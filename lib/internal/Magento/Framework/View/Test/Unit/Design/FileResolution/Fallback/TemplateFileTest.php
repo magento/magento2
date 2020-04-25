@@ -3,20 +3,21 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Framework\View\Test\Unit\Design\FileResolution\Fallback;
 
-use PHPUnit\Framework\TestCase;
-use PHPUnit\Framework\MockObject\MockObject;
-use Magento\Framework\View\Design\ThemeInterface;
-use Magento\Framework\App\State;
-use Magento\Framework\View\Design\Fallback\RulePool;
-use Magento\Framework\View\Design\FileResolution\Fallback\TemplateFile;
-use Magento\Framework\View\Design\FileResolution\Fallback\ResolverInterface;
-use Magento\Framework\View\Template\Html\MinifierInterface;
-use Magento\Framework\View\Asset\ConfigInterface;
 use Magento\Framework\App\DeploymentConfig;
+use Magento\Framework\App\State;
 use Magento\Framework\Config\ConfigOptionsListConstants;
+use Magento\Framework\View\Asset\ConfigInterface;
+use Magento\Framework\View\Design\Fallback\RulePool;
+use Magento\Framework\View\Design\FileResolution\Fallback\ResolverInterface;
+use Magento\Framework\View\Design\FileResolution\Fallback\TemplateFile;
+use Magento\Framework\View\Design\ThemeInterface;
+use Magento\Framework\View\Template\Html\MinifierInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 class TemplateFileTest extends TestCase
 {

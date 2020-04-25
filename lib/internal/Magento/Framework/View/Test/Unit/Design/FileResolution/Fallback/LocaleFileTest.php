@@ -3,16 +3,17 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Framework\View\Test\Unit\Design\FileResolution\Fallback;
 
-use PHPUnit\Framework\TestCase;
-use PHPUnit\Framework\MockObject\MockObject;
+use Magento\Framework\View\Design\Fallback\RulePool;
+use Magento\Framework\View\Design\FileResolution\Fallback\LocaleFile;
 use Magento\Framework\View\Design\FileResolution\Fallback\ResolverInterface;
 use Magento\Framework\View\Design\ThemeInterface;
-use \Magento\Framework\View\Design\FileResolution\Fallback\LocaleFile;
+use PHPUnit\Framework\MockObject\MockObject;
 
-use Magento\Framework\View\Design\Fallback\RulePool;
+use PHPUnit\Framework\TestCase;
 
 class LocaleFileTest extends TestCase
 {
@@ -41,7 +42,7 @@ class LocaleFileTest extends TestCase
         $this->resolver->expects($this->once())
             ->method('resolve')
             ->with(RulePool::TYPE_LOCALE_FILE, 'file.ext', 'frontend', $theme, 'en_US', null)
-            ->will($this->returnValue($expected));
+            ->willReturn($expected);
         $actual = $this->object->getFile('frontend', $theme, 'en_US', 'file.ext');
         $this->assertSame($expected, $actual);
     }

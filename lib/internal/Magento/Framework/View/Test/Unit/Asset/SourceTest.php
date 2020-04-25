@@ -3,30 +3,31 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Framework\View\Test\Unit\Asset;
 
-use PHPUnit\Framework\TestCase;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem;
-use PHPUnit\Framework\MockObject\MockObject;
+use Magento\Framework\Filesystem\Directory\Read;
+use Magento\Framework\Filesystem\Directory\ReadFactory;
 use Magento\Framework\Filesystem\Directory\ReadInterface;
 use Magento\Framework\Filesystem\Directory\WriteInterface;
-use Magento\Framework\View\Asset\PreProcessor\Pool;
-use Magento\Framework\View\Design\FileResolution\Fallback\StaticFile;
-use Magento\Framework\View\Design\ThemeInterface;
-use Magento\Framework\Filesystem\Directory\ReadFactory;
-use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Framework\Filesystem\Directory\Read;
-use Magento\Framework\View\Asset\File;
-use Magento\Framework\View\Asset\File\FallbackContext;
-use Magento\Framework\View\Asset\File\Context;
-use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem\DriverPool;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\Framework\View\Asset\PreProcessor\ChainFactoryInterface;
+use Magento\Framework\View\Asset\File;
+use Magento\Framework\View\Asset\File\Context;
+use Magento\Framework\View\Asset\File\FallbackContext;
 use Magento\Framework\View\Asset\PreProcessor\Chain;
+use Magento\Framework\View\Asset\PreProcessor\ChainFactoryInterface;
+use Magento\Framework\View\Asset\PreProcessor\Pool;
 use Magento\Framework\View\Asset\Source;
+use Magento\Framework\View\Design\FileResolution\Fallback\StaticFile;
 use Magento\Framework\View\Design\Theme\ThemeProviderInterface;
+use Magento\Framework\View\Design\ThemeInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)

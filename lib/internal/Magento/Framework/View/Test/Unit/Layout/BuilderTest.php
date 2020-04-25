@@ -3,17 +3,18 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Framework\View\Test\Unit\Layout;
 
-use PHPUnit\Framework\TestCase;
-use Magento\Framework\View\Layout\Builder;
-use PHPUnit\Framework\MockObject\MockObject;
 use Magento\Framework\App\Request\Http;
 use Magento\Framework\Event\ManagerInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\View\Layout;
+use Magento\Framework\View\Layout\Builder;
 use Magento\Framework\View\Layout\ProcessorInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \Magento\Framework\View\Layout\Builder
@@ -31,7 +32,7 @@ class BuilderTest extends TestCase
 
         /** @var Http|MockObject */
         $request = $this->createMock(Http::class);
-        $request->expects($this->exactly(3))->method('getFullActionName')->will($this->returnValue($fullActionName));
+        $request->expects($this->exactly(3))->method('getFullActionName')->willReturn($fullActionName);
 
         /** @var ProcessorInterface|MockObject $processor */
         $processor = $this->createMock(ProcessorInterface::class);
@@ -42,9 +43,9 @@ class BuilderTest extends TestCase
             Layout::class,
             $this->getLayoutMockMethods()
         );
-        $layout->expects($this->atLeastOnce())->method('getUpdate')->will($this->returnValue($processor));
-        $layout->expects($this->atLeastOnce())->method('generateXml')->will($this->returnValue($processor));
-        $layout->expects($this->atLeastOnce())->method('generateElements')->will($this->returnValue($processor));
+        $layout->expects($this->atLeastOnce())->method('getUpdate')->willReturn($processor);
+        $layout->expects($this->atLeastOnce())->method('generateXml')->willReturn($processor);
+        $layout->expects($this->atLeastOnce())->method('generateElements')->willReturn($processor);
 
         $data = ['full_action_name' => $fullActionName, 'layout' => $layout];
         /** @var ManagerInterface|MockObject $eventManager */

@@ -3,18 +3,19 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Framework\View\Test\Unit\Element\Html;
 
-use PHPUnit\Framework\TestCase;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\Framework\View\Element\Html\Link;
-use Magento\Framework\Escaper;
-use Magento\Framework\UrlInterface;
-use Magento\Framework\View\Element\Template\File\Validator;
 use Magento\Framework\App\Config;
-use Magento\Framework\View\Element\Template\File\Resolver;
+use Magento\Framework\Escaper;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\UrlInterface;
+use Magento\Framework\View\Element\Html\Link;
 use Magento\Framework\View\Element\Template\Context;
+use Magento\Framework\View\Element\Template\File\Resolver;
+use Magento\Framework\View\Element\Template\File\Validator;
+use PHPUnit\Framework\TestCase;
 
 class LinkTest extends TestCase
 {
@@ -45,33 +46,38 @@ class LinkTest extends TestCase
     public function testGetLinkAttributes()
     {
         $escaperMock = $this->getMockBuilder(Escaper::class)
-            ->setMethods(['escapeHtml'])->disableOriginalConstructor()->getMock();
+            ->setMethods(['escapeHtml'])->disableOriginalConstructor()
+            ->getMock();
 
         $escaperMock->expects($this->any())
             ->method('escapeHtml')
             ->willReturnArgument(0);
 
         $urlBuilderMock = $this->getMockBuilder(UrlInterface::class)
-            ->setMethods(['getUrl'])->disableOriginalConstructor()->getMockForAbstractClass();
+            ->setMethods(['getUrl'])->disableOriginalConstructor()
+            ->getMockForAbstractClass();
 
         $urlBuilderMock->expects($this->any())
             ->method('getUrl')
             ->willReturn('http://site.com/link.html');
 
         $validtorMock = $this->getMockBuilder(Validator::class)
-            ->setMethods(['isValid'])->disableOriginalConstructor()->getMock();
+            ->setMethods(['isValid'])->disableOriginalConstructor()
+            ->getMock();
         $validtorMock->expects($this->any())
             ->method('isValid')
             ->willReturn(false);
 
         $scopeConfigMock = $this->getMockBuilder(Config::class)
-            ->setMethods(['isSetFlag'])->disableOriginalConstructor()->getMock();
+            ->setMethods(['isSetFlag'])->disableOriginalConstructor()
+            ->getMock();
         $scopeConfigMock->expects($this->any())
             ->method('isSetFlag')
             ->willReturn(true);
 
         $resolverMock = $this->getMockBuilder(Resolver::class)
-            ->setMethods([])->disableOriginalConstructor()->getMock();
+            ->setMethods([])->disableOriginalConstructor()
+            ->getMock();
 
         $contextMock = $this->getMockBuilder(Context::class)
             ->setMethods(['getEscaper', 'getUrlBuilder', 'getValidator', 'getResolver', 'getScopeConfig'])

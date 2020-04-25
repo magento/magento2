@@ -3,22 +3,24 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\View\Test\Unit\Asset;
 
-use PHPUnit\Framework\TestCase;
-use PHPUnit\Framework\MockObject\MockObject;
-use Magento\Framework\Filesystem\Directory\Write;
-use Magento\Framework\View\Asset\Remote;
 use Magento\Framework\App\State;
 use Magento\Framework\Filesystem;
+use Magento\Framework\Filesystem\Directory\Write;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\View\Asset\AssetInterface;
+use Magento\Framework\View\Asset\ConfigInterface;
 use Magento\Framework\View\Asset\Merged;
 use Magento\Framework\View\Asset\MergeService;
-use Magento\Framework\View\Asset\ConfigInterface;
 use Magento\Framework\View\Asset\MergeStrategy\Checksum;
 use Magento\Framework\View\Asset\MergeStrategy\FileExists;
+use Magento\Framework\View\Asset\Remote;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)

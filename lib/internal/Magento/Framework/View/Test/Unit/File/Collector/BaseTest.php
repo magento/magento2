@@ -3,17 +3,19 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\View\Test\Unit\File\Collector;
 
-use PHPUnit\Framework\TestCase;
+use Magento\Framework\Component\ComponentFile;
+use Magento\Framework\Component\ComponentRegistrar;
+use Magento\Framework\Component\DirSearch;
+use Magento\Framework\View\Design\ThemeInterface;
+use Magento\Framework\View\File;
 use Magento\Framework\View\File\Collector\Base;
 use Magento\Framework\View\File\Factory;
 use PHPUnit\Framework\MockObject\MockObject;
-use Magento\Framework\View\Design\ThemeInterface;
-use Magento\Framework\Component\DirSearch;
-use Magento\Framework\Component\ComponentFile;
-use Magento\Framework\Component\ComponentRegistrar;
-use Magento\Framework\View\File;
+use PHPUnit\Framework\TestCase;
 
 class BaseTest extends TestCase
 {
@@ -63,10 +65,10 @@ class BaseTest extends TestCase
                 $file = $this->createMock(ComponentFile::class);
                 $file->expects($this->once())
                     ->method('getFullPath')
-                    ->will($this->returnValue("{$fileType}/module/{$i}/path"));
+                    ->willReturn("{$fileType}/module/{$i}/path");
                 $file->expects($this->once())
                     ->method('getComponentName')
-                    ->will($this->returnValue('Module_' . $i));
+                    ->willReturn('Module_' . $i);
                 $files[$fileType][] = $file;
             }
         }

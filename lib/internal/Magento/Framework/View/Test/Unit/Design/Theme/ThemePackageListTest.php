@@ -3,15 +3,17 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\View\Test\Unit\Design\Theme;
 
-use PHPUnit\Framework\TestCase;
-use Magento\Framework\Component\ComponentRegistrarInterface;
-use PHPUnit\Framework\MockObject\MockObject;
-use Magento\Framework\View\Design\Theme\ThemePackageFactory;
-use Magento\Framework\View\Design\Theme\ThemePackage;
 use Magento\Framework\Component\ComponentRegistrar;
+use Magento\Framework\Component\ComponentRegistrarInterface;
+use Magento\Framework\View\Design\Theme\ThemePackage;
+use Magento\Framework\View\Design\Theme\ThemePackageFactory;
 use Magento\Framework\View\Design\Theme\ThemePackageList;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 class ThemePackageListTest extends TestCase
 {

@@ -3,15 +3,17 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\View\Test\Unit\Element\Html;
 
-use PHPUnit\Framework\TestCase;
-use PHPUnit\Framework\MockObject\MockObject;
-use Magento\Framework\View\Element\Html\Link;
-use Magento\Framework\View\Element\AbstractBlock;
-use Magento\Framework\View\Element\Html\Links;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\View\Element\AbstractBlock;
+use Magento\Framework\View\Element\Html\Link;
+use Magento\Framework\View\Element\Html\Links;
 use Magento\Framework\View\Element\Template\Context;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 class LinksTest extends TestCase
 {

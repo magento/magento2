@@ -3,22 +3,23 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\View\Test\Unit\Asset\PreProcessor;
 
-use PHPUnit\Framework\TestCase;
-use PHPUnit\Framework\MockObject\MockObject;
-use Magento\Framework\Filesystem;
-use Magento\Framework\View\Asset\File;
 use Magento\Framework\ObjectManagerInterface;
-use Magento\Framework\View\Asset\LocalInterface;
-use Magento\Framework\View\Asset\PreProcessor\Chain;
-use Magento\Framework\View\Asset\File\FallbackContext;
-use Magento\Framework\View\Asset\LockerProcessInterface;
 use Magento\Framework\View\Asset\ContentProcessorInterface;
+use Magento\Framework\View\Asset\File;
+use Magento\Framework\View\Asset\File\FallbackContext;
+use Magento\Framework\View\Asset\LocalInterface;
+use Magento\Framework\View\Asset\LockerProcessInterface;
 use Magento\Framework\View\Asset\PreProcessor\AlternativeSource;
+use Magento\Framework\View\Asset\PreProcessor\AlternativeSource\AssetBuilder;
+use Magento\Framework\View\Asset\PreProcessor\Chain;
 use Magento\Framework\View\Asset\PreProcessor\FilenameResolverInterface;
 use Magento\Framework\View\Asset\PreProcessor\Helper\SortInterface;
-use Magento\Framework\View\Asset\PreProcessor\AlternativeSource\AssetBuilder;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  *

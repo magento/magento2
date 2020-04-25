@@ -3,14 +3,16 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\View\Test\Unit\Element\Html\Link;
 
-use PHPUnit\Framework\TestCase;
-use PHPUnit\Framework\MockObject\MockObject;
+use Magento\Framework\App\Request\Http;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\UrlInterface;
-use Magento\Framework\App\Request\Http;
 use Magento\Framework\View\Element\Html\Link\Current;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 class CurrentTest extends TestCase
 {
@@ -41,7 +43,7 @@ class CurrentTest extends TestCase
         $path = 'test/path';
         $url = 'http://example.com/asdasd';
 
-        $this->_urlBuilderMock->expects($this->once())->method('getUrl')->with($path)->will($this->returnValue($url));
+        $this->_urlBuilderMock->expects($this->once())->method('getUrl')->with($path)->willReturn($url);
 
         /** @var Current $link */
         $link = $this->_objectManager->getObject(
@@ -73,24 +75,24 @@ class CurrentTest extends TestCase
 
         $this->_requestMock->expects($this->once())
             ->method('getPathInfo')
-            ->will($this->returnValue('/test/index/'));
+            ->willReturn('/test/index/');
         $this->_requestMock->expects($this->once())
             ->method('getModuleName')
-            ->will($this->returnValue('test'));
+            ->willReturn('test');
         $this->_requestMock->expects($this->once())
             ->method('getControllerName')
-            ->will($this->returnValue('index'));
+            ->willReturn('index');
         $this->_requestMock->expects($this->once())
             ->method('getActionName')
-            ->will($this->returnValue('index'));
+            ->willReturn('index');
         $this->_urlBuilderMock->expects($this->at(0))
             ->method('getUrl')
             ->with($path)
-            ->will($this->returnValue($url));
+            ->willReturn($url);
         $this->_urlBuilderMock->expects($this->at(1))
             ->method('getUrl')
             ->with('test/index')
-            ->will($this->returnValue($url));
+            ->willReturn($url);
 
         /** @var Current $link */
         $link = $this->_objectManager->getObject(
@@ -107,8 +109,8 @@ class CurrentTest extends TestCase
 
     public function testIsCurrentFalse()
     {
-        $this->_urlBuilderMock->expects($this->at(0))->method('getUrl')->will($this->returnValue('1'));
-        $this->_urlBuilderMock->expects($this->at(1))->method('getUrl')->will($this->returnValue('2'));
+        $this->_urlBuilderMock->expects($this->at(0))->method('getUrl')->willReturn('1');
+        $this->_urlBuilderMock->expects($this->at(1))->method('getUrl')->willReturn('2');
 
         /** @var Current $link */
         $link = $this->_objectManager->getObject(

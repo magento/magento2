@@ -3,20 +3,22 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\View\Test\Unit\Asset\Bundle;
 
-use PHPUnit\Framework\TestCase;
-use PHPUnit\Framework\MockObject\MockObject;
+use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Config\View;
 use Magento\Framework\Filesystem;
+use Magento\Framework\Filesystem\Directory\ReadInterface;
 use Magento\Framework\View\Asset\Bundle;
 use Magento\Framework\View\Asset\Bundle\ConfigInterface;
+use Magento\Framework\View\Asset\Bundle\Manager;
+use Magento\Framework\View\Asset\File\FallbackContext;
 use Magento\Framework\View\Asset\LocalInterface;
 use Magento\Framework\View\Asset\Minification;
-use Magento\Framework\Filesystem\Directory\ReadInterface;
-use Magento\Framework\View\Asset\File\FallbackContext;
-use Magento\Framework\Config\View;
-use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Framework\View\Asset\Bundle\Manager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 class ManagerTest extends TestCase
 {

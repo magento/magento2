@@ -3,16 +3,17 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Framework\View\Test\Unit;
 
-use PHPUnit\Framework\TestCase;
-use Magento\Framework\View\DesignLoader;
-use PHPUnit\Framework\MockObject\MockObject;
-use Magento\Framework\App\State;
+use Magento\Framework\App\Area;
 use Magento\Framework\App\AreaList;
 use Magento\Framework\App\Request\Http;
-use Magento\Framework\App\Area;
+use Magento\Framework\App\State;
+use Magento\Framework\View\DesignLoader;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 class DesignLoaderTest extends TestCase
 {
@@ -51,12 +52,12 @@ class DesignLoaderTest extends TestCase
     public function testLoad()
     {
         $area = $this->createMock(Area::class);
-        $this->appState->expects($this->once())->method('getAreaCode')->will($this->returnValue('area'));
-        $this->_areaListMock->expects($this->once())->method('getArea')->with('area')->will($this->returnValue($area));
+        $this->appState->expects($this->once())->method('getAreaCode')->willReturn('area');
+        $this->_areaListMock->expects($this->once())->method('getArea')->with('area')->willReturn($area);
         $area->expects($this->at(0))->method('load')
-            ->with(Area::PART_DESIGN)->will($this->returnValue($area));
+            ->with(Area::PART_DESIGN)->willReturn($area);
         $area->expects($this->at(1))->method('load')
-            ->with(Area::PART_TRANSLATE)->will($this->returnValue($area));
+            ->with(Area::PART_TRANSLATE)->willReturn($area);
         $this->_model->load($this->_requestMock);
     }
 }

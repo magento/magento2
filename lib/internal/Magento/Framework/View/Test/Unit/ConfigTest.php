@@ -3,17 +3,18 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Framework\View\Test\Unit;
 
-use PHPUnit\Framework\TestCase;
-use Magento\Framework\View\Config;
-use Magento\Framework\View\Asset\Repository;
-use PHPUnit\Framework\MockObject\MockObject;
-use Magento\Framework\Config\ViewFactory;
-use Magento\Theme\Model\Theme;
 use Magento\Framework\Config\View;
+use Magento\Framework\Config\ViewFactory;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Framework\View\Asset\Repository;
+use Magento\Framework\View\Config;
+use Magento\Theme\Model\Theme;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 class ConfigTest extends TestCase
 {
@@ -52,15 +53,14 @@ class ConfigTest extends TestCase
         $themeMock = $this->createPartialMock(Theme::class, ['getFullPath']);
         $themeMock->expects($this->atLeastOnce())
             ->method('getFullPath')
-            ->will($this->returnValue($themeCode));
+            ->willReturn($themeCode);
         $params = [
             'themeModel' => $themeMock,
             'area'       => 'frontend'
         ];
         $this->repositoryMock->expects($this->atLeastOnce())
             ->method('updateDesignParams')
-            ->with($this->equalTo($params))
-            ->will($this->returnSelf());
+            ->with($params)->willReturnSelf();
         $configViewMock = $this->createMock(View::class);
         $this->viewConfigFactoryMock->expects($this->once())
             ->method('create')

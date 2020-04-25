@@ -3,15 +3,17 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\View\Test\Unit\PageLayout;
 
-use PHPUnit\Framework\TestCase;
-use Magento\Framework\View\PageLayout\Config;
-use Magento\Framework\Config\Dom\UrnResolver;
-use Magento\Framework\Config\ValidationStateInterface;
-use Magento\Framework\Config\DomFactory;
 use Magento\Framework\Config\Dom;
+use Magento\Framework\Config\Dom\UrnResolver;
+use Magento\Framework\Config\DomFactory;
+use Magento\Framework\Config\ValidationStateInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\View\PageLayout\Config;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Page layouts configuration

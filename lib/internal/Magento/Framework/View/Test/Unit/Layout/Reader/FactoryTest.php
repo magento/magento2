@@ -3,16 +3,17 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Framework\View\Test\Unit\Layout\Reader;
 
-use PHPUnit\Framework\TestCase;
 use Magento\Framework\DataObject;
 use Magento\Framework\ObjectManagerInterface;
-use PHPUnit\Framework\MockObject\MockObject;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\View\Layout\ReaderFactory;
 use Magento\Framework\View\Layout\ReaderInterface;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 class FactoryTest extends TestCase
 {
@@ -26,7 +27,7 @@ class FactoryTest extends TestCase
         /** @var ObjectManagerInterface|MockObject $objectManager */
         $objectManager = $this->createMock(ObjectManagerInterface::class);
         $objectManager->expects($this->once())->method('create')->with($className, $data)
-            ->will($this->returnValue($object));
+            ->willReturn($object);
 
         /** @var ReaderFactory|MockObject $factory */
         $factory = (new ObjectManager($this))
@@ -50,7 +51,7 @@ class FactoryTest extends TestCase
         /** @var ObjectManagerInterface|MockObject $objectManager */
         $objectManager = $this->createMock(ObjectManagerInterface::class);
         $objectManager->expects($this->once())->method('create')->with($className, $data)
-            ->will($this->returnValue($object));
+            ->willReturn($object);
 
         /** @var ReaderFactory|MockObject $factory */
         $factory = (new ObjectManager($this))

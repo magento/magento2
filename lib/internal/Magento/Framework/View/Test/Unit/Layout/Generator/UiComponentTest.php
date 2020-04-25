@@ -3,26 +3,27 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Framework\View\Test\Unit\Layout\Generator;
 
-use PHPUnit\Framework\TestCase;
-use PHPUnit\Framework\MockObject\MockObject;
-use Magento\Framework\View\Element\UiComponentFactory;
 use Magento\Framework\Data\Argument\InterpreterInterface;
-use Magento\Framework\View\Element\UiComponent\ContextFactory;
-use Magento\Framework\View\Element\BlockFactory;
-use Magento\Framework\View\Layout\Reader\Context;
-use Magento\Framework\View\Layout\Data\Structure;
-use Magento\Framework\View\LayoutInterface;
-use Magento\Framework\View\Element\UiComponentInterface;
-use Magento\Framework\View\Element\UiComponent\ContextInterface;
-use Magento\Framework\View\Element\BlockInterface;
-use \Magento\Framework\View\Layout\Generator\UiComponent;
-
-use Magento\Framework\View\Layout;
-use Magento\Framework\View\Layout\ScheduledStructure;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Framework\View\Element\BlockFactory;
+use Magento\Framework\View\Element\BlockInterface;
+use Magento\Framework\View\Element\UiComponent\ContextFactory;
+use Magento\Framework\View\Element\UiComponent\ContextInterface;
+use Magento\Framework\View\Element\UiComponentFactory;
+use Magento\Framework\View\Element\UiComponentInterface;
+use Magento\Framework\View\Layout;
+use Magento\Framework\View\Layout\Data\Structure;
+use Magento\Framework\View\Layout\Generator\UiComponent;
+use Magento\Framework\View\Layout\Reader\Context;
+use Magento\Framework\View\Layout\ScheduledStructure;
+
+use Magento\Framework\View\LayoutInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -74,12 +75,15 @@ class UiComponentTest extends TestCase
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->argumentInterpreterMock = $this->getMockBuilder(
             InterpreterInterface::class
-        )->disableOriginalConstructor()->getMockForAbstractClass();
+        )->disableOriginalConstructor()
+            ->getMockForAbstractClass();
         $this->uiComponentFactoryMock = $this->getMockBuilder(UiComponentFactory::class)
             ->setMethods(['setLayout', 'create'])
-            ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->scheduledStructureMock = $this->getMockBuilder(ScheduledStructure::class)
-            ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->contextFactoryMock =
             $this->createMock(ContextFactory::class);
         $this->blockFactoryMock = $this->createMock(BlockFactory::class);
@@ -99,24 +103,28 @@ class UiComponentTest extends TestCase
         $this->prepareScheduledStructure();
 
         $this->readerContextMock = $this->getMockBuilder(Context::class)
-            ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->readerContextMock->expects($this->any())
             ->method('getScheduledStructure')
             ->willReturn($this->scheduledStructureMock);
 
         $generatorContextMock = $this->getMockBuilder(\Magento\Framework\View\Layout\Generator\Context::class)
-            ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $structureMock = $this->getMockBuilder(Structure::class)
-            ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $structureMock->expects($this->once())
             ->method('addToParentGroup')
             ->with(UiComponent::TYPE, 'new_group')
             ->willReturnSelf();
 
-        $layoutMock = $this->getMockBuilder(LayoutInterface::class)->getMockForAbstractClass();
+        $layoutMock = $this->getMockBuilder(LayoutInterface::class)
+            ->getMockForAbstractClass();
 
         $generatorContextMock->expects($this->any())
             ->method('getStructure')
@@ -177,10 +185,10 @@ class UiComponentTest extends TestCase
 
         $this->argumentInterpreterMock->expects($this->any())
             ->method('evaluate')
-            ->will($this->returnValueMap([
+            ->willReturnMap([
                 [['key_1' => 'value_1'], 'value_1'],
                 [['key_2' => 'value_2'], 'value_2'],
-            ]));
+            ]);
 
         $layoutMock->expects($this->any())
             ->method('setBlock')

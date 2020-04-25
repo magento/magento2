@@ -3,23 +3,24 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 /**
  * Test for view filesystem model
  */
 namespace Magento\Framework\View\Test\Unit;
 
-use PHPUnit\Framework\TestCase;
-use Magento\Framework\View\FileSystem;
-use PHPUnit\Framework\MockObject\MockObject;
+use Magento\Framework\View\Asset\Repository;
+use Magento\Framework\View\Design\FileResolution\Fallback\EmailTemplateFile;
 use Magento\Framework\View\Design\FileResolution\Fallback\File;
-use Magento\Framework\View\Design\FileResolution\Fallback\TemplateFile;
 use Magento\Framework\View\Design\FileResolution\Fallback\LocaleFile;
 use Magento\Framework\View\Design\FileResolution\Fallback\StaticFile;
-use Magento\Framework\View\Design\FileResolution\Fallback\EmailTemplateFile;
-use Magento\Framework\View\Asset\Repository;
+use Magento\Framework\View\Design\FileResolution\Fallback\TemplateFile;
 use Magento\Framework\View\Design\ThemeInterface;
+use Magento\Framework\View\FileSystem;
 use Magento\Setup\Module\I18n\Locale;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 class FileSystemTest extends TestCase
 {
@@ -74,10 +75,11 @@ class FileSystemTest extends TestCase
         $this->_emailTemplateFileResolution = $this->createMock(
             EmailTemplateFile::class
         );
-        $this->_assetRepo = $this->createPartialMock(
-            Repository::class,
-            ['extractScope', 'updateDesignParams', 'createAsset']
-        );
+        $this->_assetRepo = $this->getMockBuilder(Repository::class)
+            ->addMethods(['extractScope'])
+            ->onlyMethods(['updateDesignParams', 'createAsset'])
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->_model = new FileSystem(
             $this->_fileResolution,
@@ -95,7 +97,7 @@ class FileSystemTest extends TestCase
             'area' => 'some_area',
             'themeModel' => $this->createMock(ThemeInterface::class),
             'module' => 'Some_Module',   //It should be set in \Magento\Framework\View\Asset\Repository::extractScope
-                                        // but PHPUnit has troubles with passing arguments by reference
+            // but PHPUnit has troubles with passing arguments by reference
         ];
         $file = 'Some_Module::some_file.ext';
         $expected = 'path/to/some_file.ext';
@@ -103,12 +105,12 @@ class FileSystemTest extends TestCase
         $this->_fileResolution->expects($this->once())
             ->method('getFile')
             ->with($params['area'], $params['themeModel'], 'some_file.ext', 'Some_Module')
-            ->will($this->returnValue($expected));
+            ->willReturn($expected);
 
         $this->_assetRepo->expects($this->any())
             ->method('extractScope')
             ->with($file, $params)
-            ->will($this->returnValue('some_file.ext'));
+            ->willReturn('some_file.ext');
 
         $actual = $this->_model->getFilename($file, $params);
         $this->assertEquals($expected, $actual);
@@ -120,7 +122,7 @@ class FileSystemTest extends TestCase
             'area'       => 'some_area',
             'themeModel' => $this->createMock(ThemeInterface::class),
             'module'     => 'Some_Module', //It should be set in \Magento\Framework\View\Asset\Repository::extractScope
-                                           // but PHPUnit has troubles with passing arguments by reference
+            // but PHPUnit has troubles with passing arguments by reference
         ];
         $file = 'Some_Module::some_file.ext';
         $expected = 'path/to/some_file.ext';
@@ -128,12 +130,12 @@ class FileSystemTest extends TestCase
         $this->_templateFileResolution->expects($this->once())
             ->method('getFile')
             ->with($params['area'], $params['themeModel'], 'some_file.ext', 'Some_Module')
-            ->will($this->returnValue($expected));
+            ->willReturn($expected);
 
         $this->_assetRepo->expects($this->any())
             ->method('extractScope')
             ->with($file, $params)
-            ->will($this->returnValue('some_file.ext'));
+            ->willReturn('some_file.ext');
 
         $actual = $this->_model->getTemplateFileName($file, $params);
         $this->assertEquals($expected, $actual);
@@ -152,7 +154,7 @@ class FileSystemTest extends TestCase
         $this->_localeFileResolution->expects($this->once())
             ->method('getFile')
             ->with($params['area'], $params['themeModel'], $params['locale'], 'some_file.ext')
-            ->will($this->returnValue($expected));
+            ->willReturn($expected);
 
         $actual = $this->_model->getLocaleFileName($file, $params);
         $this->assertEquals($expected, $actual);
@@ -172,7 +174,7 @@ class FileSystemTest extends TestCase
         $this->_staticFileResolution->expects($this->once())
             ->method('getFile')
             ->with($params['area'], $params['themeModel'], $params['locale'], 'some_file.ext', 'Some_Module')
-            ->will($this->returnValue($expected));
+            ->willReturn($expected);
 
         $actual = $this->_model->getStaticFileName($file, $params);
         $this->assertEquals($expected, $actual);

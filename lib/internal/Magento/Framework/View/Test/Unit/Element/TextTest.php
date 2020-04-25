@@ -3,11 +3,13 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\View\Test\Unit\Element;
 
-use PHPUnit\Framework\TestCase;
-use Magento\Framework\View\Element\Text;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\View\Element\Text;
+use PHPUnit\Framework\TestCase;
 
 class TextTest extends TestCase
 {

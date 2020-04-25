@@ -3,13 +3,14 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Framework\View\Test\Unit\Asset\PreProcessor;
 
-use PHPUnit\Framework\TestCase;
 use Magento\Framework\View\Asset\LocalInterface;
-use PHPUnit\Framework\MockObject\MockObject;
 use Magento\Framework\View\Asset\PreProcessor\Chain;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 class ChainTest extends TestCase
 {
@@ -26,7 +27,7 @@ class ChainTest extends TestCase
     protected function setUp(): void
     {
         $this->asset = $this->getMockForAbstractClass(LocalInterface::class);
-        $this->asset->expects($this->once())->method('getContentType')->will($this->returnValue('assetType'));
+        $this->asset->expects($this->once())->method('getContentType')->willReturn('assetType');
         $this->object = new Chain($this->asset, 'origContent', 'origType', 'origPath');
     }
 

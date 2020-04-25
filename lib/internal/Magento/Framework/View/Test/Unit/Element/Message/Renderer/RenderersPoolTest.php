@@ -3,11 +3,13 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\View\Test\Unit\Element\Message\Renderer;
 
-use PHPUnit\Framework\TestCase;
 use Magento\Framework\View\Element\Message\Renderer\RendererInterface;
 use Magento\Framework\View\Element\Message\Renderer\RenderersPool;
+use PHPUnit\Framework\TestCase;
 
 class RenderersPoolTest extends TestCase
 {

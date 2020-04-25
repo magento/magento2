@@ -3,23 +3,25 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\View\Test\Unit\Layout\Generator;
 
-use PHPUnit\Framework\TestCase;
-use PHPUnit\Framework\MockObject\Matcher\InvokedCount;
-use Magento\Framework\View\Layout\ScheduledStructure;
-use Magento\Framework\View\Layout\Reader\Context;
-use PHPUnit\Framework\MockObject\MockObject;
-use Magento\Framework\View\LayoutInterface;
-use Magento\Framework\View\Element\AbstractBlock;
-use Magento\Framework\View\Layout\Data\Structure;
-use Magento\Framework\Data\Argument\InterpreterInterface;
-use Magento\Framework\View\Element\BlockFactory;
-use Magento\Framework\Event\ManagerInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\ScopeResolverInterface;
-use Magento\Framework\View\Layout\Generator\Block;
+use Magento\Framework\Data\Argument\InterpreterInterface;
+use Magento\Framework\Event\ManagerInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\View\Element\AbstractBlock;
+use Magento\Framework\View\Element\BlockFactory;
+use Magento\Framework\View\Layout\Data\Structure;
+use Magento\Framework\View\Layout\Generator\Block;
+use Magento\Framework\View\Layout\Reader\Context;
+use Magento\Framework\View\Layout\ScheduledStructure;
+use Magento\Framework\View\LayoutInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\MockObject\Rule\InvokedCount;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \Magento\Framework\View\Layout\Generator\Block
@@ -64,43 +66,39 @@ class BlockTest extends TestCase
         $class = 'test_class';
 
         $scheduleStructure = $this->createMock(ScheduledStructure::class);
-        $scheduleStructure->expects($this->once())->method('getElements')->will(
-            $this->returnValue(
-                [
-                    $elementName => [
-                        $literal,
-                        [
-                            'actions' => [
+        $scheduleStructure->expects($this->once())->method('getElements')->willReturn(
+            [
+                $elementName => [
+                    $literal,
+                    [
+                        'actions' => [
+                            [
+                                $methodName,
                                 [
-                                    $methodName,
-                                    [
-                                        'test_argument' => $argumentData
-                                    ],
-                                    'config_path',
-                                    'scope',
+                                    'test_argument' => $argumentData
                                 ],
-                            ]
-                        ],
+                                'config_path',
+                                'scope',
+                            ],
+                        ]
                     ],
-                ]
-            )
+                ],
+            ]
         );
 
-        $scheduleStructure->expects($this->once())->method('getElement')->with($elementName)->will(
-            $this->returnValue(
+        $scheduleStructure->expects($this->once())->method('getElement')->with($elementName)->willReturn(
+            [
+                '',
                 [
-                    '',
-                    [
-                        'attributes' => [
-                            'class' => $class,
-                            'template' => $testTemplate,
-                            'ttl' => $testTtl,
-                            'group' => $testGroup,
-                        ],
-                        'arguments' => $testArgumentData
+                    'attributes' => [
+                        'class' => $class,
+                        'template' => $testTemplate,
+                        'ttl' => $testTtl,
+                        'group' => $testGroup,
                     ],
-                ]
-            )
+                    'arguments' => $testArgumentData
+                ],
+            ]
         );
         $scheduleStructure->expects($this->once())->method('unsetElement')->with($elementName);
 
@@ -109,7 +107,7 @@ class BlockTest extends TestCase
          */
         $readerContext = $this->createMock(Context::class);
         $readerContext->expects($this->once())->method('getScheduledStructure')
-            ->will($this->returnValue($scheduleStructure));
+            ->willReturn($scheduleStructure);
 
         $layout = $this->createMock(LayoutInterface::class);
 
@@ -117,10 +115,11 @@ class BlockTest extends TestCase
          * @var \Magento\Framework\View\Element\AbstractBlock|\PHPUnit_Framework_MockObject_MockObject $blockInstance
          */
         // explicitly set mocked methods for successful expectation of magic methods
-        $blockInstance = $this->createPartialMock(
-            AbstractBlock::class,
-            ['setType', 'setTemplate', 'setTtl', $methodName, 'setNameInLayout', 'addData', 'setLayout']
-        );
+        $blockInstance = $this->getMockBuilder(AbstractBlock::class)
+            ->addMethods(['setType', 'setTemplate', 'setTtl', $methodName])
+            ->onlyMethods(['setNameInLayout', 'addData', 'setLayout'])
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
         $blockInstance->expects($this->once())->method('setType')->with(get_class($blockInstance));
         $blockInstance->expects($this->once())->method('setNameInLayout')->with($elementName);
         $blockInstance->expects($this->once())->method('addData')->with($argumentData);
@@ -138,8 +137,8 @@ class BlockTest extends TestCase
          * @var MockObject $generatorContext
          */
         $generatorContext = $this->createMock(\Magento\Framework\View\Layout\Generator\Context::class);
-        $generatorContext->expects($this->once())->method('getLayout')->will($this->returnValue($layout));
-        $generatorContext->expects($this->once())->method('getStructure')->will($this->returnValue($structure));
+        $generatorContext->expects($this->once())->method('getLayout')->willReturn($layout);
+        $generatorContext->expects($this->once())->method('getStructure')->willReturn($structure);
 
         /**
          * @var MockObject $argumentInterpreter
@@ -152,8 +151,7 @@ class BlockTest extends TestCase
                 ->with($testArgumentData['argument'])
                 ->willReturn($argumentData['argument']);
         } else {
-            $argumentInterpreter->expects($this->never())->method('evaluate')
-            ;
+            $argumentInterpreter->expects($this->never())->method('evaluate');
         }
 
         /** @var BlockFactory|MockObject $blockFactory */
@@ -161,7 +159,7 @@ class BlockTest extends TestCase
         $blockFactory->expects($this->any())
             ->method('createBlock')
             ->with($class, ['data' => $argumentData])
-            ->will($this->returnValue($blockInstance));
+            ->willReturn($blockInstance);
 
         /** @var ManagerInterface|MockObject $eventManager */
         $eventManager = $this->createMock(ManagerInterface::class);

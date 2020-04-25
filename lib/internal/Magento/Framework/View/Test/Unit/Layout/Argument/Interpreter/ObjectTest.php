@@ -7,12 +7,12 @@ declare(strict_types=1);
 
 namespace Magento\Framework\View\Test\Unit\Layout\Argument\Interpreter;
 
-use PHPUnit\Framework\TestCase;
-use Magento\Framework\ObjectManagerInterface;
-use PHPUnit\Framework\MockObject\MockObject;
 use Magento\Framework\Data\Argument\InterpreterInterface;
+use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Stdlib\BooleanUtils;
 use Magento\Framework\View\Layout\Argument\Interpreter\DataObject;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Tests layout argument interpreter data object.

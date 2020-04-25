@@ -3,25 +3,26 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Framework\View\Test\Unit\Element;
 
-use PHPUnit\Framework\TestCase;
-use PHPUnit\Framework\MockObject\MockObject;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\Store\Model\ScopeInterface;
-use PHPUnit\Framework\MockObject\Matcher\InvokedCount;
+use Magento\Framework\App\Cache\StateInterface as CacheStateInterface;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Cache\LockGuardedCacheLoader;
+use Magento\Framework\Config\View;
 use Magento\Framework\Escaper;
+use Magento\Framework\Event\ManagerInterface as EventManagerInterface;
+use Magento\Framework\Session\SessionManagerInterface;
+use Magento\Framework\Session\SidResolverInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\View\ConfigInterface;
 use Magento\Framework\View\Element\AbstractBlock;
 use Magento\Framework\View\Element\Context;
-use Magento\Framework\Config\View;
-use Magento\Framework\View\ConfigInterface;
-use Magento\Framework\Event\ManagerInterface as EventManagerInterface;
-use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Framework\App\Cache\StateInterface as CacheStateInterface;
-use Magento\Framework\Session\SidResolverInterface;
-use Magento\Framework\Session\SessionManagerInterface;
+use Magento\Store\Model\ScopeInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\MockObject\Rule\InvokedCount;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)

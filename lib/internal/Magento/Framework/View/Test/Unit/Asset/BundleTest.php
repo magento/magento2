@@ -3,19 +3,20 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Framework\View\Test\Unit\Asset;
 
-use PHPUnit\Framework\TestCase;
 use Magento\Framework\Filesystem;
-use PHPUnit\Framework\MockObject\MockObject;
+use Magento\Framework\Filesystem\Directory\WriteInterface;
+use Magento\Framework\View\Asset\Bundle;
 use Magento\Framework\View\Asset\Bundle\ConfigInterface;
-use Magento\Framework\View\Asset\Minification;
+use Magento\Framework\View\Asset\Bundle\Manager;
 use Magento\Framework\View\Asset\File\FallbackContext;
 use Magento\Framework\View\Asset\LocalInterface;
-use Magento\Framework\Filesystem\Directory\WriteInterface;
-use Magento\Framework\View\Asset\Bundle\Manager;
-use Magento\Framework\View\Asset\Bundle;
+use Magento\Framework\View\Asset\Minification;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Unit test for Magento\Framework\View\Asset\Bundle

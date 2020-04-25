@@ -3,16 +3,18 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\View\Test\Unit\Layout\File\Collector;
 
-use PHPUnit\Framework\TestCase;
-use Magento\Framework\View\Layout\File\Collector\Aggregated;
-use PHPUnit\Framework\MockObject\MockObject;
-use Magento\Framework\View\File\FileList;
-use Magento\Framework\View\File\CollectorInterface;
-use Magento\Framework\View\File\FileList\Factory;
 use Magento\Framework\View\Design\ThemeInterface;
 use Magento\Framework\View\File;
+use Magento\Framework\View\File\CollectorInterface;
+use Magento\Framework\View\File\FileList;
+use Magento\Framework\View\File\FileList\Factory;
+use Magento\Framework\View\Layout\File\Collector\Aggregated;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 class AggregateTest extends TestCase
 {
@@ -58,7 +60,7 @@ class AggregateTest extends TestCase
             CollectorInterface::class
         );
         $fileListFactory = $this->createMock(Factory::class);
-        $fileListFactory->expects($this->once())->method('create')->will($this->returnValue($this->_fileList));
+        $fileListFactory->expects($this->once())->method('create')->willReturn($this->_fileList);
         $this->_model = new Aggregated(
             $fileListFactory,
             $this->_baseFiles,
@@ -80,8 +82,8 @@ class AggregateTest extends TestCase
             $this->once()
         )->method(
             'getInheritedThemes'
-        )->will(
-            $this->returnValue([$parentTheme, $parentTheme])
+        )->willReturn(
+            [$parentTheme, $parentTheme]
         );
 
         $files = [
@@ -100,8 +102,8 @@ class AggregateTest extends TestCase
             'getFiles'
         )->with(
             $theme
-        )->will(
-            $this->returnValue([$files[0]])
+        )->willReturn(
+            [$files[0]]
         );
 
         $this->_themeFiles->expects(
@@ -110,8 +112,8 @@ class AggregateTest extends TestCase
             'getFiles'
         )->with(
             $parentTheme
-        )->will(
-            $this->returnValue([$files[1]])
+        )->willReturn(
+            [$files[1]]
         );
         $this->_overridingBaseFiles->expects(
             $this->at(0)
@@ -119,8 +121,8 @@ class AggregateTest extends TestCase
             'getFiles'
         )->with(
             $parentTheme
-        )->will(
-            $this->returnValue([$files[2]])
+        )->willReturn(
+            [$files[2]]
         );
         $this->_overridingThemeFiles->expects(
             $this->at(0)
@@ -128,8 +130,8 @@ class AggregateTest extends TestCase
             'getFiles'
         )->with(
             $parentTheme
-        )->will(
-            $this->returnValue([$files[3]])
+        )->willReturn(
+            [$files[3]]
         );
 
         $this->_themeFiles->expects(
@@ -138,8 +140,8 @@ class AggregateTest extends TestCase
             'getFiles'
         )->with(
             $theme
-        )->will(
-            $this->returnValue([$files[4]])
+        )->willReturn(
+            [$files[4]]
         );
         $this->_overridingBaseFiles->expects(
             $this->at(1)
@@ -147,8 +149,8 @@ class AggregateTest extends TestCase
             'getFiles'
         )->with(
             $theme
-        )->will(
-            $this->returnValue([$files[5]])
+        )->willReturn(
+            [$files[5]]
         );
         $this->_overridingThemeFiles->expects(
             $this->at(1)
@@ -156,8 +158,8 @@ class AggregateTest extends TestCase
             'getFiles'
         )->with(
             $theme
-        )->will(
-            $this->returnValue([$files[6]])
+        )->willReturn(
+            [$files[6]]
         );
 
         $this->_fileList->expects($this->at(0))->method('add')->with([$files[0]]);
@@ -168,7 +170,7 @@ class AggregateTest extends TestCase
         $this->_fileList->expects($this->at(5))->method('replace')->with([$files[5]]);
         $this->_fileList->expects($this->at(6))->method('replace')->with([$files[6]]);
 
-        $this->_fileList->expects($this->atLeastOnce())->method('getAll')->will($this->returnValue($files));
+        $this->_fileList->expects($this->atLeastOnce())->method('getAll')->willReturn($files);
 
         $this->assertSame($files, $this->_model->getFiles($theme, '*'));
     }

@@ -3,26 +3,27 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 /**
  * Test for full test filter
  */
 namespace Magento\Framework\View\Test\Unit\Element\UiComponent\DataProvider;
 
-use PHPUnit\Framework\TestCase;
-use PHPUnit\Framework\MockObject\MockObject;
-use Magento\Framework\Data\Collection\AbstractDb as CollectionAbstractDb;
-use Magento\Framework\View\Element\UiComponent\DataProvider\FulltextFilter;
-use Magento\Framework\Data\Collection\EntityFactoryInterface;
-use Psr\Log\LoggerInterface;
-use Magento\Framework\Data\Collection\Db\FetchStrategyInterface;
-use Magento\Framework\DB\Adapter\AdapterInterface;
-use Magento\Framework\DB\Select;
-use Magento\Framework\Data\Collection\EntityFactory;
-use Magento\Framework\DB\Adapter\Pdo\Mysql;
 use Magento\Framework\Api\Filter;
+use Magento\Framework\Data\Collection\AbstractDb as CollectionAbstractDb;
+use Magento\Framework\Data\Collection\Db\FetchStrategyInterface;
+use Magento\Framework\Data\Collection\EntityFactory;
+use Magento\Framework\Data\Collection\EntityFactoryInterface;
+use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Framework\DB\Adapter\Pdo\Mysql;
+use Magento\Framework\DB\Select;
 use Magento\Framework\Model\ResourceModel\Db\AbstractDb as ResourceModelAbstractDb;
 use Magento\Framework\Mview\View\Collection as MviewCollection;
+use Magento\Framework\View\Element\UiComponent\DataProvider\FulltextFilter;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)

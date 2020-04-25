@@ -3,14 +3,16 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\View\Test\Unit\Layout\Argument\Interpreter;
 
-use PHPUnit\Framework\TestCase;
-use Magento\Framework\ObjectManagerInterface;
-use PHPUnit\Framework\MockObject\MockObject;
 use Magento\Framework\Data\Argument\InterpreterInterface;
 use Magento\Framework\Data\OptionSourceInterface;
-use \Magento\Framework\View\Layout\Argument\Interpreter\Options;
+use Magento\Framework\ObjectManagerInterface;
+use Magento\Framework\View\Layout\Argument\Interpreter\Options;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 class OptionsTest extends TestCase
 {
@@ -43,10 +45,8 @@ class OptionsTest extends TestCase
             $this->once()
         )->method(
             'toOptionArray'
-        )->will(
-            $this->returnValue(
-                ['value1' => 'label 1', 'value2' => 'label 2', ['value' => 'value3', 'label' => 'label 3']]
-            )
+        )->willReturn(
+            ['value1' => 'label 1', 'value2' => 'label 2', ['value' => 'value3', 'label' => 'label 3']]
         );
         $this->_objectManager->expects(
             $this->once()
@@ -54,8 +54,8 @@ class OptionsTest extends TestCase
             'get'
         )->with(
             $modelClass
-        )->will(
-            $this->returnValue($model)
+        )->willReturn(
+            $model
         );
         $input = ['model' => $modelClass];
         $expected = [

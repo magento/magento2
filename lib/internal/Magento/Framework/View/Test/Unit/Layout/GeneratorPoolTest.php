@@ -3,21 +3,22 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 /**
  * Test class for \Magento\Framework\View\Layout\Element
  */
 namespace Magento\Framework\View\Test\Unit\Layout;
 
-use PHPUnit\Framework\TestCase;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\View\Layout\Data\Structure as DataStructure;
+use Magento\Framework\View\Layout\GeneratorInterface;
+use Magento\Framework\View\Layout\GeneratorPool;
+use Magento\Framework\View\Layout\Reader\Context;
+use Magento\Framework\View\Layout\ScheduledStructure;
 use Magento\Framework\View\Layout\ScheduledStructure\Helper;
 use PHPUnit\Framework\MockObject\MockObject;
-use Magento\Framework\View\Layout\Reader\Context;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\Framework\View\Layout\GeneratorInterface;
-use \Magento\Framework\View\Layout\GeneratorPool;
-use \Magento\Framework\View\Layout\ScheduledStructure;
-use \Magento\Framework\View\Layout\Data\Structure as DataStructure;
+use PHPUnit\Framework\TestCase;
 
 class GeneratorPoolTest extends TestCase
 {

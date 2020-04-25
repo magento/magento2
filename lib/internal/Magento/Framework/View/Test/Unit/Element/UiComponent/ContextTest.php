@@ -3,26 +3,27 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 /**
  * Test for view Messages model
  */
 namespace Magento\Framework\View\Test\Unit\Element\UiComponent;
 
-use PHPUnit\Framework\TestCase;
-use Magento\Framework\AuthorizationInterface;
-use Magento\Framework\View\LayoutInterface;
 use Magento\Framework\App\Request\Http;
-use Magento\Framework\View\Element\UiComponent\Control\ButtonProviderFactory;
-use Magento\Framework\View\Element\UiComponent\Control\ActionPoolFactory;
-use Magento\Framework\View\Element\UiComponent\ContentType\ContentTypeFactory;
+use Magento\Framework\AuthorizationInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Framework\UrlInterface;
+use Magento\Framework\View\Element\UiComponent\ContentType\ContentTypeFactory;
+use Magento\Framework\View\Element\UiComponent\Context;
+use Magento\Framework\View\Element\UiComponent\Control\ActionPoolFactory;
+use Magento\Framework\View\Element\UiComponent\Control\ActionPoolInterface;
+use Magento\Framework\View\Element\UiComponent\Control\ButtonProviderFactory;
 use Magento\Framework\View\Element\UiComponent\Processor;
 use Magento\Framework\View\Element\UiComponentFactory;
 use Magento\Framework\View\Element\UiComponentInterface;
-use Magento\Framework\View\Element\UiComponent\Context;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
-use Magento\Framework\View\Element\UiComponent\Control\ActionPoolInterface;
+use Magento\Framework\View\LayoutInterface;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -46,7 +47,8 @@ class ContextTest extends TestCase
 
     protected function setUp(): void
     {
-        $pageLayout = $this->getMockBuilder(LayoutInterface::class)->getMock();
+        $pageLayout = $this->getMockBuilder(LayoutInterface::class)
+            ->getMock();
         $request = $this->getMockBuilder(Http::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -66,8 +68,10 @@ class ContextTest extends TestCase
             $this->getMockBuilder(ContentTypeFactory::class)
                 ->disableOriginalConstructor()
                 ->getMock();
-        $urlBuilder = $this->getMockBuilder(UrlInterface::class)->getMock();
-        $processor = $this->getMockBuilder(Processor::class)->getMock();
+        $urlBuilder = $this->getMockBuilder(UrlInterface::class)
+            ->getMock();
+        $processor = $this->getMockBuilder(Processor::class)
+            ->getMock();
         $uiComponentFactory =
             $this->getMockBuilder(UiComponentFactory::class)
                 ->disableOriginalConstructor()

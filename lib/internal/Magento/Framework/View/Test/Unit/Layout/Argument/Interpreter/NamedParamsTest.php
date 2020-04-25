@@ -3,12 +3,14 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\View\Test\Unit\Layout\Argument\Interpreter;
 
-use PHPUnit\Framework\TestCase;
 use Magento\Framework\Data\Argument\InterpreterInterface;
+use Magento\Framework\View\Layout\Argument\Interpreter\NamedParams;
 use PHPUnit\Framework\MockObject\MockObject;
-use \Magento\Framework\View\Layout\Argument\Interpreter\NamedParams;
+use PHPUnit\Framework\TestCase;
 
 class NamedParamsTest extends TestCase
 {
@@ -42,8 +44,8 @@ class NamedParamsTest extends TestCase
             'evaluate'
         )->with(
             ['value' => 'value 1']
-        )->will(
-            $this->returnValue('value 1 (evaluated)')
+        )->willReturn(
+            'value 1 (evaluated)'
         );
         $this->_interpreter->expects(
             $this->at(1)
@@ -51,8 +53,8 @@ class NamedParamsTest extends TestCase
             'evaluate'
         )->with(
             ['value' => 'value 2']
-        )->will(
-            $this->returnValue('value 2 (evaluated)')
+        )->willReturn(
+            'value 2 (evaluated)'
         );
         $expected = ['param1' => 'value 1 (evaluated)', 'param2' => 'value 2 (evaluated)'];
 

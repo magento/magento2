@@ -3,17 +3,18 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Framework\View\Test\Unit\Page\Config\Generator;
 
-use PHPUnit\Framework\TestCase;
-use Magento\Framework\View\Page\Config;
-use PHPUnit\Framework\MockObject\MockObject;
-use Magento\Framework\View\Layout\Generator\Context;
-use Magento\Framework\View\Page\Config\Structure;
-use \Magento\Framework\View\Page\Config\Generator\Body;
-
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Framework\View\Layout\Generator\Context;
+use Magento\Framework\View\Page\Config;
+use Magento\Framework\View\Page\Config\Generator\Body;
+use Magento\Framework\View\Page\Config\Structure;
+use PHPUnit\Framework\MockObject\MockObject;
+
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test for page config generator model
@@ -65,7 +66,7 @@ class BodyTest extends TestCase
         $bodyClasses = ['class_1', 'class--2'];
         $structureMock->expects($this->once())
             ->method('getBodyClasses')
-            ->will($this->returnValue($bodyClasses));
+            ->willReturn($bodyClasses);
         $this->pageConfigMock->expects($this->exactly(2))
             ->method('addBodyClass')
             ->withConsecutive(['class_1'], ['class--2']);

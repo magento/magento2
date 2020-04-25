@@ -3,16 +3,17 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Framework\View\Test\Unit\File\Collector\Decorator;
 
-use PHPUnit\Framework\TestCase;
-use Magento\Framework\View\File\Collector\Decorator\ModuleOutput;
-use PHPUnit\Framework\MockObject\MockObject;
-use Magento\Framework\View\File\CollectorInterface;
 use Magento\Framework\Module\Manager;
 use Magento\Framework\View\Design\ThemeInterface;
 use Magento\Framework\View\File;
+use Magento\Framework\View\File\Collector\Decorator\ModuleOutput;
+use Magento\Framework\View\File\CollectorInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 class ModuleOutputTest extends TestCase
 {
@@ -38,10 +39,10 @@ class ModuleOutputTest extends TestCase
         $this->_moduleManager
             ->expects($this->any())
             ->method('isOutputEnabled')
-            ->will($this->returnValueMap([
+            ->willReturnMap([
                 ['Module_OutputEnabled', true],
                 ['Module_OutputDisabled', false],
-            ]));
+            ]);
         $this->_model = new ModuleOutput(
             $this->_fileSource,
             $this->_moduleManager
@@ -58,7 +59,7 @@ class ModuleOutputTest extends TestCase
             ->expects($this->once())
             ->method('getFiles')
             ->with($theme, '*.xml')
-            ->will($this->returnValue([$fileOne, $fileTwo, $fileThree]));
+            ->willReturn([$fileOne, $fileTwo, $fileThree]);
         $this->assertSame([$fileOne, $fileThree], $this->_model->getFiles($theme, '*.xml'));
     }
 }

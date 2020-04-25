@@ -3,21 +3,23 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\View\Test\Unit\Model\Layout;
 
-use PHPUnit\Framework\TestCase;
-use Magento\Framework\View\Model\Layout\Merge;
-use Magento\Framework\Url\ScopeInterface;
-use PHPUnit\Framework\MockObject\MockObject;
-use Magento\Framework\Cache\FrontendInterface;
-use Magento\Framework\View\Model\Layout\Update\Validator;
-use Magento\Framework\Serialize\SerializerInterface;
-use Psr\Log\LoggerInterface;
 use Magento\Framework\App\State;
+use Magento\Framework\Cache\FrontendInterface;
 use Magento\Framework\Config\Dom\ValidationSchemaException;
 use Magento\Framework\Phrase;
+use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\Url\ScopeInterface;
 use Magento\Framework\View\Layout\LayoutCacheKeyInterface;
+use Magento\Framework\View\Model\Layout\Merge;
+use Magento\Framework\View\Model\Layout\Update\Validator;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface;
 
 class MergeTest extends TestCase
 {

@@ -3,26 +3,27 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Framework\View\Test\Unit\Asset;
 
-use PHPUnit\Framework\TestCase;
-use PHPUnit\Framework\MockObject\MockObject;
-use Magento\Framework\UrlInterface;
-use Magento\Framework\View\DesignInterface;
-use Magento\Framework\View\Asset\Source;
 use Magento\Framework\App\Request\Http;
-use Magento\Framework\View\Asset\FileFactory;
-use Magento\Framework\View\Asset\File\FallbackContextFactory;
-use Magento\Framework\View\Asset\File\ContextFactory;
-use Magento\Framework\View\Asset\RemoteFactory;
-use Magento\Framework\View\Asset\File;
-use Magento\Framework\View\Asset\RepositoryMap;
-use Magento\Framework\View\Design\ThemeInterface;
-use Magento\Framework\View\Asset\ContextInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\UrlInterface;
+use Magento\Framework\View\Asset\ContextInterface;
+use Magento\Framework\View\Asset\File;
+use Magento\Framework\View\Asset\File\ContextFactory;
+use Magento\Framework\View\Asset\File\FallbackContextFactory;
+use Magento\Framework\View\Asset\FileFactory;
+use Magento\Framework\View\Asset\RemoteFactory;
 use Magento\Framework\View\Asset\Repository;
+use Magento\Framework\View\Asset\RepositoryMap;
+use Magento\Framework\View\Asset\Source;
 use Magento\Framework\View\Design\Theme\ThemeProviderInterface;
+use Magento\Framework\View\Design\ThemeInterface;
+use Magento\Framework\View\DesignInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Unit test for Magento\Framework\View\Asset\Repository
@@ -126,7 +127,10 @@ class RepositoryTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $repositoryMapMock = $this->createPartialMock(File::class, ['getMap']);
+        $repositoryMapMock = $this->getMockBuilder(File::class)
+            ->addMethods(['getMap'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $repositoryMapMock->method('getMap')->willReturn([]);
         $this->objectManagerMock->method('get')
             ->with(RepositoryMap::class)
@@ -157,7 +161,7 @@ class RepositoryTest extends TestCase
         $this->themeProvider->expects($this->once())
             ->method('getThemeByFullPath')
             ->with('area/nonexistent_theme')
-            ->will($this->returnValue(null));
+            ->willReturn(null);
         $this->repository->updateDesignParams($params);
     }
 

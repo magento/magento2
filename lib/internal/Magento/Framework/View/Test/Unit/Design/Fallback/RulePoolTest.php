@@ -3,19 +3,20 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Framework\View\Test\Unit\Design\Fallback;
 
-use PHPUnit\Framework\TestCase;
-use Magento\Framework\Filesystem\Directory\ReadInterface;
-use Magento\Framework\View\Design\Fallback\Rule\SimpleFactory;
-use Magento\Framework\View\Design\Fallback\Rule\RuleInterface;
-use Magento\Framework\View\Design\Fallback\Rule\ThemeFactory;
-use Magento\Framework\View\Design\Fallback\Rule\ModuleFactory;
-use Magento\Framework\View\Design\Fallback\Rule\ModularSwitchFactory;
-use Magento\Framework\View\Design\ThemeInterface;
-use \Magento\Framework\View\Design\Fallback\RulePool;
 use Magento\Framework\Filesystem;
+use Magento\Framework\Filesystem\Directory\ReadInterface;
+use Magento\Framework\View\Design\Fallback\Rule\ModularSwitchFactory;
+use Magento\Framework\View\Design\Fallback\Rule\ModuleFactory;
+use Magento\Framework\View\Design\Fallback\Rule\RuleInterface;
+use Magento\Framework\View\Design\Fallback\Rule\SimpleFactory;
+use Magento\Framework\View\Design\Fallback\Rule\ThemeFactory;
+use Magento\Framework\View\Design\Fallback\RulePool;
+use Magento\Framework\View\Design\ThemeInterface;
+use PHPUnit\Framework\TestCase;
 
 class RulePoolTest extends TestCase
 {
@@ -29,36 +30,36 @@ class RulePoolTest extends TestCase
         $filesystemMock = $this->createMock(Filesystem::class);
         $filesystemMock->expects($this->any())
             ->method('getDirectoryRead')
-            ->will($this->returnCallback(function ($code) {
+            ->willReturnCallback(function ($code) {
                 $dirMock = $this->getMockForAbstractClass(ReadInterface::class);
                 $dirMock->expects($this->any())
                     ->method('getAbsolutePath')
-                    ->will($this->returnCallback(function ($path) use ($code) {
+                    ->willReturnCallback(function ($path) use ($code) {
                         $path = empty($path) ? $path : '/' . $path;
                         return rtrim($code, '/') . $path;
-                    }));
+                    });
                 return $dirMock;
-            }));
+            });
 
         $simpleFactory = $this->createMock(SimpleFactory::class);
         $rule = $this->getMockForAbstractClass(RuleInterface::class);
         $simpleFactory->expects($this->any())
             ->method('create')
-            ->will($this->returnValue($rule));
+            ->willReturn($rule);
 
         $themeFactory = $this->createMock(ThemeFactory::class);
         $themeFactory->expects($this->any())
             ->method('create')
-            ->will($this->returnValue($rule));
+            ->willReturn($rule);
         $moduleFactory = $this->createMock(ModuleFactory::class);
         $moduleFactory->expects($this->any())
             ->method('create')
-            ->will($this->returnValue($rule));
+            ->willReturn($rule);
         $moduleSwitchFactory =
             $this->createMock(ModularSwitchFactory::class);
         $moduleSwitchFactory->expects($this->any())
             ->method('create')
-            ->will($this->returnValue($rule));
+            ->willReturn($rule);
         $this->model = new RulePool(
             $filesystemMock,
             $simpleFactory,
@@ -68,11 +69,11 @@ class RulePoolTest extends TestCase
         );
 
         $parentTheme = $this->getMockForAbstractClass(ThemeInterface::class);
-        $parentTheme->expects($this->any())->method('getThemePath')->will($this->returnValue('parent_theme_path'));
+        $parentTheme->expects($this->any())->method('getThemePath')->willReturn('parent_theme_path');
 
         $theme = $this->getMockForAbstractClass(ThemeInterface::class);
-        $theme->expects($this->any())->method('getThemePath')->will($this->returnValue('current_theme_path'));
-        $theme->expects($this->any())->method('getParentTheme')->will($this->returnValue($parentTheme));
+        $theme->expects($this->any())->method('getThemePath')->willReturn('current_theme_path');
+        $theme->expects($this->any())->method('getParentTheme')->willReturn($parentTheme);
     }
 
     protected function tearDown(): void

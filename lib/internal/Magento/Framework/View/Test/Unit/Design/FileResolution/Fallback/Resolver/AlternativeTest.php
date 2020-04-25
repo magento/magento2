@@ -3,19 +3,19 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Framework\View\Test\Unit\Design\FileResolution\Fallback\Resolver;
 
-use PHPUnit\Framework\TestCase;
 use Magento\Framework\Filesystem\Directory\Read;
-use PHPUnit\Framework\MockObject\MockObject;
-use Magento\Framework\View\Design\Fallback\Rule\RuleInterface;
-use Magento\Framework\View\Design\FileResolution\Fallback\Resolver\Simple;
 use Magento\Framework\Filesystem\Directory\ReadFactory;
+use Magento\Framework\View\Design\Fallback\Rule\RuleInterface;
 use Magento\Framework\View\Design\Fallback\RulePool;
+use Magento\Framework\View\Design\FileResolution\Fallback\Resolver\Alternative;
+use Magento\Framework\View\Design\FileResolution\Fallback\Resolver\Simple;
 use Magento\Framework\View\Design\ThemeInterface;
-use \Magento\Framework\View\Design\FileResolution\Fallback\Resolver\Alternative;
-use Magento\Framework\App\Filesystem\DirectoryList;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 class AlternativeTest extends TestCase
 {
@@ -40,13 +40,13 @@ class AlternativeTest extends TestCase
         $readFactory = $this->createMock(ReadFactory::class);
         $readFactory->expects($this->any())
             ->method('create')
-            ->will($this->returnValue($this->directory));
+            ->willReturn($this->directory);
         $this->rule = $this->createMock(RuleInterface::class);
         $rulePool = $this->createMock(RulePool::class);
         $rulePool->expects($this->any())
             ->method('getRule')
             ->with('type')
-            ->will($this->returnValue($this->rule));
+            ->willReturn($this->rule);
         $this->object = new Alternative($readFactory, $rulePool, ['css' => ['less']]);
     }
 
@@ -85,10 +85,10 @@ class AlternativeTest extends TestCase
         $theme = $this->getMockForAbstractClass(ThemeInterface::class);
         $theme->expects($this->any())
             ->method('getFullPath')
-            ->will($this->returnValue('magento_theme'));
+            ->willReturn('magento_theme');
         $this->rule->expects($this->atLeastOnce())
             ->method('getPatternDirs')
-            ->will($this->returnValue(['some/dir']));
+            ->willReturn(['some/dir']);
 
         $fileExistsMap = [
             ['file.css', false],
@@ -96,7 +96,7 @@ class AlternativeTest extends TestCase
         ];
         $this->directory->expects($this->any())
             ->method('isExist')
-            ->will($this->returnValueMap($fileExistsMap));
+            ->willReturnMap($fileExistsMap);
 
         $actual = $this->object->resolve('type', $requestedFile, 'frontend', $theme, 'en_US', 'Magento_Module');
         $this->assertSame($expected, $actual);

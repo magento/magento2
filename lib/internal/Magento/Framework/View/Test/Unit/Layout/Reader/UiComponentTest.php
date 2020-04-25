@@ -3,26 +3,27 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 /**
  * Test class for \Magento\Framework\View\Layout\Reader\UiComponent
  */
 namespace Magento\Framework\View\Test\Unit\Layout\Reader;
 
-use PHPUnit\Framework\TestCase;
-use PHPUnit\Framework\MockObject\MockObject;
+use Magento\Framework\Config\DataInterface;
+use Magento\Framework\Config\DataInterfaceFactory;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\View\Layout\AclCondition;
 use Magento\Framework\View\Layout\ConfigCondition;
+use Magento\Framework\View\Layout\Element;
 use Magento\Framework\View\Layout\Reader\Context;
 use Magento\Framework\View\Layout\Reader\UiComponent;
 use Magento\Framework\View\Layout\Reader\Visibility\Condition;
-use Magento\Framework\View\Layout\ScheduledStructure\Helper;
-use Magento\Framework\Config\DataInterfaceFactory;
-use Magento\Framework\Config\DataInterface;
-use Magento\Framework\View\Layout\Element;
 use Magento\Framework\View\Layout\ReaderPool;
 use Magento\Framework\View\Layout\ScheduledStructure;
+use Magento\Framework\View\Layout\ScheduledStructure\Helper;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -100,8 +101,8 @@ class UiComponentTest extends TestCase
         $scheduleStructure = $this->getMockBuilder(ScheduledStructure::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->context->expects($this->any())->method('getScheduledStructure')->will(
-            $this->returnValue($scheduleStructure)
+        $this->context->expects($this->any())->method('getScheduledStructure')->willReturn(
+            $scheduleStructure
         );
         $this->helper->expects($this->any())->method('scheduleStructure')->with(
             $scheduleStructure,

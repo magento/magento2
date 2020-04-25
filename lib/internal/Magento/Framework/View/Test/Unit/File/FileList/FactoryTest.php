@@ -3,15 +3,16 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Framework\View\Test\Unit\File\FileList;
 
-use PHPUnit\Framework\TestCase;
-use Magento\Framework\View\File\FileList\Factory;
-use PHPUnit\Framework\MockObject\MockObject;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\View\File\FileList;
+use Magento\Framework\View\File\FileList\Factory;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 class FactoryTest extends TestCase
 {
@@ -40,17 +41,17 @@ class FactoryTest extends TestCase
         $this->objectManager
             ->expects($this->once())
             ->method('get')
-            ->with($this->equalTo(Factory::FILE_LIST_COLLATOR))
-            ->will($this->returnValue($collator));
+            ->with(Factory::FILE_LIST_COLLATOR)
+            ->willReturn($collator);
 
         $this->objectManager
             ->expects($this->once())
             ->method('create')
             ->with(
-                $this->equalTo(FileList::class),
-                $this->equalTo(['collator' => $collator])
+                FileList::class,
+                ['collator' => $collator]
             )
-            ->will($this->returnValue($list));
+            ->willReturn($list);
         $this->assertSame($list, $this->model->create());
     }
 
@@ -65,8 +66,8 @@ class FactoryTest extends TestCase
         $this->objectManager
             ->expects($this->once())
             ->method('get')
-            ->with($this->equalTo(Factory::FILE_LIST_COLLATOR))
-            ->will($this->returnValue($collator));
+            ->with(Factory::FILE_LIST_COLLATOR)
+            ->willReturn($collator);
 
         $this->model->create();
     }

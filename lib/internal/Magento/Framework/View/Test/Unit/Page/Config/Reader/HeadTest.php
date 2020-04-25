@@ -3,15 +3,16 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Framework\View\Test\Unit\Page\Config\Reader;
 
-use PHPUnit\Framework\TestCase;
-use Magento\Framework\View\Layout\Reader\Context;
-use Magento\Framework\View\Page\Config\Structure;
 use Magento\Framework\View\Layout\Element;
+use Magento\Framework\View\Layout\Reader\Context;
 use Magento\Framework\View\Page\Config;
 use Magento\Framework\View\Page\Config\Reader\Head;
+use Magento\Framework\View\Page\Config\Structure;
+use PHPUnit\Framework\TestCase;
 
 class HeadTest extends TestCase
 {

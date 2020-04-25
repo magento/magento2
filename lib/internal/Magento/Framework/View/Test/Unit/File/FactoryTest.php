@@ -3,15 +3,16 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Framework\View\Test\Unit\File;
 
-use PHPUnit\Framework\TestCase;
-use Magento\Framework\View\File\Factory;
-use PHPUnit\Framework\MockObject\MockObject;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\View\Design\ThemeInterface;
 use Magento\Framework\View\File;
+use Magento\Framework\View\File\Factory;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 class FactoryTest extends TestCase
 {
@@ -48,7 +49,7 @@ class FactoryTest extends TestCase
                     'isBase' => $isBase,
                 ])
             )
-            ->will($this->returnValue($file));
+            ->willReturn($file);
         $this->assertSame($file, $this->_model->create(__FILE__, 'Fixture_Module', $theme, $isBase));
     }
 }

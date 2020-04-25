@@ -3,12 +3,14 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\View\Test\Unit\Url;
 
-use PHPUnit\Framework\TestCase;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\View\Url\Config;
 use PHPUnit\Framework\MockObject\MockObject;
-use Magento\Framework\App\Config\ScopeConfigInterface;
+use PHPUnit\Framework\TestCase;
 
 class ConfigTest extends TestCase
 {
@@ -26,7 +28,8 @@ class ConfigTest extends TestCase
     {
         $this->_scopeConfig = $this->getMockBuilder(
             ScopeConfigInterface::class
-        )->disableOriginalConstructor()->getMock();
+        )->disableOriginalConstructor()
+            ->getMock();
         $this->_model = new Config($this->_scopeConfig);
     }
 
@@ -44,8 +47,8 @@ class ConfigTest extends TestCase
             'getValue'
         )->with(
             $path
-        )->will(
-            $this->returnValue($expectedValue)
+        )->willReturn(
+            $expectedValue
         );
         $actual = $this->_model->getValue($path);
         $this->assertEquals($expectedValue, $actual);

@@ -3,15 +3,16 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Framework\View\Test\Unit;
 
-use PHPUnit\Framework\TestCase;
-use Magento\Framework\View\Element\BlockFactory;
-use PHPUnit\Framework\MockObject\MockObject;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\View\DataSourcePool;
+use Magento\Framework\View\Element\BlockFactory;
 use Magento\Framework\View\Element\BlockInterface;
-use \Magento\Framework\View\DataSourcePool;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test for view Context model
@@ -59,7 +60,7 @@ class DataSourcePoolTest extends TestCase
         $this->blockFactory->expects($this->once())
             ->method('createBlock')
             ->with($blockClass)
-            ->will($this->returnValue($block));
+            ->willReturn($block);
         return $block;
     }
 

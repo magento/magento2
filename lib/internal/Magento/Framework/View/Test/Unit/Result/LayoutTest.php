@@ -3,19 +3,20 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Framework\View\Test\Unit\Result;
 
-use PHPUnit\Framework\TestCase;
 use Magento\Framework\App\Request\Http;
-use PHPUnit\Framework\MockObject\MockObject;
 use Magento\Framework\Event\ManagerInterface;
-use Magento\Framework\View\Layout;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\Translate\InlineInterface;
 use Magento\Framework\View\Element\Template\Context;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\View\Layout;
 use Magento\Framework\View\Layout\ProcessorInterface;
-use PHPUnit\Framework\MockObject\Matcher\InvokedCount;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\MockObject\Rule\InvokedCount;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \Magento\Framework\View\Result\Layout
@@ -55,9 +56,9 @@ class LayoutTest extends TestCase
         $this->translateInline = $this->createMock(InlineInterface::class);
 
         $context = $this->createMock(Context::class);
-        $context->expects($this->any())->method('getLayout')->will($this->returnValue($this->layout));
-        $context->expects($this->any())->method('getRequest')->will($this->returnValue($this->request));
-        $context->expects($this->any())->method('getEventManager')->will($this->returnValue($this->eventManager));
+        $context->expects($this->any())->method('getLayout')->willReturn($this->layout);
+        $context->expects($this->any())->method('getRequest')->willReturn($this->request);
+        $context->expects($this->any())->method('getEventManager')->willReturn($this->eventManager);
 
         $this->resultLayout = (new ObjectManager($this))
             ->getObject(
@@ -88,7 +89,7 @@ class LayoutTest extends TestCase
         $processor = $this->createMock(ProcessorInterface::class);
         $processor->expects($this->once())->method('addHandle')->with('module_controller_action');
 
-        $this->layout->expects($this->once())->method('getUpdate')->will($this->returnValue($processor));
+        $this->layout->expects($this->once())->method('getUpdate')->willReturn($processor);
 
         $this->assertSame($this->resultLayout, $this->resultLayout->addHandle('module_controller_action'));
     }
@@ -98,7 +99,7 @@ class LayoutTest extends TestCase
         $processor = $this->createMock(ProcessorInterface::class);
         $processor->expects($this->once())->method('addUpdate')->with('handle_name');
 
-        $this->layout->expects($this->once())->method('getUpdate')->will($this->returnValue($processor));
+        $this->layout->expects($this->once())->method('getUpdate')->willReturn($processor);
 
         $this->resultLayout->addUpdate('handle_name');
     }
@@ -122,10 +123,10 @@ class LayoutTest extends TestCase
     ) {
         $layoutOutput = 'output';
 
-        $this->layout->expects($this->once())->method('getOutput')->will($this->returnValue($layoutOutput));
+        $this->layout->expects($this->once())->method('getOutput')->willReturn($layoutOutput);
 
         $this->request->expects($this->once())->method('getFullActionName')
-            ->will($this->returnValue('Module_Controller_Action'));
+            ->willReturn('Module_Controller_Action');
 
         $this->eventManager->expects($this->exactly(2))->method('dispatch')->withConsecutive(
             ['layout_render_before'],
@@ -168,10 +169,10 @@ class LayoutTest extends TestCase
         $processor = $this->createMock(ProcessorInterface::class);
         $processor->expects($this->once())->method('addHandle')->with('module_controller_action');
 
-        $this->layout->expects($this->once())->method('getUpdate')->will($this->returnValue($processor));
+        $this->layout->expects($this->once())->method('getUpdate')->willReturn($processor);
 
         $this->request->expects($this->once())->method('getFullActionName')
-            ->will($this->returnValue('Module_Controller_Action'));
+            ->willReturn('Module_Controller_Action');
 
         $this->assertSame($this->resultLayout, $this->resultLayout->addDefaultHandle());
     }

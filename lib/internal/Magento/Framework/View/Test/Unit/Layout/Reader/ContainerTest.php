@@ -3,20 +3,21 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Framework\View\Test\Unit\Layout\Reader;
 
-use PHPUnit\Framework\TestCase;
-use PHPUnit\Framework\MockObject\MockObject;
-use Magento\Framework\View\Layout\ScheduledStructure\Helper;
-use Magento\Framework\View\Layout\ReaderPool;
-use Magento\Framework\View\Layout\Element;
-use PHPUnit\Framework\MockObject\Matcher\InvokedCount;
-use Magento\Framework\View\Layout\Reader\Context;
-use \Magento\Framework\View\Layout\Reader\Container;
-
-use Magento\Framework\View\Layout\ScheduledStructure;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Framework\View\Layout\Element;
+use Magento\Framework\View\Layout\Reader\Container;
+use Magento\Framework\View\Layout\Reader\Context;
+use Magento\Framework\View\Layout\ReaderPool;
+use Magento\Framework\View\Layout\ScheduledStructure;
+use Magento\Framework\View\Layout\ScheduledStructure\Helper;
+use PHPUnit\Framework\MockObject\MockObject;
+
+use PHPUnit\Framework\MockObject\Rule\InvokedCount;
+use PHPUnit\Framework\TestCase;
 
 class ContainerTest extends TestCase
 {
@@ -45,9 +46,11 @@ class ContainerTest extends TestCase
         $this->objectManagerHelper = new ObjectManagerHelper($this);
 
         $this->helperMock = $this->getMockBuilder(Helper::class)
-            ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->readerPoolMock = $this->getMockBuilder(ReaderPool::class)
-            ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->container = $this->objectManagerHelper->getObject(
             Container::class,
@@ -80,7 +83,8 @@ class ContainerTest extends TestCase
     ) {
         /** @var ScheduledStructure|MockObject $scheduledStructureMock */
         $scheduledStructureMock = $this->getMockBuilder(ScheduledStructure::class)
-            ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
         $scheduledStructureMock->expects($getStructureCondition)
             ->method('getStructureElementData')
             ->with($containerName)
@@ -95,7 +99,8 @@ class ContainerTest extends TestCase
 
         /** @var Context|MockObject $contextMock */
         $contextMock = $this->getMockBuilder(Context::class)
-            ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
         $contextMock->expects($this->any())
             ->method('getScheduledStructure')
             ->willReturn($scheduledStructureMock);
@@ -114,7 +119,7 @@ class ContainerTest extends TestCase
                 ->method('unsetElementFromListToRemove')
                 ->with($elementCurrent->getAttribute('name'));
         }
-        
+
         $this->container->interpret($contextMock, $elementCurrent);
     }
 

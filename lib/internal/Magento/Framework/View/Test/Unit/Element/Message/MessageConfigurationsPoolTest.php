@@ -3,10 +3,12 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\View\Test\Unit\Element\Message;
 
-use PHPUnit\Framework\TestCase;
 use Magento\Framework\View\Element\Message\MessageConfigurationsPool;
+use PHPUnit\Framework\TestCase;
 
 class MessageConfigurationsPoolTest extends TestCase
 {
@@ -55,7 +57,7 @@ class MessageConfigurationsPoolTest extends TestCase
         return [
             [['message_identifier' => []]],
             [['message_identifier' => ['renderer' => 5]]],
-            [['message_identifier' => ['renderer' => new \StdClass]]],
+            [['message_identifier' => ['renderer' => new \StdClass()]]],
         ];
     }
 
@@ -81,14 +83,12 @@ class MessageConfigurationsPoolTest extends TestCase
         return [
             [
                 [
-                    'message_identifier' =>
-                        ['renderer' => 'RendererCode', 'data' => 5]
+                    'message_identifier' => ['renderer' => 'RendererCode', 'data' => 5]
                 ]
             ],
             [
                 [
-                    'message_identifier' =>
-                        ['renderer' => 'RendererCode', 'data' => new \StdClass]
+                    'message_identifier' => ['renderer' => 'RendererCode', 'data' => new \StdClass()]
                 ]
             ],
         ];

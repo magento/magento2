@@ -3,13 +3,15 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\View\Test\Unit\Layout\Argument\Interpreter;
 
-use PHPUnit\Framework\TestCase;
 use Magento\Framework\UrlInterface;
-use PHPUnit\Framework\MockObject\MockObject;
 use Magento\Framework\View\Layout\Argument\Interpreter\NamedParams;
-use \Magento\Framework\View\Layout\Argument\Interpreter\Url;
+use Magento\Framework\View\Layout\Argument\Interpreter\Url;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 class UrlTest extends TestCase
 {
@@ -47,8 +49,8 @@ class UrlTest extends TestCase
             'evaluate'
         )->with(
             $input
-        )->will(
-            $this->returnValue($urlParams)
+        )->willReturn(
+            $urlParams
         );
 
         $this->_urlResolver->expects(
@@ -58,8 +60,8 @@ class UrlTest extends TestCase
         )->with(
             'some/path',
             $urlParams
-        )->will(
-            $this->returnValue($expected)
+        )->willReturn(
+            $expected
         );
 
         $actual = $this->_model->evaluate($input);

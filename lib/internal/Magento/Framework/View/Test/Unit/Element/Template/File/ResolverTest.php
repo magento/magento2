@@ -3,13 +3,15 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\View\Test\Unit\Element\Template\File;
 
-use PHPUnit\Framework\TestCase;
+use Magento\Framework\Serialize\Serializer\Json;
+use Magento\Framework\View\Element\Template\File\Resolver;
 use Magento\Framework\View\FileSystem;
 use PHPUnit\Framework\MockObject\MockObject;
-use Magento\Framework\View\Element\Template\File\Resolver;
-use Magento\Framework\Serialize\Serializer\Json;
+use PHPUnit\Framework\TestCase;
 
 class ResolverTest extends TestCase
 {
@@ -46,12 +48,10 @@ class ResolverTest extends TestCase
             ->getMock();
         $this->serializerMock->expects($this->any())
             ->method('serialize')
-            ->will(
-                $this->returnCallback(
-                    function ($value) {
-                        return json_encode($value);
-                    }
-                )
+            ->willReturnCallback(
+                function ($value) {
+                    return json_encode($value);
+                }
             );
         $this->_resolver = new Resolver(
             $this->_viewFileSystemMock,
@@ -70,7 +70,7 @@ class ResolverTest extends TestCase
         $this->_viewFileSystemMock->expects($this->once())
             ->method('getTemplateFileName')
             ->with($template)
-            ->will($this->returnValue('path_to' . $template));
+            ->willReturn('path_to' . $template);
         $this->assertEquals('path_to' . $template, $this->_resolver->getTemplateFileName($template));
         $this->assertEquals('path_to' . $template, $this->_resolver->getTemplateFileName($template));
     }

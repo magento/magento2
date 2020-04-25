@@ -3,16 +3,18 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\View\Test\Unit\Element\Html;
 
-use PHPUnit\Framework\TestCase;
-use PHPUnit\Framework\MockObject\MockObject;
-use Magento\Framework\Event\ManagerInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Framework\View\Element\Context;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use \Magento\Framework\View\Element\Html\Select;
 use Magento\Framework\Escaper;
+use Magento\Framework\Event\ManagerInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\View\Element\Context;
+use Magento\Framework\View\Element\Html\Select;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 class SelectTest extends TestCase
 {
@@ -41,13 +43,13 @@ class SelectTest extends TestCase
             ->getMock();
         $context->expects($this->once())
             ->method('getEscaper')
-            ->will($this->returnValue($this->escaper));
+            ->willReturn($this->escaper);
         $context->expects($this->once())
             ->method('getEventManager')
-            ->will($this->returnValue($eventManager));
+            ->willReturn($eventManager);
         $context->expects($this->once())
             ->method('getScopeConfig')
-            ->will($this->returnValue($scopeConfig));
+            ->willReturn($scopeConfig);
 
         $objectManagerHelper = new ObjectManager($this);
         $this->select = $objectManagerHelper->getObject(
@@ -105,10 +107,10 @@ class SelectTest extends TestCase
     {
         $this->escaper->expects($this->any())
             ->method('escapeHtml')
-            ->will($this->returnArgument(0));
+            ->willReturnArgument(0);
         $this->escaper->expects($this->any())
             ->method('escapeHtmlAttr')
-            ->will($this->returnArgument(0));
+            ->willReturnArgument(0);
 
         $selectId = 'testId';
         $selectClass = 'testClass';
@@ -142,10 +144,10 @@ class SelectTest extends TestCase
     {
         $this->escaper->expects($this->any())
             ->method('escapeHtml')
-            ->will($this->returnArgument(0));
+            ->willReturnArgument(0);
         $this->escaper->expects($this->any())
             ->method('escapeHtmlAttr')
-            ->will($this->returnArgument(0));
+            ->willReturnArgument(0);
 
         $selectId = 'testId';
         $selectClass = 'testClass';
@@ -178,13 +180,13 @@ class SelectTest extends TestCase
         $this->select->setValue($selectedValues);
 
         $result = '<select name="testName" id="testId" class="testClass" title="testTitle" >'
-            .   '<option value="testValue"  paramKey="paramValue" >testLabel</option>'
-            .   '<option value="selectedValue" selected="selected"  paramKey="paramValue" '
-            .       ' paramKey2="paramValue2" >selectedLabel</option>'
-            .   '<optgroup label="groupLabel" data-optgroup-name="groupLabel">'
-            .       '<option value="groupElementValue" >GroupElementLabel</option>'
-            .       '<option value="selectedGroupElementValue" selected="selected" >SelectedGroupElementLabel</option>'
-            .   '</optgroup>'
+            . '<option value="testValue"  paramKey="paramValue" >testLabel</option>'
+            . '<option value="selectedValue" selected="selected"  paramKey="paramValue" '
+            . ' paramKey2="paramValue2" >selectedLabel</option>'
+            . '<optgroup label="groupLabel" data-optgroup-name="groupLabel">'
+            . '<option value="groupElementValue" >GroupElementLabel</option>'
+            . '<option value="selectedGroupElementValue" selected="selected" >SelectedGroupElementLabel</option>'
+            . '</optgroup>'
             . '</select>';
 
         $this->assertEquals($result, $this->select->getHtml());
@@ -194,10 +196,10 @@ class SelectTest extends TestCase
     {
         $this->escaper->expects($this->any())
             ->method('escapeHtml')
-            ->will($this->returnValue('ESCAPED'));
+            ->willReturn('ESCAPED');
         $this->escaper->expects($this->any())
             ->method('escapeHtmlAttr')
-            ->will($this->returnValue('ESCAPED_ATTR'));
+            ->willReturn('ESCAPED_ATTR');
 
         $optionsSets = [
             $this->getOptionsWithSingleQuotes(),
@@ -205,12 +207,12 @@ class SelectTest extends TestCase
         ];
 
         $expectedResult = '<select name="test[name]" id="testId" class="test class" title="ESCAPED" >'
-            .   '<option value="ESCAPED"  paramKey="ESCAPED" >ESCAPED</option>'
-            .   '<option value="ESCAPED" selected="selected" >ESCAPED</option>'
-            .   '<optgroup label="ESCAPED" data-optgroup-name="ESCAPED">'
-            .       '<option value="ESCAPED" >ESCAPED</option>'
-            .       '<option value="ESCAPED" selected="selected" >ESCAPED</option>'
-            .   '</optgroup>'
+            . '<option value="ESCAPED"  paramKey="ESCAPED" >ESCAPED</option>'
+            . '<option value="ESCAPED" selected="selected" >ESCAPED</option>'
+            . '<optgroup label="ESCAPED" data-optgroup-name="ESCAPED">'
+            . '<option value="ESCAPED" >ESCAPED</option>'
+            . '<option value="ESCAPED" selected="selected" >ESCAPED</option>'
+            . '</optgroup>'
             . '</select>';
 
         foreach ($optionsSets as $inOptions) {

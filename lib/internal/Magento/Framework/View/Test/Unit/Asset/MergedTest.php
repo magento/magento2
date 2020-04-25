@@ -3,19 +3,21 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\View\Test\Unit\Asset;
 
-use PHPUnit\Framework\TestCase;
-use PHPUnit\Framework\MockObject\MockObject;
-use Magento\Framework\View\Asset\Remote;
+use Magento\Framework\App\View\Deployment\Version\StorageInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\View\Asset\File;
-use Magento\Framework\View\Asset\Merged;
-use Psr\Log\LoggerInterface;
-use Magento\Framework\View\Asset\Repository as AssetRepository;
 use Magento\Framework\View\Asset\MergeableInterface;
+use Magento\Framework\View\Asset\Merged;
 use Magento\Framework\View\Asset\MergeStrategyInterface;
-use Magento\Framework\App\View\Deployment\Version\StorageInterface;
+use Magento\Framework\View\Asset\Remote;
+use Magento\Framework\View\Asset\Repository as AssetRepository;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface;
 
 class MergedTest extends TestCase
 {

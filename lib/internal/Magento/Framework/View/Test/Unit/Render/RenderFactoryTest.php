@@ -3,15 +3,16 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Framework\View\Test\Unit\Render;
 
-use PHPUnit\Framework\TestCase;
-use Magento\Framework\View\Render\RenderFactory;
 use Magento\Framework\ObjectManagerInterface;
-use PHPUnit\Framework\MockObject\MockObject;
-use Magento\Framework\View\RenderInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Framework\View\Render\RenderFactory;
+use Magento\Framework\View\RenderInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 class RenderFactoryTest extends TestCase
 {
@@ -44,8 +45,8 @@ class RenderFactoryTest extends TestCase
         $data = 'RenderInterface';
         $this->objectManagerMock->expects($this->once())
             ->method('get')
-            ->with($this->equalTo(\Magento\Framework\View\Render\RenderInterface::class))
-            ->will($this->returnValue($renderMock));
+            ->with(\Magento\Framework\View\Render\RenderInterface::class)
+            ->willReturn($renderMock);
         $this->assertInstanceOf($instance, $this->renderFactory->get($data));
     }
 
@@ -57,8 +58,8 @@ class RenderFactoryTest extends TestCase
         );
         $this->objectManagerMock->expects($this->once())
             ->method('get')
-            ->with($this->equalTo(\Magento\Framework\View\Render\RenderInterface::class))
-            ->will($this->returnValue(new \stdClass()));
+            ->with(\Magento\Framework\View\Render\RenderInterface::class)
+            ->willReturn(new \stdClass());
         $this->renderFactory->get('RenderInterface');
     }
 }

@@ -3,18 +3,20 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\View\Test\Unit\Model\Layout\Update;
 
-use PHPUnit\Framework\TestCase;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\Framework\Config\DomFactory;
-use PHPUnit\Framework\MockObject\MockObject;
 use Magento\Framework\Config\Dom\UrnResolver;
-use Magento\Framework\Config\ValidationStateInterface;
 use Magento\Framework\Config\Dom\ValidationException;
 use Magento\Framework\Config\Dom\ValidationSchemaException;
+use Magento\Framework\Config\DomFactory;
+use Magento\Framework\Config\ValidationStateInterface;
 use Magento\Framework\Phrase;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\View\Model\Layout\Update\Validator;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 class ValidatorTest extends TestCase
 {
@@ -48,13 +50,16 @@ class ValidatorTest extends TestCase
         $this->_objectHelper = new ObjectManager($this);
         $this->domConfigFactory = $this->getMockBuilder(
             DomFactory::class
-        )->disableOriginalConstructor()->getMock();
+        )->disableOriginalConstructor()
+            ->getMock();
         $this->urnResolver = $this->getMockBuilder(
             UrnResolver::class
-        )->disableOriginalConstructor()->getMock();
+        )->disableOriginalConstructor()
+            ->getMock();
         $this->validationState = $this->getMockBuilder(
             ValidationStateInterface::class
-        )->disableOriginalConstructor()->getMock();
+        )->disableOriginalConstructor()
+            ->getMock();
 
         $this->model = $this->_objectHelper->getObject(
             Validator::class,
@@ -84,7 +89,7 @@ class ValidatorTest extends TestCase
         )->method(
             'createDom'
         )->with(
-            $this->equalTo($params)
+            $params
         )->willReturnSelf();
 
         return $this->model;

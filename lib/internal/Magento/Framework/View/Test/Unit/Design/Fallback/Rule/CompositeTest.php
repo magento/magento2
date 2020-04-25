@@ -3,11 +3,13 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\View\Test\Unit\Design\Fallback\Rule;
 
-use PHPUnit\Framework\TestCase;
+use Magento\Framework\View\Design\Fallback\Rule\Composite;
 use Magento\Framework\View\Design\Fallback\Rule\RuleInterface;
-use \Magento\Framework\View\Design\Fallback\Rule\Composite;
+use PHPUnit\Framework\TestCase;
 
 class CompositeTest extends TestCase
 {
@@ -29,8 +31,8 @@ class CompositeTest extends TestCase
             'getPatternDirs'
         )->with(
             $inputParams
-        )->will(
-            $this->returnValue(['rule_one/path/one', 'rule_one/path/two'])
+        )->willReturn(
+            ['rule_one/path/one', 'rule_one/path/two']
         );
 
         $ruleTwo = $this->getMockForAbstractClass(RuleInterface::class);
@@ -40,8 +42,8 @@ class CompositeTest extends TestCase
             'getPatternDirs'
         )->with(
             $inputParams
-        )->will(
-            $this->returnValue(['rule_two/path/one', 'rule_two/path/two'])
+        )->willReturn(
+            ['rule_two/path/one', 'rule_two/path/two']
         );
 
         $object = new Composite([$ruleOne, $ruleTwo]);

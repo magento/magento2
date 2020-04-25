@@ -3,15 +3,16 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Framework\View\Test\Unit\File;
 
-use PHPUnit\Framework\TestCase;
-use Magento\Framework\View\File\FileList;
+use Magento\Framework\View\Design\ThemeInterface;
 use Magento\Framework\View\File;
+use Magento\Framework\View\File\FileList;
 use Magento\Framework\View\File\FileList\Collator;
 use PHPUnit\Framework\MockObject\MockObject;
-use Magento\Framework\View\Design\ThemeInterface;
+use PHPUnit\Framework\TestCase;
 
 class FileListTest extends TestCase
 {
@@ -57,7 +58,7 @@ class FileListTest extends TestCase
         $theme = null;
         if ($themeFullPath !== null) {
             $theme = $this->getMockForAbstractClass(ThemeInterface::class);
-            $theme->expects($this->any())->method('getFullPath')->will($this->returnValue($themeFullPath));
+            $theme->expects($this->any())->method('getFullPath')->willReturn($themeFullPath);
         }
         return new File($filename, $module, $theme);
     }
@@ -109,15 +110,13 @@ class FileListTest extends TestCase
             ->expects($this->once())
             ->method('collate')
             ->with(
-                $this->equalTo($files),
-                $this->equalTo(
-                    [
-                        $this->_baseFile->getFileIdentifier() => $this->_baseFile,
-                        $this->_themeFile->getFileIdentifier() => $this->_themeFile,
-                    ]
-                )
+                $files,
+                [
+                    $this->_baseFile->getFileIdentifier() => $this->_baseFile,
+                    $this->_themeFile->getFileIdentifier() => $this->_themeFile,
+                ]
             )
-            ->will($this->returnValue($result));
+            ->willReturn($result);
         $this->assertNull($this->_model->replace($files));
         $this->assertSame($result, $this->_model->getAll());
     }

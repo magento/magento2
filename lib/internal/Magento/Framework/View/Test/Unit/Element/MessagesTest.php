@@ -3,23 +3,24 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 /**
  * Test for view Messages model
  */
 namespace Magento\Framework\View\Test\Unit\Element;
 
-use PHPUnit\Framework\TestCase;
-use Magento\Framework\Message\Factory;
-use PHPUnit\Framework\MockObject\MockObject;
-use Magento\Framework\Message\CollectionFactory;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\Framework\Message\Collection;
 use Magento\Framework\Escaper;
+use Magento\Framework\Message\Collection;
+use Magento\Framework\Message\CollectionFactory;
+use Magento\Framework\Message\Factory;
 use Magento\Framework\Message\Manager;
-use Magento\Framework\View\Element\Message\InterpretationStrategyInterface;
-use \Magento\Framework\View\Element\Messages;
 use Magento\Framework\Message\MessageInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\View\Element\Message\InterpretationStrategyInterface;
+use Magento\Framework\View\Element\Messages;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Unit test for \Magento\Framework\View\Element\Messages
@@ -92,7 +93,7 @@ class MessagesTest extends TestCase
 
         $this->collectionFactory->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($collection));
+            ->willReturn($collection);
         return $collection;
     }
 
@@ -137,7 +138,7 @@ class MessagesTest extends TestCase
 
         $collectionForAdd->expects($this->atLeastOnce())
             ->method('getItems')
-            ->will($this->returnValue($arrayMessages));
+            ->willReturn($arrayMessages);
 
         $this->assertSame($this->messages, $this->messages->addMessages($collectionForAdd));
     }
@@ -164,7 +165,7 @@ class MessagesTest extends TestCase
         $this->messageFactory->expects($this->once())
             ->method('create')
             ->with(MessageInterface::TYPE_ERROR, $messageText)
-            ->will($this->returnValue($message));
+            ->willReturn($message);
 
         $collection = $this->initMessageCollection();
         $collection->expects($this->once())
@@ -183,7 +184,7 @@ class MessagesTest extends TestCase
         $this->messageFactory->expects($this->once())
             ->method('create')
             ->with(MessageInterface::TYPE_WARNING, $messageText)
-            ->will($this->returnValue($message));
+            ->willReturn($message);
 
         $collection = $this->initMessageCollection();
         $collection->expects($this->once())
@@ -202,7 +203,7 @@ class MessagesTest extends TestCase
         $this->messageFactory->expects($this->once())
             ->method('create')
             ->with(MessageInterface::TYPE_NOTICE, $messageText)
-            ->will($this->returnValue($message));
+            ->willReturn($message);
 
         $collection = $this->initMessageCollection();
         $collection->expects($this->once())
@@ -221,7 +222,7 @@ class MessagesTest extends TestCase
         $this->messageFactory->expects($this->once())
             ->method('create')
             ->with(MessageInterface::TYPE_SUCCESS, $messageText)
-            ->will($this->returnValue($message));
+            ->willReturn($message);
 
         $collection = $this->initMessageCollection();
         $collection->expects($this->once())
@@ -240,7 +241,7 @@ class MessagesTest extends TestCase
         $collection->expects($this->once())
             ->method('getItemsByType')
             ->with($messageType)
-            ->will($this->returnValue($resultMessages));
+            ->willReturn($resultMessages);
 
         $this->assertSame($resultMessages, $this->messages->getMessagesByType($messageType));
     }

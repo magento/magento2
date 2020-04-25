@@ -3,16 +3,17 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Framework\View\Test\Unit;
 
-use PHPUnit\Framework\TestCase;
-use Magento\Framework\View\DesignExceptions;
 use Magento\Framework\App\Config\ScopeConfigInterface;
-use PHPUnit\Framework\MockObject\MockObject;
 use Magento\Framework\App\Request\Http;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Framework\View\DesignExceptions;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 class DesignExceptionsTest extends TestCase
 {
@@ -67,14 +68,14 @@ class DesignExceptionsTest extends TestCase
     {
         $this->requestMock->expects($this->once())
             ->method('getServer')
-            ->with($this->equalTo('HTTP_USER_AGENT'))
-            ->will($this->returnValue($userAgent));
+            ->with('HTTP_USER_AGENT')
+            ->willReturn($userAgent);
 
         if ($userAgent) {
             $this->scopeConfigMock->expects($this->once())
                 ->method('getValue')
-                ->with($this->equalTo($this->exceptionConfigPath), $this->equalTo($this->scopeType))
-                ->will($this->returnValue($configValue));
+                ->with($this->exceptionConfigPath, $this->scopeType)
+                ->willReturn($configValue);
         }
 
         $this->serializerMock->expects($this->exactly($callNum))

@@ -3,30 +3,31 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 /**
  * Test class for \Magento\Framework\View\Page\Config
  */
 namespace Magento\Framework\View\Test\Unit\Page;
 
-use PHPUnit\Framework\TestCase;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\Framework\View\Asset\Repository;
-use PHPUnit\Framework\MockObject\MockObject;
-use Magento\Framework\View\Asset\GroupedCollection;
 use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Framework\View\Page\FaviconInterface;
-use Magento\Framework\View\Layout\BuilderInterface;
-use Magento\Framework\View\Asset\File;
-use Magento\Framework\View\Asset\Remote;
-use Magento\Framework\View\Page\Title;
 use Magento\Framework\App\State;
-use Magento\Framework\Locale\ResolverInterface;
 use Magento\Framework\Escaper;
-use Magento\Framework\View\LayoutInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Locale\Resolver;
+use Magento\Framework\Locale\ResolverInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\View\Asset\File;
+use Magento\Framework\View\Asset\GroupedCollection;
+use Magento\Framework\View\Asset\Remote;
+use Magento\Framework\View\Asset\Repository;
+use Magento\Framework\View\Layout\BuilderInterface;
+use Magento\Framework\View\LayoutInterface;
 use Magento\Framework\View\Page\Config;
+use Magento\Framework\View\Page\FaviconInterface;
+use Magento\Framework\View\Page\Title;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \Magento\Framework\View\Page\Config
@@ -143,8 +144,8 @@ class ConfigTest extends TestCase
     public function testBuild()
     {
         $this->model->setBuilder($this->builder);
-        $this->builder->expects($this->once())->method('build')->will(
-            $this->returnValue(LayoutInterface::class)
+        $this->builder->expects($this->once())->method('build')->willReturn(
+            LayoutInterface::class
         );
         $this->model->publicBuild();
     }
@@ -190,9 +191,9 @@ class ConfigTest extends TestCase
         $expectedData = 'default_media_type; charset=default_charset';
         $this->model->setContentType('auto');
         $this->scopeConfig->expects($this->at(0))->method('getValue')->with('design/head/default_media_type', 'store')
-            ->will($this->returnValue('default_media_type'));
+            ->willReturn('default_media_type');
         $this->scopeConfig->expects($this->at(1))->method('getValue')->with('design/head/default_charset', 'store')
-            ->will($this->returnValue('default_charset'));
+            ->willReturn('default_charset');
         $this->assertEquals($expectedData, $this->model->getContentType());
     }
 
@@ -207,7 +208,7 @@ class ConfigTest extends TestCase
     {
         $expectedData = 'default_media_type';
         $this->scopeConfig->expects($this->once())->method('getValue')->with('design/head/default_media_type', 'store')
-            ->will($this->returnValue('default_media_type'));
+            ->willReturn('default_media_type');
         $this->assertEquals($expectedData, $this->model->getMediaType());
     }
 
@@ -222,7 +223,7 @@ class ConfigTest extends TestCase
     {
         $expectedData = 'default_charset';
         $this->scopeConfig->expects($this->once())->method('getValue')->with('design/head/default_charset', 'store')
-            ->will($this->returnValue('default_charset'));
+            ->willReturn('default_charset');
         $this->assertEquals($expectedData, $this->model->getCharset());
     }
 
@@ -237,7 +238,7 @@ class ConfigTest extends TestCase
     {
         $expectedData = 'default_description';
         $this->scopeConfig->expects($this->once())->method('getValue')->with('design/head/default_description', 'store')
-            ->will($this->returnValue('default_description'));
+            ->willReturn('default_description');
         $this->assertEquals($expectedData, $this->model->getDescription());
     }
 
@@ -252,7 +253,7 @@ class ConfigTest extends TestCase
     {
         $expectedData = 'default_keywords';
         $this->scopeConfig->expects($this->once())->method('getValue')->with('design/head/default_keywords', 'store')
-            ->will($this->returnValue('default_keywords'));
+            ->willReturn('default_keywords');
         $this->assertEquals($expectedData, $this->model->getKeywords());
     }
 
@@ -272,7 +273,7 @@ class ConfigTest extends TestCase
             'design/search_engine_robots/default_robots',
             'store'
         )
-            ->will($this->returnValue('default_robots'));
+            ->willReturn('default_robots');
         $this->assertEquals($expectedData, $this->model->getRobots());
     }
 
@@ -302,8 +303,8 @@ class ConfigTest extends TestCase
      */
     public function testAddPageAsset($file, $properties, $name, $expectedName)
     {
-        $this->assetRepo->expects($this->once())->method('createAsset')->with($file)->will(
-            $this->returnValue($this->asset)
+        $this->assetRepo->expects($this->once())->method('createAsset')->with($file)->willReturn(
+            $this->asset
         );
         $this->pageAssets->expects($this->once())->method('add')->with($expectedName, $this->asset, $properties);
         $this->assertInstanceOf(
@@ -344,8 +345,8 @@ class ConfigTest extends TestCase
      */
     public function testAddRemotePageAsset($url, $contentType, $properties, $name, $expectedName)
     {
-        $this->assetRepo->expects($this->once())->method('createRemoteAsset')->with($url, $contentType)->will(
-            $this->returnValue($this->remoteAsset)
+        $this->assetRepo->expects($this->once())->method('createRemoteAsset')->with($url, $contentType)->willReturn(
+            $this->remoteAsset
         );
         $this->pageAssets->expects($this->once())->method('add')->with($expectedName, $this->remoteAsset, $properties);
         $this->assertInstanceOf(
@@ -382,8 +383,8 @@ class ConfigTest extends TestCase
         $title = 'test title';
         $href = 'http://test.com';
         $expected = ['attributes' => 'rel="alternate" type="application/rss+xml" title="test title"'];
-        $this->assetRepo->expects($this->once())->method('createRemoteAsset')->with($href, 'unknown')->will(
-            $this->returnValue($this->remoteAsset)
+        $this->assetRepo->expects($this->once())->method('createRemoteAsset')->with($href, 'unknown')->willReturn(
+            $this->remoteAsset
         );
         $this->pageAssets->expects($this->once())->method('add')->with(
             'link/http://test.com',
@@ -542,7 +543,7 @@ class ConfigTest extends TestCase
     public function testGetFaviconFile()
     {
         $expected = 'test';
-        $this->favicon->expects($this->once())->method('getFaviconFile')->will($this->returnValue($expected));
+        $this->favicon->expects($this->once())->method('getFaviconFile')->willReturn($expected);
         $this->assertEquals($expected, $this->model->getFaviconFile());
     }
 

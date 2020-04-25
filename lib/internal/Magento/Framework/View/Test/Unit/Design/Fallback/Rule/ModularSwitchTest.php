@@ -3,12 +3,14 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\View\Test\Unit\Design\Fallback\Rule;
 
-use PHPUnit\Framework\TestCase;
-use PHPUnit\Framework\MockObject\MockObject;
+use Magento\Framework\View\Design\Fallback\Rule\ModularSwitch;
 use Magento\Framework\View\Design\Fallback\Rule\RuleInterface;
-use \Magento\Framework\View\Design\Fallback\Rule\ModularSwitch;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 class ModularSwitchTest extends TestCase
 {
@@ -55,8 +57,8 @@ class ModularSwitchTest extends TestCase
             'getPatternDirs'
         )->with(
             $inputParams
-        )->will(
-            $this->returnValue($expectedResult)
+        )->willReturn(
+            $expectedResult
         );
 
         $this->ruleModular->expects($this->never())->method('getPatternDirs');
@@ -76,8 +78,8 @@ class ModularSwitchTest extends TestCase
             'getPatternDirs'
         )->with(
             $inputParams
-        )->will(
-            $this->returnValue($expectedResult)
+        )->willReturn(
+            $expectedResult
         );
 
         $this->assertSame($expectedResult, $this->object->getPatternDirs($inputParams));

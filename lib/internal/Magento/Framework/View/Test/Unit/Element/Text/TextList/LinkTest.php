@@ -3,15 +3,16 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 /**
  * Test for view BlockPool model
  */
 namespace Magento\Framework\View\Test\Unit\Element\Text\TextList;
 
-use PHPUnit\Framework\TestCase;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use \Magento\Framework\View\Element\Text\TextList\Link;
+use Magento\Framework\View\Element\Text\TextList\Link;
+use PHPUnit\Framework\TestCase;
 
 class LinkTest extends TestCase
 {

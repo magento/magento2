@@ -3,13 +3,15 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\View\Test\Unit\Design\Theme;
 
-use PHPUnit\Framework\TestCase;
-use PHPUnit\Framework\MockObject\MockObject;
+use Magento\Framework\View\Design\Theme\FlyweightFactory;
 use Magento\Framework\View\Design\Theme\ThemeProviderInterface;
 use Magento\Theme\Model\Theme;
-use \Magento\Framework\View\Design\Theme\FlyweightFactory;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 class FlyweightFactoryTest extends TestCase
 {
@@ -39,9 +41,9 @@ class FlyweightFactoryTest extends TestCase
     public function testCreateById($path, $expectedId)
     {
         $theme = $this->createMock(Theme::class);
-        $theme->expects($this->exactly(2))->method('getId')->will($this->returnValue($expectedId));
+        $theme->expects($this->exactly(2))->method('getId')->willReturn($expectedId);
 
-        $theme->expects($this->once())->method('getFullPath')->will($this->returnValue(null));
+        $theme->expects($this->once())->method('getFullPath')->willReturn(null);
         $theme->expects($this->once())->method('getCode')->willReturn($expectedId);
         $this->themeProviderMock->expects(
             $this->once()
@@ -49,8 +51,8 @@ class FlyweightFactoryTest extends TestCase
             'getThemeById'
         )->with(
             $expectedId
-        )->will(
-            $this->returnValue($theme)
+        )->willReturn(
+            $theme
         );
 
         $this->assertSame($theme, $this->factory->create($path));
@@ -75,9 +77,9 @@ class FlyweightFactoryTest extends TestCase
         $path = 'frontend/Magento/luma';
         $themeId = 7;
         $theme = $this->createMock(Theme::class);
-        $theme->expects($this->exactly(2))->method('getId')->will($this->returnValue($themeId));
+        $theme->expects($this->exactly(2))->method('getId')->willReturn($themeId);
 
-        $theme->expects($this->once())->method('getFullPath')->will($this->returnValue($path));
+        $theme->expects($this->once())->method('getFullPath')->willReturn($path);
         $theme->expects($this->once())->method('getCode')->willReturn('Magento/luma');
         $this->themeProviderMock->expects(
             $this->once()
@@ -85,8 +87,8 @@ class FlyweightFactoryTest extends TestCase
             'getThemeByFullPath'
         )->with(
             'frontend/frontend/Magento/luma'
-        )->will(
-            $this->returnValue($theme)
+        )->willReturn(
+            $theme
         );
 
         $this->assertSame($theme, $this->factory->create($path));
@@ -105,8 +107,8 @@ class FlyweightFactoryTest extends TestCase
             'getThemeById'
         )->with(
             $themeId
-        )->will(
-            $this->returnValue($theme)
+        )->willReturn(
+            $theme
         );
 
         $this->assertNull($this->factory->create($themeId));

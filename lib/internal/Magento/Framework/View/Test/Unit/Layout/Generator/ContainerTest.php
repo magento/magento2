@@ -3,19 +3,20 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Framework\View\Test\Unit\Layout\Generator;
 
-use PHPUnit\Framework\TestCase;
-use PHPUnit\Framework\MockObject\MockObject;
-use Magento\Framework\View\Layout\Data\Structure;
-use Magento\Framework\View\Layout\Generator\Context;
-use Magento\Framework\View\Layout\Element;
-use \Magento\Framework\View\Layout\Generator\Container;
-
-use Magento\Framework\View\Layout;
-use Magento\Framework\View\Layout\ScheduledStructure;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Framework\View\Layout;
+use Magento\Framework\View\Layout\Data\Structure;
+use Magento\Framework\View\Layout\Element;
+use Magento\Framework\View\Layout\Generator\Container;
+use Magento\Framework\View\Layout\Generator\Context;
+
+use Magento\Framework\View\Layout\ScheduledStructure;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 class ContainerTest extends TestCase
 {
@@ -54,19 +55,23 @@ class ContainerTest extends TestCase
         $this->objectManagerHelper = new ObjectManagerHelper($this);
 
         $this->scheduledStructureMock = $this->getMockBuilder(ScheduledStructure::class)
-            ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->structureMock = $this->getMockBuilder(Structure::class)
-            ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->generatorContextMock = $this->getMockBuilder(Context::class)
-            ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->generatorContextMock->expects($this->any())
             ->method('getStructure')
             ->willReturn($this->structureMock);
 
         $this->readerContextMock = $this->getMockBuilder(\Magento\Framework\View\Layout\Reader\Context::class)
-            ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->readerContextMock->expects($this->any())
             ->method('getScheduledStructure')
             ->willReturn($this->scheduledStructureMock);
@@ -91,7 +96,7 @@ class ContainerTest extends TestCase
 
         $this->structureMock->expects($this->exactly($setAttributeCalls))
             ->method('setAttribute')
-            ->will($this->returnValueMap($setAttributeData));
+            ->willReturnMap($setAttributeData);
 
         $this->container->process($this->readerContextMock, $this->generatorContextMock);
     }

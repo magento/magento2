@@ -3,16 +3,17 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Framework\View\Test\Unit\Asset\PreProcessor;
 
-use PHPUnit\Framework\TestCase;
-use PHPUnit\Framework\MockObject\MockObject;
 use Magento\Framework\ObjectManagerInterface;
-use Magento\Framework\View\Asset\PreProcessor\Pool;
 use Magento\Framework\View\Asset\PreProcessor\Chain;
-use Magento\Framework\View\Asset\PreProcessorInterface;
 use Magento\Framework\View\Asset\PreProcessor\Helper\SortInterface;
+use Magento\Framework\View\Asset\PreProcessor\Pool;
+use Magento\Framework\View\Asset\PreProcessorInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  *

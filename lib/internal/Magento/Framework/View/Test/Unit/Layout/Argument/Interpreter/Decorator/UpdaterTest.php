@@ -3,14 +3,16 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\View\Test\Unit\Layout\Argument\Interpreter\Decorator;
 
-use PHPUnit\Framework\TestCase;
-use Magento\Framework\ObjectManagerInterface;
-use PHPUnit\Framework\MockObject\MockObject;
 use Magento\Framework\Data\Argument\InterpreterInterface;
+use Magento\Framework\ObjectManagerInterface;
+use Magento\Framework\View\Layout\Argument\Interpreter\Decorator\Updater;
 use Magento\Framework\View\Layout\Argument\UpdaterInterface;
-use \Magento\Framework\View\Layout\Argument\Interpreter\Decorator\Updater;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 class UpdaterTest extends TestCase
 {
@@ -53,8 +55,8 @@ class UpdaterTest extends TestCase
             'evaluate'
         )->with(
             ['value' => 'some text']
-        )->will(
-            $this->returnValue($evaluatedValue)
+        )->willReturn(
+            $evaluatedValue
         );
 
         $updater = $this->getMockForAbstractClass(UpdaterInterface::class);
@@ -64,8 +66,8 @@ class UpdaterTest extends TestCase
             'update'
         )->with(
             $evaluatedValue
-        )->will(
-            $this->returnValue($updatedValue)
+        )->willReturn(
+            $updatedValue
         );
 
         $this->_objectManager->expects(
@@ -74,8 +76,8 @@ class UpdaterTest extends TestCase
             'get'
         )->with(
             UpdaterInterface::class
-        )->will(
-            $this->returnValue($updater)
+        )->willReturn(
+            $updater
         );
 
         $actual = $this->_model->evaluate($input);
@@ -93,8 +95,8 @@ class UpdaterTest extends TestCase
             'evaluate'
         )->with(
             $input
-        )->will(
-            $this->returnValue($expected)
+        )->willReturn(
+            $expected
         );
         $this->_objectManager->expects($this->never())->method('get');
 
@@ -122,12 +124,10 @@ class UpdaterTest extends TestCase
             ],
         ];
         $self = $this;
-        $this->_objectManager->expects($this->exactly(2))->method('get')->will(
-            $this->returnCallback(
-                function ($className) use ($self) {
-                    return $self->getMockForAbstractClass($className);
-                }
-            )
+        $this->_objectManager->expects($this->exactly(2))->method('get')->willReturnCallback(
+            function ($className) use ($self) {
+                return $self->getMockForAbstractClass($className);
+            }
         );
 
         $this->_model->evaluate($input);

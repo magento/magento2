@@ -3,13 +3,15 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\View\Test\Unit\Model\Layout;
 
-use PHPUnit\Framework\TestCase;
+use Magento\Framework\Phrase;
+use Magento\Framework\Simplexml\Element;
 use Magento\Framework\View\Model\Layout\Translator;
 use PHPUnit\Framework\MockObject\MockObject;
-use Magento\Framework\Simplexml\Element;
-use Magento\Framework\Phrase;
+use PHPUnit\Framework\TestCase;
 
 class TranslatorTest extends TestCase
 {

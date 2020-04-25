@@ -3,15 +3,16 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Framework\View\Test\Unit\Result;
 
-use PHPUnit\Framework\TestCase;
-use Magento\Framework\View\Result\PageFactory;
-use Magento\Framework\View\Result\Page;
-use PHPUnit\Framework\MockObject\MockObject;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Framework\View\Result\Page;
+use Magento\Framework\View\Result\PageFactory;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 class PageFactoryTest extends TestCase
 {
@@ -47,7 +48,7 @@ class PageFactoryTest extends TestCase
         $this->objectManagerMock->expects($this->once())
             ->method('create')
             ->with(Page::class)
-            ->will($this->returnValue($this->page));
+            ->willReturn($this->page);
         $this->assertSame($this->page, $this->pageFactory->create());
     }
 }

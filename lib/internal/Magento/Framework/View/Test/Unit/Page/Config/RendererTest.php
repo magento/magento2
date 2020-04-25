@@ -3,28 +3,28 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Framework\View\Test\Unit\Page\Config;
 
-use PHPUnit\Framework\TestCase;
-use Magento\Framework\View\Page\Config;
-use PHPUnit\Framework\MockObject\MockObject;
-use Magento\Framework\View\Asset\AssetInterface;
-use Magento\Framework\View\Asset\MergeService;
-use Magento\Framework\UrlInterface;
 use Magento\Framework\Escaper;
-use Magento\Framework\Stdlib\StringUtils;
-use Psr\Log\LoggerInterface;
-use Magento\Framework\View\Page\Title;
-use Magento\Framework\View\Page\Config\Generator\Head;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Phrase;
-use Magento\Framework\View\Asset\PropertyGroup;
+use Magento\Framework\Stdlib\StringUtils;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\UrlInterface;
+use Magento\Framework\View\Asset\AssetInterface;
 use Magento\Framework\View\Asset\GroupedCollection;
+use Magento\Framework\View\Asset\MergeService;
+use Magento\Framework\View\Asset\PropertyGroup;
+use Magento\Framework\View\Page\Config;
+use Magento\Framework\View\Page\Config\Generator\Head;
 use Magento\Framework\View\Page\Config\Metadata\MsApplicationTileImage;
 use Magento\Framework\View\Page\Config\Renderer;
-use Magento\Framework\View\Page\Config\Generator;
+use Magento\Framework\View\Page\Title;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface;
 
 /**
  * Test for page config renderer model
@@ -196,13 +196,13 @@ class RendererTest extends TestCase
         $this->pageConfigMock
             ->expects($this->once())
             ->method('getMetadata')
-            ->will($this->returnValue($metadata));
+            ->willReturn($metadata);
 
         $this->msApplicationTileImageMock
             ->expects($this->once())
             ->method('getUrl')
             ->with('https://site.domain/ms-tile.jpg')
-            ->will($this->returnValue('https://site.domain/ms-tile.jpg'));
+            ->willReturn('https://site.domain/ms-tile.jpg');
 
         $this->assertEquals($expected, $this->renderer->renderMetadata());
     }
@@ -221,13 +221,13 @@ class RendererTest extends TestCase
         $this->pageConfigMock
             ->expects($this->once())
             ->method('getMetadata')
-            ->will($this->returnValue($metadata));
+            ->willReturn($metadata);
 
         $this->msApplicationTileImageMock
             ->expects($this->once())
             ->method('getUrl')
             ->with('images/ms-tile.jpg')
-            ->will($this->returnValue($expectedMetaUrl));
+            ->willReturn($expectedMetaUrl);
 
         $this->assertEquals($expected, $this->renderer->renderMetadata());
     }

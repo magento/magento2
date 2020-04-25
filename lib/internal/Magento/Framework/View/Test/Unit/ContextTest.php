@@ -3,30 +3,31 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 /**
  * Test for view Context model
  */
 namespace Magento\Framework\View\Test\Unit;
 
-use PHPUnit\Framework\TestCase;
-use Magento\Framework\App\State;
-use PHPUnit\Framework\MockObject\MockObject;
-use Magento\Framework\App\Request\Http;
-use Magento\Framework\View\DesignInterface;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\App\Cache\StateInterface;
 use Magento\Framework\App\CacheInterface;
-use Magento\Framework\Event\ManagerInterface;
-use Magento\Framework\App\FrontControllerInterface;
-use Magento\Framework\View\LayoutInterface;
-use Magento\Framework\Session\SessionManagerInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\FrontControllerInterface;
+use Magento\Framework\App\Request\Http;
+use Magento\Framework\App\State;
+use Magento\Framework\Event\ManagerInterface;
+use Magento\Framework\Session\SessionManagerInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\TranslateInterface;
 use Magento\Framework\UrlInterface;
 use Magento\Framework\View\ConfigInterface;
-use Magento\Framework\App\Cache\StateInterface;
+use Magento\Framework\View\Context;
+use Magento\Framework\View\DesignInterface;
+use Magento\Framework\View\LayoutInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
-use \Magento\Framework\View\Context;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -164,7 +165,7 @@ class ContextTest extends TestCase
 
         $this->appState->expects($this->once())
             ->method('getAreaCode')
-            ->will($this->returnValue($area));
+            ->willReturn($area);
 
         $this->assertEquals($area, $this->context->getArea());
     }
@@ -175,7 +176,7 @@ class ContextTest extends TestCase
 
         $this->request->expects($this->once())
             ->method('getModuleName')
-            ->will($this->returnValue($moduleName));
+            ->willReturn($moduleName);
 
         $this->assertEquals($moduleName, $this->context->getModuleName());
     }
@@ -186,7 +187,7 @@ class ContextTest extends TestCase
 
         $this->request->expects($this->once())
             ->method('getModuleName')
-            ->will($this->returnValue($frontName));
+            ->willReturn($frontName);
 
         $this->assertEquals($frontName, $this->context->getFrontName());
     }
@@ -197,7 +198,7 @@ class ContextTest extends TestCase
 
         $this->request->expects($this->once())
             ->method('getControllerName')
-            ->will($this->returnValue($controllerName));
+            ->willReturn($controllerName);
 
         $this->assertEquals($controllerName, $this->context->getControllerName());
     }
@@ -208,7 +209,7 @@ class ContextTest extends TestCase
 
         $this->request->expects($this->once())
             ->method('getActionName')
-            ->will($this->returnValue($actionName));
+            ->willReturn($actionName);
 
         $this->assertEquals($actionName, $this->context->getActionName());
     }
@@ -222,15 +223,15 @@ class ContextTest extends TestCase
 
         $this->request->expects($this->once())
             ->method('getModuleName')
-            ->will($this->returnValue($frontName));
+            ->willReturn($frontName);
 
         $this->request->expects($this->once())
             ->method('getControllerName')
-            ->will($this->returnValue($controllerName));
+            ->willReturn($controllerName);
 
         $this->request->expects($this->once())
             ->method('getActionName')
-            ->will($this->returnValue($actionName));
+            ->willReturn($actionName);
 
         $this->assertEquals($fullActionName, $this->context->getFullActionName());
     }
@@ -246,7 +247,7 @@ class ContextTest extends TestCase
         $this->request->expects($this->once())
             ->method('getHeader')
             ->with('Accept')
-            ->will($this->returnValue($headerAccept));
+            ->willReturn($headerAccept);
 
         $this->assertEquals($acceptType, $this->context->getAcceptType());
     }
@@ -277,7 +278,7 @@ class ContextTest extends TestCase
         $this->request->expects($this->once())
             ->method('getPost')
             ->with($key, $default)
-            ->will($this->returnValue($postValue));
+            ->willReturn($postValue);
 
         $this->assertEquals($postValue, $this->context->getPost($key, $default));
     }
@@ -291,7 +292,7 @@ class ContextTest extends TestCase
         $this->request->expects($this->once())
             ->method('getPost')
             ->with($key, $default)
-            ->will($this->returnValue($queryValue));
+            ->willReturn($queryValue);
 
         $this->assertEquals($queryValue, $this->context->getQuery($key, $default));
     }
@@ -305,7 +306,7 @@ class ContextTest extends TestCase
         $this->request->expects($this->once())
             ->method('getParam')
             ->with($key, $default)
-            ->will($this->returnValue($paramValue));
+            ->willReturn($paramValue);
 
         $this->assertEquals($paramValue, $this->context->getParam($key, $default));
     }
@@ -316,7 +317,7 @@ class ContextTest extends TestCase
 
         $this->request->expects($this->once())
             ->method('getParams')
-            ->will($this->returnValue($params));
+            ->willReturn($params);
 
         $this->assertEquals($params, $this->context->getParams());
     }
@@ -329,7 +330,7 @@ class ContextTest extends TestCase
         $this->request->expects($this->once())
             ->method('getHeader')
             ->with($headerName)
-            ->will($this->returnValue($headerValue));
+            ->willReturn($headerValue);
 
         $this->assertEquals($headerValue, $this->context->getHeader($headerName));
     }
@@ -340,7 +341,7 @@ class ContextTest extends TestCase
 
         $this->request->expects($this->once())
             ->method('getContent')
-            ->will($this->returnValue($content));
+            ->willReturn($content);
 
         $this->assertEquals($content, $this->context->getContent());
     }

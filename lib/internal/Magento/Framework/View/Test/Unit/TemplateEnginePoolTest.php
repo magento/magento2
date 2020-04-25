@@ -3,13 +3,14 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\View\Test\Unit;
 
-use PHPUnit\Framework\TestCase;
-use PHPUnit\Framework\MockObject\MockObject;
 use Magento\Framework\View\TemplateEngineFactory;
 use Magento\Framework\View\TemplateEngineInterface;
-use \Magento\Framework\View\TemplateEnginePool;
+use Magento\Framework\View\TemplateEnginePool;
+use PHPUnit\Framework\TestCase;
 
 class TemplateEnginePoolTest extends TestCase
 {

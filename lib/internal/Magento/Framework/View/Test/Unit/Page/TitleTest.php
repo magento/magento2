@@ -3,18 +3,19 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 /**
  * Test class for \Magento\Framework\View\Page\Config
  */
 namespace Magento\Framework\View\Test\Unit\Page;
 
-use PHPUnit\Framework\TestCase;
-use Magento\Framework\View\Page\Title;
 use Magento\Framework\App\Config\ScopeConfigInterface;
-use PHPUnit\Framework\MockObject\MockObject;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\View\Page\Title;
 use Magento\Store\Model\ScopeInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 class TitleTest extends TestCase
 {

@@ -3,15 +3,16 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Framework\View\Test\Unit;
 
-use PHPUnit\Framework\TestCase;
-use Magento\Framework\View\LayoutFactory;
 use Magento\Framework\ObjectManagerInterface;
-use PHPUnit\Framework\MockObject\MockObject;
-use Magento\Framework\View\LayoutInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Framework\View\LayoutFactory;
+use Magento\Framework\View\LayoutInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 class LayoutFactoryTest extends TestCase
 {
@@ -44,8 +45,8 @@ class LayoutFactoryTest extends TestCase
         $data = ['some' => 'data'];
         $this->objectManagerMock->expects($this->once())
             ->method('create')
-            ->with($this->equalTo($instance), $this->equalTo($data))
-            ->will($this->returnValue($layoutMock));
+            ->with($instance, $data)
+            ->willReturn($layoutMock);
         $this->assertInstanceOf($instance, $this->layoutFactory->create($data));
     }
 
@@ -56,7 +57,7 @@ class LayoutFactoryTest extends TestCase
         $data = ['some' => 'other_data'];
         $this->objectManagerMock->expects($this->once())
             ->method('create')
-            ->will($this->returnValue(new \stdClass()));
+            ->willReturn(new \stdClass());
         $this->layoutFactory->create($data);
     }
 }

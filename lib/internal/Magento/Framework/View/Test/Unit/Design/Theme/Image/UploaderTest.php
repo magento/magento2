@@ -3,19 +3,20 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 /**
  * Test for theme image uploader
  */
 namespace Magento\Framework\View\Test\Unit\Design\Theme\Image;
 
-use PHPUnit\Framework\TestCase;
-use Magento\Framework\View\Design\Theme\Image\Uploader;
-use PHPUnit\Framework\MockObject\MockObject;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\File\UploaderFactory;
 use Magento\Framework\Filesystem;
 use Magento\Framework\HTTP\Adapter\FileTransferFactory;
-use Magento\Framework\File\UploaderFactory;
-use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\View\Design\Theme\Image\Uploader;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 class UploaderTest extends TestCase
 {
@@ -55,12 +56,12 @@ class UploaderTest extends TestCase
             $this->once()
         )->method(
             'create'
-        )->will(
-            $this->returnValue($this->_transferAdapterMock)
+        )->willReturn(
+            $this->_transferAdapterMock
         );
 
         $uploaderFactory = $this->createPartialMock(UploaderFactory::class, ['create']);
-        $uploaderFactory->expects($this->any())->method('create')->will($this->returnValue($this->_fileUploader));
+        $uploaderFactory->expects($this->any())->method('create')->willReturn($this->_fileUploader);
 
         $this->_model = new Uploader(
             $this->_filesystemMock,
@@ -141,8 +142,8 @@ class UploaderTest extends TestCase
             'isUploaded'
         )->with(
             $testScope
-        )->will(
-            $this->returnValue($isUploaded)
+        )->willReturn(
+            $isUploaded
         );
         $this->_transferAdapterMock->expects(
             $this->any()
@@ -150,23 +151,23 @@ class UploaderTest extends TestCase
             'isValid'
         )->with(
             $testScope
-        )->will(
-            $this->returnValue($isValid)
+        )->willReturn(
+            $isValid
         );
         $this->_fileUploader->expects(
             $this->any()
         )->method(
             'checkAllowedExtension'
-        )->will(
-            $this->returnValue($checkExtension)
+        )->willReturn(
+            $checkExtension
         );
-        $this->_fileUploader->expects($this->any())->method('save')->will($this->returnValue($save));
+        $this->_fileUploader->expects($this->any())->method('save')->willReturn($save);
         $this->_fileUploader->expects(
             $this->any()
         )->method(
             'getUploadedFileName'
-        )->will(
-            $this->returnValue('test_filename')
+        )->willReturn(
+            'test_filename'
         );
 
         $this->assertEquals($result, $this->_model->uploadPreviewImage($testScope, '/tmp'));

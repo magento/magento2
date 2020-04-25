@@ -3,14 +3,15 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Framework\View\Test\Unit\File\FileList;
 
-use PHPUnit\Framework\TestCase;
-use Magento\Framework\View\File;
-use PHPUnit\Framework\MockObject\MockObject;
 use Magento\Framework\View\Design\ThemeInterface;
-use \Magento\Framework\View\File\FileList\Collator;
+use Magento\Framework\View\File;
+use Magento\Framework\View\File\FileList\Collator;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 class CollatorTest extends TestCase
 {
@@ -58,7 +59,7 @@ class CollatorTest extends TestCase
         $theme = null;
         if ($themeFullPath !== null) {
             $theme = $this->getMockForAbstractClass(ThemeInterface::class);
-            $theme->expects($this->any())->method('getFullPath')->will($this->returnValue($themeFullPath));
+            $theme->expects($this->any())->method('getFullPath')->willReturn($themeFullPath);
         }
         return new File($filename, $module, $theme);
     }

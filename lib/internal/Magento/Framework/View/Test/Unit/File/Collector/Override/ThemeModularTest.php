@@ -3,20 +3,22 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\View\Test\Unit\File\Collector\Override;
 
-use PHPUnit\Framework\TestCase;
-use Magento\Framework\View\File\Collector\Override\ThemeModular;
-use Magento\Framework\Filesystem\Directory\Read;
-use PHPUnit\Framework\MockObject\MockObject;
-use Magento\Framework\View\File\Factory;
-use Magento\Framework\View\Helper\PathPattern;
-use Magento\Framework\Filesystem\Directory\ReadFactory;
+use Magento\Framework\Component\ComponentRegistrar;
 use Magento\Framework\Component\ComponentRegistrarInterface;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Filesystem\Directory\Read;
+use Magento\Framework\Filesystem\Directory\ReadFactory;
 use Magento\Framework\View\Design\ThemeInterface;
 use Magento\Framework\View\File;
-use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\Component\ComponentRegistrar;
+use Magento\Framework\View\File\Collector\Override\ThemeModular;
+use Magento\Framework\View\File\Factory;
+use Magento\Framework\View\Helper\PathPattern;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 class ThemeModularTest extends TestCase
 {
@@ -64,7 +66,7 @@ class ThemeModularTest extends TestCase
         $this->readDirFactory = $this->createMock(ReadFactory::class);
         $this->readDirFactory->expects($this->any())
             ->method('create')
-            ->will($this->returnValue($this->themeDirectory));
+            ->willReturn($this->themeDirectory);
         $this->componentRegistrar = $this->getMockForAbstractClass(
             ComponentRegistrarInterface::class
         );
@@ -81,11 +83,11 @@ class ThemeModularTest extends TestCase
     {
         $this->componentRegistrar->expects($this->once())
             ->method('getPath')
-            ->will($this->returnValue(''));
+            ->willReturn('');
         $theme = $this->getMockForAbstractClass(ThemeInterface::class);
         $theme->expects($this->once())
             ->method('getFullPath')
-            ->will($this->returnValue('area/Vendor/theme'));
+            ->willReturn('area/Vendor/theme');
         $this->assertSame([], $this->model->getFiles($theme, ''));
     }
 
@@ -129,7 +131,7 @@ class ThemeModularTest extends TestCase
         $this->componentRegistrar->expects($this->once())
             ->method('getPath')
             ->with(ComponentRegistrar::THEME, $themePath)
-            ->will($this->returnValue('/full/theme/path'));
+            ->willReturn('/full/theme/path');
 
         $this->assertSame([$fileOne, $fileTwo], $this->model->getFiles($theme, $inputPath));
     }
@@ -168,7 +170,7 @@ class ThemeModularTest extends TestCase
         $this->componentRegistrar->expects($this->once())
             ->method('getPath')
             ->with(ComponentRegistrar::THEME, $themePath)
-            ->will($this->returnValue('/full/theme/path'));
+            ->willReturn('/full/theme/path');
 
         $this->assertSame([$fileOne], $this->model->getFiles($theme, $inputPath));
     }
@@ -199,7 +201,7 @@ class ThemeModularTest extends TestCase
         $this->componentRegistrar->expects($this->once())
             ->method('getPath')
             ->with(ComponentRegistrar::THEME, $themePath)
-            ->will($this->returnValue('/full/theme/path'));
+            ->willReturn('/full/theme/path');
 
         $this->model->getFiles($theme, $inputPath);
     }

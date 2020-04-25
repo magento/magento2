@@ -3,11 +3,13 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\View\Test\Unit\Element;
 
-use PHPUnit\Framework\TestCase;
-use Magento\Framework\View\Element\FormKey;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\View\Element\FormKey;
+use PHPUnit\Framework\TestCase;
 
 class FormKeyTest extends TestCase
 {
@@ -21,7 +23,8 @@ class FormKeyTest extends TestCase
         $objectManagerHelper = new ObjectManager($this);
 
         $formKeyMock = $this->getMockBuilder(\Magento\Framework\Data\Form\FormKey::class)
-            ->setMethods(['getFormKey'])->disableOriginalConstructor()->getMock();
+            ->setMethods(['getFormKey'])->disableOriginalConstructor()
+            ->getMock();
 
         $formKeyMock->expects($this->any())
             ->method('getFormKey')

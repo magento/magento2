@@ -3,27 +3,29 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\View\Test\Unit\Element;
 
-use PHPUnit\Framework\TestCase;
-use Magento\Framework\View\Element\Template;
+use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\App\State;
+use Magento\Framework\DataObject;
+use Magento\Framework\Exception\ValidatorException;
 use Magento\Framework\Filesystem;
-use PHPUnit\Framework\MockObject\MockObject;
-use Magento\Framework\View\TemplateEngineInterface;
+use Magento\Framework\Filesystem\Directory\Read;
+use Magento\Framework\Filesystem\DriverPool;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\UrlInterface;
+use Magento\Framework\View\Element\Template;
 use Magento\Framework\View\Element\Template\File\Resolver;
 use Magento\Framework\View\Element\Template\File\Validator;
-use Magento\Framework\Filesystem\Directory\Read;
-use Psr\Log\LoggerInterface;
-use Magento\Framework\App\State;
+use Magento\Framework\View\TemplateEngineInterface;
 use Magento\Framework\View\TemplateEnginePool;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\Framework\Exception\ValidatorException;
-use Magento\Framework\DataObject;
-use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Framework\Filesystem\DriverPool;
-use Magento\Framework\UrlInterface;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -87,10 +89,11 @@ class TemplateTest extends TestCase
             ->with(DirectoryList::ROOT, DriverPool::FILE)
             ->willReturn($this->rootDirMock);
 
-        $this->templateEngine = $this->createPartialMock(
-            TemplateEnginePool::class,
-            ['render', 'get']
-        );
+        $this->templateEngine = $this->getMockBuilder(TemplateEnginePool::class)
+            ->addMethods(['render'])
+            ->onlyMethods(['get'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->loggerMock = $this->createMock(LoggerInterface::class);
         $this->templateEngine->expects($this->any())->method('get')->willReturn($this->templateEngine);
 

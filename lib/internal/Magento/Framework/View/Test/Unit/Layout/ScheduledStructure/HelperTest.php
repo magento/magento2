@@ -3,20 +3,20 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Framework\View\Test\Unit\Layout\ScheduledStructure;
 
-use PHPUnit\Framework\TestCase;
-use Magento\Framework\View\Layout\ScheduledStructure;
-use PHPUnit\Framework\MockObject\MockObject;
-use Magento\Framework\View\Layout\Data\Structure;
-use Psr\Log\LoggerInterface;
-use Magento\Framework\View\Layout\ScheduledStructure\Helper;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\Framework\View\Layout\Element;
-use PHPUnit\Framework\MockObject\Matcher\InvokedCount;
-use Magento\Framework\View\Layout;
 use Magento\Framework\App\State;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\View\Layout\Data\Structure;
+use Magento\Framework\View\Layout\Element;
+use Magento\Framework\View\Layout\ScheduledStructure;
+use Magento\Framework\View\Layout\ScheduledStructure\Helper;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\MockObject\Rule\InvokedCount;
+use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface;
 
 /**
  * @covers \Magento\Framework\View\Layout\ScheduledStructure\Helper
@@ -96,20 +96,20 @@ class HelperTest extends TestCase
 
         $this->scheduledStructureMock->expects($this->once())->method('hasPath')
             ->with($parentNodeName)
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $this->scheduledStructureMock->expects($this->any())->method('hasStructureElement')
             ->with($actualNodeName)
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $this->scheduledStructureMock->expects($this->once())->method('setPathElement')
             ->with($actualNodeName, $testPath . '/' . $actualNodeName)
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $this->scheduledStructureMock->expects($this->once())->method('setStructureElement')
             ->with($actualNodeName, [$block, $currentNodeAs, $parentNodeName, $after, true]);
         $this->scheduledStructureMock->expects($this->once())->method('getPath')
             ->with($parentNodeName)
-            ->will($this->returnValue('test_path'));
+            ->willReturn('test_path');
         $this->scheduledStructureMock->expects($this->once())->method('getPaths')
-            ->will($this->returnValue([$potentialChild => $testPath . '/' . $currentNodeName . '/']));
+            ->willReturn([$potentialChild => $testPath . '/' . $currentNodeName . '/']);
         $this->scheduledStructureMock->expects($this->exactly($unsetPathElementCount))->method('unsetPathElement')
             ->with($potentialChild);
         $this->scheduledStructureMock->expects($this->exactly($unsetStructureElementCount))

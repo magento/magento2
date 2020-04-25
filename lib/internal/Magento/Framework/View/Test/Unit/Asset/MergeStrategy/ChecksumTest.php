@@ -3,19 +3,21 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\View\Test\Unit\Asset\MergeStrategy;
 
-use PHPUnit\Framework\TestCase;
-use PHPUnit\Framework\MockObject\MockObject;
-use Magento\Framework\View\Asset\MergeStrategyInterface;
+use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\ReadInterface;
 use Magento\Framework\Filesystem\Directory\WriteInterface;
 use Magento\Framework\View\Asset\File;
-use Magento\Framework\Filesystem;
-use \Magento\Framework\View\Asset\MergeStrategy\Checksum;
-
-use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\View\Asset\MergeStrategy\Checksum;
+use Magento\Framework\View\Asset\MergeStrategyInterface;
 use Magento\Framework\View\Asset\Source;
+
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 class ChecksumTest extends TestCase
 {
@@ -60,11 +62,11 @@ class ChecksumTest extends TestCase
         $filesystem->expects($this->once())
             ->method('getDirectoryRead')
             ->with(DirectoryList::ROOT)
-            ->will($this->returnValue($this->sourceDir));
+            ->willReturn($this->sourceDir);
         $filesystem->expects($this->any())
             ->method('getDirectoryWrite')
             ->with(DirectoryList::STATIC_VIEW)
-            ->will($this->returnValue($this->targetDir));
+            ->willReturn($this->targetDir);
         $this->checksum = new Checksum($this->mergerMock, $filesystem);
         $this->assetSource = $this->getMockBuilder(Source::class)
             ->disableOriginalConstructor()
@@ -89,7 +91,7 @@ class ChecksumTest extends TestCase
         $this->targetDir->expects($this->once())
             ->method('isExist')
             ->with('merged/result.txt.dat')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
         $assets = $this->getAssetsToMerge();
         $this->mergerMock->expects($this->once())->method('merge')->with($assets, $this->resultAsset);
         $this->targetDir->expects($this->once())->method('writeFile')->with('merged/result.txt.dat', '11');
@@ -101,11 +103,11 @@ class ChecksumTest extends TestCase
         $this->targetDir->expects($this->once())
             ->method('isExist')
             ->with('merged/result.txt.dat')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $this->targetDir->expects($this->once())
             ->method('readFile')
             ->with('merged/result.txt.dat')
-            ->will($this->returnValue('10'));
+            ->willReturn('10');
         $assets = $this->getAssetsToMerge();
         $this->mergerMock->expects($this->once())->method('merge')->with($assets, $this->resultAsset);
         $this->targetDir->expects($this->once())->method('writeFile')->with('merged/result.txt.dat', '11');
@@ -117,11 +119,11 @@ class ChecksumTest extends TestCase
         $this->targetDir->expects($this->once())
             ->method('isExist')
             ->with('merged/result.txt.dat')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $this->targetDir->expects($this->once())
             ->method('readFile')
             ->with('merged/result.txt.dat')
-            ->will($this->returnValue('11'));
+            ->willReturn('11');
         $assets = $this->getAssetsToMerge();
         $this->mergerMock->expects($this->never())->method('merge');
         $this->targetDir->expects($this->never())->method('writeFile');
@@ -150,10 +152,10 @@ class ChecksumTest extends TestCase
         $this->sourceDir->expects($this->exactly(2))
             ->method('getRelativePath')
             ->will($this->onConsecutiveCalls('file/one.txt', 'file/two.txt'));
-        $this->sourceDir->expects($this->exactly(2))->method('stat')->will($this->returnValue(['mtime' => '1']));
+        $this->sourceDir->expects($this->exactly(2))->method('stat')->willReturn(['mtime' => '1']);
         $this->resultAsset->expects($this->once())
             ->method('getPath')
-            ->will($this->returnValue('merged/result.txt'));
+            ->willReturn('merged/result.txt');
         return [$one, $two];
     }
 }

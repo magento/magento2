@@ -3,13 +3,15 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\View\Test\Unit\Design\Theme;
 
-use PHPUnit\Framework\TestCase;
-use PHPUnit\Framework\MockObject\MockObject;
 use Magento\Framework\Phrase;
 use Magento\Framework\View\Design\Theme\Label;
 use Magento\Framework\View\Design\Theme\Label\ListInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 class LabelTest extends TestCase
 {
@@ -46,8 +48,8 @@ class LabelTest extends TestCase
             ->willReturn([$data]);
 
         $result = $this->model->toOptionArray();
-        $this->assertTrue(is_array($result));
-        $this->assertEquals(2, count($result));
+        $this->assertIsArray($result);
+        $this->assertCount(2, $result);
         $this->assertEquals($defaultLabel, $result[0]['label']);
         $this->assertEquals($data['label'], $result[1]['label']);
     }
@@ -65,8 +67,8 @@ class LabelTest extends TestCase
             ->willReturn([$data]);
 
         $result = $this->model->getLabelsCollectionForSystemConfiguration();
-        $this->assertTrue(is_array($result));
-        $this->assertEquals(2, count($result));
+        $this->assertIsArray($result);
+        $this->assertCount(2, $result);
         $this->assertEquals($defaultLabel, $result[0]['label']);
         $this->assertEquals($data['label'], $result[1]['label']);
     }

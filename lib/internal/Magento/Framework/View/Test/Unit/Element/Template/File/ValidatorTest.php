@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\View\Test\Unit\Element\Template\File;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
@@ -72,29 +74,25 @@ class ValidatorTest extends TestCase
 
         $this->fileSystemMock->expects($this->any())
             ->method('getDirectoryRead')
-            ->will(
-                $this->returnValueMap(
-                    [
-                        [DirectoryList::ROOT, DriverPool::FILE, $this->rootDirectoryMock],
-                        [DirectoryList::TMP_MATERIALIZATION_DIR, DriverPool::FILE, $this->compiledDirectoryMock],
-                    ]
-                )
+            ->willReturnMap(
+                [
+                    [DirectoryList::ROOT, DriverPool::FILE, $this->rootDirectoryMock],
+                    [DirectoryList::TMP_MATERIALIZATION_DIR, DriverPool::FILE, $this->compiledDirectoryMock],
+                ]
             );
 
         $this->compiledDirectoryMock->expects($this->any())
             ->method('getAbsolutePath')
-            ->will($this->returnValue('/magento/var/compiled'));
+            ->willReturn('/magento/var/compiled');
 
         $this->componentRegistrar = $this->createMock(ComponentRegistrar::class);
         $this->componentRegistrar->expects($this->any())
             ->method('getPaths')
-            ->will(
-                $this->returnValueMap(
-                    [
-                        [ComponentRegistrar::MODULE, ['/magento/app/code/Some/Module']],
-                        [ComponentRegistrar::THEME, ['/magento/themes/default']]
-                    ]
-                )
+            ->willReturnMap(
+                [
+                    [ComponentRegistrar::MODULE, ['/magento/app/code/Some/Module']],
+                    [ComponentRegistrar::THEME, ['/magento/themes/default']]
+                ]
             );
 
         $fileDriverMock = $this->createMock(File::class);
@@ -122,7 +120,7 @@ class ValidatorTest extends TestCase
      */
     public function testIsValid($file, $expectedResult)
     {
-        $this->rootDirectoryMock->expects($this->any())->method('isFile')->will($this->returnValue(true));
+        $this->rootDirectoryMock->expects($this->any())->method('isFile')->willReturn(true);
         $this->assertEquals($expectedResult, $this->validator->isValid($file));
     }
 

@@ -3,13 +3,15 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\View\Test\Unit\Layout\Argument\Interpreter;
 
-use PHPUnit\Framework\TestCase;
 use Magento\Framework\ObjectManagerInterface;
-use PHPUnit\Framework\MockObject\MockObject;
+use Magento\Framework\View\Layout\Argument\Interpreter\HelperMethod;
 use Magento\Framework\View\Layout\Argument\Interpreter\NamedParams;
-use \Magento\Framework\View\Layout\Argument\Interpreter\HelperMethod;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 class HelperMethodTest extends TestCase
 {
@@ -46,11 +48,11 @@ class HelperMethodTest extends TestCase
             'evaluate'
         )->with(
             $input
-        )->will(
-            $this->returnValue($evaluatedValue)
+        )->willReturn(
+            $evaluatedValue
         );
 
-        $this->_objectManager->expects($this->once())->method('get')->with(__CLASS__)->will($this->returnValue($this));
+        $this->_objectManager->expects($this->once())->method('get')->with(__CLASS__)->willReturn($this);
 
         $expected = 'some text (evaluated) (updated)';
         $actual = $this->_model->evaluate($input);

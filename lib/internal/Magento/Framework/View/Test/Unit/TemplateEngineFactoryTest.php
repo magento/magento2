@@ -3,13 +3,15 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\View\Test\Unit;
 
-use PHPUnit\Framework\TestCase;
-use PHPUnit\Framework\MockObject\MockObject;
 use Magento\Framework\ObjectManagerInterface;
+use Magento\Framework\View\TemplateEngineFactory;
 use Magento\Framework\View\TemplateEngineInterface;
-use \Magento\Framework\View\TemplateEngineFactory;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 class TemplateEngineFactoryTest extends TestCase
 {
@@ -40,8 +42,8 @@ class TemplateEngineFactoryTest extends TestCase
             'create'
         )->with(
             \Fixture\Module\Model\TemplateEngine::class
-        )->will(
-            $this->returnValue($engine)
+        )->willReturn(
+            $engine
         );
         $this->assertSame($engine, $this->_factory->create('test'));
     }
@@ -66,8 +68,8 @@ class TemplateEngineFactoryTest extends TestCase
             'create'
         )->with(
             \Fixture\Module\Model\TemplateEngine::class
-        )->will(
-            $this->returnValue(new \stdClass())
+        )->willReturn(
+            new \stdClass()
         );
         $this->_factory->create('test');
     }

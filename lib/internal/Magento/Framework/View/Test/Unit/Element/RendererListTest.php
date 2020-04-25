@@ -3,16 +3,18 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\View\Test\Unit\Element;
 
-use PHPUnit\Framework\TestCase;
-use Magento\Framework\View\Element\RendererList;
-use Magento\Framework\View\Element\Context;
-use PHPUnit\Framework\MockObject\MockObject;
-use Magento\Framework\View\LayoutInterface;
-use Magento\Framework\View\Element\AbstractBlock;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\View\Element\AbstractBlock;
 use Magento\Framework\View\Element\BlockInterface;
+use Magento\Framework\View\Element\Context;
+use Magento\Framework\View\Element\RendererList;
+use Magento\Framework\View\LayoutInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 class RendererListTest extends TestCase
 {
@@ -45,18 +47,20 @@ class RendererListTest extends TestCase
             ->getMockForAbstractClass();
 
         $this->layoutMock = $this->getMockBuilder(LayoutInterface::class)
-            ->setMethods(['getBlock', 'getChildName'])->disableOriginalConstructor()->getMockForAbstractClass();
+            ->setMethods(['getBlock', 'getChildName'])->disableOriginalConstructor()
+            ->getMockForAbstractClass();
 
         $this->layoutMock->expects($this->any())
             ->method('getBlock')
-            ->will($this->returnValue($this->blockMock));
+            ->willReturn($this->blockMock);
 
         $this->contextMock = $this->getMockBuilder(Context::class)
-            ->setMethods(['getLayout'])->disableOriginalConstructor()->getMock();
+            ->setMethods(['getLayout'])->disableOriginalConstructor()
+            ->getMock();
 
         $this->contextMock->expects($this->any())
             ->method('getLayout')
-            ->will($this->returnValue($this->layoutMock));
+            ->willReturn($this->layoutMock);
 
         $this->renderList = $objectManagerHelper->getObject(
             RendererList::class,
@@ -68,19 +72,19 @@ class RendererListTest extends TestCase
     {
         $this->blockMock->expects($this->any())
             ->method('setRenderedBlock')
-            ->will($this->returnValue($this->blockMock));
+            ->willReturn($this->blockMock);
 
         $this->blockMock->expects($this->any())
             ->method('getTemplate')
-            ->will($this->returnValue('template'));
+            ->willReturn('template');
 
         $this->blockMock->expects($this->any())
             ->method('setTemplate')
-            ->will($this->returnValue($this->blockMock));
+            ->willReturn($this->blockMock);
 
         $this->layoutMock->expects($this->any())
             ->method('getChildName')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         /** During the first call cache will be generated */
         $this->assertInstanceOf(

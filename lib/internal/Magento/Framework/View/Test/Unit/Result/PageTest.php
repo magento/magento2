@@ -3,23 +3,25 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\View\Test\Unit\Result;
 
-use PHPUnit\Framework\TestCase;
-use Magento\Framework\View\Result\Page;
-use Magento\Framework\View\Element\Template\Context;
-use PHPUnit\Framework\MockObject\MockObject;
 use Magento\Framework\App\Request\Http;
-use Magento\Framework\View\Layout;
-use Magento\Framework\View\Model\Layout\Merge;
-use Magento\Framework\Translate\InlineInterface;
-use Magento\Framework\View\Page\Config\Renderer;
-use Magento\Framework\View\FileSystem;
-use Magento\Framework\View\LayoutFactory;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\Framework\View\Page\Config\RendererFactory;
-use Magento\Framework\View\Page\Config as PageConfig;
+use Magento\Framework\Translate\InlineInterface;
+use Magento\Framework\View\Element\Template\Context;
 use Magento\Framework\View\EntitySpecificHandlesList;
+use Magento\Framework\View\FileSystem;
+use Magento\Framework\View\Layout;
+use Magento\Framework\View\LayoutFactory;
+use Magento\Framework\View\Model\Layout\Merge;
+use Magento\Framework\View\Page\Config;
+use Magento\Framework\View\Page\Config\Renderer;
+use Magento\Framework\View\Page\Config\RendererFactory;
+use Magento\Framework\View\Result\Page;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Result Page Test
@@ -54,7 +56,7 @@ class PageTest extends TestCase
     private $layoutMerge;
 
     /**
-     * @var \Magento\Framework\View\Page\Config|MockObject
+     * @var Config|MockObject
      */
     private $pageConfig;
 
@@ -91,20 +93,20 @@ class PageTest extends TestCase
         $this->layoutFactory = $this->getMockBuilder(LayoutFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->layoutFactory->expects($this->any())->method('create')->will($this->returnValue($this->layout));
+        $this->layoutFactory->expects($this->any())->method('create')->willReturn($this->layout);
         $this->layoutMerge = $this->getMockBuilder(Merge::class)
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->layout->expects($this->any())
             ->method('getUpdate')
-            ->will($this->returnValue($this->layoutMerge));
+            ->willReturn($this->layoutMerge);
 
         $this->request = $this->getMockBuilder(Http::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->pageConfig = $this->getMockBuilder(\Magento\Framework\View\Page\Config::class)
+        $this->pageConfig = $this->getMockBuilder(Config::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -160,7 +162,7 @@ class PageTest extends TestCase
         $fullActionName = 'full_action_name';
         $this->request->expects($this->any())
             ->method('getFullActionName')
-            ->will($this->returnValue($fullActionName));
+            ->willReturn($fullActionName);
 
         $this->layoutMerge->expects($this->at(0))
             ->method('addHandle')
@@ -183,7 +185,7 @@ class PageTest extends TestCase
         $fullActionName = 'full_action_name';
         $this->request->expects($this->any())
             ->method('getFullActionName')
-            ->will($this->returnValue($fullActionName));
+            ->willReturn($fullActionName);
 
         $this->layoutMerge->expects($this->at(0))
             ->method('addHandle')
@@ -216,7 +218,7 @@ class PageTest extends TestCase
 
         $this->request->expects($this->any())
             ->method('getFullActionName')
-            ->will($this->returnValue($fullActionName));
+            ->willReturn($fullActionName);
 
         $this->assertEquals($expectedFullActionName, $this->page->getDefaultLayoutHandle());
     }
@@ -236,7 +238,7 @@ class PageTest extends TestCase
         ];
         $this->request->expects($this->any())
             ->method('getFullActionName')
-            ->will($this->returnValue($fullActionName));
+            ->willReturn($fullActionName);
 
         $this->layoutMerge->expects($this->any())
             ->method('addHandle')
@@ -266,7 +268,7 @@ class PageTest extends TestCase
         ];
         $this->request->expects($this->any())
             ->method('getFullActionName')
-            ->will($this->returnValue($fullActionName));
+            ->willReturn($fullActionName);
 
         $this->layoutMerge->expects($this->any())
             ->method('addHandle')

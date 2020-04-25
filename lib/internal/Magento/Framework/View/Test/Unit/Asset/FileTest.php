@@ -3,15 +3,16 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Framework\View\Test\Unit\Asset;
 
-use PHPUnit\Framework\TestCase;
+use Magento\Framework\View\Asset\ContextInterface;
+use Magento\Framework\View\Asset\File;
+use Magento\Framework\View\Asset\Minification;
 use Magento\Framework\View\Asset\Source;
 use PHPUnit\Framework\MockObject\MockObject;
-use Magento\Framework\View\Asset\ContextInterface;
-use Magento\Framework\View\Asset\Minification;
-use Magento\Framework\View\Asset\File;
+use PHPUnit\Framework\TestCase;
 
 class FileTest extends TestCase
 {
@@ -60,8 +61,8 @@ class FileTest extends TestCase
 
     public function testGetUrl()
     {
-        $this->context->expects($this->once())->method('getBaseUrl')->will($this->returnValue('http://example.com/'));
-        $this->context->expects($this->once())->method('getPath')->will($this->returnValue('static'));
+        $this->context->expects($this->once())->method('getBaseUrl')->willReturn('http://example.com/');
+        $this->context->expects($this->once())->method('getPath')->willReturn('static');
         $this->assertEquals('http://example.com/static/Magento_Module/dir/file.css', $this->object->getUrl());
     }
 
@@ -81,7 +82,7 @@ class FileTest extends TestCase
      */
     public function testGetPath($contextPath, $module, $filePath, $expected)
     {
-        $this->context->expects($this->once())->method('getPath')->will($this->returnValue($contextPath));
+        $this->context->expects($this->once())->method('getPath')->willReturn($contextPath);
         $object = new File($this->source, $this->context, $filePath, $module, '', $this->minificationMock);
         $this->assertEquals($expected, $object->getPath());
     }
@@ -108,7 +109,7 @@ class FileTest extends TestCase
         $this->source->expects($this->once())
             ->method('getFile')
             ->with($this->object)
-            ->will($this->returnValue('result'));
+            ->willReturn('result');
         $this->assertEquals('result', $this->object->getSourceFile());
         $this->assertEquals('result', $this->object->getSourceFile()); // second time to assert in-memory caching
     }
@@ -117,8 +118,8 @@ class FileTest extends TestCase
     {
         $this->expectException('LogicException');
         $this->expectExceptionMessage('Unable to resolve the source file for \'context/Magento_Module/dir/file.css\'');
-        $this->context->expects($this->once())->method('getPath')->will($this->returnValue('context'));
-        $this->source->expects($this->once())->method('getFile')->will($this->returnValue(false));
+        $this->context->expects($this->once())->method('getPath')->willReturn('context');
+        $this->source->expects($this->once())->method('getFile')->willReturn(false);
         $this->object->getSourceFile();
     }
 
@@ -132,7 +133,7 @@ class FileTest extends TestCase
         $this->source->expects($this->exactly(2))
             ->method('getContent')
             ->with($this->object)
-            ->will($this->returnValue($content));
+            ->willReturn($content);
         $this->assertEquals($content, $this->object->getContent());
         $this->assertEquals($content, $this->object->getContent()); // no in-memory caching for content
     }
@@ -155,7 +156,7 @@ class FileTest extends TestCase
         $this->source->expects($this->once())
             ->method('getContent')
             ->with($this->object)
-            ->will($this->returnValue(false));
+            ->willReturn(false);
         $this->object->getContent();
     }
 

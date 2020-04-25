@@ -3,21 +3,22 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Framework\View\Test\Unit\Design\FileResolution\Fallback\Resolver;
 
-use PHPUnit\Framework\TestCase;
+use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem\Directory\Read;
-use PHPUnit\Framework\MockObject\MockObject;
-use Magento\Framework\View\Design\Fallback\Rule\RuleInterface;
-use Magento\Framework\View\Design\ThemeInterface;
 use Magento\Framework\Filesystem\Directory\ReadFactory;
 use Magento\Framework\Filesystem\DriverPool;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\View\Design\Fallback\Rule\RuleInterface;
 use Magento\Framework\View\Design\Fallback\RulePool;
-use \Magento\Framework\View\Design\FileResolution\Fallback\Resolver\Simple;
+use Magento\Framework\View\Design\FileResolution\Fallback\Resolver\Simple;
+use Magento\Framework\View\Design\ThemeInterface;
+use PHPUnit\Framework\MockObject\MockObject;
 
-use Magento\Framework\App\Filesystem\DirectoryList;
+use PHPUnit\Framework\TestCase;
 
 class SimpleTest extends TestCase
 {

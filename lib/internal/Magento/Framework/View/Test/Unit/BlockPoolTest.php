@@ -3,13 +3,14 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Framework\View\Test\Unit;
 
-use PHPUnit\Framework\TestCase;
+use Magento\Framework\View\BlockPool;
 use Magento\Framework\View\Element\BlockFactory;
 use PHPUnit\Framework\MockObject\MockObject;
-use \Magento\Framework\View\BlockPool;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test for view BlockPool model
@@ -47,7 +48,7 @@ class BlockPoolTest extends TestCase
         $this->blockFactory->expects($this->atLeastOnce())
             ->method('createBlock')
             ->with($blockClass, $arguments)
-            ->will($this->returnValue($block));
+            ->willReturn($block);
 
         $this->assertEquals($this->blockPool, $this->blockPool->add($blockName, $blockClass, $arguments));
 

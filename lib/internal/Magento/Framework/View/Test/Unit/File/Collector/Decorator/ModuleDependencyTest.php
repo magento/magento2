@@ -3,16 +3,17 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Framework\View\Test\Unit\File\Collector\Decorator;
 
-use PHPUnit\Framework\TestCase;
-use Magento\Framework\View\File\Collector\Decorator\ModuleDependency;
-use PHPUnit\Framework\MockObject\MockObject;
-use Magento\Framework\View\File\CollectorInterface;
 use Magento\Framework\Module\ModuleListInterface;
 use Magento\Framework\View\Design\ThemeInterface;
 use Magento\Framework\View\File;
+use Magento\Framework\View\File\Collector\Decorator\ModuleDependency;
+use Magento\Framework\View\File\CollectorInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 class ModuleDependencyTest extends TestCase
 {
@@ -37,7 +38,7 @@ class ModuleDependencyTest extends TestCase
         $this->_moduleListMock = $this->createMock(ModuleListInterface::class);
         $this->_moduleListMock->expects($this->any())
             ->method('getNames')
-            ->will($this->returnValue(['Fixture_ModuleB', 'Fixture_ModuleA']));
+            ->willReturn(['Fixture_ModuleB', 'Fixture_ModuleA']);
         $this->_model = new ModuleDependency(
             $this->_fileSource,
             $this->_moduleListMock
@@ -57,7 +58,7 @@ class ModuleDependencyTest extends TestCase
             ->expects($this->once())
             ->method('getFiles')
             ->with($theme, '*.xml')
-            ->will($this->returnValue($fixtureFiles));
+            ->willReturn($fixtureFiles);
         $this->assertSame($expectedFiles, $this->_model->getFiles($theme, '*.xml'), $message);
     }
 

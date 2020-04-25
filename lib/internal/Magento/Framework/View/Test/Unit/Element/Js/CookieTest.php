@@ -3,16 +3,18 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\View\Test\Unit\Element\Js;
 
-use PHPUnit\Framework\TestCase;
-use Magento\Framework\View\Element\Js\Cookie;
-use PHPUnit\Framework\MockObject\MockObject;
-use Magento\Framework\View\Element\Template\Context;
+use Magento\Framework\Session\Config;
 use Magento\Framework\Session\Config\ConfigInterface;
 use Magento\Framework\Validator\Ip;
-use Magento\Framework\Session\Config;
+use Magento\Framework\View\Element\Js\Cookie;
+use Magento\Framework\View\Element\Template\Context;
 use Magento\Framework\View\Element\Template\File\Validator;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 class CookieTest extends TestCase
 {
@@ -49,18 +51,20 @@ class CookieTest extends TestCase
             ->getMock();
 
         $validtorMock = $this->getMockBuilder(Validator::class)
-            ->setMethods(['isValid'])->disableOriginalConstructor()->getMock();
+            ->setMethods(['isValid'])->disableOriginalConstructor()
+            ->getMock();
 
         $scopeConfigMock = $this->getMockBuilder(\Magento\Framework\App\Config::class)
-            ->setMethods(['isSetFlag'])->disableOriginalConstructor()->getMock();
+            ->setMethods(['isSetFlag'])->disableOriginalConstructor()
+            ->getMock();
 
         $this->contextMock->expects($this->any())
             ->method('getScopeConfig')
-            ->will($this->returnValue($scopeConfigMock));
+            ->willReturn($scopeConfigMock);
 
         $this->contextMock->expects($this->any())
             ->method('getValidator')
-            ->will($this->returnValue($validtorMock));
+            ->willReturn($validtorMock);
 
         $this->model = new Cookie(
             $this->contextMock,
@@ -82,11 +86,11 @@ class CookieTest extends TestCase
     {
         $this->sessionConfigMock->expects($this->once())
             ->method('getCookieDomain')
-            ->will($this->returnValue($domain));
+            ->willReturn($domain);
         $this->ipValidatorMock->expects($this->once())
             ->method('isValid')
-            ->with($this->equalTo($domain))
-            ->will($this->returnValue($isIp));
+            ->with($domain)
+            ->willReturn($isIp);
 
         $result = $this->model->getDomain($domain);
         $this->assertEquals($expectedResult, $result);
@@ -110,7 +114,7 @@ class CookieTest extends TestCase
 
         $this->sessionConfigMock->expects($this->once())
             ->method('getCookiePath')
-            ->will($this->returnValue($path));
+            ->willReturn($path);
 
         $result = $this->model->getPath();
         $this->assertEquals($path, $result);

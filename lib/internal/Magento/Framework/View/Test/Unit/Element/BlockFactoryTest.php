@@ -3,15 +3,17 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\View\Test\Unit\Element;
 
-use PHPUnit\Framework\TestCase;
-use Magento\Framework\View\Element\BlockFactory;
 use Magento\Framework\ObjectManagerInterface;
-use PHPUnit\Framework\MockObject\MockObject;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\Framework\View\Element\Template;
+use Magento\Framework\View\Element\BlockFactory;
 use Magento\Framework\View\Element\BlockInterface;
+use Magento\Framework\View\Element\Template;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 class BlockFactoryTest extends TestCase
 {
@@ -43,12 +45,13 @@ class BlockFactoryTest extends TestCase
         $argumentsResult = ['arg1', 'arg2'];
 
         $templateMock = $this->getMockBuilder(Template::class)
-            ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->objectManagerMock->expects($this->once())
             ->method('create')
             ->with($className, $argumentsResult)
-            ->will($this->returnValue($templateMock));
+            ->willReturn($templateMock);
 
         $this->assertInstanceOf(
             BlockInterface::class,

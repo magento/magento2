@@ -3,10 +3,12 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\View\Test\Unit\Asset\PreProcessor\Helper;
 
-use PHPUnit\Framework\TestCase;
 use Magento\Framework\View\Asset\PreProcessor\Helper\Sort;
+use PHPUnit\Framework\TestCase;
 
 /**
  *
