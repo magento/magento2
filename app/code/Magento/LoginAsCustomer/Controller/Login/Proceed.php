@@ -6,6 +6,7 @@
 declare(strict_types=1);
 namespace Magento\LoginAsCustomer\Controller\Login;
 
+use Magento\Backend\Model\View\Result\Page;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Controller\ResultInterface;
 use Magento\Framework\App\Action\HttpGetActionInterface;
@@ -24,6 +25,9 @@ class Proceed extends Action implements HttpGetActionInterface
      */
     public function execute():ResultInterface
     {
+        /** @var Page $resultPage */
+        $resultPage = $this->resultFactory->create(ResultFactory::TYPE_PAGE);
+        $resultPage->getConfig()->getTitle()->set(__("You are logged in"));
         return $this->resultFactory->create(ResultFactory::TYPE_PAGE);
     }
 }
