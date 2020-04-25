@@ -3,7 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Framework\App\Test\Unit\Action\Plugin;
+namespace Magento\Theme\Test\Unit\Plugin;
 
 use Magento\Framework\App\Action\Action;
 use Magento\Framework\App\ActionInterface;
