@@ -86,8 +86,8 @@ class InvokerDefaultTest extends TestCase
             'create'
         )->with(
             'class_name'
-        )->will(
-            $this->returnValue($this->_listenerMock)
+        )->willReturn(
+            $this->_listenerMock
         );
 
         $this->_invokerDefault->dispatch(
@@ -106,8 +106,8 @@ class InvokerDefaultTest extends TestCase
             'get'
         )->with(
             'class_name'
-        )->will(
-            $this->returnValue($this->_listenerMock)
+        )->willReturn(
+            $this->_listenerMock
         );
 
         $this->_invokerDefault->dispatch(
@@ -123,15 +123,16 @@ class InvokerDefaultTest extends TestCase
     public function testWrongInterfaceCallWithEnabledDeveloperMode($shared)
     {
         $this->expectException('LogicException');
-        $notObserver = $this->getMockBuilder('NotObserver')->getMock();
+        $notObserver = $this->getMockBuilder('NotObserver')
+            ->getMock();
         $this->_observerFactoryMock->expects(
             $this->any()
         )->method(
             'create'
         )->with(
             'class_name'
-        )->will(
-            $this->returnValue($notObserver)
+        )->willReturn(
+            $notObserver
         );
         $this->_observerFactoryMock->expects(
             $this->any()
@@ -139,15 +140,15 @@ class InvokerDefaultTest extends TestCase
             'get'
         )->with(
             'class_name'
-        )->will(
-            $this->returnValue($notObserver)
+        )->willReturn(
+            $notObserver
         );
         $this->_appStateMock->expects(
             $this->once()
         )->method(
             'getMode'
-        )->will(
-            $this->returnValue(State::MODE_DEVELOPER)
+        )->willReturn(
+            State::MODE_DEVELOPER
         );
 
         $this->_invokerDefault->dispatch(
@@ -166,15 +167,16 @@ class InvokerDefaultTest extends TestCase
      */
     public function testWrongInterfaceCallWithDisabledDeveloperMode($shared)
     {
-        $notObserver = $this->getMockBuilder('NotObserver')->getMock();
+        $notObserver = $this->getMockBuilder('NotObserver')
+            ->getMock();
         $this->_observerFactoryMock->expects(
             $this->any()
         )->method(
             'create'
         )->with(
             'class_name'
-        )->will(
-            $this->returnValue($notObserver)
+        )->willReturn(
+            $notObserver
         );
         $this->_observerFactoryMock->expects(
             $this->any()
@@ -182,15 +184,15 @@ class InvokerDefaultTest extends TestCase
             'get'
         )->with(
             'class_name'
-        )->will(
-            $this->returnValue($notObserver)
+        )->willReturn(
+            $notObserver
         );
         $this->_appStateMock->expects(
             $this->exactly(1)
         )->method(
             'getMode'
-        )->will(
-            $this->returnValue(State::MODE_PRODUCTION)
+        )->willReturn(
+            State::MODE_PRODUCTION
         );
 
         $this->loggerMock->expects($this->once())->method('warning');

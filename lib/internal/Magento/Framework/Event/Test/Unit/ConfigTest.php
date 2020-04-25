@@ -37,8 +37,8 @@ class ConfigTest extends TestCase
         $observers = ['observer1', 'observer3'];
         $this->dataContainerMock->expects($this->once())
             ->method('get')
-            ->with($eventName, $this->equalTo([]))
-            ->will($this->returnValue($observers));
+            ->with($eventName, [])
+            ->willReturn($observers);
 
         $result = $this->config->getObservers($eventName);
         $this->assertEquals($observers, $result);

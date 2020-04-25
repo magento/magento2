@@ -43,7 +43,7 @@ class CollectionTest extends TestCase
         $observer = $this->createMock(Observer::class);
         $observer->expects($this->any())
             ->method('getName')
-            ->will($this->returnValue($name));
+            ->willReturn($name);
         if ($event) {
             $observer->expects($this->once())
                 ->method('dispatch')

@@ -37,11 +37,12 @@ class ObserverFactoryTest extends TestCase
     public function testGet()
     {
         $className = 'Magento\Class';
-        $observerMock = $this->getMockBuilder('Observer')->getMock();
+        $observerMock = $this->getMockBuilder('Observer')
+            ->getMock();
         $this->objectManagerMock->expects($this->once())
             ->method('get')
             ->with($className)
-            ->will($this->returnValue($observerMock));
+            ->willReturn($observerMock);
 
         $result = $this->observerFactory->get($className);
         $this->assertEquals($observerMock, $result);
@@ -50,13 +51,14 @@ class ObserverFactoryTest extends TestCase
     public function testCreate()
     {
         $className = 'Magento\Class';
-        $observerMock =  $this->getMockBuilder('Observer')->getMock();
+        $observerMock =  $this->getMockBuilder('Observer')
+            ->getMock();
         $arguments = ['arg1', 'arg2'];
 
         $this->objectManagerMock->expects($this->once())
             ->method('create')
-            ->with($className, $this->equalTo($arguments))
-            ->will($this->returnValue($observerMock));
+            ->with($className, $arguments)
+            ->willReturn($observerMock);
 
         $result = $this->observerFactory->create($className, $arguments);
         $this->assertEquals($observerMock, $result);

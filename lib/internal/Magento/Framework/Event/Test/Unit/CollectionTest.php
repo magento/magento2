@@ -76,7 +76,7 @@ class CollectionTest extends TestCase
         $eventMock = $this->createPartialMock(Event::class, ['getName']);
         $eventMock->expects($this->once())
             ->method('getName')
-            ->will($this->returnValue($eventName));
+            ->willReturn($eventName);
         $this->collection->addEvent($eventMock);
     }
 
