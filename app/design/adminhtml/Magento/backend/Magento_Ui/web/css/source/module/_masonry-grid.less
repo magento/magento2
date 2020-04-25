@@ -26,7 +26,8 @@
             background-color: @admin__masonry_grid_background_color;
             float: left;
             margin: @admin__masonry_grid_image__space/2;
-            overflow: hidden;
+            overflow: visible;
+            position: relative;
 
             .masonry-image-block {
                 &.active {
@@ -51,6 +52,7 @@
             padding: .5rem;
             position: absolute;
             text-align: center;
+            top: 0;
             width: 80px;
             z-index: 10;
         }
