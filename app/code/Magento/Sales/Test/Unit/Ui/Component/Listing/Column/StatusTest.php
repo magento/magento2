@@ -1,14 +1,17 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Sales\Test\Unit\Ui\Component\Listing\Column;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Framework\View\Element\UiComponent\Processor;
 use Magento\Sales\Model\ResourceModel\Order\Status\Collection;
+use Magento\Sales\Model\ResourceModel\Order\Status\CollectionFactory;
 use Magento\Sales\Ui\Component\Listing\Column\Status;
 use PHPUnit\Framework\TestCase;
 
@@ -33,7 +36,7 @@ class StatusTest extends TestCase
             ->willReturn($itemMapping);
 
         $collectionFactoryMock = $this->createPartialMock(
-            \Magento\Sales\Model\ResourceModel\Order\Status\CollectionFactory::class,
+            CollectionFactory::class,
             ['create']
         );
         $collectionFactoryMock->expects($this->once())

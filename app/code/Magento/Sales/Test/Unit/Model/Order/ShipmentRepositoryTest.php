@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Sales\Test\Unit\Model\Order;
 
@@ -12,6 +13,7 @@ use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Sales\Api\Data\ShipmentSearchResultInterfaceFactory;
 use Magento\Sales\Model\Order\Shipment;
 use Magento\Sales\Model\Order\ShipmentRepository;
 use Magento\Sales\Model\ResourceModel\Metadata;
@@ -40,7 +42,7 @@ class ShipmentRepositoryTest extends TestCase
     protected $metadata;
 
     /**
-     * @var \Magento\Sales\Api\Data\ShipmentSearchResultInterfaceFactory|MockObject
+     * @var ShipmentSearchResultInterfaceFactory|MockObject
      */
     protected $searchResultFactory;
 
@@ -59,7 +61,7 @@ class ShipmentRepositoryTest extends TestCase
         );
 
         $this->searchResultFactory = $this->createPartialMock(
-            \Magento\Sales\Api\Data\ShipmentSearchResultInterfaceFactory::class,
+            ShipmentSearchResultInterfaceFactory::class,
             ['create']
         );
         $this->collectionProcessor = $this->createMock(

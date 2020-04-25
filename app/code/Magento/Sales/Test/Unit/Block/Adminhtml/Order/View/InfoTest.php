@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Sales\Test\Unit\Block\Adminhtml\Order\View;
 
 use Magento\Backend\Block\Template\Context;
@@ -61,12 +63,12 @@ class InfoTest extends TestCase
             = $this->createPartialMock(Context::class, ['getAuthorization']);
         $this->authorizationMock = $this->createMock(AuthorizationInterface::class);
         $this->contextMock
-            ->expects($this->any())->method('getAuthorization')->will($this->returnValue($this->authorizationMock));
+            ->expects($this->any())->method('getAuthorization')->willReturn($this->authorizationMock);
         $this->groupRepositoryMock = $this->getMockForAbstractClass(
             GroupRepositoryInterface::class
         );
         $this->coreRegistryMock = $this->createMock(Registry::class);
-        $methods = ['getCustomerGroupId', '__wakeUp'];
+        $methods = ['getCustomerGroupId'];
         $this->orderMock = $this->createPartialMock(Order::class, $methods);
         $this->groupMock = $this->getMockForAbstractClass(
             GroupInterface::class,
@@ -89,7 +91,7 @@ class InfoTest extends TestCase
     {
         $contextMock = $this->createPartialMock(Context::class, ['getAuthorization']);
         $authorizationMock = $this->createMock(AuthorizationInterface::class);
-        $contextMock->expects($this->any())->method('getAuthorization')->will($this->returnValue($authorizationMock));
+        $contextMock->expects($this->any())->method('getAuthorization')->willReturn($authorizationMock);
         $arguments = ['context' => $contextMock];
 
         $helper = new ObjectManager($this);
@@ -99,7 +101,7 @@ class InfoTest extends TestCase
         $authorizationMock->expects($this->atLeastOnce())
             ->method('isAllowed')
             ->with('Magento_Sales::actions_edit')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
 
         $address = new DataObject();
         $this->assertEmpty($block->getAddressEditLink($address));
@@ -111,14 +113,14 @@ class InfoTest extends TestCase
             ->expects($this->any())
             ->method('registry')
             ->with('current_order')
-            ->will($this->returnValue($this->orderMock));
-        $this->orderMock->expects($this->once())->method('getCustomerGroupId')->will($this->returnValue(4));
+            ->willReturn($this->orderMock);
+        $this->orderMock->expects($this->once())->method('getCustomerGroupId')->willReturn(4);
         $this->groupRepositoryMock
-            ->expects($this->once())->method('getById')->with(4)->will($this->returnValue($this->groupMock));
+            ->expects($this->once())->method('getById')->with(4)->willReturn($this->groupMock);
         $this->groupMock
             ->expects($this->once())
             ->method('getCode')
-            ->will($this->throwException(new NoSuchEntityException()));
+            ->willThrowException(new NoSuchEntityException());
         $this->assertEquals('', $this->block->getCustomerGroupName());
     }
 
@@ -128,14 +130,14 @@ class InfoTest extends TestCase
             ->expects($this->any())
             ->method('registry')
             ->with('current_order')
-            ->will($this->returnValue($this->orderMock));
-        $this->orderMock->expects($this->once())->method('getCustomerGroupId')->will($this->returnValue(4));
+            ->willReturn($this->orderMock);
+        $this->orderMock->expects($this->once())->method('getCustomerGroupId')->willReturn(4);
         $this->groupRepositoryMock
-            ->expects($this->once())->method('getById')->with(4)->will($this->returnValue($this->groupMock));
+            ->expects($this->once())->method('getById')->with(4)->willReturn($this->groupMock);
         $this->groupMock
             ->expects($this->once())
             ->method('getCode')
-            ->will($this->returnValue('group_code'));
+            ->willReturn('group_code');
         $this->assertEquals('group_code', $this->block->getCustomerGroupName());
     }
 }

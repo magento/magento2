@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Sales\Test\Unit\Model\Order\Payment\Transaction;
 
@@ -17,7 +18,9 @@ use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Sales\Api\Data\TransactionInterface;
+use Magento\Sales\Api\Data\TransactionSearchResultInterfaceFactory;
 use Magento\Sales\Model\EntityStorage;
+use Magento\Sales\Model\EntityStorageFactory;
 use Magento\Sales\Model\Order\Payment\Transaction;
 use Magento\Sales\Model\Order\Payment\Transaction\Repository;
 use Magento\Sales\Model\ResourceModel\Metadata;
@@ -103,14 +106,14 @@ class RepositoryTest extends TestCase
     {
         $objectManager = new ObjectManager($this);
         $this->searchResultFactory = $this->createPartialMock(
-            \Magento\Sales\Api\Data\TransactionSearchResultInterfaceFactory::class,
+            TransactionSearchResultInterfaceFactory::class,
             ['create']
         );
         $this->filterBuilder = $this->createMock(FilterBuilder::class);
         $this->searchCriteriaBuilder = $this->createMock(SearchCriteriaBuilder::class);
         $this->sortOrderBuilder = $this->createMock(SortOrderBuilder::class);
         $this->metaData = $this->createMock(Metadata::class);
-        $entityStorageFactory = $this->createPartialMock(\Magento\Sales\Model\EntityStorageFactory::class, ['create']);
+        $entityStorageFactory = $this->createPartialMock(EntityStorageFactory::class, ['create']);
         $this->entityStorage = $this->createMock(EntityStorage::class);
         $this->transactionResource = $this->createMock(
             \Magento\Sales\Model\ResourceModel\Order\Payment\Transaction::class

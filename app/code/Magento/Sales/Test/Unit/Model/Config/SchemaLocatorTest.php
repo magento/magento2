@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Sales\Test\Unit\Model\Config;
 
 use Magento\Framework\Module\Dir\Reader;
@@ -29,7 +31,8 @@ class SchemaLocatorTest extends TestCase
     {
         $this->_moduleReaderMock = $this->getMockBuilder(
             Reader::class
-        )->disableOriginalConstructor()->getMock();
+        )->disableOriginalConstructor()
+            ->getMock();
         $this->_moduleReaderMock->expects(
             $this->once()
         )->method(
@@ -37,8 +40,8 @@ class SchemaLocatorTest extends TestCase
         )->with(
             'etc',
             'Magento_Sales'
-        )->will(
-            $this->returnValue('schema_dir')
+        )->willReturn(
+            'schema_dir'
         );
         $this->_locator = new SchemaLocator($this->_moduleReaderMock);
     }

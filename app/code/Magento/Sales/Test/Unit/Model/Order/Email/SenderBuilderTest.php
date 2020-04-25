@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Sales\Test\Unit\Model\Order\Email;
 
@@ -49,27 +50,26 @@ class SenderBuilderTest extends TestCase
             ['getTemplateVars', 'getTemplateOptions', 'getTemplateId']
         );
 
-        $this->storeMock = $this->createPartialMock(
-            Store::class,
-            [
-                'getStoreId',
-                '__wakeup',
-                'getId',
-            ]
-        );
+        $this->storeMock = $this->getMockBuilder(Store::class)
+            ->addMethods(['getStoreId'])
+            ->onlyMethods(['getId'])
+            ->disableOriginalConstructor()
+            ->getMock();
 
-        $this->identityContainerMock = $this->createPartialMock(
-            ShipmentIdentity::class,
-            [
-                'getEmailIdentity',
-                'getCustomerEmail',
-                'getCustomerName',
-                'getTemplateOptions',
-                'getEmailCopyTo',
-                'getCopyMethod',
-                'getStore',
-            ]
-        );
+        $this->identityContainerMock = $this->getMockBuilder(ShipmentIdentity::class)
+            ->addMethods(['getTemplateOptions'])
+            ->onlyMethods(
+                [
+                    'getEmailIdentity',
+                    'getCustomerEmail',
+                    'getCustomerName',
+                    'getEmailCopyTo',
+                    'getCopyMethod',
+                    'getStore'
+                ]
+            )
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->transportBuilder = $this->createPartialMock(
             TransportBuilder::class,
@@ -104,16 +104,16 @@ class SenderBuilderTest extends TestCase
 
         $this->identityContainerMock->expects($this->once())
             ->method('getEmailCopyTo')
-            ->will($this->returnValue(['example@mail.com']));
+            ->willReturn(['example@mail.com']);
         $this->identityContainerMock->expects($this->once())
             ->method('getCopyMethod')
-            ->will($this->returnValue('bcc'));
+            ->willReturn('bcc');
         $this->identityContainerMock->expects($this->once())
             ->method('getCustomerEmail')
-            ->will($this->returnValue($customerEmail));
+            ->willReturn($customerEmail);
         $this->identityContainerMock->expects($this->once())
             ->method('getCustomerName')
-            ->will($this->returnValue($customerName));
+            ->willReturn($customerName);
         $this->identityContainerMock->expects($this->exactly(1))
             ->method('getStore')
             ->willReturn($this->storeMock);
@@ -125,11 +125,11 @@ class SenderBuilderTest extends TestCase
             ->with($identity, 1);
         $this->transportBuilder->expects($this->exactly(1))
             ->method('addTo')
-            ->with($this->equalTo($customerEmail), $this->equalTo($customerName));
+            ->with($customerEmail, $customerName);
 
         $this->transportBuilder->expects($this->exactly(1))
             ->method('getTransport')
-            ->will($this->returnValue($transportMock));
+            ->willReturn($transportMock);
 
         $this->senderBuilder->send();
     }
@@ -158,7 +158,7 @@ class SenderBuilderTest extends TestCase
             ->willReturn(1);
         $this->transportBuilder->expects($this->exactly(2))
             ->method('getTransport')
-            ->will($this->returnValue($transportMock));
+            ->willReturn($transportMock);
 
         $this->senderBuilder->sendCopyTo();
     }
@@ -178,32 +178,32 @@ class SenderBuilderTest extends TestCase
 
         $this->templateContainerMock->expects($this->exactly($count))
             ->method('getTemplateId')
-            ->will($this->returnValue($templateId));
+            ->willReturn($templateId);
         $this->transportBuilder->expects($this->exactly($count))
             ->method('setTemplateIdentifier')
-            ->with($this->equalTo($templateId));
+            ->with($templateId);
         $this->templateContainerMock->expects($this->exactly($count))
             ->method('getTemplateOptions')
-            ->will($this->returnValue($templateOptions));
+            ->willReturn($templateOptions);
         $this->transportBuilder->expects($this->exactly($count))
             ->method('setTemplateOptions')
-            ->with($this->equalTo($templateOptions));
+            ->with($templateOptions);
         $this->templateContainerMock->expects($this->exactly($count))
             ->method('getTemplateVars')
-            ->will($this->returnValue($templateVars));
+            ->willReturn($templateVars);
         $this->transportBuilder->expects($this->exactly($count))
             ->method('setTemplateVars')
-            ->with($this->equalTo($templateVars));
+            ->with($templateVars);
 
         $this->identityContainerMock->expects($this->exactly($count))
             ->method('getEmailIdentity')
-            ->will($this->returnValue($emailIdentity));
+            ->willReturn($emailIdentity);
         $this->transportBuilder->expects($this->exactly($count))
             ->method('setFromByScope')
-            ->with($this->equalTo($emailIdentity), 1);
+            ->with($emailIdentity, 1);
 
         $this->identityContainerMock->expects($this->once())
             ->method('getEmailCopyTo')
-            ->will($this->returnValue($emailCopyTo));
+            ->willReturn($emailCopyTo);
     }
 }

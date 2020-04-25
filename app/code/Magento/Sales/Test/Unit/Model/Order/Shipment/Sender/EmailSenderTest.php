@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Sales\Test\Unit\Model\Order\Shipment\Sender;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
@@ -225,8 +227,8 @@ class EmailSenderTest extends TestCase
         $this->identityContainerMock = $this->getMockBuilder(
             ShipmentIdentity::class
         )
-        ->disableOriginalConstructor()
-        ->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->identityContainerMock->expects($this->any())
             ->method('getStore')
@@ -235,9 +237,9 @@ class EmailSenderTest extends TestCase
         $this->senderBuilderFactoryMock = $this->getMockBuilder(
             SenderBuilderFactory::class
         )
-        ->disableOriginalConstructor()
-        ->setMethods(['create'])
-        ->getMock();
+            ->disableOriginalConstructor()
+            ->setMethods(['create'])
+            ->getMock();
 
         $this->subject = new EmailSender(
             $this->templateContainerMock,

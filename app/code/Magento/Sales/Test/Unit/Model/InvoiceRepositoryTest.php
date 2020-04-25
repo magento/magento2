@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Sales\Test\Unit\Model;
 
@@ -10,6 +11,7 @@ use Magento\Eav\Model\Entity\Type;
 use Magento\Framework\Api\SearchCriteria;
 use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Sales\Api\Data\InvoiceSearchResultInterfaceFactory;
 use Magento\Sales\Model\Order\Invoice;
 use Magento\Sales\Model\Order\InvoiceRepository;
 use Magento\Sales\Model\ResourceModel\Metadata;
@@ -44,7 +46,7 @@ class InvoiceRepositoryTest extends TestCase
         $objectManager = new ObjectManager($this);
         $this->invoiceMetadata = $this->createMock(Metadata::class);
         $this->searchResultFactory = $this->getMockBuilder(
-            \Magento\Sales\Api\Data\InvoiceSearchResultInterfaceFactory::class
+            InvoiceSearchResultInterfaceFactory::class
         )
             ->disableOriginalConstructor()
             ->setMethods(['create'])

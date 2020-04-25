@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Sales\Test\Unit\Observer\Frontend;
 
 use Magento\Customer\Helper\Address;
@@ -43,7 +45,10 @@ class RestoreCustomerGroupIdTest extends TestCase
      */
     public function testExecute($configAddressType)
     {
-        $eventMock = $this->createPartialMock(Event::class, ['getShippingAssignment', 'getQuote']);
+        $eventMock = $this->getMockBuilder(Event::class)
+            ->addMethods(['getShippingAssignment', 'getQuote'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $observer = $this->createPartialMock(Observer::class, ['getEvent']);
         $observer->expects($this->exactly(2))->method('getEvent')->willReturn($eventMock);
 
@@ -56,21 +61,22 @@ class RestoreCustomerGroupIdTest extends TestCase
         $shippingMock = $this->createMock(ShippingInterface::class);
         $shippingAssignmentMock->expects($this->once())->method('getShipping')->willReturn($shippingMock);
 
-        $quoteAddress = $this->createPartialMock(
-            \Magento\Quote\Model\Quote\Address::class,
+        $quoteAddress = $this->getMockBuilder(\Magento\Quote\Model\Quote\Address::class)->addMethods(
             [
                 'getPrevQuoteCustomerGroupId',
                 'unsPrevQuoteCustomerGroupId',
                 'hasPrevQuoteCustomerGroupId',
-                'setCustomerGroupId',
-                'getQuote'
+                'setCustomerGroupId'
             ]
-        );
+        )
+            ->onlyMethods(['getQuote'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $shippingMock->expects($this->once())->method('getAddress')->willReturn($quoteAddress);
 
         $this->customerAddressHelperMock->expects($this->once())
             ->method('getTaxCalculationAddressType')
-            ->will($this->returnValue($configAddressType));
+            ->willReturn($configAddressType);
 
         $quoteAddress->expects($this->once())->method('hasPrevQuoteCustomerGroupId');
         $id = $quoteAddress->expects($this->any())->method('getPrevQuoteCustomerGroupId');

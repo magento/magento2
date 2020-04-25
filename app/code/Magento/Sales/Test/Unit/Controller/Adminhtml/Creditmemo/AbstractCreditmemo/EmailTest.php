@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Sales\Test\Unit\Controller\Adminhtml\Creditmemo\AbstractCreditmemo;
 
@@ -88,23 +89,24 @@ class EmailTest extends TestCase
     {
         $objectManagerHelper = new ObjectManagerHelper($this);
         $this->context = $this->createPartialMock(Context::class, [
-                'getRequest',
-                'getResponse',
-                'getMessageManager',
-                'getRedirect',
-                'getObjectManager',
-                'getSession',
-                'getActionFlag',
-                'getHelper',
-                'getResultRedirectFactory'
-            ]);
-        $this->response = $this->createPartialMock(
-            ResponseInterface::class,
-            ['setRedirect', 'sendResponse']
-        );
+            'getRequest',
+            'getResponse',
+            'getMessageManager',
+            'getRedirect',
+            'getObjectManager',
+            'getSession',
+            'getActionFlag',
+            'getHelper',
+            'getResultRedirectFactory'
+        ]);
+        $this->response = $this->getMockBuilder(ResponseInterface::class)
+            ->addMethods(['setRedirect'])
+            ->onlyMethods(['sendResponse'])
+            ->getMock();
 
         $this->request = $this->getMockBuilder(Http::class)
-            ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->objectManager = $this->createPartialMock(
             \Magento\Framework\ObjectManager\ObjectManager::class,
             ['create']
@@ -113,7 +115,10 @@ class EmailTest extends TestCase
             Manager::class,
             ['addSuccessMessage']
         );
-        $this->session = $this->createPartialMock(Session::class, ['setIsUrlNotice']);
+        $this->session = $this->getMockBuilder(Session::class)
+            ->addMethods(['setIsUrlNotice'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->actionFlag = $this->createPartialMock(ActionFlag::class, ['get']);
         $this->helper = $this->createPartialMock(Data::class, ['getUrl']);
         $this->resultRedirectFactoryMock = $this->getMockBuilder(
@@ -182,7 +187,7 @@ class EmailTest extends TestCase
         $this->request->expects($this->once())
             ->method('getParam')
             ->with('creditmemo_id')
-            ->will($this->returnValue(null));
+            ->willReturn(null);
 
         $this->assertNull($this->creditmemoEmail->execute());
     }

@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Sales\Test\Unit\Controller\Adminhtml\Order\Invoice;
 
 use Magento\Backend\App\Action\Context;
@@ -90,19 +92,19 @@ class PrintActionTest extends TestCase
             ->getMock();
         $contextMock->expects($this->any())
             ->method('getRequest')
-            ->will($this->returnValue($this->requestMock));
+            ->willReturn($this->requestMock);
         $contextMock->expects($this->any())
             ->method('getResponse')
-            ->will($this->returnValue($this->responseMock));
+            ->willReturn($this->responseMock);
         $contextMock->expects($this->any())
             ->method('getSession')
-            ->will($this->returnValue($this->sessionMock));
+            ->willReturn($this->sessionMock);
         $contextMock->expects($this->any())
             ->method('getActionFlag')
-            ->will($this->returnValue($this->actionFlagMock));
+            ->willReturn($this->actionFlagMock);
         $contextMock->expects($this->any())
             ->method('getObjectManager')
-            ->will($this->returnValue($this->objectManagerMock));
+            ->willReturn($this->objectManagerMock);
 
         $this->fileFactory = $this->getMockBuilder(FileFactory::class)
             ->disableOriginalConstructor()
@@ -125,11 +127,14 @@ class PrintActionTest extends TestCase
         $this->requestMock->expects($this->once())
             ->method('getParam')
             ->with('invoice_id')
-            ->will($this->returnValue($invoiceId));
+            ->willReturn($invoiceId);
 
         $invoiceMock = $this->createMock(Invoice::class);
 
-        $pdfMock = $this->createPartialMock(\Magento\Sales\Model\Order\Pdf\Invoice::class, ['render', 'getPdf']);
+        $pdfMock = $this->getMockBuilder(\Magento\Sales\Model\Order\Pdf\Invoice::class)->addMethods(['render'])
+            ->onlyMethods(['getPdf'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $pdfMock->expects($this->once())
             ->method('getPdf')
             ->willReturnSelf();

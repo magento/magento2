@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Sales\Test\Unit\Observer\Backend;
 
@@ -40,11 +41,11 @@ class CatalogProductSaveAfterObserverTest extends TestCase
     {
         $this->_quoteMock = $this->createMock(Quote::class);
         $this->_observerMock = $this->createMock(Observer::class);
-        $this->_eventMock = $this->createPartialMock(
-            Event::class,
-            ['getProduct', 'getStatus', 'getProductId']
-        );
-        $this->_observerMock->expects($this->any())->method('getEvent')->will($this->returnValue($this->_eventMock));
+        $this->_eventMock = $this->getMockBuilder(Event::class)
+            ->addMethods(['getProduct', 'getStatus', 'getProductId'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->_observerMock->expects($this->any())->method('getEvent')->willReturn($this->_eventMock);
         $this->_model = new CatalogProductSaveAfterObserver($this->_quoteMock);
     }
 
@@ -57,11 +58,11 @@ class CatalogProductSaveAfterObserverTest extends TestCase
     {
         $productMock = $this->createPartialMock(
             Product::class,
-            ['getId', 'getStatus', '__wakeup']
+            ['getId', 'getStatus']
         );
-        $this->_eventMock->expects($this->once())->method('getProduct')->will($this->returnValue($productMock));
-        $productMock->expects($this->once())->method('getId')->will($this->returnValue($productId));
-        $productMock->expects($this->once())->method('getStatus')->will($this->returnValue($productStatus));
+        $this->_eventMock->expects($this->once())->method('getProduct')->willReturn($productMock);
+        $productMock->expects($this->once())->method('getId')->willReturn($productId);
+        $productMock->expects($this->once())->method('getStatus')->willReturn($productStatus);
         $this->_quoteMock->expects($this->any())->method('markQuotesRecollect');
         $this->_model->execute($this->_observerMock);
     }

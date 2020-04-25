@@ -105,29 +105,32 @@ class OrderTest extends TestCase
     {
         $this->resourceMock = $this->createMock(ResourceConnection::class);
         $this->orderMock = $this->createMock(\Magento\Sales\Model\Order::class);
-        $this->orderItemMock = $this->createPartialMock(
-            Item::class,
-            ['getQuoteParentItemId', 'setTotalItemCount', 'getChildrenItems']
-        );
+        $this->orderItemMock = $this->getMockBuilder(Item::class)
+            ->addMethods(['getQuoteParentItemId', 'setTotalItemCount'])
+            ->onlyMethods(['getChildrenItems'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->storeMock = $this->createMock(Store::class);
         $this->storeGroupMock = $this->createPartialMock(
             Group::class,
             ['getName', 'getDefaultStoreId']
         );
         $this->websiteMock = $this->createPartialMock(Website::class, ['getName']);
-        $this->connectionMock = $this->createPartialMock(
-            Mysql::class,
-            [
-                'describeTable',
-                'insert',
-                'lastInsertId',
-                'beginTransaction',
-                'rollback',
-                'commit',
-                'quoteInto',
-                'update'
-            ]
-        );
+        $this->connectionMock = $this->getMockBuilder(Mysql::class)
+            ->onlyMethods(
+                [
+                    'rollback',
+                    'describeTable',
+                    'insert',
+                    'lastInsertId',
+                    'beginTransaction',
+                    'commit',
+                    'quoteInto',
+                    'update'
+                ]
+            )
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->salesSequenceManagerMock = $this->createMock(Manager::class);
         $this->salesSequenceMock = $this->createMock(Sequence::class);
         $this->entitySnapshotMock = $this->createMock(
@@ -231,18 +234,18 @@ class OrderTest extends TestCase
             ->method('quoteInto');
         $this->connectionMock->expects($this->any())
             ->method('describeTable')
-            ->will($this->returnValue([]));
+            ->willReturn([]);
         $this->connectionMock->expects($this->any())
             ->method('update');
         $this->connectionMock->expects($this->any())
             ->method('lastInsertId');
         $this->orderMock->expects($this->any())
             ->method('getId')
-            ->will($this->returnValue(1));
+            ->willReturn(1);
         $this->entitySnapshotMock->expects($this->once())
             ->method('isModified')
             ->with($this->orderMock)
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $this->resource->save($this->orderMock);
     }
 }

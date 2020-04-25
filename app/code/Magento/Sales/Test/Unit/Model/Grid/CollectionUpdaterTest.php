@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Sales\Test\Unit\Model\Grid;
 
@@ -43,13 +44,12 @@ class CollectionUpdaterTest extends TestCase
             ->expects($this->once())
             ->method('registry')
             ->with('current_order')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
         $collectionMock->expects($this->never())->method('setOrderFilter');
         $collectionMock
             ->expects($this->once())
             ->method('addOrderInformation')
-            ->with(['increment_id'])
-            ->will($this->returnSelf());
+            ->with(['increment_id'])->willReturnSelf();
         $this->assertEquals($collectionMock, $this->collectionUpdater->update($collectionMock));
     }
 
@@ -63,14 +63,13 @@ class CollectionUpdaterTest extends TestCase
             ->expects($this->once())
             ->method('registry')
             ->with('current_order')
-            ->will($this->returnValue($orderMock));
-        $orderMock->expects($this->once())->method('getId')->will($this->returnValue('orderId'));
-        $collectionMock->expects($this->once())->method('setOrderFilter')->with('orderId')->will($this->returnSelf());
+            ->willReturn($orderMock);
+        $orderMock->expects($this->once())->method('getId')->willReturn('orderId');
+        $collectionMock->expects($this->once())->method('setOrderFilter')->with('orderId')->willReturnSelf();
         $collectionMock
             ->expects($this->once())
             ->method('addOrderInformation')
-            ->with(['increment_id'])
-            ->will($this->returnSelf());
+            ->with(['increment_id'])->willReturnSelf();
         $this->assertEquals($collectionMock, $this->collectionUpdater->update($collectionMock));
     }
 }

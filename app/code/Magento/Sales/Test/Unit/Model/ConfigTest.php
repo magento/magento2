@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Sales\Test\Unit\Model;
 
 use Magento\Framework\App\State;
@@ -56,11 +58,11 @@ class ConfigTest extends TestCase
 
         $this->stateMock->expects($this->once())
             ->method('getAreaCode')
-            ->will($this->returnValue($areaCode));
+            ->willReturn($areaCode);
         $this->configDataMock->expects($this->once())
             ->method('get')
-            ->with($this->equalTo($path))
-            ->will($this->returnValue($expected));
+            ->with($path)
+            ->willReturn($expected);
 
         $result = $this->model->getTotalsRenderer($section, $group, $code);
         $this->assertEquals($expected, $result);
@@ -75,8 +77,8 @@ class ConfigTest extends TestCase
 
         $this->configDataMock->expects($this->once())
             ->method('get')
-            ->with($this->equalTo($path))
-            ->will($this->returnValue($expected));
+            ->with($path)
+            ->willReturn($expected);
 
         $result = $this->model->getGroupTotals($section, $group);
         $this->assertEquals($expected, $result);
@@ -88,8 +90,8 @@ class ConfigTest extends TestCase
 
         $this->configDataMock->expects($this->once())
             ->method('get')
-            ->with($this->equalTo('order/available_product_types'))
-            ->will($this->returnValue($productTypes));
+            ->with('order/available_product_types')
+            ->willReturn($productTypes);
         $result = $this->model->getAvailableProductTypes();
         $this->assertEquals($productTypes, $result);
     }

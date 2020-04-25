@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Sales\Test\Unit\Model\Order;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
@@ -89,7 +91,7 @@ class ShipmentTest extends TestCase
 
         $actual = $this->shipmentModel->getCommentsCollection();
 
-        self::assertTrue(is_object($actual));
+        self::assertIsObject($actual);
         self::assertEquals($this->commentCollection, $actual);
     }
 
@@ -127,7 +129,7 @@ class ShipmentTest extends TestCase
             ->willReturn($collection);
 
         $actual = $this->shipmentModel->getComments();
-        self::assertTrue(is_array($actual));
+        self::assertIsArray($actual);
         self::assertEquals($collection, $actual);
     }
 

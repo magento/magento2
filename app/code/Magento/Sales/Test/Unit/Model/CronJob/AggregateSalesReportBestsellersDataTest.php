@@ -1,14 +1,17 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Sales\Test\Unit\Model\CronJob;
 
 use Magento\Framework\Locale\ResolverInterface;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 use Magento\Sales\Model\CronJob\AggregateSalesReportBestsellersData;
 use Magento\Sales\Model\ResourceModel\Report\Bestsellers;
+use Magento\Sales\Model\ResourceModel\Report\BestsellersFactory;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -28,7 +31,7 @@ class AggregateSalesReportBestsellersDataTest extends TestCase
     protected $localeDateMock;
 
     /**
-     * @var \Magento\Sales\Model\ResourceModel\Report\BestsellersFactory|MockObject
+     * @var BestsellersFactory|MockObject
      */
     protected $bestsellersFactoryMock;
 
@@ -44,10 +47,10 @@ class AggregateSalesReportBestsellersDataTest extends TestCase
             ->getMock();
 
         $this->bestsellersFactoryMock =
-            $this->getMockBuilder(\Magento\Sales\Model\ResourceModel\Report\BestsellersFactory::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['create'])
-            ->getMock();
+            $this->getMockBuilder(BestsellersFactory::class)
+                ->disableOriginalConstructor()
+                ->setMethods(['create'])
+                ->getMock();
         $this->localeDateMock = $this->getMockBuilder(TimezoneInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -70,7 +73,7 @@ class AggregateSalesReportBestsellersDataTest extends TestCase
             ->with($date);
         $this->bestsellersFactoryMock->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($bestsellersMock));
+            ->willReturn($bestsellersMock);
         $this->observer->execute();
     }
 
@@ -90,7 +93,7 @@ class AggregateSalesReportBestsellersDataTest extends TestCase
         $date = (new \DateTime())->sub(new \DateInterval('PT25H'));
         $this->localeDateMock->expects($this->once())
             ->method('date')
-            ->will($this->returnValue($date));
+            ->willReturn($date);
 
         return $date;
     }

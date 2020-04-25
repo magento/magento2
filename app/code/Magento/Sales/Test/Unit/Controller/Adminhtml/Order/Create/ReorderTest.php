@@ -310,7 +310,7 @@ class ReorderTest extends TestCase
             ->method('get')
             ->with(Quote::class)
             ->willReturn($this->quoteSessionMock);
-        $this->quoteSessionMock->expects($this->once())->method('clearStorage')->will($this->returnSelf());
+        $this->quoteSessionMock->expects($this->once())->method('clearStorage')->willReturnSelf();
     }
 
     /**
@@ -420,8 +420,7 @@ class ReorderTest extends TestCase
             ->willReturn($this->quoteSessionMock);
         $this->quoteSessionMock->expects($this->once())
             ->method('setUseOldShippingMethod')
-            ->with(true)
-            ->will($this->returnSelf());
+            ->with(true)->willReturnSelf();
         $this->objectManagerMock->expects($this->at(2))
             ->method('get')
             ->with(Create::class)

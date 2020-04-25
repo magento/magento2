@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Sales\Test\Unit\Model\ResourceModel\Order\Status\History;
 
@@ -79,7 +80,7 @@ class CollectionTest extends TestCase
         $this->selectMock = $this->createMock(Select::class);
         $this->historyItemMock = $this->createPartialMock(
             History::class,
-            ['__wakeup', 'addData']
+            ['addData']
         );
         $this->resourceMock = $this->getMockForAbstractClass(
             EntityAbstract::class,
@@ -88,7 +89,7 @@ class CollectionTest extends TestCase
             false,
             true,
             true,
-            ['getConnection', 'getMainTable', 'getTable', '__wakeup']
+            ['getConnection', 'getMainTable', 'getTable']
         );
         $this->entitySnapshotMock = $this->createMock(
             Snapshot::class
@@ -98,29 +99,29 @@ class CollectionTest extends TestCase
         );
         $this->entityFactoryMock = $this->createMock(EntityFactory::class);
 
-        $this->resourceMock->expects($this->any())->method('getConnection')->will(
-            $this->returnValue($this->connectionMock)
+        $this->resourceMock->expects($this->any())->method('getConnection')->willReturn(
+            $this->connectionMock
         );
-        $this->resourceMock->expects($this->any())->method('getTable')->will($this->returnArgument(0));
+        $this->resourceMock->expects($this->any())->method('getTable')->willReturnArgument(0);
 
-        $this->connectionMock->expects($this->any())->method('quoteIdentifier')->will($this->returnArgument(0));
+        $this->connectionMock->expects($this->any())->method('quoteIdentifier')->willReturnArgument(0);
         $this->connectionMock->expects($this->atLeastOnce())
             ->method('select')
-            ->will($this->returnValue($this->selectMock));
+            ->willReturn($this->selectMock);
 
         $data = [['data']];
         $this->historyItemMock->expects($this->once())
             ->method('addData')
-            ->with($this->equalTo($data[0]))
-            ->will($this->returnValue($this->historyItemMock));
+            ->with($data[0])
+            ->willReturn($this->historyItemMock);
 
         $this->fetchStrategyMock->expects($this->once())
             ->method('fetchAll')
-            ->will($this->returnValue($data));
+            ->willReturn($data);
 
         $this->entityFactoryMock->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($this->historyItemMock));
+            ->willReturn($this->historyItemMock);
 
         $logger = $this->createMock(LoggerInterface::class);
         $this->collection = new Collection(
@@ -139,15 +140,13 @@ class CollectionTest extends TestCase
         $orderId = 100000512;
         $entityType = 'order';
 
-        $order = $this->createPartialMock(Order::class, ['__wakeup',
-            'getEntityType',
-            'getId']);
+        $order = $this->createPartialMock(Order::class, ['getEntityType', 'getId']);
         $order->expects($this->once())
             ->method('getEntityType')
-            ->will($this->returnValue($entityType));
+            ->willReturn($entityType);
         $order->expects($this->once())
             ->method('getId')
-            ->will($this->returnValue($orderId));
+            ->willReturn($orderId);
 
         $this->connectionMock = $this->collection->getResource()->getConnection();
         $this->connectionMock->expects($this->exactly(3))

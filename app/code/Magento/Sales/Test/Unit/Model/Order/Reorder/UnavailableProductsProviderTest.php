@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Sales\Test\Unit\Model\Order\Reorder;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
@@ -44,12 +46,18 @@ class UnavailableProductsProviderTest extends TestCase
     protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
-        $this->salesConfigMock = $this->getMockBuilder(Config::class)->disableOriginalConstructor()->getMock();
+        $this->salesConfigMock = $this->getMockBuilder(Config::class)
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->checkerMock = $this->getMockBuilder(OrderedProductAvailabilityChecker::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->orderMock = $this->getMockBuilder(Order::class)->disableOriginalConstructor()->getMock();
-        $this->orderItemMock = $this->getMockBuilder(Item::class)->disableOriginalConstructor()->getMock();
+        $this->orderMock = $this->getMockBuilder(Order::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->orderItemMock = $this->getMockBuilder(Item::class)
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->unavailableProductsProvider = $objectManager->getObject(
             UnavailableProductsProvider::class,
             [

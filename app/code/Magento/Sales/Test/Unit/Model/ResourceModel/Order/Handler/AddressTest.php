@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Sales\Test\Unit\Model\ResourceModel\Order\Handler;
 
 use Magento\Sales\Model\Order;
@@ -42,21 +44,29 @@ class AddressTest extends TestCase
     protected function setUp(): void
     {
         $this->attributeMock = $this->createMock(Attribute::class);
-        $this->orderMock = $this->createPartialMock(Order::class, [
-                '__wakeup',
-                'getAddresses',
-                'save',
-                'getBillingAddress',
-                'getShippingAddress',
-                'hasBillingAddressId',
-                'getBillingAddressId',
-                'setBillingAddressId',
-                'unsBillingAddressId',
-                'hasShippingAddressId',
-                'getShippingAddressId',
-                'setShippingAddressId',
-                'unsShippingAddressId'
-            ]);
+        $this->orderMock = $this->getMockBuilder(Order::class)
+            ->addMethods(
+                [
+                    'hasBillingAddressId',
+                    'unsBillingAddressId',
+                    'hasShippingAddressId',
+                    'getShippingAddressId',
+                    'setShippingAddressId',
+                    'unsShippingAddressId'
+                ]
+            )
+            ->onlyMethods(
+                [
+                    'getAddresses',
+                    'save',
+                    'getBillingAddress',
+                    'getShippingAddress',
+                    'getBillingAddressId',
+                    'setBillingAddressId'
+                ]
+            )
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->addressMock = $this->createMock(\Magento\Sales\Model\Order\Address::class);
         $this->addressCollectionMock = $this->createMock(
             Collection::class
@@ -75,27 +85,24 @@ class AddressTest extends TestCase
             ->method('getAddresses')
             ->willReturn([$this->addressMock]);
         $this->addressMock->expects($this->once())
-            ->method('save')
-            ->will($this->returnSelf());
+            ->method('save')->willReturnSelf();
         $this->orderMock->expects($this->once())
             ->method('getBillingAddress')
-            ->will($this->returnValue($this->addressMock));
+            ->willReturn($this->addressMock);
         $this->addressMock->expects($this->exactly(2))
             ->method('getId')
-            ->will($this->returnValue(2));
+            ->willReturn(2);
         $this->orderMock->expects($this->once())
             ->method('getBillingAddressId')
-            ->will($this->returnValue(1));
+            ->willReturn(1);
         $this->orderMock->expects($this->once())
-            ->method('setBillingAddressId')
-            ->will($this->returnSelf());
+            ->method('setBillingAddressId')->willReturnSelf();
         $this->orderMock->expects($this->once())
             ->method('getShippingAddress')
-            ->will($this->returnValue(null));
+            ->willReturn(null);
         $this->attributeMock->expects($this->once())
             ->method('saveAttribute')
-            ->with($this->orderMock, ['billing_address_id'])
-            ->will($this->returnSelf());
+            ->with($this->orderMock, ['billing_address_id'])->willReturnSelf();
         $this->assertEquals($this->address, $this->address->process($this->orderMock));
     }
 
@@ -108,24 +115,21 @@ class AddressTest extends TestCase
             ->method('getAddresses')
             ->willReturn([$this->addressMock]);
         $this->addressMock->expects($this->once())
-            ->method('save')
-            ->will($this->returnSelf());
+            ->method('save')->willReturnSelf();
         $this->orderMock->expects($this->once())
             ->method('getBillingAddress')
-            ->will($this->returnValue(null));
+            ->willReturn(null);
         $this->orderMock->expects($this->once())
             ->method('getShippingAddress')
-            ->will($this->returnValue($this->addressMock));
+            ->willReturn($this->addressMock);
         $this->addressMock->expects($this->exactly(2))
             ->method('getId')
-            ->will($this->returnValue(2));
+            ->willReturn(2);
         $this->orderMock->expects($this->once())
-            ->method('setShippingAddressId')
-            ->will($this->returnSelf());
+            ->method('setShippingAddressId')->willReturnSelf();
         $this->attributeMock->expects($this->once())
             ->method('saveAttribute')
-            ->with($this->orderMock, ['shipping_address_id'])
-            ->will($this->returnSelf());
+            ->with($this->orderMock, ['shipping_address_id'])->willReturnSelf();
         $this->assertEquals($this->address, $this->address->process($this->orderMock));
     }
 
@@ -136,22 +140,20 @@ class AddressTest extends TestCase
     {
         $this->orderMock->expects($this->once())
             ->method('hasBillingAddressId')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $this->orderMock->expects($this->once())
             ->method('getBillingAddressId')
-            ->will($this->returnValue(null));
+            ->willReturn(null);
         $this->orderMock->expects($this->once())
-            ->method('unsBillingAddressId')
-            ->will($this->returnSelf());
+            ->method('unsBillingAddressId')->willReturnSelf();
         $this->orderMock->expects($this->once())
             ->method('hasShippingAddressId')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $this->orderMock->expects($this->once())
             ->method('getShippingAddressId')
-            ->will($this->returnValue(null));
+            ->willReturn(null);
         $this->orderMock->expects($this->once())
-            ->method('unsShippingAddressId')
-            ->will($this->returnSelf());
+            ->method('unsShippingAddressId')->willReturnSelf();
         $this->assertEquals($this->address, $this->address->removeEmptyAddresses($this->orderMock));
     }
 }

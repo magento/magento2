@@ -1,13 +1,16 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Sales\Test\Unit\Model\Config\Backend\Email;
 
 use Magento\Framework\App\Config;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Event\Manager;
+use Magento\Framework\Event\Manager\Proxy;
 use Magento\Framework\Model\Context;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Sales\Model\Config\Backend\Email\AsyncSending;
@@ -36,7 +39,7 @@ class AsyncSendingTest extends TestCase
     protected $context;
 
     /**
-     * @var \Magento\Framework\Event\Manager\Proxy|MockObject
+     * @var Proxy|MockObject
      */
     protected $eventManager;
 

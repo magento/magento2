@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Sales\Test\Unit\Controller\Adminhtml\Order;
 
@@ -107,16 +108,16 @@ class EmailTest extends TestCase
     {
         $objectManagerHelper = new ObjectManagerHelper($this);
         $this->context = $this->createPartialMock(Context::class, [
-                'getRequest',
-                'getResponse',
-                'getMessageManager',
-                'getRedirect',
-                'getObjectManager',
-                'getSession',
-                'getActionFlag',
-                'getHelper',
-                'getResultRedirectFactory'
-            ]);
+            'getRequest',
+            'getResponse',
+            'getMessageManager',
+            'getRedirect',
+            'getObjectManager',
+            'getSession',
+            'getActionFlag',
+            'getHelper',
+            'getResultRedirectFactory'
+        ]);
         $this->orderManagementMock = $this->getMockBuilder(OrderManagementInterface::class)
             ->getMockForAbstractClass();
         $this->orderRepositoryMock = $this->getMockBuilder(OrderRepositoryInterface::class)
@@ -127,12 +128,13 @@ class EmailTest extends TestCase
             RedirectFactory::class,
             ['create']
         );
-        $this->response = $this->createPartialMock(
-            ResponseInterface::class,
-            ['setRedirect', 'sendResponse']
-        );
+        $this->response = $this->getMockBuilder(ResponseInterface::class)
+            ->addMethods(['setRedirect'])
+            ->onlyMethods(['sendResponse'])
+            ->getMock();
         $this->request = $this->getMockBuilder(Http::class)
-            ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->messageManager = $this->createPartialMock(
             Manager::class,
             ['addSuccessMessage', 'addErrorMessage']
@@ -140,7 +142,10 @@ class EmailTest extends TestCase
 
         $this->orderMock = $this->getMockBuilder(OrderInterface::class)
             ->getMockForAbstractClass();
-        $this->session = $this->createPartialMock(Session::class, ['setIsUrlNotice']);
+        $this->session = $this->getMockBuilder(Session::class)
+            ->addMethods(['setIsUrlNotice'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->actionFlag = $this->createPartialMock(ActionFlag::class, ['get', 'set']);
         $this->helper = $this->createPartialMock(Data::class, ['getUrl']);
         $this->resultRedirect = $this->createMock(Redirect::class);
@@ -177,14 +182,14 @@ class EmailTest extends TestCase
         $this->request->expects($this->once())
             ->method('getParam')
             ->with('order_id')
-            ->will($this->returnValue($orderId));
+            ->willReturn($orderId);
         $this->orderRepositoryMock->expects($this->once())
             ->method('get')
             ->with($orderId)
             ->willReturn($this->orderMock);
         $this->orderMock->expects($this->atLeastOnce())
             ->method('getEntityId')
-            ->will($this->returnValue($orderId));
+            ->willReturn($orderId);
         $this->orderManagementMock->expects($this->once())
             ->method('notify')
             ->with($orderId)
@@ -212,7 +217,7 @@ class EmailTest extends TestCase
         $this->request->expects($this->once())
             ->method('getParam')
             ->with('order_id')
-            ->will($this->returnValue(null));
+            ->willReturn(null);
         $this->orderRepositoryMock->expects($this->once())
             ->method('get')
             ->with(null)
@@ -228,7 +233,7 @@ class EmailTest extends TestCase
         $this->actionFlag->expects($this->once())
             ->method('set')
             ->with('', 'no-dispatch', true)
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $this->resultRedirect->expects($this->once())
             ->method('setPath')
             ->with('sales/*/')

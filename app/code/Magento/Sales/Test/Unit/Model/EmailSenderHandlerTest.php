@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Sales\Test\Unit\Model;
 
 use Magento\Framework\App\Config;
@@ -73,7 +75,10 @@ class EmailSenderHandlerTest extends TestCase
     {
         $objectManager = new ObjectManager($this);
 
-        $this->emailSender = $this->createPartialMock(Sender::class, ['send']);
+        $this->emailSender = $this->getMockBuilder(Sender::class)
+            ->addMethods(['send'])
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
 
         $this->entityResource = $this->getMockForAbstractClass(
             EntityAbstract::class,

@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Sales\Test\Unit\Block\Adminhtml\Items;
 
 use Magento\Backend\Block\Template\Context;
@@ -27,7 +29,7 @@ class AbstractTest extends TestCase
         $renderer = $this->createMock(AbstractBlock::class);
         $layout = $this->createPartialMock(
             Layout::class,
-            ['getChildName', 'getBlock', 'getGroupChildNames', '__wakeup']
+            ['getChildName', 'getBlock', 'getGroupChildNames']
         );
         $layout->expects(
             $this->at(0)
@@ -36,8 +38,8 @@ class AbstractTest extends TestCase
         )->with(
             null,
             'some-type'
-        )->will(
-            $this->returnValue('some-block-name')
+        )->willReturn(
+            'some-block-name'
         );
         $layout->expects(
             $this->at(1)
@@ -45,8 +47,8 @@ class AbstractTest extends TestCase
             'getBlock'
         )->with(
             'some-block-name'
-        )->will(
-            $this->returnValue($renderer)
+        )->willReturn(
+            $renderer
         );
 
         /** @var AbstractItems $block */
@@ -70,7 +72,7 @@ class AbstractTest extends TestCase
         $renderer = $this->createMock(\stdClass::class);
         $layout = $this->createPartialMock(
             Layout::class,
-            ['getChildName', 'getBlock', '__wakeup']
+            ['getChildName', 'getBlock']
         );
         $layout->expects(
             $this->at(0)
@@ -79,8 +81,8 @@ class AbstractTest extends TestCase
         )->with(
             null,
             'some-type'
-        )->will(
-            $this->returnValue('some-block-name')
+        )->willReturn(
+            'some-block-name'
         );
         $layout->expects(
             $this->at(1)
@@ -88,8 +90,8 @@ class AbstractTest extends TestCase
             'getBlock'
         )->with(
             'some-block-name'
-        )->will(
-            $this->returnValue($renderer)
+        )->willReturn(
+            $renderer
         );
 
         /** @var AbstractItems $block */

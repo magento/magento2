@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Sales\Test\Unit\Model\Order\Payment;
 
@@ -13,6 +14,7 @@ use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Sales\Api\Data\OrderPaymentSearchResultInterfaceFactory;
 use Magento\Sales\Model\Order\Payment\Repository;
 use Magento\Sales\Model\ResourceModel\Metadata;
 use Magento\Sales\Model\ResourceModel\Order\Payment;
@@ -75,7 +77,7 @@ class RepositoryTest extends TestCase
         $objectManager = new ObjectManager($this);
         $this->metaData = $this->createMock(Metadata::class);
         $this->searchResultFactory = $this->createPartialMock(
-            \Magento\Sales\Api\Data\OrderPaymentSearchResultInterfaceFactory::class,
+            OrderPaymentSearchResultInterfaceFactory::class,
             ['create']
         );
         $this->searchCriteria = $this->createMock(SearchCriteria::class);

@@ -49,11 +49,11 @@ class OrderIncrementIdCheckerTest extends TestCase
         $objectManagerHelper = new ObjectManager($this);
 
         $this->selectMock = $this->createMock(Select::class);
-        $this->selectMock->expects($this->any())->method('from')->will($this->returnSelf());
+        $this->selectMock->expects($this->any())->method('from')->willReturnSelf();
         $this->selectMock->expects($this->any())->method('where');
 
         $this->adapterMock = $this->createMock(Mysql::class);
-        $this->adapterMock->expects($this->any())->method('select')->will($this->returnValue($this->selectMock));
+        $this->adapterMock->expects($this->any())->method('select')->willReturn($this->selectMock);
 
         $this->resourceMock = $this->createMock(Order::class);
         $this->resourceMock->expects($this->any())->method('getConnection')->willReturn($this->adapterMock);

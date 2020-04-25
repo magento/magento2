@@ -97,10 +97,16 @@ class CommentRepositoryTest extends TestCase
         $this->creditmemoCommentSender = $this->getMockBuilder(CreditmemoCommentSender::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->loggerMock = $this->getMockBuilder(LoggerInterface::class)->disableOriginalConstructor()->getMock();
+        $this->loggerMock = $this->getMockBuilder(LoggerInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
 
-        $this->creditmemoMock = $this->getMockBuilder(Creditmemo::class)->disableOriginalConstructor()->getMock();
-        $this->commentMock = $this->getMockBuilder(Comment::class)->disableOriginalConstructor()->getMock();
+        $this->creditmemoMock = $this->getMockBuilder(Creditmemo::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->commentMock = $this->getMockBuilder(Comment::class)
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->commentRepository = new CommentRepository(
             $this->commentResource,

@@ -1,14 +1,17 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Sales\Test\Unit\Controller\Adminhtml\Order\Creditmemo;
 
 use Magento\Backend\App\Action\Context;
 use Magento\Backend\Helper\Data;
 use Magento\Backend\Model\Session;
 use Magento\Backend\Model\View\Result\Forward;
+use Magento\Backend\Model\View\Result\ForwardFactory;
 use Magento\Backend\Model\View\Result\Redirect;
 use Magento\Backend\Model\View\Result\RedirectFactory;
 use Magento\Framework\App\ActionFlag;
@@ -84,7 +87,7 @@ class CancelTest extends TestCase
     protected $resultRedirectFactoryMock;
 
     /**
-     * @var \Magento\Backend\Model\View\Result\ForwardFactory|MockObject
+     * @var ForwardFactory|MockObject
      */
     protected $resultForwardFactoryMock;
 
@@ -129,7 +132,7 @@ class CancelTest extends TestCase
             ->setMethods(['create'])
             ->getMock();
         $this->resultForwardFactoryMock = $this->getMockBuilder(
-            \Magento\Backend\Model\View\Result\ForwardFactory::class
+            ForwardFactory::class
         )->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
@@ -157,7 +160,7 @@ class CancelTest extends TestCase
             ->getMock();
         $this->contextMock->expects($this->any())
             ->method('getHelper')
-            ->will($this->returnValue($this->helperMock));
+            ->willReturn($this->helperMock);
         $this->actionFlagMock = $this->getMockBuilder(ActionFlag::class)
             ->disableOriginalConstructor()
             ->getMock();

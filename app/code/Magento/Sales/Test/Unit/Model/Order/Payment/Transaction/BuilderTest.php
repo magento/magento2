@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Sales\Test\Unit\Model\Order\Payment\Transaction;
 
@@ -41,13 +42,11 @@ class BuilderTest extends TestCase
     {
         $objectManager = new ObjectManager($this);
         $this->repositoryMock = $this->createMock(Repository::class);
-        $this->paymentMock = $this->createPartialMock(Payment::class, [
-                'hasIsTransactionClosed',
-                'getIsTransactionClosed',
-                'getId',
-                'getParentTransactionId',
-                'getShouldCloseParentTransaction'
-            ]);
+        $this->paymentMock = $this->getMockBuilder(Payment::class)
+            ->addMethods(['hasIsTransactionClosed', 'getIsTransactionClosed'])
+            ->onlyMethods(['getId', 'getParentTransactionId', 'getShouldCloseParentTransaction'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->orderMock = $this->createMock(Order::class);
         $this->builder = $objectManager->getObject(
             Builder::class,
@@ -190,25 +189,29 @@ class BuilderTest extends TestCase
      */
     protected function expectTransaction($orderId, $paymentId)
     {
-        $newTransaction = $this->createPartialMock(Transaction::class, [
-                'getId',
-                'setOrderId',
-                'setPaymentId',
-                'loadByTxnId',
-                'setTxnId',
-                'setTxnType',
-                'isFailsafe',
-                'getTxnId',
-                'getHtmlTxnId',
-                'getTxnType',
-                'setAdditionalInformation',
-                'setParentTxnId',
-                'close',
-                'getIsClosed',
-                'setPayment',
-                'setOrder',
-                'setIsClosed'
-            ]);
+        $newTransaction = $this->getMockBuilder(Transaction::class)
+            ->addMethods(['loadByTxnId', 'setPayment'])
+            ->onlyMethods(
+                [
+                    'getId',
+                    'setOrderId',
+                    'setPaymentId',
+                    'setTxnId',
+                    'setTxnType',
+                    'isFailsafe',
+                    'getTxnId',
+                    'getHtmlTxnId',
+                    'getTxnType',
+                    'setAdditionalInformation',
+                    'setParentTxnId',
+                    'close',
+                    'getIsClosed',
+                    'setOrder',
+                    'setIsClosed'
+                ]
+            )
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->orderMock->expects($this->atLeastOnce())->method('getId')->willReturn($orderId);
         $this->paymentMock->expects($this->atLeastOnce())->method('getId')->willReturn($paymentId);
@@ -221,9 +224,10 @@ class BuilderTest extends TestCase
      */
     protected function expectDocument($transactionId)
     {
-        $document = $this->createPartialMock(Order::class, [
-                'setTransactionId'
-            ]);
+        $document = $this->getMockBuilder(Order::class)
+            ->addMethods(['setTransactionId'])
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $document->expects($this->once())->method('setTransactionId')->with($transactionId);
         return $document;

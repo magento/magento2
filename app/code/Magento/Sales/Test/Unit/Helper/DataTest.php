@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Sales\Test\Unit\Helper;
 
@@ -222,7 +223,7 @@ class DataTest extends TestCase
                 ScopeInterface::SCOPE_STORE,
                 $this->storeMock
             )
-            ->will($this->returnValue($returnValue));
+            ->willReturn($returnValue);
     }
 
     /**

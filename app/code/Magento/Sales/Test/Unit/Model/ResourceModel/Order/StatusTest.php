@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Sales\Test\Unit\Model\ResourceModel\Order;
 
@@ -45,28 +46,31 @@ class StatusTest extends TestCase
     protected function setUp(): void
     {
         $this->selectMock = $this->createMock(Select::class);
-        $this->selectMock->expects($this->any())->method('from')->will($this->returnSelf());
+        $this->selectMock->expects($this->any())->method('from')->willReturnSelf();
         $this->selectMock->expects($this->any())->method('where');
 
         $this->connectionMock = $this->createPartialMock(
             Mysql::class,
             ['update', 'insertOnDuplicate', 'select']
         );
-        $this->connectionMock->expects($this->any())->method('select')->will($this->returnValue($this->selectMock));
+        $this->connectionMock->expects($this->any())->method('select')->willReturn($this->selectMock);
 
         $this->resourceMock = $this->createMock(ResourceConnection::class);
         $tableName = 'sales_order_status_state';
         $this->resourceMock->expects($this->at(1))
             ->method('getTableName')
-            ->with($this->equalTo($tableName))
-            ->will($this->returnValue($tableName));
+            ->with($tableName)
+            ->willReturn($tableName);
         $this->resourceMock->expects($this->any())
             ->method('getConnection')
-            ->will(
-                $this->returnValue($this->connectionMock)
+            ->willReturn(
+                $this->connectionMock
             );
 
-        $this->configMock = $this->createPartialMock(Config::class, ['getConnectionName']);
+        $this->configMock = $this->getMockBuilder(Config::class)
+            ->addMethods(['getConnectionName'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $objectManager = new ObjectManager($this);
         $this->model = $objectManager->getObject(
             Status::class,
@@ -84,22 +88,20 @@ class StatusTest extends TestCase
         $this->connectionMock->expects($this->once())
             ->method('update')
             ->with(
-                $this->equalTo($tableName),
-                $this->equalTo(['is_default' => 0]),
-                $this->equalTo(['state = ?' => $state])
+                $tableName,
+                ['is_default' => 0],
+                ['state = ?' => $state]
             );
         $this->connectionMock->expects($this->once())
             ->method('insertOnDuplicate')
             ->with(
-                $this->equalTo($tableName),
-                $this->equalTo(
-                    [
-                        'status' => $status,
-                        'state' => $state,
-                        'is_default' => $isDefault,
-                        'visible_on_front' => $visibleOnFront,
-                    ]
-                )
+                $tableName,
+                [
+                    'status' => $status,
+                    'state' => $state,
+                    'is_default' => $isDefault,
+                    'visible_on_front' => $visibleOnFront,
+                ]
             );
         $this->model->assignState($status, $state, $isDefault, $visibleOnFront);
     }

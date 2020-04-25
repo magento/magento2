@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Sales\Test\Unit\Controller\Adminhtml\Invoice\AbstractInvoice;
 
@@ -10,6 +11,7 @@ use Magento\Backend\App\Action\Context;
 use Magento\Backend\Helper\Data;
 use Magento\Backend\Model\Session;
 use Magento\Backend\Model\View\Result\Forward;
+use Magento\Backend\Model\View\Result\ForwardFactory;
 use Magento\Backend\Model\View\Result\Redirect;
 use Magento\Backend\Model\View\Result\RedirectFactory;
 use Magento\Framework\App\ActionFlag;
@@ -92,7 +94,7 @@ class EmailTest extends TestCase
     protected $resultForward;
 
     /**
-     * @var \Magento\Backend\Model\View\Result\ForwardFactory|MockObject
+     * @var ForwardFactory|MockObject
      */
     protected $resultForwardFactory;
 
@@ -112,7 +114,10 @@ class EmailTest extends TestCase
         $this->request = $this->createMock(RequestInterface::class);
         $this->objectManager = $this->createMock(\Magento\Framework\ObjectManager\ObjectManager::class);
         $this->messageManager = $this->createMock(Manager::class);
-        $this->session = $this->createPartialMock(Session::class, ['setIsUrlNotice']);
+        $this->session = $this->getMockBuilder(Session::class)
+            ->addMethods(['setIsUrlNotice'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->actionFlag = $this->createMock(ActionFlag::class);
         $this->helper = $this->createMock(Data::class);
         $this->resultRedirect = $this->getMockBuilder(Redirect::class)
@@ -154,7 +159,7 @@ class EmailTest extends TestCase
         $this->resultForward = $this->getMockBuilder(Forward::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->resultForwardFactory = $this->getMockBuilder(\Magento\Backend\Model\View\Result\ForwardFactory::class)
+        $this->resultForwardFactory = $this->getMockBuilder(ForwardFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();

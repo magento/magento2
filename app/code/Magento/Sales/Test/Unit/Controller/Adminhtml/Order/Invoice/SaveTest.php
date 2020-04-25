@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Sales\Test\Unit\Controller\Adminhtml\Order\Invoice;
 
@@ -84,19 +85,19 @@ class SaveTest extends TestCase
             ->getMock();
         $contextMock->expects($this->any())
             ->method('getRequest')
-            ->will($this->returnValue($this->requestMock));
+            ->willReturn($this->requestMock);
         $contextMock->expects($this->any())
             ->method('getResponse')
-            ->will($this->returnValue($this->responseMock));
+            ->willReturn($this->responseMock);
         $contextMock->expects($this->any())
             ->method('getResultRedirectFactory')
-            ->will($this->returnValue($this->resultPageFactoryMock));
+            ->willReturn($this->resultPageFactoryMock);
         $contextMock->expects($this->any())
             ->method('getFormKeyValidator')
-            ->will($this->returnValue($this->formKeyValidatorMock));
+            ->willReturn($this->formKeyValidatorMock);
         $contextMock->expects($this->any())
             ->method('getMessageManager')
-            ->will($this->returnValue($this->messageManagerMock));
+            ->willReturn($this->messageManagerMock);
 
         $this->controller = $objectManager->getObject(
             Save::class,

@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Sales\Test\Unit\Helper;
 
@@ -137,7 +138,7 @@ class ReorderTest extends TestCase
                 ScopeInterface::SCOPE_STORE,
                 $this->storeParam
             )
-            ->will($this->returnValue($returnValue));
+            ->willReturn($returnValue);
     }
 
     /**
@@ -166,7 +167,7 @@ class ReorderTest extends TestCase
 
         $this->customerSessionMock->expects($this->once())
             ->method('isLoggedIn')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
         $this->repositoryMock->expects($this->once())
             ->method('get')
             ->with(1)
@@ -187,11 +188,11 @@ class ReorderTest extends TestCase
 
         $this->customerSessionMock->expects($this->once())
             ->method('isLoggedIn')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $this->orderMock->expects($this->once())
             ->method('canReorder')
-            ->will($this->returnValue($orderCanReorder));
+            ->willReturn($orderCanReorder);
         $this->repositoryMock->expects($this->once())
             ->method('get')
             ->with(1)
@@ -210,7 +211,7 @@ class ReorderTest extends TestCase
         $this->setupScopeConfigMock($storeScopeReturnValue);
         $this->orderMock->expects($this->once())
             ->method('getStore')
-            ->will($this->returnValue($this->storeParam));
+            ->willReturn($this->storeParam);
     }
 
     /**

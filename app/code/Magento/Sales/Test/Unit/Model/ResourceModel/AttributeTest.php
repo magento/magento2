@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Sales\Test\Unit\Model\ResourceModel;
 
 use Magento\Framework\App\ResourceConnection;
@@ -60,15 +62,15 @@ class AttributeTest extends TestCase
             false,
             false,
             true,
-            ['__wakeup', 'getId', 'getEventPrefix', 'getEventObject']
+            ['getId', 'getEventPrefix', 'getEventObject']
         );
-        $this->connectionMock = $this->createPartialMock(
-            Mysql::class,
-            ['describeTable', 'insert', 'lastInsertId', 'beginTransaction', 'rollback', 'commit']
-        );
+        $this->connectionMock = $this->getMockBuilder(Mysql::class)
+            ->onlyMethods(['rollback', 'describeTable', 'insert', 'lastInsertId', 'beginTransaction', 'commit'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->connectionMock->expects($this->any())
             ->method('describeTable')
-            ->will($this->returnValue([]));
+            ->willReturn([]);
         $this->connectionMock->expects($this->any())
             ->method('insert');
         $this->connectionMock->expects($this->any())
@@ -86,13 +88,13 @@ class AttributeTest extends TestCase
     {
         $this->appResourceMock->expects($this->once())
             ->method('getConnection')
-            ->will($this->returnValue($this->connectionMock));
+            ->willReturn($this->connectionMock);
         $this->modelMock->expects($this->any())
             ->method('getEventPrefix')
-            ->will($this->returnValue('event_prefix'));
+            ->willReturn('event_prefix');
         $this->modelMock->expects($this->any())
             ->method('getEventObject')
-            ->will($this->returnValue('event_object'));
+            ->willReturn('event_object');
         $this->eventManagerMock->expects($this->at(0))
             ->method('dispatch')
             ->with('event_prefix_save_attribute_before', [
@@ -123,17 +125,17 @@ class AttributeTest extends TestCase
         $this->expectExceptionMessage('Expected Exception');
         $this->modelMock->expects($this->any())
             ->method('getEventPrefix')
-            ->will($this->returnValue('event_prefix'));
+            ->willReturn('event_prefix');
         $this->modelMock->expects($this->any())
             ->method('getEventObject')
-            ->will($this->returnValue('event_object'));
+            ->willReturn('event_object');
         $this->appResourceMock->expects($this->once())
             ->method('getConnection')
-            ->will($this->returnValue($this->connectionMock));
+            ->willReturn($this->connectionMock);
         $exception  = new \Exception('Expected Exception');
         $this->modelMock->expects($this->any())
             ->method('getId')
-            ->will($this->throwException($exception));
+            ->willThrowException($exception);
         $this->connectionMock->expects($this->once())
             ->method('beginTransaction');
         $this->connectionMock->expects($this->once())

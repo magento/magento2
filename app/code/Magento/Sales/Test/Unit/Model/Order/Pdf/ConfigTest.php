@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Sales\Test\Unit\Model\Order\Pdf;
 
 use Magento\Framework\Config\Data;
@@ -38,8 +40,8 @@ class ConfigTest extends TestCase
         )->with(
             "renderers/page_type",
             []
-        )->will(
-            $this->returnValue($configuration)
+        )->willReturn(
+            $configuration
         );
 
         $this->assertSame($configuration, $this->_model->getRenderersPerProduct('page_type'));
@@ -56,8 +58,8 @@ class ConfigTest extends TestCase
         )->with(
             'totals',
             []
-        )->will(
-            $this->returnValue($configuration)
+        )->willReturn(
+            $configuration
         );
 
         $this->assertSame($configuration, $this->_model->getTotals());

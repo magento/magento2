@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Sales\Test\Unit\Model\AdminOrder;
 
@@ -317,11 +318,18 @@ class CreateTest extends TestCase
     public function testApplyCoupon()
     {
         $couponCode = '123';
-        $quote = $this->createPartialMock(Quote::class, ['getShippingAddress', 'setCouponCode']);
+        $quote = $this->getMockBuilder(Quote::class)
+            ->addMethods(['setCouponCode'])
+            ->onlyMethods(['getShippingAddress'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->sessionQuote->method('getQuote')
             ->willReturn($quote);
 
-        $address = $this->createPartialMock(Address::class, ['setCollectShippingRates', 'setFreeShipping']);
+        $address = $this->getMockBuilder(Address::class)
+            ->addMethods(['setCollectShippingRates', 'setFreeShipping'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $quote->method('getShippingAddress')
             ->willReturn($address);
         $quote->method('setCouponCode')

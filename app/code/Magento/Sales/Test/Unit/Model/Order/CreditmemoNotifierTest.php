@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Sales\Test\Unit\Model\Order;
 
@@ -50,12 +51,12 @@ class CreditmemoNotifierTest extends TestCase
     protected function setUp(): void
     {
         $this->historyCollectionFactory = $this->createPartialMock(
-            \Magento\Sales\Model\ResourceModel\Order\Status\History\CollectionFactory::class,
+            CollectionFactory::class,
             ['create']
         );
         $this->creditmemo = $this->createPartialMock(
             Creditmemo::class,
-            ['__wakeUp', 'getEmailSent']
+            ['getEmailSent']
         );
         $this->creditmemoSenderMock = $this->createPartialMock(
             CreditmemoSender::class,
@@ -74,13 +75,14 @@ class CreditmemoNotifierTest extends TestCase
      */
     public function testNotifySuccess()
     {
-        $historyCollection = $this->createPartialMock(
-            Collection::class,
-            ['getUnnotifiedForInstance', 'save', 'setIsCustomerNotified']
-        );
+        $historyCollection = $this->getMockBuilder(Collection::class)
+            ->addMethods(['setIsCustomerNotified'])
+            ->onlyMethods(['getUnnotifiedForInstance', 'save'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $historyItem = $this->createPartialMock(
             History::class,
-            ['setIsCustomerNotified', 'save', '__wakeUp']
+            ['setIsCustomerNotified', 'save']
         );
         $historyItem->expects($this->at(0))
             ->method('setIsCustomerNotified')
@@ -90,17 +92,17 @@ class CreditmemoNotifierTest extends TestCase
         $historyCollection->expects($this->once())
             ->method('getUnnotifiedForInstance')
             ->with($this->creditmemo)
-            ->will($this->returnValue($historyItem));
+            ->willReturn($historyItem);
         $this->creditmemo->expects($this->once())
             ->method('getEmailSent')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $this->historyCollectionFactory->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($historyCollection));
+            ->willReturn($historyCollection);
 
         $this->creditmemoSenderMock->expects($this->once())
             ->method('send')
-            ->with($this->equalTo($this->creditmemo));
+            ->with($this->creditmemo);
 
         $this->assertTrue($this->notifier->notify($this->creditmemo));
     }
@@ -112,7 +114,7 @@ class CreditmemoNotifierTest extends TestCase
     {
         $this->creditmemo->expects($this->once())
             ->method('getEmailSent')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
         $this->assertFalse($this->notifier->notify($this->creditmemo));
     }
 
@@ -124,11 +126,11 @@ class CreditmemoNotifierTest extends TestCase
         $exception = new MailException(__('Email has not been sent'));
         $this->creditmemoSenderMock->expects($this->once())
             ->method('send')
-            ->with($this->equalTo($this->creditmemo))
-            ->will($this->throwException($exception));
+            ->with($this->creditmemo)
+            ->willThrowException($exception);
         $this->loggerMock->expects($this->once())
             ->method('critical')
-            ->with($this->equalTo($exception));
+            ->with($exception);
         $this->assertFalse($this->notifier->notify($this->creditmemo));
     }
 }

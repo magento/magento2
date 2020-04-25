@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Sales\Test\Unit\Model\Order\Pdf\Total;
 
 use Magento\Framework\ObjectManagerInterface;
@@ -48,8 +50,8 @@ class FactoryTest extends TestCase
         )->with(
             $expectedClassName,
             $arguments
-        )->will(
-            $this->returnValue($createdModel)
+        )->willReturn(
+            $createdModel
         );
 
         $actual = $this->_factory->create($class, $arguments);

@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Sales\Test\Unit\Model\Order\Pdf\Config;
 
 use Magento\Framework\Module\Dir\Reader;
@@ -37,8 +39,8 @@ class SchemaLocatorTest extends TestCase
         )->with(
             'etc',
             'Magento_Sales'
-        )->will(
-            $this->returnValue($this->_xsdDir)
+        )->willReturn(
+            $this->_xsdDir
         );
 
         $this->_model = new SchemaLocator($this->_moduleReader);

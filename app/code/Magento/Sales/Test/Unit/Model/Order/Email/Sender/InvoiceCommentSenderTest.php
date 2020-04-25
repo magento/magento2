@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Sales\Test\Unit\Model\Order\Email\Sender;
 
 use Magento\Payment\Helper\Data;
@@ -37,14 +39,14 @@ class InvoiceCommentSenderTest extends AbstractSenderTest
 
         $this->invoiceMock = $this->createPartialMock(
             \Magento\Sales\Model\Order\Invoice::class,
-            ['getStore', '__wakeup', 'getOrder']
+            ['getStore', 'getOrder']
         );
         $this->invoiceMock->expects($this->any())
             ->method('getStore')
-            ->will($this->returnValue($this->storeMock));
+            ->willReturn($this->storeMock);
         $this->invoiceMock->expects($this->any())
             ->method('getOrder')
-            ->will($this->returnValue($this->orderMock));
+            ->willReturn($this->orderMock);
 
         $this->sender = new InvoiceCommentSender(
             $this->templateContainerMock,
@@ -72,7 +74,7 @@ class InvoiceCommentSenderTest extends AbstractSenderTest
         $frontendStatusLabel = 'Processing';
         $this->orderMock->expects($this->once())
             ->method('getCustomerIsGuest')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
 
         $this->orderMock->expects($this->any())
             ->method('getCustomerName')
@@ -84,25 +86,23 @@ class InvoiceCommentSenderTest extends AbstractSenderTest
 
         $this->identityContainerMock->expects($this->once())
             ->method('isEnabled')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $this->templateContainerMock->expects($this->once())
             ->method('setTemplateVars')
             ->with(
-                $this->equalTo(
-                    [
-                        'order' => $this->orderMock,
-                        'invoice' => $this->invoiceMock,
-                        'comment' => $comment,
-                        'billing' => $billingAddress,
-                        'store' => $this->storeMock,
-                        'formattedShippingAddress' => 1,
-                        'formattedBillingAddress' => 1,
-                        'order_data' => [
-                            'customer_name' => $customerName,
-                            'frontend_status_label' => $frontendStatusLabel
-                        ]
+                [
+                    'order' => $this->orderMock,
+                    'invoice' => $this->invoiceMock,
+                    'comment' => $comment,
+                    'billing' => $billingAddress,
+                    'store' => $this->storeMock,
+                    'formattedShippingAddress' => 1,
+                    'formattedBillingAddress' => 1,
+                    'order_data' => [
+                        'customer_name' => $customerName,
+                        'frontend_status_label' => $frontendStatusLabel
                     ]
-                )
+                ]
             );
 
         $this->stepSendWithoutSendCopy();
@@ -119,7 +119,7 @@ class InvoiceCommentSenderTest extends AbstractSenderTest
         $comment = 'comment_test';
         $this->orderMock->expects($this->once())
             ->method('getCustomerIsGuest')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
 
         $this->orderMock->expects($this->any())
             ->method('getCustomerName')
@@ -131,25 +131,23 @@ class InvoiceCommentSenderTest extends AbstractSenderTest
 
         $this->identityContainerMock->expects($this->once())
             ->method('isEnabled')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $this->templateContainerMock->expects($this->once())
             ->method('setTemplateVars')
             ->with(
-                $this->equalTo(
-                    [
-                        'order' => $this->orderMock,
-                        'invoice' => $this->invoiceMock,
-                        'billing' => $billingAddress,
-                        'comment' => $comment,
-                        'store' => $this->storeMock,
-                        'formattedShippingAddress' => 1,
-                        'formattedBillingAddress' => 1,
-                        'order_data' => [
-                            'customer_name' => $customerName,
-                            'frontend_status_label' => $frontendStatusLabel
-                        ]
+                [
+                    'order' => $this->orderMock,
+                    'invoice' => $this->invoiceMock,
+                    'billing' => $billingAddress,
+                    'comment' => $comment,
+                    'store' => $this->storeMock,
+                    'formattedShippingAddress' => 1,
+                    'formattedBillingAddress' => 1,
+                    'order_data' => [
+                        'customer_name' => $customerName,
+                        'frontend_status_label' => $frontendStatusLabel
                     ]
-                )
+                ]
             );
         $this->stepSendWithCallSendCopyTo();
         $result = $this->sender->send($this->invoiceMock, false, $comment);
@@ -174,25 +172,23 @@ class InvoiceCommentSenderTest extends AbstractSenderTest
 
         $this->identityContainerMock->expects($this->once())
             ->method('isEnabled')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
         $this->templateContainerMock->expects($this->once())
             ->method('setTemplateVars')
             ->with(
-                $this->equalTo(
-                    [
-                        'order' => $this->orderMock,
-                        'invoice' => $this->invoiceMock,
-                        'billing' => $this->addressMock,
-                        'comment' => '',
-                        'store' => $this->storeMock,
-                        'formattedShippingAddress' => null,
-                        'formattedBillingAddress' => 1,
-                        'order_data' => [
-                            'customer_name' => $customerName,
-                            'frontend_status_label' => $frontendStatusLabel
-                        ]
+                [
+                    'order' => $this->orderMock,
+                    'invoice' => $this->invoiceMock,
+                    'billing' => $this->addressMock,
+                    'comment' => '',
+                    'store' => $this->storeMock,
+                    'formattedShippingAddress' => null,
+                    'formattedBillingAddress' => 1,
+                    'order_data' => [
+                        'customer_name' => $customerName,
+                        'frontend_status_label' => $frontendStatusLabel
                     ]
-                )
+                ]
             );
         $this->assertFalse($this->sender->send($this->invoiceMock));
     }

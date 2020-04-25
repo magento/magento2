@@ -1,12 +1,15 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Sales\Test\Unit\Controller\Adminhtml\Order\Creditmemo;
 
 use Magento\Backend\App\Action\Context;
 use Magento\Backend\Model\View\Result\Forward;
+use Magento\Backend\Model\View\Result\ForwardFactory;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\App\Response\Http\FileFactory;
@@ -88,7 +91,7 @@ class PrintActionTest extends TestCase
     protected $responseMock;
 
     /**
-     * @var \Magento\Backend\Model\View\Result\ForwardFactory|MockObject
+     * @var ForwardFactory|MockObject
      */
     protected $resultForwardFactoryMock;
 
@@ -138,7 +141,7 @@ class PrintActionTest extends TestCase
         $this->responseMock = $this->getMockBuilder(ResponseInterface::class)
             ->getMock();
         $this->resultForwardFactoryMock = $this->getMockBuilder(
-            \Magento\Backend\Model\View\Result\ForwardFactory::class
+            ForwardFactory::class
         )->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();

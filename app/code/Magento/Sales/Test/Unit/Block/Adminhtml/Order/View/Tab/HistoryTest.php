@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Sales\Test\Unit\Block\Adminhtml\Order\View\Tab;
 
 use Magento\Backend\Block\Template\Context;
@@ -64,8 +66,8 @@ class HistoryTest extends TestCase
         $this->localeDateMock = $this->getMockBuilder(TimezoneInterface::class)
             ->getMock();
 
-        $this->contextMock->expects($this->any())->method('getLocaleDate')->will(
-            $this->returnValue($this->localeDateMock)
+        $this->contextMock->expects($this->any())->method('getLocaleDate')->willReturn(
+            $this->localeDateMock
         );
 
         $this->commentsHistory = $this->objectManager->getObject(

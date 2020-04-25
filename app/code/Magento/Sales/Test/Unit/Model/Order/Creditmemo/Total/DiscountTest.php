@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Sales\Test\Unit\Model\Order\Creditmemo\Total;
 
@@ -53,18 +54,34 @@ class DiscountTest extends TestCase
             Order::class,
             ['getBaseShippingDiscountAmount', 'getBaseShippingAmount', 'getShippingAmount']
         );
-        $this->orderItemMock = $this->createPartialMock(Order::class, [
-                'isDummy', 'getDiscountInvoiced', 'getBaseDiscountInvoiced', 'getQtyInvoiced', 'getQty',
-                'getDiscountRefunded', 'getQtyRefunded'
-            ]);
-        $this->creditmemoMock = $this->createPartialMock(Creditmemo::class, [
-                'setBaseCost', 'getAllItems', 'getOrder', 'getBaseShippingAmount', 'roundPrice',
-                'setDiscountAmount', 'setBaseDiscountAmount', 'getBaseShippingInclTax', 'getBaseShippingTaxAmount'
-            ]);
-        $this->creditmemoItemMock = $this->createPartialMock(Item::class, [
-                'getHasChildren', 'getBaseCost', 'getQty', 'getOrderItem', 'setDiscountAmount',
-                'setBaseDiscountAmount', 'isLast'
-            ]);
+        $this->orderItemMock = $this->getMockBuilder(Order::class)
+            ->addMethods(['isDummy', 'getQtyInvoiced', 'getQty', 'getQtyRefunded'])
+            ->onlyMethods(['getDiscountInvoiced', 'getBaseDiscountInvoiced', 'getDiscountRefunded'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->creditmemoMock = $this->getMockBuilder(Creditmemo::class)
+            ->addMethods(['setBaseCost'])
+            ->onlyMethods(
+                [
+                    'getAllItems',
+                    'getOrder',
+                    'getBaseShippingAmount',
+                    'roundPrice',
+                    'setDiscountAmount',
+                    'setBaseDiscountAmount',
+                    'getBaseShippingInclTax',
+                    'getBaseShippingTaxAmount'
+                ]
+            )
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->creditmemoItemMock = $this->getMockBuilder(Item::class)
+            ->addMethods(['getHasChildren'])
+            ->onlyMethods(
+                ['getBaseCost', 'getQty', 'getOrderItem', 'setDiscountAmount', 'setBaseDiscountAmount', 'isLast']
+            )
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->taxConfig = $this->createMock(Config::class);
 
         $this->total = new Discount($this->taxConfig);

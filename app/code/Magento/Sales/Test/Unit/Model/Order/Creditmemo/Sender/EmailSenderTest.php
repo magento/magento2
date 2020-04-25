@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Sales\Test\Unit\Model\Order\Creditmemo\Sender;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
@@ -19,6 +21,7 @@ use Magento\Sales\Model\Order\Creditmemo\Sender\EmailSender;
 use Magento\Sales\Model\Order\Email\Container\CreditmemoIdentity;
 use Magento\Sales\Model\Order\Email\Container\Template;
 use Magento\Sales\Model\Order\Email\Sender;
+use Magento\Sales\Model\Order\Email\SenderBuilderFactory;
 use Magento\Sales\Model\ResourceModel\Order\Creditmemo;
 use Magento\Store\Model\Store;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -113,7 +116,7 @@ class EmailSenderTest extends TestCase
     private $identityContainerMock;
 
     /**
-     * @var \Magento\Sales\Model\Order\Email\SenderBuilderFactory|MockObject
+     * @var SenderBuilderFactory|MockObject
      */
     private $senderBuilderFactoryMock;
 
@@ -217,19 +220,19 @@ class EmailSenderTest extends TestCase
         $this->identityContainerMock = $this->getMockBuilder(
             CreditmemoIdentity::class
         )
-        ->disableOriginalConstructor()
-        ->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->identityContainerMock->expects($this->any())
             ->method('getStore')
             ->willReturn($this->storeMock);
 
         $this->senderBuilderFactoryMock = $this->getMockBuilder(
-            \Magento\Sales\Model\Order\Email\SenderBuilderFactory::class
+            SenderBuilderFactory::class
         )
-        ->disableOriginalConstructor()
-        ->setMethods(['create'])
-        ->getMock();
+            ->disableOriginalConstructor()
+            ->setMethods(['create'])
+            ->getMock();
 
         $this->subject = new EmailSender(
             $this->templateContainerMock,

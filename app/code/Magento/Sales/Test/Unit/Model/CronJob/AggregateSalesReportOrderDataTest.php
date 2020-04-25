@@ -1,14 +1,17 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Sales\Test\Unit\Model\CronJob;
 
 use Magento\Framework\Locale\ResolverInterface;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 use Magento\Sales\Model\CronJob\AggregateSalesReportOrderData;
 use Magento\Sales\Model\ResourceModel\Report\Order;
+use Magento\Sales\Model\ResourceModel\Report\OrderFactory;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -28,7 +31,7 @@ class AggregateSalesReportOrderDataTest extends TestCase
     protected $localeDateMock;
 
     /**
-     * @var \Magento\Sales\Model\ResourceModel\Report\OrderFactory|MockObject
+     * @var OrderFactory|MockObject
      */
     protected $orderFactoryMock;
 
@@ -43,7 +46,7 @@ class AggregateSalesReportOrderDataTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->orderFactoryMock = $this->getMockBuilder(\Magento\Sales\Model\ResourceModel\Report\OrderFactory::class)
+        $this->orderFactoryMock = $this->getMockBuilder(OrderFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
@@ -69,7 +72,7 @@ class AggregateSalesReportOrderDataTest extends TestCase
             ->with($date);
         $this->orderFactoryMock->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($orderMock));
+            ->willReturn($orderMock);
         $this->observer->execute();
     }
 
@@ -89,7 +92,7 @@ class AggregateSalesReportOrderDataTest extends TestCase
         $date = (new \DateTime())->sub(new \DateInterval('PT25H'));
         $this->localeDateMock->expects($this->once())
             ->method('date')
-            ->will($this->returnValue($date));
+            ->willReturn($date);
 
         return $date;
     }

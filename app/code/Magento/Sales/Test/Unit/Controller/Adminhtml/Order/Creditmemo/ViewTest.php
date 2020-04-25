@@ -1,14 +1,17 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Sales\Test\Unit\Controller\Adminhtml\Order\Creditmemo;
 
 use Magento\Backend\App\Action\Context;
 use Magento\Backend\Helper\Data;
 use Magento\Backend\Model\Session;
 use Magento\Backend\Model\View\Result\Forward;
+use Magento\Backend\Model\View\Result\ForwardFactory;
 use Magento\Backend\Model\View\Result\Page;
 use Magento\Framework\App\ActionFlag;
 use Magento\Framework\App\Request\Http;
@@ -113,7 +116,7 @@ class ViewTest extends TestCase
     protected $resultPageMock;
 
     /**
-     * @var \Magento\Backend\Model\View\Result\ForwardFactory|MockObject
+     * @var ForwardFactory|MockObject
      */
     protected $resultForwardFactoryMock;
 
@@ -135,7 +138,7 @@ class ViewTest extends TestCase
             ->getMock();
         $this->creditmemoMock = $this->getMockBuilder(Creditmemo::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getInvoice', 'getOrder', 'cancel', 'getId', '__wakeup'])
+            ->setMethods(['getInvoice', 'getOrder', 'cancel', 'getId'])
             ->getMock();
         $this->requestMock = $this->getMockBuilder(Http::class)
             ->disableOriginalConstructor()
@@ -171,7 +174,7 @@ class ViewTest extends TestCase
             ->getMock();
         $this->contextMock->expects($this->any())
             ->method('getHelper')
-            ->will($this->returnValue($this->helperMock));
+            ->willReturn($this->helperMock);
         $this->actionFlagMock = $this->getMockBuilder(ActionFlag::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -192,7 +195,7 @@ class ViewTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->resultForwardFactoryMock = $this->getMockBuilder(
-            \Magento\Backend\Model\View\Result\ForwardFactory::class
+            ForwardFactory::class
         )
             ->disableOriginalConstructor()
             ->setMethods(['create'])
@@ -203,25 +206,25 @@ class ViewTest extends TestCase
 
         $this->contextMock->expects($this->any())
             ->method('getSession')
-            ->will($this->returnValue($this->sessionMock));
+            ->willReturn($this->sessionMock);
         $this->contextMock->expects($this->any())
             ->method('getActionFlag')
-            ->will($this->returnValue($this->actionFlagMock));
+            ->willReturn($this->actionFlagMock);
         $this->contextMock->expects($this->any())
             ->method('getRequest')
-            ->will($this->returnValue($this->requestMock));
+            ->willReturn($this->requestMock);
         $this->contextMock->expects($this->any())
             ->method('getResponse')
-            ->will($this->returnValue($this->responseMock));
+            ->willReturn($this->responseMock);
         $this->contextMock->expects($this->any())
             ->method('getObjectManager')
-            ->will($this->returnValue($this->objectManagerMock));
+            ->willReturn($this->objectManagerMock);
         $this->contextMock->expects($this->any())
             ->method('getTitle')
-            ->will($this->returnValue($titleMock));
+            ->willReturn($titleMock);
         $this->contextMock->expects($this->any())
             ->method('getMessageManager')
-            ->will($this->returnValue($this->messageManagerMock));
+            ->willReturn($this->messageManagerMock);
         $this->resultPageMock->expects($this->any())
             ->method('getConfig')
             ->willReturn($this->pageConfigMock);

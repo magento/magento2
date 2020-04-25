@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Sales\Test\Unit\Model\Order;
 
@@ -41,10 +42,11 @@ class AddressTest extends TestCase
         $this->orderMock = $this->createMock(Order::class);
         $this->orderMock = $this->createMock(Order::class);
         $this->regionFactoryMock = $this->createMock(RegionFactory::class);
-        $this->regionMock = $this->createPartialMock(
-            Region::class,
-            ['load', 'getCountryId', 'getCode']
-        );
+        $this->regionMock = $this->getMockBuilder(Region::class)
+            ->addMethods(['getCountryId', 'getCode'])
+            ->onlyMethods(['load'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $objectManager = new ObjectManager($this);
         $this->address = $objectManager->getObject(
             Address::class,

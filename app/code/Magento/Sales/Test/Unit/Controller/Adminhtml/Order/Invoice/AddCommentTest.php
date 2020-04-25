@@ -14,6 +14,7 @@ use Magento\Framework\App\View;
 use Magento\Framework\Controller\Result\Json;
 use Magento\Framework\Controller\Result\JsonFactory;
 use Magento\Framework\Controller\Result\Raw;
+use Magento\Framework\Controller\Result\RawFactory;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\View\Layout;
@@ -86,7 +87,7 @@ class AddCommentTest extends TestCase
     protected $resultJsonFactoryMock;
 
     /**
-     * @var \Magento\Framework\Controller\Result\RawFactory|MockObject
+     * @var RawFactory|MockObject
      */
     protected $resultRawFactoryMock;
 
@@ -153,16 +154,16 @@ class AddCommentTest extends TestCase
             ->getMock();
         $contextMock->expects($this->any())
             ->method('getRequest')
-            ->will($this->returnValue($this->requestMock));
+            ->willReturn($this->requestMock);
         $contextMock->expects($this->any())
             ->method('getResponse')
-            ->will($this->returnValue($this->responseMock));
+            ->willReturn($this->responseMock);
         $contextMock->expects($this->any())
             ->method('getTitle')
-            ->will($this->returnValue($titleMock));
+            ->willReturn($titleMock);
         $contextMock->expects($this->any())
             ->method('getView')
-            ->will($this->returnValue($this->viewMock));
+            ->willReturn($this->viewMock);
         $this->viewMock->expects($this->any())
             ->method('getPage')
             ->willReturn($this->resultPageMock);
@@ -181,7 +182,7 @@ class AddCommentTest extends TestCase
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();
-        $this->resultRawFactoryMock = $this->getMockBuilder(\Magento\Framework\Controller\Result\RawFactory::class)
+        $this->resultRawFactoryMock = $this->getMockBuilder(RawFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
@@ -264,7 +265,7 @@ class AddCommentTest extends TestCase
             ->getMock();
         $commentsBlockMock->expects($this->once())
             ->method('toHtml')
-            ->will($this->returnValue($response));
+            ->willReturn($response);
 
         $layoutMock = $this->getMockBuilder(Layout::class)
             ->disableOriginalConstructor()
@@ -273,15 +274,15 @@ class AddCommentTest extends TestCase
         $layoutMock->expects($this->once())
             ->method('getBlock')
             ->with('invoice_comments')
-            ->will($this->returnValue($commentsBlockMock));
+            ->willReturn($commentsBlockMock);
 
         $this->resultPageFactoryMock->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($this->resultPageMock));
+            ->willReturn($this->resultPageMock);
 
         $this->resultPageMock->expects($this->any())
             ->method('getLayout')
-            ->will($this->returnValue($layoutMock));
+            ->willReturn($layoutMock);
 
         $this->commentSenderMock->expects($this->once())
             ->method('send')
@@ -293,7 +294,7 @@ class AddCommentTest extends TestCase
             ->getMock();
         $resultRaw->expects($this->once())->method('setContents')->with($response);
 
-        $this->resultRawFactoryMock->expects($this->once())->method('create')->will($this->returnValue($resultRaw));
+        $this->resultRawFactoryMock->expects($this->once())->method('create')->willReturn($resultRaw);
         $this->assertSame($resultRaw, $this->controller->execute());
     }
 
@@ -310,11 +311,11 @@ class AddCommentTest extends TestCase
 
         $this->requestMock->expects($this->once())
             ->method('getParam')
-            ->will($this->throwException($e));
+            ->willThrowException($e);
 
         $this->resultJsonFactoryMock->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($this->resultJsonMock));
+            ->willReturn($this->resultJsonMock);
 
         $this->resultJsonMock->expects($this->once())->method('setData')->with($response);
         $this->assertSame($this->resultJsonMock, $this->controller->execute());
@@ -332,11 +333,11 @@ class AddCommentTest extends TestCase
 
         $this->requestMock->expects($this->once())
             ->method('getParam')
-            ->will($this->throwException($error));
+            ->willThrowException($error);
 
         $this->resultJsonFactoryMock->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($this->resultJsonMock));
+            ->willReturn($this->resultJsonMock);
 
         $this->resultJsonMock->expects($this->once())->method('setData')->with($response);
         $this->assertSame($this->resultJsonMock, $this->controller->execute());

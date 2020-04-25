@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Sales\Test\Unit\Controller\Adminhtml\Order\Creditmemo;
 
 use Magento\Backend\App\Action\Context;
@@ -102,17 +104,19 @@ class NewActionTest extends TestCase
     protected function setUp(): void
     {
         $this->contextMock = $this->createMock(Context::class);
-        $this->creditmemoLoaderMock = $this->createPartialMock(
-            CreditmemoLoader::class,
-            ['setOrderId', 'setCreditmemoId', 'setCreditmemo', 'setInvoiceId', 'load']
-        );
-        $this->creditmemoMock = $this->createPartialMock(
-            Creditmemo::class,
-            ['getInvoice', '__wakeup', 'setCommentText']
-        );
+        $this->creditmemoLoaderMock = $this->getMockBuilder(CreditmemoLoader::class)
+            ->addMethods(['setOrderId', 'setCreditmemoId', 'setCreditmemo', 'setInvoiceId'])
+            ->onlyMethods(['load'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->creditmemoMock = $this->getMockBuilder(Creditmemo::class)
+            ->addMethods(['setCommentText'])
+            ->onlyMethods(['getInvoice'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->invoiceMock = $this->createPartialMock(
             Invoice::class,
-            ['getIncrementId', '__wakeup']
+            ['getIncrementId']
         );
         $this->objectManagerMock = $this->createMock(ObjectManagerInterface::class);
         $this->requestMock = $this->getMockForAbstractClass(
@@ -137,7 +141,10 @@ class NewActionTest extends TestCase
         $this->pageConfigMock = $this->getMockBuilder(Config::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->backendSessionMock = $this->createPartialMock(Session::class, ['getCommentText']);
+        $this->backendSessionMock = $this->getMockBuilder(Session::class)
+            ->addMethods(['getCommentText'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->layoutMock = $this->getMockForAbstractClass(
             LayoutInterface::class,
             [],
@@ -157,13 +164,13 @@ class NewActionTest extends TestCase
 
         $this->contextMock->expects($this->once())
             ->method('getRequest')
-            ->will($this->returnValue($this->requestMock));
+            ->willReturn($this->requestMock);
         $this->contextMock->expects($this->once())
             ->method('getResponse')
-            ->will($this->returnValue($this->responseMock));
+            ->willReturn($this->responseMock);
         $this->contextMock->expects($this->once())
             ->method('getObjectManager')
-            ->will($this->returnValue($this->objectManagerMock));
+            ->willReturn($this->objectManagerMock);
 
         $objectManager = new ObjectManager($this);
         $this->controller = $objectManager->getObject(
@@ -183,53 +190,53 @@ class NewActionTest extends TestCase
     {
         $this->requestMock->expects($this->exactly(4))
             ->method('getParam')
-            ->will($this->returnValueMap([
+            ->willReturnMap([
                 ['order_id', null, 'order_id'],
                 ['creditmemo_id', null, 'creditmemo_id'],
                 ['creditmemo', null, 'creditmemo'],
                 ['invoice_id', null, 'invoice_id'],
-            ]));
+            ]);
         $this->creditmemoLoaderMock->expects($this->once())
             ->method('setOrderId')
-            ->with($this->equalTo('order_id'));
+            ->with('order_id');
         $this->creditmemoLoaderMock->expects($this->once())
             ->method('setCreditmemoId')
-            ->with($this->equalTo('creditmemo_id'));
+            ->with('creditmemo_id');
         $this->creditmemoLoaderMock->expects($this->once())
             ->method('setCreditmemo')
-            ->with($this->equalTo('creditmemo'));
+            ->with('creditmemo');
         $this->creditmemoLoaderMock->expects($this->once())
             ->method('setInvoiceId')
-            ->with($this->equalTo('invoice_id'));
+            ->with('invoice_id');
         $this->creditmemoLoaderMock->expects($this->once())
             ->method('load')
-            ->will($this->returnValue($this->creditmemoMock));
+            ->willReturn($this->creditmemoMock);
         $this->creditmemoMock->expects($this->exactly(2))
             ->method('getInvoice')
-            ->will($this->returnValue($this->invoiceMock));
+            ->willReturn($this->invoiceMock);
         $this->invoiceMock->expects($this->once())
             ->method('getIncrementId')
-            ->will($this->returnValue('invoice-increment-id'));
+            ->willReturn('invoice-increment-id');
         $this->titleMock->expects($this->exactly(2))
             ->method('prepend')
-            ->will($this->returnValueMap([
+            ->willReturnMap([
                 ['Credit Memos', null],
                 ['New Memo for #invoice-increment-id', null],
                 ['item-title', null],
-            ]));
+            ]);
         $this->objectManagerMock->expects($this->once())
             ->method('get')
-            ->with($this->equalTo(Session::class))
-            ->will($this->returnValue($this->backendSessionMock));
+            ->with(Session::class)
+            ->willReturn($this->backendSessionMock);
         $this->backendSessionMock->expects($this->once())
             ->method('getCommentText')
-            ->with($this->equalTo(true))
-            ->will($this->returnValue('comment'));
+            ->with(true)
+            ->willReturn('comment');
         $this->creditmemoMock->expects($this->once())
             ->method('setCommentText')
-            ->with($this->equalTo('comment'));
-        $this->resultPageMock->expects($this->any())->method('getConfig')->will(
-            $this->returnValue($this->pageConfigMock)
+            ->with('comment');
+        $this->resultPageMock->expects($this->any())->method('getConfig')->willReturn(
+            $this->pageConfigMock
         );
         $this->pageConfigMock->expects($this->any())
             ->method('getTitle')

@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Sales\Test\Unit\Model\Order\Shipment\Track;
 
 use Magento\Sales\Model\Order\Shipment\Track;
@@ -29,7 +31,7 @@ class ValidatorTest extends TestCase
     {
         $this->trackModelMock = $this->createPartialMock(
             Track::class,
-            ['hasData', 'getData', '__wakeup']
+            ['hasData', 'getData']
         );
         $this->validator = new Validator();
     }
@@ -46,10 +48,10 @@ class ValidatorTest extends TestCase
     {
         $this->trackModelMock->expects($this->any())
             ->method('hasData')
-            ->will($this->returnValueMap($trackDataMap));
+            ->willReturnMap($trackDataMap);
         $this->trackModelMock->expects($this->once())
             ->method('getData')
-            ->will($this->returnValue($trackData));
+            ->willReturn($trackData);
         $actualWarnings = $this->validator->validate($this->trackModelMock);
         $this->assertEquals($expectedWarnings, $actualWarnings);
     }

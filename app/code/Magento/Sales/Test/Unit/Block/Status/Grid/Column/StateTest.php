@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Sales\Test\Unit\Block\Status\Grid\Column;
 
@@ -13,6 +14,7 @@ use Magento\Sales\Block\Status\Grid\Column\State;
 use Magento\Sales\Model\Order\Config;
 use Magento\Sales\Model\Order\Status;
 use Magento\Sales\Model\ResourceModel\Order\Status\Collection;
+use Magento\Sales\Model\ResourceModel\Order\Status\CollectionFactory;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -37,7 +39,7 @@ class StateTest extends TestCase
     {
         $helper = new ObjectManager($this);
         $this->orderStatusCollectionFactoryMock = $this->createPartialMock(
-            \Magento\Sales\Model\ResourceModel\Order\Status\CollectionFactory::class,
+            CollectionFactory::class,
             ['create']
         );
         $this->configMock = $helper->getObject(
@@ -57,7 +59,10 @@ class StateTest extends TestCase
 
     public function testDecorateState()
     {
-        $rowMock = $this->createPartialMock(Status::class, ['getStatus']);
+        $rowMock = $this->getMockBuilder(Status::class)
+            ->addMethods(['getStatus'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $rowMock->expects($this->any())->method('getStatus')->willReturn('fraud');
         $columnMock = $this->createMock(Column::class);
         $statuses = [
@@ -78,16 +83,17 @@ class StateTest extends TestCase
                 ]
             )
         ];
-        $collectionMock = $this->createPartialMock(
-            Collection::class,
-            ['create', 'joinStates']
-        );
+        $collectionMock = $this->getMockBuilder(Collection::class)
+            ->addMethods(['create'])
+            ->onlyMethods(['joinStates'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->orderStatusCollectionFactoryMock->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($collectionMock));
+            ->willReturn($collectionMock);
         $collectionMock->expects($this->once())
             ->method('joinStates')
-            ->will($this->returnValue($statuses));
+            ->willReturn($statuses);
 
         $result = $this->stateColumn->decorateState('processing', $rowMock, $columnMock, false);
         $this->assertSame('processing[Processing]', $result);

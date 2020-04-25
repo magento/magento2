@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Sales\Test\Unit\Model\Order;
 
@@ -47,7 +48,7 @@ class StatusTest extends TestCase
         $this->contextMock = $this->createMock(Context::class);
         $this->contextMock->expects($this->once())
             ->method('getEventDispatcher')
-            ->will($this->returnValue($this->eventManagerMock));
+            ->willReturn($this->eventManagerMock);
 
         $this->model = $objectManager->getObject(
             \Magento\Sales\Model\Order\Status::class,
@@ -70,19 +71,19 @@ class StatusTest extends TestCase
         ];
         $this->resourceMock->expects($this->once())
             ->method('checkIsStateLast')
-            ->with($this->equalTo($params['state']))
-            ->will($this->returnValue(false));
+            ->with($params['state'])
+            ->willReturn(false);
         $this->resourceMock->expects($this->once())
             ->method('checkIsStatusUsed')
-            ->with($this->equalTo($params['status']))
-            ->will($this->returnValue(false));
+            ->with($params['status'])
+            ->willReturn(false);
         $this->eventManagerMock->expects($this->once())
             ->method('dispatch')
-            ->with($this->equalTo('sales_order_status_unassign'), $this->equalTo($params));
+            ->with('sales_order_status_unassign', $params);
 
         $this->resourceMock->expects($this->once())
             ->method('unassignState')
-            ->with($this->equalTo($params['status']), $this->equalTo($params['state']));
+            ->with($params['status'], $params['state']);
         $this->assertEquals($this->model, $this->model->unassignState($params['state']));
     }
 
@@ -101,8 +102,8 @@ class StatusTest extends TestCase
         ];
         $this->resourceMock->expects($this->once())
             ->method('checkIsStateLast')
-            ->with($this->equalTo($params['state']))
-            ->will($this->returnValue(true));
+            ->with($params['state'])
+            ->willReturn(true);
         $this->assertEquals($this->model, $this->model->unassignState($params['state']));
     }
 
@@ -121,12 +122,12 @@ class StatusTest extends TestCase
         ];
         $this->resourceMock->expects($this->once())
             ->method('checkIsStateLast')
-            ->with($this->equalTo($params['state']))
-            ->will($this->returnValue(false));
+            ->with($params['state'])
+            ->willReturn(false);
         $this->resourceMock->expects($this->once())
             ->method('checkIsStatusUsed')
-            ->with($this->equalTo($params['status']))
-            ->will($this->returnValue(true));
+            ->with($params['status'])
+            ->willReturn(true);
         $this->assertEquals($this->model, $this->model->unassignState($params['state']));
     }
 
@@ -168,8 +169,8 @@ class StatusTest extends TestCase
         $resource->expects($this->once())
             ->method('assignState')
             ->with(
-                $this->equalTo($status),
-                $this->equalTo($state)
+                $status,
+                $state
             );
         $resource->expects($this->once())->method('commit');
 
@@ -179,8 +180,7 @@ class StatusTest extends TestCase
         $model->setStatus($status);
         $this->assertInstanceOf(
             \Magento\Sales\Model\Order\Status::class,
-            $model->assignState($state),
-            $visibleOnFront
+            $model->assignState($state, $visibleOnFront)
         );
     }
 }

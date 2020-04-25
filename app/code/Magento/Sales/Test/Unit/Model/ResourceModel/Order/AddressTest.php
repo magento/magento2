@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Sales\Test\Unit\Model\ResourceModel\Order;
 
 use Magento\Framework\App\ResourceConnection;
@@ -57,9 +59,9 @@ class AddressTest extends TestCase
     {
         $this->addressMock = $this->createPartialMock(
             \Magento\Sales\Model\Order\Address::class,
-            ['__wakeup', 'getParentId', 'hasDataChanges', 'beforeSave', 'afterSave', 'validateBeforeSave', 'getOrder']
+            ['getParentId', 'hasDataChanges', 'beforeSave', 'afterSave', 'validateBeforeSave', 'getOrder']
         );
-        $this->orderMock = $this->createPartialMock(Order::class, ['__wakeup', 'getId']);
+        $this->orderMock = $this->createPartialMock(Order::class, ['getId']);
         $this->appResourceMock = $this->createMock(ResourceConnection::class);
         $this->connectionMock = $this->createMock(Mysql::class);
         $this->validatorMock = $this->createMock(Validator::class);
@@ -68,11 +70,11 @@ class AddressTest extends TestCase
         );
         $this->appResourceMock->expects($this->any())
             ->method('getConnection')
-            ->will($this->returnValue($this->connectionMock));
+            ->willReturn($this->connectionMock);
         $objectManager = new ObjectManager($this);
         $this->connectionMock->expects($this->any())
             ->method('describeTable')
-            ->will($this->returnValue([]));
+            ->willReturn([]);
         $this->connectionMock->expects($this->any())
             ->method('insert');
         $this->connectionMock->expects($this->any())
@@ -94,15 +96,15 @@ class AddressTest extends TestCase
     {
         $this->validatorMock->expects($this->once())
             ->method('validate')
-            ->with($this->equalTo($this->addressMock))
-            ->will($this->returnValue([]));
+            ->with($this->addressMock)
+            ->willReturn([]);
         $this->entitySnapshotMock->expects($this->once())
             ->method('isModified')
             ->with($this->addressMock)
             ->willReturn(true);
         $this->addressMock->expects($this->once())
             ->method('getParentId')
-            ->will($this->returnValue(1));
+            ->willReturn(1);
 
         $this->addressResource->save($this->addressMock);
     }
@@ -120,11 +122,11 @@ class AddressTest extends TestCase
             ->willReturn(true);
         $this->addressMock->expects($this->any())
             ->method('hasDataChanges')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $this->validatorMock->expects($this->once())
             ->method('validate')
-            ->with($this->equalTo($this->addressMock))
-            ->will($this->returnValue(['warning message']));
+            ->with($this->addressMock)
+            ->willReturn(['warning message']);
         $this->addressResource->save($this->addressMock);
     }
 }

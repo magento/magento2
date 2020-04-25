@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Sales\Test\Unit\Model\ResourceModel\Order\Invoice;
 
@@ -64,13 +65,13 @@ class RelationTest extends TestCase
             ->getMock();
         $this->invoiceCommentResourceMock =
             $this->getMockBuilder(Comment::class)
-            ->disableOriginalConstructor()
-            ->setMethods(
-                [
-                    'save'
-                ]
-            )
-            ->getMock();
+                ->disableOriginalConstructor()
+                ->setMethods(
+                    [
+                        'save'
+                    ]
+                )
+                ->getMock();
         $this->invoiceMock = $this->getMockBuilder(Invoice::class)
             ->disableOriginalConstructor()
             ->setMethods(

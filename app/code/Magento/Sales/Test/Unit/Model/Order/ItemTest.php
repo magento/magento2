@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Sales\Test\Unit\Model\Order;
 
@@ -11,6 +12,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Sales\Api\Data\OrderItemInterface;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Item;
+use Magento\Sales\Model\OrderFactory as SalesOrderFactory;
 use Magento\Sales\Model\ResourceModel\OrderFactory;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -44,7 +46,7 @@ class ItemTest extends TestCase
     {
         $this->objectManager = new ObjectManager($this);
 
-        $this->orderFactory = $this->createPartialMock(\Magento\Sales\Model\OrderFactory::class, ['create']);
+        $this->orderFactory = $this->createPartialMock(SalesOrderFactory::class, ['create']);
 
         $this->serializerMock = $this->getMockBuilder(Json::class)
             ->setMethods(['unserialize'])
@@ -204,7 +206,7 @@ class ItemTest extends TestCase
         if (is_string($options)) {
             $this->serializerMock->expects($this->once())
                 ->method('unserialize')
-                ->will($this->returnValue($expectedResult));
+                ->willReturn($expectedResult);
         }
         $this->model->setData('product_options', $options);
         $result = $this->model->getProductOptions();

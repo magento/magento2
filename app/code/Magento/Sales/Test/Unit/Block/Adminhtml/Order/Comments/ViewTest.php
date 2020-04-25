@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Sales\Test\Unit\Block\Adminhtml\Order\Comments;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
@@ -48,7 +50,7 @@ class ViewTest extends TestCase
         $this->adminHelperMock
             ->expects($this->any())
             ->method('escapeHtmlWithLinks')
-            ->will($this->returnValue($expected));
+            ->willReturn($expected);
         $actual = $this->commentsView->escapeHtml($data, $allowedTags);
         $this->assertEquals($expected, $actual);
     }

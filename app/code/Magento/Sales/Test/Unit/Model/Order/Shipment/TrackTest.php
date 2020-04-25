@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Sales\Test\Unit\Model\Order\Shipment;
 
 use Magento\Framework\DataObject;
@@ -44,8 +46,8 @@ class TrackTest extends TestCase
         $storeId = 10;
         $storeObject = new DataObject(['id' => $storeId]);
 
-        $shipmentMock = $this->createPartialMock(Shipment::class, ['getStore', '__wakeup']);
-        $shipmentMock->expects($this->once())->method('getStore')->will($this->returnValue($storeObject));
+        $shipmentMock = $this->createPartialMock(Shipment::class, ['getStore']);
+        $shipmentMock->expects($this->once())->method('getStore')->willReturn($storeObject);
 
         $this->_model->setShipment($shipmentMock);
         $this->assertEquals($storeId, $this->_model->getStoreId());

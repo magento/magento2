@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Sales\Test\Unit\Model\Order\Creditmemo\Total;
 
@@ -49,19 +50,8 @@ class TaxTest extends TestCase
         /** @var Tax $model */
         $this->model = $this->objectManager->getObject(Tax::class);
 
-        $this->order = $this->createPartialMock(
-            Order::class,
-            [
-                '__wakeup'
-            ]
-        );
-
-        $this->invoice = $this->createPartialMock(
-            Invoice::class,
-            [
-                '__wakeup',
-            ]
-        );
+        $this->order = $this->createPartialMock(Order::class, ['__wakeup']);
+        $this->invoice = $this->createPartialMock(Invoice::class, ['__wakeup']);
 
         $this->creditmemo = $this->createPartialMock(
             Creditmemo::class,
@@ -70,10 +60,9 @@ class TaxTest extends TestCase
                 'getOrder',
                 'roundPrice',
                 'isLast',
-                '__wakeup',
             ]
         );
-        $this->creditmemo->expects($this->atLeastOnce())->method('getOrder')->will($this->returnValue($this->order));
+        $this->creditmemo->expects($this->atLeastOnce())->method('getOrder')->willReturn($this->order);
     }
 
     /**
@@ -99,26 +88,24 @@ class TaxTest extends TestCase
         }
         $this->creditmemo->expects($this->once())
             ->method('getAllItems')
-            ->will($this->returnValue($creditmemoItems));
+            ->willReturn($creditmemoItems);
         $this->creditmemo->expects($this->any())
             ->method('isLast')
-            ->will($this->returnValue($creditmemoData['is_last']));
+            ->willReturn($creditmemoData['is_last']);
         foreach ($creditmemoData['data_fields'] as $key => $value) {
             $this->creditmemo->setData($key, $value);
         }
         $this->creditmemo->expects($this->any())
             ->method('roundPrice')
-            ->will(
-                $this->returnCallback(
-                    function ($price, $type) use (&$roundingDelta) {
-                        if (!isset($roundingDelta[$type])) {
-                            $roundingDelta[$type] = 0;
-                        }
-                        $roundedPrice = round($price + $roundingDelta[$type], 2);
-                        $roundingDelta[$type] = $price - $roundedPrice;
-                        return $roundedPrice;
+            ->willReturnCallback(
+                function ($price, $type) use (&$roundingDelta) {
+                    if (!isset($roundingDelta[$type])) {
+                        $roundingDelta[$type] = 0;
                     }
-                )
+                    $roundedPrice = round($price + $roundingDelta[$type], 2);
+                    $roundingDelta[$type] = $price - $roundedPrice;
+                    return $roundedPrice;
+                }
             );
 
         $this->model->collect($this->creditmemo);
@@ -770,8 +757,7 @@ class TaxTest extends TestCase
         $orderItem = $this->createPartialMock(
             \Magento\Sales\Model\Order\Item::class,
             [
-                'isDummy',
-                '__wakeup'
+                'isDummy'
             ]
         );
         foreach ($creditmemoItemData['order_item'] as $key => $value) {
@@ -783,14 +769,13 @@ class TaxTest extends TestCase
             Item::class,
             [
                 'getOrderItem',
-                'isLast',
-                '__wakeup'
+                'isLast'
             ]
         );
-        $creditmemoItem->expects($this->any())->method('getOrderItem')->will($this->returnValue($orderItem));
+        $creditmemoItem->expects($this->any())->method('getOrderItem')->willReturn($orderItem);
         $creditmemoItem->expects($this->any())
             ->method('isLast')
-            ->will($this->returnValue($creditmemoItemData['is_last']));
+            ->willReturn($creditmemoItemData['is_last']);
         $creditmemoItem->setData('qty', $creditmemoItemData['qty']);
         return $creditmemoItem;
     }

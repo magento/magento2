@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Sales\Test\Unit\Block\Adminhtml\Order\Create\Search\Grid\Renderer;
 
 use Magento\Backend\Block\Widget\Grid\Column;
@@ -34,7 +36,10 @@ class QtyTest extends TestCase
     {
         $helper = new ObjectManager($this);
 
-        $this->rowMock = $this->createPartialMock(DataObject::class, ['getTypeId', 'getIndex']);
+        $this->rowMock = $this->getMockBuilder(DataObject::class)
+            ->addMethods(['getTypeId', 'getIndex'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->typeConfigMock = $this->createMock(ConfigInterface::class);
         $this->renderer = $helper->getObject(
             Qty::class,
@@ -52,18 +57,19 @@ class QtyTest extends TestCase
             'isProductSet'
         )->with(
             'id'
-        )->will(
-            $this->returnValue(true)
+        )->willReturn(
+            true
         );
-        $this->rowMock->expects($this->once())->method('getTypeId')->will($this->returnValue('id'));
-        $columnMock = $this->createPartialMock(
-            Column::class,
-            ['getInlineCss', 'getId']
-        );
+        $this->rowMock->expects($this->once())->method('getTypeId')->willReturn('id');
+        $columnMock = $this->getMockBuilder(Column::class)
+            ->addMethods(['getInlineCss'])
+            ->onlyMethods(['getId'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->renderer->setColumn($columnMock);
 
-        $columnMock->expects($this->once())->method('getId')->will($this->returnValue('id_name'));
-        $columnMock->expects($this->once())->method('getInlineCss')->will($this->returnValue('inline_css'));
+        $columnMock->expects($this->once())->method('getId')->willReturn('id_name');
+        $columnMock->expects($this->once())->method('getInlineCss')->willReturn('inline_css');
 
         $this->assertEquals($expected, $this->renderer->render($this->rowMock));
     }

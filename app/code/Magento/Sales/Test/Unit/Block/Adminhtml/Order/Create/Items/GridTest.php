@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Sales\Test\Unit\Block\Adminhtml\Order\Create\Items;
 
@@ -27,6 +28,7 @@ use Magento\Sales\Model\AdminOrder\Create;
 use Magento\Store\Model\Store;
 use Magento\Tax\Helper\Data;
 use Magento\Tax\Model\Config;
+use Magento\Wishlist\Model\WishlistFactory;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -81,60 +83,62 @@ class GridTest extends TestCase
      */
     protected function setUp(): void
     {
-        $orderCreateMock = $this->createPartialMock(Create::class, ['__wakeup']);
-        $taxData = $this->getMockBuilder(Data::class)->disableOriginalConstructor()->getMock();
+        $orderCreateMock = $this->createMock(Create::class);
+        $taxData = $this->getMockBuilder(Data::class)
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->priceCurrency = $this->getMockBuilder(
             PriceCurrencyInterface::class
         )->getMock();
         $sessionMock = $this->getMockBuilder(Quote::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getQuote', '__wakeup'])
+            ->setMethods(['getQuote'])
             ->getMock();
 
         $quoteMock = $this->getMockBuilder(\Magento\Quote\Model\Quote::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getStore', '__wakeup'])
+            ->setMethods(['getStore'])
             ->getMock();
 
         $storeMock = $this->getMockBuilder(Store::class)
             ->disableOriginalConstructor()
-            ->setMethods(['__wakeup'])
             ->getMock();
         $this->priceCurrency->expects($this->any())
             ->method('convertAndFormat')
-            ->will($this->returnArgument(0));
-        $quoteMock->expects($this->any())->method('getStore')->will($this->returnValue($storeMock));
-        $sessionMock->expects($this->any())->method('getQuote')->will($this->returnValue($quoteMock));
-        $wishlistFactoryMock = $this->getMockBuilder(\Magento\Wishlist\Model\WishlistFactory::class)
+            ->willReturnArgument(0);
+        $quoteMock->expects($this->any())->method('getStore')->willReturn($storeMock);
+        $sessionMock->expects($this->any())->method('getQuote')->willReturn($quoteMock);
+        $wishlistFactoryMock = $this->getMockBuilder(WishlistFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['methods', '__wakeup'])
+            ->setMethods(['methods'])
             ->getMock();
 
         $giftMessageSave = $this->getMockBuilder(\Magento\Giftmessage\Model\Save::class)
-            ->setMethods(['__wakeup'])
             ->disableOriginalConstructor()
             ->getMock();
 
-        $taxConfig = $this->getMockBuilder(Config::class)->disableOriginalConstructor()->getMock();
+        $taxConfig = $this->getMockBuilder(Config::class)
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->stockRegistry = $this->getMockBuilder(StockRegistry::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getStockItem', '__wakeup'])
+            ->setMethods(['getStockItem'])
             ->getMock();
 
         $this->stockItemMock = $this->createPartialMock(
             \Magento\CatalogInventory\Model\Stock\Item::class,
-            ['getIsInStock', '__wakeup']
+            ['getIsInStock']
         );
 
         $this->stockState = $this->createPartialMock(
             StockState::class,
-            ['checkQuoteItemQty', '__wakeup']
+            ['checkQuoteItemQty']
         );
 
         $this->stockRegistry->expects($this->any())
             ->method('getStockItem')
-            ->will($this->returnValue($this->stockItemMock));
+            ->willReturn($this->stockItemMock);
 
         $this->objectManager = new ObjectManager($this);
         $this->block = $this->objectManager->getObject(
@@ -164,7 +168,6 @@ class GridTest extends TestCase
 
         $this->itemMock = $this->getMockBuilder(Item::class)
             ->disableOriginalConstructor()
-            ->setMethods(['__wakeup'])
             ->getMock();
     }
 
@@ -222,17 +225,17 @@ class GridTest extends TestCase
     {
         $product = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getTierPrice', '__wakeup', 'getStatus'])
+            ->setMethods(['getTierPrice', 'getStatus'])
             ->getMock();
-        $product->expects($this->once())->method('getTierPrice')->will($this->returnValue($tierPrices));
+        $product->expects($this->once())->method('getTierPrice')->willReturn($tierPrices);
         $item = $this->getMockBuilder(Item::class)
             ->setConstructorArgs(['getProduct', 'getProductType'])
             ->disableOriginalConstructor()
             ->getMock();
-        $item->expects($this->once())->method('getProduct')->will($this->returnValue($product));
+        $item->expects($this->once())->method('getProduct')->willReturn($product);
 
         $calledTimes = $tierPrices ? 'once' : 'never';
-        $item->expects($this->{$calledTimes}())->method('getProductType')->will($this->returnValue($productType));
+        $item->expects($this->{$calledTimes}())->method('getProductType')->willReturn($productType);
         return $item;
     }
 
@@ -244,35 +247,42 @@ class GridTest extends TestCase
         $productId = 8;
         $itemQty = 23;
         $layoutMock = $this->createMock(LayoutInterface::class);
-        $blockMock = $this->createPartialMock(AbstractBlock::class, ['getItems']);
+        $blockMock = $this->getMockBuilder(AbstractBlock::class)
+            ->addMethods(['getItems'])
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
 
         $itemMock = $this->createPartialMock(
             Item::class,
-            ['getProduct', 'setHasError', 'setQty', 'getQty', '__sleep', '__wakeup', 'getChildren']
+            ['getProduct', 'setHasError', 'setQty', 'getQty', 'getChildren']
         );
-        $productMock = $this->createPartialMock(
-            Product::class,
-            ['getStockItem', 'getID', '__sleep', '__wakeup', 'getStatus']
-        );
+        $productMock = $this->getMockBuilder(Product::class)
+            ->addMethods(['getStockItem'])
+            ->onlyMethods(['getStatus', 'getID'])
+            ->disableOriginalConstructor()
+            ->getMock();
 
-        $checkMock = $this->createPartialMock(DataObject::class, ['getMessage', 'getHasError']);
+        $checkMock = $this->getMockBuilder(DataObject::class)
+            ->addMethods(['getMessage', 'getHasError'])
+            ->disableOriginalConstructor()
+            ->getMock();
 
-        $layoutMock->expects($this->once())->method('getParentName')->will($this->returnValue('parentBlock'));
+        $layoutMock->expects($this->once())->method('getParentName')->willReturn('parentBlock');
         $layoutMock->expects($this->once())->method('getBlock')->with('parentBlock')
-            ->will($this->returnValue($blockMock));
+            ->willReturn($blockMock);
 
-        $blockMock->expects($this->once())->method('getItems')->will($this->returnValue([$itemMock]));
+        $blockMock->expects($this->once())->method('getItems')->willReturn([$itemMock]);
 
-        $itemMock->expects($this->any())->method('getChildren')->will($this->returnValue([$itemMock]));
-        $itemMock->expects($this->any())->method('getProduct')->will($this->returnValue($productMock));
-        $itemMock->expects($this->any())->method('getQty')->will($this->returnValue($itemQty));
+        $itemMock->expects($this->any())->method('getChildren')->willReturn([$itemMock]);
+        $itemMock->expects($this->any())->method('getProduct')->willReturn($productMock);
+        $itemMock->expects($this->any())->method('getQty')->willReturn($itemQty);
 
-        $productMock->expects($this->any())->method('getId')->will($this->returnValue($productId));
+        $productMock->expects($this->any())->method('getId')->willReturn($productId);
         $productMock->expects($this->any())->method('getStatus')
-            ->will($this->returnValue(Status::STATUS_ENABLED));
+            ->willReturn(Status::STATUS_ENABLED);
 
-        $checkMock->expects($this->any())->method('getMessage')->will($this->returnValue('Message'));
-        $checkMock->expects($this->any())->method('getHasError')->will($this->returnValue(false));
+        $checkMock->expects($this->any())->method('getMessage')->willReturn('Message');
+        $checkMock->expects($this->any())->method('getHasError')->willReturn(false);
 
         $this->stockState->expects($this->once())
             ->method('checkQuoteItemQty')
@@ -283,7 +293,7 @@ class GridTest extends TestCase
                 $itemQty,
                 null
             )
-            ->will($this->returnValue($checkMock));
+            ->willReturn($checkMock);
 
         $this->block->getQuote()->setIsSuperMode(true);
         $items = $this->block->setLayout($layoutMock)->getItems();
@@ -320,7 +330,7 @@ class GridTest extends TestCase
         $this->layoutMock->expects($this->once())
             ->method('getBlock')
             ->with('item_unit_price')
-            ->will($this->returnValue($this->priceRenderBlock));
+            ->willReturn($this->priceRenderBlock);
 
         $this->priceRenderBlock->expects($this->once())
             ->method('setItem')
@@ -328,7 +338,7 @@ class GridTest extends TestCase
 
         $this->priceRenderBlock->expects($this->once())
             ->method('toHtml')
-            ->will($this->returnValue($html));
+            ->willReturn($html);
 
         $this->assertEquals($html, $grid->getItemUnitPriceHtml($this->itemMock));
     }
@@ -342,7 +352,7 @@ class GridTest extends TestCase
         $this->layoutMock->expects($this->once())
             ->method('getBlock')
             ->with('item_row_total')
-            ->will($this->returnValue($this->priceRenderBlock));
+            ->willReturn($this->priceRenderBlock);
 
         $this->priceRenderBlock->expects($this->once())
             ->method('setItem')
@@ -350,7 +360,7 @@ class GridTest extends TestCase
 
         $this->priceRenderBlock->expects($this->once())
             ->method('toHtml')
-            ->will($this->returnValue($html));
+            ->willReturn($html);
 
         $this->assertEquals($html, $grid->getItemRowTotalHtml($this->itemMock));
     }
@@ -364,7 +374,7 @@ class GridTest extends TestCase
         $this->layoutMock->expects($this->once())
             ->method('getBlock')
             ->with('item_row_total_with_discount')
-            ->will($this->returnValue($this->priceRenderBlock));
+            ->willReturn($this->priceRenderBlock);
 
         $this->priceRenderBlock->expects($this->once())
             ->method('setItem')
@@ -372,7 +382,7 @@ class GridTest extends TestCase
 
         $this->priceRenderBlock->expects($this->once())
             ->method('toHtml')
-            ->will($this->returnValue($html));
+            ->willReturn($html);
 
         $this->assertEquals($html, $grid->getItemRowTotalWithDiscountHtml($this->itemMock));
     }
@@ -385,35 +395,35 @@ class GridTest extends TestCase
      */
     public function testGetSubtotalWithDiscount($orderData, $displayTotalsIncludeTax, $expected)
     {
-        $quoteAddressMock = $this->createPartialMock(
-            Address::class,
-            ['getSubtotal', 'getTaxAmount','getDiscountTaxCompensationAmount','getDiscountAmount']
-        );
+        $quoteAddressMock = $this->getMockBuilder(Address::class)
+            ->addMethods(['getSubtotal', 'getTaxAmount', 'getDiscountTaxCompensationAmount', 'getDiscountAmount'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $gridMock = $this->createPartialMock(
             Grid::class,
             ['getQuoteAddress','displayTotalsIncludeTax']
         );
 
         $gridMock->expects($this->any())->method('getQuoteAddress')
-            ->will($this->returnValue($quoteAddressMock));
+            ->willReturn($quoteAddressMock);
         $gridMock->expects($this->any())->method('displayTotalsIncludeTax')
-            ->will($this->returnValue($displayTotalsIncludeTax));
+            ->willReturn($displayTotalsIncludeTax);
 
         $quoteAddressMock->expects($this->once())
             ->method('getSubtotal')
-            ->will($this->returnValue($orderData['subTotal']));
+            ->willReturn($orderData['subTotal']);
 
         $quoteAddressMock->expects($this->any())
             ->method('getTaxAmount')
-            ->will($this->returnValue($orderData['taxAmount']));
+            ->willReturn($orderData['taxAmount']);
 
         $quoteAddressMock->expects($this->any())
             ->method('getDiscountTaxCompensationAmount')
-            ->will($this->returnValue($orderData['discountTaxCompensationAmount']));
+            ->willReturn($orderData['discountTaxCompensationAmount']);
 
         $quoteAddressMock->expects($this->once())
             ->method('getDiscountAmount')
-            ->will($this->returnValue($orderData['discountAmount']));
+            ->willReturn($orderData['discountAmount']);
 
         $this->assertEquals($expected, $gridMock->getSubtotalWithDiscount());
     }

@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Sales\Test\Unit\Model\Order\Email\Sender;
 
 use Magento\Sales\Api\Data\OrderInterface;
@@ -47,19 +49,11 @@ class InvoiceSenderTest extends AbstractSenderTest
             ['saveAttribute']
         );
 
-        $this->invoiceMock = $this->createPartialMock(
-            Invoice::class,
-            [
-                'getStore',
-                'getId',
-                '__wakeup',
-                'getOrder',
-                'setSendEmail',
-                'setEmailSent',
-                'getCustomerNoteNotify',
-                'getCustomerNote'
-            ]
-        );
+        $this->invoiceMock = $this->getMockBuilder(Invoice::class)
+            ->addMethods(['setSendEmail', 'getCustomerNoteNotify', 'getCustomerNote'])
+            ->onlyMethods(['getStore', 'getId', 'getOrder', 'setEmailSent'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->invoiceMock->expects($this->any())
             ->method('getStore')
             ->willReturn($this->storeMock);

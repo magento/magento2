@@ -1,14 +1,17 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Sales\Test\Unit\Model\CronJob;
 
 use Magento\Framework\Locale\ResolverInterface;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 use Magento\Sales\Model\CronJob\AggregateSalesReportInvoicedData;
 use Magento\Sales\Model\ResourceModel\Report\Invoiced;
+use Magento\Sales\Model\ResourceModel\Report\InvoicedFactory;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -28,7 +31,7 @@ class AggregateSalesReportInvoicedDataTest extends TestCase
     protected $localeDateMock;
 
     /**
-     * @var \Magento\Sales\Model\ResourceModel\Report\InvoicedFactory|MockObject
+     * @var InvoicedFactory|MockObject
      */
     protected $invoicedFactoryMock;
 
@@ -44,7 +47,7 @@ class AggregateSalesReportInvoicedDataTest extends TestCase
             ->getMock();
 
         $this->invoicedFactoryMock = $this->getMockBuilder(
-            \Magento\Sales\Model\ResourceModel\Report\InvoicedFactory::class
+            InvoicedFactory::class
         )
             ->disableOriginalConstructor()
             ->setMethods(['create'])
@@ -71,7 +74,7 @@ class AggregateSalesReportInvoicedDataTest extends TestCase
             ->with($date);
         $this->invoicedFactoryMock->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($invoicedMock));
+            ->willReturn($invoicedMock);
         $this->observer->execute();
     }
 
@@ -91,7 +94,7 @@ class AggregateSalesReportInvoicedDataTest extends TestCase
         $date = (new \DateTime())->sub(new \DateInterval('PT25H'));
         $this->localeDateMock->expects($this->once())
             ->method('date')
-            ->will($this->returnValue($date));
+            ->willReturn($date);
 
         return $date;
     }

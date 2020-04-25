@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Sales\Test\Unit\Model\Order\Grid\Massaction;
 
@@ -43,9 +44,9 @@ class ItemsUpdaterTest extends TestCase
             ->method('isAllowed')
             ->willReturnMap(
                 [
-                ['Magento_Sales::cancel', null, false],
-                ['Magento_Sales::hold', null, false],
-                ['Magento_Sales::unhold', null, false],
+                    ['Magento_Sales::cancel', null, false],
+                    ['Magento_Sales::hold', null, false],
+                    ['Magento_Sales::unhold', null, false],
 
                 ]
             );

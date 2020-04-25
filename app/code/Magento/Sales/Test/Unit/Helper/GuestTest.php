@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Sales\Test\Unit\Helper;
 
 use Magento\Customer\Model\Session;
@@ -23,6 +25,7 @@ use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Sales\Helper\Guest;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Address;
+use Magento\Sales\Model\OrderFactory;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -81,7 +84,7 @@ class GuestTest extends TestCase
             CookieMetadataFactory::class
         );
         $this->managerInterfaceMock = $this->createMock(ManagerInterface::class);
-        $this->orderFactoryMock = $this->createPartialMock(\Magento\Sales\Model\OrderFactory::class, ['create']);
+        $this->orderFactoryMock = $this->createPartialMock(OrderFactory::class, ['create']);
         $this->viewInterfaceMock = $this->createMock(ViewInterface::class);
         $this->storeModelMock = $this->getMockBuilder(Store::class)
             ->disableOriginalConstructor()
@@ -94,8 +97,7 @@ class GuestTest extends TestCase
                 'loadByIncrementId',
                 'getId',
                 'getStoreId',
-                'getBillingAddress',
-                '__wakeup'
+                'getBillingAddress'
             ]
         );
         $this->orderRepository = $this->getMockBuilder(OrderRepositoryInterface::class)
@@ -165,7 +167,7 @@ class GuestTest extends TestCase
 
         $billingAddressMock = $this->createPartialMock(
             Address::class,
-            ['getLastname', 'getEmail', '__wakeup']
+            ['getLastname', 'getEmail']
         );
         $billingAddressMock->expects($this->once())->method('getLastname')->willReturn(($post['oar_billing_lastname']));
         $billingAddressMock->expects($this->once())->method('getEmail')->willReturn(($post['oar_email']));

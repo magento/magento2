@@ -1,14 +1,16 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Sales\Test\Unit\Controller\Download;
 
 use Magento\Backend\App\Action\Context;
 use Magento\Framework\App\Request\Http;
 use Magento\Framework\Controller\Result\Forward;
+use Magento\Framework\Controller\Result\ForwardFactory;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\Unserialize\Unserialize;
 use Magento\Quote\Model\Quote\Item\Option;
@@ -81,7 +83,7 @@ class DownloadCustomOptionTest extends TestCase
 
     protected function setUp(): void
     {
-        $resultForwardFactoryMock = $this->getMockBuilder(\Magento\Framework\Controller\Result\ForwardFactory::class)
+        $resultForwardFactoryMock = $this->getMockBuilder(ForwardFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
@@ -106,13 +108,11 @@ class DownloadCustomOptionTest extends TestCase
             ->setMethods(['getParam'])
             ->getMock();
         $requestMock->expects($this->any())->method('getParam')
-            ->will(
-                $this->returnValueMap(
-                    [
-                        ['id', null, self::OPTION_ID],
-                        ['key', null, self::SECRET_KEY],
-                    ]
-                )
+            ->willReturnMap(
+                [
+                    ['id', null, self::OPTION_ID],
+                    ['key', null, self::SECRET_KEY],
+                ]
             );
 
         $this->itemOptionMock = $this->getMockBuilder(Option::class)
@@ -130,13 +130,11 @@ class DownloadCustomOptionTest extends TestCase
             ->setMethods(['create'])
             ->getMock();
         $objectManagerMock->expects($this->any())->method('create')
-            ->will(
-                $this->returnValueMap(
-                    [
-                        [Option::class, $this->itemOptionMock],
-                        [\Magento\Catalog\Model\Product\Option::class, $this->productOptionMock],
-                    ]
-                )
+            ->willReturnMap(
+                [
+                    [Option::class, $this->itemOptionMock],
+                    [\Magento\Catalog\Model\Product\Option::class, $this->productOptionMock],
+                ]
             );
 
         $contextMock = $this->getMockBuilder(Context::class)

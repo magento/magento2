@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Sales\Test\Unit\Block\Adminhtml\Order\Status\Assign;
 
 use Magento\Framework\Data\Form\Element\Fieldset;
@@ -11,6 +13,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Sales\Block\Adminhtml\Order\Status\Assign\Form;
 use Magento\Sales\Model\Order\Config;
 use Magento\Sales\Model\ResourceModel\Order\Status\Collection;
+use Magento\Sales\Model\ResourceModel\Order\Status\CollectionFactory;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -27,7 +30,7 @@ class FormTest extends TestCase
     protected $formFactory;
 
     /**
-     * @var \Magento\Sales\Model\ResourceModel\Order\Status\CollectionFactory|MockObject
+     * @var CollectionFactory|MockObject
      */
     protected $collectionFactory;
 
@@ -42,7 +45,7 @@ class FormTest extends TestCase
 
         $this->formFactory = $this->createPartialMock(FormFactory::class, ['create']);
         $this->collectionFactory = $this->createPartialMock(
-            \Magento\Sales\Model\ResourceModel\Order\Status\CollectionFactory::class,
+            CollectionFactory::class,
             ['create']
         );
         $this->orderConfig = $this->createMock(Config::class);
@@ -73,21 +76,21 @@ class FormTest extends TestCase
 
         $form->expects($this->once())
             ->method('addFieldset')
-            ->will($this->returnValue($fieldset));
+            ->willReturn($fieldset);
         $this->formFactory->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($form));
+            ->willReturn($form);
 
         $collection->expects($this->once())
             ->method('toOptionArray')
-            ->will($this->returnValue($statuses));
+            ->willReturn($statuses);
         $this->collectionFactory->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($collection));
+            ->willReturn($collection);
 
         $this->orderConfig->expects($this->once())
             ->method('getStates')
-            ->will($this->returnValue($states));
+            ->willReturn($states);
 
         $fieldset->expects($this->at(0))
             ->method('addField')

@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Sales\Test\Unit\Model\Order;
 
@@ -10,6 +11,7 @@ use Magento\Eav\Model\Entity\Type;
 use Magento\Framework\Api\SearchCriteria;
 use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Sales\Api\Data\CreditmemoSearchResultInterfaceFactory;
 use Magento\Sales\Model\Order\Creditmemo;
 use Magento\Sales\Model\Order\CreditmemoRepository;
 use Magento\Sales\Model\ResourceModel\Metadata;
@@ -33,7 +35,7 @@ class CreditmemoRepositoryTest extends TestCase
     protected $metadataMock;
 
     /**
-     * @var \Magento\Sales\Api\Data\CreditmemoSearchResultInterfaceFactory|MockObject
+     * @var CreditmemoSearchResultInterfaceFactory|MockObject
      */
     protected $searchResultFactoryMock;
 
@@ -47,7 +49,7 @@ class CreditmemoRepositoryTest extends TestCase
         $objectManager = new ObjectManager($this);
         $this->metadataMock = $this->createMock(Metadata::class);
         $this->searchResultFactoryMock = $this->createPartialMock(
-            \Magento\Sales\Api\Data\CreditmemoSearchResultInterfaceFactory::class,
+            CreditmemoSearchResultInterfaceFactory::class,
             ['create']
         );
         $this->collectionProcessorMock = $this->getMockBuilder(CollectionProcessorInterface::class)

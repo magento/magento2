@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Sales\Test\Unit\Controller\Adminhtml\Order\Invoice;
 
 use Magento\Backend\App\Action\Context;
@@ -263,11 +265,11 @@ class NewActionTest extends TestCase
         $this->requestMock->expects($this->at(0))
             ->method('getParam')
             ->with('order_id')
-            ->will($this->returnValue($orderId));
+            ->willReturn($orderId);
         $this->requestMock->expects($this->at(1))
             ->method('getParam')
             ->with('invoice', [])
-            ->will($this->returnValue($invoiceData));
+            ->willReturn($invoiceData);
 
         $invoiceMock = $this->getMockBuilder(Invoice::class)
             ->disableOriginalConstructor()
@@ -300,27 +302,26 @@ class NewActionTest extends TestCase
             ->setMethods(['getParentItems', 'getMenuModel'])
             ->getMock();
         $menuBlockMock->expects($this->any())
-            ->method('getMenuModel')
-            ->will($this->returnSelf());
+            ->method('getMenuModel')->willReturnSelf();
         $menuBlockMock->expects($this->any())
             ->method('getParentItems')
             ->with('Magento_Sales::sales_order')
-            ->will($this->returnValue([]));
+            ->willReturn([]);
 
         $this->sessionMock->expects($this->once())
             ->method('getCommentText')
             ->with(true)
-            ->will($this->returnValue($commentText));
+            ->willReturn($commentText);
 
         $this->objectManagerMock->expects($this->once())
             ->method('get')
             ->with(Session::class)
-            ->will($this->returnValue($this->sessionMock));
+            ->willReturn($this->sessionMock);
 
         $this->resultPageMock->expects($this->once())->method('setActiveMenu')->with('Magento_Sales::sales_order');
         $this->resultPageFactoryMock->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($this->resultPageMock));
+            ->willReturn($this->resultPageMock);
 
         $this->assertSame($this->resultPageMock, $this->controller->execute());
     }
@@ -333,11 +334,11 @@ class NewActionTest extends TestCase
         $this->requestMock->expects($this->at(0))
             ->method('getParam')
             ->with('order_id')
-            ->will($this->returnValue($orderId));
+            ->willReturn($orderId);
         $this->requestMock->expects($this->at(1))
             ->method('getParam')
             ->with('invoice', [])
-            ->will($this->returnValue($invoiceData));
+            ->willReturn($invoiceData);
 
         $orderMock = $this->getMockBuilder(Order::class)
             ->disableOriginalConstructor()
@@ -357,7 +358,7 @@ class NewActionTest extends TestCase
 
         $this->resultRedirectFactoryMock->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($resultRedirect));
+            ->willReturn($resultRedirect);
 
         $this->assertSame($resultRedirect, $this->controller->execute());
     }

@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Sales\Test\Unit\Block\Reorder;
 
 use Magento\Catalog\Model\Product;
@@ -91,23 +93,19 @@ class SidebarTest extends TestCase
             Config::class,
             ['getVisibleOnFrontStatuses']
         );
-        $this->orderCollection = $this->createPartialMock(
-            Collection::class,
-            [
-                'addAttributeToFilter',
-                'addAttributeToSort',
-                'setPage',
-                'setOrders',
-            ]
-        );
+        $this->orderCollection = $this->getMockBuilder(Collection::class)
+            ->addMethods(['setOrders'])
+            ->onlyMethods(['addAttributeToFilter', 'addAttributeToSort', 'setPage'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->stockRegistry = $this->getMockBuilder(StockRegistry::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getStockItem', '__wakeup'])
+            ->setMethods(['getStockItem'])
             ->getMock();
 
         $this->stockItemMock = $this->createPartialMock(
             Item::class,
-            ['getIsInStock', '__wakeup']
+            ['getIsInStock']
         );
 
         $this->stockRegistry->expects($this->any())
@@ -145,44 +143,43 @@ class SidebarTest extends TestCase
         $storeManager = $this->createPartialMock(StoreManager::class, ['getStore']);
         $this->context->expects($this->once())
             ->method('getStoreManager')
-            ->will($this->returnValue($storeManager));
+            ->willReturn($storeManager);
 
         $store = $this->createPartialMock(Store::class, ['getWebsiteId']);
         $store->expects($this->once())
             ->method('getWebsiteId')
-            ->will($this->returnValue($websiteId));
+            ->willReturn($websiteId);
         $storeManager->expects($this->once())
             ->method('getStore')
-            ->with($this->equalTo($storeId))
-            ->will($this->returnValue($store));
+            ->with($storeId)
+            ->willReturn($store);
 
         $product = $this->createPartialMock(
             Product::class,
-            ['__wakeUp', 'getIdentities', 'getWebsiteIds']
+            ['getIdentities', 'getWebsiteIds']
         );
         $product->expects($this->once())
             ->method('getIdentities')
-            ->will($this->returnValue($productTags));
+            ->willReturn($productTags);
         $product->expects($this->atLeastOnce())
             ->method('getWebsiteIds')
-            ->will($this->returnValue([$websiteId]));
+            ->willReturn([$websiteId]);
 
-        $item = $this->createPartialMock(
-            \Magento\Sales\Model\ResourceModel\Order\Item::class,
-            ['__wakeup', 'getProduct']
-        );
+        $item = $this->getMockBuilder(\Magento\Sales\Model\ResourceModel\Order\Item::class)->addMethods(['getProduct'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $item->expects($this->atLeastOnce())
             ->method('getProduct')
-            ->will($this->returnValue($product));
+            ->willReturn($product);
 
         $order = $this->createPartialMock(
             Order::class,
-            ['__wakeup', 'getParentItemsRandomCollection']
+            ['getParentItemsRandomCollection']
         );
         $order->expects($this->atLeastOnce())
             ->method('getParentItemsRandomCollection')
-            ->with($this->equalTo($limit))
-            ->will($this->returnValue([$item]));
+            ->with($limit)
+            ->willReturn([$item]);
 
         $this->createBlockObject();
         $this->assertSame($this->block, $this->block->setOrders([$order]));
@@ -196,41 +193,37 @@ class SidebarTest extends TestCase
 
         $this->httpContext->expects($this->once())
             ->method('getValue')
-            ->with($this->equalTo(Context::CONTEXT_AUTH))
-            ->will($this->returnValue(true));
+            ->with(Context::CONTEXT_AUTH)
+            ->willReturn(true);
 
         $this->customerSession->expects($this->once())
             ->method('getCustomerId')
-            ->will($this->returnValue($customerId));
+            ->willReturn($customerId);
 
         $statuses = ['pending', 'processing', 'complete'];
         $this->orderConfig->expects($this->once())
             ->method('getVisibleOnFrontStatuses')
-            ->will($this->returnValue($statuses));
+            ->willReturn($statuses);
 
         $this->orderCollection->expects($this->at(0))
             ->method('addAttributeToFilter')
             ->with(
                 $attribute[0],
-                $this->equalTo($customerId)
-            )
-            ->will($this->returnSelf());
+                $customerId
+            )->willReturnSelf();
         $this->orderCollection->expects($this->at(1))
             ->method('addAttributeToFilter')
-            ->with($attribute[1], $this->equalTo(['in' => $statuses]))
-            ->will($this->returnSelf());
+            ->with($attribute[1], ['in' => $statuses])->willReturnSelf();
         $this->orderCollection->expects($this->at(2))
             ->method('addAttributeToSort')
-            ->with('created_at', 'desc')
-            ->will($this->returnSelf());
+            ->with('created_at', 'desc')->willReturnSelf();
         $this->orderCollection->expects($this->at(3))
             ->method('setPage')
-            ->with($this->equalTo(1), $this->equalTo(1))
-            ->will($this->returnSelf());
+            ->with(1, 1)->willReturnSelf();
 
         $this->orderCollectionFactory->expects($this->atLeastOnce())
             ->method('create')
-            ->will($this->returnValue($this->orderCollection));
+            ->willReturn($this->orderCollection);
         $this->createBlockObject();
         $this->assertEquals($this->orderCollection, $this->block->getOrders());
     }
@@ -239,28 +232,28 @@ class SidebarTest extends TestCase
     {
         $productId = 1;
         $result = true;
-        $product = $this->createPartialMock(Product::class, ['getId', '__wakeup']);
+        $product = $this->createPartialMock(Product::class, ['getId']);
         $product->expects($this->once())
             ->method('getId')
-            ->will($this->returnValue($productId));
+            ->willReturn($productId);
         $this->stockItemMock->expects($this->once())
             ->method('getIsInStock')
-            ->will($this->returnValue($result));
+            ->willReturn($result);
         $this->stockRegistry->expects($this->any())
             ->method('getStockItem')
-            ->will($this->returnValue($this->stockItemMock));
+            ->willReturn($this->stockItemMock);
 
         $orderItem = $this->createPartialMock(\Magento\Sales\Model\Order\Item::class, ['getStore', 'getProduct']);
         $orderItem->expects($this->any())
             ->method('getProduct')
-            ->will($this->returnValue($product));
+            ->willReturn($product);
         $store = $this->createPartialMock(Store::class, ['getWebsiteId']);
         $store->expects($this->any())
             ->method('getWebsiteId')
-            ->will($this->returnValue(10));
+            ->willReturn(10);
         $orderItem->expects($this->any())
             ->method('getStore')
-            ->will($this->returnValue($store));
+            ->willReturn($store);
 
         $this->createBlockObject();
         $this->assertSame($result, $this->block->isItemAvailableForReorder($orderItem));
@@ -271,13 +264,13 @@ class SidebarTest extends TestCase
         $this->stockItemMock->expects($this->never())->method('getIsInStock');
         $this->stockRegistry->expects($this->any())
             ->method('getStockItem')
-            ->will($this->returnValue($this->stockItemMock));
+            ->willReturn($this->stockItemMock);
 
         $orderItem = $this->createMock(\Magento\Sales\Model\Order\Item::class);
         $orderItem->expects($this->any())
             ->method('getProduct')
             ->willThrowException(new NoSuchEntityException());
         $this->createBlockObject();
-        $this->assertSame(false, $this->block->isItemAvailableForReorder($orderItem));
+        $this->assertFalse($this->block->isItemAvailableForReorder($orderItem));
     }
 }

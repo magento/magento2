@@ -1,12 +1,14 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Sales\Test\Unit\Model\Order;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\Math\CalculatorFactory;
 use Magento\Framework\Model\Context;
 use Magento\Framework\Registry;
 use Magento\Framework\Stdlib\DateTime;
@@ -15,6 +17,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
 use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Creditmemo;
+use Magento\Sales\Model\Order\Creditmemo\CommentFactory;
 use Magento\Sales\Model\Order\Creditmemo\Config;
 use Magento\Sales\Model\Order\Creditmemo\Item;
 use Magento\Sales\Model\ResourceModel\Order\Creditmemo\Item\Collection as ItemCollection;
@@ -56,10 +59,10 @@ class CreditmemoTest extends TestCase
 
         $objectManagerHelper = new ObjectManagerHelper($this);
         $this->cmItemCollectionFactoryMock = $this->getMockBuilder(
-            \Magento\Sales\Model\ResourceModel\Order\Creditmemo\Item\CollectionFactory::class
+            CollectionFactory::class
         )->disableOriginalConstructor()
-        ->setMethods(['create'])
-        ->getMock();
+            ->setMethods(['create'])
+            ->getMock();
 
         $arguments = [
             'context' => $this->createMock(Context::class),
@@ -72,9 +75,9 @@ class CreditmemoTest extends TestCase
                 Config::class
             ),
             'cmItemCollectionFactory' => $this->cmItemCollectionFactoryMock,
-            'calculatorFactory' => $this->createMock(\Magento\Framework\Math\CalculatorFactory::class),
+            'calculatorFactory' => $this->createMock(CalculatorFactory::class),
             'storeManager' => $this->createMock(StoreManagerInterface::class),
-            'commentFactory' => $this->createMock(\Magento\Sales\Model\Order\Creditmemo\CommentFactory::class),
+            'commentFactory' => $this->createMock(CommentFactory::class),
             'commentCollectionFactory' => $this->createMock(
                 \Magento\Sales\Model\ResourceModel\Order\Creditmemo\Comment\CollectionFactory::class
             ),
@@ -94,13 +97,12 @@ class CreditmemoTest extends TestCase
         $entityName = 'creditmemo';
         $order = $this->createPartialMock(
             Order::class,
-            ['load', 'setHistoryEntityName', '__wakeUp']
+            ['load', 'setHistoryEntityName']
         );
         $this->creditmemo->setOrderId($orderId);
         $order->expects($this->atLeastOnce())
             ->method('setHistoryEntityName')
-            ->with($entityName)
-            ->will($this->returnSelf());
+            ->with($entityName)->willReturnSelf();
         $this->orderRepository->expects($this->atLeastOnce())
             ->method('get')
             ->with($orderId)
@@ -161,11 +163,11 @@ class CreditmemoTest extends TestCase
         $itemCollectionMock->expects($this->once())
             ->method('setCreditmemoFilter')
             ->with($id)
-            ->will($this->returnValue($items));
+            ->willReturn($items);
 
         $this->cmItemCollectionFactoryMock->expects($this->any())
             ->method('create')
-            ->will($this->returnValue($itemCollectionMock));
+            ->willReturn($itemCollectionMock);
 
         $itemsCollection = $this->creditmemo->getItemsCollection();
         $this->assertEquals($items, $itemsCollection);
@@ -190,11 +192,11 @@ class CreditmemoTest extends TestCase
         $itemCollectionMock->expects($this->once())
             ->method('setCreditmemoFilter')
             ->with(null)
-            ->will($this->returnValue($items));
+            ->willReturn($items);
 
         $this->cmItemCollectionFactoryMock->expects($this->any())
             ->method('create')
-            ->will($this->returnValue($itemCollectionMock));
+            ->willReturn($itemCollectionMock);
 
         $itemsCollection = $this->creditmemo->getItemsCollection();
         $this->assertEquals($items, $itemsCollection);

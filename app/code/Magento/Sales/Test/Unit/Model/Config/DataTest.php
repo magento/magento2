@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Sales\Test\Unit\Model\Config;
 
 use Magento\Framework\App\Cache\Type\Config;
@@ -40,10 +42,12 @@ class DataTest extends TestCase
         $this->objectManager = new ObjectManager($this);
         $this->_readerMock = $this->getMockBuilder(
             Reader::class
-        )->disableOriginalConstructor()->getMock();
+        )->disableOriginalConstructor()
+            ->getMock();
         $this->_cacheMock = $this->getMockBuilder(
             Config::class
-        )->disableOriginalConstructor()->getMock();
+        )->disableOriginalConstructor()
+            ->getMock();
         $this->serializerMock = $this->createMock(SerializerInterface::class);
     }
 

@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Sales\Test\Unit\Model\Order\Pdf;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
@@ -70,20 +72,18 @@ class InvoiceTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->directoryMock = $this->createMock(Write::class);
-        $this->directoryMock->expects($this->any())->method('getAbsolutePath')->will(
-            $this->returnCallback(
-                function ($argument) {
-                    return BP . '/' . $argument;
-                }
-            )
+        $this->directoryMock->expects($this->any())->method('getAbsolutePath')->willReturnCallback(
+            function ($argument) {
+                return BP . '/' . $argument;
+            }
         );
         $filesystemMock = $this->createMock(Filesystem::class);
         $filesystemMock->expects($this->any())
             ->method('getDirectoryRead')
-            ->will($this->returnValue($this->directoryMock));
+            ->willReturn($this->directoryMock);
         $filesystemMock->expects($this->any())
             ->method('getDirectoryWrite')
-            ->will($this->returnValue($this->directoryMock));
+            ->willReturn($this->directoryMock);
 
         $this->databaseMock = $this->createMock(Database::class);
         $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
@@ -113,13 +113,11 @@ class InvoiceTest extends TestCase
             'getRenderersPerProduct'
         )->with(
             'invoice'
-        )->will(
-            $this->returnValue(
-                [
-                    'product_type_one' => 'Renderer_Type_One_Product_One',
-                    'product_type_two' => 'Renderer_Type_One_Product_Two',
-                ]
-            )
+        )->willReturn(
+            [
+                'product_type_one' => 'Renderer_Type_One_Product_One',
+                'product_type_two' => 'Renderer_Type_One_Product_Two',
+            ]
         );
 
         $this->_model->getPdf([]);
@@ -142,10 +140,10 @@ class InvoiceTest extends TestCase
         $this->_pdfConfigMock->expects($this->once())
             ->method('getRenderersPerProduct')
             ->with('invoice')
-            ->will($this->returnValue(['product_type_one' => 'Renderer_Type_One_Product_One']));
+            ->willReturn(['product_type_one' => 'Renderer_Type_One_Product_One']);
         $this->_pdfConfigMock->expects($this->any())
             ->method('getTotals')
-            ->will($this->returnValue([]));
+            ->willReturn([]);
 
         $block = $this->getMockBuilder(Template::class)
             ->disableOriginalConstructor()
@@ -156,18 +154,18 @@ class InvoiceTest extends TestCase
             ->willReturn($block);
         $block->expects($this->any())
             ->method('toPdf')
-            ->will($this->returnValue(''));
+            ->willReturn('');
         $this->paymentDataMock->expects($this->any())
             ->method('getInfoBlock')
             ->willReturn($block);
 
         $this->addressRendererMock->expects($this->any())
             ->method('format')
-            ->will($this->returnValue(''));
+            ->willReturn('');
 
         $this->databaseMock->expects($this->any())
             ->method('checkDbUsage')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $invoiceMock = $this->createMock(Invoice::class);
         $orderMock = $this->createMock(Order::class);
@@ -177,7 +175,7 @@ class InvoiceTest extends TestCase
             ->willReturn($addressMock);
         $orderMock->expects($this->any())
             ->method('getIsVirtual')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $infoMock = $this->createMock(InfoInterface::class);
         $orderMock->expects($this->any())
             ->method('getPayment')
@@ -192,11 +190,11 @@ class InvoiceTest extends TestCase
         $this->scopeConfigMock->expects($this->at(0))
             ->method('getValue')
             ->with('sales/identity/logo', ScopeInterface::SCOPE_STORE, null)
-            ->will($this->returnValue($filename));
+            ->willReturn($filename);
         $this->scopeConfigMock->expects($this->at(1))
             ->method('getValue')
             ->with('sales/identity/address', ScopeInterface::SCOPE_STORE, null)
-            ->will($this->returnValue(''));
+            ->willReturn('');
 
         $this->directoryMock->expects($this->any())
             ->method('isFile')

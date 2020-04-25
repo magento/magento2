@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Sales\Test\Unit\Block\Adminhtml\Rss\Order\Grid;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
@@ -62,7 +64,7 @@ class LinkTest extends TestCase
         $link = 'http://magento.com/backend/rss/feed/index/type/new_order';
         $this->urlBuilderInterface->expects($this->once())->method('getUrl')
             ->with(['type' => 'new_order'])
-            ->will($this->returnValue($link));
+            ->willReturn($link);
         $this->assertEquals($link, $this->link->getLink());
     }
 

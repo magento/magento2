@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Sales\Test\Unit\Model\Config\Source\Order;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
@@ -36,7 +38,7 @@ class StatusTest extends TestCase
     public function testToOptionArray()
     {
         $this->config->expects($this->once())->method('getStateStatuses')
-            ->will($this->returnValue(['status1', 'status2']));
+            ->willReturn(['status1', 'status2']);
 
         $this->assertEquals(
             [

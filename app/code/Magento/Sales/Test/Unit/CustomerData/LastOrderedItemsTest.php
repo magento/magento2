@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Sales\Test\Unit\CustomerData;
 
@@ -151,7 +152,8 @@ class LastOrderedItemsTest extends TestCase
             ->getMock();
         $items = [$itemWithVisibleProduct, $itemWithNotVisibleProduct];
         $this->getLastOrderMock();
-        $storeMock = $this->getMockBuilder(StoreInterface::class)->getMockForAbstractClass();
+        $storeMock = $this->getMockBuilder(StoreInterface::class)
+            ->getMockForAbstractClass();
         $this->storeManagerMock->expects($this->any())->method('getStore')->willReturn($storeMock);
         $storeMock->expects($this->any())->method('getWebsiteId')->willReturn($websiteId);
         $storeMock->expects($this->any())->method('getId')->willReturn($storeId);
@@ -236,7 +238,8 @@ class LastOrderedItemsTest extends TestCase
             ->disableOriginalConstructor()
             ->setMethods(['getProductId'])
             ->getMock();
-        $storeMock = $this->getMockBuilder(StoreInterface::class)->getMockForAbstractClass();
+        $storeMock = $this->getMockBuilder(StoreInterface::class)
+            ->getMockForAbstractClass();
 
         $this->getLastOrderMock();
         $this->storeManagerMock->expects($this->exactly(2))->method('getStore')->willReturn($storeMock);

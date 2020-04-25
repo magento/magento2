@@ -141,29 +141,26 @@ class CreditmemoServiceTest extends TestCase
 
         $this->filterBuilderMock->expects($this->once())
             ->method('setField')
-            ->with('parent_id')
-            ->will($this->returnSelf());
+            ->with('parent_id')->willReturnSelf();
         $this->filterBuilderMock->expects($this->once())
             ->method('setValue')
-            ->with($id)
-            ->will($this->returnSelf());
+            ->with($id)->willReturnSelf();
         $this->filterBuilderMock->expects($this->once())
             ->method('setConditionType')
-            ->with('eq')
-            ->will($this->returnSelf());
+            ->with('eq')->willReturnSelf();
         $this->filterBuilderMock->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($filterMock));
+            ->willReturn($filterMock);
         $this->searchCriteriaBuilderMock->expects($this->once())
             ->method('addFilters')
             ->with([$filterMock]);
         $this->searchCriteriaBuilderMock->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($searchCriteriaMock));
+            ->willReturn($searchCriteriaMock);
         $this->creditmemoCommentRepositoryMock->expects($this->once())
             ->method('getList')
             ->with($searchCriteriaMock)
-            ->will($this->returnValue($returnValue));
+            ->willReturn($returnValue);
 
         $this->assertEquals($returnValue, $this->creditmemoService->getCommentsList($id));
     }
@@ -186,11 +183,11 @@ class CreditmemoServiceTest extends TestCase
         $this->creditmemoRepositoryMock->expects($this->once())
             ->method('get')
             ->with($id)
-            ->will($this->returnValue($modelMock));
+            ->willReturn($modelMock);
         $this->creditmemoNotifierMock->expects($this->once())
             ->method('notify')
             ->with($modelMock)
-        ->will($this->returnValue($returnValue));
+            ->willReturn($returnValue);
 
         $this->assertEquals($returnValue, $this->creditmemoService->notify($id));
     }
@@ -202,7 +199,9 @@ class CreditmemoServiceTest extends TestCase
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $creditMemoMock->expects($this->once())->method('getId')->willReturn(null);
-        $orderMock = $this->getMockBuilder(Order::class)->disableOriginalConstructor()->getMock();
+        $orderMock = $this->getMockBuilder(Order::class)
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $creditMemoMock->expects($this->atLeastOnce())->method('getOrder')->willReturn($orderMock);
         $orderMock->expects($this->once())->method('getBaseTotalRefunded')->willReturn(0);
@@ -274,7 +273,9 @@ class CreditmemoServiceTest extends TestCase
         $creditMemoMock->expects($this->once())->method('getId')->willReturn(444);
         $creditMemoMock->expects($this->once())->method('getState')
             ->willReturn(Creditmemo::STATE_OPEN);
-        $orderMock = $this->getMockBuilder(Order::class)->disableOriginalConstructor()->getMock();
+        $orderMock = $this->getMockBuilder(Order::class)
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $creditMemoMock->expects($this->atLeastOnce())->method('getOrder')->willReturn($orderMock);
         $orderMock->expects($this->once())->method('getBaseTotalRefunded')->willReturn(0);

@@ -1,17 +1,22 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Sales\Test\Unit\Model\Order\Invoice\Total;
 
 use Magento\Framework\Data\Collection;
 use Magento\Framework\Data\Collection\EntityFactory;
+use Magento\Framework\Math\CalculatorFactory;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Invoice;
+use Magento\Sales\Model\Order\Invoice\CommentFactory;
 use Magento\Sales\Model\Order\Invoice\Total\Shipping;
+use Magento\Sales\Model\OrderFactory;
+use Magento\Sales\Model\ResourceModel\Order\Invoice\Item\CollectionFactory;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -92,7 +97,7 @@ class ShippingTest extends TestCase
             ->getMockForAbstractClass();
         $order->expects($this->any())
             ->method('getInvoiceCollection')
-            ->will($this->returnValue($this->getInvoiceCollection($prevInvoicesData)));
+            ->willReturn($this->getInvoiceCollection($prevInvoicesData));
         $order->expects($this->any())
             ->method('getShippingAmount')
             ->willReturn($orderShipping);
@@ -120,18 +125,18 @@ class ShippingTest extends TestCase
         );
         $objectManagerHelper = new ObjectManager($this);
         $arguments = [
-            'orderFactory' => $this->createMock(\Magento\Sales\Model\OrderFactory::class),
+            'orderFactory' => $this->createMock(OrderFactory::class),
             'orderResourceFactory' => $this->createMock(
                 \Magento\Sales\Model\ResourceModel\OrderFactory::class
             ),
             'calculatorFactory' => $this->createMock(
-                \Magento\Framework\Math\CalculatorFactory::class
+                CalculatorFactory::class
             ),
             'invoiceItemCollectionFactory' => $this->createMock(
-                \Magento\Sales\Model\ResourceModel\Order\Invoice\Item\CollectionFactory::class
+                CollectionFactory::class
             ),
             'invoiceCommentFactory' => $this->createMock(
-                \Magento\Sales\Model\Order\Invoice\CommentFactory::class
+                CommentFactory::class
             ),
             'commentCollectionFactory' => $this->createMock(
                 \Magento\Sales\Model\ResourceModel\Order\Invoice\Comment\CollectionFactory::class

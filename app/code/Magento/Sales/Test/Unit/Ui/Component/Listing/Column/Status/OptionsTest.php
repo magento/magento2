@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Sales\Test\Unit\Ui\Component\Listing\Column\Status;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
@@ -30,7 +32,7 @@ class OptionsTest extends TestCase
     {
         $objectManager = new ObjectManager($this);
         $this->collectionFactoryMock = $this->createPartialMock(
-            \Magento\Sales\Model\ResourceModel\Order\Status\CollectionFactory::class,
+            CollectionFactory::class,
             ['create']
         );
         $this->model = $objectManager->getObject(

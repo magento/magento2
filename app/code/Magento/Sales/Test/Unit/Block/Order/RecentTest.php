@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Sales\Test\Unit\Block\Order;
 
 use Magento\Customer\Model\Session;
@@ -73,19 +75,20 @@ class RecentTest extends TestCase
         $layout = $this->createPartialMock(Layout::class, ['getBlock']);
         $this->context->expects($this->once())
             ->method('getLayout')
-            ->will($this->returnValue($layout));
+            ->willReturn($layout);
         $this->customerSession->expects($this->once())
             ->method('getCustomerId')
-            ->will($this->returnValue($customerId));
+            ->willReturn($customerId);
 
         $statuses = ['pending', 'processing', 'complete'];
         $this->orderConfig->expects($this->once())
             ->method('getVisibleOnFrontStatuses')
-            ->will($this->returnValue($statuses));
+            ->willReturn($statuses);
 
         $this->storeManagerMock = $this->getMockBuilder(StoreManagerInterface::class)
             ->getMockForAbstractClass();
-        $storeMock = $this->getMockBuilder(StoreInterface::class)->getMockForAbstractClass();
+        $storeMock = $this->getMockBuilder(StoreInterface::class)
+            ->getMockForAbstractClass();
         $this->storeManagerMock->expects($this->once())->method('getStore')->willReturn($storeMock);
         $storeMock->expects($this->any())->method('getId')->willReturn($storeId);
 
@@ -99,34 +102,29 @@ class RecentTest extends TestCase
         ]);
         $this->orderCollectionFactory->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($orderCollection));
+            ->willReturn($orderCollection);
         $orderCollection->expects($this->at(0))
             ->method('addAttributeToSelect')
-            ->with($this->equalTo('*'))
-            ->will($this->returnSelf());
+            ->with('*')->willReturnSelf();
         $orderCollection->expects($this->at(1))
             ->method('addAttributeToFilter')
-            ->with($attribute[0], $this->equalTo($customerId))
+            ->with($attribute[0], $customerId)
             ->willReturnSelf();
         $orderCollection->expects($this->at(2))
             ->method('addAttributeToFilter')
-            ->with($attribute[1], $this->equalTo($storeId))
+            ->with($attribute[1], $storeId)
             ->willReturnSelf();
         $orderCollection->expects($this->at(3))
             ->method('addAttributeToFilter')
-            ->with($attribute[2], $this->equalTo(['in' => $statuses]))
-            ->will($this->returnSelf());
+            ->with($attribute[2], ['in' => $statuses])->willReturnSelf();
         $orderCollection->expects($this->at(4))
             ->method('addAttributeToSort')
-            ->with('created_at', 'desc')
-            ->will($this->returnSelf());
+            ->with('created_at', 'desc')->willReturnSelf();
         $orderCollection->expects($this->at(5))
             ->method('setPageSize')
-            ->with('5')
-            ->will($this->returnSelf());
+            ->with('5')->willReturnSelf();
         $orderCollection->expects($this->at(6))
-            ->method('load')
-            ->will($this->returnSelf());
+            ->method('load')->willReturnSelf();
         $this->block = new Recent(
             $this->context,
             $this->orderCollectionFactory,

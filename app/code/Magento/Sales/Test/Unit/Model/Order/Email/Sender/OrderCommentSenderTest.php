@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Sales\Test\Unit\Model\Order\Email\Sender;
 
 use Magento\Sales\Api\Data\OrderInterface;
@@ -61,20 +63,18 @@ class OrderCommentSenderTest extends AbstractSenderTest
         $this->templateContainerMock->expects($this->once())
             ->method('setTemplateVars')
             ->with(
-                $this->equalTo(
-                    [
-                        'order' => $this->orderMock,
-                        'billing' => $billingAddress,
-                        'comment' => $comment,
-                        'store' => $this->storeMock,
-                        'formattedShippingAddress' => 1,
-                        'formattedBillingAddress' => 1,
-                        'order_data' => [
-                            'customer_name' => $customerName,
-                            'frontend_status_label' => $frontendStatusLabel
-                        ]
+                [
+                    'order' => $this->orderMock,
+                    'billing' => $billingAddress,
+                    'comment' => $comment,
+                    'store' => $this->storeMock,
+                    'formattedShippingAddress' => 1,
+                    'formattedBillingAddress' => 1,
+                    'order_data' => [
+                        'customer_name' => $customerName,
+                        'frontend_status_label' => $frontendStatusLabel
                     ]
-                )
+                ]
             );
         $this->stepSendWithoutSendCopy();
         $result = $this->sender->send($this->orderMock, true, $comment);
@@ -101,20 +101,18 @@ class OrderCommentSenderTest extends AbstractSenderTest
         $this->templateContainerMock->expects($this->once())
             ->method('setTemplateVars')
             ->with(
-                $this->equalTo(
-                    [
-                        'order' => $this->orderMock,
-                        'comment' => '',
-                        'billing' => $this->addressMock,
-                        'store' => $this->storeMock,
-                        'formattedShippingAddress' => null,
-                        'formattedBillingAddress' => 1,
-                        'order_data' => [
-                            'customer_name' => $customerName,
-                            'frontend_status_label' => $frontendStatusLabel
-                        ]
+                [
+                    'order' => $this->orderMock,
+                    'comment' => '',
+                    'billing' => $this->addressMock,
+                    'store' => $this->storeMock,
+                    'formattedShippingAddress' => null,
+                    'formattedBillingAddress' => 1,
+                    'order_data' => [
+                        'customer_name' => $customerName,
+                        'frontend_status_label' => $frontendStatusLabel
                     ]
-                )
+                ]
             );
         $this->assertFalse($this->sender->send($this->orderMock));
     }

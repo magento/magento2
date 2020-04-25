@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Sales\Test\Unit\Controller\Adminhtml\Order;
 
 use Magento\Backend\Model\Session;
@@ -18,6 +20,7 @@ use Magento\Sales\Model\Order\Creditmemo;
 use Magento\Sales\Model\Order\CreditmemoFactory;
 use Magento\Sales\Model\Order\Invoice;
 use Magento\Sales\Model\Order\Item;
+use Magento\Sales\Model\OrderFactory;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -89,7 +92,7 @@ class CreditmemoLoaderTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->creditmemoFactoryMock = $this->createMock(CreditmemoFactory::class);
-        $this->orderFactoryMock = $this->getMockBuilder(\Magento\Sales\Model\OrderFactory::class)
+        $this->orderFactoryMock = $this->getMockBuilder(OrderFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();

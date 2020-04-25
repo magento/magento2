@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Sales\Test\Unit\Block\Adminhtml\Order\Create;
 
 use Magento\Backend\Block\Template\Context;
@@ -17,7 +19,7 @@ class CustomerTest extends TestCase
     {
         $contextMock = $this->createPartialMock(Context::class, ['getAuthorization']);
         $authorizationMock = $this->createMock(AuthorizationInterface::class);
-        $contextMock->expects($this->any())->method('getAuthorization')->will($this->returnValue($authorizationMock));
+        $contextMock->expects($this->any())->method('getAuthorization')->willReturn($authorizationMock);
         $arguments = ['context' => $contextMock];
 
         $helper = new ObjectManager($this);
@@ -27,7 +29,7 @@ class CustomerTest extends TestCase
         $authorizationMock->expects($this->atLeastOnce())
             ->method('isAllowed')
             ->with('Magento_Customer::manage')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
 
         $this->assertEmpty($block->getButtonsHtml());
     }

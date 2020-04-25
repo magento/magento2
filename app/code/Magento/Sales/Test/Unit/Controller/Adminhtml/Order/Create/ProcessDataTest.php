@@ -1,14 +1,16 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Sales\Test\Unit\Controller\Adminhtml\Order\Create;
 
 use Magento\Backend\App\Action\Context;
 use Magento\Backend\Model\Session\Quote;
 use Magento\Backend\Model\View\Result\Forward;
+use Magento\Backend\Model\View\Result\ForwardFactory;
 use Magento\Eav\Model\Entity\Collection\AbstractCollection;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\App\ResponseInterface;
@@ -71,7 +73,7 @@ class ProcessDataTest extends TestCase
     protected $resultForward;
 
     /**
-     * @var \Magento\Backend\Model\View\Result\ForwardFactory|MockObject
+     * @var ForwardFactory|MockObject
      */
     protected $resultForwardFactory;
 
@@ -133,7 +135,7 @@ class ProcessDataTest extends TestCase
         $this->resultForward = $this->getMockBuilder(Forward::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->resultForwardFactory = $this->getMockBuilder(\Magento\Backend\Model\View\Result\ForwardFactory::class)
+        $this->resultForwardFactory = $this->getMockBuilder(ForwardFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
@@ -161,10 +163,10 @@ class ProcessDataTest extends TestCase
      */
     public function testExecute($noDiscount, $couponCode, $errorMessage, $actualCouponCode)
     {
-        $quote = $this->createPartialMock(
-            \Magento\Quote\Model\Quote::class,
-            ['getCouponCode', 'isVirtual', 'getAllItems']
-        );
+        $quote = $this->getMockBuilder(\Magento\Quote\Model\Quote::class)->addMethods(['getCouponCode'])
+            ->onlyMethods(['isVirtual', 'getAllItems'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $create = $this->createMock(Create::class);
 
         $paramReturnMap = [

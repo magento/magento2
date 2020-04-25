@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Sales\Test\Unit\Block\Order;
 
 use Magento\Customer\Model\Session;
@@ -70,24 +72,29 @@ class HistoryTest extends TestCase
         $this->context = $this->createMock(Context::class);
         $this->orderCollectionFactory =
             $this->getMockBuilder(CollectionFactory::class)
-            ->disableOriginalConstructor()->setMethods(['create'])->getMock();
+                ->disableOriginalConstructor()
+                ->setMethods(['create'])->getMock();
         $this->orderCollectionFactoryInterface =
             $this->getMockBuilder(CollectionFactoryInterface::class)
-                ->disableOriginalConstructor()->setMethods(['create'])->getMock();
+                ->disableOriginalConstructor()
+                ->setMethods(['create'])->getMock();
         $this->objectManager = $this->createMock(ObjectManagerInterface::class);
         $this->objectManager->expects($this->any())
             ->method('get')
-            ->will($this->returnValue($this->orderCollectionFactoryInterface));
+            ->willReturn($this->orderCollectionFactoryInterface);
         ObjectManager::setInstance($this->objectManager);
 
         $this->customerSession = $this->getMockBuilder(Session::class)
-            ->setMethods(['getCustomerId'])->disableOriginalConstructor()->getMock();
+            ->setMethods(['getCustomerId'])->disableOriginalConstructor()
+            ->getMock();
 
         $this->orderConfig = $this->getMockBuilder(Config::class)
-            ->setMethods(['getVisibleOnFrontStatuses'])->disableOriginalConstructor()->getMock();
+            ->setMethods(['getVisibleOnFrontStatuses'])->disableOriginalConstructor()
+            ->getMock();
 
         $this->pageConfig = $this->getMockBuilder(\Magento\Framework\View\Page\Config::class)
-            ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->pageTitleMock = $this->getMockBuilder(Title::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -100,12 +107,12 @@ class HistoryTest extends TestCase
         $customerId = 25;
         $this->customerSession->expects($this->once())
             ->method('getCustomerId')
-            ->will($this->returnValue($customerId));
+            ->willReturn($customerId);
 
         $statuses = ['pending', 'processing', 'comlete'];
         $this->orderConfig->expects($this->once())
             ->method('getVisibleOnFrontStatuses')
-            ->will($this->returnValue($statuses));
+            ->willReturn($statuses);
 
         $orderCollection = $this->createPartialMock(
             Collection::class,
@@ -118,19 +125,16 @@ class HistoryTest extends TestCase
 
         $orderCollection->expects($this->at(0))
             ->method('addFieldToSelect')
-            ->with($this->equalTo('*'))
-            ->will($this->returnSelf());
+            ->with('*')->willReturnSelf();
         $orderCollection->expects($this->at(1))
             ->method('addFieldToFilter')
-            ->with('status', $this->equalTo(['in' => $statuses]))
-            ->will($this->returnSelf());
+            ->with('status', ['in' => $statuses])->willReturnSelf();
         $orderCollection->expects($this->at(2))
             ->method('setOrder')
-            ->with('created_at', 'desc')
-            ->will($this->returnSelf());
+            ->with('created_at', 'desc')->willReturnSelf();
         $this->orderCollectionFactoryInterface->expects($this->atLeastOnce())
             ->method('create')
-            ->will($this->returnValue($orderCollection));
+            ->willReturn($orderCollection);
         $this->pageConfig->expects($this->atLeastOnce())
             ->method('getTitle')
             ->willReturn($this->pageTitleMock);

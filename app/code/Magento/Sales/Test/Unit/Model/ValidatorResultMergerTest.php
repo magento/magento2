@@ -46,7 +46,8 @@ class ValidatorResultMergerTest extends TestCase
     protected function setUp(): void
     {
         $this->validatorResultFactoryMock = $this->getMockBuilder(ValidatorResultInterfaceFactory::class)
-        ->setMethods(['create'])->disableOriginalConstructor()->getMock();
+            ->setMethods(['create'])->disableOriginalConstructor()
+            ->getMock();
         $this->objectManager = new ObjectManager($this);
         $this->validatorResultMerger = $this->objectManager->getObject(
             ValidatorResultMerger::class,

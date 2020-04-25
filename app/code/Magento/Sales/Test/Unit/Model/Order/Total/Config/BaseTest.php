@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Sales\Test\Unit\Model\Order\Total\Config;
 
 use Magento\Framework\App\Cache\Type\Config;
@@ -59,18 +61,16 @@ class BaseTest extends TestCase
     public function testGetTotalModels()
     {
         $total = $this->getMockForAbstractClass(AbstractTotal::class);
-        $this->salesConfig->expects($this->once())->method('getGroupTotals')->will(
-            $this->returnValue(
-                [
-                    'some_code' => ['instance' => AbstractTotal::class, 'sort_order' => 1903],
-                    'other_code' => ['instance' => AbstractTotal::class, 'sort_order' => 1723],
-                ]
-            )
+        $this->salesConfig->expects($this->once())->method('getGroupTotals')->willReturn(
+            [
+                'some_code' => ['instance' => AbstractTotal::class, 'sort_order' => 1903],
+                'other_code' => ['instance' => AbstractTotal::class, 'sort_order' => 1723],
+            ]
         );
 
         $this->orderTotalFactory->expects($this->any())->method('create')
             ->with(AbstractTotal::class)
-            ->will($this->returnValue($total));
+            ->willReturn($total);
 
         $sortedCodes = ['other_code', 'some_code'];
         $serializedCodes = '["other_code", "some_code"]';
@@ -93,18 +93,16 @@ class BaseTest extends TestCase
         $this->expectExceptionMessage(
             'The total model should be extended from \Magento\Sales\Model\Order\Total\AbstractTotal.'
         );
-        $this->salesConfig->expects($this->once())->method('getGroupTotals')->will(
-            $this->returnValue(
-                [
-                    'some_code' => ['instance' => AbstractTotal::class, 'sort_order' => 1903],
-                    'other_code' => ['instance' => AbstractTotal::class, 'sort_order' => 1723],
-                ]
-            )
+        $this->salesConfig->expects($this->once())->method('getGroupTotals')->willReturn(
+            [
+                'some_code' => ['instance' => AbstractTotal::class, 'sort_order' => 1903],
+                'other_code' => ['instance' => AbstractTotal::class, 'sort_order' => 1723],
+            ]
         );
 
         $this->orderTotalFactory->expects($this->any())->method('create')
             ->with(AbstractTotal::class)
-            ->will($this->returnValue($this));
+            ->willReturn($this);
 
         $this->object->getTotalModels();
     }
@@ -112,23 +110,21 @@ class BaseTest extends TestCase
     public function testGetTotalUnserializeCachedCollectorCodes()
     {
         $total = $this->getMockForAbstractClass(AbstractTotal::class);
-        $this->salesConfig->expects($this->any())->method('getGroupTotals')->will(
-            $this->returnValue(
-                [
-                    'some_code' => ['instance' => AbstractTotal::class, 'sort_order' => 1903],
-                    'other_code' => ['instance' => AbstractTotal::class, 'sort_order' => 1723],
-                ]
-            )
+        $this->salesConfig->expects($this->any())->method('getGroupTotals')->willReturn(
+            [
+                'some_code' => ['instance' => AbstractTotal::class, 'sort_order' => 1903],
+                'other_code' => ['instance' => AbstractTotal::class, 'sort_order' => 1723],
+            ]
         );
 
         $this->orderTotalFactory->expects($this->any())->method('create')
             ->with(AbstractTotal::class)
-            ->will($this->returnValue($total));
+            ->willReturn($total);
 
         $sortedCodes = ['other_code', 'some_code'];
         $serializedCodes = '["other_code", "some_code"]';
         $this->configCacheType->expects($this->once())->method('load')->with('sorted_collectors')
-            ->will($this->returnValue($serializedCodes));
+            ->willReturn($serializedCodes);
         $this->serializer->expects($this->once())
             ->method('unserialize')
             ->with($serializedCodes)
@@ -144,19 +140,17 @@ class BaseTest extends TestCase
     public function testGetTotalModelsSortingSubroutine()
     {
         $total = $this->getMockForAbstractClass(AbstractTotal::class);
-        $this->salesConfig->expects($this->once())->method('getGroupTotals')->will(
-            $this->returnValue(
-                [
-                    'some_code' => ['instance' => AbstractTotal::class, 'sort_order' => 1903],
-                    'other_code' => ['instance' => AbstractTotal::class, 'sort_order' => 1112],
-                    'big_order' => ['instance' => AbstractTotal::class, 'sort_order' => 3000],
-                ]
-            )
+        $this->salesConfig->expects($this->once())->method('getGroupTotals')->willReturn(
+            [
+                'some_code' => ['instance' => AbstractTotal::class, 'sort_order' => 1903],
+                'other_code' => ['instance' => AbstractTotal::class, 'sort_order' => 1112],
+                'big_order' => ['instance' => AbstractTotal::class, 'sort_order' => 3000],
+            ]
         );
 
         $this->orderTotalFactory->expects($this->any())->method('create')
             ->with(AbstractTotal::class)
-            ->will($this->returnValue($total));
+            ->willReturn($total);
 
         $this->assertSame(
             [

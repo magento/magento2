@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Sales\Test\Unit\Model\Order;
 
@@ -60,7 +61,8 @@ class InvoiceQuantityValidatorTest extends TestCase
             ->getMockForAbstractClass();
         $this->orderRepositoryMock = $this->getMockBuilder(
             OrderRepositoryInterface::class
-        )->disableOriginalConstructor()->getMockForAbstractClass();
+        )->disableOriginalConstructor()
+            ->getMockForAbstractClass();
         $this->orderRepositoryMock->expects($this->any())->method('get')->willReturn($this->orderMock);
         $this->model = $this->objectManager->getObject(
             InvoiceQuantityValidator::class,

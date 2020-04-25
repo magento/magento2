@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Sales\Test\Unit\Model\ResourceModel\Order\Creditmemo;
 
 use Magento\Framework\App\ResourceConnection;
@@ -64,16 +66,16 @@ class CommentTest extends TestCase
 
         $this->appResourceMock->expects($this->any())
             ->method('getConnection')
-            ->will($this->returnValue($this->connectionMock));
+            ->willReturn($this->connectionMock);
         $this->connectionMock->expects($this->any())
             ->method('describeTable')
-            ->will($this->returnValue([]));
+            ->willReturn([]);
         $this->connectionMock->expects($this->any())
             ->method('insert');
         $this->connectionMock->expects($this->any())
             ->method('lastInsertId');
-        $this->commentModelMock->expects($this->any())->method('hasDataChanges')->will($this->returnValue(true));
-        $this->commentModelMock->expects($this->any())->method('isSaveAllowed')->will($this->returnValue(true));
+        $this->commentModelMock->expects($this->any())->method('hasDataChanges')->willReturn(true);
+        $this->commentModelMock->expects($this->any())->method('isSaveAllowed')->willReturn(true);
 
         $relationProcessorMock = $this->createMock(
             ObjectRelationProcessor::class
@@ -101,8 +103,8 @@ class CommentTest extends TestCase
     {
         $this->validatorMock->expects($this->once())
             ->method('validate')
-            ->with($this->equalTo($this->commentModelMock))
-            ->will($this->returnValue([]));
+            ->with($this->commentModelMock)
+            ->willReturn([]);
         $this->entitySnapshotMock->expects($this->once())
             ->method('isModified')
             ->with($this->commentModelMock)
@@ -125,8 +127,8 @@ class CommentTest extends TestCase
             ->willReturn(true);
         $this->validatorMock->expects($this->once())
             ->method('validate')
-            ->with($this->equalTo($this->commentModelMock))
-            ->will($this->returnValue(['warning message']));
+            ->with($this->commentModelMock)
+            ->willReturn(['warning message']);
         $this->commentResource->save($this->commentModelMock);
         $this->assertTrue(true);
     }

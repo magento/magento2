@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Sales\Test\Unit\Observer\Backend;
 
 use Magento\Catalog\Model\Product;
@@ -39,11 +41,11 @@ class SubtractQtyFromQuotesObserverTest extends TestCase
     {
         $this->_quoteMock = $this->createMock(Quote::class);
         $this->_observerMock = $this->createMock(Observer::class);
-        $this->_eventMock = $this->createPartialMock(
-            Event::class,
-            ['getProduct', 'getStatus', 'getProductId']
-        );
-        $this->_observerMock->expects($this->any())->method('getEvent')->will($this->returnValue($this->_eventMock));
+        $this->_eventMock = $this->getMockBuilder(Event::class)
+            ->addMethods(['getProduct', 'getStatus', 'getProductId'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->_observerMock->expects($this->any())->method('getEvent')->willReturn($this->_eventMock);
         $this->_model = new SubtractQtyFromQuotesObserver($this->_quoteMock);
     }
 
@@ -51,9 +53,9 @@ class SubtractQtyFromQuotesObserverTest extends TestCase
     {
         $productMock = $this->createPartialMock(
             Product::class,
-            ['getId', 'getStatus', '__wakeup']
+            ['getId', 'getStatus']
         );
-        $this->_eventMock->expects($this->once())->method('getProduct')->will($this->returnValue($productMock));
+        $this->_eventMock->expects($this->once())->method('getProduct')->willReturn($productMock);
         $this->_quoteMock->expects($this->once())->method('subtractProductFromQuotes')->with($productMock);
         $this->_model->execute($this->_observerMock);
     }

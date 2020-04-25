@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Sales\Test\Unit\Model\Order\Creditmemo;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
@@ -10,6 +12,7 @@ use Magento\Sales\Api\Data\CreditmemoItemInterface;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Creditmemo;
 use Magento\Sales\Model\Order\Creditmemo\Item;
+use Magento\Sales\Model\Order\ItemFactory;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -26,7 +29,7 @@ class ItemTest extends TestCase
     protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
-        $this->orderItemFactoryMock = $this->getMockBuilder(\Magento\Sales\Model\Order\ItemFactory::class)
+        $this->orderItemFactoryMock = $this->getMockBuilder(ItemFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
@@ -225,11 +228,9 @@ class ItemTest extends TestCase
             ->getMock();
         $creditmemoMock->expects($this->exactly(4))
             ->method('roundPrice')
-            ->will($this->returnCallback(
-                function ($arg) {
-                    return round($arg, 2);
-                }
-            ));
+            ->willReturnCallback(function ($arg) {
+                return round($arg, 2);
+            });
 
         $qtyInvoiced = 10;
         $qtyRefunded = 2;

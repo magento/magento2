@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Sales\Test\Unit\Block\Order\Info\Buttons;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
@@ -12,6 +14,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
 use Magento\Framework\View\Element\Template\Context;
 use Magento\Sales\Block\Order\Info\Buttons\Rss;
 use Magento\Sales\Model\Order;
+use Magento\Sales\Model\OrderFactory;
 use Magento\Sales\Model\Rss\Signature;
 use Magento\Store\Model\ScopeInterface;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -60,7 +63,7 @@ class RssTest extends TestCase
     protected function setUp(): void
     {
         $this->context = $this->createMock(Context::class);
-        $this->orderFactory = $this->createPartialMock(\Magento\Sales\Model\OrderFactory::class, ['create']);
+        $this->orderFactory = $this->createPartialMock(OrderFactory::class, ['create']);
         $this->urlBuilderInterface = $this->createMock(UrlBuilderInterface::class);
         $this->scopeConfigInterface = $this->createMock(ScopeConfigInterface::class);
         $request = $this->createMock(RequestInterface::class);
@@ -82,15 +85,15 @@ class RssTest extends TestCase
     public function testGetLink()
     {
         $order = $this->getMockBuilder(Order::class)
-            ->setMethods(['getId', 'getCustomerId', 'getIncrementId', 'load', '__wakeup', '__sleep'])
+            ->setMethods(['getId', 'getCustomerId', 'getIncrementId', 'load'])
             ->disableOriginalConstructor()
             ->getMock();
-        $order->expects($this->once())->method('load')->will($this->returnSelf());
-        $order->expects($this->once())->method('getId')->will($this->returnValue(1));
-        $order->expects($this->once())->method('getCustomerId')->will($this->returnValue(1));
-        $order->expects($this->once())->method('getIncrementId')->will($this->returnValue('100000001'));
+        $order->expects($this->once())->method('load')->willReturnSelf();
+        $order->expects($this->once())->method('getId')->willReturn(1);
+        $order->expects($this->once())->method('getCustomerId')->willReturn(1);
+        $order->expects($this->once())->method('getIncrementId')->willReturn('100000001');
 
-        $this->orderFactory->expects($this->once())->method('create')->will($this->returnValue($order));
+        $this->orderFactory->expects($this->once())->method('create')->willReturn($order);
         $data = base64_encode(json_encode(['order_id' => 1, 'increment_id' => '100000001', 'customer_id' => 1]));
         $signature = '651932dfc862406b72628d95623bae5ea18242be757b3493b337942d61f834be';
         $this->signature->expects($this->once())->method('signData')->willReturn($signature);
@@ -117,7 +120,7 @@ class RssTest extends TestCase
     {
         $this->scopeConfigInterface->expects($this->once())->method('isSetFlag')
             ->with('rss/order/status', ScopeInterface::SCOPE_STORE)
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $this->assertTrue($this->rss->isRssAllowed());
     }
 }

@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Sales\Test\Unit\Model\ResourceModel\Order\Tax;
 
 use Magento\Framework\App\ResourceConnection;
@@ -40,7 +42,7 @@ class ItemTest extends TestCase
         $this->appResourceMock = $this->createMock(ResourceConnection::class);
         $this->appResourceMock->expects($this->any())
             ->method('getConnection')
-            ->will($this->returnValue($this->connectionMock));
+            ->willReturn($this->connectionMock);
         $this->appResourceMock->expects($this->any())->method('getTableName')->willReturnArgument(0);
         $objectManager = new ObjectManager($this);
         $this->taxItem = $objectManager->getObject(

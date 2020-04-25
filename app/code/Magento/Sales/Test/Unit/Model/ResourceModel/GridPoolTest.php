@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Sales\Test\Unit\Model\ResourceModel;
 
@@ -79,20 +80,20 @@ class GridPoolTest extends TestCase
 
         $this->orderGridMock->expects($this->once())
             ->method('refresh')
-            ->with($this->equalTo($orderId), $this->equalTo('sfo.entity_id'))
-            ->will($this->returnValue($this->statementMock));
+            ->with($orderId, 'sfo.entity_id')
+            ->willReturn($this->statementMock);
         $this->invoiceGridMock->expects($this->once())
             ->method('refresh')
-            ->with($this->equalTo($orderId), $this->equalTo('sfo.entity_id'))
-            ->will($this->returnValue($this->statementMock));
+            ->with($orderId, 'sfo.entity_id')
+            ->willReturn($this->statementMock);
         $this->shipmentGridMock->expects($this->once())
             ->method('refresh')
-            ->with($this->equalTo($orderId), $this->equalTo('sfo.entity_id'))
-            ->will($this->returnValue($this->statementMock));
+            ->with($orderId, 'sfo.entity_id')
+            ->willReturn($this->statementMock);
         $this->creditmemoGridMock->expects($this->once())
             ->method('refresh')
-            ->with($this->equalTo($orderId), $this->equalTo('sfo.entity_id'))
-            ->will($this->returnValue($this->statementMock));
+            ->with($orderId, 'sfo.entity_id')
+            ->willReturn($this->statementMock);
         $this->assertEquals($this->gridPool, $this->gridPool->refreshByOrderId($orderId));
     }
 }

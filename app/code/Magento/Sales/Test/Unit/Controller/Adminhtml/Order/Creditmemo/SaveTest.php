@@ -1,14 +1,16 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Sales\Test\Unit\Controller\Adminhtml\Order\Creditmemo;
 
 use Magento\Backend\App\Action\Context;
 use Magento\Backend\Model\Session;
 use Magento\Backend\Model\View\Result\Forward;
+use Magento\Backend\Model\View\Result\ForwardFactory;
 use Magento\Backend\Model\View\Result\Redirect;
 use Magento\Backend\Model\View\Result\RedirectFactory;
 use Magento\Framework\App\RequestInterface;
@@ -66,7 +68,7 @@ class SaveTest extends TestCase
     protected $memoLoaderMock;
 
     /**
-     * @var \Magento\Backend\Model\View\Result\ForwardFactory|MockObject
+     * @var ForwardFactory|MockObject
      */
     protected $resultForwardFactoryMock;
 
@@ -104,7 +106,7 @@ class SaveTest extends TestCase
             ->setConstructorArgs($constructArguments)
             ->getMock();
         $this->resultForwardFactoryMock = $this->getMockBuilder(
-            \Magento\Backend\Model\View\Result\ForwardFactory::class
+            ForwardFactory::class
         )
             ->disableOriginalConstructor()
             ->setMethods(['create'])
@@ -128,9 +130,9 @@ class SaveTest extends TestCase
         )->method(
             'get'
         )->with(
-            $this->equalTo(Registry::class)
-        )->will(
-            $this->returnValue($registryMock)
+            Registry::class
+        )->willReturn(
+            $registryMock
         );
         $this->_messageManager = $this->createMock(ManagerInterface::class);
 
@@ -167,22 +169,22 @@ class SaveTest extends TestCase
             'getPost'
         )->with(
             'creditmemo'
-        )->will(
-            $this->returnValue($data)
+        )->willReturn(
+            $data
         );
-        $this->_requestMock->expects($this->any())->method('getParam')->will($this->returnValue(null));
+        $this->_requestMock->expects($this->any())->method('getParam')->willReturn(null);
 
         $creditmemoMock = $this->createPartialMock(
             Creditmemo::class,
-            ['load', 'getGrandTotal', '__wakeup']
+            ['load', 'getGrandTotal']
         );
-        $creditmemoMock->expects($this->once())->method('getGrandTotal')->will($this->returnValue('1'));
+        $creditmemoMock->expects($this->once())->method('getGrandTotal')->willReturn('1');
         $this->memoLoaderMock->expects(
             $this->once()
         )->method(
             'load'
-        )->will(
-            $this->returnValue($creditmemoMock)
+        )->willReturn(
+            $creditmemoMock
         );
         $this->resultRedirectFactoryMock->expects($this->once())
             ->method('create')
@@ -215,22 +217,22 @@ class SaveTest extends TestCase
             'getPost'
         )->with(
             'creditmemo'
-        )->will(
-            $this->returnValue($data)
+        )->willReturn(
+            $data
         );
-        $this->_requestMock->expects($this->any())->method('getParam')->will($this->returnValue(null));
+        $this->_requestMock->expects($this->any())->method('getParam')->willReturn(null);
 
         $creditmemoMock = $this->createPartialMock(
             Creditmemo::class,
-            ['load', 'isValidGrandTotal', '__wakeup']
+            ['load', 'isValidGrandTotal']
         );
-        $creditmemoMock->expects($this->once())->method('isValidGrandTotal')->will($this->returnValue(false));
+        $creditmemoMock->expects($this->once())->method('isValidGrandTotal')->willReturn(false);
         $this->memoLoaderMock->expects(
             $this->once()
         )->method(
             'load'
-        )->will(
-            $this->returnValue($creditmemoMock)
+        )->willReturn(
+            $creditmemoMock
         );
         $this->resultRedirectFactoryMock->expects($this->once())
             ->method('create')
@@ -253,7 +255,7 @@ class SaveTest extends TestCase
      */
     protected function _setSaveActionExpectationForMageCoreException($data, $errorMessage)
     {
-        $this->_messageManager->expects($this->once())->method('addErrorMessage')->with($this->equalTo($errorMessage));
-        $this->_sessionMock->expects($this->once())->method('setFormData')->with($this->equalTo($data));
+        $this->_messageManager->expects($this->once())->method('addErrorMessage')->with($errorMessage);
+        $this->_sessionMock->expects($this->once())->method('setFormData')->with($data);
     }
 }

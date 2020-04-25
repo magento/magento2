@@ -1,16 +1,20 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Sales\Test\Unit\Model\Order;
 
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Sales\Model\Convert\Order;
+use Magento\Sales\Model\Convert\OrderFactory;
 use Magento\Sales\Model\Order\Item;
 use Magento\Sales\Model\Order\Shipment;
 use Magento\Sales\Model\Order\Shipment\Track;
+use Magento\Sales\Model\Order\Shipment\TrackFactory;
 use Magento\Sales\Model\Order\ShipmentFactory;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -38,7 +42,7 @@ class ShipmentFactoryTest extends TestCase
     /**
      * Shipment track factory mock.
      *
-     * @var \Magento\Sales\Model\Order\Shipment\TrackFactory|MockObject
+     * @var TrackFactory|MockObject
      */
     protected $trackFactory;
 
@@ -55,13 +59,13 @@ class ShipmentFactoryTest extends TestCase
             ['toShipment', 'itemToShipmentItem']
         );
 
-        $convertOrderFactory = $this->createPartialMock(\Magento\Sales\Model\Convert\OrderFactory::class, ['create']);
+        $convertOrderFactory = $this->createPartialMock(OrderFactory::class, ['create']);
         $convertOrderFactory->expects($this->once())
             ->method('create')
             ->willReturn($this->converter);
 
         $this->trackFactory = $this->createPartialMock(
-            \Magento\Sales\Model\Order\Shipment\TrackFactory::class,
+            TrackFactory::class,
             ['create']
         );
 

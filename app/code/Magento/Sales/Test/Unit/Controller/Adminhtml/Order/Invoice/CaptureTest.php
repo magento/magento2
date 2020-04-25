@@ -1,14 +1,17 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Sales\Test\Unit\Controller\Adminhtml\Order\Invoice;
 
 use Magento\Backend\App\Action\Context;
 use Magento\Backend\Helper\Data;
 use Magento\Backend\Model\Session;
 use Magento\Backend\Model\View\Result\Forward;
+use Magento\Backend\Model\View\Result\ForwardFactory;
 use Magento\Backend\Model\View\Result\Redirect;
 use Magento\Backend\Model\View\Result\RedirectFactory;
 use Magento\Framework\App\ActionFlag;
@@ -72,7 +75,7 @@ class CaptureTest extends TestCase
     protected $resultRedirectFactoryMock;
 
     /**
-     * @var \Magento\Backend\Model\View\Result\ForwardFactory|MockObject
+     * @var ForwardFactory|MockObject
      */
     protected $resultForwardFactoryMock;
 
@@ -130,7 +133,7 @@ class CaptureTest extends TestCase
             ->getMock();
 
         $this->resultForwardFactoryMock = $this->getMockBuilder(
-            \Magento\Backend\Model\View\Result\ForwardFactory::class
+            ForwardFactory::class
         )->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
@@ -200,11 +203,11 @@ class CaptureTest extends TestCase
         $this->requestMock->expects($this->once())
             ->method('getParam')
             ->with('invoice_id')
-            ->will($this->returnValue($invoiceId));
+            ->willReturn($invoiceId);
 
         $orderMock = $this->getMockBuilder(Order::class)
             ->disableOriginalConstructor()
-            ->setMethods(['setIsInProcess', '__wakeup'])
+            ->setMethods(['setIsInProcess'])
             ->getMock();
 
         $this->invoiceManagement->expects($this->once())
@@ -217,10 +220,10 @@ class CaptureTest extends TestCase
             ->getMock();
         $invoiceMock->expects($this->any())
             ->method('getEntityId')
-            ->will($this->returnValue($invoiceId));
+            ->willReturn($invoiceId);
         $invoiceMock->expects($this->any())
             ->method('getOrder')
-            ->will($this->returnValue($orderMock));
+            ->willReturn($orderMock);
 
         $transactionMock = $this->getMockBuilder(Transaction::class)
             ->disableOriginalConstructor()
@@ -228,12 +231,10 @@ class CaptureTest extends TestCase
             ->getMock();
         $transactionMock->expects($this->at(0))
             ->method('addObject')
-            ->with($invoiceMock)
-            ->will($this->returnSelf());
+            ->with($invoiceMock)->willReturnSelf();
         $transactionMock->expects($this->at(1))
             ->method('addObject')
-            ->with($orderMock)
-            ->will($this->returnSelf());
+            ->with($orderMock)->willReturnSelf();
         $transactionMock->expects($this->at(2))
             ->method('save');
 
@@ -243,7 +244,7 @@ class CaptureTest extends TestCase
 
         $invoiceMock->expects($this->once())
             ->method('getId')
-            ->will($this->returnValue($invoiceId));
+            ->willReturn($invoiceId);
 
         $this->invoiceRepository->expects($this->once())
             ->method('get')
@@ -252,7 +253,7 @@ class CaptureTest extends TestCase
         $this->objectManagerMock->expects($this->at(1))
             ->method('create')
             ->with(Transaction::class)
-            ->will($this->returnValue($transactionMock));
+            ->willReturn($transactionMock);
 
         $resultRedirect = $this->getMockBuilder(Redirect::class)
             ->disableOriginalConstructor()
@@ -261,7 +262,7 @@ class CaptureTest extends TestCase
 
         $this->resultRedirectFactoryMock->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($resultRedirect));
+            ->willReturn($resultRedirect);
 
         $this->assertSame($resultRedirect, $this->controller->execute());
     }
@@ -276,7 +277,7 @@ class CaptureTest extends TestCase
         $this->requestMock->expects($this->once())
             ->method('getParam')
             ->with('invoice_id')
-            ->will($this->returnValue($invoiceId));
+            ->willReturn($invoiceId);
 
         $this->invoiceRepository->expects($this->once())
             ->method('get')
@@ -285,11 +286,11 @@ class CaptureTest extends TestCase
         $resultForward = $this->getMockBuilder(Forward::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $resultForward->expects($this->once())->method('forward')->with(('noroute'))->will($this->returnSelf());
+        $resultForward->expects($this->once())->method('forward')->with(('noroute'))->willReturnSelf();
 
         $this->resultForwardFactoryMock->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($resultForward));
+            ->willReturn($resultForward);
 
         $this->assertSame($resultForward, $this->controller->execute());
     }
@@ -307,12 +308,12 @@ class CaptureTest extends TestCase
         $this->invoiceManagement->expects($this->once())
             ->method('setCapture')
             ->with($invoiceId)
-            ->will($this->throwException($e));
+            ->willThrowException($e);
 
         $this->requestMock->expects($this->once())
             ->method('getParam')
             ->with('invoice_id')
-            ->will($this->returnValue($invoiceId));
+            ->willReturn($invoiceId);
 
         $invoiceMock = $this->getMockBuilder(Invoice::class)
             ->disableOriginalConstructor()
@@ -324,10 +325,10 @@ class CaptureTest extends TestCase
 
         $invoiceMock->expects($this->once())
             ->method('getId')
-            ->will($this->returnValue($invoiceId));
+            ->willReturn($invoiceId);
         $invoiceMock->expects($this->once())
             ->method('getEntityId')
-            ->will($this->returnValue($invoiceId));
+            ->willReturn($invoiceId);
 
         $this->invoiceRepository->expects($this->once())
             ->method('get')
@@ -340,7 +341,7 @@ class CaptureTest extends TestCase
 
         $this->resultRedirectFactoryMock->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($resultRedirect));
+            ->willReturn($resultRedirect);
 
         $this->assertSame($resultRedirect, $this->controller->execute());
     }
@@ -358,12 +359,12 @@ class CaptureTest extends TestCase
         $this->requestMock->expects($this->once())
             ->method('getParam')
             ->with('invoice_id')
-            ->will($this->returnValue($invoiceId));
+            ->willReturn($invoiceId);
 
         $this->invoiceManagement->expects($this->once())
             ->method('setCapture')
             ->with($invoiceId)
-            ->will($this->throwException($e));
+            ->willThrowException($e);
 
         $invoiceMock = $this->getMockBuilder(Invoice::class)
             ->disableOriginalConstructor()
@@ -375,10 +376,10 @@ class CaptureTest extends TestCase
 
         $invoiceMock->expects($this->once())
             ->method('getId')
-            ->will($this->returnValue($invoiceId));
+            ->willReturn($invoiceId);
         $invoiceMock->expects($this->once())
             ->method('getEntityId')
-            ->will($this->returnValue($invoiceId));
+            ->willReturn($invoiceId);
 
         $this->invoiceRepository->expects($this->once())
             ->method('get')
@@ -392,7 +393,7 @@ class CaptureTest extends TestCase
 
         $this->resultRedirectFactoryMock->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($resultRedirect));
+            ->willReturn($resultRedirect);
 
         $this->assertSame($resultRedirect, $this->controller->execute());
     }

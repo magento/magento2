@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Sales\Test\Unit\Model\Grid\Child;
 
@@ -44,9 +45,9 @@ class CollectionUpdaterTest extends TestCase
             ->expects($this->once())
             ->method('registry')
             ->with('current_transaction')
-            ->will($this->returnValue($transactionMock));
-        $transactionMock->expects($this->once())->method('getId')->will($this->returnValue('transactionId'));
-        $collectionMock->expects($this->once())->method('addParentIdFilter')->will($this->returnSelf());
+            ->willReturn($transactionMock);
+        $transactionMock->expects($this->once())->method('getId')->willReturn('transactionId');
+        $collectionMock->expects($this->once())->method('addParentIdFilter')->willReturnSelf();
         $this->assertEquals($collectionMock, $this->collectionUpdater->update($collectionMock));
     }
 }

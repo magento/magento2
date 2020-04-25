@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Sales\Test\Unit\Block\Adminhtml\Order\Create\Sidebar;
 
 use Magento\Catalog\Model\Product\Type;
@@ -27,7 +29,10 @@ class AbstractSidebarTest extends TestCase
     protected function setUp(): void
     {
         $helper = new ObjectManager($this);
-        $this->itemMock = $this->createPartialMock(DataObject::class, ['getQty']);
+        $this->itemMock = $this->getMockBuilder(DataObject::class)
+            ->addMethods(['getQty'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->abstractSidebar = $helper->getObject(
             AbstractSidebar::class,
             []
@@ -42,7 +47,7 @@ class AbstractSidebarTest extends TestCase
      */
     public function testGetItemQty($itemQty, $qty, $expectedValue)
     {
-        $this->itemMock->expects($this->exactly($itemQty))->method('getQty')->will($this->returnValue($qty));
+        $this->itemMock->expects($this->exactly($itemQty))->method('getQty')->willReturn($qty);
         $this->assertEquals($expectedValue, $this->abstractSidebar->getItemQty($this->itemMock));
     }
 

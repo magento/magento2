@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Sales\Test\Unit\Controller\Adminhtml\Order;
 
 use Magento\Backend\App\Action\Context;
@@ -70,16 +72,16 @@ class ReviewPaymentTest extends TestCase
     protected function setUp(): void
     {
         $this->contextMock = $this->createPartialMock(Context::class, [
-                'getRequest',
-                'getResponse',
-                'getMessageManager',
-                'getRedirect',
-                'getObjectManager',
-                'getSession',
-                'getActionFlag',
-                'getHelper',
-                'getResultRedirectFactory'
-            ]);
+            'getRequest',
+            'getResponse',
+            'getMessageManager',
+            'getRedirect',
+            'getObjectManager',
+            'getSession',
+            'getActionFlag',
+            'getHelper',
+            'getResultRedirectFactory'
+        ]);
         $this->orderManagementMock = $this->getMockBuilder(OrderManagementInterface::class)
             ->getMockForAbstractClass();
         $this->orderRepositoryMock = $this->getMockBuilder(OrderRepositoryInterface::class)
@@ -99,10 +101,11 @@ class ReviewPaymentTest extends TestCase
             ['create']
         );
 
-        $this->paymentMock = $this->createPartialMock(
-            Payment::class,
-            ['update', 'getIsTransactionApproved']
-        );
+        $this->paymentMock = $this->getMockBuilder(Payment::class)
+            ->addMethods(['getIsTransactionApproved'])
+            ->onlyMethods(['update'])
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->resultRedirectMock = $this->createPartialMock(
             Redirect::class,
@@ -111,7 +114,8 @@ class ReviewPaymentTest extends TestCase
 
         $this->requestMock = $this->getMockBuilder(Http::class)
             ->setMethods(['getParam'])
-            ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->contextMock->expects($this->once())->method('getRequest')->willReturn($this->requestMock);
         $this->contextMock->expects($this->once())->method('getMessageManager')->willReturn($this->messageManagerMock);
         $this->contextMock->expects($this->once())

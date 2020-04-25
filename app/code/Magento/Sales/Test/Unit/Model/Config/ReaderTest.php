@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Sales\Test\Unit\Model\Config;
 
 use Magento\Framework\App\Config\FileResolver;
@@ -26,16 +28,20 @@ class ReaderTest extends TestCase
     {
         $fileResolver = $this->getMockBuilder(
             FileResolver::class
-        )->disableOriginalConstructor()->getMock();
+        )->disableOriginalConstructor()
+            ->getMock();
         $converter = $this->getMockBuilder(
             Converter::class
-        )->disableOriginalConstructor()->getMock();
+        )->disableOriginalConstructor()
+            ->getMock();
         $schema = $this->getMockBuilder(
             SchemaLocator::class
-        )->disableOriginalConstructor()->getMock();
+        )->disableOriginalConstructor()
+            ->getMock();
         $validator = $this->getMockBuilder(
             ValidationStateInterface::class
-        )->disableOriginalConstructor()->getMock();
+        )->disableOriginalConstructor()
+            ->getMock();
         $this->_reader = new Reader($fileResolver, $converter, $schema, $validator);
     }
 

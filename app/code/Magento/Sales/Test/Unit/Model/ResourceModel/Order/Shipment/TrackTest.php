@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Sales\Test\Unit\Model\ResourceModel\Order\Shipment;
 
 use Magento\Framework\App\ResourceConnection;
@@ -63,16 +65,16 @@ class TrackTest extends TestCase
         );
         $this->appResourceMock->expects($this->any())
             ->method('getConnection')
-            ->will($this->returnValue($this->connectionMock));
+            ->willReturn($this->connectionMock);
         $this->connectionMock->expects($this->any())
             ->method('describeTable')
-            ->will($this->returnValue([]));
+            ->willReturn([]);
         $this->connectionMock->expects($this->any())
             ->method('insert');
         $this->connectionMock->expects($this->any())
             ->method('lastInsertId');
-        $this->trackModelMock->expects($this->any())->method('hasDataChanges')->will($this->returnValue(true));
-        $this->trackModelMock->expects($this->any())->method('isSaveAllowed')->will($this->returnValue(true));
+        $this->trackModelMock->expects($this->any())->method('hasDataChanges')->willReturn(true);
+        $this->trackModelMock->expects($this->any())->method('isSaveAllowed')->willReturn(true);
 
         $relationProcessorMock = $this->createMock(
             ObjectRelationProcessor::class
@@ -104,8 +106,8 @@ class TrackTest extends TestCase
             ->willReturn(true);
         $this->validatorMock->expects($this->once())
             ->method('validate')
-            ->with($this->equalTo($this->trackModelMock))
-            ->will($this->returnValue([]));
+            ->with($this->trackModelMock)
+            ->willReturn([]);
         $this->trackModelMock->expects($this->any())->method('getData')->willReturn([]);
         $this->trackResource->save($this->trackModelMock);
         $this->assertTrue(true);
@@ -124,8 +126,8 @@ class TrackTest extends TestCase
             ->willReturn(true);
         $this->validatorMock->expects($this->once())
             ->method('validate')
-            ->with($this->equalTo($this->trackModelMock))
-            ->will($this->returnValue(['warning message']));
+            ->with($this->trackModelMock)
+            ->willReturn(['warning message']);
         $this->trackModelMock->expects($this->any())->method('getData')->willReturn([]);
         $this->trackResource->save($this->trackModelMock);
         $this->assertTrue(true);

@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Sales\Test\Unit\Block\Order\Email\Items;
 
@@ -70,7 +71,6 @@ class DefaultItemsTest extends TestCase
 
         $this->itemMock = $this->getMockBuilder(OrderItem::class)
             ->disableOriginalConstructor()
-            ->setMethods(['__wakeup'])
             ->getMock();
     }
 
@@ -81,7 +81,7 @@ class DefaultItemsTest extends TestCase
         $this->layoutMock->expects($this->once())
             ->method('getBlock')
             ->with('item_price')
-            ->will($this->returnValue($this->priceRenderBlock));
+            ->willReturn($this->priceRenderBlock);
 
         $this->priceRenderBlock->expects($this->once())
             ->method('setItem')
@@ -89,7 +89,7 @@ class DefaultItemsTest extends TestCase
 
         $this->priceRenderBlock->expects($this->once())
             ->method('toHtml')
-            ->will($this->returnValue($html));
+            ->willReturn($html);
 
         $this->assertEquals($html, $this->block->getItemPrice($this->itemMock));
     }

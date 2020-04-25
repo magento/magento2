@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 /**
  * Test class for \Magento\Sales\Block\Adminhtml\Order\Totals\TaxTest
@@ -35,7 +36,7 @@ class TaxTest extends TestCase
             ->getMock();
         $taxHelperMock->expects($this->any())
             ->method('getCalculatedTaxes')
-            ->will($this->returnValue($getCalculatedTax));
+            ->willReturn($getCalculatedTax);
 
         $this->taxMock = $this->getMockBuilder(Tax::class)
             ->setConstructorArgs($this->_getConstructArguments($taxHelperMock))
@@ -57,7 +58,7 @@ class TaxTest extends TestCase
     {
         $this->taxMock->expects($this->once())
             ->method('getOrder')
-            ->will($this->returnValue($source));
+            ->willReturn($source);
 
         $actualResult = $this->taxMock->getFullTaxInfo();
         $this->assertSame($expectedResult, $actualResult);
@@ -77,7 +78,7 @@ class TaxTest extends TestCase
     ) {
         $this->taxMock->expects($this->once())
             ->method('getSource')
-            ->will($this->returnValue($source));
+            ->willReturn($source);
 
         $actualResult = $this->taxMock->getFullTaxInfo();
         $this->assertSame($expectedResult, $actualResult);
@@ -113,12 +114,12 @@ class TaxTest extends TestCase
         return [
             'source is not an instance of \Magento\Sales\Model\Order' => [null, []],
             'source is an instance of \Magento\Sales\Model\Order and has reasonable data' => [
-                    $salesModelOrderMock,
-                    [
-                        'tax' => 'tax',
-                        'shipping_tax' => 'shipping_tax',
-                    ],
-                ]
+                $salesModelOrderMock,
+                [
+                    'tax' => 'tax',
+                    'shipping_tax' => 'shipping_tax',
+                ],
+            ]
         ];
     }
 
@@ -133,11 +134,9 @@ class TaxTest extends TestCase
     {
         $invoiceMock = $this->getMockBuilder(Invoice::class)
             ->disableOriginalConstructor()
-            ->setMethods(['__wakeup'])
             ->getMock();
         $creditMemoMock = $this->getMockBuilder(Creditmemo::class)
             ->disableOriginalConstructor()
-            ->setMethods(['__wakeup'])
             ->getMock();
 
         $expected = [

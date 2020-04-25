@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Sales\Test\Unit\Model\Order;
 
@@ -168,7 +169,7 @@ class PaymentTest extends TestCase
 
         $this->context->expects($this->atLeastOnce())
             ->method('getEventDispatcher')
-            ->will($this->returnValue($this->eventManagerMock));
+            ->willReturn($this->eventManagerMock);
 
         $this->helper = $this->getMockBuilder(Data::class)
             ->disableOriginalConstructor()
@@ -225,7 +226,7 @@ class PaymentTest extends TestCase
             )
             ->getMock();
         $this->helper->method('getMethodInstance')
-            ->will($this->returnValue($this->paymentMethod));
+            ->willReturn($this->paymentMethod);
 
         $this->order = $this->getMockBuilder(Order::class)
             ->disableOriginalConstructor()
@@ -311,7 +312,7 @@ class PaymentTest extends TestCase
     {
         $this->helper->expects($this->once())
             ->method('getMethodInstance')
-            ->will($this->returnValue($this->paymentMethod));
+            ->willReturn($this->paymentMethod);
         // check fix for partial refunds in Payflow Pro
         $this->paymentMethod->expects($this->once())
             ->method('canVoid')
@@ -326,7 +327,7 @@ class PaymentTest extends TestCase
 
         $this->helper->expects($this->once())
             ->method('getMethodInstance')
-            ->will($this->returnValue($this->paymentMethod));
+            ->willReturn($this->paymentMethod);
 
         $this->paymentMethod->expects($this->any())
             ->method('getConfigData')
@@ -355,7 +356,7 @@ class PaymentTest extends TestCase
         $this->order->expects($this->any())->method('getBaseTotalDue')->willReturn($sum);
         $this->helper->expects($this->once())
             ->method('getMethodInstance')
-            ->will($this->returnValue($this->paymentMethod));
+            ->willReturn($this->paymentMethod);
         $this->paymentMethod->expects($this->once())
             ->method('getConfigPaymentAction')
             ->willReturn(AbstractMethod::ACTION_ORDER);
@@ -416,7 +417,7 @@ class PaymentTest extends TestCase
         $this->order->expects($this->any())->method('getBaseTotalDue')->willReturn($sum);
         $this->helper->expects($this->once())
             ->method('getMethodInstance')
-            ->will($this->returnValue($this->paymentMethod));
+            ->willReturn($this->paymentMethod);
         $this->paymentMethod->expects($this->once())
             ->method('getConfigPaymentAction')
             ->willReturn(AbstractMethod::ACTION_AUTHORIZE);
@@ -465,7 +466,7 @@ class PaymentTest extends TestCase
         $this->order->expects($this->any())->method('getBaseTotalDue')->willReturn($sum);
         $this->helper->expects($this->once())
             ->method('getMethodInstance')
-            ->will($this->returnValue($this->paymentMethod));
+            ->willReturn($this->paymentMethod);
         $this->payment->setTransactionId($this->transactionId);
         $this->paymentMethod->expects($this->once())
             ->method('getConfigPaymentAction')
@@ -512,7 +513,7 @@ class PaymentTest extends TestCase
         $this->order->expects($this->any())->method('getBaseTotalDue')->willReturn($sum);
         $this->helper->expects($this->once())
             ->method('getMethodInstance')
-            ->will($this->returnValue($this->paymentMethod));
+            ->willReturn($this->paymentMethod);
         $this->paymentMethod->expects($this->once())
             ->method('getConfigPaymentAction')
             ->willReturn(AbstractMethod::ACTION_AUTHORIZE_CAPTURE);
@@ -634,11 +635,10 @@ class PaymentTest extends TestCase
 
         $this->helper->expects($this->once())
             ->method('getMethodInstance')
-            ->will($this->returnValue($this->paymentMethod));
+            ->willReturn($this->paymentMethod);
 
         $this->paymentMethod->expects($this->once())
-            ->method('setStore')
-            ->will($this->returnSelf());
+            ->method('setStore')->willReturnSelf();
 
         $this->paymentMethod->expects($this->once())
             ->method('acceptPayment')
@@ -688,11 +688,10 @@ class PaymentTest extends TestCase
 
         $this->helper->expects($this->once())
             ->method('getMethodInstance')
-            ->will($this->returnValue($this->paymentMethod));
+            ->willReturn($this->paymentMethod);
 
         $this->paymentMethod->expects($this->once())
-            ->method('setStore')
-            ->will($this->returnSelf());
+            ->method('setStore')->willReturnSelf();
 
         $this->paymentMethod->expects($this->once())
             ->method('acceptPayment')
@@ -729,11 +728,10 @@ class PaymentTest extends TestCase
 
         $this->helper->expects($this->once())
             ->method('getMethodInstance')
-            ->will($this->returnValue($this->paymentMethod));
+            ->willReturn($this->paymentMethod);
 
         $this->paymentMethod->expects($this->once())
-            ->method('setStore')
-            ->will($this->returnSelf());
+            ->method('setStore')->willReturnSelf();
 
         $this->paymentMethod->expects($this->once())
             ->method('acceptPayment')
@@ -756,11 +754,10 @@ class PaymentTest extends TestCase
 
         $this->helper->expects($this->once())
             ->method('getMethodInstance')
-            ->will($this->returnValue($this->paymentMethod));
+            ->willReturn($this->paymentMethod);
 
         $this->paymentMethod->expects($this->once())
-            ->method('setStore')
-            ->will($this->returnSelf());
+            ->method('setStore')->willReturnSelf();
 
         $this->paymentMethod->expects($this->once())
             ->method('denyPayment')
@@ -813,11 +810,10 @@ class PaymentTest extends TestCase
 
         $this->helper->expects($this->once())
             ->method('getMethodInstance')
-            ->will($this->returnValue($this->paymentMethod));
+            ->willReturn($this->paymentMethod);
 
         $this->paymentMethod->expects($this->once())
-            ->method('setStore')
-            ->will($this->returnSelf());
+            ->method('setStore')->willReturnSelf();
 
         $this->paymentMethod->expects($this->once())
             ->method('denyPayment')
@@ -848,11 +844,10 @@ class PaymentTest extends TestCase
 
         $this->helper->expects($this->once())
             ->method('getMethodInstance')
-            ->will($this->returnValue($this->paymentMethod));
+            ->willReturn($this->paymentMethod);
 
         $this->paymentMethod->expects($this->once())
-            ->method('setStore')
-            ->will($this->returnSelf());
+            ->method('setStore')->willReturnSelf();
 
         $this->paymentMethod->expects($this->once())
             ->method('denyPayment')
@@ -887,11 +882,10 @@ class PaymentTest extends TestCase
 
         $this->helper->expects($this->never())
             ->method('getMethodInstance')
-            ->will($this->returnValue($this->paymentMethod));
+            ->willReturn($this->paymentMethod);
 
         $this->paymentMethod->expects($this->never())
-            ->method('setStore')
-            ->will($this->returnSelf());
+            ->method('setStore')->willReturnSelf();
 
         $this->paymentMethod->expects($this->never())
             ->method('denyPayment')
@@ -936,7 +930,7 @@ class PaymentTest extends TestCase
             ->willReturn($storeId);
         $this->helper->expects($this->once())
             ->method('getMethodInstance')
-            ->will($this->returnValue($this->paymentMethod));
+            ->willReturn($this->paymentMethod);
         $this->paymentMethod->expects($this->once())
             ->method('setStore')
             ->with($storeId)
@@ -996,7 +990,7 @@ class PaymentTest extends TestCase
             ->willReturn($storeId);
         $this->helper->expects($this->once())
             ->method('getMethodInstance')
-            ->will($this->returnValue($this->paymentMethod));
+            ->willReturn($this->paymentMethod);
         $this->paymentMethod->expects($this->once())
             ->method('setStore')
             ->with($storeId)
@@ -1038,7 +1032,7 @@ class PaymentTest extends TestCase
             ->willReturn($storeId);
         $this->helper->expects($this->once())
             ->method('getMethodInstance')
-            ->will($this->returnValue($this->paymentMethod));
+            ->willReturn($this->paymentMethod);
         $this->paymentMethod->expects($this->once())
             ->method('setStore')
             ->with($storeId)
@@ -1080,7 +1074,7 @@ class PaymentTest extends TestCase
             ->willReturn($storeId);
         $this->helper->expects($this->once())
             ->method('getMethodInstance')
-            ->will($this->returnValue($this->paymentMethod));
+            ->willReturn($this->paymentMethod);
         $this->paymentMethod->expects($this->once())
             ->method('setStore')
             ->with($storeId)
@@ -1148,11 +1142,10 @@ class PaymentTest extends TestCase
 
         $this->helper->expects($this->once())
             ->method('getMethodInstance')
-            ->will($this->returnValue($this->paymentMethod));
+            ->willReturn($this->paymentMethod);
 
         $this->paymentMethod->expects($this->once())
-            ->method('setStore')
-            ->will($this->returnSelf());
+            ->method('setStore')->willReturnSelf();
 
         $this->paymentMethod->expects($this->once())
             ->method('acceptPayment')
@@ -1183,11 +1176,10 @@ class PaymentTest extends TestCase
 
         $this->helper->expects($this->once())
             ->method('getMethodInstance')
-            ->will($this->returnValue($this->paymentMethod));
+            ->willReturn($this->paymentMethod);
 
         $this->paymentMethod->expects($this->once())
-            ->method('setStore')
-            ->will($this->returnSelf());
+            ->method('setStore')->willReturnSelf();
 
         $this->paymentMethod->expects($this->once())
             ->method('denyPayment')
@@ -1425,10 +1417,11 @@ class PaymentTest extends TestCase
 
         $this->order->expects($this->once())->method('getBaseCurrency')->willReturn($this->currencyMock);
 
-        $parentTransaction = $this->createPartialMock(
-            Transaction::class,
-            ['setOrderId', 'setPaymentId', 'loadByTxnId', 'getId', 'getTxnId', 'setTxnId', 'getTxnType']
-        );
+        $parentTransaction = $this->getMockBuilder(Transaction::class)
+            ->addMethods(['loadByTxnId'])
+            ->onlyMethods(['setOrderId', 'setPaymentId', 'getId', 'getTxnId', 'setTxnId', 'getTxnType'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $newTransactionId = $this->transactionId . '-' . Transaction::TYPE_REFUND;
         $this->transactionRepositoryMock->expects($this->once())
             ->method('getByTransactionId')
@@ -1477,10 +1470,11 @@ class PaymentTest extends TestCase
         $this->payment->setParentTransactionId($this->transactionId);
         $this->mockInvoice($this->transactionId, 1);
         $this->order->expects($this->once())->method('getBaseCurrency')->willReturn($this->currencyMock);
-        $parentTransaction = $this->createPartialMock(
-            Transaction::class,
-            ['setOrderId', 'setPaymentId', 'loadByTxnId', 'getId', 'getTxnId', 'getTxnType']
-        );
+        $parentTransaction = $this->getMockBuilder(Transaction::class)
+            ->addMethods(['loadByTxnId'])
+            ->onlyMethods(['setOrderId', 'setPaymentId', 'getId', 'getTxnId', 'getTxnType'])
+            ->disableOriginalConstructor()
+            ->getMock();
         //generate new transaction and check if not exists
         $this->transactionRepositoryMock->expects($this->once())
             ->method('getByTransactionId')
@@ -1699,17 +1693,17 @@ class PaymentTest extends TestCase
             $orderConfigMock->expects($this->any())
                 ->method('getStateStatuses')
                 ->with($state)
-                ->will($this->returnValue($allStatuses));
+                ->willReturn($allStatuses);
         }
 
         $orderConfigMock->expects($this->any())
             ->method('getStateDefaultStatus')
             ->with($state)
-            ->will($this->returnValue($status));
+            ->willReturn($status);
 
         $this->order->expects($this->any())
             ->method('getConfig')
-            ->will($this->returnValue($orderConfigMock));
+            ->willReturn($orderConfigMock);
     }
 
     /**
@@ -1718,19 +1712,24 @@ class PaymentTest extends TestCase
      */
     protected function getTransactionMock($transactionId)
     {
-        $transaction = $this->createPartialMock(Transaction::class, [
-                'getId',
-                'setOrderId',
-                'setPaymentId',
-                'loadByTxnId',
-                'setTxnId',
-                'getTransactionId',
-                'setTxnType',
-                'isFailsafe',
-                'getTxnId',
-                'getHtmlTxnId',
-                'getTxnType'
-            ]);
+        $transaction = $this->getMockBuilder(Transaction::class)
+            ->addMethods(['loadByTxnId'])
+            ->onlyMethods(
+                [
+                    'getId',
+                    'setOrderId',
+                    'setPaymentId',
+                    'setTxnId',
+                    'getTransactionId',
+                    'setTxnType',
+                    'isFailsafe',
+                    'getTxnId',
+                    'getHtmlTxnId',
+                    'getTxnType'
+                ]
+            )
+            ->disableOriginalConstructor()
+            ->getMock();
         $transaction->expects($this->any())->method('getId')->willReturn($transactionId);
         $transaction->expects($this->any())->method('getTxnId')->willReturn($transactionId);
         $transaction->expects($this->any())->method('getHtmlTxnId')->willReturn($transactionId);

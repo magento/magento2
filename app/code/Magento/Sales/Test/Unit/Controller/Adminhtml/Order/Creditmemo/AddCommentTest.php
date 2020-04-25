@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Sales\Test\Unit\Controller\Adminhtml\Order\Creditmemo;
 
@@ -12,6 +13,7 @@ use Magento\Framework\App\Request\Http;
 use Magento\Framework\Controller\Result\Json;
 use Magento\Framework\Controller\Result\JsonFactory;
 use Magento\Framework\Controller\Result\Raw;
+use Magento\Framework\Controller\Result\RawFactory;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
@@ -78,7 +80,7 @@ class AddCommentTest extends TestCase
     protected $resultJsonFactoryMock;
 
     /**
-     * @var \Magento\Framework\Controller\Result\RawFactory|MockObject
+     * @var RawFactory|MockObject
      */
     protected $resultRawFactoryMock;
 
@@ -120,16 +122,16 @@ class AddCommentTest extends TestCase
             ->getMock();
         $this->contextMock->expects($this->any())
             ->method('getRequest')
-            ->will($this->returnValue($this->requestMock));
+            ->willReturn($this->requestMock);
         $this->contextMock->expects($this->any())
             ->method('getResponse')
-            ->will($this->returnValue($this->responseMock));
+            ->willReturn($this->responseMock);
         $this->contextMock->expects($this->any())
             ->method('getObjectManager')
-            ->will($this->returnValue($this->objectManagerMock));
+            ->willReturn($this->objectManagerMock);
         $this->contextMock->expects($this->any())
             ->method('getTitle')
-            ->will($this->returnValue($titleMock));
+            ->willReturn($titleMock);
         $this->loaderMock = $this->getMockBuilder(CreditmemoLoader::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -144,7 +146,7 @@ class AddCommentTest extends TestCase
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
-        $this->resultRawFactoryMock = $this->getMockBuilder(\Magento\Framework\Controller\Result\RawFactory::class)
+        $this->resultRawFactoryMock = $this->getMockBuilder(RawFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
@@ -185,7 +187,7 @@ class AddCommentTest extends TestCase
 
         $this->requestMock->expects($this->any())
             ->method('setParam')
-            ->will($this->throwException($e));
+            ->willThrowException($e);
         $this->resultJsonFactoryMock->expects($this->once())
             ->method('create')
             ->willReturn($this->resultJsonMock);
@@ -213,7 +215,7 @@ class AddCommentTest extends TestCase
 
         $this->requestMock->expects($this->any())
             ->method('setParam')
-            ->will($this->throwException($e));
+            ->willThrowException($e);
         $this->resultJsonFactoryMock->expects($this->once())
             ->method('create')
             ->willReturn($this->resultJsonMock);

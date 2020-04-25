@@ -38,8 +38,8 @@ class AssignOrderToCustomerObserverTest extends TestCase
             ->getMock();
 
         $this->assignmentMock =  $this->getMockBuilder(CustomerAssignment::class)
-        ->disableOriginalConstructor()
-        ->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->sut = new AssignOrderToCustomerObserver($this->orderRepositoryMock, $this->assignmentMock);
     }
@@ -58,7 +58,8 @@ class AssignOrderToCustomerObserverTest extends TestCase
         /** @var Observer|MockObject $observerMock */
         $observerMock = $this->createMock(Observer::class);
         /** @var Event|MockObject $eventMock */
-        $eventMock = $this->getMockBuilder(Event::class)->disableOriginalConstructor()
+        $eventMock = $this->getMockBuilder(Event::class)
+            ->disableOriginalConstructor()
             ->setMethods(['getData'])
             ->getMock();
         /** @var CustomerInterface|MockObject $customerMock */

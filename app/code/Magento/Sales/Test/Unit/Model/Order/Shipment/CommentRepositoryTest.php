@@ -97,10 +97,16 @@ class CommentRepositoryTest extends TestCase
         $this->shipmentCommentSender = $this->getMockBuilder(ShipmentCommentSender::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->loggerMock = $this->getMockBuilder(LoggerInterface::class)->disableOriginalConstructor()->getMock();
+        $this->loggerMock = $this->getMockBuilder(LoggerInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
 
-        $this->shipmentMock = $this->getMockBuilder(Shipment::class)->disableOriginalConstructor()->getMock();
-        $this->commentMock = $this->getMockBuilder(Comment::class)->disableOriginalConstructor()->getMock();
+        $this->shipmentMock = $this->getMockBuilder(Shipment::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->commentMock = $this->getMockBuilder(Comment::class)
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->commentRepository = new CommentRepository(
             $this->commentResource,
