@@ -1,0 +1,33 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+?>
+<?php
+/** @var \Magento\Framework\View\Element\Template $block */
+
+$chooseText = $block->escapeHtml($block->getChooseText());
+$classes = $block->getClasses();
+
+$attribute = $block->getData('attribute');
+$attributeCode = $attribute['code'];
+$attributeLabel = $attribute['label'];
+
+$selectHtml = '<select class="' . $classes['select'] . ' ' . $attributeCode . '"><option value="0" data-option-id="0">' . $chooseText . '</option>';
+
+foreach($attribute['options'] as $option) {
+    $optionId = $option['id'];
+    $optionLabel = $block->escapeHtml($option['label'] ?? '');
+
+    $optionAttributes = ' value="' . $optionId . '" data-option-id="' . $optionId . '"';
+
+    if (empty($option['products'])) {
+        $optionAttributes .= ' data-option-empty="true"';
+    }
+
+    $selectHtml .= '<option ' . $optionAttributes . '>' . $optionLabel . '</option>';
+}
+
+echo $selectHtml . '</select>';
+?>

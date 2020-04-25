@@ -1,0 +1,71 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+?>
+<?php
+/** @var \Magento\Framework\View\Element\Template $block*/
+
+$config = $block->getConfig();
+$swatchConfig = $block->getSwatchConfig();
+$sizeConfig = $block->getSwatchSizeConfig();
+$classes = $block->getClasses();
+?>
+<?php foreach($config['attributes'] as $attributeId => $attribute): ?>
+    <?php
+        $attributeCode = $attribute['code'];
+        $attributeLabel = $attribute['label'];
+        $attributeLabelId = "option-label-$attributeCode-$attributeId";
+        $attributeLabelClass = $classes['attribute_label'];
+        $attributeSelectedClass = $classes['attribute_selected_option'];
+
+        if (!$block->getEnableControlLabel()) {
+            $attributeLabelClass .= ' visually-hidden';
+            $attributeSelectedClass .= ' visually-hidden';
+        }
+    ?>
+    <div class="<?= $classes['attribute'] . ' ' . $attributeCode ?>" data-attribute-code="<?= $attributeCode ?>" data-attribute-id="<?= $attributeId ?>">
+        <span id="<?= $attributeLabelId ?>" class="<?= $attributeLabelClass ?>"><?= $attributeLabel ?></span>
+        <span class="<?= $attributeSelectedClass ?>"></span>
+        <div aria-activedescendant="" tabindex="0" aria-invalid="false" aria-required="true" role="listbox" aria-labelledby="<?= $attributeLabelId ?>" class="<?= $classes['attribute_options_wrapper'] ?>">
+        <?php
+        if (isset($swatchConfig[$attributeId])) {
+            $attributeConfig = $swatchConfig[$attributeId];
+            $displayedOptions = 0;
+
+            $swatchOption = $block
+                ->getChildBlock('swatch_option')
+                ->setAttributeLabelId($attributeLabelId)
+                ->setClasses($classes);
+
+            foreach($attribute['options'] as $optionIndex => $option) {
+                $optionId = $option['id'];
+                $optionConfig = $attributeConfig[$optionId] ?? null;
+
+                if ($block->getOnlySwatches() && !$optionConfig) {
+                    continue;
+                }
+
+                if ($block->getMoreButtonLimit() === $displayedOptions++) {
+                    echo '<a href="#" class="' . $classes['more_button'] . '"><span>' . $block->getMoreButtonText() . '</span></a>';
+                }
+
+                echo $swatchOption
+                    ->setOption($option)
+                    ->setOptionConfig($optionConfig)
+                    ->setIndex($optionIndex)
+                    ->toHtml();
+            }
+        } else {
+            echo $block
+                ->getChildBlock('swatch_select')
+                ->setData('attribute', $attribute)
+                ->setClasses($classes)
+                ->toHtml();
+        }
+        ?>
+        </div>
+        <input class="<?= $classes['attribute_input'] ?> super-attribute-select" name="super_attribute[<?= $attributeId ?>]" type="hidden" value="" data-selector="super_attribute[<?= $attributeId ?>]" data-validate="{required: true}" aria-required="true" aria-invalid="false">
+    </div>
+<?php endforeach ?>

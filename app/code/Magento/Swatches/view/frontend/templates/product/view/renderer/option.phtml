@@ -1,0 +1,83 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+?>
+<?php
+/** @var \Magento\Framework\View\Element\Template $block */
+
+$option = $block->getOption();
+$optionConfig = $block->getOptionConfig();
+$attributeLabelId = $block->getAttributeLabelId();
+$classes = $block->getClasses();
+
+$optionHtml = '';
+$optionId = $option['id'];
+$optionType = intval($optionConfig['type']);
+$optionIndex = $block->getIndex();
+$optionLabel = $block->escapeHtml($optionConfig['label'] ?? '');
+
+$optionWidth = 110;
+$optionHeight = 90;
+if (isset($sizeConfig['swatchThumb'])) {
+    $optionWidth = $sizeConfig['swatchThumb']['width'];
+    $optionHeight = $sizeConfig['swatchThumb']['height'];
+}
+
+$optionAttributes = ' id="' . $attributeLabelId . '-item-' . $optionId . '"' .
+    ' index="' . $optionIndex . '"' .
+    ' aria-checked="false"' .
+    ' aria-describedby="' . $attributeLabelId . '"' .
+    ' tabindex="0"' .
+    ' data-option-type="' . $optionType . '"' .
+    ' data-option-id="' . $optionId . '"' .
+    ' data-option-label="' . $optionLabel . '"' .
+    ' aria-label="' . $optionLabel . '"' .
+    ' role="option"' .
+    ' data-thumb-width="' . $optionWidth . '"' .
+    ' data-thumb-height="' . $optionHeight . '"';
+
+$optionThumb = $optionConfig['thumb'] ?? '';
+if ($optionThumb) {
+    $optionAttributes .= ' data-option-tooltip-thumb="' . $optionThumb . '"';
+}
+
+$optionValue = $block->escapeHtml($optionConfig['value'] ?? '');
+if ($optionValue) {
+    $optionAttributes .= ' data-option-tooltip-value="' . $optionValue . '"';
+}
+
+if (empty($option['products'])) {
+    $optionAttributes .= ' data-option-empty="true"';
+}
+
+$optionHtml = '<div class="' . $classes['option'];
+switch ($optionType) {
+    case 0:
+        // Text
+        $optionHtml .= ' text" ' . $optionAttributes . '>' . ($optionValue ?: $optionLabel);
+        break;
+    case 1:
+        // Color
+        $optionHtml .= ' color" ' . $optionAttributes . ' style="background-color: ' . $optionValue . ';">';
+        break;
+    case 2:
+        // Image
+        $optionSwatchImageWidth = 30;
+        $optionSwatchImageHeight = 20;
+        if (isset($sizeConfig['swatchImage'])) {
+            $optionSwatchImageWidth = $sizeConfig['swatchImage']['width'];
+            $optionSwatchImageHeight = $sizeConfig['swatchImage']['height'];
+        }
+        $optionHtml .= ' image" ' . $optionAttributes . ' style="background-image: url(' . $optionValue . ');" width="' . $optionSwatchImageWidth . '" height="' . $optionSwatchImageHeight . '">';
+        break;
+    case 3:
+        // Clear
+        $optionHtml .= '" ' . $optionAttributes . '>';
+        break;
+    default:
+        $optionHtml .= '" ' . $optionAttributes . '>' . $optionLabel;
+        break;
+}
+echo $optionHtml . '</div>';

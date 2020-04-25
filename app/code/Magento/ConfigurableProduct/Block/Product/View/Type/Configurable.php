@@ -215,11 +215,11 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
     }
 
     /**
-     * Composes configuration for js
+     * Returns swatches configuration.
      *
-     * @return string
+     * @return array
      */
-    public function getJsonConfig()
+    public function getConfig()
     {
         $store = $this->getCurrentStore();
         $currentProduct = $this->getProduct();
@@ -235,7 +235,6 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
             'priceFormat' => $this->localeFormat->getPriceFormat(),
             'prices' => $this->variationPrices->getFormattedPrices($this->getProduct()->getPriceInfo()),
             'productId' => $currentProduct->getId(),
-            'chooseText' => __('Choose an Option...'),
             'images' => $this->getOptionImages(),
             'index' => isset($options['index']) ? $options['index'] : [],
         ];
@@ -244,9 +243,17 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
             $config['defaultValues'] = $attributesData['defaultValues'];
         }
 
-        $config = array_merge($config, $this->_getAdditionalConfig());
+        return array_merge($config, $this->_getAdditionalConfig());
+    }
 
-        return $this->jsonEncoder->encode($config);
+    /**
+     * Returns swatches configuration in JSON.
+     *
+     * @return string
+     */
+    public function getJsonConfig()
+    {
+        return $this->jsonEncoder->encode($this->getConfig());
     }
 
     /**

@@ -5,17 +5,39 @@
  * See COPYING.txt for license details.
  */
 -->
-<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-      xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <body>
         <referenceContainer name="product.info.options.configurable" remove="true"/>
         <referenceBlock name="product.info.options.wrapper">
-            <block class="Magento\Swatches\Block\Product\Renderer\Configurable" name="product.info.options.swatches"
-                   as="swatch_options" before="-">
+            <block class="Magento\Swatches\Block\Product\Renderer\Configurable" name="product.info.options.swatches" as="swatch_options" before="-">
                 <arguments>
-                    <argument name="configurable_view_model"
-                              xsi:type="object">Magento\Swatches\ViewModel\Product\Renderer\Configurable</argument>
+                    <argument name="configurable_view_model" xsi:type="object">Magento\Swatches\ViewModel\Product\Renderer\Configurable</argument>
+                    <argument name="classes" xsi:type="array">
+                        <item name="attribute" xsi:type="string">swatch-attribute</item>
+                        <item name="attribute_label" xsi:type="string">swatch-attribute-label</item>
+                        <item name="attribute_selected_option" xsi:type="string">swatch-attribute-selected-option</item>
+                        <item name="attribute_options_wrapper" xsi:type="string">swatch-attribute-options</item>
+                        <item name="attribute_input" xsi:type="string">swatch-input</item>
+                        <item name="more_button" xsi:type="string">swatch-more</item>
+                        <item name="option" xsi:type="string">swatch-option</item>
+                        <item name="select" xsi:type="string">swatch-select</item>
+                    </argument>
+                    <argument name="in_product_list" xsi:type="string">false</argument>
                 </arguments>
+                <block name="product.info.options.swatches.attributes" as="swatch_attributes" template="Magento_Swatches::product/view/renderer/attributes.phtml">
+                    <arguments>
+                        <argument name="only_swatches" xsi:type="boolean">false</argument>
+                        <argument name="enable_control_label" xsi:type="boolean">true</argument>
+                        <argument name="more_button_text" xsi:type="string" translate="true">More</argument>
+                        <argument name="more_button_limit" xsi:type="number">-1</argument>
+                    </arguments>
+                    <block name="product.info.options.swatches.option" as="swatch_option" template="Magento_Swatches::product/view/renderer/option.phtml"/>
+                    <block name="product.info.options.swatches.select" as="swatch_select" template="Magento_Swatches::product/view/renderer/select.phtml">
+                        <arguments>
+                            <argument name="choose_text" xsi:type="string" translate="true">Choose an option...</argument>
+                        </arguments>
+                    </block>
+                </block>
             </block>
         </referenceBlock>
     </body>

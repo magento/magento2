@@ -5,22 +5,44 @@
  */
 ?>
 <?php
-/** @var $block \Magento\Swatches\Block\Product\Renderer\Configurable */
+/** @var \Magento\Swatches\Block\Product\Renderer\Configurable $block */
 /** @var \Magento\Swatches\ViewModel\Product\Renderer\Configurable $configurableViewModel */
-$configurableViewModel = $block->getConfigurableViewModel()
-?>
-<div class="swatch-opt" data-role="swatch-options"></div>
 
+$config = $block->getConfig();
+$swatchConfig = $block->getSwatchConfig();
+$sizeConfig = $block->getSwatchSizeConfig();
+$classes = $block->getClasses();
+$configurableViewModel = $block->getConfigurableViewModel();
+?>
+<div class="swatch-opt" data-role="swatch-options">
+    <?php
+    echo $block
+        ->getChildBlock('swatch_attributes')
+        ->setConfig($config)
+        ->setSwatchConfig($swatchConfig)
+        ->setSizeConfig($sizeConfig)
+        ->setClasses($classes)
+        ->toHtml();
+    ?>
+</div>
 <script type="text/x-magento-init">
     {
         "[data-role=swatch-options]": {
             "Magento_Swatches/js/swatch-renderer": {
-                "jsonConfig": <?= /* @noEscape */ $swatchOptions = $block->getJsonConfig() ?>,
-                "jsonSwatchConfig": <?= /* @noEscape */ $swatchOptions = $block->getJsonSwatchConfig() ?>,
+                "jsonConfig": <?= /* @noEscape */ json_encode($config) ?>,
+                "jsonSwatchConfig": <?= /* @noEscape */ json_encode($swatchConfig) ?>,
                 "mediaCallback": "<?= $block->escapeJs($block->escapeUrl($block->getMediaCallback())) ?>",
-                "gallerySwitchStrategy": "<?= $block->escapeJs($block->getVar('gallery_switch_strategy', 'Magento_ConfigurableProduct')) ?: 'replace'; ?>",
-                "jsonSwatchImageSizeConfig": <?= /* @noEscape */ $block->getJsonSwatchSizeConfig() ?>,
-                "showTooltip": <?= $block->escapeJs($configurableViewModel->getShowSwatchTooltip()) ?>
+                "gallerySwitchStrategy": "<?= $block->escapeJs($block->getVar('gallery_switch_strategy', 'Magento_ConfigurableProduct')) ?: 'replace' ?>",
+                "showTooltip": <?= $block->escapeJs($configurableViewModel->getShowSwatchTooltip()) ?>,
+                "classes": {
+                    "attributeClass": "<?= $block->escapeJs($classes['attribute']) ?>",
+                    "attributeSelectedOptionLabelClass": "<?= $block->escapeJs($classes['attribute_selected_option']) ?>",
+                    "attributeOptionsWrapper": "<?= $block->escapeJs($classes['attribute_options_wrapper']) ?>",
+                    "attributeInput": "<?= $block->escapeJs($classes['attribute_input']) ?>",
+                    "optionClass": "<?= $block->escapeJs($classes['option']) ?>",
+                    "selectClass": "<?= $block->escapeJs($classes['select']) ?>",
+                    "moreButton": "<?= $block->escapeJs($classes['more_button']) ?>"
+                }
             }
         },
         "*" : {

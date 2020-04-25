@@ -148,10 +148,10 @@ class Configurable extends \Magento\Swatches\Block\Product\Renderer\Configurable
      *
      * @return string
      */
-    public function getJsonConfig()
+    public function getConfig()
     {
         $this->unsetData('allow_products');
-        return parent::getJsonConfig();
+        return parent::getConfig();
     }
 
     /**

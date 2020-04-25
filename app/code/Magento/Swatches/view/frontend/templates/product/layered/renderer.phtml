@@ -50,9 +50,7 @@
                                  data-option-label="<?= $block->escapeHtmlAttr($label['label']) ?>"
                                  data-option-tooltip-thumb="<?= $block->escapeUrl($swatchThumbPath) ?>"
                                  data-option-tooltip-value=""
-                                 style="background: url(<?=
-                                 /*  @noEscape */ $escapedUrl
-                                                        ?>) no-repeat center; background-size: initial;">
+                                 style="background-image: url(<?= /*  @noEscape */ $escapedUrl ?>)">
                             </div>
                             <?php break;
                         case '1':
@@ -66,9 +64,7 @@
                                  data-option-tooltip-value="<?= $block->escapeHtmlAttr(
                                      $swatchData['swatches'][$option]['value']
                                  ) ?>"
-                                 style="background: <?= $block->escapeHtmlAttr(
-                                     $swatchData['swatches'][$option]['value']
-                                 ) ?> no-repeat center; background-size: initial;">
+                                 style="background-color: <?= $block->escapeHtmlAttr($swatchData['swatches'][$option]['value']) ?>;">
                             </div>
                             <?php break;
                         case '0':
@@ -90,10 +86,17 @@
     </div>
 </div>
 
-<script>
-    require(["jquery", "Magento_Swatches/js/swatch-renderer"], function ($) {
-        $('.swatch-layered.<?= $block->escapeJs($swatchData['attribute_code']) ?>')
-            .find('[data-option-type="1"], [data-option-type="2"], [data-option-type="0"], [data-option-type="3"]')
-            .SwatchRendererTooltip();
-    });
+<?php
+$swatchTooltipWrapper = '.swatch-layered.' . $block->escapeJs($swatchData['attribute_code']);
+$swatchTooltipTargets = [];
+for ($swatchType = 0; $swatchType <= 3; $swatchType++) {
+    $swatchTooltipTargets[] = $swatchTooltipWrapper . ' [data-option-type=\"' . $swatchType . '\"]';
+}
+?>
+<script type="text/x-magento-init">
+    {
+        "<?= implode(', ', $swatchTooltipTargets) ?>": {
+            "Magento_Swatches/js/swatch-renderer-tooltip": {}
+        }
+    }
 </script>

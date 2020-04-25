@@ -169,11 +169,11 @@ class Configurable extends \Magento\ConfigurableProduct\Block\Product\View\Type\
     }
 
     /**
-     * Get Swatch config data
+     * Get swatch config data
      *
-     * @return string
+     * @return array
      */
-    public function getJsonSwatchConfig()
+    public function getSwatchConfig()
     {
         $attributesData = $this->getSwatchAttributesData();
         $allOptionIds = $this->getConfigurableOptionsIds($attributesData);
@@ -193,7 +193,17 @@ class Configurable extends \Magento\ConfigurableProduct\Block\Product\View\Type\
             }
         }
 
-        return $this->jsonEncoder->encode($config);
+        return $config;
+    }
+
+    /**
+     * Get swatch config data as JSON
+     *
+     * @return string
+     */
+    public function getJsonSwatchConfig()
+    {
+        return $this->jsonEncoder->encode($this->getSwatchConfig());
     }
 
     /**
@@ -509,18 +519,32 @@ class Configurable extends \Magento\ConfigurableProduct\Block\Product\View\Type\
     /**
      * Get Swatch image size config data.
      *
-     * @return string
+     * @return array
      */
-    public function getJsonSwatchSizeConfig()
+    public function getSwatchSizeConfig()
     {
         $imageConfig = $this->swatchMediaHelper->getImageConfig();
         $sizeConfig = [];
 
-        $sizeConfig[self::SWATCH_IMAGE_NAME]['width'] = $imageConfig[Swatch::SWATCH_IMAGE_NAME]['width'];
-        $sizeConfig[self::SWATCH_IMAGE_NAME]['height'] = $imageConfig[Swatch::SWATCH_IMAGE_NAME]['height'];
-        $sizeConfig[self::SWATCH_THUMBNAIL_NAME]['height'] = $imageConfig[Swatch::SWATCH_THUMBNAIL_NAME]['height'];
-        $sizeConfig[self::SWATCH_THUMBNAIL_NAME]['width'] = $imageConfig[Swatch::SWATCH_THUMBNAIL_NAME]['width'];
+        $sizeConfig[self::SWATCH_IMAGE_NAME] = [
+            'width' => $imageConfig[Swatch::SWATCH_IMAGE_NAME]['width'],
+            'height' => $imageConfig[Swatch::SWATCH_IMAGE_NAME]['height']
+        ];
+        $sizeConfig[self::SWATCH_THUMBNAIL_NAME] = [
+            'width' => $imageConfig[Swatch::SWATCH_THUMBNAIL_NAME]['width'],
+            'height' => $imageConfig[Swatch::SWATCH_THUMBNAIL_NAME]['height']
+        ];
 
-        return $this->jsonEncoder->encode($sizeConfig);
+        return $sizeConfig;
+    }
+
+    /**
+     * Get swatch image size config data as JSON.
+     *
+     * @return string
+     */
+    public function getJsonSwatchSizeConfig()
+    {
+        return $this->jsonEncoder->encode($this->getSwatchSizeConfig());
     }
 }
