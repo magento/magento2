@@ -6,6 +6,9 @@
 
 // @codingStandardsIgnoreStart
 namespace Magento\Framework\Code\Generator {
+    use PHPUnit\Framework\TestCase;
+    use Magento\Framework\Autoload\AutoloaderRegistry;
+    use Magento\Framework\Autoload\AutoloaderInterface;
     use Magento\Framework\Code\Test\Unit\Generator\DefinedClassesTest;
 
     /**

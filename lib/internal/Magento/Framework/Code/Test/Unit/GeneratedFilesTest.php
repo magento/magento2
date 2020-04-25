@@ -144,7 +144,7 @@ class GeneratedFilesTest extends TestCase
      * @param bool|null $processLocked
      * @return void
      */
-    private function expectProcessLocked(int $times, bool $processLocked = null): void
+    private function expectProcessLocked(int $times, bool $processLocked = false): void
     {
         $this->lockManager->expects($this->exactly($times))
             ->method('isLocked')

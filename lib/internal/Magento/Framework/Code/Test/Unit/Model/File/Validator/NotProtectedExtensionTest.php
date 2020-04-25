@@ -37,13 +37,11 @@ class NotProtectedExtensionTest extends TestCase
         )->method(
             'getValue'
         )->with(
-            $this->equalTo(
-                NotProtectedExtension::XML_PATH_PROTECTED_FILE_EXTENSIONS
-            ),
-            $this->equalTo(ScopeInterface::SCOPE_STORE),
-            $this->equalTo(null)
-        )->will(
-            $this->returnValue($this->_protectedList)
+            NotProtectedExtension::XML_PATH_PROTECTED_FILE_EXTENSIONS,
+            ScopeInterface::SCOPE_STORE,
+            null
+        )->willReturn(
+            $this->_protectedList
         );
         $this->_model = new NotProtectedExtension($this->_scopeConfig);
     }
