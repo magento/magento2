@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -13,12 +13,13 @@ use Magento\Framework\DB\Select;
 use Magento\Theme\Model\ResourceModel\Theme;
 use Magento\Theme\Model\ResourceModel\ThemeFactory;
 use Magento\Theme\Model\Source\InitialThemeSource;
-use PHPUnit_Framework_MockObject_MockObject as Mock;
+use PHPUnit\Framework\MockObject\MockObject as Mock;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class InitialThemeSourceTest extends \PHPUnit\Framework\TestCase
+class InitialThemeSourceTest extends TestCase
 {
     /**
      * @var InitialThemeSource
@@ -60,7 +61,7 @@ class InitialThemeSourceTest extends \PHPUnit\Framework\TestCase
      */
     private $selectMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->deploymentConfigMock = $this->getMockBuilder(DeploymentConfig::class)
             ->disableOriginalConstructor()

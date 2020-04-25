@@ -1,15 +1,22 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Theme\Test\Unit\Model\Theme;
 
+use Magento\Framework\Data\Collection\EntityFactory;
+use Magento\Framework\Filesystem\Directory\ReadFactory;
+use Magento\Framework\Filesystem\Directory\ReadInterface;
+use Magento\Framework\View\Design\Theme\ThemePackage;
+use Magento\Framework\View\Design\Theme\ThemePackageList;
 use Magento\Framework\View\Design\ThemeInterface;
 use Magento\Theme\Model\Theme;
 use Magento\Theme\Model\Theme\Collection;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class CollectionTest extends \PHPUnit\Framework\TestCase
+class CollectionTest extends TestCase
 {
     /**
      * @var Collection
@@ -17,33 +24,33 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var \Magento\Framework\Config\ThemeFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Config\ThemeFactory|MockObject
      */
     private $themeConfigFactory;
 
     /**
-     * @var \Magento\Framework\Filesystem\Directory\ReadInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ReadInterface|MockObject
      */
     private $directory;
 
     /**
-     * @var \Magento\Framework\Data\Collection\EntityFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var EntityFactory|MockObject
      */
     private $entityFactory;
 
     /**
-     * @var \Magento\Framework\View\Design\Theme\ThemePackageList|\PHPUnit_Framework_MockObject_MockObject
+     * @var ThemePackageList|MockObject
      */
     private $themePackageList;
 
     /**
-     * @var \Magento\Framework\Filesystem\Directory\ReadFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var ReadFactory|MockObject
      */
     private $readDirFactory;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->entityFactory = $this->getMockBuilder(\Magento\Framework\Data\Collection\EntityFactory::class)
+        $this->entityFactory = $this->getMockBuilder(EntityFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
@@ -51,12 +58,12 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
             ->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
-        $this->directory = $this->getMockBuilder(\Magento\Framework\Filesystem\Directory\ReadInterface::class)
+        $this->directory = $this->getMockBuilder(ReadInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->themePackageList = $this->createMock(\Magento\Framework\View\Design\Theme\ThemePackageList::class);
-        $this->readDirFactory = $this->createMock(\Magento\Framework\Filesystem\Directory\ReadFactory::class);
+        $this->themePackageList = $this->createMock(ThemePackageList::class);
+        $this->readDirFactory = $this->createMock(ReadFactory::class);
         $this->readDirFactory->expects($this->any())
             ->method('create')
             ->will($this->returnValue($this->directory));
@@ -86,7 +93,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
         $parentTheme = ['parentThemeCode'];
         $parentThemePath = 'frontend/parent/theme';
 
-        $themePackage = $this->createMock(\Magento\Framework\View\Design\Theme\ThemePackage::class);
+        $themePackage = $this->createMock(ThemePackage::class);
         $themePackage->expects($this->any())
             ->method('getArea')
             ->will($this->returnValue('frontend'));
@@ -150,12 +157,10 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
         $this->assertInstanceOf(get_class($this->model), $this->model->loadData());
     }
 
-    /**
-     * @expectedException \UnexpectedValueException
-     * @expectedExceptionMessage Constraint 'unsupported_type' is not supported
-     */
     public function testAddConstraintUnsupportedType()
     {
+        $this->expectException('UnexpectedValueException');
+        $this->expectExceptionMessage('Constraint \'unsupported_type\' is not supported');
         $this->model->addConstraint('unsupported_type', 'value');
     }
 

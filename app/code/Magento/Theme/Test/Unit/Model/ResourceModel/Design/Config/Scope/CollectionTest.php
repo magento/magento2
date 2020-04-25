@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -8,43 +8,47 @@ namespace Magento\Theme\Test\Unit\Model\ResourceModel\Design\Config\Scope;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\ScopeTreeProviderInterface;
 use Magento\Framework\Data\Collection\EntityFactoryInterface;
+use Magento\Framework\DataObject;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Theme\Model\Design\Config\MetadataProviderInterface;
+use Magento\Theme\Model\Design\Config\ValueProcessor;
 use Magento\Theme\Model\ResourceModel\Design\Config\Scope\Collection;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class CollectionTest extends \PHPUnit\Framework\TestCase
+class CollectionTest extends TestCase
 {
     /** @var Collection */
     protected $collection;
 
-    /** @var  EntityFactoryInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var  EntityFactoryInterface|MockObject */
     protected $entityFactoryMock;
 
-    /** @var ScopeTreeProviderInterface|\PHPUnit_Framework_MockObject_MockObject*/
+    /** @var ScopeTreeProviderInterface|MockObject*/
     protected $scopeTreeMock;
 
-    /** @var MetadataProviderInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var MetadataProviderInterface|MockObject */
     protected $metadataProviderMock;
 
-    /** @var ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var ScopeConfigInterface|MockObject */
     protected $appConfigMock;
 
-    /** @var \Magento\Theme\Model\Design\Config\ValueProcessor|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var ValueProcessor|MockObject */
     protected $valueProcessor;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->entityFactoryMock = $this->getMockBuilder(
-            \Magento\Framework\Data\Collection\EntityFactoryInterface::class
+            EntityFactoryInterface::class
         )->getMockForAbstractClass();
-        $this->scopeTreeMock = $this->getMockBuilder(\Magento\Framework\App\ScopeTreeProviderInterface::class)
+        $this->scopeTreeMock = $this->getMockBuilder(ScopeTreeProviderInterface::class)
             ->getMockForAbstractClass();
         $this->metadataProviderMock =
-            $this->getMockBuilder(\Magento\Theme\Model\Design\Config\MetadataProviderInterface::class)
+            $this->getMockBuilder(MetadataProviderInterface::class)
                 ->getMockForAbstractClass();
-        $this->appConfigMock = $this->getMockBuilder(\Magento\Framework\App\Config\ScopeConfigInterface::class)
+        $this->appConfigMock = $this->getMockBuilder(ScopeConfigInterface::class)
             ->getMockForAbstractClass();
-        $this->valueProcessor = $this->getMockBuilder(\Magento\Theme\Model\Design\Config\ValueProcessor::class)
+        $this->valueProcessor = $this->getMockBuilder(ValueProcessor::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -125,19 +129,19 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
             );
 
         $expectedResult = [
-            new \Magento\Framework\DataObject([
+            new DataObject([
                 'store_website_id' => null,
                 'store_group_id' => null,
                 'store_id' => null,
                 'second_field' => 'DefaultValue'
             ]),
-            new \Magento\Framework\DataObject([
+            new DataObject([
                 'store_website_id' => 1,
                 'store_group_id' => null,
                 'store_id' => null,
                 'second_field' => 'WebsiteValue'
             ]),
-            new \Magento\Framework\DataObject([
+            new DataObject([
                 'store_website_id' => 1,
                 'store_group_id' => 1,
                 'store_id' => 1,

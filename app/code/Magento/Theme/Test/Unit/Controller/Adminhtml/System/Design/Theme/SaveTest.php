@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  *
  * Copyright © Magento, Inc. All rights reserved.
@@ -6,7 +6,14 @@
  */
 namespace Magento\Theme\Test\Unit\Controller\Adminhtml\System\Design\Theme;
 
-class SaveTest extends \Magento\Theme\Test\Unit\Controller\Adminhtml\System\Design\ThemeTest
+use Magento\Framework\View\Design\Theme\FlyweightFactory;
+use Magento\Theme\Model\Theme;
+use Magento\Theme\Model\Theme\Customization\File\CustomCss;
+use Magento\Theme\Model\Theme\Data;
+use Magento\Theme\Model\Theme\SingleFile;
+use Magento\Theme\Test\Unit\Controller\Adminhtml\System\Design\ThemeTest;
+
+class SaveTest extends ThemeTest
 {
     /**
      * @var string
@@ -51,32 +58,32 @@ class SaveTest extends \Magento\Theme\Test\Unit\Controller\Adminhtml\System\Desi
         $this->_request->expects($this->once(5))->method('getPostValue')->will($this->returnValue(true));
 
         $themeMock = $this->createPartialMock(
-            \Magento\Theme\Model\Theme::class,
+            Theme::class,
             ['save', 'load', 'setCustomization', 'getThemeImage', '__wakeup']
         );
 
-        $themeImage = $this->createMock(\Magento\Theme\Model\Theme\Data::class);
+        $themeImage = $this->createMock(Data::class);
         $themeMock->expects($this->any())->method('getThemeImage')->will($this->returnValue($themeImage));
 
         $themeFactory = $this->createPartialMock(
-            \Magento\Framework\View\Design\Theme\FlyweightFactory::class,
+            FlyweightFactory::class,
             ['create']
         );
         $themeFactory->expects($this->once())->method('create')->will($this->returnValue($themeMock));
 
         $this->_objectManagerMock->expects($this->at(0))
             ->method('get')
-            ->with(\Magento\Framework\View\Design\Theme\FlyweightFactory::class)
+            ->with(FlyweightFactory::class)
             ->will($this->returnValue($themeFactory));
 
         $this->_objectManagerMock->expects($this->at(1))
             ->method('get')
-            ->with(\Magento\Theme\Model\Theme\Customization\File\CustomCss::class)
+            ->with(CustomCss::class)
             ->will($this->returnValue(null));
 
         $this->_objectManagerMock->expects($this->at(2))
             ->method('create')
-            ->with(\Magento\Theme\Model\Theme\SingleFile::class)
+            ->with(SingleFile::class)
             ->will($this->returnValue(null));
 
         $this->_model->execute();

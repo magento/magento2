@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -7,9 +7,12 @@ namespace Magento\Theme\Test\Unit\Model\Config\Processor;
 
 use Magento\Framework\Stdlib\ArrayManager;
 use Magento\Framework\View\Design\Theme\ListInterface;
+use Magento\Framework\View\Design\ThemeInterface;
 use Magento\Theme\Model\Config\Processor\DesignTheme;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class DesignThemeTest extends \PHPUnit\Framework\TestCase
+class DesignThemeTest extends TestCase
 {
     /**
      * @var DesignTheme
@@ -33,11 +36,11 @@ class DesignThemeTest extends \PHPUnit\Framework\TestCase
     ];
 
     /**
-     * @var ListInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ListInterface|MockObject
      */
     private $themeList;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->arrayManager = new ArrayManager();
         $this->themeList = $this->getMockBuilder(ListInterface::class)->getMockForAbstractClass();
@@ -65,7 +68,7 @@ class DesignThemeTest extends \PHPUnit\Framework\TestCase
     {
         $themesMap = [];
         foreach ($this->themes as $themeId => $themeFullPath) {
-            $themeMock = $this->getMockBuilder(\Magento\Framework\View\Design\ThemeInterface::class)
+            $themeMock = $this->getMockBuilder(ThemeInterface::class)
                 ->getMockForAbstractClass();
             $themeMock->expects(static::any())->method('getId')->willReturn($themeId);
 

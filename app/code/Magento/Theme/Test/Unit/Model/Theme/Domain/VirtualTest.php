@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -9,7 +9,17 @@
  */
 namespace Magento\Theme\Test\Unit\Model\Theme\Domain;
 
-class VirtualTest extends \PHPUnit\Framework\TestCase
+use Magento\Framework\App\State;
+use Magento\Framework\DataObject;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\View\Design\ThemeInterface;
+use Magento\Theme\Model\Config\Customization;
+use Magento\Theme\Model\CopyService;
+use Magento\Theme\Model\Theme;
+use Magento\Theme\Model\Theme\Domain\Virtual;
+use PHPUnit\Framework\TestCase;
+
+class VirtualTest extends TestCase
 {
     /**
      * Test get existing staging theme
@@ -19,20 +29,20 @@ class VirtualTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetStagingThemeExisting()
     {
-        $themeStaging = $this->createMock(\Magento\Theme\Model\Theme::class);
+        $themeStaging = $this->createMock(Theme::class);
 
-        $theme = $this->createPartialMock(\Magento\Theme\Model\Theme::class, ['__wakeup', 'getStagingVersion']);
+        $theme = $this->createPartialMock(Theme::class, ['__wakeup', 'getStagingVersion']);
         $theme->expects($this->once())->method('getStagingVersion')->will($this->returnValue($themeStaging));
 
         $themeFactory = $this->createPartialMock(\Magento\Theme\Model\ThemeFactory::class, ['create']);
         $themeFactory->expects($this->never())->method('create');
 
-        $themeCopyService = $this->createPartialMock(\Magento\Theme\Model\CopyService::class, ['copy']);
+        $themeCopyService = $this->createPartialMock(CopyService::class, ['copy']);
         $themeCopyService->expects($this->never())->method('copy');
 
-        $customizationConfig = $this->createMock(\Magento\Theme\Model\Config\Customization::class);
+        $customizationConfig = $this->createMock(Customization::class);
 
-        $object = new \Magento\Theme\Model\Theme\Domain\Virtual(
+        $object = new Virtual(
             $theme,
             $themeFactory,
             $themeCopyService,
@@ -50,25 +60,25 @@ class VirtualTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetStagingThemeNew()
     {
-        $theme = $this->createPartialMock(\Magento\Theme\Model\Theme::class, ['__wakeup', 'getStagingVersion']);
+        $theme = $this->createPartialMock(Theme::class, ['__wakeup', 'getStagingVersion']);
         $theme->expects($this->once())->method('getStagingVersion')->will($this->returnValue(null));
-        $appState = $this->createPartialMock(\Magento\Framework\App\State::class, ['getAreaCode']);
+        $appState = $this->createPartialMock(State::class, ['getAreaCode']);
         $appState->expects($this->any())->method('getAreaCode')->will($this->returnValue('fixture_area'));
-        $appStateProperty = new \ReflectionProperty(\Magento\Theme\Model\Theme::class, '_appState');
+        $appStateProperty = new \ReflectionProperty(Theme::class, '_appState');
         $appStateProperty->setAccessible(true);
-        /** @var $theme \Magento\Framework\DataObject */
+        /** @var DataObject $theme */
         $theme->setData(
             [
                 'id' => 'fixture_theme_id',
                 'theme_title' => 'fixture_theme_title',
                 'preview_image' => 'fixture_preview_image',
                 'is_featured' => 'fixture_is_featured',
-                'type' => \Magento\Framework\View\Design\ThemeInterface::TYPE_VIRTUAL,
+                'type' => ThemeInterface::TYPE_VIRTUAL,
             ]
         );
         $appStateProperty->setValue($theme, $appState);
 
-        $themeStaging = $this->createPartialMock(\Magento\Theme\Model\Theme::class, ['__wakeup', 'setData', 'save']);
+        $themeStaging = $this->createPartialMock(Theme::class, ['__wakeup', 'setData', 'save']);
         $themeStaging->expects(
             $this->at(0)
         )->method(
@@ -80,7 +90,7 @@ class VirtualTest extends \PHPUnit\Framework\TestCase
                 'theme_title' => 'fixture_theme_title - Staging',
                 'preview_image' => 'fixture_preview_image',
                 'is_featured' => 'fixture_is_featured',
-                'type' => \Magento\Framework\View\Design\ThemeInterface::TYPE_STAGING,
+                'type' => ThemeInterface::TYPE_STAGING,
             ]
         );
         $appStateProperty->setValue($themeStaging, $appState);
@@ -89,12 +99,12 @@ class VirtualTest extends \PHPUnit\Framework\TestCase
         $themeFactory = $this->createPartialMock(\Magento\Theme\Model\ThemeFactory::class, ['create']);
         $themeFactory->expects($this->once())->method('create')->will($this->returnValue($themeStaging));
 
-        $themeCopyService = $this->createPartialMock(\Magento\Theme\Model\CopyService::class, ['copy']);
+        $themeCopyService = $this->createPartialMock(CopyService::class, ['copy']);
         $themeCopyService->expects($this->once())->method('copy')->with($theme, $themeStaging);
 
-        $customizationConfig = $this->createMock(\Magento\Theme\Model\Config\Customization::class);
+        $customizationConfig = $this->createMock(Customization::class);
 
-        $object = new \Magento\Theme\Model\Theme\Domain\Virtual(
+        $object = new Virtual(
             $theme,
             $themeFactory,
             $themeCopyService,
@@ -113,11 +123,11 @@ class VirtualTest extends \PHPUnit\Framework\TestCase
     public function testIsAssigned()
     {
         $customizationConfig = $this->createPartialMock(
-            \Magento\Theme\Model\Config\Customization::class,
+            Customization::class,
             ['isThemeAssignedToStore']
         );
         $themeMock = $this->createPartialMock(
-            \Magento\Theme\Model\Theme::class,
+            Theme::class,
             ['__wakeup', 'getCollection', 'getId']
         );
         $customizationConfig->expects(
@@ -129,13 +139,13 @@ class VirtualTest extends \PHPUnit\Framework\TestCase
         )->will(
             $this->returnValue(true)
         );
-        $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $objectManagerHelper = new ObjectManager($this);
         $constructArguments = $objectManagerHelper->getConstructArguments(
-            \Magento\Theme\Model\Theme\Domain\Virtual::class,
+            Virtual::class,
             ['theme' => $themeMock, 'customizationConfig' => $customizationConfig]
         );
-        /** @var $model \Magento\Theme\Model\Theme\Domain\Virtual */
-        $model = $objectManagerHelper->getObject(\Magento\Theme\Model\Theme\Domain\Virtual::class, $constructArguments);
+        /** @var \Magento\Theme\Model\Theme\Domain\Virtual $model */
+        $model = $objectManagerHelper->getObject(Virtual::class, $constructArguments);
         $this->assertEquals(true, $model->isAssigned());
     }
 
@@ -144,7 +154,7 @@ class VirtualTest extends \PHPUnit\Framework\TestCase
      */
     public function physicalThemeDataProvider()
     {
-        $physicalTheme = $this->getMockBuilder(\Magento\Framework\View\Design\ThemeInterface::class)
+        $physicalTheme = $this->getMockBuilder(ThemeInterface::class)
             ->setMethods(['isPhysical', 'getId'])
             ->getMockForAbstractClass();
         $physicalTheme->expects($this->once())
@@ -167,9 +177,9 @@ class VirtualTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetPhysicalTheme($data)
     {
-        $themeMock = $this->createPartialMock(\Magento\Theme\Model\Theme::class, ['__wakeup', 'getParentTheme']);
+        $themeMock = $this->createPartialMock(Theme::class, ['__wakeup', 'getParentTheme']);
         $parentThemeMock = $this->createPartialMock(
-            \Magento\Theme\Model\Theme::class,
+            Theme::class,
             ['__wakeup', 'isPhysical', 'getParentTheme']
         );
 
@@ -183,12 +193,12 @@ class VirtualTest extends \PHPUnit\Framework\TestCase
             ->method('isPhysical')
             ->willReturn(false);
 
-        $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $objectManagerHelper = new ObjectManager($this);
         $object = $objectManagerHelper->getObject(
-            \Magento\Theme\Model\Theme\Domain\Virtual::class,
+            Virtual::class,
             ['theme' => $themeMock]
         );
-        /** @var $object \Magento\Theme\Model\Theme\Domain\Virtual */
+        /** @var \Magento\Theme\Model\Theme\Domain\Virtual $object */
         $this->assertEquals($data, $object->getPhysicalTheme());
     }
 }

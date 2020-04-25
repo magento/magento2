@@ -1,31 +1,33 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Theme\Test\Unit\Ui\Component\Design\Config\SearchRobots;
 
-use Magento\Framework\View\Element\UiComponent\ContextInterface;
-use Magento\Framework\View\Element\UiComponentFactory;
 use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Theme\Ui\Component\Design\Config\SearchRobots\ResetButton;
+use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Framework\View\Element\UiComponent\Processor;
+use Magento\Framework\View\Element\UiComponentFactory;
+use Magento\Theme\Ui\Component\Design\Config\SearchRobots\ResetButton;
 use Magento\Ui\Component\Form\Field;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class ResetButtonTest extends \PHPUnit\Framework\TestCase
+class ResetButtonTest extends TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject | ContextInterface
+     * @var MockObject|ContextInterface
      */
     private $contextMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject | UiComponentFactory
+     * @var MockObject|UiComponentFactory
      */
     private $componentFactoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject | ScopeConfigInterface
+     * @var MockObject|ScopeConfigInterface
      */
     private $scopeConfigMock;
 
@@ -44,7 +46,7 @@ class ResetButtonTest extends \PHPUnit\Framework\TestCase
      */
     private $resetButton;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->contextMock = $this->getMockBuilder(ContextInterface::class)
             ->disableOriginalConstructor()
@@ -77,7 +79,7 @@ class ResetButtonTest extends \PHPUnit\Framework\TestCase
             $this->scopeConfigMock
         );
     }
-    
+
     public function testPrepare()
     {
         $robotsContent = "Content";

@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -9,10 +9,24 @@
  */
 namespace Magento\Theme\Test\Unit\Model\Wysiwyg;
 
+use Magento\Backend\Model\Session;
+use Magento\Framework\Filesystem;
+use Magento\Framework\Filesystem\Directory\Write;
+use Magento\Framework\Filesystem\Io\File;
+use Magento\Framework\Image\Adapter\Gd2;
+use Magento\Framework\Image\AdapterFactory;
+use Magento\Framework\ObjectManagerInterface;
+use Magento\Framework\Url\DecoderInterface;
+use Magento\Framework\Url\EncoderInterface;
+use Magento\MediaStorage\Model\File\Uploader;
+use Magento\Theme\Helper\Storage;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class StorageTest extends \PHPUnit\Framework\TestCase
+class StorageTest extends TestCase
 {
     /**
      * @var string
@@ -20,17 +34,17 @@ class StorageTest extends \PHPUnit\Framework\TestCase
     protected $_storageRoot;
 
     /**
-     * @var \Magento\Framework\Filesystem|\PHPUnit_Framework_MockObject_MockObject
+     * @var Filesystem|MockObject
      */
     protected $_filesystem;
 
     /**
-     * @var \Magento\Theme\Helper\Storage|\PHPUnit_Framework_MockObject_MockObject
+     * @var Storage|MockObject
      */
     protected $_helperStorage;
 
     /**
-     * @var \Magento\Framework\ObjectManagerInterface
+     * @var ObjectManagerInterface
      */
     protected $_objectManager;
 
@@ -40,30 +54,30 @@ class StorageTest extends \PHPUnit\Framework\TestCase
     protected $_storageModel;
 
     /**
-     * @var \Magento\Framework\Image\AdapterFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var AdapterFactory|MockObject
      */
     protected $_imageFactory;
 
     /**
-     * @var \Magento\Framework\Filesystem\Directory\Write|\PHPUnit_Framework_MockObject_MockObject
+     * @var Write|MockObject
      */
     protected $directoryWrite;
 
     /**
-     * @var \Magento\Framework\Url\EncoderInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var EncoderInterface|MockObject
      */
     protected $urlEncoder;
 
     /**
-     * @var \Magento\Framework\Url\DecoderInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var DecoderInterface|MockObject
      */
     protected $urlDecoder;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->_filesystem = $this->createMock(\Magento\Framework\Filesystem::class);
+        $this->_filesystem = $this->createMock(Filesystem::class);
 
-        $file = $this->createPartialMock(\Magento\Framework\Filesystem\Io\File::class, ['getPathInfo']);
+        $file = $this->createPartialMock(File::class, ['getPathInfo']);
 
         $file->expects($this->any())
             ->method('getPathInfo')
@@ -76,7 +90,7 @@ class StorageTest extends \PHPUnit\Framework\TestCase
             );
 
         $this->_helperStorage = $this->createPartialMock(
-            \Magento\Theme\Helper\Storage::class,
+            Storage::class,
             [
                 'urlEncode',
                 'getStorageType',
@@ -89,16 +103,16 @@ class StorageTest extends \PHPUnit\Framework\TestCase
             ]
         );
 
-        $reflection = new \ReflectionClass(\Magento\Theme\Helper\Storage::class);
+        $reflection = new \ReflectionClass(Storage::class);
         $reflection_property = $reflection->getProperty('file');
         $reflection_property->setAccessible(true);
         $reflection_property->setValue($this->_helperStorage, $file);
 
-        $this->_objectManager = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
-        $this->_imageFactory = $this->createMock(\Magento\Framework\Image\AdapterFactory::class);
-        $this->directoryWrite = $this->createMock(\Magento\Framework\Filesystem\Directory\Write::class);
-        $this->urlEncoder = $this->createPartialMock(\Magento\Framework\Url\EncoderInterface::class, ['encode']);
-        $this->urlDecoder = $this->createPartialMock(\Magento\Framework\Url\DecoderInterface::class, ['decode']);
+        $this->_objectManager = $this->createMock(ObjectManagerInterface::class);
+        $this->_imageFactory = $this->createMock(AdapterFactory::class);
+        $this->directoryWrite = $this->createMock(Write::class);
+        $this->urlEncoder = $this->createPartialMock(EncoderInterface::class, ['encode']);
+        $this->urlDecoder = $this->createPartialMock(DecoderInterface::class, ['decode']);
 
         $this->_filesystem->expects(
             $this->once()
@@ -120,7 +134,7 @@ class StorageTest extends \PHPUnit\Framework\TestCase
         $this->_storageRoot = '/root';
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->_filesystem = null;
         $this->_helperStorage = null;
@@ -155,7 +169,7 @@ class StorageTest extends \PHPUnit\Framework\TestCase
 
         /** Prepare image */
 
-        $image = $this->createMock(\Magento\Framework\Image\Adapter\Gd2::class);
+        $image = $this->createMock(Gd2::class);
 
         $image->expects($this->once())->method('open')->will($this->returnValue(true));
 
@@ -169,7 +183,7 @@ class StorageTest extends \PHPUnit\Framework\TestCase
 
         /** Prepare session */
 
-        $session = $this->createMock(\Magento\Backend\Model\Session::class);
+        $session = $this->createMock(Session::class);
 
         $this->_helperStorage->expects($this->any())->method('getSession')->will($this->returnValue($session));
 
@@ -182,10 +196,10 @@ class StorageTest extends \PHPUnit\Framework\TestCase
 
     /**
      * cover \Magento\Theme\Model\Wysiwyg\Storage::uploadFile
-     * @expectedException \Magento\Framework\Exception\LocalizedException
      */
     public function testUploadInvalidFile()
     {
+        $this->expectException('Magento\Framework\Exception\LocalizedException');
         $uploader = $this->_prepareUploader();
 
         $uploader->expects($this->once())->method('save')->will($this->returnValue(null));
@@ -194,11 +208,11 @@ class StorageTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return MockObject
      */
     protected function _prepareUploader()
     {
-        $uploader = $this->createMock(\Magento\MediaStorage\Model\File\Uploader::class);
+        $uploader = $this->createMock(Uploader::class);
 
         $this->_objectManager->expects($this->once())->method('create')->will($this->returnValue($uploader));
 
@@ -283,20 +297,20 @@ class StorageTest extends \PHPUnit\Framework\TestCase
 
     /**
      * cover \Magento\Theme\Model\Wysiwyg\Storage::createFolder
-     * @expectedException \Magento\Framework\Exception\LocalizedException
      */
     public function testCreateFolderWithInvalidName()
     {
+        $this->expectException('Magento\Framework\Exception\LocalizedException');
         $newDirectoryName = 'dir2!#$%^&';
         $this->_storageModel->createFolder($newDirectoryName, $this->_storageRoot);
     }
 
     /**
      * cover \Magento\Theme\Model\Wysiwyg\Storage::createFolder
-     * @expectedException \Magento\Framework\Exception\LocalizedException
      */
     public function testCreateFolderDirectoryAlreadyExist()
     {
+        $this->expectException('Magento\Framework\Exception\LocalizedException');
         $newDirectoryName = 'mew';
         $fullNewPath = $this->_storageRoot . '/' . $newDirectoryName;
 
@@ -349,10 +363,10 @@ class StorageTest extends \PHPUnit\Framework\TestCase
 
     /**
      * cover \Magento\Theme\Model\Wysiwyg\Storage::getDirsCollection
-     * @expectedException \Magento\Framework\Exception\LocalizedException
      */
     public function testGetDirsCollectionWrongDirName()
     {
+        $this->expectException('Magento\Framework\Exception\LocalizedException');
         $this->directoryWrite->expects(
             $this->once()
         )->method(
@@ -545,10 +559,10 @@ class StorageTest extends \PHPUnit\Framework\TestCase
 
     /**
      * cover \Magento\Theme\Model\Wysiwyg\Storage::deleteDirectory
-     * @expectedException \Magento\Framework\Exception\LocalizedException
      */
     public function testDeleteRootDirectory()
     {
+        $this->expectException('Magento\Framework\Exception\LocalizedException');
         $directoryPath = $this->_storageRoot;
 
         $this->_helperStorage->expects(

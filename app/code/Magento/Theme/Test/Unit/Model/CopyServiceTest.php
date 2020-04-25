@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -7,11 +7,25 @@
 namespace Magento\Theme\Test\Unit\Model;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Event\ManagerInterface;
+use Magento\Framework\Filesystem;
+use Magento\Framework\Filesystem\Directory\Write;
+use Magento\Framework\View\Design\Theme\Customization;
+use Magento\Framework\View\Design\Theme\Customization\Path;
+use Magento\Framework\View\Design\Theme\FileFactory;
+use Magento\Theme\Model\CopyService;
+use Magento\Theme\Model\Theme;
+use Magento\Theme\Model\Theme\File;
+use Magento\Widget\Model\Layout\Link;
+use Magento\Widget\Model\Layout\Update;
+use Magento\Widget\Model\ResourceModel\Layout\Update\Collection;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class CopyServiceTest extends \PHPUnit\Framework\TestCase
+class CopyServiceTest extends TestCase
 {
     /**#@+
      * @var \Magento\Theme\Model\CopyService
@@ -19,67 +33,67 @@ class CopyServiceTest extends \PHPUnit\Framework\TestCase
     protected $object;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $fileFactory;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $filesystem;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $sourceTheme;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $targetTheme;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $link;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $linkCollection;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $update;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $updateCollection;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $updateFactory;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $customizationPath;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject[]
+     * @var MockObject[]
      */
     protected $targetFiles = [];
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject[]
+     * @var MockObject[]
      */
     protected $sourceFiles = [];
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $dirWriteMock;
 
@@ -87,9 +101,9 @@ class CopyServiceTest extends \PHPUnit\Framework\TestCase
      * @return void
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    protected function setUp()
+    protected function setUp(): void
     {
-        $sourceFileOne = $this->createPartialMock(\Magento\Theme\Model\Theme\File::class, ['__wakeup', 'delete']);
+        $sourceFileOne = $this->createPartialMock(File::class, ['__wakeup', 'delete']);
         $sourceFileOne->setData(
             [
                 'file_path' => 'fixture_file_path_one',
@@ -98,7 +112,7 @@ class CopyServiceTest extends \PHPUnit\Framework\TestCase
                 'sort_order' => 10,
             ]
         );
-        $sourceFileTwo = $this->createPartialMock(\Magento\Theme\Model\Theme\File::class, ['__wakeup', 'delete']);
+        $sourceFileTwo = $this->createPartialMock(File::class, ['__wakeup', 'delete']);
         $sourceFileTwo->setData(
             [
                 'file_path' => 'fixture_file_path_two',
@@ -109,30 +123,30 @@ class CopyServiceTest extends \PHPUnit\Framework\TestCase
         );
         $this->sourceFiles = [$sourceFileOne, $sourceFileTwo];
         $this->sourceTheme = $this->createPartialMock(
-            \Magento\Theme\Model\Theme::class,
+            Theme::class,
             ['__wakeup', 'getCustomization']
         );
 
         $this->targetFiles = [
-            $this->createPartialMock(\Magento\Theme\Model\Theme\File::class, ['__wakeup', 'delete']),
-            $this->createPartialMock(\Magento\Theme\Model\Theme\File::class, ['__wakeup', 'delete']),
+            $this->createPartialMock(File::class, ['__wakeup', 'delete']),
+            $this->createPartialMock(File::class, ['__wakeup', 'delete']),
         ];
         $this->targetTheme = $this->createPartialMock(
-            \Magento\Theme\Model\Theme::class,
+            Theme::class,
             ['__wakeup', 'getCustomization']
         );
         $this->targetTheme->setId(123);
 
-        $this->customizationPath = $this->createMock(\Magento\Framework\View\Design\Theme\Customization\Path::class);
+        $this->customizationPath = $this->createMock(Path::class);
 
         $this->fileFactory = $this->createPartialMock(
-            \Magento\Framework\View\Design\Theme\FileFactory::class,
+            FileFactory::class,
             ['create']
         );
         $this->filesystem =
-            $this->createPartialMock(\Magento\Framework\Filesystem::class, ['getDirectoryWrite']);
+            $this->createPartialMock(Filesystem::class, ['getDirectoryWrite']);
         $this->dirWriteMock = $this->createPartialMock(
-            \Magento\Framework\Filesystem\Directory\Write::class,
+            Write::class,
             ['isDirectory', 'search', 'copy', 'delete', 'read', 'copyFile', 'isExist']
         );
         $this->filesystem->expects(
@@ -148,12 +162,12 @@ class CopyServiceTest extends \PHPUnit\Framework\TestCase
         /* Init \Magento\Widget\Model\ResourceModel\Layout\Update\Collection model  */
         $this->updateFactory = $this->createPartialMock(\Magento\Widget\Model\Layout\UpdateFactory::class, ['create']);
         $this->update = $this->createPartialMock(
-            \Magento\Widget\Model\Layout\Update::class,
+            Update::class,
             ['__wakeup', 'getCollection']
         );
         $this->updateFactory->expects($this->at(0))->method('create')->will($this->returnValue($this->update));
         $this->updateCollection = $this->createPartialMock(
-            \Magento\Widget\Model\ResourceModel\Layout\Update\Collection::class,
+            Collection::class,
             ['addThemeFilter', 'delete', 'getIterator']
         );
         $this->update->expects(
@@ -165,16 +179,16 @@ class CopyServiceTest extends \PHPUnit\Framework\TestCase
         );
 
         /* Init Link an Link_Collection model */
-        $this->link = $this->createPartialMock(\Magento\Widget\Model\Layout\Link::class, ['__wakeup', 'getCollection']);
+        $this->link = $this->createPartialMock(Link::class, ['__wakeup', 'getCollection']);
         $this->linkCollection = $this->createPartialMock(
             \Magento\Widget\Model\ResourceModel\Layout\Link\Collection::class,
             ['addThemeFilter', 'getIterator', 'addFieldToFilter']
         );
         $this->link->expects($this->any())->method('getCollection')->will($this->returnValue($this->linkCollection));
 
-        $eventManager = $this->createPartialMock(\Magento\Framework\Event\ManagerInterface::class, ['dispatch']);
+        $eventManager = $this->createPartialMock(ManagerInterface::class, ['dispatch']);
 
-        $this->object = new \Magento\Theme\Model\CopyService(
+        $this->object = new CopyService(
             $this->filesystem,
             $this->fileFactory,
             $this->link,
@@ -184,7 +198,7 @@ class CopyServiceTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->object = null;
         $this->filesystem = null;
@@ -205,7 +219,7 @@ class CopyServiceTest extends \PHPUnit\Framework\TestCase
     public function testCopyLayoutUpdates()
     {
         $customization = $this->createPartialMock(
-            \Magento\Framework\View\Design\Theme\Customization::class,
+            Customization::class,
             ['getFiles']
         );
         $customization->expects($this->atLeastOnce())->method('getFiles')->will($this->returnValue([]));
@@ -228,12 +242,12 @@ class CopyServiceTest extends \PHPUnit\Framework\TestCase
         $this->linkCollection->expects($this->once())->method('addThemeFilter');
 
         $targetLinkOne = $this->createPartialMock(
-            \Magento\Widget\Model\Layout\Link::class,
+            Link::class,
             ['__wakeup', 'setId', 'setThemeId', 'save', 'setLayoutUpdateId']
         );
         $targetLinkOne->setData(['id' => 1, 'layout_update_id' => 1]);
         $targetLinkTwo = $this->createPartialMock(
-            \Magento\Widget\Model\Layout\Link::class,
+            Link::class,
             ['__wakeup', 'setId', 'setThemeId', 'save', 'setLayoutUpdateId']
         );
         $targetLinkTwo->setData(['id' => 2, 'layout_update_id' => 2]);
@@ -252,12 +266,12 @@ class CopyServiceTest extends \PHPUnit\Framework\TestCase
         $this->linkCollection->expects($this->any())->method('getIterator')->will($linkReturnValues);
 
         $targetUpdateOne = $this->createPartialMock(
-            \Magento\Widget\Model\Layout\Update::class,
+            Update::class,
             ['__wakeup', 'setId', 'load', 'save']
         );
         $targetUpdateOne->setData(['id' => 1]);
         $targetUpdateTwo = $this->createPartialMock(
-            \Magento\Widget\Model\Layout\Update::class,
+            Update::class,
             ['__wakeup', 'setId', 'load', 'save']
         );
         $targetUpdateTwo->setData(['id' => 2]);
@@ -274,7 +288,7 @@ class CopyServiceTest extends \PHPUnit\Framework\TestCase
     public function testCopyDatabaseCustomization()
     {
         $sourceCustom = $this->createPartialMock(
-            \Magento\Framework\View\Design\Theme\Customization::class,
+            Customization::class,
             ['getFiles']
         );
         $sourceCustom->expects(
@@ -292,7 +306,7 @@ class CopyServiceTest extends \PHPUnit\Framework\TestCase
             $this->returnValue($sourceCustom)
         );
         $targetCustom = $this->createPartialMock(
-            \Magento\Framework\View\Design\Theme\Customization::class,
+            Customization::class,
             ['getFiles']
         );
         $targetCustom->expects(
@@ -329,8 +343,8 @@ class CopyServiceTest extends \PHPUnit\Framework\TestCase
             $targetFile->expects($this->once())->method('delete');
         }
 
-        $newFileOne = $this->createPartialMock(\Magento\Theme\Model\Theme\File::class, ['__wakeup', 'setData', 'save']);
-        $newFileTwo = $this->createPartialMock(\Magento\Theme\Model\Theme\File::class, ['__wakeup', 'setData', 'save']);
+        $newFileOne = $this->createPartialMock(File::class, ['__wakeup', 'setData', 'save']);
+        $newFileTwo = $this->createPartialMock(File::class, ['__wakeup', 'setData', 'save']);
         $newFileOne->expects(
             $this->at(0)
         )->method(
@@ -380,7 +394,7 @@ class CopyServiceTest extends \PHPUnit\Framework\TestCase
     public function testCopyFilesystemCustomization()
     {
         $customization = $this->createPartialMock(
-            \Magento\Framework\View\Design\Theme\Customization::class,
+            Customization::class,
             ['getFiles']
         );
         $customization->expects($this->atLeastOnce())->method('getFiles')->will($this->returnValue([]));

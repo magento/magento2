@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -8,8 +8,10 @@ namespace Magento\Theme\Test\Unit\Block\Adminhtml\Design\Config\Edit;
 use Magento\Backend\Block\Widget\Context;
 use Magento\Framework\UrlInterface;
 use Magento\Theme\Block\Adminhtml\Design\Config\Edit\BackButton;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class BackButtonTest extends \PHPUnit\Framework\TestCase
+class BackButtonTest extends TestCase
 {
     /**
      * @var BackButton
@@ -17,16 +19,16 @@ class BackButtonTest extends \PHPUnit\Framework\TestCase
     protected $block;
 
     /**
-     * @var Context|\PHPUnit_Framework_MockObject_MockObject
+     * @var Context|MockObject
      */
     protected $context;
 
     /**
-     * @var UrlInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var UrlInterface|MockObject
      */
     protected $urlBuilder;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->initContext();
 
@@ -52,11 +54,11 @@ class BackButtonTest extends \PHPUnit\Framework\TestCase
 
     protected function initContext()
     {
-        $this->urlBuilder = $this->getMockBuilder(\Magento\Framework\UrlInterface::class)
+        $this->urlBuilder = $this->getMockBuilder(UrlInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->context = $this->getMockBuilder(\Magento\Backend\Block\Widget\Context::class)
+        $this->context = $this->getMockBuilder(Context::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->context->expects($this->any())

@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -8,18 +8,19 @@ namespace Magento\Theme\Test\Unit\Model\Theme\Plugin;
 
 use Magento\Framework\App\ActionInterface;
 use Magento\Framework\App\State;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Phrase;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Theme\Model\ResourceModel\Theme\Collection as ThemeCollectionResourceModel;
 use Magento\Theme\Model\Theme;
 use Magento\Theme\Model\Theme\Collection as ThemeCollection;
 use Magento\Theme\Model\Theme\Plugin\Registration as RegistrationPlugin;
-use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\Phrase;
 use Magento\Theme\Model\Theme\Registration as ThemeRegistration;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 
-class RegistrationTest extends \PHPUnit\Framework\TestCase
+class RegistrationTest extends TestCase
 {
     /**
      * @var ThemeRegistration|MockObject
@@ -56,7 +57,7 @@ class RegistrationTest extends \PHPUnit\Framework\TestCase
      */
     protected $plugin;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->themeRegistrationMock = $this->createMock(ThemeRegistration::class);
         $this->loggerMock = $this->getMockForAbstractClass(LoggerInterface::class, [], '', false);

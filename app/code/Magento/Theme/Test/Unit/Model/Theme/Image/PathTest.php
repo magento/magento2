@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -9,44 +9,52 @@
  */
 namespace Magento\Theme\Test\Unit\Model\Theme\Image;
 
-use \Magento\Theme\Model\Theme\Image\Path;
-
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Filesystem;
+use Magento\Framework\Filesystem\Directory\ReadInterface;
+use Magento\Framework\View\Asset\Repository;
 use Magento\Framework\View\Design\Theme\Image\PathInterface;
+use Magento\Store\Model\Store;
+use Magento\Store\Model\StoreManager;
+use Magento\Theme\Model\Theme;
+use Magento\Theme\Model\Theme\Image\Path;
 
-class PathTest extends \PHPUnit\Framework\TestCase
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class PathTest extends TestCase
 {
     /**
-     * @var \Magento\Theme\Model\Theme\Image\Path|\PHPUnit_Framework_MockObject_MockObject
+     * @var Path|MockObject
      */
     protected $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $filesystem;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\View\Asset\Repository
+     * @var MockObject|Repository
      */
     protected $_assetRepo;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Store\Model\StoreManager
+     * @var MockObject|StoreManager
      */
     protected $_storeManager;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Filesystem\Directory\ReadInterface
+     * @var MockObject|ReadInterface
      */
     protected $mediaDirectory;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->filesystem = $this->createMock(\Magento\Framework\Filesystem::class);
-        $this->mediaDirectory = $this->createMock(\Magento\Framework\Filesystem\Directory\ReadInterface::class);
-        $this->_assetRepo = $this->createMock(\Magento\Framework\View\Asset\Repository::class);
-        $this->_storeManager = $this->createMock(\Magento\Store\Model\StoreManager::class);
+        $this->filesystem = $this->createMock(Filesystem::class);
+        $this->mediaDirectory = $this->createMock(ReadInterface::class);
+        $this->_assetRepo = $this->createMock(Repository::class);
+        $this->_storeManager = $this->createMock(StoreManager::class);
 
         $this->mediaDirectory->expects($this->any())
             ->method('getRelativePath')
@@ -68,16 +76,16 @@ class PathTest extends \PHPUnit\Framework\TestCase
 
     public function testGetPreviewImageUrl()
     {
-        /** @var $theme \Magento\Theme\Model\Theme|\PHPUnit_Framework_MockObject_MockObject */
+        /** @var Theme|\PHPUnit\Framework\MockObject\MockObject $theme */
         $theme = $this->createPartialMock(
-            \Magento\Theme\Model\Theme::class,
+            Theme::class,
             ['getPreviewImage', 'isPhysical', '__wakeup']
         );
         $theme->expects($this->any())
             ->method('getPreviewImage')
             ->will($this->returnValue('image.png'));
 
-        $store = $this->createMock(\Magento\Store\Model\Store::class);
+        $store = $this->createMock(Store::class);
         $store->expects($this->any())->method('getBaseUrl')->will($this->returnValue('http://localhost/'));
         $this->_storeManager->expects($this->any())->method('getStore')->will($this->returnValue($store));
         $this->assertEquals('http://localhost/theme/preview/image.png', $this->model->getPreviewImageUrl($theme));
@@ -88,9 +96,9 @@ class PathTest extends \PHPUnit\Framework\TestCase
         $previewImage = 'preview.jpg';
         $expectedPath = 'theme/preview/preview.jpg';
 
-        /** @var $theme \Magento\Theme\Model\Theme|\PHPUnit_Framework_MockObject_MockObject */
+        /** @var Theme|\PHPUnit\Framework\MockObject\MockObject $theme */
         $theme = $this->createPartialMock(
-            \Magento\Theme\Model\Theme::class,
+            Theme::class,
             ['getPreviewImage', 'isPhysical', '__wakeup']
         );
 
@@ -114,7 +122,7 @@ class PathTest extends \PHPUnit\Framework\TestCase
     public function testDefaultPreviewImageUrlGetter()
     {
         $this->_assetRepo->expects($this->once())->method('getUrl')
-            ->with(\Magento\Theme\Model\Theme\Image\Path::DEFAULT_PREVIEW_IMAGE);
+            ->with(Path::DEFAULT_PREVIEW_IMAGE);
         $this->model->getPreviewImageDefaultUrl();
     }
 
@@ -125,7 +133,7 @@ class PathTest extends \PHPUnit\Framework\TestCase
     {
         $this->mediaDirectory->expects($this->any())
             ->method('getAbsolutePath')
-            ->with(\Magento\Framework\View\Design\Theme\Image\PathInterface::PREVIEW_DIRECTORY_PATH)
+            ->with(PathInterface::PREVIEW_DIRECTORY_PATH)
             ->will($this->returnValue('/theme/preview'));
         $this->assertEquals(
             '/theme/preview',
