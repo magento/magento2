@@ -34,10 +34,10 @@ class BackupRollbackFactoryTest extends TestCase
         );
         $objectManager->expects($this->exactly(2))
             ->method('create')
-            ->will($this->returnValueMap([
+            ->willReturnMap([
                 [ConsoleLogger::class, ['output' => $output], $consoleLogger],
                 [BackupRollback::class, ['log' => $consoleLogger], $factory],
-            ]));
+            ]);
         $model = new BackupRollbackFactory($objectManager);
         $this->assertInstanceOf(BackupRollback::class, $model->create($output));
     }

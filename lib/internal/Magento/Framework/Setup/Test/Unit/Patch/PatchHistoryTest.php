@@ -65,7 +65,7 @@ class PatchHistoryTest extends TestCase
     public function testFixAppliedPatch()
     {
         $this->expectException('LogicException');
-        $this->expectExceptionMessageRegExp('"Patch [a-zA-Z0-9\_]+ cannot be applied twice"');
+        $this->expectExceptionMessageMatches('"Patch [a-zA-Z0-9\_]+ cannot be applied twice"');
         /** @var PatchInterface|MockObject $patch1 */
         $patch1 = $this->createMock(PatchInterface::class);
         /** @var AdapterInterface|MockObject $adapterMock */
@@ -85,7 +85,7 @@ class PatchHistoryTest extends TestCase
     public function testFixPatchTwice()
     {
         $this->expectException('LogicException');
-        $this->expectExceptionMessageRegExp('"Patch [a-zA-Z0-9\_]+ cannot be applied twice"');
+        $this->expectExceptionMessageMatches('"Patch [a-zA-Z0-9\_]+ cannot be applied twice"');
         /** @var PatchInterface|MockObject $patch1 */
         $patch = $this->createMock(PatchInterface::class);
         /** @var AdapterInterface|MockObject $adapterMock */

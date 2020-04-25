@@ -204,7 +204,7 @@ class PatchApplierTest extends TestCase
     public function testApplyDataPatchForAlias($moduleName, $dataPatches, $moduleVersionInDb)
     {
         $this->expectException('Exception');
-        $this->expectExceptionMessageRegExp('"Unable to apply data patch .+ cannot be applied twice"');
+        $this->expectExceptionMessageMatches('"Unable to apply data patch .+ cannot be applied twice"');
         $this->dataPatchReaderMock->expects($this->once())
             ->method('read')
             ->with($moduleName)
@@ -235,14 +235,12 @@ class PatchApplierTest extends TestCase
         );
         $this->connectionMock->expects($this->exactly(1))->method('beginTransaction');
         $this->connectionMock->expects($this->never())->method('commit');
-        $this->patchHistoryMock->expects($this->any())->method('fixPatch')->will(
-            $this->returnCallback(
-                function ($param1) {
-                    if ($param1 == 'PatchAlias') {
-                        throw new \LogicException(sprintf("Patch %s cannot be applied twice", $param1));
-                    }
+        $this->patchHistoryMock->expects($this->any())->method('fixPatch')->willReturnCallback(
+            function ($param1) {
+                if ($param1 == 'PatchAlias') {
+                    throw new \LogicException(sprintf("Patch %s cannot be applied twice", $param1));
                 }
-            )
+            }
         );
         $this->patchApllier->applyDataPatch($moduleName);
     }
@@ -391,7 +389,7 @@ class PatchApplierTest extends TestCase
     public function testNonDataPatchApply()
     {
         $this->expectException('Exception');
-        $this->expectExceptionMessageRegExp('"Patch [a-zA-Z0-9\_]+ should implement DataPatchInterface"');
+        $this->expectExceptionMessageMatches('"Patch [a-zA-Z0-9\_]+ should implement DataPatchInterface"');
         $this->dataPatchReaderMock->expects($this->once())
             ->method('read')
             ->with('module1')
@@ -519,7 +517,7 @@ class PatchApplierTest extends TestCase
     public function testSchemaPatchApplyForPatchAlias($moduleName, $schemaPatches, $moduleVersionInDb)
     {
         $this->expectException('Exception');
-        $this->expectExceptionMessageRegExp('"Unable to apply patch .+ cannot be applied twice"');
+        $this->expectExceptionMessageMatches('"Unable to apply patch .+ cannot be applied twice"');
         $this->schemaPatchReaderMock->expects($this->once())
             ->method('read')
             ->with($moduleName)
@@ -544,14 +542,12 @@ class PatchApplierTest extends TestCase
             ->willReturn($patchRegistryMock);
 
         $this->patchFactoryMock->expects($this->any())->method('create')->willReturn($patch1);
-        $this->patchHistoryMock->expects($this->any())->method('fixPatch')->will(
-            $this->returnCallback(
-                function ($param1) {
-                    if ($param1 == 'PatchAlias') {
-                        throw new \LogicException(sprintf("Patch %s cannot be applied twice", $param1));
-                    }
+        $this->patchHistoryMock->expects($this->any())->method('fixPatch')->willReturnCallback(
+            function ($param1) {
+                if ($param1 == 'PatchAlias') {
+                    throw new \LogicException(sprintf("Patch %s cannot be applied twice", $param1));
                 }
-            )
+            }
         );
 
         $this->patchApllier->applySchemaPatch($moduleName);

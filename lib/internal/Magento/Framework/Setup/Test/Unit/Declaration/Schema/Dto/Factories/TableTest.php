@@ -34,8 +34,8 @@ class TableTest extends TestCase
     protected function setUp(): void
     {
         $this->objectManagerMock = $this->getMockBuilder(ObjectManagerInterface::class)
-             ->disableOriginalConstructor()
-             ->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->resourceConnectionMock = $this->getMockBuilder(ResourceConnection::class)
             ->disableOriginalConstructor()
             ->getMock();

@@ -83,8 +83,8 @@ class ValidationRulesTest extends TestCase
         self::assertEquals(
             [
                 [
-                        'column' => 'ref_decimal',
-                        'message' => 'Reference column ref_decimal in reference table ref_table do not have index',
+                    'column' => 'ref_decimal',
+                    'message' => 'Reference column ref_decimal in reference table ref_table do not have index',
                 ],
             ],
             $this->model->validate($schemaMock)

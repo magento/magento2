@@ -97,19 +97,19 @@ class BackupRollbackTest extends TestCase
             ->willReturn([]);
         $this->objectManager->expects($this->any())
             ->method('get')
-            ->will($this->returnValueMap([
+            ->willReturnMap([
                 [
                     State::class, $this->createMock(State::class)
                 ],
                 [ConfigLoaderInterface::class, $configLoader],
-            ]));
+            ]);
         $this->objectManager->expects($this->any())
             ->method('create')
-            ->will($this->returnValueMap([
+            ->willReturnMap([
                 [Helper::class, [], $this->helper],
                 [Filesystem::class, [], $this->filesystem],
                 [Db::class, [], $this->database],
-            ]));
+            ]);
         $this->model = new BackupRollback(
             $this->objectManager,
             $this->log,

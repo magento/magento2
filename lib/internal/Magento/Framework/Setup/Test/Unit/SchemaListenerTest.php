@@ -78,12 +78,12 @@ class SchemaListenerTest extends TestCase
             ['unsigned' => false, 'nullable' => false],
             'Decimal'
         )
-        ->addIndex(
+            ->addIndex(
             'INDEX_KEY',
             ['column_with_type_text'],
             ['type' => AdapterInterface::INDEX_TYPE_FULLTEXT]
         )
-        ->addForeignKey(
+            ->addForeignKey(
             'some_key',
             'decimal',
             'setup_tests_table1',
@@ -121,64 +121,64 @@ class SchemaListenerTest extends TestCase
         self::assertEquals(
             [
                 'timestamp' => [
-                        'xsi:type' => 'timestamp',
-                        'name' => 'timestamp',
-                        'on_update' => true,
-                        'nullable' => false,
-                        'default' => 'CURRENT_TIMESTAMP',
-                        'disabled' => false,
-                        'onCreate' => null,
-                        'comment' => 'Column with type timestamp init update',
-                    ],
+                    'xsi:type' => 'timestamp',
+                    'name' => 'timestamp',
+                    'on_update' => true,
+                    'nullable' => false,
+                    'default' => 'CURRENT_TIMESTAMP',
+                    'disabled' => false,
+                    'onCreate' => null,
+                    'comment' => 'Column with type timestamp init update',
+                ],
                 'integer' => [
-                        'xsi:type' => 'int',
-                        'name' => 'integer',
-                        'padding' => 11,
-                        'unsigned' => false,
-                        'nullable' => false,
-                        'identity' => true,
-                        'default' => null,
-                        'disabled' => false,
-                        'onCreate' => null,
-                        'comment' => 'Integer'
-                    ],
+                    'xsi:type' => 'int',
+                    'name' => 'integer',
+                    'padding' => 11,
+                    'unsigned' => false,
+                    'nullable' => false,
+                    'identity' => true,
+                    'default' => null,
+                    'disabled' => false,
+                    'onCreate' => null,
+                    'comment' => 'Integer'
+                ],
                 'decimal' => [
-                        'xsi:type' => 'decimal',
-                        'name' => 'decimal',
-                        'scale' => '12',
-                        'precision' => '25',
-                        'unsigned' => false,
-                        'nullable' => false,
-                        'default' => null,
-                        'disabled' => false,
-                        'onCreate' => null,
-                        'comment' => 'Decimal'
-                    ],
+                    'xsi:type' => 'decimal',
+                    'name' => 'decimal',
+                    'scale' => '12',
+                    'precision' => '25',
+                    'unsigned' => false,
+                    'nullable' => false,
+                    'default' => null,
+                    'disabled' => false,
+                    'onCreate' => null,
+                    'comment' => 'Decimal'
+                ],
             ],
             $tables['First_Module']['new_table']['columns']
         );
         self::assertEquals(
             [
                 'primary' => [
-                        'PRIMARY' => [
-                                'type' => 'primary',
-                                'name' => 'PRIMARY',
-                                'disabled' => false,
-                                'columns' => [
-                                        'INTEGER' => 'integer',
-                                    ],
-                            ],
+                    'PRIMARY' => [
+                        'type' => 'primary',
+                        'name' => 'PRIMARY',
+                        'disabled' => false,
+                        'columns' => [
+                            'INTEGER' => 'integer',
+                        ],
                     ],
+                ],
                 'foreign' => [
-                        'SOME_KEY' => [
-                                'table' => 'new_table',
-                                'column' => 'decimal',
-                                'referenceTable' => 'setup_tests_table1',
-                                'referenceColumn' => 'column_with_type_integer',
-                                'onDelete' => 'CASCADE',
-                                'disabled' => false,
-                            ],
+                    'SOME_KEY' => [
+                        'table' => 'new_table',
+                        'column' => 'decimal',
+                        'referenceTable' => 'setup_tests_table1',
+                        'referenceColumn' => 'column_with_type_integer',
+                        'onDelete' => 'CASCADE',
+                        'disabled' => false,
                     ],
+                ],
             ],
             $tables['First_Module']['new_table']['constraints']
         );
@@ -186,12 +186,12 @@ class SchemaListenerTest extends TestCase
         self::assertEquals(
             [
                 'INDEX_KEY' => [
-                        'columns' => [
-                                'column_with_type_text' => 'column_with_type_text',
-                            ],
-                        'indexType' => 'fulltext',
-                        'disabled' => false,
+                    'columns' => [
+                        'column_with_type_text' => 'column_with_type_text',
                     ],
+                    'indexType' => 'fulltext',
+                    'disabled' => false,
+                ],
             ],
             $tables['First_Module']['new_table']['indexes']
         );

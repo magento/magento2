@@ -17,6 +17,10 @@ class BackendFrontnameGeneratorTest extends TestCase
         $regexp = '/' . BackendFrontnameGenerator::ADMIN_AREA_PATH_PREFIX
             . '[a-z0-9]{1,' . BackendFrontnameGenerator::ADMIN_AREA_PATH_RANDOM_PART_LENGTH . '}/';
 
-        $this->assertMatchesRegularExpression($regexp, BackendFrontnameGenerator::generate(), 'Unexpected Backend Frontname pattern.');
+        $this->assertMatchesRegularExpression(
+            $regexp,
+            BackendFrontnameGenerator::generate(),
+            'Unexpected Backend Frontname pattern.'
+        );
     }
 }
