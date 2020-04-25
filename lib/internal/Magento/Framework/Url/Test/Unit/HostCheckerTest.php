@@ -47,9 +47,11 @@ class HostCheckerTest extends TestCase
      */
     public function testIsOwnOrigin($url, $result)
     {
-        $scopes[0] = $this->getMockBuilder(ScopeInterface::class)->getMock();
+        $scopes[0] = $this->getMockBuilder(ScopeInterface::class)
+            ->getMock();
         $scopes[0]->expects($this->any())->method('getBaseUrl')->willReturn('http://www.example.com');
-        $scopes[1] = $this->getMockBuilder(ScopeInterface::class)->getMock();
+        $scopes[1] = $this->getMockBuilder(ScopeInterface::class)
+            ->getMock();
         $scopes[1]->expects($this->any())->method('getBaseUrl')->willReturn('https://www.example2.com');
 
         $this->scopeResolver->expects($this->atLeastOnce())->method('getScopes')->willReturn($scopes);

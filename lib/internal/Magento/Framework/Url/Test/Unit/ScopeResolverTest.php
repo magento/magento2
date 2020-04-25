@@ -44,15 +44,16 @@ class ScopeResolverTest extends TestCase
      */
     public function testGetScope($scopeId)
     {
-        $scopeMock = $this->getMockBuilder(ScopeInterface::class)->getMock();
+        $scopeMock = $this->getMockBuilder(ScopeInterface::class)
+            ->getMock();
         $this->scopeResolverMock->expects(
             $this->at(0)
         )->method(
             'getScope'
         )->with(
             $scopeId
-        )->will(
-            $this->returnValue($scopeMock)
+        )->willReturn(
+            $scopeMock
         );
         $this->_object->getScope($scopeId);
     }

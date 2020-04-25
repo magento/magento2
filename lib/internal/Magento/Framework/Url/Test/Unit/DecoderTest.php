@@ -30,12 +30,12 @@ class DecoderTest extends TestCase
         $result = $encoder->encode($data);
         $urlBuilderMock->expects($this->once())
             ->method('sessionUrlVar')
-            ->with($this->equalTo($data))
-            ->will($this->returnValue($result));
-        $this->assertNotContains('&', $result);
-        $this->assertNotContains('%', $result);
-        $this->assertNotContains('+', $result);
-        $this->assertNotContains('=', $result);
+            ->with($data)
+            ->willReturn($result);
+        $this->assertStringNotContainsString('&', $result);
+        $this->assertStringNotContainsString('%', $result);
+        $this->assertStringNotContainsString('+', $result);
+        $this->assertStringNotContainsString('=', $result);
         $this->assertEquals($result, $decoder->decode($result));
     }
 }
