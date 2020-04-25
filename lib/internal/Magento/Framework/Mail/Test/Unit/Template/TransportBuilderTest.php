@@ -148,15 +148,15 @@ class TransportBuilderTest extends TestCase
             ->willReturn($emailMessage);
 
         $template = $this->createMock(TemplateInterface::class);
-        $template->expects($this->once())->method('setVars')->with($this->equalTo($vars))->willReturnSelf();
-        $template->expects($this->once())->method('setOptions')->with($this->equalTo($options))->willReturnSelf();
+        $template->expects($this->once())->method('setVars')->with($vars)->willReturnSelf();
+        $template->expects($this->once())->method('setOptions')->with($options)->willReturnSelf();
         $template->expects($this->once())->method('getSubject')->willReturn('Email Subject');
         $template->expects($this->once())->method('getType')->willReturn($templateType);
         $template->expects($this->once())->method('processTemplate')->willReturn($bodyText);
 
         $this->templateFactoryMock->expects($this->once())
             ->method('get')
-            ->with($this->equalTo('identifier'), $this->equalTo($templateNamespace))
+            ->with('identifier', $templateNamespace)
             ->willReturn($template);
 
         $transport = $this->createMock(TransportInterface::class);
@@ -184,12 +184,12 @@ class TransportBuilderTest extends TestCase
         $options = ['area' => 'frontend', 'store' => 1];
 
         $template = $this->createMock(TemplateInterface::class);
-        $template->expects($this->once())->method('setVars')->with($this->equalTo($vars))->willReturnSelf();
-        $template->expects($this->once())->method('setOptions')->with($this->equalTo($options))->willReturnSelf();
+        $template->expects($this->once())->method('setVars')->with($vars)->willReturnSelf();
+        $template->expects($this->once())->method('setOptions')->with($options)->willReturnSelf();
         $template->expects($this->once())->method('getType')->willReturn('Unknown');
         $this->templateFactoryMock->expects($this->once())
             ->method('get')
-            ->with($this->equalTo('identifier'), $this->equalTo('Test\Namespace\Template'))
+            ->with('identifier', 'Test\Namespace\Template')
             ->willReturn($template);
 
         $this->builder->setTemplateIdentifier('identifier')->setTemplateVars($vars)->setTemplateOptions($options);
