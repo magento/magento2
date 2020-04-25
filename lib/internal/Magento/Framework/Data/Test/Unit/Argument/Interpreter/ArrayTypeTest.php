@@ -63,9 +63,9 @@ class ArrayTypeTest extends TestCase
     {
         $this->_itemInterpreter->expects($this->any())
             ->method('evaluate')
-            ->will($this->returnCallback(function ($input) {
+            ->willReturnCallback(function ($input) {
                 return '-' . $input['value'] . '-';
-            }));
+            });
         $actual = $this->_model->evaluate($input);
         $this->assertSame($expected, $actual);
     }

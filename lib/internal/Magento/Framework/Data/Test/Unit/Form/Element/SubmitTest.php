@@ -61,7 +61,7 @@ class SubmitTest extends TestCase
     public function testGetHtml()
     {
         $html = $this->_model->getHtml();
-        $this->assertContains('type="submit"', $html);
-        $this->assertTrue(preg_match('/class=\".*submit.*\"/i', $html) > 0);
+        $this->assertStringContainsString('type="submit"', $html);
+        $this->assertGreaterThan(0, preg_match('/class=\".*submit.*\"/i', $html));
     }
 }

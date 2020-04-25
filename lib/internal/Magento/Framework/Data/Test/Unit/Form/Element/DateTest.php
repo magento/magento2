@@ -79,11 +79,13 @@ class DateTest extends TestCase
         $formMock = $this->getFormMock('once');
         $this->model->setForm($formMock);
 
-        $this->model->setData([
+        $this->model->setData(
+            [
                 $fieldName => 'yyyy-MM-dd',
                 'name' => 'test_name',
                 'html_id' => 'test_name',
-            ]);
+            ]
+        );
         $this->model->getElementHtml();
     }
 
@@ -104,9 +106,12 @@ class DateTest extends TestCase
      */
     protected function getFormMock($exactly)
     {
-        $functions = ['getFieldNameSuffix', 'getHtmlIdPrefix', 'getHtmlIdSuffix'];
-        $formMock = $this->createPartialMock(\stdClass::class, $functions);
-        foreach ($functions as $method) {
+        $formMock = $this->getMockBuilder(\stdClass::class)->addMethods(
+            ['getFieldNameSuffix', 'getHtmlIdPrefix', 'getHtmlIdSuffix']
+        )
+            ->disableOriginalConstructor()
+            ->getMock();
+        foreach (['getFieldNameSuffix', 'getHtmlIdPrefix', 'getHtmlIdSuffix'] as $method) {
             switch ($exactly) {
                 case 'once':
                     $count = $this->once();

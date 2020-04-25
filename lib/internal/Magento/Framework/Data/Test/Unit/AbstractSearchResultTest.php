@@ -68,7 +68,8 @@ class AbstractSearchResultTest extends TestCase
             ->getMock();
         $this->searchResultIteratorMock = $this->getMockBuilder(
             SearchResultIteratorFactory::class
-        )->disableOriginalConstructor()->getMock();
+        )->disableOriginalConstructor()
+            ->getMock();
         $this->searchResult = $objectManager->getObject(
             SearchResult::class,
             [

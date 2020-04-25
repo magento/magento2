@@ -61,8 +61,8 @@ class HiddenTest extends TestCase
     public function testGetDefaultHtml()
     {
         $html = $this->_model->getDefaultHtml();
-        $this->assertContains('<input', $html);
-        $this->assertContains('type="hidden"', $html);
+        $this->assertStringContainsString('<input', $html);
+        $this->assertStringContainsString('type="hidden"', $html);
         $this->_model->setDefaultHtml('testhtml');
         $this->assertEquals('testhtml', $this->_model->getDefaultHtml());
     }

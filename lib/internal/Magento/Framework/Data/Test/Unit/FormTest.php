@@ -58,7 +58,7 @@ class FormTest extends TestCase
         $this->_factoryCollectionMock
             ->expects($this->any())
             ->method('create')
-            ->will($this->returnValue($collectionModel));
+            ->willReturn($collectionModel);
 
         $this->_formKeyMock = $this->createPartialMock(FormKey::class, ['getFormKey']);
 
@@ -68,11 +68,11 @@ class FormTest extends TestCase
     public function testFormKeyUsing()
     {
         $formKey = 'form-key';
-        $this->_formKeyMock->expects($this->once())->method('getFormKey')->will($this->returnValue($formKey));
+        $this->_formKeyMock->expects($this->once())->method('getFormKey')->willReturn($formKey);
 
         $this->_form->setUseContainer(true);
         $this->_form->setMethod('post');
-        $this->assertContains($formKey, $this->_form->toHtml());
+        $this->assertStringContainsString($formKey, $this->_form->toHtml());
     }
 
     public function testSettersGetters()
@@ -121,7 +121,7 @@ class FormTest extends TestCase
         $buttonElement = $this->getMockBuilder(Button::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $buttonElement->expects($this->any())->method('getId')->will($this->returnValue('1'));
+        $buttonElement->expects($this->any())->method('getId')->willReturn('1');
 
         $this->_form->addElement($buttonElement);
         $this->_form->addElementToCollection($buttonElement);
@@ -134,8 +134,8 @@ class FormTest extends TestCase
         $buttonElement = $this->getMockBuilder(Button::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $buttonElement->expects($this->any())->method('getId')->will($this->returnValue('1'));
-        $buttonElement->expects($this->any())->method('getName')->will($this->returnValue('Hero'));
+        $buttonElement->expects($this->any())->method('getId')->willReturn('1');
+        $buttonElement->expects($this->any())->method('getName')->willReturn('Hero');
 
         $this->_form->addElement($buttonElement);
         $this->_form->addElementToCollection($buttonElement);

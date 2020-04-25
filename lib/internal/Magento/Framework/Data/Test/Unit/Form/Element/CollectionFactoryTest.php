@@ -33,7 +33,7 @@ class CollectionFactoryTest extends TestCase
         $objectManagerMock =
             $this->createPartialMock(ObjectManager::class, ['create']);
         $collectionMock = $this->createMock(Collection::class);
-        $objectManagerMock->expects($this->once())->method('create')->will($this->returnValue($collectionMock));
+        $objectManagerMock->expects($this->once())->method('create')->willReturn($collectionMock);
         $this->_model = new CollectionFactory($objectManagerMock);
     }
 

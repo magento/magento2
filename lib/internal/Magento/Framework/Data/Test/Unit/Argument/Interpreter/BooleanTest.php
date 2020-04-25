@@ -47,8 +47,8 @@ class BooleanTest extends TestCase
             'toBoolean'
         )->with(
             $this->identicalTo($input)
-        )->will(
-            $this->returnValue($expected)
+        )->willReturn(
+            $expected
         );
         $actual = $this->_model->evaluate(['value' => $input]);
         $this->assertSame($expected, $actual);

@@ -80,12 +80,12 @@ class AbstractElementTest extends TestCase
         );
         $elementMock->expects($this->once())
             ->method('getId')
-            ->will($this->returnValue($elementId));
+            ->willReturn($elementId);
 
-        $formMock = $this->createPartialMock(
-            AbstractForm::class,
-            ['checkElementId', 'addElementToCollection']
-        );
+        $formMock = $this->getMockBuilder(AbstractForm::class)
+            ->addMethods(['checkElementId', 'addElementToCollection'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $formMock->expects($this->once())
             ->method('checkElementId')
             ->with($elementId);
@@ -97,7 +97,7 @@ class AbstractElementTest extends TestCase
 
         $this->_collectionFactoryMock->expects($this->any())
             ->method('create')
-            ->will($this->returnValue($collectionMock));
+            ->willReturn($collectionMock);
 
         $this->_model->setForm($formMock);
         $this->_model->addElement($elementMock);
@@ -112,16 +112,16 @@ class AbstractElementTest extends TestCase
         $htmlIdSuffix = ']]';
         $htmlId = 'some_id';
 
-        $formMock = $this->createPartialMock(
-            AbstractForm::class,
-            ['getHtmlIdPrefix', 'getHtmlIdSuffix']
-        );
+        $formMock = $this->getMockBuilder(AbstractForm::class)
+            ->addMethods(['getHtmlIdPrefix', 'getHtmlIdSuffix'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $formMock->expects($this->any())
             ->method('getHtmlIdPrefix')
-            ->will($this->returnValue($htmlIdPrefix));
+            ->willReturn($htmlIdPrefix);
         $formMock->expects($this->any())
             ->method('getHtmlIdSuffix')
-            ->will($this->returnValue($htmlIdSuffix));
+            ->willReturn($htmlIdSuffix);
 
         $this->_model->setId($htmlId);
         $this->_model->setForm($formMock);
@@ -133,13 +133,13 @@ class AbstractElementTest extends TestCase
      */
     public function testGetNameWithoutSuffix()
     {
-        $formMock = $this->createPartialMock(
-            AbstractForm::class,
-            ['getFieldNameSuffix', 'addSuffixToName']
-        );
+        $formMock = $this->getMockBuilder(AbstractForm::class)
+            ->addMethods(['getFieldNameSuffix', 'addSuffixToName'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $formMock->expects($this->any())
             ->method('getFieldNameSuffix')
-            ->will($this->returnValue(null));
+            ->willReturn(null);
         $formMock->expects($this->never())
             ->method('addSuffixToName');
 
@@ -154,16 +154,16 @@ class AbstractElementTest extends TestCase
     {
         $returnValue = 'some_value';
 
-        $formMock = $this->createPartialMock(
-            AbstractForm::class,
-            ['getFieldNameSuffix', 'addSuffixToName']
-        );
+        $formMock = $this->getMockBuilder(AbstractForm::class)
+            ->addMethods(['getFieldNameSuffix', 'addSuffixToName'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $formMock->expects($this->once())
             ->method('getFieldNameSuffix')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $formMock->expects($this->once())
             ->method('addSuffixToName')
-            ->will($this->returnValue($returnValue));
+            ->willReturn($returnValue);
 
         $this->_model->setForm($formMock);
 
@@ -189,7 +189,7 @@ class AbstractElementTest extends TestCase
 
         $this->_collectionFactoryMock->expects($this->any())
             ->method('create')
-            ->will($this->returnValue($collectionMock));
+            ->willReturn($collectionMock);
 
         $this->_model->setForm($formMock);
         $this->_model->removeField($elementId);
@@ -270,11 +270,14 @@ class AbstractElementTest extends TestCase
         $value = '<a href="#hash_tag">my &#039;quoted&#039; string</a>';
         $expectedValue = '&lt;a href=&quot;#hash_tag&quot;&gt;my &#039;quoted&#039; string&lt;/a&gt;';
 
-        $filterMock = $this->createPartialMock(DataObject::class, ['filter']);
+        $filterMock = $this->getMockBuilder(DataObject::class)
+            ->addMethods(['filter'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $filterMock->expects($this->once())
             ->method('filter')
             ->with($value)
-            ->will($this->returnArgument(0));
+            ->willReturnArgument(0);
 
         $this->_model->setValueFilter($filterMock);
         $this->_model->setValue($value);
@@ -361,7 +364,7 @@ class AbstractElementTest extends TestCase
         $rendererMock->expects($this->once())
             ->method('render')
             ->with($this->_model)
-            ->will($this->returnValue($expectedHtml));
+            ->willReturn($expectedHtml);
         $this->_model->setRenderer($rendererMock);
 
         $this->assertEquals($expectedHtml, $this->_model->getHtml());
@@ -416,13 +419,13 @@ class AbstractElementTest extends TestCase
     {
         $id = 'id';
         $prefix = 'prefix_';
-        $formMock = $this->createPartialMock(
-            AbstractForm::class,
-            ['getFieldContainerIdPrefix']
-        );
+        $formMock = $this->getMockBuilder(AbstractForm::class)
+            ->addMethods(['getFieldContainerIdPrefix'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $formMock->expects($this->once())
             ->method('getFieldContainerIdPrefix')
-            ->will($this->returnValue($prefix));
+            ->willReturn($prefix);
 
         $this->_model->setId($id);
         $this->_model->setForm($formMock);

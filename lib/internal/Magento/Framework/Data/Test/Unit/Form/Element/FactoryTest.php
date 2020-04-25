@@ -50,8 +50,8 @@ class FactoryTest extends TestCase
         )->with(
             $className,
             []
-        )->will(
-            $this->returnValue($elementMock)
+        )->willReturn(
+            $elementMock
         );
         $element = $this->_factory->create($type);
         $this->assertSame($elementMock, $element);
@@ -74,8 +74,8 @@ class FactoryTest extends TestCase
         )->with(
             $className,
             $config
-        )->will(
-            $this->returnValue($elementMock)
+        )->willReturn(
+            $elementMock
         );
         $element = $this->_factory->create($type, $config);
         $this->assertSame($elementMock, $element);
@@ -133,8 +133,8 @@ class FactoryTest extends TestCase
         )->with(
             $type,
             []
-        )->will(
-            $this->throwException(new \ReflectionException())
+        )->willThrowException(
+            new \ReflectionException()
         );
         $this->_factory->create($type);
     }
@@ -166,8 +166,8 @@ class FactoryTest extends TestCase
         )->with(
             $type,
             []
-        )->will(
-            $this->returnValue($elementMock)
+        )->willReturn(
+            $elementMock
         );
         $this->_factory->create($type);
     }

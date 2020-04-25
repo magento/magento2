@@ -85,7 +85,10 @@ class EditorTest extends TestCase
         );
 
         $this->formMock =
-            $this->createPartialMock(Form::class, ['getHtmlIdPrefix', 'getHtmlIdSuffix']);
+            $this->getMockBuilder(Form::class)
+                ->addMethods(['getHtmlIdPrefix', 'getHtmlIdSuffix'])
+                ->disableOriginalConstructor()
+                ->getMock();
         $this->model->setForm($this->formMock);
     }
 
@@ -115,11 +118,11 @@ class EditorTest extends TestCase
     public function testGetElementHtml()
     {
         $html = $this->model->getElementHtml();
-        $this->assertContains('</textarea>', $html);
-        $this->assertContains('rows="2"', $html);
-        $this->assertContains('cols="15"', $html);
-        $this->assertRegExp('/class=\".*textarea.*\"/i', $html);
-        $this->assertNotRegExp('/.*mage\/adminhtml\/wysiwyg\/widget.*/i', $html);
+        $this->assertStringContainsString('</textarea>', $html);
+        $this->assertStringContainsString('rows="2"', $html);
+        $this->assertStringContainsString('cols="15"', $html);
+        $this->assertMatchesRegularExpression('/class=\".*textarea.*\"/i', $html);
+        $this->assertDoesNotMatchRegularExpression('/.*mage\/adminhtml\/wysiwyg\/widget.*/i', $html);
 
         $this->configMock->expects($this->any())->method('getData')
             ->willReturnMap(
@@ -129,7 +132,7 @@ class EditorTest extends TestCase
                 ]
             );
         $html = $this->model->getElementHtml();
-        $this->assertRegExp('/.*mage\/adminhtml\/wysiwyg\/widget.*/i', $html);
+        $this->assertMatchesRegularExpression('/.*mage\/adminhtml\/wysiwyg\/widget.*/i', $html);
 
         $this->configMock->expects($this->any())->method('getData')
             ->willReturnMap(
@@ -141,7 +144,7 @@ class EditorTest extends TestCase
                 ]
             );
         $html = $this->model->getElementHtml();
-        $this->assertRegExp('/.*mage\/adminhtml\/wysiwyg\/widget.*/i', $html);
+        $this->assertMatchesRegularExpression('/.*mage\/adminhtml\/wysiwyg\/widget.*/i', $html);
     }
 
     /**
@@ -219,6 +222,6 @@ class EditorTest extends TestCase
 
         $html = $this->model->getElementHtml();
 
-        $this->assertRegExp('/.*"Insert Image...":"Insert Image...".*/i', $html);
+        $this->assertMatchesRegularExpression('/.*"Insert Image...":"Insert Image...".*/i', $html);
     }
 }

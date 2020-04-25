@@ -78,11 +78,11 @@ class ImageTest extends TestCase
     public function testGetElementHtmlWithoutValue()
     {
         $html = $this->_image->getElementHtml();
-        $this->assertContains('class="input-file"', $html);
-        $this->assertContains('<input', $html);
-        $this->assertContains('type="file"', $html);
-        $this->assertContains('value=""', $html);
-        $this->assertNotContains('</a>', $html);
+        $this->assertStringContainsString('class="input-file"', $html);
+        $this->assertStringContainsString('<input', $html);
+        $this->assertStringContainsString('type="file"', $html);
+        $this->assertStringContainsString('value=""', $html);
+        $this->assertStringNotContainsString('</a>', $html);
     }
 
     /**
@@ -96,14 +96,14 @@ class ImageTest extends TestCase
             ->with(['_type' => UrlInterface::URL_TYPE_MEDIA])
             ->willReturn('http://localhost/media/');
         $html = $this->_image->getElementHtml();
-        $this->assertContains('class="input-file"', $html);
-        $this->assertContains('<input', $html);
-        $this->assertContains('type="file"', $html);
-        $this->assertContains('value="test_value"', $html);
-        $this->assertContains(
+        $this->assertStringContainsString('class="input-file"', $html);
+        $this->assertStringContainsString('<input', $html);
+        $this->assertStringContainsString('type="file"', $html);
+        $this->assertStringContainsString('value="test_value"', $html);
+        $this->assertStringContainsString(
             '<a href="http://localhost/media/test_value" onclick="imagePreview(\'_image\'); return false;"',
             $html
         );
-        $this->assertContains('<input type="checkbox"', $html);
+        $this->assertStringContainsString('<input type="checkbox"', $html);
     }
 }

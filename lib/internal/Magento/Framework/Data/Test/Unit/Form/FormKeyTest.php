@@ -42,8 +42,11 @@ class FormKeyTest extends TestCase
     protected function setUp(): void
     {
         $this->mathRandomMock = $this->createMock(Random::class);
-        $methods = ['setData', 'getData'];
-        $this->sessionMock = $this->createPartialMock(SessionManager::class, $methods);
+        $this->sessionMock = $this->getMockBuilder(SessionManager::class)
+            ->addMethods(['setData'])
+            ->onlyMethods(['getData'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->escaperMock = $this->createMock(Escaper::class);
         $this->escaperMock->expects($this->any())->method('escapeJs')->willReturnArgument(0);
         $this->formKey = new FormKey(
@@ -62,12 +65,12 @@ class FormKeyTest extends TestCase
         $this->sessionMock
             ->expects($this->any())
             ->method('getData')
-            ->will($this->returnValueMap($valueMap));
+            ->willReturnMap($valueMap);
         $this->mathRandomMock
             ->expects($this->once())
             ->method('getRandomString')
             ->with(16)
-            ->will($this->returnValue('random_string'));
+            ->willReturn('random_string');
         $this->sessionMock->expects($this->once())->method('setData')->with(FormKey::FORM_KEY, 'random_string');
         $this->formKey->getFormKey();
     }
@@ -78,7 +81,7 @@ class FormKeyTest extends TestCase
             ->expects($this->exactly(2))
             ->method('getData')
             ->with(FormKey::FORM_KEY)
-            ->will($this->returnValue('random_string'));
+            ->willReturn('random_string');
         $this->mathRandomMock
             ->expects($this->never())
             ->method('getRandomString');

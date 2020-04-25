@@ -31,7 +31,8 @@ class PostHelperTest extends TestCase
         $contextMock =
             $this->createPartialMock(Context::class, ['getUrlBuilder', 'getUrlEncoder']);
         $urlHelper = $this->getMockBuilder(Data::class)
-            ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
         $urlHelper->expects($this->once())
             ->method('getEncodedUrl')
             ->willReturn('L2NvbnRyb2xsZXIvc2FtcGxlL2FjdGlvbi91cmwvZm9yX3VlbmM,');

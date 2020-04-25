@@ -63,10 +63,10 @@ class TextareaTest extends TestCase
     public function testGetElementHtml()
     {
         $html = $this->_model->getElementHtml();
-        $this->assertContains('</textarea>', $html);
-        $this->assertContains('rows="2"', $html);
-        $this->assertContains('cols="15"', $html);
-        $this->assertTrue(preg_match('/class=\".*textarea.*\"/i', $html) > 0);
+        $this->assertStringContainsString('</textarea>', $html);
+        $this->assertStringContainsString('rows="2"', $html);
+        $this->assertStringContainsString('cols="15"', $html);
+        $this->assertGreaterThan(0, preg_match('/class=\".*textarea.*\"/i', $html));
     }
 
     /**

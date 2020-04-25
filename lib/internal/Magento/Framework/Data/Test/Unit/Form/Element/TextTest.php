@@ -61,8 +61,8 @@ class TextTest extends TestCase
     public function testGetHtml()
     {
         $html = $this->_model->getHtml();
-        $this->assertContains('type="text"', $html);
-        $this->assertTrue(preg_match('/class=\".*input-text.*\"/i', $html) > 0);
+        $this->assertStringContainsString('type="text"', $html);
+        $this->assertGreaterThan(0, preg_match('/class=\".*input-text.*\"/i', $html));
     }
 
     /**
