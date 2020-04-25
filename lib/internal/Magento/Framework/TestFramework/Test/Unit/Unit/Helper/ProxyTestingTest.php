@@ -35,14 +35,18 @@ class ProxyTestingTest extends TestCase
         $expectedResult
     ) {
         // Create proxied object with $callProxiedMethod
-        $proxiedObject = $this->createPartialMock('stdClass', [$callProxiedMethod]);
+        $proxiedObject = $this->getMockBuilder('stdClass')
+            ->addMethods([$callProxiedMethod])
+            ->getMock();
 
         // Create object, which reacts on called $method by calling $callProxiedMethod from proxied object
         $callProxy = function () use ($proxiedObject, $callProxiedMethod, $passProxiedParams) {
             return call_user_func_array([$proxiedObject, $callProxiedMethod], $passProxiedParams);
         };
 
-        $object = $this->createPartialMock('stdClass', [$method]);
+        $object = $this->getMockBuilder('stdClass')
+            ->addMethods([$method])
+            ->getMock();
         $builder = $object->expects($this->once())->method($method);
         call_user_func_array([$builder, 'with'], $params);
         $builder->willReturnCallback($callProxy);
