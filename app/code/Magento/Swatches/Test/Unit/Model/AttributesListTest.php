@@ -52,8 +52,8 @@ class AttributesListTest extends TestCase
         $collectionFactoryMock->expects($this->once())->method('create')->willReturn($this->collectionMock);
 
         $this->attributeMock = $this->getMockBuilder(Attribute::class)
-            ->addMethods(['getFrontendLabel'])
             ->onlyMethods(['getId', 'getAttributeCode', 'getSource'])
+            ->addMethods(['getFrontendLabel'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->collectionMock
