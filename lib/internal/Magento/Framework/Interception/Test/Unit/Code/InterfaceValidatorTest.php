@@ -5,7 +5,6 @@
  */
 declare(strict_types=1);
 
-
 namespace Magento\Framework\Interception\Test\Unit\Code;
 
 use Magento\Framework\Code\Reader\ArgumentsReader;
@@ -37,9 +36,9 @@ class InterfaceValidatorTest extends TestCase
         $this->argumentsReaderMock = $this->createMock(ArgumentsReader::class);
 
         $this->argumentsReaderMock->expects($this->any())->method('isCompatibleType')
-            ->will($this->returnCallback(function ($arg1, $arg2) {
+            ->willReturnCallback(function ($arg1, $arg2) {
                 return ltrim((string)$arg1, '\\') == ltrim((string)$arg2, '\\');
-            }));
+            });
 
         $this->model = new InterfaceValidator($this->argumentsReaderMock);
     }

@@ -32,7 +32,7 @@ class DeveloperTest extends TestCase
 
     public function testGetInstanceTypeReturnsInterceptorClass()
     {
-        $this->interceptionConfig->expects($this->once())->method('hasPlugins')->will($this->returnValue(true));
+        $this->interceptionConfig->expects($this->once())->method('hasPlugins')->willReturn(true);
         $this->model->setInterceptionConfig($this->interceptionConfig);
 
         $this->assertEquals('SomeClass\Interceptor', $this->model->getInstanceType('SomeClass'));
@@ -52,7 +52,7 @@ class DeveloperTest extends TestCase
 
     public function testGetOriginalInstanceTypeReturnsInterceptedClass()
     {
-        $this->interceptionConfig->expects($this->once())->method('hasPlugins')->will($this->returnValue(true));
+        $this->interceptionConfig->expects($this->once())->method('hasPlugins')->willReturn(true);
         $this->model->setInterceptionConfig($this->interceptionConfig);
 
         $this->assertEquals('SomeClass\Interceptor', $this->model->getInstanceType('SomeClass'));

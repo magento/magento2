@@ -5,7 +5,6 @@
  */
 declare(strict_types=1);
 
-
 namespace Magento\Framework\Interception\Test\Unit\Custom\Module\Model;
 
 class StartingBackslash

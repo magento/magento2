@@ -76,7 +76,7 @@ class PluginListTest extends TestCase
     {
         $readerMap = include __DIR__ . '/../_files/reader_mock_map.php';
         $readerMock = $this->createMock(Dom::class);
-        $readerMock->expects($this->any())->method('read')->will($this->returnValueMap($readerMap));
+        $readerMock->expects($this->any())->method('read')->willReturnMap($readerMap);
 
         $this->configScopeMock = $this->createMock(ScopeInterface::class);
         $this->cacheMock = $this->getMockBuilder(CacheInterface::class)
@@ -85,13 +85,13 @@ class PluginListTest extends TestCase
         // turn cache off
         $this->cacheMock->expects($this->any())
             ->method('get')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
 
         $omConfigMock =  $this->getMockForAbstractClass(
             ConfigInterface::class
         );
 
-        $omConfigMock->expects($this->any())->method('getOriginalInstanceType')->will($this->returnArgument(0));
+        $omConfigMock->expects($this->any())->method('getOriginalInstanceType')->willReturnArgument(0);
 
         $this->objectManagerMock = $this->getMockBuilder(ObjectManagerInterface::class)
             ->setMethods(['get'])
@@ -131,7 +131,7 @@ class PluginListTest extends TestCase
 
     public function testGetPlugin()
     {
-        $this->configScopeMock->expects($this->any())->method('getCurrentScope')->will($this->returnValue('backend'));
+        $this->configScopeMock->expects($this->any())->method('getCurrentScope')->willReturn('backend');
         $this->object->getNext(Item::class, 'getName');
         $this->object->getNext(
             ItemContainer::class,
@@ -185,8 +185,8 @@ class PluginListTest extends TestCase
             $this->any()
         )->method(
             'getCurrentScope'
-        )->will(
-            $this->returnValue($scopeCode)
+        )->willReturn(
+            $scopeCode
         );
         $this->assertEquals($expectedResult, $this->object->getNext($type, $method, $code));
     }
@@ -258,7 +258,7 @@ class PluginListTest extends TestCase
         $this->expectException('InvalidArgumentException');
         $this->configScopeMock->expects($this->any())
             ->method('getCurrentScope')
-            ->will($this->returnValue('frontend'));
+            ->willReturn('frontend');
 
         $this->object->getNext('SomeType', 'someMethod');
     }
@@ -267,7 +267,7 @@ class PluginListTest extends TestCase
     {
         $this->configScopeMock->expects($this->exactly(3))
             ->method('getCurrentScope')
-            ->will($this->returnValue('scope'));
+            ->willReturn('scope');
         $this->serializerMock->expects($this->once())
             ->method('serialize');
         $this->serializerMock->expects($this->never())
@@ -289,7 +289,7 @@ class PluginListTest extends TestCase
             ->with("Reference to undeclared plugin with name 'simple_plugin'.");
         $this->configScopeMock->expects($this->any())
             ->method('getCurrentScope')
-            ->will($this->returnValue('frontend'));
+            ->willReturn('frontend');
 
         $this->assertNull($this->object->getNext('typeWithoutInstance', 'someMethod'));
     }
@@ -302,7 +302,7 @@ class PluginListTest extends TestCase
     {
         $this->configScopeMock->expects($this->once())
             ->method('getCurrentScope')
-            ->will($this->returnValue('scope'));
+            ->willReturn('scope');
 
         $data = [['key'], ['key'], ['key']];
         $serializedData = 'serialized data';
@@ -331,7 +331,7 @@ class PluginListTest extends TestCase
             ->will($this->returnArgument(0));
         $this->configScopeMock->expects($this->any())
             ->method('getCurrentScope')
-            ->will($this->returnValue('emptyscope'));
+            ->willReturn('emptyscope');
 
         $this->assertEquals(
             [4 => ['simple_plugin']],
