@@ -52,7 +52,7 @@ class ConfigTest extends TestCase
         $this->deploymentConfigMock->expects($this->once())
             ->method('getConfigData')
             ->with(Config::QUEUE_CONFIG)
-            ->will($this->returnValue(null));
+            ->willReturn(null);
 
         $this->amqpConfig->getValue(Config::HOST);
     }
@@ -64,7 +64,7 @@ class ConfigTest extends TestCase
         $this->deploymentConfigMock->expects($this->once())
             ->method('getConfigData')
             ->with(Config::QUEUE_CONFIG)
-            ->will($this->returnValue([]));
+            ->willReturn([]);
 
         $this->amqpConfig->getValue(Config::HOST);
     }
@@ -82,20 +82,18 @@ class ConfigTest extends TestCase
         $this->deploymentConfigMock->expects($this->once())
             ->method('getConfigData')
             ->with(Config::QUEUE_CONFIG)
-            ->will($this->returnValue(
-                [
-                    Config::AMQP_CONFIG => [
-                        'host' => $expectedHost,
-                        'port' => $expectedPort,
-                        'user' => $expectedUsername,
-                        'password' => $expectedPassword,
-                        'virtualhost' => $expectedVirtualHost,
-                        'ssl' => $expectedSsl,
-                        'ssl_options' => $expectedSslOptions,
-                        'randomKey' => 'randomValue',
-                    ]
+            ->willReturn([
+                Config::AMQP_CONFIG => [
+                    'host' => $expectedHost,
+                    'port' => $expectedPort,
+                    'user' => $expectedUsername,
+                    'password' => $expectedPassword,
+                    'virtualhost' => $expectedVirtualHost,
+                    'ssl' => $expectedSsl,
+                    'ssl_options' => $expectedSslOptions,
+                    'randomKey' => 'randomValue',
                 ]
-            ));
+            ]);
 
         $this->assertEquals($expectedHost, $this->amqpConfig->getValue(Config::HOST));
         $this->assertEquals($expectedPort, $this->amqpConfig->getValue(Config::PORT));
@@ -120,21 +118,19 @@ class ConfigTest extends TestCase
         $this->deploymentConfigMock->expects($this->once())
             ->method('getConfigData')
             ->with(Config::QUEUE_CONFIG)
-            ->will($this->returnValue(
-                [
-                    'connections' => [
-                        'connection-01' => [
-                            'host' => $expectedHost,
-                            'port' => $expectedPort,
-                            'user' => $expectedUsername,
-                            'password' => $expectedPassword,
-                            'virtualhost' => $expectedVirtualHost,
-                            'ssl' => $expectedSsl,
-                            'randomKey' => 'randomValue',
-                        ]
+            ->willReturn([
+                'connections' => [
+                    'connection-01' => [
+                        'host' => $expectedHost,
+                        'port' => $expectedPort,
+                        'user' => $expectedUsername,
+                        'password' => $expectedPassword,
+                        'virtualhost' => $expectedVirtualHost,
+                        'ssl' => $expectedSsl,
+                        'randomKey' => 'randomValue',
                     ]
                 ]
-            ));
+            ]);
 
         $this->assertEquals($expectedHost, $amqpConfig->getValue(Config::HOST));
         $this->assertEquals($expectedPort, $amqpConfig->getValue(Config::PORT));
