@@ -32,10 +32,10 @@ class RegistryTest extends TestCase
     protected function initRoles($roleId, $parentRoleId)
     {
         $parentRole = $this->createMock(\Zend_Acl_Role_Interface::class);
-        $parentRole->expects($this->any())->method('getRoleId')->will($this->returnValue($parentRoleId));
+        $parentRole->expects($this->any())->method('getRoleId')->willReturn($parentRoleId);
 
         $role = $this->createMock(\Zend_Acl_Role_Interface::class);
-        $role->expects($this->any())->method('getRoleId')->will($this->returnValue($roleId));
+        $role->expects($this->any())->method('getRoleId')->willReturn($roleId);
 
         $this->model->add($role);
         $this->model->add($parentRole);

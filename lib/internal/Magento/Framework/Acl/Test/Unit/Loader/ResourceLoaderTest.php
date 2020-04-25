@@ -31,30 +31,28 @@ class ResourceLoaderTest extends TestCase
         $acl->expects($this->at(1))->method('addResource')->with($aclResource, $aclResource)->will($this->returnSelf());
 
         $factoryObject = $this->createPartialMock(AclResourceFactory::class, ['createResource']);
-        $factoryObject->expects($this->any())->method('createResource')->will($this->returnValue($aclResource));
+        $factoryObject->expects($this->any())->method('createResource')->willReturn($aclResource);
 
         /** @var $resourceProvider \Magento\Framework\Acl\AclResource\ProviderInterface */
         $resourceProvider = $this->createMock(ProviderInterface::class);
         $resourceProvider->expects($this->once())
             ->method('getAclResources')
-            ->will(
-                $this->returnValue(
+            ->willReturn(
+                [
                     [
-                        [
-                            'id' => 'parent_resource::id',
-                            'title' => 'Parent Resource Title',
-                            'sortOrder' => 10,
-                            'children' => [
-                                [
-                                    'id' => 'child_resource::id',
-                                    'title' => 'Child Resource Title',
-                                    'sortOrder' => 10,
-                                    'children' => [],
-                                ],
+                        'id' => 'parent_resource::id',
+                        'title' => 'Parent Resource Title',
+                        'sortOrder' => 10,
+                        'children' => [
+                            [
+                                'id' => 'child_resource::id',
+                                'title' => 'Child Resource Title',
+                                'sortOrder' => 10,
+                                'children' => [],
                             ],
                         ],
-                    ]
-                )
+                    ],
+                ]
             );
 
         /** @var $loaderResource \Magento\Framework\Acl\Loader\ResourceLoader */
@@ -78,29 +76,27 @@ class ResourceLoaderTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $factoryObject->expects($this->any())->method('createResource')->will($this->returnValue($aclResource));
+        $factoryObject->expects($this->any())->method('createResource')->willReturn($aclResource);
 
         /** @var $resourceProvider \Magento\Framework\Acl\AclResource\ProviderInterface */
         $resourceProvider = $this->createMock(ProviderInterface::class);
         $resourceProvider->expects($this->once())
             ->method('getAclResources')
-            ->will(
-                $this->returnValue(
+            ->willReturn(
+                [
                     [
-                        [
-                            'title' => 'Parent Resource Title',
-                            'sortOrder' => 10,
-                            'children' => [
-                                [
-                                    'id' => 'child_resource::id',
-                                    'title' => 'Child Resource Title',
-                                    'sortOrder' => 10,
-                                    'children' => [],
-                                ],
+                        'title' => 'Parent Resource Title',
+                        'sortOrder' => 10,
+                        'children' => [
+                            [
+                                'id' => 'child_resource::id',
+                                'title' => 'Child Resource Title',
+                                'sortOrder' => 10,
+                                'children' => [],
                             ],
                         ],
-                    ]
-                )
+                    ],
+                ]
             );
 
         /** @var Acl $acl */

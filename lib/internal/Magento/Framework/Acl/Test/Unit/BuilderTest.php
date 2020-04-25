@@ -50,7 +50,7 @@ class BuilderTest extends TestCase
     {
         $this->_aclMock = new Acl();
         $this->_aclFactoryMock = $this->createMock(AclFactory::class);
-        $this->_aclFactoryMock->expects($this->any())->method('create')->will($this->returnValue($this->_aclMock));
+        $this->_aclFactoryMock->expects($this->any())->method('create')->willReturn($this->_aclMock);
         $this->_roleLoader = $this->createMock(DefaultLoader::class);
         $this->_ruleLoader = $this->createMock(DefaultLoader::class);
         $this->_resourceLoader = $this->createMock(DefaultLoader::class);
@@ -64,11 +64,11 @@ class BuilderTest extends TestCase
 
     public function testGetAclUsesLoadersProvidedInConfigurationToPopulateAclIfCacheIsEmpty()
     {
-        $this->_ruleLoader->expects($this->once())->method('populateAcl')->with($this->equalTo($this->_aclMock));
+        $this->_ruleLoader->expects($this->once())->method('populateAcl')->with($this->_aclMock);
 
-        $this->_roleLoader->expects($this->once())->method('populateAcl')->with($this->equalTo($this->_aclMock));
+        $this->_roleLoader->expects($this->once())->method('populateAcl')->with($this->_aclMock);
 
-        $this->_resourceLoader->expects($this->once())->method('populateAcl')->with($this->equalTo($this->_aclMock));
+        $this->_resourceLoader->expects($this->once())->method('populateAcl')->with($this->_aclMock);
 
         $this->assertEquals($this->_aclMock, $this->_model->getAcl());
     }
@@ -86,8 +86,8 @@ class BuilderTest extends TestCase
             $this->once()
         )->method(
             'create'
-        )->will(
-            $this->throwException(new \InvalidArgumentException())
+        )->willThrowException(
+            new \InvalidArgumentException()
         );
         $this->_model->getAcl();
     }
