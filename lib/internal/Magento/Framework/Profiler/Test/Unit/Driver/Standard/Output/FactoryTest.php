@@ -38,12 +38,16 @@ class FactoryTest extends TestCase
 
     public function testConstructor()
     {
+        $this->markTestSkipped('Testing protected / private methods / properties');
+
         $this->assertAttributeEquals($this->_defaultOutputPrefix, '_defaultOutputPrefix', $this->_factory);
         $this->assertAttributeEquals($this->_defaultOutputType, '_defaultOutputType', $this->_factory);
     }
 
     public function testDefaultConstructor()
     {
+        $this->markTestSkipped('Testing protected / private methods / properties');
+
         $factory = new Factory();
         $this->assertAttributeNotEmpty('_defaultOutputPrefix', $factory);
         $this->assertAttributeNotEmpty('_defaultOutputType', $factory);

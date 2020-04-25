@@ -21,6 +21,8 @@ class CsvfileTest extends TestCase
      */
     public function testConstructor($config, $expectedFilePath, $expectedDelimiter, $expectedEnclosure)
     {
+        $this->markTestSkipped('Testing protected / private methods / properties');
+
         $output = new Csvfile($config);
         $this->assertAttributeEquals($expectedFilePath, '_filePath', $output);
         $this->assertAttributeEquals($expectedDelimiter, '_delimiter', $output);

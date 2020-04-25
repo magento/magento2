@@ -38,12 +38,16 @@ class FactoryTest extends TestCase
 
     public function testConstructor()
     {
+        $this->markTestSkipped('Testing protected / private methods / properties');
+
         $this->assertAttributeEquals($this->_defaultDriverPrefix, '_defaultDriverPrefix', $this->_factory);
         $this->assertAttributeEquals($this->_defaultDriverType, '_defaultDriverType', $this->_factory);
     }
 
     public function testDefaultConstructor()
     {
+        $this->markTestSkipped('Testing protected / private methods / properties');
+
         $factory = new Factory();
         $this->assertAttributeNotEmpty('_defaultDriverPrefix', $factory);
         $this->assertAttributeNotEmpty('_defaultDriverType', $factory);
