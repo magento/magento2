@@ -75,13 +75,14 @@ class Product implements ObserverInterface
      * Retrieve the saved product and pass it to the model processor to save content - asset relations
      *
      * @param Observer $observer
+     * @throws \Exception
      */
     public function execute(Observer $observer): void
     {
         $model = $observer->getEvent()->getData('product');
 
         if ($model instanceof CatalogProduct) {
-            $metadata = $this->metadataPool->getMetadata(ProductInterface::class);
+            $id = (int) $model->getData($this->metadataPool->getMetadata(ProductInterface::class)->getLinkField());
             foreach ($this->fields as $field) {
                 if (!$model->dataHasChangedFor($field)) {
                     continue;
@@ -94,7 +95,7 @@ class Product implements ObserverInterface
                             self::ENTITY_ID => (string) $model->getId(),
                         ]
                     ),
-                    $this->getContent->execute((int) $model[$metadata->getLinkField()], $model->getAttributes()[$field])
+                    $this->getContent->execute($id, $model->getAttributes()[$field])
                 );
             }
         }
