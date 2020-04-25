@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\CatalogImportExport\Test\Unit\Model\Import\Product;
 
 use Magento\CatalogImportExport\Model\Import\Product\TaxClassProcessor;
@@ -47,8 +49,8 @@ class TaxClassProcessorTest extends TestCase
         $taxClass = $this->getMockBuilder(ClassModel::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $taxClass->method('getClassName')->will($this->returnValue(self::TEST_TAX_CLASS_NAME));
-        $taxClass->method('getId')->will($this->returnValue(self::TEST_TAX_CLASS_ID));
+        $taxClass->method('getClassName')->willReturn(self::TEST_TAX_CLASS_NAME);
+        $taxClass->method('getId')->willReturn(self::TEST_TAX_CLASS_ID);
 
         $taxClassCollection =
             $this->objectManagerHelper->getCollectionMock(
@@ -61,17 +63,17 @@ class TaxClassProcessorTest extends TestCase
             ['create']
         );
 
-        $taxClassCollectionFactory->method('create')->will($this->returnValue($taxClassCollection));
+        $taxClassCollectionFactory->method('create')->willReturn($taxClassCollection);
 
         $anotherTaxClass = $this->getMockBuilder(ClassModel::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $anotherTaxClass->method('getClassName')->will($this->returnValue(self::TEST_TAX_CLASS_NAME));
-        $anotherTaxClass->method('getId')->will($this->returnValue(self::TEST_JUST_CREATED_TAX_CLASS_ID));
+        $anotherTaxClass->method('getClassName')->willReturn(self::TEST_TAX_CLASS_NAME);
+        $anotherTaxClass->method('getId')->willReturn(self::TEST_JUST_CREATED_TAX_CLASS_ID);
 
         $taxClassFactory = $this->createPartialMock(\Magento\Tax\Model\ClassModelFactory::class, ['create']);
 
-        $taxClassFactory->method('create')->will($this->returnValue($anotherTaxClass));
+        $taxClassFactory->method('create')->willReturn($anotherTaxClass);
 
         $this->taxClassProcessor =
             new TaxClassProcessor(

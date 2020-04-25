@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\CatalogImportExport\Test\Unit\Model\Import\Product;
 
 use Magento\Catalog\Model\Category;
@@ -58,19 +60,19 @@ class CategoryProcessorTest extends TestCase
         $this->childCategory = $this->getMockBuilder(Category::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->childCategory->method('getId')->will($this->returnValue(self::CHILD_CATEGORY_ID));
-        $this->childCategory->method('getName')->will($this->returnValue(self::CHILD_CATEGORY_NAME));
-        $this->childCategory->method('getPath')->will($this->returnValue(
+        $this->childCategory->method('getId')->willReturn(self::CHILD_CATEGORY_ID);
+        $this->childCategory->method('getName')->willReturn(self::CHILD_CATEGORY_NAME);
+        $this->childCategory->method('getPath')->willReturn(
             self::PARENT_CATEGORY_ID . CategoryProcessor::DELIMITER_CATEGORY
             . self::CHILD_CATEGORY_ID
-        ));
+        );
 
         $this->parentCategory = $this->getMockBuilder(Category::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->parentCategory->method('getId')->will($this->returnValue(self::PARENT_CATEGORY_ID));
-        $this->parentCategory->method('getName')->will($this->returnValue('Parent'));
-        $this->parentCategory->method('getPath')->will($this->returnValue(self::PARENT_CATEGORY_ID));
+        $this->parentCategory->method('getId')->willReturn(self::PARENT_CATEGORY_ID);
+        $this->parentCategory->method('getName')->willReturn('Parent');
+        $this->parentCategory->method('getPath')->willReturn(self::PARENT_CATEGORY_ID);
 
         $categoryCollection =
             $this->objectManagerHelper->getCollectionMock(
@@ -101,11 +103,11 @@ class CategoryProcessorTest extends TestCase
             ['create']
         );
 
-        $categoryColFactory->method('create')->will($this->returnValue($categoryCollection));
+        $categoryColFactory->method('create')->willReturn($categoryCollection);
 
         $categoryFactory = $this->createPartialMock(\Magento\Catalog\Model\CategoryFactory::class, ['create']);
 
-        $categoryFactory->method('create')->will($this->returnValue($this->childCategory));
+        $categoryFactory->method('create')->willReturn($this->childCategory);
 
         $this->categoryProcessor =
             new CategoryProcessor(

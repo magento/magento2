@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\CatalogImportExport\Test\Unit\Model\Indexer\Product\Price\Plugin;
 
 use Magento\Catalog\Model\Indexer\Product\Price\Processor;
@@ -39,10 +41,11 @@ class ImportTest extends TestCase
     {
         $this->_objectManager = new ObjectManager($this);
 
-        $this->_indexerMock = $this->createPartialMock(
-            Indexer::class,
-            ['getId', 'invalidate', 'getPriceIndexer', 'isScheduled']
-        );
+        $this->_indexerMock = $this->getMockBuilder(Indexer::class)
+            ->addMethods(['getPriceIndexer'])
+            ->onlyMethods(['getId', 'invalidate', 'isScheduled'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->indexerRegistryMock = $this->createPartialMock(
             IndexerRegistry::class,
             ['get']
@@ -63,10 +66,10 @@ class ImportTest extends TestCase
         $this->indexerRegistryMock->expects($this->any())
             ->method('get')
             ->with(Processor::INDEXER_ID)
-            ->will($this->returnValue($this->_indexerMock));
+            ->willReturn($this->_indexerMock);
         $this->_indexerMock->expects($this->any())
             ->method('isScheduled')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
 
         $importMock = $this->createMock(\Magento\ImportExport\Model\Import::class);
         $this->assertEquals('return_value', $this->_model->afterImportSource($importMock, 'return_value'));

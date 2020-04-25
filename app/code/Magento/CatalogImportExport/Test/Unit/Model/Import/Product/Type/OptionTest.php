@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\CatalogImportExport\Test\Unit\Model\Import\Product\Type;
 
 use Magento\Catalog\Api\Data\ProductInterface;
@@ -334,47 +336,50 @@ class OptionTest extends AbstractImportTestCase
      */
     protected function _getModelDependencies($addExpectations = false, $deleteBehavior = false, $doubleOptions = false)
     {
-        $connection = $this->createPartialMock(
-            \stdClass::class,
+        $connection = $this->getMockBuilder(\stdClass::class)->addMethods(
             ['delete', 'quoteInto', 'insertMultiple', 'insertOnDuplicate']
-        );
+        )
+            ->disableOriginalConstructor()
+            ->getMock();
         if ($addExpectations) {
             if ($deleteBehavior) {
                 $connection->expects(
                     $this->exactly(2)
                 )->method(
                     'quoteInto'
-                )->will(
-                    $this->returnCallback([$this, 'stubQuoteInto'])
+                )->willReturnCallback(
+                    [$this, 'stubQuoteInto']
                 );
                 $connection->expects(
                     $this->exactly(2)
                 )->method(
                     'delete'
-                )->will(
-                    $this->returnCallback([$this, 'verifyDelete'])
+                )->willReturnCallback(
+                    [$this, 'verifyDelete']
                 );
             } else {
                 $connection->expects(
                     $this->once()
                 )->method(
                     'insertMultiple'
-                )->will(
-                    $this->returnCallback([$this, 'verifyInsertMultiple'])
+                )->willReturnCallback(
+                    [$this, 'verifyInsertMultiple']
                 );
                 $connection->expects(
                     $this->exactly(6)
                 )->method(
                     'insertOnDuplicate'
-                )->will(
-                    $this->returnCallback([$this, 'verifyInsertOnDuplicate'])
+                )->willReturnCallback(
+                    [$this, 'verifyInsertOnDuplicate']
                 );
             }
         }
 
-        $resourceHelper = $this->createPartialMock(\stdClass::class, ['getNextAutoincrement']);
+        $resourceHelper = $this->getMockBuilder(\stdClass::class)->addMethods(['getNextAutoincrement'])
+            ->disableOriginalConstructor()
+            ->getMock();
         if ($addExpectations) {
-            $resourceHelper->expects($this->any())->method('getNextAutoincrement')->will($this->returnValue(2));
+            $resourceHelper->expects($this->any())->method('getNextAutoincrement')->willReturn(2);
         }
 
         $data = [
@@ -402,16 +407,18 @@ class OptionTest extends AbstractImportTestCase
     {
         $csvData = $this->_loadCsvFile();
 
-        $dataSourceModel = $this->createPartialMock(\stdClass::class, ['getNextBunch']);
+        $dataSourceModel = $this->getMockBuilder(\stdClass::class)->addMethods(['getNextBunch'])
+            ->disableOriginalConstructor()
+            ->getMock();
         if ($addExpectations) {
             $dataSourceModel->expects(
                 $this->at(0)
             )->method(
                 'getNextBunch'
-            )->will(
-                $this->returnValue($csvData['data'])
+            )->willReturn(
+                $csvData['data']
             );
-            $dataSourceModel->expects($this->at(1))->method('getNextBunch')->will($this->returnValue(null));
+            $dataSourceModel->expects($this->at(1))->method('getNextBunch')->willReturn(null);
         }
 
         $products = [];
@@ -440,18 +447,19 @@ class OptionTest extends AbstractImportTestCase
         $reflectionProperty->setAccessible(true);
         $reflectionProperty->setValue($this->productEntity, $this->metadataPoolMock);
 
-        $productModelMock = $this->createPartialMock(\stdClass::class, ['getProductEntitiesInfo']);
+        $productModelMock = $this->getMockBuilder(\stdClass::class)->addMethods(['getProductEntitiesInfo'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $productModelMock->expects(
             $this->any()
         )->method(
             'getProductEntitiesInfo'
-        )->will(
-            $this->returnValue($products)
+        )->willReturn(
+            $products
         );
 
         $fetchStrategy = $this->getMockForAbstractClass(
-            FetchStrategyInterface::class,
-            ['fetchAll']
+            FetchStrategyInterface::class
         );
         $logger = $this->createMock(LoggerInterface::class);
         $entityFactory = $this->createMock(EntityFactory::class);
@@ -462,19 +470,19 @@ class OptionTest extends AbstractImportTestCase
             ->getMockForAbstractClass();
 
         $select = $this->createPartialMock(Select::class, ['join', 'where']);
-        $select->expects($this->any())->method('join')->will($this->returnSelf());
-        $select->expects($this->any())->method('where')->will($this->returnSelf());
+        $select->expects($this->any())->method('join')->willReturnSelf();
+        $select->expects($this->any())->method('where')->willReturnSelf();
 
         $optionCollection->expects(
             $this->any()
         )->method(
             'getNewEmptyItem'
-        )->will(
-            $this->returnCallback([$this, 'getNewOptionMock'])
+        )->willReturnCallback(
+            [$this, 'getNewOptionMock']
         );
-        $optionCollection->expects($this->any())->method('reset')->will($this->returnSelf());
-        $optionCollection->expects($this->any())->method('addProductToFilter')->will($this->returnSelf());
-        $optionCollection->expects($this->any())->method('getSelect')->will($this->returnValue($select));
+        $optionCollection->expects($this->any())->method('reset')->willReturnSelf();
+        $optionCollection->expects($this->any())->method('addProductToFilter')->willReturnSelf();
+        $optionCollection->expects($this->any())->method('getSelect')->willReturn($select);
 
         $optionsData = array_values($products);
         if ($doubleOptions) {
@@ -485,15 +493,17 @@ class OptionTest extends AbstractImportTestCase
             }
         }
 
-        $fetchStrategy->expects($this->any())->method('fetchAll')->will($this->returnValue($optionsData));
+        $fetchStrategy->expects($this->any())->method('fetchAll')->willReturn($optionsData);
 
-        $collectionIterator = $this->createPartialMock(\stdClass::class, ['iterate']);
+        $collectionIterator = $this->getMockBuilder(\stdClass::class)->addMethods(['iterate'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $collectionIterator->expects(
             $this->any()
         )->method(
             'iterate'
-        )->will(
-            $this->returnCallback([$this, 'iterate'])
+        )->willReturnCallback(
+            [$this, 'iterate']
         );
 
         $data = [
@@ -711,8 +721,8 @@ class OptionTest extends AbstractImportTestCase
     private function _bypassModelMethodGetMultiRowFormat($rowData)
     {
         $this->modelMock->expects($this->any())
-                        ->method('_getMultiRowFormat')
-                        ->will($this->returnValue([$rowData]));
+            ->method('_getMultiRowFormat')
+            ->will($this->returnValue([$rowData]));
     }
 
     /**
@@ -826,7 +836,8 @@ class OptionTest extends AbstractImportTestCase
             'with_store_view_code' => [
                 '$rowData' => [
                     'store_view_code' => '',
-                    'custom_options' => 'name=Test Field Title,type=field,required=1;sku=1-text,price=0,price_type=fixed'
+                    'custom_options' => 'name=Test Field Title,type=field,required=1'
+                        . ';sku=1-text,price=0,price_type=fixed'
                 ],
                 '$responseData' => [
                     'store_view_code' => '',
@@ -847,7 +858,8 @@ class OptionTest extends AbstractImportTestCase
             ],
             'without_store_view_code' => [
                 '$rowData' => [
-                    'custom_options' => 'name=Test Field Title,type=field,required=1;sku=1-text,price=0,price_type=fixed'
+                    'custom_options' => 'name=Test Field Title,type=field,required=1'
+                        . ';sku=1-text,price=0,price_type=fixed'
                 ],
                 '$responseData' => [
                     'custom_options' => [
@@ -1000,20 +1012,22 @@ class OptionTest extends AbstractImportTestCase
 
     public function testParseRequiredData()
     {
-        $modelData = $this->createPartialMock(\stdClass::class, ['getNextBunch']);
+        $modelData = $this->getMockBuilder(\stdClass::class)->addMethods(['getNextBunch'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $modelData->expects(
             $this->at(0)
         )->method(
             'getNextBunch'
-        )->will(
-            $this->returnValue(
-                [['sku' => 'simple3', '_custom_option_type' => 'field', '_custom_option_title' => 'Title']]
-            )
+        )->willReturn(
+            [['sku' => 'simple3', '_custom_option_type' => 'field', '_custom_option_title' => 'Title']]
         );
-        $modelData->expects($this->at(1))->method('getNextBunch')->will($this->returnValue(null));
+        $modelData->expects($this->at(1))->method('getNextBunch')->willReturn(null);
 
-        $productModel = $this->createPartialMock(\stdClass::class, ['getProductEntitiesInfo']);
-        $productModel->expects($this->any())->method('getProductEntitiesInfo')->will($this->returnValue([]));
+        $productModel = $this->getMockBuilder(\stdClass::class)->addMethods(['getProductEntitiesInfo'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $productModel->expects($this->any())->method('getProductEntitiesInfo')->willReturn([]);
 
         /** @var Product $productEntityMock */
         $productEntityMock = $this->createMock(Product::class);

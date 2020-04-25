@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\CatalogImportExport\Test\Unit\Model\Import;
 
@@ -447,7 +448,8 @@ class ProductTest extends AbstractImportTestCase
             ['create']
         );
         $this->optionEntity = $this->getMockBuilder(Option::class)
-            ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->optionFactory->expects($this->once())->method('create')->willReturn($this->optionEntity);
 
         $this->_filesystem->expects($this->once())
@@ -464,8 +466,10 @@ class ProductTest extends AbstractImportTestCase
      */
     protected function _parentObjectConstructor()
     {
-        $type = $this->getMockBuilder(Type::class)->disableOriginalConstructor()->getMock();
-        $type->expects($this->any())->method('getEntityTypeId')->will($this->returnValue(self::ENTITY_TYPE_ID));
+        $type = $this->getMockBuilder(Type::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $type->expects($this->any())->method('getEntityTypeId')->willReturn(self::ENTITY_TYPE_ID);
         $this->config->expects($this->any())->method('getEntityType')->with(self::ENTITY_TYPE_CODE)->willReturn($type);
 
         $this->_connection = $this->createMock(AdapterInterface::class);
@@ -522,7 +526,8 @@ class ProductTest extends AbstractImportTestCase
             ]];
         $productTypeInstance =
             $this->getMockBuilder(AbstractType::class)
-                ->disableOriginalConstructor()->getMock();
+                ->disableOriginalConstructor()
+                ->getMock();
         $productTypeInstance->expects($this->once())
             ->method('isSuitable')
             ->willReturn(true);
@@ -611,7 +616,8 @@ class ProductTest extends AbstractImportTestCase
     {
         $attrCode = 'code';
         $rowNum = 0;
-        $string = $this->getMockBuilder(StringUtils::class)->setMethods(null)->getMock();
+        $string = $this->getMockBuilder(StringUtils::class)
+            ->setMethods(null)->getMock();
         $this->setPropertyValue($this->importProduct, 'string', $string);
 
         $this->validator->expects($this->once())->method('isAttributeValid')->willReturn(true);
@@ -627,7 +633,8 @@ class ProductTest extends AbstractImportTestCase
     {
         $attrCode = 'code';
         $rowNum = 0;
-        $string = $this->getMockBuilder(StringUtils::class)->setMethods(null)->getMock();
+        $string = $this->getMockBuilder(StringUtils::class)
+            ->setMethods(null)->getMock();
         $this->setPropertyValue($this->importProduct, 'string', $string);
 
         $this->validator->expects($this->once())->method('isAttributeValid')->willReturn(false);

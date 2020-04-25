@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\CatalogImportExport\Test\Unit\Model\Export;
 
 use Magento\Catalog\Model\Product\LinkTypeProvider;
@@ -166,26 +168,23 @@ class ProductTest extends TestCase
         );
         $this->exportConfig = $this->createMock(\Magento\ImportExport\Model\Export\Config::class);
 
-        $this->productFactory = $this->createPartialMock(\Magento\Catalog\Model\ResourceModel\ProductFactory::class, [
-                'create',
-                'getTypeId',
-            ]);
+        $this->productFactory = $this->getMockBuilder(
+            \Magento\Catalog\Model\ResourceModel\ProductFactory::class
+        )->addMethods(['getTypeId'])
+            ->onlyMethods(['create'])
+            ->getMock();
 
-        $this->attrSetColFactory = $this->createPartialMock(
-            \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory::class,
-            [
-                'create',
-                'setEntityTypeFilter',
-            ]
-        );
+        $this->attrSetColFactory = $this->getMockBuilder(
+            \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory::class
+        )->addMethods(['setEntityTypeFilter'])
+            ->onlyMethods(['create'])
+            ->getMock();
 
-        $this->categoryColFactory = $this->createPartialMock(
-            \Magento\Catalog\Model\ResourceModel\Category\CollectionFactory::class,
-            [
-                'create',
-                'addNameToResult',
-            ]
-        );
+        $this->categoryColFactory = $this->getMockBuilder(
+            \Magento\Catalog\Model\ResourceModel\Category\CollectionFactory::class
+        )->addMethods(['addNameToResult'])
+            ->onlyMethods(['create'])
+            ->getMock();
 
         $this->itemFactory = $this->createMock(\Magento\CatalogInventory\Model\ResourceModel\Stock\ItemFactory::class);
         $this->optionColFactory = $this->createMock(
@@ -204,10 +203,10 @@ class ProductTest extends TestCase
         $this->metadataPool = $this->createMock(MetadataPool::class);
 
         $this->writer = $this->createPartialMock(AbstractAdapter::class, [
-                'setHeaderCols',
-                'writeRow',
-                'getContents',
-            ]);
+            'setHeaderCols',
+            'writeRow',
+            'getContents',
+        ]);
 
         $constructorMethods = [
             'initTypeModels',
@@ -224,7 +223,6 @@ class ProductTest extends TestCase
             '_getEntityCollection',
             'getWriter',
             'getExportData',
-            '_headerColumns',
             '_customFieldsMapping',
             'getItemsPerPage',
             'paginateCollection',
@@ -236,7 +234,7 @@ class ProductTest extends TestCase
         );
 
         foreach ($constructorMethods as $method) {
-            $this->product->expects($this->once())->method($method)->will($this->returnSelf());
+            $this->product->expects($this->once())->method($method)->willReturnSelf();
         }
 
         $this->product->__construct(
