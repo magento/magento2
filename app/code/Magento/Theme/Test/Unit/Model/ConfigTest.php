@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -9,49 +9,62 @@
  */
 namespace Magento\Theme\Test\Unit\Model;
 
-class ConfigTest extends \PHPUnit\Framework\TestCase
+use Magento\Framework\App\Config\Storage\WriterInterface;
+use Magento\Framework\App\Config\Value;
+use Magento\Framework\Cache\FrontendInterface;
+use Magento\Framework\DataObject;
+use Magento\Framework\Event\ManagerInterface;
+use Magento\Framework\View\DesignInterface;
+use Magento\Store\Model\ScopeInterface;
+use Magento\Store\Model\StoreManagerInterface;
+use Magento\Theme\Model\Config;
+use Magento\Theme\Model\Theme;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class ConfigTest extends TestCase
 {
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $_themeMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $_configData;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $_storeManagerMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $_configCacheMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $_layoutCacheMock;
 
     /**
-     * @var \Magento\Framework\App\Config\Storage\WriterInterface
+     * @var WriterInterface
      */
     protected $_scopeConfigWriter;
 
     /**
-     * @var \Magento\Theme\Model\Config
+     * @var Config
      */
     protected $_model;
 
     protected function setUp(): void
     {
         /** @var $this->_themeMock \Magento\Theme\Model\Theme */
-        $this->_themeMock = $this->createMock(\Magento\Theme\Model\Theme::class);
+        $this->_themeMock = $this->createMock(Theme::class);
         $this->_storeManagerMock = $this->getMockForAbstractClass(
-            \Magento\Store\Model\StoreManagerInterface::class,
+            StoreManagerInterface::class,
             [],
             '',
             true,
@@ -60,22 +73,22 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
             ['getStores', 'isSingleStoreMode']
         );
         $this->_configData = $this->createPartialMock(
-            \Magento\Framework\App\Config\Value::class,
+            Value::class,
             ['getCollection', 'addFieldToFilter', '__wakeup']
         );
-        $this->_configCacheMock = $this->getMockForAbstractClass(\Magento\Framework\Cache\FrontendInterface::class);
-        $this->_layoutCacheMock = $this->getMockForAbstractClass(\Magento\Framework\Cache\FrontendInterface::class);
+        $this->_configCacheMock = $this->getMockForAbstractClass(FrontendInterface::class);
+        $this->_layoutCacheMock = $this->getMockForAbstractClass(FrontendInterface::class);
 
         $this->_scopeConfigWriter = $this->createPartialMock(
-            \Magento\Framework\App\Config\Storage\WriterInterface::class,
+            WriterInterface::class,
             ['save', 'delete']
         );
 
-        $this->_model = new \Magento\Theme\Model\Config(
+        $this->_model = new Config(
             $this->_configData,
             $this->_scopeConfigWriter,
             $this->_storeManagerMock,
-            $this->createMock(\Magento\Framework\Event\ManagerInterface::class),
+            $this->createMock(ManagerInterface::class),
             $this->_configCacheMock,
             $this->_layoutCacheMock
         );
@@ -96,18 +109,18 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
      */
     public function testAssignToStoreInSingleStoreMode()
     {
-        $this->_storeManagerMock->expects($this->once())->method('isSingleStoreMode')->willReturn(true);
+        $this->_storeManagerMock->expects($this->once())->method('isSingleStoreMode')->will($this->returnValue(true));
 
         $themePath = 'Magento/blank';
         /** Unassign themes from store */
-        $configEntity = new \Magento\Framework\DataObject(['value' => 6, 'scope_id' => 8]);
+        $configEntity = new DataObject(['value' => 6, 'scope_id' => 8]);
 
         $this->_configData->expects(
             $this->once()
         )->method(
             'getCollection'
-        )->willReturn(
-            $this->_configData
+        )->will(
+            $this->returnValue($this->_configData)
         );
 
         $this->_configData->expects(
@@ -116,9 +129,9 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
             'addFieldToFilter'
         )->with(
             'scope',
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORES
-        )->willReturn(
-            $this->_configData
+            ScopeInterface::SCOPE_STORES
+        )->will(
+            $this->returnValue($this->_configData)
         );
 
         $this->_configData->expects(
@@ -127,13 +140,13 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
             'addFieldToFilter'
         )->with(
             'path',
-            \Magento\Framework\View\DesignInterface::XML_PATH_THEME_ID
-        )->willReturn(
-            [$configEntity]
+            DesignInterface::XML_PATH_THEME_ID
+        )->will(
+            $this->returnValue([$configEntity])
         );
 
-        $this->_themeMock->expects($this->any())->method('getId')->willReturn(6);
-        $this->_themeMock->expects($this->any())->method('getThemePath')->willReturn($themePath);
+        $this->_themeMock->expects($this->any())->method('getId')->will($this->returnValue(6));
+        $this->_themeMock->expects($this->any())->method('getThemePath')->will($this->returnValue($themePath));
 
         $this->_scopeConfigWriter->expects($this->once())->method('delete');
 
@@ -147,18 +160,18 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
      */
     public function testAssignToStoreNonSingleStoreMode()
     {
-        $this->_storeManagerMock->expects($this->once())->method('isSingleStoreMode')->willReturn(false);
+        $this->_storeManagerMock->expects($this->once())->method('isSingleStoreMode')->will($this->returnValue(false));
 
         $themePath = 'Magento/blank';
         /** Unassign themes from store */
-        $configEntity = new \Magento\Framework\DataObject(['value' => 6, 'scope_id' => 8]);
+        $configEntity = new DataObject(['value' => 6, 'scope_id' => 8]);
 
         $this->_configData->expects(
             $this->once()
         )->method(
             'getCollection'
-        )->willReturn(
-            $this->_configData
+        )->will(
+            $this->returnValue($this->_configData)
         );
 
         $this->_configData->expects(
@@ -167,9 +180,9 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
             'addFieldToFilter'
         )->with(
             'scope',
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORES
-        )->willReturn(
-            $this->_configData
+            ScopeInterface::SCOPE_STORES
+        )->will(
+            $this->returnValue($this->_configData)
         );
 
         $this->_configData->expects(
@@ -178,13 +191,13 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
             'addFieldToFilter'
         )->with(
             'path',
-            \Magento\Framework\View\DesignInterface::XML_PATH_THEME_ID
-        )->willReturn(
-            [$configEntity]
+            DesignInterface::XML_PATH_THEME_ID
+        )->will(
+            $this->returnValue([$configEntity])
         );
 
-        $this->_themeMock->expects($this->any())->method('getId')->willReturn(6);
-        $this->_themeMock->expects($this->any())->method('getThemePath')->willReturn($themePath);
+        $this->_themeMock->expects($this->any())->method('getId')->will($this->returnValue(6));
+        $this->_themeMock->expects($this->any())->method('getThemePath')->will($this->returnValue($themePath));
 
         $this->_scopeConfigWriter->expects($this->once())->method('delete');
 

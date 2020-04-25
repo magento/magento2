@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  *
  * Copyright © Magento, Inc. All rights reserved.
@@ -6,7 +6,13 @@
  */
 namespace Magento\Theme\Test\Unit\Controller\Adminhtml\System\Design\Theme;
 
-class IndexTest extends \Magento\Theme\Test\Unit\Controller\Adminhtml\System\Design\ThemeTest
+use Magento\Backend\Model\Menu;
+use Magento\Framework\View\LayoutInterface;
+use Magento\Theme\Block\Html\Title;
+use Magento\Theme\Test\Unit\Controller\Adminhtml\System\Design\ThemeTest;
+use Psr\Log\LoggerInterface;
+
+class IndexTest extends ThemeTest
 {
     /**
      * @var string
@@ -15,8 +21,8 @@ class IndexTest extends \Magento\Theme\Test\Unit\Controller\Adminhtml\System\Des
 
     public function testIndexAction()
     {
-        $menuModel = $this->getMockBuilder(\Magento\Backend\Model\Menu::class)
-            ->setConstructorArgs([$this->createMock(\Psr\Log\LoggerInterface::class)])
+        $menuModel = $this->getMockBuilder(Menu::class)
+            ->setConstructorArgs([$this->createMock(LoggerInterface::class)])
             ->getMock();
         $menuModel->expects($this->once())
             ->method('getParentItems')
@@ -28,10 +34,10 @@ class IndexTest extends \Magento\Theme\Test\Unit\Controller\Adminhtml\System\Des
             ->method('getMenuModel')
             ->willReturn($menuModel);
 
-        $titleBlock = $this->createMock(\Magento\Theme\Block\Html\Title::class);
+        $titleBlock = $this->createMock(Title::class);
         $titleBlock->expects($this->once())->method('setPageTitle');
 
-        $layout = $this->createMock(\Magento\Framework\View\LayoutInterface::class);
+        $layout = $this->createMock(LayoutInterface::class);
         $layout->expects($this->any())
             ->method('getBlock')
             ->willReturnMap([

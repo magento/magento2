@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -6,13 +6,19 @@
 
 namespace Magento\Theme\Test\Unit\Model\Config;
 
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Theme\Api\Data\DesignConfigInterface;
+use Magento\Theme\Model\Data\Design\Config\Data;
+use Magento\Theme\Model\Design\Config\Validator;
+use PHPUnit\Framework\TestCase;
+
 /**
  * Class ValidatorTest to test \Magento\Theme\Model\Design\Config\Validator
  */
-class ValidatorTest extends \PHPUnit\Framework\TestCase
+class ValidatorTest extends TestCase
 {
     /**
-     * @var \Magento\Theme\Model\Design\Config\Validator
+     * @var Validator
      */
     private $model;
 
@@ -28,9 +34,9 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
             ->setMethods(['create'])
             ->getMock();
 
-        $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $objectManagerHelper = new ObjectManager($this);
         $this->model = $objectManagerHelper->getObject(
-            \Magento\Theme\Model\Design\Config\Validator::class,
+            Validator::class,
             [
                 "templateFactory" => $this->templateFactoryMock,
                 "fields" => ["email_header_template", "no_reference"]
@@ -38,25 +44,22 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    /**
-     */
     public function testValidateHasRecursiveReference()
     {
-        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
-
+        $this->expectException('Magento\Framework\Exception\LocalizedException');
         $fieldConfig = [
             'path' => 'design/email/header_template',
             'fieldset' => 'other_settings/email',
             'field' => 'email_header_template'
         ];
 
-        $designConfigMock = $this->getMockBuilder(\Magento\Theme\Api\Data\DesignConfigInterface::class)
+        $designConfigMock = $this->getMockBuilder(DesignConfigInterface::class)
             ->getMock();
         $designConfigExtensionMock =
             $this->getMockBuilder(\Magento\Theme\Api\Data\DesignConfigExtensionInterface::class)
                 ->setMethods(['getDesignConfigData'])
                 ->getMockForAbstractClass();
-        $designElementMock = $this->getMockBuilder(\Magento\Theme\Model\Data\Design\Config\Data::class)
+        $designElementMock = $this->getMockBuilder(Data::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -95,13 +98,13 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
             'field' => 'no_reference'
         ];
 
-        $designConfigMock = $this->getMockBuilder(\Magento\Theme\Api\Data\DesignConfigInterface::class)
+        $designConfigMock = $this->getMockBuilder(DesignConfigInterface::class)
             ->getMock();
         $designConfigExtensionMock =
             $this->getMockBuilder(\Magento\Theme\Api\Data\DesignConfigExtensionInterface::class)
                 ->setMethods(['getDesignConfigData'])
                 ->getMockForAbstractClass();
-        $designElementMock = $this->getMockBuilder(\Magento\Theme\Model\Data\Design\Config\Data::class)
+        $designElementMock = $this->getMockBuilder(Data::class)
             ->disableOriginalConstructor()
             ->getMock();
 

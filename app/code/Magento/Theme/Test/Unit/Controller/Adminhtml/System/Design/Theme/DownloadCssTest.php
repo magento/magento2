@@ -1,65 +1,83 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Theme\Test\Unit\Controller\Adminhtml\System\Design\Theme;
 
+use Magento\Backend\App\Action\Context;
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\App\RequestInterface;
+use Magento\Framework\App\Response\Http\FileFactory;
+use Magento\Framework\App\Response\RedirectInterface;
+use Magento\Framework\App\ResponseInterface;
+use Magento\Framework\Controller\ResultFactory;
+use Magento\Framework\Filesystem;
+use Magento\Framework\Filesystem\Directory\ReadInterface;
+use Magento\Framework\Message\ManagerInterface;
+use Magento\Framework\ObjectManagerInterface;
+use Magento\Framework\Registry;
+use Magento\Framework\Url\DecoderInterface;
+use Magento\Framework\View\Asset\File;
+use Magento\Framework\View\Asset\Repository;
+use Magento\Framework\View\Design\ThemeInterface;
 use Magento\Theme\Controller\Adminhtml\System\Design\Theme\DownloadCss;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class DownloadCssTest extends \PHPUnit\Framework\TestCase
+class DownloadCssTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\Registry|\PHPUnit\Framework\MockObject\MockObject
+     * @var Registry|MockObject
      */
     protected $registry;
 
     /**
-     * @var \Magento\Framework\App\Response\Http\FileFactory|\PHPUnit\Framework\MockObject\MockObject
+     * @var FileFactory|MockObject
      */
     protected $fileFactory;
 
     /**
-     * @var \Magento\Framework\View\Asset\Repository|\PHPUnit\Framework\MockObject\MockObject
+     * @var Repository|MockObject
      */
     protected $repository;
 
     /**
-     * @var \Magento\Framework\Filesystem|\PHPUnit\Framework\MockObject\MockObject
+     * @var Filesystem|MockObject
      */
     protected $filesystem;
 
     /**
-     * @var \Magento\Framework\ObjectManagerInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var ObjectManagerInterface|MockObject
      */
     protected $objectManager;
 
     /**
-     * @var \Magento\Framework\Message\ManagerInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var ManagerInterface|MockObject
      */
     protected $messageManager;
 
     /**
-     * @var \Magento\Framework\App\Response\RedirectInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var RedirectInterface|MockObject
      */
     protected $redirect;
 
     /**
-     * @var \Magento\Framework\App\RequestInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var RequestInterface|MockObject
      */
     protected $request;
 
     /**
-     * @var \Magento\Framework\App\ResponseInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var ResponseInterface|MockObject
      */
     protected $response;
 
     /**
-     * @var \Magento\Framework\Controller\ResultFactory|\PHPUnit\Framework\MockObject\MockObject
+     * @var ResultFactory|MockObject
      */
     protected $resultFactory;
 
@@ -70,17 +88,17 @@ class DownloadCssTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp(): void
     {
-        $context = $this->getMockBuilder(\Magento\Backend\App\Action\Context::class)
+        $context = $this->getMockBuilder(Context::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->request = $this->getMockBuilder(\Magento\Framework\App\RequestInterface::class)->getMock();
-        $this->redirect = $this->getMockBuilder(\Magento\Framework\App\Response\RedirectInterface::class)->getMock();
-        $this->response = $this->getMockBuilder(\Magento\Framework\App\ResponseInterface::class)
+        $this->request = $this->getMockBuilder(RequestInterface::class)->getMock();
+        $this->redirect = $this->getMockBuilder(RedirectInterface::class)->getMock();
+        $this->response = $this->getMockBuilder(ResponseInterface::class)
             ->setMethods(['sendResponse', 'setRedirect'])
             ->getMock();
-        $this->objectManager = $this->getMockBuilder(\Magento\Framework\ObjectManagerInterface::class)->getMock();
-        $this->messageManager = $this->getMockBuilder(\Magento\Framework\Message\ManagerInterface::class)->getMock();
-        $this->resultFactory = $this->getMockBuilder(\Magento\Framework\Controller\ResultFactory::class)
+        $this->objectManager = $this->getMockBuilder(ObjectManagerInterface::class)->getMock();
+        $this->messageManager = $this->getMockBuilder(ManagerInterface::class)->getMock();
+        $this->resultFactory = $this->getMockBuilder(ResultFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
         $context->expects($this->any())
@@ -103,19 +121,19 @@ class DownloadCssTest extends \PHPUnit\Framework\TestCase
             ->willReturn($this->resultFactory);
 
         $this->registry = $this->getMockBuilder(
-            \Magento\Framework\Registry::class
+            Registry::class
         )->disableOriginalConstructor()->getMock();
-        $this->fileFactory = $this->getMockBuilder(\Magento\Framework\App\Response\Http\FileFactory::class)
+        $this->fileFactory = $this->getMockBuilder(FileFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->repository = $this->getMockBuilder(\Magento\Framework\View\Asset\Repository::class)
+        $this->repository = $this->getMockBuilder(Repository::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->filesystem = $this->getMockBuilder(\Magento\Framework\Filesystem::class)
+        $this->filesystem = $this->getMockBuilder(Filesystem::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        /** @var \Magento\Backend\App\Action\Context $context */
+        /** @var Context $context */
         $this->controller = new DownloadCss(
             $context,
             $this->registry,
@@ -141,21 +159,21 @@ class DownloadCssTest extends \PHPUnit\Framework\TestCase
                     ['file', null, $fileParam],
                 ]
             );
-        $file = $this->getMockBuilder(\Magento\Framework\View\Asset\File::class)
+        $file = $this->getMockBuilder(File::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $theme = $this->getMockBuilder(\Magento\Framework\View\Design\ThemeInterface::class)
+        $theme = $this->getMockBuilder(ThemeInterface::class)
             ->setMethods(['getId', 'load'])
             ->getMockForAbstractClass();
-        $urlDecoder = $this->getMockBuilder(\Magento\Framework\Url\DecoderInterface::class)->getMock();
-        $directoryRead = $this->getMockBuilder(\Magento\Framework\Filesystem\Directory\ReadInterface::class)->getMock();
+        $urlDecoder = $this->getMockBuilder(DecoderInterface::class)->getMock();
+        $directoryRead = $this->getMockBuilder(ReadInterface::class)->getMock();
         $this->objectManager->expects($this->any())
             ->method('get')
-            ->with(\Magento\Framework\Url\DecoderInterface::class)
+            ->with(DecoderInterface::class)
             ->willReturn($urlDecoder);
         $this->objectManager->expects($this->any())
             ->method('create')
-            ->with(\Magento\Framework\View\Design\ThemeInterface::class)
+            ->with(ThemeInterface::class)
             ->willReturn($theme);
         $urlDecoder->expects($this->once())
             ->method('decode')
@@ -186,9 +204,9 @@ class DownloadCssTest extends \PHPUnit\Framework\TestCase
         $this->fileFactory->expects($this->once())
             ->method('create')
             ->with($relPath, ['type' => 'filename', 'value' => $relPath], DirectoryList::ROOT)
-            ->willReturn($this->getMockBuilder(\Magento\Framework\App\ResponseInterface::class)->getMock());
+            ->willReturn($this->getMockBuilder(ResponseInterface::class)->getMock());
 
-        $this->assertInstanceOf(\Magento\Framework\App\ResponseInterface::class, $this->controller->execute());
+        $this->assertInstanceOf(ResponseInterface::class, $this->controller->execute());
     }
 
     public function testExecuteInvalidArgument()
@@ -206,22 +224,22 @@ class DownloadCssTest extends \PHPUnit\Framework\TestCase
                     ['file', null, $fileParam],
                 ]
             );
-        $theme = $this->getMockBuilder(\Magento\Framework\View\Design\ThemeInterface::class)
+        $theme = $this->getMockBuilder(ThemeInterface::class)
             ->setMethods(['getId', 'load'])
             ->getMockForAbstractClass();
-        $urlDecoder = $this->getMockBuilder(\Magento\Framework\Url\DecoderInterface::class)->getMock();
-        $logger = $this->getMockBuilder(\Psr\Log\LoggerInterface::class)->getMock();
+        $urlDecoder = $this->getMockBuilder(DecoderInterface::class)->getMock();
+        $logger = $this->getMockBuilder(LoggerInterface::class)->getMock();
         $this->objectManager->expects($this->any())
             ->method('get')
             ->willReturnMap(
                 [
-                    [\Magento\Framework\Url\DecoderInterface::class, $urlDecoder],
-                    [\Psr\Log\LoggerInterface::class, $logger],
+                    [DecoderInterface::class, $urlDecoder],
+                    [LoggerInterface::class, $logger],
                 ]
             );
         $this->objectManager->expects($this->any())
             ->method('create')
-            ->with(\Magento\Framework\View\Design\ThemeInterface::class)
+            ->with(ThemeInterface::class)
             ->willReturn($theme);
         $urlDecoder->expects($this->once())
             ->method('decode')

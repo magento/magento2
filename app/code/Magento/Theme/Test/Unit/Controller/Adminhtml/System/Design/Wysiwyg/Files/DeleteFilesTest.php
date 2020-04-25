@@ -1,34 +1,45 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Theme\Test\Unit\Controller\Adminhtml\System\Design\Wysiwyg\Files;
 
-class DeleteFilesTest extends \PHPUnit\Framework\TestCase
+use Magento\Framework\App\RequestInterface;
+use Magento\Framework\App\Response\Http;
+use Magento\Framework\Json\Helper\Data;
+use Magento\Framework\ObjectManagerInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Theme\Controller\Adminhtml\System\Design\Wysiwyg\Files;
+use Magento\Theme\Controller\Adminhtml\System\Design\Wysiwyg\Files\DeleteFiles;
+use Magento\Theme\Model\Wysiwyg\Storage as WisiwygStorage;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class DeleteFilesTest extends TestCase
 {
-    /** @var \Magento\Theme\Controller\Adminhtml\System\Design\Wysiwyg\Files */
+    /** @var Files */
     protected $controller;
 
-    /** @var \PHPUnit\Framework\MockObject\MockObject|\PHPUnit\Framework\MockObject\MockObject*/
+    /** @var MockObject|MockObject*/
     protected $objectManager;
 
-    /** @var \Magento\Theme\Helper\Storage|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var \Magento\Theme\Helper\Storage|MockObject */
     protected $storage;
 
-    /** @var \Magento\Framework\App\RequestInterface|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var RequestInterface|MockObject */
     protected $request;
 
-    /** @var \Magento\Framework\App\Response\Http|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var Http|MockObject */
     protected $response;
 
     protected function setUp(): void
     {
-        $this->objectManager = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
-        $this->storage = $this->createMock(\Magento\Theme\Model\Wysiwyg\Storage::class);
-        $this->response = $this->createMock(\Magento\Framework\App\Response\Http::class);
+        $this->objectManager = $this->createMock(ObjectManagerInterface::class);
+        $this->storage = $this->createMock(WisiwygStorage::class);
+        $this->response = $this->createMock(Http::class);
         $this->request = $this->getMockForAbstractClass(
-            \Magento\Framework\App\RequestInterface::class,
+            RequestInterface::class,
             [],
             '',
             false,
@@ -37,9 +48,9 @@ class DeleteFilesTest extends \PHPUnit\Framework\TestCase
             ['isPost', 'getParam']
         );
 
-        $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $helper = new ObjectManager($this);
         $this->controller = $helper->getObject(
-            \Magento\Theme\Controller\Adminhtml\System\Design\Wysiwyg\Files\DeleteFiles::class,
+            DeleteFiles::class,
             [
                 'objectManager' => $this->objectManager,
                 'request' => $this->request,
@@ -54,7 +65,7 @@ class DeleteFilesTest extends \PHPUnit\Framework\TestCase
             ->method('isPost')
             ->willReturn(false);
 
-        $jsonData = $this->createMock(\Magento\Framework\Json\Helper\Data::class);
+        $jsonData = $this->createMock(Data::class);
         $jsonData->expects($this->once())
             ->method('jsonEncode')
             ->with(['error' => true, 'message' => 'Wrong request'])
@@ -62,7 +73,7 @@ class DeleteFilesTest extends \PHPUnit\Framework\TestCase
 
         $this->objectManager->expects($this->once())
             ->method('get')
-            ->with(\Magento\Framework\Json\Helper\Data::class)
+            ->with(Data::class)
             ->willReturn($jsonData);
 
         $this->response->expects($this->once())
@@ -82,18 +93,18 @@ class DeleteFilesTest extends \PHPUnit\Framework\TestCase
             ->with('files')
             ->willReturn('{"files":"file"}');
 
-        $jsonData = $this->createMock(\Magento\Framework\Json\Helper\Data::class);
+        $jsonData = $this->createMock(Data::class);
         $jsonData->expects($this->once())
             ->method('jsonDecode')
             ->with('{"files":"file"}')
             ->willReturn(['files' => 'file']);
         $this->objectManager->expects($this->at(0))
             ->method('get')
-            ->with(\Magento\Framework\Json\Helper\Data::class)
+            ->with(Data::class)
             ->willReturn($jsonData);
         $this->objectManager->expects($this->at(1))
             ->method('get')
-            ->with(\Magento\Theme\Model\Wysiwyg\Storage::class)
+            ->with(WisiwygStorage::class)
             ->willReturn($this->storage);
         $this->storage->expects($this->once())
             ->method('deleteFile')

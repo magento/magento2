@@ -1,15 +1,22 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Theme\Test\Unit\Model\Theme;
 
+use Magento\Framework\Data\Collection\EntityFactory;
+use Magento\Framework\Filesystem\Directory\ReadFactory;
+use Magento\Framework\Filesystem\Directory\ReadInterface;
+use Magento\Framework\View\Design\Theme\ThemePackage;
+use Magento\Framework\View\Design\Theme\ThemePackageList;
 use Magento\Framework\View\Design\ThemeInterface;
 use Magento\Theme\Model\Theme;
 use Magento\Theme\Model\Theme\Collection;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class CollectionTest extends \PHPUnit\Framework\TestCase
+class CollectionTest extends TestCase
 {
     /**
      * @var Collection
@@ -17,33 +24,33 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var \Magento\Framework\Config\ThemeFactory|\PHPUnit\Framework\MockObject\MockObject
+     * @var \Magento\Framework\Config\ThemeFactory|MockObject
      */
     private $themeConfigFactory;
 
     /**
-     * @var \Magento\Framework\Filesystem\Directory\ReadInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var ReadInterface|MockObject
      */
     private $directory;
 
     /**
-     * @var \Magento\Framework\Data\Collection\EntityFactory|\PHPUnit\Framework\MockObject\MockObject
+     * @var EntityFactory|MockObject
      */
     private $entityFactory;
 
     /**
-     * @var \Magento\Framework\View\Design\Theme\ThemePackageList|\PHPUnit\Framework\MockObject\MockObject
+     * @var ThemePackageList|MockObject
      */
     private $themePackageList;
 
     /**
-     * @var \Magento\Framework\Filesystem\Directory\ReadFactory|\PHPUnit\Framework\MockObject\MockObject
+     * @var ReadFactory|MockObject
      */
     private $readDirFactory;
 
     protected function setUp(): void
     {
-        $this->entityFactory = $this->getMockBuilder(\Magento\Framework\Data\Collection\EntityFactory::class)
+        $this->entityFactory = $this->getMockBuilder(EntityFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
@@ -51,15 +58,15 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
             ->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
-        $this->directory = $this->getMockBuilder(\Magento\Framework\Filesystem\Directory\ReadInterface::class)
+        $this->directory = $this->getMockBuilder(ReadInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->themePackageList = $this->createMock(\Magento\Framework\View\Design\Theme\ThemePackageList::class);
-        $this->readDirFactory = $this->createMock(\Magento\Framework\Filesystem\Directory\ReadFactory::class);
+        $this->themePackageList = $this->createMock(ThemePackageList::class);
+        $this->readDirFactory = $this->createMock(ReadFactory::class);
         $this->readDirFactory->expects($this->any())
             ->method('create')
-            ->willReturn($this->directory);
+            ->will($this->returnValue($this->directory));
 
         $this->model = new Collection(
             $this->entityFactory,
@@ -86,19 +93,19 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
         $parentTheme = ['parentThemeCode'];
         $parentThemePath = 'frontend/parent/theme';
 
-        $themePackage = $this->createMock(\Magento\Framework\View\Design\Theme\ThemePackage::class);
+        $themePackage = $this->createMock(ThemePackage::class);
         $themePackage->expects($this->any())
             ->method('getArea')
-            ->willReturn('frontend');
+            ->will($this->returnValue('frontend'));
         $themePackage->expects($this->any())
             ->method('getVendor')
-            ->willReturn('theme');
+            ->will($this->returnValue('theme'));
         $themePackage->expects($this->any())
             ->method('getName')
-            ->willReturn('code');
+            ->will($this->returnValue('code'));
         $this->themePackageList->expects($this->once())
             ->method('getThemes')
-            ->willReturn([$themePackage]);
+            ->will($this->returnValue([$themePackage]));
         $this->directory->expects($this->once())
             ->method('isExist')
             ->with($themeConfigFile)
@@ -150,13 +157,10 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
         $this->assertInstanceOf(get_class($this->model), $this->model->loadData());
     }
 
-    /**
-     */
     public function testAddConstraintUnsupportedType()
     {
-        $this->expectException(\UnexpectedValueException::class);
+        $this->expectException('UnexpectedValueException');
         $this->expectExceptionMessage('Constraint \'unsupported_type\' is not supported');
-
         $this->model->addConstraint('unsupported_type', 'value');
     }
 

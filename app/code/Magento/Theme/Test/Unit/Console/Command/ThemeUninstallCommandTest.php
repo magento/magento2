@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -6,41 +6,54 @@
 
 namespace Magento\Theme\Test\Unit\Console\Command;
 
+use Magento\Framework\App\Cache;
 use Magento\Framework\App\Console\MaintenanceModeEnabler;
+use Magento\Framework\App\MaintenanceMode;
+use Magento\Framework\App\State\CleanupFiles;
+use Magento\Framework\Composer\ComposerInformation;
+use Magento\Framework\Composer\DependencyChecker;
+use Magento\Framework\Setup\BackupRollback;
+use Magento\Framework\Setup\BackupRollbackFactory;
+use Magento\Framework\View\Design\ThemeInterface;
 use Magento\Theme\Console\Command\ThemeUninstallCommand;
+use Magento\Theme\Model\Theme;
+use Magento\Theme\Model\Theme\Data\Collection;
+use Magento\Theme\Model\Theme\ThemeDependencyChecker;
 use Magento\Theme\Model\Theme\ThemePackageInfo;
 use Magento\Theme\Model\Theme\ThemeUninstaller;
-use Magento\Theme\Model\Theme\ThemeDependencyChecker;
+use Magento\Theme\Model\ThemeValidator;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Tester\CommandTester;
-use Magento\Framework\Setup\BackupRollbackFactory;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ThemeUninstallCommandTest extends \PHPUnit\Framework\TestCase
+class ThemeUninstallCommandTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\App\MaintenanceMode|\PHPUnit\Framework\MockObject\MockObject
+     * @var MaintenanceMode|MockObject
      */
     private $maintenanceMode;
 
     /**
-     * @var \Magento\Framework\Composer\DependencyChecker|\PHPUnit\Framework\MockObject\MockObject
+     * @var DependencyChecker|MockObject
      */
     private $dependencyChecker;
 
     /**
-     * @var \Magento\Theme\Model\Theme\Data\Collection|\PHPUnit\Framework\MockObject\MockObject
+     * @var Collection|MockObject
      */
     private $collection;
 
     /**
-     * @var \Magento\Framework\App\Cache|\PHPUnit\Framework\MockObject\MockObject
+     * @var Cache|MockObject
      */
     private $cache;
 
     /**
-     * @var \Magento\Framework\App\State\CleanupFiles|\PHPUnit\Framework\MockObject\MockObject
+     * @var CleanupFiles|MockObject
      */
     private $cleanupFiles;
 
@@ -50,29 +63,29 @@ class ThemeUninstallCommandTest extends \PHPUnit\Framework\TestCase
     private $command;
 
     /**
-     * @var BackupRollbackFactory|\PHPUnit\Framework\MockObject\MockObject
+     * @var BackupRollbackFactory|MockObject
      */
     private $backupRollbackFactory;
 
     /**
      * Theme Validator
      *
-     * @var \Magento\Theme\Model\ThemeValidator|\PHPUnit\Framework\MockObject\MockObject
+     * @var ThemeValidator|MockObject
      */
     private $themeValidator;
 
     /**
-     * @var ThemeUninstaller|\PHPUnit\Framework\MockObject\MockObject
+     * @var ThemeUninstaller|MockObject
      */
     private $themeUninstaller;
 
     /**
-     * @var ThemeDependencyChecker|\PHPUnit\Framework\MockObject\MockObject
+     * @var ThemeDependencyChecker|MockObject
      */
     private $themeDependencyChecker;
 
     /**
-     * @var ThemePackageInfo|\PHPUnit\Framework\MockObject\MockObject
+     * @var ThemePackageInfo|MockObject
      */
     private $themePackageInfo;
 
@@ -83,20 +96,20 @@ class ThemeUninstallCommandTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp(): void
     {
-        $this->maintenanceMode = $this->createMock(\Magento\Framework\App\MaintenanceMode::class);
-        $composerInformation = $this->createMock(\Magento\Framework\Composer\ComposerInformation::class);
+        $this->maintenanceMode = $this->createMock(MaintenanceMode::class);
+        $composerInformation = $this->createMock(ComposerInformation::class);
         $composerInformation->expects($this->any())
             ->method('getRootRequiredPackages')
             ->willReturn(['magento/theme-a', 'magento/theme-b', 'magento/theme-c']);
-        $this->dependencyChecker = $this->createMock(\Magento\Framework\Composer\DependencyChecker::class);
-        $this->collection = $this->createMock(\Magento\Theme\Model\Theme\Data\Collection::class);
-        $this->cache = $this->createMock(\Magento\Framework\App\Cache::class);
-        $this->cleanupFiles = $this->createMock(\Magento\Framework\App\State\CleanupFiles::class);
-        $this->backupRollbackFactory = $this->createMock(\Magento\Framework\Setup\BackupRollbackFactory::class);
-        $this->themeValidator = $this->createMock(\Magento\Theme\Model\ThemeValidator::class);
-        $this->themeUninstaller = $this->createMock(\Magento\Theme\Model\Theme\ThemeUninstaller::class);
-        $this->themeDependencyChecker = $this->createMock(\Magento\Theme\Model\Theme\ThemeDependencyChecker::class);
-        $this->themePackageInfo = $this->createMock(\Magento\Theme\Model\Theme\ThemePackageInfo::class);
+        $this->dependencyChecker = $this->createMock(DependencyChecker::class);
+        $this->collection = $this->createMock(Collection::class);
+        $this->cache = $this->createMock(Cache::class);
+        $this->cleanupFiles = $this->createMock(CleanupFiles::class);
+        $this->backupRollbackFactory = $this->createMock(BackupRollbackFactory::class);
+        $this->themeValidator = $this->createMock(ThemeValidator::class);
+        $this->themeUninstaller = $this->createMock(ThemeUninstaller::class);
+        $this->themeDependencyChecker = $this->createMock(ThemeDependencyChecker::class);
+        $this->themePackageInfo = $this->createMock(ThemePackageInfo::class);
         $this->command = new ThemeUninstallCommand(
             $this->cache,
             $this->cleanupFiles,
@@ -122,7 +135,7 @@ class ThemeUninstallCommandTest extends \PHPUnit\Framework\TestCase
             ->method('getThemeByFullPath')
             ->willReturn(
                 $this->getMockForAbstractClass(
-                    \Magento\Framework\View\Design\ThemeInterface::class,
+                    ThemeInterface::class,
                     [],
                     '',
                     false
@@ -147,7 +160,7 @@ class ThemeUninstallCommandTest extends \PHPUnit\Framework\TestCase
             ->method('getThemeByFullPath')
             ->willReturn(
                 $this->getMockForAbstractClass(
-                    \Magento\Framework\View\Design\ThemeInterface::class,
+                    ThemeInterface::class,
                     [],
                     '',
                     false
@@ -165,17 +178,17 @@ class ThemeUninstallCommandTest extends \PHPUnit\Framework\TestCase
     {
         $this->themePackageInfo->expects($this->exactly(4))
             ->method('getPackageName')
-            ->willReturnMap([
+            ->will($this->returnValueMap([
                 ['area/vendor/test1', 'dummy1'],
                 ['area/vendor/test2', 'magento/theme-b'],
                 ['area/vendor/test3', ''],
                 ['area/vendor/test4', 'dummy2'],
-            ]);
+            ]));
         $this->collection->expects($this->any())
             ->method('getThemeByFullPath')
             ->willReturn(
                 $this->getMockForAbstractClass(
-                    \Magento\Framework\View\Design\ThemeInterface::class,
+                    ThemeInterface::class,
                     [],
                     '',
                     false
@@ -214,7 +227,7 @@ class ThemeUninstallCommandTest extends \PHPUnit\Framework\TestCase
             ->method('getThemeByFullPath')
             ->willReturn(
                 $this->getMockForAbstractClass(
-                    \Magento\Framework\View\Design\ThemeInterface::class,
+                    ThemeInterface::class,
                     [],
                     '',
                     false
@@ -226,7 +239,7 @@ class ThemeUninstallCommandTest extends \PHPUnit\Framework\TestCase
 
     public function setupPassChildThemeCheck()
     {
-        $theme = $this->createMock(\Magento\Theme\Model\Theme::class);
+        $theme = $this->createMock(Theme::class);
         $theme->expects($this->any())->method('hasChildThemes')->willReturn(false);
         $this->collection->expects($this->any())->method('getIterator')->willReturn(new \ArrayIterator([]));
     }
@@ -285,16 +298,16 @@ class ThemeUninstallCommandTest extends \PHPUnit\Framework\TestCase
 
         $this->themeUninstaller->expects($this->once())
             ->method('uninstallRegistry')
-            ->with($this->isInstanceOf(\Symfony\Component\Console\Output\OutputInterface::class), $this->anything());
+            ->with($this->isInstanceOf(OutputInterface::class), $this->anything());
         $this->themeUninstaller->expects($this->once())
             ->method('uninstallCode')
-            ->with($this->isInstanceOf(\Symfony\Component\Console\Output\OutputInterface::class), $this->anything());
+            ->with($this->isInstanceOf(OutputInterface::class), $this->anything());
     }
 
     public function testExecuteWithBackupCode()
     {
         $this->setUpExecute();
-        $backupRollback = $this->createMock(\Magento\Framework\Setup\BackupRollback::class);
+        $backupRollback = $this->createMock(BackupRollback::class);
         $this->backupRollbackFactory->expects($this->once())
             ->method('create')
             ->willReturn($backupRollback);
