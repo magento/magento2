@@ -72,7 +72,7 @@ class XmlConverterCommandTest extends TestCase
                 XmlConverterCommand::PROCESSOR_ARGUMENT => 'file.xsl'
             ]
         );
-        $this->assertContains('result', $commandTester->getDisplay());
+        $this->assertStringContainsString('result', $commandTester->getDisplay());
     }
 
     public function testWrongParameter()
