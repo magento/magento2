@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php 
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\Filesystem\Test\Unit\File;
 
 use Magento\Framework\Filesystem\DriverInterface;
@@ -43,7 +45,7 @@ class ReadTest extends TestCase
         $this->driver->expects($this->any())
             ->method('isExists')
             ->with($this->path)
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $this->driver->expects($this->once())
             ->method('fileOpen')
             ->with($this->path, $this->mode)
@@ -51,7 +53,7 @@ class ReadTest extends TestCase
         $this->file = new Read($this->path, $this->driver);
     }
 
-    public function tearDown(): void
+    protected function tearDown(): void
     {
         $this->file = null;
         $this->driver = null;
@@ -64,7 +66,7 @@ class ReadTest extends TestCase
         $driver->expects($this->once())
             ->method('isExists')
             ->with($this->path)
-            ->will($this->returnValue(false));
+            ->willReturn(false);
         $file = new Read($this->path, $driver);
         $this->assertInstanceOf(Read::class, $file);
     }
@@ -76,7 +78,7 @@ class ReadTest extends TestCase
         $this->driver->expects($this->once())
             ->method('fileRead')
             ->with($this->resource, $length)
-            ->will($this->returnValue($result));
+            ->willReturn($result);
         $this->assertEquals($result, $this->file->read($length));
     }
 
@@ -88,7 +90,7 @@ class ReadTest extends TestCase
         $this->driver->expects($this->once())
             ->method('fileGetContents')
             ->with($this->path, $flag, $context)
-            ->will($this->returnValue($result));
+            ->willReturn($result);
         $this->assertEquals($result, $this->file->readAll($flag, $context));
     }
 
@@ -100,7 +102,7 @@ class ReadTest extends TestCase
         $this->driver->expects($this->once())
             ->method('fileReadLine')
             ->with($this->resource, $length, $ending)
-            ->will($this->returnValue($result));
+            ->willReturn($result);
         $this->assertEquals($result, $this->file->readLine($length, $ending));
     }
 
@@ -114,7 +116,7 @@ class ReadTest extends TestCase
         $this->driver->expects($this->once())
             ->method('fileGetCsv')
             ->with($this->resource, $length, $delimiter, $enclosure, $escape)
-            ->will($this->returnValue($result));
+            ->willReturn($result);
         $this->assertEquals($result, $this->file->readCsv($length, $delimiter, $enclosure, $escape));
     }
 
@@ -124,7 +126,7 @@ class ReadTest extends TestCase
         $this->driver->expects($this->once())
             ->method('fileTell')
             ->with($this->resource)
-            ->will($this->returnValue($result));
+            ->willReturn($result);
         $this->assertEquals($result, $this->file->tell());
     }
 
@@ -134,7 +136,7 @@ class ReadTest extends TestCase
         $this->driver->expects($this->once())
             ->method('endOfFile')
             ->with($this->resource)
-            ->will($this->returnValue($result));
+            ->willReturn($result);
         $this->assertEquals($result, $this->file->eof());
     }
 
@@ -144,7 +146,7 @@ class ReadTest extends TestCase
         $this->driver->expects($this->once())
             ->method('fileClose')
             ->with($this->resource)
-            ->will($this->returnValue($result));
+            ->willReturn($result);
         $this->assertEquals($result, $this->file->close());
     }
 
@@ -154,7 +156,7 @@ class ReadTest extends TestCase
         $this->driver->expects($this->once())
             ->method('stat')
             ->with($this->path)
-            ->will($this->returnValue($result));
+            ->willReturn($result);
         $this->assertEquals($result, $this->file->stat());
     }
 
@@ -166,7 +168,7 @@ class ReadTest extends TestCase
         $this->driver->expects($this->once())
             ->method('fileSeek')
             ->with($this->resource, $offset, $whence)
-            ->will($this->returnValue($result));
+            ->willReturn($result);
         $this->assertEquals($result, $this->file->seek($offset, $whence));
     }
 }

@@ -78,21 +78,22 @@ class WriteTest extends TestCase
 
     public function testCreate()
     {
-        $this->driver->expects($this->once())->method('isDirectory')->will($this->returnValue(false));
-        $this->driver->expects($this->once())->method('createDirectory')->will($this->returnValue(true));
+        $this->driver->expects($this->once())->method('isDirectory')->willReturn(false);
+        $this->driver->expects($this->once())->method('createDirectory')->willReturn(true);
 
         $this->assertTrue($this->write->create('correct-path'));
     }
 
     public function testIsWritable()
     {
-        $this->driver->expects($this->once())->method('isWritable')->will($this->returnValue(true));
+        $this->driver->expects($this->once())->method('isWritable')->willReturn(true);
         $this->assertTrue($this->write->isWritable('correct-path'));
     }
 
     public function testCreateSymlinkTargetDirectoryExists()
     {
-        $targetDir = $this->getMockBuilder(WriteInterface::class)->getMock();
+        $targetDir = $this->getMockBuilder(WriteInterface::class)
+            ->getMock();
         $targetDir->driver = $this->driver;
         $sourcePath = 'source/path/file';
         $destinationDirectory = 'destination/path';
@@ -169,7 +170,8 @@ class WriteTest extends TestCase
     {
         if ($targetDir !== null) {
             /** @noinspection PhpUndefinedFieldInspection */
-            $targetDir->driver = $this->getMockBuilder(DriverInterface::class)->getMockForAbstractClass();
+            $targetDir->driver = $this->getMockBuilder(DriverInterface::class)
+                ->getMockForAbstractClass();
             $targetDirPath = 'TARGET_PATH/';
             $targetDir->expects($this->once())
                 ->method('getAbsolutePath')

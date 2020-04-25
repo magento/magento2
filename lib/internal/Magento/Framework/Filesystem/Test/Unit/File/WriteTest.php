@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php 
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\Filesystem\Test\Unit\File;
 
 use Magento\Framework\Exception\FileSystemException;
@@ -46,7 +48,7 @@ class WriteTest extends TestCase
         $this->driver->expects($this->any())
             ->method('isExists')
             ->with($this->path)
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $this->driver->expects($this->once())
             ->method('fileOpen')
             ->with($this->path, $this->mode)
@@ -54,7 +56,7 @@ class WriteTest extends TestCase
         $this->file = new Write($this->path, $this->driver, $this->mode);
     }
 
-    public function tearDown(): void
+    protected function tearDown(): void
     {
         $this->file = null;
         $this->driver = null;
@@ -67,7 +69,7 @@ class WriteTest extends TestCase
         $driver->expects($this->once())
             ->method('isExists')
             ->with($this->path)
-            ->will($this->returnValue(false));
+            ->willReturn(false);
         $file = new Write($this->path, $driver, 'r');
         $this->assertInstanceOf(Read::class, $file);
     }
@@ -79,7 +81,7 @@ class WriteTest extends TestCase
         $driver->expects($this->once())
             ->method('isExists')
             ->with($this->path)
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $file = new Write($this->path, $driver, 'x');
         $this->assertInstanceOf(Read::class, $file);
     }
@@ -91,7 +93,7 @@ class WriteTest extends TestCase
         $this->driver->expects($this->once())
             ->method('fileWrite')
             ->with($this->resource, $data)
-            ->will($this->returnValue($result));
+            ->willReturn($result);
         $this->assertEquals($result, $this->file->write($data));
     }
 
@@ -104,7 +106,7 @@ class WriteTest extends TestCase
         $this->driver->expects($this->once())
             ->method('filePutCsv')
             ->with($this->resource, $data, $delimiter, $enclosure)
-            ->will($this->returnValue($result));
+            ->willReturn($result);
         $this->assertEquals($result, $this->file->writeCsv($data, $delimiter, $enclosure));
     }
 
@@ -114,7 +116,7 @@ class WriteTest extends TestCase
         $this->driver->expects($this->once())
             ->method('fileFlush')
             ->with($this->resource)
-            ->will($this->returnValue($result));
+            ->willReturn($result);
         $this->assertEquals($result, $this->file->flush());
     }
 
@@ -168,7 +170,7 @@ class WriteTest extends TestCase
         $this->driver->expects($this->once())
             ->method('fileLock')
             ->with($this->resource, $lockMode)
-            ->will($this->returnValue($result));
+            ->willReturn($result);
         $this->assertEquals($result, $this->file->lock($lockMode));
     }
 
@@ -178,7 +180,7 @@ class WriteTest extends TestCase
         $this->driver->expects($this->once())
             ->method('fileUnlock')
             ->with($this->resource)
-            ->will($this->returnValue($result));
+            ->willReturn($result);
         $this->assertEquals($result, $this->file->unlock());
     }
 }

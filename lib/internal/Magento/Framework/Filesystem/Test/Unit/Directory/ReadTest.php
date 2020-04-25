@@ -67,13 +67,13 @@ class ReadTest extends TestCase
 
     public function testIsExist()
     {
-        $this->driver->expects($this->once())->method('isExists')->will($this->returnValue(true));
+        $this->driver->expects($this->once())->method('isExists')->willReturn(true);
         $this->assertTrue($this->read->isExist('correct-path'));
     }
 
     public function testStat()
     {
-        $this->driver->expects($this->once())->method('stat')->will($this->returnValue(['some-stat-data']));
+        $this->driver->expects($this->once())->method('stat')->willReturn(['some-stat-data']);
         $this->assertEquals(['some-stat-data'], $this->read->stat('correct-path'));
     }
 
@@ -87,11 +87,11 @@ class ReadTest extends TestCase
         $this->driver->expects($this->once())
             ->method('getAbsolutePath')
             ->with($this->path, $path)
-            ->will($this->returnValue($path));
+            ->willReturn($path);
         $this->driver->expects($this->once())
             ->method('fileGetContents')
             ->with($path, $flag, $context)
-            ->will($this->returnValue($contents));
+            ->willReturn($contents);
 
         $this->assertEquals($contents, $this->read->readFile($path, $flag, $context));
     }

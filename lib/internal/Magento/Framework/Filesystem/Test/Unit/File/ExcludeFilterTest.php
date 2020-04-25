@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php 
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 
 namespace Magento\Framework\Filesystem\Test\Unit\File;
 
@@ -34,7 +36,7 @@ class ExcludeFilterTest extends TestCase
             $result[] = $i;
         }
 
-        $this->assertTrue(!in_array(BP . '/var/session/', $result), 'Filtered path should not be in array');
+        $this->assertNotContains(BP . '/var/session/', $result, 'Filtered path should not be in array');
     }
 
     /**

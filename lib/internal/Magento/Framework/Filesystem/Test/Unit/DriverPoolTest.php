@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php 
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 
 namespace Magento\Framework\Filesystem\Test\Unit;
 
@@ -31,7 +33,7 @@ class DriverPoolTest extends TestCase
         $object = new DriverPool(['customOne' => $customOne, 'customTwo' => $customTwo]);
         $this->assertSame($customOne, $object->getDriver('customOne'));
         $this->assertInstanceOf(DriverInterface::class, $object->getDriver('customOne'));
-        $this->assertEquals($customTwo, get_class($object->getDriver('customTwo')));
+        $this->assertInstanceOf($customTwo, $object->getDriver('customTwo'));
         $this->assertInstanceOf(DriverInterface::class, $object->getDriver('customTwo'));
     }
 
