@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Weee\Test\Unit\Observer;
 
@@ -77,7 +78,10 @@ class UpdateProductOptionsObserverTest extends TestCase
             ->method('priceIncludesTax')
             ->willReturn(true);
 
-        $responseObject=$this->createPartialMock(Observer::class, ['getResponseObject']);
+        $responseObject=$this->getMockBuilder(Observer::class)
+            ->addMethods(['getResponseObject'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $responseObject->expects($this->any())
             ->method('getResponseObject')
             ->willReturn($configObj);
@@ -87,7 +91,10 @@ class UpdateProductOptionsObserverTest extends TestCase
             ->method('getEvent')
             ->willReturn($responseObject);
 
-        $product = $this->createPartialMock(Type::class, ['getTypeId', 'getStoreId']);
+        $product = $this->getMockBuilder(Type::class)
+            ->addMethods(['getTypeId', 'getStoreId'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $product->expects($this->any())
             ->method('getStoreId')
             ->willReturn(1);

@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Weee\Test\Unit\Model\Total\Quote;
 
 use Magento\Catalog\Model\Product;
@@ -51,7 +53,7 @@ class WeeeTest extends TestCase
         $taxHelper = $this->createMock(Data::class);
 
         foreach ($taxConfig as $method => $value) {
-            $taxHelper->expects($this->any())->method($method)->will($this->returnValue($value));
+            $taxHelper->expects($this->any())->method($method)->willReturn($value);
         }
 
         return $taxHelper;
@@ -76,11 +78,11 @@ class WeeeTest extends TestCase
         $rateRequest = new DataObject();
         $defaultRateRequest = new DataObject();
 
-        $taxCalculation->expects($this->any())->method('getRateRequest')->will($this->returnValue($rateRequest));
+        $taxCalculation->expects($this->any())->method('getRateRequest')->willReturn($rateRequest);
         $taxCalculation
             ->expects($this->any())
             ->method('getRateOriginRequest')
-            ->will($this->returnValue($defaultRateRequest));
+            ->willReturn($defaultRateRequest);
 
         $taxCalculation
             ->expects($this->any())
@@ -98,15 +100,16 @@ class WeeeTest extends TestCase
      */
     protected function setupWeeeHelper($weeeConfig)
     {
-        $this->serializerMock = $this->getMockBuilder(Json::class)->getMock();
+        $this->serializerMock = $this->getMockBuilder(Json::class)
+            ->getMock();
 
         $weeeHelper = $this->getMockBuilder(\Magento\Weee\Helper\Data::class)
-            ->setConstructorArgs(['serializer'  => $this->serializerMock])
+            ->setConstructorArgs(['serializer' => $this->serializerMock])
             ->disableOriginalConstructor()
             ->getMock();
 
         foreach ($weeeConfig as $method => $value) {
-            $weeeHelper->expects($this->any())->method($method)->will($this->returnValue($value));
+            $weeeHelper->expects($this->any())->method($method)->willReturn($value);
         }
 
         return $weeeHelper;
@@ -120,21 +123,25 @@ class WeeeTest extends TestCase
      */
     protected function setupItemMockBasics($itemTotalQty)
     {
-        $itemMock = $this->createPartialMock(Item::class, [
-                'getProduct',
-                'getQuote',
-                'getAddress',
-                'getTotalQty',
-                'getParentItem',
-                'getHasChildren',
-                'getChildren',
-                'isChildrenCalculated',
-                '__wakeup',
-            ]);
+        $itemMock = $this->getMockBuilder(Item::class)
+            ->addMethods(['getHasChildren'])
+            ->onlyMethods(
+                [
+                    'getProduct',
+                    'getQuote',
+                    'getAddress',
+                    'getTotalQty',
+                    'getParentItem',
+                    'getChildren',
+                    'isChildrenCalculated'
+                ]
+            )
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $productMock = $this->createMock(Product::class);
-        $itemMock->expects($this->any())->method('getProduct')->will($this->returnValue($productMock));
-        $itemMock->expects($this->any())->method('getTotalQty')->will($this->returnValue($itemTotalQty));
+        $itemMock->expects($this->any())->method('getProduct')->willReturn($productMock);
+        $itemMock->expects($this->any())->method('getTotalQty')->willReturn($itemTotalQty);
 
         return $itemMock;
     }
@@ -149,10 +156,10 @@ class WeeeTest extends TestCase
     {
         $itemMock = $this->setupItemMockBasics($itemQty);
 
-        $itemMock->expects($this->any())->method('getParentItem')->will($this->returnValue(false));
-        $itemMock->expects($this->any())->method('getHasChildren')->will($this->returnValue(false));
-        $itemMock->expects($this->any())->method('getChildren')->will($this->returnValue([]));
-        $itemMock->expects($this->any())->method('isChildrenCalculated')->will($this->returnValue(false));
+        $itemMock->expects($this->any())->method('getParentItem')->willReturn(false);
+        $itemMock->expects($this->any())->method('getHasChildren')->willReturn(false);
+        $itemMock->expects($this->any())->method('getChildren')->willReturn([]);
+        $itemMock->expects($this->any())->method('isChildrenCalculated')->willReturn(false);
 
         return $itemMock;
     }
@@ -171,15 +178,15 @@ class WeeeTest extends TestCase
         $parentItemMock = $this->setupItemMockBasics($parentQty);
 
         $childItemMock = $this->setupItemMockBasics($parentQty * $itemQty);
-        $childItemMock->expects($this->any())->method('getParentItem')->will($this->returnValue($parentItemMock));
-        $childItemMock->expects($this->any())->method('getHasChildren')->will($this->returnValue(false));
-        $childItemMock->expects($this->any())->method('getChildren')->will($this->returnValue([]));
-        $childItemMock->expects($this->any())->method('isChildrenCalculated')->will($this->returnValue(false));
+        $childItemMock->expects($this->any())->method('getParentItem')->willReturn($parentItemMock);
+        $childItemMock->expects($this->any())->method('getHasChildren')->willReturn(false);
+        $childItemMock->expects($this->any())->method('getChildren')->willReturn([]);
+        $childItemMock->expects($this->any())->method('isChildrenCalculated')->willReturn(false);
 
-        $parentItemMock->expects($this->any())->method('getParentItem')->will($this->returnValue(false));
-        $parentItemMock->expects($this->any())->method('getHasChildren')->will($this->returnValue(true));
-        $parentItemMock->expects($this->any())->method('getChildren')->will($this->returnValue([$childItemMock]));
-        $parentItemMock->expects($this->any())->method('isChildrenCalculated')->will($this->returnValue(true));
+        $parentItemMock->expects($this->any())->method('getParentItem')->willReturn(false);
+        $parentItemMock->expects($this->any())->method('getHasChildren')->willReturn(true);
+        $parentItemMock->expects($this->any())->method('getChildren')->willReturn([$childItemMock]);
+        $parentItemMock->expects($this->any())->method('isChildrenCalculated')->willReturn(true);
 
         $items[] = $parentItemMock;
         $items[] = $childItemMock;
@@ -195,11 +202,10 @@ class WeeeTest extends TestCase
     protected function setupAddressMock($items)
     {
         $addressMock = $this->createPartialMock(Address::class, [
-                '__wakeup',
-                'getAllItems',
-                'getQuote',
-                'getCustomAttributesCodes'
-            ]);
+            'getAllItems',
+            'getQuote',
+            'getCustomAttributesCodes'
+        ]);
 
         $quoteMock = $this->createMock(Quote::class);
         $storeMock = $this->createMock(Store::class);
@@ -208,10 +214,10 @@ class WeeeTest extends TestCase
         )->getMock();
         $this->priceCurrency->expects($this->any())->method('round')->willReturnArgument(0);
         $this->priceCurrency->expects($this->any())->method('convert')->willReturnArgument(0);
-        $quoteMock->expects($this->any())->method('getStore')->will($this->returnValue($storeMock));
+        $quoteMock->expects($this->any())->method('getStore')->willReturn($storeMock);
 
-        $addressMock->expects($this->any())->method('getAllItems')->will($this->returnValue($items));
-        $addressMock->expects($this->any())->method('getQuote')->will($this->returnValue($quoteMock));
+        $addressMock->expects($this->any())->method('getAllItems')->willReturn($items);
+        $addressMock->expects($this->any())->method('getQuote')->willReturn($quoteMock);
         $addressMock->expects($this->any())->method('getCustomAttributesCodes')->willReturn([]);
 
         return $addressMock;
@@ -292,11 +298,12 @@ class WeeeTest extends TestCase
         }
         $quoteMock = $this->createMock(Quote::class);
         $storeMock = $this->createMock(Store::class);
-        $quoteMock->expects($this->any())->method('getStore')->will($this->returnValue($storeMock));
+        $quoteMock->expects($this->any())->method('getStore')->willReturn($storeMock);
         $addressMock = $this->setupAddressMock($items);
         $totalMock = new Total(
             [],
-            $this->getMockBuilder(Json::class)->getMock()
+            $this->getMockBuilder(Json::class)
+                ->getMock()
         );
         $shippingAssignmentMock = $this->setupShippingAssignmentMock($addressMock, $items);
 
@@ -320,26 +327,26 @@ class WeeeTest extends TestCase
                 ->method('setApplied')
                 ->with(end($items), [
                     [
-                    'title' => 'Recycling Fee',
-                    'base_amount' => '10',
-                    'amount' => '10',
-                    'row_amount' => '20',
-                    'base_row_amount' => '20',
-                    'base_amount_incl_tax' => '10',
-                    'amount_incl_tax' => '10',
-                    'row_amount_incl_tax' => '20',
-                    'base_row_amount_incl_tax' => '20',
+                        'title' => 'Recycling Fee',
+                        'base_amount' => '10',
+                        'amount' => '10',
+                        'row_amount' => '20',
+                        'base_row_amount' => '20',
+                        'base_amount_incl_tax' => '10',
+                        'amount_incl_tax' => '10',
+                        'row_amount_incl_tax' => '20',
+                        'base_row_amount_incl_tax' => '20',
                     ],
                     [
-                    'title' => 'FPT Fee',
-                    'base_amount' => '5',
-                    'amount' => '5',
-                    'row_amount' => '10',
-                    'base_row_amount' => '10',
-                    'base_amount_incl_tax' => '5',
-                    'amount_incl_tax' => '5',
-                    'row_amount_incl_tax' => '10',
-                    'base_row_amount_incl_tax' => '10',
+                        'title' => 'FPT Fee',
+                        'base_amount' => '5',
+                        'amount' => '5',
+                        'row_amount' => '10',
+                        'base_row_amount' => '10',
+                        'base_amount_incl_tax' => '5',
+                        'amount_incl_tax' => '5',
+                        'row_amount_incl_tax' => '10',
+                        'base_row_amount_incl_tax' => '10',
                     ]
                 ]);
         }

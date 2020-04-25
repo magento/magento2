@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Weee\Test\Unit\Ui\DataProvider\Product\Form\Modifier\Manager;
 
 use Magento\Catalog\Api\Data\ProductInterface;
@@ -102,6 +104,6 @@ class WebsiteTest extends TestCase
             ->method('hasSingleStore')
             ->willReturn(true);
 
-        $this->assertSame(false, $this->model->isMultiWebsites());
+        $this->assertFalse($this->model->isMultiWebsites());
     }
 }

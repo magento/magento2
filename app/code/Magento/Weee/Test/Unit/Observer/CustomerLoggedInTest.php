@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Weee\Test\Unit\Observer;
 
 use Magento\Customer\Api\Data\AddressInterface;
@@ -14,7 +16,7 @@ use Magento\PageCache\Model\Config;
 use Magento\Tax\Api\TaxAddressManagerInterface;
 use Magento\Weee\Helper\Data;
 use Magento\Weee\Observer\CustomerLoggedIn;
-use PHPUnit\Framework\MockObject\MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class CustomerLoggedInTest extends TestCase
@@ -60,7 +62,7 @@ class CustomerLoggedInTest extends TestCase
             ->disableOriginalConstructor()
             ->setMethods(
                 [
-                'getCustomerAddress', 'getData'
+                    'getCustomerAddress', 'getData'
                 ]
             )
             ->getMock();

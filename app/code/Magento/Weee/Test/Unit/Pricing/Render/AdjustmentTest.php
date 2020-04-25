@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Weee\Test\Unit\Pricing\Render;
 
@@ -55,10 +56,11 @@ class AdjustmentTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->contextMock = $this->createPartialMock(
-            Context::class,
-            ['getStoreConfig', 'getEventManager', 'getScopeConfig']
-        );
+        $this->contextMock = $this->getMockBuilder(Context::class)
+            ->addMethods(['getStoreConfig'])
+            ->onlyMethods(['getEventManager', 'getScopeConfig'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->priceCurrencyMock = $this->getMockForAbstractClass(
             PriceCurrencyInterface::class,
             [],
@@ -77,10 +79,10 @@ class AdjustmentTest extends TestCase
 
         $this->contextMock->expects($this->any())
             ->method('getEventManager')
-            ->will($this->returnValue($eventManagerMock));
+            ->willReturn($eventManagerMock);
         $this->contextMock->expects($this->any())
             ->method('getScopeConfig')
-            ->will($this->returnValue($scopeConfigMock));
+            ->willReturn($scopeConfigMock);
 
         $this->model = new Adjustment(
             $this->contextMock,
@@ -149,7 +151,6 @@ class AdjustmentTest extends TestCase
         /** @var Product $saleable */
         $saleable = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
-            ->setMethods(['__wakeup'])
             ->getMock();
         /** @var Base $baseAmount */
         $baseAmount = $this->getMockBuilder(Base::class)
@@ -293,7 +294,6 @@ class AdjustmentTest extends TestCase
         /** @var Product $saleable */
         $saleable = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
-            ->setMethods(['__wakeup'])
             ->getMock();
         /** @var Base $baseAmount */
         $baseAmount = $this->getMockBuilder(Base::class)

@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Weee\Test\Unit\Observer;
 
@@ -60,10 +61,10 @@ class GetPriceConfigurationObserverTest extends TestCase
 
         $productInstance=$this->createMock(Simple::class);
 
-        $product = $this->createPartialMock(
-            Type::class,
-            ['getTypeInstance', 'getTypeId', 'getStoreId']
-        );
+        $product = $this->getMockBuilder(Type::class)
+            ->addMethods(['getTypeInstance', 'getTypeId', 'getStoreId'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $product->expects($this->any())
             ->method('getTypeInstance')
             ->willReturn($productInstance);
@@ -124,16 +125,16 @@ class GetPriceConfigurationObserverTest extends TestCase
                         [
                             'optionId' => 1,
                             'prices' => [
-                                    'finalPrice' => ['amount' => 31.50],
-                                    'basePrice' => ['amount' => 33.50],
-                                ],
+                                'finalPrice' => ['amount' => 31.50],
+                                'basePrice' => ['amount' => 33.50],
+                            ],
                         ],
                         [
                             'optionId' => 2,
                             'prices' => [
-                                    'finalPrice' =>['amount' => 331.50],
-                                    'basePrice' => ['amount' => 333.50],
-                                ],
+                                'finalPrice' =>['amount' => 331.50],
+                                'basePrice' => ['amount' => 333.50],
+                            ],
                         ],
                     ],
                 ],
@@ -142,21 +143,21 @@ class GetPriceConfigurationObserverTest extends TestCase
                         [
                             'optionId' => 1,
                             'prices' => [
-                                    'finalPrice' => ['amount' => 31.50],
-                                    'basePrice' => ['amount' => 33.50],
-                                    'weeePrice' => ['amount' => 46.5],
-                                    'weeePricefpt1' => ['amount' => 15],
-                                ],
+                                'finalPrice' => ['amount' => 31.50],
+                                'basePrice' => ['amount' => 33.50],
+                                'weeePrice' => ['amount' => 46.5],
+                                'weeePricefpt1' => ['amount' => 15],
+                            ],
                         ],
                         [
                             'optionId' => 2,
                             'prices' => [
-                                    'finalPrice' =>['amount' => 331.50],
-                                    'basePrice' => ['amount' => 333.50],
-                                    'weeePrice' => ['amount' => 362.5],
-                                    'weeePricefpt1' => ['amount' => 15],
-                                    'weeePricefpt2' => ['amount' => 16],
-                                ],
+                                'finalPrice' =>['amount' => 331.50],
+                                'basePrice' => ['amount' => 333.50],
+                                'weeePrice' => ['amount' => 362.5],
+                                'weeePricefpt1' => ['amount' => 15],
+                                'weeePricefpt2' => ['amount' => 16],
+                            ],
                         ],
                     ],
                 ],
@@ -176,8 +177,8 @@ class GetPriceConfigurationObserverTest extends TestCase
                             [
                                 [
                                     'prices' => [
-                                            'finalPrice' =>['amount' => 321.50],
-                                        ],
+                                        'finalPrice' =>['amount' => 321.50],
+                                    ],
                                 ],
                                 'otherkey' => [ 1, 2 , 3],
                             ]
@@ -197,9 +198,9 @@ class GetPriceConfigurationObserverTest extends TestCase
                             [
                                 [
                                     'prices' => [
-                                            'finalPrice' =>['amount' => 321.50],
-                                            'weeePrice' => ['amount' => 321.50],
-                                        ],
+                                        'finalPrice' =>['amount' => 321.50],
+                                        'weeePrice' => ['amount' => 321.50],
+                                    ],
                                 ],
                                 'otherkey' => [ 1, 2 , 3],
                             ]
@@ -215,9 +216,9 @@ class GetPriceConfigurationObserverTest extends TestCase
                         [
                             'optionId' => 1,
                             'prices' => [
-                                    'basePrice' => ['amount' => 10],
-                                    'finalPrice' => ['amount' => 11],
-                                ],
+                                'basePrice' => ['amount' => 10],
+                                'finalPrice' => ['amount' => 11],
+                            ],
                         ],
                     ],
                 ],
@@ -226,10 +227,10 @@ class GetPriceConfigurationObserverTest extends TestCase
                         [
                             'optionId' => 1,
                             'prices' => [
-                                    'basePrice' => ['amount' => 10],
-                                    'finalPrice' => ['amount' => 11],
-                                    'weeePrice' => ['amount' => 11],
-                                ],
+                                'basePrice' => ['amount' => 10],
+                                'finalPrice' => ['amount' => 11],
+                                'weeePrice' => ['amount' => 11],
+                            ],
                         ],
                     ],
                 ],

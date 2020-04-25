@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Weee\Test\Unit\Model;
 
 use Magento\Store\Model\Store;
@@ -47,7 +49,7 @@ class WeeeConfigProviderTest extends TestCase
         $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
         $this->storeMock = $this->createMock(Store::class);
 
-        $this->storeManagerMock->expects($this->any())->method('getStore')->will($this->returnValue($this->storeMock));
+        $this->storeManagerMock->expects($this->any())->method('getStore')->willReturn($this->storeMock);
 
         $this->model = new WeeeConfigProvider(
             $this->weeeHelperMock,
@@ -72,16 +74,16 @@ class WeeeConfigProviderTest extends TestCase
         $includeInSubtotal
     ) {
         $storeId = 1;
-        $this->storeMock->expects($this->any())->method('getId')->will($this->returnValue($storeId));
+        $this->storeMock->expects($this->any())->method('getId')->willReturn($storeId);
         $this->weeeHelperMock->expects($this->any())->method('isEnabled')->with($storeId)
-            ->will($this->returnValue($weeeHelperEnabled));
+            ->willReturn($weeeHelperEnabled);
         $this->weeeHelperMock->expects($this->any())->method('typeOfDisplay')
-            ->will($this->returnValue($displayWeeeDetails));
+            ->willReturn($displayWeeeDetails);
 
         $this->weeeConfigMock->expects($this->any())->method('isEnabled')
-            ->will($this->returnValue($weeeConfigEnabled));
+            ->willReturn($weeeConfigEnabled);
         $this->weeeConfigMock->expects($this->any())->method('includeInSubtotal')
-            ->will($this->returnValue($includeInSubtotal));
+            ->willReturn($includeInSubtotal);
 
         $this->assertEquals($expectedResult, $this->model->getConfig());
     }

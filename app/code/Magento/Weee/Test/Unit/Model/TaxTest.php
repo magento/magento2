@@ -1,8 +1,11 @@
-<?php declare(strict_types=1);
+<?php
+
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Weee\Test\Unit\Model;
 
 use Magento\Catalog\Model\Product;
@@ -115,26 +118,37 @@ class TaxTest extends TestCase
     {
         $this->objectManager = new ObjectManager($this);
 
-        $className = Context::class;
-        $this->context = $this->createMock($className);
+        $this->context = $this->createMock(Context::class);
+        $this->registry = $this->createMock(Registry::class);
 
-        $className = Registry::class;
-        $this->registry = $this->createMock($className);
+        $this->attributeFactory = $this->getMockBuilder(AttributeFactory::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['create'])
+            ->getMock();
 
-        $className = AttributeFactory::class;
-        $this->attributeFactory = $this->createPartialMock($className, ['create']);
+        $this->storeManager = $this->createMock(StoreManagerInterface::class);
 
-        $className = StoreManagerInterface::class;
-        $this->storeManager = $this->createMock($className);
+        $this->calculationFactory = $this->getMockBuilder(CalculationFactory::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['create'])
+            ->getMock();
 
-        $className = CalculationFactory::class;
-        $this->calculationFactory = $this->createPartialMock($className, ['create']);
+        $this->customerSession = $this->getMockBuilder(Session::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(
+                [
+                    'getCustomerId',
+                ]
+            )
+            ->addMethods(
+                [
 
-        $className = Session::class;
-        $this->customerSession = $this->createPartialMock(
-            $className,
-            ['getCustomerId', 'getDefaultTaxShippingAddress', 'getDefaultTaxBillingAddress', 'getCustomerTaxClassId']
-        );
+                    'getDefaultTaxShippingAddress',
+                    'getDefaultTaxBillingAddress',
+                    'getCustomerTaxClassId'
+                ]
+            )
+            ->getMock();
         $this->customerSession->expects($this->any())->method('getCustomerId')->willReturn(null);
         $this->customerSession->expects($this->any())->method('getDefaultTaxShippingAddress')->willReturn(null);
         $this->customerSession->expects($this->any())->method('getDefaultTaxBillingAddress')->willReturn(null);
@@ -273,7 +287,7 @@ class TaxTest extends TestCase
             ]);
 
         $result = $this->model->getProductWeeeAttributes($product, null, null, $websitePassed, true);
-        $this->assertTrue(is_array($result));
+        $this->assertIsArray($result);
         $this->assertArrayHasKey(0, $result);
         $obj = $result[0];
         $this->assertEquals(1, $obj->getAmount());

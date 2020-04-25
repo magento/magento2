@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 /**
  * Test class for \Magento\Weee\Model\Attribute\Backend\Weee\Tax
@@ -104,7 +105,7 @@ class TaxTest extends TestCase
                 ],
                 'expected' => 'Set unique country-state combinations within the same fixed product tax. '
                     . 'Verify the combinations and try again.',
-                ]
+            ]
         ];
     }
 
@@ -221,12 +222,12 @@ class TaxTest extends TestCase
                 'origData' => [['state' => 12, 'country' => 'US', 'website_id' => '1']],
                 'currentData' => [['state' => 12, 'country' => 'US', 'website_id' => '2', 'price' => 100]],
                 'expectedData' => ['state' => 12, 'country' => 'US', 'website_id' => '2', 'value' => 100,
-                                   'attribute_id' => 1]],
+                    'attribute_id' => 1]],
             'withNoRegion' => [
                 'origData' => [['country' => 'US', 'website_id' => '1']],
                 'currentData' => [['country' => 'US', 'website_id' => '2', 'price' => 100]],
                 'expectedData' => ['state' => 0, 'country' => 'US', 'website_id' => '2', 'value' => 100,
-                                   'attribute_id' => 1]]
+                    'attribute_id' => 1]]
         ];
     }
 

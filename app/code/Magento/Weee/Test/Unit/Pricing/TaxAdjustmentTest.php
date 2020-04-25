@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Weee\Test\Unit\Pricing;
 
@@ -49,21 +50,17 @@ class TaxAdjustmentTest extends TestCase
         $this->priceCurrencyMock = $this->createMock(PriceCurrencyInterface::class);
         $this->priceCurrencyMock->expects($this->any())
             ->method('convertAndRound')
-            ->will(
-                $this->returnCallback(
-                    function ($arg) {
-                        return round($arg * 0.5, 2);
-                    }
-                )
+            ->willReturnCallback(
+                function ($arg) {
+                    return round($arg * 0.5, 2);
+                }
             );
         $this->priceCurrencyMock->expects($this->any())
             ->method('convert')
-            ->will(
-                $this->returnCallback(
-                    function ($arg) {
-                        return $arg * 0.5;
-                    }
-                )
+            ->willReturnCallback(
+                function ($arg) {
+                    return $arg * 0.5;
+                }
             );
 
         $this->adjustment = new TaxAdjustment(
@@ -113,7 +110,7 @@ class TaxAdjustmentTest extends TestCase
         $this->weeeHelperMock->expects($this->any())
             ->method('typeOfDisplay')
             ->with($displayTypes)
-            ->will($this->returnValue($weeeDisplayConfig));
+            ->willReturn($weeeDisplayConfig);
 
         $this->assertEquals($expectedResult, $this->adjustment->isIncludedInDisplayPrice());
     }
@@ -163,7 +160,7 @@ class TaxAdjustmentTest extends TestCase
 
         $this->weeeHelperMock->expects($this->any())
             ->method('getProductWeeeAttributes')
-            ->will($this->returnValue($weeeAttributes));
+            ->willReturn($weeeAttributes);
 
         $this->assertEquals($expectedResult, $this->adjustment->applyAdjustment($amount, $object));
     }

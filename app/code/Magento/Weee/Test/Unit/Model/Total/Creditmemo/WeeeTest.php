@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Weee\Test\Unit\Model\Total\Creditmemo;
 
 use Magento\Framework\Serialize\Serializer\Json;
@@ -82,17 +84,14 @@ class WeeeTest extends TestCase
             ]
         );
 
-        $this->order = $this->createPartialMock(Order::class, [
-                '__wakeup'
-            ]);
+        $this->order = $this->createMock(Order::class);
 
         $this->creditmemo = $this->createPartialMock(Creditmemo::class, [
-                'getAllItems',
-                'getInvoice',
-                'roundPrice',
-                'getStore',
-                '__wakeup',
-            ]);
+            'getAllItems',
+            'getInvoice',
+            'roundPrice',
+            'getStore',
+        ]);
     }
 
     /**
@@ -107,7 +106,7 @@ class WeeeTest extends TestCase
         //Set up weeeData mock
         $this->weeeData->expects($this->once())
             ->method('includeInSubtotal')
-            ->will($this->returnValue($creditmemoData['include_in_subtotal']));
+            ->willReturn($creditmemoData['include_in_subtotal']);
 
         //Set up invoice mock
         /** @var Item[] $creditmemoItems */
@@ -117,23 +116,21 @@ class WeeeTest extends TestCase
         }
         $this->creditmemo->expects($this->once())
             ->method('getAllItems')
-            ->will($this->returnValue($creditmemoItems));
+            ->willReturn($creditmemoItems);
         foreach ($creditmemoData['data_fields'] as $key => $value) {
             $this->creditmemo->setData($key, $value);
         }
         $this->creditmemo->expects($this->any())
             ->method('roundPrice')
-            ->will($this->returnCallback(
-                function ($price, $type) use (&$roundingDelta) {
-                    if (!isset($roundingDelta[$type])) {
-                        $roundingDelta[$type] = 0;
-                    }
-                    $roundedPrice = round($price + $roundingDelta[$type], 2);
-                    $roundingDelta[$type] = $price - $roundedPrice;
-
-                    return $roundedPrice;
+            ->willReturnCallback(function ($price, $type) use (&$roundingDelta) {
+                if (!isset($roundingDelta[$type])) {
+                    $roundingDelta[$type] = 0;
                 }
-            ));
+                $roundedPrice = round($price + $roundingDelta[$type], 2);
+                $roundingDelta[$type] = $price - $roundedPrice;
+
+                return $roundedPrice;
+            });
 
         $this->model->collect($this->creditmemo);
 
@@ -501,9 +498,8 @@ class WeeeTest extends TestCase
     {
         /** @var \Magento\Sales\Model\Order\Item|MockObject $orderItem */
         $orderItem = $this->createPartialMock(\Magento\Sales\Model\Order\Item::class, [
-                'isDummy',
-                '__wakeup'
-            ]);
+            'isDummy'
+        ]);
         foreach ($creditmemoItemData['order_item'] as $key => $value) {
             $orderItem->setData($key, $value);
         }
@@ -511,73 +507,68 @@ class WeeeTest extends TestCase
         $this->weeeData->expects($this->once())
             ->method('getRowWeeeTaxInclTax')
             ->with($orderItem)
-            ->will($this->returnValue($orderItem->getRowWeeeTaxInclTax()));
+            ->willReturn($orderItem->getRowWeeeTaxInclTax());
         $this->weeeData->expects($this->once())
             ->method('getBaseRowWeeeTaxInclTax')
             ->with($orderItem)
-            ->will($this->returnValue($orderItem->getBaseRowWeeeTaxInclTax()));
+            ->willReturn($orderItem->getBaseRowWeeeTaxInclTax());
         $this->weeeData->expects($this->once())
             ->method('getWeeeAmountInvoiced')
             ->with($orderItem)
-            ->will($this->returnValue($orderItem->getWeeeAmountInvoiced()));
+            ->willReturn($orderItem->getWeeeAmountInvoiced());
         $this->weeeData->expects($this->once())
             ->method('getBaseWeeeAmountInvoiced')
             ->with($orderItem)
-            ->will($this->returnValue($orderItem->getBaseWeeeAmountInvoiced()));
+            ->willReturn($orderItem->getBaseWeeeAmountInvoiced());
         $this->weeeData->expects($this->once())
             ->method('getWeeeTaxAmountInvoiced')
             ->with($orderItem)
-            ->will($this->returnValue($orderItem->getWeeeTaxAmountInvoiced()));
+            ->willReturn($orderItem->getWeeeTaxAmountInvoiced());
         $this->weeeData->expects($this->once())
             ->method('getBaseWeeeTaxAmountInvoiced')
             ->with($orderItem)
-            ->will($this->returnValue($orderItem->getBaseWeeeTaxAmountInvoiced()));
+            ->willReturn($orderItem->getBaseWeeeTaxAmountInvoiced());
         $this->weeeData->expects($this->once())
             ->method('getWeeeAmountRefunded')
             ->with($orderItem)
-            ->will($this->returnValue($orderItem->getWeeeAmountRefunded()));
+            ->willReturn($orderItem->getWeeeAmountRefunded());
         $this->weeeData->expects($this->once())
             ->method('getBaseWeeeAmountRefunded')
             ->with($orderItem)
-            ->will($this->returnValue($orderItem->getBaseWeeeAmountRefunded()));
+            ->willReturn($orderItem->getBaseWeeeAmountRefunded());
         $this->weeeData->expects($this->once())
             ->method('getWeeeTaxAmountRefunded')
             ->with($orderItem)
-            ->will($this->returnValue($orderItem->getWeeeTaxAmountRefunded()));
+            ->willReturn($orderItem->getWeeeTaxAmountRefunded());
         $this->weeeData->expects($this->once())
             ->method('getBaseWeeeTaxAmountRefunded')
             ->with($orderItem)
-            ->will($this->returnValue($orderItem->getBaseWeeeTaxAmountRefunded()));
+            ->willReturn($orderItem->getBaseWeeeTaxAmountRefunded());
 
         /** @var Item|MockObject $invoiceItem */
         $invoiceItem = $this->createPartialMock(Item::class, [
-                'getOrderItem',
-                'isLast',
-                '__wakeup'
-            ]);
-        $invoiceItem->expects($this->any())->method('getOrderItem')->will($this->returnValue($orderItem));
+            'getOrderItem',
+            'isLast'
+        ]);
+        $invoiceItem->expects($this->any())->method('getOrderItem')->willReturn($orderItem);
         $invoiceItem->expects($this->any())
             ->method('isLast')
-            ->will($this->returnValue($creditmemoItemData['is_last']));
+            ->willReturn($creditmemoItemData['is_last']);
         foreach ($creditmemoItemData['data_fields'] as $key => $value) {
             $invoiceItem->setData($key, $value);
         }
 
         $this->weeeData->expects($this->any())
             ->method('getApplied')
-            ->will($this->returnCallback(
-                function ($item) {
-                    return $item->getAppliedWeee();
-                }
-            ));
+            ->willReturnCallback(function ($item) {
+                return $item->getAppliedWeee();
+            });
 
         $this->weeeData->expects($this->any())
             ->method('setApplied')
-            ->will($this->returnCallback(
-                function ($item, $weee) {
-                    return $item->setAppliedWeee($weee);
-                }
-            ));
+            ->willReturnCallback(function ($item, $weee) {
+                return $item->setAppliedWeee($weee);
+            });
 
         return $invoiceItem;
     }

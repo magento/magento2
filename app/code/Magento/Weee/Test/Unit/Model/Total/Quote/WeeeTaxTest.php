@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Weee\Test\Unit\Model\Total\Quote;
 
 use Magento\Catalog\Model\Product;
@@ -64,7 +66,7 @@ class WeeeTaxTest extends TestCase
         $taxHelper = $this->createMock(Data::class);
 
         foreach ($taxConfig as $method => $value) {
-            $taxHelper->expects($this->any())->method($method)->will($this->returnValue($value));
+            $taxHelper->expects($this->any())->method($method)->willReturn($value);
         }
 
         return $taxHelper;
@@ -81,7 +83,7 @@ class WeeeTaxTest extends TestCase
         $weeeHelper = $this->createMock(\Magento\Weee\Helper\Data::class);
 
         foreach ($weeeConfig as $method => $value) {
-            $weeeHelper->expects($this->any())->method($method)->will($this->returnValue($value));
+            $weeeHelper->expects($this->any())->method($method)->willReturn($value);
         }
 
         return $weeeHelper;
@@ -95,17 +97,19 @@ class WeeeTaxTest extends TestCase
      */
     protected function setupItemMock($itemQty)
     {
-        $itemMock = $this->createPartialMock(Item::class, [
+        $itemMock = $this->createPartialMock(
+            Item::class,
+            [
                 'getProduct',
                 'getQuote',
                 'getAddress',
-                'getTotalQty',
-                '__wakeup',
-            ]);
+                'getTotalQty'
+            ]
+        );
 
         $productMock = $this->createMock(Product::class);
-        $itemMock->expects($this->any())->method('getProduct')->will($this->returnValue($productMock));
-        $itemMock->expects($this->any())->method('getTotalQty')->will($this->returnValue($itemQty));
+        $itemMock->expects($this->any())->method('getProduct')->willReturn($productMock);
+        $itemMock->expects($this->any())->method('getTotalQty')->willReturn($itemQty);
 
         return $itemMock;
     }
@@ -121,13 +125,12 @@ class WeeeTaxTest extends TestCase
      */
     protected function setupTotalMock($itemMock, $isWeeeTaxable, $itemWeeeTaxDetails, $addressData)
     {
-        $totalMock = $this->createPartialMock(Total::class, [
-                '__wakeup',
-                'getWeeeCodeToItemMap',
-                'getExtraTaxableDetails',
-                'getWeeeTotalExclTax',
-                'getWeeeBaseTotalExclTax',
-            ]);
+        $totalMock = $this->getMockBuilder(Total::class)
+            ->addMethods(
+                ['getWeeeCodeToItemMap', 'getExtraTaxableDetails', 'getWeeeTotalExclTax', 'getWeeeBaseTotalExclTax']
+            )
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $map = [];
         $extraDetails = [];
@@ -167,16 +170,16 @@ class WeeeTaxTest extends TestCase
             }
         }
 
-        $totalMock->expects($this->any())->method('getWeeeCodeToItemMap')->will($this->returnValue($map));
-        $totalMock->expects($this->any())->method('getExtraTaxableDetails')->will($this->returnValue($extraDetails));
+        $totalMock->expects($this->any())->method('getWeeeCodeToItemMap')->willReturn($map);
+        $totalMock->expects($this->any())->method('getExtraTaxableDetails')->willReturn($extraDetails);
         $totalMock
             ->expects($this->any())
             ->method('getWeeeTotalExclTax')
-            ->will($this->returnValue($weeeTotals));
+            ->willReturn($weeeTotals);
         $totalMock
             ->expects($this->any())
             ->method('getWeeeBaseTotalExclTax')
-            ->will($this->returnValue($weeeBaseTotals));
+            ->willReturn($weeeBaseTotals);
 
         return $totalMock;
     }
@@ -233,7 +236,8 @@ class WeeeTaxTest extends TestCase
 
     public function testFetch()
     {
-        $serializerMock = $this->getMockBuilder(Json::class)->getMock();
+        $serializerMock = $this->getMockBuilder(Json::class)
+            ->getMock();
         $weeeTotal = 17;
         $totalMock = new Total(
             [],
@@ -257,7 +261,8 @@ class WeeeTaxTest extends TestCase
 
     public function testFetchWithZeroAmounts()
     {
-        $serializerMock = $this->getMockBuilder(Json::class)->getMock();
+        $serializerMock = $this->getMockBuilder(Json::class)
+            ->getMock();
         $totalMock = new Total(
             [],
             $serializerMock

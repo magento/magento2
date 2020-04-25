@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 /**
  * Test class for \Magento\Weee\Model\Config
@@ -32,11 +33,11 @@ class ConfigTest extends TestCase
         $scopeConfigMock->expects($this->any())
             ->method('getValue')
             ->with($path, ScopeInterface::SCOPE_STORE, null)
-            ->will($this->returnValue($configValue));
+            ->willReturn($configValue);
         $scopeConfigMock->expects($this->any())
             ->method('isSetFlag')
             ->with($path, ScopeInterface::SCOPE_STORE, null)
-            ->will($this->returnValue($configValue));
+            ->willReturn($configValue);
 
         $taxData = $this->createMock(Data::class);
 
