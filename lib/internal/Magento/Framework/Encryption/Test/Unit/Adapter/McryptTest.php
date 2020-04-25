@@ -123,7 +123,7 @@ class McryptTest extends TestCase
                 $tooLongKey = str_repeat('-', $this->getKeySize($cipher, $mode) + 1);
                 $tooShortInitVector = str_repeat('-', $this->getInitVectorSize($cipher, $mode) - 1);
                 $tooLongInitVector = str_repeat('-', $this->getInitVectorSize($cipher, $mode) + 1);
-                $result['tooLongKey-' . $cipher . '-' . $mode . '-false'] = [$tooLongKey, $cipher, $mode, false];
+                $result['tooLongKey-' . $cipher . '-' . $mode . '-false'] = [$tooLongKey, $cipher, $mode, null];
                 $keyPrefix = 'key-' . $cipher . '-' . $mode;
                 $result[$keyPrefix . '-tooShortInitVector'] = [$key, $cipher, $mode, $tooShortInitVector];
                 $result[$keyPrefix . '-tooLongInitVector'] = [$key, $cipher, $mode, $tooLongInitVector];

@@ -357,7 +357,7 @@ class EncryptorTest extends TestCase
     public function testGetHashMustUseSpecifiedHashingAlgo($password, $salt, $hashAlgo, $pattern): void
     {
         $hash = $this->encryptor->getHash($password, $salt, $hashAlgo);
-        $this->assertRegExp($pattern, $hash);
+        $this->assertMatchesRegularExpression($pattern, $hash);
     }
 
     /**
