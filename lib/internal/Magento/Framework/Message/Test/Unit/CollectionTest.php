@@ -112,12 +112,12 @@ class CollectionTest extends TestCase
             $this->model->addMessage($message);
         }
 
-        $this->assertEquals(count($messages), $this->model->getCount());
+        $this->assertCount($this->model->getCount(), $messages);
 
         foreach ($messageTypes as $type => $count) {
             $messagesByType = $this->model->getItemsByType($type);
             $this->assertEquals($count, $this->model->getCountByType($type));
-            $this->assertEquals($count, count($messagesByType));
+            $this->assertCount($count, $messagesByType);
 
             /** @var MessageInterface $message */
             foreach ($messagesByType as $message) {
@@ -169,7 +169,7 @@ class CollectionTest extends TestCase
         $this->assertEquals(MessageInterface::TYPE_NOTICE, $message->getType());
         $this->assertEquals('notice_id', $message->getIdentifier());
 
-        $this->assertEquals(count($messages), $this->model->getCount());
+        $this->assertCount($this->model->getCount(), $messages);
         $this->model->deleteMessageByIdentifier('notice_id');
         $this->assertEquals(count($messages) - 1, $this->model->getCount());
 
@@ -192,7 +192,7 @@ class CollectionTest extends TestCase
             $this->model->addMessage($message);
         }
 
-        $this->assertEquals(count($messages), $this->model->getCount());
+        $this->assertCount($this->model->getCount(), $messages);
         $this->model->clear();
         $this->assertEmpty($this->model->getCount());
     }
@@ -213,7 +213,7 @@ class CollectionTest extends TestCase
             $this->model->addMessage($message);
         }
 
-        $this->assertEquals(count($messages), $this->model->getCount());
+        $this->assertCount($this->model->getCount(), $messages);
         $this->model->clear();
         $this->assertEquals(1, $this->model->getCount());
     }

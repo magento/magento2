@@ -54,7 +54,7 @@ class FactoryTest extends TestCase
             ->expects($this->once())
             ->method('create')
             ->with($className, ['text' => 'text'])
-            ->will($this->returnValue($messageMock));
+            ->willReturn($messageMock);
         $this->factory->create($type, 'text');
     }
 
@@ -67,7 +67,7 @@ class FactoryTest extends TestCase
             ->expects($this->once())
             ->method('create')
             ->with($className, ['text' => 'text'])
-            ->will($this->returnValue($messageMock));
+            ->willReturn($messageMock);
         $this->assertEquals($messageMock, $this->factory->create($type, 'text'));
     }
 }

@@ -66,8 +66,8 @@ class ExceptionMessageLookupFactoryTest extends TestCase
             'getMessageFactory'
         )->with(
             $exception
-        )->will(
-            $this->returnValue($exceptionMessageFactory)
+        )->willReturn(
+            $exceptionMessageFactory
         );
 
         $messageError = $this->getMockBuilder(
@@ -80,7 +80,7 @@ class ExceptionMessageLookupFactoryTest extends TestCase
         $exceptionMessageFactory->expects($this->once())
             ->method('createMessage')
             ->with($exception, MessageInterface::TYPE_ERROR)
-            ->will($this->returnValue($messageError));
+            ->willReturn($messageError);
 
         $this->assertEquals($messageError, $this->exceptionMessageLookupFactory->createMessage($exception));
     }

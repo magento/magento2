@@ -124,7 +124,8 @@ class ManagerTest extends TestCase
     {
         $messageCollection = $this->getMockBuilder(
             Collection::class
-        )->disableOriginalConstructor()->setMethods(
+        )->disableOriginalConstructor()
+            ->setMethods(
             ['addMessage']
         )->getMock();
 
@@ -132,8 +133,8 @@ class ManagerTest extends TestCase
             $this->atLeastOnce()
         )->method(
             'create'
-        )->will(
-            $this->returnValue($messageCollection)
+        )->willReturn(
+            $messageCollection
         );
 
         $this->session->expects(
@@ -142,8 +143,8 @@ class ManagerTest extends TestCase
             'getData'
         )->with(
             Manager::DEFAULT_GROUP
-        )->will(
-            $this->returnValue(null)
+        )->willReturn(
+            null
         );
         $this->session->expects(
             $this->at(1)
@@ -152,8 +153,8 @@ class ManagerTest extends TestCase
         )->with(
             Manager::DEFAULT_GROUP,
             $messageCollection
-        )->will(
-            $this->returnValue($this->session)
+        )->willReturn(
+            $this->session
         );
         $this->session->expects(
             $this->at(2)
@@ -161,8 +162,8 @@ class ManagerTest extends TestCase
             'getData'
         )->with(
             Manager::DEFAULT_GROUP
-        )->will(
-            $this->returnValue($messageCollection)
+        )->willReturn(
+            $messageCollection
         );
 
         $this->eventManager->expects($this->never())->method('dispatch');
@@ -174,7 +175,8 @@ class ManagerTest extends TestCase
     {
         $messageCollection = $this->getMockBuilder(
             Collection::class
-        )->disableOriginalConstructor()->setMethods(
+        )->disableOriginalConstructor()
+            ->setMethods(
             ['addMessage', 'clear']
         )->getMock();
 
@@ -186,8 +188,8 @@ class ManagerTest extends TestCase
             'getData'
         )->with(
             Manager::DEFAULT_GROUP
-        )->will(
-            $this->returnValue($messageCollection)
+        )->willReturn(
+            $messageCollection
         );
 
         $this->eventManager->expects($this->once())->method('dispatch')->with('session_abstract_clear_messages');
@@ -219,13 +221,14 @@ class ManagerTest extends TestCase
         )->with(
             MessageInterface::TYPE_ERROR,
             $alternativeText
-        )->will(
-            $this->returnValue($messageError)
+        )->willReturn(
+            $messageError
         );
 
         $messageCollection = $this->getMockBuilder(
             Collection::class
-        )->disableOriginalConstructor()->setMethods(
+        )->disableOriginalConstructor()
+            ->setMethods(
             ['addMessage']
         )->getMock();
         $messageCollection->expects($this->atLeastOnce())->method('addMessage')->with($messageError);
@@ -236,8 +239,8 @@ class ManagerTest extends TestCase
             'getData'
         )->with(
             Manager::DEFAULT_GROUP
-        )->will(
-            $this->returnValue($messageCollection)
+        )->willReturn(
+            $messageCollection
         );
 
         $exception = new \Exception($exceptionMessage);
@@ -269,13 +272,14 @@ class ManagerTest extends TestCase
             'createMessage'
         )->with(
             $exception
-        )->will(
-            $this->returnValue($message)
+        )->willReturn(
+            $message
         );
 
         $messageCollection = $this->getMockBuilder(
             Collection::class
-        )->disableOriginalConstructor()->setMethods(
+        )->disableOriginalConstructor()
+            ->setMethods(
             ['addMessage']
         )->getMock();
         $messageCollection->expects($this->atLeastOnce())->method('addMessage')->with($message);
@@ -286,8 +290,8 @@ class ManagerTest extends TestCase
             'getData'
         )->with(
             Manager::DEFAULT_GROUP
-        )->will(
-            $this->returnValue($messageCollection)
+        )->willReturn(
+            $messageCollection
         );
 
         $this->assertEquals($this->model, $this->model->addExceptionMessage($exception));
@@ -305,12 +309,12 @@ class ManagerTest extends TestCase
         $messageCollection = $this->createPartialMock(Collection::class, ['addMessage']);
         $this->session->expects($this->any())
             ->method('getData')
-            ->will($this->returnValue($messageCollection));
+            ->willReturn($messageCollection);
         $this->eventManager->expects($this->once())
             ->method('dispatch')->with('session_abstract_add_message');
         $this->messageFactory->expects($this->once())
             ->method('create')->with($type, $message)
-            ->will($this->returnValue($this->messageMock));
+            ->willReturn($this->messageMock);
         $this->model->$methodName($message, 'group');
         $this->assertTrue($this->model->hasMessages());
     }
@@ -339,11 +343,11 @@ class ManagerTest extends TestCase
             $this->createPartialMock(Collection::class, ['getItems', 'addMessage']);
         $this->session->expects($this->any())
             ->method('getData')
-            ->will($this->returnValue($messageCollection));
+            ->willReturn($messageCollection);
         $messageCollection
             ->expects($this->once())
             ->method('getItems')
-            ->will($this->returnValue([new TestingMessage('text')]));
+            ->willReturn([new TestingMessage('text')]);
         $messageCollection->expects($this->$expectation())->method('addMessage');
         $this->model->addUniqueMessages([$messages]);
     }
@@ -375,11 +379,11 @@ class ManagerTest extends TestCase
             $this->createPartialMock(Collection::class, ['getItems', 'addMessage']);
         $this->session->expects($this->any())
             ->method('getData')
-            ->will($this->returnValue($messageCollection));
+            ->willReturn($messageCollection);
         $messageCollection
             ->expects($this->any())
             ->method('getItems')
-            ->will($this->returnValue(['message']));
+            ->willReturn(['message']);
         $messageCollection->expects($this->never())->method('addMessage');
         $this->model->addUniqueMessages($messages);
     }
@@ -401,7 +405,7 @@ class ManagerTest extends TestCase
             $this->createPartialMock(Collection::class, ['getItems', 'addMessage']);
         $this->session->expects($this->any())
             ->method('getData')
-            ->will($this->returnValue($messageCollection));
+            ->willReturn($messageCollection);
         $this->eventManager->expects($this->once())
             ->method('dispatch')->with('session_abstract_add_message');
 
