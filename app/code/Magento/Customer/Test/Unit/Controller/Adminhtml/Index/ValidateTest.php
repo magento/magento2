@@ -3,66 +3,86 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Customer\Test\Unit\Controller\Adminhtml\Index;
+
+use Magento\Customer\Api\AccountManagementInterface;
+use Magento\Customer\Api\Data\CustomerInterface;
+use Magento\Customer\Api\Data\CustomerInterfaceFactory;
+use Magento\Customer\Api\Data\ValidationResultsInterface;
+use Magento\Customer\Controller\Adminhtml\Index\Validate;
+use Magento\Customer\Model\Metadata\Form;
+use Magento\Customer\Model\Metadata\FormFactory;
+use Magento\Framework\Api\DataObjectHelper;
+use Magento\Framework\Api\ExtensibleDataObjectConverter;
+use Magento\Framework\App\RequestInterface;
+use Magento\Framework\App\ResponseInterface;
+use Magento\Framework\Controller\Result\Json;
+use Magento\Framework\Controller\Result\JsonFactory;
+use Magento\Framework\Message\Error;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\Validator\Exception;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ValidateTest extends \PHPUnit\Framework\TestCase
+class ValidateTest extends TestCase
 {
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\App\RequestInterface
+     * @var MockObject|RequestInterface
      */
     protected $request;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\App\ResponseInterface
+     * @var MockObject|ResponseInterface
      */
     protected $response;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Customer\Api\Data\CustomerInterface
+     * @var MockObject|CustomerInterface
      */
     protected $customer;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Customer\Api\Data\CustomerInterfaceFactory
+     * @var MockObject|CustomerInterfaceFactory
      */
     protected $customerDataFactory;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Customer\Model\Metadata\FormFactory
+     * @var MockObject|FormFactory
      */
     protected $formFactory;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Customer\Model\Metadata\Form
+     * @var MockObject|Form
      */
     protected $form;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\Api\ExtensibleDataObjectConverter
+     * @var MockObject|ExtensibleDataObjectConverter
      */
     protected $extensibleDataObjectConverter;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\Api\DataObjectHelper
+     * @var MockObject|DataObjectHelper
      */
     protected $dataObjectHelper;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Customer\Api\AccountManagementInterface
+     * @var MockObject|AccountManagementInterface
      */
     protected $customerAccountManagement;
 
-    /** @var  \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\Controller\Result\JsonFactory */
+    /** @var  MockObject|JsonFactory */
     protected $resultJsonFactory;
 
-    /** @var  \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\Controller\Result\Json */
+    /** @var  MockObject|Json */
     protected $resultJson;
 
-    /** @var \Magento\Customer\Controller\Adminhtml\Index\Validate */
+    /** @var Validate */
     protected $controller;
 
     protected function setUp(): void
@@ -71,7 +91,7 @@ class ValidateTest extends \PHPUnit\Framework\TestCase
             $this->markTestSkipped('Skipped on HHVM. Will be fixed in MAGETWO-45033');
         }
         $this->customer = $this->getMockForAbstractClass(
-            \Magento\Customer\Api\Data\CustomerInterface::class,
+            CustomerInterface::class,
             [],
             '',
             false,
@@ -80,13 +100,13 @@ class ValidateTest extends \PHPUnit\Framework\TestCase
         );
         $this->customer->expects($this->once())->method('getWebsiteId')->willReturn(2);
         $this->customerDataFactory = $this->createPartialMock(
-            \Magento\Customer\Api\Data\CustomerInterfaceFactory::class,
+            CustomerInterfaceFactory::class,
             ['create']
         );
         $this->customerDataFactory->expects($this->once())->method('create')->willReturn($this->customer);
-        $this->form = $this->createMock(\Magento\Customer\Model\Metadata\Form::class);
+        $this->form = $this->createMock(Form::class);
         $this->request = $this->getMockForAbstractClass(
-            \Magento\Framework\App\RequestInterface::class,
+            RequestInterface::class,
             [],
             '',
             false,
@@ -95,37 +115,37 @@ class ValidateTest extends \PHPUnit\Framework\TestCase
             ['getPost', 'getParam']
         );
         $this->response = $this->getMockForAbstractClass(
-            \Magento\Framework\App\ResponseInterface::class,
+            ResponseInterface::class,
             [],
             '',
             false
         );
-        $this->formFactory = $this->createPartialMock(\Magento\Customer\Model\Metadata\FormFactory::class, ['create']);
+        $this->formFactory = $this->createPartialMock(FormFactory::class, ['create']);
         $this->formFactory->expects($this->atLeastOnce())->method('create')->willReturn($this->form);
         $this->extensibleDataObjectConverter = $this->createMock(
-            \Magento\Framework\Api\ExtensibleDataObjectConverter::class
+            ExtensibleDataObjectConverter::class
         );
-        $this->dataObjectHelper = $this->createMock(\Magento\Framework\Api\DataObjectHelper::class);
+        $this->dataObjectHelper = $this->createMock(DataObjectHelper::class);
         $this->dataObjectHelper->expects($this->once())->method('populateWithArray');
         $this->customerAccountManagement = $this->getMockForAbstractClass(
-            \Magento\Customer\Api\AccountManagementInterface::class,
+            AccountManagementInterface::class,
             [],
             '',
             false,
             true,
             true
         );
-        $this->resultJson = $this->createMock(\Magento\Framework\Controller\Result\Json::class);
+        $this->resultJson = $this->createMock(Json::class);
         $this->resultJson->expects($this->once())->method('setData');
         $this->resultJsonFactory = $this->createPartialMock(
-            \Magento\Framework\Controller\Result\JsonFactory::class,
+            JsonFactory::class,
             ['create']
         );
         $this->resultJsonFactory->expects($this->once())->method('create')->willReturn($this->resultJson);
 
-        $objectHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $objectHelper = new ObjectManager($this);
         $this->controller = $objectHelper->getObject(
-            \Magento\Customer\Controller\Adminhtml\Index\Validate::class,
+            Validate::class,
             [
                 'request' => $this->request,
                 'response' => $this->response,
@@ -157,7 +177,7 @@ class ValidateTest extends \PHPUnit\Framework\TestCase
         $this->form->expects($this->atLeastOnce())->method('extractData')->willReturn([]);
 
         $validationResult = $this->getMockForAbstractClass(
-            \Magento\Customer\Api\Data\ValidationResultsInterface::class,
+            ValidationResultsInterface::class,
             [],
             '',
             false,
@@ -183,13 +203,13 @@ class ValidateTest extends \PHPUnit\Framework\TestCase
             ->method('extractData')
             ->willReturn([]);
 
-        $error = $this->createMock(\Magento\Framework\Message\Error::class);
+        $error = $this->createMock(Error::class);
         $this->form->expects($this->never())
             ->method('validateData')
             ->willReturn([$error]);
 
         $validationResult = $this->getMockForAbstractClass(
-            \Magento\Customer\Api\Data\ValidationResultsInterface::class,
+            ValidationResultsInterface::class,
             [],
             '',
             false,
@@ -219,19 +239,19 @@ class ValidateTest extends \PHPUnit\Framework\TestCase
             ->method('validateData');
 
         $validationResult = $this->getMockForAbstractClass(
-            \Magento\Customer\Api\Data\ValidationResultsInterface::class,
+            ValidationResultsInterface::class,
             [],
             '',
             false,
             true,
             true
         );
-        $error = $this->createMock(\Magento\Framework\Message\Error::class);
+        $error = $this->createMock(Error::class);
         $error->expects($this->once())
             ->method('getText')
             ->willReturn('Error text');
 
-        $exception = $this->createMock(\Magento\Framework\Validator\Exception::class);
+        $exception = $this->createMock(Exception::class);
         $exception->expects($this->once())
             ->method('getMessages')
             ->willReturn([$error]);
@@ -260,7 +280,7 @@ class ValidateTest extends \PHPUnit\Framework\TestCase
         $this->form->expects($this->atLeastOnce())->method('extractData')->willReturn([]);
 
         $validationResult = $this->getMockForAbstractClass(
-            \Magento\Customer\Api\Data\ValidationResultsInterface::class,
+            ValidationResultsInterface::class,
             [],
             '',
             false,

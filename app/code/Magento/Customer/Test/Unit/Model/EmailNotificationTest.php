@@ -117,7 +117,7 @@ class EmailNotificationTest extends TestCase
     /**
      * @inheritdoc
      */
-    public function setUp():void
+    protected function setUp():void
     {
         $this->customerRegistryMock = $this->createMock(CustomerRegistry::class);
         $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);

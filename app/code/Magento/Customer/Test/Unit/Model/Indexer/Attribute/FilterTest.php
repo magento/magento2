@@ -3,29 +3,40 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Customer\Test\Unit\Model\Indexer\Attribute;
 
-use Magento\Customer\Model\Indexer\Attribute\Filter;
 use Magento\Customer\Api\Data\AttributeMetadataInterface;
+use Magento\Customer\Model\Customer;
+use Magento\Customer\Model\Indexer\Attribute\Filter;
+use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Framework\Indexer\IndexerInterface;
+use Magento\Framework\Indexer\IndexerRegistry;
+use Magento\Framework\Indexer\ScopeResolver\FlatScopeResolver;
+use Magento\Framework\Indexer\StateInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class FilterTest extends \PHPUnit\Framework\TestCase
+class FilterTest extends TestCase
 {
-    /** @var \Magento\Framework\App\ResourceConnection|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var ResourceConnection|MockObject */
     protected $resource;
 
-    /** @var \Magento\Framework\DB\Adapter\AdapterInterface|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var AdapterInterface|MockObject */
     protected $connection;
 
-    /** @var \Magento\Framework\Indexer\ScopeResolver\FlatScopeResolver|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var FlatScopeResolver|MockObject */
     protected $flatScopeResolver;
 
-    /** @var \Magento\Framework\Indexer\IndexerRegistry|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var IndexerRegistry|MockObject */
     protected $indexerRegistry;
 
-    /** @var \Magento\Framework\Indexer\IndexerInterface|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var IndexerInterface|MockObject */
     protected $indexer;
 
-    /** @var \Magento\Framework\Indexer\StateInterface|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var StateInterface|MockObject */
     protected $indexerState;
 
     /** @var Filter */
@@ -33,23 +44,23 @@ class FilterTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp(): void
     {
-        $this->resource = $this->createMock(\Magento\Framework\App\ResourceConnection::class);
+        $this->resource = $this->createMock(ResourceConnection::class);
         $this->connection = $this->getMockForAbstractClass(
-            \Magento\Framework\DB\Adapter\AdapterInterface::class,
+            AdapterInterface::class,
             [],
             '',
             false
         );
-        $this->flatScopeResolver = $this->createMock(\Magento\Framework\Indexer\ScopeResolver\FlatScopeResolver::class);
-        $this->indexerRegistry = $this->createMock(\Magento\Framework\Indexer\IndexerRegistry::class);
+        $this->flatScopeResolver = $this->createMock(FlatScopeResolver::class);
+        $this->indexerRegistry = $this->createMock(IndexerRegistry::class);
         $this->indexer = $this->getMockForAbstractClass(
-            \Magento\Framework\Indexer\IndexerInterface::class,
+            IndexerInterface::class,
             [],
             '',
             false
         );
         $this->indexerState = $this->getMockForAbstractClass(
-            \Magento\Framework\Indexer\StateInterface::class,
+            StateInterface::class,
             [],
             '',
             false
@@ -95,17 +106,17 @@ class FilterTest extends \PHPUnit\Framework\TestCase
 
         $this->indexerRegistry->expects($this->once())
             ->method('get')
-            ->with(\Magento\Customer\Model\Customer::CUSTOMER_GRID_INDEXER_ID)
+            ->with(Customer::CUSTOMER_GRID_INDEXER_ID)
             ->willReturn($this->indexer);
         $this->indexer->expects($this->once())
             ->method('getState')
             ->willReturn($this->indexerState);
         $this->indexerState->expects($this->once())
             ->method('getStatus')
-            ->willReturn(\Magento\Framework\Indexer\StateInterface::STATUS_INVALID);
+            ->willReturn(StateInterface::STATUS_INVALID);
         $this->flatScopeResolver->expects($this->once())
             ->method('resolve')
-            ->with(\Magento\Customer\Model\Customer::CUSTOMER_GRID_INDEXER_ID, [])
+            ->with(Customer::CUSTOMER_GRID_INDEXER_ID, [])
             ->willReturn($tableName);
         $this->resource->expects($this->once())
             ->method('getConnection')

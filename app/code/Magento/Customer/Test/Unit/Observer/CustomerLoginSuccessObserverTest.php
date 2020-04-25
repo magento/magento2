@@ -3,16 +3,18 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Customer\Test\Unit\Observer;
 
 use Magento\Customer\Model\AuthenticationInterface;
-use Magento\Framework\Event\Observer;
+use Magento\Customer\Model\Customer;
 use Magento\Customer\Observer\CustomerLoginSuccessObserver;
+use Magento\Framework\Event;
+use Magento\Framework\Event\Observer;
+use PHPUnit\Framework\TestCase;
 
-/**
- * Class CustomerLoginSuccessObserverTest
- */
-class CustomerLoginSuccessObserverTest extends \PHPUnit\Framework\TestCase
+class CustomerLoginSuccessObserverTest extends TestCase
 {
     /**
      * Authentication
@@ -22,7 +24,7 @@ class CustomerLoginSuccessObserverTest extends \PHPUnit\Framework\TestCase
     protected $authenticationMock;
 
     /**
-     * @var \Magento\Customer\Model\Customer
+     * @var Customer
      */
     protected $customerModelMock;
 
@@ -38,7 +40,7 @@ class CustomerLoginSuccessObserverTest extends \PHPUnit\Framework\TestCase
     {
         $this->authenticationMock = $this->getMockForAbstractClass(AuthenticationInterface::class);
 
-        $this->customerModelMock = $this->createPartialMock(\Magento\Customer\Model\Customer::class, ['getId']);
+        $this->customerModelMock = $this->createPartialMock(Customer::class, ['getId']);
         $this->customerLoginSuccessObserver = new CustomerLoginSuccessObserver(
             $this->authenticationMock
         );
@@ -50,8 +52,8 @@ class CustomerLoginSuccessObserverTest extends \PHPUnit\Framework\TestCase
     public function testExecute()
     {
         $customerId = 1;
-        $observerMock = $this->createMock(\Magento\Framework\Event\Observer::class);
-        $eventMock = $this->createPartialMock(\Magento\Framework\Event::class, ['getData']);
+        $observerMock = $this->createMock(Observer::class);
+        $eventMock = $this->createPartialMock(Event::class, ['getData']);
         $observerMock->expects($this->once())
             ->method('getEvent')
             ->willReturn($eventMock);

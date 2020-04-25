@@ -3,9 +3,11 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Customer\Test\Unit\Controller\Adminhtml\Index;
 
+use Magento\Backend\App\Action\Context as BackendContext;
 use Magento\Backend\Model\View\Result\Redirect;
 use Magento\Backend\Model\View\Result\RedirectFactory;
 use Magento\Customer\Api\CustomerRepositoryInterface;
@@ -99,11 +101,12 @@ class MassUnsubscribeTest extends TestCase
     {
         $objectManagerHelper = new ObjectManagerHelper($this);
 
-        $this->contextMock = $this->createMock(\Magento\Backend\App\Action\Context::class);
+        $this->contextMock = $this->createMock(BackendContext::class);
         $resultRedirectFactory = $this->createMock(RedirectFactory::class);
         $this->responseMock = $this->getMockForAbstractClass(ResponseInterface::class);
         $this->requestMock = $this->getMockBuilder(Http::class)
-            ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->objectManagerMock = $this->createPartialMock(
             ObjectManager::class,
             ['create']
@@ -111,8 +114,8 @@ class MassUnsubscribeTest extends TestCase
         $this->messageManagerMock = $this->createMock(Manager::class);
         $this->customerCollectionMock =
             $this->getMockBuilder(Collection::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+                ->disableOriginalConstructor()
+                ->getMock();
         $this->customerCollectionFactoryMock =
             $this->getMockBuilder(CollectionFactory::class)
                 ->disableOriginalConstructor()

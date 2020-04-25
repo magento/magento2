@@ -3,22 +3,31 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Customer\Test\Unit\Block\Account;
 
+use Magento\Customer\Block\Account\Resetpassword;
 use Magento\Customer\Model\AccountManagement;
+use Magento\Framework\App\Config;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\View\Element\Template\Context;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test class for \Magento\Customer\Block\Account\Resetpassword
  */
-class ResetpasswordTest extends \PHPUnit\Framework\TestCase
+class ResetpasswordTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface | \PHPUnit\Framework\MockObject\MockObject
+     * @var ScopeConfigInterface|MockObject
      */
     protected $scopeConfigMock;
 
     /**
-     * @var \Magento\Customer\Block\Account\Resetpassword
+     * @var Resetpassword
      */
     protected $block;
 
@@ -28,18 +37,18 @@ class ResetpasswordTest extends \PHPUnit\Framework\TestCase
      */
     protected function setUp(): void
     {
-        $this->scopeConfigMock =  $this->createPartialMock(\Magento\Framework\App\Config::class, ['getValue']);
+        $this->scopeConfigMock =  $this->createPartialMock(Config::class, ['getValue']);
 
-        /** @var \Magento\Framework\View\Element\Template\Context | \PHPUnit\Framework\MockObject\MockObject $context */
-        $context = $this->createMock(\Magento\Framework\View\Element\Template\Context::class);
+        /** @var Context|MockObject $context */
+        $context = $this->createMock(Context::class);
         $context->expects($this->any())
             ->method('getScopeConfig')
             ->willReturn($this->scopeConfigMock);
 
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $objectManager = new ObjectManager($this);
 
         $this->block = $objectManager->getObject(
-            \Magento\Customer\Block\Account\Resetpassword::class,
+            Resetpassword::class,
             ['context' => $context]
         );
     }

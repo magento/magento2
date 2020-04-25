@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Customer\Test\Unit\Model\Metadata;
 
 use Magento\Customer\Api\AddressMetadataInterface;
@@ -13,25 +15,28 @@ use Magento\Customer\Model\AttributeMetadataDataProvider;
 use Magento\Customer\Model\Metadata\AddressMetadata;
 use Magento\Customer\Model\ResourceModel\Form\Attribute\Collection;
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
+use Magento\Framework\Exception\NoSuchEntityException;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class AddressMetadataTest extends \PHPUnit\Framework\TestCase
+class AddressMetadataTest extends TestCase
 {
     /** @var AddressMetadata */
     protected $model;
 
-    /** @var AttributeMetadataConverter|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var AttributeMetadataConverter|MockObject */
     protected $attributeConverterMock;
 
-    /** @var AttributeMetadataDataProvider|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var AttributeMetadataDataProvider|MockObject */
     protected $attributeProviderMock;
 
     protected function setUp(): void
     {
-        $this->attributeConverterMock = $this->getMockBuilder(\Magento\Customer\Model\AttributeMetadataConverter::class)
+        $this->attributeConverterMock = $this->getMockBuilder(AttributeMetadataConverter::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->attributeProviderMock = $this->getMockBuilder(
-            \Magento\Customer\Model\AttributeMetadataDataProvider::class
+            AttributeMetadataDataProvider::class
         )
             ->disableOriginalConstructor()
             ->getMock();
@@ -47,14 +52,14 @@ class AddressMetadataTest extends \PHPUnit\Framework\TestCase
         $formCode = 'formcode';
         $attributeCode = 'attr';
 
-        /** @var Attribute|\PHPUnit\Framework\MockObject\MockObject $attributeMock */
-        $attributeMock = $this->getMockBuilder(\Magento\Customer\Model\Attribute::class)
+        /** @var Attribute|MockObject $attributeMock */
+        $attributeMock = $this->getMockBuilder(Attribute::class)
             ->disableOriginalConstructor()
             ->getMock();
         $attributes = [$attributeMock];
 
-        /** @var Collection|\PHPUnit\Framework\MockObject\MockObject $collectionMock */
-        $collectionMock = $this->getMockBuilder(\Magento\Customer\Model\ResourceModel\Form\Attribute\Collection::class)
+        /** @var Collection|MockObject $collectionMock */
+        $collectionMock = $this->getMockBuilder(Collection::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -71,8 +76,8 @@ class AddressMetadataTest extends \PHPUnit\Framework\TestCase
             ->method('getAttributeCode')
             ->willReturn($attributeCode);
 
-        /** @var AttributeMetadataInterface|\PHPUnit\Framework\MockObject\MockObject $metadataMock */
-        $metadataMock = $this->getMockBuilder(\Magento\Customer\Api\Data\AttributeMetadataInterface::class)
+        /** @var AttributeMetadataInterface|MockObject $metadataMock */
+        $metadataMock = $this->getMockBuilder(AttributeMetadataInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $result = [$attributeCode => $metadataMock];
@@ -85,18 +90,16 @@ class AddressMetadataTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($result, $this->model->getAttributes($formCode));
     }
 
-    /**
-     */
     public function testGetAttributesWithException()
     {
-        $this->expectException(\Magento\Framework\Exception\NoSuchEntityException::class);
+        $this->expectException(NoSuchEntityException::class);
         $this->expectExceptionMessage('No such entity with formCode = formcode');
 
         $formCode = 'formcode';
         $attributes = [];
 
-        /** @var Collection|\PHPUnit\Framework\MockObject\MockObject $collectionMock */
-        $collectionMock = $this->getMockBuilder(\Magento\Customer\Model\ResourceModel\Form\Attribute\Collection::class)
+        /** @var Collection|MockObject $collectionMock */
+        $collectionMock = $this->getMockBuilder(Collection::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -117,8 +120,8 @@ class AddressMetadataTest extends \PHPUnit\Framework\TestCase
         $attributeCode = 'attr';
         $attributeId = 12;
 
-        /** @var AbstractAttribute|\PHPUnit\Framework\MockObject\MockObject $attributeMock */
-        $attributeMock = $this->getMockBuilder(\Magento\Eav\Model\Entity\Attribute\AbstractAttribute::class)
+        /** @var AbstractAttribute|MockObject $attributeMock */
+        $attributeMock = $this->getMockBuilder(AbstractAttribute::class)
             ->disableOriginalConstructor()
             ->setMethods(['getId'])
             ->getMockForAbstractClass();
@@ -132,8 +135,8 @@ class AddressMetadataTest extends \PHPUnit\Framework\TestCase
             ->method('getId')
             ->willReturn($attributeId);
 
-        /** @var AttributeMetadataInterface|\PHPUnit\Framework\MockObject\MockObject $metadataMock */
-        $metadataMock = $this->getMockBuilder(\Magento\Customer\Api\Data\AttributeMetadataInterface::class)
+        /** @var AttributeMetadataInterface|MockObject $metadataMock */
+        $metadataMock = $this->getMockBuilder(AttributeMetadataInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -149,8 +152,8 @@ class AddressMetadataTest extends \PHPUnit\Framework\TestCase
     {
         $attributeCode = 'id';
 
-        /** @var AbstractAttribute|\PHPUnit\Framework\MockObject\MockObject $attributeMock */
-        $attributeMock = $this->getMockBuilder(\Magento\Eav\Model\Entity\Attribute\AbstractAttribute::class)
+        /** @var AbstractAttribute|MockObject $attributeMock */
+        $attributeMock = $this->getMockBuilder(AbstractAttribute::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
@@ -159,8 +162,8 @@ class AddressMetadataTest extends \PHPUnit\Framework\TestCase
             ->with(AddressMetadataInterface::ENTITY_TYPE_ADDRESS, $attributeCode)
             ->willReturn($attributeMock);
 
-        /** @var AttributeMetadataInterface|\PHPUnit\Framework\MockObject\MockObject $metadataMock */
-        $metadataMock = $this->getMockBuilder(\Magento\Customer\Api\Data\AttributeMetadataInterface::class)
+        /** @var AttributeMetadataInterface|MockObject $metadataMock */
+        $metadataMock = $this->getMockBuilder(AttributeMetadataInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -172,11 +175,9 @@ class AddressMetadataTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($metadataMock, $this->model->getAttributeMetadata($attributeCode));
     }
 
-    /**
-     */
     public function testGetAttributeMetadataWithoutAttribute()
     {
-        $this->expectException(\Magento\Framework\Exception\NoSuchEntityException::class);
+        $this->expectException(NoSuchEntityException::class);
         $this->expectExceptionMessage('No such entity with entityType = customer_address, attributeCode = id');
 
         $attributeCode = 'id';
@@ -199,8 +200,8 @@ class AddressMetadataTest extends \PHPUnit\Framework\TestCase
             ->with(AddressMetadataInterface::ENTITY_TYPE_ADDRESS, AddressMetadataInterface::ATTRIBUTE_SET_ID_ADDRESS)
             ->willReturn($attributeCodes);
 
-        /** @var AbstractAttribute|\PHPUnit\Framework\MockObject\MockObject $attributeMock */
-        $attributeMock = $this->getMockBuilder(\Magento\Eav\Model\Entity\Attribute\AbstractAttribute::class)
+        /** @var AbstractAttribute|MockObject $attributeMock */
+        $attributeMock = $this->getMockBuilder(AbstractAttribute::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
@@ -209,8 +210,8 @@ class AddressMetadataTest extends \PHPUnit\Framework\TestCase
             ->with(AddressMetadataInterface::ENTITY_TYPE_ADDRESS, $attributeCode)
             ->willReturn($attributeMock);
 
-        /** @var AttributeMetadataInterface|\PHPUnit\Framework\MockObject\MockObject $metadataMock */
-        $metadataMock = $this->getMockBuilder(\Magento\Customer\Api\Data\AttributeMetadataInterface::class)
+        /** @var AttributeMetadataInterface|MockObject $metadataMock */
+        $metadataMock = $this->getMockBuilder(AttributeMetadataInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $result = [$metadataMock];
@@ -254,8 +255,8 @@ class AddressMetadataTest extends \PHPUnit\Framework\TestCase
             ->with(AddressMetadataInterface::ENTITY_TYPE_ADDRESS, AddressMetadataInterface::ATTRIBUTE_SET_ID_ADDRESS)
             ->willReturn($attributeCodes);
 
-        /** @var AbstractAttribute|\PHPUnit\Framework\MockObject\MockObject $attributeMock */
-        $attributeMock = $this->getMockBuilder(\Magento\Eav\Model\Entity\Attribute\AbstractAttribute::class)
+        /** @var AbstractAttribute|MockObject $attributeMock */
+        $attributeMock = $this->getMockBuilder(AbstractAttribute::class)
             ->disableOriginalConstructor()
             ->setMethods(['getId'])
             ->getMockForAbstractClass();
@@ -269,8 +270,8 @@ class AddressMetadataTest extends \PHPUnit\Framework\TestCase
             ->method('getId')
             ->willReturn($attributeId);
 
-        /** @var AttributeMetadataInterface|\PHPUnit\Framework\MockObject\MockObject $metadataMock */
-        $metadataMock = $this->getMockBuilder(\Magento\Customer\Api\Data\AttributeMetadataInterface::class)
+        /** @var AttributeMetadataInterface|MockObject $metadataMock */
+        $metadataMock = $this->getMockBuilder(AttributeMetadataInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $result = [$metadataMock];
@@ -301,8 +302,8 @@ class AddressMetadataTest extends \PHPUnit\Framework\TestCase
             ->with(AddressMetadataInterface::ENTITY_TYPE_ADDRESS, AddressMetadataInterface::ATTRIBUTE_SET_ID_ADDRESS)
             ->willReturn($attributeCodes);
 
-        /** @var AbstractAttribute|\PHPUnit\Framework\MockObject\MockObject $attributeMock */
-        $attributeMock = $this->getMockBuilder(\Magento\Eav\Model\Entity\Attribute\AbstractAttribute::class)
+        /** @var AbstractAttribute|MockObject $attributeMock */
+        $attributeMock = $this->getMockBuilder(AbstractAttribute::class)
             ->disableOriginalConstructor()
             ->setMethods(['getId'])
             ->getMockForAbstractClass();
@@ -316,8 +317,8 @@ class AddressMetadataTest extends \PHPUnit\Framework\TestCase
             ->method('getId')
             ->willReturn($attributeId);
 
-        /** @var AttributeMetadataInterface|\PHPUnit\Framework\MockObject\MockObject $metadataMock */
-        $metadataMock = $this->getMockBuilder(\Magento\Customer\Api\Data\AttributeMetadataInterface::class)
+        /** @var AttributeMetadataInterface|MockObject $metadataMock */
+        $metadataMock = $this->getMockBuilder(AttributeMetadataInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $result = [];
@@ -347,8 +348,8 @@ class AddressMetadataTest extends \PHPUnit\Framework\TestCase
             ->with(AddressMetadataInterface::ENTITY_TYPE_ADDRESS, AddressMetadataInterface::ATTRIBUTE_SET_ID_ADDRESS)
             ->willReturn($attributeCodes);
 
-        /** @var AbstractAttribute|\PHPUnit\Framework\MockObject\MockObject $attributeMock */
-        $attributeMock = $this->getMockBuilder(\Magento\Eav\Model\Entity\Attribute\AbstractAttribute::class)
+        /** @var AbstractAttribute|MockObject $attributeMock */
+        $attributeMock = $this->getMockBuilder(AbstractAttribute::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
@@ -357,8 +358,8 @@ class AddressMetadataTest extends \PHPUnit\Framework\TestCase
             ->with(AddressMetadataInterface::ENTITY_TYPE_ADDRESS, $attributeCode)
             ->willReturn($attributeMock);
 
-        /** @var AttributeMetadataInterface|\PHPUnit\Framework\MockObject\MockObject $metadataMock */
-        $metadataMock = $this->getMockBuilder(\Magento\Customer\Api\Data\AttributeMetadataInterface::class)
+        /** @var AttributeMetadataInterface|MockObject $metadataMock */
+        $metadataMock = $this->getMockBuilder(AttributeMetadataInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $result = [];

@@ -3,54 +3,65 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Customer\Test\Unit\Model\ResourceModel\Customer;
 
+use Magento\Customer\Model\Customer;
 use Magento\Customer\Model\ResourceModel\Customer\Grid;
+use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Framework\DB\Select;
+use Magento\Framework\Indexer\IndexerInterface;
+use Magento\Framework\Indexer\IndexerRegistry;
+use Magento\Framework\Indexer\ScopeResolver\FlatScopeResolver;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class GridTest extends \PHPUnit\Framework\TestCase
+class GridTest extends TestCase
 {
-    /** @var \Magento\Framework\App\ResourceConnection|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var ResourceConnection|MockObject */
     protected $resource;
 
-    /** @var \Magento\Framework\Indexer\IndexerRegistry|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var IndexerRegistry|MockObject */
     protected $indexerRegistry;
 
-    /** @var \Magento\Framework\Indexer\ScopeResolver\FlatScopeResolver|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var FlatScopeResolver|MockObject */
     protected $flatScopeResolver;
 
-    /** @var \Magento\Framework\Indexer\IndexerInterface|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var IndexerInterface|MockObject */
     protected $indexer;
 
-    /** @var \Magento\Framework\DB\Adapter\AdapterInterface|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var AdapterInterface|MockObject */
     protected $connection;
 
-    /** @var \Magento\Framework\DB\Select|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var Select|MockObject */
     protected $select;
 
     /** @var Grid */
     protected $observer;
 
-    /** @var \Zend_Db_Statement_Interface|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var \Zend_Db_Statement_Interface|MockObject */
     protected $queryResult;
 
     protected function setUp(): void
     {
-        $this->resource = $this->createMock(\Magento\Framework\App\ResourceConnection::class);
-        $this->indexerRegistry = $this->createMock(\Magento\Framework\Indexer\IndexerRegistry::class);
-        $this->flatScopeResolver = $this->createMock(\Magento\Framework\Indexer\ScopeResolver\FlatScopeResolver::class);
+        $this->resource = $this->createMock(ResourceConnection::class);
+        $this->indexerRegistry = $this->createMock(IndexerRegistry::class);
+        $this->flatScopeResolver = $this->createMock(FlatScopeResolver::class);
         $this->indexer = $this->getMockForAbstractClass(
-            \Magento\Framework\Indexer\IndexerInterface::class,
+            IndexerInterface::class,
             [],
             '',
             false
         );
         $this->connection = $this->getMockForAbstractClass(
-            \Magento\Framework\DB\Adapter\AdapterInterface::class,
+            AdapterInterface::class,
             [],
             '',
             false
         );
-        $this->select = $this->createMock(\Magento\Framework\DB\Select::class);
+        $this->select = $this->createMock(Select::class);
         $this->queryResult = $this->getMockForAbstractClass(
             \Zend_Db_Statement_Interface::class,
             [],
@@ -72,7 +83,7 @@ class GridTest extends \PHPUnit\Framework\TestCase
 
         $this->indexerRegistry->expects($this->once())
             ->method('get')
-            ->with(\Magento\Customer\Model\Customer::CUSTOMER_GRID_INDEXER_ID)
+            ->with(Customer::CUSTOMER_GRID_INDEXER_ID)
             ->willReturn($this->indexer);
         $this->resource
             ->expects($this->once())
@@ -81,7 +92,7 @@ class GridTest extends \PHPUnit\Framework\TestCase
         $this->flatScopeResolver
             ->expects($this->once())
             ->method('resolve')
-            ->with(\Magento\Customer\Model\Customer::CUSTOMER_GRID_INDEXER_ID, [])
+            ->with(Customer::CUSTOMER_GRID_INDEXER_ID, [])
             ->willReturn($gridTable);
 
         $this->resource->expects($this->exactly(2))

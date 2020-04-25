@@ -3,23 +3,32 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Customer\Test\Unit\Block\Account;
 
-class CustomerTest extends \PHPUnit\Framework\TestCase
+use Magento\Customer\Block\Account\Customer;
+use Magento\Framework\App\Http\Context;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class CustomerTest extends TestCase
 {
-    /** @var \Magento\Customer\Block\Account\Customer */
+    /** @var Customer */
     private $block;
 
-    /** @var \PHPUnit\Framework\MockObject\MockObject */
+    /** @var MockObject */
     private $httpContext;
 
     protected function setUp(): void
     {
-        $this->httpContext = $this->getMockBuilder(\Magento\Framework\App\Http\Context::class)
-            ->disableOriginalConstructor()->getMock();
+        $this->httpContext = $this->getMockBuilder(Context::class)
+            ->disableOriginalConstructor()
+            ->getMock();
 
-        $this->block = (new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this))
-            ->getObject(\Magento\Customer\Block\Account\Customer::class, ['httpContext' => $this->httpContext]);
+        $this->block = (new ObjectManager($this))
+            ->getObject(Customer::class, ['httpContext' => $this->httpContext]);
     }
 
     /**

@@ -3,15 +3,19 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Customer\Test\Unit\CustomerData;
 
+use Magento\Customer\CustomerData\SectionConfigConverter;
 use Magento\Framework\App\Arguments\ValidationState;
+use Magento\Framework\Config\Dom;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use PHPUnit\Framework\TestCase;
 
-class SectionConfigConverterTest extends \PHPUnit\Framework\TestCase
+class SectionConfigConverterTest extends TestCase
 {
-    /** @var \Magento\Customer\CustomerData\SectionConfigConverter */
+    /** @var SectionConfigConverter */
     protected $converter;
 
     /** @var ObjectManagerHelper */
@@ -20,7 +24,7 @@ class SectionConfigConverterTest extends \PHPUnit\Framework\TestCase
     /** @var \DOMDocument */
     protected $source;
 
-    /** @var \Magento\Framework\Config\Dom config merger */
+    /** @var Dom config merger */
     private $configMergerClass;
 
     /**  @var ValidationState */
@@ -31,7 +35,7 @@ class SectionConfigConverterTest extends \PHPUnit\Framework\TestCase
         $this->source = new \DOMDocument();
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->converter = $this->objectManagerHelper->getObject(
-            \Magento\Customer\CustomerData\SectionConfigConverter::class
+            SectionConfigConverter::class
         );
         $this->validationStateMock = $this->createMock(ValidationState::class);
     }
@@ -41,7 +45,7 @@ class SectionConfigConverterTest extends \PHPUnit\Framework\TestCase
      *
      * @param string $mergerClass
      * @param string $initialContents
-     * @return \Magento\Framework\Config\Dom
+     * @return Dom
      * @throws \UnexpectedValueException
      */
     private function createConfig($mergerClass, $initialContents)

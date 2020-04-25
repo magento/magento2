@@ -3,33 +3,43 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Customer\Test\Unit\Model\Address\Validator;
+
+use Magento\Customer\Model\Address\AbstractAddress;
+use Magento\Customer\Model\Address\Validator\General;
+use Magento\Directory\Helper\Data;
+use Magento\Eav\Model\Config;
+use Magento\Eav\Model\Entity\Attribute;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Magento\Customer\Model\Address\Validator\General tests.
  */
-class GeneralTest extends \PHPUnit\Framework\TestCase
+class GeneralTest extends TestCase
 {
-    /** @var \Magento\Directory\Helper\Data|\PHPUnit\Framework\MockObject\MockObject  */
+    /** @var Data|MockObject  */
     private $directoryDataMock;
 
-    /** @var \Magento\Eav\Model\Config|\PHPUnit\Framework\MockObject\MockObject  */
+    /** @var Config|MockObject  */
     private $eavConfigMock;
 
-    /** @var \Magento\Customer\Model\Address\Validator\General  */
+    /** @var General  */
     private $model;
 
-    /** @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager */
+    /** @var ObjectManager */
     private $objectManager;
 
     protected function setUp(): void
     {
-        $this->directoryDataMock = $this->createMock(\Magento\Directory\Helper\Data::class);
-        $this->eavConfigMock = $this->createMock(\Magento\Eav\Model\Config::class);
-        $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $this->directoryDataMock = $this->createMock(Data::class);
+        $this->eavConfigMock = $this->createMock(Config::class);
+        $this->objectManager = new ObjectManager($this);
         $this->model = $this->objectManager->getObject(
-            \Magento\Customer\Model\Address\Validator\General::class,
+            General::class,
             [
                 'eavConfig' => $this->eavConfigMock,
                 'directoryData' => $this->directoryDataMock,
@@ -47,7 +57,7 @@ class GeneralTest extends \PHPUnit\Framework\TestCase
     public function testValidate(array $data, array $expected)
     {
         $addressMock = $this
-            ->getMockBuilder(\Magento\Customer\Model\Address\AbstractAddress::class)
+            ->getMockBuilder(AbstractAddress::class)
             ->disableOriginalConstructor()
             ->setMethods(
                 [
@@ -63,7 +73,7 @@ class GeneralTest extends \PHPUnit\Framework\TestCase
                 ]
             )->getMock();
 
-        $attributeMock = $this->createMock(\Magento\Eav\Model\Entity\Attribute::class);
+        $attributeMock = $this->createMock(Attribute::class);
         $attributeMock->expects($this->any())
             ->method('getIsRequired')
             ->willReturn(true);

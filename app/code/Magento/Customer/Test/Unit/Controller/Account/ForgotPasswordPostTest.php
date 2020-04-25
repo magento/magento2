@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Customer\Test\Unit\Controller\Account;
 
 use Magento\Customer\Api\AccountManagementInterface;
@@ -16,11 +18,13 @@ use Magento\Framework\Controller\Result\RedirectFactory as ResultRedirectFactory
 use Magento\Framework\Escaper;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Message\ManagerInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ForgotPasswordPostTest extends \PHPUnit\Framework\TestCase
+class ForgotPasswordPostTest extends TestCase
 {
     /**
      * @var ForgotPasswordPost
@@ -28,42 +32,42 @@ class ForgotPasswordPostTest extends \PHPUnit\Framework\TestCase
     protected $controller;
 
     /**
-     * @var Context | \PHPUnit\Framework\MockObject\MockObject
+     * @var Context|MockObject
      */
     protected $context;
 
     /**
-     * @var Session | \PHPUnit\Framework\MockObject\MockObject
+     * @var Session|MockObject
      */
     protected $session;
 
     /**
-     * @var AccountManagementInterface | \PHPUnit\Framework\MockObject\MockObject
+     * @var AccountManagementInterface|MockObject
      */
     protected $accountManagement;
 
     /**
-     * @var Escaper | \PHPUnit\Framework\MockObject\MockObject
+     * @var Escaper|MockObject
      */
     protected $escaper;
 
     /**
-     * @var ResultRedirect | \PHPUnit\Framework\MockObject\MockObject
+     * @var ResultRedirect|MockObject
      */
     protected $resultRedirect;
 
     /**
-     * @var ResultRedirectFactory | \PHPUnit\Framework\MockObject\MockObject
+     * @var ResultRedirectFactory|MockObject
      */
     protected $resultRedirectFactory;
 
     /**
-     * @var Request | \PHPUnit\Framework\MockObject\MockObject
+     * @var Request|MockObject
      */
     protected $request;
 
     /**
-     * @var ManagerInterface | \PHPUnit\Framework\MockObject\MockObject
+     * @var ManagerInterface|MockObject
      */
     protected $messageManager;
 
@@ -71,14 +75,14 @@ class ForgotPasswordPostTest extends \PHPUnit\Framework\TestCase
     {
         $this->prepareContext();
 
-        $this->session = $this->getMockBuilder(\Magento\Customer\Model\Session::class)
+        $this->session = $this->getMockBuilder(Session::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->accountManagement = $this->getMockBuilder(\Magento\Customer\Api\AccountManagementInterface::class)
+        $this->accountManagement = $this->getMockBuilder(AccountManagementInterface::class)
             ->getMockForAbstractClass();
 
-        $this->escaper = $this->getMockBuilder(\Magento\Framework\Escaper::class)
+        $this->escaper = $this->getMockBuilder(Escaper::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -185,7 +189,7 @@ class ForgotPasswordPostTest extends \PHPUnit\Framework\TestCase
     public function testExecuteException()
     {
         $email = 'user1@example.com';
-        $exception = new \Exception(__('Exception'));
+        $exception = new \Exception('Exception');
 
         $this->request->expects($this->once())
             ->method('getPost')
@@ -222,7 +226,7 @@ class ForgotPasswordPostTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->context = $this->getMockBuilder(\Magento\Framework\App\Action\Context::class)
+        $this->context = $this->getMockBuilder(Context::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -233,7 +237,7 @@ class ForgotPasswordPostTest extends \PHPUnit\Framework\TestCase
             ])
             ->getMock();
 
-        $this->messageManager = $this->getMockBuilder(\Magento\Framework\Message\ManagerInterface::class)
+        $this->messageManager = $this->getMockBuilder(ManagerInterface::class)
             ->getMockForAbstractClass();
 
         $this->resultRedirectFactory->expects($this->any())

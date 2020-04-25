@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Customer\Test\Unit\Model\Plugin;
 
@@ -13,14 +14,14 @@ use Magento\Customer\Model\Plugin\CustomerNotification;
 use Magento\Customer\Model\Session;
 use Magento\Framework\App\ActionInterface;
 use Magento\Framework\App\Area;
-use Magento\Framework\App\HttpRequestInterface;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\App\State;
 use Magento\Framework\Exception\NoSuchEntityException;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 
-class CustomerNotificationTest extends \PHPUnit\Framework\TestCase
+class CustomerNotificationTest extends TestCase
 {
     private const STUB_CUSTOMER_ID = 1;
 
@@ -71,8 +72,8 @@ class CustomerNotificationTest extends \PHPUnit\Framework\TestCase
 
         $this->customerRepositoryMock = $this->getMockForAbstractClass(CustomerRepositoryInterface::class);
         $this->actionMock = $this->getMockForAbstractClass(ActionInterface::class);
-        $this->requestMock = $this->getMockBuilder([RequestInterface::class, HttpRequestInterface::class])
-            ->getMock();
+        $this->requestMock = $this->getMockBuilder(RequestStubInterface::class)
+            ->getMockForAbstractClass();
         $this->requestMock->method('isPost')->willReturn(true);
 
         $this->loggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
