@@ -173,11 +173,11 @@ class InlineTest extends TestCase
             $this->exactly($jsonCall)
         )->method(
             'setIsJson'
-        )->will(
-            $this->returnValueMap([
+        )->willReturnMap(
+            [
                 [$isJson, $this->returnSelf()],
                 [!$isJson, $this->returnSelf()],
-            ])
+            ]
         );
         $this->parserMock->expects(
             $this->exactly(1)
@@ -190,8 +190,8 @@ class InlineTest extends TestCase
             $this->exactly(2)
         )->method(
             'getContent'
-        )->will(
-            $this->returnValue(is_array($body) ? reset($body) : $body)
+        )->willReturn(
+            is_array($body) ? reset($body) : $body
         );
 
         $model = new Inline(
@@ -238,11 +238,11 @@ class InlineTest extends TestCase
             $this->exactly($jsonCall)
         )->method(
             'setIsJson'
-        )->will(
-            $this->returnValueMap([
+        )->willReturnMap(
+            [
                 [$isJson, $this->returnSelf()],
                 [!$isJson, $this->returnSelf()],
-            ])
+            ]
         );
         $this->parserMock->expects(
             $this->exactly(1)
@@ -255,8 +255,8 @@ class InlineTest extends TestCase
             $this->exactly(2)
         )->method(
             'getContent'
-        )->will(
-            $this->returnValue(is_array($body) ? reset($body) : $body)
+        )->willReturn(
+            is_array($body) ? reset($body) : $body
         );
 
         $model = new Inline(
@@ -295,15 +295,15 @@ class InlineTest extends TestCase
     protected function prepareIsAllowed($isEnabled, $isActive, $isDevAllowed, $scope = null)
     {
         $scopeMock = $this->createMock(ScopeConfigInterface::class);
-        $this->stateMock->expects($this->any())->method('isEnabled')->will($this->returnValue($isEnabled));
+        $this->stateMock->expects($this->any())->method('isEnabled')->willReturn($isEnabled);
         $this->scopeResolverMock->expects(
             $this->once()
         )->method(
             'getScope'
         )->with(
             $scope
-        )->will(
-            $this->returnValue($scopeMock)
+        )->willReturn(
+            $scopeMock
         );
 
         $this->configMock->expects(
@@ -312,16 +312,16 @@ class InlineTest extends TestCase
             'isActive'
         )->with(
             $scopeMock
-        )->will(
-            $this->returnValue($isActive)
+        )->willReturn(
+            $isActive
         );
 
         $this->configMock->expects(
             $this->exactly((int)$isActive)
         )->method(
             'isDevAllowed'
-        )->will(
-            $this->returnValue($isDevAllowed)
+        )->willReturn(
+            $isDevAllowed
         );
     }
 }
