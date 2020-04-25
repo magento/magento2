@@ -1,12 +1,15 @@
-<?php declare(strict_types=1);
+<?php
+
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 /**
  * Magento_Convert Test Case for \Magento\Framework\Convert\Excel Export
  */
+
 namespace Magento\Framework\Convert\Test\Unit;
 
 use Magento\Framework\Convert\Excel;
@@ -96,7 +99,11 @@ class ExcelTest extends TestCase
             new \ArrayIterator($this->_testData),
             [$this, 'callbackMethod']
         );
-        $this->assertContains('_TRUE_', $convert->convert(), 'Failed asserting that callback method is called.');
+        $this->assertStringContainsString(
+            '_TRUE_',
+            $convert->convert(),
+            'Failed asserting that callback method is called.'
+        );
     }
 
     /**
@@ -159,6 +166,10 @@ class ExcelTest extends TestCase
     public function testWriteCallback()
     {
         $file = $this->_writeFile(true);
-        $this->assertContains('_TRUE_', file_get_contents($file), 'Failed asserting that callback method is called.');
+        $this->assertStringContainsString(
+            '_TRUE_',
+            file_get_contents($file),
+            'Failed asserting that callback method is called.'
+        );
     }
 }
