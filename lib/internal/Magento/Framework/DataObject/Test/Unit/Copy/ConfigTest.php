@@ -40,7 +40,7 @@ class ConfigTest extends TestCase
                 'street' => ['to_customer_address' => '*'],
             ],
         ];
-        $this->_storageMock->expects($this->once())->method('get')->will($this->returnValue($expected));
+        $this->_storageMock->expects($this->once())->method('get')->willReturn($expected);
         $result = $this->_model->getFieldsets('global');
         $this->assertEquals($expected, $result);
     }
@@ -49,7 +49,7 @@ class ConfigTest extends TestCase
     {
         $expectedFieldset = ['aspect' => 'firstAspect'];
         $fieldsets = ['test' => $expectedFieldset, 'test_second' => ['aspect' => 'secondAspect']];
-        $this->_storageMock->expects($this->once())->method('get')->will($this->returnValue($fieldsets));
+        $this->_storageMock->expects($this->once())->method('get')->willReturn($fieldsets);
         $result = $this->_model->getFieldset('test');
         $this->assertEquals($expectedFieldset, $result);
     }
@@ -57,7 +57,7 @@ class ConfigTest extends TestCase
     public function testGetFieldsetIfFieldsetIsEmpty()
     {
         $this->_storageMock->expects($this->once())->method('get')
-            ->will($this->returnValue([]));
+            ->willReturn([]);
         $result = $this->_model->getFieldset('test');
         $this->assertEquals(null, $result);
     }

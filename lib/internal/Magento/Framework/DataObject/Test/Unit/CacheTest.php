@@ -119,7 +119,7 @@ class CacheTest extends TestCase
         $newIdx = 'idx' . $hash;
         $this->assertEquals($newIdx, $this->cache->save($object, 'idx{hash}'));
         $this->cache->debug($newIdx);
-        $this->assertTrue(array_key_exists($newIdx, $this->cache->debugByIds($newIdx)));
+        $this->assertArrayHasKey($newIdx, $this->cache->debugByIds($newIdx));
     }
 
     public function testGetAndDeleteTags()

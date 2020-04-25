@@ -83,7 +83,7 @@ class CopyTest extends TestCase
             ->expects($this->once())
             ->method('getFieldset')
             ->with('fieldset', 'global')
-            ->will($this->returnValue(null));
+            ->willReturn(null);
         $this->eventManagerMock->expects($this->never())->method('dispatch');
         $this->assertEquals(
             [$this->targetMock],
@@ -98,7 +98,7 @@ class CopyTest extends TestCase
             ->expects($this->once())
             ->method('getFieldset')
             ->with('fieldset', 'global')
-            ->will($this->returnValue($fields));
+            ->willReturn($fields);
 
         $eventName = sprintf('core_copy_fieldset_%s_%s', 'fieldset', 'aspect');
         $data = [
@@ -120,19 +120,18 @@ class CopyTest extends TestCase
             ->expects($this->once())
             ->method('getFieldset')
             ->with('fieldset', 'global')
-            ->will($this->returnValue($fields));
+            ->willReturn($fields);
 
         $this->sourceMock
             ->expects($this->once())
             ->method('getDataUsingMethod')
             ->with('code')
-            ->will($this->returnValue('value'));
+            ->willReturn('value');
 
         $this->targetMock
             ->expects($this->once())
             ->method('setDataUsingMethod')
-            ->with('value')
-            ->will($this->returnSelf());
+            ->with('value')->willReturnSelf();
         $eventName = sprintf('core_copy_fieldset_%s_%s', 'fieldset', 'aspect');
         $data = [
             'target' => $this->targetMock,
@@ -154,13 +153,13 @@ class CopyTest extends TestCase
             ->expects($this->once())
             ->method('getFieldset')
             ->with('fieldset', 'global')
-            ->will($this->returnValue($fields));
+            ->willReturn($fields);
 
         $this->sourceMock
             ->expects($this->once())
             ->method('getDataUsingMethod')
             ->with('code')
-            ->will($this->returnValue('value'));
+            ->willReturn('value');
 
         $this->targetMock
             ->expects($this->never())
@@ -189,23 +188,14 @@ class CopyTest extends TestCase
             ->expects($this->once())
             ->method('getFieldset')
             ->with('fieldset', 'global')
-            ->will($this->returnValue($fields));
+            ->willReturn($fields);
 
-        $sourceMock = $this->createPartialMock(
-            ExtensibleDataInterface::class,
-            [
-                'getExtensionAttributes',
-                'getCode'
-            ]
-        );
-        $targetMock = $this->createPartialMock(
-            ExtensibleDataInterface::class,
-            [
-                'getExtensionAttributes',
-                'setCode',
-                'setExtensionAttributes'
-            ]
-        );
+        $sourceMock = $this->getMockBuilder(ExtensibleDataInterface::class)
+            ->addMethods(['getExtensionAttributes', 'getCode'])
+            ->getMock();
+        $targetMock = $this->getMockBuilder(ExtensibleDataInterface::class)
+            ->addMethods(['getExtensionAttributes', 'setCode', 'setExtensionAttributes'])
+            ->getMock();
 
         $sourceMock
             ->expects($this->any())
@@ -242,7 +232,7 @@ class CopyTest extends TestCase
             ->expects($this->once())
             ->method('getFieldset')
             ->with('fieldset', 'global')
-            ->will($this->returnValue($fields));
+            ->willReturn($fields);
 
         $sourceMock = $this->createPartialMock(
             AbstractSimpleObject::class,
@@ -284,7 +274,7 @@ class CopyTest extends TestCase
             ->expects($this->once())
             ->method('getFieldset')
             ->with('fieldset', 'global')
-            ->will($this->returnValue(null));
+            ->willReturn(null);
         $this->sourceMock
             ->expects($this->never())
             ->method('getDataUsingMethod');
@@ -298,12 +288,12 @@ class CopyTest extends TestCase
             ->expects($this->once())
             ->method('getFieldset')
             ->with('fieldset', 'global')
-            ->will($this->returnValue($fields));
+            ->willReturn($fields);
         $this->sourceMock
             ->expects($this->once())
             ->method('getDataUsingMethod')
             ->with('code')
-            ->will($this->returnValue('value'));
+            ->willReturn('value');
 
         $this->assertEquals(
             ['value' => 'value'],
@@ -318,7 +308,7 @@ class CopyTest extends TestCase
             ->expects($this->once())
             ->method('getFieldset')
             ->with('fieldset', 'global')
-            ->will($this->returnValue($fields));
+            ->willReturn($fields);
         $this->sourceMock
             ->expects($this->never())
             ->method('getDataUsingMethod');
@@ -336,23 +326,18 @@ class CopyTest extends TestCase
             ->expects($this->once())
             ->method('getFieldset')
             ->with('fieldset', 'global')
-            ->will($this->returnValue($fields));
+            ->willReturn($fields);
 
-        $sourceMock = $this->createPartialMock(
-            Address::class,
-            [
-                'getExtensionAttributes',
-                'getCode'
-            ]
-        );
-        $targetMock = $this->createPartialMock(
-            Address::class,
-            [
-                'getExtensionAttributes',
-                'setCode',
-                'setExtensionAttributes'
-            ]
-        );
+        $sourceMock = $this->getMockBuilder(Address::class)
+            ->addMethods(['getCode'])
+            ->onlyMethods(['getExtensionAttributes'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $targetMock = $this->getMockBuilder(Address::class)
+            ->addMethods(['setCode'])
+            ->onlyMethods(['getExtensionAttributes', 'setExtensionAttributes'])
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $sourceMock
             ->expects($this->any())
@@ -388,7 +373,7 @@ class CopyTest extends TestCase
             ->expects($this->once())
             ->method('getFieldset')
             ->with('fieldset', 'global')
-            ->will($this->returnValue($fields));
+            ->willReturn($fields);
 
         $sourceMock = $this->createPartialMock(
             Address::class,
