@@ -86,7 +86,7 @@ class CurrencyTest extends TestCase
         $this->mockCurrencyFactory
             ->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($options));
+            ->willReturn($options);
 
         $this->mockEventManager
             ->expects($this->once())
@@ -108,7 +108,7 @@ class CurrencyTest extends TestCase
         $this->mockCurrencyFactory
             ->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($options));
+            ->willReturn($options);
 
         $this->mockEventManager
             ->expects($this->once())
@@ -131,7 +131,7 @@ class CurrencyTest extends TestCase
         $this->mockCurrencyFactory
             ->expects($this->never())
             ->method('create')
-            ->will($this->returnValue($options));
+            ->willReturn($options);
 
         $this->mockEventManager
             ->expects($this->never())
@@ -153,7 +153,7 @@ class CurrencyTest extends TestCase
         $this->mockCurrencyFactory
             ->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($options));
+            ->willReturn($options);
 
         $this->mockEventManager
             ->expects($this->once())
@@ -179,12 +179,12 @@ class CurrencyTest extends TestCase
         $this->mockCurrencyFactory
             ->expects($this->at(0))
             ->method('create')
-            ->will($this->throwException(new \Exception()));
+            ->willThrowException(new \Exception());
 
         $this->mockCurrencyFactory
             ->expects($this->at(1))
             ->method('create')
-            ->will($this->returnValue($options));
+            ->willReturn($options);
 
         $this->mockEventManager
             ->expects($this->once())

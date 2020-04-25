@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\Framework\Locale\Test\Unit;
 
 use Magento\Directory\Model\Currency;
+use Magento\Directory\Model\CurrencyFactory;
 use Magento\Framework\App\ScopeInterface;
 use Magento\Framework\App\ScopeResolverInterface;
 use Magento\Framework\Locale\Format;
@@ -66,8 +67,8 @@ class FormatTest extends TestCase
         $this->localeResolver = $this->getMockBuilder(ResolverInterface::class)
             ->getMock();
 
-        /** @var \Magento\Directory\Model\CurrencyFactory|MockObject $currencyFactory */
-        $currencyFactory = $this->getMockBuilder(\Magento\Directory\Model\CurrencyFactory::class)
+        /** @var CurrencyFactory|MockObject $currencyFactory */
+        $currencyFactory = $this->getMockBuilder(CurrencyFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
 

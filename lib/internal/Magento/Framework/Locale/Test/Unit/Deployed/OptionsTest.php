@@ -189,20 +189,20 @@ class OptionsTest extends TestCase
         $area = 'area';
         $code = 'code';
         $themeMock = $this->getMockBuilder(ThemeInterface::class)
-                ->getMockForAbstractClass();
+            ->getMockForAbstractClass();
         $themeMock->expects($this->once())
-                ->method('getCode')
-                ->willReturn($code);
+            ->method('getCode')
+            ->willReturn($code);
         $themeMock->expects($this->once())
-                ->method('getArea')
-                ->willReturn($area);
+            ->method('getArea')
+            ->willReturn($area);
         $this->designMock->expects($this->once())
-                ->method('getDesignTheme')
-                ->willReturn($themeMock);
+            ->method('getDesignTheme')
+            ->willReturn($themeMock);
         $this->availableLocalesMock->expects($this->once())
-                ->method('getList')
-                ->with($code, $area)
-                ->willReturn($deployedCodes);
+            ->method('getList')
+            ->with($code, $area)
+            ->willReturn($deployedCodes);
     }
 
     /**
