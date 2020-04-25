@@ -5,7 +5,6 @@
  */
 declare(strict_types=1);
 
-
 namespace Magento\Framework\Reflection\Test\Unit;
 
 use Magento\Framework\Api\ExtensionAttribute\Config;

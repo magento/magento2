@@ -5,7 +5,6 @@
  */
 declare(strict_types=1);
 
-
 namespace Magento\Framework\Reflection\Test\Unit;
 
 use Magento\Framework\Api\AttributeTypeResolverInterface;
@@ -42,7 +41,7 @@ class MethodsMapTest extends TestCase
             ->method('save');
         $cacheMock->expects($this->any())
             ->method('load')
-            ->will($this->returnValue(null));
+            ->willReturn(null);
 
         $attributeTypeResolverMock = $this->getMockBuilder(AttributeTypeResolverInterface::class)
             ->getMockForAbstractClass();

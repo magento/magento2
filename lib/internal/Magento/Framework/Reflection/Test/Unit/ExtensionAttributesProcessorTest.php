@@ -5,7 +5,6 @@
  */
 declare(strict_types=1);
 
-
 namespace Magento\Framework\Reflection\Test\Unit;
 
 use Magento\Framework\Api\ExtensionAttribute\Config;
@@ -128,7 +127,7 @@ class ExtensionAttributesProcessorTest extends TestCase
                 $dataObjectType => [
                     $attributeName => [ Converter::RESOURCE_PERMISSIONS => [ $permissionName ] ]
                 ]
-              ]);
+            ]);
         $this->authorizationMock->expects($this->once())
             ->method('isAllowed')
             ->with($permissionName)
