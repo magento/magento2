@@ -34,7 +34,7 @@ class TypeResolverTest extends TestCase
      */
     private $metadataPoolMock;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
         $this->metadataPoolMock =
@@ -54,7 +54,7 @@ class TypeResolverTest extends TestCase
             ->method('hasConfiguration')
             ->willReturnMap(
                 [
-                   [$interfaceName, true]
+                    [$interfaceName, true]
                 ]
             );
         $this->assertEquals($interfaceName, $this->resolver->resolve($customerDataObject));

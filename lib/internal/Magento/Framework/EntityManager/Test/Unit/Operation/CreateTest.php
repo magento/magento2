@@ -47,7 +47,7 @@ class CreateTest extends TestCase
      */
     private $create;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->metadataPool = $this->getMockBuilder(MetadataPool::class)
             ->disableOriginalConstructor()

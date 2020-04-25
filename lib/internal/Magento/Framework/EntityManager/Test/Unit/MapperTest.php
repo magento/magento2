@@ -19,7 +19,7 @@ class MapperTest extends TestCase
      */
     private $mapper;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $config = [
             CustomerInterface::class => ['entity_id' => 'id'],

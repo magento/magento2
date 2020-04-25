@@ -41,7 +41,7 @@ class UpdateTest extends TestCase
      */
     private $update;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->metadataPool = $this->getMockBuilder(MetadataPool::class)
             ->disableOriginalConstructor()

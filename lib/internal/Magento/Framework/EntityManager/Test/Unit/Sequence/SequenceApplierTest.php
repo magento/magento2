@@ -73,7 +73,7 @@ class SequenceApplierTest extends TestCase
      */
     private $sequenceApplier;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $helper = new ObjectManager($this);
 
