@@ -49,15 +49,13 @@ class AmountFactoryTest extends TestCase
         $this->objectManagerMock->expects($this->once())
             ->method('create')
             ->with(
-                $this->equalTo(AmountInterface::class),
-                $this->equalTo(
-                    [
-                        'amount' => 'this-is-float-amount',
-                        'adjustmentAmounts' => ['this-is-array-of-adjustments'],
-                    ]
-                )
+                AmountInterface::class,
+                [
+                    'amount' => 'this-is-float-amount',
+                    'adjustmentAmounts' => ['this-is-array-of-adjustments'],
+                ]
             )
-            ->will($this->returnValue($this->amountMock));
+            ->willReturn($this->amountMock);
         $this->assertEquals(
             $this->amountMock,
             $this->factory->create('this-is-float-amount', ['this-is-array-of-adjustments'])
@@ -73,15 +71,13 @@ class AmountFactoryTest extends TestCase
         $this->objectManagerMock->expects($this->once())
             ->method('create')
             ->with(
-                $this->equalTo(AmountInterface::class),
-                $this->equalTo(
-                    [
-                        'amount' => 'this-is-float-amount',
-                        'adjustmentAmounts' => ['this-is-array-of-adjustments'],
-                    ]
-                )
+                AmountInterface::class,
+                [
+                    'amount' => 'this-is-float-amount',
+                    'adjustmentAmounts' => ['this-is-array-of-adjustments'],
+                ]
             )
-            ->will($this->returnValue(new \stdClass()));
+            ->willReturn(new \stdClass());
         $this->assertEquals(
             $this->amountMock,
             $this->factory->create('this-is-float-amount', ['this-is-array-of-adjustments'])

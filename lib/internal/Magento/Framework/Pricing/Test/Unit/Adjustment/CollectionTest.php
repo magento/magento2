@@ -30,19 +30,19 @@ class CollectionTest extends TestCase
         $adj1 = $this->createMock(AdjustmentInterface::class);
         $adj1->expects($this->any())
             ->method('getSortOrder')
-            ->will($this->returnValue(10));
+            ->willReturn(10);
         $adj2 = $this->createMock(AdjustmentInterface::class);
         $adj2->expects($this->any())
             ->method('getSortOrder')
-            ->will($this->returnValue(20));
+            ->willReturn(20);
         $adj3 = $this->createMock(AdjustmentInterface::class);
         $adj3->expects($this->any())
             ->method('getSortOrder')
-            ->will($this->returnValue(5));
+            ->willReturn(5);
         $adj4 = $this->createMock(AdjustmentInterface::class);
         $adj4->expects($this->any())
             ->method('getSortOrder')
-            ->will($this->returnValue(Pool::DEFAULT_SORT_ORDER));
+            ->willReturn(Pool::DEFAULT_SORT_ORDER);
 
         $adjustmentsData = [
             'adj1' => $adj1,
@@ -56,15 +56,13 @@ class CollectionTest extends TestCase
             ->disableOriginalConstructor()
             ->setMethods(['getAdjustmentByCode'])
             ->getMock();
-        $adjustmentPool->expects($this->any())->method('getAdjustmentByCode')->will(
-            $this->returnCallback(
-                function ($code) use ($adjustmentsData) {
-                    if (!isset($adjustmentsData[$code])) {
-                        $this->fail(sprintf('Adjustment "%s" not found', $code));
-                    }
-                    return $adjustmentsData[$code];
+        $adjustmentPool->expects($this->any())->method('getAdjustmentByCode')->willReturnCallback(
+            function ($code) use ($adjustmentsData) {
+                if (!isset($adjustmentsData[$code])) {
+                    $this->fail(sprintf('Adjustment "%s" not found', $code));
                 }
-            )
+                return $adjustmentsData[$code];
+            }
         );
 
         $this->adjustmentPool = $adjustmentPool;

@@ -36,7 +36,7 @@ class CalculatorTest extends TestCase
         $this->model = new Calculator($this->amountFactoryMock);
     }
 
-    public function tearDown(): void
+    protected function tearDown(): void
     {
         $this->model = null;
         $this->amountFactoryMock = null;
@@ -64,8 +64,8 @@ class CalculatorTest extends TestCase
             ->getMock();
         $this->amountFactoryMock->expects($this->once())
             ->method('create')
-            ->with($this->equalTo($totalAmount), $this->equalTo($expectedAdjustments))
-            ->will($this->returnValue($amountBaseMock));
+            ->with($totalAmount, $expectedAdjustments)
+            ->willReturn($amountBaseMock);
 
         $productMock = $this->getMockBuilder(SaleableInterface::class)
             ->disableOriginalConstructor()
@@ -77,35 +77,35 @@ class CalculatorTest extends TestCase
             ->getMock();
         $weeeAdjustmentMock->expects($this->once())
             ->method('getAdjustmentCode')
-            ->will($this->returnValue($weeeAdjustmentCode));
+            ->willReturn($weeeAdjustmentCode);
         $weeeAdjustmentMock->expects($this->once())
             ->method('isIncludedInBasePrice')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
         $weeeAdjustmentMock->expects($this->once())
             ->method('isIncludedInDisplayPrice')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $weeeAdjustmentMock->expects($this->once())
             ->method('applyAdjustment')
-            ->with($this->equalTo($amountInclTax), $this->equalTo($productMock))
-            ->will($this->returnValue($weeeAdjustment + $amountInclTax));
+            ->with($amountInclTax, $productMock)
+            ->willReturn($weeeAdjustment + $amountInclTax);
 
         $taxAdjustmentMock = $this->getMockBuilder(AdjustmentInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $taxAdjustmentMock->expects($this->once())
             ->method('getAdjustmentCode')
-            ->will($this->returnValue($taxAdjustmentCode));
+            ->willReturn($taxAdjustmentCode);
         $taxAdjustmentMock->expects($this->once())
             ->method('isIncludedInBasePrice')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $taxAdjustmentMock->expects($this->once())
             ->method('extractAdjustment')
-            ->with($this->equalTo($amountInclTax), $this->equalTo($productMock))
-            ->will($this->returnValue($taxAdjustment));
+            ->with($amountInclTax, $productMock)
+            ->willReturn($taxAdjustment);
         $taxAdjustmentMock->expects($this->once())
             ->method('applyAdjustment')
-            ->with($this->equalTo($totalAmount), $this->equalTo($productMock))
-            ->will($this->returnValue($totalAmount));
+            ->with($totalAmount, $productMock)
+            ->willReturn($totalAmount);
         $taxAdjustmentMock->expects($this->never())
             ->method('isIncludedInDisplayPrice');
 
@@ -115,11 +115,11 @@ class CalculatorTest extends TestCase
             ->getMock();
         $priceInfoMock->expects($this->any())
             ->method('getAdjustments')
-            ->will($this->returnValue($adjustments));
+            ->willReturn($adjustments);
 
         $productMock->expects($this->any())
             ->method('getPriceInfo')
-            ->will($this->returnValue($priceInfoMock));
+            ->willReturn($priceInfoMock);
 
         $result = $this->model->getAmount($amountInclTax, $productMock);
         $this->assertInstanceOf(AmountInterface::class, $result);
@@ -144,32 +144,32 @@ class CalculatorTest extends TestCase
             ->getMock();
         $taxAdjustmentMock->expects($this->once())
             ->method('getAdjustmentCode')
-            ->will($this->returnValue($taxAdjustmentCode));
+            ->willReturn($taxAdjustmentCode);
         $taxAdjustmentMock->expects($this->once())
             ->method('isIncludedInBasePrice')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $taxAdjustmentMock->expects($this->once())
             ->method('extractAdjustment')
-            ->with($this->equalTo($amount), $this->equalTo($productMock))
-            ->will($this->returnValue($adjustment));
+            ->with($amount, $productMock)
+            ->willReturn($adjustment);
         $taxAdjustmentMock->expects($this->once())
             ->method('applyAdjustment')
-            ->with($this->equalTo($fullamount), $this->equalTo($productMock))
-            ->will($this->returnValue($amount));
+            ->with($fullamount, $productMock)
+            ->willReturn($amount);
 
         $weeeAdjustmentMock = $this->getMockBuilder(AdjustmentInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $weeeAdjustmentMock->expects($this->once())
             ->method('getAdjustmentCode')
-            ->will($this->returnValue($weeeAdjustmentCode));
+            ->willReturn($weeeAdjustmentCode);
         $weeeAdjustmentMock->expects($this->once())
             ->method('isIncludedInBasePrice')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
         $weeeAdjustmentMock->expects($this->once())
             ->method('isIncludedInDisplayPrice')
-            ->with($this->equalTo($productMock))
-            ->will($this->returnValue(true));
+            ->with($productMock)
+            ->willReturn(true);
         $weeeAdjustmentMock->expects($this->never())
             ->method('applyAdjustment');
 
@@ -180,11 +180,11 @@ class CalculatorTest extends TestCase
             ->getMock();
         $priceInfoMock->expects($this->any())
             ->method('getAdjustments')
-            ->will($this->returnValue($adjustments));
+            ->willReturn($adjustments);
 
         $productMock->expects($this->any())
             ->method('getPriceInfo')
-            ->will($this->returnValue($priceInfoMock));
+            ->willReturn($priceInfoMock);
 
         $amountBaseMock = $this->getMockBuilder(Base::class)
             ->disableOriginalConstructor()
@@ -192,8 +192,8 @@ class CalculatorTest extends TestCase
 
         $this->amountFactoryMock->expects($this->once())
             ->method('create')
-            ->with($this->equalTo($amount), $this->equalTo($expectedAdjustments))
-            ->will($this->returnValue($amountBaseMock));
+            ->with($amount, $expectedAdjustments)
+            ->willReturn($amountBaseMock);
         $result = $this->model->getAmount($amount, $productMock, true);
         $this->assertInstanceOf(AmountInterface::class, $result);
     }

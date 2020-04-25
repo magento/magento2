@@ -121,34 +121,32 @@ class FactoryTest extends TestCase
     {
         $this->saleableItemMock->expects($this->once())
             ->method('getTypeId')
-            ->will($this->returnValue($typeId));
+            ->willReturn($typeId);
         $this->saleableItemMock->expects($this->once())
             ->method('getQty')
-            ->will($this->returnValue($quantity));
+            ->willReturn($quantity);
 
         $this->objectManagerMock->expects($this->exactly(2))
             ->method('create')
-            ->will($this->returnValueMap(
+            ->willReturnMap([
                 [
+                    $prices,
                     [
-                        $prices,
-                        [
-                            'saleableItem' => $this->saleableItemMock,
-                            'quantity' => $quantity
-                        ],
-                        $this->pricesMock,
+                        'saleableItem' => $this->saleableItemMock,
+                        'quantity' => $quantity
                     ],
+                    $this->pricesMock,
+                ],
+                [
+                    $infoClass,
                     [
-                        $infoClass,
-                        [
-                            'saleableItem' => $this->saleableItemMock,
-                            'quantity' => $quantity,
-                            'prices' => $this->pricesMock
-                        ],
-                        $this->priceInfoMock
+                        'saleableItem' => $this->saleableItemMock,
+                        'quantity' => $quantity,
+                        'prices' => $this->pricesMock
                     ],
-                ]
-            ));
+                    $this->priceInfoMock
+                ],
+            ]);
         $this->assertEquals($this->priceInfoMock, $this->factory->create($this->saleableItemMock, []));
     }
 }

@@ -97,13 +97,13 @@ class AmountTest extends TestCase
         $context = $this->createMock(Context::class);
         $context->expects($this->any())
             ->method('getEventManager')
-            ->will($this->returnValue($eventManager));
+            ->willReturn($eventManager);
         $context->expects($this->any())
             ->method('getLayout')
-            ->will($this->returnValue($this->layout));
+            ->willReturn($this->layout);
         $context->expects($this->any())
             ->method('getScopeConfig')
-            ->will($this->returnValue($scopeConfigMock));
+            ->willReturn($scopeConfigMock);
 
         $objectManager = new ObjectManager($this);
         $this->model = $objectManager->getObject(
@@ -130,7 +130,7 @@ class AmountTest extends TestCase
         $this->priceCurrency->expects($this->once())
             ->method('format')
             ->with($amount, $includeContainer, $precision)
-            ->will($this->returnValue($result));
+            ->willReturn($result);
 
         $this->assertEquals($result, $this->model->formatCurrency($amount, $includeContainer, $precision));
     }
@@ -180,7 +180,7 @@ class AmountTest extends TestCase
         $adjustmentRenders = ['render1' => $adjustmentRender1, 'render2' => $adjustmentRender2];
         $this->rendererPool->expects($this->once())
             ->method('getAdjustmentRenders')
-            ->will($this->returnValue($adjustmentRenders));
+            ->willReturn($adjustmentRenders);
 
         $this->model->toHtml();
         $this->assertEquals($expected, $this->model->getAdjustmentsHtml());
@@ -219,7 +219,7 @@ class AmountTest extends TestCase
         $adjustmentRenders = ['render1' => $adjustmentRender1, 'render2' => $adjustmentRender2];
         $this->rendererPool->expects($this->once())
             ->method('getAdjustmentRenders')
-            ->will($this->returnValue($adjustmentRenders));
+            ->willReturn($adjustmentRenders);
         $this->amount->expects($this->atLeastOnce())
             ->method('getAdjustmentAmount')
             ->willReturn(true);
@@ -239,7 +239,7 @@ class AmountTest extends TestCase
         $amountValue = 100.99;
         $this->amount->expects($this->once())
             ->method('getValue')
-            ->will($this->returnValue($amountValue));
+            ->willReturn($amountValue);
         $this->assertEquals($amountValue, $this->model->getDisplayValue());
     }
 
@@ -279,7 +279,7 @@ class AmountTest extends TestCase
         $adjustmentRenders = ['render1' => $adjustmentRender1, 'render2' => $adjustmentRender2];
         $this->rendererPool->expects($this->once())
             ->method('getAdjustmentRenders')
-            ->will($this->returnValue($adjustmentRenders));
+            ->willReturn($adjustmentRenders);
         $this->amount->expects($this->atLeastOnce())
             ->method('getAdjustmentAmount')
             ->willReturn(true);
@@ -305,10 +305,10 @@ class AmountTest extends TestCase
         $adjustmentRender->expects($this->once())
             ->method('render')
             ->with($this->model, $data)
-            ->will($this->returnValue($html));
+            ->willReturn($html);
         $adjustmentRender->expects($this->any())
             ->method('getAdjustmentCode')
-            ->will($this->returnValue($code));
+            ->willReturn($code);
         return $adjustmentRender;
     }
 }

@@ -81,9 +81,9 @@ class PoolTest extends TestCase
         $this->assertEquals('SpecialPrice', $this->pool['special_price']);
         $this->pool['fake_price'] = 'FakePrice';
         $this->assertEquals('FakePrice', $this->pool['fake_price']);
-        $this->assertTrue(isset($this->pool['fake_price']));
+        $this->assertArrayHasKey('fake_price', $this->pool);
         unset($this->pool['fake_price']);
-        $this->assertFalse(isset($this->pool['fake_price']));
+        $this->assertArrayNotHasKey('fake_price', $this->pool);
         $this->assertNull($this->pool['fake_price']);
     }
 

@@ -64,7 +64,7 @@ class RendererPoolTest extends TestCase
             ->getMock();
         $this->contextMock->expects($this->any())
             ->method('getLayout')
-            ->will($this->returnValue($this->layoutMock));
+            ->willReturn($this->layoutMock);
         $this->productMock = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -86,7 +86,7 @@ class RendererPoolTest extends TestCase
         $type = 'simple';
         $this->productMock->expects($this->once())
             ->method('getTypeId')
-            ->will($this->returnValue($type));
+            ->willReturn($type);
 
         $testedClass = $this->createTestedEntity($data);
         $result = $testedClass->createPriceRender($priceCode, $this->productMock, $methodData);
@@ -120,14 +120,14 @@ class RendererPoolTest extends TestCase
             ->getMock();
         $priceInfoMock->expects($this->once())
             ->method('getPrice')
-            ->with($this->equalTo($priceCode))
-            ->will($this->returnValue($priceModel));
+            ->with($priceCode)
+            ->willReturn($priceModel);
         $this->productMock->expects($this->once())
             ->method('getTypeId')
-            ->will($this->returnValue($type));
+            ->willReturn($type);
         $this->productMock->expects($this->once())
             ->method('getPriceInfo')
-            ->will($this->returnValue($priceInfoMock));
+            ->willReturn($priceInfoMock);
 
         $testedClass = $this->createTestedEntity($data);
         $result = $testedClass->createPriceRender($priceCode, $this->productMock, $methodData);
@@ -163,14 +163,14 @@ class RendererPoolTest extends TestCase
             ->getMock();
         $priceInfoMock->expects($this->once())
             ->method('getPrice')
-            ->with($this->equalTo($priceCode))
-            ->will($this->returnValue($this->priceMock));
+            ->with($priceCode)
+            ->willReturn($this->priceMock);
         $this->productMock->expects($this->once())
             ->method('getTypeId')
-            ->will($this->returnValue($type));
+            ->willReturn($type);
         $this->productMock->expects($this->once())
             ->method('getPriceInfo')
-            ->will($this->returnValue($priceInfoMock));
+            ->willReturn($priceInfoMock);
 
         $contextMock = $this->getMockBuilder(\Magento\Framework\View\Element\Template\Context::class)
             ->disableOriginalConstructor()
@@ -187,8 +187,8 @@ class RendererPoolTest extends TestCase
         ];
         $this->layoutMock->expects($this->once())
             ->method('createBlock')
-            ->with($this->equalTo($className), $this->equalTo(''), $this->equalTo($arguments))
-            ->will($this->returnValue($block));
+            ->with($className, '', $arguments)
+            ->willReturn($block);
 
         $result = $testedClass->createPriceRender($priceCode, $this->productMock, $methodData);
         $this->assertNull($result);
@@ -220,21 +220,21 @@ class RendererPoolTest extends TestCase
             ->getMock();
         $priceInfoMock->expects($this->once())
             ->method('getPrice')
-            ->with($this->equalTo($priceCode))
-            ->will($this->returnValue($this->priceMock));
+            ->with($priceCode)
+            ->willReturn($this->priceMock);
         $this->productMock->expects($this->once())
             ->method('getTypeId')
-            ->will($this->returnValue($type));
+            ->willReturn($type);
         $this->productMock->expects($this->once())
             ->method('getPriceInfo')
-            ->will($this->returnValue($priceInfoMock));
+            ->willReturn($priceInfoMock);
 
         $renderBlock = $this->getMockBuilder(PriceBox::class)
             ->disableOriginalConstructor()
             ->getMock();
         $renderBlock->expects($this->once())
             ->method('setTemplate')
-            ->with($this->equalTo($template));
+            ->with($template);
 
         $testedClass = $this->createTestedEntity($data);
 
@@ -246,8 +246,8 @@ class RendererPoolTest extends TestCase
         ];
         $this->layoutMock->expects($this->once())
             ->method('createBlock')
-            ->with($this->equalTo($className), $this->equalTo(''), $this->equalTo($arguments))
-            ->will($this->returnValue($renderBlock));
+            ->with($className, '', $arguments)
+            ->willReturn($renderBlock);
 
         $result = $testedClass->createPriceRender($priceCode, $this->productMock, $methodData);
         $this->assertInstanceOf(PriceBoxRenderInterface::class, $result);
@@ -270,10 +270,10 @@ class RendererPoolTest extends TestCase
             ->getMock();
         $this->productMock->expects($this->once())
             ->method('getTypeId')
-            ->will($this->returnValue($type));
+            ->willReturn($type);
         $this->priceMock->expects($this->once())
             ->method('getPriceCode')
-            ->will($this->returnValue($priceCode));
+            ->willReturn($priceCode);
 
         $testedClass = $this->createTestedEntity($data);
         $result = $testedClass->createAmountRender($amountMock, $this->productMock, $this->priceMock, $methodData);
@@ -309,10 +309,10 @@ class RendererPoolTest extends TestCase
             ->getMock();
         $this->productMock->expects($this->once())
             ->method('getTypeId')
-            ->will($this->returnValue($type));
+            ->willReturn($type);
         $this->priceMock->expects($this->once())
             ->method('getPriceCode')
-            ->will($this->returnValue($priceCode));
+            ->willReturn($priceCode);
 
         $contextMock = $this->getMockBuilder(\Magento\Framework\View\Element\Template\Context::class)
             ->disableOriginalConstructor()
@@ -331,8 +331,8 @@ class RendererPoolTest extends TestCase
 
         $this->layoutMock->expects($this->once())
             ->method('createBlock')
-            ->with($this->equalTo($amountRenderClass), $this->equalTo(''), $this->equalTo($arguments))
-            ->will($this->returnValue($block));
+            ->with($amountRenderClass, '', $arguments)
+            ->willReturn($block);
 
         $result = $testedClass->createAmountRender($amountMock, $this->productMock, $this->priceMock, $methodData);
         $this->assertNull($result);
@@ -364,10 +364,10 @@ class RendererPoolTest extends TestCase
             ->getMock();
         $this->productMock->expects($this->once())
             ->method('getTypeId')
-            ->will($this->returnValue($type));
+            ->willReturn($type);
         $this->priceMock->expects($this->once())
             ->method('getPriceCode')
-            ->will($this->returnValue($priceCode));
+            ->willReturn($priceCode);
 
         $blockMock = $this->getMockBuilder(Amount::class)
             ->disableOriginalConstructor()
@@ -385,12 +385,12 @@ class RendererPoolTest extends TestCase
 
         $this->layoutMock->expects($this->once())
             ->method('createBlock')
-            ->with($this->equalTo($amountRenderClass), $this->equalTo(''), $this->equalTo($arguments))
-            ->will($this->returnValue($blockMock));
+            ->with($amountRenderClass, '', $arguments)
+            ->willReturn($blockMock);
 
         $blockMock->expects($this->once())
             ->method('setTemplate')
-            ->with($this->equalTo($template));
+            ->with($template);
 
         $result = $testedClass->createAmountRender($amountMock, $this->productMock, $this->priceMock, $methodData);
         $this->assertInstanceOf(AmountRenderInterface::class, $result);
@@ -405,10 +405,10 @@ class RendererPoolTest extends TestCase
         $priceCode = 'base_price_test';
         $this->productMock->expects($this->once())
             ->method('getTypeId')
-            ->will($this->returnValue($typeId));
+            ->willReturn($typeId);
         $this->priceMock->expects($this->once())
             ->method('getPriceCode')
-            ->will($this->returnValue($priceCode));
+            ->willReturn($priceCode);
 
         $code = 'test_code';
         $adjustments = [$code => 'some data'];
@@ -431,10 +431,10 @@ class RendererPoolTest extends TestCase
         $priceCode = 'base_price_test';
         $this->productMock->expects($this->once())
             ->method('getTypeId')
-            ->will($this->returnValue($typeId));
+            ->willReturn($typeId);
         $this->priceMock->expects($this->once())
             ->method('getPriceCode')
-            ->will($this->returnValue($priceCode));
+            ->willReturn($priceCode);
 
         $code = 'test_code';
         $adjustments = [
@@ -480,22 +480,22 @@ class RendererPoolTest extends TestCase
 
         $this->productMock->expects($this->once())
             ->method('getTypeId')
-            ->will($this->returnValue($typeId));
+            ->willReturn($typeId);
         $this->priceMock->expects($this->once())
             ->method('getPriceCode')
-            ->will($this->returnValue($priceCode));
+            ->willReturn($priceCode);
 
         $blockMock = $this->getMockBuilder(Template::class)
             ->disableOriginalConstructor()
             ->getMock();
         $blockMock->expects($this->once())
             ->method('setTemplate')
-            ->with($this->equalTo($template));
+            ->with($template);
 
         $this->layoutMock->expects($this->once())
             ->method('createBlock')
-            ->with($this->equalTo($class))
-            ->will($this->returnValue($blockMock));
+            ->with($class)
+            ->willReturn($blockMock);
 
         $testedClass = $this->createTestedEntity($data);
         $result = $testedClass->getAdjustmentRenders($this->productMock, $this->priceMock);
@@ -532,10 +532,10 @@ class RendererPoolTest extends TestCase
 
         $this->productMock->expects($this->once())
             ->method('getTypeId')
-            ->will($this->returnValue($type));
+            ->willReturn($type);
         $this->priceMock->expects($this->once())
             ->method('getPriceCode')
-            ->will($this->returnValue($priceCode));
+            ->willReturn($priceCode);
 
         $blockMock = $this->getMockBuilder(Amount::class)
             ->disableOriginalConstructor()
@@ -553,8 +553,8 @@ class RendererPoolTest extends TestCase
 
         $this->layoutMock->expects($this->once())
             ->method('createBlock')
-            ->with($this->equalTo($amountRenderClass), $this->equalTo(''), $this->equalTo($arguments))
-            ->will($this->returnValue($blockMock));
+            ->with($amountRenderClass, '', $arguments)
+            ->willReturn($blockMock);
 
         $result = $testedClass->createAmountRender($amountMock, $this->productMock, $this->priceMock, $methodData);
         $this->assertNull($result);
@@ -588,14 +588,14 @@ class RendererPoolTest extends TestCase
             ->getMock();
         $priceInfoMock->expects($this->once())
             ->method('getPrice')
-            ->with($this->equalTo($priceCode))
-            ->will($this->returnValue($this->priceMock));
+            ->with($priceCode)
+            ->willReturn($this->priceMock);
         $this->productMock->expects($this->once())
             ->method('getTypeId')
-            ->will($this->returnValue($type));
+            ->willReturn($type);
         $this->productMock->expects($this->once())
             ->method('getPriceInfo')
-            ->will($this->returnValue($priceInfoMock));
+            ->willReturn($priceInfoMock);
 
         $renderBlock = $this->getMockBuilder(PriceBox::class)
             ->disableOriginalConstructor()
@@ -611,8 +611,8 @@ class RendererPoolTest extends TestCase
         ];
         $this->layoutMock->expects($this->once())
             ->method('createBlock')
-            ->with($this->equalTo($className), $this->equalTo(''), $this->equalTo($arguments))
-            ->will($this->returnValue($renderBlock));
+            ->with($className, '', $arguments)
+            ->willReturn($renderBlock);
 
         $result = $testedClass->createPriceRender($priceCode, $this->productMock, $methodData);
         $this->assertInstanceOf(PriceBoxRenderInterface::class, $result);

@@ -82,11 +82,11 @@ class CollectionTest extends TestCase
         $this->factoryMock->expects($this->once())
             ->method('create')
             ->with(
-                $this->equalTo($this->saleableItemMock),
-                $this->equalTo('RegularPrice'),
+                $this->saleableItemMock,
+                'RegularPrice',
                 $this->quantity
             )
-            ->will($this->returnValue($this->priceMock));
+            ->willReturn($this->priceMock);
         $this->assertEquals($this->priceMock, $this->collection->get('regular_price'));
         //Calling the get method again with the same code, cached copy should be used
         $this->assertEquals($this->priceMock, $this->collection->get('regular_price'));
@@ -100,11 +100,11 @@ class CollectionTest extends TestCase
         $this->factoryMock->expects($this->once())
             ->method('create')
             ->with(
-                $this->equalTo($this->saleableItemMock),
-                $this->equalTo($this->pool->current()),
+                $this->saleableItemMock,
+                $this->pool->current(),
                 $this->quantity
             )
-            ->will($this->returnValue($this->priceMock));
+            ->willReturn($this->priceMock);
         $this->assertEquals($this->priceMock, $this->collection->current());
     }
 }

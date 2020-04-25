@@ -111,7 +111,7 @@ class RenderTest extends TestCase
         $this->priceLayout->expects($this->once())
             ->method('getBlock')
             ->with('render.product.prices')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
 
         $this->assertEquals($result, $this->model->render($priceType, $this->saleableItem, $arguments));
     }
@@ -125,14 +125,14 @@ class RenderTest extends TestCase
         $pricingRender = $this->createMock(Render::class);
         $this->renderPool->expects($this->once())
             ->method('createPriceRender')
-            ->will($this->returnValue($pricingRender));
+            ->willReturn($pricingRender);
         $pricingRender->expects($this->once())
             ->method('toHtml')
-            ->will($this->returnValue('simple.final'));
+            ->willReturn('simple.final');
         $this->priceLayout->expects($this->once())
             ->method('getBlock')
             ->with('render.product.prices')
-            ->will($this->returnValue($this->renderPool));
+            ->willReturn($this->renderPool);
         $this->assertEquals($result, $this->model->render($priceType, $this->saleableItem, $arguments));
     }
 
@@ -144,14 +144,14 @@ class RenderTest extends TestCase
         $pricingRender = $this->createMock(Render::class);
         $this->renderPool->expects($this->once())
             ->method('createPriceRender')
-            ->will($this->returnValue($pricingRender));
+            ->willReturn($pricingRender);
         $pricingRender->expects($this->once())
             ->method('toHtml')
-            ->will($this->returnValue('default.special'));
+            ->willReturn('default.special');
         $this->priceLayout->expects($this->once())
             ->method('getBlock')
             ->with('render.product.prices')
-            ->will($this->returnValue($this->renderPool));
+            ->willReturn($this->renderPool);
 
         $this->assertEquals($result, $this->model->render($priceType, $this->saleableItem, $arguments));
     }
@@ -165,14 +165,14 @@ class RenderTest extends TestCase
         $pricingRender = $this->createMock(Render::class);
         $this->renderPool->expects($this->once())
             ->method('createPriceRender')
-            ->will($this->returnValue($pricingRender));
+            ->willReturn($pricingRender);
         $pricingRender->expects($this->once())
             ->method('toHtml')
-            ->will($this->returnValue('default.default'));
+            ->willReturn('default.default');
         $this->priceLayout->expects($this->once())
             ->method('getBlock')
             ->with('render.product.prices')
-            ->will($this->returnValue($this->renderPool));
+            ->willReturn($this->renderPool);
 
         $this->assertEquals($result, $this->model->render($priceType, $this->saleableItem, $arguments));
     }
@@ -188,19 +188,19 @@ class RenderTest extends TestCase
         $this->renderPool->expects($this->once())
             ->method('createAmountRender')
             ->with(
-                $this->equalTo($this->amount),
-                $this->equalTo($this->saleableItem),
-                $this->equalTo($this->price),
-                $this->equalTo($arguments)
+                $this->amount,
+                $this->saleableItem,
+                $this->price,
+                $arguments
             )
-            ->will($this->returnValue($pricingRender));
+            ->willReturn($pricingRender);
         $pricingRender->expects($this->once())
             ->method('toHtml')
-            ->will($this->returnValue('default.default'));
+            ->willReturn('default.default');
         $this->priceLayout->expects($this->once())
             ->method('getBlock')
             ->with('render.product.prices')
-            ->will($this->returnValue($this->renderPool));
+            ->willReturn($this->renderPool);
 
         $result = $this->model->renderAmount($this->amount, $this->price, $this->saleableItem, $arguments);
         $this->assertEquals($expectedResult, $result);
@@ -213,7 +213,7 @@ class RenderTest extends TestCase
         $this->priceLayout->expects($this->once())
             ->method('getBlock')
             ->with('render.product.prices')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
 
         $this->model->renderAmount($this->amount, $this->price, $this->saleableItem);
     }

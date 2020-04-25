@@ -59,8 +59,8 @@ class BaseTest extends TestCase
         $this->priceCollection
             ->expects($this->exactly($createCount))
             ->method('get')
-            ->with($this->equalTo($priceCode))
-            ->will($this->returnValue('basePrice'));
+            ->with($priceCode)
+            ->willReturn('basePrice');
 
         foreach ($entryParams as $params) {
             list($priceCode) = array_values($params);
@@ -103,7 +103,7 @@ class BaseTest extends TestCase
      */
     public function testGetAdjustments()
     {
-        $this->adjustmentCollection->expects($this->once())->method('getItems')->will($this->returnValue('result'));
+        $this->adjustmentCollection->expects($this->once())->method('getItems')->willReturn('result');
         $this->assertEquals('result', $this->model->getAdjustments());
     }
 
@@ -114,7 +114,7 @@ class BaseTest extends TestCase
     {
         $this->adjustmentCollection->expects($this->any())->method('getItemByCode')
             ->with('test1')
-            ->will($this->returnValue('adjustment'));
+            ->willReturn('adjustment');
         $this->assertEquals('adjustment', $this->model->getAdjustment('test1'));
     }
 }

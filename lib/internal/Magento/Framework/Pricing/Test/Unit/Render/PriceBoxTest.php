@@ -83,19 +83,19 @@ class PriceBoxTest extends TestCase
             ->getMock();
         $this->context->expects($this->any())
             ->method('getLayout')
-            ->will($this->returnValue($layout));
+            ->willReturn($layout);
         $this->context->expects($this->any())
             ->method('getEventManager')
-            ->will($this->returnValue($eventManager));
+            ->willReturn($eventManager);
         $this->context->expects($this->any())
             ->method('getStoreConfig')
-            ->will($this->returnValue($storeConfig));
+            ->willReturn($storeConfig);
         $this->context->expects($this->any())
             ->method('getScopeConfig')
-            ->will($this->returnValue($scopeConfigMock));
+            ->willReturn($scopeConfigMock);
         $this->context->expects($this->any())
             ->method('getCacheState')
-            ->will($this->returnValue($cacheState));
+            ->willReturn($cacheState);
 
         $this->saleable = $this->createMock(SaleableInterface::class);
 
@@ -122,7 +122,7 @@ class PriceBoxTest extends TestCase
     {
         $this->price->expects($this->once())
             ->method('getPriceCode')
-            ->will($this->returnValue($priceCode));
+            ->willReturn($priceCode);
 
         $priceBox = $this->objectManager->getObject(
             PriceBox::class,
@@ -176,11 +176,11 @@ class PriceBoxTest extends TestCase
         $priceInfo->expects($this->once())
             ->method('getPrice')
             ->with($priceCode)
-            ->will($this->returnValue($price));
+            ->willReturn($price);
 
         $this->saleable->expects($this->once())
             ->method('getPriceInfo')
-            ->will($this->returnValue($priceInfo));
+            ->willReturn($priceInfo);
 
         $this->assertEquals($price, $this->model->getPriceType($priceCode));
     }
@@ -197,12 +197,12 @@ class PriceBoxTest extends TestCase
             ->getMock();
         $amountRender->expects($this->once())
             ->method('toHtml')
-            ->will($this->returnValue($resultHtml));
+            ->willReturn($resultHtml);
 
         $this->rendererPool->expects($this->once())
             ->method('createAmountRender')
             ->with($amount, $this->saleable, $this->price, $arguments)
-            ->will($this->returnValue($amountRender));
+            ->willReturn($amountRender);
 
         $this->assertEquals($resultHtml, $this->model->renderAmount($amount, $arguments));
     }
@@ -226,7 +226,7 @@ class PriceBoxTest extends TestCase
         $priceId = 'price_id';
         $this->saleable->expects($this->once())
             ->method('getId')
-            ->will($this->returnValue($priceId));
+            ->willReturn($priceId);
 
         if (!empty($prefix)) {
             $this->model->setData('price_id_prefix', $prefix);

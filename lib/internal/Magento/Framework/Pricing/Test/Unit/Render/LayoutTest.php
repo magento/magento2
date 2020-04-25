@@ -49,15 +49,15 @@ class LayoutTest extends TestCase
         $isCacheable = false;
         $this->generalLayout->expects($this->once())
             ->method('isCacheable')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
         $layoutFactory = $this->getMockBuilder(LayoutFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
         $layoutFactory->expects($this->once())
             ->method('create')
-            ->with($this->equalTo(['cacheable' => $isCacheable]))
-            ->will($this->returnValue($this->layout));
+            ->with(['cacheable' => $isCacheable])
+            ->willReturn($this->layout);
 
         $objectManager = new ObjectManager($this);
         $this->model = $objectManager->getObject(
@@ -79,7 +79,7 @@ class LayoutTest extends TestCase
             ->with($handle);
         $this->layout->expects($this->once())
             ->method('getUpdate')
-            ->will($this->returnValue($layoutProcessor));
+            ->willReturn($layoutProcessor);
 
         $this->model->addHandle($handle);
     }
@@ -91,7 +91,7 @@ class LayoutTest extends TestCase
             ->method('load');
         $this->layout->expects($this->once())
             ->method('getUpdate')
-            ->will($this->returnValue($layoutProcessor));
+            ->willReturn($layoutProcessor);
 
         $this->layout->expects($this->once())
             ->method('generateXml');
@@ -111,7 +111,7 @@ class LayoutTest extends TestCase
         $this->layout->expects($this->once())
             ->method('getBlock')
             ->with($blockName)
-            ->will($this->returnValue($block));
+            ->willReturn($block);
 
         $this->assertEquals($block, $this->model->getBlock($blockName));
     }

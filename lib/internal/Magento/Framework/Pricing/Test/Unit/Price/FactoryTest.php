@@ -55,7 +55,7 @@ class FactoryTest extends TestCase
         $this->objectManagerMock->expects($this->once())
             ->method('create')
             ->with($className, $argumentsResult)
-            ->will($this->returnValue($priceMock));
+            ->willReturn($priceMock);
 
         $this->assertEquals($priceMock, $this->model->create($saleableItem, $className, $quantity, $arguments));
     }
@@ -73,7 +73,9 @@ class FactoryTest extends TestCase
         );
         $quantity = 2.2;
         $className = Base::class;
-        $priceMock = $this->getMockBuilder($className)->disableOriginalConstructor()->getMock();
+        $priceMock = $this->getMockBuilder($className)
+            ->disableOriginalConstructor()
+            ->getMock();
         $saleableItem = $this->createMock(SaleableInterface::class);
         $arguments = [];
 
@@ -82,7 +84,7 @@ class FactoryTest extends TestCase
         $this->objectManagerMock->expects($this->once())
             ->method('create')
             ->with($className, $argumentsResult)
-            ->will($this->returnValue($priceMock));
+            ->willReturn($priceMock);
 
         $this->model->create($saleableItem, $className, $quantity, $arguments);
     }
