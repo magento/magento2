@@ -33,7 +33,7 @@ class AclTest extends TestCase
     {
         $this->_aclMock = $this->createMock(\Magento\Framework\Acl::class);
         $this->_aclBuilderMock = $this->createMock(Builder::class);
-        $this->_aclBuilderMock->expects($this->any())->method('getAcl')->will($this->returnValue($this->_aclMock));
+        $this->_aclBuilderMock->expects($this->any())->method('getAcl')->willReturn($this->_aclMock);
         $this->_model = new Acl($this->_aclBuilderMock);
     }
 
@@ -46,8 +46,8 @@ class AclTest extends TestCase
         )->with(
             'some_role',
             'some_resource'
-        )->will(
-            $this->returnValue(true)
+        )->willReturn(
+            true
         );
 
         $this->assertTrue($this->_model->isAllowed('some_role', 'some_resource'));
@@ -62,11 +62,11 @@ class AclTest extends TestCase
         )->with(
             'some_role',
             'some_resource'
-        )->will(
-            $this->throwException(new \Zend_Acl_Role_Registry_Exception())
+        )->willThrowException(
+            new \Zend_Acl_Role_Registry_Exception()
         );
 
-        $this->_aclMock->expects($this->once())->method('has')->with('some_resource')->will($this->returnValue(true));
+        $this->_aclMock->expects($this->once())->method('has')->with('some_resource')->willReturn(true);
 
         $this->assertFalse($this->_model->isAllowed('some_role', 'some_resource'));
     }
@@ -80,11 +80,11 @@ class AclTest extends TestCase
         )->with(
             'some_role',
             'some_resource'
-        )->will(
-            $this->throwException(new \Zend_Acl_Role_Registry_Exception())
+        )->willThrowException(
+            new \Zend_Acl_Role_Registry_Exception()
         );
 
-        $this->_aclMock->expects($this->once())->method('has')->with('some_resource')->will($this->returnValue(false));
+        $this->_aclMock->expects($this->once())->method('has')->with('some_resource')->willReturn(false);
 
         $this->_aclMock->expects(
             $this->at(2)
@@ -93,8 +93,8 @@ class AclTest extends TestCase
         )->with(
             'some_role',
             null
-        )->will(
-            $this->returnValue(true)
+        )->willReturn(
+            true
         );
 
         $this->assertTrue($this->_model->isAllowed('some_role', 'some_resource'));
