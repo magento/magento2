@@ -24,7 +24,7 @@
             <!-- ko template: getTemplate() --><!-- /ko -->
             <!--/ko-->
         </div>
-        <form id="purchaseorder-form" class="form form-purchase-order" data-role="purchaseorder-form">
+        <form id="purchaseorder-form" class="form form-purchase-order" data-role="purchaseorder-form" onSubmit="return false;">
             <fieldset class="fieldset payment method" data-bind='attr: {id: "payment_form_" + getCode()}'>
                 <div class="field field-number required">
                     <label for="po_number" class="label">
@@ -37,7 +37,8 @@
                                data-validate="{required:true}"
                                data-bind='
                                 attr: {title: $t("Purchase Order Number")},
-                                value: purchaseOrderNumber'
+                                value: purchaseOrderNumber,
+                                event:{keyup: placeOrderKeyUpdate}'
                                class="input-text"/>
                     </div>
                 </div>

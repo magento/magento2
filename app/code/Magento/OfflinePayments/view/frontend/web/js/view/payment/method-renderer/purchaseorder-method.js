@@ -26,6 +26,19 @@ define([
         },
 
         /**
+         *
+         * @param data
+         * @param event
+         */
+        placeOrderKeyUpdate: function (data, event) {
+            var self = this;
+            var keyCode = event.keyCode || event.which;
+            if (keyCode == '13'){
+                self.placeOrder();
+            }
+        },
+
+        /**
          * @return {Object}
          */
         getData: function () {
