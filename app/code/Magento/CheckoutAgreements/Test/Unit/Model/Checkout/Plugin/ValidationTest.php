@@ -96,10 +96,9 @@ class ValidationTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->quoteRepositoryMock = $this->createMock(CartRepositoryInterface::class);
-        $this->extensionAttributesMock = $this->createPartialMock(
-            PaymentExtension::class,
-            ['getAgreementIds']
-        );
+        $this->extensionAttributesMock = $this->getMockBuilder(PaymentExtension::class)
+            ->addMethods(['getAgreementIds'])
+            ->getMock();
         $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
         $this->checkoutAgreementsListMock = $this->createMock(
             CheckoutAgreementsListInterface::class

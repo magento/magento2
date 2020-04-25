@@ -78,10 +78,9 @@ class GuestValidationTest extends TestCase
         $this->subjectMock = $this->createMock(GuestPaymentInformationManagementInterface::class);
         $this->paymentMock = $this->createMock(PaymentInterface::class);
         $this->addressMock = $this->createMock(AddressInterface::class);
-        $this->extensionAttributesMock = $this->createPartialMock(
-            PaymentExtension::class,
-            ['getAgreementIds']
-        );
+        $this->extensionAttributesMock = $this->getMockBuilder(PaymentExtension::class)
+            ->addMethods(['getAgreementIds'])
+            ->getMock();
         $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
         $this->checkoutAgreementsListMock = $this->createMock(
             CheckoutAgreementsListInterface::class
