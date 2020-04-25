@@ -106,20 +106,18 @@ class OrderGetTest extends TestCase
         $this->orderMock = $this->createMock(
             OrderInterface::class
         );
-        $this->orderExtensionMock = $this->createPartialMock(
-            OrderExtension::class,
-            ['getGiftMessage', 'setGiftMessage']
-        );
+        $this->orderExtensionMock = $this->getMockBuilder(OrderExtension::class)
+            ->addMethods(['getGiftMessage', 'setGiftMessage'])
+            ->getMock();
         $this->giftMessageMock = $this->createMock(
             MessageInterface::class
         );
         $this->orderItemMock = $this->createMock(
             OrderItemInterface::class
         );
-        $this->orderItemExtensionMock = $this->createPartialMock(
-            OrderItemExtension::class,
-            ['setGiftMessage', 'getGiftMessage']
-        );
+        $this->orderItemExtensionMock = $this->getMockBuilder(OrderItemExtension::class)
+            ->addMethods(['setGiftMessage', 'getGiftMessage'])
+            ->getMock();
         $this->orderRepositoryMock = $this->createMock(
             \Magento\Sales\Api\OrderRepositoryInterface::class
         );
