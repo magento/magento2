@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Framework\Module\Test\Unit;
 
@@ -68,10 +69,10 @@ class StatusTest extends TestCase
     {
         $this->conflictChecker->expects($this->once())
             ->method('checkConflictsWhenEnableModules')
-            ->will($this->returnValue(['Module_Foo' => [], 'Module_Bar' => []]));
+            ->willReturn(['Module_Foo' => [], 'Module_Bar' => []]);
         $this->dependencyChecker->expects($this->once())
             ->method('checkDependenciesWhenEnableModules')
-            ->will($this->returnValue(['Module_Foo' => [], 'Module_Bar' => []]));
+            ->willReturn(['Module_Foo' => [], 'Module_Bar' => []]);
         $result = $this->object->checkConstraints(
             true,
             ['Module_Foo' => '', 'Module_Bar' => ''],
@@ -84,15 +85,13 @@ class StatusTest extends TestCase
     {
         $this->conflictChecker->expects($this->once())
             ->method('checkConflictsWhenEnableModules')
-            ->will($this->returnValue(['Module_Foo' => ['Module_Bar'], 'Module_Bar' => ['Module_Foo']]));
+            ->willReturn(['Module_Foo' => ['Module_Bar'], 'Module_Bar' => ['Module_Foo']]);
         $this->dependencyChecker->expects($this->once())
             ->method('checkDependenciesWhenEnableModules')
-            ->will($this->returnValue(
-                [
-                    'Module_Foo' => ['Module_Baz' => ['Module_Foo', 'Module_Baz']],
-                    'Module_Bar' => ['Module_Baz' => ['Module_Bar', 'Module_Baz']],
-                ]
-            ));
+            ->willReturn([
+                'Module_Foo' => ['Module_Baz' => ['Module_Foo', 'Module_Baz']],
+                'Module_Bar' => ['Module_Baz' => ['Module_Bar', 'Module_Baz']],
+            ]);
         $result = $this->object->checkConstraints(true, ['Module_Foo' => '', 'Module_Bar' => ''], [], false);
         $expect = [
             'Cannot enable Module_Foo because it depends on disabled modules:',
@@ -111,15 +110,13 @@ class StatusTest extends TestCase
     {
         $this->conflictChecker->expects($this->once())
             ->method('checkConflictsWhenEnableModules')
-            ->will($this->returnValue(['Module_Foo' => ['Module_Bar'], 'Module_Bar' => ['Module_Foo']]));
+            ->willReturn(['Module_Foo' => ['Module_Bar'], 'Module_Bar' => ['Module_Foo']]);
         $this->dependencyChecker->expects($this->once())
             ->method('checkDependenciesWhenEnableModules')
-            ->will($this->returnValue(
-                [
-                    'Module_Foo' => ['Module_Baz' => ['Module_Foo', 'Module_Baz']],
-                    'Module_Bar' => ['Module_Baz' => ['Module_Bar', 'Module_Baz']],
-                ]
-            ));
+            ->willReturn([
+                'Module_Foo' => ['Module_Baz' => ['Module_Foo', 'Module_Baz']],
+                'Module_Bar' => ['Module_Baz' => ['Module_Bar', 'Module_Baz']],
+            ]);
         $result = $this->object->checkConstraints(true, ['Module_Foo' => '', 'Module_Bar' => ''], [], true);
         $expect = [
             'Cannot enable Module_Foo',
@@ -136,7 +133,7 @@ class StatusTest extends TestCase
     {
         $this->dependencyChecker->expects($this->once())
             ->method('checkDependenciesWhenDisableModules')
-            ->will($this->returnValue(['Module_Foo' => [], 'Module_Bar' => []]));
+            ->willReturn(['Module_Foo' => [], 'Module_Bar' => []]);
         $result = $this->object->checkConstraints(false, ['Module_Foo' => '', 'Module_Bar' => '']);
         $this->assertEquals([], $result);
     }
@@ -145,12 +142,10 @@ class StatusTest extends TestCase
     {
         $this->dependencyChecker->expects($this->once())
             ->method('checkDependenciesWhenDisableModules')
-            ->will($this->returnValue(
-                [
-                    'Module_Foo' => ['Module_Baz' => ['Module_Baz', 'Module_Foo']],
-                    'Module_Bar' => ['Module_Baz' => ['Module_Baz', 'Module_Bar']],
-                ]
-            ));
+            ->willReturn([
+                'Module_Foo' => ['Module_Baz' => ['Module_Baz', 'Module_Foo']],
+                'Module_Bar' => ['Module_Baz' => ['Module_Baz', 'Module_Bar']],
+            ]);
         $result = $this->object->checkConstraints(false, ['Module_Foo' => '', 'Module_Bar' => '']);
         $expect = [
             'Cannot disable Module_Foo because modules depend on it:',

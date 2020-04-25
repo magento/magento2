@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Framework\Module\Test\Unit\ModuleList;
 
@@ -81,13 +82,13 @@ class LoaderTest extends TestCase
             'e' => ['name' => 'e', 'sequence' => ['a']], // e is after a
             // so expected sequence is a -> e -> c -> d -> b
         ];
-        $this->driver->expects($this->exactly(5))->method('fileGetContents')->will($this->returnValueMap([
+        $this->driver->expects($this->exactly(5))->method('fileGetContents')->willReturnMap([
             ['/path/to/a/etc/module.xml', null, null, self::$sampleXml],
             ['/path/to/b/etc/module.xml', null, null, self::$sampleXml],
             ['/path/to/c/etc/module.xml', null, null, self::$sampleXml],
             ['/path/to/d/etc/module.xml', null, null, self::$sampleXml],
             ['/path/to/e/etc/module.xml', null, null, self::$sampleXml],
-        ]));
+        ]);
         $index = 0;
         foreach ($this->loadFixture as $name => $fixture) {
             $this->converter->expects($this->at($index++))->method('convert')->willReturn([$name => $fixture]);
@@ -129,12 +130,12 @@ class LoaderTest extends TestCase
         $this->registry->expects($this->once())
             ->method('getPaths')
             ->willReturn(['/path/to/a', '/path/to/b', '/path/to/c', '/path/to/d']);
-        $this->driver->expects($this->exactly(4))->method('fileGetContents')->will($this->returnValueMap([
+        $this->driver->expects($this->exactly(4))->method('fileGetContents')->willReturnMap([
             ['/path/to/a/etc/module.xml', null, null, self::$sampleXml],
             ['/path/to/b/etc/module.xml', null, null, self::$sampleXml],
             ['/path/to/c/etc/module.xml', null, null, self::$sampleXml],
             ['/path/to/d/etc/module.xml', null, null, self::$sampleXml],
-        ]));
+        ]);
         $this->converter->expects($this->at(0))->method('convert')->willReturn(['a' => $fixture['a']]);
         $this->converter->expects($this->at(1))->method('convert')->willReturn(['b' => $fixture['b']]);
         $this->converter->expects($this->at(2))->method('convert')->willReturn(['c' => $fixture['c']]);
@@ -159,10 +160,10 @@ class LoaderTest extends TestCase
         $this->converter->expects($this->at(0))->method('convert')->willReturn(['a' => $fixture['a']]);
         $this->converter->expects($this->at(1))->method('convert')->willReturn(['b' => $fixture['b']]);
         $this->registry->expects($this->once())->method('getPaths')->willReturn(['/path/to/a', '/path/to/b']);
-        $this->driver->expects($this->exactly(2))->method('fileGetContents')->will($this->returnValueMap([
+        $this->driver->expects($this->exactly(2))->method('fileGetContents')->willReturnMap([
             ['/path/to/a/etc/module.xml', null, null, self::$sampleXml],
             ['/path/to/b/etc/module.xml', null, null, self::$sampleXml],
-        ]));
+        ]);
         $this->loader->load();
     }
 
@@ -196,13 +197,13 @@ class LoaderTest extends TestCase
 
         $this->driver->expects($this->exactly(5))
             ->method('fileGetContents')
-            ->will($this->returnValueMap([
+            ->willReturnMap([
                 ['/path/to/Foo_Bar/etc/module.xml', null, null, self::$sampleXml],
                 ['/path/to/Magento_Directory/etc/module.xml', null, null, self::$sampleXml],
                 ['/path/to/Magento_Store/etc/module.xml', null, null, self::$sampleXml],
                 ['/path/to/Magento_Theme/etc/module.xml', null, null, self::$sampleXml],
                 ['/path/to/Test_HelloWorld/etc/module.xml', null, null, self::$sampleXml],
-            ]));
+            ]);
 
         // Load the full module list information
         $result = $this->loader->load();

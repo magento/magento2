@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\Module\Test\Unit;
 
 use Magento\Framework\Module\ConflictChecker;
@@ -30,17 +32,17 @@ class ConflictCheckerTest extends TestCase
         $packageInfoMock = $this->createMock(PackageInfo::class);
         $moduleListMock->expects($this->any())
             ->method('getNames')
-            ->will($this->returnValue($enabledModules));
+            ->willReturn($enabledModules);
         $packageInfoMock->expects($this->any())
             ->method('getConflict')
-            ->will($this->returnValueMap($conflictReturnMap));
+            ->willReturnMap($conflictReturnMap);
         $packageInfoMock->expects($this->any())
             ->method('getVersion')
-            ->will($this->returnValue('0.1'));
+            ->willReturn('0.1');
         $packageInfoFactoryMock = $this->createMock(PackageInfoFactory::class);
         $packageInfoFactoryMock->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($packageInfoMock));
+            ->willReturn($packageInfoMock);
         $conflictChecker = new ConflictChecker($moduleListMock, $packageInfoFactoryMock);
         $this->assertEquals($expected, $conflictChecker->checkConflictsWhenEnableModules($moduleName));
     }
@@ -126,21 +128,21 @@ class ConflictCheckerTest extends TestCase
         $packageInfoMock = $this->createMock(PackageInfo::class);
         $moduleListMock->expects($this->any())
             ->method('getNames')
-            ->will($this->returnValue(['Vendor_A', 'Vendor_B']));
+            ->willReturn(['Vendor_A', 'Vendor_B']);
         $packageInfoMock->expects($this->any())
             ->method('getConflict')
-            ->will($this->returnValueMap([
+            ->willReturnMap([
                 ['Vendor_A', []],
                 ['Vendor_B', []],
                 ['Vendor_C', ['Vendor_A' => '>=0.2,<0.3', 'Vendor_B' => '<0.4']]
-            ]));
+            ]);
         $packageInfoMock->expects($this->any())
             ->method('getVersion')
-            ->will($this->returnValueMap([['Vendor_A', '0.2'], ['Vendor_B', '0.4']]));
+            ->willReturnMap([['Vendor_A', '0.2'], ['Vendor_B', '0.4']]);
         $packageInfoFactoryMock = $this->createMock(PackageInfoFactory::class);
         $packageInfoFactoryMock->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($packageInfoMock));
+            ->willReturn($packageInfoMock);
         $conflictChecker = new ConflictChecker($moduleListMock, $packageInfoFactoryMock);
         $this->assertEquals(
             ['Vendor_C' => ['Vendor_C conflicts with current Vendor_A version 0.2 (version should not be >=0.2,<0.3)']],
@@ -154,18 +156,18 @@ class ConflictCheckerTest extends TestCase
         $packageInfoMock = $this->createMock(PackageInfo::class);
         $packageInfoMock->expects($this->any())
             ->method('getConflict')
-            ->will($this->returnValueMap([
+            ->willReturnMap([
                 ['Vendor_A', []],
                 ['Vendor_B', []],
                 ['Vendor_C', ['Vendor_A' => '>=0.2,<0.3', 'Vendor_B' => '<0.4']]
-            ]));
+            ]);
         $packageInfoMock->expects($this->any())
             ->method('getVersion')
-            ->will($this->returnValueMap([['Vendor_A', '0.2'], ['Vendor_B', '0.4']]));
+            ->willReturnMap([['Vendor_A', '0.2'], ['Vendor_B', '0.4']]);
         $packageInfoFactoryMock = $this->createMock(PackageInfoFactory::class);
         $packageInfoFactoryMock->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($packageInfoMock));
+            ->willReturn($packageInfoMock);
         $conflictChecker = new ConflictChecker($moduleListMock, $packageInfoFactoryMock);
         $this->assertEquals(
             ['Vendor_C' => ['Vendor_C conflicts with current Vendor_A version 0.2 (version should not be >=0.2,<0.3)']],

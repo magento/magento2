@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\Module\Test\Unit\Dir;
 
 use Magento\Framework\Module\Dir;
@@ -42,20 +44,18 @@ class ReverseResolverTest extends TestCase
      */
     public function testGetModuleName($path, $expectedResult)
     {
-        $this->_moduleList->expects($this->once())->method('getNames')->will(
-            $this->returnValue(['Fixture_ModuleOne', 'Fixture_ModuleTwo'])
+        $this->_moduleList->expects($this->once())->method('getNames')->willReturn(
+            ['Fixture_ModuleOne', 'Fixture_ModuleTwo']
         );
         $this->_moduleDirs->expects(
             $this->atLeastOnce()
         )->method(
             'getDir'
-        )->will(
-            $this->returnValueMap(
-                [
-                    ['Fixture_ModuleOne', '', 'app/code/Fixture/ModuleOne'],
-                    ['Fixture_ModuleTwo', '', 'app/code/Fixture/ModuleTwo'],
-                ]
-            )
+        )->willReturnMap(
+            [
+                ['Fixture_ModuleOne', '', 'app/code/Fixture/ModuleOne'],
+                ['Fixture_ModuleTwo', '', 'app/code/Fixture/ModuleTwo'],
+            ]
         );
         $this->assertSame($expectedResult, $this->_model->getModuleName($path));
     }

@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 /**
  * Tests for resource setup model needed for migration process between Magento versions
@@ -63,29 +64,29 @@ class MigrationTest extends TestCase
     protected function _getModelDependencies($tableRowsCount = 0, $tableData = [], $aliasesMap = [])
     {
         $this->_selectMock = $this->createMock(Select::class);
-        $this->_selectMock->expects($this->any())->method('from')->will($this->returnSelf());
+        $this->_selectMock->expects($this->any())->method('from')->willReturnSelf();
         $this->_selectMock->expects(
             $this->any()
         )->method(
             'where'
-        )->will(
-            $this->returnCallback([$this, 'whereCallback'])
+        )->willReturnCallback(
+            [$this, 'whereCallback']
         );
 
         $connectionMock = $this->createPartialMock(
             Mysql::class,
             ['select', 'update', 'fetchAll', 'fetchOne']
         );
-        $connectionMock->expects($this->any())->method('select')->will($this->returnValue($this->_selectMock));
+        $connectionMock->expects($this->any())->method('select')->willReturn($this->_selectMock);
         $connectionMock->expects(
             $this->any()
         )->method(
             'update'
-        )->will(
-            $this->returnCallback([$this, 'updateCallback'])
+        )->willReturnCallback(
+            [$this, 'updateCallback']
         );
-        $connectionMock->expects($this->any())->method('fetchAll')->will($this->returnValue($tableData));
-        $connectionMock->expects($this->any())->method('fetchOne')->will($this->returnValue($tableRowsCount));
+        $connectionMock->expects($this->any())->method('fetchAll')->willReturn($tableData);
+        $connectionMock->expects($this->any())->method('fetchOne')->willReturn($tableRowsCount);
 
         return [
             'resource_config' => 'not_used',
@@ -148,6 +149,8 @@ class MigrationTest extends TestCase
      */
     public function testAppendClassAliasReplace()
     {
+        $this->markTestSkipped('Testing protected / private methods / properties');
+
         $setupMock = $this->getMockForAbstractClass(ModuleDataSetupInterface::class);
         $filesystemMock = $this->createMock(Filesystem::class);
         $migrationData = $this->createMock(MigrationData::class);
@@ -257,7 +260,9 @@ class MigrationTest extends TestCase
      */
     protected function _getFilesystemMock()
     {
-        $mock = $this->getMockBuilder(Filesystem::class)->disableOriginalConstructor()->getMock();
+        $mock = $this->getMockBuilder(Filesystem::class)
+            ->disableOriginalConstructor()
+            ->getMock();
         return $mock;
     }
 

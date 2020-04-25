@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\Module\Test\Unit;
 
 use Magento\Framework\Component\ComponentRegistrar;
@@ -35,7 +37,7 @@ class DirTest extends TestCase
         $this->moduleRegistryMock->expects($this->once())
             ->method('getPath')
             ->with(ComponentRegistrar::MODULE, 'Test_Module')
-            ->will($this->returnValue('/Test/Module'));
+            ->willReturn('/Test/Module');
 
         $this->assertEquals('/Test/Module', $this->_model->getDir('Test_Module'));
     }
@@ -45,7 +47,7 @@ class DirTest extends TestCase
         $this->moduleRegistryMock->expects($this->once())
             ->method('getPath')
             ->with(ComponentRegistrar::MODULE, 'Test_Module')
-            ->will($this->returnValue('/Test/Module'));
+            ->willReturn('/Test/Module');
 
         $this->assertEquals('/Test/Module/etc', $this->_model->getDir('Test_Module', 'etc'));
     }
@@ -67,7 +69,7 @@ class DirTest extends TestCase
         $this->moduleRegistryMock->expects($this->once())
             ->method('getPath')
             ->with(ComponentRegistrar::MODULE, 'Test_Module')
-            ->will($this->returnValue('/Test/Module'));
+            ->willReturn('/Test/Module');
 
         $this->_model->getDir('Test_Module', 'unknown');
     }

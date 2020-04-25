@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\Module\Test\Unit\Plugin;
 
 use Magento\Framework\App\FrontController;
@@ -58,12 +60,12 @@ class DbStatusValidatorTest extends TestCase
         $moduleList = $this->getMockForAbstractClass(ModuleListInterface::class);
         $moduleList->expects($this->any())
             ->method('getNames')
-            ->will($this->returnValue(['Module_One', 'Module_Two']));
+            ->willReturn(['Module_One', 'Module_Two']);
 
-        $this->moduleManager = $this->createPartialMock(
-            Manager::class,
-            ['isDbSchemaUpToDate', 'isDbDataUpToDate']
-        );
+        $this->moduleManager = $this->getMockBuilder(Manager::class)
+            ->addMethods(['isDbSchemaUpToDate', 'isDbDataUpToDate'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->dbVersionInfoMock = $this->createMock(DbVersionInfo::class);
         $this->_model = new DbStatusValidator(
             $this->_cacheMock,
@@ -76,17 +78,17 @@ class DbStatusValidatorTest extends TestCase
         $this->_cacheMock->expects($this->once())
             ->method('load')
             ->with('db_is_up_to_date')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
         $returnMap = [
             ['Module_One', 'resource_Module_One', true],
             ['Module_Two', 'resource_Module_Two', true],
         ];
         $this->moduleManager->expects($this->any())
             ->method('isDbSchemaUpToDate')
-            ->will($this->returnValueMap($returnMap));
+            ->willReturnMap($returnMap);
         $this->moduleManager->expects($this->any())
             ->method('isDbDataUpToDate')
-            ->will($this->returnValueMap($returnMap));
+            ->willReturnMap($returnMap);
 
         $this->assertEquals(
             null,
@@ -99,7 +101,7 @@ class DbStatusValidatorTest extends TestCase
         $this->_cacheMock->expects($this->once())
             ->method('load')
             ->with('db_is_up_to_date')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $this->moduleManager->expects($this->never())
             ->method('isDbSchemaUpToDate');
         $this->moduleManager->expects($this->never())
@@ -122,12 +124,12 @@ class DbStatusValidatorTest extends TestCase
         $this->_cacheMock->expects($this->once())
             ->method('load')
             ->with('db_is_up_to_date')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
         $this->_cacheMock->expects($this->never())->method('save');
 
         $this->dbVersionInfoMock->expects($this->any())
             ->method('getDbVersionErrors')
-            ->will($this->returnValue($dbVersionErrors));
+            ->willReturn($dbVersionErrors);
 
         $this->_model->beforeDispatch($this->subjectMock, $this->requestMock);
     }
@@ -140,50 +142,50 @@ class DbStatusValidatorTest extends TestCase
         return [
             'schema is outdated' => [
                 [
-                     [
-                         DbVersionInfo::KEY_MODULE => 'Module_One',
-                         DbVersionInfo::KEY_TYPE => 'schema',
-                         DbVersionInfo::KEY_CURRENT => 'none',
-                         DbVersionInfo::KEY_REQUIRED => '1'
-                     ]
+                    [
+                        DbVersionInfo::KEY_MODULE => 'Module_One',
+                        DbVersionInfo::KEY_TYPE => 'schema',
+                        DbVersionInfo::KEY_CURRENT => 'none',
+                        DbVersionInfo::KEY_REQUIRED => '1'
+                    ]
                 ],
             ],
             'data is outdated' => [
                 [
-                     [
-                         DbVersionInfo::KEY_MODULE => 'Module_Two',
-                         DbVersionInfo::KEY_TYPE => 'data',
-                         DbVersionInfo::KEY_CURRENT => 'none',
-                         DbVersionInfo::KEY_REQUIRED => '1'
-                     ]
+                    [
+                        DbVersionInfo::KEY_MODULE => 'Module_Two',
+                        DbVersionInfo::KEY_TYPE => 'data',
+                        DbVersionInfo::KEY_CURRENT => 'none',
+                        DbVersionInfo::KEY_REQUIRED => '1'
+                    ]
                 ],
             ],
             'both schema and data are outdated' => [
                 [
-                     [
-                         DbVersionInfo::KEY_MODULE => 'Module_One',
-                         DbVersionInfo::KEY_TYPE => 'schema',
-                         DbVersionInfo::KEY_CURRENT => 'none',
-                         DbVersionInfo::KEY_REQUIRED => '1'
-                     ],
-                     [
-                         DbVersionInfo::KEY_MODULE => 'Module_Two',
-                         DbVersionInfo::KEY_TYPE => 'schema',
-                         DbVersionInfo::KEY_CURRENT => 'none',
-                         DbVersionInfo::KEY_REQUIRED => '1'
-                     ],
-                     [
-                         DbVersionInfo::KEY_MODULE => 'Module_One',
-                         DbVersionInfo::KEY_TYPE => 'data',
-                         DbVersionInfo::KEY_CURRENT => 'none',
-                         DbVersionInfo::KEY_REQUIRED => '1'
-                     ],
-                     [
-                         DbVersionInfo::KEY_MODULE => 'Module_Two',
-                         DbVersionInfo::KEY_TYPE => 'data',
-                         DbVersionInfo::KEY_CURRENT => 'none',
-                         DbVersionInfo::KEY_REQUIRED => '1'
-                     ]
+                    [
+                        DbVersionInfo::KEY_MODULE => 'Module_One',
+                        DbVersionInfo::KEY_TYPE => 'schema',
+                        DbVersionInfo::KEY_CURRENT => 'none',
+                        DbVersionInfo::KEY_REQUIRED => '1'
+                    ],
+                    [
+                        DbVersionInfo::KEY_MODULE => 'Module_Two',
+                        DbVersionInfo::KEY_TYPE => 'schema',
+                        DbVersionInfo::KEY_CURRENT => 'none',
+                        DbVersionInfo::KEY_REQUIRED => '1'
+                    ],
+                    [
+                        DbVersionInfo::KEY_MODULE => 'Module_One',
+                        DbVersionInfo::KEY_TYPE => 'data',
+                        DbVersionInfo::KEY_CURRENT => 'none',
+                        DbVersionInfo::KEY_REQUIRED => '1'
+                    ],
+                    [
+                        DbVersionInfo::KEY_MODULE => 'Module_Two',
+                        DbVersionInfo::KEY_TYPE => 'data',
+                        DbVersionInfo::KEY_CURRENT => 'none',
+                        DbVersionInfo::KEY_REQUIRED => '1'
+                    ]
                 ],
             ],
         ];

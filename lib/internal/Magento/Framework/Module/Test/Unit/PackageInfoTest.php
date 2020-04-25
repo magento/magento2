@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\Module\Test\Unit;
 
 use Magento\Framework\Component\ComponentRegistrar;
@@ -41,7 +43,7 @@ class PackageInfoTest extends TestCase
         $this->reader = $this->createMock(Reader::class);
         $this->componentRegistrar->expects($this->once())
             ->method('getPaths')
-            ->will($this->returnValue(['A' => 'A', 'B' => 'B', 'C' => 'C', 'D' => 'D', 'E' => 'E']));
+            ->willReturn(['A' => 'A', 'B' => 'B', 'C' => 'C', 'D' => 'D', 'E' => 'E']);
 
         $composerData = [
             'A/composer.json' => '{"name":"a", "require":{"b":"0.1"}, "conflict":{"c":"0.1"}, "version":"0.1"}',
@@ -53,10 +55,10 @@ class PackageInfoTest extends TestCase
         $fileIteratorMock = $this->createMock(FileIterator::class);
         $fileIteratorMock->expects($this->once())
             ->method('toArray')
-            ->will($this->returnValue($composerData));
+            ->willReturn($composerData);
         $this->reader->expects($this->once())
             ->method('getComposerJsonFiles')
-            ->will($this->returnValue($fileIteratorMock));
+            ->willReturn($fileIteratorMock);
 
         $this->serializerMock = $this->getMockBuilder(Json::class)
             ->getMock();

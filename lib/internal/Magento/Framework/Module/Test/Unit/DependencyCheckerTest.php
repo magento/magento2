@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\Module\Test\Unit;
 
 use Magento\Framework\Module\DependencyChecker;
@@ -53,26 +55,26 @@ class DependencyCheckerTest extends TestCase
         $this->packageInfoMock
             ->expects($this->any())
             ->method('getRequire')
-            ->will($this->returnValueMap($requireMap));
+            ->willReturnMap($requireMap);
 
         $this->packageInfoFactoryMock = $this->createMock(PackageInfoFactory::class);
         $this->packageInfoFactoryMock->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($this->packageInfoMock));
+            ->willReturn($this->packageInfoMock);
 
         $this->listMock = $this->createMock(ModuleList::class);
         $this->loaderMock = $this->createMock(Loader::class);
         $this->loaderMock
             ->expects($this->any())
             ->method('load')
-            ->will($this->returnValue(['A' => [], 'B' => [], 'C' => [], 'D' => [], 'E' => []]));
+            ->willReturn(['A' => [], 'B' => [], 'C' => [], 'D' => [], 'E' => []]);
     }
 
     public function testCheckDependenciesWhenDisableModules()
     {
         $this->listMock->expects($this->any())
             ->method('getNames')
-            ->will($this->returnValue(['A', 'B', 'C', 'D', 'E']));
+            ->willReturn(['A', 'B', 'C', 'D', 'E']);
         $this->packageInfoMock->expects($this->atLeastOnce())
             ->method('getNonExistingDependencies')
             ->willReturn([]);
@@ -99,7 +101,7 @@ class DependencyCheckerTest extends TestCase
     {
         $this->listMock->expects($this->any())
             ->method('getNames')
-            ->will($this->returnValue(['C']));
+            ->willReturn(['C']);
         $this->packageInfoMock->expects($this->atLeastOnce())
             ->method('getNonExistingDependencies')
             ->willReturn([]);

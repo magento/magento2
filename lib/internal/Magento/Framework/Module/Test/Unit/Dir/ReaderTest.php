@@ -1,9 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 /**
  * Test class for \Magento\Framework\Module\Dir\File
@@ -85,8 +86,8 @@ class ReaderTest extends TestCase
         )->with(
             'Test_Module',
             'etc'
-        )->will(
-            $this->returnValue('app/code/Test/Module/etc')
+        )->willReturn(
+            'app/code/Test/Module/etc'
         );
         $this->assertEquals(
             'app/code/Test/Module/etc',
@@ -106,15 +107,15 @@ class ReaderTest extends TestCase
     {
         $configPath = 'app/code/Test/Module/etc/config.xml';
         $modulesDirectoryMock = $this->createMock(ReadInterface::class);
-        $modulesDirectoryMock->expects($this->any())->method('getRelativePath')->will($this->returnArgument(0));
+        $modulesDirectoryMock->expects($this->any())->method('getRelativePath')->willReturnArgument(0);
         $modulesDirectoryMock->expects($this->any())->method('isExist')
             ->with($configPath)
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $this->directoryReadFactoryMock->expects($this->any())
             ->method('create')
-            ->will($this->returnValue($modulesDirectoryMock));
+            ->willReturn($modulesDirectoryMock);
 
-        $this->_moduleListMock->expects($this->once())->method('getNames')->will($this->returnValue(['Test_Module']));
+        $this->_moduleListMock->expects($this->once())->method('getNames')->willReturn(['Test_Module']);
         $model = new Reader(
             $this->_dirsMock,
             $this->_moduleListMock,
@@ -132,15 +133,15 @@ class ReaderTest extends TestCase
     {
         $configPath = 'app/code/Test/Module/composer.json';
         $modulesDirectoryMock = $this->createMock(ReadInterface::class);
-        $modulesDirectoryMock->expects($this->any())->method('getRelativePath')->will($this->returnArgument(0));
+        $modulesDirectoryMock->expects($this->any())->method('getRelativePath')->willReturnArgument(0);
         $modulesDirectoryMock->expects($this->any())->method('isExist')
             ->with($configPath)
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $this->directoryReadFactoryMock->expects($this->any())
             ->method('create')
-            ->will($this->returnValue($modulesDirectoryMock));
+            ->willReturn($modulesDirectoryMock);
 
-        $this->_moduleListMock->expects($this->once())->method('getNames')->will($this->returnValue(['Test_Module']));
+        $this->_moduleListMock->expects($this->once())->method('getNames')->willReturn(['Test_Module']);
         $model = new Reader(
             $this->_dirsMock,
             $this->_moduleListMock,

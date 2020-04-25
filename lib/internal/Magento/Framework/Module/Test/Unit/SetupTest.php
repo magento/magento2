@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Framework\Module\Test\Unit;
 
@@ -71,7 +72,7 @@ class SetupTest extends TestCase
         $this->resourceModel->expects($this->once())
             ->method('getTableName')
             ->with($tableName)
-            ->will($this->returnValue($expectedTableName));
+            ->willReturn($expectedTableName);
 
         $this->assertSame($expectedTableName, $this->object->getTable($tableName));
         // Check that table name is cached
@@ -85,7 +86,7 @@ class SetupTest extends TestCase
         $this->connection->expects($this->once())
             ->method('isTableExists')
             ->with($tableName)
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $this->assertTrue($this->object->tableExists($tableName));
     }
 
