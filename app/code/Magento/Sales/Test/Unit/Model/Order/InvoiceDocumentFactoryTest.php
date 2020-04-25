@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -12,43 +12,42 @@ use Magento\Sales\Api\Data\InvoiceItemCreationInterface;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\InvoiceDocumentFactory;
 use Magento\Sales\Model\Service\InvoiceService;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-/**
- * Class InvoiceDocumentFactoryTest
- */
-class InvoiceDocumentFactoryTest extends \PHPUnit\Framework\TestCase
+class InvoiceDocumentFactoryTest extends TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|InvoiceService
+     * @var MockObject|InvoiceService
      */
     private $invoiceServiceMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|InvoiceInterface
+     * @var MockObject|InvoiceInterface
      */
     private $invoiceMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|InvoiceDocumentFactory
+     * @var MockObject|InvoiceDocumentFactory
      */
     private $invoiceDocumentFactory;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|InvoiceCreationArgumentsInterface
+     * @var MockObject|InvoiceCreationArgumentsInterface
      */
     private $itemMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|Order
+     * @var MockObject|Order
      */
     private $orderMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|InvoiceCommentCreationInterface
+     * @var MockObject|InvoiceCommentCreationInterface
      */
     private $commentMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->invoiceServiceMock = $this->getMockBuilder(InvoiceService::class)
             ->disableOriginalConstructor()

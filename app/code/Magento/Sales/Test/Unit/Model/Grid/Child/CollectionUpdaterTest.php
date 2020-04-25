@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -6,23 +6,30 @@
 
 namespace Magento\Sales\Test\Unit\Model\Grid\Child;
 
-class CollectionUpdaterTest extends \PHPUnit\Framework\TestCase
+use Magento\Framework\Registry;
+use Magento\Sales\Model\Grid\Child\CollectionUpdater;
+use Magento\Sales\Model\Order\Payment\Transaction;
+use Magento\Sales\Model\ResourceModel\Order\Payment\Transaction\Collection;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class CollectionUpdaterTest extends TestCase
 {
     /**
-     * @var \Magento\Sales\Model\Grid\Child\CollectionUpdater
+     * @var CollectionUpdater
      */
     protected $collectionUpdater;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $registryMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->registryMock = $this->createMock(\Magento\Framework\Registry::class);
+        $this->registryMock = $this->createMock(Registry::class);
 
-        $this->collectionUpdater = new \Magento\Sales\Model\Grid\Child\CollectionUpdater(
+        $this->collectionUpdater = new CollectionUpdater(
             $this->registryMock
         );
     }
@@ -30,9 +37,9 @@ class CollectionUpdaterTest extends \PHPUnit\Framework\TestCase
     public function testUpdateIfOrderExists()
     {
         $collectionMock = $this->createMock(
-            \Magento\Sales\Model\ResourceModel\Order\Payment\Transaction\Collection::class
+            Collection::class
         );
-        $transactionMock = $this->createMock(\Magento\Sales\Model\Order\Payment\Transaction::class);
+        $transactionMock = $this->createMock(Transaction::class);
         $this->registryMock
             ->expects($this->once())
             ->method('registry')

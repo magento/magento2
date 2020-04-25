@@ -1,25 +1,32 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Test\Unit\Model\Order\Shipment;
 
-class TrackTest extends \PHPUnit\Framework\TestCase
+use Magento\Framework\DataObject;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Sales\Model\Order\Shipment;
+use Magento\Sales\Model\Order\Shipment\Track;
+use Magento\Sales\Model\Order\ShipmentRepository;
+use PHPUnit\Framework\TestCase;
+
+class TrackTest extends TestCase
 {
     /**
-     * @var \Magento\Sales\Model\Order\Shipment\Track
+     * @var Track
      */
     protected $_model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $objectManagerHelper = new ObjectManager($this);
         $arguments = [
-            'shipmentRepository' => $this->createMock(\Magento\Sales\Model\Order\ShipmentRepository::class),
+            'shipmentRepository' => $this->createMock(ShipmentRepository::class),
         ];
 
-        $this->_model = $objectManagerHelper->getObject(\Magento\Sales\Model\Order\Shipment\Track::class, $arguments);
+        $this->_model = $objectManagerHelper->getObject(Track::class, $arguments);
     }
 
     public function testAddData()
@@ -35,9 +42,9 @@ class TrackTest extends \PHPUnit\Framework\TestCase
     public function testGetStoreId()
     {
         $storeId = 10;
-        $storeObject = new \Magento\Framework\DataObject(['id' => $storeId]);
+        $storeObject = new DataObject(['id' => $storeId]);
 
-        $shipmentMock = $this->createPartialMock(\Magento\Sales\Model\Order\Shipment::class, ['getStore', '__wakeup']);
+        $shipmentMock = $this->createPartialMock(Shipment::class, ['getStore', '__wakeup']);
         $shipmentMock->expects($this->once())->method('getStore')->will($this->returnValue($storeObject));
 
         $this->_model->setShipment($shipmentMock);
@@ -71,6 +78,6 @@ class TrackTest extends \PHPUnit\Framework\TestCase
      */
     public static function isCustomDataProvider()
     {
-        return [[true, \Magento\Sales\Model\Order\Shipment\Track::CUSTOM_CARRIER_CODE], [false, 'ups']];
+        return [[true, Track::CUSTOM_CARRIER_CODE], [false, 'ups']];
     }
 }

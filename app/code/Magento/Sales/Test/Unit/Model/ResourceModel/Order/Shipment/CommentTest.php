@@ -1,56 +1,65 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Test\Unit\Model\ResourceModel\Order\Shipment;
 
-/**
- * Class CommentTest
- */
-class CommentTest extends \PHPUnit\Framework\TestCase
+use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Framework\DB\Adapter\Pdo\Mysql;
+use Magento\Framework\Model\ResourceModel\Db\Context;
+use Magento\Framework\Model\ResourceModel\Db\ObjectRelationProcessor;
+use Magento\Framework\Model\ResourceModel\Db\VersionControl\Snapshot;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Sales\Model\Order\Shipment\Comment\Validator;
+use Magento\Sales\Model\ResourceModel\Order\Shipment\Comment;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class CommentTest extends TestCase
 {
     /**
-     * @var \Magento\Sales\Model\ResourceModel\Order\Shipment\Comment
+     * @var Comment
      */
     protected $commentResource;
 
     /**
-     * @var \Magento\Sales\Model\Order\Shipment\Comment|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Model\Order\Shipment\Comment|MockObject
      */
     protected $commentModelMock;
 
     /**
-     * @var \Magento\Framework\App\ResourceConnection|\PHPUnit_Framework_MockObject_MockObject
+     * @var ResourceConnection|MockObject
      */
     protected $appResourceMock;
 
     /**
-     * @var \Magento\Framework\DB\Adapter\AdapterInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var AdapterInterface|MockObject
      */
     protected $connectionMock;
 
     /**
-     * @var \Magento\Sales\Model\Order\Shipment\Comment\Validator|\PHPUnit_Framework_MockObject_MockObject
+     * @var Validator|MockObject
      */
     protected $validatorMock;
 
     /**
-     * @var \Magento\Framework\Model\ResourceModel\Db\VersionControl\Snapshot|\PHPUnit_Framework_MockObject_MockObject
+     * @var Snapshot|MockObject
      */
     protected $entitySnapshotMock;
 
     /**
      * Set up
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->commentModelMock = $this->createMock(\Magento\Sales\Model\Order\Shipment\Comment::class);
-        $this->appResourceMock = $this->createMock(\Magento\Framework\App\ResourceConnection::class);
-        $this->connectionMock = $this->createMock(\Magento\Framework\DB\Adapter\Pdo\Mysql::class);
-        $this->validatorMock = $this->createMock(\Magento\Sales\Model\Order\Shipment\Comment\Validator::class);
+        $this->appResourceMock = $this->createMock(ResourceConnection::class);
+        $this->connectionMock = $this->createMock(Mysql::class);
+        $this->validatorMock = $this->createMock(Validator::class);
         $this->entitySnapshotMock = $this->createMock(
-            \Magento\Framework\Model\ResourceModel\Db\VersionControl\Snapshot::class
+            Snapshot::class
         );
         $this->appResourceMock->expects($this->any())
             ->method('getConnection')
@@ -66,16 +75,16 @@ class CommentTest extends \PHPUnit\Framework\TestCase
         $this->commentModelMock->expects($this->any())->method('isSaveAllowed')->will($this->returnValue(true));
 
         $relationProcessorMock = $this->createMock(
-            \Magento\Framework\Model\ResourceModel\Db\ObjectRelationProcessor::class
+            ObjectRelationProcessor::class
         );
 
-        $contextMock = $this->createMock(\Magento\Framework\Model\ResourceModel\Db\Context::class);
+        $contextMock = $this->createMock(Context::class);
         $contextMock->expects($this->once())->method('getResources')->willReturn($this->appResourceMock);
         $contextMock->expects($this->once())->method('getObjectRelationProcessor')->willReturn($relationProcessorMock);
 
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $objectManager = new ObjectManager($this);
         $this->commentResource = $objectManager->getObject(
-            \Magento\Sales\Model\ResourceModel\Order\Shipment\Comment::class,
+            Comment::class,
             [
                 'context' => $contextMock,
                 'validator' => $this->validatorMock,
@@ -104,12 +113,11 @@ class CommentTest extends \PHPUnit\Framework\TestCase
 
     /**
      * Test _beforeSaveMethod via save() with failed validation
-     *
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Cannot save comment:
      */
     public function testSaveValidationFailed()
     {
+        $this->expectException('Magento\Framework\Exception\LocalizedException');
+        $this->expectExceptionMessage('Cannot save comment:');
         $this->entitySnapshotMock->expects($this->once())
             ->method('isModified')
             ->with($this->commentModelMock)

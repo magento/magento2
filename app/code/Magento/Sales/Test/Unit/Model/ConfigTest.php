@@ -1,42 +1,48 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Test\Unit\Model;
 
-class ConfigTest extends \PHPUnit\Framework\TestCase
+use Magento\Framework\App\State;
+use Magento\Sales\Model\Config;
+use Magento\Sales\Model\Config\Data;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class ConfigTest extends TestCase
 {
     /**
-     * @var \Magento\Sales\Model\Config
+     * @var Config
      */
     protected $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $configDataMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $stateMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->configDataMock = $this->getMockBuilder(\Magento\Sales\Model\Config\Data::class)
+        $this->configDataMock = $this->getMockBuilder(Data::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->stateMock = $this->getMockBuilder(\Magento\Framework\App\State::class)
+        $this->stateMock = $this->getMockBuilder(State::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->model = new \Magento\Sales\Model\Config($this->configDataMock, $this->stateMock);
+        $this->model = new Config($this->configDataMock, $this->stateMock);
     }
 
     public function testInstanceOf()
     {
-        $model = new \Magento\Sales\Model\Config($this->configDataMock, $this->stateMock);
-        $this->assertInstanceOf(\Magento\Sales\Model\Config::class, $model);
+        $model = new Config($this->configDataMock, $this->stateMock);
+        $this->assertInstanceOf(Config::class, $model);
     }
 
     public function testGetTotalsRenderer()

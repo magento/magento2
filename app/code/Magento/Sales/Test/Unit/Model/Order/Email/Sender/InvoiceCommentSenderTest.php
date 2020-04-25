@@ -1,32 +1,37 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Test\Unit\Model\Order\Email\Sender;
 
+use Magento\Payment\Helper\Data;
+use Magento\Sales\Api\Data\OrderInterface;
+use Magento\Sales\Model\Order\Email\Container\InvoiceCommentIdentity;
 use Magento\Sales\Model\Order\Email\Sender\InvoiceCommentSender;
+use Magento\Sales\Model\ResourceModel\Order\Invoice;
+use PHPUnit\Framework\MockObject\MockObject;
 
 class InvoiceCommentSenderTest extends AbstractSenderTest
 {
     /**
-     * @var \Magento\Sales\Model\Order\Email\Sender\InvoiceCommentSender
+     * @var InvoiceCommentSender
      */
     protected $sender;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $invoiceMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->stepMockSetup();
-        $this->paymentHelper = $this->createPartialMock(\Magento\Payment\Helper\Data::class, ['getInfoBlockHtml']);
+        $this->paymentHelper = $this->createPartialMock(Data::class, ['getInfoBlockHtml']);
 
-        $this->invoiceResource = $this->createMock(\Magento\Sales\Model\ResourceModel\Order\Invoice::class);
+        $this->invoiceResource = $this->createMock(Invoice::class);
 
-        $this->stepIdentityContainerInit(\Magento\Sales\Model\Order\Email\Container\InvoiceCommentIdentity::class);
+        $this->stepIdentityContainerInit(InvoiceCommentIdentity::class);
 
         $this->addressRenderer->expects($this->any())->method('format')->willReturn(1);
 
@@ -154,7 +159,7 @@ class InvoiceCommentSenderTest extends AbstractSenderTest
     public function testSendVirtualOrder()
     {
         $isVirtualOrder = true;
-        $this->orderMock->setData(\Magento\Sales\Api\Data\OrderInterface::IS_VIRTUAL, $isVirtualOrder);
+        $this->orderMock->setData(OrderInterface::IS_VIRTUAL, $isVirtualOrder);
         $this->stepAddressFormat($this->addressMock, $isVirtualOrder);
         $customerName = 'Test Customer';
         $frontendStatusLabel = 'Complete';

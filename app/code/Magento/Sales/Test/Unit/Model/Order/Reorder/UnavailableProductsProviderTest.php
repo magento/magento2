@@ -1,38 +1,38 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Test\Unit\Model\Order\Reorder;
 
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Sales\Model\Config;
+use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Item;
 use Magento\Sales\Model\Order\Reorder\OrderedProductAvailabilityChecker;
 use Magento\Sales\Model\Order\Reorder\UnavailableProductsProvider;
-use Magento\Sales\Model\Order;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-/**
- * Class UnavailableProductsProviderTest
- */
-class UnavailableProductsProviderTest extends \PHPUnit\Framework\TestCase
+class UnavailableProductsProviderTest extends TestCase
 {
     /**
-     * @var Config|\PHPUnit_Framework_MockObject_MockObject
+     * @var Config|MockObject
      */
     private $salesConfigMock;
 
     /**
-     * @var OrderedProductAvailabilityChecker|\PHPUnit_Framework_MockObject_MockObject
+     * @var OrderedProductAvailabilityChecker|MockObject
      */
     private $checkerMock;
 
     /**
-     * @var Order|\PHPUnit_Framework_MockObject_MockObject
+     * @var Order|MockObject
      */
     private $orderMock;
 
     /**
-     * @var Item|\PHPUnit_Framework_MockObject_MockObject
+     * @var Item|MockObject
      */
     private $orderItemMock;
 
@@ -41,9 +41,9 @@ class UnavailableProductsProviderTest extends \PHPUnit\Framework\TestCase
      */
     private $unavailableProductsProvider;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $objectManager = new ObjectManager($this);
         $this->salesConfigMock = $this->getMockBuilder(Config::class)->disableOriginalConstructor()->getMock();
         $this->checkerMock = $this->getMockBuilder(OrderedProductAvailabilityChecker::class)
             ->disableOriginalConstructor()

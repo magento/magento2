@@ -14,18 +14,18 @@ use Magento\Backend\Model\View\Result\ForwardFactory;
 use Magento\Backend\Model\View\Result\Redirect;
 use Magento\Backend\Model\View\Result\RedirectFactory;
 use Magento\Framework\App\RequestInterface;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Message\ManagerInterface;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Sales\Controller\Adminhtml\Order\Create\Reorder;
+use Magento\Sales\Helper\Reorder as ReorderHelper;
 use Magento\Sales\Model\AdminOrder\Create;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Reorder\UnavailableProductsProvider;
-use Magento\Sales\Helper\Reorder as ReorderHelper;
-use Magento\Framework\Exception\NoSuchEntityException;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 /**
  * Verify reorder class.
@@ -118,7 +118,7 @@ class ReorderTest extends TestCase
     /**
      * @inheritDoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->orderId = 111;
         $this->orderRepositoryMock = $this->createMock(OrderRepositoryInterface::class);
@@ -285,7 +285,7 @@ class ReorderTest extends TestCase
         $this->orderMock->expects($this->once())
             ->method('setReordered')
             ->with(true)
-            ->willThrowException(new $exception);
+            ->willThrowException(new $exception());
         $this->messageManagerMock
             ->expects($this->once())
             ->method('addException')

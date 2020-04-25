@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -10,9 +10,10 @@ use Magento\Sales\Model\Order\Shipment;
 use Magento\Sales\Model\Order\Shipment\Item as ShipmentItem;
 use Magento\Sales\Model\ResourceModel\Order\Shipment\Comment\Collection;
 use Magento\Sales\Model\ResourceModel\Order\Shipment\Comment\CollectionFactory;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class ShipmentTest extends \PHPUnit\Framework\TestCase
+class ShipmentTest extends TestCase
 {
     /**
      * @var CollectionFactory|MockObject
@@ -32,7 +33,7 @@ class ShipmentTest extends \PHPUnit\Framework\TestCase
     /**
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $helperManager = new ObjectManager($this);
 

@@ -1,34 +1,38 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Test\Unit\Model\Order\Email\Sender;
 
+use Magento\Sales\Api\Data\OrderInterface;
+use Magento\Sales\Model\Order\Creditmemo;
+use Magento\Sales\Model\Order\Email\Container\CreditmemoCommentIdentity;
 use Magento\Sales\Model\Order\Email\Sender\CreditmemoCommentSender;
+use PHPUnit\Framework\MockObject\MockObject;
 
 class CreditmemoCommentSenderTest extends AbstractSenderTest
 {
     /**
-     * @var \Magento\Sales\Model\Order\Email\Sender\CreditmemoCommentSender
+     * @var CreditmemoCommentSender
      */
     protected $sender;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $creditmemoMock;
 
     /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->stepMockSetup();
-        $this->stepIdentityContainerInit(\Magento\Sales\Model\Order\Email\Container\CreditmemoCommentIdentity::class);
+        $this->stepIdentityContainerInit(CreditmemoCommentIdentity::class);
         $this->addressRenderer->expects($this->any())->method('format')->willReturn(1);
         $this->creditmemoMock = $this->createPartialMock(
-            \Magento\Sales\Model\Order\Creditmemo::class,
+            Creditmemo::class,
             ['getStore', '__wakeup', 'getOrder']
         );
         $this->creditmemoMock->expects($this->any())
@@ -57,7 +61,7 @@ class CreditmemoCommentSenderTest extends AbstractSenderTest
 
     public function testSendVirtualOrder()
     {
-        $this->orderMock->setData(\Magento\Sales\Api\Data\OrderInterface::IS_VIRTUAL, true);
+        $this->orderMock->setData(OrderInterface::IS_VIRTUAL, true);
         $billingAddress = $this->addressMock;
         $customerName = 'test customer';
         $frontendStatusLabel = 'Complete';

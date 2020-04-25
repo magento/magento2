@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -6,22 +6,27 @@
 
 namespace Magento\Sales\Test\Unit\Model\Order\Grid\Massaction;
 
-class ItemsUpdaterTest extends \PHPUnit\Framework\TestCase
+use Magento\Framework\Authorization;
+use Magento\Sales\Model\Order\Grid\Massaction\ItemsUpdater;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class ItemsUpdaterTest extends TestCase
 {
     /**
-     * @var  \Magento\Sales\Model\Order\Grid\Massaction\ItemsUpdater
+     * @var  ItemsUpdater
      */
     protected $itemUpdater;
 
     /**
-     * @var \Magento\Framework\Authorization|\PHPUnit_Framework_MockObject_MockObject
+     * @var Authorization|MockObject
      */
     protected $authorizationMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->authorizationMock = $this->createMock(\Magento\Framework\Authorization::class);
-        $this->itemUpdater = new \Magento\Sales\Model\Order\Grid\Massaction\ItemsUpdater(
+        $this->authorizationMock = $this->createMock(Authorization::class);
+        $this->itemUpdater = new ItemsUpdater(
             $this->authorizationMock
         );
     }

@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -19,14 +19,14 @@ use Magento\Sales\Model\Order\Email\SenderBuilderFactory;
 use Magento\Store\Model\Store;
 use PHPUnit\Framework\MockObject\Matcher\InvokedCount;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 
 /**
- * Class AbstractSenderTest
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-abstract class AbstractSenderTest extends \PHPUnit\Framework\TestCase
+abstract class AbstractSenderTest extends TestCase
 {
     /**
      * @var Sender|MockObject

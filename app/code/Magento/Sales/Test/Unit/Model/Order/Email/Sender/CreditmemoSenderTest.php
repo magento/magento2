@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -8,10 +8,10 @@ namespace Magento\Sales\Test\Unit\Model\Order\Email\Sender;
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Model\Order\Address;
 use Magento\Sales\Model\Order\Creditmemo;
-use Magento\Sales\Model\ResourceModel\Order\Creditmemo as CreditmemoResource;
 use Magento\Sales\Model\Order\Email\Container\CreditmemoIdentity;
 use Magento\Sales\Model\Order\Email\Sender\CreditmemoSender;
 use Magento\Sales\Model\ResourceModel\EntityAbstract;
+use Magento\Sales\Model\ResourceModel\Order\Creditmemo as CreditmemoResource;
 use PHPUnit\Framework\MockObject\MockObject;
 
 /**
@@ -38,7 +38,7 @@ class CreditmemoSenderTest extends AbstractSenderTest
      */
     protected $creditmemoResourceMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->stepMockSetup();
 

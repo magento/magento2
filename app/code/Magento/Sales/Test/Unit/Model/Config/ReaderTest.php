@@ -1,35 +1,42 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Test\Unit\Model\Config;
 
-class ReaderTest extends \PHPUnit\Framework\TestCase
+use Magento\Framework\App\Config\FileResolver;
+use Magento\Framework\Config\ValidationStateInterface;
+use Magento\Sales\Model\Config\Converter;
+use Magento\Sales\Model\Config\Reader;
+use Magento\Sales\Model\Config\SchemaLocator;
+use PHPUnit\Framework\TestCase;
+
+class ReaderTest extends TestCase
 {
     /**
-     * @var \Magento\Sales\Model\Config\Reader
+     * @var Reader
      */
     protected $_reader;
 
     /**
      * Prepare parameters
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $fileResolver = $this->getMockBuilder(
-            \Magento\Framework\App\Config\FileResolver::class
+            FileResolver::class
         )->disableOriginalConstructor()->getMock();
         $converter = $this->getMockBuilder(
-            \Magento\Sales\Model\Config\Converter::class
+            Converter::class
         )->disableOriginalConstructor()->getMock();
         $schema = $this->getMockBuilder(
-            \Magento\Sales\Model\Config\SchemaLocator::class
+            SchemaLocator::class
         )->disableOriginalConstructor()->getMock();
         $validator = $this->getMockBuilder(
-            \Magento\Framework\Config\ValidationStateInterface::class
+            ValidationStateInterface::class
         )->disableOriginalConstructor()->getMock();
-        $this->_reader = new \Magento\Sales\Model\Config\Reader($fileResolver, $converter, $schema, $validator);
+        $this->_reader = new Reader($fileResolver, $converter, $schema, $validator);
     }
 
     /**
@@ -37,6 +44,6 @@ class ReaderTest extends \PHPUnit\Framework\TestCase
      */
     public function testInstanceof()
     {
-        $this->assertInstanceOf(\Magento\Sales\Model\Config\Reader::class, $this->_reader);
+        $this->assertInstanceOf(Reader::class, $this->_reader);
     }
 }

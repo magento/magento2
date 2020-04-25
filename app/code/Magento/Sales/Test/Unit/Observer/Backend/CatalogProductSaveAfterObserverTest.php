@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -6,9 +6,15 @@
 
 namespace Magento\Sales\Test\Unit\Observer\Backend;
 
+use Magento\Catalog\Model\Product;
+use Magento\Framework\Event;
+use Magento\Framework\Event\Observer;
+use Magento\Quote\Model\ResourceModel\Quote;
 use Magento\Sales\Observer\Backend\CatalogProductSaveAfterObserver;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class CatalogProductSaveAfterObserverTest extends \PHPUnit\Framework\TestCase
+class CatalogProductSaveAfterObserverTest extends TestCase
 {
     /**
      * @var CatalogProductSaveAfterObserver
@@ -16,26 +22,26 @@ class CatalogProductSaveAfterObserverTest extends \PHPUnit\Framework\TestCase
     protected $_model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $_quoteMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $_observerMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $_eventMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->_quoteMock = $this->createMock(\Magento\Quote\Model\ResourceModel\Quote::class);
-        $this->_observerMock = $this->createMock(\Magento\Framework\Event\Observer::class);
+        $this->_quoteMock = $this->createMock(Quote::class);
+        $this->_observerMock = $this->createMock(Observer::class);
         $this->_eventMock = $this->createPartialMock(
-            \Magento\Framework\Event::class,
+            Event::class,
             ['getProduct', 'getStatus', 'getProductId']
         );
         $this->_observerMock->expects($this->any())->method('getEvent')->will($this->returnValue($this->_eventMock));
@@ -50,7 +56,7 @@ class CatalogProductSaveAfterObserverTest extends \PHPUnit\Framework\TestCase
     public function testSaveProduct($productId, $productStatus)
     {
         $productMock = $this->createPartialMock(
-            \Magento\Catalog\Model\Product::class,
+            Product::class,
             ['getId', 'getStatus', '__wakeup']
         );
         $this->_eventMock->expects($this->once())->method('getProduct')->will($this->returnValue($productMock));

@@ -1,31 +1,35 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Test\Unit\Model\Order\Email\Sender;
 
+use Magento\Sales\Api\Data\OrderInterface;
+use Magento\Sales\Model\Order\Email\Container\ShipmentCommentIdentity;
 use Magento\Sales\Model\Order\Email\Sender\ShipmentCommentSender;
+use Magento\Sales\Model\Order\Shipment;
+use PHPUnit\Framework\MockObject\MockObject;
 
 class ShipmentCommentSenderTest extends AbstractSenderTest
 {
     /**
-     * @var \Magento\Sales\Model\Order\Email\Sender\ShipmentCommentSender
+     * @var ShipmentCommentSender
      */
     protected $sender;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $shipmentMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->stepMockSetup();
-        $this->stepIdentityContainerInit(\Magento\Sales\Model\Order\Email\Container\ShipmentCommentIdentity::class);
+        $this->stepIdentityContainerInit(ShipmentCommentIdentity::class);
         $this->addressRenderer->expects($this->any())->method('format')->willReturn(1);
         $this->shipmentMock = $this->createPartialMock(
-            \Magento\Sales\Model\Order\Shipment::class,
+            Shipment::class,
             ['getStore', '__wakeup', 'getOrder']
         );
         $this->shipmentMock->expects($this->any())
@@ -145,7 +149,7 @@ class ShipmentCommentSenderTest extends AbstractSenderTest
     public function testSendVirtualOrder()
     {
         $isVirtualOrder = true;
-        $this->orderMock->setData(\Magento\Sales\Api\Data\OrderInterface::IS_VIRTUAL, $isVirtualOrder);
+        $this->orderMock->setData(OrderInterface::IS_VIRTUAL, $isVirtualOrder);
         $this->stepAddressFormat($this->addressMock, $isVirtualOrder);
         $customerName='Test Customer';
         $frontendStatusLabel='Complete';

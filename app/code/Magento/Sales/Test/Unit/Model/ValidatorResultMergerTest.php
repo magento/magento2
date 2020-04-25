@@ -11,11 +11,13 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Sales\Model\ValidatorResultInterface;
 use Magento\Sales\Model\ValidatorResultInterfaceFactory;
 use Magento\Sales\Model\ValidatorResultMerger;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \Magento\Sales\Model\ValidatorResultMerger
  */
-class ValidatorResultMergerTest extends \PHPUnit\Framework\TestCase
+class ValidatorResultMergerTest extends TestCase
 {
     /**
      * Testable Object
@@ -32,7 +34,7 @@ class ValidatorResultMergerTest extends \PHPUnit\Framework\TestCase
     private $objectManager;
 
     /**
-     * @var ValidatorResultInterfaceFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var ValidatorResultInterfaceFactory|MockObject
      */
     private $validatorResultFactoryMock;
 
@@ -41,7 +43,7 @@ class ValidatorResultMergerTest extends \PHPUnit\Framework\TestCase
      *
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->validatorResultFactoryMock = $this->getMockBuilder(ValidatorResultInterfaceFactory::class)
         ->setMethods(['create'])->disableOriginalConstructor()->getMock();

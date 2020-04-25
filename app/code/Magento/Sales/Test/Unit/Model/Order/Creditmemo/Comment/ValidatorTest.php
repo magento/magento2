@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -6,31 +6,33 @@
 
 namespace Magento\Sales\Test\Unit\Model\Order\Creditmemo\Comment;
 
-/**
- * Class ValidatorTest
- */
-class ValidatorTest extends \PHPUnit\Framework\TestCase
+use Magento\Sales\Model\Order\Creditmemo\Comment;
+use Magento\Sales\Model\Order\Creditmemo\Comment\Validator;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class ValidatorTest extends TestCase
 {
     /**
-     * @var \Magento\Sales\Model\Order\Creditmemo\Comment\Validator
+     * @var Validator
      */
     protected $validator;
 
     /**
-     * @var \Magento\Sales\Model\Order\Creditmemo\Comment|\PHPUnit_Framework_MockObject_MockObject
+     * @var Comment|MockObject
      */
     protected $commentModelMock;
 
     /**
      * Set up
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->commentModelMock = $this->createPartialMock(
-            \Magento\Sales\Model\Order\Creditmemo\Comment::class,
+            Comment::class,
             ['hasData', 'getData', '__wakeup']
         );
-        $this->validator = new \Magento\Sales\Model\Order\Creditmemo\Comment\Validator();
+        $this->validator = new Validator();
     }
 
     /**

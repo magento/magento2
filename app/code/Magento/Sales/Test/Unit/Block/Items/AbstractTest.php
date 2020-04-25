@@ -1,31 +1,37 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Test\Unit\Block\Items;
 
+use Magento\Backend\Block\Template\Context;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\View\Element\AbstractBlock;
+use Magento\Framework\View\Element\RendererList;
+use Magento\Framework\View\Layout;
 use Magento\Sales\Block\Items\AbstractItems;
+use PHPUnit\Framework\TestCase;
 
-class AbstractTest extends \PHPUnit\Framework\TestCase
+class AbstractTest extends TestCase
 {
-    /** @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager  */
+    /** @var ObjectManager  */
     protected $_objectManager;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->_objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $this->_objectManager = new ObjectManager($this);
     }
 
     public function testGetItemRenderer()
     {
         $rendererType = 'some-type';
         $renderer = $this->createPartialMock(
-            \Magento\Framework\View\Element\AbstractBlock::class,
+            AbstractBlock::class,
             ['setRenderedBlock']
         );
 
-        $rendererList = $this->createMock(\Magento\Framework\View\Element\RendererList::class);
+        $rendererList = $this->createMock(RendererList::class);
         $rendererList->expects(
             $this->once()
         )->method(
@@ -37,7 +43,7 @@ class AbstractTest extends \PHPUnit\Framework\TestCase
             $this->returnValue($renderer)
         );
 
-        $layout = $this->createPartialMock(\Magento\Framework\View\Layout::class, ['getChildName', 'getBlock']);
+        $layout = $this->createPartialMock(Layout::class, ['getChildName', 'getBlock']);
 
         $layout->expects($this->once())->method('getChildName')->will($this->returnValue('renderer.list'));
 
@@ -51,12 +57,12 @@ class AbstractTest extends \PHPUnit\Framework\TestCase
             $this->returnValue($rendererList)
         );
 
-        /** @var $block \Magento\Sales\Block\Items\AbstractItems */
+        /** @var \Magento\Sales\Block\Items\AbstractItems $block */
         $block = $this->_objectManager->getObject(
-            \Magento\Sales\Block\Items\AbstractItems::class,
+            AbstractItems::class,
             [
                 'context' => $this->_objectManager->getObject(
-                    \Magento\Backend\Block\Template\Context::class,
+                    Context::class,
                     ['layout' => $layout]
                 )
             ]
@@ -67,21 +73,19 @@ class AbstractTest extends \PHPUnit\Framework\TestCase
         $this->assertSame($renderer, $block->getItemRenderer($rendererType));
     }
 
-    /**
-     * @expectedException \RuntimeException
-     * @expectedExceptionMessage Renderer list for block "" is not defined
-     */
     public function testGetItemRendererThrowsExceptionForNonexistentRenderer()
     {
-        $layout = $this->createPartialMock(\Magento\Framework\View\Layout::class, ['getChildName', 'getBlock']);
+        $this->expectException('RuntimeException');
+        $this->expectExceptionMessage('Renderer list for block "" is not defined');
+        $layout = $this->createPartialMock(Layout::class, ['getChildName', 'getBlock']);
         $layout->expects($this->once())->method('getChildName')->will($this->returnValue(null));
 
-        /** @var $block \Magento\Sales\Block\Items\AbstractItems */
+        /** @var \Magento\Sales\Block\Items\AbstractItems $block */
         $block = $this->_objectManager->getObject(
-            \Magento\Sales\Block\Items\AbstractItems::class,
+            AbstractItems::class,
             [
                 'context' => $this->_objectManager->getObject(
-                    \Magento\Backend\Block\Template\Context::class,
+                    Context::class,
                     ['layout' => $layout]
                 )
             ]

@@ -8,40 +8,42 @@ declare(strict_types=1);
 namespace Magento\Sales\Test\Unit\Model\Order\Shipment;
 
 use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
-use Magento\Sales\Api\ShipmentRepositoryInterface;
+use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Sales\Api\Data\ShipmentCommentInterfaceFactory;
 use Magento\Sales\Api\Data\ShipmentCommentSearchResultInterfaceFactory;
+use Magento\Sales\Api\ShipmentRepositoryInterface;
+use Magento\Sales\Model\Order\Email\Sender\ShipmentCommentSender;
 use Magento\Sales\Model\Order\Shipment;
 use Magento\Sales\Model\Order\Shipment\Comment;
 use Magento\Sales\Model\Order\Shipment\CommentRepository;
-use Magento\Sales\Model\Order\Email\Sender\ShipmentCommentSender;
 use Magento\Sales\Model\Spi\ShipmentCommentResourceInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 
 /**
- * Class CommentRepositoryTest
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class CommentRepositoryTest extends \PHPUnit\Framework\TestCase
+class CommentRepositoryTest extends TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|ShipmentCommentResourceInterface
+     * @var MockObject|ShipmentCommentResourceInterface
      */
     private $commentResource;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|ShipmentCommentInterfaceFactory
+     * @var MockObject|ShipmentCommentInterfaceFactory
      */
     private $commentFactory;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|ShipmentCommentSearchResultInterfaceFactory
+     * @var MockObject|ShipmentCommentSearchResultInterfaceFactory
      */
     private $searchResultFactory;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|CollectionProcessorInterface
+     * @var MockObject|CollectionProcessorInterface
      */
     private $collectionProcessor;
 
@@ -51,31 +53,31 @@ class CommentRepositoryTest extends \PHPUnit\Framework\TestCase
     private $commentRepository;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|ShipmentCommentSender
+     * @var MockObject|ShipmentCommentSender
      */
     private $shipmentCommentSender;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|ShipmentRepositoryInterface
+     * @var MockObject|ShipmentRepositoryInterface
      */
     private $shipmentRepositoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|Shipment
+     * @var MockObject|Shipment
      */
     private $shipmentMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|Comment
+     * @var MockObject|Comment
      */
     private $commentMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|LoggerInterface
+     * @var MockObject|LoggerInterface
      */
     private $loggerMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->commentResource = $this->getMockBuilder(ShipmentCommentResourceInterface::class)
             ->disableOriginalConstructor()
@@ -139,17 +141,15 @@ class CommentRepositoryTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($this->commentMock, $this->commentRepository->save($this->commentMock));
     }
 
-    /**
-     * @expectedException \Magento\Framework\Exception\CouldNotSaveException
-     * @expectedExceptionMessage Could not save the shipment comment.
-     */
     public function testSaveWithException()
     {
+        $this->expectException('Magento\Framework\Exception\CouldNotSaveException');
+        $this->expectExceptionMessage('Could not save the shipment comment.');
         $this->commentResource->expects($this->once())
             ->method('save')
             ->with($this->commentMock)
             ->willThrowException(
-                new \Magento\Framework\Exception\CouldNotSaveException(__('Could not save the shipment comment.'))
+                new CouldNotSaveException(__('Could not save the shipment comment.'))
             );
 
         $this->commentRepository->save($this->commentMock);

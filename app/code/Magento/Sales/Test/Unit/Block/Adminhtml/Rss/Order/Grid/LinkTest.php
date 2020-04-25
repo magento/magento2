@@ -1,20 +1,22 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Test\Unit\Block\Adminhtml\Rss\Order\Grid;
 
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\Rss\UrlBuilderInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Framework\View\Element\Template\Context;
+use Magento\Sales\Block\Adminhtml\Rss\Order\Grid\Link;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-/**
- * Class LinkTest
- * @package Magento\Sales\Block\Adminhtml\Rss\Order\Grid
- */
-class LinkTest extends \PHPUnit\Framework\TestCase
+class LinkTest extends TestCase
 {
     /**
-     * @var \Magento\Sales\Block\Adminhtml\Rss\Order\Grid\Link
+     * @var Link
      */
     protected $link;
 
@@ -24,29 +26,29 @@ class LinkTest extends \PHPUnit\Framework\TestCase
     protected $objectManagerHelper;
 
     /**
-     * @var \Magento\Framework\View\Element\Template\Context|\PHPUnit_Framework_MockObject_MockObject
+     * @var Context|MockObject
      */
     protected $context;
 
     /**
-     * @var \Magento\Framework\App\Rss\UrlBuilderInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var UrlBuilderInterface|MockObject
      */
     protected $urlBuilderInterface;
 
     /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ScopeConfigInterface|MockObject
      */
     protected $scopeConfigInterface;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->context = $this->createMock(\Magento\Framework\View\Element\Template\Context::class);
-        $this->urlBuilderInterface = $this->createMock(\Magento\Framework\App\Rss\UrlBuilderInterface::class);
-        $this->scopeConfigInterface = $this->createMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
+        $this->context = $this->createMock(Context::class);
+        $this->urlBuilderInterface = $this->createMock(UrlBuilderInterface::class);
+        $this->scopeConfigInterface = $this->createMock(ScopeConfigInterface::class);
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->link = $this->objectManagerHelper->getObject(
-            \Magento\Sales\Block\Adminhtml\Rss\Order\Grid\Link::class,
+            Link::class,
             [
                 'context' => $this->context,
                 'rssUrlBuilder' => $this->urlBuilderInterface,

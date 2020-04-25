@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -6,44 +6,51 @@
 
 namespace Magento\Sales\Test\Unit\Model\Order\Payment\Transaction;
 
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Sales\Model\Order;
+use Magento\Sales\Model\Order\Payment;
 use Magento\Sales\Model\Order\Payment\Transaction;
+use Magento\Sales\Model\Order\Payment\Transaction\Builder;
+use Magento\Sales\Model\Order\Payment\Transaction\Repository;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class BuilderTest extends \PHPUnit\Framework\TestCase
+class BuilderTest extends TestCase
 {
     /**
-     * @var \Magento\Sales\Model\Order\Payment\Transaction\Repository | \PHPUnit_Framework_MockObject_MockObject
+     * @var Repository|MockObject
      */
     protected $repositoryMock;
 
     /**
-     * @var \Magento\Sales\Model\Order | \PHPUnit_Framework_MockObject_MockObject
+     * @var Order|MockObject
      */
     protected $orderMock;
 
     /**
-     * @var \Magento\Sales\Model\Order\Payment | \PHPUnit_Framework_MockObject_MockObject
+     * @var Payment|MockObject
      */
     protected $paymentMock;
 
     /**
-     * @var \Magento\Sales\Model\Order\Payment\Transaction\Builder
+     * @var Builder
      */
     protected $builder;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->repositoryMock = $this->createMock(\Magento\Sales\Model\Order\Payment\Transaction\Repository::class);
-        $this->paymentMock = $this->createPartialMock(\Magento\Sales\Model\Order\Payment::class, [
+        $objectManager = new ObjectManager($this);
+        $this->repositoryMock = $this->createMock(Repository::class);
+        $this->paymentMock = $this->createPartialMock(Payment::class, [
                 'hasIsTransactionClosed',
                 'getIsTransactionClosed',
                 'getId',
                 'getParentTransactionId',
                 'getShouldCloseParentTransaction'
             ]);
-        $this->orderMock = $this->createMock(\Magento\Sales\Model\Order::class);
+        $this->orderMock = $this->createMock(Order::class);
         $this->builder = $objectManager->getObject(
-            \Magento\Sales\Model\Order\Payment\Transaction\Builder::class,
+            Builder::class,
             ['transactionRepository' => $this->repositoryMock]
         );
     }
@@ -138,10 +145,10 @@ class BuilderTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @param \PHPUnit_Framework_MockObject_MockObject $transaction
+     * @param MockObject $transaction
      * @param string|null $parentTransactionId
      * @param bool $shouldCloseParentTransaction
-     * @param \PHPUnit_Framework_MockObject_MockObject $parentTransaction
+     * @param MockObject $parentTransaction
      * @param bool $parentTransactionIsClosed
      */
     protected function expectsLinkWithParentTransaction(
@@ -179,11 +186,11 @@ class BuilderTest extends \PHPUnit\Framework\TestCase
     /**
      * @param int $orderId
      * @param int $paymentId
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return MockObject
      */
     protected function expectTransaction($orderId, $paymentId)
     {
-        $newTransaction = $this->createPartialMock(\Magento\Sales\Model\Order\Payment\Transaction::class, [
+        $newTransaction = $this->createPartialMock(Transaction::class, [
                 'getId',
                 'setOrderId',
                 'setPaymentId',
@@ -210,11 +217,11 @@ class BuilderTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param string $transactionId
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return MockObject
      */
     protected function expectDocument($transactionId)
     {
-        $document = $this->createPartialMock(\Magento\Sales\Model\Order::class, [
+        $document = $this->createPartialMock(Order::class, [
                 'setTransactionId'
             ]);
 
@@ -223,7 +230,7 @@ class BuilderTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @param \PHPUnit_Framework_MockObject_MockObject $newTransaction
+     * @param MockObject $newTransaction
      * @param string $type
      * @param bool $failSafe
      */
@@ -243,7 +250,7 @@ class BuilderTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param bool $isPaymentTransactionClosed
-     * @param \PHPUnit_Framework_MockObject_MockObject $newTransaction
+     * @param MockObject $newTransaction
      */
     protected function expectsIsPaymentTransactionClosed($isPaymentTransactionClosed, $newTransaction)
     {

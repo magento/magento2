@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -6,47 +6,54 @@
 namespace Magento\Sales\Test\Unit\Model\Order;
 
 use Magento\Framework\DataObject;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Sales\Model\Order\Config;
+use Magento\Sales\Model\Order\Status;
 use Magento\Sales\Model\ResourceModel\Order\Status\Collection;
+use Magento\Store\Api\Data\StoreInterface;
+use Magento\Store\Model\StoreManagerInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test for Magento\Sales\Model\Order\Config class
  */
-class ConfigTest extends \PHPUnit\Framework\TestCase
+class ConfigTest extends TestCase
 {
     /**
-     * @var  \Magento\Sales\Model\Order\Config
+     * @var  Config
      */
     protected $salesConfig;
 
     /**
-     * @var \Magento\Sales\Model\ResourceModel\Order\Status\CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Model\ResourceModel\Order\Status\CollectionFactory|MockObject
      */
     protected $orderStatusCollectionFactoryMock;
 
     /**
-     * @var \Magento\Sales\Model\Order\StatusFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Model\Order\StatusFactory|MockObject
      */
     protected $statusFactoryMock;
 
     /**
-     * @var \Magento\Sales\Model\Order\Status
+     * @var Status
      */
     protected $orderStatusModel;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var StoreManagerInterface|MockObject
      */
     protected $storeManagerMock;
 
     /**
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $objectManager = new ObjectManager($this);
 
-        $this->storeManagerMock = $this->createMock(\Magento\Store\Model\StoreManagerInterface::class);
-        $this->orderStatusModel = $objectManager->getObject(\Magento\Sales\Model\Order\Status::class, [
+        $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
+        $this->orderStatusModel = $objectManager->getObject(Status::class, [
             'storeManager' => $this->storeManagerMock,
         ]);
         $this->statusFactoryMock = $this->getMockBuilder(\Magento\Sales\Model\Order\StatusFactory::class)
@@ -59,7 +66,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         );
         $this->salesConfig = $objectManager
             ->getObject(
-                \Magento\Sales\Model\Order\Config::class,
+                Config::class,
                 [
                     'orderStatusFactory' => $this->statusFactoryMock,
                     'orderStatusCollectionFactory' => $this->orderStatusCollectionFactoryMock
@@ -186,7 +193,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         $this->statusFactoryMock->method('load')
             ->willReturn($this->orderStatusModel);
 
-        $storeMock = $this->createMock(\Magento\Store\Api\Data\StoreInterface::class);
+        $storeMock = $this->createMock(StoreInterface::class);
         $storeMock->method('getId')
             ->willReturn(1);
 

@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -6,19 +6,26 @@
 
 namespace Magento\Sales\Test\Unit\Model\Order\Invoice\Total;
 
+use Magento\Framework\Data\Collection;
+use Magento\Framework\Data\Collection\EntityFactory;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Sales\Model\Order;
+use Magento\Sales\Model\Order\Invoice;
 use Magento\Sales\Model\Order\Invoice\Total\Shipping;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ShippingTest extends \PHPUnit\Framework\TestCase
+class ShippingTest extends TestCase
 {
     /**
      * @var Shipping
      */
     private $total;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->total = new Shipping();
     }
@@ -75,11 +82,11 @@ class ShippingTest extends \PHPUnit\Framework\TestCase
      *
      * @param array $prevInvoicesData
      * @param float $orderShipping
-     * @return \Magento\Sales\Model\Order\Invoice|\PHPUnit_Framework_MockObject_MockObject
+     * @return Invoice|MockObject
      */
     private function createInvoiceStub(array $prevInvoicesData, $orderShipping)
     {
-        $order = $this->getMockBuilder(\Magento\Sales\Model\Order::class)
+        $order = $this->getMockBuilder(Order::class)
             ->setMethods(['getInvoiceCollection', 'getShippingAmount'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
@@ -89,8 +96,8 @@ class ShippingTest extends \PHPUnit\Framework\TestCase
         $order->expects($this->any())
             ->method('getShippingAmount')
             ->willReturn($orderShipping);
-        /** @var $invoice \Magento\Sales\Model\Order\Invoice|\PHPUnit_Framework_MockObject_MockObject */
-        $invoice = $this->getMockBuilder(\Magento\Sales\Model\Order\Invoice::class)
+        /** @var \Magento\Sales\Model\Order\Invoice|MockObject $invoice */
+        $invoice = $this->getMockBuilder(Invoice::class)
             ->disableOriginalConstructor()
             ->getMock();
         $invoice->expects($this->any())
@@ -103,15 +110,15 @@ class ShippingTest extends \PHPUnit\Framework\TestCase
      * Retrieve new invoice collection from an array of invoices' data
      *
      * @param array $invoicesData
-     * @return \Magento\Framework\Data\Collection
+     * @return Collection
      */
     private function getInvoiceCollection(array $invoicesData)
     {
-        $className = \Magento\Sales\Model\Order\Invoice::class;
-        $result = new \Magento\Framework\Data\Collection(
-            $this->createMock(\Magento\Framework\Data\Collection\EntityFactory::class)
+        $className = Invoice::class;
+        $result = new Collection(
+            $this->createMock(EntityFactory::class)
         );
-        $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $objectManagerHelper = new ObjectManager($this);
         $arguments = [
             'orderFactory' => $this->createMock(\Magento\Sales\Model\OrderFactory::class),
             'orderResourceFactory' => $this->createMock(
@@ -133,7 +140,7 @@ class ShippingTest extends \PHPUnit\Framework\TestCase
         foreach ($invoicesData as $oneInvoiceData) {
             $arguments['data'] = $oneInvoiceData;
             $arguments = $objectManagerHelper->getConstructArguments($className, $arguments);
-            /** @var $prevInvoice \Magento\Sales\Model\Order\Invoice */
+            /** @var \Magento\Sales\Model\Order\Invoice $prevInvoice */
             $prevInvoice = $this->getMockBuilder($className)
                 ->setMethods(['_init'])
                 ->setConstructorArgs($arguments)

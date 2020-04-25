@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -6,29 +6,34 @@
 
 namespace Magento\Sales\Test\Unit\Model\Order\Payment;
 
+use Magento\Framework\Event\ManagerInterface;
+use Magento\Framework\Model\Context;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Sales\Model\Order\Payment\Transaction;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class TransactionTest extends \PHPUnit\Framework\TestCase
+class TransactionTest extends TestCase
 {
-    /** @var  \Magento\Sales\Model\Order\Payment\Transaction */
+    /** @var  Transaction */
     protected $transaction;
 
     /** @var ObjectManagerHelper */
     protected $objectManagerHelper;
 
-    /** @var \Magento\Framework\Model\Context|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var Context|MockObject */
     protected $contextMock;
 
-    /** @var  \Magento\Framework\Event\ManagerInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var  ManagerInterface|MockObject */
     protected $eventManagerMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->contextMock = $this->getMockBuilder(\Magento\Framework\Model\Context::class)
+        $this->contextMock = $this->getMockBuilder(Context::class)
             ->setMethods(['getEventDispatcher'])
             ->disableOriginalConstructor()
             ->getMock();
-        $this->eventManagerMock = $this->getMockBuilder(\Magento\Framework\Event\ManagerInterface::class)
+        $this->eventManagerMock = $this->getMockBuilder(ManagerInterface::class)
             ->setMethods(['dispatch'])
             ->getMockForAbstractClass();
 
@@ -38,7 +43,7 @@ class TransactionTest extends \PHPUnit\Framework\TestCase
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->transaction = $this->objectManagerHelper->getObject(
-            \Magento\Sales\Model\Order\Payment\Transaction::class,
+            Transaction::class,
             [
                 'context' => $this->contextMock
             ]
