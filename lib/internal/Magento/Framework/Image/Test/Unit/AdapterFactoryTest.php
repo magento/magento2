@@ -33,15 +33,13 @@ class AdapterFactoryTest extends TestCase
             $this->once()
         )->method(
             'getAdapters'
-        )->will(
-            $this->returnValue(
-                [
-                    'GD2' => ['class' => Gd2::class],
-                    'IMAGEMAGICK' => ['class' => ImageMagick::class],
-                    'wrongInstance' => ['class' => 'stdClass'],
-                    'test' => [],
-                ]
-            )
+        )->willReturn(
+            [
+                'GD2' => ['class' => Gd2::class],
+                'IMAGEMAGICK' => ['class' => ImageMagick::class],
+                'wrongInstance' => ['class' => 'stdClass'],
+                'test' => [],
+            ]
         );
     }
 
@@ -54,7 +52,10 @@ class AdapterFactoryTest extends TestCase
     {
         $objectManagerMock =
             $this->createPartialMock(ObjectManager::class, ['create']);
-        $imageAdapterMock = $this->createPartialMock($class, ['checkDependencies']);
+        $imageAdapterMock = $this->getMockBuilder($class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['checkDependencies'])
+            ->getMock();
         $imageAdapterMock->expects($this->once())->method('checkDependencies');
 
         $objectManagerMock->expects(
@@ -63,8 +64,8 @@ class AdapterFactoryTest extends TestCase
             'create'
         )->with(
             $class
-        )->will(
-            $this->returnValue($imageAdapterMock)
+        )->willReturn(
+            $imageAdapterMock
         );
 
         $adapterFactory = new AdapterFactory($objectManagerMock, $this->configMock);
@@ -92,11 +93,14 @@ class AdapterFactoryTest extends TestCase
         $adapterAlias = 'IMAGEMAGICK';
         $adapterClass = ImageMagick::class;
 
-        $this->configMock->expects($this->once())->method('getAdapterAlias')->will($this->returnValue($adapterAlias));
+        $this->configMock->expects($this->once())->method('getAdapterAlias')->willReturn($adapterAlias);
 
         $objectManagerMock =
             $this->createPartialMock(ObjectManager::class, ['create']);
-        $imageAdapterMock = $this->createPartialMock($adapterClass, ['checkDependencies']);
+        $imageAdapterMock = $this->getMockBuilder($adapterClass)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['checkDependencies'])
+            ->getMock();
         $imageAdapterMock->expects($this->once())->method('checkDependencies');
 
         $objectManagerMock->expects(
@@ -105,8 +109,8 @@ class AdapterFactoryTest extends TestCase
             'create'
         )->with(
             $adapterClass
-        )->will(
-            $this->returnValue($imageAdapterMock)
+        )->willReturn(
+            $imageAdapterMock
         );
 
         $adapterFactory = new AdapterFactory($objectManagerMock, $this->configMock);
@@ -121,7 +125,7 @@ class AdapterFactoryTest extends TestCase
     {
         $this->expectException('InvalidArgumentException');
         $this->expectExceptionMessage('Image adapter is not selected.');
-        $this->configMock->expects($this->once())->method('getAdapterAlias')->will($this->returnValue(''));
+        $this->configMock->expects($this->once())->method('getAdapterAlias')->willReturn('');
         $objectManagerMock =
             $this->createPartialMock(ObjectManager::class, ['create']);
         $adapterFactory = new AdapterFactory($objectManagerMock, $this->configMock);
@@ -154,7 +158,9 @@ class AdapterFactoryTest extends TestCase
         $class = 'stdClass';
         $objectManagerMock =
             $this->createPartialMock(ObjectManager::class, ['create']);
-        $imageAdapterMock = $this->createPartialMock($class, ['checkDependencies']);
+        $imageAdapterMock = $this->getMockBuilder($class)
+            ->addMethods(['checkDependencies'])
+            ->getMock();
 
         $objectManagerMock->expects(
             $this->once()
@@ -162,8 +168,8 @@ class AdapterFactoryTest extends TestCase
             'create'
         )->with(
             $class
-        )->will(
-            $this->returnValue($imageAdapterMock)
+        )->willReturn(
+            $imageAdapterMock
         );
 
         $adapterFactory = new AdapterFactory($objectManagerMock, $this->configMock);

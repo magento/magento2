@@ -43,15 +43,20 @@ class AbstractTest extends TestCase
     {
         $this->directoryWriteMock = $this->createMock(Write::class);
         $this->filesystemMock =
-            $this->createPartialMock(Filesystem::class, ['getDirectoryWrite', 'createDirectory']);
+            $this->getMockBuilder(Filesystem::class)
+                ->addMethods(['createDirectory'])
+                ->onlyMethods(['getDirectoryWrite'])
+                ->disableOriginalConstructor()
+                ->getMock();
         $this->filesystemMock->expects(
             $this->once()
         )->method(
             'getDirectoryWrite'
-        )->will(
-            $this->returnValue($this->directoryWriteMock)
+        )->willReturn(
+            $this->directoryWriteMock
         );
-        $this->loggerMock = $this->getMockBuilder(LoggerInterface::class)->getMock();
+        $this->loggerMock = $this->getMockBuilder(LoggerInterface::class)
+            ->getMock();
 
         $this->_model = $this->getMockForAbstractClass(
             AbstractAdapter::class,

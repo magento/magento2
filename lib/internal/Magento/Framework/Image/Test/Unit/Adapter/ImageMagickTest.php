@@ -39,10 +39,11 @@ class ImageMagickTest extends TestCase
      */
     protected $imageMagic;
 
-    public function setup(): void
+    protected function setup(): void
     {
         $objectManager = new ObjectManager($this);
-        $this->loggerMock = $this->getMockBuilder(LoggerInterface::class)->getMock();
+        $this->loggerMock = $this->getMockBuilder(LoggerInterface::class)
+            ->getMock();
         $this->writeMock = $this->getMockBuilder(
             WriteInterface::class
         )->getMock();
@@ -94,7 +95,7 @@ class ImageMagickTest extends TestCase
         $exception = new FileSystemException(
             new Phrase('Unable to write file into directory product/cache. Access forbidden.')
         );
-        $this->writeMock->method('create')->will($this->throwException($exception));
+        $this->writeMock->method('create')->willThrowException($exception);
         $this->loggerMock->expects($this->once())->method('critical')->with($exception);
         $this->imageMagic->save('product/cache', 'sample.jpg');
     }
