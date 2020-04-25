@@ -3,14 +3,20 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\Pricing\Test\Unit\Adjustment;
 
-use \Magento\Framework\Pricing\Adjustment\Collection;
+use Magento\Framework\Pricing\Adjustment\AdjustmentInterface;
+use Magento\Framework\Pricing\Adjustment\Collection;
+use Magento\Framework\Pricing\Adjustment\Pool;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class CollectionTest extends \PHPUnit\Framework\TestCase
+class CollectionTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\Pricing\Adjustment\Pool
+     * @var Pool
      */
     protected $adjustmentPool;
 
@@ -19,24 +25,24 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
      */
     protected $adjustmentsData;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $adj1 = $this->createMock(\Magento\Framework\Pricing\Adjustment\AdjustmentInterface::class);
+        $adj1 = $this->createMock(AdjustmentInterface::class);
         $adj1->expects($this->any())
             ->method('getSortOrder')
             ->will($this->returnValue(10));
-        $adj2 = $this->createMock(\Magento\Framework\Pricing\Adjustment\AdjustmentInterface::class);
+        $adj2 = $this->createMock(AdjustmentInterface::class);
         $adj2->expects($this->any())
             ->method('getSortOrder')
             ->will($this->returnValue(20));
-        $adj3 = $this->createMock(\Magento\Framework\Pricing\Adjustment\AdjustmentInterface::class);
+        $adj3 = $this->createMock(AdjustmentInterface::class);
         $adj3->expects($this->any())
             ->method('getSortOrder')
             ->will($this->returnValue(5));
-        $adj4 = $this->createMock(\Magento\Framework\Pricing\Adjustment\AdjustmentInterface::class);
+        $adj4 = $this->createMock(AdjustmentInterface::class);
         $adj4->expects($this->any())
             ->method('getSortOrder')
-            ->will($this->returnValue(\Magento\Framework\Pricing\Adjustment\Pool::DEFAULT_SORT_ORDER));
+            ->will($this->returnValue(Pool::DEFAULT_SORT_ORDER));
 
         $adjustmentsData = [
             'adj1' => $adj1,
@@ -45,8 +51,8 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
             'adj4' => $adj4,
         ];
 
-        /** @var \Magento\Framework\Pricing\Adjustment\Pool|\PHPUnit_Framework_MockObject_MockObject $adjustmentPool */
-        $adjustmentPool = $this->getMockBuilder(\Magento\Framework\Pricing\Adjustment\Pool::class)
+        /** @var Pool|MockObject $adjustmentPool */
+        $adjustmentPool = $this->getMockBuilder(Pool::class)
             ->disableOriginalConstructor()
             ->setMethods(['getAdjustmentByCode'])
             ->getMock();
@@ -121,11 +127,9 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
         ];
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     */
     public function testGetItemByNotExistingCode()
     {
+        $this->expectException('InvalidArgumentException');
         $adjustments = ['adj1'];
         $collection = new Collection($this->adjustmentPool, $adjustments);
         $collection->getItemByCode('not_existing_code');

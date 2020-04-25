@@ -5,16 +5,17 @@
  */
 namespace Magento\Framework\View\Test\Unit\Layout\Argument\Interpreter;
 
+use PHPUnit\Framework\TestCase;
 use \Magento\Framework\View\Layout\Argument\Interpreter\Passthrough;
 
-class PassthroughTest extends \PHPUnit\Framework\TestCase
+class PassthroughTest extends TestCase
 {
     /**
      * @var Passthrough
      */
     protected $_model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_model = new Passthrough();
     }

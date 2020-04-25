@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -8,28 +8,27 @@ namespace Magento\Framework\Model\Test\Unit\EntitySnapshot;
 
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\EntityManager\EntityMetadata;
+use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\Model\EntitySnapshot\AttributeProvider;
 use Magento\Framework\Model\EntitySnapshot\AttributeProviderInterface;
-use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\ObjectManagerInterface as ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-/**
- * Class AttributeProviderTest
- */
-class AttributeProviderTest extends \PHPUnit\Framework\TestCase
+class AttributeProviderTest extends TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $concreteAttributeProviderMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $metadataPoolMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $objectManagerMock;
 
@@ -38,7 +37,7 @@ class AttributeProviderTest extends \PHPUnit\Framework\TestCase
      */
     protected $attributeProvider;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->concreteAttributeProviderMock = $this->getMockBuilder(
             AttributeProviderInterface::class

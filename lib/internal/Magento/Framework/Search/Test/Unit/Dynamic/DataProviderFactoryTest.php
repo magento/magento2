@@ -1,27 +1,29 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Search\Test\Unit\Dynamic;
 
-use Magento\Framework\Search\Dynamic\DataProviderFactory;
 use Magento\Framework\ObjectManagerInterface;
+use Magento\Framework\Search\Dynamic\DataProviderFactory;
 use Magento\Framework\Search\Dynamic\DataProviderInterface;
 use Magento\Framework\Search\EngineResolverInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class DataProviderFactoryTest extends \PHPUnit\Framework\TestCase
+class DataProviderFactoryTest extends TestCase
 {
     /** @var DataProviderFactory */
     private $model;
 
-    /** @var ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var ObjectManagerInterface|MockObject */
     private $objectManagerMock;
 
-    /** @var EngineResolverInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var EngineResolverInterface|MockObject */
     private $engineResolverMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManagerMock = $this->getMockBuilder(ObjectManagerInterface::class)
             ->getMockForAbstractClass();
@@ -59,12 +61,10 @@ class DataProviderFactoryTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($dataProviderMock, $this->model->create($data));
     }
 
-    /**
-     * @expectedException \LogicException
-     * @expectedExceptionMessage DataProvider not found by config current_provider
-     */
     public function testCreateWithoutProviders()
     {
+        $this->expectException('LogicException');
+        $this->expectExceptionMessage('DataProvider not found by config current_provider');
         $dataProvider = 'current_provider';
         $dataProviders = [];
         $data = ['data'];
@@ -82,12 +82,10 @@ class DataProviderFactoryTest extends \PHPUnit\Framework\TestCase
         $this->model->create($data);
     }
 
-    /**
-     * @expectedException \LogicException
-     * @expectedExceptionMessage DataProvider not instance of interface
-     */
     public function testCreateWithWrongProvider()
     {
+        $this->expectException('LogicException');
+        $this->expectExceptionMessage('DataProvider not instance of interface');
         $dataProvider = 'current_provider';
         $dataProviderClass = \stdClass::class;
         $dataProviders = [

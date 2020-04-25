@@ -47,7 +47,7 @@ class ConfigurableObjectTest extends TestCase
      */
     private $objectManagerConfig;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
         $this->objectManager = $this->createMock(ObjectManagerInterface::class);

@@ -5,10 +5,12 @@
  */
 namespace Magento\Framework\View\Test\Unit;
 
+use Magento\Framework\View\Element\BlockInterface;
+
 /**
  * Class BlockPoolTestBlock mock
  */
-class BlockPoolTestBlock implements \Magento\Framework\View\Element\BlockInterface
+class BlockPoolTestBlock implements BlockInterface
 {
     /**
      * Produce and return block's html output

@@ -1,20 +1,21 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Convert\Test\Unit;
 
-use \Magento\Framework\Convert\DataObject;
+use Magento\Framework\Convert\DataObject;
+use PHPUnit\Framework\TestCase;
 
-class ObjectTest extends \PHPUnit\Framework\TestCase
+class ObjectTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\Convert\DataObject
+     * @var DataObject
      */
     protected $model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->model = new DataObject();
     }

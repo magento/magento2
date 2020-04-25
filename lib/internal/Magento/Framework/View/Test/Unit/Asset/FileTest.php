@@ -6,22 +6,27 @@
 
 namespace Magento\Framework\View\Test\Unit\Asset;
 
+use PHPUnit\Framework\TestCase;
+use Magento\Framework\View\Asset\Source;
+use PHPUnit\Framework\MockObject\MockObject;
+use Magento\Framework\View\Asset\ContextInterface;
+use Magento\Framework\View\Asset\Minification;
 use Magento\Framework\View\Asset\File;
 
-class FileTest extends \PHPUnit\Framework\TestCase
+class FileTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\View\Asset\Source|\PHPUnit_Framework_MockObject_MockObject
+     * @var Source|MockObject
      */
     private $source;
 
     /**
-     * @var \Magento\Framework\View\Asset\ContextInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ContextInterface|MockObject
      */
     private $context;
 
     /**
-     * @var \Magento\Framework\View\Asset\Minification|\PHPUnit_Framework_MockObject_MockObject
+     * @var Minification|MockObject
      */
     private $minificationMock;
 
@@ -30,11 +35,11 @@ class FileTest extends \PHPUnit\Framework\TestCase
      */
     private $object;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->source = $this->createMock(\Magento\Framework\View\Asset\Source::class);
-        $this->context = $this->getMockForAbstractClass(\Magento\Framework\View\Asset\ContextInterface::class);
-        $this->minificationMock = $this->getMockBuilder(\Magento\Framework\View\Asset\Minification::class)
+        $this->source = $this->createMock(Source::class);
+        $this->context = $this->getMockForAbstractClass(ContextInterface::class);
+        $this->minificationMock = $this->getMockBuilder(Minification::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -108,12 +113,10 @@ class FileTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('result', $this->object->getSourceFile()); // second time to assert in-memory caching
     }
 
-    /**
-     * @expectedException \LogicException
-     * @expectedExceptionMessage Unable to resolve the source file for 'context/Magento_Module/dir/file.css'
-     */
     public function testGetSourceFileMissing()
     {
+        $this->expectException('LogicException');
+        $this->expectExceptionMessage('Unable to resolve the source file for \'context/Magento_Module/dir/file.css\'');
         $this->context->expects($this->once())->method('getPath')->will($this->returnValue('context'));
         $this->source->expects($this->once())->method('getFile')->will($this->returnValue(false));
         $this->object->getSourceFile();
@@ -145,12 +148,10 @@ class FileTest extends \PHPUnit\Framework\TestCase
         ];
     }
 
-    /**
-     * @expectedException \Magento\Framework\View\Asset\File\NotFoundException
-     * @expectedExceptionMessage Unable to get content for 'Magento_Module/dir/file.css'
-     */
     public function testGetContentNotFound()
     {
+        $this->expectException('Magento\Framework\View\Asset\File\NotFoundException');
+        $this->expectExceptionMessage('Unable to get content for \'Magento_Module/dir/file.css\'');
         $this->source->expects($this->once())
             ->method('getContent')
             ->with($this->object)

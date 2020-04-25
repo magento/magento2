@@ -1,33 +1,39 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Test\Unit;
 
-use \Magento\Framework\Filesystem;
-
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Filesystem;
+use Magento\Framework\Filesystem\Directory\ReadFactory;
+use Magento\Framework\Filesystem\Directory\ReadInterface;
+use Magento\Framework\Filesystem\Directory\WriteFactory;
+use Magento\Framework\Filesystem\Directory\WriteInterface;
+use PHPUnit\Framework\MockObject\MockObject;
 
-class FilesystemTest extends \PHPUnit\Framework\TestCase
+use PHPUnit\Framework\TestCase;
+
+class FilesystemTest extends TestCase
 {
     /** @var Filesystem */
     protected $_filesystem;
 
-    /** @var \Magento\Framework\Filesystem\Directory\ReadFactory|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var ReadFactory|MockObject */
     protected $_dirReadFactoryMock;
 
-    /** @var \Magento\Framework\Filesystem\Directory\WriteFactory|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var WriteFactory|MockObject */
     protected $_dirWriteFactoryMock;
 
-    /** @var \Magento\Framework\App\Filesystem\DirectoryList|\PHPUnit_Framework_MockObject_MockObject  */
+    /** @var DirectoryList|MockObject  */
     protected $_directoryListMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->_dirReadFactoryMock = $this->createMock(\Magento\Framework\Filesystem\Directory\ReadFactory::class);
-        $this->_directoryListMock = $this->createMock(\Magento\Framework\App\Filesystem\DirectoryList::class);
-        $this->_dirWriteFactoryMock = $this->createMock(\Magento\Framework\Filesystem\Directory\WriteFactory::class);
+        $this->_dirReadFactoryMock = $this->createMock(ReadFactory::class);
+        $this->_directoryListMock = $this->createMock(DirectoryList::class);
+        $this->_dirWriteFactoryMock = $this->createMock(WriteFactory::class);
         $this->_filesystem = new Filesystem(
             $this->_directoryListMock,
             $this->_dirReadFactoryMock,
@@ -37,24 +43,24 @@ class FilesystemTest extends \PHPUnit\Framework\TestCase
 
     public function testGetDirectoryRead()
     {
-        /** @var \Magento\Framework\Filesystem\Directory\ReadInterface $dirReadMock */
-        $dirReadMock = $this->createMock(\Magento\Framework\Filesystem\Directory\ReadInterface::class);
+        /** @var ReadInterface $dirReadMock */
+        $dirReadMock = $this->createMock(ReadInterface::class);
         $this->_dirReadFactoryMock->expects($this->once())->method('create')->will($this->returnValue($dirReadMock));
         $this->assertEquals($dirReadMock, $this->_filesystem->getDirectoryRead(DirectoryList::ROOT));
     }
 
     public function testGetDirectoryReadByPath()
     {
-        /** @var \Magento\Framework\Filesystem\Directory\ReadInterface $dirReadMock */
-        $dirReadMock = $this->createMock(\Magento\Framework\Filesystem\Directory\ReadInterface::class);
+        /** @var ReadInterface $dirReadMock */
+        $dirReadMock = $this->createMock(ReadInterface::class);
         $this->_dirReadFactoryMock->expects($this->once())->method('create')->will($this->returnValue($dirReadMock));
         $this->assertEquals($dirReadMock, $this->_filesystem->getDirectoryReadByPath('path/to/some/file'));
     }
 
     public function testGetDirectoryWrite()
     {
-        /** @var \Magento\Framework\Filesystem\Directory\WriteInterface $dirWriteMock */
-        $dirWriteMock = $this->createMock(\Magento\Framework\Filesystem\Directory\WriteInterface::class);
+        /** @var WriteInterface $dirWriteMock */
+        $dirWriteMock = $this->createMock(WriteInterface::class);
         $this->_dirWriteFactoryMock->expects($this->once())->method('create')->will($this->returnValue($dirWriteMock));
         $this->assertEquals($dirWriteMock, $this->_filesystem->getDirectoryWrite(DirectoryList::ROOT));
     }

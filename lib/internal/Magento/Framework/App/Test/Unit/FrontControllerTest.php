@@ -3,89 +3,98 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Framework\App\Test\Unit;
 
+use Magento\Framework\App\Action\Action;
 use Magento\Framework\App\Area;
 use Magento\Framework\App\AreaInterface;
 use Magento\Framework\App\AreaList;
+use Magento\Framework\App\FrontController;
 use Magento\Framework\App\Request\InvalidRequestException;
 use Magento\Framework\App\Request\ValidatorInterface;
+use Magento\Framework\App\Response\Http;
+use Magento\Framework\App\RouterInterface;
+use Magento\Framework\App\RouterList;
 use Magento\Framework\App\State;
 use Magento\Framework\Exception\NotFoundException;
 use Magento\Framework\Message\ManagerInterface as MessageManager;
+use Magento\Framework\Phrase;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class FrontControllerTest extends \PHPUnit\Framework\TestCase
+class FrontControllerTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\App\FrontController
+     * @var FrontController
      */
     protected $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $request;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $routerList;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $router;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\Response\Http
+     * @var MockObject|Http
      */
     protected $response;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|ValidatorInterface
+     * @var MockObject|ValidatorInterface
      */
     private $requestValidator;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|\MessageManager
+     * @var MockObject|\MessageManager
      */
     private $messages;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|\LoggerInterface
+     * @var MockObject|\LoggerInterface
      */
     private $logger;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|AreaList
+     * @var MockObject|AreaList
      */
     private $areaListMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|State
+     * @var MockObject|State
      */
     private $appStateMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|AreaInterface
+     * @var MockObject|AreaInterface
      */
     private $areaMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->request = $this->getMockBuilder(\Magento\Framework\App\Request\Http::class)
             ->disableOriginalConstructor()
             ->setMethods(['isDispatched', 'setDispatched', 'initForward', 'setActionName'])
             ->getMock();
 
-        $this->router = $this->createMock(\Magento\Framework\App\RouterInterface::class);
-        $this->routerList = $this->createMock(\Magento\Framework\App\RouterList::class);
-        $this->response = $this->createMock(\Magento\Framework\App\Response\Http::class);
+        $this->router = $this->createMock(RouterInterface::class);
+        $this->routerList = $this->createMock(RouterList::class);
+        $this->response = $this->createMock(Http::class);
         $this->requestValidator = $this->createMock(ValidatorInterface::class);
         $this->messages = $this->createMock(MessageManager::class);
         $this->logger = $this->createMock(LoggerInterface::class);
@@ -94,7 +103,7 @@ class FrontControllerTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $this->areaListMock = $this->createMock(AreaList::class);
         $this->areaMock = $this->createMock(AreaInterface::class);
-        $this->model = new \Magento\Framework\App\FrontController(
+        $this->model = new FrontController(
             $this->routerList,
             $this->response,
             $this->requestValidator,
@@ -105,12 +114,10 @@ class FrontControllerTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    /**
-     * @expectedException \LogicException
-     * @expectedExceptionMessage  Front controller reached 100 router match iterations
-     */
     public function testDispatchThrowException()
     {
+        $this->expectException('LogicException');
+        $this->expectExceptionMessage('Front controller reached 100 router match iterations');
         $validCounter = 0;
         $callbackValid = function () use (&$validCounter) {
             $validCounter++;
@@ -148,8 +155,8 @@ class FrontControllerTest extends \PHPUnit\Framework\TestCase
             ->method('valid')
             ->will($this->returnValue(true));
 
-        $response = $this->createMock(\Magento\Framework\App\Response\Http::class);
-        $controllerInstance = $this->getMockBuilder(\Magento\Framework\App\Action\Action::class)
+        $response = $this->createMock(Http::class);
+        $controllerInstance = $this->getMockBuilder(Action::class)
             ->disableOriginalConstructor()
             ->getMock();
         $controllerInstance->expects($this->any())
@@ -190,8 +197,8 @@ class FrontControllerTest extends \PHPUnit\Framework\TestCase
             ->method('valid')
             ->will($this->returnValue(true));
 
-        $response = $this->createMock(\Magento\Framework\App\Response\Http::class);
-        $controllerInstance = $this->getMockBuilder(\Magento\Framework\App\Action\Action::class)
+        $response = $this->createMock(Http::class);
+        $controllerInstance = $this->getMockBuilder(Action::class)
             ->disableOriginalConstructor()
             ->getMock();
         $controllerInstance->expects($this->any())
@@ -224,8 +231,8 @@ class FrontControllerTest extends \PHPUnit\Framework\TestCase
             ->method('valid')
             ->will($this->returnValue(true));
 
-        $response = $this->createMock(\Magento\Framework\App\Response\Http::class);
-        $controllerInstance = $this->getMockBuilder(\Magento\Framework\App\Action\Action::class)
+        $response = $this->createMock(Http::class);
+        $controllerInstance = $this->getMockBuilder(Action::class)
             ->disableOriginalConstructor()
             ->getMock();
         $controllerInstance->expects($this->any())
@@ -235,7 +242,7 @@ class FrontControllerTest extends \PHPUnit\Framework\TestCase
         $this->router->expects($this->at(0))
             ->method('match')
             ->with($this->request)
-            ->willThrowException(new NotFoundException(new \Magento\Framework\Phrase('Page not found.')));
+            ->willThrowException(new NotFoundException(new Phrase('Page not found.')));
         $this->router->expects($this->at(1))
             ->method('match')
             ->with($this->request)

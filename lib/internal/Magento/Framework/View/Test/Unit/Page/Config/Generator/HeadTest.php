@@ -6,6 +6,10 @@
 
 namespace Magento\Framework\View\Test\Unit\Page\Config\Generator;
 
+use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\MockObject\MockObject;
+use Magento\Framework\UrlInterface;
+use Magento\Framework\View\Page\Title;
 use Magento\Framework\View\Page\Config\Generator\Head;
 use Magento\Framework\View\Page\Config as PageConfig;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
@@ -16,7 +20,7 @@ use Magento\Framework\View\Layout\Reader\Context as ReaderContext;
 /**
  * Test for page config generator model
  */
-class HeadTest extends \PHPUnit\Framework\TestCase
+class HeadTest extends TestCase
 {
     /**
      * @var Head
@@ -24,35 +28,35 @@ class HeadTest extends \PHPUnit\Framework\TestCase
     protected $headGenerator;
 
     /**
-     * @var \Magento\Framework\View\Page\Config|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Page\Config|MockObject
      */
     protected $pageConfigMock;
 
     /**
-     * @var \Magento\Framework\UrlInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var UrlInterface|MockObject
      */
     protected $urlMock;
 
     /**
-     * @var \Magento\Framework\View\Page\Title|\PHPUnit_Framework_MockObject_MockObject
+     * @var Title|MockObject
      */
     protected $title;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->pageConfigMock = $this->getMockBuilder(\Magento\Framework\View\Page\Config::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->title = $this->getMockBuilder(\Magento\Framework\View\Page\Title::class)
+        $this->title = $this->getMockBuilder(Title::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->urlMock = $this->getMockBuilder(\Magento\Framework\UrlInterface::class)
+        $this->urlMock = $this->getMockBuilder(UrlInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
 
         $objectManagerHelper = new ObjectManagerHelper($this);
         $this->headGenerator = $objectManagerHelper->getObject(
-            \Magento\Framework\View\Page\Config\Generator\Head::class,
+            Head::class,
             [
                 'pageConfig' => $this->pageConfigMock,
                 'url' => $this->urlMock,

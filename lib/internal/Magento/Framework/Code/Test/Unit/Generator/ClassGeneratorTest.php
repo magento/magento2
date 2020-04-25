@@ -5,10 +5,17 @@
  */
 namespace Magento\Framework\Code\Test\Unit\Generator;
 
+use PHPUnit\Framework\TestCase;
+use Magento\Framework\Code\Generator\ClassGenerator;
+use Laminas\Code\Generator\DocBlockGenerator;
+use Laminas\Code\Generator\AbstractMemberGenerator;
+use Laminas\Code\Generator\MethodGenerator;
+use Laminas\Code\Generator\PropertyGenerator;
+
 /**
  * Test for Magento\Framework\Code\Generator\ClassGenerator
  */
-class ClassGeneratorTest extends \PHPUnit\Framework\TestCase
+class ClassGeneratorTest extends TestCase
 {
     /**#@+
      * Possible flags for assertion
@@ -26,9 +33,8 @@ class ClassGeneratorTest extends \PHPUnit\Framework\TestCase
     const FLAG_VARIADIC = 'variadic';
 
     /**#@-*/
-
     /**
-     * @var \Magento\Framework\Code\Generator\ClassGenerator
+     * @var ClassGenerator
      */
     protected $_model;
 
@@ -121,12 +127,12 @@ class ClassGeneratorTest extends \PHPUnit\Framework\TestCase
         'publicProperty' => ['name' => 'publicProperty'],
     ];
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->_model = new \Magento\Framework\Code\Generator\ClassGenerator();
+        $this->_model = new ClassGenerator();
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset($this->_model);
     }
@@ -141,11 +147,11 @@ class ClassGeneratorTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param array $expectedDocBlock
-     * @param \Laminas\Code\Generator\DocBlockGenerator $actualDocBlock
+     * @param DocBlockGenerator $actualDocBlock
      */
     protected function _assertDocBlockData(
         array $expectedDocBlock,
-        \Laminas\Code\Generator\DocBlockGenerator $actualDocBlock
+        DocBlockGenerator $actualDocBlock
     ) {
         // assert plain string data
         foreach ($expectedDocBlock as $propertyName => $propertyData) {
@@ -159,7 +165,7 @@ class ClassGeneratorTest extends \PHPUnit\Framework\TestCase
             $expectedTagsData = $expectedDocBlock['tags'];
             $actualTags = $actualDocBlock->getTags();
             $this->assertSameSize($expectedTagsData, $actualTags);
-            /** @var $actualTag \Laminas\Code\Generator\DocBlock\Tag */
+            /** @var \Laminas\Code\Generator\DocBlock\Tag $actualTag */
             foreach ($actualTags as $actualTag) {
                 $tagName = $actualTag->getName();
                 $this->assertArrayHasKey($tagName, $expectedTagsData);
@@ -176,7 +182,7 @@ class ClassGeneratorTest extends \PHPUnit\Framework\TestCase
 
         $this->assertSameSize($this->_methodData, $actualMethods);
 
-        /** @var $method \Laminas\Code\Generator\MethodGenerator */
+        /** @var \Laminas\Code\Generator\MethodGenerator $method */
         foreach ($actualMethods as $methodName => $method) {
             $this->assertArrayHasKey($methodName, $this->_methodData);
             $expectedMethodData = $this->_methodData[$methodName];
@@ -199,7 +205,7 @@ class ClassGeneratorTest extends \PHPUnit\Framework\TestCase
                 foreach ($expectedMethodData['parameters'] as $parameterData) {
                     $parameterName = $parameterData['name'];
                     $this->assertArrayHasKey($parameterName, $actualParameters);
-                    /** @var $actualParameter \Laminas\Code\Generator\ParameterGenerator */
+                    /** @var \Laminas\Code\Generator\ParameterGenerator $actualParameter */
                     $actualParameter = $actualParameters[$parameterName];
                     $this->assertEquals($parameterName, $actualParameter->getName());
 
@@ -213,7 +219,7 @@ class ClassGeneratorTest extends \PHPUnit\Framework\TestCase
 
                     // assert default value
                     if (isset($parameterData['defaultValue'])) {
-                        /** @var $actualDefaultValue \Laminas\Code\Generator\ValueGenerator */
+                        /** @var \Laminas\Code\Generator\ValueGenerator $actualDefaultValue */
                         $actualDefaultValue = $actualParameter->getDefaultValue();
                         $this->assertEquals($parameterData['defaultValue'], $actualDefaultValue->getValue());
                     }
@@ -245,11 +251,11 @@ class ClassGeneratorTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param array $expectedData
-     * @param \Laminas\Code\Generator\AbstractMemberGenerator $actualObject
+     * @param AbstractMemberGenerator $actualObject
      */
     protected function _assertVisibility(
         array $expectedData,
-        \Laminas\Code\Generator\AbstractMemberGenerator $actualObject
+        AbstractMemberGenerator $actualObject
     ) {
         $expectedVisibility = isset($expectedData['visibility']) ? $expectedData['visibility'] : 'public';
         $this->assertEquals($expectedVisibility, $actualObject->getVisibility());
@@ -257,13 +263,12 @@ class ClassGeneratorTest extends \PHPUnit\Framework\TestCase
 
     /**
      * Correct behaviour of addMethodFromGenerator is already tested in testAddMethods
-     *
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage addMethodFromGenerator() expects string for name
      */
     public function testAddMethodFromGenerator()
     {
-        $invalidMethod = new \Laminas\Code\Generator\MethodGenerator();
+        $this->expectException('InvalidArgumentException');
+        $this->expectExceptionMessage('addMethodFromGenerator() expects string for name');
+        $invalidMethod = new MethodGenerator();
         $this->_model->addMethodFromGenerator($invalidMethod);
     }
 
@@ -274,7 +279,7 @@ class ClassGeneratorTest extends \PHPUnit\Framework\TestCase
 
         $this->assertSameSize($this->_propertyData, $actualProperties);
 
-        /** @var $property \Laminas\Code\Generator\PropertyGenerator */
+        /** @var \Laminas\Code\Generator\PropertyGenerator $property */
         foreach ($actualProperties as $propertyName => $property) {
             $this->assertArrayHasKey($propertyName, $this->_propertyData);
             $expectedPropertyData = $this->_propertyData[$propertyName];
@@ -290,7 +295,7 @@ class ClassGeneratorTest extends \PHPUnit\Framework\TestCase
 
             // assert default value
             if (isset($expectedPropertyData['defaultValue'])) {
-                /** @var $actualDefaultValue \Laminas\Code\Generator\ValueGenerator */
+                /** @var \Laminas\Code\Generator\ValueGenerator $actualDefaultValue */
                 $actualDefaultValue = $property->getDefaultValue();
                 $this->assertEquals($expectedPropertyData['defaultValue'], $actualDefaultValue->getValue());
             }
@@ -305,13 +310,12 @@ class ClassGeneratorTest extends \PHPUnit\Framework\TestCase
 
     /**
      * Correct behaviour of addPropertyFromGenerator is already tested in testAddProperties
-     *
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage addPropertyFromGenerator() expects string for name
      */
     public function testAddPropertyFromGenerator()
     {
-        $invalidProperty = new \Laminas\Code\Generator\PropertyGenerator();
+        $this->expectException('InvalidArgumentException');
+        $this->expectExceptionMessage('addPropertyFromGenerator() expects string for name');
+        $invalidProperty = new PropertyGenerator();
         $this->_model->addPropertyFromGenerator($invalidProperty);
     }
 

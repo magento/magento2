@@ -6,13 +6,18 @@
 
 namespace Magento\Framework\View\Test\Unit\Layout\Generator;
 
+use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\MockObject\MockObject;
+use Magento\Framework\View\Layout\Data\Structure;
+use Magento\Framework\View\Layout\Generator\Context;
+use Magento\Framework\View\Layout\Element;
 use \Magento\Framework\View\Layout\Generator\Container;
 
 use Magento\Framework\View\Layout;
 use Magento\Framework\View\Layout\ScheduledStructure;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
-class ContainerTest extends \PHPUnit\Framework\TestCase
+class ContainerTest extends TestCase
 {
     /**
      * @var ObjectManagerHelper
@@ -20,41 +25,41 @@ class ContainerTest extends \PHPUnit\Framework\TestCase
     protected $objectManagerHelper;
 
     /**
-     * @var Layout\Reader\Context|\PHPUnit_Framework_MockObject_MockObject
+     * @var Layout\Reader\Context|MockObject
      */
     protected $readerContextMock;
 
     /**
-     * @var Layout\Generator\Context|\PHPUnit_Framework_MockObject_MockObject
+     * @var Layout\Generator\Context|MockObject
      */
     protected $generatorContextMock;
 
     /**
-     * @var Container|\PHPUnit_Framework_MockObject_MockObject
+     * @var Container|MockObject
      */
     protected $container;
 
     /**
-     * @var ScheduledStructure|\PHPUnit_Framework_MockObject_MockObject
+     * @var ScheduledStructure|MockObject
      */
     protected $scheduledStructureMock;
 
     /**
-     * @var \Magento\Framework\View\Layout\Data\Structure|\PHPUnit_Framework_MockObject_MockObject
+     * @var Structure|MockObject
      */
     protected $structureMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManagerHelper = new ObjectManagerHelper($this);
 
-        $this->scheduledStructureMock = $this->getMockBuilder(\Magento\Framework\View\Layout\ScheduledStructure::class)
+        $this->scheduledStructureMock = $this->getMockBuilder(ScheduledStructure::class)
             ->disableOriginalConstructor()->getMock();
 
-        $this->structureMock = $this->getMockBuilder(\Magento\Framework\View\Layout\Data\Structure::class)
+        $this->structureMock = $this->getMockBuilder(Structure::class)
             ->disableOriginalConstructor()->getMock();
 
-        $this->generatorContextMock = $this->getMockBuilder(\Magento\Framework\View\Layout\Generator\Context::class)
+        $this->generatorContextMock = $this->getMockBuilder(Context::class)
             ->disableOriginalConstructor()->getMock();
         $this->generatorContextMock->expects($this->any())
             ->method('getStructure')
@@ -67,7 +72,7 @@ class ContainerTest extends \PHPUnit\Framework\TestCase
             ->willReturn($this->scheduledStructureMock);
 
         $this->container = $this->objectManagerHelper->getObject(
-            \Magento\Framework\View\Layout\Generator\Container::class
+            Container::class
         );
     }
 
@@ -103,7 +108,7 @@ class ContainerTest extends \PHPUnit\Framework\TestCase
                         'container',
                         [
                             'attributes' => [
-                                Layout\Element::CONTAINER_OPT_LABEL => 'dd_label',
+                                Element::CONTAINER_OPT_LABEL => 'dd_label',
                                 Container::CONTAINER_OPT_HTML_TAG   => 'dd',
                                 Container::CONTAINER_OPT_HTML_CLASS => 'dd_class',
                                 Container::CONTAINER_OPT_HTML_ID    => 'dd_id',
@@ -112,7 +117,7 @@ class ContainerTest extends \PHPUnit\Framework\TestCase
                     ],
                 ],
                 'setAttributeData' => [
-                    ['first_container', Layout\Element::CONTAINER_OPT_LABEL, 'dd_label'],
+                    ['first_container', Element::CONTAINER_OPT_LABEL, 'dd_label'],
                     ['first_container', Container::CONTAINER_OPT_HTML_TAG, 'dd'],
                     ['first_container', Container::CONTAINER_OPT_HTML_CLASS, 'dd_class'],
                     ['first_container', Container::CONTAINER_OPT_HTML_ID, 'dd_id'],
@@ -166,10 +171,10 @@ class ContainerTest extends \PHPUnit\Framework\TestCase
      * @param array $structureElements
      *
      * @dataProvider processWithExceptionDataProvider
-     * @expectedException \Magento\Framework\Exception\LocalizedException
      */
     public function testProcessWithException($structureElements)
     {
+        $this->expectException('Magento\Framework\Exception\LocalizedException');
         $this->scheduledStructureMock->expects($this->once())
             ->method('getElements')
             ->willReturn($structureElements);
@@ -194,7 +199,7 @@ class ContainerTest extends \PHPUnit\Framework\TestCase
                         [
                             'attributes' => [
                                 Container::CONTAINER_OPT_LABEL   => 'label',
-                                Layout\Element::CONTAINER_OPT_HTML_TAG => 'custom_tag',
+                                Element::CONTAINER_OPT_HTML_TAG => 'custom_tag',
                             ]
                         ],
                     ],
@@ -207,7 +212,7 @@ class ContainerTest extends \PHPUnit\Framework\TestCase
                         [
                             'attributes' => [
                                 Container::CONTAINER_OPT_LABEL   => 'label',
-                                Layout\Element::CONTAINER_OPT_HTML_ID => 'html_id',
+                                Element::CONTAINER_OPT_HTML_ID => 'html_id',
                             ]
                         ],
                     ],
@@ -220,7 +225,7 @@ class ContainerTest extends \PHPUnit\Framework\TestCase
                         [
                             'attributes' => [
                                 Container::CONTAINER_OPT_LABEL   => 'label',
-                                Layout\Element::CONTAINER_OPT_HTML_CLASS => 'html_class',
+                                Element::CONTAINER_OPT_HTML_CLASS => 'html_class',
                             ]
                         ],
                     ],

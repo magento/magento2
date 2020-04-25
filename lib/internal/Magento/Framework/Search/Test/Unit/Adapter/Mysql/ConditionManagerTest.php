@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -6,28 +6,33 @@
 
 namespace Magento\Framework\Search\Test\Unit\Adapter\Mysql;
 
+use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Framework\Search\Adapter\Mysql\ConditionManager;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class ConditionManagerTest extends \PHPUnit\Framework\TestCase
+class ConditionManagerTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\App\ResourceConnection|\PHPUnit_Framework_MockObject_MockObject
+     * @var ResourceConnection|MockObject
      */
     private $resource;
 
-    /** @var \Magento\Framework\Search\Adapter\Mysql\ConditionManager */
+    /** @var ConditionManager */
     private $conditionManager;
 
     /**
-     * @var \Magento\Framework\DB\Adapter\AdapterInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var AdapterInterface|MockObject
      */
     private $connectionMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
 
-        $this->connectionMock = $this->getMockBuilder(\Magento\Framework\DB\Adapter\AdapterInterface::class)
+        $this->connectionMock = $this->getMockBuilder(AdapterInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['quote', 'quoteIdentifier'])
             ->getMockForAbstractClass();
@@ -50,7 +55,7 @@ class ConditionManagerTest extends \PHPUnit\Framework\TestCase
                 )
             );
 
-        $this->resource = $this->getMockBuilder(\Magento\Framework\App\ResourceConnection::class)
+        $this->resource = $this->getMockBuilder(ResourceConnection::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->resource->expects($this->once())
@@ -58,7 +63,7 @@ class ConditionManagerTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnValue($this->connectionMock));
 
         $this->conditionManager = $objectManager->getObject(
-            \Magento\Framework\Search\Adapter\Mysql\ConditionManager::class,
+            ConditionManager::class,
             [
                 'resource' => $this->resource
             ]

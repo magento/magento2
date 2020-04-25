@@ -5,20 +5,15 @@
  */
 namespace Magento\Framework\View\Test\Unit\Design\Fallback\Rule;
 
+use PHPUnit\Framework\TestCase;
 use \Magento\Framework\View\Design\Fallback\Rule\Simple;
 
-/**
- * Simple Test
- *
- */
-class SimpleTest extends \PHPUnit\Framework\TestCase
+class SimpleTest extends TestCase
 {
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Required parameter 'required_parameter' was not passed
-     */
     public function testGetPatternDirsException()
     {
+        $this->expectException('InvalidArgumentException');
+        $this->expectExceptionMessage('Required parameter \'required_parameter\' was not passed');
         $model = new Simple('<required_parameter> other text');
         $model->getPatternDirs([]);
     }

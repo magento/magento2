@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Framework\Mview\Test\Unit\View;
 
@@ -16,8 +17,10 @@ use Magento\Framework\Mview\View\State\CollectionInterface as StateCollectionInt
 use Magento\Framework\Mview\View\StateInterface;
 use Magento\Framework\Mview\ViewInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class CollectionTest extends \PHPUnit\Framework\TestCase
+class CollectionTest extends TestCase
 {
     /**
      * @var ObjectManagerHelper
@@ -25,22 +28,22 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
     private $objectManagerHelper;
 
     /**
-     * @var IndexerConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var IndexerConfigInterface|MockObject
      */
     private $indexerConfigMock;
 
     /**
-     * @var EntityFactoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var EntityFactoryInterface|MockObject
      */
     private $entityFactoryMock;
 
     /**
-     * @var MviewConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var MviewConfigInterface|MockObject
      */
     private $mviewConfigMock;
 
     /**
-     * @var CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var CollectionFactory|MockObject
      */
     private $statesFactoryMock;
 
@@ -49,7 +52,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
      */
     private $collection;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->objectManagerHelper = new ObjectManagerHelper($this);
 
@@ -162,7 +165,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
             ->method('create')
             ->willReturn($states);
 
-        $this->assertInstanceOf(\Magento\Framework\Mview\View\Collection::class, $this->collection->loadData());
+        $this->assertInstanceOf(Collection::class, $this->collection->loadData());
 
         $views = $this->collection->getViewsByStateMode(StateInterface::MODE_DISABLED);
         $this->assertCount($numDisabledViews, $views);
@@ -177,7 +180,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
     /**
      * @param array $methods
      * @param array $data
-     * @return StateInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @return StateInterface|MockObject
      */
     private function getStateMock(array $methods = [], array $data = [])
     {
@@ -192,7 +195,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param array $methods
-     * @return ViewInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @return ViewInterface|MockObject
      */
     private function getViewMock(array $methods = [])
     {
@@ -206,11 +209,11 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
     /**
      * @param array $methods
      * @param array $data
-     * @return \PHPUnit_Framework_MockObject_MockObject|IndexerInterface
+     * @return MockObject|IndexerInterface
      */
     private function getIndexerMock(array $methods = [], array $data = [])
     {
-        /** @var \PHPUnit_Framework_MockObject_MockObject|IndexerInterface $indexer */
+        /** @var MockObject|IndexerInterface $indexer */
         $indexer = $this->getMockBuilder(IndexerInterface::class)
             ->setMethods(array_merge($methods, ['getId', 'getViewId']))
             ->disableOriginalConstructor()

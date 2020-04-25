@@ -3,19 +3,33 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\Pricing\Test\Unit\Render;
 
-use Magento\Framework\Pricing\Render\RendererPool;
-use Magento\Framework\Pricing\Render\Amount;
-use Magento\Framework\Pricing\SaleableInterface;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\Event\Test\Unit\ManagerStub;
+use Magento\Framework\Pricing\Amount\AmountInterface;
 use Magento\Framework\Pricing\Price\PriceInterface;
+use Magento\Framework\Pricing\PriceCurrencyInterface;
+use Magento\Framework\Pricing\Render\AdjustmentRenderInterface;
+use Magento\Framework\Pricing\Render\Amount;
+use Magento\Framework\Pricing\Render\RendererPool;
+use Magento\Framework\Pricing\SaleableInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\View\Element\Template;
+use Magento\Framework\View\Element\Template\Context;
+use Magento\Framework\View\Layout;
+use Magento\Framework\View\LayoutInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test class for \Magento\Framework\Pricing\Render\Amount
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class AmountTest extends \PHPUnit\Framework\TestCase
+class AmountTest extends TestCase
 {
     /**
      * @var Amount
@@ -23,44 +37,44 @@ class AmountTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \Magento\Framework\Pricing\PriceCurrencyInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var PriceCurrencyInterface|MockObject
      */
     protected $priceCurrency;
 
     /**
-     * @var RendererPool|\PHPUnit_Framework_MockObject_MockObject
+     * @var RendererPool|MockObject
      */
     protected $rendererPool;
 
     /**
-     * @var \Magento\Framework\View\LayoutInterface | \PHPUnit_Framework_MockObject_MockObject
+     * @var LayoutInterface|MockObject
      */
     protected $layout;
 
     /**
-     * @var SaleableInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var SaleableInterface|MockObject
      */
     protected $saleableItemMock;
 
     /**
-     * @var \Magento\Framework\Pricing\Amount\AmountInterface | \PHPUnit_Framework_MockObject_MockObject
+     * @var AmountInterface|MockObject
      */
     protected $amount;
 
     /**
-     * @var PriceInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var PriceInterface|MockObject
      */
     protected $priceMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->priceCurrency = $this->createMock(\Magento\Framework\Pricing\PriceCurrencyInterface::class);
+        $this->priceCurrency = $this->createMock(PriceCurrencyInterface::class);
         $data = [
             'default' => [
                 'adjustments' => [
                     'base_price_test' => [
                         'tax' => [
-                            'adjustment_render_class' => \Magento\Framework\View\Element\Template::class,
+                            'adjustment_render_class' => Template::class,
                             'adjustment_render_template' => 'template.phtml',
                         ],
                     ],
@@ -68,19 +82,19 @@ class AmountTest extends \PHPUnit\Framework\TestCase
             ],
         ];
 
-        $this->rendererPool = $this->getMockBuilder(\Magento\Framework\Pricing\Render\RendererPool::class)
+        $this->rendererPool = $this->getMockBuilder(RendererPool::class)
             ->setConstructorArgs(['data' => $data])
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->layout = $this->createMock(\Magento\Framework\View\Layout::class);
-        $this->amount = $this->getMockForAbstractClass(\Magento\Framework\Pricing\Amount\AmountInterface::class);
-        $this->saleableItemMock = $this->getMockForAbstractClass(\Magento\Framework\Pricing\SaleableInterface::class);
-        $this->priceMock = $this->getMockForAbstractClass(\Magento\Framework\Pricing\Price\PriceInterface::class);
+        $this->layout = $this->createMock(Layout::class);
+        $this->amount = $this->getMockForAbstractClass(AmountInterface::class);
+        $this->saleableItemMock = $this->getMockForAbstractClass(SaleableInterface::class);
+        $this->priceMock = $this->getMockForAbstractClass(PriceInterface::class);
 
-        $eventManager = $this->createMock(\Magento\Framework\Event\Test\Unit\ManagerStub::class);
-        $scopeConfigMock = $this->getMockForAbstractClass(\Magento\Framework\App\Config\ScopeConfigInterface::class);
-        $context = $this->createMock(\Magento\Framework\View\Element\Template\Context::class);
+        $eventManager = $this->createMock(ManagerStub::class);
+        $scopeConfigMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
+        $context = $this->createMock(Context::class);
         $context->expects($this->any())
             ->method('getEventManager')
             ->will($this->returnValue($eventManager));
@@ -91,9 +105,9 @@ class AmountTest extends \PHPUnit\Framework\TestCase
             ->method('getScopeConfig')
             ->will($this->returnValue($scopeConfigMock));
 
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $objectManager = new ObjectManager($this);
         $this->model = $objectManager->getObject(
-            \Magento\Framework\Pricing\Render\Amount::class,
+            Amount::class,
             [
                 'context' => $context,
                 'priceCurrency' => $this->priceCurrency,
@@ -109,7 +123,7 @@ class AmountTest extends \PHPUnit\Framework\TestCase
     {
         $amount = '100';
         $includeContainer = true;
-        $precision = \Magento\Framework\Pricing\PriceCurrencyInterface::DEFAULT_PRECISION;
+        $precision = PriceCurrencyInterface::DEFAULT_PRECISION;
 
         $result = '100.0 grn';
 
@@ -281,12 +295,12 @@ class AmountTest extends \PHPUnit\Framework\TestCase
      * @param array $data
      * @param string $html
      * @param string $code
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return MockObject
      */
     protected function getAdjustmentRenderMock($data = [], $html = '', $code = 'adjustment_code')
     {
         $adjustmentRender = $this->getMockForAbstractClass(
-            \Magento\Framework\Pricing\Render\AdjustmentRenderInterface::class
+            AdjustmentRenderInterface::class
         );
         $adjustmentRender->expects($this->once())
             ->method('render')

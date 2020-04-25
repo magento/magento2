@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -6,19 +6,21 @@
 
 namespace Magento\Framework\Filter\Test\Unit\DataObject;
 
-use \Magento\Framework\Filter\DataObject\Grid;
-
+use Magento\Framework\Data\Collection\EntityFactoryInterface;
 use Magento\Framework\DataObject;
+use Magento\Framework\Filter\DataObject\Grid;
 
-class GridTest extends \PHPUnit\Framework\TestCase
+use PHPUnit\Framework\TestCase;
+
+class GridTest extends TestCase
 {
     public function testFilter()
     {
-        $entityFactoryMock = $this->createMock(\Magento\Framework\Data\Collection\EntityFactoryInterface::class);
+        $entityFactoryMock = $this->createMock(EntityFactoryInterface::class);
         $entityFactoryMock
             ->expects($this->any())
             ->method('create')
-            ->with(\Magento\Framework\DataObject::class, [])
+            ->with(DataObject::class, [])
             ->will(
                 $this->returnCallback(
                     function () {

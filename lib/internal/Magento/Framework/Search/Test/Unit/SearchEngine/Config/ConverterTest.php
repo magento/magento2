@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -6,8 +6,9 @@
 namespace Magento\Framework\Search\Test\Unit\SearchEngine\Config;
 
 use Magento\Framework\Search\SearchEngine\Config\Converter;
+use PHPUnit\Framework\TestCase;
 
-class ConverterTest extends \PHPUnit\Framework\TestCase
+class ConverterTest extends TestCase
 {
     public function testConvert()
     {

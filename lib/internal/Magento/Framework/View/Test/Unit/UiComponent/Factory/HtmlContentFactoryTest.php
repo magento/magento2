@@ -5,26 +5,28 @@
  */
 namespace Magento\Framework\View\Test\Unit\UiComponent\Factory;
 
+use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\MockObject\MockObject;
 use Magento\Framework\View\Element\AbstractBlock;
 use Magento\Framework\View\Element\UiComponent\Config\ManagerInterface;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Framework\View\Element\UiComponent\Factory\HtmlContentFactory;
 use Magento\Framework\View\Layout;
 
-class HtmlContentFactoryTest extends \PHPUnit\Framework\TestCase
+class HtmlContentFactoryTest extends TestCase
 {
     /**
-     * @var Layout|\PHPUnit_Framework_MockObject_MockObject
+     * @var Layout|MockObject
      */
     private $layout;
 
     /**
-     * @var AbstractBlock|\PHPUnit_Framework_MockObject_MockObject
+     * @var AbstractBlock|MockObject
      */
     private $block;
 
     /**
-     * @var ContextInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ContextInterface|MockObject
      */
     private $context;
 
@@ -33,7 +35,7 @@ class HtmlContentFactoryTest extends \PHPUnit\Framework\TestCase
      */
     private $htmlContentFactory;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->layout = $this->getMockBuilder(Layout::class)
             ->disableOriginalConstructor()

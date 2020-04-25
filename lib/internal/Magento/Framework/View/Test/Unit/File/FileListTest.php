@@ -6,34 +6,41 @@
 
 namespace Magento\Framework\View\Test\Unit\File;
 
-class FileListTest extends \PHPUnit\Framework\TestCase
+use PHPUnit\Framework\TestCase;
+use Magento\Framework\View\File\FileList;
+use Magento\Framework\View\File;
+use Magento\Framework\View\File\FileList\Collator;
+use PHPUnit\Framework\MockObject\MockObject;
+use Magento\Framework\View\Design\ThemeInterface;
+
+class FileListTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\View\File\FileList
+     * @var FileList
      */
     private $_model;
 
     /**
-     * @var \Magento\Framework\View\File
+     * @var File
      */
     private $_baseFile;
 
     /**
-     * @var \Magento\Framework\View\File
+     * @var File
      */
     private $_themeFile;
 
     /**
-     * @var \Magento\Framework\View\File\FileList\Collator|\PHPUnit_Framework_MockObject_MockObject
+     * @var Collator|MockObject
      */
     protected $collator;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_baseFile = $this->_createViewFile('fixture.xml', 'Fixture_TestModule');
         $this->_themeFile = $this->_createViewFile('fixture.xml', 'Fixture_TestModule', 'area/theme/path');
-        $this->collator = $this->createPartialMock(\Magento\Framework\View\File\FileList\Collator::class, ['collate']);
-        $this->_model = new \Magento\Framework\View\File\FileList($this->collator);
+        $this->collator = $this->createPartialMock(Collator::class, ['collate']);
+        $this->_model = new FileList($this->collator);
         $this->_model->add([$this->_baseFile, $this->_themeFile]);
     }
 
@@ -43,16 +50,16 @@ class FileListTest extends \PHPUnit\Framework\TestCase
      * @param string $filename
      * @param string $module
      * @param string|null $themeFullPath
-     * @return \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\View\Design\ThemeInterface
+     * @return MockObject|ThemeInterface
      */
     protected function _createViewFile($filename, $module, $themeFullPath = null)
     {
         $theme = null;
         if ($themeFullPath !== null) {
-            $theme = $this->getMockForAbstractClass(\Magento\Framework\View\Design\ThemeInterface::class);
+            $theme = $this->getMockForAbstractClass(ThemeInterface::class);
             $theme->expects($this->any())->method('getFullPath')->will($this->returnValue($themeFullPath));
         }
-        return new \Magento\Framework\View\File($filename, $module, $theme);
+        return new File($filename, $module, $theme);
     }
 
     public function testGetAll()
@@ -74,22 +81,22 @@ class FileListTest extends \PHPUnit\Framework\TestCase
         $this->assertSame([$this->_baseFile, $this->_themeFile, $file], $this->_model->getAll());
     }
 
-    /**
-     * @expectedException \LogicException
-     * @expectedExceptionMessage View file 'test/fixture.xml' is indistinguishable from the file 'fixture.xml'
-     */
     public function testAddBaseFileException()
     {
+        $this->expectException('LogicException');
+        $this->expectExceptionMessage(
+            'View file \'test/fixture.xml\' is indistinguishable from the file \'fixture.xml\''
+        );
         $file = $this->_createViewFile('test/fixture.xml', 'Fixture_TestModule');
         $this->_model->add([$file]);
     }
 
-    /**
-     * @expectedException \LogicException
-     * @expectedExceptionMessage View file 'test/fixture.xml' is indistinguishable from the file 'fixture.xml'
-     */
     public function testAddThemeFileException()
     {
+        $this->expectException('LogicException');
+        $this->expectExceptionMessage(
+            'View file \'test/fixture.xml\' is indistinguishable from the file \'fixture.xml\''
+        );
         $file = $this->_createViewFile('test/fixture.xml', 'Fixture_TestModule', 'area/theme/path');
         $this->_model->add([$file]);
     }

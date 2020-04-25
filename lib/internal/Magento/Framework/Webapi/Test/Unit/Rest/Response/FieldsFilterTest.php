@@ -3,15 +3,20 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 
 namespace Magento\Framework\Webapi\Test\Unit\Rest\Response;
 
+use Magento\Framework\Webapi\Rest\Request;
 use Magento\Framework\Webapi\Rest\Response\FieldsFilter;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Unit test for FieldsFilter
  */
-class FieldsFilterTest extends \PHPUnit\Framework\TestCase
+class FieldsFilterTest extends TestCase
 {
     /**
      * @var FieldsFilter SUT
@@ -24,7 +29,7 @@ class FieldsFilterTest extends \PHPUnit\Framework\TestCase
     protected $sampleResponseValue;
 
     /**
-     * @var \Magento\Framework\Webapi\Rest\Request|\PHPUnit_Framework_MockObject_MockObject
+     * @var Request|MockObject
      */
     protected $requestMock;
 
@@ -36,9 +41,9 @@ class FieldsFilterTest extends \PHPUnit\Framework\TestCase
     /**
      * Setup SUT
      */
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->requestMock = $this->createMock(\Magento\Framework\Webapi\Rest\Request::class);
+        $this->requestMock = $this->createMock(Request::class);
         $this->processor = new FieldsFilter($this->requestMock);
         $this->sampleResponseValue = [
             'customer' => [

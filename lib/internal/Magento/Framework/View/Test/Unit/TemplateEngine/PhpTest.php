@@ -7,28 +7,36 @@ declare(strict_types=1);
 
 namespace Magento\Framework\View\Test\Unit\TemplateEngine;
 
+use PHPUnit\Framework\TestCase;
+use Magento\Framework\View\TemplateEngine\Php;
+use PHPUnit\Framework\MockObject\MockObject;
+use Magento\Framework\ObjectManagerInterface;
+use Magento\Framework\View\Element\Template;
+use Magento\Framework\DataObject;
+use Magento\Framework\App\Helper\AbstractHelper;
+
 /**
  * Test template engine that enables PHP templates to be used for rendering.
  */
-class PhpTest extends \PHPUnit\Framework\TestCase
+class PhpTest extends TestCase
 {
     const TEST_PROP_VALUE = 'TEST_PROP_VALUE';
 
-    /** @var  \Magento\Framework\View\TemplateEngine\Php */
+    /** @var  Php */
     protected $_phpEngine;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $_helperFactoryMock;
 
     /**
      * Create a PHP template engine to test.
      */
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->_helperFactoryMock = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
-        $this->_phpEngine = new \Magento\Framework\View\TemplateEngine\Php($this->_helperFactoryMock);
+        $this->_helperFactoryMock = $this->createMock(ObjectManagerInterface::class);
+        $this->_phpEngine = new Php($this->_helperFactoryMock);
     }
 
     /**
@@ -39,7 +47,7 @@ class PhpTest extends \PHPUnit\Framework\TestCase
     public function testRender()
     {
         $blockMock = $this->getMockBuilder(
-            \Magento\Framework\View\Element\Template::class
+            Template::class
         )->setMethods(
             ['testMethod']
         )->disableOriginalConstructor()->getMock();
@@ -60,12 +68,12 @@ class PhpTest extends \PHPUnit\Framework\TestCase
      * Test the render() function with a nonexistent filename.
      *
      * Expect an exception if the specified file does not exist.
-     * @expectedException PHPUnit\Framework\Exception
      */
     public function testRenderException()
     {
+        $this->expectException('PHPUnit\Framework\Exception');
         $blockMock = $this->getMockBuilder(
-            \Magento\Framework\View\Element\Template::class
+            Template::class
         )->setMethods(
             ['testMethod']
         )->disableOriginalConstructor()->getMock();
@@ -75,12 +83,10 @@ class PhpTest extends \PHPUnit\Framework\TestCase
         $this->_phpEngine->render($blockMock, $filename);
     }
 
-    /**
-     * @expectedException \LogicException
-     */
     public function testHelperWithInvalidClass()
     {
-        $class = \Magento\Framework\DataObject::class;
+        $this->expectException('LogicException');
+        $class = DataObject::class;
         $object = $this->createMock($class);
         $this->_helperFactoryMock->expects(
             $this->once()
@@ -96,7 +102,7 @@ class PhpTest extends \PHPUnit\Framework\TestCase
 
     public function testHelperWithValidClass()
     {
-        $class = \Magento\Framework\App\Helper\AbstractHelper::class;
+        $class = AbstractHelper::class;
         $object = $this->getMockForAbstractClass($class, [], '', false);
         $this->_helperFactoryMock->expects(
             $this->once()

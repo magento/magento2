@@ -5,17 +5,22 @@
  */
 namespace Magento\Framework\View\Test\Unit\Layout\Argument\Interpreter;
 
+use PHPUnit\Framework\TestCase;
+use Magento\Framework\ObjectManagerInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use Magento\Framework\Data\Argument\InterpreterInterface;
+use Magento\Framework\Data\OptionSourceInterface;
 use \Magento\Framework\View\Layout\Argument\Interpreter\Options;
 
-class OptionsTest extends \PHPUnit\Framework\TestCase
+class OptionsTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ObjectManagerInterface|MockObject
      */
     protected $_objectManager;
 
     /**
-     * @var \Magento\Framework\Data\Argument\InterpreterInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var InterpreterInterface|MockObject
      */
     protected $_interpreter;
 
@@ -24,15 +29,15 @@ class OptionsTest extends \PHPUnit\Framework\TestCase
      */
     protected $_model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->_objectManager = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
+        $this->_objectManager = $this->createMock(ObjectManagerInterface::class);
         $this->_model = new Options($this->_objectManager);
     }
 
     public function testEvaluate()
     {
-        $modelClass = \Magento\Framework\Data\OptionSourceInterface::class;
+        $modelClass = OptionSourceInterface::class;
         $model = $this->getMockForAbstractClass($modelClass);
         $model->expects(
             $this->once()

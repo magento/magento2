@@ -3,39 +3,46 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Framework\App\Test\Unit\Language;
 
+use Magento\Framework\App\Language\Config;
+use Magento\Framework\App\Language\ConfigFactory;
 use Magento\Framework\App\Language\Dictionary;
-use Magento\Framework\Filesystem\DriverPool;
+use Magento\Framework\Component\ComponentRegistrar;
+use Magento\Framework\Filesystem\Directory\ReadFactory;
+use Magento\Framework\Filesystem\File\ReadInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class DictionaryTest extends \PHPUnit\Framework\TestCase
+class DictionaryTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\App\Language\Dictionary
+     * @var Dictionary
      */
     private $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     private $readFactory;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     private $componentRegistrar;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     private $configFactory;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->readFactory = $this->createMock(\Magento\Framework\Filesystem\Directory\ReadFactory::class);
-        $this->componentRegistrar = $this->createMock(\Magento\Framework\Component\ComponentRegistrar::class);
-        $this->configFactory = $this->getMockBuilder(\Magento\Framework\App\Language\ConfigFactory::class)
+        $this->readFactory = $this->createMock(ReadFactory::class);
+        $this->componentRegistrar = $this->createMock(ComponentRegistrar::class);
+        $this->configFactory = $this->getMockBuilder(ConfigFactory::class)
             ->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
@@ -51,7 +58,7 @@ class DictionaryTest extends \PHPUnit\Framework\TestCase
             $expected[$item[0]] = $item[1];
         }
 
-        $file = $this->getMockForAbstractClass(\Magento\Framework\Filesystem\File\ReadInterface::class);
+        $file = $this->getMockForAbstractClass(ReadInterface::class);
         for ($i = 0, $count = count($data); $i < $count; $i++) {
             $file->expects($this->at($i))->method('readCsv')->will($this->returnValue($data[$i]));
         }
@@ -71,7 +78,7 @@ class DictionaryTest extends \PHPUnit\Framework\TestCase
 
         $this->readFactory->expects($this->any())->method("create")->willReturn($readMock);
 
-        $languageConfig = $this->createMock(\Magento\Framework\App\Language\Config::class);
+        $languageConfig = $this->createMock(Config::class);
         $languageConfig->expects($this->any())->method('getCode')->will($this->returnValue('en_US'));
         $languageConfig->expects($this->any())->method('getVendor')->will($this->returnValue('foo'));
         $languageConfig->expects($this->any())->method('getPackage')->will($this->returnValue('en_us'));

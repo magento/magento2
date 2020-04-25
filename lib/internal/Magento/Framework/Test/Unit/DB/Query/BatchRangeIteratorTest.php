@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -9,8 +9,10 @@ namespace Magento\Framework\Test\Unit\DB\Query;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Query\BatchRangeIterator;
 use Magento\Framework\DB\Select;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class BatchRangeIteratorTest extends \PHPUnit\Framework\TestCase
+class BatchRangeIteratorTest extends TestCase
 {
     /**
      * @var BatchRangeIterator
@@ -18,17 +20,17 @@ class BatchRangeIteratorTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     private $selectMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     private $wrapperSelectMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     private $connectionMock;
 
@@ -62,7 +64,7 @@ class BatchRangeIteratorTest extends \PHPUnit\Framework\TestCase
      *
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->batchSize = 10;
         $this->currentBatch = 0;

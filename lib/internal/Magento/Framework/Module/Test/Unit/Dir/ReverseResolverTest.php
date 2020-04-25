@@ -1,32 +1,38 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Module\Test\Unit\Dir;
 
-class ReverseResolverTest extends \PHPUnit\Framework\TestCase
+use Magento\Framework\Module\Dir;
+use Magento\Framework\Module\Dir\ReverseResolver;
+use Magento\Framework\Module\ModuleListInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class ReverseResolverTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\Module\Dir\ReverseResolver
+     * @var ReverseResolver
      */
     protected $_model;
 
     /**
-     * @var \Magento\Framework\Module\ModuleListInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ModuleListInterface|MockObject
      */
     protected $_moduleList;
 
     /**
-     * @var \Magento\Framework\Module\Dir|\PHPUnit_Framework_MockObject_MockObject
+     * @var Dir|MockObject
      */
     protected $_moduleDirs;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->_moduleList = $this->createMock(\Magento\Framework\Module\ModuleListInterface::class);
-        $this->_moduleDirs = $this->createMock(\Magento\Framework\Module\Dir::class);
-        $this->_model = new \Magento\Framework\Module\Dir\ReverseResolver($this->_moduleList, $this->_moduleDirs);
+        $this->_moduleList = $this->createMock(ModuleListInterface::class);
+        $this->_moduleDirs = $this->createMock(Dir::class);
+        $this->_model = new ReverseResolver($this->_moduleList, $this->_moduleDirs);
     }
 
     /**

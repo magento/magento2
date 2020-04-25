@@ -9,32 +9,37 @@
  */
 namespace Magento\Framework\View\Test\Unit\Page;
 
+use PHPUnit\Framework\TestCase;
+use Magento\Framework\View\Page\Title;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Store\Model\ScopeInterface;
 
-class TitleTest extends \PHPUnit\Framework\TestCase
+class TitleTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\View\Page\Title
+     * @var Title
      */
     protected $title;
 
     /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ScopeConfigInterface|MockObject
      */
     protected $scopeConfigMock;
 
     /**
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->scopeConfigMock = $this->getMockBuilder(\Magento\Framework\App\Config\ScopeConfigInterface::class)
+        $this->scopeConfigMock = $this->getMockBuilder(ScopeConfigInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $objectManagerHelper = new ObjectManager($this);
         $this->title = $objectManagerHelper->getObject(
-            \Magento\Framework\View\Page\Title::class,
+            Title::class,
             ['scopeConfig' => $this->scopeConfigMock]
         );
     }

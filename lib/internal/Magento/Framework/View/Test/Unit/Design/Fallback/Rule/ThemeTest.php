@@ -5,6 +5,9 @@
  */
 namespace Magento\Framework\View\Test\Unit\Design\Fallback\Rule;
 
+use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\MockObject\MockObject;
+use Magento\Framework\View\Design\ThemeInterface;
 use Magento\Framework\Component\ComponentRegistrar;
 use Magento\Framework\Component\ComponentRegistrarInterface;
 use Magento\Framework\View\Design\Fallback\Rule\RuleInterface;
@@ -12,20 +15,20 @@ use Magento\Framework\View\Design\Fallback\Rule\Theme;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
-class ThemeTest extends \PHPUnit\Framework\TestCase
+class ThemeTest extends TestCase
 {
     /**
-     * @var RuleInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var RuleInterface|MockObject
      */
     private $ruleMock;
 
     /**
-     * @var ComponentRegistrarInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ComponentRegistrarInterface|MockObject
      */
     private $componentRegistrarMock;
 
     /**
-     * @var DirectoryList|\PHPUnit_Framework_MockObject_MockObject
+     * @var DirectoryList|MockObject
      */
     private $directoryListMock;
 
@@ -34,7 +37,7 @@ class ThemeTest extends \PHPUnit\Framework\TestCase
      */
     private $model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->ruleMock = $this->getMockForAbstractClass(RuleInterface::class);
         $this->componentRegistrarMock = $this->getMockForAbstractClass(ComponentRegistrarInterface::class);
@@ -49,23 +52,21 @@ class ThemeTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Parameter "theme" should be specified and should implement the theme interface
-     */
     public function testGetPatternDirsException()
     {
+        $this->expectException('InvalidArgumentException');
+        $this->expectExceptionMessage('Parameter "theme" should be specified and should implement the theme interface');
         $this->model->getPatternDirs([]);
     }
 
     public function testGetPatternDirs()
     {
-        $parentTheme = $this->getMockForAbstractClass(\Magento\Framework\View\Design\ThemeInterface::class);
+        $parentTheme = $this->getMockForAbstractClass(ThemeInterface::class);
         $parentTheme->expects($this->exactly(2))->method('getFullPath')->willReturn('package/parent_theme');
         $parentTheme->expects($this->never())->method('getArea');
         $parentTheme->expects($this->never())->method('getCode');
 
-        $theme = $this->getMockForAbstractClass(\Magento\Framework\View\Design\ThemeInterface::class);
+        $theme = $this->getMockForAbstractClass(ThemeInterface::class);
         $theme->expects($this->exactly(2))->method('getFullPath')->willReturn('package/current_theme');
         $theme->expects($this->once())->method('getParentTheme')->willReturn($parentTheme);
         $theme->expects($this->once())->method('getArea')->willReturn('frontend');

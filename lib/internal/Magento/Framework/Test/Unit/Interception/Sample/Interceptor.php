@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -6,11 +6,13 @@
 namespace Magento\Framework\Test\Unit\Interception\Sample;
 
 use Magento\Framework\Interception;
+use Magento\Framework\Interception\InterceptorInterface;
+use Magento\Framework\Interception\PluginListInterface;
 
 /**
  * Sample interceptor
  */
-class Interceptor extends Entity implements Interception\InterceptorInterface
+class Interceptor extends Entity implements InterceptorInterface
 {
     use Interception\Interceptor;
 
@@ -46,7 +48,7 @@ class Interceptor extends Entity implements Interception\InterceptorInterface
      * @param Interception\PluginListInterface $pluginList
      * @return void
      */
-    public function setPluginList(Interception\PluginListInterface $pluginList)
+    public function setPluginList(PluginListInterface $pluginList)
     {
         $this->pluginList = $pluginList;
     }

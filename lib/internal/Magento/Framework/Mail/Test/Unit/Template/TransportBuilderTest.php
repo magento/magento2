@@ -26,7 +26,6 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Class TransportBuilderTest
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
@@ -43,32 +42,32 @@ class TransportBuilderTest extends TestCase
     protected $builder;
 
     /**
-     * @var FactoryInterface | \PHPUnit_Framework_MockObject_MockObject
+     * @var FactoryInterface|MockObject
      */
     protected $templateFactoryMock;
 
     /**
-     * @var Message | \PHPUnit_Framework_MockObject_MockObject
+     * @var Message|MockObject
      */
     protected $messageMock;
 
     /**
-     * @var ObjectManagerInterface | \PHPUnit_Framework_MockObject_MockObject
+     * @var ObjectManagerInterface|MockObject
      */
     protected $objectManagerMock;
 
     /**
-     * @var SenderResolverInterface | \PHPUnit_Framework_MockObject_MockObject
+     * @var SenderResolverInterface|MockObject
      */
     protected $senderResolverMock;
 
     /**
-     * @var MessageInterfaceFactory| \PHPUnit_Framework_MockObject_MockObject
+     * @var MessageInterfaceFactory|MockObject
      */
     private $messageFactoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $mailTransportFactoryMock;
 
@@ -85,7 +84,7 @@ class TransportBuilderTest extends TestCase
     /**
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManagerHelper = new ObjectManager($this);
         $this->templateFactoryMock = $this->createMock(FactoryInterface::class);
@@ -174,12 +173,11 @@ class TransportBuilderTest extends TestCase
 
     /**
      * Test get transport with exception
-     *
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Unknown template type
      */
     public function testGetTransportWithException()
     {
+        $this->expectException('Magento\Framework\Exception\LocalizedException');
+        $this->expectExceptionMessage('Unknown template type');
         $this->builder->setTemplateModel('Test\Namespace\Template');
 
         $vars = ['reason' => 'Reason', 'customer' => 'Customer'];

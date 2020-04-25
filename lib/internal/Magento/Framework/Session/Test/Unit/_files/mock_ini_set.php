@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /***
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -6,7 +6,7 @@
 
 namespace Magento\Framework\Session;
 
-use \Magento\Framework\Session\Test\Unit\SessionManagerTest;
+use Magento\Framework\Session\Test\Unit\SessionManagerTest;
 
 /**
  * Mock ini_set global function

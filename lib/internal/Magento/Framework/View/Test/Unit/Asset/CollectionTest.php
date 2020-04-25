@@ -5,28 +5,33 @@
  */
 namespace Magento\Framework\View\Test\Unit\Asset;
 
-class CollectionTest extends \PHPUnit\Framework\TestCase
+use PHPUnit\Framework\TestCase;
+use Magento\Framework\View\Asset\Collection;
+use Magento\Framework\View\Asset\AssetInterface;
+use Magento\Framework\View\Asset\Remote;
+
+class CollectionTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\View\Asset\Collection
+     * @var Collection
      */
     protected $_object;
 
     /**
-     * @var \Magento\Framework\View\Asset\AssetInterface
+     * @var AssetInterface
      */
     protected $_asset;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->_object = new \Magento\Framework\View\Asset\Collection();
-        $this->_asset = new \Magento\Framework\View\Asset\Remote('http://127.0.0.1/magento/test.css');
+        $this->_object = new Collection();
+        $this->_asset = new Remote('http://127.0.0.1/magento/test.css');
         $this->_object->add('asset', $this->_asset);
     }
 
     public function testAdd()
     {
-        $assetNew = new \Magento\Framework\View\Asset\Remote('http://127.0.0.1/magento/test.js');
+        $assetNew = new Remote('http://127.0.0.1/magento/test.js');
         $this->_object->add('asset_new', $assetNew);
         $this->assertSame(['asset' => $this->_asset, 'asset_new' => $assetNew], $this->_object->getAll());
     }
@@ -45,7 +50,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
 
     public function testAddOverrideExisting()
     {
-        $assetOverridden = new \Magento\Framework\View\Asset\Remote('http://127.0.0.1/magento/test_overridden.css');
+        $assetOverridden = new Remote('http://127.0.0.1/magento/test_overridden.css');
         $this->_object->add('asset', $assetOverridden);
         $this->assertSame(['asset' => $assetOverridden], $this->_object->getAll());
     }

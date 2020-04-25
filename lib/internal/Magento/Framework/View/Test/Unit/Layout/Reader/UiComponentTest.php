@@ -9,6 +9,8 @@
  */
 namespace Magento\Framework\View\Test\Unit\Layout\Reader;
 
+use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\MockObject\MockObject;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\View\Layout\AclCondition;
 use Magento\Framework\View\Layout\ConfigCondition;
@@ -22,39 +24,42 @@ use Magento\Framework\View\Layout\Element;
 use Magento\Framework\View\Layout\ReaderPool;
 use Magento\Framework\View\Layout\ScheduledStructure;
 
-class UiComponentTest extends \PHPUnit\Framework\TestCase
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
+class UiComponentTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\View\Layout\Reader\UiComponent
+     * @var UiComponent
      */
     protected $model;
 
     /**
-     * @var Helper|\PHPUnit_Framework_MockObject_MockObject
+     * @var Helper|MockObject
      */
     protected $helper;
 
     /**
-     * @var DataInterfaceFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var DataInterfaceFactory|MockObject
      */
     private $dataConfigFactory;
 
     /**
-     * @var DataInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var DataInterface|MockObject
      */
     private $dataConfig;
 
     /**
-     * @var ReaderPool|\PHPUnit_Framework_MockObject_MockObject
+     * @var ReaderPool|MockObject
      */
     private $readerPool;
 
     /**
-     * @var Context|\PHPUnit_Framework_MockObject_MockObject
+     * @var Context|MockObject
      */
     protected $context;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->helper = $this->getMockBuilder(Helper::class)
             ->setMethods(['scheduleStructure'])

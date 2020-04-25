@@ -1,21 +1,27 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Module\Test\Unit;
 
+use Magento\Framework\Component\ComponentRegistrar;
+use Magento\Framework\Config\FileIterator;
+use Magento\Framework\Module\Dir\Reader;
 use Magento\Framework\Module\PackageInfo;
+use Magento\Framework\Serialize\Serializer\Json;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class PackageInfoTest extends \PHPUnit\Framework\TestCase
+class PackageInfoTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\Component\ComponentRegistrar|\PHPUnit_Framework_MockObject_MockObject
+     * @var ComponentRegistrar|MockObject
      */
     private $componentRegistrar;
 
     /**
-     * @var \Magento\Framework\Module\Dir\Reader|\PHPUnit_Framework_MockObject_MockObject
+     * @var Reader|MockObject
      */
     private $reader;
 
@@ -25,14 +31,14 @@ class PackageInfoTest extends \PHPUnit\Framework\TestCase
     private $packageInfo;
 
     /**
-     * @var \Magento\Framework\Serialize\Serializer\Json|\PHPUnit_Framework_MockObject_MockObject
+     * @var Json|MockObject
      */
     private $serializerMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->componentRegistrar = $this->createMock(\Magento\Framework\Component\ComponentRegistrar::class);
-        $this->reader = $this->createMock(\Magento\Framework\Module\Dir\Reader::class);
+        $this->componentRegistrar = $this->createMock(ComponentRegistrar::class);
+        $this->reader = $this->createMock(Reader::class);
         $this->componentRegistrar->expects($this->once())
             ->method('getPaths')
             ->will($this->returnValue(['A' => 'A', 'B' => 'B', 'C' => 'C', 'D' => 'D', 'E' => 'E']));
@@ -44,7 +50,7 @@ class PackageInfoTest extends \PHPUnit\Framework\TestCase
             'D/composer.json' => '{"name":"d", "conflict":{"c":"0.1"}, "version":"0.3"}',
             'E/composer.json' => '{"name":"e", "version":"0.4"}',
         ];
-        $fileIteratorMock = $this->createMock(\Magento\Framework\Config\FileIterator::class);
+        $fileIteratorMock = $this->createMock(FileIterator::class);
         $fileIteratorMock->expects($this->once())
             ->method('toArray')
             ->will($this->returnValue($composerData));
@@ -52,7 +58,7 @@ class PackageInfoTest extends \PHPUnit\Framework\TestCase
             ->method('getComposerJsonFiles')
             ->will($this->returnValue($fileIteratorMock));
 
-        $this->serializerMock = $this->getMockBuilder(\Magento\Framework\Serialize\Serializer\Json::class)
+        $this->serializerMock = $this->getMockBuilder(Json::class)
             ->getMock();
 
         $this->serializerMock->expects($this->any())

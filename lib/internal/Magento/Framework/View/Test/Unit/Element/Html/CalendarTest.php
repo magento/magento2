@@ -5,17 +5,18 @@
  */
 namespace Magento\Framework\View\Test\Unit\Element\Html;
 
+use PHPUnit\Framework\TestCase;
 use Magento\Framework\Locale\ResolverInterface;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\View\Element\Html\Calendar;
 use Magento\Framework\View\Element\Template\Context;
-use \PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
 
 /**
  * @see Calendar
  */
-class CalendarTest extends \PHPUnit\Framework\TestCase
+class CalendarTest extends TestCase
 {
     /**
      * @see MAGETWO-60828

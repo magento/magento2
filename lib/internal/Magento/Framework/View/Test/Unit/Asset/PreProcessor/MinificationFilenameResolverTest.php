@@ -5,16 +5,16 @@
  */
 namespace Magento\Framework\View\Test\Unit\Asset\PreProcessor;
 
+use PHPUnit\Framework\TestCase;
 use Magento\Framework\View\Asset\Minification;
 use Magento\Framework\View\Asset\PreProcessor\MinificationFilenameResolver;
 use Magento\Framework\View\Asset\PreProcessor\MinificationConfigProvider;
 
 /**
- * Class MinificationFilenameResolverTest
  *
  * @see \Magento\Framework\View\Asset\PreProcessor\MinificationFilenameResolver
  */
-class MinificationFilenameResolverTest extends \PHPUnit\Framework\TestCase
+class MinificationFilenameResolverTest extends TestCase
 {
     /**
      * Run test for resolve method

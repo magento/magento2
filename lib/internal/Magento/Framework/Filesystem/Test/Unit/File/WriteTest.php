@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -6,13 +6,14 @@
 namespace Magento\Framework\Filesystem\Test\Unit\File;
 
 use Magento\Framework\Exception\FileSystemException;
+use Magento\Framework\Filesystem\DriverInterface;
+use Magento\Framework\Filesystem\File\Read;
 use Magento\Framework\Filesystem\File\Write;
 use Magento\Framework\Phrase;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-/**
- * Class WriteTest
- */
-class WriteTest extends \PHPUnit\Framework\TestCase
+class WriteTest extends TestCase
 {
     /**
      * @var Write
@@ -35,13 +36,13 @@ class WriteTest extends \PHPUnit\Framework\TestCase
     protected $mode = 'w';
 
     /**
-     * @var \Magento\Framework\Filesystem\DriverInterface | \PHPUnit_Framework_MockObject_MockObject
+     * @var DriverInterface|MockObject
      */
     protected $driver;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->driver = $this->getMockForAbstractClass(\Magento\Framework\Filesystem\DriverInterface::class);
+        $this->driver = $this->getMockForAbstractClass(DriverInterface::class);
         $this->driver->expects($this->any())
             ->method('isExists')
             ->with($this->path)
@@ -53,38 +54,34 @@ class WriteTest extends \PHPUnit\Framework\TestCase
         $this->file = new Write($this->path, $this->driver, $this->mode);
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         $this->file = null;
         $this->driver = null;
     }
 
-    /**
-     * @expectedException \Magento\Framework\Exception\FileSystemException
-     */
     public function testInstanceFileNotExists()
     {
-        $driver = $this->getMockForAbstractClass(\Magento\Framework\Filesystem\DriverInterface::class);
+        $this->expectException('Magento\Framework\Exception\FileSystemException');
+        $driver = $this->getMockForAbstractClass(DriverInterface::class);
         $driver->expects($this->once())
             ->method('isExists')
             ->with($this->path)
             ->will($this->returnValue(false));
         $file = new Write($this->path, $driver, 'r');
-        $this->assertInstanceOf(\Magento\Framework\Filesystem\File\Read::class, $file);
+        $this->assertInstanceOf(Read::class, $file);
     }
 
-    /**
-     * @expectedException \Magento\Framework\Exception\FileSystemException
-     */
     public function testInstanceFileAlreadyExists()
     {
-        $driver = $this->getMockForAbstractClass(\Magento\Framework\Filesystem\DriverInterface::class);
+        $this->expectException('Magento\Framework\Exception\FileSystemException');
+        $driver = $this->getMockForAbstractClass(DriverInterface::class);
         $driver->expects($this->once())
             ->method('isExists')
             ->with($this->path)
             ->will($this->returnValue(true));
         $file = new Write($this->path, $driver, 'x');
-        $this->assertInstanceOf(\Magento\Framework\Filesystem\File\Read::class, $file);
+        $this->assertInstanceOf(Read::class, $file);
     }
 
     public function testWrite()
@@ -121,11 +118,9 @@ class WriteTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($result, $this->file->flush());
     }
 
-    /**
-     * @expectedException \Magento\Framework\Exception\FileSystemException
-     */
     public function testWriteException()
     {
+        $this->expectException('Magento\Framework\Exception\FileSystemException');
         $data = 'data';
         $emptyTranslation = '';
 
@@ -137,11 +132,9 @@ class WriteTest extends \PHPUnit\Framework\TestCase
         $this->file->write($data);
     }
 
-    /**
-     * @expectedException \Magento\Framework\Exception\FileSystemException
-     */
     public function testWriteCsvException()
     {
+        $this->expectException('Magento\Framework\Exception\FileSystemException');
         $data = [];
         $delimiter = ',';
         $enclosure = '"';
@@ -155,11 +148,9 @@ class WriteTest extends \PHPUnit\Framework\TestCase
         $this->file->writeCsv($data, $delimiter, $enclosure);
     }
 
-    /**
-     * @expectedException \Magento\Framework\Exception\FileSystemException
-     */
     public function testFlushException()
     {
+        $this->expectException('Magento\Framework\Exception\FileSystemException');
         $emptyTranslation = '';
 
         $this->driver->expects($this->once())

@@ -5,20 +5,22 @@
  */
 namespace Magento\Framework\View\Test\Unit\Design\Fallback\Rule;
 
+use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\MockObject\MockObject;
 use Magento\Framework\Component\ComponentRegistrar;
 use Magento\Framework\Component\ComponentRegistrarInterface;
 use \Magento\Framework\View\Design\Fallback\Rule\Module;
 use Magento\Framework\View\Design\Fallback\Rule\RuleInterface;
 
-class ModuleTest extends \PHPUnit\Framework\TestCase
+class ModuleTest extends TestCase
 {
     /**
-     * @var RuleInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var RuleInterface|MockObject
      */
     private $rule;
 
     /**
-     * @var ComponentRegistrarInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ComponentRegistrarInterface|MockObject
      */
     private $componentRegistrar;
 
@@ -27,21 +29,19 @@ class ModuleTest extends \PHPUnit\Framework\TestCase
      */
     private $model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->rule = $this->getMockForAbstractClass(\Magento\Framework\View\Design\Fallback\Rule\RuleInterface::class);
+        $this->rule = $this->getMockForAbstractClass(RuleInterface::class);
         $this->componentRegistrar = $this->getMockForAbstractClass(
-            \Magento\Framework\Component\ComponentRegistrarInterface::class
+            ComponentRegistrarInterface::class
         );
         $this->model = new Module($this->rule, $this->componentRegistrar);
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Required parameter "module_name" is not specified
-     */
     public function testGetPatternDirsException()
     {
+        $this->expectException('InvalidArgumentException');
+        $this->expectExceptionMessage('Required parameter "module_name" is not specified');
         $this->model->getPatternDirs([]);
     }
 

@@ -6,35 +6,43 @@
 
 namespace Magento\Framework\View\Test\Unit\Design\FileResolution\Fallback\Resolver;
 
+use PHPUnit\Framework\TestCase;
+use Magento\Framework\Filesystem\Directory\Read;
+use PHPUnit\Framework\MockObject\MockObject;
+use Magento\Framework\View\Design\Fallback\Rule\RuleInterface;
+use Magento\Framework\View\Design\FileResolution\Fallback\Resolver\Simple;
+use Magento\Framework\Filesystem\Directory\ReadFactory;
+use Magento\Framework\View\Design\Fallback\RulePool;
+use Magento\Framework\View\Design\ThemeInterface;
 use \Magento\Framework\View\Design\FileResolution\Fallback\Resolver\Alternative;
 use Magento\Framework\App\Filesystem\DirectoryList;
 
-class AlternativeTest extends \PHPUnit\Framework\TestCase
+class AlternativeTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\Filesystem\Directory\Read|\PHPUnit_Framework_MockObject_MockObject
+     * @var Read|MockObject
      */
     private $directory;
 
     /**
-     * @var \Magento\Framework\View\Design\Fallback\Rule\RuleInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var RuleInterface|MockObject
      */
     private $rule;
 
     /**
-     * @var \Magento\Framework\View\Design\FileResolution\Fallback\Resolver\Simple
+     * @var Simple
      */
     private $object;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->directory = $this->createMock(\Magento\Framework\Filesystem\Directory\Read::class);
-        $readFactory = $this->createMock(\Magento\Framework\Filesystem\Directory\ReadFactory::class);
+        $this->directory = $this->createMock(Read::class);
+        $readFactory = $this->createMock(ReadFactory::class);
         $readFactory->expects($this->any())
             ->method('create')
             ->will($this->returnValue($this->directory));
-        $this->rule = $this->createMock(\Magento\Framework\View\Design\Fallback\Rule\RuleInterface::class);
-        $rulePool = $this->createMock(\Magento\Framework\View\Design\Fallback\RulePool::class);
+        $this->rule = $this->createMock(RuleInterface::class);
+        $rulePool = $this->createMock(RulePool::class);
         $rulePool->expects($this->any())
             ->method('getRule')
             ->with('type')
@@ -53,8 +61,8 @@ class AlternativeTest extends \PHPUnit\Framework\TestCase
         $this->expectExceptionMessage("\$alternativeExtensions must be an array with format:"
             . " array('ext1' => array('ext1', 'ext2'), 'ext3' => array(...)]");
 
-        $readFactory = $this->createMock(\Magento\Framework\Filesystem\Directory\ReadFactory::class);
-        $rulePool = $this->createMock(\Magento\Framework\View\Design\Fallback\RulePool::class);
+        $readFactory = $this->createMock(ReadFactory::class);
+        $rulePool = $this->createMock(RulePool::class);
         new Alternative($readFactory, $rulePool, $alternativeExtensions);
     }
 
@@ -74,7 +82,7 @@ class AlternativeTest extends \PHPUnit\Framework\TestCase
         $requestedFile = 'file.css';
         $expected = 'some/dir/file.less';
 
-        $theme = $this->getMockForAbstractClass(\Magento\Framework\View\Design\ThemeInterface::class);
+        $theme = $this->getMockForAbstractClass(ThemeInterface::class);
         $theme->expects($this->any())
             ->method('getFullPath')
             ->will($this->returnValue('magento_theme'));

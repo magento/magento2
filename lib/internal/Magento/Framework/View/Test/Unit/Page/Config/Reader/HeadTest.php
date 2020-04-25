@@ -6,28 +6,31 @@
 
 namespace Magento\Framework\View\Test\Unit\Page\Config\Reader;
 
+use PHPUnit\Framework\TestCase;
+use Magento\Framework\View\Layout\Reader\Context;
+use Magento\Framework\View\Page\Config\Structure;
 use Magento\Framework\View\Layout\Element;
 use Magento\Framework\View\Page\Config;
 use Magento\Framework\View\Page\Config\Reader\Head;
 
-class HeadTest extends \PHPUnit\Framework\TestCase
+class HeadTest extends TestCase
 {
     /**
      * @var Head
      */
     protected $model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->model = new Head();
     }
 
     public function testInterpret()
     {
-        $readerContextMock = $this->getMockBuilder(\Magento\Framework\View\Layout\Reader\Context::class)
+        $readerContextMock = $this->getMockBuilder(Context::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $structureMock = $this->getMockBuilder(\Magento\Framework\View\Page\Config\Structure::class)
+        $structureMock = $this->getMockBuilder(Structure::class)
             ->disableOriginalConstructor()
             ->getMock();
         $readerContextMock->expects($this->once())

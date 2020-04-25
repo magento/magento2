@@ -30,8 +30,7 @@ use RuntimeException;
  */
 class GeneratorTest extends TestCase
 {
-    /**
-     * Class name parameter value
+    /** parameter value
      */
     private const SOURCE_CLASS = 'testClassName';
 
@@ -81,7 +80,7 @@ class GeneratorTest extends TestCase
     /**
      * @inheritDoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->definedClassesMock = $this->createMock(DefinedClasses::class);
         $this->ioObjectMock = $this->getMockBuilder(Io::class)
@@ -120,11 +119,11 @@ class GeneratorTest extends TestCase
     /**
      * @param string $className
      * @param string $entityType
-     * @expectedException RuntimeException
      * @dataProvider generateValidClassDataProvider
      */
     public function testGenerateClass($className, $entityType): void
     {
+        $this->expectException('RuntimeException');
         $fullClassName = $className . $entityType;
 
         $entityGeneratorMock = $this->getMockBuilder(EntityAbstract::class)
@@ -179,11 +178,9 @@ class GeneratorTest extends TestCase
         );
     }
 
-    /**
-     * @expectedException RuntimeException
-     */
     public function testGenerateClassWhenClassIsNotGenerationSuccess(): void
     {
+        $this->expectException('RuntimeException');
         $expectedEntities = array_values($this->expectedEntities);
         $resultClassName = self::SOURCE_CLASS . ucfirst(array_shift($expectedEntities));
 

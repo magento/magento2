@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -11,8 +11,10 @@ use Magento\Framework\App\ResourceConnection\ConfigInterface;
 use Magento\Framework\Config\ConfigOptionsListConstants;
 use Magento\Framework\Model\ResourceModel\Type\Db\ConnectionFactoryInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class ResourceConnectionTest extends \PHPUnit\Framework\TestCase
+class ResourceConnectionTest extends TestCase
 {
     /**
      * @var ResourceConnection
@@ -20,12 +22,12 @@ class ResourceConnectionTest extends \PHPUnit\Framework\TestCase
     private $unit;
 
     /**
-     * @var ResourceConnection|\PHPUnit_Framework_MockObject_MockObject
+     * @var ResourceConnection|MockObject
      */
     private $deploymentConfigMock;
 
     /**
-     * @var ConnectionFactoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ConnectionFactoryInterface|MockObject
      */
     private $connectionFactoryMock;
 
@@ -35,11 +37,11 @@ class ResourceConnectionTest extends \PHPUnit\Framework\TestCase
     private $objectManager;
 
     /**
-     * @var ConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ConfigInterface|MockObject
      */
     private $configMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->deploymentConfigMock = $this->getMockBuilder(DeploymentConfig::class)
             ->disableOriginalConstructor()

@@ -3,25 +3,30 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\Interception\Test\Unit\ObjectManager\Config;
 
-use \Magento\Framework\Interception\ObjectManager\Config\Developer;
+use Magento\Framework\Interception\ConfigInterface;
+use Magento\Framework\Interception\ObjectManager\Config\Developer;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class DeveloperTest extends \PHPUnit\Framework\TestCase
+class DeveloperTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\Interception\ObjectManager\Config\Developer
+     * @var Developer
      */
     private $model;
 
     /**
-     * @var \Magento\Framework\Interception\ConfigInterface | \PHPUnit_Framework_MockObject_MockObject
+     * @var ConfigInterface|MockObject
      */
     private $interceptionConfig;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->interceptionConfig = $this->createMock(\Magento\Framework\Interception\ConfigInterface::class);
+        $this->interceptionConfig = $this->createMock(ConfigInterface::class);
         $this->model = new Developer();
     }
 

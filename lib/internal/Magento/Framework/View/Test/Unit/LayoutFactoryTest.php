@@ -6,26 +6,31 @@
 
 namespace Magento\Framework\View\Test\Unit;
 
+use PHPUnit\Framework\TestCase;
+use Magento\Framework\View\LayoutFactory;
+use Magento\Framework\ObjectManagerInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use Magento\Framework\View\LayoutInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
-class LayoutFactoryTest extends \PHPUnit\Framework\TestCase
+class LayoutFactoryTest extends TestCase
 {
-    /** @var \Magento\Framework\View\LayoutFactory */
+    /** @var LayoutFactory */
     protected $layoutFactory;
 
     /** @var ObjectManagerHelper */
     protected $objectManagerHelper;
 
-    /** @var \Magento\Framework\ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var ObjectManagerInterface|MockObject */
     protected $objectManagerMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->objectManagerMock = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
+        $this->objectManagerMock = $this->createMock(ObjectManagerInterface::class);
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->layoutFactory = $this->objectManagerHelper->getObject(
-            \Magento\Framework\View\LayoutFactory::class,
+            LayoutFactory::class,
             [
                 'objectManager' => $this->objectManagerMock
             ]
@@ -34,7 +39,7 @@ class LayoutFactoryTest extends \PHPUnit\Framework\TestCase
 
     public function testCreate()
     {
-        $instance = \Magento\Framework\View\LayoutInterface::class;
+        $instance = LayoutInterface::class;
         $layoutMock = $this->createMock($instance);
         $data = ['some' => 'data'];
         $this->objectManagerMock->expects($this->once())
@@ -44,12 +49,10 @@ class LayoutFactoryTest extends \PHPUnit\Framework\TestCase
         $this->assertInstanceOf($instance, $this->layoutFactory->create($data));
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage stdClass must be an instance of LayoutInterface.
-     */
     public function testCreateException()
     {
+        $this->expectException('InvalidArgumentException');
+        $this->expectExceptionMessage('stdClass must be an instance of LayoutInterface.');
         $data = ['some' => 'other_data'];
         $this->objectManagerMock->expects($this->once())
             ->method('create')

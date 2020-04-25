@@ -1,14 +1,17 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Convert\Test\Unit;
 
+use Magento\Framework\Convert\Excel;
 use Magento\Framework\Convert\ExcelFactory;
 use Magento\Framework\ObjectManagerInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class ExcelFactoryTest extends \PHPUnit\Framework\TestCase
+class ExcelFactoryTest extends TestCase
 {
     /**
      * @var ExcelFactory
@@ -16,13 +19,13 @@ class ExcelFactoryTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var ObjectManagerInterface | \PHPUnit_Framework_MockObject_MockObject
+     * @var ObjectManagerInterface|MockObject
      */
     protected $objectManager;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->objectManager = $this->getMockBuilder(\Magento\Framework\ObjectManagerInterface::class)
+        $this->objectManager = $this->getMockBuilder(ObjectManagerInterface::class)
             ->setMethods(['create'])
             ->getMockForAbstractClass();
 
@@ -33,15 +36,15 @@ class ExcelFactoryTest extends \PHPUnit\Framework\TestCase
 
     public function testCreate()
     {
-        $excel = $this->getMockBuilder(\Magento\Framework\Convert\Excel::class)
+        $excel = $this->getMockBuilder(Excel::class)
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->objectManager->expects($this->once())
             ->method('create')
-            ->with(\Magento\Framework\Convert\Excel::class, [])
+            ->with(Excel::class, [])
             ->willReturn($excel);
 
-        $this->assertInstanceOf(\Magento\Framework\Convert\Excel::class, $this->model->create());
+        $this->assertInstanceOf(Excel::class, $this->model->create());
     }
 }

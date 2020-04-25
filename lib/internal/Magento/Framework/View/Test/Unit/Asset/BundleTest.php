@@ -6,45 +6,54 @@
 
 namespace Magento\Framework\View\Test\Unit\Asset;
 
+use PHPUnit\Framework\TestCase;
+use Magento\Framework\Filesystem;
+use PHPUnit\Framework\MockObject\MockObject;
+use Magento\Framework\View\Asset\Bundle\ConfigInterface;
+use Magento\Framework\View\Asset\Minification;
+use Magento\Framework\View\Asset\File\FallbackContext;
+use Magento\Framework\View\Asset\LocalInterface;
+use Magento\Framework\Filesystem\Directory\WriteInterface;
+use Magento\Framework\View\Asset\Bundle\Manager;
 use Magento\Framework\View\Asset\Bundle;
 
 /**
  * Unit test for Magento\Framework\View\Asset\Bundle
  */
-class BundleTest extends \PHPUnit\Framework\TestCase
+class BundleTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\View\Asset\Bundle
+     * @var Bundle
      */
     protected $bundle;
 
     /**
-     * @var \Magento\Framework\Filesystem|\PHPUnit_Framework_MockObject_MockObject
+     * @var Filesystem|MockObject
      */
     protected $filesystemMock;
 
     /**
-     * @var \Magento\Framework\View\Asset\Bundle\ConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ConfigInterface|MockObject
      */
     protected $bundleConfigMock;
 
     /**
-     * @var \Magento\Framework\View\Asset\Minification|\PHPUnit_Framework_MockObject_MockObject
+     * @var Minification|MockObject
      */
     protected $minificationMock;
 
     /**
      * {@inheritDoc}
      */
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->filesystemMock = $this->getMockBuilder(\Magento\Framework\Filesystem::class)
+        $this->filesystemMock = $this->getMockBuilder(Filesystem::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->bundleConfigMock = $this->getMockBuilder(\Magento\Framework\View\Asset\Bundle\ConfigInterface::class)
+        $this->bundleConfigMock = $this->getMockBuilder(ConfigInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->minificationMock = $this->getMockBuilder(\Magento\Framework\View\Asset\Minification::class)
+        $this->minificationMock = $this->getMockBuilder(Minification::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -76,7 +85,7 @@ class BundleTest extends \PHPUnit\Framework\TestCase
                 'path-to-theme/js/bundle/bundle0.min.js'
             );
 
-        $contextMock = $this->getMockBuilder(\Magento\Framework\View\Asset\File\FallbackContext::class)
+        $contextMock = $this->getMockBuilder(FallbackContext::class)
             ->disableOriginalConstructor()
             ->getMock();
         $contextMock
@@ -96,7 +105,7 @@ class BundleTest extends \PHPUnit\Framework\TestCase
             ->method('getPath')
             ->willReturn('path-to-theme');
 
-        $assetMock = $this->getMockBuilder(\Magento\Framework\View\Asset\LocalInterface::class)
+        $assetMock = $this->getMockBuilder(LocalInterface::class)
             ->setMethods(['getContentType', 'getContext'])
             ->getMockForAbstractClass();
         $assetMock
@@ -112,12 +121,12 @@ class BundleTest extends \PHPUnit\Framework\TestCase
             ->method('getFilePath')
             ->willReturn('onefile.js');
 
-        $writeMock = $this->getMockBuilder(\Magento\Framework\Filesystem\Directory\WriteInterface::class)
+        $writeMock = $this->getMockBuilder(WriteInterface::class)
             ->getMockForAbstractClass();
         $writeMock
             ->expects($this->once())
             ->method('delete')
-            ->with('path-to-theme' . DIRECTORY_SEPARATOR . \Magento\Framework\View\Asset\Bundle\Manager::BUNDLE_JS_DIR);
+            ->with('path-to-theme' . DIRECTORY_SEPARATOR . Manager::BUNDLE_JS_DIR);
         $writeMock
             ->expects($this->once())
             ->method('writeFile')

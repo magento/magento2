@@ -6,12 +6,19 @@
 
 namespace Magento\Framework\View\Test\Unit\Layout\Reader;
 
+use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\MockObject\MockObject;
+use Magento\Framework\View\Layout\ScheduledStructure\Helper;
+use Magento\Framework\View\Layout\ReaderPool;
+use Magento\Framework\View\Layout\Element;
+use PHPUnit\Framework\MockObject\Matcher\InvokedCount;
+use Magento\Framework\View\Layout\Reader\Context;
 use \Magento\Framework\View\Layout\Reader\Container;
 
 use Magento\Framework\View\Layout\ScheduledStructure;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
-class ContainerTest extends \PHPUnit\Framework\TestCase
+class ContainerTest extends TestCase
 {
     /**
      * @var ObjectManagerHelper
@@ -19,31 +26,31 @@ class ContainerTest extends \PHPUnit\Framework\TestCase
     protected $objectManagerHelper;
 
     /**
-     * @var Container|\PHPUnit_Framework_MockObject_MockObject
+     * @var Container|MockObject
      */
     protected $container;
 
     /**
-     * @var \Magento\Framework\View\Layout\ScheduledStructure\Helper|\PHPUnit_Framework_MockObject_MockObject
+     * @var Helper|MockObject
      */
     protected $helperMock;
 
     /**
-     * @var \Magento\Framework\View\Layout\ReaderPool|\PHPUnit_Framework_MockObject_MockObject
+     * @var ReaderPool|MockObject
      */
     protected $readerPoolMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManagerHelper = new ObjectManagerHelper($this);
 
-        $this->helperMock = $this->getMockBuilder(\Magento\Framework\View\Layout\ScheduledStructure\Helper::class)
+        $this->helperMock = $this->getMockBuilder(Helper::class)
             ->disableOriginalConstructor()->getMock();
-        $this->readerPoolMock = $this->getMockBuilder(\Magento\Framework\View\Layout\ReaderPool::class)
+        $this->readerPoolMock = $this->getMockBuilder(ReaderPool::class)
             ->disableOriginalConstructor()->getMock();
 
         $this->container = $this->objectManagerHelper->getObject(
-            \Magento\Framework\View\Layout\Reader\Container::class,
+            Container::class,
             [
                 'helper' => $this->helperMock,
                 'readerPool' => $this->readerPoolMock
@@ -52,13 +59,13 @@ class ContainerTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @param \Magento\Framework\View\Layout\Element $elementCurrent
+     * @param Element $elementCurrent
      * @param string $containerName
      * @param array $structureElement
      * @param array $expectedData
-     * @param \PHPUnit\Framework\MockObject\Matcher\InvokedCount $getStructureCondition
-     * @param \PHPUnit\Framework\MockObject\Matcher\InvokedCount $setStructureCondition
-     * @param \PHPUnit\Framework\MockObject\Matcher\InvokedCount $setRemoveCondition
+     * @param InvokedCount $getStructureCondition
+     * @param InvokedCount $setStructureCondition
+     * @param InvokedCount $setRemoveCondition
      *
      * @dataProvider processDataProvider
      */
@@ -71,8 +78,8 @@ class ContainerTest extends \PHPUnit\Framework\TestCase
         $setStructureCondition,
         $setRemoveCondition
     ) {
-        /** @var ScheduledStructure|\PHPUnit_Framework_MockObject_MockObject $scheduledStructureMock */
-        $scheduledStructureMock = $this->getMockBuilder(\Magento\Framework\View\Layout\ScheduledStructure::class)
+        /** @var ScheduledStructure|MockObject $scheduledStructureMock */
+        $scheduledStructureMock = $this->getMockBuilder(ScheduledStructure::class)
             ->disableOriginalConstructor()->getMock();
         $scheduledStructureMock->expects($getStructureCondition)
             ->method('getStructureElementData')
@@ -86,8 +93,8 @@ class ContainerTest extends \PHPUnit\Framework\TestCase
             ->method('setElementToRemoveList')
             ->with($containerName);
 
-        /** @var \Magento\Framework\View\Layout\Reader\Context|\PHPUnit_Framework_MockObject_MockObject $contextMock */
-        $contextMock = $this->getMockBuilder(\Magento\Framework\View\Layout\Reader\Context::class)
+        /** @var Context|MockObject $contextMock */
+        $contextMock = $this->getMockBuilder(Context::class)
             ->disableOriginalConstructor()->getMock();
         $contextMock->expects($this->any())
             ->method('getScheduledStructure')
@@ -233,13 +240,13 @@ class ContainerTest extends \PHPUnit\Framework\TestCase
     /**
      * @param string $xml
      * @param string $elementType
-     * @return \Magento\Framework\View\Layout\Element
+     * @return Element
      */
     protected function getElement($xml, $elementType)
     {
         $xml = simplexml_load_string(
             '<parent_element>' . $xml . '</parent_element>',
-            \Magento\Framework\View\Layout\Element::class
+            Element::class
         );
         return $xml->{$elementType};
     }

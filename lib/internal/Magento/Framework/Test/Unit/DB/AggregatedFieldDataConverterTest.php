@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -12,8 +12,10 @@ use Magento\Framework\DB\FieldDataConverter;
 use Magento\Framework\DB\FieldDataConverterFactory;
 use Magento\Framework\DB\FieldToConvert;
 use Magento\Framework\DB\Select\QueryModifierInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class AggregatedFieldDataConverterTest extends \PHPUnit\Framework\TestCase
+class AggregatedFieldDataConverterTest extends TestCase
 {
     public function testConvert()
     {
@@ -52,7 +54,7 @@ class AggregatedFieldDataConverterTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param array $returnValuesMap
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return MockObject
      */
     private function createFieldConverterFactory(array $returnValuesMap)
     {
@@ -69,14 +71,14 @@ class AggregatedFieldDataConverterTest extends \PHPUnit\Framework\TestCase
      * Assert that correct methods with correct arguments are called during delegation of the action
      *
      * @param $connection
-     * @param \PHPUnit_Framework_MockObject_MockObject $fieldConverterOne
-     * @param \PHPUnit_Framework_MockObject_MockObject $fieldConverterTwo
+     * @param MockObject $fieldConverterOne
+     * @param MockObject $fieldConverterTwo
      * @param $queryModifier
      */
     private function assertCallsDelegation(
         $connection,
-        \PHPUnit_Framework_MockObject_MockObject $fieldConverterOne,
-        \PHPUnit_Framework_MockObject_MockObject $fieldConverterTwo,
+        MockObject $fieldConverterOne,
+        MockObject $fieldConverterTwo,
         $queryModifier
     ) {
         $fieldConverterOne->expects($this->once())

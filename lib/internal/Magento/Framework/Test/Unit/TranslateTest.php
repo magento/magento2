@@ -7,77 +7,97 @@ declare(strict_types=1);
 
 namespace Magento\Framework\Test\Unit;
 
+use Magento\Framework\App\Language\Dictionary;
+use Magento\Framework\App\RequestInterface;
+use Magento\Framework\App\ScopeResolverInterface;
+use Magento\Framework\App\State;
+use Magento\Framework\Cache\FrontendInterface;
+use Magento\Framework\DataObject;
+use Magento\Framework\File\Csv;
+use Magento\Framework\Filesystem;
+use Magento\Framework\Filesystem\Directory\ReadInterface;
+use Magento\Framework\Filesystem\DriverInterface;
+use Magento\Framework\Locale\ResolverInterface;
+use Magento\Framework\Module\Dir\Reader;
+use Magento\Framework\Module\ModuleList;
 use Magento\Framework\Serialize\SerializerInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\Translate;
+use Magento\Framework\Translate\ResourceInterface;
+use Magento\Framework\View\DesignInterface;
+use Magento\Framework\View\FileSystem as FilesystemView;
+use Magento\Theme\Model\Theme;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class TranslateTest extends \PHPUnit\Framework\TestCase
+class TranslateTest extends TestCase
 {
     /** @var Translate */
     protected $translate;
 
-    /** @var \Magento\Framework\View\DesignInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var DesignInterface|MockObject */
     protected $viewDesign;
 
-    /** @var \Magento\Framework\Cache\FrontendInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var FrontendInterface|MockObject */
     protected $cache;
 
-    /** @var \Magento\Framework\View\FileSystem|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var FilesystemView|MockObject */
     protected $viewFileSystem;
 
-    /** @var \Magento\Framework\Module\ModuleList|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var ModuleList|MockObject */
     protected $moduleList;
 
-    /** @var \Magento\Framework\Module\Dir\Reader|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var Reader|MockObject */
     protected $modulesReader;
 
-    /** @var \Magento\Framework\App\ScopeResolverInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var ScopeResolverInterface|MockObject */
     protected $scopeResolver;
 
-    /** @var \Magento\Framework\Translate\ResourceInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var ResourceInterface|MockObject */
     protected $resource;
 
-    /** @var \Magento\Framework\Locale\ResolverInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var ResolverInterface|MockObject */
     protected $locale;
 
-    /** @var \Magento\Framework\App\State|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var State|MockObject */
     protected $appState;
 
-    /** @var \Magento\Framework\Filesystem|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var Filesystem|MockObject */
     protected $filesystem;
 
-    /** @var \Magento\Framework\App\RequestInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var RequestInterface|MockObject */
     protected $request;
 
-    /** @var \Magento\Framework\File\Csv|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var Csv|MockObject */
     protected $csvParser;
 
-    /** @var  \Magento\Framework\App\Language\Dictionary|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var  Dictionary|MockObject */
     protected $packDictionary;
 
-    /** @var \Magento\Framework\Filesystem\Directory\ReadInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var ReadInterface|MockObject */
     protected $directory;
 
-    /** @var \Magento\Framework\Filesystem\DriverInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var DriverInterface|MockObject */
     protected $fileDriver;
 
     protected function setUp(): void
     {
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->viewDesign = $this->createMock(\Magento\Framework\View\DesignInterface::class);
-        $this->cache = $this->createMock(\Magento\Framework\Cache\FrontendInterface::class);
-        $this->viewFileSystem = $this->createMock(\Magento\Framework\View\FileSystem::class);
-        $this->moduleList = $this->createMock(\Magento\Framework\Module\ModuleList::class);
-        $this->modulesReader = $this->createMock(\Magento\Framework\Module\Dir\Reader::class);
-        $this->scopeResolver = $this->createMock(\Magento\Framework\App\ScopeResolverInterface::class);
-        $this->resource = $this->createMock(\Magento\Framework\Translate\ResourceInterface::class);
-        $this->locale = $this->createMock(\Magento\Framework\Locale\ResolverInterface::class);
-        $this->appState = $this->createMock(\Magento\Framework\App\State::class);
+        $objectManager = new ObjectManager($this);
+        $this->viewDesign = $this->createMock(DesignInterface::class);
+        $this->cache = $this->createMock(FrontendInterface::class);
+        $this->viewFileSystem = $this->createMock(FilesystemView::class);
+        $this->moduleList = $this->createMock(ModuleList::class);
+        $this->modulesReader = $this->createMock(Reader::class);
+        $this->scopeResolver = $this->createMock(ScopeResolverInterface::class);
+        $this->resource = $this->createMock(ResourceInterface::class);
+        $this->locale = $this->createMock(ResolverInterface::class);
+        $this->appState = $this->createMock(State::class);
         $this->request = $this->getMockForAbstractClass(
-            \Magento\Framework\App\RequestInterface::class,
+            RequestInterface::class,
             [],
             '',
             false,
@@ -85,12 +105,12 @@ class TranslateTest extends \PHPUnit\Framework\TestCase
             true,
             ['getParam', 'getControllerModule']
         );
-        $this->csvParser = $this->createMock(\Magento\Framework\File\Csv::class);
-        $this->packDictionary = $this->createMock(\Magento\Framework\App\Language\Dictionary::class);
-        $this->directory = $this->createMock(\Magento\Framework\Filesystem\Directory\ReadInterface::class);
-        $filesystem = $this->createMock(\Magento\Framework\Filesystem::class);
+        $this->csvParser = $this->createMock(Csv::class);
+        $this->packDictionary = $this->createMock(Dictionary::class);
+        $this->directory = $this->createMock(ReadInterface::class);
+        $filesystem = $this->createMock(Filesystem::class);
         $filesystem->expects($this->once())->method('getDirectoryRead')->will($this->returnValue($this->directory));
-        $this->fileDriver = $this->createMock(\Magento\Framework\Filesystem\DriverInterface::class);
+        $this->fileDriver = $this->createMock(DriverInterface::class);
 
         $this->translate = new Translate(
             $this->viewDesign,
@@ -349,8 +369,8 @@ class TranslateTest extends \PHPUnit\Framework\TestCase
     protected function expectsSetConfig($themeId, $localeCode = 'en_US'): void
     {
         $this->locale->expects($this->any())->method('getLocale')->will($this->returnValue($localeCode));
-        $scope = new \Magento\Framework\DataObject(['code' => 'frontendCode', 'id' => 1]);
-        $scopeAdmin = new \Magento\Framework\DataObject(['code' => 'adminCode', 'id' => 0]);
+        $scope = new DataObject(['code' => 'frontendCode', 'id' => 1]);
+        $scopeAdmin = new DataObject(['code' => 'adminCode', 'id' => 0]);
         $this->scopeResolver->expects($this->any())
             ->method('getScope')
             ->will(
@@ -361,7 +381,7 @@ class TranslateTest extends \PHPUnit\Framework\TestCase
                     ]
                 )
             );
-        $designTheme = $this->getMockBuilder(\Magento\Theme\Model\Theme::class)
+        $designTheme = $this->getMockBuilder(Theme::class)
             ->disableOriginalConstructor()
             ->getMock();
 

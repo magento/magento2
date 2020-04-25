@@ -5,19 +5,22 @@
  */
 namespace Magento\Framework\View\Test\Unit\Design\Theme;
 
+use PHPUnit\Framework\TestCase;
 use Magento\Framework\View\Design\Theme\ThemePackage;
 
-class ThemePackageTest extends \PHPUnit\Framework\TestCase
+class ThemePackageTest extends TestCase
 {
     /**
      * @param string $key
      *
      * @dataProvider constructBadKeyDataProvider
-     * @expectedException \UnexpectedValueException
-     * @expectedExceptionMessage Theme's key does not correspond to required format: '<area>/<vendor>/<name>'
      */
     public function testConstructBadKey($key)
     {
+        $this->expectException('UnexpectedValueException');
+        $this->expectExceptionMessage(
+            'Theme\'s key does not correspond to required format: \'<area>/<vendor>/<name>\''
+        );
         new ThemePackage($key, 'path');
     }
 

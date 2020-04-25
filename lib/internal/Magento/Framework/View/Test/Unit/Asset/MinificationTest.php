@@ -6,6 +6,9 @@
 
 namespace Magento\Framework\View\Test\Unit\Asset;
 
+use PHPUnit\Framework\TestCase;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use PHPUnit\Framework\MockObject\MockObject;
 use Magento\Framework\App\State;
 use Magento\Framework\View\Asset\Minification;
 use Magento\Store\Model\ScopeInterface;
@@ -13,32 +16,32 @@ use Magento\Store\Model\ScopeInterface;
 /**
  * Unit test for Magento\Framework\View\Asset\Minification
  */
-class MinificationTest extends \PHPUnit\Framework\TestCase
+class MinificationTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\View\Asset\Minification
+     * @var Minification
      */
     protected $minification;
 
     /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ScopeConfigInterface|MockObject
      */
     protected $scopeConfigMock;
 
     /**
-     * @var \Magento\Framework\App\State|\PHPUnit_Framework_MockObject_MockObject
+     * @var State|MockObject
      */
     protected $appStateMock;
 
     /**
      * {@inheritDoc}
      */
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->scopeConfigMock = $this->getMockBuilder(\Magento\Framework\App\Config\ScopeConfigInterface::class)
+        $this->scopeConfigMock = $this->getMockBuilder(ScopeConfigInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->appStateMock = $this->getMockBuilder(\Magento\Framework\App\State::class)
+        $this->appStateMock = $this->getMockBuilder(State::class)
             ->disableOriginalConstructor()
             ->getMock();
 

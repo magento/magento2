@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -6,29 +6,34 @@
 
 namespace Magento\Framework\Search\Test\Unit\Adapter\Mysql\Filter\Builder;
 
+use Magento\Framework\Search\Adapter\Mysql\ConditionManager;
+use Magento\Framework\Search\Adapter\Mysql\Filter\Builder\Range;
+use Magento\Framework\Search\Request\Filter\Term;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class RangeTest extends \PHPUnit\Framework\TestCase
+class RangeTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\Search\Request\Filter\Term|\PHPUnit_Framework_MockObject_MockObject
+     * @var Term|MockObject
      */
     private $requestFilter;
 
     /**
-     * @var \Magento\Framework\Search\Adapter\Mysql\Filter\Builder\Range
+     * @var Range
      */
     private $filter;
 
     /**
-     * @var \Magento\Framework\Search\Adapter\Mysql\ConditionManager|\PHPUnit_Framework_MockObject_MockObject
+     * @var ConditionManager|MockObject
      */
     private $conditionManager;
 
     /**
      * Set Up
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
         $this->requestFilter = $this->getMockBuilder(\Magento\Framework\Search\Request\Filter\Range::class)
@@ -36,7 +41,7 @@ class RangeTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->conditionManager = $this->getMockBuilder(\Magento\Framework\Search\Adapter\Mysql\ConditionManager::class)
+        $this->conditionManager = $this->getMockBuilder(ConditionManager::class)
             ->disableOriginalConstructor()
             ->setMethods(['generateCondition'])
             ->getMock();
@@ -51,7 +56,7 @@ class RangeTest extends \PHPUnit\Framework\TestCase
             );
 
         $this->filter = $objectManager->getObject(
-            \Magento\Framework\Search\Adapter\Mysql\Filter\Builder\Range::class,
+            Range::class,
             [
                 'conditionManager' => $this->conditionManager,
             ]

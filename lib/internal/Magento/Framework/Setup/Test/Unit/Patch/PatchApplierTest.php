@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Framework\Setup\Test\Unit\Patch;
 
@@ -10,74 +11,74 @@ use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\Module\ModuleResource;
 use Magento\Framework\ObjectManagerInterface;
-use Magento\Framework\Setup\Exception;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Framework\Setup\Patch\DataPatchInterface;
-use Magento\Framework\Setup\Patch\PatchBackwardCompatability;
-use Magento\Framework\Setup\Patch\PatchInterface;
-use Magento\Framework\Setup\SchemaSetupInterface;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\Setup\Patch\PatchApplier;
+use Magento\Framework\Setup\Patch\PatchBackwardCompatability;
 use Magento\Framework\Setup\Patch\PatchFactory;
 use Magento\Framework\Setup\Patch\PatchHistory;
+use Magento\Framework\Setup\Patch\PatchInterface;
 use Magento\Framework\Setup\Patch\PatchReader;
 use Magento\Framework\Setup\Patch\PatchRegistry;
 use Magento\Framework\Setup\Patch\PatchRegistryFactory;
+use Magento\Framework\Setup\SchemaSetupInterface;
+use Magento\Framework\Setup\SetupInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
- * Class PatchApplierTest
- * @package Magento\Framework\Setup\Test\Unit\Patch
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class PatchApplierTest extends \PHPUnit\Framework\TestCase
+class PatchApplierTest extends TestCase
 {
     /**
-     * @var PatchRegistryFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var PatchRegistryFactory|MockObject
      */
     private $patchRegistryFactoryMock;
 
     /**
-     * @var PatchReader|\PHPUnit_Framework_MockObject_MockObject
+     * @var PatchReader|MockObject
      */
     private $dataPatchReaderMock;
 
     /**
-     * @var PatchReader|\PHPUnit_Framework_MockObject_MockObject
+     * @var PatchReader|MockObject
      */
     private $schemaPatchReaderMock;
 
     /**
-     * @var ResourceConnection|\PHPUnit_Framework_MockObject_MockObject
+     * @var ResourceConnection|MockObject
      */
     private $resourceConnectionMock;
 
     /**
-     * @var ModuleResource|\PHPUnit_Framework_MockObject_MockObject
+     * @var ModuleResource|MockObject
      */
     private $moduleResourceMock;
 
     /**
-     * @var PatchHistory|\PHPUnit_Framework_MockObject_MockObject
+     * @var PatchHistory|MockObject
      */
     private $patchHistoryMock;
 
     /**
-     * @var PatchFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var PatchFactory|MockObject
      */
     private $patchFactoryMock;
 
     /**
-     * @var \Magento\Framework\Setup\SetupInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var SetupInterface|MockObject
      */
     private $schemaSetupMock;
 
     /**
-     * @var ModuleDataSetupInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ModuleDataSetupInterface|MockObject
      */
     private $moduleDataSetupMock;
 
     /**
-     * @var ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ObjectManagerInterface|MockObject
      */
     private $objectManagerMock;
 
@@ -87,16 +88,16 @@ class PatchApplierTest extends \PHPUnit\Framework\TestCase
     private $patchApllier;
 
     /**
-     * @var AdapterInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var AdapterInterface|MockObject
      */
     private $connectionMock;
 
     /**
-     * @var PatchBackwardCompatability |\PHPUnit_Framework_MockObject_MockObject
+     * @var PatchBackwardCompatability|MockObject
      */
     private $patchBackwardCompatability;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->patchRegistryFactoryMock = $this->createMock(PatchRegistryFactory::class);
         $this->dataPatchReaderMock = $this->createMock(PatchReader::class);
@@ -199,12 +200,11 @@ class PatchApplierTest extends \PHPUnit\Framework\TestCase
      * @param $moduleVersionInDb
      *
      * @dataProvider applyDataPatchDataNewModuleProvider()
-     *
-     * @expectedException Exception
-     * @expectedExceptionMessageRegExp "Unable to apply data patch .+ cannot be applied twice"
      */
     public function testApplyDataPatchForAlias($moduleName, $dataPatches, $moduleVersionInDb)
     {
+        $this->expectException('Exception');
+        $this->expectExceptionMessageRegExp('"Unable to apply data patch .+ cannot be applied twice"');
         $this->dataPatchReaderMock->expects($this->once())
             ->method('read')
             ->with($moduleName)
@@ -340,13 +340,13 @@ class PatchApplierTest extends \PHPUnit\Framework\TestCase
      * @param $dataPatches
      * @param $moduleVersionInDb
      *
-     * @expectedException Exception
-     * @expectedExceptionMessage Patch Apply Error
      *
      * @dataProvider applyDataPatchDataInstalledModuleProvider()
      */
     public function testApplyDataPatchRollback($moduleName, $dataPatches, $moduleVersionInDb)
     {
+        $this->expectException('Exception');
+        $this->expectExceptionMessage('Patch Apply Error');
         $this->dataPatchReaderMock->expects($this->once())
             ->method('read')
             ->with($moduleName)
@@ -388,12 +388,10 @@ class PatchApplierTest extends \PHPUnit\Framework\TestCase
         $this->patchApllier->applyDataPatch($moduleName);
     }
 
-    /**
-     * @expectedException Exception
-     * @expectedExceptionMessageRegExp "Patch [a-zA-Z0-9\_]+ should implement DataPatchInterface"
-     */
     public function testNonDataPatchApply()
     {
+        $this->expectException('Exception');
+        $this->expectExceptionMessageRegExp('"Patch [a-zA-Z0-9\_]+ should implement DataPatchInterface"');
         $this->dataPatchReaderMock->expects($this->once())
             ->method('read')
             ->with('module1')
@@ -517,12 +515,11 @@ class PatchApplierTest extends \PHPUnit\Framework\TestCase
      * @param $moduleVersionInDb
      *
      * @dataProvider schemaPatchDataProvider()
-     *
-     * @expectedException Exception
-     * @expectedExceptionMessageRegExp "Unable to apply patch .+ cannot be applied twice"
      */
     public function testSchemaPatchApplyForPatchAlias($moduleName, $schemaPatches, $moduleVersionInDb)
     {
+        $this->expectException('Exception');
+        $this->expectExceptionMessageRegExp('"Unable to apply patch .+ cannot be applied twice"');
         $this->schemaPatchReaderMock->expects($this->once())
             ->method('read')
             ->with($moduleName)
@@ -622,7 +619,7 @@ class PatchApplierTest extends \PHPUnit\Framework\TestCase
      * @param string $className
      * @param array $items
      * @param array $methods
-     * @return \PHPUnit_Framework_MockObject_MockObject|\IteratorAggregate
+     * @return MockObject|\IteratorAggregate
      * @throws \Exception
      */
     private function createAggregateIteratorMock($className, array $items = [], array $methods = [])

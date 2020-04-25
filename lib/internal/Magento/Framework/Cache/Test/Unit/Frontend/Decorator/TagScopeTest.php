@@ -3,27 +3,34 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\Cache\Test\Unit\Frontend\Decorator;
 
-class TagScopeTest extends \PHPUnit\Framework\TestCase
+use Magento\Framework\Cache\Frontend\Decorator\TagScope;
+use Magento\Framework\Cache\FrontendInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class TagScopeTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\Cache\Frontend\Decorator\TagScope
+     * @var TagScope
      */
     protected $_object;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $_frontend;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->_frontend = $this->createMock(\Magento\Framework\Cache\FrontendInterface::class);
-        $this->_object = new \Magento\Framework\Cache\Frontend\Decorator\TagScope($this->_frontend, 'enforced_tag');
+        $this->_frontend = $this->createMock(FrontendInterface::class);
+        $this->_object = new TagScope($this->_frontend, 'enforced_tag');
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->_object = null;
         $this->_frontend = null;

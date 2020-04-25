@@ -5,16 +5,19 @@
  */
 namespace Magento\Framework\View\Test\Unit\Asset;
 
-class PropertyGroupTest extends \PHPUnit\Framework\TestCase
+use PHPUnit\Framework\TestCase;
+use Magento\Framework\View\Asset\PropertyGroup;
+
+class PropertyGroupTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\View\Asset\PropertyGroup
+     * @var PropertyGroup
      */
     protected $_object;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->_object = new \Magento\Framework\View\Asset\PropertyGroup(['test_property' => 'test_value']);
+        $this->_object = new PropertyGroup(['test_property' => 'test_value']);
     }
 
     public function testGetProperties()

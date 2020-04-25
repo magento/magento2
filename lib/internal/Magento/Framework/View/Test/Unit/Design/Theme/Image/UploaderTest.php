@@ -9,40 +9,48 @@
  */
 namespace Magento\Framework\View\Test\Unit\Design\Theme\Image;
 
-class UploaderTest extends \PHPUnit\Framework\TestCase
+use PHPUnit\Framework\TestCase;
+use Magento\Framework\View\Design\Theme\Image\Uploader;
+use PHPUnit\Framework\MockObject\MockObject;
+use Magento\Framework\Filesystem;
+use Magento\Framework\HTTP\Adapter\FileTransferFactory;
+use Magento\Framework\File\UploaderFactory;
+use Magento\Framework\Exception\LocalizedException;
+
+class UploaderTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\View\Design\Theme\Image\Uploader|\PHPUnit_Framework_MockObject_MockObject
+     * @var Uploader|MockObject
      */
     protected $_model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $_helperMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $_filesystemMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $_transferAdapterMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $_fileUploader;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->_filesystemMock = $this->createMock(\Magento\Framework\Filesystem::class);
+        $this->_filesystemMock = $this->createMock(Filesystem::class);
         $this->_transferAdapterMock = $this->createMock(\Zend_File_Transfer_Adapter_Http::class);
         $this->_fileUploader = $this->createMock(\Magento\Framework\File\Uploader::class);
 
-        $adapterFactory = $this->createMock(\Magento\Framework\HTTP\Adapter\FileTransferFactory::class);
+        $adapterFactory = $this->createMock(FileTransferFactory::class);
         $adapterFactory->expects(
             $this->once()
         )->method(
@@ -51,17 +59,17 @@ class UploaderTest extends \PHPUnit\Framework\TestCase
             $this->returnValue($this->_transferAdapterMock)
         );
 
-        $uploaderFactory = $this->createPartialMock(\Magento\Framework\File\UploaderFactory::class, ['create']);
+        $uploaderFactory = $this->createPartialMock(UploaderFactory::class, ['create']);
         $uploaderFactory->expects($this->any())->method('create')->will($this->returnValue($this->_fileUploader));
 
-        $this->_model = new \Magento\Framework\View\Design\Theme\Image\Uploader(
+        $this->_model = new Uploader(
             $this->_filesystemMock,
             $adapterFactory,
             $uploaderFactory
         );
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->_model = null;
         $this->_transferAdapterMock = null;
@@ -96,7 +104,7 @@ class UploaderTest extends \PHPUnit\Framework\TestCase
                 'checkAllowedExtension' => true,
                 'save' => true,
                 'result' => false,
-                'exception' => \Magento\Framework\Exception\LocalizedException::class
+                'exception' => LocalizedException::class
             ],
             [
                 'isUploaded' => true,
@@ -104,7 +112,7 @@ class UploaderTest extends \PHPUnit\Framework\TestCase
                 'checkAllowedExtension' => false,
                 'save' => true,
                 'result' => false,
-                'exception' => \Magento\Framework\Exception\LocalizedException::class
+                'exception' => LocalizedException::class
             ],
             [
                 'isUploaded' => true,
@@ -112,7 +120,7 @@ class UploaderTest extends \PHPUnit\Framework\TestCase
                 'checkAllowedExtension' => true,
                 'save' => false,
                 'result' => false,
-                'exception' => \Magento\Framework\Exception\LocalizedException::class
+                'exception' => LocalizedException::class
             ]
         ];
     }

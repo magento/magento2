@@ -1,24 +1,25 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Filter\Test\Unit;
 
-/**
- * Translit url test.
- */
-class TranslitUrlTest extends \PHPUnit\Framework\TestCase
+use Magento\Framework\Filter\TranslitUrl;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\TestCase;
+
+class TranslitUrlTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\Filter\TranslitUrl
+     * @var TranslitUrl
      */
     protected $model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->model = $objectManager->getObject(\Magento\Framework\Filter\TranslitUrl::class);
+        $objectManager = new ObjectManager($this);
+        $this->model = $objectManager->getObject(TranslitUrl::class);
     }
 
     /**

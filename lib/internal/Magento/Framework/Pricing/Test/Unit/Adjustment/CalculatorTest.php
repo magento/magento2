@@ -3,33 +3,40 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\Pricing\Test\Unit\Adjustment;
 
-/**
- * Class CalculatorTest
- *
- */
-class CalculatorTest extends \PHPUnit\Framework\TestCase
+use Magento\Framework\Pricing\Adjustment\AdjustmentInterface;
+use Magento\Framework\Pricing\Adjustment\Calculator;
+use Magento\Framework\Pricing\Amount\AmountFactory;
+use Magento\Framework\Pricing\Amount\AmountInterface;
+use Magento\Framework\Pricing\Amount\Base;
+use Magento\Framework\Pricing\SaleableInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class CalculatorTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\Pricing\Adjustment\Calculator
+     * @var Calculator
      */
     protected $model;
 
     /**
-     * @var \Magento\Framework\Pricing\Amount\AmountFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var AmountFactory|MockObject
      */
     protected $amountFactoryMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->amountFactoryMock = $this->getMockBuilder(\Magento\Framework\Pricing\Amount\AmountFactory::class)
+        $this->amountFactoryMock = $this->getMockBuilder(AmountFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->model = new \Magento\Framework\Pricing\Adjustment\Calculator($this->amountFactoryMock);
+        $this->model = new Calculator($this->amountFactoryMock);
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         $this->model = null;
         $this->amountFactoryMock = null;
@@ -52,7 +59,7 @@ class CalculatorTest extends \PHPUnit\Framework\TestCase
             $taxAdjustmentCode => $taxAdjustment,
         ];
 
-        $amountBaseMock = $this->getMockBuilder(\Magento\Framework\Pricing\Amount\Base::class)
+        $amountBaseMock = $this->getMockBuilder(Base::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->amountFactoryMock->expects($this->once())
@@ -60,12 +67,12 @@ class CalculatorTest extends \PHPUnit\Framework\TestCase
             ->with($this->equalTo($totalAmount), $this->equalTo($expectedAdjustments))
             ->will($this->returnValue($amountBaseMock));
 
-        $productMock = $this->getMockBuilder(\Magento\Framework\Pricing\SaleableInterface::class)
+        $productMock = $this->getMockBuilder(SaleableInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['getPriceInfo', '__wakeup'])
             ->getMockForAbstractClass();
 
-        $weeeAdjustmentMock = $this->getMockBuilder(\Magento\Framework\Pricing\Adjustment\AdjustmentInterface::class)
+        $weeeAdjustmentMock = $this->getMockBuilder(AdjustmentInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $weeeAdjustmentMock->expects($this->once())
@@ -82,7 +89,7 @@ class CalculatorTest extends \PHPUnit\Framework\TestCase
             ->with($this->equalTo($amountInclTax), $this->equalTo($productMock))
             ->will($this->returnValue($weeeAdjustment + $amountInclTax));
 
-        $taxAdjustmentMock = $this->getMockBuilder(\Magento\Framework\Pricing\Adjustment\AdjustmentInterface::class)
+        $taxAdjustmentMock = $this->getMockBuilder(AdjustmentInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $taxAdjustmentMock->expects($this->once())
@@ -115,7 +122,7 @@ class CalculatorTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnValue($priceInfoMock));
 
         $result = $this->model->getAmount($amountInclTax, $productMock);
-        $this->assertInstanceOf(\Magento\Framework\Pricing\Amount\AmountInterface::class, $result);
+        $this->assertInstanceOf(AmountInterface::class, $result);
     }
 
     public function testGetAmountExclude()
@@ -127,12 +134,12 @@ class CalculatorTest extends \PHPUnit\Framework\TestCase
         $adjustment = 5;
         $expectedAdjustments = [];
 
-        $productMock = $this->getMockBuilder(\Magento\Framework\Pricing\SaleableInterface::class)
+        $productMock = $this->getMockBuilder(SaleableInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['getPriceInfo', '__wakeup'])
             ->getMockForAbstractClass();
 
-        $taxAdjustmentMock = $this->getMockBuilder(\Magento\Framework\Pricing\Adjustment\AdjustmentInterface::class)
+        $taxAdjustmentMock = $this->getMockBuilder(AdjustmentInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $taxAdjustmentMock->expects($this->once())
@@ -150,7 +157,7 @@ class CalculatorTest extends \PHPUnit\Framework\TestCase
             ->with($this->equalTo($fullamount), $this->equalTo($productMock))
             ->will($this->returnValue($amount));
 
-        $weeeAdjustmentMock = $this->getMockBuilder(\Magento\Framework\Pricing\Adjustment\AdjustmentInterface::class)
+        $weeeAdjustmentMock = $this->getMockBuilder(AdjustmentInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $weeeAdjustmentMock->expects($this->once())
@@ -179,7 +186,7 @@ class CalculatorTest extends \PHPUnit\Framework\TestCase
             ->method('getPriceInfo')
             ->will($this->returnValue($priceInfoMock));
 
-        $amountBaseMock = $this->getMockBuilder(\Magento\Framework\Pricing\Amount\Base::class)
+        $amountBaseMock = $this->getMockBuilder(Base::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -188,6 +195,6 @@ class CalculatorTest extends \PHPUnit\Framework\TestCase
             ->with($this->equalTo($amount), $this->equalTo($expectedAdjustments))
             ->will($this->returnValue($amountBaseMock));
         $result = $this->model->getAmount($amount, $productMock, true);
-        $this->assertInstanceOf(\Magento\Framework\Pricing\Amount\AmountInterface::class, $result);
+        $this->assertInstanceOf(AmountInterface::class, $result);
     }
 }

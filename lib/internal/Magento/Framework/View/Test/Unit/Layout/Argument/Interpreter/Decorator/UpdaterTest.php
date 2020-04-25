@@ -5,17 +5,22 @@
  */
 namespace Magento\Framework\View\Test\Unit\Layout\Argument\Interpreter\Decorator;
 
+use PHPUnit\Framework\TestCase;
+use Magento\Framework\ObjectManagerInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use Magento\Framework\Data\Argument\InterpreterInterface;
+use Magento\Framework\View\Layout\Argument\UpdaterInterface;
 use \Magento\Framework\View\Layout\Argument\Interpreter\Decorator\Updater;
 
-class UpdaterTest extends \PHPUnit\Framework\TestCase
+class UpdaterTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ObjectManagerInterface|MockObject
      */
     protected $_objectManager;
 
     /**
-     * @var \Magento\Framework\Data\Argument\InterpreterInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var InterpreterInterface|MockObject
      */
     protected $_interpreter;
 
@@ -24,11 +29,11 @@ class UpdaterTest extends \PHPUnit\Framework\TestCase
      */
     protected $_model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->_objectManager = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
+        $this->_objectManager = $this->createMock(ObjectManagerInterface::class);
         $this->_interpreter = $this->getMockForAbstractClass(
-            \Magento\Framework\Data\Argument\InterpreterInterface::class
+            InterpreterInterface::class
         );
         $this->_model = new Updater($this->_objectManager, $this->_interpreter);
     }
@@ -37,7 +42,7 @@ class UpdaterTest extends \PHPUnit\Framework\TestCase
     {
         $input = [
             'value' => 'some text',
-            'updater' => [\Magento\Framework\View\Layout\Argument\UpdaterInterface::class],
+            'updater' => [UpdaterInterface::class],
         ];
         $evaluatedValue = 'some text (new)';
         $updatedValue = 'some text (updated)';
@@ -52,7 +57,7 @@ class UpdaterTest extends \PHPUnit\Framework\TestCase
             $this->returnValue($evaluatedValue)
         );
 
-        $updater = $this->getMockForAbstractClass(\Magento\Framework\View\Layout\Argument\UpdaterInterface::class);
+        $updater = $this->getMockForAbstractClass(UpdaterInterface::class);
         $updater->expects(
             $this->once()
         )->method(
@@ -68,7 +73,7 @@ class UpdaterTest extends \PHPUnit\Framework\TestCase
         )->method(
             'get'
         )->with(
-            \Magento\Framework\View\Layout\Argument\UpdaterInterface::class
+            UpdaterInterface::class
         )->will(
             $this->returnValue($updater)
         );
@@ -97,27 +102,23 @@ class UpdaterTest extends \PHPUnit\Framework\TestCase
         $this->assertSame($expected, $actual);
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Layout argument updaters are expected to be an array of classes
-     */
     public function testEvaluateWrongUpdaterValue()
     {
+        $this->expectException('InvalidArgumentException');
+        $this->expectExceptionMessage('Layout argument updaters are expected to be an array of classes');
         $input = ['value' => 'some text', 'updater' => 'non-array'];
         $this->_model->evaluate($input);
     }
 
-    /**
-     * @expectedException \UnexpectedValueException
-     * @expectedExceptionMessage Instance of layout argument updater is expected
-     */
     public function testEvaluateWrongUpdaterClass()
     {
+        $this->expectException('UnexpectedValueException');
+        $this->expectExceptionMessage('Instance of layout argument updater is expected');
         $input = [
             'value' => 'some text',
             'updater' => [
-                \Magento\Framework\View\Layout\Argument\UpdaterInterface::class,
-                \Magento\Framework\ObjectManagerInterface::class,
+                UpdaterInterface::class,
+                ObjectManagerInterface::class,
             ],
         ];
         $self = $this;

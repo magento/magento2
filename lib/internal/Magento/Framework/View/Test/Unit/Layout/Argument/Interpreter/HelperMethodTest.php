@@ -5,17 +5,21 @@
  */
 namespace Magento\Framework\View\Test\Unit\Layout\Argument\Interpreter;
 
+use PHPUnit\Framework\TestCase;
+use Magento\Framework\ObjectManagerInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use Magento\Framework\View\Layout\Argument\Interpreter\NamedParams;
 use \Magento\Framework\View\Layout\Argument\Interpreter\HelperMethod;
 
-class HelperMethodTest extends \PHPUnit\Framework\TestCase
+class HelperMethodTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ObjectManagerInterface|MockObject
      */
     protected $_objectManager;
 
     /**
-     * @var \Magento\Framework\View\Layout\Argument\Interpreter\NamedParams|\PHPUnit_Framework_MockObject_MockObject
+     * @var NamedParams|MockObject
      */
     protected $_interpreter;
 
@@ -24,10 +28,10 @@ class HelperMethodTest extends \PHPUnit\Framework\TestCase
      */
     protected $_model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->_objectManager = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
-        $this->_interpreter = $this->createMock(\Magento\Framework\View\Layout\Argument\Interpreter\NamedParams::class);
+        $this->_objectManager = $this->createMock(ObjectManagerInterface::class);
+        $this->_interpreter = $this->createMock(NamedParams::class);
         $this->_model = new HelperMethod($this->_objectManager, $this->_interpreter);
     }
 

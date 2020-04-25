@@ -1,37 +1,43 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Filter\Test\Unit;
 
-class FilterManagerTest extends \PHPUnit\Framework\TestCase
+use Magento\Framework\Filter\Factory;
+use Magento\Framework\Filter\FilterManager;
+use Magento\Framework\Filter\FilterManager\Config;
+use Magento\Framework\ObjectManagerInterface;
+use PHPUnit\Framework\TestCase;
+
+class FilterManagerTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\Filter\FilterManager
+     * @var FilterManager
      */
     protected $_filterManager;
 
     /**
-     * @var \Magento\Framework\Filter\Factory
+     * @var Factory
      */
     protected $_factoryMock;
 
     /**
-     * @var \Magento\Framework\ObjectManagerInterface
+     * @var ObjectManagerInterface
      */
     protected $_objectManager;
 
     /**
-     * @var \Magento\Framework\Filter\FilterManager\Config
+     * @var Config
      */
     protected $_config;
 
     protected function initMocks()
     {
-        $factoryName = \Magento\Framework\Filter\Factory::class;
+        $factoryName = Factory::class;
         $this->_factoryMock = $this->createPartialMock($factoryName, ['canCreateFilter', 'createFilter']);
-        $this->_objectManager = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
+        $this->_objectManager = $this->createMock(ObjectManagerInterface::class);
         $this->_objectManager->expects(
             $this->atLeastOnce()
         )->method(
@@ -42,7 +48,7 @@ class FilterManagerTest extends \PHPUnit\Framework\TestCase
             $this->returnValue($this->_factoryMock)
         );
         $this->_config =
-            $this->createPartialMock(\Magento\Framework\Filter\FilterManager\Config::class, ['getFactories']);
+            $this->createPartialMock(Config::class, ['getFactories']);
         $this->_config->expects(
             $this->atLeastOnce()
         )->method(
@@ -50,27 +56,27 @@ class FilterManagerTest extends \PHPUnit\Framework\TestCase
         )->will(
             $this->returnValue([$factoryName])
         );
-        $this->_filterManager = new \Magento\Framework\Filter\FilterManager($this->_objectManager, $this->_config);
+        $this->_filterManager = new FilterManager($this->_objectManager, $this->_config);
     }
 
     public function testGetFilterFactories()
     {
         $this->initMocks();
         $method =
-            new \ReflectionMethod(\Magento\Framework\Filter\FilterManager::class, 'getFilterFactories');
+            new \ReflectionMethod(FilterManager::class, 'getFilterFactories');
         $method->setAccessible(true);
         $this->assertEquals([$this->_factoryMock], $method->invoke($this->_filterManager));
     }
 
-    /**
-     * @expectedException \UnexpectedValueException
-     * @expectedExceptionMessage Filter factory must implement FilterFactoryInterface interface, stdClass was given.
-     */
     public function testGetFilterFactoriesWrongInstance()
     {
-        $factoryName = \Magento\Framework\Filter\Factory::class;
+        $this->expectException('UnexpectedValueException');
+        $this->expectExceptionMessage(
+            'Filter factory must implement FilterFactoryInterface interface, stdClass was given.'
+        );
+        $factoryName = Factory::class;
         $this->_factoryMock = new \stdClass();
-        $this->_objectManager = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
+        $this->_objectManager = $this->createMock(ObjectManagerInterface::class);
         $this->_objectManager->expects(
             $this->atLeastOnce()
         )->method(
@@ -81,7 +87,7 @@ class FilterManagerTest extends \PHPUnit\Framework\TestCase
             $this->returnValue($this->_factoryMock)
         );
         $this->_config =
-            $this->createPartialMock(\Magento\Framework\Filter\FilterManager\Config::class, ['getFactories']);
+            $this->createPartialMock(Config::class, ['getFactories']);
         $this->_config->expects(
             $this->atLeastOnce()
         )->method(
@@ -89,9 +95,9 @@ class FilterManagerTest extends \PHPUnit\Framework\TestCase
         )->will(
             $this->returnValue([$factoryName])
         );
-        $this->_filterManager = new \Magento\Framework\Filter\FilterManager($this->_objectManager, $this->_config);
+        $this->_filterManager = new FilterManager($this->_objectManager, $this->_config);
 
-        $method = new \ReflectionMethod(\Magento\Framework\Filter\FilterManager::class, 'getFilterFactories');
+        $method = new \ReflectionMethod(FilterManager::class, 'getFilterFactories');
         $method->setAccessible(true);
         $method->invoke($this->_filterManager);
     }
@@ -102,17 +108,15 @@ class FilterManagerTest extends \PHPUnit\Framework\TestCase
         $filterMock = $this->getMockBuilder('FactoryInterface')->getMock();
         $this->configureFactoryMock($filterMock, 'alias', ['123']);
 
-        $method = new \ReflectionMethod(\Magento\Framework\Filter\FilterManager::class, 'createFilterInstance');
+        $method = new \ReflectionMethod(FilterManager::class, 'createFilterInstance');
         $method->setAccessible(true);
         $this->assertEquals($filterMock, $method->invoke($this->_filterManager, 'alias', ['123']));
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Filter was not found by given alias wrongAlias
-     */
     public function testCreateFilterInstanceWrongAlias()
     {
+        $this->expectException('InvalidArgumentException');
+        $this->expectExceptionMessage('Filter was not found by given alias wrongAlias');
         $this->initMocks();
         $filterAlias = 'wrongAlias';
         $this->_factoryMock->expects(
@@ -125,7 +129,7 @@ class FilterManagerTest extends \PHPUnit\Framework\TestCase
             $this->returnValue(false)
         );
 
-        $method = new \ReflectionMethod(\Magento\Framework\Filter\FilterManager::class, 'createFilterInstance');
+        $method = new \ReflectionMethod(FilterManager::class, 'createFilterInstance');
         $method->setAccessible(true);
         $method->invoke($this->_filterManager, $filterAlias, []);
     }

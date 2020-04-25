@@ -5,6 +5,20 @@
  */
 namespace Magento\Framework\View\Test\Unit\Element;
 
+use PHPUnit\Framework\TestCase;
+use Magento\Framework\View\Element\Template;
+use Magento\Framework\Filesystem;
+use PHPUnit\Framework\MockObject\MockObject;
+use Magento\Framework\View\TemplateEngineInterface;
+use Magento\Framework\View\Element\Template\File\Resolver;
+use Magento\Framework\View\Element\Template\File\Validator;
+use Magento\Framework\Filesystem\Directory\Read;
+use Psr\Log\LoggerInterface;
+use Magento\Framework\App\State;
+use Magento\Framework\View\TemplateEnginePool;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\Exception\ValidatorException;
+use Magento\Framework\DataObject;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem\DriverPool;
 use Magento\Framework\UrlInterface;
@@ -14,73 +28,73 @@ use Magento\Store\Model\StoreManager;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class TemplateTest extends \PHPUnit\Framework\TestCase
+class TemplateTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\View\Element\Template
+     * @var Template
      */
     protected $block;
 
     /**
-     * @var \Magento\Framework\Filesystem|\PHPUnit_Framework_MockObject_MockObject
+     * @var Filesystem|MockObject
      */
     protected $filesystem;
 
     /**
-     * @var \Magento\Framework\View\TemplateEngineInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var TemplateEngineInterface|MockObject
      */
     protected $templateEngine;
 
     /**
-     * @var \Magento\Framework\View\Element\Template\File\Resolver|\PHPUnit_Framework_MockObject_MockObject
+     * @var Resolver|MockObject
      */
     protected $resolver;
 
     /**
-     * @var \Magento\Framework\View\Element\Template\File\Validator|\PHPUnit_Framework_MockObject_MockObject
+     * @var Validator|MockObject
      */
     protected $validator;
 
     /**
-     * @var \Magento\Framework\Filesystem\Directory\Read|\PHPUnit_Framework_MockObject_MockObject
+     * @var Read|MockObject
      */
     private $rootDirMock;
 
     /**
-     * @var \Psr\Log\LoggerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var LoggerInterface|MockObject
      */
     protected $loggerMock;
 
     /**
-     * @var \Magento\Framework\App\State|\PHPUnit_Framework_MockObject_MockObject
+     * @var State|MockObject
      */
     protected $appState;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->resolver = $this->createMock(\Magento\Framework\View\Element\Template\File\Resolver::class);
+        $this->resolver = $this->createMock(Resolver::class);
 
-        $this->validator = $this->createMock(\Magento\Framework\View\Element\Template\File\Validator::class);
+        $this->validator = $this->createMock(Validator::class);
 
-        $this->rootDirMock = $this->createMock(\Magento\Framework\Filesystem\Directory\Read::class);
+        $this->rootDirMock = $this->createMock(Read::class);
         $this->rootDirMock->expects($this->any())
             ->method('getRelativePath')
             ->willReturnArgument(0);
 
-        $this->filesystem = $this->createMock(\Magento\Framework\Filesystem::class);
+        $this->filesystem = $this->createMock(Filesystem::class);
         $this->filesystem->expects($this->any())
             ->method('getDirectoryRead')
             ->with(DirectoryList::ROOT, DriverPool::FILE)
             ->willReturn($this->rootDirMock);
 
         $this->templateEngine = $this->createPartialMock(
-            \Magento\Framework\View\TemplateEnginePool::class,
+            TemplateEnginePool::class,
             ['render', 'get']
         );
-        $this->loggerMock = $this->createMock(\Psr\Log\LoggerInterface::class);
+        $this->loggerMock = $this->createMock(LoggerInterface::class);
         $this->templateEngine->expects($this->any())->method('get')->willReturn($this->templateEngine);
 
-        $this->appState = $this->createPartialMock(\Magento\Framework\App\State::class, ['getAreaCode', 'getMode']);
+        $this->appState = $this->createPartialMock(State::class, ['getAreaCode', 'getMode']);
         $this->appState->expects($this->any())->method('getAreaCode')->willReturn('frontend');
         $storeManagerMock = $this->createMock(StoreManager::class);
         $storeMock = $this->createMock(Store::class);
@@ -94,9 +108,9 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
         $urlBuilderMock->expects($this->any())
             ->method('getBaseUrl')
             ->willReturn('baseUrl');
-        $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $helper = new ObjectManager($this);
         $this->block = $helper->getObject(
-            \Magento\Framework\View\Element\Template::class,
+            Template::class,
             [
                 'filesystem' => $this->filesystem,
                 'enginePool' => $this->templateEngine,
@@ -173,9 +187,9 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
             ->method('critical');
         $this->appState->expects($this->once())
             ->method('getMode')
-            ->willReturn(\Magento\Framework\App\State::MODE_DEVELOPER);
+            ->willReturn(State::MODE_DEVELOPER);
 
-        $this->expectException(\Magento\Framework\Exception\ValidatorException::class);
+        $this->expectException(ValidatorException::class);
         $this->expectExceptionMessage($exception);
         $this->block->fetchView($template);
     }
@@ -183,7 +197,7 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
     public function testSetTemplateContext()
     {
         $template = 'themedir/template.phtml';
-        $context = new \Magento\Framework\DataObject();
+        $context = new DataObject();
         $this->validator->expects($this->once())
             ->method('isValid')
             ->with($template)

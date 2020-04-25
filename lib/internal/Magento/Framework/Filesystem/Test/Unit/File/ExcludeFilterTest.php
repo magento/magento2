@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -7,18 +7,16 @@
 namespace Magento\Framework\Filesystem\Test\Unit\File;
 
 use Magento\Framework\Filesystem\Filter\ExcludeFilter;
+use PHPUnit\Framework\TestCase;
 
-/**
- * Class ExcludeFilterTest
- */
-class ExcludeFilterTest extends \PHPUnit\Framework\TestCase
+class ExcludeFilterTest extends TestCase
 {
     /**
      * @var \Iterator
      */
     protected $iterator;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->iterator = $this->getFilesIterator();
     }

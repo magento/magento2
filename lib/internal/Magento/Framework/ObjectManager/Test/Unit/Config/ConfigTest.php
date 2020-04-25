@@ -3,19 +3,25 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\ObjectManager\Test\Unit\Config;
 
+use Magento\Framework\ObjectManager\Config\Config;
+use Magento\Framework\ObjectManager\ConfigCacheInterface;
+use Magento\Framework\ObjectManager\DefinitionInterface;
 use Magento\Framework\Serialize\SerializerInterface;
-use \Magento\Framework\ObjectManager\Config\Config;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\TestCase;
 
-class ConfigTest extends \PHPUnit\Framework\TestCase
+class ConfigTest extends TestCase
 {
-    /** @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager */
+    /** @var ObjectManager */
     private $objectManagerHelper;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $this->objectManagerHelper = new ObjectManager($this);
     }
 
     public function testGetArgumentsEmpty()
@@ -44,10 +50,10 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
 
     public function testExtendWithCacheMock()
     {
-        $definitions = $this->createMock(\Magento\Framework\ObjectManager\DefinitionInterface::class);
+        $definitions = $this->createMock(DefinitionInterface::class);
         $definitions->expects($this->once())->method('getClasses')->will($this->returnValue(['FooType']));
 
-        $cache = $this->createMock(\Magento\Framework\ObjectManager\ConfigCacheInterface::class);
+        $cache = $this->createMock(ConfigCacheInterface::class);
         $cache->expects($this->once())->method('get')->will($this->returnValue(false));
 
         $config = new Config(null, $definitions);

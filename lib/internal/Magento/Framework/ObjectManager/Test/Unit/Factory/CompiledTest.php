@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Framework\ObjectManager\Test\Unit\Factory;
 
@@ -14,19 +15,21 @@ use Magento\Framework\ObjectManager\Test\Unit\Factory\Fixture\Compiled\Dependenc
 use Magento\Framework\ObjectManager\Test\Unit\Factory\Fixture\Compiled\SimpleClassTesting;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class CompiledTest extends \PHPUnit\Framework\TestCase
+class CompiledTest extends TestCase
 {
-    /** @var ObjectManagerInterface | \PHPUnit_Framework_MockObject_MockObject */
+    /** @var ObjectManagerInterface|MockObject */
     protected $objectManagerMock;
 
-    /** @var ConfigInterface | \PHPUnit_Framework_MockObject_MockObject */
+    /** @var ConfigInterface|MockObject */
     protected $config;
 
-    /** @var DefinitionInterface | \PHPUnit_Framework_MockObject_MockObject */
+    /** @var DefinitionInterface|MockObject */
     private $definitionsMock;
 
     /** @var Compiled */
@@ -41,7 +44,7 @@ class CompiledTest extends \PHPUnit\Framework\TestCase
     /**
      * Setup tests
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
         $this->objectManagerMock = $this->getMockBuilder(ObjectManagerInterface::class)

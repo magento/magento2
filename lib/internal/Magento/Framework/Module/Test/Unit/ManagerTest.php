@@ -1,14 +1,17 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Module\Test\Unit;
 
-/**
- * Manager test
- */
-class ManagerTest extends \PHPUnit\Framework\TestCase
+use Magento\Framework\Module\Manager;
+use Magento\Framework\Module\ModuleListInterface;
+use Magento\Framework\Module\Output\ConfigInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class ManagerTest extends TestCase
 {
     /**
      * XPath in the configuration of a module output flag
@@ -16,26 +19,26 @@ class ManagerTest extends \PHPUnit\Framework\TestCase
     const XML_PATH_OUTPUT_ENABLED = 'custom/is_module_output_enabled';
 
     /**
-     * @var \Magento\Framework\Module\Manager
+     * @var Manager
      */
     private $_model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     private $_moduleList;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     private $_outputConfig;
 
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->_moduleList = $this->getMockForAbstractClass(\Magento\Framework\Module\ModuleListInterface::class);
+        $this->_moduleList = $this->getMockForAbstractClass(ModuleListInterface::class);
         $this->_moduleList->expects($this->any())
             ->method('getOne')
             ->will(
@@ -47,8 +50,8 @@ class ManagerTest extends \PHPUnit\Framework\TestCase
                     ]
                 )
             );
-        $this->_outputConfig = $this->getMockForAbstractClass(\Magento\Framework\Module\Output\ConfigInterface::class);
-        $this->_model = new \Magento\Framework\Module\Manager(
+        $this->_outputConfig = $this->getMockForAbstractClass(ConfigInterface::class);
+        $this->_model = new Manager(
             $this->_outputConfig,
             $this->_moduleList,
             [

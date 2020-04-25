@@ -3,21 +3,24 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\DB\Test\Unit\Select;
 
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\DB\Select;
-use Magento\Framework\DB\Select\QueryModifierInterface;
 use Magento\Framework\DB\Select\CompositeQueryModifier;
+use Magento\Framework\DB\Select\QueryModifierInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\TestCase;
 
-class CompositeQueryModifierTest extends \PHPUnit\Framework\TestCase
+class CompositeQueryModifierTest extends TestCase
 {
     /**
      * @var ObjectManager
      */
     private $objectManager;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
     }

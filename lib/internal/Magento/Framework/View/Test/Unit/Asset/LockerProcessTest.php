@@ -5,6 +5,8 @@
  */
 namespace Magento\Framework\View\Test\Unit\Asset;
 
+use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\MockObject\MockObject;
 use Magento\Framework\Filesystem;
 use Magento\Framework\View\Asset\LockerProcess;
 use Magento\Framework\App\Filesystem\DirectoryList;
@@ -13,11 +15,10 @@ use Magento\Framework\App\State;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 /**
- * Class LockerProcessTest
  *
  * @see \Magento\Framework\View\Asset\LockerProcess
  */
-class LockerProcessTest extends \PHPUnit\Framework\TestCase
+class LockerProcessTest extends TestCase
 {
     const LOCK_NAME = 'test-lock';
 
@@ -32,23 +33,23 @@ class LockerProcessTest extends \PHPUnit\Framework\TestCase
     private $lockerProcess;
 
     /**
-     * @var Filesystem|\PHPUnit_Framework_MockObject_MockObject
+     * @var Filesystem|MockObject
      */
     private $filesystemMock;
 
     /**
-     * @var State|\PHPUnit_Framework_MockObject_MockObject
+     * @var State|MockObject
      */
     private $stateMock;
 
     /**
      * Set up
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->fileName = DirectoryList::TMP . DIRECTORY_SEPARATOR . self::LOCK_NAME . LockerProcess::LOCK_EXTENSION;
 
-        $this->filesystemMock = $this->getMockBuilder(\Magento\Framework\Filesystem::class)
+        $this->filesystemMock = $this->getMockBuilder(Filesystem::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->stateMock = $this->getMockBuilder(State::class)
@@ -82,7 +83,7 @@ class LockerProcessTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return WriteInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @return WriteInterface|MockObject
      */
     protected function getTmpDirectoryMockTrue()
     {
@@ -107,7 +108,7 @@ class LockerProcessTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param int $exactly
-     * @return WriteInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @return WriteInterface|MockObject
      */
     protected function getTmpDirectoryMockFalse($exactly = 0)
     {
@@ -133,11 +134,11 @@ class LockerProcessTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return WriteInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @return WriteInterface|MockObject
      */
     private function getTmpDirectoryMock()
     {
-        $tmpDirectoryMock = $this->getMockBuilder(\Magento\Framework\Filesystem\Directory\WriteInterface::class)
+        $tmpDirectoryMock = $this->getMockBuilder(WriteInterface::class)
             ->getMockForAbstractClass();
 
         return $tmpDirectoryMock;

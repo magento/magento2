@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Test class for \Magento\Framework\Profiler\Driver\Standard\Stat
  *
@@ -7,16 +7,19 @@
  */
 namespace Magento\Framework\Profiler\Test\Unit\Driver\Standard;
 
-class StatTest extends \PHPUnit\Framework\TestCase
+use Magento\Framework\Profiler\Driver\Standard\Stat;
+use PHPUnit\Framework\TestCase;
+
+class StatTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\Profiler\Driver\Standard\Stat
+     * @var Stat
      */
     protected $_stat;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->_stat = new \Magento\Framework\Profiler\Driver\Standard\Stat();
+        $this->_stat = new Stat();
     }
 
     /**
@@ -58,13 +61,13 @@ class StatTest extends \PHPUnit\Framework\TestCase
                 ],
                 'expected' => [
                     'timer1' => [
-                        \Magento\Framework\Profiler\Driver\Standard\Stat::START => 25,
-                        \Magento\Framework\Profiler\Driver\Standard\Stat::TIME => 0,
-                        \Magento\Framework\Profiler\Driver\Standard\Stat::REALMEM => 0,
-                        \Magento\Framework\Profiler\Driver\Standard\Stat::EMALLOC => 0,
-                        \Magento\Framework\Profiler\Driver\Standard\Stat::REALMEM_START => 1500,
-                        \Magento\Framework\Profiler\Driver\Standard\Stat::EMALLOC_START => 10,
-                        \Magento\Framework\Profiler\Driver\Standard\Stat::COUNT => 1,
+                        Stat::START => 25,
+                        Stat::TIME => 0,
+                        Stat::REALMEM => 0,
+                        Stat::EMALLOC => 0,
+                        Stat::REALMEM_START => 1500,
+                        Stat::EMALLOC_START => 10,
+                        Stat::COUNT => 1,
                     ],
                 ],
             ],
@@ -75,13 +78,13 @@ class StatTest extends \PHPUnit\Framework\TestCase
                 ],
                 'expected' => [
                     'timer1' => [
-                        \Magento\Framework\Profiler\Driver\Standard\Stat::START => 75,
-                        \Magento\Framework\Profiler\Driver\Standard\Stat::TIME => 0,
-                        \Magento\Framework\Profiler\Driver\Standard\Stat::REALMEM => 0,
-                        \Magento\Framework\Profiler\Driver\Standard\Stat::EMALLOC => 0,
-                        \Magento\Framework\Profiler\Driver\Standard\Stat::REALMEM_START => 2000,
-                        \Magento\Framework\Profiler\Driver\Standard\Stat::EMALLOC_START => 20,
-                        \Magento\Framework\Profiler\Driver\Standard\Stat::COUNT => 2,
+                        Stat::START => 75,
+                        Stat::TIME => 0,
+                        Stat::REALMEM => 0,
+                        Stat::EMALLOC => 0,
+                        Stat::REALMEM_START => 2000,
+                        Stat::EMALLOC_START => 20,
+                        Stat::COUNT => 2,
                     ],
                 ],
             ],
@@ -94,13 +97,13 @@ class StatTest extends \PHPUnit\Framework\TestCase
                 ],
                 'expected' => [
                     'timer1' => [
-                        \Magento\Framework\Profiler\Driver\Standard\Stat::START => false,
-                        \Magento\Framework\Profiler\Driver\Standard\Stat::TIME => 100,
-                        \Magento\Framework\Profiler\Driver\Standard\Stat::REALMEM => 1500,
-                        \Magento\Framework\Profiler\Driver\Standard\Stat::EMALLOC => 40,
-                        \Magento\Framework\Profiler\Driver\Standard\Stat::REALMEM_START => 3000,
-                        \Magento\Framework\Profiler\Driver\Standard\Stat::EMALLOC_START => 50,
-                        \Magento\Framework\Profiler\Driver\Standard\Stat::COUNT => 2,
+                        Stat::START => false,
+                        Stat::TIME => 100,
+                        Stat::REALMEM => 1500,
+                        Stat::EMALLOC => 40,
+                        Stat::REALMEM_START => 3000,
+                        Stat::EMALLOC_START => 50,
+                        Stat::COUNT => 2,
                     ],
                 ],
             ],
@@ -113,22 +116,22 @@ class StatTest extends \PHPUnit\Framework\TestCase
                 ],
                 'expected' => [
                     'timer1' => [
-                        \Magento\Framework\Profiler\Driver\Standard\Stat::START => false,
-                        \Magento\Framework\Profiler\Driver\Standard\Stat::TIME => 75,
-                        \Magento\Framework\Profiler\Driver\Standard\Stat::REALMEM => 2700,
-                        \Magento\Framework\Profiler\Driver\Standard\Stat::EMALLOC => 45,
-                        \Magento\Framework\Profiler\Driver\Standard\Stat::REALMEM_START => 1500,
-                        \Magento\Framework\Profiler\Driver\Standard\Stat::EMALLOC_START => 10,
-                        \Magento\Framework\Profiler\Driver\Standard\Stat::COUNT => 1,
+                        Stat::START => false,
+                        Stat::TIME => 75,
+                        Stat::REALMEM => 2700,
+                        Stat::EMALLOC => 45,
+                        Stat::REALMEM_START => 1500,
+                        Stat::EMALLOC_START => 10,
+                        Stat::COUNT => 1,
                     ],
                     'timer2' => [
-                        \Magento\Framework\Profiler\Driver\Standard\Stat::START => false,
-                        \Magento\Framework\Profiler\Driver\Standard\Stat::TIME => 30,
-                        \Magento\Framework\Profiler\Driver\Standard\Stat::REALMEM => 500,
-                        \Magento\Framework\Profiler\Driver\Standard\Stat::EMALLOC => 5,
-                        \Magento\Framework\Profiler\Driver\Standard\Stat::REALMEM_START => 2000,
-                        \Magento\Framework\Profiler\Driver\Standard\Stat::EMALLOC_START => 20,
-                        \Magento\Framework\Profiler\Driver\Standard\Stat::COUNT => 1,
+                        Stat::START => false,
+                        Stat::TIME => 30,
+                        Stat::REALMEM => 500,
+                        Stat::EMALLOC => 5,
+                        Stat::REALMEM_START => 2000,
+                        Stat::EMALLOC_START => 20,
+                        Stat::COUNT => 1,
                     ],
                 ],
             ]
@@ -137,23 +140,21 @@ class StatTest extends \PHPUnit\Framework\TestCase
 
     /**
      * Test get method with invalid timer id
-     *
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Timer "unknown_timer" doesn't exist.
      */
     public function testGetWithInvalidTimer()
     {
+        $this->expectException('InvalidArgumentException');
+        $this->expectExceptionMessage('Timer "unknown_timer" doesn\'t exist.');
         $this->_stat->get('unknown_timer');
     }
 
     /**
      * Test stop method with invalid timer id
-     *
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Timer "unknown_timer" doesn't exist.
      */
     public function testStopWithInvalidTimer()
     {
+        $this->expectException('InvalidArgumentException');
+        $this->expectExceptionMessage('Timer "unknown_timer" doesn\'t exist.');
         $this->_stat->stop('unknown_timer', 1, 2, 3);
     }
 
@@ -292,8 +293,8 @@ class StatTest extends \PHPUnit\Framework\TestCase
                     ['stop', 'root', 'time' => 1000, 'realMemory' => 500, 'emallocMemory' => 0],
                 ],
                 'thresholds' => [
-                    \Magento\Framework\Profiler\Driver\Standard\Stat::TIME => 1000,
-                    \Magento\Framework\Profiler\Driver\Standard\Stat::REALMEM => 20000,
+                    Stat::TIME => 1000,
+                    Stat::REALMEM => 20000,
                 ],
                 'filterPattern' => null,
                 // TIME >= 1000, REALMEM >= 20000
@@ -340,22 +341,22 @@ class StatTest extends \PHPUnit\Framework\TestCase
                 'expects' => [
                     [
                         'timerId' => 'root',
-                        'key' => \Magento\Framework\Profiler\Driver\Standard\Stat::START,
+                        'key' => Stat::START,
                         'expectedValue' => false,
                     ],
                     [
                         'timerId' => 'root',
-                        'key' => \Magento\Framework\Profiler\Driver\Standard\Stat::TIME,
+                        'key' => Stat::TIME,
                         'expectedValue' => 1000
                     ],
                     [
                         'timerId' => 'root',
-                        'key' => \Magento\Framework\Profiler\Driver\Standard\Stat::REALMEM,
+                        'key' => Stat::REALMEM,
                         'expectedValue' => 500
                     ],
                     [
                         'timerId' => 'root',
-                        'key' => \Magento\Framework\Profiler\Driver\Standard\Stat::EMALLOC,
+                        'key' => Stat::EMALLOC,
                         'expectedValue' => 10
                     ],
                 ],
@@ -370,7 +371,7 @@ class StatTest extends \PHPUnit\Framework\TestCase
                 'expects' => [
                     [
                         'timerId' => 'root',
-                        'key' => \Magento\Framework\Profiler\Driver\Standard\Stat::AVG,
+                        'key' => Stat::AVG,
                         'expectedValue' => 10,
                     ],
                 ]
@@ -380,12 +381,12 @@ class StatTest extends \PHPUnit\Framework\TestCase
                 'expects' => [
                     [
                         'timerId' => 'root',
-                        'key' => \Magento\Framework\Profiler\Driver\Standard\Stat::TIME,
+                        'key' => Stat::TIME,
                         'expectedValue' => $this->greaterThan(microtime(true)),
                     ],
                     [
                         'timerId' => 'root',
-                        'key' => \Magento\Framework\Profiler\Driver\Standard\Stat::ID,
+                        'key' => Stat::ID,
                         'expectedValue' => 'root'
                     ],
                 ]
@@ -393,21 +394,17 @@ class StatTest extends \PHPUnit\Framework\TestCase
         ];
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Timer "foo" doesn't exist.
-     */
     public function testFetchInvalidTimer()
     {
+        $this->expectException('InvalidArgumentException');
+        $this->expectExceptionMessage('Timer "foo" doesn\'t exist.');
         $this->_stat->fetch('foo', 'bar');
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Timer "foo" doesn't have value for "bar".
-     */
     public function testFetchInvalidKey()
     {
+        $this->expectException('InvalidArgumentException');
+        $this->expectExceptionMessage('Timer "foo" doesn\'t have value for "bar".');
         $this->_stat->start('foo', 0, 0, 0);
         $this->_stat->fetch('foo', 'bar');
     }

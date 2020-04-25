@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -6,13 +6,15 @@
 
 namespace Magento\Framework\Filter\Test\Unit;
 
-use \Magento\Framework\Filter\Input;
+use Magento\Framework\Filter\Input;
+use Magento\Framework\ObjectManagerInterface;
+use PHPUnit\Framework\TestCase;
 
-class InputTest extends \PHPUnit\Framework\TestCase
+class InputTest extends TestCase
 {
     public function testFilterZendFilterAsObject()
     {
-        $objectManagerMock = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
+        $objectManagerMock = $this->createMock(ObjectManagerInterface::class);
         $inputFilter = new Input($objectManagerMock);
 
         /** @var \Zend_Filter_Interface $filterMock */
@@ -35,7 +37,7 @@ class InputTest extends \PHPUnit\Framework\TestCase
 
     public function testFilterZendFilterAsArray()
     {
-        $objectManagerMock = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
+        $objectManagerMock = $this->createMock(ObjectManagerInterface::class);
         $inputFilter = new Input($objectManagerMock);
 
         /** This filter should be applied to 'field1' field value only */

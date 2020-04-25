@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -9,16 +9,18 @@ use Magento\Framework\Search\Adapter\Aggregation\AggregationResolver;
 use Magento\Framework\Search\Adapter\Aggregation\AggregationResolverInterface;
 use Magento\Framework\Search\RequestInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class AggregationResolverTest extends \PHPUnit\Framework\TestCase
+class AggregationResolverTest extends TestCase
 {
     /**
-     * @var RequestInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var RequestInterface|MockObject
      */
     private $request;
 
     /**
-     * @var AggregationResolverInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var AggregationResolverInterface|MockObject
      */
     private $specificAggregationResolver;
 
@@ -27,7 +29,7 @@ class AggregationResolverTest extends \PHPUnit\Framework\TestCase
      */
     private $aggregationResolver;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->request = $this->createMock(RequestInterface::class);
         $this->specificAggregationResolver = $this->createMock(AggregationResolverInterface::class);

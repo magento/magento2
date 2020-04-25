@@ -3,13 +3,16 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\Api\Test\Unit\Search;
 
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\Framework\Api\Search\SearchResult;
 use Magento\Framework\Api\Search\DocumentInterface;
+use Magento\Framework\Api\Search\SearchResult;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\TestCase;
 
-class SearchResultTest extends \PHPUnit\Framework\TestCase
+class SearchResultTest extends TestCase
 {
     /**
      * @var SearchResult
@@ -29,7 +32,7 @@ class SearchResultTest extends \PHPUnit\Framework\TestCase
     /**
      * Set up
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $document1 = $this->createMock(DocumentInterface::class);
         $document2 = $this->createMock(DocumentInterface::class);

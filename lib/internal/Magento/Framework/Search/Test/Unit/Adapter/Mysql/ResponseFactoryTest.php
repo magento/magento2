@@ -1,42 +1,48 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Search\Test\Unit\Adapter\Mysql;
 
+use Magento\Framework\ObjectManagerInterface;
+use Magento\Framework\Search\Adapter\Mysql\DocumentFactory;
+use Magento\Framework\Search\Adapter\Mysql\ResponseFactory;
+use Magento\Framework\Search\Response\QueryResponse;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class ResponseFactoryTest extends \PHPUnit\Framework\TestCase
+class ResponseFactoryTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\Search\Adapter\Mysql\ResponseFactory
+     * @var ResponseFactory
      */
     private $factory;
 
     /**
-     * @var \Magento\Framework\Search\Adapter\Mysql\DocumentFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var DocumentFactory|MockObject
      */
     private $documentFactory;
 
     /**
-     * @var \Magento\Framework\ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ObjectManagerInterface|MockObject
      */
     private $objectManager;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $helper = new ObjectManager($this);
 
-        $this->documentFactory = $this->getMockBuilder(\Magento\Framework\Search\Adapter\Mysql\DocumentFactory::class)
+        $this->documentFactory = $this->getMockBuilder(DocumentFactory::class)
             ->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->objectManager = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
+        $this->objectManager = $this->createMock(ObjectManagerInterface::class);
 
         $this->factory = $helper->getObject(
-            \Magento\Framework\Search\Adapter\Mysql\ResponseFactory::class,
+            ResponseFactory::class,
             ['documentFactory' => $this->documentFactory, 'objectManager' => $this->objectManager]
         );
     }
@@ -61,7 +67,7 @@ class ResponseFactoryTest extends \PHPUnit\Framework\TestCase
 
         $this->objectManager->expects($this->once())->method('create')
             ->with(
-                $this->equalTo(\Magento\Framework\Search\Response\QueryResponse::class),
+                $this->equalTo(QueryResponse::class),
                 $this->equalTo(['documents' => ['document1', 'document2'], 'aggregations' => null, 'total' => 2])
             )
             ->will($this->returnValue('QueryResponseObject'));

@@ -3,19 +3,31 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\Css\Test\Unit\PreProcessor\File\Collector;
 
-use Magento\Framework\Component\ComponentRegistrar;
-use \Magento\Framework\Css\PreProcessor\File\Collector\Library;
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Component\ComponentRegistrar;
+use Magento\Framework\Component\ComponentRegistrarInterface;
+use Magento\Framework\Css\PreProcessor\File\Collector\Library;
+use Magento\Framework\Css\PreProcessor\File\FileList\Collator;
 use Magento\Framework\Filesystem;
+use Magento\Framework\Filesystem\Directory\ReadFactory;
+use Magento\Framework\Filesystem\Directory\ReadInterface;
+use Magento\Framework\Filesystem\DriverPool;
+use Magento\Framework\View\Design\ThemeInterface;
+use Magento\Framework\View\File\FileList;
+use Magento\Framework\View\File\FileList\Factory;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Tests Library
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class LibraryTest extends \PHPUnit\Framework\TestCase
+class LibraryTest extends TestCase
 {
     /**
      * @var Library
@@ -23,44 +35,44 @@ class LibraryTest extends \PHPUnit\Framework\TestCase
     private $library;
 
     /**
-     * @var \Magento\Framework\View\File\FileList\Factory|\PHPUnit_Framework_MockObject_MockObject
+     * @var Factory|MockObject
      */
     protected $fileListFactoryMock;
 
     /**
-     * @var \Magento\Framework\Filesystem|\PHPUnit_Framework_MockObject_MockObject
+     * @var Filesystem|MockObject
      */
     protected $fileSystemMock;
 
     /**
-     * @var \Magento\Framework\View\File\Factory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\File\Factory|MockObject
      */
     protected $fileFactoryMock;
 
     /**
-     * @var \Magento\Framework\View\File\FileList|\PHPUnit_Framework_MockObject_MockObject
+     * @var FileList|MockObject
      */
     protected $fileListMock;
 
     /**
-     * @var \Magento\Framework\Filesystem\Directory\ReadInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ReadInterface|MockObject
      */
     protected $libraryDirectoryMock;
 
     /**
-     * @var \Magento\Framework\Filesystem\Directory\ReadFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var ReadFactory|MockObject
      */
     private $readFactoryMock;
 
     /**
      * Component registry
      *
-     * @var \Magento\Framework\Component\ComponentRegistrarInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ComponentRegistrarInterface|MockObject
      */
     private $componentRegistrarMock;
 
     /**
-     * @var \Magento\Framework\View\Design\ThemeInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ThemeInterface|MockObject
      */
     protected $themeMock;
 
@@ -68,32 +80,32 @@ class LibraryTest extends \PHPUnit\Framework\TestCase
      * Setup tests
      * @return void
      */
-    public function setup()
+    public function setup(): void
     {
-        $this->fileListFactoryMock = $this->getMockBuilder(\Magento\Framework\View\File\FileList\Factory::class)
+        $this->fileListFactoryMock = $this->getMockBuilder(Factory::class)
             ->disableOriginalConstructor()->getMock();
-        $this->fileListMock = $this->getMockBuilder(\Magento\Framework\View\File\FileList::class)
+        $this->fileListMock = $this->getMockBuilder(FileList::class)
             ->disableOriginalConstructor()->getMock();
         $this->fileListFactoryMock->expects($this->any())
             ->method('create')
-            ->with(\Magento\Framework\Css\PreProcessor\File\FileList\Collator::class)
+            ->with(Collator::class)
             ->will($this->returnValue($this->fileListMock));
-        $this->readFactoryMock = $this->getMockBuilder(\Magento\Framework\Filesystem\Directory\ReadFactory::class)
+        $this->readFactoryMock = $this->getMockBuilder(ReadFactory::class)
             ->disableOriginalConstructor()->getMock();
         $this->componentRegistrarMock = $this->getMockBuilder(
-            \Magento\Framework\Component\ComponentRegistrarInterface::class
+            ComponentRegistrarInterface::class
         )->disableOriginalConstructor()->getMock();
-        $this->fileSystemMock = $this->getMockBuilder(\Magento\Framework\Filesystem::class)
+        $this->fileSystemMock = $this->getMockBuilder(Filesystem::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->libraryDirectoryMock = $this->getMockBuilder(
-            \Magento\Framework\Filesystem\Directory\ReadInterface::class
+            ReadInterface::class
         )->getMock();
         $this->fileSystemMock->expects($this->any())->method('getDirectoryRead')
             ->will(
                 $this->returnValueMap(
                     [
-                        [DirectoryList::LIB_WEB, Filesystem\DriverPool::FILE, $this->libraryDirectoryMock],
+                        [DirectoryList::LIB_WEB, DriverPool::FILE, $this->libraryDirectoryMock],
                     ]
                 )
             );
@@ -101,7 +113,7 @@ class LibraryTest extends \PHPUnit\Framework\TestCase
         $this->fileFactoryMock = $this->getMockBuilder(\Magento\Framework\View\File\Factory::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->themeMock = $this->getMockBuilder(\Magento\Framework\View\Design\ThemeInterface::class)->getMock();
+        $this->themeMock = $this->getMockBuilder(ThemeInterface::class)->getMock();
         $this->library = new Library(
             $this->fileListFactoryMock,
             $this->fileSystemMock,
@@ -146,7 +158,7 @@ class LibraryTest extends \PHPUnit\Framework\TestCase
         ));
         $themePath = '/var/Magento/ATheme';
         $subPath = '*';
-        $readerMock = $this->getMockBuilder(\Magento\Framework\Filesystem\Directory\ReadInterface::class)->getMock();
+        $readerMock = $this->getMockBuilder(ReadInterface::class)->getMock();
         $this->readFactoryMock->expects($this->once())
             ->method('create')
             ->will($this->returnValue($readerMock));
@@ -157,7 +169,7 @@ class LibraryTest extends \PHPUnit\Framework\TestCase
         $readerMock->expects($this->once())
             ->method('search')
             ->will($this->returnValue($themeFiles));
-        $inheritedThemeMock = $this->getMockBuilder(\Magento\Framework\View\Design\ThemeInterface::class)->getMock();
+        $inheritedThemeMock = $this->getMockBuilder(ThemeInterface::class)->getMock();
         $inheritedThemeMock->expects($this->any())->method('getFullPath')->will($this->returnValue($themePath));
         $this->themeMock->expects($this->any())->method('getInheritedThemes')
             ->will($this->returnValue([$inheritedThemeMock]));

@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -6,19 +6,23 @@
 
 namespace Magento\Framework\Module\Test\Unit;
 
-use \Magento\Framework\Module\Setup;
+use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Framework\Module\Setup;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class SetupTest extends \PHPUnit\Framework\TestCase
+class SetupTest extends TestCase
 {
     const CONNECTION_NAME = 'connection';
 
     /**
-     * @var \Magento\Framework\App\ResourceConnection|\PHPUnit_Framework_MockObject_MockObject
+     * @var ResourceConnection|MockObject
      */
     private $resourceModel;
 
     /**
-     * @var \Magento\Framework\DB\Adapter\AdapterInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var AdapterInterface|MockObject
      */
     private $connection;
 
@@ -27,17 +31,17 @@ class SetupTest extends \PHPUnit\Framework\TestCase
      */
     private $object;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->resourceModel = $this->createMock(\Magento\Framework\App\ResourceConnection::class);
-        $this->connection = $this->getMockForAbstractClass(\Magento\Framework\DB\Adapter\AdapterInterface::class);
+        $this->resourceModel = $this->createMock(ResourceConnection::class);
+        $this->connection = $this->getMockForAbstractClass(AdapterInterface::class);
         $this->resourceModel->expects($this->any())
             ->method('getConnection')
             ->with(self::CONNECTION_NAME)
             ->willReturn($this->connection);
         $this->resourceModel->expects($this->any())
             ->method('getConnectionByName')
-            ->with(\Magento\Framework\App\ResourceConnection::DEFAULT_CONNECTION)
+            ->with(ResourceConnection::DEFAULT_CONNECTION)
             ->willReturn($this->connection);
         $this->object = new Setup($this->resourceModel, self::CONNECTION_NAME);
     }

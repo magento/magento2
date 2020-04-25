@@ -1,35 +1,40 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Search\Test\Unit\Response;
 
+use Magento\Framework\Api\Search\Document;
+use Magento\Framework\Search\Response\Aggregation;
+use Magento\Framework\Search\Response\QueryResponse;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class QueryResponseTest extends \PHPUnit\Framework\TestCase
+class QueryResponseTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\Api\Search\Document[]
+     * @var Document[]
      */
     private $documents = [];
 
     /**
-     * @var \Magento\Framework\Search\Response\Aggregation
+     * @var Aggregation
      */
     private $aggregations = [];
 
     /**
-     * @var \Magento\Framework\Search\Response\QueryResponse | \PHPUnit_Framework_MockObject_MockObject
+     * @var QueryResponse|MockObject
      */
     private $queryResponse;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $helper = new ObjectManager($this);
 
         for ($count = 0; $count < 5; $count++) {
-            $document = $this->getMockBuilder(\Magento\Framework\Api\Search\Document::class)
+            $document = $this->getMockBuilder(Document::class)
                 ->disableOriginalConstructor()
                 ->getMock();
 
@@ -37,12 +42,12 @@ class QueryResponseTest extends \PHPUnit\Framework\TestCase
             $this->documents[] = $document;
         }
 
-        $this->aggregations = $this->getMockBuilder(\Magento\Framework\Search\Response\Aggregation::class)
+        $this->aggregations = $this->getMockBuilder(Aggregation::class)
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->queryResponse = $helper->getObject(
-            \Magento\Framework\Search\Response\QueryResponse::class,
+            QueryResponse::class,
             [
                 'documents' => $this->documents,
                 'aggregations' => $this->aggregations,
@@ -68,6 +73,6 @@ class QueryResponseTest extends \PHPUnit\Framework\TestCase
     public function testGetAggregations()
     {
         $aggregations = $this->queryResponse->getAggregations();
-        $this->assertInstanceOf(\Magento\Framework\Search\Response\Aggregation::class, $aggregations);
+        $this->assertInstanceOf(Aggregation::class, $aggregations);
     }
 }

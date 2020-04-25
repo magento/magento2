@@ -3,30 +3,36 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\Cache\Test\Unit\Backend;
 
-class MongoDbTest extends \PHPUnit\Framework\TestCase
+use Magento\Framework\Cache\Backend\MongoDb;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class MongoDbTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\Cache\Backend\MongoDb|null
+     * @var MongoDb|null
      */
     protected $_model = null;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $_collection = null;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_collection = $this->getMockBuilder('MongoCollection')
             ->setMethods(['find', 'findOne', 'distinct', 'save', 'update', 'remove', 'drop'])
             ->getMock();
-        $this->_model = $this->createPartialMock(\Magento\Framework\Cache\Backend\MongoDb::class, ['_getCollection']);
+        $this->_model = $this->createPartialMock(MongoDb::class, ['_getCollection']);
         $this->_model->expects($this->any())->method('_getCollection')->will($this->returnValue($this->_collection));
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->_model = null;
         $this->_collection = null;
@@ -411,12 +417,10 @@ class MongoDbTest extends \PHPUnit\Framework\TestCase
         }
     }
 
-    /**
-     * @expectedException \Zend_Cache_Exception
-     * @expectedExceptionMessage Unsupported cleaning mode: invalid_mode
-     */
     public function testCleanInvalidMode()
     {
+        $this->expectException('Zend_Cache_Exception');
+        $this->expectExceptionMessage('Unsupported cleaning mode: invalid_mode');
         $this->_model->clean('invalid_mode');
     }
 }

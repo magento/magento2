@@ -6,21 +6,26 @@
 
 namespace Magento\Framework\View\Test\Unit;
 
+use PHPUnit\Framework\TestCase;
+use Magento\Framework\View\DesignExceptions;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use Magento\Framework\App\Request\Http;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
-class DesignExceptionsTest extends \PHPUnit\Framework\TestCase
+class DesignExceptionsTest extends TestCase
 {
-    /** @var \Magento\Framework\View\DesignExceptions */
+    /** @var DesignExceptions */
     private $designExceptions;
 
     /** @var ObjectManagerHelper */
     private $objectManagerHelper;
 
-    /** @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var ScopeConfigInterface|MockObject */
     private $scopeConfigMock;
 
-    /** @var \Magento\Framework\App\Request\Http|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var Http|MockObject */
     private $requestMock;
 
     /** @var string */
@@ -29,18 +34,18 @@ class DesignExceptionsTest extends \PHPUnit\Framework\TestCase
     /** @var string */
     private $scopeType = 'scope_type';
 
-    /** @var Json|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var Json|MockObject */
     private $serializerMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->scopeConfigMock = $this->createMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
-        $this->requestMock = $this->createMock(\Magento\Framework\App\Request\Http::class);
+        $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
+        $this->requestMock = $this->createMock(Http::class);
         $this->serializerMock = $this->createMock(Json::class);
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->designExceptions = $this->objectManagerHelper->getObject(
-            \Magento\Framework\View\DesignExceptions::class,
+            DesignExceptions::class,
             [
                 'scopeConfig' => $this->scopeConfigMock,
                 'exceptionConfigPath' => $this->exceptionConfigPath,

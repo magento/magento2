@@ -1,16 +1,16 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Filesystem\Test\Unit\File;
 
-use \Magento\Framework\Filesystem\File\Read;
+use Magento\Framework\Filesystem\DriverInterface;
+use Magento\Framework\Filesystem\File\Read;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-/**
- * Class ReadTest
- */
-class ReadTest extends \PHPUnit\Framework\TestCase
+class ReadTest extends TestCase
 {
     /**
      * @var Read
@@ -33,13 +33,13 @@ class ReadTest extends \PHPUnit\Framework\TestCase
     protected $mode = 'r';
 
     /**
-     * @var \Magento\Framework\Filesystem\DriverInterface | \PHPUnit_Framework_MockObject_MockObject
+     * @var DriverInterface|MockObject
      */
     protected $driver;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->driver = $this->getMockForAbstractClass(\Magento\Framework\Filesystem\DriverInterface::class);
+        $this->driver = $this->getMockForAbstractClass(DriverInterface::class);
         $this->driver->expects($this->any())
             ->method('isExists')
             ->with($this->path)
@@ -51,24 +51,22 @@ class ReadTest extends \PHPUnit\Framework\TestCase
         $this->file = new Read($this->path, $this->driver);
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         $this->file = null;
         $this->driver = null;
     }
 
-    /**
-     * @expectedException \Magento\Framework\Exception\FileSystemException
-     */
     public function testInstanceFileNotExists()
     {
-        $driver = $this->getMockForAbstractClass(\Magento\Framework\Filesystem\DriverInterface::class);
+        $this->expectException('Magento\Framework\Exception\FileSystemException');
+        $driver = $this->getMockForAbstractClass(DriverInterface::class);
         $driver->expects($this->once())
             ->method('isExists')
             ->with($this->path)
             ->will($this->returnValue(false));
         $file = new Read($this->path, $driver);
-        $this->assertInstanceOf(\Magento\Framework\Filesystem\File\Read::class, $file);
+        $this->assertInstanceOf(Read::class, $file);
     }
 
     public function testRead()

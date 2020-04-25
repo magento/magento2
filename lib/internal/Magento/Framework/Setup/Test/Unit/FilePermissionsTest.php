@@ -3,31 +3,37 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\Setup\Test\Unit;
 
-use \Magento\Framework\Setup\FilePermissions;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\State;
+use Magento\Framework\Filesystem;
+use Magento\Framework\Filesystem\Directory\Write;
+use Magento\Framework\Setup\FilePermissions;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class FilePermissionsTest extends \PHPUnit\Framework\TestCase
+class FilePermissionsTest extends TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Filesystem\Directory\Write
+     * @var MockObject|Write
      */
     private $directoryWriteMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Filesystem
+     * @var MockObject|Filesystem
      */
     private $filesystemMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\Filesystem\DirectoryList
+     * @var MockObject|DirectoryList
      */
     private $directoryListMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|State
+     * @var MockObject|State
      */
     private $stateMock;
 
@@ -36,17 +42,17 @@ class FilePermissionsTest extends \PHPUnit\Framework\TestCase
      */
     private $filePermissions;
 
-    public function setUp()
+    public function setUp(): void
     {
-        $this->directoryWriteMock = $this->createMock(\Magento\Framework\Filesystem\Directory\Write::class);
-        $this->filesystemMock = $this->createMock(\Magento\Framework\Filesystem::class);
+        $this->directoryWriteMock = $this->createMock(Write::class);
+        $this->filesystemMock = $this->createMock(Filesystem::class);
         $this->stateMock = $this->createMock(State::class);
 
         $this->filesystemMock
             ->expects($this->any())
             ->method('getDirectoryWrite')
             ->will($this->returnValue($this->directoryWriteMock));
-        $this->directoryListMock = $this->createMock(\Magento\Framework\App\Filesystem\DirectoryList::class);
+        $this->directoryListMock = $this->createMock(DirectoryList::class);
 
         $this->filePermissions = new FilePermissions(
             $this->filesystemMock,
@@ -137,7 +143,7 @@ class FilePermissionsTest extends \PHPUnit\Framework\TestCase
                 ->expects($this->at($index))
                 ->method($mockMethod)
                 ->will($this->returnValue($returnValue));
-            $index += 1;
+            $index++;
         }
 
         $this->filePermissions->getApplicationNonWritableDirectories();
@@ -253,7 +259,7 @@ class FilePermissionsTest extends \PHPUnit\Framework\TestCase
                 ->expects($this->at($index))
                 ->method($mockMethod)
                 ->will($this->returnValue($returnValue));
-            $index += 1;
+            $index++;
         }
 
         $this->assertEquals(

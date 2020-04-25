@@ -5,13 +5,13 @@
  */
 namespace Magento\Framework\View\Test\Unit\Element\Template\File;
 
+use PHPUnit\Framework\TestCase;
+use Magento\Framework\View\FileSystem;
+use PHPUnit\Framework\MockObject\MockObject;
+use Magento\Framework\View\Element\Template\File\Resolver;
 use Magento\Framework\Serialize\Serializer\Json;
 
-/**
- * Class ResolverTest
- * @package Magento\Framework\View\Test\Unit\Element\Template\File
- */
-class ResolverTest extends \PHPUnit\Framework\TestCase
+class ResolverTest extends TestCase
 {
     /**
      * Resolver object
@@ -23,12 +23,12 @@ class ResolverTest extends \PHPUnit\Framework\TestCase
     /**
      * Mock for view file system
      *
-     * @var \Magento\Framework\View\FileSystem|\PHPUnit_Framework_MockObject_MockObject
+     * @var FileSystem|MockObject
      */
     protected $_viewFileSystemMock;
 
     /**
-     * @var Json|\PHPUnit_Framework_MockObject_MockObject
+     * @var Json|MockObject
      */
     private $serializerMock;
 
@@ -37,9 +37,9 @@ class ResolverTest extends \PHPUnit\Framework\TestCase
      *
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->_viewFileSystemMock = $this->createMock(\Magento\Framework\View\FileSystem::class);
+        $this->_viewFileSystemMock = $this->createMock(FileSystem::class);
         $this->serializerMock = $this->getMockBuilder(Json::class)
             ->setMethods(['serialize'])
             ->disableOriginalConstructor()
@@ -53,7 +53,7 @@ class ResolverTest extends \PHPUnit\Framework\TestCase
                     }
                 )
             );
-        $this->_resolver = new \Magento\Framework\View\Element\Template\File\Resolver(
+        $this->_resolver = new Resolver(
             $this->_viewFileSystemMock,
             $this->serializerMock
         );

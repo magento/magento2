@@ -1,26 +1,29 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Test\Unit;
 
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\Escaper;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\Translate\Inline;
+use Magento\Framework\ZendEscaper;
+use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface;
 
 /**
  * \Magento\Framework\Escaper test case
  */
-class EscaperTest extends \PHPUnit\Framework\TestCase
+class EscaperTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\Escaper
+     * @var Escaper
      */
     protected $escaper;
 
     /**
-     * @var \Magento\Framework\ZendEscaper
+     * @var ZendEscaper
      */
     private $zendEscaper;
 
@@ -30,20 +33,20 @@ class EscaperTest extends \PHPUnit\Framework\TestCase
     private $translateInline;
 
     /**
-     * @var \Psr\Log\LoggerInterface
+     * @var LoggerInterface
      */
     private $loggerMock;
 
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManagerHelper = new ObjectManager($this);
         $this->escaper = new Escaper();
-        $this->zendEscaper = new \Magento\Framework\ZendEscaper();
+        $this->zendEscaper = new ZendEscaper();
         $this->translateInline = $objectManagerHelper->getObject(Inline::class);
-        $this->loggerMock = $this->getMockForAbstractClass(\Psr\Log\LoggerInterface::class);
+        $this->loggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
         $objectManagerHelper->setBackwardCompatibleProperty($this->escaper, 'escaper', $this->zendEscaper);
         $objectManagerHelper->setBackwardCompatibleProperty($this->escaper, 'logger', $this->loggerMock);
         $objectManagerHelper->setBackwardCompatibleProperty(

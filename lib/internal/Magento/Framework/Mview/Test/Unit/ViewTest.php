@@ -3,22 +3,23 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\Mview\Test\Unit;
 
 use Magento\Framework\Mview\ActionFactory;
 use Magento\Framework\Mview\ActionInterface;
 use Magento\Framework\Mview\ConfigInterface;
-use \Magento\Framework\Mview\View;
+use Magento\Framework\Mview\View;
 use Magento\Framework\Mview\View\Changelog;
 use Magento\Framework\Mview\View\StateInterface;
 use Magento\Framework\Mview\View\Subscription;
 use Magento\Framework\Mview\View\SubscriptionFactory;
 use Magento\Indexer\Model\Mview\View\State;
-use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-/**
- * Class to test Mview functionality
+/** test Mview functionality
  */
 class ViewTest extends TestCase
 {
@@ -55,7 +56,7 @@ class ViewTest extends TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->configMock = $this->getMockForAbstractClass(
             ConfigInterface::class,
@@ -147,12 +148,11 @@ class ViewTest extends TestCase
 
     /**
      * Test to Fill view data from config
-     *
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage view_id view does not exist.
      */
     public function testLoadWithException()
     {
+        $this->expectException('InvalidArgumentException');
+        $this->expectExceptionMessage('view_id view does not exist.');
         $viewId = 'view_id';
         $this->configMock->expects(
             $this->once()
@@ -211,11 +211,9 @@ class ViewTest extends TestCase
         $this->model->subscribe();
     }
 
-    /**
-     * @expectedException \Exception
-     */
     public function testSubscribeWithException()
     {
+        $this->expectException('Exception');
         $this->stateMock->expects($this->once())
             ->method('getMode')
             ->will($this->returnValue(StateInterface::MODE_DISABLED));
@@ -279,11 +277,9 @@ class ViewTest extends TestCase
         $this->model->unsubscribe();
     }
 
-    /**
-     * @expectedException \Exception
-     */
     public function testUnsubscribeWithException()
     {
+        $this->expectException('Exception');
         $this->stateMock->expects($this->once())
             ->method('getMode')
             ->will($this->returnValue(StateInterface::MODE_ENABLED));
@@ -446,12 +442,11 @@ class ViewTest extends TestCase
 
     /**
      * Test to Materialize view by IDs in changelog
-     *
-     * @expectedException \Exception
-     * @expectedExceptionMessage Test exception
      */
     public function testUpdateWithException()
     {
+        $this->expectException('Exception');
+        $this->expectExceptionMessage('Test exception');
         $currentVersionId = 3;
         $lastVersionId = 1;
         $listId = [2, 3];

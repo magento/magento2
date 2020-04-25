@@ -3,13 +3,16 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\Indexer\Test\Unit;
 
-/**
- * Class StrategyTest
- * @package Magento\Indexer\Test\Unit\Model\Indexer\Table
- */
-class StrategyTest extends \PHPUnit\Framework\TestCase
+use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\Indexer\Table\Strategy;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class StrategyTest extends TestCase
 {
     /**
      * Strategy object
@@ -21,17 +24,17 @@ class StrategyTest extends \PHPUnit\Framework\TestCase
     /**
      * Resource mock
      *
-     * @var \Magento\Framework\App\ResourceConnection|\PHPUnit_Framework_MockObject_MockObject
+     * @var ResourceConnection|MockObject
      */
     protected $_resourceMock;
 
     /**
      * {@inheritdoc}
      */
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->_resourceMock = $this->createMock(\Magento\Framework\App\ResourceConnection::class);
-        $this->_model = new \Magento\Framework\Indexer\Table\Strategy(
+        $this->_resourceMock = $this->createMock(ResourceConnection::class);
+        $this->_model = new Strategy(
             $this->_resourceMock
         );
     }

@@ -5,22 +5,26 @@
  */
 namespace Magento\Framework\View\Test\Unit\Element;
 
-class TextTest extends \PHPUnit\Framework\TestCase
+use PHPUnit\Framework\TestCase;
+use Magento\Framework\View\Element\Text;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+
+class TextTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\View\Element\Text
+     * @var Text
      */
     protected $elementText;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->elementText = $objectManagerHelper->getObject(\Magento\Framework\View\Element\Text::class);
+        $objectManagerHelper = new ObjectManager($this);
+        $this->elementText = $objectManagerHelper->getObject(Text::class);
     }
 
     public function testSetText()
     {
-        $this->assertInstanceOf(\Magento\Framework\View\Element\Text::class, $this->elementText->setText('example'));
+        $this->assertInstanceOf(Text::class, $this->elementText->setText('example'));
     }
 
     public function testGetText()

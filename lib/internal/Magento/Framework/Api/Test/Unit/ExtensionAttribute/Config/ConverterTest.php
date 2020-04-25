@@ -3,23 +3,30 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\Api\Test\Unit\ExtensionAttribute\Config;
 
+use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\CatalogInventory\Api\Data\StockItemInterface;
+use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Framework\Api\ExtensionAttribute\Config\Converter;
+use Magento\Tax\Api\Data\TaxRateInterface;
+use PHPUnit\Framework\TestCase;
 
-class ConverterTest extends \PHPUnit\Framework\TestCase
+class ConverterTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\Api\ExtensionAttribute\Config\Converter
+     * @var Converter
      */
     protected $_converter;
 
     /**
      * Initialize parameters
      */
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->_converter = new \Magento\Framework\Api\ExtensionAttribute\Config\Converter();
+        $this->_converter = new Converter();
     }
 
     /**
@@ -45,14 +52,14 @@ class ConverterTest extends \PHPUnit\Framework\TestCase
      */
     public function testConvert()
     {
-        $expected = [\Magento\Tax\Api\Data\TaxRateInterface::class => [
-            ], \Magento\Catalog\Api\Data\ProductInterface::class => [
+        $expected = [TaxRateInterface::class => [
+            ], ProductInterface::class => [
                 'stock_item' => [
-                    Converter::DATA_TYPE => \Magento\CatalogInventory\Api\Data\StockItemInterface::class,
+                    Converter::DATA_TYPE => StockItemInterface::class,
                     Converter::RESOURCE_PERMISSIONS => [],
                     Converter::JOIN_DIRECTIVE => null,
                 ],
-            ], \Magento\Customer\Api\Data\CustomerInterface::class => [
+            ], CustomerInterface::class => [
                 'custom_1' => [
                     Converter::DATA_TYPE => \Magento\Customer\Api\Data\CustomerCustom::class,
                     Converter::RESOURCE_PERMISSIONS => [],
@@ -94,7 +101,7 @@ class ConverterTest extends \PHPUnit\Framework\TestCase
      */
     public function testConvertWithJoinDirectives()
     {
-        $expected = [\Magento\Customer\Api\Data\CustomerInterface::class => [
+        $expected = [CustomerInterface::class => [
                 'library_card_id' => [
                     Converter::DATA_TYPE => 'string',
                     Converter::RESOURCE_PERMISSIONS => [],

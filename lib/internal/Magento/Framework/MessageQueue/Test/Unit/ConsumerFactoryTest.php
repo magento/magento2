@@ -3,33 +3,40 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Framework\MessageQueue\Test\Unit;
 
-use Magento\Framework\MessageQueue\ConsumerFactory;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\Communication\ConfigInterface as CommunicationConfig;
-use Magento\Framework\MessageQueue\Consumer\ConfigInterface as ConsumerConfig;
+use Magento\Framework\DataObject;
 use Magento\Framework\MessageQueue\Consumer\Config\ConsumerConfigItem;
+use Magento\Framework\MessageQueue\Consumer\ConfigInterface as ConsumerConfig;
+use Magento\Framework\MessageQueue\ConsumerConfigurationInterface;
+use Magento\Framework\MessageQueue\ConsumerFactory;
+use Magento\Framework\MessageQueue\ConsumerInterface;
+use Magento\Framework\ObjectManagerInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class ConsumerFactoryTest extends \PHPUnit\Framework\TestCase
+class ConsumerFactoryTest extends TestCase
 {
     /**
      * @var ObjectManager
      */
     private $objectManager;
 
-    /** @var CommunicationConfig|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var CommunicationConfig|MockObject */
     protected $communicationConfigMock;
 
-    /** @var ConsumerConfig|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var ConsumerConfig|MockObject */
     protected $consumerConfigMock;
 
     const TEST_CONSUMER_NAME = "test_consumer_name";
     const TEST_CONSUMER_QUEUE = "test_consumer_queue";
     const TEST_CONSUMER_METHOD = "test_consumer_method";
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
         $this->communicationConfigMock = $this->getMockBuilder(CommunicationConfig::class)
@@ -40,12 +47,10 @@ class ConsumerFactoryTest extends \PHPUnit\Framework\TestCase
             ->getMock();
     }
 
-    /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage pecified consumer "test_consumer_name" is not declared.
-     */
     public function testUndeclaredConsumerName()
     {
+        $this->expectException('Magento\Framework\Exception\LocalizedException');
+        $this->expectExceptionMessage('pecified consumer "test_consumer_name" is not declared.');
         $consumerFactory = $this->objectManager->getObject(ConsumerFactory::class);
         $this->objectManager->setBackwardCompatibleProperty(
             $consumerFactory,
@@ -83,10 +88,10 @@ class ConsumerFactoryTest extends \PHPUnit\Framework\TestCase
     private function getConsumerFactoryInstance($consumers)
     {
         $consumerTypeValue = \Magento\Framework\MessageQueue\Model\TestConsumer::class;
-        $handlerTypeValue = \Magento\Framework\DataObject::class;
+        $handlerTypeValue = DataObject::class;
         $consumerType = 'async';
 
-        /** @var ConsumerConfigItem|\PHPUnit_Framework_MockObject_MockObject $consumerConfigItemMock */
+        /** @var ConsumerConfigItem|MockObject $consumerConfigItemMock */
         $consumerConfigItemMock = $this->getMockBuilder(ConsumerConfigItem::class)->disableOriginalConstructor()
             ->getMock();
         $consumerConfigItemMock->expects($this->any())->method('getName')->willReturn(self::TEST_CONSUMER_NAME);
@@ -122,17 +127,17 @@ class ConsumerFactoryTest extends \PHPUnit\Framework\TestCase
             );
 
         $consumerInstanceMock = $this->getMockBuilder($consumerTypeValue)->getMock();
-        $consumerMock = $this->getMockBuilder(\Magento\Framework\MessageQueue\ConsumerInterface::class)
+        $consumerMock = $this->getMockBuilder(ConsumerInterface::class)
             ->setMethods(['configure'])
             ->getMockForAbstractClass();
 
         $consumerConfigurationMock =
-            $this->getMockBuilder(\Magento\Framework\MessageQueue\ConsumerConfigurationInterface::class)
+            $this->getMockBuilder(ConsumerConfigurationInterface::class)
                 ->disableOriginalConstructor()
                 ->getMockForAbstractClass();
         $consumerConfigurationMock->expects($this->any())->method('getType')->willReturn($consumerType);
 
-        $objectManagerMock = $this->getMockBuilder(\Magento\Framework\ObjectManagerInterface::class)
+        $objectManagerMock = $this->getMockBuilder(ObjectManagerInterface::class)
             ->setMethods(['create'])
             ->getMockForAbstractClass();
 
@@ -141,7 +146,7 @@ class ConsumerFactoryTest extends \PHPUnit\Framework\TestCase
             ->willReturnOnConsecutiveCalls($consumerMock, $consumerConfigurationMock, $consumerInstanceMock);
 
         $consumerFactory = $this->objectManager->getObject(
-            \Magento\Framework\MessageQueue\ConsumerFactory::class,
+            ConsumerFactory::class,
             [
                 'objectManager' => $objectManagerMock,
                 'consumers' => $consumers

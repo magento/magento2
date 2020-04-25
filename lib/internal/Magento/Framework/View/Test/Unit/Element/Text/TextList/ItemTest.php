@@ -9,19 +9,21 @@
  */
 namespace Magento\Framework\View\Test\Unit\Element\Text\TextList;
 
+use PHPUnit\Framework\TestCase;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use \Magento\Framework\View\Element\Text\TextList\Item;
 
-class ItemTest extends \PHPUnit\Framework\TestCase
+class ItemTest extends TestCase
 {
     /**
      * @var Item
      */
     protected $item;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->item = $objectManager->getObject(\Magento\Framework\View\Element\Text\TextList\Item::class);
+        $objectManager = new ObjectManager($this);
+        $this->item = $objectManager->getObject(Item::class);
     }
 
     public function testSetLink()
