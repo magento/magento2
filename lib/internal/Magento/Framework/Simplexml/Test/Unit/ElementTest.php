@@ -19,11 +19,11 @@ class ElementTest extends TestCase
     {
         /** @var Element $xml */
         $xml = simplexml_load_file($xmlData[0], $xmlData[1]);
-        $this->assertTrue(isset($xml->node3->node4));
+        $this->assertObjectHasAttribute('node4', $xml->node3);
         $xml->node3->unsetSelf();
-        $this->assertFalse(isset($xml->node3->node4));
-        $this->assertFalse(isset($xml->node3));
-        $this->assertTrue(isset($xml->node1));
+        $this->assertObjectNotHasAttribute('node4', $xml->node3);
+        $this->assertObjectNotHasAttribute('node3', $xml);
+        $this->assertObjectHasAttribute('node1', $xml);
     }
 
     /**
@@ -35,7 +35,7 @@ class ElementTest extends TestCase
         $this->expectExceptionMessage('Root node could not be unset.');
         /** @var Element $xml */
         $xml = simplexml_load_file($xmlData[0], $xmlData[1]);
-        $this->assertTrue($xml->getName() == 'root');
+        $this->assertEquals('root', $xml->getName());
         $xml->unsetSelf();
     }
 
