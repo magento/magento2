@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Framework\Model\Test\Unit\EntitySnapshot;
 
@@ -66,7 +67,8 @@ class AttributeProviderTest extends TestCase
             ->getMock();
         $attributes = ['test' => 1];
         $this->metadataPoolMock->expects($this->atLeastOnce())->method('getMetadata')->willReturn($metadata);
-        $connection = $this->getMockBuilder(AdapterInterface::class)->getMockForAbstractClass();
+        $connection = $this->getMockBuilder(AdapterInterface::class)
+            ->getMockForAbstractClass();
         $metadata->expects($this->once())->method('getEntityConnection')->willReturn($connection);
         $metadata->expects($this->once())->method('getEntityTable')->willReturn($entityTable);
         $metadata->expects($this->exactly(2))->method('getLinkField')->willReturn($linkField);

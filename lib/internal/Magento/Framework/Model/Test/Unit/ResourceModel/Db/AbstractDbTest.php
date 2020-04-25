@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Framework\Model\Test\Unit\ResourceModel\Db;
 
@@ -216,8 +217,8 @@ class AbstractDbTest extends TestCase
     public function testGetChecksum($checksum, $expected)
     {
         $connectionMock = $this->createMock(AdapterInterface::class);
-        $connectionMock->expects($this->once())->method('getTablesChecksum')->with($checksum)->will(
-            $this->returnValue([$checksum => 'checksum'])
+        $connectionMock->expects($this->once())->method('getTablesChecksum')->with($checksum)->willReturn(
+            [$checksum => 'checksum']
         );
         $this->_resourcesMock->expects($this->any())->method('getConnection')->will(
             $this->returnValue($connectionMock)
@@ -343,7 +344,7 @@ class AbstractDbTest extends TestCase
         $idFieldNameReflection->setAccessible(true);
         $idFieldNameReflection->setValue($this->_model, 'idFieldName');
         $connectionInterfaceMock->expects($this->any())->method('delete')->with('tableName', 'idFieldName');
-        $connectionInterfaceMock->expects($this->any())->method('quoteInto')->will($this->returnValue('idFieldName'));
+        $connectionInterfaceMock->expects($this->any())->method('quoteInto')->willReturn('idFieldName');
         $abstractModelMock->expects($this->once())->method('beforeDelete');
         $abstractModelMock->expects($this->once())->method('afterDelete');
         $abstractModelMock->expects($this->once())->method('afterDeleteCommit');
@@ -366,7 +367,7 @@ class AbstractDbTest extends TestCase
             true,
             ['__wakeup', 'getOrigData']
         );
-        $abstractModelMock->expects($this->any())->method('getOrigData')->will($this->returnValue(false));
+        $abstractModelMock->expects($this->any())->method('getOrigData')->willReturn(false);
         $this->assertTrue($this->_model->hasDataChanged($abstractModelMock));
     }
 
@@ -403,10 +404,10 @@ class AbstractDbTest extends TestCase
             ->method('getTableName')
             ->with('table')
             ->will($this->returnValue('tableName'));
-        $abstractModelMock->expects($this->at(0))->method('getOrigData')->will($this->returnValue(true));
-        $abstractModelMock->expects($this->at(1))->method('getOrigData')->will($this->returnValue($getOriginData));
-        $connectionInterfaceMock->expects($this->any())->method('describeTable')->with('tableName')->will(
-            $this->returnValue(['tableName'])
+        $abstractModelMock->expects($this->at(0))->method('getOrigData')->willReturn(true);
+        $abstractModelMock->expects($this->at(1))->method('getOrigData')->willReturn($getOriginData);
+        $connectionInterfaceMock->expects($this->any())->method('describeTable')->with('tableName')->willReturn(
+            ['tableName']
         );
         $this->assertEquals($expected, $this->_model->hasDataChanged($abstractModelMock));
     }
@@ -442,7 +443,7 @@ class AbstractDbTest extends TestCase
         $connectionInterfaceMock = $this->createMock(AdapterInterface::class);
         $resourceMock->expects($this->any())
             ->method('getConnection')
-            ->will($this->returnValue($connectionInterfaceMock));
+            ->willReturn($connectionInterfaceMock);
         $resourceCollectionMock = $this->getMockBuilder(\Magento\Framework\Data\Collection\AbstractDb::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
@@ -471,7 +472,7 @@ class AbstractDbTest extends TestCase
         $idFieldNameReflection->setAccessible(true);
         $idFieldNameReflection->setValue($this->_model, 'idFieldName');
         $connectionMock->expects($this->any())->method('save')->with('tableName', 'idFieldName');
-        $connectionMock->expects($this->any())->method('quoteInto')->will($this->returnValue('idFieldName'));
+        $connectionMock->expects($this->any())->method('quoteInto')->willReturn('idFieldName');
         $connectionMock->expects($this->any())
             ->method('describeTable')
             ->with('tableName')

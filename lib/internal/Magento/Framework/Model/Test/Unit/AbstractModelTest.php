@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Framework\Model\Test\Unit;
 
@@ -71,14 +72,14 @@ class AbstractModelTest extends TestCase
         );
         $this->registryMock = $this->createMock(Registry::class);
         $this->resourceMock = $this->createPartialMock(AbstractDb::class, [
-                '_construct',
-                'getConnection',
-                '__wakeup',
-                'commit',
-                'delete',
-                'getIdFieldName',
-                'rollBack'
-            ]);
+            '_construct',
+            'getConnection',
+            '__wakeup',
+            'commit',
+            'delete',
+            'getIdFieldName',
+            'rollBack'
+        ]);
         $this->resourceCollectionMock = $this->getMockBuilder(\Magento\Framework\Data\Collection\AbstractDb::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
@@ -89,7 +90,7 @@ class AbstractModelTest extends TestCase
         $this->connectionMock = $this->createMock(AdapterInterface::class);
         $this->resourceMock->expects($this->any())
             ->method('getConnection')
-            ->will($this->returnValue($this->connectionMock));
+            ->willReturn($this->connectionMock);
     }
 
     public function testDelete()

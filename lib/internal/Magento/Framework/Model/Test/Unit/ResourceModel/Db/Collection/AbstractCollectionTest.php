@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Framework\Model\Test\Unit\ResourceModel\Db\Collection;
 
@@ -78,7 +79,7 @@ class AbstractCollectionTest extends TestCase
         $this->resourceMock
             ->expects($this->any())
             ->method('getConnection')
-            ->will($this->returnValue($this->connectionMock));
+            ->willReturn($this->connectionMock);
 
         $this->selectMock = $this->getMockBuilder(Select::class)
             ->setMethods(['getPart', 'setPart', 'from', 'columns'])
@@ -88,7 +89,7 @@ class AbstractCollectionTest extends TestCase
         $this->connectionMock
             ->expects($this->any())
             ->method('select')
-            ->will($this->returnValue($this->selectMock));
+            ->willReturn($this->selectMock);
 
         $this->objectManagerMock = $this->createMock(\Magento\Framework\App\ObjectManager::class);
 
@@ -130,16 +131,16 @@ class AbstractCollectionTest extends TestCase
         $this->resourceMock
             ->expects($this->any())
             ->method('getMainTable')
-            ->will($this->returnValue(null));
+            ->willReturn(null);
 
         $this->resourceMock
             ->expects($this->any())
             ->method('getTable')
-            ->will($this->returnValue(null));
+            ->willReturn(null);
 
         $this->uut = $this->getUut();
 
-        $this->assertTrue($this->uut->setMainTable('') instanceof Uut);
+        $this->assertInstanceOf(Uut::class, $this->uut->setMainTable(''));
         $this->assertEquals(null, $this->uut->getMainTable());
     }
 
@@ -148,11 +149,11 @@ class AbstractCollectionTest extends TestCase
         $this->resourceMock
             ->expects($this->any())
             ->method('getTable')
-            ->will($this->returnValue(self::TABLE_NAME));
+            ->willReturn(self::TABLE_NAME);
 
         $this->selectMock->expects($this->never())->method('getPart');
 
-        $this->assertTrue($this->uut->setMainTable('') instanceof Uut);
+        $this->assertInstanceOf(Uut::class, $this->uut->setMainTable(''));
         $this->assertEquals(self::TABLE_NAME, $this->uut->getMainTable());
     }
 
@@ -161,19 +162,19 @@ class AbstractCollectionTest extends TestCase
         $this->connectionMock
             ->expects($this->any())
             ->method('select')
-            ->will($this->returnValue(null));
+            ->willReturn(null);
 
         $this->uut = $this->getUut();
 
         $this->resourceMock
             ->expects($this->any())
             ->method('getTable')
-            ->will($this->returnValue(self::TABLE_NAME));
+            ->willReturn(self::TABLE_NAME);
 
         $this->uut->setMainTable('');
         $this->selectMock->expects($this->never())->method('getPart');
 
-        $this->assertTrue($this->uut->setMainTable('') instanceof Uut);
+        $this->assertInstanceOf(Uut::class, $this->uut->setMainTable(''));
         $this->assertEquals(self::TABLE_NAME, $this->uut->getMainTable());
     }
 
@@ -184,19 +185,19 @@ class AbstractCollectionTest extends TestCase
         $this->selectMock
             ->expects($this->atLeastOnce())
             ->method('getPart')
-            ->will($this->returnValue(['main_table' => []]));
+            ->willReturn(['main_table' => []]);
 
         $this->selectMock->expects($this->atLeastOnce())->method('setPart');
 
         $this->resourceMock
             ->expects($this->any())
             ->method('getTable')
-            ->will($this->returnValueMap([['', self::TABLE_NAME], [$anotherTableName, $anotherTableName]]));
+            ->willReturnMap([['', self::TABLE_NAME], [$anotherTableName, $anotherTableName]]);
 
         $this->uut = $this->getUut();
 
-        $this->assertTrue($this->uut->setMainTable('') instanceof Uut);
-        $this->assertTrue($this->uut->setMainTable($anotherTableName) instanceof Uut);
+        $this->assertInstanceOf(Uut::class, $this->uut->setMainTable(''));
+        $this->assertInstanceOf(Uut::class, $this->uut->setMainTable($anotherTableName));
         $this->assertEquals($anotherTableName, $this->uut->getMainTable());
     }
 
@@ -206,7 +207,7 @@ class AbstractCollectionTest extends TestCase
             ->expects($this->never())
             ->method('getPart');
 
-        $this->assertTrue($this->uut->getSelect() instanceof Select);
+        $this->assertInstanceOf(Select::class, $this->uut->getSelect());
     }
 
     /**
@@ -217,21 +218,21 @@ class AbstractCollectionTest extends TestCase
         $this->resourceMock
             ->expects($this->any())
             ->method('getIdFieldName')
-            ->will($this->returnValue($idFieldNameRet));
+            ->willReturn($idFieldNameRet);
 
         $this->uut->removeAllFieldsFromSelect();
 
         $this->selectMock
             ->expects($this->any())
             ->method('getPart')
-            ->will($this->returnValue($getPartRet));
+            ->willReturn($getPartRet);
 
         $this->selectMock
             ->expects($this->once())
             ->method('setPart')
             ->with(Select::COLUMNS, $expected);
 
-        $this->assertTrue($this->uut->getSelect() instanceof Select);
+        $this->assertInstanceOf(Select::class, $this->uut->getSelect());
     }
 
     /**
@@ -258,7 +259,7 @@ class AbstractCollectionTest extends TestCase
      */
     public function testAddFieldToSelect($field, $alias, $expectedFieldsToSelect)
     {
-        $this->assertTrue($this->uut->addFieldToSelect($field, $alias) instanceof Uut);
+        $this->assertInstanceOf(Uut::class, $this->uut->addFieldToSelect($field, $alias));
         $this->assertEquals($expectedFieldsToSelect, $this->uut->getFieldsToSelect());
         $this->assertTrue($this->uut->wereFieldsToSelectChanged());
     }
@@ -282,7 +283,7 @@ class AbstractCollectionTest extends TestCase
     public function testAddExpressionFieldToSelect($alias, $expression, $fields, $expected)
     {
         $this->selectMock->expects($this->once())->method('columns')->with($expected);
-        $this->assertTrue($this->uut->addExpressionFieldToSelect($alias, $expression, $fields) instanceof Uut);
+        $this->assertInstanceOf(Uut::class, $this->uut->addExpressionFieldToSelect($alias, $expression, $fields));
     }
 
     /**
@@ -307,7 +308,7 @@ class AbstractCollectionTest extends TestCase
         $expectedWereFieldsToSelectChanged
     ) {
         $this->uut->setFieldsToSelect($initialFieldsToSelect);
-        $this->assertTrue($this->uut->removeFieldFromSelect($field, $isAlias) instanceof Uut);
+        $this->assertInstanceOf(Uut::class, $this->uut->removeFieldFromSelect($field, $isAlias));
         $this->assertEquals($expectedFieldsToSelect, $this->uut->getFieldsToSelect());
         $this->assertEquals($expectedWereFieldsToSelectChanged, $this->uut->wereFieldsToSelectChanged());
     }
@@ -330,17 +331,17 @@ class AbstractCollectionTest extends TestCase
         $this->resourceMock
             ->expects($this->any())
             ->method('getIdFieldName')
-            ->will($this->returnValue('id_field'));
+            ->willReturn('id_field');
 
         $this->uut->setFieldsToSelect(['alias' => 'field']);
-        $this->assertTrue($this->uut->removeAllFieldsFromSelect() instanceof Uut);
+        $this->assertInstanceOf(Uut::class, $this->uut->removeAllFieldsFromSelect());
         $this->assertTrue($this->uut->wereFieldsToSelectChanged());
         $this->assertEquals(['id_field'], $this->uut->getFieldsToSelect());
     }
 
     public function testSetModelNotString()
     {
-        $this->assertTrue($this->uut->setModel(1) instanceof Uut);
+        $this->assertInstanceOf(Uut::class, $this->uut->setModel(1));
         $this->assertEmpty($this->uut->getModelName());
     }
 
@@ -353,7 +354,7 @@ class AbstractCollectionTest extends TestCase
 
     public function testSetModel()
     {
-        $this->assertTrue($this->uut->setModel(DataObject::class) instanceof Uut);
+        $this->assertInstanceOf(Uut::class, $this->uut->setModel(DataObject::class));
     }
 
     public function testGetModelName()
@@ -386,7 +387,7 @@ class AbstractCollectionTest extends TestCase
         $this->resourceMock
             ->expects($this->any())
             ->method('getTable')
-            ->will($this->returnValue(self::TABLE_NAME));
+            ->willReturn(self::TABLE_NAME);
 
         $this->assertEquals(self::TABLE_NAME, $this->uut->getTable(''));
     }
@@ -396,7 +397,7 @@ class AbstractCollectionTest extends TestCase
      */
     public function testJoin($table, $cond, $cols, $expected)
     {
-        $this->assertTrue($this->uut->join($table, $cond, $cols) instanceof Uut);
+        $this->assertInstanceOf(Uut::class, $this->uut->join($table, $cond, $cols));
         $this->assertEquals($expected, $this->uut->getJoinedTables());
     }
 
@@ -419,7 +420,7 @@ class AbstractCollectionTest extends TestCase
             $this->uut->addItem($item->setDataChanges(true));
         }
 
-        $this->assertTrue($this->uut->resetItemsDataChanged() instanceof Uut);
+        $this->assertInstanceOf(Uut::class, $this->uut->resetItemsDataChanged());
 
         foreach ($this->uut->getItems() as $item) {
             $this->assertFalse($item->hasDataChanges());
@@ -430,11 +431,14 @@ class AbstractCollectionTest extends TestCase
     {
         for ($i = 0; $i < 3; $i++) {
             /** @var DataObject|MockObject $item */
-            $item = $this->createPartialMock(DataObject::class, ['save']);
+            $item = $this->getMockBuilder(DataObject::class)
+                ->addMethods(['save'])
+                ->disableOriginalConstructor()
+                ->getMock();
             $item->expects($this->once())->method('save');
             $this->uut->addItem($item);
         }
 
-        $this->assertTrue($this->uut->save() instanceof Uut);
+        $this->assertInstanceOf(Uut::class, $this->uut->save());
     }
 }

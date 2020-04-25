@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\Model\Test\Unit\ActionValidator;
 
 use Magento\Catalog\Model\Product;
@@ -28,7 +30,7 @@ class RemoveActionTest extends TestCase
     {
         $registryMock = $this->createMock(Registry::class);
         $registryMock->expects($this->once())
-            ->method('registry')->with('isSecureArea')->will($this->returnValue($secureArea));
+            ->method('registry')->with('isSecureArea')->willReturn($secureArea);
 
         $model = new RemoveAction(
             $registryMock,

@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Framework\Model\Test\Unit;
 
@@ -83,14 +84,14 @@ class AbstractExtensibleModelTest extends TestCase
         );
         $this->registryMock = $this->createMock(Registry::class);
         $this->resourceMock = $this->createPartialMock(AbstractDb::class, [
-                '_construct',
-                'getConnection',
-                '__wakeup',
-                'commit',
-                'delete',
-                'getIdFieldName',
-                'rollBack'
-            ]);
+            '_construct',
+            'getConnection',
+            '__wakeup',
+            'commit',
+            'delete',
+            'getIdFieldName',
+            'rollBack'
+        ]);
         $this->resourceCollectionMock = $this->getMockBuilder(\Magento\Framework\Data\Collection\AbstractDb::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
@@ -243,12 +244,10 @@ class AbstractExtensibleModelTest extends TestCase
             ->getMock();
         $attributeMock->expects($this->never())
             ->method('setAttributeCode')
-            ->with($attributeCode)
-            ->will($this->returnSelf());
+            ->with($attributeCode)->willReturnSelf();
         $attributeMock->expects($this->never())
             ->method('setValue')
-            ->with($attributeValue)
-            ->will($this->returnSelf());
+            ->with($attributeValue)->willReturnSelf();
         $this->attributeValueFactoryMock->expects($this->never())->method('create')
             ->willReturn($attributeMock);
         $this->model->setData(
