@@ -93,7 +93,8 @@ class HttpTest extends TestCase
         $file = __DIR__ . '/../../_files/javascript.js';
         $contentType = 'content/type';
 
-        $headers = $this->getMockBuilder(Headers::class)->getMock();
+        $headers = $this->getMockBuilder(Headers::class)
+            ->getMock();
         $this->response->expects($this->atLeastOnce())
             ->method('setHeader')
             ->withConsecutive(['Content-length', filesize($file)], ['Content-Type', $contentType]);
