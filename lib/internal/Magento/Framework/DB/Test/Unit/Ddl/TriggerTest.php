@@ -28,11 +28,11 @@ class TriggerTest extends TestCase
     public function testGetListOfEvents()
     {
         $actualEventTypes = Trigger::getListOfEvents();
-        $this->assertInternalType('array', $actualEventTypes);
+        $this->assertIsArray($actualEventTypes);
         $this->assertCount(3, $actualEventTypes);
-        $this->assertTrue(in_array(Trigger::EVENT_INSERT, $actualEventTypes));
-        $this->assertTrue(in_array(Trigger::EVENT_UPDATE, $actualEventTypes));
-        $this->assertTrue(in_array(Trigger::EVENT_DELETE, $actualEventTypes));
+        $this->assertContains(Trigger::EVENT_INSERT, $actualEventTypes);
+        $this->assertContains(Trigger::EVENT_UPDATE, $actualEventTypes);
+        $this->assertContains(Trigger::EVENT_DELETE, $actualEventTypes);
     }
 
     /**
@@ -41,10 +41,10 @@ class TriggerTest extends TestCase
     public function testGetListOfTimes()
     {
         $actualTimeTypes = Trigger::getListOfTimes();
-        $this->assertInternalType('array', $actualTimeTypes);
+        $this->assertIsArray($actualTimeTypes);
         $this->assertCount(2, $actualTimeTypes);
-        $this->assertTrue(in_array(Trigger::TIME_AFTER, $actualTimeTypes));
-        $this->assertTrue(in_array(Trigger::TIME_BEFORE, $actualTimeTypes));
+        $this->assertContains(Trigger::TIME_AFTER, $actualTimeTypes);
+        $this->assertContains(Trigger::TIME_BEFORE, $actualTimeTypes);
     }
 
     /**

@@ -40,7 +40,7 @@ class MysqlTest extends TestCase
     /**
      * @inheritdoc
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->adapterMock = $this->getMockForAbstractClass(
             \Zend_Db_Adapter_Abstract::class,

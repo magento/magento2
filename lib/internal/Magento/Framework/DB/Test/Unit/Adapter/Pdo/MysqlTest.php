@@ -95,7 +95,7 @@ class MysqlTest extends TestCase
 
         $this->_mockAdapter->expects($this->any())
             ->method('getTransactionLevel')
-            ->will($this->returnValue(1));
+            ->willReturn(1);
 
         $this->_adapter = $this->getMockBuilder(\Magento\Framework\DB\Adapter\Pdo\Mysql::class)
             ->setMethods(
@@ -192,7 +192,7 @@ class MysqlTest extends TestCase
         try {
             $this->_mockAdapter->query($query);
         } catch (\Exception $e) {
-            $this->assertNotContains(
+            $this->assertStringNotContainsString(
                 $e->getMessage(),
                 AdapterInterface::ERROR_DDL_MESSAGE
             );
@@ -203,7 +203,7 @@ class MysqlTest extends TestCase
         try {
             $this->_mockAdapter->query($select);
         } catch (\Exception $e) {
-            $this->assertNotContains(
+            $this->assertStringNotContainsString(
                 $e->getMessage(),
                 AdapterInterface::ERROR_DDL_MESSAGE
             );
@@ -460,7 +460,7 @@ class MysqlTest extends TestCase
         $this->_adapter->expects($this->once())
             ->method('query')
             ->with($sqlQuery, $bind)
-            ->will($this->returnValue($stmtMock));
+            ->willReturn($stmtMock);
 
         $this->_adapter->insertOnDuplicate($table, $data, $fields);
     }
@@ -480,8 +480,8 @@ class MysqlTest extends TestCase
             ['tableColumnExists', '_getTableName', 'rawQuery', 'resetDdlCache', 'quote', 'getSchemaListener']
         );
         $connectionMock->expects($this->any())->method('getSchemaListener')->willReturn($this->schemaListenerMock);
-        $connectionMock->expects($this->any())->method('_getTableName')->will($this->returnArgument(0));
-        $connectionMock->expects($this->any())->method('quote')->will($this->returnArgument(0));
+        $connectionMock->expects($this->any())->method('_getTableName')->willReturnArgument(0);
+        $connectionMock->expects($this->any())->method('quote')->willReturnArgument(0);
         $connectionMock->expects($this->once())->method('rawQuery')->with($expectedQuery);
         $connectionMock->addColumn('tableName', 'columnName', $options);
     }
@@ -515,10 +515,7 @@ class MysqlTest extends TestCase
     public function testGetIndexName($name, $fields, $indexType, $expectedName)
     {
         $resultIndexName = $this->_mockAdapter->getIndexName($name, $fields, $indexType);
-        $this->assertTrue(
-            strpos($resultIndexName, $expectedName) === 0,
-            "Index name '$resultIndexName' did not begin with expected value '$expectedName'"
-        );
+        $this->assertStringStartsWith($expectedName, $resultIndexName);
     }
 
     /**

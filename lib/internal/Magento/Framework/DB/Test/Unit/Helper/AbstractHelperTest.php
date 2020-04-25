@@ -38,7 +38,7 @@ class AbstractHelperTest extends TestCase
         $this->_resourceMock->expects($this->any())
             ->method('getConnection')
             ->with('prefix')
-            ->will($this->returnValue($this->_adapterMock));
+            ->willReturn($this->_adapterMock);
 
         $this->_model = $this->getMockForAbstractClass(
             AbstractHelper::class,
@@ -70,12 +70,12 @@ class AbstractHelperTest extends TestCase
         $this->_adapterMock->expects($this->once())
             ->method('quoteIdentifier')
             ->with($field)
-            ->will($this->returnArgument(0));
+            ->willReturnArgument(0);
 
         $this->_model->expects($this->once())
             ->method('addLikeEscape')
             ->with($value, $options)
-            ->will($this->returnArgument(0));
+            ->willReturnArgument(0);
 
         $result = $this->_model->getCILike($field, $value, $options);
         $this->assertInstanceOf('Zend_Db_Expr', $result);

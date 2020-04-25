@@ -139,7 +139,7 @@ class AbstractMapperTest extends TestCase
         );
         $criteriaMock->expects($this->once())
             ->method('toArray')
-            ->will($this->returnValue($criteriaParts));
+            ->willReturn($criteriaParts);
         foreach ($mapperMethods as $value => $method) {
             $mapper->expects($this->once())
                 ->method($method)
@@ -185,7 +185,7 @@ class AbstractMapperTest extends TestCase
         );
         $criteriaMock->expects($this->once())
             ->method('toArray')
-            ->will($this->returnValue($criteriaParts));
+            ->willReturn($criteriaParts);
         $this->expectException(\InvalidArgumentException::class);
         $mapper->map($criteriaMock);
     }
@@ -265,15 +265,15 @@ class AbstractMapperTest extends TestCase
 
         $mapper->expects($this->any())
             ->method('getConnection')
-            ->will($this->returnValue($connectionMock));
+            ->willReturn($connectionMock);
         $connectionMock->expects($this->any())
             ->method('quoteIdentifier')
             ->with('my-field')
-            ->will($this->returnValue('quote-field'));
+            ->willReturn('quote-field');
         $connectionMock->expects($this->any())
             ->method('prepareSqlCondition')
             ->with('quote-field', $condition)
-            ->will($this->returnValue($resultCondition));
+            ->willReturn($resultCondition);
 
         if (is_array($field)) {
             $resultCondition = '(' . implode(

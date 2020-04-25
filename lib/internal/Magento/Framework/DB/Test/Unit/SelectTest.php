@@ -123,7 +123,7 @@ class SelectTest extends TestCase
         );
         $method = $connection->expects($this->exactly($callCount))->method('quote');
         if ($callCount > 0) {
-            $method->will($this->returnValue($returnValue));
+            $method->willReturn($returnValue);
         }
         return $connection;
     }
