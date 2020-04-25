@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Framework\Search\Test\Unit\Request;
 
@@ -41,7 +42,7 @@ class CleanerTest extends TestCase
     {
         $this->status->expects($this->once())
             ->method('isEnabled')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $requestData = [
             'query' => 'bool_query',
             'queries' => [
@@ -122,7 +123,7 @@ class CleanerTest extends TestCase
     {
         $this->status->expects($this->once())
             ->method('isEnabled')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
         $requestData = [
             'query' => 'bool_query',
             'queries' => [
@@ -337,7 +338,7 @@ class CleanerTest extends TestCase
         );
         $this->status->expects($this->once())
             ->method('isEnabled')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $requestData = [
             'query' => 'bool_query',
             'queries' => [

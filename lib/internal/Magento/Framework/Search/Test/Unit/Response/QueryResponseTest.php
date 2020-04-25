@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\Search\Test\Unit\Response;
 
 use Magento\Framework\Api\Search\Document;
@@ -38,7 +40,7 @@ class QueryResponseTest extends TestCase
                 ->disableOriginalConstructor()
                 ->getMock();
 
-            $document->expects($this->any())->method('getId')->will($this->returnValue($count));
+            $document->expects($this->any())->method('getId')->willReturn($count);
             $this->documents[] = $document;
         }
 
@@ -67,7 +69,7 @@ class QueryResponseTest extends TestCase
 
     public function testCount()
     {
-        $this->assertEquals(count($this->queryResponse), 5);
+        $this->assertCount(5, $this->queryResponse);
     }
 
     public function testGetAggregations()

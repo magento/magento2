@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Framework\Search\Test\Unit\Adapter\Mysql;
 
@@ -38,21 +39,17 @@ class ConditionManagerTest extends TestCase
             ->getMockForAbstractClass();
         $this->connectionMock->expects($this->any())
             ->method('quote')
-            ->will(
-                $this->returnCallback(
-                    function ($value) {
-                        return sprintf('\'%s\'', $value);
-                    }
-                )
+            ->willReturnCallback(
+                function ($value) {
+                    return sprintf('\'%s\'', $value);
+                }
             );
         $this->connectionMock->expects($this->any())
             ->method('quoteIdentifier')
-            ->will(
-                $this->returnCallback(
-                    function ($value) {
-                        return sprintf('`%s`', $value);
-                    }
-                )
+            ->willReturnCallback(
+                function ($value) {
+                    return sprintf('`%s`', $value);
+                }
             );
 
         $this->resource = $this->getMockBuilder(ResourceConnection::class)
@@ -60,7 +57,7 @@ class ConditionManagerTest extends TestCase
             ->getMock();
         $this->resource->expects($this->once())
             ->method('getConnection')
-            ->will($this->returnValue($this->connectionMock));
+            ->willReturn($this->connectionMock);
 
         $this->conditionManager = $objectManager->getObject(
             ConditionManager::class,

@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\Search\Test\Unit\Adapter\Mysql\Query\Builder;
 
 use Magento\Framework\DB\Helper\Mysql\Fulltext;
@@ -87,12 +89,12 @@ class MatchTest extends TestCase
             ->getMock();
         $this->preprocessor->expects($this->once())
             ->method('process')
-            ->with($this->equalTo('some_value '))
-            ->will($this->returnValue('some_value '));
+            ->with('some_value ')
+            ->willReturn('some_value ');
         $this->fulltextHelper->expects($this->once())
             ->method('getMatchQuery')
-            ->with($this->equalTo(['some_field' => 'some_field']), $this->equalTo('-some_value*'))
-            ->will($this->returnValue('matchedQuery'));
+            ->with(['some_field' => 'some_field'], '-some_value*')
+            ->willReturn('matchedQuery');
         $select->expects($this->once())
             ->method('where')
             ->with('matchedQuery')

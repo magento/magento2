@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\Search\Test\Unit\Adapter\Mysql\Aggregation;
 
 use Magento\Framework\App\ResourceConnection;
@@ -201,7 +203,9 @@ class BuilderTest extends TestCase
         $documentIds = [1, 2];
         $tableName = 'table_name';
 
-        $select = $this->getMockBuilder(Select::class)->disableOriginalConstructor()->getMock();
+        $select = $this->getMockBuilder(Select::class)
+            ->disableOriginalConstructor()
+            ->getMock();
         $select->expects($this->once())
             ->method('from')
             ->with($tableName, TemporaryStorage::FIELD_ENTITY_ID)

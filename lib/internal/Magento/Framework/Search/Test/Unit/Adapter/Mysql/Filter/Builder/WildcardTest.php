@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Framework\Search\Test\Unit\Adapter\Mysql\Filter\Builder;
 
@@ -47,12 +48,10 @@ class WildcardTest extends TestCase
             ->getMock();
         $this->conditionManager->expects($this->any())
             ->method('generateCondition')
-            ->will(
-                $this->returnCallback(
-                    function ($field, $operator, $value) {
-                        return sprintf('%s %s %s', $field, $operator, $value);
-                    }
-                )
+            ->willReturnCallback(
+                function ($field, $operator, $value) {
+                    return sprintf('%s %s %s', $field, $operator, $value);
+                }
             );
 
         $this->filter = $objectManager->getObject(
@@ -74,7 +73,7 @@ class WildcardTest extends TestCase
     {
         $this->requestFilter->expects($this->once())
             ->method('getField')
-            ->will($this->returnValue($field));
+            ->willReturn($field);
         $this->requestFilter->expects($this->once())->method('getValue')->willReturn($value);
 
         $actualResult = $this->filter->buildFilter($this->requestFilter, $isNegation);

@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\Search\Test\Unit\Adapter\Mysql;
 
 use Magento\Framework\ObjectManagerInterface;
@@ -59,18 +61,18 @@ class ResponseFactoryTest extends TestCase
         ];
 
         $this->documentFactory->expects($this->at(0))->method('create')
-            ->with($this->equalTo($rawResponse['documents'][0]))
-            ->will($this->returnValue('document1'));
+            ->with($rawResponse['documents'][0])
+            ->willReturn('document1');
         $this->documentFactory->expects($this->at(1))->method('create')
             ->with($rawResponse['documents'][1])
-            ->will($this->returnValue('document2'));
+            ->willReturn('document2');
 
         $this->objectManager->expects($this->once())->method('create')
             ->with(
-                $this->equalTo(QueryResponse::class),
-                $this->equalTo(['documents' => ['document1', 'document2'], 'aggregations' => null, 'total' => 2])
+                QueryResponse::class,
+                ['documents' => ['document1', 'document2'], 'aggregations' => null, 'total' => 2]
             )
-            ->will($this->returnValue('QueryResponseObject'));
+            ->willReturn('QueryResponseObject');
 
         $result = $this->factory->create($rawResponse);
         $this->assertEquals('QueryResponseObject', $result);

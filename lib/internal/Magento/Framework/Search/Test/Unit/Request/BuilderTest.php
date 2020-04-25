@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\Search\Test\Unit\Request;
 
 use Magento\Framework\ObjectManagerInterface;
@@ -107,7 +109,7 @@ class BuilderTest extends TestCase
         $requestName = 'rn';
 
         $this->requestBuilder->setRequestName($requestName);
-        $this->config->expects($this->once())->method('get')->with($this->equalTo($requestName))->willReturn(null);
+        $this->config->expects($this->once())->method('get')->with($requestName)->willReturn(null);
 
         $this->requestBuilder->create();
     }
@@ -211,7 +213,7 @@ class BuilderTest extends TestCase
         $this->requestMapper->expects($this->once())->method('getRootQuery')->willReturn([]);
         $this->objectManager->expects($this->at(0))->method('create')->willReturn($this->requestMapper);
         $this->objectManager->expects($this->at(2))->method('create')->willReturn($this->request);
-        $this->config->expects($this->once())->method('get')->with($this->equalTo($requestName))->willReturn($data);
+        $this->config->expects($this->once())->method('get')->with($requestName)->willReturn($data);
         $result = $this->requestBuilder->create();
         $this->assertInstanceOf(Request::class, $result);
     }

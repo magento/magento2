@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Framework\Search\Test\Unit\Adapter\Mysql\Filter\Builder;
 
@@ -46,17 +47,15 @@ class TermTest extends TestCase
             ->getMock();
         $this->conditionManager->expects($this->any())
             ->method('generateCondition')
-            ->will(
-                $this->returnCallback(
-                    function ($field, $operator, $value) {
-                        return sprintf(
-                            is_array($value) ? '%s %s (%s)' : '%s %s %s',
-                            $field,
-                            $operator,
-                            is_array($value) ? implode(', ', $value) : $value
-                        );
-                    }
-                )
+            ->willReturnCallback(
+                function ($field, $operator, $value) {
+                    return sprintf(
+                        is_array($value) ? '%s %s (%s)' : '%s %s %s',
+                        $field,
+                        $operator,
+                        is_array($value) ? implode(', ', $value) : $value
+                    );
+                }
             );
 
         $this->filter = $objectManager->getObject(
@@ -78,10 +77,10 @@ class TermTest extends TestCase
     {
         $this->requestFilter->expects($this->once())
             ->method('getField')
-            ->will($this->returnValue($field));
+            ->willReturn($field);
         $this->requestFilter->expects($this->atLeastOnce())
             ->method('getValue')
-            ->will($this->returnValue($value));
+            ->willReturn($value);
 
         $actualResult = $this->filter->buildFilter($this->requestFilter, $isNegation);
         $this->assertEquals($expectedResult, $actualResult);

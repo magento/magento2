@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\Search\Test\Unit\Adapter\Mysql;
 
 use Magento\Framework\App\ResourceConnection;
@@ -106,7 +108,7 @@ class MapperTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->resource->expects($this->any())->method('getConnection')
-            ->will($this->returnValue($this->connectionAdapter));
+            ->willReturn($this->connectionAdapter);
 
         $this->request = $this->getMockBuilder(RequestInterface::class)
             ->setMethods(['getQuery', 'getIndex', 'getSize'])
@@ -114,7 +116,7 @@ class MapperTest extends TestCase
             ->getMockForAbstractClass();
         $this->request->expects($this->any())
             ->method('getIndex')
-            ->will($this->returnValue(self::INDEX_NAME));
+            ->willReturn(self::INDEX_NAME);
 
         $this->queryContainer = $this->getMockBuilder(
             QueryContainer::class
@@ -151,13 +153,13 @@ class MapperTest extends TestCase
 
         $this->queryContainer->expects($this->any())->method('addMatchQuery')
             ->with(
-                $this->equalTo($select),
-                $this->equalTo($query),
-                $this->equalTo(BoolExpression::QUERY_CONDITION_MUST)
+                $select,
+                $query,
+                BoolExpression::QUERY_CONDITION_MUST
             )
-            ->will($this->returnValue($select));
+            ->willReturn($select);
 
-        $this->request->expects($this->once())->method('getQuery')->will($this->returnValue($query));
+        $this->request->expects($this->once())->method('getQuery')->willReturn($query);
 
         $select->expects($this->any())->method('columns')->willReturnSelf();
 
@@ -181,9 +183,9 @@ class MapperTest extends TestCase
 
         $select->expects($this->any())->method('columns')->willReturnSelf();
 
-        $this->request->expects($this->once())->method('getQuery')->will($this->returnValue($query));
+        $this->request->expects($this->once())->method('getQuery')->willReturn($query);
 
-        $this->filterBuilder->expects($this->once())->method('build')->will($this->returnValue('(1)'));
+        $this->filterBuilder->expects($this->once())->method('build')->willReturn('(1)');
 
         $response = $this->mapper->buildQuery($this->request);
 
@@ -218,7 +220,7 @@ class MapperTest extends TestCase
             ->method('getSize')
             ->willReturn(self::REQUEST_LIMIT);
 
-        $this->filterBuilder->expects($this->any())->method('build')->will($this->returnValue('(1)'));
+        $this->filterBuilder->expects($this->any())->method('build')->willReturn('(1)');
 
         $table = $this->getMockBuilder(Table::class)
             ->disableOriginalConstructor()
@@ -234,7 +236,7 @@ class MapperTest extends TestCase
             ->method('getMatchQueries')
             ->willReturn($derivedQueries);
 
-        $this->request->expects($this->once())->method('getQuery')->will($this->returnValue($query));
+        $this->request->expects($this->once())->method('getQuery')->willReturn($query);
 
         $response = $this->mapper->buildQuery($this->request);
         $this->assertEquals(end($selects), $response);
@@ -314,11 +316,11 @@ class MapperTest extends TestCase
             ->getMockForAbstractClass();
         $query->expects($this->exactly(2))
             ->method('getType')
-            ->will($this->returnValue('unknownQuery'));
+            ->willReturn('unknownQuery');
         $this->connectionAdapter->expects($this->never())->method('select');
         $this->connectionAdapter->expects($this->never())->method('dropTable');
 
-        $this->request->expects($this->once())->method('getQuery')->will($this->returnValue($query));
+        $this->request->expects($this->once())->method('getQuery')->willReturn($query);
 
         $this->mapper->buildQuery($this->request);
     }
@@ -351,7 +353,7 @@ class MapperTest extends TestCase
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $query->expects($this->once())->method('getType')
-            ->will($this->returnValue(QueryInterface::TYPE_MATCH));
+            ->willReturn(QueryInterface::TYPE_MATCH);
         return $query;
     }
 
@@ -368,11 +370,11 @@ class MapperTest extends TestCase
             ->getMockForAbstractClass();
         $query->expects($this->exactly(1))
             ->method('getType')
-            ->will($this->returnValue(QueryInterface::TYPE_FILTER));
+            ->willReturn(QueryInterface::TYPE_FILTER);
         $query->expects($this->once())->method('getReferenceType')
-            ->will($this->returnValue($referenceType));
+            ->willReturn($referenceType);
         $query->expects($this->once())->method('getReference')
-            ->will($this->returnValue($reference));
+            ->willReturn($reference);
         return $query;
     }
 
@@ -390,16 +392,16 @@ class MapperTest extends TestCase
             ->getMockForAbstractClass();
         $query->expects($this->exactly(1))
             ->method('getType')
-            ->will($this->returnValue(QueryInterface::TYPE_BOOL));
+            ->willReturn(QueryInterface::TYPE_BOOL);
         $query->expects($this->once())
             ->method('getMust')
-            ->will($this->returnValue($must));
+            ->willReturn($must);
         $query->expects($this->once())
             ->method('getShould')
-            ->will($this->returnValue($should));
+            ->willReturn($should);
         $query->expects($this->once())
             ->method('getMustNot')
-            ->will($this->returnValue($mustNot));
+            ->willReturn($mustNot);
         return $query;
     }
 
@@ -451,7 +453,7 @@ class MapperTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->scoreBuilderFactory->expects($this->any())->method('create')
-            ->will($this->returnValue($this->scoreBuilder));
+            ->willReturn($this->scoreBuilder);
         $this->filterBuilder = $this->getMockBuilder(Builder::class)
             ->setMethods(['build'])
             ->disableOriginalConstructor()
@@ -471,7 +473,7 @@ class MapperTest extends TestCase
             ->getMockForAbstractClass();
         $this->indexBuilder->expects($this->any())
             ->method('build')
-            ->will($this->returnValue($select));
+            ->willReturn($select);
         $temporaryStorageFactory = $this->getMockBuilder(
             TemporaryStorageFactory::class
         )
