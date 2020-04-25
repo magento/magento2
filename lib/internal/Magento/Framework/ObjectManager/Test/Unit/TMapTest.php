@@ -56,9 +56,7 @@ class TMapTest extends TestCase
                 ]
             );
 
-        foreach ($tMap as $instance) {
-            static::assertInstanceOf('\TInterface', $instance);
-        }
+        static::assertContainsOnlyInstancesOf('\TInterface', $tMap);
     }
 
     /**

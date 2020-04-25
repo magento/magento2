@@ -33,8 +33,8 @@ class DomTest extends TestCase
             $this->any()
         )->method(
             'parse'
-        )->will(
-            $this->returnCallback([$this, 'parserMockCallback'])
+        )->willReturnCallback(
+            [$this, 'parserMockCallback']
         );
 
         $booleanUtils = $this->createMock(BooleanUtils::class);
@@ -42,8 +42,8 @@ class DomTest extends TestCase
             $this->any()
         )->method(
             'toBoolean'
-        )->will(
-            $this->returnValueMap([['true', true], ['false', false]])
+        )->willReturnMap(
+            [['true', true], ['false', false]]
         );
 
         $this->argumentInterpreter = $this->createMock(InterpreterInterface::class);
@@ -53,8 +53,8 @@ class DomTest extends TestCase
             'evaluate'
         )->with(
             ['xsi:type' => 'string', 'value' => 'test value']
-        )->will(
-            $this->returnValue('test value')
+        )->willReturn(
+            'test value'
         );
         $this->_mapper = new Dom($this->argumentInterpreter, $booleanUtils, $argumentParser);
     }

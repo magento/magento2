@@ -59,7 +59,8 @@ class CompiledTest extends TestCase
         $this->factory = new Compiled($this->config, $this->sharedInstances, []);
         $this->factory->setObjectManager($this->objectManagerMock);
 
-        $this->definitionsMock = $this->getMockBuilder(DefinitionInterface::class)->getMock();
+        $this->definitionsMock = $this->getMockBuilder(DefinitionInterface::class)
+            ->getMock();
         $this->objectManager->setBackwardCompatibleProperty($this->factory, 'definitions', $this->definitionsMock);
     }
 
@@ -319,50 +320,50 @@ class CompiledTest extends TestCase
     {
         return [
             0 => [
-                    0 => 'nonSharedDependency',
-                    1 => DependencyTesting::class,
-                    2 => true,
-                    3 => null,
-                    4 => false,
-                ],
+                0 => 'nonSharedDependency',
+                1 => DependencyTesting::class,
+                2 => true,
+                3 => null,
+                4 => false,
+            ],
             1 => [
-                    0 => 'sharedDependency',
-                    1 => DependencySharedTesting::class,
-                    2 => true,
-                    3 => null,
-                    4 => false,
-                ],
+                0 => 'sharedDependency',
+                1 => DependencySharedTesting::class,
+                2 => true,
+                3 => null,
+                4 => false,
+            ],
             2 => [
-                    0 => 'value',
-                    1 => null,
-                    2 => false,
-                    3 => 'value',
-                    4 => false,
-                ],
+                0 => 'value',
+                1 => null,
+                2 => false,
+                3 => 'value',
+                4 => false,
+            ],
             3 => [
-                    0 => 'valueArray',
-                    1 => null,
-                    2 => false,
-                    3 => [
-                            0 => 'default_value1',
-                            1 => 'default_value2',
-                        ],
-                    4 => false,
+                0 => 'valueArray',
+                1 => null,
+                2 => false,
+                3 => [
+                    0 => 'default_value1',
+                    1 => 'default_value2',
                 ],
+                4 => false,
+            ],
             4 => [
-                    0 => 'globalValue',
-                    1 => null,
-                    2 => false,
-                    3 => '',
-                    4 => false,
-                ],
+                0 => 'globalValue',
+                1 => null,
+                2 => false,
+                3 => '',
+                4 => false,
+            ],
             5 => [
-                    0 => 'nullValue',
-                    1 => null,
-                    2 => false,
-                    3 => null,
-                    4 => false,
-                ],
+                0 => 'nullValue',
+                1 => null,
+                2 => false,
+                3 => null,
+                4 => false,
+            ],
         ];
     }
 }

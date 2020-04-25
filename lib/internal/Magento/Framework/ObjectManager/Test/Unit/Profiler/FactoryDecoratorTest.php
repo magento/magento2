@@ -71,7 +71,9 @@ class FactoryDecoratorTest extends TestCase
     public function testCreateNeglectGenerator()
     {
         $arguments = [1, 2, 3];
-        $loggerMock = $this->getMockBuilder(self::GENERATOR_NAME)->disableOriginalConstructor()->getMock();
+        $loggerMock = $this->getMockBuilder(self::GENERATOR_NAME)
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->objectManagerMock->expects($this->once())
             ->method('create')

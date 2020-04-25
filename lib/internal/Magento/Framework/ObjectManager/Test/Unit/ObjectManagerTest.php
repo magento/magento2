@@ -1,9 +1,11 @@
 <?php
-declare(strict_types=1);
+
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 
 namespace Magento\Framework\ObjectManager\Test\Unit;
 
@@ -50,8 +52,8 @@ class ObjectManagerTest extends TestCase
             null,
             null,
             [
-            'first_param' => 'first_param_value',
-            'second_param' => 'second_param_value'
+                'first_param' => 'first_param_value',
+                'second_param' => 'second_param_value'
             ]
         );
         $this->_object = new ObjectManager($factory, $config);

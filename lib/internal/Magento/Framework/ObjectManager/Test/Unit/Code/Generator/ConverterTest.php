@@ -57,7 +57,8 @@ class ConverterTest extends TestCase
         $this->classGenerator = $this->createMock(ClassGenerator::class);
 
         $this->definedClassesMock = $this->getMockBuilder(DefinedClasses::class)
-            ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $objectManager = new ObjectManager($this);
         $this->generator = $objectManager->getObject(
@@ -80,12 +81,12 @@ class ConverterTest extends TestCase
         //Mocking _validateData call
         $this->definedClassesMock->expects($this->at(0))
             ->method('isClassLoadable')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $this->ioObjectMock->expects($this->once())
             ->method('makeResultFileDirectory')
             ->with($this->resultClassName)
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         //Mocking _generateCode call
         $this->classGenerator->expects($this->once())
@@ -103,13 +104,13 @@ class ConverterTest extends TestCase
             ->willReturnSelf();
         $this->classGenerator->expects($this->once())
             ->method('generate')
-            ->will($this->returnValue($generatedCode));
+            ->willReturn($generatedCode);
 
         //Mocking generation
         $this->ioObjectMock->expects($this->any())
             ->method('generateResultFileName')
             ->with($this->resultClassName)
-            ->will($this->returnValue($resultFileName));
+            ->willReturn($resultFileName);
         $this->ioObjectMock->expects($this->once())
             ->method('writeResultFile')
             ->with($resultFileName, $generatedCode);

@@ -43,7 +43,7 @@ class DomFactoryTest extends TestCase
         $this->_objectManager->expects($this->once())
             ->method('create')
             ->with(Dom::class)
-            ->will($this->returnValue($this->_object));
+            ->willReturn($this->_object);
 
         $this->_factory->create([1]);
     }

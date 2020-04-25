@@ -60,27 +60,23 @@ class FactoryTest extends TestCase
         $this->expectException('UnexpectedValueException');
         $this->expectExceptionMessage('Invalid parameter configuration provided for $firstParam argument');
         $configMock = $this->createMock(Config::class);
-        $configMock->expects($this->once())->method('getArguments')->will(
-            $this->returnValue(
-                [
-                    'firstParam' => 1,
-                ]
-            )
+        $configMock->expects($this->once())->method('getArguments')->willReturn(
+            [
+                'firstParam' => 1,
+            ]
         );
 
         $definitionsMock = $this->createMock(DefinitionInterface::class);
-        $definitionsMock->expects($this->once())->method('getParameters')->will(
-            $this->returnValue(
+        $definitionsMock->expects($this->once())->method('getParameters')->willReturn(
+            [
                 [
-                    [
-                        'firstParam',
-                        'string',
-                        true,
-                        'default_val',
-                        false
-                    ]
+                    'firstParam',
+                    'string',
+                    true,
+                    'default_val',
+                    false
                 ]
-            )
+            ]
         );
 
         $this->factory = new Developer(
@@ -173,21 +169,19 @@ class FactoryTest extends TestCase
         $type = Polymorphous::class;
         $definitions = $this->createMock(DefinitionInterface::class);
         // should be more than defined in "switch" of create() method
-        $definitions->expects($this->once())->method('getParameters')->with($type)->will(
-            $this->returnValue(
-                [
-                    ['one', null, false, null, false],
-                    ['two', null, false, null, false],
-                    ['three', null, false, null, false],
-                    ['four', null, false, null, false],
-                    ['five', null, false, null, false],
-                    ['six', null, false, null, false],
-                    ['seven', null, false, null, false],
-                    ['eight', null, false, null, false],
-                    ['nine', null, false, null, false],
-                    ['ten', null, false, null, false],
-                ]
-            )
+        $definitions->expects($this->once())->method('getParameters')->with($type)->willReturn(
+            [
+                ['one', null, false, null, false],
+                ['two', null, false, null, false],
+                ['three', null, false, null, false],
+                ['four', null, false, null, false],
+                ['five', null, false, null, false],
+                ['six', null, false, null, false],
+                ['seven', null, false, null, false],
+                ['eight', null, false, null, false],
+                ['nine', null, false, null, false],
+                ['ten', null, false, null, false],
+            ]
         );
         $factory = new Developer($this->config, null, $definitions);
         $result = $factory->create(
@@ -224,18 +218,16 @@ class FactoryTest extends TestCase
         $type = Variadic::class;
         $definitions = $this->createMock(DefinitionInterface::class);
 
-        $definitions->expects($this->once())->method('getParameters')->with($type)->will(
-            $this->returnValue(
+        $definitions->expects($this->once())->method('getParameters')->with($type)->willReturn(
+            [
                 [
-                    [
-                'oneScalars',
-                OneScalar::class,
-                false,
-                [],
-                true
-                    ],
-                ]
-            )
+                    'oneScalars',
+                    OneScalar::class,
+                    false,
+                    [],
+                    true
+                ],
+            ]
         );
         $factory = new Developer($this->config, null, $definitions);
 
@@ -344,25 +336,23 @@ class FactoryTest extends TestCase
         $type = SemiVariadic::class;
         $definitions = $this->createMock(DefinitionInterface::class);
 
-        $definitions->expects($this->once())->method('getParameters')->with($type)->will(
-            $this->returnValue(
+        $definitions->expects($this->once())->method('getParameters')->with($type)->willReturn(
+            [
                 [
-                    [
-                        'foo',
-                        null,
-                        false,
-                        SemiVariadic::DEFAULT_FOO_VALUE,
-                        false
-                    ],
-                    [
-                        'oneScalars',
-                        OneScalar::class,
-                        false,
-                        [],
-                        true
-                    ],
-                ]
-            )
+                    'foo',
+                    null,
+                    false,
+                    SemiVariadic::DEFAULT_FOO_VALUE,
+                    false
+                ],
+                [
+                    'oneScalars',
+                    OneScalar::class,
+                    false,
+                    [],
+                    true
+                ],
+            ]
         );
         $factory = new Developer($this->config, null, $definitions);
 
