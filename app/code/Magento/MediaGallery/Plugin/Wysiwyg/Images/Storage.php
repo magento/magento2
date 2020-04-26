@@ -8,7 +8,6 @@ declare(strict_types=1);
 
 namespace Magento\MediaGallery\Plugin\Wysiwyg\Images;
 
-use Magento\Cms\Model\Wysiwyg\Images;
 use Magento\MediaGalleryApi\Api\DeleteAssetsByPathsInterface;
 use Magento\Cms\Model\Wysiwyg\Images\Storage as StorageSubject;
 use Magento\Framework\App\Filesystem\DirectoryList;
@@ -75,7 +74,6 @@ class Storage
         }
 
         try {
-
             $this->deleteMediaAssetByPath->execute([$relativePath]);
         } catch (\Exception $exception) {
             $this->logger->critical($exception);

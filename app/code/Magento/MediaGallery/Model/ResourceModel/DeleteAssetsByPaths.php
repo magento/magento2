@@ -55,7 +55,6 @@ class DeleteAssetsByPaths implements DeleteAssetsByPathsInterface
         foreach ($paths as $path) {
             try {
                 $this->validateDirectoryPath($path);
-                $path = count(explode('/', $path)) > 1 ? $path : '/' . $path;
                 $this->deleteAssetsByDirectoryPath($path);
             } catch (\Exception $exception) {
                 $this->logger->critical($exception);
