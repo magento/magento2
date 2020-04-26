@@ -6,20 +6,21 @@
  */
 namespace Magento\User\Controller\Adminhtml\Auth;
 
+use Magento\Backend\App\Action\Context;
+use Magento\Backend\Helper\Data;
 use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Framework\App\ObjectManager;
-use Magento\Security\Model\SecurityManager;
-use Magento\Backend\App\Action\Context;
-use Magento\User\Model\UserFactory;
-use Magento\User\Model\ResourceModel\User\CollectionFactory;
-use Magento\Framework\Validator\EmailAddress;
-use Magento\Security\Model\PasswordResetRequestEvent;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\SecurityViolationException;
+use Magento\Framework\Validator\EmailAddress;
+use Magento\Security\Model\PasswordResetRequestEvent;
+use Magento\Security\Model\SecurityManager;
 use Magento\User\Controller\Adminhtml\Auth;
-use Magento\Backend\Helper\Data;
+use Magento\User\Model\ResourceModel\User\CollectionFactory;
 use Magento\User\Model\Spi\NotificatorInterface;
+use Magento\User\Model\User;
+use Magento\User\Model\UserFactory;
 
 /**
  * Initiate forgot-password process.
@@ -109,19 +110,10 @@ class Forgotpassword extends Auth implements HttpGetActionInterface, HttpPostAct
                 try {
                     if ($collection->getSize() > 0) {
                         foreach ($collection as $item) {
-                            /** @var \Magento\User\Model\User $user */
+                            /** @var User $user */
                             $user = $this->_userFactory->create()->load($item->getId());
-                            if ($user->getId()) {
-                                try {
-                                    // Use the old token if it's still valid
-                                    $newPassResetToken = $user->getRpToken();
-                                    $this->_validateResetPasswordLinkToken((int)$user->getId(), $newPassResetToken);
-                                } catch (LocalizedException $exception) {
-                                    // Otherwise generate a new token
-                                    $newPassResetToken = $this->backendDataHelper->generateResetPasswordLinkToken();
-                                }
-
-                                // Always set/renew expiry time for token
+                            if ($user->getId() && !$this->userHasValidPasswordResetToken($user)) {
+                                $newPassResetToken = $this->backendDataHelper->generateResetPasswordLinkToken();
                                 $user->changeResetPasswordLinkToken($newPassResetToken);
                                 $user->save();
                                 $this->notificator->sendForgotPassword($user);
@@ -151,5 +143,23 @@ class Forgotpassword extends Auth implements HttpGetActionInterface, HttpPostAct
         }
         $this->_view->loadLayout();
         $this->_view->renderLayout();
+    }
+
+    /**
+     * Retrieve and validate existing password reset token; returns true on
+     * success, false on failure
+     *
+     * @param User $user
+     * @return bool
+     */
+    protected function userHasValidPasswordResetToken(User $user): bool
+    {
+        try {
+            $newPassResetToken = $user->getRpToken();
+            $this->_validateResetPasswordLinkToken((int) $user->getId(), $newPassResetToken);
+            return true;
+        } catch (LocalizedException $exception) {
+            return false;
+        }
     }
 }

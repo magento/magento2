@@ -651,20 +651,17 @@ class AccountManagement implements AccountManagementInterface
         // load customer by email
         $customer = $this->customerRepository->get($email, $websiteId);
 
+        if ($this->customerHasValidPasswordResetToken($customer)) {
+            // No need to send an email as the password reset token that has
+            // already been sent is still valid. No message is shown to avoid
+            // leaking information about existence of account.
+            return false;
+        }
+
         // No need to validate customer address while saving customer reset password token
         $this->disableAddressValidation($customer);
 
-        try {
-            // Use the old token if it's still valid
-            $customerSecureData = $this->customerRegistry->retrieveSecureData($customer->getId());
-            $newPasswordToken = $customerSecureData->getRpToken();
-            $this->validateResetPasswordToken($customer->getId(), $newPasswordToken);
-        } catch (\Exception $exception) {
-            // Otherwise generate a new token
-            $newPasswordToken = $this->mathRandom->getUniqueHash();
-        }
-
-        // Always set/renew expiry time for token
+        $newPasswordToken = $this->mathRandom->getUniqueHash();
         $this->changeResetPasswordLinkToken($customer, $newPasswordToken);
 
         try {
@@ -1596,6 +1593,25 @@ class AccountManagement implements AccountManagementInterface
     public function getPasswordHash($password)
     {
         return $this->encryptor->getHash($password, true);
+    }
+
+    /**
+     * Retrieve and validate existing password reset token; returns true on
+     * success, false on failure
+     *
+     * @param CustomerInterface $customer
+     * @return bool
+     */
+    protected function customerHasValidPasswordResetToken(CustomerInterface $customer): bool
+    {
+        try {
+            $customerId = $customer->getId();
+            $customerSecureData = $this->customerRegistry->retrieveSecureData($customerId);
+            $token = $customerSecureData->getRpToken();
+            return $this->validateResetPasswordToken($customerId, $token);
+        } catch (\Exception $exception) {
+            return false;
+        }
     }
 
     /**
