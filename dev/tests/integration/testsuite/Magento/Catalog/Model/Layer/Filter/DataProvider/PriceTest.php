@@ -85,7 +85,6 @@ class PriceTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetRangeItemCounts($inputRange, $expectedItemCounts)
     {
-//        $this->markTestSkipped('MC-33231: Mysql Search Engine is deprecated. This test need stabilization.');
         $actualItemCounts = $this->_model->getRangeItemCounts($inputRange);
         $this->assertEquals($expectedItemCounts, $actualItemCounts);
     }

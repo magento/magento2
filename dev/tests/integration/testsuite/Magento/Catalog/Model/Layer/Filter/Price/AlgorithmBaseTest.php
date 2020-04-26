@@ -109,7 +109,7 @@ class AlgorithmBaseTest extends \PHPUnit\Framework\TestCase
         );
 
         $items = $model->calculateSeparators($interval);
-        $this->assertEquals(array_keys($intervalItems), array_keys($items));
+        $this->assertEquals($intervalItems, $items);
 
         for ($i = 0, $count = count($intervalItems); $i < $count; ++$i) {
             $this->assertInternalType('array', $items[$i]);

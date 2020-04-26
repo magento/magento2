@@ -298,51 +298,54 @@ class Algorithm
                 $interval->load($intervalValuesCount + 1, $offset, $lowerValue, $this->_upperLimit)
             );
         }
-        $lastValue = $values[$intervalValuesCount - 1];
+        $lastValue = $this->offsetLimits($intervalValuesCount, $values);
         $bestRoundValue = [];
-        if ($lastValue == $values[0]) {
-            if ($quantileNumber == 1 && $offset) {
-                $additionalValues = $interval->loadPrevious($lastValue, $quantileInterval[0], $this->_lowerLimit);
-                if ($additionalValues) {
-                    $quantileInterval[0] -= count($additionalValues);
-                    $values = array_merge($additionalValues, $values);
-                    $bestRoundValue = $this->_findRoundValue(
-                        $values[0] + self::MIN_POSSIBLE_VALUE / 10,
-                        $lastValue,
-                        false
-                    );
-                }
-            }
-            if ($quantileNumber == $this->getIntervalsNumber() - 1) {
-                $valuesCount = count($values);
-                if ($values[$valuesCount - 1] > $lastValue) {
-                    $additionalValues = [$values[$valuesCount - 1]];
-                } else {
-                    $additionalValues = $interval->loadNext(
-                        $lastValue,
-                        $this->_count - $quantileInterval[0] - count($values),
-                        $this->_upperLimit
-                    );
-                }
-                if ($additionalValues) {
-                    $quantileInterval[1] = $quantileInterval[0] + count($values) - 1;
-                    if ($values[$valuesCount - 1] <= $lastValue) {
-                        $quantileInterval[1] += count($additionalValues);
-                        $values = array_merge($values, $additionalValues);
+
+        if (count($values) > 0) {
+            if ($lastValue == $values[0]) {
+                if ($quantileNumber == 1 && $offset) {
+                    $additionalValues = $interval->loadPrevious($lastValue, $quantileInterval[0], $this->_lowerLimit);
+                    if ($additionalValues) {
+                        $quantileInterval[0] -= count($additionalValues);
+                        $values = array_merge($additionalValues, $values);
+                        $bestRoundValue = $this->_findRoundValue(
+                            $values[0] + self::MIN_POSSIBLE_VALUE / 10,
+                            $lastValue,
+                            false
+                        );
                     }
-                    $upperBestRoundValue = $this->_findRoundValue(
-                        $lastValue + self::MIN_POSSIBLE_VALUE / 10,
-                        $values[count($values) - 1],
-                        false
-                    );
-                    $this->_mergeRoundValues($bestRoundValue, $upperBestRoundValue);
                 }
+                if ($quantileNumber == $this->getIntervalsNumber() - 1) {
+                    $valuesCount = count($values);
+                    if ($values[$valuesCount - 1] > $lastValue) {
+                        $additionalValues = [$values[$valuesCount - 1]];
+                    } else {
+                        $additionalValues = $interval->loadNext(
+                            $lastValue,
+                            $this->_count - $quantileInterval[0] - count($values),
+                            $this->_upperLimit
+                        );
+                    }
+                    if ($additionalValues) {
+                        $quantileInterval[1] = $quantileInterval[0] + count($values) - 1;
+                        if ($values[$valuesCount - 1] <= $lastValue) {
+                            $quantileInterval[1] += count($additionalValues);
+                            $values = array_merge($values, $additionalValues);
+                        }
+                        $upperBestRoundValue = $this->_findRoundValue(
+                            $lastValue + self::MIN_POSSIBLE_VALUE / 10,
+                            $values[count($values) - 1],
+                            false
+                        );
+                        $this->_mergeRoundValues($bestRoundValue, $upperBestRoundValue);
+                    }
+                }
+            } else {
+                $bestRoundValue = $this->_findRoundValue(
+                    $values[0] + self::MIN_POSSIBLE_VALUE / 10,
+                    $lastValue
+                );
             }
-        } else {
-            $bestRoundValue = $this->_findRoundValue(
-                $values[0] + self::MIN_POSSIBLE_VALUE / 10,
-                $lastValue
-            );
         }
 
         $this->_quantileInterval = $quantileInterval;
@@ -591,5 +594,12 @@ class Algorithm
         }
 
         return $this->_binarySearch($value, [$limits[0], $limits[1]]);
+    }
+
+    private function offsetLimits($intervalValuesCount, $values)
+    {
+        if (array_key_exists((int)$intervalValuesCount - 1, $values)) {
+            return $values[$intervalValuesCount - 1];
+        }
     }
 }
