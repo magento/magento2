@@ -36,12 +36,13 @@
         </dataProvider>
     </dataSource>
     <columns name="export_filter_columns">
-        <column name="skip_attr">
+        <selectionsColumn name="skip_attr">
             <settings>
                 <label translate="true">Exclude</label>
-                <sortable>false</sortable>
+                <headerTmpl>ui/grid/columns/text</headerTmpl>
+                <indexField>attribute_id</indexField>
             </settings>
-        </column>
+        </selectionsColumn>
         <column name="frontend_label">
             <settings>
                 <label translate="true">Attribute Label</label>
