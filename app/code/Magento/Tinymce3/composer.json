@@ -7,8 +7,7 @@
         "magento/module-backend": "*",
         "magento/module-ui": "*",
         "magento/module-variable": "*",
-        "magento/module-widget": "*",
-        "magento/module-cms": "*"
+        "magento/module-widget": "*"
 
     },
     "suggest": {

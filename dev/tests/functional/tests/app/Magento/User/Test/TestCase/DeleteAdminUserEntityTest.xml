@@ -12,12 +12,14 @@
             <data name="systemAdmin/dataset" xsi:type="string">system_admin</data>
             <constraint name="Magento\User\Test\Constraint\AssertImpossibleDeleteYourOwnAccount" />
             <constraint name="Magento\User\Test\Constraint\AssertUserInGrid" />
+            <data name="tag" xsi:type="string">mftf_migrated:yes</data>
         </variation>
         <variation name="DeleteAdminUserEntityTestVariation2">
             <data name="isDefaultUser" xsi:type="string">1</data>
             <data name="systemAdmin/dataset" xsi:type="string">system_admin</data>
             <constraint name="Magento\User\Test\Constraint\AssertUserSuccessDeleteMessage" />
             <constraint name="Magento\User\Test\Constraint\AssertUserNotInGrid" />
+            <data name="tag" xsi:type="string">mftf_migrated:yes</data>
         </variation>
     </testCase>
 </config>

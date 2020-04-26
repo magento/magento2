@@ -16,7 +16,7 @@
             <severity value="MINOR"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
             <magentoCLI command="config:set currency/import/enabled 1" stepKey="enableCurrencyImport"/>
         </before>
 
