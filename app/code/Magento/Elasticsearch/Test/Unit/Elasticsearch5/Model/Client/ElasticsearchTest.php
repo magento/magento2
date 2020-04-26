@@ -3,20 +3,20 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Elasticsearch\Test\Unit\Elasticsearch5\Model\Client;
 
 use Magento\Elasticsearch\Elasticsearch5\Model\Client\Elasticsearch;
-use Magento\Elasticsearch\Model\Client\Elasticsearch as ElasticsearchClient;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
 /**
- * Class ElasticsearchTest
+ * Test elasticsearch client methods.
  */
 class ElasticsearchTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var ElasticsearchClient
+     * @var \Magento\Elasticsearch\Elasticsearch5\Model\Client\Elasticsearch
      */
     protected $model;
 
@@ -94,34 +94,6 @@ class ElasticsearchTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     */
-    public function testConstructorOptionsException()
-    {
-        $result = $this->objectManager->getObject(
-            \Magento\Elasticsearch\Model\Client\Elasticsearch::class,
-            [
-                'options' => []
-            ]
-        );
-        $this->assertNotNull($result);
-    }
-
-    /**
-     * Test client creation from the list of options
-     */
-    public function testConstructorWithOptions()
-    {
-        $result = $this->objectManager->getObject(
-            \Magento\Elasticsearch\Model\Client\Elasticsearch::class,
-            [
-                'options' => $this->getOptions()
-            ]
-        );
-        $this->assertNotNull($result);
-    }
-
-    /**
      * Test ping functionality
      */
     public function testPing()
@@ -145,23 +117,6 @@ class ElasticsearchTest extends \PHPUnit\Framework\TestCase
     public function testTestConnectionFalse()
     {
         $this->elasticsearchClientMock->expects($this->once())->method('ping')->willReturn(false);
-        $this->assertEquals(true, $this->model->testConnection());
-    }
-
-    /**
-     * Test validation of connection parameters
-     */
-    public function testTestConnectionPing()
-    {
-        $this->model = $this->objectManager->getObject(
-            \Magento\Elasticsearch\Model\Client\Elasticsearch::class,
-            [
-                'options' => $this->getEmptyIndexOption(),
-                'elasticsearchClient' => $this->elasticsearchClientMock
-            ]
-        );
-
-        $this->model->ping();
         $this->assertEquals(true, $this->model->testConnection());
     }
 
@@ -379,7 +334,7 @@ class ElasticsearchTest extends \PHPUnit\Framework\TestCase
                                         'match_mapping_type' => 'string',
                                         'mapping' => [
                                             'type' => 'integer',
-                                            'index' => false
+                                            'index' => true
                                         ],
                                     ],
                                 ],
@@ -389,7 +344,7 @@ class ElasticsearchTest extends \PHPUnit\Framework\TestCase
                                         'match_mapping_type' => 'string',
                                         'mapping' => [
                                             'type' => 'text',
-                                            'index' => false,
+                                            'index' => true,
                                         ],
                                     ],
                                 ],
@@ -449,7 +404,7 @@ class ElasticsearchTest extends \PHPUnit\Framework\TestCase
                                         'match_mapping_type' => 'string',
                                         'mapping' => [
                                             'type' => 'integer',
-                                            'index' => false
+                                            'index' => true,
                                         ],
                                     ],
                                 ],
@@ -459,7 +414,7 @@ class ElasticsearchTest extends \PHPUnit\Framework\TestCase
                                         'match_mapping_type' => 'string',
                                         'mapping' => [
                                             'type' => 'text',
-                                            'index' => false,
+                                            'index' => true,
                                         ],
                                     ],
                                 ]
@@ -563,9 +518,9 @@ class ElasticsearchTest extends \PHPUnit\Framework\TestCase
         $query = 'test phrase query';
         $this->elasticsearchClientMock->expects($this->once())
             ->method('search')
-            ->with($query)
+            ->with([$query])
             ->willReturn([]);
-        $this->assertEquals([], $this->model->query($query));
+        $this->assertEquals([], $this->model->query([$query]));
     }
 
     /**

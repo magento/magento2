@@ -268,7 +268,7 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
             )
             ->disableOriginalConstructor()
             ->getMock();
-        $filterTemplate->expects($this->once())
+        $filterTemplate->expects($this->never())
             ->method('setUseSessionInUrl')
             ->with(false)
             ->will($this->returnSelf());

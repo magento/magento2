@@ -10,6 +10,8 @@ use Magento\AdvancedSearch\Model\Client\ClientInterface;
 
 /**
  * Elasticsearch client
+ *
+ * @deprecated the Elasticsearch 5 doesn't supported due to EOL
  */
 class Elasticsearch implements ClientInterface
 {
@@ -285,7 +287,7 @@ class Elasticsearch implements ClientInterface
                                 'match_mapping_type' => 'string',
                                 'mapping' => [
                                     'type' => 'integer',
-                                    'index' => false,
+                                    'index' => true,
                                 ],
                             ],
                         ],
@@ -296,7 +298,7 @@ class Elasticsearch implements ClientInterface
                                 'mapping' => $this->prepareFieldInfo(
                                     [
                                         'type' => 'text',
-                                        'index' => false,
+                                        'index' => true,
                                     ]
                                 ),
                             ],

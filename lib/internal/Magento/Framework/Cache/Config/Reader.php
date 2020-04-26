@@ -3,9 +3,19 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Framework\Cache\Config;
 
-class Reader extends \Magento\Framework\Config\Reader\Filesystem
+use Magento\Framework\App\Area;
+use Magento\Framework\Config\Dom;
+use Magento\Framework\Config\FileResolverInterface;
+use Magento\Framework\Config\Reader\Filesystem;
+use Magento\Framework\Config\ValidationStateInterface;
+
+/**
+ * Cache configuration reader
+ */
+class Reader extends Filesystem
 {
     /**
      * List of id attributes for merge
@@ -15,24 +25,27 @@ class Reader extends \Magento\Framework\Config\Reader\Filesystem
     protected $_idAttributes = ['/config/type' => 'name'];
 
     /**
-     * @param \Magento\Framework\Config\FileResolverInterface $fileResolver
+     * Initialize dependencies.
+     *
+     * @param FileResolverInterface $fileResolver
      * @param Converter $converter
      * @param SchemaLocator $schemaLocator
-     * @param \Magento\Framework\Config\ValidationStateInterface $validationState
+     * @param ValidationStateInterface $validationState
      * @param string $fileName
      * @param array $idAttributes
      * @param string $domDocumentClass
      * @param string $defaultScope
+     * phpcs:disable Generic.CodeAnalysis.UselessOverridingMethod
      */
     public function __construct(
-        \Magento\Framework\Config\FileResolverInterface $fileResolver,
-        \Magento\Framework\Cache\Config\Converter $converter,
-        \Magento\Framework\Cache\Config\SchemaLocator $schemaLocator,
-        \Magento\Framework\Config\ValidationStateInterface $validationState,
+        FileResolverInterface $fileResolver,
+        Converter $converter,
+        SchemaLocator $schemaLocator,
+        ValidationStateInterface $validationState,
         $fileName = 'cache.xml',
         $idAttributes = [],
-        $domDocumentClass = \Magento\Framework\Config\Dom::class,
-        $defaultScope = 'global'
+        $domDocumentClass = Dom::class,
+        $defaultScope = Area::AREA_GLOBAL
     ) {
         parent::__construct(
             $fileResolver,

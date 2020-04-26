@@ -74,7 +74,7 @@ class LinkedProductSelectBuilderByBasePrice implements LinkedProductSelectBuilde
     /**
      * @inheritdoc
      */
-    public function build($productId)
+    public function build(int $productId, int $storeId) : array
     {
         $linkField = $this->metadataPool->getMetadata(ProductInterface::class)->getLinkField();
         $priceAttribute = $this->eavConfig->getAttribute(Product::ENTITY, 'price');
@@ -104,7 +104,7 @@ class LinkedProductSelectBuilderByBasePrice implements LinkedProductSelectBuilde
 
         if (!$this->catalogHelper->isPriceGlobal()) {
             $priceSelectStore = clone $priceSelect;
-            $priceSelectStore->where('t.store_id = ?', $this->storeManager->getStore()->getId());
+            $priceSelectStore->where('t.store_id = ?', $storeId);
             $selects[] = $priceSelectStore;
         }
 

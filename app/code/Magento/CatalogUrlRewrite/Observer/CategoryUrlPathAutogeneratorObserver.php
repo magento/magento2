@@ -7,12 +7,14 @@ declare(strict_types=1);
 
 namespace Magento\CatalogUrlRewrite\Observer;
 
+use Magento\Catalog\Api\CategoryRepositoryInterface;
 use Magento\Catalog\Model\Category;
+use Magento\CatalogUrlRewrite\Model\Category\ChildrenCategoriesProvider;
 use Magento\CatalogUrlRewrite\Model\CategoryUrlPathGenerator;
 use Magento\CatalogUrlRewrite\Service\V1\StoreViewService;
-use Magento\Catalog\Api\CategoryRepositoryInterface;
-use Magento\CatalogUrlRewrite\Model\Category\ChildrenCategoriesProvider;
 use Magento\Framework\Event\ObserverInterface;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Store\Model\Store;
 
 /**
@@ -83,7 +85,7 @@ class CategoryUrlPathAutogeneratorObserver implements ObserverInterface
      *
      * @param \Magento\Framework\Event\Observer $observer
      * @return void
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     public function execute(\Magento\Framework\Event\Observer $observer)
     {
@@ -106,26 +108,14 @@ class CategoryUrlPathAutogeneratorObserver implements ObserverInterface
      * Update Url Key
      *
      * @param Category $category
-     * @param string $urlKey
-     * @throws \Magento\Framework\Exception\LocalizedException
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @param string|null $urlKey
+     * @return void
+     * @throws LocalizedException
+     * @throws NoSuchEntityException
      */
-    private function updateUrlKey($category, $urlKey)
+    private function updateUrlKey(Category $category, ?string $urlKey): void
     {
-        if (empty($urlKey)) {
-            throw new \Magento\Framework\Exception\LocalizedException(__('Invalid URL key'));
-        }
-
-        if (in_array($urlKey, $this->getInvalidValues())) {
-            throw new \Magento\Framework\Exception\LocalizedException(
-                __(
-                    'URL key "%1" matches a reserved endpoint name (%2). Use another URL key.',
-                    $urlKey,
-                    implode(', ', $this->getInvalidValues())
-                )
-            );
-        }
-
+        $this->validateUrlKey($category, $urlKey);
         $category->setUrlKey($urlKey)
             ->setUrlPath($this->categoryUrlPathGenerator->getUrlPath($category));
         if (!$category->isObjectNew()) {
@@ -133,6 +123,52 @@ class CategoryUrlPathAutogeneratorObserver implements ObserverInterface
             if ($category->dataHasChangedFor('url_path')) {
                 $this->updateUrlPathForChildren($category);
             }
+        }
+    }
+
+    /**
+     * Validate URL key value
+     *
+     * @param Category $category
+     * @param string|null $urlKey
+     * @return void
+     * @throws LocalizedException
+     */
+    private function validateUrlKey(Category $category, ?string $urlKey): void
+    {
+        if (empty($urlKey) && !empty($category->getName()) && !empty($category->getUrlKey())) {
+            throw new LocalizedException(
+                __(
+                    'Invalid URL key. The "%1" URL key can not be used to generate Latin URL key. ' .
+                    'Please use Latin letters and numbers to avoid generating URL key issues.',
+                    $category->getUrlKey()
+                )
+            );
+        }
+
+        if (empty($urlKey) && !empty($category->getName())) {
+            throw new LocalizedException(
+                __(
+                    'Invalid URL key. The "%1" category name can not be used to generate Latin URL key. ' .
+                    'Please add URL key or change category name using Latin letters and numbers to avoid generating ' .
+                    'URL key issues.',
+                    $category->getName()
+                )
+            );
+        }
+
+        if (empty($urlKey)) {
+            throw new LocalizedException(__('Invalid URL key'));
+        }
+
+        if (in_array($urlKey, $this->getInvalidValues())) {
+            throw new LocalizedException(
+                __(
+                    'URL key "%1" matches a reserved endpoint name (%2). Use another URL key.',
+                    $urlKey,
+                    implode(', ', $this->getInvalidValues())
+                )
+            );
         }
     }
 
@@ -199,7 +235,7 @@ class CategoryUrlPathAutogeneratorObserver implements ObserverInterface
      * @param Category $category
      * @param Category|null $parentCategory
      * @return void
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @throws NoSuchEntityException
      */
     protected function updateUrlPathForCategory(Category $category, Category $parentCategory = null)
     {

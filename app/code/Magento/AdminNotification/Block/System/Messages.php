@@ -5,45 +5,54 @@
  */
 namespace Magento\AdminNotification\Block\System;
 
-class Messages extends \Magento\Backend\Block\Template
+use Magento\AdminNotification\Model\ResourceModel\System\Message\Collection\Synchronized;
+use Magento\Backend\Block\Template;
+use Magento\Backend\Block\Template\Context as TemplateContext;
+use Magento\Framework\Json\Helper\Data as JsonDataHelper;
+use Magento\Framework\Notification\MessageInterface;
+use Magento\Framework\Serialize\Serializer\Json as JsonSerializer;
+
+/**
+ * AdminNotification Messages class
+ */
+class Messages extends Template
 {
     /**
-     * Message list
+     * Synchronized Message collection
      *
-     * @var \Magento\AdminNotification\Model\ResourceModel\System\Message\Collection\Synchronized
+     * @var Synchronized
      */
     protected $_messages;
 
     /**
-     * @var \Magento\Framework\Json\Helper\Data
+     * @var JsonDataHelper
      * @deprecated
      */
     protected $jsonHelper;
 
     /**
-     * @var \Magento\Framework\Serialize\Serializer\Json
+     * @var JsonSerializer
      */
     private $serializer;
 
     /**
-     * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\AdminNotification\Model\ResourceModel\System\Message\Collection\Synchronized $messages
-     * @param \Magento\Framework\Json\Helper\Data $jsonHelper
+     * @param TemplateContext $context
+     * @param Synchronized $messages
+     * @param JsonDataHelper $jsonHelper
+     * @param JsonSerializer $serializer
      * @param array $data
-     * @param \Magento\Framework\Serialize\Serializer\Json|null $serializer
      */
     public function __construct(
-        \Magento\Backend\Block\Template\Context $context,
-        \Magento\AdminNotification\Model\ResourceModel\System\Message\Collection\Synchronized $messages,
-        \Magento\Framework\Json\Helper\Data $jsonHelper,
-        array $data = [],
-        \Magento\Framework\Serialize\Serializer\Json $serializer = null
+        TemplateContext $context,
+        Synchronized $messages,
+        JsonDataHelper $jsonHelper,
+        JsonSerializer $serializer,
+        array $data = []
     ) {
         $this->jsonHelper = $jsonHelper;
         parent::__construct($context, $data);
         $this->_messages = $messages;
-        $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()
-            ->get(\Magento\Framework\Serialize\Serializer\Json::class);
+        $this->serializer = $serializer;
     }
 
     /**
@@ -62,16 +71,14 @@ class Messages extends \Magento\Backend\Block\Template
     /**
      * Retrieve message list
      *
-     * @return \Magento\Framework\Notification\MessageInterface[]
+     * @return MessageInterface[]|null
      */
     public function getLastCritical()
     {
         $items = array_values($this->_messages->getItems());
-        if (isset(
-            $items[0]
-        ) && $items[0]->getSeverity() == \Magento\Framework\Notification\MessageInterface::SEVERITY_CRITICAL
-        ) {
-            return $items[0];
+
+        if (!empty($items) && current($items)->getSeverity() === MessageInterface::SEVERITY_CRITICAL) {
+            return current($items);
         }
         return null;
     }
@@ -83,9 +90,7 @@ class Messages extends \Magento\Backend\Block\Template
      */
     public function getCriticalCount()
     {
-        return $this->_messages->getCountBySeverity(
-            \Magento\Framework\Notification\MessageInterface::SEVERITY_CRITICAL
-        );
+        return $this->_messages->getCountBySeverity(MessageInterface::SEVERITY_CRITICAL);
     }
 
     /**
@@ -95,9 +100,7 @@ class Messages extends \Magento\Backend\Block\Template
      */
     public function getMajorCount()
     {
-        return $this->_messages->getCountBySeverity(
-            \Magento\Framework\Notification\MessageInterface::SEVERITY_MAJOR
-        );
+        return $this->_messages->getCountBySeverity(MessageInterface::SEVERITY_MAJOR);
     }
 
     /**
