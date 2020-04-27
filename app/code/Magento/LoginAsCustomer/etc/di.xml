@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <preference for="Magento\LoginAsCustomer\Api\CreateSecretInterface" type="Magento\LoginAsCustomer\Model\ResourceModel\CreateSecret" />
+    <preference for="Magento\LoginAsCustomer\Api\GetAuthenticateDataInterface" type="Magento\LoginAsCustomer\Model\ResourceModel\GetAuthenticateData" />
+    <preference for="Magento\LoginAsCustomer\Api\AuthenticateCustomerInterface" type="Magento\LoginAsCustomer\Model\AuthenticateCustomer" />
+    <preference for="Magento\LoginAsCustomer\Api\DeleteSecretInterface" type="Magento\LoginAsCustomer\Model\ResourceModel\DeleteSecret" />
+    <preference for="Magento\LoginAsCustomer\Api\DeleteOldSecretsInterface" type="Magento\LoginAsCustomer\Model\ResourceModel\DeleteOldSecrets" />
+</config>

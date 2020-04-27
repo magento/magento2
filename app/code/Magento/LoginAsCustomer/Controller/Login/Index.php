@@ -11,11 +11,15 @@ use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Controller\Result\Redirect;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Controller\ResultInterface;
+use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Framework\Message\ManagerInterface;
-use Magento\LoginAsCustomer\Model\Login;
 use Psr\Log\LoggerInterface;
+use Magento\LoginAsCustomer\Api\GetAuthenticateDataInterface;
+use Magento\LoginAsCustomer\Api\AuthenticateCustomerInterface;
+use Magento\LoginAsCustomer\Api\DeleteSecretInterface;
 
 /**
  * Login As Customer storefront login action
@@ -33,9 +37,24 @@ class Index implements HttpGetActionInterface
     private $request;
 
     /**
-     * @var Login
+     * @var CustomerRepositoryInterface
      */
-    private $loginModel;
+    private $customerRepository;
+
+    /**
+     * @var GetAuthenticateDataInterface
+     */
+    private $getAuthenticateDataProcessor;
+
+    /**
+     * @var AuthenticateCustomerInterface
+     */
+    private $authenticateCustomerProcessor;
+
+    /**
+     * @var DeleteSecretInterface
+     */
+    private $deleteSecretProcessor;
 
     /**
      * @var ManagerInterface
@@ -50,20 +69,29 @@ class Index implements HttpGetActionInterface
     /**
      * @param ResultFactory $resultFactory
      * @param RequestInterface $request
-     * @param Login $loginModel
+     * @param CustomerRepositoryInterface $customerRepository
+     * @param GetAuthenticateDataInterface $getAuthenticateDataProcessor
+     * @param AuthenticateCustomerInterface $authenticateCustomerProcessor
+     * @param DeleteSecretInterface $deleteSecretProcessor
      * @param ManagerInterface $messageManager
      * @param LoggerInterface $logger
      */
     public function __construct(
         ResultFactory $resultFactory,
         RequestInterface $request,
-        Login $loginModel,
+        CustomerRepositoryInterface $customerRepository,
+        GetAuthenticateDataInterface $getAuthenticateDataProcessor,
+        AuthenticateCustomerInterface $authenticateCustomerProcessor,
+        DeleteSecretInterface $deleteSecretProcessor,
         ManagerInterface $messageManager,
         LoggerInterface $logger
     ) {
         $this->resultFactory = $resultFactory;
         $this->request = $request;
-        $this->loginModel = $loginModel;
+        $this->customerRepository = $customerRepository;
+        $this->getAuthenticateDataProcessor = $getAuthenticateDataProcessor;
+        $this->authenticateCustomerProcessor = $authenticateCustomerProcessor;
+        $this->deleteSecretProcessor = $deleteSecretProcessor;
         $this->messageManager = $messageManager;
         $this->logger = $logger;
     }
@@ -79,11 +107,35 @@ class Index implements HttpGetActionInterface
         $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
 
         try {
-            $login = $this->initLogin();
-            $login->authenticateCustomer();
+            $secret = $this->request->getParam('secret');
+            if (!$secret || !is_string($secret)) {
+                throw new LocalizedException(__('Cannot login to account. No secret key provided.'));
+            }
+
+            /* Can throw LocalizedException */
+            $authenticateData = $this->getAuthenticateDataProcessor->execute($secret);
+
+            $this->deleteSecretProcessor->execute($secret);
+
+            try {
+                $customer = $this->customerRepository->getById($authenticateData['customer_id']);
+            } catch (NoSuchEntityException $e) {
+                throw new LocalizedException(__('Customer are no longer exist.'));
+            }
+
+            $loggedIn = $this->authenticateCustomerProcessor->execute(
+                (int)$authenticateData['customer_id'],
+                (int)$authenticateData['admin_id']
+            );
+
+
+            if (!$loggedIn) {
+                throw new LocalizedException(__('Login was not successful.'));
+            }
+
 
             $this->messageManager->addSuccessMessage(
-                __('You are logged in as customer: %1', $login->getCustomer()->getName())
+                __('You are logged in as customer: %1', $customer->getFirstname() . ' ' . $customer->getLastname())
             );
             $resultRedirect->setPath('*/*/proceed');
 
@@ -97,27 +149,5 @@ class Index implements HttpGetActionInterface
             $resultRedirect->setPath('/');
         }
         return $resultRedirect;
-    }
-
-    /**
-     * Init login info
-     *
-     * @return Login
-     * @throws LocalizedException
-     */
-    private function initLogin(): Login
-    {
-        $secret = $this->request->getParam('secret');
-        if (!$secret) {
-            throw new LocalizedException(__('Cannot login to account. No secret key provided.'));
-        }
-
-        $login = $this->loginModel->loadNotUsed($secret);
-
-        if ($login->getId()) {
-            return $login;
-        } else {
-            throw new LocalizedException(__('Cannot login to account. Secret key is not valid'));
-        }
     }
 }

@@ -22,6 +22,8 @@ class Config
     private const XML_PATH_EXTENSION_ENABLED = 'loginascustomer/general/enabled';
     private const ENABLE_STORE_VIEW_MANUAL_CHOICE = 'loginascustomer/general/enable_store_view_manual_choice';
 
+    public const TIME_FRAME = 60;
+
     /**
      * @var ScopeConfigInterface
      */
