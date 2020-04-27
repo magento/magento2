@@ -15,7 +15,7 @@ class IndexTest extends \PHPUnit\Framework\TestCase
         /** @var $controller Index */
         $controller = new Index();
         $viewModel = $controller->indexAction();
-        $this->assertInstanceOf(\Zend\View\Model\ViewModel::class, $viewModel);
+        $this->assertInstanceOf(\Laminas\View\Model\ViewModel::class, $viewModel);
         $this->assertFalse($viewModel->terminate());
     }
 }

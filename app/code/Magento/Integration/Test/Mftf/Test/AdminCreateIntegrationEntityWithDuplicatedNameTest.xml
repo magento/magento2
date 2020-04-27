@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCreateIntegrationEntityWithDuplicatedNameTest">
+        <annotations>
+            <features value="Integration"/>
+            <stories value="Creating System Integration With Duplicated Name"/>
+            <title value="Admin System Integration With Duplicated Name"/>
+            <description value="Admin Creates New Integration With Duplicated Name"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-19889"/>
+            <group value="integration"/>
+            <group value="mtf_migrated"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>
+        </before>
+        <after>
+            <actionGroup ref="AdminNavigateMenuActionGroup" stepKey="returnToIntegrationsPage">
+                <argument name="menuUiId" value="{{AdminMenuSystem.dataUiId}}"/>
+                <argument name="submenuUiId" value="{{AdminMenuSystemExtensionsIntegrations.dataUiId}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminSearchIntegrationInGridActionGroup" stepKey="searchForIntegration">
+                <argument name="name" value="{{defaultIntegrationData.name}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminDeleteIntegrationEntityActionGroup" stepKey="deleteCreatedIntegration"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+
+        <actionGroup ref="AdminNavigateMenuActionGroup" stepKey="navigateToIntegrationsPage">
+            <argument name="menuUiId" value="{{AdminMenuSystem.dataUiId}}"/>
+            <argument name="submenuUiId" value="{{AdminMenuSystemExtensionsIntegrations.dataUiId}}"/>
+        </actionGroup>
+        <actionGroup ref="AdminNavigateToCreateIntegrationPageActionGroup" stepKey="clickAddNewIntegrationButton"/>
+        <actionGroup ref="AdminCreatesNewIntegrationActionGroup" stepKey="createNewIntegration">
+            <argument name="name" value="{{defaultIntegrationData.name}}"/>
+            <argument name="password" value="{{_ENV.MAGENTO_ADMIN_PASSWORD}}"/>
+        </actionGroup>
+        <actionGroup ref="AdminSubmitNewIntegrationFormActionGroup" stepKey="submitTheForm"/>
+        <actionGroup ref="AdminNavigateToCreateIntegrationPageActionGroup" stepKey="clickAddNewIntegrationButtonSecondTime"/>
+        <actionGroup ref="AdminCreatesNewIntegrationActionGroup" stepKey="createNewIntegrationWithDuplicatedName">
+            <argument name="name" value="{{defaultIntegrationData.name}}"/>
+            <argument name="password" value="{{_ENV.MAGENTO_ADMIN_PASSWORD}}"/>
+        </actionGroup>
+        <actionGroup ref="AdminSubmitNewIntegrationFormActionGroup" stepKey="submitTheFormWithDuplicatedName"/>
+        <actionGroup ref="AssertAdminMessageCreateIntegrationEntityActionGroup" stepKey="seeErrorMessage">
+            <argument name="message" value="The integration with name &quot;{{defaultIntegrationData.name}}&quot; exists."/>
+            <argument value="error" name="messageType"/>
+        </actionGroup>
+    </test>
+</tests>

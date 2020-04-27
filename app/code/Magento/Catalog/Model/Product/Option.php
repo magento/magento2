@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Catalog\Model\Product;
 
@@ -16,8 +17,10 @@ use Magento\Catalog\Model\Product\Option\Type\DefaultType;
 use Magento\Catalog\Model\Product\Option\Type\File;
 use Magento\Catalog\Model\Product\Option\Type\Select;
 use Magento\Catalog\Model\Product\Option\Type\Text;
+use Magento\Catalog\Model\Product\Option\Value;
 use Magento\Catalog\Model\ResourceModel\Product\Option\Value\Collection;
-use Magento\Catalog\Pricing\Price\BasePrice;
+use Magento\Catalog\Pricing\Price\CalculateCustomOptionCatalogRule;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Model\AbstractExtensibleModel;
@@ -124,6 +127,11 @@ class Option extends AbstractExtensibleModel implements ProductCustomOptionInter
     private $customOptionValuesFactory;
 
     /**
+     * @var CalculateCustomOptionCatalogRule
+     */
+    private $calculateCustomOptionCatalogRule;
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
@@ -138,6 +146,7 @@ class Option extends AbstractExtensibleModel implements ProductCustomOptionInter
      * @param ProductCustomOptionValuesInterfaceFactory|null $customOptionValuesFactory
      * @param array $optionGroups
      * @param array $optionTypesToGroups
+     * @param CalculateCustomOptionCatalogRule $calculateCustomOptionCatalogRule
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -154,14 +163,17 @@ class Option extends AbstractExtensibleModel implements ProductCustomOptionInter
         array $data = [],
         ProductCustomOptionValuesInterfaceFactory $customOptionValuesFactory = null,
         array $optionGroups = [],
-        array $optionTypesToGroups = []
+        array $optionTypesToGroups = [],
+        CalculateCustomOptionCatalogRule $calculateCustomOptionCatalogRule = null
     ) {
         $this->productOptionValue = $productOptionValue;
         $this->optionTypeFactory = $optionFactory;
         $this->string = $string;
         $this->validatorPool = $validatorPool;
         $this->customOptionValuesFactory = $customOptionValuesFactory ?:
-            \Magento\Framework\App\ObjectManager::getInstance()->get(ProductCustomOptionValuesInterfaceFactory::class);
+            ObjectManager::getInstance()->get(ProductCustomOptionValuesInterfaceFactory::class);
+        $this->calculateCustomOptionCatalogRule = $calculateCustomOptionCatalogRule ??
+            ObjectManager::getInstance()->get(CalculateCustomOptionCatalogRule::class);
         $this->optionGroups = $optionGroups ?: [
             self::OPTION_GROUP_DATE => Date::class,
             self::OPTION_GROUP_FILE => File::class,
@@ -462,10 +474,12 @@ class Option extends AbstractExtensibleModel implements ProductCustomOptionInter
      */
     public function getPrice($flag = false)
     {
-        if ($flag && $this->getPriceType() == self::$typePercent) {
-            $basePrice = $this->getProduct()->getPriceInfo()->getPrice(BasePrice::PRICE_CODE)->getValue();
-            $price = $basePrice * ($this->_getData(self::KEY_PRICE) / 100);
-            return $price;
+        if ($flag) {
+            return $this->calculateCustomOptionCatalogRule->execute(
+                $this->getProduct(),
+                (float)$this->getData(self::KEY_PRICE),
+                $this->getPriceType() === Value::TYPE_PERCENT
+            );
         }
         return $this->_getData(self::KEY_PRICE);
     }
@@ -952,7 +966,7 @@ class Option extends AbstractExtensibleModel implements ProductCustomOptionInter
     private function getOptionRepository()
     {
         if (null === $this->optionRepository) {
-            $this->optionRepository = \Magento\Framework\App\ObjectManager::getInstance()
+            $this->optionRepository = ObjectManager::getInstance()
                 ->get(\Magento\Catalog\Model\Product\Option\Repository::class);
         }
         return $this->optionRepository;
@@ -966,7 +980,7 @@ class Option extends AbstractExtensibleModel implements ProductCustomOptionInter
     private function getMetadataPool()
     {
         if (null === $this->metadataPool) {
-            $this->metadataPool = \Magento\Framework\App\ObjectManager::getInstance()
+            $this->metadataPool = ObjectManager::getInstance()
                 ->get(\Magento\Framework\EntityManager\MetadataPool::class);
         }
         return $this->metadataPool;

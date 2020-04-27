@@ -13,12 +13,12 @@ class OptionsTest extends \PHPUnit\Framework\TestCase
     const TEST_HELPER_CLASS_NAME = 'testHelperClass';
 
     /**
-     * @var \Magento\Framework\Escaper|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Escaper|\PHPUnit\Framework\MockObject\MockObject
      */
     private $escaperMock;
 
     /**
-     * @var \Magento\Framework\App\Http\Context|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Http\Context|\PHPUnit\Framework\MockObject\MockObject
      */
     private $httpContextMock;
 
@@ -28,12 +28,12 @@ class OptionsTest extends \PHPUnit\Framework\TestCase
     private $block;
 
     /**
-     * @var \Magento\Catalog\Helper\Product\ConfigurationPool|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Helper\Product\ConfigurationPool|\PHPUnit\Framework\MockObject\MockObject
      */
     private $helperPoolMock;
 
     /**
-     * @var \Magento\Wishlist\Model\Item|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Wishlist\Model\Item|\PHPUnit\Framework\MockObject\MockObject
      */
     private $itemMock;
 

@@ -165,6 +165,8 @@ class HelperTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
+        $this->dateTimeFilterMock = $this->createMock(\Magento\Catalog\Model\Product\Filter\DateTime::class);
+
         $this->helper = $this->objectManager->getObject(
             Helper::class,
             [
@@ -178,6 +180,7 @@ class HelperTest extends \PHPUnit\Framework\TestCase
                 'linkTypeProvider' => $this->linkTypeProviderMock,
                 'attributeFilter' => $this->attributeFilterMock,
                 'localeFormat' => $this->localeFormatMock,
+                'dateTimeFilter' => $this->dateTimeFilterMock
             ]
         );
 
@@ -188,11 +191,6 @@ class HelperTest extends \PHPUnit\Framework\TestCase
         $resolverProperty = $helperReflection->getProperty('linkResolver');
         $resolverProperty->setAccessible(true);
         $resolverProperty->setValue($this->helper, $this->linkResolverMock);
-
-        $this->dateTimeFilterMock = $this->createMock(\Magento\Framework\Stdlib\DateTime\Filter\DateTime::class);
-        $dateTimeFilterProperty = $helperReflection->getProperty('dateTimeFilter');
-        $dateTimeFilterProperty->setAccessible(true);
-        $dateTimeFilterProperty->setValue($this->helper, $this->dateTimeFilterMock);
     }
 
     /**
@@ -226,6 +224,7 @@ class HelperTest extends \PHPUnit\Framework\TestCase
         ];
         $specialFromDate = '2018-03-03 19:30:00';
         $productData = [
+            'name' => 'Simple Product',
             'stock_data' => ['stock_data'],
             'options' => $optionsData,
             'website_ids' => $websiteIds,
@@ -235,30 +234,23 @@ class HelperTest extends \PHPUnit\Framework\TestCase
             $productData = array_merge($productData, ['tier_price' => $tierPrice]);
         }
 
-        $this->dateTimeFilterMock->expects($this->once())
+        $this->dateTimeFilterMock
+            ->expects($this->once())
             ->method('filter')
-            ->with($specialFromDate)
-            ->willReturn($specialFromDate);
+            ->willReturnArgument(0);
 
-        $attributeNonDate = $this->getMockBuilder(\Magento\Catalog\Model\ResourceModel\Eav\Attribute::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $attributeDate = $this->getMockBuilder(\Magento\Catalog\Model\ResourceModel\Eav\Attribute::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $attributeNonDateBackEnd =
-            $this->getMockBuilder(\Magento\Eav\Model\Entity\Attribute\Backend\DefaultBackend::class)
-                ->disableOriginalConstructor()
-                ->getMock();
-        $attributeDateBackEnd = $this->getMockBuilder(\Magento\Eav\Model\Entity\Attribute\Backend\Datetime::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $attributeNonDate->expects($this->any())->method('getBackend')->willReturn($attributeNonDateBackEnd);
-        $attributeDate->expects($this->any())->method('getBackend')->willReturn($attributeDateBackEnd);
-        $attributeNonDateBackEnd->expects($this->any())->method('getType')->willReturn('non-datetime');
-        $attributeDateBackEnd->expects($this->any())->method('getType')->willReturn('datetime');
+        $this->setProductAttributes(
+            [
+                [
+                    'code' => 'name',
+                    'backend_type' => 'varchar',
+                ],
+                [
+                    'code' => 'special_from_date',
+                    'backend_type' => 'datetime',
+                ]
+            ]
+        );
 
         $useDefaults = ['attributeCode1', 'attributeCode2'];
 
@@ -274,8 +266,6 @@ class HelperTest extends \PHPUnit\Framework\TestCase
         $this->productMock->expects($this->once())->method('isLockedAttribute')->with('media')->willReturn(true);
         $this->productMock->expects($this->once())->method('unlockAttribute')->with('media');
         $this->productMock->expects($this->once())->method('lockAttribute')->with('media');
-        $this->productMock->expects($this->once())->method('getAttributes')
-            ->willReturn([$attributeNonDate, $attributeDate]);
         $this->productMock->expects($this->any())->method('getSku')->willReturn('sku');
         $this->productMock->expects($this->any())->method('getOptionsReadOnly')->willReturn(false);
 
@@ -348,7 +338,35 @@ class HelperTest extends \PHPUnit\Framework\TestCase
         }
 
         $this->assertEquals($expectedLinks, $resultLinks);
-        $this->assertEquals($specialFromDate, $productData['special_from_date']);
+        $this->assertEquals($specialFromDate, $this->productMock->getSpecialFromDate());
+    }
+
+    /**
+     * Mock product attributes
+     *
+     * @param array $attributes
+     */
+    private function setProductAttributes(array $attributes): void
+    {
+        $attributesModels = [];
+        foreach ($attributes as $attribute) {
+            $attributeModel = $this->createMock(\Magento\Catalog\Model\ResourceModel\Eav\Attribute::class);
+            $backendModel = $attribute['backend_model']
+                ?? $this->createMock(\Magento\Eav\Model\Entity\Attribute\Backend\DefaultBackend::class);
+            $attributeModel->expects($this->any())
+                ->method('getBackend')
+                ->willReturn($backendModel);
+            $attributeModel->expects($this->any())
+                ->method('getAttributeCode')
+                ->willReturn($attribute['code']);
+            $backendModel->expects($this->any())
+                ->method('getType')
+                ->willReturn($attribute['backend_type']);
+            $attributesModels[$attribute['code']] = $attributeModel;
+        }
+        $this->productMock->expects($this->once())
+            ->method('getAttributes')
+            ->willReturn($attributesModels);
     }
 
     /**

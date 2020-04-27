@@ -7,7 +7,7 @@
 -->
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="ReviewOrderForSingleShipmentActionGroup">
         <arguments>
             <argument name="totalName" type="string" defaultValue="Shipping &amp; Handling"/>
@@ -18,28 +18,6 @@
         <assertEquals stepKey="assertShippingMethodPrice">
             <expectedResult type="string">$shippingMethodSubtotalPrice</expectedResult>
             <actualResult type="string">$shippingMethodBasePrice</actualResult>
-        </assertEquals>
-    </actionGroup>
-    <actionGroup name="ReviewOrderForMultiShipmentActionGroup">
-        <arguments>
-            <argument name="totalNameForFirstOrder" type="string" defaultValue="Shipping &amp; Handling"/>
-            <argument name="totalPositionForFirstOrder" type="string" defaultValue="1"/>
-            <argument name="totalNameForSecondOrder" type="string" defaultValue="Shipping &amp; Handling"/>
-            <argument name="totalPositionForSecondOrder" type="string" defaultValue="2"/>
-        </arguments>
-        <!--Check First Shipping Method Price-->
-        <grabTextFrom selector="{{ReviewOrderSection.shippingMethodBasePrice(totalPositionForFirstOrder)}}" stepKey="firstShippingMethodBasePrice"/>
-        <grabTextFrom selector="{{ReviewOrderSection.shippingMethodSubtotalPrice(totalPositionForFirstOrder,totalNameForFirstOrder)}}" stepKey="firstShippingMethodSubtotalPrice"/>
-        <assertEquals stepKey="assertShippingMethodPrice">
-            <expectedResult type="string">$firstShippingMethodSubtotalPrice</expectedResult>
-            <actualResult type="string">$firstShippingMethodBasePrice</actualResult>
-        </assertEquals>
-        <!--Check Second Shipping Method Price-->
-        <grabTextFrom selector="{{ReviewOrderSection.shippingMethodBasePrice(totalPositionForSecondOrder)}}" stepKey="secondShippingMethodBasePrice"/>
-        <grabTextFrom selector="{{ReviewOrderSection.shippingMethodSubtotalPrice(totalPositionForSecondOrder,totalNameForSecondOrder)}}" stepKey="secondShippingMethodSubtotalPrice"/>
-        <assertEquals stepKey="assertSecondShippingMethodPrice" >
-            <expectedResult type="string">$secondShippingMethodSubtotalPrice</expectedResult>
-            <actualResult type="string">$secondShippingMethodBasePrice</actualResult>
         </assertEquals>
     </actionGroup>
 </actionGroups>

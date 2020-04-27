@@ -21,6 +21,18 @@
         <data key="label">Yes</data>
         <data key="value">1</data>
     </entity>
+    <entity name="StorefrontSingleStoreModeEnabledConfigData">
+        <data key="path">general/single_store_mode/enabled</data>
+        <data key="scope_id">0</data>
+        <data key="label">Yes</data>
+        <data key="value">1</data>
+    </entity>
+    <entity name="StorefrontSingleStoreModeDisabledConfigData">
+        <data key="path">general/single_store_mode/enabled</data>
+        <data key="scope_id">0</data>
+        <data key="label">No</data>
+        <data key="value">0</data>
+    </entity>
     <entity name="MinifyJavaScriptFilesDisableConfigData">
         <!-- Default value -->
         <data key="path">dev/js/minify_files</data>

@@ -27,7 +27,7 @@ class Grid extends GridAbstract
             'selector' => 'input[name="title"]',
         ],
         'status' => [
-            'selector' => '#reviwGrid_filter_status',
+            'selector' => '#reviewGrid_filter_status',
             'input' => 'select',
         ],
         'nickname' => [

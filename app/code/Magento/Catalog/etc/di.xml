@@ -74,6 +74,7 @@
     <preference for="Magento\Catalog\Model\Product\Configuration\Item\ItemResolverInterface" type="Magento\Catalog\Model\Product\Configuration\Item\ItemResolverComposite" />
     <preference for="Magento\Catalog\Api\Data\MassActionInterface" type="\Magento\Catalog\Model\MassAction" />
     <preference for="Magento\Catalog\Model\ProductLink\Data\ListCriteriaInterface" type="Magento\Catalog\Model\ProductLink\Data\ListCriteria" />
+    <preference for="Magento\Catalog\Api\CategoryListDeleteBySkuInterface" type="Magento\Catalog\Model\CategoryLinkRepository"/>
     <type name="Magento\Customer\Model\ResourceModel\Visitor">
         <plugin name="catalogLog" type="Magento\Catalog\Model\Plugin\Log" />
     </type>
@@ -234,6 +235,11 @@
         </arguments>
     </virtualType>
     <type name="Magento\Catalog\Controller\Adminhtml\Category\Image\Upload">
+        <arguments>
+            <argument name="imageUploader" xsi:type="object">Magento\Catalog\CategoryImageUpload</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Model\Category\Attribute\Backend\Image">
         <arguments>
             <argument name="imageUploader" xsi:type="object">Magento\Catalog\CategoryImageUpload</argument>
         </arguments>
@@ -883,6 +889,11 @@
                     <item name="Magento\Catalog\Api\Data\ProductInterface" xsi:type="array">
                         <item name="create" xsi:type="string">Magento\Catalog\Model\ResourceModel\CreateHandler</item>
                         <item name="update" xsi:type="string">Magento\Catalog\Model\ResourceModel\UpdateHandler</item>
+                    </item>
+                </item>
+                <item name="websites" xsi:type="array">
+                    <item name="Magento\Catalog\Api\Data\ProductInterface" xsi:type="array">
+                        <item name="create" xsi:type="string">Magento\Catalog\Model\ResourceModel\ProductWebsiteAssignmentHandler</item>
                     </item>
                 </item>
             </argument>

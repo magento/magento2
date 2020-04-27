@@ -37,4 +37,7 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Sales\Api\OrderItemRepositoryInterface">
+        <plugin name="get_gift_message" type="Magento\GiftMessage\Model\Plugin\OrderItemGet"/>
+    </type>
 </config>

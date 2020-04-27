@@ -190,7 +190,7 @@ class UrlTest extends \PHPUnit\Framework\TestCase
 
         $this->_menuMock->expects($this->any())->method('getFirstAvailableChild')->will($this->returnValue(null));
 
-        $this->assertEquals('*/*/denied', $this->_model->findFirstAvailableMenu());
+        $this->assertEquals('*/denied', $this->_model->findFirstAvailableMenu());
     }
 
     public function testFindFirstAvailableMenu()

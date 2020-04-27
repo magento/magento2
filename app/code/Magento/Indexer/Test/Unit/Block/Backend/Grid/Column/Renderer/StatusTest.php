@@ -49,7 +49,7 @@ class StatusTest extends \PHPUnit\Framework\TestCase
             ],
             'set3' => [
                 [\Magento\Framework\Indexer\StateInterface::STATUS_WORKING],
-                ['class' => 'grid-severity-major', 'text' => 'Processing']
+                ['class' => 'grid-severity-minor', 'text' => 'Processing']
             ]
         ];
     }

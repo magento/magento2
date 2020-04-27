@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="EnterCustomerAddressInfoActionGroup">
+        <annotations>
+            <description>Fills in the provided Customer details (First/Last Name, Company, Phone # and Address) on the Admin Customer creation/edit page. Clicks on the Save button.</description>
+        </annotations>
+        <arguments>
+            <argument name="Address"/>
+        </arguments>
+
+        <amOnPage url="customer/address/new/" stepKey="goToAddressPage"/>
+        <waitForPageLoad stepKey="waitForAddressPage"/>
+        <fillField stepKey="fillFirstName" selector="{{StorefrontCustomerAddressSection.firstName}}" userInput="{{Address.firstname}}"/>
+        <fillField stepKey="fillLastName" selector="{{StorefrontCustomerAddressSection.lastName}}" userInput="{{Address.lastname}}"/>
+        <fillField stepKey="fillCompany" selector="{{StorefrontCustomerAddressSection.company}}" userInput="{{Address.company}}"/>
+        <fillField stepKey="fillPhoneNumber" selector="{{StorefrontCustomerAddressSection.phoneNumber}}" userInput="{{Address.telephone}}"/>
+        <fillField stepKey="fillStreetAddress1" selector="{{StorefrontCustomerAddressSection.streetAddress1}}" userInput="{{Address.street[0]}}"/>
+        <fillField stepKey="fillStreetAddress2" selector="{{StorefrontCustomerAddressSection.streetAddress2}}" userInput="{{Address.street[1]}}"/>
+        <fillField stepKey="fillCityName" selector="{{StorefrontCustomerAddressSection.city}}" userInput="{{Address.city}}"/>
+        <selectOption stepKey="selectCounty" selector="{{StorefrontCustomerAddressSection.country}}" userInput="{{Address.country_id}}"/>
+        <selectOption stepKey="selectState" selector="{{StorefrontCustomerAddressSection.stateProvince}}" userInput="{{Address.state}}"/>
+        <fillField stepKey="fillZip" selector="{{StorefrontCustomerAddressSection.zip}}" userInput="{{Address.postcode}}"/>
+        <click stepKey="saveAddress" selector="{{StorefrontCustomerAddressSection.saveAddress}}"/>
+    </actionGroup>
+</actionGroups>

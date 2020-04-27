@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="AdminNewsletterSubscriberGridSection">
+        <element name="email" type="text" selector="//table[contains(@class, 'data-grid')]/tbody/tr[{{row}}][@data-role='row']/td[@data-column='email']" parameterized="true"/>
+        <element name="type" type="text" selector="//table[contains(@class, 'data-grid')]/tbody/tr[{{row}}][@data-role='row']/td[@data-column='type']" parameterized="true"/>
+        <element name="firstName" type="text" selector="//table[contains(@class, 'data-grid')]/tbody/tr[{{row}}][@data-role='row']/td[@data-column='firstname']" parameterized="true"/>
+        <element name="lastName" type="text" selector="//table[contains(@class, 'data-grid')]/tbody/tr[{{row}}][@data-role='row']/td[@data-column='lastname']" parameterized="true"/>
+    </section>
+</sections>

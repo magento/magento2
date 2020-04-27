@@ -54,7 +54,7 @@ class WishlistTest extends \PHPUnit\Framework\TestCase
     protected $catalogOutputMock;
 
     /**
-     * @var \Magento\Catalog\Helper\Output|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Helper\Output|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $layoutMock;
 

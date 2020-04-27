@@ -339,7 +339,6 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
     public function getProcessedTemplate(array $variables = [])
     {
         $processor = $this->getTemplateFilter()
-            ->setUseSessionInUrl(false)
             ->setPlainTemplateMode($this->isPlain())
             ->setIsChildTemplate($this->isChildTemplate())
             ->setTemplateProcessor([$this, 'getTemplateContent']);
