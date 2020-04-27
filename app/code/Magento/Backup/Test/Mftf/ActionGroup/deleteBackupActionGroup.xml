@@ -5,7 +5,8 @@
   * See COPYING.txt for license details.
   */
 -->
+
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <actionGroup name="updateIndexerOnSave" extends="AdminIndexerSetUpdateOnSaveActionGroup" deprecated="Use AdminIndexerSetUpdateOnSaveActionGroup"/>
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="deleteBackup" extends="AdminBackupDeleteActionGroup" deprecated="Use DeleteBackupActionGroup"/>
 </actionGroups>
