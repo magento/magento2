@@ -100,7 +100,11 @@ class Storage
         }
 
         try {
-            $this->deleteMediaAssetByPath->execute([$this->getMediaDirectoryRelativePath($path)]);
+            $this->deleteMediaAssetByPath->execute(
+                [
+                    $this->filesystem->getDirectoryRead(DirectoryList::MEDIA)->getRelativePath($path)
+                ]
+            );
         } catch (\Exception $exception) {
             $this->logger->critical($exception);
         }
