@@ -32,6 +32,8 @@ use Magento\Newsletter\Model\SubscriberFactory;
  */
 class NewAction extends SubscriberController implements HttpPostActionInterface
 {
+    const XML_PATH_IS_ACTIVE = 'newsletter/general/active';
+
     /**
      * @var CustomerAccountManagement
      */
@@ -48,6 +50,11 @@ class NewAction extends SubscriberController implements HttpPostActionInterface
     private $subscriptionManager;
 
     /**
+     * @var ScopeConfigInterface
+     */
+    private $scopeConfig;
+
+    /**
      * Initialize dependencies.
      *
      * @param Context $context
@@ -58,6 +65,7 @@ class NewAction extends SubscriberController implements HttpPostActionInterface
      * @param CustomerAccountManagement $customerAccountManagement
      * @param SubscriptionManagerInterface $subscriptionManager
      * @param EmailValidator $emailValidator
+     * @param ScopeConfigInterface $scopeConfig
      */
     public function __construct(
         Context $context,
@@ -67,11 +75,13 @@ class NewAction extends SubscriberController implements HttpPostActionInterface
         CustomerUrl $customerUrl,
         CustomerAccountManagement $customerAccountManagement,
         SubscriptionManagerInterface $subscriptionManager,
-        EmailValidator $emailValidator = null
+        EmailValidator $emailValidator = null,
+        ScopeConfigInterface $scopeConfig
     ) {
         $this->customerAccountManagement = $customerAccountManagement;
         $this->subscriptionManager = $subscriptionManager;
         $this->emailValidator = $emailValidator ?: ObjectManager::getInstance()->get(EmailValidator::class);
+        $this->scopeConfig = $scopeConfig;
         parent::__construct(
             $context,
             $subscriberFactory,
@@ -109,12 +119,11 @@ class NewAction extends SubscriberController implements HttpPostActionInterface
      */
     protected function validateGuestSubscription()
     {
-        if ($this->_objectManager->get(ScopeConfigInterface::class)
-                ->getValue(
-                    Subscriber::XML_PATH_ALLOW_GUEST_SUBSCRIBE_FLAG,
-                    ScopeInterface::SCOPE_STORE
-                ) != 1
-            && !$this->_customerSession->isLoggedIn()
+        if (!$this->_customerSession->isLoggedIn() &&
+            !$this->scopeConfig->getValue(
+                Subscriber::XML_PATH_ALLOW_GUEST_SUBSCRIBE_FLAG,
+                ScopeInterface::SCOPE_STORE
+            )
         ) {
             throw new LocalizedException(
                 __(
@@ -150,6 +159,7 @@ class NewAction extends SubscriberController implements HttpPostActionInterface
             $email = (string)$this->getRequest()->getPost('email');
 
             try {
+                $this->isNewsletterEnabled();
                 $this->validateEmailFormat($email);
                 $this->validateGuestSubscription();
                 $this->validateEmailAvailable($email);
@@ -219,5 +229,22 @@ class NewAction extends SubscriberController implements HttpPostActionInterface
         }
 
         return __('Thank you for your subscription.');
+    }
+
+    /**
+     * Check if Newsletter enabled
+     *
+     * @return void
+     * @throws LocalizedException
+     */
+    private function isNewsletterEnabled(): void
+    {
+        $isActive = $this->scopeConfig->getValue(self::XML_PATH_IS_ACTIVE);
+
+        if (!$isActive) {
+            throw new LocalizedException(
+                __('The subscription is not available for now.')
+            );
+        }
     }
 }
