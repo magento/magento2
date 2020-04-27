@@ -890,6 +890,11 @@
                         <item name="update" xsi:type="string">Magento\Catalog\Model\ResourceModel\UpdateHandler</item>
                     </item>
                 </item>
+                <item name="websites" xsi:type="array">
+                    <item name="Magento\Catalog\Api\Data\ProductInterface" xsi:type="array">
+                        <item name="create" xsi:type="string">Magento\Catalog\Model\ResourceModel\ProductWebsiteAssignmentHandler</item>
+                    </item>
+                </item>
             </argument>
         </arguments>
     </type>

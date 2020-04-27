@@ -13,7 +13,7 @@ use Magento\Framework\Locale\ResolverInterface;
 use Magento\Store\Model\ScopeInterface;
 
 /**
- * Smart button config
+ * Smart button configuration.
  */
 class SmartButtonConfig
 {
@@ -96,7 +96,14 @@ class SmartButtonConfig
     private function getDisallowedFunding(): array
     {
         $disallowedFunding = $this->config->getValue('disable_funding_options');
-        return $disallowedFunding ? explode(',', $disallowedFunding) : [];
+        $result = $disallowedFunding ? explode(',', $disallowedFunding) : [];
+
+        // PayPal Guest Checkout Credit Card Icons only available when Guest Checkout option is enabled
+        if ($this->isPaypalGuestCheckoutAllowed() === false && !in_array('CARD', $result)) {
+            array_push($result, 'CARD');
+        }
+
+        return $result;
     }
 
     /**
@@ -167,5 +174,15 @@ class SmartButtonConfig
         }
 
         return $styles;
+    }
+
+    /**
+     * Returns if is allowed PayPal Guest Checkout.
+     *
+     * @return bool
+     */
+    private function isPaypalGuestCheckoutAllowed(): bool
+    {
+        return $this->config->getValue('solution_type') === Config::EC_SOLUTION_TYPE_SOLE;
     }
 }
