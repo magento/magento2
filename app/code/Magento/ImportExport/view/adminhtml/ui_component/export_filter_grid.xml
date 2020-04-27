@@ -36,10 +36,17 @@
         </dataProvider>
     </dataSource>
     <listingToolbar name="listing_top" template="Magento_ImportExport/export/filter-grid/toolbar">
-        <component name="listing_buttons" template="Magento_ImportExport/export/filter-grid/toolbar/buttons"/>
+        <filters name="listing_filter" template="Magento_ImportExport/export/filter-grid/filters/filters"/>
         <paging name="listing_paging" class="Magento\Ui\Component\Container"/>
     </listingToolbar>
-    <columns name="export_filter_columns">
+    <columns name="export_filter_columns" template="Magento_ImportExport/export/filter-grid/listing">
+        <argument name="data" xsi:type="array">
+            <item name="js_config" xsi:type="array">
+                <item name="modules" xsi:type="array">
+                    <item name="filter" xsi:type="string">${ $.parentName }.listing_top.listing_filter</item>
+                </item>
+            </item>
+        </argument>
         <selectionsColumn name="skip_attr">
             <settings>
                 <label translate="true">Exclude</label>
