@@ -105,7 +105,7 @@ class Category implements ObserverInterface
                         [
                             self::TYPE => self::CONTENT_TYPE,
                             self::FIELD => $field,
-                            self::ENTITY_ID => (string) $model->getId(),
+                            self::ENTITY_ID => (string) $id,
                         ]
                     ),
                     $this->getContent->execute($id, $attribute)
