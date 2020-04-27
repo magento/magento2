@@ -298,6 +298,7 @@ class Algorithm
                 $interval->load($intervalValuesCount + 1, $offset, $lowerValue, $this->_upperLimit)
             );
         }
+        // phpcs:ignore Generic.CodeAnalysis.ForLoopWithTestFunctionCall
         $lastValue = $this->offsetLimits($intervalValuesCount, $values);
         $bestRoundValue = [];
 
@@ -500,6 +501,7 @@ class Algorithm
         foreach ($newRoundValues as $roundingFactor => $roundValueValues) {
             if (array_key_exists($roundingFactor, $oldRoundValues)) {
                 $oldRoundValues[$roundingFactor] = array_unique(
+                // phpcs:ignore Magento2.Performance.ForeachArrayMerge
                     array_merge($oldRoundValues[$roundingFactor], $roundValueValues)
                 );
             } else {
@@ -554,6 +556,7 @@ class Algorithm
 
     /**
      * Search first index of value, that satisfy conditions to be 'greater or equal' than $value
+     *
      * Returns -1 if index was not found
      *
      * @param float $value
@@ -596,6 +599,13 @@ class Algorithm
         return $this->_binarySearch($value, [$limits[0], $limits[1]]);
     }
 
+    /**
+     * Get the offsetLimit value
+     *
+     * @param $intervalValuesCount
+     * @param $values
+     * @return mixed
+     */
     private function offsetLimits($intervalValuesCount, $values)
     {
         if (array_key_exists((int)$intervalValuesCount - 1, $values)) {
