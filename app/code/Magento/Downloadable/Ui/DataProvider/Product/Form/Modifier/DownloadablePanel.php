@@ -45,7 +45,7 @@ class DownloadablePanel extends AbstractModifier
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function modifyData(array $data)
     {
@@ -58,7 +58,7 @@ class DownloadablePanel extends AbstractModifier
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function modifyMeta(array $meta)
     {
@@ -97,7 +97,8 @@ class DownloadablePanel extends AbstractModifier
             'visible' => false,
             'imports' => [
                 'visible' => '${$.provider}:' . self::DATA_SCOPE_PRODUCT . '.'
-                    . ProductAttributeInterface::CODE_HAS_WEIGHT
+                    . ProductAttributeInterface::CODE_HAS_WEIGHT,
+                '__disableTmpl' => ['visible' => false],
             ],
         ];
 
@@ -122,7 +123,8 @@ class DownloadablePanel extends AbstractModifier
             'sortOrder' => 10,
             'imports' => [
                 'disabled' => '${$.provider}:' . self::DATA_SCOPE_PRODUCT . '.'
-                    . ProductAttributeInterface::CODE_HAS_WEIGHT
+                    . ProductAttributeInterface::CODE_HAS_WEIGHT,
+                '__disableTmpl' => ['disabled' => false],
             ],
             'valueMap' => [
                 'false' => '0',
@@ -130,6 +132,7 @@ class DownloadablePanel extends AbstractModifier
             ],
             'samplesFieldset' => 'ns = ${ $.ns }, index=' . Composite::CONTAINER_SAMPLES,
             'linksFieldset' => 'ns = ${ $.ns }, index=' . Composite::CONTAINER_LINKS,
+            '__disableTmpl' => ['samplesFieldset' => false, 'linksFieldset' => false],
         ];
 
         $this->meta = $this->arrayManager->set($checkboxPath, $this->meta, $checkboxConfig);
