@@ -122,6 +122,6 @@ class Storage
     {
         $relativePath = $this->filesystem->getDirectoryRead(DirectoryList::MEDIA)->getRelativePath($path);
 
-        return (false === strpos($relativePath, '/')) ? '/' . $relativePath : $relativePath;
+        return ($relativePath && false === strpos($relativePath, '/')) ? '/' . $relativePath : $relativePath;
     }
 }
