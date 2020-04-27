@@ -8,12 +8,15 @@
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <actionGroup name="AdminTranslateElementActionGroup">
+    <actionGroup name="AdminTranslateElementActionGroup" deprecated="Avoid using super-ActionGroups. Use StorefrontOpenInlineTranslationPopupActionGroup, StorefrontFillCustomTranslationFieldActionGroup and StorefrontSubmitInlineTranslationFormActionGroup">
+        <annotations>
+            <description>DEPRECATED. Avoid using super-ActionGroups. Use StorefrontOpenInlineTranslationPopupActionGroup, StorefrontFillCustomTranslationFieldActionGroup and StorefrontSubmitInlineTranslationFormActionGroup.</description>
+        </annotations>
         <arguments>
             <argument name="elementSelector" type="string"/>
             <argument name="translateText" type="string"/>
         </arguments>
-        
+
         <executeJS function="jQuery('{{elementSelector}}').mousemove()" stepKey="moveMouseOverSelector"/>
         <executeJS function="jQuery('{{InlineTranslationModeSection.bookIcon}}').click()" stepKey="clickBookIcon"/>
         <waitForPageLoad stepKey="waitForLoadWindow"/>
