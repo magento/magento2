@@ -11,12 +11,14 @@ use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Stdlib\DateTime\DateTime;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\LoginAsCustomer\Api\ConfigInterface;
-use Magento\LoginAsCustomer\Api\GetAuthenticateDataInterface;
+use Magento\LoginAsCustomer\Api\Data\AuthenticationDataInterface;
+use Magento\LoginAsCustomer\Api\Data\AuthenticationDataInterfaceFactor;
+use Magento\LoginAsCustomer\Api\GetAuthenticationDataBySecretInterface;
 
 /**
- * @api
+ * @inheritdoc
  */
-class GetAuthenticateData implements GetAuthenticateDataInterface
+class GetAuthenticationDataBySecret implements GetAuthenticationDataBySecretInterface
 {
     /**
      * @var ResourceConnection
@@ -34,27 +36,32 @@ class GetAuthenticateData implements GetAuthenticateDataInterface
     private $config;
 
     /**
+     * @var AuthenticationDataInterfaceFactor
+     */
+    private $authenticationDataFactory;
+
+    /**
      * @param ResourceConnection $resourceConnection
      * @param DateTime $dateTime
      * @param ConfigInterface $config
+     * @param AuthenticationDataInterfaceFactory $authenticationDataFactory
      */
     public function __construct(
         ResourceConnection $resourceConnection,
         DateTime $dateTime,
-        ConfigInterface $config
+        ConfigInterface $config,
+        AuthenticationDataInterfaceFactory $authenticationDataFactory
     ) {
         $this->resourceConnection = $resourceConnection;
         $this->dateTime = $dateTime;
         $this->config = $config;
+        $this->authenticationDataFactory = $authenticationDataFactory;
     }
 
     /**
-     * Load logic details based on secret key
-     * @return array
-     * @throws LocalizedException
-     * @param string $secretKey
+     * @inheritdoc
      */
-    public function execute(string $secretKey):array
+    public function execute(string $secretKey): AuthenticationDataInterface
     {
         $connection = $this->resourceConnection->getConnection();
         $tableName = $this->resourceConnection->getTableName('login_as_customer');
@@ -64,16 +71,22 @@ class GetAuthenticateData implements GetAuthenticateDataInterface
         $select = $connection->select()
             ->from(['main_table' => $tableName])
             ->where('main_table.secret = ?', $secretKey)
-            ->where('main_table.created_at > ?', $timePoint)
-            ->limit(1);
+            ->where('main_table.created_at > ?', $timePoint);
 
         $data = $connection->fetchRow($select);
 
         if (!$data) {
-            throw new LocalizedException(__('Secret key is not valid.'));
+            throw new LocalizedException(__('Secret key is not found or was expired.'));
         }
 
-
-        return $data;
+        /** @var AuthenticationDataInterface $authenticationData */
+        $authenticationData = $this->authenticationDataFactory->create(
+            [
+                'customerId' => (int)$data['admin_id'],
+                'adminId' => (int)$data['customer_id'],
+                'extensionAttributes' => null,
+            ]
+        );
+        return $authenticationData;
     }
 }

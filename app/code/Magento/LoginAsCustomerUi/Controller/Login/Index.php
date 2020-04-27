@@ -17,7 +17,7 @@ use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Framework\Message\ManagerInterface;
 use Psr\Log\LoggerInterface;
-use Magento\LoginAsCustomer\Api\GetAuthenticateDataInterface;
+use Magento\LoginAsCustomer\Api\GetAuthenticationDataBySecretInterface;
 use Magento\LoginAsCustomer\Api\AuthenticateCustomerInterface;
 use Magento\LoginAsCustomer\Api\DeleteSecretInterface;
 
@@ -42,14 +42,14 @@ class Index implements HttpGetActionInterface
     private $customerRepository;
 
     /**
-     * @var GetAuthenticateDataInterface
+     * @var GetAuthenticationDataBySecretInterface
      */
-    private $getAuthenticateDataProcessor;
+    private $getAuthenticationDataBySecret;
 
     /**
      * @var AuthenticateCustomerInterface
      */
-    private $authenticateCustomerProcessor;
+    private $authenticateCustomer;
 
     /**
      * @var DeleteSecretInterface
@@ -70,7 +70,7 @@ class Index implements HttpGetActionInterface
      * @param ResultFactory $resultFactory
      * @param RequestInterface $request
      * @param CustomerRepositoryInterface $customerRepository
-     * @param GetAuthenticateDataInterface $getAuthenticateDataProcessor
+     * @param GetAuthenticationDataBySecretInterface $getAuthenticateDataProcessor
      * @param AuthenticateCustomerInterface $authenticateCustomerProcessor
      * @param DeleteSecretInterface $deleteSecretProcessor
      * @param ManagerInterface $messageManager
@@ -80,7 +80,7 @@ class Index implements HttpGetActionInterface
         ResultFactory $resultFactory,
         RequestInterface $request,
         CustomerRepositoryInterface $customerRepository,
-        GetAuthenticateDataInterface $getAuthenticateDataProcessor,
+        GetAuthenticationDataBySecretInterface $getAuthenticateDataProcessor,
         AuthenticateCustomerInterface $authenticateCustomerProcessor,
         DeleteSecretInterface $deleteSecretProcessor,
         ManagerInterface $messageManager,
@@ -89,8 +89,8 @@ class Index implements HttpGetActionInterface
         $this->resultFactory = $resultFactory;
         $this->request = $request;
         $this->customerRepository = $customerRepository;
-        $this->getAuthenticateDataProcessor = $getAuthenticateDataProcessor;
-        $this->authenticateCustomerProcessor = $authenticateCustomerProcessor;
+        $this->getAuthenticationDataBySecret = $getAuthenticateDataProcessor;
+        $this->authenticateCustomer = $authenticateCustomerProcessor;
         $this->deleteSecretProcessor = $deleteSecretProcessor;
         $this->messageManager = $messageManager;
         $this->logger = $logger;
@@ -112,20 +112,19 @@ class Index implements HttpGetActionInterface
                 throw new LocalizedException(__('Cannot login to account. No secret key provided.'));
             }
 
-            /* Can throw LocalizedException */
-            $authenticateData = $this->getAuthenticateDataProcessor->execute($secret);
+            $authenticateData = $this->getAuthenticationDataBySecret->execute($secret);
 
             $this->deleteSecretProcessor->execute($secret);
 
             try {
-                $customer = $this->customerRepository->getById($authenticateData['customer_id']);
+                $customer = $this->customerRepository->getById($authenticateData->getCustomerId());
             } catch (NoSuchEntityException $e) {
                 throw new LocalizedException(__('Customer are no longer exist.'));
             }
 
-            $loggedIn = $this->authenticateCustomerProcessor->execute(
-                (int)$authenticateData['customer_id'],
-                (int)$authenticateData['admin_id']
+            $loggedIn = $this->authenticateCustomer->execute(
+                $authenticateData->getCustomerId(),
+                $authenticateData->getAdminId()
             );
 
 
