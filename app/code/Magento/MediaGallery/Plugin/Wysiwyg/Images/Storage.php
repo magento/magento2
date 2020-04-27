@@ -116,6 +116,8 @@ class Storage
      */
     private function getMediaDirectoryRelativePath(string $path): string
     {
-        return $this->filesystem->getDirectoryRead(DirectoryList::MEDIA)->getRelativePath($path);
+        $relativePath = $this->filesystem->getDirectoryRead(DirectoryList::MEDIA)->getRelativePath($path);
+
+        return (false === strpos($relativePath, '/')) ? '/' . $relativePath : $relativePath;
     }
 }
