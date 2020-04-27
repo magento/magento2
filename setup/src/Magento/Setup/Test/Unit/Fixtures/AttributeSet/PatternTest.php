@@ -28,7 +28,7 @@ class PatternTest extends \PHPUnit\Framework\TestCase
                         'frontend_label' => 'Attribute 1',
                         'frontend_input' => 'select',
                         'backend_type' => 1,
-                        'default_option' => 'option 1',
+                        'default_value' => 'option_1',
                         'options' => [
                             'option' => [
                                 [

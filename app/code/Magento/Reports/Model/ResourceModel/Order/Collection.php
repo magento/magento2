@@ -461,6 +461,7 @@ class Collection extends \Magento\Sales\Model\ResourceModel\Order\Collection
                 $startMonth = isset($startMonthDay[0]) ? (int)$startMonthDay[0] : 1;
                 $startDay = isset($startMonthDay[1]) ? (int)$startMonthDay[1] : 1;
                 $dateStart->setDate($dateStart->format('Y'), $startMonth, $startDay);
+                $dateStart->modify('-1 year');
                 if ($range == '2y') {
                     $dateStart->modify('-1 year');
                 }

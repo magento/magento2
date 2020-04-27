@@ -141,6 +141,7 @@
         </resources>
         <data>
             <parameter name="customer.id" force="true">%customer_id%</parameter>
+            <parameter name="customer.group_id" force="true">null</parameter>
         </data>
     </route>
     <route url="/V1/customers/me" method="GET" soapOperation="getSelf">

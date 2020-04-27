@@ -11,7 +11,9 @@ use Magento\Framework\Exception\ConfigurationMismatchException;
 use Magento\Elasticsearch\Model\Adapter\BatchDataMapperInterface;
 
 /**
- * Data mapper factory
+ * Data mapper factory uses to create appropriate mapper class
+ *
+ * @deprecated 100.3.5 because of EOL for Elasticsearch2
  */
 class DataMapperFactory
 {

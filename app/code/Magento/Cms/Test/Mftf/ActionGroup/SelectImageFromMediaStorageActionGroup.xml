@@ -8,6 +8,10 @@
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <!--
+    NOTICE: clickBrowseBtnOnUploadPopup is deprecated.
+            Please use ClickBrowseBtnOnUploadPopupActionGroup instead.
+    -->
     <actionGroup name="clickBrowseBtnOnUploadPopup">
         <annotations>
             <description>Clicks on the Browse button in the 'Insert/edit image' model.</description>
@@ -16,7 +20,11 @@
         <click selector="{{MediaGallerySection.Browse}}" stepKey="clickBrowse"/>
         <waitForPageLoad stepKey="waitForPageLoad1"/>
     </actionGroup>
-    
+
+    <!--
+    NOTICE: VerifyMediaGalleryStorageActions is deprecated.
+            Please use VerifyMediaGalleryStorageActionsActionGroup instead.
+    -->
     <actionGroup name="VerifyMediaGalleryStorageActions">
         <annotations>
             <description>Validates that the Media Gallery 'Cancel'/'Create Folder' buttons are present.</description>
@@ -28,7 +36,11 @@
         <see selector="{{MediaGallerySection.CancelBtn}}" userInput="Cancel" stepKey="seeCancelBtn"/>
         <see selector="{{MediaGallerySection.CreateFolder}}" userInput="Create Folder" stepKey="seeCreateFolderBtn"/>
     </actionGroup>
-    
+
+    <!--
+    NOTICE: CreateImageFolder is deprecated.
+            Please use CreateImageFolderActionGroup instead.
+    -->
     <actionGroup name="CreateImageFolder">
         <annotations>
             <description>Creates a folder in the Media Gallery based on the provided Folder.</description>
@@ -49,7 +61,11 @@
         <click userInput="{{ImageFolder.name}}" stepKey="clickOnCreatedFolder"/>
         <waitForLoadingMaskToDisappear stepKey="waitForLoading5"/>
     </actionGroup>
-    
+
+    <!--
+    NOTICE: attachImage is deprecated.
+            Please use AttachImageActionGroup instead.
+    -->
     <actionGroup name="attachImage">
         <annotations>
             <description>Uploads the provided Image to Media Gallery.
@@ -77,7 +93,11 @@
         <waitForElementNotVisible selector="{{MediaGallerySection.image(ImageUpload.file)}}" stepKey="waitForImageDeleted"/>
         <dontSeeElement selector="{{MediaGallerySection.image(ImageUpload.file)}}" stepKey="dontSeeImage"/>
     </actionGroup>
-    
+
+    <!--
+    NOTICE: saveImage is deprecated.
+            Please use SaveImageActionGroup instead.
+    -->
     <actionGroup name="saveImage">
         <annotations>
             <description>Clicks on Insert File in the Media Gallery.</description>
@@ -87,7 +107,11 @@
         <waitForPageLoad stepKey="waitForPageLoad"/>
         <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskToDisappear"/>
     </actionGroup>
-    
+
+    <!--
+    NOTICE: fillOutUploadImagePopup is deprecated.
+            Please use FillOutUploadImagePopupActionGroup instead.
+    -->
     <actionGroup name="fillOutUploadImagePopup">
         <annotations>
             <description>Fills in the Image Description and Height fields. PLEASE NOTE: The values are Hardcoded using 'ImageUpload'.</description>

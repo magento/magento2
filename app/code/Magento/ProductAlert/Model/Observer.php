@@ -242,6 +242,7 @@ class Observer
                     );
 
                     $product->setCustomerGroupId($customer->getGroupId());
+                    $this->_storeManager->getStore()->setWebsiteId($website->getId());
                     if ($alert->getPrice() > $product->getFinalPrice()) {
                         $productPrice = $product->getFinalPrice();
                         $product->setFinalPrice($this->_catalogData->getTaxPrice($product, $productPrice));

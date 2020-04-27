@@ -62,6 +62,9 @@
         <waitForPageLoad stepKey="waitFormToReload1"/>
         <click selector="{{AdminCartPriceRulesFormSection.manageCouponCodesHeader}}" stepKey="expandCouponSection2"/>
 
+        <!-- Assert coupon codes grid header is correct -->
+        <see selector="{{AdminCartPriceRulesFormSection.couponGridUsedHeader}}" userInput="Used" stepKey="seeCorrectUsedHeader"/>
+
         <!-- Grab a coupon code and hold on to it for later -->
         <grabTextFrom selector="{{AdminCartPriceRulesFormSection.generatedCouponByIndex('1')}}" stepKey="grabCouponCode"/>
 

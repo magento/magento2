@@ -22,6 +22,8 @@ use Psr\Log\LoggerInterface;
  * Responsible for handling webhook posts from Signifyd service.
  *
  * @see https://www.signifyd.com/docs/api/#/reference/webhooks/
+ * @deprecated 100.3.5 Starting from Magento 2.3.5 Signifyd core integration is deprecated in favor of
+ * official Signifyd integration available on the marketplace
  */
 class Handler extends Action implements \Magento\Framework\App\CsrfAwareActionInterface
 {

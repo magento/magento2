@@ -8,13 +8,10 @@ namespace Magento\Customer\Controller;
 
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Api\Data\CustomerInterface;
-use Magento\Customer\Model\Account\Redirect;
 use Magento\Customer\Model\CustomerRegistry;
 use Magento\Customer\Model\Session;
 use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\Api\SearchCriteriaBuilder;
-use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Framework\App\Config\Value;
 use Magento\Framework\App\Http;
 use Magento\Framework\App\Request\Http as HttpRequest;
 use Magento\Framework\Data\Form\FormKey;
@@ -26,10 +23,8 @@ use Magento\Store\Model\StoreManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\Mail\Template\TransportBuilderMock;
 use Magento\TestFramework\Request;
-use Magento\TestFramework\Response;
 use Magento\Theme\Controller\Result\MessagePlugin;
 use PHPUnit\Framework\Constraint\StringContains;
-use Zend\Stdlib\Parameters;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -78,35 +73,6 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
     }
 
     /**
-     * @magentoDataFixture Magento/Customer/_files/customer_no_password.php
-     */
-    public function testLoginWithIncorrectPassword()
-    {
-        $expectedMessage = 'The account sign-in was incorrect or your account is disabled temporarily. '
-            . 'Please wait and try again later.';
-        $this->getRequest()
-            ->setMethod('POST')
-            ->setPostValue(
-                [
-                    'login' => [
-                        'username' => 'customer@example.com',
-                        'password' => '123123q'
-                    ]
-                ]
-            );
-
-        $this->dispatch('customer/account/loginPost');
-        $this->assertRedirect($this->stringContains('customer/account/login'));
-        $this->assertSessionMessages(
-            $this->equalTo(
-                [
-                    $expectedMessage
-                ]
-            )
-        );
-    }
-
-    /**
      * Test sign up form displaying.
      */
     public function testCreateAction()
@@ -130,35 +96,6 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
         $this->login(1);
         $this->dispatch('customer/account/logout');
         $this->assertRedirect($this->stringContains('customer/account/logoutSuccess'));
-    }
-
-    /**
-     * Test that forgot password email message displays special characters correctly.
-     *
-     * @codingStandardsIgnoreStart
-     * @magentoConfigFixture current_store customer/password/limit_password_reset_requests_method 0
-     * @magentoConfigFixture current_store customer/password/forgot_email_template customer_password_forgot_email_template
-     * @magentoConfigFixture current_store customer/password/forgot_email_identity support
-     * @magentoConfigFixture current_store general/store_information/name Test special' characters
-     * @magentoConfigFixture current_store customer/captcha/enable 0
-     * @magentoDataFixture Magento/Customer/_files/customer.php
-     * @codingStandardsIgnoreEnd
-     */
-    public function testForgotPasswordEmailMessageWithSpecialCharacters()
-    {
-        $email = 'customer@example.com';
-
-        $this->getRequest()->setPostValue(['email' => $email]);
-        $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
-
-        $this->dispatch('customer/account/forgotPasswordPost');
-        $this->assertRedirect($this->stringContains('customer/account/'));
-
-        $subject = $this->transportBuilderMock->getSentMessage()->getSubject();
-        $this->assertContains(
-            'Test special\' characters',
-            $subject
-        );
     }
 
     /**
@@ -394,56 +331,6 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
                 ]
             ),
             MessageInterface::TYPE_SUCCESS
-        );
-    }
-
-    /**
-     * @codingStandardsIgnoreStart
-     * @magentoConfigFixture current_store customer/password/limit_password_reset_requests_method 0
-     * @magentoConfigFixture current_store customer/password/forgot_email_template customer_password_forgot_email_template
-     * @magentoConfigFixture current_store customer/password/forgot_email_identity support
-     * @magentoConfigFixture current_store customer/captcha/enable 0
-     * @magentoDataFixture Magento/Customer/_files/customer.php
-     * @codingStandardsIgnoreEnd
-     */
-    public function testForgotPasswordPostAction()
-    {
-        $email = 'customer@example.com';
-
-        $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
-        $this->getRequest()->setPostValue(['email' => $email]);
-
-        $this->dispatch('customer/account/forgotPasswordPost');
-        $this->assertRedirect($this->stringContains('customer/account/'));
-
-        $message = __(
-            'If there is an account associated with %1 you will receive an email with a link to reset your password.',
-            $email
-        );
-        $this->assertSessionMessages(
-            $this->equalTo([$message]),
-            MessageInterface::TYPE_SUCCESS
-        );
-    }
-
-    /**
-     * @magentoConfigFixture current_store customer/captcha/enable 0
-     */
-    public function testForgotPasswordPostWithBadEmailAction()
-    {
-        $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
-        $this->getRequest()
-            ->setPostValue(
-                [
-                    'email' => 'bad@email',
-                ]
-            );
-
-        $this->dispatch('customer/account/forgotPasswordPost');
-        $this->assertRedirect($this->stringContains('customer/account/forgotpassword'));
-        $this->assertSessionMessages(
-            $this->equalTo(['The email address is incorrect. Verify the email address and try again.']),
-            MessageInterface::TYPE_ERROR
         );
     }
 
@@ -720,35 +607,6 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
     }
 
     /**
-     * Test redirect customer to account dashboard after logging in.
-     *
-     * @param bool|null $redirectDashboard
-     * @param string $redirectUrl
-     * @magentoDbIsolation enabled
-     * @magentoAppIsolation enabled
-     * @magentoDataFixture Magento/Customer/_files/customer.php
-     * @dataProvider loginPostRedirectDataProvider
-     */
-    public function testLoginPostRedirect($redirectDashboard, string $redirectUrl)
-    {
-        if (isset($redirectDashboard)) {
-            $this->_objectManager->get(ScopeConfigInterface::class)->setValue(
-                'customer/startup/redirect_dashboard',
-                $redirectDashboard
-            );
-        }
-        $this->_objectManager->get(Redirect::class)->setRedirectCookie('test');
-        $configValue = $this->_objectManager->create(Value::class);
-        $configValue->load('web/unsecure/base_url', 'path');
-        $baseUrl = $configValue->getValue() ?: 'http://localhost/';
-        $request = $this->prepareRequest();
-        $app = $this->_objectManager->create(Http::class, ['_request' => $request]);
-        $response = $app->launch();
-        $this->assertResponseRedirect($response, $baseUrl . $redirectUrl);
-        $this->assertTrue($this->_objectManager->get(Session::class)->isLoggedIn());
-    }
-
-    /**
      * Register Customer with email confirmation.
      *
      * @magentoDataFixture Magento/Customer/_files/customer_confirmation_config_enable.php
@@ -995,20 +853,6 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
     }
 
     /**
-     * Data provider for testLoginPostRedirect.
-     *
-     * @return array
-     */
-    public function loginPostRedirectDataProvider()
-    {
-        return [
-            [null, 'index.php/'],
-            [0, 'index.php/'],
-            [1, 'index.php/customer/account/'],
-        ];
-    }
-
-    /**
      * @param string $email
      * @return void
      */
@@ -1074,44 +918,6 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
         $customer = array_pop($customers);
 
         return $customer;
-    }
-
-    /**
-     * Prepare request for customer login.
-     *
-     * @return Request
-     */
-    private function prepareRequest()
-    {
-        $post = new Parameters(
-            [
-                'form_key' => $this->_objectManager->get(FormKey::class)->getFormKey(),
-                'login' => [
-                    'username' => 'customer@example.com',
-                    'password' => 'password'
-                ]
-            ]
-        );
-        $request = $this->getRequest();
-        $formKey = $this->_objectManager->get(FormKey::class);
-        $request->setParam('form_key', $formKey->getFormKey());
-        $request->setMethod(Request::METHOD_POST);
-        $request->setRequestUri('customer/account/loginPost/');
-        $request->setPost($post);
-        return $request;
-    }
-
-    /**
-     * Assert response is redirect.
-     *
-     * @param Response $response
-     * @param string $redirectUrl
-     * @return void
-     */
-    private function assertResponseRedirect(Response $response, string $redirectUrl)
-    {
-        $this->assertTrue($response->isRedirect());
-        $this->assertSame($redirectUrl, $response->getHeader('Location')->getUri());
     }
 
     /**

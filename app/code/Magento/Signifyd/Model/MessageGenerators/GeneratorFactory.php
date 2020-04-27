@@ -10,6 +10,9 @@ use Magento\Signifyd\Model\MessageGeneratorInterface;
 
 /**
  * Creates instance of message generator based on received type of message.
+ *
+ * @deprecated 100.3.5 Starting from Magento 2.3.5 Signifyd core integration is deprecated in favor of
+ * official Signifyd integration available on the marketplace
  */
 class GeneratorFactory
 {

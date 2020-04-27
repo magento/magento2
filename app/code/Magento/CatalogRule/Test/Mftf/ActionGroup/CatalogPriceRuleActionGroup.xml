@@ -233,4 +233,23 @@
         <click selector="{{AdminNewCatalogPriceRuleConditions.activeConditionApplyButton}}" stepKey="clickApply"/>
         <waitForElementNotVisible selector="{{AdminNewCatalogPriceRuleConditions.activeConditionApplyButton}}" stepKey="waitForApplyButtonInvisibility"/>
     </actionGroup>
+
+    <actionGroup name="newCatalogPriceRuleWithInvalidData">
+        <annotations>
+            <description>Goes to the Catalog Price Rule grid. Clicks on Add. Fills in the provided Catalog Rule details with invalid data.</description>
+        </annotations>
+        <arguments>
+            <argument name="catalogRule" defaultValue="catalogRuleWithInvalid"/>
+        </arguments>
+
+        <!-- Go to the admin Catalog rule grid and add a new one -->
+        <amOnPage stepKey="goToPriceRulePage" url="{{CatalogRulePage.url}}"/>
+        <waitForPageLoad stepKey="waitForPriceRulePage"/>
+
+        <click stepKey="addNewRule" selector="{{AdminGridMainControls.add}}"/>
+        <fillField stepKey="fillPriority" selector="{{AdminNewCatalogPriceRule.priority}}" userInput="{{catalogRule.priority}}"/>
+        <scrollToTopOfPage stepKey="scrollToTop"/>
+        <click selector="{{AdminNewCatalogPriceRule.save}}" stepKey="clickSave"/>
+        <waitForPageLoad stepKey="waitForApplied"/>
+    </actionGroup>
 </actionGroups>

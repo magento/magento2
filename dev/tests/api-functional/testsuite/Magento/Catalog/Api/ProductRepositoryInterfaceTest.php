@@ -8,19 +8,13 @@ declare(strict_types=1);
 namespace Magento\Catalog\Api;
 
 use Magento\Authorization\Model\Role;
-use Magento\Authorization\Model\Rules;
 use Magento\Authorization\Model\RoleFactory;
+use Magento\Authorization\Model\Rules;
 use Magento\Authorization\Model\RulesFactory;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\CatalogInventory\Api\Data\StockItemInterface;
 use Magento\Downloadable\Api\DomainManagerInterface;
 use Magento\Downloadable\Model\Link;
-use Magento\Integration\Api\AdminTokenServiceInterface;
-use Magento\Store\Model\Store;
-use Magento\Store\Model\Website;
-use Magento\Store\Model\WebsiteRepository;
-use Magento\TestFramework\Helper\Bootstrap;
-use Magento\TestFramework\TestCase\WebapiAbstract;
 use Magento\Framework\Api\ExtensibleDataInterface;
 use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\Api\SearchCriteriaBuilder;
@@ -28,6 +22,12 @@ use Magento\Framework\Api\SortOrder;
 use Magento\Framework\Api\SortOrderBuilder;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Webapi\Exception as HTTPExceptionCodes;
+use Magento\Integration\Api\AdminTokenServiceInterface;
+use Magento\Store\Model\Store;
+use Magento\Store\Model\Website;
+use Magento\Store\Model\WebsiteRepository;
+use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\TestCase\WebapiAbstract;
 
 /**
  * Test for \Magento\Catalog\Api\ProductRepositoryInterface
@@ -491,7 +491,6 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
             ProductInterface::TYPE_ID => 'simple',
             ProductInterface::PRICE => 100,
             ProductInterface::STATUS => 1,
-            ProductInterface::TYPE_ID => 'simple',
             ProductInterface::ATTRIBUTE_SET_ID => 4,
             ProductInterface::EXTENSION_ATTRIBUTES_KEY => [
                 'stock_item' => $this->getStockItemData()
@@ -1393,8 +1392,6 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         $response = $this->getProduct($productData[ProductInterface::SKU]);
         $response[self::KEY_TIER_PRICES] = [];
         $response = $this->updateProduct($response);
-        $this->assertArrayHasKey(self::KEY_TIER_PRICES, $response, "expected to have the 'tier_prices' key");
-        $this->assertEmpty($response[self::KEY_TIER_PRICES], "expected to have an empty array of 'tier_prices'");
 
         // delete the product with tier prices; expect that all goes well
         $response = $this->deleteProduct($productData[ProductInterface::SKU]);
@@ -1618,7 +1615,6 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
             ProductInterface::TYPE_ID => 'simple',
             ProductInterface::PRICE => 100,
             ProductInterface::STATUS => 0,
-            ProductInterface::TYPE_ID => 'simple',
             ProductInterface::ATTRIBUTE_SET_ID => 4,
         ];
 

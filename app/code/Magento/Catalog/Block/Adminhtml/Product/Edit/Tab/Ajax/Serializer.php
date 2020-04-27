@@ -36,7 +36,7 @@ class Serializer extends \Magento\Framework\View\Element\Template
     }
 
     /**
-     * @return $this
+     * @inheritDoc
      */
     public function _construct()
     {
@@ -46,6 +46,8 @@ class Serializer extends \Magento\Framework\View\Element\Template
     }
 
     /**
+     * Retrieve product data as JSON
+     *
      * @return string
      * @deprecated 102.0.0
      */

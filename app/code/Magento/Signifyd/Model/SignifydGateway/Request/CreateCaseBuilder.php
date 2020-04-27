@@ -12,6 +12,8 @@ use Magento\Sales\Model\OrderFactory;
  *
  * Handles the conversion from Magento Order to Signifyd Case.
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @deprecated 100.3.5 Starting from Magento 2.3.5 Signifyd core integration is deprecated in favor of
+ * official Signifyd integration available on the marketplace
  */
 class CreateCaseBuilder implements CreateCaseBuilderInterface
 {

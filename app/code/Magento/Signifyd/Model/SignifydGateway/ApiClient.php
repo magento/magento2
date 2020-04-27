@@ -9,6 +9,9 @@ use Magento\Signifyd\Model\SignifydGateway\Client\RequestBuilder;
 
 /**
  * Encapsulates Signifyd API protocol.
+ *
+ * @deprecated 100.3.5 Starting from Magento 2.3.5 Signifyd core integration is deprecated in favor of
+ * official Signifyd integration available on the marketplace
  */
 class ApiClient
 {

@@ -282,6 +282,8 @@ class AbstractProductTest extends \PHPUnit\Framework\TestCase
     {
         $this->_condition->setAttribute('category_ids');
         $this->assertEquals('e.entity_id', $this->_condition->getMappedSqlField());
+        $this->_condition->setAttribute('attribute_set_id');
+        $this->assertEquals('e.attribute_set_id', $this->_condition->getMappedSqlField());
     }
 
     /**
@@ -329,7 +331,7 @@ class AbstractProductTest extends \PHPUnit\Framework\TestCase
             ->willReturn($attributeObjectFrontendInput);
         $attributeObjectMock->method('getSource')->willReturn($attrObjectSourceMock);
 
-        $entityTypeMock = $this->getMockBuilder(\Magento\Framework\Model\AbstractModel\Type::class)
+        $entityTypeMock = $this->getMockBuilder(\Magento\Eav\Model\Entity\Type::class)
             ->setMethods(['getId'])
             ->disableOriginalConstructor()
             ->getMock();

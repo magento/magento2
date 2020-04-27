@@ -302,9 +302,6 @@
             <testCaseId value="MC-14784"/>
             <group value="CatalogSearch"/>
             <group value="mtf_migrated"/>
-            <skip>
-                <issueId value="MC-29937"/>
-            </skip>
         </annotations>
         <before>
             <createData entity="_defaultCategory" stepKey="createCategory"/>
@@ -606,14 +603,14 @@
     <test name="QuickSearchConfigurableChildren">
         <annotations>
             <stories value="Search Product on Storefront"/>
-            <title value="User should be able to use Quick Search to a configurable product's child products"/>
+            <title value="Deprecated. User should be able to use Quick Search to a configurable product's child products"/>
             <description value="Use Quick Search to find a configurable product with enabled/disable children"/>
             <severity value="MAJOR"/>
             <testCaseId value="MC-14798"/>
             <group value="CatalogSearch"/>
             <group value="mtf_migrated"/>
             <skip>
-                <issueId value="MC-15101"/>
+                <issueId value="DEPRECATED">Use StorefrontQuickSearchConfigurableChildrenTest instead.</issueId>
             </skip>
         </annotations>
         <before>
@@ -675,6 +672,13 @@
             <magentoCLI command="indexer:reindex" stepKey="reindex"/>
             <magentoCLI command="cache:flush" stepKey="flushCache"/>
         </before>
+        <after>
+            <deleteData createDataKey="attributeSet" stepKey="deleteAttributeSet"/>
+            <deleteData createDataKey="createConfigProductAttribute" stepKey="deleteConfigProductAttribute"/>
+
+            <!-- Reindex invalidated indices after product attribute has been created/deleted -->
+            <actionGroup ref="CliRunReindexUsingCronJobsActionGroup" stepKey="reindexInvalidatedIndices"/>
+        </after>
         <amOnPage url="{{StorefrontHomePage.url}}" stepKey="goToFrontPage"/>
         <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="searchStorefront">
             <argument name="phrase" value="$createConfigProduct.name$"/>

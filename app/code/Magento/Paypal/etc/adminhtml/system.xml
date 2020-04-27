@@ -13,7 +13,7 @@
                 <frontend_model>Magento\Paypal\Block\Adminhtml\System\Config\Fieldset\Expanded</frontend_model>
                 <field id="merchant_country" type="select" translate="label comment" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Merchant Country</label>
-                    <comment>If not specified, Default Country from General Config will be used</comment>
+                    <comment>If not specified, Default Country from General Config will be used.</comment>
                     <frontend_model>Magento\Paypal\Block\Adminhtml\System\Config\Field\Country</frontend_model>
                     <source_model>Magento\Paypal\Model\System\Config\Source\MerchantCountry</source_model>
                     <backend_model>Magento\Paypal\Model\System\Config\Backend\MerchantCountry</backend_model>
@@ -34,6 +34,13 @@
                 <label>Other Payment Methods:</label>
                 <attribute type="expanded">1</attribute>
                 <fieldset_css>paypal-top-section payments-other-header</fieldset_css>
+                <frontend_model>\Magento\Config\Block\System\Config\Form\Fieldset</frontend_model>
+            </group>
+            <group id="deprecated_payment_methods" translate="label" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Deprecated Payment Methods:</label>
+                <comment><![CDATA[These payment methods have been deprecated because they are no longer compliant. We recommend that these payment method to be disabled to prevent new orders, since the payment processor might not support them. Please migrate to the official payment methods extensions from Magento Marketplace instead and disable deprecated payment integrations as soon as possible.]]></comment>
+                <attribute type="expanded">1</attribute>
+                <fieldset_css>paypal-top-section payments-other-header deprecated-message</fieldset_css>
                 <frontend_model>\Magento\Config\Block\System\Config\Form\Fieldset</frontend_model>
             </group>
         </section>

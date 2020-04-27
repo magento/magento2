@@ -252,4 +252,7 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Framework\Session\SessionStartChecker">
+        <plugin name="transparent_session_checker" type="Magento\Paypal\Plugin\TransparentSessionChecker"/>
+    </type>
 </config>

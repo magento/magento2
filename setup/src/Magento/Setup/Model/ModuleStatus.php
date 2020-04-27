@@ -11,6 +11,9 @@ use Magento\Framework\Config\ConfigOptionsListConstants;
 use Magento\Framework\Module\DependencyChecker;
 use Magento\Framework\Module\ModuleList\Loader as ModuleLoader;
 
+/**
+ * Setup module status
+ */
 class ModuleStatus
 {
     /**
@@ -104,7 +107,7 @@ class ModuleStatus
                 [$module['name']],
                 $enabledModules
             );
-            if (sizeof($errorMessages[$module['name']]) === 0) {
+            if (count($errorMessages[$module['name']]) === 0) {
                 $canBeDisabled[] = $module['name'];
             }
         }
@@ -128,6 +131,8 @@ class ModuleStatus
     }
 
     /**
+     * Set module status is enabled
+     *
      * @param bool $status
      * @param String $moduleName
      *

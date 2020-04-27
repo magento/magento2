@@ -223,7 +223,7 @@ class LoginPostTest extends \PHPUnit\Framework\TestCase
             ->willReturn([]);
 
         $this->messageManager->expects($this->once())
-            ->method('addError')
+            ->method('addErrorMessage')
             ->with(__('A login and a password are required.'))
             ->willReturnSelf();
 
@@ -557,7 +557,7 @@ class LoginPostTest extends \PHPUnit\Framework\TestCase
                     $url
                 );
                 $this->messageManager->expects($this->once())
-                    ->method('addError')
+                    ->method('addErrorMessage')
                     ->with($message)
                     ->willReturnSelf();
 
@@ -569,7 +569,7 @@ class LoginPostTest extends \PHPUnit\Framework\TestCase
 
             case \Magento\Framework\Exception\AuthenticationException::class:
                 $this->messageManager->expects($this->once())
-                    ->method('addError')
+                    ->method('addErrorMessage')
                     ->with(
                         __(
                             'The account sign-in was incorrect or your account is disabled temporarily. '
@@ -586,7 +586,7 @@ class LoginPostTest extends \PHPUnit\Framework\TestCase
 
             case '\Exception':
                 $this->messageManager->expects($this->once())
-                    ->method('addError')
+                    ->method('addErrorMessage')
                     ->with(__('An unspecified error occurred. Please contact us for assistance.'))
                     ->willReturnSelf();
                 break;
@@ -597,7 +597,7 @@ class LoginPostTest extends \PHPUnit\Framework\TestCase
                     . 'Please wait and try again later.'
                 );
                 $this->messageManager->expects($this->once())
-                    ->method('addError')
+                    ->method('addErrorMessage')
                     ->with($message)
                     ->willReturnSelf();
                 $this->session->expects($this->once())

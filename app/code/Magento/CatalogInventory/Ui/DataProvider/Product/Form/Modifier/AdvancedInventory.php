@@ -255,6 +255,9 @@ class AdvancedInventory extends AbstractModifier
                         'actionName' => 'toggleModal',
                     ],
                 ],
+                'imports' => [
+                    'childError' => 'product_form.product_form.advanced_inventory_modal.stock_data:error',
+                ],
                 'title' => __('Advanced Inventory'),
                 'provider' => false,
                 'additionalForGroup' => true,

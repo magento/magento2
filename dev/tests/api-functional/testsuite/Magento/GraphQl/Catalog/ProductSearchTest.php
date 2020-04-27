@@ -32,6 +32,37 @@ use Magento\TestFramework\Helper\CacheCleaner;
 class ProductSearchTest extends GraphQlAbstract
 {
     /**
+     * Verify that filters for non-existing category are empty
+     *
+     * @throws \Exception
+     */
+    public function testFilterForNonExistingCategory()
+    {
+        $query = <<<QUERY
+{
+  products(filter: {category_id: {eq: "99999999"}}) {
+    filters {
+      name
+    }
+  }
+}
+QUERY;
+
+        $response = $this->graphQlQuery($query);
+
+        $this->assertArrayHasKey(
+            'filters',
+            $response['products'],
+            'Filters are missing in product query result.'
+        );
+
+        $this->assertEmpty(
+            $response['products']['filters'],
+            'Returned filters data set does not empty'
+        );
+    }
+
+    /**
      * Verify that layered navigation filters and aggregations are correct for product query
      *
      * Filter products by an array of skus
@@ -41,6 +72,7 @@ class ProductSearchTest extends GraphQlAbstract
      */
     public function testFilterLn()
     {
+        $this->reIndexAndCleanCache();
         $query = <<<QUERY
 {
     products (
@@ -124,7 +156,7 @@ QUERY;
         CacheCleaner::cleanAll();
         $attributeCode = 'test_configurable';
 
-        /** @var \Magento\Eav\Model\Config $eavConfig */
+        /** @var Config $eavConfig */
         $eavConfig = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(Config::class);
         $attribute = $eavConfig->getAttribute('catalog_product', $attributeCode);
         /** @var AttributeOptionInterface[] $options */
@@ -172,7 +204,7 @@ QUERY;
     {
         return <<<QUERY
 {
-  products(filter:{                   
+  products(filter:{
                    $attributeCode: {in:["{$firstOption}", "{$secondOption}"]}
                    }
                    pageSize: 3
@@ -180,7 +212,7 @@ QUERY;
        )
   {
   total_count
-    items 
+    items
      {
       name
       sku
@@ -193,14 +225,14 @@ QUERY;
     filters{
       name
       request_var
-      filter_items_count 
+      filter_items_count
       filter_items{
         label
         items_count
         value_string
         __typename
       }
-    }  
+    }
     aggregations{
         attribute_code
         count
@@ -211,8 +243,8 @@ QUERY;
            count
     }
   }
-      
-    } 
+
+    }
 }
 QUERY;
     }
@@ -230,16 +262,15 @@ QUERY;
         $optionValue = $this->getDefaultAttributeOptionValue($attributeCode);
         $query = <<<QUERY
 {
-  products(filter:{                   
+  products(filter:{
                    $attributeCode: {eq: "{$optionValue}"}
                    }
-                   
                    pageSize: 3
                    currentPage: 1
        )
   {
   total_count
-    items 
+    items
      {
       name
       sku
@@ -252,14 +283,13 @@ QUERY;
     filters{
       name
       request_var
-      filter_items_count 
+      filter_items_count
       filter_items{
         label
         items_count
         value_string
         __typename
       }
-       
     }
      aggregations{
         attribute_code
@@ -272,8 +302,8 @@ QUERY;
           value
         }
       }
-      
-    } 
+
+    }
 }
 QUERY;
 
@@ -303,7 +333,7 @@ QUERY;
             );
         }
 
-        /** @var \Magento\Eav\Model\Config $eavConfig */
+        /** @var Config $eavConfig */
         $eavConfig = $objectManager->get(Config::class);
         $attribute = $eavConfig->getAttribute('catalog_product', 'second_test_configurable');
         // Validate custom attribute filter layer data from aggregations
@@ -348,8 +378,8 @@ QUERY;
         $objectManager = Bootstrap::getObjectManager();
         $this->reIndexAndCleanCache();
         $attributeCode = 'multiselect_attribute';
-        /** @var \Magento\Eav\Model\Config $eavConfig */
-        $eavConfig = $objectManager->get(\Magento\Eav\Model\Config::class);
+        /** @var Config $eavConfig */
+        $eavConfig = $objectManager->get(Config::class);
         $attribute = $eavConfig->getAttribute('catalog_product', $attributeCode);
         /** @var AttributeOptionInterface[] $options */
         $options = $attribute->getOptions();
@@ -361,15 +391,15 @@ QUERY;
         }
         $query = <<<QUERY
 {
-  products(filter:{                   
-                   $attributeCode: {in:["{$optionValues[0]}", "{$optionValues[1]}", "{$optionValues[2]}"]} 
+  products(filter:{
+                   $attributeCode: {in:["{$optionValues[0]}", "{$optionValues[1]}", "{$optionValues[2]}"]}
                    }
                    pageSize: 3
                    currentPage: 1
        )
   {
   total_count
-    items 
+    items
      {
       name
       sku
@@ -382,14 +412,14 @@ QUERY;
     filters{
       name
       request_var
-      filter_items_count 
+      filter_items_count
       filter_items{
         label
         items_count
         value_string
         __typename
       }
-    }  
+    }
        aggregations{
         attribute_code
         count
@@ -398,15 +428,16 @@ QUERY;
         {
           label
           value
-        
+
         }
       }
-      
-    } 
+
+    }
 }
 QUERY;
 
         $response = $this->graphQlQuery($query);
+        $this->assertArrayNotHasKey('errors', $response, 'Response has errors.');
         $this->assertEquals(3, $response['products']['total_count']);
         $this->assertNotEmpty($response['products']['filters']);
         $this->assertNotEmpty($response['products']['aggregations']);
@@ -420,8 +451,8 @@ QUERY;
      */
     private function getDefaultAttributeOptionValue(string $attributeCode) : string
     {
-        /** @var \Magento\Eav\Model\Config $eavConfig */
-        $eavConfig = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(\Magento\Eav\Model\Config::class);
+        /** @var Config $eavConfig */
+        $eavConfig = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(Config::class);
         $attribute = $eavConfig->getAttribute('catalog_product', $attributeCode);
         /** @var AttributeOptionInterface[] $options */
         $options = $attribute->getOptions();
@@ -453,7 +484,7 @@ QUERY;
        )
   {
    total_count
-    items 
+    items
      {
       name
       sku
@@ -466,15 +497,15 @@ QUERY;
     filters{
       name
       request_var
-      filter_items_count 
+      filter_items_count
       filter_items{
         label
         items_count
         value_string
         __typename
       }
-       
-    } 
+
+    }
     aggregations
     {
         attribute_code
@@ -486,10 +517,8 @@ QUERY;
           label
           value
         }
-    }   
-      
     }
- 
+    }
 }
 QUERY;
         $response = $this->graphQlQuery($query);
@@ -523,7 +552,7 @@ QUERY;
             );
         }
 
-       // Validate the price layer of aggregations from the response
+        // Validate the price layer of aggregations from the response
         $this->assertResponseFields(
             $response['products']['aggregations'][0],
             [
@@ -599,7 +628,7 @@ QUERY;
        )
   {
   total_count
-    items 
+    items
      {
       name
       sku
@@ -612,7 +641,7 @@ QUERY;
     filters{
       name
       request_var
-      filter_items_count 
+      filter_items_count
       filter_items{
         label
         items_count
@@ -632,7 +661,7 @@ QUERY;
           value
         }
     }
-  } 
+  }
 }
 QUERY;
         $response = $this->graphQlQuery($query);
@@ -663,7 +692,7 @@ QUERY;
         //Validate the number of categories/sub-categories that contain the products with the custom attribute
         $this->assertCount(6, $actualCategoriesFromResponse);
 
-        $expectedCategoryInAggregrations =
+        $expectedCategoryInAggregations =
             [
                 [
                   'count' =>  2,
@@ -700,9 +729,9 @@ QUERY;
                 ],
             ];
         // presort expected and actual results as different search engines have different orders
-        usort($expectedCategoryInAggregrations, [$this, 'compareLabels']);
+        usort($expectedCategoryInAggregations, [$this, 'compareLabels']);
         usort($actualCategoriesFromResponse, [$this, 'compareLabels']);
-        $categoryInAggregations = array_map(null, $expectedCategoryInAggregrations, $actualCategoriesFromResponse);
+        $categoryInAggregations = array_map(null, $expectedCategoryInAggregations, $actualCategoriesFromResponse);
 
         //Validate the categories and sub-categories data in the filter layer
         foreach ($categoryInAggregations as $index => $categoryAggregationsData) {
@@ -756,7 +785,7 @@ QUERY;
        )
   {
   total_count
-    items 
+    items
      {
       name
       sku
@@ -770,7 +799,7 @@ QUERY;
     filters{
       name
       request_var
-      filter_items_count 
+      filter_items_count
       filter_items{
         label
         items_count
@@ -790,7 +819,7 @@ QUERY;
           value
         }
     }
-  } 
+  }
 }
 QUERY;
         $response = $this->graphQlQuery($query);
@@ -819,17 +848,17 @@ QUERY;
        )
   {
   total_count
-    items 
+    items
      {
       name
       sku
       url_key
       }
-    
+
     filters{
       name
       request_var
-      filter_items_count      
+      filter_items_count
     }
      aggregations
     {
@@ -843,7 +872,7 @@ QUERY;
           value
         }
     }
-  } 
+  }
 }
 QUERY;
         $response = $this->graphQlQuery($query2);
@@ -882,7 +911,7 @@ QUERY;
        )
   {
   total_count
-    items 
+    items
      {
       name
       sku
@@ -891,12 +920,12 @@ QUERY;
     page_info{
       current_page
       page_size
-      
+
     }
     filters{
       name
       request_var
-      filter_items_count      
+      filter_items_count
     }
      aggregations
     {
@@ -910,7 +939,7 @@ QUERY;
           value
         }
     }
-  } 
+  }
 }
 QUERY;
         $response = $this->graphQlQuery($query);
@@ -939,8 +968,8 @@ QUERY;
      */
     private function getExpectedFiltersDataSet()
     {
-        /** @var \Magento\Eav\Model\Config $eavConfig */
-        $eavConfig = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(\Magento\Eav\Model\Config::class);
+        /** @var Config $eavConfig */
+        $eavConfig = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(Config::class);
         $attribute = $eavConfig->getAttribute('catalog_product', 'test_configurable');
         /** @var \Magento\Eav\Api\Data\AttributeOptionInterface[] $options */
         $options = $attribute->getOptions();
@@ -1166,10 +1195,10 @@ QUERY;
     products(
         filter:
         {
-            price:{to :"50"}            
+            price:{to :"50"}
             sku:{in:["simple1", "simple2"]}
             name:{match:"Simple"}
-             
+
         }
          pageSize:4
          currentPage:1
@@ -1204,10 +1233,10 @@ QUERY;
           page_size
           current_page
         }
-        sort_fields 
+        sort_fields
         {
           default
-          options 
+          options
           {
             value
             label
@@ -1350,7 +1379,7 @@ QUERY;
         $query
             = <<<QUERY
 {
-   products(filter:{     
+   products(filter:{
           category_id :{in:["4","5","12"]}
          })
  {
@@ -1397,7 +1426,7 @@ QUERY;
             category_id:{eq:"{$queryCategoryId}"}
         }
     pageSize:2
-            
+
      )
     {
       items
@@ -1414,7 +1443,7 @@ QUERY;
         }
       }
        total_count
-        
+
     }
 }
 
@@ -1488,7 +1517,7 @@ QUERY;
        )
   {
     total_count
-    items 
+    items
      {
       name
       sku
@@ -1501,14 +1530,14 @@ QUERY;
     filters{
       name
       request_var
-      filter_items_count 
+      filter_items_count
       filter_items{
         label
         items_count
         value_string
         __typename
       }
-    }    
+    }
      aggregations{
         attribute_code
         count
@@ -1518,9 +1547,9 @@ QUERY;
           value
           count
         }
-      } 
+      }
     }
- 
+
 }
 QUERY;
         $response = $this->graphQlQuery($query);
@@ -1647,7 +1676,7 @@ QUERY;
           items_count
           label
           value_string
-        }        
+        }
       }
       aggregations{
         attribute_code
@@ -1806,11 +1835,11 @@ QUERY;
 {
 products(
     filter:
-    {        
+    {
         price:{from:"50"}
-        
+
         description:{match:"Description"}
-        
+
     }
     pageSize:2
     currentPage:1
@@ -1963,7 +1992,7 @@ QUERY;
             sku:{eq:"simple_visible_in_stock"}
         }
     pageSize:20
-            
+
      )
     {
       items
@@ -1972,7 +2001,7 @@ QUERY;
        name
       }
        total_count
-        
+
     }
 }
 QUERY;

@@ -17,6 +17,9 @@
             <testCaseId value="MC-11505"/>
             <group value="translation"/>
             <group value="checkout"/>
+            <skip>
+                <issueId value="MC-31016"/>
+            </skip>
         </annotations>
         <before>
             <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin"/>

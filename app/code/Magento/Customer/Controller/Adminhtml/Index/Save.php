@@ -320,12 +320,13 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Index implements HttpP
                     ['customer' => $customer, 'request' => $this->getRequest()]
                 );
 
-                if (isset($customerData['sendemail_store_id'])) {
+                if (isset($customerData['sendemail_store_id']) && $customerData['sendemail_store_id'] !== false) {
                     $customer->setStoreId($customerData['sendemail_store_id']);
                 }
 
                 // Save customer
                 if ($customerId) {
+                    $this->customerAccountManagement->validateCustomerStoreIdByWebsiteId($customer);
                     $this->_customerRepository->save($customer);
 
                     $this->getEmailNotification()->credentialsChanged($customer, $currentCustomer->getEmail());

@@ -25,7 +25,11 @@
         <click selector="{{ContentManagementSection.Save}}" stepKey="saveConfiguration"/>
         <see selector="{{AdminMessagesSection.success}}" userInput="You saved the configuration." stepKey="seeConfigurationSuccessMessage"/>
     </actionGroup>
-    
+
+    <!--
+    NOTICE: ResetSearchEngineConfiguration is deprecated.
+            Please use ResetSearchEngineConfigurationActionGroup instead.
+    -->
     <actionGroup name="ResetSearchEngineConfiguration">
         <annotations>
             <description>Goes to the 'Configuration' page for 'Catalog'. Sets the 'Search Engine' to 'mysql'. Clicks on the Save button. PLEASE NOTE: The value is Hardcoded.</description>

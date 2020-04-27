@@ -5,10 +5,11 @@
 
 define([
     'jquery',
+    'underscore',
     'Magento_Checkout/js/view/summary/abstract-total',
     'Magento_Checkout/js/model/quote',
     'Magento_SalesRule/js/view/summary/discount'
-], function ($, Component, quote, discountView) {
+], function ($, _, Component, quote, discountView) {
     'use strict';
 
     return Component.extend({
@@ -22,7 +23,7 @@ define([
          * @return {*}
          */
         getShippingMethodTitle: function () {
-            var shippingMethod = '',
+            var shippingMethod,
                 shippingMethodTitle = '';
 
             if (!this.isCalculated()) {
@@ -30,11 +31,15 @@ define([
             }
             shippingMethod = quote.shippingMethod();
 
+            if (!_.isArray(shippingMethod) && !_.isObject(shippingMethod)) {
+                return '';
+            }
+
             if (typeof shippingMethod['method_title'] !== 'undefined') {
                 shippingMethodTitle = ' - ' + shippingMethod['method_title'];
             }
 
-            return shippingMethod ?
+            return shippingMethodTitle ?
                 shippingMethod['carrier_title'] + shippingMethodTitle :
                 shippingMethod['carrier_title'];
         },

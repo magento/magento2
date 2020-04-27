@@ -5,37 +5,68 @@
  */
 namespace Magento\CurrencySymbol\Controller\Adminhtml\System\Currencysymbol;
 
-use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
+use Magento\Backend\App\Action;
+use Magento\Backend\Model\View\Result\Redirect;
+use Magento\CurrencySymbol\Controller\Adminhtml\System\Currencysymbol as CurrencysymbolController;
+use Magento\CurrencySymbol\Model\System\CurrencysymbolFactory;
+use Magento\Framework\App\Action\HttpPostActionInterface;
+use Magento\Framework\Controller\ResultInterface;
+use Magento\Framework\Filter\FilterManager;
 
 /**
- * Class Save
+ * Controller to save currency symbol
  */
-class Save extends \Magento\CurrencySymbol\Controller\Adminhtml\System\Currencysymbol implements HttpPostActionInterface
+class Save extends CurrencysymbolController implements HttpPostActionInterface
 {
+    /**
+     * @var FilterManager
+     */
+    private $filterManager;
+
+    /**
+     * @var CurrencysymbolFactory
+     */
+    private $currencySymbolFactory;
+
+    /**
+     * @param Action\Context $context
+     * @param FilterManager $filterManager
+     * @param CurrencysymbolFactory $currencySymbolFactory
+     */
+    public function __construct(
+        Action\Context $context,
+        FilterManager $filterManager,
+        CurrencysymbolFactory $currencySymbolFactory
+    ) {
+        parent::__construct($context);
+        $this->filterManager = $filterManager;
+        $this->currencySymbolFactory = $currencySymbolFactory;
+    }
+
     /**
      * Save custom Currency symbol
      *
-     * @return void
+     * @return ResultInterface
      */
     public function execute()
     {
+        /** @var Redirect $resultRedirect */
+        $resultRedirect = $this->resultRedirectFactory->create();
         $symbolsDataArray = $this->getRequest()->getParam('custom_currency_symbol', null);
         if (is_array($symbolsDataArray)) {
             foreach ($symbolsDataArray as &$symbolsData) {
-                /** @var $filterManager \Magento\Framework\Filter\FilterManager */
-                $filterManager = $this->_objectManager->get(\Magento\Framework\Filter\FilterManager::class);
-                $symbolsData = $filterManager->stripTags($symbolsData);
+                $symbolsData = $this->filterManager->stripTags($symbolsData);
             }
         }
 
         try {
-            $this->_objectManager->create(\Magento\CurrencySymbol\Model\System\Currencysymbol::class)
-                ->setCurrencySymbolsData($symbolsDataArray);
+            $currencySymbol = $this->currencySymbolFactory->create();
+            $currencySymbol->setCurrencySymbolsData($symbolsDataArray);
             $this->messageManager->addSuccessMessage(__('You applied the custom currency symbols.'));
         } catch (\Exception $e) {
             $this->messageManager->addErrorMessage($e->getMessage());
         }
 
-        $this->getResponse()->setRedirect($this->_redirect->getRedirectUrl($this->getUrl('*')));
+        return $resultRedirect->setPath('*');
     }
 }

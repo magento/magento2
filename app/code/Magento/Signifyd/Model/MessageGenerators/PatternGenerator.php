@@ -14,6 +14,9 @@ namespace Magento\Signifyd\Model\MessageGenerators;
  * placeholders, for example:
  * Message is 'Case Update: New score for the order is %1. Previous score was %2.', then the required params order
  * should be ['new_score', 'prev_score'].
+ *
+ * @deprecated 100.3.5 Starting from Magento 2.3.5 Signifyd core integration is deprecated in favor of
+ * official Signifyd integration available on the marketplace
  */
 class PatternGenerator implements GeneratorInterface
 {

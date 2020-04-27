@@ -16,24 +16,27 @@ use Magento\Elasticsearch\SearchAdapter\SearchIndexNameResolver;
 use Magento\Store\Model\StoreManagerInterface as StoreManager;
 
 /**
- * Class Suggestions
+ * The implementation to provide suggestions mechanism for Elasticsearch2
+ *
+ * @deprecated 100.3.5 because of EOL for Elasticsearch2
+ * @see \Magento\Elasticsearch\Model\DataProvider\Base\Suggestions
  */
 class Suggestions implements SuggestedQueriesInterface
 {
     /**
-     * @deprecated
+     * @deprecated moved to interface
      * @see SuggestedQueriesInterface::SEARCH_SUGGESTION_COUNT
      */
     const CONFIG_SUGGESTION_COUNT = 'catalog/search/search_suggestion_count';
 
     /**
-     * @deprecated
+     * @deprecated moved to interface
      * @see SuggestedQueriesInterface::SEARCH_SUGGESTION_COUNT_RESULTS_ENABLED
      */
     const CONFIG_SUGGESTION_COUNT_RESULTS_ENABLED = 'catalog/search/search_suggestion_count_results_enabled';
 
     /**
-     * @deprecated
+     * @deprecated moved to interface
      * @see SuggestedQueriesInterface::SEARCH_SUGGESTION_ENABLED
      */
     const CONFIG_SUGGESTION_ENABLED = 'catalog/search/search_suggestion_enabled';

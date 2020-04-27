@@ -102,5 +102,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
     {
         $this->model->setAttribute('sku');
         $this->assertEquals('e.sku', $this->model->getMappedSqlField());
+        $this->model->setAttribute('attribute_set_id');
+        $this->assertEquals('e.attribute_set_id', $this->model->getMappedSqlField());
     }
 }

@@ -18,6 +18,9 @@ use Magento\Store\Model\ScopeInterface;
  *
  * This information is optional unless you are operating a marketplace,
  * listing goods on behalf of multiple sellers who each hold a seller account registered with your site.
+ *
+ * @deprecated 100.3.5 Starting from Magento 2.3.5 Signifyd core integration is deprecated in favor of
+ * official Signifyd integration available on the marketplace
  */
 class SellerBuilder
 {

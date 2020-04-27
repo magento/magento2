@@ -5,10 +5,24 @@
  */
 namespace Magento\Catalog\Model\Indexer\Category\Product\Action;
 
+use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Framework\Indexer\CacheContext;
+use Magento\Framework\Event\ManagerInterface as EventManagerInterface;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\App\ResourceConnection;
+use Magento\Store\Model\StoreManagerInterface;
+use Magento\Framework\DB\Query\Generator as QueryGenerator;
+use Magento\Framework\EntityManager\MetadataPool;
+use Magento\Catalog\Model\Config;
+use Magento\Catalog\Model\Category;
+use Magento\Framework\Indexer\IndexerRegistry;
+use Magento\Catalog\Model\Indexer\Product\Category as ProductCategoryIndexer;
+
 /**
  * Reindex multiple rows action.
  *
  * @package Magento\Catalog\Model\Indexer\Category\Product\Action
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Rows extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractAction
 {
@@ -20,11 +34,53 @@ class Rows extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractActio
     protected $limitationByCategories;
 
     /**
+     * @var CacheContext
+     */
+    private $cacheContext;
+
+    /**
+     * @var EventManagerInterface|null
+     */
+    private $eventManager;
+
+    /**
+     * @var IndexerRegistry
+     */
+    private $indexerRegistry;
+
+    /**
+     * @param ResourceConnection $resource
+     * @param StoreManagerInterface $storeManager
+     * @param Config $config
+     * @param QueryGenerator|null $queryGenerator
+     * @param MetadataPool|null $metadataPool
+     * @param CacheContext|null $cacheContext
+     * @param EventManagerInterface|null $eventManager
+     * @param IndexerRegistry|null $indexerRegistry
+     */
+    public function __construct(
+        ResourceConnection $resource,
+        StoreManagerInterface $storeManager,
+        Config $config,
+        QueryGenerator $queryGenerator = null,
+        MetadataPool $metadataPool = null,
+        CacheContext $cacheContext = null,
+        EventManagerInterface $eventManager = null,
+        IndexerRegistry $indexerRegistry = null
+    ) {
+        parent::__construct($resource, $storeManager, $config, $queryGenerator, $metadataPool);
+        $this->cacheContext = $cacheContext ?: ObjectManager::getInstance()->get(CacheContext::class);
+        $this->eventManager = $eventManager ?: ObjectManager::getInstance()->get(EventManagerInterface::class);
+        $this->indexerRegistry = $indexerRegistry ?: ObjectManager::getInstance()->get(IndexerRegistry::class);
+    }
+
+    /**
      * Refresh entities index
      *
      * @param int[] $entityIds
      * @param bool $useTempTable
      * @return $this
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function execute(array $entityIds = [], $useTempTable = false)
     {
@@ -40,10 +96,56 @@ class Rows extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractActio
         }
         $this->limitationByCategories = array_unique($this->limitationByCategories);
         $this->useTempTable = $useTempTable;
-        $this->removeEntries();
+        $indexer = $this->indexerRegistry->get(ProductCategoryIndexer::INDEXER_ID);
+        $workingState = $indexer->isWorking();
+
+        if ($useTempTable && !$workingState && $indexer->isScheduled()) {
+            foreach ($this->storeManager->getStores() as $store) {
+                $this->connection->truncateTable($this->getIndexTable($store->getId()));
+            }
+        } else {
+            $this->removeEntries();
+        }
+
         $this->reindex();
 
+        if ($useTempTable && !$workingState && $indexer->isScheduled()) {
+            foreach ($this->storeManager->getStores() as $store) {
+                $removalCategoryIds = array_diff($this->limitationByCategories, [$this->getRootCategoryId($store)]);
+                $this->connection->delete(
+                    $this->tableMaintainer->getMainTable($store->getId()),
+                    ['category_id IN (?)' => $removalCategoryIds]
+                );
+                $select = $this->connection->select()
+                    ->from($this->tableMaintainer->getMainReplicaTable($store->getId()));
+                $this->connection->query(
+                    $this->connection->insertFromSelect(
+                        $select,
+                        $this->tableMaintainer->getMainTable($store->getId()),
+                        [],
+                        AdapterInterface::INSERT_ON_DUPLICATE
+                    )
+                );
+            }
+        }
+
+        $this->registerCategories($entityIds);
+        $this->eventManager->dispatch('clean_cache_by_tags', ['object' => $this->cacheContext]);
+
         return $this;
+    }
+
+    /**
+     * Register categories assigned to products
+     *
+     * @param array $categoryIds
+     * @return void
+     */
+    private function registerCategories(array $categoryIds)
+    {
+        if ($categoryIds) {
+            $this->cacheContext->registerEntities(Category::CACHE_TAG, $categoryIds);
+        }
     }
 
     /**

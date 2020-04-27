@@ -8,6 +8,27 @@
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AssertProductInStorefrontProductPageActionGroup">
+        <annotations>
+            <description>Goes to the Storefront page. Validates that the provided Product details are present.</description>
+        </annotations>
+        <arguments>
+            <argument name="product"/>
+        </arguments>
+
+        <!-- Go to storefront product page, assert product name, sku and price -->
+        <amOnPage url="{{product.urlKey}}.html" stepKey="navigateToProductPage"/>
+        <waitForPageLoad stepKey="waitForPageLoad2"/>
+        <seeInTitle userInput="{{product.name}}" stepKey="assertProductNameTitle"/>
+        <see userInput="{{product.name}}" selector="{{StorefrontProductInfoMainSection.productName}}" stepKey="assertProductName"/>
+        <see userInput="{{product.price}}" selector="{{StorefrontProductInfoMainSection.productPrice}}" stepKey="assertProductPrice"/>
+        <see userInput="{{product.sku}}" selector="{{StorefrontProductInfoMainSection.productSku}}" stepKey="assertProductSku"/>
+    </actionGroup>
+
+    <!--
+    NOTICE: AssertProductInStorefrontProductPage is deprecated.
+            Please use AssertProductInStorefrontProductPageActionGroup instead.
+    -->
     <actionGroup name="AssertProductInStorefrontProductPage">
         <annotations>
             <description>Goes to the Storefront page. Validates that the provided Product details are present.</description>
@@ -25,6 +46,10 @@
         <see userInput="{{product.sku}}" selector="{{StorefrontProductInfoMainSection.productSku}}" stepKey="assertProductSku"/>
     </actionGroup>
 
+    <!--
+    NOTICE: AssertProductNameAndSkuInStorefrontProductPage is deprecated.
+            Please use AssertProductNameAndSkuInStorefrontProductPageActionGroup instead.
+    -->
     <actionGroup name="AssertProductNameAndSkuInStorefrontProductPage">
         <annotations>
             <description>Goes to the Storefront Product page for the provided Product. Validates that the Product details are present and correct.</description>

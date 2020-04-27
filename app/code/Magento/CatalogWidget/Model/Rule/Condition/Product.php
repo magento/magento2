@@ -14,7 +14,8 @@ use Magento\Catalog\Model\ProductCategoryList;
 use Magento\Store\Model\Store;
 
 /**
- * Class Product
+ * Rule product condition data model
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
@@ -250,7 +251,7 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
     public function getMappedSqlField()
     {
         $result = '';
-        if (in_array($this->getAttribute(), ['category_ids', 'sku'])) {
+        if (in_array($this->getAttribute(), ['category_ids', 'sku', 'attribute_set_id'])) {
             $result = parent::getMappedSqlField();
         } elseif (isset($this->joinedAttributes[$this->getAttribute()])) {
             $result = $this->joinedAttributes[$this->getAttribute()];

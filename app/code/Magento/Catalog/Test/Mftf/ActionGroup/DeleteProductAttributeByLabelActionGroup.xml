@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="DeleteProductAttributeByLabelActionGroup">
+        <annotations>
+            <description>Goes to the Admin Product Attributes grid page. Filters the grid for the provided Product Attribute (Label). Deletes the Product Attribute from the grid. Validates that the Success Message is present.</description>
+        </annotations>
+        <arguments>
+            <argument name="ProductAttribute"/>
+        </arguments>
+
+        <amOnPage url="{{AdminProductAttributeGridPage.url}}" stepKey="navigateToProductAttributeGrid"/>
+        <fillField selector="{{AdminProductAttributeGridSection.FilterByAttributeCode}}" userInput="{{ProductAttribute.default_label}}" stepKey="setAttributeCode"/>
+        <click selector="{{AdminProductAttributeGridSection.Search}}" stepKey="searchForAttributeFromTheGrid"/>
+        <click selector="{{AdminProductAttributeGridSection.FirstRow}}" stepKey="clickOnAttributeRow"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <click selector="{{AttributePropertiesSection.DeleteAttribute}}" stepKey="deleteAttribute"/>
+        <click selector="{{ModalConfirmationSection.OkButton}}" stepKey="ClickOnDeleteButton"/>
+        <waitForPageLoad stepKey="waitForPageLoad1"/>
+        <seeElement selector="{{AdminProductMessagesSection.successMessage}}" stepKey="waitForSuccessMessage"/>
+    </actionGroup>
+</actionGroups>

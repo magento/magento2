@@ -117,7 +117,10 @@
         <see selector="{{AdminOrderFormPaymentSection.shippingError}}" userInput="This is a required field." stepKey="seeShippingMethodRequired"/>
     </actionGroup>
 
-    <!--Add a simple product to order-->
+    <!--
+    NOTICE: addSimpleProductToOrder is deprecated.
+            Please use AddSimpleProductToOrderActionGroup instead.
+    -->
     <actionGroup name="addSimpleProductToOrder">
         <annotations>
             <description>Adds the provided Simple Product to an Order. Fills in the provided Product Qty. Clicks on 'Add Selected Product(s) to Order'.</description>
@@ -287,7 +290,10 @@
         <click selector="{{AdminOrderFormItemsSection.addSelected}}" stepKey="clickAddSelectedProducts"/>
     </actionGroup>
 
-    <!--Fill customer billing address-->
+    <!--
+    NOTICE: fillOrderCustomerInformation is deprecated.
+            Please use FillOrderCustomerInformationActionGroup instead.
+    -->
     <actionGroup name="fillOrderCustomerInformation">
         <annotations>
             <description>Fills in the provided Customer and Address details on the Admin 'Create New Order for' page.</description>
@@ -307,7 +313,10 @@
         <fillField selector="{{AdminOrderFormBillingAddressSection.Phone}}" userInput="{{address.telephone}}" stepKey="fillPhone"/>
     </actionGroup>
 
-    <!--Select flat rate shipping method-->
+    <!--
+    NOTICE: orderSelectFlatRateShipping is deprecated.
+            Please use OrderSelectFlatRateShippingActionGroup instead.
+    -->
     <actionGroup name="orderSelectFlatRateShipping">
         <annotations>
             <description>Selects the 'Flat Rate' Shipping Method on the Admin 'Create New Order for' page.</description>
@@ -349,7 +358,10 @@
         <selectOption selector="{{AdminOrderFormPaymentSection.freeShippingOption}}" userInput="freeshipping_freeshipping" stepKey="checkFreeShipping"/>
     </actionGroup>
 
-    <!--Check that customer information is correct in order-->
+    <!--
+    NOTICE: verifyBasicOrderInformation is deprecated.
+            Please use VerifyBasicOrderInformationActionGroup instead.
+    -->
     <actionGroup name="verifyBasicOrderInformation">
         <annotations>
             <description>Validates that the provided Customer, Shipping/Billing Address and Customer Group are present and correct on the Admin Orders view page.</description>
@@ -383,7 +395,10 @@
         <see selector="{{AdminOrderAddressInformationSection.shippingAddress}}" userInput="{{shippingAddress.country}}" stepKey="seeAddressCountry" after="seeShippingAddressCity"/>
     </actionGroup>
 
-    <!--Verify order information-->
+    <!--
+    NOTICE: verifyCreatedOrderInformation is deprecated.
+            Please use VerifyCreatedOrderInformationActionGroup instead.
+    -->
     <actionGroup name="verifyCreatedOrderInformation">
         <annotations>
             <description>Validates that the Success Message, Order Status (Pending) and Order ID are present and correct.</description>
@@ -466,7 +481,10 @@
         <see stepKey="seeSuccessMessageForOrder" userInput="You created the order."/>
     </actionGroup>
 
-    <!--Cancel order that is in pending status-->
+    <!--
+    NOTICE: cancelPendingOrder is deprecated.
+            Please use CancelPendingOrderActionGroup instead.
+    -->
     <actionGroup name="cancelPendingOrder">
         <annotations>
             <description>Cancels the Pending Order on the Admin Orders view page. Validates that the provided Order Status is present and correct.</description>
@@ -491,7 +509,10 @@
         <dontSee selector="{{AdminOrderItemsOrderedSection.productSkuColumn}}" userInput="{{product.sku}}" stepKey="dontseeSkuInItemsOrdered"/>
     </actionGroup>
 
-    <!--Select Check Money payment method-->
+    <!--
+    NOTICE: adminDataGridSelectCustomPerPage is deprecated.
+            Please use AdminDataGridSelectCustomPerPageActionGroup instead.
+    -->
     <actionGroup name="SelectCheckMoneyPaymentMethod">
         <annotations>
             <description>Selects the 'Check / Money Order' Payment Method on the Admin Create New Order page.</description>

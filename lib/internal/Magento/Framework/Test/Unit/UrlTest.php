@@ -108,7 +108,7 @@ class UrlTest extends \PHPUnit\Framework\TestCase
     {
         $routeParamsResolverFactoryMock = $this->createMock(\Magento\Framework\Url\RouteParamsResolverFactory::class);
         if ($resolve) {
-            $routeParamsResolverFactoryMock->expects($this->once())->method('create')
+            $routeParamsResolverFactoryMock->expects($this->any())->method('create')
                 ->will($this->returnValue($this->routeParamsResolverMock));
         }
         return $routeParamsResolverFactoryMock;
@@ -173,17 +173,6 @@ class UrlTest extends \PHPUnit\Framework\TestCase
             'default_port' => ['example.com:80', 'http://example.com/fancy_uri'],
             'custom_port' => ['example.com:8080', 'http://example.com:8080/fancy_uri']
         ];
-    }
-
-    public function testGetUseSession()
-    {
-        $model = $this->getUrlModel();
-
-        $model->setUseSession(false);
-        $this->assertFalse((bool)$model->getUseSession());
-
-        $model->setUseSession(true);
-        $this->assertTrue($model->getUseSession());
     }
 
     public function testGetBaseUrlNotLinkType()
@@ -467,10 +456,10 @@ class UrlTest extends \PHPUnit\Framework\TestCase
             ]
         );
 
-        $this->sidResolverMock->expects($this->once())->method('getUseSessionInUrl')->will($this->returnValue(true));
-        $this->sessionMock->expects($this->once())->method('getSessionIdForHost')->will($this->returnValue(false));
-        $this->sidResolverMock->expects($this->once())->method('getUseSessionVar')->will($this->returnValue(true));
-        $this->routeParamsResolverMock->expects($this->once())->method('hasData')->with('secure_is_forced')
+        $this->sidResolverMock->expects($this->any())->method('getUseSessionInUrl')->will($this->returnValue(true));
+        $this->sessionMock->expects($this->any())->method('getSessionIdForHost')->will($this->returnValue(false));
+        $this->sidResolverMock->expects($this->any())->method('getUseSessionVar')->will($this->returnValue(true));
+        $this->routeParamsResolverMock->expects($this->any())->method('hasData')->with('secure_is_forced')
             ->will($this->returnValue(true));
         $this->sidResolverMock->expects($this->never())->method('getSessionIdQueryParam');
         $this->queryParamsResolverMock->expects($this->once())
@@ -491,11 +480,11 @@ class UrlTest extends \PHPUnit\Framework\TestCase
             ]
         );
 
-        $this->sidResolverMock->expects($this->once())->method('getUseSessionInUrl')->will($this->returnValue(true));
-        $this->sessionMock->expects($this->once())->method('getSessionIdForHost')
+        $this->sidResolverMock->expects($this->never())->method('getUseSessionInUrl')->will($this->returnValue(true));
+        $this->sessionMock->expects($this->never())->method('getSessionIdForHost')
             ->will($this->returnValue('session-id'));
-        $this->sidResolverMock->expects($this->once())->method('getUseSessionVar')->will($this->returnValue(false));
-        $this->sidResolverMock->expects($this->once())->method('getSessionIdQueryParam');
+        $this->sidResolverMock->expects($this->never())->method('getUseSessionVar')->will($this->returnValue(false));
+        $this->sidResolverMock->expects($this->never())->method('getSessionIdQueryParam');
         $this->queryParamsResolverMock->expects($this->once())
             ->method('getQuery')
             ->will($this->returnValue('foo=bar'));
@@ -530,22 +519,6 @@ class UrlTest extends \PHPUnit\Framework\TestCase
 
         $this->routeParamsResolverMock->expects($this->never())->method('unsetData');
         $this->assertEquals('http://example.com', $model->getRouteUrl('http://example.com'));
-    }
-
-    public function testAddSessionParam()
-    {
-        $model = $this->getUrlModel([
-            'session' => $this->sessionMock,
-            'sidResolver' => $this->sidResolverMock,
-            'queryParamsResolver' => $this->queryParamsResolverMock,
-        ]);
-
-        $this->sidResolverMock->expects($this->once())->method('getSessionIdQueryParam')->with($this->sessionMock)
-            ->will($this->returnValue('sid'));
-        $this->sessionMock->expects($this->once())->method('getSessionId')->will($this->returnValue('session-id'));
-        $this->queryParamsResolverMock->expects($this->once())->method('setQueryParam')->with('sid', 'session-id');
-
-        $model->addSessionParam();
     }
 
     /**
@@ -681,10 +654,10 @@ class UrlTest extends \PHPUnit\Framework\TestCase
             ]
         );
 
-        $requestMock->expects($this->once())
+        $requestMock->expects($this->any())
             ->method('getHttpHost')
             ->will($this->returnValue('localhost'));
-        $this->scopeMock->expects($this->once())
+        $this->scopeMock->expects($this->any())
             ->method('getBaseUrl')
             ->will($this->returnValue('http://localhost'));
         $this->scopeResolverMock->expects($this->any())
@@ -709,20 +682,20 @@ class UrlTest extends \PHPUnit\Framework\TestCase
             ]
         );
 
-        $requestMock->expects($this->once())->method('getHttpHost')->will($this->returnValue('localhost'));
-        $this->scopeMock->expects($this->once())
+        $requestMock->expects($this->never())->method('getHttpHost')->will($this->returnValue('localhost'));
+        $this->scopeMock->expects($this->any())
             ->method('getBaseUrl')
             ->will($this->returnValue('http://example.com'));
         $this->scopeResolverMock->expects($this->any())
             ->method('getScope')
             ->will($this->returnValue($this->scopeMock));
-        $this->sidResolverMock->expects($this->once())->method('getSessionIdQueryParam')
+        $this->sidResolverMock->expects($this->never())->method('getSessionIdQueryParam')
             ->will($this->returnValue('SID'));
-        $this->sessionMock->expects($this->once())->method('getSessionId')
+        $this->sessionMock->expects($this->never())->method('getSessionId')
             ->will($this->returnValue('session-id'));
 
         $this->assertEquals(
-            '<a href="http://example.com/?SID=session-id">www.example.com</a>',
+            '<a href="http://example.com/">www.example.com</a>',
             $model->sessionUrlVar('<a href="http://example.com/?___SID=U">www.example.com</a>')
         );
     }

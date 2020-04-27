@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminCatalogPriceRuleDeleteAllActionGroup" deprecated="Use RemoveCatalogPriceRule for each created rule instead.">
+        <annotations>
+            <description>Open Catalog Price Rule grid and delete all rules one by one. Need to avoid interference with other tests that test catalog price rules.</description>
+        </annotations>
+        <amOnPage url="{{AdminCatalogPriceRuleGridPage.url}}" stepKey="goToAdminCatalogPriceRuleGridPage"/>
+        <!-- It sometimes is loading too long for default 10s -->
+        <waitForPageLoad time="60" stepKey="waitForPageFullyLoaded"/>
+        <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clearExistingFilters"/>
+        <executeInSelenium
+            function="
+                function ($webdriver) use ($I) {
+                    $rows = $webdriver->findElements(\Facebook\WebDriver\WebDriverBy::cssSelector('table.data-grid tbody tr[data-role=row]:not(.data-grid-tr-no-data):nth-of-type(1)'));
+                    while(!empty($rows)) {
+                        $rows[0]->click();
+                        $I->waitForPageLoad(30);
+                        $I->click('#delete');
+                        $I->waitForPageLoad(30);
+                        $I->waitForElementVisible('aside.confirm .modal-footer button.action-accept', 10);
+                        $I->waitForPageLoad(60);
+                        $I->click('aside.confirm .modal-footer button.action-accept');
+                        $I->waitForPageLoad(60);
+                        $I->waitForLoadingMaskToDisappear();
+                        $I->waitForElementVisible('#messages div.message-success', 10);
+                        $I->see('You deleted the rule.', '#messages div.message-success');
+                        $rows = $webdriver->findElements(\Facebook\WebDriver\WebDriverBy::cssSelector('table.data-grid tbody tr[data-role=row]:not(.data-grid-tr-no-data):nth-of-type(1)'));
+                    }
+                }"
+            stepKey="deleteAllCatalogPriceRulesOneByOne"/>
+        <waitForElementVisible selector="{{AdminDataGridTableSection.dataGridEmpty}}" stepKey="waitDataGridEmptyMessageAppears"/>
+        <see selector="{{AdminDataGridTableSection.dataGridEmpty}}" userInput="We couldn't find any records." stepKey="assertDataGridEmptyMessage"/>
+    </actionGroup>
+</actionGroups>

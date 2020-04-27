@@ -11,12 +11,15 @@
         <annotations>
             <features value="Url Rewrite"/>
             <stories value="Update url rewrites"/>
-            <title value="Check url rewrites in catalog categories after changing url key"/>
-            <description value="Check url rewrites in catalog categories after changing url key for store view and moving category"/>
+            <title value="DEPRECATED. Check url rewrites in catalog categories after changing url key"/>
+            <description value="DEPRECATED. Check url rewrites in catalog categories after changing url key for store view and moving category"/>
             <severity value="CRITICAL"/>
             <testCaseId value="MC-5352"/>
             <group value="url_rewrite"/>
             <group value="mtf_migrated"/>
+            <skip>
+                <issueId value="DEPRECATED">Use AdminCheckUrlRewritesInCatalogCategoriesAfterChangingUrlKeyForStoreViewAndMovingCategory2Test instead</issueId>
+            </skip>
         </annotations>
         <before>
             <!-- Create two sub-categories in default category with simple products -->

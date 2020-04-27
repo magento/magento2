@@ -443,6 +443,10 @@ define([
                 }
 
                 for (i = 0; i < options.length; i++) {
+                    if (prevConfig && typeof allowedProductsByOption[i] === 'undefined') {
+                        continue; //jscs:ignore disallowKeywords
+                    }
+
                     allowedProducts = prevConfig ? allowedProductsByOption[i] : options[i].products.slice(0);
                     optionPriceDiff = 0;
 

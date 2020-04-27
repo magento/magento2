@@ -6,6 +6,8 @@
  */
 namespace Magento\Quote\Api;
 
+use Magento\CatalogInventory\Api\StockRegistryInterface;
+use Magento\CatalogInventory\Model\Stock;
 use Magento\TestFramework\TestCase\WebapiAbstract;
 
 class GuestCartItemRepositoryTest extends WebapiAbstract
@@ -167,9 +169,13 @@ class GuestCartItemRepositoryTest extends WebapiAbstract
 
     /**
      * @magentoApiDataFixture Magento/Checkout/_files/quote_with_items_saved.php
+     * @param array $stockData
+     * @param string|null $errorMessage
+     * @dataProvider updateItemDataProvider
      */
-    public function testUpdateItem()
+    public function testUpdateItem(array $stockData, string $errorMessage = null)
     {
+        $this->updateStockData('simple_one', $stockData);
         /** @var \Magento\Quote\Model\Quote  $quote */
         $quote = $this->objectManager->create(\Magento\Quote\Model\Quote::class);
         $quote->load('test_order_item_with_items', 'reserved_order_id');
@@ -215,6 +221,9 @@ class GuestCartItemRepositoryTest extends WebapiAbstract
                 ],
             ];
         }
+        if ($errorMessage) {
+            $this->expectExceptionMessage($errorMessage);
+        }
         $this->_webApiCall($serviceInfo, $requestData);
         $quote = $this->objectManager->create(\Magento\Quote\Model\Quote::class);
         $quote->load('test_order_item_with_items', 'reserved_order_id');
@@ -222,5 +231,67 @@ class GuestCartItemRepositoryTest extends WebapiAbstract
         $item = $quote->getItemByProduct($product);
         $this->assertEquals(5, $item->getQty());
         $this->assertEquals($itemId, $item->getItemId());
+    }
+
+    /**
+     * @return array
+     */
+    public function updateItemDataProvider(): array
+    {
+        return [
+            [
+                []
+            ],
+            [
+                [
+                    'qty' => 0,
+                    'is_in_stock' => 1,
+                    'use_config_manage_stock' => 0,
+                    'manage_stock' => 1,
+                    'use_config_backorders' => 0,
+                    'backorders' => Stock::BACKORDERS_YES_NOTIFY,
+                ]
+            ],
+            [
+                [
+                    'qty' => 0,
+                    'is_in_stock' => 1,
+                    'use_config_manage_stock' => 0,
+                    'manage_stock' => 1,
+                    'use_config_backorders' => 0,
+                    'backorders' => Stock::BACKORDERS_NO,
+                ],
+                'This product is out of stock.'
+            ],
+            [
+                [
+                    'qty' => 2,
+                    'is_in_stock' => 1,
+                    'use_config_manage_stock' => 0,
+                    'manage_stock' => 1,
+                    'use_config_backorders' => 0,
+                    'backorders' => Stock::BACKORDERS_NO,
+                ],
+                'The requested qty is not available'
+            ]
+        ];
+    }
+
+    /**
+     * Update product stock
+     *
+     * @param string $sku
+     * @param array $stockData
+     * @return void
+     */
+    private function updateStockData(string $sku, array $stockData): void
+    {
+        if ($stockData) {
+            /** @var $stockRegistry StockRegistryInterface */
+            $stockRegistry = $this->objectManager->create(StockRegistryInterface::class);
+            $stockItem = $stockRegistry->getStockItemBySku($sku);
+            $stockItem->addData($stockData);
+            $stockRegistry->updateStockItemBySku($sku, $stockItem);
+        }
     }
 }

@@ -15,16 +15,6 @@ use Magento\TestFramework\TestCase\GraphQlAbstract;
 class MediaGalleryTest extends GraphQlAbstract
 {
     /**
-     * @var \Magento\TestFramework\ObjectManager
-     */
-    private $objectManager;
-
-    protected function setUp()
-    {
-        $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-    }
-
-    /**
      * @magentoApiDataFixture Magento/Catalog/_files/product_with_image.php
      */
     public function testProductSmallImageUrlWithExistingImage()
@@ -38,7 +28,7 @@ class MediaGalleryTest extends GraphQlAbstract
             url
         }
     }
-  }    
+  }
 }
 QUERY;
         $response = $this->graphQlQuery($query);
@@ -57,7 +47,7 @@ QUERY;
         $query = <<<QUERY
 {
   products(filter: {sku: {eq: "{$productSku}"}}) {
-    items {    
+    items {
       media_gallery_entries {
       	label
         media_type
@@ -65,7 +55,7 @@ QUERY;
         types
       }
     }
-  }    
+  }
 }
 QUERY;
         $response = $this->graphQlQuery($query);
@@ -91,13 +81,15 @@ QUERY;
         $query = <<<QUERY
 {
   products(filter: {sku: {eq: "{$productSku}"}}) {
-    items {    
+    items {
       media_gallery {
       	label
         url
+        position
+        disabled
       }
     }
-  }    
+  }
 }
 QUERY;
         $response = $this->graphQlQuery($query);
@@ -105,9 +97,13 @@ QUERY;
         $mediaGallery = $response['products']['items'][0]['media_gallery'];
         $this->assertCount(2, $mediaGallery);
         $this->assertEquals('Image Alt Text', $mediaGallery[0]['label']);
-        self::assertTrue($this->checkImageExists($mediaGallery[0]['url']));
+        $this->assertEquals(1, $mediaGallery[0]['position']);
+        $this->assertFalse($mediaGallery[0]['disabled']);
+        $this->assertTrue($this->checkImageExists($mediaGallery[0]['url']));
         $this->assertEquals('Thumbnail Image', $mediaGallery[1]['label']);
-        self::assertTrue($this->checkImageExists($mediaGallery[1]['url']));
+        $this->assertEquals(2, $mediaGallery[1]['position']);
+        $this->assertFalse($mediaGallery[1]['disabled']);
+        $this->assertTrue($this->checkImageExists($mediaGallery[1]['url']));
     }
 
     /**
@@ -119,10 +115,12 @@ QUERY;
         $query = <<<QUERY
 {
   products(filter: {sku: {eq: "{$productSku}"}}) {
-    items {    
+    items {
       media_gallery {
       	label
         url
+        position
+        disabled
         ... on ProductVideo {
               video_content {
                   media_type
@@ -135,7 +133,7 @@ QUERY;
           }
       }
     }
-  }    
+  }
 }
 QUERY;
         $response = $this->graphQlQuery($query);
@@ -143,7 +141,9 @@ QUERY;
         $mediaGallery = $response['products']['items'][0]['media_gallery'];
         $this->assertCount(1, $mediaGallery);
         $this->assertEquals('Video Label', $mediaGallery[0]['label']);
-        self::assertTrue($this->checkImageExists($mediaGallery[0]['url']));
+        $this->assertTrue($this->checkImageExists($mediaGallery[0]['url']));
+        $this->assertFalse($mediaGallery[0]['disabled']);
+        $this->assertEquals(2, $mediaGallery[0]['position']);
         $this->assertNotEmpty($mediaGallery[0]['video_content']);
         $video_content = $mediaGallery[0]['video_content'];
         $this->assertEquals('external-video', $video_content['media_type']);

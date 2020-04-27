@@ -36,7 +36,7 @@ class GetCustomerTest extends GraphQlAbstract
      */
     private $customerRepository;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 

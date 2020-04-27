@@ -3,117 +3,91 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Persistent\Test\Unit\Model\Layout;
 
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Framework\View\LayoutInterface;
+use Magento\PageCache\Model\DepersonalizeChecker;
+use Magento\Persistent\Model\Layout\DepersonalizePlugin;
+use Magento\Persistent\Model\Session as PersistentSession;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
 /**
- * Class DepersonalizePluginTest
+ * Tests \Magento\Persistent\Model\Layout\DepersonalizePlugin.
  */
-class DepersonalizePluginTest extends \PHPUnit\Framework\TestCase
+class DepersonalizePluginTest extends TestCase
 {
     /**
-     * @var \Magento\Persistent\Model\Session|\PHPUnit_Framework_MockObject_MockObject
+     * @var PersistentSession|MockObject
      */
-    protected $persistentSessionMock;
+    private $persistentSessionMock;
 
     /**
-     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
+     * @var ObjectManagerHelper
      */
-    protected $objectManager;
+    private $objectManager;
 
     /**
-     * @var \Magento\Persistent\Model\Layout\DepersonalizePlugin
+     * @var DepersonalizePlugin
      */
-    protected $plugin;
+    private $plugin;
 
     /**
-     * @var \Magento\PageCache\Model\DepersonalizeChecker|\PHPUnit_Framework_MockObject_MockObject
+     * @var DepersonalizeChecker|MockObject
      */
-    protected $depersonalizeCheckerMock;
+    private $depersonalizeCheckerMock;
 
     /**
-     * Set up
-     *
-     * @return void
+     * @var LayoutInterface|MockObject
+     */
+    private $layoutMock;
+
+    /**
+     * @inheritdoc
      */
     protected function setUp()
     {
-        $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $this->objectManager = new ObjectManagerHelper($this);
 
-        $this->persistentSessionMock = $this->createPartialMock(
-            \Magento\Persistent\Model\Session::class,
-            ['setCustomerId']
-        );
-
-        $this->requestMock = $this->createMock(\Magento\Framework\App\Request\Http::class);
-
-        $this->moduleManagerMock = $this->createPartialMock(\Magento\Framework\Module\Manager::class, ['isEnabled']);
-        $this->cacheConfigMock = $this->createPartialMock(\Magento\PageCache\Model\Config::class, ['isEnabled']);
-        $this->depersonalizeCheckerMock = $this->createMock(\Magento\PageCache\Model\DepersonalizeChecker::class);
+        $this->layoutMock = $this->getMockForAbstractClass(LayoutInterface::class);
+        $this->persistentSessionMock = $this->createPartialMock(PersistentSession::class, ['setCustomerId']);
+        $this->depersonalizeCheckerMock = $this->createMock(DepersonalizeChecker::class);
 
         $this->plugin = $this->objectManager->getObject(
-            \Magento\Persistent\Model\Layout\DepersonalizePlugin::class,
+            DepersonalizePlugin::class,
             [
-                'persistentSession' => $this->persistentSessionMock,
                 'depersonalizeChecker' => $this->depersonalizeCheckerMock,
+                'persistentSession' => $this->persistentSessionMock,
             ]
         );
     }
 
-    public function testAfterGenerateXml()
+    /**
+     * Test afterGenerateElements method when depersonalization is needed.
+     *
+     * @return void
+     */
+    public function testAfterGenerateElements(): void
     {
-        /** @var \Magento\Framework\View\LayoutInterface|\PHPUnit_Framework_MockObject_MockObject $subjectMock */
-        $subjectMock = $this->getMockForAbstractClass(
-            \Magento\Framework\View\LayoutInterface::class,
-            [],
-            '',
-            false,
-            true,
-            true,
-            ['isCacheable']
-        );
-        /** @var \Magento\Framework\View\LayoutInterface|\PHPUnit_Framework_MockObject_MockObject $resultMock */
-        $resultMock = $this->getMockForAbstractClass(
-            \Magento\Framework\View\LayoutInterface::class,
-            [],
-            '',
-            false,
-            true,
-            true,
-            []
-        );
-
         $this->depersonalizeCheckerMock->expects($this->once())->method('checkIfDepersonalize')->willReturn(true);
         $this->persistentSessionMock->expects($this->once())->method('setCustomerId')->with(null);
 
-        $this->assertEquals($resultMock, $this->plugin->afterGenerateXml($subjectMock, $resultMock));
+        $this->assertEmpty($this->plugin->afterGenerateElements($this->layoutMock));
     }
 
-    public function testAfterGenerateXmlNoDepersonalize()
+    /**
+     * Test afterGenerateElements method when depersonalization is not needed.
+     *
+     * @return void
+     */
+    public function testAfterGenerateElementsNoDepersonalize(): void
     {
-        /** @var \Magento\Framework\View\LayoutInterface|\PHPUnit_Framework_MockObject_MockObject $subjectMock */
-        $subjectMock = $this->getMockForAbstractClass(
-            \Magento\Framework\View\LayoutInterface::class,
-            [],
-            '',
-            false,
-            true,
-            true,
-            ['isCacheable']
-        );
-        /** @var \Magento\Framework\View\LayoutInterface|\PHPUnit_Framework_MockObject_MockObject $resultMock */
-        $resultMock = $this->getMockForAbstractClass(
-            \Magento\Framework\View\LayoutInterface::class,
-            [],
-            '',
-            false,
-            true,
-            true,
-            []
-        );
-
         $this->depersonalizeCheckerMock->expects($this->once())->method('checkIfDepersonalize')->willReturn(false);
         $this->persistentSessionMock->expects($this->never())->method('setCustomerId');
 
-        $this->assertEquals($resultMock, $this->plugin->afterGenerateXml($subjectMock, $resultMock));
+        $this->assertEmpty($this->plugin->afterGenerateElements($this->layoutMock));
     }
 }

@@ -15,6 +15,9 @@ use Magento\Signifyd\Model\CaseManagement;
 
 /**
  * Checks if is possible to create Guarantee for order.
+ *
+ * @deprecated 100.3.5 Starting from Magento 2.3.5 Signifyd core integration is deprecated in favor of
+ * official Signifyd integration available on the marketplace
  */
 class CreateGuaranteeAbility
 {

@@ -1,0 +1,1 @@
+Magento\Payment\Block\Transparent\Redirect

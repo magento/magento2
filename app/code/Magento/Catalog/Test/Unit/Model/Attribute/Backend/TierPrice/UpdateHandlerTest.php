@@ -108,6 +108,7 @@ class UpdateHandlerTest extends \PHPUnit\Framework\TestCase
         ];
         $linkField = 'entity_id';
         $productId = 10;
+        $originalProductId = 11;
 
         /** @var \PHPUnit_Framework_MockObject_MockObject $product */
         $product = $this->getMockBuilder(\Magento\Catalog\Api\Data\ProductInterface::class)
@@ -124,7 +125,7 @@ class UpdateHandlerTest extends \PHPUnit\Framework\TestCase
             ->willReturnMap(
                 [
                     ['tier_price', $originalTierPrices],
-                    ['entity_id', $productId]
+                    ['entity_id', $originalProductId]
                 ]
             );
         $product->expects($this->atLeastOnce())->method('getStoreId')->willReturn(0);

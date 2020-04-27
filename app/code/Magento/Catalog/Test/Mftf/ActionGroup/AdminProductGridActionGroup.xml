@@ -8,7 +8,10 @@
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <!--Reset the product grid to the default view-->
+    <!--
+    NOTICE: resetProductGridToDefaultView is deprecated.
+            Please use ResetProductGridToDefaultViewActionGroup instead.
+    -->
     <actionGroup name="resetProductGridToDefaultView">
         <annotations>
             <description>Sets the Admin Products grid view to the 'Default View'.</description>
@@ -21,7 +24,10 @@
         <see selector="{{AdminProductGridFilterSection.viewDropdown}}" userInput="Default View" stepKey="seeDefaultViewSelected"/>
     </actionGroup>
 
-    <!--Filter the product grid by the SKU field-->
+    <!--
+    NOTICE: filterProductGridBySku is deprecated.
+            Please use FilterProductGridBySkuActionGroup instead.
+    -->
     <actionGroup name="filterProductGridBySku">
         <annotations>
             <description>Filters the Admin Products grid by the provided Product (SKU).</description>
@@ -37,7 +43,10 @@
         <waitForElementNotVisible selector="{{AdminProductGridSection.loadingMask}}" stepKey="waitForFilteredGridLoad" time="30"/>
     </actionGroup>
 
-    <!--Filter the product grid by the SKU string -->
+    <!--
+    NOTICE: filterProductGridBySku2 is deprecated.
+           Please use FilterProductGridBySku2ActionGroup instead.
+    -->
     <actionGroup name="filterProductGridBySku2">
         <annotations>
             <description>Filters the Admin Products grid by the provided Product SKU.</description>
@@ -53,7 +62,10 @@
         <waitForElementNotVisible selector="{{AdminProductGridSection.loadingMask}}" stepKey="waitForFilteredGridLoad" time="30"/>
     </actionGroup>
 
-    <!--Filter the product grid by the Name field-->
+    <!--
+    NOTICE: filterProductGridByName is deprecated.
+           Please use FilterProductGridByNameActionGroup instead.
+    -->
     <actionGroup name="filterProductGridByName">
         <annotations>
             <description>Filters the Admin Products grid by the provided Product (Name).</description>
@@ -208,7 +220,10 @@
         <click selector="{{AdminProductGridFilterSection.applyFilters}}" stepKey="clickApplyFilters"/>
     </actionGroup>
 
-    <!--Delete a product by filtering grid and using delete action-->
+    <!--
+    NOTICE: deleteProductUsingProductGrid is deprecated.
+            Please use DeleteProductUsingProductGridActionGroup instead.
+    -->
     <actionGroup name="deleteProductUsingProductGrid">
         <annotations>
             <description>Deletes the provided Product from the Admin Products grid page.</description>
@@ -246,7 +261,10 @@
         <remove keyForRemoval="seeProductSkuInGrid"/>
     </actionGroup>
 
-    <!--Delete a product by filtering grid and using delete action-->
+    <!--
+    NOTICE: deleteProductBySku is deprecated.
+            Please use DeleteProductBySkuActionGroup instead.
+    -->
     <actionGroup name="deleteProductBySku">
         <annotations>
             <description>Goes to the Admin Products grid page. Deletes the provided Product SKU.</description>
@@ -369,6 +387,10 @@
         <conditionalClick selector="{{AdminProductGridFilterSection.clearFilters}}" dependentSelector="{{AdminProductGridFilterSection.clearFilters}}" visible="true" stepKey="clickClearFiltersInitial2"/>
     </actionGroup>
 
+    <!--
+    NOTICE: NavigateToAndResetProductGridToDefaultView is deprecated.
+            Please use NavigateToAndResetProductGridToDefaultViewActionGroup instead.
+    -->
     <actionGroup name="NavigateToAndResetProductGridToDefaultView" extends="resetProductGridToDefaultView">
         <annotations>
             <description>EXTENDS: resetProductGridToDefaultView. Adds an action to go to the Admin Products grid page.</description>
@@ -378,6 +400,10 @@
         <waitForPageLoad after="goToAdminProductIndexPage" stepKey="waitForProductIndexPageToLoad"/>
     </actionGroup>
 
+    <!--
+    NOTICE: NavigateToAndResetProductAttributeGridToDefaultView is deprecated.
+            Please use NavigateToAndResetProductAttributeGridToDefaultViewActionGroup instead.
+    -->
     <actionGroup name="NavigateToAndResetProductAttributeGridToDefaultView">
         <annotations>
             <description>Goes to the Product Attributes grid. Clicks on 'Clear Filters'.</description>

@@ -147,7 +147,7 @@ class Data extends AbstractHelper
      * Retrieve place order url
      *
      * @param array $params
-     * @return  string
+     * @return string
      */
     public function getSuccessOrderUrl($params)
     {
@@ -260,7 +260,7 @@ class Data extends AbstractHelper
     /**
      * Format price with currency sign
      *
-     * @param  \Magento\Payment\Model\InfoInterface $payment
+     * @param \Magento\Payment\Model\InfoInterface $payment
      * @param float $amount
      * @return string
      */

@@ -9,6 +9,9 @@ use Magento\Framework\App\ProductMetadataInterface;
 
 /**
  * Provides platform name, edition and version info
+ *
+ * @deprecated 100.3.5 Starting from Magento 2.3.5 Signifyd core integration is deprecated in favor of
+ * official Signifyd integration available on the marketplace
  */
 class ClientVersionBuilder
 {

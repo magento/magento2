@@ -10,7 +10,7 @@ namespace Magento\Elasticsearch\Elasticsearch5\SearchAdapter;
 use Magento\TestFramework\Helper\Bootstrap;
 
 /**
- * Class AdapterTest
+ * Class AdapterTest to test Elasticsearch search adapter
  */
 class AdapterTest extends \PHPUnit\Framework\TestCase
 {
@@ -78,7 +78,6 @@ class AdapterTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @magentoAppIsolation enabled
-     * @magentoConfigFixture default/catalog/search/engine elasticsearch6
      * @magentoConfigFixture current_store catalog/search/elasticsearch_index_prefix adaptertest
      * @return void
      */

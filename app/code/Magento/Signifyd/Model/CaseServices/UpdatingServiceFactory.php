@@ -13,6 +13,9 @@ use Magento\Signifyd\Model\Config;
  * Creates instance of case updating service configured with specific message generator.
  * The message generator initialization depends on specified type (like, case creation, re-scoring, review and
  * guarantee completion).
+ *
+ * @deprecated 100.3.5 Starting from Magento 2.3.5 Signifyd core integration is deprecated in favor of
+ * official Signifyd integration available on the marketplace
  */
 class UpdatingServiceFactory
 {

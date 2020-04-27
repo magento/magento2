@@ -84,15 +84,13 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
     {
         $ids = [1, 2, 3];
 
-        $this->indexerMock->expects($this->once())->method('isWorking')->will($this->returnValue(true));
         $this->prepareIndexer();
 
         $rowMock = $this->createPartialMock(
             \Magento\Catalog\Model\Indexer\Product\Category\Action\Rows::class,
             ['execute']
         );
-        $rowMock->expects($this->at(0))->method('execute')->with($ids, true)->will($this->returnSelf());
-        $rowMock->expects($this->at(1))->method('execute')->with($ids, false)->will($this->returnSelf());
+        $rowMock->expects($this->at(0))->method('execute')->with($ids)->will($this->returnSelf());
 
         $this->rowsMock->expects($this->once())->method('create')->will($this->returnValue($rowMock));
 
@@ -103,14 +101,13 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
     {
         $ids = [1, 2, 3];
 
-        $this->indexerMock->expects($this->once())->method('isWorking')->will($this->returnValue(false));
         $this->prepareIndexer();
 
         $rowMock = $this->createPartialMock(
             \Magento\Catalog\Model\Indexer\Product\Category\Action\Rows::class,
             ['execute']
         );
-        $rowMock->expects($this->once())->method('execute')->with($ids, false)->will($this->returnSelf());
+        $rowMock->expects($this->once())->method('execute')->with($ids)->will($this->returnSelf());
 
         $this->rowsMock->expects($this->once())->method('create')->will($this->returnValue($rowMock));
 
@@ -123,7 +120,7 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
 
     protected function prepareIndexer()
     {
-        $this->indexerRegistryMock->expects($this->once())
+        $this->indexerRegistryMock->expects($this->any())
             ->method('get')
             ->with(\Magento\Catalog\Model\Indexer\Product\Category::INDEXER_ID)
             ->will($this->returnValue($this->indexerMock));

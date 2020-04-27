@@ -129,7 +129,7 @@
         <assertEquals expected="{{option.title}}" expectedType="string" actual="$grabOptionSku" stepKey="assertOptionSku"/>
     </actionGroup>
     <!-- Assumes we are on product edit page -->
-    <actionGroup name="AdminDeleteAllProductCustomOptions">
+    <actionGroup name="AdminDeleteAllProductCustomOptions" deprecated="Use AdminDeleteProductCustomOption for each custom option created instead.">
         <conditionalClick selector="{{AdminProductCustomizableOptionsSection.customizableOptions}}" dependentSelector="{{AdminProductCustomizableOptionsSection.checkIfCustomizableOptionsTabOpen}}" visible="true" stepKey="expandContentTab"/>
         <waitForPageLoad time="10" stepKey="waitCustomizableOptionsTabOpened"/>
         <executeInSelenium function="function($webdriver) use ($I) {

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminInsertWidgetToCmsPageContentActionGroup">
+        <annotations>
+            <description>Insert widget to CMS Page content field. You are on CMS edit page, content tab is expanded.</description>
+        </annotations>
+
+        <arguments>
+            <argument name="widgetType" type="string" defaultValue="CMS Page Link"/>
+        </arguments>
+        <waitForElementVisible selector="{{CmsNewPagePageActionsSection.insertWidget}}" stepKey="waitForInsertWidgetElementVisible"/>
+        <click selector="{{CmsNewPagePageActionsSection.insertWidget}}" stepKey="clickOnInsertWidgetButton"/>
+        <waitForPageLoad stepKey="waitForPageLoadAfterClickOnInsertWidgetButton"/>
+        <waitForElementVisible selector="{{WidgetSection.InsertWidgetTitle}}" stepKey="waitForInsertWidgetTitle"/>
+        <selectOption selector="{{WidgetSection.WidgetType}}" userInput="{{widgetType}}" stepKey="selectWidgetType"/>
+    </actionGroup>
+</actionGroups>

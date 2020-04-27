@@ -13,6 +13,9 @@ namespace Magento\Signifyd\Model\SignifydGateway\Response;
  * They allow your application to receive pushed updates about a case, rather than poll SIGNIFYD for status changes.
  *
  * @see https://www.signifyd.com/docs/api/#/reference/webhooks
+ *
+ * @deprecated 100.3.5 Starting from Magento 2.3.5 Signifyd core integration is deprecated in favor of
+ * official Signifyd integration available on the marketplace
  */
 class WebhookMessage
 {

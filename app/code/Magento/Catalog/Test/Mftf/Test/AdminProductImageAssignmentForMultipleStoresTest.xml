@@ -18,9 +18,6 @@
             <testCaseId value="MAGETWO-58718"/>
             <group value="product"/>
             <group value="WYSIWYGDisabled"/>
-            <skip>
-                <issueId value="MC-13841"/>
-            </skip>
         </annotations>
         <before>
             <!-- Login Admin -->

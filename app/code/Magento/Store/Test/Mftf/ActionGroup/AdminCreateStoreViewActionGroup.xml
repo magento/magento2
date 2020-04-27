@@ -54,6 +54,10 @@
         <see userInput="You saved the store view." stepKey="seeSavedMessage"/>
     </actionGroup>
 
+    <!--
+    NOTICE: adminDataGridSelectCustomPerPage is deprecated.
+            Please use AdminDataGridSelectCustomPerPageActionGroup instead.
+    -->
     <actionGroup name="navigateToAdminContentManagementPage">
         <annotations>
             <description>Goes to the 'Configuration' page for 'Content Management'.</description>
@@ -63,6 +67,10 @@
         <waitForPageLoad stepKey="waitForPageLoad1"/>
     </actionGroup>
 
+    <!--
+    NOTICE: saveStoreConfiguration is deprecated.
+            Please use SaveStoreConfigurationPageActionGroup instead.
+    -->
     <actionGroup name="saveStoreConfiguration">
         <annotations>
             <description>Clicks on the Save button.</description>
@@ -74,6 +82,10 @@
         <waitForPageLoad stepKey="waitForPageLoad"/>
     </actionGroup>
 
+    <!--
+    NOTICE: saveStoreConfigurationAndValidateFieldError is deprecated.
+            Please use SaveStoreConfigurationAndValidateFieldError instead.
+    -->
     <actionGroup name="saveStoreConfigurationAndValidateFieldError">
         <annotations>
             <description>Clicks on Save. Validates that the fields are required.</description>

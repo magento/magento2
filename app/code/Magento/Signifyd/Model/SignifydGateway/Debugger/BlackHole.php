@@ -10,6 +10,9 @@ use Exception;
 /**
  * This debugger ignores any information.
  * Optimal production environment.
+ *
+ * @deprecated 100.3.5 Starting from Magento 2.3.5 Signifyd core integration is deprecated in favor of
+ * official Signifyd integration available on the marketplace
  */
 class BlackHole implements DebuggerInterface
 {

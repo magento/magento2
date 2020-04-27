@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <!--Navigate to create order page (New Order -> Select Customer)-->
+    <actionGroup name="NavigateToNewOrderPageExistingCustomerActionGroup">
+        <arguments>
+            <argument name="customer"/>
+            <argument name="storeView" defaultValue="_defaultStore"/>
+        </arguments>
+        <amOnPage url="{{AdminOrdersPage.url}}" stepKey="navigateToOrderIndexPage"/>
+        <waitForPageLoad stepKey="waitForIndexPageLoad"/>
+        <see selector="{{AdminHeaderSection.pageTitle}}" userInput="Orders" stepKey="seeIndexPageTitle"/>
+        <click selector="{{AdminOrdersGridSection.createNewOrder}}" stepKey="clickCreateNewOrder"/>
+        <waitForPageLoad stepKey="waitForCustomerGridLoad"/>
+
+        <conditionalClick selector="{{AdminOrderCustomersGridSection.resetButton}}" dependentSelector="{{AdminOrderCustomersGridSection.resetButton}}" visible="true" stepKey="clearExistingCustomerFilters"/>
+        <fillField userInput="{{customer.email}}" selector="{{AdminOrderCustomersGridSection.emailInput}}" stepKey="filterEmail"/>
+        <click selector="{{AdminOrderCustomersGridSection.apply}}" stepKey="applyFilter"/>
+        <waitForPageLoad stepKey="waitForFilteredCustomerGridLoad"/>
+        <click selector="{{AdminOrderCustomersGridSection.firstRow}}" stepKey="clickOnCustomer"/>
+        <waitForPageLoad stepKey="waitForCreateOrderPageLoad"/>
+
+        <conditionalClick selector="{{AdminOrderStoreScopeTreeSection.storeOption(storeView.name)}}" dependentSelector="{{AdminOrderStoreScopeTreeSection.storeOption(storeView.name)}}" visible="true" stepKey="selectStoreViewIfAppears"/>
+        <waitForPageLoad stepKey="waitForCreateOrderPageLoadAfterStoreSelect"/>
+        <see selector="{{AdminHeaderSection.pageTitle}}" userInput="Create New Order" stepKey="seeNewOrderPageTitle"/>
+    </actionGroup>
+</actionGroups>

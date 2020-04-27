@@ -13,6 +13,8 @@ use Magento\Signifyd\Api\GuaranteeCancelingServiceInterface;
  * Plugin for Magento\Payment\Model\MethodInterface.
  *
  * @see MethodInterface
+ * @deprecated 100.3.5 Starting from Magento 2.3.5 Signifyd core integration is deprecated in favor of
+ * official Signifyd integration available on the marketplace
  */
 class PaymentPlugin
 {

@@ -19,8 +19,11 @@ use Magento\Framework\Api\ExtensibleDataInterface;
 interface ButtonInterface extends ExtensibleDataInterface
 {
     /**
-     * @param string $postData Post data should be serialized (JSON/serialized) string
-     * Post data can be empty
+     * Set post Data
+     *
+     * Post data should be serialized (JSON/serialized) string. Post data can be empty
+     *
+     * @param string $postData
      * @return void
      * @since 102.0.0
      */
@@ -57,6 +60,8 @@ interface ButtonInterface extends ExtensibleDataInterface
     public function getUrl();
 
     /**
+     * Set required options flag
+     *
      * Required options is flag for options (attributes), without which we cant do actions with a product
      * E.g.: without product size we cant add this product to cart
      *

@@ -420,13 +420,16 @@ class MultishippingTest extends \PHPUnit\Framework\TestCase
         $methodsArray = [1 => 'flatrate_flatrate', 2 => 'tablerate_bestway'];
         $addressId = 1;
         $addressMock = $this->getMockBuilder(QuoteAddress::class)
-            ->setMethods(['getId', 'setShippingMethod'])
+            ->setMethods(['getId', 'setShippingMethod', 'setCollectShippingRates'])
             ->disableOriginalConstructor()
             ->getMock();
 
         $addressMock->expects($this->once())->method('getId')->willReturn($addressId);
         $this->quoteMock->expects($this->once())->method('getAllShippingAddresses')->willReturn([$addressMock]);
         $addressMock->expects($this->once())->method('setShippingMethod')->with($methodsArray[$addressId]);
+        $addressMock->expects($this->once())
+            ->method('setCollectShippingRates')
+            ->with(true);
         $this->quoteMock->expects($this->once())
             ->method('__call')
             ->with('setTotalsCollectedFlag', [false])

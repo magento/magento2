@@ -10,13 +10,13 @@
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="StorefrontSelectOptionDropDownActionGroup">
         <annotations>
-            <description>Selects the provided Product Option Value under the provided Product Option Title on a Storefront Product page.</description>
+            <description>DEPRECATED. Please use StorefrontProductPageSelectDropDownOptionValueActionGroup instead. Selects the provided Product Option Value under the provided Product Option Title on a Storefront Product page.</description>
         </annotations>
         <arguments>
             <argument name="optionTitle" defaultValue="ProductOptionDropDown"/>
             <argument name="option" defaultValue="ProductOptionValueDropdown2.title"/>
         </arguments>
-        
+
         <selectOption selector="{{StorefrontProductInfoMainSection.productOptionSelect(optionTitle.title)}}" userInput="{{option}}" stepKey="fillOptionDropDown"/>
     </actionGroup>
 </actionGroups>

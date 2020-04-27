@@ -11,7 +11,6 @@ namespace Magento\Store\Controller\Store;
 use Magento\Framework\App\Action\Action;
 use Magento\Framework\App\Action\Context as ActionContext;
 use Magento\Framework\App\Http\Context as HttpContext;
-use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Store\Api\StoreCookieManagerInterface;
 use Magento\Store\Api\StoreRepositoryInterface;
@@ -21,6 +20,7 @@ use Magento\Store\Model\StoreSwitcher;
 use Magento\Store\Model\StoreSwitcherInterface;
 use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Framework\App\Action\HttpGetActionInterface;
+use Magento\Store\Controller\Store\SwitchAction\CookieManager;
 
 /**
  * Handles store switching url and makes redirect.
@@ -57,6 +57,11 @@ class SwitchAction extends Action implements HttpGetActionInterface, HttpPostAct
     private $storeSwitcher;
 
     /**
+     * @var CookieManager
+     */
+    private $cookieManager;
+
+    /**
      * Initialize dependencies.
      *
      * @param ActionContext $context
@@ -65,6 +70,7 @@ class SwitchAction extends Action implements HttpGetActionInterface, HttpPostAct
      * @param StoreRepositoryInterface $storeRepository
      * @param StoreManagerInterface $storeManager
      * @param StoreSwitcherInterface $storeSwitcher
+     * @param CookieManager $cookieManager
      */
     public function __construct(
         ActionContext $context,
@@ -72,7 +78,8 @@ class SwitchAction extends Action implements HttpGetActionInterface, HttpPostAct
         HttpContext $httpContext,
         StoreRepositoryInterface $storeRepository,
         StoreManagerInterface $storeManager,
-        StoreSwitcherInterface $storeSwitcher = null
+        StoreSwitcherInterface $storeSwitcher,
+        CookieManager $cookieManager
     ) {
         parent::__construct($context);
         $this->storeCookieManager = $storeCookieManager;
@@ -80,7 +87,8 @@ class SwitchAction extends Action implements HttpGetActionInterface, HttpPostAct
         $this->storeRepository = $storeRepository;
         $this->storeManager = $storeManager;
         $this->messageManager = $context->getMessageManager();
-        $this->storeSwitcher = $storeSwitcher ?: ObjectManager::getInstance()->get(StoreSwitcherInterface::class);
+        $this->storeSwitcher = $storeSwitcher;
+        $this->cookieManager = $cookieManager;
     }
 
     /**
@@ -88,12 +96,13 @@ class SwitchAction extends Action implements HttpGetActionInterface, HttpPostAct
      *
      * @return void
      * @throws StoreSwitcher\CannotSwitchStoreException
+     * @throws \Magento\Framework\Exception\InputException
+     * @throws \Magento\Framework\Stdlib\Cookie\CookieSizeLimitReachedException
+     * @throws \Magento\Framework\Stdlib\Cookie\FailureToSendException
      */
     public function execute()
     {
-        $targetStoreCode = $this->_request->getParam(
-            \Magento\Store\Model\StoreManagerInterface::PARAM_NAME
-        );
+        $targetStoreCode = $this->_request->getParam(StoreManagerInterface::PARAM_NAME);
         $fromStoreCode = $this->_request->getParam(
             '___from_store',
             $this->storeCookieManager->getStoreCodeFromCookie()
@@ -115,6 +124,7 @@ class SwitchAction extends Action implements HttpGetActionInterface, HttpPostAct
             $this->messageManager->addErrorMessage($error);
         } else {
             $redirectUrl = $this->storeSwitcher->switch($fromStore, $targetStore, $requestedUrlToRedirect);
+            $this->cookieManager->setCookieForStore($targetStore);
         }
 
         $this->getResponse()->setRedirect($redirectUrl);

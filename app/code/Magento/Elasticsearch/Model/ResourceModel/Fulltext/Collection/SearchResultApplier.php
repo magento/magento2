@@ -7,8 +7,8 @@
 namespace Magento\Elasticsearch\Model\ResourceModel\Fulltext\Collection;
 
 use Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection\SearchResultApplierInterface;
-use Magento\Framework\Data\Collection;
 use Magento\Framework\Api\Search\SearchResultInterface;
+use Magento\Framework\Data\Collection;
 
 /**
  * Resolve specific attributes for search criteria.
@@ -72,7 +72,7 @@ class SearchResultApplier implements SearchResultApplierInterface
         $this->collection->getSelect()->where('e.entity_id IN (?)', $ids);
         $orderList = join(',', $ids);
         $this->collection->getSelect()->reset(\Magento\Framework\DB\Select::ORDER);
-        $this->collection->getSelect()->order("FIELD(e.entity_id,$orderList)");
+        $this->collection->getSelect()->order(new \Zend_Db_Expr("FIELD(e.entity_id,$orderList)"));
     }
 
     /**
@@ -88,31 +88,16 @@ class SearchResultApplier implements SearchResultApplierInterface
         if ($size !== 0) {
             // Check that current page is in a range of allowed page numbers, based on items count and items per page,
             // than calculate offset for slicing items array.
-            $itemsCount = count($items);
-            $maxAllowedPageNumber = ceil($itemsCount/$size);
-            if ($currentPage < 1) {
-                $currentPage = 1;
-            }
-            if ($currentPage > $maxAllowedPageNumber) {
-                $currentPage = $maxAllowedPageNumber;
+            $totalPages = (int) ceil(count($items)/$size);
+            $currentPage = min($currentPage, $totalPages);
+            $offset = ($currentPage - 1) * $size;
+            if ($offset < 0) {
+                $offset = 0;
             }
 
-            $offset = $this->getOffset($currentPage, $size);
             $items = array_slice($items, $offset, $size);
         }
 
         return $items;
-    }
-
-    /**
-     * Get offset for given page.
-     *
-     * @param int $pageNumber
-     * @param int $pageSize
-     * @return int
-     */
-    private function getOffset(int $pageNumber, int $pageSize): int
-    {
-        return ($pageNumber - 1) * $pageSize;
     }
 }

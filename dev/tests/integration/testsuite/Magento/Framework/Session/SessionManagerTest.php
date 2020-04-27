@@ -52,7 +52,7 @@ namespace Magento\Framework\Session {
             SessionManagerTest::$isIniSetInvoked[$varName] = $newValue;
             return true;
         }
-        return call_user_func_array('\ini_set', func_get_args());
+        return call_user_func_array('\ini_set', [$varName, $newValue]);
     }
 
     /**
@@ -213,34 +213,16 @@ namespace Magento\Framework\Session {
         public function testSetSessionId()
         {
             $this->initializeModel();
-            $sessionId = $this->model->getSessionId();
-            $this->appState->expects($this->atLeastOnce())
+            $this->assertNotEmpty($this->model->getSessionId());
+            $this->appState->expects($this->any())
                 ->method('getAreaCode')
                 ->willReturn(\Magento\Framework\App\Area::AREA_FRONTEND);
-            $this->model->setSessionId($this->sidResolver->getSid($this->model));
-            $this->assertEquals($sessionId, $this->model->getSessionId());
 
             $this->model->setSessionId('test');
             $this->assertEquals('test', $this->model->getSessionId());
-        }
-
-        /**
-         * @magentoConfigFixture current_store web/session/use_frontend_sid 1
-         */
-        public function testSetSessionIdFromParam()
-        {
-            $this->initializeModel();
-            $this->appState->expects($this->atLeastOnce())
-                ->method('getAreaCode')
-                ->willReturn(\Magento\Framework\App\Area::AREA_FRONTEND);
-            $this->assertNotEquals('test_id', $this->model->getSessionId());
-            $this->request->getQuery()->set($this->sidResolver->getSessionIdQueryParam($this->model), 'test-id');
-            $this->model->setSessionId($this->sidResolver->getSid($this->model));
-            $this->assertEquals('test-id', $this->model->getSessionId());
             /* Use not valid identifier */
-            $this->request->getQuery()->set($this->sidResolver->getSessionIdQueryParam($this->model), 'test_id');
-            $this->model->setSessionId($this->sidResolver->getSid($this->model));
-            $this->assertEquals('test-id', $this->model->getSessionId());
+            $this->model->setSessionId('test_id');
+            $this->assertEquals('test', $this->model->getSessionId());
         }
 
         public function testGetSessionIdForHost()

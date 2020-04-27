@@ -11,7 +11,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
 use Magento\Elasticsearch6\Model\Client\Elasticsearch;
 
 /**
- * Class ElasticsearchTest
+ * Class ElasticsearchTest to test Elasticsearch 6
  */
 class ElasticsearchTest extends \PHPUnit\Framework\TestCase
 {
@@ -589,7 +589,7 @@ class ElasticsearchTest extends \PHPUnit\Framework\TestCase
      */
     public function testQuery()
     {
-        $query = 'test phrase query';
+        $query = ['test phrase query'];
         $this->elasticsearchClientMock->expects($this->once())
             ->method('search')
             ->with($query)

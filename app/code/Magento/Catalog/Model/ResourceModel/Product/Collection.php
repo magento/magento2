@@ -2122,7 +2122,9 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
                 if (in_array($category['parent_id'], $categoryIds)
                     && in_array($category['parent_id'], $anchorCategory)) {
                     $categoryIds[] = (int)$category[$linkField];
-                    if ($category['is_anchor'] == 1) {
+                    // Storefront approach is to treat non-anchor children of anchor category as anchors.
+                    // Adding their's IDs to $anchorCategory for consistency.
+                    if ($category['is_anchor'] == 1 || in_array($category['parent_id'], $anchorCategory)) {
                         $anchorCategory[] = (int)$category[$linkField];
                     }
                 }

@@ -29,7 +29,7 @@ class CreateCustomerAddressTest extends GraphQlAbstract
      */
     private $addressRepository;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -356,6 +356,67 @@ MUTATION;
 
         self::expectExceptionMessage('"Street Address" cannot contain more than 2 lines.');
         $this->graphQlMutation($mutation, [], '', $this->getCustomerAuthHeaders($userName, $password));
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Customer/_files/customer_without_addresses.php
+     * @magentoConfigFixture default_store general/country/optional_zip_countries UA
+     *
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
+    public function testCreateCustomerAddressWithOptionalZipCode()
+    {
+        $newAddress = [
+            'country_code' => 'UA',
+            'street' => ['Line 1 Street', 'Line 2'],
+            'company' => 'Company name',
+            'telephone' => '123456789',
+            'fax' => '123123123',
+            'city' => 'City Name',
+            'firstname' => 'Adam',
+            'lastname' => 'Phillis',
+            'middlename' => 'A',
+            'prefix' => 'Mr.',
+            'suffix' => 'Jr.',
+            'vat_id' => '1',
+            'default_shipping' => true,
+            'default_billing' => false
+        ];
+
+        $mutation
+            = <<<MUTATION
+mutation {
+  createCustomerAddress(input: {
+    country_code: {$newAddress['country_code']}
+    street: ["{$newAddress['street'][0]}","{$newAddress['street'][1]}"]
+    company: "{$newAddress['company']}"
+    telephone: "{$newAddress['telephone']}"
+    fax: "{$newAddress['fax']}"
+    city: "{$newAddress['city']}"
+    firstname: "{$newAddress['firstname']}"
+    lastname: "{$newAddress['lastname']}"
+    middlename: "{$newAddress['middlename']}"
+    prefix: "{$newAddress['prefix']}"
+    suffix: "{$newAddress['suffix']}"
+    vat_id: "{$newAddress['vat_id']}"
+    default_shipping: true
+    default_billing: false
+  }) {
+    id
+  }
+}
+MUTATION;
+
+        $userName = 'customer@example.com';
+        $password = 'password';
+
+        $response = $this->graphQlMutation(
+            $mutation,
+            [],
+            '',
+            $this->getCustomerAuthHeaders($userName, $password)
+        );
+        $this->assertNotEmpty($response['createCustomerAddress']['id']);
     }
 
     /**

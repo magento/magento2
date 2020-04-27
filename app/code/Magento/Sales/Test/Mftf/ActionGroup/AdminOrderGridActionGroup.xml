@@ -8,7 +8,10 @@
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <!--Filter order grid by order id field-->
+    <!--
+    NOTICE: filterOrderGridById is deprecated.
+            Please use FilterOrderGridByIdActionGroup instead.
+    -->
     <actionGroup name="filterOrderGridById">
         <annotations>
             <description>Goes to the Admin Orders page. Filters the grid based on the provided Order ID.</description>
@@ -85,7 +88,7 @@
         <arguments>
             <argument name="status"/>
         </arguments>
-        
+
         <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clearExistingOrderFilters"/>
         <click selector="{{AdminDataGridHeaderSection.filters}}" stepKey="openOrderGridFilters"/>
         <selectOption selector="{{AdminDataGridHeaderSection.filterFieldSelect('status')}}" userInput="{{status}}" stepKey="fillOrderStatusFilter"/>
@@ -101,7 +104,10 @@
         <waitForPageLoad stepKey="waitForPageToLoad"/>
         <conditionalClick selector="{{AdminOrdersGridSection.clearFilters}}" dependentSelector="{{AdminOrdersGridSection.enabledFilters}}" visible="true" stepKey="clickOnButtonToRemoveFiltersIfPresent"/>
     </actionGroup>
-
+    <!--
+    NOTICE: OpenOrderById is deprecated.
+            Please use OpenOrderByIdActionGroup instead.
+    -->
     <actionGroup name="OpenOrderById" extends="filterOrderGridById">
         <annotations>
             <description>EXTENDS: filterOrderGridById. Clicks on the 1st row of the Admin Orders grid.</description>

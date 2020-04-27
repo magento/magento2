@@ -62,9 +62,9 @@
             <deleteData createDataKey="productNoImages" stepKey="deleteProductNoImages"/>
             <deleteData createDataKey="productWithImages" stepKey="deleteProductWithImages"/>
         </after>
-        
+
         <actionGroup ref="LoginAsAdmin" stepKey="loginToAdminArea"/>
-        
+
         <!--Admin area: configure Product Image Placeholders-->
         <comment userInput="Configure product image placeholders in store config" stepKey="configurePlaceholderComment"/>
         <amOnPage url="{{CatalogConfigPage.url}}" stepKey="goToCatalogConfigurationPage"/>

@@ -82,6 +82,10 @@
             <deleteData createDataKey="simple2Handle" stepKey="deleteSimple2" before="delete"/>
             <deleteData createDataKey="childProductHandle1" stepKey="deleteChildProduct1" before="delete"/>
             <deleteData createDataKey="childProductHandle2" stepKey="deleteChildProduct2" before="delete"/>
+            <deleteData createDataKey="productAttributeHandle" stepKey="deleteProductDropDownAttribute"/>
+
+            <!-- Reindex invalidated indices after product attribute has been created/deleted -->
+            <actionGroup ref="CliRunReindexUsingCronJobsActionGroup" stepKey="reindexInvalidatedIndices"/>
         </after>
     </test>
     <test name="AdvanceCatalogSearchConfigurableBySkuTest" extends="AdvanceCatalogSearchSimpleProductBySkuTest">
@@ -158,6 +162,10 @@
             <deleteData createDataKey="simple2Handle" stepKey="deleteSimple2" before="delete"/>
             <deleteData createDataKey="childProductHandle1" stepKey="deleteChildProduct1" before="delete"/>
             <deleteData createDataKey="childProductHandle2" stepKey="deleteChildProduct2" before="delete"/>
+            <deleteData createDataKey="productAttributeHandle" stepKey="deleteProductDropDownAttribute"/>
+
+            <!-- Reindex invalidated indices after product attribute has been created/deleted -->
+            <actionGroup ref="CliRunReindexUsingCronJobsActionGroup" stepKey="reindexInvalidatedIndices"/>
         </after>
     </test>
     <test name="AdvanceCatalogSearchConfigurableByDescriptionTest" extends="AdvanceCatalogSearchSimpleProductByDescriptionTest">
@@ -234,6 +242,10 @@
             <deleteData createDataKey="simple2Handle" stepKey="deleteSimple2" before="delete"/>
             <deleteData createDataKey="childProductHandle1" stepKey="deleteChildProduct1" before="delete"/>
             <deleteData createDataKey="childProductHandle2" stepKey="deleteChildProduct2" before="delete"/>
+            <deleteData createDataKey="productAttributeHandle" stepKey="deleteProductDropDownAttribute"/>
+
+            <!-- Reindex invalidated indices after product attribute has been created/deleted -->
+            <actionGroup ref="CliRunReindexUsingCronJobsActionGroup" stepKey="reindexInvalidatedIndices"/>
         </after>
     </test>
     <test name="AdvanceCatalogSearchConfigurableByShortDescriptionTest" extends="AdvanceCatalogSearchSimpleProductByShortDescriptionTest">
@@ -310,6 +322,10 @@
             <deleteData createDataKey="simple2Handle" stepKey="deleteSimple2" before="delete"/>
             <deleteData createDataKey="childProductHandle1" stepKey="deleteChildProduct1" before="delete"/>
             <deleteData createDataKey="childProductHandle2" stepKey="deleteChildProduct2" before="delete"/>
+            <deleteData createDataKey="productAttributeHandle" stepKey="deleteProductDropDownAttribute"/>
+
+            <!-- Reindex invalidated indices after product attribute has been created/deleted -->
+            <actionGroup ref="CliRunReindexUsingCronJobsActionGroup" stepKey="reindexInvalidatedIndices"/>
         </after>
     </test>
 </tests>

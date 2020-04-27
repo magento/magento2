@@ -73,23 +73,23 @@ class GetById implements GetByIdInterface
                 ->where('amg.id = ?', $mediaAssetId);
             $mediaAssetData = $connection->query($select)->fetch();
         } catch (\Exception $exception) {
+            $this->logger->critical($exception);
             $message = __(
                 'En error occurred during get media asset data by id %id: %error',
                 ['id' => $mediaAssetId, 'error' => $exception->getMessage()]
             );
-            $this->logger->critical($message);
             throw new IntegrationException($message, $exception);
         }
 
         if (empty($mediaAssetData)) {
-            $message = __('There is no such media asset with id "%1"', $mediaAssetId);
+            $message = __('There is no such media asset with id %id', ['id' => $mediaAssetId]);
             throw new NoSuchEntityException($message);
         }
 
         try {
             return $this->assetFactory->create(['data' => $mediaAssetData]);
         } catch (\Exception $exception) {
-            $this->logger->critical($exception->getMessage());
+            $this->logger->critical($exception);
             $message = __(
                 'En error occurred during initialize media asset with id %id: %error',
                 ['id' => $mediaAssetId, 'error' => $exception->getMessage()]

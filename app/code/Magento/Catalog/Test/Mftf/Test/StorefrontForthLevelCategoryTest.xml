@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontForthLevelCategoryTest">
+        <annotations>
+            <features value="Catalog"/>
+            <stories value="Category"/>
+            <title value="Storefront forth level category test"/>
+            <description value="When the submenu was created in the third stage follow, the submenu works"/>
+            <severity value="MAJOR"/>
+            <group value="Catalog"/>
+        </annotations>
+        <before>
+            <createData entity="SimpleSubCategory" stepKey="category1"/>
+            <createData entity="SubCategoryWithParent" stepKey="category2">
+                <requiredEntity createDataKey="category1"/>
+            </createData>
+            <createData entity="SubCategoryWithParent" stepKey="category3">
+                <requiredEntity createDataKey="category2"/>
+            </createData>
+            <createData entity="SubCategoryWithParent" stepKey="category4">
+                <requiredEntity createDataKey="category3"/>
+            </createData>
+        </before>
+        <after>
+            <deleteData createDataKey="category4" stepKey="deleteCategory4"/>
+            <deleteData createDataKey="category3" stepKey="deleteCategory3"/>
+            <deleteData createDataKey="category2" stepKey="deleteCategory2"/>
+            <deleteData createDataKey="category1" stepKey="deleteCategory1"/>
+        </after>
+        <amOnPage url="{{StorefrontHomePage.url}}" stepKey="amOnStorefrontPage"/>
+        <moveMouseOver
+            selector="{{StorefrontHeaderSection.NavigationCategoryByName($$category1.name$$)}}"
+            stepKey="hoverCategoryLevelOne"/>
+        <moveMouseOver
+            selector="{{StorefrontHeaderSection.NavigationCategoryByName($$category2.name$$)}}"
+            stepKey="hoverCategoryLevelTwo"/>
+        <moveMouseOver
+            selector="{{StorefrontHeaderSection.NavigationCategoryByName($$category3.name$$)}}"
+            stepKey="hoverCategoryLevelThree"/>
+        <moveMouseOver
+            selector="{{StorefrontHeaderSection.NavigationCategoryByName($$category4.name$$)}}"
+            stepKey="hoverCategoryLevelFour"/>
+    </test>
+</tests>

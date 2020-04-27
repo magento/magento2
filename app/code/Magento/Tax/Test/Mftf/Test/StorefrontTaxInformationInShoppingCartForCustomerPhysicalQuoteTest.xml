@@ -12,12 +12,15 @@
         <annotations>
             <features value="Tax"/>
             <stories value="Shopping cart taxes"/>
-            <title value="Tax information are updating/recalculating on fly in shopping cart for Customer with default addresses (physical quote)"/>
+            <title value="DEPRECATED. Tax information are updating/recalculating on fly in shopping cart for Customer with default addresses (physical quote)"/>
             <description value="Tax information are updating/recalculating on fly in shopping cart for Customer with default addresses (physical quote)"/>
             <severity value="CRITICAL"/>
             <testCaseId value="MAGETWO-41932"/>
             <group value="checkout"/>
             <group value="tax"/>
+            <skip>
+                <issueId value="DEPRECATED">Use StorefrontFPTTaxInformationInShoppingCartForCustomerPhysicalQuoteTest instead.</issueId>
+            </skip>
         </annotations>
         <before>
             <!-- Preconditions  -->

@@ -252,7 +252,7 @@ class Validate extends AttributeAction implements HttpGetActionInterface, HttpPo
     private function checkEmptyOption(DataObject $response, array $optionsForCheck = null)
     {
         foreach ($optionsForCheck as $optionValues) {
-            if (isset($optionValues[0]) && $optionValues[0] == '') {
+            if (isset($optionValues[0]) && trim($optionValues[0]) == '') {
                 $this->setMessageToResponse($response, [__("The value of Admin scope can't be empty.")]);
                 $response->setError(true);
             }

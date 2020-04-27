@@ -93,7 +93,7 @@ location / {
 }
 
 location /pub/ {
-    location ~ ^/pub/media/(downloadable|customer|import|theme_customization/.*\.xml) {
+    location ~ ^/pub/media/(downloadable|customer|import|custom_options|theme_customization/.*\.xml) {
         deny all;
     }
     alias $MAGE_ROOT/pub/;
@@ -109,7 +109,7 @@ location /static/ {
         rewrite ^/static/(version\d*/)?(.*)$ /static/$2 last;
     }
 
-    location ~* \.(ico|jpg|jpeg|png|gif|svg|js|css|swf|eot|ttf|otf|woff|woff2|json)$ {
+    location ~* \.(ico|jpg|jpeg|png|gif|svg|js|css|swf|eot|ttf|otf|woff|woff2|html|json)$ {
         add_header Cache-Control "public";
         add_header X-Frame-Options "SAMEORIGIN";
         expires +1y;
@@ -166,6 +166,11 @@ location /media/downloadable/ {
 location /media/import/ {
     deny all;
 }
+
+location /media/custom_options/ {
+    deny all;
+}
+
 location /errors/ {
     location ~* \.xml$ {
         deny all;

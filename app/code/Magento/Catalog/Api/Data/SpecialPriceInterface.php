@@ -110,6 +110,7 @@ interface SpecialPriceInterface extends \Magento\Framework\Api\ExtensibleDataInt
 
     /**
      * Retrieve existing extension attributes object.
+     *
      * If extension attributes do not exist return null.
      *
      * @return \Magento\Catalog\Api\Data\SpecialPriceExtensionInterface|null

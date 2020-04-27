@@ -9,6 +9,9 @@ use Magento\Framework\Json\DecoderInterface;
 
 /**
  * Reads request and produces webhook message data object based on request params.
+ *
+ * @deprecated 100.3.5 Starting from Magento 2.3.5 Signifyd core integration is deprecated in favor of
+ * official Signifyd integration available on the marketplace
  */
 class WebhookMessageReader
 {
