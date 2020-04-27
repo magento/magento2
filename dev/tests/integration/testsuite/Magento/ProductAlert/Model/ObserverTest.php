@@ -70,8 +70,8 @@ class ObserverTest extends \PHPUnit\Framework\TestCase
     {
         $this->observer->process();
         $this->assertContains(
-            'ohn Smith,',
-            $this->transportBuilder->getSentMessage()->getRawMessage()
+            'John Smith,',
+            $this->transportBuilder->getSentMessage()->getBody()->getParts()[0]->getRawContent()
         );
     }
 
