@@ -189,14 +189,14 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
     }
 
     /**
-     * @param int         $customerId
+     * @param int $customerId
      * @param string|null $confirmation
      */
     private function assertCustomerConfirmationEquals(int $customerId, string $confirmation = null)
     {
         /** @var \Magento\Customer\Model\Customer $customer */
         $customer = Bootstrap::getObjectManager()
-                             ->create(\Magento\Customer\Model\Customer::class)->load($customerId);
+            ->create(\Magento\Customer\Model\Customer::class)->load($customerId);
         $this->assertEquals($confirmation, $customer->getConfirmation());
     }
 
@@ -497,14 +497,14 @@ EXPECTED_HTML;
             ->setMethod('POST')
             ->setPostValue(
                 [
-                    'form_key'         => $this->_objectManager->get(FormKey::class)->getFormKey(),
-                    'firstname'        => 'John',
-                    'lastname'         => 'Doe',
-                    'email'            => 'johndoe@email.com',
-                    'change_password'  => 1,
-                    'change_email'     => 1,
+                    'form_key' => $this->_objectManager->get(FormKey::class)->getFormKey(),
+                    'firstname' => 'John',
+                    'lastname' => 'Doe',
+                    'email' => 'johndoe@email.com',
+                    'change_password' => 1,
+                    'change_email' => 1,
                     'current_password' => 'password',
-                    'password'         => 'new-Password1',
+                    'password' => 'new-Password1',
                     'password_confirmation' => 'new-Password1',
                 ]
             );
@@ -654,6 +654,7 @@ EXPECTED_HTML;
         /** @var CookieManagerInterface $cookieManager */
         $cookieManager = $this->_objectManager->get(CookieManagerInterface::class);
         $cookieManager->deleteCookie(MessagePlugin::MESSAGES_COOKIES_NAME);
+
         $this->_objectManager->removeSharedInstance(Http::class);
         $this->_objectManager->removeSharedInstance(Request::class);
         $this->_request = null;
@@ -774,8 +775,9 @@ EXPECTED_HTML;
         $customer->setEmail($newEmail);
         $customerRepository->save($customer);
 
-        /* Goes through the link in a mail */
         $this->resetRequest();
+
+        /* Goes through the link in a mail */
         $this->getRequest()
             ->setParam('token', $token)
             ->setParam('id', $customerData->getId());
@@ -855,15 +857,13 @@ EXPECTED_HTML;
     }
 
     /**
-     * Clear request object.
-     *
-     * @return void
+     * @inheritDoc
      */
-    private function resetRequest(): void
+    protected function resetRequest(): void
     {
         $this->_objectManager->removeSharedInstance(Http::class);
         $this->_objectManager->removeSharedInstance(Request::class);
-        $this->_request = null;
+        parent::resetRequest();
     }
 
     /**
