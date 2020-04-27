@@ -5,60 +5,60 @@
  */
 declare(strict_types=1);
 
-namespace Magento\LoginAsCustomer\Block\Adminhtml\Customer\Edit;
+namespace Magento\LoginAsCustomer\Ui\Customer\Component\Control;
 
 use Magento\Customer\Block\Adminhtml\Edit\GenericButton;
 use Magento\Framework\View\Element\UiComponent\Control\ButtonProviderInterface;
 
 /**
- * Login as customer button
+ * Login As Customer button UI component.
  */
-class Login extends GenericButton implements ButtonProviderInterface
+class LoginAsCustomerButton extends GenericButton implements ButtonProviderInterface
 {
     /**
      * @var \Magento\Framework\AuthorizationInterface
      */
-    private $_authorization;
+    private $authorization;
 
     /**
-     * Constructor
-     *
      * @param \Magento\Backend\Block\Widget\Context $context
      * @param \Magento\Framework\Registry $registry
-     * @param AccountManagementInterface $customerAccountManagement
      */
     public function __construct(
         \Magento\Backend\Block\Widget\Context $context,
         \Magento\Framework\Registry $registry
     ) {
         parent::__construct($context, $registry);
-        $this->_authorization = $context->getAuthorization();
+        $this->authorization = $context->getAuthorization();
     }
 
     /**
-     * @return array
+     * @inheritdoc
      */
     public function getButtonData(): array
     {
         $customerId = $this->getCustomerId();
         $data = [];
-        $canModify = $customerId && $this->_authorization->isAllowed('Magento_LoginAsCustomer::login_button');
+        $canModify = $customerId && $this->authorization->isAllowed('Magento_LoginAsCustomer::login_button');
         if ($canModify) {
             $data = [
                 'label' => __('Login As Customer'),
                 'class' => 'login login-button',
-                'on_click' => 'window.open( \'' . $this->getInvalidateTokenUrl() .
+                'on_click' => 'window.open( \'' . $this->getLoginUrl() .
                     '\')',
                 'sort_order' => 70,
             ];
         }
+
         return $data;
     }
 
     /**
+     * Get Login As Customer login url.
+     *
      * @return string
      */
-    public function getInvalidateTokenUrl(): string
+    public function getLoginUrl(): string
     {
         return $this->getUrl('loginascustomer/login/login', ['customer_id' => $this->getCustomerId()]);
     }
