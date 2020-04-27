@@ -107,19 +107,19 @@ define([
         /** @inheritdoc */
         onError: function (err) {
             this.productAddedToCart = false;
-            this._super();
+            this._super(err);
         },
 
         /** @inheritdoc */
         onCancel: function (data, actions) {
             this.productAddedToCart = false;
-            this._super();
+            this._super(data, actions);
         },
 
         /** @inheritdoc */
         afterOnAuthorize: function (res, resolve, reject, actions) {
             this.productAddedToCart = false;
-            this._super();
+            this._super(res, resolve, reject, actions);
         }
     });
 });
