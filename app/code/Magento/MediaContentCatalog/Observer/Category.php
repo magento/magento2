@@ -15,6 +15,7 @@ use Magento\Framework\Event\ObserverInterface;
 use Magento\MediaContentApi\Api\UpdateContentAssetLinksInterface;
 use Magento\MediaContentApi\Api\Data\ContentIdentityInterfaceFactory;
 use Magento\MediaContentCatalog\Model\ResourceModel\GetContent;
+use Magento\Eav\Model\Config;
 
 /**
  * Observe the catalog_category_save_after event and run processing relation between category content and media asset.
@@ -52,10 +53,16 @@ class Category implements ObserverInterface
     private $metadataPool;
 
     /**
+     * @var Config
+     */
+    private $config;
+
+    /**
      * @param ContentIdentityInterfaceFactory $contentIdentityFactory
      * @param GetContent $getContent
      * @param UpdateContentAssetLinksInterface $updateContentAssetLinks
      * @param MetadataPool $metadataPool
+     * @param Config $config
      * @param array $fields
      */
     public function __construct(
@@ -63,12 +70,14 @@ class Category implements ObserverInterface
         GetContent $getContent,
         UpdateContentAssetLinksInterface $updateContentAssetLinks,
         MetadataPool $metadataPool,
+        Config $config,
         array $fields
     ) {
         $this->contentIdentityFactory = $contentIdentityFactory;
         $this->getContent = $getContent;
         $this->updateContentAssetLinks = $updateContentAssetLinks;
         $this->metadataPool = $metadataPool;
+        $this->config = $config;
         $this->fields = $fields;
     }
 
@@ -83,11 +92,14 @@ class Category implements ObserverInterface
         $model = $observer->getEvent()->getData('category');
 
         if ($model instanceof CatalogCategory) {
-            $id = (int) $model->getData($this->metadataPool->getMetadata(CategoryInterface::class)->getLinkField());
+            $id = (int) $model->getData(
+                $this->metadataPool->getMetadata(CategoryInterface::class)->getLinkField()
+            );
             foreach ($this->fields as $field) {
                 if (!$model->dataHasChangedFor($field)) {
                     continue;
                 }
+                $attribute = $this->config->getAttribute(self::CONTENT_TYPE, $field);
                 $this->updateContentAssetLinks->execute(
                     $this->contentIdentityFactory->create(
                         [
@@ -96,7 +108,7 @@ class Category implements ObserverInterface
                             self::ENTITY_ID => (string) $model->getId(),
                         ]
                     ),
-                    $this->getContent->execute($id, $model->getAttributes()[$field])
+                    $this->getContent->execute($id, $attribute)
                 );
             }
         }

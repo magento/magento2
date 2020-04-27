@@ -15,6 +15,7 @@ use Magento\Framework\Event\ObserverInterface;
 use Magento\MediaContentApi\Api\UpdateContentAssetLinksInterface;
 use Magento\MediaContentApi\Api\Data\ContentIdentityInterfaceFactory;
 use Magento\MediaContentCatalog\Model\ResourceModel\GetContent;
+use Magento\Eav\Model\Config;
 
 /**
  * Observe the catalog_product_save_after event and run processing relation between product content and media asset
@@ -52,10 +53,16 @@ class Product implements ObserverInterface
     private $metadataPool;
 
     /**
+     * @var Config
+     */
+    private $config;
+
+    /**
      * @param ContentIdentityInterfaceFactory $contentIdentityFactory
      * @param GetContent $getContent
      * @param UpdateContentAssetLinksInterface $updateContentAssetLinks
      * @param MetadataPool $metadataPool
+     * @param Config $config
      * @param array $fields
      */
     public function __construct(
@@ -63,12 +70,14 @@ class Product implements ObserverInterface
         GetContent $getContent,
         UpdateContentAssetLinksInterface $updateContentAssetLinks,
         MetadataPool $metadataPool,
+        Config $config,
         array $fields
     ) {
         $this->contentIdentityFactory = $contentIdentityFactory;
         $this->getContent = $getContent;
         $this->updateContentAssetLinks = $updateContentAssetLinks;
         $this->metadataPool = $metadataPool;
+        $this->config = $config;
         $this->fields = $fields;
     }
 
@@ -81,22 +90,24 @@ class Product implements ObserverInterface
     public function execute(Observer $observer): void
     {
         $model = $observer->getEvent()->getData('product');
-
         if ($model instanceof CatalogProduct) {
-            $id = (int) $model->getData($this->metadataPool->getMetadata(ProductInterface::class)->getLinkField());
+            $id = (int) $model->getData(
+                $this->metadataPool->getMetadata(ProductInterface::class)->getLinkField()
+            );
             foreach ($this->fields as $field) {
                 if (!$model->dataHasChangedFor($field)) {
                     continue;
                 }
+                $attribute = $this->config->getAttribute(self::CONTENT_TYPE, $field);
                 $this->updateContentAssetLinks->execute(
                     $this->contentIdentityFactory->create(
                         [
                             self::TYPE => self::CONTENT_TYPE,
                             self::FIELD => $field,
-                            self::ENTITY_ID => (string) $model->getId(),
+                            self::ENTITY_ID => (string) $id,
                         ]
                     ),
-                    $this->getContent->execute($id, $model->getAttributes()[$field])
+                    $this->getContent->execute($id, $attribute)
                 );
             }
         }
