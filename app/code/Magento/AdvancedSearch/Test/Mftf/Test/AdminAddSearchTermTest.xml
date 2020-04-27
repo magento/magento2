@@ -23,7 +23,7 @@
         <after>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
-        <actionGroup ref="AdminOpenNewSerchTermPageActionGroup" stepKey="navigateToSearchTermPage"/>
+        <actionGroup ref="AdminOpenNewSearchTermsPageActionGroup" stepKey="navigateToSearchTermPage"/>
         <actionGroup ref="AdminFillSearchTermActionGroup" stepKey="fillNewSearchTermData">
             <argument name="searchQuery" value="{{SearchTerms.searchQuery}}"/>
             <argument name="store" value="{{SearchTerms.store}}"/>
