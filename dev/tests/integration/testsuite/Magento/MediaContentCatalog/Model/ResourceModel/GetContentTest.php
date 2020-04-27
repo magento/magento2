@@ -47,7 +47,7 @@ class GetContentTest extends TestCase
         $product = $this->productRepository->get('simple');
         $this->assertEquals(
             'Description with <b>html tag</b>',
-            $this->getContent->execute((int) $product->getEntityId(), $product->getAttributes()['description'])
+            $this->getContent->execute((int) $product->getId(), $product->getAttributes()['description'])
         );
     }
 
@@ -61,7 +61,7 @@ class GetContentTest extends TestCase
         $product = $this->productRepository->get('simple-on-two-websites-different-description');
         $this->assertEquals(
             '<p>Product base description</p>' . PHP_EOL . '<p>Product second description</p>',
-            $this->getContent->execute((int) $product->getEntityId(), $product->getAttributes()['description'])
+            $this->getContent->execute((int) $product->getId(), $product->getAttributes()['description'])
         );
     }
 }
