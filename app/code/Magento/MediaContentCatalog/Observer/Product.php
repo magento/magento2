@@ -55,6 +55,7 @@ class Product implements ObserverInterface
      * @param ContentIdentityInterfaceFactory $contentIdentityFactory
      * @param GetContent $getContent
      * @param UpdateContentAssetLinksInterface $updateContentAssetLinks
+     * @param MetadataPool $metadataPool
      * @param array $fields
      */
     public function __construct(
