@@ -13,7 +13,9 @@ docker-php-ext-configure gd --with-png-dir=/usr/include/ \
 && docker-php-ext-configure zip --with-libzip \
 && docker-php-ext-install mysqli bcmath gd pdo_mysql soap xsl zip intl opcache \
 && echo "memory_limit=512M" > /usr/local/etc/php/conf.d/memory-limit.ini \
-&& echo "max_input_vars=10000" > /usr/local/etc/php/conf.d/max-input-vars-php.ini \ 
+&& echo "max_input_vars=10000" > /usr/local/etc/php/conf.d/max-input-vars-php.ini \
+&& echo "memory_limit=-1" > /usr/local/etc/php/conf.d/buddy.ini \ 
+&& chmod 766 /usr/local/etc/php/conf.d/buddy.ini \
 && mkdir -p /var/www/magento \
 && chown www-data.www-data /var/www/magento \
 && curl -sS https://getcomposer.org/installer | php \
