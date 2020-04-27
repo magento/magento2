@@ -34,7 +34,7 @@
             <argument name="product" value="$createProduct$"/>
         </actionGroup>
         <actionGroup ref="ClickViewAndEditCartFromMiniCartActionGroup" stepKey="goToPayPalSmartButtonPage"/>
-        <actionGroup ref="StorefrontSwitchToPayPalButtonIframeActionGroup" stepKey="switchToIframe">
+        <actionGroup ref="SwitchToPayPalGroupBtnActionGroup" stepKey="switchToIframe">
             <argument name="elementNumber" value="1"/>
         </actionGroup>
         <!-- Check PayPal smart button configurations -->

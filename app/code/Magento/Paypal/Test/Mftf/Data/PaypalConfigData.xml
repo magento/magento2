@@ -203,7 +203,7 @@
         <data key="path">paypal/style/product_page_button_layout</data>
         <data key="scope_id">1</data>
         <data key="label">Vertical</data>
-        <data key="value">Vertical</data>
+        <data key="value">vertical</data>
     </entity>
     <entity name="StorefrontPaypalProductPageButtonPillShapeConfigData">
         <data key="path">paypal/style/product_page_button_shape</data>
