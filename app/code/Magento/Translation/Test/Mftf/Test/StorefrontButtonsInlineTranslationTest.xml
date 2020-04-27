@@ -8,17 +8,17 @@
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="StorefrontButtonsInlineTranslationTest">
+    <test name="StorefrontButtonsInlineTranslationTest" deprecated="Use StorefrontButtonsInlineTranslation2Test instead.">
         <annotations>
             <features value="Translation"/>
             <stories value="Inline Translation"/>
-            <title value="[Inline Translation] Buttons inline translation"/>
-            <description value="[Inline Translation] Buttons inline translation"/>
+            <title value="DEPRECATED [Inline Translation] Buttons inline translation"/>
+            <description value="DEPRECATED [Inline Translation] Buttons inline translation"/>
             <severity value="CRITICAL"/>
             <testCaseId value="MC-12735"/>
             <group value="translation"/>
             <skip>
-                <issueId value="MC-20127"/>
+                <issueId value="DEPRECATED">Use StorefrontButtonsInlineTranslation2Test instead.</issueId>
             </skip>
         </annotations>
         <before>
