@@ -8,7 +8,9 @@ declare(strict_types=1);
 
 namespace Magento\MediaContentCatalog\Model\ResourceModel;
 
+use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Framework\EntityManager\MetadataPool;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 
@@ -28,6 +30,11 @@ class GetContentTest extends TestCase
     private $productRepository;
 
     /**
+     * @var MetadataPool
+     */
+    private $metadataPool;
+
+    /**
      * @inheritdoc
      */
     public function setUp(): void
@@ -35,6 +42,7 @@ class GetContentTest extends TestCase
         $objectManager = Bootstrap::getObjectManager();
         $this->getContent = $objectManager->get(GetContent::class);
         $this->productRepository = $objectManager->get(ProductRepositoryInterface::class);
+        $this->metadataPool = $objectManager->get(MetadataPool::class);
     }
 
     /**
@@ -45,9 +53,10 @@ class GetContentTest extends TestCase
     public function testProduct(): void
     {
         $product = $this->productRepository->get('simple');
+        $id = (int) $product->getData($this->metadataPool->getMetadata(ProductInterface::class)->getLinkField());
         $this->assertEquals(
             'Description with <b>html tag</b>',
-            $this->getContent->execute((int) $product->getId(), $product->getAttributes()['description'])
+            $this->getContent->execute($id, $product->getAttributes()['description'])
         );
     }
 
@@ -59,9 +68,10 @@ class GetContentTest extends TestCase
     public function testProductTwoWebsites(): void
     {
         $product = $this->productRepository->get('simple-on-two-websites-different-description');
+        $id = (int) $product->getData($this->metadataPool->getMetadata(ProductInterface::class)->getLinkField());
         $this->assertEquals(
             '<p>Product base description</p>' . PHP_EOL . '<p>Product second description</p>',
-            $this->getContent->execute((int) $product->getId(), $product->getAttributes()['description'])
+            $this->getContent->execute($id, $product->getAttributes()['description'])
         );
     }
 }

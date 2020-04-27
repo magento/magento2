@@ -7,7 +7,9 @@ declare(strict_types=1);
 
 namespace Magento\MediaContentCatalog\Observer;
 
+use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Model\Product as CatalogProduct;
+use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
 use Magento\MediaContentApi\Api\UpdateContentAssetLinksInterface;
@@ -45,6 +47,11 @@ class Product implements ObserverInterface
     private $getContent;
 
     /**
+     * @var MetadataPool
+     */
+    private $metadataPool;
+
+    /**
      * @param ContentIdentityInterfaceFactory $contentIdentityFactory
      * @param GetContent $getContent
      * @param UpdateContentAssetLinksInterface $updateContentAssetLinks
@@ -54,11 +61,13 @@ class Product implements ObserverInterface
         ContentIdentityInterfaceFactory $contentIdentityFactory,
         GetContent $getContent,
         UpdateContentAssetLinksInterface $updateContentAssetLinks,
+        MetadataPool $metadataPool,
         array $fields
     ) {
         $this->contentIdentityFactory = $contentIdentityFactory;
         $this->getContent = $getContent;
         $this->updateContentAssetLinks = $updateContentAssetLinks;
+        $this->metadataPool = $metadataPool;
         $this->fields = $fields;
     }
 
@@ -73,6 +82,7 @@ class Product implements ObserverInterface
         $model = $observer->getEvent()->getData('product');
 
         if ($model instanceof CatalogProduct) {
+            $id = (int) $model->getData($this->metadataPool->getMetadata(ProductInterface::class)->getLinkField());
             foreach ($this->fields as $field) {
                 if (!$model->dataHasChangedFor($field)) {
                     continue;
@@ -85,7 +95,7 @@ class Product implements ObserverInterface
                             self::ENTITY_ID => (string) $model->getId(),
                         ]
                     ),
-                    $this->getContent->execute((int) $model->getId(), $model->getAttributes()[$field])
+                    $this->getContent->execute($id, $model->getAttributes()[$field])
                 );
             }
         }
