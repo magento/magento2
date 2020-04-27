@@ -10,5 +10,6 @@
     <preference for="Magento\LoginAsCustomer\Api\GetAuthenticateDataInterface" type="Magento\LoginAsCustomer\Model\ResourceModel\GetAuthenticateData" />
     <preference for="Magento\LoginAsCustomer\Api\AuthenticateCustomerInterface" type="Magento\LoginAsCustomer\Model\AuthenticateCustomer" />
     <preference for="Magento\LoginAsCustomer\Api\DeleteSecretInterface" type="Magento\LoginAsCustomer\Model\ResourceModel\DeleteSecret" />
-    <preference for="Magento\LoginAsCustomer\Api\DeleteOldSecretsInterface" type="Magento\LoginAsCustomer\Model\ResourceModel\DeleteOldSecrets" />
+    <preference for="Magento\LoginAsCustomer\Api\DeleteOutdatedSecretsInterface" type="Magento\LoginAsCustomer\Model\ResourceModel\DeleteOutdatedSecrets" />
+    <preference for="Magento\LoginAsCustomer\Api\ConfigInterface" type="Magento\LoginAsCustomer\Model\Config" />
 </config>

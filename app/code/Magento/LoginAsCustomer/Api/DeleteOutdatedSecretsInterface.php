@@ -8,12 +8,14 @@ declare(strict_types=1);
 namespace Magento\LoginAsCustomer\Api;
 
 /**
+ * Delete outdated secret records
+ *
  * @api
  */
-interface DeleteOldSecretsInterface
+interface DeleteOutdatedSecretsInterface
 {
     /**
-     * Delete old secret key records
+     * Delete outdated secret records
      */
-    public function execute():void;
+    public function execute(): void;
 }

@@ -10,8 +10,8 @@ namespace Magento\LoginAsCustomer\Model\ResourceModel;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Stdlib\DateTime\DateTime;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\LoginAsCustomer\Api\ConfigInterface;
 use Magento\LoginAsCustomer\Api\GetAuthenticateDataInterface;
-use Magento\LoginAsCustomer\Model\Config;
 
 /**
  * @api
@@ -29,14 +29,23 @@ class GetAuthenticateData implements GetAuthenticateDataInterface
     private $dateTime;
 
     /**
+     * @var ConfigInterface
+     */
+    private $config;
+
+    /**
      * @param ResourceConnection $resourceConnection
+     * @param DateTime $dateTime
+     * @param ConfigInterface $config
      */
     public function __construct(
         ResourceConnection $resourceConnection,
-        DateTime $dateTime
+        DateTime $dateTime,
+        ConfigInterface $config
     ) {
         $this->resourceConnection = $resourceConnection;
         $this->dateTime = $dateTime;
+        $this->config = $config;
     }
 
     /**
@@ -50,7 +59,7 @@ class GetAuthenticateData implements GetAuthenticateDataInterface
         $connection = $this->resourceConnection->getConnection();
         $tableName = $this->resourceConnection->getTableName('login_as_customer');
 
-        $timePoint = date('Y-m-d H:i:s', $this->dateTime->gmtTimestamp() - Config::TIME_FRAME);
+        $timePoint = date('Y-m-d H:i:s', $this->dateTime->gmtTimestamp() - $this->config->getSecretExpirationTime());
 
         $select = $connection->select()
             ->from(['main_table' => $tableName])

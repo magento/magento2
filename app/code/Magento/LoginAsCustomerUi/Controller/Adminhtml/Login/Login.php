@@ -13,6 +13,7 @@ use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Backend\App\Action;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\LoginAsCustomer\Api\ConfigInterface;
 use Magento\LoginAsCustomer\Api\CreateSecretInterface;
 
 /**
@@ -51,7 +52,7 @@ class Login extends Action implements HttpGetActionInterface, HttpPostActionInte
     private $customerRepository;
 
     /**
-     * @var \Magento\LoginAsCustomer\Model\Config
+     * @var ConfigInterface
      */
     private $config;
 
@@ -67,7 +68,7 @@ class Login extends Action implements HttpGetActionInterface, HttpPostActionInte
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\Url $url
      * @param CustomerRepositoryInterface $customerRepository
-     * @param \Magento\LoginAsCustomer\Model\Config $config,
+     * @param ConfigInterface $config,
      * @param CreateSecretInterface $createSecretProcessor
      */
     public function __construct(
@@ -76,7 +77,7 @@ class Login extends Action implements HttpGetActionInterface, HttpPostActionInte
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\Url $url,
         CustomerRepositoryInterface $customerRepository,
-        \Magento\LoginAsCustomer\Model\Config $config,
+        ConfigInterface $config,
         CreateSecretInterface $createSecretProcessor
     ) {
         parent::__construct($context);
@@ -111,14 +112,14 @@ class Login extends Action implements HttpGetActionInterface, HttpPostActionInte
         }
 
         try {
-            $customer = $this->customerRepository->getById($customerId);
+            $this->customerRepository->getById($customerId);
         } catch (NoSuchEntityException $e) {
             $this->messageManager->addErrorMessage(__('Customer with this ID are no longer exist.'));
             return $resultRedirect->setPath('customer/index/index');
         }
 
         $customerStoreId = $request->getParam('store_id');
-        if (!isset($customerStoreId) && $this->config->isManualChoiceEnabled()) {
+        if (!isset($customerStoreId) && $this->config->isStoreManualChoiceEnabled()) {
             $this->messageManager->addNoticeMessage(__('Please select a Store View to login in.'));
             return $resultRedirect->setPath('loginascustomer/login/manual', ['entity_id' => $customerId ]);
         }

@@ -7,32 +7,31 @@ declare(strict_types=1);
 
 namespace Magento\LoginAsCustomer\Cron;
 
-use Magento\LoginAsCustomer\Api\DeleteOldSecretsInterface;
-use Magento\LoginAsCustomer\Model\Config;
+use Magento\LoginAsCustomer\Api\ConfigInterface;
+use Magento\LoginAsCustomer\Api\DeleteOutdatedSecretsInterface;
 
 /**
  * @api
  */
-class DeleteOldSecrets implements DeleteOldSecretsInterface
+class DeleteOutdatedSecrets implements DeleteOutdatedSecretsInterface
 {
     /**
-     * @var DeleteOldSecretsInterface
+     * @var DeleteOutdatedSecretsInterface
      */
     private $deleteOldSecretsProcessor;
 
     /**
-     * @var Config
+     * @var ConfigInterface
      */
     private $config;
 
     /**
-     * DeleteOldSecrets constructor.
-     * @param DeleteOldSecretsInterface $deleteOldSecretsProcessor
-     * @param Config $config
+     * @param DeleteOutdatedSecretsInterface $deleteOldSecretsProcessor
+     * @param ConfigInterface $config
      */
     public function __construct(
-        DeleteOldSecretsInterface $deleteOldSecretsProcessor,
-        Config $config
+        DeleteOutdatedSecretsInterface $deleteOldSecretsProcessor,
+        ConfigInterface $config
     ) {
         $this->deleteOldSecretsProcessor = $deleteOldSecretsProcessor;
         $this->config = $config;

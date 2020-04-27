@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\LoginAsCustomerUi\ViewModel;
 
 use Magento\Customer\Model\Context;
+use Magento\LoginAsCustomer\Api\ConfigInterface;
 
 /**
  * View model to get extension configuration in the template
@@ -28,12 +29,11 @@ class Configuration implements \Magento\Framework\View\Element\Block\ArgumentInt
     private $httpContext;
 
     /**
-     * Configuration constructor.
-     * @param \Magento\LoginAsCustomer\Model\Config $config
+     * @param ConfigInterface $config
      * @param \Magento\Framework\App\Http\Context $httpContext
      */
     public function __construct(
-        \Magento\LoginAsCustomer\Model\Config $config,
+        ConfigInterface $config,
         \Magento\Framework\App\Http\Context $httpContext
     ) {
         $this->config = $config;

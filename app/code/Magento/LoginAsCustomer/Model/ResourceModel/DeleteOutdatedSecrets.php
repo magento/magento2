@@ -9,13 +9,13 @@ namespace Magento\LoginAsCustomer\Model\ResourceModel;
 
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Stdlib\DateTime\DateTime;
-use Magento\LoginAsCustomer\Api\DeleteOldSecretsInterface;
-use Magento\LoginAsCustomer\Model\Config;
+use Magento\LoginAsCustomer\Api\ConfigInterface;
+use Magento\LoginAsCustomer\Api\DeleteOutdatedSecretsInterface;
 
 /**
- * @api
+ * @inheritdoc
  */
-class DeleteOldSecrets implements DeleteOldSecretsInterface
+class DeleteOutdatedSecrets implements DeleteOutdatedSecretsInterface
 {
     /**
      * @var ResourceConnection
@@ -28,25 +28,34 @@ class DeleteOldSecrets implements DeleteOldSecretsInterface
     private $dateTime;
 
     /**
+     * @var ConfigInterface
+     */
+    private $config;
+
+    /**
      * @param ResourceConnection $resourceConnection
+     * @param DateTime $dateTime
+     * @param ConfigInterface $config
      */
     public function __construct(
         ResourceConnection $resourceConnection,
-        DateTime $dateTime
+        DateTime $dateTime,
+        ConfigInterface $config
     ) {
         $this->resourceConnection = $resourceConnection;
         $this->dateTime = $dateTime;
+        $this->config = $config;
     }
 
     /**
-     * Delete old secret key records
+     * @inheritdoc
      */
-    public function execute():void
+    public function execute(): void
     {
         $connection = $this->resourceConnection->getConnection();
         $tableName = $this->resourceConnection->getTableName('login_as_customer');
 
-        $timePoint = date('Y-m-d H:i:s', $this->dateTime->gmtTimestamp() - Config::TIME_FRAME);
+        $timePoint = date('Y-m-d H:i:s', $this->dateTime->gmtTimestamp() - $this->config->getSecretExpirationTime());
 
         $connection->delete(
             $tableName,
