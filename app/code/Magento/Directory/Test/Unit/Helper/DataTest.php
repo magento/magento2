@@ -6,6 +6,10 @@
 namespace Magento\Directory\Test\Unit\Helper;
 
 use Magento\Directory\Helper\Data;
+use Magento\Directory\Model\AllowedCountries;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\RequestInterface;
+use Magento\Store\Model\ScopeInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -47,11 +51,13 @@ class DataTest extends \PHPUnit\Framework\TestCase
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->scopeConfigMock = $this->createMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
         $this->scopeConfigMock->expects($this->any())->method('isSetFlag')->willReturn(false);
+        $requestMock = $this->createMock(RequestInterface::class);
         $context = $this->createMock(\Magento\Framework\App\Helper\Context::class);
+        $context->method('getRequest')
+            ->willReturn($requestMock);
         $context->expects($this->any())
             ->method('getScopeConfig')
             ->willReturn($this->scopeConfigMock);
-
         $configCacheType = $this->createMock(\Magento\Framework\App\Cache\Type\Config::class);
 
         $this->_countryCollection = $this->createMock(\Magento\Directory\Model\ResourceModel\Country\Collection::class);
@@ -91,19 +97,18 @@ class DataTest extends \PHPUnit\Framework\TestCase
 
     public function testGetRegionJson()
     {
-        $countries = [
-            new \Magento\Framework\DataObject(['country_id' => 'Country1']),
-            new \Magento\Framework\DataObject(['country_id' => 'Country2'])
-        ];
-        $countryIterator = new \ArrayIterator($countries);
-        $this->_countryCollection->expects(
-            $this->atLeastOnce()
-        )->method(
-            'getIterator'
-        )->will(
-            $this->returnValue($countryIterator)
-        );
-
+        $this->scopeConfigMock->method('getValue')
+            ->willReturnMap(
+                [
+                    [
+                        AllowedCountries::ALLOWED_COUNTRIES_PATH,
+                        ScopeConfigInterface::SCOPE_TYPE_DEFAULT,
+                        null,
+                        'Country1,Country2'
+                    ],
+                    [Data::XML_PATH_STATES_REQUIRED, ScopeInterface::SCOPE_STORE, null, '']
+                ]
+            );
         $regions = [
             new \Magento\Framework\DataObject(
                 ['country_id' => 'Country1', 'region_id' => 'r1', 'code' => 'r1-code', 'name' => 'r1-name']
