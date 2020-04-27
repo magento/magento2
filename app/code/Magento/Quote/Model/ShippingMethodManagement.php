@@ -335,6 +335,7 @@ class ShippingMethodManagement implements
         if ($isCustomerGroupChanged) {
             $quote->setCustomerGroupId($quoteCustomerGroupId);
         }
+        $quote->save();
         return $output;
     }
 
