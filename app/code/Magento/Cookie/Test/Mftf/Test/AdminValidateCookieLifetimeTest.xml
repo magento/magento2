@@ -39,6 +39,9 @@
         <actionGroup ref="AdminFillCookieLifetimeActionGroup" stepKey="fillCookieLifetimeFieldWithNumber">
             <argument name="cookieLifetime" value="3600"/>
         </actionGroup>
+        <actionGroup ref="AdminCheckUseSystemValueActionGroup" stepKey="checkUseSystemValue">
+            <argument name="rowId" value="row_web_cookie_cookie_lifetime"/>
+        </actionGroup>
         <actionGroup ref="AdminClickFormActionButtonActionGroup" stepKey="clickSaveButtonWithNumber">
             <argument name="buttonSelector" value="{{AdminMainActionsSection.save}}"/>
         </actionGroup>
