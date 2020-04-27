@@ -11,9 +11,9 @@
  */
 namespace Magento\Catalog\Block\Adminhtml\Product\Helper\Form;
 
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Data\Form\Element\CollectionFactory;
 use Magento\Framework\Data\Form\Element\Factory;
-use Magento\Framework\Math\Random;
 use Magento\Framework\UrlInterface;
 use Magento\Framework\View\Helper\SecureHtmlRenderer;
 
@@ -23,6 +23,27 @@ class Image extends \Magento\Framework\Data\Form\Element\Image
      * @var SecureHtmlRenderer
      */
     private $secureRenderer;
+
+    /**
+     * @param Factory $factoryElement
+     * @param CollectionFactory $factoryCollection
+     * @param \Magento\Framework\Escaper $escaper
+     * @param UrlInterface $urlBuilder
+     * @param array $data
+     * @param SecureHtmlRenderer|null $secureRenderer
+     */
+    public function __construct(
+        Factory $factoryElement,
+        CollectionFactory $factoryCollection,
+        \Magento\Framework\Escaper $escaper,
+        UrlInterface $urlBuilder,
+        $data = [],
+        ?SecureHtmlRenderer $secureRenderer = null
+    ) {
+        $secureRenderer = $secureRenderer ?? ObjectManager::getInstance()->get(SecureHtmlRenderer::class);
+        parent::__construct($factoryElement, $factoryCollection, $escaper, $urlBuilder, $data, $secureRenderer);
+        $this->secureRenderer = $secureRenderer;
+    }
 
     /**
      * Return generated url.

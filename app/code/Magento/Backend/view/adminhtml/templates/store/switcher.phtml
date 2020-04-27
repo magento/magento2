@@ -17,7 +17,7 @@
                <?= /* @noEscape */ $block->getUiId() ?> />
         <?= /* @noEscape */ $secureRenderer->renderEventListenerAsTag(
             'onchange',
-            "switchScope($('#store_switcher'));",
+            'switchScope(this);',
             '#store_switcher'
         ) ?>
         <input type="hidden" name="store_group_switcher" id="store_group_switcher"
@@ -181,7 +181,7 @@ script;
                         reload();
                     },
                     cancel: function() {
-                        obj.value = \'' . $block->escapeHtml($block->getStoreId()) . '\';
+                        obj.value = \'' . $block->escapeJs($block->getStoreId()) . '\';
                     }
                 }
             });

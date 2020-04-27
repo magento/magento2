@@ -54,6 +54,7 @@ $_colspan = $block->isAddAfter() ? 2 : 1;
 script;
     foreach ($block->getColumns() as $columnName => $column):
         $scriptString .= <<<script
+
                         + '<td>'
                         + '{$block->escapeJs($block->renderCellTemplate($columnName))}'
                         + '<\/td>'
@@ -62,17 +63,29 @@ script;
 
     if ($block->isAddAfter()):
         $scriptString .= <<<script
+
                         + '<td><button class="action-add" type="button" id="addAfterBtn<%- _id %>"><span>'
                         + '{$block->escapeJs(__('Add after'))}'
                         + '<\/span><\/button><\/td>'
 script;
     endif;
     $scriptString .= <<<script
+
                     + '<td class="col-actions"><button '
-                    + 'onclick="arrayRow{$block->escapeJs($_htmlId)}.del(\'<%- _id %>\')" '
                     + 'class="action-delete" type="button">'
                     + '<span>{$block->escapeJs(__('Delete'))}<\/span><\/button><\/td>'
                     + '<\/tr>'
+
+script;
+    $scriptString1 = /* $noEscape */ $secureRenderer->renderEventListenerAsTag(
+        'onclick',
+        "arrayRow" . $block->escapeJs($_htmlId) . ".del('<%- _id %>')",
+        "tr#<%- _id %> button.action-delete"
+    );
+
+    $scriptString .= " + '" . $block->escapeJs($scriptString1) . "'" . PHP_EOL;
+
+    $scriptString .= <<<script
             ),
 
             add: function(rowData, insertAfterId) {
@@ -88,11 +101,13 @@ script;
 script;
     foreach ($block->getColumns() as $columnName => $column):
         $scriptString .= <<<script
+
                             {$block->escapeJs($columnName)}: '',
                                 'option_extra_attrs': {},
 script;
     endforeach;
     $scriptString .= <<<script
+
                         _id: '_' + d.getTime() + '_' + d.getMilliseconds()
                 };
             }
@@ -115,13 +130,17 @@ script;
             }
 
             // Add event for {addAfterBtn} button
+
 script;
     if ($block->isAddAfter()):
         $scriptString .= <<<script
+
             Event.observe('addAfterBtn' + templateValues._id, 'click', this.add.bind(this, false, templateValues._id));
+
 script;
     endif;
     $scriptString .= <<<script
+
             },
 
             del: function(rowId) {
@@ -138,19 +157,25 @@ script;
         );
 
         // add existing rows
+
 script;
+
     foreach ($block->getArrayRows() as $_rowId => $_row) {
-        echo /** @noEscape */ "arrayRow{$block->escapeJs($_htmlId)}.add(" . /** @noEscape */ $_row->toJson() . ");\n";
+        $scriptString .= /** @noEscape */ " arrayRow" .$block->escapeJs($_htmlId) .
+            ".add(" . /** @noEscape */ $_row->toJson() . ");\n";
     }
     $scriptString .= <<<script
+
         // Toggle the grid availability, if element is disabled (depending on scope)
 script;
     if ($block->getElement()->getDisabled()):
         $scriptString .= <<<script
+
         toggleValueElements({checked: true}, $('grid{$block->escapeJs($_htmlId)}').parentNode);
 script;
     endif;
     $scriptString .= <<<script
+
         });
 script;
     ?>

@@ -68,5 +68,5 @@ script;
 <?= /* @noEscape */ $secureRenderer->renderEventListenerAsTag(
     'onclick',
     'javascript:validateVat(); return false;',
-    '#' . $htmlId
+    '#' . /* @noEscape */ $block->getHtmlId()
 ); ?>

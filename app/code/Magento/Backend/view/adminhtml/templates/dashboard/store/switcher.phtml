@@ -42,7 +42,7 @@
 </select>
 <?= /* @noEscape */ $secureRenderer->renderEventListenerAsTag(
     'onchange',
-    "return switchStore($('select#store_switcher');",
+    'return switchStore(this);',
     'select#store_switcher'
 ) ?>
 </p>

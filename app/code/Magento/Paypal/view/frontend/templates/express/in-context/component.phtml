@@ -5,7 +5,10 @@
  */
 use Magento\Paypal\Block\Express\InContext\Minicart\SmartButton;
 
-/** @var \Magento\Paypal\Block\Express\InContext\Component $block */
+/**
+ * @var \Magento\Paypal\Block\Express\InContext\Component $block
+ * @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer
+ */
 
 $configuration = [
     'id' => SmartButton::PAYPAL_BUTTON_ID,
@@ -27,12 +30,20 @@ $configuration = [
 ];
 
 ?>
-<div style="display: none;" id="<?= /* @noEscape */ SmartButton::PAYPAL_BUTTON_ID ?>"></div>
+<div id="<?= /* @noEscape */ SmartButton::PAYPAL_BUTTON_ID ?>"></div>
+<?= /* @noEscape */ $secureRenderer->renderStyleAsTag(
+    "display: none;",
+    'div#' . /* @noEscape */ SmartButton::PAYPAL_BUTTON_ID
+) ?>
+
+<?php /** @var \Magento\Framework\Json\Helper\Data $jsonHelper */
+$jsonHelper = $block->getData('jsonHelper');
+?>
 <script type="text/x-magento-init">
     {
         "*": {
             "Magento_Paypal/js/in-context/express-checkout":
-            <?= /* @noEscape */ $this->helper(\Magento\Framework\Json\Helper\Data::class)->jsonEncode($configuration) ?>
+            <?= /* @noEscape */ $jsonHelper->jsonEncode($configuration) ?>
         }
     }
 </script>

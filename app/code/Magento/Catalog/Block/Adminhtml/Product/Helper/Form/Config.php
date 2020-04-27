@@ -11,10 +11,10 @@
  */
 namespace Magento\Catalog\Block\Adminhtml\Product\Helper\Form;
 
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Data\Form\Element\CollectionFactory;
 use Magento\Framework\Data\Form\Element\Factory;
 use Magento\Framework\Escaper;
-use Magento\Framework\Math\Random;
 use Magento\Framework\View\Helper\SecureHtmlRenderer;
 
 class Config extends \Magento\Framework\Data\Form\Element\Select
@@ -23,6 +23,25 @@ class Config extends \Magento\Framework\Data\Form\Element\Select
      * @var SecureHtmlRenderer
      */
     private $secureRenderer;
+
+    /**
+     * @param Factory $factoryElement
+     * @param CollectionFactory $factoryCollection
+     * @param Escaper $escaper
+     * @param array $data
+     * @param SecureHtmlRenderer|null $secureRenderer
+     */
+    public function __construct(
+        Factory $factoryElement,
+        CollectionFactory $factoryCollection,
+        Escaper $escaper,
+        $data = [],
+        ?SecureHtmlRenderer $secureRenderer = null
+    ) {
+        $secureRenderer = $secureRenderer ?? ObjectManager::getInstance()->get(SecureHtmlRenderer::class);
+        parent::__construct($factoryElement, $factoryCollection, $escaper, $data, $secureRenderer);
+        $this->secureRenderer = $secureRenderer;
+    }
 
     /**
      * Retrieve element html

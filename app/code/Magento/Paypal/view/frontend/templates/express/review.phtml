@@ -6,12 +6,13 @@
 
 /**
  * @var \Magento\Paypal\Block\Express\Review $block
+ * @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer
  */
 ?>
 <div class="paypal-review view">
     <div class="block block-order-details-view">
         <div class="block-content">
-            <?php if ($block->getShippingAddress()) : ?>
+            <?php if ($block->getShippingAddress()): ?>
                 <div class="box box-order-shipping-method">
                     <strong class="box-title">
                         <span><?= $block->escapeHtml(__('Shipping Method')) ?></span>
@@ -20,17 +21,20 @@
                         <form method="post" id="shipping-method-form"
                               action="<?= $block->escapeUrl($block->getShippingMethodSubmitUrl()) ?>"
                               class="form">
-                            <?php if ($block->canEditShippingMethod()) : ?>
-                                <?php if ($groups = $block->getShippingRateGroups()) : ?>
+                            <?php if ($block->canEditShippingMethod()): ?>
+                                <?php if ($groups = $block->getShippingRateGroups()): ?>
                                     <?php $currentRate = $block->getCurrentShippingRate(); ?>
                                     <div class="field shipping required">
                                         <select name="shipping_method" id="shipping-method" class="select">
-                                            <?php if (!$currentRate) : ?>
-                                                <option value=""><?= $block->escapeHtml(__('Please select a shipping method...')); ?></option>
+                                            <?php if (!$currentRate): ?>
+                                                <option value="">
+                                                    <?= $block->escapeHtml(__('Please select a shipping method...')); ?>
+                                                </option>
                                             <?php endif; ?>
-                                            <?php foreach ($groups as $code => $rates) : ?>
-                                                <optgroup label="<?= $block->escapeHtml($block->getCarrierName($code)); ?>">
-                                                    <?php foreach ($rates as $rate) : ?>
+                                            <?php foreach ($groups as $code => $rates): ?>
+                                                <optgroup label="<?= $block->escapeHtml($block->getCarrierName($code));
+                                                ?>">
+                                                    <?php foreach ($rates as $rate): ?>
                                                         <option value="<?=
                                                                         $block->escapeHtml(
                                                                             $block->renderShippingRateValue($rate)
@@ -39,7 +43,8 @@
                                                             <?= ($currentRate === $rate) ?
                                                                 ' selected="selected"' : '';
                                                             ?>>
-                                                            <?= /* @noEscape */ $block->renderShippingRateOption($rate); ?>
+                                                            <?= /* @noEscape */ $block->renderShippingRateOption($rate);
+                                                            ?>
                                                         </option>
                                                     <?php endforeach; ?>
                                                 </optgroup>
@@ -56,14 +61,14 @@
                                             </button>
                                         </div>
                                     </div>
-                                <?php else : ?>
+                                <?php else: ?>
                                     <p>
                                         <?= $block->escapeHtml(__(
                                             'Sorry, no quotes are available for this order right now.'
                                         )); ?>
                                     </p>
                                 <?php endif; ?>
-                            <?php else : ?>
+                            <?php else: ?>
                                 <p>
                                     <?= /* @noEscape */ $block->renderShippingRateOption(
                                         $block->getCurrentShippingRate()
@@ -85,7 +90,7 @@
                             );?>
                         </address>
                     </div>
-                    <?php if ($block->getCanEditShippingAddress()) : ?>
+                    <?php if ($block->getCanEditShippingAddress()): ?>
                         <div class="box-actions">
                             <a href="<?= $block->escapeUrl($block->getEditUrl()) ?>" class="action edit">
                                 <span><?= $block->escapeHtml(__('Edit')) ?></span>
@@ -102,7 +107,7 @@
                     <img src="https://www.paypalobjects.com/webstatic/en_US/i/buttons/pp-acceptance-medium.png"
                          alt="<?= $block->escapeHtml(__('Buy now with PayPal')) ?>"/>
                 </div>
-            <?php if ($block->getEditUrl()) : ?>
+            <?php if ($block->getEditUrl()): ?>
                 <div class="box-actions">
                     <a href="<?= $block->escapeUrl($block->getEditUrl()) ?>" class="action edit">
                         <span><?= $block->escapeHtml(__('Edit Payment Information')) ?></span>
@@ -137,10 +142,11 @@
                         <span><?= $block->escapeHtml(__('Place Order')) ?></span>
                     </button>
                 </div>
-                <span class="please-wait load indicator" id="review-please-wait" style="display: none;"
+                <span class="please-wait load indicator" id="review-please-wait"
                       data-text="<?= $block->escapeHtml(__('Submitting order information...')) ?>">
                    <span><?= $block->escapeHtml(__('Submitting order information...')) ?></span>
                 </span>
+                <?= /* @noEscape */ $secureRenderer->renderStyleAsTag("display: none;", 'span#review-please-wait')?>
             </div>
         </form>
     </div>

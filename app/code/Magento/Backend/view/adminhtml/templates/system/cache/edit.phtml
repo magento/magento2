@@ -70,7 +70,7 @@ script;
                                     <?= /* @noEscape */ $secureRenderer->renderEventListenerAsTag(
                                         'onclick',
                                         /* @noEscape */ $clickAction,
-                                        '#' . $block->escapeHtmlAttr($_button['name'])
+                                        '#' . $block->escapeJs($_button['name'])
                                     ) ?>
                                 <?php endif; ?>
                                 <?php if (isset($_button['comment'])): ?> <br />
