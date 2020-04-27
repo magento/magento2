@@ -9,6 +9,7 @@
     <search>
         <patterns>
             <pattern name="catalog_image">/^\/?media\/(.*)/</pattern>
+            <pattern name="catalog_image_with_pub">/^\/pub\/?media\/(.*)/</pattern>
         </patterns>
     </search>
 </config>
