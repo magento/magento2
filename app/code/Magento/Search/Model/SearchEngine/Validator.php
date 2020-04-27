@@ -22,7 +22,7 @@ class Validator implements ValidatorInterface
     /**
      * @var array
      */
-    private $engineBlacklist = ['mysql'];
+    private $engineBlacklist = ['mysql' => 'MySQL'];
 
     /**
      * @var ValidatorInterface[]
@@ -55,8 +55,9 @@ class Validator implements ValidatorInterface
             ? $searchConfig['search-engine']
             : $this->scopeConfig->getValue('catalog/search/engine');
 
-        if (in_array($currentEngine, $this->engineBlacklist)) {
-            $errors[] = "Search engine '{$currentEngine}' is not supported. Fix search configuration and try again.";
+        if (isset($this->engineBlacklist[$currentEngine])) {
+            $blacklistedEngine = $this->engineBlacklist[$currentEngine];
+            $errors[] = "Search engine '{$blacklistedEngine}' is not supported. Fix search configuration and try again.";
         }
 
         if (isset($this->engineValidators[$currentEngine])) {

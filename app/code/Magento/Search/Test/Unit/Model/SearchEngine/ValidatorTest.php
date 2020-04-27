@@ -34,7 +34,7 @@ class ValidatorTest extends TestCase
             [
                 'scopeConfig' => $this->scopeConfigMock,
                 'engineValidators' => ['otherEngine' => $this->otherEngineValidatorMock],
-                'engineBlacklist' => ['badEngine']
+                'engineBlacklist' => ['badEngine' => 'Bad Engine']
             ]
         );
     }
@@ -56,7 +56,7 @@ class ValidatorTest extends TestCase
 
     public function testValidateBlacklist()
     {
-        $expectedErrors = ["Search engine 'badEngine' is not supported. Fix search configuration and try again."];
+        $expectedErrors = ["Search engine 'Bad Engine' is not supported. Fix search configuration and try again."];
 
         $this->assertEquals($expectedErrors, $this->validator->validate(['search-engine' => 'badEngine']));
     }
