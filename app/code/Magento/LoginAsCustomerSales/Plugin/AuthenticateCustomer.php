@@ -3,7 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 declare(strict_types=1);
 
 namespace Magento\LoginAsCustomerSales\Plugin;
@@ -34,7 +33,6 @@ class AuthenticateCustomer
     private $quoteRepository;
 
     /**
-     * AuthenticateCustomer constructor.
      * @param CustomerSession $customerSession
      * @param CheckoutSession $checkoutSession
      * @param CartRepositoryInterface $quoteRepository
@@ -51,9 +49,14 @@ class AuthenticateCustomer
 
     /**
      * Remove all items from guest shopping cart
+     *
      * @param AuthenticateCustomerInterface $subject
      * @param int $customerId
      * @param int $adminId
+     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function beforeExecute(
         AuthenticateCustomerInterface $subject,
@@ -71,14 +74,17 @@ class AuthenticateCustomer
     }
 
     /**
-     * Mart customer cart as not guest
-     * @return bool
-     * @throws \Magento\Framework\Exception\LocalizedException
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * Mark customer cart as not guest
+     *
      * @param int $adminId
      * @param AuthenticateCustomerInterface $subject
      * @param bool $result
      * @param int $customerId
+     * @return bool
+     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function afterExecute(
         AuthenticateCustomerInterface $subject,
@@ -87,7 +93,6 @@ class AuthenticateCustomer
         int $adminId
     ) {
         if ($result) {
-            /* Load Customer Quote */
             $this->checkoutSession->loadCustomerQuote();
 
             $quote = $this->checkoutSession->getQuote();
