@@ -13,7 +13,7 @@
     <type name="Magento\Customer\CustomerData\SectionPoolInterface">
         <arguments>
             <argument name="sectionSourceMap" xsi:type="array">
-                <item name="logged_as_customer" xsi:type="string">Magento\LoginAsCustomer\CustomerData\LoginAsCustomer</item>
+                <item name="loggedAsCustomer" xsi:type="string">Magento\LoginAsCustomer\CustomerData\LoginAsCustomer</item>
             </argument>
         </arguments>
     </type>

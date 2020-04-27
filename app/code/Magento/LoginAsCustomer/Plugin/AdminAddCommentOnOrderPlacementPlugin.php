@@ -39,16 +39,18 @@ class AdminAddCommentOnOrderPlacementPlugin
     public function afterPlace(Order $subject, Order $result): Order
     {
         $adminUser = $this->userSession->getUser();
-        $subject->addCommentToStatusHistory(
-            'Order Placed by Store Administrator',
-            false,
-            true
-        )->setIsCustomerNotified(false);
-        $subject->addCommentToStatusHistory(
-            "Order Placed by {$adminUser->getFirstName()} {$adminUser->getLastName()} using Admin Panel",
-            false,
-            false
-        )->setIsCustomerNotified(false);
+        if ($adminUser) {
+            $subject->addCommentToStatusHistory(
+                'Order Placed by Store Administrator',
+                false,
+                true
+            )->setIsCustomerNotified(false);
+            $subject->addCommentToStatusHistory(
+                "Order Placed by {$adminUser->getFirstName()} {$adminUser->getLastName()} using Admin Panel",
+                false,
+                false
+            )->setIsCustomerNotified(false);
+        }
 
         return $result;
     }

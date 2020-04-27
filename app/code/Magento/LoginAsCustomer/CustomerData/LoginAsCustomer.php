@@ -13,6 +13,8 @@ use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Customer data for the logged_as_customer section
+ *
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  */
 class LoginAsCustomer implements SectionSourceInterface
 {
@@ -41,6 +43,7 @@ class LoginAsCustomer implements SectionSourceInterface
 
     /**
      * Retrieve private customer data for the logged_as_customer section
+     *
      * @return array
      */
     public function getSectionData():array
@@ -50,8 +53,8 @@ class LoginAsCustomer implements SectionSourceInterface
         }
 
         return [
-            'admin_user_id' => $this->customerSession->getLoggedAsCustomerAdmindId(),
-            'website_name' => $this->storeManager->getWebsite()->getName()
+            'adminUserId' => $this->customerSession->getLoggedAsCustomerAdmindId(),
+            'websiteName' => $this->storeManager->getWebsite()->getName()
         ];
     }
 }

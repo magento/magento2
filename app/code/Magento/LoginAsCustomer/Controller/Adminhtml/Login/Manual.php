@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\LoginAsCustomer\Controller\Adminhtml\Login;
 
+use Magento\Backend\Model\View\Result\Page;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Controller\ResultInterface;
 use Magento\Framework\App\Action\HttpGetActionInterface;
@@ -31,6 +32,7 @@ class Manual extends Action implements HttpGetActionInterface
      */
     public function execute():ResultInterface
     {
+        /** @var Page $resultPage */
         $resultPage = $this->resultFactory->create(ResultFactory::TYPE_PAGE);
         $resultPage->setActiveMenu('Magento_LoginAsCustomer::login_button')
             ->addBreadcrumb(__('Customer'), __('Login As Customer Log'), __('Store View To Login In'));

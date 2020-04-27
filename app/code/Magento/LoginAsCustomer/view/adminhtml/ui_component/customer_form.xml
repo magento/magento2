@@ -5,10 +5,12 @@
  * See COPYING.txt for license details.
  */
 -->
-<form xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
-    <argument name="data" xsi:type="array">
-        <item name="buttons" xsi:type="array">
-            <item name="login_as_customer" xsi:type="string">Magento\LoginAsCustomer\Block\Adminhtml\Customer\Edit\Login</item>
-        </item>
-    </argument>
+<form xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
+    <settings>
+        <buttons>
+            <button name="login_as_customer"
+                    class="\Magento\LoginAsCustomer\Ui\Customer\Component\Control\LoginAsCustomerButton"/>
+        </buttons>
+    </settings>
 </form>

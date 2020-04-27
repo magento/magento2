@@ -4,11 +4,15 @@
  * See COPYING.txt for license details.
  */
 declare(strict_types=1);
-namespace Magento\LoginAsCustomer\Ui\DataProvider\Store\Form;
+
+namespace Magento\LoginAsCustomer\Ui\Store\DataProvider\Form;
 
 use Magento\Customer\Model\ResourceModel\Customer\CollectionFactory;
 use Magento\Ui\DataProvider\AbstractDataProvider;
 
+/**
+ * Login As Customer store view form data provider.
+ */
 class StoreDataProvider extends AbstractDataProvider
 {
     /**
@@ -30,5 +34,4 @@ class StoreDataProvider extends AbstractDataProvider
         $this->collection = $collectionFactory->create();
         parent::__construct($name, $primaryFieldName, $requestFieldName, $meta, $data);
     }
-
 }

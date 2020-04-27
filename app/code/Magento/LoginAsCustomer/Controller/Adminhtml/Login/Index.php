@@ -7,11 +7,14 @@ declare(strict_types=1);
 
 namespace Magento\LoginAsCustomer\Controller\Adminhtml\Login;
 
+use Magento\Backend\App\Action\Context;
+use Magento\Backend\Model\View\Result\Page;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Controller\ResultInterface;
 use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Backend\App\Action;
+use Magento\LoginAsCustomer\Model\Login;
 
 /**
  * Login As Customer log grid action
@@ -27,18 +30,17 @@ class Index extends Action implements HttpGetActionInterface, HttpPostActionInte
     const ADMIN_RESOURCE = 'Magento_LoginAsCustomer::login_log';
 
     /**
-     * @var \Magento\LoginAsCustomer\Model\Login
+     * @var Login
      */
     private $loginModel;
 
     /**
-     * Index constructor.
-     * @param \Magento\Backend\App\Action\Context $context
-     * @param \Magento\LoginAsCustomer\Model\Login $loginModel
+     * @param Context $context
+     * @param Login $loginModel
      */
     public function __construct(
-        \Magento\Backend\App\Action\Context $context,
-        \Magento\LoginAsCustomer\Model\Login $loginModel
+        Context $context,
+        Login $loginModel
     ) {
         parent::__construct($context);
         $this->loginModel = $loginModel;
@@ -59,6 +61,7 @@ class Index extends Action implements HttpGetActionInterface, HttpPostActionInte
 
         $this->loginModel->deleteNotUsed();
 
+        /** @var Page $resultPage */
         $resultPage = $this->resultFactory->create(ResultFactory::TYPE_PAGE);
         $resultPage->setActiveMenu('Magento_LoginAsCustomer::login_log')
             ->addBreadcrumb(__('Customer'), __('Login As Customer Log'));

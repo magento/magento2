@@ -9,6 +9,8 @@ namespace Magento\LoginAsCustomer\Model\PageCache;
 
 /**
  * Page cache config plugin
+ *
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  */
 class ConfigPlugin
 {
@@ -44,12 +46,14 @@ class ConfigPlugin
      * @param \Magento\PageCache\Model\Config $subject
      * @param bool $result
      * @return bool
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function afterIsEnabled(\Magento\PageCache\Model\Config $subject, $result): bool
     {
         if ($result) {
+
             $disable = $this->_scopeConfig->getValue(
-                'mfloginascustomer/general/disable_page_cache',
+                'loginascustomer/general/disable_page_cache',
                 \Magento\Store\Model\ScopeInterface::SCOPE_STORE
             );
             $adminId = $this->_customerSession->getLoggedAsCustomerAdmindId();
