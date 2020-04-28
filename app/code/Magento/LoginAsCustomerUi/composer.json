@@ -8,8 +8,7 @@
         "magento/module-backend": "*",
         "magento/module-customer": "*",
         "magento/module-store": "*",
-        "magento/module-ui": "*",
-        "magento/module-user": "*"
+        "magento/module-ui": "*"
     },
     "suggest": {
         "magento/module-login-as-customer": "*"
