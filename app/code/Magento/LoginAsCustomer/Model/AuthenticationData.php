@@ -7,8 +7,8 @@ declare(strict_types=1);
 
 namespace Magento\LoginAsCustomer\Model;
 
-use Magento\LoginAsCustomer\Api\Data\AuthenticationDataInterface;
-use Magento\LoginAsCustomer\Api\Data\AuthenticationDataExtensionInterface;
+use Magento\LoginAsCustomerApi\Api\Data\AuthenticationDataInterface;
+use Magento\LoginAsCustomerApi\Api\Data\AuthenticationDataExtensionInterface;
 
 /**
  * @inheritdoc

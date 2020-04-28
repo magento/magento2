@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\LoginAsCustomer\Api;
+namespace Magento\LoginAsCustomerApi\Api;
 
 /**
  * Delete expired authentication data

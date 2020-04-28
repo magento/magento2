@@ -10,10 +10,10 @@ namespace Magento\LoginAsCustomer\Model\ResourceModel;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Stdlib\DateTime\DateTime;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\LoginAsCustomer\Api\ConfigInterface;
-use Magento\LoginAsCustomer\Api\Data\AuthenticationDataInterface;
-use Magento\LoginAsCustomer\Api\Data\AuthenticationDataInterfaceFactor;
-use Magento\LoginAsCustomer\Api\GetAuthenticationDataBySecretInterface;
+use Magento\LoginAsCustomerApi\Api\ConfigInterface;
+use Magento\LoginAsCustomerApi\Api\Data\AuthenticationDataInterface;
+use Magento\LoginAsCustomerApi\Api\Data\AuthenticationDataInterfaceFactor;
+use Magento\LoginAsCustomerApi\Api\GetAuthenticationDataBySecretInterface;
 
 /**
  * @inheritdoc

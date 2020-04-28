@@ -8,7 +8,7 @@ declare(strict_types=1);
 namespace Magento\LoginAsCustomer\Model;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\LoginAsCustomer\Api\ConfigInterface;
+use Magento\LoginAsCustomerApi\Api\ConfigInterface;
 
 /**
  * @inheritdoc

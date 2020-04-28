@@ -5,10 +5,10 @@
  */
 declare(strict_types=1);
 
-namespace Magento\LoginAsCustomer\Api;
+namespace Magento\LoginAsCustomerApi\Api;
 
 use Magento\Framework\Exception\LocalizedException;
-use Magento\LoginAsCustomer\Api\Data\AuthenticationDataInterface;
+use Magento\LoginAsCustomerApi\Api\Data\AuthenticationDataInterface;
 
 /**
  * Save authentication data. Return secret key

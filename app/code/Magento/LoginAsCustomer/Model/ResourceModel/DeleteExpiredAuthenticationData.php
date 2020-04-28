@@ -9,8 +9,8 @@ namespace Magento\LoginAsCustomer\Model\ResourceModel;
 
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Stdlib\DateTime\DateTime;
-use Magento\LoginAsCustomer\Api\ConfigInterface;
-use Magento\LoginAsCustomer\Api\DeleteExpiredAuthenticationDataInterface;
+use Magento\LoginAsCustomerApi\Api\ConfigInterface;
+use Magento\LoginAsCustomerApi\Api\DeleteExpiredAuthenticationDataInterface;
 
 /**
  * @inheritdoc

@@ -10,8 +10,8 @@ namespace Magento\LoginAsCustomer\Model\ResourceModel;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Stdlib\DateTime\DateTime;
 use Magento\Framework\Math\Random;
-use Magento\LoginAsCustomer\Api\Data\AuthenticationDataInterface;
-use Magento\LoginAsCustomer\Api\SaveAuthenticationDataInterface;
+use Magento\LoginAsCustomerApi\Api\Data\AuthenticationDataInterface;
+use Magento\LoginAsCustomerApi\Api\SaveAuthenticationDataInterface;
 
 /**
  * @inheritdoc

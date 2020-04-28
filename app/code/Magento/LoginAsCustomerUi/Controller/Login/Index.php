@@ -17,9 +17,9 @@ use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Framework\Message\ManagerInterface;
 use Psr\Log\LoggerInterface;
-use Magento\LoginAsCustomer\Api\GetAuthenticationDataBySecretInterface;
-use Magento\LoginAsCustomer\Api\AuthenticateCustomerInterface;
-use Magento\LoginAsCustomer\Api\DeleteAuthenticationDataBySecretInterface;
+use Magento\LoginAsCustomerApi\Api\GetAuthenticationDataBySecretInterface;
+use Magento\LoginAsCustomerApi\Api\AuthenticateCustomerInterface;
+use Magento\LoginAsCustomerApi\Api\DeleteAuthenticationDataBySecretInterface;
 
 /**
  * Login As Customer storefront login action

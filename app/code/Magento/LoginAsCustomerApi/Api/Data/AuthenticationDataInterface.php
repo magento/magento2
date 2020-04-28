@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\LoginAsCustomer\Api\Data;
+namespace Magento\LoginAsCustomerApi\Api\Data;
 
 use Magento\Framework\Api\ExtensibleDataInterface;
 

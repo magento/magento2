@@ -8,7 +8,7 @@ declare(strict_types=1);
 namespace Magento\LoginAsCustomerUi\ViewModel;
 
 use Magento\Customer\Model\Context;
-use Magento\LoginAsCustomer\Api\ConfigInterface;
+use Magento\LoginAsCustomerApi\Api\ConfigInterface;
 
 /**
  * View model to get extension configuration in the template

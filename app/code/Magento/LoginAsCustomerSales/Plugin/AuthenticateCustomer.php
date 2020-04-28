@@ -10,9 +10,9 @@ namespace Magento\LoginAsCustomerSales\Plugin;
 use Magento\Customer\Model\Session as CustomerSession;
 use Magento\Checkout\Model\Session as CheckoutSession;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\LoginAsCustomer\Api\Data\AuthenticationDataInterface;
+use Magento\LoginAsCustomerApi\Api\Data\AuthenticationDataInterface;
 use Magento\Quote\Api\CartRepositoryInterface;
-use Magento\LoginAsCustomer\Api\AuthenticateCustomerInterface;
+use Magento\LoginAsCustomerApi\Api\AuthenticateCustomerInterface;
 
 /**
  * Class AuthenticateCustomer Plugin

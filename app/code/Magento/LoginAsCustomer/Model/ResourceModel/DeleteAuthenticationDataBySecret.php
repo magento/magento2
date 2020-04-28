@@ -8,7 +8,7 @@ declare(strict_types=1);
 namespace Magento\LoginAsCustomer\Model\ResourceModel;
 
 use Magento\Framework\App\ResourceConnection;
-use Magento\LoginAsCustomer\Api\DeleteAuthenticationDataBySecretInterface;
+use Magento\LoginAsCustomerApi\Api\DeleteAuthenticationDataBySecretInterface;
 
 /**
  * @inheritdoc

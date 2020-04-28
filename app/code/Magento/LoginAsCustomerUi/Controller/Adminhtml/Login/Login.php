@@ -17,10 +17,10 @@ use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Message\ManagerInterface;
-use Magento\LoginAsCustomer\Api\ConfigInterface;
-use Magento\LoginAsCustomer\Api\Data\AuthenticationDataInterface;
-use Magento\LoginAsCustomer\Api\Data\AuthenticationDataInterfaceFactor;
-use Magento\LoginAsCustomer\Api\SaveAuthenticationDataInterface;
+use Magento\LoginAsCustomerApi\Api\ConfigInterface;
+use Magento\LoginAsCustomerApi\Api\Data\AuthenticationDataInterface;
+use Magento\LoginAsCustomerApi\Api\Data\AuthenticationDataInterfaceFactor;
+use Magento\LoginAsCustomerApi\Api\SaveAuthenticationDataInterface;
 
 /**
  * Login as customer action

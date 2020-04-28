@@ -9,8 +9,8 @@ namespace Magento\LoginAsCustomer\Model;
 
 use Magento\Customer\Model\Session;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\LoginAsCustomer\Api\AuthenticateCustomerInterface;
-use Magento\LoginAsCustomer\Api\Data\AuthenticationDataInterface;
+use Magento\LoginAsCustomerApi\Api\AuthenticateCustomerInterface;
+use Magento\LoginAsCustomerApi\Api\Data\AuthenticationDataInterface;
 
 /**
  * @inheritdoc

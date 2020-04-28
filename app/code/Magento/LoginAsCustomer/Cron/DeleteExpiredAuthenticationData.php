@@ -7,8 +7,8 @@ declare(strict_types=1);
 
 namespace Magento\LoginAsCustomer\Cron;
 
-use Magento\LoginAsCustomer\Api\ConfigInterface;
-use Magento\LoginAsCustomer\Api\DeleteExpiredAuthenticationDataInterface;
+use Magento\LoginAsCustomerApi\Api\ConfigInterface;
+use Magento\LoginAsCustomerApi\Api\DeleteExpiredAuthenticationDataInterface;
 
 /**
  * elete expired authentication data cron task
