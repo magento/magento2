@@ -38,5 +38,6 @@
         <element name="currencyTrigger" type="select" selector="#switcher-currency-trigger" timeout="30"/>
         <element name="currency" type="select" selector="//a[text()='{{arg}}']" parameterized="true"/>
         <element name="multiSelectOption" type="select" selector="//div[@class='field option  required']//select"/>
+        <element name="validationMessageBox" type="block" selector="#validation-message-box"/>
     </section>
 </sections>
