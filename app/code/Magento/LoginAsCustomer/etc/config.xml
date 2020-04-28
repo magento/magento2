@@ -12,7 +12,7 @@
             <general>
                 <enabled>0</enabled>
                 <store_view_manual_choice_enabled>0</store_view_manual_choice_enabled>
-                <secrets_expiration_time>60</secrets_expiration_time>
+                <authentication_data_expiration_time>60</authentication_data_expiration_time>
             </general>
         </login_as_customer>
     </default>
