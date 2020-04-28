@@ -17,7 +17,7 @@ use Magento\LoginAsCustomerApi\Api\Data\AuthenticationDataInterface;
 /**
  * Class AuthenticateCustomer Plugin
  */
-class AuthenticateCustomer
+class AuthenticateCustomerPlugin
 {
     /**
      * @var CustomerSession

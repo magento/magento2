@@ -7,7 +7,6 @@
             "created_at": true
         },
         "index": {
-            "LOGIN_AS_CUSTOMER_SECRET_CREATED_AT": true,
             "LOGIN_AS_CUSTOMER_CREATED_AT": true
         },
         "constraint": {

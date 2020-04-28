@@ -9,7 +9,7 @@ namespace Magento\LoginAsCustomerUi\Controller\Adminhtml\Login;
 
 use Magento\Backend\App\Action;
 use Magento\Backend\App\Action\Context;
-use Magento\Framework\App\RequestInterface;
+use Magento\Backend\Model\Auth\Session;
 use Magento\Framework\Controller\Result\Redirect;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Controller\ResultInterface;
@@ -18,11 +18,11 @@ use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\Framework\Message\ManagerInterface;
 use Magento\LoginAsCustomerApi\Api\ConfigInterface;
 use Magento\LoginAsCustomerApi\Api\Data\AuthenticationDataInterface;
-use Magento\LoginAsCustomerApi\Api\Data\AuthenticationDataInterfaceFactor;
+use Magento\LoginAsCustomerApi\Api\Data\AuthenticationDataInterfaceFactory;
 use Magento\LoginAsCustomerApi\Api\SaveAuthenticationDataInterface;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Login as customer action
@@ -40,34 +40,14 @@ class Login extends Action implements HttpGetActionInterface, HttpPostActionInte
     const ADMIN_RESOURCE = 'Magento_LoginAsCustomer::login';
 
     /**
-     * @var ResultFactory
-     */
-    private $resultFactory;
-
-    /**
-     * @var RequestInterface
-     */
-    private $request;
-
-    /**
-     * @var ManagerInterface
-     */
-    private $messageManager;
-
-    /**
-     * @var \Magento\Backend\Model\Auth\Session
+     * @var Session
      */
     private $authSession;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var StoreManagerInterface
      */
     private $storeManager;
-
-    /**
-     * @var \Magento\Framework\Url
-     */
-    private $url;
 
     /**
      * @var CustomerRepositoryInterface
@@ -91,12 +71,8 @@ class Login extends Action implements HttpGetActionInterface, HttpPostActionInte
 
     /**
      * @param Context $context
-     * @param ResultFactory $resultFactory
-     * @param RequestInterface $request
-     * @param ManagerInterface $messageManager
-     * @param \Magento\Backend\Model\Auth\Session $authSession
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Framework\Url $url
+     * @param Session $authSession
+     * @param StoreManagerInterface $storeManager
      * @param CustomerRepositoryInterface $customerRepository
      * @param ConfigInterface $config
      * @param AuthenticationDataInterfaceFactory $authenticationDataFactory
@@ -104,12 +80,8 @@ class Login extends Action implements HttpGetActionInterface, HttpPostActionInte
      */
     public function __construct(
         Context $context,
-        ResultFactory $resultFactory,
-        RequestInterface $request,
-        ManagerInterface $messageManager,
-        \Magento\Backend\Model\Auth\Session $authSession,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Framework\Url $url,
+        Session $authSession,
+        StoreManagerInterface $storeManager,
         CustomerRepositoryInterface $customerRepository,
         ConfigInterface $config,
         AuthenticationDataInterfaceFactory $authenticationDataFactory,
@@ -117,12 +89,8 @@ class Login extends Action implements HttpGetActionInterface, HttpPostActionInte
     ) {
         parent::__construct($context);
 
-        $this->resultFactory = $resultFactory;
-        $this->request = $request;
-        $this->messageManager = $messageManager;
         $this->authSession = $authSession;
         $this->storeManager = $storeManager;
-        $this->url = $url;
         $this->customerRepository = $customerRepository;
         $this->config = $config;
         $this->authenticationDataFactory = $authenticationDataFactory;
@@ -146,9 +114,9 @@ class Login extends Action implements HttpGetActionInterface, HttpPostActionInte
             return $resultRedirect->setPath('customer/index/index');
         }
 
-        $customerId = (int)$this->request->getParam('customer_id');
+        $customerId = (int)$this->_request->getParam('customer_id');
         if (!$customerId) {
-            $customerId = (int)$this->request->getParam('entity_id');
+            $customerId = (int)$this->_request->getParam('entity_id');
         }
 
         try {
@@ -158,7 +126,7 @@ class Login extends Action implements HttpGetActionInterface, HttpPostActionInte
             return $resultRedirect->setPath('customer/index/index');
         }
 
-        $storeId = $this->request->getParam('store_id');
+        $storeId = $this->_request->getParam('store_id');
         if (empty($storeId) && $this->config->isStoreManualChoiceEnabled()) {
             $this->messageManager->addNoticeMessage(__('Please select a Store View to login in.'));
             return $resultRedirect->setPath('loginascustomer/login/manual', ['customer_id' => $customerId]);
@@ -195,7 +163,7 @@ class Login extends Action implements HttpGetActionInterface, HttpPostActionInte
             $store = $this->storeManager->getStore($storeId);
         }
 
-        $redirectUrl = $this->url
+        $redirectUrl = $this->_url
             ->setScope($store)
             ->getUrl('loginascustomer/login/index', ['secret' => $secret, '_nosid' => true]);
         return $redirectUrl;

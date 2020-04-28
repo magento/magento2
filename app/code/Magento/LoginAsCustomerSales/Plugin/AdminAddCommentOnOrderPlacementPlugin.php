@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\LoginAsCustomer\Plugin;
+namespace Magento\LoginAsCustomerSales\Plugin;
 
 use Magento\Backend\Model\Auth\Session;
 use Magento\Sales\Model\Order;

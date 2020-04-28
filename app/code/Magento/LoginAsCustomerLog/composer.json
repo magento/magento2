@@ -12,6 +12,9 @@
         "magento/module-ui": "*",
         "magento/module-user": "*"
     },
+    "suggest": {
+        "magento/module-login-as-customer": "*"
+    },
     "type": "magento2-module",
     "license": [
         "OSL-3.0",

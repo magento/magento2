@@ -15,10 +15,6 @@
         <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="secret"/>
         </constraint>
-        <index referenceId="LOGIN_AS_CUSTOMER_SECRET_CREATED_AT" indexType="btree">
-            <column name="secret"/>
-            <column name="created_at"/>
-        </index>
         <index referenceId="LOGIN_AS_CUSTOMER_CREATED_AT" indexType="btree">
             <column name="created_at"/>
         </index>

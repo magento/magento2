@@ -31,7 +31,9 @@ interface AuthenticationDataInterface extends ExtensibleDataInterface
     public function getAdminId(): int;
 
     /**
-     * @inheritdoc
+     * Get extension attributes
+     *
+     * @return AuthenticationDataExtensionInterface|null
      */
     public function getExtensionAttributes(): ?AuthenticationDataExtensionInterface;
 }
