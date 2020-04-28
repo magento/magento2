@@ -8,10 +8,12 @@ declare(strict_types=1);
 namespace Magento\LoginAsCustomer\Model;
 
 use Magento\Customer\Model\Session;
-use Magento\LoginAsCustomer\Api\AuthenticateCustomerInterface;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\LoginAsCustomerApi\Api\AuthenticateCustomerInterface;
+use Magento\LoginAsCustomerApi\Api\Data\AuthenticationDataInterface;
 
 /**
- * @api
+ * @inheritdoc
  */
 class AuthenticateCustomer implements AuthenticateCustomerInterface
 {
@@ -21,7 +23,6 @@ class AuthenticateCustomer implements AuthenticateCustomerInterface
     private $customerSession;
 
     /**
-     * AuthenticateCustomer constructor.
      * @param Session $customerSession
      */
     public function __construct(
@@ -31,25 +32,20 @@ class AuthenticateCustomer implements AuthenticateCustomerInterface
     }
 
     /**
-     * Authenticate a customer by customer ID
-     *
-     * @return bool
-     * @param int $customerId
-     * @param int $adminId
+     * @inheritdoc
      */
-    public function execute(int $customerId, int $adminId):bool
+    public function execute(AuthenticationDataInterface $authenticationData): void
     {
         if ($this->customerSession->getId()) {
-            /* Logout if logged in */
             $this->customerSession->logout();
         }
 
-        $loggedIn = $this->customerSession->loginById($customerId);
-        if ($loggedIn) {
-            $this->customerSession->regenerateId();
-            $this->customerSession->setLoggedAsCustomerAdmindId($adminId);
+        $result = $this->customerSession->loginById($authenticationData->getCustomerId());
+        if (false === $result) {
+            throw new LocalizedException(__('Login was not successful.'));
         }
 
-        return $loggedIn;
+        $this->customerSession->regenerateId();
+        $this->customerSession->setLoggedAsCustomerAdmindId($authenticationData->getAdminId());
     }
 }

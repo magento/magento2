@@ -7,7 +7,9 @@
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Cron:etc/crontab.xsd">
     <group id="default">
-        <job instance="Magento\LoginAsCustomer\Cron\DeleteOldSecrets" method="execute" name="login_as_customer_delete_old_secrets">
+        <job instance="Magento\LoginAsCustomer\Cron\DeleteExpiredAuthenticationData"
+             method="execute"
+             name="login_as_customer_delete_expired_authentication_data">
             <schedule>15 * * * *</schedule>
         </job>
     </group>

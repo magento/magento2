@@ -6,9 +6,11 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
-    <preference for="Magento\LoginAsCustomer\Api\CreateSecretInterface" type="Magento\LoginAsCustomer\Model\ResourceModel\CreateSecret" />
-    <preference for="Magento\LoginAsCustomer\Api\GetAuthenticateDataInterface" type="Magento\LoginAsCustomer\Model\ResourceModel\GetAuthenticateData" />
-    <preference for="Magento\LoginAsCustomer\Api\AuthenticateCustomerInterface" type="Magento\LoginAsCustomer\Model\AuthenticateCustomer" />
-    <preference for="Magento\LoginAsCustomer\Api\DeleteSecretInterface" type="Magento\LoginAsCustomer\Model\ResourceModel\DeleteSecret" />
-    <preference for="Magento\LoginAsCustomer\Api\DeleteOldSecretsInterface" type="Magento\LoginAsCustomer\Model\ResourceModel\DeleteOldSecrets" />
+    <preference for="Magento\LoginAsCustomerApi\Api\Data\AuthenticationDataInterface" type="Magento\LoginAsCustomer\Model\AuthenticationData"/>
+    <preference for="Magento\LoginAsCustomerApi\Api\SaveAuthenticationDataInterface" type="Magento\LoginAsCustomer\Model\ResourceModel\SaveAuthenticationData"/>
+    <preference for="Magento\LoginAsCustomerApi\Api\GetAuthenticationDataBySecretInterface" type="Magento\LoginAsCustomer\Model\ResourceModel\GetAuthenticationDataBySecret"/>
+    <preference for="Magento\LoginAsCustomerApi\Api\AuthenticateCustomerInterface" type="Magento\LoginAsCustomer\Model\AuthenticateCustomer"/>
+    <preference for="Magento\LoginAsCustomerApi\Api\DeleteAuthenticationDataBySecretInterface" type="Magento\LoginAsCustomer\Model\ResourceModel\DeleteAuthenticationDataBySecret"/>
+    <preference for="Magento\LoginAsCustomerApi\Api\DeleteExpiredAuthenticationDataInterface" type="Magento\LoginAsCustomer\Model\ResourceModel\DeleteExpiredAuthenticationData"/>
+    <preference for="Magento\LoginAsCustomerApi\Api\ConfigInterface" type="Magento\LoginAsCustomer\Model\Config"/>
 </config>

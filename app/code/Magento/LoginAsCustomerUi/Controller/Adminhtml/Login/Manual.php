@@ -23,18 +23,18 @@ class Manual extends Action implements HttpGetActionInterface
      *
      * @see _isAllowed()
      */
-    const ADMIN_RESOURCE = 'Magento_LoginAsCustomerUi::login_button';
+    const ADMIN_RESOURCE = 'Magento_LoginAsCustomer::login';
 
     /**
      * Chose store view for Login as customer
      *
      * @return ResultInterface
      */
-    public function execute():ResultInterface
+    public function execute(): ResultInterface
     {
         /** @var Page $resultPage */
         $resultPage = $this->resultFactory->create(ResultFactory::TYPE_PAGE);
-        $resultPage->setActiveMenu('Magento_LoginAsCustomerUi::login_button')
+        $resultPage->setActiveMenu('Magento_Customer::customer')
             ->addBreadcrumb(__('Customer'), __('Login As Customer Log'), __('Store View To Login In'));
         $resultPage->getConfig()->getTitle()->prepend(__('Store View To Login In'));
 

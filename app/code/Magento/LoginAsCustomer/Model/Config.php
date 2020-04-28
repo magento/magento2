@@ -8,70 +8,58 @@ declare(strict_types=1);
 namespace Magento\LoginAsCustomer\Model;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Framework\App\ProductMetadataInterface;
-use Magento\Store\Model\ScopeInterface;
+use Magento\LoginAsCustomerApi\Api\ConfigInterface;
 
 /**
- * LoginAsCustomer module config model.
+ * @inheritdoc
  */
-class Config
+class Config implements ConfigInterface
 {
     /**
      * Extension config path
      */
-    private const XML_PATH_EXTENSION_ENABLED = 'loginascustomer/general/enabled';
-    private const ENABLE_STORE_VIEW_MANUAL_CHOICE = 'loginascustomer/general/enable_store_view_manual_choice';
-
-    public const TIME_FRAME = 60;
+    private const XML_PATH_ENABLED
+        = 'login_as_customer/general/enabled';
+    private const XML_PATH_STORE_VIEW_MANUAL_CHOICE_ENABLED
+        = 'login_as_customer/general/store_view_manual_choice_enabled';
+    private const XML_PATH_AUTHENTICATION_EXPIRATION_TIME
+        = 'login_as_customer/general/authentication_data_expiration_time';
 
     /**
      * @var ScopeConfigInterface
      */
-
     private $scopeConfig;
 
     /**
-     * @var \Magento\Framework\App\ProductMetadataInterface
-     */
-    private $metadata;
-
-    /**
      * @param ScopeConfigInterface $scopeConfig
-     * @param ProductMetadataInterface $metadata
      */
     public function __construct(
-        ScopeConfigInterface $scopeConfig,
-        ProductMetadataInterface $metadata
+        ScopeConfigInterface $scopeConfig
     ) {
         $this->scopeConfig = $scopeConfig;
-        $this->metadata = $metadata;
     }
 
     /**
-     * Check if Login As Customer extension is enabled.
-     *
-     * @return bool
+     * @inheritdoc
      */
     public function isEnabled(): bool
     {
-        return (bool)$this->scopeConfig->getValue(
-            self::XML_PATH_EXTENSION_ENABLED,
-            ScopeInterface::SCOPE_STORE,
-            null
-        );
+        return (bool)$this->scopeConfig->getValue(self::XML_PATH_ENABLED);
     }
 
     /**
-     * Check if store view manual choice is enabled.
-     *
-     * @return bool
+     * @inheritdoc
      */
-    public function isManualChoiceEnabled(): bool
+    public function isStoreManualChoiceEnabled(): bool
     {
-        return (bool)$this->scopeConfig->getValue(
-            self::ENABLE_STORE_VIEW_MANUAL_CHOICE,
-            ScopeInterface::SCOPE_STORE,
-            null
-        );
+        return (bool)$this->scopeConfig->getValue(self::XML_PATH_STORE_VIEW_MANUAL_CHOICE_ENABLED);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getAuthenticationDataExpirationTime(): int
+    {
+        return (int)$this->scopeConfig->getValue(self::XML_PATH_AUTHENTICATION_EXPIRATION_TIME);
     }
 }

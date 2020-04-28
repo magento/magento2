@@ -3,10 +3,17 @@
     "description": "",
     "require": {
         "php": "~7.1.3||~7.2.0||~7.3.0",
-        "magento/module-login-as-customer": "*",
-        "magento/module-customer": "*",
+        "magento/framework": "*",
+        "magento/module-backend": "*",
         "magento/module-checkout": "*",
-        "magento/module-quote": "*"
+        "magento/module-customer": "*",
+        "magento/module-quote": "*",
+        "magento/module-login-as-customer": "*",
+        "magento/module-user": "*"
+    },
+    "suggest": {
+        "magento/sales": "*",
+        "magento/module-login-as-customer-api": "*"
     },
     "type": "magento2-module",
     "license": [
@@ -14,7 +21,9 @@
         "AFL-3.0"
     ],
     "autoload": {
-        "files": [ "registration.php" ],
+        "files": [
+            "registration.php"
+        ],
         "psr-4": {
             "Magento\\LoginAsCustomerSales\\": ""
         }

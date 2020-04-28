@@ -24,19 +24,19 @@ class ToolbarPlugin
     /**
      * @var \Magento\Framework\UrlInterface
      */
-    private $urlInterface;
+    private $url;
 
     /**
      * ToolbarPlugin constructor.
      * @param \Magento\Framework\AuthorizationInterface $authorization
-     * @param \Magento\Framework\UrlInterface $urlInterface
+     * @param \Magento\Framework\UrlInterface $url
      */
     public function __construct(
         \Magento\Framework\AuthorizationInterface $authorization,
-        \Magento\Framework\UrlInterface $urlInterface
+        \Magento\Framework\UrlInterface $url
     ) {
         $this->authorization = $authorization;
-        $this->urlInterface = $urlInterface;
+        $this->url = $url;
     }
 
     /**
@@ -91,6 +91,6 @@ class ToolbarPlugin
      */
     private function isAllowed(): bool
     {
-        return (bool)$this->authorization->isAllowed('Magento_LoginAsCustomerUi::login_button');
+        return (bool)$this->authorization->isAllowed('Magento_LoginAsCustomer::login_button');
     }
 }
