@@ -14,7 +14,7 @@ use Magento\Signifyd\Model\SignifydGateway\Request\CreateCaseBuilderInterface;
  *
  * Encapsulates interaction with Signifyd API.
  *
- * @deprecated Starting from Magento 2.3.5 Signifyd core integration is deprecated in favor of
+ * @deprecated 100.3.5 Starting from Magento 2.3.5 Signifyd core integration is deprecated in favor of
  * official Signifyd integration available on the marketplace
  */
 class Gateway
