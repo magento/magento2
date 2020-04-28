@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -6,15 +6,15 @@
 
 namespace Magento\Setup\Test\Unit\Model;
 
-use \Magento\Setup\Model\StoreConfigurationDataMapper;
-
 use Magento\Backend\Model\Url;
 use Magento\Directory\Helper\Data;
-use Magento\Directory\Model\Currency;
-use Magento\Setup\Module\Setup;
-use Magento\Store\Model\Store;
 
-class StoreConfigurationDataMapperTest extends \PHPUnit\Framework\TestCase
+use Magento\Directory\Model\Currency;
+use Magento\Setup\Model\StoreConfigurationDataMapper;
+use Magento\Store\Model\Store;
+use PHPUnit\Framework\TestCase;
+
+class StoreConfigurationDataMapperTest extends TestCase
 {
     /**
      * @param array $data
@@ -35,8 +35,7 @@ class StoreConfigurationDataMapperTest extends \PHPUnit\Framework\TestCase
     public function getConfigDataDataProvider()
     {
         return [
-            'valid' =>
-            [
+            'valid' => [
                 [
                     StoreConfigurationDataMapper::KEY_ADMIN_USE_SECURITY_KEY => '1',
                     StoreConfigurationDataMapper::KEY_BASE_URL => 'http://127.0.0.1/',
@@ -88,8 +87,7 @@ class StoreConfigurationDataMapperTest extends \PHPUnit\Framework\TestCase
                     Url::XML_PATH_USE_SECURE_KEY => '1',
                 ],
             ],
-            'no trailing slash' =>
-            [
+            'no trailing slash' => [
                 [
                     StoreConfigurationDataMapper::KEY_ADMIN_USE_SECURITY_KEY => '1',
                     StoreConfigurationDataMapper::KEY_BASE_URL => 'http://127.0.0.1',
@@ -115,8 +113,7 @@ class StoreConfigurationDataMapperTest extends \PHPUnit\Framework\TestCase
                     Url::XML_PATH_USE_SECURE_KEY => '1',
                 ],
             ],
-            'no trailing slash, alphabet url' =>
-                [
+            'no trailing slash, alphabet url' => [
                     [
                         StoreConfigurationDataMapper::KEY_ADMIN_USE_SECURITY_KEY => '1',
                         StoreConfigurationDataMapper::KEY_BASE_URL => 'http://example.com',

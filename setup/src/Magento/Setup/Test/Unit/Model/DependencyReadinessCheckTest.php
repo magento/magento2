@@ -1,31 +1,38 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Setup\Test\Unit\Model;
 
+use Magento\Composer\RequireUpdateDryRunCommand;
+use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Composer\ComposerJsonFinder;
+use Magento\Framework\Composer\MagentoComposerApplicationFactory;
+use Magento\Framework\Filesystem\Driver\File;
 use Magento\Setup\Model\DependencyReadinessCheck;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class DependencyReadinessCheckTest extends \PHPUnit\Framework\TestCase
+class DependencyReadinessCheckTest extends TestCase
 {
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\Composer\ComposerJsonFinder
+     * @var MockObject|ComposerJsonFinder
      */
     private $composerJsonFinder;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\App\Filesystem\DirectoryList
+     * @var MockObject|DirectoryList
      */
     private $directoryList;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Composer\RequireUpdateDryRunCommand
+     * @var MockObject|RequireUpdateDryRunCommand
      */
     private $reqUpdDryRunCommand;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\Filesystem\Driver\File
+     * @var MockObject|File
      */
     private $file;
 
@@ -34,19 +41,19 @@ class DependencyReadinessCheckTest extends \PHPUnit\Framework\TestCase
      */
     private $dependencyReadinessCheck;
 
-    protected function setUp(): void
+    public function setUp(): void
     {
         $this->composerJsonFinder =
-            $this->createMock(\Magento\Framework\Composer\ComposerJsonFinder::class);
+            $this->createMock(ComposerJsonFinder::class);
         $this->composerJsonFinder->expects($this->once())->method('findComposerJson')->willReturn('composer.json');
         $this->directoryList =
-            $this->createMock(\Magento\Framework\App\Filesystem\DirectoryList::class);
+            $this->createMock(DirectoryList::class);
         $this->directoryList->expects($this->exactly(2))->method('getPath')->willReturn('var');
         $this->reqUpdDryRunCommand =
-            $this->createMock(\Magento\Composer\RequireUpdateDryRunCommand::class);
-        $this->file = $this->createMock(\Magento\Framework\Filesystem\Driver\File::class);
+            $this->createMock(RequireUpdateDryRunCommand::class);
+        $this->file = $this->createMock(File::class);
         $this->file->expects($this->once())->method('copy')->with('composer.json', 'var/composer.json');
-        $composerAppFactory = $this->createMock(\Magento\Framework\Composer\MagentoComposerApplicationFactory::class);
+        $composerAppFactory = $this->createMock(MagentoComposerApplicationFactory::class);
         $composerAppFactory->expects($this->once())
             ->method('createRequireUpdateDryRunCommand')
             ->willReturn($this->reqUpdDryRunCommand);

@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -7,13 +7,16 @@
 namespace Magento\Setup\Test\Unit\Model\FixtureGenerator;
 
 use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Setup\Model\FixtureGenerator\SqlCollector;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Collect insert queries for quick entity generation
  */
-class SqlCollectorTest extends \PHPUnit\Framework\TestCase
+class SqlCollectorTest extends TestCase
 {
     /**
      * @var SqlCollector
@@ -21,7 +24,7 @@ class SqlCollectorTest extends \PHPUnit\Framework\TestCase
     private $unit;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     private $resourceConnection;
 
@@ -38,7 +41,7 @@ class SqlCollectorTest extends \PHPUnit\Framework\TestCase
 
     public function testGetEmptySql()
     {
-        $connection = $this->getMockBuilder(\Magento\Framework\DB\Adapter\AdapterInterface::class)
+        $connection = $this->getMockBuilder(AdapterInterface::class)
             ->setMethods(['getProfiler'])
             ->getMockForAbstractClass();
         $profiler = $this->getMockBuilder(\Zend_Db_Profiler::class)
@@ -55,7 +58,7 @@ class SqlCollectorTest extends \PHPUnit\Framework\TestCase
 
     public function testGetEmptySqlWhenSelectQueryProcessed()
     {
-        $connection = $this->getMockBuilder(\Magento\Framework\DB\Adapter\AdapterInterface::class)
+        $connection = $this->getMockBuilder(AdapterInterface::class)
             ->setMethods(['getProfiler'])
             ->getMockForAbstractClass();
         $profiler = $this->getMockBuilder(\Zend_Db_Profiler::class)
@@ -74,7 +77,7 @@ class SqlCollectorTest extends \PHPUnit\Framework\TestCase
 
     public function testGetSql()
     {
-        $connection = $this->getMockBuilder(\Magento\Framework\DB\Adapter\AdapterInterface::class)
+        $connection = $this->getMockBuilder(AdapterInterface::class)
             ->setMethods(['getProfiler'])
             ->getMockForAbstractClass();
         $profiler = $this->getMockBuilder(\Zend_Db_Profiler::class)

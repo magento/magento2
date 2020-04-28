@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -6,12 +6,13 @@
 
 namespace Magento\Setup\Test\Unit\Module\Di\Code\Scanner;
 
-use \Magento\Setup\Module\Di\Code\Scanner\ServiceDataAttributesScanner;
+use Magento\Setup\Module\Di\Code\Scanner\ServiceDataAttributesScanner;
+use PHPUnit\Framework\TestCase;
 
-class ServiceDataAttributesScannerTest extends \PHPUnit\Framework\TestCase
+class ServiceDataAttributesScannerTest extends TestCase
 {
     /**
-     * @var \Magento\Setup\Module\Di\Code\Scanner\ServiceDataAttributesScanner
+     * @var ServiceDataAttributesScanner
      */
     protected $model;
 

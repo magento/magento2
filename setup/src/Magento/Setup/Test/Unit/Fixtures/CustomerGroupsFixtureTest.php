@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -11,14 +11,18 @@ use Magento\Customer\Api\Data\GroupInterfaceFactory;
 use Magento\Customer\Api\GroupRepositoryInterface;
 use Magento\Customer\Model\ResourceModel\Group\CollectionFactory;
 use Magento\Setup\Fixtures\CustomerGroupsFixture;
+use Magento\Setup\Fixtures\FixtureModel;
+use Magento\Setup\Fixtures\IndexersStatesApplyFixture;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test Customer Groups generation
  */
-class CustomerGroupsFixtureTest extends \PHPUnit\Framework\TestCase
+class CustomerGroupsFixtureTest extends TestCase
 {
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Setup\Fixtures\FixtureModel
+     * @var MockObject|FixtureModel
      */
     private $fixtureModelMock;
 
@@ -43,20 +47,20 @@ class CustomerGroupsFixtureTest extends \PHPUnit\Framework\TestCase
     private $groupDataObjectMock;
 
     /**
-     * @var \Magento\Setup\Fixtures\IndexersStatesApplyFixture
+     * @var IndexersStatesApplyFixture
      */
     private $model;
 
     public function testExecute()
     {
-        $this->fixtureModelMock = $this->getMockBuilder(\Magento\Setup\Fixtures\FixtureModel::class)
+        $this->fixtureModelMock = $this->getMockBuilder(FixtureModel::class)
             ->disableOriginalConstructor()
             ->getMock();
 
         //Mock repository for customer groups
         $this->groupRepositoryMock = $this->getMockBuilder(GroupRepositoryInterface::class)
             ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+            ->getMock();
 
         //Mock for customer groups collection
         $this->groupCollectionFactoryMock = $this->getMockBuilder(CollectionFactory::class)
@@ -109,7 +113,7 @@ class CustomerGroupsFixtureTest extends \PHPUnit\Framework\TestCase
         $this->fixtureModelMock
             ->expects($this->once())
             ->method('getValue')
-            ->willReturn(1);
+            ->will($this->returnValue(1));
 
         $this->model = new CustomerGroupsFixture(
             $this->fixtureModelMock,

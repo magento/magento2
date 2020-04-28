@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -6,26 +6,31 @@
 
 namespace Magento\Setup\Test\Unit\Controller;
 
-use \Magento\Setup\Controller\SelectVersion;
-use \Magento\Setup\Controller\ResponseTypeInterface;
+use Laminas\View\Model\JsonModel;
+use Laminas\View\Model\ViewModel;
+use Magento\Setup\Controller\ResponseTypeInterface;
+use Magento\Setup\Controller\SelectVersion;
+use Magento\Setup\Model\SystemPackage;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class SelectVersionTest extends \PHPUnit\Framework\TestCase
+class SelectVersionTest extends TestCase
 {
     /**
-     * @var \Magento\Setup\Model\SystemPackage|\PHPUnit\Framework\MockObject\MockObject
+     * @var SystemPackage|MockObject
      */
     private $systemPackage;
 
     /**
      * Controller
      *
-     * @var \Magento\Setup\Controller\SelectVersion
+     * @var SelectVersion
      */
     private $controller;
 
-    protected function setUp(): void
+    public function setUp(): void
     {
-        $this->systemPackage = $this->createMock(\Magento\Setup\Model\SystemPackage::class);
+        $this->systemPackage = $this->createMock(SystemPackage::class);
         $this->controller = new SelectVersion(
             $this->systemPackage
         );
@@ -34,7 +39,7 @@ class SelectVersionTest extends \PHPUnit\Framework\TestCase
     public function testIndexAction()
     {
         $viewModel = $this->controller->indexAction();
-        $this->assertInstanceOf(\Laminas\View\Model\ViewModel::class, $viewModel);
+        $this->assertInstanceOf(ViewModel::class, $viewModel);
         $this->assertTrue($viewModel->terminate());
     }
 
@@ -50,7 +55,7 @@ class SelectVersionTest extends \PHPUnit\Framework\TestCase
                 ]
             ]);
         $jsonModel = $this->controller->systemPackageAction();
-        $this->assertInstanceOf(\Laminas\View\Model\JsonModel::class, $jsonModel);
+        $this->assertInstanceOf(JsonModel::class, $jsonModel);
         $variables = $jsonModel->getVariables();
         $this->assertArrayHasKey('responseType', $variables);
         $this->assertEquals(ResponseTypeInterface::RESPONSE_TYPE_SUCCESS, $variables['responseType']);
@@ -62,7 +67,7 @@ class SelectVersionTest extends \PHPUnit\Framework\TestCase
             ->method('getPackageVersions')
             ->will($this->throwException(new \Exception("Test error message")));
         $jsonModel = $this->controller->systemPackageAction();
-        $this->assertInstanceOf(\Laminas\View\Model\JsonModel::class, $jsonModel);
+        $this->assertInstanceOf(JsonModel::class, $jsonModel);
         $variables = $jsonModel->getVariables();
         $this->assertArrayHasKey('responseType', $variables);
         $this->assertEquals(ResponseTypeInterface::RESPONSE_TYPE_ERROR, $variables['responseType']);
@@ -80,7 +85,7 @@ class SelectVersionTest extends \PHPUnit\Framework\TestCase
                 ]
             ]);
         $jsonModel = $this->controller->installedSystemPackageAction();
-        $this->assertInstanceOf(\Laminas\View\Model\JsonModel::class, $jsonModel);
+        $this->assertInstanceOf(JsonModel::class, $jsonModel);
         $variables = $jsonModel->getVariables();
         $this->assertArrayHasKey('responseType', $variables);
         $this->assertEquals(ResponseTypeInterface::RESPONSE_TYPE_SUCCESS, $variables['responseType']);

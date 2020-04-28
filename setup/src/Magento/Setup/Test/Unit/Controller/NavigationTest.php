@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -6,14 +6,19 @@
 
 namespace Magento\Setup\Test\Unit\Controller;
 
-use \Magento\Setup\Controller\Navigation;
+use Laminas\View\Model\JsonModel;
+use Laminas\View\Model\ViewModel;
+use Magento\Setup\Controller\Navigation;
+use Magento\Setup\Model\Cron\Status;
 use Magento\Setup\Model\Navigation as NavModel;
 use Magento\Setup\Model\ObjectManagerProvider;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class NavigationTest extends \PHPUnit\Framework\TestCase
+class NavigationTest extends TestCase
 {
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Setup\Model\Navigation
+     * @var MockObject|\Magento\Setup\Model\Navigation
      */
     private $navigationModel;
 
@@ -23,21 +28,21 @@ class NavigationTest extends \PHPUnit\Framework\TestCase
     private $controller;
 
     /**
-     * @var \Magento\Setup\Model\Cron\Status|\PHPUnit\Framework\MockObject\MockObject
+     * @var Status|MockObject
      */
     private $status;
 
     /**
-     * @var \Magento\Setup\Model\ObjectManagerProvider|\PHPUnit\Framework\MockObject\MockObject
+     * @var ObjectManagerProvider|MockObject
      */
     private $objectManagerProvider;
 
-    protected function setUp(): void
+    public function setUp(): void
     {
         $this->navigationModel = $this->createMock(\Magento\Setup\Model\Navigation::class);
-        $this->status = $this->createMock(\Magento\Setup\Model\Cron\Status::class);
+        $this->status = $this->createMock(Status::class);
         $this->objectManagerProvider =
-            $this->createMock(\Magento\Setup\Model\ObjectManagerProvider::class);
+            $this->createMock(ObjectManagerProvider::class);
         $this->controller = new Navigation($this->navigationModel, $this->status, $this->objectManagerProvider);
     }
 
@@ -46,14 +51,14 @@ class NavigationTest extends \PHPUnit\Framework\TestCase
         $this->navigationModel->expects($this->once())->method('getData')->willReturn('some data');
         $viewModel = $this->controller->indexAction();
 
-        $this->assertInstanceOf(\Laminas\View\Model\JsonModel::class, $viewModel);
+        $this->assertInstanceOf(JsonModel::class, $viewModel);
         $this->assertArrayHasKey('nav', $viewModel->getVariables());
     }
 
     public function testMenuActionUpdater()
     {
         $viewModel = $this->controller->menuAction();
-        $this->assertInstanceOf(\Laminas\View\Model\ViewModel::class, $viewModel);
+        $this->assertInstanceOf(ViewModel::class, $viewModel);
         $variables = $viewModel->getVariables();
         $this->assertArrayHasKey('menu', $variables);
         $this->assertArrayHasKey('main', $variables);
@@ -64,7 +69,7 @@ class NavigationTest extends \PHPUnit\Framework\TestCase
     public function testMenuActionInstaller()
     {
         $viewModel = $this->controller->menuAction();
-        $this->assertInstanceOf(\Laminas\View\Model\ViewModel::class, $viewModel);
+        $this->assertInstanceOf(ViewModel::class, $viewModel);
         $variables = $viewModel->getVariables();
         $this->assertArrayHasKey('menu', $variables);
         $this->assertArrayHasKey('main', $variables);
@@ -76,7 +81,7 @@ class NavigationTest extends \PHPUnit\Framework\TestCase
     {
         $this->navigationModel->expects($this->once())->method('getType')->willReturn(NavModel::NAV_INSTALLER);
         $viewModel = $this->controller->headerBarAction();
-        $this->assertInstanceOf(\Laminas\View\Model\ViewModel::class, $viewModel);
+        $this->assertInstanceOf(ViewModel::class, $viewModel);
         $variables = $viewModel->getVariables();
         $this->assertArrayHasKey('menu', $variables);
         $this->assertArrayHasKey('main', $variables);
@@ -88,7 +93,7 @@ class NavigationTest extends \PHPUnit\Framework\TestCase
     {
         $this->navigationModel->expects($this->once())->method('getType')->willReturn(NavModel::NAV_UPDATER);
         $viewModel = $this->controller->headerBarAction();
-        $this->assertInstanceOf(\Laminas\View\Model\ViewModel::class, $viewModel);
+        $this->assertInstanceOf(ViewModel::class, $viewModel);
         $variables = $viewModel->getVariables();
         $this->assertArrayHasKey('menu', $variables);
         $this->assertArrayHasKey('main', $variables);

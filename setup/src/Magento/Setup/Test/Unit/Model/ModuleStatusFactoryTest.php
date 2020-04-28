@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -6,9 +6,14 @@
 
 namespace Magento\Setup\Test\Unit\Model;
 
+use Magento\Framework\Module\Status;
+use Magento\Framework\ObjectManagerInterface;
 use Magento\Setup\Model\ModuleStatusFactory;
+use Magento\Setup\Model\ObjectManagerProvider;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class ModuleStatusFactoryTest extends \PHPUnit\Framework\TestCase
+class ModuleStatusFactoryTest extends TestCase
 {
     /**
      * @var ModuleStatusFactory
@@ -16,20 +21,20 @@ class ModuleStatusFactoryTest extends \PHPUnit\Framework\TestCase
     private $moduleStatusFactory;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Setup\Model\ObjectManagerProvider
+     * @var MockObject|ObjectManagerProvider
      */
     private $objectManagerProvider;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\ObjectManagerInterface
+     * @var MockObject|ObjectManagerInterface
      */
     private $objectManager;
 
-    protected function setUp(): void
+    public function setUp(): void
     {
-        $this->objectManagerProvider = $this->createMock(\Magento\Setup\Model\ObjectManagerProvider::class);
+        $this->objectManagerProvider = $this->createMock(ObjectManagerProvider::class);
         $this->objectManager = $this->getMockForAbstractClass(
-            \Magento\Framework\ObjectManagerInterface::class,
+            ObjectManagerInterface::class,
             [],
             '',
             false
@@ -41,7 +46,7 @@ class ModuleStatusFactoryTest extends \PHPUnit\Framework\TestCase
         $this->objectManagerProvider->expects($this->once())->method('get')->willReturn($this->objectManager);
         $this->objectManager->expects($this->once())
             ->method('get')
-            ->with(\Magento\Framework\Module\Status::class);
+            ->with(Status::class);
         $this->moduleStatusFactory = new ModuleStatusFactory($this->objectManagerProvider);
         $this->moduleStatusFactory->create();
     }

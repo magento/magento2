@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -16,17 +16,19 @@ use Magento\Sales\Model\ResourceModel\Order;
 use Magento\Setup\Fixtures\FixtureModel;
 use Magento\Setup\Fixtures\OrdersFixture;
 use Magento\Store\Model\StoreManagerInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class OrdersFixtureTest extends \PHPUnit\Framework\TestCase
+class OrdersFixtureTest extends TestCase
 {
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|FixtureModel
+     * @var MockObject|FixtureModel
      */
     private $fixtureModelMock;
 
     /**
-     * @var \Magento\Setup\Fixtures\OrdersFixture
+     * @var OrdersFixture
      */
     private $model;
 

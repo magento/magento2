@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -6,29 +6,36 @@
 
 namespace Magento\Setup\Test\Unit\Module\I18n\Parser;
 
+use Magento\Setup\Module\I18n\Dictionary\Phrase;
+use Magento\Setup\Module\I18n\Factory;
+use Magento\Setup\Module\I18n\FilesCollector;
+use Magento\Setup\Module\I18n\Parser\AbstractParser;
+use Magento\Setup\Module\I18n\Parser\AdapterInterface;
 use Magento\Setup\Module\I18n\Parser as Parser;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class ParserTest extends \PHPUnit\Framework\TestCase
+class ParserTest extends TestCase
 {
     /**
-     * @var \Magento\Setup\Module\I18n\Parser\AbstractParser|\PHPUnit\Framework\MockObject\MockObject
+     * @var AbstractParser|MockObject
      */
     protected $parser;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Setup\Module\I18n\FilesCollector
+     * @var MockObject|FilesCollector
      */
     protected $filesCollector;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Setup\Module\I18n\Factory
+     * @var MockObject|Factory
      */
     protected $factory;
 
     protected function setUp(): void
     {
-        $this->filesCollector = $this->createMock(\Magento\Setup\Module\I18n\FilesCollector::class);
-        $this->factory = $this->createMock(\Magento\Setup\Module\I18n\Factory::class);
+        $this->filesCollector = $this->createMock(FilesCollector::class);
+        $this->factory = $this->createMock(Factory::class);
 
         $this->parser = new Parser\Parser($this->filesCollector, $this->factory);
     }
@@ -46,8 +53,8 @@ class ParserTest extends \PHPUnit\Framework\TestCase
     public function testAddPhrase($options, $phpFiles, $jsFiles, $phpMap, $jsMap, $phraseFactoryMap, $expectedResult)
     {
         // 1. Create mocks
-        $phpAdapter = new AdapterStub;
-        $jsAdapter = new AdapterStub;
+        $phpAdapter = new AdapterStub();
+        $jsAdapter = new AdapterStub();
 
         // 2. Set mocks
         $this->parser->addAdapter('php', $phpAdapter);
@@ -65,10 +72,10 @@ class ParserTest extends \PHPUnit\Framework\TestCase
         //4. Set expectations
         $this->filesCollector->expects($this->any())
             ->method('getFiles')
-            ->willReturnMap([
+            ->will($this->returnValueMap([
                 [$options[0]['paths'], '', $phpFiles],
                 [$options[1]['paths'], '', $jsFiles],
-            ]);
+            ]));
 
         $result = $this->parser->parse($options);
         $this->assertEquals($expectedResult, $result);
@@ -79,14 +86,14 @@ class ParserTest extends \PHPUnit\Framework\TestCase
      */
     public function addPhraseDataProvider()
     {
-        $phraseMock1 = $this->createMock(\Magento\Setup\Module\I18n\Dictionary\Phrase::class);
-        $phraseMock2 = $this->createMock(\Magento\Setup\Module\I18n\Dictionary\Phrase::class);
-        $phraseMock3 = $this->createMock(\Magento\Setup\Module\I18n\Dictionary\Phrase::class);
-        $phraseMock4 = $this->createMock(\Magento\Setup\Module\I18n\Dictionary\Phrase::class);
-        $phraseMock5 = $this->createMock(\Magento\Setup\Module\I18n\Dictionary\Phrase::class);
-        $phraseMock6 = $this->createMock(\Magento\Setup\Module\I18n\Dictionary\Phrase::class);
-        $phraseMock7 = $this->createMock(\Magento\Setup\Module\I18n\Dictionary\Phrase::class);
-        $phraseMock8 = $this->createMock(\Magento\Setup\Module\I18n\Dictionary\Phrase::class);
+        $phraseMock1 = $this->createMock(Phrase::class);
+        $phraseMock2 = $this->createMock(Phrase::class);
+        $phraseMock3 = $this->createMock(Phrase::class);
+        $phraseMock4 = $this->createMock(Phrase::class);
+        $phraseMock5 = $this->createMock(Phrase::class);
+        $phraseMock6 = $this->createMock(Phrase::class);
+        $phraseMock7 = $this->createMock(Phrase::class);
+        $phraseMock8 = $this->createMock(Phrase::class);
 
         $phraseMock1->expects($this->any())->method('getCompiledPhrase')->willReturn('php phrase111');
         $phraseMock2->expects($this->any())->method('getCompiledPhrase')->willReturn('php phrase112');
@@ -173,7 +180,7 @@ class ParserTest extends \PHPUnit\Framework\TestCase
 }
 
 // @codingStandardsIgnoreStart
-class AdapterStub implements Parser\AdapterInterface
+class AdapterStub implements AdapterInterface
 {
     /**
      * @var string

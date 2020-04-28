@@ -1,21 +1,22 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Setup\Test\Unit\Console;
 
+use Laminas\ServiceManager\ServiceManager;
 use Magento\Framework\Console\GenerationDirectoryAccess;
+use Magento\Framework\Filesystem\Driver\File;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Setup\Console\Command\DiCompileCommand;
-use Magento\Setup\Mvc\Bootstrap\InitParamListener;
-use Magento\Framework\Filesystem\Driver\File;
-use Symfony\Component\Console\Input\ArgvInput;
-use Laminas\ServiceManager\ServiceManager;
 use Magento\Setup\Console\CompilerPreparation;
+use Magento\Setup\Mvc\Bootstrap\InitParamListener;
 use PHPUnit\Framework\MockObject\MockObject as Mock;
+use PHPUnit\Framework\TestCase;
+use Symfony\Component\Console\Input\ArgvInput;
 
-class CompilerPreparationTest extends \PHPUnit\Framework\TestCase
+class CompilerPreparationTest extends TestCase
 {
     /**
      * @var CompilerPreparation|Mock
@@ -45,7 +46,7 @@ class CompilerPreparationTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp(): void
+    public function setUp(): void
     {
         $this->serviceManagerMock = $this->getMockBuilder(ServiceManager::class)
             ->disableOriginalConstructor()

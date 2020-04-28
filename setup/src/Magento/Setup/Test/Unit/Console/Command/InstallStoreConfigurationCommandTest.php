@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -6,58 +6,63 @@
 
 namespace Magento\Setup\Test\Unit\Console\Command;
 
-use Magento\Setup\Console\Command\InstallStoreConfigurationCommand;
-use Symfony\Component\Console\Tester\CommandTester;
-use Magento\Setup\Model\Installer;
+use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\ObjectManagerInterface;
-use Magento\Setup\Model\StoreConfigurationDataMapper;
-use Magento\Framework\Validator\Url as UrlValidator;
+use Magento\Framework\Validator\Currency as CurrencyValidator;
 use Magento\Framework\Validator\Locale as LocaleValidator;
 use Magento\Framework\Validator\Timezone as TimezoneValidator;
-use Magento\Framework\Validator\Currency as CurrencyValidator;
+use Magento\Framework\Validator\Url as UrlValidator;
+use Magento\Setup\Console\Command\InstallStoreConfigurationCommand;
+use Magento\Setup\Model\Installer;
+use Magento\Setup\Model\InstallerFactory;
+use Magento\Setup\Model\ObjectManagerProvider;
+use Magento\Setup\Model\StoreConfigurationDataMapper;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+use Symfony\Component\Console\Tester\CommandTester;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class InstallStoreConfigurationCommandTest extends \PHPUnit\Framework\TestCase
+class InstallStoreConfigurationCommandTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\App\DeploymentConfig|\PHPUnit\Framework\MockObject\MockObject
+     * @var DeploymentConfig|MockObject
      */
     private $deploymentConfig;
 
     /**
-     * @var \Magento\Setup\Model\InstallerFactory|\PHPUnit\Framework\MockObject\MockObject
+     * @var InstallerFactory|MockObject
      */
     private $installerFactory;
 
     /**
-     * @var Installer|\PHPUnit\Framework\MockObject\MockObject
+     * @var Installer|MockObject
      */
     private $installer;
 
     /**
-     * @var ObjectManagerInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var ObjectManagerInterface|MockObject
      */
     private $objectManager;
 
     /**
-     * @var LocaleValidator|\PHPUnit\Framework\MockObject\MockObject
+     * @var LocaleValidator|MockObject
      */
     private $localeValidatorMock;
 
     /**
-     * @var TimezoneValidator|\PHPUnit\Framework\MockObject\MockObject
+     * @var TimezoneValidator|MockObject
      */
     private $timezoneValidatorMock;
 
     /**
-     * @var CurrencyValidator|\PHPUnit\Framework\MockObject\MockObject
+     * @var CurrencyValidator|MockObject
      */
     private $currencyValidatorMock;
 
     /**
-     * @var UrlValidator|\PHPUnit\Framework\MockObject\MockObject
+     * @var UrlValidator|MockObject
      */
     private $urlValidatorMock;
 
@@ -73,12 +78,12 @@ class InstallStoreConfigurationCommandTest extends \PHPUnit\Framework\TestCase
         $this->timezoneValidatorMock = $this->createMock(TimezoneValidator::class);
         $this->currencyValidatorMock = $this->createMock(CurrencyValidator::class);
 
-        $this->installerFactory = $this->createMock(\Magento\Setup\Model\InstallerFactory::class);
-        $this->deploymentConfig = $this->createMock(\Magento\Framework\App\DeploymentConfig::class);
-        $this->installer = $this->createMock(\Magento\Setup\Model\Installer::class);
-        $objectManagerProvider = $this->createMock(\Magento\Setup\Model\ObjectManagerProvider::class);
+        $this->installerFactory = $this->createMock(InstallerFactory::class);
+        $this->deploymentConfig = $this->createMock(DeploymentConfig::class);
+        $this->installer = $this->createMock(Installer::class);
+        $objectManagerProvider = $this->createMock(ObjectManagerProvider::class);
         $this->objectManager = $this->getMockForAbstractClass(
-            \Magento\Framework\ObjectManagerInterface::class,
+            ObjectManagerInterface::class,
             [],
             '',
             false
@@ -99,12 +104,12 @@ class InstallStoreConfigurationCommandTest extends \PHPUnit\Framework\TestCase
     {
         $this->deploymentConfig->expects($this->once())
             ->method('isAvailable')
-            ->willReturn(true);
+            ->will($this->returnValue(true));
         $this->installer->expects($this->once())
             ->method('installUserConfig');
         $this->installerFactory->expects($this->once())
             ->method('create')
-            ->willReturn($this->installer);
+            ->will($this->returnValue($this->installer));
         $tester = new CommandTester($this->command);
         $tester->execute([]);
     }
@@ -113,7 +118,7 @@ class InstallStoreConfigurationCommandTest extends \PHPUnit\Framework\TestCase
     {
         $this->deploymentConfig->expects($this->once())
             ->method('isAvailable')
-            ->willReturn(false);
+            ->will($this->returnValue(false));
         $this->installerFactory->expects($this->never())
             ->method('create');
         $tester = new CommandTester($this->command);
@@ -138,7 +143,7 @@ class InstallStoreConfigurationCommandTest extends \PHPUnit\Framework\TestCase
 
         $this->deploymentConfig->expects($this->once())
             ->method('isAvailable')
-            ->willReturn(true);
+            ->will($this->returnValue(true));
         $this->installerFactory->expects($this->never())
             ->method('create');
         $commandTester = new CommandTester($this->command);

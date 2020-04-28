@@ -1,26 +1,32 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Setup\Test\Unit\Model\Description;
 
-class MixinManagerTest extends \PHPUnit\Framework\TestCase
+use Magento\Setup\Model\Description\Mixin\DescriptionMixinInterface;
+use Magento\Setup\Model\Description\Mixin\MixinFactory;
+use Magento\Setup\Model\Description\MixinManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class MixinManagerTest extends TestCase
 {
     /**
-     * @var \Magento\Setup\Model\Description\MixinManager
+     * @var MixinManager
      */
     private $mixinManager;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Setup\Model\Description\Mixin\MixinFactory
+     * @var MockObject|MixinFactory
      */
     private $mixinFactoryMock;
 
-    protected function setUp(): void
+    public function setUp(): void
     {
-        $this->mixinFactoryMock = $this->createMock(\Magento\Setup\Model\Description\Mixin\MixinFactory::class);
-        $this->mixinManager = new \Magento\Setup\Model\Description\MixinManager($this->mixinFactoryMock);
+        $this->mixinFactoryMock = $this->createMock(MixinFactory::class);
+        $this->mixinManager = new MixinManager($this->mixinFactoryMock);
     }
 
     public function testApply()
@@ -29,7 +35,7 @@ class MixinManagerTest extends \PHPUnit\Framework\TestCase
         $mixinList = ['x', 'y', 'z'];
 
         $xMixinMock = $this->getMockForAbstractClass(
-            \Magento\Setup\Model\Description\Mixin\DescriptionMixinInterface::class
+            DescriptionMixinInterface::class
         );
         $xMixinMock->expects($this->once())
             ->method('apply')
@@ -37,7 +43,7 @@ class MixinManagerTest extends \PHPUnit\Framework\TestCase
             ->willReturn($description . 'x');
 
         $yMixinMock = $this->getMockForAbstractClass(
-            \Magento\Setup\Model\Description\Mixin\DescriptionMixinInterface::class
+            DescriptionMixinInterface::class
         );
         $yMixinMock->expects($this->once())
             ->method('apply')
@@ -45,7 +51,7 @@ class MixinManagerTest extends \PHPUnit\Framework\TestCase
             ->willReturn($description . 'xy');
 
         $zMixinMock = $this->getMockForAbstractClass(
-            \Magento\Setup\Model\Description\Mixin\DescriptionMixinInterface::class
+            DescriptionMixinInterface::class
         );
         $zMixinMock->expects($this->once())
             ->method('apply')

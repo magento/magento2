@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -6,6 +6,7 @@
 
 namespace Magento\Setup\Test\Unit\Fixtures;
 
+use Magento\Catalog\Model\Category;
 use Magento\Catalog\Model\CategoryFactory;
 use Magento\Catalog\Model\ResourceModel\Category\Collection;
 use Magento\Catalog\Model\ResourceModel\Category\CollectionFactory;
@@ -13,31 +14,33 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Setup\Fixtures\CategoriesFixture;
 use Magento\Setup\Fixtures\FixtureModel;
 use Magento\Store\Model\Store;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class CategoriesFixtureTest extends \PHPUnit\Framework\TestCase
+class CategoriesFixtureTest extends TestCase
 {
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|FixtureModel
+     * @var MockObject|FixtureModel
      */
     private $fixtureModelMock;
 
     /**
-     * @var \Magento\Setup\Fixtures\CategoriesFixture
+     * @var CategoriesFixture
      */
     private $model;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     private $collectionFactoryMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     private $collectionMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     private $categoryFactoryMock;
 
@@ -83,12 +86,12 @@ class CategoriesFixtureTest extends \PHPUnit\Framework\TestCase
         $this->fixtureModelMock
             ->expects($this->exactly(2))
             ->method('getValue')
-            ->willReturnMap($valueMap);
+            ->will($this->returnValueMap($valueMap));
 
         $this->collectionFactoryMock->expects($this->once())->method('create')->willReturn($this->collectionMock);
         $this->collectionMock->expects($this->once())->method('getSize')->willReturn(2);
 
-        $parentCategoryMock = $this->createPartialMock(\Magento\Catalog\Model\Category::class, [
+        $parentCategoryMock = $this->createPartialMock(Category::class, [
                 'getName',
                 'setId',
                 'getId',
@@ -113,7 +116,7 @@ class CategoriesFixtureTest extends \PHPUnit\Framework\TestCase
         $categoryMock->expects($this->once())
             ->method('getName')
             ->with('Category 1')
-            ->willReturn('category_name');
+            ->will($this->returnValue('category_name'));
         $categoryMock->expects($this->once())
             ->method('setId')
             ->willReturnSelf();

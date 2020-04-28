@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -6,16 +6,20 @@
 
 namespace Magento\Setup\Test\Unit\Controller;
 
+use Laminas\View\Model\JsonModel;
+use Laminas\View\Model\ViewModel;
 use Magento\Setup\Controller\ModuleGrid;
 use Magento\Setup\Model\Grid\Module;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test for \Magento\Setup\Controller\ModuleGrid
  */
-class ModuleGridTest extends \PHPUnit\Framework\TestCase
+class ModuleGridTest extends TestCase
 {
     /**
-     * @var Module|\PHPUnit\Framework\MockObject\MockObject
+     * @var Module|MockObject
      */
     private $gridModuleMock;
 
@@ -26,7 +30,7 @@ class ModuleGridTest extends \PHPUnit\Framework\TestCase
      */
     private $controller;
 
-    protected function setUp(): void
+    public function setUp(): void
     {
         $this->gridModuleMock = $this->getMockBuilder(Module::class)
             ->disableOriginalConstructor()
@@ -40,7 +44,7 @@ class ModuleGridTest extends \PHPUnit\Framework\TestCase
     public function testIndexAction()
     {
         $viewModel = $this->controller->indexAction();
-        $this->assertInstanceOf(\Laminas\View\Model\ViewModel::class, $viewModel);
+        $this->assertInstanceOf(ViewModel::class, $viewModel);
         $this->assertTrue($viewModel->terminate());
     }
 
@@ -72,7 +76,7 @@ class ModuleGridTest extends \PHPUnit\Framework\TestCase
             ->willReturn($moduleList);
 
         $jsonModel = $this->controller->modulesAction();
-        $this->assertInstanceOf(\Laminas\View\Model\JsonModel::class, $jsonModel);
+        $this->assertInstanceOf(JsonModel::class, $jsonModel);
         $variables = $jsonModel->getVariables();
         $this->assertArrayHasKey('success', $variables);
         $this->assertTrue($variables['success']);

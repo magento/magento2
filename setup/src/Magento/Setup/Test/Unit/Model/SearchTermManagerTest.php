@@ -1,14 +1,17 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Setup\Test\Unit\Model;
 
-class SearchTermManagerTest extends \PHPUnit\Framework\TestCase
+use Magento\Setup\Model\SearchTermManager;
+use PHPUnit\Framework\TestCase;
+
+class SearchTermManagerTest extends TestCase
 {
     /**
-     * @var \Magento\Setup\Model\SearchTermManager
+     * @var SearchTermManager
      */
     private $searchTermManager;
 
@@ -48,9 +51,9 @@ class SearchTermManagerTest extends \PHPUnit\Framework\TestCase
         ]
     ];
 
-    protected function setUp(): void
+    public function setUp(): void
     {
-        $this->searchTermManager = new \Magento\Setup\Model\SearchTermManager(
+        $this->searchTermManager = new SearchTermManager(
             $this->searchTermConfiguration,
             $this->totalProductsCount
         );

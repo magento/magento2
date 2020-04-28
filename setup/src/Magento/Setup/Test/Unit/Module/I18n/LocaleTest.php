@@ -1,21 +1,19 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Setup\Test\Unit\Module\I18n;
 
-use \Magento\Setup\Module\I18n\Locale;
+use Magento\Setup\Module\I18n\Locale;
+use PHPUnit\Framework\TestCase;
 
-class LocaleTest extends \PHPUnit\Framework\TestCase
+class LocaleTest extends TestCase
 {
-    /**
-     */
     public function testWrongLocaleFormatException()
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException('InvalidArgumentException');
         $this->expectExceptionMessage('Target locale must match the following format: "aa_AA".');
-
         new Locale('wrong_locale');
     }
 

@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -24,7 +24,7 @@ class UninstallCollectorTest extends \PHPUnit\Framework\TestCase
      */
     private $result;
 
-    protected function setUp(): void
+    public function setUp(): void
     {
         $objectManagerProvider = $this->createMock(\Magento\Setup\Model\ObjectManagerProvider::class);
         $objectManager =
@@ -48,11 +48,11 @@ class UninstallCollectorTest extends \PHPUnit\Framework\TestCase
         $uninstallB = 'Uninstall Class B';
         $objectManager->expects($this->any())
             ->method('create')
-            ->willReturnMap(
-                [
+            ->will(
+                $this->returnValueMap([
                     ['Magento\A\Setup\Uninstall', [], $uninstallA],
                     ['Magento\B\Setup\Uninstall', [], $uninstallB],
-                ]
+                ])
             );
         $setupFactory = $this->createMock(\Magento\Setup\Module\DataSetupFactory::class);
         $setupFactory->expects($this->once())->method('create')->willReturn($setup);

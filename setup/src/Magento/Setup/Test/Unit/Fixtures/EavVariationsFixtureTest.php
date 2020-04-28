@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -7,58 +7,64 @@
 namespace Magento\Setup\Test\Unit\Fixtures;
 
 use Magento\Catalog\Model\Product;
+use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
 use Magento\Catalog\Model\ResourceModel\Eav\AttributeFactory;
 use Magento\Eav\Model\Config;
 use Magento\Eav\Model\Entity\Attribute\Set;
 use Magento\Framework\App\CacheInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Setup\Fixtures\EavVariationsFixture;
 use Magento\Setup\Fixtures\FixtureModel;
+use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Unit test for \Magento\Setup\Fixtures\EavVariationsFixture.
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class EavVariationsFixtureTest extends \PHPUnit\Framework\TestCase
+class EavVariationsFixtureTest extends TestCase
 {
     /**
-     * @var FixtureModel|\PHPUnit\Framework\MockObject\MockObject
+     * @var FixtureModel|MockObject
      */
     private $fixtureModelMock;
 
     /**
-     * @var \Magento\Setup\Fixtures\EavVariationsFixture
+     * @var EavVariationsFixture
      */
     private $model;
 
     /**
-     * @var StoreManager|\PHPUnit\Framework\MockObject\MockObject
+     * @var StoreManager|MockObject
      */
     private $storeManagerMock;
 
     /**
-     * @var Set|\PHPUnit\Framework\MockObject\MockObject
+     * @var Set|MockObject
      */
     private $attributeSetMock;
 
     /**
-     * @var CacheInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var CacheInterface|MockObject
      */
     private $cacheMock;
 
     /**
-     * @var Config|\PHPUnit\Framework\MockObject\MockObject
+     * @var Config|MockObject
      */
     private $eavConfigMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     private $attributeFactoryMock;
 
     /**
      * @inheritdoc
      */
-    protected function setUp(): void
+    public function setUp(): void
     {
         $this->fixtureModelMock = $this->getMockBuilder(FixtureModel::class)
             ->disableOriginalConstructor()->getMock();
@@ -69,12 +75,12 @@ class EavVariationsFixtureTest extends \PHPUnit\Framework\TestCase
         $this->attributeSetMock = $this->getMockBuilder(Set::class)
             ->disableOriginalConstructor()->getMock();
         $this->cacheMock = $this->getMockBuilder(CacheInterface::class)
-            ->disableOriginalConstructor()->getMockForAbstractClass();
+            ->disableOriginalConstructor()->getMock();
         $this->attributeFactoryMock = $this->getMockBuilder(AttributeFactory::class)
             ->setMethods(['create'])
             ->disableOriginalConstructor()->getMock();
 
-        $this->model = (new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this))->getObject(
+        $this->model = (new ObjectManager($this))->getObject(
             EavVariationsFixture::class,
             [
                 'fixtureModel' => $this->fixtureModelMock,
@@ -121,13 +127,13 @@ class EavVariationsFixtureTest extends \PHPUnit\Framework\TestCase
                 ['configurable_products_variation', 3, 1],
             ]);
 
-        $storeMock = $this->getMockBuilder(\Magento\Store\Model\Store::class)
+        $storeMock = $this->getMockBuilder(Store::class)
             ->disableOriginalConstructor()->getMock();
         $this->storeManagerMock->expects($this->once())->method('getStores')->willReturn([$storeId => $storeMock]);
         $this->attributeSetMock->expects($this->once())->method('load')->willReturnSelf();
         $this->attributeSetMock->expects($this->once())->method('getDefaultGroupId')->willReturn(2);
 
-        $attributeMock = $this->getMockBuilder(\Magento\Catalog\Model\ResourceModel\Eav\Attribute::class)
+        $attributeMock = $this->getMockBuilder(Attribute::class)
             ->setMethods([
                 'setAttributeSetId',
                 'setAttributeGroupId',

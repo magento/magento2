@@ -1,34 +1,40 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Setup\Test\Unit\Model\Description\Mixin;
 
-class ItalicMixinTest extends \PHPUnit\Framework\TestCase
+use Magento\Setup\Model\Description\Mixin\Helper\RandomWordSelector;
+use Magento\Setup\Model\Description\Mixin\Helper\WordWrapper;
+use Magento\Setup\Model\Description\Mixin\ItalicMixin;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class ItalicMixinTest extends TestCase
 {
     /**
-     * @var \Magento\Setup\Model\Description\Mixin\ItalicMixin
+     * @var ItalicMixin
      */
     private $mixin;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Setup\Model\Description\Mixin\Helper\RandomWordSelector
+     * @var MockObject|RandomWordSelector
      */
     private $randomWordSelectorMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Setup\Model\Description\Mixin\Helper\WordWrapper
+     * @var MockObject|WordWrapper
      */
     private $wordWrapperMock;
 
-    protected function setUp(): void
+    public function setUp(): void
     {
         $this->randomWordSelectorMock =
-            $this->createMock(\Magento\Setup\Model\Description\Mixin\Helper\RandomWordSelector::class);
-        $this->wordWrapperMock = $this->createMock(\Magento\Setup\Model\Description\Mixin\Helper\WordWrapper::class);
+            $this->createMock(RandomWordSelector::class);
+        $this->wordWrapperMock = $this->createMock(WordWrapper::class);
 
-        $this->mixin = new \Magento\Setup\Model\Description\Mixin\ItalicMixin(
+        $this->mixin = new ItalicMixin(
             $this->randomWordSelectorMock,
             $this->wordWrapperMock
         );

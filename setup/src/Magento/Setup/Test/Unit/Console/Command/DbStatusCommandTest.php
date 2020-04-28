@@ -1,24 +1,25 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Setup\Test\Unit\Console\Command;
 
+use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\Console\Cli;
 use Magento\Framework\Module\DbVersionInfo;
+use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Setup\UpToDateValidatorInterface;
 use Magento\Setup\Console\Command\DbStatusCommand;
-use Magento\Framework\App\DeploymentConfig;
 use Magento\Setup\Model\ObjectManagerProvider;
-use Magento\Framework\ObjectManagerInterface;
 use PHPUnit\Framework\MockObject\MockObject as Mock;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Tester\CommandTester;
 
 /**
  * @inheritdoc
  */
-class DbStatusCommandTest extends \PHPUnit\Framework\TestCase
+class DbStatusCommandTest extends TestCase
 {
     /**
      * @var DbVersionInfo|Mock
@@ -66,7 +67,7 @@ class DbStatusCommandTest extends \PHPUnit\Framework\TestCase
 
         $objectManagerProvider->expects($this->any())
             ->method('get')
-            ->willReturn($objectManager);
+            ->will($this->returnValue($objectManager));
         $objectManager->expects(self::exactly(4))
             ->method('get')
             ->willReturnOnConsecutiveCalls(
@@ -94,7 +95,7 @@ class DbStatusCommandTest extends \PHPUnit\Framework\TestCase
             ->willReturn(true);
         $this->deploymentConfig->expects($this->once())
             ->method('isAvailable')
-            ->willReturn(true);
+            ->will($this->returnValue(true));
         $tester = new CommandTester($this->command);
         $tester->execute([]);
         $this->assertStringMatchesFormat('All modules are up to date.', $tester->getDisplay());
@@ -105,7 +106,7 @@ class DbStatusCommandTest extends \PHPUnit\Framework\TestCase
     {
         $this->deploymentConfig->expects($this->once())
             ->method('isAvailable')
-            ->willReturn(false);
+            ->will($this->returnValue(false));
         $tester = new CommandTester($this->command);
         $tester->execute([]);
 

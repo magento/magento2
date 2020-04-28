@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -6,18 +6,21 @@
 namespace Magento\Setup\Test\Unit\Module\Dependency\Parser\Composer;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Setup\Module\Dependency\Parser\Composer\Json;
+use Magento\Setup\Module\Dependency\Parser\Config\Xml;
+use PHPUnit\Framework\TestCase;
 
-class JsonTest extends \PHPUnit\Framework\TestCase
+class JsonTest extends TestCase
 {
     /**
-     * @var \Magento\Setup\Module\Dependency\Parser\Config\Xml
+     * @var Xml
      */
     protected $parser;
 
     protected function setUp(): void
     {
         $objectManagerHelper = new ObjectManager($this);
-        $this->parser = $objectManagerHelper->getObject(\Magento\Setup\Module\Dependency\Parser\Composer\Json::class);
+        $this->parser = $objectManagerHelper->getObject(Json::class);
     }
 
     /**
@@ -26,9 +29,8 @@ class JsonTest extends \PHPUnit\Framework\TestCase
      */
     public function testParseWithWrongOptionFilesForParse($options)
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException('InvalidArgumentException');
         $this->expectExceptionMessage('Parse error: Option "files_for_parse" is wrong.');
-
         $this->parser->parse($options);
     }
 

@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -13,29 +13,28 @@ use Magento\Setup\Console\Command\MaintenanceEnableCommand;
 use Magento\Setup\Model\Cron\JobSetMaintenanceMode;
 use Magento\Setup\Model\Cron\Status;
 use Magento\Setup\Model\ObjectManagerProvider;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Output\OutputInterface;
 
-/**
- * Class JobSetMaintenanceModeTest
- */
-class JobSetMaintenanceModeTest extends \PHPUnit\Framework\TestCase
+class JobSetMaintenanceModeTest extends TestCase
 {
     /**
-     * @var Status|\PHPUnit\Framework\MockObject\MockObject
+     * @var Status|MockObject
      */
     private $statusMock;
 
     /**
-     * @var OutputInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var OutputInterface|MockObject
      */
     private $outputMock;
 
     /**
-     * @var ObjectManagerProvider|\PHPUnit\Framework\MockObject\MockObject
+     * @var ObjectManagerProvider|MockObject
      */
     private $objectManagerProviderMock;
 
-    protected function setUp(): void
+    public function setUp(): void
     {
         $this->objectManagerProviderMock = $this->createMock(ObjectManagerProvider::class);
         $objectManager = $this->getMockForAbstractClass(ObjectManagerInterface::class, [], '', false);
@@ -46,11 +45,11 @@ class JobSetMaintenanceModeTest extends \PHPUnit\Framework\TestCase
             [Cache::class, $cache],
 
         ];
-        $objectManager->expects($this->atLeastOnce())->method('get')->willReturnMap($valueMap);
+        $objectManager->expects($this->atLeastOnce())->method('get')->will($this->returnValueMap($valueMap));
         $this->objectManagerProviderMock->expects($this->once())->method('get')->willReturn($objectManager);
 
         $this->statusMock = $this->createMock(Status::class);
-        $this->outputMock = $this->getMockForAbstractClass(OutputInterface::class);
+        $this->outputMock = $this->createMock(OutputInterface::class);
     }
 
     public function testExecuteMaintenanceModeDisable()
@@ -70,12 +69,10 @@ class JobSetMaintenanceModeTest extends \PHPUnit\Framework\TestCase
 
     /**
      * Test MaintenanceModeDisable job execution when maintenance mode is set manually by admin
-     *
      */
     public function testExecuteMaintenanceModeDisableExeption()
     {
-        $this->expectException(\RuntimeException::class);
-
+        $this->expectException('RuntimeException');
         $command = $this->createMock(MaintenanceDisableCommand::class);
         $command->expects($this->once())->method('isSetAddressInfo')->willReturn(true);
         $command->expects($this->never())->method('run');

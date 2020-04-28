@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -6,34 +6,38 @@
 namespace Magento\Setup\Test\Unit\Module\Dependency\Report\Dependency\Data;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Setup\Module\Dependency\Report\Dependency\Data\Dependency;
+use Magento\Setup\Module\Dependency\Report\Dependency\Data\Module;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class ModuleTest extends \PHPUnit\Framework\TestCase
+class ModuleTest extends TestCase
 {
     /**
-     * @var \Magento\Setup\Module\Dependency\Report\Dependency\Data\Dependency|\PHPUnit\Framework\MockObject\MockObject
+     * @var Dependency|MockObject
      */
     protected $dependencyFirst;
 
     /**
-     * @var \Magento\Setup\Module\Dependency\Report\Dependency\Data\Dependency|\PHPUnit\Framework\MockObject\MockObject
+     * @var Dependency|MockObject
      */
     protected $dependencySecond;
 
     /**
-     * @var \Magento\Setup\Module\Dependency\Report\Dependency\Data\Module
+     * @var Module
      */
     protected $module;
 
-    protected function setUp(): void
+    public function setUp(): void
     {
         $this->dependencyFirst =
-            $this->createMock(\Magento\Setup\Module\Dependency\Report\Dependency\Data\Dependency::class);
+            $this->createMock(Dependency::class);
         $this->dependencySecond =
-            $this->createMock(\Magento\Setup\Module\Dependency\Report\Dependency\Data\Dependency::class);
+            $this->createMock(Dependency::class);
 
         $objectManagerHelper = new ObjectManager($this);
         $this->module = $objectManagerHelper->getObject(
-            \Magento\Setup\Module\Dependency\Report\Dependency\Data\Module::class,
+            Module::class,
             ['name' => 'name', 'dependencies' => [$this->dependencyFirst, $this->dependencySecond]]
         );
     }
@@ -55,10 +59,10 @@ class ModuleTest extends \PHPUnit\Framework\TestCase
 
     public function testGetHardDependenciesCount()
     {
-        $this->dependencyFirst->expects($this->once())->method('isHard')->willReturn(true);
+        $this->dependencyFirst->expects($this->once())->method('isHard')->will($this->returnValue(true));
         $this->dependencyFirst->expects($this->never())->method('isSoft');
 
-        $this->dependencySecond->expects($this->once())->method('isHard')->willReturn(false);
+        $this->dependencySecond->expects($this->once())->method('isHard')->will($this->returnValue(false));
         $this->dependencySecond->expects($this->never())->method('isSoft');
 
         $this->assertEquals(1, $this->module->getHardDependenciesCount());
@@ -67,10 +71,10 @@ class ModuleTest extends \PHPUnit\Framework\TestCase
     public function testGetSoftDependenciesCount()
     {
         $this->dependencyFirst->expects($this->never())->method('isHard');
-        $this->dependencyFirst->expects($this->once())->method('isSoft')->willReturn(true);
+        $this->dependencyFirst->expects($this->once())->method('isSoft')->will($this->returnValue(true));
 
         $this->dependencySecond->expects($this->never())->method('isHard');
-        $this->dependencySecond->expects($this->once())->method('isSoft')->willReturn(false);
+        $this->dependencySecond->expects($this->once())->method('isSoft')->will($this->returnValue(false));
 
         $this->assertEquals(1, $this->module->getSoftDependenciesCount());
     }

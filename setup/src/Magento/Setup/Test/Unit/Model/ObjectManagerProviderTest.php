@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -13,32 +13,34 @@ use Magento\Framework\ObjectManagerInterface;
 use Magento\Setup\Model\Bootstrap;
 use Magento\Setup\Model\ObjectManagerProvider;
 use Magento\Setup\Mvc\Bootstrap\InitParamListener;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Command\Command;
 
 /**
  * Test for \Magento\Setup\Model\ObjectManagerProvider
  */
-class ObjectManagerProviderTest extends \PHPUnit\Framework\TestCase
+class ObjectManagerProviderTest extends TestCase
 {
     /**
-     * @var ServiceLocatorInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var ServiceLocatorInterface|MockObject
      */
     private $serviceLocatorMock;
 
     /**
-     * @var Bootstrap|\PHPUnit\Framework\MockObject\MockObject
+     * @var Bootstrap|MockObject
      */
     private $bootstrapMock;
 
     /**
-     * @var ObjectManagerProvider|\PHPUnit\Framework\MockObject\MockObject
+     * @var ObjectManagerProvider|MockObject
      */
     private $model;
 
-    protected function setUp(): void
+    public function setUp(): void
     {
-        $this->serviceLocatorMock = $this->getMockForAbstractClass(ServiceLocatorInterface::class);
+        $this->serviceLocatorMock = $this->createMock(ServiceLocatorInterface::class);
         $this->bootstrapMock = $this->createMock(Bootstrap::class);
 
         $this->model = new ObjectManagerProvider($this->serviceLocatorMock, $this->bootstrapMock);
@@ -69,12 +71,12 @@ class ObjectManagerProviderTest extends \PHPUnit\Framework\TestCase
                 ]
             );
 
-        $commandListMock = $this->getMockForAbstractClass(CommandListInterface::class);
+        $commandListMock = $this->createMock(CommandListInterface::class);
         $commandListMock->expects($this->once())
             ->method('getCommands')
             ->willReturn($commands);
 
-        $objectManagerMock = $this->getMockForAbstractClass(ObjectManagerInterface::class);
+        $objectManagerMock = $this->createMock(ObjectManagerInterface::class);
         $objectManagerMock->expects($this->once())
             ->method('create')
             ->with(CommandListInterface::class)
