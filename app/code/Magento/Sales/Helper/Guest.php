@@ -253,7 +253,7 @@ class Guest extends \Magento\Framework\App\Helper\AbstractHelper
         if (!$this->compareStoredBillingDataWithInput($order, $postData)) {
             throw new InputException(__('You entered incorrect data. Please try again.'));
         }
-        $toCookie = base64_encode($order->getProtectCode() . ':' . $postData['oar_order_id']);
+        $toCookie = base64_encode($order->getProtectCode() . ':' . trim($postData['oar_order_id']));
         $this->setGuestViewCookie($toCookie);
         return $order;
     }
