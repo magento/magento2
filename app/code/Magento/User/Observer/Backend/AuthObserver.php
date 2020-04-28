@@ -166,14 +166,14 @@ class AuthObserver implements ObserverInterface
         $failuresNum = (int)$user->getFailuresNum() + 1;
         /** @noinspection PhpAssignmentInConditionInspection */
         if ($firstFailureDate = $user->getFirstFailure()) {
-            $firstFailureDate = new \DateTime($firstFailureDate);
+            $firstFailureDate = strtotime($user->getFirstFailure());
         }
 
         $newFirstFailureDate = false;
         $updateLockExpires = false;
         $lockThreshInterval = new \DateInterval('PT' . $lockThreshold.'S');
         // set first failure date when this is first failure or last first failure expired
-        if (1 === $failuresNum || !$firstFailureDate || $now->diff($firstFailureDate) > $lockThreshInterval) {
+        if (1 === $failuresNum || !$firstFailureDate || (\time() - $firstFailureDate) > $lockThreshold) {
             $newFirstFailureDate = $now;
             // otherwise lock user
         } elseif ($failuresNum >= $maxFailures) {
