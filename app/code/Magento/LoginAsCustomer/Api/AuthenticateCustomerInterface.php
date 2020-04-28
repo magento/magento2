@@ -7,17 +7,22 @@ declare(strict_types=1);
 
 namespace Magento\LoginAsCustomer\Api;
 
+use Magento\Framework\Exception\LocalizedException;
+use Magento\LoginAsCustomer\Api\Data\AuthenticationDataInterface;
+
 /**
+ * Authenticate a customer
+ *
  * @api
  */
 interface AuthenticateCustomerInterface
 {
     /**
-     * Authenticate a customer by customer ID
+     * Authenticate a customer
      *
-     * @return bool
-     * @param int $customerId
-     * @param int $adminId
+     * @param AuthenticationDataInterface $authenticationData
+     * @return void
+     * @throws LocalizedException
      */
-    public function execute(int $customerId, int $adminId):bool;
+    public function execute(AuthenticationDataInterface $authenticationData): void;
 }

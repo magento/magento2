@@ -9,6 +9,8 @@ namespace Magento\LoginAsCustomerSales\Plugin;
 
 use Magento\Customer\Model\Session as CustomerSession;
 use Magento\Checkout\Model\Session as CheckoutSession;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\LoginAsCustomer\Api\Data\AuthenticationDataInterface;
 use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\LoginAsCustomer\Api\AuthenticateCustomerInterface;
 
@@ -51,54 +53,44 @@ class AuthenticateCustomer
      * Remove all items from guest shopping cart
      *
      * @param AuthenticateCustomerInterface $subject
-     * @param int $customerId
-     * @param int $adminId
-     * @throws \Magento\Framework\Exception\LocalizedException
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @param AuthenticationDataInterface $authenticationData
+     * @return null
+     * @throws LocalizedException
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function beforeExecute(
         AuthenticateCustomerInterface $subject,
-        int $customerId,
-        int $adminId
+        AuthenticationDataInterface $authenticationData
     ) {
         if (!$this->customerSession->getId()) {
             $quote = $this->checkoutSession->getQuote();
             /* Remove items from guest cart */
-            foreach ($quote->getAllVisibleItems() as $item) {
-                $quote->removeItem($item->getId());
-            }
-            $this->quoteRepository->save($quote);
+            $quote->removeAllItems();
         }
+        return null;
     }
 
     /**
-     * Mark customer cart as not guest
+     * Mark customer cart as not-guest
      *
-     * @param int $adminId
      * @param AuthenticateCustomerInterface $subject
-     * @param bool $result
-     * @param int $customerId
-     * @return bool
-     * @throws \Magento\Framework\Exception\LocalizedException
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @param null $result
+     * @param AuthenticationDataInterface $authenticationData
+     * @return void
+     * @throws LocalizedException
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function afterExecute(
         AuthenticateCustomerInterface $subject,
-        bool $result,
-        int $customerId,
-        int $adminId
+        $result,
+        AuthenticationDataInterface $authenticationData
     ) {
-        if ($result) {
-            $this->checkoutSession->loadCustomerQuote();
+        $this->checkoutSession->loadCustomerQuote();
+        $quote = $this->checkoutSession->getQuote();
 
-            $quote = $this->checkoutSession->getQuote();
-            $quote->setCustomerIsGuest(0);
-            $this->quoteRepository->save($quote);
-        }
-        return $result;
+        $quote->setCustomerIsGuest(0);
+        $this->quoteRepository->save($quote);
     }
 }
