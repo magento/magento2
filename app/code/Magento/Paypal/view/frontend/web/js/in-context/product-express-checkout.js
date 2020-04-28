@@ -119,6 +119,7 @@ define([
         /** @inheritdoc */
         afterOnAuthorize: function (res, resolve, reject, actions) {
             this.productAddedToCart = false;
+
             return this._super(res, resolve, reject, actions);
         }
     });
