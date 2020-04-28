@@ -323,7 +323,7 @@ class EmailNotificationTest extends TestCase
             ->withConsecutive([$oldEmail, self::STUB_CUSTOMER_NAME], [$newEmail, self::STUB_CUSTOMER_NAME])
             ->willReturnSelf();
 
-        $transport = $this->createMock(TransportInterface::class);
+        $transport = $this->getMockForAbstractClass(TransportInterface::class);
 
         $this->transportBuilderMock->expects(clone $expects)
             ->method('getTransport')
@@ -813,7 +813,7 @@ class EmailNotificationTest extends TestCase
         string $customerName,
         array $templateVars = []
     ):void {
-        $transportMock = $this->createMock(TransportInterface::class);
+        $transportMock = $this->getMockForAbstractClass(TransportInterface::class);
 
         $this->transportBuilderMock->expects($this->once())
             ->method('setTemplateIdentifier')

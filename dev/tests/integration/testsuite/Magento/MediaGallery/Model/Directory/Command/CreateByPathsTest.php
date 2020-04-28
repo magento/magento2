@@ -36,7 +36,7 @@ class CreateByPathsTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    public function setUp()
+    protected function setUp(): void
     {
         $this->createByPaths = Bootstrap::getObjectManager()->get(CreateDirectoriesByPathsInterface::class);
         $this->mediaDirectoryPath = Bootstrap::getObjectManager()->get(Filesystem::class)
@@ -54,10 +54,11 @@ class CreateByPathsTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @throws \Magento\Framework\Exception\CouldNotSaveException
-     * @expectedException \Magento\Framework\Exception\CouldNotSaveException
      */
     public function testCreateDirectoryThatAlreadyExist(): void
     {
+        $this->expectException(\Magento\Framework\Exception\CouldNotSaveException::class);
+
         $this->createByPaths->execute([self::TEST_DIRECTORY_NAME]);
         $this->assertFileExists($this->mediaDirectoryPath . self::TEST_DIRECTORY_NAME);
         $this->createByPaths->execute([self::TEST_DIRECTORY_NAME]);
@@ -66,11 +67,12 @@ class CreateByPathsTest extends \PHPUnit\Framework\TestCase
     /**
      * @param array $paths
      * @throws \Magento\Framework\Exception\CouldNotSaveException
-     * @expectedException \Magento\Framework\Exception\CouldNotSaveException
      * @dataProvider notAllowedPathsProvider
      */
     public function testCreateDirectoryWithRelativePath(array $paths): void
     {
+        $this->expectException(\Magento\Framework\Exception\CouldNotSaveException::class);
+
         $this->createByPaths->execute($paths);
     }
 
@@ -97,7 +99,7 @@ class CreateByPathsTest extends \PHPUnit\Framework\TestCase
     /**
      * @throws \Magento\Framework\Exception\FileSystemException
      */
-    public static function tearDownAfterClass()
+    public static function tearDownAfterClass(): void
     {
         $filesystem = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
             ->get(\Magento\Framework\Filesystem::class);
