@@ -18,7 +18,7 @@
                     <label>Enable Extension</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
-                <field id="enable_store_view_manual_choice" translate="label comment" type="select" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="store_view_manual_choice_enabled" translate="label comment" type="select" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Store View To Login In</label>
                     <source_model>Magento\LoginAsCustomerUi\Model\Config\Source\StoreViewLogin</source_model>
                     <comment><![CDATA[
