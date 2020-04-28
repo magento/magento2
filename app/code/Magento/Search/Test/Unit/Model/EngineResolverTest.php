@@ -17,22 +17,22 @@ class EngineResolverTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ScopeConfigInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $scopeConfig;
 
     /**
-     * @var string|\PHPUnit_Framework_MockObject_MockObject
+     * @var string|\PHPUnit\Framework\MockObject\MockObject
      */
     private $path;
 
     /**
-     * @var string|\PHPUnit_Framework_MockObject_MockObject
+     * @var string|\PHPUnit\Framework\MockObject\MockObject
      */
     private $scopeType;
 
     /**
-     * @var null|string|\PHPUnit_Framework_MockObject_MockObject
+     * @var null|string|\PHPUnit\Framework\MockObject\MockObject
      */
     private $scopeCode;
 
@@ -42,9 +42,14 @@ class EngineResolverTest extends \PHPUnit\Framework\TestCase
     private $engines = [];
 
     /**
-     * @var LoggerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var LoggerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $loggerMock;
+
+    /**
+     * @var string
+     */
+    private $defaultEngine = 'defaultentengine';
 
     /**
      * Setup
@@ -62,7 +67,7 @@ class EngineResolverTest extends \PHPUnit\Framework\TestCase
         $this->path = 'catalog/search/engine';
         $this->scopeType = 'default';
         $this->scopeCode = null;
-        $this->engines = [EngineResolver::CATALOG_SEARCH_MYSQL_ENGINE, 'anotherengine'];
+        $this->engines = ['defaultentengine', 'anotherengine'];
 
         $this->model = new EngineResolver(
             $this->scopeConfig,
@@ -70,7 +75,8 @@ class EngineResolverTest extends \PHPUnit\Framework\TestCase
             $this->loggerMock,
             $this->path,
             $this->scopeType,
-            $this->scopeCode
+            $this->scopeCode,
+            $this->defaultEngine
         );
     }
 
@@ -91,21 +97,50 @@ class EngineResolverTest extends \PHPUnit\Framework\TestCase
     /**
      * Test getCurrentSearchEngine
      */
-    public function testGetCurrentSearchEngineWithoutEngine()
+    public function testGetCurrentSearchEngineDefaultEngine()
     {
-        $engine = 'nonexistentengine';
+        $configEngine = 'nonexistentengine';
 
         $this->scopeConfig->expects($this->any())
             ->method('getValue')
-            ->willReturn($engine);
+            ->willReturn($configEngine);
 
         $this->loggerMock->expects($this->any())
             ->method('error')
             ->with(
-                $engine . ' search engine doesn\'t exists. Falling back to '
-                . EngineResolver::CATALOG_SEARCH_MYSQL_ENGINE
+                "{$configEngine} search engine doesn't exist. Falling back to {$this->defaultEngine}"
             );
 
-        $this->assertEquals(EngineResolver::CATALOG_SEARCH_MYSQL_ENGINE, $this->model->getCurrentSearchEngine());
+        $this->assertEquals($this->defaultEngine, $this->model->getCurrentSearchEngine());
+    }
+
+    /**
+     * Test getCurrentSearchEngine
+     */
+    public function testGetCurrentSearchEngineDefaultEngineNonExistent()
+    {
+        $configEngine = 'nonexistentengine';
+        $this->defaultEngine = 'nonexistenddefaultengine';
+
+        $this->scopeConfig->expects($this->any())
+            ->method('getValue')
+            ->willReturn($configEngine);
+
+        $this->loggerMock->expects($this->any())
+            ->method('error')
+            ->with(
+                'Default search engine is not configured, fallback is not possible'
+            );
+
+        $model = new EngineResolver(
+            $this->scopeConfig,
+            $this->engines,
+            $this->loggerMock,
+            $this->path,
+            $this->scopeType,
+            $this->scopeCode,
+            $this->defaultEngine
+        );
+        $this->assertEquals($this->defaultEngine, $model->getCurrentSearchEngine());
     }
 }

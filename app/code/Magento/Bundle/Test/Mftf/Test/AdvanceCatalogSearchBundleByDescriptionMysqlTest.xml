@@ -18,6 +18,9 @@
             <testCaseId value="MC-20473"/>
             <group value="Bundle"/>
             <group value="SearchEngineMysql"/>
+            <skip>
+                <issueId value="MC-20539"/>
+            </skip>
         </annotations>
         <before>
             <createData entity="ApiProductWithDescription" stepKey="simple1" before="simple2"/>

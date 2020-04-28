@@ -18,6 +18,9 @@
              <testCaseId value="MC-252"/>
              <group value="Downloadable"/>
              <group value="SearchEngineMysql"/>
+             <skip>
+                 <issueId value="MC-20539"/>
+             </skip>
          </annotations>
          <before>
              <magentoCLI command="downloadable:domains:add example.com static.magento.com" before="product" stepKey="addDownloadableDomain"/>

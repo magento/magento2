@@ -18,6 +18,9 @@
             <testCaseId value="MC-20385"/>
             <group value="Catalog"/>
             <group value="SearchEngineMysql"/>
+            <skip>
+                <issueId value="MC-20539"/>
+            </skip>
         </annotations>
         <before>
             <createData entity="ApiVirtualProductWithDescription" stepKey="product"/>

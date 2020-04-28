@@ -113,6 +113,7 @@
     <type name="Magento\CatalogSearch\Model\Advanced\ProductCollectionPrepareStrategyProvider">
         <arguments>
             <argument name="strategies" xsi:type="array">
+                <item name="default" xsi:type="object">Magento\Elasticsearch\Model\Advanced\ProductCollectionPrepareStrategy</item>
                 <item name="elasticsearch5" xsi:type="object">Magento\Elasticsearch\Model\Advanced\ProductCollectionPrepareStrategy</item>
             </argument>
         </arguments>
@@ -226,6 +227,7 @@
             <argument name="engines" xsi:type="array">
                 <item name="elasticsearch5" xsi:type="string">elasticsearch5</item>
             </argument>
+            <argument name="defaultEngine" xsi:type="string">elasticsearch5</argument>
         </arguments>
     </type>
     <virtualType name="Magento\Elasticsearch\SearchAdapter\ProductEntityMetadata" type="Magento\Framework\Search\EntityMetadata">
