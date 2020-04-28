@@ -12,7 +12,7 @@ use Magento\Framework\Stdlib\DateTime\DateTime;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\LoginAsCustomerApi\Api\ConfigInterface;
 use Magento\LoginAsCustomerApi\Api\Data\AuthenticationDataInterface;
-use Magento\LoginAsCustomerApi\Api\Data\AuthenticationDataInterfaceFactor;
+use Magento\LoginAsCustomerApi\Api\Data\AuthenticationDataInterfaceFactory;
 use Magento\LoginAsCustomerApi\Api\GetAuthenticationDataBySecretInterface;
 
 /**

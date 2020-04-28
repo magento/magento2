@@ -33,7 +33,9 @@ interface AuthenticationDataInterface extends ExtensibleDataInterface
     /**
      * Get extension attributes
      *
-     * @return AuthenticationDataExtensionInterface|null
+     * Fully qualified namespaces is needed for proper work of ccode generation
+     *
+     * @return \Magento\LoginAsCustomerApi\Api\Data\AuthenticationDataExtensionInterface|null
      */
     public function getExtensionAttributes(): ?AuthenticationDataExtensionInterface;
 }

@@ -7,19 +7,19 @@ declare(strict_types=1);
 
 namespace Magento\LoginAsCustomerUi\Controller\Login;
 
+use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Controller\Result\Redirect;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Controller\ResultInterface;
-use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Framework\Message\ManagerInterface;
-use Psr\Log\LoggerInterface;
 use Magento\LoginAsCustomerApi\Api\GetAuthenticationDataBySecretInterface;
 use Magento\LoginAsCustomerApi\Api\AuthenticateCustomerInterface;
 use Magento\LoginAsCustomerApi\Api\DeleteAuthenticationDataBySecretInterface;
+use Psr\Log\LoggerInterface;
 
 /**
  * Login As Customer storefront login action
