@@ -6,15 +6,15 @@
     },
     "require": {
         "php": "~7.1.3||~7.2.0||~7.3.0",
-        "magento/framework": "102.0.*",
-        "magento/module-authorization": "100.3.*",
-        "magento/module-backend": "101.0.*",
-        "magento/module-integration": "100.3.*",
-        "magento/module-store": "101.0.*"
+        "magento/framework": "*",
+        "magento/module-authorization": "*",
+        "magento/module-backend": "*",
+        "magento/module-integration": "*",
+        "magento/module-store": "*"
     },
     "suggest": {
-        "magento/module-user": "101.1.*",
-        "magento/module-customer": "102.0.*"
+        "magento/module-user": "*",
+        "magento/module-customer": "*"
     },
     "type": "magento2-module",
     "license": [
@@ -28,6 +28,5 @@
         "psr-4": {
             "Magento\\Webapi\\": ""
         }
-    },
-    "version": "100.3.4"
+    }
 }

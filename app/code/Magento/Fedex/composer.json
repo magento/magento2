@@ -7,15 +7,15 @@
     "require": {
         "php": "~7.1.3||~7.2.0||~7.3.0",
         "lib-libxml": "*",
-        "magento/framework": "102.0.*",
-        "magento/module-catalog": "103.0.*",
-        "magento/module-catalog-inventory": "100.3.*",
-        "magento/module-config": "101.1.*",
-        "magento/module-directory": "100.3.*",
-        "magento/module-quote": "101.1.*",
-        "magento/module-sales": "102.0.*",
-        "magento/module-shipping": "100.3.*",
-        "magento/module-store": "101.0.*"
+        "magento/framework": "*",
+        "magento/module-catalog": "*",
+        "magento/module-catalog-inventory": "*",
+        "magento/module-config": "*",
+        "magento/module-directory": "*",
+        "magento/module-quote": "*",
+        "magento/module-sales": "*",
+        "magento/module-shipping": "*",
+        "magento/module-store": "*"
     },
     "type": "magento2-module",
     "license": [
@@ -29,6 +29,5 @@
         "psr-4": {
             "Magento\\Fedex\\": ""
         }
-    },
-    "version": "100.3.4"
+    }
 }

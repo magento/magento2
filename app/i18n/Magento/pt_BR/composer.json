@@ -9,13 +9,12 @@
         "sort-packages": true
     },
     "require": {
-        "magento/framework": "102.0.*"
+        "magento/framework": "*"
     },
     "type": "magento2-language",
     "autoload": {
         "files": [
             "registration.php"
         ]
-    },
-    "version": "100.3.4"
+    }
 }

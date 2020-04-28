@@ -6,13 +6,13 @@
     },
     "require": {
         "php": "~7.1.3||~7.2.0||~7.3.0",
-        "magento/framework": "102.0.*",
-        "magento/module-backend": "101.0.*",
-        "magento/module-catalog": "103.0.*",
-        "magento/module-cms": "103.0.*",
-        "magento/module-google-analytics": "100.3.*",
-        "magento/module-store": "101.0.*",
-        "magento/module-ui": "101.1.*"
+        "magento/framework": "*",
+        "magento/module-backend": "*",
+        "magento/module-catalog": "*",
+        "magento/module-cms": "*",
+        "magento/module-google-analytics": "*",
+        "magento/module-store": "*",
+        "magento/module-ui": "*"
     },
     "type": "magento2-module",
     "license": [
@@ -26,6 +26,5 @@
         "psr-4": {
             "Magento\\GoogleOptimizer\\": ""
         }
-    },
-    "version": "100.3.4"
+    }
 }
