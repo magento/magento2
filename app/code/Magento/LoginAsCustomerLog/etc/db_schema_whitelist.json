@@ -1,0 +1,23 @@
+{
+    "magento_login_as_customer_log": {
+        "column": {
+            "log_id": true,
+            "ip": true,
+            "x_forwarded_ip": true,
+            "event_code": true,
+            "time": true,
+            "action": true,
+            "info": true,
+            "status": true,
+            "user": true,
+            "user_id": true,
+            "customer_id": true,
+            "fullaction": true,
+            "error_message": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "MAGENTO_LOGIN_AS_CUSTOMER_LOG_USER_ID_ADMIN_USER_USER_ID": true
+        }
+    }
+}

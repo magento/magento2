@@ -14,6 +14,6 @@
              parent="Magento_Customer::customer"
              sortOrder="40"
              resource="Magento_LoginAsCustomer::login_log"
-             action="loginascustomer"/>
+             action="loginascustomer_log/log/index"/>
     </menu>
 </config>
