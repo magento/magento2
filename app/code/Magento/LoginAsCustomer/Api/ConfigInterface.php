@@ -29,9 +29,9 @@ interface ConfigInterface
     public function isStoreManualChoiceEnabled(): bool;
 
     /**
-     * Gte secrets expiration time (in seconds)
+     * Gte authentication data expiration time (in seconds)
      *
      * @return int
      */
-    public function getSecretExpirationTime(): int;
+    public function getAuthenticationDataExpirationTime(): int;
 }

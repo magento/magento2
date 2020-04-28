@@ -8,15 +8,15 @@ declare(strict_types=1);
 namespace Magento\LoginAsCustomer\Cron;
 
 use Magento\LoginAsCustomer\Api\ConfigInterface;
-use Magento\LoginAsCustomer\Api\DeleteOutdatedSecretsInterface;
+use Magento\LoginAsCustomer\Api\DeleteExpiredAuthenticationDataInterface;
 
 /**
- * @api
+ * elete expired authentication data cron task
  */
-class DeleteOutdatedSecrets implements DeleteOutdatedSecretsInterface
+class DeleteExpiredAuthenticationData
 {
     /**
-     * @var DeleteOutdatedSecretsInterface
+     * @var DeleteExpiredAuthenticationDataInterface
      */
     private $deleteOldSecretsProcessor;
 
@@ -26,11 +26,11 @@ class DeleteOutdatedSecrets implements DeleteOutdatedSecretsInterface
     private $config;
 
     /**
-     * @param DeleteOutdatedSecretsInterface $deleteOldSecretsProcessor
+     * @param DeleteExpiredAuthenticationDataInterface $deleteOldSecretsProcessor
      * @param ConfigInterface $config
      */
     public function __construct(
-        DeleteOutdatedSecretsInterface $deleteOldSecretsProcessor,
+        DeleteExpiredAuthenticationDataInterface $deleteOldSecretsProcessor,
         ConfigInterface $config
     ) {
         $this->deleteOldSecretsProcessor = $deleteOldSecretsProcessor;
@@ -38,9 +38,9 @@ class DeleteOutdatedSecrets implements DeleteOutdatedSecretsInterface
     }
 
     /**
-     * Delete old secret key records
+     * elete expired authentication data
      */
-    public function execute():void
+    public function execute(): void
     {
         if ($this->config->isEnabled()) {
             $this->deleteOldSecretsProcessor->execute();

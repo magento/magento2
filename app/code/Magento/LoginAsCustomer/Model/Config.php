@@ -18,10 +18,12 @@ class Config implements ConfigInterface
     /**
      * Extension config path
      */
-    private const XML_PATH_ENABLED = 'login_as_customer/general/enabled';
+    private const XML_PATH_ENABLED
+        = 'login_as_customer/general/enabled';
     private const XML_PATH_STORE_VIEW_MANUAL_CHOICE_ENABLED
         = 'login_as_customer/general/store_view_manual_choice_enabled';
-    private const XML_PATH_SECRETS_EXPIRATION_TIME = 'login_as_customer/general/secrets_expiration_time';
+    private const XML_PATH_AUTHENTICATION_EXPIRATION_TIME
+        = 'login_as_customer/general/authentication_data_expiration_time';
 
     /**
      * @var ScopeConfigInterface
@@ -56,8 +58,8 @@ class Config implements ConfigInterface
     /**
      * @inheritdoc
      */
-    public function getSecretExpirationTime(): int
+    public function getAuthenticationDataExpirationTime(): int
     {
-        return (int)$this->scopeConfig->getValue(self::XML_PATH_SECRETS_EXPIRATION_TIME);
+        return (int)$this->scopeConfig->getValue(self::XML_PATH_AUTHENTICATION_EXPIRATION_TIME);
     }
 }

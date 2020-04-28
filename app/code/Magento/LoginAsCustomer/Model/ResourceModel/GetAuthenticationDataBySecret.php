@@ -36,7 +36,7 @@ class GetAuthenticationDataBySecret implements GetAuthenticationDataBySecretInte
     private $config;
 
     /**
-     * @var AuthenticationDataInterfaceFactor
+     * @var AuthenticationDataInterfaceFactory
      */
     private $authenticationDataFactory;
 
@@ -66,7 +66,10 @@ class GetAuthenticationDataBySecret implements GetAuthenticationDataBySecretInte
         $connection = $this->resourceConnection->getConnection();
         $tableName = $this->resourceConnection->getTableName('login_as_customer');
 
-        $timePoint = date('Y-m-d H:i:s', $this->dateTime->gmtTimestamp() - $this->config->getSecretExpirationTime());
+        $timePoint = date(
+            'Y-m-d H:i:s',
+            $this->dateTime->gmtTimestamp() - $this->config->getAuthenticationDataExpirationTime()
+        );
 
         $select = $connection->select()
             ->from(['main_table' => $tableName])

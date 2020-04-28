@@ -1,16 +1,14 @@
 {
     "login_as_customer": {
         "column": {
-            "login_id": true,
+            "secret": true,
             "customer_id": true,
             "admin_id": true,
-            "secret": true,
             "created_at": true
         },
         "index": {
-            "LOGIN_AS_CUSTOMER_LOG_CUSTOMER_ID_ADMIN_ID": true,
-            "LOGIN_AS_CUSTOMER_LOG_CUSTOMER_ID": true,
-            "LOGIN_AS_CUSTOMER_LOG_ADMIN_ID": true
+            "LOGIN_AS_CUSTOMER_SECRET_CREATED_AT": true,
+            "LOGIN_AS_CUSTOMER_CREATED_AT": true
         },
         "constraint": {
             "PRIMARY": true

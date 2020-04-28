@@ -10,12 +10,12 @@ namespace Magento\LoginAsCustomer\Model\ResourceModel;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Stdlib\DateTime\DateTime;
 use Magento\LoginAsCustomer\Api\ConfigInterface;
-use Magento\LoginAsCustomer\Api\DeleteOutdatedSecretsInterface;
+use Magento\LoginAsCustomer\Api\DeleteExpiredAuthenticationDataInterface;
 
 /**
  * @inheritdoc
  */
-class DeleteOutdatedSecrets implements DeleteOutdatedSecretsInterface
+class DeleteExpiredAuthenticationData implements DeleteExpiredAuthenticationDataInterface
 {
     /**
      * @var ResourceConnection
@@ -55,7 +55,10 @@ class DeleteOutdatedSecrets implements DeleteOutdatedSecretsInterface
         $connection = $this->resourceConnection->getConnection();
         $tableName = $this->resourceConnection->getTableName('login_as_customer');
 
-        $timePoint = date('Y-m-d H:i:s', $this->dateTime->gmtTimestamp() - $this->config->getSecretExpirationTime());
+        $timePoint = date(
+            'Y-m-d H:i:s',
+            $this->dateTime->gmtTimestamp() - $this->config->getAuthenticationDataExpirationTime()
+        );
 
         $connection->delete(
             $tableName,

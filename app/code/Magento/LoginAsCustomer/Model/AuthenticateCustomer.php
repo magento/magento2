@@ -40,8 +40,8 @@ class AuthenticateCustomer implements AuthenticateCustomerInterface
             $this->customerSession->logout();
         }
 
-        $loggedIn = $this->customerSession->loginById($authenticationData->getCustomerId());
-        if (!$loggedIn) {
+        $result = $this->customerSession->loginById($authenticationData->getCustomerId());
+        if (false === $result) {
             throw new LocalizedException(__('Login was not successful.'));
         }
 
