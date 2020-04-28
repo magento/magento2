@@ -9,6 +9,6 @@ use Magento\Framework\Component\ComponentRegistrar;
 
 ComponentRegistrar::register(
     ComponentRegistrar::MODULE,
-    'Magento_LoginAsCustomerLog',
+    'Magento_LoginAsCustomerPageCache',
     __DIR__
 );
