@@ -5,9 +5,6 @@
  */
 namespace Magento\Search\Model\Adminhtml\System\Config\Source;
 
-use Magento\Framework\App\ObjectManager;
-use Magento\Framework\Search\EngineResolverInterface;
-
 /**
  * All registered search adapters
  *
@@ -24,22 +21,12 @@ class Engine implements \Magento\Framework\Option\ArrayInterface
     private $engines;
 
     /**
-     * Engine Resolver
-     *
-     * @var EngineResolverInterface
-     */
-    private $engineResolver;
-
-    /**
      * @param array $engines
-     * @param EngineResolverInterface|null $engineResolver
      */
     public function __construct(
-        array $engines,
-        EngineResolverInterface $engineResolver = null
+        array $engines
     ) {
         $this->engines = $engines;
-        $this->engineResolver = $engineResolver ?? ObjectManager::getInstance()->get(EngineResolverInterface::class);
     }
 
     /**
@@ -49,9 +36,6 @@ class Engine implements \Magento\Framework\Option\ArrayInterface
     {
         $options = [['value' => null, 'label' => __('--Please Select--')]];
         foreach ($this->engines as $key => $label) {
-            if ($this->engineResolver->getCurrentSearchEngine() === $key) {
-                $label = $label . ' (' . __('Default') . ')';
-            }
             $options[] = ['value' => $key, 'label' => $label];
         }
         return $options;
