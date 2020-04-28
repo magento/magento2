@@ -394,7 +394,12 @@ class TransportBuilder
         }
 
         /** @var \Magento\Framework\Mail\MimePartInterface $mimePart */
-        $mimePart = $this->mimePartInterfaceFactory->create(['content' => $content]);
+        $mimePart = $this->mimePartInterfaceFactory->create(
+        	[
+        		'content' => $content,
+        		'type' => $part['type']
+        	]
+        );
         $this->messageData['encoding'] = $mimePart->getCharset();
         $this->messageData['body'] = $this->mimeMessageInterfaceFactory->create(
             ['parts' => [$mimePart]]
