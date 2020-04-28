@@ -9,12 +9,12 @@
 <entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
     <entity name="LoginAsCustomerConfigDataEnabled">
-        <data key="path">mfloginascustomer/general/enabled</data>
+        <data key="path">login_as_customer/general/enabled</data>
     </entity>
     <entity name="LoginAsCustomerDisablePageCache">
-        <data key="path">mfloginascustomer/general/disable_page_cache</data>
+        <data key="path">login_as_customer/general/disable_page_cache</data>
     </entity>
     <entity name="LoginAsCustomerStoreViewLogin">
-        <data key="path">mfloginascustomer/general/store_view_login</data>
+        <data key="path">login_as_customer/general/store_view_manual_choice_enabled</data>
     </entity>
 </entities>
