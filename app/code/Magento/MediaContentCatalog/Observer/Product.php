@@ -7,14 +7,12 @@ declare(strict_types=1);
 
 namespace Magento\MediaContentCatalog\Observer;
 
-use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Model\Product as CatalogProduct;
-use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
 use Magento\MediaContentApi\Api\UpdateContentAssetLinksInterface;
 use Magento\MediaContentApi\Api\Data\ContentIdentityInterfaceFactory;
-use Magento\MediaContentCatalog\Model\ResourceModel\GetContent;
+use Magento\MediaContentCatalog\Model\ResourceModel\GetProductContent;
 use Magento\Eav\Model\Config;
 
 /**
@@ -43,14 +41,9 @@ class Product implements ObserverInterface
     private $contentIdentityFactory;
 
     /**
-     * @var GetContent
+     * @var GetProductContent
      */
     private $getContent;
-
-    /**
-     * @var MetadataPool
-     */
-    private $metadataPool;
 
     /**
      * @var Config
@@ -61,24 +54,21 @@ class Product implements ObserverInterface
      * * Create links for product content
      *
      * @param ContentIdentityInterfaceFactory $contentIdentityFactory
-     * @param GetContent $getContent
+     * @param GetProductContent $getContent
      * @param UpdateContentAssetLinksInterface $updateContentAssetLinks
-     * @param MetadataPool $metadataPool
      * @param Config $config
      * @param array $fields
      */
     public function __construct(
         ContentIdentityInterfaceFactory $contentIdentityFactory,
-        GetContent $getContent,
+        GetProductContent $getContent,
         UpdateContentAssetLinksInterface $updateContentAssetLinks,
-        MetadataPool $metadataPool,
         Config $config,
         array $fields
     ) {
         $this->contentIdentityFactory = $contentIdentityFactory;
         $this->getContent = $getContent;
         $this->updateContentAssetLinks = $updateContentAssetLinks;
-        $this->metadataPool = $metadataPool;
         $this->config = $config;
         $this->fields = $fields;
     }
@@ -93,9 +83,6 @@ class Product implements ObserverInterface
     {
         $model = $observer->getEvent()->getData('product');
         if ($model instanceof CatalogProduct) {
-            $id = (int) $model->getData(
-                $this->metadataPool->getMetadata(ProductInterface::class)->getLinkField()
-            );
             foreach ($this->fields as $field) {
                 if (!$model->dataHasChangedFor($field)) {
                     continue;
@@ -106,10 +93,10 @@ class Product implements ObserverInterface
                         [
                             self::TYPE => self::CONTENT_TYPE,
                             self::FIELD => $field,
-                            self::ENTITY_ID => (string) $id,
+                            self::ENTITY_ID => (string) $model->getEntityId(),
                         ]
                     ),
-                    $this->getContent->execute($id, $attribute)
+                    $this->getContent->execute((int) $model->getEntityId(), $attribute)
                 );
             }
         }

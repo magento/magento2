@@ -7,14 +7,12 @@ declare(strict_types=1);
 
 namespace Magento\MediaContentCatalog\Observer;
 
-use Magento\Catalog\Api\Data\CategoryInterface;
 use Magento\Catalog\Model\Category as CatalogCategory;
-use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
 use Magento\MediaContentApi\Api\UpdateContentAssetLinksInterface;
 use Magento\MediaContentApi\Api\Data\ContentIdentityInterfaceFactory;
-use Magento\MediaContentCatalog\Model\ResourceModel\GetContent;
+use Magento\MediaContentCatalog\Model\ResourceModel\GetCategoryContent;
 use Magento\Eav\Model\Config;
 
 /**
@@ -43,14 +41,9 @@ class Category implements ObserverInterface
     private $contentIdentityFactory;
 
     /**
-     * @var GetContent
+     * @var GetCategoryContent
      */
     private $getContent;
-
-    /**
-     * @var MetadataPool
-     */
-    private $metadataPool;
 
     /**
      *
@@ -62,16 +55,14 @@ class Category implements ObserverInterface
      * Create links for category content
      *
      * @param ContentIdentityInterfaceFactory $contentIdentityFactory
-     * @param GetContent $getContent
-     * @param MetadataPool $metadataPool
+     * @param GetCategoryContent $getContent
      * @param UpdateContentAssetLinksInterface $updateContentAssetLinks
      * @param Config $config
      * @param array $fields
      */
     public function __construct(
         ContentIdentityInterfaceFactory $contentIdentityFactory,
-        GetContent $getContent,
-        MetadataPool $metadataPool,
+        GetCategoryContent $getContent,
         UpdateContentAssetLinksInterface $updateContentAssetLinks,
         Config $config,
         array $fields
@@ -79,7 +70,6 @@ class Category implements ObserverInterface
         $this->contentIdentityFactory = $contentIdentityFactory;
         $this->getContent = $getContent;
         $this->updateContentAssetLinks = $updateContentAssetLinks;
-        $this->metadataPool = $metadataPool;
         $this->fields = $fields;
         $this->config = $config;
     }
@@ -95,9 +85,6 @@ class Category implements ObserverInterface
         $model = $observer->getEvent()->getData('category');
 
         if ($model instanceof CatalogCategory) {
-            $id = (int) $model->getData(
-                $this->metadataPool->getMetadata(CategoryInterface::class)->getLinkField()
-            );
             foreach ($this->fields as $field) {
                 if (!$model->dataHasChangedFor($field)) {
                     continue;
@@ -108,10 +95,10 @@ class Category implements ObserverInterface
                         [
                             self::TYPE => self::CONTENT_TYPE,
                             self::FIELD => $field,
-                            self::ENTITY_ID => (string) $id,
+                            self::ENTITY_ID => (string) $model->getEntityId(),
                         ]
                     ),
-                    $this->getContent->execute($id, $attribute)
+                    $this->getContent->execute((int) $model->getEntityId(), $attribute)
                 );
             }
         }

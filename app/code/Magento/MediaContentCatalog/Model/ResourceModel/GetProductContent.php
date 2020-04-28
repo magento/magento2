@@ -8,13 +8,19 @@ declare(strict_types=1);
 namespace Magento\MediaContentCatalog\Model\ResourceModel;
 
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
+use Magento\Catalog\Model\ResourceModel\Product;
 use Magento\Framework\App\ResourceConnection;
 
 /**
  * Get concatenated content for all store views
  */
-class GetContent
+class GetProductContent
 {
+    /**
+     * @var Product
+     */
+    private $productResource;
+
     /**
      * @var ResourceConnection
      */
@@ -22,15 +28,18 @@ class GetContent
 
     /**
      * @param ResourceConnection $resourceConnection
+     * @param Product $productResource
      */
     public function __construct(
-        ResourceConnection $resourceConnection
+        ResourceConnection $resourceConnection,
+        Product $productResource
     ) {
+        $this->productResource = $productResource;
         $this->resourceConnection = $resourceConnection;
     }
 
     /**
-     * Get concatenated content for all store views
+     * Get concatenated product content for all store views
      *
      * @param int $entityId
      * @param AbstractAttribute $attribute
@@ -48,7 +57,7 @@ class GetContent
     }
 
     /**
-     * Load values of an attribute for all store views
+     * Load values of an product attribute for all store views
      *
      * @param int $entityId
      * @param AbstractAttribute $attribute
@@ -57,18 +66,19 @@ class GetContent
     private function getDistinctContent(int $entityId, AbstractAttribute $attribute): array
     {
         $connection = $this->resourceConnection->getConnection();
-
         $select = $connection->select()->from(
             ['abt' => $attribute->getBackendTable()],
             'abt.value'
+        )->joinInner(
+            ['rt' => $this->productResource->getEntityTable()],
+            'rt.' . $attribute->getEntityIdField() . ' = abt.' . $attribute->getEntityIdField()
+        )->where(
+            'rt.entity_id = ?',
+            $entityId
         )->where(
             $connection->quoteIdentifier('abt.attribute_id') . ' = ?',
             (int) $attribute->getAttributeId()
-        )->where(
-            $connection->quoteIdentifier('abt.' . $attribute->getEntityIdField()) . ' = ?',
-            $entityId
-        )->distinct(true);
-
+        );
         return $connection->fetchCol($select);
     }
 }
