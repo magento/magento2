@@ -18,6 +18,9 @@
                 value="Verify admin user can directly login into customer account to Custom store view when Store View To Login In = Manual Choose"/>
             <severity value="CRITICAL"/>
             <group value="login_as_customer"/>
+            <skip>
+                <issueId value="https://github.com/magento/magento2-login-as-customer/issues/102"/>
+            </skip>
         </annotations>
         <before>
             <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
