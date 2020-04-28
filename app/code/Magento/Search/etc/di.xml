@@ -69,4 +69,5 @@
         </arguments>
     </type>
     <preference for="Magento\Search\Setup\InstallConfigInterface" type="Magento\Search\Setup\CompositeInstallConfig"/>
+    <preference for="Magento\Search\Model\SearchEngine\ValidatorInterface" type="Magento\Search\Model\SearchEngine\Validator"/>
 </config>

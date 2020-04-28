@@ -7,65 +7,77 @@ declare(strict_types=1);
 
 namespace Magento\Search\Test\Unit\Setup;
 
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Search\Setup\CompositeInstallConfig;
 use Magento\Search\Setup\InstallConfigInterface;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class CompositeInstallConfigTest extends TestCase
 {
-    public function testConfigure()
-    {
-        $firstInstallConfig = $this->getMockBuilder(InstallConfigInterface::class)->getMock();
-        $secondInstallConfig = $this->getMockBuilder(InstallConfigInterface::class)->getMock();
-        $objectManager = new ObjectManager($this);
+    /**
+     * @var CompositeInstallConfig
+     */
+    private $compositeInstallConfig;
 
-        /** @var CompositeInstallConfig $compositeInstallConfig */
-        $compositeInstallConfig = $objectManager->getObject(
+    /**
+     * @var InstallConfigInterface|MockObject
+     */
+    private $firstInstallConfigMock;
+
+    /**
+     * @var InstallConfigInterface|MockObject
+     */
+    private $secondInstallConfigMock;
+
+    /**
+     * @var ScopeConfigInterface|MockObject
+     */
+    private $scopeConfigMock;
+
+    protected function setup()
+    {
+        $objectManager = new ObjectManager($this);
+        $this->firstInstallConfigMock = $this->getMockForAbstractClass(InstallConfigInterface::class);
+        $this->secondInstallConfigMock = $this->getMockForAbstractClass(InstallConfigInterface::class);
+        $this->scopeConfigMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
+        $this->compositeInstallConfig = $objectManager->getObject(
             CompositeInstallConfig::class,
             [
+                'scopeConfig' => $this->scopeConfigMock,
                 'installConfigList' => [
-                    'first' => $firstInstallConfig,
-                    'second' => $secondInstallConfig
+                    'first' => $this->firstInstallConfigMock,
+                    'second' => $this->secondInstallConfigMock
                 ]
             ]
         );
+    }
 
+    public function testConfigure()
+    {
         $testInput = [
             'search-engine' => 'second',
             'test-option' => 'testValue'
         ];
 
-        $firstInstallConfig->expects($this->never())->method('configure');
-        $secondInstallConfig->expects($this->once())->method('configure')->with($testInput);
+        $this->firstInstallConfigMock->expects($this->never())->method('configure');
+        $this->secondInstallConfigMock->expects($this->once())->method('configure')->with($testInput);
 
-        $compositeInstallConfig->configure($testInput);
+        $this->compositeInstallConfig->configure($testInput);
     }
 
-    /**
-     * @expectedException \Magento\Framework\Exception\InputException
-     * @expectedExceptionMessage Unable to configure search engine: other-engine
-     */
-    public function testConfigureInvalidSearchEngine()
+    public function testConfigureEmptyInput()
     {
-        $firstInstallConfig = $this->getMockBuilder(InstallConfigInterface::class)->getMockForAbstractClass();
-        $secondInstallConfig = $this->getMockBuilder(InstallConfigInterface::class)->getMockForAbstractClass();
-        $objectManager = new ObjectManager($this);
+        $this->firstInstallConfigMock->expects($this->never())->method('configure');
+        $this->secondInstallConfigMock->expects($this->never())->method('configure');
 
-        /** @var CompositeInstallConfig $compositeInstallConfig */
-        $compositeInstallConfig = $objectManager->getObject(
-            CompositeInstallConfig::class,
-            [
-                'installConfigList' => [
-                    'first' => $firstInstallConfig,
-                    'second' => $secondInstallConfig
-                ]
-            ]
-        );
+        $this->scopeConfigMock
+            ->expects($this->once())
+            ->method('getValue')
+            ->with('catalog/search/engine')
+            ->willReturn('second');
 
-        $compositeInstallConfig->configure([
-            'search-engine' => 'other-engine',
-            'test-option' => 'testValue'
-        ]);
+        $this->compositeInstallConfig->configure([]);
     }
 }

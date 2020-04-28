@@ -70,11 +70,11 @@ class SearchEngineCheck extends AbstractActionController
     /**
      * Check search engine parameter is valid
      *
-     * @param $requestParams
+     * @param array $requestParams
      * @return bool
      * @throws InputException
      */
-    private function isValidSearchEngine($requestParams): bool
+    private function isValidSearchEngine(array $requestParams): bool
     {
         $selectedEngine = $requestParams['engine'] ?? null;
         $availableSearchEngines = $this->searchConfigOptionsList->getAvailableSearchEngineList();

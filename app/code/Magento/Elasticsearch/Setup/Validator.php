@@ -8,11 +8,12 @@ declare(strict_types=1);
 namespace Magento\Elasticsearch\Setup;
 
 use Magento\AdvancedSearch\Model\Client\ClientResolver;
+use Magento\Search\Model\SearchEngine\ValidatorInterface;
 
 /**
  * Validate Elasticsearch connection
  */
-class ConnectionValidator
+class Validator implements ValidatorInterface
 {
     /**
      * @var ClientResolver
@@ -30,16 +31,21 @@ class ConnectionValidator
     /**
      * Checks Elasticsearch Connection
      *
-     * @param string|null $searchEngine if empty, uses the currently configured engine
-     * @return bool true if the connection succeeded, false otherwise
+     * @param array $searchConfig
+     * @return array
      */
-    public function validate(string $searchEngine = null): bool
+    public function validate(array $searchConfig = []): array
     {
+        $errors = [];
+        $searchEngine = $searchConfig['search-engine'] ?? null;
         try {
             $client = $this->clientResolver->create($searchEngine);
-            return $client->testConnection();
+            if (!$client->testConnection()) {
+                $errors[] = 'Elasticsearch connection validation failed';
+            }
         } catch (\Exception $e) {
-            return false;
+            $errors[] = 'Elasticsearch connection validation failed: ' . $e->getMessage();
         }
+        return $errors;
     }
 }

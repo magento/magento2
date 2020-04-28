@@ -243,4 +243,11 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Search\Model\SearchEngine\Validator">
+        <arguments>
+            <argument name="engineValidators" xsi:type="array">
+                <item name="elasticsearch7" xsi:type="object">Magento\Elasticsearch\Setup\Validator</item>
+            </argument>
+        </arguments>
+    </type>
 </config>

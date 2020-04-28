@@ -13,6 +13,7 @@ use Magento\Framework\Setup\ConsoleLogger;
 use Magento\Framework\Setup\Declaration\Schema\DryRunLogger;
 use Magento\Framework\Setup\Declaration\Schema\OperationsExecutor;
 use Magento\Setup\Model\InstallerFactory;
+use Magento\Setup\Model\SearchConfig;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -47,18 +48,26 @@ class UpgradeCommand extends AbstractSetupCommand
     private $appState;
 
     /**
+     * @var SearchConfig
+     */
+    private $searchConfig;
+
+    /**
      * @param InstallerFactory $installerFactory
      * @param DeploymentConfig $deploymentConfig
      * @param AppState|null $appState
+     * @param SearchConfig|null $searchConfig
      */
     public function __construct(
         InstallerFactory $installerFactory,
         DeploymentConfig $deploymentConfig = null,
-        AppState $appState = null
+        AppState $appState = null,
+        SearchConfig $searchConfig = null
     ) {
         $this->installerFactory = $installerFactory;
         $this->deploymentConfig = $deploymentConfig ?: ObjectManager::getInstance()->get(DeploymentConfig::class);
         $this->appState = $appState ?: ObjectManager::getInstance()->get(AppState::class);
+        $this->searchConfig = $searchConfig ?: ObjectManager::getInstance()->get(SearchConfig::class);
         parent::__construct();
     }
 
@@ -117,6 +126,7 @@ class UpgradeCommand extends AbstractSetupCommand
         try {
             $request = $input->getOptions();
             $keepGenerated = $input->getOption(self::INPUT_KEY_KEEP_GENERATED);
+            $this->searchConfig->validateSearchEngine();
             $installer = $this->installerFactory->create(new ConsoleLogger($output));
             $installer->updateModulesSequence($keepGenerated);
             $installer->installSchema($request);
@@ -128,7 +138,9 @@ class UpgradeCommand extends AbstractSetupCommand
                 $arrayInput->setInteractive($input->isInteractive());
                 $result = $importConfigCommand->run($arrayInput, $output);
                 if ($result === \Magento\Framework\Console\Cli::RETURN_FAILURE) {
-                    throw new \Magento\Framework\Exception\RuntimeException(__('%1 failed. See previous output.', ConfigImportCommand::COMMAND_NAME));
+                    throw new \Magento\Framework\Exception\RuntimeException(
+                        __('%1 failed. See previous output.', ConfigImportCommand::COMMAND_NAME)
+                    );
                 }
             }
 
