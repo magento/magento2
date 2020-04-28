@@ -15,7 +15,7 @@ use Magento\Catalog\Model\Category\Toolbar\Config as ToolbarConfig;
 
 class ProductListTest extends TestCase
 {
-    public const STUB_VIEW_MODE = 'grid';
+    const STUB_VIEW_MODE = 'grid';
 
     /**
      * @var ProductList
