@@ -1,51 +1,59 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Setup\Test\Unit\Module\I18n\Pack;
 
-/**
- * Generator test
- */
-class GeneratorTest extends \PHPUnit\Framework\TestCase
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Setup\Module\I18n\Dictionary;
+use Magento\Setup\Module\I18n\Dictionary\Loader\FileInterface;
+use Magento\Setup\Module\I18n\Dictionary\Phrase;
+use Magento\Setup\Module\I18n\Factory;
+use Magento\Setup\Module\I18n\Locale;
+use Magento\Setup\Module\I18n\Pack\Generator;
+use Magento\Setup\Module\I18n\Pack\WriterInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class GeneratorTest extends TestCase
 {
     /**
-     * @var \Magento\Setup\Module\I18n\Dictionary\Loader\FileInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var FileInterface|MockObject
      */
     protected $dictionaryLoaderMock;
 
     /**
-     * @var \Magento\Setup\Module\I18n\Pack\WriterInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var WriterInterface|MockObject
      */
     protected $packWriterMock;
 
     /**
-     * @var \Magento\Setup\Module\I18n\Factory|\PHPUnit_Framework_MockObject_MockObject
+     * @var Factory|MockObject
      */
     protected $factoryMock;
 
     /**
-     * @var \Magento\Setup\Module\I18n\Dictionary|\PHPUnit_Framework_MockObject_MockObject
+     * @var Dictionary|MockObject
      */
     protected $dictionaryMock;
 
     /**
-     * @var \Magento\Setup\Module\I18n\Pack\Generator
+     * @var Generator
      */
     protected $_generator;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->dictionaryLoaderMock =
-            $this->createMock(\Magento\Setup\Module\I18n\Dictionary\Loader\FileInterface::class);
-        $this->packWriterMock = $this->createMock(\Magento\Setup\Module\I18n\Pack\WriterInterface::class);
-        $this->factoryMock = $this->createMock(\Magento\Setup\Module\I18n\Factory::class);
-        $this->dictionaryMock = $this->createMock(\Magento\Setup\Module\I18n\Dictionary::class);
+            $this->createMock(FileInterface::class);
+        $this->packWriterMock = $this->createMock(WriterInterface::class);
+        $this->factoryMock = $this->createMock(Factory::class);
+        $this->dictionaryMock = $this->createMock(Dictionary::class);
 
-        $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $objectManagerHelper = new ObjectManager($this);
         $this->_generator = $objectManagerHelper->getObject(
-            \Magento\Setup\Module\I18n\Pack\Generator::class,
+            Generator::class,
             [
                 'dictionaryLoader' => $this->dictionaryLoaderMock,
                 'packWriter' => $this->packWriterMock,
@@ -60,9 +68,9 @@ class GeneratorTest extends \PHPUnit\Framework\TestCase
         $localeString = 'locale';
         $mode = 'mode';
         $allowDuplicates = true;
-        $localeMock = $this->createMock(\Magento\Setup\Module\I18n\Locale::class);
+        $localeMock = $this->createMock(Locale::class);
 
-        $phrases = [$this->createMock(\Magento\Setup\Module\I18n\Dictionary\Phrase::class)];
+        $phrases = [$this->createMock(Phrase::class)];
         $this->dictionaryMock->expects($this->once())
             ->method('getPhrases')
             ->will($this->returnValue([$phrases]));
@@ -82,17 +90,15 @@ class GeneratorTest extends \PHPUnit\Framework\TestCase
         $this->_generator->generate($dictionaryPath, $localeString, $mode, $allowDuplicates);
     }
 
-    /**
-     * @expectedExceptionMessage No phrases have been found by the specified path.
-     * @expectedException \UnexpectedValueException
-     */
     public function testGenerateEmptyFile()
     {
+        $this->expectException('UnexpectedValueException');
+        $this->expectExceptionMessage('No phrases have been found by the specified path.');
         $dictionaryPath = 'dictionary_path';
         $localeString = 'locale';
         $mode = 'mode';
         $allowDuplicates = true;
-        $localeMock = $this->createMock(\Magento\Setup\Module\I18n\Locale::class);
+        $localeMock = $this->createMock(Locale::class);
 
         $this->factoryMock->expects($this->once())
             ->method('createLocale')
@@ -119,15 +125,15 @@ class GeneratorTest extends \PHPUnit\Framework\TestCase
 
         $allowDuplicates = false;
 
-        $phraseFirstMock = $this->createMock(\Magento\Setup\Module\I18n\Dictionary\Phrase::class);
+        $phraseFirstMock = $this->createMock(Phrase::class);
         $phraseFirstMock->expects($this->once())->method('getPhrase')->will($this->returnValue('phrase1'));
-        $phraseSecondMock = $this->createMock(\Magento\Setup\Module\I18n\Dictionary\Phrase::class);
+        $phraseSecondMock = $this->createMock(Phrase::class);
         $phraseSecondMock->expects($this->once())->method('getPhrase')->will($this->returnValue('phrase2'));
 
         $this->dictionaryLoaderMock->expects($this->any())
             ->method('load')
             ->will($this->returnValue($this->dictionaryMock));
-        $phrases = [$this->createMock(\Magento\Setup\Module\I18n\Dictionary\Phrase::class)];
+        $phrases = [$this->createMock(Phrase::class)];
         $this->dictionaryMock->expects($this->once())
             ->method('getPhrases')
             ->will($this->returnValue([$phrases]));

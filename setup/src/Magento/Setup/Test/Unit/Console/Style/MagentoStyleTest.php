@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -40,7 +40,7 @@ class MagentoStyleTest extends TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $input = new ArrayInput(['name' => 'foo'], new InputDefinition([new InputArgument('name')]));
         $this->testOutput = new TestOutput();

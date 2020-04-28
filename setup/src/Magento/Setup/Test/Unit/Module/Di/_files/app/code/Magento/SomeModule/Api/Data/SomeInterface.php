@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  *
  * Copyright © Magento, Inc. All rights reserved.
@@ -6,7 +6,9 @@
  */
 namespace Magento\SomeModule\Api\Data;
 
-interface SomeInterface extends \Magento\Framework\Api\CustomAttributesDataInterface
+use Magento\Framework\Api\CustomAttributesDataInterface;
+
+interface SomeInterface extends CustomAttributesDataInterface
 {
     /**
      * @return \Magento\Eav\Api\Data\AttributeExtensionInterface|null

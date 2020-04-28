@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -6,12 +6,13 @@
 
 namespace Magento\Setup\Test\Unit\Model;
 
-use \Magento\Setup\Model\PhpInformation;
+use Magento\Setup\Model\PhpInformation;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Tests Magento\Setup\Model\PhpInformation
  */
-class PhpInformationTest extends \PHPUnit\Framework\TestCase
+class PhpInformationTest extends TestCase
 {
     public function testGetRequiredMinimumXDebugNestedLevel()
     {

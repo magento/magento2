@@ -8,11 +8,13 @@ declare(strict_types=1);
 namespace Magento\Setup\Test\Unit\Module\Di\Code\Reader;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Setup\Module\Di\Code\Reader\ClassesScanner;
+use PHPUnit\Framework\TestCase;
 
-class ClassesScannerTest extends \PHPUnit\Framework\TestCase
+class ClassesScannerTest extends TestCase
 {
     /**
-     * @var \Magento\Setup\Module\Di\Code\Reader\ClassesScanner
+     * @var ClassesScanner
      */
     private $model;
 
@@ -24,14 +26,14 @@ class ClassesScannerTest extends \PHPUnit\Framework\TestCase
 
     private $generation;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->generation = realpath(__DIR__ . '/../../_files/var/generation');
         $mock = $this->getMockBuilder(DirectoryList::class)->disableOriginalConstructor()->setMethods(
             ['getPath']
         )->getMock();
         $mock->method('getPath')->willReturn($this->generation);
-        $this->model = new \Magento\Setup\Module\Di\Code\Reader\ClassesScanner([], $mock);
+        $this->model = new ClassesScanner([], $mock);
     }
 
     public function testGetList()

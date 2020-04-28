@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -13,29 +13,28 @@ use Magento\Setup\Console\Command\MaintenanceEnableCommand;
 use Magento\Setup\Model\Cron\JobSetMaintenanceMode;
 use Magento\Setup\Model\Cron\Status;
 use Magento\Setup\Model\ObjectManagerProvider;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Output\OutputInterface;
 
-/**
- * Class JobSetMaintenanceModeTest
- */
-class JobSetMaintenanceModeTest extends \PHPUnit\Framework\TestCase
+class JobSetMaintenanceModeTest extends TestCase
 {
     /**
-     * @var Status|\PHPUnit_Framework_MockObject_MockObject
+     * @var Status|MockObject
      */
     private $statusMock;
 
     /**
-     * @var OutputInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var OutputInterface|MockObject
      */
     private $outputMock;
 
     /**
-     * @var ObjectManagerProvider|\PHPUnit_Framework_MockObject_MockObject
+     * @var ObjectManagerProvider|MockObject
      */
     private $objectManagerProviderMock;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->objectManagerProviderMock = $this->createMock(ObjectManagerProvider::class);
         $objectManager = $this->getMockForAbstractClass(ObjectManagerInterface::class, [], '', false);
@@ -70,11 +69,10 @@ class JobSetMaintenanceModeTest extends \PHPUnit\Framework\TestCase
 
     /**
      * Test MaintenanceModeDisable job execution when maintenance mode is set manually by admin
-     *
-     * @expectedException \RuntimeException
      */
     public function testExecuteMaintenanceModeDisableExeption()
     {
+        $this->expectException('RuntimeException');
         $command = $this->createMock(MaintenanceDisableCommand::class);
         $command->expects($this->once())->method('isSetAddressInfo')->willReturn(true);
         $command->expects($this->never())->method('run');

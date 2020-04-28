@@ -1,20 +1,23 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Setup\Test\Unit\Model\Description\Mixin\Helper;
 
-class WordWrapperTest extends \PHPUnit\Framework\TestCase
+use Magento\Setup\Model\Description\Mixin\Helper\WordWrapper;
+use PHPUnit\Framework\TestCase;
+
+class WordWrapperTest extends TestCase
 {
     /**
-     * @var \Magento\Setup\Model\Description\Mixin\Helper\WordWrapper
+     * @var WordWrapper
      */
     private $wrapper;
 
-    public function setUp()
+    public function setUp(): void
     {
-        $this->wrapper = new \Magento\Setup\Model\Description\Mixin\Helper\WordWrapper();
+        $this->wrapper = new WordWrapper();
     }
 
     /**

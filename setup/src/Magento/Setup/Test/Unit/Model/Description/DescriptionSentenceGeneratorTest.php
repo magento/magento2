@@ -1,19 +1,24 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Setup\Test\Unit\Model\Description;
 
-class DescriptionSentenceGeneratorTest extends \PHPUnit\Framework\TestCase
+use Magento\Setup\Model\Description\DescriptionSentenceGenerator;
+use Magento\Setup\Model\Dictionary;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class DescriptionSentenceGeneratorTest extends TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Setup\Model\Dictionary
+     * @var MockObject|Dictionary
      */
     private $dictionaryMock;
 
     /**
-     * @var \Magento\Setup\Model\Description\DescriptionSentenceGenerator
+     * @var DescriptionSentenceGenerator
      */
     private $sentenceGenerator;
 
@@ -27,10 +32,10 @@ class DescriptionSentenceGeneratorTest extends \PHPUnit\Framework\TestCase
         ]
     ];
 
-    public function setUp()
+    public function setUp(): void
     {
-        $this->dictionaryMock = $this->createMock(\Magento\Setup\Model\Dictionary::class);
-        $this->sentenceGenerator = new \Magento\Setup\Model\Description\DescriptionSentenceGenerator(
+        $this->dictionaryMock = $this->createMock(Dictionary::class);
+        $this->sentenceGenerator = new DescriptionSentenceGenerator(
             $this->dictionaryMock,
             $this->sentenceConfig
         );

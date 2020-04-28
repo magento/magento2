@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -15,16 +15,16 @@ class UninstallCollectorTest extends \PHPUnit\Framework\TestCase
     private $collector;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\DB\Adapter\AdapterInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\DB\Adapter\AdapterInterface
      */
     private $adapterInterface;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\DB\Select
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\DB\Select
      */
     private $result;
 
-    public function setUp()
+    public function setUp(): void
     {
         $objectManagerProvider = $this->createMock(\Magento\Setup\Model\ObjectManagerProvider::class);
         $objectManager =

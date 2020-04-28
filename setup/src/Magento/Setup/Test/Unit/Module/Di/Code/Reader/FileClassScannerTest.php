@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -8,8 +8,9 @@ namespace Magento\Setup\Test\Unit\Module\Di\Code\Reader;
 use Magento\Setup\Module\Di\Code\Reader\FileClassScanner;
 use Magento\Setup\Module\Di\Code\Reader\InvalidFileException;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class FileClassScannerTest extends \PHPUnit\Framework\TestCase
+class FileClassScannerTest extends TestCase
 {
     public function testInvalidFileThrowsException()
     {
@@ -22,7 +23,8 @@ class FileClassScannerTest extends \PHPUnit\Framework\TestCase
         $scanner = $this->getScannerMockObject();
         $scanner->expects(self::once())
             ->method('getFileContents')
-            ->willReturn(<<<PHP
+            ->willReturn(
+                <<<PHP
 <?php
 
 echo 'hello world';
@@ -31,7 +33,7 @@ if (class_exists('some_class')) {
     \$object = new some_class();
 }
 PHP
-        );
+            );
         /** @var $scanner FileClassScanner */
 
         $result = $scanner->getClassName();
@@ -43,14 +45,15 @@ PHP
         $scanner = $this->getScannerMockObject();
         $scanner->expects(self::once())
             ->method('getFileContents')
-            ->willReturn(<<<PHP
+            ->willReturn(
+                <<<PHP
 <?php
 
 class ThisIsATest {
 
 }
 PHP
-        );
+            );
 
         /** @var $scanner FileClassScanner */
         $result = $scanner->getClassName();
@@ -62,7 +65,8 @@ PHP
         $scanner = $this->getScannerMockObject();
         $scanner->expects(self::once())
             ->method('getFileContents')
-            ->willReturn(<<<PHP
+            ->willReturn(
+                <<<PHP
 <?php
 
 namespace NS;
@@ -71,7 +75,7 @@ class ThisIsMyTest {
 
 }
 PHP
-        );
+            );
 
         /** @var $scanner FileClassScanner */
         $result = $scanner->getClassName();
@@ -83,7 +87,8 @@ PHP
         $scanner = $this->getScannerMockObject();
         $scanner->expects(self::once())
             ->method('getFileContents')
-            ->willReturn(<<<PHP
+            ->willReturn(
+                <<<PHP
 <?php
 
 namespace This\Is\My\Ns;
@@ -101,7 +106,7 @@ class ThisIsMyTest {
     }
 }
 PHP
-        );
+            );
 
         /** @var $scanner FileClassScanner */
         $result = $scanner->getClassName();
@@ -113,7 +118,8 @@ PHP
         $scanner = $this->getScannerMockObject();
         $scanner->expects(self::once())
             ->method('getFileContents')
-            ->willReturn(<<<PHP
+            ->willReturn(
+                <<<PHP
 <?php
 
 namespace This\Is\My\Ns;
@@ -137,7 +143,7 @@ class ThisIsForBreaking {
 }
 
 PHP
-        );
+            );
 
         /** @var $scanner FileClassScanner */
         $result = $scanner->getClassName();
@@ -150,7 +156,8 @@ PHP
         $scanner = $this->getScannerMockObject();
         $scanner->expects(self::once())
             ->method('getFileContents')
-            ->willReturn(<<<PHP
+            ->willReturn(
+                <<<PHP
 <?php
 
 namespace This\Is\My\Ns {
@@ -179,7 +186,7 @@ namespace This\Is\Not\My\Ns {
 }
 
 PHP
-        );
+            );
 
         /** @var $scanner FileClassScanner */
         $result = $scanner->getClassName();
@@ -192,7 +199,8 @@ PHP
         $scanner = $this->getScannerMockObject();
         $scanner->expects(self::once())
             ->method('getFileContents')
-            ->willReturn(<<<'PHP'
+            ->willReturn(
+                <<<'PHP'
 <?php
 
 namespace This\Is\My\Ns;
@@ -216,7 +224,7 @@ class ThisIsMyTest
 }
 
 PHP
-        );
+            );
 
         /* @var $scanner FileClassScanner */
         $result = $scanner->getClassName();
@@ -229,7 +237,8 @@ PHP
         $scanner = $this->getScannerMockObject();
         $scanner->expects(self::once())
             ->method('getFileContents')
-            ->willReturn(<<<PHP
+            ->willReturn(
+                <<<PHP
             <?php
 
 namespace This\Is\My\Ns
@@ -239,7 +248,7 @@ class ThisIsMyTest
 }
 
 PHP
-        );
+            );
 
         /** @var $scanner FileClassScanner */
         $scanner->getClassName();
@@ -253,7 +262,8 @@ PHP
         $scanner = $this->getScannerMockObject();
         $scanner->expects(self::once())
             ->method('getFileContents')
-            ->willReturn(<<<'PHP'
+            ->willReturn(
+                <<<'PHP'
 <?php
 
 namespace This\Is\My\Ns;
@@ -277,7 +287,7 @@ class ThisIsMyTest
 class_alias(\This\Is\My\Ns\ThisIsMyTest::class, stdClass::class);
 
 PHP
-        );
+            );
 
         /* @var $scanner FileClassScanner */
         $result = $scanner->getClassName();
@@ -292,7 +302,8 @@ PHP
         $scanner = $this->getScannerMockObject();
         $scanner->expects(self::once())
             ->method('getFileContents')
-            ->willReturn(<<<PHP
+            ->willReturn(
+                <<<PHP
 <?php
 
 namespace This\Is\My\Ns;

@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -6,17 +6,21 @@
 
 namespace Magento\Setup\Test\Unit\Model;
 
-use \Magento\Setup\Model\WebLogger;
+use Magento\Framework\Filesystem;
+use Magento\Framework\Filesystem\Directory\Write;
+use Magento\Setup\Model\WebLogger;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class WebLoggerTest extends \PHPUnit\Framework\TestCase
+class WebLoggerTest extends TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Filesystem\Directory\Write
+     * @var MockObject|Write
      */
     private $directoryWriteMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Filesystem
+     * @var MockObject|Filesystem
      */
     private $filesystemMock;
 
@@ -30,11 +34,11 @@ class WebLoggerTest extends \PHPUnit\Framework\TestCase
      */
     private $webLogger;
 
-    public function setUp()
+    public function setUp(): void
     {
         self::$log = '';
 
-        $this->directoryWriteMock = $this->createMock(\Magento\Framework\Filesystem\Directory\Write::class);
+        $this->directoryWriteMock = $this->createMock(Write::class);
         $this->directoryWriteMock
             ->expects($this->any())
             ->method('readFile')
@@ -50,7 +54,7 @@ class WebLoggerTest extends \PHPUnit\Framework\TestCase
             ->method('isExist')
             ->will($this->returnCallback([\Magento\Setup\Test\Unit\Model\WebLoggerTest::class, 'isExist']));
 
-        $this->filesystemMock = $this->createMock(\Magento\Framework\Filesystem::class);
+        $this->filesystemMock = $this->createMock(Filesystem::class);
         $this->filesystemMock
             ->expects($this->once())
             ->method('getDirectoryWrite')
@@ -62,11 +66,11 @@ class WebLoggerTest extends \PHPUnit\Framework\TestCase
     public function testConstructorLogFileSpecified()
     {
         $logFile = 'custom.log';
-        $directoryWriteMock = $this->createMock(\Magento\Framework\Filesystem\Directory\Write::class);
+        $directoryWriteMock = $this->createMock(Write::class);
         $directoryWriteMock->expects($this->once())->method('readFile')->with($logFile);
         $directoryWriteMock->expects($this->once())->method('writeFile')->with($logFile);
 
-        $filesystemMock = $this->createMock(\Magento\Framework\Filesystem::class);
+        $filesystemMock = $this->createMock(Filesystem::class);
         $filesystemMock
             ->expects($this->once())
             ->method('getDirectoryWrite')

@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -15,47 +15,48 @@ use Magento\Framework\ObjectManagerInterface;
 use Magento\Setup\Model\Grid\Module;
 use Magento\Setup\Model\ObjectManagerProvider;
 use Magento\Setup\Model\PackagesData;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
- * Class ModuleTest
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ModuleTest extends \PHPUnit\Framework\TestCase
+class ModuleTest extends TestCase
 {
     /**
-     * @var ComposerInformation|\PHPUnit_Framework_MockObject_MockObject
+     * @var ComposerInformation|MockObject
      */
     private $composerInformationMock;
 
     /**
-     * @var FullModuleList|\PHPUnit_Framework_MockObject_MockObject
+     * @var FullModuleList|MockObject
      */
     private $fullModuleListMock;
 
     /**
-     * @var ModuleList|\PHPUnit_Framework_MockObject_MockObject
+     * @var ModuleList|MockObject
      */
     private $moduleListMock;
 
     /**
-     * @var PackageInfoFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var PackageInfoFactory|MockObject
      */
     private $packageInfoFactoryMock;
 
     /**
      * Module package info
      *
-     * @var PackageInfo|\PHPUnit_Framework_MockObject_MockObject
+     * @var PackageInfo|MockObject
      */
     private $packageInfoMock;
 
     /**
-     * @var ObjectManagerProvider|\PHPUnit_Framework_MockObject_MockObject
+     * @var ObjectManagerProvider|MockObject
      */
     private $objectManagerProvider;
 
     /**
-     * @var PackagesData|\PHPUnit_Framework_MockObject_MockObject
+     * @var PackagesData|MockObject
      */
     private $packagesDataMock;
 
@@ -71,7 +72,7 @@ class ModuleTest extends \PHPUnit\Framework\TestCase
      */
     private $moduleData = [];
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->moduleData = [
             'magento/sample-module-one' => [

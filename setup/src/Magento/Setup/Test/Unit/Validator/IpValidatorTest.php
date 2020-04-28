@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -6,15 +6,16 @@
 namespace Magento\Setup\Test\Unit\Validator;
 
 use Magento\Setup\Validator\IpValidator;
+use PHPUnit\Framework\TestCase;
 
-class IpValidatorTest extends \PHPUnit\Framework\TestCase
+class IpValidatorTest extends TestCase
 {
     /**
      * @var IpValidator
      */
     private $ipValidator;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->ipValidator = new IpValidator();
     }

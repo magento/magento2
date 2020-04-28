@@ -1,20 +1,21 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Setup\Test\Unit\Controller;
 
-use Magento\Setup\Controller\UpdateExtensionGrid;
-use Magento\Setup\Model\Grid\Extension;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
 use Laminas\View\Model\JsonModel;
 use Laminas\View\Model\ViewModel;
+use Magento\Setup\Controller\UpdateExtensionGrid;
+use Magento\Setup\Model\Grid\Extension;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * CTest for \Magento\Setup\Controller\UpdateExtensionGrid
  */
-class UpdateExtensionGridTest extends \PHPUnit\Framework\TestCase
+class UpdateExtensionGridTest extends TestCase
 {
     /**
      * @var Extension|MockObject
@@ -28,7 +29,7 @@ class UpdateExtensionGridTest extends \PHPUnit\Framework\TestCase
      */
     private $controller;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->gridExtensionMock = $this->createMock(Extension::class);
 

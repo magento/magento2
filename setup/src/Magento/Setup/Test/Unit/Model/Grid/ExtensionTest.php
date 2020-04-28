@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -8,12 +8,10 @@ namespace Magento\Setup\Test\Unit\Model\Grid;
 use Magento\Framework\Composer\ComposerInformation;
 use Magento\Setup\Model\Grid\Extension;
 use Magento\Setup\Model\PackagesData;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-/**
- * Class ExtensionTest
- */
-class ExtensionTest extends \PHPUnit\Framework\TestCase
+class ExtensionTest extends TestCase
 {
     /**
      * @var ComposerInformation|MockObject
@@ -32,7 +30,7 @@ class ExtensionTest extends \PHPUnit\Framework\TestCase
      */
     private $model;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->composerInformationMock =  $this->getMockBuilder(ComposerInformation::class)
             ->disableOriginalConstructor()

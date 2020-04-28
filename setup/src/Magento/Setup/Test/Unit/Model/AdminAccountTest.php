@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -7,17 +7,20 @@
 namespace Magento\Setup\Test\Unit\Model;
 
 use Magento\Framework\DB\Adapter\Pdo\Mysql;
+use Magento\Framework\Encryption\EncryptorInterface;
 use Magento\Setup\Model\AdminAccount;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class AdminAccountTest extends \PHPUnit\Framework\TestCase
+class AdminAccountTest extends TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|Mysql
+     * @var MockObject|Mysql
      */
     private $dbAdapter;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Encryption\EncryptorInterface
+     * @var MockObject|EncryptorInterface
      */
     private $encryptor;
 
@@ -31,7 +34,7 @@ class AdminAccountTest extends \PHPUnit\Framework\TestCase
      */
     private $prefix;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->dbAdapter = $this->getMockBuilder(Mysql::class)
             ->disableOriginalConstructor()
@@ -43,7 +46,7 @@ class AdminAccountTest extends \PHPUnit\Framework\TestCase
                 return $table;
             });
 
-        $this->encryptor = $this->getMockBuilder(\Magento\Framework\Encryption\EncryptorInterface::class)
+        $this->encryptor = $this->getMockBuilder(EncryptorInterface::class)
             ->getMockForAbstractClass();
 
         $data = [
@@ -310,12 +313,10 @@ class AdminAccountTest extends \PHPUnit\Framework\TestCase
         $this->adminAccount->save();
     }
 
-    /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage An existing user has the given email but different username.
-     */
     public function testSaveExceptionUsernameNotMatch()
     {
+        $this->expectException('Exception');
+        $this->expectExceptionMessage('An existing user has the given email but different username.');
         // existing user in db
         $existingUserData = [
             'email' => 'john.doe@test.com',
@@ -331,12 +332,10 @@ class AdminAccountTest extends \PHPUnit\Framework\TestCase
         $this->adminAccount->save();
     }
 
-    /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage An existing user has the given username but different email.
-     */
     public function testSaveExceptionEmailNotMatch()
     {
+        $this->expectException('Exception');
+        $this->expectExceptionMessage('An existing user has the given username but different email.');
         $existingUserData = [
             'email' => 'another.email@test.com',
             'username' => 'admin',
@@ -351,24 +350,20 @@ class AdminAccountTest extends \PHPUnit\Framework\TestCase
         $this->adminAccount->save();
     }
 
-    /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage No Administrators role was found, data fixture needs to be run
-     */
     public function testSaveExceptionSpecialAdminRoleNotFound()
     {
+        $this->expectException('Exception');
+        $this->expectExceptionMessage('No Administrators role was found, data fixture needs to be run');
         $this->dbAdapter->expects($this->exactly(3))->method('fetchRow')->will($this->returnValue([]));
         $this->dbAdapter->expects($this->once())->method('lastInsertId')->will($this->returnValue(1));
 
         $this->adminAccount->save();
     }
 
-    /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage "Password" is required. Enter and try again.
-     */
     public function testSaveExceptionPasswordEmpty()
     {
+        $this->expectException('Exception');
+        $this->expectExceptionMessage('"Password" is required. Enter and try again.');
         // alternative data must be used for this test
         $data = [
             AdminAccount::KEY_FIRST_NAME => 'John',
@@ -411,12 +406,10 @@ class AdminAccountTest extends \PHPUnit\Framework\TestCase
         $adminAccount->save();
     }
 
-    /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage Password cannot be the same as the user name.
-     */
     public function testSaveExceptionPasswordAndUsernameEqual()
     {
+        $this->expectException('Exception');
+        $this->expectExceptionMessage('Password cannot be the same as the user name.');
         // alternative data must be used for this test
         $data = [
             AdminAccount::KEY_FIRST_NAME => 'John',

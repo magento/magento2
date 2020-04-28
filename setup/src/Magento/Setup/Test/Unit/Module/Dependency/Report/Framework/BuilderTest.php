@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -6,30 +6,32 @@
 namespace Magento\Setup\Test\Unit\Module\Dependency\Report\Framework;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Setup\Module\Dependency\Report\Framework\Builder;
+use PHPUnit\Framework\TestCase;
 
-class BuilderTest extends \PHPUnit\Framework\TestCase
+class BuilderTest extends TestCase
 {
     /**
-     * @var \Magento\Setup\Module\Dependency\Report\Framework\Builder
+     * @var Builder
      */
     protected $builder;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManagerHelper = new ObjectManager($this);
         $this->builder = $objectManagerHelper->getObject(
-            \Magento\Setup\Module\Dependency\Report\Framework\Builder::class
+            Builder::class
         );
     }
 
     /**
      * @param array $options
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Parse error. Passed option "config_files" is wrong.
      * @dataProvider dataProviderWrongOptionConfigFiles
      */
     public function testBuildWithWrongOptionConfigFiles($options)
     {
+        $this->expectException('InvalidArgumentException');
+        $this->expectExceptionMessage('Parse error. Passed option "config_files" is wrong.');
         $this->builder->build($options);
     }
 

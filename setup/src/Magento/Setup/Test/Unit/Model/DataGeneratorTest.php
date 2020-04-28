@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -7,13 +7,10 @@
 namespace Magento\Setup\Test\Unit\Model;
 
 use Magento\Setup\Model\DataGenerator;
+use PHPUnit\Framework\TestCase;
 
-/**
- * Class DataGeneratorTest
- */
-class DataGeneratorTest extends \PHPUnit\Framework\TestCase
+class DataGeneratorTest extends TestCase
 {
-
     const PATH_TO_CSV_FILE = '/_files/dictionary.csv';
 
     /**

@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -6,57 +6,66 @@
 
 namespace Magento\Setup\Test\Unit\Controller;
 
+use Laminas\Http\PhpEnvironment\Request;
+use Laminas\Http\PhpEnvironment\Response;
+use Laminas\Mvc\MvcEvent;
+use Laminas\Mvc\Router\RouteMatch;
+use Laminas\View\Model\ViewModel;
 use Magento\Setup\Controller\StartUpdater;
+use Magento\Setup\Model\PayloadValidator;
+use Magento\Setup\Model\UpdaterTaskCreator;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test for \Magento\Setup\Controller\StartUpdater
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class StartUpdaterTest extends \PHPUnit\Framework\TestCase
+class StartUpdaterTest extends TestCase
 {
     /**
-     * @var StartUpdater|\PHPUnit_Framework_MockObject_MockObject
+     * @var StartUpdater|MockObject
      */
     private $controller;
 
     /**
-     * @var \Laminas\Http\PhpEnvironment\Request|\PHPUnit_Framework_MockObject_MockObject
+     * @var Request|MockObject
      */
     private $request;
 
     /**
-     * @var \Laminas\Http\PhpEnvironment\Response|\PHPUnit_Framework_MockObject_MockObject
+     * @var Response|MockObject
      */
     private $response;
 
     /**
-     * @var \Laminas\Mvc\MvcEvent|\PHPUnit_Framework_MockObject_MockObject
+     * @var MvcEvent|MockObject
      */
     private $mvcEvent;
 
     /**
-     * @var Magento\Setup\Model\PayloadValidator|\PHPUnit_Framework_MockObject_MockObject
+     * @var PayloadValidator|MockObject
      */
     private $payloadValidator;
 
     /**
-     * @var Magento\Setup\Model\UpdaterTaskCreator|\PHPUnit_Framework_MockObject_MockObject
+     * @var UpdaterTaskCreator|MockObject
      */
     private $updaterTaskCreator;
 
-    public function setUp()
+    public function setUp(): void
     {
-        $this->payloadValidator = $this->createMock(\Magento\Setup\Model\PayloadValidator::class);
-        $this->updaterTaskCreator = $this->createMock(\Magento\Setup\Model\UpdaterTaskCreator::class);
+        $this->payloadValidator = $this->createMock(PayloadValidator::class);
+        $this->updaterTaskCreator = $this->createMock(UpdaterTaskCreator::class);
 
         $this->controller = new StartUpdater(
             $this->updaterTaskCreator,
             $this->payloadValidator
         );
-        $this->request = $this->createMock(\Laminas\Http\PhpEnvironment\Request::class);
-        $this->response = $this->createMock(\Laminas\Http\PhpEnvironment\Response::class);
-        $routeMatch = $this->createMock(\Laminas\Mvc\Router\RouteMatch::class);
-        $this->mvcEvent = $this->createMock(\Laminas\Mvc\MvcEvent::class);
+        $this->request = $this->createMock(Request::class);
+        $this->response = $this->createMock(Response::class);
+        $routeMatch = $this->createMock(RouteMatch::class);
+        $this->mvcEvent = $this->createMock(MvcEvent::class);
         $this->mvcEvent->expects($this->any())
             ->method('setRequest')
             ->with($this->request)
@@ -76,7 +85,7 @@ class StartUpdaterTest extends \PHPUnit\Framework\TestCase
     public function testIndexAction()
     {
         $viewModel = $this->controller->indexAction();
-        $this->assertInstanceOf(\Laminas\View\Model\ViewModel::class, $viewModel);
+        $this->assertInstanceOf(ViewModel::class, $viewModel);
         $this->assertTrue($viewModel->terminate());
     }
 

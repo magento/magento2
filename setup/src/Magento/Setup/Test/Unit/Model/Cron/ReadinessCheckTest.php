@@ -1,37 +1,47 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Setup\Test\Unit\Model\Cron;
 
+use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\Config\ConfigOptionsListConstants;
+use Magento\Framework\Filesystem;
+use Magento\Framework\Filesystem\Directory\Write;
+use Magento\Setup\Exception;
+use Magento\Setup\Model\BasePackageInfo;
 use Magento\Setup\Model\Cron\ReadinessCheck;
+use Magento\Setup\Model\Cron\Status;
+use Magento\Setup\Model\PhpReadinessCheck;
+use Magento\Setup\Validator\DbValidator;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class ReadinessCheckTest extends \PHPUnit\Framework\TestCase
+class ReadinessCheckTest extends TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Setup\Validator\DbValidator
+     * @var MockObject|DbValidator
      */
     private $dbValidator;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\DeploymentConfig
+     * @var MockObject|DeploymentConfig
      */
     private $deploymentConfig;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Filesystem
+     * @var MockObject|Filesystem
      */
     private $filesystem;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Filesystem\Directory\Write
+     * @var MockObject|Write
      */
     private $write;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Setup\Model\PhpReadinessCheck
+     * @var MockObject|PhpReadinessCheck
      */
     private $phpReadinessCheck;
 
@@ -41,7 +51,7 @@ class ReadinessCheckTest extends \PHPUnit\Framework\TestCase
     private $readinessCheck;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Setup\Model\BasePackageInfo
+     * @var MockObject|BasePackageInfo
      */
     private $basePackageInfo;
 
@@ -51,14 +61,14 @@ class ReadinessCheckTest extends \PHPUnit\Framework\TestCase
     private $expected;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Setup\Model\Cron\Status
+     * @var MockObject|Status
      */
     private $status;
 
-    public function setUp()
+    public function setUp(): void
     {
-        $this->dbValidator = $this->createMock(\Magento\Setup\Validator\DbValidator::class);
-        $this->deploymentConfig = $this->createMock(\Magento\Framework\App\DeploymentConfig::class);
+        $this->dbValidator = $this->createMock(DbValidator::class);
+        $this->deploymentConfig = $this->createMock(DeploymentConfig::class);
         $this->deploymentConfig->expects($this->once())
             ->method('get')
             ->willReturn(
@@ -69,13 +79,13 @@ class ReadinessCheckTest extends \PHPUnit\Framework\TestCase
                     ConfigOptionsListConstants::KEY_PASSWORD => 'password'
                 ]
             );
-        $this->filesystem = $this->createMock(\Magento\Framework\Filesystem::class);
-        $this->write = $this->createMock(\Magento\Framework\Filesystem\Directory\Write::class);
+        $this->filesystem = $this->createMock(Filesystem::class);
+        $this->write = $this->createMock(Write::class);
         $this->filesystem->expects($this->once())->method('getDirectoryWrite')->willReturn($this->write);
-        $this->phpReadinessCheck = $this->createMock(\Magento\Setup\Model\PhpReadinessCheck::class);
-        $this->basePackageInfo = $this->createMock(\Magento\Setup\Model\BasePackageInfo::class);
+        $this->phpReadinessCheck = $this->createMock(PhpReadinessCheck::class);
+        $this->basePackageInfo = $this->createMock(BasePackageInfo::class);
         $this->basePackageInfo->expects($this->once())->method('getPaths')->willReturn([__FILE__]);
-        $this->status = $this->createMock(\Magento\Setup\Model\Cron\Status::class);
+        $this->status = $this->createMock(Status::class);
         $this->readinessCheck = new ReadinessCheck(
             $this->dbValidator,
             $this->deploymentConfig,
@@ -107,7 +117,7 @@ class ReadinessCheckTest extends \PHPUnit\Framework\TestCase
     {
         $this->dbValidator->expects($this->once())
             ->method('checkDatabaseConnection')
-            ->willThrowException(new \Magento\Setup\Exception('Connection failure'));
+            ->willThrowException(new Exception('Connection failure'));
         $this->write->expects($this->once())->method('isExist')->willReturn(false);
         $this->write->expects($this->never())->method('readFile');
         $expected = [
@@ -133,7 +143,7 @@ class ReadinessCheckTest extends \PHPUnit\Framework\TestCase
     {
         $this->dbValidator->expects($this->once())
             ->method('checkDatabaseConnection')
-            ->willThrowException(new \Magento\Setup\Exception('Database user username does not have write access.'));
+            ->willThrowException(new Exception('Database user username does not have write access.'));
         $this->write->expects($this->once())->method('isExist')->willReturn(false);
         $this->write->expects($this->never())->method('readFile');
         $expected = [

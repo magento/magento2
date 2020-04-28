@@ -1,39 +1,49 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Setup\Test\Unit\Controller;
 
+use Laminas\Http\PhpEnvironment\Request;
+use Laminas\Http\PhpEnvironment\Response;
+use Laminas\Mvc\MvcEvent;
+use Laminas\Mvc\Router\RouteMatch;
+use Laminas\View\Model\JsonModel;
+use Magento\Framework\Filesystem;
+use Magento\Framework\Filesystem\Directory\ReadInterface;
+use Magento\Framework\Setup\FilePermissions;
 use Magento\Setup\Controller\Environment;
 use Magento\Setup\Controller\ReadinessCheckInstaller;
 use Magento\Setup\Controller\ReadinessCheckUpdater;
 use Magento\Setup\Controller\ResponseTypeInterface;
+use Magento\Setup\Model\CronScriptReadinessCheck;
+use Magento\Setup\Model\PhpReadinessCheck;
 use PHPUnit\Framework\MockObject\MockObject;
-use Laminas\View\Model\JsonModel;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class EnvironmentTest extends \PHPUnit\Framework\TestCase
+class EnvironmentTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\Setup\FilePermissions|\PHPUnit_Framework_MockObject_MockObject
+     * @var FilePermissions|MockObject
      */
     private $permissions;
 
     /**
-     * @var \Magento\Framework\Filesystem|\PHPUnit_Framework_MockObject_MockObject
+     * @var Filesystem|MockObject
      */
     private $filesystem;
 
     /**
-     * @var \Magento\Setup\Model\CronScriptReadinessCheck|\PHPUnit_Framework_MockObject_MockObject
+     * @var CronScriptReadinessCheck|MockObject
      */
     private $cronScriptReadinessCheck;
 
     /**
-     * @var \Magento\Setup\Model\PhpReadinessCheck|\PHPUnit_Framework_MockObject_MockObject
+     * @var PhpReadinessCheck|MockObject
      */
     private $phpReadinessCheck;
 
@@ -42,12 +52,12 @@ class EnvironmentTest extends \PHPUnit\Framework\TestCase
      */
     private $environment;
 
-    public function setUp()
+    public function setUp(): void
     {
-        $this->filesystem = $this->createMock(\Magento\Framework\Filesystem::class);
-        $this->permissions = $this->createMock(\Magento\Framework\Setup\FilePermissions::class);
-        $this->cronScriptReadinessCheck = $this->createMock(\Magento\Setup\Model\CronScriptReadinessCheck::class);
-        $this->phpReadinessCheck = $this->createMock(\Magento\Setup\Model\PhpReadinessCheck::class);
+        $this->filesystem = $this->createMock(Filesystem::class);
+        $this->permissions = $this->createMock(FilePermissions::class);
+        $this->cronScriptReadinessCheck = $this->createMock(CronScriptReadinessCheck::class);
+        $this->phpReadinessCheck = $this->createMock(PhpReadinessCheck::class);
         $this->environment = new Environment(
             $this->permissions,
             $this->filesystem,
@@ -58,9 +68,9 @@ class EnvironmentTest extends \PHPUnit\Framework\TestCase
 
     public function testFilePermissionsInstaller()
     {
-        $request = $this->createMock(\Laminas\Http\PhpEnvironment\Request::class);
-        $response = $this->createMock(\Laminas\Http\PhpEnvironment\Response::class);
-        $routeMatch = $this->createMock(\Laminas\Mvc\Router\RouteMatch::class);
+        $request = $this->createMock(Request::class);
+        $response = $this->createMock(Response::class);
+        $routeMatch = $this->createMock(RouteMatch::class);
 
         $mvcEvent = $this->getMvcEventMock($request, $response, $routeMatch);
 
@@ -72,9 +82,9 @@ class EnvironmentTest extends \PHPUnit\Framework\TestCase
 
     public function testPhpVersionActionInstaller()
     {
-        $request = $this->createMock(\Laminas\Http\PhpEnvironment\Request::class);
-        $response = $this->createMock(\Laminas\Http\PhpEnvironment\Response::class);
-        $routeMatch = $this->createMock(\Laminas\Mvc\Router\RouteMatch::class);
+        $request = $this->createMock(Request::class);
+        $response = $this->createMock(Response::class);
+        $routeMatch = $this->createMock(RouteMatch::class);
 
         $mvcEvent = $this->getMvcEventMock($request, $response, $routeMatch);
 
@@ -87,16 +97,16 @@ class EnvironmentTest extends \PHPUnit\Framework\TestCase
 
     public function testPhpVersionActionUpdater()
     {
-        $request = $this->createMock(\Laminas\Http\PhpEnvironment\Request::class);
-        $response = $this->createMock(\Laminas\Http\PhpEnvironment\Response::class);
-        $routeMatch = $this->createMock(\Laminas\Mvc\Router\RouteMatch::class);
+        $request = $this->createMock(Request::class);
+        $response = $this->createMock(Response::class);
+        $routeMatch = $this->createMock(RouteMatch::class);
 
         $mvcEvent = $this->getMvcEventMock($request, $response, $routeMatch);
 
         $request->expects($this->once())->method('getQuery')->willReturn(ReadinessCheckUpdater::UPDATER);
         $this->phpReadinessCheck->expects($this->never())->method('checkPhpVersion');
         $read =
-            $this->getMockForAbstractClass(\Magento\Framework\Filesystem\Directory\ReadInterface::class, [], '', false);
+            $this->getMockForAbstractClass(ReadInterface::class, [], '', false);
         $this->filesystem->expects($this->once())->method('getDirectoryRead')->willReturn($read);
         $read->expects($this->once())
             ->method('readFile')
@@ -108,9 +118,9 @@ class EnvironmentTest extends \PHPUnit\Framework\TestCase
 
     public function testPhpSettingsActionInstaller()
     {
-        $request = $this->createMock(\Laminas\Http\PhpEnvironment\Request::class);
-        $response = $this->createMock(\Laminas\Http\PhpEnvironment\Response::class);
-        $routeMatch = $this->createMock(\Laminas\Mvc\Router\RouteMatch::class);
+        $request = $this->createMock(Request::class);
+        $response = $this->createMock(Response::class);
+        $routeMatch = $this->createMock(RouteMatch::class);
 
         $mvcEvent = $this->getMvcEventMock($request, $response, $routeMatch);
 
@@ -123,16 +133,16 @@ class EnvironmentTest extends \PHPUnit\Framework\TestCase
 
     public function testPhpSettingsActionUpdater()
     {
-        $request = $this->createMock(\Laminas\Http\PhpEnvironment\Request::class);
-        $response = $this->createMock(\Laminas\Http\PhpEnvironment\Response::class);
-        $routeMatch = $this->createMock(\Laminas\Mvc\Router\RouteMatch::class);
+        $request = $this->createMock(Request::class);
+        $response = $this->createMock(Response::class);
+        $routeMatch = $this->createMock(RouteMatch::class);
 
         $mvcEvent = $this->getMvcEventMock($request, $response, $routeMatch);
 
         $request->expects($this->once())->method('getQuery')->willReturn(ReadinessCheckUpdater::UPDATER);
         $this->phpReadinessCheck->expects($this->never())->method('checkPhpSettings');
         $read =
-            $this->getMockForAbstractClass(\Magento\Framework\Filesystem\Directory\ReadInterface::class, [], '', false);
+            $this->getMockForAbstractClass(ReadInterface::class, [], '', false);
         $this->filesystem->expects($this->once())->method('getDirectoryRead')->willReturn($read);
         $read->expects($this->once())
             ->method('readFile')
@@ -144,9 +154,9 @@ class EnvironmentTest extends \PHPUnit\Framework\TestCase
 
     public function testPhpExtensionsActionInstaller()
     {
-        $request = $this->createMock(\Laminas\Http\PhpEnvironment\Request::class);
-        $response = $this->createMock(\Laminas\Http\PhpEnvironment\Response::class);
-        $routeMatch = $this->createMock(\Laminas\Mvc\Router\RouteMatch::class);
+        $request = $this->createMock(Request::class);
+        $response = $this->createMock(Response::class);
+        $routeMatch = $this->createMock(RouteMatch::class);
 
         $mvcEvent = $this->getMvcEventMock($request, $response, $routeMatch);
 
@@ -159,16 +169,16 @@ class EnvironmentTest extends \PHPUnit\Framework\TestCase
 
     public function testPhpExtensionsActionUpdater()
     {
-        $request = $this->createMock(\Laminas\Http\PhpEnvironment\Request::class);
-        $response = $this->createMock(\Laminas\Http\PhpEnvironment\Response::class);
-        $routeMatch = $this->createMock(\Laminas\Mvc\Router\RouteMatch::class);
+        $request = $this->createMock(Request::class);
+        $response = $this->createMock(Response::class);
+        $routeMatch = $this->createMock(RouteMatch::class);
 
         $mvcEvent = $this->getMvcEventMock($request, $response, $routeMatch);
 
         $request->expects($this->once())->method('getQuery')->willReturn(ReadinessCheckUpdater::UPDATER);
         $this->phpReadinessCheck->expects($this->never())->method('checkPhpExtensions');
         $read =
-            $this->getMockForAbstractClass(\Magento\Framework\Filesystem\Directory\ReadInterface::class, [], '', false);
+            $this->getMockForAbstractClass(ReadInterface::class, [], '', false);
         $this->filesystem->expects($this->once())->method('getDirectoryRead')->willReturn($read);
         $read->expects($this->once())
             ->method('readFile')
@@ -291,22 +301,22 @@ class EnvironmentTest extends \PHPUnit\Framework\TestCase
     public function testIndexAction()
     {
         $model = $this->environment->indexAction();
-        $this->assertInstanceOf(\Laminas\View\Model\JsonModel::class, $model);
+        $this->assertInstanceOf(JsonModel::class, $model);
     }
 
     /**
-     * @param \PHPUnit\Framework\MockObject\MockObject $request
-     * @param \PHPUnit\Framework\MockObject\MockObject $response
-     * @param \PHPUnit\Framework\MockObject\MockObject $routeMatch
+     * @param MockObject $request
+     * @param MockObject $response
+     * @param MockObject $routeMatch
      *
-     * @return \PHPUnit\Framework\MockObject\MockObject
+     * @return MockObject
      */
     protected function getMvcEventMock(
         MockObject $request,
         MockObject $response,
         MockObject $routeMatch
     ) {
-        $mvcEvent = $this->createMock(\Laminas\Mvc\MvcEvent::class);
+        $mvcEvent = $this->createMock(MvcEvent::class);
         $mvcEvent->expects($this->once())->method('setRequest')->with($request)->willReturn($mvcEvent);
         $mvcEvent->expects($this->once())->method('setResponse')->with($response)->willReturn($mvcEvent);
         $mvcEvent->expects($this->once())->method('setTarget')->with($this->environment)->willReturn($mvcEvent);

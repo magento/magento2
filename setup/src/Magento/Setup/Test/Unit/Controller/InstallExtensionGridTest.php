@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -6,25 +6,29 @@
 
 namespace Magento\Setup\Test\Unit\Controller;
 
+use Laminas\View\Model\JsonModel;
+use Laminas\View\Model\ViewModel;
+use Magento\Framework\Composer\ComposerInformation;
 use Magento\Setup\Controller\InstallExtensionGrid;
 use Magento\Setup\Model\PackagesData;
-use Magento\Framework\Composer\ComposerInformation;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class InstallExtensionGridTest extends \PHPUnit\Framework\TestCase
+class InstallExtensionGridTest extends TestCase
 {
     /**
      * Controller
      *
-     * @var \Magento\Setup\Controller\InstallExtensionGrid
+     * @var InstallExtensionGrid
      */
     private $controller;
 
     /**
-     * @var PackagesData|\PHPUnit_Framework_MockObject_MockObject
+     * @var PackagesData|MockObject
      */
     private $packagesData;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->packagesData = $this->getMockBuilder(PackagesData::class)
             ->disableOriginalConstructor()
@@ -41,7 +45,7 @@ class InstallExtensionGridTest extends \PHPUnit\Framework\TestCase
     public function testIndexAction()
     {
         $viewModel = $this->controller->indexAction();
-        static::assertInstanceOf(\Laminas\View\Model\ViewModel::class, $viewModel);
+        static::assertInstanceOf(ViewModel::class, $viewModel);
     }
 
     /**
@@ -56,7 +60,7 @@ class InstallExtensionGridTest extends \PHPUnit\Framework\TestCase
             ->willReturn($extensions);
 
         $jsonModel = $this->controller->extensionsAction();
-        static::assertInstanceOf(\Laminas\View\Model\JsonModel::class, $jsonModel);
+        static::assertInstanceOf(JsonModel::class, $jsonModel);
         $variables = $jsonModel->getVariables();
         static::assertArrayHasKey('success', $variables);
         static::assertArrayHasKey('extensions', $variables);

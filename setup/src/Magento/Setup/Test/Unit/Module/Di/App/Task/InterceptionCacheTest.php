@@ -1,32 +1,36 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Setup\Test\Unit\Module\Di\App\Task;
 
+use Magento\Framework\Interception\Config\Config;
 use Magento\Setup\Module\Di\App\Task\Operation\InterceptionCache;
+use Magento\Setup\Module\Di\Code\Reader\Decorator\Interceptions;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class InterceptionCacheTest extends \PHPUnit\Framework\TestCase
+class InterceptionCacheTest extends TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Framework\Interception\Config\Config
+     * @var MockObject|Config
      */
     private $configMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Setup\Module\Di\Code\Reader\Decorator\Interceptions
+     * @var MockObject|Interceptions
      */
     private $interceptionsListMock;
 
-    public function setUp()
+    public function setUp(): void
     {
-        $this->configMock = $this->getMockBuilder(\Magento\Framework\Interception\Config\Config::class)
+        $this->configMock = $this->getMockBuilder(Config::class)
             ->setMethods([])
             ->disableOriginalConstructor()
             ->getMock();
         $this->interceptionsListMock = $this->getMockBuilder(
-            \Magento\Setup\Module\Di\Code\Reader\Decorator\Interceptions::class
+            Interceptions::class
         )
             ->setMethods([])
             ->disableOriginalConstructor()

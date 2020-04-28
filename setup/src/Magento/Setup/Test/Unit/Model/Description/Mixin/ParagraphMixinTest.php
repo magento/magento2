@@ -1,20 +1,23 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Setup\Test\Unit\Model\Description\Mixin;
 
-class ParagraphMixinTest extends \PHPUnit\Framework\TestCase
+use Magento\Setup\Model\Description\Mixin\ParagraphMixin;
+use PHPUnit\Framework\TestCase;
+
+class ParagraphMixinTest extends TestCase
 {
     /**
-     * @var \Magento\Setup\Model\Description\Mixin\ParagraphMixin
+     * @var ParagraphMixin
      */
     private $mixin;
 
-    public function setUp()
+    public function setUp(): void
     {
-        $this->mixin = new \Magento\Setup\Model\Description\Mixin\ParagraphMixin();
+        $this->mixin = new ParagraphMixin();
     }
 
     /**

@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -10,7 +10,7 @@ use Magento\Setup\Controller\ExtensionGrid;
 use Magento\Setup\Model\Grid\Extension;
 use Magento\Setup\Model\PackagesAuth;
 use Magento\Setup\Model\PackagesData;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
 
 /**
  * Test for \Magento\Setup\Controller\ExtensionGrid

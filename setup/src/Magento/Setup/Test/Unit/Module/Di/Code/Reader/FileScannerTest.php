@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -6,16 +6,19 @@
 
 namespace Magento\Setup\Test\Unit\Module\Di\Code\Reader;
 
-class FileScannerTest extends \PHPUnit\Framework\TestCase
+use Magento\Setup\Module\Di\Code\Reader\FileScanner;
+use PHPUnit\Framework\TestCase;
+
+class FileScannerTest extends TestCase
 {
     /**
-     * @var \Magento\Setup\Module\Di\Code\Reader\FileScanner
+     * @var FileScanner
      */
     private $object;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->object = new \Magento\Setup\Module\Di\Code\Reader\FileScanner(
+        $this->object = new FileScanner(
             __DIR__ . DIRECTORY_SEPARATOR . '_files' . DIRECTORY_SEPARATOR . 'classes.php'
         );
     }

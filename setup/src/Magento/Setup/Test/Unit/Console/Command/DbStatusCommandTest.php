@@ -1,24 +1,25 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Setup\Test\Unit\Console\Command;
 
+use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\Console\Cli;
 use Magento\Framework\Module\DbVersionInfo;
+use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Setup\UpToDateValidatorInterface;
 use Magento\Setup\Console\Command\DbStatusCommand;
-use Magento\Framework\App\DeploymentConfig;
 use Magento\Setup\Model\ObjectManagerProvider;
-use Magento\Framework\ObjectManagerInterface;
-use PHPUnit_Framework_MockObject_MockObject as Mock;
+use PHPUnit\Framework\MockObject\MockObject as Mock;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Tester\CommandTester;
 
 /**
  * @inheritdoc
  */
-class DbStatusCommandTest extends \PHPUnit\Framework\TestCase
+class DbStatusCommandTest extends TestCase
 {
     /**
      * @var DbVersionInfo|Mock
@@ -43,7 +44,7 @@ class DbStatusCommandTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->dbVersionInfo = $this->getMockBuilder(DbVersionInfo::class)
             ->disableOriginalConstructor()
