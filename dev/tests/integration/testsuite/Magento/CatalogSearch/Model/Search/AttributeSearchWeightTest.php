@@ -70,13 +70,18 @@ class AttributeSearchWeightTest extends TestCase
      * @param string $searchQuery
      * @param array $attributeWeights
      * @param array $expectedProductNames
+     * @param string|null $incompleteReason
      * @return void
      */
     public function testAttributeSearchWeight(
         string $searchQuery,
         array $attributeWeights,
-        array $expectedProductNames
+        array $expectedProductNames,
+        string $incompleteReason = null
     ): void {
+        if ($incompleteReason) {
+                $this->markTestIncomplete($incompleteReason);
+        }
         $this->updateAttributesWeight($attributeWeights);
         $actualProductNames = $this->quickSearchByQuery->execute($searchQuery)->getColumnValues('name');
         $this->assertEquals($expectedProductNames, $actualProductNames, 'Products order is not as expected.');
@@ -90,18 +95,6 @@ class AttributeSearchWeightTest extends TestCase
     public function attributeSearchWeightDataProvider(): array
     {
         return [
-            // TODO: This test need stabilization MC-29260
-            //'sku_order_more_than_name' => [
-            //    'Nintendo Wii',
-            //    [
-            //        'sku' => 6,
-            //        'name' => 5,
-            //    ],
-            //    [
-            //        'Xbox',
-            //        'Nintendo Wii',
-            //    ],
-            //],
             'name_order_more_than_sku' => [
                 'Nintendo Wii',
                 [
@@ -143,7 +136,19 @@ class AttributeSearchWeightTest extends TestCase
                     'Gamecube attribute',
                 ],
             ],
-
+            'sku_order_more_than_name' => [
+                'Nintendo Wii',
+                [
+                    'sku' => 6,
+                    'name' => 5,
+                ],
+                [
+                    'Xbox',
+                    'Nintendo Wii',
+                ],
+                'incomplete_reason' => 'MC-33824:'
+                    . 'Stabilize skipped test cases for Integration AttributeSearchWeightTest with elasticsearch',
+            ],
         ];
     }
 
