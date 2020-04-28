@@ -252,6 +252,8 @@ class CarrierTest extends TestCase
                 new Response(200, [], $acceptResponse)
             ]
         );
+        $this->httpClient->clearRequests();
+
         $request = new Request(
             [
                 'packages' => [
