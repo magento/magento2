@@ -114,18 +114,20 @@ require([
         },
 
         stripTags: function () {
+            var self = this;
+            
             confirm({
                 content: "<?= $block->escapeJs($block->escapeHtml(__('Are you sure you want to strip tags?'))) ?>",
                 actions: {
                     confirm: function () {
-                        this.unconvertedText = $('template_text').value;
+                        self.unconvertedText = $('template_text').value;
                         $('convert_button').hide();
                         $('template_text').value =  $('template_text').value.stripScripts().replace(
                             new RegExp('<style[^>]*>[\\S\\s]*?</style>', 'img'), ''
                         ).stripTags().strip();
                         $('convert_button_back').show();
                         $('field_template_styles').hide();
-                        this.typeChange = true;
+                        self.typeChange = true;
                         return false;
                     }
                 }
