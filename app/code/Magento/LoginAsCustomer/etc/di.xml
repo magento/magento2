@@ -7,7 +7,7 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
     <preference for="Magento\LoginAsCustomer\Api\Data\AuthenticationDataInterface" type="Magento\LoginAsCustomer\Model\AuthenticationData"/>
-    <preference for="Magento\LoginAsCustomer\Api\CreateSecretInterface" type="Magento\LoginAsCustomer\Model\ResourceModel\CreateSecret"/>
+    <preference for="Magento\LoginAsCustomer\Api\SaveAuthenticationDataInterface" type="Magento\LoginAsCustomer\Model\ResourceModel\SaveAuthenticationData"/>
     <preference for="Magento\LoginAsCustomer\Api\GetAuthenticationDataBySecretInterface" type="Magento\LoginAsCustomer\Model\ResourceModel\GetAuthenticationDataBySecret"/>
     <preference for="Magento\LoginAsCustomer\Api\AuthenticateCustomerInterface" type="Magento\LoginAsCustomer\Model\AuthenticateCustomer"/>
     <preference for="Magento\LoginAsCustomer\Api\DeleteAuthenticationDataBySecretInterface" type="Magento\LoginAsCustomer\Model\ResourceModel\DeleteAuthenticationDataBySecret"/>
