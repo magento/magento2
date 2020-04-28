@@ -29,7 +29,7 @@ interface ConfigInterface
     public function isStoreManualChoiceEnabled(): bool;
 
     /**
-     * Gte authentication data expiration time (in seconds)
+     * Get authentication data expiration time (in seconds)
      *
      * @return int
      */
