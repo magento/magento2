@@ -78,20 +78,6 @@ class Database implements \Magento\Framework\Lock\LockManagerInterface
         }
         $name = $this->addPrefix($name);
 
-        /**
-         * Before MySQL 5.7.5, only a single simultaneous lock per connection can be acquired.
-         * This limitation can be removed once MySQL minimum requirement has been raised,
-         * currently we support MySQL 5.6 way only.
-         */
-        if ($this->currentLock) {
-            throw new AlreadyExistsException(
-                new Phrase(
-                    'Current connection is already holding lock for %1, only single lock allowed',
-                    [$this->currentLock]
-                )
-            );
-        }
-
         $result = (bool)$this->resource->getConnection()->query(
             "SELECT GET_LOCK(?, ?);",
             [$name, $timeout < 0 ? self::MAX_LOCK_TIME : $timeout]
