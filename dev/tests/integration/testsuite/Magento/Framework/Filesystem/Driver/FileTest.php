@@ -65,6 +65,32 @@ class FileTest extends TestCase
     }
 
     /**
+     * Tests read directory with symlynked folders.
+     *
+     * @return void
+     */
+    public function testReadDirectoryRecursivelyWithSymlinkedFolders(): void
+    {
+        $sourceDirectory = $this->generatedPath . '/source';
+        $destinationDirectory = $this->generatedPath . '/destination';
+
+        $this->driver->createDirectory($sourceDirectory);
+        $this->driver->createDirectory($sourceDirectory . '/directory1');
+        $this->driver->createDirectory($destinationDirectory);
+
+        $linkName = $destinationDirectory . '/link';
+        $this->driver->symlink($sourceDirectory, $linkName);
+
+        $paths = [
+            $destinationDirectory . '/link' . '/directory1',
+            $destinationDirectory . '/link'
+
+        ];
+        $actual = $this->driver->readDirectoryRecursively($destinationDirectory);
+        $this->assertEquals($paths, $actual);
+    }
+
+    /**
      * Tests directory recursive read.
      *
      * @return void

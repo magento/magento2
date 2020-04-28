@@ -31,7 +31,7 @@
             </createData>
 
             <!-- Assign attribute to set -->
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
             <actionGroup ref="GoToAttributeGridPageActionGroup" stepKey="goToAttributeSetPage"/>
             <actionGroup ref="GoToAttributeSetByNameActionGroup" stepKey="openAttributeSetByName">
                 <argument name="name" value="$createAttributeSet.attribute_set_name$"/>

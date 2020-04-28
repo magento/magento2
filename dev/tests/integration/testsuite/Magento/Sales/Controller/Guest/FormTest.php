@@ -55,7 +55,7 @@ class FormTest extends AbstractController
     {
         $this->login(1);
         $this->dispatch('sales/guest/form/');
-        $this->assertRedirect($this->stringContains('customer/account'));
+        $this->assertRedirect($this->stringContains('sales/order/history'));
     }
 
     /**
