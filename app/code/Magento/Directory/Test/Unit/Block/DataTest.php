@@ -65,7 +65,11 @@ class DataTest extends \PHPUnit\Framework\TestCase
     protected function setUp()
     {
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->escaper= $objectManagerHelper->getObject(Escaper::class);
+        $this->escaper = $this->getMockBuilder(Escaper::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['escapeHtmlAttr'])
+            ->getMock();
+
         $this->prepareContext();
 
         $this->helperDataMock = $this->getMockBuilder(\Magento\Directory\Helper\Data::class)
@@ -304,7 +308,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
                     'setValue',
                     'setOptions',
                     'setExtraParams',
-                    'getHtml',
+                    'getHtml'
                 ]
             )
             ->getMock();
@@ -336,6 +340,10 @@ class DataTest extends \PHPUnit\Framework\TestCase
         $elementHtmlSelect->expects($this->once())
             ->method('getHtml')
             ->willReturn($resultHtml);
+        $this->escaper->expects($this->once())
+            ->method('escapeHtmlAttr')
+            ->with(__($title))
+            ->willReturn(__($title));
 
         return $elementHtmlSelect;
     }

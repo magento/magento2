@@ -12,7 +12,7 @@ namespace Magento\Signifyd\Api;
  * Implementation should send request to Signifyd API and update existing case entity with guarantee information.
  *
  * @api
- * @since 100.2.1
+ * @since 100.2.0
  */
 interface GuaranteeCancelingServiceInterface
 {
@@ -21,7 +21,7 @@ interface GuaranteeCancelingServiceInterface
      *
      * @param int $orderId
      * @return bool
-     * @since 100.2.1
+     * @since 100.2.0
      */
     public function cancelForOrder($orderId);
 }

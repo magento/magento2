@@ -125,7 +125,7 @@ interface PageInterface
      * Get layout update xml
      *
      * @return string|null
-     * @deprecated Existing updates are applied, new are not accepted.
+     * @deprecated 103.0.4 Existing updates are applied, new are not accepted.
      */
     public function getLayoutUpdateXml();
 
@@ -146,7 +146,7 @@ interface PageInterface
     /**
      * Get custom layout update xml
      *
-     * @deprecated Existing updates are applied, new are not accepted.
+     * @deprecated 103.0.4 Existing updates are applied, new are not accepted.
      * @see \Magento\Cms\Model\Page\CustomLayout\Data\CustomLayoutSelectedInterface
      * @return string|null
      */
@@ -275,7 +275,7 @@ interface PageInterface
      *
      * @param string $layoutUpdateXml
      * @return \Magento\Cms\Api\Data\PageInterface
-     * @deprecated Existing updates are applied, new are not accepted.
+     * @deprecated 103.0.4 Existing updates are applied, new are not accepted.
      */
     public function setLayoutUpdateXml($layoutUpdateXml);
 
@@ -300,7 +300,7 @@ interface PageInterface
      *
      * @param string $customLayoutUpdateXml
      * @return \Magento\Cms\Api\Data\PageInterface
-     * @deprecated Existing updates are applied, new are not accepted.
+     * @deprecated 103.0.4 Existing updates are applied, new are not accepted.
      * @see \Magento\Cms\Model\Page\CustomLayout\Data\CustomLayoutSelectedInterface
      */
     public function setCustomLayoutUpdateXml($customLayoutUpdateXml);

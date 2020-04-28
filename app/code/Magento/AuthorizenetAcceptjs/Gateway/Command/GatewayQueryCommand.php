@@ -21,7 +21,7 @@ use Magento\Payment\Gateway\Command\Result\ArrayResult;
 /**
  * Makes a request to the gateway and returns results
  *
- * @deprecated Starting from Magento 2.3.4 Authorize.net payment method core integration is deprecated in favor of
+ * @deprecated 100.3.3 Starting from Magento 2.3.4 Authorize.net payment method core integration is deprecated in favor of
  * official payment integration available on the marketplace
  */
 class GatewayQueryCommand implements CommandInterface

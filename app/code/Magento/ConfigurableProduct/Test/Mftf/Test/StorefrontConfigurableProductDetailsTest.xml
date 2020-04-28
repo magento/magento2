@@ -36,6 +36,9 @@
             </actionGroup>
             <actionGroup ref="clearFiltersAdminDataGrid" stepKey="clearProductsGridFilters"/>
             <actionGroup ref="logout" stepKey="adminLogout"/>
+
+            <!-- Reindex invalidated indices after product attribute has been created/deleted -->
+            <actionGroup ref="CliRunReindexUsingCronJobsActionGroup" stepKey="reindexInvalidatedIndices"/>
         </after>
 
         <!-- Verify configurable product details in storefront product view -->

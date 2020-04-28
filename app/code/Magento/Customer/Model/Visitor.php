@@ -10,9 +10,8 @@ use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\RequestSafetyInterface;
 
 /**
- * Class Visitor
+ * Class Visitor responsible for initializing visitor's.
  *
- * @package Magento\Customer\Model
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  */
@@ -194,7 +193,9 @@ class Visitor extends \Magento\Framework\Model\AbstractModel
     public function saveByRequest($observer)
     {
         // prevent saving Visitor for safe methods, e.g. GET request
-        if ($this->skipRequestLogging || $this->requestSafety->isSafeMethod() || $this->isModuleIgnored($observer)) {
+        if (($this->skipRequestLogging || $this->requestSafety->isSafeMethod() || $this->isModuleIgnored($observer))
+            && !$this->sessionIdHasChanged()
+        ) {
             return $this;
         }
 
@@ -206,6 +207,23 @@ class Visitor extends \Magento\Framework\Model\AbstractModel
             $this->_logger->critical($e);
         }
         return $this;
+    }
+
+    /**
+     * Check if visitor session id was changed.
+     *
+     * @return bool
+     */
+    private function sessionIdHasChanged(): bool
+    {
+        $visitorData = $this->session->getVisitorData();
+        $hasChanged = false;
+
+        if (isset($visitorData['session_id'])) {
+            $hasChanged = $this->session->getSessionId() !== $visitorData['session_id'];
+        }
+
+        return $hasChanged;
     }
 
     /**

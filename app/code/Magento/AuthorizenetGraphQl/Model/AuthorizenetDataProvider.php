@@ -14,7 +14,7 @@ use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 /**
  * SetPaymentMethod additional data provider model for Authorizenet payment method
  *
- * @deprecated Starting from Magento 2.3.4 Authorize.net payment method core integration is deprecated in favor of
+ * @deprecated 100.3.1 Starting from Magento 2.3.4 Authorize.net payment method core integration is deprecated in favor of
  * official payment integration available on the marketplace
  */
 class AuthorizenetDataProvider implements AdditionalDataProviderInterface

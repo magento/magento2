@@ -143,8 +143,10 @@ class Save extends Attribute implements HttpPostActionInterface
             $optionData = $this->formDataSerializer
                 ->unserialize($this->getRequest()->getParam('serialized_options', '[]'));
         } catch (\InvalidArgumentException $e) {
-            $message = __("The attribute couldn't be saved due to an error. Verify your information and try again. "
-                . "If the error persists, please try again later.");
+            $message = __(
+                "The attribute couldn't be saved due to an error. Verify your information and try again. "
+                . "If the error persists, please try again later."
+            );
             $this->messageManager->addErrorMessage($message);
             return $this->returnResult('catalog/*/edit', ['_current' => true], ['error' => true]);
         }
@@ -221,7 +223,7 @@ class Save extends Attribute implements HttpPostActionInterface
                     return $this->returnResult('catalog/*/', [], ['error' => true]);
                 }
                 // entity type check
-                if ($model->getEntityTypeId() != $this->_entityTypeId) {
+                if ($model->getEntityTypeId() != $this->_entityTypeId || array_key_exists('backend_model', $data)) {
                     $this->messageManager->addErrorMessage(__('We can\'t update the attribute.'));
                     $this->_session->setAttributeData($data);
                     return $this->returnResult('catalog/*/', [], ['error' => true]);
@@ -257,6 +259,8 @@ class Save extends Attribute implements HttpPostActionInterface
                 // Unset attribute field for system attributes
                 unset($data['apply_to']);
             }
+
+            unset($data['entity_type_id']);
 
             $model->addData($data);
 

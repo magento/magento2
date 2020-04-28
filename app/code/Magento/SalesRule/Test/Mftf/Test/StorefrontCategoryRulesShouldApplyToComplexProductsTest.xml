@@ -73,6 +73,7 @@
             <!--Delete Cart Price Rule -->
             <deleteData  createDataKey="createCartPriceRule" stepKey="deleteCartPriceRule"/>
             <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="CliRunReindexUsingCronJobsActionGroup" stepKey="reindexInvalidatedIndices"/>
         </after>
         <!-- 1: Create a cart price rule applying to CAT1 with discount -->
         <createData entity="SalesRuleNoCouponWithFixedDiscount" stepKey="createCartPriceRule"/>

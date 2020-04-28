@@ -105,6 +105,9 @@
             <createData entity="MsrpDisableMAP" stepKey="disableMAP"/>
 
             <actionGroup ref="logout" stepKey="logoutOfAdmin"/>
+
+            <!-- Reindex invalidated indices after product attribute has been created/deleted -->
+            <actionGroup ref="CliRunReindexUsingCronJobsActionGroup" stepKey="reindexInvalidatedIndices"/>
         </after>
 
         <!-- Set Manufacturer's Suggested Retail Price to products-->

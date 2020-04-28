@@ -11,7 +11,7 @@ use Zend\Mime\Part;
 /**
  * Class Message for email transportation
  *
- * @deprecated
+ * @deprecated 102.0.4
  * @see \Magento\Framework\Mail\EmailMessage
  */
 class Message implements MailMessageInterface

@@ -44,6 +44,9 @@
             </actionGroup>
             <actionGroup ref="AdminClearFiltersActionGroup" stepKey="clearProductFilters"/>
             <actionGroup ref="logout" stepKey="logout"/>
+
+            <!-- Reindex invalidated indices after product attribute has been created/deleted -->
+            <actionGroup ref="CliRunReindexUsingCronJobsActionGroup" stepKey="reindexInvalidatedIndices"/>
         </after>
         <!--Add configurations to product-->
         <comment userInput="Add configurations to product" stepKey="commentAddConfigs"/>
@@ -148,6 +151,9 @@
             </actionGroup>
             <actionGroup ref="AdminClearFiltersActionGroup" stepKey="clearProductFilters"/>
             <actionGroup ref="logout" stepKey="logout"/>
+
+            <!-- Reindex invalidated indices after product attribute has been created/deleted -->
+            <actionGroup ref="CliRunReindexUsingCronJobsActionGroup" stepKey="reindexInvalidatedIndices"/>
         </after>
         <!--Add configurations to product-->
         <comment userInput="Add configurations to product" stepKey="commentAddConfigurations"/>

@@ -4031,6 +4031,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
 
     /**
      * Closes the connection.
+     * @since 102.0.4
      */
     public function closeConnection()
     {
