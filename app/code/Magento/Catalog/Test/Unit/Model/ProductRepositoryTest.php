@@ -302,11 +302,9 @@ class ProductRepositoryTest extends TestCase
         $this->serializerMock->expects($this->any())
             ->method('unserialize')
             ->willReturnCallback(
-
-                    function ($value) {
-                        return json_decode($value, true);
-                    }
-
+                function ($value) {
+                    return json_decode($value, true);
+                }
             );
 
         $mediaProcessor = $this->objectManager->getObject(
@@ -348,7 +346,9 @@ class ProductRepositoryTest extends TestCase
     public function testGetAbsentProduct()
     {
         $this->expectException(\Magento\Framework\Exception\NoSuchEntityException::class);
-        $this->expectExceptionMessage('The product that was requested doesn\'t exist. Verify the product and try again.');
+        $this->expectExceptionMessage(
+            'The product that was requested doesn\'t exist. Verify the product and try again.'
+        );
 
         $this->productFactory->expects($this->once())->method('create')
             ->willReturn($this->product);
@@ -415,7 +415,9 @@ class ProductRepositoryTest extends TestCase
     public function testGetByIdAbsentProduct()
     {
         $this->expectException(\Magento\Framework\Exception\NoSuchEntityException::class);
-        $this->expectExceptionMessage('The product that was requested doesn\'t exist. Verify the product and try again.');
+        $this->expectExceptionMessage(
+            'The product that was requested doesn\'t exist. Verify the product and try again.'
+        );
 
         $this->productFactory->expects($this->once())->method('create')
             ->willReturn($this->product);
