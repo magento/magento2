@@ -8,7 +8,7 @@
 
 <entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
-    <entity name="mftfTestProductVideo" type="product_video">
+    <entity name="YoutubeProductVideo" type="product_video">
         <data key="videoUrl">https://youtu.be/bpOSxM0rNPM</data>
         <data key="videoTitle">Arctic Monkeys - Do I Wanna Know? (Official Video)</data>
         <data key="videoShortTitle">Arctic Monkeys</data>
