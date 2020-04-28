@@ -1104,6 +1104,10 @@ class Installer
             $configModel->setDataByPath($key, $val);
             $configModel->save();
         }
+
+        /** @var SearchConfig $searchConfig */
+        $searchConfig = $this->objectManagerProvider->get()->get(SearchConfig::class);
+        $searchConfig->saveConfiguration($data);
     }
 
     /**

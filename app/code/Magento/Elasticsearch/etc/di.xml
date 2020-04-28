@@ -511,4 +511,24 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Elasticsearch\Setup\InstallConfig">
+        <arguments>
+            <argument name="searchConfigMapping" xsi:type="array">
+                <item name="elasticsearch-host" xsi:type="string">elasticsearch5_server_hostname</item>
+                <item name="elasticsearch-port" xsi:type="string">elasticsearch5_server_port</item>
+                <item name="elasticsearch-timeout" xsi:type="string">elasticsearch5_server_timeout</item>
+                <item name="elasticsearch-index-prefix" xsi:type="string">elasticsearch5_index_prefix</item>
+                <item name="elasticsearch-enable-auth" xsi:type="string">elasticsearch5_enable_auth</item>
+                <item name="elasticsearch-username" xsi:type="string">elasticsearch5_username</item>
+                <item name="elasticsearch-password" xsi:type="string">elasticsearch5_password</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Search\Setup\CompositeInstallConfig">
+        <arguments>
+            <argument name="installConfigList" xsi:type="array">
+                <item name="elasticsearch5" xsi:type="object">Magento\Elasticsearch\Setup\InstallConfig</item>
+            </argument>
+        </arguments>
+    </type>
 </config>
