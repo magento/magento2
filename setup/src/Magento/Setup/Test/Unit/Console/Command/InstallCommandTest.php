@@ -18,6 +18,7 @@ use Magento\Backend\Setup\ConfigOptionsList as BackendConfigOptionsList;
 use Magento\Framework\Config\ConfigOptionsListConstants as SetupConfigOptionsList;
 use Magento\Setup\Model\StoreConfigurationDataMapper;
 use Magento\Setup\Console\Command\AdminUserCreateCommand;
+use PHPUnit\Framework\MockObject\MockObject;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -30,42 +31,42 @@ class InstallCommandTest extends \PHPUnit\Framework\TestCase
     private $input;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|InstallCommand
+     * @var MockObject|InstallCommand
      */
     private $command;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Setup\Model\InstallerFactory
+     * @var MockObject|\Magento\Setup\Model\InstallerFactory
      */
     private $installerFactory;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Setup\Model\Installer
+     * @var MockObject|\Magento\Setup\Model\Installer
      */
     private $installer;
 
     /**
-     * @var Application|\PHPUnit_Framework_MockObject_MockObject
+     * @var Application|MockObject
      */
     private $applicationMock;
 
     /**
-     * @var HelperSet|\PHPUnit_Framework_MockObject_MockObject
+     * @var HelperSet|MockObject
      */
     private $helperSetMock;
 
     /**
-     * @var InputDefinition|\PHPUnit_Framework_MockObject_MockObject
+     * @var InputDefinition|MockObject
      */
     private $definitionMock;
 
     /**
-     * @var ConfigImportCommand|\PHPUnit_Framework_MockObject_MockObject
+     * @var ConfigImportCommand|MockObject
      */
     private $configImportMock;
 
     /**
-     * @var AdminUserCreateCommand|\PHPUnit_Framework_MockObject_MockObject
+     * @var AdminUserCreateCommand|MockObject
      */
     private $adminUserMock;
 

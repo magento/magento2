@@ -8,7 +8,6 @@ declare(strict_types=1);
 namespace Magento\Setup\Model;
 
 use Magento\Framework\Setup\Option\AbstractConfigOption;
-use Magento\Framework\Setup\Option\FlagConfigOption;
 use Magento\Framework\Setup\Option\SelectConfigOption;
 use Magento\Framework\Setup\Option\TextConfigOption;
 
@@ -30,15 +29,6 @@ class SearchConfigOptionsList
     const INPUT_KEY_ELASTICSEARCH_TIMEOUT = 'elasticsearch-timeout';
 
     /**
-     * Default values
-     */
-    const DEFAULT_SEARCH_ENGINE = 'elasticsearch7';
-    const DEFAULT_ELASTICSEARCH_HOST = 'localhost';
-    const DEFAULT_ELASTICSEARCH_PORT = '9200';
-    const DEFAULT_ELASTICSEARCH_INDEX_PREFIX = 'magento2';
-    const DEFAULT_ELASTICSEARCH_TIMEOUT = 15;
-
-    /**
      * Get options list for search engine configuration
      *
      * @return AbstractConfigOption[]
@@ -51,28 +41,25 @@ class SearchConfigOptionsList
                 SelectConfigOption::FRONTEND_WIZARD_SELECT,
                 array_keys($this->getAvailableSearchEngineList()),
                 '',
-                'Search engine. Values: ' . implode(', ', array_keys($this->getAvailableSearchEngineList())),
-                self::DEFAULT_SEARCH_ENGINE
+                'Search engine. Values: ' . implode(', ', array_keys($this->getAvailableSearchEngineList()))
             ),
             new TextConfigOption(
                 self::INPUT_KEY_ELASTICSEARCH_HOST,
                 TextConfigOption::FRONTEND_WIZARD_TEXT,
                 '',
-                'Elasticsearch server host.',
-                self::DEFAULT_ELASTICSEARCH_HOST
+                'Elasticsearch server host.'
             ),
             new TextConfigOption(
                 self::INPUT_KEY_ELASTICSEARCH_PORT,
                 TextConfigOption::FRONTEND_WIZARD_TEXT,
                 '',
-                'Elasticsearch server port.',
-                self::DEFAULT_ELASTICSEARCH_PORT
+                'Elasticsearch server port.'
             ),
-            new FlagConfigOption(
+            new TextConfigOption(
                 self::INPUT_KEY_ELASTICSEARCH_ENABLE_AUTH,
+                TextConfigOption::FRONTEND_WIZARD_TEXT,
                 '',
-                'Enable Elasticsearch HTTP authentication.',
-                null
+                'Set to 1 to enable authentication. (default is 0, disabled)'
             ),
             new TextConfigOption(
                 self::INPUT_KEY_ELASTICSEARCH_USERNAME,
@@ -90,15 +77,13 @@ class SearchConfigOptionsList
                 self::INPUT_KEY_ELASTICSEARCH_INDEX_PREFIX,
                 TextConfigOption::FRONTEND_WIZARD_TEXT,
                 '',
-                'Elasticsearch index prefix.',
-                self::DEFAULT_ELASTICSEARCH_INDEX_PREFIX
+                'Elasticsearch index prefix.'
             ),
             new TextConfigOption(
                 self::INPUT_KEY_ELASTICSEARCH_TIMEOUT,
                 TextConfigOption::FRONTEND_WIZARD_TEXT,
                 '',
-                'Elasticsearch server timeout.',
-                self::DEFAULT_ELASTICSEARCH_TIMEOUT
+                'Elasticsearch server timeout.'
             )
         ];
     }

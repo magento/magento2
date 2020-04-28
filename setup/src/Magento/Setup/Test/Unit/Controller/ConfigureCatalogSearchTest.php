@@ -8,10 +8,10 @@ declare(strict_types=1);
 namespace Magento\Setup\Test\Unit\Controller;
 
 use Laminas\View\Model\JsonModel;
+use Laminas\View\Model\ViewModel;
 use Magento\Setup\Controller\ConfigureCatalogSearch;
 use Magento\Setup\Model\SearchConfigOptionsList;
 use PHPUnit\Framework\TestCase;
-use Zend\View\Model\ViewModel;
 
 class ConfigureCatalogSearchTest extends TestCase
 {
@@ -50,12 +50,12 @@ class ConfigureCatalogSearchTest extends TestCase
         $this->assertInstanceOf(JsonModel::class, $jsonModel);
 
         $expectedDefaultParameters = [
-            'engine' => SearchConfigOptionsList::DEFAULT_SEARCH_ENGINE,
+            'engine' => 'elasticsearch7',
             'elasticsearch' => [
-                'hostname' => SearchConfigOptionsList::DEFAULT_ELASTICSEARCH_HOST,
-                'port' => SearchConfigOptionsList::DEFAULT_ELASTICSEARCH_PORT,
-                'timeout' => SearchConfigOptionsList::DEFAULT_ELASTICSEARCH_TIMEOUT,
-                'indexPrefix' => SearchConfigOptionsList::DEFAULT_ELASTICSEARCH_INDEX_PREFIX,
+                'hostname' => 'localhost',
+                'port' => '9200',
+                'timeout' => '15',
+                'indexPrefix' => 'magento2',
                 'enableAuth' => false
             ]
         ];
