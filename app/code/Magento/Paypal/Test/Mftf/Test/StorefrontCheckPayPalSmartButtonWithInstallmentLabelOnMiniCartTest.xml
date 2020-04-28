@@ -18,6 +18,9 @@
             <testCaseId value="MC-28711"/>
             <group value="paypal"/>
             <group value="paypalExpress"/>
+            <skip>
+                <issueId value="MQE-1576"/>
+            </skip>
         </annotations>
         <before>
             <magentoCLI command="setup:static-content:deploy {{GeneralLocalCodeConfigsForMexico.value}}" stepKey="deployStaticContentWithMexicoLocale"/>
@@ -30,7 +33,6 @@
         </before>
         <after>
             <magentoCLI command="config:set {{StorefrontPaypalMiniCartDisableCustomizeButtonConfigData.path}} {{StorefrontPaypalMiniCartDisableCustomizeButtonConfigData.value}}" stepKey="disableCustomizeButton"/>
-            <magentoCLI command="setup:static-content:deploy {{GeneralLocalCodeConfigsForUS.value}}" stepKey="setLocaleUS"/>
         </after>
         <!-- Add Product to Cart -->
         <actionGroup ref="StorefrontAddSimpleProductToShoppingCartActionGroup" before="goToPayPalSmartButtonPage" stepKey="addProductToCart">
