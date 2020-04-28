@@ -1293,7 +1293,10 @@ class Installer
 
         $this->log->log('Current status:');
         // phpcs:ignore Magento2.Functions.DiscouragedFunction
-        $this->log->log(print_r($cacheStatus, true));
+        foreach($cacheStatus as $type => $status){
+            $status = $status == 0 ? 'Disabled' : 'Enabled';
+            $this->log->log($type . ' => ' . $status);
+        }
     }
 
     /**
