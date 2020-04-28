@@ -12,7 +12,7 @@
         "magento/module-user": "*"
     },
     "suggest": {
-        "magento/sales": "*",
+        "magento/module-sales": "*",
         "magento/module-login-as-customer-api": "*"
     },
     "type": "magento2-module",

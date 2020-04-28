@@ -10,7 +10,7 @@
 {
     "*": {
         "Magento_LoginAsCustomerUi/js/login": {
-            "redirectUrl": "<?= $block->getUrl('customer/account/index') ?>"
+            "redirectUrl": "<?= /* @noEscape */ $block->getUrl('customer/account/index') ?>"
         }
     }
 }

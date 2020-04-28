@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\LoginAsCustomerUi\ViewModel;
 
 use Magento\Customer\Model\Context;
+use Magento\LoginAsCustomer\Model\Config;
 use Magento\LoginAsCustomerApi\Api\ConfigInterface;
 
 /**
@@ -15,15 +16,12 @@ use Magento\LoginAsCustomerApi\Api\ConfigInterface;
  */
 class Configuration implements \Magento\Framework\View\Element\Block\ArgumentInterface
 {
-
     /**
-     * @var \Magento\LoginAsCustomer\Model\Config
+     * @var Config
      */
     private $config;
 
     /**
-     * Customer session
-     *
      * @var \Magento\Framework\App\Http\Context
      */
     private $httpContext;
@@ -42,6 +40,7 @@ class Configuration implements \Magento\Framework\View\Element\Block\ArgumentInt
 
     /**
      * Retrieve true if login as a customer is enabled
+     *
      * @return bool
      */
     public function isEnabled(): bool

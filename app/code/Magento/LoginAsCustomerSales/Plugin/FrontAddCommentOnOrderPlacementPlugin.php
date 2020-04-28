@@ -13,6 +13,8 @@ use Magento\User\Model\UserFactory;
 
 /**
  * Add comment after order placed by admin using login-as-customer.
+ *
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  */
 class FrontAddCommentOnOrderPlacementPlugin
 {

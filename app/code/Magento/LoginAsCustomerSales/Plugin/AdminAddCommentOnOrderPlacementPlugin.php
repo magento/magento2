@@ -12,6 +12,8 @@ use Magento\Sales\Model\Order;
 
 /**
  * Add comment after order placed by admin using admin panel.
+ *
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  */
 class AdminAddCommentOnOrderPlacementPlugin
 {

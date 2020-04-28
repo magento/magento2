@@ -13,10 +13,7 @@ namespace Magento\LoginAsCustomerLog\Model\ResourceModel;
 class Login extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
     /**
-     * Initialize resource model
-     * Get tablename from config
-     *
-     * @return void
+     * @inheritdoc
      */
     protected function _construct()
     {

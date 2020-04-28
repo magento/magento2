@@ -8,13 +8,14 @@
  * @var \Magento\Framework\View\Element\Template $block
  * @var \Magento\Framework\Escaper $escaper
  */
+$viewFileUrl = $block->getViewFileUrl('Magento_LoginAsCustomerUi::images/magento-icon.svg');
 ?>
 <?php if ($block->getConfig()->isEnabled()) : ?>
     <div  data-bind="scope: 'loginAsCustomer'" >
         <div class="lac-notification clearfix" data-bind="visible: isVisible" style="display: none">
             <div class="top-container">
                 <div class="lac-notification-icon wrapper">
-                    <img class="logo-img" src="<?= $escaper->escapeUrl($block->getViewFileUrl('Magento_LoginAsCustomerUi::images/magento-icon.svg')) ?>" alt="Magento" />
+                    <img class="logo-img"  src="<?= $escaper->escapeUrl($viewFileUrl) ?>" alt="Magento" />
                 </div>
                 <div class="lac-notification-text wrapper">
                     <span data-bind="html: notificationText"></span>

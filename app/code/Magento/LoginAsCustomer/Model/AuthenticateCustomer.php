@@ -14,6 +14,8 @@ use Magento\LoginAsCustomerApi\Api\Data\AuthenticationDataInterface;
 
 /**
  * @inheritdoc
+ *
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  */
 class AuthenticateCustomer implements AuthenticateCustomerInterface
 {

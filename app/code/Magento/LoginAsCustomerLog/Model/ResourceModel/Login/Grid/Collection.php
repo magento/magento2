@@ -13,10 +13,7 @@ namespace Magento\LoginAsCustomerLog\Model\ResourceModel\Login\Grid;
 class Collection extends \Magento\LoginAsCustomerLog\Model\ResourceModel\Login\Collection
 {
     /**
-     * Constructor
-     * Configures collection
-     *
-     * @return void
+     * @inheritdoc
      */
     protected function _construct()
     {

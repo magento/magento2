@@ -14,7 +14,8 @@ if ($block->isLoggedIn()) {
 }
 ?>
 
-<a class="lac-notification-close-link" <?= /* @noEscape */ $block->getLinkAttributes() ?><?= /* @noEscape */ $dataPostParam ?>>
+<a class="lac-notification-close-link" <?= /* @noEscape */ $block->getLinkAttributes()
+?><?= /* @noEscape */ $dataPostParam ?>>
     <?= $escaper->escapeHtml(__('Close Session')) ?>
 </a>
 

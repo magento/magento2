@@ -8,7 +8,7 @@ declare(strict_types=1);
 namespace Magento\LoginAsCustomerUi\Model\Config\Source;
 
 /**
- * Class StoreViewLogin
+ * @inheritdoc
  */
 class StoreViewLogin implements \Magento\Framework\Data\OptionSourceInterface
 {
@@ -23,9 +23,7 @@ class StoreViewLogin implements \Magento\Framework\Data\OptionSourceInterface
     private const MANUAL = 1;
 
     /**
-     * Options int
-     *
-     * @return array
+     * @inheritdoc
      */
     public function toOptionArray(): array
     {

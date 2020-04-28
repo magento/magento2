@@ -46,7 +46,7 @@ class AuthenticationData implements AuthenticationDataInterface
     }
 
     /**
-     * @return int
+     * @inheritdoc
      */
     public function getCustomerId(): int
     {
@@ -54,7 +54,7 @@ class AuthenticationData implements AuthenticationDataInterface
     }
 
     /**
-     * @return int
+     * @inheritdoc
      */
     public function getAdminId(): int
     {

@@ -14,6 +14,8 @@ use Magento\Store\Model\ScopeInterface;
 
 /**
  * Disable PageCache if enabled corresponding option in configuration
+ *
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  */
 class DisablePageCacheIfNeededPlugin
 {

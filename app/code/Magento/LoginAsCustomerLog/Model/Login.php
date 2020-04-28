@@ -13,9 +13,7 @@ namespace Magento\LoginAsCustomerLog\Model;
 class Login extends \Magento\Framework\Model\AbstractModel
 {
     /**
-     * Initialize resource model
-     *
-     * @return void
+     * @inheritdoc
      */
     protected function _construct()
     {

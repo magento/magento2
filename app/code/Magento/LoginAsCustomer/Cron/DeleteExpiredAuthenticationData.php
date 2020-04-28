@@ -11,7 +11,7 @@ use Magento\LoginAsCustomerApi\Api\ConfigInterface;
 use Magento\LoginAsCustomerApi\Api\DeleteExpiredAuthenticationDataInterface;
 
 /**
- * elete expired authentication data cron task
+ * Delete expired authentication data cron task
  */
 class DeleteExpiredAuthenticationData
 {
@@ -38,7 +38,7 @@ class DeleteExpiredAuthenticationData
     }
 
     /**
-     * elete expired authentication data
+     * Delete expired authentication data
      */
     public function execute(): void
     {

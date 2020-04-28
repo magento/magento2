@@ -15,7 +15,11 @@ use Magento\LoginAsCustomerApi\Api\AuthenticateCustomerInterface;
 use Magento\LoginAsCustomerApi\Api\Data\AuthenticationDataInterface;
 
 /**
- * Class AuthenticateCustomer Plugin
+ * \Magento\LoginAsCustomerApi\Api\AuthenticateCustomerInterface Plugin
+ *
+ * Remove all items from guest shopping cart before execute. Mark customer cart as not-guest after execute
+ *
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  */
 class AuthenticateCustomerPlugin
 {

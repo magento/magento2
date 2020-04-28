@@ -13,10 +13,7 @@ namespace Magento\LoginAsCustomerLog\Model\ResourceModel\Login;
 class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {
     /**
-     * Constructor
-     * Configures collection
-     *
-     * @return void
+     * @inheritdoc
      */
     protected function _construct()
     {

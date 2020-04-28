@@ -150,6 +150,8 @@ class Login extends Action implements HttpGetActionInterface, HttpPostActionInte
     }
 
     /**
+     * Get login proceed redirect url
+     *
      * @param string $secret
      * @param int|null $storeId
      * @return string
