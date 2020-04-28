@@ -63,8 +63,8 @@ class Category implements ObserverInterface
      *
      * @param ContentIdentityInterfaceFactory $contentIdentityFactory
      * @param GetContent $getContent
-     * @param UpdateContentAssetLinksInterface $updateContentAssetLinks
      * @param MetadataPool $metadataPool
+     * @param UpdateContentAssetLinksInterface $updateContentAssetLinks
      * @param Config $config
      * @param array $fields
      */
