@@ -58,6 +58,8 @@ class Product implements ObserverInterface
     private $config;
 
     /**
+     * * Create links for product content
+     *
      * @param ContentIdentityInterfaceFactory $contentIdentityFactory
      * @param GetContent $getContent
      * @param UpdateContentAssetLinksInterface $updateContentAssetLinks

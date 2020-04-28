@@ -53,11 +53,14 @@ class Category implements ObserverInterface
     private $metadataPool;
 
     /**
+     *
      * @var Config
      */
     private $config;
 
     /**
+     * Create links for category content
+     *
      * @param ContentIdentityInterfaceFactory $contentIdentityFactory
      * @param GetContent $getContent
      * @param UpdateContentAssetLinksInterface $updateContentAssetLinks
@@ -68,8 +71,8 @@ class Category implements ObserverInterface
     public function __construct(
         ContentIdentityInterfaceFactory $contentIdentityFactory,
         GetContent $getContent,
-        UpdateContentAssetLinksInterface $updateContentAssetLinks,
         MetadataPool $metadataPool,
+        UpdateContentAssetLinksInterface $updateContentAssetLinks,
         Config $config,
         array $fields
     ) {
@@ -77,8 +80,8 @@ class Category implements ObserverInterface
         $this->getContent = $getContent;
         $this->updateContentAssetLinks = $updateContentAssetLinks;
         $this->metadataPool = $metadataPool;
-        $this->config = $config;
         $this->fields = $fields;
+        $this->config = $config;
     }
 
     /**
