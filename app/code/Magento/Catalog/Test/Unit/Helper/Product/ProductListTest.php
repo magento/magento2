@@ -15,6 +15,8 @@ use Magento\Catalog\Model\Category\Toolbar\Config as ToolbarConfig;
 
 class ProductListTest extends TestCase
 {
+    public const STUB_VIEW_MODE = 'grid';
+
     /**
      * @var ProductList
      */
@@ -49,5 +51,40 @@ class ProductListTest extends TestCase
             ->method('getOrderField')
             ->willReturn($order);
         $this->assertEquals($order, $this->object->getDefaultSortField());
+    }
+
+    /**
+     * @dataProvider defaultAvailableLimitsDataProvider
+     */
+    public function testGetDefaultLimitPerPageValueReturnsOneOfAvailableLimits(
+        string $availableValues,
+        int $defaultValue,
+        int $expectedReturn
+    ) {
+        $this->scopeConfigMock->method('getValue')
+            ->willReturnMap([
+                [sprintf('catalog/frontend/%s_per_page_values', self::STUB_VIEW_MODE), $availableValues],
+                [sprintf('catalog/frontend/%s_per_page', self::STUB_VIEW_MODE), $defaultValue]
+            ]);
+
+        $returnedValue = $this->object->getDefaultLimitPerPageValue(self::STUB_VIEW_MODE);
+
+        $this->assertSame($expectedReturn, $returnedValue);
+    }
+
+    public function defaultAvailableLimitsDataProvider(): array
+    {
+        return [
+            'limit-available' => [
+                'values' => '10,20,30',
+                'default' => 10,
+                'expected' => 10
+            ],
+            'limit-not-available' => [
+                'values' => '10,20,30',
+                'default' => 1,
+                'expected' => 10
+            ]
+        ];
     }
 }
