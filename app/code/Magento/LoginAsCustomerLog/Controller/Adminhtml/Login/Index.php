@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\LoginAsCustomerUi\Controller\Adminhtml\Login;
+namespace Magento\LoginAsCustomerLog\Controller\Adminhtml\Login;
 
 use Magento\Backend\Model\View\Result\Page;
 use Magento\Framework\Controller\ResultFactory;
@@ -25,7 +25,7 @@ class Index extends Action implements HttpGetActionInterface, HttpPostActionInte
      *
      * @see _isAllowed()
      */
-    const ADMIN_RESOURCE = 'Magento_LoginAsCustomerUi::login_log';
+    const ADMIN_RESOURCE = 'Magento_LoginAsCustomer::login_log';
 
     /**
      * Login As Customer log grid action
@@ -42,7 +42,7 @@ class Index extends Action implements HttpGetActionInterface, HttpPostActionInte
 
         /** @var Page $resultPage */
         $resultPage = $this->resultFactory->create(ResultFactory::TYPE_PAGE);
-        $resultPage->setActiveMenu('Magento_LoginAsCustomerUi::login_log')
+        $resultPage->setActiveMenu('Magento_LoginAsCustomerLog::login_log')
             ->addBreadcrumb(__('Customer'), __('Login As Customer Log'));
         $resultPage->getConfig()->getTitle()->prepend(__('Login As Customer Log'));
 

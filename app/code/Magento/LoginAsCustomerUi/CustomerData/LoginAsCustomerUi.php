@@ -9,6 +9,7 @@ namespace Magento\LoginAsCustomerUi\CustomerData;
 
 use Magento\Customer\CustomerData\SectionSourceInterface;
 use Magento\Customer\Model\Session;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Store\Model\StoreManagerInterface;
 
 /**
@@ -29,7 +30,6 @@ class LoginAsCustomerUi implements SectionSourceInterface
     private $storeManager;
 
     /**
-     * LoginAsCustomerUi constructor.
      * @param Session $customerSession
      * @param StoreManagerInterface $storeManager
      */
@@ -45,8 +45,9 @@ class LoginAsCustomerUi implements SectionSourceInterface
      * Retrieve private customer data for the logged_as_customer section
      *
      * @return array
+     * @throws LocalizedException
      */
-    public function getSectionData():array
+    public function getSectionData(): array
     {
         if (!$this->customerSession->getCustomerId()) {
             return [];

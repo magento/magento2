@@ -7,6 +7,8 @@ declare(strict_types=1);
 
 namespace Magento\LoginAsCustomerUi\Controller\Adminhtml\Login;
 
+use Magento\Backend\App\Action;
+use Magento\Backend\App\Action\Context;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Controller\Result\Redirect;
 use Magento\Framework\Controller\ResultFactory;
@@ -28,14 +30,14 @@ use Magento\LoginAsCustomerApi\Api\SaveAuthenticationDataInterface;
  *
  * This action can be executed via GET request when "Store View To Login In" is disabled, and POST when it is enabled
  */
-class Login implements HttpGetActionInterface, HttpPostActionInterface
+class Login extends Action implements HttpGetActionInterface, HttpPostActionInterface
 {
     /**
      * Authorization level of a basic admin session
      *
      * @see _isAllowed()
      */
-    const ADMIN_RESOURCE = 'Magento_LoginAsCustomerUi::login_button';
+    const ADMIN_RESOURCE = 'Magento_LoginAsCustomer::login';
 
     /**
      * @var ResultFactory
@@ -88,6 +90,7 @@ class Login implements HttpGetActionInterface, HttpPostActionInterface
     private $saveAuthenticationData;
 
     /**
+     * @param Context $context
      * @param ResultFactory $resultFactory
      * @param RequestInterface $request
      * @param ManagerInterface $messageManager
@@ -100,6 +103,7 @@ class Login implements HttpGetActionInterface, HttpPostActionInterface
      * @param SaveAuthenticationDataInterface $saveAuthenticationData
      */
     public function __construct(
+        Context $context,
         ResultFactory $resultFactory,
         RequestInterface $request,
         ManagerInterface $messageManager,
@@ -111,6 +115,8 @@ class Login implements HttpGetActionInterface, HttpPostActionInterface
         AuthenticationDataInterfaceFactory $authenticationDataFactory,
         SaveAuthenticationDataInterface $saveAuthenticationData
     ) {
+        parent::__construct($context);
+
         $this->resultFactory = $resultFactory;
         $this->request = $request;
         $this->messageManager = $messageManager;

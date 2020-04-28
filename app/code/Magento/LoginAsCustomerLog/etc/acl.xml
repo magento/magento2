@@ -11,14 +11,7 @@
             <resource id="Magento_Backend::admin">
                 <resource id="Magento_Customer::customer">
                     <resource id="Magento_LoginAsCustomer::login" title="Login as Customer" sortOrder="50">
-                        <resource id="Magento_LoginAsCustomer::login_button" title="Allow Login as Customer Button" sortOrder="10" />
-                    </resource>
-                </resource>
-                <resource id="Magento_Backend::stores">
-                    <resource id="Magento_Backend::stores_settings">
-                        <resource id="Magento_Config::config">
-                            <resource id="Magento_LoginAsCustomer::config_section" title="Login as Customer Section" />
-                        </resource>
+                        <resource id="Magento_LoginAsCustomer::login_log" title="View Login as Customer Log" sortOrder="20"/>
                     </resource>
                 </resource>
             </resource>

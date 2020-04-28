@@ -5,12 +5,12 @@
  */
 declare(strict_types=1);
 
-namespace Magento\LoginAsCustomerUi\Model\ResourceModel\Login\Grid;
+namespace Magento\LoginAsCustomerLog\Model\ResourceModel\Login\Grid;
 
 /**
- * LoginAsCustomerUi collection
+ * LoginAsCustomerLog collection
  */
-class Collection extends \Magento\LoginAsCustomerUi\Model\ResourceModel\Login\Collection
+class Collection extends \Magento\LoginAsCustomerLog\Model\ResourceModel\Login\Collection
 {
     /**
      * Constructor

@@ -40,7 +40,7 @@ class Proceed implements HttpGetActionInterface
     {
         /** @var Page $resultPage */
         $resultPage = $this->resultFactory->create(ResultFactory::TYPE_PAGE);
-        $resultPage->getConfig()->getTitle()->set(__("You are logged in"));
+        $resultPage->getConfig()->getTitle()->set(__('You are logged in'));
         return $this->resultFactory->create(ResultFactory::TYPE_PAGE);
     }
 }

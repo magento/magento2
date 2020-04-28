@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\LoginAsCustomerUi\Model;
+namespace Magento\LoginAsCustomerLog\Model;
 
 /**
  * Login model
@@ -19,6 +19,6 @@ class Login extends \Magento\Framework\Model\AbstractModel
      */
     protected function _construct()
     {
-        $this->_init(\Magento\LoginAsCustomerUi\Model\ResourceModel\Login::class);
+        $this->_init(\Magento\LoginAsCustomerLog\Model\ResourceModel\Login::class);
     }
 }

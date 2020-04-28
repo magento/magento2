@@ -1,5 +1,5 @@
 {
-    "name": "magento/module-login-as-customer-ui",
+    "name": "magento/module-login-as-customer-log",
     "description": "",
     "require": {
         "php": "~7.1.3||~7.2.0||~7.3.0",
@@ -7,6 +7,7 @@
         "magento/module-login-as-customer-api": "*",
         "magento/module-backend": "*",
         "magento/module-customer": "*",
+        "magento/module-sales": "*",
         "magento/module-store": "*",
         "magento/module-ui": "*",
         "magento/module-user": "*"
@@ -19,7 +20,7 @@
     "autoload": {
         "files": [ "registration.php" ],
         "psr-4": {
-            "Magento\\LoginAsCustomerUi\\": ""
+            "Magento\\LoginAsCustomerLog\\": ""
         }
     }
 }

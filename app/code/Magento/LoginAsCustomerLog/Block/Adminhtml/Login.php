@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\LoginAsCustomerUi\Block\Adminhtml;
+namespace Magento\LoginAsCustomerLog\Block\Adminhtml;
 
 /**
  * Login as customer log

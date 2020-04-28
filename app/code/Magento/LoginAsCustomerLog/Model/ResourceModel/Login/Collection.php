@@ -5,10 +5,10 @@
  */
 declare(strict_types=1);
 
-namespace Magento\LoginAsCustomerUi\Model\ResourceModel\Login;
+namespace Magento\LoginAsCustomerLog\Model\ResourceModel\Login;
 
 /**
- * LoginAsCustomerUi collection
+ * LoginAsCustomerLog collection
  */
 class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {
@@ -21,6 +21,9 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     protected function _construct()
     {
         parent::_construct();
-        $this->_init(\Magento\LoginAsCustomerUi\Model\Login::class, \Magento\LoginAsCustomerUi\Model\ResourceModel\Login::class);
+        $this->_init(
+            \Magento\LoginAsCustomerLog\Model\Login::class,
+            \Magento\LoginAsCustomerLog\Model\ResourceModel\Login::class
+        );
     }
 }

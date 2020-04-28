@@ -5,10 +5,10 @@
  */
 declare(strict_types=1);
 
-namespace Magento\LoginAsCustomerUi\Model\ResourceModel;
+namespace Magento\LoginAsCustomerLog\Model\ResourceModel;
 
 /**
- * LoginAsCustomerUi resource model
+ * LoginAsCustomerLog resource model
  */
 class Login extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
@@ -20,6 +20,6 @@ class Login extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      */
     protected function _construct()
     {
-        $this->_init('login_as_customer', 'login_id');
+        $this->_init('login_as_customer', 'secret');
     }
 }

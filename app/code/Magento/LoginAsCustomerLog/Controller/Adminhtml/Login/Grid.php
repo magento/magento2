@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\LoginAsCustomerUi\Controller\Adminhtml\Login;
+namespace Magento\LoginAsCustomerLog\Controller\Adminhtml\Login;
 
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Controller\ResultInterface;
@@ -22,14 +22,14 @@ class Grid extends Action implements HttpPostActionInterface
      *
      * @see _isAllowed()
      */
-    const ADMIN_RESOURCE = 'Magento_LoginAsCustomerUi::login_log';
+    const ADMIN_RESOURCE = 'Magento_LoginAsCustomer::login_log';
 
     /**
      * Login as customer log ajax grid
      *
      * @return ResultInterface
      */
-    public function execute():ResultInterface
+    public function execute(): ResultInterface
     {
         return $this->resultFactory->create(ResultFactory::TYPE_PAGE);
     }

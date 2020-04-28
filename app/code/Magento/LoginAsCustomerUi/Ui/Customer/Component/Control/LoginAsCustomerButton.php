@@ -39,7 +39,7 @@ class LoginAsCustomerButton extends GenericButton implements ButtonProviderInter
     {
         $customerId = $this->getCustomerId();
         $data = [];
-        $canModify = $customerId && $this->authorization->isAllowed('Magento_LoginAsCustomerUi::login_button');
+        $canModify = $customerId && $this->authorization->isAllowed('Magento_LoginAsCustomer::login_button');
         if ($canModify) {
             $data = [
                 'label' => __('Login As Customer'),

@@ -7,12 +7,12 @@ declare(strict_types=1);
 
 namespace Magento\LoginAsCustomerSales\Plugin;
 
-use Magento\Customer\Model\Session as CustomerSession;
 use Magento\Checkout\Model\Session as CheckoutSession;
+use Magento\Customer\Model\Session as CustomerSession;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\LoginAsCustomerApi\Api\Data\AuthenticationDataInterface;
 use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\LoginAsCustomerApi\Api\AuthenticateCustomerInterface;
+use Magento\LoginAsCustomerApi\Api\Data\AuthenticationDataInterface;
 
 /**
  * Class AuthenticateCustomer Plugin

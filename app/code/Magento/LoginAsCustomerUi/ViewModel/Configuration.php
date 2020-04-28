@@ -44,7 +44,7 @@ class Configuration implements \Magento\Framework\View\Element\Block\ArgumentInt
      * Retrieve true if login as a customer is enabled
      * @return bool
      */
-    public function isEnabled():bool
+    public function isEnabled(): bool
     {
         return $this->config->isEnabled() && $this->isLoggedIn();
     }
@@ -54,7 +54,7 @@ class Configuration implements \Magento\Framework\View\Element\Block\ArgumentInt
      *
      * @return bool
      */
-    private function isLoggedIn():bool
+    private function isLoggedIn(): bool
     {
         return (bool)$this->httpContext->getValue(Context::CONTEXT_AUTH);
     }

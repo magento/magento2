@@ -10,7 +10,7 @@
     <update handle="loginascustomer_login_grid_block"/>
     <body>
         <referenceContainer name="content">
-            <block class="Magento\LoginAsCustomerUi\Block\Adminhtml\Login" name="loginascustomer.container"/>
+            <block class="Magento\LoginAsCustomerLog\Block\Adminhtml\Login" name="loginascustomer.container"/>
         </referenceContainer>
     </body>
 </page>

@@ -3,9 +3,8 @@
     "description": "",
     "require": {
         "php": "~7.1.3||~7.2.0||~7.3.0",
-        "magento/module-login-as-customer": "*",
-        "magento/module-customer": "*",
         "magento/module-checkout": "*",
+        "magento/module-login-as-customer": "*",
         "magento/module-quote": "*"
     },
     "type": "magento2-module",
