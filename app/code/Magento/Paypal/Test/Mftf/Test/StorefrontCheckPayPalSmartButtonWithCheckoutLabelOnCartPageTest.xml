@@ -36,7 +36,7 @@
 
         <actionGroup ref="ClickViewAndEditCartFromMiniCartActionGroup" stepKey="goToPayPalSmartButtonPage"/>
 
-        <actionGroup ref="SwitchToPayPalGroupBtnActionGroup" stepKey="switchToIframe">
+        <actionGroup ref="StorefrontSwitchToPayPalButtonIframeActionGroup" stepKey="switchToIframe">
             <argument name="elementNumber" value="1"/>
         </actionGroup>
         <!-- Check PayPal smart button configurations -->

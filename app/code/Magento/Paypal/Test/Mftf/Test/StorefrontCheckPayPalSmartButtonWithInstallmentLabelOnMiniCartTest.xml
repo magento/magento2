@@ -30,7 +30,7 @@
         </before>
         <after>
             <magentoCLI command="config:set {{StorefrontPaypalMiniCartDisableCustomizeButtonConfigData.path}} {{StorefrontPaypalMiniCartDisableCustomizeButtonConfigData.value}}" stepKey="disableCustomizeButton"/>
-            <magentoCLI command="config:set {{GeneralLocalCodeConfigsForMexico.path}} {{GeneralLocalCodeConfigsForUS.value}}" stepKey="setLocaleUS"/>
+            <magentoCLI command="setup:static-content:deploy {{GeneralLocalCodeConfigsForUS.value}}" stepKey="setLocaleUS"/>
         </after>
         <!-- Add Product to Cart -->
         <actionGroup ref="StorefrontAddSimpleProductToShoppingCartActionGroup" before="goToPayPalSmartButtonPage" stepKey="addProductToCart">
