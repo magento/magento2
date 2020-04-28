@@ -19,25 +19,14 @@
         </annotations>
 
         <before>
-            <!--Set default flat rate shipping method settings-->
             <createData entity="FlatRateShippingMethodDefault" stepKey="setDefaultFlatRateShippingMethod"/>
-
-            <!--Create simple customer-->
             <createData entity="Simple_US_Customer_CA" stepKey="simpleCustomer"/>
-
-            <!--Create simple product 1-->
             <createData entity="ApiProductWithDescription" stepKey="simple1" before="simple2"/>
-
-            <!--Create simple product 2-->
             <createData entity="ApiProductWithDescription" stepKey="simple2" before="product"/>
-
-            <!--Create bundle product with checkbox bundle option-->
             <createData entity="ApiBundleProduct" stepKey="product"/>
             <createData entity="CheckboxOption" stepKey="checkboxBundleOption">
                 <requiredEntity createDataKey="product"/>
             </createData>
-
-            <!--Link simple product 1 to bundle option with default quantity 2-->
             <createData entity="ApiBundleLink" stepKey="createBundleLink1">
                 <requiredEntity createDataKey="product"/>
                 <requiredEntity createDataKey="checkboxBundleOption"/>
@@ -45,8 +34,6 @@
                 <field key="qty">2</field>
                 <field key="is_default">1</field>
             </createData>
-
-            <!--Link simple product 2 to bundle option with default quantity 2-->
             <createData entity="ApiBundleLink" stepKey="createBundleLink2">
                 <requiredEntity createDataKey="product"/>
                 <requiredEntity createDataKey="checkboxBundleOption"/>
@@ -54,13 +41,9 @@
                 <field key="qty">2</field>
                 <field key="is_default">1</field>
             </createData>
-
-            <!--Add drop-down bundle option-->
             <createData entity="DropDownBundleOption" stepKey="dropDownBundleOption">
                 <requiredEntity createDataKey="product"/>
             </createData>
-
-            <!--Link simple product 1 to drop-down bundle option with default quantity 2-->
             <createData entity="ApiBundleLink" stepKey="createBundleLink3">
                 <requiredEntity createDataKey="product"/>
                 <requiredEntity createDataKey="dropDownBundleOption"/>
@@ -68,8 +51,6 @@
                 <field key="qty">2</field>
                 <field key="is_default">1</field>
             </createData>
-
-            <!--Link simple product 2 to drop-down bundle option with default quantity 2-->
             <createData entity="ApiBundleLink" stepKey="createBundleLink4">
                 <requiredEntity createDataKey="product"/>
                 <requiredEntity createDataKey="dropDownBundleOption"/>
@@ -78,45 +59,30 @@
             </createData>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
+        <after>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+            <deleteData createDataKey="product" stepKey="delete"/>
+            <deleteData createDataKey="simpleCustomer" stepKey="deleteSimpleCustomer"/>
+            <deleteData createDataKey="simple1" stepKey="deleteSimple1" before="deleteSimple2"/>
+            <deleteData createDataKey="simple2" stepKey="deleteSimple2" before="delete"/>
+        </after>
 
-        <!--Create new customer order-->
         <actionGroup ref="NavigateToNewOrderPageExistingCustomerActionGroup" stepKey="navigateToNewOrderWithExistingCustomer">
             <argument name="customer" value="$$simpleCustomer$$"/>
         </actionGroup>
-
-        <!--Add bundle product to order and check product price in grid-->
         <actionGroup ref="AddBundleProductToOrderAndCheckPriceInGridActionGroup" stepKey="addBundleProductToOrder">
             <argument name="product" value="$$product$$"/>
             <argument name="quantity" value="1"/>
             <argument name="price" value="$738.00"/>
         </actionGroup>
-
-        <!--Select FlatRate shipping method-->
         <actionGroup ref="OrderSelectFlatRateShippingActionGroup" stepKey="orderSelectFlatRateShippingMethod"/>
-
-        <!--Submit order-->
-        <click selector="{{AdminOrderFormActionSection.SubmitOrder}}" stepKey="submitOrder"/>
-
-        <!--Verify order information-->
-        <actionGroup ref="VerifyCreatedOrderInformationActionGroup" stepKey="verifyCreatedOrderInformation"/>
-
-
-        <!-- Create Invoice -->
+        <actionGroup ref="AdminSubmitOrderActionGroup" stepKey="submitOrder"/>
         <actionGroup ref="StartCreateInvoiceFromOrderPageActionGroup" stepKey="startInvoice"/>
-        <click selector="{{AdminInvoiceMainActionsSection.submitInvoice}}" stepKey="clickSubmitInvoice"/>
-        <waitForElementVisible selector="{{AdminMessagesSection.success}}" stepKey="waitForMessageAppears"/>
-        <see selector="{{AdminMessagesSection.success}}" userInput="The invoice has been created." stepKey="seeInvoiceCreateSuccess"/>
-
-        <!-- Go to Sales > Orders > find out placed order and open -->
-        <grabTextFrom selector="|Order # (\d+)|" stepKey="grabOrderId" />
-        <assertNotEmpty stepKey="assertOrderIdIsNotEmpty" after="grabOrderId">
-            <actualResult type="const">$grabOrderId</actualResult>
-        </assertNotEmpty>
+        <actionGroup ref="SubmitInvoiceActionGroup" stepKey="submitInvoice"/>
+        <grabFromCurrentUrl regex="~/order_id/(\d+)/~" stepKey="grabOrderId"/>
         <actionGroup ref="OpenOrderByIdActionGroup" stepKey="openOrder">
-            <argument name="orderId" value="{$grabOrderId}"/>
+            <argument name="orderId" value="$grabOrderId"/>
         </actionGroup>
-
-        <!-- Click 'Credit Memo' button and fill data from dataset: partial refund -->
         <actionGroup ref="AdminOpenAndFillCreditMemoRefundBundleWithQtyActionGroup" stepKey="fillCreditMemoRefund">
             <argument name="itemQtyToRefund" value="0"/>
             <argument name="rowNumberItemOne" value="3"/>
@@ -124,36 +90,15 @@
             <argument name="rowNumberItemThree" value="6"/>
             <argument name="adjustmentRefund" value="10"/>
         </actionGroup>
+        <actionGroup ref="SubmitCreditMemoActionGroup" stepKey="submitCreditMemo" />
 
-        <!-- On order's page click 'Refund offline' button -->
-        <click selector="{{AdminCreditMemoTotalSection.submitRefundOffline}}" stepKey="clickRefundOffline"/>
-        <waitForPageLoad stepKey="waitForResultPage"/>
-
-        <!-- Perform all assertions: assert refund success create message -->
-        <see selector="{{AdminIndexManagementSection.successMessage}}" userInput="You created the credit memo." stepKey="assertRefundSuccessCreateMessage"/>
-
-        <!--Assert refund in Credit Memo Tab -->
-        <click selector="{{AdminOrderDetailsOrderViewSection.creditMemos}}" stepKey="clickCreditMemoTab"/>
-        <waitForPageLoad stepKey="waitForTabLoad"/>
-        <grabTextFrom selector="{{AdminCreditMemosGridSection.memoId}}" stepKey="grabMemoId"/>
-        <assertNotEmpty stepKey="assertMemoIdIsNotEmpty" after="grabMemoId">
-            <actualResult type="const">$grabMemoId</actualResult>
-        </assertNotEmpty>
-        <click selector="{{AdminCreditMemosGridSection.memoId}}" stepKey="clickView"/>
-        <waitForPageLoad stepKey="waitForCreditMemo"/>
+        <actionGroup ref="AdminOpenCreditMemoFromOrderPageActionGroup" stepKey="openCreditMemo" />
         <scrollTo selector="{{AdminCreditMemoViewTotalSection.subtotal}}" stepKey="scrollToTotal"/>
-        <see selector="{{AdminCreditMemoViewTotalSection.subtotal}}" userInput="$0.00" stepKey="seeSubtotal"/>
-        <see selector="{{AdminCreditMemoViewTotalSection.adjustmentRefund}}" userInput="$10.00" stepKey="seeAdjustmentRefund"/>
-        <see selector="{{AdminCreditMemoViewTotalSection.adjustmentFee}}" userInput="$0.00" stepKey="seeAdjustmentFee"/>
-        <see selector="{{AdminCreditMemoViewTotalSection.grandTotal}}" userInput="$10.00" stepKey="assertRefundOnCreditMemoTab"/>
-
-        <after>
-            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
-
-            <deleteData createDataKey="product" stepKey="delete"/>
-            <deleteData createDataKey="simpleCustomer" stepKey="deleteSimpleCustomer"/>
-            <deleteData createDataKey="simple1" stepKey="deleteSimple1" before="deleteSimple2"/>
-            <deleteData createDataKey="simple2" stepKey="deleteSimple2" before="delete"/>
-        </after>
+        <actionGroup ref="AssertAdminCreditMemoViewPageTotalsActionGroup" stepKey="assertCreditMemoViewPageTotals">
+            <argument name="subtotal" value="$0.00"/>
+            <argument name="adjustmentRefund" value="$10.00"/>
+            <argument name="adjustmentFee" value="$0.00"/>
+            <argument name="grandTotal" value="$10.00"/>
+        </actionGroup>
     </test>
 </tests>

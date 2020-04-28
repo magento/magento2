@@ -3,74 +3,121 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Sales\Test\Unit\Model\Order;
 
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Sales\Model\Order\CreditmemoFactory;
+use Magento\Sales\Model\Order\Item;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+use ReflectionMethod;
+
 /**
  * Unit test for creditmemo factory class.
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class CreditmemoFactoryTest extends \PHPUnit\Framework\TestCase
+class CreditmemoFactoryTest extends TestCase
 {
     /**
-     * Subject of testing.
-     *
-     * @var \Magento\Sales\Model\Order\CreditmemoFactory
+     * @var CreditmemoFactory
      */
     protected $subject;
 
     /**
-     * @return void
-     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @var ReflectionMethod
      */
-    protected function setUp()
+    protected $testMethod;
+
+    /**
+     * @var Item|MockObject
+     */
+    protected $orderItemMock;
+
+    /**
+     * @var Item|MockObject
+     */
+    protected $orderChildItemOneMock;
+
+    /**
+     * @var Item|MockObject
+     */
+    protected $orderChildItemTwoMock;
+
+    /**
+     * @inheritDoc
+     */
+    protected function setUp(): void
     {
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->subject = $objectManager->getObject(\Magento\Sales\Model\Order\CreditmemoFactory::class, []);
+        $this->orderItemMock = $this->createPartialMock(
+            Item::class,
+            ['getChildrenItems', 'isDummy', 'getHasChildren', 'getId', 'getParentItemId']
+        );
+        $this->orderChildItemOneMock = $this->createPartialMock(
+            Item::class,
+            ['getQtyToRefund', 'getId']
+        );
+        $this->orderChildItemTwoMock = $this->createPartialMock(
+            Item::class,
+            ['getQtyToRefund', 'getId']
+        );
+        $this->testMethod = new ReflectionMethod(CreditmemoFactory::class, 'canRefundItem');
+
+        $objectManagerHelper = new ObjectManagerHelper($this);
+        $this->subject = $objectManagerHelper->getObject(CreditmemoFactory::class, []);
     }
 
     /**
      * Check if order item can be refunded
+     * @return void
      */
-    public function testCanRefundItem()
+    public function testCanRefundItem(): void
     {
-        $orderItem = $this->createPartialMock(
-            \Magento\Sales\Model\Order\Item::class,
-            ['getChildrenItems', 'isDummy', 'getHasChildren', 'getId', 'getParentItemId']
-        );
-        $orderItem->expects($this->any())
-            ->method('getId')
-            ->willReturn(1);
-        $orderItem->expects($this->any())->method('getParentItemId')->willReturn(false);
-        $orderItem->expects($this->any())->method('isDummy')->willReturn(true);
-        $orderItem->expects($this->any())->method('getHasChildren')->willReturn(true);
-        $orderChildItemOne = $this->createPartialMock(
-            \Magento\Sales\Model\Order\Item::class,
-            ['getQtyToRefund', 'getId']
-        );
-        $orderChildItemOne->expects($this->any())->method('getQtyToRefund')->willReturn(1);
-        $orderChildItemOne->expects($this->any())->method('getId')->willReturn(2);
-        $orderChildItemTwo = $this->createPartialMock(
-            \Magento\Sales\Model\Order\Item::class,
-            ['getQtyToRefund', 'getId']
-        );
-        $orderChildItemTwo->expects($this->any())->method('getQtyToRefund')->willReturn(1);
-        $orderChildItemTwo->expects($this->any())->method('getId')->willReturn(3);
-        $orderItem->expects($this->any())
-            ->method('getChildrenItems')
-            ->willReturn([$orderChildItemOne, $orderChildItemTwo]);
-        $testMethod = new \ReflectionMethod(
-            \Magento\Sales\Model\Order\CreditmemoFactory::class,
-            'canRefundItem'
-        );
         $orderItemQtys = [
             2 => 0,
             3 => 0
         ];
         $invoiceQtysRefundLimits = [];
-        $testMethod->setAccessible(true);
-        $result         = $testMethod->invoke($this->subject, $orderItem, $orderItemQtys, $invoiceQtysRefundLimits);
-        $expectedResult = true;
-        $this->assertEquals($expectedResult, $result);
+
+        $this->orderItemMock->expects($this->any())
+            ->method('getId')
+            ->willReturn(1);
+        $this->orderItemMock->expects($this->any())
+            ->method('getParentItemId')
+            ->willReturn(false);
+        $this->orderItemMock->expects($this->any())
+            ->method('isDummy')
+            ->willReturn(true);
+        $this->orderItemMock->expects($this->any())
+            ->method('getHasChildren')
+            ->willReturn(true);
+
+        $this->orderChildItemOneMock->expects($this->any())
+            ->method('getQtyToRefund')
+            ->willReturn(1);
+        $this->orderChildItemOneMock->expects($this->any())
+            ->method('getId')
+            ->willReturn(2);
+
+        $this->orderChildItemTwoMock->expects($this->any())
+            ->method('getQtyToRefund')
+            ->willReturn(1);
+        $this->orderChildItemTwoMock->expects($this->any())
+            ->method('getId')
+            ->willReturn(3);
+        $this->orderItemMock->expects($this->any())
+            ->method('getChildrenItems')
+            ->willReturn([$this->orderChildItemOneMock, $this->orderChildItemTwoMock]);
+
+        $this->testMethod->setAccessible(true);
+
+        $this->assertTrue(
+            $this->testMethod->invoke(
+                $this->subject,
+                $this->orderItemMock,
+                $orderItemQtys,
+                $invoiceQtysRefundLimits
+            )
+        );
     }
 }
