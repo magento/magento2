@@ -819,7 +819,7 @@ class Installer
     /**
      * Clear memory tables
      *
-     * Memory tables that used in old versions of Magento fro indexing purposes should be clened
+     * Memory tables that used in old versions of Magento for indexing purposes should be cleaned
      * Otherwise some supported DB solutions like Galeracluster may have replication error
      * when memory engine will be switched to InnoDb
      *
