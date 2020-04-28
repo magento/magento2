@@ -8,12 +8,12 @@ declare(strict_types=1);
 namespace Magento\LoginAsCustomer\Model\ResourceModel;
 
 use Magento\Framework\App\ResourceConnection;
-use Magento\LoginAsCustomer\Api\DeleteSecretInterface;
+use Magento\LoginAsCustomer\Api\DeleteAuthenticationDataBySecretInterface;
 
 /**
- * @api
+ * @inheritdoc
  */
-class DeleteSecret implements DeleteSecretInterface
+class DeleteAuthenticationDataBySecret implements DeleteAuthenticationDataBySecretInterface
 {
     /**
      * @var ResourceConnection
@@ -30,9 +30,9 @@ class DeleteSecret implements DeleteSecretInterface
     }
 
     /**
-     * Delete old secret key records
+     * @inheritdoc
      */
-    public function execute(string $secretKey):void
+    public function execute(string $secret): void
     {
         $connection = $this->resourceConnection->getConnection();
         $tableName = $this->resourceConnection->getTableName('login_as_customer');
@@ -40,7 +40,7 @@ class DeleteSecret implements DeleteSecretInterface
         $connection->delete(
             $tableName,
             [
-                'secret = ?' => $secretKey
+                'secret = ?' => $secret
             ]
         );
     }
