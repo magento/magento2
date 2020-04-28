@@ -15,7 +15,6 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
-use Magento\TestFramework\TestCase\GraphQl\ResponseContainsErrorsException;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 
 /**
@@ -37,6 +36,11 @@ class ResetPasswordTest extends GraphQlAbstract
     private $customerRegistry;
 
     /**
+     * @var LockCustomer
+     */
+    private $lockCustomer;
+
+    /**
      * @inheritdoc
      */
     protected function setUp()
@@ -44,6 +48,7 @@ class ResetPasswordTest extends GraphQlAbstract
         $this->objectManager = Bootstrap::getObjectManager();
         $this->accountManagement = $this->objectManager->get(AccountManagementInterface::class);
         $this->customerRegistry = $this->objectManager->get(CustomerRegistry::class);
+        $this->lockCustomer = Bootstrap::getObjectManager()->get(LockCustomer::class);
         parent::setUp();
     }
 
@@ -75,6 +80,9 @@ QUERY;
     /**
      * @magentoApiDataFixture    Magento/Customer/_files/customer.php
      *
+     * @expectedException \Exception
+     * @expectedExceptionMessage Email must be specified
+     *
      * @throws NoSuchEntityException
      * @throws Exception
      * @throws LocalizedException
@@ -90,12 +98,14 @@ mutation {
     )
 }
 QUERY;
-        $this->assertMessage('Email must be specified');
         $this->graphQlMutation($query);
     }
 
     /**
      * @magentoApiDataFixture    Magento/Customer/_files/customer.php
+     *
+     * @expectedException \Exception
+     * @expectedExceptionMessage Email is invalid
      *
      * @throws NoSuchEntityException
      * @throws Exception
@@ -112,12 +122,14 @@ mutation {
     )
 }
 QUERY;
-        $this->assertMessage('Email is invalid');
         $this->graphQlMutation($query);
     }
 
     /**
      * @magentoApiDataFixture    Magento/Customer/_files/customer.php
+     *
+     * @expectedException \Exception
+     * @expectedExceptionMessage resetPasswordToken must be specified
      *
      * @throws NoSuchEntityException
      * @throws Exception
@@ -134,12 +146,14 @@ mutation {
     )
 }
 QUERY;
-        $this->assertMessage('resetPasswordToken must be specified');
         $this->graphQlMutation($query);
     }
 
     /**
      * @magentoApiDataFixture    Magento/Customer/_files/customer.php
+     *
+     * @expectedException \Exception
+     * @expectedExceptionMessage Cannot set customer password
      *
      * @throws NoSuchEntityException
      * @throws Exception
@@ -156,12 +170,14 @@ mutation {
     )
 }
 QUERY;
-        $this->assertMessage('The password token is mismatched. Reset and try again.');
         $this->graphQlMutation($query);
     }
 
     /**
      * @magentoApiDataFixture    Magento/Customer/_files/customer.php
+     *
+     * @expectedException \Exception
+     * @expectedExceptionMessage newPassword must be specified
      *
      * @throws NoSuchEntityException
      * @throws Exception
@@ -178,20 +194,33 @@ mutation {
     )
 }
 QUERY;
-        $this->assertMessage('newPassword must be specified');
         $this->graphQlMutation($query);
     }
 
     /**
-     * Assert messages
+     * Check password reset for lock customer
      *
-     * @param $message
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     *
+     * @expectedException \Exception
+     * @expectedExceptionMessage The current customer isn't authorized
+     *
+     * @throws LocalizedException
+     * @throws NoSuchEntityException
      */
-    private function assertMessage($message)
+    public function testPasswordResetForLockCustomer()
     {
-        $expectedExceptionsMessage = "GraphQL response contains errors: {$message}";
-        $this->expectException(ResponseContainsErrorsException::class);
-        $this->expectExceptionMessage($expectedExceptionsMessage);
+        $this->lockCustomer->execute(1);
+        $query = <<<QUERY
+mutation {
+    resetPassword (
+        email: "{$this->getCustomerEmail()}"
+        resetPasswordToken: "{$this->getResetPasswordToken()}"
+        newPassword: "{$this->getNewPassword()}"
+    )
+}
+QUERY;
+        $this->graphQlMutation($query);
     }
 
     /**

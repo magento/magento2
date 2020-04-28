@@ -8,6 +8,8 @@ declare(strict_types=1);
 namespace Magento\CustomerGraphQl\Model\Resolver;
 
 use Magento\Customer\Api\AccountManagementInterface;
+use Magento\Customer\Api\CustomerRepositoryInterface;
+use Magento\Customer\Model\AuthenticationInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
@@ -17,6 +19,9 @@ use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Framework\Validator\EmailAddress as EmailValidator;
 
+/**
+ * Class Resolver for ResetPassword
+ */
 class ResetPassword implements ResolverInterface
 {
     /**
@@ -30,15 +35,31 @@ class ResetPassword implements ResolverInterface
     private $emailValidator;
 
     /**
-     * RequestPasswordResetEmail constructor.
+     * @var AuthenticationInterface
+     */
+    private $authentication;
+
+    /**
+     * @var CustomerRepositoryInterface
+     */
+    private $customerRepository;
+
+    /**
+     * ResetPassword constructor.
      *
-     * @param AccountManagementInterface $customerAccountManagement
-     * @param EmailValidator             $emailValidator
+     * @param AuthenticationInterface     $authentication
+     * @param CustomerRepositoryInterface $customerRepository
+     * @param AccountManagementInterface  $customerAccountManagement
+     * @param EmailValidator              $emailValidator
      */
     public function __construct(
+        AuthenticationInterface $authentication,
+        CustomerRepositoryInterface $customerRepository,
         AccountManagementInterface $customerAccountManagement,
         EmailValidator $emailValidator
     ) {
+        $this->authentication = $authentication;
+        $this->customerRepository = $customerRepository;
         $this->customerAccountManagement = $customerAccountManagement;
         $this->emailValidator = $emailValidator;
     }
@@ -81,13 +102,23 @@ class ResetPassword implements ResolverInterface
         }
 
         try {
+            $customer = $this->customerRepository->get($args['email']);
+        } catch (LocalizedException $e) {
+            throw new GraphQlInputException(__('Cannot set customer password'), $e);
+        }
+
+        if (true === $this->authentication->isLocked($customer->getId())) {
+            throw new GraphQlInputException(__("The current customer isn't authorized"));
+        }
+
+        try {
             return $this->customerAccountManagement->resetPassword(
                 $args['email'],
                 $args['resetPasswordToken'],
                 $args['newPassword']
             );
         } catch (LocalizedException $e) {
-            throw new GraphQlInputException(__($e->getMessage()), $e);
+            throw new GraphQlInputException(__('Cannot set customer password'), $e);
         }
     }
 }

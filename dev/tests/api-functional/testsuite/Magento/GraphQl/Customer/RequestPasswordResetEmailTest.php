@@ -7,10 +7,22 @@ declare(strict_types=1);
 
 namespace Magento\GraphQl\Customer;
 
+use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 
 class RequestPasswordResetEmailTest extends GraphQlAbstract
 {
+    /**
+     * @var LockCustomer
+     */
+    private $lockCustomer;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->lockCustomer = Bootstrap::getObjectManager()->get(LockCustomer::class);
+    }
     /**
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
      */
@@ -30,6 +42,9 @@ QUERY;
 
     /**
      * Check if customer account is not available
+     *
+     * @expectedException \Exception
+     * @expectedExceptionMessage Cannot reset customer password
      */
     public function testCustomerAccountWithEmailNotAvailable()
     {
@@ -39,12 +54,14 @@ mutation {
   requestPasswordResetEmail(email: "customerNotAvalible@example.com")
 }
 QUERY;
-        $this->assertMessage('No such entity with email = customerNotAvalible@example.com, websiteId = 1');
         $this->graphQlMutation($query);
     }
 
     /**
      * Check if email value empty
+     *
+     * @expectedException \Exception
+     * @expectedExceptionMessage Email must be specified
      */
     public function testEmailAvailableEmptyValue()
     {
@@ -53,12 +70,14 @@ mutation {
   requestPasswordResetEmail(email: "")
 }
 QUERY;
-        $this->assertMessage('Email must be specified');
         $this->graphQlMutation($query);
     }
 
     /**
      * Check if email is invalid
+     *
+     * @expectedException \Exception
+     * @expectedExceptionMessage Email is invalid
      */
     public function testEmailAvailableInvalidValue()
     {
@@ -67,35 +86,27 @@ mutation {
   requestPasswordResetEmail(email: "invalid-email")
 }
 QUERY;
-        $this->assertMessage('Email is invalid');
         $this->graphQlMutation($query);
     }
 
     /**
-     * Check if email contain right type
+     * Check if email was sent for lock customer
+     *
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     *
+     * @expectedException \Exception
+     * @expectedExceptionMessage The current customer isn't authorized
      */
-    public function testEmailAvailableTypeValue()
+    public function testRequestPasswordResetEmailForLockCustomer()
     {
-        $query = <<<QUERY
+        $this->lockCustomer->execute(1);
+        $query =
+            <<<QUERY
 mutation {
-  requestPasswordResetEmail (email: 12345)
+  requestPasswordResetEmail(email: "customer@example.com")
 }
 QUERY;
-        self::expectException(\Exception::class);
-        self::expectExceptionMessage(
-            'GraphQL response contains errors: Field "requestPasswordResetEmail" argument "email" requires type String!'
-        );
-        $this->graphQlMutation($query);
-    }
 
-    /**
-     * Checks Exception and ExceptionMessages
-     *
-     * @param $message
-     */
-    private function assertMessage($message)
-    {
-        self::expectException(\Exception::class);
-        self::expectExceptionMessage("GraphQL response contains errors: {$message}");
+        $this->graphQlMutation($query);
     }
 }
