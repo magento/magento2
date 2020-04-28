@@ -99,6 +99,11 @@ class ArgumentsTest extends \Magento\Test\Integrity\Phrase\AbstractTestCase
     {
         if (preg_match_all('/%(\w+)/', $phrase['phrase'], $matches) || $phrase['arguments']) {
             $placeholderCount = count(array_unique($matches[1]));
+            // count all occurrences of %s
+            preg_match_all('/%s/', $phrase['phrase'], $sprintfMatches);
+            if (count($sprintfMatches[0]) > 1) {
+                $placeholderCount = $placeholderCount + count($sprintfMatches[0]) - 1;
+            }
 
             // Check for zend placeholders %placeholder% and sprintf placeholder %s
             if (preg_match_all('/%((s)|([A-Za-z]+)%)/', $phrase['phrase'], $placeHolders, PREG_OFFSET_CAPTURE)) {
