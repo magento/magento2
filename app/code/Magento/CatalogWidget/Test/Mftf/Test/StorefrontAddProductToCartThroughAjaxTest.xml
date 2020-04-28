@@ -15,8 +15,6 @@
             <title value="Add product through ajax"/>
             <description value="Add product to cart through ajax in Product List widget on Cms page"/>
             <severity value="MAJOR"/>
-            <group value="catalog"/>
-            <group value="WYSIWYGDisabled"/>
         </annotations>
         <before>
             <createData entity="ApiCategory" stepKey="createCategory"/>
@@ -24,6 +22,7 @@
                 <requiredEntity createDataKey="createCategory"/>
             </createData>
             <actionGroup ref="LoginAsAdmin" stepKey="loginToAdminPanel"/>
+            <actionGroup ref="DisabledWYSIWYGActionGroup" stepKey="disableWYSIWYG"/>
             <actionGroup ref="AdminOpenCmsPageActionGroup" stepKey="onAdminCmsHomePage">
                 <argument name="page_id" value="{{CmsHomePageContent.page_id}}"/>
             </actionGroup>
