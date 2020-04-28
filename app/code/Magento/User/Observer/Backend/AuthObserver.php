@@ -21,6 +21,7 @@ use Magento\User\Model\UserFactory;
 /**
  * User backend observer model for authentication
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  */
 class AuthObserver implements ObserverInterface
 {
@@ -184,6 +185,7 @@ class AuthObserver implements ObserverInterface
 
     /**
      * Check whether the latest password is expired
+     *
      * Side-effect can be when passwords were changed with different lifetime configuration settings
      *
      * @param array $latestPassword
