@@ -6,8 +6,8 @@
   */
 -->
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="AdminCheckUrlRewritesCorrectlyGeneratedForMultipleStoreviewsDuringProductImportTest">
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminUrlRewriteGeneratedForMultipleStoreviewsWithConfigTurnedOffTest">
         <annotations>
             <features value="Url Rewrite"/>
             <stories value="Url Rewrites for Multiple Storeviews"/>
