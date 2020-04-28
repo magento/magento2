@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Setup\Test\Unit\Module\Di\Code\Reader\InstancesNamesList;
 
 use Magento\Setup\Module\Di\Code\Reader\ClassesScanner;
@@ -66,9 +68,7 @@ class AreaTest extends TestCase
 
         $this->classReaderDecoratorMock->expects($this->exactly(count($classes)))
             ->method('getConstructor')
-            ->will($this->returnValueMap(
-                $constructors
-            ));
+            ->willReturnMap($constructors);
 
         $result = $this->model->getList($path);
 

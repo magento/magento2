@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Setup\Test\Unit\Fixtures;
 
@@ -64,21 +65,27 @@ class EavVariationsFixtureTest extends TestCase
     /**
      * @inheritdoc
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->fixtureModelMock = $this->getMockBuilder(FixtureModel::class)
-            ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->eavConfigMock = $this->getMockBuilder(Config::class)
-            ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->storeManagerMock = $this->getMockBuilder(StoreManager::class)
-            ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->attributeSetMock = $this->getMockBuilder(Set::class)
-            ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->cacheMock = $this->getMockBuilder(CacheInterface::class)
-            ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->attributeFactoryMock = $this->getMockBuilder(AttributeFactory::class)
             ->setMethods(['create'])
-            ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->model = (new ObjectManager($this))->getObject(
             EavVariationsFixture::class,
@@ -128,7 +135,8 @@ class EavVariationsFixtureTest extends TestCase
             ]);
 
         $storeMock = $this->getMockBuilder(Store::class)
-            ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->storeManagerMock->expects($this->once())->method('getStores')->willReturn([$storeId => $storeMock]);
         $this->attributeSetMock->expects($this->once())->method('load')->willReturnSelf();
         $this->attributeSetMock->expects($this->once())->method('getDefaultGroupId')->willReturn(2);
@@ -139,7 +147,8 @@ class EavVariationsFixtureTest extends TestCase
                 'setAttributeGroupId',
                 'save',
             ])
-            ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
         $attributeMock->expects($this->exactly(2))->method('setAttributeSetId')->willReturnSelf();
         $attributeMock->expects($this->once())->method('setAttributeGroupId')->willReturnSelf();
         $this->attributeFactoryMock->expects($this->once())->method('create')

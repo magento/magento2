@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Setup\Test\Unit\Console\Command;
 
@@ -32,7 +33,7 @@ class UninstallCommandTest extends TestCase
      */
     private $command;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->installerFactory = $this->createMock(InstallerFactory::class);
         $this->installer = $this->createMock(Installer::class);
@@ -42,7 +43,7 @@ class UninstallCommandTest extends TestCase
     public function testExecuteInteractionYes()
     {
         $this->installer->expects($this->once())->method('uninstall');
-        $this->installerFactory->expects($this->once())->method('create')->will($this->returnValue($this->installer));
+        $this->installerFactory->expects($this->once())->method('create')->willReturn($this->installer);
 
         $this->checkInteraction(true);
     }
@@ -64,7 +65,7 @@ class UninstallCommandTest extends TestCase
         $question
             ->expects($this->once())
             ->method('ask')
-            ->will($this->returnValue($answer));
+            ->willReturn($answer);
 
         /** @var HelperSet|MockObject $helperSet */
         $helperSet = $this->createMock(HelperSet::class);
@@ -72,7 +73,7 @@ class UninstallCommandTest extends TestCase
             ->expects($this->once())
             ->method('get')
             ->with('question')
-            ->will($this->returnValue($question));
+            ->willReturn($question);
         $this->command->setHelperSet($helperSet);
 
         $tester = new CommandTester($this->command);

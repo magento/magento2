@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Setup\Test\Unit\Console\Command;
 
 use Magento\Framework\App\Cache;
@@ -127,7 +129,7 @@ class ModuleUninstallCommandTest extends TestCase
     /**
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->deploymentConfig = $this->createMock(DeploymentConfig::class);
         $this->fullModuleList = $this->createMock(FullModuleList::class);
@@ -164,7 +166,7 @@ class ModuleUninstallCommandTest extends TestCase
         $configLoader->expects($this->any())->method('load')->willReturn([]);
         $objectManager->expects($this->any())
             ->method('get')
-            ->will($this->returnValueMap([
+            ->willReturnMap([
                 [PackageInfoFactory::class, $packageInfoFactory],
                 [DependencyChecker::class, $this->dependencyChecker],
                 [Cache::class, $this->cache],
@@ -176,7 +178,7 @@ class ModuleUninstallCommandTest extends TestCase
                 [BackupRollbackFactory::class, $this->backupRollbackFactory],
                 [PatchApplier::class, $this->patchApplierMock],
                 [ConfigLoaderInterface::class, $configLoader],
-            ]));
+            ]);
         $composer = $this->createMock(ComposerInformation::class);
         $composer->expects($this->any())
             ->method('getRootRequiredPackages')
@@ -198,13 +200,13 @@ class ModuleUninstallCommandTest extends TestCase
         $this->question
             ->expects($this->any())
             ->method('ask')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $this->helperSet = $this->createMock(HelperSet::class);
         $this->helperSet
             ->expects($this->any())
             ->method('get')
             ->with('question')
-            ->will($this->returnValue($this->question));
+            ->willReturn($this->question);
         $this->command->setHelperSet($this->helperSet);
         $this->tester = new CommandTester($this->command);
     }
@@ -235,13 +237,13 @@ class ModuleUninstallCommandTest extends TestCase
         $this->deploymentConfig->expects($this->once())->method('isAvailable')->willReturn(true);
         $this->packageInfo->expects($this->exactly(count($input['module'])))
             ->method('getPackageName')
-            ->will($this->returnValueMap($packageInfoMap));
+            ->willReturnMap($packageInfoMap);
         $this->fullModuleList->expects($this->exactly(count($input['module'])))
             ->method('has')
-            ->will($this->returnValueMap($fullModuleListMap));
+            ->willReturnMap($fullModuleListMap);
         $this->tester->execute($input);
         foreach ($expect as $message) {
-            $this->assertContains($message, $this->tester->getDisplay());
+            $this->assertStringContainsString($message, $this->tester->getDisplay());
         }
     }
 
@@ -342,7 +344,7 @@ class ModuleUninstallCommandTest extends TestCase
         ];
         $this->packageInfo->expects($this->any())
             ->method('getPackageName')
-            ->will($this->returnValueMap($packageMap));
+            ->willReturnMap($packageMap);
         $this->fullModuleList->expects($this->any())
             ->method('has')
             ->willReturn(true);
@@ -365,7 +367,7 @@ class ModuleUninstallCommandTest extends TestCase
             ->willReturn($dependencies);
         $this->tester->execute($input);
         foreach ($expect as $message) {
-            $this->assertContains($message, $this->tester->getDisplay());
+            $this->assertStringContainsString($message, $this->tester->getDisplay());
         }
     }
 
@@ -574,12 +576,12 @@ class ModuleUninstallCommandTest extends TestCase
         $this->question
             ->expects($this->once())
             ->method('ask')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
         $this->helperSet
             ->expects($this->once())
             ->method('get')
             ->with('question')
-            ->will($this->returnValue($this->question));
+            ->willReturn($this->question);
         $this->command->setHelperSet($this->helperSet);
         $this->tester = new CommandTester($this->command);
         $this->tester->execute($input);

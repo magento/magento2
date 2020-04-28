@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Setup\Test\Unit\Console\Command;
 
 use Magento\Framework\Module\FullModuleList;
@@ -21,21 +23,21 @@ class ModuleStatusCommandTest extends TestCase
         $objectManager = $this->getMockForAbstractClass(ObjectManagerInterface::class);
         $objectManagerProvider->expects($this->any())
             ->method('get')
-            ->will($this->returnValue($objectManager));
+            ->willReturn($objectManager);
         $moduleList = $this->createMock(ModuleList::class);
         $fullModuleList = $this->createMock(FullModuleList::class);
         $objectManager->expects($this->any())
             ->method('create')
-            ->will($this->returnValueMap([
+            ->willReturnMap([
                 [ModuleList::class, [], $moduleList],
                 [FullModuleList::class, [], $fullModuleList],
-            ]));
+            ]);
         $moduleList->expects($this->any())
             ->method('getNames')
-            ->will($this->returnValue(['Magento_Module1', 'Magento_Module2']));
+            ->willReturn(['Magento_Module1', 'Magento_Module2']);
         $fullModuleList->expects($this->any())
             ->method('getNames')
-            ->will($this->returnValue(['Magento_Module1', 'Magento_Module2', 'Magento_Module3']));
+            ->willReturn(['Magento_Module1', 'Magento_Module2', 'Magento_Module3']);
         $commandTester = new CommandTester(new ModuleStatusCommand($objectManagerProvider));
         $commandTester->execute([]);
         $this->assertStringMatchesFormat(

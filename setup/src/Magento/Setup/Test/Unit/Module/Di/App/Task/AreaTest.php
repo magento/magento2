@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Setup\Test\Unit\Module\Di\App\Task;
 
 use Magento\Framework\App;
@@ -50,15 +52,15 @@ class AreaTest extends TestCase
             ->getMock();
         $this->areaInstancesNamesList =
             $this->getMockBuilder(\Magento\Setup\Module\Di\Code\Reader\Decorator\Area::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+                ->disableOriginalConstructor()
+                ->getMock();
         $this->configReaderMock = $this->getMockBuilder(Reader::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->configWriterMock =
             $this->getMockBuilder(ConfigWriterInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+                ->disableOriginalConstructor()
+                ->getMock();
         $this->configChain = $this->getMockBuilder(ModificationChain::class)
             ->disableOriginalConstructor()
             ->getMock();

@@ -1,8 +1,11 @@
-<?php declare(strict_types=1);
+<?php
+
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Setup\Test\Unit\Model\Cron;
 
 use Magento\Deploy\Model\Filesystem;
@@ -22,18 +25,9 @@ class JobStaticRegenerateTest extends TestCase
      */
     private $jobStaticRegenerate;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
-        $this->jobStaticRegenerate = $this->getJobStaticRegenerateMock(
-            [
-                'getCacheObject',
-                'getCleanFilesObject',
-                'getStatusObject',
-                'getOutputObject',
-                'getModeObject',
-                'getFilesystem',
-            ]
-        );
+        $this->jobStaticRegenerate = $this->getJobStaticRegenerateMock();
     }
 
     /**
@@ -41,12 +35,12 @@ class JobStaticRegenerateTest extends TestCase
      */
     public function testExecuteProductionMode()
     {
-        $modeObjectMock = $this->getModeObjectMock(['getMode']);
+        $modeObjectMock = $this->getModeObjectMock();
         $modeObjectMock->expects($this->once())
             ->method('getMode')
-            ->will($this->returnValue(State::MODE_PRODUCTION));
+            ->willReturn(State::MODE_PRODUCTION);
 
-        $filesystemMock = $this->getFilesystemObjectMock(['regenerateStatic']);
+        $filesystemMock = $this->getFilesystemObjectMock();
         $filesystemMock
             ->expects($this->once())
             ->method('regenerateStatic');
@@ -54,17 +48,17 @@ class JobStaticRegenerateTest extends TestCase
         $this->jobStaticRegenerate
             ->expects($this->once())
             ->method('getFilesystem')
-            ->will($this->returnValue($filesystemMock));
+            ->willReturn($filesystemMock);
 
         $this->jobStaticRegenerate
             ->expects($this->once())
             ->method('getModeObject')
-            ->will($this->returnValue($modeObjectMock));
+            ->willReturn($modeObjectMock);
 
         $this->jobStaticRegenerate
             ->expects($this->once())
             ->method('getOutputObject')
-            ->will($this->returnValue($this->getOutputObjectMock()));
+            ->willReturn($this->getOutputObjectMock());
 
         $this->jobStaticRegenerate->execute();
     }
@@ -77,32 +71,32 @@ class JobStaticRegenerateTest extends TestCase
         $modeObjectMock = $this->getModeObjectMock(['getMode']);
         $modeObjectMock->expects($this->once())
             ->method('getMode')
-            ->will($this->returnValue(State::MODE_DEVELOPER));
+            ->willReturn(State::MODE_DEVELOPER);
 
         $this->jobStaticRegenerate
             ->expects($this->once())
             ->method('getModeObject')
-            ->will($this->returnValue($modeObjectMock));
+            ->willReturn($modeObjectMock);
 
-        $statusObject = $this->getStatusObjectMock(['add']);
+        $statusObject = $this->getStatusObjectMock();
         $statusObject
             ->expects($this->exactly(3))
             ->method('add');
         $this->jobStaticRegenerate
             ->expects($this->exactly(3))
             ->method('getStatusObject')
-            ->will($this->returnValue($statusObject));
+            ->willReturn($statusObject);
 
-        $cacheObject = $this->getCacheObjectMock(['clean']);
+        $cacheObject = $this->getCacheObjectMock();
         $cacheObject
             ->expects($this->once())
             ->method('clean');
         $this->jobStaticRegenerate
             ->expects($this->once())
             ->method('getCacheObject')
-            ->will($this->returnValue($cacheObject));
+            ->willReturn($cacheObject);
 
-        $cleanFilesObject = $this->getCleanFilesObjectMock(['clearMaterializedViewFiles', 'clearCodeGeneratedFiles']);
+        $cleanFilesObject = $this->getCleanFilesObjectMock();
         $cleanFilesObject
             ->expects($this->once())
             ->method('clearMaterializedViewFiles');
@@ -112,7 +106,7 @@ class JobStaticRegenerateTest extends TestCase
         $this->jobStaticRegenerate
             ->expects($this->exactly(2))
             ->method('getCleanFilesObject')
-            ->will($this->returnValue($cleanFilesObject));
+            ->willReturn($cleanFilesObject);
 
         $this->jobStaticRegenerate->execute();
     }
@@ -126,20 +120,20 @@ class JobStaticRegenerateTest extends TestCase
         $modeObjectMock = $this->getModeObjectMock(['getMode']);
         $modeObjectMock->expects($this->once())
             ->method('getMode')
-            ->will($this->throwException(new \Exception('error')));
+            ->willThrowException(new \Exception('error'));
         $this->jobStaticRegenerate
             ->expects($this->once())
             ->method('getModeObject')
-            ->will($this->returnValue($modeObjectMock));
+            ->willReturn($modeObjectMock);
 
-        $statusObject = $this->getStatusObjectMock(['toggleUpdateError']);
+        $statusObject = $this->getStatusObjectMock();
         $statusObject
             ->expects($this->once())
             ->method('toggleUpdateError');
         $this->jobStaticRegenerate
             ->expects($this->once())
             ->method('getStatusObject')
-            ->will($this->returnValue($statusObject));
+            ->willReturn($statusObject);
 
         $this->jobStaticRegenerate->execute();
     }
@@ -149,9 +143,19 @@ class JobStaticRegenerateTest extends TestCase
      *
      * @return MockObject|\Magento\Setup\Model\Cron\JobStaticRegenerate
      */
-    protected function getJobStaticRegenerateMock($methods = null)
+    protected function getJobStaticRegenerateMock()
     {
-        return $this->createPartialMock(JobStaticRegenerate::class, $methods);
+        return $this->createPartialMock(
+            JobStaticRegenerate::class,
+            [
+                'getCacheObject',
+                'getCleanFilesObject',
+                'getStatusObject',
+                'getOutputObject',
+                'getModeObject',
+                'getFilesystem',
+            ]
+        );
     }
 
     /**
@@ -159,9 +163,9 @@ class JobStaticRegenerateTest extends TestCase
      *
      * @return MockObject|Filesystem
      */
-    protected function getFilesystemObjectMock($methods = null)
+    protected function getFilesystemObjectMock()
     {
-        return $this->createPartialMock(Filesystem::class, $methods);
+        return $this->createPartialMock(Filesystem::class, ['regenerateStatic']);
     }
 
     /**
@@ -169,9 +173,9 @@ class JobStaticRegenerateTest extends TestCase
      *
      * @return MockObject|Status
      */
-    protected function getStatusObjectMock($methods = null)
+    protected function getStatusObjectMock()
     {
-        return $this->createPartialMock(Status::class, $methods);
+        return $this->createPartialMock(Status::class, ['add', 'toggleUpdateError']);
     }
 
     /**
@@ -179,9 +183,9 @@ class JobStaticRegenerateTest extends TestCase
      *
      * @return MockObject|CleanupFiles
      */
-    protected function getCleanFilesObjectMock($methods = null)
+    protected function getCleanFilesObjectMock()
     {
-        return $this->createPartialMock(CleanupFiles::class, $methods);
+        return $this->createPartialMock(CleanupFiles::class, ['clearMaterializedViewFiles', 'clearCodeGeneratedFiles']);
     }
 
     /**
@@ -189,9 +193,12 @@ class JobStaticRegenerateTest extends TestCase
      *
      * @return MockObject|CleanupFiles
      */
-    protected function getCacheObjectMock($methods = null)
+    protected function getCacheObjectMock()
     {
-        return $this->createPartialMock(CleanupFiles::class, $methods);
+        return $this->getMockBuilder(CleanupFiles::class)
+            ->addMethods(['clean'])
+            ->disableOriginalConstructor()
+            ->getMock();
     }
 
     /**
@@ -209,8 +216,8 @@ class JobStaticRegenerateTest extends TestCase
      *
      * @return MockObject|Mode
      */
-    protected function getModeObjectMock($methods = null)
+    protected function getModeObjectMock()
     {
-        return $this->createPartialMock(Mode::class, $methods);
+        return $this->createPartialMock(Mode::class, ['getMode']);
     }
 }

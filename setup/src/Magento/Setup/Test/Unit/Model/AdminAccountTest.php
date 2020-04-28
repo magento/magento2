@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Setup\Test\Unit\Model;
 
@@ -34,7 +35,7 @@ class AdminAccountTest extends TestCase
      */
     private $prefix;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->dbAdapter = $this->getMockBuilder(Mysql::class)
             ->disableOriginalConstructor()
@@ -113,13 +114,13 @@ class AdminAccountTest extends TestCase
         $this->dbAdapter
             ->expects($this->exactly(3))
             ->method('fetchRow')
-            ->will($this->returnValueMap($returnValueMap));
-        $this->dbAdapter->expects($this->once())->method('quoteInto')->will($this->returnValue(''));
-        $this->dbAdapter->expects($this->once())->method('update')->will($this->returnValue(1));
+            ->willReturnMap($returnValueMap);
+        $this->dbAdapter->expects($this->once())->method('quoteInto')->willReturn('');
+        $this->dbAdapter->expects($this->once())->method('update')->willReturn(1);
 
         $this->dbAdapter->expects($this->once())
             ->method('insert')
-            ->with($this->equalTo('pre_admin_passwords'), $this->anything());
+            ->with('pre_admin_passwords', $this->anything());
 
         $this->adminAccount->save();
     }
@@ -238,17 +239,17 @@ class AdminAccountTest extends TestCase
         $this->dbAdapter
             ->expects($this->exactly(2))
             ->method('fetchRow')
-            ->will($this->returnValueMap($returnValueMap));
+            ->willReturnMap($returnValueMap);
         // insert only once (new user)
         $this->dbAdapter->expects($this->at(3))
             ->method('insert')
-            ->with($this->equalTo('pre_admin_user'), $this->anything());
+            ->with('pre_admin_user', $this->anything());
         $this->dbAdapter->expects($this->at(6))
             ->method('insert')
-            ->with($this->equalTo('pre_admin_passwords'), $this->anything());
+            ->with('pre_admin_passwords', $this->anything());
 
         // after inserting new user
-        $this->dbAdapter->expects($this->once())->method('lastInsertId')->will($this->returnValue(1));
+        $this->dbAdapter->expects($this->once())->method('lastInsertId')->willReturn(1);
 
         $this->adminAccount->save();
     }
@@ -303,9 +304,9 @@ class AdminAccountTest extends TestCase
         $this->dbAdapter
             ->expects($this->exactly(3))
             ->method('fetchRow')
-            ->will($this->returnValueMap($returnValueMap));
+            ->willReturnMap($returnValueMap);
         // after inserting new user
-        $this->dbAdapter->expects($this->once())->method('lastInsertId')->will($this->returnValue(1));
+        $this->dbAdapter->expects($this->once())->method('lastInsertId')->willReturn(1);
 
         // insert only (new user and new admin role and new admin password)
         $this->dbAdapter->expects($this->exactly(3))->method('insert');
@@ -324,7 +325,7 @@ class AdminAccountTest extends TestCase
         ];
 
         $this->dbAdapter->expects($this->exactly(2))
-            ->method('fetchRow')->will($this->returnValue($existingUserData));
+            ->method('fetchRow')->willReturn($existingUserData);
         // should not alter db
         $this->dbAdapter->expects($this->never())->method('update');
         $this->dbAdapter->expects($this->never())->method('insert');
@@ -342,7 +343,7 @@ class AdminAccountTest extends TestCase
         ];
 
         $this->dbAdapter->expects($this->exactly(2))
-            ->method('fetchRow')->will($this->returnValue($existingUserData));
+            ->method('fetchRow')->willReturn($existingUserData);
         // should not alter db
         $this->dbAdapter->expects($this->never())->method('update');
         $this->dbAdapter->expects($this->never())->method('insert');
@@ -354,8 +355,8 @@ class AdminAccountTest extends TestCase
     {
         $this->expectException('Exception');
         $this->expectExceptionMessage('No Administrators role was found, data fixture needs to be run');
-        $this->dbAdapter->expects($this->exactly(3))->method('fetchRow')->will($this->returnValue([]));
-        $this->dbAdapter->expects($this->once())->method('lastInsertId')->will($this->returnValue(1));
+        $this->dbAdapter->expects($this->exactly(3))->method('fetchRow')->willReturn([]);
+        $this->dbAdapter->expects($this->once())->method('lastInsertId')->willReturn(1);
 
         $this->adminAccount->save();
     }
@@ -399,7 +400,7 @@ class AdminAccountTest extends TestCase
         $this->dbAdapter
             ->expects($this->exactly(1))
             ->method('fetchRow')
-            ->will($this->returnValueMap($returnValueMap));
+            ->willReturnMap($returnValueMap);
         $this->dbAdapter->expects($this->never())->method('insert');
         $this->dbAdapter->expects($this->never())->method('update');
 
@@ -444,7 +445,7 @@ class AdminAccountTest extends TestCase
         $this->dbAdapter
             ->expects($this->exactly(1))
             ->method('fetchRow')
-            ->will($this->returnValueMap($returnValueMap));
+            ->willReturnMap($returnValueMap);
         $this->dbAdapter->expects($this->never())->method('insert');
         $this->dbAdapter->expects($this->never())->method('update');
 

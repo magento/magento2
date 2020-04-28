@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Setup\Test\Unit\Mvc\Bootstrap;
 
@@ -154,7 +155,9 @@ class InitParamListenerTest extends TestCase
         $mvcApplication = $this->getMockBuilder(Application::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $request = $this->getMockBuilder(Request::class)->disableOriginalConstructor()->getMock();
+        $request = $this->getMockBuilder(Request::class)
+            ->disableOriginalConstructor()
+            ->getMock();
         $request->expects($this->any())
             ->method('getContent')
             ->willReturn(
@@ -242,7 +245,8 @@ class InitParamListenerTest extends TestCase
          * \PHPUnit_Framework_MockObject_MockObject $directoryList
          */
         $directoryList = $this->getMockBuilder(DirectoryList::class)
-            ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
         $directoryList->expects($this->any())->method('getPath')->willReturn($testPath);
         $filesystem = $this->listener->createFilesystem($directoryList);
 

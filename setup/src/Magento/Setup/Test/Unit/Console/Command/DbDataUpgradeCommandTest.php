@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Setup\Test\Unit\Console\Command;
 
@@ -34,9 +35,9 @@ class DbDataUpgradeCommandTest extends TestCase
 
     public function testExecute()
     {
-        $this->deploymentConfig->expects($this->once())->method('isAvailable')->will($this->returnValue(true));
+        $this->deploymentConfig->expects($this->once())->method('isAvailable')->willReturn(true);
         $installer = $this->createMock(Installer::class);
-        $this->installerFactory->expects($this->once())->method('create')->will($this->returnValue($installer));
+        $this->installerFactory->expects($this->once())->method('create')->willReturn($installer);
         $installer->expects($this->once())->method('installDataFixtures');
 
         $commandTester = new CommandTester(
@@ -47,7 +48,7 @@ class DbDataUpgradeCommandTest extends TestCase
 
     public function testExecuteNoConfig()
     {
-        $this->deploymentConfig->expects($this->once())->method('isAvailable')->will($this->returnValue(false));
+        $this->deploymentConfig->expects($this->once())->method('isAvailable')->willReturn(false);
         $this->installerFactory->expects($this->never())->method('create');
 
         $commandTester = new CommandTester(

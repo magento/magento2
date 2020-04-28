@@ -31,18 +31,18 @@ class ModuleConfigStatusCommandTest extends TestCase
     {
         $configReader = $this->createMock(Reader::class);
         $configReader->expects($this->once())
-                     ->method('load')
-                     ->willReturn([ConfigOptionsListConstants::KEY_MODULES => $currentConfig]);
+            ->method('load')
+            ->willReturn([ConfigOptionsListConstants::KEY_MODULES => $currentConfig]);
 
         $installer = $this->createMock(Installer::class);
         $installer->expects($this->once())
-                  ->method('getModulesConfig')
-                  ->willReturn($correctConfig);
+            ->method('getModulesConfig')
+            ->willReturn($correctConfig);
 
         $installerFactory = $this->createMock(InstallerFactory::class);
         $installerFactory->expects($this->once())
-                         ->method('create')
-                         ->willReturn($installer);
+            ->method('create')
+            ->willReturn($installer);
 
         $command = new ModuleConfigStatusCommand($configReader, $installerFactory);
 

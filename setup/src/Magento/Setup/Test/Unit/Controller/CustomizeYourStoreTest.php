@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Setup\Test\Unit\Controller;
 
@@ -44,7 +45,7 @@ class CustomizeYourStoreTest extends TestCase
      */
     private $moduleList;
 
-    public function setup(): void
+    protected function setup(): void
     {
         $objectManagerProvider = $this->createMock(ObjectManagerProvider::class);
         $this->objectManager = $this->createMock(ObjectManager::class);

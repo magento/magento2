@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Setup\Test\Unit\Model;
 
@@ -64,7 +65,7 @@ class PackagesDataTest extends TestCase
      */
     private $typeMapper;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->composerInformation = $this->getComposerInformation();
         $this->timeZoneProvider = $this->getMockBuilder(TimeZoneProvider::class)
@@ -122,10 +123,10 @@ class PackagesDataTest extends TestCase
 
         $directoryWrite = $this->getMockForAbstractClass(WriteInterface::class);
         $directoryRead = $this->getMockForAbstractClass(ReadInterface::class);
-        $this->filesystem->expects($this->any())->method('getDirectoryRead')->will($this->returnValue($directoryRead));
+        $this->filesystem->expects($this->any())->method('getDirectoryRead')->willReturn($directoryRead);
         $this->filesystem->expects($this->any())
             ->method('getDirectoryWrite')
-            ->will($this->returnValue($directoryWrite));
+            ->willReturn($directoryWrite);
         $directoryWrite->expects($this->any())->method('isExist')->willReturn(true);
         $directoryWrite->expects($this->any())->method('isReadable')->willReturn(true);
         $directoryWrite->expects($this->any())->method('delete')->willReturn(true);
@@ -236,10 +237,10 @@ class PackagesDataTest extends TestCase
         $this->assertArrayHasKey('date', $latestData['lastSyncDate']);
         $this->assertArrayHasKey('time', $latestData['lastSyncDate']);
         $this->assertArrayHasKey('packages', $latestData);
-        $this->assertSame(3, count($latestData['packages']));
+        $this->assertCount(3, $latestData['packages']);
         $this->assertSame(3, $latestData['countOfUpdate']);
         $this->assertArrayHasKey('installPackages', $latestData);
-        $this->assertSame(1, count($latestData['installPackages']));
+        $this->assertCount(1, $latestData['installPackages']);
         $this->assertSame(1, $latestData['countOfInstall']);
     }
 
@@ -270,7 +271,7 @@ class PackagesDataTest extends TestCase
             ->willReturn('repo1');
         $this->createPackagesData();
         $packages = $this->packagesData->getPackagesForUpdate();
-        $this->assertEquals(2, count($packages));
+        $this->assertCount(2, $packages);
         $this->assertArrayHasKey('magento/package-1', $packages);
         $this->assertArrayHasKey('partner/package-3', $packages);
         $firstPackage = array_values($packages)[0];
@@ -281,7 +282,7 @@ class PackagesDataTest extends TestCase
     public function testGetPackagesForUpdate()
     {
         $packages = $this->packagesData->getPackagesForUpdate();
-        $this->assertEquals(3, count($packages));
+        $this->assertCount(3, $packages);
         $this->assertArrayHasKey('magento/package-1', $packages);
         $this->assertArrayHasKey('magento/package-2', $packages);
         $this->assertArrayHasKey('partner/package-3', $packages);
@@ -293,7 +294,7 @@ class PackagesDataTest extends TestCase
     public function testGetInstalledPackages()
     {
         $installedPackages = $this->packagesData->getInstalledPackages();
-        $this->assertEquals(3, count($installedPackages));
+        $this->assertCount(3, $installedPackages);
         $this->assertArrayHasKey('magento/package-1', $installedPackages);
         $this->assertArrayHasKey('magento/package-2', $installedPackages);
         $this->assertArrayHasKey('partner/package-3', $installedPackages);

@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Setup\Test\Unit\Module\Dependency\Report\Circular\Data;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
@@ -28,7 +30,7 @@ class ConfigTest extends TestCase
      */
     protected $config;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->moduleFirst = $this->createMock(Module::class);
         $this->moduleSecond = $this->createMock(Module::class);
@@ -42,8 +44,8 @@ class ConfigTest extends TestCase
 
     public function testGetDependenciesCount()
     {
-        $this->moduleFirst->expects($this->once())->method('getChainsCount')->will($this->returnValue(0));
-        $this->moduleSecond->expects($this->once())->method('getChainsCount')->will($this->returnValue(2));
+        $this->moduleFirst->expects($this->once())->method('getChainsCount')->willReturn(0);
+        $this->moduleSecond->expects($this->once())->method('getChainsCount')->willReturn(2);
 
         $this->assertEquals(2, $this->config->getDependenciesCount());
     }

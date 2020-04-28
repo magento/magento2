@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Setup\Test\Unit\Controller;
 
@@ -35,7 +36,7 @@ class OtherComponentsGridTest extends TestCase
      */
     private $controller;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->composerInformation = $this->createMock(ComposerInformation::class);
         $this->infoCommand = $this->createMock(InfoCommand::class);
@@ -113,7 +114,7 @@ class OtherComponentsGridTest extends TestCase
     {
         $this->composerInformation->expects($this->once())
             ->method('getInstalledMagentoPackages')
-            ->will($this->throwException(new \Exception("Test error message")));
+            ->willThrowException(new \Exception("Test error message"));
         $jsonModel = $this->controller->componentsAction();
         $this->assertInstanceOf(JsonModel::class, $jsonModel);
         $variables = $jsonModel->getVariables();

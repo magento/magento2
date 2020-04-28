@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Setup\Test\Unit\Module\Di\App\Task;
 
@@ -41,8 +42,8 @@ class RepositoryGeneratorTest extends TestCase
     {
         $this->repositoryScannerMock =
             $this->getMockBuilder(RepositoryScanner::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+                ->disableOriginalConstructor()
+                ->getMock();
         $this->classesScannerMock = $this->getMockBuilder(ClassesScanner::class)
             ->disableOriginalConstructor()
             ->getMock();

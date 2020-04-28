@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Setup\Test\Unit\Controller;
 
@@ -32,7 +33,7 @@ class MaintenanceTest extends TestCase
      */
     private $controller;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->maintenanceMode = $this->createMock(MaintenanceMode::class);
         $this->controller = new Maintenance($this->maintenanceMode);
@@ -67,8 +68,8 @@ class MaintenanceTest extends TestCase
 
     public function testIndexActionWithExceptions()
     {
-        $this->maintenanceMode->expects($this->once())->method('set')->will(
-            $this->throwException(new \Exception("Test error message"))
+        $this->maintenanceMode->expects($this->once())->method('set')->willThrowException(
+            new \Exception("Test error message")
         );
         $jsonModel = $this->controller->indexAction();
         $this->assertInstanceOf(JsonModel::class, $jsonModel);

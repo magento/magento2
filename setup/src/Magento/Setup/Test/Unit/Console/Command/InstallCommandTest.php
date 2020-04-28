@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Setup\Test\Unit\Console\Command;
 
@@ -75,7 +76,7 @@ class InstallCommandTest extends TestCase
      */
     private $adminUserMock;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->input = [
             '--' . SetupConfigOptionsList::INPUT_KEY_DB_HOST => 'localhost',
@@ -92,27 +93,27 @@ class InstallCommandTest extends TestCase
         $configModel
             ->expects($this->exactly(2))
             ->method('getAvailableOptions')
-            ->will($this->returnValue($this->getOptionsListDeployConfig()));
+            ->willReturn($this->getOptionsListDeployConfig());
         $configModel
             ->expects($this->once())
             ->method('validate')
-            ->will($this->returnValue([]));
+            ->willReturn([]);
 
         $userConfig = $this->createMock(InstallStoreConfigurationCommand::class);
         $userConfig
             ->expects($this->once())
             ->method('getOptionsList')
-            ->will($this->returnValue($this->getOptionsListUserConfig()));
+            ->willReturn($this->getOptionsListUserConfig());
         $userConfig
             ->expects($this->once())
             ->method('validate')
-            ->will($this->returnValue([]));
+            ->willReturn([]);
 
         $this->adminUserMock = $this->createMock(AdminUserCreateCommand::class);
         $this->adminUserMock
             ->expects($this->once())
             ->method('getOptionsList')
-            ->will($this->returnValue($this->getOptionsListAdminUser()));
+            ->willReturn($this->getOptionsListAdminUser());
 
         $this->installerFactory = $this->createMock(InstallerFactory::class);
         $this->installer = $this->createMock(Installer::class);
@@ -168,7 +169,7 @@ class InstallCommandTest extends TestCase
             ->willReturn([]);
         $this->installerFactory->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($this->installer));
+            ->willReturn($this->installer);
         $this->installer->expects($this->once())->method('install');
         $this->configImportMock->expects($this->once())
             ->method('run');
@@ -188,22 +189,22 @@ class InstallCommandTest extends TestCase
         $option1
             ->expects($this->any())
             ->method('getName')
-            ->will($this->returnValue(SetupConfigOptionsList::INPUT_KEY_DB_HOST));
+            ->willReturn(SetupConfigOptionsList::INPUT_KEY_DB_HOST);
         $option2 = $this->createMock(TextConfigOption::class);
         $option2
             ->expects($this->any())
             ->method('getName')
-            ->will($this->returnValue(SetupConfigOptionsList::INPUT_KEY_DB_NAME));
+            ->willReturn(SetupConfigOptionsList::INPUT_KEY_DB_NAME);
         $option3 = $this->createMock(TextConfigOption::class);
         $option3
             ->expects($this->any())
             ->method('getName')
-            ->will($this->returnValue(SetupConfigOptionsList::INPUT_KEY_DB_USER));
+            ->willReturn(SetupConfigOptionsList::INPUT_KEY_DB_USER);
         $option4 = $this->createMock(TextConfigOption::class);
         $option4
             ->expects($this->any())
             ->method('getName')
-            ->will($this->returnValue(BackendConfigOptionsList::INPUT_KEY_BACKEND_FRONTNAME));
+            ->willReturn(BackendConfigOptionsList::INPUT_KEY_BACKEND_FRONTNAME);
 
         return [$option1, $option2, $option3, $option4];
     }
@@ -219,22 +220,22 @@ class InstallCommandTest extends TestCase
         $option1
             ->expects($this->any())
             ->method('getName')
-            ->will($this->returnValue(StoreConfigurationDataMapper::KEY_BASE_URL));
+            ->willReturn(StoreConfigurationDataMapper::KEY_BASE_URL);
         $option2 = $this->createMock(TextConfigOption::class);
         $option2
             ->expects($this->any())
             ->method('getName')
-            ->will($this->returnValue(StoreConfigurationDataMapper::KEY_LANGUAGE));
+            ->willReturn(StoreConfigurationDataMapper::KEY_LANGUAGE);
         $option3 = $this->createMock(TextConfigOption::class);
         $option3
             ->expects($this->any())
             ->method('getName')
-            ->will($this->returnValue(StoreConfigurationDataMapper::KEY_TIMEZONE));
+            ->willReturn(StoreConfigurationDataMapper::KEY_TIMEZONE);
         $option4 = $this->createMock(TextConfigOption::class);
         $option4
             ->expects($this->any())
             ->method('getName')
-            ->will($this->returnValue(StoreConfigurationDataMapper::KEY_CURRENCY));
+            ->willReturn(StoreConfigurationDataMapper::KEY_CURRENCY);
 
         return [$option1, $option2, $option3, $option4];
     }
@@ -250,27 +251,27 @@ class InstallCommandTest extends TestCase
         $option1
             ->expects($this->any())
             ->method('getName')
-            ->will($this->returnValue(AdminAccount::KEY_USER));
+            ->willReturn(AdminAccount::KEY_USER);
         $option2 = $this->createMock(TextConfigOption::class);
         $option2
             ->expects($this->any())
             ->method('getName')
-            ->will($this->returnValue(AdminAccount::KEY_PASSWORD));
+            ->willReturn(AdminAccount::KEY_PASSWORD);
         $option3 = $this->createMock(TextConfigOption::class);
         $option3
             ->expects($this->any())
             ->method('getName')
-            ->will($this->returnValue(AdminAccount::KEY_EMAIL));
+            ->willReturn(AdminAccount::KEY_EMAIL);
         $option4 = $this->createMock(TextConfigOption::class);
         $option4
             ->expects($this->any())
             ->method('getName')
-            ->will($this->returnValue(AdminAccount::KEY_FIRST_NAME));
+            ->willReturn(AdminAccount::KEY_FIRST_NAME);
         $option5 = $this->createMock(TextConfigOption::class);
         $option5
             ->expects($this->any())
             ->method('getName')
-            ->will($this->returnValue(AdminAccount::KEY_LAST_NAME));
+            ->willReturn(AdminAccount::KEY_LAST_NAME);
 
         return [$option1, $option2, $option3, $option4, $option5];
     }
@@ -288,7 +289,7 @@ class InstallCommandTest extends TestCase
             ->method('validate');
         $this->installerFactory->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($this->installer));
+            ->willReturn($this->installer);
         $this->installer->expects($this->once())->method('install');
         $this->input['--' . InstallCommand::INPUT_KEY_SALES_ORDER_INCREMENT_PREFIX] = $prefixValue;
 
@@ -310,7 +311,7 @@ class InstallCommandTest extends TestCase
             ->method('validate');
         $this->installerFactory->expects($this->never())
             ->method('create')
-            ->will($this->returnValue($this->installer));
+            ->willReturn($this->installer);
         $this->installer->expects($this->never())->method('install');
         $this->input['--' . InstallCommand::INPUT_KEY_SALES_ORDER_INCREMENT_PREFIX] = $prefixValue;
 

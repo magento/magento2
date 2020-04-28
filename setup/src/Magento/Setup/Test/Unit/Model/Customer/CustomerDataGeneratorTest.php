@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Setup\Test\Unit\Model\Customer;
 
 use Magento\Setup\Model\Address\AddressDataGenerator;
@@ -37,13 +39,14 @@ class CustomerDataGeneratorTest extends TestCase
      */
     private $customerGenerator;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->groupCollectionFactoryMock =
-            $this->createPartialMock(
-                \Magento\Customer\Model\ResourceModel\Group\CollectionFactory::class,
-                ['create', 'getAllIds']
-            );
+            $this->getMockBuilder(\Magento\Customer\Model\ResourceModel\Group\CollectionFactory::class)->addMethods(
+                ['getAllIds']
+            )
+                ->onlyMethods(['create'])
+                ->getMock();
 
         $this->groupCollectionFactoryMock
             ->expects($this->once())
@@ -93,7 +96,7 @@ class CustomerDataGeneratorTest extends TestCase
         $customer = $this->customerGenerator->generate(42);
 
         foreach ($this->customerStructure as $customerField) {
-            $this->assertTrue(array_key_exists($customerField, $customer));
+            $this->assertArrayHasKey($customerField, $customer);
         }
     }
 }

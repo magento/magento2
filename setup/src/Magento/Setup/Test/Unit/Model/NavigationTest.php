@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Setup\Test\Unit\Model;
 
@@ -29,29 +30,33 @@ class NavigationTest extends TestCase
      */
     private $navigation;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->serviceLocatorMock =
-            $this->getMockForAbstractClass(ServiceLocatorInterface::class, ['get']);
+            $this->getMockBuilder(ServiceLocatorInterface::class)
+                ->onlyMethods(['get'])
+                ->getMockForAbstractClass();
         $this->serviceLocatorMock
             ->expects($this->exactly(2))
             ->method('get')
             ->with('config')
-            ->will($this->returnValue([
-                'navInstallerTitles' => [
-                    'install' => 'SomeTitle'
-                 ],
-                'navInstaller' => [
-                    ['key1' => 'value1'],
-                    ['key2' => 'value2'],
-                    ['nav' => 'abc', 'key3' => 'value3'],
-                    ['nav' => ''],
-                    ['nav' => false],
-                    ['main' => 'abc', 'key3' => 'value3'],
-                    ['main' => ''],
-                    ['main' => false],
+            ->willReturn(
+                [
+                    'navInstallerTitles' => [
+                        'install' => 'SomeTitle'
+                    ],
+                    'navInstaller' => [
+                        ['key1' => 'value1'],
+                        ['key2' => 'value2'],
+                        ['nav' => 'abc', 'key3' => 'value3'],
+                        ['nav' => ''],
+                        ['nav' => false],
+                        ['main' => 'abc', 'key3' => 'value3'],
+                        ['main' => ''],
+                        ['main' => false],
+                    ]
                 ]
-            ]));
+            );
         $this->deploymentConfig = $this->createMock(DeploymentConfig::class);
         $this->navigation = new Navigation($this->serviceLocatorMock, $this->deploymentConfig);
     }

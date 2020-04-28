@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Setup\Test\Unit\Console\Command;
 
 use Magento\Framework\App\Cache;
@@ -63,7 +65,7 @@ class DiCompileCommandTest extends TestCase
     /** @var OutputFormatterInterface|MockObject */
     private $outputFormatterMock;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->deploymentConfigMock = $this->createMock(DeploymentConfig::class);
         $objectManagerProviderMock = $this->createMock(ObjectManagerProvider::class);

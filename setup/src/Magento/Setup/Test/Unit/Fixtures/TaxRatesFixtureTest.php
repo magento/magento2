@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Setup\Test\Unit\Fixtures;
 
@@ -28,7 +29,7 @@ class TaxRatesFixtureTest extends TestCase
      */
     private $model;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->fixtureModelMock = $this->createMock(FixtureModel::class);
 
@@ -55,7 +56,7 @@ class TaxRatesFixtureTest extends TestCase
         $objectManagerMock = $this->createMock(ObjectManager::class);
         $objectManagerMock->expects($this->exactly(2))
             ->method('get')
-            ->will($this->returnValueMap($valueMap));
+            ->willReturnMap($valueMap);
         $objectManagerMock->expects($this->once())
             ->method('create')
             ->willReturn($csvImportHandlerMock);

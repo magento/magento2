@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Setup\Test\Unit\Console\Command;
 
@@ -23,17 +24,17 @@ class InfoBackupsListCommandTest extends TestCase
         $table->expects($this->once())->method('addRow')->with(['backupFile_media.tgz', 'media']);
         /** @var \Symfony\Component\Console\Helper\TableFactory|MockObject $helperSet */
         $tableFactoryMock = $this->createMock(\Symfony\Component\Console\Helper\TableFactory::class);
-        $tableFactoryMock->expects($this->once())->method('create')->will($this->returnValue($table));
+        $tableFactoryMock->expects($this->once())->method('create')->willReturn($table);
         /** @var DirectoryList
          * |\PHPUnit_Framework_MockObject_MockObject $directoryList
          */
         $directoryList = $this->createMock(DirectoryList::class);
         /** @var File|MockObject $file */
         $file = $this->createMock(File::class);
-        $file->expects($this->once())->method('isExists')->will($this->returnValue(true));
+        $file->expects($this->once())->method('isExists')->willReturn(true);
         $file->expects($this->once())
             ->method('readDirectoryRecursively')
-            ->will($this->returnValue(['backupFile_media.tgz']));
+            ->willReturn(['backupFile_media.tgz']);
         $command = new InfoBackupsListCommand($directoryList, $file, $tableFactoryMock);
         $commandTester = new CommandTester($command);
         $commandTester->execute([]);

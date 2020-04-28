@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Setup\Test\Unit\Controller;
 
@@ -64,7 +65,7 @@ class InstallTest extends TestCase
      */
     private $deploymentConfig;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->webLogger = $this->createMock(WebLogger::class);
         $installerFactory = $this->createMock(InstallerFactory::class);
@@ -175,15 +176,15 @@ class InstallTest extends TestCase
         $e = 'Some exception message';
         $this->webLogger->expects($this->once())->method('logfileExists')->willReturn(true);
         $this->progressFactory->expects($this->once())->method('createFromLog')
-            ->will($this->throwException(new \LogicException($e)));
+            ->willThrowException(new \LogicException($e));
         $jsonModel = $this->controller->progressAction();
         $this->assertInstanceOf(JsonModel::class, $jsonModel);
         $variables = $jsonModel->getVariables();
         $this->assertArrayHasKey('success', $variables);
         $this->assertArrayHasKey('console', $variables);
         $this->assertFalse($variables['success']);
-        $this->assertContains('LogicException', $variables['console'][0]);
-        $this->assertContains($e, $variables['console'][0]);
+        $this->assertStringContainsString('LogicException', $variables['console'][0]);
+        $this->assertStringContainsString($e, $variables['console'][0]);
     }
 
     public function testProgressActionWithSampleDataError()

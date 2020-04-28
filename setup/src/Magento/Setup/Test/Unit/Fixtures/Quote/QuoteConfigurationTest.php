@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
+
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Setup\Test\Unit\Fixtures\Quote;
 
@@ -30,7 +32,7 @@ class QuoteConfigurationTest extends TestCase
     /**
      * @inheritdoc
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->fixtureModelMock = $this->getMockBuilder(FixtureModel::class)
             ->disableOriginalConstructor()
@@ -60,7 +62,8 @@ class QuoteConfigurationTest extends TestCase
             'configurable_count_from' => 1,
             'big_configurable_count_to' => 1,
             'big_configurable_count_from' => 1,
-            'fixture_data_filename' => $dir . DIRECTORY_SEPARATOR . "_files" . DIRECTORY_SEPARATOR . 'orders_fixture_data.json',
+            'fixture_data_filename' => $dir . DIRECTORY_SEPARATOR . "_files"
+                . DIRECTORY_SEPARATOR . 'orders_fixture_data.json',
             'order_quotes_enable' => 1,
         ];
         $this->fixtureModelMock->expects($this->atLeastOnce())

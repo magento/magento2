@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Setup\Test\Unit\Model;
 
 use Composer\Package\Version\VersionParser;
@@ -44,7 +46,7 @@ class PhpReadinessCheckTest extends TestCase
      */
     private $phpReadinessCheck;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->composerInfo = $this->createMock(ComposerInformation::class);
         $this->phpInfo = $this->createMock(PhpInformation::class);
@@ -331,9 +333,9 @@ class PhpReadinessCheckTest extends TestCase
     {
         $this->dataSize->expects($this->any())->method('convertSizeToBytes')->willReturnMap(
             [
-               ['512M', 512],
-               ['756M', 756],
-               ['2G', 2048],
+                ['512M', 512],
+                ['756M', 756],
+                ['2G', 2048],
 
             ]
         );

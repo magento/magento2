@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Setup\Test\Unit\Model\Description;
 
 use Magento\Setup\Model\Description\DescriptionGenerator;
@@ -28,7 +30,7 @@ class DescriptionGeneratorTest extends TestCase
      */
     private $paragraphs = [
         'Paragraph#1', 'Paragraph#2', 'Paragraph#3'
-     ];
+    ];
 
     /**
      * @var array
@@ -53,7 +55,7 @@ class DescriptionGeneratorTest extends TestCase
         ]
     ];
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->descriptionParagraphGeneratorMock =
             $this->createMock(DescriptionParagraphGenerator::class);

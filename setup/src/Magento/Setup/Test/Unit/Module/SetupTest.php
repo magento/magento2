@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Setup\Test\Unit\Module;
 
@@ -38,7 +39,7 @@ class SetupTest extends TestCase
         $this->resourceModelMock->expects($this->any())
             ->method('getConnection')
             ->with(self::CONNECTION_NAME)
-            ->will($this->returnValue($this->connection));
+            ->willReturn($this->connection);
         $this->resourceModelMock->expects($this->any())
             ->method('getConnectionByName')
             ->with(ResourceConnection::DEFAULT_CONNECTION)
@@ -56,12 +57,12 @@ class SetupTest extends TestCase
         $this->resourceModelMock->expects($this->once())
             ->method('getTableName')
             ->with($tableName)
-            ->will($this->returnValue($tableName));
+            ->willReturn($tableName);
 
         $this->connection->expects($this->once())
             ->method('getIndexName')
             ->with($tableName, $fields, $indexType)
-            ->will($this->returnValue($expectedIdxName));
+            ->willReturn($expectedIdxName);
 
         $this->assertEquals('idxName', $this->setup->getIdxName($tableName, $fields, $indexType));
     }
@@ -76,12 +77,12 @@ class SetupTest extends TestCase
         $this->resourceModelMock->expects($this->once())
             ->method('getTableName')
             ->with($tableName)
-            ->will($this->returnValue($tableName));
+            ->willReturn($tableName);
 
         $this->connection->expects($this->once())
             ->method('getForeignKeyName')
             ->with($tableName, $columnName, $refTable, $refColumnName)
-            ->will($this->returnValue('fkName'));
+            ->willReturn('fkName');
 
         $this->assertEquals('fkName', $this->setup->getFkName($tableName, $columnName, $refTable, $refColumnName));
     }

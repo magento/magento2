@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Setup\Test\Unit\Controller;
 
@@ -39,7 +40,7 @@ class ModulesTest extends TestCase
      */
     private $controller;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->objectManager = $this->getMockForAbstractClass(ObjectManagerInterface::class);
         /** @var
@@ -49,7 +50,7 @@ class ModulesTest extends TestCase
         $objectManagerProvider->expects($this->once())->method('get')->willReturn($this->objectManager);
         $this->modules = $this->createMock(ModuleStatus::class);
         $this->status = $this->createMock(Status::class);
-        $this->objectManager->expects($this->once())->method('create')->will($this->returnValue($this->status));
+        $this->objectManager->expects($this->once())->method('create')->willReturn($this->status);
         $this->controller = new Modules($this->modules, $objectManagerProvider);
     }
 

@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Setup\Test\Unit\Fixtures;
 
@@ -274,14 +275,12 @@ class StoresFixtureTest extends TestCase
         $this->fixtureModelMock
             ->expects($this->exactly(4))
             ->method('getValue')
-            ->will($this->returnValueMap(
-                [
-                    ['websites', 1, 3],
-                    ['store_groups', 1, 6],
-                    ['store_views', 1, 12],
-                    ['assign_entities_to_all_websites', false]
-                ]
-            ));
+            ->willReturnMap([
+                ['websites', 1, 3],
+                ['store_groups', 1, 6],
+                ['store_views', 1, 12],
+                ['assign_entities_to_all_websites', false]
+            ]);
 
         $this->model = new StoresFixture(
             $this->fixtureModelMock,

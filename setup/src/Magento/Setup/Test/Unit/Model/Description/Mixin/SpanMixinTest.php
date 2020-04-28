@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Setup\Test\Unit\Model\Description\Mixin;
 
 use Magento\Setup\Model\Description\Mixin\Helper\RandomWordSelector;
@@ -28,7 +30,7 @@ class SpanMixinTest extends TestCase
      */
     private $wordWrapperMock;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->randomWordSelectorMock =
             $this->createMock(RandomWordSelector::class);
@@ -54,7 +56,7 @@ class SpanMixinTest extends TestCase
         $this->randomWordSelectorMock
             ->expects($this->once())
             ->method('getRandomWords')
-            ->with($this->equalTo($fixtureString), $this->greaterThan(0))
+            ->with($fixtureString, $this->greaterThan(0))
             ->willReturn($randWordsFixture);
 
         $this->wordWrapperMock

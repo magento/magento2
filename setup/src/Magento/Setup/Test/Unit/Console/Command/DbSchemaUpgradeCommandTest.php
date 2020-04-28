@@ -40,9 +40,9 @@ class DbSchemaUpgradeCommandTest extends TestCase
      */
     public function testExecute($options, $expectedOptions)
     {
-        $this->deploymentConfig->expects($this->once())->method('isAvailable')->will($this->returnValue(true));
+        $this->deploymentConfig->expects($this->once())->method('isAvailable')->willReturn(true);
         $installer = $this->createMock(Installer::class);
-        $this->installerFactory->expects($this->once())->method('create')->will($this->returnValue($installer));
+        $this->installerFactory->expects($this->once())->method('create')->willReturn($installer);
         $installer
             ->expects($this->once())
             ->method('installSchema')
@@ -75,7 +75,7 @@ class DbSchemaUpgradeCommandTest extends TestCase
 
     public function testExecuteNoConfig()
     {
-        $this->deploymentConfig->expects($this->once())->method('isAvailable')->will($this->returnValue(false));
+        $this->deploymentConfig->expects($this->once())->method('isAvailable')->willReturn(false);
         $this->installerFactory->expects($this->never())->method('create');
 
         $commandTester = new CommandTester(

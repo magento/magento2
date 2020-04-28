@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Setup\Test\Unit\Model\Cron;
 
 use Magento\Framework\Exception\FileSystemException;
@@ -43,7 +45,7 @@ class StatusTest extends TestCase
      */
     private $setupLoggerFactory;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->filesystem = $this->createMock(Filesystem::class);
         $this->varReaderWriter = $this->getMockForAbstractClass(
@@ -54,7 +56,7 @@ class StatusTest extends TestCase
         );
         $this->filesystem->expects($this->once())
             ->method('getDirectoryWrite')
-            ->will($this->returnValue($this->varReaderWriter));
+            ->willReturn($this->varReaderWriter);
         $this->logger = $this->getMockForAbstractClass(LoggerInterface::class, [], '', false);
         $this->setupLoggerFactory =
             $this->createMock(SetupLoggerFactory::class);

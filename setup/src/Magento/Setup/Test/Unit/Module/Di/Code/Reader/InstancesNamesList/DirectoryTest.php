@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Setup\Test\Unit\Module\Di\Code\Reader\InstancesNamesList;
 
 use Magento\Framework\Code\Reader\ClassReader;
@@ -101,8 +103,8 @@ class DirectoryTest extends TestCase
             )
         )
             ->method('getParents')
-            ->will(
-                $this->returnValueMap($parents)
+            ->willReturnMap(
+                $parents
             );
 
         $this->logMock->expects($this->never())
@@ -140,8 +142,8 @@ class DirectoryTest extends TestCase
 
         $this->classReaderMock->expects($this->exactly(count($classes)))
             ->method('getParents')
-            ->will(
-                $this->returnValueMap($parents)
+            ->willReturnMap(
+                $parents
             );
 
         $this->logMock->expects($this->never())
@@ -183,8 +185,8 @@ class DirectoryTest extends TestCase
 
         $this->validatorMock->expects($this->exactly(count($classes)))
             ->method('validate')
-            ->will(
-                $this->throwException($exception)
+            ->willThrowException(
+                $exception
             );
 
         $this->model->getList($path);

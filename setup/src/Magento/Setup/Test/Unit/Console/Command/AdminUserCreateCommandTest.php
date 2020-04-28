@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Setup\Test\Unit\Console\Command;
 
 use Magento\Setup\Console\Command\AdminUserCreateCommand;
@@ -39,7 +41,7 @@ class AdminUserCreateCommandTest extends TestCase
      */
     private $command;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->installerFactoryMock = $this->createMock(InstallerFactory::class);
         $this->command = new AdminUserCreateCommand($this->installerFactoryMock, new UserValidationRules());
@@ -81,23 +83,23 @@ class AdminUserCreateCommandTest extends TestCase
 
         $this->questionHelperMock->expects($this->at(0))
             ->method('ask')
-            ->will($this->returnValue('admin'));
+            ->willReturn('admin');
 
         $this->questionHelperMock->expects($this->at(1))
             ->method('ask')
-            ->will($this->returnValue('Password123'));
+            ->willReturn('Password123');
 
         $this->questionHelperMock->expects($this->at(2))
             ->method('ask')
-            ->will($this->returnValue('john.doe@example.com'));
+            ->willReturn('john.doe@example.com');
 
         $this->questionHelperMock->expects($this->at(3))
             ->method('ask')
-            ->will($this->returnValue('John'));
+            ->willReturn('John');
 
         $this->questionHelperMock->expects($this->at(4))
             ->method('ask')
-            ->will($this->returnValue('Doe'));
+            ->willReturn('Doe');
 
         // We override the standard helper with our mock
         $this->command->getHelperSet()->set($this->questionHelperMock, 'question');

@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Setup\Test\Unit\Model;
 
@@ -39,7 +40,7 @@ class PackagesAuthTest extends TestCase
     /** @var Json|MockObject */
     private $serializerMock;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $laminasServiceLocator = $this->createMock(ServiceLocatorInterface::class);
         $laminasServiceLocator
@@ -85,7 +86,7 @@ class PackagesAuthTest extends TestCase
         $this->curl->expects($this->once())->method('getStatus')->willReturn(200);
         $this->curl->expects($this->once())->method('getBody')->willReturn("{'someJson'}");
         $directory = $this->getMockForAbstractClass(WriteInterface::class);
-        $this->filesystem->expects($this->once())->method('getDirectoryWrite')->will($this->returnValue($directory));
+        $this->filesystem->expects($this->once())->method('getDirectoryWrite')->willReturn($directory);
         $directory->expects($this->once())
             ->method('writeFile')
             ->with(PackagesAuth::PATH_TO_PACKAGES_FILE, "{'someJson'}");
@@ -99,7 +100,7 @@ class PackagesAuthTest extends TestCase
         $this->curl->expects($this->once())->method('setCredentials')->with('username', 'password');
         $this->curl->expects($this->once())
             ->method('getStatus')
-            ->will($this->throwException(new \Exception("Test error")));
+            ->willThrowException(new \Exception("Test error"));
         $this->curl->expects($this->never())->method('getBody')->willReturn("{'someJson}");
 
         $expectedValue = '{"success":false,"message":"Test error"}';
@@ -111,10 +112,10 @@ class PackagesAuthTest extends TestCase
     {
         $directoryWrite = $this->getMockForAbstractClass(WriteInterface::class);
         $directoryRead = $this->getMockForAbstractClass(ReadInterface::class);
-        $this->filesystem->expects($this->once())->method('getDirectoryRead')->will($this->returnValue($directoryRead));
+        $this->filesystem->expects($this->once())->method('getDirectoryRead')->willReturn($directoryRead);
         $this->filesystem->expects($this->once())
             ->method('getDirectoryWrite')
-            ->will($this->returnValue($directoryWrite));
+            ->willReturn($directoryWrite);
         $directoryWrite->expects($this->once())->method('isExist')->willReturn(true);
         $directoryWrite->expects($this->once())->method('isReadable')->willReturn(true);
         $directoryWrite->expects($this->once())->method('delete')->willReturn(true);
@@ -132,7 +133,7 @@ class PackagesAuthTest extends TestCase
         $directoryWrite = $this->getMockForAbstractClass(WriteInterface::class);
         $this->filesystem->expects($this->once())
             ->method('getDirectoryWrite')
-            ->will($this->returnValue($directoryWrite));
+            ->willReturn($directoryWrite);
         $directoryWrite->expects($this->once())->method('writeFile')->willReturn(true);
 
         $this->assertTrue($this->packagesAuth->saveAuthJson("testusername", "testpassword"));

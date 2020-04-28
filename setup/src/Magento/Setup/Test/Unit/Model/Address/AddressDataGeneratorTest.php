@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Setup\Test\Unit\Model\Address;
 
 use Magento\Setup\Model\Address\AddressDataGenerator;
@@ -22,7 +24,7 @@ class AddressDataGeneratorTest extends TestCase
      */
     private $addressGenerator;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->addressGenerator = new AddressDataGenerator();
     }
@@ -45,7 +47,7 @@ class AddressDataGeneratorTest extends TestCase
         $address = $this->addressGenerator->generateAddress();
 
         foreach ($this->addressStructure as $addressField) {
-            $this->assertTrue(array_key_exists($addressField, $address));
+            $this->assertArrayHasKey($addressField, $address);
         }
     }
 }

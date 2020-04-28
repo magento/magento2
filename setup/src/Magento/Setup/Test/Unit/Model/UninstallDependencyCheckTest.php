@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Setup\Test\Unit\Model;
 
@@ -41,7 +42,7 @@ class UninstallDependencyCheckTest extends TestCase
      */
     private $themeDependencyCheckerFactory;
 
-    public function setup(): void
+    protected function setup(): void
     {
         $this->composerInfo = $this->createMock(ComposerInformation::class);
         $this->packageDependencyChecker = $this->createMock(DependencyChecker::class);

@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Setup\Test\Unit\Console\Command;
 
 use Magento\Framework\App\Console\MaintenanceModeEnabler;
@@ -66,7 +68,7 @@ class RollbackCommandTest extends TestCase
      */
     private $command;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->deploymentConfig = $this->createMock(DeploymentConfig::class);
         $maintenanceMode = $this->createMock(MaintenanceMode::class);
@@ -93,22 +95,22 @@ class RollbackCommandTest extends TestCase
         $configLoader->expects($this->any())->method('load')->willReturn([]);
         $this->objectManager->expects($this->any())
             ->method('get')
-            ->will($this->returnValueMap([
+            ->willReturnMap([
                 [BackupRollbackFactory::class, $this->backupRollbackFactory],
                 [State::class, $appState],
                 [ConfigLoaderInterface::class, $configLoader],
-            ]));
+            ]);
         $this->helperSet = $this->createMock(HelperSet::class);
         $this->question = $this->createMock(QuestionHelper::class);
         $this->question
             ->expects($this->any())
             ->method('ask')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $this->helperSet
             ->expects($this->any())
             ->method('get')
             ->with('question')
-            ->will($this->returnValue($this->question));
+            ->willReturn($this->question);
         $this->command = new RollbackCommand(
             $objectManagerProvider,
             $maintenanceMode,
@@ -123,7 +125,7 @@ class RollbackCommandTest extends TestCase
     {
         $this->deploymentConfig->expects($this->once())
             ->method('isAvailable')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $this->backupRollback->expects($this->once())
             ->method('codeRollback')
             ->willReturn($this->backupRollback);
@@ -134,7 +136,7 @@ class RollbackCommandTest extends TestCase
     {
         $this->deploymentConfig->expects($this->once())
             ->method('isAvailable')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $this->backupRollback->expects($this->once())
             ->method('codeRollback')
             ->willReturn($this->backupRollback);
@@ -145,7 +147,7 @@ class RollbackCommandTest extends TestCase
     {
         $this->deploymentConfig->expects($this->once())
             ->method('isAvailable')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $this->backupRollback->expects($this->once())
             ->method('dbRollback')
             ->willReturn($this->backupRollback);
@@ -156,7 +158,7 @@ class RollbackCommandTest extends TestCase
     {
         $this->deploymentConfig->expects($this->once())
             ->method('isAvailable')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
         $this->tester->execute(['--db-file' => 'C.gz']);
         $this->assertStringMatchesFormat(
             'No information is available: the Magento application is not installed.%w',
@@ -168,7 +170,7 @@ class RollbackCommandTest extends TestCase
     {
         $this->deploymentConfig->expects($this->once())
             ->method('isAvailable')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $this->tester->execute([]);
         $expected = 'Enabling maintenance mode' . PHP_EOL
             . 'Not enough information provided to roll back.' . PHP_EOL
@@ -180,16 +182,16 @@ class RollbackCommandTest extends TestCase
     {
         $this->deploymentConfig->expects($this->once())
             ->method('isAvailable')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $this->question
             ->expects($this->atLeast(2))
             ->method('ask')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
         $this->helperSet
             ->expects($this->once())
             ->method('get')
             ->with('question')
-            ->will($this->returnValue($this->question));
+            ->willReturn($this->question);
         $this->command->setHelperSet($this->helperSet);
         $this->tester = new CommandTester($this->command);
         $this->tester->execute(['--db-file' => 'C.gz']);

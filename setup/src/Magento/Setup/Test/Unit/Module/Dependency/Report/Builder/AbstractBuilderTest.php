@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Setup\Test\Unit\Module\Dependency\Report\Builder;
 
 use Magento\Setup\Module\Dependency\ParserInterface;
@@ -94,8 +96,8 @@ class AbstractBuilderTest extends TestCase
             'parse'
         )->with(
             $options['parse']
-        )->will(
-            $this->returnValue($parseResult)
+        )->willReturn(
+            $parseResult
         );
         $this->builder->expects(
             $this->once()
@@ -103,8 +105,8 @@ class AbstractBuilderTest extends TestCase
             'buildData'
         )->with(
             $parseResult
-        )->will(
-            $this->returnValue($configMock)
+        )->willReturn(
+            $configMock
         );
         $this->reportWriterMock->expects($this->once())->method('write')->with($options['write'], $configMock);
 

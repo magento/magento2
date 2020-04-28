@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Setup\Test\Unit\Module\Dependency\Report\Writer\Csv;
 
 use Magento\Framework\File\Csv;
@@ -45,8 +47,8 @@ class AbstractWriterTest extends TestCase
             'prepareData'
         )->with(
             $configMock
-        )->will(
-            $this->returnValue($preparedData)
+        )->willReturn(
+            $preparedData
         );
         $this->csvMock->expects($this->once())->method('saveData')->with($options['report_filename'], $preparedData);
 

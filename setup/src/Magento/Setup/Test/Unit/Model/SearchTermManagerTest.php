@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Setup\Test\Unit\Model;
 
 use Magento\Setup\Model\SearchTermManager;
@@ -51,7 +53,7 @@ class SearchTermManagerTest extends TestCase
         ]
     ];
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->searchTermManager = new SearchTermManager(
             $this->searchTermConfiguration,

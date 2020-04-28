@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Setup\Test\Unit\Model;
 
 use Magento\Setup\Model\Dictionary;
@@ -30,7 +32,7 @@ class DictionaryTest extends TestCase
     public function testDictionaryFileIsEmptyException()
     {
         $this->expectException('Magento\Setup\Exception');
-        $this->expectExceptionMessageRegExp('/Dictionary file .*empty-dictionary\.csv is empty/');
+        $this->expectExceptionMessageMatches('/Dictionary file .*empty-dictionary\.csv is empty/');
         $filePath = __DIR__ . '/_files/empty-dictionary.csv';
         file_put_contents($filePath, '');
 
@@ -49,9 +51,9 @@ class DictionaryTest extends TestCase
 
         $dictionary = new Dictionary($filePath);
 
-        $this->assertTrue(in_array($dictionary->getRandWord(), $this->dictionary));
-        $this->assertTrue(in_array($dictionary->getRandWord(), $this->dictionary));
-        $this->assertTrue(in_array($dictionary->getRandWord(), $this->dictionary));
+        $this->assertContains($dictionary->getRandWord(), $this->dictionary);
+        $this->assertContains($dictionary->getRandWord(), $this->dictionary);
+        $this->assertContains($dictionary->getRandWord(), $this->dictionary);
 
         unlink($filePath);
     }

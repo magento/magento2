@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Setup\Test\Unit\Fixtures;
 
@@ -23,7 +24,7 @@ class FixtureConfigTest extends TestCase
      */
     private $fileParserMock;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->fileParserMock = $this->createPartialMock(Parser::class, ['getDom', 'xmlToArray']);
 
@@ -58,7 +59,7 @@ class FixtureConfigTest extends TestCase
 
     public function testGetValue()
     {
-        $this->assertSame(null, $this->model->getValue('null_key'));
+        $this->assertNull($this->model->getValue('null_key'));
     }
 }
 

@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Setup\Test\Unit\Model\Installer;
 
@@ -23,7 +24,7 @@ class ProgressFactoryTest extends TestCase
             'Output from C...',
         ];
         $logger = $this->createMock(WebLogger::class);
-        $logger->expects($this->once())->method('get')->will($this->returnValue($contents));
+        $logger->expects($this->once())->method('get')->willReturn($contents);
 
         $progressFactory = new ProgressFactory();
         $progress = $progressFactory->createFromLog($logger);

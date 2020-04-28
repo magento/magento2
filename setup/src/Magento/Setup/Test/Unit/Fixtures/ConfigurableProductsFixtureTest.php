@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Setup\Test\Unit\Fixtures;
 
@@ -46,7 +47,7 @@ class ConfigurableProductsFixtureTest extends TestCase
      */
     private $attributePatternMock;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->fixtureModelMock = $this->getMockBuilder(FixtureModel::class)
             ->disableOriginalConstructor()
@@ -103,7 +104,7 @@ class ConfigurableProductsFixtureTest extends TestCase
 
         $objectManagerMock->expects($this->any())
             ->method('get')
-            ->will($this->returnValueMap([
+            ->willReturnMap([
                 [
                     StoreManager::class,
                     $storeManagerMock
@@ -116,7 +117,7 @@ class ConfigurableProductsFixtureTest extends TestCase
                     ProductAttributeOptionManagementInterface::class,
                     $productAttributeOptionManagementInterface
                 ]
-            ]));
+            ]);
 
         $attributeCollectionFactoryMock = $this->getMockBuilder(CollectionFactory::class)
             ->setMethods(['create'])
@@ -125,33 +126,31 @@ class ConfigurableProductsFixtureTest extends TestCase
 
         $objectManagerMock->expects($this->any())
             ->method('create')
-            ->will(
-                $this->returnCallback(
-                    function ($className) use (
-                        $attributeCollectionFactoryMock,
-                        $categoryMock,
-                        $importMock,
-                        $source
-                    ) {
-                        if ($className === CollectionFactory::class) {
-                            return $attributeCollectionFactoryMock;
-                        }
-
-                        if ($className === Category::class) {
-                            return $categoryMock;
-                        }
-
-                        if ($className === Import::class) {
-                            return $importMock;
-                        }
-
-                        if ($className === Generator::class) {
-                            return $source;
-                        }
-
-                        return null;
+            ->willReturnCallback(
+                function ($className) use (
+                    $attributeCollectionFactoryMock,
+                    $categoryMock,
+                    $importMock,
+                    $source
+                ) {
+                    if ($className === CollectionFactory::class) {
+                        return $attributeCollectionFactoryMock;
                     }
-                )
+
+                    if ($className === Category::class) {
+                        return $categoryMock;
+                    }
+
+                    if ($className === Import::class) {
+                        return $importMock;
+                    }
+
+                    if ($className === Generator::class) {
+                        return $source;
+                    }
+
+                    return null;
+                }
             );
 
         $valuesMap = [
@@ -208,7 +207,7 @@ class ConfigurableProductsFixtureTest extends TestCase
         $this->fixtureModelMock
             ->expects($this->any())
             ->method('getValue')
-            ->will($this->returnValueMap($valuesMap));
+            ->willReturnMap($valuesMap);
 
         $this->model->execute();
     }
@@ -226,13 +225,13 @@ class ConfigurableProductsFixtureTest extends TestCase
             ->getMock();
         $objectManagerMock->expects($this->never())
             ->method('create')
-            ->with($this->equalTo(Import::class))
+            ->with(Import::class)
             ->willReturn($importMock);
 
         $this->fixtureModelMock
             ->expects($this->never())
             ->method('getObjectManager')
-            ->will($this->returnValue($objectManagerMock));
+            ->willReturn($objectManagerMock);
 
         $this->model->execute();
     }

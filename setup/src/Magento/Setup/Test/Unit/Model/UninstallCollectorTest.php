@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Setup\Test\Unit\Model;
 
 use Magento\Setup\Model\UninstallCollector;
@@ -24,7 +26,7 @@ class UninstallCollectorTest extends \PHPUnit\Framework\TestCase
      */
     private $result;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $objectManagerProvider = $this->createMock(\Magento\Setup\Model\ObjectManagerProvider::class);
         $objectManager =

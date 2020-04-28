@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Setup\Test\Unit\Module\I18n\Pack;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
@@ -73,16 +75,16 @@ class GeneratorTest extends TestCase
         $phrases = [$this->createMock(Phrase::class)];
         $this->dictionaryMock->expects($this->once())
             ->method('getPhrases')
-            ->will($this->returnValue([$phrases]));
+            ->willReturn([$phrases]);
 
         $this->factoryMock->expects($this->once())
             ->method('createLocale')
             ->with($localeString)
-            ->will($this->returnValue($localeMock));
+            ->willReturn($localeMock);
         $this->dictionaryLoaderMock->expects($this->once())
             ->method('load')
             ->with($dictionaryPath)
-            ->will($this->returnValue($this->dictionaryMock));
+            ->willReturn($this->dictionaryMock);
         $this->packWriterMock->expects($this->once())
             ->method('writeDictionary')
             ->with($this->dictionaryMock, $localeMock, $mode);
@@ -103,14 +105,14 @@ class GeneratorTest extends TestCase
         $this->factoryMock->expects($this->once())
             ->method('createLocale')
             ->with($localeString)
-            ->will($this->returnValue($localeMock));
+            ->willReturn($localeMock);
         $this->dictionaryLoaderMock->expects($this->once())
             ->method('load')
             ->with($dictionaryPath)
-            ->will($this->returnValue($this->dictionaryMock));
+            ->willReturn($this->dictionaryMock);
         $this->dictionaryMock->expects($this->once())
             ->method('getPhrases')
-            ->will($this->returnValue([]));
+            ->willReturn([]);
 
         $this->_generator->generate($dictionaryPath, $localeString, $mode, $allowDuplicates);
     }
@@ -126,20 +128,20 @@ class GeneratorTest extends TestCase
         $allowDuplicates = false;
 
         $phraseFirstMock = $this->createMock(Phrase::class);
-        $phraseFirstMock->expects($this->once())->method('getPhrase')->will($this->returnValue('phrase1'));
+        $phraseFirstMock->expects($this->once())->method('getPhrase')->willReturn('phrase1');
         $phraseSecondMock = $this->createMock(Phrase::class);
-        $phraseSecondMock->expects($this->once())->method('getPhrase')->will($this->returnValue('phrase2'));
+        $phraseSecondMock->expects($this->once())->method('getPhrase')->willReturn('phrase2');
 
         $this->dictionaryLoaderMock->expects($this->any())
             ->method('load')
-            ->will($this->returnValue($this->dictionaryMock));
+            ->willReturn($this->dictionaryMock);
         $phrases = [$this->createMock(Phrase::class)];
         $this->dictionaryMock->expects($this->once())
             ->method('getPhrases')
-            ->will($this->returnValue([$phrases]));
+            ->willReturn([$phrases]);
         $this->dictionaryMock->expects($this->once())
             ->method('getDuplicates')
-            ->will($this->returnValue([[$phraseFirstMock], [$phraseSecondMock]]));
+            ->willReturn([[$phraseFirstMock], [$phraseSecondMock]]);
 
         $this->_generator->generate('dictionary_path', 'locale', 'mode', $allowDuplicates);
     }

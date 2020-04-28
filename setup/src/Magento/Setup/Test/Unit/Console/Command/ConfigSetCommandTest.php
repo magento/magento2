@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Setup\Test\Unit\Console\Command;
 
@@ -34,18 +35,18 @@ class ConfigSetCommandTest extends TestCase
      */
     private $command;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $option = $this->createMock(TextConfigOption::class);
         $option
             ->expects($this->any())
             ->method('getName')
-            ->will($this->returnValue('db-host'));
+            ->willReturn('db-host');
         $this->configModel = $this->createMock(ConfigModel::class);
         $this->configModel
             ->expects($this->exactly(2))
             ->method('getAvailableOptions')
-            ->will($this->returnValue([$option]));
+            ->willReturn([$option]);
         $moduleList = $this->createMock(ModuleList::class);
         $this->deploymentConfig = $this->createMock(DeploymentConfig::class);
         $this->command = new ConfigSetCommand($this->configModel, $moduleList, $this->deploymentConfig);
@@ -56,7 +57,7 @@ class ConfigSetCommandTest extends TestCase
         $this->deploymentConfig
             ->expects($this->once())
             ->method('get')
-            ->will($this->returnValue(null));
+            ->willReturn(null);
         $this->configModel
             ->expects($this->once())
             ->method('process')
@@ -74,7 +75,7 @@ class ConfigSetCommandTest extends TestCase
         $this->deploymentConfig
             ->expects($this->once())
             ->method('get')
-            ->will($this->returnValue('localhost'));
+            ->willReturn('localhost');
         $this->configModel
             ->expects($this->once())
             ->method('process')
@@ -87,7 +88,7 @@ class ConfigSetCommandTest extends TestCase
         $this->deploymentConfig
             ->expects($this->once())
             ->method('get')
-            ->will($this->returnValue('localhost'));
+            ->willReturn('localhost');
         $this->configModel
             ->expects($this->once())
             ->method('process')
@@ -107,7 +108,7 @@ class ConfigSetCommandTest extends TestCase
         $dialog
             ->expects($this->once())
             ->method('ask')
-            ->will($this->returnValue($interactionType));
+            ->willReturn($interactionType);
 
         /** @var HelperSet|MockObject $helperSet */
         $helperSet = $this->createMock(HelperSet::class);
@@ -115,7 +116,7 @@ class ConfigSetCommandTest extends TestCase
             ->expects($this->once())
             ->method('get')
             ->with('question')
-            ->will($this->returnValue($dialog));
+            ->willReturn($dialog);
         $this->command->setHelperSet($helperSet);
 
         $commandTester = new CommandTester($this->command);

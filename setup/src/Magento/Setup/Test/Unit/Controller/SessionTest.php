@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Setup\Test\Unit\Controller;
 
@@ -39,7 +40,7 @@ class SessionTest extends TestCase
      */
     private $serviceManager;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $objectManager =
             $this->getMockForAbstractClass(ObjectManagerInterface::class, [], '', false);
@@ -55,18 +56,18 @@ class SessionTest extends TestCase
      */
     public function testUnloginAction()
     {
-        $this->objectManagerProvider->expects($this->once())->method('get')->will(
-            $this->returnValue($this->objectManager)
+        $this->objectManagerProvider->expects($this->once())->method('get')->willReturn(
+            $this->objectManager
         );
         $deployConfigMock =
             $this->createPartialMock(DeploymentConfig::class, ['isAvailable']);
-        $deployConfigMock->expects($this->once())->method('isAvailable')->will($this->returnValue(true));
+        $deployConfigMock->expects($this->once())->method('isAvailable')->willReturn(true);
 
         $sessionMock = $this->createPartialMock(
             \Magento\Backend\Model\Auth\Session::class,
             ['prolong', 'isSessionExists']
         );
-        $sessionMock->expects($this->once())->method('isSessionExists')->will($this->returnValue(false));
+        $sessionMock->expects($this->once())->method('isSessionExists')->willReturn(false);
 
         $stateMock = $this->createPartialMock(State::class, ['setAreaCode']);
         $stateMock->expects($this->once())->method('setAreaCode');
@@ -87,11 +88,11 @@ class SessionTest extends TestCase
 
         $this->objectManager->expects($this->atLeastOnce())
             ->method('get')
-            ->will($this->returnValueMap($returnValueMap));
+            ->willReturnMap($returnValueMap);
 
         $this->objectManager->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($sessionMock));
+            ->willReturn($sessionMock);
         $controller = new Session($this->serviceManager, $this->objectManagerProvider);
         $urlMock->expects($this->once())->method('getBaseUrl');
         $controller->prolongAction();
@@ -113,22 +114,22 @@ class SessionTest extends TestCase
      */
     public function testProlongActionWithExistingSession()
     {
-        $this->objectManagerProvider->expects($this->once())->method('get')->will(
-            $this->returnValue($this->objectManager)
+        $this->objectManagerProvider->expects($this->once())->method('get')->willReturn(
+            $this->objectManager
         );
         $deployConfigMock =
             $this->createPartialMock(DeploymentConfig::class, ['isAvailable']);
-        $deployConfigMock->expects($this->once())->method('isAvailable')->will($this->returnValue(true));
+        $deployConfigMock->expects($this->once())->method('isAvailable')->willReturn(true);
         $sessionMock = $this->createPartialMock(
             \Magento\Backend\Model\Auth\Session::class,
             ['prolong', 'isSessionExists']
         );
-        $sessionMock->expects($this->once())->method('isSessionExists')->will($this->returnValue(true));
+        $sessionMock->expects($this->once())->method('isSessionExists')->willReturn(true);
 
         $this->serviceManager->expects($this->once())->method('get')->will($this->returnValue($deployConfigMock));
         $this->objectManager->expects($this->once())
             ->method('get')
-            ->will($this->returnValue($sessionMock));
+            ->willReturn($sessionMock);
         $controller = new Session($this->serviceManager, $this->objectManagerProvider);
         $this->assertEquals(new JsonModel(['success' => true]), $controller->prolongAction());
     }

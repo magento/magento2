@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Setup\Test\Unit\Fixtures;
 
@@ -38,7 +39,7 @@ class AttributeSetsFixtureTest extends TestCase
      */
     private $patternMock;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->fixtureModelMock = $this->getMockBuilder(FixtureModel::class)
             ->disableOriginalConstructor()
@@ -70,7 +71,7 @@ class AttributeSetsFixtureTest extends TestCase
         $this->fixtureModelMock
             ->expects($this->exactly(2))
             ->method('getValue')
-            ->will($this->returnValueMap($valueMap));
+            ->willReturnMap($valueMap);
 
         $this->model->execute();
     }
@@ -96,7 +97,7 @@ class AttributeSetsFixtureTest extends TestCase
         $this->fixtureModelMock
             ->expects($this->exactly(4))
             ->method('getValue')
-            ->will($this->returnValueMap($valueMap));
+            ->willReturnMap($valueMap);
 
         $this->model->execute();
     }

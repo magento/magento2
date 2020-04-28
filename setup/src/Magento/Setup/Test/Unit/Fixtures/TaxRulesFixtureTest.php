@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Setup\Test\Unit\Fixtures;
 
@@ -93,12 +94,10 @@ class TaxRulesFixtureTest extends TestCase
         $this->fixtureModelMock
             ->expects($this->exactly(2))
             ->method('getValue')
-            ->will($this->returnValueMap(
-                [
-                    ['tax_mode', 'VAT'],
-                    ['tax_rules', 2]
-                ]
-            ));
+            ->willReturnMap([
+                ['tax_mode', 'VAT'],
+                ['tax_rules', 2]
+            ]);
 
         $this->taxRateCollectionFactoryMock = $this->getMockBuilder(CollectionFactory::class)
             ->disableOriginalConstructor()

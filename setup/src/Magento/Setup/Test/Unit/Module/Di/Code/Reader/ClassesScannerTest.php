@@ -29,9 +29,11 @@ class ClassesScannerTest extends TestCase
     protected function setUp(): void
     {
         $this->generation = realpath(__DIR__ . '/../../_files/var/generation');
-        $mock = $this->getMockBuilder(DirectoryList::class)->disableOriginalConstructor()->setMethods(
-            ['getPath']
-        )->getMock();
+        $mock = $this->getMockBuilder(DirectoryList::class)
+            ->disableOriginalConstructor()
+            ->setMethods(
+                ['getPath']
+            )->getMock();
         $mock->method('getPath')->willReturn($this->generation);
         $this->model = new ClassesScanner([], $mock);
     }

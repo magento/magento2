@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Setup\Test\Unit\Model\FixtureGenerator;
 
@@ -67,7 +68,8 @@ class SqlCollectorTest extends TestCase
         $connection->expects($this->once())->method('getProfiler')->willReturn($profiler);
         $this->resourceConnection->expects($this->once())->method('getConnection')->willReturn($connection);
 
-        $query = $this->getMockBuilder(\Zend_Db_Profiler_Query::class)->disableOriginalConstructor()->getMock();
+        $query = $this->getMockBuilder(\Zend_Db_Profiler_Query::class)->disableOriginalConstructor()
+            ->getMock();
         $query->expects($this->exactly(2))->method('getQueryType')->willReturn(\Zend_Db_Profiler::SELECT);
         $profiler->expects($this->once())->method('getQueryProfiles')->willReturn([$query]);
 
@@ -86,7 +88,8 @@ class SqlCollectorTest extends TestCase
         $connection->expects($this->once())->method('getProfiler')->willReturn($profiler);
         $this->resourceConnection->expects($this->once())->method('getConnection')->willReturn($connection);
 
-        $query = $this->getMockBuilder(\Zend_Db_Profiler_Query::class)->disableOriginalConstructor()->getMock();
+        $query = $this->getMockBuilder(\Zend_Db_Profiler_Query::class)->disableOriginalConstructor()
+            ->getMock();
         $query->expects($this->once())->method('getQueryType')->willReturn(\Zend_Db_Profiler::INSERT);
         $query->expects($this->once())->method('getQuery')->willReturn(
             'INSERT INTO `catalog_product_entity` (id, sku, type, created_at, attribute_set)'

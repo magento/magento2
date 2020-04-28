@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Setup\Test\Unit\Fixtures;
 
@@ -74,10 +75,11 @@ class OrdersFixtureTest extends TestCase
             $this->fixtureModelMock
         );
 
-        $orderMock = $this->createPartialMock(
-            Order::class,
-            ['getTable', 'getConnection', 'getTableName', 'query', 'fetchColumn']
-        );
+        $orderMock = $this->getMockBuilder(Order::class)
+            ->addMethods(['getTableName', 'query', 'fetchColumn'])
+            ->onlyMethods(['getTable', 'getConnection'])
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $path = explode('\\', Order::class);
         $name = array_pop($path);

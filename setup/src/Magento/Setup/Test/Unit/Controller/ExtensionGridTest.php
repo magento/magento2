@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Setup\Test\Unit\Controller;
 
@@ -56,7 +57,7 @@ class ExtensionGridTest extends \PHPUnit\Framework\TestCase
     const FORMATTED_TIME = '01:55PM';
     /**#@-*/
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->lastSyncData = [
             "lastSyncDate" => [

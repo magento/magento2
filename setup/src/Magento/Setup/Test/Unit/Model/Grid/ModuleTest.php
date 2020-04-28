@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Setup\Test\Unit\Model\Grid;
 
@@ -72,7 +73,7 @@ class ModuleTest extends TestCase
      */
     private $moduleData = [];
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->moduleData = [
             'magento/sample-module-one' => [
@@ -151,9 +152,9 @@ class ModuleTest extends TestCase
         $this->packageInfoMock->expects(static::exactly(2))
             ->method('getPackageName')
             ->willReturnMap([
-                    ['Sample_ModuleOne', 'magento/sample-module-one'],
-                    ['Sample_ModuleTwo', ''],
-                ]);
+                ['Sample_ModuleOne', 'magento/sample-module-one'],
+                ['Sample_ModuleTwo', ''],
+            ]);
         $this->packageInfoMock->expects(static::exactly(2))
             ->method('getVersion')
             ->willReturnMap([
@@ -163,12 +164,12 @@ class ModuleTest extends TestCase
 
         $this->packagesDataMock->expects(static::exactly(2))
             ->method('addPackageExtraInfo')
-            ->will(
-                $this->returnCallback(function ($package) {
+            ->willReturnCallback(
+                function ($package) {
                     $package['package_title'] = 'packageTitle';
                     $package['package_type'] = 'packageType';
                     return $package;
-                })
+                }
             );
 
         $this->moduleListMock->expects(static::exactly(2))

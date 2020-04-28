@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Setup\Test\Unit\Console\Command;
 
@@ -27,11 +28,11 @@ class InfoCurrencyListCommandTest extends TestCase
 
         /** @var \Symfony\Component\Console\Helper\TableFactory|MockObject $helperSet */
         $tableFactoryMock = $this->createMock(\Symfony\Component\Console\Helper\TableFactory::class);
-        $tableFactoryMock->expects($this->once())->method('create')->will($this->returnValue($table));
+        $tableFactoryMock->expects($this->once())->method('create')->willReturn($table);
 
         /** @var Lists|MockObject $list */
         $list = $this->createMock(Lists::class);
-        $list->expects($this->once())->method('getCurrencyList')->will($this->returnValue($currencies));
+        $list->expects($this->once())->method('getCurrencyList')->willReturn($currencies);
         $command = new InfoCurrencyListCommand($list, $tableFactoryMock);
         $commandTester = new CommandTester($command);
         $commandTester->execute([]);

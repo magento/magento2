@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Setup\Test\Unit\Controller;
 
@@ -28,7 +29,7 @@ class SelectVersionTest extends TestCase
      */
     private $controller;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->systemPackage = $this->createMock(SystemPackage::class);
         $this->controller = new SelectVersion(
@@ -65,7 +66,7 @@ class SelectVersionTest extends TestCase
     {
         $this->systemPackage->expects($this->once())
             ->method('getPackageVersions')
-            ->will($this->throwException(new \Exception("Test error message")));
+            ->willThrowException(new \Exception("Test error message"));
         $jsonModel = $this->controller->systemPackageAction();
         $this->assertInstanceOf(JsonModel::class, $jsonModel);
         $variables = $jsonModel->getVariables();
@@ -95,7 +96,7 @@ class SelectVersionTest extends TestCase
     {
         $this->systemPackage->expects($this->once())
             ->method('getInstalledSystemPackages')
-            ->will($this->throwException(new \Exception("Test error message")));
+            ->willThrowException(new \Exception("Test error message"));
         $jsonModel = $this->controller->installedSystemPackageAction();
         $variables = $jsonModel->getVariables();
         $this->assertArrayHasKey('responseType', $variables);

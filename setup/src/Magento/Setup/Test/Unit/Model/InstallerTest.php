@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Setup\Test\Unit\Model {
 
@@ -335,7 +336,7 @@ namespace Magento\Setup\Test\Unit\Model {
             $connection->expects($this->any())->method('newTable')->willReturn($table);
             $resource = $this->createMock(ResourceConnection::class);
             $this->contextMock->expects($this->any())->method('getResources')->willReturn($resource);
-            $resource->expects($this->any())->method('getConnection')->will($this->returnValue($connection));
+            $resource->expects($this->any())->method('getConnection')->willReturn($connection);
             $dataSetup = $this->createMock(DataSetup::class);
             $dataSetup->expects($this->any())->method('getConnection')->willReturn($connection);
             $cacheManager = $this->createMock(Manager::class);
@@ -355,7 +356,7 @@ namespace Magento\Setup\Test\Unit\Model {
             $this->dataSetupFactory->expects($this->atLeastOnce())->method('create')->willReturn($dataSetup);
             $this->objectManager->expects($this->any())
                 ->method('create')
-                ->will($this->returnValueMap([
+                ->willReturnMap([
                     [Manager::class, [], $cacheManager],
                     [\Magento\Framework\App\State::class, [], $appState],
                     [
@@ -363,7 +364,7 @@ namespace Magento\Setup\Test\Unit\Model {
                         ['objectManager' => $this->objectManager],
                         $this->patchApplierFactoryMock
                     ],
-                ]));
+                ]);
             $this->patchApplierMock->expects($this->exactly(2))->method('applySchemaPatch')->willReturnMap(
                 [
                     ['Bar_Two'],
@@ -378,12 +379,12 @@ namespace Magento\Setup\Test\Unit\Model {
             );
             $this->objectManager->expects($this->any())
                 ->method('get')
-                ->will($this->returnValueMap([
+                ->willReturnMap([
                     [\Magento\Framework\App\State::class, $appState],
                     [Manager::class, $cacheManager],
                     [DeclarationInstaller::class, $this->declarationInstallerMock],
                     [Registry::class, $registry]
-                ]));
+                ]);
             $this->adminFactory->expects($this->any())->method('create')->willReturn(
                 $this->createMock(AdminAccount::class)
             );
@@ -577,12 +578,10 @@ namespace Magento\Setup\Test\Unit\Model {
 
         public function testUpdateModulesSequence()
         {
-            $this->cleanupFiles->expects($this->once())->method('clearCodeGeneratedFiles')->will(
-                $this->returnValue(
-                    [
-                        "The directory '/generation' doesn't exist - skipping cleanup",
-                    ]
-                )
+            $this->cleanupFiles->expects($this->once())->method('clearCodeGeneratedFiles')->willReturn(
+                [
+                    "The directory '/generation' doesn't exist - skipping cleanup",
+                ]
             );
             $installer = $this->prepareForUpdateModulesTests();
 
@@ -621,20 +620,18 @@ namespace Magento\Setup\Test\Unit\Model {
             $configDir
                 ->expects($this->exactly(2))
                 ->method('getAbsolutePath')
-                ->will(
-                    $this->returnValueMap(
-                        [
-                            ['ConfigOne.php', '/config/ConfigOne.php'],
-                            ['ConfigTwo.php', '/config/ConfigTwo.php']
-                        ]
-                    )
+                ->willReturnMap(
+                    [
+                        ['ConfigOne.php', '/config/ConfigOne.php'],
+                        ['ConfigTwo.php', '/config/ConfigTwo.php']
+                    ]
                 );
             $this->filesystem
                 ->expects($this->any())
                 ->method('getDirectoryWrite')
-                ->will($this->returnValueMap([
+                ->willReturnMap([
                     [DirectoryList::CONFIG, DriverPool::FILE, $configDir],
-                ]));
+                ]);
             $this->logger->expects($this->at(0))->method('log')->with('Starting Magento uninstallation:');
             $this->logger
                 ->expects($this->at(2))
@@ -666,13 +663,11 @@ namespace Magento\Setup\Test\Unit\Model {
                 ->method('log')
                 ->with("The file '/config/ConfigTwo.php' doesn't exist - skipping cleanup");
             $this->logger->expects($this->once())->method('logSuccess')->with('Magento uninstallation complete.');
-            $this->cleanupFiles->expects($this->once())->method('clearAllFiles')->will(
-                $this->returnValue(
-                    [
-                        "The directory '/var' doesn't exist - skipping cleanup",
-                        "The directory '/static' doesn't exist - skipping cleanup"
-                    ]
-                )
+            $this->cleanupFiles->expects($this->once())->method('clearAllFiles')->willReturn(
+                [
+                    "The directory '/var' doesn't exist - skipping cleanup",
+                    "The directory '/static' doesn't exist - skipping cleanup"
+                ]
             );
 
             $this->object->uninstall();
@@ -710,9 +705,9 @@ namespace Magento\Setup\Test\Unit\Model {
             $cacheManager->expects($this->once())->method('clean');
             $this->objectManager->expects($this->any())
                 ->method('get')
-                ->will($this->returnValueMap([
+                ->willReturnMap([
                     [Manager::class, $cacheManager]
-                ]));
+                ]);
             $this->moduleLoader->expects($this->once())->method('load')->willReturn($allModules);
 
             $expectedModules = [

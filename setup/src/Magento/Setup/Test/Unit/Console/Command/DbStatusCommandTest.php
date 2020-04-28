@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Setup\Test\Unit\Console\Command;
 
 use Magento\Framework\App\DeploymentConfig;
@@ -59,15 +61,19 @@ class DbStatusCommandTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->validators = [
-            'declarative_schema' => $this->getMockBuilder(UpToDateValidatorInterface::class)->getMock(),
-            'up_to_date_schema' => $this->getMockBuilder(UpToDateValidatorInterface::class)->getMock(),
-            'up_to_date_data' => $this->getMockBuilder(UpToDateValidatorInterface::class)->getMock(),
-            'old_validator' => $this->getMockBuilder(UpToDateValidatorInterface::class)->getMock(),
+            'declarative_schema' => $this->getMockBuilder(UpToDateValidatorInterface::class)
+                ->getMock(),
+            'up_to_date_schema' => $this->getMockBuilder(UpToDateValidatorInterface::class)
+                ->getMock(),
+            'up_to_date_data' => $this->getMockBuilder(UpToDateValidatorInterface::class)
+                ->getMock(),
+            'old_validator' => $this->getMockBuilder(UpToDateValidatorInterface::class)
+                ->getMock(),
         ];
 
         $objectManagerProvider->expects($this->any())
             ->method('get')
-            ->will($this->returnValue($objectManager));
+            ->willReturn($objectManager);
         $objectManager->expects(self::exactly(4))
             ->method('get')
             ->willReturnOnConsecutiveCalls(
@@ -95,7 +101,7 @@ class DbStatusCommandTest extends TestCase
             ->willReturn(true);
         $this->deploymentConfig->expects($this->once())
             ->method('isAvailable')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $tester = new CommandTester($this->command);
         $tester->execute([]);
         $this->assertStringMatchesFormat('All modules are up to date.', $tester->getDisplay());
@@ -106,7 +112,7 @@ class DbStatusCommandTest extends TestCase
     {
         $this->deploymentConfig->expects($this->once())
             ->method('isAvailable')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
         $tester = new CommandTester($this->command);
         $tester->execute([]);
 

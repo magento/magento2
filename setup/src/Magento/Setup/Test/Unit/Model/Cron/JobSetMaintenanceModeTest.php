@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Setup\Test\Unit\Model\Cron;
 
 use Magento\Framework\App\Cache;
@@ -34,7 +36,7 @@ class JobSetMaintenanceModeTest extends TestCase
      */
     private $objectManagerProviderMock;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->objectManagerProviderMock = $this->createMock(ObjectManagerProvider::class);
         $objectManager = $this->getMockForAbstractClass(ObjectManagerInterface::class, [], '', false);
@@ -45,7 +47,7 @@ class JobSetMaintenanceModeTest extends TestCase
             [Cache::class, $cache],
 
         ];
-        $objectManager->expects($this->atLeastOnce())->method('get')->will($this->returnValueMap($valueMap));
+        $objectManager->expects($this->atLeastOnce())->method('get')->willReturnMap($valueMap);
         $this->objectManagerProviderMock->expects($this->once())->method('get')->willReturn($objectManager);
 
         $this->statusMock = $this->createMock(Status::class);

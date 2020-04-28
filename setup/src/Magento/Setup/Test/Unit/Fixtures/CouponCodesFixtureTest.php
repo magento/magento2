@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Setup\Test\Unit\Fixtures;
 
@@ -45,7 +46,7 @@ class CouponCodesFixtureTest extends TestCase
     /**
      * setUp
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->fixtureModelMock = $this->createMock(FixtureModel::class);
         $this->ruleFactoryMock = $this->createPartialMock(\Magento\SalesRule\Model\RuleFactory::class, ['create']);
@@ -68,17 +69,17 @@ class CouponCodesFixtureTest extends TestCase
         $websiteMock = $this->createMock(Website::class);
         $websiteMock->expects($this->once())
             ->method('getId')
-            ->will($this->returnValue('website_id'));
+            ->willReturn('website_id');
 
         $storeManagerMock = $this->createMock(StoreManager::class);
         $storeManagerMock->expects($this->once())
             ->method('getWebsites')
-            ->will($this->returnValue([$websiteMock]));
+            ->willReturn([$websiteMock]);
 
         $objectManagerMock = $this->createMock(ObjectManager::class);
         $objectManagerMock->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($storeManagerMock));
+            ->willReturn($storeManagerMock);
 
         $valueMap = [
             ['coupon_codes', 0, 1]
@@ -87,11 +88,11 @@ class CouponCodesFixtureTest extends TestCase
         $this->fixtureModelMock
             ->expects($this->exactly(1))
             ->method('getValue')
-            ->will($this->returnValueMap($valueMap));
+            ->willReturnMap($valueMap);
         $this->fixtureModelMock
             ->expects($this->exactly(1))
             ->method('getObjectManager')
-            ->will($this->returnValue($objectManagerMock));
+            ->willReturn($objectManagerMock);
 
         $ruleMock = $this->createMock(Rule::class);
         $this->ruleFactoryMock->expects($this->once())
@@ -132,7 +133,7 @@ class CouponCodesFixtureTest extends TestCase
         $objectManagerMock = $this->createMock(ObjectManager::class);
         $objectManagerMock->expects($this->never())
             ->method('get')
-            ->with($this->equalTo(Rule::class))
+            ->with(Rule::class)
             ->willReturn($ruleMock);
 
         $this->fixtureModelMock

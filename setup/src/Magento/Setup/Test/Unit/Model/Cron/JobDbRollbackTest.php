@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Setup\Test\Unit\Model\Cron;
 
 use Magento\Framework\App\State;
@@ -44,7 +46,7 @@ class JobDbRollbackTest extends TestCase
      */
     private $objectManagerProvider;
 
-    public function setup(): void
+    protected function setup(): void
     {
         $this->backupRollbackFactory = $this->createMock(BackupRollbackFactory::class);
         $this->backupRollback = $this->createMock(BackupRollback::class);
@@ -66,10 +68,10 @@ class JobDbRollbackTest extends TestCase
             $this->getMockForAbstractClass(ObjectManagerInterface::class, [], '', false);
         $objectManager->expects($this->any())
             ->method('get')
-            ->will($this->returnValueMap([
+            ->willReturnMap([
                 [State::class, $appState],
                 [ConfigLoaderInterface::class, $configLoader],
-            ]));
+            ]);
 
         $this->objectManagerProvider->expects($this->once())->method('get')->willReturn($objectManager);
 

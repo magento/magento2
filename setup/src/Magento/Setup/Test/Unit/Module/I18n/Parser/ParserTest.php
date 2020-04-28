@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Setup\Test\Unit\Module\I18n\Parser;
 
@@ -72,10 +73,10 @@ class ParserTest extends TestCase
         //4. Set expectations
         $this->filesCollector->expects($this->any())
             ->method('getFiles')
-            ->will($this->returnValueMap([
+            ->willReturnMap([
                 [$options[0]['paths'], '', $phpFiles],
                 [$options[1]['paths'], '', $jsFiles],
-            ]));
+            ]);
 
         $result = $this->parser->parse($options);
         $this->assertEquals($expectedResult, $result);

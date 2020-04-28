@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Setup\Test\Unit\Module\I18n\Dictionary\Writer;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
@@ -60,58 +62,58 @@ class CsvTest extends TestCase
             $this->once()
         )->method(
             'getCompiledPhrase'
-        )->will(
-            $this->returnValue("phrase1_quote'")
+        )->willReturn(
+            "phrase1_quote'"
         );
         $this->_phraseFirstMock->expects(
             $this->once()
         )->method(
             'getCompiledTranslation'
-        )->will(
-            $this->returnValue("translation1_quote'")
+        )->willReturn(
+            "translation1_quote'"
         );
         $this->_phraseFirstMock->expects(
             $this->once()
         )->method(
             'getContextType'
-        )->will(
-            $this->returnValue("context_type1_quote\\'")
+        )->willReturn(
+            "context_type1_quote\\'"
         );
         $this->_phraseFirstMock->expects(
             $this->once()
         )->method(
             'getContextValueAsString'
-        )->will(
-            $this->returnValue("content_value1_quote\\'")
+        )->willReturn(
+            "content_value1_quote\\'"
         );
 
         $this->_phraseSecondMock->expects(
             $this->once()
         )->method(
             'getCompiledPhrase'
-        )->will(
-            $this->returnValue("phrase2_quote'")
+        )->willReturn(
+            "phrase2_quote'"
         );
         $this->_phraseSecondMock->expects(
             $this->once()
         )->method(
             'getCompiledTranslation'
-        )->will(
-            $this->returnValue("translation2_quote'")
+        )->willReturn(
+            "translation2_quote'"
         );
         $this->_phraseSecondMock->expects(
             $this->once()
         )->method(
             'getContextType'
-        )->will(
-            $this->returnValue("context_type2_quote\\'")
+        )->willReturn(
+            "context_type2_quote\\'"
         );
         $this->_phraseSecondMock->expects(
             $this->once()
         )->method(
             'getContextValueAsString'
-        )->will(
-            $this->returnValue("content_value2_quote\\'")
+        )->willReturn(
+            "content_value2_quote\\'"
         );
 
         $objectManagerHelper = new ObjectManager($this);
@@ -140,7 +142,7 @@ EXPECTED;
         $this->_phraseFirstMock->expects($this->once())
             ->method('getCompiledTranslation')
             ->willReturn('translation1');
-        $this->_phraseFirstMock->expects($this->once())->method('getContextType')->will($this->returnValue(''));
+        $this->_phraseFirstMock->expects($this->once())->method('getContextType')->willReturn('');
 
         $this->_phraseSecondMock->expects($this->once())
             ->method('getCompiledPhrase')

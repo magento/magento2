@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Setup\Test\Unit\Controller;
 
@@ -33,7 +34,7 @@ class MarketplaceTest extends TestCase
      */
     private $controller;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->packagesAuth = $this->createMock(PackagesAuth::class);
         $this->packagesData = $this->createMock(PackagesData::class);
@@ -45,7 +46,7 @@ class MarketplaceTest extends TestCase
         $this->packagesAuth
             ->expects($this->once())
             ->method('checkCredentials')
-            ->will($this->returnValue(json_encode(['success' => true])));
+            ->willReturn(json_encode(['success' => true]));
         $this->packagesAuth
             ->expects($this->once())
             ->method('saveAuthJson')
@@ -62,7 +63,7 @@ class MarketplaceTest extends TestCase
         $this->packagesAuth
             ->expects($this->once())
             ->method('checkCredentials')
-            ->will($this->throwException(new \Exception()));
+            ->willThrowException(new \Exception());
         $this->packagesAuth->expects($this->never())->method('saveAuthJson');
         $jsonModel = $this->controller->saveAuthJsonAction();
         $this->assertInstanceOf(JsonModel::class, $jsonModel);
@@ -77,11 +78,11 @@ class MarketplaceTest extends TestCase
         $this->packagesAuth
             ->expects($this->once())
             ->method('getAuthJsonData')
-            ->will($this->returnValue(['username' => 'test', 'password' => 'test']));
+            ->willReturn(['username' => 'test', 'password' => 'test']);
         $this->packagesAuth
             ->expects($this->once())
             ->method('checkCredentials')
-            ->will($this->returnValue(json_encode(['success' => true])));
+            ->willReturn(json_encode(['success' => true]));
         $jsonModel = $this->controller->checkAuthAction();
         $this->assertInstanceOf(ViewModel::class, $jsonModel);
         $variables = $jsonModel->getVariables();
@@ -94,7 +95,7 @@ class MarketplaceTest extends TestCase
         $this->packagesAuth
             ->expects($this->once())
             ->method('getAuthJsonData')
-            ->will($this->throwException(new \Exception()));
+            ->willThrowException(new \Exception());
         $jsonModel = $this->controller->checkAuthAction();
         $this->assertInstanceOf(JsonModel::class, $jsonModel);
         $variables = $jsonModel->getVariables();
@@ -108,7 +109,7 @@ class MarketplaceTest extends TestCase
         $this->packagesAuth
             ->expects($this->once())
             ->method('removeCredentials')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $jsonModel = $this->controller->removeCredentialsAction();
         $this->assertInstanceOf(ViewModel::class, $jsonModel);
@@ -122,7 +123,7 @@ class MarketplaceTest extends TestCase
         $this->packagesAuth
             ->expects($this->once())
             ->method('removeCredentials')
-            ->will($this->throwException(new \Exception()));
+            ->willThrowException(new \Exception());
         $jsonModel = $this->controller->removeCredentialsAction();
         $this->assertInstanceOf(JsonModel::class, $jsonModel);
         $variables = $jsonModel->getVariables();

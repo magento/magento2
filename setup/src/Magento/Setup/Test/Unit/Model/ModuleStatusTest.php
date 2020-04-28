@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Setup\Test\Unit\Model;
 
@@ -42,7 +43,7 @@ class ModuleStatusTest extends TestCase
      */
     private $objectManagerProvider;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->moduleLoader = $this->createMock(Loader::class);
         $this->dependencyChecker =
@@ -64,9 +65,9 @@ class ModuleStatusTest extends TestCase
      */
     public function testGetAllModules($expectedAllModules, $expectedConfig, $expectedResult)
     {
-        $this->moduleLoader->expects($this->once())->method('load')->will($this->returnValue($expectedAllModules));
+        $this->moduleLoader->expects($this->once())->method('load')->willReturn($expectedAllModules);
         $this->deploymentConfig->expects($this->once())->method('get')
-            ->will($this->returnValue($expectedConfig));
+            ->willReturn($expectedConfig);
         $this->dependencyChecker->expects($this->any())->method('checkDependenciesWhenDisableModules')->willReturn(
             ['module1' => [], 'module2' => [], 'module3' => [], 'module4' => []]
         );
@@ -89,19 +90,19 @@ class ModuleStatusTest extends TestCase
      */
     public function testGetAllModulesWithInputs($expectedAllModules, $expectedConfig, $expectedResult)
     {
-        $this->moduleLoader->expects($this->once())->method('load')->will($this->returnValue($expectedAllModules));
+        $this->moduleLoader->expects($this->once())->method('load')->willReturn($expectedAllModules);
         $this->deploymentConfig->expects($this->never())->method('get')
-            ->will($this->returnValue($expectedConfig));
+            ->willReturn($expectedConfig);
         $this->dependencyChecker->expects($this->any())->method('checkDependenciesWhenDisableModules')->willReturn(
             ['module1' => [], 'module2' => [], 'module3' => [], 'module4' => []]
         );
 
         $moduleStatus = new ModuleStatus($this->moduleLoader, $this->deploymentConfig, $this->objectManagerProvider);
         $allModules = $moduleStatus->getAllModules(['module1', 'module2']);
-        $this->assertSame(true, $allModules['module1']['selected']);
-        $this->assertSame(true, $allModules['module2']['selected']);
-        $this->assertSame(false, $allModules['module3']['selected']);
-        $this->assertSame(false, $allModules['module4']['selected']);
+        $this->assertTrue($allModules['module1']['selected']);
+        $this->assertTrue($allModules['module2']['selected']);
+        $this->assertFalse($allModules['module3']['selected']);
+        $this->assertFalse($allModules['module4']['selected']);
     }
 
     /**
@@ -113,9 +114,9 @@ class ModuleStatusTest extends TestCase
      */
     public function testSetIsEnabled($expectedAllModules, $expectedConfig, $expectedResult)
     {
-        $this->moduleLoader->expects($this->once())->method('load')->will($this->returnValue($expectedAllModules));
+        $this->moduleLoader->expects($this->once())->method('load')->willReturn($expectedAllModules);
         $this->deploymentConfig->expects($this->once())->method('get')
-            ->will($this->returnValue($expectedConfig));
+            ->willReturn($expectedConfig);
         $this->dependencyChecker->expects($this->any())->method('checkDependenciesWhenDisableModules')->willReturn(
             ['module1' => [], 'module2' => [], 'module3' => [], 'module4' => []]
         );
@@ -123,7 +124,7 @@ class ModuleStatusTest extends TestCase
         $moduleStatus = new ModuleStatus($this->moduleLoader, $this->deploymentConfig, $this->objectManagerProvider);
         $moduleStatus->setIsEnabled(false, 'module1');
         $allModules = $moduleStatus->getAllModules();
-        $this->assertSame(false, $allModules['module1']['selected']);
+        $this->assertFalse($allModules['module1']['selected']);
         $this->assertSame($expectedResult[1], $allModules['module2']['selected']);
         $this->assertSame($expectedResult[2], $allModules['module3']['selected']);
         $this->assertSame($expectedResult[3], $allModules['module4']['selected']);

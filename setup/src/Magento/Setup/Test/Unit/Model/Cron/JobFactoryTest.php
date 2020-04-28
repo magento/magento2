@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Setup\Test\Unit\Model\Cron;
 
 use Laminas\ServiceManager\ServiceLocatorInterface;
@@ -50,7 +52,7 @@ class JobFactoryTest extends TestCase
      */
     private $jobFactory;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $serviceManager =
             $this->getMockForAbstractClass(ServiceLocatorInterface::class, [], '', false);
@@ -94,7 +96,7 @@ class JobFactoryTest extends TestCase
 
         $serviceManager->expects($this->atLeastOnce())
             ->method('get')
-            ->will($this->returnValueMap($returnValueMap));
+            ->willReturnMap($returnValueMap);
 
         $this->jobFactory = new JobFactory($serviceManager);
     }
@@ -125,7 +127,7 @@ class JobFactoryTest extends TestCase
         ];
         $this->objectManager->expects($this->any())
             ->method('get')
-            ->will($this->returnValueMap($valueMap));
+            ->willReturnMap($valueMap);
 
         $this->assertInstanceOf(
             AbstractJob::class,
@@ -155,7 +157,7 @@ class JobFactoryTest extends TestCase
         ];
         $this->objectManager->expects($this->any())
             ->method('get')
-            ->will($this->returnValueMap($valueMap));
+            ->willReturnMap($valueMap);
         $this->assertInstanceOf(
             JobComponentUninstall::class,
             $this->jobFactory->create('setup:component:uninstall', [])
@@ -182,7 +184,7 @@ class JobFactoryTest extends TestCase
 
         $this->objectManager->expects($this->any())
             ->method('get')
-            ->will($this->returnValueMap($valueMap));
+            ->willReturnMap($valueMap);
 
         $this->assertInstanceOf(
             JobSetCache::class,
@@ -200,7 +202,7 @@ class JobFactoryTest extends TestCase
                     ->getMock()
             ]
         ];
-        $this->objectManager->expects($this->any())->method('get')->will($this->returnValueMap($valueMap));
+        $this->objectManager->expects($this->any())->method('get')->willReturnMap($valueMap);
 
         $this->assertInstanceOf(
             JobSetCache::class,

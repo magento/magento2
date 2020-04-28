@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Setup\Test\Unit\Console;
 
@@ -23,7 +24,7 @@ class CommandListTest extends TestCase
      */
     private $serviceManager;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->serviceManager = $this->createMock(ServiceManager::class);
         $this->commandList = new CommandList($this->serviceManager);

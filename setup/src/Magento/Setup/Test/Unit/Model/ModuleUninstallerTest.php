@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Setup\Test\Unit\Model;
 
 use Magento\Framework\Composer\Remove;
@@ -68,7 +70,7 @@ class ModuleUninstallerTest extends TestCase
      */
     private $patchApplierMock;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->moduleRegistryUninstaller = $this->createMock(ModuleRegistryUninstaller::class);
         $this->objectManager = $this->getMockForAbstractClass(

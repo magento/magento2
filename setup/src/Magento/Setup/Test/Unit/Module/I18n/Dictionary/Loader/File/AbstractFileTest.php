@@ -1,8 +1,10 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Setup\Test\Unit\Module\I18n\Dictionary\Loader\File;
 
 use Magento\Setup\Module\I18n\Dictionary;
@@ -65,15 +67,15 @@ class AbstractFileTest extends TestCase
             $this->at(1)
         )->method(
             '_readFile'
-        )->will(
-            $this->returnValue(['phrase1', 'translation1'])
+        )->willReturn(
+            ['phrase1', 'translation1']
         );
         $abstractLoaderMock->expects(
             $this->at(2)
         )->method(
             '_readFile'
-        )->will(
-            $this->returnValue(['phrase2', 'translation2', 'context_type2', 'context_value2'])
+        )->willReturn(
+            ['phrase2', 'translation2', 'context_type2', 'context_value2']
         );
 
         $phraseFirstMock = $this->createMock(Phrase::class);
@@ -83,8 +85,8 @@ class AbstractFileTest extends TestCase
             $this->once()
         )->method(
             'createDictionary'
-        )->will(
-            $this->returnValue($this->_dictionaryMock)
+        )->willReturn(
+            $this->_dictionaryMock
         );
         $this->_factoryMock->expects(
             $this->at(1)
@@ -92,8 +94,8 @@ class AbstractFileTest extends TestCase
             'createPhrase'
         )->with(
             ['phrase' => 'phrase1', 'translation' => 'translation1', 'context_type' => '', 'context_value' => '']
-        )->will(
-            $this->returnValue($phraseFirstMock)
+        )->willReturn(
+            $phraseFirstMock
         );
         $this->_factoryMock->expects(
             $this->at(2)
@@ -106,8 +108,8 @@ class AbstractFileTest extends TestCase
                 'context_type' => 'context_type2',
                 'context_value' => 'context_value2',
             ]
-        )->will(
-            $this->returnValue($phraseSecondMock)
+        )->willReturn(
+            $phraseSecondMock
         );
 
         $this->_dictionaryMock->expects($this->at(0))->method('addPhrase')->with($phraseFirstMock);
@@ -134,23 +136,23 @@ class AbstractFileTest extends TestCase
             $this->at(1)
         )->method(
             '_readFile'
-        )->will(
-            $this->returnValue(['phrase1', 'translation1'])
+        )->willReturn(
+            ['phrase1', 'translation1']
         );
 
         $this->_factoryMock->expects(
             $this->once()
         )->method(
             'createDictionary'
-        )->will(
-            $this->returnValue($this->_dictionaryMock)
+        )->willReturn(
+            $this->_dictionaryMock
         );
         $this->_factoryMock->expects(
             $this->at(1)
         )->method(
             'createPhrase'
-        )->will(
-            $this->throwException(new \DomainException('exception_message'))
+        )->willThrowException(
+            new \DomainException('exception_message')
         );
 
         /** @var AbstractFile $abstractLoaderMock */
