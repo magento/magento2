@@ -47,6 +47,11 @@
                 </item>
             </item>
         </argument>
+        <settings>
+            <dndConfig>
+                <param name="component" xsi:type="string">Magento_ImportExport/js/export/filter-grid/dnd</param>
+            </dndConfig>
+        </settings>
         <selectionsColumn name="skip_attr">
             <settings>
                 <label translate="true">Exclude</label>

@@ -8,7 +8,7 @@
     <table class="data-grid" data-role="grid">
         <thead>
             <tr each="data: getVisible(), as: '$col'" render="getHeader()"/>
-            <tr class="data-grid-filters" each="getVisible()" keyboard="13: filter().apply.bind(filter())">
+            <tr class="data-grid-filters _odd-row" each="getVisible()" keyboard="13: filter().apply.bind(filter())">
                 <td each="$parent.filter().getPlain()">
                     <render if="$parent.index == $data.index" args="elementTmpl"/>
                 </td>
