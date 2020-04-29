@@ -12,7 +12,7 @@ docker-php-ext-configure gd --with-png-dir=/usr/include/ \
                                 --with-freetype-dir=/usr/inlcude/ \
 && docker-php-ext-configure zip --with-libzip \
 && docker-php-ext-install mysqli bcmath gd pdo_mysql soap xsl zip intl opcache \
-&& echo "memory_limit=512M" > /usr/local/etc/php/conf.d/memory-limit.ini \
+&& echo "memory_limit=2G" > /usr/local/etc/php/conf.d/memory-limit.ini \
 && echo "max_input_vars=10000" > /usr/local/etc/php/conf.d/max-input-vars-php.ini \
 && mkdir -p /var/www/magento \
 && chown www-data.www-data /var/www/magento \
@@ -23,7 +23,7 @@ COPY --chown=www-data . /var/www/magento
 USER www-data
 RUN cd /var/www/magento \
 && mv /var/www/magento/start.sh /tmp \
-#&& composer require zendframework/zend-stdlib \
+&& composer require zendframework/zend-stdlib \
 && composer install --no-cache \
 && composer config repositories.magento composer https://repo.magento.com/ \
 && chmod +x pub/get.php pub/static.php \
