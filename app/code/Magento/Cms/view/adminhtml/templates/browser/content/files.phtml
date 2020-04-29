@@ -12,6 +12,11 @@ $_height = $block->getImagesHeight();
 ?>
 <?php if ($block->getFilesCount() > 0) : ?>
     <?php foreach ($block->getFiles() as $file) : ?>
+<?php
+$src = $block->escapeHtmlAttr($block->getFileThumbUrl($file));
+$width = $block->escapeHtml($block->getFileWidth($file));
+$height = $block->escapeHtml($block->getFileHeight($file));
+?>
     <div
         data-row="file"
         class="filecnt"
@@ -19,13 +24,13 @@ $_height = $block->getImagesHeight();
         data-size="<?= $block->escapeHtmlAttr($file->getSize()) ?>"
         data-mime-type="<?= $block->escapeHtmlAttr($file->getMimeType()) ?>"
     >
-        <p class="nm" style="height:<?= $block->escapeHtmlAttr($_height) ?>px;">
+        <p class="nm" style="min-height: 72px;">
         <?php if ($block->getFileThumbUrl($file)) : ?>
-            <img src="<?= $block->escapeHtmlAttr($block->getFileThumbUrl($file)) ?>" alt="<?= $block->escapeHtmlAttr($block->getFileName($file)) ?>"/>
+            <img src="<?= $src ?>" alt="<?= $block->escapeHtmlAttr($block->getFileName($file)) ?>"/>
         <?php endif; ?>
         </p>
         <?php if ($block->getFileWidth($file)) : ?>
-            <small><?= $block->escapeHtml($block->getFileWidth($file)) ?>x<?= $block->escapeHtml($block->getFileHeight($file)) ?> <?= $block->escapeHtml(__('px.')) ?></small><br/>
+            <small><?= $width ?>x<?= $height ?> <?= $block->escapeHtml(__('px.')) ?></small><br/>
         <?php endif; ?>
         <small><?= $block->escapeHtml($block->getFileShortName($file)) ?></small>
     </div>
