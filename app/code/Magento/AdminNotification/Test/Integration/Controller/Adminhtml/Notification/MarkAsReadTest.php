@@ -1,21 +1,26 @@
 <?php
+
+declare(strict_types=1);
+
 /***
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\AdminNotification\Controller\Adminhtml\Notification;
+namespace Magento\AdminNotification\Test\Integration\Controller\Adminhtml\Notification;
+
+use Magento\TestFramework\TestCase\AbstractBackendController;
 
 /**
  * Testing markAsRead controller.
  *
  * @magentoAppArea adminhtml
  */
-class MarkAsReadTest extends \Magento\TestFramework\TestCase\AbstractBackendController
+class MarkAsReadTest extends AbstractBackendController
 {
     /**
      * @inheritdoc
      */
-    public function setUp()
+    public function setUp(): void
     {
         $this->resource = 'Magento_AdminNotification::mark_as_read';
         $this->uri = 'backend/admin/notification/markasread';
