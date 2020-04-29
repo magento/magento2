@@ -37,7 +37,7 @@ class DbRuleTest extends \PHPUnit\Framework\TestCase
                 'any',
                 '/app/some/path/Setup/some-file.php',
                 '$install->getTableName("unknown_table")',
-                [['module' => 'Unknown', 'source' => 'unknown_table']]
+                [['modules' => ['Unknown'], 'source' => 'unknown_table']]
             ],
             [
                 'SomeModule',
@@ -51,7 +51,7 @@ class DbRuleTest extends \PHPUnit\Framework\TestCase
                 '$install->getTableName("some_table")',
                 [
                     [
-                        'module' => 'SomeModule',
+                        'modules' => ['SomeModule'],
                         'type' => \Magento\TestFramework\Dependency\RuleInterface::TYPE_HARD,
                         'source' => 'some_table',
                     ]
