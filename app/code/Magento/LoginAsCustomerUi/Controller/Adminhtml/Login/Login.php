@@ -10,14 +10,15 @@ namespace Magento\LoginAsCustomerUi\Controller\Adminhtml\Login;
 use Magento\Backend\App\Action;
 use Magento\Backend\App\Action\Context;
 use Magento\Backend\Model\Auth\Session;
+use Magento\Customer\Api\CustomerRepositoryInterface;
+use Magento\Framework\App\Action\HttpGetActionInterface;
+use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Framework\Controller\Result\Redirect;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Controller\ResultInterface;
-use Magento\Framework\App\Action\HttpGetActionInterface;
-use Magento\Framework\App\Action\HttpPostActionInterface;
-use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Url;
 use Magento\LoginAsCustomerApi\Api\ConfigInterface;
 use Magento\LoginAsCustomerApi\Api\Data\AuthenticationDataInterface;
 use Magento\LoginAsCustomerApi\Api\Data\AuthenticationDataInterfaceFactory;
@@ -70,13 +71,19 @@ class Login extends Action implements HttpGetActionInterface, HttpPostActionInte
     private $saveAuthenticationData;
 
     /**
+     * @var Url
+     */
+    private $url;
+
+    /**
      * @param Context $context
      * @param Session $authSession
      * @param StoreManagerInterface $storeManager
      * @param CustomerRepositoryInterface $customerRepository
      * @param ConfigInterface $config
      * @param AuthenticationDataInterfaceFactory $authenticationDataFactory
-     * @param SaveAuthenticationDataInterface $saveAuthenticationData
+     * @param SaveAuthenticationDataInterface $saveAuthenticationData ,
+     * @param Url $url
      */
     public function __construct(
         Context $context,
@@ -85,7 +92,8 @@ class Login extends Action implements HttpGetActionInterface, HttpPostActionInte
         CustomerRepositoryInterface $customerRepository,
         ConfigInterface $config,
         AuthenticationDataInterfaceFactory $authenticationDataFactory,
-        SaveAuthenticationDataInterface $saveAuthenticationData
+        SaveAuthenticationDataInterface $saveAuthenticationData,
+        Url $url
     ) {
         parent::__construct($context);
 
@@ -95,6 +103,7 @@ class Login extends Action implements HttpGetActionInterface, HttpPostActionInte
         $this->config = $config;
         $this->authenticationDataFactory = $authenticationDataFactory;
         $this->saveAuthenticationData = $saveAuthenticationData;
+        $this->url = $url;
     }
 
     /**
@@ -165,9 +174,8 @@ class Login extends Action implements HttpGetActionInterface, HttpPostActionInte
             $store = $this->storeManager->getStore($storeId);
         }
 
-        $redirectUrl = $this->_url
+        return $this->url
             ->setScope($store)
             ->getUrl('loginascustomer/login/index', ['secret' => $secret, '_nosid' => true]);
-        return $redirectUrl;
     }
 }

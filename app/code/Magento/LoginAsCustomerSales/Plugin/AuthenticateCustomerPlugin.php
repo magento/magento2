@@ -79,7 +79,7 @@ class AuthenticateCustomerPlugin
      * Mark customer cart as not-guest
      *
      * @param AuthenticateCustomerInterface $subject
-     * @param null $result
+     * @param void $result
      * @param AuthenticationDataInterface $authenticationData
      * @return void
      * @throws LocalizedException

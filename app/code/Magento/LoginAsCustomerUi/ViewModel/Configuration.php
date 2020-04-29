@@ -8,7 +8,6 @@ declare(strict_types=1);
 namespace Magento\LoginAsCustomerUi\ViewModel;
 
 use Magento\Customer\Model\Context;
-use Magento\LoginAsCustomer\Model\Config;
 use Magento\LoginAsCustomerApi\Api\ConfigInterface;
 
 /**
@@ -17,7 +16,7 @@ use Magento\LoginAsCustomerApi\Api\ConfigInterface;
 class Configuration implements \Magento\Framework\View\Element\Block\ArgumentInterface
 {
     /**
-     * @var Config
+     * @var ConfigInterface
      */
     private $config;
 
