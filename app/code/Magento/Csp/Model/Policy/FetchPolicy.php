@@ -152,7 +152,28 @@ class FetchPolicy implements SimplePolicyInterface
      */
     public function getSchemeSources(): array
     {
+        if (!in_array('data', $this->schemeSources) &&
+            $this->isSelfAllowed() &&
+            $this->isDataSchemeAllowed()
+        ) {
+            $this->schemeSources[] = 'data';
+        }
+
         return $this->schemeSources;
+    }
+
+    /**
+     * Check if 'data:' scheme is allowed to fetch the source
+     * https://www.w3.org/TR/CSP/#framework-directive-source-list
+     *
+     * @return boolean
+     */
+    public function isDataSchemeAllowed(): bool
+    {
+        return in_array($this->getId(), [
+            'font-src',
+            'img-src',
+        ]);
     }
 
     /**
@@ -212,7 +233,7 @@ class FetchPolicy implements SimplePolicyInterface
                 $sources[] = $schemeSource .':';
             }
             if ($this->isSelfAllowed()) {
-                $sources[] = $this->getSelfSourceValue();
+                $sources[] = '\'self\'';
             }
             if ($this->isInlineAllowed()) {
                 $sources[] = '\'unsafe-inline\'';
@@ -235,34 +256,6 @@ class FetchPolicy implements SimplePolicyInterface
 
             return implode(' ', $sources);
         }
-    }
-
-    /**
-     * @return string
-     */
-    public function getSelfSourceValue(): string
-    {
-        $result = '\'self\'';
-
-        if ($this->isDataSchemeAllowed()) {
-            $result .= ' data:';
-        }
-
-        return $result;
-    }
-
-    /**
-     * Check if 'data:' scheme is allowed to fetch the source
-     * https://www.w3.org/TR/CSP/#framework-directive-source-list
-     *
-     * @return boolean
-     */
-    public function isDataSchemeAllowed(): bool
-    {
-        return in_array($this->getId(), [
-            'font-src',
-            'img-src',
-        ]);
     }
 
     /**
