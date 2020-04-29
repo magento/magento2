@@ -95,9 +95,23 @@ class CreateByPathsTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Test create child directory with the same name as parent
+     */
+    public function testCreateChildDirectoryTheSameNameAsParentDirectory(): void
+    {
+        $dir = self::TEST_DIRECTORY_NAME;
+        $childPath = $dir . '/' . $dir;
+
+        $this->createByPaths->execute([$dir]);
+        $this->assertFileExists($this->mediaDirectoryPath . $dir);
+        $this->createByPaths->execute([$childPath]);
+        $this->assertFileExists($this->mediaDirectoryPath . $childPath);
+    }
+
+    /**
      * @throws \Magento\Framework\Exception\FileSystemException
      */
-    public static function tearDownAfterClass()
+    protected function tearDown()
     {
         $filesystem = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
             ->get(\Magento\Framework\Filesystem::class);
