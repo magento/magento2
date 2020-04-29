@@ -16,6 +16,8 @@ use Magento\MediaContentApi\Api\Data\ContentIdentityInterface;
 interface GetEntityContentsInterface
 {
     /**
+     * Get concatenated content by the content identity
+     *
      * @param ContentIdentityInterface $contentIdentity
      * @return string[]
      */

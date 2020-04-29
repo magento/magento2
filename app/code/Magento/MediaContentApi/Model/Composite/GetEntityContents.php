@@ -16,12 +16,11 @@ use Magento\MediaContentApi\Model\GetEntityContentsInterface;
 class GetEntityContents implements GetEntityContentsInterface
 {
     /**
-     * @var array|GetEntityContentsInterface[]
+     * @var GetEntityContentsInterface[]
      */
     private $items;
 
     /**
-     * GetContent constructor.
      * @param GetEntityContentsInterface[] $items
      */
     public function __construct(
@@ -39,6 +38,8 @@ class GetEntityContents implements GetEntityContentsInterface
     }
 
     /**
+     * Get concatenated content for the content identity
+     *
      * @param ContentIdentityInterface $contentIdentity
      * @return string[]
      */
