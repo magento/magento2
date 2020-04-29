@@ -169,6 +169,7 @@ class SmartButtonConfig
             $result);
 
         //disable unsupported payment methods
+        $result = array_combine($result, $result);
         $result = array_merge($result, $this->unsupportedPaymentMethods);
 
         return $result;
