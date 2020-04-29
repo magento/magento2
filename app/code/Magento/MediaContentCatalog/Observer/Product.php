@@ -12,8 +12,7 @@ use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
 use Magento\MediaContentApi\Api\UpdateContentAssetLinksInterface;
 use Magento\MediaContentApi\Api\Data\ContentIdentityInterfaceFactory;
-use Magento\MediaContentCatalog\Model\ResourceModel\GetProductContent;
-use Magento\Eav\Model\Config;
+use Magento\MediaContentApi\Model\GetEntityContentsInterface;
 
 /**
  * Observe the catalog_product_save_after event and run processing relation between product content and media asset
@@ -41,35 +40,27 @@ class Product implements ObserverInterface
     private $contentIdentityFactory;
 
     /**
-     * @var GetProductContent
+     * @var GetEntityContentsInterface
      */
     private $getContent;
-
-    /**
-     * @var Config
-     */
-    private $config;
 
     /**
      * * Create links for product content
      *
      * @param ContentIdentityInterfaceFactory $contentIdentityFactory
-     * @param GetProductContent $getContent
+     * @param GetEntityContentsInterface $getContent
      * @param UpdateContentAssetLinksInterface $updateContentAssetLinks
-     * @param Config $config
      * @param array $fields
      */
     public function __construct(
         ContentIdentityInterfaceFactory $contentIdentityFactory,
-        GetProductContent $getContent,
+        GetEntityContentsInterface $getContent,
         UpdateContentAssetLinksInterface $updateContentAssetLinks,
-        Config $config,
         array $fields
     ) {
         $this->contentIdentityFactory = $contentIdentityFactory;
         $this->getContent = $getContent;
         $this->updateContentAssetLinks = $updateContentAssetLinks;
-        $this->config = $config;
         $this->fields = $fields;
     }
 
@@ -87,17 +78,15 @@ class Product implements ObserverInterface
                 if (!$model->dataHasChangedFor($field)) {
                     continue;
                 }
-                $attribute = $this->config->getAttribute(self::CONTENT_TYPE, $field);
-                $this->updateContentAssetLinks->execute(
-                    $this->contentIdentityFactory->create(
-                        [
-                            self::TYPE => self::CONTENT_TYPE,
-                            self::FIELD => $field,
-                            self::ENTITY_ID => (string) $model->getEntityId(),
-                        ]
-                    ),
-                    $this->getContent->execute((int) $model->getEntityId(), $attribute)
+                $contentIdentity = $this->contentIdentityFactory->create(
+                    [
+                        self::TYPE => self::CONTENT_TYPE,
+                        self::FIELD => $field,
+                        self::ENTITY_ID => (string) $model->getEntityId(),
+                    ]
                 );
+                $concatenatedContent = implode(PHP_EOL, $this->getContent->execute($contentIdentity));
+                $this->updateContentAssetLinks->execute($contentIdentity, $concatenatedContent);
             }
         }
     }

@@ -7,15 +7,22 @@ declare(strict_types=1);
 
 namespace Magento\MediaContentCatalog\Model\ResourceModel;
 
-use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
 use Magento\Catalog\Model\ResourceModel\Product;
 use Magento\Framework\App\ResourceConnection;
+use Magento\MediaContentApi\Model\GetEntityContentsInterface;
+use Magento\MediaContentApi\Api\Data\ContentIdentityInterface;
+use Magento\Eav\Model\Config;
 
 /**
  * Get concatenated content for all store views
  */
-class GetProductContent
+class GetEntityContent implements GetEntityContentsInterface
 {
+    /**
+     * @var Config
+     */
+    private $config;
+
     /**
      * @var Product
      */
@@ -27,58 +34,43 @@ class GetProductContent
     private $resourceConnection;
 
     /**
+     * @param Config $config
      * @param ResourceConnection $resourceConnection
      * @param Product $productResource
      */
     public function __construct(
+        Config $config,
         ResourceConnection $resourceConnection,
         Product $productResource
     ) {
+        $this->config = $config;
         $this->productResource = $productResource;
         $this->resourceConnection = $resourceConnection;
     }
 
     /**
-     * Get concatenated product content for all store views
+     * Get product content for all store views
      *
-     * @param int $entityId
-     * @param AbstractAttribute $attribute
-     * @return string
-     */
-    public function execute(int $entityId, AbstractAttribute $attribute): string
-    {
-        return implode(
-            PHP_EOL,
-            $this->getDistinctContent(
-                $entityId,
-                $attribute
-            )
-        );
-    }
-
-    /**
-     * Load values of an product attribute for all store views
-     *
-     * @param int $entityId
-     * @param AbstractAttribute $attribute
+     * @param ContentIdentityInterface $contentIdentity
      * @return array
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
-    private function getDistinctContent(int $entityId, AbstractAttribute $attribute): array
+    public function execute(ContentIdentityInterface $contentIdentity): array
     {
+        $attribute = $this->config->getAttribute($contentIdentity->getEntityType(), $contentIdentity->getField());
         $connection = $this->resourceConnection->getConnection();
+
         $select = $connection->select()->from(
             ['abt' => $attribute->getBackendTable()],
             'abt.value'
-        )->joinInner(
-            ['rt' => $this->productResource->getEntityTable()],
-            'rt.' . $attribute->getEntityIdField() . ' = abt.' . $attribute->getEntityIdField()
-        )->where(
-            'rt.entity_id = ?',
-            $entityId
         )->where(
             $connection->quoteIdentifier('abt.attribute_id') . ' = ?',
             (int) $attribute->getAttributeId()
-        );
+        )->where(
+            $connection->quoteIdentifier('abt.' . $attribute->getEntityIdField()) . ' = ?',
+            $contentIdentity->getEntityId()
+        )->distinct(true);
+
         return $connection->fetchCol($select);
     }
 }
