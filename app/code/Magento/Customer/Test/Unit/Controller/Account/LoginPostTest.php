@@ -551,14 +551,12 @@ class LoginPostTest extends \PHPUnit\Framework\TestCase
                     ->with($username)
                     ->willReturn($url);
 
-                $message = __(
-                    'This account is not confirmed.' .
-                    ' <a href="%1">Click here</a> to resend confirmation email.',
-                    $url
-                );
                 $this->messageManager->expects($this->once())
-                    ->method('addError')
-                    ->with($message)
+                    ->method('addComplexErrorMessage')
+                    ->with(
+                        'confirmAccountErrorMessage',
+                        ['url' => $url]
+                    )
                     ->willReturnSelf();
 
                 $this->session->expects($this->once())
@@ -569,7 +567,7 @@ class LoginPostTest extends \PHPUnit\Framework\TestCase
 
             case \Magento\Framework\Exception\AuthenticationException::class:
                 $this->messageManager->expects($this->once())
-                    ->method('addError')
+                    ->method('addErrorMessage')
                     ->with(
                         __(
                             'The account sign-in was incorrect or your account is disabled temporarily. '
@@ -597,7 +595,7 @@ class LoginPostTest extends \PHPUnit\Framework\TestCase
                     . 'Please wait and try again later.'
                 );
                 $this->messageManager->expects($this->once())
-                    ->method('addError')
+                    ->method('addErrorMessage')
                     ->with($message)
                     ->willReturnSelf();
                 $this->session->expects($this->once())

@@ -204,11 +204,11 @@ class LoginPost extends AbstractAccount implements CsrfAwareActionInterface, Htt
                         return $resultRedirect;
                     }
                 } catch (EmailNotConfirmedException $e) {
-                    $value = $this->customerUrl->getEmailConfirmationUrl($login['username']);
-                    $message = __(
-                        'This account is not confirmed. <a href="%1">Click here</a> to resend confirmation email.',
-                        $value
+                    $this->messageManager->addComplexErrorMessage(
+                        'confirmAccountErrorMessage',
+                        ['url' => $this->customerUrl->getEmailConfirmationUrl($login['username'])]
                     );
+                    $this->session->setUsername($login['username']);
                 } catch (AuthenticationException $e) {
                     $message = __(
                         'The account sign-in was incorrect or your account is disabled temporarily. '
@@ -223,7 +223,7 @@ class LoginPost extends AbstractAccount implements CsrfAwareActionInterface, Htt
                     );
                 } finally {
                     if (isset($message)) {
-                        $this->messageManager->addError($message);
+                        $this->messageManager->addErrorMessage($message);
                         $this->session->setUsername($login['username']);
                     }
                 }
