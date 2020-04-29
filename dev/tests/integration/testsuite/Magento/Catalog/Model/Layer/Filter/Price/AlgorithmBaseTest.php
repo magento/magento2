@@ -123,7 +123,6 @@ class AlgorithmBaseTest extends \PHPUnit\Framework\TestCase
 
         // Algorithm should use less than 10M
         $this->assertLessThan(10 * 1024 * 1024, memory_get_usage() - $memoryUsedBefore);
-
     }
 
     /**
