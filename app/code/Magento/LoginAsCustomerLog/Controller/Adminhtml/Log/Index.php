@@ -17,7 +17,7 @@ use Magento\Framework\Controller\ResultInterface;
  */
 class Index extends Action implements HttpGetActionInterface
 {
-    const ADMIN_RESOURCE = 'Magento_LoginAsCustomer::login_log';
+    const ADMIN_RESOURCE = 'Magento_LoginAsCustomerLog::login_log';
 
     /**
      * @inheritdoc

@@ -64,11 +64,8 @@ class GetLogList implements GetLogsListInterface
     public function execute(SearchCriteriaInterface $searchCriteria = null): LogSearchResultsInterface
     {
         $collection = $this->logCollectionFactory->create();
-        if (null === $searchCriteria) {
-            $searchCriteria = $this->searchCriteriaBuilder->create();
-        } else {
-            $this->collectionProcessor->process($searchCriteria, $collection);
-        }
+        $searchCriteria = $searchCriteria ?: $this->searchCriteriaBuilder->create();
+        $this->collectionProcessor->process($searchCriteria, $collection);
 
         $searchResult = $this->logSearchResultsFactory->create();
         $searchResult->setItems($collection->getItems());

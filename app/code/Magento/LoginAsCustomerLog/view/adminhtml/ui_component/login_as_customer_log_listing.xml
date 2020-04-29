@@ -24,7 +24,7 @@
             </storageConfig>
             <updateUrl path="mui/index/render"/>
         </settings>
-        <aclResource>Magento_LoginAsCustomer::login_log</aclResource>
+        <aclResource>Magento_LoginAsCustomerLog::login_log</aclResource>
         <dataProvider class="Magento\LoginAsCustomerLog\Ui\DataProvider\LogDataProvider" name="login_as_customer_log_listing_data_source">
             <settings>
                 <requestFieldName>log_id</requestFieldName>

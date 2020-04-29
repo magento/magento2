@@ -50,6 +50,6 @@ class SaveLogs implements SaveLogsInterface
         }
         $logTable = $this->resourceConnection->getTableName(Log::TABLE_NAME_LOG);
         $connection = $this->resourceConnection->getConnection();
-        $connection->insertOnDuplicate($logTable, $logsData);
+        $connection->insertMultiple($logTable, $logsData);
     }
 }

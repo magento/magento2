@@ -16,5 +16,8 @@
         <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="log_id"/>
         </constraint>
+        <index referenceId="MAGENTO_LOGIN_AS_CUSTOMER_LOG_USER_ID" indexType="btree">
+            <column name="user_id"/>
+        </index>
     </table>
 </schema>

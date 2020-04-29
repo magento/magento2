@@ -9,6 +9,9 @@
         },
         "constraint": {
             "PRIMARY": true
+        },
+        "index": {
+            "MAGENTO_LOGIN_AS_CUSTOMER_LOG_USER_ID": true
         }
     }
 }
