@@ -36,6 +36,7 @@
         <element name="itemDiscount" type="text" selector="//tr[@class='totals']//td[@class='amount']/span"/>
         <element name="subtotal" type="text" selector="//tr[@class='totals sub']//td[@class='amount']/span"/>
         <element name="emptyCart" type="text" selector=".counter.qty.empty"/>
+        <element name="emptyMiniCart" type="text" selector="//div[@class='minicart-wrapper']//span[@class='counter qty empty']/../.."/>
         <element name="minicartContent" type="block" selector="#minicart-content-wrapper"/>
         <element name="messageEmptyCart" type="text" selector="//*[@id='minicart-content-wrapper']//*[contains(@class,'subtitle empty')]"/>
         <element name="visibleItemsCountText" type="text" selector="//div[@class='items-total']"/>
