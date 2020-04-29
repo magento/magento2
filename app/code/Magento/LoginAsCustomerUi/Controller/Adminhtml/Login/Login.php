@@ -135,10 +135,10 @@ class Login extends Action implements HttpGetActionInterface, HttpPostActionInte
             return $resultRedirect->setPath('customer/index/index');
         }
 
-        $storeId = $this->_request->getParam('store_id');
+        $storeId = (int)$this->_request->getParam('store_id');
         if (empty($storeId) && $this->config->isStoreManualChoiceEnabled()) {
             $this->messageManager->addNoticeMessage(__('Please select a Store View to login in.'));
-            return $resultRedirect->setPath('loginascustomer/login/manual', ['customer_id' => $customerId]);
+            return $resultRedirect->setPath('customer/index/edit', ['id' => $customerId]);
         }
 
         $adminUser = $this->authSession->getUser();

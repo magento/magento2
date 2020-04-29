@@ -10,6 +10,8 @@ namespace Magento\LoginAsCustomerUi\Plugin\Button;
 use Magento\Backend\Block\Widget\Button\ButtonList;
 use Magento\Backend\Block\Widget\Button\Toolbar;
 use Magento\Framework\View\Element\AbstractBlock;
+use Magento\Framework\Escaper;
+use Magento\Framework\AuthorizationInterface;
 
 /**
  * Plugin for \Magento\Backend\Block\Widget\Button\Toolbar.
@@ -17,26 +19,26 @@ use Magento\Framework\View\Element\AbstractBlock;
 class ToolbarPlugin
 {
     /**
-     * @var \Magento\Framework\AuthorizationInterface
+     * @var AuthorizationInterface
      */
     private $authorization;
 
     /**
-     * @var \Magento\Framework\UrlInterface
+     * @var Escaper
      */
-    private $url;
+    private $escaper;
 
     /**
      * ToolbarPlugin constructor.
-     * @param \Magento\Framework\AuthorizationInterface $authorization
-     * @param \Magento\Framework\UrlInterface $url
+     * @param AuthorizationInterface $authorization
+     * @param Escaper $escaper
      */
     public function __construct(
-        \Magento\Framework\AuthorizationInterface $authorization,
-        \Magento\Framework\UrlInterface $url
+        AuthorizationInterface $authorization,
+        Escaper $escaper
     ) {
         $this->authorization = $authorization;
-        $this->url = $url;
+        $this->escaper = $escaper;
     }
 
     /**
@@ -74,7 +76,9 @@ class ToolbarPlugin
                         'guest_to_customer',
                         [
                             'label' => __('Login As Customer'),
-                            'onclick' => 'window.open(\'' . $buttonUrl . '\')',
+                            'onclick' => 'window.lacConfirmationPopup("'
+                                . $this->escaper->escapeHtml($this->escaper->escapeJs($buttonUrl))
+                                . '")',
                             'class' => 'reset'
                         ],
                         -1

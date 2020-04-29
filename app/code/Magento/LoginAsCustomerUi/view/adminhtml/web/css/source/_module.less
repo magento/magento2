@@ -1,0 +1,32 @@
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+& when (@media-common = true) {
+    .modal-popup.confirm.lac-confirm {
+        .modal-inner-wrap {
+            max-width: 55rem;
+        }
+        .modal-title {
+            border-bottom: 1px solid rgb(204, 204, 204);
+            width: 100%;
+            padding-bottom: 15px;
+        }
+
+        .store-view-ptions {
+            padding-top: 15px;
+        }
+
+        .modal-content {
+            .message-warning {
+                padding-left: 4.5rem;
+                &:before {
+                    color: #514943;
+                    left: 5px;
+                }
+            }
+        }
+    }
+
+}
