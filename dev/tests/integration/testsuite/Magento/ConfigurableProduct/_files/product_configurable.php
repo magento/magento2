@@ -21,7 +21,7 @@ require __DIR__ . '/configurable_attribute.php';
 
 /** @var ProductRepositoryInterface $productRepository */
 $productRepository = Bootstrap::getObjectManager()
-    ->create(ProductRepositoryInterface::class);
+    ->get(ProductRepositoryInterface::class);
 
 /** @var $installer CategorySetup */
 $installer = Bootstrap::getObjectManager()->create(CategorySetup::class);
