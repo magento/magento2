@@ -8,4 +8,10 @@
 /** @var \Magento\Framework\Escaper $escaper */
 
 ?>
-<?= $escaper->escapeHtml(__('This account is not confirmed. <a href="%1">Click here</a> to resend confirmation email.', $block->getData('url')), ['a']);
+<?= $escaper->escapeHtml(
+    __(
+        'This account is not confirmed. <a href="%1">Click here</a> to resend confirmation email.',
+        $block->getData('url')
+    ),
+    ['a']
+);
