@@ -35,9 +35,7 @@ define(
                         }) + content;
                 }
 
-
                 window.lacConfirmationPopup = function (url) {
-
                     confirm({
                         title: self.title,
                         content: content,

@@ -17,7 +17,6 @@ use Magento\LoginAsCustomerApi\Api\ConfigInterface;
  */
 class ConfirmationPopup extends Template
 {
-
     /**
      * Store Options
      *
@@ -39,25 +38,23 @@ class ConfirmationPopup extends Template
      */
     private $json;
 
-
     /**
      * ConfirmationPopup constructor.
      * @param Template\Context $context
-     * @param SystemStore $systemStore
-     * @param StoreOptions $toreOptions
+     * @param StoreOptions $storeOptions
      * @param ConfigInterface $config
      * @param Json $json
      * @param array $data
      */
     public function __construct(
         Template\Context $context,
-        StoreOptions $toreOptions,
+        StoreOptions $storeOptions,
         ConfigInterface $config,
         Json $json,
         array $data = []
     ) {
         parent::__construct($context, $data);
-        $this->storeOptions = $toreOptions;
+        $this->storeOptions = $storeOptions;
         $this->config = $config;
         $this->json = $json;
     }
