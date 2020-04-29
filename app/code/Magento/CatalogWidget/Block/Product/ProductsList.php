@@ -20,7 +20,7 @@ use Magento\CatalogWidget\Model\Rule;
 use Magento\Framework\App\ActionInterface;
 use Magento\Framework\App\Http\Context as HttpContext;
 use Magento\Framework\App\ObjectManager;
-use \Magento\Framework\Data\Form\FormKey;
+use Magento\Framework\Data\Form\FormKey;
 use Magento\Framework\DataObject\IdentityInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
@@ -40,6 +40,7 @@ use Magento\Wishlist\Helper\Data;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+ * @SuppressWarnings(PHPMD.TooManyFields)
  */
 class ProductsList extends AbstractProduct implements BlockInterface, IdentityInterface
 {

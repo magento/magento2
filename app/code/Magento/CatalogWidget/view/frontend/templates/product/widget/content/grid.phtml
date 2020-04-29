@@ -76,10 +76,10 @@ use Magento\Framework\App\Action\Action;
                                                             <input type="hidden"
                                                                    name="<?= /* @noEscape */ Action::PARAM_NAME_URL_ENCODED ?>"
                                                                    value="<?= /* @noEscape */ $postParams['data'][Action::PARAM_NAME_URL_ENCODED] ?>">
-                                                            <?php /** phpcs:enable */ ?>
                                                             <input type="hidden"
                                                                    name="form_key"
-                                                                   value="<?php echo $block->escapeHtmlAttr($block->getFormKey()) ?>">
+                                                                   value="<?= $block->escapeHtmlAttr($block->getFormKey()) ?>">
+                                                            <?php /** phpcs:enable */ ?>
                                                             <button type="submit"
                                                                     title="<?=
                                                                     $block->escapeHtml(__('Add to Cart'))    ?>"
