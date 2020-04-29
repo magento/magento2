@@ -23,8 +23,7 @@ COPY --chown=www-data . /var/www/magento
 USER www-data
 RUN cd /var/www/magento \
 && mv /var/www/magento/start.sh /tmp \
-&& rm -rf /var/www/magento/.git \
-&& composer require zendframework/zend-stdlib \
+#&& composer require zendframework/zend-stdlib \
 && composer install --no-cache \
 && composer config repositories.magento composer https://repo.magento.com/ \
 && chmod +x pub/get.php pub/static.php \
