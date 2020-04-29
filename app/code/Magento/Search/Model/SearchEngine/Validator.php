@@ -57,7 +57,8 @@ class Validator implements ValidatorInterface
 
         if (isset($this->engineBlacklist[$currentEngine])) {
             $blacklistedEngine = $this->engineBlacklist[$currentEngine];
-            $errors[] = "Search engine '{$blacklistedEngine}' is not supported. Fix search configuration and try again.";
+            $errors[] = "Search engine '{$blacklistedEngine}' is not supported. "
+                . "Fix search configuration and try again.";
         }
 
         if (isset($this->engineValidators[$currentEngine])) {
