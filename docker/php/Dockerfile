@@ -1,4 +1,4 @@
-ARG PHP_VERSION="7.2.1"
+ARG PHP_VERSION="7.3.17"
 FROM php:${PHP_VERSION:+${PHP_VERSION}-}fpm-alpine
 LABEL maintainer="Cristian Pini"
 ENV TZ=Europe/London
