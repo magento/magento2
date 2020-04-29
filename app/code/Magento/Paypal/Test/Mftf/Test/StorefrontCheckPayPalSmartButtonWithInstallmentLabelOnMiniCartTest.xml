@@ -24,6 +24,7 @@
             <magentoCLI command="config:set {{StorefrontPaypalMiniCartEnableCustomizeButtonConfigData.path}} {{StorefrontPaypalMiniCartEnableCustomizeButtonConfigData.value}}" stepKey="enableCustomizeButton"/>
             <magentoCLI command="config:set {{StorefrontPaypalMiniCartButtonInstallmentLabelConfigData.path}} {{StorefrontPaypalMiniCartButtonInstallmentLabelConfigData.value}}" stepKey="setLabelForPayPalSmartButton"/>
             <magentoCLI command="config:set {{StorefrontPaypalMiniCartButtonVerticalLayoutConfigData.path}} {{StorefrontPaypalMiniCartButtonVerticalLayoutConfigData.value}}" stepKey="setLayoutForPayPalSmartButton"/>
+            <magentoCLI command="config:set {{StorefrontPaypalMiniCartButtonResponsiveSizeConfigData.path}} {{StorefrontPaypalMiniCartButtonResponsiveSizeConfigData.value}}" stepKey="setSizeForPayPalSmartButton"/>
             <magentoCLI command="config:set {{StorefrontPaypalMiniCartButtonRectangleShapeConfigData.path}} {{StorefrontPaypalMiniCartButtonRectangleShapeConfigData.value}}" stepKey="setShapeForPayPalSmartButton"/>
             <magentoCLI command="config:set {{StorefrontPaypalMiniCartButtonBlackColorConfigData.path}} {{StorefrontPaypalMiniCartButtonBlackColorConfigData.value}}" stepKey="setColorForPayPalSmartButton"/>
             <magentoCLI command="config:set {{GeneralLocalCodeConfigsForMexico.path}} {{GeneralLocalCodeConfigsForMexico.value}}" stepKey="setLocaleMexico"/>

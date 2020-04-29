@@ -15,7 +15,6 @@
         <arguments>
             <argument name="elementNumber" type="string" defaultValue="0"/>
         </arguments>
-        <waitForElementVisible selector="{{CheckoutPaymentSection.smartButtonPayPalFrame}}" stepKey="waitForIframeVisible"/>
         <!--set ID for iframe of PayPal group button-->
         <executeJS function="document.getElementsByClassName('component-frame')[{{elementNumber}}].setAttribute('name', 'myFrame');" stepKey="setIDForIframe"/>
         <!--switch to iframe of PayPal group button-->
