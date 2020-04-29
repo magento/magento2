@@ -71,7 +71,7 @@ class PriceTest extends \PHPUnit\Framework\TestCase
     public function getRangeItemCountsDataProvider()
     {
         return [
-            //[$inputRange, [$expectedItemCounts]]
+            // These are $inputRange, [$expectedItemCounts] values
             [1, [11 => 2, 46 => 1, 16 => '1']],
             [10, [2 => 3, 5 => 1]],
             [20, [1 => 3, 3 => 1]],

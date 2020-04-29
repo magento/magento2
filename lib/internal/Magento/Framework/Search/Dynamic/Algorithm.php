@@ -173,7 +173,7 @@ class Algorithm
         $lastCount = 0;
         $intervalFirstValue = $this->_minValue;
         $lastSeparator = $this->_lowerLimit === null ? 0 : $this->_lowerLimit;
-
+        // phpcs:ignore Generic.CodeAnalysis.ForLoopWithTestFunctionCall
         for ($intervalNumber = 1; $intervalNumber < $this->getIntervalsNumber(); ++$intervalNumber) {
             $separator = $this->_findValueSeparator($intervalNumber, $interval);
             if (empty($separator)) {
@@ -602,9 +602,8 @@ class Algorithm
     /**
      * Get the offsetLimit value
      *
-     * @param $intervalValuesCount
-     * @param $values
-     * @return mixed
+     * @param float|int $intervalValuesCount
+     * @param array $values
      */
     private function offsetLimits($intervalValuesCount, $values)
     {

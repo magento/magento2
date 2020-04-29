@@ -303,7 +303,7 @@ class SortingTest extends TestCase
                 'sort' => 'test_configurable',
                 'direction' => 'desc',
                 'expectation' => ['simple3', 'simple2', 'simple1'],
-        'default_sort' => 'price',
+            'default_sort' => 'price',
                 'incomplete_reason' => 'MC-33825:'
                     . 'Stabilize skipped test cases for Integration SortingTest with elasticsearch',
             ],
