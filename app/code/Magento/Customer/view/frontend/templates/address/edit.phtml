@@ -43,6 +43,11 @@
                 <span><?= /* @noEscape */ $block->getAttributeData()->getFrontendLabel('street') ?></span>
             </label>
             <div class="control">
+                <div class="field primary">
+                    <label for="street_1" class="label">
+                        <span><?= /* @noEscape */ $block->getAttributeData()->getFrontendLabel('street') . ': Line 1' ?></span>
+                    </label>
+                </div>
                 <input type="text"
                        name="street[]"
                        value="<?= $block->escapeHtmlAttr($block->getStreetLine(1)) ?>"
@@ -54,12 +59,12 @@
                     <?php for ($_i = 1, $_n = $this->helper(\Magento\Customer\Helper\Address::class)->getStreetLines(); $_i < $_n; $_i++) : ?>
                         <div class="field additional">
                             <label class="label" for="street_<?= /* @noEscape */ $_i + 1 ?>">
-                                <span><?= $block->escapeHtml(__('Street Address %1', $_i + 1)) ?></span>
+                                <span><?= $block->escapeHtml(__('Street Address: Line %1', $_i + 1)) ?></span>
                             </label>
                             <div class="control">
                                 <input type="text" name="street[]"
                                        value="<?= $block->escapeHtmlAttr($block->getStreetLine($_i + 1)) ?>"
-                                       title="<?= $block->escapeHtmlAttr(__('Street Address %1', $_i + 1)) ?>"
+                                       title="<?= $block->escapeHtmlAttr(__('Street Address: Line %1', $_i + 1)) ?>"
                                        id="street_<?= /* @noEscape */ $_i + 1 ?>"
                                        class="input-text <?= $block->escapeHtmlAttr($_streetValidationClass) ?>">
                             </div>
