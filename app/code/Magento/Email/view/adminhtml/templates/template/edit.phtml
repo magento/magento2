@@ -114,6 +114,8 @@ require([
         },
 
         stripTags: function () {
+            var self = this;
+
             confirm({
                 content: "<?= $block->escapeJs($block->escapeHtml(__('Are you sure you want to strip tags?'))) ?>",
                 actions: {
@@ -125,7 +127,7 @@ require([
                         ).stripTags().strip();
                         $('convert_button_back').show();
                         $('field_template_styles').hide();
-                        this.typeChange = true;
+                        self.typeChange = true;
                         return false;
                     }
                 }
