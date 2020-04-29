@@ -101,7 +101,7 @@ class RequestPasswordResetEmail implements ResolverInterface
         }
 
         if (true === $this->authentication->isLocked($customer->getId())) {
-            throw new GraphQlInputException(__("The current customer isn't authorized"));
+            throw new GraphQlInputException(__('The account is locked'));
         }
 
         try {
@@ -110,7 +110,7 @@ class RequestPasswordResetEmail implements ResolverInterface
                 AccountManagement::EMAIL_RESET
             );
         } catch (LocalizedException $e) {
-            throw new GraphQlInputException(__("Cannot reset customer password"), $e);
+            throw new GraphQlInputException(__('Cannot reset customer password'), $e);
         }
     }
 }

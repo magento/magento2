@@ -203,7 +203,7 @@ QUERY;
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
      *
      * @expectedException \Exception
-     * @expectedExceptionMessage The current customer isn't authorized
+     * @expectedExceptionMessage The account is locked
      *
      * @throws LocalizedException
      * @throws NoSuchEntityException

@@ -108,7 +108,7 @@ class ResetPassword implements ResolverInterface
         }
 
         if (true === $this->authentication->isLocked($customer->getId())) {
-            throw new GraphQlInputException(__("The current customer isn't authorized"));
+            throw new GraphQlInputException(__('The account is locked'));
         }
 
         try {
