@@ -34,8 +34,7 @@ class CatalogPriceRuleHelper extends Helper
         string $deleteButton,
         string $successMessageContainer,
         string $successMessage
-    ): void
-    {
+    ): void {
         try {
             /** @var MagentoWebDriver $webDriver */
             $magentoWebDriver = $this->getModule('\Magento\FunctionalTestingFramework\Module\MagentoWebDriver');
