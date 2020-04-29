@@ -6,16 +6,22 @@
 declare(strict_types=1);
 namespace Magento\Sales\Model\Reorder;
 
+use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product;
+use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Quote\Api\Data\CartInterface;
 use Magento\Quote\Model\Cart\CustomerCartResolver;
+use Magento\Quote\Model\Quote as Quote;
+use Magento\Sales\Api\Data\OrderItemInterface;
 use Magento\Sales\Helper\Reorder as ReorderHelper;
 use Magento\Sales\Model\Order\Item;
 use Magento\Sales\Model\OrderFactory;
+use Magento\Sales\Model\ResourceModel\Order\Item\Collection as ItemCollection;
 
 /**
  * Allows customer quickly to reorder previously added products and put them to the Cart
@@ -82,12 +88,18 @@ class Reorder
     private $customerCartProvider;
 
     /**
+     * @var SearchCriteriaBuilder
+     */
+    private $searchCriteriaBuilder;
+
+    /**
      * @param OrderFactory $orderFactory
      * @param CustomerCartResolver $customerCartProvider
      * @param CartRepositoryInterface $cartRepository
      * @param ProductRepositoryInterface $productRepository
      * @param ReorderHelper $reorderHelper
      * @param \Psr\Log\LoggerInterface $logger
+     * @param SearchCriteriaBuilder $searchCriteriaBuilder = null
      */
     public function __construct(
         OrderFactory $orderFactory,
@@ -95,7 +107,8 @@ class Reorder
         CartRepositoryInterface $cartRepository,
         ProductRepositoryInterface $productRepository,
         ReorderHelper $reorderHelper,
-        \Psr\Log\LoggerInterface $logger
+        \Psr\Log\LoggerInterface $logger,
+        SearchCriteriaBuilder $searchCriteriaBuilder = null
     ) {
         $this->orderFactory = $orderFactory;
         $this->cartRepository = $cartRepository;
@@ -103,6 +116,8 @@ class Reorder
         $this->reorderHelper = $reorderHelper;
         $this->logger = $logger;
         $this->customerCartProvider = $customerCartProvider;
+        $this->searchCriteriaBuilder = $searchCriteriaBuilder ?:
+            ObjectManager::getInstance()->get(SearchCriteriaBuilder::class);
     }
 
     /**
@@ -133,66 +148,102 @@ class Reorder
             return $this->prepareOutput($cart);
         }
 
-        $items = $order->getItemsCollection();
-        foreach ($items as $item) {
-            $this->addOrderItem($cart, $item);
-        }
+        $cartWithItems = $this->addItemsToCart($cart, $order->getItemsCollection());
 
         try {
-            $this->cartRepository->save($cart);
+            $this->cartRepository->save($cartWithItems);
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
             // handle exception from \Magento\Quote\Model\QuoteRepository\SaveHandler::save
             $this->addError($e->getMessage());
         }
 
-        $cart = $this->cartRepository->get($cart->getId());
+        $savedCart = $this->cartRepository->get($cartWithItems->getId());
 
-        return $this->prepareOutput($cart);
+        return $this->prepareOutput($savedCart);
     }
 
     /**
-     * Convert order item to quote item
+     * Add collections of order items to cart.
      *
-     * @param \Magento\Quote\Model\Quote $cart
-     * @param Item $orderItem
-     * @return void
+     * @param Quote $cart
+     * @param ItemCollection $orderItems
+     * @return Quote
      */
-    private function addOrderItem(\Magento\Quote\Model\Quote $cart, $orderItem): void
+    private function addItemsToCart(Quote $cart, ItemCollection $orderItems): Quote
     {
-        /* @var $orderItem Item */
-        if ($orderItem->getParentItem() === null) {
-            $info = $orderItem->getProductOptionByCode('info_buyRequest');
-            $info = new \Magento\Framework\DataObject($info);
-            $info->setQty($orderItem->getQtyOrdered());
+        $orderItemProductIds = [];
+        /** @var \Magento\Sales\Model\Order\Item[] $orderItemsByProductId */
+        $orderItemsByProductId = [];
 
-            try {
-                /** @var Product $product */
-                $product = $this->productRepository->getById($orderItem->getProductId(), false, null, true);
-            } catch (NoSuchEntityException $e) {
-                $this->addError(
-                    (string)__('Could not find a product with ID "%1"', $orderItem->getProductId()),
-                    self::ERROR_PRODUCT_NOT_FOUND
-                );
-                return;
-            }
-            $addProductResult = null;
-            try {
-                $addProductResult = $cart->addProduct($product, $info);
-            } catch (\Magento\Framework\Exception\LocalizedException $e) {
-                $this->addError($this->getCartItemErrorMessage($orderItem, $product, $e->getMessage()));
-            } catch (\Throwable $e) {
-                $this->logger->critical($e);
-                $this->addError($this->getCartItemErrorMessage($orderItem, $product), self::ERROR_UNDEFINED);
-            }
-
-            // error happens in case the result is string
-            if (is_string($addProductResult)) {
-                $errors = array_unique(explode("\n", $addProductResult));
-                foreach ($errors as $error) {
-                    $this->addError($this->getCartItemErrorMessage($orderItem, $product, $error));
-                }
+        /** @var \Magento\Sales\Model\Order\Item $item */
+        foreach ($orderItems as $item) {
+            if ($item->getParentItem() === null) {
+                $orderItemProductIds[] = $item->getProductId();
+                $orderItemsByProductId[$item->getProductId()] = $item;
             }
         }
+
+        $criteria = $this->searchCriteriaBuilder
+            ->addFilter('entity_id', $orderItemProductIds, 'in')
+            ->create();
+
+        /** @var \Magento\Catalog\Api\Data\ProductInterface $products */
+        $products = $this->productRepository->getList($criteria)->getItems();
+
+        // compare founded products and throw an error if some product not exists
+        $productsNotFound = array_diff($orderItemProductIds, array_keys($products));
+        if (!empty($productsNotFound)) {
+            foreach ($productsNotFound as $productId) {
+                /** @var \Magento\Sales\Model\Order\Item $orderItemProductNotFound */
+                $this->addError(
+                    (string)__('Could not find a product with ID "%1"', $productId),
+                    self::ERROR_PRODUCT_NOT_FOUND
+                );
+            }
+        }
+
+        /** @var ProductInterface $product */
+        foreach ($products as $product) {
+            $orderItem = $orderItemsByProductId[$product->getId()];
+            $this->addItemToCart($orderItem, $cart, $product);
+        }
+
+        return $cart;
+    }
+
+    /**
+     * Adds order item product to cart.
+     *
+     * @param OrderItemInterface $orderItem
+     * @param Quote $cart
+     * @param ProductInterface $product
+     * @return Quote
+     */
+    private function addItemToCart(OrderItemInterface $orderItem, Quote $cart, ProductInterface $product): Quote
+    {
+        $info = $orderItem->getProductOptionByCode('info_buyRequest');
+        $info = new \Magento\Framework\DataObject($info);
+        $info->setQty($orderItem->getQtyOrdered());
+
+        $addProductResult = null;
+        try {
+            $addProductResult = $cart->addProduct($product, $info);
+        } catch (\Magento\Framework\Exception\LocalizedException $e) {
+            $this->addError($this->getCartItemErrorMessage($orderItem, $product, $e->getMessage()));
+        } catch (\Throwable $e) {
+            $this->logger->critical($e);
+            $this->addError($this->getCartItemErrorMessage($orderItem, $product), self::ERROR_UNDEFINED);
+        }
+
+        // error happens in case the result is string
+        if (is_string($addProductResult)) {
+            $errors = array_unique(explode("\n", $addProductResult));
+            foreach ($errors as $error) {
+                $this->addError($this->getCartItemErrorMessage($orderItem, $product, $error));
+            }
+        }
+
+        return $cart;
     }
 
     /**
