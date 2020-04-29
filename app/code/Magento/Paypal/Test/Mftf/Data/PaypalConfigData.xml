@@ -139,18 +139,6 @@
         <data key="label">Vertical</data>
         <data key="value">vertical</data>
     </entity>
-    <entity name="StorefrontPaypalCheckoutPageButtonMediumSizeConfigData">
-        <data key="path">paypal/style/checkout_page_button_size</data>
-        <data key="scope_id">1</data>
-        <data key="label">Medium</data>
-        <data key="value">medium</data>
-    </entity>
-    <entity name="StorefrontPaypalCheckoutPageButtonLargeSizeConfigData">
-        <data key="path">paypal/style/checkout_page_button_size</data>
-        <data key="scope_id">1</data>
-        <data key="label">Large</data>
-        <data key="value">large</data>
-    </entity>
     <entity name="StorefrontPaypalCheckoutPageButtonPillShapeConfigData">
         <data key="path">paypal/style/checkout_page_button_shape</data>
         <data key="scope_id">1</data>
@@ -306,12 +294,6 @@
         <data key="scope_id">1</data>
         <data key="label">Vertical</data>
         <data key="value">vertical</data>
-    </entity>
-    <entity name="StorefrontPaypalMiniCartButtonResponsiveSizeConfigData">
-        <data key="path">paypal/style/mini_cart_page_button_size</data>
-        <data key="scope_id">1</data>
-        <data key="label">Responsive</data>
-        <data key="value">responsive</data>
     </entity>
     <entity name="StorefrontPaypalMiniCartButtonPillShapeConfigData">
         <data key="path">paypal/style/mini_cart_page_button_shape</data>
