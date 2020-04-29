@@ -21,7 +21,7 @@ class ExportFilter extends Column
      * @param array $dataSource
      * @return array
      */
-    public function prepareDataSource(array $dataSource)
+    public function prepareDataSource(array $dataSource) :array
     {
         if (!empty($dataSource['data']['items'])) {
             /** @var AbstractDataProvider $dataProvider */
@@ -33,10 +33,27 @@ class ExportFilter extends Column
                 $attribute = $collection->getItemById($item['attribute_id']);
 
                 try {
-                    $item['filterType'] = Export::getAttributeFilterType($attribute);
+                    $filter = [
+                        'type' => Export::getAttributeFilterType($attribute)
+                    ];
+
+                    if ($attribute->usesSource()) {
+                        $options = $attribute->getSource()->getAllOptions();
+                        $filter['options'] = array_filter($options, function($option) {
+                            return $option['value'] !== '';
+                        });
+                    }
+
+                    if ($filter['type'] == Export::FILTER_TYPE_SELECT && empty($filter['options'])) {
+                        throw new LocalizedException(
+                            __('We can\'t determine the attribute filter type.')
+                        );
+                    }
                 } catch (LocalizedException $e) {
-                    $item[$this->getName()] = $e->getMessage();
+                    $filter = $e->getMessage();
                 }
+
+                $item[$this->getName()] = $filter;
             }
         }
 

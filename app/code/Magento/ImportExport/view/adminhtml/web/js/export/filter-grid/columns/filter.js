@@ -4,8 +4,10 @@
  */
 
 define([
-    'Magento_Ui/js/grid/columns/column'
-], function (Column) {
+    'underscore',
+    'mage/translate',
+    'Magento_Ui/js/grid/columns/column',
+], function (_, $t, Column) {
     'use strict';
 
     return Column.extend({
@@ -14,8 +16,10 @@ define([
             templates: {
                 base: 'ui/grid/cells/text',
                 input: 'Magento_ImportExport/export/filter-grid/columns/filter/input',
+                select: 'Magento_ImportExport/export/filter-grid/columns/filter/select'
             },
-            filters: {}
+            filters: {},
+            notSelectedLabel: '-- Not Selected --'
         },
 
         /**
@@ -25,11 +29,30 @@ define([
          * @returns {String}
          */
         getTemplateByType: function (row) {
-            if (this.templates[row.filterType]) {
-                return this.templates[row.filterType];
+            let filter = row[this.index];
+
+            if (_.isObject(filter) && this.templates[filter.type]) {
+                return this.templates[filter.type];
             }
 
             return this.templates.base;
+        },
+
+        /**
+         * Retrieves options for selects, including "not selected" value.
+         *
+         * @param {Object} row
+         * @returns {Array}
+         */
+        getOptions: function (row) {
+            let options = _.toArray(row[this.index].options);
+
+            options.unshift({
+                value: '',
+                label: $t(this.notSelectedLabel)
+            });
+
+            return options;
         }
     });
 });
