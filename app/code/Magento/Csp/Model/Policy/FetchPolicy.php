@@ -261,7 +261,7 @@ class FetchPolicy implements SimplePolicyInterface
     {
         return in_array($this->getId(), [
             'font-src',
-            'image-src',
+            'img-src',
         ]);
     }
 
