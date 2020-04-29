@@ -602,10 +602,11 @@ class Algorithm
     /**
      * Get the offsetLimit value
      *
-     * @param float|int $intervalValuesCount
+     * @param float $intervalValuesCount
      * @param array $values
+     * @return float|int
      */
-    private function offsetLimits($intervalValuesCount, $values)
+    private function offsetLimits(float $intervalValuesCount, array $values)
     {
         if (array_key_exists((int)$intervalValuesCount - 1, $values)) {
             return $values[$intervalValuesCount - 1];
