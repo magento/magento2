@@ -59,7 +59,8 @@ class AvailableShippingMethods implements ResolverInterface
         if (!isset($value['model'])) {
             throw new LocalizedException(__('"model" values should be specified'));
         }
-        $address = $value['model'];
+        $address = clone $value['model'];
+        $address->setLimitCarrier(null);
 
         // Allow shipping rates by setting country id for new addresses
         if (!$address->getCountryId() && $address->getCountryCode()) {
