@@ -148,16 +148,16 @@ class Reorder
             return $this->prepareOutput($cart);
         }
 
-        $cartWithItems = $this->addItemsToCart($cart, $order->getItemsCollection());
+        $this->addItemsToCart($cart, $order->getItemsCollection());
 
         try {
-            $this->cartRepository->save($cartWithItems);
+            $this->cartRepository->save($cart);
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
             // handle exception from \Magento\Quote\Model\QuoteRepository\SaveHandler::save
             $this->addError($e->getMessage());
         }
 
-        $savedCart = $this->cartRepository->get($cartWithItems->getId());
+        $savedCart = $this->cartRepository->get($cart->getId());
 
         return $this->prepareOutput($savedCart);
     }
@@ -167,9 +167,9 @@ class Reorder
      *
      * @param Quote $cart
      * @param ItemCollection $orderItems
-     * @return Quote
+     * @return void
      */
-    private function addItemsToCart(Quote $cart, ItemCollection $orderItems): Quote
+    private function addItemsToCart(Quote $cart, ItemCollection $orderItems): void
     {
         $orderItemProductIds = [];
         /** @var \Magento\Sales\Model\Order\Item[] $orderItemsByProductId */
@@ -179,10 +179,11 @@ class Reorder
         foreach ($orderItems as $item) {
             if ($item->getParentItem() === null) {
                 $orderItemProductIds[] = $item->getProductId();
-                $orderItemsByProductId[$item->getProductId()] = $item;
+                $orderItemsByProductId[$item->getProductId()][$item->getId()] = $item;
             }
         }
 
+        /** @var \Magento\Framework\Api\SearchCriteria $criteria */
         $criteria = $this->searchCriteriaBuilder
             ->addFilter('entity_id', $orderItemProductIds, 'in')
             ->create();
@@ -204,11 +205,14 @@ class Reorder
 
         /** @var ProductInterface $product */
         foreach ($products as $product) {
-            $orderItem = $orderItemsByProductId[$product->getId()];
-            $this->addItemToCart($orderItem, $cart, $product);
+            if (!isset($orderItemsByProductId[$product->getId()])) {
+                continue;
+            }
+            $orderItems = $orderItemsByProductId[$product->getId()];
+            foreach ($orderItems as $orderItem) {
+                $this->addItemToCart($orderItem, $cart, $product);
+            }
         }
-
-        return $cart;
     }
 
     /**
@@ -217,9 +221,9 @@ class Reorder
      * @param OrderItemInterface $orderItem
      * @param Quote $cart
      * @param ProductInterface $product
-     * @return Quote
+     * @return void
      */
-    private function addItemToCart(OrderItemInterface $orderItem, Quote $cart, ProductInterface $product): Quote
+    private function addItemToCart(OrderItemInterface $orderItem, Quote $cart, ProductInterface $product): void
     {
         $info = $orderItem->getProductOptionByCode('info_buyRequest');
         $info = new \Magento\Framework\DataObject($info);
@@ -242,8 +246,6 @@ class Reorder
                 $this->addError($this->getCartItemErrorMessage($orderItem, $product, $error));
             }
         }
-
-        return $cart;
     }
 
     /**
