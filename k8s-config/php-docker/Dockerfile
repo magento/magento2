@@ -1,4 +1,4 @@
-ARG PHP_VERSION="7.2.1"
+ARG PHP_VERSION="7.3.17"
 FROM php:${PHP_VERSION:+${PHP_VERSION}-}fpm-alpine
 LABEL maintainer="Cristian Pini"
 ENV TZ=Europe/London
@@ -14,8 +14,6 @@ docker-php-ext-configure gd --with-png-dir=/usr/include/ \
 && docker-php-ext-install mysqli bcmath gd pdo_mysql soap xsl zip intl opcache \
 && echo "memory_limit=512M" > /usr/local/etc/php/conf.d/memory-limit.ini \
 && echo "max_input_vars=10000" > /usr/local/etc/php/conf.d/max-input-vars-php.ini \
-&& echo "memory_limit=-1" > /usr/local/etc/php/conf.d/buddy.ini \ 
-&& chmod 766 /usr/local/etc/php/conf.d/buddy.ini \
 && mkdir -p /var/www/magento \
 && chown www-data.www-data /var/www/magento \
 && curl -sS https://getcomposer.org/installer | php \
@@ -26,6 +24,7 @@ USER www-data
 RUN cd /var/www/magento \
 && mv /var/www/magento/start.sh /tmp \
 && rm -rf /var/www/magento/.git \
+&& composer require zendframework/zend-stdlib \
 && composer install --no-cache \
 && composer config repositories.magento composer https://repo.magento.com/ \
 && chmod +x pub/get.php pub/static.php \
