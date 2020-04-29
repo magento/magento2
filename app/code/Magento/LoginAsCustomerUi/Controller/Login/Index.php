@@ -127,7 +127,9 @@ class Index implements HttpGetActionInterface
             $this->messageManager->addSuccessMessage(
                 __('You are logged in as customer: %1', $customer->getFirstname() . ' ' . $customer->getLastname())
             );
-            $resultRedirect->setPath('*/*/proceed');
+            $resultPage = $this->resultFactory->create(ResultFactory::TYPE_PAGE);
+            $resultPage->getConfig()->getTitle()->set(__('You are logged in'));
+            return $this->resultFactory->create(ResultFactory::TYPE_PAGE);
 
         } catch (LocalizedException $e) {
             $this->messageManager->addErrorMessage($e->getMessage());
