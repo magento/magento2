@@ -657,6 +657,7 @@ EXPECTED_HTML;
         /** @var CookieManagerInterface $cookieManager */
         $cookieManager = $this->_objectManager->get(CookieManagerInterface::class);
         $cookieManager->deleteCookie(MessagePlugin::MESSAGES_COOKIES_NAME);
+
         $this->_objectManager->removeSharedInstance(Http::class);
         $this->_objectManager->removeSharedInstance(Request::class);
         $this->_request = null;
@@ -777,8 +778,9 @@ EXPECTED_HTML;
         $customer->setEmail($newEmail);
         $customerRepository->save($customer);
 
-        /* Goes through the link in a mail */
         $this->resetRequest();
+
+        /* Goes through the link in a mail */
         $this->getRequest()
             ->setParam('token', $token)
             ->setParam('id', $customerData->getId());
@@ -858,15 +860,13 @@ EXPECTED_HTML;
     }
 
     /**
-     * Clear request object.
-     *
-     * @return void
+     * @inheritDoc
      */
-    private function resetRequest(): void
+    protected function resetRequest(): void
     {
         $this->_objectManager->removeSharedInstance(Http::class);
         $this->_objectManager->removeSharedInstance(Request::class);
-        $this->_request = null;
+        parent::resetRequest();
     }
 
     /**
