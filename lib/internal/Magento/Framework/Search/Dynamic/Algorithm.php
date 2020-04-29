@@ -604,7 +604,6 @@ class Algorithm
      *
      * @param float $intervalValuesCount
      * @param array $values
-     * @return float|int
      */
     private function offsetLimits(float $intervalValuesCount, array $values)
     {
