@@ -21,7 +21,14 @@ $_order = $_item->getOrder();
             <?php foreach ($block->getItemOptions() as $option) : ?>
                 <dt><strong><em><?= $block->escapeHtml($option['label']) ?></em></strong></dt>
                 <dd>
-                    <?= /* @noEscape */  nl2br($block->escapeHtml($option['value'])) ?>
+                    <?php
+                    if ($option['option_type'] == 'file') {
+                        /* @noEscape */
+                        echo nl2br($option['value']);
+                    } else {
+                        echo nl2br($block->escapeHtml($option['value']));
+                    }
+                    ?>
                 </dd>
             <?php endforeach; ?>
             </dl>
