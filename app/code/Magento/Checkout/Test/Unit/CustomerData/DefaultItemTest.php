@@ -6,6 +6,7 @@
 namespace Magento\Checkout\Test\Unit\CustomerData;
 
 use Magento\Catalog\Model\Product\Configuration\Item\ItemResolverInterface;
+use PHPUnit\Framework\MockObject\MockObject;
 
 class DefaultItemTest extends \PHPUnit\Framework\TestCase
 {
@@ -25,7 +26,7 @@ class DefaultItemTest extends \PHPUnit\Framework\TestCase
     private $configurationPool;
 
     /**
-     * @var ItemResolverInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ItemResolverInterface|MockObject
      */
     private $itemResolver;
 
@@ -102,5 +103,6 @@ class DefaultItemTest extends \PHPUnit\Framework\TestCase
         $this->assertArrayHasKey('product_price_value', $itemData);
         $this->assertArrayHasKey('product_image', $itemData);
         $this->assertArrayHasKey('canApplyMsrp', $itemData);
+        $this->assertArrayHasKey('message', $itemData);
     }
 }

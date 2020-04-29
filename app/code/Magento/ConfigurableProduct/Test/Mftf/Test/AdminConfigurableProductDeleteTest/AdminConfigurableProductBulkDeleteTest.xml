@@ -120,7 +120,7 @@
                 <requiredEntity createDataKey="createConfigChildProduct6"/>
             </createData>
 
-            <actionGroup ref="LoginAsAdmin" stepKey="login"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
         </before>
 
         <after>
