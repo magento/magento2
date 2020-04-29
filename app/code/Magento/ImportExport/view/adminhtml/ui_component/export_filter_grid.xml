@@ -52,7 +52,7 @@
                 <param name="component" xsi:type="string">Magento_ImportExport/js/export/filter-grid/dnd</param>
             </dndConfig>
         </settings>
-        <selectionsColumn name="skip_attr">
+        <selectionsColumn name="ids">
             <settings>
                 <label translate="true">Exclude</label>
                 <headerTmpl>ui/grid/columns/text</headerTmpl>
@@ -72,7 +72,13 @@
                 <filter>text</filter>
             </settings>
         </column>
-        <column name="filter">
+        <column name="filter" class="Magento\ImportExport\Ui\Component\Columns\ExportFilter"
+                component="Magento_ImportExport/js/export/filter-grid/columns/filter">
+            <argument name="data" xsi:type="array">
+                <item name="js_config" xsi:type="array">
+                    <item name="indexField" xsi:type="string">attribute_code</item>
+                </item>
+            </argument>
             <settings>
                 <label translate="true">Filter</label>
                 <sortable>false</sortable>
