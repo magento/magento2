@@ -149,8 +149,8 @@ abstract class AbstractBundleProductSaveTest extends AbstractBackendController
     private function prepareSelection(array $productIdsBySkus, array $selection): array
     {
         $staticData = [
-            'price' => '10',
-            'selection_qty' => '5',
+            'price' => '10.000000',
+            'selection_qty' => '5.0000',
             'selection_can_change_qty' => '0'
         ];
         $selection['product_id'] = $productIdsBySkus[$selection['sku']];

@@ -131,7 +131,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetAllIds()
     {
-        $this->assertContains(\Magento\Store\Model\Store::DISTRO_STORE_ID, $this->_collection->getAllIds());
+        $this->assertTrue(in_array(\Magento\Store\Model\Store::DISTRO_STORE_ID, $this->_collection->getAllIds()));
     }
 
     /**

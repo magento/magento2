@@ -286,7 +286,7 @@ class ProductListTest extends TestCase
             },
             $productCollection->getItems()
         );
-        $this->assertEquals($matches, $skus, '', 0.0, 10, true);
+        $this->assertEmpty(array_diff($matches, $skus));
     }
 
     public function priceFilterDataProvider(): array
