@@ -5,8 +5,6 @@
  */
 namespace Magento\Framework\EntityManager;
 
-use Magento\Catalog\Model\Category;
-
 /**
  * Resolves types.
  */
@@ -56,7 +54,7 @@ class TypeResolver
         $interfaceNames = $reflectionClass->getInterfaceNames();
         $dataInterfaces = [];
         foreach ($interfaceNames as $interfaceName) {
-            if ($this->isDataInterface($interfaceName, $type)) {
+            if (strpos($interfaceName, '\Api\Data\\') !== false) {
                 $dataInterfaces[] = $interfaceName;
             }
         }
@@ -74,18 +72,5 @@ class TypeResolver
             $this->typeMapping[$className] = reset($dataInterfaces);
         }
         return $this->typeMapping[$className];
-    }
-
-    /**
-     * Checks whether interface has Data type.
-     *
-     * @param string $interfaceName
-     * @param object $entityType
-     * @return bool
-     */
-    private function isDataInterface(string $interfaceName, $entityType): bool
-    {
-        return strpos($interfaceName, '\Api\Data\\') !== false
-            && (!$entityType instanceof Category || preg_match('/Category(?!Tree)/', $interfaceName));
     }
 }
