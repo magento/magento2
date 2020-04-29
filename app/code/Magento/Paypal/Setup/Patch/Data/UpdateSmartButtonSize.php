@@ -69,14 +69,6 @@ class UpdateSmartButtonSize implements DataPatchInterface, PatchVersionInterface
     /**
      * @inheritdoc
      */
-    public static function getVersion()
-    {
-        return '2.3.1';
-    }
-
-    /**
-     * @inheritdoc
-     */
     public function getAliases()
     {
         return [];
