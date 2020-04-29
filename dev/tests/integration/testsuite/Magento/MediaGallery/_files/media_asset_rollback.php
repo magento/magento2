@@ -5,16 +5,16 @@
  */
 declare(strict_types=1);
 
-use Magento\MediaGalleryApi\Model\Asset\Command\DeleteByPathInterface;
+use Magento\MediaGalleryApi\Api\DeleteAssetsByPathsInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 
 $objectManager = Bootstrap::getObjectManager();
 
-/** @var DeleteByPathInterface $mediaSave */
-$mediaAssetDelete = $objectManager->get(DeleteByPathInterface::class);
+/** @var DeleteAssetsByPathsInterface $mediaSave */
+$mediaAssetDelete = $objectManager->get(DeleteAssetsByPathsInterface::class);
 
 try {
-    $mediaAssetDelete->execute('testDirectory/path.jpg');
+    $mediaAssetDelete->execute(['testDirectory/path.jpg']);
 } catch (\Exception $exception) {
 
 }
