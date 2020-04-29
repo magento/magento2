@@ -224,6 +224,25 @@ QUERY;
     }
 
     /**
+     * Check type of autocomplete_on_storefront storeConfig value
+     *
+     * @throws Exception
+     */
+    public function testReturnTypeAutocompleteOnStorefrontConfig()
+    {
+        $query = <<<QUERY
+{
+    storeConfig {
+        autocomplete_on_storefront
+    }
+}
+QUERY;
+        $response = $this->graphQlQuery($query);
+        self::assertArrayHasKey('autocomplete_on_storefront', $response['storeConfig']);
+        self::assertInternalType('bool',$response['storeConfig']['autocomplete_on_storefront']);
+    }
+
+    /**
      * Get reset password token
      *
      * @return string
