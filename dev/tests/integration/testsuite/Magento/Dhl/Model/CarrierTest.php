@@ -366,7 +366,7 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
         string $regionCode
     ): string {
         $countryNames = [
-            'US' => 'United States of America',
+            'US' => 'United States Of America',
             'SG' => 'Singapore',
             'GB' => 'United Kingdom',
             'DE' => 'Germany',
