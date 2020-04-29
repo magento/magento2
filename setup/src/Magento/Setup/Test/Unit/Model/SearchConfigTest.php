@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Setup\Test\Unit\Model;
 
+use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Search\Model\SearchEngine\Validator;
 use Magento\Search\Setup\CompositeInstallConfig;
@@ -45,15 +46,19 @@ class SearchConfigTest extends TestCase
         $this->searchEngineValidatorMock = $this->getMockBuilder(Validator::class)
             ->disableOriginalConstructor()
             ->getMock();
+        $objectManagerMock = $this->getMockForAbstractClass(ObjectManagerInterface::class);
+        $objectManagerMock->expects($this->any())->method('get')->willReturnMap([
+            [CompositeInstallConfig::class, $this->installConfigMock],
+            [Validator::class, $this->searchEngineValidatorMock]
+        ]);
 
         $objectManager = new ObjectManager($this);
         $this->searchConfigOptionsList = $objectManager->getObject(SearchConfigOptionsList::class);
         $this->searchConfig = $objectManager->getObject(
             SearchConfig::class,
             [
+                'objectManager' => $objectManagerMock,
                 'searchConfigOptionsList' => $this->searchConfigOptionsList,
-                'installConfig' => $this->installConfigMock,
-                'searchValidator' =>$this->searchEngineValidatorMock
             ]
         );
     }

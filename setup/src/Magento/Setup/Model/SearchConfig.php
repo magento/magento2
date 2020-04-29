@@ -7,10 +7,11 @@ declare(strict_types=1);
 
 namespace Magento\Setup\Model;
 
+use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Setup\Option\AbstractConfigOption;
 use Magento\Framework\Validation\ValidationException;
-use Magento\Search\Model\SearchEngine\Validator as SearchEngineValidator;
-use Magento\Search\Setup\CompositeInstallConfig as InstallConfig;
+use Magento\Search\Model\SearchEngine\Validator;
+use Magento\Search\Setup\CompositeInstallConfig;
 use Magento\Setup\Exception as SetupException;
 
 /**
@@ -24,28 +25,20 @@ class SearchConfig
     private $searchConfigOptionsList;
 
     /**
-     * @var InstallConfig
+     * @var ObjectManagerInterface
      */
-    private $installConfig;
+    private $objectManager;
 
     /**
-     * @var SearchEngineValidator
-     */
-    private $searchValidator;
-
-    /**
+     * @param ObjectManagerInterface $objectManager
      * @param SearchConfigOptionsList $searchConfigOptionsList
-     * @param InstallConfig $installConfig
-     * @param SearchEngineValidator $searchValidator
      */
     public function __construct(
-        SearchConfigOptionsList $searchConfigOptionsList,
-        InstallConfig $installConfig,
-        SearchEngineValidator $searchValidator
+        ObjectManagerInterface $objectManager,
+        SearchConfigOptionsList $searchConfigOptionsList
     ) {
+        $this->objectManager = $objectManager;
         $this->searchConfigOptionsList = $searchConfigOptionsList;
-        $this->installConfig = $installConfig;
-        $this->searchValidator = $searchValidator;
     }
 
     /**
@@ -62,7 +55,9 @@ class SearchConfig
             $this->validateSearchEngineSelection($searchConfigOptions);
         }
         try {
-            $this->installConfig->configure($searchConfigOptions);
+            /** @var CompositeInstallConfig $installConfig */
+            $installConfig = $this->objectManager->get(CompositeInstallConfig::class);
+            $installConfig->configure($searchConfigOptions);
         } catch (\Exception $e) {
             throw new SetupException($e->getMessage());
         }
@@ -77,7 +72,9 @@ class SearchConfig
      */
     public function validateSearchEngine(array $config = [])
     {
-        $validationErrors = $this->searchValidator->validate($config);
+        /** @var Validator $searchValidator */
+        $searchValidator = $this->objectManager->get(Validator::class);
+        $validationErrors = $searchValidator->validate($config);
         if (!empty($validationErrors)) {
             throw new ValidationException(__(implode(PHP_EOL, $validationErrors)));
         }
