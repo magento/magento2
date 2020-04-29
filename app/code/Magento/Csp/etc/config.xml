@@ -191,6 +191,9 @@
                         <policy_id>img-src</policy_id>
                         <self>1</self>
                         <inline>1</inline>
+                        <schemes>
+                            <data>data</data>
+                        </schemes>
                         <eval>0</eval>
                         <dynamic>0</dynamic>
                     </images>
@@ -219,6 +222,9 @@
                         <policy_id>font-src</policy_id>
                         <self>1</self>
                         <inline>1</inline>
+                        <schemes>
+                            <data>data</data>
+                        </schemes>
                         <eval>0</eval>
                         <dynamic>0</dynamic>
                     </fonts>
