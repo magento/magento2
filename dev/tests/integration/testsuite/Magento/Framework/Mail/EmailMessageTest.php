@@ -13,7 +13,8 @@ use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Class EmailMessageTest
+ * Test Email Messages
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class EmailMessageTest extends TestCase

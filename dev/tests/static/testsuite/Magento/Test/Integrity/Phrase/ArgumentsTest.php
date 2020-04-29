@@ -102,11 +102,17 @@ class ArgumentsTest extends \Magento\Test\Integrity\Phrase\AbstractTestCase
             // count all occurrences of sprintf placeholders
             preg_match_all('/%\b([sducoxXbgGeEfF])\b/', $phrase['phrase'], $sprintfMatches);
             if (count($sprintfMatches[0]) > count(array_unique($sprintfMatches[0]))) {
-                $placeholderCount = $placeholderCount + count($sprintfMatches[0]) - count(array_unique($sprintfMatches[0]));
+                $placeholderCount = $placeholderCount +
+                    count($sprintfMatches[0]) - count(array_unique($sprintfMatches[0]));
             }
 
-            // Check for zend placeholders %placeholder% and sprintf placeholders
-            if (preg_match_all('/%\b(([sducoxXbgGeEfF])\b|([A-Za-z]+)%)/', $phrase['phrase'], $placeHolders, PREG_OFFSET_CAPTURE)) {
+            // Check for zend placeholders %placeholder% and sprintf placeholders and remove from the count
+            if (preg_match_all(
+                '/%\b(([sducoxXbgGeEfF])\b|([A-Za-z]+)%)/',
+                $phrase['phrase'],
+                $placeHolders,
+                PREG_OFFSET_CAPTURE
+            )) {
                 foreach ($placeHolders[0] as $ph) {
                     // Check if char after placeholder is not a digit or letter
                     $charAfterPh = $phrase['phrase'][$ph[1] + strlen($ph[0])];
