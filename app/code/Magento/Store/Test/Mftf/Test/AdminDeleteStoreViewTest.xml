@@ -42,11 +42,10 @@
         </actionGroup>
 
         <!--Go to backup index page and verify AssertBackupInGrid-->
-        <amOnPage url="{{BackupIndexPage.url}}" stepKey="goToBackupIndexPage"/>
-        <waitForPageLoad stepKey="waitForBackupIndexPageLoad"/>
+        <actionGroup ref="AdminBackupIndexPageOpenActionGroup" stepKey="navigateToBackupPage"/>
         <see selector="{{AdminGridTableSection.backupNameColumn}}" userInput="{{WebSetupWizardBackup.name}}" stepKey="seeBackupInGrid"/>
         <!--Delete database backup-->
-        <actionGroup ref="deleteBackup" stepKey="deleteDatabaseBackup">
+        <actionGroup ref="AdminBackupDeleteActionGroup" stepKey="deleteDatabaseBackup">
             <argument name="backup" value="WebSetupWizardBackup"/>
         </actionGroup>
 
