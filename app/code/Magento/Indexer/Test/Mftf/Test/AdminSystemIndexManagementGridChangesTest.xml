@@ -13,6 +13,7 @@
             <stories value="Menu Navigation"/>
             <title value="Admin system index management grid change test"/>
             <description value="Verify changes in 'Schedule column' on system index management"/>
+            <severity value="CRITICAL"/>
         </annotations>
         <before>
             <createData entity="_defaultCategory" stepKey="createCategory"/>
