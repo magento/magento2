@@ -323,8 +323,15 @@ class UserTest extends \PHPUnit\Framework\TestCase
      */
     public function testBeforeSaveRequiredFieldsValidation()
     {
+        $expectedMessages = '"User Name" is required. Enter and try again.' . PHP_EOL
+            . '"First Name" is required. Enter and try again.' . PHP_EOL
+            . '"Last Name" is required. Enter and try again.' . PHP_EOL
+            . 'Please enter a valid email.' . PHP_EOL
+            . 'Password is required field.' . PHP_EOL
+            . 'Invalid type given. String expected' . PHP_EOL
+            . 'Invalid type given. String, integer or float expected';
         $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
-        $this->expectExceptionMessage('"Password" is required. Enter and try again.');
+        $this->expectExceptionMessage($expectedMessages);
 
         $this->_model->setSomething('some_value');
         // force model change
