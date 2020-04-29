@@ -20,6 +20,7 @@ use Magento\CatalogWidget\Model\Rule;
 use Magento\Framework\App\ActionInterface;
 use Magento\Framework\App\Http\Context as HttpContext;
 use Magento\Framework\App\ObjectManager;
+use \Magento\Framework\Data\Form\FormKey;
 use Magento\Framework\DataObject\IdentityInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
@@ -148,6 +149,11 @@ class ProductsList extends AbstractProduct implements BlockInterface, IdentityIn
     private $categoryRepository;
 
     /**
+     * @var FormKey
+     */
+    protected $formKey;
+
+    /**
      * @param Context $context
      * @param CollectionFactory $productCollectionFactory
      * @param Visibility $catalogProductVisibility
@@ -162,6 +168,7 @@ class ProductsList extends AbstractProduct implements BlockInterface, IdentityIn
      * @param LayoutFactory|null $layoutFactory
      * @param EncoderInterface|null $urlEncoder
      * @param CategoryRepositoryInterface|null $categoryRepository
+     * @param FormKey|null $formKey
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -179,7 +186,8 @@ class ProductsList extends AbstractProduct implements BlockInterface, IdentityIn
         Json $json = null,
         LayoutFactory $layoutFactory = null,
         EncoderInterface $urlEncoder = null,
-        CategoryRepositoryInterface $categoryRepository = null
+        CategoryRepositoryInterface $categoryRepository = null,
+        FormKey $formKey = null
     ) {
         $this->productCollectionFactory = $productCollectionFactory;
         $this->catalogProductVisibility = $catalogProductVisibility;
@@ -194,6 +202,7 @@ class ProductsList extends AbstractProduct implements BlockInterface, IdentityIn
         $this->urlEncoder = $urlEncoder ?: ObjectManager::getInstance()->get(EncoderInterface::class);
         $this->categoryRepository = $categoryRepository ?? ObjectManager::getInstance()
                 ->get(CategoryRepositoryInterface::class);
+        $this->formKey = $formKey ?: ObjectManager::getInstance()->get(FormKey::class);
         parent::__construct(
             $context,
             $data
@@ -615,5 +624,16 @@ class ProductsList extends AbstractProduct implements BlockInterface, IdentityIn
     public function getComparePostData($product)
     {
         return $this->productCompareHelper->getPostDataParams($product);
+    }
+
+    /**
+     * Retrieve form key
+     *
+     * @codeCoverageIgnore
+     * @return string
+     */
+    public function getFormKey()
+    {
+        return $this->formKey->getFormKey();
     }
 }
