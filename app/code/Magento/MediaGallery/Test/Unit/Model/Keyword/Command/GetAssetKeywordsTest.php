@@ -19,7 +19,7 @@ use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 
 /**
- * GetAssetKeywordsTest
+ * Test for GetAssetKeywords
  */
 class GetAssetKeywordsTest extends TestCase
 {
@@ -83,9 +83,32 @@ class GetAssetKeywordsTest extends TestCase
     public function casesProvider(): array
     {
         return [
-            'not_found' => [[],0],
-            'find_one_keyword' => [['keywordRawData'],1],
-            'find_several_keywords' => [['keywordRawData', 'keywordRawData'],2],
+            'not_found' => [
+                [],
+                0
+            ],
+            'find_one_keyword' => [
+                [
+                    [
+                        'id' => 1,
+                        'keyword' => 'keywordRawData'
+                    ]
+                ],
+                1
+            ],
+            'find_several_keywords' => [
+                [
+                    [
+                        'id' => 1,
+                        'keyword' => 'keywordRawData'
+                    ],
+                    [
+                        'id' => 2,
+                        'keyword' => 'keywordRawData2'
+                    ]
+                ],
+                2
+            ],
         ];
     }
 

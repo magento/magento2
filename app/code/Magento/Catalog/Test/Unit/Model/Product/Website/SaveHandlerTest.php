@@ -6,28 +6,27 @@
 
 namespace Magento\Catalog\Test\Unit\Model\Product\Website;
 
-use Magento\Catalog\Api\Data\ProductExtension;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Model\ResourceModel\Product\Website\Link;
 use Magento\Catalog\Model\Product\Website\SaveHandler;
-use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\ResourceModel\Product as ResourceModel;
 use Magento\Framework\Api\ExtensionAttributesInterface;
 use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Model\StoreManagerInterface;
+use PHPUnit\Framework\MockObject\MockObject;
 
 class SaveHandlerTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var  ResourceModel\Website\Link | \PHPUnit\Framework\MockObject\MockObject */
+    /** @var  ResourceModel\Website\Link|MockObject */
     private $productWebsiteLink;
 
-    /** @var  StoreManagerInterface | \PHPUnit\Framework\MockObject\MockObject */
+    /** @var  StoreManagerInterface|MockObject */
     private $storeManager;
 
     /** @var SaveHandler */
     private $saveHandler;
 
-    /** @var  ProductInterface | \PHPUnit\Framework\MockObject\MockObject */
+    /** @var  ProductInterface|MockObject */
     private $product;
 
     protected function setUp(): void

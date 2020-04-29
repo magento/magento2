@@ -7,7 +7,7 @@ declare(strict_types=1);
 namespace Magento\Payment\Ui\Component\Listing\Column\Method;
 
 /**
- * Class Options
+ * Class Options for Listing Column Method
  */
 class Options implements \Magento\Framework\Data\OptionSourceInterface
 {
@@ -42,13 +42,6 @@ class Options implements \Magento\Framework\Data\OptionSourceInterface
         if ($this->options === null) {
             $this->options = $this->paymentHelper->getPaymentMethodList(true, true);
         }
-
-        array_walk(
-            $this->options,
-            function (&$item) {
-                $item['__disableTmpl'] = true;
-            }
-        );
 
         return $this->options;
     }
