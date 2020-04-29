@@ -25,9 +25,7 @@ class AggregateCount
          */
         $parentIds = $category->getParentIds();
         if ($parentIds) {
-            $childDecrease = $category->getChildrenCount() + 1;
-            // +1 is itself
-            $data = ['children_count' => new \Zend_Db_Expr('children_count - ' . $childDecrease)];
+            $data = ['children_count' => new \Zend_Db_Expr('children_count - 1')];
             $where = ['entity_id IN(?)' => $parentIds];
             $resourceModel->getConnection()->update($resourceModel->getEntityTable(), $data, $where);
         }
