@@ -16,15 +16,10 @@ interface LogInterface extends ExtensibleDataInterface
 {
     const LOG_ID = 'log_id';
     const TIME = 'time';
-    const ACTION_GROUP = 'action_group';
-    const ACTION = 'action';
-    const FULL_ACTION_NAME = 'full_action_name';
-    const RESULT = 'result';
-    const DETAILS = 'details';
-    const ERROR = 'error';
-    const IP_ADDRESS = 'ip_address';
-    const USERNAME = 'username';
     const CUSTOMER_ID = 'customer_id';
+    const CUSTOMER_EMAIL = 'customer_email';
+    const USER_ID = 'user_id';
+    const USERNAME = 'user_name';
 
     /**
      * Set login as customer log id.
@@ -44,10 +39,10 @@ interface LogInterface extends ExtensibleDataInterface
     /**
      * Set login as customer log time.
      *
-     * @param string $name
+     * @param string $time
      * @return void
      */
-    public function setTime(string $name): void;
+    public function setTime(string $time): void;
 
     /**
      * Retrieve login as customer log time.
@@ -57,124 +52,34 @@ interface LogInterface extends ExtensibleDataInterface
     public function getTime(): ?string;
 
     /**
-     * Set login as customer log action group.
+     * Set login as customer log user id.
      *
-     * @param string $actionGroup
+     * @param int $userId
      * @return void
      */
-    public function setActionGroup(string $actionGroup): void;
+    public function setUserId(int $userId): void;
 
     /**
-     * Retrieve login as customer log action group.
-     *
-     * @return null|string
-     */
-    public function getActionGroup(): ?string;
-
-    /**
-     * Set login as customer log action.
-     *
-     * @param string $action
-     * @return void
-     */
-    public function setAction(string $action): void;
-
-    /**
-     * Retrieve login as customer log action.
-     *
-     * @return null|string
-     */
-    public function getAction(): ?string;
-
-    /**
-     * Set login as customer log full action name.
-     *
-     * @param string $fullActionName
-     * @return void
-     */
-    public function setFullActionName(string $fullActionName): void;
-
-    /**
-     * Retrieve login as customer log full action name.
-     *
-     * @return null|string
-     */
-    public function getFullActionName(): ?string;
-
-    /**
-     * Set login as customer log result.
-     *
-     * @param int $result
-     * @return void
-     */
-    public function setResult(int $result): void;
-
-    /**
-     * Retrieve login as customer log result.
+     * Retrieve login as customer log user id.
      *
      * @return null|int
      */
-    public function getResult(): ?int;
-
-    /**
-     * Set login as customer log details.
-     *
-     * @param string $details
-     * @return void
-     */
-    public function setDetails(string $details): void;
-
-    /**
-     * Retrieve login as customer log details.
-     *
-     * @return null|string
-     */
-    public function getDetails(): ?string;
-
-    /**
-     * Set login as customer log error.
-     *
-     * @param string $error
-     * @return void
-     */
-    public function setError(string $error): void;
-
-    /**
-     * Retrieve login as customer log error.
-     *
-     * @return string|null
-     */
-    public function getError(): ?string;
-
-    /**
-     * Set login as customer log ip address.
-     *
-     * @param int $ipAddress
-     * @return void
-     */
-    public function setIpAddress(int $ipAddress): void;
-
-    /**
-     * Retrieve login as customer log ip address.
-     *
-     * @return null|int
-     */
-    public function getIpAddress(): ?int;
+    public function getUserId(): ?int;
 
     /**
      * Set login as customer log user name.
      *
-     * @param string $username
+     * @param string $userName
      * @return void
      */
-    public function setUsername(string $username): void;
+    public function setUserName(string $userName): void;
 
     /**
      * Retrieve login as customer log user name.
      *
      * @return null|string
      */
-    public function getUsername(): ?string;
+    public function getUserName(): ?string;
 
     /**
      * Set login as customer log customer id.
@@ -190,6 +95,21 @@ interface LogInterface extends ExtensibleDataInterface
      * @return null|int
      */
     public function getCustomerId(): ?int;
+
+    /**
+     * Set login as customer log customer email.
+     *
+     * @param string $customerEmail
+     * @return void
+     */
+    public function setCustomerEmail(string $customerEmail): void;
+
+    /**
+     * Retrieve login as customer log customer email.
+     *
+     * @return null|string
+     */
+    public function getCustomerEmail(): ?string;
 
     /**
      * Set log extension attributes.

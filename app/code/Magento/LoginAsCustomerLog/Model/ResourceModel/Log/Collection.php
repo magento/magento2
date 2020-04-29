@@ -12,7 +12,7 @@ use Magento\LoginAsCustomerLog\Model\Log;
 use Magento\LoginAsCustomerLog\Model\ResourceModel\Log as LogResource;
 
 /**
- * Todo: add description.
+ * Login as customer log entities collection.
  */
 class Collection extends AbstractCollection
 {

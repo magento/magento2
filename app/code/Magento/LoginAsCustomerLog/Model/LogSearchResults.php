@@ -11,7 +11,7 @@ use Magento\Framework\Api\SearchResults;
 use Magento\LoginAsCustomerLog\Api\Data\LogSearchResultsInterface;
 
 /**
- * todo: add description.
+ * @inheritDoc
  */
 class LogSearchResults extends SearchResults implements LogSearchResultsInterface
 {

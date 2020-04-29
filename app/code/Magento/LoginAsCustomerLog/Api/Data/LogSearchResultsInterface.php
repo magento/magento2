@@ -9,17 +9,20 @@ namespace Magento\LoginAsCustomerLog\Api\Data;
 
 use \Magento\Framework\Api\SearchResultsInterface;
 
+/**
+ * Login as customer log entity search results interface.
+ */
 interface LogSearchResultsInterface extends SearchResultsInterface
 {
     /**
-     * Get sources list
+     * Get log list.
      *
      * @return \Magento\LoginAsCustomerLog\Api\Data\LogInterface[]
      */
     public function getItems();
 
     /**
-     * Set sources list
+     * Set log list.
      *
      * @param \Magento\LoginAsCustomerLog\Api\Data\LogInterface[] $items
      * @return void

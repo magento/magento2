@@ -22,7 +22,7 @@ class Log extends AbstractExtensibleModel implements LogInterface
      */
     public function setLogId(int $logId): void
     {
-        $this->setData(LogInterface::LOG_ID);
+        $this->setData(LogInterface::LOG_ID, $logId);
     }
 
     /**
@@ -36,9 +36,9 @@ class Log extends AbstractExtensibleModel implements LogInterface
     /**
      * @inheritDoc
      */
-    public function setTime(string $name): void
+    public function setTime(string $time): void
     {
-        $this->setData(LogInterface::TIME);
+        $this->setData(LogInterface::TIME, $time);
     }
 
     /**
@@ -52,129 +52,31 @@ class Log extends AbstractExtensibleModel implements LogInterface
     /**
      * @inheritDoc
      */
-    public function setActionGroup(string $actionGroup): void
+    public function setUserId(int $userId): void
     {
-        $this->setData(LogInterface::ACTION_GROUP);
+        $this->setData(LogInterface::USER_ID, $userId);
     }
 
     /**
      * @inheritDoc
      */
-    public function getActionGroup(): ?string
+    public function getUserId(): ?int
     {
-        return $this->getData(LogInterface::ACTION_GROUP);
+        return $this->getData(LogInterface::USER_ID) ? (int)$this->getData(LogInterface::USER_ID) : null;
     }
 
     /**
      * @inheritDoc
      */
-    public function setAction(string $action): void
+    public function setUserName(string $userName): void
     {
-        $this->setData(LogInterface::ACTION);
+        $this->setData(LogInterface::USERNAME, $userName);
     }
 
     /**
      * @inheritDoc
      */
-    public function getAction(): ?string
-    {
-        return $this->getData(LogInterface::ACTION);
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function setFullActionName(string $fullActionName): void
-    {
-        $this->setData(LogInterface::FULL_ACTION_NAME);
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function getFullActionName(): ?string
-    {
-        return $this->getData(LogInterface::FULL_ACTION_NAME);
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function setResult(int $result): void
-    {
-        $this->setData(LogInterface::RESULT);
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function getResult(): ?int
-    {
-        return $this->getData(LogInterface::RESULT);
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function setDetails(string $details): void
-    {
-        $this->setData(LogInterface::DETAILS);
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function getDetails(): ?string
-    {
-        return $this->getData(LogInterface::DETAILS);
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function setError(string $error): void
-    {
-        $this->setData(LogInterface::ERROR);
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function getError(): ?string
-    {
-        return $this->getData(LogInterface::ERROR);
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function setIpAddress(int $ipAddress): void
-    {
-        $this->setData(LogInterface::IP_ADDRESS);
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function getIpAddress(): ?int
-    {
-        return $this->getData(LogInterface::IP_ADDRESS)
-            ? (int)$this->getData(LogInterface::IP_ADDRESS)
-            : null;
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function setUsername(string $username): void
-    {
-        $this->setData(LogInterface::USERNAME);
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function getUsername(): ?string
+    public function getUserName(): ?string
     {
         return $this->getData(LogInterface::USERNAME);
     }
@@ -184,7 +86,7 @@ class Log extends AbstractExtensibleModel implements LogInterface
      */
     public function setCustomerId(int $customerId): void
     {
-        $this->setData(LogInterface::CUSTOMER_ID);
+        $this->setData(LogInterface::CUSTOMER_ID, $customerId);
     }
 
     /**
@@ -195,6 +97,22 @@ class Log extends AbstractExtensibleModel implements LogInterface
         return $this->getData(LogInterface::CUSTOMER_ID) ?
             (int)$this->getData(LogInterface::CUSTOMER_ID)
             : null;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function setCustomerEmail(string $customerEmail): void
+    {
+        $this->setData(LogInterface::CUSTOMER_EMAIL, $customerEmail);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getCustomerEmail(): ?string
+    {
+        return $this->getData(LogInterface::CUSTOMER_EMAIL);
     }
 
     /**

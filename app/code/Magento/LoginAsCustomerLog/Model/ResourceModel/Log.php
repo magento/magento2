@@ -11,7 +11,7 @@ use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
 use Magento\LoginAsCustomerLog\Api\Data\LogInterface;
 
 /**
- * Todo: add description.
+ * Login as customer log resource model.
  */
 class Log extends AbstractDb
 {

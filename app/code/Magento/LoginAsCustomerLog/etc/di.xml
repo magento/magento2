@@ -9,4 +9,5 @@
     <preference for="Magento\LoginAsCustomerLog\Api\Data\LogInterface" type="Magento\LoginAsCustomerLog\Model\Log"/>
     <preference for="Magento\LoginAsCustomerLog\Api\Data\LogSearchResultsInterface" type="Magento\LoginAsCustomerLog\Model\LogSearchResults"/>
     <preference for="Magento\LoginAsCustomerLog\Api\GetLogsListInterface" type="Magento\LoginAsCustomerLog\Model\GetLogList"/>
+    <preference for="Magento\LoginAsCustomerLog\Api\SaveLogsInterface" type="Magento\LoginAsCustomerLog\Model\ResourceModel\SaveLogs"/>
 </config>

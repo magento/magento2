@@ -28,7 +28,7 @@
         <dataProvider class="Magento\LoginAsCustomerLog\Ui\DataProvider\LogDataProvider" name="login_as_customer_log_listing_data_source">
             <settings>
                 <requestFieldName>log_id</requestFieldName>
-                <primaryFieldName>log_id</primaryFieldName>
+                <primaryFieldName>Id</primaryFieldName>
             </settings>
         </dataProvider>
     </dataSource>
@@ -54,15 +54,40 @@
         <paging name="listing_paging"/>
     </listingToolbar>
     <columns name="login_as_customer_log_listing_columns">
-        <column name="username" sortOrder="10">
+        <column name="log_id" sortOrder="10">
             <settings>
                 <filter>text</filter>
-                <label translate="true">User Name</label>
-                <editor>
-                    <validation>
-                        <rule name="required-entry" xsi:type="boolean">true</rule>
-                    </validation>
-                </editor>
+                <label translate="true">ID</label>
+            </settings>
+        </column>
+        <column name="customer_id" sortOrder="20">
+            <settings>
+                <filter>text</filter>
+                <label translate="true">Customer ID</label>
+            </settings>
+        </column>
+        <column name="customer_email" sortOrder="30">
+            <settings>
+                <filter>text</filter>
+                <label translate="true">Customer Email</label>
+            </settings>
+        </column>
+        <column name="user_id" sortOrder="40">
+            <settings>
+                <filter>text</filter>
+                <label translate="true">Admin ID</label>
+            </settings>
+        </column>
+        <column name="user_name" sortOrder="50">
+            <settings>
+                <filter>text</filter>
+                <label translate="true">Admin Name</label>
+            </settings>
+        </column>
+        <column name="time" sortOrder="60">
+            <settings>
+                <filter>text</filter>
+                <label translate="true">Logged In</label>
             </settings>
         </column>
     </columns>

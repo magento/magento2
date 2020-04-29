@@ -11,11 +11,13 @@ use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\LoginAsCustomerLog\Api\Data\LogSearchResultsInterface;
 
 /**
- * @todo: add description.
+ * Get login as customer log list considering search criteria.
  */
 interface GetLogsListInterface
 {
     /**
+     * Retrieve list of log entities.
+     *
      * @param SearchCriteriaInterface $searchCriteria
      * @return LogSearchResultsInterface
      */
