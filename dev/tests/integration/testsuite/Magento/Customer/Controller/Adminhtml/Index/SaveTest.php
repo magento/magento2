@@ -232,12 +232,12 @@ class SaveTest extends AbstractBackendController
             ],
             'subscription' => '1',
         ];
-        $expectedMessage = (string)__('Something went wrong while saving the customer.');
+        $expectedMessages = [(string)__('Something went wrong while saving the customer.')];
         $postData['customer']['entity_id'] = -1;
         $params = ['back' => true];
         $this->dispatchCustomerSave($postData, $params);
         $this->assertSessionMessages(
-            $this->equalTo($expectedMessage),
+            $this->equalTo($expectedMessages),
             MessageInterface::TYPE_ERROR
         );
     }
