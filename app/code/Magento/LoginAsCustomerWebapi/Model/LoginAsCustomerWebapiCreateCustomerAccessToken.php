@@ -11,7 +11,7 @@ use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Framework\Event\ManagerInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Integration\Model\Oauth\TokenFactory;
-use Magento\LoginAsCustomer\Model\Config;
+use Magento\LoginAsCustomerApi\Api\ConfigInterface;
 use Magento\LoginAsCustomerWebapi\Api\LoginAsCustomerWebapiCreateCustomerAccessTokenInterface;
 
 /**
@@ -20,7 +20,7 @@ use Magento\LoginAsCustomerWebapi\Api\LoginAsCustomerWebapiCreateCustomerAccessT
 class LoginAsCustomerWebapiCreateCustomerAccessToken implements LoginAsCustomerWebapiCreateCustomerAccessTokenInterface
 {
     /**
-     * @var Config
+     * @var ConfigInterface
      */
     private $config;
 
@@ -40,13 +40,13 @@ class LoginAsCustomerWebapiCreateCustomerAccessToken implements LoginAsCustomerW
     private $tokenFactory;
 
     /**
-     * @param Config $config
+     * @param ConfigInterface $config
      * @param CustomerRepositoryInterface $customerRepository
      * @param ManagerInterface $eventManager
      * @param TokenFactory $tokenFactory
      */
     public function __construct(
-        Config $config,
+        ConfigInterface $config,
         CustomerRepositoryInterface $customerRepository,
         ManagerInterface $eventManager,
         TokenFactory $tokenFactory
