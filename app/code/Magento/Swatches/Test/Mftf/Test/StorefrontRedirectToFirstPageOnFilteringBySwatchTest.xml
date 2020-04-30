@@ -37,7 +37,6 @@
             <actionGroup ref="AddTextSwatchToProductActionGroup" stepKey="addSwatchAttribute">
                 <argument name="usedInLayeredNavigation" value="1"/>
             </actionGroup>
-            <magentoCLI command="cache:clean block_html collections config full_page" stepKey="cleanInvalidatedCaches"/>
         </before>
 
         <after>
@@ -48,7 +47,7 @@
 
             <magentoCLI command="config:set catalog/frontend/grid_per_page 12" stepKey="setDefaultProductsPerPage"/>
             <magentoCLI command="config:set catalog/frontend/grid_per_page_values 12,24,36" stepKey="setDefaultGridPerPage"/>
-            <magentoCLI command="cache:clean block_html collections config full_page" stepKey="cleanInvalidatedCaches"/>
+            <magentoCLI command="cache:clean config full_page" stepKey="cleanInvalidatedCaches"/>
 
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <deleteData createDataKey="createSimpleProduct1" stepKey="deleteSimpleProduct1"/>
@@ -97,6 +96,8 @@
         <click selector="{{StorefrontCategorySidebarSection.attributeNthOption(textSwatchAttribute.attribute_code, '1')}}" stepKey="filterBySwatch1"/>
         <waitForPageLoad stepKey="waitForPageToLoad2"/>
 
-        <actionGroup ref="AssertStorefrontCategoryCurrentPageIsFirstActionGroup" stepKey="assertCurrentPageIsFirst"/>
+        <actionGroup ref="AssertStorefrontCategoryCurrentPageIsNthActionGroup" stepKey="assertCurrentPageIsFirst">
+            <argument name="expectedPage" value="1"/>
+        </actionGroup>
     </test>
 </tests>

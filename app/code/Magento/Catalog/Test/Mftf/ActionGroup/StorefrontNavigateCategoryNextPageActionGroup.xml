@@ -6,8 +6,10 @@
 -->
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <!-- Navigates storefront category next page from toolbar -->
     <actionGroup name="StorefrontNavigateCategoryNextPageActionGroup">
+        <annotations>
+            <description>Navigates storefront category next page from toolbar</description>
+        </annotations>
         <scrollTo selector="{{StorefrontCategoryBottomToolbarSection.nextPage}}" stepKey="scrollToNextButton"/>
         <click selector="{{StorefrontCategoryBottomToolbarSection.nextPage}}" stepKey="clickOnNextPage"/>
         <waitForPageLoad stepKey="waitForNextCategoryPageLoad"/>
