@@ -22,6 +22,7 @@ use Magento\Framework\Url;
 use Magento\LoginAsCustomerApi\Api\ConfigInterface;
 use Magento\LoginAsCustomerApi\Api\Data\AuthenticationDataInterface;
 use Magento\LoginAsCustomerApi\Api\Data\AuthenticationDataInterfaceFactory;
+use Magento\LoginAsCustomerApi\Api\DeleteExpiredAuthenticationDataInterface;
 use Magento\LoginAsCustomerApi\Api\SaveAuthenticationDataInterface;
 use Magento\Store\Model\StoreManagerInterface;
 
@@ -30,6 +31,8 @@ use Magento\Store\Model\StoreManagerInterface;
  * Generate secret key and forward to the storefront action
  *
  * This action can be executed via GET request when "Store View To Login In" is disabled, and POST when it is enabled
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Login extends Action implements HttpGetActionInterface, HttpPostActionInterface
 {
@@ -71,6 +74,11 @@ class Login extends Action implements HttpGetActionInterface, HttpPostActionInte
     private $saveAuthenticationData;
 
     /**
+     * @var DeleteExpiredAuthenticationDataInterface
+     */
+    private $deleteExpiredAuthenticationData;
+
+    /**
      * @var Url
      */
     private $url;
@@ -83,6 +91,7 @@ class Login extends Action implements HttpGetActionInterface, HttpPostActionInte
      * @param ConfigInterface $config
      * @param AuthenticationDataInterfaceFactory $authenticationDataFactory
      * @param SaveAuthenticationDataInterface $saveAuthenticationData ,
+     * @param DeleteExpiredAuthenticationDataInterface $deleteExpiredAuthenticationData
      * @param Url $url
      */
     public function __construct(
@@ -93,6 +102,7 @@ class Login extends Action implements HttpGetActionInterface, HttpPostActionInte
         ConfigInterface $config,
         AuthenticationDataInterfaceFactory $authenticationDataFactory,
         SaveAuthenticationDataInterface $saveAuthenticationData,
+        DeleteExpiredAuthenticationDataInterface $deleteExpiredAuthenticationData,
         Url $url
     ) {
         parent::__construct($context);
@@ -103,6 +113,7 @@ class Login extends Action implements HttpGetActionInterface, HttpPostActionInte
         $this->config = $config;
         $this->authenticationDataFactory = $authenticationDataFactory;
         $this->saveAuthenticationData = $saveAuthenticationData;
+        $this->deleteExpiredAuthenticationData = $deleteExpiredAuthenticationData;
         $this->url = $url;
     }
 
@@ -142,15 +153,18 @@ class Login extends Action implements HttpGetActionInterface, HttpPostActionInte
         }
 
         $adminUser = $this->authSession->getUser();
+        $userId = (int)$adminUser->getId();
 
         /** @var AuthenticationDataInterface $authenticationData */
         $authenticationData = $this->authenticationDataFactory->create(
             [
                 'customerId' => $customerId,
-                'adminId' => (int)$adminUser->getId(),
+                'adminId' => $userId,
                 'extensionAttributes' => null,
             ]
         );
+
+        $this->deleteExpiredAuthenticationData->execute($userId);
         $secret = $this->saveAuthenticationData->execute($authenticationData);
 
         $redirectUrl = $this->getLoginProceedRedirectUrl($secret, $storeId);

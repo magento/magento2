@@ -13,7 +13,7 @@
              module="Magento_LoginAsCustomerLog"
              parent="Magento_Customer::customer"
              sortOrder="40"
-             resource="Magento_LoginAsCustomer::login_log"
-             action="loginascustomer"/>
+             resource="Magento_LoginAsCustomerLog::login_log"
+             action="loginascustomer_log/log/index"/>
     </menu>
 </config>
