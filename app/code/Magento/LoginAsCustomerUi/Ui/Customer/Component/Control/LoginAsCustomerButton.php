@@ -7,8 +7,11 @@ declare(strict_types=1);
 
 namespace Magento\LoginAsCustomerUi\Ui\Customer\Component\Control;
 
-use Magento\Customer\Block\Adminhtml\Edit\GenericButton;
 use Magento\Framework\View\Element\UiComponent\Control\ButtonProviderInterface;
+use Magento\Framework\Escaper;
+use Magento\Framework\Registry;
+use Magento\Backend\Block\Widget\Context;
+use Magento\Customer\Block\Adminhtml\Edit\GenericButton;
 
 /**
  * Login As Customer button UI component.
@@ -21,15 +24,23 @@ class LoginAsCustomerButton extends GenericButton implements ButtonProviderInter
     private $authorization;
 
     /**
-     * @param \Magento\Backend\Block\Widget\Context $context
-     * @param \Magento\Framework\Registry $registry
+     * Escaper
+     *
+     * @var Escaper
+     */
+    private $escaper;
+
+    /**
+     * @param Context $context
+     * @param Registry $registry
      */
     public function __construct(
-        \Magento\Backend\Block\Widget\Context $context,
-        \Magento\Framework\Registry $registry
+        Context $context,
+        Registry $registry
     ) {
         parent::__construct($context, $registry);
         $this->authorization = $context->getAuthorization();
+        $this->escaper = $context->getEscaper();
     }
 
     /**
@@ -44,8 +55,9 @@ class LoginAsCustomerButton extends GenericButton implements ButtonProviderInter
             $data = [
                 'label' => __('Login As Customer'),
                 'class' => 'login login-button',
-                'on_click' => 'window.open( \'' . $this->getLoginUrl() .
-                    '\')',
+                'on_click' => 'window.lacConfirmationPopup("'
+                    . $this->escaper->escapeHtml($this->escaper->escapeJs($this->getLoginUrl()))
+                    . '")',
                 'sort_order' => 70,
             ];
         }
