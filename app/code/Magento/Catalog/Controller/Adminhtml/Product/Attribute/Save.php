@@ -194,7 +194,8 @@ class Save extends Attribute implements HttpPostActionInterface
             $attributeCode = $model && $model->getId()
                 ? $model->getAttributeCode()
                 : $this->getRequest()->getParam('attribute_code');
-            $attributeCode = $attributeCode ?: $this->generateCode($this->getRequest()->getParam('frontend_label')[0]);
+            $frontendLabel = $this->getRequest()->getParam('frontend_label')[0] ?? null;
+            $attributeCode = $attributeCode ?: $this->generateCode($frontendLabel);
             $data['attribute_code'] = $attributeCode;
 
             //validate frontend_input
