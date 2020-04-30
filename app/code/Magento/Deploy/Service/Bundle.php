@@ -3,13 +3,15 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Deploy\Service;
 
 use Magento\Deploy\Config\BundleConfig;
 use Magento\Deploy\Package\BundleInterface;
 use Magento\Deploy\Package\BundleInterfaceFactory;
 use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Filesystem;
 use Magento\Framework\App\Utility\Files;
 use Magento\Framework\Filesystem\Io\File;
@@ -55,6 +57,11 @@ class Bundle
     private $bundleFactory;
 
     /**
+     * @var BundleConfig
+     */
+    private $bundleConfig;
+
+    /**
      * Utility class for collecting files by specific pattern and location
      *
      * @var Files
@@ -79,7 +86,7 @@ class Bundle
     ];
 
     /**
-     * @var File|null
+     * @var File
      */
     private $file;
 
@@ -90,25 +97,22 @@ class Bundle
      * @param BundleInterfaceFactory $bundleFactory
      * @param BundleConfig $bundleConfig
      * @param Files $files
+     * @param File $file
      *
-     * @param File|null $file
-     *
-     * @throws \Magento\Framework\Exception\FileSystemException
+     * @throws FileSystemException
      */
     public function __construct(
         Filesystem $filesystem,
         BundleInterfaceFactory $bundleFactory,
         BundleConfig $bundleConfig,
         Files $files,
-        File $file = null
+        File $file
     ) {
         $this->pubStaticDir = $filesystem->getDirectoryWrite(DirectoryList::STATIC_VIEW);
         $this->bundleFactory = $bundleFactory;
         $this->bundleConfig = $bundleConfig;
         $this->utilityFiles = $files;
-        $this->file = $file ?: ObjectManager::getInstance()->get(
-            \Magento\Framework\Filesystem\Io\File::class
-        );
+        $this->file = $file;
     }
 
     /**
@@ -119,7 +123,7 @@ class Bundle
      * @param string $locale
      * @return void
      *
-     * @throws \Magento\Framework\Exception\FileSystemException
+     * @throws FileSystemException
      * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function deploy($area, $theme, $locale)
@@ -240,12 +244,12 @@ class Bundle
     private function prepareExcludePath($path)
     {
         if (strpos($path, Repository::FILE_ID_SEPARATOR) !== false) {
-            list($excludedModule, $excludedPath) = explode(Repository::FILE_ID_SEPARATOR, $path);
+            [$excludedModule, $excludedPath] = explode(Repository::FILE_ID_SEPARATOR, $path);
             if ($excludedModule == 'Lib') {
                 return $excludedPath;
-            } else {
-                return $excludedModule . '/' . $excludedPath;
             }
+
+            return $excludedModule . '/' . $excludedPath;
         }
         return $path;
     }

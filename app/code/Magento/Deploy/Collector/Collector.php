@@ -3,12 +3,14 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Deploy\Collector;
 
-use Magento\Deploy\Source\SourcePool;
 use Magento\Deploy\Package\Package;
 use Magento\Deploy\Package\PackageFactory;
 use Magento\Deploy\Package\PackageFile;
+use Magento\Deploy\Source\SourcePool;
 use Magento\Framework\Module\Manager;
 use Magento\Framework\View\Asset\PreProcessor\FileNameResolver;
 
@@ -46,7 +48,9 @@ class Collector implements CollectorInterface
      */
     private $packageFactory;
 
-    /** @var \Magento\Framework\Module\Manager */
+    /**
+     * @var Manager
+     */
     private $moduleManager;
 
     /**
@@ -66,19 +70,18 @@ class Collector implements CollectorInterface
      * @param SourcePool $sourcePool
      * @param FileNameResolver $fileNameResolver
      * @param PackageFactory $packageFactory
-     * @param Manager|null $moduleManager
+     * @param Manager $moduleManager
      */
     public function __construct(
         SourcePool $sourcePool,
         FileNameResolver $fileNameResolver,
         PackageFactory $packageFactory,
-        Manager $moduleManager = null
+        Manager $moduleManager
     ) {
         $this->sourcePool = $sourcePool;
         $this->fileNameResolver = $fileNameResolver;
         $this->packageFactory = $packageFactory;
-        $this->moduleManager = $moduleManager ?: \Magento\Framework\App\ObjectManager::getInstance()
-            ->get(\Magento\Framework\Module\Manager::class);
+        $this->moduleManager = $moduleManager;
     }
 
     /**
@@ -104,6 +107,7 @@ class Collector implements CollectorInterface
                 }
             }
         }
+
         return $packages;
     }
 
@@ -127,6 +131,7 @@ class Collector implements CollectorInterface
                 $params[$name] = $value;
             }
         }
+
         return $params;
     }
 }

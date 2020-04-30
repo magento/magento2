@@ -3,12 +3,13 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Deploy\Console\Command\App;
 
 use Magento\Deploy\Model\DeploymentConfig\Hash;
 use Magento\Framework\App\Config\ConfigSourceInterface;
 use Magento\Framework\App\DeploymentConfig\Writer;
-use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Config\File\ConfigFilePool;
 use Magento\Framework\Console\Cli;
 use Symfony\Component\Console\Command\Command;
@@ -48,11 +49,11 @@ class ApplicationDumpCommand extends Command
     public function __construct(
         Writer $writer,
         array $sources,
-        Hash $configHash = null
+        Hash $configHash
     ) {
         $this->writer = $writer;
         $this->sources = $sources;
-        $this->configHash = $configHash ?: ObjectManager::getInstance()->get(Hash::class);
+        $this->configHash = $configHash;
         parent::__construct();
     }
 
@@ -157,9 +158,6 @@ class ApplicationDumpCommand extends Command
     private function skipDump(InputInterface $input, array $sourceData): bool
     {
         $allowedTypes = $input->getArgument(self::INPUT_CONFIG_TYPES);
-        if ($allowedTypes && !in_array($sourceData['namespace'], $allowedTypes)) {
-            return true;
-        }
-        return false;
+        return $allowedTypes && !in_array($sourceData['namespace'], $allowedTypes);
     }
 }

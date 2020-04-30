@@ -3,15 +3,19 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Deploy\Model;
 
-use Symfony\Component\Console\Output\OutputInterface;
-use Magento\Framework\App\State;
-use Magento\Framework\App\DeploymentConfig\Writer;
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Filesystem\Driver\File;
+use Magento\Framework\ShellInterface;
 use Magento\Framework\Validator\Locale;
+use Magento\Store\Model\Config\StoreView;
 use Magento\User\Model\ResourceModel\User\Collection as UserCollection;
+use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * Generate static files, compile
@@ -52,42 +56,27 @@ class Filesystem
     const DEFAULT_THEME = 'Magento/blank';
 
     /**
-     * @var \Magento\Framework\App\DeploymentConfig\Writer
-     */
-    private $writer;
-
-    /**
-     * @var \Magento\Framework\App\DeploymentConfig\Reader
-     */
-    private $reader;
-
-    /**
-     * @var \Magento\Framework\ObjectManagerInterface
-     */
-    private $objectManager;
-
-    /**
      * @var \Magento\Framework\Filesystem
      */
     private $filesystem;
 
     /**
-     * @var \Magento\Framework\App\Filesystem\DirectoryList
+     * @var DirectoryList
      */
     private $directoryList;
 
     /**
-     * @var \Magento\Framework\Filesystem\Driver\File
+     * @var File
      */
     private $driverFile;
 
     /**
-     * @var \Magento\Store\Model\Config\StoreView
+     * @var StoreView
      */
     private $storeView;
 
     /**
-     * @var \Magento\Framework\ShellInterface
+     * @var ShellInterface
      */
     private $shell;
 
@@ -107,40 +96,30 @@ class Filesystem
     private $locale;
 
     /**
-     * @param \Magento\Framework\App\DeploymentConfig\Writer $writer
-     * @param \Magento\Framework\App\DeploymentConfig\Reader $reader
-     * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param \Magento\Framework\Filesystem $filesystem
-     * @param \Magento\Framework\App\Filesystem\DirectoryList $directoryList
-     * @param \Magento\Framework\Filesystem\Driver\File $driverFile
-     * @param \Magento\Store\Model\Config\StoreView $storeView
-     * @param \Magento\Framework\ShellInterface $shell
-     * @param UserCollection|null $userCollection
-     * @param Locale|null $locale
-     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @param DirectoryList $directoryList
+     * @param File $driverFile
+     * @param StoreView $storeView
+     * @param ShellInterface $shell
+     * @param UserCollection $userCollection
+     * @param Locale $locale
      */
     public function __construct(
-        \Magento\Framework\App\DeploymentConfig\Writer $writer,
-        \Magento\Framework\App\DeploymentConfig\Reader $reader,
-        \Magento\Framework\ObjectManagerInterface $objectManager,
         \Magento\Framework\Filesystem $filesystem,
-        \Magento\Framework\App\Filesystem\DirectoryList $directoryList,
-        \Magento\Framework\Filesystem\Driver\File $driverFile,
-        \Magento\Store\Model\Config\StoreView $storeView,
-        \Magento\Framework\ShellInterface $shell,
-        UserCollection $userCollection = null,
-        Locale $locale = null
+        DirectoryList $directoryList,
+        File $driverFile,
+        StoreView $storeView,
+        ShellInterface $shell,
+        UserCollection $userCollection,
+        Locale $locale
     ) {
-        $this->writer = $writer;
-        $this->reader = $reader;
-        $this->objectManager = $objectManager;
         $this->filesystem = $filesystem;
         $this->directoryList = $directoryList;
         $this->driverFile = $driverFile;
         $this->storeView = $storeView;
         $this->shell = $shell;
-        $this->userCollection = $userCollection ?: $this->objectManager->get(UserCollection::class);
-        $this->locale = $locale ?: $this->objectManager->get(Locale::class);
+        $this->userCollection = $userCollection;
+        $this->locale = $locale;
         $this->functionCallPath =
             PHP_BINARY . ' -f ' . BP . DIRECTORY_SEPARATOR . 'bin' . DIRECTORY_SEPARATOR . 'magento ';
     }
@@ -222,7 +201,6 @@ class Filesystem
      *
      * @return array
      * @throws \InvalidArgumentException if unknown locale is provided by the store configuration
-     * @throws \Magento\Framework\Exception\FileSystemException
      */
     private function getUsedLocales()
     {
@@ -278,7 +256,7 @@ class Filesystem
      *
      * @param array $directoryCodeList
      * @return void
-     * @throws \Magento\Framework\Exception\FileSystemException
+     * @throws FileSystemException
      */
     public function cleanupFilesystem($directoryCodeList)
     {
@@ -307,7 +285,7 @@ class Filesystem
      * of inverse mask for setting access permissions to files and directories generated by Magento.
      * @link https://devdocs.magento.com/guides/v2.3/install-gde/install/post-install-umask.html
      * @link https://devdocs.magento.com/guides/v2.3/install-gde/prereq/file-system-perms.html
-     * @throws \Magento\Framework\Exception\FileSystemException
+     * @throws FileSystemException
      */
     protected function changePermissions($directoryCodeList, $dirPermissions, $filePermissions)
     {
@@ -333,7 +311,7 @@ class Filesystem
      * of inverse mask for setting access permissions to files and directories generated by Magento.
      * @link https://devdocs.magento.com/guides/v2.3/install-gde/install/post-install-umask.html
      * @link https://devdocs.magento.com/guides/v2.3/install-gde/prereq/file-system-perms.html
-     * @throws \Magento\Framework\Exception\FileSystemException
+     * @throws FileSystemException
      */
     public function lockStaticResources()
     {
@@ -364,7 +342,7 @@ class Filesystem
      * Cleanup directory with static view files.
      *
      * @param array $excludePatterns
-     * @throws \Magento\Framework\Exception\FileSystemException
+     * @throws FileSystemException
      */
     private function cleanupStaticDirectory(array $excludePatterns): void
     {

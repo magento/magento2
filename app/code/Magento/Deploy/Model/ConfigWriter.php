@@ -3,13 +3,14 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Deploy\Model;
 
 use Magento\Config\App\Config\Type\System;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Config\Value;
 use Magento\Framework\App\DeploymentConfig\Writer;
-use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Config\File\ConfigFilePool;
 use Magento\Framework\Stdlib\ArrayManager;
 use Magento\Config\Model\PreparedValueFactory;
@@ -39,16 +40,16 @@ class ConfigWriter
     /**
      * @param Writer $writer
      * @param ArrayManager $arrayManager
-     * @param PreparedValueFactory|null $valueFactory Creates a prepared instance of Value
+     * @param PreparedValueFactory $valueFactory Creates a prepared instance of Value
      */
     public function __construct(
         Writer $writer,
         ArrayManager $arrayManager,
-        PreparedValueFactory $valueFactory = null
+        PreparedValueFactory $valueFactory
     ) {
         $this->writer = $writer;
         $this->arrayManager = $arrayManager;
-        $this->preparedValueFactory = $valueFactory ?: ObjectManager::getInstance()->get(PreparedValueFactory::class);
+        $this->preparedValueFactory = $valueFactory;
     }
 
     /**

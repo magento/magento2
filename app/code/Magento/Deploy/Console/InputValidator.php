@@ -3,14 +3,15 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Deploy\Console;
 
-use Magento\Setup\Console\Command\DeployStaticContentCommand;
+use InvalidArgumentException;
 use Magento\Deploy\Console\DeployStaticOptions as Options;
 use Magento\Framework\Validator\Locale;
-use Symfony\Component\Console\Input\InputInterface;
-use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Validator\RegexFactory;
+use Symfony\Component\Console\Input\InputInterface;
 
 /**
  * Command input arguments validator class
@@ -70,11 +71,10 @@ class InputValidator
      */
     public function __construct(
         Locale $localeValidator,
-        ?RegexFactory $versionValidatorFactory = null
+        RegexFactory $versionValidatorFactory
     ) {
         $this->localeValidator = $localeValidator;
-        $this->versionValidatorFactory = $versionValidatorFactory ?:
-            ObjectManager::getInstance()->get(RegexFactory::class);
+        $this->versionValidatorFactory = $versionValidatorFactory;
     }
 
     /**
@@ -108,12 +108,12 @@ class InputValidator
      * @param array $areasInclude
      * @param array $areasExclude
      * @return void
-     * @throws \InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     private function checkAreasInput(array $areasInclude, array $areasExclude)
     {
         if ($areasInclude[0] != 'all' && $areasExclude[0] != 'none') {
-            throw new \InvalidArgumentException(
+            throw new InvalidArgumentException(
                 '--area (-a) and --exclude-area cannot be used at the same time'
             );
         }
@@ -125,12 +125,12 @@ class InputValidator
      * @param array $themesInclude
      * @param array $themesExclude
      * @return void
-     * @throws \InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     private function checkThemesInput(array $themesInclude, array $themesExclude)
     {
         if ($themesInclude[0] != 'all' && $themesExclude[0] != 'none') {
-            throw new \InvalidArgumentException(
+            throw new InvalidArgumentException(
                 '--theme (-t) and --exclude-theme cannot be used at the same time'
             );
         }
@@ -142,21 +142,21 @@ class InputValidator
      * @param array $languagesInclude
      * @param array $languagesExclude
      * @return void
-     * @throws \InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     private function checkLanguagesInput(array $languagesInclude, array $languagesExclude)
     {
         if ($languagesInclude[0] != 'all') {
             foreach ($languagesInclude as $lang) {
                 if (!$this->localeValidator->isValid($lang)) {
-                    throw new \InvalidArgumentException(
+                    throw new InvalidArgumentException(
                         $lang .
                         ' argument has invalid value, please run info:language:list for list of available locales'
                     );
                 }
             }
             if ($languagesExclude[0] != 'none') {
-                throw new \InvalidArgumentException(
+                throw new InvalidArgumentException(
                     '--language (-l) and --exclude-language cannot be used at the same time'
                 );
             }
@@ -167,7 +167,7 @@ class InputValidator
      * Version input checks
      *
      * @param string $contentVersion
-     * @throws \InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     private function checkVersionInput(string $contentVersion): void
     {
@@ -179,7 +179,7 @@ class InputValidator
             );
 
             if (!$versionValidator->isValid($contentVersion)) {
-                throw new \InvalidArgumentException(
+                throw new InvalidArgumentException(
                     'Argument "' .
                     Options::CONTENT_VERSION
                     . '" has invalid value, content version should contain only characters, digits and dots'

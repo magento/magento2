@@ -3,10 +3,12 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Deploy\Test\Unit\Model;
 
-use Magento\Config\Console\Command\ConfigSet\ProcessorFacadeFactory;
 use Magento\Config\Console\Command\ConfigSet\ProcessorFacade;
+use Magento\Config\Console\Command\ConfigSet\ProcessorFacadeFactory;
 use Magento\Config\Console\Command\EmulatedAdminhtmlAreaProcessor;
 use Magento\Deploy\App\Mode\ConfigProvider;
 use Magento\Deploy\Model\Filesystem;
@@ -17,17 +19,16 @@ use Magento\Framework\App\DeploymentConfig\Reader;
 use Magento\Framework\App\DeploymentConfig\Writer;
 use Magento\Framework\App\MaintenanceMode;
 use Magento\Framework\App\State;
-use PHPUnit_Framework_MockObject_MockObject as Mock;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
 use Magento\Framework\Config\File\ConfigFilePool;
 use Magento\Framework\Exception\LocalizedException;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * @inheritdoc
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ModeTest extends \PHPUnit\Framework\TestCase
+class ModeTest extends TestCase
 {
     /**
      * @var Mode
@@ -35,68 +36,58 @@ class ModeTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var Reader|Mock
+     * @var Reader|MockObject
      */
     private $readerMock;
 
     /**
-     * @var InputInterface|Mock
-     */
-    private $inputMock;
-
-    /**
-     * @var OutputInterface|Mock
+     * @var OutputInterface|MockObject
      */
     private $outputMock;
 
     /**
-     * @var Writer|Mock
+     * @var Writer|MockObject
      */
     private $writerMock;
 
     /**
-     * @var MaintenanceMode|Mock
-     */
-    private $maintenanceMock;
-
-    /**
-     * @var Filesystem|Mock
+     * @var Filesystem|MockObject
      */
     private $filesystemMock;
 
     /**
-     * @var ConfigProvider|Mock
+     * @var ConfigProvider|MockObject
      */
     private $configProvider;
 
     /**
-     * @var ProcessorFacadeFactory|Mock
+     * @var ProcessorFacadeFactory|MockObject
      */
     private $processorFacadeFactory;
 
     /**
-     * @var ProcessorFacade|Mock
+     * @var ProcessorFacade|MockObject
      */
     private $processorFacade;
 
     /**
-     * @var EmulatedAdminhtmlAreaProcessor|Mock
+     * @var EmulatedAdminhtmlAreaProcessor|MockObject
      */
     private $emulatedAreaProcessor;
 
+    /**
+     * @var MaintenanceMode|MockObject
+     */
+    private $maintenanceMock;
+
     protected function setUp()
     {
-        $this->inputMock = $this->getMockBuilder(InputInterface::class)
-            ->getMockForAbstractClass();
         $this->outputMock = $this->getMockBuilder(OutputInterface::class)
             ->getMockForAbstractClass();
         $this->writerMock = $this->getMockBuilder(Writer::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->readerMock = $this->getMockBuilder(Reader::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->maintenanceMock = $this->getMockBuilder(MaintenanceMode::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->filesystemMock = $this->getMockBuilder(Filesystem::class)
@@ -115,13 +106,14 @@ class ModeTest extends \PHPUnit\Framework\TestCase
         $this->emulatedAreaProcessor = $this->getMockBuilder(EmulatedAdminhtmlAreaProcessor::class)
             ->disableOriginalConstructor()
             ->getMock();
+        $this->maintenanceMock = $this->getMockBuilder(MaintenanceMode::class)
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->model = new Mode(
-            $this->inputMock,
             $this->outputMock,
             $this->writerMock,
             $this->readerMock,
-            $this->maintenanceMock,
             $this->filesystemMock,
             $this->configProvider,
             $this->processorFacadeFactory,
@@ -139,7 +131,7 @@ class ModeTest extends \PHPUnit\Framework\TestCase
                 [State::PARAM_MODE => State::MODE_DEVELOPER]
             );
 
-        $this->assertSame(null, $this->model->getMode());
+        $this->assertNull($this->model->getMode());
         $this->assertSame(State::MODE_DEVELOPER, $this->model->getMode());
     }
 
@@ -156,22 +148,20 @@ class ModeTest extends \PHPUnit\Framework\TestCase
                 State::PARAM_MODE => State::MODE_DEVELOPER,
             ],
         ];
-        $this->configProvider->expects($this->any())
-            ->method('getConfigs')
+        $this->configProvider->method('getConfigs')
             ->willReturn([]);
         $this->writerMock->expects($this->once())
             ->method("saveConfig")
-            ->willReturnCallback(function ($data) use (&$dataStorage) {
+            ->willReturnCallback(static function ($data) use (&$dataStorage) {
                 $dataStorage = $data;
             });
-        $this->readerMock->expects($this->any())
-            ->method('load')
-            ->willReturnCallback(function () use (&$dataStorage) {
+        $this->readerMock->method('load')
+            ->willReturnCallback(static function () use (&$dataStorage) {
                 return $dataStorage[ConfigFilePool::APP_ENV];
             });
         $this->filesystemMock->expects($this->once())
             ->method("regenerateStatic")
-            ->willReturnCallback(function () use (&$modeModel, &$mode) {
+            ->willReturnCallback(static function () use (&$modeModel, &$mode) {
                 $mode = $modeModel->getMode();
             });
         $this->model->enableProductionMode();
@@ -181,8 +171,6 @@ class ModeTest extends \PHPUnit\Framework\TestCase
     /**
      * Test that previous mode will be enabled after error during static generation call.
      * We need this to be sure that mode will be reverted to it previous tate.
-     *
-     * @expectedException \Magento\Framework\Exception\LocalizedException
      */
     public function testEnableDeveloperModeOnFail()
     {
@@ -192,11 +180,9 @@ class ModeTest extends \PHPUnit\Framework\TestCase
                 State::PARAM_MODE => State::MODE_DEVELOPER,
             ],
         ];
-        $this->readerMock->expects($this->any())
-            ->method('load')
+        $this->readerMock->method('load')
             ->willReturn([State::PARAM_MODE => State::MODE_DEVELOPER]);
-        $this->configProvider->expects($this->any())
-            ->method('getConfigs')
+        $this->configProvider->method('getConfigs')
             ->willReturn([]);
         $this->writerMock->expects($this->exactly(2))
             ->method("saveConfig")
@@ -204,17 +190,18 @@ class ModeTest extends \PHPUnit\Framework\TestCase
                 [$this->equalTo([ConfigFilePool::APP_ENV => [State::PARAM_MODE => State::MODE_PRODUCTION]])],
                 [$this->equalTo([ConfigFilePool::APP_ENV => [State::PARAM_MODE => State::MODE_DEVELOPER]])]
             )
-            ->willReturnCallback(function ($data) use (&$dataStorage) {
+            ->willReturnCallback(static function ($data) use (&$dataStorage) {
                 $dataStorage = $data;
             });
-        $this->readerMock->expects($this->any())
-            ->method('load')
-            ->willReturnCallback(function () use (&$dataStorage) {
+        $this->readerMock->method('load')
+            ->willReturnCallback(static function () use (&$dataStorage) {
                 return $dataStorage[ConfigFilePool::APP_ENV];
             });
         $this->filesystemMock->expects($this->once())
             ->method("regenerateStatic")
             ->willThrowException(new LocalizedException(__('Exception')));
+
+        $this->expectException(LocalizedException::class);
         $this->model->enableProductionMode();
         $this->assertEquals(State::MODE_PRODUCTION, $mode);
     }

@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Deploy\Model;
 
@@ -12,15 +13,12 @@ use Magento\Framework\App\Console\MaintenanceModeEnabler;
 use Magento\Framework\App\DeploymentConfig\Reader;
 use Magento\Framework\App\DeploymentConfig\Writer;
 use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Framework\App\MaintenanceMode;
 use Magento\Framework\App\State;
 use Magento\Framework\Config\File\ConfigFilePool;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
 use Magento\Config\Console\Command\ConfigSet\ProcessorFacadeFactory;
 use Magento\Config\Console\Command\EmulatedAdminhtmlAreaProcessor;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\App\ObjectManager;
+use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * A class to manage Magento modes
@@ -31,14 +29,9 @@ use Magento\Framework\App\ObjectManager;
 class Mode
 {
     /**
-     * @var InputInterface
-     */
-    private $input;
-
-    /**
      * @var OutputInterface
      */
-    protected $output;
+    private $output;
 
     /**
      * @var Writer
@@ -80,45 +73,34 @@ class Mode
     private $maintenanceModeEnabler;
 
     /**
-     * @param InputInterface $input
      * @param OutputInterface $output
      * @param Writer $writer
      * @param Reader $reader
-     * @param MaintenanceMode $maintenanceMode deprecated, use $maintenanceModeEnabler instead
      * @param Filesystem $filesystem
      * @param ConfigProvider $configProvider
      * @param ProcessorFacadeFactory $processorFacadeFactory
      * @param EmulatedAdminhtmlAreaProcessor $emulatedAreaProcessor
      * @param MaintenanceModeEnabler $maintenanceModeEnabler
-     *
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
-        InputInterface $input,
         OutputInterface $output,
         Writer $writer,
         Reader $reader,
-        MaintenanceMode $maintenanceMode,
         Filesystem $filesystem,
-        ConfigProvider $configProvider = null,
-        ProcessorFacadeFactory $processorFacadeFactory = null,
-        EmulatedAdminhtmlAreaProcessor $emulatedAreaProcessor = null,
-        MaintenanceModeEnabler $maintenanceModeEnabler = null
+        ConfigProvider $configProvider,
+        ProcessorFacadeFactory $processorFacadeFactory,
+        EmulatedAdminhtmlAreaProcessor $emulatedAreaProcessor,
+        MaintenanceModeEnabler $maintenanceModeEnabler
     ) {
-        $this->input = $input;
         $this->output = $output;
         $this->writer = $writer;
         $this->reader = $reader;
         $this->filesystem = $filesystem;
 
-        $this->configProvider =
-            $configProvider ?: ObjectManager::getInstance()->get(ConfigProvider::class);
-        $this->processorFacadeFactory =
-            $processorFacadeFactory ?: ObjectManager::getInstance()->get(ProcessorFacadeFactory::class);
-        $this->emulatedAreaProcessor =
-            $emulatedAreaProcessor ?: ObjectManager::getInstance()->get(EmulatedAdminhtmlAreaProcessor::class);
-        $this->maintenanceModeEnabler =
-            $maintenanceModeEnabler ?: ObjectManager::getInstance()->get(MaintenanceModeEnabler::class);
+        $this->configProvider = $configProvider;
+        $this->processorFacadeFactory = $processorFacadeFactory;
+        $this->emulatedAreaProcessor = $emulatedAreaProcessor;
+        $this->maintenanceModeEnabler = $maintenanceModeEnabler;
     }
 
     /**
