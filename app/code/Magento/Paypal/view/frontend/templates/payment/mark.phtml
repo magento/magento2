@@ -25,7 +25,7 @@ $url = $block->escapeUrl($block->getPaymentAcceptanceMarkHref());
 <?= /* @noEscape */ $secureRenderer->renderEventListenerAsTag(
     'onclick',
     "javascript:window.open(
-           '" . /* @noEscape */ $url . "',
+           '" . /* @noEscape */ $block->escapeJs($block->getPaymentAcceptanceMarkHref()) . "',
            'olcwhatispaypal',
            'toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=yes, resizable=yes, ,' +
            'left=0, top=0, width=400, height=350'

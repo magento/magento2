@@ -8,7 +8,7 @@
  * @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer
  */
 ?>
-<div id="video_name_<?= $block->escapeHtmlAttr($block->getNameInLayout()) ?>"
+<div id="<?= $block->escapeHtmlAttr($block->getNameInLayout()) ?>"
     data-modal-info='<?= /* @noEscape */ $block->getWidgetOptions() ?>'
 >
     <?= $block->getFormHtml() ?>
@@ -28,7 +28,7 @@
         </div>
     </div>
 </div>
-<?= /* @noEscape */ $secureRenderer->renderTag(
+<?= /* @noEscape */ $secureRenderer->renderStyleAsTag(
     'display:none',
-    'div#video_name_' . $block->escapeHtmlAttr($block->getNameInLayout())
+    'div#' . $block->escapeJs($block->getNameInLayout())
 ) ?>

@@ -16,6 +16,7 @@
 </head>
 <body>
 <?php $scriptString= <<<script
+
     (function() {
         'use strict';
 
@@ -32,7 +33,7 @@
 
         var cartUrl = '{$block->escapeJs($block->getUrl('checkout/cart'))}',
             successUrl = '{$block->escapeJs($block->getUrl('checkout/onepage/success'))}',
-            goToSuccessPage = '{$block->escapeUrl($block->getGotoSuccessPage())}',
+            goToSuccessPage = '{$block->escapeJs($block->getGotoSuccessPage())}',
             require = window.top.require,
             windowContext = window,
             errorMessage = {
@@ -50,8 +51,8 @@
             })
         }
 
-
     })();
+
 script;
 ?>
 <?= /* @noEscape */ $secureRenderer->renderTag('script', [], $scriptString, false) ?>

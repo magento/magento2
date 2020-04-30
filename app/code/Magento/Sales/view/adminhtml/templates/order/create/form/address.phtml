@@ -100,7 +100,7 @@ endif; ?>
                 <?= /* @noEscape */ $secureRenderer->renderEventListenerAsTag(
                     'onchange',
                     "order.selectAddress(this, '" . $block->escapeJs($_fieldsContainerId) . "')",
-                    'select#' . $block->escapeHtmlAttr($_id)
+                    'select#' . $block->escapeJs($_id)
                 ) ?>
             </div>
         </div>

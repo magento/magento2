@@ -25,12 +25,16 @@
                    value="<?= $block->escapeHtmlAttr($_code); ?>"
                    type="radio" name="payment[method]"
                    title="<?= $block->escapeHtmlAttr($_method->getTitle()); ?>"
-                   onclick="payment.switchMethod('<?= $block->escapeJs($_code); ?>')"
                     <?php if ($currentSelectedMethod == $_code): ?>
                     checked="checked"
                     <?php endif; ?>
                    data-validate="{'validate-one-required-by-name':true}"
                    class="admin__control-radio"/>
+            <?= /* @noEscape */ $secureRenderer->renderEventListenerAsTag(
+                'onclick',
+                "payment.switchMethod('" . $block->escapeJs($_code) . "')",
+                'input#p_method_' . $block->escapeJs($_code)
+            ) ?>
         <?php else:?>
             <span class="no-display">
                 <input id="p_method_<?= $block->escapeHtmlAttr($_code); ?>"

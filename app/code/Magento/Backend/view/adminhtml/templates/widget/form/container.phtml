@@ -29,6 +29,7 @@
     </div>
 <?php endif; ?>
 <?php $scriptString = <<<script
+
 require([
     'jquery',
     'mage/backend/form',
@@ -51,6 +52,7 @@ require([
         });
 
 });
+
 script;
 ?>
 <?= /* @noEscape */ $secureRenderer->renderTag('script', [], $scriptString, false) ?>

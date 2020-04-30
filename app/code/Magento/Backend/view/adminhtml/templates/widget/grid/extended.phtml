@@ -150,7 +150,7 @@ $numColumns = count($block->getColumns());
                                 'onclick',
                                 /* @noEscape */ $block->getJsObjectName() . '.setPage(\'' .
                                 /* @noEscape */ ($_curPage + 1) . '\');return false;',
-                                '. admin__data-grid-pager button.action-next'
+                                '.admin__data-grid-pager button.action-next'
                             ) ?>
                         <?php else: ?>
                             <button type="button" class="action-next disabled">
@@ -290,16 +290,19 @@ $numColumns = count($block->getColumns());
     $jsonHelper = $block->getData('jsonHelper');
     if ($block->canDisplayContainer()):
         $scriptString = <<<script
+
     var deps = [];
 script;
         if ($block->getDependencyJsObject()):
             $scriptString .= <<<script
+
     deps.push('uiRegistry');
 script;
         endif;
 
         if (strpos($block->getRowClickCallback(), 'order.') !== false):
             $scriptString .= <<<script
+
     deps.push('Magento_Sales/order/create/form')
 script;
         endif;
@@ -310,6 +313,7 @@ script;
         if (is_array($block->getRequireJsDependencies())):
             foreach ($block->getRequireJsDependencies() as $dependency):
                 $scriptString .= <<<script
+
             deps.push('{$block->escapeJs($dependency)}');
 script;
             endforeach;

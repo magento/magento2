@@ -17,7 +17,7 @@
              alt="<?= $block->escapeHtml(__('Loading...')); ?>">
     </div>
 </div>
-<?= /* @noEscape */ $secureRenderer->renderStyleAsTag('position: absolute;', 'div#checkout-loader .loader image') ?>
+<?= /* @noEscape */ $secureRenderer->renderStyleAsTag('position: absolute;', 'div#checkout-loader .loader img') ?>
 <?php $checkoutConfig = /* @noEscape */ $block->getCheckoutData()->getSerializedCheckoutConfigs();
 $scriptString = <<<script
     window.checkoutConfig = {$checkoutConfig};
@@ -148,6 +148,7 @@ script;
 </form>
 <?php $quoteBaseGrandTotal = (float)$block->getQuoteBaseGrandTotal();
 $scriptString = <<<script
+
     require(['jquery', 'mage/mage'], function(jQuery) {
         var addtocartForm = jQuery('#multishipping-billing-form');
 
@@ -165,11 +166,13 @@ $scriptString = <<<script
             }
         });
     });
+
 script;
 ?>
 <?= /* @noEscape */ $secureRenderer->renderTag('script', [], $scriptString, false) ?>
 
 <?php $scriptString = <<<script
+
     //<![CDATA[
     require(
         [
@@ -198,6 +201,7 @@ $scriptString .= <<<script
             });
         });
     //]]>
+
 script;
 ?>
 <?= /* @noEscape */ $secureRenderer->renderTag('script', [], $scriptString, false) ?>

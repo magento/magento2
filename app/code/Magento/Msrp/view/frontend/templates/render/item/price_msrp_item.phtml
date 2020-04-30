@@ -49,6 +49,11 @@
                                          "cartForm": "#wishlist-view-form"}}'>
             <?= $block->escapeHtml(__('Click for price')) ?>
         </a>
+        <?= /* @noEscape */ $secureRenderer->renderEventListenerAsTag(
+            'onclick',
+            'e.preventDefault()',
+            'a#' . /* @noEscape */ ($popupId)
+        ) ?>
     <?php else: ?>
         <span class="msrp-message">
             <?= $block->escapeHtml($_catalogHelper->getMsrpPriceMessage($_product)) ?>
@@ -61,4 +66,9 @@
        class="link tip">
         <?= $block->escapeHtml(__("What's this?")) ?>
     </a>
+    <?= /* @noEscape */ $secureRenderer->renderEventListenerAsTag(
+        'onclick',
+        'e.preventDefault()',
+        'a#' . /* @noEscape */ ($helpLinkId)
+    ) ?>
 </div>

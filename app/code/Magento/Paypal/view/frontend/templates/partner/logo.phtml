@@ -25,7 +25,7 @@
 <?= /* @noEscape */ $secureRenderer->renderEventListenerAsTag(
     'onclick',
     "javascript:window.open(
-               '" . $block->escapeUrl($block->getAboutPaypalPageUrl()) . "',
+               '" . $block->escapeJs($block->getAboutPaypalPageUrl()) . "',
                'paypal',
                'width=600,height=350,left=0,top=0,location=no,status=yes,scrollbars=yes,resizable=yes'
                ); return false;",

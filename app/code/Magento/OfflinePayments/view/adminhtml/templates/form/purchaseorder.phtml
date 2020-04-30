@@ -24,5 +24,5 @@
 </fieldset>
 <?= /* @noEscape */ $secureRenderer->renderStyleAsTag(
     "display:none",
-    'fieldset#payment_form_' . $block->escapeHtml($block->getMethodCode())
+    'fieldset#payment_form_' . $block->escapeJs($block->getMethodCode())
 ) ?>

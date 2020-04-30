@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 ?>
 <?php
 /**
@@ -230,10 +231,10 @@ require(deps, function('. ($block->getDependencyJsObject() ? 'registry' : '') .'
 
         if ($block->getChildBlock('grid.massaction') &&
             $block->getChildBlock('grid.massaction')->isAvailable()) {
-            $scriptString .= /* @noEscape */ $block->getChildBlock('grid.massaction')->getJavaScript();
+            $scriptString .= /* @noEscape */ $block->getChildBlock('grid.massaction')->getJavaScript() . PHP_EOL;
         }
 
-        $scriptString .= /* @noEscape */ $block->getAdditionalJavaScript();
+        $scriptString .= /* @noEscape */ $block->getAdditionalJavaScript() . PHP_EOL;
 
         if ($block->getDependencyJsObject()) {
             $scriptString .=  '});' . PHP_EOL;
