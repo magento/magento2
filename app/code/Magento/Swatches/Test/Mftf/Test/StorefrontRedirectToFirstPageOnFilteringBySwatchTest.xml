@@ -32,12 +32,12 @@
 
             <magentoCLI command="config:set catalog/frontend/grid_per_page 1" stepKey="setOneProductPerPage"/>
             <magentoCLI command="config:set catalog/frontend/grid_per_page_values 1" stepKey="setGridPerPage"/>
-            <magentoCLI command="cache:clean config full_page" stepKey="cleanInvalidatedCaches"/>
 
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
             <actionGroup ref="AddTextSwatchToProductActionGroup" stepKey="addSwatchAttribute">
                 <argument name="usedInLayeredNavigation" value="1"/>
             </actionGroup>
+            <magentoCLI command="cache:clean block_html collections config full_page" stepKey="cleanInvalidatedCaches"/>
         </before>
 
         <after>
@@ -48,7 +48,7 @@
 
             <magentoCLI command="config:set catalog/frontend/grid_per_page 12" stepKey="setDefaultProductsPerPage"/>
             <magentoCLI command="config:set catalog/frontend/grid_per_page_values 12,24,36" stepKey="setDefaultGridPerPage"/>
-            <magentoCLI command="cache:clean config full_page" stepKey="cleanInvalidatedCaches"/>
+            <magentoCLI command="cache:clean block_html collections config full_page" stepKey="cleanInvalidatedCaches"/>
 
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <deleteData createDataKey="createSimpleProduct1" stepKey="deleteSimpleProduct1"/>
@@ -63,7 +63,8 @@
         </actionGroup>
         <actionGroup ref="SaveAttributeSetActionGroup" stepKey="SaveAttributeSet"/>
 
-        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="goToProductsGridPage"/>
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="goToProductIndexPage"/>
+        <actionGroup ref="ClearFiltersAdminProductGridActionGroup" stepKey="clearFiltersOnProductIndexPage"/>
 
         <actionGroup ref="OpenEditProductOnBackendActionGroup" stepKey="goToProduct1EditPage">
             <argument name="product" value="$$createSimpleProduct1$$"/>
@@ -85,18 +86,16 @@
         <selectOption selector="{{AdminProductAttributesSection.attributeDropdownByCode(textSwatchAttribute.attribute_code)}}" userInput="textSwatchOption2" stepKey="selectProduct3AttributeOption"/>
         <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct3"/>
 
-        <magentoCLI command="cron:run --group=index" stepKey="runCronIndexer"/>
+        <magentoCron groups="index" stepKey="runCronIndexer"/>
 
-        <amOnPage url="$$createCategory.name$$.html" stepKey="amOnCategoryPage"/>
-        <waitForPageLoad stepKey="waitForPageToLoad"/>
-
-        <scrollTo selector="{{StorefrontCategoryBottomToolbarSection.nextPage}}" stepKey="scrollToNextButton"/>
-        <click selector="{{StorefrontCategoryBottomToolbarSection.nextPage}}" stepKey="clickOnNextPage"/>
-        <waitForPageLoad stepKey="waitForPageToLoad2"/>
+        <actionGroup ref="StorefrontNavigateCategoryPageActionGroup" stepKey="navigateToCategoryPage">
+            <argument name="category" value="$$createCategory$$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontNavigateCategoryNextPageActionGroup" stepKey="navigateToCategoryNextPage"/>
 
         <click selector="{{StorefrontCategorySidebarSection.filterOptionTitle(textSwatchAttribute.default_label)}}" stepKey="expandAttribute"/>
         <click selector="{{StorefrontCategorySidebarSection.attributeNthOption(textSwatchAttribute.attribute_code, '1')}}" stepKey="filterBySwatch1"/>
-        <waitForPageLoad stepKey="waitForPageToLoad3"/>
+        <waitForPageLoad stepKey="waitForPageToLoad2"/>
 
         <actionGroup ref="AssertStorefrontCategoryCurrentPageIsFirstActionGroup" stepKey="assertCurrentPageIsFirst"/>
     </test>

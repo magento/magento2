@@ -95,7 +95,10 @@ class RenderLayered extends Template
     }
 
     /**
+     * Set filter and attribute objects
+     *
      * @param \Magento\Catalog\Model\Layer\Filter\AbstractFilter $filter
+     *
      * @return $this
      * @throws \Magento\Framework\Exception\LocalizedException
      */
@@ -108,6 +111,8 @@ class RenderLayered extends Template
     }
 
     /**
+     * Get attribute swatch data
+     *
      * @return array
      */
     public function getSwatchData()
@@ -138,8 +143,11 @@ class RenderLayered extends Template
     }
 
     /**
+     * Build filter option url
+     *
      * @param string $attributeCode
      * @param int $optionId
+     *
      * @return string
      */
     public function buildUrl($attributeCode, $optionId)
@@ -161,7 +169,10 @@ class RenderLayered extends Template
     }
 
     /**
+     * Get view data for option with no results
+     *
      * @param Option $swatchOption
+     *
      * @return array
      */
     protected function getUnusedOption(Option $swatchOption)
@@ -174,8 +185,11 @@ class RenderLayered extends Template
     }
 
     /**
+     * Get option data if visible
+     *
      * @param FilterItem[] $filterItems
      * @param Option $swatchOption
+     *
      * @return array
      */
     protected function getFilterOption(array $filterItems, Option $swatchOption)
@@ -190,8 +204,11 @@ class RenderLayered extends Template
     }
 
     /**
+     * Get view data for option
+     *
      * @param FilterItem $filterItem
      * @param Option $swatchOption
+     *
      * @return array
      */
     protected function getOptionViewData(FilterItem $filterItem, Option $swatchOption)
@@ -211,7 +228,10 @@ class RenderLayered extends Template
     }
 
     /**
+     * Check if option should be visible
+     *
      * @param FilterItem $filterItem
+     *
      * @return bool
      */
     protected function isOptionVisible(FilterItem $filterItem)
@@ -220,6 +240,8 @@ class RenderLayered extends Template
     }
 
     /**
+     * Check if attribute values should be visible with no results
+     *
      * @return bool
      */
     protected function isShowEmptyResults()
@@ -228,7 +250,10 @@ class RenderLayered extends Template
     }
 
     /**
+     * Check if option should be disabled
+     *
      * @param FilterItem $filterItem
+     *
      * @return bool
      */
     protected function isOptionDisabled(FilterItem $filterItem)
@@ -237,8 +262,11 @@ class RenderLayered extends Template
     }
 
     /**
+     * Retrieve filter item by id
+     *
      * @param FilterItem[] $filterItems
      * @param integer $id
+     *
      * @return bool|FilterItem
      */
     protected function getFilterItemById(array $filterItems, $id)
@@ -252,8 +280,11 @@ class RenderLayered extends Template
     }
 
     /**
+     * Get swatch image path
+     *
      * @param string $type
      * @param string $filename
+     *
      * @return string
      */
     public function getSwatchPath($type, $filename)
