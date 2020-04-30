@@ -18,7 +18,6 @@ use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Framework\Message\ManagerInterface;
 use Magento\LoginAsCustomerApi\Api\GetAuthenticationDataBySecretInterface;
 use Magento\LoginAsCustomerApi\Api\AuthenticateCustomerInterface;
-use Magento\LoginAsCustomerApi\Api\DeleteAuthenticationDataBySecretInterface;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -52,11 +51,6 @@ class Index implements HttpGetActionInterface
     private $authenticateCustomer;
 
     /**
-     * @var DeleteAuthenticationDataBySecretInterface
-     */
-    private $deleteAuthenticationDataBySecret;
-
-    /**
      * @var ManagerInterface
      */
     private $messageManager;
@@ -72,7 +66,6 @@ class Index implements HttpGetActionInterface
      * @param CustomerRepositoryInterface $customerRepository
      * @param GetAuthenticationDataBySecretInterface $getAuthenticateDataProcessor
      * @param AuthenticateCustomerInterface $authenticateCustomerProcessor
-     * @param DeleteAuthenticationDataBySecretInterface $deleteSecretProcessor
      * @param ManagerInterface $messageManager
      * @param LoggerInterface $logger
      */
@@ -82,7 +75,6 @@ class Index implements HttpGetActionInterface
         CustomerRepositoryInterface $customerRepository,
         GetAuthenticationDataBySecretInterface $getAuthenticateDataProcessor,
         AuthenticateCustomerInterface $authenticateCustomerProcessor,
-        DeleteAuthenticationDataBySecretInterface $deleteSecretProcessor,
         ManagerInterface $messageManager,
         LoggerInterface $logger
     ) {
@@ -91,7 +83,6 @@ class Index implements HttpGetActionInterface
         $this->customerRepository = $customerRepository;
         $this->getAuthenticationDataBySecret = $getAuthenticateDataProcessor;
         $this->authenticateCustomer = $authenticateCustomerProcessor;
-        $this->deleteAuthenticationDataBySecret = $deleteSecretProcessor;
         $this->messageManager = $messageManager;
         $this->logger = $logger;
     }
@@ -113,8 +104,6 @@ class Index implements HttpGetActionInterface
             }
 
             $authenticateData = $this->getAuthenticationDataBySecret->execute($secret);
-
-            $this->deleteAuthenticationDataBySecret->execute($secret);
 
             try {
                 $customer = $this->customerRepository->getById($authenticateData->getCustomerId());

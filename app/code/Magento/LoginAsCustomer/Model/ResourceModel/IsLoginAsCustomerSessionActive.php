@@ -8,12 +8,12 @@ declare(strict_types=1);
 namespace Magento\LoginAsCustomer\Model\ResourceModel;
 
 use Magento\Framework\App\ResourceConnection;
-use Magento\LoginAsCustomerApi\Api\DeleteAuthenticationDataBySecretInterface;
+use Magento\LoginAsCustomerApi\Api\IsLoginAsCustomerSessionActiveInterface;
 
 /**
  * @inheritdoc
  */
-class DeleteAuthenticationDataBySecret implements DeleteAuthenticationDataBySecretInterface
+class IsLoginAsCustomerSessionActive implements IsLoginAsCustomerSessionActiveInterface
 {
     /**
      * @var ResourceConnection
@@ -32,16 +32,18 @@ class DeleteAuthenticationDataBySecret implements DeleteAuthenticationDataBySecr
     /**
      * @inheritdoc
      */
-    public function execute(string $secret): void
+    public function execute(int $customerId, int $userId): bool
     {
-        $connection = $this->resourceConnection->getConnection();
         $tableName = $this->resourceConnection->getTableName('login_as_customer');
+        $connection = $this->resourceConnection->getConnection();
 
-        $connection->delete(
-            $tableName,
-            [
-                'secret = ?' => $secret
-            ]
-        );
+        $query = $connection->select()
+            ->from($tableName)
+            ->where('customer_id = ?', $customerId)
+            ->where('admin_id = ?', $userId);
+
+        $result = $connection->fetchRow($query);
+
+        return false !== $result;
     }
 }
