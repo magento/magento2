@@ -10,7 +10,7 @@ use Magento\Framework\Code\Generator;
 use Magento\Framework\Logger\LoggerProxy;
 use Magento\TestFramework\ObjectManager;
 use PHPUnit\Framework\TestCase;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
 use Psr\Log\LoggerInterface;
 
 class AutoloaderTest extends TestCase
