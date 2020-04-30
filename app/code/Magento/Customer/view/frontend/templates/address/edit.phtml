@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 
+// phpcs:disable Magento2.Templates.ThisInTemplate
+
 /** @var \Magento\Customer\Block\Address\Edit $block */
 ?>
 <?php $_company = $block->getLayout()->createBlock(\Magento\Customer\Block\Widget\Company::class) ?>
@@ -61,7 +63,7 @@
                     <?php $_streetValidationClass =
                         trim(str_replace('required-entry', '', $_streetValidationClass)); ?>
                     <?php $_n = $this->helper(\Magento\Customer\Helper\Address::class)->getStreetLines() ?>
-                    <?php for ($_i = 1; $_i < $_n; $_i++) : ?>
+                    <?php for ($_i = 1; $_i < $_n; $_i++): ?>
                         <div class="field additional">
                             <label class="label" for="street_<?= /* @noEscape */ $_i + 1 ?>">
                                 <span><?= $block->escapeHtml(__('Street Address: Line %1', $_i + 1)) ?></span>
@@ -106,7 +108,7 @@
                        value="<?= $block->escapeHtmlAttr($block->getAddress()->getCity()) ?>"
                        title="<?= $block->escapeHtmlAttr(__('City')) ?>"
                        class="input-text
-                       <?= $block->escapeHtmlAttr($this->helper(\Magento\Customer\Helper\Address::class)
+                        <?= $block->escapeHtmlAttr($this->helper(\Magento\Customer\Helper\Address::class)
                            ->getAttributeValidationClass('city')) ?>"
                        id="city">
             </div>
@@ -131,7 +133,7 @@
                        value="<?= $block->escapeHtmlAttr($block->getRegion()) ?>"
                        title="<?= /* @noEscape */ $block->getAttributeData()->getFrontendLabel('region') ?>"
                        class="input-text validate-not-number-first
-                       <?= $block->escapeHtmlAttr($this->helper(\Magento\Customer\Helper\Address::class)
+                        <?= $block->escapeHtmlAttr($this->helper(\Magento\Customer\Helper\Address::class)
                            ->getAttributeValidationClass('region')) ?>"
                         <?= !$block->getConfig('general/region/display_all') ? ' disabled="disabled"' : '' ?>/>
             </div>
@@ -147,7 +149,7 @@
                        title="<?= /* @noEscape */ $block->getAttributeData()->getFrontendLabel('postcode') ?>"
                        id="zip"
                        class="input-text validate-zip-international
-                       <?= $block->escapeHtmlAttr($this->helper(\Magento\Customer\Helper\Address::class)
+                        <?= $block->escapeHtmlAttr($this->helper(\Magento\Customer\Helper\Address::class)
                            ->getAttributeValidationClass('postcode')) ?>">
                 <div role="alert" class="message warning" style="display:none">
                     <span></span>
