@@ -51,7 +51,7 @@ abstract class AbstractTestCase extends \PHPUnit\Framework\TestCase
      * Retrieve resource model instance
      *
      * @param \Magento\Framework\DB\Select $select
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     protected function _getResource(\Magento\Framework\DB\Select $select)
     {
@@ -88,7 +88,7 @@ abstract class AbstractTestCase extends \PHPUnit\Framework\TestCase
 
         $collection = $this->_getCollection($select);
 
-        /** @var $connection \PHPUnit_Framework_MockObject_MockObject */
+        /** @var $connection \PHPUnit\Framework\MockObject\MockObject */
         $connection = $collection->getResource()->getConnection();
         $connection->expects(
             $this->any()

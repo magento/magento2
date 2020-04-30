@@ -11,7 +11,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\UrlInterface;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Framework\View\Element\UiComponent\Processor;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
 
 /**
  * BlockActionsTest contains unit tests for \Magento\Cms\Ui\Component\Listing\Column\BlockActions class.
@@ -96,7 +96,6 @@ class BlockActionsTest extends \PHPUnit\Framework\TestCase
                     'edit' => [
                         'href' => 'test/url/edit',
                         'label' => __('Edit'),
-                        '__disableTmpl' => true,
                     ],
                     'delete' => [
                         'href' => 'test/url/delete',
@@ -106,7 +105,6 @@ class BlockActionsTest extends \PHPUnit\Framework\TestCase
                             'message' => __('Are you sure you want to delete a %1 record?', $title),
                         ],
                         'post' => true,
-                        '__disableTmpl' => true,
                     ],
                 ],
             ],

@@ -5,7 +5,7 @@
  */
 namespace Magento\Test;
 
-use Zend\Stdlib\Parameters;
+use Laminas\Stdlib\Parameters;
 
 class RequestTest extends \PHPUnit\Framework\TestCase
 {

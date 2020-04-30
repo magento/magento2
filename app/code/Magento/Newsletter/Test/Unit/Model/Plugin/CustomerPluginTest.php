@@ -6,10 +6,10 @@
 namespace Magento\Newsletter\Test\Unit\Model\Plugin;
 
 use Magento\Customer\Api\CustomerRepositoryInterface;
+use Magento\Customer\Api\Data\CustomerExtensionInterface;
 use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Customer\Model\Config\Share;
 use Magento\Customer\Model\ResourceModel\CustomerRepository;
-use Magento\Customer\Api\Data\CustomerExtensionInterface;
 use Magento\Framework\Api\ExtensionAttributesFactory;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Newsletter\Model\Plugin\CustomerPlugin;
@@ -124,13 +124,23 @@ class CustomerPluginTest extends TestCase
             ->method('loadByCustomer')
             ->with($customerId, $websiteId)
             ->willReturnSelf();
-        $subscriber->expects($this->once())
-            ->method('loadBySubscriberEmail')
-            ->with($customerEmail, $websiteId)
-            ->willReturnSelf();
+        if ($originalStatus !== null && $originalStatus === Subscriber::STATUS_UNCONFIRMED) {
+            $subscriber->method('getId')->willReturn(1);
+        } else {
+            $subscriber->expects($this->once())
+                ->method('loadBySubscriberEmail')
+                ->with($customerEmail, $websiteId)
+                ->willReturnSelf();
+        }
         $this->subscriberFactory->method('create')->willReturn($subscriber);
 
-        $customerExtension = $this->createPartialMock(CustomerExtensionInterface::class, ['getIsSubscribed']);
+        $customerExtension = $this->createPartialMock(
+            CustomerExtensionInterface::class,
+            [
+                'getIsSubscribed',
+                'CustomerExtensionInterface'
+            ]
+        );
         $customerExtension->method('getIsSubscribed')->willReturn($newValue);
         /** @var CustomerInterface|MockObject $customer */
         $customer = $this->createMock(CustomerInterface::class);
@@ -148,7 +158,14 @@ class CustomerPluginTest extends TestCase
             $this->subscriptionManager->expects($this->never())->method('subscribeCustomer');
             $this->subscriptionManager->expects($this->never())->method('unsubscribeCustomer');
         }
-        $resultExtension = $this->createPartialMock(CustomerExtensionInterface::class, ['setIsSubscribed']);
+        $resultExtension = $this->createPartialMock(
+            CustomerExtensionInterface::class,
+            [
+                'setIsSubscribed',
+                'getIsSubscribed',
+                'CustomerExtensionInterface'
+            ]
+        );
         $resultExtension->expects($this->once())->method('setIsSubscribed')->with($resultIsSubscribed);
         /** @var CustomerInterface|MockObject $result */
         $result = $this->createMock(CustomerInterface::class);
@@ -162,23 +179,25 @@ class CustomerPluginTest extends TestCase
     }
 
     /**
+     * Data provider for testAfterSave()
+     *
      * @return array
      */
-    public function afterSaveDataProvider()
+    public function afterSaveDataProvider(): array
     {
         return [
-            [null, null, null],
-            [null, true, true],
-            [null, false, null],
-            [Subscriber::STATUS_SUBSCRIBED, null, null],
-            [Subscriber::STATUS_SUBSCRIBED, true, null],
-            [Subscriber::STATUS_SUBSCRIBED, false, false],
-            [Subscriber::STATUS_UNSUBSCRIBED, null, null],
-            [Subscriber::STATUS_UNSUBSCRIBED, true, true],
-            [Subscriber::STATUS_UNSUBSCRIBED, false, null],
-            [Subscriber::STATUS_UNCONFIRMED, null, true],
-            [Subscriber::STATUS_UNCONFIRMED, true, true],
-            [Subscriber::STATUS_UNCONFIRMED, false, true],
+            'missing_previous_and_new_status' => [null, null, null],
+            'missing_previous_status_and_subscribe' => [null, true, true],
+            'new_unsubscribed_value_and_missing_previous_status' => [null, false, null],
+            'previous_subscribed_status_without_new_value' => [Subscriber::STATUS_SUBSCRIBED, null, null],
+            'same_subscribed_previous_and_new_status' => [Subscriber::STATUS_SUBSCRIBED, true, null],
+            'unsubscribe_previously_subscribed_customer' => [Subscriber::STATUS_SUBSCRIBED, false, false],
+            'previously_unsubscribed_status_without_new_value' => [Subscriber::STATUS_UNSUBSCRIBED, null, null],
+            'subscribe_previously_unsubscribed_customer' => [Subscriber::STATUS_UNSUBSCRIBED, true, true],
+            'same_unsubscribed_previous_and_new_status' => [Subscriber::STATUS_UNSUBSCRIBED, false, null],
+            'previous_unconfirmed_status_without_new_value' => [Subscriber::STATUS_UNCONFIRMED, null, true],
+            'subscribe_previously_unconfirmed_status' => [Subscriber::STATUS_UNCONFIRMED, true, true],
+            'unsubscribe_previously_unconfirmed_status' => [Subscriber::STATUS_UNCONFIRMED, false, true],
         ];
     }
 
@@ -285,7 +304,7 @@ class CustomerPluginTest extends TestCase
 
         $customerExtension = $this->createPartialMock(
             CustomerExtensionInterface::class,
-            ['getIsSubscribed', 'setIsSubscribed']
+            ['getIsSubscribed', 'setIsSubscribed','CustomerExtensionInterface']
         );
         $customerExtension->expects($this->once())->method('setIsSubscribed')->with($subscribed);
         $this->extensionFactory->expects($this->once())->method('create')->willReturn($customerExtension);

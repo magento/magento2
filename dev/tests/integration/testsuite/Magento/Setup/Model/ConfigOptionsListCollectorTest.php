@@ -39,7 +39,7 @@ class ConfigOptionsListCollectorTest extends \PHPUnit\Framework\TestCase
                 ]
             );
 
-        $serviceLocator = $this->getMockForAbstractClass(\Zend\ServiceManager\ServiceLocatorInterface::class);
+        $serviceLocator = $this->getMockForAbstractClass(\Laminas\ServiceManager\ServiceLocatorInterface::class);
 
         $serviceLocator->expects($this->once())
             ->method('get')

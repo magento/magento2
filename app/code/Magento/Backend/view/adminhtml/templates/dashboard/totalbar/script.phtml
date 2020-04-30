@@ -1,0 +1,27 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+use Magento\Framework\Escaper;
+use Magento\Framework\View\Element\Template;
+
+/**
+ * @var Template $block
+ * @var Escaper $escaper
+ */
+?>
+<script type="text/x-magento-init">
+{
+    "#dashboard_diagram_totals": {
+        "Magento_Backend/js/dashboard/totals": {
+            "updateUrl": "<?= $escaper->escapeUrl($block->getUrl('adminhtml/*/ajaxBlock', [
+                '_current' => true,
+                'block' => 'totals',
+                'period' => ''
+            ])) ?>",
+            "periodSelect": "#dashboard_chart_period"
+        }
+    }
+}
+</script>

@@ -10,7 +10,6 @@ namespace Magento\QuoteGraphQl\Model\Cart;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\GraphQl\Model\Query\ContextInterface;
 use Magento\Quote\Api\Data\CartInterface;
-use Magento\Quote\Model\Quote\Address;
 
 /**
  * Set single shipping address for a specified shopping cart
@@ -49,7 +48,12 @@ class SetShippingAddressesOnCart implements SetShippingAddressesOnCartInterface
                 __('You cannot specify multiple shipping addresses.')
             );
         }
-        $shippingAddressInput = current($shippingAddressesInput);
+        $shippingAddressInput = current($shippingAddressesInput) ?? [];
+        $customerAddressId = $shippingAddressInput['customer_address_id'] ?? null;
+
+        if (!$customerAddressId && !isset($shippingAddressInput['address']['save_in_address_book'])) {
+            $shippingAddressInput['address']['save_in_address_book'] = true;
+        }
 
         $shippingAddress = $this->getShippingAddress->execute($context, $shippingAddressInput);
 

@@ -8,7 +8,7 @@ namespace Magento\Framework\View\Element;
 use Magento\Framework\ObjectManagerInterface;
 
 /**
- * Class BlockFactory
+ * Creates Blocks
  *
  * @api
  */

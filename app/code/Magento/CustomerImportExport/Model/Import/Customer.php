@@ -11,6 +11,8 @@ use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\ImportExport\Model\Import;
 use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface;
 use Magento\ImportExport\Model\Import\AbstractSource;
+use Magento\Customer\Model\Indexer\Processor;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * Customer entity import
@@ -169,6 +171,11 @@ class Customer extends AbstractCustomer
     ];
 
     /**
+     * @var Processor
+     */
+    private $indexerProcessor;
+
+    /**
      * @param \Magento\Framework\Stdlib\StringUtils $string
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\ImportExport\Model\ImportFactory $importFactory
@@ -182,6 +189,7 @@ class Customer extends AbstractCustomer
      * @param \Magento\Customer\Model\ResourceModel\Attribute\CollectionFactory $attrCollectionFactory
      * @param \Magento\Customer\Model\CustomerFactory $customerFactory
      * @param array $data
+     * @param Processor $indexerProcessor
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -197,7 +205,8 @@ class Customer extends AbstractCustomer
         \Magento\CustomerImportExport\Model\ResourceModel\Import\Customer\StorageFactory $storageFactory,
         \Magento\Customer\Model\ResourceModel\Attribute\CollectionFactory $attrCollectionFactory,
         \Magento\Customer\Model\CustomerFactory $customerFactory,
-        array $data = []
+        array $data = [],
+        ?Processor $indexerProcessor = null
     ) {
         $this->_resourceHelper = $resourceHelper;
 
@@ -254,6 +263,7 @@ class Customer extends AbstractCustomer
         /** @var $customerResource \Magento\Customer\Model\ResourceModel\Customer */
         $customerResource = $this->_customerModel->getResource();
         $this->_entityTable = $customerResource->getEntityTable();
+        $this->indexerProcessor = $indexerProcessor ?: ObjectManager::getInstance()->get(Processor::class);
     }
 
     /**
@@ -502,8 +512,8 @@ class Customer extends AbstractCustomer
     {
         while ($bunch = $this->_dataSourceModel->getNextBunch()) {
             $this->prepareCustomerData($bunch);
-            $entitiesToCreate = [];
-            $entitiesToUpdate = [];
+            $entitiesToCreate = [[]];
+            $entitiesToUpdate = [[]];
             $entitiesToDelete = [];
             $attributesToSave = [];
 
@@ -523,10 +533,10 @@ class Customer extends AbstractCustomer
                     );
                 } elseif ($this->getBehavior($rowData) == \Magento\ImportExport\Model\Import::BEHAVIOR_ADD_UPDATE) {
                     $processedData = $this->_prepareDataForUpdate($rowData);
-                    // phpcs:disable Magento2.Performance.ForeachArrayMerge
-                    $entitiesToCreate = array_merge($entitiesToCreate, $processedData[self::ENTITIES_TO_CREATE_KEY]);
-                    $entitiesToUpdate = array_merge($entitiesToUpdate, $processedData[self::ENTITIES_TO_UPDATE_KEY]);
-                    // phpcs:enable
+
+                    $entitiesToCreate[] = $processedData[self::ENTITIES_TO_CREATE_KEY];
+                    $entitiesToUpdate[] = $processedData[self::ENTITIES_TO_UPDATE_KEY];
+
                     foreach ($processedData[self::ATTRIBUTES_TO_SAVE_KEY] as $tableName => $customerAttributes) {
                         if (!isset($attributesToSave[$tableName])) {
                             $attributesToSave[$tableName] = [];
@@ -536,6 +546,10 @@ class Customer extends AbstractCustomer
                     }
                 }
             }
+
+            $entitiesToCreate = array_merge(...$entitiesToCreate);
+            $entitiesToUpdate = array_merge(...$entitiesToUpdate);
+
             $this->updateItemsCounterStats($entitiesToCreate, $entitiesToUpdate, $entitiesToDelete);
             /**
              * Save prepared data
@@ -550,7 +564,7 @@ class Customer extends AbstractCustomer
                 $this->_deleteCustomerEntities($entitiesToDelete);
             }
         }
-
+        $this->indexerProcessor->markIndexerAsInvalid();
         return true;
     }
 
