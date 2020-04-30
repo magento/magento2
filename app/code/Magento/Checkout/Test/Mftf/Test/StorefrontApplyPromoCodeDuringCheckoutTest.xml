@@ -66,6 +66,7 @@
         <seeElement selector="{{DiscountSection.CancelCouponBtn}}" stepKey="seeCancelCouponButton"/>
 
         <!-- Order summary contains information about applied code -->
+        <waitForAjaxLoad time="30" stepKey="waitAjaxLoad"/>
         <seeElement selector="{{CheckoutPaymentSection.discount}}" stepKey="seeDiscountCouponInSummaryBlock"/>
         <see selector="{{CheckoutPaymentSection.discountPrice}}" userInput="-$5.00" stepKey="seeDiscountPrice"/>
 
