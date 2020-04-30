@@ -30,17 +30,17 @@ class DeleteAddressTest extends TestCase
     /**
      * @var CustomerRegistry
      */
-    private $customerRegistry;
+    protected $customerRegistry;
 
     /**
      * @var AddressRepositoryInterface
      */
-    private $addressRepository;
+    protected $addressRepository;
 
     /**
      * @var CustomerRepositoryInterface
      */
-    private $customerRepository;
+    protected $customerRepository;
 
     /**
      * @inheritdoc

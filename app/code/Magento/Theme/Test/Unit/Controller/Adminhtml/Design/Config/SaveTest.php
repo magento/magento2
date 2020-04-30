@@ -37,7 +37,7 @@ class SaveTest extends \PHPUnit\Framework\TestCase
     /** @var \Magento\Backend\App\Action\Context|\PHPUnit_Framework_MockObject_MockObject */
     protected $context;
 
-    /** @var \Zend\Stdlib\Parameters|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Laminas\Stdlib\Parameters|\PHPUnit_Framework_MockObject_MockObject */
     protected $fileParams;
 
     /** @var \Magento\Theme\Api\Data\DesignConfigInterface|\PHPUnit_Framework_MockObject_MockObject */
@@ -83,7 +83,7 @@ class SaveTest extends \PHPUnit\Framework\TestCase
             '',
             false
         );
-        $this->fileParams = $this->createMock(\Zend\Stdlib\Parameters::class);
+        $this->fileParams = $this->createMock(\Laminas\Stdlib\Parameters::class);
         $this->dataPersistor = $this->getMockBuilder(\Magento\Framework\App\Request\DataPersistorInterface::class)
             ->getMockForAbstractClass();
         $this->controller = new Save(

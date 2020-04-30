@@ -13,30 +13,32 @@ use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Wishlist\Model\Product\AttributeValueProvider;
 use PHPUnit\Framework\TestCase;
-use PHPUnit_Framework_MockObject_MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
 
 /**
- * AttributeValueProviderTest
+ * Class AttributeValueProviderTest
+ *
+ * PHPUnit test case for \Magento\Wishlist\Model\Product\AttributeValueProvider
  */
 class AttributeValueProviderTest extends TestCase
 {
     /**
-     * @var AttributeValueProvider|PHPUnit_Framework_MockObject_MockObject
+     * @var AttributeValueProvider|MockObject
      */
     private $attributeValueProvider;
 
     /**
-     * @var CollectionFactory|PHPUnit_Framework_MockObject_MockObject
+     * @var CollectionFactory|MockObject
      */
     private $productCollectionFactoryMock;
 
     /**
-     * @var Product|PHPUnit_Framework_MockObject_MockObject
+     * @var Product|MockObject
      */
     private $productMock;
 
     /**
-     * @var AdapterInterface|PHPUnit_Framework_MockObject_MockObject
+     * @var AdapterInterface|MockObject
      */
     private $connectionMock;
 

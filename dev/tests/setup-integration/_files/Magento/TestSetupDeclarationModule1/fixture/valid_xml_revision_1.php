@@ -199,6 +199,12 @@ return [
                     'type' => 'mediumtext',
                     'name' => 'mediumtext',
                 ],
+                'char' => [
+                    'type' => 'char',
+                    'name' => 'char',
+                    'length' => '255',
+                    'nullable' => 'true',
+                ],
                 'varchar' => [
                     'type' => 'varchar',
                     'name' => 'varchar',

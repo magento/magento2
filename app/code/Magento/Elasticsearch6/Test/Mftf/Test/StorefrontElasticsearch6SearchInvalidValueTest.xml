@@ -14,13 +14,13 @@
             <stories value="Search Product on Storefront"/>
             <title value="Elasticsearch: try to search by invalid value of 'Searchable' attribute"/>
             <description value="Elasticsearch: try to search by invalid value of 'Searchable' attribute"/>
-            <severity value="MAJOR"/>
+            <severity value="BLOCKER"/>
             <testCaseId value="MC-17906"/>
             <useCaseId value="MC-15759"/>
             <group value="elasticsearch"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
             <!--Create category-->
             <createData entity="SimpleSubCategory" stepKey="createCategory"/>
             <!--Set Minimal Query Length-->
@@ -50,7 +50,7 @@
             <actionGroup ref="ResetProductGridToDefaultViewActionGroup" stepKey="resetFiltersIfExist"/>
             <magentoCLI command="indexer:reindex catalogsearch_fulltext" stepKey="reindex"/>
             <magentoCLI command="cache:flush config" stepKey="flushCache"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
         <!--Create new searchable product attribute-->
         <amOnPage url="{{AdminProductAttributeGridPage.url}}" stepKey="goToProductAttributes"/>
@@ -83,8 +83,7 @@
         <magentoCLI command="indexer:reindex" stepKey="reindex"/>
         <magentoCLI command="cache:flush eav" stepKey="flushCache"/>
         <!--Assert search results on storefront-->
-        <amOnPage url="{{StorefrontHomePage.url}}" stepKey="goToStorefrontPage"/>
-        <waitForPageLoad stepKey="waitForStorefrontPageLoad"/>
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToStorefrontPage"/>
         <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="quickSearchForFirstSearchTerm">
             <argument name="phrase" value="?searchable;"/>
         </actionGroup>

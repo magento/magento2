@@ -8,10 +8,12 @@ namespace Magento\Catalog\Model\Product;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Model\Attribute\ScopeOverriddenValue;
 use Magento\Catalog\Model\Product;
+use Magento\Catalog\Model\Product\Attribute\Source\Status;
 use Magento\Catalog\Model\Product\Option\Repository as OptionRepository;
 use Magento\Catalog\Model\ProductFactory;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\EntityManager\MetadataPool;
+use Magento\Store\Model\Store;
 use Magento\UrlRewrite\Model\Exception\UrlAlreadyExistsException;
 
 /**
@@ -72,40 +74,37 @@ class Copier
     /**
      * Create product duplicate
      *
-     * @param \Magento\Catalog\Model\Product $product
-     *
-     * @return \Magento\Catalog\Model\Product
-     *
-     * @throws \Exception
+     * @param Product $product
+     * @return Product
      */
-    public function copy(Product $product)
+    public function copy(Product $product): Product
     {
         $product->getWebsiteIds();
         $product->getCategoryIds();
 
         $metadata = $this->metadataPool->getMetadata(ProductInterface::class);
 
-        /** @var \Magento\Catalog\Model\Product $duplicate */
+        /** @var Product $duplicate */
         $duplicate = $this->productFactory->create();
         $productData = $product->getData();
         $productData = $this->removeStockItem($productData);
         $duplicate->setData($productData);
         $duplicate->setOptions([]);
+        $duplicate->setMetaTitle(null);
+        $duplicate->setMetaKeyword(null);
+        $duplicate->setMetaDescription(null);
         $duplicate->setIsDuplicate(true);
         $duplicate->setOriginalLinkId($product->getData($metadata->getLinkField()));
-        $duplicate->setStatus(\Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_DISABLED);
+        $duplicate->setStatus(Status::STATUS_DISABLED);
         $duplicate->setCreatedAt(null);
         $duplicate->setUpdatedAt(null);
         $duplicate->setId(null);
-        $duplicate->setStoreId(\Magento\Store\Model\Store::DEFAULT_STORE_ID);
+        $duplicate->setStoreId(Store::DEFAULT_STORE_ID);
         $this->copyConstructor->build($product, $duplicate);
         $this->setDefaultUrl($product, $duplicate);
         $this->setStoresUrl($product, $duplicate);
         $this->optionRepository->duplicate($product, $duplicate);
-        $product->getResource()->duplicate(
-            $product->getData($metadata->getLinkField()),
-            $duplicate->getData($metadata->getLinkField())
-        );
+
         return $duplicate;
     }
 
@@ -118,11 +117,11 @@ class Copier
      */
     private function setDefaultUrl(Product $product, Product $duplicate) : void
     {
-        $duplicate->setStoreId(\Magento\Store\Model\Store::DEFAULT_STORE_ID);
+        $duplicate->setStoreId(Store::DEFAULT_STORE_ID);
         $resource = $product->getResource();
         $attribute = $resource->getAttribute('url_key');
         $productId = $product->getId();
-        $urlKey = $resource->getAttributeRawValue($productId, 'url_key', \Magento\Store\Model\Store::DEFAULT_STORE_ID);
+        $urlKey = $resource->getAttributeRawValue($productId, 'url_key', Store::DEFAULT_STORE_ID);
         do {
             $urlKey = $this->modifyUrl($urlKey);
             $duplicate->setUrlKey($urlKey);
@@ -175,7 +174,7 @@ class Copier
             $productResource->saveAttribute($duplicate, 'url_path');
             $productResource->saveAttribute($duplicate, 'url_key');
         }
-        $duplicate->setStoreId(\Magento\Store\Model\Store::DEFAULT_STORE_ID);
+        $duplicate->setStoreId(Store::DEFAULT_STORE_ID);
     }
 
     /**
@@ -197,7 +196,7 @@ class Copier
      * @param array $productData
      * @return array
      */
-    private function removeStockItem(array $productData)
+    private function removeStockItem(array $productData): array
     {
         if (isset($productData[ProductInterface::EXTENSION_ATTRIBUTES_KEY])) {
             $extensionAttributes = $productData[ProductInterface::EXTENSION_ATTRIBUTES_KEY];

@@ -6,11 +6,12 @@
 
 namespace Magento\Setup\Model;
 
-use Magento\Setup\Module\Setup;
-use Zend\ServiceManager\ServiceLocatorInterface;
-use Magento\Framework\Serialize\Serializer\Json;
+use Laminas\ServiceManager\ServiceLocatorInterface;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 
+/**
+ * Factory for \Magento\Setup\Model\AdminAccount
+ */
 class AdminAccountFactory
 {
     /**
@@ -27,6 +28,8 @@ class AdminAccountFactory
     }
 
     /**
+     * Create object
+     *
      * @param AdapterInterface $connection
      * @param array $data
      * @return AdminAccount

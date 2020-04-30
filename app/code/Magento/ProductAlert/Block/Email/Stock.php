@@ -27,7 +27,7 @@ class Stock extends \Magento\ProductAlert\Block\Email\AbstractEmail
     {
         $params = $this->_getUrlParams();
         $params['product'] = $productId;
-        return $this->getUrl('productalert/unsubscribe/stock', $params);
+        return $this->getUrl('productalert/unsubscribe/email', $params);
     }
 
     /**

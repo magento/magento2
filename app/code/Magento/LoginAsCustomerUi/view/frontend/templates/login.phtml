@@ -1,0 +1,17 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+/** @var \Magento\Framework\View\Element\Template $block */
+?>
+
+<script type="text/x-magento-init">
+{
+    "*": {
+        "Magento_LoginAsCustomerUi/js/login": {
+            "redirectUrl": "<?= /* @noEscape */ $block->getUrl('customer/account/index') ?>"
+        }
+    }
+}
+</script>

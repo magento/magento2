@@ -8,6 +8,7 @@ namespace Magento\ConfigurableProduct\Test\Unit\Model;
 
 use Magento\ConfigurableProduct\Model\LinkManagement;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
+use PHPUnit\Framework\MockObject\MockObject;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -15,12 +16,12 @@ use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 class LinkManagementTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $productRepository;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $productFactory;
 
@@ -30,7 +31,7 @@ class LinkManagementTest extends \PHPUnit\Framework\TestCase
     protected $objectManagerHelper;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $configurableType;
 
@@ -40,7 +41,7 @@ class LinkManagementTest extends \PHPUnit\Framework\TestCase
     protected $object;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Api\DataObjectHelper
+     * @var MockObject|\Magento\Framework\Api\DataObjectHelper
      */
     protected $dataObjectHelperMock;
 
@@ -149,7 +150,7 @@ class LinkManagementTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->setMethods(['getId', 'getData'])
             ->getMock();
-        $extensionAttributesMock = $this->getMockBuilder(\Magento\Catalog\Api\Data\ProductExtension::class)
+        $extensionAttributesMock = $this->getMockBuilder(\Magento\Catalog\Api\Data\ProductExtensionInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(
                 [
@@ -158,11 +159,11 @@ class LinkManagementTest extends \PHPUnit\Framework\TestCase
                     'setConfigurableProductLinks'
                 ]
             )
-            ->getMock();
-        $optionMock = $this->getMockBuilder(\Magento\ConfigurableProduct\Api\Data\Option::class)
+            ->getMockForAbstractClass();
+        $optionMock = $this->getMockBuilder(\Magento\ConfigurableProduct\Api\Data\OptionInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['getProductAttribute', 'getPosition', 'getAttributeId'])
-            ->getMock();
+            ->getMockForAbstractClass();
         $productAttributeMock = $this->getMockBuilder(\Magento\Eav\Model\Entity\Attribute\AbstractAttribute::class)
             ->disableOriginalConstructor()
             ->setMethods(['getAttributeCode'])

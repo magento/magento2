@@ -33,7 +33,7 @@ use Magento\Wishlist\Model\ResourceModel\Wishlist as WishlistResource;
 use Magento\Wishlist\Model\ResourceModel\Wishlist\Collection as WishlistCollection;
 use Magento\Wishlist\Model\Wishlist;
 use PHPUnit\Framework\TestCase;
-use PHPUnit_Framework_MockObject_MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -42,67 +42,67 @@ use PHPUnit_Framework_MockObject_MockObject;
 class WishlistTest extends TestCase
 {
     /**
-     * @var Registry|PHPUnit_Framework_MockObject_MockObject
+     * @var Registry|MockObject
      */
     protected $registry;
 
     /**
-     * @var HelperProduct|PHPUnit_Framework_MockObject_MockObject
+     * @var HelperProduct|MockObject
      */
     protected $productHelper;
 
     /**
-     * @var Data|PHPUnit_Framework_MockObject_MockObject
+     * @var Data|MockObject
      */
     protected $helper;
 
     /**
-     * @var WishlistResource|PHPUnit_Framework_MockObject_MockObject
+     * @var WishlistResource|MockObject
      */
     protected $resource;
 
     /**
-     * @var WishlistCollection|PHPUnit_Framework_MockObject_MockObject
+     * @var WishlistCollection|MockObject
      */
     protected $collection;
 
     /**
-     * @var StoreManagerInterface|PHPUnit_Framework_MockObject_MockObject
+     * @var StoreManagerInterface|MockObject
      */
     protected $storeManager;
 
     /**
-     * @var DateTime\DateTime|PHPUnit_Framework_MockObject_MockObject
+     * @var DateTime\DateTime|MockObject
      */
     protected $date;
 
     /**
-     * @var ItemFactory|PHPUnit_Framework_MockObject_MockObject
+     * @var ItemFactory|MockObject
      */
     protected $itemFactory;
 
     /**
-     * @var CollectionFactory|PHPUnit_Framework_MockObject_MockObject
+     * @var CollectionFactory|MockObject
      */
     protected $itemsFactory;
 
     /**
-     * @var ProductFactory|PHPUnit_Framework_MockObject_MockObject
+     * @var ProductFactory|MockObject
      */
     protected $productFactory;
 
     /**
-     * @var Random|PHPUnit_Framework_MockObject_MockObject
+     * @var Random|MockObject
      */
     protected $mathRandom;
 
     /**
-     * @var DateTime|PHPUnit_Framework_MockObject_MockObject
+     * @var DateTime|MockObject
      */
     protected $dateTime;
 
     /**
-     * @var ManagerInterface|PHPUnit_Framework_MockObject_MockObject
+     * @var ManagerInterface|MockObject
      */
     protected $eventDispatcher;
 
@@ -112,22 +112,22 @@ class WishlistTest extends TestCase
     protected $wishlist;
 
     /**
-     * @var ProductRepositoryInterface|PHPUnit_Framework_MockObject_MockObject
+     * @var ProductRepositoryInterface|MockObject
      */
     protected $productRepository;
 
     /**
-     * @var Json|PHPUnit_Framework_MockObject_MockObject
+     * @var Json|MockObject
      */
     protected $serializer;
 
     /**
-     * @var StockItemRepository|PHPUnit_Framework_MockObject_MockObject
+     * @var StockItemRepository|MockObject
      */
     private $scopeConfig;
 
     /**
-     * @var StockRegistryInterface|PHPUnit_Framework_MockObject_MockObject
+     * @var StockRegistryInterface|MockObject
      */
     private $stockRegistry;
 
@@ -240,7 +240,7 @@ class WishlistTest extends TestCase
     }
 
     /**
-     * @param int|Item|PHPUnit_Framework_MockObject_MockObject $itemId
+     * @param int|Item|MockObject $itemId
      * @param DataObject $buyRequest
      * @param null|array|DataObject $param
      * @throws LocalizedException
