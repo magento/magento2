@@ -10,19 +10,6 @@ spec:
     app: magento
     tier: frontend
 ---
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: magento-pv-claim
-  labels:
-    app: magento
-spec:
-  accessModes:
-    - ReadWriteOnce
-  resources:
-    requests:
-      storage: 10Gi
----
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -85,18 +72,19 @@ spec:
           - mountPath: /var/www/html
             name: magento-shared
           - mountPath: /var/www/html/magento/media
-            name: magento-persistent-storage
+            name: magento-media-volume
             subPath: media
           - mountPath: /var/www/html/magento/var
-            name: magento-shared-var
+            name: magento-var-volume
             subPath: var 
       nodeSelector: 
         private-app-pool: web-app
       volumes:
       - name: magento-shared
         emptyDir: {}
-      - name: magento-shared-var
-        emptyDir: {}
-      - name: magento-persistent-storage
+      - name: magento-media-volume
         persistentVolumeClaim:
-          claimName: magento-pv-claim
+          claimName: nfs-pvc-1
+      - name: magento-var-volume
+        persistentVolumeClaim:
+          claimName: nfs-pvc-2
