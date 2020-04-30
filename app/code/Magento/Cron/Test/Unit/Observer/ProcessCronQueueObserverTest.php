@@ -964,10 +964,10 @@ class ProcessCronQueueObserverTest extends \PHPUnit\Framework\TestCase
             ->method('delete')
             ->withConsecutive(
                 [$tableName, ['status = ?' => 'pending', 'job_code in (?)' => ['test_job1']]],
-                [$tableName, ['status = ?' => 'success', 'job_code in (?)' => ['test_job1'], 'created_at < ?' => null]],
-                [$tableName, ['status = ?' => 'missed', 'job_code in (?)' => ['test_job1'], 'created_at < ?' => null]],
-                [$tableName, ['status = ?' => 'error', 'job_code in (?)' => ['test_job1'], 'created_at < ?' => null]],
-                [$tableName, ['status = ?' => 'pending', 'job_code in (?)' => ['test_job1'], 'created_at < ?' => null]]
+                [$tableName, ['status = ?' => 'success', 'job_code in (?)' => ['test_job1'], 'scheduled_at < ?' => null]],
+                [$tableName, ['status = ?' => 'missed', 'job_code in (?)' => ['test_job1'], 'scheduled_at < ?' => null]],
+                [$tableName, ['status = ?' => 'error', 'job_code in (?)' => ['test_job1'], 'scheduled_at < ?' => null]],
+                [$tableName, ['status = ?' => 'pending', 'job_code in (?)' => ['test_job1'], 'scheduled_at < ?' => null]]
             )
             ->willReturn(1);
 
