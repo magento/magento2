@@ -111,7 +111,7 @@ namespace Magento\Framework\Session {
         private $request;
 
         /**
-         * @var State|\PHPUnit_Framework_MockObject_MockObject
+         * @var State|\PHPUnit\Framework\MockObject\MockObject
          */
         private $appState;
 
