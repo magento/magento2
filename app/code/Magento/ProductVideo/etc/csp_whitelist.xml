@@ -10,6 +10,7 @@
     <policies>
         <policy id="script-src">
             <values>
+                <value id="www_googleapis_com" type="host">www.googleapis.com</value>
                 <value id="youtube_cdn" type="host">s.ytimg.com</value>
                 <value id="google_video" type="host">www.googleapis.com</value>
                 <value id="vimeo" type="host">vimeo.com</value>
@@ -19,6 +20,11 @@
         <policy id="img-src">
             <values>
                 <value id="vimeo_cdn" type="host">*.vimeocdn.com</value>
+            </values>
+        </policy>
+        <policy id="frame-src">
+            <values>
+                <value id="www_youtube_com" type="host">www.youtube.com</value>
             </values>
         </policy>
     </policies>
