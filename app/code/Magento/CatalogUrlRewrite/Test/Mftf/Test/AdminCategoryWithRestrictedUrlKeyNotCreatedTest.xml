@@ -19,7 +19,7 @@
             <group value="CatalogUrlRewrite"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
             <!--Delete created categories-->
@@ -57,7 +57,7 @@
             <argument name="categoryName" value="admin"/>
             <argument name="categoryUrlKey" value="{{SimpleSubCategory.name}}"/>
         </actionGroup>
-        <see selector="{{AdminMessagesSection.success}}" userInput="You saved the category." stepKey="seeAdminSuccessMessage"/>
+        <actionGroup ref="AssertAdminCategorySaveSuccessMessageActionGroup" stepKey="seeAdminSuccessMessage"/>
         <seeElement selector="{{AdminCategorySidebarTreeSection.categoryByName('admin')}}" stepKey="seeAdminCategoryInTree"/>
         <!--Check category creation with restricted url key 'soap'-->
         <comment userInput="Check category creation with restricted url key 'soap'" stepKey="commentCheckSoapCategoryCreation"/>
@@ -78,7 +78,7 @@
             <argument name="categoryName" value="soap"/>
             <argument name="categoryUrlKey" value="{{ApiCategory.name}}"/>
         </actionGroup>
-        <see selector="{{AdminMessagesSection.success}}" userInput="You saved the category." stepKey="seeSoapSuccessMessage"/>
+        <actionGroup ref="AssertAdminCategorySaveSuccessMessageActionGroup" stepKey="seeSoapSuccessMessage"/>
         <seeElement selector="{{AdminCategorySidebarTreeSection.categoryByName('soap')}}" stepKey="seeSoapCategoryInTree"/>
         <!--Check category creation with restricted url key 'rest'-->
         <comment userInput="Check category creation with restricted url key 'rest'" stepKey="commentCheckRestCategoryCreation"/>
@@ -99,7 +99,7 @@
             <argument name="categoryName" value="rest"/>
             <argument name="categoryUrlKey" value="{{SubCategoryWithParent.name}}"/>
         </actionGroup>
-        <see selector="{{AdminMessagesSection.success}}" userInput="You saved the category." stepKey="seeRestSuccessMesdgssage"/>
+        <actionGroup ref="AssertAdminCategorySaveSuccessMessageActionGroup" stepKey="seeRestSuccessMesdgssage"/>
         <seeElement selector="{{AdminCategorySidebarTreeSection.categoryByName('rest')}}" stepKey="seeRestCategoryInTree"/>
         <!--Check category creation with restricted url key 'graphql'-->
         <comment userInput="Check category creation with restricted url key 'graphql'" stepKey="commentCheckGraphQlCategoryCreation"/>
@@ -120,7 +120,7 @@
             <argument name="categoryName" value="graphql"/>
             <argument name="categoryUrlKey" value="{{NewSubCategoryWithParent.name}}"/>
         </actionGroup>
-        <see selector="{{AdminMessagesSection.success}}" userInput="You saved the category." stepKey="seeGraphQlSuccessMessage"/>
+        <actionGroup ref="AssertAdminCategorySaveSuccessMessageActionGroup" stepKey="seeGraphQlSuccessMessage"/>
         <seeElement selector="{{AdminCategorySidebarTreeSection.categoryByName('graphql')}}" stepKey="seeGraphQlCategoryInTree"/>
     </test>
 </tests>

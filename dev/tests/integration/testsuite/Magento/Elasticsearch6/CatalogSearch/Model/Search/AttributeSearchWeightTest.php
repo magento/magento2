@@ -8,10 +8,11 @@ declare(strict_types=1);
 namespace Magento\Elasticsearch6\CatalogSearch\Model\Search;
 
 use Magento\CatalogSearch\Model\Search\AttributeSearchWeightTest as CatalogSearchAttributeSearchWeightTest;
+use Magento\TestModuleCatalogSearch\Model\ElasticsearchVersionChecker;
+use Magento\TestFramework\Helper\Bootstrap;
 
 /**
  * Test founded products order after quick search with changed attribute search weight
- * using Elasticsearch 6.0+ search engine.
  *
  * @magentoAppIsolation enabled
  */
@@ -20,7 +21,6 @@ class AttributeSearchWeightTest extends CatalogSearchAttributeSearchWeightTest
     /**
      * Perform search by word and check founded product order in different cases.
      *
-     * @magentoConfigFixture default/catalog/search/engine elasticsearch6
      * @magentoDataFixture Magento/CatalogSearch/_files/products_for_sku_search_weight_score.php
      * @magentoDataFixture Magento/CatalogSearch/_files/full_reindex.php
      * @dataProvider attributeSearchWeightDataProvider
