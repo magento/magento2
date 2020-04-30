@@ -79,8 +79,9 @@ class DumpConfigSourceAggregated implements DumpConfigSourceInterface
     private $rules;
 
     /**
-     * @param TypePool $typePool
+     * @param ExcludeList $excludeList
      * @param array $sources
+     * @param TypePool|null $typePool
      * @param array $rules Rules for filtration the configuration data.
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
@@ -99,6 +100,7 @@ class DumpConfigSourceAggregated implements DumpConfigSourceInterface
      * Retrieve aggregated configuration from all available sources.
      *
      * @param string $path
+     *
      * @return array
      */
     public function get($path = '')
@@ -129,6 +131,7 @@ class DumpConfigSourceAggregated implements DumpConfigSourceInterface
      *
      * @param string $path
      * @param array $data
+     *
      * @return void
      */
     private function filterChain($path, &$data)
@@ -154,6 +157,7 @@ class DumpConfigSourceAggregated implements DumpConfigSourceInterface
      * Checks if the configuration field needs to be excluded.
      *
      * @param string $path Configuration field path. For example 'contact/email/recipient_email'
+     *
      * @return boolean Return true if path should be excluded
      */
     private function isExcludedPath($path)
@@ -181,6 +185,7 @@ class DumpConfigSourceAggregated implements DumpConfigSourceInterface
      * Eliminating scope info from path
      *
      * @param string $path
+     *
      * @return null|string
      */
     private function filterPath($path)
@@ -215,6 +220,7 @@ class DumpConfigSourceAggregated implements DumpConfigSourceInterface
 
     /**
      * Retrieves list of field paths were excluded from config dump
+     *
      * @return array
      */
     public function getExcludedFields()
