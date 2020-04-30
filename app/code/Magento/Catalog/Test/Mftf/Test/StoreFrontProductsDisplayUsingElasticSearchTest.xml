@@ -16,6 +16,7 @@
             <testCaseId value="MC-30209"/>
             <severity value="CRITICAL"/>
             <group value="Catalog"/>
+            <group value="SearchEngineElasticsearch"/>
         </annotations>
 
         <before>
@@ -112,11 +113,9 @@
                 <requiredEntity createDataKey="createCategory1"/>
             </createData>
 
-            <!--Enable ElasticSearch as search engine.-->
-            <magentoCLI command="config:set {{SearchEngineElasticsearchConfigData.path}} {{SearchEngineElasticsearchConfigData.value}}" stepKey="enableElasticSearchAsSearchEngine"/>
-            <magentoCLI command="indexer:reindex" stepKey="performReindexAfterElasticSearchEnable"/>
-            <magentoCLI command="cache:flush" stepKey="cleanCacheAfterElasticSearchEnable"/>
-
+            <actionGroup ref="CliRunReindexUsingCronJobsActionGroup" stepKey="reindexInvalidatedIndices"/>
+            <magentoCLI command="indexer:reindex" arguments="catalogsearch_fulltext" stepKey="performReindex"/>
+            <magentoCLI command="cache:clean" arguments="full_page" stepKey="cleanFullPageCache"/>
         </before>
 
         <after>
@@ -152,12 +151,6 @@
             <deleteData createDataKey="createSimpleProduct28" stepKey="deleteSimpleProduct28"/>
             <deleteData createDataKey="createSimpleProduct29" stepKey="deleteSimpleProduct29"/>
             <deleteData createDataKey="createSimpleProduct30" stepKey="deleteSimpleProduct30"/>
-
-            <!--Revert ElasticSearch as search engine.-->
-            <actionGroup ref="ResetSearchEngineConfiguration" stepKey="resetCatalogSearchConfiguration"/>
-            <magentoCLI command="indexer:reindex" stepKey="performReindexAfterElasticSearchDisable"/>
-            <magentoCLI command="cache:flush" stepKey="cleanCacheAfterElasticSearchDisable"/>
-            <actionGroup ref="logout" stepKey="logout"/>
         </after>
 
         <!--Open Storefront on the myCategory page-->
