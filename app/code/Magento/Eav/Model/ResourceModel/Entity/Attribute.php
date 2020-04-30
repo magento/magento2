@@ -107,6 +107,7 @@ class Attribute extends AbstractDb
 
         if ($data) {
             $object->setData($data);
+            $object->setOrigData('entity_type_id', $object->getEntityTypeId());
             $this->_afterLoad($object);
             return true;
         }

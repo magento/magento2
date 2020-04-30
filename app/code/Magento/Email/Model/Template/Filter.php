@@ -6,8 +6,9 @@
 namespace Magento\Email\Model\Template;
 
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Exception\MailException;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Filesystem;
-use Magento\Framework\Filesystem\Directory\ReadInterface;
 use Magento\Framework\Filter\VariableResolverInterface;
 use Magento\Framework\View\Asset\ContentProcessorException;
 use Magento\Framework\View\Asset\ContentProcessorInterface;
@@ -734,27 +735,32 @@ class Filter extends \Magento\Framework\Filter\Template
      *     {{protocol store="1"}} - Optional parameter which gets protocol from provide store based on store ID or code
      *
      * @param string[] $construction
-     * @throws \Magento\Framework\Exception\MailException
      * @return string
+     * @throws MailException
+     * @throws NoSuchEntityException
      */
     public function protocolDirective($construction)
     {
         $params = $this->getParameters($construction[2]);
+
         $store = null;
         if (isset($params['store'])) {
             try {
                 $store = $this->_storeManager->getStore($params['store']);
             } catch (\Exception $e) {
-                throw new \Magento\Framework\Exception\MailException(
+                throw new MailException(
                     __('Requested invalid store "%1"', $params['store'])
                 );
             }
         }
+
         $isSecure = $this->_storeManager->getStore($store)->isCurrentlySecure();
         $protocol = $isSecure ? 'https' : 'http';
         if (isset($params['url'])) {
             return $protocol . '://' . $params['url'];
         } elseif (isset($params['http']) && isset($params['https'])) {
+            $this->validateProtocolDirectiveHttpScheme($params);
+
             if ($isSecure) {
                 return $params['https'];
             }
@@ -762,6 +768,37 @@ class Filter extends \Magento\Framework\Filter\Template
         }
 
         return $protocol;
+    }
+
+    /**
+     * Validate protocol directive HTTP parameters.
+     *
+     * @param string[] $params
+     * @return void
+     * @throws MailException
+     */
+    private function validateProtocolDirectiveHttpScheme(array $params) : void
+    {
+        $parsed_http = parse_url($params['http']);
+        $parsed_https = parse_url($params['https']);
+
+        if (empty($parsed_http)) {
+            throw new MailException(
+                __('Contents of %1 could not be loaded or is empty', $params['http'])
+            );
+        } elseif (empty($parsed_https)) {
+            throw new MailException(
+                __('Contents of %1 could not be loaded or is empty', $params['https'])
+            );
+        } elseif ($parsed_http['scheme'] !== 'http') {
+            throw new MailException(
+                __('Contents of %1 could not be loaded or is empty', $params['http'])
+            );
+        } elseif ($parsed_https['scheme'] !== 'https') {
+            throw new MailException(
+                __('Contents of %1 could not be loaded or is empty', $params['https'])
+            );
+        }
     }
 
     /**
