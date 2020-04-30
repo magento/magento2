@@ -6,6 +6,7 @@
 
 namespace Magento\DownloadableImportExport\Test\Unit\Model\Import\Product\Type;
 
+use Magento\Downloadable\Model\Url\DomainValidator;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManager;
 
 /**
@@ -38,6 +39,11 @@ class DownloadableTest extends \Magento\ImportExport\Test\Unit\Model\Import\Abst
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
     protected $prodAttrColFacMock;
+
+    /**
+     * @var DomainValidator
+     */
+    private $domainValidator;
 
     /**
      * @var \Magento\Catalog\Model\ResourceModel\Product\Attribute\Collection|\PHPUnit_Framework_MockObject_MockObject
@@ -498,7 +504,7 @@ class DownloadableTest extends \Magento\ImportExport\Test\Unit\Model\Import\Abst
     /**
      * @dataProvider isRowValidData
      */
-    public function testIsRowValid(array $rowData, $rowNum, $isNewProduct = true)
+    public function testIsRowValid(array $rowData, $rowNum, $isNewProduct, $isDomainValid, $expectedResult)
     {
         $this->connectionMock->expects($this->any())->method('fetchAll')->with(
             $this->select
@@ -514,6 +520,13 @@ class DownloadableTest extends \Magento\ImportExport\Test\Unit\Model\Import\Abst
                 ],
             ]
         );
+
+        $this->domainValidator = $this->createMock(DomainValidator::class);
+        $this->domainValidator
+            ->expects($this->any())->method('isValid')
+            ->withAnyParameters()
+            ->willReturn($isDomainValid);
+
         $this->downloadableModelMock = $this->objectManagerHelper->getObject(
             \Magento\DownloadableImportExport\Model\Import\Product\Type\Downloadable::class,
             [
@@ -522,11 +535,12 @@ class DownloadableTest extends \Magento\ImportExport\Test\Unit\Model\Import\Abst
                 'resource' => $this->resourceMock,
                 'params' => $this->paramsArray,
                 'uploaderHelper' => $this->uploaderHelper,
-                'downloadableHelper' => $this->downloadableHelper
+                'downloadableHelper' => $this->downloadableHelper,
+                'domainValidator' => $this->domainValidator
             ]
         );
         $result = $this->downloadableModelMock->isRowValid($rowData, $rowNum, $isNewProduct);
-        $this->assertNotNull($result);
+        $this->assertEquals($expectedResult, $result);
     }
 
     /**
@@ -539,7 +553,7 @@ class DownloadableTest extends \Magento\ImportExport\Test\Unit\Model\Import\Abst
     {
         return [
             [
-                [
+                'row_data' => [
                     'sku' => 'downloadablesku1',
                     'product_type' => 'downloadable',
                     'name' => 'Downloadable Product 1',
@@ -549,11 +563,13 @@ class DownloadableTest extends \Magento\ImportExport\Test\Unit\Model\Import\Abst
                         . 'downloads=unlimited, file=media/file_link.mp4,sortorder=1|group_title=Group Title, '
                         . 'title=Title 2, price=10, downloads=unlimited, url=media/file2.mp4,sortorder=0',
                 ],
-                0,
-                true
+                'row_num' => 0,
+                'is_new_product' => true,
+                'is_domain_valid' => true,
+                'expected_result' => true
             ],
             [
-                [
+                'row_data' => [
                     'sku' => 'downloadablesku12',
                     'product_type' => 'downloadable',
                     'name' => 'Downloadable Product 2',
@@ -563,84 +579,98 @@ class DownloadableTest extends \Magento\ImportExport\Test\Unit\Model\Import\Abst
                         . ' downloads=unlimited, file=media/file.mp4,sortorder=1|group_title=Group Title,'
                         . ' title=Title 2, price=10, downloads=unlimited, url=media/file2.mp4,sortorder=0',
                 ],
-                1,
-                true
+                'row_num' => 1,
+                'is_new_product' => true,
+                'is_domain_valid' => true,
+                'expected_result' => true
             ],
             [
-                [
+                'row_data' => [
                     'sku' => 'downloadablesku12',
                     'product_type' => 'downloadable',
                     'name' => 'Downloadable Product 2',
+                    'downloadable_samples' => 'group_title=Group Title Samples, title=Title 1, file=media/file.mp4'
+                        .',sortorder=1|group_title=Group Title, title=Title 2, url=media/file2.mp4,sortorder=0',
+                    'downloadable_links' => 'group_title=Group Title Links, title=Title 1, price=10,'
+                        .' downloads=unlimited, file=media/file.mp4,sortorder=1|group_title=Group Title,'
+                        .' title=Title 2, price=10, downloads=unlimited, url=media/file2.mp4,sortorder=0',
                 ],
-                2,
-                true
+                'row_num' => 3,
+                'is_new_product' => true,
+                'is_domain_valid' => true,
+                'expected_result' => true
             ],
             [
-                [
+                'row_data' => [
                     'sku' => 'downloadablesku12',
                     'product_type' => 'downloadable',
                     'name' => 'Downloadable Product 2',
-                    'downloadable_samples' => 'title=Title 1, file=media/file.mp4,sortorder=1|title=Title 2,'
-                        . ' url=media/file2.mp4,sortorder=0',
+                    'downloadable_samples' => 'title=Title 1, file=media/file.mp4,sortorder=1|title=Title 2,' .
+                        ' group_title=Group Title, url=media/file2.mp4,sortorder=0',
                     'downloadable_links' => 'title=Title 1, price=10, downloads=unlimited, file=media/file.mp4,'
                         . 'sortorder=1|group_title=Group Title, title=Title 2, price=10, downloads=unlimited,'
                         . ' url=media/file2.mp4,sortorder=0',
                 ],
-                3,
-                true
-            ],
-            [
-                [
-                    'sku' => 'downloadablesku12',
-                    'product_type' => 'downloadable',
-                    'name' => 'Downloadable Product 2',
-                    'downloadable_samples' => 'file=media/file.mp4,sortorder=1|group_title=Group Title, '
-                        . 'url=media/file2.mp4,sortorder=0',
-                    'downloadable_links' => 'title=Title 1, price=10, downloads=unlimited, file=media/file.mp4,'
-                        . 'sortorder=1|group_title=Group Title, title=Title 2, price=10, downloads=unlimited,'
-                        . ' url=media/file2.mp4,sortorder=0',
-                ],
-                4,
-                true
+                'row_num' => 4,
+                'is_new_product' => true,
+                'is_domain_valid' => true,
+                'expected_result' => true
             ],
             [ //empty group title samples
-                [
+                'row_data' => [
                     'sku' => 'downloadablesku12',
                     'product_type' => 'downloadable',
                     'name' => 'Downloadable Product 2',
-                    'downloadable_samples' => 'group_title=, title=Title 1, file=media/file.mp4,sortorder=1'
-                        . '|group_title=, title=Title 2, url=media/file2.mp4,sortorder=0',
+                    'downloadable_samples' => 'group_title=Group Title Samples, title=Title 1, file=media/file.mp4'
+                        .',sortorder=1|group_title=Group Title, title=Title 2, url=media/file2.mp4,sortorder=0',
                     'downloadable_links' => 'group_title=Group Title Links, title=Title 1, price=10,'
-                        . ' downloads=unlimited, file=media/file_link.mp4,sortorder=1|group_title=Group Title,'
-                        . ' title=Title 2, price=10, downloads=unlimited, url=media/file2.mp4,sortorder=0',
+                        .' downloads=unlimited, file=media/file.mp4,sortorder=1|group_title=Group Title,'
+                        .' title=Title 2, price=10, downloads=unlimited, url=media/file2.mp4,sortorder=0',
                 ],
-                5,
-                true
+                'row_num' => 5,
+                'is_new_product' => true,
+                'is_domain_valid' => true,
+                'expected_result' => true
             ],
             [ //empty group title links
-                [
+                'row_data' => [
                     'sku' => 'downloadablesku12',
                     'product_type' => 'downloadable',
                     'name' => 'Downloadable Product 2',
-                    'downloadable_samples' => 'group_title=Group Title Samples, title=Title 1, file=media/file.mp4,'
-                        . 'sortorder=1|group_title=Group Title, title=Title 2, url=media/file2.mp4,sortorder=0',
-                    'downloadable_links' => 'group_title=, title=Title 1, price=10, downloads=unlimited, '
-                        . 'file=media/file_link.mp4,sortorder=1|group_title=, title=Title 2, price=10, '
-                        . 'downloads=unlimited, url=media/file2.mp4,sortorder=0',
+                    'downloadable_samples' => 'group_title=Group Title Samples, title=Title 1, file=media/file.mp4'
+                        .',sortorder=1|group_title=Group Title, title=Title 2, url=media/file2.mp4,sortorder=0',
+                    'downloadable_links' => 'group_title=Group Title Links, title=Title 1, price=10,'
+                        .' downloads=unlimited, file=media/file.mp4,sortorder=1|group_title=Group Title,'
+                        .' title=Title 2, price=10, downloads=unlimited, url=media/file2.mp4,sortorder=0',
                 ],
-                6,
-                true
+                'row_num' => 6,
+                'is_new_product' => true,
+                'is_domain_valid' => true,
+                'expected_result' => true
             ],
             [
-                [
+                'row_data' => [
+                    'sku' => 'downloadablesku12',
+                    'product_type' => 'downloadable',
+                    'name' => 'Downloadable Product 2',
+                ],
+                'row_num' => 2,
+                'is_new_product' => false,
+                'is_domain_valid' => true,
+                'expected_result' => true
+            ],
+            [
+                'row_data' => [
                     'sku' => 'downloadablesku12',
                     'product_type' => 'downloadable',
                     'name' => 'Downloadable Product 2',
                     'downloadable_samples' => '',
                     'downloadable_links' => '',
                 ],
-                7,
-                true
+                'row_num' => 7,
+                'is_new_product' => true,
+                'is_domain_valid' => true,
+                'expected_result' => false
             ],
         ];
     }

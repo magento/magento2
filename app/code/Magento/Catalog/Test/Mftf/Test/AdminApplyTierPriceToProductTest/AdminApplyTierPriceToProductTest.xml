@@ -1,0 +1,269 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminApplyTierPriceToProductTest">
+        <annotations>
+            <features value="Catalog"/>
+            <stories value="Apply tier price to a product"/>
+            <title value="You should be able to apply tier price to a product."/>
+            <description value="You should be able to apply tier price to a product."/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MAGETWO-68921"/>
+            <group value="product"/>
+        </annotations>
+        <before>
+            <createData entity="Simple_US_Customer" stepKey="createSimpleUSCustomer">
+                <field key="group_id">1</field>
+            </createData>
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+            <createData entity="SimpleProduct" stepKey="createSimpleProduct">
+                <requiredEntity createDataKey="createCategory"/>
+                <field key="price">100</field>
+            </createData>
+        </before>
+        <after>
+            <deleteData createDataKey="createSimpleUSCustomer" stepKey="deleteCustomer"/>
+            <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndex1"/>
+            <waitForPageLoad time="30" stepKey="waitForProductIndexPageLoad"/>
+            <actionGroup ref="ResetProductGridToDefaultViewActionGroup" stepKey="resetGridToDefaultKeywordSearch"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
+        </after>
+        <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        <!--Case: Group Price-->
+        <actionGroup ref="SearchForProductOnBackendActionGroup" stepKey="searchForSimpleProduct">
+            <argument name="product" value="$$createSimpleProduct$$"/>
+        </actionGroup>
+        <actionGroup ref="OpenEditProductOnBackendActionGroup" stepKey="openEditProduct1">
+            <argument name="product" value="$$createSimpleProduct$$"/>
+        </actionGroup>
+        <scrollToTopOfPage stepKey="scrollToTopOfPage1"/>
+        <click selector="{{AdminProductFormSection.advancedPricingLink}}" stepKey="clickOnAdvancedPricingButton1"/>
+        <waitForElement selector="{{AdminProductFormAdvancedPricingSection.customerGroupPriceAddButton}}" stepKey="waitForCustomerGroupPriceAddButton1"/>
+        <click selector="{{AdminProductFormAdvancedPricingSection.customerGroupPriceAddButton}}" stepKey="addCustomerGroupAllGroupsQty1PriceDiscountAnd10percent"/>
+        <fillField selector="{{AdminProductFormAdvancedPricingSection.productTierPriceQtyInput('0')}}" userInput="1" stepKey="fillProductTierPriceQtyInput1"/>
+        <selectOption selector="{{AdminProductFormAdvancedPricingSection.productTierPriceValueTypeSelect('0')}}" userInput="Discount" stepKey="selectProductTierPriceValueType1"/>
+        <fillField selector="{{AdminProductFormAdvancedPricingSection.productTierPricePercentageValuePriceInput('0')}}" userInput="10" stepKey="selectProductTierPricePriceInput"/>
+        <click selector="{{AdminProductFormAdvancedPricingSection.doneButton}}" stepKey="clickDoneButton1"/>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct1"/>
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="customerLogin1">
+            <argument name="Customer" value="$$createSimpleUSCustomer$$"/>
+        </actionGroup>
+        <amOnPage url="{{StorefrontCategoryPage.url($$createCategory.name$$)}}" stepKey="navigateToCategoryPage1"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad1"/>
+        <seeElement selector="{{StorefrontCategoryProductSection.productPriceFinal('90')}}" stepKey="assertProductFinalPriceIs90_1"/>
+        <seeElement selector="{{StorefrontCategoryProductSection.productPriceLabel('Regular Price')}}" stepKey="assertRegularPriceLabel_1"/>
+        <seeElement selector="{{StorefrontCategoryProductSection.productPriceOld('100')}}" stepKey="assertRegularPriceAmount_1"/>
+        <amOnPage url="{{StorefrontCustomerLogoutPage.url}}" stepKey="logoutCustomer1"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad2"/>
+        <amOnPage url="{{StorefrontCategoryPage.url($$createCategory.name$$)}}" stepKey="navigateToCategoryPage2"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad3"/>
+        <seeElement selector="{{StorefrontCategoryProductSection.productPriceFinal('90')}}" stepKey="assertProductFinalPriceIs90_2"/>
+        <seeElement selector="{{StorefrontCategoryProductSection.productPriceLabel('Regular Price')}}" stepKey="assertRegularPriceLabel_2"/>
+        <seeElement selector="{{StorefrontCategoryProductSection.productPriceOld('100')}}" stepKey="assertRegularPriceAmount_2"/>
+        <!--Case: Tier Price for General Customer Group-->
+        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndex2"/>
+        <waitForPageLoad time="30" stepKey="waitForProductPageToLoad1"/>
+        <actionGroup ref="OpenEditProductOnBackendActionGroup" stepKey="openEditProduct2">
+            <argument name="product" value="$$createSimpleProduct$$"/>
+        </actionGroup>
+        <scrollToTopOfPage stepKey="scrollToTopOfPage2"/>
+        <click selector="{{AdminProductFormSection.advancedPricingLink}}" stepKey="clickOnAdvancedPricingButton2"/>
+        <waitForElement selector="{{AdminProductFormAdvancedPricingSection.customerGroupPriceAddButton}}" stepKey="waitForcustomerGroupPriceAddButton2"/>
+        <waitForElement selector="{{AdminProductFormAdvancedPricingSection.productTierPriceCustGroupSelect('0')}}" time="30" stepKey="waitForSelectCustomerGroupNameAttribute1"/>
+        <selectOption selector="{{AdminProductFormAdvancedPricingSection.productTierPriceCustGroupSelect('0')}}" userInput="General" stepKey="selectCustomerGroupGeneral"/>
+        <click selector="{{AdminProductFormAdvancedPricingSection.doneButton}}" stepKey="clickDoneButton2"/>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct2"/>
+        <amOnPage url="{{StorefrontCategoryPage.url($$createCategory.name$$)}}" stepKey="navigateToCategoryPage3"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad4"/>
+        <seeElement selector="{{StorefrontCategoryProductSection.productPriceFinal('100')}}" stepKey="assertProductFinalPriceIs100_1"/>
+        <dontSeeElement selector="{{StorefrontCategoryProductSection.productPriceLabel('Regular Price')}}" stepKey="assertRegularPriceLabel_3"/>
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="customerLogin2">
+            <argument name="Customer" value="$$createSimpleUSCustomer$$"/>
+        </actionGroup>
+        <amOnPage url="{{StorefrontCategoryPage.url($$createCategory.name$$)}}" stepKey="navigateToCategoryPage4"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad5"/>
+        <seeElement selector="{{StorefrontCategoryProductSection.productPriceFinal('90')}}" stepKey="assertProductFinalPriceIs90_3"/>
+        <seeElement selector="{{StorefrontCategoryProductSection.productPriceLabel('Regular Price')}}" stepKey="assertRegularPriceLabel_4"/>
+        <seeElement selector="{{StorefrontCategoryProductSection.productPriceOld('100')}}" stepKey="assertRegularPriceAmount_3"/>
+        <!--Case: Tier Price applied if Product quantity meets Tier Price Condition-->
+        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndex3"/>
+        <waitForPageLoad time="30" stepKey="waitForProductPageToLoad2"/>
+        <actionGroup ref="OpenEditProductOnBackendActionGroup" stepKey="openEditProduct3">
+            <argument name="product" value="$$createSimpleProduct$$"/>
+        </actionGroup>
+        <scrollToTopOfPage stepKey="scrollToTopOfPage3"/>
+        <click selector="{{AdminProductFormSection.advancedPricingLink}}" stepKey="clickOnAdvancedPricingButton3"/>
+        <waitForElement selector="{{AdminProductFormAdvancedPricingSection.customerGroupPriceAddButton}}" stepKey="waitForcustomerGroupPriceAddButton3"/>
+        <waitForElement selector="{{AdminProductFormAdvancedPricingSection.productTierPriceCustGroupSelect('0')}}" stepKey="waitForSelectCustomerGroupNameAttribute2"/>
+        <selectOption selector="{{AdminProductFormAdvancedPricingSection.productTierPriceCustGroupSelect('0')}}" userInput="ALL GROUPS" stepKey="selectCustomerGroupAllGroups"/>
+        <fillField selector="{{AdminProductFormAdvancedPricingSection.productTierPriceQtyInput('0')}}" userInput="15" stepKey="fillProductTierPriceQtyInput15"/>
+        <click selector="{{AdminProductFormAdvancedPricingSection.customerGroupPriceAddButton}}" stepKey="clickToLoseFocusOnRequiredInputElement"/>
+        <click selector="{{AdminProductFormAdvancedPricingSection.customerGroupPriceAddButton}}" stepKey="addCustomerGroupAllGroupsQty20PriceDiscountAnd18percent2"/>
+        <fillField selector="{{AdminProductFormAdvancedPricingSection.productTierPriceQtyInput('1')}}" userInput="20" stepKey="fillProductTierPriceQtyInput20"/>
+        <selectOption selector="{{AdminProductFormAdvancedPricingSection.productTierPriceValueTypeSelect('1')}}" userInput="Discount" stepKey="selectProductTierPriceValueType2"/>
+        <fillField selector="{{AdminProductFormAdvancedPricingSection.productTierPricePercentageValuePriceInput('1')}}" userInput="18" stepKey="selectProductTierPricePriceInput18"/>
+        <click selector="{{AdminProductFormAdvancedPricingSection.doneButton}}" stepKey="clickDoneButton3"/>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct3"/>
+        <amOnPage url="{{StorefrontCategoryPage.url($$createCategory.name$$)}}" stepKey="navigateToCategoryPage5"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad6"/>
+        <seeElement selector="{{StorefrontCategoryProductSection.productPriceFinal('100')}}" stepKey="assertProductFinalPriceIs100_2"/>
+        <seeElement selector="{{StorefrontCategoryProductSection.productPriceLabel('As low as')}}" stepKey="assertAsLowAsPriceLabel_1"/>
+        <seeElement selector="{{StorefrontCategoryProductSection.productPriceLinkAfterLabel('As low as', '82')}}" stepKey="assertPriceAfterAsLowAsLabel_1"/>
+        <amOnPage url="{{StorefrontCustomerLogoutPage.url}}" stepKey="logoutCustomer2"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad7"/>
+        <amOnPage url="{{StorefrontCategoryPage.url($$createCategory.name$$)}}" stepKey="navigateToCategoryPage6"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad8"/>
+        <seeElement selector="{{StorefrontCategoryProductSection.productPriceFinal('100')}}" stepKey="assertProductFinalPriceIs100_3"/>
+        <seeElement selector="{{StorefrontCategoryProductSection.productPriceLabel('As low as')}}" stepKey="assertAsLowAsPriceLabel_2"/>
+        <seeElement selector="{{StorefrontCategoryProductSection.productPriceLinkAfterLabel('As low as', '82')}}" stepKey="assertPriceAfterAsLowAsLabel_2"/>
+        <amOnPage url="{{StorefrontProductPage.url($$createSimpleProduct.name$$)}}" stepKey="goToProductPage1"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad9"/>
+        <seeElement selector="{{StorefrontProductInfoMainSection.productTierPriceByForTextLabel('1', '15')}}" stepKey="assertProductTierPriceByForTextLabelForFirstRow1"/>
+        <seeElement selector="{{StorefrontProductInfoMainSection.productTierPriceByForTextLabel('2', '20')}}" stepKey="assertProductTierPriceByForTextLabelForSecondRow1"/>
+        <seeElement selector="{{StorefrontProductInfoMainSection.productTierPriceAmount('1', '90')}}" stepKey="assertProductTierPriceAmountForFirstRow1"/>
+        <seeElement selector="{{StorefrontProductInfoMainSection.productTierPriceAmount('2', '82')}}" stepKey="assertProductTierPriceAmountForSecondRow1"/>
+        <seeElement selector="{{StorefrontProductInfoMainSection.productTierPriceSavePercentageAmount('1', '10')}}" stepKey="assertProductTierPriceSavePercentageAmountForFirstRow1"/>
+        <seeElement selector="{{StorefrontProductInfoMainSection.productTierPriceSavePercentageAmount('2', '18')}}" stepKey="assertProductTierPriceSavePercentageAmountForSecondRow1"/>
+        <fillField userInput="10" selector="{{StorefrontProductInfoMainSection.qty}}" stepKey="fillProductQuantity1"/>
+        <actionGroup ref="AddToCartFromStorefrontProductPageActionGroup" stepKey="addToCartFromStorefrontProductPage">
+            <argument name="productName" value="$$createSimpleProduct.name$$"/>
+        </actionGroup>
+        <actionGroup ref="ClickViewAndEditCartFromMiniCartActionGroup" stepKey="goToCheckoutFromMinicart"/>
+        <seeInField userInput="10" selector="{{CheckoutCartProductSection.ProductQuantityByName($$createSimpleProduct.name$$)}}" stepKey="seeInQtyField10"/>
+        <grabTextFrom selector="{{CheckoutCartProductSection.productSubtotalByName($$createSimpleProduct.name$$)}}" stepKey="grabTextFromSubtotalField1"/>
+        <assertEquals message="Shopping cart should contain subtotal $1,000" stepKey="assertSubtotalField1">
+            <expectedResult type="string">$1,000.00</expectedResult>
+            <actualResult type="variable">grabTextFromSubtotalField1</actualResult>
+        </assertEquals>
+        <fillField userInput="15" selector="{{CheckoutCartProductSection.ProductQuantityByName($$createSimpleProduct.name$$)}}" stepKey="fillProductQuantity2"/>
+        <click selector="{{CheckoutCartProductSection.updateShoppingCartButton}}" stepKey="clickUpdateShoppingCartButton1"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskToDisappear1"/>
+        <grabTextFrom selector="{{CheckoutCartProductSection.productSubtotalByName($$createSimpleProduct.name$$)}}" stepKey="grabTextFromSubtotalField2"/>
+        <assertEquals message="Shopping cart should contain subtotal $1,350" stepKey="assertSubtotalField2">
+            <expectedResult type="string">$1,350.00</expectedResult>
+            <actualResult type="variable">grabTextFromSubtotalField2</actualResult>
+        </assertEquals>
+        <fillField userInput="20" selector="{{CheckoutCartProductSection.ProductQuantityByName($$createSimpleProduct.name$$)}}" stepKey="fillProductQuantity3"/>
+        <click selector="{{CheckoutCartProductSection.updateShoppingCartButton}}" stepKey="clickUpdateShoppingCartButton2"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskToDisappear2"/>
+        <grabTextFrom selector="{{CheckoutCartProductSection.productSubtotalByName($$createSimpleProduct.name$$)}}" stepKey="grabTextFromSubtotalField3"/>
+        <assertEquals message="Shopping cart should contain subtotal $1,640" stepKey="assertSubtotalField3">
+            <expectedResult type="string">$1,640.00</expectedResult>
+            <actualResult type="variable">grabTextFromSubtotalField3</actualResult>
+        </assertEquals>
+        <!--Tier Price is changed in Shopping Cart and is changed on Product page if Tier Price parameters are changed in Admin-->
+        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndex4"/>
+        <waitForPageLoad time="30" stepKey="waitForProductPageToLoa4"/>
+        <actionGroup ref="OpenEditProductOnBackendActionGroup" stepKey="openEditProduct4">
+            <argument name="product" value="$$createSimpleProduct$$"/>
+        </actionGroup>
+        <scrollToTopOfPage stepKey="scrollToTopOfPage4"/>
+        <click selector="{{AdminProductFormSection.advancedPricingLink}}" stepKey="clickOnAdvancedPricingButton4"/>
+        <waitForElement selector="{{AdminProductFormAdvancedPricingSection.customerGroupPriceAddButton}}" stepKey="waitForcustomerGroupPriceAddButton4"/>
+        <fillField selector="{{AdminProductFormAdvancedPricingSection.productTierPricePercentageValuePriceInput('1')}}" userInput="25" stepKey="selectProductTierPricePercentageValue2"/>
+        <click selector="{{AdminProductFormAdvancedPricingSection.doneButton}}" stepKey="clickDoneButton4"/>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct4"/>
+        <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="goToShoppingCartPage1"/>
+        <seeInField userInput="20" selector="{{CheckoutCartProductSection.ProductQuantityByName($$createSimpleProduct.name$$)}}" stepKey="seeInQtyField20"/>
+        <grabTextFrom selector="{{CheckoutCartProductSection.productSubtotalByName($$createSimpleProduct.name$$)}}" stepKey="grabTextFromSubtotalField4"/>
+        <assertEquals message="Shopping cart should contain subtotal $1,500" stepKey="assertSubtotalField4">
+            <expectedResult type="string">$1,500.00</expectedResult>
+            <actualResult type="variable">grabTextFromSubtotalField4</actualResult>
+        </assertEquals>
+        <grabTextFrom selector="{{CheckoutCartSummarySection.subtotal}}" stepKey="grabTextFromCheckoutCartSummarySectionSubtotal1"/>
+        <assertEquals message="Shopping cart summary section should contain subtotal $1,500" stepKey="assertSubtotalFieldFromCheckoutCartSummarySection1">
+            <expectedResult type="string">$1,500.00</expectedResult>
+            <actualResult type="variable">grabTextFromCheckoutCartSummarySectionSubtotal1</actualResult>
+        </assertEquals>
+        <conditionalClick selector="{{StorefrontMinicartSection.showCart}}" dependentSelector="{{StorefrontMinicartSection.miniCartOpened}}" visible="false" stepKey="openMiniCart1"/>
+        <waitForElementVisible selector="{{StorefrontMinicartSection.miniCartSubtotalField}}" stepKey="waitForminiCartSubtotalField1"/>
+        <grabTextFrom selector="{{StorefrontMinicartSection.miniCartSubtotalField}}" stepKey="grabTextFromMiniCartSubtotalField"/>
+        <assertEquals message="Mini shopping cart should contain subtotal $1,500" stepKey="assertSubtotalFieldFromMiniShoppingCart1">
+            <expectedResult type="string">$1,500.00</expectedResult>
+            <actualResult type="variable">grabTextFromMiniCartSubtotalField</actualResult>
+        </assertEquals>
+        <amOnPage url="{{AdminSalesConfigPage.url('#sales_msrp-link')}}" stepKey="navigateToAdminSalesConfigPageMAPTab1"/>
+        <waitForPageLoad time="30" stepKey="waitForAdminSalesConfigPageLoad1"/>
+        <uncheckOption selector="{{AdminSalesConfigSection.enableMAPUseSystemValue}}" stepKey="uncheckMAPUseSystemValue"/>
+        <selectOption selector="{{AdminSalesConfigSection.enableMAPSelect}}" userInput="Yes" stepKey="setEnableMAPYes"/>
+        <click selector="{{AdminConfigSection.saveButton}}" stepKey="saveConfig1"/>
+        <see selector="{{AdminMessagesSection.success}}" userInput="You saved the configuration." stepKey="seeConfigSuccessMessage1"/>
+        <actionGroup ref="ClearCacheActionGroup" stepKey="flushCache1"/>
+        <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="goToShoppingCartPage2"/>
+        <seeInField userInput="20" selector="{{CheckoutCartProductSection.ProductQuantityByName($$createSimpleProduct.name$$)}}" stepKey="seeInQtyField20_2"/>
+        <grabTextFrom selector="{{CheckoutCartProductSection.productSubtotalByName($$createSimpleProduct.name$$)}}" stepKey="grabTextFromSubtotalField5"/>
+        <assertEquals message="Shopping cart should contain subtotal $1,500" stepKey="assertSubtotalField5">
+            <expectedResult type="string">$1,500.00</expectedResult>
+            <actualResult type="variable">grabTextFromSubtotalField5</actualResult>
+        </assertEquals>
+        <amOnPage url="{{AdminSalesConfigPage.url('#sales_msrp-link')}}" stepKey="navigateToAdminSalesConfigPageMAPTab2"/>
+        <waitForPageLoad time="30" stepKey="waitForAdminSalesConfigPageLoad2"/>
+        <selectOption selector="{{AdminSalesConfigSection.enableMAPSelect}}" userInput="No" stepKey="setEnableMAPNo"/>
+        <click selector="{{AdminConfigSection.saveButton}}" stepKey="saveConfig2"/>
+        <see selector="{{AdminMessagesSection.success}}" userInput="You saved the configuration." stepKey="seeConfigSuccessMessage2"/>
+        <actionGroup ref="ClearCacheActionGroup" stepKey="flushCache2"/>
+        <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="goToShoppingCartPage3"/>
+        <seeInField userInput="20" selector="{{CheckoutCartProductSection.ProductQuantityByName($$createSimpleProduct.name$$)}}" stepKey="seeInQtyField20_3"/>
+        <grabTextFrom selector="{{CheckoutCartProductSection.productSubtotalByName($$createSimpleProduct.name$$)}}" stepKey="grabTextFromSubtotalField6"/>
+        <assertEquals message="Shopping cart should contain subtotal $1,500" stepKey="assertSubtotalField6">
+            <expectedResult type="string">$1,500.00</expectedResult>
+            <actualResult type="variable">grabTextFromSubtotalField6</actualResult>
+        </assertEquals>
+        <amOnPage url="{{StorefrontProductPage.url($$createSimpleProduct.name$$)}}" stepKey="goToProductPage2"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad10"/>
+        <seeElement selector="{{StorefrontProductInfoMainSection.productTierPriceByForTextLabel('1', '15')}}" stepKey="assertProductTierPriceByForTextLabelForFirstRow2"/>
+        <seeElement selector="{{StorefrontProductInfoMainSection.productTierPriceByForTextLabel('2', '20')}}" stepKey="assertProductTierPriceByForTextLabelForSecondRow2"/>
+        <seeElement selector="{{StorefrontProductInfoMainSection.productTierPriceAmount('1', '90')}}" stepKey="assertProductTierPriceAmountForFirstRow2"/>
+        <seeElement selector="{{StorefrontProductInfoMainSection.productTierPriceAmount('2', '75')}}" stepKey="assertProductTierPriceAmountForSecondRow2"/>
+        <seeElement selector="{{StorefrontProductInfoMainSection.productTierPriceSavePercentageAmount('1', '10')}}" stepKey="assertProductTierPriceSavePercentageAmountForFirstRow2"/>
+        <seeElement selector="{{StorefrontProductInfoMainSection.productTierPriceSavePercentageAmount('2', '25')}}" stepKey="assertProductTierPriceSavePercentageAmountForSecondRow2"/>
+        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndex5"/>
+        <waitForPageLoad time="30" stepKey="waitForProductPageToLoad3"/>
+        <actionGroup ref="OpenEditProductOnBackendActionGroup" stepKey="openEditProduct5">
+            <argument name="product" value="$$createSimpleProduct$$"/>
+        </actionGroup>
+        <scrollToTopOfPage stepKey="scrollToTopOfPage5"/>
+        <click selector="{{AdminProductFormSection.advancedPricingLink}}" stepKey="clickOnAdvancedPricingButton5"/>
+        <waitForElement selector="{{AdminProductFormAdvancedPricingSection.customerGroupPriceDeleteButton}}" stepKey="waitForcustomerGroupPriceDeleteButton"/>
+        <scrollTo selector="(//*[contains(@class, 'product_form_product_form_advanced_pricing_modal')]//tr//button[@data-action='remove_row'])[1]" x="30" y="0" stepKey="scrollToDeleteFirstRowOfCustomerGroupPrice"/>
+        <click selector="(//tr//button[@data-action='remove_row'])[1]" userInput=".product_form_product_form_advanced_pricing_modal" stepKey="deleteFirstRowOfCustomerGroupPrice"/>
+        <click selector="//tr//button[@data-action='remove_row']" userInput=".product_form_product_form_advanced_pricing_modal" stepKey="deleteSecondRowOfCustomerGroupPrice"/>
+        <click selector="{{AdminProductFormAdvancedPricingSection.doneButton}}" userInput=".product_form_product_form_advanced_pricing_modal" stepKey="clickDoneButton5"/>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct5"/>
+        <scrollToTopOfPage stepKey="scrollToTopOfPage6"/>
+        <click selector="{{AdminProductFormSection.advancedPricingLink}}" stepKey="clickOnAdvancedPricingButton6"/>
+        <waitForElement selector="{{AdminProductFormAdvancedPricingSection.customerGroupPriceAddButton}}" stepKey="waitForcustomerGroupPriceAddButton5"/>
+        <dontSeeElement selector="{{AdminProductFormAdvancedPricingSection.productTierPriceQtyInput('0')}}" stepKey="dontSeeQtyInputOfFirstRow"/>
+        <dontSeeElement selector="{{AdminProductFormAdvancedPricingSection.productTierPriceQtyInput('1')}}" stepKey="dontSeeQtyInputOfSecondRow"/>
+        <click selector="{{AdminProductFormAdvancedPricingSection.advancedPricingCloseButton}}" stepKey="closeAdvancedPricingPopup"/>
+        <waitForElementVisible selector="{{AdminProductFormSection.productPrice}}" stepKey="waitForAdminProductFormSectionProductPriceInput"/>
+        <fillField selector="{{AdminProductFormSection.productPrice}}" userInput="200" stepKey="fillProductPrice200"/>
+        <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="clickSaveButton"/>
+        <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="goToShoppingCartPage4"/>
+        <grabTextFrom selector="{{CheckoutCartProductSection.productSubtotalByName($$createSimpleProduct.name$$)}}" stepKey="grabTextFromSubtotalField7"/>
+        <assertEquals message="Shopping cart should contain subtotal $4,000" stepKey="assertSubtotalField7">
+            <expectedResult type="string">$4,000.00</expectedResult>
+            <actualResult type="variable">grabTextFromSubtotalField7</actualResult>
+        </assertEquals>
+        <grabTextFrom selector="{{CheckoutCartSummarySection.subtotal}}" stepKey="grabTextFromCheckoutCartSummarySectionSubtotal2"/>
+        <assertEquals message="Shopping cart summary section should contain subtotal $4,000" stepKey="assertSubtotalFieldFromCheckoutCartSummarySection2">
+            <expectedResult type="string">$4,000.00</expectedResult>
+            <actualResult type="variable">grabTextFromCheckoutCartSummarySectionSubtotal2</actualResult>
+        </assertEquals>
+        <conditionalClick selector="{{StorefrontMinicartSection.showCart}}" dependentSelector="{{StorefrontMinicartSection.miniCartOpened}}" visible="false" stepKey="openMiniCart2"/>
+        <waitForElementVisible selector="{{StorefrontMinicartSection.miniCartSubtotalField}}" stepKey="waitForminiCartSubtotalField2"/>
+        <grabTextFrom selector="{{StorefrontMinicartSection.miniCartSubtotalField}}" stepKey="grabTextFromMiniCartSubtotalField2"/>
+        <assertEquals message="Mini shopping cart should contain subtotal $4,000" stepKey="assertSubtotalFieldFromMiniShoppingCart2">
+            <expectedResult type="string">$4,000.00</expectedResult>
+            <actualResult type="variable">grabTextFromMiniCartSubtotalField2</actualResult>
+        </assertEquals>
+    </test>
+</tests>

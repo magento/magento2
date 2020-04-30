@@ -7,63 +7,101 @@ declare(strict_types=1);
 
 namespace Magento\Captcha\Controller\Refresh;
 
-use Magento\Captcha\Helper\Data;
-use Magento\Framework\App\Action\Action;
+use Magento\Captcha\Helper\Data as CaptchaHelper;
 use Magento\Framework\App\Action\HttpPostActionInterface;
-use Magento\Framework\App\Action\Context;
-use Magento\Framework\Serialize\Serializer\Json;
+use Magento\Framework\App\RequestInterface;
+use Magento\Framework\Controller\Result\JsonFactory as JsonResultFactory;
+use Magento\Framework\Serialize\Serializer\Json as JsonSerializer;
+use Magento\Framework\View\LayoutInterface;
 
 /**
  * Refreshes captcha and returns JSON encoded URL to image (AJAX action)
  * Example: {'imgSrc': 'http://example.com/media/captcha/67842gh187612ngf8s.png'}
  */
-class Index extends Action implements HttpPostActionInterface
+class Index implements HttpPostActionInterface
 {
     /**
-     * @var Data
+     * @var CaptchaHelper
      */
     private $captchaHelper;
 
     /**
-     * @var Json
+     * @var JsonSerializer
      */
     private $serializer;
 
     /**
-     * @param Context $context
-     * @param Data $captchaHelper
-     * @param Json|null $serializer
+     * @var RequestInterface
+     */
+    private $request;
+
+    /**
+     * @var LayoutInterface
+     */
+    private $layout;
+
+    /**
+     * @var JsonResultFactory
+     */
+    private $jsonResultFactory;
+
+    /**
+     * @param RequestInterface $request
+     * @param JsonResultFactory $jsonFactory
+     * @param CaptchaHelper $captchaHelper
+     * @param LayoutInterface $layout
+     * @param JsonSerializer $serializer
      */
     public function __construct(
-        Context $context,
-        Data $captchaHelper,
-        Json $serializer
+        RequestInterface $request,
+        JsonResultFactory $jsonFactory,
+        CaptchaHelper $captchaHelper,
+        LayoutInterface $layout,
+        JsonSerializer $serializer
     ) {
+        $this->request = $request;
+        $this->jsonResultFactory = $jsonFactory;
         $this->captchaHelper = $captchaHelper;
+        $this->layout = $layout;
         $this->serializer = $serializer;
-        parent::__construct($context);
     }
 
     /**
-     * Execute action based on request and return result
+     * @inheritdoc
      */
     public function execute()
     {
-        $formId = $this->_request->getPost('formId');
-        if (null === $formId) {
-            $params = [];
-            $content = $this->_request->getContent();
-            if ($content) {
-                $params = $this->serializer->unserialize($content);
-            }
-            $formId = $params['formId'] ?? null;
-        }
+        $formId = $this->getRequestFormId();
+
         $captchaModel = $this->captchaHelper->getCaptcha($formId);
         $captchaModel->generate();
 
-        $block = $this->_view->getLayout()->createBlock($captchaModel->getBlockName());
+        $block = $this->layout->createBlock($captchaModel->getBlockName());
         $block->setFormId($formId)->setIsAjax(true)->toHtml();
-        $this->_response->representJson($this->serializer->serialize(['imgSrc' => $captchaModel->getImgSrc()]));
-        $this->_actionFlag->set('', self::FLAG_NO_POST_DISPATCH, true);
+
+        $result = $this->jsonResultFactory->create();
+
+        return $result->setData(['imgSrc' => $captchaModel->getImgSrc()]);
+    }
+
+    /**
+     * Returns requested Form ID
+     *
+     * @return string|null
+     */
+    private function getRequestFormId(): ?string
+    {
+        $formId = $this->request->getPost('formId');
+        if (null === $formId) {
+            $params = [];
+            $content = $this->request->getContent();
+            if ($content) {
+                $params = $this->serializer->unserialize($content);
+            }
+
+            $formId = $params['formId'] ?? null;
+        }
+
+        return $formId !== null ? (string)$formId : null;
     }
 }
