@@ -135,16 +135,6 @@
     <type name="Magento\Catalog\Model\Layer\Search\CollectionFilter">
         <plugin name="searchQuery" type="Magento\CatalogSearch\Model\Layer\Search\Plugin\CollectionFilter" />
     </type>
-    <virtualType name="categoryFilterList" type="Magento\Catalog\Model\Layer\FilterList">
-        <arguments>
-            <argument name="filters" xsi:type="array">
-                <item name="attribute" xsi:type="string">Magento\CatalogSearch\Model\Layer\Filter\Attribute</item>
-                <item name="price" xsi:type="string">Magento\CatalogSearch\Model\Layer\Filter\Price</item>
-                <item name="decimal" xsi:type="string">Magento\CatalogSearch\Model\Layer\Filter\Decimal</item>
-                <item name="category" xsi:type="string">Magento\CatalogSearch\Model\Layer\Filter\Category</item>
-            </argument>
-        </arguments>
-    </virtualType>
     <virtualType name="searchFilterList" type="Magento\Catalog\Model\Layer\FilterList">
         <arguments>
             <argument name="filters" xsi:type="array">
