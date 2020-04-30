@@ -83,6 +83,12 @@ class ExtractAssetsFromContentTest extends TestCase
                     2020
                 ]
             ],
+            'Relevant path content with pub' => [
+                '/pub/media/testDirectory/path.jpg',
+                [
+                    2020
+                ]
+            ],
             'Relevant path content' => [
                 '/media/testDirectory/path.jpg',
                 [

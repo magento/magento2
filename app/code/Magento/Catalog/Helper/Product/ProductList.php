@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Catalog\Helper\Product;
 
@@ -13,20 +14,19 @@ use Magento\Framework\Registry;
 use Magento\Store\Model\ScopeInterface;
 
 /**
+ * Returns data for toolbars of Sorting and Pagination
+ *
  * @api
  * @since 100.0.2
  */
 class ProductList
 {
-    /**
-     * List mode configuration path
-     */
-    const XML_PATH_LIST_MODE = 'catalog/frontend/list_mode';
+    public const XML_PATH_LIST_MODE = 'catalog/frontend/list_mode';
+    public const DEFAULT_SORT_DIRECTION = 'asc';
 
     const VIEW_MODE_LIST = 'list';
     const VIEW_MODE_GRID = 'grid';
 
-    const DEFAULT_SORT_DIRECTION = 'asc';
     /**
      * @var ScopeConfigInterface
      */
@@ -42,7 +42,7 @@ class ProductList
      *
      * @var array
      */
-    protected $_defaultAvailableLimit  = [10 => 10,20 => 20,50 => 50];
+    protected $_defaultAvailableLimit = [10 => 10, 20 => 20, 50 => 50];
 
     /**
      * @param ScopeConfigInterface $scopeConfig
@@ -53,7 +53,7 @@ class ProductList
         Registry $coreRegistry = null
     ) {
         $this->scopeConfig = $scopeConfig;
-        $this->coreRegistry = $coreRegistry ?: ObjectManager::getInstance()->get(Registry::class);
+        $this->coreRegistry = $coreRegistry ?? ObjectManager::getInstance()->get(Registry::class);
     }
 
     /**
@@ -63,32 +63,23 @@ class ProductList
      */
     public function getAvailableViewMode()
     {
-        $value = $this->scopeConfig->getValue(
-            self::XML_PATH_LIST_MODE,
-            ScopeInterface::SCOPE_STORE
-        );
+        $value = $this->scopeConfig->getValue(self::XML_PATH_LIST_MODE, ScopeInterface::SCOPE_STORE);
 
         switch ($value) {
             case 'grid':
-                $availableMode = ['grid' => __('Grid')];
-                break;
+                return ['grid' => __('Grid')];
 
             case 'list':
-                $availableMode = ['list' => __('List')];
-                break;
+                return ['list' => __('List')];
 
             case 'grid-list':
-                $availableMode = ['grid' => __('Grid'), 'list' =>  __('List')];
-                break;
+                return ['grid' => __('Grid'), 'list' => __('List')];
 
             case 'list-grid':
-                $availableMode = ['list' => __('List'), 'grid' => __('Grid')];
-                break;
-            default:
-                $availableMode = null;
-                break;
+                return ['list' => __('List'), 'grid' => __('Grid')];
         }
-        return $availableMode;
+
+        return null;
     }
 
     /**
@@ -103,12 +94,14 @@ class ProductList
         if (empty($options)) {
             $options = $this->getAvailableViewMode();
         }
+
         return current(array_keys($options));
     }
 
     /**
      * Get default sort field
      *
+     * @FIXME Helper should be context-independent
      * @return null|string
      */
     public function getDefaultSortField()
@@ -118,35 +111,28 @@ class ProductList
             return $currentCategory->getDefaultSortBy();
         }
 
-        return $this->scopeConfig->getValue(
-            Config::XML_PATH_LIST_DEFAULT_SORT_BY,
-            ScopeInterface::SCOPE_STORE
-        );
+        return $this->scopeConfig->getValue(Config::XML_PATH_LIST_DEFAULT_SORT_BY, ScopeInterface::SCOPE_STORE);
     }
 
     /**
      * Retrieve available limits for specified view mode
      *
-     * @param string $mode
-     *
+     * @param string $viewMode
      * @return array
      */
-    public function getAvailableLimit($mode)
+    public function getAvailableLimit($viewMode): array
     {
-        if (!in_array($mode, [self::VIEW_MODE_GRID, self::VIEW_MODE_LIST])) {
+        $availableViewModes = $this->getAvailableViewMode();
+
+        if (!isset($availableViewModes[$viewMode])) {
             return $this->_defaultAvailableLimit;
         }
-        $perPageConfigKey = 'catalog/frontend/' . $mode . '_per_page_values';
-        $perPageValues = (string)$this->scopeConfig->getValue(
-            $perPageConfigKey,
-            ScopeInterface::SCOPE_STORE
-        );
+
+        $perPageConfigPath = 'catalog/frontend/' . $viewMode . '_per_page_values';
+        $perPageValues = (string)$this->scopeConfig->getValue($perPageConfigPath, ScopeInterface::SCOPE_STORE);
         $perPageValues = explode(',', $perPageValues);
         $perPageValues = array_combine($perPageValues, $perPageValues);
-        if ($this->scopeConfig->isSetFlag(
-            'catalog/frontend/list_allow_all',
-            ScopeInterface::SCOPE_STORE
-        )) {
+        if ($this->scopeConfig->isSetFlag('catalog/frontend/list_allow_all', ScopeInterface::SCOPE_STORE)) {
             return ($perPageValues + ['all' => __('All')]);
         }
 
@@ -154,28 +140,17 @@ class ProductList
     }
 
     /**
-     * Retrieve default per page values
+     * Returns default value of `per_page` for view mode provided
      *
      * @param string $viewMode
-     *
-     * @return string (comma separated)
+     * @return int
      */
-    public function getDefaultLimitPerPageValue($viewMode)
+    public function getDefaultLimitPerPageValue($viewMode): int
     {
-        if ($viewMode == self::VIEW_MODE_LIST) {
-            return $this->scopeConfig->getValue(
-                'catalog/frontend/list_per_page',
-                ScopeInterface::SCOPE_STORE
-            );
-        }
+        $xmlConfigPath = sprintf('catalog/frontend/%s_per_page', $viewMode);
+        $defaultLimit = $this->scopeConfig->getValue($xmlConfigPath, ScopeInterface::SCOPE_STORE);
 
-        if ($viewMode == self::VIEW_MODE_GRID) {
-            return $this->scopeConfig->getValue(
-                'catalog/frontend/grid_per_page',
-                ScopeInterface::SCOPE_STORE
-            );
-        }
-
-        return 0;
+        $availableLimits = $this->getAvailableLimit($viewMode);
+        return (int)($availableLimits[$defaultLimit] ?? current($availableLimits));
     }
 }
