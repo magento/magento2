@@ -80,11 +80,8 @@ class GuestShipmentEstimationWithExtensionAttributesTest extends WebapiAbstract
                 AddressInterface::CUSTOMER_ADDRESS_ID => $address->getCustomerAddressId(),
                 AddressInterface::SAVE_IN_ADDRESS_BOOK => $address->getSaveInAddressBook(),
 
-                'custom_attributes' => [
-                    [
-                    'attribute_code' =>  'test_attribute',
-                    'value' => 1,
-                    ],
+                'extension_attributes' => [
+                    'test_attribute' => 1
                 ]
             ];
 
