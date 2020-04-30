@@ -567,7 +567,7 @@ class ProcessCronQueueObserver implements ObserverInterface
                 [
                     'status = ?' => $status,
                     'job_code in (?)' => array_keys($jobs),
-                    'created_at < ?' => $this->_scheduleFactory
+                    'scheduled_at < ?' => $this->_scheduleFactory
                         ->create()
                         ->getResource()
                         ->getConnection()

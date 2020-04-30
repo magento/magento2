@@ -11,6 +11,7 @@ use Magento\Framework\Intl\DateTimeFactory;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
 
 /**
  * Class \Magento\Cron\Test\Unit\Model\ObserverTest
@@ -24,22 +25,22 @@ class ScheduleTest extends \PHPUnit\Framework\TestCase
     protected $helper;
 
     /**
-     * @var \Magento\Cron\Model\ResourceModel\Schedule|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Cron\Model\ResourceModel\Schedule|MockObject
      */
     protected $resourceJobMock;
 
     /**
-     * @var TimezoneInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var TimezoneInterface|MockObject
      */
     private $timezoneConverter;
 
     /**
-     * @var DateTimeFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var DateTimeFactory|MockObject
      */
     private $dateTimeFactory;
 
     /**
-     * @var DeadlockRetrierInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var DeadlockRetrierInterface|MockObject
      */
     private $retrierMock;
 
