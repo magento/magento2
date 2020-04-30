@@ -963,11 +963,26 @@ class ProcessCronQueueObserverTest extends \PHPUnit\Framework\TestCase
         $connectionMock->expects($this->exactly(5))
             ->method('delete')
             ->withConsecutive(
-                [$tableName, ['status = ?' => 'pending', 'job_code in (?)' => ['test_job1']]],
-                [$tableName, ['status = ?' => 'success', 'job_code in (?)' => ['test_job1'], 'scheduled_at < ?' => null]],
-                [$tableName, ['status = ?' => 'missed', 'job_code in (?)' => ['test_job1'], 'scheduled_at < ?' => null]],
-                [$tableName, ['status = ?' => 'error', 'job_code in (?)' => ['test_job1'], 'scheduled_at < ?' => null]],
-                [$tableName, ['status = ?' => 'pending', 'job_code in (?)' => ['test_job1'], 'scheduled_at < ?' => null]]
+                [
+                    $tableName,
+                    ['status = ?' => 'pending', 'job_code in (?)' => ['test_job1']]
+                ],
+                [
+                    $tableName,
+                    ['status = ?' => 'success', 'job_code in (?)' => ['test_job1'], 'scheduled_at < ?' => null]
+                ],
+                [
+                    $tableName,
+                    ['status = ?' => 'missed', 'job_code in (?)' => ['test_job1'], 'scheduled_at < ?' => null]
+                ],
+                [
+                    $tableName,
+                    ['status = ?' => 'error', 'job_code in (?)' => ['test_job1'], 'scheduled_at < ?' => null]
+                ],
+                [
+                    $tableName,
+                    ['status = ?' => 'pending', 'job_code in (?)' => ['test_job1'], 'scheduled_at < ?' => null]
+                ]
             )
             ->willReturn(1);
 
