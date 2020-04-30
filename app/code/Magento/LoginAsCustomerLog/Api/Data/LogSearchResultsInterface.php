@@ -11,6 +11,8 @@ use \Magento\Framework\Api\SearchResultsInterface;
 
 /**
  * Login as customer log entity search results interface.
+ *
+ * @api
  */
 interface LogSearchResultsInterface extends SearchResultsInterface
 {

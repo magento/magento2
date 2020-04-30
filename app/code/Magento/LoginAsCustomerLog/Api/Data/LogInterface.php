@@ -11,6 +11,8 @@ use Magento\Framework\Api\ExtensibleDataInterface;
 
 /**
  * Data interface for login as customer log.
+ *
+ * @api
  */
 interface LogInterface extends ExtensibleDataInterface
 {

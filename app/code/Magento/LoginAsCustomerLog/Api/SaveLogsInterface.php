@@ -9,6 +9,8 @@ namespace Magento\LoginAsCustomerLog\Api;
 
 /**
  * Save login as custom logs entities.
+ *
+ * @api
  */
 interface SaveLogsInterface
 {
