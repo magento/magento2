@@ -8,13 +8,16 @@ declare(strict_types=1);
 namespace Magento\LoginAsCustomerUi\Plugin;
 
 use Magento\Backend\Model\Auth;
-use Magento\LoginAsCustomer\Model\Config;
+use Magento\LoginAsCustomerApi\Api\ConfigInterface;
 use Magento\LoginAsCustomerApi\Api\DeleteExpiredAuthenticationDataInterface;
 
+/**
+ * Delete all Login as Customer sessions for logging out admin.
+ */
 class AdminLogoutPlugin
 {
     /**
-     * @var Config
+     * @var ConfigInterface
      */
     private $config;
 
@@ -24,11 +27,11 @@ class AdminLogoutPlugin
     private $deleteExpiredAuthenticationData;
 
     /**
-     * @param Config $config
+     * @param ConfigInterface $config
      * @param DeleteExpiredAuthenticationDataInterface $deleteExpiredAuthenticationData
      */
     public function __construct(
-        Config $config,
+        ConfigInterface $config,
         DeleteExpiredAuthenticationDataInterface $deleteExpiredAuthenticationData
     ) {
         $this->config = $config;
@@ -36,6 +39,8 @@ class AdminLogoutPlugin
     }
 
     /**
+     * Delete all Login as Customer sessions for logging out admin.
+     *
      * @param Auth $subject
      */
     public function beforeLogout(Auth $subject): void

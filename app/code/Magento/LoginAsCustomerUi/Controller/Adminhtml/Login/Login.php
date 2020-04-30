@@ -31,6 +31,8 @@ use Magento\Store\Model\StoreManagerInterface;
  * Generate secret key and forward to the storefront action
  *
  * This action can be executed via GET request when "Store View To Login In" is disabled, and POST when it is enabled
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Login extends Action implements HttpGetActionInterface, HttpPostActionInterface
 {

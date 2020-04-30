@@ -8,9 +8,8 @@ namespace Magento\LoginAsCustomerUi\Plugin;
 
 use Magento\Customer\Model\Session;
 use Magento\Framework\App\ActionInterface;
-use Magento\LoginAsCustomer\Model\Config;
+use Magento\LoginAsCustomerApi\Api\ConfigInterface;
 use Magento\LoginAsCustomerApi\Api\IsLoginAsCustomerSessionActiveInterface;
-use Magento\Security\Model\AdminSessionInfoFactory;
 
 /**
  * Invalidate expired and not active Login as Customer sessions.
@@ -18,7 +17,7 @@ use Magento\Security\Model\AdminSessionInfoFactory;
 class InvalidateExpiredSessionPlugin
 {
     /**
-     * @var Config
+     * @var ConfigInterface
      */
     private $config;
 
@@ -33,24 +32,16 @@ class InvalidateExpiredSessionPlugin
     private $isLoginAsCustomerSessionActive;
 
     /**
-     * @var AdminSessionInfoFactory
-     */
-    private $adminSessionInfoFactory;
-
-    /**
-     * @param Config $config
+     * @param ConfigInterface $config
      * @param Session $session
-     * @param AdminSessionInfoFactory $adminSessionInfoFactory
      * @param IsLoginAsCustomerSessionActiveInterface $isLoginAsCustomerSessionActive
      */
     public function __construct(
-        Config $config,
+        ConfigInterface $config,
         Session $session,
-        AdminSessionInfoFactory $adminSessionInfoFactory,
         IsLoginAsCustomerSessionActiveInterface $isLoginAsCustomerSessionActive
     ) {
         $this->session = $session;
-        $this->adminSessionInfoFactory = $adminSessionInfoFactory;
         $this->isLoginAsCustomerSessionActive = $isLoginAsCustomerSessionActive;
         $this->config = $config;
     }
@@ -61,6 +52,7 @@ class InvalidateExpiredSessionPlugin
      * @param ActionInterface $subject
      * @throws \Magento\Framework\Exception\LocalizedException
      * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function beforeExecute(ActionInterface $subject)
     {
