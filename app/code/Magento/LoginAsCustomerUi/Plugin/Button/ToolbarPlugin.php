@@ -12,6 +12,7 @@ use Magento\Backend\Block\Widget\Button\Toolbar;
 use Magento\Framework\View\Element\AbstractBlock;
 use Magento\Framework\Escaper;
 use Magento\Framework\AuthorizationInterface;
+use Magento\LoginAsCustomerApi\Api\ConfigInterface;
 
 /**
  * Plugin for \Magento\Backend\Block\Widget\Button\Toolbar.
@@ -29,15 +30,23 @@ class ToolbarPlugin
     private $escaper;
 
     /**
+     * @var ConfigInterface
+     */
+    private $config;
+
+    /**
      * ToolbarPlugin constructor.
      * @param AuthorizationInterface $authorization
+     * @param ConfigInterface $config
      * @param Escaper $escaper
      */
     public function __construct(
         AuthorizationInterface $authorization,
+        ConfigInterface $config,
         Escaper $escaper
     ) {
         $this->authorization = $authorization;
+        $this->config = $config;
         $this->escaper = $escaper;
     }
 
@@ -67,7 +76,10 @@ class ToolbarPlugin
             $order = $context->getCreditmemo()->getOrder();
         }
         if ($order) {
-            if ($this->isAllowed()) {
+
+            $isAllowed = $this->authorization->isAllowed('Magento_LoginAsCustomer::login_button');
+            $isEnabled = $this->config->isEnabled();
+            if ($isAllowed && $isEnabled) {
                 if (!empty($order['customer_id'])) {
                     $buttonUrl = $context->getUrl('loginascustomer/login/login', [
                         'customer_id' => $order['customer_id']
@@ -86,15 +98,5 @@ class ToolbarPlugin
                 }
             }
         }
-    }
-
-    /**
-     * Check is allowed access
-     *
-     * @return bool
-     */
-    private function isAllowed(): bool
-    {
-        return (bool)$this->authorization->isAllowed('Magento_LoginAsCustomer::login_button');
     }
 }
