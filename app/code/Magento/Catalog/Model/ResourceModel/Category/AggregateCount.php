@@ -8,11 +8,15 @@ namespace Magento\Catalog\Model\ResourceModel\Category;
 use Magento\Catalog\Model\Category;
 
 /**
+ * Aggregate count for parent category after deleting child category
+ *
  * Class AggregateCount
  */
 class AggregateCount
 {
     /**
+     * Reduces children count for parent categories
+     *
      * @param Category $category
      * @return void
      */
