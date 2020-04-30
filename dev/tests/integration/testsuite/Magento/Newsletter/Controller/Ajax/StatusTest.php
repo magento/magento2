@@ -34,12 +34,12 @@ class StatusTest extends AbstractController
      *
      * @magentoDataFixture Magento/Newsletter/_files/subscribers.php
      * @dataProvider ajaxSubscriberDataProvider
-     * @param string $expStatus
+     * @param bool $expStatus
      * @param string $email
      *
      * @return void
      */
-    public function testExecute(string $expStatus, string $email): void
+    public function testExecute(bool $expStatus, string $email): void
     {
         $this->getRequest()->setParam('email', $email);
         $this->dispatch('newsletter/ajax/status');
