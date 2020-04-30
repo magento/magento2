@@ -203,14 +203,13 @@ class Reorder
             }
         }
 
-        /** @var ProductInterface $product */
-        foreach ($products as $product) {
-            if (!isset($orderItemsByProductId[$product->getId()])) {
+        foreach ($orderItemsByProductId as $productId => $orderItems) {
+            if (!isset($products[$productId])) {
                 continue;
             }
-            $orderItems = $orderItemsByProductId[$product->getId()];
+            $product = $products[$productId];
             foreach ($orderItems as $orderItem) {
-                $this->addItemToCart($orderItem, $cart, $product);
+                $this->addItemToCart($orderItem, $cart, clone $product);
             }
         }
     }
