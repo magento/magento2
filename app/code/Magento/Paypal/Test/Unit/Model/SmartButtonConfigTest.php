@@ -168,5 +168,4 @@ class SmartButtonConfigTest extends TestCase
     {
         return include __DIR__ . '/_files/unsupported_payment_methods.php';
     }
-
 }
