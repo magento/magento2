@@ -9,12 +9,11 @@ namespace Magento\Paypal\Setup\Patch\Data;
 
 use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Framework\Setup\Patch\DataPatchInterface;
-use Magento\Framework\Setup\Patch\PatchVersionInterface;
 
 /**
  * Update existing customization for the smart button label to be compatible with the new PayPal SDK
  */
-class UpdateSmartButtonLabel implements DataPatchInterface, PatchVersionInterface
+class UpdateSmartButtonLabel implements DataPatchInterface
 {
     /**
      * @var ModuleDataSetupInterface
