@@ -6,7 +6,7 @@
 -->
 <select class="admin__control-select" data-bind="
     value: (indexValue = $row()[indexField]) && filters[indexValue],
-    optgroup: getOptions($row()),
+    optgroup: getOptions($row(), true),
     optionsValue: 'value',
     optionsText: 'label'"
 />

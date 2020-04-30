@@ -16,7 +16,8 @@ define([
             templates: {
                 base: 'ui/grid/cells/text',
                 input: 'Magento_ImportExport/export/filter-grid/columns/filter/input',
-                select: 'Magento_ImportExport/export/filter-grid/columns/filter/select'
+                select: 'Magento_ImportExport/export/filter-grid/columns/filter/select',
+                multiselect: 'Magento_ImportExport/export/filter-grid/columns/filter/multiselect'
             },
             filters: {},
             notSelectedLabel: '-- Not Selected --'
@@ -39,18 +40,21 @@ define([
         },
 
         /**
-         * Retrieves options for selects, including "not selected" value.
+         * Retrieves options for selects, including "not selected" value if needed.
          *
          * @param {Object} row
+         * @param {Boolean} notSelected
          * @returns {Array}
          */
-        getOptions: function (row) {
+        getOptions: function (row, notSelected = false) {
             let options = _.toArray(row[this.index].options);
 
-            options.unshift({
-                value: '',
-                label: $t(this.notSelectedLabel)
-            });
+            if (notSelected) {
+                options.unshift({
+                    value: '',
+                    label: $t(this.notSelectedLabel)
+                });
+            }
 
             return options;
         }

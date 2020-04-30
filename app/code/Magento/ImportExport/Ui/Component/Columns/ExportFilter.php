@@ -39,15 +39,16 @@ class ExportFilter extends Column
 
                     if ($attribute->usesSource()) {
                         $options = $attribute->getSource()->getAllOptions();
-                        $filter['options'] = array_filter($options, function($option) {
+                        $filter['options'] = array_filter($options, function ($option) {
                             return $option['value'] !== '';
                         });
-                    }
+                        $filter['options'] = array_values($filter['options']);
 
-                    if ($filter['type'] == Export::FILTER_TYPE_SELECT && empty($filter['options'])) {
-                        throw new LocalizedException(
-                            __('We can\'t determine the attribute filter type.')
-                        );
+                        if (empty($filter['options'])) {
+                            throw new LocalizedException(
+                                __('We can\'t filter an attribute with no attribute options.')
+                            );
+                        }
                     }
                 } catch (LocalizedException $e) {
                     $filter = $e->getMessage();

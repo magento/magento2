@@ -1,0 +1,15 @@
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<select multiple class="admin__control-multiselect" data-bind="
+    attr: {
+        size: 6
+    },
+    selectedOptions: (indexValue = $row()[indexField]) && filters[indexValue],
+    optgroup: getOptions($row()),
+    optionsValue: 'value',
+    optionsText: 'label'"
+/>
