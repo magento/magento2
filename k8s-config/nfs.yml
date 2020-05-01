@@ -77,6 +77,9 @@ spec:
       labels:
         role: nfs-server
     spec:
+      securityContext:
+        fsGroup: 82
+        fsGroupChangePolicy: "OnRootMismatch"
       containers:
       - name: nfs-server
         env:
