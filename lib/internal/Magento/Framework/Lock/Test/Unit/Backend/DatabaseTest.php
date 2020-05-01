@@ -85,7 +85,6 @@ class DatabaseTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @throws \Magento\Framework\Exception\AlreadyExistsException
      * @throws \Zend_Db_Statement_Exception
      */
     public function testLock()
@@ -102,7 +101,6 @@ class DatabaseTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @throws \Magento\Framework\Exception\AlreadyExistsException
      * @throws \Zend_Db_Statement_Exception
      */
     public function testlockWithTooLongName()
@@ -119,9 +117,7 @@ class DatabaseTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @throws \Magento\Framework\Exception\AlreadyExistsException
      * @throws \Zend_Db_Statement_Exception
-     * @expectedException \Magento\Framework\Exception\AlreadyExistsException
      */
     public function testlockWithAlreadyAcquiredLockInSameSession()
     {
@@ -133,12 +129,11 @@ class DatabaseTest extends \PHPUnit\Framework\TestCase
             ->method('fetchColumn')
             ->willReturn(true);
 
-        $this->database->lock('testLock');
-        $this->database->lock('differentLock');
+        $this->assertTrue($this->database->lock('testLock'));
+        $this->assertFalse($this->database->lock('differentLock'));
     }
 
     /**
-     * @throws \Magento\Framework\Exception\AlreadyExistsException
      * @throws \Zend_Db_Statement_Exception
      */
     public function testLockWithUnavailableDeploymentConfig()

@@ -84,12 +84,7 @@ class Database implements \Magento\Framework\Lock\LockManagerInterface
          * currently we support MySQL 5.6 way only.
          */
         if ($this->currentLock) {
-            throw new AlreadyExistsException(
-                new Phrase(
-                    'Current connection is already holding lock for %1, only single lock allowed',
-                    [$this->currentLock]
-                )
-            );
+            return false;
         }
 
         $result = (bool)$this->resource->getConnection()->query(
