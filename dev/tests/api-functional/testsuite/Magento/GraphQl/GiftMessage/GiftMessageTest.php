@@ -5,6 +5,8 @@
  */
 declare(strict_types=1);
 
+namespace Magento\GraphQl\GiftMessage;
+
 use Magento\GraphQl\Quote\GetMaskedQuoteIdByReservedOrderId;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
