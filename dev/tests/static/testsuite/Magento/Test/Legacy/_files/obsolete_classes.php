@@ -4254,5 +4254,7 @@ return [
     ['Magento\Elasticsearch\Elasticsearch5\Model\Adapter\DataMapper\ProductDataMapperProxy'],
     ['Magento\Elasticsearch\Elasticsearch5\Model\Adapter\DataMapper\ProductDataMapper'],
     ['Magento\Elasticsearch\Model\Adapter\DataMapper\DataMapperResolver'],
-    ['Magento\Elasticsearch\Model\Adapter\Container\Attribute']
+    ['Magento\Elasticsearch\Model\Adapter\Container\Attribute'],
+    ['PHPUnit_Framework_MockObject_MockObject', 'PHPUnit\Framework\MockObject\MockObject'],
+    ['PHPUnit\Framework\BaseTestListener'],
 ];
