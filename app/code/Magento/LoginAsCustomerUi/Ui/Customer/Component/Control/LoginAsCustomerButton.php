@@ -8,10 +8,12 @@ declare(strict_types=1);
 namespace Magento\LoginAsCustomerUi\Ui\Customer\Component\Control;
 
 use Magento\Framework\View\Element\UiComponent\Control\ButtonProviderInterface;
+use Magento\Framework\AuthorizationInterface;
 use Magento\Framework\Escaper;
 use Magento\Framework\Registry;
 use Magento\Backend\Block\Widget\Context;
 use Magento\Customer\Block\Adminhtml\Edit\GenericButton;
+use Magento\LoginAsCustomerApi\Api\ConfigInterface;
 
 /**
  * Login As Customer button UI component.
@@ -19,9 +21,14 @@ use Magento\Customer\Block\Adminhtml\Edit\GenericButton;
 class LoginAsCustomerButton extends GenericButton implements ButtonProviderInterface
 {
     /**
-     * @var \Magento\Framework\AuthorizationInterface
+     * @var AuthorizationInterface
      */
     private $authorization;
+
+    /**
+     * @var ConfigInterface
+     */
+    private $config;
 
     /**
      * Escaper
@@ -33,13 +40,16 @@ class LoginAsCustomerButton extends GenericButton implements ButtonProviderInter
     /**
      * @param Context $context
      * @param Registry $registry
+     * @param ConfigInterface $config
      */
     public function __construct(
         Context $context,
-        Registry $registry
+        Registry $registry,
+        ConfigInterface $config
     ) {
         parent::__construct($context, $registry);
         $this->authorization = $context->getAuthorization();
+        $this->config = $config;
         $this->escaper = $context->getEscaper();
     }
 
@@ -50,8 +60,9 @@ class LoginAsCustomerButton extends GenericButton implements ButtonProviderInter
     {
         $customerId = $this->getCustomerId();
         $data = [];
-        $canModify = $customerId && $this->authorization->isAllowed('Magento_LoginAsCustomer::login_button');
-        if ($canModify) {
+        $isAllowed = $customerId && $this->authorization->isAllowed('Magento_LoginAsCustomer::login_button');
+        $isEnabled = $this->config->isEnabled();
+        if ($isAllowed && $isEnabled) {
             $data = [
                 'label' => __('Login As Customer'),
                 'class' => 'login login-button',

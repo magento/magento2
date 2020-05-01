@@ -81,4 +81,17 @@ class ConfirmationPopup extends Template
 
         return $this->json->serialize($layout);
     }
+
+    /**
+     * Render block HTML
+     *
+     * @return string
+     */
+    protected function _toHtml()
+    {
+        if (!$this->config->isEnabled()) {
+            return '';
+        }
+        return parent::_toHtml();
+    }
 }
