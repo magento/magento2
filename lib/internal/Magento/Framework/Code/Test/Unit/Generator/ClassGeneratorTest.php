@@ -156,7 +156,7 @@ class ClassGeneratorTest extends TestCase
         array $expectedDocBlock,
         DocBlockGenerator $actualDocBlock
     ) {
-        $this->markTestSkipped('Testing protected / private methods / properties');
+        $this->markTestSkipped('Skipped in #27500 due to testing protected/private methods and properties');
         // assert plain string data
         foreach ($expectedDocBlock as $propertyName => $propertyData) {
             if (is_string($propertyData)) {

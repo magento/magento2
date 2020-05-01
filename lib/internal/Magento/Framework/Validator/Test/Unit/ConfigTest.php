@@ -230,7 +230,7 @@ class ConfigTest extends TestCase
      */
     public function testBuilderConfiguration()
     {
-        $this->markTestSkipped('Testing protected / private methods / properties');
+        $this->markTestSkipped('Skipped in #27500 due to testing protected/private methods and properties');
 
         $this->getMockBuilder(Builder::class)
             ->disableOriginalConstructor()

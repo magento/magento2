@@ -65,7 +65,7 @@ class CollectionTest extends TestCase
      */
     public function testSetItemObjectClass($class)
     {
-        $this->markTestSkipped('Testing protected / private methods / properties');
+        $this->markTestSkipped('Skipped in #27500 due to testing protected/private methods and properties');
 
         $this->_model->setItemObjectClass($class);
         $this->assertAttributeSame($class, '_itemObjectClass', $this->_model);

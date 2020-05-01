@@ -34,7 +34,7 @@ class ProfilerTest extends TestCase
 
     public function testSetDefaultTags()
     {
-        $this->markTestSkipped('Testing protected / private methods / properties');
+        $this->markTestSkipped('Skipped in #27500 due to testing protected/private methods and properties');
 
         $expected = ['some_key' => 'some_value'];
         Profiler::setDefaultTags($expected);
@@ -43,7 +43,7 @@ class ProfilerTest extends TestCase
 
     public function testAddTagFilter()
     {
-        $this->markTestSkipped('Testing protected / private methods / properties');
+        $this->markTestSkipped('Skipped in #27500 due to testing protected/private methods and properties');
 
         Profiler::addTagFilter('tag1', 'value_1.1');
         Profiler::addTagFilter('tag2', 'value_2.1');
@@ -56,7 +56,7 @@ class ProfilerTest extends TestCase
 
     public function testAdd()
     {
-        $this->markTestSkipped('Testing protected / private methods / properties');
+        $this->markTestSkipped('Skipped in #27500 due to testing protected/private methods and properties');
 
         $mock = $this->_getDriverMock();
         Profiler::add($mock);
@@ -223,7 +223,7 @@ class ProfilerTest extends TestCase
 
     public function testResetProfiler()
     {
-        $this->markTestSkipped('Testing protected / private methods / properties');
+        $this->markTestSkipped('Skipped in #27500 due to testing protected/private methods and properties');
 
         $driver = $this->_getDriverMock();
         $driver->expects($this->once())->method('clear')->with(null);
@@ -295,7 +295,7 @@ class ProfilerTest extends TestCase
 
     public function testApplyConfig()
     {
-        $this->markTestSkipped('Testing protected / private methods / properties');
+        $this->markTestSkipped('Skipped in #27500 due to testing protected/private methods and properties');
 
         $mockDriver = $this->createMock(DriverInterface::class);
         $driverConfig = ['type' => 'foo'];

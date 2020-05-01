@@ -163,7 +163,7 @@ class StatTest extends TestCase
      */
     public function testClear()
     {
-        $this->markTestSkipped('Testing protected / private methods / properties');
+        $this->markTestSkipped('Skipped in #27500 due to testing protected/private methods and properties');
 
         $this->_stat->start('timer1', 1, 20, 10);
         $this->_stat->start('timer2', 2, 20, 10);

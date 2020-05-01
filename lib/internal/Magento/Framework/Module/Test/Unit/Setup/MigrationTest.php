@@ -149,7 +149,7 @@ class MigrationTest extends TestCase
      */
     public function testAppendClassAliasReplace()
     {
-        $this->markTestSkipped('Testing protected / private methods / properties');
+        $this->markTestSkipped('Skipped in #27500 due to testing protected/private methods and properties');
 
         $setupMock = $this->getMockForAbstractClass(ModuleDataSetupInterface::class);
         $filesystemMock = $this->createMock(Filesystem::class);

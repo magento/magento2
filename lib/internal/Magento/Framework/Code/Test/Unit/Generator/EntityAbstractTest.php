@@ -68,7 +68,7 @@ class EntityAbstractTest extends TestCase
 
     public function testConstruct()
     {
-        $this->markTestSkipped('Testing protected / private methods / properties');
+        $this->markTestSkipped('Skipped in #27500 due to testing protected/private methods and properties');
 
         // without parameters
         $this->assertAttributeEmpty('_sourceClassName', $this->_model);

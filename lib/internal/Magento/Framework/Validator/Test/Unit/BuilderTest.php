@@ -185,7 +185,7 @@ class BuilderTest extends TestCase
      */
     public function testAddConfiguration($constraints, $alias, $configuration, $expected)
     {
-        $this->markTestSkipped('Testing protected / private methods / properties');
+        $this->markTestSkipped('Skipped in #27500 due to testing protected/private methods and properties');
 
         /** @var \Magento\Framework\Validator\Builder $builder */
         $builder = $this->_objectManager->getObject(
@@ -208,7 +208,7 @@ class BuilderTest extends TestCase
      */
     public function testAddConfigurations($constraints, $alias, $configuration, $expected)
     {
-        $this->markTestSkipped('Testing protected / private methods / properties');
+        $this->markTestSkipped('Skipped in #27500 due to testing protected/private methods and properties');
 
         /** @var \Magento\Framework\Validator\Builder $builder */
         $builder = $this->_objectManager->getObject(

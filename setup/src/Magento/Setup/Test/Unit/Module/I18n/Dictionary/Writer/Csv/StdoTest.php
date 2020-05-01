@@ -14,7 +14,7 @@ class StdoTest extends TestCase
 {
     public function testThatHandlerIsRight()
     {
-        $this->markTestSkipped('Testing protected / private methods / properties');
+        $this->markTestSkipped('Skipped in #27500 due to testing protected/private methods and properties');
         $writer = new Stdo();
         $this->assertAttributeEquals(STDOUT, '_fileHandler', $writer);
     }

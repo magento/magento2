@@ -43,7 +43,7 @@ class StandardTest extends TestCase
      */
     public function testDefaultConstructor()
     {
-        $this->markTestSkipped('Testing protected / private methods / properties');
+        $this->markTestSkipped('Skipped in #27500 due to testing protected/private methods and properties');
 
         $driver = new Standard();
         $this->assertAttributeInstanceOf(Stat::class, '_stat', $driver);
@@ -99,7 +99,7 @@ class StandardTest extends TestCase
      */
     public function testInitOutputs()
     {
-        $this->markTestSkipped('Testing protected / private methods / properties');
+        $this->markTestSkipped('Skipped in #27500 due to testing protected/private methods and properties');
 
         $outputFactory = $this->createMock(Factory::class);
         $config = [

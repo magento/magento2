@@ -46,7 +46,7 @@ class MysqlTest extends TestCase
      */
     public function testConstructor(array $inputConfig, array $expectedConfig)
     {
-        $this->markTestSkipped('Testing protected / private methods / properties');
+        $this->markTestSkipped('Skipped in #27500 due to testing protected/private methods and properties');
 
         $object = new Mysql(
             $inputConfig,

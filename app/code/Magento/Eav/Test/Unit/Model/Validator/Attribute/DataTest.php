@@ -316,7 +316,7 @@ class DataTest extends TestCase
 
     public function testSetAttributesWhiteList()
     {
-        $this->markTestSkipped('Testing protected / private methods / properties');
+        $this->markTestSkipped('Skipped in #27500 due to testing protected/private methods and properties');
 
         $attributes = ['attr1', 'attr2', 'attr3'];
         $attrDataFactory = $this->getMockBuilder(AttributeDataFactory::class)
@@ -335,7 +335,7 @@ class DataTest extends TestCase
 
     public function testSetAttributesBlackList()
     {
-        $this->markTestSkipped('Testing protected / private methods / properties');
+        $this->markTestSkipped('Skipped in #27500 due to testing protected/private methods and properties');
 
         $attributes = ['attr1', 'attr2', 'attr3'];
         $attrDataFactory = $this->getMockBuilder(AttributeDataFactory::class)

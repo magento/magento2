@@ -242,7 +242,7 @@ class AbstractCollectionTest extends TestCase
      */
     public function testAttributeIdIsInt($values)
     {
-        $this->markTestSkipped('Testing protected / private methods / properties');
+        $this->markTestSkipped('Skipped in #27500 due to testing protected/private methods and properties');
         $this->resourceHelperMock->expects($this->any())->method('getLoadAttributesSelectGroups')->willReturn([]);
         $this->fetchStrategyMock->expects($this->any())->method('fetchAll')->willReturn($values);
         $selectMock = $this->coreResourceMock->getConnection()->select();

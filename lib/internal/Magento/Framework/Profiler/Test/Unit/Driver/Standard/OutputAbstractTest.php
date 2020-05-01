@@ -32,7 +32,7 @@ class OutputAbstractTest extends TestCase
      */
     public function testSetFilterPattern()
     {
-        $this->markTestSkipped('Testing protected / private methods / properties');
+        $this->markTestSkipped('Skipped in #27500 due to testing protected/private methods and properties');
 
         $this->assertAttributeEmpty('_filterPattern', $this->_output);
         $filterPattern = '/test/';
@@ -45,7 +45,7 @@ class OutputAbstractTest extends TestCase
      */
     public function testSetThreshold()
     {
-        $this->markTestSkipped('Testing protected / private methods / properties');
+        $this->markTestSkipped('Skipped in #27500 due to testing protected/private methods and properties');
 
         $thresholdKey = Stat::TIME;
         $this->_output->setThreshold($thresholdKey, 100);

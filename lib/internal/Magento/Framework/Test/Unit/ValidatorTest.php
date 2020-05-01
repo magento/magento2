@@ -141,7 +141,7 @@ class ValidatorTest extends TestCase
      */
     public function testAddValidator()
     {
-        $this->markTestSkipped('Testing protected / private methods / properties');
+        $this->markTestSkipped('Skipped in #27500 due to testing protected/private methods and properties');
         $fooValidator = new IsTrue();
         $classConstraint = new Constraint($fooValidator, 'id');
         $propertyValidator = new Property($classConstraint, 'name', 'id');
