@@ -70,7 +70,6 @@ class InitialConfigSourceTest extends TestCase
         $this->config = $this->loadConfig();
         $this->envConfig = $this->loadEnvConfig();
         $this->loadDumpConfig();
-        $this->storeManager->reinitStores();
     }
 
     /**
@@ -100,6 +99,8 @@ class InitialConfigSourceTest extends TestCase
             // remove application environment config for emulate work without db
             $this->clearConfig(ConfigFilePool::APP_ENV);
         }
+        // reinit stores to get correct updated config
+        $this->storeManager->reinitStores();
         $this->assertEquals($defaultWebsite, $this->storeManager->getWebsite()->getCode());
         $this->assertEquals($websites, array_keys($this->storeManager->getWebsites(true, true)), '', 0.0, 10, true);
     }
