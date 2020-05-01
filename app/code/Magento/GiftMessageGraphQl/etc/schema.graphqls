@@ -5,6 +5,30 @@ type Cart {
     gift_message: GiftMessage @resolver (class: "\\Magento\\GiftMessageGraphQl\\Model\\Resolver\\GiftMessage") @doc(description: "The entered gift message for the cart")
 }
 
+type SimpleCartItem {
+    gift_message: GiftMessage @resolver (class: "\\Magento\\GiftMessageGraphQl\\Model\\Resolver\\GiftMessageItem") @doc(description: "The entered gift message for the cart item")
+}
+
+type ConfigurableCartItem {
+    gift_message: GiftMessage @resolver (class: "\\Magento\\GiftMessageGraphQl\\Model\\Resolver\\GiftMessageItem") @doc(description: "The entered gift message for the cart item")
+}
+
+type BundleCartItem {
+    gift_message: GiftMessage @resolver (class: "\\Magento\\GiftMessageGraphQl\\Model\\Resolver\\GiftMessageItem") @doc(description: "The entered gift message for the cart item")
+}
+
+type GiftCardCartItem {
+    gift_message: GiftMessage @resolver (class: "\\Magento\\GiftMessageGraphQl\\Model\\Resolver\\GiftMessageItem") @doc(description: "The entered gift message for the cart item")
+}
+# TODO gift message for the order and order item
+type SalesItemInterface {
+    gift_message: GiftMessage @doc(description: "The entered gift message for the order item")
+}
+
+type CustomerOrder {
+    gift_message: GiftMessage @doc(description: "The entered gift message for the order")
+}
+
 type GiftMessage {
     to: String! @doc(description: "Recepient name")
     from: String! @doc(description: "Sender name")
