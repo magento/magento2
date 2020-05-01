@@ -16,7 +16,6 @@ use Magento\LoginAsCustomerLog\Api\Data\LogInterface;
  */
 class Log extends AbstractExtensibleModel implements LogInterface
 {
-
     /**
      * @inheritDoc
      */

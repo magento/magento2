@@ -14,6 +14,8 @@ use Magento\LoginAsCustomerApi\Api\ConfigInterface;
 
 /**
  * Admin blog post
+ *
+ * @api
  */
 class ConfirmationPopup extends Template
 {
@@ -39,7 +41,6 @@ class ConfirmationPopup extends Template
     private $json;
 
     /**
-     * ConfirmationPopup constructor.
      * @param Template\Context $context
      * @param StoreOptions $storeOptions
      * @param ConfigInterface $config
@@ -60,7 +61,7 @@ class ConfirmationPopup extends Template
     }
 
     /**
-     * @return string
+     * @inheritdoc
      */
     public function getJsLayout()
     {
@@ -70,7 +71,8 @@ class ConfirmationPopup extends Template
         $layout['components']['lac-confirmation-popup']['title'] = $showStoreViewOptions
             ? __('Login as Customer: Select Store View')
             : __('You are about to Login as Customer');
-        $layout['components']['lac-confirmation-popup']['content'] = __('Actions taken while in "Login as Customer" will affect actual customer data.');
+        $layout['components']['lac-confirmation-popup']['content'] =
+            __('Actions taken while in "Login as Customer" will affect actual customer data.');
 
         $layout['components']['lac-confirmation-popup']['showStoreViewOptions'] = $showStoreViewOptions;
         $layout['components']['lac-confirmation-popup']['storeViewOptions'] = $showStoreViewOptions

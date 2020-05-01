@@ -61,7 +61,7 @@ class GetLogList implements GetLogsListInterface
     /**
      * @inheritDoc
      */
-    public function execute(SearchCriteriaInterface $searchCriteria = null): LogSearchResultsInterface
+    public function execute(SearchCriteriaInterface $searchCriteria): LogSearchResultsInterface
     {
         $collection = $this->logCollectionFactory->create();
         $searchCriteria = $searchCriteria ?: $this->searchCriteriaBuilder->create();

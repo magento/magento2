@@ -3,15 +3,25 @@
  * See COPYING.txt for license details.
  */
 
+//
+//  Variables
+//  ---------------------------------------------
+
+@lac-confirm-background-color: #ccc;
+
+//
+//  Common
+//  ---------------------------------------------
+
 & when (@media-common = true) {
     .modal-popup.confirm.lac-confirm {
         .modal-inner-wrap {
             max-width: 55rem;
         }
         .modal-title {
-            border-bottom: 1px solid rgb(204, 204, 204);
-            width: 100%;
+            border-bottom: 1px solid @lac-confirm-background-color;
             padding-bottom: 15px;
+            width: 100%;
         }
 
         .store-view-ptions {

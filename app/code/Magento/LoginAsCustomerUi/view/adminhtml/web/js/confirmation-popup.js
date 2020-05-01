@@ -18,11 +18,14 @@ define(
     function (Component, confirm, $, ko, $t, template, selectTpl, undefined) {
 
         return Component.extend({
+            /**
+             * Initialize Component
+             */
             initialize: function () {
                 this._super();
-                var self = this;
+                var self = this,
+                    content = '<div class="message message-warning">' + self.content + '</div>';
 
-                var content = '<div class="message message-warning">' + self.content + '</div>';
                 if (self.showStoreViewOptions) {
                     content = template(
                         selectTpl,
@@ -35,6 +38,12 @@ define(
                         }) + content;
                 }
 
+                /**
+                 * Confirmation popup
+                 *
+                 * @param {String} url
+                 * @returns {Boolean}
+                 */
                 window.lacConfirmationPopup = function (url) {
                     confirm({
                         title: self.title,
@@ -46,6 +55,7 @@ define(
                              */
                             confirm: function () {
                                 var storeId = $('#lac-confirmation-popup-store-id').val();
+
                                 if (storeId) {
                                     url += ((url.indexOf('?') == -1) ? '?' : '&') + 'store_id=' + storeId;
                                 }
