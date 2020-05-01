@@ -96,7 +96,6 @@ class GroupActions extends Column
                                 ]
                             ),
                             'label' => __('Edit'),
-                            '__disableTmpl' => true
                         ],
                     ];
 
@@ -117,7 +116,6 @@ class GroupActions extends Column
                                 )
                             ],
                             'post' => true,
-                            '__disableTmpl' => true
                         ];
                     }
                 }
