@@ -9,7 +9,7 @@ use Magento\GraphQl\Quote\GetMaskedQuoteIdByReservedOrderId;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 
-class GiftMessageTest  extends GraphQlAbstract
+class GiftMessageTest extends GraphQlAbstract
 {
     /**
      * @var GetMaskedQuoteIdByReservedOrderId

@@ -16,7 +16,7 @@ use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\GiftMessage\Api\CartRepositoryInterface;
 
 /**
- * Class Gift Message
+ * Class provides ability to get GiftMessage for cart
  */
 class GiftMessage implements ResolverInterface
 {
@@ -48,6 +48,7 @@ class GiftMessage implements ResolverInterface
      * @return array|Value|mixed
      *
      * @throws GraphQlInputException
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function resolve(
         Field $field,
@@ -63,7 +64,7 @@ class GiftMessage implements ResolverInterface
 
         $giftCartMessage = $this->cartRepository->get($cart->getId());
 
-        if (is_null($giftCartMessage)) {
+        if ($giftCartMessage === null) {
             throw new GraphQlInputException(__("Gift message doesn't exist for current cart"));
         }
 
