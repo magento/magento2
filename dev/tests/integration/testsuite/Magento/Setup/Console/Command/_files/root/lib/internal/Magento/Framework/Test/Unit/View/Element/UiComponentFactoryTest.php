@@ -32,7 +32,7 @@ class UiComponentFactoryTest extends \PHPUnit\Framework\TestCase
     /** @var \Magento\Ui\Config\Reader\Definition\Data|MockObject */
     protected $dataMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManagerMock = $this->getMockBuilder(\Magento\Framework\ObjectManagerInterface::class)
             ->getMockForAbstractClass();
