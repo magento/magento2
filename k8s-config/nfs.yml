@@ -77,8 +77,6 @@ spec:
       labels:
         role: nfs-server
     spec:
-      securityContext:
-        fsGroup: 82
       containers:
       - name: nfs-server
         env:
@@ -92,6 +90,8 @@ spec:
             containerPort: 20048
           - name: rpcbind
             containerPort: 111
+        securityContext:
+          privileged: true
         volumeMounts:
           - mountPath: /data
             name: nfs-pvc
