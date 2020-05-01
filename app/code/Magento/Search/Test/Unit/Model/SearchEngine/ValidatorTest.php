@@ -56,20 +56,35 @@ class ValidatorTest extends TestCase
 
     public function testValidateBlacklist()
     {
-        $expectedErrors = ["Search engine 'Bad Engine' is not supported. Fix search configuration and try again."];
+        $this->scopeConfigMock
+            ->expects($this->once())
+            ->method('getValue')
+            ->with('catalog/search/engine')
+            ->willReturn('badEngine');
 
-        $this->assertEquals($expectedErrors, $this->validator->validate(['search-engine' => 'badEngine']));
+        $expectedErrors = [
+            "Your current search engine, 'Bad Engine', is not supported."
+            . " You must install a supported search engine before upgrading."
+            . " See the System Upgrade Guide for more information."
+        ];
+
+        $this->assertEquals($expectedErrors, $this->validator->validate());
     }
 
     public function testValidateInvalid()
     {
         $expectedErrors = ['Validation failed for otherEngine'];
 
+        $this->scopeConfigMock
+            ->expects($this->once())
+            ->method('getValue')
+            ->with('catalog/search/engine')
+            ->willReturn('otherEngine');
         $this->otherEngineValidatorMock
             ->expects($this->once())
             ->method('validate')
             ->willReturn($expectedErrors);
 
-        $this->assertEquals($expectedErrors, $this->validator->validate(['search-engine' => 'otherEngine']));
+        $this->assertEquals($expectedErrors, $this->validator->validate());
     }
 }

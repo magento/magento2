@@ -15,8 +15,7 @@ interface ValidatorInterface
     /**
      * Validate search engine
      *
-     * @param array $searchConfig
      * @return string[] array of errors, empty array if validation passed
      */
-    public function validate(array $searchConfig = []): array;
+    public function validate(): array;
 }

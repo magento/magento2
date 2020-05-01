@@ -47,23 +47,20 @@ class Validator implements ValidatorInterface
     /**
      * @inheritDoc
      */
-    public function validate(array $searchConfig = []): array
+    public function validate(): array
     {
         $errors = [];
-
-        $currentEngine = isset($searchConfig['search-engine'])
-            ? $searchConfig['search-engine']
-            : $this->scopeConfig->getValue('catalog/search/engine');
-
+        $currentEngine = $this->scopeConfig->getValue('catalog/search/engine');
         if (isset($this->engineBlacklist[$currentEngine])) {
             $blacklistedEngine = $this->engineBlacklist[$currentEngine];
-            $errors[] = "Search engine '{$blacklistedEngine}' is not supported. "
-                . "Fix search configuration and try again.";
+            $errors[] = "Your current search engine, '{$blacklistedEngine}', is not supported."
+                . " You must install a supported search engine before upgrading."
+                . " See the System Upgrade Guide for more information.";
         }
 
         if (isset($this->engineValidators[$currentEngine])) {
             $validator = $this->engineValidators[$currentEngine];
-            $validationErrors = $validator->validate($searchConfig);
+            $validationErrors = $validator->validate();
             $errors = array_merge($errors, $validationErrors);
         }
         return $errors;

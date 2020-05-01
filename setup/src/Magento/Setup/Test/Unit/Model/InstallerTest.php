@@ -18,6 +18,7 @@ namespace Magento\Setup\Test\Unit\Model {
     use Magento\Framework\App\State\CleanupFiles;
     use Magento\Framework\Setup\Patch\PatchApplier;
     use Magento\Framework\Setup\Patch\PatchApplierFactory;
+    use Magento\Setup\Model\SearchConfig;
     use Magento\Setup\Validator\DbValidator;
 
     /**
@@ -318,6 +319,7 @@ namespace Magento\Setup\Test\Unit\Model {
                 ->method('setAreaCode')
                 ->with(\Magento\Framework\App\Area::AREA_GLOBAL);
             $registry = $this->createMock(\Magento\Framework\Registry::class);
+            $searchConfigMock = $this->getMockBuilder(SearchConfig::class)->disableOriginalConstructor()->getMock();
             $this->setupFactory->expects($this->atLeastOnce())->method('create')->with($resource)->willReturn($setup);
             $this->dataSetupFactory->expects($this->atLeastOnce())->method('create')->willReturn($dataSetup);
             $this->objectManager->expects($this->any())
@@ -349,7 +351,8 @@ namespace Magento\Setup\Test\Unit\Model {
                     [\Magento\Framework\App\State::class, $appState],
                     [\Magento\Framework\App\Cache\Manager::class, $cacheManager],
                     [\Magento\Setup\Model\DeclarationInstaller::class, $this->declarationInstallerMock],
-                    [\Magento\Framework\Registry::class, $registry]
+                    [\Magento\Framework\Registry::class, $registry],
+                    [SearchConfig::class, $searchConfigMock]
                 ]));
             $this->adminFactory->expects($this->any())->method('create')->willReturn(
                 $this->createMock(\Magento\Setup\Model\AdminAccount::class)
@@ -409,6 +412,7 @@ namespace Magento\Setup\Test\Unit\Model {
                         ['Schema post-updates:'],
                         ['Module \'Foo_One\':'],
                         ['Module \'Bar_Two\':'],
+                        ['Installing search configuration...'],
                         ['Installing user configuration...'],
                         ['Enabling caches:'],
                         ['Current status:'],
@@ -460,6 +464,7 @@ namespace Magento\Setup\Test\Unit\Model {
                         ['Schema post-updates:'],
                         ['Module \'Foo_One\':'],
                         ['Module \'Bar_Two\':'],
+                        ['Installing search configuration...'],
                         ['Installing user configuration...'],
                         ['Enabling caches:'],
                         ['Current status:'],

@@ -54,7 +54,6 @@ class ValidatorTest extends TestCase
         $this->clientResolverMock
             ->expects($this->once())
             ->method('create')
-            ->with(null)
             ->willReturn($this->elasticsearchClientMock);
         $this->elasticsearchClientMock->expects($this->once())->method('testConnection')->willReturn(true);
 
@@ -68,12 +67,14 @@ class ValidatorTest extends TestCase
         $this->clientResolverMock
             ->expects($this->once())
             ->method('create')
-            ->with($searchEngine)
             ->willReturn($this->elasticsearchClientMock);
         $this->elasticsearchClientMock->expects($this->once())->method('testConnection')->willReturn(false);
 
-        $expected = ['Elasticsearch connection validation failed'];
-        $this->assertEquals($expected, $this->validator->validate(['search-engine' => $searchEngine]));
+        $expected = [
+            'Could not validate a connection to Elasticsearch.'
+            . ' Verify that the Elasticsearch host and port are configured correctly.'
+        ];
+        $this->assertEquals($expected, $this->validator->validate());
     }
 
     public function testValidateFailException()
@@ -88,7 +89,7 @@ class ValidatorTest extends TestCase
             ->method('testConnection')
             ->willThrowException(new \Exception($exceptionMessage));
 
-        $expected = ['Elasticsearch connection validation failed: ' . $exceptionMessage];
+        $expected = ['Could not validate a connection to Elasticsearch. ' . $exceptionMessage];
         $this->assertEquals($expected, $this->validator->validate());
     }
 }

@@ -31,20 +31,19 @@ class Validator implements ValidatorInterface
     /**
      * Checks Elasticsearch Connection
      *
-     * @param array $searchConfig
-     * @return array
+     * @return string[]
      */
-    public function validate(array $searchConfig = []): array
+    public function validate(): array
     {
         $errors = [];
-        $searchEngine = $searchConfig['search-engine'] ?? null;
         try {
-            $client = $this->clientResolver->create($searchEngine);
+            $client = $this->clientResolver->create();
             if (!$client->testConnection()) {
-                $errors[] = 'Elasticsearch connection validation failed';
+                $errors[] = 'Could not validate a connection to Elasticsearch.'
+                    . ' Verify that the Elasticsearch host and port are configured correctly.';
             }
         } catch (\Exception $e) {
-            $errors[] = 'Elasticsearch connection validation failed: ' . $e->getMessage();
+            $errors[] = 'Could not validate a connection to Elasticsearch. ' . $e->getMessage();
         }
         return $errors;
     }
