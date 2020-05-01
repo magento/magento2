@@ -29,7 +29,7 @@ class GiftMessageTest extends GraphQlAbstract
      */
     public function testGiftMessageForCart()
     {
-        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('message_order_21');
         $query = <<<QUERY
 {
     cart(cart_id: "$maskedQuoteId") {
