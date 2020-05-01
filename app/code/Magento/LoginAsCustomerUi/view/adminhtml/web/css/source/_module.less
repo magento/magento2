@@ -7,7 +7,8 @@
 //  Variables
 //  ---------------------------------------------
 
-@lac-confirm-background-color: #ccc;
+@lac-confirm-popup-title-background-color: #ccc;
+@lac-confirm-popup-content-color: #514943;
 
 //
 //  Common
@@ -19,7 +20,7 @@
             max-width: 55rem;
         }
         .modal-title {
-            border-bottom: 1px solid @lac-confirm-background-color;
+            border-bottom: 1px solid @lac-confirm-popup-title-background-color;
             padding-bottom: 15px;
             width: 100%;
         }
@@ -32,7 +33,7 @@
             .message-warning {
                 padding-left: 4.5rem;
                 &:before {
-                    color: #514943;
+                    color: @lac-confirm-popup-content-color;
                     left: 5px;
                 }
             }
