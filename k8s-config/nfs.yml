@@ -91,7 +91,7 @@ spec:
           - name: rpcbind
             containerPort: 111
         securityContext:
-          privileged: true
+          fsGroup: 82        
         volumeMounts:
           - mountPath: /data
             name: nfs-pvc
