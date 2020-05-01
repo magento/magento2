@@ -7,15 +7,12 @@ declare(strict_types=1);
 
 namespace Magento\LoginAsCustomerWebapi\Api;
 
-use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\Exception\NoSuchEntityException;
-
 /**
  * Interface providing customer token generation for admin.
  *
  * @api
  */
-interface LoginAsCustomerWebapiCreateCustomerAccessTokenInterface
+interface CreateCustomerAccessTokenInterface
 {
     /**
      * Create access token for admin by customer id.

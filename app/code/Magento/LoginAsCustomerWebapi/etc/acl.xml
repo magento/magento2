@@ -11,7 +11,7 @@
             <resource id="Magento_Backend::admin">
                 <resource id="Magento_Customer::customer">
                     <resource id="Magento_LoginAsCustomer::login" title="Login as Customer" sortOrder="50">
-                        <resource id="Magento_LoginAsCustomer::login_token" title="Create Login as Customer Token" sortOrder="30" />
+                        <resource id="Magento_LoginAsCustomerWebapi::login_token" title="Create Login as Customer Token" sortOrder="30" />
                     </resource>
                 </resource>
             </resource>

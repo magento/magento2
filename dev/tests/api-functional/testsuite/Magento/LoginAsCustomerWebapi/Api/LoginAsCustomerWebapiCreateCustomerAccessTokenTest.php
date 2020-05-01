@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\LoginAsCustomerWebapi\Api;
 
@@ -42,9 +43,9 @@ class LoginAsCustomerWebapiCreateCustomerAccessTokenTest extends WebapiAbstract
      */
     public function testCreateCustomerAccessToken()
     {
-        // 'Magento_LoginAsCustomer::login_token' resource required for access.
+        // 'Magento_LoginAsCustomerWebapi::login_token' resource required for access.
         OauthHelper::clearApiAccessCredentials();
-        OauthHelper::getApiAccessCredentials(['Magento_LoginAsCustomer::login_token']);
+        OauthHelper::getApiAccessCredentials(['Magento_LoginAsCustomerWebapi::login_token']);
         try {
             $customerId = 1;
 
@@ -96,7 +97,7 @@ class LoginAsCustomerWebapiCreateCustomerAccessTokenTest extends WebapiAbstract
         $this->expectException(\Exception::class);
         $this->expectExceptionMessage('The consumer isn\'t authorized to access %resources.');
 
-        // 'Magento_LoginAsCustomer::login_token' resource required for access.
+        // 'Magento_LoginAsCustomerWebapi::login_token' resource required for access.
         OauthHelper::clearApiAccessCredentials();
         OauthHelper::getApiAccessCredentials([]);
         try {

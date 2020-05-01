@@ -12,12 +12,12 @@ use Magento\Framework\Event\ManagerInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Integration\Model\Oauth\TokenFactory;
 use Magento\LoginAsCustomerApi\Api\ConfigInterface;
-use Magento\LoginAsCustomerWebapi\Api\LoginAsCustomerWebapiCreateCustomerAccessTokenInterface;
+use Magento\LoginAsCustomerWebapi\Api\CreateCustomerAccessTokenInterface;
 
 /**
  * @inheritdoc
  */
-class LoginAsCustomerWebapiCreateCustomerAccessToken implements LoginAsCustomerWebapiCreateCustomerAccessTokenInterface
+class CreateCustomerAccessToken implements CreateCustomerAccessTokenInterface
 {
     /**
      * @var ConfigInterface
