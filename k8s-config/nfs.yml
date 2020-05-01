@@ -78,7 +78,7 @@ spec:
         role: nfs-server
     spec:
       securityContext:
-          fsGroup: 82
+        fsGroup: 82
       containers:
       - name: nfs-server
         env:
@@ -95,6 +95,9 @@ spec:
         volumeMounts:
           - mountPath: /data
             name: nfs-pvc
+        securityContext:
+          fsGroup: 82
+          runAsUser: 82
       nodeSelector: 
         private-nfs-pool: nfs-drive
       volumes:
