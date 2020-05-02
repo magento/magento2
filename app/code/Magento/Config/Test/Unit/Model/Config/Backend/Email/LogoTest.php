@@ -83,8 +83,7 @@ class LogoTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->uploaderFactoryMock->expects($this->any())
-            ->method('create')
+        $this->uploaderFactoryMock->method('create')
             ->willReturn($this->uploaderMock);
 
         $this->filesystemMock->expects($this->once())
@@ -122,8 +121,7 @@ class LogoTest extends TestCase
         $this->model->setScopeCode($scopeCode);
         $_FILES['groups']['tmp_name'][$groupId]['fields'][$field]['value'] = $tmpFileName;
 
-        $this->scopeConfigMock->expects($this->any())
-            ->method('getValue')
+        $this->scopeConfigMock->method('getValue')
             ->with($path, $scope, $scopeCode)
             ->willReturn($oldValue);
 
@@ -131,6 +129,9 @@ class LogoTest extends TestCase
             ->method('delete')
             ->with(Logo::UPLOAD_DIR . '/' . $oldValue)
             ->willReturn(true);
+
+        $this->uploaderMock->method('save')
+            ->willReturn(['file' => $oldValue]);
 
         $this->assertEquals($this->model, $this->model->beforeSave());
     }
@@ -153,8 +154,7 @@ class LogoTest extends TestCase
         $this->model->setScope($scope);
         $this->model->setScopeCode($scopeCode);
 
-        $this->scopeConfigMock->expects($this->any())
-            ->method('getValue')
+        $this->scopeConfigMock->method('getValue')
             ->with($path, $scope, $scopeCode)
             ->willReturn($oldValue);
 
@@ -162,6 +162,9 @@ class LogoTest extends TestCase
             ->method('delete')
             ->with(Logo::UPLOAD_DIR . '/' . $oldValue)
             ->willReturn(true);
+
+        $this->uploaderMock->method('save')
+            ->willReturn(['file' => $oldValue]);
 
         $this->assertEquals($this->model, $this->model->beforeSave());
     }
@@ -184,8 +187,7 @@ class LogoTest extends TestCase
         $this->model->setScope($scope);
         $this->model->setScopeCode($scopeCode);
 
-        $this->scopeConfigMock->expects($this->any())
-            ->method('getValue')
+        $this->scopeConfigMock->method('getValue')
             ->with($path, $scope, $scopeCode)
             ->willReturn($oldValue);
 
@@ -215,8 +217,7 @@ class LogoTest extends TestCase
         $this->model->setScope($scope);
         $this->model->setScopeCode($scopeCode);
 
-        $this->scopeConfigMock->expects($this->any())
-            ->method('getValue')
+        $this->scopeConfigMock->method('getValue')
             ->with($path, $scope, $scopeCode)
             ->willReturn($oldValue);
 
