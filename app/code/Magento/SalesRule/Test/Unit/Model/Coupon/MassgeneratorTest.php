@@ -42,7 +42,7 @@ class MassgeneratorTest extends TestCase
      */
     public function testGenerateCode(array $data, $length)
     {
-        $salesRuleCouponMock = $this->createPartialMock(Coupon::class, ['getCharset']);
+        $salesRuleCouponMock = $this->createPartialMock(Coupon::class, ['getCharset', 'getCodeSeparator']);
 
         /** @var Massgenerator $massgenerator */
         $massgenerator = $this->objectManager->getObject(
@@ -54,6 +54,7 @@ class MassgeneratorTest extends TestCase
             ->method('getCharset')
             ->with($data['format'])
             ->willReturn($this->charset);
+        $salesRuleCouponMock->method('getCodeSeparator')->willReturn('test-separator');
         $code = $massgenerator->generateCode();
 
         $this->assertSame($length, strlen($code));
@@ -101,7 +102,7 @@ class MassgeneratorTest extends TestCase
             'format' => 'test-format',
         ];
 
-        $salesRuleCouponMock = $this->createPartialMock(Coupon::class, ['getCharset']);
+        $salesRuleCouponMock = $this->createPartialMock(Coupon::class, ['getCharset', 'getCodeSeparator']);
         $resourceMock = $this->createPartialMock(
             \Magento\SalesRule\Model\ResourceModel\Coupon::class,
             ['exists', 'getIdFieldName']
@@ -123,21 +124,17 @@ class MassgeneratorTest extends TestCase
             ]
         );
 
-        $couponMock->expects($this->any())->method('setId')->willReturnSelf();
-        $couponMock->expects($this->any())->method('setRuleId')->willReturnSelf();
-        $couponMock->expects($this->any())->method('setUsageLimit')->willReturnSelf();
-        $couponMock->expects($this->any())->method('setUsagePerCustomer')->willReturnSelf();
-        $couponMock->expects($this->any())->method('setCreatedAt')->willReturnSelf();
-        $couponMock->expects($this->any())->method('setType')->willReturnSelf();
-        $couponMock->expects($this->any())->method('setCode')->willReturnSelf();
-        $couponMock->expects($this->any())->method('save')->willReturnSelf();
-        $couponFactoryMock->expects($this->once())
-            ->method('create')
-            ->willReturn($couponMock);
-        $salesRuleCouponMock->expects($this->any())
-            ->method('getCharset')
-            ->with($data['format'])
-            ->willReturn($this->charset);
+        $couponMock->method('setId')->willReturnSelf();
+        $couponMock->method('setRuleId')->willReturnSelf();
+        $couponMock->method('setUsageLimit')->willReturnSelf();
+        $couponMock->method('setUsagePerCustomer')->willReturnSelf();
+        $couponMock->method('setCreatedAt')->willReturnSelf();
+        $couponMock->method('setType')->willReturnSelf();
+        $couponMock->method('setCode')->willReturnSelf();
+        $couponMock->method('save')->willReturnSelf();
+        $couponFactoryMock->expects($this->once())->method('create')->willReturn($couponMock);
+        $salesRuleCouponMock->method('getCharset')->with($data['format'])->willReturn($this->charset);
+        $salesRuleCouponMock->method('getCodeSeparator')->willReturn('test-separator');
         /** @var Massgenerator $massgenerator */
         $massgenerator = $this->objectManager->getObject(
             Massgenerator::class,
@@ -173,7 +170,7 @@ class MassgeneratorTest extends TestCase
             'max_attempts' => 0,
         ];
 
-        $salesRuleCouponMock = $this->createPartialMock(Coupon::class, ['getCharset']);
+        $salesRuleCouponMock = $this->createPartialMock(Coupon::class, ['getCharset', 'getCodeSeparator']);
         $resourceMock = $this->createPartialMock(
             \Magento\SalesRule\Model\ResourceModel\Coupon::class,
             ['exists', 'getIdFieldName']
@@ -186,11 +183,12 @@ class MassgeneratorTest extends TestCase
         $couponFactoryMock->expects($this->once())
             ->method('create')
             ->willReturn($couponMock);
-        $salesRuleCouponMock->expects($this->any())
+        $salesRuleCouponMock
             ->method('getCharset')
             ->with($data['format'])
             ->willReturn($this->charset);
-        $resourceMock->expects($this->any())
+        $salesRuleCouponMock->method('getCodeSeparator')->willReturn('test-separator');
+        $resourceMock
             ->method('exists')
             ->willReturn(true);
 
