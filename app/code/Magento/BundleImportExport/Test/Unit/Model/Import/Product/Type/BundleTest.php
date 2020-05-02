@@ -133,25 +133,31 @@ class BundleTest extends AbstractImportTestCase
     {
         parent::setUp();
 
-        $this->entityModel = $this->createPartialMock(Product::class, [
-            'getErrorAggregator',
-            'getBehavior',
-            'getNewSku',
-            'getNextBunch',
-            'isRowAllowedToImport',
-            'getRowScope',
-            'getConnection'
-        ]);
+        $this->entityModel = $this->createPartialMock(
+            Product::class,
+            [
+                'getErrorAggregator',
+                'getBehavior',
+                'getNewSku',
+                'getNextBunch',
+                'isRowAllowedToImport',
+                'getRowScope',
+                'getConnection',
+                'getMultipleValueSeparator'
+            ]
+        );
+        $this->entityModel->method('getMultipleValueSeparator')->willReturn(',');
         $this->entityModel->method('getErrorAggregator')->willReturn($this->getErrorAggregatorObject());
         $this->connection = $this->getMockBuilder(Mysql::class)
             ->addMethods(['joinLeft'])
-            ->onlyMethods([
-                'select',
-                'fetchAll',
-                'fetchPairs',
-                'insertOnDuplicate',
-                'delete',
-                'quoteInto',
+            ->onlyMethods(
+                [
+                    'select',
+                    'fetchAll',
+                    'fetchPairs',
+                    'insertOnDuplicate',
+                    'delete',
+                    'quoteInto',
                 'fetchAssoc'
             ])
             ->disableOriginalConstructor()
@@ -242,57 +248,65 @@ class BundleTest extends AbstractImportTestCase
         $this->entityModel->expects($this->once())->method('getNewSku')->willReturn($skus['newSku']);
         $this->entityModel->expects($this->at(2))->method('getNextBunch')->willReturn([$bunch]);
         $this->entityModel->expects($this->any())->method('isRowAllowedToImport')->willReturn($allowImport);
-        $scope = $this->getMockBuilder(ScopeInterface::class)
-            ->getMockForAbstractClass();
+        $scope = $this->getMockBuilder(ScopeInterface::class)->getMockForAbstractClass();
         $this->scopeResolver->expects($this->any())->method('getScope')->willReturn($scope);
-        $this->connection->expects($this->any())->method('fetchAssoc')->with($this->select)->willReturn([
-            '1' => [
-                'option_id' => '1',
-                'parent_id' => '1',
-                'required' => '1',
-                'position' => '1',
-                'type' => 'bundle',
-                'value_id' => '1',
-                'title' => 'Bundle1',
-                'name' => 'bundle1',
-                'selections' => [
-                    ['name' => 'Bundlen1',
-                        'type' => 'dropdown',
+        $this->connection->method('fetchPairs')->willReturn([1 => 'sku']);
+        $this->connection->expects($this->any())
+            ->method('fetchAssoc')
+            ->with($this->select)
+            ->willReturn(
+                [
+                    '1' => [
+                        'option_id' => '1',
+                        'parent_id' => '1',
                         'required' => '1',
-                        'sku' => '1',
-                        'price' => '10',
-                        'price_type' => 'fixed',
-                        'shipment_type' => '1',
-                        'default_qty' => '1',
-                        'is_default' => '1',
                         'position' => '1',
-                        'option_id' => '1']
-                ]
-            ],
-            '2' => [
-                'option_id' => '6',
-                'parent_id' => '6',
-                'required' => '6',
-                'position' => '6',
-                'type' => 'bundle',
-                'value_id' => '6',
-                'title' => 'Bundle6',
-                'selections' => [
-                    ['name' => 'Bundlen6',
-                        'type' => 'dropdown',
-                        'required' => '1',
-                        'sku' => '222',
-                        'price' => '10',
-                        'price_type' => 'percent',
-                        'shipment_type' => 0,
-                        'default_qty' => '2',
-                        'is_default' => '1',
+                        'type' => 'bundle',
+                        'value_id' => '1',
+                        'title' => 'Bundle1',
+                        'name' => 'bundle1',
+                        'selections' => [
+                            [
+                                'name' => 'Bundlen1',
+                                'type' => 'dropdown',
+                                'required' => '1',
+                                'sku' => '1',
+                                'price' => '10',
+                                'price_type' => 'fixed',
+                                'shipment_type' => '1',
+                                'default_qty' => '1',
+                                'is_default' => '1',
+                                'position' => '1',
+                                'option_id' => '1'
+                            ]
+                        ]
+                    ],
+                    '2' => [
+                        'option_id' => '6',
+                        'parent_id' => '6',
+                        'required' => '6',
                         'position' => '6',
-                        'option_id' => '6'
+                        'type' => 'bundle',
+                        'value_id' => '6',
+                        'title' => 'Bundle6',
+                        'selections' => [
+                            [
+                                'name' => 'Bundlen6',
+                                'type' => 'dropdown',
+                                'required' => '1',
+                                'sku' => '222',
+                                'price' => '10',
+                                'price_type' => 'percent',
+                                'shipment_type' => 0,
+                                'default_qty' => '2',
+                                'is_default' => '1',
+                                'position' => '6',
+                                'option_id' => '6'
+                            ]
+                        ]
                     ]
                 ]
-            ]
-        ]);
+            );
         $bundle = $this->bundle->saveData();
         $this->assertNotNull($bundle);
     }
