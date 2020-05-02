@@ -15,9 +15,10 @@ namespace Magento\LoginAsCustomerApi\Api;
 interface DeleteExpiredAuthenticationDataInterface
 {
     /**
-     * Delete expired authentication data
+     * Delete expired authentication data by user id.
      *
+     * @param int $userId
      * @return void
      */
-    public function execute(): void;
+    public function execute(int $userId): void;
 }

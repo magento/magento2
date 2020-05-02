@@ -13,4 +13,8 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Framework\App\ActionInterface">
+        <plugin name="invalidate_expired_session_plugin"
+                type="Magento\LoginAsCustomerUi\Plugin\InvalidateExpiredSessionPlugin"/>
+    </type>
 </config>
