@@ -71,10 +71,11 @@ class PriceTest extends \PHPUnit\Framework\TestCase
     public function getRangeItemCountsDataProvider()
     {
         return [
-            [1, [11 => 2, 46 => 1]],
-            [10, [2 => 2, 5 => 1]],
-            [20, [1 => 2, 3 => 1]],
-            [50, [1 => 3]]
+            // These are $inputRange, [$expectedItemCounts] values
+            [1, [11 => 2, 46 => 1, 16 => '1']],
+            [10, [2 => 3, 5 => 1]],
+            [20, [1 => 3, 3 => 1]],
+            [50, [1 => 4]]
         ];
     }
 
@@ -85,7 +86,6 @@ class PriceTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetRangeItemCounts($inputRange, $expectedItemCounts)
     {
-        $this->markTestSkipped('MC-33231: Mysql Search Engine is deprecated. This test need stabilization.');
         $actualItemCounts = $this->_model->getRangeItemCounts($inputRange);
         $this->assertEquals($expectedItemCounts, $actualItemCounts);
     }

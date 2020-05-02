@@ -89,10 +89,18 @@ class SortingTest extends TestCase
      * @param string $sortBy
      * @param string $direction
      * @param array $expectation
+     * @param string|null $incompleteReason
      * @return void
      */
-    public function testProductListSortOrder(string $sortBy, string $direction, array $expectation): void
-    {
+    public function testProductListSortOrder(
+        string $sortBy,
+        string $direction,
+        array $expectation,
+        string $incompleteReason = null
+    ): void {
+        if ($incompleteReason) {
+            $this->markTestIncomplete($incompleteReason);
+        }
         $category = $this->updateCategorySortBy('Category 1', Store::DEFAULT_STORE_ID, $sortBy);
         $this->renderBlock($category, $direction);
         $this->assertBlockSorting($sortBy, $expectation);
@@ -104,10 +112,18 @@ class SortingTest extends TestCase
      * @param string $sortBy
      * @param string $direction
      * @param array $expectation
+     * @param string|null $incompleteReason
      * @return void
      */
-    public function testProductListSortOrderWithConfig(string $sortBy, string $direction, array $expectation): void
-    {
+    public function testProductListSortOrderWithConfig(
+        string $sortBy,
+        string $direction,
+        array $expectation,
+        string $incompleteReason = null
+    ): void {
+        if ($incompleteReason) {
+            $this->markTestIncomplete($incompleteReason);
+        }
         $this->assertProductListSortOrderWithConfig($sortBy, $direction, $expectation);
     }
 
@@ -147,17 +163,20 @@ class SortingTest extends TestCase
                 'direction' => 'desc',
                 'expectation' => ['simple3', 'simple2', 'simple1'],
             ],
-            // TODO: Skipped MC-33231
-            //'default_order_custom_attribute_asc' => [
-            //    'sort' => 'test_configurable',
-            //    'direction' => 'asc',
-            //    'expectation' => ['simple1', 'simple3', 'simple2'],
-            //],
-            //'default_order_custom_attribute_desc' => [
-            //    'sort' => 'test_configurable',
-            //    'direction' => 'desc',
-            //    'expectation' => ['simple3', 'simple2', 'simple1'],
-            //],
+            'default_order_custom_attribute_asc' => [
+                'sort' => 'test_configurable',
+                'direction' => 'asc',
+                'expectation' => ['simple1', 'simple3', 'simple2'],
+                'incomplete_reason' => 'MC-33825:'
+                    . 'Stabilize skipped test cases for Integration SortingTest with elasticsearch',
+            ],
+            'default_order_custom_attribute_desc' => [
+                'sort' => 'test_configurable',
+                'direction' => 'desc',
+                'expectation' => ['simple3', 'simple2', 'simple1'],
+                'incomplete_reason' => 'MC-33825:'
+                    . 'Stabilize skipped test cases for Integration SortingTest with elasticsearch',
+            ],
         ];
     }
 
@@ -169,14 +188,19 @@ class SortingTest extends TestCase
      * @param string $direction
      * @param array $expectation
      * @param string $defaultSortBy
+     * @param string|null $incompleteReason
      * @return void
      */
     public function testProductListSortOrderOnStoreView(
         string $sortBy,
         string $direction,
         array $expectation,
-        string $defaultSortBy
+        string $defaultSortBy,
+        string $incompleteReason = null
     ): void {
+        if ($incompleteReason) {
+            $this->markTestIncomplete($incompleteReason);
+        }
         $secondStoreId = (int)$this->storeManager->getStore('fixture_second_store')->getId();
         $this->updateCategorySortBy('Category 1', Store::DEFAULT_STORE_ID, $defaultSortBy);
         $category = $this->updateCategorySortBy('Category 1', $secondStoreId, $sortBy);
@@ -192,14 +216,19 @@ class SortingTest extends TestCase
      * @param string $direction
      * @param array $expectation
      * @param string $defaultSortBy
+     * @param string|null $incompleteReason,
      * @return void
      */
     public function testProductListSortOrderWithConfigOnStoreView(
         string $sortBy,
         string $direction,
         array $expectation,
-        string $defaultSortBy
+        string $defaultSortBy,
+        string $incompleteReason = null
     ): void {
+        if ($incompleteReason) {
+            $this->markTestIncomplete($incompleteReason);
+        }
         $this->objectManager->removeSharedInstance(Config::class);
         $secondStoreId = (int)$this->storeManager->getStore('fixture_second_store')->getId();
         $this->scopeConfig->setValue(
@@ -225,20 +254,60 @@ class SortingTest extends TestCase
      */
     public function productListSortOrderDataProviderOnStoreView(): array
     {
-        return array_merge_recursive(
-            $this->productListSortOrderDataProvider(),
-            [
-                'default_order_price_asc' => ['default_sort' => 'position'],
-                'default_order_price_desc' => ['default_sort' => 'position'],
-                'default_order_position_asc' => ['default_sort' => 'price'],
-                'default_order_position_desc' => ['default_sort' => 'price'],
-                'default_order_name_asc' => ['default_sort' => 'price'],
-                'default_order_name_desc' => ['default_sort' => 'price'],
-                // TODO: Skipped MC-33231
-                //'default_order_custom_attribute_asc' => ['default_sort' => 'price'],
-                //'default_order_custom_attribute_desc' => ['default_sort' => 'price'],
-            ]
-        );
+        return [
+            'default_order_price_asc' => [
+                'sort' => 'price',
+                'direction' => 'asc',
+                'expectation' => ['simple1', 'simple2', 'simple3'],
+                'default_sort' => 'position'
+            ],
+            'default_order_price_desc' => [
+                'sort' => 'price',
+                'direction' => 'desc',
+                'expectation' => ['simple3', 'simple2', 'simple1'],
+                'default_sort' => 'position'
+            ],
+            'default_order_position_asc' => [
+                'sort' => 'position',
+                'direction' => 'asc',
+                'expectation' => ['simple1', 'simple2', 'simple3'],
+                'default_sort' => 'price'
+            ],
+            'default_order_position_desc' => [
+                'sort' => 'position',
+                'direction' => 'desc',
+                'expectation' => ['simple3', 'simple2', 'simple1'],
+                'default_sort' => 'price'
+            ],
+            'default_order_name_asc' => [
+                'sort' => 'name',
+                'direction' => 'asc',
+                'expectation' => ['simple1', 'simple2', 'simple3'],
+                'default_sort' => 'price'
+            ],
+            'default_order_name_desc' => [
+                'sort' => 'name',
+                'direction' => 'desc',
+                'expectation' => ['simple3', 'simple2', 'simple1'],
+                'default_sort' => 'price'
+            ],
+            'default_order_custom_attribute_asc' => [
+                'sort' => 'test_configurable',
+                'direction' => 'asc',
+                'expectation' => ['simple1', 'simple3', 'simple2'],
+                'default_sort' => 'price',
+                'incomplete_reason' => 'MC-33825:'
+                    . 'Stabilize skipped test cases for Integration SortingTest with elasticsearch',
+            ],
+            'default_order_custom_attribute_desc' => [
+                'sort' => 'test_configurable',
+                'direction' => 'desc',
+                'expectation' => ['simple3', 'simple2', 'simple1'],
+            'default_sort' => 'price',
+                'incomplete_reason' => 'MC-33825:'
+                    . 'Stabilize skipped test cases for Integration SortingTest with elasticsearch',
+            ],
+        ];
     }
 
     /**
