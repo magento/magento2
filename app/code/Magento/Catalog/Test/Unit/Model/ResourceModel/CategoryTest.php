@@ -31,6 +31,8 @@ use PHPUnit\Framework\TestCase;
  */
 class CategoryTest extends TestCase
 {
+    private const STUB_PRIMARY_KEY = 'PK';
+
     /**
      * @var Category
      */
@@ -112,8 +114,7 @@ class CategoryTest extends TestCase
         $this->selectMock->expects($this->at(2))->method('where')->willReturnSelf();
         $this->selectMock->expects($this->once())->method('from')->willReturnSelf();
         $this->selectMock->expects($this->once())->method('joinLeft')->willReturnSelf();
-        $this->connectionMock = $this->getMockBuilder(Adapter::class)
-            ->getMockForAbstractClass();
+        $this->connectionMock = $this->getMockBuilder(Adapter::class)->getMockForAbstractClass();
         $this->connectionMock->expects($this->once())->method('select')->willReturn($this->selectMock);
         $this->resourceMock = $this->getMockBuilder(ResourceConnection::class)
             ->disableOriginalConstructor()
@@ -188,6 +189,16 @@ class CategoryTest extends TestCase
                 function ($value) {
                     return json_encode($value);
                 }
+            );
+
+        $this->connectionMock->method('getPrimaryKeyName')->willReturn(self::STUB_PRIMARY_KEY);
+        $this->connectionMock->method('getIndexList')
+            ->willReturn(
+                [
+                    self::STUB_PRIMARY_KEY => [
+                        'COLUMNS_LIST' => ['Column']
+                    ]
+                ]
             );
 
         $result = $this->category->findWhereAttributeIs($entityIdsFilter, $attribute, $expectedValue);

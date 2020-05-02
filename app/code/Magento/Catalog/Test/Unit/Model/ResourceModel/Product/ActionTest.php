@@ -35,6 +35,7 @@ use PHPUnit\Framework\TestCase;
 class ActionTest extends TestCase
 {
     private const ENTITY_IDS = [1, 2, 5, 10];
+    private const STUB_PRIMARY_KEY = 'PK';
 
     /**
      * @var Action
@@ -205,6 +206,16 @@ class ActionTest extends TestCase
             ProductAttributeInterface::CODE_HAS_WEIGHT => $hasWeight
         ];
         $storeId = 0;
+
+        $this->connectionMock->method('getPrimaryKeyName')->willReturn(self::STUB_PRIMARY_KEY);
+        $this->connectionMock->method('getIndexList')
+            ->willReturn(
+                [
+                    self::STUB_PRIMARY_KEY => [
+                        'COLUMNS_LIST' => ['Column']
+                    ]
+                ]
+            );
 
         $this->connectionMock->expects($this->once())
             ->method('update')
