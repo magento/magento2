@@ -62,8 +62,6 @@ class ValidatorTest extends TestCase
 
     public function testValidateFail()
     {
-        $searchEngine = 'elasticsearch5';
-
         $this->clientResolverMock
             ->expects($this->once())
             ->method('create')
