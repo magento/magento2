@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\PhpStan\Reflection\DataObject\Fixtures;
+namespace Magento\PhpStan\Reflection\DataObject;
 
 use PHPStan\Rules\Methods\CallMethodsRule;
 use PHPStan\Rules\Rule;
