@@ -169,13 +169,19 @@ class PluginTest extends TestCase
     public function afterToDataProvider()
     {
         return [
-            ['operations_successful' => 0,
-                'operations_failed' => 0,
-                'operations_total' => 10
+            [
+                [
+                    'operations_successful' => 0,
+                    'operations_failed' => 0,
+                    'operations_total' => 10
+                ]
             ],
-            ['operations_successful' => 1,
-                'operations_failed' => 2,
-                'operations_total' => 10
+            [
+                [
+                    'operations_successful' => 1,
+                    'operations_failed' => 2,
+                    'operations_total' => 10
+                ]
             ],
         ];
     }
