@@ -254,17 +254,25 @@ class RepositoryTest extends TestCase
         $this->expectExceptionMessage(
             'Product with SKU \'linkedProduct\' is not linked to product with SKU \'product\''
         );
+
         $entityMock = $this->createMock(\Magento\Catalog\Model\ProductLink\Link::class);
         $productMock = $this->createMock(Product::class);
         $linkedProductMock = $this->createMock(Product::class);
-        $this->productRepositoryMock->expects($this->exactly(2))->method('get')->willReturnMap([
-            ['product', false, null, false, $productMock],
-            ['linkedProduct', false, null, false, $linkedProductMock],
-        ]);
+        $this->productRepositoryMock->expects($this->exactly(2))->method('get')->willReturnMap(
+            [
+                ['product', false, null, false, $productMock],
+                ['linkedProduct', false, null, false, $linkedProductMock],
+            ]
+        );
         $entityMock->expects($this->exactly(2))->method('getLinkedProductSku')->willReturn('linkedProduct');
         $entityMock->expects($this->exactly(2))->method('getSku')->willReturn('product');
         $entityMock->expects($this->once())->method('getLinkType')->willReturn('linkType');
         $this->metadataPoolMock->expects($this->once())->method('getHydrator')->willReturn($this->hydratorMock);
+
+        $this->metadataMock->expects($this->once())->method('getLinkField')->willReturn('linkField');
+        $this->hydratorMock->expects($this->once())->method('extract')->willReturn(['linkField' => 'parent_id']);
+        $this->linkTypeProvider->expects($this->once())->method('getLinkTypes')->willReturn(['linkType' => 1]);
+
         $this->model->delete($entityMock);
     }
 }
