@@ -29,7 +29,7 @@ class StoreViewLogin implements \Magento\Framework\Data\OptionSourceInterface
     {
         return  [
             ['value' => self::AUTODETECT, 'label' => __('Auto-Detection (default)')],
-            ['value' => self::MANUAL, 'label' => __('Manual Choose')],
+            ['value' => self::MANUAL, 'label' => __('Manual Selection')],
         ];
     }
 }
