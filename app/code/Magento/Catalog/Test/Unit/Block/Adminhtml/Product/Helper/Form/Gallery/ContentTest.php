@@ -163,17 +163,13 @@ class ContentTest extends TestCase
         $this->galleryMock->expects($this->once())->method('getImages')->willReturn($images);
         $this->fileSystemMock->expects($this->once())->method('getDirectoryRead')->willReturn($this->readMock);
 
-        $this->mediaConfigMock->expects($this->any())->method('getMediaUrl')->willReturnMap($url);
-        $this->mediaConfigMock->expects($this->any())->method('getMediaPath')->willReturnMap($mediaPath);
-        $this->readMock->expects($this->any())->method('stat')->willReturnMap($sizeMap);
+        $this->mediaConfigMock->method('getMediaUrl')->willReturnMap($url);
+        $this->mediaConfigMock->method('getMediaPath')->willReturnMap($mediaPath);
+        $this->readMock->method('stat')->willReturnMap($sizeMap);
         $this->jsonEncoderMock->expects($this->once())->method('encode')->willReturnCallback('json_encode');
 
-        $this->readMock->expects($this->any())
-            ->method('isFile')
-            ->willReturn(true);
-        $this->databaseMock->expects($this->any())
-            ->method('checkDbUsage')
-            ->willReturn(false);
+        $this->readMock->method('isFile')->willReturn(true);
+        $this->databaseMock->method('checkDbUsage')->willReturn(false);
 
         $this->assertSame(json_encode($imagesResult), $this->content->getImagesJson());
     }
@@ -239,18 +235,18 @@ class ContentTest extends TestCase
 
         $this->content->setElement($this->galleryMock);
         $this->galleryMock->expects($this->once())->method('getImages')->willReturn($images);
-        $this->fileSystemMock->expects($this->any())->method('getDirectoryRead')->willReturn($this->readMock);
-        $this->mediaConfigMock->expects($this->any())->method('getMediaUrl');
-        $this->mediaConfigMock->expects($this->any())->method('getMediaPath');
+        $this->fileSystemMock->method('getDirectoryRead')->willReturn($this->readMock);
+        $this->mediaConfigMock->method('getMediaUrl');
+        $this->mediaConfigMock->method('getMediaPath');
 
-        $this->readMock->expects($this->any())
+        $this->readMock
             ->method('isFile')
             ->willReturn(true);
-        $this->databaseMock->expects($this->any())
+        $this->databaseMock
             ->method('checkDbUsage')
             ->willReturn(false);
 
-        $this->readMock->expects($this->any())->method('stat')->willReturnOnConsecutiveCalls(
+        $this->readMock->method('stat')->willReturnOnConsecutiveCalls(
             $this->throwException(
                 new FileSystemException(new Phrase('test'))
             ),
@@ -258,7 +254,7 @@ class ContentTest extends TestCase
                 new FileSystemException(new Phrase('test'))
             )
         );
-        $this->imageHelper->expects($this->any())->method('getDefaultPlaceholderUrl')->willReturn($placeholderUrl);
+        $this->imageHelper->method('getDefaultPlaceholderUrl')->willReturn($placeholderUrl);
         $this->jsonEncoderMock->expects($this->once())->method('encode')->willReturnCallback('json_encode');
 
         $this->assertSame(json_encode($imagesResult), $this->content->getImagesJson());
@@ -396,7 +392,7 @@ class ContentTest extends TestCase
         $mediaAttribute = $this->getMockBuilder(Attribute::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $mediaAttribute->expects($this->any())
+        $mediaAttribute
             ->method('getAttributeCode')
             ->willReturn($attributeCode);
         $mediaAttribute->expects($this->once())
@@ -436,20 +432,22 @@ class ContentTest extends TestCase
         $this->fileSystemMock->expects($this->once())
             ->method('getDirectoryRead')
             ->willReturn($this->readMock);
-        $this->mediaConfigMock->expects($this->any())
+        $this->mediaConfigMock
             ->method('getMediaPath')
             ->willReturnMap($mediaPath);
 
-        $this->readMock->expects($this->any())
+        $this->readMock
             ->method('isFile')
             ->willReturn(false);
-        $this->databaseMock->expects($this->any())
+        $this->databaseMock
             ->method('checkDbUsage')
             ->willReturn(true);
 
         $this->databaseMock->expects($this->once())
             ->method('saveFileToFilesystem')
             ->with('catalog/product/image_1.jpg');
+
+        $this->readMock->method('stat')->willReturn(['size' => 123]);
 
         $this->content->getImagesJson();
     }
