@@ -84,7 +84,7 @@
         <see selector="{{StorefrontMinicartSection.productPriceByName($$createProduct1.name$$)}}" userInput="$$createProduct1.price$$" stepKey="seeCorrectProductPrice1"/>
 
         <!-- Assert that the rule isn't present on the Checkout page -->
-        <click selector="{{StorefrontMiniCartSection.goToCheckout}}" stepKey="goToCheckout1"/>
+        <click selector="{{StorefrontMinicartSection.goToCheckout}}" stepKey="goToCheckout1"/>
         <conditionalClick selector="{{CheckoutCartSummarySection.expandShoppingCartSummary}}" dependentSelector="{{CheckoutCartSummarySection.expandShoppingCartSummary}}" visible="true" stepKey="expandShoppingCartSummary1"/>
         <see selector="{{CheckoutCartProductSection.ProductRegularPriceByName($$createProduct1.name$$)}}" userInput="$$createProduct1.price$$" stepKey="seeCorrectProductPriceOnCheckout1"/>
     </test>
