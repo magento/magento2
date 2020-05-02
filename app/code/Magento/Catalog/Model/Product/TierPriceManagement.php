@@ -90,7 +90,8 @@ class TierPriceManagement implements \Magento\Catalog\Api\ProductTierPriceManage
      */
     public function add($sku, $customerGroupId, $price, $qty)
     {
-        if (!\Zend_Validate::is($price, 'Float') || $price <= 0 || !\Zend_Validate::is($qty, 'Float') || $qty <= 0) {
+        $floatValidator = new \Laminas\I18n\Validator\IsFloat();
+        if (!$floatValidator->isValid($price) || $price <= 0 || !$floatValidator->isValid($qty) || $qty <= 0) {
             throw new InputException(__('The data was invalid. Verify the data and try again.'));
         }
         $product = $this->productRepository->get($sku, ['edit_mode' => true]);
