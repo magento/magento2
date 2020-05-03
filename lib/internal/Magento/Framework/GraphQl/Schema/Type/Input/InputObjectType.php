@@ -56,7 +56,7 @@ class InputObjectType extends \Magento\Framework\GraphQl\Schema\Type\InputObject
         ];
         foreach ($configElement->getFields() as $field) {
             if ($this->scalarTypes->isScalarType($field->getTypeName())) {
-                $type = $type = $this->wrappedTypeProcessor->processScalarWrappedType($field);
+                $type = $this->wrappedTypeProcessor->processScalarWrappedType($field);
             } else {
                 if ($field->getTypeName() == $configElement->getName()) {
                     $type = $this;

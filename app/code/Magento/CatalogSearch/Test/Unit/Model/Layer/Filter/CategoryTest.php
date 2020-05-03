@@ -81,7 +81,7 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
             ->setMethods(['getState', 'getProductCollection'])
             ->getMock();
 
-        $this->fulltextCollection = $this->fulltextCollection = $this->getMockBuilder(
+        $this->fulltextCollection = $this->getMockBuilder(
             \Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection::class
         )
             ->disableOriginalConstructor()

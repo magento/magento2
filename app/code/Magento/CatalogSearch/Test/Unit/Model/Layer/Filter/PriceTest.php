@@ -86,7 +86,7 @@ class PriceTest extends \PHPUnit\Framework\TestCase
             ->method('getState')
             ->will($this->returnValue($this->state));
 
-        $this->fulltextCollection = $this->fulltextCollection = $this->getMockBuilder(
+        $this->fulltextCollection = $this->getMockBuilder(
             \Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection::class
         )
             ->disableOriginalConstructor()

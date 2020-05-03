@@ -698,7 +698,7 @@ class CustomerRepositoryTest extends WebapiAbstract
         $builder = Bootstrap::getObjectManager()->create(\Magento\Framework\Api\FilterBuilder::class);
         $customerData1 = $this->_createCustomer();
         $customerData2 = $this->_createCustomer();
-        $filter1 = $filter1 = $builder->setField(Customer::EMAIL)
+        $filter1 = $builder->setField(Customer::EMAIL)
             ->setValue($customerData1[Customer::EMAIL])
             ->create();
         $filter2 = $builder->setField(Customer::EMAIL)
@@ -736,7 +736,7 @@ class CustomerRepositoryTest extends WebapiAbstract
         $builder = Bootstrap::getObjectManager()->create(\Magento\Framework\Api\FilterBuilder::class);
         $customerData1 = $this->_createCustomer();
         $customerData2 = $this->_createCustomer();
-        $filter1 = $filter1 = $builder->setField(Customer::EMAIL)
+        $filter1 = $builder->setField(Customer::EMAIL)
             ->setValue($customerData1[Customer::EMAIL])
             ->create();
         $filter2 = $builder->setField(Customer::EMAIL)

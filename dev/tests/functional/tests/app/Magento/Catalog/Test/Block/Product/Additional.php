@@ -99,7 +99,7 @@ class Additional extends Block
         $selector = '';
         $dom = new \DOMDocument();
         $dom->loadHTML($stringWithHtml);
-        $xmlStructure = $xmlStructure = $dom->saveXML();
+        $xmlStructure = $dom->saveXML();
         $parser = xml_parser_create();
         xml_parse_into_struct($parser, $xmlStructure, $htmlData);
         $htmlData = array_slice($htmlData, 2, -2); //Remove <html> and <body> tags

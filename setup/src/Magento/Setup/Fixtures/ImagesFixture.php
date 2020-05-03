@@ -440,7 +440,7 @@ class ImagesFixture extends Fixture
     private function getProductsCount()
     {
         if ($this->productsCountCache === null) {
-            $select = $select = $this->getDbConnection()
+            $select = $this->getDbConnection()
                 ->select()
                 ->from(['product_entity' => $this->getTable('catalog_product_entity')], [])
                 ->columns([
@@ -462,7 +462,7 @@ class ImagesFixture extends Fixture
      */
     private function getImagesCount()
     {
-        $select = $select = $this->getDbConnection()
+        $select = $this->getDbConnection()
             ->select()
             ->from(['product_entity' => $this->getTable('catalog_product_entity_media_gallery')], [])
             ->columns([

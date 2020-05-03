@@ -74,7 +74,7 @@ class DecimalTest extends \PHPUnit\Framework\TestCase
             ->method('create')
             ->will($this->returnValue($this->filterItem));
 
-        $this->fulltextCollection = $this->fulltextCollection = $this->getMockBuilder(
+        $this->fulltextCollection = $this->getMockBuilder(
             \Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection::class
         )
             ->disableOriginalConstructor()

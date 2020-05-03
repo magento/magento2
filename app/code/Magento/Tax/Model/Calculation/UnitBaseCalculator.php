@@ -39,7 +39,7 @@ class UnitBaseCalculator extends AbstractCalculator
             $this->taxClassManagement->getTaxClassId($item->getTaxClassKey())
         );
         $rate = $this->calculationTool->getRate($taxRateRequest);
-        $storeRate = $storeRate = $this->calculationTool->getStoreRate($taxRateRequest, $this->storeId);
+        $storeRate = $this->calculationTool->getStoreRate($taxRateRequest, $this->storeId);
 
         // Calculate $priceInclTax
         $applyTaxAfterDiscount = $this->config->applyTaxAfterDiscount($this->storeId);
