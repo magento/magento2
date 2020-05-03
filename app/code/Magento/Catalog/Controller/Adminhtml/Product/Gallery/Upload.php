@@ -9,6 +9,7 @@ use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterf
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Backend\Model\Image\UploadResizeConfigInterface;
 
 /**
  * Class Upload
@@ -53,18 +54,25 @@ class Upload extends \Magento\Backend\App\Action implements HttpPostActionInterf
     private $productMediaConfig;
 
     /**
+     * @var \Magento\Backend\Model\Image\UploadResizeConfigInterface
+     */
+    private $imageUploadConfig;
+
+    /**
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Framework\Controller\Result\RawFactory $resultRawFactory
      * @param \Magento\Framework\Image\AdapterFactory $adapterFactory
      * @param \Magento\Framework\Filesystem $filesystem
      * @param \Magento\Catalog\Model\Product\Media\Config $productMediaConfig
+     * @param UploadResizeConfigInterface $imageUploadConfig
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
         \Magento\Framework\Controller\Result\RawFactory $resultRawFactory,
         \Magento\Framework\Image\AdapterFactory $adapterFactory = null,
         \Magento\Framework\Filesystem $filesystem = null,
-        \Magento\Catalog\Model\Product\Media\Config $productMediaConfig = null
+        \Magento\Catalog\Model\Product\Media\Config $productMediaConfig = null,
+        UploadResizeConfigInterface $imageUploadConfig = null
     ) {
         parent::__construct($context);
         $this->resultRawFactory = $resultRawFactory;
@@ -74,6 +82,8 @@ class Upload extends \Magento\Backend\App\Action implements HttpPostActionInterf
             ->get(\Magento\Framework\Filesystem::class);
         $this->productMediaConfig = $productMediaConfig ?: ObjectManager::getInstance()
             ->get(\Magento\Catalog\Model\Product\Media\Config::class);
+        $this->imageUploadConfig = $imageUploadConfig ?: ObjectManager::getInstance()
+            ->get(UploadResizeConfigInterface::class);
     }
 
     /**
@@ -98,6 +108,14 @@ class Upload extends \Magento\Backend\App\Action implements HttpPostActionInterf
                 $mediaDirectory->getAbsolutePath($this->productMediaConfig->getBaseTmpMediaPath())
             );
 
+            # Get width and height of the uploaded image
+            list($imageWidth, $imageHeight) = getimagesize($result['path'] . $result['file']);
+            if ($this->imageUploadConfig->isResizeEnabled()
+                && $imageHeight > $this->imageUploadConfig->getMaxHeight()
+                || $imageWidth > $this->imageUploadConfig->getMaxWidth()
+            ) {
+                $this->resizeImage($imageAdapter, $result['path'], $result['file']);
+            }
             $this->_eventManager->dispatch(
                 'catalog_product_gallery_upload_image_after',
                 ['result' => $result, 'action' => $this]
@@ -127,5 +145,23 @@ class Upload extends \Magento\Backend\App\Action implements HttpPostActionInterf
     private function getAllowedExtensions()
     {
         return array_keys($this->allowedMimeTypes);
+    }
+
+    /**
+     * Resize the image
+     *
+     * @param \Magento\Framework\Image\AdapterFactory $imageAdapter
+     * @param string $path
+     * @param string $file
+     * @return bool
+     */
+    private function resizeImage($imageAdapter, $path, $file)
+    {
+        $imageAdapter->open($path . $file);
+        $imageAdapter->keepAspectRatio(true);
+        $imageAdapter->resize($this->imageUploadConfig->getMaxWidth(), $this->imageUploadConfig->getMaxHeight());
+        $imageAdapter->save();
+
+        return true;
     }
 }
