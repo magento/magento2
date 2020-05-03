@@ -133,7 +133,6 @@ class BlockRepository implements BlockRepositoryInterface
     public function getById($blockId)
     {
         $block = $this->blockFactory->create();
-        $block->setStoreId($this->storeManager->getStore()->getId());
         $this->resource->load($block, $blockId);
         if (!$block->getId()) {
             throw new NoSuchEntityException(__('The CMS block with the "%1" ID doesn\'t exist.', $blockId));
