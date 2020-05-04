@@ -9,8 +9,7 @@ namespace Magento\Sales\Model\Reorder;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product;
-use Magento\Framework\Api\SearchCriteriaBuilder;
-use Magento\Framework\App\ObjectManager;
+use Magento\Catalog\Model\ResourceModel\Product\Collection;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Quote\Api\CartRepositoryInterface;
@@ -22,6 +21,7 @@ use Magento\Sales\Helper\Reorder as ReorderHelper;
 use Magento\Sales\Model\Order\Item;
 use Magento\Sales\Model\OrderFactory;
 use Magento\Sales\Model\ResourceModel\Order\Item\Collection as ItemCollection;
+use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory as ProductCollectionFactory;
 
 /**
  * Allows customer quickly to reorder previously added products and put them to the Cart
@@ -88,9 +88,9 @@ class Reorder
     private $customerCartProvider;
 
     /**
-     * @var SearchCriteriaBuilder
+     * ProductCollectionFactory
      */
-    private $searchCriteriaBuilder;
+    private $productCollectionFactory;
 
     /**
      * @param OrderFactory $orderFactory
@@ -99,7 +99,7 @@ class Reorder
      * @param ProductRepositoryInterface $productRepository
      * @param ReorderHelper $reorderHelper
      * @param \Psr\Log\LoggerInterface $logger
-     * @param SearchCriteriaBuilder $searchCriteriaBuilder = null
+     * @param ProductCollectionFactory $productCollectionFactory
      */
     public function __construct(
         OrderFactory $orderFactory,
@@ -108,7 +108,7 @@ class Reorder
         ProductRepositoryInterface $productRepository,
         ReorderHelper $reorderHelper,
         \Psr\Log\LoggerInterface $logger,
-        SearchCriteriaBuilder $searchCriteriaBuilder = null
+        ProductCollectionFactory $productCollectionFactory
     ) {
         $this->orderFactory = $orderFactory;
         $this->cartRepository = $cartRepository;
@@ -116,8 +116,7 @@ class Reorder
         $this->reorderHelper = $reorderHelper;
         $this->logger = $logger;
         $this->customerCartProvider = $customerCartProvider;
-        $this->searchCriteriaBuilder = $searchCriteriaBuilder ?:
-            ObjectManager::getInstance()->get(SearchCriteriaBuilder::class);
+        $this->productCollectionFactory = $productCollectionFactory;
     }
 
     /**
@@ -148,7 +147,7 @@ class Reorder
             return $this->prepareOutput($cart);
         }
 
-        $this->addItemsToCart($cart, $order->getItemsCollection());
+        $this->addItemsToCart($cart, $order->getItemsCollection(), $storeId);
 
         try {
             $this->cartRepository->save($cart);
@@ -167,9 +166,10 @@ class Reorder
      *
      * @param Quote $cart
      * @param ItemCollection $orderItems
+     * @param string $storeId
      * @return void
      */
-    private function addItemsToCart(Quote $cart, ItemCollection $orderItems): void
+    private function addItemsToCart(Quote $cart, ItemCollection $orderItems, string $storeId): void
     {
         $orderItemProductIds = [];
         /** @var \Magento\Sales\Model\Order\Item[] $orderItemsByProductId */
@@ -183,13 +183,13 @@ class Reorder
             }
         }
 
-        /** @var \Magento\Framework\Api\SearchCriteria $criteria */
-        $criteria = $this->searchCriteriaBuilder
-            ->addFilter('entity_id', $orderItemProductIds, 'in')
-            ->create();
+        /** @var Collection $collection */
+        $collection = $this->productCollectionFactory->create();
 
-        /** @var \Magento\Catalog\Api\Data\ProductInterface $products */
-        $products = $this->productRepository->getList($criteria)->getItems();
+        $collection->setStore($storeId);
+        $collection->addIdFilter($orderItemProductIds);
+        $collection->addStoreFilter();
+        $products = $collection->getItems();
 
         // compare founded products and throw an error if some product not exists
         $productsNotFound = array_diff($orderItemProductIds, array_keys($products));
