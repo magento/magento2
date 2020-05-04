@@ -82,7 +82,10 @@ class ListProductsTest extends TestCase
     public function testNoItems(): void
     {
         $html = $this->createBlock()->toHtml();
-        $this->assertContains((string)__('You have not purchased any downloadable products yet.'), strip_tags($html));
+        $this->assertStringContainsString(
+            (string)__('You have not purchased any downloadable products yet.'),
+            strip_tags($html)
+        );
     }
 
     /**
