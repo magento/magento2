@@ -8,15 +8,11 @@ declare(strict_types=1);
 
 namespace Magento\MediaGallery\Plugin\Wysiwyg\Images;
 
-use Magento\Framework\Exception\CouldNotDeleteException;
-use Magento\MediaGalleryApi\Model\Asset\Command\DeleteByDirectoryPathInterface;
-use Magento\MediaGalleryApi\Model\Asset\Command\GetByPathInterface;
-use Magento\MediaGalleryApi\Model\Asset\Command\DeleteByPathInterface;
+use Magento\MediaGalleryApi\Api\DeleteAssetsByPathsInterface;
 use Magento\Cms\Model\Wysiwyg\Images\Storage as StorageSubject;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem;
 use Psr\Log\LoggerInterface;
-use Magento\Framework\Exception\ValidatorException;
 
 /**
  * Ensures that metadata is removed from the database when a file is deleted and it is an image
@@ -24,19 +20,9 @@ use Magento\Framework\Exception\ValidatorException;
 class Storage
 {
     /**
-     * @var GetByPathInterface
-     */
-    private $getMediaAssetByPath;
-
-    /**
-     * @var DeleteByPathInterface
+     * @var DeleteAssetsByPathsInterface
      */
     private $deleteMediaAssetByPath;
-
-    /**
-     * @var DeleteByDirectoryPathInterface
-     */
-    private $deleteMediaAssetByDirectoryPath;
 
     /**
      * @var Filesystem
@@ -51,22 +37,16 @@ class Storage
     /**
      * Storage constructor.
      *
-     * @param GetByPathInterface $getMediaAssetByPath
-     * @param DeleteByPathInterface $deleteMediaAssetByPath
-     * @param DeleteByDirectoryPathInterface $deleteByDirectoryPath
+     * @param DeleteAssetsByPathsInterface $deleteMediaAssetByPath
      * @param Filesystem $filesystem
      * @param LoggerInterface $logger
      */
     public function __construct(
-        GetByPathInterface $getMediaAssetByPath,
-        DeleteByPathInterface $deleteMediaAssetByPath,
-        DeleteByDirectoryPathInterface $deleteByDirectoryPath,
+        DeleteAssetsByPathsInterface $deleteMediaAssetByPath,
         Filesystem $filesystem,
         LoggerInterface $logger
     ) {
-        $this->getMediaAssetByPath = $getMediaAssetByPath;
         $this->deleteMediaAssetByPath = $deleteMediaAssetByPath;
-        $this->deleteMediaAssetByDirectoryPath = $deleteByDirectoryPath;
         $this->filesystem = $filesystem;
         $this->logger = $logger;
     }
@@ -94,7 +74,7 @@ class Storage
         }
 
         try {
-            $this->deleteMediaAssetByPath->execute($relativePath);
+            $this->deleteMediaAssetByPath->execute([$relativePath]);
         } catch (\Exception $exception) {
             $this->logger->critical($exception);
         }
@@ -120,8 +100,12 @@ class Storage
         }
 
         try {
-            $this->deleteMediaAssetByDirectoryPath->execute($this->getMediaDirectoryRelativePath($path));
-        } catch (ValidatorException $exception) {
+            $this->deleteMediaAssetByPath->execute(
+                [
+                    $this->filesystem->getDirectoryRead(DirectoryList::MEDIA)->getRelativePath($path)
+                ]
+            );
+        } catch (\Exception $exception) {
             $this->logger->critical($exception);
         }
 
@@ -136,6 +120,8 @@ class Storage
      */
     private function getMediaDirectoryRelativePath(string $path): string
     {
-        return $this->filesystem->getDirectoryRead(DirectoryList::MEDIA)->getRelativePath($path);
+        $relativePath = $this->filesystem->getDirectoryRead(DirectoryList::MEDIA)->getRelativePath($path);
+
+        return ($relativePath && false === strpos($relativePath, '/')) ? '/' . $relativePath : $relativePath;
     }
 }
