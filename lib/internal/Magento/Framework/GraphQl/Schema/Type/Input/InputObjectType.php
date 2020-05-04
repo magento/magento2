@@ -13,9 +13,6 @@ use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Schema\Type\ScalarTypes;
 use Magento\Framework\GraphQl\Schema\Type\TypeRegistry;
 
-/**
- * Class InputObjectType
- */
 class InputObjectType extends \Magento\Framework\GraphQl\Schema\Type\InputObjectType
 {
     /**

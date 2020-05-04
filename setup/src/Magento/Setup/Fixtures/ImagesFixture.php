@@ -142,7 +142,6 @@ class ImagesFixture extends Fixture
     }
 
     /**
-     * {@inheritdoc}
      * @throws \Exception
      */
     public function execute()
@@ -154,7 +153,7 @@ class ImagesFixture extends Fixture
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getActionTitle()
     {
@@ -162,7 +161,7 @@ class ImagesFixture extends Fixture
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function introduceParamLabels()
     {
@@ -172,8 +171,8 @@ class ImagesFixture extends Fixture
     }
 
     /**
-     * {@inheritdoc}
-     * @throws ValidatorException
+     * @param \Symfony\Component\Console\Output\OutputInterface $output
+     * @throws \Magento\Framework\Exception\ValidatorException
      */
     public function printInfo(OutputInterface $output)
     {
@@ -237,8 +236,7 @@ class ImagesFixture extends Fixture
     }
 
     /**
-     * Create generator that creates image files and puts them to appropriate media folder
-     * in memory-safe way
+     * Create generator that creates image files and puts them to appropriate media folder in memory-safe way
      *
      * @return \Generator
      * @throws \Magento\Framework\Exception\FileSystemException
