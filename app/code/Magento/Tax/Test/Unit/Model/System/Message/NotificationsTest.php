@@ -3,21 +3,24 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Tax\Test\Unit\Model\System\Message;
 
 use Magento\Framework\Escaper;
-use Magento\Tax\Model\Config as TaxConfig;
-use Magento\Tax\Model\System\Message\Notifications;
-use Magento\Store\Model\StoreManagerInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\UrlInterface;
+use Magento\Store\Model\StoreManagerInterface;
+use Magento\Tax\Model\Config as TaxConfig;
 use Magento\Tax\Model\System\Message\NotificationInterface;
+use Magento\Tax\Model\System\Message\Notifications;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test class for @see \Magento\Tax\Model\System\Message\Notifications.
  */
-class NotificationsTest extends \PHPUnit\Framework\TestCase
+class NotificationsTest extends TestCase
 {
     /**
      * @var Notifications
@@ -25,27 +28,27 @@ class NotificationsTest extends \PHPUnit\Framework\TestCase
     private $notifications;
 
     /**
-     * @var StoreManagerInterface | \PHPUnit\Framework\MockObject\MockObject
+     * @var StoreManagerInterface|MockObject
      */
     private $storeManagerMock;
 
     /**
-     * @var UrlInterface | \PHPUnit\Framework\MockObject\MockObject
+     * @var UrlInterface|MockObject
      */
     private $urlBuilderMock;
 
     /**
-     * @var TaxConfig | \PHPUnit\Framework\MockObject\MockObject
+     * @var TaxConfig|MockObject
      */
     private $taxConfigMock;
 
     /**
-     * @var NotificationInterface | \PHPUnit\Framework\MockObject\MockObject
+     * @var NotificationInterface|MockObject
      */
     private $notificationMock;
 
     /**
-     * @var Escaper|\PHPUnit\Framework\MockObject\MockObject
+     * @var Escaper|MockObject
      */
     private $escaperMock;
 
@@ -54,10 +57,10 @@ class NotificationsTest extends \PHPUnit\Framework\TestCase
      */
     protected function setUp(): void
     {
-        $this->storeManagerMock = $this->getMockForAbstractClass(StoreManagerInterface::class);
-        $this->urlBuilderMock = $this->getMockForAbstractClass(UrlInterface::class);
+        $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
+        $this->urlBuilderMock = $this->createMock(UrlInterface::class);
         $this->taxConfigMock = $this->createMock(TaxConfig::class);
-        $this->notificationMock = $this->getMockForAbstractClass(NotificationInterface::class);
+        $this->notificationMock = $this->createMock(NotificationInterface::class);
         $this->escaperMock = $this->createMock(Escaper::class);
         $this->notifications = (new ObjectManager($this))->getObject(
             Notifications::class,

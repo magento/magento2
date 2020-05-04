@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 /**
  * Test class for \Magento\Paypal\Helper\Checkout
@@ -12,11 +13,13 @@ namespace Magento\Paypal\Test\Unit\Helper;
 use Magento\Checkout\Model\Session;
 use Magento\Paypal\Helper\Checkout;
 use Magento\Sales\Model\Order;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class CheckoutTest extends \PHPUnit\Framework\TestCase
+class CheckoutTest extends TestCase
 {
     /**
-     * @var Session|\PHPUnit\Framework\MockObject\MockObject
+     * @var Session|MockObject
      */
     private $session;
 

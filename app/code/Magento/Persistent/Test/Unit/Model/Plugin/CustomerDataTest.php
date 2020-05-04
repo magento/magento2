@@ -3,43 +3,51 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Persistent\Test\Unit\Model\Plugin;
 
-class CustomerDataTest extends \PHPUnit\Framework\TestCase
+use Magento\Customer\CustomerData\Customer;
+use Magento\Customer\Model\Session;
+use Magento\Persistent\Helper\Data;
+use Magento\Persistent\Model\Plugin\CustomerData;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class CustomerDataTest extends TestCase
 {
     /**
-     * @var \Magento\Persistent\Model\Plugin\CustomerData
+     * @var CustomerData
      */
     protected $plugin;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $helperMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $customerSessionMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $persistentSessionMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $subjectMock;
 
     protected function setUp(): void
     {
-        $this->helperMock = $this->createMock(\Magento\Persistent\Helper\Data::class);
-        $this->customerSessionMock = $this->createMock(\Magento\Customer\Model\Session::class);
+        $this->helperMock = $this->createMock(Data::class);
+        $this->customerSessionMock = $this->createMock(Session::class);
         $this->persistentSessionMock = $this->createMock(\Magento\Persistent\Helper\Session::class);
-        $this->subjectMock = $this->createMock(\Magento\Customer\CustomerData\Customer::class);
-        $this->plugin = new \Magento\Persistent\Model\Plugin\CustomerData(
+        $this->subjectMock = $this->createMock(Customer::class);
+        $this->plugin = new CustomerData(
             $this->helperMock,
             $this->customerSessionMock,
             $this->persistentSessionMock

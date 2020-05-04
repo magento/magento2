@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Sales\Test\Unit\Model\Order\Email\Sender;
 
 use Magento\Framework\App\Config;
@@ -19,14 +21,14 @@ use Magento\Sales\Model\Order\Email\SenderBuilderFactory;
 use Magento\Store\Model\Store;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\MockObject\Rule\InvokedCount;
+use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 
 /**
- * Class AbstractSenderTest
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-abstract class AbstractSenderTest extends \PHPUnit\Framework\TestCase
+abstract class AbstractSenderTest extends TestCase
 {
     /**
      * @var Sender|MockObject
@@ -92,10 +94,10 @@ abstract class AbstractSenderTest extends \PHPUnit\Framework\TestCase
 
     public function stepMockSetup()
     {
-        $this->senderMock = $this->createPartialMock(
-            Sender::class,
-            ['send', 'sendCopyTo']
-        );
+        $this->senderMock = $this->getMockBuilder(Sender::class)
+            ->addMethods(['send', 'sendCopyTo'])
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
 
         $this->senderBuilderFactoryMock = $this->createPartialMock(
             SenderBuilderFactory::class,
@@ -106,18 +108,32 @@ abstract class AbstractSenderTest extends \PHPUnit\Framework\TestCase
             ['setTemplateVars']
         );
 
-        $this->storeMock = $this->createPartialMock(Store::class, ['getStoreId', '__wakeup']);
+        $this->storeMock = $this->getMockBuilder(Store::class)
+            ->addMethods(['getStoreId'])
+            ->disableOriginalConstructor()
+            ->getMock();
 
-        $this->orderMock = $this->createPartialMock(
-            Order::class,
-            [
-                'getId', 'getStore', 'getBillingAddress', 'getPayment',
-                '__wakeup', 'getCustomerIsGuest', 'getCustomerName',
-                'getCustomerEmail', 'getShippingAddress', 'setSendEmail',
-                'setEmailSent', 'getCreatedAtFormatted', 'getIsNotVirtual',
-                'getEmailCustomerNote', 'getFrontendStatusLabel'
-            ]
-        );
+        $this->orderMock = $this->getMockBuilder(Order::class)
+            ->addMethods(['setSendEmail'])
+            ->onlyMethods(
+                [
+                    'getId',
+                    'getStore',
+                    'getBillingAddress',
+                    'getPayment',
+                    'getCustomerIsGuest',
+                    'getCustomerName',
+                    'getCustomerEmail',
+                    'getShippingAddress',
+                    'setEmailSent',
+                    'getCreatedAtFormatted',
+                    'getIsNotVirtual',
+                    'getEmailCustomerNote',
+                    'getFrontendStatusLabel'
+                ]
+            )
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->orderMock->expects($this->any())
             ->method('getStore')
             ->willReturn($this->storeMock);
@@ -137,7 +153,7 @@ abstract class AbstractSenderTest extends \PHPUnit\Framework\TestCase
 
         $this->globalConfig = $this->createPartialMock(Config::class, ['getValue']);
 
-        $this->loggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
+        $this->loggerMock = $this->createMock(LoggerInterface::class);
     }
 
     /**
@@ -174,10 +190,10 @@ abstract class AbstractSenderTest extends \PHPUnit\Framework\TestCase
      */
     public function stepIdentityContainerInit($identityMockClassName)
     {
-        $this->identityContainerMock = $this->createPartialMock(
-            $identityMockClassName,
-            ['getStore', 'isEnabled', 'getConfigValue', 'getTemplateId', 'getGuestTemplateId']
-        );
+        $this->identityContainerMock = $this->getMockBuilder($identityMockClassName)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['getStore', 'isEnabled', 'getConfigValue', 'getTemplateId', 'getGuestTemplateId'])
+            ->getMock();
         $this->identityContainerMock->expects($this->any())
             ->method('getStore')
             ->willReturn($this->storeMock);
@@ -191,7 +207,10 @@ abstract class AbstractSenderTest extends \PHPUnit\Framework\TestCase
         InvokedCount $sendExpects,
         InvokedCount $sendCopyToExpects
     ) {
-        $senderMock = $this->createPartialMock(Sender::class, ['send', 'sendCopyTo']);
+        $senderMock = $this->getMockBuilder(Sender::class)
+            ->addMethods(['send', 'sendCopyTo'])
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
         $senderMock->expects($sendExpects)
             ->method('send');
         $senderMock->expects($sendCopyToExpects)

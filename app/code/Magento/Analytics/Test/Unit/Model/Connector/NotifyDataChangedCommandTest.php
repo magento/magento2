@@ -3,20 +3,28 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Analytics\Test\Unit\Model\Connector;
 
 use Magento\Analytics\Model\AnalyticsToken;
+use Magento\Analytics\Model\Connector\Http\ClientInterface;
 use Magento\Analytics\Model\Connector\Http\JsonConverter;
+use Magento\Analytics\Model\Connector\Http\ResponseHandlerInterface;
 use Magento\Analytics\Model\Connector\Http\ResponseResolver;
+use Magento\Analytics\Model\Connector\NotifyDataChangedCommand;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\HTTP\ZendClient;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
-use Magento\Analytics\Model\Connector\NotifyDataChangedCommand;
-use Magento\Analytics\Model\Connector\Http\ClientInterface;
 
-class NotifyDataChangedCommandTest extends \PHPUnit\Framework\TestCase
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
+class NotifyDataChangedCommandTest extends TestCase
 {
     /**
      * @var NotifyDataChangedCommand
@@ -24,50 +32,40 @@ class NotifyDataChangedCommandTest extends \PHPUnit\Framework\TestCase
     private $notifyDataChangedCommand;
 
     /**
-     * @var AnalyticsToken|\PHPUnit\Framework\MockObject\MockObject
+     * @var AnalyticsToken|MockObject
      */
     private $analyticsTokenMock;
 
     /**
-     * @var ClientInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var ClientInterface|MockObject
      */
     private $httpClientMock;
 
     /**
-     * @var ScopeConfigInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var ScopeConfigInterface|MockObject
      */
     public $configMock;
 
     /**
-     * @var LoggerInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var LoggerInterface|MockObject
      */
     private $loggerMock;
 
     protected function setUp(): void
     {
-        $this->analyticsTokenMock =  $this->getMockBuilder(AnalyticsToken::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->analyticsTokenMock =  $this->createMock(AnalyticsToken::class);
 
-        $this->httpClientMock =  $this->getMockBuilder(ClientInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->httpClientMock =  $this->createMock(ClientInterface::class);
 
-        $this->configMock =  $this->getMockBuilder(ScopeConfigInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->configMock =  $this->createMock(ScopeConfigInterface::class);
 
-        $this->loggerMock =  $this->getMockBuilder(LoggerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $successHandler = $this->getMockBuilder(\Magento\Analytics\Model\Connector\Http\ResponseHandlerInterface::class)
+        $this->loggerMock =  $this->createMock(LoggerInterface::class);
+        $successHandler = $this->getMockBuilder(ResponseHandlerInterface::class)
             ->getMockForAbstractClass();
         $successHandler->method('handleResponse')
             ->willReturn(true);
-        $serializerMock = $this->getMockBuilder(Json::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $serializerMock->expects($this->any())
+        $serializerMock = $this->createMock(Json::class);
+        $serializerMock
             ->method('unserialize')
             ->willReturn(['unserialized data']);
         $objectManager = new ObjectManager($this);
@@ -99,7 +97,7 @@ class NotifyDataChangedCommandTest extends \PHPUnit\Framework\TestCase
         $this->analyticsTokenMock->expects($this->once())
             ->method('isTokenExist')
             ->willReturn(true);
-        $this->configMock->expects($this->any())
+        $this->configMock
             ->method('getValue')
             ->willReturn($configVal);
         $this->analyticsTokenMock->expects($this->once())

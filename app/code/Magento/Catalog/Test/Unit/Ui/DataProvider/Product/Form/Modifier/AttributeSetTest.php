@@ -3,40 +3,41 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Catalog\Test\Unit\Ui\DataProvider\Product\Form\Modifier;
 
+use Magento\Catalog\Model\ResourceModel\Product as ProductResource;
 use Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\AbstractModifier;
 use Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\AttributeSet;
-use Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory;
 use Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\Collection;
+use Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory;
 use Magento\Framework\UrlInterface;
-use Magento\Catalog\Model\ResourceModel\Product as ProductResource;
+use PHPUnit\Framework\MockObject\MockObject;
 
 /**
- * Class AttributeSetTest
- *
  * @method \Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\AttributeSet getModel
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class AttributeSetTest extends AbstractModifierTest
 {
     /**
-     * @var CollectionFactory|\PHPUnit\Framework\MockObject\MockObject
+     * @var CollectionFactory|MockObject
      */
     protected $attributeSetCollectionFactoryMock;
 
     /**
-     * @var Collection|\PHPUnit\Framework\MockObject\MockObject
+     * @var Collection|MockObject
      */
     protected $attributeSetCollectionMock;
 
     /**
-     * @var UrlInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var UrlInterface|MockObject
      */
     protected $urlBuilderMock;
 
     /**
-     * @var ProductResource|\PHPUnit\Framework\MockObject\MockObject
+     * @var ProductResource|MockObject
      */
     protected $productResourceMock;
 
@@ -52,7 +53,7 @@ class AttributeSetTest extends AbstractModifierTest
             ->getMock();
         $this->urlBuilderMock = $this->getMockBuilder(UrlInterface::class)
             ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+            ->getMock();
         $this->productResourceMock = $this->getMockBuilder(ProductResource::class)
             ->disableOriginalConstructor()
             ->getMock();

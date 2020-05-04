@@ -3,54 +3,65 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Integration\Test\Unit\Model\ResourceModel;
+
+use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Framework\DB\Adapter\Pdo\Mysql;
+use Magento\Framework\DB\Select;
+use Magento\Framework\Model\ResourceModel\Db\Context;
+use Magento\Integration\Model\ResourceModel\Integration;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Unit test for \Magento\Integration\Model\ResourceModel\Integration
  */
-class IntegrationTest extends \PHPUnit\Framework\TestCase
+class IntegrationTest extends TestCase
 {
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $selectMock;
 
     /**
-     * @var \Magento\Framework\DB\Adapter\AdapterInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var AdapterInterface|MockObject
      */
     protected $connectionMock;
 
     /**
-     * @var \Magento\Framework\App\ResourceConnection|\PHPUnit\Framework\MockObject\MockObject
+     * @var ResourceConnection|MockObject
      */
     protected $resourceMock;
 
     /**
-     * @var \Magento\Framework\Model\ResourceModel\Db\Context|\PHPUnit\Framework\MockObject\MockObject
+     * @var Context|MockObject
      */
     protected $contextMock;
 
     /**
-     * @var \Magento\Integration\Model\ResourceModel\Integration
+     * @var Integration
      */
     protected $integrationResourceModel;
 
     protected function setUp(): void
     {
-        $this->selectMock = $this->createMock(\Magento\Framework\DB\Select::class);
+        $this->selectMock = $this->createMock(Select::class);
         $this->selectMock->expects($this->any())->method('from')->willReturn($this->selectMock);
         $this->selectMock->expects($this->any())->method('where')->willReturn($this->selectMock);
 
-        $this->connectionMock = $this->createMock(\Magento\Framework\DB\Adapter\Pdo\Mysql::class);
+        $this->connectionMock = $this->createMock(Mysql::class);
         $this->connectionMock->expects($this->any())->method('select')->willReturn($this->selectMock);
 
-        $this->resourceMock = $this->createMock(\Magento\Framework\App\ResourceConnection::class);
+        $this->resourceMock = $this->createMock(ResourceConnection::class);
         $this->resourceMock->expects($this->any())->method('getConnection')->willReturn($this->connectionMock);
 
-        $this->contextMock = $this->createMock(\Magento\Framework\Model\ResourceModel\Db\Context::class);
+        $this->contextMock = $this->createMock(Context::class);
         $this->contextMock->expects($this->once())->method('getResources')->willReturn($this->resourceMock);
 
-        $this->integrationResourceModel = new \Magento\Integration\Model\ResourceModel\Integration($this->contextMock);
+        $this->integrationResourceModel = new Integration($this->contextMock);
     }
 
     public function testSelectActiveIntegrationByConsumerId()

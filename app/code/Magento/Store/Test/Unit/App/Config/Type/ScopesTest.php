@@ -3,15 +3,17 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Store\Test\Unit\App\Config\Type;
 
 use Magento\Framework\App\Config\ConfigSourceInterface;
-use Magento\Framework\Stdlib\ArrayManager;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Store\App\Config\Type\Scopes;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class ScopesTest extends \PHPUnit\Framework\TestCase
+class ScopesTest extends TestCase
 {
     /**
      * @var Scopes
@@ -19,13 +21,14 @@ class ScopesTest extends \PHPUnit\Framework\TestCase
     private $unit;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     private $sourceMock;
 
     protected function setUp(): void
     {
-        $this->sourceMock = $this->getMockBuilder(ConfigSourceInterface::class)->getMock();
+        $this->sourceMock = $this->getMockBuilder(ConfigSourceInterface::class)
+            ->getMock();
         $this->unit = (new ObjectManager($this))->getObject(
             Scopes::class,
             [

@@ -3,45 +3,54 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\View\Test\Unit\Asset\MergeStrategy;
 
-use \Magento\Framework\View\Asset\MergeStrategy\FileExists;
-
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Filesystem;
+use Magento\Framework\Filesystem\Directory\ReadInterface;
+use Magento\Framework\Filesystem\Directory\WriteInterface;
+use Magento\Framework\View\Asset\File;
+use Magento\Framework\View\Asset\MergeStrategy\FileExists;
+use Magento\Framework\View\Asset\MergeStrategyInterface;
+use PHPUnit\Framework\MockObject\MockObject;
 
-class FileExistsTest extends \PHPUnit\Framework\TestCase
+use PHPUnit\Framework\TestCase;
+
+class FileExistsTest extends TestCase
 {
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\View\Asset\MergeStrategyInterface
+     * @var MockObject|MergeStrategyInterface
      */
     private $mergerMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\Filesystem\Directory\WriteInterface
+     * @var MockObject|WriteInterface
      */
     private $dirMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\View\Asset\File
+     * @var MockObject|File
      */
     private $resultAsset;
 
     /**
-     * @var \Magento\Framework\View\Asset\MergeStrategy\FileExists
+     * @var FileExists
      */
     private $fileExists;
 
     protected function setUp(): void
     {
-        $this->mergerMock = $this->getMockForAbstractClass(\Magento\Framework\View\Asset\MergeStrategyInterface::class);
-        $this->dirMock = $this->getMockForAbstractClass(\Magento\Framework\Filesystem\Directory\ReadInterface::class);
-        $filesystem = $this->createMock(\Magento\Framework\Filesystem::class);
+        $this->mergerMock = $this->getMockForAbstractClass(MergeStrategyInterface::class);
+        $this->dirMock = $this->getMockForAbstractClass(ReadInterface::class);
+        $filesystem = $this->createMock(Filesystem::class);
         $filesystem->expects($this->once())
             ->method('getDirectoryRead')
             ->with(DirectoryList::STATIC_VIEW)
             ->willReturn($this->dirMock);
         $this->fileExists = new FileExists($this->mergerMock, $filesystem);
-        $this->resultAsset = $this->createMock(\Magento\Framework\View\Asset\File::class);
+        $this->resultAsset = $this->createMock(File::class);
         $this->resultAsset->expects($this->once())->method('getPath')->willReturn('foo/file');
     }
 

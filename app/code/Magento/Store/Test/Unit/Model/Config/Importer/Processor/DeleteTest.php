@@ -3,9 +3,12 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Store\Test\Unit\Model\Config\Importer\Processor;
 
 use Magento\Framework\Event\ManagerInterface;
+use Magento\Framework\Exception\RuntimeException;
 use Magento\Framework\Registry;
 use Magento\Store\Model\Config\Importer\DataDifferenceCalculator;
 use Magento\Store\Model\Config\Importer\Processor\Delete;
@@ -20,6 +23,7 @@ use Magento\Store\Model\StoreRepository;
 use Magento\Store\Model\Website;
 use Magento\Store\Model\WebsiteRepository;
 use PHPUnit\Framework\MockObject\MockObject as Mock;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test for Delete processor.
@@ -27,7 +31,7 @@ use PHPUnit\Framework\MockObject\MockObject as Mock;
  * @see Delete
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class DeleteTest extends \PHPUnit\Framework\TestCase
+class DeleteTest extends TestCase
 {
     /**
      * @var Delete
@@ -306,13 +310,10 @@ class DeleteTest extends \PHPUnit\Framework\TestCase
         $this->model->run($data);
     }
 
-    /**
-     */
     public function testRunWithException()
     {
-        $this->expectException(\Magento\Framework\Exception\RuntimeException::class);
+        $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('Some exception');
-
         $data = [
             ScopeInterface::SCOPE_WEBSITES => [],
             ScopeInterface::SCOPE_STORES => []

@@ -3,45 +3,55 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Weee\Test\Unit\Model;
 
-class WeeeConfigProviderTest extends \PHPUnit\Framework\TestCase
+use Magento\Store\Model\Store;
+use Magento\Store\Model\StoreManagerInterface;
+use Magento\Weee\Helper\Data;
+use Magento\Weee\Model\Config;
+use Magento\Weee\Model\WeeeConfigProvider;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class WeeeConfigProviderTest extends TestCase
 {
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $weeeHelperMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $weeeConfigMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $storeManagerMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $storeMock;
 
     /**
-     * @var \Magento\Weee\Model\WeeeConfigProvider
+     * @var WeeeConfigProvider
      */
     protected $model;
 
     protected function setUp(): void
     {
-        $this->weeeHelperMock = $this->createMock(\Magento\Weee\Helper\Data::class);
-        $this->weeeConfigMock = $this->createMock(\Magento\Weee\Model\Config::class);
-        $this->storeManagerMock = $this->createMock(\Magento\Store\Model\StoreManagerInterface::class);
-        $this->storeMock = $this->createMock(\Magento\Store\Model\Store::class);
+        $this->weeeHelperMock = $this->createMock(Data::class);
+        $this->weeeConfigMock = $this->createMock(Config::class);
+        $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
+        $this->storeMock = $this->createMock(Store::class);
 
         $this->storeManagerMock->expects($this->any())->method('getStore')->willReturn($this->storeMock);
 
-        $this->model = new \Magento\Weee\Model\WeeeConfigProvider(
+        $this->model = new WeeeConfigProvider(
             $this->weeeHelperMock,
             $this->storeManagerMock,
             $this->weeeConfigMock

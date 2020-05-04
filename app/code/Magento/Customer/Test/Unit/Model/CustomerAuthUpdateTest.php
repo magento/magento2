@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Customer\Test\Unit\Model;
 
 use Magento\Customer\Model\Customer as CustomerModel;
@@ -13,11 +15,10 @@ use Magento\Customer\Model\ResourceModel\Customer as CustomerResourceModel;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-/**
- * Class CustomerAuthUpdateTest
- */
-class CustomerAuthUpdateTest extends \PHPUnit\Framework\TestCase
+class CustomerAuthUpdateTest extends TestCase
 {
     /**
      * @var CustomerAuthUpdate
@@ -25,17 +26,17 @@ class CustomerAuthUpdateTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var CustomerRegistry|\PHPUnit\Framework\MockObject\MockObject
+     * @var CustomerRegistry|MockObject
      */
     protected $customerRegistry;
 
     /**
-     * @var CustomerResourceModel|\PHPUnit\Framework\MockObject\MockObject
+     * @var CustomerResourceModel|MockObject
      */
     protected $customerResourceModel;
 
     /**
-     * @var CustomerModel|\PHPUnit\Framework\MockObject\MockObject
+     * @var CustomerModel|MockObject
      */
     protected $customerModel;
 

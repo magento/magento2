@@ -3,19 +3,34 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Unit\Model\Product;
 
+use Magento\Catalog\Api\Data\ProductTierPriceInterface;
+use Magento\Catalog\Api\Data\ProductTierPriceInterfaceFactory;
+use Magento\Catalog\Model\Product;
+use Magento\Catalog\Model\Product\PriceModifier;
 use Magento\Catalog\Model\Product\TierPriceManagement;
-
+use Magento\Catalog\Model\ProductRepository;
+use Magento\Customer\Api\GroupManagementInterface;
+use Magento\Customer\Api\GroupRepositoryInterface;
+use Magento\Customer\Model\Data\Group;
 use Magento\Customer\Model\GroupManagement;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\TemporaryState\CouldNotSaveException;
+use Magento\Store\Model\ScopeInterface;
+use Magento\Store\Model\StoreManagerInterface;
+
+use Magento\Store\Model\Website;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class TierPriceManagementTest extends \PHPUnit\Framework\TestCase
+class TierPriceManagementTest extends TestCase
 {
     /**
      * @var TierPriceManagement
@@ -23,73 +38,73 @@ class TierPriceManagementTest extends \PHPUnit\Framework\TestCase
     protected $service;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $repositoryMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $priceFactoryMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $storeManagerMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $priceModifierMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $websiteMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $configMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $productMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $groupManagementMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $groupRepositoryMock;
 
     protected function setUp(): void
     {
-        $this->repositoryMock = $this->createMock(\Magento\Catalog\Model\ProductRepository::class);
+        $this->repositoryMock = $this->createMock(ProductRepository::class);
         $this->priceFactoryMock = $this->createPartialMock(
-            \Magento\Catalog\Api\Data\ProductTierPriceInterfaceFactory::class,
+            ProductTierPriceInterfaceFactory::class,
             ['create']
         );
-        $this->storeManagerMock = $this->createMock(\Magento\Store\Model\StoreManagerInterface::class);
+        $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
         $this->websiteMock =
-            $this->createPartialMock(\Magento\Store\Model\Website::class, ['getId', '__wakeup']);
+            $this->createPartialMock(Website::class, ['getId']);
         $this->productMock = $this->createPartialMock(
-            \Magento\Catalog\Model\Product::class,
-            ['getData', 'getIdBySku', 'load', '__wakeup', 'save', 'validate', 'setData']
+            Product::class,
+            ['getData', 'getIdBySku', 'load', 'save', 'validate', 'setData']
         );
-        $this->configMock = $this->createMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
+        $this->configMock = $this->createMock(ScopeConfigInterface::class);
         $this->priceModifierMock =
-            $this->createMock(\Magento\Catalog\Model\Product\PriceModifier::class);
+            $this->createMock(PriceModifier::class);
         $this->repositoryMock->expects($this->any())->method('get')->with('product_sku')
             ->willReturn($this->productMock);
         $this->groupManagementMock =
-            $this->createMock(\Magento\Customer\Api\GroupManagementInterface::class);
+            $this->createMock(GroupManagementInterface::class);
         $this->groupRepositoryMock =
-            $this->createMock(\Magento\Customer\Api\GroupRepositoryInterface::class);
+            $this->createMock(GroupRepositoryInterface::class);
 
         $this->service = new TierPriceManagement(
             $this->repositoryMock,
@@ -111,7 +126,7 @@ class TierPriceManagementTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetList($configValue, $customerGroupId, $groupData, $expected)
     {
-        $group = $this->createMock(\Magento\Customer\Model\Data\Group::class);
+        $group = $this->createMock(Group::class);
         $group->expects($this->any())->method('getId')->willReturn(GroupManagement::CUST_GROUP_ALL);
         $this->groupManagementMock->expects($this->any())->method('getAllCustomersGroup')
             ->willReturn($group);
@@ -125,10 +140,10 @@ class TierPriceManagementTest extends \PHPUnit\Framework\TestCase
         $this->configMock
             ->expects($this->once())
             ->method('getValue')
-            ->with('catalog/price/scope', \Magento\Store\Model\ScopeInterface::SCOPE_WEBSITE)
+            ->with('catalog/price/scope', ScopeInterface::SCOPE_WEBSITE)
             ->willReturn($configValue);
         if ($expected) {
-            $priceMock = $this->createMock(\Magento\Catalog\Api\Data\ProductTierPriceInterface::class);
+            $priceMock = $this->createMock(ProductTierPriceInterface::class);
             $priceMock->expects($this->once())
                 ->method('setValue')
                 ->with($expected['value'])
@@ -186,22 +201,19 @@ class TierPriceManagementTest extends \PHPUnit\Framework\TestCase
         $this->configMock
             ->expects($this->once())
             ->method('getValue')
-            ->with('catalog/price/scope', \Magento\Store\Model\ScopeInterface::SCOPE_WEBSITE)
+            ->with('catalog/price/scope', ScopeInterface::SCOPE_WEBSITE)
             ->willReturn(0);
         $this->priceModifierMock->expects($this->once())->method('removeTierPrice')->with($this->productMock, 4, 5, 0);
 
-        $this->assertTrue($this->service->remove('product_sku', 4, 5, 0));
+        $this->assertEquals(true, $this->service->remove('product_sku', 4, 5, 0));
     }
 
-    /**
-     */
     public function testDeleteTierPriceFromNonExistingProduct()
     {
-        $this->expectException(\Magento\Framework\Exception\NoSuchEntityException::class);
+        $this->expectException('Magento\Framework\Exception\NoSuchEntityException');
         $this->expectExceptionMessage('No such entity.');
-
         $this->repositoryMock->expects($this->once())->method('get')
-            ->will($this->throwException(new NoSuchEntityException()));
+            ->willThrowException(new NoSuchEntityException());
         $this->priceModifierMock->expects($this->never())->method('removeTierPrice');
         $this->storeManagerMock
             ->expects($this->never())
@@ -219,17 +231,17 @@ class TierPriceManagementTest extends \PHPUnit\Framework\TestCase
         $this->configMock
             ->expects($this->once())
             ->method('getValue')
-            ->with('catalog/price/scope', \Magento\Store\Model\ScopeInterface::SCOPE_WEBSITE)
+            ->with('catalog/price/scope', ScopeInterface::SCOPE_WEBSITE)
             ->willReturn(1);
         $this->priceModifierMock->expects($this->once())->method('removeTierPrice')->with($this->productMock, 4, 5, 1);
 
-        $this->assertTrue($this->service->remove('product_sku', 4, 5, 6));
+        $this->assertEquals(true, $this->service->remove('product_sku', 4, 5, 6));
     }
 
     public function testSetNewPriceWithGlobalPriceScopeAll()
     {
-        $websiteMock = $this->getMockBuilder(\Magento\Store\Model\Website::class)
-            ->setMethods(['getId', '__wakeup'])
+        $websiteMock = $this->getMockBuilder(Website::class)
+            ->setMethods(['getId'])
             ->disableOriginalConstructor()
             ->getMock();
         $websiteMock->expects($this->once())->method('getId')->willReturn(0);
@@ -241,14 +253,12 @@ class TierPriceManagementTest extends \PHPUnit\Framework\TestCase
             ->method('getData')
             ->with('tier_price')
             ->willReturn(
-                
-                    [['all_groups' => 0, 'website_id' => 0, 'price_qty' => 4, 'price' => 50]]
-                
+                [['all_groups' => 0, 'website_id' => 0, 'price_qty' => 4, 'price' => 50]]
             );
         $this->configMock
             ->expects($this->once())
             ->method('getValue')
-            ->with('catalog/price/scope', \Magento\Store\Model\ScopeInterface::SCOPE_WEBSITE)
+            ->with('catalog/price/scope', ScopeInterface::SCOPE_WEBSITE)
             ->willReturn(1);
 
         $this->productMock->expects($this->once())->method('setData')->with(
@@ -265,7 +275,7 @@ class TierPriceManagementTest extends \PHPUnit\Framework\TestCase
             ]
         );
         $this->repositoryMock->expects($this->once())->method('save')->with($this->productMock);
-        $group = $this->createMock(\Magento\Customer\Model\Data\Group::class);
+        $group = $this->createMock(Group::class);
         $group->expects($this->once())->method('getId')->willReturn(GroupManagement::CUST_GROUP_ALL);
         $this->groupManagementMock->expects($this->once())->method('getAllCustomersGroup')
             ->willReturn($group);
@@ -274,7 +284,7 @@ class TierPriceManagementTest extends \PHPUnit\Framework\TestCase
 
     public function testSetNewPriceWithGlobalPriceScope()
     {
-        $group = $this->createMock(\Magento\Customer\Model\Data\Group::class);
+        $group = $this->createMock(Group::class);
         $group->expects($this->once())->method('getId')->willReturn(1);
         $this->groupRepositoryMock->expects($this->once())->method('getById')->willReturn($group);
         $this->productMock
@@ -282,14 +292,12 @@ class TierPriceManagementTest extends \PHPUnit\Framework\TestCase
             ->method('getData')
             ->with('tier_price')
             ->willReturn(
-                
-                    [['cust_group' => 1, 'website_id' => 0, 'price_qty' => 4, 'price' => 50]]
-                
+                [['cust_group' => 1, 'website_id' => 0, 'price_qty' => 4, 'price' => 50]]
             );
         $this->configMock
             ->expects($this->once())
             ->method('getValue')
-            ->with('catalog/price/scope', \Magento\Store\Model\ScopeInterface::SCOPE_WEBSITE)
+            ->with('catalog/price/scope', ScopeInterface::SCOPE_WEBSITE)
             ->willReturn(0);
 
         $this->productMock->expects($this->once())->method('setData')->with(
@@ -310,14 +318,12 @@ class TierPriceManagementTest extends \PHPUnit\Framework\TestCase
             ->method('getData')
             ->with('tier_price')
             ->willReturn(
-                
-                    [['cust_group' => 1, 'website_id' => 0, 'price_qty' => 3, 'price' => 50]]
-                
+                [['cust_group' => 1, 'website_id' => 0, 'price_qty' => 3, 'price' => 50]]
             );
         $this->configMock
             ->expects($this->once())
             ->method('getValue')
-            ->with('catalog/price/scope', \Magento\Store\Model\ScopeInterface::SCOPE_WEBSITE)
+            ->with('catalog/price/scope', ScopeInterface::SCOPE_WEBSITE)
             ->willReturn(0);
 
         $this->productMock->expects($this->once())->method('setData')->with(
@@ -330,14 +336,13 @@ class TierPriceManagementTest extends \PHPUnit\Framework\TestCase
         $this->service->add('product_sku', 1, 100, 3);
     }
 
-    /**
-     */
     public function testSetThrowsExceptionIfDoesntValidate()
     {
-        $this->expectException(\Magento\Framework\Exception\InputException::class);
-        $this->expectExceptionMessage('Values in the attr1, attr2 attributes are invalid. Verify the values and try again.');
-
-        $group = $this->createMock(\Magento\Customer\Model\Data\Group::class);
+        $this->expectException('Magento\Framework\Exception\InputException');
+        $this->expectExceptionMessage(
+            'Values in the attr1, attr2 attributes are invalid. Verify the values and try again.'
+        );
+        $group = $this->createMock(Group::class);
         $group->expects($this->once())->method('getId')->willReturn(1);
         $this->productMock
             ->expects($this->once())
@@ -347,21 +352,16 @@ class TierPriceManagementTest extends \PHPUnit\Framework\TestCase
 
         $this->groupRepositoryMock->expects($this->once())->method('getById')->willReturn($group);
         $this->productMock->expects($this->once())->method('validate')->willReturn(
-            
-                ['attr1' => '', 'attr2' => '']
-            
+            ['attr1' => '', 'attr2' => '']
         );
         $this->repositoryMock->expects($this->never())->method('save');
         $this->service->add('product_sku', 1, 100, 2);
     }
 
-    /**
-     */
     public function testSetThrowsExceptionIfCantSave()
     {
-        $this->expectException(\Magento\Framework\Exception\CouldNotSaveException::class);
-
-        $group = $this->createMock(\Magento\Customer\Model\Data\Group::class);
+        $this->expectException('Magento\Framework\Exception\CouldNotSaveException');
+        $group = $this->createMock(Group::class);
         $group->expects($this->once())->method('getId')->willReturn(1);
         $this->productMock
             ->expects($this->once())
@@ -370,17 +370,14 @@ class TierPriceManagementTest extends \PHPUnit\Framework\TestCase
             ->willReturn([]);
 
         $this->groupRepositoryMock->expects($this->once())->method('getById')->willReturn($group);
-        $this->repositoryMock->expects($this->once())->method('save')->will($this->throwException(new \Exception()));
+        $this->repositoryMock->expects($this->once())->method('save')->willThrowException(new \Exception());
         $this->service->add('product_sku', 1, 100, 2);
     }
 
-    /**
-     */
     public function testAddRethrowsTemporaryStateExceptionIfRecoverableErrorOccurred()
     {
-        $this->expectException(\Magento\Framework\Exception\TemporaryState\CouldNotSaveException::class);
-
-        $group = $this->createMock(\Magento\Customer\Model\Data\Group::class);
+        $this->expectException('Magento\Framework\Exception\TemporaryState\CouldNotSaveException');
+        $group = $this->createMock(Group::class);
         $group->expects($this->once())
             ->method('getId')
             ->willReturn(1);
@@ -406,8 +403,7 @@ class TierPriceManagementTest extends \PHPUnit\Framework\TestCase
      */
     public function testAddWithInvalidData($price, $qty)
     {
-        $this->expectException(\Magento\Framework\Exception\InputException::class);
-
+        $this->expectException('Magento\Framework\Exception\InputException');
         $this->service->add('product_sku', 1, $price, $qty);
     }
 

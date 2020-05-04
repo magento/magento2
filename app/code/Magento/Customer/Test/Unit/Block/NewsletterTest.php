@@ -3,14 +3,20 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Customer\Test\Unit\Block;
 
 use Magento\Customer\Block\Newsletter;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\UrlInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class NewsletterTest extends \PHPUnit\Framework\TestCase
+class NewsletterTest extends TestCase
 {
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $urlBuilder;
 
@@ -21,10 +27,10 @@ class NewsletterTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp(): void
     {
-        $this->urlBuilder = $this->createMock(\Magento\Framework\UrlInterface::class);
-        $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $this->urlBuilder = $this->createMock(UrlInterface::class);
+        $helper = new ObjectManager($this);
         $this->block = $helper->getObject(
-            \Magento\Customer\Block\Newsletter::class,
+            Newsletter::class,
             ['urlBuilder' => $this->urlBuilder]
         );
     }

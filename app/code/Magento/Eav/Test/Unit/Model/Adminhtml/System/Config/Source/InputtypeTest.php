@@ -3,18 +3,23 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Eav\Test\Unit\Model\Adminhtml\System\Config\Source;
 
-class InputtypeTest extends \PHPUnit\Framework\TestCase
+use Magento\Eav\Model\Adminhtml\System\Config\Source\Inputtype;
+use PHPUnit\Framework\TestCase;
+
+class InputtypeTest extends TestCase
 {
     /**
-     * @var \Magento\Eav\Model\Adminhtml\System\Config\Source\Inputtype
+     * @var Inputtype
      */
     protected $model;
 
     protected function setUp(): void
     {
-        $this->model = new \Magento\Eav\Model\Adminhtml\System\Config\Source\Inputtype(
+        $this->model = new Inputtype(
             $this->getOptionsArray()
         );
     }

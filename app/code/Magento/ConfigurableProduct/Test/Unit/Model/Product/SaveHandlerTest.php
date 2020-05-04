@@ -3,10 +3,11 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\ConfigurableProduct\Test\Unit\Model\Product;
 
 use Magento\Catalog\Model\Product;
-use Magento\Catalog\Model\ProductRepository;
 use Magento\ConfigurableProduct\Api\Data\OptionInterface;
 use Magento\ConfigurableProduct\Model\OptionRepository;
 use Magento\ConfigurableProduct\Model\Product\SaveHandler;
@@ -14,14 +15,13 @@ use Magento\ConfigurableProduct\Model\Product\Type\Configurable as ConfigurableM
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable\Attribute;
 use Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable;
 use Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\ConfigurableFactory;
-use PHPUnit\Framework\MockObject\MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
- * Class SaveHandlerTest
- *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class SaveHandlerTest extends \PHPUnit\Framework\TestCase
+class SaveHandlerTest extends TestCase
 {
     /**
      * @var OptionRepository|MockObject
@@ -230,12 +230,12 @@ class SaveHandlerTest extends \PHPUnit\Framework\TestCase
     /**
      * Mock for options save
      *
-     * @param \PHPUnit\Framework\MockObject\MockObject $attribute
+     * @param MockObject $attribute
      * @param $sku
      * @param $id
      * @return void
      */
-    private function processSaveOptions(\PHPUnit\Framework\MockObject\MockObject $attribute, $sku, $id)
+    private function processSaveOptions(MockObject $attribute, $sku, $id)
     {
         $attribute->expects(static::once())
             ->method('setId')

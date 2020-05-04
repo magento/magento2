@@ -3,62 +3,71 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Sales\Test\Unit\Model\Order\Invoice;
 
-class ItemTest extends \PHPUnit\Framework\TestCase
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Sales\Model\Order;
+use Magento\Sales\Model\Order\Invoice;
+use Magento\Sales\Model\Order\Invoice\Item;
+use Magento\Sales\Model\Order\ItemFactory;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class ItemTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
+     * @var ObjectManager
      */
     protected $objectManager;
 
     /**
-     * @var \Magento\Sales\Model\Order\Invoice\Item|\PHPUnit\Framework\MockObject\MockObject
+     * @var Item|MockObject
      */
     protected $item;
 
     /**
-     * @var \Magento\Sales\Model\Order\ItemFactory|\PHPUnit\Framework\MockObject\MockObject
+     * @var ItemFactory|MockObject
      */
     protected $orderItemFactoryMock;
 
     /**
-     * @var \Magento\Sales\Model\Order\Invoice|\PHPUnit\Framework\MockObject\MockObject
+     * @var Invoice|MockObject
      */
     protected $invoiceMock;
 
     /**
-     * @var \Magento\Sales\Model\Order|\PHPUnit\Framework\MockObject\MockObject
+     * @var Order|MockObject
      */
     protected $orderMock;
 
     /**
-     * @var \Magento\Sales\Model\Order\Item|\PHPUnit\Framework\MockObject\MockObject
+     * @var \Magento\Sales\Model\Order\Item|MockObject
      */
     protected $orderItemMock;
 
     protected function setUp(): void
     {
-        $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $this->objectManager = new ObjectManager($this);
         $this->orderItemFactoryMock = $this->createPartialMock(
-            \Magento\Sales\Model\Order\ItemFactory::class,
+            ItemFactory::class,
             ['create']
         );
-        $this->invoiceMock = $this->createMock(\Magento\Sales\Model\Order\Invoice::class);
-        $this->orderMock = $this->createMock(\Magento\Sales\Model\Order::class);
+        $this->invoiceMock = $this->createMock(Invoice::class);
+        $this->orderMock = $this->createMock(Order::class);
         $this->orderItemMock = $this->createPartialMock(\Magento\Sales\Model\Order\Item::class, [
-                'load', 'isDummy', 'getIsQtyDecimal', 'getQtyToInvoice', 'getQtyInvoiced', 'getTaxInvoiced',
-                'getBaseTaxInvoiced', 'getDiscountTaxCompensationInvoiced',
-                'getBaseDiscountTaxCompensationInvoiced', 'getDiscountInvoiced',
-                'getBaseDiscountInvoiced', 'getRowInvoiced', 'getBaseRowInvoiced', 'setQtyInvoiced', 'setTaxInvoiced',
-                'setBaseTaxInvoiced', 'setDiscountTaxCompensationInvoiced',
-                'setBaseDiscountTaxCompensationInvoiced', 'setDiscountInvoiced',
-                'setBaseDiscountInvoiced', 'setRowInvoiced', 'setBaseRowInvoiced', 'getQtyOrdered', 'getRowTotal',
-                'getBaseRowTotal', 'getRowTotalInclTax', 'getBaseRowTotalInclTax'
-            ]);
+            'load', 'isDummy', 'getIsQtyDecimal', 'getQtyToInvoice', 'getQtyInvoiced', 'getTaxInvoiced',
+            'getBaseTaxInvoiced', 'getDiscountTaxCompensationInvoiced',
+            'getBaseDiscountTaxCompensationInvoiced', 'getDiscountInvoiced',
+            'getBaseDiscountInvoiced', 'getRowInvoiced', 'getBaseRowInvoiced', 'setQtyInvoiced', 'setTaxInvoiced',
+            'setBaseTaxInvoiced', 'setDiscountTaxCompensationInvoiced',
+            'setBaseDiscountTaxCompensationInvoiced', 'setDiscountInvoiced',
+            'setBaseDiscountInvoiced', 'setRowInvoiced', 'setBaseRowInvoiced', 'getQtyOrdered', 'getRowTotal',
+            'getBaseRowTotal', 'getRowTotalInclTax', 'getBaseRowTotalInclTax'
+        ]);
         $this->item = $this->objectManager->getObject(
-            \Magento\Sales\Model\Order\Invoice\Item::class,
+            Item::class,
             [
                 'orderItemFactory' => $this->orderItemFactoryMock
             ]

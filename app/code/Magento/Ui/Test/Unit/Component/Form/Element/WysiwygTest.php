@@ -3,37 +3,38 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Ui\Test\Unit\Component\Form\Element;
 
-use Magento\Framework\DataObject;
-use Magento\Ui\Component\Form\Element\Wysiwyg;
-use Magento\Framework\Data\Form\Element\Editor;
 use Magento\Framework\Data\Form;
+use Magento\Framework\Data\Form\Element\Editor;
 use Magento\Framework\Data\FormFactory;
+use Magento\Framework\DataObject;
+use Magento\Ui\Component\Form\Element\AbstractElement;
+use Magento\Ui\Component\Form\Element\Wysiwyg;
 use Magento\Ui\Component\Wysiwyg\ConfigInterface;
+use PHPUnit\Framework\MockObject\MockObject;
 
-/**
- * Class WysiwygTest
- */
 class WysiwygTest extends AbstractElementTest
 {
     /**
-     * @var FormFactory|\PHPUnit\Framework\MockObject\MockObject
+     * @var FormFactory|MockObject
      */
     protected $formFactoryMock;
 
     /**
-     * @var Form|\PHPUnit\Framework\MockObject\MockObject
+     * @var Form|MockObject
      */
     protected $formMock;
 
     /**
-     * @var Editor|\PHPUnit\Framework\MockObject\MockObject
+     * @var Editor|MockObject
      */
     protected $editorMock;
 
     /**
-     * @var ConfigInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var ConfigInterface|MockObject
      */
     protected $wysiwygConfig;
 
@@ -70,7 +71,7 @@ class WysiwygTest extends AbstractElementTest
     }
 
     /**
-     * @return \Magento\Ui\Component\Form\Element\AbstractElement|object
+     * @return AbstractElement|object
      */
     protected function getModel()
     {

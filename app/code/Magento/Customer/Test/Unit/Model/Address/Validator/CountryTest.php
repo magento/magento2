@@ -3,45 +3,55 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Customer\Test\Unit\Model\Address\Validator;
 
+use Magento\Customer\Model\Address\AbstractAddress;
+use Magento\Customer\Model\Address\Validator\Country;
+use Magento\Directory\Helper\Data;
+use Magento\Directory\Model\AllowedCountries;
+use Magento\Directory\Model\ResourceModel\Region\Collection;
+use Magento\Framework\Escaper;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Store\Model\ScopeInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Magento\Customer\Model\Address\Validator\Country tests.
  */
-class CountryTest extends \PHPUnit\Framework\TestCase
+class CountryTest extends TestCase
 {
-    /** @var \Magento\Directory\Helper\Data|\PHPUnit\Framework\MockObject\MockObject  */
+    /** @var Data|MockObject  */
     private $directoryDataMock;
 
-    /** @var \Magento\Customer\Model\Address\Validator\Country  */
+    /** @var Country  */
     private $model;
 
-    /** @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager */
+    /** @var ObjectManager */
     private $objectManager;
 
     /**
-     * @var \Magento\Directory\Model\AllowedCountries|\PHPUnit\Framework\MockObject\MockObject
+     * @var AllowedCountries|MockObject
      */
     private $allowedCountriesReaderMock;
 
     protected function setUp(): void
     {
-        $this->directoryDataMock = $this->createMock(\Magento\Directory\Helper\Data::class);
-        $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $this->directoryDataMock = $this->createMock(Data::class);
+        $this->objectManager = new ObjectManager($this);
         $this->allowedCountriesReaderMock = $this->createPartialMock(
-            \Magento\Directory\Model\AllowedCountries::class,
+            AllowedCountries::class,
             ['getAllowedCountries']
         );
 
         $escaper = $this->objectManager->getObject(
-            \Magento\Framework\Escaper::class
+            Escaper::class
         );
 
         $this->model = $this->objectManager->getObject(
-            \Magento\Customer\Model\Address\Validator\Country::class,
+            Country::class,
             [
                 'directoryData' => $this->directoryDataMock,
                 'allowedCountriesReader' => $this->allowedCountriesReaderMock,
@@ -62,7 +72,7 @@ class CountryTest extends \PHPUnit\Framework\TestCase
     public function testValidate(array $data, array $countryIds, array $allowedRegions, array $expected)
     {
         $addressMock = $this
-            ->getMockBuilder(\Magento\Customer\Model\Address\AbstractAddress::class)
+            ->getMockBuilder(AbstractAddress::class)
             ->disableOriginalConstructor()
             ->setMethods(
                 [
@@ -91,7 +101,7 @@ class CountryTest extends \PHPUnit\Framework\TestCase
 
         $addressMock->method('getCountryModel')->willReturn($countryModelMock);
 
-        $regionCollectionMock = $this->getMockBuilder(\Magento\Directory\Model\ResourceModel\Region\Collection::class)
+        $regionCollectionMock = $this->getMockBuilder(Collection::class)
             ->disableOriginalConstructor()
             ->setMethods(['getAllIds'])
             ->getMock();

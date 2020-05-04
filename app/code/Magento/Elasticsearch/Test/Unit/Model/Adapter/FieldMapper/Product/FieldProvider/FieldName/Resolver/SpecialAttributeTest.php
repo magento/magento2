@@ -8,13 +8,14 @@ declare(strict_types=1);
 namespace Magento\Elasticsearch\Test\Unit\Model\Adapter\FieldMapper\Product\FieldProvider\FieldName\Resolver;
 
 use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\AttributeAdapter;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldName\Resolver\SpecialAttribute;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @SuppressWarnings(PHPMD)
  */
-class SpecialAttributeTest extends \PHPUnit\Framework\TestCase
+class SpecialAttributeTest extends TestCase
 {
     /**
      * @var SpecialAttribute

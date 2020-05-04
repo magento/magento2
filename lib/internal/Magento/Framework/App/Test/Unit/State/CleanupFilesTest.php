@@ -3,18 +3,23 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Framework\App\Test\Unit\State;
 
-use \Magento\Framework\App\State\CleanupFiles;
-
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\App\State\CleanupFiles;
+use Magento\Framework\Filesystem;
+use Magento\Framework\Filesystem\Directory\WriteInterface;
 use Magento\Framework\Filesystem\DriverPool;
 
-class CleanupFilesTest extends \PHPUnit\Framework\TestCase
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class CleanupFilesTest extends TestCase
 {
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     private $filesystem;
 
@@ -25,7 +30,7 @@ class CleanupFilesTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp(): void
     {
-        $this->filesystem = $this->createMock(\Magento\Framework\Filesystem::class);
+        $this->filesystem = $this->createMock(Filesystem::class);
         $this->object = new CleanupFiles($this->filesystem);
     }
 
@@ -36,12 +41,10 @@ class CleanupFilesTest extends \PHPUnit\Framework\TestCase
         $this->filesystem->expects($this->exactly(2))
             ->method('getDirectoryWrite')
             ->willReturnMap(
-                
-                    [
-                        [DirectoryList::GENERATED_CODE, DriverPool::FILE, $dir1],
-                        [DirectoryList::GENERATED_METADATA, DriverPool::FILE, $dir2],
-                    ]
-                
+                [
+                    [DirectoryList::GENERATED_CODE, DriverPool::FILE, $dir1],
+                    [DirectoryList::GENERATED_METADATA, DriverPool::FILE, $dir2],
+                ]
             );
         $this->object->clearCodeGeneratedClasses();
     }
@@ -61,11 +64,11 @@ class CleanupFilesTest extends \PHPUnit\Framework\TestCase
      * Gets a mock of directory with expectation to be cleaned
      *
      * @param string|null $subPath
-     * @return \PHPUnit\Framework\MockObject\MockObject
+     * @return MockObject
      */
     private function getDirectoryCleanMock($subPath = null)
     {
-        $dir = $this->getMockForAbstractClass(\Magento\Framework\Filesystem\Directory\WriteInterface::class);
+        $dir = $this->getMockForAbstractClass(WriteInterface::class);
         $dir->expects($this->once())->method('search')->with('*', $subPath)->willReturn(['one', 'two']);
         $dir->expects($this->exactly(2))->method('delete');
         $dir->expects($this->once())->method('isExist')->willReturn(true);

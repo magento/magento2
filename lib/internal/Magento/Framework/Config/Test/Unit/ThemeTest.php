@@ -3,25 +3,31 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\Config\Test\Unit;
 
-class ThemeTest extends \PHPUnit\Framework\TestCase
+use Magento\Framework\Config\Dom\UrnResolver;
+use Magento\Framework\Config\Theme;
+use PHPUnit\Framework\TestCase;
+
+class ThemeTest extends TestCase
 {
-    /** @var \Magento\Framework\Config\Dom\UrnResolver */
+    /** @var UrnResolver */
     protected $urnResolver;
 
-    /** @var \Magento\Framework\Config\Dom\UrnResolver */
+    /** @var UrnResolver */
     protected $urnResolverMock;
 
     protected function setUp(): void
     {
-        $this->urnResolver = new \Magento\Framework\Config\Dom\UrnResolver();
-        $this->urnResolverMock = $this->createMock(\Magento\Framework\Config\Dom\UrnResolver::class);
+        $this->urnResolver = new UrnResolver();
+        $this->urnResolverMock = $this->createMock(UrnResolver::class);
     }
 
     public function testGetSchemaFile()
     {
-        $config = new \Magento\Framework\Config\Theme($this->urnResolverMock, null);
+        $config = new Theme($this->urnResolverMock, null);
         $this->urnResolverMock->expects($this->exactly(2))
             ->method('getRealPath')
             ->with('urn:magento:framework:Config/etc/theme.xsd')
@@ -43,7 +49,7 @@ class ThemeTest extends \PHPUnit\Framework\TestCase
     public function testDataGetter($themePath, $expected)
     {
         $expected = reset($expected);
-        $config = new \Magento\Framework\Config\Theme(
+        $config = new Theme(
             $this->urnResolverMock,
             file_get_contents(__DIR__ . '/_files/area/' . $themePath . '/theme.xml')
         );

@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /***
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -13,29 +13,28 @@ use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Framework\View\Page\Config\RendererInterface;
 use Magento\Store\Model\ScopeInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-/**
- * Class RendererFactoryTest
- */
-class RendererFactoryTest extends \PHPUnit\Framework\TestCase
+class RendererFactoryTest extends TestCase
 {
     /**
-     * @var ObjectManagerInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var ObjectManagerInterface|MockObject
      */
     private $objectManagerMock;
 
     /**
-     * @var RendererInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var RendererInterface|MockObject
      */
     private $rendererMock;
 
     /**
-     * @var ScopeConfigInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var ScopeConfigInterface|MockObject
      */
     private $configMock;
 
     /**
-     * @var State|\PHPUnit\Framework\MockObject\MockObject
+     * @var State|MockObject
      */
     private $stateMock;
 
@@ -52,7 +51,7 @@ class RendererFactoryTest extends \PHPUnit\Framework\TestCase
             ->getMockForAbstractClass();
         $this->rendererMock = $this->getMockBuilder(RendererInterface::class)
             ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+            ->getMock();
         $this->stateMock = $this->getMockBuilder(State::class)
             ->disableOriginalConstructor()
             ->getMock();

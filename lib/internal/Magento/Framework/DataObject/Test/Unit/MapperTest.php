@@ -3,31 +3,37 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Framework\DataObject\Test\Unit;
 
-class MapperTest extends \PHPUnit\Framework\TestCase
+use Magento\Framework\DataObject;
+use Magento\Framework\DataObject\Mapper;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class MapperTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\DataObject\Mapper
+     * @var Mapper
      */
     protected $mapper;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $fromMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $toMock;
 
     protected function setUp(): void
     {
-        $this->fromMock = $this->createMock(\Magento\Framework\DataObject::class);
-        $this->toMock = $this->createMock(\Magento\Framework\DataObject::class);
-        $this->mapper = new \Magento\Framework\DataObject\Mapper();
+        $this->fromMock = $this->createMock(DataObject::class);
+        $this->toMock = $this->createMock(DataObject::class);
+        $this->mapper = new Mapper();
     }
 
     public function testAccumulateByMapWhenToIsArrayFromIsObject()

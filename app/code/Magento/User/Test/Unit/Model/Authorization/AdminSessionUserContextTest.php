@@ -3,42 +3,47 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\User\Test\Unit\Model\Authorization;
 
 use Magento\Authorization\Model\UserContextInterface;
+use Magento\Backend\Model\Auth\Session;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\User\Model\Authorization\AdminSessionUserContext;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Tests Magento\User\Model\Authorization\AdminSessionUserContext
  */
-class AdminSessionUserContextTest extends \PHPUnit\Framework\TestCase
+class AdminSessionUserContextTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
+     * @var ObjectManager
      */
     protected $objectManager;
 
     /**
-     * @var \Magento\User\Model\Authorization\AdminSessionUserContext
+     * @var AdminSessionUserContext
      */
     protected $adminSessionUserContext;
 
     /**
-     * @var \Magento\Backend\Model\Auth\Session
+     * @var Session
      */
     protected $adminSession;
 
     protected function setUp(): void
     {
-        $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $this->objectManager = new ObjectManager($this);
 
-        $this->adminSession = $this->getMockBuilder(\Magento\Backend\Model\Auth\Session::class)
+        $this->adminSession = $this->getMockBuilder(Session::class)
             ->disableOriginalConstructor()
             ->setMethods(['hasUser', 'getUser', 'getId'])
             ->getMock();
 
         $this->adminSessionUserContext = $this->objectManager->getObject(
-            \Magento\User\Model\Authorization\AdminSessionUserContext::class,
+            AdminSessionUserContext::class,
             ['adminSession' => $this->adminSession]
         );
     }

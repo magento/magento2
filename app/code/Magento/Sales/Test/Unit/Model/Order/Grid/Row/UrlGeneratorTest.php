@@ -3,30 +3,38 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Sales\Test\Unit\Model\Order\Grid\Row;
 
-class UrlGeneratorTest extends \PHPUnit\Framework\TestCase
+use Magento\Backend\Model\UrlInterface;
+use Magento\Framework\AuthorizationInterface;
+use Magento\Framework\DataObject;
+use Magento\Sales\Model\Order\Grid\Row\UrlGenerator;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class UrlGeneratorTest extends TestCase
 {
     /**
-     * @var \Magento\Sales\Model\Order\Grid\Row\UrlGenerator
+     * @var UrlGenerator
      */
     protected $urlGenerator;
 
     /**
-     * @var \Magento\Backend\Model\UrlInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var UrlInterface|MockObject
      */
     protected $urlMock;
 
     /**
-     * @var \Magento\Framework\AuthorizationInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var AuthorizationInterface|MockObject
      */
     protected $authorizationMock;
 
     protected function setUp(): void
     {
         $this->urlMock = $this->getMockForAbstractClass(
-            \Magento\Backend\Model\UrlInterface::class,
+            UrlInterface::class,
             [],
             '',
             false,
@@ -35,7 +43,7 @@ class UrlGeneratorTest extends \PHPUnit\Framework\TestCase
             []
         );
         $this->authorizationMock = $this->getMockForAbstractClass(
-            \Magento\Framework\AuthorizationInterface::class,
+            AuthorizationInterface::class,
             [],
             '',
             false,
@@ -43,7 +51,7 @@ class UrlGeneratorTest extends \PHPUnit\Framework\TestCase
             true,
             []
         );
-        $this->urlGenerator = new \Magento\Sales\Model\Order\Grid\Row\UrlGenerator(
+        $this->urlGenerator = new UrlGenerator(
             $this->urlMock,
             $this->authorizationMock,
             ['path' => 'path']
@@ -74,6 +82,6 @@ class UrlGeneratorTest extends \PHPUnit\Framework\TestCase
             ->method('isAllowed')
             ->with('Magento_Sales::actions_view', null)
             ->willReturn($isAllowed);
-        $this->assertEquals($url, $this->urlGenerator->getUrl(new \Magento\Framework\DataObject()));
+        $this->assertEquals($url, $this->urlGenerator->getUrl(new DataObject()));
     }
 }

@@ -3,14 +3,18 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Email\Test\Unit\Model\Template\Config;
 
 use Magento\Email\Model\Template\Config\FileIterator;
+use Magento\Framework\Filesystem\File\Read;
+use Magento\Framework\Filesystem\File\ReadFactory;
+use Magento\Framework\Module\Dir\ReverseResolver;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-/**
- * Class FileIteratorTest
- */
-class FileIteratorTest extends \PHPUnit\Framework\TestCase
+class FileIteratorTest extends TestCase
 {
     /**
      * @var FileIterator
@@ -18,17 +22,17 @@ class FileIteratorTest extends \PHPUnit\Framework\TestCase
     protected $fileIterator;
 
     /**
-     * @var \Magento\Framework\Filesystem\File\ReadFactory | \PHPUnit\Framework\MockObject\MockObject
+     * @var ReadFactory|MockObject
      */
     protected $fileReadFactory;
 
     /**
-     * @var \Magento\Framework\Filesystem\File\Read | \PHPUnit\Framework\MockObject\MockObject
+     * @var Read|MockObject
      */
     protected $fileRead;
 
     /**
-     * @var \Magento\Framework\Module\Dir\ReverseResolver | \PHPUnit\Framework\MockObject\MockObject
+     * @var ReverseResolver|MockObject
      */
     protected $moduleDirResolverMock;
 
@@ -42,11 +46,11 @@ class FileIteratorTest extends \PHPUnit\Framework\TestCase
     protected function setUp(): void
     {
         $this->filePaths = ['directory/path/file1', 'directory/path/file2'];
-        $this->fileReadFactory = $this->createMock(\Magento\Framework\Filesystem\File\ReadFactory::class);
-        $this->fileRead = $this->createMock(\Magento\Framework\Filesystem\File\Read::class);
-        $this->moduleDirResolverMock = $this->createMock(\Magento\Framework\Module\Dir\ReverseResolver::class);
+        $this->fileReadFactory = $this->createMock(ReadFactory::class);
+        $this->fileRead = $this->createMock(Read::class);
+        $this->moduleDirResolverMock = $this->createMock(ReverseResolver::class);
 
-        $this->fileIterator = new \Magento\Email\Model\Template\Config\FileIterator(
+        $this->fileIterator = new FileIterator(
             $this->fileReadFactory,
             $this->filePaths,
             $this->moduleDirResolverMock

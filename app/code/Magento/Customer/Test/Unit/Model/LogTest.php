@@ -3,17 +3,23 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Customer\Test\Unit\Model;
+
+use Magento\Customer\Model\Log;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Customer log model test.
  */
-class LogTest extends \PHPUnit\Framework\TestCase
+class LogTest extends TestCase
 {
     /**
      * Customer log model.
      *
-     * @var \Magento\Customer\Model\Log
+     * @var Log
      */
     protected $log;
 
@@ -32,10 +38,10 @@ class LogTest extends \PHPUnit\Framework\TestCase
      */
     protected function setUp(): void
     {
-        $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $objectManagerHelper = new ObjectManager($this);
 
         $this->log = $objectManagerHelper->getObject(
-            \Magento\Customer\Model\Log::class,
+            Log::class,
             [
                 'customerId' => $this->logData['customer_id'],
                 'lastLoginAt' => $this->logData['last_login_at'],

@@ -3,17 +3,19 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Framework\View\Test\Unit\Page\Config;
 
-use \Magento\Framework\View\Page\Config\Structure;
-
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Framework\View\Page\Config\Structure;
+
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test for page config structure model
  */
-class StructureTest extends \PHPUnit\Framework\TestCase
+class StructureTest extends TestCase
 {
     /**
      * @var Structure
@@ -24,7 +26,7 @@ class StructureTest extends \PHPUnit\Framework\TestCase
     {
         $objectManagerHelper = new ObjectManagerHelper($this);
         $this->structure = $objectManagerHelper->getObject(
-            \Magento\Framework\View\Page\Config\Structure::class
+            Structure::class
         );
     }
 

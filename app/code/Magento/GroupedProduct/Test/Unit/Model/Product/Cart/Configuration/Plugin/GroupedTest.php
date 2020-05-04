@@ -3,22 +3,30 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\GroupedProduct\Test\Unit\Model\Product\Cart\Configuration\Plugin;
 
-class GroupedTest extends \PHPUnit\Framework\TestCase
+use Magento\Catalog\Model\Product;
+use Magento\Catalog\Model\Product\CartConfiguration;
+use Magento\GroupedProduct\Model\Product\Cart\Configuration\Plugin\Grouped;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class GroupedTest extends TestCase
 {
     /**
-     * @var \Magento\GroupedProduct\Model\Product\Cart\Configuration\Plugin\Grouped
+     * @var Grouped
      */
     protected $groupedPlugin;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $productMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $subjectMock;
 
@@ -29,12 +37,12 @@ class GroupedTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp(): void
     {
-        $this->productMock = $this->createMock(\Magento\Catalog\Model\Product::class);
-        $this->subjectMock = $this->createMock(\Magento\Catalog\Model\Product\CartConfiguration::class);
+        $this->productMock = $this->createMock(Product::class);
+        $this->subjectMock = $this->createMock(CartConfiguration::class);
         $this->closureMock = function () {
             return 'Expected';
         };
-        $this->groupedPlugin = new \Magento\GroupedProduct\Model\Product\Cart\Configuration\Plugin\Grouped();
+        $this->groupedPlugin = new Grouped();
     }
 
     public function testAroundIsProductConfiguredWhenProductGrouped()
@@ -47,7 +55,8 @@ class GroupedTest extends \PHPUnit\Framework\TestCase
         )->willReturn(
             \Magento\GroupedProduct\Model\Product\Type\Grouped::TYPE_CODE
         );
-        $this->assertTrue(
+        $this->assertEquals(
+            true,
             $this->groupedPlugin->aroundIsProductConfigured(
                 $this->subjectMock,
                 $this->closureMock,

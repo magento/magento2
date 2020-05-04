@@ -3,25 +3,31 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Framework\Search\Test\Unit\Adapter\Mysql\Filter\Builder;
 
+use Magento\Framework\Search\Adapter\Mysql\ConditionManager;
+use Magento\Framework\Search\Adapter\Mysql\Filter\Builder\Range;
+use Magento\Framework\Search\Request\Filter\Term;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class RangeTest extends \PHPUnit\Framework\TestCase
+class RangeTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\Search\Request\Filter\Term|\PHPUnit\Framework\MockObject\MockObject
+     * @var Term|MockObject
      */
     private $requestFilter;
 
     /**
-     * @var \Magento\Framework\Search\Adapter\Mysql\Filter\Builder\Range
+     * @var Range
      */
     private $filter;
 
     /**
-     * @var \Magento\Framework\Search\Adapter\Mysql\ConditionManager|\PHPUnit\Framework\MockObject\MockObject
+     * @var ConditionManager|MockObject
      */
     private $conditionManager;
 
@@ -36,22 +42,20 @@ class RangeTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->conditionManager = $this->getMockBuilder(\Magento\Framework\Search\Adapter\Mysql\ConditionManager::class)
+        $this->conditionManager = $this->getMockBuilder(ConditionManager::class)
             ->disableOriginalConstructor()
             ->setMethods(['generateCondition'])
             ->getMock();
         $this->conditionManager->expects($this->any())
             ->method('generateCondition')
             ->willReturnCallback(
-                
-                    function ($field, $operator, $value) {
-                        return sprintf('%s %s \'%s\'', $field, $operator, $value);
-                    }
-                
+                function ($field, $operator, $value) {
+                    return sprintf('%s %s \'%s\'', $field, $operator, $value);
+                }
             );
 
         $this->filter = $objectManager->getObject(
-            \Magento\Framework\Search\Adapter\Mysql\Filter\Builder\Range::class,
+            Range::class,
             [
                 'conditionManager' => $this->conditionManager,
             ]

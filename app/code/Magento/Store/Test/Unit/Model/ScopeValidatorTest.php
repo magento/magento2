@@ -3,14 +3,20 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Store\Test\Unit\Model;
 
+use Magento\Framework\App\ScopeInterface;
+use Magento\Framework\App\ScopeResolverInterface;
 use Magento\Framework\App\ScopeResolverPool;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Phrase;
 use Magento\Store\Model\ScopeValidator;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class ScopeValidatorTest extends \PHPUnit\Framework\TestCase
+class ScopeValidatorTest extends TestCase
 {
     /**
      * @var ScopeValidator
@@ -18,13 +24,13 @@ class ScopeValidatorTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var ScopeResolverPool|\PHPUnit\Framework\MockObject\MockObject
+     * @var ScopeResolverPool|MockObject
      */
     protected $scopeResolverPool;
 
     protected function setUp(): void
     {
-        $this->scopeResolverPool = $this->getMockBuilder(\Magento\Framework\App\ScopeResolverPool::class)
+        $this->scopeResolverPool = $this->getMockBuilder(ScopeResolverPool::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -46,13 +52,13 @@ class ScopeValidatorTest extends \PHPUnit\Framework\TestCase
         $scope = 'websites';
         $scopeId = 1;
 
-        $scopeObject = $this->getMockBuilder(\Magento\Framework\App\ScopeInterface::class)
+        $scopeObject = $this->getMockBuilder(ScopeInterface::class)
             ->getMockForAbstractClass();
         $scopeObject->expects($this->once())
             ->method('getId')
             ->willReturn(false);
 
-        $scopeResolver = $this->getMockBuilder(\Magento\Framework\App\ScopeResolverInterface::class)
+        $scopeResolver = $this->getMockBuilder(ScopeResolverInterface::class)
             ->getMockForAbstractClass();
         $scopeResolver->expects($this->once())
             ->method('getScope')

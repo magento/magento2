@@ -18,8 +18,8 @@ use Magento\Framework\Phrase\Renderer\Translate;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Translation\Model\Js\Config;
 use Magento\Translation\Model\Js\DataProvider as ModelDataProvider;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use PHPUnit\Framework\MockObject\MockObject as MockObject;
 
 /**
  * Verify data provider translation
@@ -152,8 +152,7 @@ class DataProviderTest extends TestCase
      */
     public function testGetDataThrowingException(array $config): void
     {
-        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
-
+        $this->expectException('Magento\Framework\Exception\LocalizedException');
         $themePath = 'blank';
         $areaCode = 'adminhtml';
         $patterns = $config['patterns'];

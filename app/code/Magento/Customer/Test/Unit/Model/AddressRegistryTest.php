@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Unit test for converter \Magento\Customer\Model\AddressRegistry
  *
@@ -7,31 +7,38 @@
  */
 namespace Magento\Customer\Test\Unit\Model;
 
-class AddressRegistryTest extends \PHPUnit\Framework\TestCase
+use Magento\Customer\Model\Address;
+use Magento\Customer\Model\AddressFactory;
+use Magento\Customer\Model\AddressRegistry;
+use Magento\Framework\Exception\NoSuchEntityException;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class AddressRegistryTest extends TestCase
 {
     /**
-     * @var \Magento\Customer\Model\AddressRegistry
+     * @var AddressRegistry
      */
     private $unit;
 
     /**
-     * @var \Magento\Customer\Model\AddressFactory|\PHPUnit\Framework\MockObject\MockObject
+     * @var AddressFactory|MockObject
      */
     private $addressFactory;
 
     protected function setUp(): void
     {
-        $this->addressFactory = $this->getMockBuilder(\Magento\Customer\Model\AddressFactory::class)
+        $this->addressFactory = $this->getMockBuilder(AddressFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
-        $this->unit = new \Magento\Customer\Model\AddressRegistry($this->addressFactory);
+        $this->unit = new AddressRegistry($this->addressFactory);
     }
 
     public function testRetrieve()
     {
         $addressId = 1;
-        $address = $this->getMockBuilder(\Magento\Customer\Model\Address::class)
+        $address = $this->getMockBuilder(Address::class)
             ->disableOriginalConstructor()
             ->setMethods(['load', 'getId', '__wakeup'])
             ->getMock();
@@ -51,14 +58,12 @@ class AddressRegistryTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($address, $actualCached);
     }
 
-    /**
-     */
     public function testRetrieveException()
     {
-        $this->expectException(\Magento\Framework\Exception\NoSuchEntityException::class);
+        $this->expectException(NoSuchEntityException::class);
 
         $addressId = 1;
-        $address = $this->getMockBuilder(\Magento\Customer\Model\Address::class)
+        $address = $this->getMockBuilder(Address::class)
             ->setMethods(['load', 'getId', '__wakeup'])
             ->disableOriginalConstructor()
             ->getMock();
@@ -78,7 +83,7 @@ class AddressRegistryTest extends \PHPUnit\Framework\TestCase
     public function testRemove()
     {
         $addressId = 1;
-        $address = $this->getMockBuilder(\Magento\Customer\Model\Address::class)
+        $address = $this->getMockBuilder(Address::class)
             ->disableOriginalConstructor()
             ->setMethods(['load', 'getId', '__wakeup'])
             ->getMock();

@@ -3,60 +3,72 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\ProductAlert\Test\Unit\Block\Product\View;
+
+use Magento\Catalog\Model\Product;
+use Magento\Framework\Registry;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\View\Layout;
+use Magento\ProductAlert\Block\Product\View\Stock;
+use Magento\ProductAlert\Helper\Data;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test class for \Magento\ProductAlert\Block\Product\View\Stock
  */
-class StockTest extends \PHPUnit\Framework\TestCase
+class StockTest extends TestCase
 {
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\ProductAlert\Helper\Data
+     * @var MockObject|Data
      */
     protected $_helper;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Catalog\Model\Product
+     * @var MockObject|Product
      */
     protected $_product;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\Registry
+     * @var MockObject|Registry
      */
     protected $_registry;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\ProductAlert\Block\Product\View\Stock
+     * @var MockObject|Stock
      */
     protected $_block;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\View\Layout
+     * @var MockObject|Layout
      */
     protected $_layout;
 
     protected function setUp(): void
     {
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $objectManager = new ObjectManager($this);
         $this->_helper = $this->createPartialMock(
-            \Magento\ProductAlert\Helper\Data::class,
+            Data::class,
             ['isStockAlertAllowed', 'getSaveUrl']
         );
         $this->_product = $this->createPartialMock(
-            \Magento\Catalog\Model\Product::class,
+            Product::class,
             ['isAvailable', 'getId', '__wakeup']
         );
         $this->_product->expects($this->any())->method('getId')->willReturn(1);
         $this->_registry = $this->getMockBuilder(
-            \Magento\Framework\Registry::class
-        )->disableOriginalConstructor()->setMethods(
+            Registry::class
+        )->disableOriginalConstructor()
+            ->setMethods(
             ['registry']
         )->getMock();
         $this->_block = $objectManager->getObject(
-            \Magento\ProductAlert\Block\Product\View\Stock::class,
+            Stock::class,
             ['helper' => $this->_helper, 'registry' => $this->_registry]
         );
-        $this->_layout = $this->createMock(\Magento\Framework\View\Layout::class);
+        $this->_layout = $this->createMock(Layout::class);
     }
 
     public function testSetTemplateStockUrlAllowed()

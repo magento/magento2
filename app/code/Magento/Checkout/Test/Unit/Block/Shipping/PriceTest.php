@@ -3,42 +3,53 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Checkout\Test\Unit\Block\Shipping;
 
-class PriceTest extends \PHPUnit\Framework\TestCase
+use Magento\Checkout\Block\Shipping\Price;
+use Magento\Framework\Pricing\PriceCurrencyInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Quote\Model\Quote;
+use Magento\Quote\Model\Quote\Address\Rate;
+use Magento\Store\Model\Store;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class PriceTest extends TestCase
 {
     const SUBTOTAL = 10;
 
     /**
-     * @var \Magento\Checkout\Block\Shipping\Price
+     * @var Price
      */
     protected $priceObj;
 
     /**
-     * @var \Magento\Quote\Model\Quote|\PHPUnit\Framework\MockObject\MockObject
+     * @var Quote|MockObject
      */
     protected $quote;
 
     /**
-     * @var \Magento\Store\Model\Store|\PHPUnit\Framework\MockObject\MockObject
+     * @var Store|MockObject
      */
     protected $store;
 
     /**
-     * @var \Magento\Framework\Pricing\PriceCurrencyInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var PriceCurrencyInterface|MockObject
      */
     protected $priceCurrency;
 
     protected function setUp(): void
     {
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $objectManager = new ObjectManager($this);
 
         $this->priceCurrency = $this->getMockBuilder(
-            \Magento\Framework\Pricing\PriceCurrencyInterface::class
+            PriceCurrencyInterface::class
         )->getMock();
 
         $this->priceObj = $objectManager->getObject(
-            \Magento\Checkout\Block\Shipping\Price::class,
+            Price::class,
             ['priceCurrency'   => $this->priceCurrency]
         );
     }
@@ -48,9 +59,9 @@ class PriceTest extends \PHPUnit\Framework\TestCase
         $shippingPrice = 5;
         $convertedPrice = "$5";
 
-        $shippingRateMock = $this->getMockBuilder(\Magento\Quote\Model\Quote\Address\Rate::class)
+        $shippingRateMock = $this->getMockBuilder(Rate::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getPrice', '__wakeup'])
+            ->setMethods(['getPrice'])
             ->getMock();
         $shippingRateMock->expects($this->once())
             ->method('getPrice')

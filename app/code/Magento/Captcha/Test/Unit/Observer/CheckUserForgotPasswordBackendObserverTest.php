@@ -134,7 +134,10 @@ class CheckUserForgotPasswordBackendObserverTest extends TestCase
             ->method('getResponse')
             ->willReturn($this->httpResponseMock);
 
-        $this->eventObserverMock = $this->createPartialMock(Observer::class, ['getControllerAction']);
+        $this->eventObserverMock = $this->getMockBuilder(Observer::class)
+            ->addMethods(['getControllerAction'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->eventObserverMock->expects($this->any())
             ->method('getControllerAction')
             ->willReturn($this->controllerMock);

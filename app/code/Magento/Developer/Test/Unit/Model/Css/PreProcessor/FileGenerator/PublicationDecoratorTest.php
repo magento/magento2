@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /***
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -16,11 +16,13 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\View\Asset\File;
 use Magento\Framework\View\Asset\LocalInterface;
 use Magento\Framework\View\Asset\Repository;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class PublicationDecoratorTest extends \PHPUnit\Framework\TestCase
+class PublicationDecoratorTest extends TestCase
 {
     /**
      * @var PublicationDecorator
@@ -28,47 +30,47 @@ class PublicationDecoratorTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var Filesystem|\PHPUnit\Framework\MockObject\MockObject
+     * @var Filesystem|MockObject
      */
     private $filesystemMock;
 
     /**
-     * @var Temporary|\PHPUnit\Framework\MockObject\MockObject
+     * @var Temporary|MockObject
      */
     private $temporaryFileMock;
 
     /**
-     * @var Publisher|\PHPUnit\Framework\MockObject\MockObject
+     * @var Publisher|MockObject
      */
     private $publisherMock;
 
     /**
-     * @var Repository|\PHPUnit\Framework\MockObject\MockObject
+     * @var Repository|MockObject
      */
     private $assetRepositoryMock;
 
     /**
-     * @var File|\PHPUnit\Framework\MockObject\MockObject
+     * @var File|MockObject
      */
     private $relatedAssetMock;
 
     /**
-     * @var Import|\PHPUnit\Framework\MockObject\MockObject
+     * @var Import|MockObject
      */
     private $importGeneratorMock;
 
     /**
-     * @var LocalInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var LocalInterface|MockObject
      */
     private $localAssetMock;
 
     /**
-     * @var ScopeConfigInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var ScopeConfigInterface|MockObject
      */
     private $scopeConfigMock;
 
     /**
-     * @var State|\PHPUnit\Framework\MockObject\MockObject
+     * @var State|MockObject
      */
     private $stateMock;
 
@@ -94,7 +96,7 @@ class PublicationDecoratorTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $this->localAssetMock = $this->getMockBuilder(LocalInterface::class)
             ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+            ->getMock();
         $this->scopeConfigMock = $this->getMockBuilder(ScopeConfigInterface::class)
             ->getMockForAbstractClass();
         $this->stateMock = $this->getMockBuilder(State::class)

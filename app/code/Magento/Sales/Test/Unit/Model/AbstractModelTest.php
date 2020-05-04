@@ -3,22 +3,25 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Sales\Test\Unit\Model;
 
-/**
- * Class AbstractModelTest
- */
-class AbstractModelTest extends \PHPUnit\Framework\TestCase
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Sales\Model\Order;
+use PHPUnit\Framework\TestCase;
+
+class AbstractModelTest extends TestCase
 {
     /**
-     * @var \Magento\Sales\Model\Order
+     * @var Order
      */
     protected $model;
 
     protected function setUp(): void
     {
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->model = $objectManager->getObject(\Magento\Sales\Model\Order::class);
+        $objectManager = new ObjectManager($this);
+        $this->model = $objectManager->getObject(Order::class);
     }
 
     public function testGetEventPrefix()

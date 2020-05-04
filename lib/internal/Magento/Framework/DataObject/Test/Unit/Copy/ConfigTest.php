@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * \Magento\Framework\DataObject\Copy\Config
  *
@@ -7,23 +7,28 @@
  */
 namespace Magento\Framework\DataObject\Test\Unit\Copy;
 
-class ConfigTest extends \PHPUnit\Framework\TestCase
+use Magento\Framework\DataObject\Copy\Config;
+use Magento\Framework\DataObject\Copy\Config\Data;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class ConfigTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\DataObject\Copy\Config\Data|\PHPUnit\Framework\MockObject\MockObject
+     * @var Data|MockObject
      */
     protected $_storageMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\DataObject\Copy\Config
+     * @var MockObject|Config
      */
     protected $_model;
 
     protected function setUp(): void
     {
-        $this->_storageMock = $this->createPartialMock(\Magento\Framework\DataObject\Copy\Config\Data::class, ['get']);
+        $this->_storageMock = $this->createPartialMock(Data::class, ['get']);
 
-        $this->_model = new \Magento\Framework\DataObject\Copy\Config($this->_storageMock);
+        $this->_model = new Config($this->_storageMock);
     }
 
     public function testGetFieldsets()
@@ -54,6 +59,6 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         $this->_storageMock->expects($this->once())->method('get')
             ->willReturn([]);
         $result = $this->_model->getFieldset('test');
-        $this->assertNull($result);
+        $this->assertEquals(null, $result);
     }
 }

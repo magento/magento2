@@ -3,28 +3,38 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\App\Test\Unit\Cache;
 
-use \Magento\Framework\App\Cache\State;
+use Magento\Framework\App\Cache\State;
+use Magento\Framework\App\DeploymentConfig;
+use Magento\Framework\App\DeploymentConfig\Writer;
 use Magento\Framework\Config\File\ConfigFilePool;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class StateTest extends \PHPUnit\Framework\TestCase
+class StateTest extends TestCase
 {
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     private $config;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     private $writer;
 
     protected function setUp(): void
     {
-        $this->config = $this->createMock(\Magento\Framework\App\DeploymentConfig::class);
+        $this->config = $this->createMock(DeploymentConfig::class);
         $this->writer =
-            $this->createPartialMock(\Magento\Framework\App\DeploymentConfig\Writer::class, ['update', 'saveConfig']);
+            $this->getMockBuilder(Writer::class)
+                ->addMethods(['update'])
+                ->onlyMethods(['saveConfig'])
+                ->disableOriginalConstructor()
+                ->getMock();
     }
 
     /**

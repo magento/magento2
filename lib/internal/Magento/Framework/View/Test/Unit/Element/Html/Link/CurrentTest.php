@@ -3,30 +3,39 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\View\Test\Unit\Element\Html\Link;
 
-class CurrentTest extends \PHPUnit\Framework\TestCase
+use Magento\Framework\App\Request\Http;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\UrlInterface;
+use Magento\Framework\View\Element\Html\Link\Current;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class CurrentTest extends TestCase
 {
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $_urlBuilderMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $_requestMock;
 
     /**
-     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
+     * @var ObjectManager
      */
     protected $_objectManager;
 
     protected function setUp(): void
     {
-        $this->_objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->_urlBuilderMock = $this->createMock(\Magento\Framework\UrlInterface::class);
-        $this->_requestMock = $this->createMock(\Magento\Framework\App\Request\Http::class);
+        $this->_objectManager = new ObjectManager($this);
+        $this->_urlBuilderMock = $this->createMock(UrlInterface::class);
+        $this->_requestMock = $this->createMock(Http::class);
     }
 
     public function testGetUrl()
@@ -36,9 +45,9 @@ class CurrentTest extends \PHPUnit\Framework\TestCase
 
         $this->_urlBuilderMock->expects($this->once())->method('getUrl')->with($path)->willReturn($url);
 
-        /** @var \Magento\Framework\View\Element\Html\Link\Current $link */
+        /** @var Current $link */
         $link = $this->_objectManager->getObject(
-            \Magento\Framework\View\Element\Html\Link\Current::class,
+            Current::class,
             ['urlBuilder' => $this->_urlBuilderMock]
         );
 
@@ -48,8 +57,8 @@ class CurrentTest extends \PHPUnit\Framework\TestCase
 
     public function testIsCurrentIfIsset()
     {
-        /** @var \Magento\Framework\View\Element\Html\Link\Current $link */
-        $link = $this->_objectManager->getObject(\Magento\Framework\View\Element\Html\Link\Current::class);
+        /** @var Current $link */
+        $link = $this->_objectManager->getObject(Current::class);
         $link->setCurrent(true);
         $this->assertTrue($link->isCurrent());
     }
@@ -85,9 +94,9 @@ class CurrentTest extends \PHPUnit\Framework\TestCase
             ->with('test/index')
             ->willReturn($url);
 
-        /** @var \Magento\Framework\View\Element\Html\Link\Current $link */
+        /** @var Current $link */
         $link = $this->_objectManager->getObject(
-            \Magento\Framework\View\Element\Html\Link\Current::class,
+            Current::class,
             [
                 'urlBuilder' => $this->_urlBuilderMock,
                 'request' => $this->_requestMock
@@ -103,9 +112,9 @@ class CurrentTest extends \PHPUnit\Framework\TestCase
         $this->_urlBuilderMock->expects($this->at(0))->method('getUrl')->willReturn('1');
         $this->_urlBuilderMock->expects($this->at(1))->method('getUrl')->willReturn('2');
 
-        /** @var \Magento\Framework\View\Element\Html\Link\Current $link */
+        /** @var Current $link */
         $link = $this->_objectManager->getObject(
-            \Magento\Framework\View\Element\Html\Link\Current::class,
+            Current::class,
             ['urlBuilder' => $this->_urlBuilderMock, 'request' => $this->_requestMock]
         );
         $this->assertFalse($link->isCurrent());

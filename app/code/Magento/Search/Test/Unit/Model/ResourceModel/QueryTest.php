@@ -3,19 +3,27 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Search\Test\Unit\Model\ResourceModel;
 
+use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Framework\Model\ResourceModel\Db\Context;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Search\Model\ResourceModel\Query;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class QueryTest extends \PHPUnit\Framework\TestCase
+class QueryTest extends TestCase
 {
     /**
-     * @var \Magento\Search\Model\ResourceModel\Query
+     * @var Query
      */
     private $model;
 
     /**
-     * @var \Magento\Framework\DB\Adapter\AdapterInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var AdapterInterface|MockObject
      */
     private $adapter;
 
@@ -23,18 +31,18 @@ class QueryTest extends \PHPUnit\Framework\TestCase
     {
         $objectManager = new ObjectManager($this);
 
-        $this->adapter = $this->getMockBuilder(\Magento\Framework\DB\Adapter\AdapterInterface::class)
+        $this->adapter = $this->getMockBuilder(AdapterInterface::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
-        $resource = $this->getMockBuilder(\Magento\Framework\App\ResourceConnection::class)
+        $resource = $this->getMockBuilder(ResourceConnection::class)
             ->disableOriginalConstructor()
             ->getMock();
         $resource->expects($this->any())
             ->method('getConnection')
             ->willReturn($this->adapter);
 
-        $context = $this->getMockBuilder(\Magento\Framework\Model\ResourceModel\Db\Context::class)
+        $context = $this->getMockBuilder(Context::class)
             ->disableOriginalConstructor()
             ->getMock();
         $context->expects($this->any())
@@ -42,14 +50,14 @@ class QueryTest extends \PHPUnit\Framework\TestCase
             ->willReturn($resource);
 
         $this->model = $objectManager->getObject(
-            \Magento\Search\Model\ResourceModel\Query::class,
+            Query::class,
             ['context' => $context]
         );
     }
 
     public function testSaveIncrementalPopularity()
     {
-        /** @var \Magento\Search\Model\Query|\PHPUnit\Framework\MockObject\MockObject $model */
+        /** @var \Magento\Search\Model\Query|MockObject $model */
         $model = $this->getMockBuilder(\Magento\Search\Model\Query::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -68,7 +76,7 @@ class QueryTest extends \PHPUnit\Framework\TestCase
 
     public function testSaveNumResults()
     {
-        /** @var \Magento\Search\Model\Query|\PHPUnit\Framework\MockObject\MockObject $model */
+        /** @var \Magento\Search\Model\Query|MockObject $model */
         $model = $this->getMockBuilder(\Magento\Search\Model\Query::class)
             ->setMethods(['getNumResults', 'getStoreId', 'getQueryText'])
             ->disableOriginalConstructor()

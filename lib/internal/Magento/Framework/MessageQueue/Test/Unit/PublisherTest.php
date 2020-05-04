@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Framework\MessageQueue\Test\Unit;
 
@@ -18,11 +19,13 @@ use Magento\Framework\MessageQueue\Publisher\Config\PublisherConnection;
 use Magento\Framework\MessageQueue\Publisher\ConfigInterface as PublisherConfig;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\MysqlMq\Model\Driver\Exchange;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-/**
- * Class PublisherTest @covers \Magento\Framework\MessageQueue\Publisher
+/** @covers \Magento\Framework\MessageQueue\Publisher
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class PublisherTest extends \PHPUnit\Framework\TestCase
+class PublisherTest extends TestCase
 {
     /**
      * Test subject.
@@ -34,42 +37,42 @@ class PublisherTest extends \PHPUnit\Framework\TestCase
     /**
      * Publisher config mock.
      *
-     * @var PublisherConfig|\PHPUnit\Framework\MockObject\MockObject
+     * @var PublisherConfig|MockObject
      */
     private $publisherConfig;
 
     /**
      * Amqp config mock.
      *
-     * @var AmqpConfig|\PHPUnit\Framework\MockObject\MockObject
+     * @var AmqpConfig|MockObject
      */
     private $amqpConfig;
 
     /**
      * Message validator mock.
      *
-     * @var MessageValidator|\PHPUnit\Framework\MockObject\MockObject
+     * @var MessageValidator|MockObject
      */
     private $messageValidator;
 
     /**
      * Message encoder mock.
      *
-     * @var MessageEncoder|\PHPUnit\Framework\MockObject\MockObject
+     * @var MessageEncoder|MockObject
      */
     private $messageEncoder;
 
     /**
      * Exchange repository mock.
      *
-     * @var ExchangeRepository|\PHPUnit\Framework\MockObject\MockObject
+     * @var ExchangeRepository|MockObject
      */
     private $exchangeRepository;
 
     /**
      * Envelope factory mock.
      *
-     * @var EnvelopeFactory|\PHPUnit\Framework\MockObject\MockObject
+     * @var EnvelopeFactory|MockObject
      */
     private $envelopeFactory;
 

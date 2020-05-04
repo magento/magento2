@@ -3,17 +3,17 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Setup\Test\Unit\Model\Grid;
 
 use Magento\Framework\Composer\ComposerInformation;
 use Magento\Setup\Model\Grid\Extension;
 use Magento\Setup\Model\PackagesData;
-use PHPUnit\Framework\MockObject\MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-/**
- * Class ExtensionTest
- */
-class ExtensionTest extends \PHPUnit\Framework\TestCase
+class ExtensionTest extends TestCase
 {
     /**
      * @var ComposerInformation|MockObject

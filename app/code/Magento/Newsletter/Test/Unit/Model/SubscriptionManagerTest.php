@@ -18,8 +18,8 @@ use Magento\Newsletter\Model\SubscriptionManager;
 use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\StoreManagerInterface;
-use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -212,10 +212,11 @@ class SubscriptionManagerTest extends TestCase
         $this->storeManager->method('getStore')->with($storeId)->willReturn($store);
         $confirmCode = 'confirm code';
         /** @var Subscriber|MockObject $subscriber */
-        $subscriber = $this->createPartialMock(
-            Subscriber::class,
-            ['loadBySubscriberEmail', 'getId', 'setCheckCode', 'unsubscribe']
-        );
+        $subscriber = $this->getMockBuilder(Subscriber::class)
+            ->addMethods(['setCheckCode'])
+            ->onlyMethods(['loadBySubscriberEmail', 'getId', 'unsubscribe'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $subscriber->expects($this->once())
             ->method('loadBySubscriberEmail')
             ->with($email, $websiteId)

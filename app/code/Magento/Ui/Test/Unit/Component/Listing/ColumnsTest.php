@@ -3,21 +3,21 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Ui\Test\Unit\Component\Listing;
 
-use Magento\Ui\Component\Listing\Columns;
-use Magento\Ui\Component\Listing\Columns\Column;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
-use Magento\Framework\View\Element\UiComponent\DataProvider\DataProviderInterface;
+use Magento\Framework\View\Element\UiComponent\Processor;
+use Magento\Ui\Component\Listing\Columns;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-/**
- * Class ColumnsTest
- */
-class ColumnsTest extends \PHPUnit\Framework\TestCase
+class ColumnsTest extends TestCase
 {
     /**
-     * @var ContextInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var ContextInterface|MockObject
      */
     protected $contextMock;
 
@@ -34,7 +34,7 @@ class ColumnsTest extends \PHPUnit\Framework\TestCase
         $this->objectManager = new ObjectManager($this);
 
         $this->contextMock = $this->getMockForAbstractClass(
-            \Magento\Framework\View\Element\UiComponent\ContextInterface::class,
+            ContextInterface::class,
             [],
             '',
             false,
@@ -42,7 +42,7 @@ class ColumnsTest extends \PHPUnit\Framework\TestCase
             true,
             []
         );
-        $processor = $this->getMockBuilder(\Magento\Framework\View\Element\UiComponent\Processor::class)
+        $processor = $this->getMockBuilder(Processor::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->contextMock->expects($this->never())->method('getProcessor')->willReturn($processor);
@@ -56,7 +56,7 @@ class ColumnsTest extends \PHPUnit\Framework\TestCase
     public function testGetComponentName()
     {
         $columns = $this->objectManager->getObject(
-            \Magento\Ui\Component\Listing\Columns::class,
+            Columns::class,
             [
                 'context' => $this->contextMock,
                 'data' => [

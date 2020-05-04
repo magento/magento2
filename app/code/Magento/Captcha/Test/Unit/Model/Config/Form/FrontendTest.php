@@ -9,9 +9,10 @@ declare(strict_types=1);
 namespace Magento\Captcha\Test\Unit\Model\Config\Form;
 
 use Magento\Captcha\Model\Config\Form\Frontend;
-use PHPUnit\Framework\TestCase;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 class FrontendTest extends TestCase
 {
@@ -26,7 +27,7 @@ class FrontendTest extends TestCase
     private $model;
 
     /**
-     * @var ScopeConfigInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var ScopeConfigInterface|MockObject
      */
     private $configMock;
 
@@ -35,7 +36,7 @@ class FrontendTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->configMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
+        $this->configMock = $this->createMock(ScopeConfigInterface::class);
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
 

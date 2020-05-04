@@ -3,30 +3,37 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Config\Test\Unit\Model\Config\Structure\Element\Iterator;
 
-class FieldTest extends \PHPUnit\Framework\TestCase
+use Magento\Config\Model\Config\Structure\Element\Group;
+use Magento\Config\Model\Config\Structure\Element\Iterator\Field;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class FieldTest extends TestCase
 {
     /**
-     * @var \Magento\Config\Model\Config\Structure\Element\Iterator\Field
+     * @var Field
      */
     protected $_model;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $_fieldMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $_groupMock;
 
     protected function setUp(): void
     {
         $this->_fieldMock = $this->createMock(\Magento\Config\Model\Config\Structure\Element\Field::class);
-        $this->_groupMock = $this->createMock(\Magento\Config\Model\Config\Structure\Element\Group::class);
-        $this->_model = new \Magento\Config\Model\Config\Structure\Element\Iterator\Field(
+        $this->_groupMock = $this->createMock(Group::class);
+        $this->_model = new Field(
             $this->_groupMock,
             $this->_fieldMock
         );

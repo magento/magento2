@@ -3,12 +3,17 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\MessageQueue\Test\Unit\Consumer\Config\Xml;
 
 use Magento\Framework\Communication\Config\ConfigParser;
 use Magento\Framework\MessageQueue\Consumer\Config\Xml\Converter;
+use Magento\Framework\MessageQueue\DefaultValueProvider;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class ConverterTest extends \PHPUnit\Framework\TestCase
+class ConverterTest extends TestCase
 {
     /**
      * @var Converter
@@ -16,12 +21,12 @@ class ConverterTest extends \PHPUnit\Framework\TestCase
     private $converter;
 
     /**
-     * @var ConfigParser|\PHPUnit\Framework\MockObject\MockObject
+     * @var ConfigParser|MockObject
      */
     protected $configParserMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $defaultConfigProviderMock;
 
@@ -31,7 +36,7 @@ class ConverterTest extends \PHPUnit\Framework\TestCase
     protected function setUp(): void
     {
         $this->defaultConfigProviderMock =
-            $this->createMock(\Magento\Framework\MessageQueue\DefaultValueProvider::class);
+            $this->createMock(DefaultValueProvider::class);
         $this->configParserMock = $this->createMock(ConfigParser::class);
         $this->converter = new Converter($this->configParserMock, $this->defaultConfigProviderMock);
     }
@@ -51,7 +56,7 @@ class ConverterTest extends \PHPUnit\Framework\TestCase
         $dom->load($xmlFile);
         $result = $this->converter->convert($dom);
 
-        $expectedData = include($fixtureDir . '/valid.php');
+        $expectedData = include $fixtureDir . '/valid.php';
         $this->assertEquals($expectedData, $result);
     }
 }

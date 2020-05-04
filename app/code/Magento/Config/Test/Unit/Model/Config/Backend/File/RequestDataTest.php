@@ -3,12 +3,17 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Config\Test\Unit\Model\Config\Backend\File;
 
-class RequestDataTest extends \PHPUnit\Framework\TestCase
+use Magento\Config\Model\Config\Backend\File\RequestData;
+use PHPUnit\Framework\TestCase;
+
+class RequestDataTest extends TestCase
 {
     /**
-     * @var \Magento\Config\Model\Config\Backend\File\RequestData
+     * @var RequestData
      */
     protected $_model;
 
@@ -35,7 +40,7 @@ class RequestDataTest extends \PHPUnit\Framework\TestCase
             ],
         ];
 
-        $this->_model = new \Magento\Config\Model\Config\Backend\File\RequestData();
+        $this->_model = new RequestData();
     }
 
     protected function tearDown(): void

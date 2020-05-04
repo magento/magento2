@@ -3,20 +3,24 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Ui\Test\Unit\Component\Form;
 
-use Magento\Ui\Component\Form\Field;
+use Magento\Framework\View\Element\UiComponent\ContextInterface;
+use Magento\Framework\View\Element\UiComponent\Processor;
 use Magento\Framework\View\Element\UiComponentFactory;
 use Magento\Framework\View\Element\UiComponentInterface;
-use Magento\Framework\View\Element\UiComponent\ContextInterface;
+use Magento\Ui\Component\Form\Field;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Class FieldTest
  *
  * Test for class \Magento\Ui\Component\Form\Field
  */
-class FieldTest extends \PHPUnit\Framework\TestCase
+class FieldTest extends TestCase
 {
     const NAME = 'test-name';
     const COMPONENT_NAME = 'test-name';
@@ -28,12 +32,12 @@ class FieldTest extends \PHPUnit\Framework\TestCase
     protected $field;
 
     /**
-     * @var UiComponentFactory|\PHPUnit\Framework\MockObject\MockObject
+     * @var UiComponentFactory|MockObject
      */
     protected $uiComponentFactoryMock;
 
     /**
-     * @var ContextInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var ContextInterface|MockObject
      */
     protected $contextMock;
 
@@ -52,10 +56,10 @@ class FieldTest extends \PHPUnit\Framework\TestCase
      */
     protected function setUp(): void
     {
-        $this->uiComponentFactoryMock = $this->getMockBuilder(\Magento\Framework\View\Element\UiComponentFactory::class)
+        $this->uiComponentFactoryMock = $this->getMockBuilder(UiComponentFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->contextMock = $this->getMockBuilder(\Magento\Framework\View\Element\UiComponent\ContextInterface::class)
+        $this->contextMock = $this->getMockBuilder(ContextInterface::class)
             ->getMockForAbstractClass();
 
         $this->field = new Field(
@@ -75,7 +79,7 @@ class FieldTest extends \PHPUnit\Framework\TestCase
      */
     public function testPrepareSuccess(array $data, array $expectedData)
     {
-        $processor = $this->getMockBuilder(\Magento\Framework\View\Element\UiComponent\Processor::class)
+        $processor = $this->getMockBuilder(Processor::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->contextMock->expects($this->atLeastOnce())->method('getProcessor')->willReturn($processor);
@@ -125,11 +129,11 @@ class FieldTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return \PHPUnit\Framework\MockObject\MockObject|UiComponentInterface
+     * @return MockObject|UiComponentInterface
      */
     protected function getWrappedComponentMock()
     {
-        $wrappedComponentMock = $this->getMockBuilder(\Magento\Framework\View\Element\UiComponentInterface::class)
+        $wrappedComponentMock = $this->getMockBuilder(UiComponentInterface::class)
             ->getMockForAbstractClass();
 
         $wrappedComponentMock->expects($this->any())
@@ -154,11 +158,11 @@ class FieldTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return \PHPUnit\Framework\MockObject\MockObject[]|UiComponentInterface[]
+     * @return MockObject[]|UiComponentInterface[]
      */
     protected function getComponentsMock()
     {
-        $componentMock = $this->getMockBuilder(\Magento\Framework\View\Element\UiComponentInterface::class)
+        $componentMock = $this->getMockBuilder(UiComponentInterface::class)
             ->getMockForAbstractClass();
 
         return [$componentMock];
@@ -168,13 +172,13 @@ class FieldTest extends \PHPUnit\Framework\TestCase
      * Run test prepare method (Exception)
      *
      * @return void
-     *
      */
     public function testPrepareException()
     {
-        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
-        $this->expectExceptionMessage('The "formElement" configuration parameter is required for the "test-name" field.');
-
+        $this->expectException('Magento\Framework\Exception\LocalizedException');
+        $this->expectExceptionMessage(
+            'The "formElement" configuration parameter is required for the "test-name" field.'
+        );
         $this->contextMock->expects($this->never())->method('getProcessor');
         $this->uiComponentFactoryMock->expects($this->never())
             ->method('create');

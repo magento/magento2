@@ -3,11 +3,18 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Catalog\Test\Unit\Model;
 
+use Magento\Catalog\Api\Data\ProductTypeInterface;
+use Magento\Catalog\Api\Data\ProductTypeInterfaceFactory;
 use Magento\Catalog\Model\ProductTypeList;
+use Magento\Catalog\Model\ProductTypes\ConfigInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class ProductTypeListTest extends \PHPUnit\Framework\TestCase
+class ProductTypeListTest extends TestCase
 {
     /**
      * @var ProductTypeList
@@ -15,20 +22,20 @@ class ProductTypeListTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     private $typeConfigMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     private $factoryMock;
 
     protected function setUp(): void
     {
-        $this->typeConfigMock = $this->createMock(\Magento\Catalog\Model\ProductTypes\ConfigInterface::class);
+        $this->typeConfigMock = $this->createMock(ConfigInterface::class);
         $this->factoryMock = $this->createPartialMock(
-            \Magento\Catalog\Api\Data\ProductTypeInterfaceFactory::class,
+            ProductTypeInterfaceFactory::class,
             ['create']
         );
         $this->model = new ProductTypeList(
@@ -46,7 +53,7 @@ class ProductTypeListTest extends \PHPUnit\Framework\TestCase
         $productTypeData = [
             'simple' => $simpleProductType,
         ];
-        $productTypeMock = $this->createMock(\Magento\Catalog\Api\Data\ProductTypeInterface::class);
+        $productTypeMock = $this->createMock(ProductTypeInterface::class);
         $this->typeConfigMock->expects($this->any())->method('getAll')->willReturn($productTypeData);
 
         $this->factoryMock->expects($this->once())->method('create')->willReturn($productTypeMock);

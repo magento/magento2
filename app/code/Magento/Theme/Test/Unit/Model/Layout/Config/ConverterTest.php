@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * \Magento\Theme\Model\Layout\Config\Converter
  *
@@ -7,10 +7,13 @@
  */
 namespace Magento\Theme\Test\Unit\Model\Layout\Config;
 
-class ConverterTest extends \PHPUnit\Framework\TestCase
+use Magento\Theme\Model\Layout\Config\Converter;
+use PHPUnit\Framework\TestCase;
+
+class ConverterTest extends TestCase
 {
     /**
-     * @var \Magento\Theme\Model\Layout\Config\Converter
+     * @var Converter
      */
     protected $_model;
 
@@ -19,7 +22,7 @@ class ConverterTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp(): void
     {
-        $this->_model = new \Magento\Theme\Model\Layout\Config\Converter();
+        $this->_model = new Converter();
     }
 
     public function testConvert()
@@ -38,6 +41,6 @@ class ConverterTest extends \PHPUnit\Framework\TestCase
                 'code' => '1column',
             ],
         ];
-        $this->assertEquals($expectedResult, $this->_model->convert($dom), '', 0, 20);
+        $this->assertEquals($expectedResult, $this->_model->convert($dom));
     }
 }

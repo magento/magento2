@@ -3,15 +3,17 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Bundle\Test\Unit\Model\Plugin\Frontend;
 
 use Magento\Bundle\Model\Plugin\Frontend\Product as ProductPlugin;
 use Magento\Bundle\Model\Product\Type;
 use Magento\Catalog\Model\Product;
-use PHPUnit\Framework\MockObject\MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class ProductTest extends \PHPUnit\Framework\TestCase
+class ProductTest extends TestCase
 {
     /** @var  \Magento\Bundle\Model\Plugin\Product */
     private $plugin;

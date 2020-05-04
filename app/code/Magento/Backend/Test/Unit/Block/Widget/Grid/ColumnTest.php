@@ -3,42 +3,56 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Backend\Test\Unit\Block\Widget\Grid;
 
+use Magento\Backend\Block\Widget;
+use Magento\Backend\Block\Widget\Grid\Column;
+use Magento\Backend\Block\Widget\Grid\Column\Filter\Text;
 use Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer;
+use Magento\Backend\Model\Url;
 use Magento\Framework\DataObject;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\View\Element\Template;
+use Magento\Framework\View\Layout;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class ColumnTest extends \PHPUnit\Framework\TestCase
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
+class ColumnTest extends TestCase
 {
     /**
-     * @var \Magento\Backend\Block\Widget\Grid\Column
+     * @var Column
      */
     protected $_block;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $_layoutMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $_blockMock;
 
     protected function setUp(): void
     {
-        $this->_layoutMock = $this->createMock(\Magento\Framework\View\Layout::class);
-        $this->_blockMock = $this->createPartialMock(
-            \Magento\Framework\View\Element\Template::class,
-            ['setColumn', 'getHtml']
-        );
+        $this->_layoutMock = $this->createMock(Layout::class);
+        $this->_blockMock = $this->getMockBuilder(Template::class)
+            ->addMethods(['setColumn', 'getHtml'])
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $arguments = [
             'layout' => $this->_layoutMock,
-            'urlBuilder' => $this->createMock(\Magento\Backend\Model\Url::class),
+            'urlBuilder' => $this->createMock(Url::class),
         ];
-        $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->_block = $objectManagerHelper->getObject(\Magento\Backend\Block\Widget\Grid\Column::class, $arguments);
+        $objectManagerHelper = new ObjectManager($this);
+        $this->_block = $objectManagerHelper->getObject(Column::class, $arguments);
         $this->_block->setId('id');
     }
 
@@ -64,7 +78,7 @@ class ColumnTest extends \PHPUnit\Framework\TestCase
         )->method(
             'createBlock'
         )->with(
-            \Magento\Backend\Block\Widget\Grid\Column\Filter\Text::class
+            Text::class
         )->willReturn(
             $this->_blockMock
         );
@@ -117,7 +131,7 @@ class ColumnTest extends \PHPUnit\Framework\TestCase
         )->method(
             'createBlock'
         )->with(
-            \Magento\Backend\Block\Widget\Grid\Column\Filter\Text::class
+            Text::class
         )->willReturn(
             $this->_blockMock
         );
@@ -368,12 +382,12 @@ class ColumnTest extends \PHPUnit\Framework\TestCase
     {
         $arguments = [
             'layout' => $this->_layoutMock,
-            'urlBuilder' => $this->createMock(\Magento\Backend\Model\Url::class),
+            'urlBuilder' => $this->createMock(Url::class),
             'data' => $groupedData,
         ];
 
-        $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $block = $objectManagerHelper->getObject(\Magento\Backend\Block\Widget\Grid\Column::class, $arguments);
+        $objectManagerHelper = new ObjectManager($this);
+        $block = $objectManagerHelper->getObject(Column::class, $arguments);
         $this->assertEquals($expected, $block->isGrouped());
     }
 
@@ -409,7 +423,7 @@ class ColumnTest extends \PHPUnit\Framework\TestCase
             }
         );
 
-        $frameCallbackHostObject = $this->getMockBuilder(\Magento\Backend\Block\Widget::class)
+        $frameCallbackHostObject = $this->getMockBuilder(Widget::class)
             ->disableOriginalConstructor()
             ->setMethods(['decorate'])
             ->getMock();
@@ -430,13 +444,10 @@ class ColumnTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('__callback_decorated_some item', $renderResult);
     }
 
-    /**
-     */
     public function testGetRowFieldExportWithInvalidCallback()
     {
-        $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage('Frame callback host must be instance of Magento\\Backend\\Block\\Widget');
-
+        $this->expectException('InvalidArgumentException');
+        $this->expectExceptionMessage('Frame callback host must be instance of Magento\Backend\Block\Widget');
         $row = new DataObject(['id' => '2', 'title' => 'some item']);
         /** @var  $rendererMock */
         $rendererMock = $this->getMockBuilder(AbstractRenderer::class)
@@ -455,13 +466,10 @@ class ColumnTest extends \PHPUnit\Framework\TestCase
         $this->_block->getRowFieldExport($row);
     }
 
-    /**
-     */
     public function testGetRowFieldWithInvalidCallback()
     {
-        $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage('Frame callback host must be instance of Magento\\Backend\\Block\\Widget');
-
+        $this->expectException('InvalidArgumentException');
+        $this->expectExceptionMessage('Frame callback host must be instance of Magento\Backend\Block\Widget');
         $row = new DataObject(['id' => '2', 'title' => 'some item']);
         /** @var  $rendererMock */
         $rendererMock = $this->getMockBuilder(AbstractRenderer::class)

@@ -3,33 +3,42 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Theme\Test\Unit\Block\Adminhtml\Wysiwyg\Files;
 
-class TreeTest extends \PHPUnit\Framework\TestCase
+use Magento\Backend\Model\Url;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Theme\Block\Adminhtml\Wysiwyg\Files\Tree;
+use Magento\Theme\Helper\Storage;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class TreeTest extends TestCase
 {
     /**
-     * @var \Magento\Backend\Model\Url|PHPUnit\Framework\MockObject\MockObject
+     * @var Url|MockObject
      */
     protected $_urlBuilder;
 
     /**
-     * @var \Magento\Theme\Helper\Storage|PHPUnit\Framework\MockObject\MockObject
+     * @var Storage|MockObject
      */
     protected $_helperStorage;
 
     /**
-     * @var \Magento\Theme\Block\Adminhtml\Wysiwyg\Files\Tree|PHPUnit\Framework\MockObject\MockObject
+     * @var Tree|MockObject
      */
     protected $_filesTree;
 
     protected function setUp(): void
     {
-        $this->_helperStorage = $this->createMock(\Magento\Theme\Helper\Storage::class);
-        $this->_urlBuilder = $this->createMock(\Magento\Backend\Model\Url::class);
+        $this->_helperStorage = $this->createMock(Storage::class);
+        $this->_urlBuilder = $this->createMock(Url::class);
 
-        $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $objectManagerHelper = new ObjectManager($this);
         $this->_filesTree = $objectManagerHelper->getObject(
-            \Magento\Theme\Block\Adminhtml\Wysiwyg\Files\Tree::class,
+            Tree::class,
             ['urlBuilder' => $this->_urlBuilder, 'storageHelper' => $this->_helperStorage]
         );
     }
@@ -37,9 +46,9 @@ class TreeTest extends \PHPUnit\Framework\TestCase
     public function testGetTreeLoaderUrl()
     {
         $requestParams = [
-            \Magento\Theme\Helper\Storage::PARAM_THEME_ID => 1,
-            \Magento\Theme\Helper\Storage::PARAM_CONTENT_TYPE => \Magento\Theme\Model\Wysiwyg\Storage::TYPE_IMAGE,
-            \Magento\Theme\Helper\Storage::PARAM_NODE => 'root',
+            Storage::PARAM_THEME_ID => 1,
+            Storage::PARAM_CONTENT_TYPE => \Magento\Theme\Model\Wysiwyg\Storage::TYPE_IMAGE,
+            Storage::PARAM_NODE => 'root',
         ];
         $expectedUrl = 'some_url';
 

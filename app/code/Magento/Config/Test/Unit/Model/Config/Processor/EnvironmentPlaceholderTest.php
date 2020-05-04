@@ -3,15 +3,18 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Config\Test\Unit\Model\Config\Processor;
 
 use Magento\Config\Model\Config\Processor\EnvironmentPlaceholder;
 use Magento\Config\Model\Placeholder\PlaceholderFactory;
 use Magento\Config\Model\Placeholder\PlaceholderInterface;
 use Magento\Framework\Stdlib\ArrayManager;
-use \PHPUnit\Framework\MockObject\MockObject as Mock;
+use PHPUnit\Framework\MockObject\MockObject as Mock;
+use PHPUnit\Framework\TestCase;
 
-class EnvironmentPlaceholderTest extends \PHPUnit\Framework\TestCase
+class EnvironmentPlaceholderTest extends TestCase
 {
     /**
      * @var EnvironmentPlaceholder

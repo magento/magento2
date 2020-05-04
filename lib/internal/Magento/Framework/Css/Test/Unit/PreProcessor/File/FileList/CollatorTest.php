@@ -3,11 +3,17 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\Css\Test\Unit\PreProcessor\File\FileList;
 
-use \Magento\Framework\Css\PreProcessor\File\FileList\Collator;
+use Magento\Framework\Css\PreProcessor\File\FileList\Collator;
+use Magento\Framework\View\Design\ThemeInterface;
+use Magento\Framework\View\File;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class CollatorTest extends \PHPUnit\Framework\TestCase
+class CollatorTest extends TestCase
 {
     /**
      * @var Collator
@@ -15,17 +21,17 @@ class CollatorTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \Magento\Framework\View\File[]
+     * @var File[]
      */
     protected $originFiles;
 
     /**
-     * @var \Magento\Framework\View\File
+     * @var File
      */
     protected $baseFile;
 
     /**
-     * @var \Magento\Framework\View\File
+     * @var File
      */
     protected $themeFile;
 
@@ -46,16 +52,16 @@ class CollatorTest extends \PHPUnit\Framework\TestCase
      * @param string $filename
      * @param string $module
      * @param string|null $themeFullPath
-     * @return \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\View\File
+     * @return MockObject|File
      */
     protected function createLayoutFile($filename, $module, $themeFullPath = null)
     {
         $theme = null;
         if ($themeFullPath !== null) {
-            $theme = $this->getMockForAbstractClass(\Magento\Framework\View\Design\ThemeInterface::class);
+            $theme = $this->getMockForAbstractClass(ThemeInterface::class);
             $theme->expects($this->any())->method('getFullPath')->willReturn($themeFullPath);
         }
-        return new \Magento\Framework\View\File($filename, $module, $theme);
+        return new File($filename, $module, $theme);
     }
 
     public function testCollate()

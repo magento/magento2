@@ -3,57 +3,67 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Sales\Test\Unit\Model\Order;
+
+use Magento\Sales\Api\Data\CreditmemoInterface;
+use Magento\Sales\Api\Data\InvoiceInterface;
+use Magento\Sales\Api\Data\OrderInterface;
+use Magento\Sales\Model\Order\Invoice\PayOperation;
+use Magento\Sales\Model\Order\PaymentAdapter;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Unit test for payment adapter.
  */
-class PaymentAdapterTest extends \PHPUnit\Framework\TestCase
+class PaymentAdapterTest extends TestCase
 {
     /**
-     * @var \Magento\Sales\Model\Order\PaymentAdapter
+     * @var PaymentAdapter
      */
     private $subject;
 
     /**
-     * @var \Magento\Sales\Api\Data\OrderInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var OrderInterface|MockObject
      */
     private $orderMock;
 
     /**
-     * @var \Magento\Sales\Api\Data\CreditmemoInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var CreditmemoInterface|MockObject
      */
     private $creditmemoMock;
 
     /**
-     * @var \Magento\Sales\Api\Data\InvoiceInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var InvoiceInterface|MockObject
      */
     private $invoiceMock;
 
     /**
-     * @var \Magento\Sales\Model\Order\Invoice\PayOperation|\PHPUnit\Framework\MockObject\MockObject
+     * @var PayOperation|MockObject
      */
     private $payOperationMock;
 
     protected function setUp(): void
     {
-        $this->orderMock = $this->getMockBuilder(\Magento\Sales\Api\Data\OrderInterface::class)
+        $this->orderMock = $this->getMockBuilder(OrderInterface::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
-        $this->creditmemoMock = $this->getMockBuilder(\Magento\Sales\Api\Data\CreditmemoInterface::class)
+        $this->creditmemoMock = $this->getMockBuilder(CreditmemoInterface::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
-        $this->invoiceMock = $this->getMockBuilder(\Magento\Sales\Api\Data\InvoiceInterface::class)
+        $this->invoiceMock = $this->getMockBuilder(InvoiceInterface::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
-        $this->payOperationMock = $this->getMockBuilder(\Magento\Sales\Model\Order\Invoice\PayOperation::class)
+        $this->payOperationMock = $this->getMockBuilder(PayOperation::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->subject = new \Magento\Sales\Model\Order\PaymentAdapter(
+        $this->subject = new PaymentAdapter(
             $this->payOperationMock
         );
     }

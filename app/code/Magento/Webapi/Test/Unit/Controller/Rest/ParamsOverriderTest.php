@@ -3,18 +3,22 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Webapi\Test\Unit\Controller\Rest;
 
-use \Magento\Authorization\Model\UserContextInterface;
+use Magento\Authorization\Model\UserContextInterface;
 use Magento\Framework\Api\SimpleDataObjectConverter;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Webapi\Controller\Rest\ParamOverriderCustomerId;
 use Magento\Webapi\Controller\Rest\ParamsOverrider;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test Magento\Webapi\Controller\Rest\ParamsOverrider
  */
-class ParamsOverriderTest extends \PHPUnit\Framework\TestCase
+class ParamsOverriderTest extends TestCase
 {
     /**
      * @param array $requestData Data from the request
@@ -27,15 +31,16 @@ class ParamsOverriderTest extends \PHPUnit\Framework\TestCase
      */
     public function testOverrideParams($requestData, $parameters, $expectedOverriddenParams, $userId, $userType)
     {
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $objectManager = new ObjectManager($this);
 
-        $userContextMock = $this->getMockBuilder(\Magento\Authorization\Model\UserContextInterface::class)
-            ->disableOriginalConstructor()->setMethods(['getUserId', 'getUserType'])->getMockForAbstractClass();
+        $userContextMock = $this->getMockBuilder(UserContextInterface::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['getUserId', 'getUserType'])->getMockForAbstractClass();
         $userContextMock->expects($this->any())->method('getUserId')->willReturn($userId);
         $userContextMock->expects($this->any())->method('getUserType')->willReturn($userType);
 
         $paramOverriderCustomerId = $objectManager->getObject(
-            \Magento\Webapi\Controller\Rest\ParamOverriderCustomerId::class,
+            ParamOverriderCustomerId::class,
             ['userContext' => $userContextMock]
         );
 

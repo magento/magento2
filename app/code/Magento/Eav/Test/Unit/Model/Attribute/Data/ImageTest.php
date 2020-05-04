@@ -3,27 +3,40 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Eav\Test\Unit\Model\Attribute\Data;
 
-class ImageTest extends \PHPUnit\Framework\TestCase
+use Magento\Eav\Model\Attribute;
+use Magento\Eav\Model\Attribute\Data\File;
+use Magento\Eav\Model\Attribute\Data\Image;
+use Magento\Framework\Filesystem;
+use Magento\Framework\Locale\ResolverInterface;
+use Magento\Framework\Model\AbstractModel;
+use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
+use Magento\Framework\Url\EncoderInterface;
+use Magento\MediaStorage\Model\File\Validator\NotProtectedExtension;
+use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface;
+
+class ImageTest extends TestCase
 {
     /**
-     * @var \Magento\Eav\Model\Attribute\Data\File
+     * @var File
      */
     protected $model;
 
     protected function setUp(): void
     {
         $this->markTestSkipped('MAGETWO-34751: Test fails after being moved.  Might have hidden dependency.');
-        $timezoneMock = $this->createMock(\Magento\Framework\Stdlib\DateTime\TimezoneInterface::class);
-        $loggerMock = $this->createMock(\Psr\Log\LoggerInterface::class);
-        $localeResolverMock = $this->createMock(\Magento\Framework\Locale\ResolverInterface::class);
-        $urlEncoder = $this->createMock(\Magento\Framework\Url\EncoderInterface::class);
-        $fileValidatorMock = $this->createMock(\Magento\MediaStorage\Model\File\Validator\NotProtectedExtension::class);
-        $filesystemMock = $this->createMock(\Magento\Framework\Filesystem::class);
+        $timezoneMock = $this->createMock(TimezoneInterface::class);
+        $loggerMock = $this->createMock(LoggerInterface::class);
+        $localeResolverMock = $this->createMock(ResolverInterface::class);
+        $urlEncoder = $this->createMock(EncoderInterface::class);
+        $fileValidatorMock = $this->createMock(NotProtectedExtension::class);
+        $filesystemMock = $this->createMock(Filesystem::class);
 
-        $this->model = new \Magento\Eav\Model\Attribute\Data\Image(
+        $this->model = new Image(
             $timezoneMock,
             $loggerMock,
             $localeResolverMock,
@@ -55,10 +68,10 @@ class ImageTest extends \PHPUnit\Framework\TestCase
         $rules,
         $expectedResult
     ) {
-        $entityMock = $this->createMock(\Magento\Framework\Model\AbstractModel::class);
+        $entityMock = $this->createMock(AbstractModel::class);
         $entityMock->expects($this->any())->method('getData')->willReturn($originalValue);
 
-        $attributeMock = $this->createMock(\Magento\Eav\Model\Attribute::class);
+        $attributeMock = $this->createMock(Attribute::class);
         $attributeMock->expects($this->any())->method('getStoreLabel')->willReturn('Label');
         $attributeMock->expects($this->any())->method('getIsRequired')->willReturn($isRequired);
         $attributeMock->expects($this->any())->method('getIsAjaxRequest')->willReturn($isAjaxRequest);

@@ -3,14 +3,17 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\Event\Test\Unit\Observer;
 
-use \Magento\Framework\Event\Observer\Collection;
+use Magento\Framework\Event;
+use Magento\Framework\Event\Observer;
+use Magento\Framework\Event\Observer\Collection;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-/**
- * Class CollectionTest
- */
-class CollectionTest extends \PHPUnit\Framework\TestCase
+class CollectionTest extends TestCase
 {
     /**
      * @var Collection
@@ -32,12 +35,12 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
      * If event parameter is passed - observer mock expects dispatch method to be called with passed event.
      *
      * @param string $name
-     * @param \Magento\Framework\Event | null $event
-     * @return \Magento\Framework\Event\Observer |\PHPUnit\Framework\MockObject\MockObject
+     * @param Event|null $event
+     * @return Observer|MockObject
      */
     protected function getObserverMock($name, $event = null)
     {
-        $observer = $this->createMock(\Magento\Framework\Event\Observer::class);
+        $observer = $this->createMock(Observer::class);
         $observer->expects($this->any())
             ->method('getName')
             ->willReturn($name);
@@ -114,7 +117,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
 
     public function testDispatch()
     {
-        $eventMock = $this->createMock(\Magento\Framework\Event::class);
+        $eventMock = $this->createMock(Event::class);
 
         $observer1 = $this->getObserverMock('test_observer1', $eventMock);
         $observer2 = $this->getObserverMock('test_observer2', $eventMock);

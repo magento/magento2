@@ -16,11 +16,13 @@ use Magento\Framework\App\Config\MutableScopeConfigInterface as ScopeConfig;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Store\Model\Store;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \Magento\Catalog\Cron\DeleteOutdatedPriceValues
  */
-class DeleteOutdatedPriceValuesTest extends \PHPUnit\Framework\TestCase
+class DeleteOutdatedPriceValuesTest extends TestCase
 {
     /**
      * Testable Object
@@ -30,32 +32,32 @@ class DeleteOutdatedPriceValuesTest extends \PHPUnit\Framework\TestCase
     private $deleteOutdatedPriceValues;
 
     /**
-     * @var AttributeRepository|\PHPUnit\Framework\MockObject\MockObject
+     * @var AttributeRepository|MockObject
      */
     private $attributeRepositoryMock;
 
     /**
-     * @var ResourceConnection|\PHPUnit\Framework\MockObject\MockObject
+     * @var ResourceConnection|MockObject
      */
     private $resourceConnectionMock;
 
     /**
-     * @var ScopeConfig|\PHPUnit\Framework\MockObject\MockObject
+     * @var ScopeConfig|MockObject
      */
     private $scopeConfigMock;
 
     /**
-     * @var Attribute|\PHPUnit\Framework\MockObject\MockObject
+     * @var Attribute|MockObject
      */
     private $attributeMock;
 
     /**
-     * @var AdapterInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var AdapterInterface|MockObject
      */
     private $dbAdapterMock;
 
     /**
-     * @var BackendInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var BackendInterface|MockObject
      */
     private $attributeBackendMock;
 
@@ -70,8 +72,8 @@ class DeleteOutdatedPriceValuesTest extends \PHPUnit\Framework\TestCase
         $this->attributeRepositoryMock = $this->createMock(AttributeRepository::class);
         $this->attributeMock = $this->createMock(Attribute::class);
         $this->scopeConfigMock = $this->createMock(ScopeConfig::class);
-        $this->dbAdapterMock = $this->getMockForAbstractClass(AdapterInterface::class);
-        $this->attributeBackendMock = $this->getMockForAbstractClass(BackendInterface::class);
+        $this->dbAdapterMock = $this->createMock(AdapterInterface::class);
+        $this->attributeBackendMock = $this->createMock(BackendInterface::class);
         $this->deleteOutdatedPriceValues = new DeleteOutdatedPriceValues(
             $this->resourceConnectionMock,
             $this->attributeRepositoryMock,

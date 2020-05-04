@@ -10,13 +10,14 @@ namespace Magento\Elasticsearch\Test\Unit\Model\Adapter\FieldMapper\Product\Fiel
 use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\AttributeAdapter;
 use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldType\ConverterInterface
     as FieldTypeConverterInterface;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldType\Resolver\IntegerType;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @SuppressWarnings(PHPMD)
  */
-class IntegerTypeTest extends \PHPUnit\Framework\TestCase
+class IntegerTypeTest extends TestCase
 {
     /**
      * @var IntegerType

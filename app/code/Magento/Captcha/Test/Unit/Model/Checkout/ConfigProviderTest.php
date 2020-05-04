@@ -3,27 +3,37 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Captcha\Test\Unit\Model\Checkout;
 
-class ConfigProviderTest extends \PHPUnit\Framework\TestCase
+use Magento\Captcha\Helper\Data;
+use Magento\Captcha\Model\Checkout\ConfigProvider;
+use Magento\Captcha\Model\DefaultModel;
+use Magento\Store\Model\Store;
+use Magento\Store\Model\StoreManagerInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class ConfigProviderTest extends TestCase
 {
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $storeManagerMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $captchaHelperMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $captchaMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $storeMock;
 
@@ -33,19 +43,19 @@ class ConfigProviderTest extends \PHPUnit\Framework\TestCase
     protected $formId = 1;
 
     /**
-     * @var \Magento\Captcha\Model\Checkout\ConfigProvider
+     * @var ConfigProvider
      */
     protected $model;
 
     protected function setUp(): void
     {
-        $this->storeManagerMock = $this->createMock(\Magento\Store\Model\StoreManagerInterface::class);
-        $this->captchaHelperMock = $this->createMock(\Magento\Captcha\Helper\Data::class);
-        $this->captchaMock = $this->createMock(\Magento\Captcha\Model\DefaultModel::class);
-        $this->storeMock = $this->createMock(\Magento\Store\Model\Store::class);
+        $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
+        $this->captchaHelperMock = $this->createMock(Data::class);
+        $this->captchaMock = $this->createMock(DefaultModel::class);
+        $this->storeMock = $this->createMock(Store::class);
         $formIds = [$this->formId];
 
-        $this->model = new \Magento\Captcha\Model\Checkout\ConfigProvider(
+        $this->model = new ConfigProvider(
             $this->storeManagerMock,
             $this->captchaHelperMock,
             $formIds

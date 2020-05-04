@@ -3,31 +3,38 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Elasticsearch\Test\Unit\SearchAdapter;
 
+use Magento\Elasticsearch\SearchAdapter\AggregationFactory;
+use Magento\Elasticsearch\SearchAdapter\DocumentFactory;
 use Magento\Elasticsearch\SearchAdapter\ResponseFactory;
+use Magento\Framework\ObjectManagerInterface;
+use Magento\Framework\Search\Response\QueryResponse;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class ResponseFactoryTest extends \PHPUnit\Framework\TestCase
+class ResponseFactoryTest extends TestCase
 {
     /**
-     * @var ResponseFactory|\PHPUnit\Framework\MockObject\MockObject
+     * @var ResponseFactory|MockObject
      */
     private $model;
 
     /**
-     * @var \Magento\Elasticsearch\SearchAdapter\DocumentFactory|\PHPUnit\Framework\MockObject\MockObject
+     * @var DocumentFactory|MockObject
      */
     private $documentFactory;
 
     /**
-     * @var \Magento\Elasticsearch\SearchAdapter\AggregationFactory|\PHPUnit\Framework\MockObject\MockObject
+     * @var AggregationFactory|MockObject
      */
     private $aggregationFactory;
 
     /**
-     * @var \Magento\Framework\ObjectManagerInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var ObjectManagerInterface|MockObject
      */
     private $objectManager;
 
@@ -38,23 +45,23 @@ class ResponseFactoryTest extends \PHPUnit\Framework\TestCase
      */
     protected function setUp(): void
     {
-        $this->documentFactory = $this->getMockBuilder(\Magento\Elasticsearch\SearchAdapter\DocumentFactory::class)
+        $this->documentFactory = $this->getMockBuilder(DocumentFactory::class)
             ->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->aggregationFactory = $this->getMockBuilder(
-            \Magento\Elasticsearch\SearchAdapter\AggregationFactory::class
+            AggregationFactory::class
         )
             ->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->objectManager = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
+        $this->objectManager = $this->createMock(ObjectManagerInterface::class);
 
         $objectManagerHelper = new ObjectManagerHelper($this);
         $this->model = $objectManagerHelper->getObject(
-            \Magento\Elasticsearch\SearchAdapter\ResponseFactory::class,
+            ResponseFactory::class,
             [
                 'objectManager' => $this->objectManager,
                 'documentFactory' => $this->documentFactory,
@@ -106,24 +113,24 @@ class ResponseFactoryTest extends \PHPUnit\Framework\TestCase
         ];
 
         $this->documentFactory->expects($this->at(0))->method('create')
-            ->with($this->equalTo($documents[0]))
+            ->with($documents[0])
             ->willReturn('document1');
         $this->documentFactory->expects($this->at(1))->method('create')
             ->with($documents[1])
             ->willReturn('document2');
 
         $this->aggregationFactory->expects($this->at(0))->method('create')
-            ->with($this->equalTo($exceptedResponse['aggregations']))
+            ->with($exceptedResponse['aggregations'])
             ->willReturn('aggregationsData');
 
         $this->objectManager->expects($this->once())->method('create')
             ->with(
-                $this->equalTo(\Magento\Framework\Search\Response\QueryResponse::class),
-                $this->equalTo([
+                QueryResponse::class,
+                [
                     'documents' => ['document1', 'document2'],
                     'aggregations' => 'aggregationsData',
                     'total' => 2
-                ])
+                ]
             )
             ->willReturn('QueryResponseObject');
 

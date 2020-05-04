@@ -3,14 +3,17 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Catalog\Test\Unit\Model\ResourceModel\Product;
 
 use Magento\Catalog\Model\ResourceModel\Product\BaseSelectProcessorInterface;
 use Magento\Catalog\Model\ResourceModel\Product\CompositeBaseSelectProcessor;
 use Magento\Framework\DB\Select;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\TestCase;
 
-class CompositeBaseSelectProcessorTest extends \PHPUnit\Framework\TestCase
+class CompositeBaseSelectProcessorTest extends TestCase
 {
     /**
      * @var ObjectManager
@@ -22,13 +25,10 @@ class CompositeBaseSelectProcessorTest extends \PHPUnit\Framework\TestCase
         $this->objectManager =  new ObjectManager($this);
     }
 
-    /**
-     */
     public function testInitializeWithWrongProcessorInstance()
     {
-        $this->expectException(\Magento\Framework\Exception\InputException::class);
-
-        $processorValid = $this->getMockForAbstractClass(BaseSelectProcessorInterface::class);
+        $this->expectException('Magento\Framework\Exception\InputException');
+        $processorValid = $this->createMock(BaseSelectProcessorInterface::class);
         $processorInvalid = $this->createMock(\stdClass::class);
 
         $this->objectManager->getObject(CompositeBaseSelectProcessor::class, [
@@ -38,12 +38,14 @@ class CompositeBaseSelectProcessorTest extends \PHPUnit\Framework\TestCase
 
     public function testProcess()
     {
-        $select = $this->getMockBuilder(Select::class)->disableOriginalConstructor()->getMock();
+        $select = $this->getMockBuilder(Select::class)
+            ->disableOriginalConstructor()
+            ->getMock();
 
-        $processorFirst = $this->getMockForAbstractClass(BaseSelectProcessorInterface::class);
+        $processorFirst = $this->createMock(BaseSelectProcessorInterface::class);
         $processorFirst->expects($this->once())->method('process')->with($select)->willReturn($select);
 
-        $processorSecond = $this->getMockForAbstractClass(BaseSelectProcessorInterface::class);
+        $processorSecond = $this->createMock(BaseSelectProcessorInterface::class);
         $processorSecond->expects($this->once())->method('process')->with($select)->willReturn($select);
 
         /** @var CompositeBaseSelectProcessor $baseSelectProcessors */

@@ -3,38 +3,42 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Payment\Test\Unit\Gateway\Data\Order;
 
-use Magento\Payment\Gateway\Data\Order\OrderAdapter;
-use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Payment\Gateway\Data\AddressAdapterInterface;
+use Magento\Payment\Gateway\Data\Order\AddressAdapterFactory;
+use Magento\Payment\Gateway\Data\Order\OrderAdapter;
+use Magento\Sales\Api\Data\OrderAddressInterface;
+use Magento\Sales\Api\Data\OrderInterface;
+use Magento\Sales\Model\Order;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-/**
- * Class OrderAdapterTest
- */
-class OrderAdapterTest extends \PHPUnit\Framework\TestCase
+class OrderAdapterTest extends TestCase
 {
     /** @var OrderAdapter */
     protected $model;
 
     /**
-     * @var OrderInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var OrderInterface|MockObject
      */
     protected $orderMock;
 
     /**
-     * @var \Magento\Payment\Gateway\Data\Order\AddressAdapterFactory|\PHPUnit\Framework\MockObject\MockObject
+     * @var AddressAdapterFactory|MockObject
      */
     protected $addressAdapterFactoryMock;
 
     protected function setUp(): void
     {
-        $this->orderMock = $this->getMockBuilder(\Magento\Sales\Model\Order::class)
+        $this->orderMock = $this->getMockBuilder(Order::class)
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->addressAdapterFactoryMock =
-            $this->getMockBuilder(\Magento\Payment\Gateway\Data\Order\AddressAdapterFactory::class)
+            $this->getMockBuilder(AddressAdapterFactory::class)
                 ->setMethods(['create'])
                 ->disableOriginalConstructor()
                 ->getMock();
@@ -73,10 +77,10 @@ class OrderAdapterTest extends \PHPUnit\Framework\TestCase
     public function testGetBillingAddress()
     {
         /** @var AddressAdapterInterface $addressAdapterMock */
-        $addressAdapterMock = $this->getMockBuilder(\Magento\Payment\Gateway\Data\AddressAdapterInterface::class)
+        $addressAdapterMock = $this->getMockBuilder(AddressAdapterInterface::class)
             ->getMockForAbstractClass();
-        /** @var \Magento\Sales\Api\Data\OrderAddressInterface $orderAddressMock */
-        $orderAddressMock = $this->getMockBuilder(\Magento\Sales\Api\Data\OrderAddressInterface::class)
+        /** @var OrderAddressInterface $orderAddressMock */
+        $orderAddressMock = $this->getMockBuilder(OrderAddressInterface::class)
             ->getMockForAbstractClass();
         $this->addressAdapterFactoryMock->expects($this->once())
             ->method('create')
@@ -97,10 +101,10 @@ class OrderAdapterTest extends \PHPUnit\Framework\TestCase
     public function testGetShippingAddress()
     {
         /** @var AddressAdapterInterface $addressAdapterMock */
-        $addressAdapterMock = $this->getMockBuilder(\Magento\Payment\Gateway\Data\AddressAdapterInterface::class)
+        $addressAdapterMock = $this->getMockBuilder(AddressAdapterInterface::class)
             ->getMockForAbstractClass();
-        /** @var \Magento\Sales\Api\Data\OrderAddressInterface $orderAddressMock */
-        $orderAddressMock = $this->getMockBuilder(\Magento\Sales\Api\Data\OrderAddressInterface::class)
+        /** @var OrderAddressInterface $orderAddressMock */
+        $orderAddressMock = $this->getMockBuilder(OrderAddressInterface::class)
             ->getMockForAbstractClass();
         $this->addressAdapterFactoryMock->expects($this->once())
             ->method('create')

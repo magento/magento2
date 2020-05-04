@@ -3,50 +3,61 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Catalog\Test\Unit\Model\Product\CopyConstructor;
 
-class UpSellTest extends \PHPUnit\Framework\TestCase
+use Magento\Catalog\Model\Product;
+use Magento\Catalog\Model\Product\CopyConstructor\UpSell;
+use Magento\Catalog\Model\Product\Link;
+use Magento\Catalog\Model\ResourceModel\Product\Link\Collection;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class UpSellTest extends TestCase
 {
     /**
-     * @var \Magento\Catalog\Model\Product\CopyConstructor\UpSell
+     * @var UpSell
      */
     protected $_model;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $_productMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $_duplicateMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $_linkMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $_linkCollectionMock;
 
     protected function setUp(): void
     {
-        $this->_model = new \Magento\Catalog\Model\Product\CopyConstructor\UpSell();
+        $this->_model = new UpSell();
 
-        $this->_productMock = $this->createMock(\Magento\Catalog\Model\Product::class);
+        $this->_productMock = $this->createMock(Product::class);
 
-        $this->_duplicateMock = $this->createPartialMock(
-            \Magento\Catalog\Model\Product::class,
-            ['setUpSellLinkData', '__wakeup']
-        );
+        $this->_duplicateMock = $this->getMockBuilder(Product::class)
+            ->addMethods(['setUpSellLinkData'])
+            ->disableOriginalConstructor()
+            ->getMock();
 
-        $this->_linkMock = $this->createPartialMock(
-            \Magento\Catalog\Model\Product\Link::class,
-            ['__wakeup', 'getAttributes', 'getUpSellLinkCollection', 'useUpSellLinks']
-        );
+        $this->_linkMock = $this->getMockBuilder(Link::class)
+            ->addMethods(['getUpSellLinkCollection'])
+            ->onlyMethods([ 'getAttributes', 'useUpSellLinks'])
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->_productMock->expects(
             $this->any()
@@ -59,7 +70,7 @@ class UpSellTest extends \PHPUnit\Framework\TestCase
 
     public function testBuild()
     {
-        $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $helper = new ObjectManager($this);
         $expectedData = ['100500' => ['some' => 'data']];
 
         $attributes = ['attributeOne' => ['code' => 'one'], 'attributeTwo' => ['code' => 'two']];
@@ -68,10 +79,11 @@ class UpSellTest extends \PHPUnit\Framework\TestCase
 
         $this->_linkMock->expects($this->once())->method('getAttributes')->willReturn($attributes);
 
-        $productLinkMock = $this->createPartialMock(
-            \Magento\Catalog\Model\ResourceModel\Product\Link::class,
-            ['__wakeup', 'getLinkedProductId', 'toArray']
-        );
+        $productLinkMock = $this->getMockBuilder(\Magento\Catalog\Model\ResourceModel\Product\Link::class)->addMethods(
+            ['getLinkedProductId', 'toArray']
+        )
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $productLinkMock->expects($this->once())->method('getLinkedProductId')->willReturn('100500');
         $productLinkMock->expects(
@@ -85,7 +97,7 @@ class UpSellTest extends \PHPUnit\Framework\TestCase
         );
 
         $collectionMock = $helper->getCollectionMock(
-            \Magento\Catalog\Model\ResourceModel\Product\Link\Collection::class,
+            Collection::class,
             [$productLinkMock]
         );
         $this->_productMock->expects(

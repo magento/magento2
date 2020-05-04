@@ -3,25 +3,31 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Store\Test\Unit\Model\Config;
 
+use Magento\Framework\App\Request\Http;
+use Magento\Store\Model\Config\Processor\Placeholder as PlaceholderProcessor;
 use Magento\Store\Model\Store;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class PlaceholderTest extends \PHPUnit\Framework\TestCase
+class PlaceholderTest extends TestCase
 {
     /**
-     * @var \Magento\Store\Model\Config\Processor\Placeholder
+     * @var PlaceholderProcessor
      */
     protected $_model;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $_requestMock;
 
     protected function setUp(): void
     {
-        $this->_requestMock = $this->createMock(\Magento\Framework\App\Request\Http::class);
+        $this->_requestMock = $this->createMock(Http::class);
         $this->_requestMock->expects(
             $this->any()
         )->method(
@@ -35,7 +41,7 @@ class PlaceholderTest extends \PHPUnit\Framework\TestCase
                 'unsecureBaseUrl' => Store::XML_PATH_UNSECURE_BASE_URL,
                 'secureBaseUrl' => Store::XML_PATH_SECURE_BASE_URL
             ],
-            \Magento\Store\Model\Store::BASE_URL_PLACEHOLDER
+            Store::BASE_URL_PLACEHOLDER
         );
     }
 

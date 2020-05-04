@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 /**
  * Custom import CSV file field for shipping table rates
@@ -11,31 +12,39 @@
  */
 namespace Magento\OfflineShipping\Test\Unit\Block\Adminhtml\Form\Field;
 
-class ImportTest extends \PHPUnit\Framework\TestCase
+use Magento\Framework\Data\Form;
+use Magento\Framework\Escaper;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\OfflineShipping\Block\Adminhtml\Form\Field\Import;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class ImportTest extends TestCase
 {
     /**
-     * @var \Magento\OfflineShipping\Block\Adminhtml\Form\Field\Import
+     * @var Import
      */
     protected $_object;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $_formMock;
 
     protected function setUp(): void
     {
-        $this->_formMock = $this->createPartialMock(
-            \Magento\Framework\Data\Form::class,
-            ['getFieldNameSuffix', 'addSuffixToName', 'getHtmlIdPrefix', 'getHtmlIdSuffix']
-        );
+        $this->_formMock = $this->getMockBuilder(Form::class)
+            ->addMethods(['getFieldNameSuffix', 'getHtmlIdPrefix', 'getHtmlIdSuffix'])
+            ->onlyMethods(['addSuffixToName'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $testData = ['name' => 'test_name', 'html_id' => 'test_html_id'];
-        $testHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $testHelper = new ObjectManager($this);
         $this->_object = $testHelper->getObject(
-            \Magento\OfflineShipping\Block\Adminhtml\Form\Field\Import::class,
+            Import::class,
             [
                 'data' => $testData,
-                '_escaper' => $testHelper->getObject(\Magento\Framework\Escaper::class)
+                '_escaper' => $testHelper->getObject(Escaper::class)
             ]
         );
         $this->_object->setForm($this->_formMock);

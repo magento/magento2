@@ -3,20 +3,24 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Sales\Test\Unit\Model\Order\Shipment\Track;
 
-/**
- * Class ValidatorTest
- */
-class ValidatorTest extends \PHPUnit\Framework\TestCase
+use Magento\Sales\Model\Order\Shipment\Track;
+use Magento\Sales\Model\Order\Shipment\Track\Validator;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class ValidatorTest extends TestCase
 {
     /**
-     * @var \Magento\Sales\Model\Order\Shipment\Track\Validator
+     * @var Validator
      */
     protected $validator;
 
     /**
-     * @var \Magento\Sales\Model\Order\Shipment\Track|\PHPUnit\Framework\MockObject\MockObject
+     * @var \Magento\Sales\Model\Order\Shipment\Track|MockObject
      */
     protected $trackModelMock;
 
@@ -26,10 +30,10 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
     protected function setUp(): void
     {
         $this->trackModelMock = $this->createPartialMock(
-            \Magento\Sales\Model\Order\Shipment\Track::class,
-            ['hasData', 'getData', '__wakeup']
+            Track::class,
+            ['hasData', 'getData']
         );
-        $this->validator = new \Magento\Sales\Model\Order\Shipment\Track\Validator();
+        $this->validator = new Validator();
     }
 
     /**

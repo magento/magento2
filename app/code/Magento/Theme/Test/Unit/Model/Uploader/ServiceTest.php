@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 /**
  * Test for uploader service
@@ -10,41 +11,48 @@
 namespace Magento\Theme\Test\Unit\Model\Uploader;
 
 use Magento\Framework\Convert\DataSize;
+use Magento\Framework\File\Size;
+use Magento\Framework\Filesystem;
+use Magento\Framework\Filesystem\Directory\Read;
+use Magento\MediaStorage\Model\File\Uploader;
+use Magento\Theme\Model\Uploader\Service;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class ServiceTest extends \PHPUnit\Framework\TestCase
+class ServiceTest extends TestCase
 {
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Theme\Model\Uploader\Service
+     * @var MockObject|Service
      */
     protected $_service;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\MediaStorage\Model\File\Uploader
+     * @var MockObject|Uploader
      */
     protected $_uploader;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\MediaStorage\Model\File\UploaderFactory
+     * @var MockObject|\Magento\MediaStorage\Model\File\UploaderFactory
      */
     protected $_uploaderFactory;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\File\Size
+     * @var MockObject|Size
      */
     protected $_fileSizeMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\Convert\DataSize
+     * @var MockObject|DataSize
      */
     protected $dataSize;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\Filesystem
+     * @var MockObject|Filesystem
      */
     protected $_filesystemMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\Filesystem\Directory\Read
+     * @var MockObject|Read
      */
     protected $_directoryMock;
 
@@ -55,15 +63,15 @@ class ServiceTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp(): void
     {
-        $this->_uploader = $this->createMock(\Magento\MediaStorage\Model\File\Uploader::class);
+        $this->_uploader = $this->createMock(Uploader::class);
         $this->dataSize = new DataSize();
         $this->_uploaderFactory = $this->createPartialMock(
             \Magento\MediaStorage\Model\File\UploaderFactory::class,
             ['create']
         );
         $this->_uploaderFactory->expects($this->any())->method('create')->willReturn($this->_uploader);
-        $this->_directoryMock = $this->createMock(\Magento\Framework\Filesystem\Directory\Read::class);
-        $this->_filesystemMock = $this->createMock(\Magento\Framework\Filesystem::class);
+        $this->_directoryMock = $this->createMock(Read::class);
+        $this->_filesystemMock = $this->createMock(Filesystem::class);
         $this->_filesystemMock->expects(
             $this->any()
         )->method(
@@ -74,10 +82,11 @@ class ServiceTest extends \PHPUnit\Framework\TestCase
         /** @var $service \Magento\Theme\Model\Uploader\Service */
 
         $this->_fileSizeMock = $this->getMockBuilder(
-            \Magento\Framework\File\Size::class
+            Size::class
         )->setMethods(
             ['getMaxFileSize']
-        )->disableOriginalConstructor()->getMock();
+        )->disableOriginalConstructor()
+            ->getMock();
 
         $this->_fileSizeMock->expects(
             $this->any()
@@ -99,7 +108,7 @@ class ServiceTest extends \PHPUnit\Framework\TestCase
 
     public function testUploadLimitNotConfigured()
     {
-        $this->_service = new \Magento\Theme\Model\Uploader\Service(
+        $this->_service = new Service(
             $this->_filesystemMock,
             $this->_fileSizeMock,
             $this->dataSize,
@@ -111,7 +120,7 @@ class ServiceTest extends \PHPUnit\Framework\TestCase
 
     public function testGetCssUploadMaxSize()
     {
-        $this->_service = new \Magento\Theme\Model\Uploader\Service(
+        $this->_service = new Service(
             $this->_filesystemMock,
             $this->_fileSizeMock,
             $this->dataSize,
@@ -123,7 +132,7 @@ class ServiceTest extends \PHPUnit\Framework\TestCase
 
     public function testGetJsUploadMaxSize()
     {
-        $this->_service = new \Magento\Theme\Model\Uploader\Service(
+        $this->_service = new Service(
             $this->_filesystemMock,
             $this->_fileSizeMock,
             $this->dataSize,
@@ -157,7 +166,7 @@ class ServiceTest extends \PHPUnit\Framework\TestCase
             'content from my file'
         );
 
-        $this->_service = new \Magento\Theme\Model\Uploader\Service(
+        $this->_service = new Service(
             $this->_filesystemMock,
             $this->_fileSizeMock,
             $this->dataSize,
@@ -171,7 +180,7 @@ class ServiceTest extends \PHPUnit\Framework\TestCase
     public function testUploadCssFile()
     {
         $fileName = 'file.name';
-        $this->_service = new \Magento\Theme\Model\Uploader\Service(
+        $this->_service = new Service(
             $this->_filesystemMock,
             $this->_fileSizeMock,
             $this->dataSize,
@@ -212,12 +221,9 @@ class ServiceTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    /**
-     */
     public function testUploadInvalidCssFile()
     {
-        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
-
+        $this->expectException('Magento\Framework\Exception\LocalizedException');
         $fileName = 'file.name';
 
         $this->_uploader->expects(
@@ -228,7 +234,7 @@ class ServiceTest extends \PHPUnit\Framework\TestCase
             30 * self::MB_MULTIPLIER
         );
 
-        $this->_service = new \Magento\Theme\Model\Uploader\Service(
+        $this->_service = new Service(
             $this->_filesystemMock,
             $this->_fileSizeMock,
             $this->dataSize,
@@ -251,7 +257,7 @@ class ServiceTest extends \PHPUnit\Framework\TestCase
             600 * self::MB_MULTIPLIER
         );
 
-        $this->_service = new \Magento\Theme\Model\Uploader\Service(
+        $this->_service = new Service(
             $this->_filesystemMock,
             $this->_fileSizeMock,
             $this->dataSize,
@@ -294,14 +300,11 @@ class ServiceTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    /**
-     */
     public function testUploadInvalidJsFile()
     {
-        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
-
+        $this->expectException('Magento\Framework\Exception\LocalizedException');
         $fileName = 'file.name';
-        $this->_service = new \Magento\Theme\Model\Uploader\Service(
+        $this->_service = new Service(
             $this->_filesystemMock,
             $this->_fileSizeMock,
             $this->dataSize,

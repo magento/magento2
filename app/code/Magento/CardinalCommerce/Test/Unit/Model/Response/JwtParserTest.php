@@ -7,17 +7,16 @@ declare(strict_types=1);
 
 namespace Magento\CardinalCommerce\Test\Unit\Model\Response;
 
-use Magento\CardinalCommerce\Model\Response\JwtParser;
 use Magento\CardinalCommerce\Model\Config;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\CardinalCommerce\Model\JwtManagement;
+use Magento\CardinalCommerce\Model\Response\JwtParser;
 use Magento\CardinalCommerce\Model\Response\JwtPayloadValidatorInterface;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-/**
- * Class \Magento\CardinalCommerce\Test\Unit\Model\Response\JwtParserTest
- */
-class JwtParserTest extends \PHPUnit\Framework\TestCase
+class JwtParserTest extends TestCase
 {
     /**
      * @var ObjectManager
@@ -30,17 +29,17 @@ class JwtParserTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject | Config
+     * @var MockObject|Config
      */
     private $configMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject | JwtManagement
+     * @var MockObject|JwtManagement
      */
     private $jwtManagementMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject | JwtPayloadValidatorInterface
+     * @var MockObject|JwtPayloadValidatorInterface
      */
     private $jwtPayloadValidatorMock;
 
@@ -64,7 +63,7 @@ class JwtParserTest extends \PHPUnit\Framework\TestCase
         $this->jwtPayloadValidatorMock = $this->getMockBuilder(JwtPayloadValidatorInterface::class)
             ->setMethods(['validate'])
             ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+            ->getMock();
 
         $this->model = $this->objectManager->getObject(
             JwtParser::class,

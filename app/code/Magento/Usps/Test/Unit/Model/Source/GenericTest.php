@@ -3,31 +3,39 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Usps\Test\Unit\Model\Source;
 
-class GenericTest extends \PHPUnit\Framework\TestCase
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Usps\Model\Carrier;
+use Magento\Usps\Model\Source\Generic;
+use PHPUnit\Framework\TestCase;
+
+class GenericTest extends TestCase
 {
     /**
-     * @var \Magento\Usps\Model\Source\Generic
+     * @var Generic
      */
     protected $_generic;
 
     /**
-     * @var \Magento\Usps\Model\Carrier
+     * @var Carrier
      */
     protected $_uspsModel;
 
     protected function setUp(): void
     {
-        $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $helper = new ObjectManager($this);
         $this->_uspsModel = $this->getMockBuilder(
-            \Magento\Usps\Model\Carrier::class
+            Carrier::class
         )->setMethods(
             ['getCode']
-        )->disableOriginalConstructor()->getMock();
+        )->disableOriginalConstructor()
+            ->getMock();
 
         $this->_generic = $helper->getObject(
-            \Magento\Usps\Model\Source\Generic::class,
+            Generic::class,
             ['shippingUsps' => $this->_uspsModel]
         );
     }

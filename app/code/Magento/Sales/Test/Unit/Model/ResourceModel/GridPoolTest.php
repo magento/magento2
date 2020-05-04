@@ -3,32 +3,35 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Sales\Test\Unit\Model\ResourceModel;
 
-/**
- * Class GridPoolTest
- */
-class GridPoolTest extends \PHPUnit\Framework\TestCase
+use Magento\Sales\Model\ResourceModel\Grid;
+use Magento\Sales\Model\ResourceModel\GridPool;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class GridPoolTest extends TestCase
 {
     /**
-     * @var \Magento\Sales\Model\ResourceModel\GridPool
+     * @var GridPool
      */
     protected $gridPool;
     /**
-     * @var \Magento\Sales\Model\ResourceModel\Order\Grid|\PHPUnit\Framework\MockObject\MockObject
+     * @var \Magento\Sales\Model\ResourceModel\Order\Grid|MockObject
      */
     protected $orderGridMock;
     /**
-     * @var \Magento\Sales\Model\ResourceModel\Order\Invoice\Grid|\PHPUnit\Framework\MockObject\MockObject
+     * @var \Magento\Sales\Model\ResourceModel\Order\Invoice\Grid|MockObject
      */
     protected $invoiceGridMock;
     /**
-     * @var \Magento\Sales\Model\ResourceModel\Order\Shipment\Grid|\PHPUnit\Framework\MockObject\MockObject
+     * @var \Magento\Sales\Model\ResourceModel\Order\Shipment\Grid|MockObject
      */
     protected $shipmentGridMock;
     /**
-     * @var \Magento\Sales\Model\ResourceModel\Order\Creditmemo\Grid|\PHPUnit\Framework\MockObject\MockObject
+     * @var \Magento\Sales\Model\ResourceModel\Order\Creditmemo\Grid|MockObject
      */
     protected $creditmemoGridMock;
     /**
@@ -41,10 +44,10 @@ class GridPoolTest extends \PHPUnit\Framework\TestCase
      */
     protected function setUp(): void
     {
-        $this->orderGridMock = $this->createMock(\Magento\Sales\Model\ResourceModel\Grid::class);
-        $this->invoiceGridMock = $this->createMock(\Magento\Sales\Model\ResourceModel\Grid::class);
-        $this->shipmentGridMock = $this->createMock(\Magento\Sales\Model\ResourceModel\Grid::class);
-        $this->creditmemoGridMock = $this->createMock(\Magento\Sales\Model\ResourceModel\Grid::class);
+        $this->orderGridMock = $this->createMock(Grid::class);
+        $this->invoiceGridMock = $this->createMock(Grid::class);
+        $this->shipmentGridMock = $this->createMock(Grid::class);
+        $this->creditmemoGridMock = $this->createMock(Grid::class);
         $this->statementMock = $this->getMockForAbstractClass(\Zend_Db_Statement_Interface::class);
         $grids = [
             'order_grid' => $this->orderGridMock,
@@ -52,7 +55,7 @@ class GridPoolTest extends \PHPUnit\Framework\TestCase
             'shipment_grid' => $this->shipmentGridMock,
             'creditmemo_grid' => $this->creditmemoGridMock
         ];
-        $this->gridPool = new \Magento\Sales\Model\ResourceModel\GridPool($grids);
+        $this->gridPool = new GridPool($grids);
     }
 
     /**
@@ -77,19 +80,19 @@ class GridPoolTest extends \PHPUnit\Framework\TestCase
 
         $this->orderGridMock->expects($this->once())
             ->method('refresh')
-            ->with($this->equalTo($orderId), $this->equalTo('sfo.entity_id'))
+            ->with($orderId, 'sfo.entity_id')
             ->willReturn($this->statementMock);
         $this->invoiceGridMock->expects($this->once())
             ->method('refresh')
-            ->with($this->equalTo($orderId), $this->equalTo('sfo.entity_id'))
+            ->with($orderId, 'sfo.entity_id')
             ->willReturn($this->statementMock);
         $this->shipmentGridMock->expects($this->once())
             ->method('refresh')
-            ->with($this->equalTo($orderId), $this->equalTo('sfo.entity_id'))
+            ->with($orderId, 'sfo.entity_id')
             ->willReturn($this->statementMock);
         $this->creditmemoGridMock->expects($this->once())
             ->method('refresh')
-            ->with($this->equalTo($orderId), $this->equalTo('sfo.entity_id'))
+            ->with($orderId, 'sfo.entity_id')
             ->willReturn($this->statementMock);
         $this->assertEquals($this->gridPool, $this->gridPool->refreshByOrderId($orderId));
     }

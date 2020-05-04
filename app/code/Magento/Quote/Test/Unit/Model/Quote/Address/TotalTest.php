@@ -3,19 +3,25 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Quote\Test\Unit\Model\Quote\Address;
 
-class TotalTest extends \PHPUnit\Framework\TestCase
+use Magento\Framework\Serialize\Serializer\Json;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Quote\Model\Quote\Address\Total;
+use PHPUnit\Framework\TestCase;
+
+class TotalTest extends TestCase
 {
     /**
-     * @var \Magento\Quote\Model\Quote\Address\Total
+     * @var Total
      */
     protected $model;
 
     protected function setUp(): void
     {
-        $serializer = $this->getMockBuilder(\Magento\Framework\Serialize\Serializer\Json::class)
+        $serializer = $this->getMockBuilder(Json::class)
             ->setMethods(['unserialize'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
@@ -25,9 +31,9 @@ class TotalTest extends \PHPUnit\Framework\TestCase
                 return json_decode($value, true);
             });
 
-        $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $objectManagerHelper = new ObjectManager($this);
         $this->model = $objectManagerHelper->getObject(
-            \Magento\Quote\Model\Quote\Address\Total::class,
+            Total::class,
             [
                 'serializer' => $serializer
             ]

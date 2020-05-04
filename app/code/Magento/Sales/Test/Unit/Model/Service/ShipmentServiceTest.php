@@ -3,52 +3,63 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Sales\Test\Unit\Model\Service;
 
+use Magento\Framework\Api\Filter;
+use Magento\Framework\Api\FilterBuilder;
+use Magento\Framework\Api\SearchCriteria;
+use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Sales\Api\ShipmentCommentRepositoryInterface;
+use Magento\Sales\Api\ShipmentRepositoryInterface;
+use Magento\Sales\Model\AbstractModel;
+use Magento\Sales\Model\Order\Shipment;
+use Magento\Sales\Model\Service\ShipmentService;
+use Magento\Shipping\Model\ShipmentNotifier;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-/**
- * Class ShipmentServiceTest
- */
-class ShipmentServiceTest extends \PHPUnit\Framework\TestCase
+class ShipmentServiceTest extends TestCase
 {
     /**
      * Repository
      *
-     * @var \Magento\Sales\Api\ShipmentCommentRepositoryInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var ShipmentCommentRepositoryInterface|MockObject
      */
     protected $commentRepositoryMock;
 
     /**
      * Search Criteria Builder
      *
-     * @var \Magento\Framework\Api\SearchCriteriaBuilder|\PHPUnit\Framework\MockObject\MockObject
+     * @var SearchCriteriaBuilder|MockObject
      */
     protected $searchCriteriaBuilderMock;
 
     /**
      * Filter Builder
      *
-     * @var \Magento\Framework\Api\FilterBuilder|\PHPUnit\Framework\MockObject\MockObject
+     * @var FilterBuilder|MockObject
      */
     protected $filterBuilderMock;
 
     /**
      * Repository
      *
-     * @var \Magento\Sales\Api\ShipmentRepositoryInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var ShipmentRepositoryInterface|MockObject
      */
     protected $repositoryMock;
 
     /**
      * Shipment Notifier
      *
-     * @var \Magento\Shipping\Model\ShipmentNotifier|\PHPUnit\Framework\MockObject\MockObject
+     * @var ShipmentNotifier|MockObject
      */
     protected $notifierMock;
 
     /**
-     * @var \Magento\Sales\Model\Service\ShipmentService
+     * @var ShipmentService
      */
     protected $shipmentService;
 
@@ -60,29 +71,29 @@ class ShipmentServiceTest extends \PHPUnit\Framework\TestCase
         $objectManager = new ObjectManagerHelper($this);
 
         $this->commentRepositoryMock = $this->getMockForAbstractClass(
-            \Magento\Sales\Api\ShipmentCommentRepositoryInterface::class,
+            ShipmentCommentRepositoryInterface::class,
             ['getList'],
             '',
             false
         );
         $this->searchCriteriaBuilderMock = $this->createPartialMock(
-            \Magento\Framework\Api\SearchCriteriaBuilder::class,
+            SearchCriteriaBuilder::class,
             ['create', 'addFilters']
         );
         $this->filterBuilderMock = $this->createPartialMock(
-            \Magento\Framework\Api\FilterBuilder::class,
+            FilterBuilder::class,
             ['setField', 'setValue', 'setConditionType', 'create']
         );
         $this->repositoryMock = $this->getMockForAbstractClass(
-            \Magento\Sales\Api\ShipmentRepositoryInterface::class,
+            ShipmentRepositoryInterface::class,
             ['get'],
             '',
             false
         );
-        $this->notifierMock = $this->createPartialMock(\Magento\Shipping\Model\ShipmentNotifier::class, ['notify']);
+        $this->notifierMock = $this->createPartialMock(ShipmentNotifier::class, ['notify']);
 
         $this->shipmentService = $objectManager->getObject(
-            \Magento\Sales\Model\Service\ShipmentService::class,
+            ShipmentService::class,
             [
                 'commentRepository' => $this->commentRepositoryMock,
                 'criteriaBuilder' => $this->searchCriteriaBuilderMock,
@@ -101,7 +112,7 @@ class ShipmentServiceTest extends \PHPUnit\Framework\TestCase
         $id = 145;
         $returnValue = 'return-value';
 
-        $shipmentMock = $this->createPartialMock(\Magento\Sales\Model\Order\Shipment::class, ['getShippingLabel']);
+        $shipmentMock = $this->createPartialMock(Shipment::class, ['getShippingLabel']);
 
         $this->repositoryMock->expects($this->once())
             ->method('get')
@@ -122,21 +133,18 @@ class ShipmentServiceTest extends \PHPUnit\Framework\TestCase
         $id = 25;
         $returnValue = 'return-value';
 
-        $filterMock = $this->createMock(\Magento\Framework\Api\Filter::class);
-        $searchCriteriaMock = $this->createMock(\Magento\Framework\Api\SearchCriteria::class);
+        $filterMock = $this->createMock(Filter::class);
+        $searchCriteriaMock = $this->createMock(SearchCriteria::class);
 
         $this->filterBuilderMock->expects($this->once())
             ->method('setField')
-            ->with('parent_id')
-            ->willReturnSelf();
+            ->with('parent_id')->willReturnSelf();
         $this->filterBuilderMock->expects($this->once())
             ->method('setValue')
-            ->with($id)
-            ->willReturnSelf();
+            ->with($id)->willReturnSelf();
         $this->filterBuilderMock->expects($this->once())
             ->method('setConditionType')
-            ->with('eq')
-            ->willReturnSelf();
+            ->with('eq')->willReturnSelf();
         $this->filterBuilderMock->expects($this->once())
             ->method('create')
             ->willReturn($filterMock);
@@ -163,7 +171,7 @@ class ShipmentServiceTest extends \PHPUnit\Framework\TestCase
         $returnValue = 'return-value';
 
         $modelMock = $this->getMockForAbstractClass(
-            \Magento\Sales\Model\AbstractModel::class,
+            AbstractModel::class,
             [],
             '',
             false

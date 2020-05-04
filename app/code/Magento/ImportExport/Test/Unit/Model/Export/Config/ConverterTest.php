@@ -3,15 +3,20 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\ImportExport\Test\Unit\Model\Export\Config;
 
-/**
- * Converter test
- */
-class ConverterTest extends \PHPUnit\Framework\TestCase
+use Magento\Framework\Module\Manager;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\ImportExport\Model\Export\Config\Converter;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class ConverterTest extends TestCase
 {
     /**
-     * @var \Magento\ImportExport\Model\Export\Config\Converter
+     * @var Converter
      */
     protected $model;
 
@@ -21,17 +26,17 @@ class ConverterTest extends \PHPUnit\Framework\TestCase
     protected $filePath;
 
     /**
-     * @var \Magento\Framework\Module\Manager|\PHPUnit\Framework\MockObject\MockObject
+     * @var Manager|MockObject
      */
     protected $moduleManager;
 
     protected function setUp(): void
     {
         $this->filePath = realpath(__DIR__) . '/_files/';
-        $this->moduleManager = $this->createPartialMock(\Magento\Framework\Module\Manager::class, ['isOutputEnabled']);
-        $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $this->moduleManager = $this->createPartialMock(Manager::class, ['isOutputEnabled']);
+        $objectManagerHelper = new ObjectManager($this);
         $this->model = $objectManagerHelper->getObject(
-            \Magento\ImportExport\Model\Export\Config\Converter::class,
+            Converter::class,
             [
                 'moduleManager' => $this->moduleManager
             ]

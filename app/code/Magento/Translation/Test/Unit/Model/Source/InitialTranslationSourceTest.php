@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Translation\Test\Unit\Model\Source;
 
 use Magento\Framework\App\DeploymentConfig;
@@ -13,46 +15,47 @@ use Magento\Store\Model\StoreManager;
 use Magento\Translation\Model\ResourceModel\Translate;
 use Magento\Translation\Model\ResourceModel\TranslateFactory;
 use Magento\Translation\Model\Source\InitialTranslationSource;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \Magento\Translation\Model\Source\InitialTranslationSource
- * @package Magento\Translation\Test\Unit\Model\Source
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class InitialTranslationSourceTest extends \PHPUnit\Framework\TestCase
+class InitialTranslationSourceTest extends TestCase
 {
     /**
-     * @var TranslateFactory|\PHPUnit\Framework\MockObject\MockObject
+     * @var TranslateFactory|MockObject
      */
     private $translationFactory;
 
     /**
-     * @var Translate|\PHPUnit\Framework\MockObject\MockObject
+     * @var Translate|MockObject
      */
     private $translation;
 
     /**
-     * @var StoreManager|\PHPUnit\Framework\MockObject\MockObject
+     * @var StoreManager|MockObject
      */
     private $storeManager;
 
     /**
-     * @var Store|\PHPUnit\Framework\MockObject\MockObject
+     * @var Store|MockObject
      */
     private $store;
 
     /**
-     * @var AdapterInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var AdapterInterface|MockObject
      */
     private $connection;
 
     /**
-     * @var Select|\PHPUnit\Framework\MockObject\MockObject
+     * @var Select|MockObject
      */
     private $select;
 
     /**
-     * @var DeploymentConfig | \PHPUnit\Framework\MockObject\MockObject
+     * @var DeploymentConfig|MockObject
      */
     private $deploymentConfigMock;
 
@@ -78,7 +81,7 @@ class InitialTranslationSourceTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $this->connection = $this->getMockBuilder(AdapterInterface::class)
             ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+            ->getMock();
         $this->select = $this->getMockBuilder(Select::class)
             ->disableOriginalConstructor()
             ->getMock();

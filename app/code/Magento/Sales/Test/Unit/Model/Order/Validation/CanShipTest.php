@@ -3,51 +3,58 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Sales\Test\Unit\Model\Order\Validation;
 
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Sales\Api\Data\OrderInterface;
+use Magento\Sales\Api\Data\OrderItemInterface;
 use Magento\Sales\Model\Order;
+use Magento\Sales\Model\Order\Validation\CanShip;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test for \Magento\Sales\Model\Order\Validation\CanShip class
  */
-class CanShipTest extends \PHPUnit\Framework\TestCase
+class CanShipTest extends TestCase
 {
     /**
-     * @var \Magento\Sales\Model\Order\Validation\CanShip|\PHPUnit\Framework\MockObject\MockObject
+     * @var CanShip|MockObject
      */
     private $model;
 
     /**
-     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
+     * @var ObjectManager
      */
     private $objectManager;
 
     /**
-     * @var \Magento\Sales\Api\Data\OrderInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var OrderInterface|MockObject
      */
     private $orderMock;
 
     /**
-     * @var \Magento\Sales\Api\Data\OrderItemInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var OrderItemInterface|MockObject
      */
     private $orderItemMock;
 
     protected function setUp(): void
     {
-        $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $this->objectManager = new ObjectManager($this);
 
-        $this->orderMock = $this->getMockBuilder(\Magento\Sales\Api\Data\OrderInterface::class)
+        $this->orderMock = $this->getMockBuilder(OrderInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['getStatus', 'getItems'])
             ->getMockForAbstractClass();
 
-        $this->orderItemMock = $this->getMockBuilder(\Magento\Sales\Api\Data\OrderItemInterface::class)
+        $this->orderItemMock = $this->getMockBuilder(OrderItemInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['getQtyToShip', 'getLockedDoShip'])
             ->getMockForAbstractClass();
 
-        $this->model = new \Magento\Sales\Model\Order\Validation\CanShip();
+        $this->model = new CanShip();
     }
 
     /**

@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\User\Test\Unit\Observer\Backend;
 
@@ -23,41 +24,43 @@ use Magento\User\Model\ResourceModel\User;
 use Magento\User\Model\User as ModelUser;
 use Magento\User\Model\UserFactory;
 use Magento\User\Observer\Backend\AuthObserver;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test class for Magento\User\Observer\Backend\AuthObserver
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class AuthObserverTest extends \PHPUnit\Framework\TestCase
+class AuthObserverTest extends TestCase
 {
     /** @var ObserverConfig */
     protected $observerConfig;
 
-    /** @var ConfigInterface|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var ConfigInterface|MockObject */
     protected $configInterfaceMock;
 
-    /** @var User|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var User|MockObject */
     protected $userMock;
 
-    /** @var UrlInterface|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var UrlInterface|MockObject */
     protected $urlInterfaceMock;
 
-    /** @var Session|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var Session|MockObject */
     protected $authSessionMock;
 
-    /** @var UserFactory|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var UserFactory|MockObject */
     protected $userFactoryMock;
 
-    /** @var EncryptorInterface|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var EncryptorInterface|MockObject */
     protected $encryptorMock;
 
-    /** @var ManagerInterface|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var ManagerInterface|MockObject */
     protected $managerInterfaceMock;
 
-    /** @var MessageInterface|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var MessageInterface|MockObject */
     protected $messageInterfaceMock;
 
-    /** @var EventManagerInterface|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var EventManagerInterface|MockObject */
     protected $eventManagerMock;
 
     /** @var AuthObserver */
@@ -65,7 +68,7 @@ class AuthObserverTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp(): void
     {
-        $this->configInterfaceMock = $this->getMockBuilder(\Magento\Backend\App\ConfigInterface::class)
+        $this->configInterfaceMock = $this->getMockBuilder(ConfigInterface::class)
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();
@@ -75,12 +78,12 @@ class AuthObserverTest extends \PHPUnit\Framework\TestCase
             ->setMethods([])
             ->getMock();
 
-        $this->urlInterfaceMock = $this->getMockBuilder(\Magento\Backend\Model\UrlInterface::class)
+        $this->urlInterfaceMock = $this->getMockBuilder(UrlInterface::class)
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();
 
-        $this->authSessionMock = $this->getMockBuilder(\Magento\Backend\Model\Auth\Session::class)
+        $this->authSessionMock = $this->getMockBuilder(Session::class)
             ->disableOriginalConstructor()
             ->setMethods(
                 [
@@ -92,12 +95,12 @@ class AuthObserverTest extends \PHPUnit\Framework\TestCase
                 ]
             )->getMock();
 
-        $this->userFactoryMock = $this->getMockBuilder(\Magento\User\Model\UserFactory::class)
+        $this->userFactoryMock = $this->getMockBuilder(UserFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
 
-        $this->encryptorMock = $this->getMockBuilder(\Magento\Framework\Encryption\EncryptorInterface::class)
+        $this->encryptorMock = $this->getMockBuilder(EncryptorInterface::class)
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();
@@ -107,7 +110,7 @@ class AuthObserverTest extends \PHPUnit\Framework\TestCase
             ->setMethods([])
             ->getMock();
 
-        $this->messageInterfaceMock = $this->getMockBuilder(\Magento\Framework\Message\MessageInterface::class)
+        $this->messageInterfaceMock = $this->getMockBuilder(MessageInterface::class)
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();
@@ -120,14 +123,14 @@ class AuthObserverTest extends \PHPUnit\Framework\TestCase
         $helper = new ObjectManager($this);
 
         $this->observerConfig = $helper->getObject(
-            \Magento\User\Model\Backend\Config\ObserverConfig::class,
+            ObserverConfig::class,
             [
                 'backendConfig' => $this->configInterfaceMock
             ]
         );
 
         $this->model = $helper->getObject(
-            \Magento\User\Observer\Backend\AuthObserver::class,
+            AuthObserver::class,
             [
                 'observerConfig' => $this->observerConfig,
                 'userResource' => $this->userMock,
@@ -153,19 +156,19 @@ class AuthObserverTest extends \PHPUnit\Framework\TestCase
             'last_updated' => 1496248367
         ];
 
-        /** @var Observer|\PHPUnit\Framework\MockObject\MockObject $eventObserverMock */
-        $eventObserverMock = $this->getMockBuilder(\Magento\Framework\Event\Observer::class)
+        /** @var Observer|MockObject $eventObserverMock */
+        $eventObserverMock = $this->getMockBuilder(Observer::class)
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();
 
-        /** @var Event|\PHPUnit\Framework\MockObject\MockObject */
-        $eventMock = $this->getMockBuilder(\Magento\Framework\Event::class)
+        /** @var Event|MockObject */
+        $eventMock = $this->getMockBuilder(Event::class)
             ->disableOriginalConstructor()
             ->setMethods(['getPassword', 'getUser', 'getResult'])
             ->getMock();
 
-        /** @var ModelUser|\PHPUnit\Framework\MockObject\MockObject $userMock */
+        /** @var ModelUser|MockObject $userMock */
         $userMock = $this->getMockBuilder(\Magento\User\Model\User::class)
             ->disableOriginalConstructor()
             ->setMethods(['getId', 'getLockExpires', 'getPassword', 'save'])
@@ -184,8 +187,8 @@ class AuthObserverTest extends \PHPUnit\Framework\TestCase
             ->method('getValue')
             ->willReturn(1);
 
-        /** @var Collection|\PHPUnit\Framework\MockObject\MockObject $collectionMock */
-        $collectionMock = $this->getMockBuilder(\Magento\Framework\Message\Collection::class)
+        /** @var Collection|MockObject $collectionMock */
+        $collectionMock = $this->getMockBuilder(Collection::class)
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();
@@ -208,19 +211,19 @@ class AuthObserverTest extends \PHPUnit\Framework\TestCase
         $authResult = true;
         $lockExpires = '3015-07-08 11:14:15.638276';
 
-        /** @var Observer|\PHPUnit\Framework\MockObject\MockObject $eventObserverMock */
-        $eventObserverMock = $this->getMockBuilder(\Magento\Framework\Event\Observer::class)
+        /** @var Observer|MockObject $eventObserverMock */
+        $eventObserverMock = $this->getMockBuilder(Observer::class)
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();
 
-        /** @var Event|\PHPUnit\Framework\MockObject\MockObject */
-        $eventMock = $this->getMockBuilder(\Magento\Framework\Event::class)
+        /** @var Event|MockObject */
+        $eventMock = $this->getMockBuilder(Event::class)
             ->disableOriginalConstructor()
             ->setMethods(['getPassword', 'getUser', 'getResult'])
             ->getMock();
 
-        /** @var ModelUser|\PHPUnit\Framework\MockObject\MockObject $userMock */
+        /** @var ModelUser|MockObject $userMock */
         $userMock = $this->getMockBuilder(\Magento\User\Model\User::class)
             ->disableOriginalConstructor()
             ->setMethods(['getId', 'getLockExpires', 'getPassword'])
@@ -248,19 +251,19 @@ class AuthObserverTest extends \PHPUnit\Framework\TestCase
         $firstFailure = '1965-07-08 11:14:15.638276';
         $numOfFailures = 5;
 
-        /** @var Observer|\PHPUnit\Framework\MockObject\MockObject $eventObserverMock */
-        $eventObserverMock = $this->getMockBuilder(\Magento\Framework\Event\Observer::class)
+        /** @var Observer|MockObject $eventObserverMock */
+        $eventObserverMock = $this->getMockBuilder(Observer::class)
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();
 
-        /** @var Event|\PHPUnit\Framework\MockObject\MockObject */
-        $eventMock = $this->getMockBuilder(\Magento\Framework\Event::class)
+        /** @var Event|MockObject */
+        $eventMock = $this->getMockBuilder(Event::class)
             ->disableOriginalConstructor()
             ->setMethods(['getPassword', 'getUser', 'getResult'])
             ->getMock();
 
-        /** @var ModelUser|\PHPUnit\Framework\MockObject\MockObject $userMock */
+        /** @var ModelUser|MockObject $userMock */
         $userMock = $this->getMockBuilder(\Magento\User\Model\User::class)
             ->disableOriginalConstructor()
             ->setMethods(['getId', 'getFailuresNum', 'getFirstFailure'])

@@ -3,18 +3,23 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Catalog\Test\Unit\Model\Attribute\Config;
 
-class ConverterTest extends \PHPUnit\Framework\TestCase
+use Magento\Catalog\Model\Attribute\Config\Converter;
+use PHPUnit\Framework\TestCase;
+
+class ConverterTest extends TestCase
 {
     /**
-     * @var \Magento\Catalog\Model\Attribute\Config\Converter
+     * @var Converter
      */
     protected $_model;
 
     protected function setUp(): void
     {
-        $this->_model = new \Magento\Catalog\Model\Attribute\Config\Converter();
+        $this->_model = new Converter();
     }
 
     public function testConvert()

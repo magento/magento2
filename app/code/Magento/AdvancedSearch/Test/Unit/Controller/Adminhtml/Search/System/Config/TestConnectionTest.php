@@ -3,53 +3,65 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\AdvancedSearch\Test\Unit\Controller\Adminhtml\Search\System\Config;
 
 use Magento\AdvancedSearch\Controller\Adminhtml\Search\System\Config\TestConnection;
-use Magento\AdvancedSearch\Model\Client\ClientResolver;
 use Magento\AdvancedSearch\Model\Client\ClientInterface;
+use Magento\AdvancedSearch\Model\Client\ClientResolver;
+use Magento\Backend\App\Action\Context;
+use Magento\Framework\App\Request\Http as HttpRequest;
+use Magento\Framework\App\Response\Http as HttpResponse;
+use Magento\Framework\Controller\Result\Json;
+use Magento\Framework\Controller\Result\JsonFactory;
+use Magento\Framework\Filter\StripTags;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
- * Class TestConnectionTest
- *
+ * @covers \Magento\AdvancedSearch\Controller\Adminhtml\Search\System\Config\TestConnection
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class TestConnectionTest extends \PHPUnit\Framework\TestCase
+class TestConnectionTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\App\Request\Http|\PHPUnit\Framework\MockObject\MockObject
+     * Testable Object
+     *
+     * @var TestConnection
      */
-    protected $requestMock;
+    private $controller;
 
     /**
-     * @var ClientResolver|\PHPUnit\Framework\MockObject\MockObject
+     * @var HttpRequest|MockObject
+     */
+    private $requestMock;
+
+    /**
+     * @var ClientResolver|MockObject
      */
     private $clientResolverMock;
 
     /**
-     * @var ClientInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var ClientInterface|MockObject
      */
     private $clientMock;
 
     /**
-     * @var \Magento\Framework\Controller\Result\Json|\PHPUnit\Framework\MockObject\MockObject
+     * @var Json|MockObject
      */
-    private $resultJson;
+    private $resultJsonMock;
 
     /**
-     * @var \Magento\Framework\Controller\Result\JsonFactory|\PHPUnit\Framework\MockObject\MockObject
+     * @var JsonFactory|MockObject
      */
-    private $resultJsonFactory;
+    private $resultJsonFactoryMock;
 
     /**
-     * @var \Magento\Framework\Filter\StripTags|\PHPUnit\Framework\MockObject\MockObject
+     * @var StripTags|MockObject
      */
     private $tagFilterMock;
-
-    /**
-     * @var TestConnection
-     */
-    private $controller;
 
     /**
      * Setup test function
@@ -58,15 +70,15 @@ class TestConnectionTest extends \PHPUnit\Framework\TestCase
      */
     protected function setUp(): void
     {
-        $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->requestMock = $this->createPartialMock(\Magento\Framework\App\Request\Http::class, ['getParams']);
-        $responseMock = $this->createMock(\Magento\Framework\App\Response\Http::class);
+        $helper = new ObjectManager($this);
+        $this->requestMock = $this->createPartialMock(HttpRequest::class, ['getParams']);
+        $responseMock = $this->createMock(HttpResponse::class);
 
-        $context = $this->getMockBuilder(\Magento\Backend\App\Action\Context::class)
+        $context = $this->getMockBuilder(Context::class)
             ->setMethods(['getRequest', 'getResponse', 'getMessageManager', 'getSession'])
             ->setConstructorArgs(
                 $helper->getConstructArguments(
-                    \Magento\Backend\App\Action\Context::class,
+                    Context::class,
                     [
                         'request' => $this->requestMock
                     ]
@@ -76,23 +88,23 @@ class TestConnectionTest extends \PHPUnit\Framework\TestCase
         $context->expects($this->once())->method('getRequest')->willReturn($this->requestMock);
         $context->expects($this->once())->method('getResponse')->willReturn($responseMock);
 
-        $this->clientResolverMock = $this->getMockBuilder(\Magento\AdvancedSearch\Model\Client\ClientResolver::class)
+        $this->clientResolverMock = $this->getMockBuilder(ClientResolver::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
 
-        $this->clientMock = $this->createMock(\Magento\AdvancedSearch\Model\Client\ClientInterface::class);
+        $this->clientMock = $this->createMock(ClientInterface::class);
 
-        $this->resultJson = $this->getMockBuilder(\Magento\Framework\Controller\Result\Json::class)
+        $this->resultJsonMock = $this->getMockBuilder(Json::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->resultJsonFactory = $this->getMockBuilder(\Magento\Framework\Controller\Result\JsonFactory::class)
+        $this->resultJsonFactoryMock = $this->getMockBuilder(JsonFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
 
-        $this->tagFilterMock = $this->getMockBuilder(\Magento\Framework\Filter\StripTags::class)
+        $this->tagFilterMock = $this->getMockBuilder(StripTags::class)
             ->disableOriginalConstructor()
             ->setMethods(['filter'])
             ->getMock();
@@ -100,69 +112,69 @@ class TestConnectionTest extends \PHPUnit\Framework\TestCase
         $this->controller = new TestConnection(
             $context,
             $this->clientResolverMock,
-            $this->resultJsonFactory,
+            $this->resultJsonFactoryMock,
             $this->tagFilterMock
         );
     }
 
-    public function testExecuteEmptyEngine()
+    public function testExecuteEmptyEngine(): void
     {
         $this->requestMock->expects($this->once())->method('getParams')
             ->willReturn(['engine' => '']);
 
-        $this->resultJsonFactory->expects($this->once())->method('create')
-            ->willReturn($this->resultJson);
+        $this->resultJsonFactoryMock->expects($this->once())->method('create')
+            ->willReturn($this->resultJsonMock);
 
         $result = ['success' => false, 'errorMessage' => 'Missing search engine parameter.'];
 
-        $this->resultJson->expects($this->once())->method('setData')
-            ->with($this->equalTo($result));
+        $this->resultJsonMock->expects($this->once())->method('setData')
+            ->with($result);
 
         $this->controller->execute();
     }
 
-    public function testExecute()
+    public function testExecute(): void
     {
         $this->requestMock->expects($this->once())->method('getParams')
             ->willReturn(['engine' => 'engineName']);
 
         $this->clientResolverMock->expects($this->once())->method('create')
-            ->with($this->equalTo('engineName'))
+            ->with('engineName')
             ->willReturn($this->clientMock);
 
         $this->clientMock->expects($this->once())->method('testConnection')
             ->willReturn(true);
 
-        $this->resultJsonFactory->expects($this->once())->method('create')
-            ->willReturn($this->resultJson);
+        $this->resultJsonFactoryMock->expects($this->once())->method('create')
+            ->willReturn($this->resultJsonMock);
 
         $result = ['success' => true, 'errorMessage' => ''];
 
-        $this->resultJson->expects($this->once())->method('setData')
-            ->with($this->equalTo($result));
+        $this->resultJsonMock->expects($this->once())->method('setData')
+            ->with($result);
 
         $this->controller->execute();
     }
 
-    public function testExecutePingFailed()
+    public function testExecutePingFailed(): void
     {
         $this->requestMock->expects($this->once())->method('getParams')
             ->willReturn(['engine' => 'engineName']);
 
         $this->clientResolverMock->expects($this->once())->method('create')
-            ->with($this->equalTo('engineName'))
+            ->with('engineName')
             ->willReturn($this->clientMock);
 
         $this->clientMock->expects($this->once())->method('testConnection')
             ->willReturn(false);
 
-        $this->resultJsonFactory->expects($this->once())->method('create')
-            ->willReturn($this->resultJson);
+        $this->resultJsonFactoryMock->expects($this->once())->method('create')
+            ->willReturn($this->resultJsonMock);
 
         $result = ['success' => false, 'errorMessage' => ''];
 
-        $this->resultJson->expects($this->once())->method('setData')
-            ->with($this->equalTo($result));
+        $this->resultJsonMock->expects($this->once())->method('setData')
+            ->with($result);
 
         $this->controller->execute();
     }

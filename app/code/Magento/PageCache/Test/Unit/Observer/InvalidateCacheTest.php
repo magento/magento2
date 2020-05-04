@@ -4,21 +4,31 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\PageCache\Test\Unit\Observer;
 
-class InvalidateCacheTest extends \PHPUnit\Framework\TestCase
+use Magento\Framework\App\Cache\TypeList;
+use Magento\Framework\App\Cache\TypeListInterface;
+use Magento\Framework\Event\Observer;
+use Magento\PageCache\Model\Config;
+use Magento\PageCache\Observer\InvalidateCache;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class InvalidateCacheTest extends TestCase
 {
-    /** @var \Magento\PageCache\Observer\InvalidateCache */
+    /** @var InvalidateCache */
     protected $_model;
 
-    /** @var \PHPUnit\Framework\MockObject\MockObject|\Magento\PageCache\Model\Config */
+    /** @var MockObject|Config */
     protected $_configMock;
 
-    /** @var  \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\App\Cache\TypeListInterface */
+    /** @var  MockObject|TypeListInterface */
     protected $_typeListMock;
 
     /**
-     * @var \Magento\Framework\Event\Observer|\PHPUnit\Framework\MockObject\MockObject|
+     * @var Observer|MockObject
      */
     protected $observerMock;
 
@@ -27,12 +37,12 @@ class InvalidateCacheTest extends \PHPUnit\Framework\TestCase
      */
     protected function setUp(): void
     {
-        $this->_configMock = $this->createPartialMock(\Magento\PageCache\Model\Config::class, ['getType', 'isEnabled']);
-        $this->_typeListMock = $this->createMock(\Magento\Framework\App\Cache\TypeList::class);
+        $this->_configMock = $this->createPartialMock(Config::class, ['getType', 'isEnabled']);
+        $this->_typeListMock = $this->createMock(TypeList::class);
 
-        $this->observerMock = $this->createMock(\Magento\Framework\Event\Observer::class);
+        $this->observerMock = $this->createMock(Observer::class);
 
-        $this->_model = new \Magento\PageCache\Observer\InvalidateCache(
+        $this->_model = new InvalidateCache(
             $this->_configMock,
             $this->_typeListMock
         );
@@ -47,7 +57,7 @@ class InvalidateCacheTest extends \PHPUnit\Framework\TestCase
         $this->_configMock->expects($this->once())->method('isEnabled')->willReturn($cacheState);
 
         if ($cacheState) {
-            $this->_typeListMock->expects($this->once())->method('invalidate')->with($this->equalTo('full_page'));
+            $this->_typeListMock->expects($this->once())->method('invalidate')->with('full_page');
         }
 
         $this->_model->execute($this->observerMock);

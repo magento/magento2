@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -8,6 +8,7 @@ namespace Magento\Developer\Test\Unit\Console\Command;
 
 use Magento\Developer\Console\Command\ProfilerDisableCommand;
 use Magento\Framework\Filesystem\Io\File;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Tester\CommandTester;
 
@@ -19,7 +20,7 @@ use Symfony\Component\Console\Tester\CommandTester;
 class ProfilerDisableCommandTest extends TestCase
 {
     /**
-     * @var File|\PHPUnit\Framework\MockObject\MockObject
+     * @var File|MockObject
      */
     private $filesystemMock;
 

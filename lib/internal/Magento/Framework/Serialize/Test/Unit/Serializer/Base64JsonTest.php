@@ -3,20 +3,28 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\Serialize\Test\Unit\Serializer;
 
-class Base64JsonTest extends \PHPUnit\Framework\TestCase
+use Magento\Framework\DataObject;
+use Magento\Framework\Serialize\Serializer\Base64Json;
+use Magento\Framework\Serialize\Serializer\Json;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\TestCase;
+
+class Base64JsonTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\Serialize\Serializer\Base64Json
+     * @var Base64Json
      */
     private $base64json;
 
     protected function setUp(): void
     {
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->base64json = $objectManager->getObject(\Magento\Framework\Serialize\Serializer\Base64Json::class, [
-            'jsonSerializer' => new \Magento\Framework\Serialize\Serializer\Json()
+        $objectManager = new ObjectManager($this);
+        $this->base64json = $objectManager->getObject(Base64Json::class, [
+            'jsonSerializer' => new Json()
         ]);
     }
 
@@ -35,13 +43,13 @@ class Base64JsonTest extends \PHPUnit\Framework\TestCase
      */
     public function serializeDataProvider()
     {
-        $dataObject = new \Magento\Framework\DataObject(['something']);
+        $dataObject = new DataObject(['something']);
         return [
             ['', 'IiI='], // ""
             ['string', 'InN0cmluZyI='], // "string"
             [null, 'bnVsbA=='], // null
             [false, 'ZmFsc2U='], // false
-            [['a' => 'b', 'd' => 123], 'eyJhIjoiYiIsImQiOjEyM30='], // {"a":"b","d":123}
+            [['a' => 'b', 'd' => 123], 'eyJhIjoiYiIsImQiOjEyM30='], // Means: {"a":"b","d":123}
             [123, 'MTIz'], // 123
             [10.56, 'MTAuNTY='], // 10.56
             [$dataObject, 'e30='], // {}

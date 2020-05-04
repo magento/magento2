@@ -3,12 +3,18 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Catalog\Test\Unit\Helper;
 
-class ProductTest extends \PHPUnit\Framework\TestCase
+use Magento\Catalog\Helper\Product;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\TestCase;
+
+class ProductTest extends TestCase
 {
     /**
-     * @var \Magento\Catalog\Helper\Product
+     * @var Product
      */
     protected $_productHelper;
 
@@ -21,8 +27,8 @@ class ProductTest extends \PHPUnit\Framework\TestCase
             ],
         ];
 
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->_productHelper = $objectManager->getObject(\Magento\Catalog\Helper\Product::class, $arguments);
+        $objectManager = new ObjectManager($this);
+        $this->_productHelper = $objectManager->getObject(Product::class, $arguments);
     }
 
     /**
@@ -43,31 +49,34 @@ class ProductTest extends \PHPUnit\Framework\TestCase
     {
         $product1 = $this->getMockBuilder(
             \Magento\Catalog\Model\Product::class
-        )->disableOriginalConstructor()->getMock();
+        )->disableOriginalConstructor()
+            ->getMock();
 
         $product2 = $this->getMockBuilder(
             \Magento\Catalog\Model\Product::class
-        )->disableOriginalConstructor()->getMock();
+        )->disableOriginalConstructor()
+            ->getMock();
 
         $product2->expects(
             $this->once()
         )->method(
             'getData'
         )->with(
-            $this->equalTo('attribute')
+            'attribute'
         )->willReturn(
             true
         );
 
         $product3 = $this->getMockBuilder(
             \Magento\Catalog\Model\Product::class
-        )->disableOriginalConstructor()->getMock();
+        )->disableOriginalConstructor()
+            ->getMock();
         $product3->expects(
             $this->once()
         )->method(
             'dataHasChangedFor'
         )->with(
-            $this->equalTo('attribute')
+            'attribute'
         )->willReturn(
             true
         );

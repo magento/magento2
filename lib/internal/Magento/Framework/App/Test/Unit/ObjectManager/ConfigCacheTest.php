@@ -3,37 +3,44 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\App\Test\Unit\ObjectManager;
 
+use Magento\Framework\App\ObjectManager\ConfigCache;
+use Magento\Framework\Cache\FrontendInterface;
 use Magento\Framework\Serialize\SerializerInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class ConfigCacheTest extends \PHPUnit\Framework\TestCase
+class ConfigCacheTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\App\ObjectManager\ConfigCache
+     * @var ConfigCache
      */
     private $configCache;
 
     /**
-     * @var \Magento\Framework\App\ObjectManager\ConfigCache|\PHPUnit\Framework\MockObject\MockObject
+     * @var ConfigCache|MockObject
      */
     private $cacheFrontendMock;
 
     /**
-     * @var \Magento\Framework\Serialize\SerializerInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var SerializerInterface|MockObject
      */
     private $serializerMock;
 
     protected function setUp(): void
     {
-        $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->cacheFrontendMock = $this->createMock(\Magento\Framework\Cache\FrontendInterface::class);
+        $objectManagerHelper = new ObjectManager($this);
+        $this->cacheFrontendMock = $this->createMock(FrontendInterface::class);
         $this->configCache = $objectManagerHelper->getObject(
-            \Magento\Framework\App\ObjectManager\ConfigCache::class,
+            ConfigCache::class,
             ['cacheFrontend' => $this->cacheFrontendMock]
         );
 
-        $this->serializerMock = $this->getMockForAbstractClass(SerializerInterface::class);
+        $this->serializerMock = $this->createMock(SerializerInterface::class);
         $objectManagerHelper->setBackwardCompatibleProperty(
             $this->configCache,
             'serializer',

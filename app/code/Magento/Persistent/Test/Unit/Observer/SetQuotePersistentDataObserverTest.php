@@ -4,66 +4,82 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Persistent\Test\Unit\Observer;
+
+use Magento\Framework\Event;
+use Magento\Framework\Event\Observer;
+use Magento\Persistent\Helper\Data;
+use Magento\Persistent\Helper\Session;
+use Magento\Persistent\Model\QuoteManager;
+use Magento\Persistent\Observer\SetQuotePersistentDataObserver;
+use Magento\Quote\Model\Quote;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Observer test for setting "is_persistent" value to quote
  */
-class SetQuotePersistentDataObserverTest extends \PHPUnit\Framework\TestCase
+class SetQuotePersistentDataObserverTest extends TestCase
 {
     /**
-     * @var \Magento\Persistent\Observer\SetQuotePersistentDataObserver
+     * @var SetQuotePersistentDataObserver
      */
     protected $model;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $helperMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $sessionHelperMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $customerSessionMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $observerMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $quoteManagerMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $eventManagerMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $quoteMock;
 
     protected function setUp(): void
     {
-        $quoteMethods = ['setIsActive', 'setIsPersistent', '__wakeUp'];
-        $eventMethods = ['getQuote', '__wakeUp'];
-        $this->quoteMock = $this->createPartialMock(\Magento\Quote\Model\Quote::class, $quoteMethods);
-        $this->helperMock = $this->createMock(\Magento\Persistent\Helper\Data::class);
-        $this->sessionHelperMock = $this->createMock(\Magento\Persistent\Helper\Session::class);
-        $this->eventManagerMock = $this->createPartialMock(\Magento\Framework\Event::class, $eventMethods);
+        $this->quoteMock = $this->getMockBuilder(Quote::class)
+            ->addMethods(['setIsPersistent'])
+            ->onlyMethods(['setIsActive'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->helperMock = $this->createMock(Data::class);
+        $this->sessionHelperMock = $this->createMock(Session::class);
+        $this->eventManagerMock = $this->getMockBuilder(Event::class)
+            ->addMethods(['getQuote'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->customerSessionMock = $this->createMock(\Magento\Customer\Model\Session::class);
-        $this->observerMock = $this->createMock(\Magento\Framework\Event\Observer::class);
-        $this->quoteManagerMock = $this->createMock(\Magento\Persistent\Model\QuoteManager::class);
-        $this->model = new \Magento\Persistent\Observer\SetQuotePersistentDataObserver(
+        $this->observerMock = $this->createMock(Observer::class);
+        $this->quoteManagerMock = $this->createMock(QuoteManager::class);
+        $this->model = new SetQuotePersistentDataObserver(
             $this->sessionHelperMock,
             $this->helperMock,
             $this->quoteManagerMock,

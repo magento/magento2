@@ -1,31 +1,42 @@
 <?php
+
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Bundle\Test\Unit\Block\Adminhtml\Sales\Order\View\Items;
 
-class RendererTest extends \PHPUnit\Framework\TestCase
+use Magento\Bundle\Block\Adminhtml\Sales\Order\View\Items\Renderer;
+use Magento\Framework\Serialize\Serializer\Json;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Sales\Model\Order\Item;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class RendererTest extends TestCase
 {
-    /** @var \Magento\Sales\Model\Order\Item|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var Item|MockObject */
     protected $orderItem;
 
-    /** @var \Magento\Bundle\Block\Adminhtml\Sales\Order\View\Items\Renderer $model */
+    /** @var Renderer $model */
     protected $model;
 
-    /** @var \Magento\Framework\Serialize\Serializer\Json|\PHPUnit\Framework\MockObject\MockObject $serializer */
+    /** @var Json|MockObject $serializer */
     protected $serializer;
 
     protected function setUp(): void
     {
-        $this->orderItem = $this->createPartialMock(
-            \Magento\Sales\Model\Order\Item::class,
-            ['getProductOptions', '__wakeup', 'getParentItem', 'getOrderItem']
-        );
-        $this->serializer = $this->createMock(\Magento\Framework\Serialize\Serializer\Json::class);
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $this->orderItem = $this->getMockBuilder(Item::class)
+            ->addMethods(['getOrderItem'])
+            ->onlyMethods(['getProductOptions', 'getParentItem'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->serializer = $this->createMock(Json::class);
+        $objectManager = new ObjectManager($this);
         $this->model = $objectManager->getObject(
-            \Magento\Bundle\Block\Adminhtml\Sales\Order\View\Items\Renderer::class,
+            Renderer::class,
             ['serializer' => $this->serializer]
         );
     }
@@ -59,9 +70,7 @@ class RendererTest extends \PHPUnit\Framework\TestCase
     public function testIsShipmentSeparatelyWithItem($productOptions, $result, $parentItem)
     {
         if ($parentItem) {
-            $parentItem =
-                $this->createPartialMock(\Magento\Sales\Model\Order\Item::class, ['getProductOptions',
-                    '__wakeup']);
+            $parentItem = $this->createPartialMock(Item::class, ['getProductOptions']);
             $parentItem->expects($this->any())->method('getProductOptions')->willReturn($productOptions);
         } else {
             $this->orderItem->expects($this->any())->method('getProductOptions')
@@ -116,8 +125,13 @@ class RendererTest extends \PHPUnit\Framework\TestCase
     {
         if ($parentItem) {
             $parentItem =
-                $this->createPartialMock(\Magento\Sales\Model\Order\Item::class, ['getProductOptions',
-                    '__wakeup']);
+                $this->createPartialMock(
+                    Item::class,
+                    [
+                        'getProductOptions',
+                        '__wakeup'
+                    ]
+                );
             $parentItem->expects($this->any())->method('getProductOptions')->willReturn($productOptions);
         } else {
             $this->orderItem->expects($this->any())->method('getProductOptions')

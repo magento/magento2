@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Unit\Plugin\Model\AttributeSetRepository;
 
@@ -12,6 +13,7 @@ use Magento\Catalog\Plugin\Model\AttributeSetRepository\RemoveProducts;
 use Magento\Eav\Api\AttributeSetRepositoryInterface;
 use Magento\Eav\Api\Data\AttributeSetInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -25,7 +27,7 @@ class RemoveProductsTest extends TestCase
     private $testSubject;
 
     /**
-     * @var CollectionFactory|\PHPUnit\Framework\MockObject\MockObject
+     * @var CollectionFactory|MockObject
      */
     private $collectionFactory;
 
@@ -54,7 +56,7 @@ class RemoveProductsTest extends TestCase
     {
         $attributeSetId = '1';
 
-        /** @var Collection|\PHPUnit\Framework\MockObject\MockObject $collection */
+        /** @var Collection|MockObject $collection */
         $collection = $this->getMockBuilder(Collection::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -68,12 +70,12 @@ class RemoveProductsTest extends TestCase
             ->method('create')
             ->willReturn($collection);
 
-        /** @var AttributeSetRepositoryInterface|\PHPUnit\Framework\MockObject\MockObject $attributeSetRepository */
+        /** @var AttributeSetRepositoryInterface|MockObject $attributeSetRepository */
         $attributeSetRepository = $this->getMockBuilder(AttributeSetRepositoryInterface::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
-        /** @var AttributeSetInterface|\PHPUnit\Framework\MockObject\MockObject $attributeSet */
+        /** @var AttributeSetInterface|MockObject $attributeSet */
         $attributeSet = $this->getMockBuilder(AttributeSetInterface::class)
             ->setMethods(['getId'])
             ->disableOriginalConstructor()

@@ -3,86 +3,100 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\CurrencySymbol\Test\Unit\Model\System;
 
+use Magento\Config\Model\Config;
+use Magento\Config\Model\Config\Factory;
 use Magento\CurrencySymbol\Model\System\Currencysymbol;
+use Magento\Framework\App\Cache\TypeListInterface;
+use Magento\Framework\App\Config\ReinitableConfigInterface;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\Event\ManagerInterface;
+use Magento\Framework\Locale\ResolverInterface;
 use Magento\Framework\Serialize\Serializer\Json;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Store\Model\Group;
 use Magento\Store\Model\ScopeInterface;
+use Magento\Store\Model\StoreManagerInterface;
+use Magento\Store\Model\System\Store;
+use Magento\Store\Model\Website;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
- * Class CurrencysymbolTest
- *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class CurrencysymbolTest extends \PHPUnit\Framework\TestCase
+class CurrencysymbolTest extends TestCase
 {
     /**
      * Object manager helper
      *
-     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
+     * @var ObjectManager
      */
     private $objectManagerHelper;
 
     /**
-     * @var \Magento\Framework\Locale\ResolverInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var ResolverInterface|MockObject
      */
     private $localeResolverMock;
 
     /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var ScopeConfigInterface|MockObject
      */
     private $scopeConfigMock;
 
     /**
-     * @var \Magento\Store\Model\System\Store|\PHPUnit\Framework\MockObject\MockObject
+     * @var Store|MockObject
      */
     private $systemStoreMock;
 
     /**
-     * @var \Magento\Config\Model\Config\Factory|\PHPUnit\Framework\MockObject\MockObject
+     * @var Factory|MockObject
      */
     private $configFactoryMock;
 
     /**
-     * @var \Magento\Framework\Event\ManagerInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var ManagerInterface|MockObject
      */
     private $eventManagerMock;
 
     /**
-     * @var \Magento\Framework\App\Config\ReinitableConfigInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var ReinitableConfigInterface|MockObject
      */
     private $coreConfigMock;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var StoreManagerInterface|MockObject
      */
     private $storeManagerMock;
 
     /**
-     * @var \Magento\Framework\App\Cache\TypeListInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var TypeListInterface|MockObject
      */
     private $cacheTypeListMock;
 
     /**
-     * @var Json|\PHPUnit\Framework\MockObject\MockObject
+     * @var Json|MockObject
      */
     private $serializerMock;
 
     /**
-     * @var \Magento\CurrencySymbol\Model\System\Currencysymbol
+     * @var Currencysymbol
      */
     private $model;
 
     protected function setUp(): void
     {
-        $this->objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $this->objectManagerHelper = new ObjectManager($this);
 
         $this->scopeConfigMock = $this->createPartialMock(
-            \Magento\Framework\App\Config\ScopeConfigInterface::class,
+            ScopeConfigInterface::class,
             ['getValue', 'isSetFlag']
         );
         $this->localeResolverMock = $this->createPartialMock(
-            \Magento\Framework\Locale\ResolverInterface::class,
+            ResolverInterface::class,
             [
                 'getLocale',
                 'getDefaultLocalePath',
@@ -94,26 +108,26 @@ class CurrencysymbolTest extends \PHPUnit\Framework\TestCase
             ]
         );
         $this->systemStoreMock = $this->createPartialMock(
-            \Magento\Store\Model\System\Store::class,
+            Store::class,
             ['getWebsiteCollection', 'getGroupCollection', 'getStoreCollection']
         );
-        $this->configFactoryMock = $this->createPartialMock(\Magento\Config\Model\Config\Factory::class, ['create']);
+        $this->configFactoryMock = $this->createPartialMock(Factory::class, ['create']);
         $this->eventManagerMock = $this->createPartialMock(
-            \Magento\Framework\Event\ManagerInterface::class,
+            ManagerInterface::class,
             ['dispatch']
         );
         $this->coreConfigMock = $this->createPartialMock(
-            \Magento\Framework\App\Config\ReinitableConfigInterface::class,
+            ReinitableConfigInterface::class,
             ['reinit', 'setValue', 'getValue', 'isSetFlag']
         );
-        $this->storeManagerMock = $this->createMock(\Magento\Store\Model\StoreManagerInterface::class);
-        $this->cacheTypeListMock = $this->createMock(\Magento\Framework\App\Cache\TypeListInterface::class);
+        $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
+        $this->cacheTypeListMock = $this->createMock(TypeListInterface::class);
         $this->serializerMock = $this->getMockBuilder(Json::class)
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->model = $this->objectManagerHelper->getObject(
-            \Magento\CurrencySymbol\Model\System\Currencysymbol::class,
+            Currencysymbol::class,
             [
                 'scopeConfig' => $this->scopeConfigMock,
                 'localeResolver' => $this->localeResolverMock,
@@ -170,7 +184,7 @@ class CurrencysymbolTest extends \PHPUnit\Framework\TestCase
         $this->expectSaveOfCustomSymbols($configValue);
         $this->expectApplicationServiceMethodsCalls();
         $this->assertInstanceOf(
-            \Magento\CurrencySymbol\Model\System\Currencysymbol::class,
+            Currencysymbol::class,
             $this->model->setCurrencySymbolsData($symbols)
         );
     }
@@ -183,9 +197,9 @@ class CurrencysymbolTest extends \PHPUnit\Framework\TestCase
     private function expectSaveOfCustomSymbols(array $configValue)
     {
         /**
-         * @var \Magento\Config\Model\Config|\PHPUnit\Framework\MockObject\MockObject
+         * @var Config|MockObject
          */
-        $configMock = $this->getMockBuilder(\Magento\Config\Model\Config::class)
+        $configMock = $this->getMockBuilder(Config::class)
             ->disableOriginalConstructor()
             ->setMethods(['setSection', 'setWebsite', 'setStore', 'setGroups', 'save'])
             ->getMock();
@@ -270,7 +284,7 @@ class CurrencysymbolTest extends \PHPUnit\Framework\TestCase
         $this->serializerMock->expects($this->never())
             ->method('unserialize');
         $currencySymbol = $this->model->getCurrencySymbol('USD');
-        $this->assertFalse($currencySymbol);
+        $this->assertEquals(false, $currencySymbol);
     }
 
     /**
@@ -287,17 +301,17 @@ class CurrencysymbolTest extends \PHPUnit\Framework\TestCase
     ) {
         $customSymbolsSerialized = '{"USD":"custom $"}';
         /**
-         * @var \Magento\Store\Model\Website|\PHPUnit\Framework\MockObject\MockObject
+         * @var Website|MockObject
          */
-        $websiteMock = $this->createPartialMock(\Magento\Store\Model\Website::class, ['getId', 'getConfig']);
+        $websiteMock = $this->createPartialMock(Website::class, ['getId', 'getConfig']);
 
         /**
-         * @var \Magento\Store\Model\Group|\PHPUnit\Framework\MockObject\MockObject
+         * @var Group|MockObject
          */
-        $groupMock = $this->createPartialMock(\Magento\Store\Model\Group::class, ['getId', 'getWebsiteId']);
+        $groupMock = $this->createPartialMock(Group::class, ['getId', 'getWebsiteId']);
 
         /**
-         * @var \Magento\Store\Model\Store|\PHPUnit\Framework\MockObject\MockObject
+         * @var \Magento\Store\Model\Store|MockObject
          */
         $storeMock = $this->createPartialMock(\Magento\Store\Model\Store::class, ['getGroupId']);
 

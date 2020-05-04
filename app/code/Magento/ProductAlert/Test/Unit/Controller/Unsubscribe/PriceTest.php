@@ -17,11 +17,13 @@ use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Message\Manager;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\ProductAlert\Controller\Unsubscribe\Price;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test class for \Magento\ProductAlert\Controller\Unsubscribe\Price
  */
-class PriceTest extends \PHPUnit\Framework\TestCase
+class PriceTest extends TestCase
 {
     /**
      * @var Price
@@ -34,42 +36,42 @@ class PriceTest extends \PHPUnit\Framework\TestCase
     private $objectManager;
 
     /**
-     * @var Http|\PHPUnit\Framework\MockObject\MockObject
+     * @var Http|MockObject
      */
     private $requestMock;
 
     /**
-     * @var Redirect|\PHPUnit\Framework\MockObject\MockObject
+     * @var Redirect|MockObject
      */
     private $resultRedirectMock;
 
     /**
-     * @var ResultFactory|\PHPUnit\Framework\MockObject\MockObject
+     * @var ResultFactory|MockObject
      */
     private $resultFactoryMock;
 
     /**
-     * @var Manager|\PHPUnit\Framework\MockObject\MockObject
+     * @var Manager|MockObject
      */
     private $messageManagerMock;
 
     /**
-     * @var Product|\PHPUnit\Framework\MockObject\MockObject
+     * @var Product|MockObject
      */
     private $productMock;
 
     /**
-     * @var Session|\PHPUnit\Framework\MockObject\MockObject
+     * @var Session|MockObject
      */
     private $customerSessionMock;
 
     /**
-     * @var Context|\PHPUnit\Framework\MockObject\MockObject
+     * @var Context|MockObject
      */
     private $contextMock;
 
     /**
-     * @var ProductRepositoryInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var ProductRepositoryInterface|MockObject
      */
     private $productRepositoryMock;
 
@@ -114,7 +116,9 @@ class PriceTest extends \PHPUnit\Framework\TestCase
             ->with($productId)
             ->willReturn($this->productMock);
         $this->productMock->expects($this->any())->method('isVisibleInCatalog')->willReturn(false);
-        $this->messageManagerMock->expects($this->once())->method('addErrorMessage')->with(__("The product wasn't found. Verify the product and try again."));
+        $this->messageManagerMock->expects($this->once())
+            ->method('addErrorMessage')
+            ->with(__("The product wasn't found. Verify the product and try again."));
         $this->resultRedirectMock->expects($this->once())->method('setPath')->with('customer/account/');
 
         $this->assertEquals(

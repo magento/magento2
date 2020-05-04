@@ -13,11 +13,13 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Sales\Model\Order\CustomerAssignment;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test for Magento\Sales\Model\Order\CustomerAssignment class.
  */
-class CustomerAssigmentTest extends \PHPUnit\Framework\TestCase
+class CustomerAssigmentTest extends TestCase
 {
     /**
      * @var CustomerAssignment
@@ -25,22 +27,22 @@ class CustomerAssigmentTest extends \PHPUnit\Framework\TestCase
     private $customerAssignment;
 
     /**
-     * @var OrderInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var OrderInterface|MockObject
      */
     private $orderMock;
 
     /**
-     * @var CustomerInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var CustomerInterface|MockObject
      */
     private $customerMock;
 
     /**
-     * @var OrderRepositoryInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var OrderRepositoryInterface|MockObject
      */
     private $orderRepositoryMock;
 
     /**
-     * @var ManagerInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var ManagerInterface|MockObject
      */
     private $eventManagerMock;
 

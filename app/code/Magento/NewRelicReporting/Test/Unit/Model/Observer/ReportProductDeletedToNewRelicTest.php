@@ -3,14 +3,18 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\NewRelicReporting\Test\Unit\Model\Observer;
 
+use Magento\Framework\Event\Observer;
+use Magento\NewRelicReporting\Model\Config;
+use Magento\NewRelicReporting\Model\NewRelicWrapper;
 use Magento\NewRelicReporting\Model\Observer\ReportProductDeletedToNewRelic;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-/**
- * Class ReportProductDeletedToNewRelicTest
- */
-class ReportProductDeletedToNewRelicTest extends \PHPUnit\Framework\TestCase
+class ReportProductDeletedToNewRelicTest extends TestCase
 {
     /**
      * @var ReportProductDeletedToNewRelic
@@ -18,12 +22,12 @@ class ReportProductDeletedToNewRelicTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \Magento\NewRelicReporting\Model\Config|\PHPUnit\Framework\MockObject\MockObject
+     * @var Config|MockObject
      */
     protected $config;
 
     /**
-     * @var \Magento\NewRelicReporting\Model\NewRelicWrapper|\PHPUnit\Framework\MockObject\MockObject
+     * @var NewRelicWrapper|MockObject
      */
     protected $newRelicWrapper;
 
@@ -34,11 +38,11 @@ class ReportProductDeletedToNewRelicTest extends \PHPUnit\Framework\TestCase
      */
     protected function setUp(): void
     {
-        $this->config = $this->getMockBuilder(\Magento\NewRelicReporting\Model\Config::class)
+        $this->config = $this->getMockBuilder(Config::class)
             ->disableOriginalConstructor()
             ->setMethods(['isNewRelicEnabled'])
             ->getMock();
-        $this->newRelicWrapper = $this->getMockBuilder(\Magento\NewRelicReporting\Model\NewRelicWrapper::class)
+        $this->newRelicWrapper = $this->getMockBuilder(NewRelicWrapper::class)
             ->disableOriginalConstructor()
             ->setMethods(['addCustomParameter'])
             ->getMock();
@@ -56,8 +60,8 @@ class ReportProductDeletedToNewRelicTest extends \PHPUnit\Framework\TestCase
      */
     public function testReportProductDeletedToNewRelicModuleDisabledFromConfig()
     {
-        /** @var \Magento\Framework\Event\Observer|\PHPUnit\Framework\MockObject\MockObject $eventObserver */
-        $eventObserver = $this->getMockBuilder(\Magento\Framework\Event\Observer::class)
+        /** @var Observer|MockObject $eventObserver */
+        $eventObserver = $this->getMockBuilder(Observer::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -75,8 +79,8 @@ class ReportProductDeletedToNewRelicTest extends \PHPUnit\Framework\TestCase
      */
     public function testReportProductDeletedToNewRelic()
     {
-        /** @var \Magento\Framework\Event\Observer|\PHPUnit\Framework\MockObject\MockObject $eventObserver */
-        $eventObserver = $this->getMockBuilder(\Magento\Framework\Event\Observer::class)
+        /** @var Observer|MockObject $eventObserver */
+        $eventObserver = $this->getMockBuilder(Observer::class)
             ->disableOriginalConstructor()
             ->getMock();
 

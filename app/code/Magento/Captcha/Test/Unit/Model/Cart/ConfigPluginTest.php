@@ -3,24 +3,32 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Captcha\Test\Unit\Model\Cart;
 
-class ConfigPluginTest extends \PHPUnit\Framework\TestCase
+use Magento\Captcha\Model\Cart\ConfigPlugin;
+use Magento\Captcha\Model\Checkout\ConfigProvider;
+use Magento\Checkout\Block\Cart\Sidebar;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class ConfigPluginTest extends TestCase
 {
     /**
-     * @var \Magento\Captcha\Model\Cart\ConfigPlugin
+     * @var ConfigPlugin
      */
     protected $model;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $configProviderMock;
 
     protected function setUp(): void
     {
-        $this->configProviderMock = $this->createMock(\Magento\Captcha\Model\Checkout\ConfigProvider::class);
-        $this->model = new \Magento\Captcha\Model\Cart\ConfigPlugin(
+        $this->configProviderMock = $this->createMock(ConfigProvider::class);
+        $this->model = new ConfigPlugin(
             $this->configProviderMock
         );
     }
@@ -38,7 +46,7 @@ class ConfigPluginTest extends \PHPUnit\Framework\TestCase
             ]
         ];
         $expectedResult = array_merge_recursive($resultMock, $configMock);
-        $sidebarMock = $this->createMock(\Magento\Checkout\Block\Cart\Sidebar::class);
+        $sidebarMock = $this->createMock(Sidebar::class);
         $this->configProviderMock->expects($this->once())->method('getConfig')->willReturn($configMock);
 
         $this->assertEquals($expectedResult, $this->model->afterGetConfig($sidebarMock, $resultMock));

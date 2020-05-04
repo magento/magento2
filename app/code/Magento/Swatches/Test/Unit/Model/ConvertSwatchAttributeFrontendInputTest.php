@@ -3,17 +3,19 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Swatches\Test\Unit\Model;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\Swatches\Model\Swatch;
 use Magento\Swatches\Model\ConvertSwatchAttributeFrontendInput;
+use Magento\Swatches\Model\Swatch;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Tests for \Magento\Swatches\Model\ConvertSwatchAttributeFrontendInput.
  */
-class ConvertSwatchAttributeFrontendInputTest extends \PHPUnit\Framework\TestCase
+class ConvertSwatchAttributeFrontendInputTest extends TestCase
 {
     /**
      * @var ConvertSwatchAttributeFrontendInput

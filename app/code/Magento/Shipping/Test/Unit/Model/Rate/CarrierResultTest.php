@@ -45,7 +45,6 @@ class CarrierResultTest extends TestCase
      */
     public function testComposing(): void
     {
-
         $rate1 = $this->getMockBuilder(Method::class)
             ->disableOriginalConstructor()
             ->setMethods(['getMethod', 'getPrice', 'setPrice'])
@@ -80,19 +79,29 @@ class CarrierResultTest extends TestCase
                 }
             );
         /** @var Result|MockObject $result2 */
-        $result2 = $this->getMockBuilder(Result::class)->disableOriginalConstructor()->getMock();
+        $result2 = $this->getMockBuilder(Result::class)
+            ->disableOriginalConstructor()
+            ->getMock();
         $result2->method('getAllRates')->willReturn([$rate2]);
         $result2->method('getError')->willReturn(false);
 
-        $rate3 = $this->getMockBuilder(Error::class)->disableOriginalConstructor()->getMock();
+        $rate3 = $this->getMockBuilder(Error::class)
+            ->disableOriginalConstructor()
+            ->getMock();
         /** @var Result|MockObject $result3 */
-        $result3 = $this->getMockBuilder(Result::class)->disableOriginalConstructor()->getMock();
+        $result3 = $this->getMockBuilder(Result::class)
+            ->disableOriginalConstructor()
+            ->getMock();
         $result3->method('getAllRates')->willReturn([$rate3]);
         $result3->method('getError')->willReturn(true);
 
-        $rate4 = $this->getMockBuilder(Error::class)->disableOriginalConstructor()->getMock();
+        $rate4 = $this->getMockBuilder(Error::class)
+            ->disableOriginalConstructor()
+            ->getMock();
         /** @var Result|MockObject $result4 */
-        $result4 = $this->getMockBuilder(Result::class)->disableOriginalConstructor()->getMock();
+        $result4 = $this->getMockBuilder(Result::class)
+            ->disableOriginalConstructor()
+            ->getMock();
         $result4->method('getAllRates')->willReturn([$rate4]);
         $result4->method('getError')->willReturn(true);
 

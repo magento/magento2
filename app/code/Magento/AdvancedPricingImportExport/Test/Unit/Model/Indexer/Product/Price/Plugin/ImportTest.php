@@ -3,53 +3,60 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\AdvancedPricingImportExport\Test\Unit\Model\Indexer\Product\Price\Plugin;
 
+use Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing;
 use Magento\AdvancedPricingImportExport\Model\Indexer\Product\Price\Plugin\Import as Import;
+use Magento\Catalog\Model\Indexer\Product\Price\Processor;
+use Magento\Framework\Indexer\IndexerInterface;
+use Magento\Framework\Indexer\IndexerRegistry;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class ImportTest extends \PHPUnit\Framework\TestCase
+class ImportTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\Indexer\IndexerInterface |\PHPUnit\Framework\MockObject\MockObject
+     * @var IndexerInterface|MockObject
      */
     private $indexer;
 
     /**
-     * @var Import |\PHPUnit\Framework\MockObject\MockObject
+     * @var Import|MockObject
      */
     private $import;
 
     /**
-     * @var \Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing|\PHPUnit\Framework\MockObject\MockObject
+     * @var AdvancedPricing|MockObject
      */
     private $advancedPricing;
 
     /**
-     * @var \Magento\Framework\Indexer\IndexerRegistry|\PHPUnit\Framework\MockObject\MockObject
+     * @var IndexerRegistry|MockObject
      */
     private $indexerRegistry;
 
     protected function setUp(): void
     {
         $this->indexer = $this->getMockForAbstractClass(
-            \Magento\Framework\Indexer\IndexerInterface::class,
+            IndexerInterface::class,
             [],
             '',
             false
         );
         $this->indexerRegistry = $this->createMock(
-            \Magento\Framework\Indexer\IndexerRegistry::class
+            IndexerRegistry::class
         );
         $this->import = new \Magento\AdvancedPricingImportExport\Model\Indexer\Product\Price\Plugin\Import(
             $this->indexerRegistry
         );
         $this->advancedPricing = $this->createMock(
-            \Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing::class
+            AdvancedPricing::class
         );
-        $this->indexerRegistry->expects($this->any())
+        $this->indexerRegistry
             ->method('get')
-            ->with(\Magento\Catalog\Model\Indexer\Product\Price\Processor::INDEXER_ID)
+            ->with(Processor::INDEXER_ID)
             ->willReturn($this->indexer);
     }
 

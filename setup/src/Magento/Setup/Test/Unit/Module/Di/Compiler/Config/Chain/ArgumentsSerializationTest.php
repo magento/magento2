@@ -3,11 +3,14 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Setup\Test\Unit\Module\Di\Compiler\Config\Chain;
 
-use Magento\Setup\Module\Di\Compiler\Config\Chain\ArgumentsSerialization;
 use Magento\Framework\Serialize\SerializerInterface;
+use Magento\Setup\Module\Di\Compiler\Config\Chain\ArgumentsSerialization;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Unit test for the ArgumentsSerialization class.
@@ -15,10 +18,10 @@ use Magento\Framework\Serialize\SerializerInterface;
  * @deprecated We don't need anymore serialize arguments, this class will be removed in the next
  *             backward incompatible release.
  */
-class ArgumentsSerializationTest extends \PHPUnit\Framework\TestCase
+class ArgumentsSerializationTest extends TestCase
 {
     /**
-     * @var SerializerInterface|PHPUnit\Framework\MockObject\MockObject
+     * @var SerializerInterface|MockObject
      */
     private $serializer;
 

@@ -3,51 +3,64 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Integration\Test\Unit\Model\ResourceModel\Oauth;
+
+use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Framework\DB\Adapter\Pdo\Mysql;
+use Magento\Framework\DB\Select;
+use Magento\Framework\Model\ResourceModel\Db\Context;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Integration\Model\ResourceModel\Oauth\Token;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Unit test for \Magento\Integration\Model\ResourceModel\Oauth\Token
  */
-class TokenTest extends \PHPUnit\Framework\TestCase
+class TokenTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\DB\Adapter\AdapterInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var AdapterInterface|MockObject
      */
     protected $connectionMock;
 
     /**
-     * @var \Magento\Framework\App\ResourceConnection|\PHPUnit\Framework\MockObject\MockObject
+     * @var ResourceConnection|MockObject
      */
     protected $resourceMock;
 
     /**
-     * @var \Magento\Integration\Model\ResourceModel\Oauth\Token
+     * @var Token
      */
     protected $tokenResource;
 
     protected function setUp(): void
     {
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->connectionMock = $this->createMock(\Magento\Framework\DB\Adapter\Pdo\Mysql::class);
+        $objectManager = new ObjectManager($this);
+        $this->connectionMock = $this->createMock(Mysql::class);
 
-        $this->resourceMock = $this->createMock(\Magento\Framework\App\ResourceConnection::class);
+        $this->resourceMock = $this->createMock(ResourceConnection::class);
         $this->resourceMock->expects($this->any())->method('getConnection')->willReturn($this->connectionMock);
 
-        $contextMock = $this->createMock(\Magento\Framework\Model\ResourceModel\Db\Context::class);
+        $contextMock = $this->createMock(Context::class);
         $contextMock->expects($this->once())->method('getResources')->willReturn($this->resourceMock);
 
         $this->tokenResource = $objectManager->getObject(
-            \Magento\Integration\Model\ResourceModel\Oauth\Token::class,
+            Token::class,
             ['context' => $contextMock]
         );
     }
 
     public function testCleanOldAuthorizedTokensExcept()
     {
-        $tokenMock = $this->createPartialMock(
-            \Magento\Integration\Model\Oauth\Token::class,
-            ['getId', 'getAuthorized', 'getConsumerId', 'getCustomerId', 'getAdminId']
-        );
+        $tokenMock = $this->getMockBuilder(\Magento\Integration\Model\Oauth\Token::class)
+            ->addMethods(['getAuthorized', 'getConsumerId', 'getCustomerId', 'getAdminId'])
+            ->onlyMethods(['getId'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $tokenMock->expects($this->any())->method('getId')->willReturn(1);
         $tokenMock->expects($this->once())->method('getAuthorized')->willReturn(true);
         $tokenMock->expects($this->any())->method('getCustomerId')->willReturn(1);
@@ -65,7 +78,7 @@ class TokenTest extends \PHPUnit\Framework\TestCase
 
     public function testSelectTokenByType()
     {
-        $selectMock = $this->createMock(\Magento\Framework\DB\Select::class);
+        $selectMock = $this->createMock(Select::class);
         $selectMock->expects($this->once())->method('from')->willReturn($selectMock);
         $selectMock->expects($this->exactly(2))->method('where')->willReturn($selectMock);
         $this->connectionMock->expects($this->once())->method('select')->willReturn($selectMock);
@@ -75,7 +88,7 @@ class TokenTest extends \PHPUnit\Framework\TestCase
 
     public function testSelectTokenByConsumerIdAndUserType()
     {
-        $selectMock = $this->createMock(\Magento\Framework\DB\Select::class);
+        $selectMock = $this->createMock(Select::class);
         $selectMock->expects($this->once())->method('from')->willReturn($selectMock);
         $selectMock->expects($this->exactly(2))->method('where')->willReturn($selectMock);
         $this->connectionMock->expects($this->once())->method('select')->willReturn($selectMock);
@@ -85,7 +98,7 @@ class TokenTest extends \PHPUnit\Framework\TestCase
 
     public function testSelectTokenByAdminId()
     {
-        $selectMock = $this->createMock(\Magento\Framework\DB\Select::class);
+        $selectMock = $this->createMock(Select::class);
         $selectMock->expects($this->once())->method('from')->willReturn($selectMock);
         $selectMock->expects($this->exactly(2))->method('where')->willReturn($selectMock);
         $this->connectionMock->expects($this->once())->method('select')->willReturn($selectMock);
@@ -95,7 +108,7 @@ class TokenTest extends \PHPUnit\Framework\TestCase
 
     public function testSelectTokenByCustomerId()
     {
-        $selectMock = $this->createMock(\Magento\Framework\DB\Select::class);
+        $selectMock = $this->createMock(Select::class);
         $selectMock->expects($this->once())->method('from')->willReturn($selectMock);
         $selectMock->expects($this->exactly(2))->method('where')->willReturn($selectMock);
         $this->connectionMock->expects($this->once())->method('select')->willReturn($selectMock);

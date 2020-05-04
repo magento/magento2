@@ -3,27 +3,35 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Backend\Test\Unit\App\Area\Request;
 
-class PathInfoProcessorTest extends \PHPUnit\Framework\TestCase
+use Magento\Backend\App\Request\PathInfoProcessor;
+use Magento\Backend\Helper\Data;
+use Magento\Framework\App\RequestInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class PathInfoProcessorTest extends TestCase
 {
     /**
-     * @var \Magento\Backend\App\Request\PathInfoProcessor
+     * @var PathInfoProcessor
      */
     protected $_model;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $_backendHelperMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $_subjectMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $_requestMock;
 
@@ -34,10 +42,10 @@ class PathInfoProcessorTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp(): void
     {
-        $this->_requestMock = $this->createMock(\Magento\Framework\App\RequestInterface::class);
+        $this->_requestMock = $this->createMock(RequestInterface::class);
         $this->_subjectMock = $this->createMock(\Magento\Store\App\Request\PathInfoProcessor::class);
-        $this->_backendHelperMock = $this->createMock(\Magento\Backend\Helper\Data::class);
-        $this->_model = new \Magento\Backend\App\Request\PathInfoProcessor(
+        $this->_backendHelperMock = $this->createMock(Data::class);
+        $this->_model = new PathInfoProcessor(
             $this->_subjectMock,
             $this->_backendHelperMock
         );

@@ -3,32 +3,45 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\ProductVideo\Test\Unit\Observer;
 
-use \Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\Event\Observer;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\ProductVideo\Block\Adminhtml\Product\Edit\NewVideo;
+use Magento\ProductVideo\Observer\ChangeTemplateObserver;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class ChangeTemplateObserverTest extends \PHPUnit\Framework\TestCase
+class ChangeTemplateObserverTest extends TestCase
 {
+    /**
+     * @var ObjectManager
+     */
+    private $objectManager;
+
     public function testChangeTemplate()
     {
-        /** @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\Event\Observer $observer */
-        $observer = $this->createPartialMock(\Magento\Framework\Event\Observer::class, ['getBlock']);
+        /** @var MockObject|Observer $observer */
+        $observer = $this->getMockBuilder(Observer::class)
+            ->addMethods(['getBlock'])
+            ->disableOriginalConstructor()
+            ->getMock();
 
         /**
-         * @var \PHPUnit\Framework\MockObject\MockObject
-         * |\Magento\ProductVideo\Block\Adminhtml\Product\Edit\NewVideo $block
+         * @var MockObject|NewVideo $block
          */
-        $block = $this->createMock(\Magento\ProductVideo\Block\Adminhtml\Product\Edit\NewVideo::class);
+        $block = $this->createMock(NewVideo::class);
         $block->expects($this->once())
             ->method('setTemplate')
             ->with('Magento_ProductVideo::helper/gallery.phtml')
             ->willReturnSelf();
         $observer->expects($this->once())->method('getBlock')->willReturn($block);
 
-        /** @var \PHPUnit\Framework\MockObject\MockObject|\Magento\ProductVideo\Observer\ChangeTemplateObserver $unit */
+        /** @var MockObject|ChangeTemplateObserver $unit */
         $this->objectManager = new ObjectManager($this);
-        $unit = $this->objectManager->getObject(\Magento\ProductVideo\Observer\ChangeTemplateObserver::class);
+        $unit = $this->objectManager->getObject(ChangeTemplateObserver::class);
         $unit->execute($observer);
     }
 }

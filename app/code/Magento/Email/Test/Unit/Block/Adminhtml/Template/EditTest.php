@@ -3,27 +3,48 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Email\Test\Unit\Block\Adminhtml\Template;
 
+use Magento\Backend\Helper\Data;
+use Magento\Backend\Model\Menu;
+use Magento\Backend\Model\Menu\Config;
+use Magento\Backend\Model\Menu\Item;
+use Magento\Backend\Model\Url;
+use Magento\Config\Model\Config\Structure;
+use Magento\Config\Model\Config\Structure\Element\Field;
+use Magento\Config\Model\Config\Structure\Element\Group;
+use Magento\Config\Model\Config\Structure\Element\Section;
+use Magento\Email\Block\Adminhtml\Template\Edit;
+use Magento\Email\Model\BackendTemplate;
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Filesystem;
+use Magento\Framework\Filesystem\Directory\Read;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\View\FileSystem as FilesystemView;
+use Magento\Framework\View\Layout;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class EditTest extends \PHPUnit\Framework\TestCase
+class EditTest extends TestCase
 {
     /**
-     * @var \Magento\Email\Block\Adminhtml\Template\Edit
+     * @var Edit
      */
     protected $_block;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $_configStructureMock;
 
     /**
-     * @var \Magento\Email\Model\Template\Config|\PHPUnit\Framework\MockObject\MockObject
+     * @var \Magento\Email\Model\Template\Config|MockObject
      */
     protected $_emailConfigMock;
 
@@ -37,30 +58,34 @@ class EditTest extends \PHPUnit\Framework\TestCase
     ];
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $filesystemMock;
 
     protected function setUp(): void
     {
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $layoutMock = $this->createPartialMock(\Magento\Framework\View\Layout::class, ['helper']);
-        $helperMock = $this->createMock(\Magento\Backend\Helper\Data::class);
-        $menuConfigMock = $this->createMock(\Magento\Backend\Model\Menu\Config::class);
-        $menuMock = $this->getMockBuilder(\Magento\Backend\Model\Menu::class)
-            ->setConstructorArgs([$this->createMock(\Psr\Log\LoggerInterface::class)])
+        $objectManager = new ObjectManager($this);
+        $layoutMock = $this->getMockBuilder(Layout::class)
+            ->addMethods(['helper'])
+            ->disableOriginalConstructor()
             ->getMock();
-        $menuItemMock = $this->createMock(\Magento\Backend\Model\Menu\Item::class);
-        $urlBuilder = $this->createMock(\Magento\Backend\Model\Url::class);
-        $this->_configStructureMock = $this->createMock(\Magento\Config\Model\Config\Structure::class);
+        $helperMock = $this->createMock(Data::class);
+        $menuConfigMock = $this->createMock(Config::class);
+        $menuMock = $this->getMockBuilder(Menu::class)
+            ->setConstructorArgs([$this->createMock(LoggerInterface::class)])
+            ->getMock();
+        $menuItemMock = $this->createMock(Item::class);
+        $urlBuilder = $this->createMock(Url::class);
+        $this->_configStructureMock = $this->createMock(Structure::class);
         $this->_emailConfigMock = $this->createMock(\Magento\Email\Model\Template\Config::class);
 
-        $this->filesystemMock = $this->createPartialMock(
-            \Magento\Framework\Filesystem::class,
-            ['getFilesystem', '__wakeup', 'getPath', 'getDirectoryRead']
-        );
+        $this->filesystemMock = $this->getMockBuilder(Filesystem::class)
+            ->addMethods(['getFilesystem', 'getPath'])
+            ->onlyMethods(['getDirectoryRead'])
+            ->disableOriginalConstructor()
+            ->getMock();
 
-        $viewFilesystem = $this->getMockBuilder(\Magento\Framework\View\FileSystem::class)
+        $viewFilesystem = $this->getMockBuilder(FilesystemView::class)
             ->setMethods(['getTemplateFileName'])
             ->disableOriginalConstructor()
             ->getMock();
@@ -82,7 +107,7 @@ class EditTest extends \PHPUnit\Framework\TestCase
             'viewFileSystem' => $viewFilesystem,
         ];
         $arguments = $objectManager->getConstructArguments(
-            \Magento\Email\Block\Adminhtml\Template\Edit::class,
+            Edit::class,
             $params
         );
 
@@ -93,7 +118,7 @@ class EditTest extends \PHPUnit\Framework\TestCase
 
         $layoutMock->expects($this->any())->method('helper')->willReturn($helperMock);
 
-        $this->_block = $objectManager->getObject(\Magento\Email\Block\Adminhtml\Template\Edit::class, $arguments);
+        $this->_block = $objectManager->getObject(Edit::class, $arguments);
     }
 
     /**
@@ -103,23 +128,23 @@ class EditTest extends \PHPUnit\Framework\TestCase
     public function testGetCurrentlyUsedForPaths()
     {
         $sectionMock = $this->createPartialMock(
-            \Magento\Config\Model\Config\Structure\Element\Section::class,
+            Section::class,
             ['getLabel']
         );
         $groupMock1 = $this->createPartialMock(
-            \Magento\Config\Model\Config\Structure\Element\Group::class,
+            Group::class,
             ['getLabel']
         );
         $groupMock2 = $this->createPartialMock(
-            \Magento\Config\Model\Config\Structure\Element\Group::class,
+            Group::class,
             ['getLabel']
         );
         $groupMock3 = $this->createPartialMock(
-            \Magento\Config\Model\Config\Structure\Element\Group::class,
+            Group::class,
             ['getLabel']
         );
         $filedMock = $this->createPartialMock(
-            \Magento\Config\Model\Config\Structure\Element\Field::class,
+            Field::class,
             ['getLabel']
         );
         $map = [
@@ -145,7 +170,7 @@ class EditTest extends \PHPUnit\Framework\TestCase
             ->method('getElementByPathParts')
             ->willReturnMap($map);
 
-        $templateMock = $this->createMock(\Magento\Email\Model\BackendTemplate::class);
+        $templateMock = $this->createMock(BackendTemplate::class);
         $templateMock->expects($this->once())
             ->method('getSystemConfigPathsWhereCurrentlyUsed')
             ->willReturn($this->_fixtureConfigPath);
@@ -184,7 +209,7 @@ class EditTest extends \PHPUnit\Framework\TestCase
 
     public function testGetDefaultTemplatesAsOptionsArray()
     {
-        $directoryMock = $this->createMock(\Magento\Framework\Filesystem\Directory\Read::class);
+        $directoryMock = $this->createMock(Read::class);
 
         $this->filesystemMock->expects($this->any())
             ->method('getDirectoryRead')
@@ -193,25 +218,23 @@ class EditTest extends \PHPUnit\Framework\TestCase
         $this->_emailConfigMock
             ->expects($this->once())
             ->method('getAvailableTemplates')
-            ->willReturn(
+            ->willReturn([
                 [
-                    [
-                        'value' => 'template_b2',
-                        'label' => 'Template B2',
-                        'group' => 'Fixture_ModuleB',
-                    ],
-                    [
-                        'value' => 'template_a',
-                        'label' => 'Template A',
-                        'group' => 'Fixture_ModuleA',
-                    ],
-                    [
-                        'value' => 'template_b1',
-                        'label' => 'Template B1',
-                        'group' => 'Fixture_ModuleB',
-                    ],
-                ]
-            );
+                    'value' => 'template_b2',
+                    'label' => 'Template B2',
+                    'group' => 'Fixture_ModuleB',
+                ],
+                [
+                    'value' => 'template_a',
+                    'label' => 'Template A',
+                    'group' => 'Fixture_ModuleA',
+                ],
+                [
+                    'value' => 'template_b1',
+                    'label' => 'Template B1',
+                    'group' => 'Fixture_ModuleB',
+                ],
+            ]);
 
         $this->assertEmpty($this->_block->getData('template_options'));
         $this->_block->setTemplate('my/custom\template.phtml');

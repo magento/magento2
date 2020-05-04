@@ -3,50 +3,65 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\GroupedProduct\Test\Unit\Block\Adminhtml\Product\Composite\Fieldset;
 
-class GroupedTest extends \PHPUnit\Framework\TestCase
+use Magento\Catalog\Model\Product;
+use Magento\Customer\Api\Data\CustomerInterface;
+use Magento\Framework\DataObject;
+use Magento\Framework\Pricing\Helper\Data;
+use Magento\Framework\Registry;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\GroupedProduct\Block\Adminhtml\Product\Composite\Fieldset\Grouped;
+use Magento\Store\Model\Store;
+use Magento\Store\Model\StoreManagerInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class GroupedTest extends TestCase
 {
     /**
-     * @var \Magento\GroupedProduct\Block\Adminhtml\Product\Composite\Fieldset\Grouped
+     * @var Grouped
      */
     protected $block;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $storeManagerMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $registryMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $pricingHelperMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $productMock;
 
     protected function setUp(): void
     {
-        $this->registryMock = $this->createMock(\Magento\Framework\Registry::class);
-        $this->productMock = $this->createMock(\Magento\Catalog\Model\Product::class);
-        $this->pricingHelperMock = $this->createMock(\Magento\Framework\Pricing\Helper\Data::class);
-        $this->storeManagerMock = $this->createMock(\Magento\Store\Model\StoreManagerInterface::class);
+        $this->registryMock = $this->createMock(Registry::class);
+        $this->productMock = $this->createMock(Product::class);
+        $this->pricingHelperMock = $this->createMock(Data::class);
+        $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
 
         $customerMock = $this->getMockBuilder(
-            \Magento\Customer\Api\Data\CustomerInterface::class
-        )->disableOriginalConstructor()->getMock();
+            CustomerInterface::class
+        )->disableOriginalConstructor()
+            ->getMock();
         $customerMock->expects($this->any())->method('getId')->willReturn(1);
 
-        $objectHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $objectHelper = new ObjectManager($this);
         $this->block = $objectHelper->getObject(
-            \Magento\GroupedProduct\Block\Adminhtml\Product\Composite\Fieldset\Grouped::class,
+            Grouped::class,
             [
                 'registry' => $this->registryMock,
                 'storeManager' => $this->storeManagerMock,
@@ -62,7 +77,7 @@ class GroupedTest extends \PHPUnit\Framework\TestCase
     public function testGetProductPositive()
     {
         $instanceMock = $this->createMock(\Magento\GroupedProduct\Model\Product\Type\Grouped::class);
-        $storeMock = $this->createMock(\Magento\Store\Model\Store::class);
+        $storeMock = $this->createMock(Store::class);
 
         $this->productMock->expects($this->any())->method('getTypeInstance')->willReturn($instanceMock);
 
@@ -80,7 +95,7 @@ class GroupedTest extends \PHPUnit\Framework\TestCase
     {
         $storeId = 2;
         $instanceMock = $this->createMock(\Magento\GroupedProduct\Model\Product\Type\Grouped::class);
-        $storeMock = $this->createMock(\Magento\Store\Model\Store::class);
+        $storeMock = $this->createMock(Store::class);
 
         $this->productMock->expects($this->any())->method('getTypeInstance')->willReturn($instanceMock);
 
@@ -148,7 +163,10 @@ class GroupedTest extends \PHPUnit\Framework\TestCase
     {
         $storeId = 2;
 
-        $objectMock = $this->createPartialMock(\Magento\Framework\DataObject::class, ['getSuperGroup']);
+        $objectMock = $this->getMockBuilder(DataObject::class)
+            ->addMethods(['getSuperGroup'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $instanceMock = $this->createMock(\Magento\GroupedProduct\Model\Product\Type\Grouped::class);
 
         $objectMock->expects($this->once())->method('getSuperGroup')->willReturn([]);
@@ -187,7 +205,7 @@ class GroupedTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetCanShowProductPrice()
     {
-        $this->assertTrue($this->block->getCanShowProductPrice($this->productMock));
+        $this->assertEquals(true, $this->block->getCanShowProductPrice($this->productMock));
     }
 
     /**
@@ -199,7 +217,7 @@ class GroupedTest extends \PHPUnit\Framework\TestCase
 
         $this->productMock->expects($this->never())->method('getOptions');
 
-        $this->assertTrue($this->block->getIsLastFieldset());
+        $this->assertEquals(true, $this->block->getIsLastFieldset());
     }
 
     /**

@@ -3,15 +3,23 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Backend\Test\Unit\Cron;
 
-class CleanCacheTest extends \PHPUnit\Framework\TestCase
+use Magento\Backend\Cron\CleanCache;
+use Magento\Framework\App\Cache\Frontend\Pool;
+use Magento\Framework\Cache\FrontendInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\TestCase;
+
+class CleanCacheTest extends TestCase
 {
     public function testCleanCache()
     {
         $cacheBackendMock = $this->getMockForAbstractClass(\Zend_Cache_Backend_Interface::class);
-        $cacheFrontendMock = $this->getMockForAbstractClass(\Magento\Framework\Cache\FrontendInterface::class);
-        $frontendPoolMock = $this->createMock(\Magento\Framework\App\Cache\Frontend\Pool::class);
+        $cacheFrontendMock = $this->getMockForAbstractClass(FrontendInterface::class);
+        $frontendPoolMock = $this->createMock(Pool::class);
 
         $cacheBackendMock->expects(
             $this->once()
@@ -46,12 +54,12 @@ class CleanCacheTest extends \PHPUnit\Framework\TestCase
             $cacheFrontendMock
         );
 
-        $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $objectManagerHelper = new ObjectManager($this);
         /**
-         * @var \Magento\Backend\Cron\CleanCache
+         * @var CleanCache
          */
         $model = $objectManagerHelper->getObject(
-            \Magento\Backend\Cron\CleanCache::class,
+            CleanCache::class,
             [
                 'cacheFrontendPool' => $frontendPoolMock,
             ]

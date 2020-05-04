@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\SampleData\Test\Unit\Console\Command;
 
 use Composer\Console\Application;
@@ -12,6 +14,7 @@ use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\ReadInterface;
 use Magento\Framework\Filesystem\Directory\WriteInterface;
 use Magento\SampleData\Model\Dependency;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\ArrayInputFactory;
@@ -22,37 +25,37 @@ use Symfony\Component\Console\Input\ArrayInputFactory;
 abstract class AbstractSampleDataCommandTest extends TestCase
 {
     /**
-     * @var ReadInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var ReadInterface|MockObject
      */
     protected $directoryReadMock;
 
     /**
-     * @var WriteInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var WriteInterface|MockObject
      */
     protected $directoryWriteMock;
 
     /**
-     * @var Filesystem|\PHPUnit\Framework\MockObject\MockObject
+     * @var Filesystem|MockObject
      */
     protected $filesystemMock;
 
     /**
-     * @var Dependency|\PHPUnit\Framework\MockObject\MockObject
+     * @var Dependency|MockObject
      */
     protected $sampleDataDependencyMock;
 
     /**
-     * @var ArrayInputFactory|\PHPUnit\Framework\MockObject\MockObject
+     * @var ArrayInputFactory|MockObject
      */
     protected $arrayInputFactoryMock;
 
     /**
-     * @var Application|\PHPUnit\Framework\MockObject\MockObject
+     * @var Application|MockObject
      */
     protected $applicationMock;
 
     /**
-     * @var ApplicationFactory|\PHPUnit\Framework\MockObject\MockObject
+     * @var ApplicationFactory|MockObject
      */
     protected $applicationFactoryMock;
 
@@ -61,8 +64,8 @@ abstract class AbstractSampleDataCommandTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->directoryReadMock = $this->getMockForAbstractClass(ReadInterface::class);
-        $this->directoryWriteMock = $this->getMockForAbstractClass(WriteInterface::class);
+        $this->directoryReadMock = $this->createMock(ReadInterface::class);
+        $this->directoryWriteMock = $this->createMock(WriteInterface::class);
         $this->filesystemMock = $this->createMock(Filesystem::class);
         $this->sampleDataDependencyMock = $this->createMock(Dependency::class);
         $this->arrayInputFactoryMock = $this->createMock(ArrayInputFactory::class);

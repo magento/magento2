@@ -3,15 +3,18 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Cms\Test\Unit\Block;
 
-/**
- * Class PageTest
- */
-class PageTest extends \PHPUnit\Framework\TestCase
+use Magento\Cms\Block\Page;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\TestCase;
+
+class PageTest extends TestCase
 {
     /**
-     * @var \Magento\Cms\Block\Page
+     * @var Page
      */
     protected $block;
 
@@ -22,8 +25,8 @@ class PageTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp(): void
     {
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->block = $objectManager->getObject(\Magento\Cms\Block\Page::class);
+        $objectManager = new ObjectManager($this);
+        $this->block = $objectManager->getObject(Page::class);
         $this->page = $objectManager->getObject(\Magento\Cms\Model\Page::class);
         $reflection = new \ReflectionClass($this->page);
         $reflectionProperty = $reflection->getProperty('_idFieldName');

@@ -3,26 +3,34 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\GoogleOptimizer\Test\Unit\Block\Code;
 
-class CategoryTest extends \PHPUnit\Framework\TestCase
+use Magento\Framework\Registry;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\GoogleOptimizer\Block\Code\Category;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class CategoryTest extends TestCase
 {
     /**
-     * @var \Magento\GoogleOptimizer\Block\Code\Category
+     * @var Category
      */
     protected $block;
 
     /**
-     * @var \Magento\Framework\Registry|\PHPUnit\Framework\MockObject\MockObject
+     * @var Registry|MockObject
      */
     protected $registry;
 
     protected function setUp(): void
     {
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->registry = $this->createMock(\Magento\Framework\Registry::class);
+        $objectManager = new ObjectManager($this);
+        $this->registry = $this->createMock(Registry::class);
         $this->block = $objectManager->getObject(
-            \Magento\GoogleOptimizer\Block\Code\Category::class,
+            Category::class,
             ['registry' => $this->registry]
         );
     }

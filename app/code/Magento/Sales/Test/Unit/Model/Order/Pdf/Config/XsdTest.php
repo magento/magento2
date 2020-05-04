@@ -5,9 +5,16 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Sales\Test\Unit\Model\Order\Pdf\Config;
 
-class XsdTest extends \PHPUnit\Framework\TestCase
+use Magento\Framework\Config\Dom;
+use Magento\Framework\Config\Dom\UrnResolver;
+use Magento\Framework\Config\ValidationStateInterface;
+use PHPUnit\Framework\TestCase;
+
+class XsdTest extends TestCase
 {
     /**
      * @var string
@@ -21,7 +28,7 @@ class XsdTest extends \PHPUnit\Framework\TestCase
 
     public static function setUpBeforeClass(): void
     {
-        $urnResolver = new \Magento\Framework\Config\Dom\UrnResolver();
+        $urnResolver = new UrnResolver();
         self::$_schemaPath = $urnResolver->getRealPath('urn:magento:module:Magento_Sales:etc/pdf.xsd');
         self::$_schemaFilePath = $urnResolver->getRealPath('urn:magento:module:Magento_Sales:etc/pdf_file.xsd');
     }
@@ -62,10 +69,10 @@ class XsdTest extends \PHPUnit\Framework\TestCase
      */
     protected function _testSchema($schema, $fixtureXml, array $expectedErrors)
     {
-        $validationStateMock = $this->createMock(\Magento\Framework\Config\ValidationStateInterface::class);
+        $validationStateMock = $this->createMock(ValidationStateInterface::class);
         $validationStateMock->method('isValidationRequired')
             ->willReturn(true);
-        $dom = new \Magento\Framework\Config\Dom($fixtureXml, $validationStateMock, [], null, null, '%message%');
+        $dom = new Dom($fixtureXml, $validationStateMock, [], null, null, '%message%');
         $actualResult = $dom->validate($schema, $actualErrors);
         $this->assertEquals(empty($expectedErrors), $actualResult);
         $this->assertEquals($expectedErrors, $actualErrors);

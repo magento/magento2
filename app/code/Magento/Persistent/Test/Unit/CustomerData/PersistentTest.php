@@ -88,7 +88,10 @@ class PersistentTest extends TestCase
     {
         $this->persistentSessionHelperMock->method('isPersistent')->willReturn(true);
 
-        $persistentSessionMock = $this->createPartialMock(PersistentSession::class, ['getCustomerId']);
+        $persistentSessionMock = $this->getMockBuilder(PersistentSession::class)
+            ->addMethods(['getCustomerId'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $persistentSessionMock->method('getCustomerId')->willReturn(null);
         $this->persistentSessionHelperMock->method('getSession')->willReturn($persistentSessionMock);
 
@@ -102,7 +105,10 @@ class PersistentTest extends TestCase
     {
         $this->persistentSessionHelperMock->method('isPersistent')->willReturn(true);
 
-        $persistentSessionMock = $this->createPartialMock(PersistentSession::class, ['getCustomerId']);
+        $persistentSessionMock = $this->getMockBuilder(PersistentSession::class)
+            ->addMethods(['getCustomerId'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $persistentSessionMock->method('getCustomerId')->willReturn(self::STUB_CUSTOMER_ID);
         $this->persistentSessionHelperMock->method('getSession')->willReturn($persistentSessionMock);
 

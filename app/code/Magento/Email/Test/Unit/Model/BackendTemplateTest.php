@@ -3,19 +3,28 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 /**
  * Test class for Magento\Email\Model\BackendTemplate.
  */
 namespace Magento\Email\Test\Unit\Model;
 
+use Magento\Config\Model\Config\Structure;
 use Magento\Email\Model\BackendTemplate;
+use Magento\Email\Model\ResourceModel\Template;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\ObjectManagerInterface;
+use Magento\Framework\Serialize\Serializer\Json;
+use Magento\MediaStorage\Helper\File\Storage\Database;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Tests for  adminhtml email template model.
  */
-class BackendTemplateTest extends \PHPUnit\Framework\TestCase
+class BackendTemplateTest extends TestCase
 {
     /**
      * Backend template mock
@@ -25,32 +34,32 @@ class BackendTemplateTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var ScopeConfigInterface|MockObject
      */
     protected $scopeConfigMock;
 
     /**
-     * @var \Magento\Config\Model\Config\Structure|\PHPUnit\Framework\MockObject\MockObject
+     * @var Structure|MockObject
      */
     protected $structureMock;
 
     /**
-     * @var \Magento\Email\Model\ResourceModel\Template|\PHPUnit\Framework\MockObject\MockObject
+     * @var Template|MockObject
      */
     protected $resourceModelMock;
 
     /**
-     * @var \Magento\Framework\App\ObjectManager
+     * @var ObjectManager
      */
     protected $objectManagerBackup;
 
     /**
-     * @var \Magento\Framework\Serialize\Serializer\Json|\PHPUnit\Framework\MockObject\MockObject
+     * @var Json|MockObject
      */
     private $serializerMock;
 
     /**
-     * @var \Magento\MediaStorage\Helper\File\Storage\Database|\PHPUnit\Framework\MockObject\MockObject
+     * @var Database|MockObject
      */
     private $databaseHelperMock;
 
@@ -58,27 +67,27 @@ class BackendTemplateTest extends \PHPUnit\Framework\TestCase
     {
         $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
-        $this->scopeConfigMock = $this->createMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
+        $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
         $this->scopeConfigMock->expects($this->any())->method('getValue')->willReturn(['test' => 1]);
 
-        $this->structureMock = $this->createMock(\Magento\Config\Model\Config\Structure::class);
+        $this->structureMock = $this->createMock(Structure::class);
         $this->structureMock->expects($this->any())->method('getFieldPathsByAttribute')->willReturn(['path' => 'test']);
 
-        $this->databaseHelperMock = $this->createMock(\Magento\MediaStorage\Helper\File\Storage\Database::class);
-        $this->resourceModelMock = $this->createMock(\Magento\Email\Model\ResourceModel\Template::class);
+        $this->databaseHelperMock = $this->createMock(Database::class);
+        $this->resourceModelMock = $this->createMock(Template::class);
         $this->resourceModelMock->expects($this->any())
             ->method('getSystemConfigByPathsAndTemplateId')
             ->willReturn(['test_config' => 2015]);
-        /** @var ObjectManagerInterface|\PHPUnit\Framework\MockObject\MockObject $objectManagerMock*/
-        $objectManagerMock = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
+        /** @var ObjectManagerInterface|MockObject $objectManagerMock*/
+        $objectManagerMock = $this->createMock(ObjectManagerInterface::class);
         $objectManagerMock->expects($this->any())
             ->method('get')
             ->willReturnCallback(
                 function ($value) {
                     switch ($value) {
-                        case \Magento\MediaStorage\Helper\File\Storage\Database::class:
+                        case Database::class:
                             return ($this->databaseHelperMock);
-                        case \Magento\Email\Model\ResourceModel\Template::class:
+                        case Template::class:
                             return ($this->resourceModelMock);
                         default:
                             return(null);
@@ -86,12 +95,13 @@ class BackendTemplateTest extends \PHPUnit\Framework\TestCase
                 }
             );
 
-        \Magento\Framework\App\ObjectManager::setInstance($objectManagerMock);
+        ObjectManager::setInstance($objectManagerMock);
 
-        $this->serializerMock = $this->getMockBuilder(\Magento\Framework\Serialize\Serializer\Json::class)->getMock();
+        $this->serializerMock = $this->getMockBuilder(Json::class)
+            ->getMock();
 
         $this->model = $helper->getObject(
-            \Magento\Email\Model\BackendTemplate::class,
+            BackendTemplate::class,
             [
                 'scopeConfig' => $this->scopeConfigMock,
                 'structure' => $this->structureMock,
@@ -103,9 +113,9 @@ class BackendTemplateTest extends \PHPUnit\Framework\TestCase
     protected function tearDown(): void
     {
         parent::tearDown();
-        /** @var ObjectManagerInterface|\PHPUnit\Framework\MockObject\MockObject $objectManagerMock*/
-        $objectManagerMock = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
-        \Magento\Framework\App\ObjectManager::setInstance($objectManagerMock);
+        /** @var ObjectManagerInterface|MockObject $objectManagerMock*/
+        $objectManagerMock = $this->createMock(ObjectManagerInterface::class);
+        ObjectManager::setInstance($objectManagerMock);
     }
 
     public function testGetSystemConfigPathsWhereCurrentlyUsedNoId()

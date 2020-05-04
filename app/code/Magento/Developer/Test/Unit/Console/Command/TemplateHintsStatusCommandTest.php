@@ -10,9 +10,7 @@ namespace Magento\Developer\Test\Unit\Console\Command;
 use Magento\Developer\Console\Command\TemplateHintsStatusCommand;
 use Magento\Framework\App\Config\ReinitableConfigInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Framework\Console\Cli;
 use PHPUnit\Framework\TestCase;
-use Symfony\Component\Console\Tester\CommandTester;
 
 /**
  * Class TemplateHintsStatusCommandTest

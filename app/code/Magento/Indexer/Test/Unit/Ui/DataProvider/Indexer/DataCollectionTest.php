@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Indexer\Test\Unit\Ui\DataProvider\Indexer;
 
@@ -14,8 +15,10 @@ use Magento\Framework\Indexer\IndexerRegistry;
 use Magento\Framework\Indexer\StateInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Indexer\Ui\DataProvider\Indexer\DataCollection;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class DataCollectionTest extends \PHPUnit\Framework\TestCase
+class DataCollectionTest extends TestCase
 {
     /**
      * @var ObjectManagerHelper
@@ -28,17 +31,17 @@ class DataCollectionTest extends \PHPUnit\Framework\TestCase
     private $dataCollection;
 
     /**
-     * @var ConfigInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var ConfigInterface|MockObject
      */
     private $configMock;
 
     /**
-     * @var IndexerRegistry|\PHPUnit\Framework\MockObject\MockObject
+     * @var IndexerRegistry|MockObject
      */
     private $indexerRegistryMock;
 
     /**
-     * @var EntityFactoryInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var EntityFactoryInterface|MockObject
      */
     private $entityFactoryMock;
 
@@ -55,10 +58,10 @@ class DataCollectionTest extends \PHPUnit\Framework\TestCase
         $this->indexerRegistryMock = $this->getMockBuilder(IndexerRegistry::class)
             ->disableOriginalConstructor()
             ->getMock();
-        
+
         $this->entityFactoryMock = $this->getMockBuilder(EntityFactoryInterface::class)
             ->getMock();
-        
+
         $this->dataCollection = $this->objectManagerHelper->getObject(
             DataCollection::class,
             [
@@ -154,11 +157,11 @@ class DataCollectionTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param array $data
-     * @return \PHPUnit\Framework\MockObject\MockObject|IndexerInterface
+     * @return MockObject|IndexerInterface
      */
     private function getIndexerMock(array $data = [])
     {
-        /** @var \PHPUnit\Framework\MockObject\MockObject|IndexerInterface $indexer */
+        /** @var MockObject|IndexerInterface $indexer */
         $indexer = $this->getMockBuilder(IndexerInterface::class)
             ->getMockForAbstractClass();
         foreach ($data as $methodName => $result) {

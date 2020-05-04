@@ -9,11 +9,13 @@ namespace Magento\Braintree\Test\Unit\Model\InstantPurchase\PayPal;
 
 use Magento\Braintree\Model\InstantPurchase\CreditCard\TokenFormatter as PaypalTokenFormatter;
 use Magento\Vault\Api\Data\PaymentTokenInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class TokenFormatterTest extends \PHPUnit\Framework\TestCase
+class TokenFormatterTest extends TestCase
 {
     /**
-     * @var PaymentTokenInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var PaymentTokenInterface|MockObject
      */
     private $paymentTokenMock;
 

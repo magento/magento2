@@ -3,27 +3,38 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Indexer\Test\Unit\Model\Config;
 
-class DataTest extends \PHPUnit\Framework\TestCase
+use Magento\Framework\Config\CacheInterface;
+use Magento\Framework\Indexer\Config\Reader;
+use Magento\Framework\Serialize\SerializerInterface;
+use Magento\Indexer\Model\Config\Data;
+use Magento\Indexer\Model\Indexer\State;
+use Magento\Indexer\Model\ResourceModel\Indexer\State\Collection;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class DataTest extends TestCase
 {
     /**
-     * @var \Magento\Indexer\Model\Config\Data
+     * @var Data
      */
     protected $model;
 
     /**
-     * @var \Magento\Framework\Indexer\Config\Reader|\PHPUnit\Framework\MockObject\MockObject
+     * @var Reader|MockObject
      */
     protected $reader;
 
     /**
-     * @var \Magento\Framework\Config\CacheInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var CacheInterface|MockObject
      */
     protected $cache;
 
     /**
-     * @var \Magento\Indexer\Model\ResourceModel\Indexer\State\Collection|\PHPUnit\Framework\MockObject\MockObject
+     * @var Collection|MockObject
      */
     protected $stateCollection;
 
@@ -38,15 +49,15 @@ class DataTest extends \PHPUnit\Framework\TestCase
     protected $indexers = ['indexer1' => [], 'indexer3' => []];
 
     /**
-     * @var \Magento\Framework\Serialize\SerializerInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var SerializerInterface|MockObject
      */
     private $serializerMock;
 
     protected function setUp(): void
     {
-        $this->reader = $this->createPartialMock(\Magento\Framework\Indexer\Config\Reader::class, ['read']);
+        $this->reader = $this->createPartialMock(Reader::class, ['read']);
         $this->cache = $this->getMockForAbstractClass(
-            \Magento\Framework\Config\CacheInterface::class,
+            CacheInterface::class,
             [],
             '',
             false,
@@ -55,10 +66,10 @@ class DataTest extends \PHPUnit\Framework\TestCase
             ['test', 'load', 'save']
         );
         $this->stateCollection = $this->createPartialMock(
-            \Magento\Indexer\Model\ResourceModel\Indexer\State\Collection::class,
+            Collection::class,
             ['getItems']
         );
-        $this->serializerMock = $this->createMock(\Magento\Framework\Serialize\SerializerInterface::class);
+        $this->serializerMock = $this->createMock(SerializerInterface::class);
     }
 
     public function testConstructorWithCache()
@@ -77,7 +88,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
 
         $this->stateCollection->expects($this->never())->method('getItems');
 
-        $this->model = new \Magento\Indexer\Model\Config\Data(
+        $this->model = new Data(
             $this->reader,
             $this->cache,
             $this->stateCollection,
@@ -94,14 +105,14 @@ class DataTest extends \PHPUnit\Framework\TestCase
         $this->reader->expects($this->once())->method('read')->willReturn($this->indexers);
 
         $stateExistent = $this->createPartialMock(
-            \Magento\Indexer\Model\Indexer\State::class,
+            State::class,
             ['getIndexerId', '__wakeup', 'delete']
         );
         $stateExistent->expects($this->once())->method('getIndexerId')->willReturn('indexer1');
         $stateExistent->expects($this->never())->method('delete');
 
         $stateNonexistent = $this->createPartialMock(
-            \Magento\Indexer\Model\Indexer\State::class,
+            State::class,
             ['getIndexerId', '__wakeup', 'delete']
         );
         $stateNonexistent->expects($this->once())->method('getIndexerId')->willReturn('indexer2');
@@ -111,7 +122,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
 
         $this->stateCollection->expects($this->once())->method('getItems')->willReturn($states);
 
-        $this->model = new \Magento\Indexer\Model\Config\Data(
+        $this->model = new Data(
             $this->reader,
             $this->cache,
             $this->stateCollection,

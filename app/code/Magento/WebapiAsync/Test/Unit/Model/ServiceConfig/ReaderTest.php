@@ -9,10 +9,13 @@ declare(strict_types=1);
 namespace Magento\WebapiAsync\Test\Unit\Model\ServiceConfig;
 
 use Magento\Framework\Config\FileResolverInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\WebapiAsync\Model\ServiceConfig\Converter;
 use Magento\WebapiAsync\Model\ServiceConfig\Reader;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class ReaderTest extends \PHPUnit\Framework\TestCase
+class ReaderTest extends TestCase
 {
     /**
      * @var Reader
@@ -20,15 +23,15 @@ class ReaderTest extends \PHPUnit\Framework\TestCase
     private $reader;
 
     /**
-     * @var FileResolverInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var FileResolverInterface|MockObject
      */
     private $fileResolver;
 
     protected function setUp(): void
     {
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $objectManager = new ObjectManager($this);
         $this->fileResolver = $this
-            ->getMockForAbstractClass(\Magento\Framework\Config\FileResolverInterface::class);
+            ->getMockForAbstractClass(FileResolverInterface::class);
 
         $this->reader = $objectManager->getObject(
             Reader::class,

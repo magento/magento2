@@ -3,15 +3,19 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Paypal\Test\Unit\Model;
 
+use Magento\Framework\DataObject;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Payment\Model\InfoInterface;
 use Magento\Paypal\Model\Info;
+use PHPUnit\Framework\TestCase;
 
-class InfoTest extends \PHPUnit\Framework\TestCase
+class InfoTest extends TestCase
 {
-    /** @var \Magento\Paypal\Model\Info */
+    /** @var Info */
     protected $info;
 
     /** @var ObjectManagerHelper */
@@ -21,7 +25,7 @@ class InfoTest extends \PHPUnit\Framework\TestCase
     {
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->info = $this->objectManagerHelper->getObject(
-            \Magento\Paypal\Model\Info::class
+            Info::class
         );
     }
 
@@ -32,7 +36,7 @@ class InfoTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetPaymentInfo($additionalInfo, $expectation)
     {
-        /** @var \Magento\Payment\Model\InfoInterface $paymentInfo */
+        /** @var InfoInterface $paymentInfo */
         $paymentInfo = $this->objectManagerHelper->getObject(\Magento\Payment\Model\Info::class);
         $paymentInfo->setAdditionalInformation($additionalInfo);
         $this->assertEquals($expectation, $this->info->getPaymentInfo($paymentInfo));
@@ -45,7 +49,7 @@ class InfoTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetPaymentInfoLabelValues($additionalInfo, $expectation)
     {
-        /** @var \Magento\Payment\Model\InfoInterface $paymentInfo */
+        /** @var InfoInterface $paymentInfo */
         $paymentInfo = $this->objectManagerHelper->getObject(\Magento\Payment\Model\Info::class);
         $paymentInfo->setAdditionalInformation($additionalInfo);
         $this->assertEquals(
@@ -61,7 +65,7 @@ class InfoTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetPublicPaymentInfo($additionalInfo, $expectation)
     {
-        /** @var \Magento\Payment\Model\InfoInterface $paymentInfo */
+        /** @var InfoInterface $paymentInfo */
         $paymentInfo = $this->objectManagerHelper->getObject(\Magento\Payment\Model\Info::class);
         $paymentInfo->setAdditionalInformation($additionalInfo);
         $this->assertEquals(
@@ -77,7 +81,7 @@ class InfoTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetPublicPaymentInfoLabelValues($additionalInfo, $expectation)
     {
-        /** @var \Magento\Payment\Model\InfoInterface $paymentInfo */
+        /** @var InfoInterface $paymentInfo */
         $paymentInfo = $this->objectManagerHelper->getObject(\Magento\Payment\Model\Info::class);
         $paymentInfo->setAdditionalInformation($additionalInfo);
         $this->assertEquals($expectation, $this->info->getPublicPaymentInfo($paymentInfo));
@@ -91,8 +95,8 @@ class InfoTest extends \PHPUnit\Framework\TestCase
     public function testImportToPayment($mapping, $expectation)
     {
         // we create $from object, based on mapping
-        $from = new \Magento\Framework\DataObject($mapping);
-        /** @var \Magento\Payment\Model\InfoInterface $paymentInfo */
+        $from = new DataObject($mapping);
+        /** @var InfoInterface $paymentInfo */
         $paymentInfo = $this->objectManagerHelper->getObject(\Magento\Payment\Model\Info::class);
         $this->info->importToPayment($from, $paymentInfo);
         $this->assertEquals($expectation, $paymentInfo->getAdditionalInformation());
@@ -105,12 +109,12 @@ class InfoTest extends \PHPUnit\Framework\TestCase
      */
     public function testExportFromPayment($mapping, $expectation)
     {
-        /** @var \Magento\Payment\Model\InfoInterface $paymentInfo */
+        /** @var InfoInterface $paymentInfo */
         $paymentInfo = $this->objectManagerHelper->getObject(\Magento\Payment\Model\Info::class);
         $paymentInfo->setAdditionalInformation($expectation);
 
         // we create $to empty object
-        $to = new \Magento\Framework\DataObject();
+        $to = new DataObject();
         $this->info->exportFromPayment($paymentInfo, $to);
         $this->assertEquals($mapping, $to->getData());
     }
@@ -122,12 +126,12 @@ class InfoTest extends \PHPUnit\Framework\TestCase
      */
     public function testExportFromPaymentCustomMapping($mapping, $expectation)
     {
-        /** @var \Magento\Payment\Model\InfoInterface $paymentInfo */
+        /** @var InfoInterface $paymentInfo */
         $paymentInfo = $this->objectManagerHelper->getObject(\Magento\Payment\Model\Info::class);
         $paymentInfo->setAdditionalInformation($expectation);
 
         // we create $to empty object
-        $to = new \Magento\Framework\DataObject();
+        $to = new DataObject();
         $this->info->exportFromPayment($paymentInfo, $to, array_flip($mapping));
         $this->assertEquals($mapping, $to->getData());
     }

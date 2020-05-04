@@ -3,33 +3,40 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\CatalogRuleConfigurable\Test\Unit\Plugin\CatalogRule\Model\Rule;
 
+use Magento\CatalogRule\Model\Rule;
 use Magento\CatalogRuleConfigurable\Plugin\CatalogRule\Model\Rule\Validation;
+use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
+use Magento\Framework\DataObject;
+use Magento\Rule\Model\Condition\Combine;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Unit test for Magento\CatalogRuleConfigurable\Plugin\CatalogRule\Model\Rule\Validation
  */
-class ValidationTest extends \PHPUnit\Framework\TestCase
+class ValidationTest extends TestCase
 {
     /**
-     * @var \Magento\CatalogRuleConfigurable\Plugin\CatalogRule\Model\Rule\Validation
+     * @var Validation
      */
     private $validation;
 
     /**
-     * @var \Magento\ConfigurableProduct\Model\Product\Type\Configurable|\PHPUnit\Framework\MockObject\MockObject
+     * @var Configurable|MockObject
      */
     private $configurableMock;
 
-    /** @var \Magento\CatalogRule\Model\Rule|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var Rule|MockObject */
     private $ruleMock;
 
-    /** @var \Magento\Rule\Model\Condition\Combine|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var Combine|MockObject */
     private $ruleConditionsMock;
 
-    /** @var \Magento\Framework\DataObject|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var DataObject|MockObject */
     private $productMock;
 
     /**
@@ -38,13 +45,16 @@ class ValidationTest extends \PHPUnit\Framework\TestCase
     protected function setUp(): void
     {
         $this->configurableMock = $this->createPartialMock(
-            \Magento\ConfigurableProduct\Model\Product\Type\Configurable::class,
+            Configurable::class,
             ['getParentIdsByChild']
         );
 
-        $this->ruleMock = $this->createMock(\Magento\CatalogRule\Model\Rule::class);
-        $this->ruleConditionsMock = $this->createMock(\Magento\Rule\Model\Condition\Combine::class);
-        $this->productMock = $this->createPartialMock(\Magento\Framework\DataObject::class, ['getId']);
+        $this->ruleMock = $this->createMock(Rule::class);
+        $this->ruleConditionsMock = $this->createMock(Combine::class);
+        $this->productMock = $this->getMockBuilder(DataObject::class)
+            ->addMethods(['getId'])
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->validation = new Validation(
             $this->configurableMock

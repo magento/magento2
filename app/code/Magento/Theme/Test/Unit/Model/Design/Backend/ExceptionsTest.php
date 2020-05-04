@@ -3,41 +3,52 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Theme\Test\Unit\Model\Design\Backend;
 
+use Magento\Framework\App\Area;
+use Magento\Framework\Event\ManagerInterface;
+use Magento\Framework\Model\Context;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\Framework\App\Area;
+use Magento\Framework\View\DesignInterface;
+use Magento\Theme\Model\Design\Backend\Exceptions;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class ExceptionsTest extends \PHPUnit\Framework\TestCase
+class ExceptionsTest extends TestCase
 {
     /**
-     * @var \Magento\Theme\Model\Design\Backend\Exceptions
+     * @var Exceptions
      */
     protected $model;
 
     /**
-     * @var \Magento\Framework\Model\Context|\PHPUnit\Framework\MockObject\MockObject
+     * @var Context|MockObject
      */
     protected $contextMock;
 
     /**
-     * @var \Magento\Framework\View\DesignInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var DesignInterface|MockObject
      */
     protected $designMock;
 
     protected function setUp(): void
     {
-        $this->contextMock = $this->getMockBuilder(\Magento\Framework\Model\Context::class)
+        $this->contextMock = $this->getMockBuilder(Context::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->designMock = $this->getMockBuilder(\Magento\Framework\View\DesignInterface::class)->getMock();
+        $this->designMock = $this->getMockBuilder(DesignInterface::class)
+            ->getMock();
         $this->contextMock->expects($this->once())
             ->method('getEventDispatcher')
-            ->willReturn($this->getMockBuilder(\Magento\Framework\Event\ManagerInterface::class)->getMock());
-        $serializerMock = $this->getMockBuilder(Json::class)->getMock();
+            ->willReturn($this->getMockBuilder(ManagerInterface::class)
+            ->getMock());
+        $serializerMock = $this->getMockBuilder(Json::class)
+            ->getMock();
         $this->model = (new ObjectManager($this))->getObject(
-            \Magento\Theme\Model\Design\Backend\Exceptions::class,
+            Exceptions::class,
             [
                 'context' => $this->contextMock,
                 'design' => $this->designMock,

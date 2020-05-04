@@ -9,11 +9,12 @@ namespace Magento\CardinalCommerce\Test\Unit\Model;
 
 use Magento\CardinalCommerce\Model\JwtManagement;
 use Magento\Framework\Serialize\Serializer\Json;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Tests JWT encode and decode.
  */
-class JwtManagementTest extends \PHPUnit\Framework\TestCase
+class JwtManagementTest extends TestCase
 {
     /**
      * API key

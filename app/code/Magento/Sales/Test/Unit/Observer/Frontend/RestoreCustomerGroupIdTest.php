@@ -3,17 +3,28 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Sales\Test\Unit\Observer\Frontend;
 
+use Magento\Customer\Helper\Address;
+use Magento\Customer\Model\Address\AbstractAddress;
+use Magento\Framework\Event;
+use Magento\Framework\Event\Observer;
+use Magento\Quote\Api\Data\ShippingAssignmentInterface;
+use Magento\Quote\Api\Data\ShippingInterface;
+use Magento\Quote\Model\Quote;
 use Magento\Sales\Observer\Frontend\RestoreCustomerGroupId;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Tests Magento\Sales\Observer\Frontend\RestoreCustomerGroupIdTest
  */
-class RestoreCustomerGroupIdTest extends \PHPUnit\Framework\TestCase
+class RestoreCustomerGroupIdTest extends TestCase
 {
     /**
-     * @var \Magento\Customer\Helper\Address|\PHPUnit\Framework\MockObject\MockObject
+     * @var Address|MockObject
      */
     protected $customerAddressHelperMock;
 
@@ -24,7 +35,7 @@ class RestoreCustomerGroupIdTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp(): void
     {
-        $this->customerAddressHelperMock = $this->createMock(\Magento\Customer\Helper\Address::class);
+        $this->customerAddressHelperMock = $this->createMock(Address::class);
         $this->quote = new RestoreCustomerGroupId($this->customerAddressHelperMock);
     }
 
@@ -34,29 +45,33 @@ class RestoreCustomerGroupIdTest extends \PHPUnit\Framework\TestCase
      */
     public function testExecute($configAddressType)
     {
-        $eventMock = $this->createPartialMock(\Magento\Framework\Event::class, ['getShippingAssignment', 'getQuote']);
-        $observer = $this->createPartialMock(\Magento\Framework\Event\Observer::class, ['getEvent']);
+        $eventMock = $this->getMockBuilder(Event::class)
+            ->addMethods(['getShippingAssignment', 'getQuote'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $observer = $this->createPartialMock(Observer::class, ['getEvent']);
         $observer->expects($this->exactly(2))->method('getEvent')->willReturn($eventMock);
 
-        $shippingAssignmentMock = $this->createMock(\Magento\Quote\Api\Data\ShippingAssignmentInterface::class);
-        $quoteMock = $this->createMock(\Magento\Quote\Model\Quote::class);
+        $shippingAssignmentMock = $this->createMock(ShippingAssignmentInterface::class);
+        $quoteMock = $this->createMock(Quote::class);
 
         $eventMock->expects($this->once())->method('getShippingAssignment')->willReturn($shippingAssignmentMock);
         $eventMock->expects($this->once())->method('getQuote')->willReturn($quoteMock);
 
-        $shippingMock = $this->createMock(\Magento\Quote\Api\Data\ShippingInterface::class);
+        $shippingMock = $this->createMock(ShippingInterface::class);
         $shippingAssignmentMock->expects($this->once())->method('getShipping')->willReturn($shippingMock);
 
-        $quoteAddress = $this->createPartialMock(
-            \Magento\Quote\Model\Quote\Address::class,
+        $quoteAddress = $this->getMockBuilder(\Magento\Quote\Model\Quote\Address::class)->addMethods(
             [
                 'getPrevQuoteCustomerGroupId',
                 'unsPrevQuoteCustomerGroupId',
                 'hasPrevQuoteCustomerGroupId',
-                'setCustomerGroupId',
-                'getQuote'
+                'setCustomerGroupId'
             ]
-        );
+        )
+            ->onlyMethods(['getQuote'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $shippingMock->expects($this->once())->method('getAddress')->willReturn($quoteAddress);
 
         $this->customerAddressHelperMock->expects($this->once())
@@ -78,9 +93,9 @@ class RestoreCustomerGroupIdTest extends \PHPUnit\Framework\TestCase
     public function restoreCustomerGroupIdDataProvider()
     {
         return [
-            [\Magento\Customer\Model\Address\AbstractAddress::TYPE_SHIPPING],
+            [AbstractAddress::TYPE_SHIPPING],
             [null],
-            [\Magento\Customer\Model\Address\AbstractAddress::TYPE_BILLING],
+            [AbstractAddress::TYPE_BILLING],
         ];
     }
 }

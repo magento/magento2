@@ -3,15 +3,21 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Framework\Pricing\Test\Unit\Price;
 
-use \Magento\Framework\Pricing\Price\AbstractPrice;
+use Magento\Catalog\Model\Product;
+use Magento\Framework\Pricing\Adjustment\Calculator;
+use Magento\Framework\Pricing\Price\AbstractPrice;
+use Magento\Framework\Pricing\PriceCurrencyInterface;
+use Magento\Framework\Pricing\PriceInfo\Base;
+use Magento\Framework\Pricing\SaleableInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-/**
- * Class RegularPriceTest
- */
-class AbstractPriceTest extends \PHPUnit\Framework\TestCase
+class AbstractPriceTest extends TestCase
 {
     /**
      * @var AbstractPrice
@@ -19,22 +25,22 @@ class AbstractPriceTest extends \PHPUnit\Framework\TestCase
     protected $price;
 
     /**
-     * @var \Magento\Framework\Pricing\PriceInfo\Base |\PHPUnit\Framework\MockObject\MockObject
+     * @var Base|MockObject
      */
     protected $priceInfoMock;
 
     /**
-     * @var \Magento\Framework\Pricing\SaleableInterface |\PHPUnit\Framework\MockObject\MockObject
+     * @var SaleableInterface|MockObject
      */
     protected $saleableItemMock;
 
     /**
-     * @var \Magento\Framework\Pricing\Adjustment\Calculator |\PHPUnit\Framework\MockObject\MockObject
+     * @var Calculator|MockObject
      */
     protected $calculatorMock;
 
     /**
-     * @var \Magento\Framework\Pricing\PriceCurrencyInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var PriceCurrencyInterface|MockObject
      */
     protected $priceCurrencyMock;
 
@@ -44,19 +50,19 @@ class AbstractPriceTest extends \PHPUnit\Framework\TestCase
     protected function setUp(): void
     {
         $qty = 1;
-        $this->saleableItemMock = $this->createMock(\Magento\Catalog\Model\Product::class);
-        $this->priceInfoMock = $this->createMock(\Magento\Framework\Pricing\PriceInfo\Base::class);
-        $this->calculatorMock = $this->createMock(\Magento\Framework\Pricing\Adjustment\Calculator::class);
+        $this->saleableItemMock = $this->createMock(Product::class);
+        $this->priceInfoMock = $this->createMock(Base::class);
+        $this->calculatorMock = $this->createMock(Calculator::class);
 
         $this->saleableItemMock->expects($this->once())
             ->method('getPriceInfo')
             ->willReturn($this->priceInfoMock);
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $objectManager = new ObjectManager($this);
 
-        $this->priceCurrencyMock = $this->createMock(\Magento\Framework\Pricing\PriceCurrencyInterface::class);
+        $this->priceCurrencyMock = $this->createMock(PriceCurrencyInterface::class);
 
         $this->price = $objectManager->getObject(
-            \Magento\Framework\Pricing\Test\Unit\Price\Stub::class,
+            Stub::class,
             [
                 'saleableItem' => $this->saleableItemMock,
                 'quantity' => $qty,
@@ -75,7 +81,7 @@ class AbstractPriceTest extends \PHPUnit\Framework\TestCase
         $amountValue = 88;
         $this->calculatorMock->expects($this->once())
             ->method('getAmount')
-            ->with($this->equalTo($priceValue))
+            ->with($priceValue)
             ->willReturn($amountValue);
         $this->assertEquals($amountValue, $this->price->getAmount());
     }

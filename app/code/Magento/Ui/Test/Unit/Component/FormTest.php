@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Ui\Test\Unit\Component;
 
 use Magento\Framework\Api\Filter;
@@ -10,23 +12,25 @@ use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Framework\View\Element\UiComponent\DataProvider\DataProviderInterface;
 use Magento\Ui\Component\Form;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class FormTest extends \PHPUnit\Framework\TestCase
+class FormTest extends TestCase
 {
     /** @var Form */
     protected $model;
 
-    /** @var ContextInterface|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var ContextInterface|MockObject */
     protected $contextMock;
 
-    /** @var FilterBuilder|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var FilterBuilder|MockObject */
     protected $filterBuilderMock;
 
     protected function setUp(): void
     {
-        $this->contextMock = $this->getMockBuilder(\Magento\Framework\View\Element\UiComponent\ContextInterface::class)
+        $this->contextMock = $this->getMockBuilder(ContextInterface::class)
             ->getMockForAbstractClass();
-        $this->filterBuilderMock = $this->getMockBuilder(\Magento\Framework\Api\FilterBuilder::class)
+        $this->filterBuilderMock = $this->getMockBuilder(FilterBuilder::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -56,10 +60,10 @@ class FormTest extends \PHPUnit\Framework\TestCase
             'data' => $row,
         ];
 
-        /** @var DataProviderInterface|\PHPUnit\Framework\MockObject\MockObject $dataProviderMock */
+        /** @var DataProviderInterface|MockObject $dataProviderMock */
         $dataProviderMock =
-            $this->getMockBuilder(\Magento\Framework\View\Element\UiComponent\DataProvider\DataProviderInterface::class)
-            ->getMock();
+            $this->getMockBuilder(DataProviderInterface::class)
+                ->getMock();
         $dataProviderMock->expects($this->once())
             ->method('getRequestFieldName')
             ->willReturn($requestFieldName);
@@ -75,10 +79,10 @@ class FormTest extends \PHPUnit\Framework\TestCase
             ->with($requestFieldName)
             ->willReturn($fieldId);
 
-        /** @var Filter|\PHPUnit\Framework\MockObject\MockObject $filterMock */
-        $filterMock = $this->getMockBuilder(\Magento\Framework\Api\Filter::class)
-                ->disableOriginalConstructor()
-                ->getMock();
+        /** @var Filter|MockObject $filterMock */
+        $filterMock = $this->getMockBuilder(Filter::class)
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->filterBuilderMock->expects($this->once())
             ->method('setField')
@@ -110,9 +114,9 @@ class FormTest extends \PHPUnit\Framework\TestCase
         $data = [];
         $dataSource = [];
 
-        /** @var DataProviderInterface|\PHPUnit\Framework\MockObject\MockObject $dataProviderMock */
+        /** @var DataProviderInterface|MockObject $dataProviderMock */
         $dataProviderMock =
-            $this->getMockBuilder(\Magento\Framework\View\Element\UiComponent\DataProvider\DataProviderInterface::class)
+            $this->getMockBuilder(DataProviderInterface::class)
                 ->getMock();
         $dataProviderMock->expects($this->once())
             ->method('getRequestFieldName')
@@ -129,8 +133,8 @@ class FormTest extends \PHPUnit\Framework\TestCase
             ->with($requestFieldName)
             ->willReturn($fieldId);
 
-        /** @var Filter|\PHPUnit\Framework\MockObject\MockObject $filterMock */
-        $filterMock = $this->getMockBuilder(\Magento\Framework\Api\Filter::class)
+        /** @var Filter|MockObject $filterMock */
+        $filterMock = $this->getMockBuilder(Filter::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -169,9 +173,9 @@ class FormTest extends \PHPUnit\Framework\TestCase
             'data' => $row,
         ];
 
-        /** @var DataProviderInterface|\PHPUnit\Framework\MockObject\MockObject $dataProviderMock */
+        /** @var DataProviderInterface|MockObject $dataProviderMock */
         $dataProviderMock =
-            $this->getMockBuilder(\Magento\Framework\View\Element\UiComponent\DataProvider\DataProviderInterface::class)
+            $this->getMockBuilder(DataProviderInterface::class)
                 ->getMock();
         $dataProviderMock->expects($this->once())
             ->method('getRequestFieldName')
@@ -188,8 +192,8 @@ class FormTest extends \PHPUnit\Framework\TestCase
             ->with($requestFieldName)
             ->willReturn($fieldId);
 
-        /** @var Filter|\PHPUnit\Framework\MockObject\MockObject $filterMock */
-        $filterMock = $this->getMockBuilder(\Magento\Framework\Api\Filter::class)
+        /** @var Filter|MockObject $filterMock */
+        $filterMock = $this->getMockBuilder(Filter::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -230,9 +234,9 @@ class FormTest extends \PHPUnit\Framework\TestCase
             ],
         ];
 
-        /** @var DataProviderInterface|\PHPUnit\Framework\MockObject\MockObject $dataProviderMock */
+        /** @var DataProviderInterface|MockObject $dataProviderMock */
         $dataProviderMock =
-            $this->getMockBuilder(\Magento\Framework\View\Element\UiComponent\DataProvider\DataProviderInterface::class)
+            $this->getMockBuilder(DataProviderInterface::class)
                 ->getMock();
         $dataProviderMock->expects($this->once())
             ->method('getRequestFieldName')
@@ -249,8 +253,8 @@ class FormTest extends \PHPUnit\Framework\TestCase
             ->with($requestFieldName)
             ->willReturn($fieldId);
 
-        /** @var Filter|\PHPUnit\Framework\MockObject\MockObject $filterMock */
-        $filterMock = $this->getMockBuilder(\Magento\Framework\Api\Filter::class)
+        /** @var Filter|MockObject $filterMock */
+        $filterMock = $this->getMockBuilder(Filter::class)
             ->disableOriginalConstructor()
             ->getMock();
 

@@ -3,87 +3,106 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\App\Test\Unit;
+
+use Magento\Framework\App\ActionFlag;
+use Magento\Framework\App\ActionInterface;
+use Magento\Framework\App\Response\Http;
+use Magento\Framework\App\View;
+use Magento\Framework\Config\ScopeInterface;
+use Magento\Framework\Event\ManagerInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\View\Layout;
+use Magento\Framework\View\Model\Layout\Merge;
+use Magento\Framework\View\Page\Config;
+use Magento\Framework\View\Page\Config\RendererFactory;
+use Magento\Framework\View\Result\Page;
+use Magento\Framework\View\Result\PageFactory;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ViewTest extends \PHPUnit\Framework\TestCase
+class ViewTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\App\View
+     * @var View
      */
     protected $_view;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $_layoutMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $_configScopeMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $_requestMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $_layoutProcessor;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $_actionFlagMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $_eventManagerMock;
 
     /**
-     * @var \Magento\Framework\View\Result\Page|\PHPUnit\Framework\MockObject\MockObject
+     * @var Page|MockObject
      */
     protected $resultPage;
 
     /**
-     * @var \Magento\Framework\App\Response\Http|\PHPUnit\Framework\MockObject\MockObject
+     * @var Http|MockObject
      */
     protected $response;
 
     protected function setUp(): void
     {
-        $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->_layoutMock = $this->createMock(\Magento\Framework\View\Layout::class);
+        $helper = new ObjectManager($this);
+        $this->_layoutMock = $this->createMock(Layout::class);
         $this->_requestMock = $this->createMock(\Magento\Framework\App\Request\Http::class);
-        $this->_configScopeMock = $this->createMock(\Magento\Framework\Config\ScopeInterface::class);
-        $this->_layoutProcessor = $this->createMock(\Magento\Framework\View\Model\Layout\Merge::class);
+        $this->_configScopeMock = $this->createMock(ScopeInterface::class);
+        $this->_layoutProcessor = $this->createMock(Merge::class);
         $this->_layoutMock->expects($this->any())->method('getUpdate')
             ->willReturn($this->_layoutProcessor);
-        $this->_actionFlagMock = $this->createMock(\Magento\Framework\App\ActionFlag::class);
-        $this->_eventManagerMock = $this->createMock(\Magento\Framework\Event\ManagerInterface::class);
+        $this->_actionFlagMock = $this->createMock(ActionFlag::class);
+        $this->_eventManagerMock = $this->createMock(ManagerInterface::class);
         $pageConfigMock = $this->getMockBuilder(
-            \Magento\Framework\View\Page\Config::class
-        )->disableOriginalConstructor()->getMock();
+            Config::class
+        )->disableOriginalConstructor()
+            ->getMock();
         $pageConfigMock->expects($this->any())
             ->method('publicBuild')
             ->willReturnSelf();
 
-        $pageConfigRendererFactory = $this->getMockBuilder(\Magento\Framework\View\Page\Config\RendererFactory::class)
+        $pageConfigRendererFactory = $this->getMockBuilder(RendererFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
 
-        $this->resultPage = $this->getMockBuilder(\Magento\Framework\View\Result\Page::class)
+        $this->resultPage = $this->getMockBuilder(Page::class)
             ->setConstructorArgs(
-                $helper->getConstructArguments(\Magento\Framework\View\Result\Page::class, [
-                'request' => $this->_requestMock,
-                'pageConfigRendererFactory' => $pageConfigRendererFactory,
-                'layout' => $this->_layoutMock
+                $helper->getConstructArguments(Page::class, [
+                    'request' => $this->_requestMock,
+                    'pageConfigRendererFactory' => $pageConfigRendererFactory,
+                    'layout' => $this->_layoutMock
                 ])
             )
             ->setMethods(['renderResult', 'getConfig'])
@@ -91,7 +110,7 @@ class ViewTest extends \PHPUnit\Framework\TestCase
         $this->resultPage->expects($this->any())
             ->method('getConfig')
             ->willReturn($pageConfigMock);
-        $pageFactory = $this->getMockBuilder(\Magento\Framework\View\Result\PageFactory::class)
+        $pageFactory = $this->getMockBuilder(PageFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
@@ -99,10 +118,10 @@ class ViewTest extends \PHPUnit\Framework\TestCase
             ->method('create')
             ->willReturn($this->resultPage);
 
-        $this->response = $this->createMock(\Magento\Framework\App\Response\Http::class);
+        $this->response = $this->createMock(Http::class);
 
         $this->_view = $helper->getObject(
-            \Magento\Framework\App\View::class,
+            View::class,
             [
                 'layout' => $this->_layoutMock,
                 'request' => $this->_requestMock,
@@ -120,13 +139,10 @@ class ViewTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($this->_layoutMock, $this->_view->getLayout());
     }
 
-    /**
-     */
     public function testLoadLayoutWhenLayoutAlreadyLoaded()
     {
-        $this->expectException(\RuntimeException::class);
+        $this->expectException('RuntimeException');
         $this->expectExceptionMessage('Layout must be loaded only once.');
-
         $this->_view->setIsLayoutLoaded(true);
         $this->_view->loadLayout();
     }
@@ -192,8 +208,8 @@ class ViewTest extends \PHPUnit\Framework\TestCase
     public function testGenerateLayoutBlocksWhenFlagIsNotSet()
     {
         $valueMap = [
-            ['', \Magento\Framework\App\ActionInterface::FLAG_NO_DISPATCH_BLOCK_EVENT, false],
-            ['', \Magento\Framework\App\ActionInterface::FLAG_NO_DISPATCH_BLOCK_EVENT, false],
+            ['', ActionInterface::FLAG_NO_DISPATCH_BLOCK_EVENT, false],
+            ['', ActionInterface::FLAG_NO_DISPATCH_BLOCK_EVENT, false],
         ];
         $this->_actionFlagMock->expects($this->any())->method('get')->willReturnMap($valueMap);
         $this->_view->generateLayoutBlocks();
@@ -202,8 +218,8 @@ class ViewTest extends \PHPUnit\Framework\TestCase
     public function testGenerateLayoutBlocksWhenFlagIsSet()
     {
         $valueMap = [
-            ['', \Magento\Framework\App\ActionInterface::FLAG_NO_DISPATCH_BLOCK_EVENT, true],
-            ['', \Magento\Framework\App\ActionInterface::FLAG_NO_DISPATCH_BLOCK_EVENT, true],
+            ['', ActionInterface::FLAG_NO_DISPATCH_BLOCK_EVENT, true],
+            ['', ActionInterface::FLAG_NO_DISPATCH_BLOCK_EVENT, true],
         ];
         $this->_actionFlagMock->expects($this->any())->method('get')->willReturnMap($valueMap);
 

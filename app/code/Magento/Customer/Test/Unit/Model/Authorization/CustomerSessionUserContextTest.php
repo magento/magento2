@@ -3,42 +3,47 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Customer\Test\Unit\Model\Authorization;
 
 use Magento\Authorization\Model\UserContextInterface;
+use Magento\Customer\Model\Authorization\CustomerSessionUserContext;
+use Magento\Customer\Model\Session;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Tests Magento\Customer\Model\Authorization\CustomerSessionUserContext
  */
-class CustomerSessionUserContextTest extends \PHPUnit\Framework\TestCase
+class CustomerSessionUserContextTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
+     * @var ObjectManager
      */
     protected $objectManager;
 
     /**
-     * @var \Magento\Customer\Model\Authorization\CustomerSessionUserContext
+     * @var CustomerSessionUserContext
      */
     protected $customerSessionUserContext;
 
     /**
-     * @var \Magento\Customer\Model\Session
+     * @var Session
      */
     protected $customerSession;
 
     protected function setUp(): void
     {
-        $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $this->objectManager = new ObjectManager($this);
 
-        $this->customerSession = $this->getMockBuilder(\Magento\Customer\Model\Session::class)
+        $this->customerSession = $this->getMockBuilder(Session::class)
             ->disableOriginalConstructor()
             ->setMethods(['getId'])
             ->getMock();
 
         $this->customerSessionUserContext = $this->objectManager->getObject(
-            \Magento\Customer\Model\Authorization\CustomerSessionUserContext::class,
+            CustomerSessionUserContext::class,
             ['customerSession' => $this->customerSession]
         );
     }

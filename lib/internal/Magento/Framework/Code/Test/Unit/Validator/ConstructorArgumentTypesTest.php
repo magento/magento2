@@ -6,30 +6,36 @@
 
 namespace Magento\Framework\Code\Test\Unit\Validator;
 
-class ConstructorArgumentTypesTest extends \PHPUnit\Framework\TestCase
+use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\MockObject\MockObject;
+use Magento\Framework\Code\Validator\ConstructorArgumentTypes;
+use Magento\Framework\Code\Reader\ArgumentsReader;
+use Magento\Framework\Code\Reader\SourceArgumentsReader;
+
+class ConstructorArgumentTypesTest extends TestCase
 {
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $argumentsReaderMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $sourceArgumentsReaderMock;
 
     /**
-     * @var \Magento\Framework\Code\Validator\ConstructorArgumentTypes
+     * @var ConstructorArgumentTypes
      */
     protected $model;
 
     protected function setUp(): void
     {
-        $this->argumentsReaderMock = $this->createMock(\Magento\Framework\Code\Reader\ArgumentsReader::class);
+        $this->argumentsReaderMock = $this->createMock(ArgumentsReader::class);
         $this->sourceArgumentsReaderMock =
-            $this->createMock(\Magento\Framework\Code\Reader\SourceArgumentsReader::class);
-        $this->model = new \Magento\Framework\Code\Validator\ConstructorArgumentTypes(
+            $this->createMock(SourceArgumentsReader::class);
+        $this->model = new ConstructorArgumentTypes(
             $this->argumentsReaderMock,
             $this->sourceArgumentsReaderMock
         );
@@ -46,13 +52,10 @@ class ConstructorArgumentTypesTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($this->model->validate($className));
     }
 
-    /**
-     */
     public function testValidateWithException()
     {
-        $this->expectException(\Magento\Framework\Exception\ValidatorException::class);
-        $this->expectExceptionMessage('Invalid constructor argument(s) in \\stdClass');
-
+        $this->expectException('Magento\Framework\Exception\ValidatorException');
+        $this->expectExceptionMessage('Invalid constructor argument(s) in \stdClass');
         $className = '\stdClass';
         $classMock = new \ReflectionClass($className);
         $this->argumentsReaderMock->expects($this->once())->method('getConstructorArguments')->with($classMock)

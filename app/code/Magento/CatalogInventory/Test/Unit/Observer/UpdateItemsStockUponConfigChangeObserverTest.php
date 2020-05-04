@@ -3,11 +3,20 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\CatalogInventory\Test\Unit\Observer;
 
+use Magento\CatalogInventory\Model\Configuration;
+use Magento\CatalogInventory\Model\ResourceModel\Stock\Item;
 use Magento\CatalogInventory\Observer\UpdateItemsStockUponConfigChangeObserver;
+use Magento\Framework\Event;
+use Magento\Framework\Event\Observer;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class UpdateItemsStockUponConfigChangeObserverTest extends \PHPUnit\Framework\TestCase
+class UpdateItemsStockUponConfigChangeObserverTest extends TestCase
 {
     /**
      * @var UpdateItemsStockUponConfigChangeObserver
@@ -15,30 +24,30 @@ class UpdateItemsStockUponConfigChangeObserverTest extends \PHPUnit\Framework\Te
     protected $observer;
 
     /**
-     * @var \Magento\CatalogInventory\Model\ResourceModel\Stock\Item|\PHPUnit\Framework\MockObject\MockObject
+     * @var Item|MockObject
      */
     protected $resourceStockItem;
 
     /**
-     * @var \Magento\Framework\Event|\PHPUnit\Framework\MockObject\MockObject
+     * @var Event|MockObject
      */
     protected $event;
 
     /**
-     * @var \Magento\Framework\Event\Observer|\PHPUnit\Framework\MockObject\MockObject
+     * @var Observer|MockObject
      */
     protected $eventObserver;
 
     protected function setUp(): void
     {
-        $this->resourceStockItem = $this->createMock(\Magento\CatalogInventory\Model\ResourceModel\Stock\Item::class);
+        $this->resourceStockItem = $this->createMock(Item::class);
 
-        $this->event = $this->getMockBuilder(\Magento\Framework\Event::class)
+        $this->event = $this->getMockBuilder(Event::class)
             ->disableOriginalConstructor()
             ->setMethods(['getWebsite', 'getChangedPaths'])
             ->getMock();
 
-        $this->eventObserver = $this->getMockBuilder(\Magento\Framework\Event\Observer::class)
+        $this->eventObserver = $this->getMockBuilder(Observer::class)
             ->disableOriginalConstructor()
             ->setMethods(['getEvent'])
             ->getMock();
@@ -47,8 +56,8 @@ class UpdateItemsStockUponConfigChangeObserverTest extends \PHPUnit\Framework\Te
             ->method('getEvent')
             ->willReturn($this->event);
 
-        $this->observer = (new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this))->getObject(
-            \Magento\CatalogInventory\Observer\UpdateItemsStockUponConfigChangeObserver::class,
+        $this->observer = (new ObjectManager($this))->getObject(
+            UpdateItemsStockUponConfigChangeObserver::class,
             [
                 'resourceStockItem' => $this->resourceStockItem,
             ]
@@ -67,7 +76,7 @@ class UpdateItemsStockUponConfigChangeObserverTest extends \PHPUnit\Framework\Te
             ->willReturn($websiteId);
         $this->event->expects($this->once())
             ->method('getChangedPaths')
-            ->willReturn([\Magento\CatalogInventory\Model\Configuration::XML_PATH_MANAGE_STOCK]);
+            ->willReturn([Configuration::XML_PATH_MANAGE_STOCK]);
 
         $this->observer->execute($this->eventObserver);
     }

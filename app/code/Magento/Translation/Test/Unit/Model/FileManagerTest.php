@@ -3,42 +3,50 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Translation\Test\Unit\Model;
 
+use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Filesystem\Driver\File;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\View\Asset\ContextInterface;
+use Magento\Framework\View\Asset\Repository;
 use Magento\Translation\Model\FileManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class FileManagerTest extends \PHPUnit\Framework\TestCase
+class FileManagerTest extends TestCase
 {
     /**
-     * @var \Magento\Translation\Model\FileManager|\PHPUnit\Framework\MockObject\MockObject
+     * @var FileManager|MockObject
      */
     private $model;
 
     /**
-     * @var \Magento\Framework\View\Asset\Repository|\PHPUnit\Framework\MockObject\MockObject
+     * @var Repository|MockObject
      */
     private $assetRepoMock;
 
     /**
-     * @var \Magento\Framework\App\Filesystem\DirectoryList|\PHPUnit\Framework\MockObject\MockObject
+     * @var DirectoryList|MockObject
      */
     private $directoryListMock;
 
     /**
-     * @var \Magento\Framework\Filesystem\Driver\File|\PHPUnit\Framework\MockObject\MockObject
+     * @var File|MockObject
      */
     private $driverFileMock;
 
     protected function setUp(): void
     {
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->assetRepoMock = $this->createMock(\Magento\Framework\View\Asset\Repository::class);
-        $this->directoryListMock = $this->createMock(\Magento\Framework\App\Filesystem\DirectoryList::class);
-        $this->driverFileMock = $this->createMock(\Magento\Framework\Filesystem\Driver\File::class);
+        $objectManager = new ObjectManager($this);
+        $this->assetRepoMock = $this->createMock(Repository::class);
+        $this->directoryListMock = $this->createMock(DirectoryList::class);
+        $this->driverFileMock = $this->createMock(File::class);
 
         $this->model = $objectManager->getObject(
-            \Magento\Translation\Model\FileManager::class,
+            FileManager::class,
             [
                 'assetRepo' => $this->assetRepoMock,
                 'directoryList' => $this->directoryListMock,
@@ -53,7 +61,7 @@ class FileManagerTest extends \PHPUnit\Framework\TestCase
         $expectedPath = $path . '/' . FileManager::TRANSLATION_CONFIG_FILE_NAME;
         $fileMock = $this->createMock(\Magento\Framework\View\Asset\File::class);
         $contextMock = $this->getMockForAbstractClass(
-            \Magento\Framework\View\Asset\ContextInterface::class,
+            ContextInterface::class,
             [],
             '',
             true,
@@ -76,7 +84,7 @@ class FileManagerTest extends \PHPUnit\Framework\TestCase
     {
         $path = 'path';
         $contextMock = $this->getMockForAbstractClass(
-            \Magento\Framework\View\Asset\ContextInterface::class,
+            ContextInterface::class,
             [],
             '',
             true,
@@ -101,7 +109,7 @@ class FileManagerTest extends \PHPUnit\Framework\TestCase
     {
         $path = 'path';
         $contextMock = $this->getMockForAbstractClass(
-            \Magento\Framework\View\Asset\ContextInterface::class,
+            ContextInterface::class,
             [],
             '',
             true,

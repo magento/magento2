@@ -8,15 +8,15 @@ declare(strict_types=1);
 
 namespace Magento\Swatches\Test\Unit\Block\Adminhtml\Attribute\Edit\Options;
 
+use Magento\Framework\DataObject;
 use Magento\Swatches\Block\Adminhtml\Attribute\Edit\Options\Visual;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-/**
- * Class \Magento\Swatches\Test\Unit\Block\Adminhtml\Attribute\Edit\Options\VisualTest
- */
-class VisualTest extends \PHPUnit\Framework\TestCase
+class VisualTest extends TestCase
 {
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|Visual
+     * @var MockObject|Visual
      */
     private $model;
 
@@ -42,8 +42,8 @@ class VisualTest extends \PHPUnit\Framework\TestCase
                 'can_manage_option_default_only' => false,
                 'upload_action_url' => 'http://magento.com/admin/swatches/iframe/show',
                 'option_values' => [
-                    new \Magento\Framework\DataObject(['value' => 6, 'label' => 'red']),
-                    new \Magento\Framework\DataObject(['value' => 6, 'label' => 'blue']),
+                    new DataObject(['value' => 6, 'label' => 'red']),
+                    new DataObject(['value' => 6, 'label' => 'blue']),
                 ]
             ],
             'expectedResult' => '{"attributesData":[{"value":6,"label":"red"},{"value":6,"label":"blue"}],' .
@@ -65,8 +65,8 @@ class VisualTest extends \PHPUnit\Framework\TestCase
                 'can_manage_option_default_only' => false,
                 'upload_action_url' => 'http://magento.com/admin/swatches/iframe/show',
                 'option_values' => [
-                    new \Magento\Framework\DataObject(['value' => 6, 'label' => 'red']),
-                    new \Magento\Framework\DataObject(['value' => 6, 'label' => 'blue']),
+                    new DataObject(['value' => 6, 'label' => 'red']),
+                    new DataObject(['value' => 6, 'label' => 'blue']),
                 ]
             ],
             'expectedResult' => '{"attributesData":[{"value":6,"label":"red"},{"value":6,"label":"blue"}],' .

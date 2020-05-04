@@ -3,32 +3,38 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Ui\Test\Unit\Component\Filters;
 
+use Magento\Framework\Api\Filter;
+use Magento\Framework\Api\FilterBuilder;
+use Magento\Framework\App\RequestInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\View\Element\UiComponent\DataProvider\DataProviderInterface;
+use Magento\Ui\Component\Filters\FilterModifier;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-/**
- * Class DateRangeTest
- */
-class FilterModifierTest extends \PHPUnit\Framework\TestCase
+class FilterModifierTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\App\RequestInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var RequestInterface|MockObject
      */
     protected $request;
 
     /**
-     * @var DataProviderInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var DataProviderInterface|MockObject
      */
     protected $dataProvider;
 
     /**
-     * @var \Magento\Framework\Api\FilterBuilder|\PHPUnit\Framework\MockObject\MockObject
+     * @var FilterBuilder|MockObject
      */
     protected $filterBuilder;
 
     /**
-     * @var \Magento\Ui\Component\Filters\FilterModifier
+     * @var FilterModifier
      */
     protected $unit;
 
@@ -37,14 +43,14 @@ class FilterModifierTest extends \PHPUnit\Framework\TestCase
      */
     protected function setUp(): void
     {
-        $this->request = $this->getMockForAbstractClass(\Magento\Framework\App\RequestInterface::class);
+        $this->request = $this->getMockForAbstractClass(RequestInterface::class);
         $this->dataProvider = $this->getMockForAbstractClass(
-            \Magento\Framework\View\Element\UiComponent\DataProvider\DataProviderInterface::class
+            DataProviderInterface::class
         );
-        $this->filterBuilder = $this->createMock(\Magento\Framework\Api\FilterBuilder::class);
-        $this->unit = (new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this))
+        $this->filterBuilder = $this->createMock(FilterBuilder::class);
+        $this->unit = (new ObjectManager($this))
             ->getObject(
-                \Magento\Ui\Component\Filters\FilterModifier::class,
+                FilterModifier::class,
                 [
                     'request' => $this->request,
                     'filterBuilder' => $this->filterBuilder,
@@ -58,7 +64,7 @@ class FilterModifierTest extends \PHPUnit\Framework\TestCase
     public function testNotApplyFilterModifier()
     {
         $this->request->expects($this->once())->method('getParam')
-            ->with(\Magento\Ui\Component\Filters\FilterModifier::FILTER_MODIFIER)
+            ->with(FilterModifier::FILTER_MODIFIER)
             ->willReturn([]);
         $this->dataProvider->expects($this->never())->method('addFilter');
         $this->unit->applyFilterModifier($this->dataProvider, 'test');
@@ -69,11 +75,10 @@ class FilterModifierTest extends \PHPUnit\Framework\TestCase
      */
     public function testApplyFilterModifierWithNotAllowedCondition()
     {
-        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+        $this->expectException('Magento\Framework\Exception\LocalizedException');
         $this->expectExceptionMessage('Condition type "not_allowed" is not allowed');
-
         $this->request->expects($this->once())->method('getParam')
-            ->with(\Magento\Ui\Component\Filters\FilterModifier::FILTER_MODIFIER)
+            ->with(FilterModifier::FILTER_MODIFIER)
             ->willReturn([
                 'filter' => [
                     'condition_type' => 'not_allowed'
@@ -93,10 +98,10 @@ class FilterModifierTest extends \PHPUnit\Framework\TestCase
      */
     public function testApplyFilterModifierWith($filterModifier, $filterName, $conditionType, $value)
     {
-        $filter = $this->createMock(\Magento\Framework\Api\Filter::class);
+        $filter = $this->createMock(Filter::class);
 
         $this->request->expects($this->once())->method('getParam')
-            ->with(\Magento\Ui\Component\Filters\FilterModifier::FILTER_MODIFIER)
+            ->with(FilterModifier::FILTER_MODIFIER)
             ->willReturn($filterModifier);
         $this->filterBuilder->expects($this->once())->method('setConditionType')->with($conditionType)
             ->willReturnSelf();
@@ -116,7 +121,7 @@ class FilterModifierTest extends \PHPUnit\Framework\TestCase
         return [
             [
                 [
-                    'filter1' => ['condition_type' => 'eq', 'value' => '5',]
+                    'filter1' => ['condition_type' => 'eq', 'value' => '5']
                 ],
                 'filter1',
                 'eq',

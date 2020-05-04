@@ -3,22 +3,26 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\Search\Test\Unit\Dynamic;
 
-use Magento\Framework\Search\Dynamic\DataProviderFactory;
 use Magento\Framework\ObjectManagerInterface;
+use Magento\Framework\Search\Dynamic\DataProviderFactory;
 use Magento\Framework\Search\Dynamic\DataProviderInterface;
 use Magento\Framework\Search\EngineResolverInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class DataProviderFactoryTest extends \PHPUnit\Framework\TestCase
+class DataProviderFactoryTest extends TestCase
 {
     /** @var DataProviderFactory */
     private $model;
 
-    /** @var ObjectManagerInterface|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var ObjectManagerInterface|MockObject */
     private $objectManagerMock;
 
-    /** @var EngineResolverInterface|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var EngineResolverInterface|MockObject */
     private $engineResolverMock;
 
     protected function setUp(): void
@@ -59,13 +63,10 @@ class DataProviderFactoryTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($dataProviderMock, $this->model->create($data));
     }
 
-    /**
-     */
     public function testCreateWithoutProviders()
     {
-        $this->expectException(\LogicException::class);
+        $this->expectException('LogicException');
         $this->expectExceptionMessage('DataProvider not found by config current_provider');
-
         $dataProvider = 'current_provider';
         $dataProviders = [];
         $data = ['data'];
@@ -83,13 +84,10 @@ class DataProviderFactoryTest extends \PHPUnit\Framework\TestCase
         $this->model->create($data);
     }
 
-    /**
-     */
     public function testCreateWithWrongProvider()
     {
-        $this->expectException(\LogicException::class);
+        $this->expectException('LogicException');
         $this->expectExceptionMessage('DataProvider not instance of interface');
-
         $dataProvider = 'current_provider';
         $dataProviderClass = \stdClass::class;
         $dataProviders = [

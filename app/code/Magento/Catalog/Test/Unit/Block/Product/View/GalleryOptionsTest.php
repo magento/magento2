@@ -3,21 +3,25 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Catalog\Test\Unit\Block\Product\View;
 
 use Magento\Catalog\Block\Product\Context;
 use Magento\Catalog\Block\Product\View\Gallery;
 use Magento\Catalog\Block\Product\View\GalleryOptions;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\Framework\Escaper;
-use Magento\Framework\View\Config;
 use Magento\Framework\Config\View;
+use Magento\Framework\Escaper;
 use Magento\Framework\Serialize\Serializer\Json;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\View\Config;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class GalleryOptionsTest extends \PHPUnit\Framework\TestCase
+class GalleryOptionsTest extends TestCase
 {
     /**
      * @var GalleryOptions
@@ -25,12 +29,12 @@ class GalleryOptionsTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var Gallery|\PHPUnit\Framework\MockObject\MockObject
+     * @var Gallery|MockObject
      */
     private $gallery;
 
     /**
-     * @var Context|\PHPUnit\Framework\MockObject\MockObject
+     * @var Context|MockObject
      */
     private $context;
 
@@ -40,12 +44,12 @@ class GalleryOptionsTest extends \PHPUnit\Framework\TestCase
     private $jsonSerializer;
 
     /**
-     * @var View|\PHPUnit\Framework\MockObject\MockObject
+     * @var View|MockObject
      */
     private $configView;
 
     /**
-     * @var Config|\PHPUnit\Framework\MockObject\MockObject
+     * @var Config|MockObject
      */
     private $viewConfig;
 

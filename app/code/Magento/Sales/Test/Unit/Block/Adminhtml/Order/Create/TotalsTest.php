@@ -3,33 +3,38 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Sales\Test\Unit\Block\Adminhtml\Order\Create;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Quote\Model\Quote;
+use Magento\Sales\Block\Adminhtml\Order\Create\Totals;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Totals block test
  */
-class TotalsTest extends \PHPUnit\Framework\TestCase
+class TotalsTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
+     * @var ObjectManager
      */
     protected $objectManager;
 
     /**
-     * @var \Magento\Sales\Block\Adminhtml\Order\Create\Totals
+     * @var Totals
      */
     protected $totals;
 
     /**
-     * @var \Magento\Quote\Model\Quote|\PHPUnit\Framework\MockObject\MockObject
+     * @var Quote|MockObject
      */
     protected $quoteMock;
 
     /**
-     * @var \Magento\Backend\Model\Session\Quote|\PHPUnit\Framework\MockObject\MockObject
+     * @var \Magento\Backend\Model\Session\Quote|MockObject
      */
     protected $sessionQuoteMock;
 
@@ -37,7 +42,7 @@ class TotalsTest extends \PHPUnit\Framework\TestCase
     {
         $this->objectManager = new ObjectManager($this);
 
-        $this->quoteMock = $this->createPartialMock(\Magento\Quote\Model\Quote::class, ['getCustomerNoteNotify']);
+        $this->quoteMock = $this->createPartialMock(Quote::class, ['getCustomerNoteNotify']);
         $this->sessionQuoteMock = $this->createMock(\Magento\Backend\Model\Session\Quote::class);
 
         $this->sessionQuoteMock->expects($this->any())
@@ -45,7 +50,7 @@ class TotalsTest extends \PHPUnit\Framework\TestCase
             ->willReturn($this->quoteMock);
 
         $this->totals = $this->objectManager->getObject(
-            \Magento\Sales\Block\Adminhtml\Order\Create\Totals::class,
+            Totals::class,
             [
                 'sessionQuote' => $this->sessionQuoteMock
             ]

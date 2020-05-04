@@ -3,14 +3,18 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\ImportExport\Test\Unit\Model\ResourceModel;
 
+use Magento\Framework\DB\Adapter\Pdo\Mysql;
+use Magento\Framework\DB\Select;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\ImportExport\Model\ResourceModel\History;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-/**
- * Class HistoryTest
- */
-class HistoryTest extends \PHPUnit\Framework\TestCase
+class HistoryTest extends TestCase
 {
     /**
      * @var ObjectManagerHelper
@@ -18,7 +22,7 @@ class HistoryTest extends \PHPUnit\Framework\TestCase
     protected $objectManagerHelper;
 
     /**
-     * @var \Magento\ImportExport\Model\ResourceModel\History|\PHPUnit\Framework\MockObject\MockObject
+     * @var History|MockObject
      */
     protected $historyResourceModel;
 
@@ -28,15 +32,15 @@ class HistoryTest extends \PHPUnit\Framework\TestCase
     protected function setUp(): void
     {
         $this->historyResourceModel = $this->createPartialMock(
-            \Magento\ImportExport\Model\ResourceModel\History::class,
+            History::class,
             ['getConnection', 'getMainTable', 'getIdFieldName']
         );
         $dbAdapterMock = $this->createPartialMock(
-            \Magento\Framework\DB\Adapter\Pdo\Mysql::class,
+            Mysql::class,
             ['select', 'fetchOne']
         );
         $selectMock = $this->createPartialMock(
-            \Magento\Framework\DB\Select::class,
+            Select::class,
             ['from', 'order', 'where', 'limit']
         );
         $selectMock->expects($this->any())->method('from')->willReturnSelf();

@@ -3,26 +3,34 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Persistent\Test\Unit\Helper;
 
-class DataTest extends \PHPUnit\Framework\TestCase
+use Magento\Framework\Module\Dir\Reader;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Persistent\Helper\Data;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class DataTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\Module\Dir\Reader|\PHPUnit\Framework\MockObject\MockObject
+     * @var Reader|MockObject
      */
     protected $_modulesReader;
 
     /**
-     * @var  \Magento\Persistent\Helper\Data
+     * @var  Data
      */
     protected $_helper;
 
     protected function setUp(): void
     {
-        $this->_modulesReader = $this->createMock(\Magento\Framework\Module\Dir\Reader::class);
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $this->_modulesReader = $this->createMock(Reader::class);
+        $objectManager = new ObjectManager($this);
         $this->_helper = $objectManager->getObject(
-            \Magento\Persistent\Helper\Data::class,
+            Data::class,
             ['modulesReader' => $this->_modulesReader]
         );
     }

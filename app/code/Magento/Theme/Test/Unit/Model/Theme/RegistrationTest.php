@@ -3,12 +3,19 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Theme\Test\Unit\Model\Theme;
 
+use Magento\Framework\View\Design\Theme\CustomizationInterface;
+use Magento\Framework\View\Design\Theme\Image;
 use Magento\Framework\View\Design\ThemeInterface;
+use Magento\Theme\Model\Theme\Data\Collection;
 use Magento\Theme\Model\Theme\Registration;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class RegistrationTest extends \PHPUnit\Framework\TestCase
+class RegistrationTest extends TestCase
 {
     /**
      * @var Registration
@@ -16,12 +23,12 @@ class RegistrationTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \Magento\Theme\Model\ResourceModel\Theme\Data\CollectionFactory|\PHPUnit\Framework\MockObject\MockObject
+     * @var \Magento\Theme\Model\ResourceModel\Theme\Data\CollectionFactory|MockObject
      */
     protected $collectionFactory;
 
     /**
-     * @var \Magento\Theme\Model\Theme\Data\Collection|\PHPUnit\Framework\MockObject\MockObject
+     * @var Collection|MockObject
      */
     protected $filesystemCollection;
 
@@ -29,10 +36,10 @@ class RegistrationTest extends \PHPUnit\Framework\TestCase
     {
         $this->collectionFactory =
             $this->getMockBuilder(\Magento\Theme\Model\ResourceModel\Theme\Data\CollectionFactory::class)
-            ->setMethods(['create'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->filesystemCollection = $this->getMockBuilder(\Magento\Theme\Model\Theme\Data\Collection::class)
+                ->setMethods(['create'])
+                ->disableOriginalConstructor()
+                ->getMock();
+        $this->filesystemCollection = $this->getMockBuilder(Collection::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -53,7 +60,7 @@ class RegistrationTest extends \PHPUnit\Framework\TestCase
         $themeFilePath = 'any/path';
         $parentId = 1;
         $fullPath = '/full/path';
-        $theme = $this->getMockBuilder(\Magento\Framework\View\Design\ThemeInterface::class)
+        $theme = $this->getMockBuilder(ThemeInterface::class)
             ->setMethods(
                 [
                     'setParentId',
@@ -68,20 +75,21 @@ class RegistrationTest extends \PHPUnit\Framework\TestCase
                 ]
             )
             ->getMockForAbstractClass();
-        $parentTheme = $this->getMockBuilder(\Magento\Framework\View\Design\ThemeInterface::class)->getMock();
+        $parentTheme = $this->getMockBuilder(ThemeInterface::class)
+            ->getMock();
         $parentThemeFromCollectionId = 123;
-        $parentThemeFromCollection = $this->getMockBuilder(\Magento\Framework\View\Design\ThemeInterface::class)
+        $parentThemeFromCollection = $this->getMockBuilder(ThemeInterface::class)
             ->setMethods(['getType', 'getId'])
             ->getMockForAbstractClass();
-        $themeFromCollection = $this->getMockBuilder(\Magento\Framework\View\Design\ThemeInterface::class)
+        $themeFromCollection = $this->getMockBuilder(ThemeInterface::class)
             ->setMethods(['setType', 'save', 'getParentTheme', 'getType', 'getParentId', 'setParentId'])
             ->getMockForAbstractClass();
         $collection = $this->getMockBuilder(\Magento\Theme\Model\ResourceModel\Theme\Data\Collection::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $customization = $this->getMockBuilder(\Magento\Framework\View\Design\Theme\CustomizationInterface::class)
+        $customization = $this->getMockBuilder(CustomizationInterface::class)
             ->getMock();
-        $imageModel = $this->getMockBuilder(\Magento\Framework\View\Design\Theme\Image::class)
+        $imageModel = $this->getMockBuilder(Image::class)
             ->disableOriginalConstructor()
             ->getMock();
 

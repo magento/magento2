@@ -3,22 +3,29 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\EntityManager\Test\Unit;
 
-class MapperTest extends \PHPUnit\Framework\TestCase
+use Magento\Customer\Api\Data\AddressInterface;
+use Magento\Customer\Api\Data\CustomerInterface;
+use Magento\Framework\EntityManager\Mapper;
+use PHPUnit\Framework\TestCase;
+
+class MapperTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\EntityManager\Mapper
+     * @var Mapper
      */
     private $mapper;
 
     protected function setUp(): void
     {
         $config = [
-            \Magento\Customer\Api\Data\CustomerInterface::class => ['entity_id' => 'id'],
-            \Magento\Customer\Api\Data\AddressInterface::class => ['parent_id' => 'customer_id', 'invalid' => '']
+            CustomerInterface::class => ['entity_id' => 'id'],
+            AddressInterface::class => ['parent_id' => 'customer_id', 'invalid' => '']
         ];
-        $this->mapper = new \Magento\Framework\EntityManager\Mapper($config);
+        $this->mapper = new Mapper($config);
     }
 
     public function testEntityToDatabase()
@@ -33,25 +40,22 @@ class MapperTest extends \PHPUnit\Framework\TestCase
         unset($expectedOutput['id']);
 
         $actualOutput = $this->mapper->entityToDatabase(
-            \Magento\Customer\Api\Data\CustomerInterface::class,
+            CustomerInterface::class,
             $inputData
         );
 
         $this->assertEquals($expectedOutput, $actualOutput);
     }
 
-    /**
-     */
     public function testEntityToDatabaseException()
     {
-        $this->expectException(\LogicException::class);
-        $this->expectExceptionMessage('Incorrect configuration for Magento\\Customer\\Api\\Data\\AddressInterface');
-
+        $this->expectException('LogicException');
+        $this->expectExceptionMessage('Incorrect configuration for Magento\Customer\Api\Data\AddressInterface');
         $inputData = [
             'group_id' => 1,
             'extension_attributes' => ['extension_attribute' => ['value' => 'some value']],
         ];
-        $this->mapper->entityToDatabase(\Magento\Customer\Api\Data\AddressInterface::class, $inputData);
+        $this->mapper->entityToDatabase(AddressInterface::class, $inputData);
     }
 
     public function testDatabaseToEntity()
@@ -66,25 +70,22 @@ class MapperTest extends \PHPUnit\Framework\TestCase
         unset($expectedOutput['entity_id']);
 
         $actualOutput = $this->mapper->databaseToEntity(
-            \Magento\Customer\Api\Data\CustomerInterface::class,
+            CustomerInterface::class,
             $inputData
         );
 
         $this->assertEquals($expectedOutput, $actualOutput);
     }
 
-    /**
-     */
     public function testDatabaseToEntityException()
     {
-        $this->expectException(\LogicException::class);
-        $this->expectExceptionMessage('Incorrect configuration for Magento\\Customer\\Api\\Data\\AddressInterface');
-
+        $this->expectException('LogicException');
+        $this->expectExceptionMessage('Incorrect configuration for Magento\Customer\Api\Data\AddressInterface');
         $inputData = [
             'group_id' => 1,
             'extension_attributes' => ['extension_attribute' => ['value' => 'some value']],
             'invalid' => 123
         ];
-        $this->mapper->databaseToEntity(\Magento\Customer\Api\Data\AddressInterface::class, $inputData);
+        $this->mapper->databaseToEntity(AddressInterface::class, $inputData);
     }
 }

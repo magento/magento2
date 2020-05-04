@@ -3,19 +3,27 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Catalog\Test\Unit\Model;
 
 use Magento\Catalog\Api\Data\CustomOptionInterface;
+use Magento\Catalog\Api\Data\ProductOptionExtensionInterface;
+use Magento\Catalog\Api\Data\ProductOptionInterface;
+use Magento\Catalog\Model\CustomOptions\CustomOption;
 use Magento\Catalog\Model\CustomOptions\CustomOptionFactory;
+use Magento\Catalog\Model\Product\Option\UrlBuilder;
 use Magento\Catalog\Model\ProductOptionProcessor;
 use Magento\Framework\DataObject;
 use Magento\Framework\DataObject\Factory as DataObjectFactory;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ProductOptionProcessorTest extends \PHPUnit\Framework\TestCase
+class ProductOptionProcessorTest extends TestCase
 {
     /**
      * @var ProductOptionProcessor
@@ -23,28 +31,28 @@ class ProductOptionProcessorTest extends \PHPUnit\Framework\TestCase
     protected $processor;
 
     /**
-     * @var DataObject | \PHPUnit\Framework\MockObject\MockObject
+     * @var DataObject|MockObject
      */
     protected $dataObject;
 
     /**
-     * @var DataObjectFactory | \PHPUnit\Framework\MockObject\MockObject
+     * @var DataObjectFactory|MockObject
      */
     protected $dataObjectFactory;
 
     /**
-     * @var CustomOptionFactory | \PHPUnit\Framework\MockObject\MockObject
+     * @var CustomOptionFactory|MockObject
      */
     protected $customOptionFactory;
 
     /**
-     * @var CustomOptionInterface | \PHPUnit\Framework\MockObject\MockObject
+     * @var CustomOptionInterface|MockObject
      */
     protected $customOption;
 
     protected function setUp(): void
     {
-        $this->dataObject = $this->getMockBuilder(\Magento\Framework\DataObject::class)
+        $this->dataObject = $this->getMockBuilder(DataObject::class)
             ->setMethods([
                 'getOptions', 'addData',
             ])
@@ -60,7 +68,7 @@ class ProductOptionProcessorTest extends \PHPUnit\Framework\TestCase
             ->willReturn($this->dataObject);
 
         $this->customOption = $this->getMockBuilder(
-            \Magento\Catalog\Api\Data\CustomOptionInterface::class
+            CustomOptionInterface::class
         )
             ->setMethods([
                 'getDownloadableLinks',
@@ -68,7 +76,7 @@ class ProductOptionProcessorTest extends \PHPUnit\Framework\TestCase
             ->getMockForAbstractClass();
 
         $this->customOptionFactory = $this->getMockBuilder(
-            \Magento\Catalog\Model\CustomOptions\CustomOptionFactory::class
+            CustomOptionFactory::class
         )
             ->setMethods(['create'])
             ->disableOriginalConstructor()
@@ -82,7 +90,7 @@ class ProductOptionProcessorTest extends \PHPUnit\Framework\TestCase
             $this->customOptionFactory
         );
 
-        $urlBuilder = $this->getMockBuilder(\Magento\Catalog\Model\Product\Option\UrlBuilder::class)
+        $urlBuilder = $this->getMockBuilder(UrlBuilder::class)
             ->disableOriginalConstructor()
             ->setMethods(['getUrl'])
             ->getMock();
@@ -103,11 +111,11 @@ class ProductOptionProcessorTest extends \PHPUnit\Framework\TestCase
         $options,
         $requestData
     ) {
-        $productOptionMock = $this->getMockBuilder(\Magento\Catalog\Api\Data\ProductOptionInterface::class)
+        $productOptionMock = $this->getMockBuilder(ProductOptionInterface::class)
             ->getMockForAbstractClass();
 
         $productOptionExtensionMock = $this->getMockBuilder(
-            \Magento\Catalog\Api\Data\ProductOptionExtensionInterface::class
+            ProductOptionExtensionInterface::class
         )
             ->setMethods([
                 'getCustomOptions',
@@ -137,8 +145,8 @@ class ProductOptionProcessorTest extends \PHPUnit\Framework\TestCase
     {
         $objectManager = new ObjectManager($this);
 
-        /** @var \Magento\Catalog\Model\CustomOptions\CustomOption $option */
-        $option = $objectManager->getObject(\Magento\Catalog\Model\CustomOptions\CustomOption::class);
+        /** @var CustomOption $option */
+        $option = $objectManager->getObject(CustomOption::class);
         $option->setOptionId(1);
         $option->setOptionValue(1);
 

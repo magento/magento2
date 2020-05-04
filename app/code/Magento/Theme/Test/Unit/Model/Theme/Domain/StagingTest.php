@@ -3,13 +3,19 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 /**
  * Test theme staging model
  */
 namespace Magento\Theme\Test\Unit\Model\Theme\Domain;
 
-class StagingTest extends \PHPUnit\Framework\TestCase
+use Magento\Theme\Model\CopyService;
+use Magento\Theme\Model\Theme;
+use Magento\Theme\Model\Theme\Domain\Staging;
+use PHPUnit\Framework\TestCase;
+
+class StagingTest extends TestCase
 {
     /**
      * @covers \Magento\Theme\Model\Theme\Domain\Staging::__construct
@@ -17,15 +23,15 @@ class StagingTest extends \PHPUnit\Framework\TestCase
      */
     public function testUpdateFromStagingTheme()
     {
-        $parentTheme = $this->createMock(\Magento\Theme\Model\Theme::class);
+        $parentTheme = $this->createMock(Theme::class);
 
-        $theme = $this->createPartialMock(\Magento\Theme\Model\Theme::class, ['__wakeup', 'getParentTheme']);
+        $theme = $this->createPartialMock(Theme::class, ['__wakeup', 'getParentTheme']);
         $theme->expects($this->once())->method('getParentTheme')->willReturn($parentTheme);
 
-        $themeCopyService = $this->createPartialMock(\Magento\Theme\Model\CopyService::class, ['copy']);
+        $themeCopyService = $this->createPartialMock(CopyService::class, ['copy']);
         $themeCopyService->expects($this->once())->method('copy')->with($theme, $parentTheme);
 
-        $object = new \Magento\Theme\Model\Theme\Domain\Staging($theme, $themeCopyService);
+        $object = new Staging($theme, $themeCopyService);
         $this->assertSame($object, $object->updateFromStagingTheme());
     }
 }

@@ -3,17 +3,20 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\SalesRule\Test\Unit\Model\ResourceModel;
 
+use Magento\Framework\EntityManager\EntityMetadata;
+use Magento\Framework\EntityManager\MetadataPool;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\SalesRule\Api\Data\RuleInterface;
 use Magento\SalesRule\Model\ResourceModel\ReadHandler;
 use Magento\SalesRule\Model\ResourceModel\Rule;
-use Magento\Framework\EntityManager\MetadataPool;
-use Magento\SalesRule\Api\Data\RuleInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-/**
- * Class ReadHandlerTest
- */
-class ReadHandlerTest extends \PHPUnit\Framework\TestCase
+class ReadHandlerTest extends TestCase
 {
     /**
      * @var ReadHandler
@@ -21,17 +24,17 @@ class ReadHandlerTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var Rule|\PHPUnit\Framework\MockObject\MockObject
+     * @var Rule|MockObject
      */
     protected $ruleResource;
 
     /**
-     * @var MetadataPool|\PHPUnit\Framework\MockObject\MockObject
+     * @var MetadataPool|MockObject
      */
     protected $metadataPool;
 
     /**
-     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
+     * @var ObjectManager
      */
     protected $objectManager;
 
@@ -40,12 +43,12 @@ class ReadHandlerTest extends \PHPUnit\Framework\TestCase
      */
     protected function setUp(): void
     {
-        $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $this->objectManager = new ObjectManager($this);
 
-        $className = \Magento\SalesRule\Model\ResourceModel\Rule::class;
+        $className = Rule::class;
         $this->ruleResource = $this->createMock($className);
 
-        $className = \Magento\Framework\EntityManager\MetadataPool::class;
+        $className = MetadataPool::class;
         $this->metadataPool = $this->createMock($className);
 
         $this->model = $this->objectManager->getObject(
@@ -70,7 +73,7 @@ class ReadHandlerTest extends \PHPUnit\Framework\TestCase
         $customers = [1, 2];
         $websites = [3, 4, 5];
 
-        $className = \Magento\Framework\EntityManager\EntityMetadata::class;
+        $className = EntityMetadata::class;
         $metadata = $this->createMock($className);
 
         $metadata->expects($this->once())

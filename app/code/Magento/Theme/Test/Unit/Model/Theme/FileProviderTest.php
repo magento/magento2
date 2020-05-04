@@ -3,11 +3,17 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Theme\Test\Unit\Model\Theme;
 
+use Magento\Framework\View\Design\ThemeInterface;
+use Magento\Theme\Model\ResourceModel\Theme\File\Collection;
 use Magento\Theme\Model\Theme\FileProvider;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class FileProviderTest extends \PHPUnit\Framework\TestCase
+class FileProviderTest extends TestCase
 {
     /**
      * @var FileProvider
@@ -15,7 +21,7 @@ class FileProviderTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \Magento\Theme\Model\ResourceModel\Theme\File\Collection|\PHPUnit\Framework\MockObject\MockObject
+     * @var Collection|MockObject
      */
     protected $file;
 
@@ -25,14 +31,14 @@ class FileProviderTest extends \PHPUnit\Framework\TestCase
             ->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
-        $this->file = $this->getMockBuilder(\Magento\Theme\Model\ResourceModel\Theme\File\Collection::class)
+        $this->file = $this->getMockBuilder(Collection::class)
             ->disableOriginalConstructor()
             ->getMock();
         $fileFactory->expects($this->once())
             ->method('create')
             ->willReturn($this->file);
 
-        /** @var $fileFactory \Magento\Theme\Model\ResourceModel\Theme\File\CollectionFactory */
+        /** @var \Magento\Theme\Model\ResourceModel\Theme\File\CollectionFactory $fileFactory */
         $this->model = new FileProvider($fileFactory);
     }
 
@@ -43,7 +49,8 @@ class FileProviderTest extends \PHPUnit\Framework\TestCase
     public function testGetItems()
     {
         $items = ['item'];
-        $theme = $this->getMockBuilder(\Magento\Framework\View\Design\ThemeInterface::class)->getMock();
+        $theme = $this->getMockBuilder(ThemeInterface::class)
+            ->getMock();
         $filters = ['name' => 'filter'];
         $this->file->expects($this->once())
             ->method('addThemeFilter')
@@ -60,7 +67,7 @@ class FileProviderTest extends \PHPUnit\Framework\TestCase
             ->method('getItems')
             ->willReturn($items);
 
-        /** @var $theme \Magento\Framework\View\Design\ThemeInterface */
+        /** @var ThemeInterface $theme */
         $this->assertEquals($items, $this->model->getItems($theme, $filters));
     }
 }

@@ -3,19 +3,24 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Catalog\Test\Unit\Model;
 
-use \Magento\Catalog\Model\Factory;
+use Magento\Catalog\Model\Factory;
+use Magento\Catalog\Model\Product\Option;
+use Magento\Framework\ObjectManagerInterface;
+use PHPUnit\Framework\TestCase;
 
-class FactoryTest extends \PHPUnit\Framework\TestCase
+class FactoryTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\ObjectManagerInterface
+     * @var ObjectManagerInterface
      */
     protected $objectManager;
 
     /**
-     * @var \Magento\Catalog\Model\Product\Option
+     * @var Option
      */
     protected $model;
 
@@ -26,21 +31,18 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
 
     public function testCreate()
     {
-        $this->assertInstanceOf(\Magento\Catalog\Model\Product\Option::class, $this->factory->create('model', []));
+        $this->assertInstanceOf(Option::class, $this->factory->create('model', []));
     }
 
-    /**
-     */
     public function testExceptionCreate()
     {
-        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
-
+        $this->expectException('Magento\Framework\Exception\LocalizedException');
         $this->factory->create('null', []);
     }
 
     protected function setUp(): void
     {
-        $this->model = $this->createMock(\Magento\Catalog\Model\Product\Option::class);
+        $this->model = $this->createMock(Option::class);
 
         $this->setObjectManager();
 
@@ -49,12 +51,12 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
 
     protected function setObjectManager()
     {
-        $this->objectManager = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
+        $this->objectManager = $this->createMock(ObjectManagerInterface::class);
 
         $this->objectManager
             ->expects($this->any())
             ->method('create')
-            ->with($this->logicalOr($this->equalTo('model'), $this->equalTo('null')), $this->equalTo([]))
+            ->with($this->logicalOr($this->equalTo('model'), $this->equalTo('null')), [])
             ->willReturnCallback(function ($className) {
                 $returnValue = null;
                 if ($className == 'model') {

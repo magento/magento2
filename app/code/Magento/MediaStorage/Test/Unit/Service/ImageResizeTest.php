@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\MediaStorage\Test\Unit\Service;
 
 use Magento\Catalog\Model\Product\Image\ParamsBuilder;
@@ -19,19 +21,22 @@ use Magento\Framework\Image;
 use Magento\Framework\Image\Factory as ImageFactory;
 use Magento\Framework\View\ConfigInterface as ViewConfig;
 use Magento\MediaStorage\Helper\File\Storage\Database;
+use Magento\MediaStorage\Service\ImageResize;
+use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Theme\Model\Config\Customization as ThemeCustomizationConfig;
 use Magento\Theme\Model\ResourceModel\Theme\Collection;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ImageResizeTest extends \PHPUnit\Framework\TestCase
+class ImageResizeTest extends TestCase
 {
     /**
-     * @var \Magento\MediaStorage\Service\ImageResize
+     * @var ImageResize
      */
     protected $service;
 
@@ -201,17 +206,17 @@ class ImageResizeTest extends \PHPUnit\Framework\TestCase
             ->method('getMediaEntities')
             ->willReturn(
                 ['product_small_image' => [
-                        'type' => 'small_image',
-                        'width' => 75,
-                        'height' => 75
-                    ]
+                    'type' => 'small_image',
+                    'width' => 75,
+                    'height' => 75
+                ]
                 ]
             );
         $this->viewConfigMock->expects($this->any())
             ->method('getViewConfig')
             ->willReturn($this->viewMock);
 
-        $store = $this->getMockForAbstractClass(\Magento\Store\Api\Data\StoreInterface::class);
+        $store = $this->getMockForAbstractClass(StoreInterface::class);
         $store
             ->expects($this->any())
             ->method('getId')
@@ -221,7 +226,7 @@ class ImageResizeTest extends \PHPUnit\Framework\TestCase
             ->method('getStores')
             ->willReturn([$store]);
 
-        $this->service = new \Magento\MediaStorage\Service\ImageResize(
+        $this->service = new ImageResize(
             $this->appStateMock,
             $this->imageConfigMock,
             $this->productImageMock,

@@ -3,35 +3,41 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Framework\Interception\Test\Unit\Code;
 
-use \Magento\Framework\Interception\Code\InterfaceValidator;
-use \Magento\Framework\Interception\Test\Unit\Custom\Module\Model\InterfaceValidator\ItemPlugin\ValidPlugin;
-use \Magento\Framework\Interception\Test\Unit\Custom\Module\Model\InterfaceValidator\ItemPlugin\IncompatibleInterface;
-use \Magento\Framework\Interception\Test\Unit\Custom\Module\Model\InterfaceValidator\ItemPlugin\IncorrectSubject;
-use \Magento\Framework\Interception\Test\Unit\Custom\Module\Model\InterfaceValidator\ItemPlugin\ExtraParameters;
-use \Magento\Framework\Interception\Test\Unit\Custom\Module\Model\InterfaceValidator\ItemPlugin\InvalidProceed;
+use Magento\Framework\Code\Reader\ArgumentsReader;
+use Magento\Framework\Interception\Code\InterfaceValidator;
+use Magento\Framework\Interception\Test\Unit\Custom\Module\Model\InterfaceValidator\Item;
+use Magento\Framework\Interception\Test\Unit\Custom\Module\Model\InterfaceValidator\ItemPlugin\ExtraParameters;
+use Magento\Framework\Interception\Test\Unit\Custom\Module\Model\InterfaceValidator\ItemPlugin\IncompatibleInterface;
+use Magento\Framework\Interception\Test\Unit\Custom\Module\Model\InterfaceValidator\ItemPlugin\IncorrectSubject;
+use Magento\Framework\Interception\Test\Unit\Custom\Module\Model\InterfaceValidator\ItemPlugin\InvalidProceed;
+use Magento\Framework\Interception\Test\Unit\Custom\Module\Model\InterfaceValidator\ItemPlugin\ValidPlugin;
+use Magento\Framework\Interception\Test\Unit\Custom\Module\Model\InterfaceValidator\ItemWithArguments;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class InterfaceValidatorTest extends \PHPUnit\Framework\TestCase
+class InterfaceValidatorTest extends TestCase
 {
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $argumentsReaderMock;
 
     /**
-     * @var \Magento\Framework\Interception\Code\InterfaceValidator
+     * @var InterfaceValidator
      */
     protected $model;
 
     protected function setUp(): void
     {
-        $this->argumentsReaderMock = $this->createMock(\Magento\Framework\Code\Reader\ArgumentsReader::class);
+        $this->argumentsReaderMock = $this->createMock(ArgumentsReader::class);
 
         $this->argumentsReaderMock->expects($this->any())->method('isCompatibleType')
             ->willReturnCallback(function ($arg1, $arg2) {
-                return ltrim($arg1, '\\') == ltrim($arg2, '\\');
+                return ltrim((string)$arg1, '\\') == ltrim((string)$arg2, '\\');
             });
 
         $this->model = new InterfaceValidator($this->argumentsReaderMock);
@@ -49,7 +55,7 @@ class InterfaceValidatorTest extends \PHPUnit\Framework\TestCase
     {
         $this->model->validate(
             ValidPlugin::class,
-            \Magento\Framework\Interception\Test\Unit\Custom\Module\Model\InterfaceValidator\ItemWithArguments::class
+            ItemWithArguments::class
         );
     }
 
@@ -58,12 +64,11 @@ class InterfaceValidatorTest extends \PHPUnit\Framework\TestCase
      */
     public function testValidateIncorrectInterface()
     {
-        $this->expectException(\Magento\Framework\Exception\ValidatorException::class);
+        $this->expectException('Magento\Framework\Exception\ValidatorException');
         $this->expectExceptionMessage('Incorrect interface in');
-
         $this->model->validate(
             IncompatibleInterface::class,
-            \Magento\Framework\Interception\Test\Unit\Custom\Module\Model\InterfaceValidator\Item::class
+            Item::class
         );
     }
 
@@ -72,12 +77,11 @@ class InterfaceValidatorTest extends \PHPUnit\Framework\TestCase
      */
     public function testValidateIncorrectSubjectType()
     {
-        $this->expectException(\Magento\Framework\Exception\ValidatorException::class);
+        $this->expectException('Magento\Framework\Exception\ValidatorException');
         $this->expectExceptionMessage('$subject type');
-
         $this->model->validate(
             IncorrectSubject::class,
-            \Magento\Framework\Interception\Test\Unit\Custom\Module\Model\InterfaceValidator\Item::class
+            Item::class
         );
     }
 
@@ -87,13 +91,12 @@ class InterfaceValidatorTest extends \PHPUnit\Framework\TestCase
      */
     public function testValidateIncompatibleMethodArgumentsCount()
     {
-        $this->expectException(\Magento\Framework\Exception\ValidatorException::class);
+        $this->expectException('Magento\Framework\Exception\ValidatorException');
         $this->expectExceptionMessage('Invalid method signature. Invalid method parameters count');
-
         $this->model->validate(
             \Magento\Framework\Interception\Test\Unit\Custom\Module\Model::class .
             '\InterfaceValidator\ItemPlugin\IncompatibleArgumentsCount',
-            \Magento\Framework\Interception\Test\Unit\Custom\Module\Model\InterfaceValidator\Item::class
+            Item::class
         );
     }
 
@@ -103,13 +106,12 @@ class InterfaceValidatorTest extends \PHPUnit\Framework\TestCase
      */
     public function testValidateIncompatibleMethodArgumentsType()
     {
-        $this->expectException(\Magento\Framework\Exception\ValidatorException::class);
+        $this->expectException('Magento\Framework\Exception\ValidatorException');
         $this->expectExceptionMessage('Incompatible parameter type');
-
         $this->model->validate(
             \Magento\Framework\Interception\Test\Unit\Custom\Module\Model::class .
             '\InterfaceValidator\ItemPlugin\IncompatibleArgumentsType',
-            \Magento\Framework\Interception\Test\Unit\Custom\Module\Model\InterfaceValidator\ItemWithArguments::class
+            ItemWithArguments::class
         );
     }
 
@@ -118,12 +120,11 @@ class InterfaceValidatorTest extends \PHPUnit\Framework\TestCase
      */
     public function testValidateExtraParameters()
     {
-        $this->expectException(\Magento\Framework\Exception\ValidatorException::class);
+        $this->expectException('Magento\Framework\Exception\ValidatorException');
         $this->expectExceptionMessage('Invalid method signature. Invalid method parameters count');
-
         $this->model->validate(
             ExtraParameters::class,
-            \Magento\Framework\Interception\Test\Unit\Custom\Module\Model\InterfaceValidator\Item::class
+            Item::class
         );
     }
 
@@ -132,12 +133,11 @@ class InterfaceValidatorTest extends \PHPUnit\Framework\TestCase
      */
     public function testValidateInvalidProceed()
     {
-        $this->expectException(\Magento\Framework\Exception\ValidatorException::class);
+        $this->expectException('Magento\Framework\Exception\ValidatorException');
         $this->expectExceptionMessage('Invalid [] $name type in');
-
         $this->model->validate(
             InvalidProceed::class,
-            \Magento\Framework\Interception\Test\Unit\Custom\Module\Model\InterfaceValidator\Item::class
+            Item::class
         );
     }
 }

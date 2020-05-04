@@ -3,46 +3,60 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Rss\Test\Unit\App\Action\Plugin;
 
-class BackendAuthenticationTest extends \PHPUnit\Framework\TestCase
+use Magento\Backend\App\AbstractAction;
+use Magento\Backend\Model\Auth;
+use Magento\Backend\Model\Auth\StorageInterface;
+use Magento\Framework\App\Request\Http;
+use Magento\Framework\App\ResponseInterface;
+use Magento\Framework\AuthorizationInterface;
+use Magento\Framework\HTTP\Authentication;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Rss\App\Action\Plugin\BackendAuthentication;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class BackendAuthenticationTest extends TestCase
 {
     public function testAroundDispatch()
     {
-        /** @var \Magento\Backend\App\AbstractAction|\PHPUnit\Framework\MockObject\MockObject $subject */
-        $subject = $this->createMock(\Magento\Backend\App\AbstractAction::class);
+        /** @var AbstractAction|MockObject $subject */
+        $subject = $this->createMock(AbstractAction::class);
 
-        /** @var \Magento\Framework\App\ResponseInterface|\PHPUnit\Framework\MockObject\MockObject $response */
-        $response = $this->createMock(\Magento\Framework\App\ResponseInterface::class);
+        /** @var ResponseInterface|MockObject $response */
+        $response = $this->createMock(ResponseInterface::class);
 
         $proceed = function () use ($response) {
             return $response;
         };
 
-        /** @var \Magento\Framework\App\Request\Http|\PHPUnit\Framework\MockObject\MockObject $request */
-        $request = $this->createMock(\Magento\Framework\App\Request\Http::class);
+        /** @var Http|MockObject $request */
+        $request = $this->createMock(Http::class);
         $request->expects($this->atLeastOnce())->method('getControllerName')->willReturn('feed');
         $request->expects($this->atLeastOnce())->method('getActionName')->willReturn('index');
         $request->expects($this->once())->method('getParam')->with('type')->willReturn('notifystock');
 
-        /** @var \Magento\Backend\Model\Auth\StorageInterface|\PHPUnit\Framework\MockObject\MockObject $session */
-        $session = $this->createMock(\Magento\Backend\Model\Auth\StorageInterface::class);
+        /** @var StorageInterface|MockObject $session */
+        $session = $this->createMock(StorageInterface::class);
         $session->expects($this->at(0))->method('isLoggedIn')->willReturn(false);
         $session->expects($this->at(1))->method('isLoggedIn')->willReturn(true);
 
         $username = 'admin';
         $password = '123123qa';
-        $auth = $this->createMock(\Magento\Backend\Model\Auth::class);
+        $auth = $this->createMock(Auth::class);
         $auth->expects($this->once())->method('getAuthStorage')->willReturn($session);
         $auth->expects($this->once())->method('login')->with($username, $password);
 
-        /** @var \Magento\Framework\HTTP\Authentication|\PHPUnit\Framework\MockObject\MockObject $httpAuthentication */
-        $httpAuthentication = $this->createMock(\Magento\Framework\HTTP\Authentication::class);
+        /** @var Authentication|MockObject $httpAuthentication */
+        $httpAuthentication = $this->createMock(Authentication::class);
         $httpAuthentication->expects($this->once())->method('getCredentials')
             ->willReturn([$username, $password]);
         $httpAuthentication->expects($this->once())->method('setAuthenticationFailed')->with('RSS Feeds');
 
-        $authorization = $this->createMock(\Magento\Framework\AuthorizationInterface::class);
+        $authorization = $this->createMock(AuthorizationInterface::class);
         $authorization->expects($this->at(0))->method('isAllowed')->with('Magento_Rss::rss')
             ->willReturn(true);
         $authorization->expects($this->at(1))->method('isAllowed')->with('Magento_Catalog::catalog_inventory')
@@ -55,10 +69,10 @@ class BackendAuthenticationTest extends \PHPUnit\Framework\TestCase
             'review' => 'Magento_Reports::review_product'
         ];
 
-        /** @var \Magento\Rss\App\Action\Plugin\BackendAuthentication $plugin */
-        $plugin = (new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this))
+        /** @var BackendAuthentication $plugin */
+        $plugin = (new ObjectManager($this))
             ->getObject(
-                \Magento\Rss\App\Action\Plugin\BackendAuthentication::class,
+                BackendAuthentication::class,
                 [
                     'auth' => $auth,
                     'httpAuthentication' => $httpAuthentication,

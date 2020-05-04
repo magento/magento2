@@ -3,40 +3,55 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Customer\Test\Unit\Model\Address;
 
-class ConfigTest extends \PHPUnit\Framework\TestCase
+use Magento\Customer\Helper\Address;
+use Magento\Customer\Model\Address\Config;
+use Magento\Customer\Model\Address\Config\Reader;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\Config\CacheInterface;
+use Magento\Framework\DataObject;
+use Magento\Framework\Serialize\SerializerInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Store\Model\Store;
+use Magento\Store\Model\StoreManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class ConfigTest extends TestCase
 {
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $addressHelperMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $storeMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $scopeConfigMock;
 
     /**
-     * @var \Magento\Customer\Model\Address\Config
+     * @var Config
      */
     protected $model;
 
     protected function setUp(): void
     {
         $cacheId = 'cache_id';
-        $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->storeMock = $this->createMock(\Magento\Store\Model\Store::class);
-        $this->scopeConfigMock = $this->createMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
+        $objectManagerHelper = new ObjectManager($this);
+        $this->storeMock = $this->createMock(Store::class);
+        $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
 
-        $readerMock = $this->createMock(\Magento\Customer\Model\Address\Config\Reader::class);
-        $cacheMock = $this->createMock(\Magento\Framework\Config\CacheInterface::class);
-        $storeManagerMock = $this->createMock(\Magento\Store\Model\StoreManager::class);
+        $readerMock = $this->createMock(Reader::class);
+        $cacheMock = $this->createMock(CacheInterface::class);
+        $storeManagerMock = $this->createMock(StoreManager::class);
         $storeManagerMock->expects(
             $this->once()
         )->method(
@@ -45,7 +60,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
             $this->storeMock
         );
 
-        $this->addressHelperMock = $this->createMock(\Magento\Customer\Helper\Address::class);
+        $this->addressHelperMock = $this->createMock(Address::class);
 
         $cacheMock->expects(
             $this->once()
@@ -68,14 +83,14 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
                 $cacheId
             );
 
-        $serializerMock = $this->createMock(\Magento\Framework\Serialize\SerializerInterface::class);
+        $serializerMock = $this->createMock(SerializerInterface::class);
         $serializerMock->method('serialize')
             ->willReturn(json_encode($fixtureConfigData));
         $serializerMock->method('unserialize')
             ->willReturn($fixtureConfigData);
 
         $this->model = $objectManagerHelper->getObject(
-            \Magento\Customer\Model\Address\Config::class,
+            Config::class,
             [
                 'reader' => $readerMock,
                 'cache' => $cacheMock,
@@ -105,7 +120,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
 
         $this->scopeConfigMock->expects($this->any())->method('getValue')->willReturn('someValue');
 
-        $rendererMock = $this->createMock(\Magento\Framework\DataObject::class);
+        $rendererMock = $this->createMock(DataObject::class);
 
         $this->addressHelperMock->expects(
             $this->any()
@@ -115,7 +130,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
             $rendererMock
         );
 
-        $firstExpected = new \Magento\Framework\DataObject();
+        $firstExpected = new DataObject();
         $firstExpected->setCode(
             'format_one'
         )->setTitle(
@@ -128,7 +143,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
             null
         );
 
-        $secondExpected = new \Magento\Framework\DataObject();
+        $secondExpected = new DataObject();
         $secondExpected->setCode(
             'format_two'
         )->setTitle(

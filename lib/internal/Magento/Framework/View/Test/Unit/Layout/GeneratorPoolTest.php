@@ -3,30 +3,37 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 /**
  * Test class for \Magento\Framework\View\Layout\Element
  */
 namespace Magento\Framework\View\Test\Unit\Layout;
 
-use \Magento\Framework\View\Layout\GeneratorPool;
-use \Magento\Framework\View\Layout\ScheduledStructure;
-use \Magento\Framework\View\Layout\Data\Structure as DataStructure;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\View\Layout\Data\Structure as DataStructure;
+use Magento\Framework\View\Layout\GeneratorInterface;
+use Magento\Framework\View\Layout\GeneratorPool;
+use Magento\Framework\View\Layout\Reader\Context;
+use Magento\Framework\View\Layout\ScheduledStructure;
+use Magento\Framework\View\Layout\ScheduledStructure\Helper;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class GeneratorPoolTest extends \PHPUnit\Framework\TestCase
+class GeneratorPoolTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\View\Layout\ScheduledStructure\Helper|\PHPUnit\Framework\MockObject\MockObject
+     * @var Helper|MockObject
      */
     protected $helperMock;
 
     /**
-     * @var \Magento\Framework\View\Layout\Reader\Context|\PHPUnit\Framework\MockObject\MockObject
+     * @var Context|MockObject
      */
     protected $readerContextMock;
 
     /**
-     * @var \Magento\Framework\View\Layout\Generator\Context|\PHPUnit\Framework\MockObject\MockObject
+     * @var \Magento\Framework\View\Layout\Generator\Context|MockObject
      */
     protected $generatorContextMock;
 
@@ -36,7 +43,7 @@ class GeneratorPoolTest extends \PHPUnit\Framework\TestCase
     protected $scheduledStructure;
 
     /**
-     * @var \Magento\Framework\View\Layout\Data\Structure|\PHPUnit\Framework\MockObject\MockObject
+     * @var \Magento\Framework\View\Layout\Data\Structure|MockObject
      */
     protected $structureMock;
 
@@ -51,7 +58,7 @@ class GeneratorPoolTest extends \PHPUnit\Framework\TestCase
     protected function setUp(): void
     {
         // ScheduledStructure
-        $this->readerContextMock = $this->getMockBuilder(\Magento\Framework\View\Layout\Reader\Context::class)
+        $this->readerContextMock = $this->getMockBuilder(Context::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->scheduledStructure = new ScheduledStructure();
@@ -69,13 +76,13 @@ class GeneratorPoolTest extends \PHPUnit\Framework\TestCase
         $this->generatorContextMock->expects($this->any())->method('getStructure')
             ->willReturn($this->structureMock);
 
-        $this->helperMock = $this->getMockBuilder(\Magento\Framework\View\Layout\ScheduledStructure\Helper::class)
+        $this->helperMock = $this->getMockBuilder(Helper::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $helperObjectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $helperObjectManager = new ObjectManager($this);
         $this->model = $helperObjectManager->getObject(
-            \Magento\Framework\View\Layout\GeneratorPool::class,
+            GeneratorPool::class,
             [
                 'helper' => $this->helperMock,
                 'generators' => $this->getGeneratorsMocks()
@@ -84,15 +91,15 @@ class GeneratorPoolTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return \PHPUnit\Framework\MockObject\MockObject[]
+     * @return MockObject[]
      */
     protected function getGeneratorsMocks()
     {
-        $firstGenerator = $this->createMock(\Magento\Framework\View\Layout\GeneratorInterface::class);
+        $firstGenerator = $this->createMock(GeneratorInterface::class);
         $firstGenerator->expects($this->any())->method('getType')->willReturn('first_generator');
         $firstGenerator->expects($this->atLeastOnce())->method('process');
 
-        $secondGenerator = $this->createMock(\Magento\Framework\View\Layout\GeneratorInterface::class);
+        $secondGenerator = $this->createMock(GeneratorInterface::class);
         $secondGenerator->expects($this->any())->method('getType')->willReturn('second_generator');
         $secondGenerator->expects($this->atLeastOnce())->method('process');
         return [$firstGenerator, $secondGenerator];

@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Payment\Test\Unit\Model\Method;
 
 use Magento\Framework\DataObject;
@@ -10,8 +12,9 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Payment\Model\Method\Cc;
 use Magento\Quote\Api\Data\PaymentInterface;
 use Magento\Quote\Model\Quote\Payment;
+use PHPUnit\Framework\TestCase;
 
-class CcTest extends \PHPUnit\Framework\TestCase
+class CcTest extends TestCase
 {
     /**
      * @var Cc
@@ -23,7 +26,7 @@ class CcTest extends \PHPUnit\Framework\TestCase
         $objectManager = new ObjectManager($this);
         $this->ccModel = $objectManager->getObject(Cc::class);
     }
-    
+
     public function testAssignData()
     {
         $additionalData = [

@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Search\Test\Unit\Controller\Adminhtml\Synonyms;
 
@@ -12,22 +13,24 @@ use Magento\Framework\Search\EngineResolverInterface;
 use Magento\Framework\Search\SearchEngine\ConfigInterface;
 use Magento\Framework\View\Result\PageFactory;
 use Magento\Search\Controller\Adminhtml\Synonyms\ResultPageBuilder;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class ResultPageBuilderTest extends \PHPUnit\Framework\TestCase
+class ResultPageBuilderTest extends TestCase
 {
     /** @var ResultPageBuilder */
     private $model;
 
-    /** @var PageFactory|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var PageFactory|MockObject */
     private $resultPageFactoryMock;
 
-    /** @var EngineResolverInterface|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var EngineResolverInterface|MockObject */
     private $engineResolverMock;
 
-    /** @var ConfigInterface|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var ConfigInterface|MockObject */
     private $searchFeatureConfigMock;
 
-    /** @var ManagerInterface|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var ManagerInterface|MockObject */
     private $messageManagerMock;
 
     protected function setUp(): void

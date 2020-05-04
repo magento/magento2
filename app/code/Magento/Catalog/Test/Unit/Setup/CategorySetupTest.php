@@ -3,17 +3,23 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Catalog\Test\Unit\Setup;
 
-class CategorySetupTest extends \PHPUnit\Framework\TestCase
+use Magento\Catalog\Setup\CategorySetup;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\TestCase;
+
+class CategorySetupTest extends TestCase
 {
-    /** @var \Magento\Catalog\Setup\CategorySetup */
+    /** @var CategorySetup */
     protected $unit;
 
     protected function setUp(): void
     {
-        $this->unit = (new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this))->getObject(
-            \Magento\Catalog\Setup\CategorySetup::class
+        $this->unit = (new ObjectManager($this))->getObject(
+            CategorySetup::class
         );
     }
 

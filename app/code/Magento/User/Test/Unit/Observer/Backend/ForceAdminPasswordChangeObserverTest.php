@@ -3,63 +3,81 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\User\Test\Unit\Observer\Backend;
+
+use Magento\Backend\App\ConfigInterface;
+use Magento\Backend\Model\Session;
+use Magento\Backend\Model\UrlInterface;
+use Magento\Framework\App\Action\AbstractAction;
+use Magento\Framework\App\Action\Action;
+use Magento\Framework\App\ActionFlag;
+use Magento\Framework\App\RequestInterface;
+use Magento\Framework\AuthorizationInterface;
+use Magento\Framework\Event;
+use Magento\Framework\Event\Observer;
+use Magento\Framework\Message\ManagerInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\User\Model\Backend\Config\ObserverConfig;
+use Magento\User\Observer\Backend\ForceAdminPasswordChangeObserver;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test class for Magento\User\Observer\Backend\ForceAdminPasswordChangeObserver
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ForceAdminPasswordChangeObserverTest extends \PHPUnit\Framework\TestCase
+class ForceAdminPasswordChangeObserverTest extends TestCase
 {
-    /** @var \Magento\Framework\AuthorizationInterface|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var AuthorizationInterface|MockObject */
     protected $authMock;
 
-    /** @var \Magento\User\Model\Backend\Config\ObserverConfig */
+    /** @var ObserverConfig */
     protected $observerConfig;
 
-    /** @var \Magento\Backend\App\ConfigInterface|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var ConfigInterface|MockObject */
     protected $configInterfaceMock;
 
-    /** @var \Magento\Backend\Model\UrlInterface|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var UrlInterface|MockObject */
     protected $urlInterfaceMock;
 
-    /** @var \Magento\Backend\Model\Session|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var Session|MockObject */
     protected $sessionMock;
 
-    /** @var \Magento\Backend\Model\Auth\Session|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var \Magento\Backend\Model\Auth\Session|MockObject */
     protected $authSessionMock;
 
-    /** @var \Magento\Framework\App\ActionFlag|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var ActionFlag|MockObject */
     protected $actionFlagMock;
 
-    /** @var \Magento\Framework\Message\ManagerInterface|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var ManagerInterface|MockObject */
     protected $managerInterfaceMock;
 
-    /** @var \Magento\Framework\Event\ManagerInterface|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var \Magento\Framework\Event\ManagerInterface|MockObject */
     protected $eventManagerMock;
 
-    /** @var \Magento\User\Observer\Backend\ForceAdminPasswordChangeObserver */
+    /** @var ForceAdminPasswordChangeObserver */
     protected $model;
 
     protected function setUp(): void
     {
-        $this->authMock = $this->getMockBuilder(\Magento\Framework\AuthorizationInterface::class)
+        $this->authMock = $this->getMockBuilder(AuthorizationInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['isAllowed'])
             ->getMock();
 
-        $this->configInterfaceMock = $this->getMockBuilder(\Magento\Backend\App\ConfigInterface::class)
+        $this->configInterfaceMock = $this->getMockBuilder(ConfigInterface::class)
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();
 
-        $this->urlInterfaceMock = $this->getMockBuilder(\Magento\Backend\Model\UrlInterface::class)
+        $this->urlInterfaceMock = $this->getMockBuilder(UrlInterface::class)
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();
 
-        $this->sessionMock = $this->getMockBuilder(\Magento\Backend\Model\Session::class)
+        $this->sessionMock = $this->getMockBuilder(Session::class)
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();
@@ -76,12 +94,12 @@ class ForceAdminPasswordChangeObserverTest extends \PHPUnit\Framework\TestCase
                 ]
             )->getMock();
 
-        $this->actionFlagMock = $this->getMockBuilder(\Magento\Framework\App\ActionFlag::class)
+        $this->actionFlagMock = $this->getMockBuilder(ActionFlag::class)
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();
 
-        $this->managerInterfaceMock = $this->getMockBuilder(\Magento\Framework\Message\ManagerInterface::class)
+        $this->managerInterfaceMock = $this->getMockBuilder(ManagerInterface::class)
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();
@@ -91,17 +109,17 @@ class ForceAdminPasswordChangeObserverTest extends \PHPUnit\Framework\TestCase
             ->setMethods([])
             ->getMockForAbstractClass();
 
-        $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $helper = new ObjectManager($this);
 
         $this->observerConfig = $helper->getObject(
-            \Magento\User\Model\Backend\Config\ObserverConfig::class,
+            ObserverConfig::class,
             [
                 'backendConfig' => $this->configInterfaceMock
             ]
         );
 
         $this->model = $helper->getObject(
-            \Magento\User\Observer\Backend\ForceAdminPasswordChangeObserver::class,
+            ForceAdminPasswordChangeObserver::class,
             [
                 'observerConfig' => $this->observerConfig,
                 'authorization' => $this->authMock,
@@ -116,14 +134,14 @@ class ForceAdminPasswordChangeObserverTest extends \PHPUnit\Framework\TestCase
 
     public function testForceAdminPasswordChange()
     {
-        /** @var \Magento\Framework\Event\Observer|\PHPUnit\Framework\MockObject\MockObject $eventObserverMock */
-        $eventObserverMock = $this->getMockBuilder(\Magento\Framework\Event\Observer::class)
+        /** @var Observer|MockObject $eventObserverMock */
+        $eventObserverMock = $this->getMockBuilder(Observer::class)
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();
 
-        /** @var \Magento\Framework\Event|\PHPUnit\Framework\MockObject\MockObject */
-        $eventMock = $this->getMockBuilder(\Magento\Framework\Event::class)
+        /** @var Event|MockObject */
+        $eventMock = $this->getMockBuilder(Event::class)
             ->disableOriginalConstructor()
             ->setMethods(['getControllerAction', 'getRequest'])
             ->getMock();
@@ -134,13 +152,13 @@ class ForceAdminPasswordChangeObserverTest extends \PHPUnit\Framework\TestCase
             ->willReturn(1);
         $this->authSessionMock->expects($this->once())->method('isLoggedIn')->willReturn(true);
         $eventObserverMock->expects($this->atLeastOnce())->method('getEvent')->willReturn($eventMock);
-        /** @var \Magento\Framework\App\Action\Action $controllerMock */
-        $controllerMock = $this->getMockBuilder(\Magento\Framework\App\Action\AbstractAction::class)
+        /** @var Action $controllerMock */
+        $controllerMock = $this->getMockBuilder(AbstractAction::class)
             ->disableOriginalConstructor()
             ->setMethods(['getRedirect', 'getRequest'])
             ->getMockForAbstractClass();
-        /** @var \Magento\Framework\App\RequestInterface $requestMock */
-        $requestMock = $this->getMockBuilder(\Magento\Framework\App\RequestInterface::class)
+        /** @var RequestInterface $requestMock */
+        $requestMock = $this->getMockBuilder(RequestInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['getFullActionName', 'setDispatched'])
             ->getMockForAbstractClass();

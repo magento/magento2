@@ -3,32 +3,45 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\ImportExport\Test\Unit\Controller\Adminhtml\History;
 
+use Magento\Backend\App\Action\Context;
+use Magento\Backend\Model\View\Result\Redirect;
+use Magento\Framework\App\Request\Http;
+use Magento\Framework\App\Response\Http\FileFactory;
+use Magento\Framework\Controller\Result\Raw;
+use Magento\Framework\Controller\Result\RawFactory;
+use Magento\Framework\Controller\Result\RedirectFactory;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\ImportExport\Controller\Adminhtml\History\Download;
+use Magento\ImportExport\Helper\Report;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class DownloadTest extends \PHPUnit\Framework\TestCase
+class DownloadTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\App\Request\Http|\PHPUnit\Framework\MockObject\MockObject
+     * @var Http|MockObject
      */
     protected $request;
 
     /**
-     * @var \Magento\Framework\ObjectManager\ObjectManager|\PHPUnit\Framework\MockObject\MockObject
+     * @var \Magento\Framework\ObjectManager\ObjectManager|MockObject
      */
     protected $objectManager;
 
     /**
-     * @var \Magento\Backend\Model\View\Result\Redirect|\PHPUnit\Framework\MockObject\MockObject
+     * @var Redirect|MockObject
      */
     protected $resultRaw;
 
     /**
-     * @var \Magento\Framework\Controller\Result\Raw|\PHPUnit\Framework\MockObject\MockObject
+     * @var Raw|MockObject
      */
     protected $redirect;
 
@@ -38,32 +51,32 @@ class DownloadTest extends \PHPUnit\Framework\TestCase
     protected $objectManagerHelper;
 
     /**
-     * @var \Magento\Backend\App\Action\Context|\PHPUnit\Framework\MockObject\MockObject
+     * @var Context|MockObject
      */
     protected $context;
 
     /**
-     * @var \Magento\ImportExport\Controller\Adminhtml\History\Download
+     * @var Download
      */
     protected $downloadController;
 
     /**
-     * $var \Magento\ImportExport\Helper\Report|\PHPUnit\Framework\MockObject\MockObject
+     * @var Report|MockObject
      */
     protected $reportHelper;
 
     /**
-     * @var \Magento\Framework\App\Response\Http\FileFactory|\PHPUnit\Framework\MockObject\MockObject
+     * @var FileFactory|MockObject
      */
     protected $fileFactory;
 
     /**
-     * @var \Magento\Framework\Controller\Result\RawFactory|\PHPUnit\Framework\MockObject\MockObject
+     * @var RawFactory|MockObject
      */
     protected $resultRawFactory;
 
     /**
-     * @var \Magento\Framework\Controller\Result\RedirectFactory|\PHPUnit\Framework\MockObject\MockObject
+     * @var RedirectFactory|MockObject
      */
     protected $resultRedirectFactory;
 
@@ -72,11 +85,11 @@ class DownloadTest extends \PHPUnit\Framework\TestCase
      */
     protected function setUp(): void
     {
-        $this->request = $this->getMockBuilder(\Magento\Framework\App\Request\Http::class)
+        $this->request = $this->getMockBuilder(Http::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->reportHelper = $this->createPartialMock(
-            \Magento\ImportExport\Helper\Report::class,
+            Report::class,
             ['importFileExists', 'getReportSize', 'getReportOutput']
         );
         $this->reportHelper->expects($this->any())->method('getReportSize')->willReturn(1);
@@ -84,26 +97,26 @@ class DownloadTest extends \PHPUnit\Framework\TestCase
         $this->objectManager = $this->createPartialMock(\Magento\Framework\ObjectManager\ObjectManager::class, ['get']);
         $this->objectManager->expects($this->any())
             ->method('get')
-            ->with(\Magento\ImportExport\Helper\Report::class)
+            ->with(Report::class)
             ->willReturn($this->reportHelper);
         $this->context = $this->createPartialMock(
-            \Magento\Backend\App\Action\Context::class,
+            Context::class,
             ['getRequest', 'getObjectManager', 'getResultRedirectFactory']
         );
         $this->fileFactory = $this->createPartialMock(
-            \Magento\Framework\App\Response\Http\FileFactory::class,
+            FileFactory::class,
             ['create']
         );
-        $this->resultRaw = $this->createPartialMock(\Magento\Framework\Controller\Result\Raw::class, ['setContents']);
+        $this->resultRaw = $this->createPartialMock(Raw::class, ['setContents']);
         $this->resultRawFactory = $this->createPartialMock(
-            \Magento\Framework\Controller\Result\RawFactory::class,
+            RawFactory::class,
             ['create']
         );
         $this->resultRawFactory->expects($this->any())->method('create')->willReturn($this->resultRaw);
-        $this->redirect = $this->createPartialMock(\Magento\Backend\Model\View\Result\Redirect::class, ['setPath']);
+        $this->redirect = $this->createPartialMock(Redirect::class, ['setPath']);
 
         $this->resultRedirectFactory = $this->createPartialMock(
-            \Magento\Framework\Controller\Result\RedirectFactory::class,
+            RedirectFactory::class,
             ['create']
         );
         $this->resultRedirectFactory->expects($this->any())->method('create')->willReturn($this->redirect);
@@ -116,7 +129,7 @@ class DownloadTest extends \PHPUnit\Framework\TestCase
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->downloadController = $this->objectManagerHelper->getObject(
-            \Magento\ImportExport\Controller\Adminhtml\History\Download::class,
+            Download::class,
             [
                 'context' => $this->context,
                 'fileFactory' => $this->fileFactory,

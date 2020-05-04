@@ -3,56 +3,63 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Sales\Test\Unit\Model;
 
 use Magento\Framework\Exception\MailException;
-
+use Magento\Framework\ObjectManager\ObjectManager;
+use Magento\Framework\ObjectManagerInterface;
+use Magento\Sales\Model\Order;
+use Magento\Sales\Model\Order\Email\Sender\OrderSender;
+use Magento\Sales\Model\Order\Status\History;
 use Magento\Sales\Model\OrderNotifier;
+use Magento\Sales\Model\ResourceModel\Order\Status\History\Collection;
 use Magento\Sales\Model\ResourceModel\Order\Status\History\CollectionFactory;
+use PHPUnit\Framework\MockObject\MockObject;
 
-/**
- * Class OrderNotifierTest
- */
-class OrderNotifierTest extends \PHPUnit\Framework\TestCase
+use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface;
+
+class OrderNotifierTest extends TestCase
 {
     /**
-     * @var CollectionFactory |\PHPUnit\Framework\MockObject\MockObject
+     * @var CollectionFactory|MockObject
      */
     protected $historyCollectionFactory;
 
     /**
-     * @var \Magento\Sales\Model\OrderNotifier
+     * @var OrderNotifier
      */
     protected $notifier;
 
     /**
-     * @var \Magento\Sales\Model\Order|\PHPUnit\Framework\MockObject\MockObject
+     * @var Order|MockObject
      */
     protected $order;
 
     /**
-     * @var \Magento\Framework\ObjectManagerInterface |\PHPUnit\Framework\MockObject\MockObject
+     * @var ObjectManagerInterface|MockObject
      */
     protected $loggerMock;
 
     /**
-     * @var \Magento\Framework\ObjectManager\ObjectManager |\PHPUnit\Framework\MockObject\MockObject
+     * @var ObjectManager|MockObject
      */
     protected $orderSenderMock;
 
     protected function setUp(): void
     {
         $this->historyCollectionFactory = $this->createPartialMock(
-            \Magento\Sales\Model\ResourceModel\Order\Status\History\CollectionFactory::class,
+            CollectionFactory::class,
             ['create']
         );
-        $this->order = $this->createPartialMock(\Magento\Sales\Model\Order::class, ['__wakeUp', 'getEmailSent']);
+        $this->order = $this->createPartialMock(Order::class, ['getEmailSent']);
         $this->orderSenderMock = $this->createPartialMock(
-            \Magento\Sales\Model\Order\Email\Sender\OrderSender::class,
+            OrderSender::class,
             ['send']
         );
-        $this->loggerMock = $this->createMock(\Psr\Log\LoggerInterface::class);
+        $this->loggerMock = $this->createMock(LoggerInterface::class);
         $this->notifier = new OrderNotifier(
             $this->historyCollectionFactory,
             $this->loggerMock,
@@ -65,13 +72,14 @@ class OrderNotifierTest extends \PHPUnit\Framework\TestCase
      */
     public function testNotifySuccess()
     {
-        $historyCollection = $this->createPartialMock(
-            \Magento\Sales\Model\ResourceModel\Order\Status\History\Collection::class,
-            ['getUnnotifiedForInstance', 'save', 'setIsCustomerNotified']
-        );
+        $historyCollection = $this->getMockBuilder(Collection::class)
+            ->addMethods(['setIsCustomerNotified'])
+            ->onlyMethods(['getUnnotifiedForInstance', 'save'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $historyItem = $this->createPartialMock(
-            \Magento\Sales\Model\Order\Status\History::class,
-            ['setIsCustomerNotified', 'save', '__wakeUp']
+            History::class,
+            ['setIsCustomerNotified', 'save']
         );
         $historyItem->expects($this->at(0))
             ->method('setIsCustomerNotified')
@@ -91,7 +99,7 @@ class OrderNotifierTest extends \PHPUnit\Framework\TestCase
 
         $this->orderSenderMock->expects($this->once())
             ->method('send')
-            ->with($this->equalTo($this->order));
+            ->with($this->order);
 
         $this->assertTrue($this->notifier->notify($this->order));
     }
@@ -115,11 +123,11 @@ class OrderNotifierTest extends \PHPUnit\Framework\TestCase
         $exception = new MailException(__('Email has not been sent'));
         $this->orderSenderMock->expects($this->once())
             ->method('send')
-            ->with($this->equalTo($this->order))
-            ->will($this->throwException($exception));
+            ->with($this->order)
+            ->willThrowException($exception);
         $this->loggerMock->expects($this->once())
             ->method('critical')
-            ->with($this->equalTo($exception));
+            ->with($exception);
         $this->assertFalse($this->notifier->notify($this->order));
     }
 }

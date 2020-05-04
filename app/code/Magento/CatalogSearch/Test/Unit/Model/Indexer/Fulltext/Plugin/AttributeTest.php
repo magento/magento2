@@ -3,30 +3,38 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\CatalogSearch\Test\Unit\Model\Indexer\Fulltext\Plugin;
 
+use Magento\CatalogSearch\Model\Indexer\Fulltext;
 use Magento\CatalogSearch\Model\Indexer\Fulltext\Plugin\Attribute;
+use Magento\Framework\Indexer\IndexerInterface;
+use Magento\Framework\Indexer\IndexerRegistry;
+use Magento\Framework\Search\Request\Config;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class AttributeTest extends \PHPUnit\Framework\TestCase
+class AttributeTest extends TestCase
 {
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\Indexer\IndexerInterface
+     * @var MockObject|IndexerInterface
      */
     protected $indexerMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Catalog\Model\ResourceModel\Attribute
+     * @var MockObject|\Magento\Catalog\Model\ResourceModel\Attribute
      */
     protected $subjectMock;
 
     /**
-     * @var \Magento\Framework\Indexer\IndexerRegistry|\PHPUnit\Framework\MockObject\MockObject
+     * @var IndexerRegistry|MockObject
      */
     protected $indexerRegistryMock;
 
     /**
-     * @var \Magento\Catalog\Model\ResourceModel\Attribute|\PHPUnit\Framework\MockObject\MockObject
+     * @var \Magento\Catalog\Model\ResourceModel\Attribute|MockObject
      */
     private $attributeMock;
 
@@ -41,7 +49,7 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
     private $objectManager;
 
     /**
-     * @var \Magento\Framework\Search\Request\Config|\PHPUnit\Framework\MockObject\MockObject
+     * @var Config|MockObject
      */
     private $config;
 
@@ -50,7 +58,7 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
         $this->objectManager = new ObjectManager($this);
         $this->subjectMock = $this->createMock(\Magento\Catalog\Model\ResourceModel\Attribute::class);
         $this->indexerMock = $this->getMockForAbstractClass(
-            \Magento\Framework\Indexer\IndexerInterface::class,
+            IndexerInterface::class,
             [],
             '',
             false,
@@ -59,14 +67,14 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
             ['getId', 'getState', '__wakeup']
         );
         $this->indexerRegistryMock = $this->createPartialMock(
-            \Magento\Framework\Indexer\IndexerRegistry::class,
+            IndexerRegistry::class,
             ['get']
         );
         $this->attributeMock = $this->createPartialMock(
             \Magento\Catalog\Model\ResourceModel\Eav\Attribute::class,
             ['dataHasChangedFor', 'isObjectNew', 'getIsSearchable', 'getData']
         );
-        $this->config =  $this->getMockBuilder(\Magento\Framework\Search\Request\Config::class)
+        $this->config =  $this->getMockBuilder(Config::class)
             ->disableOriginalConstructor()
             ->setMethods(['reset'])
             ->getMock();
@@ -88,7 +96,8 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
             ->method('getData')
             ->with('is_searchable')
             ->willReturn(true);
-        $this->assertNull(
+        $this->assertEquals(
+            null,
             $this->model->beforeSave($this->subjectMock, $this->attributeMock)
         );
     }
@@ -157,7 +166,8 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
         $this->attributeMock->expects($this->once())
             ->method('getIsSearchable')
             ->willReturn(true);
-        $this->assertNull(
+        $this->assertEquals(
+            null,
             $this->model->beforeDelete($this->subjectMock, $this->attributeMock)
         );
     }
@@ -194,7 +204,7 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
     {
         $this->indexerRegistryMock->expects($this->once())
             ->method('get')
-            ->with(\Magento\CatalogSearch\Model\Indexer\Fulltext::INDEXER_ID)
+            ->with(Fulltext::INDEXER_ID)
             ->willReturn($this->indexerMock);
     }
 }

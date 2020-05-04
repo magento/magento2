@@ -3,11 +3,19 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Backend\Test\Unit\Block\Widget\Grid\Column\Renderer\Radio;
 
+use Magento\Backend\Block\Context;
+use Magento\Backend\Block\Widget\Grid\Column;
+use Magento\Backend\Block\Widget\Grid\Column\Renderer\Options\Converter;
 use Magento\Backend\Block\Widget\Grid\Column\Renderer\Radio\Extended;
+use Magento\Framework\DataObject;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class ExtendedTest extends \PHPUnit\Framework\TestCase
+class ExtendedTest extends TestCase
 {
     /**
      * @var Extended
@@ -15,26 +23,26 @@ class ExtendedTest extends \PHPUnit\Framework\TestCase
     protected $_object;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $_converter;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $_column;
 
     protected function setUp(): void
     {
-        $context = $this->createMock(\Magento\Backend\Block\Context::class);
+        $context = $this->createMock(Context::class);
         $this->_converter = $this->createPartialMock(
-            \Magento\Backend\Block\Widget\Grid\Column\Renderer\Options\Converter::class,
+            Converter::class,
             ['toFlatArray']
         );
-        $this->_column = $this->createPartialMock(
-            \Magento\Backend\Block\Widget\Grid\Column::class,
-            ['getValues', 'getIndex', 'getHtmlName']
-        );
+        $this->_column = $this->getMockBuilder(Column::class)
+            ->addMethods(['getValues', 'getIndex', 'getHtmlName'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->_object = new Extended($context, $this->_converter);
         $this->_object->setColumn($this->_column);
     }
@@ -51,7 +59,7 @@ class ExtendedTest extends \PHPUnit\Framework\TestCase
         $this->_column->expects($this->once())->method('getIndex')->willReturn('label');
         $this->_column->expects($this->once())->method('getHtmlName')->willReturn('test[]');
         $this->_converter->expects($this->never())->method('toFlatArray');
-        $this->assertEquals($expectedResult, $this->_object->render(new \Magento\Framework\DataObject($rowData)));
+        $this->assertEquals($expectedResult, $this->_object->render(new DataObject($rowData)));
     }
 
     /**

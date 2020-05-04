@@ -3,14 +3,26 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\Test\Unit\Interception;
 
 use Magento\Framework\Interception;
+use Magento\Framework\Interception\DefinitionInterface;
+use Magento\Framework\Interception\PluginListInterface;
+use Magento\Framework\Test\Unit\Interception\Sample\Entity;
+use Magento\Framework\Test\Unit\Interception\Sample\Interceptor;
+use Magento\Framework\Test\Unit\Interception\Sample\Plugin1;
+use Magento\Framework\Test\Unit\Interception\Sample\Plugin2;
+use Magento\Framework\Test\Unit\Interception\Sample\Plugin3;
+use Magento\Framework\Test\Unit\Interception\Sample\Plugin4;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class InterceptorTest extends \PHPUnit\Framework\TestCase
+class InterceptorTest extends TestCase
 {
     /**
-     * @var Sample\Interceptor
+     * @var Interceptor
      */
     private $sampleInterceptor;
 
@@ -20,21 +32,21 @@ class InterceptorTest extends \PHPUnit\Framework\TestCase
     private $samplePlugins;
 
     /**
-     * @var Interception\PluginListInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var Interception\PluginListInterface|MockObject
      */
     private $pluginListMock;
 
     protected function setUp(): void
     {
-        $this->pluginListMock = $this->getMockBuilder(Interception\PluginListInterface::class)
+        $this->pluginListMock = $this->getMockBuilder(PluginListInterface::class)
             ->getMockForAbstractClass();
 
-        $this->sampleInterceptor = new Sample\Interceptor();
+        $this->sampleInterceptor = new Interceptor();
         $this->samplePlugins = [
-            'plugin1' => new Sample\Plugin1(),
-            'plugin2' => new Sample\Plugin2(),
-            'plugin3' => new Sample\Plugin3(),
-            'plugin4' => new Sample\Plugin4()
+            'plugin1' => new Plugin1(),
+            'plugin2' => new Plugin2(),
+            'plugin3' => new Plugin3(),
+            'plugin4' => new Plugin4()
         ];
 
         $this->sampleInterceptor->setPluginList($this->pluginListMock);
@@ -42,7 +54,7 @@ class InterceptorTest extends \PHPUnit\Framework\TestCase
 
     public function testCallPlugins()
     {
-        $subjectType = Sample\Entity::class;
+        $subjectType = Entity::class;
         $method = 'doSomething';
         $capMethod = ucfirst($method);
         $pluginMap = [
@@ -57,9 +69,9 @@ class InterceptorTest extends \PHPUnit\Framework\TestCase
                 $method,
                 null,
                 [
-                    Interception\DefinitionInterface::LISTENER_BEFORE => ['plugin1', 'plugin2'],
-                    Interception\DefinitionInterface::LISTENER_AROUND => 'plugin3',
-                    Interception\DefinitionInterface::LISTENER_AFTER => ['plugin1', 'plugin2', 'plugin3']
+                    DefinitionInterface::LISTENER_BEFORE => ['plugin1', 'plugin2'],
+                    DefinitionInterface::LISTENER_AROUND => 'plugin3',
+                    DefinitionInterface::LISTENER_AFTER => ['plugin1', 'plugin2', 'plugin3']
                 ]
             ],
             [
@@ -67,9 +79,9 @@ class InterceptorTest extends \PHPUnit\Framework\TestCase
                 $method,
                 'plugin3',
                 [
-                    Interception\DefinitionInterface::LISTENER_BEFORE => ['plugin4'],
-                    Interception\DefinitionInterface::LISTENER_AROUND => 'plugin4',
-                    Interception\DefinitionInterface::LISTENER_AFTER => ['plugin4']
+                    DefinitionInterface::LISTENER_BEFORE => ['plugin4'],
+                    DefinitionInterface::LISTENER_AROUND => 'plugin4',
+                    DefinitionInterface::LISTENER_AFTER => ['plugin4']
                 ]
             ],
             [
@@ -80,16 +92,16 @@ class InterceptorTest extends \PHPUnit\Framework\TestCase
             ]
         ];
         $expectedPluginCalls = [
-            Sample\Plugin1::class . '::before' . $capMethod,
-            Sample\Plugin2::class . '::before' . $capMethod,
-            Sample\Plugin3::class . '::around' . $capMethod,
-            Sample\Plugin4::class . '::before' . $capMethod,
-            Sample\Plugin4::class . '::around' . $capMethod,
-            Sample\Entity::class . '::' . $method,
-            Sample\Plugin4::class . '::after' . $capMethod,
-            Sample\Plugin1::class . '::after' . $capMethod,
-            Sample\Plugin2::class . '::after' . $capMethod,
-            Sample\Plugin3::class . '::after' . $capMethod
+            Plugin1::class . '::before' . $capMethod,
+            Plugin2::class . '::before' . $capMethod,
+            Plugin3::class . '::around' . $capMethod,
+            Plugin4::class . '::before' . $capMethod,
+            Plugin4::class . '::around' . $capMethod,
+            Entity::class . '::' . $method,
+            Plugin4::class . '::after' . $capMethod,
+            Plugin1::class . '::after' . $capMethod,
+            Plugin2::class . '::after' . $capMethod,
+            Plugin3::class . '::after' . $capMethod
         ];
 
         $this->pluginListMock->expects(static::any())

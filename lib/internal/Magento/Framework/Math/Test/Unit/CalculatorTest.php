@@ -3,12 +3,18 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\Math\Test\Unit;
 
-class CalculatorTest extends \PHPUnit\Framework\TestCase
+use Magento\Framework\Math\Calculator;
+use Magento\Framework\Pricing\PriceCurrencyInterface;
+use PHPUnit\Framework\TestCase;
+
+class CalculatorTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\Math\Calculator
+     * @var Calculator
      */
     protected $_model;
 
@@ -20,7 +26,7 @@ class CalculatorTest extends \PHPUnit\Framework\TestCase
     protected function setUp(): void
     {
         $this->priceCurrency = $this->getMockBuilder(
-            \Magento\Framework\Pricing\PriceCurrencyInterface::class
+            PriceCurrencyInterface::class
         )->getMock();
         $this->priceCurrency->expects($this->any())
             ->method('round')
@@ -28,7 +34,7 @@ class CalculatorTest extends \PHPUnit\Framework\TestCase
                 return round($argument, 2);
             });
 
-        $this->_model = new \Magento\Framework\Math\Calculator($this->priceCurrency);
+        $this->_model = new Calculator($this->priceCurrency);
     }
 
     /**

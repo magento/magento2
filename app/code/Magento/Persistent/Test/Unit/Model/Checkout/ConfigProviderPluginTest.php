@@ -3,58 +3,70 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Persistent\Test\Unit\Model\Checkout;
 
-class ConfigProviderPluginTest extends \PHPUnit\Framework\TestCase
+use Magento\Checkout\Model\DefaultConfigProvider;
+use Magento\Persistent\Helper\Data;
+use Magento\Persistent\Helper\Session;
+use Magento\Persistent\Model\Checkout\ConfigProviderPlugin;
+use Magento\Quote\Model\Quote;
+use Magento\Quote\Model\QuoteIdMask;
+use Magento\Quote\Model\QuoteIdMaskFactory;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class ConfigProviderPluginTest extends TestCase
 {
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $persistentHelperMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $persistentSessionMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $checkoutSessionMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $maskFactoryMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $customerSessionMock;
 
     /**
-     * @var \Magento\Persistent\Model\Checkout\ConfigProviderPlugin
+     * @var ConfigProviderPlugin
      */
     protected $plugin;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $subjectMock;
 
     protected function setUp(): void
     {
-        $this->persistentHelperMock = $this->createMock(\Magento\Persistent\Helper\Data::class);
-        $this->persistentSessionMock = $this->createMock(\Magento\Persistent\Helper\Session::class);
+        $this->persistentHelperMock = $this->createMock(Data::class);
+        $this->persistentSessionMock = $this->createMock(Session::class);
         $this->checkoutSessionMock = $this->createMock(\Magento\Checkout\Model\Session::class);
         $this->maskFactoryMock = $this->createPartialMock(
-            \Magento\Quote\Model\QuoteIdMaskFactory::class,
-            ['create', '__wakeup']
+            QuoteIdMaskFactory::class,
+            ['create']
         );
         $this->customerSessionMock = $this->createMock(\Magento\Customer\Model\Session::class);
-        $this->subjectMock = $this->createMock(\Magento\Checkout\Model\DefaultConfigProvider::class);
+        $this->subjectMock = $this->createMock(DefaultConfigProvider::class);
 
-        $this->plugin = new \Magento\Persistent\Model\Checkout\ConfigProviderPlugin(
+        $this->plugin = new ConfigProviderPlugin(
             $this->persistentHelperMock,
             $this->persistentSessionMock,
             $this->checkoutSessionMock,
@@ -104,9 +116,13 @@ class ConfigProviderPluginTest extends \PHPUnit\Framework\TestCase
         $this->persistentSessionMock->expects($this->once())->method('isPersistent')->willReturn(true);
         $this->customerSessionMock->expects($this->once())->method('isLoggedIn')->willReturn(false);
 
-        $quoteMaskMock = $this->createPartialMock(\Magento\Quote\Model\QuoteIdMask::class, ['load', 'getMaskedId']);
+        $quoteMaskMock = $this->getMockBuilder(QuoteIdMask::class)
+            ->addMethods(['getMaskedId'])
+            ->onlyMethods(['load'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->maskFactoryMock->expects($this->once())->method('create')->willReturn($quoteMaskMock);
-        $quoteMock = $this->createMock(\Magento\Quote\Model\Quote::class);
+        $quoteMock = $this->createMock(Quote::class);
 
         $this->checkoutSessionMock->expects($this->once())->method('getQuote')->willReturn($quoteMock);
         $quoteMaskMock->expects($this->once())->method('load')->willReturnSelf();

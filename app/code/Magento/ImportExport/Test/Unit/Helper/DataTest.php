@@ -7,11 +7,12 @@ declare(strict_types=1);
 
 namespace Magento\ImportExport\Test\Unit\Helper;
 
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Helper\Context;
 use Magento\Framework\File\Size as FileSize;
-use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\ImportExport\Helper\Data as HelperData;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -27,22 +28,22 @@ class DataTest extends TestCase
     private $objectManagerHelper;
 
     /**
-     * @var FileSize|PHPUnit\Framework\MockObject\MockObject
+     * @var FileSize|MockObject
      */
     private $fileSizeMock;
 
     /**
-     * @var Context|PHPUnit\Framework\MockObject\MockObject
+     * @var Context|MockObject
      */
     private $contextMock;
 
     /**
-     * @var ScopeConfigInterface|PHPUnit\Framework\MockObject\MockObject
+     * @var ScopeConfigInterface|MockObject
      */
     private $scopeConfigMock;
 
     /**
-     * @var HelperData|PHPUnit\Framework\MockObject\MockObject
+     * @var HelperData|MockObject
      */
     private $helperData;
 
@@ -53,7 +54,7 @@ class DataTest extends TestCase
     {
         $this->contextMock = $this->createMock(Context::class);
         $this->fileSizeMock = $this->createMock(FileSize::class);
-        $this->scopeConfigMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
+        $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
         $this->contextMock->expects($this->any())->method('getScopeConfig')->willReturn($this->scopeConfigMock);
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);

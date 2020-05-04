@@ -3,15 +3,19 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Catalog\Test\Unit\Model\Product\Initialization\Helper;
 
 use Magento\Catalog\Model\Product;
+use Magento\Catalog\Model\Product\Initialization\Helper\ProductLinks;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\TestCase;
 
-class ProductLinksTest extends \PHPUnit\Framework\TestCase
+class ProductLinksTest extends TestCase
 {
     /**
-     * @var \Magento\Catalog\Model\Product\Initialization\Helper\ProductLinks
+     * @var ProductLinks
      */
     private $model;
 
@@ -19,15 +23,15 @@ class ProductLinksTest extends \PHPUnit\Framework\TestCase
     {
         $links = ['related' => ['data'], 'upsell' => ['data'], 'crosssell' => ['data']];
         $this->assertInstanceOf(
-            \Magento\Catalog\Model\Product::class,
+            Product::class,
             $this->model->initializeLinks($this->getMockedProduct(), $links)
         );
     }
 
     protected function setUp(): void
     {
-        $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->model = $helper->getObject(\Magento\Catalog\Model\Product\Initialization\Helper\ProductLinks::class);
+        $helper = new ObjectManager($this);
+        $this->model = $helper->getObject(ProductLinks::class);
     }
 
     /**
@@ -35,7 +39,7 @@ class ProductLinksTest extends \PHPUnit\Framework\TestCase
      */
     private function getMockedProduct()
     {
-        $mockBuilder = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
+        $mockBuilder = $this->getMockBuilder(Product::class)
             ->setMethods(
                 [
                     'getRelatedReadonly',
@@ -44,7 +48,6 @@ class ProductLinksTest extends \PHPUnit\Framework\TestCase
                     'setCrossSellLinkData',
                     'setUpSellLinkData',
                     'setRelatedLinkData',
-                    '__wakeup',
                 ]
             )
             ->disableOriginalConstructor();

@@ -3,14 +3,18 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Catalog\Test\Unit\Model\Indexer\Category\Flat\Plugin;
 
 use Magento\Catalog\Model\Indexer\Category\Flat\Plugin\IndexerConfigData;
 use Magento\Catalog\Model\Indexer\Category\Flat\State;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Indexer\Model\Config\Data;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class IndexerConfigDataTest extends \PHPUnit\Framework\TestCase
+class IndexerConfigDataTest extends TestCase
 {
     /**
      * @var IndexerConfigData
@@ -18,12 +22,12 @@ class IndexerConfigDataTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var State|\PHPUnit\Framework\MockObject\MockObject
+     * @var State|MockObject
      */
     protected $stateMock;
 
     /**
-     * @var Data|\PHPUnit\Framework\MockObject\MockObject
+     * @var Data|MockObject
      */
     protected $subjectMock;
 

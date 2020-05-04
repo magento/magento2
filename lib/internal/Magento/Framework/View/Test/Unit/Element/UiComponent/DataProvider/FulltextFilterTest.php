@@ -3,30 +3,32 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 /**
  * Test for full test filter
  */
 namespace Magento\Framework\View\Test\Unit\Element\UiComponent\DataProvider;
 
-use Magento\Framework\Data\Collection\AbstractDb as CollectionAbstractDb;
-use Magento\Framework\View\Element\UiComponent\DataProvider\FulltextFilter;
-use Magento\Framework\Data\Collection\EntityFactoryInterface;
-use Psr\Log\LoggerInterface;
-use Magento\Framework\Data\Collection\Db\FetchStrategyInterface;
-use Magento\Framework\DB\Adapter\AdapterInterface;
-use Magento\Framework\DB\Select;
-use Magento\Framework\Data\Collection\EntityFactory;
-use Magento\Framework\DB\Adapter\Pdo\Mysql;
 use Magento\Framework\Api\Filter;
+use Magento\Framework\Data\Collection\AbstractDb as CollectionAbstractDb;
+use Magento\Framework\Data\Collection\Db\FetchStrategyInterface;
+use Magento\Framework\Data\Collection\EntityFactory;
+use Magento\Framework\Data\Collection\EntityFactoryInterface;
+use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Framework\DB\Adapter\Pdo\Mysql;
+use Magento\Framework\DB\Select;
 use Magento\Framework\Model\ResourceModel\Db\AbstractDb as ResourceModelAbstractDb;
 use Magento\Framework\Mview\View\Collection as MviewCollection;
+use Magento\Framework\View\Element\UiComponent\DataProvider\FulltextFilter;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface;
 
 /**
- * Class FulltextFilterTest
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class FulltextFilterTest extends \PHPUnit\Framework\TestCase
+class FulltextFilterTest extends TestCase
 {
     /**
      * @var FulltextFilter
@@ -34,46 +36,46 @@ class FulltextFilterTest extends \PHPUnit\Framework\TestCase
     protected $fulltextFilter;
 
     /**
-     * @var EntityFactoryInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var EntityFactoryInterface|MockObject
      */
     protected $entityFactoryMock;
 
     /**
-     * @var LoggerInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var LoggerInterface|MockObject
      */
     protected $loggerMock;
 
     /**
-     * @var FetchStrategyInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var FetchStrategyInterface|MockObject
      */
     protected $fetchStrategyMock;
 
     /**
-     * @var AdapterInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var AdapterInterface|MockObject
      */
     private $connectionMock;
 
     /**
-     * @var Select|\PHPUnit\Framework\MockObject\MockObject
+     * @var Select|MockObject
      */
     protected $selectMock;
 
     /**
-     * @var CollectionAbstractDb|\PHPUnit\Framework\MockObject\MockObject
+     * @var CollectionAbstractDb|MockObject
      */
     protected $collectionAbstractDbMock;
 
     /**
-     * @var ResourceModelAbstractDb|\PHPUnit\Framework\MockObject\MockObject
+     * @var ResourceModelAbstractDb|MockObject
      */
     protected $resourceModelAbstractDb;
 
     protected function setUp(): void
     {
         $this->entityFactoryMock = $this->createMock(EntityFactory::class);
-        $this->loggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
-        $this->fetchStrategyMock = $this->getMockForAbstractClass(FetchStrategyInterface::class);
-        $this->resourceModelAbstractDb = $this->getMockForAbstractClass(FetchStrategyInterface::class);
+        $this->loggerMock = $this->createMock(LoggerInterface::class);
+        $this->fetchStrategyMock = $this->createMock(FetchStrategyInterface::class);
+        $this->resourceModelAbstractDb = $this->createMock(FetchStrategyInterface::class);
         $this->connectionMock = $this->createPartialMock(Mysql::class, ['select', 'getIndexList']);
         $this->selectMock = $this->createPartialMock(Select::class, ['getPart', 'where']);
 
@@ -123,12 +125,9 @@ class FulltextFilterTest extends \PHPUnit\Framework\TestCase
         $this->fulltextFilter->apply($this->collectionAbstractDbMock, $filter);
     }
 
-    /**
-     */
     public function testApplyWrongCollectionType()
     {
-        $this->expectException(\InvalidArgumentException::class);
-
+        $this->expectException('InvalidArgumentException');
         /** @var MviewCollection $mviewCollection */
         $mviewCollection = $this->getMockBuilder(MviewCollection::class)
             ->setMethods([])

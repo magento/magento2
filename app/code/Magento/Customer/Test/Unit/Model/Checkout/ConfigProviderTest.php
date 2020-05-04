@@ -3,18 +3,22 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Customer\Test\Unit\Model\Checkout;
 
 use Magento\Customer\Model\Checkout\ConfigProvider;
-use Magento\Framework\UrlInterface;
-use Magento\Store\Model\StoreManagerInterface;
-use Magento\Store\Api\Data\StoreInterface;
-use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Customer\Model\Url;
 use Magento\Customer\Model\Form;
+use Magento\Customer\Model\Url;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\UrlInterface;
+use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Model\ScopeInterface;
+use Magento\Store\Model\StoreManagerInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class ConfigProviderTest extends \PHPUnit\Framework\TestCase
+class ConfigProviderTest extends TestCase
 {
     /**
      * @var ConfigProvider
@@ -22,54 +26,54 @@ class ConfigProviderTest extends \PHPUnit\Framework\TestCase
     protected $provider;
 
     /**
-     * @var StoreManagerInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var StoreManagerInterface|MockObject
      */
     protected $storeManager;
 
     /**
-     * @var UrlInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var UrlInterface|MockObject
      */
     protected $urlBuilder;
 
     /**
-     * @var ScopeConfigInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var ScopeConfigInterface|MockObject
      */
     protected $scopeConfig;
 
     /**
-     * @var StoreInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var StoreInterface|MockObject
      */
     protected $store;
 
     /**
-     * @var Url|\PHPUnit\Framework\MockObject\MockObject
+     * @var Url|MockObject
      */
     private $customerUrl;
 
     protected function setUp(): void
     {
         $this->storeManager = $this->getMockForAbstractClass(
-            \Magento\Store\Model\StoreManagerInterface::class,
+            StoreManagerInterface::class,
             [],
             '',
             false
         );
 
         $this->urlBuilder = $this->getMockForAbstractClass(
-            \Magento\Framework\UrlInterface::class,
+            UrlInterface::class,
             [],
             '',
             false
         );
 
         $this->scopeConfig = $this->getMockForAbstractClass(
-            \Magento\Framework\App\Config\ScopeConfigInterface::class,
+            ScopeConfigInterface::class,
             [],
             '',
             false
         );
         $this->store = $this->getMockForAbstractClass(
-            \Magento\Store\Api\Data\StoreInterface::class,
+            StoreInterface::class,
             [],
             '',
             false,
@@ -78,7 +82,7 @@ class ConfigProviderTest extends \PHPUnit\Framework\TestCase
             ['getBaseUrl']
         );
 
-        $this->customerUrl = $this->createMock(\Magento\Customer\Model\Url::class);
+        $this->customerUrl = $this->createMock(Url::class);
 
         $this->provider = new ConfigProvider(
             $this->urlBuilder,

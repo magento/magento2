@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Customer\Test\Unit\Model\Plugin;
 
 use Magento\Customer\Model\Plugin\CustomerFlushFormKey;
@@ -11,8 +13,8 @@ use Magento\Framework\App\PageCache\FormKey as CookieFormKey;
 use Magento\Framework\Data\Form\FormKey as DataFormKey;
 use Magento\Framework\Event\Observer;
 use Magento\PageCache\Observer\FlushFormKey;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use PHPUnit\Framework\MockObject\MockObject as MockObject;
 
 class CustomerFlushFormKeyTest extends TestCase
 {

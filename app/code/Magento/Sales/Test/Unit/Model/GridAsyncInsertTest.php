@@ -3,39 +3,44 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Sales\Test\Unit\Model;
 
-/**
- * Class GridAsyncInsertTest
- */
-class GridAsyncInsertTest extends \PHPUnit\Framework\TestCase
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Sales\Model\AbstractModel;
+use Magento\Sales\Model\GridAsyncInsert;
+use Magento\Sales\Model\ResourceModel\GridInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class GridAsyncInsertTest extends TestCase
 {
     /**
-     * @var \Magento\Sales\Model\GridAsyncInsert
+     * @var GridAsyncInsert
      */
     protected $unit;
 
     /**
-     * @var \Magento\Sales\Model\ResourceModel\GridInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var GridInterface|MockObject
      */
     protected $gridAggregatorMock;
 
     /**
-     * @var \Magento\Sales\Model\AbstractModel|\PHPUnit\Framework\MockObject\MockObject
+     * @var AbstractModel|MockObject
      */
     protected $salesModelMock;
 
     /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var ScopeConfigInterface|MockObject
      */
     protected $scopeConfigurationMock;
 
     protected function setUp(): void
     {
-        $this->gridAggregatorMock = $this->getMockBuilder(\Magento\Sales\Model\ResourceModel\GridInterface::class)
+        $this->gridAggregatorMock = $this->getMockBuilder(GridInterface::class)
             ->getMockForAbstractClass();
-        $this->salesModelMock = $this->getMockBuilder(\Magento\Sales\Model\AbstractModel::class)
+        $this->salesModelMock = $this->getMockBuilder(AbstractModel::class)
             ->disableOriginalConstructor()
             ->setMethods(
                 [
@@ -43,10 +48,10 @@ class GridAsyncInsertTest extends \PHPUnit\Framework\TestCase
                 ]
             )
             ->getMockForAbstractClass();
-        $this->scopeConfigurationMock = $this->getMockBuilder(\Magento\Framework\App\Config\ScopeConfigInterface::class)
+        $this->scopeConfigurationMock = $this->getMockBuilder(ScopeConfigInterface::class)
             ->getMockForAbstractClass();
 
-        $this->unit = new \Magento\Sales\Model\GridAsyncInsert(
+        $this->unit = new GridAsyncInsert(
             $this->gridAggregatorMock,
             $this->scopeConfigurationMock
         );
