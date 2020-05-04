@@ -53,6 +53,7 @@ class IpnTest extends \PHPUnit\Framework\TestCase
             'getEmailSent',
             'save',
             'getState',
+            'setState',
         ];
         $this->_orderMock = $this->createPartialMock(\Magento\Sales\Model\OrderFactory::class, $methods);
         $this->_orderMock->expects($this->any())->method('create')->will($this->returnSelf());
@@ -149,9 +150,12 @@ class IpnTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnValue(true));
         $this->_orderMock->expects($this->any())->method('getPayment')->will($this->returnValue($paymentMock));
         $this->_orderMock->expects($this->any())->method('canFetchPaymentReviewUpdate')->will($this->returnValue(true));
-        $this->_orderMock->expects($this->once())->method('getState')->will(
+        $this->_orderMock->expects($this->any())->method('getState')->will(
             $this->returnValue(Order::STATE_PENDING_PAYMENT)
         );
+        $this->_orderMock->expects($this->once())
+            ->method('setState')
+            ->with(Order::STATE_PROCESSING);
         $this->_paypalInfo->expects($this->once())
             ->method('importToPayment')
             ->with(

@@ -11,6 +11,7 @@ namespace Magento\Theme\Test\Unit\Ui\Component\Listing\Column;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\UrlInterface;
 use Magento\Theme\Ui\Component\Listing\Column\ViewAction;
+use PHPUnit\Framework\MockObject\MockObject;
 
 /**
  * Class ViewActionTest contains unit tests for \Magento\Theme\Ui\Component\Listing\Column\ViewAction class
@@ -25,7 +26,7 @@ class ViewActionTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var UrlInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var UrlInterface|MockObject
      */
     protected $urlBuilder;
 
@@ -112,7 +113,6 @@ class ViewActionTest extends \PHPUnit\Framework\TestCase
                             'view' => [
                                 'href' => 'url',
                                 'label' => __('View'),
-                                '__disableTmpl' => true,
                             ]
                         ],
                         'entity_id' => 1
@@ -139,7 +139,6 @@ class ViewActionTest extends \PHPUnit\Framework\TestCase
                             'view' => [
                                 'href' => 'url',
                                 'label' => __('View'),
-                                '__disableTmpl' => true,
                             ]
                         ],
                         'theme_id' => 2

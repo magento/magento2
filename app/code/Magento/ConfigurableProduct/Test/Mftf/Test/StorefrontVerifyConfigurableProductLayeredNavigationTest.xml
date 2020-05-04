@@ -14,14 +14,14 @@
             <title value="Out of stock configurable attribute option doesn't show in Layered Navigation"/>
             <description value=" Login as admin and verify out of stock configurable attribute option doesn't show in Layered Navigation"/>
             <testCaseId value="MC-13734"/>
-            <severity value="CRITICAL"/>
+            <severity value="BLOCKER"/>
             <group value="ConfigurableProduct"/>
             <group value="mtf_migrated"/>
         </annotations>
 
         <before>
             <!-- Login as Admin -->
-            <actionGroup ref="LoginAsAdmin" stepKey="loginToAdminPanel"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginToAdminPanel"/>
 
             <!-- Create Default Category -->
             <createData entity="_defaultCategory" stepKey="createCategory"/>

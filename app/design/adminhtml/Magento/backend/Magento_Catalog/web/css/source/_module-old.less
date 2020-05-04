@@ -25,11 +25,13 @@
 // Attributes
 .attributes-edit-form {
     .field {
+        .addon {
+            display: block;
+            position: relative;
+        }
+
         &:not(.field-weight) {
             .addon {
-                display: block;
-                position: relative;
-
                 input[type="text"] {
                     border-width: 1px;
                 }
@@ -43,6 +45,14 @@
 
                 input:focus ~ .addafter {
                     box-shadow: none;
+                }
+            }
+        }
+
+        &.field-weight {
+            .addon {
+                .addafter {
+                    border-width: 0;
                 }
             }
         }
