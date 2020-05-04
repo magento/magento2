@@ -22,7 +22,6 @@ use Magento\Quote\Model\Quote\Item;
 use Magento\Store\Model\Store;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use PHPUnit_Framework_MockObject_MockObject;
 
 /**
  * Test address total collector model.
@@ -100,7 +99,7 @@ class SubtotalTest extends TestCase
         // @TODO this is a wrong test and it does not check methods. Any digital value will be correct
         $priceCurrency->expects($this->any())->method('convert')->willReturn(1231313);
 
-        /** @var Item|PHPUnit_Framework_MockObject_MockObject $quoteItem */
+        /** @var Item|MockObject $quoteItem */
         $quoteItem = $this->objectManager->getObject(
             Item::class,
             [
