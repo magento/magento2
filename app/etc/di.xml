@@ -1673,6 +1673,7 @@
         <arguments>
             <argument name="validators" xsi:type="array">
                 <item name="connectionFormat" xsi:type="object" sortOrder="10">Magento\Framework\MessageQueue\Publisher\Config\Validator\Format</item>
+                <item name="enabledConnection" xsi:type="object" sortOrder="20">Magento\Framework\MessageQueue\Publisher\Config\Validator\EnabledConnection</item>
             </argument>
         </arguments>
     </type>

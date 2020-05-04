@@ -9,7 +9,6 @@ use Magento\Framework\MessageQueue\Config\Topology\ConfigReaderPlugin as Topolog
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Framework\MessageQueue\ConfigInterface;
 use Magento\Framework\MessageQueue\Topology\Config\CompositeReader as TopologyConfigCompositeReader;
-use PHPUnit\Framework\MockObject\MockObject;
 
 class ConfigReaderPluginTest extends \PHPUnit\Framework\TestCase
 {
@@ -24,19 +23,23 @@ class ConfigReaderPluginTest extends \PHPUnit\Framework\TestCase
     private $objectManagerHelper;
 
     /**
-     * @var ConfigInterface|MockObject
+     * @var ConfigInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     private $configMock;
 
     /**
-     * @var TopologyConfigCompositeReader|MockObject
+     * @var TopologyConfigCompositeReader|\PHPUnit_Framework_MockObject_MockObject
      */
     private $subjectMock;
 
     protected function setUp()
     {
-        $this->configMock = $this->createMock(ConfigInterface::class);
-        $this->subjectMock = $this->createMock(TopologyConfigCompositeReader::class);
+        $this->configMock = $this->getMockBuilder(ConfigInterface::class)
+            ->getMockForAbstractClass();
+        $this->subjectMock = $this->getMockBuilder(TopologyConfigCompositeReader::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['getBinds', 'getConnectionByTopic'])
+            ->getMock();
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->plugin = $this->objectManagerHelper->getObject(
@@ -83,13 +86,17 @@ class ConfigReaderPluginTest extends \PHPUnit\Framework\TestCase
                 'name' => 'magento-db',
                 'type' => 'topic',
                 'connection' => 'db',
-                'bindings' => ['defaultBinding' => $dbDefaultBinding]
+                'bindings' => [
+                    'defaultBinding' => $dbDefaultBinding
+                ]
             ],
             'magento--amqp' => [
                 'name' => 'magento',
                 'type' => 'topic',
                 'connection' => 'amqp',
-                'bindings' => ['defaultBinding' => $amqpDefaultBinding]
+                'bindings' => [
+                    'defaultBinding' => $amqpDefaultBinding
+                ]
             ]
         ];
         $expectedResult = [
@@ -127,21 +134,17 @@ class ConfigReaderPluginTest extends \PHPUnit\Framework\TestCase
                 ]
             ]
         ];
-        $this->configMock->expects($this->atLeastOnce())
+
+        $this->configMock->expects(static::atLeastOnce())
             ->method('getBinds')
             ->willReturn($binding);
-        $this->configMock->expects($this->exactly(2))
-            ->method('getExchangeByTopic')
-            ->willReturnMap([
-                ['catalog.product.removed', 'magento-db'],
-                ['inventory.counter.updated', 'magento']
-            ]);
-        $this->configMock->expects($this->exactly(2))
+        $this->configMock->expects(static::exactly(2))
             ->method('getConnectionByTopic')
             ->willReturnMap([
                 ['catalog.product.removed', 'db'],
                 ['inventory.counter.updated', 'amqp']
             ]);
+
         $this->assertEquals($expectedResult, $this->plugin->afterRead($this->subjectMock, $result));
     }
 }

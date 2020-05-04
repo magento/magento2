@@ -85,15 +85,15 @@ class Reader implements \Magento\Framework\Config\ReaderInterface
             }
             $publisherName = $this->configData->get('topics/' . $topicName . '/publisher', $scope);
             $config = $this->configData->get('publishers/' . $publisherName, $scope);
-            if (!empty($config)) {
+            if (!empty($config) && isset($this->publisherNameToConnectionMap[$publisherName])) {
+                $connectionName = $this->publisherNameToConnectionMap[$publisherName];
                 $config['name'] = $config['connection'];
                 unset($config['connection']);
                 $disabled = isset($config['disabled']) ? $config['disabled'] : false;
                 $config['disabled'] = $disabled;
-                $configData[$topicName]['connection'] = $config;
+                $configData[$topicName]['connections'][$connectionName] = $config;
             }
         }
-
         return $configData;
     }
 }

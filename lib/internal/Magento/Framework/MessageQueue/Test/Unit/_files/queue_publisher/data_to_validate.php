@@ -7,21 +7,32 @@ return [
     'top04' => [
         'topic' => 'top04',
         'disabled' => false,
-        'connection' => ['name' => 'db', 'exchange' => 'magento2', 'disabled' => false],
+        'connections' => [
+            'amqp' => ['name' => 'amqp', 'exchange' => 'magento8', 'disabled' => true],
+            'db' => ['name' => 'db', 'exchange' => 'magento2', 'disabled' => false]
+        ]
     ],
     'top05' => [
         'topic' => 'top05',
         'disabled' => false,
-        'connection' => ['name' => 'amqp', 'exchange' => 'exch01', 'disabled' => false],
+        'connections' => [
+            'amqp' => ['name' => 'amqp', 'exchange' => 'exch01', 'disabled' => false],
+            'db' => ['name' => 'db', 'exchange' => 'exch02', 'disabled' => true],
+        ]
     ],
     'top06' => [
         'topic' => 'top06',
         'disabled' => false,
-        'connection' => ['name' => 'amqp', 'exchange' => 'magento', 'disabled' => false]
+        'connections' => [
+            'amqp' => ['name' => 'amqp', 'exchange' => 'magento', 'disabled' => false]
+        ]
     ],
     'top07' => [
         'topic' => 'top07',
         'disabled' => false,
-        'connection' => ['name' => 'amqp', 'exchange' => 'magento', 'disabled' => false],
+        'connections' => [
+            'amqp' => ['name' => 'amqp', 'exchange' => 'magento', 'disabled' => false],
+            'db' => ['name' => 'db', 'exchange' => 'exch02', 'disabled' => true],
+        ]
     ],
 ];

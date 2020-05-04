@@ -65,6 +65,19 @@ class CompositeReader implements ReaderInterface
 
         $this->validator->validate($result);
 
+        foreach ($result as $key => &$value) {
+            //Find enabled connection
+            $connection = null;
+            foreach ($value['connections'] as $connectionConfig) {
+                if (!$connectionConfig['disabled']) {
+                    $connection = $connectionConfig;
+                    break;
+                }
+            }
+            $value['connection'] = $connection;
+            unset($value['connections']);
+            $result[$key] = $value;
+        }
         return $result;
     }
 
@@ -74,7 +87,7 @@ class CompositeReader implements ReaderInterface
      * @param array $config
      * @return array
      */
-    private function addDefaultConnection(array $config): array
+    private function addDefaultConnection(array $config)
     {
         $defaultConnectionName = $this->defaultValueProvider->getConnection();
         $default = [
@@ -84,11 +97,23 @@ class CompositeReader implements ReaderInterface
         ];
 
         foreach ($config as &$value) {
-            if (!isset($value['connection']) || empty($value['connection']) || $value['connection']['disabled']) {
-                $value['connection'] = $default;
+            if (!isset($value['connections']) || empty($value['connections'])) {
+                $value['connections'][$defaultConnectionName] = $default;
+                continue;
+            }
+
+            $hasActiveConnection = false;
+            /** Find enabled connection */
+            foreach ($value['connections'] as $connectionConfig) {
+                if (!$connectionConfig['disabled']) {
+                    $hasActiveConnection = true;
+                    break;
+                }
+            }
+            if (!$hasActiveConnection) {
+                $value['connections'][$defaultConnectionName] = $default;
             }
         }
-
         return $config;
     }
 }

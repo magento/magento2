@@ -49,10 +49,12 @@ class Publisher implements \Magento\Framework\Config\ReaderInterface
                 [
                     'topic'       => $topicName,
                     'disabled'    => false,
-                    'connection' => [
-                        'name'     => 'amqp',
-                        'exchange' => 'magento',
-                        'disabled' => false,
+                    'connections' => [
+                        'amqp' => [
+                            'name'     => 'amqp',
+                            'exchange' => 'magento',
+                            'disabled' => false,
+                        ],
                     ],
                 ];
         }

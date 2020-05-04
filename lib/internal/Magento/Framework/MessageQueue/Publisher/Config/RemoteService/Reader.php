@@ -58,17 +58,20 @@ class Reader implements ReaderInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
+     *
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     public function read($scope = null)
     {
         $result = [];
         $connectionName = $this->defaultValueProvider->getConnection();
-        $connection = [
-            'name' => $connectionName,
-            'exchange' => $this->defaultValueProvider->getExchange(),
-            'disabled' => false,
+        $connections = [
+            $connectionName => [
+                'name' => $connectionName,
+                'exchange' => $this->defaultValueProvider->getExchange(),
+                'disabled' => false,
+            ]
         ];
         foreach ($this->getRemoteServices() as $serviceInterface => $remoteImplementation) {
             try {
@@ -81,7 +84,7 @@ class Reader implements ReaderInterface
                 $result[$topic] = [
                     'topic' => $topic,
                     'disabled' => false,
-                    'connection' => $connection,
+                    'connections' => $connections,
 
                 ];
             }

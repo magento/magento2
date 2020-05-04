@@ -25,12 +25,17 @@ class FormatTest extends \PHPUnit\Framework\TestCase
             'pub01' => [
                 'topic' => 'pub01',
                 'disabled' => false,
-                'connection' => ['name' => 'con1', 'exchange' => 'exchange01', 'disabled' => false],
+                'connections' => [
+                    'con01' => ['name' => 'con1', 'exchange' => 'exchange01', 'disabled' => true],
+                    'con02' => ['name' => 'con1', 'exchange' => 'exchange01', 'disabled' => false],
+                ],
             ],
             'pub02' => [
                 'topic' => 'pub02',
                 'disabled' => false,
-                'connection' => ['name' => 'amqp', 'exchange' => 'magento', 'disabled' => true],
+                'connections' => [
+                    'con01' => ['name' => 'amqp', 'exchange' => 'magento', 'disabled' => true],
+                ]
             ]
         ];
         $this->model->validate($configData);
@@ -45,7 +50,10 @@ class FormatTest extends \PHPUnit\Framework\TestCase
         $configData = [
             'pub01' => [
                 'disabled' => false,
-                'connection' => ['name' => 'con1', 'exchange' => 'exchange01', 'disabled' => false],
+                'connections' => [
+                    'con01' => ['name' => 'con1', 'exchange' => 'exchange01', 'disabled' => false],
+                    'con02' => ['name' => 'con1', 'exchange' => 'exchange01', 'disabled' => false],
+                ],
             ],
         ];
         $this->model->validate($configData);
@@ -60,7 +68,10 @@ class FormatTest extends \PHPUnit\Framework\TestCase
         $configData = [
             'pub01' => [
                 'topic' => 'pub01',
-                'connection' => ['name' => 'con1', 'exchange' => 'exchange01', 'disabled' => false],
+                'connections' => [
+                    'con01' => ['name' => 'con1', 'exchange' => 'exchange01', 'disabled' => false],
+                    'con02' => ['name' => 'con1', 'exchange' => 'exchange01', 'disabled' => false],
+                ],
             ],
         ];
         $this->model->validate($configData);
@@ -68,9 +79,9 @@ class FormatTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \LogicException
-     * @expectedExceptionMessage Missing connection field for publisher pub01.
+     * @expectedExceptionMessage Missing connections field for publisher pub01.
      */
-    public function testValidateMissingConnectionField()
+    public function testValidateMissingConnectionsField()
     {
         $configData = [
             'pub01' => [
@@ -83,15 +94,15 @@ class FormatTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \LogicException
-     * @expectedExceptionMessage Invalid connection format for publisher pub01.
+     * @expectedExceptionMessage Invalid connections format for publisher pub01.
      */
-    public function testValidateInvalidConnectionFormat()
+    public function testValidateInvalidConnectionsFormat()
     {
         $configData = [
             'pub01' => [
                 'topic' => 'pub01',
                 'disabled' => false,
-                'connection' => 'con1'
+                'connections' => 'con1'
             ],
         ];
         $this->model->validate($configData);
@@ -107,7 +118,9 @@ class FormatTest extends \PHPUnit\Framework\TestCase
             'pub01' => [
                 'topic' => 'pub01',
                 'disabled' => false,
-                'connection' => ['exchange' => 'exchange01', 'disabled' => false],
+                'connections' => [
+                    'con01' => ['exchange' => 'exchange01', 'disabled' => false],
+                ]
             ],
         ];
         $this->model->validate($configData);
@@ -123,7 +136,9 @@ class FormatTest extends \PHPUnit\Framework\TestCase
             'pub01' => [
                 'topic' => 'pub01',
                 'disabled' => false,
-                'connection' => ['name' => 'con1', 'disabled' => false],
+                'connections' => [
+                    'con01' => ['name' => 'con1', 'disabled' => false],
+                ]
             ],
         ];
         $this->model->validate($configData);
@@ -139,7 +154,9 @@ class FormatTest extends \PHPUnit\Framework\TestCase
             'pub01' => [
                 'topic' => 'pub01',
                 'disabled' => false,
-                'connection' => ['name' => 'con1', 'exchange' => 'default'],
+                'connections' => [
+                    'con01' => ['name' => 'con1', 'exchange' => 'default'],
+                ]
             ],
         ];
         $this->model->validate($configData);
@@ -154,11 +171,17 @@ class FormatTest extends \PHPUnit\Framework\TestCase
         $configData = [
             'pub01' => [
                 'disabled' => false,
-                'connection' => ['name' => 'con1', 'exchange' => 'exchange01', 'disabled' => false],
+                'connections' => [
+                    'con01' => ['name' => 'con1', 'exchange' => 'exchange01', 'disabled' => false],
+                    'con02' => ['name' => 'con1', 'exchange' => 'exchange01', 'disabled' => false],
+                ],
             ],
             'pub02' => [
                 'topic' => 'pub02',
-                'connection' => ['name' => 'con1', 'exchange' => 'exchange01', 'disabled' => false],
+                'connections' => [
+                    'con01' => ['name' => 'con1', 'exchange' => 'exchange01', 'disabled' => false],
+                    'con02' => ['name' => 'con1', 'exchange' => 'exchange01', 'disabled' => false],
+                ],
             ],
         ];
         $this->model->validate($configData);
