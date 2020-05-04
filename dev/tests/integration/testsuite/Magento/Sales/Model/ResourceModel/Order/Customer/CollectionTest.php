@@ -39,7 +39,7 @@ class CollectionTest extends TestCase
     {
         $customers = $this->collection->getItems();
         foreach ($customers as $customer) {
-            $this->assertNotEmpty($customer->getData($attribute), "Attribute '$attribute' does not present");
+            $this->assertNotEmpty($customer->getData($attribute), "Attribute '$attribute' is not present");
         }
     }
 
