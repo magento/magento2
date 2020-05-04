@@ -9,10 +9,10 @@
     <system>
         <section id="login_as_customer">
             <group id="general">
-                <field id="disable_page_cache" translate="label comment" type="select" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="disable_page_cache" translate="label comment" type="select" sortOrder="20" showInDefault="1" canRestore="1">
                     <label>Disable Page Cache For Admin User</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
-                    <comment><![CDATA[If set to "Yes", when login as customer Page Cache will be disabled.]]></comment>
+                    <comment><![CDATA[If set to "Yes", page caching is disabled when the Admin user is logged in as a customer.]]></comment>
                 </field>
             </group>
         </section>
