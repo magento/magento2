@@ -3,8 +3,10 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
 
-require __DIR__ . '/../../Checkout/_files/quote_with_address.php';
+Resolver::getInstance()->requireDataFixture('Magento/Checkout/_files/quote_with_address.php');
+
 $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 $product = $objectManager->create(\Magento\Catalog\Model\Product::class);
 $product->setTypeId(

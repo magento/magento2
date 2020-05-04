@@ -15,11 +15,12 @@ use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 use Magento\Eav\Api\Data\AttributeOptionInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryExtensionFactory;
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
 
 \Magento\TestFramework\Helper\Bootstrap::getInstance()->reinitialize();
 
-require __DIR__ . '/configurable_attribute.php';
-require __DIR__ . '/../../Catalog/_files/category.php';
+Resolver::getInstance()->requireDataFixture('Magento/ConfigurableProduct/_files/configurable_attribute.php');
+Resolver::getInstance()->requireDataFixture('Magento/Catalog/_files/category.php');
 
 /** @var ProductRepositoryInterface $productRepository */
 $productRepository = Bootstrap::getObjectManager()

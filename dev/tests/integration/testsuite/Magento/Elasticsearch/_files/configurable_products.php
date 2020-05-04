@@ -13,14 +13,21 @@ use Magento\Catalog\Setup\CategorySetup;
 use Magento\ConfigurableProduct\Helper\Product\Options\Factory;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 use Magento\Eav\Api\Data\AttributeOptionInterface;
+use Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\Collection;
 use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
+use Magento\Eav\Model\Config;
 
-require __DIR__ . '/select_attribute.php';
-require __DIR__ . '/multiselect_attribute.php';
-require __DIR__ . '/configurable_attribute.php';
+Resolver::getInstance()->requireDataFixture('Magento/Elasticsearch/_files/select_attribute.php');
+Resolver::getInstance()->requireDataFixture('Magento/Elasticsearch/_files/multiselect_attribute.php');
+Resolver::getInstance()->requireDataFixture('Magento/Elasticsearch/_files/configurable_attribute.php');
 
 $objectManager = Bootstrap::getObjectManager();
 
+$eavConfig = Bootstrap::getObjectManager()->get(Config::class);
+$attribute = $eavConfig->getAttribute(Product::ENTITY, 'test_configurable');
+$selectAttribute = $eavConfig->getAttribute(Product::ENTITY, 'select_attribute');
+$multiselectAttribute = $eavConfig->getAttribute(Product::ENTITY, 'test_configurable');
 /** @var CategorySetup $installer */
 $installer = $objectManager->create(CategorySetup::class);
 
@@ -31,7 +38,12 @@ $attributeSetId = $installer->getAttributeSetId('catalog_product', 'Default');
 
 /** @var AttributeOptionInterface[] $options */
 $options = $attribute->getOptions();
-
+$selectOptionsIds = $objectManager->create(Collection::class)
+    ->setAttributeFilter($selectAttribute->getId())
+    ->getAllIds();
+$multiselectOptionsIds = $objectManager->create(Collection::class)
+    ->setAttributeFilter($multiselectAttribute->getId())
+    ->getAllIds();
 $attributeValues = [];
 $attributeSetId = $installer->getAttributeSetId('catalog_product', 'Default');
 $associatedProductIds = [];

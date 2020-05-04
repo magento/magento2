@@ -7,8 +7,9 @@ declare(strict_types=1);
 
 use Magento\Eav\Model\Entity\Attribute\FrontendLabel;
 use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
 
-require __DIR__ . '/configurable_products.php';
+Resolver::getInstance()->requireDataFixture('Magento/ConfigurableProduct/_files/configurable_products.php');
 
 // Add frontend label to created attribute:
 $frontendLabelAttribute = Bootstrap::getObjectManager()->get(FrontendLabel::class);

@@ -5,8 +5,11 @@
  */
 
 use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
 
-require __DIR__ . '/product_downloadable_with_purchased_separately_links.php';
+Resolver::getInstance()->requireDataFixture(
+    'Magento/Downloadable/_files/product_downloadable_with_purchased_separately_links.php'
+);
 
 $product->setCanSaveCustomOptions(true);
 $product->setHasOptions(true);
