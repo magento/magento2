@@ -51,7 +51,7 @@
         </a>
         <?= /* @noEscape */ $secureRenderer->renderEventListenerAsTag(
             'onclick',
-            'e.preventDefault()',
+            'event.preventDefault()',
             'a#' . /* @noEscape */ ($popupId)
         ) ?>
     <?php else: ?>
@@ -68,7 +68,7 @@
     </a>
     <?= /* @noEscape */ $secureRenderer->renderEventListenerAsTag(
         'onclick',
-        'e.preventDefault()',
+        'event.preventDefault()',
         'a#' . /* @noEscape */ ($helpLinkId)
     ) ?>
 </div>

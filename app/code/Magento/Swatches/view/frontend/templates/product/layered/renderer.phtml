@@ -8,6 +8,7 @@
 // phpcs:disable Generic.WhiteSpace.ScopeIndent
 
 /** @var $block \Magento\Swatches\Block\LayeredNavigation\RenderLayered */
+/** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
 ?>
 <?php $swatchData = $block->getSwatchData(); ?>
 <div class="swatch-attribute swatch-layered <?= $block->escapeHtmlAttr($swatchData['attribute_code']) ?>"
@@ -22,7 +23,7 @@
                     <?php switch ($swatchData['swatches'][$option]['type']) {
                         case '3':
                             ?>
-                            <div class="swatch-option <?= $block->escapeHtmlAttr($label['custom_style']) ?>"
+                            <div class="swatch-option"
                                  tabindex="-1"
                                  data-option-type="3"
                                  data-option-id="<?= $block->escapeHtmlAttr($option) ?>"
@@ -30,6 +31,13 @@
                                  data-option-tooltip-thumb=""
                                  data-option-tooltip-value=""
                                 ></div>
+                            <?php if ($block->escapeHtmlAttr($label['custom_style'])): ?>
+                            <?= /* @noEscape */ $secureRenderer->renderStyleAsTag(
+                                $block->escapeHtmlAttr($label['custom_style']),
+                                "div[data-option-id='" . $block->escapeHtmlAttr($option) . "']"
+                            ) ?>
+                            <?php endif; ?>
+
                             <?php break;
                         case '2':
                             ?>
@@ -43,21 +51,29 @@
                             );
                             $escapedUrl = $block->escapeUrl($swatchImagePath);
                             ?>
-                            <div class="swatch-option image <?= $block->escapeHtmlAttr($label['custom_style']) ?>"
+                            <div class="swatch-option image"
                                  tabindex="-1"
                                  data-option-type="2"
                                  data-option-id="<?= $block->escapeHtmlAttr($option) ?>"
                                  data-option-label="<?= $block->escapeHtmlAttr($label['label']) ?>"
                                  data-option-tooltip-thumb="<?= $block->escapeUrl($swatchThumbPath) ?>"
-                                 data-option-tooltip-value=""
-                                 style="background: url(<?=
-                                 /*  @noEscape */ $escapedUrl
-                                                        ?>) no-repeat center; background-size: initial;">
+                                 data-option-tooltip-value="">
                             </div>
+                            <?php if ($block->escapeHtmlAttr($label['custom_style'])): ?>
+                            <?= /* @noEscape */ $secureRenderer->renderStyleAsTag(
+                                $block->escapeHtmlAttr($label['custom_style']),
+                                "div[data-option-id='" . $block->escapeHtmlAttr($option) . "']"
+                            ) ?>
+                            <?php endif; ?>
+                            <?= /* @noEscape */ $secureRenderer->renderStyleAsTag(
+                                "background: url(" . /*  @noEscape */ $escapedUrl .
+                                ") no-repeat center; background-size: initial;",
+                                "div[data-option-id='" . $block->escapeHtmlAttr($option) . "']"
+                            ) ?>
                             <?php break;
                         case '1':
                             ?>
-                            <div class="swatch-option color <?= $block->escapeHtmlAttr($label['custom_style']) ?>"
+                            <div class="swatch-option color"
                                  tabindex="-1"
                                  data-option-type="1"
                                  data-option-id="<?= $block->escapeHtmlAttr($option) ?>"
@@ -65,16 +81,25 @@
                                  data-option-tooltip-thumb=""
                                  data-option-tooltip-value="<?= $block->escapeHtmlAttr(
                                      $swatchData['swatches'][$option]['value']
-                                 ) ?>"
-                                 style="background: <?= $block->escapeHtmlAttr(
-                                     $swatchData['swatches'][$option]['value']
-                                 ) ?> no-repeat center; background-size: initial;">
+                                 ) ?>">
                             </div>
+                            <?php if ($block->escapeHtmlAttr($label['custom_style'])): ?>
+                            <?= /* @noEscape */ $secureRenderer->renderStyleAsTag(
+                                $block->escapeHtmlAttr($label['custom_style']),
+                                "div[data-option-id='" . $block->escapeHtmlAttr($option) . "']"
+                            ) ?>
+                            <?php endif; ?>
+                            <?= /* @noEscape */ $secureRenderer->renderStyleAsTag(
+                                "background: " . $block->escapeHtmlAttr(
+                                    $swatchData['swatches'][$option]['value']
+                                ) . " no-repeat center; background-size: initial;",
+                                "div[data-option-id='" . $block->escapeHtmlAttr($option) . "']"
+                            ) ?>
                             <?php break;
                         case '0':
                         default:
                             ?>
-                            <div class="swatch-option text <?= $block->escapeHtmlAttr($label['custom_style']) ?>"
+                            <div class="swatch-option text"
                                  tabindex="-1"
                                  data-option-type="0"
                                  data-option-id="<?= $block->escapeHtmlAttr($option) ?>"
@@ -82,6 +107,12 @@
                                  data-option-tooltip-thumb=""
                                  data-option-tooltip-value=""
                                 ><?= $block->escapeHtml($swatchData['swatches'][$option]['value']) ?></div>
+                            <?php if ($block->escapeHtmlAttr($label['custom_style'])): ?>
+                            <?= /* @noEscape */ $secureRenderer->renderStyleAsTag(
+                                $block->escapeHtmlAttr($label['custom_style']),
+                                "div[data-option-id='" . $block->escapeHtmlAttr($option) . "']"
+                            ) ?>
+                            <?php endif; ?>
                         <?php break;
                     } ?>
                 <?php endif; ?>
@@ -89,11 +120,14 @@
         <?php endforeach; ?>
     </div>
 </div>
+<?php $scriptString = <<<script
 
-<script>
     require(["jquery", "Magento_Swatches/js/swatch-renderer"], function ($) {
-        $('.swatch-layered.<?= $block->escapeJs($swatchData['attribute_code']) ?>')
+        $('.swatch-layered.{$block->escapeJs($swatchData['attribute_code'])}')
             .find('[data-option-type="1"], [data-option-type="2"], [data-option-type="0"], [data-option-type="3"]')
             .SwatchRendererTooltip();
     });
-</script>
+
+script;
+?>
+<?= /* @noEscape */ $secureRenderer->renderTag('script', [], $scriptString, false) ?>

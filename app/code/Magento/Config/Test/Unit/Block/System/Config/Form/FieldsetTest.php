@@ -5,6 +5,8 @@
  */
 namespace Magento\Config\Test\Unit\Block\System\Config\Form;
 
+use Magento\Framework\View\Helper\SecureHtmlRenderer;
+
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
@@ -100,6 +102,13 @@ class FieldsetTest extends \PHPUnit\Framework\TestCase
         $groupMock->expects($this->any())->method('getFieldsetCss')->will($this->returnValue('test_fieldset_css'));
 
         $this->_helperMock = $this->createMock(\Magento\Framework\View\Helper\Js::class);
+        $secureRendererMock = $this->createMock(SecureHtmlRenderer::class);
+        $secureRendererMock->method('renderStyleAsTag')
+            ->willReturnCallback(
+                function (string $style, string $selector): string {
+                    return "<style>$selector { $style }</style>";
+                }
+            );
 
         $data = [
             'request' => $this->_requestMock,
@@ -108,6 +117,7 @@ class FieldsetTest extends \PHPUnit\Framework\TestCase
             'layout' => $this->_layoutMock,
             'jsHelper' => $this->_helperMock,
             'data' => ['group' => $groupMock],
+            'secureRenderer' => $secureRendererMock
         ];
         $this->_testHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->_object = $this->_testHelper->getObject(\Magento\Config\Block\System\Config\Form\Fieldset::class, $data);
@@ -222,8 +232,8 @@ class FieldsetTest extends \PHPUnit\Framework\TestCase
 
         $this->assertContains('test_field_toHTML', $actual);
 
-        $expected = '<div id="row_test_field_id_comment" class="system-tooltip-box"' .
-            ' style="display:none;">test_field_tootip</div>';
+        $expected = '<div id="row_test_field_id_comment" class="system-tooltip-box">test_field_tootip</div>' .
+        '<style>row_test_field_id_comment { display:none; }</style>';
         $this->assertContains($expected, $actual);
         if ($nested) {
             $this->assertContains('nested', $actual);

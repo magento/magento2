@@ -30,7 +30,7 @@ $urlForm = $block->getReviewsUrl() . '#review-form';
          </div>
             <?= /* @noEscape */ $secureRenderer->renderStyleAsTag(
                 "width:" . $block->escapeHtmlAttr($rating) . "%",
-                'div.rating-summary div.rating-result span'
+                'div.rating-summary div.rating-result>span:first-child'
             ) ?>
         <?php endif;?>
         <div class="reviews-actions">

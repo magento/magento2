@@ -6,6 +6,8 @@
 
 namespace Magento\Paypal\Test\Unit\Block\Adminhtml\System\Config\Fieldset;
 
+use Magento\Framework\View\Helper\SecureHtmlRenderer;
+
 class GroupTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -70,9 +72,23 @@ class GroupTest extends \PHPUnit\Framework\TestCase
             ->method('__call')
             ->with('getUser')
             ->will($this->returnValue($this->_user));
+        $secureRendererMock = $this->createMock(SecureHtmlRenderer::class);
+        $secureRendererMock->method('renderEventListenerAsTag')
+            ->willReturnCallback(
+                function (string $event, string $js, string $selector): string {
+                    return "<script>document.querySelector('$selector').$event = function () { $js };</script>";
+                }
+            );
+        $secureRendererMock->method('renderStyleAsTag')
+            ->willReturnCallback(
+                function (string $style, string $selector): string {
+                    return "<style>$selector { $style }</style>";
+                }
+            );
+
         $this->_model = $helper->getObject(
             \Magento\Paypal\Block\Adminhtml\System\Config\Fieldset\Group::class,
-            ['authSession' => $this->_authSession]
+            ['authSession' => $this->_authSession, 'secureRenderer' => $secureRendererMock]
         );
         $this->_model->setGroup($this->_group);
     }

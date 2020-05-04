@@ -5,6 +5,8 @@
  */
 namespace Magento\Config\Test\Unit\Block\System\Config\Form;
 
+use Magento\Framework\View\Helper\SecureHtmlRenderer;
+
 /**
  * Test how class render field html element in Stores Configuration
  */
@@ -38,10 +40,24 @@ class FieldTest extends \PHPUnit\Framework\TestCase
     protected function setUp()
     {
         $this->_storeManagerMock = $this->createMock(\Magento\Store\Model\StoreManager::class);
+        $secureRendererMock = $this->createMock(SecureHtmlRenderer::class);
+        $secureRendererMock->method('renderEventListenerAsTag')
+            ->willReturnCallback(
+                function (string $event, string $js, string $selector): string {
+                    return "<script>document.querySelector('$selector').$event = function () { $js };</script>";
+                }
+            );
+        $secureRendererMock->method('renderStyleAsTag')
+            ->willReturnCallback(
+                function (string $style, string $selector): string {
+                    return "<style>$selector { $style }</style>";
+                }
+            );
 
         $data = [
             'storeManager' => $this->_storeManagerMock,
             'urlBuilder' => $this->createMock(\Magento\Backend\Model\Url::class),
+            'secureRenderer' => $secureRendererMock,
         ];
         $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->_object = $helper->getObject(\Magento\Config\Block\System\Config\Form\Field::class, $data);
@@ -150,7 +166,7 @@ class FieldTest extends \PHPUnit\Framework\TestCase
     {
         $testHint = 'test_hint';
         $this->_elementMock->expects($this->any())->method('getHint')->will($this->returnValue($testHint));
-        $expected = '<td class=""><div class="hint"><div style="display: none;">' . $testHint . '</div></div>';
+        $expected = '<td class=""><div class="hint"><div id="hint_test_field_id">' . $testHint . '</div></div>';
         $actual = $this->_object->render($this->_elementMock);
         $this->assertContains($expected, $actual);
     }
@@ -187,8 +203,9 @@ class FieldTest extends \PHPUnit\Framework\TestCase
             '_inherit" name="' .
             $this->_testData['name'] .
             '[inherit]" type="checkbox" value="1"' .
-            ' class="checkbox config-inherit" checked="checked"' . ' disabled="disabled"' . ' readonly="1"' .
-            ' onclick="toggleValueElements(this, Element.previous(this.parentNode))" /> ';
+            ' class="checkbox config-inherit" checked="checked"' . ' disabled="disabled"' . ' readonly="1" />' .
+            '<script>document.querySelector(\'input#test_field_id_inherit\').onclick = function () '.
+            '{ toggleValueElements(this, Element.previous(this.parentNode)) };</script>';
 
         $expected .= '<label for="' . $this->_testData['htmlId'] . '_inherit" class="inherit">Use Website</label>';
         $actual = $this->_object->render($this->_elementMock);

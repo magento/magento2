@@ -5,6 +5,8 @@
  */
 namespace Magento\Config\Test\Unit\Block\System\Config\Form\Fieldset\Modules;
 
+use Magento\Framework\View\Helper\SecureHtmlRenderer;
+
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
@@ -141,6 +143,14 @@ class DisableOutputTest extends \PHPUnit\Framework\TestCase
             ]
         );
 
+        $secureRendererMock = $this->createMock(SecureHtmlRenderer::class);
+        $secureRendererMock->method('renderEventListenerAsTag')
+            ->willReturnCallback(
+                function (string $event, string $js, string $selector): string {
+                    return "<script>document.querySelector('$selector').$event = function () { $js };</script>";
+                }
+            );
+
         $data = [
             'context'     => $context,
             'authSession' => $this->authSessionMock,
@@ -150,6 +160,7 @@ class DisableOutputTest extends \PHPUnit\Framework\TestCase
                 'group'          => $groupMock,
                 'form'           => $formMock,
             ],
+            'secureRenderer' => $secureRendererMock
         ];
 
         $this->object = $this->objectManager->getObject(

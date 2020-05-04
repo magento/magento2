@@ -5,6 +5,7 @@
  */
 namespace Magento\Paypal\Test\Unit\Block\Adminhtml\System\Config\Field;
 
+use Magento\Framework\View\Helper\SecureHtmlRenderer;
 use Magento\Paypal\Block\Adminhtml\System\Config\Field\Country;
 
 class CountryTest extends \PHPUnit\Framework\TestCase
@@ -58,9 +59,28 @@ class CountryTest extends \PHPUnit\Framework\TestCase
         $this->_request = $this->getMockForAbstractClass(\Magento\Framework\App\RequestInterface::class);
         $this->_jsHelper = $this->createMock(\Magento\Framework\View\Helper\Js::class);
         $this->_url = $this->createMock(\Magento\Backend\Model\Url::class);
+        $secureRendererMock = $this->createMock(SecureHtmlRenderer::class);
+        $secureRendererMock->method('renderEventListenerAsTag')
+            ->willReturnCallback(
+                function (string $event, string $js, string $selector): string {
+                    return "<script>document.querySelector('$selector').$event = function () { $js };</script>";
+                }
+            );
+        $secureRendererMock->method('renderStyleAsTag')
+            ->willReturnCallback(
+                function (string $style, string $selector): string {
+                    return "<style>$selector { $style }</style>";
+                }
+            );
+
         $this->_model = $helper->getObject(
             \Magento\Paypal\Block\Adminhtml\System\Config\Field\Country::class,
-            ['request' => $this->_request, 'jsHelper' => $this->_jsHelper, 'url' => $this->_url]
+            [
+                'request' => $this->_request,
+                'jsHelper' => $this->_jsHelper,
+                'url' => $this->_url,
+                'secureRenderer' => $secureRendererMock,
+            ]
         );
     }
 

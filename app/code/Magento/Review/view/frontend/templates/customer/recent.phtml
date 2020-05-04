@@ -37,7 +37,7 @@
                          </div>
                         <?= /* @noEscape */ $secureRenderer->renderStyleAsTag(
                             "width:". $block->escapeHtmlAttr($rating) . "%",
-                            'div.rating-result span'
+                            'div.rating-result>span:first-child'
                         ) ?>
                      </div>
                 <?php endif; ?>

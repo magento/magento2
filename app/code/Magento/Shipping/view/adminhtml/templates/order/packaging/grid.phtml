@@ -104,6 +104,7 @@
                                qty-decimal
                             <?php endif ?>">&nbsp;
                         <button type="button"
+                                id="packaging-delete-item-<?= /* @noEscape */ $item->getId() ?>"
                                 class="action-delete"
                                 data-action="package-delete-item">
                             <span><?= $block->escapeHtml(__('Delete')) ?></span>
@@ -112,7 +113,7 @@
                         <?= /* @noEscape */ $secureRenderer->renderEventListenerAsTag(
                             'onclick',
                             'packaging.deleteItem(this);',
-                            'button.action-delete'
+                            'button#packaging-delete-item-' . $item->getId()
                         ) ?>
                     </td>
                 </tr>

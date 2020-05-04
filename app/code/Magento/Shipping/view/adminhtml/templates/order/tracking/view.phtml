@@ -87,7 +87,8 @@ $shippingHelper = $block->getData('shippingHelper');
                     </td>
                     <?= /* @noEscape */ $secureRenderer->renderEventListenerAsTag(
                         'onclick',
-                        "deleteTrackingNumber('{$block->escapeJs($block->getRemoveUrl($_track))}'); return false;",
+                        "deleteTrackingNumber('{$block->escapeJs($block->getRemoveUrl($_track))}');
+                         event.preventDefault();",
                         '#del-track-' . (int) $_track->getId()
                     ) ?>
                 </tr>

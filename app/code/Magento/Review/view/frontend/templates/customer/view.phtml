@@ -49,7 +49,7 @@ $product = $block->getProductData();
                             </div>
                             <?= /* @noEscape */ $secureRenderer->renderStyleAsTag(
                                 "width:" . /* @noEscape */ $rating . "%",
-                                'div.rating-result span'
+                                'div.rating-result>span:first-child'
                             ) ?>
                         </div>
                     <?php endif; ?>

@@ -53,7 +53,7 @@ $reviewHelper = $block->getData('reviewHelper');
                         </div>
                         <?= /* @noEscape */ $secureRenderer->renderStyleAsTag(
                             "width:" . /* @noEscape */ ((int)$review->getSum() / (int)$review->getCount()) . "%;",
-                            'div.rating-summary div.rating-result span'
+                            'div.rating-summary div.rating-result>span:first-child'
                         ) ?>
                     <?php endif; ?>
                     </td>

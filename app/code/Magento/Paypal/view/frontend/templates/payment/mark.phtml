@@ -24,12 +24,12 @@ $url = $block->escapeUrl($block->getPaymentAcceptanceMarkHref());
 </a>
 <?= /* @noEscape */ $secureRenderer->renderEventListenerAsTag(
     'onclick',
-    "javascript:window.open(
+    "window.open(
            '" . /* @noEscape */ $block->escapeJs($block->getPaymentAcceptanceMarkHref()) . "',
            'olcwhatispaypal',
            'toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=yes, resizable=yes, ,' +
            'left=0, top=0, width=400, height=350'
-       ); return false;",
+       ); event.preventDefault();",
     'a.action.paypal.about'
 ) ?>
 <!-- PayPal Logo -->
