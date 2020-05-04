@@ -15,7 +15,7 @@ define([
 
     return Column.extend({
         defaults: {
-            bodyTmpl: 'Magento_ImportExport/export/filter-grid/columns/filter',
+            bodyTmpl: 'Magento_ImportExport/export/filter-grid/cells/filter',
             templates: {
                 base: {
                     index: '${ $.$data.index }',
@@ -39,6 +39,14 @@ define([
                 multiselect: {
                     component: 'Magento_Ui/js/form/element/multiselect',
                     options: '${ JSON.stringify($.$data.options) }'
+                },
+                number: {
+                    component: 'Magento_ImportExport/js/export/filter-grid/columns/filter/range',
+                    rangeType: 'text'
+                },
+                date: {
+                    component: 'Magento_ImportExport/js/export/filter-grid/columns/filter/range',
+                    rangeType: 'date'
                 }
             },
             filters: {},
