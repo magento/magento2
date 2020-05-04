@@ -142,6 +142,8 @@ class ImagesFixture extends Fixture
     }
 
     /**
+     * Executes the fixture
+     *
      * @throws \Exception
      */
     public function execute()
@@ -171,6 +173,8 @@ class ImagesFixture extends Fixture
     }
 
     /**
+     * Prints information about the amount of generated images
+     *
      * @param \Symfony\Component\Console\Output\OutputInterface $output
      * @throws \Magento\Framework\Exception\ValidatorException
      */
