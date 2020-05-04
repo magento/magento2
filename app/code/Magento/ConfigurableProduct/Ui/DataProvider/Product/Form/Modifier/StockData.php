@@ -69,6 +69,7 @@ class StockData extends AbstractModifier
                 'imports' => [
                     'disabled' => '!ns = ${ $.ns }, index = '
                         . ConfigurablePanel::CONFIGURABLE_MATRIX . ':isEmpty',
+                    '__disableTmpl' => ['disabled' => false],
                 ],
             ];
 

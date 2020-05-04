@@ -58,6 +58,7 @@ class BundleWeightTest extends AbstractModifierTest
         $weightParams = [
             'imports' => [
                 'disabled' => 'ns = ${ $.ns }, index = ' . BundleWeight::CODE_WEIGHT_TYPE . ':checked',
+                '__disableTmpl' => ['disabled' => false],
             ]
         ];
         $hasWeightParams = [

@@ -52,7 +52,7 @@ class RateTest extends \Magento\TestFramework\TestCase\AbstractBackendController
      */
     public function ajaxSaveActionDataProvider()
     {
-        $postData = ['rate' => '10', 'tax_country_id' => 'US', 'tax_region_id' => '1'];
+        $postData = ['rate' => '10.0000', 'tax_country_id' => 'US', 'tax_region_id' => '1'];
         return [
             [
                 $postData + [

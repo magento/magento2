@@ -13,7 +13,7 @@ use Magento\Framework\App\RequestInterface;
 use PHPUnit\Framework\TestCase;
 
 /**
- * AssociatedProductsTest
+ * Test verifies modifier for configurable associated product
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
@@ -48,8 +48,8 @@ class AssociatedProductsTest extends TestCase
     {
         $productSku = 'configurable';
         $associatedProductsData = [
-            [10 => '10.000'],
-            [20 => '20.000']
+            [10 => '10.000000'],
+            [20 => '20.000000']
         ];
         /** @var \Magento\Catalog\Api\ProductRepositoryInterface $productRepository */
         $productRepository = $this->objectManager->create(\Magento\Catalog\Api\ProductRepositoryInterface::class);

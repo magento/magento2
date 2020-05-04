@@ -59,8 +59,6 @@ $customOptions = [
 
 $productModel->setTypeId(
     \Magento\Catalog\Model\Product\Type::TYPE_SIMPLE
-)->setId(
-    1
 )->setAttributeSetId(
     4
 )->setName(
