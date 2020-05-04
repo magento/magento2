@@ -19,6 +19,10 @@ define([
 
             originalSelectPaymentMethodAction(paymentMethod);
 
+            if (paymentMethod === null) {
+                return;
+            }
+
             $.when(
                 setPaymentInformationExtended(
                     messageContainer,
