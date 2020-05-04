@@ -4,13 +4,17 @@
  * See COPYING.txt for license details.
  */
 
+use Magento\Sales\Api\Data\OrderInterfaceFactory;
+use Magento\Sales\Model\Order;
 use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
 
-require __DIR__ . '/../../../Magento/Sales/_files/customer_order_item_with_product_and_custom_options.php';
-
-$customerIdFromFixture = 1;
-/** @var $order \Magento\Sales\Model\Order */
-$order->setCustomerId($customerIdFromFixture)->setCustomerIsGuest(false)->save();
+Resolver::getInstance()->requireDataFixture(
+    'Magento/Sales/_files/customer_order_item_with_product_and_custom_options.php'
+);
+/** @var Order $order */
+$order = $objectManager->get(OrderInterfaceFactory::class)->create()->loadByIncrementId('100000001');
+$order->setCustomerId(1)->setCustomerIsGuest(false)->save();
 
 // load product and set it out of stock
 /** @var \Magento\Catalog\Api\ProductRepositoryInterface $repository */

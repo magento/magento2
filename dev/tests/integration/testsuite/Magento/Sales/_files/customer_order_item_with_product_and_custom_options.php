@@ -4,9 +4,13 @@
  * See COPYING.txt for license details.
  */
 
-require __DIR__ . '/../../../Magento/Customer/_files/customer.php';
-require __DIR__ . '/../../../Magento/Catalog/_files/order_item_with_product_and_custom_options.php';
+use Magento\Sales\Api\Data\OrderInterfaceFactory;
+use Magento\Sales\Model\Order;
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
 
-$customerIdFromFixture = 1;
-/** @var $order \Magento\Sales\Model\Order */
-$order->setCustomerId($customerIdFromFixture)->setCustomerIsGuest(false)->save();
+Resolver::getInstance()->requireDataFixture('Magento/Customer/_files/customer.php');
+Resolver::getInstance()->requireDataFixture('Magento/Catalog/_files/order_item_with_product_and_custom_options.php');
+
+/** @var Order $order */
+$order = $objectManager->get(OrderInterfaceFactory::class)->create()->loadByIncrementId('100000001');
+$order->setCustomerId(1)->setCustomerIsGuest(false)->save();

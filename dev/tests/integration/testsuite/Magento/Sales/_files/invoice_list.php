@@ -5,8 +5,9 @@
  */
 
 use Magento\Sales\Model\Order;
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
 
-require 'order.php';
+Resolver::getInstance()->requireDataFixture('Magento/Sales/_files/order.php');
 /** @var Order $order */
 
 $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();

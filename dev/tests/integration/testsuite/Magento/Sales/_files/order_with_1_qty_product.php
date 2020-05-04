@@ -4,10 +4,13 @@
  * See COPYING.txt for license details.
  */
 
+use Magento\Sales\Api\Data\OrderInterfaceFactory;
 use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
 
-require __DIR__ . '/../../../Magento/Sales/_files/order_with_two_simple_products_qty_10.php';
-
+Resolver::getInstance()->requireDataFixture('Magento/Sales/_files/order_with_two_simple_products_qty_10.php');
+/** @var \Magento\Sales\Model\Order $order */
+$order = $objectManager->get(OrderInterfaceFactory::class)->create()->loadByIncrementId('100000001');
 $customerIdFromFixture = 1;
 /** @var $order \Magento\Sales\Model\Order */
 $order->setCustomerId($customerIdFromFixture)->setCustomerIsGuest(false)->save();
