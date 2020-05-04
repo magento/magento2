@@ -10,12 +10,14 @@ use Magento\Tax\Api\Data\QuoteDetailsItemInterface;
 class UnitBaseCalculator extends AbstractCalculator
 {
     /**
-     * @param $amount
-     * @param null $rate
-     * @param null $direction
+     * Determines the rounding operation type and rounds the amount
+     *
+     * @param float $amount
+     * @param string $rate
+     * @param bool $direction
      * @param string $type
      * @param bool $round
-     * @param null $item
+     * @param QuoteDetailsItemInterface $item
      * @return float
      */
     protected function roundAmount(
