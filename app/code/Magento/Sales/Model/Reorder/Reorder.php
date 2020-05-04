@@ -88,7 +88,7 @@ class Reorder
     private $customerCartProvider;
 
     /**
-     * ProductCollectionFactory
+     * @var ProductCollectionFactory
      */
     private $productCollectionFactory;
 
