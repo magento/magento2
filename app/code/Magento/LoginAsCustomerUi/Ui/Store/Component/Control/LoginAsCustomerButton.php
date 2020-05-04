@@ -10,7 +10,7 @@ namespace Magento\LoginAsCustomerUi\Ui\Store\Component\Control;
 use Magento\Framework\View\Element\UiComponent\Control\ButtonProviderInterface;
 
 /**
- * Login As Customer button UI component.
+ * Login as Customer button UI component.
  */
 class LoginAsCustomerButton implements ButtonProviderInterface
 {
@@ -22,7 +22,7 @@ class LoginAsCustomerButton implements ButtonProviderInterface
     public function getButtonData(): array
     {
         return [
-            'label' => __('Login As Customer'),
+            'label' => __('Login as Customer'),
             'class' => 'save primary',
             'data_attribute' => [
                 'mage-init' => ['button' => ['event' => 'save']],

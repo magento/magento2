@@ -130,7 +130,7 @@ class Login extends Action implements HttpGetActionInterface, HttpPostActionInte
         $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
 
         if (!$this->config->isEnabled()) {
-            $this->messageManager->addErrorMessage(__('Login As Customer is disabled.'));
+            $this->messageManager->addErrorMessage(__('Login as Customer is disabled.'));
             return $resultRedirect->setPath('customer/index/index');
         }
 

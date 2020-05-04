@@ -16,7 +16,7 @@ use Magento\Customer\Block\Adminhtml\Edit\GenericButton;
 use Magento\LoginAsCustomerApi\Api\ConfigInterface;
 
 /**
- * Login As Customer button UI component.
+ * Login as Customer button UI component.
  */
 class LoginAsCustomerButton extends GenericButton implements ButtonProviderInterface
 {
@@ -64,7 +64,7 @@ class LoginAsCustomerButton extends GenericButton implements ButtonProviderInter
         $isEnabled = $this->config->isEnabled();
         if ($isAllowed && $isEnabled) {
             $data = [
-                'label' => __('Login As Customer'),
+                'label' => __('Login as Customer'),
                 'class' => 'login login-button',
                 'on_click' => 'window.lacConfirmationPopup("'
                     . $this->escaper->escapeHtml($this->escaper->escapeJs($this->getLoginUrl()))
@@ -77,7 +77,7 @@ class LoginAsCustomerButton extends GenericButton implements ButtonProviderInter
     }
 
     /**
-     * Get Login As Customer login url.
+     * Get Login as Customer login url.
      *
      * @return string
      */
