@@ -19,7 +19,7 @@
             <useCaseId value="MAGETWO-91707"/>
             <group value="productVideo"/>
             <skip>
-                <issueId value="MC-32197"/>
+                <issueId value="MC-33903"/>
             </skip>
         </annotations>
 
