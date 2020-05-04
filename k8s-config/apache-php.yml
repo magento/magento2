@@ -30,8 +30,6 @@ spec:
         app: magento
         tier: frontend
     spec:
-      securityContext:
-        privileged: true
       initContainers:
         - name: copy-data
           image: eu.gcr.io/magento2-269418/magento2-php72:$TAG_NAME
