@@ -9,6 +9,7 @@ namespace Magento\Sales\Test\Unit\Model\Order;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Sales\Api\Data\OrderItemInterface;
 use Magento\Sales\Model\ResourceModel\OrderFactory;
+use PHPUnit\Framework\MockObject\MockObject
 
 /**
  * Unit test for order item class.
@@ -26,12 +27,12 @@ class ItemTest extends \PHPUnit\Framework\TestCase
     protected $objectManager;
 
     /**
-     * @var OrderFactory |\PHPUnit_Framework_MockObject_MockObject
+     * @var OrderFactory|MockObject
      */
     protected $orderFactory;
 
     /**
-     * @var Json|\PHPUnit_Framework_MockObject_MockObject
+     * @var Json|MockObject
      */
     private $serializerMock;
 
