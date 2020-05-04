@@ -10,6 +10,71 @@ spec:
     app: magento
     tier: frontend
 ---
+apiVersion: v1
+kind: Service
+metadata:
+  name: nfs-server
+spec:
+  ports:
+    - name: nfs
+      port: 2049
+    - name: mountd
+      port: 20048
+    - name: rpcbind
+      port: 111
+  selector:
+    role: nfs-server
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: nfs-pv-1
+spec:
+  capacity:
+    storage: 5Gi
+  accessModes:
+    - ReadWriteMany
+  nfs:
+    server: nfs-server.default.svc.cluster.local
+    path: "/"
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: nfs-pvc-1
+spec:
+  accessModes:
+    - ReadWriteMany
+  storageClassName: ""
+  resources:
+    requests:
+      storage: 5Gi
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: nfs-pv-2
+spec:
+  capacity:
+    storage: 5Gi
+  accessModes:
+    - ReadWriteMany
+  nfs:
+    server: nfs-server.default.svc.cluster.local
+    path: "/"
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: nfs-pvc-2
+spec:
+  accessModes:
+    - ReadWriteMany
+  storageClassName: ""
+  resources:
+    requests:
+      storage: 5Gi
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -77,6 +142,21 @@ spec:
           - mountPath: /var/www/html/magento/var
             name: magento-var-volume
             subPath: var 
+        - name: nfs-server
+          env:
+          - name: SHARED_DIRECTORY
+            value: /data
+          image: eu.gcr.io/magento2-269418/nfs-server-alpine:1
+          ports:
+            - name: nfs
+              containerPort: 2049
+            - name: mountd
+              containerPort: 20048
+            - name: rpcbind
+              containerPort: 111        
+          volumeMounts:
+            - mountPath: /data
+              name: nfs-pvc   
       nodeSelector: 
         private-app-pool: web-app
       volumes:
@@ -88,3 +168,7 @@ spec:
       - name: magento-var-volume
         persistentVolumeClaim:
           claimName: nfs-pvc-2
+      - name: nfs-pvc
+          gcePersistentDisk:
+            pdName: nfs-disk
+            fsType: ext4
