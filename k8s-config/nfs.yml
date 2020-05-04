@@ -94,7 +94,7 @@ spec:
           - mountPath: /data
             name: nfs-pvc
       securityContext:
-        supplementalGroups: [5555] 
+        privileged: true
       nodeSelector: 
         private-nfs-pool: nfs-drive
       volumes:
