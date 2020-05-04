@@ -516,7 +516,7 @@ class AfterImportDataObserver implements ObserverInterface
                 return [];
             }
             return [
-                $this->urlRewriteFactory->create()
+                $productId => $this->urlRewriteFactory->create()
                     ->setEntityType(ProductUrlRewriteGenerator::ENTITY_TYPE)
                     ->setEntityId($productId)
                     ->setRequestPath($url->getRequestPath())
@@ -551,7 +551,7 @@ class AfterImportDataObserver implements ObserverInterface
                 return [];
             }
             return [
-                $this->urlRewriteFactory->create()
+                $productId => $this->urlRewriteFactory->create()
                     ->setEntityType(ProductUrlRewriteGenerator::ENTITY_TYPE)
                     ->setEntityId($productId)
                     ->setRequestPath($url->getRequestPath())
