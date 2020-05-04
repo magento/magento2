@@ -672,14 +672,6 @@
                         <item name="store" xsi:type="string">Magento\Store\Model\StoreScopeProvider</item>
                     </item>
                 </item>
-                <item name="Magento\Catalog\Api\Data\CategoryTreeInterface" xsi:type="array">
-                    <item name="entityTableName" xsi:type="string">catalog_category_entity</item>
-                    <item name="eavEntityType" xsi:type="string">catalog_category</item>
-                    <item name="identifierField" xsi:type="string">entity_id</item>
-                    <item name="entityContext" xsi:type="array">
-                        <item name="store" xsi:type="string">Magento\Store\Model\StoreScopeProvider</item>
-                    </item>
-                </item>
                 <item name="Magento\Catalog\Api\Data\CategoryLinkInterface" xsi:type="array">
                     <item name="entityTableName" xsi:type="string">catalog_category_product</item>
                     <item name="identifierField" xsi:type="string">entity_id</item>
