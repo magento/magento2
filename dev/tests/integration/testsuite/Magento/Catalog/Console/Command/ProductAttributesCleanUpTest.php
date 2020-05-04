@@ -71,7 +71,7 @@ class ProductAttributesCleanUpTest extends \PHPUnit\Framework\TestCase
             $this->tester->getDisplay()
         );
         $attribute = $this->getUnusedProductAttribute();
-        $this->assertFalse($attribute);
+        $this->assertEmpty($attribute);
     }
 
     /**

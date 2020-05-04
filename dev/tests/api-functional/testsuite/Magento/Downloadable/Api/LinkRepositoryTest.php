@@ -672,63 +672,6 @@ class LinkRepositoryTest extends WebapiAbstract
     }
 
     /**
-     * @magentoApiDataFixture Magento/Catalog/_files/product_simple.php
-     */
-    public function testCreateThrowsExceptionIfTargetProductTypeIsNotDownloadable()
-    {
-        $this->expectException(\Exception::class);
-        $this->expectExceptionMessage(
-            'The product needs to be the downloadable type. Verify the product and try again.'
-        );
-
-        $this->createServiceInfo['rest']['resourcePath'] = '/V1/products/simple/downloadable-links';
-        $requestData = [
-            'isGlobalScopeContent' => false,
-            'sku' => 'simple',
-            'link' => [
-                'title' => 'Link Title',
-                'sort_order' => 50,
-                'price' => 200,
-                'is_shareable' => 0,
-                'number_of_downloads' => 10,
-                'sample_type' => 'url',
-                'sample_url' => 'http://example.com/',
-                'link_type' => 'url',
-                'link_url' => 'http://example.com/',
-            ],
-        ];
-        $this->_webApiCall($this->createServiceInfo, $requestData);
-    }
-
-    /**
-     */
-    public function testCreateThrowsExceptionIfTargetProductDoesNotExist()
-    {
-        $this->expectException(\Exception::class);
-        $this->expectExceptionMessage(
-            'The product that was requested doesn\'t exist. Verify the product and try again.'
-        );
-
-        $this->createServiceInfo['rest']['resourcePath'] = '/V1/products/wrong-sku/downloadable-links';
-        $requestData = [
-            'isGlobalScopeContent' => false,
-            'sku' => 'wrong-sku',
-            'link' => [
-                'title' => 'Link Title',
-                'sort_order' => 15,
-                'price' => 200,
-                'is_shareable' => 1,
-                'number_of_downloads' => 100,
-                'sample_type' => 'url',
-                'sample_url' => 'http://example.com/',
-                'link_type' => 'url',
-                'link_url' => 'http://example.com/',
-            ],
-        ];
-        $this->_webApiCall($this->createServiceInfo, $requestData);
-    }
-
-    /**
      * @magentoApiDataFixture Magento/Downloadable/_files/product_downloadable.php
      */
     public function testUpdate()
@@ -965,6 +908,61 @@ class LinkRepositoryTest extends WebapiAbstract
     }
 
     /**
+     * @magentoApiDataFixture Magento/Downloadable/_files/product_downloadable_with_files.php
+     * @dataProvider getListForAbsentProductProvider
+     */
+    public function testGetList($urlTail, $method, $expectations)
+    {
+        $sku = 'downloadable-product';
+
+        $serviceInfo = [
+            'rest' => [
+                'resourcePath' => '/V1/products/' . $sku . $urlTail,
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_GET,
+            ],
+            'soap' => [
+                'service' => 'downloadableLinkRepositoryV1',
+                'serviceVersion' => 'V1',
+                'operation' => 'downloadableLinkRepositoryV1' . $method,
+            ],
+        ];
+
+        $requestData = ['sku' => $sku];
+
+        $list = $this->_webApiCall($serviceInfo, $requestData);
+
+        $this->assertCount(1, $list);
+
+        $link = reset($list);
+        foreach ($expectations['fields'] as $index => $value) {
+            $this->assertEquals($value, $link[$index]);
+        }
+        $this->assertStringContainsString('jellyfish_1_3.jpg', $link['sample_file']);
+    }
+
+    public function getListForAbsentProductProvider()
+    {
+        $linkExpectation = [
+            'fields' => [
+                'is_shareable' => 2,
+                'price' => 15,
+                'number_of_downloads' => 15,
+                'sample_type' => 'file',
+                'link_file' => '/j/e/jellyfish_2_4.jpg',
+                'link_type' => 'file'
+            ]
+        ];
+
+        return [
+            'links' => [
+                '/downloadable-links',
+                'GetList',
+                $linkExpectation,
+            ],
+        ];
+    }
+
+    /**
      */
     public function testDeleteThrowsExceptionIfThereIsNoDownloadableLinkWithGivenId()
     {
@@ -1040,57 +1038,59 @@ class LinkRepositoryTest extends WebapiAbstract
     }
 
     /**
-     * @magentoApiDataFixture Magento/Downloadable/_files/product_downloadable_with_files.php
-     * @dataProvider getListForAbsentProductProvider
+     * @magentoApiDataFixture Magento/Catalog/_files/product_simple.php
      */
-    public function testGetList($urlTail, $method, $expectations)
+    public function testCreateThrowsExceptionIfTargetProductTypeIsNotDownloadable()
     {
-        $sku = 'downloadable-product';
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage(
+            'The product needs to be the downloadable type. Verify the product and try again.'
+        );
 
-        $serviceInfo = [
-            'rest' => [
-                'resourcePath' => '/V1/products/' . $sku . $urlTail,
-                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_GET,
-            ],
-            'soap' => [
-                'service' => 'downloadableLinkRepositoryV1',
-                'serviceVersion' => 'V1',
-                'operation' => 'downloadableLinkRepositoryV1' . $method,
+        $this->createServiceInfo['rest']['resourcePath'] = '/V1/products/simple/downloadable-links';
+        $requestData = [
+            'isGlobalScopeContent' => false,
+            'sku' => 'simple',
+            'link' => [
+                'title' => 'Link Title',
+                'sort_order' => 50,
+                'price' => 200,
+                'is_shareable' => 0,
+                'number_of_downloads' => 10,
+                'sample_type' => 'url',
+                'sample_url' => 'http://example.com/',
+                'link_type' => 'url',
+                'link_url' => 'http://example.com/',
             ],
         ];
-
-        $requestData = ['sku' => $sku];
-
-        $list = $this->_webApiCall($serviceInfo, $requestData);
-
-        $this->assertCount(1, $list);
-
-        $link = reset($list);
-        foreach ($expectations['fields'] as $index => $value) {
-            $this->assertEquals($value, $link[$index]);
-        }
-        $this->assertStringContainsString('jellyfish_1_3.jpg', $link['sample_file']);
+        $this->_webApiCall($this->createServiceInfo, $requestData);
     }
 
-    public function getListForAbsentProductProvider()
+    /**
+     */
+    public function testCreateThrowsExceptionIfTargetProductDoesNotExist()
     {
-        $linkExpectation = [
-            'fields' => [
-                'is_shareable' => 2,
-                'price' => 15,
-                'number_of_downloads' => 15,
-                'sample_type' => 'file',
-                'link_file' => '/j/e/jellyfish_2_4.jpg',
-                'link_type' => 'file'
-            ]
-        ];
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage(
+            'The product that was requested doesn\'t exist. Verify the product and try again.'
+        );
 
-        return [
-            'links' => [
-                '/downloadable-links',
-                'GetList',
-                $linkExpectation,
+        $this->createServiceInfo['rest']['resourcePath'] = '/V1/products/wrong-sku/downloadable-links';
+        $requestData = [
+            'isGlobalScopeContent' => false,
+            'sku' => 'wrong-sku',
+            'link' => [
+                'title' => 'Link Title',
+                'sort_order' => 15,
+                'price' => 200,
+                'is_shareable' => 1,
+                'number_of_downloads' => 100,
+                'sample_type' => 'url',
+                'sample_url' => 'http://example.com/',
+                'link_type' => 'url',
+                'link_url' => 'http://example.com/',
             ],
         ];
+        $this->_webApiCall($this->createServiceInfo, $requestData);
     }
 }
