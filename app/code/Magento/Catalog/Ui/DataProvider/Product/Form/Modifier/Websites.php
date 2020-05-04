@@ -259,7 +259,8 @@ class Websites extends AbstractModifier
                         'columnsHeader' => true,
                         'dndConfig' => ['enabled' => false],
                         'imports' => [
-                            'visible' => '${$.namespace}.${$.namespace}.websites.' . $websiteId . ':checked'
+                            'visible' => '${$.namespace}.${$.namespace}.websites.' . $websiteId . ':checked',
+                            '__disableTmpl' => ['visible' => false],
                         ],
                         'itemTemplate' => 'record',
                         'dataScope' => '',
