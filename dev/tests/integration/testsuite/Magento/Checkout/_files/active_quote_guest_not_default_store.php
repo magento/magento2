@@ -12,9 +12,6 @@ use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
 Resolver::getInstance()->requireDataFixture('Magento/Store/_files/second_store.php');
 
 $objectManager = Bootstrap::getObjectManager();
-/** @var CustomerRegistry $customerRegistry */
-$customerRegistry = Bootstrap::getObjectManager()->create(CustomerRegistry::class);
-$customer = $customerRegistry->retrieve(1);
 /** @var StoreRepositoryInterface $storeRepository */
 $storeRepository = $objectManager->get(StoreRepositoryInterface::class);
 $store = $storeRepository->get('fixture_second_store');

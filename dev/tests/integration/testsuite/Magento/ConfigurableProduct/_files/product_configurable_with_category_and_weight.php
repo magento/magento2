@@ -13,6 +13,7 @@ use Magento\Catalog\Setup\CategorySetup;
 use Magento\ConfigurableProduct\Helper\Product\Options\Factory;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 use Magento\Eav\Api\Data\AttributeOptionInterface;
+use Magento\Eav\Model\Config;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryExtensionFactory;
 use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
@@ -28,7 +29,9 @@ $productRepository = Bootstrap::getObjectManager()
 
 /** @var $installer CategorySetup */
 $installer = Bootstrap::getObjectManager()->create(CategorySetup::class);
-
+/** @var Config $eavConfig */
+$eavConfig = Bootstrap::getObjectManager()->get(Config::class);
+$attribute = $eavConfig->getAttribute(Product::ENTITY, 'test_configurable');
 /* Create simple products per each option value*/
 /** @var AttributeOptionInterface[] $options */
 $options = $attribute->getOptions();

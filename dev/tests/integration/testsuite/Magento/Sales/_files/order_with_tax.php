@@ -10,10 +10,13 @@ use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Tax\ItemFactory;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Tax\Model\Sales\Order\TaxFactory;
+use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
 
 Resolver::getInstance()->requireDataFixture('Magento/Sales/_files/default_rollback.php');
 Resolver::getInstance()->requireDataFixture('Magento/Sales/_files/order.php');
+
+$objectManager = Bootstrap::getObjectManager();
 /** @var Order $order */
 $order = $objectManager->get(OrderInterfaceFactory::class)->create()->loadByIncrementId('100000001');
 $amount = 45;

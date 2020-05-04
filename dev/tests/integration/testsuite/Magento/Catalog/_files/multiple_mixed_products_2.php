@@ -13,6 +13,7 @@ use Magento\Catalog\Setup\CategorySetup;
 use Magento\ConfigurableProduct\Helper\Product\Options\Factory;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 use Magento\Eav\Api\Data\AttributeOptionInterface;
+use Magento\Eav\Model\Config;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
 
@@ -22,7 +23,9 @@ Resolver::getInstance()->requireDataFixture('Magento/Catalog/_files/multiple_pro
 /** @var ProductRepositoryInterface $productRepository */
 $productRepository = Bootstrap::getObjectManager()
     ->get(ProductRepositoryInterface::class);
-
+/** @var Config $eavConfig */
+$eavConfig = Bootstrap::getObjectManager()->get(Config::class);
+$attribute = $eavConfig->getAttribute(Product::ENTITY, 'test_configurable');
 /** @var $installer CategorySetup */
 $installer = Bootstrap::getObjectManager()->create(CategorySetup::class);
 

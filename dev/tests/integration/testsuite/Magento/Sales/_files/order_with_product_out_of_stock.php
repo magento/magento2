@@ -12,6 +12,8 @@ use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
 Resolver::getInstance()->requireDataFixture(
     'Magento/Sales/_files/customer_order_item_with_product_and_custom_options.php'
 );
+
+$objectManager = Bootstrap::getObjectManager();
 /** @var Order $order */
 $order = $objectManager->get(OrderInterfaceFactory::class)->create()->loadByIncrementId('100000001');
 $order->setCustomerId(1)->setCustomerIsGuest(false)->save();

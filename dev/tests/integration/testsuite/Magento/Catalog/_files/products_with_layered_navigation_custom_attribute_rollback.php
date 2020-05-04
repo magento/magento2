@@ -15,7 +15,7 @@ use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Eav\Api\AttributeRepositoryInterface;
 use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
 
-Resolver::getInstance()->requireDataFixture('Magento/Catalog/_files/empty_attribute_set_rollback.php');
+Resolver::getInstance()->requireDataFixture('Magento/Eav/_files/empty_attribute_set_rollback.php');
 Resolver::getInstance()->requireDataFixture('Magento/Catalog/_files/categories_rollback.php');
 /** @var ObjectManager $objectManager */
 $objectManager = Bootstrap::getObjectManager();

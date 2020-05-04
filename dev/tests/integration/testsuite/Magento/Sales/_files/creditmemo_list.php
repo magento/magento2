@@ -9,10 +9,11 @@ use Magento\Sales\Model\Order;
 use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
 
 Resolver::getInstance()->requireDataFixture('Magento/Sales/_files/order.php');
+
+$objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 /** @var \Magento\Sales\Model\Order $order */
 $order = $objectManager->get(OrderInterfaceFactory::class)->create()->loadByIncrementId('100000001');
 
-$objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 $creditMemos = [
     [
         'store_id' => 1,

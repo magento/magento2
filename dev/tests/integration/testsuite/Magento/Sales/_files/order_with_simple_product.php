@@ -82,7 +82,7 @@ $orderItem2->setProductId($secondProduct->getId())
     ->setSku($secondProduct->getSku())
     ->setStoreId(0)
     ->setProductId($secondProduct->getId())
-    ->setSku($secondProductSku)
+    ->setSku($secondProduct->getSku())
     ->setProductOptions(['info_buyRequest' => $requestInfo]);
 
 /** @var \Magento\Sales\Model\Order $order */

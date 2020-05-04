@@ -4,6 +4,7 @@
  * See COPYING.txt for license details.
  */
 
+use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
@@ -16,7 +17,8 @@ $objectManager = Bootstrap::getObjectManager();
 /** @var CustomerRegistry $customerRegistry */
 $customerRegistry = $objectManager->create(CustomerRegistry::class);
 $customer = $customerRegistry->retrieve(1);
-
+/** @var ProductRepositoryInterface $productRepository */
+$productRepository = $objectManager->create(ProductRepositoryInterface::class);
 $configurableProduct = $productRepository->get('configurable');
 
 /** \Magento\Customer\Model\Customer $customer */

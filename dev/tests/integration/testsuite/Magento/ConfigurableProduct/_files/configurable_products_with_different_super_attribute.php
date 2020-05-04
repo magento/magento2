@@ -18,13 +18,16 @@ use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
 Resolver::getInstance()->requireDataFixture('Magento/ConfigurableProduct/_files/configurable_attribute.php');
 Resolver::getInstance()->requireDataFixture('Magento/ConfigurableProduct/_files/configurable_attribute_2.php');
 
+$objectManager = Bootstrap::getObjectManager();
 /** @var ProductRepositoryInterface $productRepository */
-$productRepository = Bootstrap::getObjectManager()
-    ->get(ProductRepositoryInterface::class);
+$productRepository = $objectManager->get(ProductRepositoryInterface::class);
 
 /** @var $installer CategorySetup */
-$installer = Bootstrap::getObjectManager()->create(CategorySetup::class);
-
+$installer = $objectManager->create(CategorySetup::class);
+/** @var \Magento\Eav\Model\Config $eavConfig */
+$eavConfig = $objectManager->get(\Magento\Eav\Model\Config::class);
+$attribute = $eavConfig->getAttribute(Product::ENTITY, 'test_configurable');
+$attribute2 = $eavConfig->getAttribute(Product::ENTITY, 'test_configurable_2');
 /* Create simple products per each option value*/
 /** @var AttributeOptionInterface[] $options */
 $options = $attribute->getOptions();
@@ -37,7 +40,7 @@ array_shift($options); //remove the first option which is empty
 
 foreach ($options as $option) {
     /** @var $product Product */
-    $product = Bootstrap::getObjectManager()->create(Product::class);
+    $product = $objectManager->create(Product::class);
     $productId = array_shift($productIds);
     $product->setTypeId(Type::TYPE_SIMPLE)
         ->setId($productId)
@@ -61,9 +64,9 @@ foreach ($options as $option) {
 }
 
 /** @var $product Product */
-$product = Bootstrap::getObjectManager()->create(Product::class);
+$product = $objectManager->create(Product::class);
 /** @var Factory $optionsFactory */
-$optionsFactory = Bootstrap::getObjectManager()->create(Factory::class);
+$optionsFactory = $objectManager->create(Factory::class);
 $configurableAttributesData = [
     [
         'attribute_id' => $attribute->getId(),
@@ -103,7 +106,7 @@ array_shift($options); //remove the first option which is empty
 
 foreach ($options as $option) {
     /** @var $product Product */
-    $product = Bootstrap::getObjectManager()->create(Product::class);
+    $product = $objectManager->create(Product::class);
     $productId = array_shift($productIds);
     $product->setTypeId(Type::TYPE_SIMPLE)
         ->setId($productId)
@@ -127,10 +130,10 @@ foreach ($options as $option) {
 }
 
 /** @var $product Product */
-$product = Bootstrap::getObjectManager()->create(Product::class);
+$product = $objectManager->create(Product::class);
 
 /** @var Factory $optionsFactory */
-$optionsFactory = Bootstrap::getObjectManager()->create(Factory::class);
+$optionsFactory = $objectManager->create(Factory::class);
 
 $configurableAttributesData = [
     [

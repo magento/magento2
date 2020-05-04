@@ -10,8 +10,6 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
 
-Resolver::getInstance()->requireDataFixture('Magento/SendFriend/Fixtures/process_config_data.php');
-
 $objectManager = Bootstrap::getObjectManager();
 
 $configData = [
@@ -22,4 +20,7 @@ $configData = [
 $objectManager = Bootstrap::getObjectManager();
 $defConfig = $objectManager->create(Config::class);
 $defConfig->setScope(ScopeConfigInterface::SCOPE_TYPE_DEFAULT);
-$processConfigData($defConfig, $configData);
+foreach ($configData as $key => $value) {
+    $defConfig->setDataByPath($key, $value);
+    $defConfig->save();
+}

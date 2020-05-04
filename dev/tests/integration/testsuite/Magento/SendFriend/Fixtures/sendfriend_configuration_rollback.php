@@ -10,8 +10,6 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
 
-Resolver::getInstance()->requireDataFixture('Magento/SendFriend/Fixtures/process_config_data.php');
-
 $objectManager = Bootstrap::getObjectManager();
 
 $configData = [
@@ -20,4 +18,6 @@ $configData = [
 ];
 /** @var WriterInterface $configWriter */
 $configWriter = $objectManager->get(WriterInterface::class);
-$deleteConfigData($configWriter, $configData, ScopeConfigInterface::SCOPE_TYPE_DEFAULT, 0);
+foreach ($configData as $path) {
+    $configWriter->delete($path, ScopeConfigInterface::SCOPE_TYPE_DEFAULT, 0);
+}
