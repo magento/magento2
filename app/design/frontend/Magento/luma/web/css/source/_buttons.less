@@ -17,6 +17,8 @@
 
     button {
         &:not(.primary) {
+            .lib-css(box-shadow, none);
+            
             &:active {
                 .lib-css(box-shadow, @button__shadow-active);
             }
