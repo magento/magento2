@@ -50,20 +50,15 @@ class DeleteExpiredAuthenticationData implements DeleteExpiredAuthenticationData
     /**
      * @inheritdoc
      */
-    public function execute(): void
+    public function execute(int $userId): void
     {
         $connection = $this->resourceConnection->getConnection();
         $tableName = $this->resourceConnection->getTableName('login_as_customer');
 
-        $timePoint = date(
-            'Y-m-d H:i:s',
-            $this->dateTime->gmtTimestamp() - $this->config->getAuthenticationDataExpirationTime()
-        );
-
         $connection->delete(
             $tableName,
             [
-                'created_at < ?' => $timePoint
+                'admin_id = ?' => $userId
             ]
         );
     }
