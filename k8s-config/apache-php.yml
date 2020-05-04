@@ -39,6 +39,12 @@ spec:
           volumeMounts:
           - mountPath: /var/www/html
             name: magento-shared
+          - mountPath: /var/www/html/magento/media
+            name: magento-media-volume
+            subPath: media
+          - mountPath: /var/www/html/magento/var
+            name: magento-var-volume
+            subPath: var
           resources:
             requests:
               cpu: "250m"
