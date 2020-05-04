@@ -203,7 +203,7 @@ class TierPrice extends AbstractPrice implements TierPriceInterface, BasePricePr
             }
 
             // Check with current minimum price
-            if ($minPrice && $this->isFirstPriceBetter($minPrice, $price['website_price'])) {
+            if ($minPrice && $minPrice < $price['website_price']) {
                 unset($priceList[$priceKey]);
                 continue;
             } else {
