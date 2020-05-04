@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Setup\Test\Unit\Fixtures;
 
@@ -16,17 +17,19 @@ use Magento\Sales\Model\ResourceModel\Order;
 use Magento\Setup\Fixtures\FixtureModel;
 use Magento\Setup\Fixtures\OrdersFixture;
 use Magento\Store\Model\StoreManagerInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class OrdersFixtureTest extends \PHPUnit\Framework\TestCase
+class OrdersFixtureTest extends TestCase
 {
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|FixtureModel
+     * @var MockObject|FixtureModel
      */
     private $fixtureModelMock;
 
     /**
-     * @var \Magento\Setup\Fixtures\OrdersFixture
+     * @var OrdersFixture
      */
     private $model;
 
@@ -72,10 +75,11 @@ class OrdersFixtureTest extends \PHPUnit\Framework\TestCase
             $this->fixtureModelMock
         );
 
-        $orderMock = $this->createPartialMock(
-            Order::class,
-            ['getTable', 'getConnection', 'getTableName', 'query', 'fetchColumn']
-        );
+        $orderMock = $this->getMockBuilder(Order::class)
+            ->addMethods(['getTableName', 'query', 'fetchColumn'])
+            ->onlyMethods(['getTable', 'getConnection'])
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $path = explode('\\', Order::class);
         $name = array_pop($path);

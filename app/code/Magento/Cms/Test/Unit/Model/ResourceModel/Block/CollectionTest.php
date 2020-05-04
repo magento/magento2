@@ -3,25 +3,35 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Cms\Test\Unit\Model\ResourceModel\Block;
 
+use Magento\Cms\Model\ResourceModel\Block\Collection;
 use Magento\Cms\Test\Unit\Model\ResourceModel\AbstractCollectionTest;
 use Magento\Framework\DataObject;
+use Magento\Framework\DB\Select;
+use Magento\Framework\EntityManager\EntityMetadata;
+use Magento\Framework\EntityManager\MetadataPool;
+use Magento\Store\Api\Data\StoreInterface;
+use Magento\Store\Model\Store;
+use Magento\Store\Model\StoreManagerInterface;
+use PHPUnit\Framework\MockObject\MockObject;
 
 class CollectionTest extends AbstractCollectionTest
 {
     /**
-     * @var \Magento\Cms\Model\ResourceModel\Block\Collection
+     * @var Collection
      */
     protected $collection;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var StoreManagerInterface|MockObject
      */
     protected $storeManagerMock;
 
     /**
-     * @var \Magento\Framework\EntityManager\MetadataPool|\PHPUnit\Framework\MockObject\MockObject
+     * @var MetadataPool|MockObject
      */
     protected $metadataPoolMock;
 
@@ -29,15 +39,15 @@ class CollectionTest extends AbstractCollectionTest
     {
         parent::setUp();
 
-        $this->storeManagerMock  = $this->getMockBuilder(\Magento\Store\Model\StoreManagerInterface::class)
+        $this->storeManagerMock  = $this->getMockBuilder(StoreManagerInterface::class)
             ->getMockForAbstractClass();
 
-        $this->metadataPoolMock  = $this->getMockBuilder(\Magento\Framework\EntityManager\MetadataPool::class)
+        $this->metadataPoolMock  = $this->getMockBuilder(MetadataPool::class)
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->collection = $this->objectManager->getObject(
-            \Magento\Cms\Model\ResourceModel\Block\Collection::class,
+            Collection::class,
             [
                 'resource' => $this->resource,
                 'connection' => $this->connection,
@@ -75,7 +85,7 @@ class CollectionTest extends AbstractCollectionTest
 
         $this->select->expects($this->once())
             ->method('where')
-            ->with($searchSql, null, \Magento\Framework\DB\Select::TYPE_CONDITION);
+            ->with($searchSql, null, Select::TYPE_CONDITION);
 
         $this->assertSame($this->collection, $this->collection->addFieldToFilter($field, $value));
     }
@@ -95,7 +105,7 @@ class CollectionTest extends AbstractCollectionTest
             $expectedResult[$storeData[$linkField]][] = $storeData['store_id'];
         }
 
-        $entityMetadataMock = $this->getMockBuilder(\Magento\Framework\EntityManager\EntityMetadata::class)
+        $entityMetadataMock = $this->getMockBuilder(EntityMetadata::class)
             ->disableOriginalConstructor()
             ->getMock();
         $entityMetadataMock->expects($this->any())->method('getLinkField')->willReturn($linkField);
@@ -105,7 +115,7 @@ class CollectionTest extends AbstractCollectionTest
         $this->connection->expects($this->any())->method('fetchAll')->willReturn($storesData);
 
         $storeDataMock = $this->getMockBuilder(
-            \Magento\Store\Api\Data\StoreInterface::class
+            StoreInterface::class
         )->getMockForAbstractClass();
         $storeDataMock->expects($this->any())->method('getId')->willReturn(current($expectedResult[$item->getId()]));
         $storeDataMock->expects($this->any())->method('getCode')->willReturn('some_code');
@@ -126,13 +136,13 @@ class CollectionTest extends AbstractCollectionTest
     {
         return [
             [
-                new \Magento\Framework\DataObject(['id' => 1, 'row_id' => 1]),
+                new DataObject(['id' => 1, 'row_id' => 1]),
                 [
-                    ['row_id' => 1, 'store_id' => \Magento\Store\Model\Store::DEFAULT_STORE_ID],
+                    ['row_id' => 1, 'store_id' => Store::DEFAULT_STORE_ID],
                 ],
             ],
             [
-                new \Magento\Framework\DataObject(['id' => 2, 'row_id' => 2]),
+                new DataObject(['id' => 2, 'row_id' => 2]),
                 [
                     ['row_id' => 2, 'store_id' => 1],
                     ['row_id' => 2, 'store_id' => 2],

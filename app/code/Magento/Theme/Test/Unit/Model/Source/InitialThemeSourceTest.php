@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Theme\Test\Unit\Model\Source;
 
 use Magento\Framework\App\DeploymentConfig;
@@ -14,11 +16,12 @@ use Magento\Theme\Model\ResourceModel\Theme;
 use Magento\Theme\Model\ResourceModel\ThemeFactory;
 use Magento\Theme\Model\Source\InitialThemeSource;
 use PHPUnit\Framework\MockObject\MockObject as Mock;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class InitialThemeSourceTest extends \PHPUnit\Framework\TestCase
+class InitialThemeSourceTest extends TestCase
 {
     /**
      * @var InitialThemeSource

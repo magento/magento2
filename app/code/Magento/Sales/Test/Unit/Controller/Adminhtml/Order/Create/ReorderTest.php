@@ -14,18 +14,18 @@ use Magento\Backend\Model\View\Result\ForwardFactory;
 use Magento\Backend\Model\View\Result\Redirect;
 use Magento\Backend\Model\View\Result\RedirectFactory;
 use Magento\Framework\App\RequestInterface;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Message\ManagerInterface;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Sales\Controller\Adminhtml\Order\Create\Reorder;
+use Magento\Sales\Helper\Reorder as ReorderHelper;
 use Magento\Sales\Model\AdminOrder\Create;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Reorder\UnavailableProductsProvider;
-use Magento\Sales\Helper\Reorder as ReorderHelper;
-use Magento\Framework\Exception\NoSuchEntityException;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use PHPUnit\Framework\MockObject\MockObject as MockObject;
 
 /**
  * Verify reorder class.
@@ -121,9 +121,9 @@ class ReorderTest extends TestCase
     protected function setUp(): void
     {
         $this->orderId = 111;
-        $this->orderRepositoryMock = $this->getMockForAbstractClass(OrderRepositoryInterface::class);
-        $this->requestMock = $this->getMockForAbstractClass(RequestInterface::class);
-        $this->objectManagerMock = $this->getMockForAbstractClass(ObjectManagerInterface::class);
+        $this->orderRepositoryMock = $this->createMock(OrderRepositoryInterface::class);
+        $this->requestMock = $this->createMock(RequestInterface::class);
+        $this->objectManagerMock = $this->createMock(ObjectManagerInterface::class);
         $this->resultForwardFactoryMock = $this->createMock(ForwardFactory::class);
         $this->resultRedirectFactoryMock = $this->createMock(RedirectFactory::class);
         $this->resultRedirectMock = $this->createMock(Redirect::class);
@@ -285,7 +285,7 @@ class ReorderTest extends TestCase
         $this->orderMock->expects($this->once())
             ->method('setReordered')
             ->with(true)
-            ->willThrowException(new $exception);
+            ->willThrowException(new $exception());
         $this->messageManagerMock
             ->expects($this->once())
             ->method('addException')
@@ -420,8 +420,7 @@ class ReorderTest extends TestCase
             ->willReturn($this->quoteSessionMock);
         $this->quoteSessionMock->expects($this->once())
             ->method('setUseOldShippingMethod')
-            ->with(true)
-            ->willReturnSelf();
+            ->with(true)->willReturnSelf();
         $this->objectManagerMock->expects($this->at(2))
             ->method('get')
             ->with(Create::class)

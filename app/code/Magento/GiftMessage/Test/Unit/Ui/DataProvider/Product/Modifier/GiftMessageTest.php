@@ -3,18 +3,18 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\GiftMessage\Test\Unit\Ui\DataProvider\Product\Modifier;
 
+use Magento\Catalog\Model\Product\Attribute\Source\Boolean;
 use Magento\Catalog\Test\Unit\Ui\DataProvider\Product\Form\Modifier\AbstractModifierTest;
 use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\GiftMessage\Ui\DataProvider\Product\Modifier\GiftMessage;
 use Magento\GiftMessage\Helper\Message as GiftMessageHelper;
+use Magento\GiftMessage\Ui\DataProvider\Product\Modifier\GiftMessage;
 use Magento\Store\Model\ScopeInterface;
-use Magento\Catalog\Model\Product\Attribute\Source\Boolean;
 
 /**
- * Class GiftMessageTest
- *
  * @method GiftMessage getModel
  */
 class GiftMessageTest extends AbstractModifierTest

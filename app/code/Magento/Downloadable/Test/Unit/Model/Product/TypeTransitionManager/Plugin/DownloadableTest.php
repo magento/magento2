@@ -3,12 +3,23 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Downloadable\Test\Unit\Model\Product\TypeTransitionManager\Plugin;
 
-class DownloadableTest extends \PHPUnit\Framework\TestCase
+use Magento\Catalog\Model\Product;
+use Magento\Catalog\Model\Product\Edit\WeightResolver;
+use Magento\Catalog\Model\Product\TypeTransitionManager;
+use Magento\Downloadable\Model\Product\Type;
+use Magento\Downloadable\Model\Product\TypeTransitionManager\Plugin\Downloadable;
+use Magento\Framework\App\Request\Http;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class DownloadableTest extends TestCase
 {
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $requestMock;
 
@@ -18,37 +29,37 @@ class DownloadableTest extends \PHPUnit\Framework\TestCase
     protected $closureMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $productMock;
 
     /**
-     * @var \Magento\Downloadable\Model\Product\TypeTransitionManager\Plugin\Downloadable
+     * @var Downloadable
      */
     protected $model;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $weightResolver;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $subjectMock;
 
     protected function setUp(): void
     {
-        $this->requestMock = $this->createMock(\Magento\Framework\App\Request\Http::class);
+        $this->requestMock = $this->createMock(Http::class);
         $this->productMock = $this->createPartialMock(
-            \Magento\Catalog\Model\Product::class,
+            Product::class,
             ['getTypeId', 'setTypeId']
         );
-        $this->weightResolver = $this->createMock(\Magento\Catalog\Model\Product\Edit\WeightResolver::class);
-        $this->subjectMock = $this->createMock(\Magento\Catalog\Model\Product\TypeTransitionManager::class);
+        $this->weightResolver = $this->createMock(WeightResolver::class);
+        $this->subjectMock = $this->createMock(TypeTransitionManager::class);
         $this->closureMock = function () {
         };
-        $this->model = new \Magento\Downloadable\Model\Product\TypeTransitionManager\Plugin\Downloadable(
+        $this->model = new Downloadable(
             $this->requestMock,
             $this->weightResolver
         );
@@ -68,7 +79,7 @@ class DownloadableTest extends \PHPUnit\Framework\TestCase
         $this->productMock->expects($this->once())->method('getTypeId')->willReturn($currentTypeId);
         $this->productMock->expects($this->once())
             ->method('setTypeId')
-            ->with(\Magento\Downloadable\Model\Product\Type::TYPE_DOWNLOADABLE);
+            ->with(Type::TYPE_DOWNLOADABLE);
 
         $this->model->aroundProcessProduct($this->subjectMock, $this->closureMock, $this->productMock);
     }
@@ -81,7 +92,7 @@ class DownloadableTest extends \PHPUnit\Framework\TestCase
         return [
             [\Magento\Catalog\Model\Product\Type::TYPE_SIMPLE],
             [\Magento\Catalog\Model\Product\Type::TYPE_VIRTUAL],
-            [\Magento\Downloadable\Model\Product\Type::TYPE_DOWNLOADABLE]
+            [Type::TYPE_DOWNLOADABLE]
         ];
     }
 
@@ -117,7 +128,7 @@ class DownloadableTest extends \PHPUnit\Framework\TestCase
             [true, \Magento\Catalog\Model\Product\Type::TYPE_SIMPLE, null],
             [false, \Magento\Catalog\Model\Product\Type::TYPE_SIMPLE, null],
             [true, \Magento\Catalog\Model\Product\Type::TYPE_SIMPLE, ['link' => [['is_delete' => '']]]],
-            [false, \Magento\Downloadable\Model\Product\Type::TYPE_DOWNLOADABLE, ['link' => [['is_delete' => '1']]]]
+            [false, Type::TYPE_DOWNLOADABLE, ['link' => [['is_delete' => '1']]]]
         ];
     }
 }

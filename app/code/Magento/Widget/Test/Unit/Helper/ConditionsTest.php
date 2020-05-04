@@ -3,31 +3,36 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Widget\Test\Unit\Helper;
 
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\Data\Wysiwyg\Normalizer;
+use Magento\Framework\Serialize\Serializer\Json;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Widget\Helper\Conditions;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Class ConditionsTest
  *
  * PHPUnit test case for \Magento\Widget\Helper\Conditions
  */
-class ConditionsTest extends \PHPUnit\Framework\TestCase
+class ConditionsTest extends TestCase
 {
     /**
-     * @var \Magento\Widget\Helper\Conditions
+     * @var Conditions
      */
     protected $conditions;
 
     /**
-     * @var \Magento\Framework\Serialize\Serializer\Json|\PHPUnit\Framework\MockObject\MockObject
+     * @var Json|MockObject
      */
     private $serializer;
 
     /**
-     * @var Normalizer|\PHPUnit\Framework\MockObject\MockObject
+     * @var Normalizer|MockObject
      */
     private $normalizer;
 
@@ -36,10 +41,10 @@ class ConditionsTest extends \PHPUnit\Framework\TestCase
      */
     protected function setUp(): void
     {
-        $this->serializer = $this->createMock(\Magento\Framework\Serialize\Serializer\Json::class);
+        $this->serializer = $this->createMock(Json::class);
         $this->normalizer = $this->createMock(Normalizer::class);
         $this->conditions = (new ObjectManager($this))->getObject(
-            \Magento\Widget\Helper\Conditions::class,
+            Conditions::class,
             [
                 'serializer' => $this->serializer,
                 'normalizer' => $this->normalizer

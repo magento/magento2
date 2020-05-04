@@ -3,26 +3,33 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\CheckoutAgreements\Test\Unit\Model;
 
-class AgreementTest extends \PHPUnit\Framework\TestCase
+use Magento\CheckoutAgreements\Model\Agreement;
+use Magento\Framework\DataObject;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\TestCase;
+
+class AgreementTest extends TestCase
 {
     /**
-     * @var \Magento\CheckoutAgreements\Model\Agreement
+     * @var Agreement
      */
     protected $model;
 
     protected function setUp(): void
     {
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->model = $objectManager->getObject(\Magento\CheckoutAgreements\Model\Agreement::class);
+        $objectManager = new ObjectManager($this);
+        $this->model = $objectManager->getObject(Agreement::class);
     }
 
     /**
      * @covers \Magento\CheckoutAgreements\Model\Agreement::validateData
      *
      * @dataProvider validateDataDataProvider
-     * @param \Magento\Framework\DataObject $inputData
+     * @param DataObject $inputData
      * @param array|bool $expectedResult
      */
     public function testValidateData($inputData, $expectedResult)
@@ -37,33 +44,33 @@ class AgreementTest extends \PHPUnit\Framework\TestCase
     {
         return [
             [
-                'inputData' => (new \Magento\Framework\DataObject())->setContentHeight('1px'),
+                'inputData' => (new DataObject())->setContentHeight('1px'),
                 'expectedResult' => true,
             ],
             [
-                'inputData' => (new \Magento\Framework\DataObject())->setContentHeight('1.1px'),
+                'inputData' => (new DataObject())->setContentHeight('1.1px'),
                 'expectedResult' => true
             ],
             [
-                'inputData' => (new \Magento\Framework\DataObject())->setContentHeight('0.1in'),
+                'inputData' => (new DataObject())->setContentHeight('0.1in'),
                 'expectedResult' => true
             ],
             [
-                'inputData' => (new \Magento\Framework\DataObject())->setContentHeight('5%'),
+                'inputData' => (new DataObject())->setContentHeight('5%'),
                 'expectedResult' => true
             ],
             [
-                'inputData' => (new \Magento\Framework\DataObject())->setContentHeight('5'),
+                'inputData' => (new DataObject())->setContentHeight('5'),
                 'expectedResult' => true
             ],
             [
-                'inputData' => (new \Magento\Framework\DataObject())->setContentHeight('px'),
+                'inputData' => (new DataObject())->setContentHeight('px'),
                 'expectedResult' => [
                     "Please input a valid CSS-height. For example 100px or 77pt or 20em or .5ex or 50%.",
                 ]
             ],
             [
-                'inputData' => (new \Magento\Framework\DataObject())->setContentHeight('abracadabra'),
+                'inputData' => (new DataObject())->setContentHeight('abracadabra'),
                 'expectedResult' => [
                     "Please input a valid CSS-height. For example 100px or 77pt or 20em or .5ex or 50%.",
                 ]

@@ -8,13 +8,14 @@ declare(strict_types=1);
 namespace Magento\Elasticsearch\Test\Unit\Model\Adapter\FieldMapper\Product\FieldProvider\FieldName\Resolver;
 
 use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\AttributeAdapter;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldName\Resolver\NotEavAttribute;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @SuppressWarnings(PHPMD)
  */
-class NotEavAttributeTest extends \PHPUnit\Framework\TestCase
+class NotEavAttributeTest extends TestCase
 {
     /**
      * @var NotEavAttribute

@@ -3,37 +3,43 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Backend\Test\Unit\Block\Widget\Grid\Column\Filter;
 
+use Magento\Backend\Block\Context;
+use Magento\Backend\Block\Widget\Grid\Column\Filter\Store;
+use Magento\Framework\DB\Helper;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class StoreTest extends \PHPUnit\Framework\TestCase
+class StoreTest extends TestCase
 {
-    /** @var \Magento\Backend\Block\Widget\Grid\Column\Filter\Store */
+    /** @var Store */
     protected $object;
 
     /** @var ObjectManagerHelper */
     protected $objectManagerHelper;
 
-    /** @var \Magento\Backend\Block\Context|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var Context|MockObject */
     protected $context;
 
-    /** @var \Magento\Framework\DB\Helper|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var Helper|MockObject */
     protected $helper;
 
-    /** @var \Magento\Store\Model\System\Store|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var \Magento\Store\Model\System\Store|MockObject */
     protected $store;
 
     protected function setUp(): void
     {
-        $this->context = $this->createMock(\Magento\Backend\Block\Context::class);
-        $this->helper = $this->createMock(\Magento\Framework\DB\Helper::class);
+        $this->context = $this->createMock(Context::class);
+        $this->helper = $this->createMock(Helper::class);
         $this->store = $this->createMock(\Magento\Store\Model\System\Store::class);
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->store = $this->objectManagerHelper->getObject(
-            \Magento\Backend\Block\Widget\Grid\Column\Filter\Store::class,
+            Store::class,
             [
                 'context' => $this->context,
                 'resourceHelper' => $this->helper,
@@ -60,7 +66,7 @@ class StoreTest extends \PHPUnit\Framework\TestCase
     {
         return [
             [null, null],
-            [null, \Magento\Backend\Block\Widget\Grid\Column\Filter\Store::ALL_STORE_VIEWS],
+            [null, Store::ALL_STORE_VIEWS],
             [['eq' => 1], 1],
             [['null' => true], '_deleted_'],
         ];

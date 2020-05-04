@@ -3,25 +3,29 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Backend\Test\Unit\Block\Widget;
 
 use Magento\Backend\Block\Template\Context;
 use Magento\Backend\Block\Widget\Form;
 use Magento\Framework\Data\Form as DataForm;
 use Magento\Framework\UrlInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class FormTest extends \PHPUnit\Framework\TestCase
+class FormTest extends TestCase
 {
     /** @var  Form */
     protected $model;
 
-    /** @var  Context |\PHPUnit\Framework\MockObject\MockObject */
+    /** @var  Context|MockObject */
     protected $context;
 
-    /** @var  DataForm |\PHPUnit\Framework\MockObject\MockObject */
+    /** @var  DataForm|MockObject */
     protected $dataForm;
 
-    /** @var  UrlInterface |\PHPUnit\Framework\MockObject\MockObject */
+    /** @var  UrlInterface|MockObject */
     protected $urlBuilder;
 
     protected function setUp(): void
@@ -44,10 +48,10 @@ class FormTest extends \PHPUnit\Framework\TestCase
 
     protected function prepareContext()
     {
-        $this->urlBuilder = $this->getMockBuilder(\Magento\Framework\UrlInterface::class)
+        $this->urlBuilder = $this->getMockBuilder(UrlInterface::class)
             ->getMock();
 
-        $this->context = $this->getMockBuilder(\Magento\Backend\Block\Template\Context::class)
+        $this->context = $this->getMockBuilder(Context::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->context->expects($this->any())

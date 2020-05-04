@@ -3,25 +3,29 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Cron\Test\Unit\Console\Command;
 
-use Symfony\Component\Console\Tester\CommandTester;
 use Magento\Cron\Console\Command\CronInstallCommand;
+use Magento\Framework\Console\Cli;
 use Magento\Framework\Crontab\CrontabManagerInterface;
 use Magento\Framework\Crontab\TasksProviderInterface;
-use Magento\Framework\Console\Cli;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Phrase;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+use Symfony\Component\Console\Tester\CommandTester;
 
-class CronInstallCommandTest extends \PHPUnit\Framework\TestCase
+class CronInstallCommandTest extends TestCase
 {
     /**
-     * @var CrontabManagerInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var CrontabManagerInterface|MockObject
      */
     private $crontabManagerMock;
 
     /**
-     * @var TasksProviderInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var TasksProviderInterface|MockObject
      */
     private $tasksProviderMock;
 

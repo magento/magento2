@@ -3,36 +3,38 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Sales\Test\Unit\Model\Order\Reorder;
 
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Sales\Model\Config;
+use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Item;
 use Magento\Sales\Model\Order\Reorder\OrderedProductAvailabilityChecker;
 use Magento\Sales\Model\Order\Reorder\UnavailableProductsProvider;
-use Magento\Sales\Model\Order;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-/**
- * Class UnavailableProductsProviderTest
- */
-class UnavailableProductsProviderTest extends \PHPUnit\Framework\TestCase
+class UnavailableProductsProviderTest extends TestCase
 {
     /**
-     * @var Config|\PHPUnit\Framework\MockObject\MockObject
+     * @var Config|MockObject
      */
     private $salesConfigMock;
 
     /**
-     * @var OrderedProductAvailabilityChecker|\PHPUnit\Framework\MockObject\MockObject
+     * @var OrderedProductAvailabilityChecker|MockObject
      */
     private $checkerMock;
 
     /**
-     * @var Order|\PHPUnit\Framework\MockObject\MockObject
+     * @var Order|MockObject
      */
     private $orderMock;
 
     /**
-     * @var Item|\PHPUnit\Framework\MockObject\MockObject
+     * @var Item|MockObject
      */
     private $orderItemMock;
 
@@ -43,13 +45,19 @@ class UnavailableProductsProviderTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp(): void
     {
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->salesConfigMock = $this->getMockBuilder(Config::class)->disableOriginalConstructor()->getMock();
+        $objectManager = new ObjectManager($this);
+        $this->salesConfigMock = $this->getMockBuilder(Config::class)
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->checkerMock = $this->getMockBuilder(OrderedProductAvailabilityChecker::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->orderMock = $this->getMockBuilder(Order::class)->disableOriginalConstructor()->getMock();
-        $this->orderItemMock = $this->getMockBuilder(Item::class)->disableOriginalConstructor()->getMock();
+        $this->orderMock = $this->getMockBuilder(Order::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->orderItemMock = $this->getMockBuilder(Item::class)
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->unavailableProductsProvider = $objectManager->getObject(
             UnavailableProductsProvider::class,
             [

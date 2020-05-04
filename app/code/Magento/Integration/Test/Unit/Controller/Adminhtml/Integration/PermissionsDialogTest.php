@@ -4,12 +4,15 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Integration\Test\Unit\Controller\Adminhtml\Integration;
 
 use Magento\Framework\View\Layout\Element as LayoutElement;
+use Magento\Integration\Controller\Adminhtml\Integration;
+use Magento\Integration\Test\Unit\Controller\Adminhtml\IntegrationTest;
 
-class PermissionsDialogTest extends \Magento\Integration\Test\Unit\Controller\Adminhtml\IntegrationTest
+class PermissionsDialogTest extends IntegrationTest
 {
     public function testPermissionsDialog()
     {
@@ -17,12 +20,12 @@ class PermissionsDialogTest extends \Magento\Integration\Test\Unit\Controller\Ad
 
         $this->_requestMock->expects($this->any())
             ->method('getParam')
-            ->with($this->equalTo(\Magento\Integration\Controller\Adminhtml\Integration::PARAM_INTEGRATION_ID))
+            ->with(Integration::PARAM_INTEGRATION_ID)
             ->willReturn(self::INTEGRATION_ID);
 
         $this->_integrationSvcMock->expects($this->any())
             ->method('get')
-            ->with($this->equalTo(self::INTEGRATION_ID))
+            ->with(self::INTEGRATION_ID)
             ->willReturn($this->_getSampleIntegrationData());
 
         // @codingStandardsIgnoreStart
@@ -50,7 +53,7 @@ HANDLE;
 
         $this->_viewMock->expects($this->once())
             ->method('loadLayout')
-            ->with($this->equalTo(['adminhtml_integration_activate_permissions_webapi']));
+            ->with(['adminhtml_integration_activate_permissions_webapi']);
 
         $controller->execute();
     }

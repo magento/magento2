@@ -3,35 +3,46 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Tax\Test\Unit\Observer;
 
+use Magento\Bundle\Model\ResourceModel\Selection\Collection;
+use Magento\Catalog\Model\Product;
+use Magento\Catalog\Model\Product\Type;
+use Magento\Catalog\Pricing\Price\BasePrice;
+use Magento\Framework\DataObject;
+use Magento\Framework\Event\Observer;
+use Magento\Framework\Pricing\Amount\Base;
+use Magento\Framework\Registry;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Tax\Helper\Data;
+use Magento\Tax\Observer\GetPriceConfigurationObserver;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
- * Class GetPriceConfigurationObserverTest
- *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class GetPriceConfigurationObserverTest extends \PHPUnit\Framework\TestCase
+class GetPriceConfigurationObserverTest extends TestCase
 {
     /**
-     * @var \Magento\Tax\Observer\GetPriceConfigurationObserver
+     * @var GetPriceConfigurationObserver
      */
     protected $model;
 
     /**
-     * @var \Magento\Framework\Registry|\PHPUnit\Framework\MockObject\MockObject
+     * @var Registry|MockObject
      */
     protected $registry;
 
     /**
-     * @var \Magento\Tax\Helper\Data|\PHPUnit\Framework\MockObject\MockObject
+     * @var Data|MockObject
      */
     protected $taxData;
 
     /**
-     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
+     * @var ObjectManager
      */
     protected $objectManager;
 
@@ -44,28 +55,28 @@ class GetPriceConfigurationObserverTest extends \PHPUnit\Framework\TestCase
      */
     public function testExecute($testArray, $expectedArray)
     {
-        $configObj = new \Magento\Framework\DataObject(
+        $configObj = new DataObject(
             [
                 'config' => $testArray,
             ]
         );
 
-        $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $this->objectManager = new ObjectManager($this);
 
-        $className = \Magento\Framework\Registry::class;
+        $className = Registry::class;
         $this->registry = $this->createMock($className);
 
-        $className = \Magento\Tax\Helper\Data::class;
+        $className = Data::class;
         $this->taxData = $this->createMock($className);
 
-        $observerObject=$this->createMock(\Magento\Framework\Event\Observer::class);
+        $observerObject = $this->createMock(Observer::class);
         $observerObject->expects($this->any())
             ->method('getData')
             ->with('configObj')
             ->willReturn($configObj);
 
         $baseAmount = $this->createPartialMock(
-            \Magento\Framework\Pricing\Amount\Base::class,
+            Base::class,
             ['getBaseAmount', 'getAdjustmentAmount', 'hasAdjustment']
         );
 
@@ -83,7 +94,7 @@ class GetPriceConfigurationObserverTest extends \PHPUnit\Framework\TestCase
 
         $priceInfo = $this->createPartialMock(\Magento\Framework\Pricing\PriceInfo\Base::class, ['getPrice']);
 
-        $basePrice = $this->createPartialMock(\Magento\Catalog\Pricing\Price\BasePrice::class, ['getAmount']);
+        $basePrice = $this->createPartialMock(BasePrice::class, ['getAmount']);
 
         $basePrice->expects($this->any())
             ->method('getAmount')
@@ -93,8 +104,8 @@ class GetPriceConfigurationObserverTest extends \PHPUnit\Framework\TestCase
             ->method('getPrice')
             ->willReturn($basePrice);
 
-        $prod1 = $this->createPartialMock(\Magento\Catalog\Model\Product::class, ['getId', 'getPriceInfo']);
-        $prod2 = $this->createMock(\Magento\Catalog\Model\Product::class);
+        $prod1 = $this->createPartialMock(Product::class, ['getId', 'getPriceInfo']);
+        $prod2 = $this->createMock(Product::class);
 
         $prod1->expects($this->any())
             ->method('getId')
@@ -105,22 +116,23 @@ class GetPriceConfigurationObserverTest extends \PHPUnit\Framework\TestCase
             ->willReturn($priceInfo);
 
         $optionCollection =
-            $this->createPartialMock(\Magento\Bundle\Model\ResourceModel\Selection\Collection::class, ['getItems']);
+            $this->createPartialMock(Collection::class, ['getItems']);
 
         $optionCollection->expects($this->any())
             ->method('getItems')
             ->willReturn([$prod1, $prod2]);
 
         $productInstance =
-            $this->createPartialMock(
-                \Magento\Catalog\Model\Product\Type::class,
-                ['setStoreFilter', 'getSelectionsCollection', 'getOptionsIds']
-            );
+            $this->getMockBuilder(Type::class)
+                ->addMethods(['setStoreFilter', 'getSelectionsCollection', 'getOptionsIds'])
+                ->disableOriginalConstructor()
+                ->getMock();
 
-        $product = $this->createPartialMock(
-            \Magento\Bundle\Model\Product\Type::class,
-            ['getTypeInstance', 'getTypeId', 'getStoreId', 'getSelectionsCollection', 'getId']
-        );
+        $product = $this->getMockBuilder(\Magento\Bundle\Model\Product\Type::class)
+            ->addMethods(['getTypeInstance', 'getTypeId', 'getStoreId', 'getId'])
+            ->onlyMethods(['getSelectionsCollection'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $product->expects($this->any())
             ->method('getTypeInstance')
             ->willReturn($productInstance);
@@ -150,7 +162,7 @@ class GetPriceConfigurationObserverTest extends \PHPUnit\Framework\TestCase
 
         $objectManager = new ObjectManager($this);
         $this->model = $objectManager->getObject(
-            \Magento\Tax\Observer\GetPriceConfigurationObserver::class,
+            GetPriceConfigurationObserver::class,
             [
                 'taxData' => $this->taxData,
                 'registry' => $this->registry,
@@ -175,16 +187,16 @@ class GetPriceConfigurationObserverTest extends \PHPUnit\Framework\TestCase
                         [
                             'optionId' => 1,
                             'prices' => [
-                                    'finalPrice' => ['amount' => 35.50],
-                                    'basePrice' => ['amount' => 30.50],
-                                ],
+                                'finalPrice' => ['amount' => 35.50],
+                                'basePrice' => ['amount' => 30.50],
+                            ],
                         ],
                         [
                             'optionId' => 2,
                             'prices' => [
-                                    'finalPrice' =>['amount' => 333.50],
-                                    'basePrice' => ['amount' => 300.50],
-                                ],
+                                'finalPrice' => ['amount' => 333.50],
+                                'basePrice' => ['amount' => 300.50],
+                            ],
                         ],
                     ],
                 ],
@@ -193,17 +205,17 @@ class GetPriceConfigurationObserverTest extends \PHPUnit\Framework\TestCase
                         [
                             'optionId' => 1,
                             'prices' => [
-                                    'finalPrice' => ['amount' => 35.50],
-                                    'basePrice' => ['amount' => 35],
-                                    'oldPrice' => ['amount' => 35],
-                                ],
+                                'finalPrice' => ['amount' => 35.50],
+                                'basePrice' => ['amount' => 35],
+                                'oldPrice' => ['amount' => 35],
+                            ],
                         ],
                         [
                             'optionId' => 2,
                             'prices' => [
-                                    'finalPrice' =>['amount' => 333.50],
-                                    'basePrice' => ['amount' => 300.50],
-                                ],
+                                'finalPrice' => ['amount' => 333.50],
+                                'basePrice' => ['amount' => 300.50],
+                            ],
                         ],
                     ],
                 ],

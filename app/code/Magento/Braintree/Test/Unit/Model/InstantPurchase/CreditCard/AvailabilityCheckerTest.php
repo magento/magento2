@@ -9,11 +9,13 @@ namespace Magento\Braintree\Test\Unit\Model\InstantPurchase\CreditCard;
 
 use Magento\Braintree\Gateway\Config\Config;
 use Magento\Braintree\Model\InstantPurchase\CreditCard\AvailabilityChecker;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \Magento\Braintree\Model\InstantPurchase\CreditCard\AvailabilityChecker
  */
-class AvailabilityCheckerTest extends \PHPUnit\Framework\TestCase
+class AvailabilityCheckerTest extends TestCase
 {
     /**
      * Testable Object
@@ -23,7 +25,7 @@ class AvailabilityCheckerTest extends \PHPUnit\Framework\TestCase
     private $availabilityChecker;
 
     /**
-     * @var Config|\PHPUnit\Framework\MockObject\MockObject
+     * @var Config|MockObject
      */
     private $configMock;
 

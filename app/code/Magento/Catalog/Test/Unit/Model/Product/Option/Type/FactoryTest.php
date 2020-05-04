@@ -3,34 +3,43 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Catalog\Test\Unit\Model\Product\Option\Type;
 
-class FactoryTest extends \PHPUnit\Framework\TestCase
+use Magento\Catalog\Model\Product\Option\Type\DefaultType;
+use Magento\Catalog\Model\Product\Option\Type\Factory;
+use Magento\Framework\ObjectManagerInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class FactoryTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\ObjectManagerInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var ObjectManagerInterface|MockObject
      */
     protected $_objectManagerMock;
 
     /**
-     * @var \Magento\Catalog\Model\Product\Option\Type\Factory
+     * @var Factory
      */
     protected $_factory;
 
     protected function setUp(): void
     {
-        $this->_objectManagerMock = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
+        $this->_objectManagerMock = $this->createMock(ObjectManagerInterface::class);
 
-        $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $objectManagerHelper = new ObjectManager($this);
         $this->_factory = $objectManagerHelper->getObject(
-            \Magento\Catalog\Model\Product\Option\Type\Factory::class,
+            Factory::class,
             ['objectManager' => $this->_objectManagerMock]
         );
     }
 
     public function testCreate()
     {
-        $className = \Magento\Catalog\Model\Product\Option\Type\DefaultType::class;
+        $className = DefaultType::class;
 
         $filterMock = $this->createMock($className);
         $this->_objectManagerMock->expects(
@@ -49,7 +58,7 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
 
     public function testCreateWithArguments()
     {
-        $className = \Magento\Catalog\Model\Product\Option\Type\DefaultType::class;
+        $className = DefaultType::class;
         $arguments = ['foo', 'bar'];
 
         $filterMock = $this->createMock($className);
@@ -67,16 +76,17 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($filterMock, $this->_factory->create($className, $arguments));
     }
 
-    /**
-     */
     public function testWrongTypeException()
     {
-        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
-        $this->expectExceptionMessage('WrongClass doesn\'t extends \\Magento\\Catalog\\Model\\Product\\Option\\Type\\DefaultType');
-
+        $this->expectException('Magento\Framework\Exception\LocalizedException');
+        $this->expectExceptionMessage(
+            'WrongClass doesn\'t extends \Magento\Catalog\Model\Product\Option\Type\DefaultType'
+        );
         $className = 'WrongClass';
 
-        $filterMock = $this->getMockBuilder($className)->disableOriginalConstructor()->getMock();
+        $filterMock = $this->getMockBuilder($className)
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->_objectManagerMock->expects($this->once())->method('create')->willReturn($filterMock);
 
         $this->_factory->create($className);

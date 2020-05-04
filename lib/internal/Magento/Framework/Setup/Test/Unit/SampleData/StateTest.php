@@ -3,25 +3,31 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\Setup\Test\Unit\SampleData;
 
-/**
- * Class StateTest
- */
-class StateTest extends \PHPUnit\Framework\TestCase
+use Magento\Framework\Filesystem;
+use Magento\Framework\Filesystem\Directory\WriteInterface;
+use Magento\Framework\Setup\SampleData\State;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class StateTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\Setup\SampleData\State|\PHPUnit\Framework\MockObject\MockObject
+     * @var State|MockObject
      */
     protected $state;
 
     /**
-     * @var \Magento\Framework\Filesystem|\PHPUnit\Framework\MockObject\MockObject
+     * @var Filesystem|MockObject
      */
     protected $filesystem;
 
     /**
-     * @var \Magento\Framework\Filesystem\Directory\WriteInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var WriteInterface|MockObject
      */
     protected $writeInterface;
 
@@ -32,12 +38,12 @@ class StateTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp(): void
     {
-        $this->filesystem = $this->getMockBuilder(\Magento\Framework\Filesystem::class)
+        $this->filesystem = $this->getMockBuilder(Filesystem::class)
             ->setMethods(['getDirectoryWrite'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->writeInterface = $this->getMockForAbstractClass(
-            \Magento\Framework\Filesystem\Directory\WriteInterface::class,
+            WriteInterface::class,
             [],
             '',
             false,
@@ -45,9 +51,9 @@ class StateTest extends \PHPUnit\Framework\TestCase
             true,
             ['write', 'close']
         );
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $objectManager = new ObjectManager($this);
         $this->state = $objectManager->getObject(
-            \Magento\Framework\Setup\SampleData\State::class,
+            State::class,
             ['filesystem' => $this->filesystem]
         );
     }
@@ -71,7 +77,7 @@ class StateTest extends \PHPUnit\Framework\TestCase
         $this->writeInterface->expects($this->any())->method('close');
         $this->writeInterface->expects($this->any())->method('isExist')->willReturn(true);
         $this->writeInterface->expects($this->any())->method('read')
-            ->willReturn(\Magento\Framework\Setup\SampleData\State::ERROR);
+            ->willReturn(State::ERROR);
         $this->state->setError();
         $this->assertTrue($this->state->hasError());
     }

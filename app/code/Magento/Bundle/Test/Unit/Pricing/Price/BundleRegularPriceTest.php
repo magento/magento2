@@ -3,31 +3,40 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Bundle\Test\Unit\Pricing\Price;
 
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
-use Magento\Catalog\Pricing\Price\CustomOptionPrice;
 use Magento\Bundle\Model\Product\Price;
+use Magento\Bundle\Pricing\Adjustment\BundleCalculatorInterface;
+use Magento\Bundle\Pricing\Price\BundleRegularPrice;
+use Magento\Catalog\Model\Product;
+use Magento\Catalog\Pricing\Price\CustomOptionPrice;
+use Magento\Framework\Pricing\PriceCurrencyInterface;
+use Magento\Framework\Pricing\PriceInfo\Base;
+use Magento\Framework\Pricing\SaleableInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class BundleRegularPriceTest extends \PHPUnit\Framework\TestCase
+class BundleRegularPriceTest extends TestCase
 {
-    /** @var \Magento\Bundle\Pricing\Price\BundleRegularPrice */
+    /** @var BundleRegularPrice */
     protected $regularPrice;
 
     /** @var ObjectManagerHelper */
     protected $objectManagerHelper;
 
-    /** @var \Magento\Framework\Pricing\SaleableInterface|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var SaleableInterface|MockObject */
     protected $saleableInterfaceMock;
 
-    /** @var \Magento\Bundle\Pricing\Adjustment\BundleCalculatorInterface|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var BundleCalculatorInterface|MockObject */
     protected $bundleCalculatorMock;
 
-    /** @var \Magento\Framework\Pricing\PriceInfo\Base |\PHPUnit\Framework\MockObject\MockObject */
+    /** @var Base|MockObject */
     protected $priceInfoMock;
 
-    /** @var CustomOptionPrice|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var CustomOptionPrice|MockObject */
     protected $customOptionPriceMock;
 
     /**
@@ -36,7 +45,7 @@ class BundleRegularPriceTest extends \PHPUnit\Framework\TestCase
     protected $quantity = 1;
 
     /**
-     * @var \Magento\Framework\Pricing\PriceCurrencyInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var PriceCurrencyInterface|MockObject
      */
     protected $priceCurrencyMock;
 
@@ -45,17 +54,17 @@ class BundleRegularPriceTest extends \PHPUnit\Framework\TestCase
      */
     protected function setUp(): void
     {
-        $this->saleableInterfaceMock = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
+        $this->saleableInterfaceMock = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
             ->setMethods(['getPriceInfo', 'getPriceType', 'getPrice'])
             ->getMock();
         $this->bundleCalculatorMock = $this->createMock(
-            \Magento\Bundle\Pricing\Adjustment\BundleCalculatorInterface::class
+            BundleCalculatorInterface::class
         );
 
-        $this->priceInfoMock = $this->createMock(\Magento\Framework\Pricing\PriceInfo\Base::class);
+        $this->priceInfoMock = $this->createMock(Base::class);
 
-        $this->customOptionPriceMock = $this->getMockBuilder(\Magento\Catalog\Pricing\Price\CustomOptionPrice::class)
+        $this->customOptionPriceMock = $this->getMockBuilder(CustomOptionPrice::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -63,10 +72,10 @@ class BundleRegularPriceTest extends \PHPUnit\Framework\TestCase
             ->method('getPriceInfo')
             ->willReturn($this->priceInfoMock);
 
-        $this->priceCurrencyMock = $this->createMock(\Magento\Framework\Pricing\PriceCurrencyInterface::class);
+        $this->priceCurrencyMock = $this->createMock(PriceCurrencyInterface::class);
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
-        $this->regularPrice = new \Magento\Bundle\Pricing\Price\BundleRegularPrice(
+        $this->regularPrice = new BundleRegularPrice(
             $this->saleableInterfaceMock,
             $this->quantity,
             $this->bundleCalculatorMock,

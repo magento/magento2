@@ -15,14 +15,15 @@ use Magento\Framework\Locale\Deployed\Options;
 use Magento\Framework\Locale\ListsInterface;
 use Magento\Framework\View\Design\ThemeInterface;
 use Magento\Framework\View\DesignInterface;
-use \PHPUnit\Framework\MockObject\MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test for Options class.
  *
  * @see Options
  */
-class OptionsTest extends \PHPUnit\Framework\TestCase
+class OptionsTest extends TestCase
 {
     /**
      * @var State|MockObject
@@ -68,7 +69,7 @@ class OptionsTest extends \PHPUnit\Framework\TestCase
             ->getMockForAbstractClass();
         $this->localeListsMock = $this->getMockBuilder(ListsInterface::class)
             ->getMockForAbstractClass();
-        $this->deploymentConfigMock = $this->createMock(\Magento\Framework\App\DeploymentConfig::class);
+        $this->deploymentConfigMock = $this->createMock(DeploymentConfig::class);
 
         $this->model = new Options(
             $this->localeListsMock,
@@ -185,23 +186,23 @@ class OptionsTest extends \PHPUnit\Framework\TestCase
             ->with(Constants::CONFIG_PATH_SCD_ON_DEMAND_IN_PRODUCTION)
             ->willReturn($scdOnDemand);
 
-            $area = 'area';
-            $code = 'code';
-            $themeMock = $this->getMockBuilder(ThemeInterface::class)
-                ->getMockForAbstractClass();
-            $themeMock->expects($this->once())
-                ->method('getCode')
-                ->willReturn($code);
-            $themeMock->expects($this->once())
-                ->method('getArea')
-                ->willReturn($area);
-            $this->designMock->expects($this->once())
-                ->method('getDesignTheme')
-                ->willReturn($themeMock);
-            $this->availableLocalesMock->expects($this->once())
-                ->method('getList')
-                ->with($code, $area)
-                ->willReturn($deployedCodes);
+        $area = 'area';
+        $code = 'code';
+        $themeMock = $this->getMockBuilder(ThemeInterface::class)
+            ->getMockForAbstractClass();
+        $themeMock->expects($this->once())
+            ->method('getCode')
+            ->willReturn($code);
+        $themeMock->expects($this->once())
+            ->method('getArea')
+            ->willReturn($area);
+        $this->designMock->expects($this->once())
+            ->method('getDesignTheme')
+            ->willReturn($themeMock);
+        $this->availableLocalesMock->expects($this->once())
+            ->method('getList')
+            ->with($code, $area)
+            ->willReturn($deployedCodes);
     }
 
     /**

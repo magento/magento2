@@ -3,27 +3,32 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\App\Test\Unit\Utility;
 
 use Magento\Framework\App\Utility\Files;
 use Magento\Framework\Component\ComponentRegistrar;
+use Magento\Framework\Component\DirSearch;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test for Utility/Files class.
  *
- * @package Magento\Framework\App\Test\Unit\Utility
  */
-class FilesTest extends \PHPUnit\Framework\TestCase
+class FilesTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\Component\DirSearch|\PHPUnit\Framework\MockObject\MockObject
+     * @var DirSearch|MockObject
      */
     private $dirSearchMock;
 
     protected function setUp(): void
     {
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->dirSearchMock = $this->createMock(\Magento\Framework\Component\DirSearch::class);
+        $objectManager = new ObjectManager($this);
+        $this->dirSearchMock = $this->createMock(DirSearch::class);
         $fileUtilities = $objectManager->getObject(
             Files::class,
             [

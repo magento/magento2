@@ -3,46 +3,56 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Robots\Test\Unit\Controller;
 
-class RouterTest extends \PHPUnit\Framework\TestCase
+use Magento\Framework\App\ActionFactory;
+use Magento\Framework\App\RequestInterface;
+use Magento\Framework\App\Route\ConfigInterface;
+use Magento\Framework\App\Router\ActionList;
+use Magento\Robots\Controller\Index\Index;
+use Magento\Robots\Controller\Router;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class RouterTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\App\ActionFactory|\PHPUnit\Framework\MockObject\MockObject
+     * @var ActionFactory|MockObject
      */
     private $actionFactoryMock;
 
     /**
-     * @var \Magento\Framework\App\Router\ActionList|\PHPUnit\Framework\MockObject\MockObject
+     * @var ActionList|MockObject
      */
     private $actionListMock;
 
     /**
-     * @var \Magento\Framework\App\Route\ConfigInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var ConfigInterface|MockObject
      */
     private $routeConfigMock;
 
     /**
-     * @var \Magento\Robots\Controller\Router
+     * @var Router
      */
     private $router;
 
     protected function setUp(): void
     {
-        $this->actionFactoryMock = $this->getMockBuilder(\Magento\Framework\App\ActionFactory::class)
+        $this->actionFactoryMock = $this->getMockBuilder(ActionFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
 
-        $this->actionListMock = $this->getMockBuilder(\Magento\Framework\App\Router\ActionList::class)
+        $this->actionListMock = $this->getMockBuilder(ActionList::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->routeConfigMock = $this->getMockBuilder(\Magento\Framework\App\Route\ConfigInterface::class)
+        $this->routeConfigMock = $this->getMockBuilder(ConfigInterface::class)
             ->getMockForAbstractClass();
 
-        $this->router = new \Magento\Robots\Controller\Router(
+        $this->router = new Router(
             $this->actionFactoryMock,
             $this->actionListMock,
             $this->routeConfigMock
@@ -56,7 +66,7 @@ class RouterTest extends \PHPUnit\Framework\TestCase
     {
         $identifier = 'test';
 
-        $requestMock = $this->getMockBuilder(\Magento\Framework\App\RequestInterface::class)
+        $requestMock = $this->getMockBuilder(RequestInterface::class)
             ->setMethods(['getPathInfo'])
             ->getMockForAbstractClass();
         $requestMock->expects($this->once())
@@ -73,7 +83,7 @@ class RouterTest extends \PHPUnit\Framework\TestCase
     {
         $identifier = 'robots.txt';
 
-        $requestMock = $this->getMockBuilder(\Magento\Framework\App\RequestInterface::class)
+        $requestMock = $this->getMockBuilder(RequestInterface::class)
             ->setMethods(['getPathInfo'])
             ->getMockForAbstractClass();
         $requestMock->expects($this->once())
@@ -95,9 +105,9 @@ class RouterTest extends \PHPUnit\Framework\TestCase
     {
         $identifier = 'robots.txt';
         $moduleName = 'Magento_Robots';
-        $actionClassName = \Magento\Robots\Controller\Index\Index::class;
+        $actionClassName = Index::class;
 
-        $requestMock = $this->getMockBuilder(\Magento\Framework\App\RequestInterface::class)
+        $requestMock = $this->getMockBuilder(RequestInterface::class)
             ->setMethods(['getPathInfo'])
             ->getMockForAbstractClass();
         $requestMock->expects($this->once())
@@ -114,7 +124,7 @@ class RouterTest extends \PHPUnit\Framework\TestCase
             ->with($moduleName, null, 'index', 'index')
             ->willReturn($actionClassName);
 
-        $actionClassMock = $this->getMockBuilder(\Magento\Robots\Controller\Index\Index::class)
+        $actionClassMock = $this->getMockBuilder(Index::class)
             ->disableOriginalConstructor()
             ->getMock();
 

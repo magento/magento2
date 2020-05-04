@@ -3,17 +3,20 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Vault\Test\Unit\Model;
 
 use Magento\Payment\Api\Data\PaymentMethodInterface;
 use Magento\Payment\Api\PaymentMethodListInterface;
 use Magento\Payment\Model\Method\InstanceFactory;
 use Magento\Payment\Model\MethodInterface;
-use Magento\Vault\Model\VaultPaymentInterface;
 use Magento\Vault\Model\PaymentMethodList;
-use PHPUnit\Framework\MockObject\MockObject as MockObject;
+use Magento\Vault\Model\VaultPaymentInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class PaymentMethodListTest extends \PHPUnit\Framework\TestCase
+class PaymentMethodListTest extends TestCase
 {
     /**
      * @var PaymentMethodListInterface|MockObject
@@ -32,7 +35,7 @@ class PaymentMethodListTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp(): void
     {
-        $this->paymentMethodList = $this->getMockForAbstractClass(PaymentMethodListInterface::class);
+        $this->paymentMethodList = $this->createMock(PaymentMethodListInterface::class);
         $this->instanceFactory = $this->getMockBuilder(InstanceFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
@@ -47,9 +50,9 @@ class PaymentMethodListTest extends \PHPUnit\Framework\TestCase
     public function testGetActivePaymentList()
     {
         $storeId = 1;
-        $vaultPayment = $this->getMockForAbstractClass(VaultPaymentInterface::class);
-        $paymentMethodInterface1 = $this->getMockForAbstractClass(PaymentMethodInterface::class);
-        $paymentMethodInterface2 = $this->getMockForAbstractClass(PaymentMethodInterface::class);
+        $vaultPayment = $this->createMock(VaultPaymentInterface::class);
+        $paymentMethodInterface1 = $this->createMock(PaymentMethodInterface::class);
+        $paymentMethodInterface2 = $this->createMock(PaymentMethodInterface::class);
         $activePayments = [
             $paymentMethodInterface1,
             $paymentMethodInterface2
@@ -63,7 +66,7 @@ class PaymentMethodListTest extends \PHPUnit\Framework\TestCase
         $this->instanceFactory->expects(static::exactly(2))
             ->method('create')
             ->willReturnMap([
-                [$paymentMethodInterface1, $this->getMockForAbstractClass(MethodInterface::class)],
+                [$paymentMethodInterface1, $this->createMock(MethodInterface::class)],
                 [$paymentMethodInterface2, $vaultPayment]
             ]);
 

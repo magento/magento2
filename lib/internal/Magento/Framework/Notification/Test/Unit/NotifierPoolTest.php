@@ -3,37 +3,43 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Framework\Notification\Test\Unit;
 
+use Magento\Framework\Notification\MessageInterface;
+use Magento\Framework\Notification\NotifierList;
+use Magento\Framework\Notification\NotifierPool;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class NotifierPoolTest extends \PHPUnit\Framework\TestCase
+class NotifierPoolTest extends TestCase
 {
-    /** @var \Magento\Framework\Notification\NotifierPool */
+    /** @var NotifierPool */
     protected $notifierPool;
 
     /** @var ObjectManagerHelper */
     protected $objectManagerHelper;
 
-    /** @var \Magento\Framework\Notification\NotifierList|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var NotifierList|MockObject */
     protected $notifierList;
 
     /**
-     * @var \Magento\Framework\Notification\NotifierPool[]|\PHPUnit\Framework\MockObject\MockObject[]
+     * @var NotifierPool[]|MockObject[]
      */
     protected $notifiers;
 
     protected function setUp(): void
     {
         $this->objectManagerHelper = new ObjectManagerHelper($this);
-        $notifier1 = $this->createMock(\Magento\Framework\Notification\NotifierPool::class);
-        $notifier2 = $this->createMock(\Magento\Framework\Notification\NotifierPool::class);
+        $notifier1 = $this->createMock(NotifierPool::class);
+        $notifier2 = $this->createMock(NotifierPool::class);
         $this->notifiers = [$notifier1, $notifier2];
-        $this->notifierList = $this->createMock(\Magento\Framework\Notification\NotifierList::class);
+        $this->notifierList = $this->createMock(NotifierList::class);
         $this->notifierList->expects($this->any())->method('asArray')->willReturn($this->notifiers);
         $this->notifierPool = $this->objectManagerHelper->getObject(
-            \Magento\Framework\Notification\NotifierPool::class,
+            NotifierPool::class,
             [
                 'notifierList' => $this->notifierList
             ]
@@ -42,7 +48,7 @@ class NotifierPoolTest extends \PHPUnit\Framework\TestCase
 
     public function testAdd()
     {
-        $severity = \Magento\Framework\Notification\MessageInterface::SEVERITY_CRITICAL;
+        $severity = MessageInterface::SEVERITY_CRITICAL;
         $title = 'title';
         $description = 'desc';
         foreach ($this->notifiers as $notifier) {

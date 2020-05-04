@@ -3,20 +3,25 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Framework\View\Test\Unit\Page\Config\Generator;
 
-use Magento\Framework\View\Page\Config\Generator\Head;
-use Magento\Framework\View\Page\Config as PageConfig;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Framework\UrlInterface;
 use Magento\Framework\View\Layout\Generator\Context;
-use Magento\Framework\View\Page\Config\Structure;
 use Magento\Framework\View\Layout\Reader\Context as ReaderContext;
+use Magento\Framework\View\Page\Config as PageConfig;
+use Magento\Framework\View\Page\Config\Generator\Head;
+use Magento\Framework\View\Page\Config\Structure;
+use Magento\Framework\View\Page\Title;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test for page config generator model
  */
-class HeadTest extends \PHPUnit\Framework\TestCase
+class HeadTest extends TestCase
 {
     /**
      * @var Head
@@ -24,17 +29,17 @@ class HeadTest extends \PHPUnit\Framework\TestCase
     protected $headGenerator;
 
     /**
-     * @var \Magento\Framework\View\Page\Config|\PHPUnit\Framework\MockObject\MockObject
+     * @var \Magento\Framework\View\Page\Config|MockObject
      */
     protected $pageConfigMock;
 
     /**
-     * @var \Magento\Framework\UrlInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var UrlInterface|MockObject
      */
     protected $urlMock;
 
     /**
-     * @var \Magento\Framework\View\Page\Title|\PHPUnit\Framework\MockObject\MockObject
+     * @var Title|MockObject
      */
     protected $title;
 
@@ -43,16 +48,16 @@ class HeadTest extends \PHPUnit\Framework\TestCase
         $this->pageConfigMock = $this->getMockBuilder(\Magento\Framework\View\Page\Config::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->title = $this->getMockBuilder(\Magento\Framework\View\Page\Title::class)
+        $this->title = $this->getMockBuilder(Title::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->urlMock = $this->getMockBuilder(\Magento\Framework\UrlInterface::class)
+        $this->urlMock = $this->getMockBuilder(UrlInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
 
         $objectManagerHelper = new ObjectManagerHelper($this);
         $this->headGenerator = $objectManagerHelper->getObject(
-            \Magento\Framework\View\Page\Config\Generator\Head::class,
+            Head::class,
             [
                 'pageConfig' => $this->pageConfigMock,
                 'url' => $this->urlMock,

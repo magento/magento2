@@ -3,37 +3,43 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Unit\Pricing\Render;
 
-/**
- * Class PriceBoxTest
- */
-class PriceBoxTest extends \PHPUnit\Framework\TestCase
+use Magento\Catalog\Model\Product;
+use Magento\Catalog\Pricing\Render\PriceBox;
+use Magento\Framework\Json\Helper\Data;
+use Magento\Framework\Math\Random;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class PriceBoxTest extends TestCase
 {
     /**
-     * @var \Magento\Catalog\Pricing\Render\PriceBox
+     * @var PriceBox
      */
     protected $object;
 
     /**
-     * @var \Magento\Framework\Json\Helper\Data|\PHPUnit\Framework\MockObject\MockObject
+     * @var Data|MockObject
      */
     protected $jsonHelperMock;
 
     /**
-     * @var \Magento\Framework\Math\Random|\PHPUnit\Framework\MockObject\MockObject
+     * @var Random|MockObject
      */
     protected $mathRandom;
 
     protected function setUp(): void
     {
-        $this->jsonHelperMock = $this->createPartialMock(\Magento\Framework\Json\Helper\Data::class, ['jsonEncode']);
-        $this->mathRandom = $this->createMock(\Magento\Framework\Math\Random::class);
+        $this->jsonHelperMock = $this->createPartialMock(Data::class, ['jsonEncode']);
+        $this->mathRandom = $this->createMock(Random::class);
 
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $objectManager = new ObjectManager($this);
         $this->object = $objectManager->getObject(
-            \Magento\Catalog\Pricing\Render\PriceBox::class,
+            PriceBox::class,
             [
                 'jsonHelper' => $this->jsonHelperMock,
                 'mathRandom' => $this->mathRandom,
@@ -47,7 +53,7 @@ class PriceBoxTest extends \PHPUnit\Framework\TestCase
 
         $this->jsonHelperMock->expects($this->once())
             ->method('jsonEncode')
-            ->with($this->equalTo($expectedValue))
+            ->with($expectedValue)
             ->willReturn($expectedValue);
 
         $result = $this->object->jsonEncode($expectedValue);
@@ -62,7 +68,7 @@ class PriceBoxTest extends \PHPUnit\Framework\TestCase
         $expectedTestValue = 'test_value';
         $this->mathRandom->expects($this->once())
             ->method('getRandomString')
-            ->with($this->equalTo($expectedValue))
+            ->with($expectedValue)
             ->willReturn('test_value');
 
         $result = $this->object->getRandomString($expectedValue);
@@ -79,7 +85,7 @@ class PriceBoxTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetCanDisplayQty($typeCode, $expected)
     {
-        $product = $this->createPartialMock(\Magento\Catalog\Model\Product::class, ['getTypeId', '__wakeup']);
+        $product = $this->createPartialMock(Product::class, ['getTypeId']);
 
         $product->expects($this->once())
             ->method('getTypeId')

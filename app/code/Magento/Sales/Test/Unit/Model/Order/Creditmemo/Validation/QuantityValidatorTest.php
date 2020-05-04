@@ -3,27 +3,30 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Sales\Test\Unit\Model\Order\Creditmemo\Validation;
 
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Sales\Api\Data\CreditmemoInterface;
+use Magento\Sales\Api\Data\CreditmemoItemInterface;
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Api\InvoiceRepositoryInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Sales\Model\Order\Creditmemo\Validation\QuantityValidator;
+use Magento\Sales\Model\Order\Item;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-/**
- * Class QuantityValidatorTest
- */
-class QuantityValidatorTest extends \PHPUnit\Framework\TestCase
+class QuantityValidatorTest extends TestCase
 {
     /**
-     * @var OrderRepositoryInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var OrderRepositoryInterface|MockObject
      */
     private $orderRepositoryMock;
 
     /**
-     * @var InvoiceRepositoryInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var InvoiceRepositoryInterface|MockObject
      */
     private $invoiceRepositoryMock;
 
@@ -114,7 +117,7 @@ class QuantityValidatorTest extends \PHPUnit\Framework\TestCase
         $creditmemoMock->expects($this->exactly(2))->method('getOrderId')
             ->willReturn($orderId);
         $creditmemoItemMock = $this->getMockBuilder(
-            \Magento\Sales\Api\Data\CreditmemoItemInterface::class
+            CreditmemoItemInterface::class
         )->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $creditmemoItemMock->expects($this->once())->method('getOrderItemId')
@@ -169,7 +172,7 @@ class QuantityValidatorTest extends \PHPUnit\Framework\TestCase
         $creditmemoMock->expects($this->once())->method('getGrandTotal')
             ->willReturn($total);
         $creditmemoItemMock = $this->getMockBuilder(
-            \Magento\Sales\Api\Data\CreditmemoItemInterface::class
+            CreditmemoItemInterface::class
         )->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $creditmemoItemMock->expects($this->exactly(2))->method('getOrderItemId')
@@ -184,7 +187,7 @@ class QuantityValidatorTest extends \PHPUnit\Framework\TestCase
         $orderMock = $this->getMockBuilder(OrderInterface::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
-        $orderItemMock = $this->getMockBuilder(\Magento\Sales\Model\Order\Item::class)
+        $orderItemMock = $this->getMockBuilder(Item::class)
             ->disableOriginalConstructor()
             ->getMock();
         $orderItemMock->expects($this->exactly(2))->method('getQtyToRefund')

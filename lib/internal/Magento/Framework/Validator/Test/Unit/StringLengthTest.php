@@ -3,22 +3,26 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Framework\Validator\Test\Unit;
+
+use Magento\Framework\Validator\StringLength;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test case for \Magento\Framework\Validator\StringLength
  */
-class StringLengthTest extends \PHPUnit\Framework\TestCase
+class StringLengthTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\Validator\StringLength
+     * @var StringLength
      */
     protected $_validator;
 
     protected function setUp(): void
     {
-        $this->_validator = new \Magento\Framework\Validator\StringLength();
+        $this->_validator = new StringLength();
     }
 
     public function testDefaultEncoding()

@@ -3,18 +3,23 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Setup\Test\Unit\Model\Description\Mixin;
 
-class BrakeMixinTest extends \PHPUnit\Framework\TestCase
+use Magento\Setup\Model\Description\Mixin\BrakeMixin;
+use PHPUnit\Framework\TestCase;
+
+class BrakeMixinTest extends TestCase
 {
     /**
-     * @var \Magento\Setup\Model\Description\Mixin\BrakeMixin
+     * @var BrakeMixin
      */
     private $mixin;
 
     protected function setUp(): void
     {
-        $this->mixin = new \Magento\Setup\Model\Description\Mixin\BrakeMixin();
+        $this->mixin = new BrakeMixin();
     }
 
     /**

@@ -3,33 +3,45 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Swatches\Test\Unit\Model\Plugin;
 
-class ConfigurableTest extends \PHPUnit\Framework\TestCase
+use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
+use Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Product\Collection;
+use Magento\Eav\Model\Config;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Swatches\Helper\Data;
+use Magento\Swatches\Model\Plugin\Configurable;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class ConfigurableTest extends TestCase
 {
-    /** @var \Magento\Eav\Model\Config|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var Config|MockObject */
     private $eavConfig;
 
-    /** @var \Magento\Swatches\Helper\Data|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var Data|MockObject */
     private $swatchHelper;
 
-    /** @var \Magento\Swatches\Model\Plugin\Configurable|\Magento\Framework\TestFramework\Unit\Helper\ObjectManager */
+    /** @var Configurable|ObjectManager */
     protected $pluginModel;
 
     protected function setUp(): void
     {
         $this->eavConfig = $this->createPartialMock(
-            \Magento\Eav\Model\Config::class,
+            Config::class,
             ['getEntityAttributeCodes', 'getAttribute']
         );
         $this->swatchHelper = $this->createPartialMock(
-            \Magento\Swatches\Helper\Data::class,
+            Data::class,
             ['isVisualSwatch', 'isTextSwatch']
         );
 
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $objectManager = new ObjectManager($this);
         $this->pluginModel = $objectManager->getObject(
-            \Magento\Swatches\Model\Plugin\Configurable::class,
+            Configurable::class,
             [
                 'eavConfig' => $this->eavConfig,
                 'swatchHelper' => $this->swatchHelper,
@@ -39,18 +51,19 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
 
     public function testAfterGetUsedProductCollection()
     {
-        $product = $this->getMockBuilder(\Magento\Catalog\Api\Data\ProductInterface::class)->getMock();
+        $product = $this->getMockBuilder(ProductInterface::class)
+            ->getMock();
 
         $subject = $this->createPartialMock(
             \Magento\ConfigurableProduct\Model\Product\Type\Configurable::class,
             ['getUsedProductAttributes']
         );
         $result = $this->createPartialMock(
-            \Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Product\Collection::class,
+            Collection::class,
             ['getEntity', 'addAttributeToSelect']
         );
 
-        $attribute = $this->createMock(\Magento\Catalog\Model\ResourceModel\Eav\Attribute::class);
+        $attribute = $this->createMock(Attribute::class);
 
         $subject->expects($this->once())->method('getUsedProductAttributes')->with($product)
             ->willReturn(['size' => $attribute, 'color' => $attribute, 'swatch1' => $attribute]);
@@ -66,7 +79,7 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
 
         $result = $this->pluginModel->afterGetUsedProductCollection($subject, $result, $product);
         $this->assertInstanceOf(
-            \Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Product\Collection::class,
+            Collection::class,
             $result
         );
     }

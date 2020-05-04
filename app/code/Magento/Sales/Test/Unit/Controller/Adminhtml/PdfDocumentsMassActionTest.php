@@ -3,40 +3,55 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Sales\Test\Unit\Controller\Adminhtml;
 
+use Magento\Backend\Model\View\Result\Redirect;
+use Magento\Framework\Controller\ResultFactory;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Message\Manager;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Sales\Controller\Adminhtml\Order\PdfDocumentsMassAction;
+use Magento\Sales\Controller\Adminhtml\Order\Pdfinvoices;
+use Magento\Sales\Model\ResourceModel\Order\Collection;
+use Magento\Sales\Model\ResourceModel\Order\CollectionFactory;
+use Magento\Ui\Component\MassAction\Filter;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class PdfDocumentsMassActionTest extends \PHPUnit\Framework\TestCase
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
+class PdfDocumentsMassActionTest extends TestCase
 {
     /**
-     * @var \Magento\Sales\Controller\Adminhtml\Order\PdfDocumentsMassAction
+     * @var PdfDocumentsMassAction
      */
     private $controller;
 
     /**
-     * @var \Magento\Backend\Model\View\Result\Redirect|\PHPUnit\Framework\MockObject\MockObject
+     * @var Redirect|MockObject
      */
     private $resultRedirect;
 
     /**
-     * @var \Magento\Framework\Message\Manager|\PHPUnit\Framework\MockObject\MockObject
+     * @var Manager|MockObject
      */
     private $messageManager;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     private $orderCollectionFactoryMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     private $orderCollectionMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     private $filterMock;
 
@@ -48,15 +63,15 @@ class PdfDocumentsMassActionTest extends \PHPUnit\Framework\TestCase
         $objectManagerHelper = new ObjectManagerHelper($this);
 
         $this->messageManager = $this->createPartialMock(
-            \Magento\Framework\Message\Manager::class,
+            Manager::class,
             ['addSuccessMessage', 'addErrorMessage']
         );
 
-        $this->orderCollectionMock = $this->createMock(\Magento\Sales\Model\ResourceModel\Order\Collection::class);
-        $this->filterMock = $this->createMock(\Magento\Ui\Component\MassAction\Filter::class);
+        $this->orderCollectionMock = $this->createMock(Collection::class);
+        $this->filterMock = $this->createMock(Filter::class);
 
         $this->orderCollectionFactoryMock = $this->createPartialMock(
-            \Magento\Sales\Model\ResourceModel\Order\CollectionFactory::class,
+            CollectionFactory::class,
             ['create']
         );
 
@@ -64,11 +79,11 @@ class PdfDocumentsMassActionTest extends \PHPUnit\Framework\TestCase
             ->expects($this->once())
             ->method('create')
             ->willReturn($this->orderCollectionMock);
-        $this->resultRedirect = $this->createMock(\Magento\Backend\Model\View\Result\Redirect::class);
-        $resultRedirectFactory = $this->createMock(\Magento\Framework\Controller\ResultFactory::class);
+        $this->resultRedirect = $this->createMock(Redirect::class);
+        $resultRedirectFactory = $this->createMock(ResultFactory::class);
         $resultRedirectFactory->expects($this->any())->method('create')->willReturn($this->resultRedirect);
         $this->controller = $objectManagerHelper->getObject(
-            \Magento\Sales\Controller\Adminhtml\Order\Pdfinvoices::class,
+            Pdfinvoices::class,
             [
                 'filter' => $this->filterMock,
                 'resultFactory' => $resultRedirectFactory,
@@ -84,7 +99,7 @@ class PdfDocumentsMassActionTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     public function testExecute()
     {

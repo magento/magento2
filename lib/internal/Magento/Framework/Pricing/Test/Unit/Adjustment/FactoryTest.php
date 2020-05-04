@@ -3,26 +3,35 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\Pricing\Test\Unit\Adjustment;
+
+use Magento\Framework\DataObject;
+use Magento\Framework\Pricing\Adjustment\AdjustmentInterface;
+use Magento\Framework\Pricing\Adjustment\Factory;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test class for \Magento\Framework\Pricing\Adjustment\Factory
  */
-class FactoryTest extends \PHPUnit\Framework\TestCase
+class FactoryTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
+     * @var ObjectManager
      */
     protected $objectManager;
 
     protected function setUp(): void
     {
-        $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $this->objectManager = new ObjectManager($this);
     }
 
     public function testCreate()
     {
-        $adjustmentInterface = \Magento\Framework\Pricing\Adjustment\AdjustmentInterface::class;
+        $adjustmentInterface = AdjustmentInterface::class;
         $adjustmentFactory = $this->prepareAdjustmentFactory($adjustmentInterface);
 
         $this->assertInstanceOf(
@@ -38,14 +47,14 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
     protected function prepareAdjustmentFactory($adjustmentInterface)
     {
         return $this->objectManager->getObject(
-            \Magento\Framework\Pricing\Adjustment\Factory::class,
+            Factory::class,
             ['objectManager' => $this->prepareObjectManager($adjustmentInterface)]
         );
     }
 
     /**
      * @param string $adjustmentInterface
-     * @return \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\ObjectManager\ObjectManager
+     * @return MockObject|\Magento\Framework\ObjectManager\ObjectManager
      */
     protected function prepareObjectManager($adjustmentInterface)
     {
@@ -56,13 +65,10 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
         return $objectManager;
     }
 
-    /**
-     */
     public function testCreateWithException()
     {
-        $this->expectException(\InvalidArgumentException::class);
-
-        $invalidAdjustmentInterface = \Magento\Framework\DataObject::class;
+        $this->expectException('InvalidArgumentException');
+        $invalidAdjustmentInterface = DataObject::class;
         $adjustmentFactory = $this->prepareAdjustmentFactory($invalidAdjustmentInterface);
         $adjustmentFactory->create($invalidAdjustmentInterface);
     }

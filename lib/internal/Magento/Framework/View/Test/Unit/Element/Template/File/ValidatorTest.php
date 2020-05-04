@@ -3,55 +3,60 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\View\Test\Unit\Element\Template\File;
 
-use \Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Component\ComponentRegistrar;
-use \Magento\Framework\Filesystem\DriverPool;
+use Magento\Framework\Filesystem;
+use Magento\Framework\Filesystem\Directory\ReadInterface;
+use Magento\Framework\Filesystem\Driver\File;
+use Magento\Framework\Filesystem\DriverPool;
+use Magento\Framework\View\Element\Template\File\Validator;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-/**
- * Class ValidatorTest
- * @package Magento\Framework\View\Test\Unit\Element\Template\File
- */
-class ValidatorTest extends \PHPUnit\Framework\TestCase
+class ValidatorTest extends TestCase
 {
     /**
      * Resolver object
      *
-     * @var \Magento\Framework\View\Element\Template\File\Validator
+     * @var Validator
      */
     private $validator;
 
     /**
      * Mock for view file system
      *
-     * @var \Magento\Framework\FileSystem|\PHPUnit\Framework\MockObject\MockObject
+     * @var Filesystem|MockObject
      */
     private $fileSystemMock;
 
     /**
      * Mock for scope config
      *
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var ScopeConfigInterface|MockObject
      */
     private $scopeConfigMock;
 
     /**
      * Mock for root directory reader
      *
-     * @var \Magento\Framework\Filesystem\Directory\ReadInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var ReadInterface|MockObject
      */
     private $rootDirectoryMock;
 
     /**
      * Mock for compiled directory reader
      *
-     * @var \Magento\Framework\Filesystem\Directory\ReadInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var ReadInterface|MockObject
      */
     private $compiledDirectoryMock;
 
     /**
-     * @var ComponentRegistrar|\PHPUnit\Framework\MockObject\MockObject
+     * @var ComponentRegistrar|MockObject
      */
     private $componentRegistrar;
 
@@ -62,10 +67,10 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
      */
     protected function setUp(): void
     {
-        $this->fileSystemMock = $this->createMock(\Magento\Framework\Filesystem::class);
-        $this->scopeConfigMock = $this->createMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
-        $this->rootDirectoryMock = $this->createMock(\Magento\Framework\Filesystem\Directory\ReadInterface::class);
-        $this->compiledDirectoryMock = $this->createMock(\Magento\Framework\Filesystem\Directory\ReadInterface::class);
+        $this->fileSystemMock = $this->createMock(Filesystem::class);
+        $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
+        $this->rootDirectoryMock = $this->createMock(ReadInterface::class);
+        $this->compiledDirectoryMock = $this->createMock(ReadInterface::class);
 
         $this->fileSystemMock->expects($this->any())
             ->method('getDirectoryRead')
@@ -80,24 +85,22 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
             ->method('getAbsolutePath')
             ->willReturn('/magento/var/compiled');
 
-        $this->componentRegistrar = $this->createMock(\Magento\Framework\Component\ComponentRegistrar::class);
+        $this->componentRegistrar = $this->createMock(ComponentRegistrar::class);
         $this->componentRegistrar->expects($this->any())
             ->method('getPaths')
             ->willReturnMap(
-                
-                    [
-                        [ComponentRegistrar::MODULE, ['/magento/app/code/Some/Module']],
-                        [ComponentRegistrar::THEME, ['/magento/themes/default']]
-                    ]
-                
+                [
+                    [ComponentRegistrar::MODULE, ['/magento/app/code/Some/Module']],
+                    [ComponentRegistrar::THEME, ['/magento/themes/default']]
+                ]
             );
 
-        $fileDriverMock = $this->createMock(\Magento\Framework\Filesystem\Driver\File::class);
+        $fileDriverMock = $this->createMock(File::class);
         $fileDriverMock->expects($this->any())
             ->method('getRealPath')
             ->willReturnArgument(0);
 
-        $this->validator = new \Magento\Framework\View\Element\Template\File\Validator(
+        $this->validator = new Validator(
             $this->fileSystemMock,
             $this->scopeConfigMock,
             $this->componentRegistrar,

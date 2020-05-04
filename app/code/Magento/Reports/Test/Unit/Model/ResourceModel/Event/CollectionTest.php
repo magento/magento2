@@ -3,50 +3,61 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Reports\Test\Unit\Model\ResourceModel\Event;
 
+use Magento\Framework\Data\Collection\Db\FetchStrategyInterface;
+use Magento\Framework\Data\Collection\EntityFactoryInterface;
+use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Framework\DB\Adapter\Pdo\Mysql;
+use Magento\Framework\DB\Select;
+use Magento\Framework\Event\ManagerInterface;
+use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
 use Magento\Reports\Model\ResourceModel\Event\Collection;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface;
 
-class CollectionTest extends \PHPUnit\Framework\TestCase
+class CollectionTest extends TestCase
 {
     /**
-     * @var \Magento\Reports\Model\ResourceModel\Event\Collection
+     * @var Collection
      */
     protected $collection;
 
     /**
-     * @var \Magento\Framework\Data\Collection\EntityFactoryInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var EntityFactoryInterface|MockObject
      */
     protected $entityFactoryMock;
 
     /**
-     * @var \Psr\Log\LoggerInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var LoggerInterface|MockObject
      */
     protected $loggerMock;
 
     /**
-     * @var \Magento\Framework\Data\Collection\Db\FetchStrategyInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var FetchStrategyInterface|MockObject
      */
     protected $fetchStrategyMock;
 
     /**
-     * @var \Magento\Framework\Event\ManagerInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var ManagerInterface|MockObject
      */
     protected $managerMock;
 
     /**
-     * @var \Magento\Framework\Model\ResourceModel\Db\AbstractDb|\PHPUnit\Framework\MockObject\MockObject
+     * @var AbstractDb|MockObject
      */
     protected $resourceMock;
 
     /**
-     * @var \Magento\Framework\DB\Adapter\AdapterInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var AdapterInterface|MockObject
      */
     protected $dbMock;
 
     /**
-     * @var \Magento\Framework\DB\Select|\PHPUnit\Framework\MockObject\MockObject
+     * @var Select|MockObject
      */
     protected $selectMock;
 
@@ -56,17 +67,17 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
     protected function setUp(): void
     {
         $this->entityFactoryMock = $this->getMockBuilder(
-            \Magento\Framework\Data\Collection\EntityFactoryInterface::class
+            EntityFactoryInterface::class
         )->getMock();
-        $this->loggerMock = $this->getMockBuilder(\Psr\Log\LoggerInterface::class)
+        $this->loggerMock = $this->getMockBuilder(LoggerInterface::class)
             ->getMock();
         $this->fetchStrategyMock = $this->getMockBuilder(
-            \Magento\Framework\Data\Collection\Db\FetchStrategyInterface::class
+            FetchStrategyInterface::class
         )->getMock();
-        $this->managerMock = $this->getMockBuilder(\Magento\Framework\Event\ManagerInterface::class)
+        $this->managerMock = $this->getMockBuilder(ManagerInterface::class)
             ->getMock();
 
-        $this->selectMock = $this->getMockBuilder(\Magento\Framework\DB\Select::class)
+        $this->selectMock = $this->getMockBuilder(Select::class)
             ->setMethods(['where', 'from'])
             ->disableOriginalConstructor()
             ->getMock();
@@ -77,14 +88,14 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
             ->method('where')
             ->willReturnSelf();
 
-        $this->dbMock = $this->getMockBuilder(\Magento\Framework\DB\Adapter\Pdo\Mysql::class)
+        $this->dbMock = $this->getMockBuilder(Mysql::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->dbMock->expects($this->any())
             ->method('select')
             ->willReturn($this->selectMock);
 
-        $this->resourceMock = $this->getMockBuilder(\Magento\Framework\Model\ResourceModel\Db\AbstractDb::class)
+        $this->resourceMock = $this->getMockBuilder(AbstractDb::class)
             ->disableOriginalConstructor()
             ->setMethods(['getConnection', 'getCurrentStoreIds', '_construct', 'getMainTable', 'getTable'])
             ->getMock();

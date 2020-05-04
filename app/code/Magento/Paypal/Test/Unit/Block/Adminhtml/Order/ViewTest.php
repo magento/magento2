@@ -7,14 +7,14 @@ declare(strict_types=1);
 
 namespace Magento\Paypal\Test\Unit\Block\Adminhtml\Order;
 
-use Magento\Paypal\Model\Adminhtml\Express;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Paypal\Block\Adminhtml\Order\View;
+use Magento\Paypal\Model\Adminhtml\Express;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Payment;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Magento\Framework\Exception\LocalizedException;
-use \PHPUnit\Framework\MockObject\MockObject as MockObject;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 /**
  * Test adminhtml sales order view.

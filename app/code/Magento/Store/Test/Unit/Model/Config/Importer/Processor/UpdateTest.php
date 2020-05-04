@@ -3,22 +3,26 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Store\Test\Unit\Model\Config\Importer\Processor;
 
+use Magento\Framework\Event\ManagerInterface;
+use Magento\Framework\Exception\RuntimeException;
 use Magento\Store\Model\Config\Importer\DataDifferenceCalculator;
 use Magento\Store\Model\Config\Importer\Processor\Update;
 use Magento\Store\Model\Group;
 use Magento\Store\Model\GroupFactory;
-use Magento\Store\Model\ScopeInterface;
-use Magento\Store\Model\StoreFactory;
-use Magento\Store\Model\Website;
-use Magento\Store\Model\ResourceModel\Website as WebsiteResource;
-use Magento\Store\Model\WebsiteFactory;
 use Magento\Store\Model\ResourceModel\Group as GroupResource;
 use Magento\Store\Model\ResourceModel\Store as StoreResource;
-use PHPUnit\Framework\MockObject\MockObject as Mock;
+use Magento\Store\Model\ResourceModel\Website as WebsiteResource;
+use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\Store;
-use Magento\Framework\Event\ManagerInterface;
+use Magento\Store\Model\StoreFactory;
+use Magento\Store\Model\Website;
+use Magento\Store\Model\WebsiteFactory;
+use PHPUnit\Framework\MockObject\MockObject as Mock;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test for Update processor.
@@ -26,7 +30,7 @@ use Magento\Framework\Event\ManagerInterface;
  * @see Update
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class UpdateTest extends \PHPUnit\Framework\TestCase
+class UpdateTest extends TestCase
 {
     /**
      * @var Update
@@ -291,13 +295,10 @@ class UpdateTest extends \PHPUnit\Framework\TestCase
         ];
     }
 
-    /**
-     */
     public function testRunWithException()
     {
-        $this->expectException(\Magento\Framework\Exception\RuntimeException::class);
+        $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('Some exception');
-
         $data = [
             ScopeInterface::SCOPE_GROUPS => [],
             ScopeInterface::SCOPE_STORES => []

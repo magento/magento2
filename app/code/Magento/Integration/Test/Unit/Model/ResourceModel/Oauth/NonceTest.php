@@ -3,39 +3,50 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Integration\Test\Unit\Model\ResourceModel\Oauth;
+
+use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Framework\DB\Adapter\Pdo\Mysql;
+use Magento\Framework\DB\Select;
+use Magento\Framework\Model\ResourceModel\Db\Context;
+use Magento\Integration\Model\ResourceModel\Oauth\Nonce;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Unit test for \Magento\Integration\Model\ResourceModel\Oauth\Nonce
  */
-class NonceTest extends \PHPUnit\Framework\TestCase
+class NonceTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\DB\Adapter\AdapterInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var AdapterInterface|MockObject
      */
     protected $connectionMock;
 
     /**
-     * @var \Magento\Framework\App\ResourceConnection|\PHPUnit\Framework\MockObject\MockObject
+     * @var ResourceConnection|MockObject
      */
     protected $resourceMock;
 
     /**
-     * @var \Magento\Integration\Model\ResourceModel\Oauth\Nonce
+     * @var Nonce
      */
     protected $nonceResource;
 
     protected function setUp(): void
     {
-        $this->connectionMock = $this->createMock(\Magento\Framework\DB\Adapter\Pdo\Mysql::class);
+        $this->connectionMock = $this->createMock(Mysql::class);
 
-        $this->resourceMock = $this->createMock(\Magento\Framework\App\ResourceConnection::class);
+        $this->resourceMock = $this->createMock(ResourceConnection::class);
         $this->resourceMock->expects($this->any())->method('getConnection')->willReturn($this->connectionMock);
 
-        $contextMock = $this->createMock(\Magento\Framework\Model\ResourceModel\Db\Context::class);
+        $contextMock = $this->createMock(Context::class);
         $contextMock->expects($this->once())->method('getResources')->willReturn($this->resourceMock);
 
-        $this->nonceResource = new \Magento\Integration\Model\ResourceModel\Oauth\Nonce($contextMock);
+        $this->nonceResource = new Nonce($contextMock);
     }
 
     public function testDeleteOldEntries()
@@ -47,7 +58,7 @@ class NonceTest extends \PHPUnit\Framework\TestCase
 
     public function testSelectByCompositeKey()
     {
-        $selectMock = $this->createMock(\Magento\Framework\DB\Select::class);
+        $selectMock = $this->createMock(Select::class);
         $selectMock->expects($this->once())->method('from')->willReturn($selectMock);
         $selectMock->expects($this->exactly(2))->method('where')->willReturn($selectMock);
         $this->connectionMock->expects($this->once())->method('select')->willReturn($selectMock);

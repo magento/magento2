@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Customer\Test\Unit\Block\Widget;
 
@@ -22,8 +23,8 @@ use Magento\Framework\Stdlib\DateTime\Timezone;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\View\Element\Html\Date;
 use Magento\Framework\View\Element\Template\Context;
-use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 use Zend_Cache_Backend_BlackHole;
 use Zend_Cache_Core;
 
@@ -191,13 +192,11 @@ class DobTest extends TestCase
     {
         $this->customerMetadata->expects($this->any())
             ->method('getAttributeMetadata')
-            ->will(
-                $this->throwException(
-                    new NoSuchEntityException(
-                        __(
-                            'No such entity with %fieldName = %fieldValue',
-                            ['fieldName' => 'field', 'fieldValue' => 'value']
-                        )
+            ->willThrowException(
+                new NoSuchEntityException(
+                    __(
+                        'No such entity with %fieldName = %fieldValue',
+                        ['fieldName' => 'field', 'fieldValue' => 'value']
                     )
                 )
             );
@@ -220,13 +219,11 @@ class DobTest extends TestCase
     {
         $this->customerMetadata->expects($this->any())
             ->method('getAttributeMetadata')
-            ->will(
-                $this->throwException(
-                    new NoSuchEntityException(
-                        __(
-                            'No such entity with %fieldName = %fieldValue',
-                            ['fieldName' => 'field', 'fieldValue' => 'value']
-                        )
+            ->willThrowException(
+                new NoSuchEntityException(
+                    __(
+                        'No such entity with %fieldName = %fieldValue',
+                        ['fieldName' => 'field', 'fieldValue' => 'value']
                     )
                 )
             );
@@ -455,13 +452,11 @@ class DobTest extends TestCase
     {
         $this->customerMetadata->expects($this->any())
             ->method('getAttributeMetadata')
-            ->will(
-                $this->throwException(
-                    new NoSuchEntityException(
-                        __(
-                            'No such entity with %fieldName = %fieldValue',
-                            ['fieldName' => 'field', 'fieldValue' => 'value']
-                        )
+            ->willThrowException(
+                new NoSuchEntityException(
+                    __(
+                        'No such entity with %fieldName = %fieldValue',
+                        ['fieldName' => 'field', 'fieldValue' => 'value']
                     )
                 )
             );
@@ -525,13 +520,11 @@ class DobTest extends TestCase
     {
         $this->customerMetadata->expects($this->any())
             ->method('getAttributeMetadata')
-            ->will(
-                $this->throwException(
-                    new NoSuchEntityException(
-                        __(
-                            'No such entity with %fieldName = %fieldValue',
-                            ['fieldName' => 'field', 'fieldValue' => 'value']
-                        )
+            ->willThrowException(
+                new NoSuchEntityException(
+                    __(
+                        'No such entity with %fieldName = %fieldValue',
+                        ['fieldName' => 'field', 'fieldValue' => 'value']
                     )
                 )
             );

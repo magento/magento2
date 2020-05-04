@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Ui\Test\Unit\DataProvider\Modifier;
 
@@ -10,11 +11,10 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Ui\DataProvider\Modifier\ModifierFactory;
 use Magento\Ui\DataProvider\Modifier\ModifierInterface;
 use Magento\Ui\DataProvider\Modifier\Pool;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-/**
- * Class PoolTest
- */
-class PoolTest extends \PHPUnit\Framework\TestCase
+class PoolTest extends TestCase
 {
     /**
      * @var ObjectManager
@@ -22,17 +22,17 @@ class PoolTest extends \PHPUnit\Framework\TestCase
     protected $objectManager;
 
     /**
-     * @var ModifierFactory|\PHPUnit\Framework\MockObject\MockObject
+     * @var ModifierFactory|MockObject
      */
     protected $factoryMock;
 
     /**
-     * @var ModifierInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var ModifierInterface|MockObject
      */
     protected $dataProviderMockOne;
 
     /**
-     * @var ModifierInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var ModifierInterface|MockObject
      */
     protected $dataProviderMockTwo;
 
@@ -99,13 +99,10 @@ class PoolTest extends \PHPUnit\Framework\TestCase
         $this->assertSame($expectedData, $model->getModifiersInstances());
     }
 
-    /**
-     */
     public function testWithSortOrderException()
     {
-        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+        $this->expectException('Magento\Framework\Exception\LocalizedException');
         $this->expectExceptionMessage('The parameter "sortOrder" is missing. Set the "sortOrder" and try again.');
-
         /** @var Pool $model */
         $model = $this->objectManager->getObject(Pool::class, [
             'factory' => $this->factoryMock,
@@ -119,13 +116,10 @@ class PoolTest extends \PHPUnit\Framework\TestCase
         $model->getModifiersInstances();
     }
 
-    /**
-     */
     public function testWithClassException()
     {
-        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+        $this->expectException('Magento\Framework\Exception\LocalizedException');
         $this->expectExceptionMessage('The parameter "class" is missing. Set the "class" and try again.');
-
         /** @var Pool $model */
         $model = $this->objectManager->getObject(Pool::class, [
             'factory' => $this->factoryMock,

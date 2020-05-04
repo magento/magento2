@@ -3,20 +3,30 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Config\Test\Unit\Block\System\Config\Form;
+
+use Magento\Backend\Model\Url;
+use Magento\Config\Block\System\Config\Form\Field;
+use Magento\Framework\Data\Form\Element\Text;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Store\Model\StoreManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test how class render field html element in Stores Configuration
  */
-class FieldTest extends \PHPUnit\Framework\TestCase
+class FieldTest extends TestCase
 {
     /**
-     * @var \Magento\Config\Block\System\Config\Form\Field
+     * @var Field
      */
     protected $_object;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $_elementMock;
 
@@ -26,25 +36,25 @@ class FieldTest extends \PHPUnit\Framework\TestCase
     protected $_testData;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $_storeManagerMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $_layoutMock;
 
     protected function setUp(): void
     {
-        $this->_storeManagerMock = $this->createMock(\Magento\Store\Model\StoreManager::class);
+        $this->_storeManagerMock = $this->createMock(StoreManager::class);
 
         $data = [
             'storeManager' => $this->_storeManagerMock,
-            'urlBuilder' => $this->createMock(\Magento\Backend\Model\Url::class),
+            'urlBuilder' => $this->createMock(Url::class),
         ];
-        $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->_object = $helper->getObject(\Magento\Config\Block\System\Config\Form\Field::class, $data);
+        $helper = new ObjectManager($this);
+        $this->_object = $helper->getObject(Field::class, $data);
 
         $this->_testData = [
             'htmlId' => 'test_field_id',
@@ -53,13 +63,9 @@ class FieldTest extends \PHPUnit\Framework\TestCase
             'elementHTML' => 'test_html',
         ];
 
-        $this->_elementMock = $this->createPartialMock(
-            \Magento\Framework\Data\Form\Element\Text::class,
-            [
-                'getHtmlId',
-                'getName',
+        $this->_elementMock = $this->getMockBuilder(Text::class)
+            ->addMethods([
                 'getLabel',
-                'getElementHtml',
                 'getComment',
                 'getHint',
                 'getScope',
@@ -69,10 +75,11 @@ class FieldTest extends \PHPUnit\Framework\TestCase
                 'getCanUseWebsiteValue',
                 'getCanUseDefaultValue',
                 'setDisabled',
-                'getTooltip',
-                'setReadonly'
-            ]
-        );
+                'getTooltip'
+            ])
+            ->onlyMethods(['getHtmlId', 'getName', 'getElementHtml', 'setReadonly'])
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->_elementMock->expects(
             $this->any()
@@ -130,7 +137,7 @@ class FieldTest extends \PHPUnit\Framework\TestCase
             $testComment .
             '</span></p></td>';
         $actual = $this->_object->render($this->_elementMock);
-        $this->assertContains($expected, $actual);
+        $this->assertStringContainsString($expected, $actual);
     }
 
     public function testRenderValueWithTooltipBlock()
@@ -143,7 +150,7 @@ class FieldTest extends \PHPUnit\Framework\TestCase
             $testTooltip .
             '</div></div></td>';
         $actual = $this->_object->render($this->_elementMock);
-        $this->assertContains($expected, $actual);
+        $this->assertStringContainsString($expected, $actual);
     }
 
     public function testRenderHint()
@@ -152,7 +159,7 @@ class FieldTest extends \PHPUnit\Framework\TestCase
         $this->_elementMock->expects($this->any())->method('getHint')->willReturn($testHint);
         $expected = '<td class=""><div class="hint"><div style="display: none;">' . $testHint . '</div></div>';
         $actual = $this->_object->render($this->_elementMock);
-        $this->assertContains($expected, $actual);
+        $this->assertStringContainsString($expected, $actual);
     }
 
     public function testRenderScopeLabel()
@@ -169,7 +176,7 @@ class FieldTest extends \PHPUnit\Framework\TestCase
             '</label></td><td class="value">test_html</td><td class=""></td></tr>';
         $actual = $this->_object->render($this->_elementMock);
 
-        $this->assertContains($expected, $actual);
+        $this->assertStringContainsString($expected, $actual);
     }
 
     public function testRenderInheritCheckbox()
@@ -193,6 +200,6 @@ class FieldTest extends \PHPUnit\Framework\TestCase
         $expected .= '<label for="' . $this->_testData['htmlId'] . '_inherit" class="inherit">Use Website</label>';
         $actual = $this->_object->render($this->_elementMock);
 
-        $this->assertContains($expected, $actual);
+        $this->assertStringContainsString($expected, $actual);
     }
 }

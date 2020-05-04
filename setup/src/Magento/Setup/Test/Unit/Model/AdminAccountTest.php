@@ -3,21 +3,25 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Setup\Test\Unit\Model;
 
 use Magento\Framework\DB\Adapter\Pdo\Mysql;
+use Magento\Framework\Encryption\EncryptorInterface;
 use Magento\Setup\Model\AdminAccount;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class AdminAccountTest extends \PHPUnit\Framework\TestCase
+class AdminAccountTest extends TestCase
 {
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|Mysql
+     * @var MockObject|Mysql
      */
     private $dbAdapter;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\Encryption\EncryptorInterface
+     * @var MockObject|EncryptorInterface
      */
     private $encryptor;
 
@@ -43,7 +47,7 @@ class AdminAccountTest extends \PHPUnit\Framework\TestCase
                 return $table;
             });
 
-        $this->encryptor = $this->getMockBuilder(\Magento\Framework\Encryption\EncryptorInterface::class)
+        $this->encryptor = $this->getMockBuilder(EncryptorInterface::class)
             ->getMockForAbstractClass();
 
         $data = [
@@ -116,7 +120,7 @@ class AdminAccountTest extends \PHPUnit\Framework\TestCase
 
         $this->dbAdapter->expects($this->once())
             ->method('insert')
-            ->with($this->equalTo('pre_admin_passwords'), $this->anything());
+            ->with('pre_admin_passwords', $this->anything());
 
         $this->adminAccount->save();
     }
@@ -239,10 +243,10 @@ class AdminAccountTest extends \PHPUnit\Framework\TestCase
         // insert only once (new user)
         $this->dbAdapter->expects($this->at(3))
             ->method('insert')
-            ->with($this->equalTo('pre_admin_user'), $this->anything());
+            ->with('pre_admin_user', $this->anything());
         $this->dbAdapter->expects($this->at(6))
             ->method('insert')
-            ->with($this->equalTo('pre_admin_passwords'), $this->anything());
+            ->with('pre_admin_passwords', $this->anything());
 
         // after inserting new user
         $this->dbAdapter->expects($this->once())->method('lastInsertId')->willReturn(1);
@@ -310,13 +314,10 @@ class AdminAccountTest extends \PHPUnit\Framework\TestCase
         $this->adminAccount->save();
     }
 
-    /**
-     */
     public function testSaveExceptionUsernameNotMatch()
     {
-        $this->expectException(\Exception::class);
+        $this->expectException('Exception');
         $this->expectExceptionMessage('An existing user has the given email but different username.');
-
         // existing user in db
         $existingUserData = [
             'email' => 'john.doe@test.com',
@@ -332,13 +333,10 @@ class AdminAccountTest extends \PHPUnit\Framework\TestCase
         $this->adminAccount->save();
     }
 
-    /**
-     */
     public function testSaveExceptionEmailNotMatch()
     {
-        $this->expectException(\Exception::class);
+        $this->expectException('Exception');
         $this->expectExceptionMessage('An existing user has the given username but different email.');
-
         $existingUserData = [
             'email' => 'another.email@test.com',
             'username' => 'admin',
@@ -353,26 +351,20 @@ class AdminAccountTest extends \PHPUnit\Framework\TestCase
         $this->adminAccount->save();
     }
 
-    /**
-     */
     public function testSaveExceptionSpecialAdminRoleNotFound()
     {
-        $this->expectException(\Exception::class);
+        $this->expectException('Exception');
         $this->expectExceptionMessage('No Administrators role was found, data fixture needs to be run');
-
         $this->dbAdapter->expects($this->exactly(3))->method('fetchRow')->willReturn([]);
         $this->dbAdapter->expects($this->once())->method('lastInsertId')->willReturn(1);
 
         $this->adminAccount->save();
     }
 
-    /**
-     */
     public function testSaveExceptionPasswordEmpty()
     {
-        $this->expectException(\Exception::class);
+        $this->expectException('Exception');
         $this->expectExceptionMessage('"Password" is required. Enter and try again.');
-
         // alternative data must be used for this test
         $data = [
             AdminAccount::KEY_FIRST_NAME => 'John',
@@ -415,13 +407,10 @@ class AdminAccountTest extends \PHPUnit\Framework\TestCase
         $adminAccount->save();
     }
 
-    /**
-     */
     public function testSaveExceptionPasswordAndUsernameEqual()
     {
-        $this->expectException(\Exception::class);
+        $this->expectException('Exception');
         $this->expectExceptionMessage('Password cannot be the same as the user name.');
-
         // alternative data must be used for this test
         $data = [
             AdminAccount::KEY_FIRST_NAME => 'John',

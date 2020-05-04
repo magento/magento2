@@ -3,19 +3,26 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Catalog\Test\Unit\Block\Product;
 
-class PriceTest extends \PHPUnit\Framework\TestCase
+use Magento\Catalog\Block\Product\Price;
+use Magento\Catalog\Model\Product;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\TestCase;
+
+class PriceTest extends TestCase
 {
     /**
-     * @var \Magento\Catalog\Block\Product\Price
+     * @var Price
      */
     protected $block;
 
     protected function setUp(): void
     {
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->block = $objectManager->getObject(\Magento\Catalog\Block\Product\Price::class);
+        $objectManager = new ObjectManager($this);
+        $this->block = $objectManager->getObject(Price::class);
     }
 
     protected function tearDown(): void
@@ -26,7 +33,7 @@ class PriceTest extends \PHPUnit\Framework\TestCase
     public function testGetIdentities()
     {
         $productTags = ['catalog_product_1'];
-        $product = $this->createMock(\Magento\Catalog\Model\Product::class);
+        $product = $this->createMock(Product::class);
         $product->expects($this->once())->method('getIdentities')->willReturn($productTags);
         $this->block->setProduct($product);
         $this->assertEquals($productTags, $this->block->getIdentities());

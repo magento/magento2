@@ -3,44 +3,55 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Paypal\Test\Unit\Observer;
 
-/**
- * Class HtmlTransactionIdObserverTest
- */
-class HtmlTransactionIdObserverTest extends \PHPUnit\Framework\TestCase
+use Magento\Framework\DataObject;
+use Magento\Framework\Event\Observer;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Payment\Model\MethodInterface;
+use Magento\Paypal\Helper\Data;
+use Magento\Paypal\Observer\HtmlTransactionIdObserver;
+use Magento\Sales\Model\Order;
+use Magento\Sales\Model\Order\Payment;
+use Magento\Sales\Model\Order\Payment\Transaction;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class HtmlTransactionIdObserverTest extends TestCase
 {
     /**
-     * @var \Magento\Paypal\Observer\HtmlTransactionIdObserver
+     * @var HtmlTransactionIdObserver
      */
     protected $_model;
 
     /**
-     * @var \Magento\Framework\Event\Observer
+     * @var Observer
      */
     protected $_observer;
 
     /**
-     * @var \Magento\Framework\DataObject
+     * @var DataObject
      */
     protected $_event;
 
     /**
-     * @var \Magento\Paypal\Helper\Data|\PHPUnit\Framework\MockObject\MockObject
+     * @var Data|MockObject
      */
     protected $paypalDataMock;
 
     protected function setUp(): void
     {
-        $this->_event = new \Magento\Framework\DataObject();
+        $this->_event = new DataObject();
 
-        $this->_observer = new \Magento\Framework\Event\Observer();
+        $this->_observer = new Observer();
         $this->_observer->setEvent($this->_event);
 
-        $this->paypalDataMock = $this->createPartialMock(\Magento\Paypal\Helper\Data::class, ['getHtmlTransactionId']);
-        $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $this->paypalDataMock = $this->createPartialMock(Data::class, ['getHtmlTransactionId']);
+        $objectManagerHelper = new ObjectManager($this);
         $this->_model = $objectManagerHelper->getObject(
-            \Magento\Paypal\Observer\HtmlTransactionIdObserver::class,
+            HtmlTransactionIdObserver::class,
             [
                 'paypalData' => $this->paypalDataMock,
             ]
@@ -49,23 +60,23 @@ class HtmlTransactionIdObserverTest extends \PHPUnit\Framework\TestCase
 
     public function testObserveHtmlTransactionId()
     {
-        $observerMock = $this->getMockBuilder(\Magento\Framework\Event\Observer::class)
+        $observerMock = $this->getMockBuilder(Observer::class)
             ->setMethods(['getDataObject'])
             ->disableOriginalConstructor()
             ->getMock();
-        $transactionMock = $this->getMockBuilder(\Magento\Sales\Model\Order\Payment\Transaction::class)
+        $transactionMock = $this->getMockBuilder(Transaction::class)
             ->setMethods(['getOrder', 'getTxnId', 'setData'])
             ->disableOriginalConstructor()
             ->getMock();
-        $orderMock = $this->getMockBuilder(\Magento\Sales\Model\Order::class)
+        $orderMock = $this->getMockBuilder(Order::class)
             ->setMethods(['getPayment'])
             ->disableOriginalConstructor()
             ->getMock();
-        $paymentMock = $this->getMockBuilder(\Magento\Sales\Model\Order\Payment::class)
+        $paymentMock = $this->getMockBuilder(Payment::class)
             ->setMethods(['getMethodInstance'])
             ->disableOriginalConstructor()
             ->getMock();
-        $methodInstanceMock = $this->getMockBuilder(\Magento\Payment\Model\MethodInterface::class)
+        $methodInstanceMock = $this->getMockBuilder(MethodInterface::class)
             ->setMethods(['getCode'])
             ->getMockForAbstractClass();
 

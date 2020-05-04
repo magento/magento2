@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\ConfigurableProduct\Test\Unit\Model\Plugin;
 
 use Magento\Catalog\Api\Data\ProductAttributeInterface;
@@ -65,7 +67,7 @@ class ProductRepositorySaveTest extends TestCase
     private $plugin;
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     protected function setUp(): void
     {
@@ -149,13 +151,11 @@ class ProductRepositorySaveTest extends TestCase
 
     /**
      * Test saving a configurable product with same set of attribute values
-     *
      */
     public function testBeforeSaveWithLinks()
     {
-        $this->expectException(\Magento\Framework\Exception\InputException::class);
+        $this->expectException('Magento\Framework\Exception\InputException');
         $this->expectExceptionMessage('Products "5" and "4" have the same set of attribute values.');
-
         $links = [4, 5];
         $this->product->expects(static::once())
             ->method('getTypeId')
@@ -176,7 +176,7 @@ class ProductRepositorySaveTest extends TestCase
 
         $product = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getData', '__wakeup'])
+            ->setMethods(['getData'])
             ->getMock();
 
         $this->productRepository->expects(static::exactly(2))
@@ -194,9 +194,8 @@ class ProductRepositorySaveTest extends TestCase
      */
     public function testBeforeSaveWithLinksWithMissingAttribute()
     {
-        $this->expectException(\Magento\Framework\Exception\InputException::class);
+        $this->expectException('Magento\Framework\Exception\InputException');
         $this->expectExceptionMessage('Product with id "4" does not contain required attribute "color".');
-
         $simpleProductId = 4;
         $links = [$simpleProductId, 5];
         $attributeCode = 'color';
@@ -230,7 +229,7 @@ class ProductRepositorySaveTest extends TestCase
 
         $product = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getData', '__wakeup'])
+            ->setMethods(['getData'])
             ->getMock();
 
         $this->productRepository->expects(static::once())
@@ -250,9 +249,8 @@ class ProductRepositorySaveTest extends TestCase
      */
     public function testBeforeSaveWithLinksWithDuplicateAttributes()
     {
-        $this->expectException(\Magento\Framework\Exception\InputException::class);
+        $this->expectException('Magento\Framework\Exception\InputException');
         $this->expectExceptionMessage('Products "5" and "4" have the same set of attribute values.');
-
         $links = [4, 5];
         $attributeCode = 'color';
         $attributeId = 23;
@@ -285,7 +283,7 @@ class ProductRepositorySaveTest extends TestCase
 
         $product = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getData', '__wakeup'])
+            ->setMethods(['getData'])
             ->getMock();
 
         $this->productRepository->expects(static::exactly(2))

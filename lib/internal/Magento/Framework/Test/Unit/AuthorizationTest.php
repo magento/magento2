@@ -3,32 +3,40 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 /**
  * Test class for \Magento\Framework\AuthorizationInterface.
  */
 namespace Magento\Framework\Test\Unit;
 
-class AuthorizationTest extends \PHPUnit\Framework\TestCase
+use Magento\Framework\Authorization;
+use Magento\Framework\Authorization\PolicyInterface;
+use Magento\Framework\Authorization\RoleLocatorInterface;
+use Magento\Framework\AuthorizationInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class AuthorizationTest extends TestCase
 {
     /**
      * Authorization model
      *
-     * @var \Magento\Framework\AuthorizationInterface
+     * @var AuthorizationInterface
      */
     protected $_model;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $_policyMock;
 
     protected function setUp(): void
     {
-        $this->_policyMock = $this->createMock(\Magento\Framework\Authorization\PolicyInterface::class);
-        $roleLocatorMock = $this->createMock(\Magento\Framework\Authorization\RoleLocatorInterface::class);
+        $this->_policyMock = $this->createMock(PolicyInterface::class);
+        $roleLocatorMock = $this->createMock(RoleLocatorInterface::class);
         $roleLocatorMock->expects($this->any())->method('getAclRoleId')->willReturn('U1');
-        $this->_model = new \Magento\Framework\Authorization($this->_policyMock, $roleLocatorMock);
+        $this->_model = new Authorization($this->_policyMock, $roleLocatorMock);
     }
 
     protected function tearDown(): void

@@ -3,15 +3,18 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Elasticsearch\Test\Unit\Model\Adapter\Index\Config;
 
 use Magento\Elasticsearch\Model\Adapter\Index\Config\Converter;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Unit test for Magento\Elasticsearch\Model\Adapter\Index\Config\Converter
  */
-class ConverterTest extends \PHPUnit\Framework\TestCase
+class ConverterTest extends TestCase
 {
     /**
      * @var Converter
@@ -25,7 +28,7 @@ class ConverterTest extends \PHPUnit\Framework\TestCase
     {
         $objectManager = new ObjectManagerHelper($this);
         $this->converter = $objectManager->getObject(
-            \Magento\Elasticsearch\Model\Adapter\Index\Config\Converter::class
+            Converter::class
         );
     }
 
@@ -39,7 +42,6 @@ class ConverterTest extends \PHPUnit\Framework\TestCase
         $dom->loadXML(file_get_contents($xmlFile));
         $result = $this->converter->convert($dom);
 
-        $this->assertIsArray($result
-        );
+        $this->assertIsArray($result);
     }
 }

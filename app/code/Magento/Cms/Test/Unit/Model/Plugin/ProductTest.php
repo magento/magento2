@@ -11,7 +11,7 @@ use Magento\Catalog\Model\Product as CatalogProduct;
 use Magento\Cms\Model\Page;
 use Magento\Cms\Model\Plugin\Product;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use PHPUnit\Framework\MockObject\MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**

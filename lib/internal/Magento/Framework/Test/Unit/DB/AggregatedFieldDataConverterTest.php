@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Framework\Test\Unit\DB;
 
@@ -12,13 +13,17 @@ use Magento\Framework\DB\FieldDataConverter;
 use Magento\Framework\DB\FieldDataConverterFactory;
 use Magento\Framework\DB\FieldToConvert;
 use Magento\Framework\DB\Select\QueryModifierInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class AggregatedFieldDataConverterTest extends \PHPUnit\Framework\TestCase
+class AggregatedFieldDataConverterTest extends TestCase
 {
     public function testConvert()
     {
-        $connection = $this->getMockBuilder(AdapterInterface::class)->getMock();
-        $queryModifier = $this->getMockBuilder(QueryModifierInterface::class)->getMock();
+        $connection = $this->getMockBuilder(AdapterInterface::class)
+            ->getMock();
+        $queryModifier = $this->getMockBuilder(QueryModifierInterface::class)
+            ->getMock();
         $fields = [
             new FieldToConvert(
                 'ClassOne',
@@ -52,7 +57,7 @@ class AggregatedFieldDataConverterTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param array $returnValuesMap
-     * @return \PHPUnit\Framework\MockObject\MockObject
+     * @return MockObject
      */
     private function createFieldConverterFactory(array $returnValuesMap)
     {
@@ -69,14 +74,14 @@ class AggregatedFieldDataConverterTest extends \PHPUnit\Framework\TestCase
      * Assert that correct methods with correct arguments are called during delegation of the action
      *
      * @param $connection
-     * @param \PHPUnit\Framework\MockObject\MockObject $fieldConverterOne
-     * @param \PHPUnit\Framework\MockObject\MockObject $fieldConverterTwo
+     * @param MockObject $fieldConverterOne
+     * @param MockObject $fieldConverterTwo
      * @param $queryModifier
      */
     private function assertCallsDelegation(
         $connection,
-        \PHPUnit\Framework\MockObject\MockObject $fieldConverterOne,
-        \PHPUnit\Framework\MockObject\MockObject $fieldConverterTwo,
+        MockObject $fieldConverterOne,
+        MockObject $fieldConverterTwo,
         $queryModifier
     ) {
         $fieldConverterOne->expects($this->once())

@@ -9,7 +9,6 @@ namespace Magento\Framework\Lock\Test\Unit\Backend;
 
 use Magento\Framework\Lock\Backend\Zookeeper as ZookeeperProvider;
 use PHPUnit\Framework\TestCase;
-use PHPUnit\Framework\MockObject\MockObject;
 
 class ZookeeperTest extends TestCase
 {
@@ -43,9 +42,8 @@ class ZookeeperTest extends TestCase
      */
     public function testConstructionWithPathException()
     {
-        $this->expectException(\Magento\Framework\Exception\RuntimeException::class);
+        $this->expectException('Magento\Framework\Exception\RuntimeException');
         $this->expectExceptionMessage('The path needs to be a non-empty string.');
-
         $this->zookeeperProvider = new ZookeeperProvider($this->host, '');
     }
 
@@ -54,9 +52,8 @@ class ZookeeperTest extends TestCase
      */
     public function testConstructionWithHostException()
     {
-        $this->expectException(\Magento\Framework\Exception\RuntimeException::class);
+        $this->expectException('Magento\Framework\Exception\RuntimeException');
         $this->expectExceptionMessage('The host needs to be a non-empty string.');
-
         $this->zookeeperProvider = new ZookeeperProvider('', $this->path);
     }
 

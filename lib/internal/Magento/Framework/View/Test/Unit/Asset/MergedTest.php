@@ -3,49 +3,51 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\View\Test\Unit\Asset;
 
+use Magento\Framework\App\View\Deployment\Version\StorageInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\View\Asset\File;
-use Magento\Framework\View\Asset\Merged;
-use Psr\Log\LoggerInterface;
-use Magento\Framework\View\Asset\Repository as AssetRepository;
 use Magento\Framework\View\Asset\MergeableInterface;
+use Magento\Framework\View\Asset\Merged;
 use Magento\Framework\View\Asset\MergeStrategyInterface;
-use Magento\Framework\App\View\Deployment\Version\StorageInterface;
+use Magento\Framework\View\Asset\Remote;
+use Magento\Framework\View\Asset\Repository as AssetRepository;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface;
 
-/**
- * Class MergedTest
- */
-class MergedTest extends \PHPUnit\Framework\TestCase
+class MergedTest extends TestCase
 {
     /**
-     * @var LoggerInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var LoggerInterface|MockObject
      */
     private $logger;
 
     /**
-     * @var MergeStrategyInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var MergeStrategyInterface|MockObject
      */
     private $mergeStrategy;
 
     /**
-     * @var MergeableInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var MergeableInterface|MockObject
      */
     private $assetJsOne;
 
     /**
-     * @var MergeableInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var MergeableInterface|MockObject
      */
     private $assetJsTwo;
 
     /**
-     * @var AssetRepository|\PHPUnit\Framework\MockObject\MockObject
+     * @var AssetRepository|MockObject
      */
     private $assetRepo;
 
     /**
-     * @var StorageInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var StorageInterface|MockObject
      */
     private $versionStorage;
 
@@ -67,22 +69,19 @@ class MergedTest extends \PHPUnit\Framework\TestCase
             ->method('getPath')
             ->willReturn('script_two.js');
 
-        $this->logger = $this->getMockForAbstractClass(LoggerInterface::class);
-        $this->mergeStrategy = $this->getMockForAbstractClass(MergeStrategyInterface::class);
+        $this->logger = $this->createMock(LoggerInterface::class);
+        $this->mergeStrategy = $this->createMock(MergeStrategyInterface::class);
         $this->assetRepo = $this->getMockBuilder(AssetRepository::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->versionStorage = $this->getMockForAbstractClass(StorageInterface::class);
+        $this->versionStorage = $this->createMock(StorageInterface::class);
     }
 
-    /**
-     */
     public function testConstructorNothingToMerge()
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException('InvalidArgumentException');
         $this->expectExceptionMessage('At least one asset has to be passed for merging.');
-
-        new \Magento\Framework\View\Asset\Merged(
+        new Merged(
             $this->logger,
             $this->mergeStrategy,
             $this->assetRepo,
@@ -91,14 +90,11 @@ class MergedTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    /**
-     */
     public function testConstructorRequireMergeInterface()
     {
-        $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage('Asset has to implement \\Magento\\Framework\\View\\Asset\\MergeableInterface.');
-
-        $assetUrl = new \Magento\Framework\View\Asset\Remote('http://example.com/style.css', 'css');
+        $this->expectException('InvalidArgumentException');
+        $this->expectExceptionMessage('Asset has to implement \Magento\Framework\View\Asset\MergeableInterface.');
+        $assetUrl = new Remote('http://example.com/style.css', 'css');
 
         (new ObjectManager($this))->getObject(Merged::class, [
             'logger' => $this->logger,
@@ -109,13 +105,10 @@ class MergedTest extends \PHPUnit\Framework\TestCase
         ]);
     }
 
-    /**
-     */
     public function testConstructorIncompatibleContentTypes()
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException('InvalidArgumentException');
         $this->expectExceptionMessage('Content type \'css\' cannot be merged with \'js\'.');
-
         $assetCss = $this->getMockForAbstractClass(MergeableInterface::class);
         $assetCss->expects($this->any())
             ->method('getContentType')
@@ -145,7 +138,7 @@ class MergedTest extends \PHPUnit\Framework\TestCase
             'versionStorage' => $this->versionStorage,
         ]);
 
-        $mergedAsset = $this->createMock(\Magento\Framework\View\Asset\File::class);
+        $mergedAsset = $this->createMock(File::class);
         $this->mergeStrategy
             ->expects($this->once())
             ->method('merge')

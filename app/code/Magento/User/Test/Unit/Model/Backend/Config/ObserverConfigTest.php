@@ -8,16 +8,18 @@ declare(strict_types=1);
 
 namespace Magento\User\Test\Unit\Model\Backend\Config;
 
-use Magento\User\Model\Backend\Config\ObserverConfig;
 use Magento\Backend\App\ConfigInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\User\Model\Backend\Config\ObserverConfig;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Unit Test for \Magento\User\Model\Backend\Config\ObserverConfig class
  *
  * Class \Magento\User\Test\Unit\Model\Backend\Config\ObserverConfigTest
  */
-class ObserverConfigTest extends \PHPUnit\Framework\TestCase
+class ObserverConfigTest extends TestCase
 {
     /**
      * Config path for lockout threshold
@@ -43,7 +45,7 @@ class ObserverConfigTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|ConfigInterface
+     * @var MockObject|ConfigInterface
      */
     private $backendConfigMock;
 
@@ -52,7 +54,7 @@ class ObserverConfigTest extends \PHPUnit\Framework\TestCase
      */
     protected function setUp(): void
     {
-        $this->backendConfigMock = $this->getMockForAbstractClass(ConfigInterface::class);
+        $this->backendConfigMock = $this->createMock(ConfigInterface::class);
 
         $objectManager = new ObjectManagerHelper($this);
         $this->model = $objectManager->getObject(
@@ -71,7 +73,7 @@ class ObserverConfigTest extends \PHPUnit\Framework\TestCase
         $this->backendConfigMock->expects(self::any())->method('getValue')
             ->with(self::XML_ADMIN_SECURITY_PASSWORD_LIFETIME)
             ->willReturn('0');
-        $this->assertFalse($this->model->_isLatestPasswordExpired([]));
+        $this->assertEquals(false, $this->model->_isLatestPasswordExpired([]));
     }
 
     /**
@@ -82,7 +84,7 @@ class ObserverConfigTest extends \PHPUnit\Framework\TestCase
         $this->backendConfigMock->expects(self::any())->method('getValue')
             ->with(self::XML_ADMIN_SECURITY_PASSWORD_LIFETIME)
             ->willReturn('2');
-        $this->assertTrue($this->model->_isLatestPasswordExpired(['last_updated' => 1571428052]));
+        $this->assertEquals(true, $this->model->_isLatestPasswordExpired(['last_updated' => 1571428052]));
     }
 
     /**
@@ -104,7 +106,7 @@ class ObserverConfigTest extends \PHPUnit\Framework\TestCase
         $this->backendConfigMock->expects(self::any())->method('getValue')
             ->with(self::XML_ADMIN_SECURITY_PASSWORD_IS_FORCED)
             ->willReturn('1');
-        $this->assertTrue($this->model->isPasswordChangeForced());
+        $this->assertEquals(true, $this->model->isPasswordChangeForced());
     }
 
     /**
@@ -115,7 +117,7 @@ class ObserverConfigTest extends \PHPUnit\Framework\TestCase
         $this->backendConfigMock->expects(self::any())->method('getValue')
             ->with(self::XML_ADMIN_SECURITY_PASSWORD_IS_FORCED)
             ->willReturn('0');
-        $this->assertFalse($this->model->isPasswordChangeForced());
+        $this->assertEquals(false, $this->model->isPasswordChangeForced());
     }
 
     /**

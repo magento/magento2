@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Tax\Test\Unit\Block\Grid\Renderer;
 
 use Magento\Backend\Block\Context;
@@ -10,13 +12,14 @@ use Magento\Framework\DataObject;
 use Magento\Framework\Escaper;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Tax\Block\Grid\Renderer\Codes;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test for Tax Rates codes column of Tax Rules grid.
  *
  * Class CodesTest
  */
-class CodesTest extends \PHPUnit\Framework\TestCase
+class CodesTest extends TestCase
 {
     /**
      * @var Codes
@@ -33,7 +36,7 @@ class CodesTest extends \PHPUnit\Framework\TestCase
             ->method('escapeHtml')
             ->willReturnCallback(
                 function ($str) {
-                    return 'ESCAPED:' .$str;
+                    return 'ESCAPED:' . $str;
                 }
             );
         $context = $this->getMockBuilder(Context::class)

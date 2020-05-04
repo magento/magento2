@@ -3,45 +3,53 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\CatalogRule\Test\Unit\Plugin\Indexer\Product\Save;
 
+use Magento\Catalog\Model\ResourceModel\Product;
+use Magento\CatalogRule\Model\Indexer\Product\ProductRuleProcessor;
+use Magento\CatalogRule\Plugin\Indexer\Product\Save\ApplyRules;
+use Magento\Framework\Model\AbstractModel;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class ApplyRulesTest extends \PHPUnit\Framework\TestCase
+class ApplyRulesTest extends TestCase
 {
     /**
-     * @var \Magento\CatalogRule\Model\Indexer\Product\ProductRuleProcessor|\PHPUnit\Framework\MockObject\MockObject
+     * @var ProductRuleProcessor|MockObject
      */
     private $productRuleProcessor;
 
     /**
-     * @var \Magento\Catalog\Model\ResourceModel\Product|\PHPUnit\Framework\MockObject\MockObject
+     * @var Product|MockObject
      */
     private $subject;
 
     /**
-     * @var \Magento\Framework\Model\AbstractModel|\PHPUnit\Framework\MockObject\MockObject
+     * @var AbstractModel|MockObject
      */
     private $model;
 
     /**
-     * @var \Magento\CatalogRule\Plugin\Indexer\Product\Save\ApplyRules
+     * @var ApplyRules
      */
     private $plugin;
 
     protected function setUp(): void
     {
         $this->productRuleProcessor = $this
-            ->getMockBuilder(\Magento\CatalogRule\Model\Indexer\Product\ProductRuleProcessor::class)
+            ->getMockBuilder(ProductRuleProcessor::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->subject = $this->getMockBuilder(\Magento\Catalog\Model\ResourceModel\Product::class)
+        $this->subject = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->model = $this->getMockForAbstractClass(
-            \Magento\Framework\Model\AbstractModel::class,
+            AbstractModel::class,
             [],
             '',
             false,
@@ -51,7 +59,7 @@ class ApplyRulesTest extends \PHPUnit\Framework\TestCase
         );
 
         $this->plugin = (new ObjectManager($this))->getObject(
-            \Magento\CatalogRule\Plugin\Indexer\Product\Save\ApplyRules::class,
+            ApplyRules::class,
             [
                 'productRuleProcessor' => $this->productRuleProcessor,
             ]

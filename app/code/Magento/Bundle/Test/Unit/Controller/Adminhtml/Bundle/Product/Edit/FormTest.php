@@ -3,49 +3,62 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Bundle\Test\Unit\Controller\Adminhtml\Bundle\Product\Edit;
 
+use Magento\Backend\App\Action\Context;
+use Magento\Bundle\Block\Adminhtml\Catalog\Product\Edit\Tab\Bundle;
+use Magento\Bundle\Controller\Adminhtml\Bundle\Product\Edit\Form;
+use Magento\Catalog\Controller\Adminhtml\Product\Builder;
+use Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper;
+use Magento\Catalog\Model\Product;
+use Magento\Framework\App\RequestInterface;
+use Magento\Framework\App\ResponseInterface;
+use Magento\Framework\App\ViewInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Framework\View\LayoutInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class FormTest extends \PHPUnit\Framework\TestCase
+class FormTest extends TestCase
 {
-    /** @var \Magento\Bundle\Controller\Adminhtml\Bundle\Product\Edit\Form */
+    /** @var Form */
     protected $controller;
 
     /** @var ObjectManagerHelper */
     protected $objectManagerHelper;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\App\RequestInterface
+     * @var MockObject|RequestInterface
      */
     protected $request;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\App\ResponseInterface
+     * @var MockObject|ResponseInterface
      */
     protected $response;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Catalog\Controller\Adminhtml\Product\Builder
+     * @var MockObject|Builder
      */
     protected $productBuilder;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper
+     * @var MockObject|Helper
      */
     protected $initializationHelper;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\App\ViewInterface
+     * @var MockObject|ViewInterface
      */
     protected $view;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Backend\App\Action\Context
+     * @var MockObject|Context
      */
     protected $context;
 
@@ -53,28 +66,25 @@ class FormTest extends \PHPUnit\Framework\TestCase
     {
         $this->objectManagerHelper = new ObjectManagerHelper($this);
 
-        $this->context = $this->getMockBuilder(\Magento\Backend\App\Action\Context::class)
+        $this->context = $this->getMockBuilder(Context::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->request = $this->createMock(\Magento\Framework\App\RequestInterface::class);
-        $this->response = $this->createPartialMock(
-            \Magento\Framework\App\ResponseInterface::class,
-            [
-                'sendResponse',
-                'setBody'
-            ]
-        );
-        $this->productBuilder = $this->getMockBuilder(\Magento\Catalog\Controller\Adminhtml\Product\Builder::class)
+        $this->request = $this->createMock(RequestInterface::class);
+        $this->response = $this->getMockBuilder(ResponseInterface::class)
+            ->addMethods(['setBody'])
+            ->onlyMethods(['sendResponse'])
+            ->getMock();
+        $this->productBuilder = $this->getMockBuilder(Builder::class)
             ->disableOriginalConstructor()
             ->setMethods(['build'])
             ->getMock();
         $this->initializationHelper = $this->getMockBuilder(
-            \Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper::class
+            Helper::class
         )
             ->disableOriginalConstructor()
             ->setMethods(['initialize'])
             ->getMock();
-        $this->view = $this->createMock(\Magento\Framework\App\ViewInterface::class);
+        $this->view = $this->createMock(ViewInterface::class);
 
         $this->context->expects($this->any())
             ->method('getRequest')
@@ -87,7 +97,7 @@ class FormTest extends \PHPUnit\Framework\TestCase
             ->willReturn($this->view);
 
         $this->controller = $this->objectManagerHelper->getObject(
-            \Magento\Bundle\Controller\Adminhtml\Bundle\Product\Edit\Form::class,
+            Form::class,
             [
                 'context' => $this->context,
                 'productBuilder' => $this->productBuilder,
@@ -98,12 +108,12 @@ class FormTest extends \PHPUnit\Framework\TestCase
 
     public function testExecute()
     {
-        $product = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
+        $product = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
             ->setMethods(['_wakeup', 'getId'])
             ->getMock();
-        $layout = $this->createMock(\Magento\Framework\View\LayoutInterface::class);
-        $block = $this->getMockBuilder(\Magento\Bundle\Block\Adminhtml\Catalog\Product\Edit\Tab\Bundle::class)
+        $layout = $this->createMock(LayoutInterface::class);
+        $block = $this->getMockBuilder(Bundle::class)
             ->disableOriginalConstructor()
             ->setMethods(['setIndex', 'toHtml'])
             ->getMock();

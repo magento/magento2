@@ -3,77 +3,93 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Sales\Test\Unit\Model\Order\Payment;
+
+use Magento\Framework\Api\Filter;
+use Magento\Framework\Api\Search\FilterGroup;
+use Magento\Framework\Api\SearchCriteria;
+use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
+use Magento\Framework\Exception\InputException;
+use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Sales\Api\Data\OrderPaymentSearchResultInterfaceFactory;
+use Magento\Sales\Model\Order\Payment\Repository;
+use Magento\Sales\Model\ResourceModel\Metadata;
+use Magento\Sales\Model\ResourceModel\Order\Payment;
+use Magento\Sales\Model\ResourceModel\Order\Payment\Collection;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class RepositoryTest extends \PHPUnit\Framework\TestCase
+class RepositoryTest extends TestCase
 {
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $searchResultFactory;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $searchCriteria;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $collection;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $metaData;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $filterGroup;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $filter;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $paymentResource;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     private $collectionProcessor;
 
     /**
-     * @var \Magento\Sales\Model\Order\Payment\Repository
+     * @var Repository
      */
     protected $repository;
 
     protected function setUp(): void
     {
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->metaData = $this->createMock(\Magento\Sales\Model\ResourceModel\Metadata::class);
+        $objectManager = new ObjectManager($this);
+        $this->metaData = $this->createMock(Metadata::class);
         $this->searchResultFactory = $this->createPartialMock(
-            \Magento\Sales\Api\Data\OrderPaymentSearchResultInterfaceFactory::class,
+            OrderPaymentSearchResultInterfaceFactory::class,
             ['create']
         );
-        $this->searchCriteria = $this->createMock(\Magento\Framework\Api\SearchCriteria::class);
-        $this->collection = $this->createMock(\Magento\Sales\Model\ResourceModel\Order\Payment\Collection::class);
-        $this->paymentResource = $this->createMock(\Magento\Sales\Model\ResourceModel\Order\Payment::class);
-        $this->filterGroup = $this->createMock(\Magento\Framework\Api\Search\FilterGroup::class);
-        $this->filter = $this->createMock(\Magento\Framework\Api\Filter::class);
+        $this->searchCriteria = $this->createMock(SearchCriteria::class);
+        $this->collection = $this->createMock(Collection::class);
+        $this->paymentResource = $this->createMock(Payment::class);
+        $this->filterGroup = $this->createMock(FilterGroup::class);
+        $this->filter = $this->createMock(Filter::class);
         $this->collectionProcessor = $this->createMock(
-            \Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface::class
+            CollectionProcessorInterface::class
         );
         $this->repository = $objectManager->getObject(
-            \Magento\Sales\Model\Order\Payment\Repository::class,
+            Repository::class,
             [
                 'searchResultFactory' => $this->searchResultFactory,
                 'metaData' => $this->metaData,
@@ -117,24 +133,22 @@ class RepositoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @throws \Magento\Framework\Exception\InputException
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @throws InputException
+     * @throws NoSuchEntityException
      */
     public function testGetException()
     {
-        $this->expectException(\Magento\Framework\Exception\InputException::class);
-
+        $this->expectException('Magento\Framework\Exception\InputException');
         $this->repository->get(null);
     }
 
     /**
-     * @throws \Magento\Framework\Exception\InputException
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @throws InputException
+     * @throws NoSuchEntityException
      */
     public function testGetNoSuchEntity()
     {
-        $this->expectException(\Magento\Framework\Exception\NoSuchEntityException::class);
-
+        $this->expectException('Magento\Framework\Exception\NoSuchEntityException');
         $paymentId = 1;
         $payment = $this->mockPayment(null);
         $payment->expects($this->any())->method('load')->with($paymentId)->willReturn($payment);
@@ -153,7 +167,7 @@ class RepositoryTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param bool $id
-     * @return \PHPUnit\Framework\MockObject\MockObject
+     * @return MockObject
      */
     protected function mockPayment($id = false)
     {

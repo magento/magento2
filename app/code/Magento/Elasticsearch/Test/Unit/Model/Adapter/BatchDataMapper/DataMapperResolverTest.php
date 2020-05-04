@@ -3,14 +3,18 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Elasticsearch\Test\Unit\Model\Adapter\BatchDataMapper;
 
 use Magento\Elasticsearch\Model\Adapter\BatchDataMapper\DataMapperFactory;
+use Magento\Elasticsearch\Model\Adapter\BatchDataMapper\DataMapperResolver;
 use Magento\Elasticsearch\Model\Adapter\BatchDataMapperInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
-use Magento\Elasticsearch\Model\Adapter\BatchDataMapper\DataMapperResolver;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class DataMapperResolverTest extends \PHPUnit\Framework\TestCase
+class DataMapperResolverTest extends TestCase
 {
     /**
      * @var DataMapperResolver
@@ -18,12 +22,12 @@ class DataMapperResolverTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var DataMapperFactory|\PHPUnit\Framework\MockObject\MockObject
+     * @var DataMapperFactory|MockObject
      */
     private $dataMapperFactoryMock;
 
     /**
-     * @var BatchDataMapperInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var BatchDataMapperInterface|MockObject
      */
     private $dataMapperEntity;
 
@@ -39,7 +43,7 @@ class DataMapperResolverTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $this->model = (new ObjectManagerHelper($this))->getObject(
-            \Magento\Elasticsearch\Model\Adapter\BatchDataMapper\DataMapperResolver::class,
+            DataMapperResolver::class,
             [
                 'dataMapperFactory' => $this->dataMapperFactoryMock
             ]

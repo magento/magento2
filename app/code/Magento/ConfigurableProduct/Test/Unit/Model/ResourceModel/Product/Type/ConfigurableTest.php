@@ -3,25 +3,29 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\ConfigurableProduct\Test\Unit\Model\ResourceModel\Product\Type;
 
-use Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable;
-use Magento\Framework\App\ScopeResolverInterface;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
-use Magento\CatalogInventory\Api\StockRegistryInterface;
-use Magento\Framework\DB\Adapter\AdapterInterface;
-use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
 use Magento\Catalog\Model\Product;
+use Magento\Catalog\Model\ResourceModel\Product\Relation as ProductRelation;
 use Magento\ConfigurableProduct\Model\AttributeOptionProvider;
 use Magento\ConfigurableProduct\Model\ResourceModel\Attribute\OptionProvider;
-use Magento\Framework\Model\ResourceModel\Db\Context;
+use Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable;
+use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
 use Magento\Framework\App\ResourceConnection;
-use Magento\Catalog\Model\ResourceModel\Product\Relation as ProductRelation;
+use Magento\Framework\App\ScopeResolverInterface;
+use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Framework\DB\Select;
+use Magento\Framework\Model\ResourceModel\Db\Context;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ConfigurableTest extends \PHPUnit\Framework\TestCase
+class ConfigurableTest extends TestCase
 {
     /**
      * @var Configurable
@@ -34,44 +38,39 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
     private $objectManagerHelper;
 
     /**
-     * @var ResourceConnection|\PHPUnit\Framework\MockObject\MockObject
+     * @var ResourceConnection|MockObject
      */
     private $resource;
 
     /**
-     * @var ProductRelation|\PHPUnit\Framework\MockObject\MockObject
+     * @var ProductRelation|MockObject
      */
     private $relation;
 
     /**
-     * @var AdapterInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var AdapterInterface|MockObject
      */
     private $connectionMock;
 
     /**
-     * @var AbstractAttribute|\PHPUnit\Framework\MockObject\MockObject
+     * @var AbstractAttribute|MockObject
      */
     private $abstractAttribute;
 
     /**
-     * @var Product|\PHPUnit\Framework\MockObject\MockObject
+     * @var Product|MockObject
      */
     private $product;
 
     /**
-     * @var AttributeOptionProvider|\PHPUnit\Framework\MockObject\MockObject
+     * @var AttributeOptionProvider|MockObject
      */
     private $attributeOptionProvider;
 
     /**
-     * @var OptionProvider|\PHPUnit\Framework\MockObject\MockObject
+     * @var OptionProvider|MockObject
      */
     private $optionProvider;
-
-    /**
-     * @var ScopeResolverInterface|\PHPUnit\Framework\MockObject\MockObject
-     */
-    private $scopeResolver;
 
     protected function setUp(): void
     {
@@ -87,10 +86,7 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
         $this->relation = $this->getMockBuilder(ProductRelation::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->stockRegistryMock = $this->getMockBuilder(StockRegistryInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $this->scopeResolver = $this->getMockBuilder(ScopeResolverInterface::class)
+        $scopeResolver = $this->getMockBuilder(ScopeResolverInterface::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $this->abstractAttribute = $this->getMockBuilder(AbstractAttribute::class)
@@ -98,7 +94,7 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $this->product = $this->getMockBuilder(Product::class)
-            ->setMethods(['__sleep', '__wakeup', 'getData'])
+            ->setMethods(['__sleep', 'getData'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->attributeOptionProvider = $this->getMockBuilder(AttributeOptionProvider::class)
@@ -126,7 +122,7 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
             Configurable::class,
             [
                 'catalogProductRelation' => $this->relation,
-                'scopeResolver' => $this->scopeResolver,
+                'scopeResolver' => $scopeResolver,
                 'attributeOptionProvider' => $this->attributeOptionProvider,
                 'optionProvider' => $this->optionProvider,
                 'context' => $context
@@ -145,7 +141,7 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
         $this->resource->expects($this->any())->method('getConnection')->willReturn($this->connectionMock);
         $this->resource->expects($this->any())->method('getTableName')->willReturn('table name');
 
-        $select = $this->getMockBuilder(\Magento\Framework\DB\Select::class)
+        $select = $this->getMockBuilder(Select::class)
             ->setMethods(['from', 'where'])
             ->disableOriginalConstructor()
             ->getMock();

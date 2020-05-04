@@ -3,12 +3,17 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\App\Test\Unit\Config\Initial;
 
-class ConverterTest extends \PHPUnit\Framework\TestCase
+use Magento\Framework\App\Config\Initial\Converter;
+use PHPUnit\Framework\TestCase;
+
+class ConverterTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\App\Config\Initial\Converter
+     * @var Converter
      */
     protected $_model;
 
@@ -19,7 +24,7 @@ class ConverterTest extends \PHPUnit\Framework\TestCase
             'stores' => '/config/stores',
             'websites' => '/config/websites',
         ];
-        $this->_model = new \Magento\Framework\App\Config\Initial\Converter($nodeMap);
+        $this->_model = new Converter($nodeMap);
     }
 
     public function testConvert()

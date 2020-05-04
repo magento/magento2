@@ -3,11 +3,17 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Customer\Test\Unit\Model\ResourceModel\Db\VersionControl;
 
 use Magento\Customer\Model\ResourceModel\Db\VersionControl\AddressSnapshot;
+use Magento\Framework\DataObject;
+use Magento\Framework\Model\ResourceModel\Db\VersionControl\Metadata;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class AddressSnapshotTest extends \PHPUnit\Framework\TestCase
+class AddressSnapshotTest extends TestCase
 {
     /**
      * @var AddressSnapshot
@@ -15,15 +21,16 @@ class AddressSnapshotTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var \Magento\Framework\Model\ResourceModel\Db\VersionControl\Metadata|\PHPUnit\Framework\MockObject\MockObject
+     * @var Metadata|MockObject
      */
     private $metadataMock;
 
     protected function setUp(): void
     {
         $this->metadataMock = $this->getMockBuilder(
-            \Magento\Framework\Model\ResourceModel\Db\VersionControl\Metadata::class
-        )->disableOriginalConstructor()->getMock();
+            Metadata::class
+        )->disableOriginalConstructor()
+            ->getMock();
 
         $this->model = new AddressSnapshot(
             $this->metadataMock
@@ -45,7 +52,7 @@ class AddressSnapshotTest extends \PHPUnit\Framework\TestCase
     ) {
         $entityId = 1;
 
-        $dataObjectMock = $this->getMockBuilder(\Magento\Framework\DataObject::class)
+        $dataObjectMock = $this->getMockBuilder(DataObject::class)
             ->disableOriginalConstructor()
             ->setMethods([
                 'getId',
@@ -102,7 +109,7 @@ class AddressSnapshotTest extends \PHPUnit\Framework\TestCase
 
     public function testIsModifiedBypass()
     {
-        $dataObjectMock = $this->getMockBuilder(\Magento\Framework\DataObject::class)
+        $dataObjectMock = $this->getMockBuilder(DataObject::class)
             ->disableOriginalConstructor()
             ->setMethods([
                 'getId',

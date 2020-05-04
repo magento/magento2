@@ -3,22 +3,23 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\Mview\Test\Unit;
 
 use Magento\Framework\Mview\ActionFactory;
 use Magento\Framework\Mview\ActionInterface;
 use Magento\Framework\Mview\ConfigInterface;
-use \Magento\Framework\Mview\View;
+use Magento\Framework\Mview\View;
 use Magento\Framework\Mview\View\Changelog;
 use Magento\Framework\Mview\View\StateInterface;
 use Magento\Framework\Mview\View\Subscription;
 use Magento\Framework\Mview\View\SubscriptionFactory;
 use Magento\Indexer\Model\Mview\View\State;
-use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-/**
- * Class to test Mview functionality
+/** test Mview functionality
  */
 class ViewTest extends TestCase
 {
@@ -147,13 +148,11 @@ class ViewTest extends TestCase
 
     /**
      * Test to Fill view data from config
-     *
      */
     public function testLoadWithException()
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException('InvalidArgumentException');
         $this->expectExceptionMessage('view_id view does not exist.');
-
         $viewId = 'view_id';
         $this->configMock->expects(
             $this->once()
@@ -177,8 +176,7 @@ class ViewTest extends TestCase
             ->willReturn(StateInterface::MODE_DISABLED);
         $this->stateMock->expects($this->once())
             ->method('setMode')
-            ->with(StateInterface::MODE_ENABLED)
-            ->willReturnSelf();
+            ->with(StateInterface::MODE_ENABLED)->willReturnSelf();
         $this->changelogMock->expects($this->once())
             ->method('create');
         $subscriptionMock = $this->createPartialMock(Subscription::class, ['create']);
@@ -212,12 +210,9 @@ class ViewTest extends TestCase
         $this->model->subscribe();
     }
 
-    /**
-     */
     public function testSubscribeWithException()
     {
-        $this->expectException(\Exception::class);
-
+        $this->expectException('Exception');
         $this->stateMock->expects($this->once())
             ->method('getMode')
             ->willReturn(StateInterface::MODE_DISABLED);
@@ -244,8 +239,7 @@ class ViewTest extends TestCase
             ->willReturn(StateInterface::MODE_ENABLED);
         $this->stateMock->expects($this->once())
             ->method('setMode')
-            ->with(StateInterface::MODE_DISABLED)
-            ->willReturnSelf();
+            ->with(StateInterface::MODE_DISABLED)->willReturnSelf();
         $this->changelogMock->expects($this->never())
             ->method('drop');
         $subscriptionMock = $this->createPartialMock(Subscription::class, ['remove']);
@@ -281,12 +275,9 @@ class ViewTest extends TestCase
         $this->model->unsubscribe();
     }
 
-    /**
-     */
     public function testUnsubscribeWithException()
     {
-        $this->expectException(\Exception::class);
-
+        $this->expectException('Exception');
         $this->stateMock->expects($this->once())
             ->method('getMode')
             ->willReturn(StateInterface::MODE_ENABLED);
@@ -323,8 +314,7 @@ class ViewTest extends TestCase
             ->method('getVersionId')
             ->willReturn($lastVersionId);
         $this->stateMock->expects($this->once())
-            ->method('setVersionId')
-            ->willReturnSelf();
+            ->method('setVersionId')->willReturnSelf();
         $this->stateMock->expects($this->atLeastOnce())
             ->method('getMode')
             ->willReturn(StateInterface::MODE_ENABLED);
@@ -332,11 +322,9 @@ class ViewTest extends TestCase
             ->method('getStatus')
             ->willReturn(StateInterface::STATUS_IDLE);
         $this->stateMock->expects($this->exactly(2))
-            ->method('setStatus')
-            ->willReturnSelf();
+            ->method('setStatus')->willReturnSelf();
         $this->stateMock->expects($this->exactly(2))
-            ->method('save')
-            ->willReturnSelf();
+            ->method('save')->willReturnSelf();
 
         $this->changelogMock->expects(
             $this->once()
@@ -356,7 +344,7 @@ class ViewTest extends TestCase
             $listId
         );
 
-        $actionMock = $this->getMockForAbstractClass(ActionInterface::class);
+        $actionMock = $this->createMock(ActionInterface::class);
         $actionMock->expects($this->once())->method('execute')->with($listId)->willReturnSelf();
         $this->actionFactoryMock->expects(
             $this->once()
@@ -412,7 +400,7 @@ class ViewTest extends TestCase
                 ]
             );
 
-        $actionMock = $this->getMockForAbstractClass(ActionInterface::class);
+        $actionMock = $this->createMock(ActionInterface::class);
         $actionMock->expects($this->once())
             ->method('execute')
             ->with($this->generateChangeLog(150, 1, 150))
@@ -449,13 +437,11 @@ class ViewTest extends TestCase
 
     /**
      * Test to Materialize view by IDs in changelog
-     *
      */
     public function testUpdateWithException()
     {
-        $this->expectException(\Exception::class);
+        $this->expectException('Exception');
         $this->expectExceptionMessage('Test exception');
-
         $currentVersionId = 3;
         $lastVersionId = 1;
         $listId = [2, 3];
@@ -475,11 +461,9 @@ class ViewTest extends TestCase
             ->method('getStatus')
             ->willReturn(StateInterface::STATUS_IDLE);
         $this->stateMock->expects($this->exactly(2))
-            ->method('setStatus')
-            ->willReturnSelf();
+            ->method('setStatus')->willReturnSelf();
         $this->stateMock->expects($this->exactly(2))
-            ->method('save')
-            ->willReturnSelf();
+            ->method('save')->willReturnSelf();
 
         $this->changelogMock->expects(
             $this->once()
@@ -501,11 +485,9 @@ class ViewTest extends TestCase
 
         $actionMock = $this->createPartialMock(ActionInterface::class, ['execute']);
         $actionMock->expects($this->once())->method('execute')->with($listId)->willReturnCallback(
-            
-                function () {
-                    throw new \Exception('Test exception');
-                }
-            
+            function () {
+                throw new \Exception('Test exception');
+            }
         );
         $this->actionFactoryMock->expects(
             $this->once()
@@ -531,15 +513,12 @@ class ViewTest extends TestCase
             ->willReturn(StateInterface::MODE_ENABLED);
         $this->stateMock->expects($this->once())
             ->method('setVersionId')
-            ->with(11)
-            ->willReturnSelf();
+            ->with(11)->willReturnSelf();
         $this->stateMock->expects($this->once())
             ->method('setStatus')
-            ->with(StateInterface::STATUS_SUSPENDED)
-            ->willReturnSelf();
+            ->with(StateInterface::STATUS_SUSPENDED)->willReturnSelf();
         $this->stateMock->expects($this->once())
-            ->method('save')
-            ->willReturnSelf();
+            ->method('save')->willReturnSelf();
 
         $this->changelogMock->expects($this->once())
             ->method('getVersion')
@@ -581,11 +560,9 @@ class ViewTest extends TestCase
             ->willReturn(StateInterface::STATUS_SUSPENDED);
         $this->stateMock->expects($this->once())
             ->method('setStatus')
-            ->with(StateInterface::STATUS_IDLE)
-            ->willReturnSelf();
+            ->with(StateInterface::STATUS_IDLE)->willReturnSelf();
         $this->stateMock->expects($this->once())
-            ->method('save')
-            ->willReturnSelf();
+            ->method('save')->willReturnSelf();
 
         $this->loadView();
         $this->model->resume();

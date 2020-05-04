@@ -3,66 +3,79 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Eav\Test\Unit\Model\ResourceModel\Entity\Attribute;
 
+use Magento\Eav\Model\Config;
+use Magento\Eav\Model\ResourceModel\Entity\Attribute\Collection;
 use Magento\Framework\Data\Collection\Db\FetchStrategyInterface;
+use Magento\Framework\Data\Collection\EntityFactory;
+use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Framework\DB\Adapter\Pdo\Mysql;
+use Magento\Framework\DB\Select;
+use Magento\Framework\Event\ManagerInterface;
+use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Store\Model\StoreManagerInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface;
 
 /**
  * Test for \Magento\Eav\Model\ResourceModel\Entity\Attribute\Collection class.
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class CollectionTest extends \PHPUnit\Framework\TestCase
+class CollectionTest extends TestCase
 {
     /**
-     * @var \Magento\Eav\Model\ResourceModel\Entity\Attribute\Collection
+     * @var Collection
      */
     private $model;
 
     /**
-     * @var \Magento\Framework\Data\Collection\EntityFactory|\PHPUnit\Framework\MockObject\MockObject
+     * @var EntityFactory|MockObject
      */
     private $entityFactoryMock;
 
     /**
-     * @var \Psr\Log\LoggerInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var LoggerInterface|MockObject
      */
     private $loggerMock;
 
     /**
-     * @var \Magento\Framework\Data\Collection\Db\FetchStrategyInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var FetchStrategyInterface|MockObject
      */
     private $fetchStrategyMock;
 
     /**
-     * @var \Magento\Framework\Data\Collection\EntityFactory|\PHPUnit\Framework\MockObject\MockObject
+     * @var EntityFactory|MockObject
      */
     private $eventManagerMock;
 
     /**
-     * @var \Magento\Eav\Model\Config|\PHPUnit\Framework\MockObject\MockObject
+     * @var Config|MockObject
      */
     private $eavConfigMock;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var StoreManagerInterface|MockObject
      */
     private $storeManagerMock;
 
     /**
-     * @var \Magento\Framework\DB\Adapter\AdapterInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var AdapterInterface|MockObject
      */
     private $connectionMock;
 
     /**
-     * @var \Magento\Framework\Model\ResourceModel\Db\AbstractDb|\PHPUnit\Framework\MockObject\MockObject
+     * @var AbstractDb|MockObject
      */
     private $resourceMock;
 
     /**
-     * @var \Magento\Framework\DB\Select|\PHPUnit\Framework\MockObject\MockObject
+     * @var Select|MockObject
      */
     private $selectMock;
 
@@ -71,35 +84,35 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
      */
     protected function setUp(): void
     {
-        $this->entityFactoryMock = $this->getMockBuilder(\Magento\Framework\Data\Collection\EntityFactory::class)
+        $this->entityFactoryMock = $this->getMockBuilder(EntityFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->loggerMock = $this->getMockBuilder(\Psr\Log\LoggerInterface::class)
+        $this->loggerMock = $this->getMockBuilder(LoggerInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->fetchStrategyMock = $this->getMockBuilder(FetchStrategyInterface::class)
             ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+            ->getMock();
 
-        $this->eventManagerMock = $this->getMockBuilder(\Magento\Framework\Event\ManagerInterface::class)
+        $this->eventManagerMock = $this->getMockBuilder(ManagerInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->eavConfigMock = $this->getMockBuilder(\Magento\Eav\Model\Config::class)
+        $this->eavConfigMock = $this->getMockBuilder(Config::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->connectionMock = $this->getMockBuilder(\Magento\Framework\DB\Adapter\Pdo\Mysql::class)
+        $this->connectionMock = $this->getMockBuilder(Mysql::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->storeManagerMock = $this->getMockBuilder(\Magento\Store\Model\StoreManagerInterface::class)
+        $this->storeManagerMock = $this->getMockBuilder(StoreManagerInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->resourceMock = $this->getMockBuilder(\Magento\Framework\Model\ResourceModel\Db\AbstractDb::class)
+        $this->resourceMock = $this->getMockBuilder(AbstractDb::class)
             ->setMethods(['__wakeup', 'getConnection', 'getMainTable', 'getTable'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
@@ -107,7 +120,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
         $this->resourceMock->expects($this->any())->method('getConnection')->willReturn($this->connectionMock);
         $this->resourceMock->expects($this->any())->method('getMainTable')->willReturn('eav_entity_attribute');
 
-        $this->selectMock = $this->getMockBuilder(\Magento\Framework\DB\Select::class)
+        $this->selectMock = $this->getMockBuilder(Select::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -115,7 +128,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
 
         $objectManager = new ObjectManager($this);
         $this->model = $objectManager->getObject(
-            \Magento\Eav\Model\ResourceModel\Entity\Attribute\Collection::class,
+            Collection::class,
             [
                 'entityFactory' => $this->entityFactoryMock,
                 'logger'        => $this->loggerMock,

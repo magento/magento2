@@ -3,22 +3,25 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\SalesRule\Test\Unit\Model\ResourceModel\Rule;
 
+use Magento\Framework\DB\Select;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\SalesRule\Model\ResourceModel\Rule\DateApplier;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-/**
- * Class DateApplierTest
- */
-class DateApplierTest extends \PHPUnit\Framework\TestCase
+class DateApplierTest extends TestCase
 {
     /**
-     * @var DateApplier|\PHPUnit\Framework\MockObject\MockObject
+     * @var DateApplier|MockObject
      */
     protected $model;
 
     /**
-     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
+     * @var ObjectManager
      */
     protected $objectManager;
 
@@ -27,7 +30,7 @@ class DateApplierTest extends \PHPUnit\Framework\TestCase
      */
     protected function setUp(): void
     {
-        $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $this->objectManager = new ObjectManager($this);
 
         $this->model = $this->objectManager->getObject(DateApplier::class, []);
     }
@@ -37,8 +40,8 @@ class DateApplierTest extends \PHPUnit\Framework\TestCase
      */
     public function testApplyDate()
     {
-        $className = \Magento\Framework\DB\Select::class;
-        /** @var \Magento\Framework\DB\Select|\PHPUnit\Framework\MockObject\MockObject $select */
+        $className = Select::class;
+        /** @var \Magento\Framework\DB\Select|MockObject $select */
         $select = $this->createMock($className);
 
         $select->expects($this->exactly(2))

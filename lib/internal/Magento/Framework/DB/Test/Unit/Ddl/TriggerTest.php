@@ -3,21 +3,23 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\DB\Test\Unit\Ddl;
 
-/**
- * Class TriggerTest
- */
-class TriggerTest extends \PHPUnit\Framework\TestCase
+use Magento\Framework\DB\Ddl\Trigger;
+use PHPUnit\Framework\TestCase;
+
+class TriggerTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\DB\Ddl\Trigger
+     * @var Trigger
      */
     protected $_object;
 
     protected function setUp(): void
     {
-        $this->_object = new \Magento\Framework\DB\Ddl\Trigger();
+        $this->_object = new Trigger();
     }
 
     /**
@@ -25,12 +27,12 @@ class TriggerTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetListOfEvents()
     {
-        $actualEventTypes = \Magento\Framework\DB\Ddl\Trigger::getListOfEvents();
+        $actualEventTypes = Trigger::getListOfEvents();
         $this->assertIsArray($actualEventTypes);
         $this->assertCount(3, $actualEventTypes);
-        $this->assertTrue(in_array(\Magento\Framework\DB\Ddl\Trigger::EVENT_INSERT, $actualEventTypes));
-        $this->assertTrue(in_array(\Magento\Framework\DB\Ddl\Trigger::EVENT_UPDATE, $actualEventTypes));
-        $this->assertTrue(in_array(\Magento\Framework\DB\Ddl\Trigger::EVENT_DELETE, $actualEventTypes));
+        $this->assertContains(Trigger::EVENT_INSERT, $actualEventTypes);
+        $this->assertContains(Trigger::EVENT_UPDATE, $actualEventTypes);
+        $this->assertContains(Trigger::EVENT_DELETE, $actualEventTypes);
     }
 
     /**
@@ -38,11 +40,11 @@ class TriggerTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetListOfTimes()
     {
-        $actualTimeTypes = \Magento\Framework\DB\Ddl\Trigger::getListOfTimes();
+        $actualTimeTypes = Trigger::getListOfTimes();
         $this->assertIsArray($actualTimeTypes);
         $this->assertCount(2, $actualTimeTypes);
-        $this->assertTrue(in_array(\Magento\Framework\DB\Ddl\Trigger::TIME_AFTER, $actualTimeTypes));
-        $this->assertTrue(in_array(\Magento\Framework\DB\Ddl\Trigger::TIME_BEFORE, $actualTimeTypes));
+        $this->assertContains(Trigger::TIME_AFTER, $actualTimeTypes);
+        $this->assertContains(Trigger::TIME_BEFORE, $actualTimeTypes);
     }
 
     /**
@@ -58,13 +60,11 @@ class TriggerTest extends \PHPUnit\Framework\TestCase
 
     /**
      * Test case for setName() with exception
-     *
      */
     public function testSetNameWithException()
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException('InvalidArgumentException');
         $this->expectExceptionMessage('Trigger name should be a string');
-
         $triggerName = new \stdClass();
         //non string
 
@@ -73,13 +73,11 @@ class TriggerTest extends \PHPUnit\Framework\TestCase
 
     /**
      * Test case for setTable() with exception
-     *
      */
     public function testSetTableWithException()
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException('InvalidArgumentException');
         $this->expectExceptionMessage('Trigger table name should be a string');
-
         $tableName = new \stdClass();
         //non string
 
@@ -100,32 +98,28 @@ class TriggerTest extends \PHPUnit\Framework\TestCase
 
     /**
      * Test case for getName()
-     *
      */
     public function testGetNameWithException()
     {
-        $this->expectException(\Zend_Db_Exception::class);
+        $this->expectException('Zend_Db_Exception');
         $this->expectExceptionMessage('Trigger name is not defined');
-
         $tableName = 'TEST_TABLE_NAME_' . random_int(100, 999);
-        $event = \Magento\Framework\DB\Ddl\Trigger::EVENT_INSERT;
+        $event = Trigger::EVENT_INSERT;
 
-        $this->_object->setTable($tableName)->setTime(\Magento\Framework\DB\Ddl\Trigger::TIME_AFTER)->setEvent($event);
+        $this->_object->setTable($tableName)->setTime(Trigger::TIME_AFTER)->setEvent($event);
 
         $this->_object->getName();
     }
 
     /**
      * Test case for getTime() with Exception
-     *
      */
     public function testGetTimeWithException()
     {
-        $this->expectException(\Zend_Db_Exception::class);
+        $this->expectException('Zend_Db_Exception');
         $this->expectExceptionMessage('Trigger time is not defined');
-
         $tableName = 'TEST_TABLE_NAME_' . random_int(100, 999);
-        $event = \Magento\Framework\DB\Ddl\Trigger::EVENT_INSERT;
+        $event = Trigger::EVENT_INSERT;
 
         $this->_object->setTable($tableName)->setEvent($event);
 
@@ -134,65 +128,53 @@ class TriggerTest extends \PHPUnit\Framework\TestCase
 
     /**
      * Test case for getTable()
-     *
      */
     public function testGetTableWithException()
     {
-        $this->expectException(\Zend_Db_Exception::class);
+        $this->expectException('Zend_Db_Exception');
         $this->expectExceptionMessage('Trigger table name is not defined');
+        $event = Trigger::EVENT_INSERT;
 
-        $event = \Magento\Framework\DB\Ddl\Trigger::EVENT_INSERT;
-
-        $this->_object->setTime(\Magento\Framework\DB\Ddl\Trigger::TIME_AFTER)->setEvent($event);
+        $this->_object->setTime(Trigger::TIME_AFTER)->setEvent($event);
 
         $this->_object->getTable();
     }
 
     /**
      * Test case for getEvent() with Exception
-     *
      */
     public function testGetEventWithException()
     {
-        $this->expectException(\Zend_Db_Exception::class);
+        $this->expectException('Zend_Db_Exception');
         $this->expectExceptionMessage('Trigger event is not defined');
-
         $tableName = 'TEST_TABLE_NAME_' . random_int(100, 999);
 
-        $this->_object->setTable($tableName)->setTime(\Magento\Framework\DB\Ddl\Trigger::TIME_AFTER);
+        $this->_object->setTable($tableName)->setTime(Trigger::TIME_AFTER);
 
         $this->_object->getEvent();
     }
 
-    /**
-     */
     public function testWrongEventTypeException()
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException('InvalidArgumentException');
         $this->expectExceptionMessage('Trigger unsupported event type');
-
         $this->_object->setEvent('UNSUPORT EVENT TYPE');
     }
 
-    /**
-     */
     public function testWrongTimeTypeException()
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException('InvalidArgumentException');
         $this->expectExceptionMessage('Trigger unsupported time type');
-
         $this->_object->setTime('UNSUPORT TIME TYPE');
     }
 
     /**
      * Test case for setTable() with exception
-     *
      */
     public function testAddStatementWithException()
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException('InvalidArgumentException');
         $this->expectExceptionMessage('Trigger statement should be a string');
-
         $statement = new \stdClass();
         //non string
 

@@ -4,12 +4,22 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Persistent\Test\Unit\Model;
 
+use Magento\Customer\Model\GroupManagement;
+use Magento\Eav\Model\Entity\Collection\AbstractCollection;
+use Magento\Persistent\Helper\Data;
+use Magento\Persistent\Helper\Session;
 use Magento\Persistent\Model\QuoteManager;
+use Magento\Quote\Api\CartRepositoryInterface;
+use Magento\Quote\Model\Quote;
+use Magento\Quote\Model\Quote\Address;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class QuoteManagerTest extends \PHPUnit\Framework\TestCase
+class QuoteManagerTest extends TestCase
 {
     /**
      * @var QuoteManager
@@ -17,86 +27,86 @@ class QuoteManagerTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \Magento\Persistent\Helper\Session|\PHPUnit\Framework\MockObject\MockObject
+     * @var Session|MockObject
      */
     protected $persistentSessionMock;
 
     /**
-     * @var \Magento\Persistent\Helper\Data|\PHPUnit\Framework\MockObject\MockObject
+     * @var Data|MockObject
      */
     protected $persistentDataMock;
 
     /**
-     * @var \Magento\Checkout\Model\Session|\PHPUnit\Framework\MockObject\MockObject
+     * @var \Magento\Checkout\Model\Session|MockObject
      */
     protected $checkoutSessionMock;
 
     /**
-     * @var \Magento\Quote\Model\Quote|\PHPUnit\Framework\MockObject\MockObject
+     * @var Quote|MockObject
      */
     protected $quoteMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $sessionMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $abstractCollectionMock;
 
     /**
-     * @var \Magento\Quote\Api\CartRepositoryInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var CartRepositoryInterface|MockObject
      */
     protected $quoteRepositoryMock;
 
     protected function setUp(): void
     {
-        $this->persistentSessionMock = $this->createMock(\Magento\Persistent\Helper\Session::class);
+        $this->persistentSessionMock = $this->createMock(Session::class);
         $this->sessionMock =
-            $this->createPartialMock(
-                \Magento\Persistent\Model\Session::class,
-                [
-                    'setLoadInactive',
-                    'setCustomerData',
-                    'clearQuote',
-                    'clearStorage',
-                    'getQuote',
-                    'removePersistentCookie',
-                    '__wakeup',
-                ]
-            );
-        $this->persistentDataMock = $this->createMock(\Magento\Persistent\Helper\Data::class);
+            $this->getMockBuilder(\Magento\Persistent\Model\Session::class)->addMethods([
+                'setLoadInactive',
+                'setCustomerData',
+                'clearQuote',
+                'clearStorage',
+                'getQuote'
+            ])
+                ->onlyMethods(['removePersistentCookie'])
+                ->disableOriginalConstructor()
+                ->getMock();
+        $this->persistentDataMock = $this->createMock(Data::class);
         $this->checkoutSessionMock = $this->createMock(\Magento\Checkout\Model\Session::class);
 
         $this->abstractCollectionMock =
-            $this->createMock(\Magento\Eav\Model\Entity\Collection\AbstractCollection::class);
+            $this->createMock(AbstractCollection::class);
 
-        $this->quoteRepositoryMock = $this->createMock(\Magento\Quote\Api\CartRepositoryInterface::class);
-        $this->quoteMock = $this->createPartialMock(
-            \Magento\Quote\Model\Quote::class,
-            [
-                'getId',
+        $this->quoteRepositoryMock = $this->createMock(CartRepositoryInterface::class);
+        $this->quoteMock = $this->getMockBuilder(Quote::class)
+            ->addMethods([
                 'getIsPersistent',
-                'getPaymentsCollection',
-                'getAddressesCollection',
-                'setIsActive',
                 'setCustomerId',
                 'setCustomerEmail',
                 'setCustomerFirstname',
                 'setCustomerLastname',
                 'setCustomerGroupId',
                 'setIsPersistent',
+                'getCustomerId'
+            ])
+            ->onlyMethods([
+                'getId',
+                'getPaymentsCollection',
+                'getAddressesCollection',
+                'setIsActive',
                 'getShippingAddress',
                 'getBillingAddress',
                 'collectTotals',
                 'removeAllAddresses',
                 'getIsActive',
-                'getCustomerId',
                 '__wakeup'
-            ]
-        );
+            ])
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->model = new QuoteManager(
             $this->persistentSessionMock,
@@ -173,13 +183,13 @@ class QuoteManagerTest extends \PHPUnit\Framework\TestCase
         $this->quoteMock->expects($this->once())
             ->method('setCustomerLastname')->with(null)->willReturn($this->quoteMock);
         $this->quoteMock->expects($this->once())->method('setCustomerGroupId')
-            ->with(\Magento\Customer\Model\GroupManagement::NOT_LOGGED_IN_ID)
+            ->with(GroupManagement::NOT_LOGGED_IN_ID)
             ->willReturn($this->quoteMock);
         $this->quoteMock->expects($this->once())
             ->method('setIsPersistent')->with(false)->willReturn($this->quoteMock);
         $this->quoteMock->expects($this->once())
             ->method('removeAllAddresses')->willReturn($this->quoteMock);
-        $quoteAddressMock = $this->createMock(\Magento\Quote\Model\Quote\Address::class);
+        $quoteAddressMock = $this->createMock(Address::class);
         $this->quoteMock->expects($this->once())
             ->method('getShippingAddress')->willReturn($quoteAddressMock);
         $this->quoteMock->expects($this->once())
@@ -237,7 +247,7 @@ class QuoteManagerTest extends \PHPUnit\Framework\TestCase
             ->willReturn($this->quoteMock);
         $this->quoteMock->expects($this->once())
             ->method('setCustomerGroupId')
-            ->with(\Magento\Customer\Model\GroupManagement::NOT_LOGGED_IN_ID)
+            ->with(GroupManagement::NOT_LOGGED_IN_ID)
             ->willReturn($this->quoteMock);
 
         $this->model->expire();
@@ -302,7 +312,7 @@ class QuoteManagerTest extends \PHPUnit\Framework\TestCase
     {
         $this->checkoutSessionMock->expects($this->once())
             ->method('getQuoteId')->willReturn(1);
-        $quoteWithNoId = $this->quoteMock = $this->createMock(\Magento\Quote\Model\Quote::class);
+        $quoteWithNoId = $this->quoteMock = $this->createMock(Quote::class);
         $quoteWithNoId->expects($this->once())->method('getId')->willReturn(null);
         $this->quoteRepositoryMock->expects($this->once())->method('get')->with(1)->willReturn($quoteWithNoId);
         $this->quoteMock->expects($this->once())->method('getId')->willReturn(1);

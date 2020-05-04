@@ -3,19 +3,24 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\App\Test\Unit\Config;
 
-class ElementTest extends \PHPUnit\Framework\TestCase
+use Magento\Framework\App\Config\Element;
+use PHPUnit\Framework\TestCase;
+
+class ElementTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\App\Config\Element
+     * @var Element
      */
     protected $model;
 
     protected function setUp(): void
     {
         $xmlString = file_get_contents(__DIR__ . '/_files/element.xml');
-        $this->model = new \Magento\Framework\App\Config\Element($xmlString);
+        $this->model = new Element($xmlString);
     }
 
     public function testIs()

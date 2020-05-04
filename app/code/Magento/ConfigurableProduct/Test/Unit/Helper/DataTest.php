@@ -3,31 +3,41 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\ConfigurableProduct\Test\Unit\Helper;
 
+use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Catalog\Helper\Image;
+use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Image\UrlBuilder;
+use Magento\ConfigurableProduct\Helper\Data;
+use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
+use Magento\Framework\Data\Collection;
+use Magento\Framework\DataObject;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class DataTest extends \PHPUnit\Framework\TestCase
+class DataTest extends TestCase
 {
     /**
-     * @var \Magento\ConfigurableProduct\Helper\Data|\PHPUnit\Framework\MockObject\MockObject
+     * @var Data|MockObject
      */
     protected $_model;
 
     /**
-     * @var \Magento\Catalog\Helper\Image|\PHPUnit\Framework\MockObject\MockObject
+     * @var Image|MockObject
      */
     protected $_imageHelperMock;
 
     /**
-     * @var \Magento\Catalog\Model\Product|\PHPUnit\Framework\MockObject\MockObject
+     * @var Product|MockObject
      */
     protected $_productMock;
 
     /**
-     * @var UrlBuilder|\PHPUnit\Framework\MockObject\MockObject
+     * @var UrlBuilder|MockObject
      */
     protected $imageUrlBuilder;
 
@@ -37,11 +47,11 @@ class DataTest extends \PHPUnit\Framework\TestCase
         $this->imageUrlBuilder = $this->getMockBuilder(UrlBuilder::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->_imageHelperMock = $this->createMock(\Magento\Catalog\Helper\Image::class);
-        $this->_productMock = $this->createMock(\Magento\Catalog\Model\Product::class);
+        $this->_imageHelperMock = $this->createMock(Image::class);
+        $this->_productMock = $this->createMock(Product::class);
 
         $this->_model = $objectManager->getObject(
-            \Magento\ConfigurableProduct\Helper\Data::class,
+            Data::class,
             [
                 '_imageHelper' => $this->_imageHelperMock
             ]
@@ -51,7 +61,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
 
     public function testGetAllowAttributes()
     {
-        $typeInstanceMock = $this->createMock(\Magento\ConfigurableProduct\Model\Product\Type\Configurable::class);
+        $typeInstanceMock = $this->createMock(Configurable::class);
         $typeInstanceMock->expects($this->once())
             ->method('getConfigurableAttributes')
             ->with($this->_productMock);
@@ -71,14 +81,14 @@ class DataTest extends \PHPUnit\Framework\TestCase
     public function testGetOptions(array $expected, array $data)
     {
         if (count($data['allowed_products'])) {
-            $imageHelper1 = $this->getMockBuilder(\Magento\Catalog\Helper\Image::class)
+            $imageHelper1 = $this->getMockBuilder(Image::class)
                 ->disableOriginalConstructor()
                 ->getMock();
             $imageHelper1->expects($this->any())
                 ->method('getUrl')
                 ->willReturn('http://example.com/base_img_url');
 
-            $imageHelper2 = $this->getMockBuilder(\Magento\Catalog\Helper\Image::class)
+            $imageHelper2 = $this->getMockBuilder(Image::class)
                 ->disableOriginalConstructor()
                 ->getMock();
             $imageHelper2->expects($this->any())
@@ -108,8 +118,8 @@ class DataTest extends \PHPUnit\Framework\TestCase
     public function getOptionsDataProvider()
     {
         $currentProductMock = $this->createPartialMock(
-            \Magento\Catalog\Model\Product::class,
-            ['getTypeInstance', '__wakeup']
+            Product::class,
+            ['getTypeInstance']
         );
         $provider = [];
         $provider[] = [
@@ -123,11 +133,14 @@ class DataTest extends \PHPUnit\Framework\TestCase
         $attributesCount = 3;
         $attributes = [];
         for ($i = 1; $i < $attributesCount; $i++) {
-            $attribute = $this->createPartialMock(\Magento\Framework\DataObject::class, ['getProductAttribute']);
-            $productAttribute = $this->createPartialMock(
-                \Magento\Framework\DataObject::class,
-                ['getId', 'getAttributeCode']
-            );
+            $attribute = $this->getMockBuilder(DataObject::class)
+                ->addMethods(['getProductAttribute'])
+                ->disableOriginalConstructor()
+                ->getMock();
+            $productAttribute = $this->getMockBuilder(DataObject::class)
+                ->addMethods(['getId', 'getAttributeCode'])
+                ->disableOriginalConstructor()
+                ->getMock();
             $productAttribute->expects($this->any())
                 ->method('getId')
                 ->willReturn('attribute_id_' . $i);
@@ -139,7 +152,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
                 ->willReturn($productAttribute);
             $attributes[] = $attribute;
         }
-        $typeInstanceMock = $this->createMock(\Magento\ConfigurableProduct\Model\Product\Type\Configurable::class);
+        $typeInstanceMock = $this->createMock(Configurable::class);
         $typeInstanceMock->expects($this->any())
             ->method('getConfigurableAttributes')
             ->willReturn($attributes);
@@ -149,8 +162,8 @@ class DataTest extends \PHPUnit\Framework\TestCase
         $allowedProducts = [];
         for ($i = 1; $i <= 2; $i++) {
             $productMock = $this->createPartialMock(
-                \Magento\Catalog\Model\Product::class,
-                ['getData', 'getImage', 'getId', '__wakeup', 'getMediaGalleryImages', 'isSalable']
+                Product::class,
+                ['getData', 'getImage', 'getId', 'getMediaGalleryImages', 'isSalable']
             );
             $productMock->expects($this->any())
                 ->method('getData')
@@ -213,7 +226,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
 
     public function testGetGalleryImages()
     {
-        $productMock = $this->getMockBuilder(\Magento\Catalog\Api\Data\ProductInterface::class)
+        $productMock = $this->getMockBuilder(ProductInterface::class)
             ->setMethods(['getMediaGalleryImages'])
             ->getMockForAbstractClass();
         $productMock->expects($this->once())
@@ -258,22 +271,22 @@ class DataTest extends \PHPUnit\Framework\TestCase
             ->willReturn('product_page_image_large_url');
 
         $this->assertInstanceOf(
-            \Magento\Framework\Data\Collection::class,
+            Collection::class,
             $this->_model->getGalleryImages($productMock)
         );
     }
 
     /**
-     * @return \Magento\Framework\Data\Collection
+     * @return Collection
      */
     private function getImagesCollection()
     {
-        $collectionMock = $this->getMockBuilder(\Magento\Framework\Data\Collection::class)
+        $collectionMock = $this->getMockBuilder(Collection::class)
             ->disableOriginalConstructor()
             ->getMock();
 
         $items = [
-            new \Magento\Framework\DataObject(
+            new DataObject(
                 ['file' => 'test_file']
             ),
         ];

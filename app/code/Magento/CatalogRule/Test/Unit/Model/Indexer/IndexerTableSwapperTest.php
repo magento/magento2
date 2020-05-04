@@ -12,29 +12,30 @@ use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Ddl\Table;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test for Magento\CatalogRule\Model\Indexer\IndexerTableSwapper class.
  */
-class IndexerTableSwapperTest extends \PHPUnit\Framework\TestCase
+class IndexerTableSwapperTest extends TestCase
 {
     /**
-     * @var ResourceConnection|PHPUnit\Framework\MockObject\MockObject
+     * @var ResourceConnection|MockObject
      */
     private $resourceConnectionMock;
 
     /**
-     * @var AdapterInterface|PHPUnit\Framework\MockObject\MockObject
+     * @var AdapterInterface|MockObject
      */
     private $adapterInterfaceMock;
 
     /**
-     * @var \Zend_Db_Statement_Interface|PHPUnit\Framework\MockObject\MockObject
+     * @var \Zend_Db_Statement_Interface|MockObject
      */
     private $statementInterfaceMock;
 
     /**
-     * @var Table|PHPUnit\Framework\MockObject\MockObject
+     * @var Table|MockObject
      */
     private $tableMock;
 
@@ -45,7 +46,8 @@ class IndexerTableSwapperTest extends \PHPUnit\Framework\TestCase
     {
         $this->resourceConnectionMock = $this->createMock(ResourceConnection::class);
 
-        $this->adapterInterfaceMock = $this->getMockBuilder(AdapterInterface::class)->getMockForAbstractClass();
+        $this->adapterInterfaceMock = $this->getMockBuilder(AdapterInterface::class)
+            ->getMockForAbstractClass();
         /** @var \Zend_Db_Statement_Interface $statementInterfaceMock */
         $this->statementInterfaceMock = $this->getMockBuilder(\Zend_Db_Statement_Interface::class)
             ->getMockForAbstractClass();

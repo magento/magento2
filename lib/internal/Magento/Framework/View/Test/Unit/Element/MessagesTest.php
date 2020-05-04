@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 /**
  * Test for view Messages model
@@ -10,15 +11,21 @@
 namespace Magento\Framework\View\Test\Unit\Element;
 
 use Magento\Framework\Escaper;
+use Magento\Framework\Message\Collection;
+use Magento\Framework\Message\CollectionFactory;
+use Magento\Framework\Message\Factory;
 use Magento\Framework\Message\Manager;
-use Magento\Framework\View\Element\Message\InterpretationStrategyInterface;
-use \Magento\Framework\View\Element\Messages;
 use Magento\Framework\Message\MessageInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\View\Element\Message\InterpretationStrategyInterface;
+use Magento\Framework\View\Element\Messages;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Unit test for \Magento\Framework\View\Element\Messages
  */
-class MessagesTest extends \PHPUnit\Framework\TestCase
+class MessagesTest extends TestCase
 {
     /**
      * @var Messages
@@ -26,46 +33,46 @@ class MessagesTest extends \PHPUnit\Framework\TestCase
     protected $messages;
 
     /**
-     * @var \Magento\Framework\Message\Factory|\PHPUnit\Framework\MockObject\MockObject
+     * @var Factory|MockObject
      */
     protected $messageFactory;
 
     /**
-     * @var \Magento\Framework\Message\CollectionFactory|\PHPUnit\Framework\MockObject\MockObject
+     * @var CollectionFactory|MockObject
      */
     protected $collectionFactory;
 
     /**
-     * @var InterpretationStrategyInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var InterpretationStrategyInterface|MockObject
      */
     protected $messageInterpretationStrategy;
 
     /**
-     * @var Escaper|\PHPUnit\Framework\MockObject\MockObject
+     * @var Escaper|MockObject
      */
     private $escaperMock;
 
     protected function setUp(): void
     {
-        $this->collectionFactory = $this->getMockBuilder(\Magento\Framework\Message\CollectionFactory::class)
+        $this->collectionFactory = $this->getMockBuilder(CollectionFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->messageFactory = $this->getMockBuilder(\Magento\Framework\Message\Factory::class)
+        $this->messageFactory = $this->getMockBuilder(Factory::class)
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->messageInterpretationStrategy = $this->createMock(
-            \Magento\Framework\View\Element\Message\InterpretationStrategyInterface::class
+            InterpretationStrategyInterface::class
         );
 
         $this->escaperMock = $this->getMockBuilder(Escaper::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $objectManager = new ObjectManager($this);
         $this->messages = $objectManager->getObject(
-            \Magento\Framework\View\Element\Messages::class,
+            Messages::class,
             [
                 'collectionFactory' => $this->collectionFactory,
                 'messageFactory' => $this->messageFactory,
@@ -76,11 +83,11 @@ class MessagesTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\Message\Collection
+     * @return MockObject|Collection
      */
     protected function initMessageCollection()
     {
-        $collection = $this->getMockBuilder(\Magento\Framework\Message\Collection::class)
+        $collection = $this->getMockBuilder(Collection::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -92,7 +99,7 @@ class MessagesTest extends \PHPUnit\Framework\TestCase
 
     public function testSetMessages()
     {
-        $collection = $this->getMockBuilder(\Magento\Framework\Message\Collection::class)
+        $collection = $this->getMockBuilder(Collection::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -111,8 +118,8 @@ class MessagesTest extends \PHPUnit\Framework\TestCase
 
     public function testAddMessages()
     {
-        $messageOne = $this->createMock(\Magento\Framework\Message\MessageInterface::class);
-        $messageTwo = $this->createMock(\Magento\Framework\Message\MessageInterface::class);
+        $messageOne = $this->createMock(MessageInterface::class);
+        $messageTwo = $this->createMock(MessageInterface::class);
 
         $arrayMessages = [$messageOne, $messageTwo];
 
@@ -125,7 +132,7 @@ class MessagesTest extends \PHPUnit\Framework\TestCase
             ->method('addMessage')
             ->with($messageTwo);
 
-        $collectionForAdd = $this->getMockBuilder(\Magento\Framework\Message\Collection::class)
+        $collectionForAdd = $this->getMockBuilder(Collection::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -138,7 +145,7 @@ class MessagesTest extends \PHPUnit\Framework\TestCase
 
     public function testAddMessage()
     {
-        $message = $this->createMock(\Magento\Framework\Message\MessageInterface::class);
+        $message = $this->createMock(MessageInterface::class);
 
         $collection = $this->initMessageCollection();
 
@@ -153,7 +160,7 @@ class MessagesTest extends \PHPUnit\Framework\TestCase
     {
         $messageText = 'Some message error text';
 
-        $message = $this->createMock(\Magento\Framework\Message\MessageInterface::class);
+        $message = $this->createMock(MessageInterface::class);
 
         $this->messageFactory->expects($this->once())
             ->method('create')
@@ -172,7 +179,7 @@ class MessagesTest extends \PHPUnit\Framework\TestCase
     {
         $messageText = 'Some message warning text';
 
-        $message = $this->createMock(\Magento\Framework\Message\MessageInterface::class);
+        $message = $this->createMock(MessageInterface::class);
 
         $this->messageFactory->expects($this->once())
             ->method('create')
@@ -191,7 +198,7 @@ class MessagesTest extends \PHPUnit\Framework\TestCase
     {
         $messageText = 'Some message notice text';
 
-        $message = $this->createMock(\Magento\Framework\Message\MessageInterface::class);
+        $message = $this->createMock(MessageInterface::class);
 
         $this->messageFactory->expects($this->once())
             ->method('create')
@@ -210,7 +217,7 @@ class MessagesTest extends \PHPUnit\Framework\TestCase
     {
         $messageText = 'Some message success text';
 
-        $message = $this->createMock(\Magento\Framework\Message\MessageInterface::class);
+        $message = $this->createMock(MessageInterface::class);
 
         $this->messageFactory->expects($this->once())
             ->method('create')
@@ -228,7 +235,7 @@ class MessagesTest extends \PHPUnit\Framework\TestCase
     public function testGetMessagesByType()
     {
         $messageType = MessageInterface::TYPE_SUCCESS;
-        $resultMessages = [$this->createMock(\Magento\Framework\Message\MessageInterface::class)];
+        $resultMessages = [$this->createMock(MessageInterface::class)];
 
         $collection = $this->initMessageCollection();
         $collection->expects($this->once())
@@ -297,13 +304,13 @@ class MessagesTest extends \PHPUnit\Framework\TestCase
         $resultHtml .= '</div></div>';
         $resultHtml .= '</div>';
 
-        $errorMock = $this->getMockBuilder(\Magento\Framework\Message\MessageInterface::class)
+        $errorMock = $this->getMockBuilder(MessageInterface::class)
             ->getMockForAbstractClass();
-        $warningMock = $this->getMockBuilder(\Magento\Framework\Message\MessageInterface::class)
+        $warningMock = $this->getMockBuilder(MessageInterface::class)
             ->getMockForAbstractClass();
-        $noticeMock = $this->getMockBuilder(\Magento\Framework\Message\MessageInterface::class)
+        $noticeMock = $this->getMockBuilder(MessageInterface::class)
             ->getMockForAbstractClass();
-        $successMock = $this->getMockBuilder(\Magento\Framework\Message\MessageInterface::class)
+        $successMock = $this->getMockBuilder(MessageInterface::class)
             ->getMockForAbstractClass();
 
         $this->messageInterpretationStrategy->expects(static::any())

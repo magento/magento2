@@ -3,13 +3,22 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Catalog\Test\Unit\Model\Product\Media;
 
+use Magento\Catalog\Api\Data\ProductAttributeInterface;
 use Magento\Catalog\Model\Product;
-
 use Magento\Catalog\Model\Product\Media\AttributeManagement;
+use Magento\Catalog\Model\ResourceModel\Product\Attribute\Collection;
+use Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory;
+use Magento\Store\Model\Store;
+use Magento\Store\Model\StoreManagerInterface;
+use PHPUnit\Framework\MockObject\MockObject;
 
-class AttributeManagementTest extends \PHPUnit\Framework\TestCase
+use PHPUnit\Framework\TestCase;
+
+class AttributeManagementTest extends TestCase
 {
     /**
      * @var AttributeManagement
@@ -22,24 +31,24 @@ class AttributeManagementTest extends \PHPUnit\Framework\TestCase
     private $storeId;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     private $factoryMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     private $storeManagerMock;
 
     protected function setUp(): void
     {
         $this->factoryMock = $this->createPartialMock(
-            \Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory::class,
+            CollectionFactory::class,
             ['create']
         );
         $this->storeId = 1;
-        $this->storeManagerMock = $this->createMock(\Magento\Store\Model\StoreManagerInterface::class);
-        $storeMock = $this->createMock(\Magento\Store\Model\Store::class);
+        $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
+        $storeMock = $this->createMock(Store::class);
         $storeMock->expects($this->any())
             ->method('getId')
             ->willReturn($this->storeId);
@@ -57,9 +66,9 @@ class AttributeManagementTest extends \PHPUnit\Framework\TestCase
     {
         $attributeSetName = 'Default Attribute Set';
         $expectedResult = [
-            $this->createMock(\Magento\Catalog\Api\Data\ProductAttributeInterface::class),
+            $this->createMock(ProductAttributeInterface::class),
         ];
-        $collectionMock = $this->createMock(\Magento\Catalog\Model\ResourceModel\Product\Attribute\Collection::class);
+        $collectionMock = $this->createMock(Collection::class);
         $collectionMock->expects($this->once())
             ->method('setAttributeSetFilterBySetName')
             ->with($attributeSetName, Product::ENTITY);

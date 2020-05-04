@@ -3,16 +3,21 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\CatalogUrlRewrite\Test\Unit\Model\Category\Plugin\Category;
 
+use Magento\Catalog\Model\Category;
+use Magento\Catalog\Model\ResourceModel\Category as CategoryResourceModel;
+use Magento\CatalogUrlRewrite\Model\Category\ChildrenCategoriesProvider;
 use Magento\CatalogUrlRewrite\Model\Category\Plugin\Category\Remove as CategoryRemovePlugin;
+use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\UrlRewrite\Model\UrlPersistInterface;
-use Magento\CatalogUrlRewrite\Model\Category\ChildrenCategoriesProvider;
-use Magento\Catalog\Model\ResourceModel\Category as CategoryResourceModel;
-use Magento\Catalog\Model\Category;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class RemoveTest extends \PHPUnit\Framework\TestCase
+class RemoveTest extends TestCase
 {
     /**
      * @var ObjectManager
@@ -20,26 +25,26 @@ class RemoveTest extends \PHPUnit\Framework\TestCase
     private $objectManager;
 
     /**
-     * @var UrlPersistInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var UrlPersistInterface|MockObject
      */
     private $urlPersistMock;
 
     /**
-     * @var ChildrenCategoriesProvider|\PHPUnit\Framework\MockObject\MockObject
+     * @var ChildrenCategoriesProvider|MockObject
      */
     private $childrenCategoriesProviderMock;
 
     /**
-     * @var CategoryResourceModel|\PHPUnit\Framework\MockObject\MockObject
+     * @var CategoryResourceModel|MockObject
      */
     private $subjectMock;
 
     /**
-     * @var Category|\PHPUnit\Framework\MockObject\MockObject
+     * @var Category|MockObject
      */
     private $objectMock;
 
-    /** @var \Magento\Framework\Serialize\Serializer\Json|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var Json|MockObject */
     private $serializerMock;
 
     protected function setUp(): void
@@ -55,7 +60,7 @@ class RemoveTest extends \PHPUnit\Framework\TestCase
         $this->objectMock = $this->getMockBuilder(Category::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->serializerMock = $this->createMock(\Magento\Framework\Serialize\Serializer\Json::class);
+        $this->serializerMock = $this->createMock(Json::class);
     }
 
     public function testAroundDelete()

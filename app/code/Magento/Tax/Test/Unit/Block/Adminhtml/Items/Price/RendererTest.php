@@ -3,28 +3,37 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Tax\Test\Unit\Block\Adminhtml\Items\Price;
 
-class RendererTest extends \PHPUnit\Framework\TestCase
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Sales\Block\Adminhtml\Items\Column\DefaultColumn;
+use Magento\Sales\Model\Order\Item;
+use Magento\Tax\Block\Adminhtml\Items\Price\Renderer;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class RendererTest extends TestCase
 {
     /**
-     * @var \Magento\Tax\Block\Adminhtml\Items\Price\Renderer
+     * @var Renderer
      */
     protected $renderer;
 
     /**
-     * @var \Magento\Tax\Block\Item\Price\Renderer|\PHPUnit\Framework\MockObject\MockObject
+     * @var \Magento\Tax\Block\Item\Price\Renderer|MockObject
      */
     protected $itemPriceRenderer;
 
     /**
-     * @var \Magento\Sales\Block\Adminhtml\Items\Column\DefaultColumn|\PHPUnit\Framework\MockObject\MockObject
+     * @var DefaultColumn|MockObject
      */
     protected $defaultColumnRenderer;
 
     protected function setUp(): void
     {
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $objectManager = new ObjectManager($this);
 
         $this->itemPriceRenderer = $this->getMockBuilder(\Magento\Tax\Block\Item\Price\Renderer::class)
             ->disableOriginalConstructor()
@@ -40,13 +49,13 @@ class RendererTest extends \PHPUnit\Framework\TestCase
             ->getMock();
 
         $this->defaultColumnRenderer = $this->getMockBuilder(
-            \Magento\Sales\Block\Adminhtml\Items\Column\DefaultColumn::class
+            DefaultColumn::class
         )->disableOriginalConstructor()
             ->setMethods(['displayPrices'])
             ->getMock();
 
         $this->renderer = $objectManager->getObject(
-            \Magento\Tax\Block\Adminhtml\Items\Price\Renderer::class,
+            Renderer::class,
             [
                 'itemPriceRenderer' => $this->itemPriceRenderer,
                 'defaultColumnRenderer' => $this->defaultColumnRenderer,
@@ -114,7 +123,7 @@ class RendererTest extends \PHPUnit\Framework\TestCase
     public function testGetTotalAmount()
     {
         $totalAmount = 10;
-        $itemMock = $this->getMockBuilder(\Magento\Sales\Model\Order\Item::class)
+        $itemMock = $this->getMockBuilder(Item::class)
             ->disableOriginalConstructor()
             ->getMock();
 

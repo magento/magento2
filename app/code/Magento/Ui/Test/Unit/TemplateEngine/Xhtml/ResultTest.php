@@ -98,8 +98,8 @@ class ResultTest extends TestCase
         $e = new \Exception();
 
         $this->templateMock->expects($this->once())
-           ->method('getDocumentElement')
-           ->willThrowException($e);
+            ->method('getDocumentElement')
+            ->willThrowException($e);
         $this->stateMock->expects($this->once())
             ->method('getMode')
             ->willReturn(State::MODE_DEVELOPER);

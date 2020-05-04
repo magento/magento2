@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\SalesInventory\Test\Unit\Model\Order;
 
 use Magento\Framework\Exception\NoSuchEntityException;
@@ -11,29 +13,28 @@ use Magento\Sales\Api\Data\CreditmemoItemInterface;
 use Magento\Sales\Api\Data\OrderItemInterface;
 use Magento\Sales\Api\OrderItemRepositoryInterface;
 use Magento\SalesInventory\Model\Order\ReturnValidator;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-/**
- * Class ReturnValidatorTest
- */
-class ReturnValidatorTest extends \PHPUnit\Framework\TestCase
+class ReturnValidatorTest extends TestCase
 {
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|OrderItemRepositoryInterface
+     * @var MockObject|OrderItemRepositoryInterface
      */
     private $orderItemRepositoryMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|CreditmemoInterface
+     * @var MockObject|CreditmemoInterface
      */
     private $creditMemoMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|CreditmemoItemInterface
+     * @var MockObject|CreditmemoItemInterface
      */
     private $creditMemoItemMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|OrderItemInterface
+     * @var MockObject|OrderItemInterface
      */
     private $orderItemMock;
 
@@ -46,19 +47,19 @@ class ReturnValidatorTest extends \PHPUnit\Framework\TestCase
     {
         $this->orderItemRepositoryMock = $this->getMockBuilder(OrderItemRepositoryInterface::class)
             ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+            ->getMock();
 
         $this->creditMemoMock = $this->getMockBuilder(CreditmemoInterface::class)
             ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+            ->getMock();
 
         $this->creditMemoItemMock = $this->getMockBuilder(CreditmemoItemInterface::class)
             ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+            ->getMock();
 
         $this->orderItemMock = $this->getMockBuilder(OrderItemInterface::class)
             ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+            ->getMock();
 
         $this->returnValidator = new ReturnValidator(
             $this->orderItemRepositoryMock

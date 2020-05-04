@@ -3,24 +3,39 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Paypal\Test\Unit\Block\Express;
 
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\Request\Http;
+use Magento\Framework\DataObject;
+use Magento\Framework\Event\ManagerInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\UrlInterface;
+use Magento\Framework\View\Asset\Repository;
+use Magento\Framework\View\Element\Template\Context;
+use Magento\Framework\View\LayoutInterface;
 use Magento\Paypal\Block\Express\Review;
-use Magento\Quote\Model\Quote\Address\Rate;
+use Magento\Quote\Model\Quote;
+use Magento\Quote\Model\Quote\Address;
+use Magento\Quote\Model\Quote\Payment;
+use Magento\Store\Model\ScopeInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ReviewTest extends \PHPUnit\Framework\TestCase
+class ReviewTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\App\Request\Http|\PHPUnit\Framework\MockObject\MockObject
+     * @var Http|MockObject
      */
     protected $request;
 
     /**
-     * @var \Magento\Framework\View\Asset\Repository|\PHPUnit\Framework\MockObject\MockObject
+     * @var Repository|MockObject
      */
     protected $assetRepo;
 
@@ -34,29 +49,29 @@ class ReviewTest extends \PHPUnit\Framework\TestCase
      */
     protected function setUp(): void
     {
-        $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $helper = new ObjectManager($this);
 
-        $layout = $this->createMock(\Magento\Framework\View\LayoutInterface::class);
-        $eventManager = $this->createMock(\Magento\Framework\Event\ManagerInterface::class);
-        $scopeConfig = $this->createMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
+        $layout = $this->createMock(LayoutInterface::class);
+        $eventManager = $this->createMock(ManagerInterface::class);
+        $scopeConfig = $this->createMock(ScopeConfigInterface::class);
 
         $scopeConfig->expects($this->any())
             ->method('getValue')
             ->with(
                 $this->stringContains('advanced/modules_disable_output/'),
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+                ScopeInterface::SCOPE_STORE
             )->willReturn(false);
 
-        $urlBuilder = $this->createMock(\Magento\Framework\UrlInterface::class);
+        $urlBuilder = $this->createMock(UrlInterface::class);
         $urlBuilder->expects($this->any())->method('getUrl')->willReturnArgument(0);
 
         $context = $this->createPartialMock(
-            \Magento\Framework\View\Element\Template\Context::class,
+            Context::class,
             ['getLayout', 'getEventManager', 'getScopeConfig', 'getRequest', 'getAssetRepository', 'getUrlBuilder']
         );
 
-        $this->request = $this->createMock(\Magento\Framework\App\Request\Http::class);
-        $this->assetRepo = $this->createMock(\Magento\Framework\View\Asset\Repository::class);
+        $this->request = $this->createMock(Http::class);
+        $this->assetRepo = $this->createMock(Repository::class);
 
         $context->expects($this->any())->method('getLayout')->willReturn($layout);
         $context->expects($this->any())->method('getEventManager')->willReturn($eventManager);
@@ -65,7 +80,7 @@ class ReviewTest extends \PHPUnit\Framework\TestCase
         $context->expects($this->any())->method('getAssetRepository')->willReturn($this->assetRepo);
         $context->expects($this->any())->method('getUrlBuilder')->willReturn($urlBuilder);
 
-        $this->model = $helper->getObject(\Magento\Paypal\Block\Express\Review::class, ['context' => $context]);
+        $this->model = $helper->getObject(Review::class, ['context' => $context]);
     }
 
     /**
@@ -77,9 +92,14 @@ class ReviewTest extends \PHPUnit\Framework\TestCase
         $this->request->expects($this->once())->method('isSecure')->willReturn($isSecure);
         $this->assetRepo->expects($this->once())
             ->method('getUrlWithParams')
-            ->with('some file', $this->callback(function ($value) use ($isSecure) {
-                return isset($value['_secure']) && $value['_secure'] === $isSecure;
-            }))
+            ->with(
+                'some file',
+                $this->callback(
+                    function ($value) use ($isSecure) {
+                        return isset($value['_secure']) && $value['_secure'] === $isSecure;
+                    }
+                )
+            )
             ->willReturn('result url');
         $this->assertEquals('result url', $this->model->getViewFileUrl('some file'));
     }
@@ -98,18 +118,18 @@ class ReviewTest extends \PHPUnit\Framework\TestCase
         $quote->expects($this->any())->method('getIsVirtual')->willReturn(false);
         $quote->setMayEditShippingMethod('MayEditShippingMethod');
 
-        $shippingRate = new \Magento\Framework\DataObject(['code' => 'Rate 1']);
+        $shippingRate = new DataObject(['code' => 'Rate 1']);
         $shippingRates = [
             [$shippingRate],
         ];
         $quote->getShippingAddress()
             ->expects($this->any())
             ->method('getGroupedAllShippingRates')
-            ->willReturn($shippingRates);
+            ->will($this->returnValue($shippingRates));
         $quote->getShippingAddress()
             ->expects($this->any())
             ->method('getShippingMethod')
-            ->willReturn($shippingRate->getCode());
+            ->will($this->returnValue($shippingRate->getCode()));
 
         $this->model->setQuote($quote);
         $this->model->toHtml();
@@ -123,9 +143,12 @@ class ReviewTest extends \PHPUnit\Framework\TestCase
         $this->assertSame($shippingRate, $this->model->getCurrentShippingRate());
         $this->assertNotNull($this->model->getCanEditShippingAddress());
         $this->assertEquals($quote->getMayEditShippingMethod(), $this->model->getCanEditShippingMethod());
-        $this->assertContains('paypal/express/saveShippingMethod', $this->model->getShippingMethodSubmitUrl());
-        $this->assertContains('paypal/express/edit', $this->model->getEditUrl());
-        $this->assertContains('paypal/express/placeOrder', $this->model->getPlaceOrderUrl());
+        $this->assertStringContainsString(
+            'paypal/express/saveShippingMethod',
+            $this->model->getShippingMethodSubmitUrl()
+        );
+        $this->assertStringContainsString('paypal/express/edit', $this->model->getEditUrl());
+        $this->assertStringContainsString('paypal/express/placeOrder', $this->model->getPlaceOrderUrl());
     }
 
     public function testBeforeToHtmlWhenQuoteIsVirtual()
@@ -139,26 +162,26 @@ class ReviewTest extends \PHPUnit\Framework\TestCase
             $quote->getPayment()->getMethodInstance()->getTitle()
         );
         $this->assertFalse($this->model->getShippingRateRequired());
-        $this->assertContains('paypal/express/edit', $this->model->getEditUrl());
-        $this->assertContains('paypal/express/placeOrder', $this->model->getPlaceOrderUrl());
+        $this->assertStringContainsString('paypal/express/edit', $this->model->getEditUrl());
+        $this->assertStringContainsString('paypal/express/placeOrder', $this->model->getPlaceOrderUrl());
     }
 
     /**
      * Create mock of sales quote model
      *
-     * @return \PHPUnit\Framework\MockObject\MockObject
+     * @return MockObject
      */
     protected function _getQuoteMock()
     {
-        $methodInstance = new \Magento\Framework\DataObject(['title' => 'Payment Method']);
-        $payment = $this->createMock(\Magento\Quote\Model\Quote\Payment::class);
+        $methodInstance = new DataObject(['title' => 'Payment Method']);
+        $payment = $this->createMock(Payment::class);
         $payment->expects($this->any())->method('getMethodInstance')->willReturn($methodInstance);
 
-        $quote = $this->createMock(\Magento\Quote\Model\Quote::class);
+        $quote = $this->createMock(Quote::class);
         $quote->expects($this->any())->method('getPayment')->willReturn($payment);
         $quote->setPayment($payment);
 
-        $address = $this->getMockBuilder(\Magento\Quote\Model\Quote\Address::class)
+        $address = $this->getMockBuilder(Address::class)
             ->disableOriginalConstructor()
             ->setMethods(['getShippingMethod', 'getGroupedAllShippingRates', '__wakeup'])
             ->getMock();
@@ -169,8 +192,8 @@ class ReviewTest extends \PHPUnit\Framework\TestCase
 
     public function testGetEmail()
     {
-        $quoteMock = $this->createMock(\Magento\Quote\Model\Quote::class);
-        $billingAddressMock = $this->createMock(\Magento\Quote\Model\Quote\Address::class);
+        $quoteMock = $this->createMock(Quote::class);
+        $billingAddressMock = $this->createMock(Address::class);
         $quoteMock->expects($this->once())->method('getBillingAddress')->willReturn($billingAddressMock);
         $billingAddressMock->expects($this->once())->method('getEmail')->willReturn('test@example.com');
         $this->model->setQuote($quoteMock);
@@ -179,7 +202,7 @@ class ReviewTest extends \PHPUnit\Framework\TestCase
 
     public function testGetEmailWhenBillingAddressNotExist()
     {
-        $quoteMock = $this->createMock(\Magento\Quote\Model\Quote::class);
+        $quoteMock = $this->createMock(Quote::class);
         $quoteMock->expects($this->once())->method('getBillingAddress')->willReturn(null);
         $this->model->setQuote($quoteMock);
         $this->assertEquals('', $this->model->getEmail());

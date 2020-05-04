@@ -3,40 +3,45 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Catalog\Test\Unit\Model\Indexer\Category\Product;
 
-/**
- * Class RowSizeEstimatorTest
- * @package Magento\Catalog\Test\Unit\Model\Indexer\Category
- */
-class RowSizeEstimatorTest extends \PHPUnit\Framework\TestCase
+use Magento\Catalog\Model\Indexer\Category\Product\RowSizeEstimator;
+use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Framework\DB\Select;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class RowSizeEstimatorTest extends TestCase
 {
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     private $resourceConnectionMock;
 
     /**
-     * @var \Magento\Catalog\Model\Indexer\Category\Product\RowSizeEstimator
+     * @var RowSizeEstimator
      */
     private $model;
 
     protected function setUp(): void
     {
-        $this->resourceConnectionMock = $this->getMockBuilder(\Magento\Framework\App\ResourceConnection::class)
+        $this->resourceConnectionMock = $this->getMockBuilder(ResourceConnection::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->model = new \Magento\Catalog\Model\Indexer\Category\Product\RowSizeEstimator(
+        $this->model = new RowSizeEstimator(
             $this->resourceConnectionMock
         );
     }
 
     public function testEstimateRowSize()
     {
-        $connectionMock = $this->getMockBuilder(\Magento\Framework\DB\Adapter\AdapterInterface::class)
+        $connectionMock = $this->getMockBuilder(AdapterInterface::class)
             ->getMock();
-        $storeGroupCounterMock = $this->getMockBuilder(\Magento\Framework\DB\Select::class)
+        $storeGroupCounterMock = $this->getMockBuilder(Select::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->resourceConnectionMock->expects($this->exactly(2))

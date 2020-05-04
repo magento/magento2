@@ -3,27 +3,27 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Catalog\Test\Unit\Ui\Component\Listing\Columns;
 
 use Magento\Catalog\Ui\Component\Listing\Columns\AttributeSetText;
 use Magento\Eav\Api\AttributeSetRepositoryInterface;
 use Magento\Eav\Api\Data\AttributeSetInterface;
+use PHPUnit\Framework\MockObject\MockObject;
 
-/**
- * Class AttributeSetTextTest
- */
 class AttributeSetTextTest extends AbstractColumnTest
 {
     const ATTRIBUTE_SET_ID = 4;
     const ATTRIBUTE_SET_NAME = 'Default';
 
     /**
-     * @var AttributeSetRepositoryInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var AttributeSetRepositoryInterface|MockObject
      */
     protected $attributeSetRepositoryMock;
 
     /**
-     * @var AttributeSetInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var AttributeSetInterface|MockObject
      */
     protected $attributeSetMock;
 

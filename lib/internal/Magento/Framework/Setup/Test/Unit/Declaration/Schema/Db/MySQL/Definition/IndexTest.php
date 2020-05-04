@@ -3,20 +3,23 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\Setup\Test\Unit\Declaration\Schema\Db\MySQL\Definition;
 
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Adapter\AdapterInterface;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\Setup\Declaration\Schema\Db\MySQL\Definition\Index;
 use Magento\Framework\Setup\Declaration\Schema\Dto\Index as IndexDto;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test for index (key) definition.
  *
- * @package Magento\Framework\Setup\Test\Unit\Declaration\Schema\Db\MySQL\Definition\Constraints
  */
-class IndexTest extends \PHPUnit\Framework\TestCase
+class IndexTest extends TestCase
 {
     /**
      * @var ObjectManager
@@ -29,7 +32,7 @@ class IndexTest extends \PHPUnit\Framework\TestCase
     private $index;
 
     /**
-     * @var ResourceConnection|\PHPUnit\Framework\MockObject\MockObject
+     * @var ResourceConnection|MockObject
      */
     private $resourceConnectionMock;
 
@@ -54,13 +57,13 @@ class IndexTest extends \PHPUnit\Framework\TestCase
      */
     public function testToDefinition($name, $type, $columns, $expectedExpression)
     {
-        /** @var IndexDto|\PHPUnit\Framework\MockObject\MockObject $index */
+        /** @var IndexDto|MockObject $index */
         $index = $this->getMockBuilder(IndexDto::class)
             ->disableOriginalConstructor()
             ->getMock();
         $adapterMock = $this->getMockBuilder(AdapterInterface::class)
             ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+            ->getMock();
         $this->resourceConnectionMock->expects($this->once())
             ->method('getConnection')
             ->willReturn($adapterMock);

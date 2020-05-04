@@ -3,9 +3,19 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\Controller\Test\Unit\Controller;
 
-class NorouteTest extends \PHPUnit\Framework\TestCase
+use Magento\Framework\App\Request\Http;
+use Magento\Framework\App\ViewInterface;
+use Magento\Framework\Controller\Noroute\Index;
+use Magento\Framework\DataObject;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class NorouteTest extends TestCase
 {
     /**
      * @var \Magento\Framework\Controller\Noroute
@@ -13,29 +23,32 @@ class NorouteTest extends \PHPUnit\Framework\TestCase
     protected $_controller;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $_requestMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $_viewMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $_statusMock;
 
     protected function setUp(): void
     {
-        $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->_requestMock = $this->createMock(\Magento\Framework\App\Request\Http::class);
-        $this->_viewMock = $this->createMock(\Magento\Framework\App\ViewInterface::class);
+        $helper = new ObjectManager($this);
+        $this->_requestMock = $this->createMock(Http::class);
+        $this->_viewMock = $this->createMock(ViewInterface::class);
         $this->_statusMock =
-            $this->createPartialMock(\Magento\Framework\DataObject::class, ['getLoaded', 'getForwarded']);
+            $this->getMockBuilder(DataObject::class)
+                ->addMethods(['getLoaded', 'getForwarded'])
+                ->disableOriginalConstructor()
+                ->getMock();
         $this->_controller = $helper->getObject(
-            \Magento\Framework\Controller\Noroute\Index::class,
+            Index::class,
             ['request' => $this->_requestMock, 'view' => $this->_viewMock]
         );
     }

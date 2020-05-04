@@ -3,25 +3,31 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Reports\Test\Unit\Model\ResourceModel;
 
+use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Framework\DB\Select;
 use Magento\Reports\Model\ResourceModel\Helper;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class HelperTest extends \PHPUnit\Framework\TestCase
+class HelperTest extends TestCase
 {
     /**
-     * @var \Magento\Reports\Model\ResourceModel\Helper
+     * @var Helper
      */
     protected $helper;
 
     /**
-     * @var \Magento\Framework\App\ResourceConnection|\PHPUnit\Framework\MockObject\MockObject
+     * @var ResourceConnection|MockObject
      */
     protected $resourceMock;
 
     /**
-     * @var \Magento\Framework\DB\Adapter\AdapterInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var AdapterInterface|MockObject
      */
     protected $connectionMock;
 
@@ -30,11 +36,11 @@ class HelperTest extends \PHPUnit\Framework\TestCase
      */
     protected function setUp(): void
     {
-        $this->resourceMock = $this->getMockBuilder(\Magento\Framework\App\ResourceConnection::class)
+        $this->resourceMock = $this->getMockBuilder(ResourceConnection::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->connectionMock = $this->getMockBuilder(\Magento\Framework\DB\Adapter\AdapterInterface::class)
+        $this->connectionMock = $this->getMockBuilder(AdapterInterface::class)
             ->getMock();
 
         $this->resourceMock
@@ -76,7 +82,7 @@ class HelperTest extends \PHPUnit\Framework\TestCase
         $column = 'column';
         $aggregationTable = 'aggregationTable';
 
-        $selectMock = $this->getMockBuilder(\Magento\Framework\DB\Select::class)
+        $selectMock = $this->getMockBuilder(Select::class)
             ->disableOriginalConstructor()
             ->getMock();
         $selectMock

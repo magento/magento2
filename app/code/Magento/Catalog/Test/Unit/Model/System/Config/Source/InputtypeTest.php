@@ -3,24 +3,30 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Catalog\Test\Unit\Model\System\Config\Source;
 
-class InputtypeTest extends \PHPUnit\Framework\TestCase
+use Magento\Catalog\Model\System\Config\Source\Inputtype;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\TestCase;
+
+class InputtypeTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
+     * @var ObjectManager
      */
     protected $_helper;
 
     /**
-     * @var \Magento\Catalog\Model\System\Config\Source\Inputtype
+     * @var Inputtype
      */
     protected $_model;
 
     protected function setUp(): void
     {
-        $this->_helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->_model = $this->_helper->getObject(\Magento\Catalog\Model\System\Config\Source\Inputtype::class);
+        $this->_helper = new ObjectManager($this);
+        $this->_model = $this->_helper->getObject(Inputtype::class);
     }
 
     public function testToOptionArrayIsArray()

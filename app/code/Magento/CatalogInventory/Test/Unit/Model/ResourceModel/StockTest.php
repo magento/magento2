@@ -7,73 +7,75 @@ declare(strict_types=1);
 
 namespace Magento\CatalogInventory\Test\Unit\Model\ResourceModel;
 
-use Magento\Catalog\Model\ResourceModel\Product\Collection;
 use Magento\CatalogInventory\Model\Configuration as StockConfiguration;
 use Magento\CatalogInventory\Model\ResourceModel\Stock;
 use Magento\Framework\App\Config;
 use Magento\Framework\DB\Adapter\Pdo\Mysql;
+use Magento\Framework\DB\Select;
 use Magento\Framework\Model\ResourceModel\Db\Context;
 use Magento\Framework\Stdlib\DateTime\DateTime;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Store\Model\StoreManagerInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test for \Magento\CatalogInventory\Model\ResourceModel\Stock
  */
-class StockTest extends \PHPUnit\Framework\TestCase
+class StockTest extends TestCase
 {
     const PRODUCT_TABLE = 'testProductTable';
     const ITEM_TABLE = 'testItemTableName';
 
     /**
-     * @var Stock|\PHPUnit\Framework\MockObject\MockObject
+     * @var Stock|MockObject
      */
     private $stock;
 
     /**
-     * @var Mysql|\PHPUnit\Framework\MockObject\MockObject
+     * @var Mysql|MockObject
      */
     private $connectionMock;
 
     /**
-     * @var Config|\PHPUnit\Framework\MockObject\MockObject
+     * @var Config|MockObject
      */
     private $scopeConfigMock;
 
     /**
-     * @var DateTime|\PHPUnit\Framework\MockObject\MockObject
+     * @var DateTime|MockObject
      */
     private $dateTimeMock;
 
     /**
-     * @var StockConfiguration|\PHPUnit\Framework\MockObject\MockObject
+     * @var StockConfiguration|MockObject
      */
     private $stockConfigurationMock;
 
     /**
-     * @var StoreManagerInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var StoreManagerInterface|MockObject
      */
     private $storeManagerMock;
 
     /**
-     * @var Context|\PHPUnit\Framework\MockObject\MockObject
+     * @var Context|MockObject
      */
     private $contextMock;
 
     /**
-     * @var \Magento\Framework\DB\Select|\PHPUnit\Framework\MockObject\MockObject
+     * @var Select|MockObject
      */
     private $selectMock;
 
     /**
-     * @var \Zend_Db_Statement_Interface|\PHPUnit\Framework\MockObject\MockObject
+     * @var \Zend_Db_Statement_Interface|MockObject
      */
     private $statementMock;
-    
+
     protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
-        $this->selectMock = $this->getMockBuilder(\Magento\Framework\DB\Select::class)
+        $this->selectMock = $this->getMockBuilder(Select::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->contextMock = $objectManager->getObject(Context::class);
@@ -89,7 +91,7 @@ class StockTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $this->storeManagerMock = $this->getMockBuilder(StoreManagerInterface::class)
             ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+            ->getMock();
         $this->connectionMock = $this->getMockBuilder(Mysql::class)
             ->disableOriginalConstructor()
             ->getMock();

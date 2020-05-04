@@ -3,24 +3,31 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Checkout\Test\Unit\Block\Cart;
 
-class CartTotalsProcessorTest extends \PHPUnit\Framework\TestCase
+use Magento\Checkout\Block\Cart\CartTotalsProcessor;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class CartTotalsProcessorTest extends TestCase
 {
     /**
-     * @var \Magento\Checkout\Block\Cart\CartTotalsProcessor
+     * @var CartTotalsProcessor
      */
     protected $model;
 
     /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var ScopeConfigInterface|MockObject
      */
     protected $scopeConfig;
 
     protected function setUp(): void
     {
-        $this->scopeConfig = $this->createMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
-        $this->model = new \Magento\Checkout\Block\Cart\CartTotalsProcessor($this->scopeConfig);
+        $this->scopeConfig = $this->createMock(ScopeConfigInterface::class);
+        $this->model = new CartTotalsProcessor($this->scopeConfig);
     }
 
     public function testProcess()

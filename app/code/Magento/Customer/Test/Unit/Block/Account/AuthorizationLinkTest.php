@@ -3,15 +3,23 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Customer\Test\Unit\Block\Account;
+
+use Magento\Customer\Block\Account\AuthorizationLink;
+use Magento\Customer\Model\Url;
+use Magento\Framework\App\Http\Context;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test class for \Magento\Customer\Block\Account\AuthorizationLink
  */
-class AuthorizationLinkTest extends \PHPUnit\Framework\TestCase
+class AuthorizationLinkTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
+     * @var ObjectManager
      */
     protected $_objectManager;
 
@@ -21,30 +29,30 @@ class AuthorizationLinkTest extends \PHPUnit\Framework\TestCase
     protected $httpContext;
 
     /**
-     * @var \Magento\Customer\Model\Url
+     * @var Url
      */
     protected $_customerUrl;
 
     /**
-     * @var \Magento\Customer\Block\Account\AuthorizationLink
+     * @var AuthorizationLink
      */
     protected $_block;
 
     protected function setUp(): void
     {
-        $this->_objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->httpContext = $this->getMockBuilder(\Magento\Framework\App\Http\Context::class)
+        $this->_objectManager = new ObjectManager($this);
+        $this->httpContext = $this->getMockBuilder(Context::class)
             ->disableOriginalConstructor()
             ->setMethods(['getValue'])
             ->getMock();
-        $this->_customerUrl = $this->getMockBuilder(\Magento\Customer\Model\Url::class)
+        $this->_customerUrl = $this->getMockBuilder(Url::class)
             ->disableOriginalConstructor()
             ->setMethods(['getLogoutUrl', 'getLoginUrl'])
             ->getMock();
 
         $context = $this->_objectManager->getObject(\Magento\Framework\View\Element\Template\Context::class);
         $this->_block = $this->_objectManager->getObject(
-            \Magento\Customer\Block\Account\AuthorizationLink::class,
+            AuthorizationLink::class,
             [
                 'context' => $context,
                 'httpContext' => $this->httpContext,

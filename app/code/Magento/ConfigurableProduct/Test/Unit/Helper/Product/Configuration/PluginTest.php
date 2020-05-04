@@ -3,32 +3,42 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\ConfigurableProduct\Test\Unit\Helper\Product\Configuration;
 
-class PluginTest extends \PHPUnit\Framework\TestCase
+use Magento\Catalog\Helper\Product\Configuration;
+use Magento\Catalog\Model\Product;
+use Magento\Catalog\Model\Product\Configuration\Item\ItemInterface;
+use Magento\ConfigurableProduct\Helper\Product\Configuration\Plugin;
+use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class PluginTest extends TestCase
 {
     /**
-     * @var \Magento\ConfigurableProduct\Helper\Product\Configuration\Plugin
+     * @var Plugin
      */
     protected $plugin;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $itemMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $productMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $typeInstanceMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $subjectMock;
 
@@ -39,18 +49,18 @@ class PluginTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp(): void
     {
-        $this->itemMock = $this->createMock(\Magento\Catalog\Model\Product\Configuration\Item\ItemInterface::class);
-        $this->productMock = $this->createMock(\Magento\Catalog\Model\Product::class);
+        $this->itemMock = $this->createMock(ItemInterface::class);
+        $this->productMock = $this->createMock(Product::class);
         $this->typeInstanceMock = $this->createPartialMock(
-            \Magento\ConfigurableProduct\Model\Product\Type\Configurable::class,
-            ['getSelectedAttributesInfo', '__wakeup']
+            Configurable::class,
+            ['getSelectedAttributesInfo']
         );
         $this->itemMock->expects($this->once())->method('getProduct')->willReturn($this->productMock);
         $this->closureMock = function () {
             return ['options'];
         };
-        $this->subjectMock = $this->createMock(\Magento\Catalog\Helper\Product\Configuration::class);
-        $this->plugin = new \Magento\ConfigurableProduct\Helper\Product\Configuration\Plugin();
+        $this->subjectMock = $this->createMock(Configuration::class);
+        $this->plugin = new Plugin();
     }
 
     public function testAroundGetOptionsWhenProductTypeIsConfigurable()
@@ -60,7 +70,7 @@ class PluginTest extends \PHPUnit\Framework\TestCase
         )->method(
             'getTypeId'
         )->willReturn(
-            \Magento\ConfigurableProduct\Model\Product\Type\Configurable::TYPE_CODE
+            Configurable::TYPE_CODE
         );
         $this->productMock->expects(
             $this->once()

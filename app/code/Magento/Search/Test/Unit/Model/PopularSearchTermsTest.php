@@ -11,11 +11,13 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Search\Model\PopularSearchTerms;
 use Magento\Search\Model\ResourceModel\Query\Collection;
 use Magento\Store\Model\ScopeInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \Magento\Search\Model\PopularSearchTerms
  */
-class PopularSearchTermsTest extends \PHPUnit\Framework\TestCase
+class PopularSearchTermsTest extends TestCase
 {
     /**
      * Testable Object
@@ -25,12 +27,12 @@ class PopularSearchTermsTest extends \PHPUnit\Framework\TestCase
     private $popularSearchTerms;
 
     /**
-     * @var ScopeConfigInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var ScopeConfigInterface|MockObject
      */
     private $scopeConfigMock;
 
     /**
-     * @var Collection|\PHPUnit\Framework\MockObject\MockObject
+     * @var Collection|MockObject
      */
     private $queryCollectionMock;
 
@@ -41,7 +43,7 @@ class PopularSearchTermsTest extends \PHPUnit\Framework\TestCase
      */
     protected function setUp(): void
     {
-        $this->scopeConfigMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
+        $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
         $this->queryCollectionMock = $this->createMock(Collection::class);
         $this->popularSearchTerms = new PopularSearchTerms($this->scopeConfigMock, $this->queryCollectionMock);
     }

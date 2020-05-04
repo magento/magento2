@@ -3,24 +3,30 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Cms\Test\Unit\Controller\Adminhtml\Block;
 
+use Magento\Cms\Controller\Adminhtml\Block\MassDelete;
+use Magento\Cms\Model\ResourceModel\Block\Collection;
+use Magento\Cms\Model\ResourceModel\Block\CollectionFactory;
 use Magento\Cms\Test\Unit\Controller\Adminhtml\AbstractMassActionTest;
+use PHPUnit\Framework\MockObject\MockObject;
 
 class MassDeleteTest extends AbstractMassActionTest
 {
     /**
-     * @var \Magento\Cms\Controller\Adminhtml\Block\MassDelete
+     * @var MassDelete
      */
     protected $massDeleteController;
 
     /**
-     * @var \Magento\Cms\Model\ResourceModel\Block\CollectionFactory|\PHPUnit\Framework\MockObject\MockObject
+     * @var CollectionFactory|MockObject
      */
     protected $collectionFactoryMock;
 
     /**
-     * @var \Magento\Cms\Model\ResourceModel\Block\Collection|\PHPUnit\Framework\MockObject\MockObject
+     * @var \Magento\Cms\Model\ResourceModel\Block\Collection|MockObject
      */
     protected $blockCollectionMock;
 
@@ -29,15 +35,15 @@ class MassDeleteTest extends AbstractMassActionTest
         parent::setUp();
 
         $this->collectionFactoryMock = $this->createPartialMock(
-            \Magento\Cms\Model\ResourceModel\Block\CollectionFactory::class,
+            CollectionFactory::class,
             ['create']
         );
 
         $this->blockCollectionMock =
-            $this->createMock(\Magento\Cms\Model\ResourceModel\Block\Collection::class);
+            $this->createMock(Collection::class);
 
         $this->massDeleteController = $this->objectManager->getObject(
-            \Magento\Cms\Controller\Adminhtml\Block\MassDelete::class,
+            MassDelete::class,
             [
                 'context' => $this->contextMock,
                 'filter' => $this->filterMock,
@@ -83,11 +89,14 @@ class MassDeleteTest extends AbstractMassActionTest
     /**
      * Create Cms Block Collection Mock
      *
-     * @return \Magento\Cms\Model\ResourceModel\Block\Collection|\PHPUnit\Framework\MockObject\MockObject
+     * @return \Magento\Cms\Model\ResourceModel\Block\Collection|MockObject
      */
     protected function getBlockMock()
     {
-        $blockMock = $this->createPartialMock(\Magento\Cms\Model\ResourceModel\Block\Collection::class, ['delete']);
+        $blockMock = $this->getMockBuilder(Collection::class)
+            ->addMethods(['delete'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $blockMock->expects($this->once())->method('delete')->willReturn(true);
 
         return $blockMock;

@@ -3,22 +3,25 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Catalog\Test\Unit\Ui\DataProvider\Product\Related;
 
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductLinkRepositoryInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Catalog\Model\ResourceModel\Product\Collection;
+use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
 use Magento\Catalog\Ui\DataProvider\Product\Related\AbstractDataProvider;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\Catalog\Model\ResourceModel\Product\Collection;
-use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
- * Class AbstractDataProviderTest
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-abstract class AbstractDataProviderTest extends \PHPUnit\Framework\TestCase
+abstract class AbstractDataProviderTest extends TestCase
 {
     /**
      * @var ObjectManager
@@ -26,32 +29,32 @@ abstract class AbstractDataProviderTest extends \PHPUnit\Framework\TestCase
     protected $objectManager;
 
     /**
-     * @var RequestInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var RequestInterface|MockObject
      */
     protected $requestMock;
 
     /**
-     * @var ProductRepositoryInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var ProductRepositoryInterface|MockObject
      */
     protected $productRepositoryMock;
 
     /**
-     * @var ProductLinkRepositoryInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var ProductLinkRepositoryInterface|MockObject
      */
     protected $productLinkRepositoryMock;
 
     /**
-     * @var ProductInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var ProductInterface|MockObject
      */
     protected $productMock;
 
     /**
-     * @var CollectionFactory|\PHPUnit\Framework\MockObject\MockObject
+     * @var CollectionFactory|MockObject
      */
     protected $collectionFactoryMock;
 
     /**
-     * @var Collection|\PHPUnit\Framework\MockObject\MockObject
+     * @var Collection|MockObject
      */
     protected $collectionMock;
 

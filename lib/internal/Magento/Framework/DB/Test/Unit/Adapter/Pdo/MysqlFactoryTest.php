@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\DB\Test\Unit\Adapter\Pdo;
 
 use Magento\Framework\DB\Adapter\Pdo\Mysql;
@@ -11,21 +13,23 @@ use Magento\Framework\DB\LoggerInterface;
 use Magento\Framework\DB\SelectFactory;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class MysqlFactoryTest extends \PHPUnit\Framework\TestCase
+class MysqlFactoryTest extends TestCase
 {
     /**
-     * @var SelectFactory|\PHPUnit\Framework\MockObject\MockObject
+     * @var SelectFactory|MockObject
      */
     private $selectFactoryMock;
 
     /**
-     * @var LoggerInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var LoggerInterface|MockObject
      */
     private $loggerMock;
 
     /**
-     * @var ObjectManagerInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var ObjectManagerInterface|MockObject
      */
     private $objectManagerMock;
 
@@ -37,7 +41,7 @@ class MysqlFactoryTest extends \PHPUnit\Framework\TestCase
     protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
-        $this->objectManagerMock = $this->getMockForAbstractClass(ObjectManagerInterface::class);
+        $this->objectManagerMock = $this->createMock(ObjectManagerInterface::class);
         $this->mysqlFactory = $objectManager->getObject(
             MysqlFactory::class,
             [
@@ -112,13 +116,10 @@ class MysqlFactoryTest extends \PHPUnit\Framework\TestCase
         ];
     }
 
-    /**
-     */
     public function testCreateInvalidClass()
     {
-        $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage('Invalid class, stdClass must extend Magento\\Framework\\DB\\Adapter\\Pdo\\Mysql.');
-
+        $this->expectException('InvalidArgumentException');
+        $this->expectExceptionMessage('Invalid class, stdClass must extend Magento\Framework\DB\Adapter\Pdo\Mysql.');
         $this->mysqlFactory->create(
             \stdClass::class,
             []

@@ -3,26 +3,34 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Downloadable\Test\Unit\Controller\Adminhtml\Downloadable\Product\Edit;
 
+use Magento\Downloadable\Controller\Adminhtml\Downloadable\Product\Edit\Sample;
+use Magento\Downloadable\Helper\Download;
+use Magento\Downloadable\Helper\File;
+use Magento\Framework\App\Request\Http;
+use Magento\Framework\App\ResponseInterface;
+use Magento\Framework\ObjectManager\ObjectManager;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use PHPUnit\Framework\TestCase;
 
-class SampleTest extends \PHPUnit\Framework\TestCase
+class SampleTest extends TestCase
 {
-    /** @var \Magento\Downloadable\Controller\Adminhtml\Downloadable\Product\Edit\Sample */
+    /** @var Sample */
     protected $sample;
 
     /** @var ObjectManagerHelper */
     protected $objectManagerHelper;
 
     /**
-     * @var \Magento\Framework\App\Request\Http
+     * @var Http
      */
     protected $request;
 
     /**
-     * @var \Magento\Framework\App\ResponseInterface
+     * @var ResponseInterface
      */
     protected $response;
 
@@ -32,17 +40,17 @@ class SampleTest extends \PHPUnit\Framework\TestCase
     protected $sampleModel;
 
     /**
-     * @var \Magento\Framework\ObjectManager\ObjectManager
+     * @var ObjectManager
      */
     protected $objectManager;
 
     /**
-     * @var \Magento\Downloadable\Helper\File
+     * @var File
      */
     protected $fileHelper;
 
     /**
-     * @var \Magento\Downloadable\Helper\Download
+     * @var Download
      */
     protected $downloadHelper;
 
@@ -50,47 +58,42 @@ class SampleTest extends \PHPUnit\Framework\TestCase
     {
         $this->objectManagerHelper = new ObjectManagerHelper($this);
 
-        $this->request = $this->getMockBuilder(\Magento\Framework\App\Request\Http::class)
-            ->disableOriginalConstructor()->getMock();
-        $this->response = $this->createPartialMock(
-            \Magento\Framework\App\ResponseInterface::class,
-            [
-                'setHttpResponseCode',
-                'clearBody',
-                'sendHeaders',
-                'sendResponse',
-                'setHeader'
-            ]
-        );
-        $this->fileHelper = $this->createPartialMock(\Magento\Downloadable\Helper\File::class, [
-                'getFilePath'
-            ]);
-        $this->downloadHelper = $this->createPartialMock(\Magento\Downloadable\Helper\Download::class, [
-                'setResource',
-                'getFilename',
-                'getContentType',
-                'output',
-                'getFileSize',
-                'getContentDisposition'
-            ]);
-        $this->sampleModel = $this->createPartialMock(
-            \Magento\Downloadable\Controller\Adminhtml\Downloadable\Product\Edit\Sample::class,
-            [
+        $this->request = $this->getMockBuilder(Http::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->response = $this->getMockBuilder(ResponseInterface::class)
+            ->addMethods(['setHttpResponseCode', 'clearBody', 'sendHeaders', 'setHeader'])
+            ->onlyMethods(['sendResponse'])
+            ->getMock();
+        $this->fileHelper = $this->createPartialMock(File::class, [
+            'getFilePath'
+        ]);
+        $this->downloadHelper = $this->createPartialMock(Download::class, [
+            'setResource',
+            'getFilename',
+            'getContentType',
+            'output',
+            'getFileSize',
+            'getContentDisposition'
+        ]);
+        $this->sampleModel = $this->getMockBuilder(Sample::class)
+            ->addMethods([
                 'load',
                 'getId',
                 'getSampleType',
                 'getSampleUrl',
                 'getBasePath',
                 'getBaseSamplePath',
-                'getSampleFile',
-            ]
-        );
-        $this->objectManager = $this->createPartialMock(\Magento\Framework\ObjectManager\ObjectManager::class, [
-                'create',
-                'get'
-            ]);
+                'getSampleFile'
+            ])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->objectManager = $this->createPartialMock(ObjectManager::class, [
+            'create',
+            'get'
+        ]);
         $this->sample = $this->objectManagerHelper->getObject(
-            \Magento\Downloadable\Controller\Adminhtml\Downloadable\Product\Edit\Sample::class,
+            Sample::class,
             [
                 'objectManager' => $this->objectManager,
                 'request' => $this->request,
@@ -105,43 +108,43 @@ class SampleTest extends \PHPUnit\Framework\TestCase
     public function testExecuteFile()
     {
         $this->request->expects($this->at(0))->method('getParam')->with('id', 0)
-            ->willReturn(1);
+            ->will($this->returnValue(1));
         $this->response->expects($this->once())->method('setHttpResponseCode')
-            ->willReturnSelf();
+            ->will($this->returnSelf());
         $this->response->expects($this->once())->method('clearBody')
-            ->willReturnSelf();
+            ->will($this->returnSelf());
         $this->response->expects($this->any())->method('setHeader')
-            ->willReturnSelf();
+            ->will($this->returnSelf());
         $this->response->expects($this->once())->method('sendHeaders')
-            ->willReturnSelf();
-        $this->objectManager->expects($this->at(1))->method('get')->with(\Magento\Downloadable\Helper\File::class)
-            ->willReturn($this->fileHelper);
+            ->will($this->returnSelf());
+        $this->objectManager->expects($this->at(1))->method('get')->with(File::class)
+            ->will($this->returnValue($this->fileHelper));
         $this->objectManager->expects($this->at(2))->method('get')->with(\Magento\Downloadable\Model\Sample::class)
-            ->willReturn($this->sampleModel);
-        $this->objectManager->expects($this->at(3))->method('get')->with(\Magento\Downloadable\Helper\Download::class)
-            ->willReturn($this->downloadHelper);
+            ->will($this->returnValue($this->sampleModel));
+        $this->objectManager->expects($this->at(3))->method('get')->with(Download::class)
+            ->will($this->returnValue($this->downloadHelper));
         $this->fileHelper->expects($this->once())->method('getFilePath')
-            ->willReturn('filepath/sample.jpg');
+            ->will($this->returnValue('filepath/sample.jpg'));
         $this->downloadHelper->expects($this->once())->method('setResource')
-            ->willReturnSelf();
+            ->will($this->returnSelf());
         $this->downloadHelper->expects($this->once())->method('getFilename')
-            ->willReturn('sample.jpg');
+            ->will($this->returnValue('sample.jpg'));
         $this->downloadHelper->expects($this->once())->method('getContentType')
-            ->willReturnSelf('file');
+            ->will($this->returnSelf('file'));
         $this->downloadHelper->expects($this->once())->method('getFileSize')
-            ->willReturn(null);
+            ->will($this->returnValue(null));
         $this->downloadHelper->expects($this->once())->method('getContentDisposition')
-            ->willReturn(null);
+            ->will($this->returnValue(null));
         $this->downloadHelper->expects($this->once())->method('output')
-            ->willReturnSelf();
+            ->will($this->returnSelf());
         $this->sampleModel->expects($this->once())->method('load')
-            ->willReturnSelf();
+            ->will($this->returnSelf());
         $this->sampleModel->expects($this->once())->method('getId')
-            ->willReturn('1');
+            ->will($this->returnValue('1'));
         $this->sampleModel->expects($this->any())->method('getSampleType')
-            ->willReturn('file');
+            ->will($this->returnValue('file'));
         $this->objectManager->expects($this->once())->method('create')
-            ->willReturn($this->sampleModel);
+            ->will($this->returnValue($this->sampleModel));
 
         $this->sample->execute();
     }
@@ -152,37 +155,37 @@ class SampleTest extends \PHPUnit\Framework\TestCase
     public function testExecuteUrl()
     {
         $this->request->expects($this->at(0))->method('getParam')->with('id', 0)
-            ->willReturn(1);
+            ->will($this->returnValue(1));
         $this->response->expects($this->once())->method('setHttpResponseCode')
-            ->willReturnSelf();
+            ->will($this->returnSelf());
         $this->response->expects($this->once())->method('clearBody')
-            ->willReturnSelf();
+            ->will($this->returnSelf());
         $this->response->expects($this->any())->method('setHeader')
-            ->willReturnSelf();
+            ->will($this->returnSelf());
         $this->response->expects($this->once())->method('sendHeaders')
-            ->willReturnSelf();
-        $this->objectManager->expects($this->at(1))->method('get')->with(\Magento\Downloadable\Helper\Download::class)
-            ->willReturn($this->downloadHelper);
+            ->will($this->returnSelf());
+        $this->objectManager->expects($this->at(1))->method('get')->with(Download::class)
+            ->will($this->returnValue($this->downloadHelper));
         $this->downloadHelper->expects($this->once())->method('setResource')
-            ->willReturnSelf();
+            ->will($this->returnSelf());
         $this->downloadHelper->expects($this->once())->method('getFilename')
-            ->willReturn('sample.jpg');
+            ->will($this->returnValue('sample.jpg'));
         $this->downloadHelper->expects($this->once())->method('getContentType')
-            ->willReturnSelf('url');
+            ->will($this->returnSelf('url'));
         $this->downloadHelper->expects($this->once())->method('getFileSize')
-            ->willReturn(null);
+            ->will($this->returnValue(null));
         $this->downloadHelper->expects($this->once())->method('getContentDisposition')
-            ->willReturn(null);
+            ->will($this->returnValue(null));
         $this->downloadHelper->expects($this->once())->method('output')
-            ->willReturnSelf();
+            ->will($this->returnSelf());
         $this->sampleModel->expects($this->once())->method('load')
-            ->willReturnSelf();
+            ->will($this->returnSelf());
         $this->sampleModel->expects($this->once())->method('getId')
-            ->willReturn('1');
+            ->will($this->returnValue('1'));
         $this->sampleModel->expects($this->any())->method('getSampleType')
-            ->willReturn('url');
+            ->will($this->returnValue('url'));
         $this->objectManager->expects($this->once())->method('create')
-            ->willReturn($this->sampleModel);
+            ->will($this->returnValue($this->sampleModel));
 
         $this->sample->execute();
     }

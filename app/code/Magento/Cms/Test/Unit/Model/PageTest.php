@@ -3,20 +3,25 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Cms\Test\Unit\Model;
 
 use Magento\Cms\Model\Page;
+use Magento\Cms\Model\ResourceModel\Page as PageResource;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Event\ManagerInterface;
 use Magento\Framework\Model\Context;
-use Magento\Cms\Model\ResourceModel\Page as PageResource;
 use Magento\Framework\Model\ResourceModel\AbstractResource;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \Magento\Cms\Model\Page
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class PageTest extends \PHPUnit\Framework\TestCase
+class PageTest extends TestCase
 {
     /**
      * @var \Magento\Cms\Model\Page
@@ -24,27 +29,27 @@ class PageTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \Magento\Backend\Block\Template\Context|\PHPUnit\Framework\MockObject\MockObject
+     * @var \Magento\Backend\Block\Template\Context|MockObject
      */
     protected $contextMock;
 
     /**
-     * @var ManagerInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var ManagerInterface|MockObject
      */
     protected $eventManagerMock;
 
     /**
-     * @var PageResource|\PHPUnit\Framework\MockObject\MockObject
+     * @var PageResource|MockObject
      */
     protected $resourcePageMock;
 
     /**
-     * @var AbstractResource|\PHPUnit\Framework\MockObject\MockObject
+     * @var AbstractResource|MockObject
      */
     protected $resourcesMock;
 
     /**
-     * @var ScopeConfigInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var ScopeConfigInterface|MockObject
      */
     protected $scopeConfigMock;
 
@@ -52,7 +57,7 @@ class PageTest extends \PHPUnit\Framework\TestCase
     {
         $this->eventManagerMock = $this->getMockBuilder(ManagerInterface::class)
             ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+            ->getMock();
         $this->contextMock = $this->getMockBuilder(Context::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -62,7 +67,7 @@ class PageTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $this->eventManagerMock = $this->getMockBuilder(ManagerInterface::class)
             ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+            ->getMock();
         $this->resourcesMock = $this->getMockBuilder(AbstractResource::class)
             ->setMethods(['getIdFieldName', 'load', 'checkIdentifier'])
             ->getMockForAbstractClass();
@@ -76,7 +81,7 @@ class PageTest extends \PHPUnit\Framework\TestCase
             ->method('getResources')
             ->willReturn($this->resourcesMock);
 
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $objectManager = new ObjectManager($this);
 
         $this->model = $objectManager->getObject(
             Page::class,
@@ -115,15 +120,14 @@ class PageTest extends \PHPUnit\Framework\TestCase
             ->willReturn($fetchOneResult);
 
         $this->assertIsString($this->model->checkIdentifier($identifier, $storeId));
+        // TODO: After migration to PHPUnit 8, replace deprecated method
+        // $this->assertIsString($this->model->checkIdentifier($identifier, $storeId));
     }
 
-    /**
-     */
     public function testBeforeSave404Identifier()
     {
-        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+        $this->expectException('Magento\Framework\Exception\LocalizedException');
         $this->expectExceptionMessage('This identifier is reserved for "CMS No Route Page" in configuration.');
-
         $this->model->setId(1);
         $this->model->setOrigData('identifier', 'no-route');
         $this->model->setIdentifier('no-route2');
@@ -144,13 +148,10 @@ class PageTest extends \PHPUnit\Framework\TestCase
         $this->model->beforeSave();
     }
 
-    /**
-     */
     public function testBeforeSaveHomeIdentifier()
     {
-        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+        $this->expectException('Magento\Framework\Exception\LocalizedException');
         $this->expectExceptionMessage('This identifier is reserved for "CMS Home Page" in configuration.');
-
         $this->model->setId(1);
         $this->model->setOrigData('identifier', 'home');
         $this->model->setIdentifier('home2');
@@ -171,13 +172,10 @@ class PageTest extends \PHPUnit\Framework\TestCase
         $this->model->beforeSave();
     }
 
-    /**
-     */
     public function testBeforeSaveNoCookiesIdentifier()
     {
-        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+        $this->expectException('Magento\Framework\Exception\LocalizedException');
         $this->expectExceptionMessage('This identifier is reserved for "CMS No Cookies Page" in configuration.');
-
         $this->model->setId(1);
         $this->model->setOrigData('identifier', 'no-cookies');
         $this->model->setIdentifier('no-cookies2');

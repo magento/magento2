@@ -3,12 +3,17 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Sales\Test\Unit\Model\Config;
 
-class ConverterTest extends \PHPUnit\Framework\TestCase
+use Magento\Sales\Model\Config\Converter;
+use PHPUnit\Framework\TestCase;
+
+class ConverterTest extends TestCase
 {
     /**
-     * @var \Magento\Sales\Model\Config\Converter
+     * @var Converter
      */
     protected $_converter;
 
@@ -17,7 +22,7 @@ class ConverterTest extends \PHPUnit\Framework\TestCase
      */
     protected function setUp(): void
     {
-        $this->_converter = new \Magento\Sales\Model\Config\Converter();
+        $this->_converter = new Converter();
     }
 
     /**
@@ -73,12 +78,10 @@ class ConverterTest extends \PHPUnit\Framework\TestCase
 
     /**
      * Testing converting not valid cron configuration, expect to get exception
-     *
      */
     public function testConvertWrongConfiguration()
     {
-        $this->expectException(\InvalidArgumentException::class);
-
+        $this->expectException('InvalidArgumentException');
         $xmlFile = __DIR__ . '/_files/sales_invalid.xml';
         $dom = new \DOMDocument();
         $dom->loadXML(file_get_contents($xmlFile));

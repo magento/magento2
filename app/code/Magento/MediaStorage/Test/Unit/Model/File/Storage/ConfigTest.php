@@ -3,11 +3,18 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\MediaStorage\Test\Unit\Model\File\Storage;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Filesystem;
+use Magento\Framework\Filesystem\File\Write;
+use Magento\MediaStorage\Model\File\Storage;
+use Magento\MediaStorage\Model\File\Storage\Config;
+use PHPUnit\Framework\TestCase;
 
-class ConfigTest extends \PHPUnit\Framework\TestCase
+class ConfigTest extends TestCase
 {
     /**
      * Test for save method
@@ -15,10 +22,10 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
     public function testSave()
     {
         $config = [];
-        $fileStorageMock = $this->createMock(\Magento\MediaStorage\Model\File\Storage::class);
+        $fileStorageMock = $this->createMock(Storage::class);
         $fileStorageMock->expects($this->once())->method('getScriptConfig')->willReturn($config);
 
-        $file = $this->getMockBuilder(\Magento\Framework\Filesystem\File\Write::class)
+        $file = $this->getMockBuilder(Write::class)
             ->setMethods(['lock', 'write', 'unlock', 'close'])
             ->disableOriginalConstructor()
             ->getMock();
@@ -32,7 +39,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         );
         $directory->expects($this->once())->method('getRelativePath')->willReturnArgument(0);
         $directory->expects($this->once())->method('openFile')->with('cacheFile')->willReturn($file);
-        $filesystem = $this->createPartialMock(\Magento\Framework\Filesystem::class, ['getDirectoryWrite']);
+        $filesystem = $this->createPartialMock(Filesystem::class, ['getDirectoryWrite']);
         $filesystem->expects(
             $this->once()
         )->method(
@@ -42,7 +49,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         )->willReturn(
             $directory
         );
-        $model = new \Magento\MediaStorage\Model\File\Storage\Config($fileStorageMock, $filesystem, 'cacheFile');
+        $model = new Config($fileStorageMock, $filesystem, 'cacheFile');
         $model->save();
     }
 }

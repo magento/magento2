@@ -3,26 +3,33 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Config\Test\Unit\Model\Config\Source\Locale;
 
-class TimezoneTest extends \PHPUnit\Framework\TestCase
+use Magento\Config\Model\Config\Source\Locale\Timezone;
+use Magento\Framework\Locale\TranslatedLists;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class TimezoneTest extends TestCase
 {
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $listMock;
 
     /**
-     * @var \Magento\Config\Model\Config\Source\Locale\Timezone
+     * @var Timezone
      */
     protected $model;
 
     protected function setUp(): void
     {
-        $this->listMock = $this->getMockBuilder(\Magento\Framework\Locale\TranslatedLists::class)
+        $this->listMock = $this->getMockBuilder(TranslatedLists::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->model = new \Magento\Config\Model\Config\Source\Locale\Timezone($this->listMock);
+        $this->model = new Timezone($this->listMock);
     }
 
     public function testToOptionArray()

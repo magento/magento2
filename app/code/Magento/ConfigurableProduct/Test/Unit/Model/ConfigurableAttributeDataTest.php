@@ -3,27 +3,32 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\ConfigurableProduct\Test\Unit\Model;
 
-/**
- * Class CustomOptionTest
- */
-class ConfigurableAttributeDataTest extends \PHPUnit\Framework\TestCase
+use Magento\Catalog\Model\Product;
+use Magento\ConfigurableProduct\Model\ConfigurableAttributeData;
+use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
+use Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Attribute;
+use Magento\Framework\DataObject;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class ConfigurableAttributeDataTest extends TestCase
 {
     /**
-     * @var \Magento\Catalog\Model\Product|\PHPUnit\Framework\MockObject\MockObject
+     * @var Product|MockObject
      */
     protected $product;
 
     /**
-     * @var \Magento\ConfigurableProduct\Model\ConfigurableAttributeData|\PHPUnit\Framework\MockObject\MockObject
+     * @var ConfigurableAttributeData|MockObject
      */
     protected $configurableAttributeData;
 
     /**
-     * @var \Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Attribute|
-     * \PHPUnit\Framework\MockObject\MockObject
+     * @var Attribute|MockObject
      */
     protected $attributeMock;
 
@@ -32,18 +37,15 @@ class ConfigurableAttributeDataTest extends \PHPUnit\Framework\TestCase
      */
     protected function setUp(): void
     {
-        $this->product = $this->createPartialMock(\Magento\Catalog\Model\Product::class, [
-                'getTypeInstance',
-                'setParentId',
-                'hasPreconfiguredValues',
-                'getPreconfiguredValues',
-                'getPriceInfo',
-                'getStoreId'
-            ]);
+        $this->product = $this->getMockBuilder(Product::class)
+            ->addMethods(['setParentId', 'hasPreconfiguredValues'])
+            ->onlyMethods(['getTypeInstance', 'getPreconfiguredValues', 'getPriceInfo', 'getStoreId'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->attributeMock = $this->createMock(
-            \Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Attribute::class
+            Attribute::class
         );
-        $this->configurableAttributeData = new \Magento\ConfigurableProduct\Model\ConfigurableAttributeData();
+        $this->configurableAttributeData = new ConfigurableAttributeData();
     }
 
     /**
@@ -89,7 +91,7 @@ class ConfigurableAttributeDataTest extends \PHPUnit\Framework\TestCase
 
         $productAttributeMock = $this->getMockBuilder(\Magento\Catalog\Model\Entity\Attribute::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getStoreLabel', '__wakeup', 'getAttributeCode', 'getId', 'getAttributeLabel'])
+            ->setMethods(['getStoreLabel', 'getAttributeCode', 'getId', 'getAttributeLabel'])
             ->getMock();
         $productAttributeMock->expects($this->once())
             ->method('getId')
@@ -102,7 +104,7 @@ class ConfigurableAttributeDataTest extends \PHPUnit\Framework\TestCase
             \Magento\ConfigurableProduct\Model\Product\Type\Configurable\Attribute::class
         )
             ->disableOriginalConstructor()
-            ->setMethods(['getProductAttribute', '__wakeup', 'getLabel', 'getOptions', 'getAttributeId', 'getPosition'])
+            ->setMethods(['getProductAttribute', 'getLabel', 'getOptions', 'getAttributeId', 'getPosition'])
             ->getMock();
         $attributeMock->expects($this->once())
             ->method('getProductAttribute')
@@ -125,14 +127,15 @@ class ConfigurableAttributeDataTest extends \PHPUnit\Framework\TestCase
             ->willReturn($attributeOptions);
 
         $configurableProduct = $this->getMockBuilder(
-            \Magento\ConfigurableProduct\Model\Product\Type\Configurable::class
-        )->disableOriginalConstructor()->getMock();
+            Configurable::class
+        )->disableOriginalConstructor()
+            ->getMock();
         $configurableProduct->expects($this->once())
             ->method('getConfigurableAttributes')
             ->with($this->product)
             ->willReturn([$attributeMock]);
 
-        $configuredValueMock = $this->getMockBuilder(\Magento\Framework\DataObject::class)
+        $configuredValueMock = $this->getMockBuilder(DataObject::class)
             ->disableOriginalConstructor()
             ->getMock();
         $configuredValueMock->expects($this->any())

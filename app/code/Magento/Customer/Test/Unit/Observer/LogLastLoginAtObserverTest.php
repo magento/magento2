@@ -3,17 +3,19 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Customer\Test\Unit\Observer;
 
+use Magento\Customer\Model\Customer;
 use Magento\Customer\Model\Logger;
-use Magento\Framework\Stdlib\DateTime;
-use Magento\Framework\Event\Observer;
 use Magento\Customer\Observer\LogLastLoginAtObserver;
+use Magento\Framework\Event;
+use Magento\Framework\Event\Observer;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-/**
- * Class LogLastLoginAtObserverTest
- */
-class LogLastLoginAtObserverTest extends \PHPUnit\Framework\TestCase
+class LogLastLoginAtObserverTest extends TestCase
 {
     /**
      * @var LogLastLoginAtObserver
@@ -21,7 +23,7 @@ class LogLastLoginAtObserverTest extends \PHPUnit\Framework\TestCase
     protected $logLastLoginAtObserver;
 
     /**
-     * @var Logger | \PHPUnit\Framework\MockObject\MockObject
+     * @var Logger|MockObject
      */
     protected $loggerMock;
 
@@ -30,7 +32,7 @@ class LogLastLoginAtObserverTest extends \PHPUnit\Framework\TestCase
      */
     protected function setUp(): void
     {
-        $this->loggerMock = $this->createMock(\Magento\Customer\Model\Logger::class);
+        $this->loggerMock = $this->createMock(Logger::class);
         $this->logLastLoginAtObserver = new LogLastLoginAtObserver($this->loggerMock);
     }
 
@@ -41,9 +43,12 @@ class LogLastLoginAtObserverTest extends \PHPUnit\Framework\TestCase
     {
         $id = 1;
 
-        $observerMock = $this->createMock(\Magento\Framework\Event\Observer::class);
-        $eventMock = $this->createPartialMock(\Magento\Framework\Event::class, ['getCustomer']);
-        $customerMock = $this->createMock(\Magento\Customer\Model\Customer::class);
+        $observerMock = $this->createMock(Observer::class);
+        $eventMock = $this->getMockBuilder(Event::class)
+            ->addMethods(['getCustomer'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $customerMock = $this->createMock(Customer::class);
 
         $observerMock->expects($this->once())
             ->method('getEvent')

@@ -3,15 +3,19 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Store\Test\Unit\Model\HeaderProvider;
 
-use \Magento\Store\Model\HeaderProvider\UpgradeInsecure;
-use \Magento\Store\Model\Store;
-use \Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
-use \Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\Config;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Store\Model\HeaderProvider\UpgradeInsecure;
+use Magento\Store\Model\Store;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class UpgradeInsecureTest extends \PHPUnit\Framework\TestCase
+class UpgradeInsecureTest extends TestCase
 {
     /** Content-Security-Policy Header name */
     const HEADER_NAME = 'Content-Security-Policy';
@@ -27,18 +31,18 @@ class UpgradeInsecureTest extends \PHPUnit\Framework\TestCase
     protected $object;
 
     /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var ScopeConfigInterface|MockObject
      */
     protected $scopeConfigMock;
 
     protected function setUp(): void
     {
-        $this->scopeConfigMock = $this->getMockBuilder(\Magento\Framework\App\Config::class)
+        $this->scopeConfigMock = $this->getMockBuilder(Config::class)
             ->disableOriginalConstructor()
             ->getMock();
         $objectManager = new ObjectManagerHelper($this);
         $this->object = $objectManager->getObject(
-            \Magento\Store\Model\HeaderProvider\UpgradeInsecure::class,
+            UpgradeInsecure::class,
             ['scopeConfig' => $this->scopeConfigMock]
         );
     }

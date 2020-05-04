@@ -7,13 +7,13 @@ declare(strict_types=1);
 
 namespace Magento\Setup\Test\Unit\Model\ConfigOptionsList;
 
-use Magento\Setup\Model\ConfigOptionsList\Lock as LockConfigOptionsList;
+use Magento\Framework\App\DeploymentConfig;
+use Magento\Framework\Config\Data\ConfigData;
 use Magento\Framework\Lock\Backend\Zookeeper as ZookeeperLock;
 use Magento\Framework\Lock\LockBackendFactory;
-use Magento\Framework\Config\Data\ConfigData;
-use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\Setup\Option\SelectConfigOption;
 use Magento\Framework\Setup\Option\TextConfigOption;
+use Magento\Setup\Model\ConfigOptionsList\Lock as LockConfigOptionsList;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 

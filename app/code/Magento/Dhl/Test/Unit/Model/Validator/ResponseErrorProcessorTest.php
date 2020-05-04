@@ -3,14 +3,16 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Dhl\Test\Unit\Model\Validator;
 
 use Magento\Dhl\Model\Validator\ResponseErrorProcessor;
-use Magento\Shipping\Model\Simplexml\Element;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Shipping\Model\Simplexml\Element;
+use PHPUnit\Framework\TestCase;
 
-class ResponseErrorProcessorTest extends \PHPUnit\Framework\TestCase
+class ResponseErrorProcessorTest extends TestCase
 {
     /**
      * @var ObjectManager

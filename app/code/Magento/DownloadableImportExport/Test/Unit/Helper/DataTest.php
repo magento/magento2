@@ -8,9 +8,9 @@ declare(strict_types=1);
 
 namespace Magento\DownloadableImportExport\Test\Unit\Helper;
 
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\DownloadableImportExport\Helper\Data as HelperData;
 use Magento\DownloadableImportExport\Model\Import\Product\Type\Downloadable;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use PHPUnit\Framework\TestCase;
 
 class DataTest extends TestCase

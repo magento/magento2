@@ -11,14 +11,13 @@ use Magento\Framework\Locale\ResolverInterface;
 use Magento\Paypal\Model\Config;
 use Magento\Paypal\Model\ConfigFactory;
 use Magento\Paypal\Model\Express\LocaleResolver as ExpressLocaleResolver;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-/**
- * Class LocaleResolverTest
- */
-class LocaleResolverTest extends \PHPUnit\Framework\TestCase
+class LocaleResolverTest extends TestCase
 {
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|ResolverInterface
+     * @var MockObject|ResolverInterface
      */
     private $resolver;
 
@@ -29,7 +28,7 @@ class LocaleResolverTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp(): void
     {
-        $this->resolver = $this->getMockForAbstractClass(ResolverInterface::class);
+        $this->resolver = $this->createMock(ResolverInterface::class);
         /** @var Config $config */
         $config = $this->createMock(Config::class);
         $config->method('getValue')

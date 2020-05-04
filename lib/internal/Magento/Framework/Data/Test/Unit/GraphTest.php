@@ -3,9 +3,14 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\Data\Test\Unit;
 
-class GraphTest extends \PHPUnit\Framework\TestCase
+use Magento\Framework\Data\Graph;
+use PHPUnit\Framework\TestCase;
+
+class GraphTest extends TestCase
 {
     /**
      * @param array $nodes
@@ -14,9 +19,8 @@ class GraphTest extends \PHPUnit\Framework\TestCase
      */
     public function testConstructorError($nodes, $relations)
     {
-        $this->expectException(\InvalidArgumentException::class);
-
-        new \Magento\Framework\Data\Graph($nodes, $relations);
+        $this->expectException('InvalidArgumentException');
+        new Graph($nodes, $relations);
     }
 
     /**
@@ -37,7 +41,7 @@ class GraphTest extends \PHPUnit\Framework\TestCase
      */
     public function testAddRelation()
     {
-        $model = new \Magento\Framework\Data\Graph([1, 2, 3], [[1, 2], [2, 3]]);
+        $model = new Graph([1, 2, 3], [[1, 2], [2, 3]]);
         $this->assertEquals([1 => [2 => 2], 2 => [3 => 3]], $model->getRelations());
         $this->assertSame($model, $model->addRelation(3, 1));
         $this->assertEquals([1 => [2 => 2], 2 => [3 => 3], 3 => [1 => 1]], $model->getRelations());
@@ -48,33 +52,33 @@ class GraphTest extends \PHPUnit\Framework\TestCase
         // directional case is covered by testAddRelation()
 
         // inverse
-        $model = new \Magento\Framework\Data\Graph([1, 2, 3], [[1, 2], [2, 3]]);
+        $model = new Graph([1, 2, 3], [[1, 2], [2, 3]]);
         $this->assertEquals(
             [2 => [1 => 1], 3 => [2 => 2]],
-            $model->getRelations(\Magento\Framework\Data\Graph::INVERSE)
+            $model->getRelations(Graph::INVERSE)
         );
 
         // non-directional
         $this->assertEquals(
             [1 => [2 => 2], 2 => [1 => 1, 3 => 3], 3 => [2 => 2]],
-            $model->getRelations(\Magento\Framework\Data\Graph::NON_DIRECTIONAL)
+            $model->getRelations(Graph::NON_DIRECTIONAL)
         );
     }
 
     public function testFindCycle()
     {
         $nodes = [1, 2, 3, 4];
-        $model = new \Magento\Framework\Data\Graph($nodes, [[1, 2], [2, 3], [3, 4]]);
+        $model = new Graph($nodes, [[1, 2], [2, 3], [3, 4]]);
         $this->assertEquals([], $model->findCycle());
 
-        $model = new \Magento\Framework\Data\Graph($nodes, [[1, 2], [2, 3], [3, 4], [4, 2]]);
+        $model = new Graph($nodes, [[1, 2], [2, 3], [3, 4], [4, 2]]);
         $this->assertEquals([], $model->findCycle(1));
         $cycle = $model->findCycle();
         sort($cycle);
         $this->assertEquals([2, 2, 3, 4], $cycle);
         $this->assertEquals([3, 4, 2, 3], $model->findCycle(3));
 
-        $model = new \Magento\Framework\Data\Graph(
+        $model = new Graph(
             $nodes,
             [[1, 2], [2, 3], [3, 4], [4, 2], [3, 1]]
         );
@@ -88,7 +92,7 @@ class GraphTest extends \PHPUnit\Framework\TestCase
 
     public function testDfs()
     {
-        $model = new \Magento\Framework\Data\Graph([1, 2, 3, 4, 5], [[1, 2], [2, 3], [4, 5]]);
+        $model = new Graph([1, 2, 3, 4, 5], [[1, 2], [2, 3], [4, 5]]);
 
         // directional
         $this->assertEquals([1, 2, 3], $model->dfs(1, 3));
@@ -97,18 +101,18 @@ class GraphTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals([], $model->dfs(1, 5));
 
         // inverse
-        $this->assertEquals([3, 2, 1], $model->dfs(3, 1, \Magento\Framework\Data\Graph::INVERSE));
+        $this->assertEquals([3, 2, 1], $model->dfs(3, 1, Graph::INVERSE));
 
         // non-directional
-        $model = new \Magento\Framework\Data\Graph([1, 2, 3], [[2, 1], [2, 3]]);
-        $this->assertEquals([], $model->dfs(1, 3, \Magento\Framework\Data\Graph::DIRECTIONAL));
-        $this->assertEquals([], $model->dfs(3, 1, \Magento\Framework\Data\Graph::INVERSE));
-        $this->assertEquals([1, 2, 3], $model->dfs(1, 3, \Magento\Framework\Data\Graph::NON_DIRECTIONAL));
+        $model = new Graph([1, 2, 3], [[2, 1], [2, 3]]);
+        $this->assertEquals([], $model->dfs(1, 3, Graph::DIRECTIONAL));
+        $this->assertEquals([], $model->dfs(3, 1, Graph::INVERSE));
+        $this->assertEquals([1, 2, 3], $model->dfs(1, 3, Graph::NON_DIRECTIONAL));
     }
 
     public function testFindPathsToReachableNodes()
     {
-        $model = new \Magento\Framework\Data\Graph([1, 2, 3, 4, 5], [[1, 2], [1, 3], [1, 4], [4, 5]]);
+        $model = new Graph([1, 2, 3, 4, 5], [[1, 2], [1, 3], [1, 4], [4, 5]]);
 
         // directional
         $paths = $model->findPathsToReachableNodes(1);
@@ -116,12 +120,12 @@ class GraphTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals([1 => [1], 2 => [1, 2], 3 => [1, 3], 4 => [1, 4], 5 => [1, 4, 5]], $paths);
 
         // inverse
-        $paths = $model->findPathsToReachableNodes(5, \Magento\Framework\Data\Graph::INVERSE);
+        $paths = $model->findPathsToReachableNodes(5, Graph::INVERSE);
         ksort($paths);
         $this->assertEquals([1 => [5, 4, 1], 4 => [5, 4], 5 => [5]], $paths);
 
         // non-directional
-        $paths = $model->findPathsToReachableNodes(5, \Magento\Framework\Data\Graph::NON_DIRECTIONAL);
+        $paths = $model->findPathsToReachableNodes(5, Graph::NON_DIRECTIONAL);
         ksort($paths);
         $this->assertEquals([1 => [5, 4, 1], 2 => [5, 4, 1, 2], 3 => [5, 4, 1, 3], 4 => [5, 4], 5 => [5]], $paths);
     }

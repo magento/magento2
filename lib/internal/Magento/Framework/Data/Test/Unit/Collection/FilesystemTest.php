@@ -3,18 +3,23 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Framework\Data\Test\Unit\Collection;
 
-class FilesystemTest extends \PHPUnit\Framework\TestCase
+use Magento\Framework\Data\Collection\Filesystem;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\TestCase;
+
+class FilesystemTest extends TestCase
 {
-    /** @var \Magento\Framework\Data\Collection\Filesystem */
+    /** @var Filesystem */
     private $model;
 
     protected function setUp(): void
     {
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->model = $objectManager->getObject(\Magento\Framework\Data\Collection\Filesystem::class);
+        $objectManager = new ObjectManager($this);
+        $this->model = $objectManager->getObject(Filesystem::class);
     }
 
     /**
@@ -40,44 +45,44 @@ class FilesystemTest extends \PHPUnit\Framework\TestCase
         $field     = 'field';
         $testValue = '\'\'\'test\'\'\'Filter\'\'\'Value\'\'\'';
         return [
-            [$field, '\'%test%\'', [$field => $testValue,], true],
-            [$field, '%\'test%', [$field => $testValue,], true],
-            [$field, '%\'test\'%', [$field => $testValue,], true],
-            [$field, '%\'\'test%', [$field => $testValue,], true],
-            [$field, '%\'\'test\'\'%', [$field => $testValue,], true],
-            [$field, '%\'\'\'test%', [$field => $testValue,], true],
-            [$field, '%\'\'\'test\'\'\'%', [$field => $testValue,], true],
-            [$field, '%\'\'\'\'test%', [$field => $testValue,], false],
+            [$field, '\'%test%\'', [$field => $testValue], true],
+            [$field, '%\'test%', [$field => $testValue], true],
+            [$field, '%\'test\'%', [$field => $testValue], true],
+            [$field, '%\'\'test%', [$field => $testValue], true],
+            [$field, '%\'\'test\'\'%', [$field => $testValue], true],
+            [$field, '%\'\'\'test%', [$field => $testValue], true],
+            [$field, '%\'\'\'test\'\'\'%', [$field => $testValue], true],
+            [$field, '%\'\'\'\'test%', [$field => $testValue], false],
 
-            [$field, '\'%Value%\'', [$field => $testValue,], true],
-            [$field, '%Value\'%', [$field => $testValue,], true],
-            [$field, '%\'Value\'%', [$field => $testValue,], true],
-            [$field, '%Value\'\'%', [$field => $testValue,], true],
-            [$field, '%\'\'Value\'\'%', [$field => $testValue,], true],
-            [$field, '%Value\'\'\'%', [$field => $testValue,], true],
-            [$field, '%\'\'\'Value\'\'\'%', [$field => $testValue,], true],
-            [$field, '%Value%\'\'\'\'%', [$field => $testValue,], false],
+            [$field, '\'%Value%\'', [$field => $testValue], true],
+            [$field, '%Value\'%', [$field => $testValue], true],
+            [$field, '%\'Value\'%', [$field => $testValue], true],
+            [$field, '%Value\'\'%', [$field => $testValue], true],
+            [$field, '%\'\'Value\'\'%', [$field => $testValue], true],
+            [$field, '%Value\'\'\'%', [$field => $testValue], true],
+            [$field, '%\'\'\'Value\'\'\'%', [$field => $testValue], true],
+            [$field, '%Value%\'\'\'\'%', [$field => $testValue], false],
 
-            [$field, '\'%\'\'\'test\'\'\'Filter\'\'\'Value\'\'\'%\'', [$field => $testValue,], true],
-            [$field, '\'\'\'%\'\'\'test\'\'\'Filter\'\'\'Value\'\'\'%\'\'\'', [$field => $testValue,], true],
-            [$field, '%test\'\'\'Filter\'\'\'Value%', [$field => $testValue,], true],
-            [$field, '%test\'\'\'Filter\'\'\'Value\'\'\'%', [$field => $testValue,], true],
-            [$field, '%\'\'\'test\'\'\'Filter\'\'\'Value%', [$field => $testValue,], true],
-            [$field, '%\'\'\'Filter\'\'\'Value\'\'\'%', [$field => $testValue,], true],
-            [$field, '%Filter\'\'\'Value\'\'\'%', [$field => $testValue,], true],
-            [$field, '%\'\'\'Filter\'\'\'Value%', [$field => $testValue,], true],
-            [$field, '%Filter\'\'\'Value%', [$field => $testValue,], true],
-            [$field, '%Filter\'\'\'\'Value%', [$field => $testValue,], false],
+            [$field, '\'%\'\'\'test\'\'\'Filter\'\'\'Value\'\'\'%\'', [$field => $testValue], true],
+            [$field, '\'\'\'%\'\'\'test\'\'\'Filter\'\'\'Value\'\'\'%\'\'\'', [$field => $testValue], true],
+            [$field, '%test\'\'\'Filter\'\'\'Value%', [$field => $testValue], true],
+            [$field, '%test\'\'\'Filter\'\'\'Value\'\'\'%', [$field => $testValue], true],
+            [$field, '%\'\'\'test\'\'\'Filter\'\'\'Value%', [$field => $testValue], true],
+            [$field, '%\'\'\'Filter\'\'\'Value\'\'\'%', [$field => $testValue], true],
+            [$field, '%Filter\'\'\'Value\'\'\'%', [$field => $testValue], true],
+            [$field, '%\'\'\'Filter\'\'\'Value%', [$field => $testValue], true],
+            [$field, '%Filter\'\'\'Value%', [$field => $testValue], true],
+            [$field, '%Filter\'\'\'\'Value%', [$field => $testValue], false],
 
-            [$field, '\'%\'\'\'Filter\'\'\'%\'', [$field => $testValue,], true],
-            [$field, '%Filter\'\'\'%', [$field => $testValue,], true],
-            [$field, '%\'\'\'Filter%', [$field => $testValue,], true],
-            [$field, '%\'Filter%', [$field => $testValue,], true],
-            [$field, '%Filter\'%', [$field => $testValue,], true],
-            [$field, '%Filter%', [$field => $testValue,], true],
-            [$field, '%Filter\'\'\'\'%', [$field => $testValue,], false],
+            [$field, '\'%\'\'\'Filter\'\'\'%\'', [$field => $testValue], true],
+            [$field, '%Filter\'\'\'%', [$field => $testValue], true],
+            [$field, '%\'\'\'Filter%', [$field => $testValue], true],
+            [$field, '%\'Filter%', [$field => $testValue], true],
+            [$field, '%Filter\'%', [$field => $testValue], true],
+            [$field, '%Filter%', [$field => $testValue], true],
+            [$field, '%Filter\'\'\'\'%', [$field => $testValue], false],
 
-            [$field, '\'%no_match_value%\'', [$field => $testValue,], false],
+            [$field, '\'%no_match_value%\'', [$field => $testValue], false],
         ];
     }
 }

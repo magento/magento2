@@ -3,12 +3,14 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Framework\Translate\Test\Unit\Inline;
 
-use \Magento\Framework\Translate\Inline\State;
+use Magento\Framework\Translate\Inline\State;
+use PHPUnit\Framework\TestCase;
 
-class StateTest extends \PHPUnit\Framework\TestCase
+class StateTest extends TestCase
 {
     /**
      * @var State

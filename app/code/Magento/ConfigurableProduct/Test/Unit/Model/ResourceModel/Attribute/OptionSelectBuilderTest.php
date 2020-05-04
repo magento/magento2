@@ -3,21 +3,22 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\ConfigurableProduct\Test\Unit\Model\ResourceModel\Attribute;
 
+use Magento\ConfigurableProduct\Model\ResourceModel\Attribute\OptionProvider;
 use Magento\ConfigurableProduct\Model\ResourceModel\Attribute\OptionSelectBuilder;
 use Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Attribute;
-use Magento\ConfigurableProduct\Model\ResourceModel\Attribute\OptionProvider;
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
 use Magento\Framework\App\ScopeInterface;
-use Magento\Framework\DB\Select;
 use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Framework\DB\Select;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-/**
- * Class OptionSelectBuilderTest
- */
-class OptionSelectBuilderTest extends \PHPUnit\Framework\TestCase
+class OptionSelectBuilderTest extends TestCase
 {
     /**
      * @var OptionSelectBuilder
@@ -30,35 +31,35 @@ class OptionSelectBuilderTest extends \PHPUnit\Framework\TestCase
     private $objectManagerHelper;
 
     /**
-     * @var Attribute|\PHPUnit\Framework\MockObject\MockObject
+     * @var Attribute|MockObject
      */
     private $attributeResourceMock;
 
     /**
-     * @var OptionProvider|\PHPUnit\Framework\MockObject\MockObject
+     * @var OptionProvider|MockObject
      */
     private $attributeOptionProviderMock;
 
     /**
-     * @var Select|\PHPUnit\Framework\MockObject\MockObject
+     * @var Select|MockObject
      */
     private $select;
 
     /**
-     * @var AdapterInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var AdapterInterface|MockObject
      */
     private $connectionMock;
 
     /**
-     * @var AbstractAttribute|\PHPUnit\Framework\MockObject\MockObject
+     * @var AbstractAttribute|MockObject
      */
     private $abstractAttributeMock;
 
     /**
-     * @var ScopeInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var ScopeInterface|MockObject
      */
     private $scope;
-    
+
     protected function setUp(): void
     {
         $this->connectionMock = $this->getMockBuilder(AdapterInterface::class)
@@ -120,18 +121,16 @@ class OptionSelectBuilderTest extends \PHPUnit\Framework\TestCase
         $this->attributeResourceMock->expects($this->exactly(9))
             ->method('getTable')
             ->willReturnMap(
-                
-                    [
-                        ['catalog_product_super_attribute', 'catalog_product_super_attribute value'],
-                        ['catalog_product_entity', 'catalog_product_entity value'],
-                        ['catalog_product_super_link', 'catalog_product_super_link value'],
-                        ['eav_attribute', 'eav_attribute value'],
-                        ['catalog_product_entity', 'catalog_product_entity value'],
-                        ['catalog_product_super_attribute_label', 'catalog_product_super_attribute_label value'],
-                        ['eav_attribute_option', 'eav_attribute_option value'],
-                        ['eav_attribute_option_value', 'eav_attribute_option_value value']
-                    ]
-                
+                [
+                    ['catalog_product_super_attribute', 'catalog_product_super_attribute value'],
+                    ['catalog_product_entity', 'catalog_product_entity value'],
+                    ['catalog_product_super_link', 'catalog_product_super_link value'],
+                    ['eav_attribute', 'eav_attribute value'],
+                    ['catalog_product_entity', 'catalog_product_entity value'],
+                    ['catalog_product_super_attribute_label', 'catalog_product_super_attribute_label value'],
+                    ['eav_attribute_option', 'eav_attribute_option value'],
+                    ['eav_attribute_option_value', 'eav_attribute_option_value value']
+                ]
             );
 
         $this->abstractAttributeMock->expects($this->atLeastOnce())
@@ -164,17 +163,15 @@ class OptionSelectBuilderTest extends \PHPUnit\Framework\TestCase
         $this->attributeResourceMock->expects($this->exactly(7))
             ->method('getTable')
             ->willReturnMap(
-                
-                    [
-                        ['catalog_product_super_attribute', 'catalog_product_super_attribute value'],
-                        ['catalog_product_entity', 'catalog_product_entity value'],
-                        ['catalog_product_super_link', 'catalog_product_super_link value'],
-                        ['eav_attribute', 'eav_attribute value'],
-                        ['catalog_product_entity', 'catalog_product_entity value'],
-                        ['catalog_product_super_attribute_label', 'catalog_product_super_attribute_label value'],
-                        ['eav_attribute_option', 'eav_attribute_option value']
-                    ]
-                
+                [
+                    ['catalog_product_super_attribute', 'catalog_product_super_attribute value'],
+                    ['catalog_product_entity', 'catalog_product_entity value'],
+                    ['catalog_product_super_link', 'catalog_product_super_link value'],
+                    ['eav_attribute', 'eav_attribute value'],
+                    ['catalog_product_entity', 'catalog_product_entity value'],
+                    ['catalog_product_super_attribute_label', 'catalog_product_super_attribute_label value'],
+                    ['eav_attribute_option', 'eav_attribute_option value']
+                ]
             );
 
         $this->abstractAttributeMock->expects($this->atLeastOnce())

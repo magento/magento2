@@ -3,72 +3,90 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Unit\Block\Product\ProductList;
 
-class ToolbarTest extends \PHPUnit\Framework\TestCase
+use Magento\Catalog\Block\Product\ProductList\Toolbar;
+use Magento\Catalog\Helper\Product\ProductList;
+use Magento\Catalog\Model\Config;
+use Magento\Catalog\Model\Product\ProductList\ToolbarMemorizer;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\Url;
+use Magento\Framework\Url\EncoderInterface;
+use Magento\Framework\View\Element\Template\Context;
+use Magento\Framework\View\Layout;
+use Magento\Theme\Block\Html\Pager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
+class ToolbarTest extends TestCase
 {
     /**
-     * @var \Magento\Catalog\Block\Product\ProductList\Toolbar
+     * @var Toolbar
      */
     protected $block;
 
     /**
-     * @var \Magento\Catalog\Model\Product\ProductList\Toolbar | \PHPUnit\Framework\MockObject\MockObject
+     * @var \Magento\Catalog\Model\Product\ProductList\Toolbar|MockObject
      */
     protected $model;
 
     /**
-     * @var \Magento\Catalog\Model\Product\ProductList\ToolbarMemorizer | \PHPUnit\Framework\MockObject\MockObject
+     * @var ToolbarMemorizer|MockObject
      */
     private $memorizer;
 
     /**
-     * @var \Magento\Framework\Url | \PHPUnit\Framework\MockObject\MockObject
+     * @var Url|MockObject
      */
     protected $urlBuilder;
 
     /**
-     * @var \Magento\Framework\Url\EncoderInterface | \PHPUnit\Framework\MockObject\MockObject
+     * @var EncoderInterface|MockObject
      */
     protected $urlEncoder;
 
     /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface | \PHPUnit\Framework\MockObject\MockObject
+     * @var ScopeConfigInterface|MockObject
      */
     protected $scopeConfig;
 
     /**
-     * @var \Magento\Catalog\Model\Config | \PHPUnit\Framework\MockObject\MockObject
+     * @var Config|MockObject
      */
     protected $catalogConfig;
 
     /**
-     * @var \Magento\Catalog\Helper\Product\ProductList|\PHPUnit\Framework\MockObject\MockObject
+     * @var ProductList|MockObject
      */
     protected $productListHelper;
 
     /**
-     * @var \Magento\Framework\View\Layout|\PHPUnit\Framework\MockObject\MockObject
+     * @var Layout|MockObject
      */
     protected $layout;
 
     /**
-     * @var \Magento\Theme\Block\Html\Pager|\PHPUnit\Framework\MockObject\MockObject
+     * @var Pager|MockObject
      */
     protected $pagerBlock;
 
     protected function setUp(): void
     {
         $this->model = $this->createPartialMock(\Magento\Catalog\Model\Product\ProductList\Toolbar::class, [
-                'getDirection',
-                'getOrder',
-                'getMode',
-                'getLimit',
-                'getCurrentPage'
-            ]);
+            'getDirection',
+            'getOrder',
+            'getMode',
+            'getLimit',
+            'getCurrentPage'
+        ]);
         $this->memorizer = $this->createPartialMock(
-            \Magento\Catalog\Model\Product\ProductList\ToolbarMemorizer::class,
+            ToolbarMemorizer::class,
             [
                 'getDirection',
                 'getOrder',
@@ -77,23 +95,18 @@ class ToolbarTest extends \PHPUnit\Framework\TestCase
                 'isMemorizingAllowed'
             ]
         );
-        $this->layout = $this->createPartialMock(\Magento\Framework\View\Layout::class, ['getChildName', 'getBlock']);
-        $this->pagerBlock = $this->createPartialMock(\Magento\Theme\Block\Html\Pager::class, [
-                'setUseContainer',
-                'setShowPerPage',
-                'setShowAmounts',
-                'setFrameLength',
-                'setJump',
-                'setLimit',
-                'setCollection',
-                'toHtml'
-            ]);
-        $this->urlBuilder = $this->createPartialMock(\Magento\Framework\Url::class, ['getUrl']);
-        $this->scopeConfig = $this->createMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
+        $this->layout = $this->createPartialMock(Layout::class, ['getChildName', 'getBlock']);
+        $this->pagerBlock = $this->getMockBuilder(Pager::class)
+            ->addMethods(['setUseContainer', 'setShowAmounts'])
+            ->onlyMethods(['setShowPerPage', 'setFrameLength', 'setJump', 'setLimit', 'setCollection', 'toHtml'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->urlBuilder = $this->createPartialMock(Url::class, ['getUrl']);
+        $this->scopeConfig = $this->createMock(ScopeConfigInterface::class);
 
         $scopeConfig = [
-            [\Magento\Catalog\Model\Config::XML_PATH_LIST_DEFAULT_SORT_BY, null, 'name'],
-            [\Magento\Catalog\Helper\Product\ProductList::XML_PATH_LIST_MODE, null, 'grid-list'],
+            [Config::XML_PATH_LIST_DEFAULT_SORT_BY, null, 'name'],
+            [ProductList::XML_PATH_LIST_MODE, null, 'grid-list'],
             ['catalog/frontend/list_per_page_values', null, '10,20,30'],
             ['catalog/frontend/grid_per_page_values', null, '10,20,30'],
             ['catalog/frontend/list_allow_all', null, false]
@@ -104,12 +117,12 @@ class ToolbarTest extends \PHPUnit\Framework\TestCase
             ->willReturnMap($scopeConfig);
 
         $this->catalogConfig = $this->createPartialMock(
-            \Magento\Catalog\Model\Config::class,
+            Config::class,
             ['getAttributeUsedForSortByArray']
         );
 
         $context = $this->createPartialMock(
-            \Magento\Framework\View\Element\Template\Context::class,
+            Context::class,
             ['getUrlBuilder', 'getScopeConfig', 'getLayout']
         );
         $context->expects($this->any())
@@ -121,12 +134,12 @@ class ToolbarTest extends \PHPUnit\Framework\TestCase
         $context->expects($this->any())
             ->method('getlayout')
             ->willReturn($this->layout);
-        $this->productListHelper = $this->createMock(\Magento\Catalog\Helper\Product\ProductList::class);
+        $this->productListHelper = $this->createMock(ProductList::class);
 
-        $this->urlEncoder = $this->createPartialMock(\Magento\Framework\Url\EncoderInterface::class, ['encode']);
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $this->urlEncoder = $this->createPartialMock(EncoderInterface::class, ['encode']);
+        $objectManager = new ObjectManager($this);
         $this->block = $objectManager->getObject(
-            \Magento\Catalog\Block\Product\ProductList\Toolbar::class,
+            Toolbar::class,
             [
                 'context' => $context,
                 'catalogConfig' => $this->catalogConfig,
@@ -260,7 +273,7 @@ class ToolbarTest extends \PHPUnit\Framework\TestCase
             ->willReturn([10 => 10, 20 => 20]);
         $this->productListHelper->expects($this->once())
             ->method('getDefaultLimitPerPageValue')
-            ->with($this->equalTo('list'))
+            ->with('list')
             ->willReturn(10);
         $this->productListHelper->expects($this->any())
             ->method('getAvailableViewMode')

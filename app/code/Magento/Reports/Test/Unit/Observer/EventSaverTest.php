@@ -73,8 +73,8 @@ class EventSaverTest extends TestCase
         $this->customerSessionMock = $this->createMock(Session::class);
         $this->customerVisitorMock = $this->createMock(Visitor::class);
 
-        $this->storeMock = $this->getMockForAbstractClass(StoreInterface::class);
-        $this->storeManagerMock = $this->getMockForAbstractClass(StoreManagerInterface::class);
+        $this->storeMock = $this->createMock(StoreInterface::class);
+        $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
         $this->storeManagerMock->expects($this->once())
             ->method('getStore')
             ->willReturn($this->storeMock);

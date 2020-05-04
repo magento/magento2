@@ -9,16 +9,17 @@ namespace Magento\Elasticsearch\Test\Unit\Model\Adapter\FieldMapper\Product\Fiel
 
 use Magento\Catalog\Api\Data\CategoryInterface;
 use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\AttributeAdapter;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
-use Magento\Framework\Registry;
-use Magento\Store\Model\StoreManagerInterface as StoreManager;
-use Magento\Store\Api\Data\StoreInterface;
 use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldName\Resolver\CategoryName;
+use Magento\Framework\Registry;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Store\Api\Data\StoreInterface;
+use Magento\Store\Model\StoreManagerInterface as StoreManager;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @SuppressWarnings(PHPMD)
  */
-class CategoryNameTest extends \PHPUnit\Framework\TestCase
+class CategoryNameTest extends TestCase
 {
     /**
      * @var CategoryName

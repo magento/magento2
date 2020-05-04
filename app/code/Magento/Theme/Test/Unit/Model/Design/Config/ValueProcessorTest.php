@@ -3,16 +3,22 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Theme\Test\Unit\Model\Design\Config;
 
+use Magento\Framework\App\Config\Value;
+use Magento\Theme\Model\Design\BackendModelFactory;
 use Magento\Theme\Model\Design\Config\ValueProcessor;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class ValueProcessorTest extends \PHPUnit\Framework\TestCase
+class ValueProcessorTest extends TestCase
 {
-    /** @var \Magento\Theme\Model\Design\BackendModelFactory|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var BackendModelFactory|MockObject */
     protected $backendModelFactory;
 
-    /** @var \Magento\Framework\App\Config\Value|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var Value|MockObject */
     protected $backendModel;
 
     /** @var ValueProcessor */
@@ -20,10 +26,10 @@ class ValueProcessorTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp(): void
     {
-        $this->backendModelFactory = $this->getMockBuilder(\Magento\Theme\Model\Design\BackendModelFactory::class)
+        $this->backendModelFactory = $this->getMockBuilder(BackendModelFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->backendModel = $this->getMockBuilder(\Magento\Framework\App\Config\Value::class)
+        $this->backendModel = $this->getMockBuilder(Value::class)
             ->disableOriginalConstructor()
             ->setMethods(['getValue', 'afterLoad'])
             ->getMock();

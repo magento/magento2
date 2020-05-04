@@ -3,17 +3,21 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Setup\Test\Unit\Model\FixtureGenerator;
 
 use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Setup\Model\FixtureGenerator\SqlCollector;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Collect insert queries for quick entity generation
  */
-class SqlCollectorTest extends \PHPUnit\Framework\TestCase
+class SqlCollectorTest extends TestCase
 {
     /**
      * @var SqlCollector
@@ -21,7 +25,7 @@ class SqlCollectorTest extends \PHPUnit\Framework\TestCase
     private $unit;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     private $resourceConnection;
 
@@ -38,7 +42,7 @@ class SqlCollectorTest extends \PHPUnit\Framework\TestCase
 
     public function testGetEmptySql()
     {
-        $connection = $this->getMockBuilder(\Magento\Framework\DB\Adapter\AdapterInterface::class)
+        $connection = $this->getMockBuilder(AdapterInterface::class)
             ->setMethods(['getProfiler'])
             ->getMockForAbstractClass();
         $profiler = $this->getMockBuilder(\Zend_Db_Profiler::class)
@@ -55,7 +59,7 @@ class SqlCollectorTest extends \PHPUnit\Framework\TestCase
 
     public function testGetEmptySqlWhenSelectQueryProcessed()
     {
-        $connection = $this->getMockBuilder(\Magento\Framework\DB\Adapter\AdapterInterface::class)
+        $connection = $this->getMockBuilder(AdapterInterface::class)
             ->setMethods(['getProfiler'])
             ->getMockForAbstractClass();
         $profiler = $this->getMockBuilder(\Zend_Db_Profiler::class)
@@ -64,7 +68,8 @@ class SqlCollectorTest extends \PHPUnit\Framework\TestCase
         $connection->expects($this->once())->method('getProfiler')->willReturn($profiler);
         $this->resourceConnection->expects($this->once())->method('getConnection')->willReturn($connection);
 
-        $query = $this->getMockBuilder(\Zend_Db_Profiler_Query::class)->disableOriginalConstructor()->getMock();
+        $query = $this->getMockBuilder(\Zend_Db_Profiler_Query::class)->disableOriginalConstructor()
+            ->getMock();
         $query->expects($this->exactly(2))->method('getQueryType')->willReturn(\Zend_Db_Profiler::SELECT);
         $profiler->expects($this->once())->method('getQueryProfiles')->willReturn([$query]);
 
@@ -74,7 +79,7 @@ class SqlCollectorTest extends \PHPUnit\Framework\TestCase
 
     public function testGetSql()
     {
-        $connection = $this->getMockBuilder(\Magento\Framework\DB\Adapter\AdapterInterface::class)
+        $connection = $this->getMockBuilder(AdapterInterface::class)
             ->setMethods(['getProfiler'])
             ->getMockForAbstractClass();
         $profiler = $this->getMockBuilder(\Zend_Db_Profiler::class)
@@ -83,7 +88,8 @@ class SqlCollectorTest extends \PHPUnit\Framework\TestCase
         $connection->expects($this->once())->method('getProfiler')->willReturn($profiler);
         $this->resourceConnection->expects($this->once())->method('getConnection')->willReturn($connection);
 
-        $query = $this->getMockBuilder(\Zend_Db_Profiler_Query::class)->disableOriginalConstructor()->getMock();
+        $query = $this->getMockBuilder(\Zend_Db_Profiler_Query::class)->disableOriginalConstructor()
+            ->getMock();
         $query->expects($this->once())->method('getQueryType')->willReturn(\Zend_Db_Profiler::INSERT);
         $query->expects($this->once())->method('getQuery')->willReturn(
             'INSERT INTO `catalog_product_entity` (id, sku, type, created_at, attribute_set)'

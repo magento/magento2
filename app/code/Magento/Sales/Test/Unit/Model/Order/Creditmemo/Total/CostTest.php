@@ -3,40 +3,46 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Sales\Test\Unit\Model\Order\Creditmemo\Total;
 
-/**
- * Class CostTest
- */
-class CostTest extends \PHPUnit\Framework\TestCase
+use Magento\Sales\Model\Order\Creditmemo;
+use Magento\Sales\Model\Order\Creditmemo\Item;
+use Magento\Sales\Model\Order\Creditmemo\Total\Cost;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class CostTest extends TestCase
 {
     /**
-     * @var \Magento\Sales\Model\Order\Creditmemo\Total\Cost
+     * @var Cost
      */
     protected $total;
 
     /**
-     * @var \Magento\Sales\Model\Order\Creditmemo|\PHPUnit\Framework\MockObject\MockObject
+     * @var Creditmemo|MockObject
      */
     protected $creditmemoMock;
 
     /**
-     * @var \Magento\Sales\Model\Order\Creditmemo\Item|\PHPUnit\Framework\MockObject\MockObject
+     * @var Item|MockObject
      */
     protected $creditmemoItemMock;
 
     protected function setUp(): void
     {
-        $this->creditmemoMock = $this->createPartialMock(
-            \Magento\Sales\Model\Order\Creditmemo::class,
-            ['setBaseCost', 'getAllItems']
-        );
-        $this->creditmemoItemMock = $this->createPartialMock(
-            \Magento\Sales\Model\Order\Creditmemo\Item::class,
-            ['getHasChildren', 'getBaseCost', 'getQty']
-        );
-        $this->total = new \Magento\Sales\Model\Order\Creditmemo\Total\Cost();
+        $this->creditmemoMock = $this->getMockBuilder(Creditmemo::class)
+            ->addMethods(['setBaseCost'])
+            ->onlyMethods(['getAllItems'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->creditmemoItemMock = $this->getMockBuilder(Item::class)
+            ->addMethods(['getHasChildren'])
+            ->onlyMethods(['getBaseCost', 'getQty'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->total = new Cost();
     }
 
     public function testCollect()

@@ -3,60 +3,66 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Framework\View\Test\Unit\Design\FileResolution\Fallback\Resolver;
 
+use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Filesystem\Directory\Read;
 use Magento\Framework\Filesystem\Directory\ReadFactory;
 use Magento\Framework\Filesystem\DriverPool;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\View\Design\Fallback\Rule\RuleInterface;
 use Magento\Framework\View\Design\Fallback\RulePool;
-use \Magento\Framework\View\Design\FileResolution\Fallback\Resolver\Simple;
+use Magento\Framework\View\Design\FileResolution\Fallback\Resolver\Simple;
+use Magento\Framework\View\Design\ThemeInterface;
+use PHPUnit\Framework\MockObject\MockObject;
 
-use Magento\Framework\App\Filesystem\DirectoryList;
+use PHPUnit\Framework\TestCase;
 
-class SimpleTest extends \PHPUnit\Framework\TestCase
+class SimpleTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\Filesystem\Directory\Read|\PHPUnit\Framework\MockObject\MockObject
+     * @var Read|MockObject
      */
     protected $directoryMock;
 
     /**
-     * @var \Magento\Framework\View\Design\Fallback\Rule\RuleInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var RuleInterface|MockObject
      */
     protected $ruleMock;
 
     /**
-     * @var \Magento\Framework\View\Design\FileResolution\Fallback\Resolver\Simple
+     * @var Simple
      */
     protected $object;
 
     /**
-     * @var ReadFactory|\PHPUnit\Framework\MockObject\MockObject
+     * @var ReadFactory|MockObject
      */
     protected $readFactoryMock;
 
     /**
-     * @var RulePool|\PHPUnit\Framework\MockObject\MockObject
+     * @var RulePool|MockObject
      */
     protected $rulePoolMock;
 
     /**
-     * @var DirectoryList|\PHPUnit\Framework\MockObject\MockObject
+     * @var DirectoryList|MockObject
      */
     protected $directoryListMock;
 
     protected function setUp(): void
     {
-        $this->directoryMock = $this->getMockBuilder(\Magento\Framework\Filesystem\Directory\Read::class)
+        $this->directoryMock = $this->getMockBuilder(Read::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->ruleMock = $this->getMockBuilder(\Magento\Framework\View\Design\Fallback\Rule\RuleInterface::class)
+        $this->ruleMock = $this->getMockBuilder(RuleInterface::class)
             ->getMockForAbstractClass();
-        $this->rulePoolMock = $this->getMockBuilder(\Magento\Framework\View\Design\Fallback\RulePool::class)
+        $this->rulePoolMock = $this->getMockBuilder(RulePool::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->readFactoryMock = $this->getMockBuilder(\Magento\Framework\Filesystem\Directory\ReadFactory::class)
+        $this->readFactoryMock = $this->getMockBuilder(ReadFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->directoryListMock = $this->getMockBuilder(DirectoryList::class)
@@ -182,13 +188,10 @@ class SimpleTest extends \PHPUnit\Framework\TestCase
         ];
     }
 
-    /**
-     */
     public function testResolveSecurityException()
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException('InvalidArgumentException');
         $this->expectExceptionMessage('File path \'var/test/../file.ext\' is forbidden for security reasons.');
-
         $this->ruleMock->expects($this->once())
             ->method('getPatternDirs')
             ->willReturn([
@@ -293,11 +296,11 @@ class SimpleTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param string $themePath
-     * @return \Magento\Framework\View\Design\ThemeInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @return ThemeInterface|MockObject
      */
     private function getMockForTheme($themePath)
     {
-        $theme = $this->getMockForAbstractClass(\Magento\Framework\View\Design\ThemeInterface::class);
+        $theme = $this->getMockForAbstractClass(ThemeInterface::class);
         $theme->expects($this->any())
             ->method('getThemePath')
             ->willReturn($themePath);

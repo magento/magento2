@@ -12,8 +12,8 @@ use Magento\Developer\Model\Logger\Handler\Syslog;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\Logger\Monolog;
-use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\MockObject\MockObject as Mock;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @inheritdoc

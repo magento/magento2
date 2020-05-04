@@ -3,13 +3,17 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Config\Test\Unit\Model\Placeholder;
 
 use Magento\Config\Model\Placeholder\Environment;
 use Magento\Config\Model\Placeholder\PlaceholderFactory;
 use Magento\Framework\ObjectManagerInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class PlaceholderFactoryTest extends \PHPUnit\Framework\TestCase
+class PlaceholderFactoryTest extends TestCase
 {
     /**
      * @var PlaceholderFactory
@@ -17,12 +21,12 @@ class PlaceholderFactoryTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var ObjectManagerInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var ObjectManagerInterface|MockObject
      */
     private $objectManagerMock;
 
     /**
-     * @var Environment|\PHPUnit\Framework\MockObject\MockObject
+     * @var Environment|MockObject
      */
     private $environmentMock;
 
@@ -56,23 +60,19 @@ class PlaceholderFactoryTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    /**
-     */
     public function testCreateNonExisted()
     {
-        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+        $this->expectException('Magento\Framework\Exception\LocalizedException');
         $this->expectExceptionMessage('There is no defined type dummyClass');
-
         $this->model->create('dummyClass');
     }
 
-    /**
-     */
     public function testCreateWrongImplementation()
     {
-        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
-        $this->expectExceptionMessage('Object is not instance of Magento\\Config\\Model\\Placeholder\\PlaceholderInterface');
-
+        $this->expectException('Magento\Framework\Exception\LocalizedException');
+        $this->expectExceptionMessage(
+            'Object is not instance of Magento\Config\Model\Placeholder\PlaceholderInterface'
+        );
         $this->model->create('wrongClass');
     }
 }

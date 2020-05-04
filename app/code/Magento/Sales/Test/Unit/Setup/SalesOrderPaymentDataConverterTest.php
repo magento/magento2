@@ -3,22 +3,26 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Sales\Test\Unit\Setup;
 
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\Serialize\Serializer\Serialize;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Sales\Setup\SalesOrderPaymentDataConverter;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class SalesOrderPaymentDataConverterTest extends \PHPUnit\Framework\TestCase
+class SalesOrderPaymentDataConverterTest extends TestCase
 {
     /**
-     * @var Serialize|\PHPUnit\Framework\MockObject\MockObject
+     * @var Serialize|MockObject
      */
     private $serializeMock;
 
     /**
-     * @var Json|\PHPUnit\Framework\MockObject\MockObject
+     * @var Json|MockObject
      */
     private $jsonMock;
 

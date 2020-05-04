@@ -3,40 +3,50 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Catalog\Test\Unit\Pricing\Price;
 
-/**
- * Final Price test
- */
-class FinalPriceTest extends \PHPUnit\Framework\TestCase
+use Magento\Catalog\Model\Product;
+use Magento\Catalog\Pricing\Price\BasePrice;
+use Magento\Catalog\Pricing\Price\FinalPrice;
+use Magento\Framework\Pricing\Adjustment\Calculator;
+use Magento\Framework\Pricing\PriceCurrencyInterface;
+use Magento\Framework\Pricing\PriceInfo\Base;
+use Magento\Framework\Pricing\PriceInfoInterface;
+use Magento\Framework\Pricing\SaleableInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class FinalPriceTest extends TestCase
 {
     /**
-     * @var \Magento\Catalog\Pricing\Price\FinalPrice
+     * @var FinalPrice
      */
     protected $model;
 
     /**
-     * @var \Magento\Framework\Pricing\PriceInfoInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var PriceInfoInterface|MockObject
      */
     protected $priceInfoMock;
 
     /**
-     * @var \Magento\Catalog\Pricing\Price\BasePrice|\PHPUnit\Framework\MockObject\MockObject
+     * @var BasePrice|MockObject
      */
     protected $basePriceMock;
 
     /**
-     * @var \Magento\Framework\Pricing\SaleableInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var SaleableInterface|MockObject
      */
     protected $saleableMock;
 
     /**
-     * @var \Magento\Framework\Pricing\Adjustment\Calculator|\PHPUnit\Framework\MockObject\MockObject
+     * @var Calculator|MockObject
      */
     protected $calculatorMock;
 
     /**
-     * @var \Magento\Framework\Pricing\PriceCurrencyInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var PriceCurrencyInterface|MockObject
      */
     protected $priceCurrencyMock;
 
@@ -45,24 +55,24 @@ class FinalPriceTest extends \PHPUnit\Framework\TestCase
      */
     protected function setUp(): void
     {
-        $this->saleableMock = $this->createMock(\Magento\Catalog\Model\Product::class);
+        $this->saleableMock = $this->createMock(Product::class);
         $this->priceInfoMock = $this->basePriceMock = $this->createMock(
-            \Magento\Framework\Pricing\PriceInfo\Base::class
+            Base::class
         );
-        $this->basePriceMock = $this->createMock(\Magento\Catalog\Pricing\Price\BasePrice::class);
+        $this->basePriceMock = $this->createMock(BasePrice::class);
 
-        $this->calculatorMock = $this->createMock(\Magento\Framework\Pricing\Adjustment\Calculator::class);
+        $this->calculatorMock = $this->createMock(Calculator::class);
 
         $this->saleableMock->expects($this->once())
             ->method('getPriceInfo')
             ->willReturn($this->priceInfoMock);
         $this->priceInfoMock->expects($this->any())
             ->method('getPrice')
-            ->with($this->equalTo(\Magento\Catalog\Pricing\Price\BasePrice::PRICE_CODE))
+            ->with(BasePrice::PRICE_CODE)
             ->willReturn($this->basePriceMock);
-        $this->priceCurrencyMock = $this->createMock(\Magento\Framework\Pricing\PriceCurrencyInterface::class);
+        $this->priceCurrencyMock = $this->createMock(PriceCurrencyInterface::class);
 
-        $this->model = new \Magento\Catalog\Pricing\Price\FinalPrice(
+        $this->model = new FinalPrice(
             $this->saleableMock,
             1,
             $this->calculatorMock,
@@ -95,7 +105,7 @@ class FinalPriceTest extends \PHPUnit\Framework\TestCase
             ->willReturn($basePrice);
         $this->calculatorMock->expects($this->once())
             ->method('getAmount')
-            ->with($this->equalTo($basePrice))
+            ->with($basePrice)
             ->willReturn($minimalPrice);
         $this->saleableMock->expects($this->once())
             ->method('getMinimalPrice')
@@ -124,7 +134,7 @@ class FinalPriceTest extends \PHPUnit\Framework\TestCase
             ->method('getValue');
         $this->calculatorMock->expects($this->once())
             ->method('getAmount')
-            ->with($this->equalTo($convertedPrice))
+            ->with($convertedPrice)
             ->willReturn($finalPrice);
         $this->saleableMock->expects($this->once())
             ->method('getMinimalPrice')
@@ -148,7 +158,7 @@ class FinalPriceTest extends \PHPUnit\Framework\TestCase
             ->willReturn($basePrice);
         $this->calculatorMock->expects($this->once())
             ->method('getAmount')
-            ->with($this->equalTo($basePrice))
+            ->with($basePrice)
             ->willReturn($minimalPrice);
         $result = $this->model->getMaximalPrice();
         $this->assertEquals($minimalPrice, $result);

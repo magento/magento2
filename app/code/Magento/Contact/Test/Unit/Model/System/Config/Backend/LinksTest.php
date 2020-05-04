@@ -3,26 +3,36 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Contact\Test\Unit\Model\System\Config\Backend;
 
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Contact\Model\System\Config\Backend\Links;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use PHPUnit\Framework\TestCase;
 
-class LinksTest extends \PHPUnit\Framework\TestCase
+/**
+ * @covers \Magento\Contact\Model\System\Config\Backend\Links
+ */
+class LinksTest extends TestCase
 {
     /**
-     * @var \Magento\Contact\Model\System\Config\Backend\Links|\PHPUnit\Framework\MockObject\MockObject
+     * @var Links
      */
-    protected $_model;
+    private $model;
 
     protected function setUp(): void
     {
-        $this->_model = (new ObjectManager($this))->getObject(
-            \Magento\Contact\Model\System\Config\Backend\Links::class
+        $this->model = (new ObjectManagerHelper($this))->getObject(
+            Links::class
         );
     }
 
-    public function testGetIdentities()
+    /**
+     * Test getIdentities
+     */
+    public function testGetIdentities(): void
     {
-        $this->assertIsArray($this->_model->getIdentities());
+        $this->assertIsArray($this->model->getIdentities());
     }
 }

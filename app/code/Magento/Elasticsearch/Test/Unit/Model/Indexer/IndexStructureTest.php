@@ -3,12 +3,20 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Elasticsearch\Test\Unit\Model\Indexer;
 
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Elasticsearch\Model\Adapter\Elasticsearch;
 use Magento\Elasticsearch\Model\Indexer\IndexStructure;
+use Magento\Framework\App\ScopeInterface;
+use Magento\Framework\App\ScopeResolverInterface;
+use Magento\Framework\Search\Request\Dimension;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class IndexStructureTest extends \PHPUnit\Framework\TestCase
+class IndexStructureTest extends TestCase
 {
     /**
      * @var IndexStructure
@@ -16,17 +24,17 @@ class IndexStructureTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var \Magento\Elasticsearch\Model\Adapter\Elasticsearch|\PHPUnit\Framework\MockObject\MockObject
+     * @var Elasticsearch|MockObject
      */
     private $adapter;
 
     /**
-     * @var \Magento\Framework\App\ScopeResolverInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var ScopeResolverInterface|MockObject
      */
     private $scopeResolver;
 
     /**
-     * @var \Magento\Framework\App\ScopeInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var ScopeInterface|MockObject
      */
     private $scopeInterface;
 
@@ -37,19 +45,19 @@ class IndexStructureTest extends \PHPUnit\Framework\TestCase
      */
     protected function setUp(): void
     {
-        $this->adapter = $this->getMockBuilder(\Magento\Elasticsearch\Model\Adapter\Elasticsearch::class)
+        $this->adapter = $this->getMockBuilder(Elasticsearch::class)
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->scopeResolver = $this->getMockForAbstractClass(
-            \Magento\Framework\App\ScopeResolverInterface::class,
+            ScopeResolverInterface::class,
             [],
             '',
             false
         );
 
         $this->scopeInterface = $this->getMockForAbstractClass(
-            \Magento\Framework\App\ScopeInterface::class,
+            ScopeInterface::class,
             [],
             '',
             false
@@ -58,7 +66,7 @@ class IndexStructureTest extends \PHPUnit\Framework\TestCase
         $objectManager = new ObjectManagerHelper($this);
 
         $this->model = $objectManager->getObject(
-            \Magento\Elasticsearch\Model\Indexer\IndexStructure::class,
+            IndexStructure::class,
             [
                 'adapter' => $this->adapter,
                 'scopeResolver' => $this->scopeResolver
@@ -69,7 +77,7 @@ class IndexStructureTest extends \PHPUnit\Framework\TestCase
     public function testDelete()
     {
         $scopeId = 9;
-        $dimension = $this->getMockBuilder(\Magento\Framework\Search\Request\Dimension::class)
+        $dimension = $this->getMockBuilder(Dimension::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -88,7 +96,7 @@ class IndexStructureTest extends \PHPUnit\Framework\TestCase
     public function testCreate()
     {
         $scopeId = 9;
-        $dimension = $this->getMockBuilder(\Magento\Framework\Search\Request\Dimension::class)
+        $dimension = $this->getMockBuilder(Dimension::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->adapter->expects($this->any())

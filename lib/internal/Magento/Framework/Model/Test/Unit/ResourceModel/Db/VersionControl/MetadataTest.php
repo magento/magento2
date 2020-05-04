@@ -3,32 +3,39 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\Model\Test\Unit\ResourceModel\Db\VersionControl;
 
+use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Framework\Model\AbstractModel;
+use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
+use Magento\Framework\Model\ResourceModel\Db\VersionControl\Metadata;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-/**
- * Class Version Control MetadataTest
+/** Control MetadataTest
  */
-class MetadataTest extends \PHPUnit\Framework\TestCase
+class MetadataTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\Model\ResourceModel\Db\VersionControl\Metadata
+     * @var Metadata
      */
     protected $entityMetadata;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject | \Magento\Framework\Model\AbstractModel
+     * @var MockObject|AbstractModel
      */
     protected $model;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject | \Magento\Framework\Model\ResourceModel\Db\AbstractDb
+     * @var MockObject|AbstractDb
      */
     protected $resource;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject | \Magento\Framework\DB\Adapter\AdapterInterface
+     * @var MockObject|AdapterInterface
      */
     protected $connection;
 
@@ -38,9 +45,9 @@ class MetadataTest extends \PHPUnit\Framework\TestCase
     protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
-        $this->model = $this->createMock(\Magento\Framework\Model\AbstractModel::class);
+        $this->model = $this->createMock(AbstractModel::class);
         $this->resource = $this->getMockForAbstractClass(
-            \Magento\Framework\DB\Adapter\AdapterInterface::class,
+            AdapterInterface::class,
             [],
             "",
             false,
@@ -49,7 +56,7 @@ class MetadataTest extends \PHPUnit\Framework\TestCase
             ['getConnection', 'getMainTable']
         );
         $this->connection = $this->getMockForAbstractClass(
-            \Magento\Framework\DB\Adapter\AdapterInterface::class,
+            AdapterInterface::class,
             [],
             "",
             false,
@@ -58,7 +65,7 @@ class MetadataTest extends \PHPUnit\Framework\TestCase
         $this->model->expects($this->any())->method('getResource')->willReturn($this->resource);
         $this->resource->expects($this->any())->method('getConnection')->willReturn($this->connection);
         $this->entityMetadata = $objectManager->getObject(
-            \Magento\Framework\Model\ResourceModel\Db\VersionControl\Metadata::class
+            Metadata::class
         );
     }
 

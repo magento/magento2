@@ -3,14 +3,25 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Sales\Test\Unit\Controller\Guest;
 
+use Magento\Framework\App\Action\Context;
+use Magento\Framework\App\RequestInterface;
+use Magento\Framework\Controller\Result\Redirect;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Framework\View\Result\Page;
+use Magento\Framework\View\Result\PageFactory;
+use Magento\Sales\Controller\Guest\View;
+use Magento\Sales\Helper\Guest;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class ViewTest extends \PHPUnit\Framework\TestCase
+class ViewTest extends TestCase
 {
     /**
-     * @var \Magento\Sales\Controller\Guest\View
+     * @var View
      */
     protected $viewController;
 
@@ -20,32 +31,32 @@ class ViewTest extends \PHPUnit\Framework\TestCase
     protected $objectManagerHelper;
 
     /**
-     * @var \Magento\Framework\App\Action\Context
+     * @var Context
      */
     protected $context;
 
     /**
-     * @var \Magento\Framework\App\RequestInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var RequestInterface|MockObject
      */
     protected $requestMock;
 
     /**
-     * @var \Magento\Sales\Helper\Guest|\PHPUnit\Framework\MockObject\MockObject
+     * @var Guest|MockObject
      */
     protected $guestHelperMock;
 
     /**
-     * @var \Magento\Framework\Controller\Result\Redirect|\PHPUnit\Framework\MockObject\MockObject
+     * @var Redirect|MockObject
      */
     protected $resultRedirectMock;
 
     /**
-     * @var \Magento\Framework\View\Result\PageFactory|\PHPUnit\Framework\MockObject\MockObject
+     * @var PageFactory|MockObject
      */
     protected $resultPageFactoryMock;
 
     /**
-     * @var \Magento\Framework\View\Result\Page|\PHPUnit\Framework\MockObject\MockObject
+     * @var Page|MockObject
      */
     protected $resultPageMock;
 
@@ -54,31 +65,31 @@ class ViewTest extends \PHPUnit\Framework\TestCase
      */
     protected function setUp(): void
     {
-        $this->requestMock = $this->getMockBuilder(\Magento\Framework\App\RequestInterface::class)
+        $this->requestMock = $this->getMockBuilder(RequestInterface::class)
             ->getMock();
-        $this->guestHelperMock = $this->getMockBuilder(\Magento\Sales\Helper\Guest::class)
+        $this->guestHelperMock = $this->getMockBuilder(Guest::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->resultRedirectMock = $this->getMockBuilder(\Magento\Framework\Controller\Result\Redirect::class)
+        $this->resultRedirectMock = $this->getMockBuilder(Redirect::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->resultPageFactoryMock = $this->getMockBuilder(\Magento\Framework\View\Result\PageFactory::class)
+        $this->resultPageFactoryMock = $this->getMockBuilder(PageFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
-        $this->resultPageMock = $this->getMockBuilder(\Magento\Framework\View\Result\Page::class)
+        $this->resultPageMock = $this->getMockBuilder(Page::class)
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->context = $this->objectManagerHelper->getObject(
-            \Magento\Framework\App\Action\Context::class,
+            Context::class,
             [
                 'request' => $this->requestMock
             ]
         );
         $this->viewController = $this->objectManagerHelper->getObject(
-            \Magento\Sales\Controller\Guest\View::class,
+            View::class,
             [
                 'context' => $this->context,
                 'guestHelper' => $this->guestHelperMock,

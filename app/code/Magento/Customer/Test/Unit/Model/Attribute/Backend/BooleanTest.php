@@ -3,19 +3,25 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Customer\Test\Unit\Model\Attribute\Backend;
 
-class BooleanTest extends \PHPUnit\Framework\TestCase
+use Magento\Customer\Model\Attribute\Backend\Data\Boolean;
+use Magento\Customer\Model\Customer;
+use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
+use PHPUnit\Framework\TestCase;
+
+class BooleanTest extends TestCase
 {
     /**
-     * @var \Magento\Customer\Model\Attribute\Backend\Data\Boolean
+     * @var Boolean
      */
     protected $model;
 
     protected function setUp(): void
     {
-        $this->model = new \Magento\Customer\Model\Attribute\Backend\Data\Boolean();
+        $this->model = new Boolean();
     }
 
     /**
@@ -27,11 +33,11 @@ class BooleanTest extends \PHPUnit\Framework\TestCase
      */
     public function testBeforeSave($value, $defaultValue, $result)
     {
-        $attributeMock = $this->getMockBuilder(\Magento\Eav\Model\Entity\Attribute\AbstractAttribute::class)
+        $attributeMock = $this->getMockBuilder(AbstractAttribute::class)
             ->setMethods(['getName', 'getDefaultValue'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
-        $customerMock = $this->getMockBuilder(\Magento\Customer\Model\Customer::class)
+        $customerMock = $this->getMockBuilder(Customer::class)
             ->disableOriginalConstructor()
             ->getMock();
 

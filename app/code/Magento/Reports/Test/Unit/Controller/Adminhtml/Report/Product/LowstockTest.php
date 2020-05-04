@@ -3,22 +3,28 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Reports\Test\Unit\Controller\Adminhtml\Report\Product;
 
-use Magento\Reports\Controller\Adminhtml\Report\Product\Lowstock;
 use Magento\Framework\DataObject;
 use Magento\Framework\Phrase;
+use Magento\Framework\Stdlib\DateTime\Filter\Date;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\View\Page\Title;
+use Magento\Reports\Controller\Adminhtml\Report\Product\Lowstock;
+use Magento\Reports\Test\Unit\Controller\Adminhtml\Report\AbstractControllerTest;
+use PHPUnit\Framework\MockObject\MockObject;
 
-class LowstockTest extends \Magento\Reports\Test\Unit\Controller\Adminhtml\Report\AbstractControllerTest
+class LowstockTest extends AbstractControllerTest
 {
     /**
-     * @var \Magento\Reports\Controller\Adminhtml\Report\Product\Lowstock
+     * @var Lowstock
      */
     protected $lowstock;
 
     /**
-     * @var \Magento\Framework\Stdlib\DateTime\Filter\Date|\PHPUnit\Framework\MockObject\MockObject
+     * @var Date|MockObject
      */
     protected $dateMock;
 
@@ -29,13 +35,13 @@ class LowstockTest extends \Magento\Reports\Test\Unit\Controller\Adminhtml\Repor
     {
         parent::setUp();
 
-        $this->dateMock = $this->getMockBuilder(\Magento\Framework\Stdlib\DateTime\Filter\Date::class)
+        $this->dateMock = $this->getMockBuilder(Date::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $objectManager = new ObjectManager($this);
         $this->lowstock = $objectManager->getObject(
-            \Magento\Reports\Controller\Adminhtml\Report\Product\Lowstock::class,
+            Lowstock::class,
             [
                 'context' => $this->contextMock,
                 'fileFactory' => $this->fileFactoryMock,
@@ -49,7 +55,7 @@ class LowstockTest extends \Magento\Reports\Test\Unit\Controller\Adminhtml\Repor
      */
     public function testExecute()
     {
-        $titleMock = $this->getMockBuilder(\Magento\Framework\View\Page\Title::class)
+        $titleMock = $this->getMockBuilder(Title::class)
             ->disableOriginalConstructor()
             ->getMock();
 

@@ -3,37 +3,46 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Backend\Test\Unit\App\Router;
 
-class NoRouteHandlerTest extends \PHPUnit\Framework\TestCase
+use Magento\Backend\App\Router\NoRouteHandler;
+use Magento\Backend\Helper\Data;
+use Magento\Framework\App\Request\Http;
+use Magento\Framework\App\Route\ConfigInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class NoRouteHandlerTest extends TestCase
 {
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $_helperMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $_requestMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $_routeConfigMock;
 
     /**
-     * @var \Magento\Backend\App\Router\NoRouteHandler
+     * @var NoRouteHandler
      */
     protected $_model;
 
     protected function setUp(): void
     {
-        $this->_requestMock = $this->createMock(\Magento\Framework\App\Request\Http::class);
-        $this->_routeConfigMock = $this->createMock(\Magento\Framework\App\Route\ConfigInterface::class);
-        $this->_helperMock = $this->createMock(\Magento\Backend\Helper\Data::class);
+        $this->_requestMock = $this->createMock(Http::class);
+        $this->_routeConfigMock = $this->createMock(ConfigInterface::class);
+        $this->_helperMock = $this->createMock(Data::class);
         $this->_helperMock->expects($this->any())->method('getAreaFrontName')->willReturn('backend');
-        $this->_model = new \Magento\Backend\App\Router\NoRouteHandler($this->_helperMock, $this->_routeConfigMock);
+        $this->_model = new NoRouteHandler($this->_helperMock, $this->_routeConfigMock);
     }
 
     /**
@@ -82,7 +91,7 @@ class NoRouteHandlerTest extends \PHPUnit\Framework\TestCase
             $this->_requestMock
         );
 
-        $this->assertTrue($this->_model->process($this->_requestMock));
+        $this->assertEquals(true, $this->_model->process($this->_requestMock));
     }
 
     /**
@@ -104,6 +113,6 @@ class NoRouteHandlerTest extends \PHPUnit\Framework\TestCase
 
         $this->_requestMock->expects($this->never())->method('setActionName');
 
-        $this->assertFalse($this->_model->process($this->_requestMock));
+        $this->assertEquals(false, $this->_model->process($this->_requestMock));
     }
 }

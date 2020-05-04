@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Cms\Test\Unit\Model\ResourceModel\Page\Grid;
 
 use Magento\Cms\Model\ResourceModel\Page\Grid\Collection;
@@ -10,62 +12,63 @@ use Magento\Framework\Api\Search\AggregationInterface;
 use Magento\Framework\Data\Collection\Db\FetchStrategyInterface;
 use Magento\Framework\Data\Collection\EntityFactoryInterface;
 use Magento\Framework\DB\Adapter\AdapterInterface;
-use Magento\Framework\Event\ManagerInterface;
+use Magento\Framework\DB\Select;
 use Magento\Framework\EntityManager\MetadataPool;
+use Magento\Framework\Event\ManagerInterface;
 use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Store\Model\StoreManagerInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
-use Magento\Framework\DB\Select;
 
 /**
- * Class CollectionTest
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class CollectionTest extends \PHPUnit\Framework\TestCase
+class CollectionTest extends TestCase
 {
     /**
-     * @var EntityFactoryInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var EntityFactoryInterface|MockObject
      */
     protected $entityFactoryMock;
 
     /**
-     * @var LoggerInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var LoggerInterface|MockObject
      */
     protected $loggerMock;
 
     /**
-     * @var FetchStrategyInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var FetchStrategyInterface|MockObject
      */
     protected $fetchStrategyMock;
 
     /**
-     * @var ManagerInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var ManagerInterface|MockObject
      */
     protected $eventManagerMock;
 
     /**
-     * @var StoreManagerInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var StoreManagerInterface|MockObject
      */
     protected $storeManagerMock;
 
     /**
-     * @var MetadataPool|\PHPUnit\Framework\MockObject\MockObject
+     * @var MetadataPool|MockObject
      */
     protected $metadataPoolMock;
 
     /**
-     * @var AdapterInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var AdapterInterface|MockObject
      */
     protected $connectionMock;
 
     /**
-     * @var AbstractDb|\PHPUnit\Framework\MockObject\MockObject
+     * @var AbstractDb|MockObject
      */
     protected $resourceMock;
 
     /**
-     * @var AggregationInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var AggregationInterface|MockObject
      */
     protected $aggregationsMock;
 

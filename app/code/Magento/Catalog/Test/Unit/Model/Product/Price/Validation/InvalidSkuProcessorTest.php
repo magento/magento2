@@ -3,26 +3,36 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Unit\Model\Product\Price\Validation;
+
+use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Catalog\Model\Product\Price\Validation\InvalidSkuProcessor;
+use Magento\Catalog\Model\Product\Type;
+use Magento\Catalog\Model\ProductIdLocatorInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test for model Magento\Catalog\Product\Price\Validation\InvalidSkuProcessor.
  */
-class InvalidSkuProcessorTest extends \PHPUnit\Framework\TestCase
+class InvalidSkuProcessorTest extends TestCase
 {
     /**
-     * @var \Magento\Catalog\Model\Product\Price\Validation\InvalidSkuProcessor
+     * @var InvalidSkuProcessor
      */
     private $invalidSkuProcessor;
 
     /**
-     * @var \Magento\Catalog\Model\ProductIdLocatorInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var ProductIdLocatorInterface|MockObject
      */
     private $productIdLocator;
 
     /**
-     * @var \Magento\Catalog\Api\ProductRepositoryInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var ProductRepositoryInterface|MockObject
      */
     private $productRepository;
 
@@ -31,14 +41,16 @@ class InvalidSkuProcessorTest extends \PHPUnit\Framework\TestCase
      */
     protected function setUp(): void
     {
-        $this->productIdLocator = $this->getMockBuilder(\Magento\Catalog\Model\ProductIdLocatorInterface::class)
-            ->disableOriginalConstructor()->getMockForAbstractClass();
-        $this->productRepository = $this->getMockBuilder(\Magento\Catalog\Api\ProductRepositoryInterface::class)
-            ->disableOriginalConstructor()->getMockForAbstractClass();
+        $this->productIdLocator = $this->getMockBuilder(ProductIdLocatorInterface::class)
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+        $this->productRepository = $this->getMockBuilder(ProductRepositoryInterface::class)
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
 
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $objectManager = new ObjectManager($this);
         $this->invalidSkuProcessor = $objectManager->getObject(
-            \Magento\Catalog\Model\Product\Price\Validation\InvalidSkuProcessor::class,
+            InvalidSkuProcessor::class,
             [
                 'productIdLocator' => $this->productIdLocator,
                 'productRepository' => $this->productRepository
@@ -58,9 +70,10 @@ class InvalidSkuProcessorTest extends \PHPUnit\Framework\TestCase
         $idsBySku = [$productSku => [235235235 => $productType]];
         $this->productIdLocator->expects($this->atLeastOnce())->method('retrieveProductIdsBySkus')
             ->willReturn($idsBySku);
-        $product = $this->getMockBuilder(\Magento\Catalog\Api\Data\ProductInterface::class)
+        $product = $this->getMockBuilder(ProductInterface::class)
             ->setMethods(['getPriceType'])
-            ->disableOriginalConstructor()->getMockForAbstractClass();
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
         $productPriceType = 0;
         $product->expects($this->atLeastOnce())->method('getPriceType')->willReturn($productPriceType);
         $this->productRepository->expects($this->atLeastOnce())->method('get')->willReturn($product);
@@ -74,7 +87,7 @@ class InvalidSkuProcessorTest extends \PHPUnit\Framework\TestCase
     public function testRetrieveInvalidSkuList()
     {
         $productSku = 'LKJKJ2233636';
-        $productType = \Magento\Catalog\Model\Product\Type::TYPE_BUNDLE;
+        $productType = Type::TYPE_BUNDLE;
         $methodParamSku = 'SDFSDF3242355';
         $skus = [$methodParamSku];
         $allowedProductTypes = [$productType];

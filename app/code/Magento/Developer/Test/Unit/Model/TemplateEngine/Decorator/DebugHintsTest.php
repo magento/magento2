@@ -1,11 +1,16 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Developer\Test\Unit\Model\TemplateEngine\Decorator;
 
-class DebugHintsTest extends \PHPUnit\Framework\TestCase
+use Magento\Developer\Model\TemplateEngine\Decorator\DebugHints;
+use Magento\Framework\View\Element\BlockInterface;
+use Magento\Framework\View\TemplateEngineInterface;
+use PHPUnit\Framework\TestCase;
+
+class DebugHintsTest extends TestCase
 {
     /**
      * @param bool $showBlockHints
@@ -13,8 +18,8 @@ class DebugHintsTest extends \PHPUnit\Framework\TestCase
      */
     public function testRender($showBlockHints)
     {
-        $subject = $this->createMock(\Magento\Framework\View\TemplateEngineInterface::class);
-        $block = $this->getMockBuilder(\Magento\Framework\View\Element\BlockInterface::class)
+        $subject = $this->createMock(TemplateEngineInterface::class);
+        $block = $this->getMockBuilder(BlockInterface::class)
             ->setMockClassName('TestBlock')
             ->getMock();
         $subject->expects(
@@ -28,7 +33,7 @@ class DebugHintsTest extends \PHPUnit\Framework\TestCase
         )->willReturn(
             '<div id="fixture"/>'
         );
-        $model = new \Magento\Developer\Model\TemplateEngine\Decorator\DebugHints($subject, $showBlockHints);
+        $model = new DebugHints($subject, $showBlockHints);
         $actualResult = $model->render($block, 'template.phtml', ['var' => 'val']);
         $this->assertNotNull($actualResult);
     }

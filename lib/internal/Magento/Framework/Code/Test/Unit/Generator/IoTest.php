@@ -5,10 +5,15 @@
  */
 namespace Magento\Framework\Code\Test\Unit\Generator;
 
+use PHPUnit\Framework\TestCase;
+use Magento\Framework\Code\Generator\Io;
+use Magento\Framework\Filesystem;
+use PHPUnit\Framework\MockObject\MockObject;
+use Magento\Framework\Filesystem\Driver\File;
 use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Phrase;
 
-class IoTest extends \PHPUnit\Framework\TestCase
+class IoTest extends TestCase
 {
     /**#@+
      * Source and result class parameters
@@ -30,10 +35,10 @@ class IoTest extends \PHPUnit\Framework\TestCase
      */
     protected $_generationDirectory;
 
-    /** @var \Magento\Framework\Code\Generator\Io */
+    /** @var Io */
     protected $_object;
 
-    /** @var \Magento\Framework\Filesystem|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var Filesystem|MockObject */
     protected $_filesystemDriverMock;
 
     /** @var string */
@@ -46,9 +51,9 @@ class IoTest extends \PHPUnit\Framework\TestCase
     {
         $this->_generationDirectory = rtrim(self::GENERATION_DIRECTORY, '/') . '/';
 
-        $this->_filesystemDriverMock = $this->createMock(\Magento\Framework\Filesystem\Driver\File::class);
+        $this->_filesystemDriverMock = $this->createMock(File::class);
 
-        $this->_object = new \Magento\Framework\Code\Generator\Io(
+        $this->_object = new Io(
             $this->_filesystemDriverMock,
             self::GENERATION_DIRECTORY
         );
@@ -97,7 +102,7 @@ class IoTest extends \PHPUnit\Framework\TestCase
         } else {
             $exceptionMessage = 'Some error renaming file';
             $renameMockEvent = $this->throwException(new FileSystemException(new Phrase($exceptionMessage)));
-            $this->expectException(\Magento\Framework\Exception\FileSystemException::class);
+            $this->expectException(FileSystemException::class);
             $this->expectExceptionMessage($exceptionMessage);
         }
 
@@ -146,7 +151,7 @@ class IoTest extends \PHPUnit\Framework\TestCase
         )->method(
             'isWritable'
         )->with(
-            $this->equalTo($this->_generationDirectory)
+            $this->_generationDirectory
         )->willReturn(
             true
         );
@@ -161,7 +166,7 @@ class IoTest extends \PHPUnit\Framework\TestCase
         )->method(
             'isWritable'
         )->with(
-            $this->equalTo($this->_generationDirectory)
+            $this->_generationDirectory
         )->willReturn(
             false
         );
@@ -171,7 +176,7 @@ class IoTest extends \PHPUnit\Framework\TestCase
         )->method(
             'createDirectory'
         )->with(
-            $this->equalTo($this->_generationDirectory),
+            $this->_generationDirectory,
             $this->anything()
         )->willReturn(
             true
@@ -197,7 +202,7 @@ class IoTest extends \PHPUnit\Framework\TestCase
         )->method(
             'isExists'
         )->with(
-            $this->equalTo($fileName)
+            $fileName
         )->willReturn(
             $exists
         );

@@ -3,14 +3,18 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\Setup\Test\Unit\Declaration\Schema\Db\MySQL\Definition\Columns;
 
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\Setup\Declaration\Schema\Db\MySQL\Definition\Columns\Nullable;
 use Magento\Framework\Setup\Declaration\Schema\Dto\Columns\Boolean as BooleanColumnDto;
 use Magento\Framework\Setup\Declaration\Schema\Dto\ElementInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class NullableTest extends \PHPUnit\Framework\TestCase
+class NullableTest extends TestCase
 {
     /**
      * @var ObjectManager
@@ -35,7 +39,7 @@ class NullableTest extends \PHPUnit\Framework\TestCase
      */
     public function testToDefinition()
     {
-        /** @var BooleanColumnDto|\PHPUnit\Framework\MockObject\MockObject $column */
+        /** @var BooleanColumnDto|MockObject $column */
         $column = $this->getMockBuilder(BooleanColumnDto::class)
             ->disableOriginalConstructor()
             ->setMethods(['isNullable'])
@@ -54,7 +58,7 @@ class NullableTest extends \PHPUnit\Framework\TestCase
      */
     public function testToDefinitionNotNull()
     {
-        /** @var BooleanColumnDto|\PHPUnit\Framework\MockObject\MockObject $column */
+        /** @var BooleanColumnDto|MockObject $column */
         $column = $this->getMockBuilder(BooleanColumnDto::class)
             ->disableOriginalConstructor()
             ->setMethods(['isNullable'])
@@ -73,10 +77,10 @@ class NullableTest extends \PHPUnit\Framework\TestCase
      */
     public function testToDefinitionNotNullableAware()
     {
-        /** @var ElementInterface|\PHPUnit\Framework\MockObject\MockObject $column */
+        /** @var ElementInterface|MockObject $column */
         $column = $this->getMockBuilder(ElementInterface::class)
             ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+            ->getMock();
         $this->assertEquals(
             '',
             $this->nullable->toDefinition($column)

@@ -3,39 +3,44 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Sales\Test\Unit\Observer;
 
-/**
- * Class GridSyncRemoveObserverTest
- */
-class GridSyncRemoveObserverTest extends \PHPUnit\Framework\TestCase
+use Magento\Framework\Event\Observer;
+use Magento\Sales\Model\AbstractModel;
+use Magento\Sales\Model\ResourceModel\GridInterface;
+use Magento\Sales\Observer\GridSyncRemoveObserver;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class GridSyncRemoveObserverTest extends TestCase
 {
     /**
-     * @var \Magento\Sales\Observer\GridSyncRemoveObserver
+     * @var GridSyncRemoveObserver
      */
     protected $unit;
 
     /**
-     * @var \Magento\Sales\Model\ResourceModel\GridInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var GridInterface|MockObject
      */
     protected $gridAggregatorMock;
 
     /**
-     * @var \Magento\Framework\Event\Observer|\PHPUnit\Framework\MockObject\MockObject
+     * @var Observer|MockObject
      */
     protected $eventObserverMock;
 
     /**
-     * @var \Magento\Sales\Model\AbstractModel|\PHPUnit\Framework\MockObject\MockObject
+     * @var AbstractModel|MockObject
      */
     protected $salesModelMock;
 
     protected function setUp(): void
     {
-        $this->gridAggregatorMock = $this->getMockBuilder(\Magento\Sales\Model\ResourceModel\GridInterface::class)
+        $this->gridAggregatorMock = $this->getMockBuilder(GridInterface::class)
             ->getMockForAbstractClass();
-        $this->eventObserverMock = $this->getMockBuilder(\Magento\Framework\Event\Observer::class)
+        $this->eventObserverMock = $this->getMockBuilder(Observer::class)
             ->disableOriginalConstructor()
             ->setMethods(
                 [
@@ -44,7 +49,7 @@ class GridSyncRemoveObserverTest extends \PHPUnit\Framework\TestCase
                 ]
             )
             ->getMock();
-        $this->salesModelMock = $this->getMockBuilder(\Magento\Sales\Model\AbstractModel::class)
+        $this->salesModelMock = $this->getMockBuilder(AbstractModel::class)
             ->disableOriginalConstructor()
             ->setMethods(
                 [
@@ -52,7 +57,7 @@ class GridSyncRemoveObserverTest extends \PHPUnit\Framework\TestCase
                 ]
             )
             ->getMockForAbstractClass();
-        $this->unit = new \Magento\Sales\Observer\GridSyncRemoveObserver(
+        $this->unit = new GridSyncRemoveObserver(
             $this->gridAggregatorMock
         );
     }

@@ -3,29 +3,32 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Braintree\Test\Unit\Gateway\Response;
 
 use Braintree\Transaction;
 use Magento\Braintree\Gateway\Response\PaymentDetailsHandler;
+use Magento\Braintree\Gateway\SubjectReader;
 use Magento\Payment\Gateway\Data\PaymentDataObject;
 use Magento\Sales\Model\Order\Payment;
-use Magento\Braintree\Gateway\SubjectReader;
-use PHPUnit\Framework\MockObject\MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Tests \\Magento\Braintree\Gateway\Response\PaymentDetailsHandler.
  */
-class PaymentDetailsHandlerTest extends \PHPUnit\Framework\TestCase
+class PaymentDetailsHandlerTest extends TestCase
 {
     const TRANSACTION_ID = '432erwwe';
 
     /**
-     * @var \Magento\Braintree\Gateway\Response\PaymentDetailsHandler
+     * @var PaymentDetailsHandler
      */
     private $paymentHandler;
 
     /**
-     * @var \Magento\Sales\Model\Order\Payment|MockObject
+     * @var Payment|MockObject
      */
     private $paymentMock;
 

@@ -3,13 +3,17 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\Test\Unit\DB\Query;
 
+use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Query\BatchIterator;
 use Magento\Framework\DB\Select;
-use Magento\Framework\DB\Adapter\AdapterInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class BatchIteratorTest extends \PHPUnit\Framework\TestCase
+class BatchIteratorTest extends TestCase
 {
     /**
      * @var BatchIterator
@@ -17,17 +21,17 @@ class BatchIteratorTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     private $selectMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     private $wrapperSelectMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     private $connectionMock;
 
@@ -65,7 +69,7 @@ class BatchIteratorTest extends \PHPUnit\Framework\TestCase
 
         $this->selectMock = $this->createMock(Select::class);
         $this->wrapperSelectMock = $this->createMock(Select::class);
-        $this->connectionMock = $this->getMockForAbstractClass(AdapterInterface::class);
+        $this->connectionMock = $this->createMock(AdapterInterface::class);
         $this->connectionMock->expects($this->any())->method('select')->willReturn($this->wrapperSelectMock);
         $this->selectMock->expects($this->once())->method('getConnection')->willReturn($this->connectionMock);
         $this->connectionMock->expects($this->any())->method('quoteIdentifier')->willReturnArgument(0);

@@ -3,18 +3,20 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Quote\Test\Unit\Model\QuoteRepository\Plugin;
 
 use Magento\Authorization\Model\UserContextInterface;
-use Magento\Quote\Model\ChangeQuoteControl;
-use Magento\Quote\Model\QuoteRepository\Plugin\AccessChangeQuoteControl;
-use Magento\Quote\Model\Quote;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Quote\Model\ChangeQuoteControl;
+use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\QuoteRepository;
-use \PHPUnit\Framework\MockObject\MockObject as MockObject;
+use Magento\Quote\Model\QuoteRepository\Plugin\AccessChangeQuoteControl;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class AccessChangeQuoteControlTest extends \PHPUnit\Framework\TestCase
+class AccessChangeQuoteControlTest extends TestCase
 {
     /**
      * @var AccessChangeQuoteControl
@@ -89,13 +91,11 @@ class AccessChangeQuoteControlTest extends \PHPUnit\Framework\TestCase
 
     /**
      * The user_id and customer_id from the quote are different.
-     *
      */
     public function testBeforeSaveException()
     {
-        $this->expectException(\Magento\Framework\Exception\StateException::class);
+        $this->expectException('Magento\Framework\Exception\StateException');
         $this->expectExceptionMessage('Invalid state change requested');
-
         $this->quoteMock->method('getCustomerId')
             ->willReturn(2);
 
@@ -148,13 +148,11 @@ class AccessChangeQuoteControlTest extends \PHPUnit\Framework\TestCase
 
     /**
      * User with role Guest and customer_id !== null.
-     *
      */
     public function testBeforeSaveForGuestException()
     {
-        $this->expectException(\Magento\Framework\Exception\StateException::class);
+        $this->expectException('Magento\Framework\Exception\StateException');
         $this->expectExceptionMessage('Invalid state change requested');
-
         $this->quoteMock->method('getCustomerId')
             ->willReturn(1);
 
@@ -169,13 +167,11 @@ class AccessChangeQuoteControlTest extends \PHPUnit\Framework\TestCase
 
     /**
      * User with unknown role.
-     *
      */
     public function testBeforeSaveForUnknownUserTypeException()
     {
-        $this->expectException(\Magento\Framework\Exception\StateException::class);
+        $this->expectException('Magento\Framework\Exception\StateException');
         $this->expectExceptionMessage('Invalid state change requested');
-
         $this->quoteMock->method('getCustomerId')
             ->willReturn(2);
 

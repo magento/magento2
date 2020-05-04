@@ -8,26 +8,29 @@ declare(strict_types=1);
 namespace Magento\AdvancedSearch\Test\Unit\Model\Recommendations;
 
 use Magento\AdvancedSearch\Model\Recommendations\DataProvider;
-use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
-use Magento\Catalog\Model\Layer\Resolver;
 use Magento\AdvancedSearch\Model\ResourceModel\Recommendations;
 use Magento\AdvancedSearch\Model\ResourceModel\RecommendationsFactory;
+use Magento\Catalog\Model\Layer as SearchLayer;
+use Magento\Catalog\Model\Layer\Resolver;
+use Magento\Catalog\Model\ResourceModel\Product\Collection as ProductCollection;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Search\Model\QueryInterface;
 use Magento\Search\Model\QueryResult;
 use Magento\Search\Model\QueryResultFactory;
-use Magento\Catalog\Model\ResourceModel\Product\Collection as ProductCollection;
-use Magento\Catalog\Model\Layer as SearchLayer;
 use Magento\Store\Model\ScopeInterface;
-use Magento\Search\Model\QueryInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
+ * @covers \Magento\AdvancedSearch\Model\Recommendations\DataProvider
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- *
- * Class \Magento\AdvancedSearch\Test\Unit\Model\Recommendations\DataProviderTest
  */
-class DataProviderTest extends \PHPUnit\Framework\TestCase
+class DataProviderTest extends TestCase
 {
     /**
+     * Testable Object
+     *
      * @var DataProvider;
      */
     private $model;
@@ -38,34 +41,34 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
     private $objectManagerHelper;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|ScopeConfigInterface
+     * @var ScopeConfigInterface|MockObject
      */
     private $scopeConfigMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|Resolver
+     * @var Resolver|MockObject
      */
     private $layerResolverMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|SearchLayer
+     * @var SearchLayer|MockObject
      */
     private $searchLayerMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|RecommendationsFactory
+     * @var RecommendationsFactory|MockObject
      */
     private $recommendationsFactoryMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|Recommendations
+     * @var Recommendations|MockObject
      */
     private $recommendationsMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|Resolver
+     * @var Resolver|MockObject
      */
-    private $queryResultFactory;
+    private $queryResultFactoryMock;
 
     /**
      * Set up test environment.
@@ -74,7 +77,7 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
      */
     protected function setUp(): void
     {
-        $this->scopeConfigMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
+        $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
         $this->layerResolverMock = $this->getMockBuilder(Resolver::class)
             ->disableOriginalConstructor()
             ->setMethods(['get'])
@@ -93,7 +96,7 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
 
         $this->recommendationsMock = $this->createMock(Recommendations::class);
 
-        $this->queryResultFactory = $this->getMockBuilder(QueryResultFactory::class)
+        $this->queryResultFactoryMock = $this->getMockBuilder(QueryResultFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
@@ -105,7 +108,7 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
                 'scopeConfig' => $this->scopeConfigMock,
                 'layerResolver' => $this->layerResolverMock,
                 'recommendationsFactory' => $this->recommendationsFactoryMock,
-                'queryResultFactory' => $this->queryResultFactory
+                'queryResultFactory' => $this->queryResultFactoryMock
             ]
         );
     }
@@ -115,12 +118,12 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
      *
      * @return void
      */
-    public function testGetItemsWhenDisabledSearchRecommendations()
+    public function testGetItemsWhenDisabledSearchRecommendations(): void
     {
         $isEnabledSearchRecommendations = false;
 
-        /** @var $queryInterfaceMock QueryInterface */
-        $queryInterfaceMock = $this->getMockForAbstractClass(QueryInterface::class);
+        /** @var QueryInterface $queryInterfaceMock */
+        $queryInterfaceMock = $this->createMock(QueryInterface::class);
 
         $this->scopeConfigMock->expects($this->any())
             ->method('isSetFlag')
@@ -136,15 +139,15 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
      *
      * @return void
      */
-    public function testGetItemsWhenEnabledSearchRecommendations()
+    public function testGetItemsWhenEnabledSearchRecommendations(): void
     {
         $storeId = 1;
         $searchRecommendationsCountConfig = 2;
         $isEnabledSearchRecommendations = true;
         $queryText = 'test';
 
-        /** @var $queryInterfaceMock QueryInterface */
-        $queryInterfaceMock = $this->getMockForAbstractClass(QueryInterface::class);
+        /** @var QueryInterface $queryInterfaceMock */
+        $queryInterfaceMock = $this->createMock(QueryInterface::class);
         $queryInterfaceMock->expects($this->any())->method('getQueryText')->willReturn($queryText);
 
         $this->scopeConfigMock->expects($this->any())
@@ -181,7 +184,7 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
                 ]
             );
         $queryResultMock = $this->createMock(QueryResult::class);
-        $this->queryResultFactory->expects($this->any())->method('create')->willReturn($queryResultMock);
+        $this->queryResultFactoryMock->expects($this->any())->method('create')->willReturn($queryResultMock);
 
         $result = $this->model->getItems($queryInterfaceMock);
         $this->assertCount(2, $result);

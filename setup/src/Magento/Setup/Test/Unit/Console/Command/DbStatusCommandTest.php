@@ -3,22 +3,25 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Setup\Test\Unit\Console\Command;
 
+use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\Console\Cli;
 use Magento\Framework\Module\DbVersionInfo;
+use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Setup\UpToDateValidatorInterface;
 use Magento\Setup\Console\Command\DbStatusCommand;
-use Magento\Framework\App\DeploymentConfig;
 use Magento\Setup\Model\ObjectManagerProvider;
-use Magento\Framework\ObjectManagerInterface;
 use PHPUnit\Framework\MockObject\MockObject as Mock;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Tester\CommandTester;
 
 /**
  * @inheritdoc
  */
-class DbStatusCommandTest extends \PHPUnit\Framework\TestCase
+class DbStatusCommandTest extends TestCase
 {
     /**
      * @var DbVersionInfo|Mock
@@ -58,10 +61,14 @@ class DbStatusCommandTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->validators = [
-            'declarative_schema' => $this->getMockBuilder(UpToDateValidatorInterface::class)->getMock(),
-            'up_to_date_schema' => $this->getMockBuilder(UpToDateValidatorInterface::class)->getMock(),
-            'up_to_date_data' => $this->getMockBuilder(UpToDateValidatorInterface::class)->getMock(),
-            'old_validator' => $this->getMockBuilder(UpToDateValidatorInterface::class)->getMock(),
+            'declarative_schema' => $this->getMockBuilder(UpToDateValidatorInterface::class)
+                ->getMock(),
+            'up_to_date_schema' => $this->getMockBuilder(UpToDateValidatorInterface::class)
+                ->getMock(),
+            'up_to_date_data' => $this->getMockBuilder(UpToDateValidatorInterface::class)
+                ->getMock(),
+            'old_validator' => $this->getMockBuilder(UpToDateValidatorInterface::class)
+                ->getMock(),
         ];
 
         $objectManagerProvider->expects($this->any())

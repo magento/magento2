@@ -3,32 +3,36 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Framework\View\Test\Unit\Design\FileResolution\Fallback;
 
-use Magento\Framework\App\State;
-use Magento\Framework\View\Design\Fallback\RulePool;
-use Magento\Framework\View\Design\FileResolution\Fallback\TemplateFile;
-use Magento\Framework\View\Design\FileResolution\Fallback\ResolverInterface;
-use Magento\Framework\View\Template\Html\MinifierInterface;
-use Magento\Framework\View\Asset\ConfigInterface;
 use Magento\Framework\App\DeploymentConfig;
+use Magento\Framework\App\State;
 use Magento\Framework\Config\ConfigOptionsListConstants;
+use Magento\Framework\View\Asset\ConfigInterface;
+use Magento\Framework\View\Design\Fallback\RulePool;
+use Magento\Framework\View\Design\FileResolution\Fallback\ResolverInterface;
+use Magento\Framework\View\Design\FileResolution\Fallback\TemplateFile;
+use Magento\Framework\View\Design\ThemeInterface;
+use Magento\Framework\View\Template\Html\MinifierInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class TemplateFileTest extends \PHPUnit\Framework\TestCase
+class TemplateFileTest extends TestCase
 {
     /**
-     * @var ResolverInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var ResolverInterface|MockObject
      */
     protected $resolver;
 
     /**
-     * @var MinifierInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var MinifierInterface|MockObject
      */
     protected $minifier;
 
     /**
-     * @var State|\PHPUnit\Framework\MockObject\MockObject
+     * @var State|MockObject
      */
     protected $state;
 
@@ -38,12 +42,12 @@ class TemplateFileTest extends \PHPUnit\Framework\TestCase
     protected $object;
 
     /**
-     * @var DeploymentConfig|\PHPUnit\Framework\MockObject\MockObject
+     * @var DeploymentConfig|MockObject
      */
     private $deploymentConfigMock;
 
     /**
-     * @var ConfigInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var ConfigInterface|MockObject
      */
     protected $assetConfig;
 
@@ -73,7 +77,7 @@ class TemplateFileTest extends \PHPUnit\Framework\TestCase
             ->method('isMinifyHtml')
             ->willReturn(true);
 
-        $theme = $this->getMockForAbstractClass(\Magento\Framework\View\Design\ThemeInterface::class);
+        $theme = $this->getMockForAbstractClass(ThemeInterface::class);
         $expected = 'some/file.ext';
 
         $this->state->expects($this->once())
@@ -103,7 +107,7 @@ class TemplateFileTest extends \PHPUnit\Framework\TestCase
             ->method('isMinifyHtml')
             ->willReturn(true);
 
-        $theme = $this->getMockForAbstractClass(\Magento\Framework\View\Design\ThemeInterface::class);
+        $theme = $this->getMockForAbstractClass(ThemeInterface::class);
         $expected = 'some/file.ext';
         $expectedMinified = '/path/to/minified/some/file.ext';
 
@@ -136,7 +140,7 @@ class TemplateFileTest extends \PHPUnit\Framework\TestCase
             ->method('isMinifyHtml')
             ->willReturn(false);
 
-        $theme = $this->getMockForAbstractClass(\Magento\Framework\View\Design\ThemeInterface::class);
+        $theme = $this->getMockForAbstractClass(ThemeInterface::class);
         $expected = 'some/file.ext';
 
         $this->resolver->expects($this->once())

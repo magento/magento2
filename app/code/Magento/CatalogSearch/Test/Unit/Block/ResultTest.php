@@ -3,55 +3,67 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\CatalogSearch\Test\Unit\Block;
 
-use \Magento\CatalogSearch\Block\Result;
+use Magento\Catalog\Block\Product\ListProduct;
+use Magento\Catalog\Model\Layer;
+use Magento\Catalog\Model\Layer\Resolver;
+use Magento\Catalog\Model\Layer\Search;
+use Magento\CatalogSearch\Block\Result;
+use Magento\CatalogSearch\Helper\Data;
+use Magento\Framework\View\Element\Template\Context;
+use Magento\Search\Model\Query;
+use Magento\Search\Model\QueryFactory;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Unit test for \Magento\CatalogSearch\Block\Result
  */
-class ResultTest extends \PHPUnit\Framework\TestCase
+class ResultTest extends TestCase
 {
-    /** @var  \Magento\Search\Model\Query|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var  Query|MockObject */
     private $queryMock;
 
-    /** @var  \Magento\Search\Model\QueryFactory|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var  QueryFactory|MockObject */
     private $queryFactoryMock;
 
-    /** @var \Magento\CatalogSearch\Block\Result */
+    /** @var Result */
     protected $model;
 
-    /** @var \Magento\Framework\View\Element\Template\Context|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var Context|MockObject */
     protected $contextMock;
 
-    /** @var \Magento\Catalog\Model\Layer|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var Layer|MockObject */
     protected $layerMock;
 
-    /** @var \Magento\CatalogSearch\Helper\Data|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var Data|MockObject */
     protected $dataMock;
 
     /**
-     * @var \Magento\Catalog\Block\Product\ListProduct|\PHPUnit\Framework\MockObject\MockObject
+     * @var ListProduct|MockObject
      */
     protected $childBlockMock;
 
     protected function setUp(): void
     {
-        $this->contextMock = $this->createMock(\Magento\Framework\View\Element\Template\Context::class);
-        $this->layerMock = $this->createMock(\Magento\Catalog\Model\Layer\Search::class);
-        /** @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Catalog\Model\Layer\Resolver $layerResolver */
-        $layerResolver = $this->getMockBuilder(\Magento\Catalog\Model\Layer\Resolver::class)
+        $this->contextMock = $this->createMock(Context::class);
+        $this->layerMock = $this->createMock(Search::class);
+        /** @var MockObject|Resolver $layerResolver */
+        $layerResolver = $this->getMockBuilder(Resolver::class)
             ->disableOriginalConstructor()
             ->setMethods(['get', 'create'])
             ->getMock();
         $layerResolver->expects($this->any())
             ->method($this->anything())
             ->willReturn($this->layerMock);
-        $this->dataMock = $this->createMock(\Magento\CatalogSearch\Helper\Data::class);
-        $this->queryMock = $this->getMockBuilder(\Magento\Search\Model\Query::class)
+        $this->dataMock = $this->createMock(Data::class);
+        $this->queryMock = $this->getMockBuilder(Query::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->queryFactoryMock = $this->getMockBuilder(\Magento\Search\Model\QueryFactory::class)
+        $this->queryFactoryMock = $this->getMockBuilder(QueryFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['get'])
             ->getMock();
@@ -85,7 +97,7 @@ class ResultTest extends \PHPUnit\Framework\TestCase
             $isMinQueryLength
         );
         if ($isMinQueryLength) {
-            $queryMock = $this->createMock(\Magento\Search\Model\Query::class);
+            $queryMock = $this->createMock(Query::class);
             $queryMock->expects($this->once())->method('getMinQueryLength')->willReturn('5');
 
             $this->queryFactoryMock->expects($this->once())->method('get')->willReturn($queryMock);

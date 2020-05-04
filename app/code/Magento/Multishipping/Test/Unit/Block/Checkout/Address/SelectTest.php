@@ -3,64 +3,77 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Multishipping\Test\Unit\Block\Checkout\Address;
 
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Customer\Api\AddressRepositoryInterface;
+use Magento\Customer\Api\Data\AddressInterface;
+use Magento\Customer\Api\Data\AddressSearchResultsInterface;
+use Magento\Customer\Api\Data\CustomerInterface;
+use Magento\Framework\Api\Filter;
+use Magento\Framework\Api\FilterBuilder;
+use Magento\Framework\Api\SearchCriteria;
+use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Multishipping\Block\Checkout\Address\Select;
+use Magento\Multishipping\Model\Checkout\Type\Multishipping;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class SelectTest extends \PHPUnit\Framework\TestCase
+class SelectTest extends TestCase
 {
     /**
-     * @var \Magento\Multishipping\Block\Checkout\Address\Select
+     * @var Select
      */
     protected $block;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $addressMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $multishippingMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $customerMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $filterBuilderMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $searchCriteriaBuilderMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $addressRepositoryMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $filterMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $searchCriteriaMock;
 
     /**
-     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
+     * @var ObjectManager
      */
     protected $objectManager;
 
@@ -68,17 +81,17 @@ class SelectTest extends \PHPUnit\Framework\TestCase
     {
         $this->objectManager = new ObjectManager($this);
         $this->multishippingMock =
-            $this->createMock(\Magento\Multishipping\Model\Checkout\Type\Multishipping::class);
-        $this->addressMock = $this->createMock(\Magento\Customer\Api\Data\AddressInterface::class);
-        $this->customerMock = $this->createMock(\Magento\Customer\Api\Data\CustomerInterface::class);
-        $this->filterBuilderMock = $this->createMock(\Magento\Framework\Api\FilterBuilder::class);
+            $this->createMock(Multishipping::class);
+        $this->addressMock = $this->createMock(AddressInterface::class);
+        $this->customerMock = $this->createMock(CustomerInterface::class);
+        $this->filterBuilderMock = $this->createMock(FilterBuilder::class);
         $this->searchCriteriaBuilderMock =
-            $this->createMock(\Magento\Framework\Api\SearchCriteriaBuilder::class);
-        $this->addressRepositoryMock = $this->createMock(\Magento\Customer\Api\AddressRepositoryInterface::class);
-        $this->filterMock = $this->createMock(\Magento\Framework\Api\Filter::class);
-        $this->searchCriteriaMock = $this->createMock(\Magento\Framework\Api\SearchCriteria::class);
+            $this->createMock(SearchCriteriaBuilder::class);
+        $this->addressRepositoryMock = $this->createMock(AddressRepositoryInterface::class);
+        $this->filterMock = $this->createMock(Filter::class);
+        $this->searchCriteriaMock = $this->createMock(SearchCriteria::class);
         $this->block = $this->objectManager->getObject(
-            \Magento\Multishipping\Block\Checkout\Address\Select::class,
+            Select::class,
             [
                 'multishipping' => $this->multishippingMock,
                 'addressRepository' => $this->addressRepositoryMock,
@@ -127,7 +140,7 @@ class SelectTest extends \PHPUnit\Framework\TestCase
 
     public function testGetAddress()
     {
-        $searchResultMock = $this->createMock(\Magento\Customer\Api\Data\AddressSearchResultsInterface::class);
+        $searchResultMock = $this->createMock(AddressSearchResultsInterface::class);
         $this->multishippingMock->expects($this->once())->method('getCustomer')->willReturn($this->customerMock);
         $this->customerMock->expects($this->once())->method('getId')->willReturn(1);
         $this->filterBuilderMock->expects($this->once())->method('setField')->with('parent_id')->willReturnSelf();
@@ -156,7 +169,7 @@ class SelectTest extends \PHPUnit\Framework\TestCase
     public function testGetAlreadyExistingAddress()
     {
         $this->block = $this->objectManager->getObject(
-            \Magento\Multishipping\Block\Checkout\Address\Select::class,
+            Select::class,
             [
                 'addressRepository' => $this->addressRepositoryMock,
                 'filterBuilder' => $this->filterBuilderMock,
@@ -175,7 +188,7 @@ class SelectTest extends \PHPUnit\Framework\TestCase
 
     public function testGetAddressWhenItNotExistInCustomer()
     {
-        $searchResultMock = $this->createMock(\Magento\Customer\Api\Data\AddressSearchResultsInterface::class);
+        $searchResultMock = $this->createMock(AddressSearchResultsInterface::class);
         $this->multishippingMock->expects($this->once())->method('getCustomer')->willReturn($this->customerMock);
         $this->customerMock->expects($this->once())->method('getId')->willReturn(1);
         $this->filterBuilderMock->expects($this->once())->method('setField')->with('parent_id')->willReturnSelf();

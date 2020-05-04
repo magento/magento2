@@ -3,24 +3,30 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Ups\Test\Unit\Helper;
+
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Ups\Helper\Config;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Config helper Test
  */
-class ConfigTest extends \PHPUnit\Framework\TestCase
+class ConfigTest extends TestCase
 {
     /**
      * Ups config helper
      *
-     * @var \Magento\Ups\Helper\Config
+     * @var Config
      */
     protected $helper;
 
     protected function setUp(): void
     {
-        $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->helper = $objectManagerHelper->getObject(\Magento\Ups\Helper\Config::class);
+        $objectManagerHelper = new ObjectManager($this);
+        $this->helper = $objectManagerHelper->getObject(Config::class);
     }
 
     /**

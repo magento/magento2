@@ -3,40 +3,50 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Sales\Test\Unit\Helper;
 
-use \Magento\Sales\Helper\Reorder;
+use Magento\Customer\Model\Session;
+use Magento\Framework\App\Config;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\Helper\Context;
+use Magento\Sales\Api\OrderRepositoryInterface;
+use Magento\Sales\Helper\Reorder;
+use Magento\Sales\Model\Order;
+use Magento\Store\Model\ScopeInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class ReorderTest extends \PHPUnit\Framework\TestCase
+class ReorderTest extends TestCase
 {
     /**
-     * @var \Magento\Sales\Helper\Reorder
+     * @var Reorder
      */
     protected $helper;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject | \Magento\Framework\App\Config\ScopeConfigInterface
+     * @var MockObject|ScopeConfigInterface
      */
     protected $scopeConfigMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject | \Magento\Sales\Model\Store
+     * @var MockObject|\Magento\Sales\Model\Store
      */
     protected $storeParam;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject | \Magento\Sales\Model\Order
+     * @var MockObject|\Magento\Sales\Model\Order
      */
     protected $orderMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject | \Magento\Customer\Model\Session
+     * @var MockObject|Session
      */
     protected $customerSessionMock;
 
     /**
-     * @var \Magento\Sales\Api\OrderRepositoryInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var OrderRepositoryInterface|MockObject
      */
     protected $repositoryMock;
 
@@ -45,24 +55,24 @@ class ReorderTest extends \PHPUnit\Framework\TestCase
      */
     protected function setUp(): void
     {
-        $this->scopeConfigMock = $this->getMockBuilder(\Magento\Framework\App\Config::class)
+        $this->scopeConfigMock = $this->getMockBuilder(Config::class)
             ->setMethods(['getValue'])
             ->disableOriginalConstructor()
             ->getMock();
-        $contextMock = $this->getMockBuilder(\Magento\Framework\App\Helper\Context::class)
+        $contextMock = $this->getMockBuilder(Context::class)
             ->disableOriginalConstructor()
             ->getMock();
         $contextMock->expects($this->any())
             ->method('getScopeConfig')
             ->willReturn($this->scopeConfigMock);
 
-        $this->customerSessionMock = $this->getMockBuilder(\Magento\Customer\Model\Session::class)
+        $this->customerSessionMock = $this->getMockBuilder(Session::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->repositoryMock = $this->getMockBuilder(\Magento\Sales\Api\OrderRepositoryInterface::class)
+        $this->repositoryMock = $this->getMockBuilder(OrderRepositoryInterface::class)
             ->getMockForAbstractClass();
-        $this->helper = new \Magento\Sales\Helper\Reorder(
+        $this->helper = new Reorder(
             $contextMock,
             $this->customerSessionMock,
             $this->repositoryMock
@@ -72,7 +82,7 @@ class ReorderTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->orderMock = $this->getMockBuilder(\Magento\Sales\Model\Order::class)
+        $this->orderMock = $this->getMockBuilder(Order::class)
             ->disableOriginalConstructor()
             ->getMock();
     }
@@ -125,7 +135,7 @@ class ReorderTest extends \PHPUnit\Framework\TestCase
             ->method('getValue')
             ->with(
                 Reorder::XML_PATH_SALES_REORDER_ALLOW,
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                ScopeInterface::SCOPE_STORE,
                 $this->storeParam
             )
             ->willReturn($returnValue);

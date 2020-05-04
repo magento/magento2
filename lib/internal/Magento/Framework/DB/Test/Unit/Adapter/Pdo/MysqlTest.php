@@ -3,54 +3,58 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Framework\DB\Test\Unit\Adapter\Pdo;
 
 use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Framework\DB\LoggerInterface;
 use Magento\Framework\DB\Select;
 use Magento\Framework\DB\Select\SelectRenderer;
+use Magento\Framework\DB\SelectFactory;
 use Magento\Framework\Model\ResourceModel\Type\Db\Pdo\Mysql;
 use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Framework\Setup\SchemaListener;
+use Magento\Framework\Stdlib\DateTime;
+use Magento\Framework\Stdlib\StringUtils;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * \Magento\Framework\DB\Adapter\Pdo\Mysql class test
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class MysqlTest extends \PHPUnit\Framework\TestCase
+class MysqlTest extends TestCase
 {
-    /**
-     * Custom error handler message
-     */
     const CUSTOM_ERROR_HANDLER_MESSAGE = 'Custom error handler message';
 
     /**
      * Adapter for test
      *
-     * @var \Magento\Framework\DB\Adapter\Pdo\Mysql|\PHPUnit\Framework\MockObject\MockObject
+     * @var \Magento\Framework\DB\Adapter\Pdo\Mysql|MockObject
      */
     protected $_adapter;
 
     /**
      * Mock DB adapter for DDL query tests
      *
-     * @var \Magento\Framework\DB\Adapter\Pdo\Mysql|\PHPUnit\Framework\MockObject\MockObject
+     * @var \Magento\Framework\DB\Adapter\Pdo\Mysql|MockObject
      */
     protected $_mockAdapter;
 
     /**
-     * @var \Magento\Framework\DB\SelectFactory|\PHPUnit\Framework\MockObject\MockObject
+     * @var SelectFactory|MockObject
      */
     protected $selectFactory;
 
     /**
-     * @var SchemaListener|\PHPUnit\Framework\MockObject\MockObject
+     * @var SchemaListener|MockObject
      */
     private $schemaListenerMock;
 
     /**
-     * @var SerializerInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var SerializerInterface|MockObject
      */
     private $serializerMock;
 
@@ -59,15 +63,15 @@ class MysqlTest extends \PHPUnit\Framework\TestCase
      */
     protected function setUp(): void
     {
-        $string = $this->createMock(\Magento\Framework\Stdlib\StringUtils::class);
-        $dateTime = $this->createMock(\Magento\Framework\Stdlib\DateTime::class);
-        $logger = $this->getMockForAbstractClass(\Magento\Framework\DB\LoggerInterface::class);
-        $selectFactory = $this->getMockBuilder(\Magento\Framework\DB\SelectFactory::class)
+        $string = $this->createMock(StringUtils::class);
+        $dateTime = $this->createMock(DateTime::class);
+        $logger = $this->getMockForAbstractClass(LoggerInterface::class);
+        $selectFactory = $this->getMockBuilder(SelectFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->serializerMock = $this->getMockBuilder(SerializerInterface::class)
             ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+            ->getMock();
         $this->schemaListenerMock = $this->getMockBuilder(SchemaListener::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -188,7 +192,7 @@ class MysqlTest extends \PHPUnit\Framework\TestCase
         try {
             $this->_mockAdapter->query($query);
         } catch (\Exception $e) {
-            $this->assertNotContains(
+            $this->assertStringNotContainsString(
                 $e->getMessage(),
                 AdapterInterface::ERROR_DDL_MESSAGE
             );
@@ -199,7 +203,7 @@ class MysqlTest extends \PHPUnit\Framework\TestCase
         try {
             $this->_mockAdapter->query($select);
         } catch (\Exception $e) {
-            $this->assertNotContains(
+            $this->assertStringNotContainsString(
                 $e->getMessage(),
                 AdapterInterface::ERROR_DDL_MESSAGE
             );
@@ -213,22 +217,18 @@ class MysqlTest extends \PHPUnit\Framework\TestCase
      */
     public function testCheckDdlTransaction($ddlQuery)
     {
-        $this->expectException(\Exception::class);
+        $this->expectException('Exception');
         $this->expectExceptionMessage('DDL statements are not allowed in transactions');
-
         $this->_mockAdapter->query($ddlQuery);
     }
 
-    /**
-     */
     public function testMultipleQueryException()
     {
-        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+        $this->expectException('Magento\Framework\Exception\LocalizedException');
         $this->expectExceptionMessage('Multiple queries can\'t be executed. Run a single query and try again.');
-
         $sql = "SELECT COUNT(*) AS _num FROM test; ";
-        $sql.= "INSERT INTO test(id) VALUES (1); ";
-        $sql.= "SELECT COUNT(*) AS _num FROM test; ";
+        $sql .= "INSERT INTO test(id) VALUES (1); ";
+        $sql .= "SELECT COUNT(*) AS _num FROM test; ";
         $this->_mockAdapter->query($sql);
     }
 
@@ -265,15 +265,8 @@ class MysqlTest extends \PHPUnit\Framework\TestCase
      */
     public function testAsymmetricRollBackFailure()
     {
-        try {
-            $this->_adapter->rollBack();
-            throw new \Exception('Test Failed!');
-        } catch (\Exception $e) {
-            $this->assertEquals(
-                AdapterInterface::ERROR_ASYMMETRIC_ROLLBACK_MESSAGE,
-                $e->getMessage()
-            );
-        }
+        $this->expectExceptionMessage(AdapterInterface::ERROR_ASYMMETRIC_ROLLBACK_MESSAGE);
+        $this->_adapter->rollBack();
     }
 
     /**
@@ -281,15 +274,8 @@ class MysqlTest extends \PHPUnit\Framework\TestCase
      */
     public function testAsymmetricCommitFailure()
     {
-        try {
-            $this->_adapter->commit();
-            throw new \Exception('Test Failed!');
-        } catch (\Exception $e) {
-            $this->assertEquals(
-                AdapterInterface::ERROR_ASYMMETRIC_COMMIT_MESSAGE,
-                $e->getMessage()
-            );
-        }
+        $this->expectExceptionMessage(AdapterInterface::ERROR_ASYMMETRIC_COMMIT_MESSAGE);
+        $this->_adapter->commit();
     }
 
     /**
@@ -384,11 +370,11 @@ class MysqlTest extends \PHPUnit\Framework\TestCase
 
     /**
      * Test incomplete Roll Back in a nested transaction
+     * phpcs:disable Magento2.Exceptions.ThrowCatch
      */
     public function testIncompleteRollBackFailureOnCommit()
     {
-        $this->_adapter->expects($this->exactly(2))
-            ->method('_connect');
+        $this->_adapter->expects($this->exactly(2))->method('_connect');
 
         try {
             $this->_adapter->beginTransaction();
@@ -407,11 +393,11 @@ class MysqlTest extends \PHPUnit\Framework\TestCase
 
     /**
      * Test incomplete Roll Back in a nested transaction
+     * phpcs:disable Magento2.Exceptions.ThrowCatch
      */
     public function testIncompleteRollBackFailureOnBeginTransaction()
     {
-        $this->_adapter->expects($this->exactly(2))
-            ->method('_connect');
+        $this->_adapter->expects($this->exactly(2))->method('_connect');
 
         try {
             $this->_adapter->beginTransaction();
@@ -529,10 +515,7 @@ class MysqlTest extends \PHPUnit\Framework\TestCase
     public function testGetIndexName($name, $fields, $indexType, $expectedName)
     {
         $resultIndexName = $this->_mockAdapter->getIndexName($name, $fields, $indexType);
-        $this->assertTrue(
-            strpos($resultIndexName, $expectedName) === 0,
-            "Index name '$resultIndexName' did not begin with expected value '$expectedName'"
-        );
+        $this->assertStringStartsWith($expectedName, $resultIndexName);
     }
 
     /**
@@ -562,13 +545,12 @@ class MysqlTest extends \PHPUnit\Framework\TestCase
         $this->assertInstanceOf(Mysql::class, $subject);
     }
 
-    /**
-     */
     public function testConfigValidationByPortWithException()
     {
-        $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage('Port must be configured within host (like \'localhost:33390\') parameter, not within port');
-
+        $this->expectException('InvalidArgumentException');
+        $this->expectExceptionMessage(
+            'Port must be configured within host (like \'localhost:33390\') parameter, not within port'
+        );
         (new ObjectManager($this))->getObject(
             Mysql::class,
             ['config' => ['host' => 'localhost', 'port' => '33390']]

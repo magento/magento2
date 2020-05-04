@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Analytics\Test\Unit\Model;
 
@@ -11,11 +12,13 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Api\Data\WebsiteInterface;
 use Magento\Store\Model\StoreManagerInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class StoreConfigurationProviderTest extends \PHPUnit\Framework\TestCase
+class StoreConfigurationProviderTest extends TestCase
 {
     /**
-     * @var ScopeConfigInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var ScopeConfigInterface|MockObject
      */
     private $scopeConfigMock;
 
@@ -25,22 +28,22 @@ class StoreConfigurationProviderTest extends \PHPUnit\Framework\TestCase
     private $configPaths;
 
     /**
-     * @var StoreManagerInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var StoreManagerInterface|MockObject
      */
     private $storeManagerMock;
 
     /**
-     * @var WebsiteInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var WebsiteInterface|MockObject
      */
     private $websiteMock;
 
     /**
-     * @var StoreInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var StoreInterface|MockObject
      */
     private $storeMock;
 
     /**
-     * @var StoreConfigurationProvider|\PHPUnit\Framework\MockObject\MockObject
+     * @var StoreConfigurationProvider|MockObject
      */
     private $storeConfigurationProvider;
 
@@ -49,21 +52,13 @@ class StoreConfigurationProviderTest extends \PHPUnit\Framework\TestCase
      */
     protected function setUp(): void
     {
-        $this->scopeConfigMock = $this->getMockBuilder(ScopeConfigInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
 
-        $this->storeManagerMock =  $this->getMockBuilder(StoreManagerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->storeManagerMock =  $this->createMock(StoreManagerInterface::class);
 
-        $this->websiteMock =  $this->getMockBuilder(WebsiteInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->websiteMock =  $this->createMock(WebsiteInterface::class);
 
-        $this->storeMock =  $this->getMockBuilder(StoreInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->storeMock =  $this->createMock(StoreInterface::class);
 
         $this->configPaths = [
             'web/unsecure/base_url',

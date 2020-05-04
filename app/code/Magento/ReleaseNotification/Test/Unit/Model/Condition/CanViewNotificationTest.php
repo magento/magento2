@@ -3,37 +3,38 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\ReleaseNotification\Test\Unit\Model\Condition;
 
+use Magento\Backend\Model\Auth\Session;
+use Magento\Framework\App\CacheInterface;
+use Magento\Framework\App\ProductMetadataInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\ReleaseNotification\Model\Condition\CanViewNotification;
 use Magento\ReleaseNotification\Model\ResourceModel\Viewer\Logger;
 use Magento\ReleaseNotification\Model\Viewer\Log;
-use Magento\Framework\App\ProductMetadataInterface;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\Backend\Model\Auth\Session;
-use Magento\Framework\App\CacheInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-/**
- * Class CanViewNotificationTest
- */
-class CanViewNotificationTest extends \PHPUnit\Framework\TestCase
+class CanViewNotificationTest extends TestCase
 {
     /** @var CanViewNotification */
     private $canViewNotification;
 
-    /** @var  Logger|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var Logger|MockObject */
     private $viewerLoggerMock;
 
-    /** @var ProductMetadataInterface|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var ProductMetadataInterface|MockObject */
     private $productMetadataMock;
 
-    /** @var Session|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var Session|MockObject */
     private $sessionMock;
 
-    /** @var  Log|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var Log|MockObject */
     private $logMock;
 
-    /** @var  $cacheStorageMock \PHPUnit\Framework\MockObject\MockObject|CacheInterface */
+    /** @var MockObject|CacheInterface */
     private $cacheStorageMock;
 
     protected function setUp(): void
@@ -51,7 +52,7 @@ class CanViewNotificationTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $this->productMetadataMock = $this->getMockBuilder(ProductMetadataInterface::class)
             ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+            ->getMock();
         $objectManager = new ObjectManager($this);
         $this->canViewNotification = $objectManager->getObject(
             CanViewNotification::class,
@@ -76,7 +77,7 @@ class CanViewNotificationTest extends \PHPUnit\Framework\TestCase
             ->method('load')
             ->with('release-notification-popup-1')
             ->willReturn("0");
-        $this->assertFalse($this->canViewNotification->isVisible([]));
+        $this->assertEquals(false, $this->canViewNotification->isVisible([]));
     }
 
     /**

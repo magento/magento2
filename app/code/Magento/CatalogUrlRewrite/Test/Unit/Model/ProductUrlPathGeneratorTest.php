@@ -15,9 +15,10 @@ use Magento\CatalogUrlRewrite\Model\ProductUrlPathGenerator;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Store\Model\ScopeInterface;
+use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use PHPUnit\Framework\MockObject\MockObject as MockObject;
 
 /**
  * Verify ProductUrlPathGenerator class
@@ -51,24 +52,17 @@ class ProductUrlPathGeneratorTest extends TestCase
     protected function setUp(): void
     {
         $this->category = $this->createMock(Category::class);
-        $productMethods = [
-            '__wakeup',
-            'getData',
-            'getUrlKey',
-            'getName',
-            'formatUrlKey',
-            'getId',
-            'load',
-            'setStoreId',
-        ];
-
-        $this->product = $this->createPartialMock(Product::class, $productMethods);
-        $this->storeManager = $this->getMockForAbstractClass(StoreManagerInterface::class);
-        $this->scopeConfig = $this->getMockForAbstractClass(ScopeConfigInterface::class);
+        $this->product = $this->getMockBuilder(Product::class)
+            ->addMethods(['getUrlKey'])
+            ->onlyMethods(['__wakeup', 'getData', 'getName', 'formatUrlKey', 'getId', 'load', 'setStoreId'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->storeManager = $this->createMock(StoreManagerInterface::class);
+        $this->scopeConfig = $this->createMock(ScopeConfigInterface::class);
         $this->categoryUrlPathGenerator = $this->createMock(
             CategoryUrlPathGenerator::class
         );
-        $this->productRepository = $this->getMockForAbstractClass(ProductRepositoryInterface::class);
+        $this->productRepository = $this->createMock(ProductRepositoryInterface::class);
         $this->productRepository->expects($this->any())->method('getById')->willReturn($this->product);
 
         $this->productUrlPathGenerator = (new ObjectManager($this))->getObject(
@@ -208,7 +202,7 @@ class ProductUrlPathGeneratorTest extends TestCase
         $storeId = 1;
         $this->product->expects($this->once())->method('getData')->with('url_path')
             ->willReturn('product-path');
-        $store = $this->createMock(\Magento\Store\Model\Store::class);
+        $store = $this->createMock(Store::class);
         $store->expects($this->once())->method('getId')->willReturn($storeId);
         $this->storeManager->expects($this->once())->method('getStore')->willReturn($store);
         $this->scopeConfig->expects($this->once())->method('getValue')

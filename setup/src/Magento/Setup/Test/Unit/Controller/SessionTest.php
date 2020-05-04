@@ -3,37 +3,52 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Setup\Test\Unit\Controller;
 
-use \Magento\Setup\Controller\Session;
+use Laminas\ServiceManager\ServiceManager;
+use Laminas\View\Model\JsonModel;
+use Laminas\View\Model\ViewModel;
+use Magento\Backend\Model\Session\AdminConfig;
+use Magento\Backend\Model\Url;
+use Magento\Framework\App\DeploymentConfig;
+use Magento\Framework\App\State;
+use Magento\Framework\ObjectManagerInterface;
+use Magento\Setup\Controller\Session;
+use Magento\Setup\Model\ObjectManagerProvider;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class SessionTest extends \PHPUnit\Framework\TestCase
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
+class SessionTest extends TestCase
 {
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\ObjectManagerInterface
+     * @var MockObject|ObjectManagerInterface
      */
     private $objectManager;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject| \Magento\Setup\Model\ObjectManagerProvider
+     * @var MockObject|ObjectManagerProvider
      */
     private $objectManagerProvider;
 
     /**
-     * @var \Laminas\ServiceManager\ServiceManager
+     * @var ServiceManager
      */
     private $serviceManager;
 
     protected function setUp(): void
     {
         $objectManager =
-            $this->getMockForAbstractClass(\Magento\Framework\ObjectManagerInterface::class, [], '', false);
+            $this->getMockForAbstractClass(ObjectManagerInterface::class, [], '', false);
         $objectManagerProvider =
-            $this->createPartialMock(\Magento\Setup\Model\ObjectManagerProvider::class, ['get']);
+            $this->createPartialMock(ObjectManagerProvider::class, ['get']);
         $this->objectManager = $objectManager;
         $this->objectManagerProvider = $objectManagerProvider;
-        $this->serviceManager = $this->createPartialMock(\Laminas\ServiceManager\ServiceManager::class, ['get']);
+        $this->serviceManager = $this->createPartialMock(ServiceManager::class, ['get']);
     }
 
     /**
@@ -45,7 +60,7 @@ class SessionTest extends \PHPUnit\Framework\TestCase
             $this->objectManager
         );
         $deployConfigMock =
-            $this->createPartialMock(\Magento\Framework\App\DeploymentConfig::class, ['isAvailable']);
+            $this->createPartialMock(DeploymentConfig::class, ['isAvailable']);
         $deployConfigMock->expects($this->once())->method('isAvailable')->willReturn(true);
 
         $sessionMock = $this->createPartialMock(
@@ -54,22 +69,22 @@ class SessionTest extends \PHPUnit\Framework\TestCase
         );
         $sessionMock->expects($this->once())->method('isSessionExists')->willReturn(false);
 
-        $stateMock = $this->createPartialMock(\Magento\Framework\App\State::class, ['setAreaCode']);
+        $stateMock = $this->createPartialMock(State::class, ['setAreaCode']);
         $stateMock->expects($this->once())->method('setAreaCode');
 
         $sessionConfigMock =
-            $this->createPartialMock(\Magento\Backend\Model\Session\AdminConfig::class, ['setCookiePath']);
+            $this->createPartialMock(AdminConfig::class, ['setCookiePath']);
         $sessionConfigMock->expects($this->once())->method('setCookiePath');
-        $urlMock = $this->createMock(\Magento\Backend\Model\Url::class);
+        $urlMock = $this->createMock(Url::class);
 
         $returnValueMap = [
             [\Magento\Backend\Model\Auth\Session::class, $sessionMock],
-            [\Magento\Framework\App\State::class, $stateMock],
-            [\Magento\Backend\Model\Session\AdminConfig::class, $sessionConfigMock],
-            [\Magento\Backend\Model\Url::class, $urlMock]
+            [State::class, $stateMock],
+            [AdminConfig::class, $sessionConfigMock],
+            [Url::class, $urlMock]
         ];
 
-        $this->serviceManager->expects($this->once())->method('get')->willReturn($deployConfigMock);
+        $this->serviceManager->expects($this->once())->method('get')->will($this->returnValue($deployConfigMock));
 
         $this->objectManager->expects($this->atLeastOnce())
             ->method('get')
@@ -88,10 +103,10 @@ class SessionTest extends \PHPUnit\Framework\TestCase
      */
     public function testIndexAction()
     {
-        /** @var $controller Session */
+        /** @var Session $controller */
         $controller = new Session($this->serviceManager, $this->objectManagerProvider);
         $viewModel = $controller->unloginAction();
-        $this->assertInstanceOf(\Laminas\View\Model\ViewModel::class, $viewModel);
+        $this->assertInstanceOf(ViewModel::class, $viewModel);
     }
 
     /**
@@ -103,7 +118,7 @@ class SessionTest extends \PHPUnit\Framework\TestCase
             $this->objectManager
         );
         $deployConfigMock =
-            $this->createPartialMock(\Magento\Framework\App\DeploymentConfig::class, ['isAvailable']);
+            $this->createPartialMock(DeploymentConfig::class, ['isAvailable']);
         $deployConfigMock->expects($this->once())->method('isAvailable')->willReturn(true);
         $sessionMock = $this->createPartialMock(
             \Magento\Backend\Model\Auth\Session::class,
@@ -111,11 +126,11 @@ class SessionTest extends \PHPUnit\Framework\TestCase
         );
         $sessionMock->expects($this->once())->method('isSessionExists')->willReturn(true);
 
-        $this->serviceManager->expects($this->once())->method('get')->willReturn($deployConfigMock);
+        $this->serviceManager->expects($this->once())->method('get')->will($this->returnValue($deployConfigMock));
         $this->objectManager->expects($this->once())
             ->method('get')
             ->willReturn($sessionMock);
         $controller = new Session($this->serviceManager, $this->objectManagerProvider);
-        $this->assertEquals(new \Laminas\View\Model\JsonModel(['success' => true]), $controller->prolongAction());
+        $this->assertEquals(new JsonModel(['success' => true]), $controller->prolongAction());
     }
 }

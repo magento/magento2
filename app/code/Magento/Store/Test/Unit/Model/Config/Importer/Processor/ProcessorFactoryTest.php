@@ -3,20 +3,23 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Store\Test\Unit\Model\Config\Importer\Processor;
 
+use Magento\Framework\Exception\ConfigurationMismatchException;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Store\Model\Config\Importer\Processor\Create;
 use Magento\Store\Model\Config\Importer\Processor\Delete;
 use Magento\Store\Model\Config\Importer\Processor\ProcessorFactory;
 use Magento\Store\Model\Config\Importer\Processor\ProcessorInterface;
 use PHPUnit\Framework\MockObject\MockObject as Mock;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @inheritdoc
  */
-class ProcessorFactoryTest extends \PHPUnit\Framework\TestCase
+class ProcessorFactoryTest extends TestCase
 {
     /**
      * @var ProcessorFactory
@@ -61,23 +64,19 @@ class ProcessorFactoryTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    /**
-     */
     public function testCreateNonExisted()
     {
-        $this->expectException(\Magento\Framework\Exception\ConfigurationMismatchException::class);
-        $this->expectExceptionMessage('The class for "dummyType" type wasn\'t declared. Enter the class and try again.');
-
+        $this->expectException(ConfigurationMismatchException::class);
+        $this->expectExceptionMessage(
+            'The class for "dummyType" type wasn\'t declared. Enter the class and try again.'
+        );
         $this->model->create('dummyType');
     }
 
-    /**
-     */
     public function testCreateWrongImplementation()
     {
-        $this->expectException(\Magento\Framework\Exception\ConfigurationMismatchException::class);
+        $this->expectException(ConfigurationMismatchException::class);
         $this->expectExceptionMessage('stdClass should implement');
-
         $type = 'wrongType';
         $this->objectManagerMock->expects($this->once())
             ->method('create')

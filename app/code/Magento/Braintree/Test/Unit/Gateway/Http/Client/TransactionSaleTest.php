@@ -3,20 +3,24 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Braintree\Test\Unit\Gateway\Http\Client;
 
 use Magento\Braintree\Gateway\Http\Client\TransactionSale;
 use Magento\Braintree\Model\Adapter\BraintreeAdapter;
 use Magento\Braintree\Model\Adapter\BraintreeAdapterFactory;
+use Magento\Payment\Gateway\Http\ClientException;
 use Magento\Payment\Gateway\Http\TransferInterface;
 use Magento\Payment\Model\Method\Logger;
-use PHPUnit\Framework\MockObject\MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 
 /**
  * Tests \Magento\Braintree\Gateway\Http\Client\TransactionSale.
  */
-class TransactionSaleTest extends \PHPUnit\Framework\TestCase
+class TransactionSaleTest extends TestCase
 {
     /**
      * @var TransactionSale
@@ -61,13 +65,11 @@ class TransactionSaleTest extends \PHPUnit\Framework\TestCase
      * Runs test placeRequest method (exception)
      *
      * @return void
-     *
      */
     public function testPlaceRequestException()
     {
-        $this->expectException(\Magento\Payment\Gateway\Http\ClientException::class);
+        $this->expectException(ClientException::class);
         $this->expectExceptionMessage('Test messages');
-
         $this->loggerMock->expects($this->once())
             ->method('debug')
             ->with(
@@ -124,7 +126,7 @@ class TransactionSaleTest extends \PHPUnit\Framework\TestCase
      */
     private function getTransferObjectMock()
     {
-        $transferObjectMock = $this->getMockForAbstractClass(TransferInterface::class);
+        $transferObjectMock = $this->createMock(TransferInterface::class);
         $transferObjectMock->expects($this->once())
             ->method('getBody')
             ->willReturn($this->getTransferData());
@@ -139,7 +141,7 @@ class TransactionSaleTest extends \PHPUnit\Framework\TestCase
      */
     private function getResponseObject()
     {
-        $obj = new \stdClass;
+        $obj = new \stdClass();
         $obj->success = true;
 
         return $obj;

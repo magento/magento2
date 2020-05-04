@@ -3,17 +3,19 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Sales\Test\Unit\Model\ResourceModel\Provider;
 
 use Magento\Framework\ObjectManager\TMapFactory;
 use Magento\Sales\Model\ResourceModel\Provider\NotSyncedDataProvider;
 use Magento\Sales\Model\ResourceModel\Provider\NotSyncedDataProviderInterface;
-use PHPUnit\Framework\MockObject\MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-/**
- * Class for testing not synchronized DataProvider.
+/** testing not synchronized DataProvider.
  */
-class NotSyncedDataProviderTest extends \PHPUnit\Framework\TestCase
+class NotSyncedDataProviderTest extends TestCase
 {
     public function testGetIdsEmpty()
     {

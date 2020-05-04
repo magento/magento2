@@ -3,35 +3,43 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\App\Test\Unit\Config\Initial;
 
-class SchemaLocatorTest extends \PHPUnit\Framework\TestCase
+use Magento\Framework\App\Config\Initial\SchemaLocator;
+use Magento\Framework\Module\Dir\Reader;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class SchemaLocatorTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
+     * @var ObjectManager
      */
     protected $objectManager;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $_moduleReaderMock;
 
     /**
-     * @var \Magento\Framework\App\Config\Initial\SchemaLocator
+     * @var SchemaLocator
      */
     protected $_model;
 
     protected function setUp(): void
     {
-        $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->_moduleReaderMock = $this->createMock(\Magento\Framework\Module\Dir\Reader::class);
+        $this->objectManager = new ObjectManager($this);
+        $this->_moduleReaderMock = $this->createMock(Reader::class);
         $this->_moduleReaderMock->expects($this->once())
             ->method('getModuleDir')
             ->with('etc', 'moduleName')
             ->willReturn('schema_dir');
         $this->_model = $this->objectManager->getObject(
-            \Magento\Framework\App\Config\Initial\SchemaLocator::class,
+            SchemaLocator::class,
             [
                 'moduleReader' => $this->_moduleReaderMock,
                 'moduleName' => 'moduleName',

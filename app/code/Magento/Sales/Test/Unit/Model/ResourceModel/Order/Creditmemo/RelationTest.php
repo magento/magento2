@@ -3,47 +3,54 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Sales\Test\Unit\Model\ResourceModel\Order\Creditmemo;
 
-/**
- * Class RelationTest
- */
-class RelationTest extends \PHPUnit\Framework\TestCase
+use Magento\Sales\Model\Order\Creditmemo;
+use Magento\Sales\Model\Order\Creditmemo\Comment;
+use Magento\Sales\Model\Order\Item as OrderItem;
+use Magento\Sales\Model\ResourceModel\Order\Creditmemo\Comment as CreditMemoComment;
+use Magento\Sales\Model\ResourceModel\Order\Creditmemo\Item;
+use Magento\Sales\Model\ResourceModel\Order\Creditmemo\Relation;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class RelationTest extends TestCase
 {
     /**
-     * @var \Magento\Sales\Model\ResourceModel\Order\Creditmemo\Relation
+     * @var Relation
      */
     protected $relationProcessor;
 
     /**
-     * @var \Magento\Sales\Model\ResourceModel\Order\Creditmemo\Item|\PHPUnit\Framework\MockObject\MockObject
+     * @var Item|MockObject
      */
     protected $itemResourceMock;
 
     /**
-     * @var \Magento\Sales\Model\Order\Creditmemo\Comment|\PHPUnit\Framework\MockObject\MockObject
+     * @var Comment|MockObject
      */
     protected $commentMock;
 
     /**
-     * @var \Magento\Sales\Model\Order\Creditmemo|\PHPUnit\Framework\MockObject\MockObject
+     * @var Creditmemo|MockObject
      */
     protected $creditmemoMock;
 
     /**
-     * @var \Magento\Sales\Model\Order\Creditmemo\Item|\PHPUnit\Framework\MockObject\MockObject
+     * @var \Magento\Sales\Model\Order\Creditmemo\Item|MockObject
      */
     protected $itemMock;
 
     /**
-     * @var \Magento\Sales\Model\ResourceModel\Order\Creditmemo\Comment|\PHPUnit\Framework\MockObject\MockObject
+     * @var CreditMemoComment|MockObject
      */
     protected $commentResourceMock;
 
     protected function setUp(): void
     {
-        $this->itemResourceMock = $this->getMockBuilder(\Magento\Sales\Model\ResourceModel\Order\Creditmemo\Item::class)
+        $this->itemResourceMock = $this->getMockBuilder(Item::class)
             ->disableOriginalConstructor()
             ->setMethods(
                 [
@@ -52,7 +59,7 @@ class RelationTest extends \PHPUnit\Framework\TestCase
             )
             ->getMock();
         $this->commentResourceMock = $this->getMockBuilder(
-            \Magento\Sales\Model\ResourceModel\Order\Creditmemo\Comment::class
+            CreditMemoComment::class
         )
             ->disableOriginalConstructor()
             ->setMethods(
@@ -61,7 +68,7 @@ class RelationTest extends \PHPUnit\Framework\TestCase
                 ]
             )
             ->getMock();
-        $this->creditmemoMock = $this->getMockBuilder(\Magento\Sales\Model\Order\Creditmemo::class)
+        $this->creditmemoMock = $this->getMockBuilder(Creditmemo::class)
             ->disableOriginalConstructor()
             ->setMethods(
                 [
@@ -71,7 +78,7 @@ class RelationTest extends \PHPUnit\Framework\TestCase
                 ]
             )
             ->getMock();
-        $this->itemMock = $this->getMockBuilder(\Magento\Sales\Model\Order\Item::class)
+        $this->itemMock = $this->getMockBuilder(OrderItem::class)
             ->disableOriginalConstructor()
             ->setMethods(
                 [
@@ -79,10 +86,10 @@ class RelationTest extends \PHPUnit\Framework\TestCase
                 ]
             )
             ->getMock();
-        $this->commentMock = $this->getMockBuilder(\Magento\Sales\Model\Order\Creditmemo::class)
+        $this->commentMock = $this->getMockBuilder(Creditmemo::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->relationProcessor = new \Magento\Sales\Model\ResourceModel\Order\Creditmemo\Relation(
+        $this->relationProcessor = new Relation(
             $this->itemResourceMock,
             $this->commentResourceMock
         );

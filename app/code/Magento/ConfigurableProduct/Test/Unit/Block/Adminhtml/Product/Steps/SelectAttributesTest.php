@@ -3,17 +3,21 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\ConfigurableProduct\Test\Unit\Block\Adminhtml\Product\Steps;
 
-use Magento\ConfigurableProduct\Block\Adminhtml\Product\Steps\SelectAttributes;
-use Magento\Framework\View\Element\Template\Context;
-use Magento\Framework\Registry;
 use Magento\Backend\Block\Widget\Button;
-use Magento\Framework\View\LayoutInterface;
 use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\ConfigurableProduct\Block\Adminhtml\Product\Steps\SelectAttributes;
+use Magento\Framework\Registry;
 use Magento\Framework\UrlInterface;
+use Magento\Framework\View\Element\Template\Context;
+use Magento\Framework\View\LayoutInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class SelectAttributesTest extends \PHPUnit\Framework\TestCase
+class SelectAttributesTest extends TestCase
 {
     /**
      * @var SelectAttributes
@@ -21,27 +25,27 @@ class SelectAttributesTest extends \PHPUnit\Framework\TestCase
     private $selectAttributes;
 
     /**
-     * @var Context|\PHPUnit\Framework\MockObject\MockObject
+     * @var Context|MockObject
      */
     private $contextMock;
 
     /**
-     * @var Registry|\PHPUnit\Framework\MockObject\MockObject
+     * @var Registry|MockObject
      */
     private $registryMock;
 
     /**
-     * @var Button|\PHPUnit\Framework\MockObject\MockObject
+     * @var Button|MockObject
      */
     private $buttonMock;
 
     /**
-     * @var LayoutInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var LayoutInterface|MockObject
      */
     private $layoutMock;
 
     /**
-     * @var UrlInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var UrlInterface|MockObject
      */
     private $urlBuilderMock;
 
@@ -61,10 +65,10 @@ class SelectAttributesTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $this->layoutMock = $this->getMockBuilder(LayoutInterface::class)
             ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+            ->getMock();
         $this->urlBuilderMock = $this->getMockBuilder(UrlInterface::class)
             ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+            ->getMock();
 
         $this->contextMock->expects($this->any())
             ->method('getLayout')

@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Test class for \Magento\Review\Block\Product\View\ListView
  *
@@ -12,9 +12,6 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Review\Block\Product\View\ListView;
 use PHPUnit\Framework\TestCase;
 
-/**
- * Class ViewTest
- */
 class ListViewTest extends TestCase
 {
     /**

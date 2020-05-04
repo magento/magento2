@@ -3,25 +3,33 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Sales\Test\Unit\Model\ResourceModel\Order\Tax;
 
-/**
- * Class ItemTest
- */
-class ItemTest extends \PHPUnit\Framework\TestCase
+use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Framework\DB\Adapter\Pdo\Mysql;
+use Magento\Framework\DB\Select;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Sales\Model\ResourceModel\Order\Tax\Item;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class ItemTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\DB\Adapter\AdapterInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var AdapterInterface|MockObject
      */
     protected $connectionMock;
 
     /**
-     * @var \Magento\Framework\App\ResourceConnection|\PHPUnit\Framework\MockObject\MockObject
+     * @var ResourceConnection|MockObject
      */
     protected $appResourceMock;
 
     /**
-     * @var \Magento\Sales\Model\ResourceModel\Order\Tax\Item
+     * @var Item
      */
     protected $taxItem;
 
@@ -30,15 +38,15 @@ class ItemTest extends \PHPUnit\Framework\TestCase
      */
     protected function setUp(): void
     {
-        $this->connectionMock = $this->createMock(\Magento\Framework\DB\Adapter\Pdo\Mysql::class);
-        $this->appResourceMock = $this->createMock(\Magento\Framework\App\ResourceConnection::class);
+        $this->connectionMock = $this->createMock(Mysql::class);
+        $this->appResourceMock = $this->createMock(ResourceConnection::class);
         $this->appResourceMock->expects($this->any())
             ->method('getConnection')
             ->willReturn($this->connectionMock);
         $this->appResourceMock->expects($this->any())->method('getTableName')->willReturnArgument(0);
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $objectManager = new ObjectManager($this);
         $this->taxItem = $objectManager->getObject(
-            \Magento\Sales\Model\ResourceModel\Order\Tax\Item::class,
+            Item::class,
             [
                 'resource' => $this->appResourceMock
             ]
@@ -59,7 +67,7 @@ class ItemTest extends \PHPUnit\Framework\TestCase
                 'real_base_amount' => 12
             ]
         ];
-        $select = $this->createMock(\Magento\Framework\DB\Select::class);
+        $select = $this->createMock(Select::class);
         $this->connectionMock->expects($this->once())->method('select')->willReturn($select);
         $select->expects($this->once())->method('from')->with(
             ['item' => 'sales_order_tax_item'],

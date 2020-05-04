@@ -3,58 +3,68 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Theme\Test\Unit\Model\Design\Backend;
 
 use Magento\Framework\App\Area;
+use Magento\Framework\App\Cache\TypeListInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\Event\ManagerInterface;
+use Magento\Framework\Model\Context;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\View\DesignInterface;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Theme\Model\Design\Backend\Theme;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class ThemeTest extends \PHPUnit\Framework\TestCase
+class ThemeTest extends TestCase
 {
     /**
-     * @var \Magento\Theme\Model\Design\Backend\Theme
+     * @var Theme
      */
     protected $model;
 
     /**
-     * @var \Magento\Framework\Model\Context|\PHPUnit\Framework\MockObject\MockObject
+     * @var Context|MockObject
      */
     protected $contextMock;
 
     /**
-     * @var \Magento\Framework\View\DesignInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var DesignInterface|MockObject
      */
     protected $designMock;
 
     /**
-     * @var \Magento\Framework\App\Cache\TypeListInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var TypeListInterface|MockObject
      */
     protected $cacheTypeListMock;
 
     /**
-     * @var ScopeConfigInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var ScopeConfigInterface|MockObject
      */
     protected $configMock;
 
     protected function setUp(): void
     {
-        $this->contextMock = $this->getMockBuilder(\Magento\Framework\Model\Context::class)
+        $this->contextMock = $this->getMockBuilder(Context::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->designMock = $this->getMockBuilder(\Magento\Framework\View\DesignInterface::class)->getMock();
-        $this->cacheTypeListMock = $this->getMockBuilder(\Magento\Framework\App\Cache\TypeListInterface::class)
+        $this->designMock = $this->getMockBuilder(DesignInterface::class)
+            ->getMock();
+        $this->cacheTypeListMock = $this->getMockBuilder(TypeListInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->contextMock->expects($this->once())
             ->method('getEventDispatcher')
-            ->willReturn($this->getMockBuilder(\Magento\Framework\Event\ManagerInterface::class)->getMock());
-        $this->configMock = $this->getMockBuilder(\Magento\Framework\App\Config\ScopeConfigInterface::class)->getMock();
+            ->willReturn($this->getMockBuilder(ManagerInterface::class)
+            ->getMock());
+        $this->configMock = $this->getMockBuilder(ScopeConfigInterface::class)
+            ->getMock();
 
         $this->model = (new ObjectManager($this))->getObject(
-            \Magento\Theme\Model\Design\Backend\Theme::class,
+            Theme::class,
             [
                 'design' => $this->designMock,
                 'context' => $this->contextMock,

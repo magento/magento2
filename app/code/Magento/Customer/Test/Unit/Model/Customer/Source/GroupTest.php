@@ -3,19 +3,21 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Customer\Test\Unit\Model\Customer\Source;
 
-use Magento\Customer\Model\Customer\Source\Group;
-use Magento\Framework\Module\Manager;
-use Magento\Customer\Api\GroupRepositoryInterface;
-use Magento\Framework\Api\SearchCriteriaBuilder;
-use Magento\Framework\Api\SearchCriteria;
+use Magento\Customer\Api\Data\GroupInterface;
 use Magento\Customer\Api\Data\GroupSearchResultsInterface;
+use Magento\Customer\Api\GroupRepositoryInterface;
+use Magento\Customer\Model\Customer\Source\Group;
+use Magento\Framework\Api\SearchCriteria;
+use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Framework\Module\Manager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-/**
- * Group test.
- */
-class GroupTest extends \PHPUnit\Framework\TestCase
+class GroupTest extends TestCase
 {
     /**
      * @var Group
@@ -23,27 +25,27 @@ class GroupTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var Manager|\PHPUnit\Framework\MockObject\MockObject
+     * @var Manager|MockObject
      */
     private $moduleManagerMock;
 
     /**
-     * @var GroupRepositoryInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var GroupRepositoryInterface|MockObject
      */
     private $groupRepositoryMock;
 
     /**
-     * @var SearchCriteriaBuilder|\PHPUnit\Framework\MockObject\MockObject
+     * @var SearchCriteriaBuilder|MockObject
      */
     private $searchCriteriaBuilderMock;
 
     /**
-     * @var SearchCriteria|\PHPUnit\Framework\MockObject\MockObject
+     * @var SearchCriteria|MockObject
      */
     private $searchCriteriaMock;
 
     /**
-     * @var GroupSearchResultsInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var GroupSearchResultsInterface|MockObject
      */
     private $searchResultMock;
 
@@ -93,7 +95,7 @@ class GroupTest extends \PHPUnit\Framework\TestCase
             ->with($this->searchCriteriaMock)
             ->willReturn($this->searchResultMock);
 
-        $groupTest = $this->getMockBuilder(\Magento\Customer\Api\Data\GroupInterface::class)
+        $groupTest = $this->getMockBuilder(GroupInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['getCode', 'getId'])
             ->getMockForAbstractClass();

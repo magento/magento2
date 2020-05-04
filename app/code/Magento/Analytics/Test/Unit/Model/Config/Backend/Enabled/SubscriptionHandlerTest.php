@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Analytics\Test\Unit\Model\Config\Backend\Enabled;
 
@@ -12,21 +13,23 @@ use Magento\Analytics\Model\Config\Backend\Enabled\SubscriptionHandler;
 use Magento\Framework\App\Config\Storage\WriterInterface;
 use Magento\Framework\FlagManager;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class SubscriptionHandlerTest extends \PHPUnit\Framework\TestCase
+class SubscriptionHandlerTest extends TestCase
 {
     /**
-     * @var FlagManager|\PHPUnit\Framework\MockObject\MockObject
+     * @var FlagManager|MockObject
      */
     private $flagManagerMock;
 
     /**
-     * @var WriterInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var WriterInterface|MockObject
      */
     private $configWriterMock;
 
     /**
-     * @var AnalyticsToken|\PHPUnit\Framework\MockObject\MockObject
+     * @var AnalyticsToken|MockObject
      */
     private $tokenMock;
 
@@ -47,17 +50,11 @@ class SubscriptionHandlerTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp(): void
     {
-        $this->flagManagerMock = $this->getMockBuilder(FlagManager::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->flagManagerMock = $this->createMock(FlagManager::class);
 
-        $this->configWriterMock = $this->getMockBuilder(WriterInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->configWriterMock = $this->createMock(WriterInterface::class);
 
-        $this->tokenMock = $this->getMockBuilder(AnalyticsToken::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->tokenMock = $this->createMock(AnalyticsToken::class);
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
 

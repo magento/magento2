@@ -3,25 +3,31 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Eav\Test\Unit\Model\Entity\Attribute\Backend;
 
+use Magento\Eav\Model\Entity\Attribute;
 use Magento\Eav\Model\Entity\Attribute\Backend\JsonEncoded;
+use Magento\Framework\DataObject;
+use Magento\Framework\Serialize\Serializer\Json;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class JsonEncodedTest extends \PHPUnit\Framework\TestCase
+class JsonEncodedTest extends TestCase
 {
     /**
-     * @var \Magento\Eav\Model\Entity\Attribute\Backend\JsonEncoded
+     * @var JsonEncoded
      */
     private $model;
 
     /**
-     * @var \Magento\Eav\Model\Entity\Attribute|\PHPUnit\Framework\MockObject\MockObject
+     * @var Attribute|MockObject
      */
     private $attributeMock;
 
     /**
-     * @var \Magento\Framework\Serialize\Serializer\Json|\PHPUnit\Framework\MockObject\MockObject
+     * @var Json|MockObject
      */
     private $serializerMock;
 
@@ -30,7 +36,7 @@ class JsonEncodedTest extends \PHPUnit\Framework\TestCase
      */
     protected function setUp(): void
     {
-        $this->serializerMock = $this->getMockBuilder(\Magento\Framework\Serialize\Serializer\Json::class)
+        $this->serializerMock = $this->getMockBuilder(Json::class)
             ->disableOriginalConstructor()
             ->setMethods(['serialize', 'unserialize'])
             ->getMock();
@@ -38,24 +44,20 @@ class JsonEncodedTest extends \PHPUnit\Framework\TestCase
         $this->serializerMock->expects($this->any())
             ->method('serialize')
             ->willReturnCallback(
-                
-                    function ($value) {
-                        return json_encode($value);
-                    }
-                
+                function ($value) {
+                    return json_encode($value);
+                }
             );
 
         $this->serializerMock->expects($this->any())
             ->method('unserialize')
             ->willReturnCallback(
-                
-                    function ($value) {
-                        return json_decode($value, true);
-                    }
-                
+                function ($value) {
+                    return json_decode($value, true);
+                }
             );
 
-        $this->attributeMock = $this->getMockBuilder(\Magento\Eav\Model\Entity\Attribute::class)
+        $this->attributeMock = $this->getMockBuilder(Attribute::class)
             ->disableOriginalConstructor()
             ->setMethods(['getAttributeCode'])
             ->getMock();
@@ -73,7 +75,7 @@ class JsonEncodedTest extends \PHPUnit\Framework\TestCase
      */
     public function testBeforeSave()
     {
-        $product = new \Magento\Framework\DataObject(
+        $product = new DataObject(
             [
                 'json_encoded' => [1, 2, 3]
             ]
@@ -87,7 +89,7 @@ class JsonEncodedTest extends \PHPUnit\Framework\TestCase
      */
     public function testBeforeSaveWithAlreadyEncodedValue()
     {
-        $product = new \Magento\Framework\DataObject(
+        $product = new DataObject(
             [
                 'json_encoded' => [1, 2, 3]
             ]
@@ -96,7 +98,7 @@ class JsonEncodedTest extends \PHPUnit\Framework\TestCase
         // save twice
         $this->model->beforeSave($product);
         $this->model->beforeSave($product);
-        
+
         // check it is encoded only once
         $this->assertEquals(json_encode([1, 2, 3]), $product->getData('json_encoded'));
     }
@@ -106,7 +108,7 @@ class JsonEncodedTest extends \PHPUnit\Framework\TestCase
      */
     public function testAfterLoad()
     {
-        $product = new \Magento\Framework\DataObject(
+        $product = new DataObject(
             [
                 'json_encoded' => json_encode([1, 2, 3])
             ]
@@ -120,7 +122,7 @@ class JsonEncodedTest extends \PHPUnit\Framework\TestCase
      */
     public function testAfterLoadWithNullAttributeValue()
     {
-        $product = new \Magento\Framework\DataObject(
+        $product = new DataObject(
             [
                 'json_encoded' => null
             ]

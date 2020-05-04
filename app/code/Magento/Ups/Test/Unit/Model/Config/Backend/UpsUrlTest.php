@@ -46,9 +46,8 @@ class UpsUrlTest extends TestCase
      */
     public function testBeforeSaveErrors($data)
     {
-        $this->expectException(\Magento\Framework\Exception\ValidatorException::class);
+        $this->expectException('Magento\Framework\Exception\ValidatorException');
         $this->expectExceptionMessage('UPS API endpoint URL\'s must use ups.com');
-
         $this->config->setValue($data);
         $this->config->beforeSave();
     }

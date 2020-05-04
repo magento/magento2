@@ -3,14 +3,18 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\Api\Test\Unit\SearchCriteria;
 
 use Magento\Framework\Api\SearchCriteria\CollectionProcessor;
 use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\Data\Collection\AbstractDb;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class CollectionProcessorTest extends \PHPUnit\Framework\TestCase
+class CollectionProcessorTest extends TestCase
 {
     /**
      * Return model
@@ -25,11 +29,11 @@ class CollectionProcessorTest extends \PHPUnit\Framework\TestCase
 
     public function testProcess()
     {
-        /** @var CollectionProcessorInterface|\PHPUnit\Framework\MockObject\MockObject $customFilterMock */
+        /** @var CollectionProcessorInterface|MockObject $customFilterMock */
         $processorOneMock = $this->getMockBuilder(CollectionProcessorInterface::class)
             ->getMock();
 
-        /** @var CollectionProcessorInterface|\PHPUnit\Framework\MockObject\MockObject $processorTwoMock */
+        /** @var CollectionProcessorInterface|MockObject $processorTwoMock */
         $processorTwoMock = $this->getMockBuilder(CollectionProcessorInterface::class)
             ->getMock();
 
@@ -37,11 +41,11 @@ class CollectionProcessorTest extends \PHPUnit\Framework\TestCase
 
         $model = $this->getModel($processors);
 
-        /** @var SearchCriteriaInterface|\PHPUnit\Framework\MockObject\MockObject $searchCriteriaMock */
+        /** @var SearchCriteriaInterface|MockObject $searchCriteriaMock */
         $searchCriteriaMock = $this->getMockBuilder(SearchCriteriaInterface::class)
             ->getMock();
 
-        /** @var AbstractDb|\PHPUnit\Framework\MockObject\MockObject $searchCriteriarMock */
+        /** @var AbstractDb|MockObject $searchCriteriarMock */
         $collectionMock = $this->getMockBuilder(AbstractDb::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -57,18 +61,15 @@ class CollectionProcessorTest extends \PHPUnit\Framework\TestCase
         $model->process($searchCriteriaMock, $collectionMock);
     }
 
-    /**
-     */
     public function testProcessWithException()
     {
-        $this->expectException(\InvalidArgumentException::class);
-
-        /** @var CollectionProcessorInterface|\PHPUnit\Framework\MockObject\MockObject $customFilterMock */
+        $this->expectException('InvalidArgumentException');
+        /** @var CollectionProcessorInterface|MockObject $customFilterMock */
         $processorOneMock = $this->getMockBuilder(CollectionProcessorInterface::class)
             ->setMethods(['process'])
-            ->getMockForAbstractClass();
+            ->getMock();
 
-        /** @var \stdClass|\PHPUnit\Framework\MockObject\MockObject $processorTwoMock */
+        /** @var \stdClass|MockObject $processorTwoMock */
         $processorTwoMock = $this->getMockBuilder(\stdClass::class)
             ->setMethods(['process'])
             ->getMock();
@@ -77,11 +78,11 @@ class CollectionProcessorTest extends \PHPUnit\Framework\TestCase
 
         $model = $this->getModel($processors);
 
-        /** @var SearchCriteriaInterface|\PHPUnit\Framework\MockObject\MockObject $searchCriteriaMock */
+        /** @var SearchCriteriaInterface|MockObject $searchCriteriaMock */
         $searchCriteriaMock = $this->getMockBuilder(SearchCriteriaInterface::class)
             ->getMock();
 
-        /** @var AbstractDb|\PHPUnit\Framework\MockObject\MockObject $searchCriteriarMock */
+        /** @var AbstractDb|MockObject $searchCriteriarMock */
         $collectionMock = $this->getMockBuilder(AbstractDb::class)
             ->disableOriginalConstructor()
             ->getMock();

@@ -3,29 +3,36 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Customer\Test\Unit\Model;
 
+use Magento\Customer\Model\Customer;
+use Magento\Customer\Model\CustomerFactory;
+use Magento\Customer\Model\CustomerRegistry;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test for CustomerRegistry
  *
  */
-class CustomerRegistryTest extends \PHPUnit\Framework\TestCase
+class CustomerRegistryTest extends TestCase
 {
     /**
-     * @var \Magento\Customer\Model\CustomerRegistry
+     * @var CustomerRegistry
      */
     private $customerRegistry;
 
     /**
-     * @var \Magento\Customer\Model\CustomerFactory|\PHPUnit\Framework\MockObject\MockObject
+     * @var CustomerFactory|MockObject
      */
     private $customerFactory;
 
     /**
-     * @var \Magento\Customer\Model\Customer|\PHPUnit\Framework\MockObject\MockObject
+     * @var Customer|MockObject
      */
     private $customer;
 
@@ -38,16 +45,16 @@ class CustomerRegistryTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp(): void
     {
-        $this->customerFactory = $this->getMockBuilder(\Magento\Customer\Model\CustomerFactory::class)
+        $this->customerFactory = $this->getMockBuilder(CustomerFactory::class)
             ->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
         $objectManager = new ObjectManager($this);
         $this->customerRegistry = $objectManager->getObject(
-            \Magento\Customer\Model\CustomerRegistry::class,
+            CustomerRegistry::class,
             ['customerFactory' => $this->customerFactory]
         );
-        $this->customer = $this->getMockBuilder(\Magento\Customer\Model\Customer::class)
+        $this->customer = $this->getMockBuilder(Customer::class)
             ->disableOriginalConstructor()
             ->setMethods(
                 [
@@ -112,11 +119,9 @@ class CustomerRegistryTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($this->customer, $actualCached);
     }
 
-    /**
-     */
     public function testRetrieveException()
     {
-        $this->expectException(\Magento\Framework\Exception\NoSuchEntityException::class);
+        $this->expectException(NoSuchEntityException::class);
 
         $this->customer->expects($this->once())
             ->method('load')
@@ -131,11 +136,9 @@ class CustomerRegistryTest extends \PHPUnit\Framework\TestCase
         $this->customerRegistry->retrieve(self::CUSTOMER_ID);
     }
 
-    /**
-     */
     public function testRetrieveByEmailException()
     {
-        $this->expectException(\Magento\Framework\Exception\NoSuchEntityException::class);
+        $this->expectException(NoSuchEntityException::class);
 
         $this->customer->expects($this->once())
             ->method('loadByEmail')

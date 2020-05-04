@@ -3,33 +3,43 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Paypal\Test\Unit\Model;
 
 use Magento\Customer\Helper\Session\CurrentCustomer;
+use Magento\Framework\DataObject;
+use Magento\Paypal\Model\Billing\Agreement;
 use Magento\Paypal\Model\Billing\AgreementFactory;
 use Magento\Paypal\Model\BillingAgreementConfigProvider;
 use Magento\Paypal\Model\Payment\Method\Billing\AbstractAgreement;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class BillingAgreementConfigProviderTest extends \PHPUnit\Framework\TestCase
+class BillingAgreementConfigProviderTest extends TestCase
 {
     /**
-     * @var CurrentCustomer|\PHPUnit\Framework\MockObject\MockObject
+     * @var CurrentCustomer|MockObject
      */
     protected $currentCustomerMock;
 
     /**
-     * @var AgreementFactory|\PHPUnit\Framework\MockObject\MockObject
+     * @var AgreementFactory|MockObject
      */
     protected $agreementFactoryMock;
+    /**
+     * @var BillingAgreementConfigProvider
+     */
+    private $configProvider;
 
     protected function setUp(): void
     {
-        $this->currentCustomerMock = $this->getMockBuilder(\Magento\Customer\Helper\Session\CurrentCustomer::class)
+        $this->currentCustomerMock = $this->getMockBuilder(CurrentCustomer::class)
             ->setMethods(['getCustomerId'])
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->agreementFactoryMock = $this->getMockBuilder(\Magento\Paypal\Model\Billing\AgreementFactory::class)
+        $this->agreementFactoryMock = $this->getMockBuilder(AgreementFactory::class)
             ->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
@@ -44,8 +54,8 @@ class BillingAgreementConfigProviderTest extends \PHPUnit\Framework\TestCase
     {
         $customerId = 1;
         $agreements = [
-            new \Magento\Framework\DataObject(['id' => 1, 'reference_id' => 'DFG123ER']),
-            new \Magento\Framework\DataObject(['id' => 2, 'reference_id' => 'JKT153ER']),
+            new DataObject(['id' => 1, 'reference_id' => 'DFG123ER']),
+            new DataObject(['id' => 2, 'reference_id' => 'JKT153ER']),
         ];
 
         $expected = [
@@ -62,7 +72,7 @@ class BillingAgreementConfigProviderTest extends \PHPUnit\Framework\TestCase
 
         $this->currentCustomerMock->expects($this->once())->method('getCustomerId')->willReturn($customerId);
 
-        $agreementMock = $this->getMockBuilder(\Magento\Paypal\Model\Billing\Agreement::class)
+        $agreementMock = $this->getMockBuilder(Agreement::class)
             ->disableOriginalConstructor()
             ->getMock();
 
