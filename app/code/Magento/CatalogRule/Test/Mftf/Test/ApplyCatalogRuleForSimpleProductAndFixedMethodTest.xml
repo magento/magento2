@@ -20,7 +20,7 @@
         </annotations>
         <before>
             <!-- Login as Admin -->
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
 
             <!-- Create category -->
             <createData entity="_defaultCategory" stepKey="createCategory"/>
@@ -33,6 +33,7 @@
 
             <!-- Update all products to have custom options -->
             <updateData createDataKey="createProduct1" entity="productWithFixedOptions" stepKey="updateProductWithOptions1"/>
+            <magentoCron stepKey="runCronIndex" groups="index"/>
         </before>
         <after>
             <!-- Delete products and category -->
@@ -47,7 +48,7 @@
             </actionGroup>
 
             <!-- Logout -->
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
         <!-- 1. Begin creating a new catalog price rule -->
         <actionGroup ref="NewCatalogPriceRuleByUIWithConditionIsCategoryActionGroup" stepKey="newCatalogPriceRuleByUIWithConditionIsCategory">

@@ -5,6 +5,9 @@
  */
 namespace Magento\Indexer\Controller\Adminhtml;
 
+/**
+ * Abstract class used as part of inheritance tree for Indexer controllers
+ */
 abstract class Indexer extends \Magento\Backend\App\Action
 {
     /**
@@ -20,6 +23,8 @@ abstract class Indexer extends \Magento\Backend\App\Action
             case 'massOnTheFly':
             case 'massChangelog':
                 return $this->_authorization->isAllowed('Magento_Indexer::changeMode');
+            case 'massInvalidate':
+                return $this->_authorization->isAllowed('Magento_Indexer::invalidate');
         }
         return false;
     }

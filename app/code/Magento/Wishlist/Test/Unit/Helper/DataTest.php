@@ -28,43 +28,43 @@ class DataTest extends \PHPUnit\Framework\TestCase
     /** @var  \Magento\Wishlist\Helper\Data */
     protected $model;
 
-    /** @var  WishlistProviderInterface |\PHPUnit_Framework_MockObject_MockObject */
+    /** @var  WishlistProviderInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $wishlistProvider;
 
-    /** @var  Registry |\PHPUnit_Framework_MockObject_MockObject */
+    /** @var  Registry|\PHPUnit\Framework\MockObject\MockObject */
     protected $coreRegistry;
 
-    /** @var  PostHelper |\PHPUnit_Framework_MockObject_MockObject */
+    /** @var  PostHelper|\PHPUnit\Framework\MockObject\MockObject */
     protected $postDataHelper;
 
-    /** @var  WishlistItem |\PHPUnit_Framework_MockObject_MockObject */
+    /** @var  WishlistItem|\PHPUnit\Framework\MockObject\MockObject */
     protected $wishlistItem;
 
-    /** @var  Product |\PHPUnit_Framework_MockObject_MockObject */
+    /** @var  Product|\PHPUnit\Framework\MockObject\MockObject */
     protected $product;
 
-    /** @var  StoreManagerInterface |\PHPUnit_Framework_MockObject_MockObject */
+    /** @var  StoreManagerInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $storeManager;
 
-    /** @var  Store |\PHPUnit_Framework_MockObject_MockObject */
+    /** @var  Store|\PHPUnit\Framework\MockObject\MockObject */
     protected $store;
 
-    /** @var  UrlInterface |\PHPUnit_Framework_MockObject_MockObject */
+    /** @var  UrlInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $urlBuilder;
 
-    /** @var  Wishlist |\PHPUnit_Framework_MockObject_MockObject */
+    /** @var  Wishlist|\PHPUnit\Framework\MockObject\MockObject */
     protected $wishlist;
 
-    /** @var  EncoderInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var  EncoderInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $urlEncoderMock;
 
-    /** @var  RequestInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var  RequestInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $requestMock;
 
-    /** @var  Context |\PHPUnit_Framework_MockObject_MockObject */
+    /** @var  Context|\PHPUnit\Framework\MockObject\MockObject */
     protected $context;
 
-    /** @var  Session |\PHPUnit_Framework_MockObject_MockObject */
+    /** @var  Session|\PHPUnit\Framework\MockObject\MockObject */
     protected $customerSession;
 
     /**
@@ -180,7 +180,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
     {
         $url = 'http://magento2ce/wishlist/index/configure/id/4/product_id/30/';
 
-        /** @var \Magento\Wishlist\Model\Item|\PHPUnit_Framework_MockObject_MockObject $wishlistItem */
+        /** @var \Magento\Wishlist\Model\Item|\PHPUnit\Framework\MockObject\MockObject $wishlistItem */
         $wishlistItem = $this->createPartialMock(
             \Magento\Wishlist\Model\Item::class,
             ['getWishlistItemId', 'getProductId']

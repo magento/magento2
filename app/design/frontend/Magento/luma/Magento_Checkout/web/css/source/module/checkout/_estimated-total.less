@@ -14,7 +14,6 @@
     //  ---------------------------------------------
 
     .opc-estimated-wrapper {
-        &:extend(.abs-no-display-desktop all);
         &:extend(.abs-add-clearfix all);
         .lib-css(background, @checkout-step-content-mobile__background);
         .lib-css(border-bottom, @checkout-step-title__border);
@@ -54,6 +53,6 @@
 
 .media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
     .opc-estimated-wrapper {
-        display: none;
+        &:extend(.abs-no-display-desktop all);
     }
 }

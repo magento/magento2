@@ -1,30 +1,41 @@
 <?php
 /**
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Quote\Api;
 
+use Magento\CatalogInventory\Api\StockRegistryInterface;
+use Magento\CatalogInventory\Model\Stock;
+use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\ObjectManager;
 use Magento\TestFramework\TestCase\WebapiAbstract;
 
+/**
+ * Test for Magento\Quote\Api\GuestCartItemRepositoryInterface.
+ */
 class GuestCartItemRepositoryTest extends WebapiAbstract
 {
-    const SERVICE_VERSION = 'V1';
-    const SERVICE_NAME = 'quoteGuestCartItemRepositoryV1';
-    const RESOURCE_PATH = '/V1/guest-carts/';
+    public const SERVICE_NAME = 'quoteGuestCartItemRepositoryV1';
+    private const SERVICE_VERSION = 'V1';
+    private const RESOURCE_PATH = '/V1/guest-carts/';
 
     /**
-     * @var \Magento\TestFramework\ObjectManager
+     * @var ObjectManager
      */
-    protected $objectManager;
+    private $objectManager;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp()
     {
-        $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        $this->objectManager = Bootstrap::getObjectManager();
     }
 
     /**
+     * Test quote items
+     *
      * @magentoApiDataFixture Magento/Checkout/_files/quote_with_items_saved.php
      */
     public function testGetList()
@@ -110,12 +121,16 @@ class GuestCartItemRepositoryTest extends WebapiAbstract
         ];
 
         $requestData = [
-            "cartItem" => [
-                "sku" => $productSku,
-                "qty" => 7,
-                "quote_id" => $cartId,
+            'cartItem' => [
+                'sku' => $productSku,
+                'qty' => 7,
             ],
         ];
+
+        if (TESTS_WEB_API_ADAPTER === self::ADAPTER_SOAP) {
+            $requestData['cartItem']['quote_id'] = $cartId;
+        }
+
         $this->_webApiCall($serviceInfo, $requestData);
         $this->assertTrue($quote->hasProductId(2));
         $this->assertEquals(7, $quote->getItemByProduct($product)->getQty());
@@ -167,9 +182,13 @@ class GuestCartItemRepositoryTest extends WebapiAbstract
 
     /**
      * @magentoApiDataFixture Magento/Checkout/_files/quote_with_items_saved.php
+     * @param array $stockData
+     * @param string|null $errorMessage
+     * @dataProvider updateItemDataProvider
      */
-    public function testUpdateItem()
+    public function testUpdateItem(array $stockData, string $errorMessage = null)
     {
+        $this->updateStockData('simple_one', $stockData);
         /** @var \Magento\Quote\Model\Quote  $quote */
         $quote = $this->objectManager->create(\Magento\Quote\Model\Quote::class);
         $quote->load('test_order_item_with_items', 'reserved_order_id');
@@ -199,21 +218,15 @@ class GuestCartItemRepositoryTest extends WebapiAbstract
             ],
         ];
 
-        if (TESTS_WEB_API_ADAPTER == self::ADAPTER_SOAP) {
-            $requestData = [
-                "cartItem" => [
-                    "qty" => 5,
-                    "quote_id" => $cartId,
-                    "itemId" => $itemId,
-                ],
+        $requestData['cartItem']['qty'] = 5;
+        if (TESTS_WEB_API_ADAPTER === self::ADAPTER_SOAP) {
+            $requestData['cartItem'] += [
+                'quote_id' => $cartId,
+                'itemId' => $itemId,
             ];
-        } else {
-            $requestData = [
-                "cartItem" => [
-                    "qty" => 5,
-                    "quote_id" => $cartId,
-                ],
-            ];
+        }
+        if ($errorMessage) {
+            $this->expectExceptionMessage($errorMessage);
         }
         $this->_webApiCall($serviceInfo, $requestData);
         $quote = $this->objectManager->create(\Magento\Quote\Model\Quote::class);
@@ -222,5 +235,67 @@ class GuestCartItemRepositoryTest extends WebapiAbstract
         $item = $quote->getItemByProduct($product);
         $this->assertEquals(5, $item->getQty());
         $this->assertEquals($itemId, $item->getItemId());
+    }
+
+    /**
+     * @return array
+     */
+    public function updateItemDataProvider(): array
+    {
+        return [
+            [
+                []
+            ],
+            [
+                [
+                    'qty' => 0,
+                    'is_in_stock' => 1,
+                    'use_config_manage_stock' => 0,
+                    'manage_stock' => 1,
+                    'use_config_backorders' => 0,
+                    'backorders' => Stock::BACKORDERS_YES_NOTIFY,
+                ]
+            ],
+            [
+                [
+                    'qty' => 0,
+                    'is_in_stock' => 1,
+                    'use_config_manage_stock' => 0,
+                    'manage_stock' => 1,
+                    'use_config_backorders' => 0,
+                    'backorders' => Stock::BACKORDERS_NO,
+                ],
+                'This product is out of stock.'
+            ],
+            [
+                [
+                    'qty' => 2,
+                    'is_in_stock' => 1,
+                    'use_config_manage_stock' => 0,
+                    'manage_stock' => 1,
+                    'use_config_backorders' => 0,
+                    'backorders' => Stock::BACKORDERS_NO,
+                ],
+                'The requested qty is not available'
+            ]
+        ];
+    }
+
+    /**
+     * Update product stock
+     *
+     * @param string $sku
+     * @param array $stockData
+     * @return void
+     */
+    private function updateStockData(string $sku, array $stockData): void
+    {
+        if ($stockData) {
+            /** @var $stockRegistry StockRegistryInterface */
+            $stockRegistry = $this->objectManager->create(StockRegistryInterface::class);
+            $stockItem = $stockRegistry->getStockItemBySku($sku);
+            $stockItem->addData($stockData);
+            $stockRegistry->updateStockItemBySku($sku, $stockItem);
+        }
     }
 }

@@ -44,7 +44,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
  WHERE (INSTR(product_name_table.value, 'TestProductName'))";
 
     /**
-     * @var MetadataPool|\PHPUnit_Framework_MockObject_MockObject
+     * @var MetadataPool|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $metadataPool;
 
