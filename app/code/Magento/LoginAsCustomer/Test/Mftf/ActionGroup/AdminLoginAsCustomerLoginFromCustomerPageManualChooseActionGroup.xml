@@ -8,21 +8,22 @@
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <actionGroup name="AdminLoginAsCustomerLoginFromOrderPageActionGroup">
+    <actionGroup name="AdminLoginAsCustomerLoginFromCustomerPageManualChooseActionGroup">
         <annotations>
-            <description>Verify Login As Customer Login action is works properly from Order grid page.</description>
+            <description>Verify Login As Customer Login action is works properly from Customer page with manual Store View choose.</description>
         </annotations>
         <arguments>
-            <argument name="orderId" type="string"/>
+            <argument name="customerId" type="string"/>
+            <argument name="storeViewName" type="string" defaultValue="default"/>
         </arguments>
 
-        <amOnPage url="{{AdminOrderPage.url(orderId)}}" stepKey="gotoOrderPage"/>
-        <waitForPageLoad stepKey="waitForOrderPageLoad"/>
-        <click selector="{{AdminOrderDetailsMainActionsSection.loginAsCustomer}}" stepKey="clickLoginAsCustomerLink"/>
-        <see selector="{{AdminConfirmationModalSection.title}}" userInput="You are about to Login as Customer"
-             stepKey="seeModal"/>
+        <amOnPage url="{{AdminEditCustomerPage.url(customerId)}}" stepKey="gotoCustomerPage"/>
+        <waitForPageLoad stepKey="waitForCustomerPageLoad"/>
+        <click selector="{{AdminCustomerMainActionsSection.loginAsCustomer}}" stepKey="clickLoginAsCustomerLink"/>
+        <see selector="{{AdminConfirmationModalSection.title}}" userInput="Login as Customer: Select Store View" stepKey="seeModal"/>
         <!-- TODO: Unskip after https://github.com/magento/magento2-login-as-customer/issues/137 is fixed-->
         <!-- <see selector="{{AdminConfirmationModalSection.message}}" userInput="Actions taken while in "Login as Customer" will affect actual customer data." stepKey="seeModalMessage"/>-->
+        <selectOption selector="{{AdminLoginAsCustomerConfirmationModalSection.storeView}}" userInput="{{storeViewName}}" stepKey="selectStoreView"/>
         <click selector="{{AdminConfirmationModalSection.ok}}" stepKey="clickLogin"/>
         <switchToNextTab stepKey="switchToNewTab"/>
         <waitForPageLoad stepKey="waitForPageLoad"/>

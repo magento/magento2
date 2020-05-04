@@ -52,13 +52,9 @@
         </after>
 
         <!-- Login As Customer from Customer page -->
-        <actionGroup ref="AdminLoginAsCustomerLoginFromCustomerPageActionGroup"
+        <actionGroup ref="AdminLoginAsCustomerLoginFromCustomerPageManualChooseActionGroup"
                      stepKey="loginAsCustomerFromCustomerPage">
             <argument name="customerId" value="$$createCustomer.id$$"/>
-        </actionGroup>
-
-        <!-- Choose custom store view -->
-        <actionGroup ref="AdminLoginAsCustomerChooseStoreViewActionGroup" stepKey="chooseCustomStoreView">
             <argument name="storeViewName" value="{{customStore.name}}"/>
         </actionGroup>
 
