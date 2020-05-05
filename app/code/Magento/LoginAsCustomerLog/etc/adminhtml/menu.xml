@@ -14,6 +14,7 @@
              parent="Magento_Customer::customer"
              sortOrder="40"
              resource="Magento_LoginAsCustomerLog::login_log"
-             action="loginascustomer_log/log/index"/>
+             action="loginascustomer_log/log/index"
+             dependsOnConfig="login_as_customer/general/enabled"/>
     </menu>
 </config>
