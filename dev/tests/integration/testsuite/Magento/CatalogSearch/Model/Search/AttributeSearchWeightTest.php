@@ -70,18 +70,16 @@ class AttributeSearchWeightTest extends TestCase
      * @param string $searchQuery
      * @param array $attributeWeights
      * @param array $expectedProductNames
-     * @param string|null $incompleteReason
      * @return void
      */
     public function testAttributeSearchWeight(
         string $searchQuery,
         array $attributeWeights,
-        array $expectedProductNames,
-        string $incompleteReason = null
+        array $expectedProductNames
     ): void {
-        if ($incompleteReason) {
-                $this->markTestIncomplete($incompleteReason);
-        }
+        $this->markTestSkipped(
+            'MC-33824: Stabilize skipped test cases for Integration AttributeSearchWeightTest with Elasticsearch'
+        );
         $this->updateAttributesWeight($attributeWeights);
         $actualProductNames = $this->quickSearchByQuery->execute($searchQuery)->getColumnValues('name');
         $this->assertEquals($expectedProductNames, $actualProductNames, 'Products order is not as expected.');
@@ -145,9 +143,7 @@ class AttributeSearchWeightTest extends TestCase
                 [
                     'Xbox',
                     'Nintendo Wii',
-                ],
-                'incomplete_reason' => 'MC-33824:'
-                    . 'Stabilize skipped test cases for Integration AttributeSearchWeightTest with elasticsearch',
+                ]
             ],
         ];
     }
