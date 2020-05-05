@@ -189,6 +189,10 @@ class Reorder
         $collection->setStore($storeId);
         $collection->addIdFilter($orderItemProductIds);
         $collection->addStoreFilter();
+        $collection->addAttributeToSelect('*');
+        $collection->joinAttribute('status', 'catalog_product/status', 'entity_id', null, 'inner');
+        $collection->joinAttribute('visibility', 'catalog_product/visibility', 'entity_id', null, 'inner');
+
         $products = $collection->getItems();
 
         // compare founded products and throw an error if some product not exists
