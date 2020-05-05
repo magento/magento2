@@ -10,7 +10,7 @@ namespace Magento\Framework\Session;
 /**
  * Interface \Magento\Framework\Session\SidResolverInterface
  *
- * @deprecated 2.3.3 SIDs in URLs are no longer used
+ * @deprecated 102.0.5 SIDs in URLs are no longer used
  */
 interface SidResolverInterface
 {
@@ -24,7 +24,7 @@ interface SidResolverInterface
      *
      * @param \Magento\Framework\Session\SessionManagerInterface $session
      * @return string|null
-     * @deprecated SID query parameter is not used in URLs anymore.
+     * @deprecated 102.0.5 SID query parameter is not used in URLs anymore.
      */
     public function getSid(\Magento\Framework\Session\SessionManagerInterface $session);
 
@@ -33,7 +33,7 @@ interface SidResolverInterface
      *
      * @param \Magento\Framework\Session\SessionManagerInterface $session
      * @return string
-     * @deprecated SID query parameter is not used in URLs anymore.
+     * @deprecated 102.0.5 SID query parameter is not used in URLs anymore.
      */
     public function getSessionIdQueryParam(\Magento\Framework\Session\SessionManagerInterface $session);
 
@@ -42,7 +42,7 @@ interface SidResolverInterface
      *
      * @param bool $var
      * @return $this
-     * @deprecated SID query parameter is not used in URLs anymore.
+     * @deprecated 102.0.5 SID query parameter is not used in URLs anymore.
      */
     public function setUseSessionVar($var);
 
@@ -59,7 +59,7 @@ interface SidResolverInterface
      *
      * @param bool $flag
      * @return $this
-     * @deprecated SID query parameter is not used in URLs anymore.
+     * @deprecated 102.0.5 SID query parameter is not used in URLs anymore.
      */
     public function setUseSessionInUrl($flag = true);
 
@@ -67,7 +67,7 @@ interface SidResolverInterface
      * Retrieve use session in URL flag
      *
      * @return bool
-     * @deprecated SID query parameter is not used in URLs anymore.
+     * @deprecated 102.0.5 SID query parameter is not used in URLs anymore.
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getUseSessionInUrl();

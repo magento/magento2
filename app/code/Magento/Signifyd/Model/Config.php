@@ -13,7 +13,7 @@ use Magento\Store\Model\ScopeInterface;
  *
  * Class is a proxy service for retrieving configuration settings.
  *
- * @deprecated Starting from Magento 2.3.5 Signifyd core integration is deprecated in favor of
+ * @deprecated 100.3.5 Starting from Magento 2.3.5 Signifyd core integration is deprecated in favor of
  * official Signifyd integration available on the marketplace
  */
 class Config
