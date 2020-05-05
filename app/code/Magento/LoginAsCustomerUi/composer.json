@@ -7,8 +7,7 @@
         "magento/module-login-as-customer-api": "*",
         "magento/module-backend": "*",
         "magento/module-customer": "*",
-        "magento/module-store": "*",
-        "magento/module-ui": "*"
+        "magento/module-store": "*"
     },
     "suggest": {
         "magento/module-login-as-customer": "*"
