@@ -126,7 +126,8 @@
                 <requiredEntity createDataKey="createConfigChildProduct"/>
             </createData>
 
-            <!-- Login as admin -->
+            <magentoCron stepKey="runCronIndex" groups="index"/>
+
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
     </before>
         <after>
@@ -151,8 +152,6 @@
             <actionGroup ref="ResetProductGridToDefaultViewActionGroup" stepKey="resetProductGridColumnsInitial"/>
             <!-- Admin logout-->
             <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
-
-            <!-- Reindex invalidated indices after product attribute has been created/deleted -->
             <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
         </after>
 
