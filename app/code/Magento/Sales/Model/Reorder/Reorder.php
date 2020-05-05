@@ -183,17 +183,7 @@ class Reorder
             }
         }
 
-        /** @var Collection $collection */
-        $collection = $this->productCollectionFactory->create();
-
-        $collection->setStore($storeId);
-        $collection->addIdFilter($orderItemProductIds);
-        $collection->addStoreFilter();
-        $collection->addAttributeToSelect('*');
-        $collection->joinAttribute('status', 'catalog_product/status', 'entity_id', null, 'inner');
-        $collection->joinAttribute('visibility', 'catalog_product/visibility', 'entity_id', null, 'inner');
-
-        $products = $collection->getItems();
+        $products = $this->getOrderProducts($storeId, $orderItemProductIds);
 
         // compare founded products and throw an error if some product not exists
         $productsNotFound = array_diff($orderItemProductIds, array_keys($products));
@@ -216,6 +206,28 @@ class Reorder
                 $this->addItemToCart($orderItem, $cart, clone $product);
             }
         }
+    }
+
+    /**
+     * Get order products by store id and order item product ids.
+     *
+     * @param string $storeId
+     * @param int[] $orderItemProductIds
+     * @return Product[]
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    private function getOrderProducts(string $storeId, array $orderItemProductIds): array
+    {
+        /** @var Collection $collection */
+        $collection = $this->productCollectionFactory->create();
+        $collection->setStore($storeId)
+            ->addIdFilter($orderItemProductIds)
+            ->addStoreFilter()
+            ->addAttributeToSelect('*')
+            ->joinAttribute('status', 'catalog_product/status', 'entity_id', null, 'inner')
+            ->joinAttribute('visibility', 'catalog_product/visibility', 'entity_id', null, 'inner');
+
+        return $collection->getItems();
     }
 
     /**
