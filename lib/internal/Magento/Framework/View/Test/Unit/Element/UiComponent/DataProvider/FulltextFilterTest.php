@@ -62,48 +62,16 @@ class FulltextFilterTest extends TestCase
     /**
      * Test apply filter
      *
-     * @return void
-     */
-    public function testApply(): void
-    {
-        $filter = new Filter();
-        $filter->setValue('test');
-
-        $this->collectionAbstractDbMock->expects($this->once())
-            ->method('getMainTable')
-            ->willReturn('testTable');
-
-        $this->collectionAbstractDbMock->expects($this->once())
-            ->method('getConnection')
-            ->willReturn($this->connectionMock);
-
-        $this->connectionMock->expects($this->once())
-            ->method('getIndexList')
-            ->willReturn([['INDEX_TYPE' => 'FULLTEXT', 'COLUMNS_LIST' => ['col1', 'col2']]]);
-
-        $this->selectMock->expects($this->once())
-            ->method('getPart')
-            ->willReturn([]);
-        $this->selectMock->expects($this->once())
-            ->method('where')
-            ->willReturn(null);
-
-        $this->collectionAbstractDbMock->expects($this->exactly(2))
-            ->method('getSelect')
-            ->willReturn($this->selectMock);
-
-        $this->fulltextFilter->apply($this->collectionAbstractDbMock, $filter);
-    }
-
-    /**
-     * Apply filter with value in double quotes
+     * @param string $searchable
+     * @param string $expectedSearchable
+     * @dataProvider searchValuesDataProvider
      *
      * @return void
      */
-    public function testApplyFilter(): void
+    public function testApply(string $searchable, string $expectedSearchable): void
     {
         $filter = new Filter();
-        $filter->setValue('"test"');
+        $filter->setValue($searchable);
         $columns = ['col1', 'col2'];
         $whereCondition = 'MATCH(' . implode(',', $columns) . ') AGAINST(?)';
 
@@ -132,9 +100,25 @@ class FulltextFilterTest extends TestCase
 
         $this->selectMock->expects($this->once())
             ->method('where')
-            ->with($whereCondition, '"test"');
+            ->with($whereCondition, $expectedSearchable);
 
         $this->fulltextFilter->apply($this->collectionAbstractDbMock, $filter);
+    }
+
+    /**
+     * Data provider for testApply()
+     *
+     * @return array
+     */
+    public function searchValuesDataProvider(): array
+    {
+        return [
+            ['text', 'text'],
+            ['"text"', '"text"'],
+            ['"text@', '"text\_'],
+            ['user_1+test@example.com', 'user_1 test\_example\_com'],
+            ['"user_1+test@example.com"', '"user_1+test@example.com"'],
+        ];
     }
 
     /**
