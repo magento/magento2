@@ -33,7 +33,6 @@ spec:
       initContainers:
         - name: copy-data
           image: eu.gcr.io/magento2-269418/magento2-php72:$TAG_NAME
-          command: ["/bin/sh", "-c", "/tmp/start.sh"]
           volumeMounts:
           - mountPath: /var/www/html
             name: magento-shared
@@ -43,6 +42,11 @@ spec:
           - mountPath: /var/www/html/magento/var
             name: magento-var-volume
             subPath: var
+          command: ["/bin/sh", "-c", "/tmp/start.sh"]
+          command: 
+            - sh
+            - -c
+            - (chmod 0775 /var/www/html/magento/var /var/www/html/magento/media; chgrp 82 /var/www/html/magento/var /var/www/html/magento/media)
           resources:
             requests:
               cpu: "250m"

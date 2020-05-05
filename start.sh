@@ -12,8 +12,6 @@ cd /var/www/html/magento
 php bin/magento sampledata:deploy
 php bin/magento setup:upgrade
 
-chmod 0775 /var/www/html/magento/media /var/www/html/magento/var
-chgrp 82 /var/www/html/magento/media /var/www/html/magento/var
 #mkdir /var/www/html/magento
 #echo "<h1>HELLO WORLD!!!</h1>" > /var/www/html/magento/index.html
 
