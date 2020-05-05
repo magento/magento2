@@ -118,6 +118,12 @@ class CartFixedTest extends TestCase
      */
     public function testCalculate()
     {
+        $ruleItemTotals = [
+            'items_price' => 100,
+            'base_items_price' => 100,
+            'items_count' => 1,
+        ];
+
         $this->rule->setData(['id' => 1, 'discount_amount' => 10.0]);
 
         $this->quote->expects($this->any())->method('getCartFixedRules')->willReturn([]);
@@ -125,6 +131,11 @@ class CartFixedTest extends TestCase
         $this->priceCurrency->expects($this->atLeastOnce())->method('convert')->willReturnArgument(0);
         $this->priceCurrency->expects($this->atLeastOnce())->method('round')->willReturnArgument(0);
         $this->quote->expects($this->any())->method('getStore')->willReturn($store);
+
+        $this->validator->expects($this->once())
+            ->method('getRuleItemTotalsInfo')
+            ->with($this->rule->getId())
+            ->willReturn($ruleItemTotals);
 
         /** validators data */
         $this->validator->expects(
