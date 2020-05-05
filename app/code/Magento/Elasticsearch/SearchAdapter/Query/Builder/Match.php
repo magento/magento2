@@ -132,7 +132,7 @@ class Match implements QueryInterface
         // Checking for quoted phrase \"phrase test\", trim escaped surrounding quotes if found
         $count = 0;
         $value = preg_replace('#^"(.*)"$#m', '$1', $queryValue['value'], -1, $count);
-        $matchCondition = ($count) ? 'match_phrase' : 'match';
+        $condition = ($count) ? 'match_phrase' : 'match';
 
         $transformedTypes = [];
         foreach ($matches as $match) {
@@ -153,7 +153,7 @@ class Match implements QueryInterface
                 //Value is incompatible with this field type.
                 continue;
             }
-            $matchCondition = $match['matchCondition'] ?? $matchCondition;
+            $matchCondition = $match['matchCondition'] ?? $condition;
             $conditions[] = [
                 'condition' => $queryValue['condition'],
                 'body' => [
