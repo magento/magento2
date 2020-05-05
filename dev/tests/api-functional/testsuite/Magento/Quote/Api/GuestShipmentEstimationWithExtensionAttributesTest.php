@@ -5,6 +5,7 @@
  */
 namespace Magento\Quote\Api;
 
+use Magento\Framework\Api\ExtensibleDataInterface;
 use Magento\TestFramework\ObjectManager;
 use Magento\TestFramework\TestCase\WebapiAbstract;
 use Magento\Quote\Api\Data\AddressInterface;
@@ -26,6 +27,8 @@ class GuestShipmentEstimationWithExtensionAttributesTest extends WebapiAbstract
     }
 
     /**
+     * @magentoAppIsolation enabled
+     * @magentoDbIsolation disabled
      * @magentoApiDataFixture Magento/SalesRule/_files/cart_rule_free_shipping.php
      * @magentoApiDataFixture Magento/Sales/_files/quote.php
      */
@@ -59,7 +62,7 @@ class GuestShipmentEstimationWithExtensionAttributesTest extends WebapiAbstract
         ];
         if (TESTS_WEB_API_ADAPTER == self::ADAPTER_SOAP) {
             /** @var \Magento\Quote\Model\Quote\Address $address */
-            $address = $quote->getBillingAddress();
+            $address = $quote->getShippingAddress();
 
             $data = [
                 AddressInterface::KEY_ID => (int)$address->getId(),
@@ -79,9 +82,8 @@ class GuestShipmentEstimationWithExtensionAttributesTest extends WebapiAbstract
                 AddressInterface::SAME_AS_BILLING => $address->getSameAsBilling(),
                 AddressInterface::CUSTOMER_ADDRESS_ID => $address->getCustomerAddressId(),
                 AddressInterface::SAVE_IN_ADDRESS_BOOK => $address->getSaveInAddressBook(),
-
-                'extension_attributes' => [
-                    'test_attribute' => 1
+                ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY => [
+                    'discounts' => []
                 ]
             ];
 
@@ -90,19 +92,24 @@ class GuestShipmentEstimationWithExtensionAttributesTest extends WebapiAbstract
                 'address' => $data
             ];
         } else {
+
             $requestData = [
                 'address' => [
                     'country_id' => "US",
                     'postcode' => null,
                     'region' => null,
-                    'region_id' => null
-                ],
+                    'region_id' => null,
+                    'extension_attributes' => [
+                        'discounts' => []
+                    ]
+                ]
             ];
         }
         // Cart must be anonymous (see fixture)
         $this->assertEmpty($quote->getCustomerId());
 
         $result = $this->_webApiCall($serviceInfo, $requestData);
+
         $this->assertNotEmpty($result);
         $this->assertEquals(1, count($result));
         foreach ($result as $rate) {
