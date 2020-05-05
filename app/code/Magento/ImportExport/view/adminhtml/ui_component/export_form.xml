@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<form xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
+    <argument name="data" xsi:type="array">
+        <item name="js_config" xsi:type="array">
+            <item name="provider" xsi:type="string">export_form.export_form_data_source</item>
+        </item>
+        <item name="template" xsi:type="string">templates/form/collapsible</item>
+    </argument>
+    <settings>
+        <deps>
+            <dep>export_form.export_form_data_source</dep>
+        </deps>
+    </settings>
+    <dataSource name="export_form_data_source" component="Magento_Ui/js/form/provider">
+        <aclResource>Magento_ImportExport::export</aclResource>
+        <dataProvider class="Magento\ImportExport\Ui\DataProvider\ExportFormDataProvider"
+                      name="export_form_data_source">
+            <settings>
+                <primaryFieldName>id</primaryFieldName>
+                <requestFieldName>entity_id</requestFieldName>
+            </settings>
+        </dataProvider>
+    </dataSource>
+    <fieldset name="settings" sortOrder="10" template="Magento_ImportExport/export/form/fieldset">
+        <settings>
+            <label translate="true">Export Settings</label>
+        </settings>
+        <field name="entity" sortOrder="10" formElement="select">
+            <settings>
+                <label translate="true">Entity Type</label>
+            </settings>
+            <formElements>
+                <select>
+                    <settings>
+                        <options class="Magento\ImportExport\Model\Source\Export\Entity"/>
+                    </settings>
+                </select>
+            </formElements>
+        </field>
+        <field name="file_format" sortOrder="20" formElement="select">
+            <settings>
+                <label translate="true">Export File Format</label>
+            </settings>
+            <formElements>
+                <select>
+                    <settings>
+                        <options class="Magento\ImportExport\Model\Source\Export\Format"/>
+                    </settings>
+                </select>
+            </formElements>
+        </field>
+        <field name="fields_enclosure" sortOrder="30" formElement="checkbox">
+            <settings>
+                <label translate="true">Fields Enclosure</label>
+            </settings>
+        </field>
+    </fieldset>
+</form>
