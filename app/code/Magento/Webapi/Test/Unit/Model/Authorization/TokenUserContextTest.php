@@ -217,7 +217,7 @@ class TokenUserContextTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnValue(1));
 
         $this->assertNull($this->tokenUserContext->getUserType());
-        $this->assertNull($this->tokenUserContext->getUserId());
+        $this->assertEquals(0, $this->tokenUserContext->getUserId());
     }
 
     /**
@@ -451,8 +451,8 @@ class TokenUserContextTest extends \PHPUnit\Framework\TestCase
                 ],
                 'tokenTtl' => 1,
                 'currentTime' => $time,
-                'expectedUserType' => null,
-                'expectedUserId' => null,
+                'expectedUserType' => UserContextInterface::USER_TYPE_ADMIN,
+                'expectedUserId' => 0,
             ],
             'token_vigent_admin' => [
                 'tokenData' => [
@@ -473,8 +473,8 @@ class TokenUserContextTest extends \PHPUnit\Framework\TestCase
                 ],
                 'tokenTtl' => 1,
                 'currentTime' => $time,
-                'expectedUserType' => null,
-                'expectedUserId' => null,
+                'expectedUserType' => UserContextInterface::USER_TYPE_CUSTOMER,
+                'expectedUserId' => 0,
             ],
             'token_vigent_customer' => [
                 'tokenData' => [

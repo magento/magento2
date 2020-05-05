@@ -124,9 +124,11 @@ class TokenUserContext implements UserContextInterface
      */
     private function isTokenExpired(Token $token): bool
     {
-        if ($token->getUserType() == UserContextInterface::USER_TYPE_ADMIN) {
+        $userType = (int) $token->getUserType();
+
+        if ($userType === UserContextInterface::USER_TYPE_ADMIN) {
             $tokenTtl = $this->oauthHelper->getAdminTokenLifetime();
-        } elseif ($token->getUserType() == UserContextInterface::USER_TYPE_CUSTOMER) {
+        } elseif ($userType === UserContextInterface::USER_TYPE_CUSTOMER) {
             $tokenTtl = $this->oauthHelper->getCustomerTokenLifetime();
         } else {
             // other user-type tokens are considered always valid
@@ -149,41 +151,53 @@ class TokenUserContext implements UserContextInterface
      *
      * @return void
      */
-    protected function processRequest()
+    protected function processRequest(): void
     {
         if ($this->isRequestProcessed) {
             return;
         }
+        $this->isRequestProcessed = true;
 
         $authorizationHeaderValue = $this->request->getHeader('Authorization');
         if (!$authorizationHeaderValue) {
-            $this->isRequestProcessed = true;
             return;
         }
 
-        $headerPieces = explode(" ", $authorizationHeaderValue);
+        $headerPieces = explode(' ', $authorizationHeaderValue);
         if (count($headerPieces) !== 2) {
-            $this->isRequestProcessed = true;
             return;
         }
 
         $tokenType = strtolower($headerPieces[0]);
         if ($tokenType !== 'bearer') {
-            $this->isRequestProcessed = true;
             return;
         }
 
         $bearerToken = $headerPieces[1];
+        /** @var Token $token */
         $token = $this->tokenFactory->create()->loadByToken($bearerToken);
 
-        if (!$token->getId() || $token->getRevoked() || $this->isTokenExpired($token)) {
-            $this->isRequestProcessed = true;
+        if ($token->getId()) {
+            $this->validateToken($token);
+        }
+    }
+
+    /**
+     * Validate token
+     *
+     * @param Token $token
+     * @return void
+     */
+    private function validateToken(Token $token): void
+    {
+        if ($token->getRevoked() || $this->isTokenExpired($token)) {
+            //userId 0 will mean that the token is not valid
+            $this->userId = 0;
+            $this->userType = $token->getUserType();
 
             return;
         }
-
         $this->setUserDataViaToken($token);
-        $this->isRequestProcessed = true;
     }
 
     /**

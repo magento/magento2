@@ -10,9 +10,13 @@ namespace Magento\GraphQl\Quote\Customer;
 use Exception;
 use Magento\GraphQl\Quote\GetMaskedQuoteIdByReservedOrderId;
 use Magento\Integration\Api\CustomerTokenServiceInterface;
+use Magento\Integration\Model\Oauth\Token;
+use Magento\Integration\Model\Oauth\TokenFactory;
+use Magento\Framework\Stdlib\DateTime;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Quote\Model\ResourceModel\Quote\Collection;
 use Magento\Framework\ObjectManagerInterface;
+use Magento\TestFramework\TestCase\GraphQl\ResponseContainsErrorsException;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 
 /**
@@ -35,11 +39,20 @@ class GetCustomerCartTest extends GraphQlAbstract
      */
     private $objectManager;
 
+    /**
+     * @var TokenFactory
+     */
+    private $tokenFactory;
+
+    /**
+     * @inheritdoc
+     */
     protected function setUp()
     {
         $this->objectManager = Bootstrap::getObjectManager();
         $this->getMaskedQuoteIdByReservedOrderId = $this->objectManager->get(GetMaskedQuoteIdByReservedOrderId::class);
         $this->customerTokenService = $this->objectManager->get(CustomerTokenServiceInterface::class);
+        $this->tokenFactory = $this->objectManager->get(TokenFactory::class);
     }
 
     /**
@@ -151,6 +164,41 @@ class GetCustomerCartTest extends GraphQlAbstract
         $this->revokeCustomerToken();
         $customerCartQuery = $this->getCustomerCartQuery();
         $this->graphQlQuery($customerCartQuery, [], '', $headers);
+    }
+
+    /**
+     * Create cart for customer after token is expired
+     *
+     * @magentoConfigFixture oauth/access_token_lifetime/customer 1
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     * @return void
+     */
+    public function testCreateCustomerCartAfterTokenExpired(): void
+    {
+        $customerCartQuery = $this->getCustomerCartQuery();
+        $headers = $this->getHeaderMap();
+        $bearerToken = $headers['Authorization'];
+        $this->makeTokenExpired($bearerToken);
+        $this->expectExceptionMessage('The request is allowed for logged in customer');
+        $this->expectException(ResponseContainsErrorsException::class);
+
+        $this->graphQlMutation($customerCartQuery, [], '', $headers);
+    }
+
+    /**
+     * Set yesterday date to token created at
+     *
+     * @param string $bearerToken
+     * @return void
+     */
+    private function makeTokenExpired(string $bearerToken): void
+    {
+        $token = explode(' ', $bearerToken)[1];
+        $createdYesterday =  gmdate(DateTime::DATETIME_PHP_FORMAT, strtotime('-1 day'));
+        /** @var Token $tokenModel */
+        $tokenModel = $this->tokenFactory->create()->loadByToken($token);
+        $tokenModel->setCreatedAt($createdYesterday);
+        $tokenModel->save();
     }
 
     /**
