@@ -67,7 +67,7 @@ class PathPattern
         preg_match_all('~\\\\\\[(\\\\\\!)?[^\\]]+\\\\\\]~i', $pattern, $matches, PREG_OFFSET_CAPTURE);
         for ($index = count($matches[0]) - 1; $index >= 0; $index -= 1) {
             list($match, $offset) = $matches[0][$index];
-            $exclude = !empty($matches[1][$index]);
+            $exclude = !empty($matches[1][$index][0]);
             $replacement = substr_replace($match, '[' . ($exclude ? '^' : ''), 0, $exclude ? 4 : 2);
             $replacement = substr_replace($replacement, ']', -2);
             $replacement = str_replace('\\-', '-', $replacement);

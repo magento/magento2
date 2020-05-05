@@ -234,6 +234,15 @@ class QuoteGeneratorTest extends TestCase
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $option = $this->getMockBuilder(Attribute::class)
+            ->setConstructorArgs(
+                [
+                    'data' => [
+                        'options' => [
+                            ['label' => null],
+                        ],
+                    ],
+                ],
+            )
             ->disableOriginalConstructor()
             ->getMock();
         $optionValue = $this->getMockBuilder(OptionValueInterface::class)

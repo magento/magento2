@@ -11,6 +11,7 @@ use Magento\Setup\Model\Address\AddressDataGenerator;
 use Magento\Setup\Model\Customer\CustomerDataGenerator;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\Customer\Model\ResourceModel\Group\CollectionFactory;
 
 class CustomerDataGeneratorTest extends TestCase
 {
@@ -41,12 +42,13 @@ class CustomerDataGeneratorTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->groupCollectionFactoryMock =
-            $this->getMockBuilder(\Magento\Customer\Model\ResourceModel\Group\CollectionFactory::class)->addMethods(
+        $this->groupCollectionFactoryMock = $this->getMockBuilder(CollectionFactory::class)
+            ->disableOriginalConstructor()
+            ->addMethods(
                 ['getAllIds']
             )
-                ->onlyMethods(['create'])
-                ->getMock();
+            ->onlyMethods(['create'])
+            ->getMock();
 
         $this->groupCollectionFactoryMock
             ->expects($this->once())
