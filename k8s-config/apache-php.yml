@@ -30,9 +30,15 @@ spec:
         app: magento
         tier: frontend
     spec:
+      securityContext:
+        supplementalGroups:
+          - 82
+        fsGroup: 82
       initContainers:
         - name: copy-data
           image: eu.gcr.io/magento2-269418/magento2-php72:$TAG_NAME
+          securityContext:
+            runAsUser: 0
           volumeMounts:
           - mountPath: /var/www/html
             name: magento-shared
