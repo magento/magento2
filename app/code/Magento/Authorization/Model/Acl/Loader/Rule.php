@@ -3,12 +3,20 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Authorization\Model\Acl\Loader;
 
-use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Acl\Data\CacheInterface;
+use Magento\Framework\Acl\LoaderInterface;
+use Magento\Framework\Acl\RootResource;
+use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Serialize\Serializer\Json;
 
-class Rule implements \Magento\Framework\Acl\LoaderInterface
+/**
+ * Acl Rule Loader
+ */
+class Rule implements LoaderInterface
 {
     /**
      * Rules array cache key
@@ -16,17 +24,17 @@ class Rule implements \Magento\Framework\Acl\LoaderInterface
     const ACL_RULE_CACHE_KEY = 'authorization_rule_cached_data';
 
     /**
-     * @var \Magento\Framework\App\ResourceConnection
+     * @var ResourceConnection
      */
     protected $_resource;
 
     /**
-     * @var \Magento\Framework\Acl\RootResource
+     * @var RootResource
      */
     private $_rootResource;
 
     /**
-     * @var \Magento\Framework\Acl\Data\CacheInterface
+     * @var CacheInterface
      */
     private $aclDataCache;
 
@@ -41,28 +49,26 @@ class Rule implements \Magento\Framework\Acl\LoaderInterface
     private $cacheKey;
 
     /**
-     * @param \Magento\Framework\Acl\RootResource $rootResource
-     * @param \Magento\Framework\App\ResourceConnection $resource
-     * @param array $data
-     * @param \Magento\Framework\Acl\Data\CacheInterface $aclDataCache
+     * @param RootResource $rootResource
+     * @param ResourceConnection $resource
+     * @param CacheInterface $aclDataCache
      * @param Json $serializer
+     * @param array $data
      * @param string $cacheKey
      * @SuppressWarnings(PHPMD.UnusedFormalParameter):
      */
     public function __construct(
-        \Magento\Framework\Acl\RootResource $rootResource,
-        \Magento\Framework\App\ResourceConnection $resource,
+        RootResource $rootResource,
+        ResourceConnection $resource,
+        CacheInterface $aclDataCache,
+        Json $serializer,
         array $data = [],
-        \Magento\Framework\Acl\Data\CacheInterface $aclDataCache = null,
-        Json $serializer = null,
         $cacheKey = self::ACL_RULE_CACHE_KEY
     ) {
-        $this->_resource = $resource;
         $this->_rootResource = $rootResource;
-        $this->aclDataCache = $aclDataCache ?: ObjectManager::getInstance()->get(
-            \Magento\Framework\Acl\Data\CacheInterface::class
-        );
-        $this->serializer = $serializer ?: ObjectManager::getInstance()->get(Json::class);
+        $this->_resource = $resource;
+        $this->aclDataCache = $aclDataCache;
+        $this->serializer = $serializer;
         $this->cacheKey = $cacheKey;
     }
 
@@ -104,7 +110,7 @@ class Rule implements \Magento\Framework\Acl\LoaderInterface
             return $this->serializer->unserialize($rulesCachedData);
         }
 
-        $ruleTable = $this->_resource->getTableName("authorization_rule");
+        $ruleTable = $this->_resource->getTableName('authorization_rule');
         $connection = $this->_resource->getConnection();
         $select = $connection->select()
             ->from(['r' => $ruleTable]);

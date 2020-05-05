@@ -280,7 +280,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         $websitesData = [
             'website_ids' => [
                 1,
-                (int) $website->getId(),
+                (int)$website->getId(),
             ]
         ];
         $productBuilder[ProductInterface::EXTENSION_ATTRIBUTES_KEY] = $websitesData;
@@ -1096,6 +1096,86 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
     }
 
     /**
+     * Test getList() method with pagination
+     *
+     * @param int $pageSize
+     * @param int $currentPage
+     * @param int $expectedCount
+     *
+     * @magentoAppIsolation enabled
+     * @magentoApiDataFixture Magento/Catalog/_files/products_for_search.php
+     * @dataProvider productPaginationDataProvider
+     */
+    public function testGetListPagination(int $pageSize, int $currentPage, int $expectedCount)
+    {
+        $fixtureProducts = 5;
+
+        /** @var FilterBuilder $filterBuilder */
+        $filterBuilder = Bootstrap::getObjectManager()->create(FilterBuilder::class);
+
+        $categoryFilter = $filterBuilder->setField('category_id')
+            ->setValue(333)
+            ->create();
+
+        /** @var SearchCriteriaBuilder $searchCriteriaBuilder */
+        $searchCriteriaBuilder = Bootstrap::getObjectManager()->create(SearchCriteriaBuilder::class);
+
+        $searchCriteriaBuilder->addFilters([$categoryFilter]);
+        $searchCriteriaBuilder->setPageSize($pageSize);
+        $searchCriteriaBuilder->setCurrentPage($currentPage);
+
+        $searchData = $searchCriteriaBuilder->create()->__toArray();
+        $requestData = ['searchCriteria' => $searchData];
+        $serviceInfo = [
+            'rest' => [
+                'resourcePath' => self::RESOURCE_PATH . '?' . http_build_query($requestData),
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_GET,
+            ],
+            'soap' => [
+                'service' => self::SERVICE_NAME,
+                'serviceVersion' => self::SERVICE_VERSION,
+                'operation' => self::SERVICE_NAME . 'GetList',
+            ],
+        ];
+
+        $searchResult = $this->_webApiCall($serviceInfo, $requestData);
+
+        $this->assertEquals($fixtureProducts, $searchResult['total_count']);
+        $this->assertCount($expectedCount, $searchResult['items']);
+    }
+
+    /**
+     * Keep in mind: Fixture contains 5 products
+     *
+     * @return array
+     */
+    public function productPaginationDataProvider()
+    {
+        return [
+            'expect-all-items' => [
+                'pageSize' => 10,
+                'currentPage' => 1,
+                'expectedCount' => 5
+            ],
+            'expect-page=size-items' => [
+                'pageSize' => 2,
+                'currentPage' => 1,
+                'expectedCount' => 2
+            ],
+            'expect-less-than-pagesize-elements' => [
+                'pageSize' => 3,
+                'currentPage' => 2,
+                'expectedCount' => 2
+            ],
+            'expect-no-items' => [
+                'pageSize' => 100,
+                'currentPage' => 99,
+                'expectedCount' => 0
+            ]
+        ];
+    }
+
+    /**
      * Test getList() method with multiple filter groups and sorting and pagination
      *
      * @magentoApiDataFixture Magento/Catalog/_files/products_for_search.php
@@ -1132,7 +1212,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         $sortOrder = $sortOrderBuilder->setField('meta_title')->setDirection(SortOrder::SORT_DESC)->create();
 
         /** @var SearchCriteriaBuilder $searchCriteriaBuilder */
-        $searchCriteriaBuilder =  Bootstrap::getObjectManager()->create(SearchCriteriaBuilder::class);
+        $searchCriteriaBuilder = Bootstrap::getObjectManager()->create(SearchCriteriaBuilder::class);
 
         $searchCriteriaBuilder->addFilters([$filter1, $filter2, $filter3, $filter4]);
         $searchCriteriaBuilder->addFilters([$filter5]);
@@ -1724,8 +1804,8 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
      * Test design settings authorization
      *
      * @magentoApiDataFixture Magento/User/_files/user_with_custom_role.php
-     * @throws \Throwable
      * @return void
+     * @throws \Throwable
      */
     public function testSaveDesign(): void
     {

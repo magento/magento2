@@ -20,10 +20,10 @@
             <group value="WYSIWYGDisabled"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginActionGroup" stepKey="loginGetFromGeneralFile"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginGetFromGeneralFile"/>
         </before>
         <after>
-            <actionGroup ref="logout" stepKey="adminLogout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
         </after>
         <actionGroup ref="AdminNavigateToPageGridActionGroup" stepKey="navigateToCmsPageGrid" />
         <actionGroup ref="CreateNewPageWithBasicValues" stepKey="createNewPageWithBasicValues" />

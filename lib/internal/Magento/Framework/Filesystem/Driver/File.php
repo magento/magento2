@@ -11,9 +11,12 @@ namespace Magento\Framework\Filesystem\Driver;
 use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Filesystem\DriverInterface;
 use Magento\Framework\Filesystem\Glob;
+use Magento\Framework\Phrase;
 
 /**
- * Driver file class
+ * Filesystem driver that uses the local filesystem.
+ *
+ * Assumed that stat cache is cleanup before test filesystem
  *
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  */
@@ -47,11 +50,12 @@ class File implements DriverInterface
      */
     public function isExists($path)
     {
-        clearstatcache();
-        $result = @file_exists($this->getScheme() . $path);
+        $filename = $this->getScheme() . $path;
+        clearstatcache(false, $filename);
+        $result = @file_exists($filename);
         if ($result === null) {
             throw new FileSystemException(
-                new \Magento\Framework\Phrase('An error occurred during "%1" execution.', [$this->getWarningMessage()])
+                new Phrase('An error occurred during "%1" execution.', [$this->getWarningMessage()])
             );
         }
         return $result;
@@ -66,11 +70,12 @@ class File implements DriverInterface
      */
     public function stat($path)
     {
-        clearstatcache();
-        $result = @stat($this->getScheme() . $path);
+        $filename = $this->getScheme() . $path;
+        clearstatcache(false, $filename);
+        $result = @stat($filename);
         if (!$result) {
             throw new FileSystemException(
-                new \Magento\Framework\Phrase('Cannot gather stats! %1', [$this->getWarningMessage()])
+                new Phrase('Cannot gather stats! %1', [$this->getWarningMessage()])
             );
         }
         return $result;
@@ -85,11 +90,12 @@ class File implements DriverInterface
      */
     public function isReadable($path)
     {
-        clearstatcache();
-        $result = @is_readable($this->getScheme() . $path);
+        $filename = $this->getScheme() . $path;
+        clearstatcache(false, $filename);
+        $result = @is_readable($filename);
         if ($result === null) {
             throw new FileSystemException(
-                new \Magento\Framework\Phrase('An error occurred during "%1" execution.', [$this->getWarningMessage()])
+                new Phrase('An error occurred during "%1" execution.', [$this->getWarningMessage()])
             );
         }
         return $result;
@@ -104,11 +110,12 @@ class File implements DriverInterface
      */
     public function isFile($path)
     {
-        clearstatcache();
-        $result = @is_file($this->getScheme() . $path);
+        $filename = $this->getScheme() . $path;
+        clearstatcache(false, $filename);
+        $result = @is_file($filename);
         if ($result === null) {
             throw new FileSystemException(
-                new \Magento\Framework\Phrase('An error occurred during "%1" execution.', [$this->getWarningMessage()])
+                new Phrase('An error occurred during "%1" execution.', [$this->getWarningMessage()])
             );
         }
         return $result;
@@ -123,11 +130,12 @@ class File implements DriverInterface
      */
     public function isDirectory($path)
     {
-        clearstatcache();
-        $result = @is_dir($this->getScheme() . $path);
+        $filename = $this->getScheme() . $path;
+        clearstatcache(false, $filename);
+        $result = @is_dir($filename);
         if ($result === null) {
             throw new FileSystemException(
-                new \Magento\Framework\Phrase('An error occurred during "%1" execution.', [$this->getWarningMessage()])
+                new Phrase('An error occurred during "%1" execution.', [$this->getWarningMessage()])
             );
         }
         return $result;
@@ -144,11 +152,12 @@ class File implements DriverInterface
      */
     public function fileGetContents($path, $flag = null, $context = null)
     {
-        clearstatcache();
-        $result = @file_get_contents($this->getScheme() . $path, $flag, $context);
+        $filename = $this->getScheme() . $path;
+        clearstatcache(false, $filename);
+        $result = @file_get_contents($filename, $flag, $context);
         if (false === $result) {
             throw new FileSystemException(
-                new \Magento\Framework\Phrase(
+                new Phrase(
                     'The contents from the "%1" file can\'t be read. %2',
                     [$path, $this->getWarningMessage()]
                 )
@@ -166,11 +175,12 @@ class File implements DriverInterface
      */
     public function isWritable($path)
     {
-        clearstatcache();
-        $result = @is_writable($this->getScheme() . $path);
+        $filename = $this->getScheme() . $path;
+        clearstatcache(false, $filename);
+        $result = @is_writable($filename);
         if ($result === null) {
             throw new FileSystemException(
-                new \Magento\Framework\Phrase('An error occurred during "%1" execution.', [$this->getWarningMessage()])
+                new Phrase('An error occurred during "%1" execution.', [$this->getWarningMessage()])
             );
         }
         return $result;
@@ -224,7 +234,7 @@ class File implements DriverInterface
                 $result = true;
             } else {
                 throw new FileSystemException(
-                    new \Magento\Framework\Phrase(
+                    new Phrase(
                         'Directory "%1" cannot be created %2',
                         [$path, $this->getWarningMessage()]
                     )
@@ -244,7 +254,10 @@ class File implements DriverInterface
     public function readDirectory($path)
     {
         try {
-            $flags = \FilesystemIterator::SKIP_DOTS | \FilesystemIterator::UNIX_PATHS;
+            $flags = \FilesystemIterator::SKIP_DOTS |
+                     \FilesystemIterator::UNIX_PATHS |
+                     \RecursiveDirectoryIterator::FOLLOW_SYMLINKS;
+            
             $iterator = new \FilesystemIterator($path, $flags);
             $result = [];
             /** @var \FilesystemIterator $file */
@@ -254,7 +267,7 @@ class File implements DriverInterface
             sort($result);
             return $result;
         } catch (\Exception $e) {
-            throw new FileSystemException(new \Magento\Framework\Phrase($e->getMessage()), $e);
+            throw new FileSystemException(new Phrase($e->getMessage()), $e);
         }
     }
 
@@ -297,7 +310,7 @@ class File implements DriverInterface
         }
         if (!$result) {
             throw new FileSystemException(
-                new \Magento\Framework\Phrase(
+                new Phrase(
                     'The path "%1" cannot be renamed into "%2" %3',
                     [$oldPath, $newPath, $this->getWarningMessage()]
                 )
@@ -326,7 +339,7 @@ class File implements DriverInterface
         }
         if (!$result) {
             throw new FileSystemException(
-                new \Magento\Framework\Phrase(
+                new Phrase(
                     'The file or directory "%1" cannot be copied to "%2" %3',
                     [
                         $source,
@@ -356,7 +369,7 @@ class File implements DriverInterface
         }
         if (!$result) {
             throw new FileSystemException(
-                new \Magento\Framework\Phrase(
+                new Phrase(
                     'A symlink for "%1" can\'t be created and placed to "%2". %3',
                     [
                         $source,
@@ -381,7 +394,7 @@ class File implements DriverInterface
         $result = @unlink($this->getScheme() . $path);
         if (!$result) {
             throw new FileSystemException(
-                new \Magento\Framework\Phrase(
+                new Phrase(
                     'The "%1" file can\'t be deleted. %2',
                     [$path, $this->getWarningMessage()]
                 )
@@ -417,7 +430,7 @@ class File implements DriverInterface
 
         if (!empty($exceptionMessages)) {
             throw new FileSystemException(
-                new \Magento\Framework\Phrase(
+                new Phrase(
                     \implode(' ', $exceptionMessages)
                 )
             );
@@ -431,7 +444,7 @@ class File implements DriverInterface
         }
         if (!$result) {
             throw new FileSystemException(
-                new \Magento\Framework\Phrase(
+                new Phrase(
                     'The directory "%1" cannot be deleted %2',
                     [$path, $this->getWarningMessage()]
                 )
@@ -453,7 +466,7 @@ class File implements DriverInterface
         $result = @chmod($this->getScheme() . $path, $permissions);
         if (!$result) {
             throw new FileSystemException(
-                new \Magento\Framework\Phrase(
+                new Phrase(
                     'The permissions can\'t be changed for the "%1" path. %2.',
                     [$path, $this->getWarningMessage()]
                 )
@@ -481,7 +494,7 @@ class File implements DriverInterface
         }
         if (!$result) {
             throw new FileSystemException(
-                new \Magento\Framework\Phrase(
+                new Phrase(
                     'The permissions can\'t be changed for the "%1" path. %2.',
                     [$path, $this->getWarningMessage()]
                 )
@@ -503,7 +516,7 @@ class File implements DriverInterface
             }
             if (!$result) {
                 throw new FileSystemException(
-                    new \Magento\Framework\Phrase(
+                    new Phrase(
                         'The permissions can\'t be changed for the "%1" path. %2.',
                         [$path, $this->getWarningMessage()]
                     )
@@ -530,7 +543,7 @@ class File implements DriverInterface
         }
         if (!$result) {
             throw new FileSystemException(
-                new \Magento\Framework\Phrase(
+                new Phrase(
                     'The "%1" file or directory can\'t be touched. %2',
                     [$path, $this->getWarningMessage()]
                 )
@@ -553,7 +566,7 @@ class File implements DriverInterface
         $result = @file_put_contents($this->getScheme() . $path, $content, $mode);
         if ($result === false) {
             throw new FileSystemException(
-                new \Magento\Framework\Phrase(
+                new Phrase(
                     'The specified "%1" file couldn\'t be written. %2',
                     [$path, $this->getWarningMessage()]
                 )
@@ -575,7 +588,7 @@ class File implements DriverInterface
         $result = @fopen($this->getScheme() . $path, $mode);
         if (!$result) {
             throw new FileSystemException(
-                new \Magento\Framework\Phrase('File "%1" cannot be opened %2', [$path, $this->getWarningMessage()])
+                new Phrase('File "%1" cannot be opened %2', [$path, $this->getWarningMessage()])
             );
         }
         return $result;
@@ -597,7 +610,7 @@ class File implements DriverInterface
         // phpcs:enable
         if (false === $result) {
             throw new FileSystemException(
-                new \Magento\Framework\Phrase('File cannot be read %1', [$this->getWarningMessage()])
+                new Phrase('File cannot be read %1', [$this->getWarningMessage()])
             );
         }
 
@@ -617,7 +630,7 @@ class File implements DriverInterface
         $result = @fread($resource, $length);
         if ($result === false) {
             throw new FileSystemException(
-                new \Magento\Framework\Phrase('File cannot be read %1', [$this->getWarningMessage()])
+                new Phrase('File cannot be read %1', [$this->getWarningMessage()])
             );
         }
         return $result;
@@ -639,7 +652,7 @@ class File implements DriverInterface
         $result = @fgetcsv($resource, $length, $delimiter, $enclosure, $escape);
         if ($result === null) {
             throw new FileSystemException(
-                new \Magento\Framework\Phrase(
+                new Phrase(
                     'The "%1" CSV handle is incorrect. Verify the handle and try again.',
                     [$this->getWarningMessage()]
                 )
@@ -660,7 +673,7 @@ class File implements DriverInterface
         $result = @ftell($resource);
         if ($result === null) {
             throw new FileSystemException(
-                new \Magento\Framework\Phrase('An error occurred during "%1" execution.', [$this->getWarningMessage()])
+                new Phrase('An error occurred during "%1" execution.', [$this->getWarningMessage()])
             );
         }
         return $result;
@@ -680,7 +693,7 @@ class File implements DriverInterface
         $result = @fseek($resource, $offset, $whence);
         if ($result === -1) {
             throw new FileSystemException(
-                new \Magento\Framework\Phrase(
+                new Phrase(
                     'An error occurred during "%1" fileSeek execution.',
                     [$this->getWarningMessage()]
                 )
@@ -712,7 +725,7 @@ class File implements DriverInterface
         $result = @fclose($resource);
         if (!$result) {
             throw new FileSystemException(
-                new \Magento\Framework\Phrase(
+                new Phrase(
                     'An error occurred during "%1" fileClose execution.',
                     [$this->getWarningMessage()]
                 )
@@ -758,7 +771,7 @@ class File implements DriverInterface
      */
     private function fileSystemException($message, $arguments = [])
     {
-        throw new FileSystemException(new \Magento\Framework\Phrase($message, $arguments));
+        throw new FileSystemException(new Phrase($message, $arguments));
     }
 
     /**
@@ -777,7 +790,7 @@ class File implements DriverInterface
          * Security enhancement for CSV data processing by Excel-like applications.
          * @see https://bugzilla.mozilla.org/show_bug.cgi?id=1054702
          *
-         * @var $value string|\Magento\Framework\Phrase
+         * @var $value string|Phrase
          */
         foreach ($data as $key => $value) {
             if (!is_string($value)) {
@@ -791,7 +804,7 @@ class File implements DriverInterface
         $result = @fputcsv($resource, $data, $delimiter, $enclosure);
         if (!$result) {
             throw new FileSystemException(
-                new \Magento\Framework\Phrase(
+                new Phrase(
                     'An error occurred during "%1" filePutCsv execution.',
                     [$this->getWarningMessage()]
                 )
@@ -812,7 +825,7 @@ class File implements DriverInterface
         $result = @fflush($resource);
         if (!$result) {
             throw new FileSystemException(
-                new \Magento\Framework\Phrase(
+                new Phrase(
                     'An error occurred during "%1" fileFlush execution.',
                     [$this->getWarningMessage()]
                 )
@@ -834,7 +847,7 @@ class File implements DriverInterface
         $result = @flock($resource, $lockMode);
         if (!$result) {
             throw new FileSystemException(
-                new \Magento\Framework\Phrase(
+                new Phrase(
                     'An error occurred during "%1" fileLock execution.',
                     [$this->getWarningMessage()]
                 )
@@ -855,7 +868,7 @@ class File implements DriverInterface
         $result = @flock($resource, LOCK_UN);
         if (!$result) {
             throw new FileSystemException(
-                new \Magento\Framework\Phrase(
+                new Phrase(
                     'An error occurred during "%1" fileUnlock execution.',
                     [$this->getWarningMessage()]
                 )
@@ -936,7 +949,10 @@ class File implements DriverInterface
     public function readDirectoryRecursively($path = null)
     {
         $result = [];
-        $flags = \FilesystemIterator::SKIP_DOTS | \FilesystemIterator::UNIX_PATHS;
+        $flags = \FilesystemIterator::SKIP_DOTS |
+                 \FilesystemIterator::UNIX_PATHS |
+                 \RecursiveDirectoryIterator::FOLLOW_SYMLINKS;
+ 
         try {
             $iterator = new \RecursiveIteratorIterator(
                 new \RecursiveDirectoryIterator($path, $flags),
@@ -947,7 +963,7 @@ class File implements DriverInterface
                 $result[] = $file->getPathname();
             }
         } catch (\Exception $e) {
-            throw new FileSystemException(new \Magento\Framework\Phrase($e->getMessage()), $e);
+            throw new FileSystemException(new Phrase($e->getMessage()), $e);
         }
         return $result;
     }

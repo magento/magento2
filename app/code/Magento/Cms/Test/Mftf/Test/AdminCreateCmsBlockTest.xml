@@ -20,13 +20,13 @@
             <group value="WYSIWYGDisabled"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginActionGroup" stepKey="loginGetFromGeneralFile"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginGetFromGeneralFile"/>
         </before>
         <after>
             <actionGroup ref="deleteBlock" stepKey="deleteCreatedBlock">
                 <argument name="Block" value="_defaultBlock"/>
             </actionGroup>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
         <!-- Navigate to create cms block page and verify save split button -->
         <actionGroup ref="VerifyCmsBlockSaveSplitButtonActionGroup" stepKey="verifyCmsBlockSaveButton" />

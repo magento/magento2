@@ -19,10 +19,10 @@
             <group value="Theme"/>
         </annotations>
         <after>
-            <actionGroup ref="logout" stepKey="logoutOfAdmin"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutOfAdmin"/>
         </after>
         <!--Login to Admin Area-->
-        <actionGroup ref="LoginAsAdmin" stepKey="loginToAdminArea"/>
+        <actionGroup ref="AdminLoginActionGroup" stepKey="loginToAdminArea"/>
         <!--Navigate to Themes page-->
         <amOnPage url="{{ThemesPageIndex.url}}" stepKey="navigateToThemesIndexPage" />
         <waitForPageLoad stepKey="wait1"/>
