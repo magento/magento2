@@ -6,10 +6,10 @@
 namespace Magento\Framework\MessageQueue\UseCase;
 
 use Magento\Framework\App\DeploymentConfig\FileReader;
-use Magento\TestModuleAsyncAmqp\Model\AsyncTestData;
 use Magento\Framework\App\DeploymentConfig\Writer;
 use Magento\Framework\Config\File\ConfigFilePool;
 use Magento\Framework\Filesystem;
+use Magento\TestModuleAsyncAmqp\Model\AsyncTestData;
 
 class WaitAndNotWaitMessagesTest extends QueueTestCaseAbstract
 {
@@ -93,10 +93,7 @@ class WaitAndNotWaitMessagesTest extends QueueTestCaseAbstract
         $config['queue']['consumers_wait_for_messages'] = 0;
         $this->writeConfig($config);
 
-        $loadedConfig = $this->loadConfig();
-        $this->assertArrayHasKey('queue', $loadedConfig);
-        $this->assertArrayHasKey('consumers_wait_for_messages', $loadedConfig['queue']);
-        $this->assertEquals(0, $loadedConfig['queue']['consumers_wait_for_messages']);
+        $this->assertContainsEquals(['queue' => ['consumers_wait_for_messages' => 0]], $this->loadConfig());
         foreach ($this->messages as $message) {
             $this->publishMessage($message);
         }
