@@ -3,23 +3,19 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 declare(strict_types=1);
 
 namespace Magento\Directory\Setup\Patch\Data;
 
 use Magento\Directory\Setup\DataInstaller;
-use Magento\Framework\App\ResourceConnection;
+use Magento\Directory\Setup\DataInstallerFactory;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Framework\Setup\Patch\DataPatchInterface;
-use Magento\Framework\Setup\Patch\PatchVersionInterface;
 
 /**
  * Add Bulgaria States
- * 
- * Class AddDataForBulgaria
  */
-class AddDataForBulgaria implements DataPatchInterface, PatchVersionInterface
+class AddDataForBulgaria implements DataPatchInterface
 {
     /**
      * @var ModuleDataSetupInterface
@@ -27,7 +23,7 @@ class AddDataForBulgaria implements DataPatchInterface, PatchVersionInterface
     private $moduleDataSetup;
 
     /**
-     * @var \Magento\Directory\Setup\DataInstallerFactory
+     * @var DataInstallerFactory
      */
     private $dataInstallerFactory;
 
@@ -35,11 +31,11 @@ class AddDataForBulgaria implements DataPatchInterface, PatchVersionInterface
      * AddDataForBulgaria constructor.
      *
      * @param ModuleDataSetupInterface $moduleDataSetup
-     * @param \Magento\Directory\Setup\DataInstallerFactory $dataInstallerFactory
+     * @param DataInstallerFactory $dataInstallerFactory
      */
     public function __construct(
         ModuleDataSetupInterface $moduleDataSetup,
-        \Magento\Directory\Setup\DataInstallerFactory $dataInstallerFactory
+        DataInstallerFactory $dataInstallerFactory
     ) {
         $this->moduleDataSetup = $moduleDataSetup;
         $this->dataInstallerFactory = $dataInstallerFactory;
@@ -56,6 +52,8 @@ class AddDataForBulgaria implements DataPatchInterface, PatchVersionInterface
             $this->moduleDataSetup->getConnection(),
             $this->getDataForBulgaria()
         );
+
+        return $this;
     }
 
     /**
@@ -105,14 +103,6 @@ class AddDataForBulgaria implements DataPatchInterface, PatchVersionInterface
         return [
             InitializeDirectoryData::class,
         ];
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public static function getVersion()
-    {
-        return '';
     }
 
     /**
