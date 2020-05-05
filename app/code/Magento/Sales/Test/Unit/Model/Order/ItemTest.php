@@ -9,7 +9,7 @@ namespace Magento\Sales\Test\Unit\Model\Order;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Sales\Api\Data\OrderItemInterface;
 use Magento\Sales\Model\ResourceModel\OrderFactory;
-use PHPUnit\Framework\MockObject\MockObject
+use PHPUnit\Framework\MockObject\MockObject;
 
 /**
  * Unit test for order item class.
