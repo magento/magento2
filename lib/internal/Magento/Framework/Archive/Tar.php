@@ -16,7 +16,7 @@ use Magento\Framework\Archive\Helper\File;
 class Tar extends \Magento\Framework\Archive\AbstractArchive implements \Magento\Framework\Archive\ArchiveInterface
 {
     /**
-     * Tar block size
+     * The value of the tar block size
      *
      * @const int
      */
