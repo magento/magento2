@@ -42,7 +42,20 @@ spec:
           volumeMounts:
           - mountPath: /var/www/html
             name: magento-shared
-          command: ["/bin/sh", "-c", "/tmp/start.sh"]
+          - mountPath: /var/www/html/magento/media
+            name: magento-media-volume
+            subPath: media
+          - mountPath: /var/www/html/magento/var
+            name: magento-var-volume
+            subPath: var
+          command: 
+           - sh
+           - -c
+           - (/tmp/start.sh)
+          command: 
+           - sh
+           - -c
+           - (chmod 0775 /var/www/html/magento/var /var/www/html/magento/media; chgrp 82 /var/www/html/magento/var /var/www/html/magento/media)
           resources:
             requests:
               cpu: "250m"
