@@ -73,7 +73,8 @@ class TranslateTest extends \PHPUnit\Framework\TestCase
                     $objectManager->get(\Magento\Theme\Model\ThemeFactory::class),
                     $objectManager->get(\Magento\Framework\ObjectManagerInterface::class),
                     $objectManager->get(\Magento\Framework\App\State::class),
-                    ['frontend' => 'Test/default']
+                    ['frontend' => 'Test/default'],
+                    $objectManager->get(\Magento\Store\Model\App\EmulationInterface::class)
                 ]
             )
             ->getMock();
