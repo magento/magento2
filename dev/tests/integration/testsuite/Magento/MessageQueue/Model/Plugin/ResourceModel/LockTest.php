@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -6,37 +9,46 @@
 
 namespace Magento\MessageQueue\Model\Plugin\ResourceModel;
 
-use Magento\TestFramework\Event\Magento;
+use Magento\Framework\App\MaintenanceMode;
+use Magento\Framework\MessageQueue\Lock\ReaderInterface;
+use Magento\Framework\MessageQueue\Lock\WriterInterface;
+use Magento\Framework\MessageQueue\LockInterface;
+use Magento\Framework\ObjectManagerInterface;
+use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\TestCase;
 
-class LockTest extends \PHPUnit\Framework\TestCase
+class LockTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\ObjectManagerInterface
+     * @var ObjectManagerInterface
      */
     protected $objectManager;
 
     /**
-     * @var \Magento\Framework\MessageQueue\LockInterface
+     * @var LockInterface
      */
     protected $lock;
 
     /**
-     * @var \Magento\Framework\MessageQueue\Lock\WriterInterface
+     * @var WriterInterface
      */
     protected $writer;
 
     /**
-     * @var \Magento\Framework\MessageQueue\Lock\ReaderInterface
+     * @var ReaderInterface
      */
     protected $reader;
 
-    protected function setUp()
+    /**
+     * @return void
+     */
+    protected function setUp(): void
     {
-        $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        $this->objectManager = Bootstrap::getObjectManager();
 
-        $this->lock = $this->objectManager->get(\Magento\Framework\MessageQueue\LockInterface::class);
-        $this->writer = $this->objectManager->get(\Magento\Framework\MessageQueue\Lock\WriterInterface::class);
-        $this->reader = $this->objectManager->get(\Magento\Framework\MessageQueue\Lock\ReaderInterface::class);
+        $this->lock = $this->objectManager->get(LockInterface::class);
+        $this->writer = $this->objectManager->get(WriterInterface::class);
+        $this->reader = $this->objectManager->get(ReaderInterface::class);
     }
 
     /**
@@ -44,11 +56,13 @@ class LockTest extends \PHPUnit\Framework\TestCase
      *
      * @return void
      */
-    public function testLockClearedByMaintenanceModeOff()
+    public function testLockClearedByMaintenanceModeOff(): void
     {
-        /** @var $maintenanceMode \Magento\Framework\App\MaintenanceMode */
-        $maintenanceMode = $this->objectManager->get(\Magento\Framework\App\MaintenanceMode::class);
+        /** @var $maintenanceMode MaintenanceMode */
+        $maintenanceMode = $this->objectManager->get(MaintenanceMode::class);
+        // phpcs:disable
         $code = md5('consumer.name-1');
+        // phpcs:enable
         $this->lock->setMessageCode($code);
         $this->writer->saveLock($this->lock);
         $this->reader->read($this->lock, $code);
