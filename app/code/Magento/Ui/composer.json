@@ -11,8 +11,7 @@
         "magento/module-backend": "*",
         "magento/module-eav": "*",
         "magento/module-store": "*",
-        "magento/module-user": "*",
-        "magento/module-cms": "*"
+        "magento/module-user": "*"
     },
     "suggest": {
         "magento/module-config": "*"

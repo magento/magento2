@@ -113,8 +113,7 @@
         <waitForElementVisible selector="{{StorefrontCategoryMainSection.SuccessMsg}}" stepKey="waitForSuccessMessage"/>
 
         <!-- Assert configurable product in cart -->
-        <amOnPage url="{{CheckoutCartPage.url}}" stepKey="amOnShoppingCartPage"/>
-        <waitForPageLoad stepKey="waitForShoppingCartPageLoad"/>
+        <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="amOnShoppingCartPage"/>
         <actionGroup ref="StorefrontCheckCartConfigurableProductActionGroup" stepKey="storefrontCheckCartConfigurableProductActionGroup">
             <argument name="product" value="ApiConfigurableProduct"/>
             <argument name="optionProduct" value="colorConfigurableProductAttribute1"/>
