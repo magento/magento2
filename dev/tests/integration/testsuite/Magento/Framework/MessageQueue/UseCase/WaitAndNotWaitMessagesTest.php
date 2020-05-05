@@ -65,9 +65,7 @@ class WaitAndNotWaitMessagesTest extends QueueTestCaseAbstract
      */
     public function testWaitForMessages()
     {
-        $this->assertArrayHasKey('queue', $this->config);
-        $this->assertArrayHasKey('consumers_wait_for_messages', $this->config['queue']);
-        $this->assertEquals(1, $this->config['queue']['consumers_wait_for_messages']);
+        $this->assertContainsEquals(['queue' => ['consumers_wait_for_messages' => 1]], $this->config);
 
         foreach ($this->messages as $message) {
             $this->publishMessage($message);
@@ -111,9 +109,10 @@ class WaitAndNotWaitMessagesTest extends QueueTestCaseAbstract
         }
 
         // Checks that consumers do not wait 4th message and die
-        $consumersProcessIds = $this->publisherConsumerController->getConsumersProcessIds();
-        $this->assertArrayHasKey('mixed.sync.and.async.queue.consumer', $consumersProcessIds);
-        $this->assertEquals([], $consumersProcessIds['mixed.sync.and.async.queue.consumer']);
+        $this->assertContainsEquals(
+            ['mixed.sync.and.async.queue.consumer' => []],
+            $this->publisherConsumerController->getConsumersProcessIds()
+        );
     }
 
     /**
