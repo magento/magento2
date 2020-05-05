@@ -90,7 +90,7 @@ class Config implements ConfigInterface
         }
 
         $routers = $this->_reader->read($scope);
-        $routes = $routers[$this->_areaList->getDefaultRouter($scope)]['routes'];
+        $routes = $routers[$this->_areaList->getDefaultRouter($scope)]['routes'] ?? null;
         $routesData = $this->getSerializer()->serialize($routes);
         $this->_cache->save($routesData, $cacheId);
         $this->_routes[$scope] = $routes;
