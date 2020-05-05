@@ -36,7 +36,7 @@ spec:
         fsGroup: 82
       initContainers:
         - name: copy-data
-          image: eu.gcr.io/magento2-269418/magento2-php72:243
+          image: eu.gcr.io/magento2-269418/magento2-php72:$TAG_NAME
           securityContext:
             runAsUser: 0
           volumeMounts:
@@ -47,7 +47,7 @@ spec:
             requests:
               cpu: "250m"
       containers:
-        - image: eu.gcr.io/magento2-269418/magento2-apache24:243
+        - image: eu.gcr.io/magento2-269418/magento2-apache24:$TAG_NAME
           name: apache
           ports:
             - containerPort: 80
@@ -61,7 +61,7 @@ spec:
           volumeMounts:
           - mountPath: /var/www/html
             name: magento-shared
-        - image: eu.gcr.io/magento2-269418/magento2-php72:243
+        - image: eu.gcr.io/magento2-269418/magento2-php72:$TAG_NAME
           name: php
           resources:
             requests:
