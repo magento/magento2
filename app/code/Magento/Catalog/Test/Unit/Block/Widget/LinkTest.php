@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Catalog\Test\Unit\Block\Widget;
 
 use Exception;
@@ -18,10 +20,9 @@ use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\UrlRewrite\Model\UrlFinderInterface;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
-use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 use ReflectionClass;
-use RuntimeException;
 
 /**
  * @SuppressWarnings(PHPMD.UnusedFormalParameter)
@@ -31,12 +32,12 @@ use RuntimeException;
 class LinkTest extends TestCase
 {
     /**
-     * @var PHPUnit\Framework\MockObject\MockObject|StoreManagerInterface
+     * @var MockObject|StoreManagerInterface
      */
     protected $storeManager;
 
     /**
-     * @var PHPUnit\Framework\MockObject\MockObject|UrlFinderInterface
+     * @var MockObject|UrlFinderInterface
      */
     protected $urlFinder;
 
@@ -46,7 +47,7 @@ class LinkTest extends TestCase
     protected $block;
 
     /**
-     * @var AbstractResource|PHPUnit\Framework\MockObject\MockObject
+     * @var AbstractResource|MockObject
      */
     protected $entityResource;
 
@@ -55,8 +56,8 @@ class LinkTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->storeManager = $this->getMockForAbstractClass(StoreManagerInterface::class);
-        $this->urlFinder = $this->getMockForAbstractClass(UrlFinderInterface::class);
+        $this->storeManager = $this->createMock(StoreManagerInterface::class);
+        $this->urlFinder = $this->createMock(UrlFinderInterface::class);
 
         $context = $this->createMock(Context::class);
         $context->expects($this->any())
@@ -78,43 +79,37 @@ class LinkTest extends TestCase
 
     /**
      * Tests getHref with wrong id_path
-     *
      */
     public function testGetHrefWithoutSetIdPath()
     {
-        $this->expectException(\RuntimeException::class);
+        $this->expectException('RuntimeException');
         $this->expectExceptionMessage('Parameter id_path is not set.');
-
         $this->block->getHref();
     }
 
     /**
      * Tests getHref with wrong id_path
-     *
      */
     public function testGetHrefIfSetWrongIdPath()
     {
-        $this->expectException(\RuntimeException::class);
+        $this->expectException('RuntimeException');
         $this->expectExceptionMessage('Wrong id_path structure.');
-
         $this->block->setData('id_path', 'wrong_id_path');
         $this->block->getHref();
     }
 
     /**
      * Tests getHref with wrong store ID
-     *
      */
     public function testGetHrefWithSetStoreId()
     {
-        $this->expectException(\Exception::class);
-
+        $this->expectException('Exception');
         $this->block->setData('id_path', 'type/id');
         $this->block->setData('store_id', 'store_id');
         $this->storeManager->expects($this->once())
             ->method('getStore')
             ->with('store_id')
-            ->will($this->throwException(new Exception()));
+            ->willThrowException(new Exception());
         $this->block->getHref();
     }
 
@@ -125,7 +120,7 @@ class LinkTest extends TestCase
     {
         $this->block->setData('id_path', 'entity_type/entity_id');
 
-        $store = $this->createPartialMock(Store::class, ['getId', '__wakeUp']);
+        $store = $this->createPartialMock(Store::class, ['getId']);
         $store->expects($this->any())
             ->method('getId');
 
@@ -200,7 +195,7 @@ class LinkTest extends TestCase
             ->willReturnCallback(
                 function ($route, $params) use ($storeId) {
                     $baseUrl = rtrim($this->storeManager->getStore($storeId)->getBaseUrl(), '/');
-                    return $baseUrl .'/' . ltrim($params['_direct'], '/');
+                    return $baseUrl . '/' . ltrim($params['_direct'], '/');
                 }
             );
 
@@ -289,7 +284,7 @@ class LinkTest extends TestCase
         $storeId = 15;
         $this->block->setData('id_path', ProductUrlRewriteGenerator::ENTITY_TYPE . '/entity_id/category_id');
 
-        $store = $this->createPartialMock(Store::class, ['getId', '__wakeUp']);
+        $store = $this->createPartialMock(Store::class, ['getId']);
         $store->expects($this->any())
             ->method('getId')
             ->willReturn($storeId);

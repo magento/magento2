@@ -3,31 +3,38 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\Authorization\Test\Unit\Policy;
 
-class AclTest extends \PHPUnit\Framework\TestCase
+use Magento\Framework\Acl\Builder;
+use Magento\Framework\Authorization\Policy\Acl;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class AclTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\Authorization\Policy\Acl
+     * @var Acl
      */
     protected $_model;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $_aclMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $_aclBuilderMock;
 
     protected function setUp(): void
     {
         $this->_aclMock = $this->createMock(\Magento\Framework\Acl::class);
-        $this->_aclBuilderMock = $this->createMock(\Magento\Framework\Acl\Builder::class);
+        $this->_aclBuilderMock = $this->createMock(Builder::class);
         $this->_aclBuilderMock->expects($this->any())->method('getAcl')->willReturn($this->_aclMock);
-        $this->_model = new \Magento\Framework\Authorization\Policy\Acl($this->_aclBuilderMock);
+        $this->_model = new Acl($this->_aclBuilderMock);
     }
 
     public function testIsAllowedReturnsTrueIfResourceIsAllowedToRole()
@@ -55,8 +62,8 @@ class AclTest extends \PHPUnit\Framework\TestCase
         )->with(
             'some_role',
             'some_resource'
-        )->will(
-            $this->throwException(new \Zend_Acl_Role_Registry_Exception())
+        )->willThrowException(
+            new \Zend_Acl_Role_Registry_Exception()
         );
 
         $this->_aclMock->expects($this->once())->method('has')->with('some_resource')->willReturn(true);
@@ -73,8 +80,8 @@ class AclTest extends \PHPUnit\Framework\TestCase
         )->with(
             'some_role',
             'some_resource'
-        )->will(
-            $this->throwException(new \Zend_Acl_Role_Registry_Exception())
+        )->willThrowException(
+            new \Zend_Acl_Role_Registry_Exception()
         );
 
         $this->_aclMock->expects($this->once())->method('has')->with('some_resource')->willReturn(false);

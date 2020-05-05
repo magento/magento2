@@ -3,35 +3,39 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Bundle\Test\Unit\Model\Plugin;
 
-use \Magento\Bundle\Model\Plugin\PriceBackend;
-
+use Magento\Bundle\Model\Plugin\PriceBackend;
 use Magento\Bundle\Model\Product\Price;
+use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Type;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
-class PriceBackendTest extends \PHPUnit\Framework\TestCase
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class PriceBackendTest extends TestCase
 {
     const CLOSURE_VALUE = 'CLOSURE';
 
     /** @var  PriceBackend */
     private $priceBackendPlugin;
 
-    /** @var  \PHPUnit\Framework\MockObject\MockObject */
+    /** @var  MockObject */
     private $priceAttributeMock;
 
     /** @var  \Closure */
     private $closure;
 
-    /** @var  \PHPUnit\Framework\MockObject\MockObject */
+    /** @var  MockObject */
     private $productMock;
 
     protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
-        $this->priceBackendPlugin = $objectManager->getObject(\Magento\Bundle\Model\Plugin\PriceBackend::class);
+        $this->priceBackendPlugin = $objectManager->getObject(PriceBackend::class);
 
         $this->closure = function () {
             return static::CLOSURE_VALUE;
@@ -39,7 +43,7 @@ class PriceBackendTest extends \PHPUnit\Framework\TestCase
         $this->priceAttributeMock = $this->getMockBuilder(\Magento\Catalog\Model\Product\Attribute\Backend\Price::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->productMock = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
+        $this->productMock = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
             ->setMethods(['getTypeId', 'getPriceType', '__wakeUp'])
             ->getMock();

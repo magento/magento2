@@ -3,34 +3,44 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\Phrase\Test\Unit\Renderer;
 
-class TranslateTest extends \PHPUnit\Framework\TestCase
+use Magento\Framework\Phrase\Renderer\Translate as PhraseRenderer;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\Translate;
+use Magento\Framework\TranslateInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface;
+
+class TranslateTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\Translate|\PHPUnit\Framework\MockObject\MockObject
+     * @var Translate|MockObject
      */
     protected $_translator;
 
     /**
-     * @var \Magento\Framework\Phrase\Renderer\Translate
+     * @var PhraseRenderer
      */
     protected $_renderer;
 
     /**
-     * @var \Psr\Log\LoggerInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var LoggerInterface|MockObject
      */
     protected $loggerMock;
 
     protected function setUp(): void
     {
-        $this->_translator = $this->createMock(\Magento\Framework\TranslateInterface::class);
-        $this->loggerMock = $this->getMockBuilder(\Psr\Log\LoggerInterface::class)
+        $this->_translator = $this->createMock(TranslateInterface::class);
+        $this->loggerMock = $this->getMockBuilder(LoggerInterface::class)
             ->getMock();
 
-        $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $objectManagerHelper = new ObjectManager($this);
         $this->_renderer = $objectManagerHelper->getObject(
-            \Magento\Framework\Phrase\Renderer\Translate::class,
+            PhraseRenderer::class,
             [
                 'translator' => $this->_translator,
                 'logger' => $this->loggerMock

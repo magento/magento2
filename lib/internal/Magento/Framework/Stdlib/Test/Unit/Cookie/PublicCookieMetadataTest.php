@@ -3,18 +3,20 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Framework\Stdlib\Test\Unit\Cookie;
 
 use Magento\Framework\Stdlib\Cookie\PublicCookieMetadata;
 use Magento\Framework\Stdlib\StringUtils;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test PublicCookieMetadata
  *
  */
-class PublicCookieMetadataTest extends \PHPUnit\Framework\TestCase
+class PublicCookieMetadataTest extends TestCase
 {
     /** @var PublicCookieMetadata */
     private $publicCookieMetadata;
@@ -23,7 +25,7 @@ class PublicCookieMetadataTest extends \PHPUnit\Framework\TestCase
     {
         $objectManager = new ObjectManager($this);
         $this->publicCookieMetadata = $objectManager->getObject(
-            \Magento\Framework\Stdlib\Cookie\PublicCookieMetadata::class
+            PublicCookieMetadata::class
         );
     }
 

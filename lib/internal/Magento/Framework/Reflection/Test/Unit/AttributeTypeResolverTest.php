@@ -3,12 +3,18 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Framework\Reflection\Test\Unit;
 
-use \Magento\Framework\Reflection\AttributeTypeResolver;
+use Magento\Framework\Api\ExtensionAttribute\Config;
+use Magento\Framework\DataObject;
+use Magento\Framework\Reflection\AttributeTypeResolver;
+use Magento\Framework\Reflection\TypeProcessor;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class AttributeTypeResolverTest extends \PHPUnit\Framework\TestCase
+class AttributeTypeResolverTest extends TestCase
 {
     /**
      * @var AttributeTypeResolver
@@ -16,12 +22,12 @@ class AttributeTypeResolverTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \Magento\Framework\Reflection\TypeProcessor|\PHPUnit\Framework\MockObject\MockObject
+     * @var TypeProcessor|MockObject
      */
     protected $typeProcessor;
 
     /**
-     * @var \Magento\Framework\Api\ExtensionAttribute\Config|\PHPUnit\Framework\MockObject\MockObject
+     * @var Config|MockObject
      */
     protected $configMock;
 
@@ -30,18 +36,15 @@ class AttributeTypeResolverTest extends \PHPUnit\Framework\TestCase
      */
     protected function setUp(): void
     {
-        $this->typeProcessor = $this->createMock(\Magento\Framework\Reflection\TypeProcessor::class);
-        $this->configMock = $this->createMock(\Magento\Framework\Api\ExtensionAttribute\Config::class);
+        $this->typeProcessor = $this->createMock(TypeProcessor::class);
+        $this->configMock = $this->createMock(Config::class);
         $this->model = new AttributeTypeResolver($this->typeProcessor, $this->configMock);
     }
 
-    /**
-     */
     public function testResolveObjectTypeWithNonObjectValue()
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException('InvalidArgumentException');
         $this->expectExceptionMessage('Provided value is not object type');
-
         $code = 'some_code';
         $value = 'string';
         $context = 'Some\Class';
@@ -66,29 +69,26 @@ class AttributeTypeResolverTest extends \PHPUnit\Framework\TestCase
         $config = [
             'Some\Class' => [
                 'some_code' => [
-                    'type' => \Magento\Framework\DataObject::class,
+                    'type' => DataObject::class,
                 ],
             ]
         ];
 
         $this->typeProcessor->expects($this->once())
             ->method('getArrayItemType')
-            ->with(\Magento\Framework\DataObject::class)
-            ->willReturn(\Magento\Framework\DataObject::class);
+            ->with(DataObject::class)
+            ->willReturn(DataObject::class);
 
         $this->configMock->expects($this->once())->method('get')->willReturn($config);
         $this->assertEquals(
-            \Magento\Framework\DataObject::class,
+            DataObject::class,
             $this->model->resolveObjectType($code, $value, $context)
         );
     }
 
-    /**
-     */
     public function testResolveObjectTypeWithConfiguredAttributeAndNonExistedClass()
     {
-        $this->expectException(\LogicException::class);
-
+        $this->expectException('LogicException');
         $code = 'some_code';
         $value = new \stdClass();
         $context = '\Some\Class';

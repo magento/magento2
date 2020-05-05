@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 /**
  * Test class for \Magento\Catalog\Model\ResourceModel\Attribute\AttributeConditionsBuilder
@@ -10,25 +11,24 @@
 namespace Magento\Catalog\Test\Unit\Model\ResourceModel\Attribute;
 
 use Magento\Catalog\Model\Entity\Attribute;
-use Magento\Framework\DB\Adapter\Pdo\Mysql;
-use Magento\Store\Model\Website;
 use Magento\Catalog\Model\ResourceModel\Attribute\ConditionBuilder;
+use Magento\Catalog\Model\ResourceModel\Eav\Attribute as CatalogEavAttribute;
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
+use Magento\Framework\DB\Adapter\Pdo\Mysql;
 use Magento\Framework\EntityManager\EntityMetadata;
 use Magento\Framework\EntityManager\EntityMetadataInterface;
-use Magento\Store\Api\Data\StoreInterface;
 use Magento\Framework\Model\Entity\ScopeInterface;
+use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManager;
-use Magento\Catalog\Model\ResourceModel\Eav\Attribute as CatalogEavAttribute;
+use Magento\Store\Model\Website;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
- * Class AttributeConditionsBuilderTest
- * @package Magento\Catalog\Test\Unit\Model\ResourceModel\Attribute
- *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ConditionBuilderTest extends \PHPUnit\Framework\TestCase
+class ConditionBuilderTest extends TestCase
 {
     /**
      * @param AbstractAttribute $attribute
@@ -75,7 +75,7 @@ class ConditionBuilderTest extends \PHPUnit\Framework\TestCase
 
         $metadata = $this->getMockBuilder(EntityMetadataInterface::class)
             ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+            ->getMock();
 
         $scopes = [];
 
@@ -145,7 +145,7 @@ class ConditionBuilderTest extends \PHPUnit\Framework\TestCase
 
         $metadata = $this->getMockBuilder(EntityMetadataInterface::class)
             ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+            ->getMock();
 
         $scopes = [];
 
@@ -219,7 +219,7 @@ class ConditionBuilderTest extends \PHPUnit\Framework\TestCase
 
         $metadata = $this->getMockBuilder(EntityMetadataInterface::class)
             ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+            ->getMock();
 
         $scope = $this->getMockBuilder(ScopeInterface::class)
             ->disableOriginalConstructor()
@@ -228,7 +228,7 @@ class ConditionBuilderTest extends \PHPUnit\Framework\TestCase
                 'getValue',
                 'getFallback',
             ])
-            ->getMockForAbstractClass();
+            ->getMock();
         $scope->expects($this->once())
             ->method('getIdentifier')
             ->willReturn(
@@ -431,7 +431,7 @@ class ConditionBuilderTest extends \PHPUnit\Framework\TestCase
 
         $metadata = $this->getMockBuilder(EntityMetadataInterface::class)
             ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+            ->getMock();
 
         $scopes = [];
 
@@ -546,7 +546,7 @@ class ConditionBuilderTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return \PHPUnit\Framework\MockObject\MockObject
+     * @return MockObject
      */
     private function getValidAttributeMock()
     {
@@ -572,7 +572,7 @@ class ConditionBuilderTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return \PHPUnit\Framework\MockObject\MockObject
+     * @return MockObject
      */
     private function getValidStoreMock()
     {
@@ -608,7 +608,7 @@ class ConditionBuilderTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return \PHPUnit\Framework\MockObject\MockObject
+     * @return MockObject
      */
     private function getValidScopeMock()
     {
@@ -619,7 +619,7 @@ class ConditionBuilderTest extends \PHPUnit\Framework\TestCase
                 'getValue',
                 'getFallback',
             ])
-            ->getMockForAbstractClass();
+            ->getMock();
         $scope->expects($this->once())
             ->method('getIdentifier')
             ->willReturn(

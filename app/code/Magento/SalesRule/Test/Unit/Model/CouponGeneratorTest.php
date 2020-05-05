@@ -11,11 +11,13 @@ use Magento\SalesRule\Api\Data\CouponGenerationSpecInterface;
 use Magento\SalesRule\Api\Data\CouponGenerationSpecInterfaceFactory;
 use Magento\SalesRule\Model\CouponGenerator;
 use Magento\SalesRule\Model\Service\CouponManagementService;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \Magento\SalesRule\Model\CouponGenerator
  */
-class CouponGeneratorTest extends \PHPUnit\Framework\TestCase
+class CouponGeneratorTest extends TestCase
 {
     /**
      * Testable Object
@@ -25,17 +27,17 @@ class CouponGeneratorTest extends \PHPUnit\Framework\TestCase
     private $couponGenerator;
 
     /**
-     * @var CouponManagementService|\PHPUnit\Framework\MockObject\MockObject
+     * @var CouponManagementService|MockObject
      */
     private $couponManagementServiceMock;
 
     /**
-     * @var CouponGenerationSpecInterfaceFactory|\PHPUnit\Framework\MockObject\MockObject
+     * @var CouponGenerationSpecInterfaceFactory|MockObject
      */
     private $generationSpecFactoryMock;
 
     /**
-     * @var CouponGenerationSpecInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var CouponGenerationSpecInterface|MockObject
      */
     private $generationSpecMock;
 
@@ -47,9 +49,10 @@ class CouponGeneratorTest extends \PHPUnit\Framework\TestCase
     protected function setUp(): void
     {
         $this->generationSpecFactoryMock = $this->getMockBuilder(CouponGenerationSpecInterfaceFactory::class)
-            ->disableOriginalConstructor()->setMethods(['create'])->getMock();
+            ->disableOriginalConstructor()
+            ->setMethods(['create'])->getMock();
         $this->couponManagementServiceMock = $this->createMock(CouponManagementService::class);
-        $this->generationSpecMock = $this->getMockForAbstractClass(CouponGenerationSpecInterface::class);
+        $this->generationSpecMock = $this->createMock(CouponGenerationSpecInterface::class);
         $this->couponGenerator = new CouponGenerator(
             $this->couponManagementServiceMock,
             $this->generationSpecFactoryMock

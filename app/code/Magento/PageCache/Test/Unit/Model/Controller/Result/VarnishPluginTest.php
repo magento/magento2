@@ -3,21 +3,25 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\PageCache\Test\Unit\Model\Controller\Result;
 
-use Magento\PageCache\Model\Controller\Result\VarnishPlugin;
+use Magento\Framework\App\PageCache\Version;
+use Magento\Framework\App\Response\Http as ResponseHttp;
+use Magento\Framework\App\State as AppState;
+use Magento\Framework\Controller\ResultInterface;
+use Magento\Framework\Registry;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\PageCache\Model\Config;
-use Magento\Framework\App\PageCache\Version;
-use Magento\Framework\App\State as AppState;
-use Magento\Framework\Registry;
-use Magento\Framework\Controller\ResultInterface;
-use Magento\Framework\App\Response\Http as ResponseHttp;
+use Magento\PageCache\Model\Controller\Result\VarnishPlugin;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class VarnishPluginTest extends \PHPUnit\Framework\TestCase
+class VarnishPluginTest extends TestCase
 {
     /**
      * @var VarnishPlugin
@@ -30,32 +34,32 @@ class VarnishPluginTest extends \PHPUnit\Framework\TestCase
     private $objectManagerHelper;
 
     /**
-     * @var Config|\PHPUnit\Framework\MockObject\MockObject
+     * @var Config|MockObject
      */
     private $configMock;
 
     /**
-     * @var Version|\PHPUnit\Framework\MockObject\MockObject
+     * @var Version|MockObject
      */
     private $versionMock;
 
     /**
-     * @var AppState|\PHPUnit\Framework\MockObject\MockObject
+     * @var AppState|MockObject
      */
     private $appStateMock;
 
     /**
-     * @var Registry|\PHPUnit\Framework\MockObject\MockObject
+     * @var Registry|MockObject
      */
     private $registryMock;
 
     /**
-     * @var ResultInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var ResultInterface|MockObject
      */
     private $resultMock;
 
     /**
-     * @var ResponseHttp|\PHPUnit\Framework\MockObject\MockObject
+     * @var ResponseHttp|MockObject
      */
     private $responseMock;
 

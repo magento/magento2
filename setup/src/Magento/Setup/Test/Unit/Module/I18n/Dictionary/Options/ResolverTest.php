@@ -3,14 +3,17 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Setup\Test\Unit\Module\I18n\Dictionary\Options;
 
+use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Component\ComponentRegistrar;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Setup\Module\I18n\Dictionary\Options\Resolver;
+use PHPUnit\Framework\TestCase;
 
-/**
- * Class ResolverTest
- */
-class ResolverTest extends \PHPUnit\Framework\TestCase
+class ResolverTest extends TestCase
 {
     /**
      * @param string $directory
@@ -20,8 +23,8 @@ class ResolverTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetOptions($directory, $withContext, $result)
     {
-        $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $componentRegistrar = $this->createMock(\Magento\Framework\Component\ComponentRegistrar::class);
+        $objectManagerHelper = new ObjectManager($this);
+        $componentRegistrar = $this->createMock(ComponentRegistrar::class);
         $root = __DIR__ . '/_files/source';
         $componentRegistrar->expects($this->any())
             ->method('getPaths')
@@ -31,11 +34,11 @@ class ResolverTest extends \PHPUnit\Framework\TestCase
                     [ComponentRegistrar::THEME, [$root . '/app/design']],
                 ]
             );
-        $directoryList = $this->createMock(\Magento\Framework\App\Filesystem\DirectoryList::class);
+        $directoryList = $this->createMock(DirectoryList::class);
         $directoryList->expects($this->any())->method('getRoot')->willReturn('root');
-        /** @var \Magento\Setup\Module\I18n\Dictionary\Options\Resolver $resolver */
+        /** @var Resolver $resolver */
         $resolver = $objectManagerHelper->getObject(
-            \Magento\Setup\Module\I18n\Dictionary\Options\Resolver::class,
+            Resolver::class,
             [
                 'directory' => $directory,
                 'withContext' => $withContext,
@@ -119,16 +122,16 @@ class ResolverTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetOptionsWrongDir($directory, $withContext, $message)
     {
-        $componentRegistrar = $this->createMock(\Magento\Framework\Component\ComponentRegistrar::class);
+        $componentRegistrar = $this->createMock(ComponentRegistrar::class);
         $root = __DIR__ . '/_files/source';
         $componentRegistrar->expects($this->any())
             ->method('getPaths')
             ->willReturn([$root . '/app/code/module1', $root . '/app/code/module2']);
-        $directoryList = $this->createMock(\Magento\Framework\App\Filesystem\DirectoryList::class);
-        $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        /** @var \Magento\Setup\Module\I18n\Dictionary\Options\Resolver $resolver */
+        $directoryList = $this->createMock(DirectoryList::class);
+        $objectManagerHelper = new ObjectManager($this);
+        /** @var Resolver $resolver */
         $resolver = $objectManagerHelper->getObject(
-            \Magento\Setup\Module\I18n\Dictionary\Options\Resolver::class,
+            Resolver::class,
             [
                 'directory' => $directory,
                 'withContext' => $withContext,

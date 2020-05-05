@@ -3,17 +3,21 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Catalog\Test\Unit\Model\Product\Attribute\Backend;
 
 use Magento\Catalog\Model\Product\Attribute\Backend\Boolean as BooleanBackend;
 use Magento\Catalog\Model\Product\Attribute\Source\Boolean as BooleanSource;
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
 use Magento\Framework\DataObject;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class BooleanTest extends \PHPUnit\Framework\TestCase
+class BooleanTest extends TestCase
 {
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|AbstractAttribute
+     * @var MockObject|AbstractAttribute
      */
     private $attributeMock;
 

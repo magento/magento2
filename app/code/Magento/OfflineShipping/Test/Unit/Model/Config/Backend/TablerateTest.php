@@ -3,31 +3,39 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\OfflineShipping\Test\Unit\Model\Config\Backend;
 
-class TablerateTest extends \PHPUnit\Framework\TestCase
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\OfflineShipping\Model\Config\Backend\Tablerate;
+use Magento\OfflineShipping\Model\ResourceModel\Carrier\TablerateFactory;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class TablerateTest extends TestCase
 {
     /**
-     * @var \Magento\OfflineShipping\Model\Config\Backend\Tablerate
+     * @var Tablerate
      */
     protected $model;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $tableateFactoryMock;
 
     protected function setUp(): void
     {
         $this->tableateFactoryMock =
-            $this->getMockBuilder(\Magento\OfflineShipping\Model\ResourceModel\Carrier\TablerateFactory::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['create'])
-            ->getMock();
+            $this->getMockBuilder(TablerateFactory::class)
+                ->disableOriginalConstructor()
+                ->setMethods(['create'])
+                ->getMock();
 
-        $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $helper = new ObjectManager($this);
         $this->model = $helper->getObject(
-            \Magento\OfflineShipping\Model\Config\Backend\Tablerate::class,
+            Tablerate::class,
             ['tablerateFactory' => $this->tableateFactoryMock]
         );
     }

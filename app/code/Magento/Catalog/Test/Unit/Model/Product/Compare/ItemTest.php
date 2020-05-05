@@ -3,19 +3,25 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Catalog\Test\Unit\Model\Product\Compare;
 
-class ItemTest extends \PHPUnit\Framework\TestCase
+use Magento\Catalog\Model\Product\Compare\Item;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\TestCase;
+
+class ItemTest extends TestCase
 {
     /**
-     * @var \Magento\Catalog\Model\Product\Compare\Item
+     * @var Item
      */
     protected $model;
 
     protected function setUp(): void
     {
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->model = $objectManager->getObject(\Magento\Catalog\Model\Product\Compare\Item::class);
+        $objectManager = new ObjectManager($this);
+        $this->model = $objectManager->getObject(Item::class);
     }
 
     protected function tearDown(): void
@@ -28,7 +34,7 @@ class ItemTest extends \PHPUnit\Framework\TestCase
         $id = 1;
         $this->model->setId($id);
         $this->assertEquals(
-            [\Magento\Catalog\Model\Product\Compare\Item::CACHE_TAG . '_' . $id],
+            [Item::CACHE_TAG . '_' . $id],
             $this->model->getIdentities()
         );
     }

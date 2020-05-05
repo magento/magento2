@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\AdminNotification\Test\Unit\Model;
 
@@ -70,13 +71,12 @@ class FeedTest extends TestCase
             ['create']
         );
         $this->curlFactory = $this->createPartialMock(CurlFactory::class, ['create']);
-        $this->curl = $this->getMockBuilder(Curl::class)
-            ->disableOriginalConstructor()->getMock();
+        $this->curl = $this->createMock(Curl::class);
         $this->appState = $this->createPartialMock(State::class, []);
         $this->inboxModel = $this->createPartialMock(Inbox::class, [
-                '__wakeup',
-                'parse'
-            ]);
+            '__wakeup',
+            'parse'
+        ]);
         $this->backendConfig = $this->createPartialMock(
             ConfigInterface::class,
             [
@@ -96,13 +96,11 @@ class FeedTest extends TestCase
             ]
         );
 
-        $this->deploymentConfig = $this->getMockBuilder(DeploymentConfig::class)
-            ->disableOriginalConstructor()->getMock();
+        $this->deploymentConfig = $this->createMock(DeploymentConfig::class);
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
 
-        $this->productMetadata = $this->getMockBuilder(ProductMetadata::class)
-            ->disableOriginalConstructor()->getMock();
+        $this->productMetadata = $this->createMock(ProductMetadata::class);
 
         $this->urlBuilder = $this->getMockForAbstractClass(UrlInterface::class);
 
@@ -145,7 +143,7 @@ class FeedTest extends TestCase
         ];
 
         $lastUpdate = 0;
-        $this->cacheManager->expects($this->once())->method('load')->will(($this->returnValue($lastUpdate)));
+        $this->cacheManager->expects($this->once())->method('load')->willReturn($lastUpdate);
         $this->curlFactory->expects($this->at(0))->method('create')->willReturn($this->curl);
         $this->curl->expects($this->once())->method('setConfig')->with($configValues)->willReturnSelf();
         $this->curl->expects($this->once())->method('read')->willReturn($curlRequest);

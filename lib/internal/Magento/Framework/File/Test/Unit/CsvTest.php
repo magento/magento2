@@ -3,15 +3,18 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Framework\File\Test\Unit;
 
+use Magento\Framework\File\Csv;
 use Magento\Framework\Filesystem\Driver\File;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test class for \Magento\Framework\File\Csv.
  */
-class CsvTest extends \PHPUnit\Framework\TestCase
+class CsvTest extends TestCase
 {
     /**
      * Csv model
@@ -22,7 +25,7 @@ class CsvTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp(): void
     {
-        $this->_model = new \Magento\Framework\File\Csv(new File());
+        $this->_model = new Csv(new File());
     }
 
     protected function tearDown(): void
@@ -34,7 +37,7 @@ class CsvTest extends \PHPUnit\Framework\TestCase
     {
         $expected = 4;
         $this->_model->setLineLength($expected);
-        $lineLengthProperty = new \ReflectionProperty(\Magento\Framework\File\Csv::class, '_lineLength');
+        $lineLengthProperty = new \ReflectionProperty(Csv::class, '_lineLength');
         $lineLengthProperty->setAccessible(true);
         $actual = $lineLengthProperty->getValue($this->_model);
         $this->assertEquals($expected, $actual);
@@ -42,21 +45,18 @@ class CsvTest extends \PHPUnit\Framework\TestCase
 
     public function testSetDelimiter()
     {
-        $this->assertInstanceOf(\Magento\Framework\File\Csv::class, $this->_model->setDelimiter(','));
+        $this->assertInstanceOf(Csv::class, $this->_model->setDelimiter(','));
     }
 
     public function testSetEnclosure()
     {
-        $this->assertInstanceOf(\Magento\Framework\File\Csv::class, $this->_model->setEnclosure('"'));
+        $this->assertInstanceOf(Csv::class, $this->_model->setEnclosure('"'));
     }
 
-    /**
-     */
     public function testGetDataFileNonExistent()
     {
-        $this->expectException(\Exception::class);
+        $this->expectException('Exception');
         $this->expectExceptionMessage('File "FileNameThatShouldNotExist" does not exist');
-
         $file = 'FileNameThatShouldNotExist';
         $this->_model->getData($file);
     }

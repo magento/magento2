@@ -3,12 +3,16 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Framework\Xml\Test\Unit;
 
-class ParserTest extends \PHPUnit\Framework\TestCase
+use Magento\Framework\Xml\Parser;
+use PHPUnit\Framework\TestCase;
+
+class ParserTest extends TestCase
 {
-    /** @var \Magento\Framework\Xml\Parser */
+    /** @var Parser */
     protected $parser;
 
     protected function setUp(): void
@@ -16,7 +20,7 @@ class ParserTest extends \PHPUnit\Framework\TestCase
         if (!function_exists('libxml_set_external_entity_loader')) {
             $this->markTestSkipped('Skipped on HHVM. Will be fixed in MAGETWO-45033');
         }
-        $this->parser = new \Magento\Framework\Xml\Parser();
+        $this->parser = new Parser();
     }
 
     public function testGetXml()
@@ -35,13 +39,10 @@ class ParserTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    /**
-     */
     public function testLoadXmlInvalid()
     {
-        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+        $this->expectException('Magento\Framework\Exception\LocalizedException');
         $this->expectExceptionMessage('DOMDocument::loadXML(): Opening and ending tag mismatch');
-
         $sampleInvalidXml = '<?xml version="1.0"?><config></onfig>';
         $this->parser->initErrorHandler();
         $this->parser->loadXML($sampleInvalidXml);

@@ -3,36 +3,43 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Catalog\Test\Unit\Model\Indexer\Product\Flat\Plugin;
 
-class StoreTest extends \PHPUnit\Framework\TestCase
+use Magento\Catalog\Model\Indexer\Product\Flat\Processor;
+use Magento\Store\Model\Store;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class StoreTest extends TestCase
 {
     /**
-     * @var \Magento\Catalog\Model\Indexer\Product\Flat\Processor|\PHPUnit\Framework\MockObject\MockObject
+     * @var Processor|MockObject
      */
     protected $processorMock;
 
     /**
-     * @var \Magento\Store\Model\Store|\PHPUnit\Framework\MockObject\MockObject
+     * @var Store|MockObject
      */
     protected $storeMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $subjectMock;
 
     protected function setUp(): void
     {
         $this->processorMock = $this->createPartialMock(
-            \Magento\Catalog\Model\Indexer\Product\Flat\Processor::class,
+            Processor::class,
             ['markIndexerAsInvalid']
         );
 
         $this->subjectMock = $this->createMock(\Magento\Store\Model\ResourceModel\Store::class);
         $this->storeMock = $this->createPartialMock(
-            \Magento\Store\Model\Store::class,
-            ['getId', '__wakeup', 'dataHasChangedFor']
+            Store::class,
+            ['getId', 'dataHasChangedFor']
         );
     }
 

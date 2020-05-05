@@ -3,12 +3,14 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Setup\Test\Unit\Model\Installer;
 
-use \Magento\Setup\Model\Installer\Progress;
+use Magento\Setup\Model\Installer\Progress;
+use PHPUnit\Framework\TestCase;
 
-class ProgressTest extends \PHPUnit\Framework\TestCase
+class ProgressTest extends TestCase
 {
     /**
      * @param int $total
@@ -17,9 +19,8 @@ class ProgressTest extends \PHPUnit\Framework\TestCase
      */
     public function testConstructorExceptionInvalidTotal($total, $current)
     {
-        $this->expectException(\LogicException::class);
+        $this->expectException('LogicException');
         $this->expectExceptionMessage('Total number must be more than zero.');
-
         new Progress($total, $current);
     }
 
@@ -31,13 +32,10 @@ class ProgressTest extends \PHPUnit\Framework\TestCase
         return [[0,0], [0, 1], [[], 1]];
     }
 
-    /**
-     */
     public function testConstructorExceptionCurrentExceedsTotal()
     {
-        $this->expectException(\LogicException::class);
+        $this->expectException('LogicException');
         $this->expectExceptionMessage('Current cannot exceed total number.');
-
         new Progress(1, 2);
     }
 
@@ -48,13 +46,10 @@ class ProgressTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(1, $progress->getCurrent());
     }
 
-    /**
-     */
     public function testSetNextException()
     {
-        $this->expectException(\LogicException::class);
+        $this->expectException('LogicException');
         $this->expectExceptionMessage('Current cannot exceed total number.');
-
         $progress = new Progress(10, 10);
         $progress->setNext();
     }

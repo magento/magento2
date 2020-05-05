@@ -3,9 +3,12 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Backend\Test\Unit\Console\Command;
 
+use Magento\Framework\Event\ManagerInterface;
+use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Component\Console\Tester\CommandTester;
 
 abstract class AbstractCacheManageCommandTest extends AbstractCacheCommandTest
@@ -13,12 +16,12 @@ abstract class AbstractCacheManageCommandTest extends AbstractCacheCommandTest
     /** @var  string */
     protected $cacheEventName;
 
-    /** @var  \Magento\Framework\Event\ManagerInterface | \PHPUnit\Framework\MockObject\MockObject */
+    /** @var  ManagerInterface|MockObject */
     protected $eventManagerMock;
 
     protected function setUp(): void
     {
-        $this->eventManagerMock = $this->getMockBuilder(\Magento\Framework\Event\ManagerInterface::class)
+        $this->eventManagerMock = $this->getMockBuilder(ManagerInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         parent::setUp();
@@ -43,13 +46,10 @@ abstract class AbstractCacheManageCommandTest extends AbstractCacheCommandTest
         ];
     }
 
-    /**
-     */
     public function testExecuteInvalidCacheType()
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException('InvalidArgumentException');
         $this->expectExceptionMessage('The following requested cache types are not supported:');
-
         $this->cacheManagerMock->expects($this->once())->method('getAvailableTypes')->willReturn(['A', 'B', 'C']);
         $param = ['types' => ['A', 'D']];
         $commandTester = new CommandTester($this->command);

@@ -8,15 +8,15 @@ declare(strict_types=1);
 
 namespace Magento\Swatches\Test\Unit\Block\Adminhtml\Attribute\Edit\Options;
 
+use Magento\Framework\DataObject;
 use Magento\Swatches\Block\Adminhtml\Attribute\Edit\Options\Text;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-/**
- * Class \Magento\Swatches\Test\Unit\Block\Adminhtml\Attribute\Edit\Options\TextTest
- */
-class TextTest extends \PHPUnit\Framework\TestCase
+class TextTest extends TestCase
 {
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|Text
+     * @var MockObject|Text
      */
     private $model;
 
@@ -41,8 +41,8 @@ class TextTest extends \PHPUnit\Framework\TestCase
                 'read_only' => true,
                 'can_manage_option_default_only' => false,
                 'option_values' => [
-                    new \Magento\Framework\DataObject(['value' => 6, 'label' => 'red']),
-                    new \Magento\Framework\DataObject(['value' => 6, 'label' => 'blue']),
+                    new DataObject(['value' => 6, 'label' => 'red']),
+                    new DataObject(['value' => 6, 'label' => 'blue']),
                 ]
             ],
             'expectedResult' => '{"attributesData":[{"value":6,"label":"red"},{"value":6,"label":"blue"}],' .
@@ -63,8 +63,8 @@ class TextTest extends \PHPUnit\Framework\TestCase
                 'read_only' => false,
                 'can_manage_option_default_only' => false,
                 'option_values' => [
-                    new \Magento\Framework\DataObject(['value' => 6, 'label' => 'red']),
-                    new \Magento\Framework\DataObject(['value' => 6, 'label' => 'blue']),
+                    new DataObject(['value' => 6, 'label' => 'red']),
+                    new DataObject(['value' => 6, 'label' => 'blue']),
                 ]
             ],
             'expectedResult' => '{"attributesData":[{"value":6,"label":"red"},{"value":6,"label":"blue"}],' .

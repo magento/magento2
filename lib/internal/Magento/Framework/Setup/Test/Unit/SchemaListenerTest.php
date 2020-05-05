@@ -7,22 +7,24 @@ declare(strict_types=1);
 
 namespace Magento\Framework\Setup\Test\Unit;
 
+use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Ddl\Table;
+use Magento\Framework\Setup\SchemaListener;
 use Magento\Framework\Setup\SchemaListenerDefinition\BooleanDefinition;
 use Magento\Framework\Setup\SchemaListenerDefinition\IntegerDefinition;
 use Magento\Framework\Setup\SchemaListenerDefinition\RealDefinition;
 use Magento\Framework\Setup\SchemaListenerDefinition\TimestampDefinition;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Unit test for schema listener.
  *
- * @package Magento\Framework\Setup\Test\Unit
  */
-class SchemaListenerTest extends \PHPUnit\Framework\TestCase
+class SchemaListenerTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\Setup\SchemaListener
+     * @var SchemaListener
      */
     private $model;
 
@@ -35,7 +37,7 @@ class SchemaListenerTest extends \PHPUnit\Framework\TestCase
     {
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->model = $this->objectManagerHelper->getObject(
-            \Magento\Framework\Setup\SchemaListener::class,
+            SchemaListener::class,
             [
                 'definitionMappers' => [
                     'timestamp' => new TimestampDefinition(),
@@ -59,34 +61,34 @@ class SchemaListenerTest extends \PHPUnit\Framework\TestCase
         $table->setOption('type', 'innodb');
         return $table->addColumn(
             'timestamp',
-            \Magento\Framework\DB\Ddl\Table::TYPE_TIMESTAMP,
+            Table::TYPE_TIMESTAMP,
             null,
-            ['nullable' => false, 'default' => \Magento\Framework\DB\Ddl\Table::TIMESTAMP_INIT_UPDATE],
+            ['nullable' => false, 'default' => Table::TIMESTAMP_INIT_UPDATE],
             'Column with type timestamp init update'
         )->addColumn(
             'integer',
-            \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
+            Table::TYPE_INTEGER,
             null,
             ['nullable' => false, 'primary' => true, 'identity' => true],
             'Integer'
         )->addColumn(
             'decimal',
-            \Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL,
+            Table::TYPE_DECIMAL,
             '25,12',
             ['unsigned' => false, 'nullable' => false],
             'Decimal'
         )
-        ->addIndex(
+            ->addIndex(
             'INDEX_KEY',
             ['column_with_type_text'],
-            ['type' => \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_FULLTEXT]
+            ['type' => AdapterInterface::INDEX_TYPE_FULLTEXT]
         )
-        ->addForeignKey(
+            ->addForeignKey(
             'some_key',
             'decimal',
             'setup_tests_table1',
             'column_with_type_integer',
-            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
+            Table::ACTION_CASCADE
         )->setComment(
             'Related Table'
         );
@@ -118,88 +120,78 @@ class SchemaListenerTest extends \PHPUnit\Framework\TestCase
         self::assertArrayHasKey('new_table', $tables['First_Module']);
         self::assertEquals(
             [
-                'timestamp' =>
-                    [
-                        'xsi:type' => 'timestamp',
-                        'name' => 'timestamp',
-                        'on_update' => true,
-                        'nullable' => false,
-                        'default' => 'CURRENT_TIMESTAMP',
-                        'disabled' => false,
-                        'onCreate' => null,
-                        'comment' => 'Column with type timestamp init update',
-                    ],
-                'integer' =>
-                    [
-                        'xsi:type' => 'int',
-                        'name' => 'integer',
-                        'padding' => 11,
-                        'unsigned' => false,
-                        'nullable' => false,
-                        'identity' => true,
-                        'default' => null,
-                        'disabled' => false,
-                        'onCreate' => null,
-                        'comment' => 'Integer'
-                    ],
-                'decimal' =>
-                    [
-                        'xsi:type' => 'decimal',
-                        'name' => 'decimal',
-                        'scale' => '12',
-                        'precision' => '25',
-                        'unsigned' => false,
-                        'nullable' => false,
-                        'default' => null,
-                        'disabled' => false,
-                        'onCreate' => null,
-                        'comment' => 'Decimal'
-                    ],
+                'timestamp' => [
+                    'xsi:type' => 'timestamp',
+                    'name' => 'timestamp',
+                    'on_update' => true,
+                    'nullable' => false,
+                    'default' => 'CURRENT_TIMESTAMP',
+                    'disabled' => false,
+                    'onCreate' => null,
+                    'comment' => 'Column with type timestamp init update',
+                ],
+                'integer' => [
+                    'xsi:type' => 'int',
+                    'name' => 'integer',
+                    'padding' => 11,
+                    'unsigned' => false,
+                    'nullable' => false,
+                    'identity' => true,
+                    'default' => null,
+                    'disabled' => false,
+                    'onCreate' => null,
+                    'comment' => 'Integer'
+                ],
+                'decimal' => [
+                    'xsi:type' => 'decimal',
+                    'name' => 'decimal',
+                    'scale' => '12',
+                    'precision' => '25',
+                    'unsigned' => false,
+                    'nullable' => false,
+                    'default' => null,
+                    'disabled' => false,
+                    'onCreate' => null,
+                    'comment' => 'Decimal'
+                ],
             ],
             $tables['First_Module']['new_table']['columns']
         );
         self::assertEquals(
             [
-                'primary' =>
-                    [
-                        'PRIMARY' =>
-                            [
-                                'type' => 'primary',
-                                'name' => 'PRIMARY',
-                                'disabled' => false,
-                                'columns' =>
-                                    [
-                                        'INTEGER' => 'integer',
-                                    ],
-                            ],
+                'primary' => [
+                    'PRIMARY' => [
+                        'type' => 'primary',
+                        'name' => 'PRIMARY',
+                        'disabled' => false,
+                        'columns' => [
+                            'INTEGER' => 'integer',
+                        ],
                     ],
-                'foreign' =>
-                    [
-                        'SOME_KEY' =>
-                            [
-                                'table' => 'new_table',
-                                'column' => 'decimal',
-                                'referenceTable' => 'setup_tests_table1',
-                                'referenceColumn' => 'column_with_type_integer',
-                                'onDelete' => 'CASCADE',
-                                'disabled' => false,
-                            ],
+                ],
+                'foreign' => [
+                    'SOME_KEY' => [
+                        'table' => 'new_table',
+                        'column' => 'decimal',
+                        'referenceTable' => 'setup_tests_table1',
+                        'referenceColumn' => 'column_with_type_integer',
+                        'onDelete' => 'CASCADE',
+                        'disabled' => false,
                     ],
+                ],
             ],
             $tables['First_Module']['new_table']['constraints']
         );
 
         self::assertEquals(
             [
-                'INDEX_KEY' =>
-                    [
-                        'columns' =>
-                            [
-                                'column_with_type_text' => 'column_with_type_text',
-                            ],
-                        'indexType' => 'fulltext',
-                        'disabled' => false,
+                'INDEX_KEY' => [
+                    'columns' => [
+                        'column_with_type_text' => 'column_with_type_text',
                     ],
+                    'indexType' => 'fulltext',
+                    'disabled' => false,
+                ],
             ],
             $tables['First_Module']['new_table']['indexes']
         );

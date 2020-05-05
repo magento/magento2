@@ -3,45 +3,57 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Weee\Test\Unit\Model\Total\Creditmemo;
 
 use Magento\Framework\Serialize\Serializer\Json;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Sales\Model\Order;
+use Magento\Sales\Model\Order\Creditmemo;
+use Magento\Sales\Model\Order\Invoice;
+use Magento\Sales\Model\Order\Invoice\Item;
+use Magento\Sales\Model\Order\Invoice\Total\Tax;
+use Magento\Weee\Helper\Data;
+use Magento\Weee\Model\Total\Creditmemo\Weee;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class WeeeTest extends \PHPUnit\Framework\TestCase
+class WeeeTest extends TestCase
 {
     /**
-     * @var \Magento\Weee\Model\Total\Creditmemo\Weee
+     * @var Weee
      */
     protected $model;
 
     /**
-     * @var \Magento\Sales\Model\Order|\PHPUnit\Framework\MockObject\MockObject
+     * @var Order|MockObject
      */
     protected $order;
 
     /**
-     * @var  \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
+     * @var  ObjectManager
      */
     protected $objectManager;
 
     /**
-     * @var \Magento\Sales\Model\Order\Creditmemo|\PHPUnit\Framework\MockObject\MockObject
+     * @var Creditmemo|MockObject
      */
     protected $creditmemo;
 
     /**
-     * @var \Magento\Sales\Model\Order\Invoice|\PHPUnit\Framework\MockObject\MockObject
+     * @var Invoice|MockObject
      */
     protected $invoice;
 
     /**
-     * @var \Magento\Weee\Helper\Data|\PHPUnit\Framework\MockObject\MockObject
+     * @var Data|MockObject
      */
     protected $weeeData;
 
     protected function setUp(): void
     {
-        $this->weeeData = $this->getMockBuilder(\Magento\Weee\Helper\Data::class)
+        $this->weeeData = $this->getMockBuilder(Data::class)
             ->setMethods(
                 [
                     'getRowWeeeTaxInclTax',
@@ -61,28 +73,25 @@ class WeeeTest extends \PHPUnit\Framework\TestCase
             )->disableOriginalConstructor()
             ->getMock();
 
-        $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $this->objectManager = new ObjectManager($this);
         $serializer = $this->objectManager->getObject(Json::class);
-        /** @var \Magento\Sales\Model\Order\Invoice\Total\Tax $model */
+        /** @var Tax $model */
         $this->model = $this->objectManager->getObject(
-            \Magento\Weee\Model\Total\Creditmemo\Weee::class,
+            Weee::class,
             [
                 'weeeData' => $this->weeeData,
                 'serializer' => $serializer
             ]
         );
 
-        $this->order = $this->createPartialMock(\Magento\Sales\Model\Order::class, [
-                '__wakeup'
-            ]);
+        $this->order = $this->createMock(Order::class);
 
-        $this->creditmemo = $this->createPartialMock(\Magento\Sales\Model\Order\Creditmemo::class, [
-                'getAllItems',
-                'getInvoice',
-                'roundPrice',
-                'getStore',
-                '__wakeup',
-            ]);
+        $this->creditmemo = $this->createPartialMock(Creditmemo::class, [
+            'getAllItems',
+            'getInvoice',
+            'roundPrice',
+            'getStore',
+        ]);
     }
 
     /**
@@ -100,7 +109,7 @@ class WeeeTest extends \PHPUnit\Framework\TestCase
             ->willReturn($creditmemoData['include_in_subtotal']);
 
         //Set up invoice mock
-        /** @var \Magento\Sales\Model\Order\Invoice\Item[] $creditmemoItems */
+        /** @var Item[] $creditmemoItems */
         $creditmemoItems = [];
         foreach ($creditmemoData['items'] as $itemKey => $creditmemoItemData) {
             $creditmemoItems[$itemKey] = $this->getInvoiceItem($creditmemoItemData);
@@ -113,17 +122,15 @@ class WeeeTest extends \PHPUnit\Framework\TestCase
         }
         $this->creditmemo->expects($this->any())
             ->method('roundPrice')
-            ->willReturnCallback(
-                function ($price, $type) use (&$roundingDelta) {
-                    if (!isset($roundingDelta[$type])) {
-                        $roundingDelta[$type] = 0;
-                    }
-                    $roundedPrice = round($price + $roundingDelta[$type], 2);
-                    $roundingDelta[$type] = $price - $roundedPrice;
-
-                    return $roundedPrice;
+            ->willReturnCallback(function ($price, $type) use (&$roundingDelta) {
+                if (!isset($roundingDelta[$type])) {
+                    $roundingDelta[$type] = 0;
                 }
-            );
+                $roundedPrice = round($price + $roundingDelta[$type], 2);
+                $roundingDelta[$type] = $price - $roundedPrice;
+
+                return $roundedPrice;
+            });
 
         $this->model->collect($this->creditmemo);
 
@@ -132,7 +139,7 @@ class WeeeTest extends \PHPUnit\Framework\TestCase
             $this->assertEquals(
                 $value,
                 $this->creditmemo->getData($key),
-                'Creditmemo data field '.$key.' is incorrect'
+                'Creditmemo data field ' . $key . ' is incorrect'
             );
         }
         //verify invoice item data
@@ -146,7 +153,7 @@ class WeeeTest extends \PHPUnit\Framework\TestCase
                     $this->assertEquals(
                         $value,
                         $creditmemoItem->getData($key),
-                        'Creditmemo item field '.$key.' is incorrect'
+                        'Creditmemo item field ' . $key . ' is incorrect'
                     );
                 }
             }
@@ -485,15 +492,14 @@ class WeeeTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param $creditmemoItemData array
-     * @return \Magento\Sales\Model\Order\Creditmemo\Item|\PHPUnit\Framework\MockObject\MockObject
+     * @return \Magento\Sales\Model\Order\Creditmemo\Item|MockObject
      */
     protected function getInvoiceItem($creditmemoItemData)
     {
-        /** @var \Magento\Sales\Model\Order\Item|\PHPUnit\Framework\MockObject\MockObject $orderItem */
+        /** @var \Magento\Sales\Model\Order\Item|MockObject $orderItem */
         $orderItem = $this->createPartialMock(\Magento\Sales\Model\Order\Item::class, [
-                'isDummy',
-                '__wakeup'
-            ]);
+            'isDummy'
+        ]);
         foreach ($creditmemoItemData['order_item'] as $key => $value) {
             $orderItem->setData($key, $value);
         }
@@ -539,12 +545,11 @@ class WeeeTest extends \PHPUnit\Framework\TestCase
             ->with($orderItem)
             ->willReturn($orderItem->getBaseWeeeTaxAmountRefunded());
 
-        /** @var \Magento\Sales\Model\Order\Invoice\Item|\PHPUnit\Framework\MockObject\MockObject $invoiceItem */
-        $invoiceItem = $this->createPartialMock(\Magento\Sales\Model\Order\Invoice\Item::class, [
-                'getOrderItem',
-                'isLast',
-                '__wakeup'
-            ]);
+        /** @var Item|MockObject $invoiceItem */
+        $invoiceItem = $this->createPartialMock(Item::class, [
+            'getOrderItem',
+            'isLast'
+        ]);
         $invoiceItem->expects($this->any())->method('getOrderItem')->willReturn($orderItem);
         $invoiceItem->expects($this->any())
             ->method('isLast')
@@ -555,19 +560,15 @@ class WeeeTest extends \PHPUnit\Framework\TestCase
 
         $this->weeeData->expects($this->any())
             ->method('getApplied')
-            ->willReturnCallback(
-                function ($item) {
-                    return $item->getAppliedWeee();
-                }
-            );
+            ->willReturnCallback(function ($item) {
+                return $item->getAppliedWeee();
+            });
 
         $this->weeeData->expects($this->any())
             ->method('setApplied')
-            ->willReturnCallback(
-                function ($item, $weee) {
-                    return $item->setAppliedWeee($weee);
-                }
-            );
+            ->willReturnCallback(function ($item, $weee) {
+                return $item->setAppliedWeee($weee);
+            });
 
         return $invoiceItem;
     }

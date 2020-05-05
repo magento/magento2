@@ -3,26 +3,38 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Sales\Test\Unit\Block\Adminhtml\Order\Create\Sidebar;
 
-class AbstractSidebarTest extends \PHPUnit\Framework\TestCase
+use Magento\Catalog\Model\Product\Type;
+use Magento\Framework\DataObject;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Sales\Block\Adminhtml\Order\Create\Sidebar\AbstractSidebar;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class AbstractSidebarTest extends TestCase
 {
     /**
-     * @var \Magento\Sales\Block\Adminhtml\Order\Create\Sidebar\AbstractSidebar
+     * @var AbstractSidebar
      */
     protected $abstractSidebar;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $itemMock;
 
     protected function setUp(): void
     {
-        $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->itemMock = $this->createPartialMock(\Magento\Framework\DataObject::class, ['getQty']);
+        $helper = new ObjectManager($this);
+        $this->itemMock = $this->getMockBuilder(DataObject::class)
+            ->addMethods(['getQty'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->abstractSidebar = $helper->getObject(
-            \Magento\Sales\Block\Adminhtml\Order\Create\Sidebar\AbstractSidebar::class,
+            AbstractSidebar::class,
             []
         );
     }
@@ -49,7 +61,7 @@ class AbstractSidebarTest extends \PHPUnit\Framework\TestCase
 
     public function testIsConfigurationRequired()
     {
-        $productTypeMock = $this->createMock(\Magento\Catalog\Model\Product\Type::class);
-        $this->assertFalse($this->abstractSidebar->isConfigurationRequired($productTypeMock));
+        $productTypeMock = $this->createMock(Type::class);
+        $this->assertEquals(false, $this->abstractSidebar->isConfigurationRequired($productTypeMock));
     }
 }

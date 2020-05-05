@@ -8,17 +8,19 @@ declare(strict_types=1);
 namespace Magento\Elasticsearch\Test\Unit\Model\ResourceModel\Fulltext\Collection;
 
 use Magento\Elasticsearch\Model\ResourceModel\Fulltext\Collection\SearchCriteriaResolver;
-use Magento\Framework\Api\Search\SearchCriteriaBuilder;
 use Magento\Framework\Api\Search\SearchCriteria;
+use Magento\Framework\Api\Search\SearchCriteriaBuilder;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Unit test for SearchCriteriaResolver
  */
-class SearchCriteriaResolverTest extends \PHPUnit\Framework\TestCase
+class SearchCriteriaResolverTest extends TestCase
 {
     /**
-     * @var SearchCriteriaBuilder|\PHPUnit\Framework\MockObject\MockObject
+     * @var SearchCriteriaBuilder|MockObject
      */
     private $searchCriteriaBuilder;
 

@@ -3,32 +3,40 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Setup\Test\Unit\Model;
 
-class SearchTermDescriptionGeneratorTest extends \PHPUnit\Framework\TestCase
+use Magento\Setup\Model\Description\DescriptionGenerator;
+use Magento\Setup\Model\SearchTermDescriptionGenerator;
+use Magento\Setup\Model\SearchTermManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class SearchTermDescriptionGeneratorTest extends TestCase
 {
     /**
-     * @var \Magento\Setup\Model\SearchTermDescriptionGenerator
+     * @var SearchTermDescriptionGenerator
      */
     private $searchTermDescriptionGenerator;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Setup\Model\Description\DescriptionGenerator
+     * @var MockObject|DescriptionGenerator
      */
     private $descriptionGeneratorMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Setup\Model\SearchTermManager
+     * @var MockObject|SearchTermManager
      */
     private $searchTermManagerMock;
 
     protected function setUp(): void
     {
         $this->descriptionGeneratorMock =
-            $this->createMock(\Magento\Setup\Model\Description\DescriptionGenerator::class);
-        $this->searchTermManagerMock = $this->createMock(\Magento\Setup\Model\SearchTermManager::class);
+            $this->createMock(DescriptionGenerator::class);
+        $this->searchTermManagerMock = $this->createMock(SearchTermManager::class);
 
-        $this->searchTermDescriptionGenerator = new \Magento\Setup\Model\SearchTermDescriptionGenerator(
+        $this->searchTermDescriptionGenerator = new SearchTermDescriptionGenerator(
             $this->descriptionGeneratorMock,
             $this->searchTermManagerMock
         );

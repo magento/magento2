@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Braintree\Test\Unit\Model\Ui\Adminhtml\PayPal;
 
 use Magento\Braintree\Gateway\Config\PayPal\Config;
@@ -11,12 +13,13 @@ use Magento\Framework\UrlInterface;
 use Magento\Vault\Api\Data\PaymentTokenInterface;
 use Magento\Vault\Model\Ui\TokenUiComponentInterface;
 use Magento\Vault\Model\Ui\TokenUiComponentInterfaceFactory;
-use PHPUnit\Framework\MockObject\MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Contains methods to test PayPal token Ui component provider
  */
-class TokenUiComponentProviderTest extends \PHPUnit\Framework\TestCase
+class TokenUiComponentProviderTest extends TestCase
 {
     /**
      * @var TokenUiComponentInterfaceFactory|MockObject
@@ -45,7 +48,7 @@ class TokenUiComponentProviderTest extends \PHPUnit\Framework\TestCase
             ->setMethods(['create'])
             ->getMock();
 
-        $this->urlBuilder = $this->getMockForAbstractClass(UrlInterface::class);
+        $this->urlBuilder = $this->createMock(UrlInterface::class);
 
         $this->config = $this->getMockBuilder(Config::class)
             ->disableOriginalConstructor()
@@ -86,7 +89,7 @@ class TokenUiComponentProviderTest extends \PHPUnit\Framework\TestCase
             ->method('getPayPalIcon')
             ->willReturn($icon);
 
-        $paymentToken = $this->getMockForAbstractClass(PaymentTokenInterface::class);
+        $paymentToken = $this->createMock(PaymentTokenInterface::class);
         $paymentToken->expects(static::once())
             ->method('getTokenDetails')
             ->willReturn('{"payerEmail":" ' . $payerEmail . '"}');
@@ -98,7 +101,7 @@ class TokenUiComponentProviderTest extends \PHPUnit\Framework\TestCase
             ->method('getUrl')
             ->willReturn($nonceUrl);
 
-        $tokenComponent = $this->getMockForAbstractClass(TokenUiComponentInterface::class);
+        $tokenComponent = $this->createMock(TokenUiComponentInterface::class);
         $tokenComponent->expects(static::once())
             ->method('getConfig')
             ->willReturn($expected);

@@ -3,14 +3,17 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\ConfigurableProduct\Test\Unit\Model\Product\Type;
 
+use Magento\ConfigurableProduct\Model\Product\Type\VariationMatrix;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use PHPUnit\Framework\TestCase;
 
-class VariationMatrixTest extends \PHPUnit\Framework\TestCase
+class VariationMatrixTest extends TestCase
 {
-    /** @var \Magento\ConfigurableProduct\Model\Product\Type\VariationMatrix */
+    /** @var VariationMatrix */
     protected $model;
 
     /** @var ObjectManagerHelper */
@@ -21,7 +24,7 @@ class VariationMatrixTest extends \PHPUnit\Framework\TestCase
         $this->objectManagerHelper = new ObjectManagerHelper($this);
 
         $this->model = $this->objectManagerHelper->getObject(
-            \Magento\ConfigurableProduct\Model\Product\Type\VariationMatrix::class
+            VariationMatrix::class
         );
     }
 
@@ -33,7 +36,6 @@ class VariationMatrixTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetVariations($expectedResult)
     {
-
         $this->assertEquals($expectedResult['result'], $this->model->getVariations($expectedResult['input']));
     }
 

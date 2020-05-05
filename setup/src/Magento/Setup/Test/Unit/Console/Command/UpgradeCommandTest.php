@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Setup\Test\Unit\Console\Command;
 
 use Magento\Framework\App\DeploymentConfig;
@@ -11,27 +13,29 @@ use Magento\Framework\Console\Cli;
 use Magento\Setup\Console\Command\UpgradeCommand;
 use Magento\Setup\Model\Installer;
 use Magento\Setup\Model\InstallerFactory;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Tester\CommandTester;
 
-class UpgradeCommandTest extends \PHPUnit\Framework\TestCase
+class UpgradeCommandTest extends TestCase
 {
     /**
-     * @var DeploymentConfig|\PHPUnit\Framework\MockObject\MockObject
+     * @var DeploymentConfig|MockObject
      */
     private $deploymentConfigMock;
 
     /**
-     * @var InstallerFactory|\PHPUnit\Framework\MockObject\MockObject
+     * @var InstallerFactory|MockObject
      */
     private $installerFactoryMock;
 
     /**
-     * @var Installer|\PHPUnit\Framework\MockObject\MockObject
+     * @var Installer|MockObject
      */
     private $installerMock;
 
     /**
-     * @var AppState|\PHPUnit\Framework\MockObject\MockObject
+     * @var AppState|MockObject
      */
     private $appStateMock;
 

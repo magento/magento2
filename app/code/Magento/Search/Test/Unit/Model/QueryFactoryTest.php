@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Search\Test\Unit\Model;
 
 use Magento\Framework\App\Helper\Context;
@@ -13,13 +15,15 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Search\Helper\Data;
 use Magento\Search\Model\Query;
 use Magento\Search\Model\QueryFactory;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Class QueryFactoryTest tests Magento\Search\Model\QueryFactory
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class QueryFactoryTest extends \PHPUnit\Framework\TestCase
+class QueryFactoryTest extends TestCase
 {
     /**
      * @var QueryFactory
@@ -27,27 +31,27 @@ class QueryFactoryTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var Data|\PHPUnit\Framework\MockObject\MockObject
+     * @var Data|MockObject
      */
     private $queryHelper;
 
     /**
-     * @var RequestInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var RequestInterface|MockObject
      */
     private $request;
 
     /**
-     * @var StringUtils|\PHPUnit\Framework\MockObject\MockObject
+     * @var StringUtils|MockObject
      */
     private $string;
 
     /**
-     * @var ObjectManagerInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var ObjectManagerInterface|MockObject
      */
     private $objectManager;
 
     /**
-     * @var Query|\PHPUnit\Framework\MockObject\MockObject
+     * @var Query|MockObject
      */
     private $query;
 
@@ -75,7 +79,7 @@ class QueryFactoryTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
-        /** @var Context|\PHPUnit\Framework\MockObject\MockObject $context */
+        /** @var Context|MockObject $context */
         $context = $this->getMockBuilder(Context::class)
             ->disableOriginalConstructor()
             ->getMock();

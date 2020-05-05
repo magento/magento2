@@ -3,14 +3,16 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Webapi\Test\Unit\Controller\Rest;
 
 use Magento\Authorization\Model\UserContextInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Webapi\Controller\Rest\ParamOverriderCustomerId;
+use PHPUnit\Framework\TestCase;
 
-class ParamOverriderCustomerIdTest extends \PHPUnit\Framework\TestCase
+class ParamOverriderCustomerIdTest extends TestCase
 {
     /**
      * @var ParamOverriderCustomerId
@@ -24,16 +26,16 @@ class ParamOverriderCustomerIdTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp(): void
     {
-        $this->userContext = $this->getMockBuilder(\Magento\Authorization\Model\UserContextInterface::class)
+        $this->userContext = $this->getMockBuilder(UserContextInterface::class)
             ->getMockForAbstractClass();
         $this->model = (new ObjectManager($this))->getObject(
-            \Magento\Webapi\Controller\Rest\ParamOverriderCustomerId::class,
+            ParamOverriderCustomerId::class,
             [
                 'userContext' => $this->userContext
             ]
         );
     }
-    
+
     public function testGetOverriddenValueIsCustomer()
     {
         $retValue = 'retValue';

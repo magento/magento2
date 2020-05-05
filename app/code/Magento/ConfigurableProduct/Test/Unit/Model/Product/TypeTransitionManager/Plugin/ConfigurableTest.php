@@ -3,43 +3,52 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\ConfigurableProduct\Test\Unit\Model\Product\TypeTransitionManager\Plugin;
 
-class ConfigurableTest extends \PHPUnit\Framework\TestCase
+use Magento\Catalog\Model\Product;
+use Magento\Catalog\Model\Product\TypeTransitionManager;
+use Magento\ConfigurableProduct\Model\Product\TypeTransitionManager\Plugin\Configurable;
+use Magento\Framework\App\Request\Http;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class ConfigurableTest extends TestCase
 {
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $requestMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $closureMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $productMock;
 
     /**
-     * @var \Magento\ConfigurableProduct\Model\Product\TypeTransitionManager\Plugin\Configurable
+     * @var Configurable
      */
     protected $model;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $subjectMock;
 
     protected function setUp(): void
     {
-        $this->requestMock = $this->createMock(\Magento\Framework\App\Request\Http::class);
-        $this->model = new \Magento\ConfigurableProduct\Model\Product\TypeTransitionManager\Plugin\Configurable(
+        $this->requestMock = $this->createMock(Http::class);
+        $this->model = new Configurable(
             $this->requestMock
         );
-        $this->productMock = $this->createPartialMock(\Magento\Catalog\Model\Product::class, ['setTypeId', '__wakeup']);
-        $this->subjectMock = $this->createMock(\Magento\Catalog\Model\Product\TypeTransitionManager::class);
+        $this->productMock = $this->createPartialMock(Product::class, ['setTypeId']);
+        $this->subjectMock = $this->createMock(TypeTransitionManager::class);
         $this->closureMock = function () {
             return 'Expected';
         };

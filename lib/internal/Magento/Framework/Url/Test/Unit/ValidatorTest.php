@@ -3,16 +3,21 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\Url\Test\Unit;
 
+use Laminas\Validator\Uri;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\Url\Validator;
+use PHPUnit\Framework\TestCase;
 
-class ValidatorTest extends \PHPUnit\Framework\TestCase
+class ValidatorTest extends TestCase
 {
-    /** @var \Magento\Framework\Url\Validator */
+    /** @var Validator */
     protected $object;
 
-    /** @var \Laminas\Validator\Uri */
+    /** @var Uri */
     protected $laminasValidator;
 
     /** @var string[] */
@@ -22,9 +27,9 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
     {
         $objectManager = new ObjectManager($this);
 
-        $this->laminasValidator = $this->createMock(\Laminas\Validator\Uri::class);
+        $this->laminasValidator = $this->createMock(Uri::class);
         $this->object = $objectManager->getObject(
-            \Magento\Framework\Url\Validator::class,
+            Validator::class,
             ['validator' => $this->laminasValidator]
         );
     }

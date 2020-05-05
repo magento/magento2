@@ -3,42 +3,51 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Analytics\Test\Unit\ReportXml\DB\Assembler;
 
+use Magento\Analytics\ReportXml\DB\Assembler\FromAssembler;
+use Magento\Analytics\ReportXml\DB\ColumnsResolver;
+use Magento\Analytics\ReportXml\DB\NameResolver;
+use Magento\Analytics\ReportXml\DB\SelectBuilder;
 use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * A unit test for testing of the 'from' assembler.
  */
-class FromAssemblerTest extends \PHPUnit\Framework\TestCase
+class FromAssemblerTest extends TestCase
 {
     /**
-     * @var \Magento\Analytics\ReportXml\DB\Assembler\FromAssembler
+     * @var FromAssembler
      */
     private $subject;
 
     /**
-     * @var \Magento\Analytics\ReportXml\DB\NameResolver|\PHPUnit\Framework\MockObject\MockObject
+     * @var NameResolver|MockObject
      */
     private $nameResolverMock;
 
     /**
-     * @var \Magento\Analytics\ReportXml\DB\SelectBuilder|\PHPUnit\Framework\MockObject\MockObject
+     * @var SelectBuilder|MockObject
      */
     private $selectBuilderMock;
 
     /**
-     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
+     * @var ObjectManager
      */
     private $objectManagerHelper;
 
     /**
-     * @var \Magento\Analytics\ReportXml\DB\ColumnsResolver|\PHPUnit\Framework\MockObject\MockObject
+     * @var ColumnsResolver|MockObject
      */
     private $columnsResolverMock;
 
     /**
-     * @var ResourceConnection|\PHPUnit\Framework\MockObject\MockObject
+     * @var ResourceConnection|MockObject
      */
     private $resourceConnection;
 
@@ -47,36 +56,22 @@ class FromAssemblerTest extends \PHPUnit\Framework\TestCase
      */
     protected function setUp(): void
     {
-        $this->nameResolverMock = $this->getMockBuilder(
-            \Magento\Analytics\ReportXml\DB\NameResolver::class
-        )
-        ->disableOriginalConstructor()
-        ->getMock();
+        $this->nameResolverMock = $this->createMock(NameResolver::class);
 
-        $this->selectBuilderMock = $this->getMockBuilder(
-            \Magento\Analytics\ReportXml\DB\SelectBuilder::class
-        )
-        ->disableOriginalConstructor()
-        ->getMock();
-        $this->selectBuilderMock->expects($this->any())
+        $this->selectBuilderMock = $this->createMock(SelectBuilder::class);
+        $this->selectBuilderMock
             ->method('getColumns')
             ->willReturn([]);
 
-        $this->columnsResolverMock = $this->getMockBuilder(
-            \Magento\Analytics\ReportXml\DB\ColumnsResolver::class
-        )
-        ->disableOriginalConstructor()
-        ->getMock();
+        $this->columnsResolverMock = $this->createMock(ColumnsResolver::class);
 
-        $this->resourceConnection = $this->getMockBuilder(ResourceConnection::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->resourceConnection = $this->createMock(ResourceConnection::class);
 
         $this->objectManagerHelper =
-            new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+            new ObjectManager($this);
 
         $this->subject = $this->objectManagerHelper->getObject(
-            \Magento\Analytics\ReportXml\DB\Assembler\FromAssembler::class,
+            FromAssembler::class,
             [
                 'nameResolver' => $this->nameResolverMock,
                 'columnsResolver' => $this->columnsResolverMock,
@@ -93,7 +88,7 @@ class FromAssemblerTest extends \PHPUnit\Framework\TestCase
      */
     public function testAssemble(array $queryConfig, $tableName)
     {
-        $this->nameResolverMock->expects($this->any())
+        $this->nameResolverMock
             ->method('getAlias')
             ->with($queryConfig['source'])
             ->willReturn($queryConfig['source']['alias']);

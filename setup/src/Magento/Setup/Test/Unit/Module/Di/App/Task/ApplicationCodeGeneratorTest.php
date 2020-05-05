@@ -3,40 +3,45 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Setup\Test\Unit\Module\Di\App\Task;
 
 use Magento\Setup\Module\Di\App\Task\Operation\ApplicationCodeGenerator;
-use Magento\Setup\Module\Di\Code\Scanner;
 use Magento\Setup\Module\Di\Code\Reader\ClassesScanner;
+use Magento\Setup\Module\Di\Code\Scanner;
+use Magento\Setup\Module\Di\Code\Scanner\DirectoryScanner;
+use Magento\Setup\Module\Di\Code\Scanner\PhpScanner;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class ApplicationCodeGeneratorTest extends \PHPUnit\Framework\TestCase
+class ApplicationCodeGeneratorTest extends TestCase
 {
     /**
-     * @var Scanner\DirectoryScanner | \PHPUnit\Framework\MockObject\MockObject
+     * @var Scanner\DirectoryScanner|MockObject
      */
     private $directoryScannerMock;
 
     /**
-     * @var Scanner\PhpScanner | \PHPUnit\Framework\MockObject\MockObject
+     * @var Scanner\PhpScanner|MockObject
      */
     private $phpScannerMock;
 
     /**
-     * @var ClassesScanner | \PHPUnit\Framework\MockObject\MockObject
+     * @var ClassesScanner|MockObject
      */
     private $classesScannerMock;
 
     protected function setUp(): void
     {
         $this->directoryScannerMock = $this->getMockBuilder(
-            \Magento\Setup\Module\Di\Code\Scanner\DirectoryScanner::class
+            DirectoryScanner::class
         )->disableOriginalConstructor()
             ->getMock();
-        $this->phpScannerMock = $this->getMockBuilder(\Magento\Setup\Module\Di\Code\Scanner\PhpScanner::class)
+        $this->phpScannerMock = $this->getMockBuilder(PhpScanner::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->classesScannerMock = $this->getMockBuilder(\Magento\Setup\Module\Di\Code\Reader\ClassesScanner::class)
+        $this->classesScannerMock = $this->getMockBuilder(ClassesScanner::class)
             ->disableOriginalConstructor()
             ->getMock();
     }

@@ -3,19 +3,26 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\ConfigurableProduct\Test\Unit\Model;
 
+use Magento\Catalog\Api\Data\ProductOptionExtensionInterface;
+use Magento\Catalog\Api\Data\ProductOptionInterface;
 use Magento\ConfigurableProduct\Api\Data\ConfigurableItemOptionValueInterface;
 use Magento\ConfigurableProduct\Model\ProductOptionProcessor;
+use Magento\ConfigurableProduct\Model\Quote\Item\ConfigurableItemOptionValue;
 use Magento\ConfigurableProduct\Model\Quote\Item\ConfigurableItemOptionValueFactory;
 use Magento\Framework\DataObject;
 use Magento\Framework\DataObject\Factory as DataObjectFactory;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ProductOptionProcessorTest extends \PHPUnit\Framework\TestCase
+class ProductOptionProcessorTest extends TestCase
 {
     /**
      * @var ProductOptionProcessor
@@ -23,28 +30,28 @@ class ProductOptionProcessorTest extends \PHPUnit\Framework\TestCase
     protected $processor;
 
     /**
-     * @var DataObject | \PHPUnit\Framework\MockObject\MockObject
+     * @var DataObject|MockObject
      */
     protected $dataObject;
 
     /**
-     * @var DataObjectFactory | \PHPUnit\Framework\MockObject\MockObject
+     * @var DataObjectFactory|MockObject
      */
     protected $dataObjectFactory;
 
     /**
-     * @var ConfigurableItemOptionValueFactory | \PHPUnit\Framework\MockObject\MockObject
+     * @var ConfigurableItemOptionValueFactory|MockObject
      */
     protected $itemOptionValueFactory;
 
     /**
-     * @var ConfigurableItemOptionValueInterface | \PHPUnit\Framework\MockObject\MockObject
+     * @var ConfigurableItemOptionValueInterface|MockObject
      */
     protected $itemOptionValue;
 
     protected function setUp(): void
     {
-        $this->dataObject = $this->getMockBuilder(\Magento\Framework\DataObject::class)
+        $this->dataObject = $this->getMockBuilder(DataObject::class)
             ->setMethods([
                 'getSuperAttribute', 'addData'
             ])
@@ -60,12 +67,12 @@ class ProductOptionProcessorTest extends \PHPUnit\Framework\TestCase
             ->willReturn($this->dataObject);
 
         $this->itemOptionValue = $this->getMockBuilder(
-            \Magento\ConfigurableProduct\Api\Data\ConfigurableItemOptionValueInterface::class
+            ConfigurableItemOptionValueInterface::class
         )
             ->getMockForAbstractClass();
 
         $this->itemOptionValueFactory = $this->getMockBuilder(
-            \Magento\ConfigurableProduct\Model\Quote\Item\ConfigurableItemOptionValueFactory::class
+            ConfigurableItemOptionValueFactory::class
         )
             ->setMethods(['create'])
             ->disableOriginalConstructor()
@@ -89,11 +96,11 @@ class ProductOptionProcessorTest extends \PHPUnit\Framework\TestCase
         $options,
         $requestData
     ) {
-        $productOptionMock = $this->getMockBuilder(\Magento\Catalog\Api\Data\ProductOptionInterface::class)
+        $productOptionMock = $this->getMockBuilder(ProductOptionInterface::class)
             ->getMockForAbstractClass();
 
         $productOptionExtensionMock = $this->getMockBuilder(
-            \Magento\Catalog\Api\Data\ProductOptionExtensionInterface::class
+            ProductOptionExtensionInterface::class
         )
             ->setMethods([
                 'getConfigurableItemOptions',
@@ -123,9 +130,9 @@ class ProductOptionProcessorTest extends \PHPUnit\Framework\TestCase
     {
         $objectManager = new ObjectManager($this);
 
-        /** @var \Magento\ConfigurableProduct\Model\Quote\Item\ConfigurableItemOptionValue $option */
+        /** @var ConfigurableItemOptionValue $option */
         $option = $objectManager->getObject(
-            \Magento\ConfigurableProduct\Model\Quote\Item\ConfigurableItemOptionValue::class
+            ConfigurableItemOptionValue::class
         );
         $option->setOptionId(1);
         $option->setOptionValue('test');

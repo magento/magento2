@@ -8,11 +8,11 @@ declare(strict_types=1);
 
 namespace Magento\Customer\Test\Unit\CustomerData;
 
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Customer\CustomerData\Customer as CustomerData;
 use Magento\Customer\Helper\Session\CurrentCustomer;
 use Magento\Customer\Helper\View;
-use Magento\Customer\Api\Data\CustomerInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use PHPUnit\Framework\TestCase;
 
 class CustomerTest extends TestCase

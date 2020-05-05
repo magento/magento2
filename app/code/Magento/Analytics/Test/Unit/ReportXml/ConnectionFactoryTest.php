@@ -3,34 +3,38 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Analytics\Test\Unit\ReportXml;
 
 use Magento\Analytics\ReportXml\ConnectionFactory;
 use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Adapter\Pdo\Mysql as MysqlPdoAdapter;
 use Magento\Framework\ObjectManagerInterface;
-use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class ConnectionFactoryTest extends \PHPUnit\Framework\TestCase
+class ConnectionFactoryTest extends TestCase
 {
     /**
-     * @var ResourceConnection|\PHPUnit\Framework\MockObject\MockObject
+     * @var ResourceConnection|MockObject
      */
     private $resourceConnectionMock;
 
     /**
-     * @var ObjectManagerInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var ObjectManagerInterface|MockObject
      */
     private $objectManagerMock;
 
     /**
-     * @var ConnectionFactory|\PHPUnit\Framework\MockObject\MockObject
+     * @var ConnectionFactory|MockObject
      */
     private $connectionNewMock;
 
     /**
-     * @var AdapterInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var AdapterInterface|MockObject
      */
     private $connectionMock;
 
@@ -49,21 +53,13 @@ class ConnectionFactoryTest extends \PHPUnit\Framework\TestCase
      */
     protected function setUp(): void
     {
-        $this->resourceConnectionMock = $this->getMockBuilder(ResourceConnection::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->resourceConnectionMock = $this->createMock(ResourceConnection::class);
 
-        $this->objectManagerMock = $this->getMockBuilder(ObjectManagerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->objectManagerMock = $this->createMock(ObjectManagerInterface::class);
 
-        $this->connectionMock = $this->getMockBuilder(MysqlPdoAdapter::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->connectionMock = $this->createMock(MysqlPdoAdapter::class);
 
-        $this->connectionNewMock = $this->getMockBuilder(MysqlPdoAdapter::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->connectionNewMock = $this->createMock(MysqlPdoAdapter::class);
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
 

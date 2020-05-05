@@ -3,20 +3,26 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Catalog\Test\Unit\Helper\Product\Edit\Action;
 
-/**
- * Class AttributeTest
- */
-class AttributeTest extends \PHPUnit\Framework\TestCase
+use Magento\Catalog\Helper\Product\Edit\Action\Attribute;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Store\Model\Store;
+use Magento\Store\Model\StoreManagerInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class AttributeTest extends TestCase
 {
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var StoreManagerInterface|MockObject
      */
     protected $storeManagerMock;
 
     /**
-     * @var \Magento\Catalog\Helper\Product\Edit\Action\Attribute
+     * @var Attribute
      */
     protected $attribute;
 
@@ -27,17 +33,17 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
      */
     protected function setUp(): void
     {
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $objectManager = new ObjectManager($this);
 
         $this->storeManagerMock = $this->getMockForAbstractClass(
-            \Magento\Store\Model\StoreManagerInterface::class,
+            StoreManagerInterface::class,
             [],
             '',
             false
         );
 
         $this->attribute = $objectManager->getObject(
-            \Magento\Catalog\Helper\Product\Edit\Action\Attribute::class,
+            Attribute::class,
             [
                 'storeManager' => $this->storeManagerMock
             ]
@@ -53,7 +59,7 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
     {
         $storeId = 20;
 
-        $storeMock = $this->createPartialMock(\Magento\Store\Model\Store::class, ['getWebsiteId']);
+        $storeMock = $this->createPartialMock(Store::class, ['getWebsiteId']);
 
         $this->storeManagerMock->expects($this->once())
             ->method('getStore')

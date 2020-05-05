@@ -3,23 +3,30 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Integration\Test\Unit\Helper\Oauth;
 
-class DataTest extends \PHPUnit\Framework\TestCase
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Integration\Helper\Oauth\Data;
+use PHPUnit\Framework\TestCase;
+
+class DataTest extends TestCase
 {
-    /** @var \Magento\Framework\App\Config\ScopeConfigInterface */
+    /** @var ScopeConfigInterface */
     protected $_scopeConfigMock;
 
-    /** @var \Magento\Integration\Helper\Oauth\Data */
+    /** @var Data */
     protected $_dataHelper;
 
     protected function setUp(): void
     {
         $this->_scopeConfigMock = $this->getMockBuilder(
-            \Magento\Framework\App\Config\ScopeConfigInterface::class
-        )->disableOriginalConstructor()->getMock();
+            ScopeConfigInterface::class
+        )->disableOriginalConstructor()
+            ->getMock();
 
-        $this->_dataHelper = new \Magento\Integration\Helper\Oauth\Data($this->_scopeConfigMock);
+        $this->_dataHelper = new Data($this->_scopeConfigMock);
     }
 
     protected function tearDown(): void
@@ -44,7 +51,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
     {
         $this->_scopeConfigMock->expects($this->once())->method('getValue')->willReturn(0);
         $this->assertEquals(
-            \Magento\Integration\Helper\Oauth\Data::CLEANUP_EXPIRATION_PERIOD_DEFAULT,
+            Data::CLEANUP_EXPIRATION_PERIOD_DEFAULT,
             $this->_dataHelper->getCleanupExpirationPeriod()
         );
     }
@@ -71,7 +78,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
     {
         $this->_scopeConfigMock->expects($this->once())->method('getValue')->willReturn(0);
         $this->assertEquals(
-            \Magento\Integration\Helper\Oauth\Data::CONSUMER_POST_TIMEOUT_DEFAULT,
+            Data::CONSUMER_POST_TIMEOUT_DEFAULT,
             $this->_dataHelper->getConsumerPostTimeout()
         );
     }

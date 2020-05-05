@@ -3,18 +3,22 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Rss\Test\Unit\Block;
 
+use Magento\Framework\App\Rss\DataProviderInterface;
+use Magento\Framework\App\Rss\RssManagerInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Framework\View\Element\Template\Context;
+use Magento\Rss\Block\Feeds;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-/**
- * Class FeedsTest
- * @package Magento\Rss\Block
- */
-class FeedsTest extends \PHPUnit\Framework\TestCase
+class FeedsTest extends TestCase
 {
     /**
-     * @var \Magento\Rss\Block\Feeds
+     * @var Feeds
      */
     protected $block;
 
@@ -24,23 +28,23 @@ class FeedsTest extends \PHPUnit\Framework\TestCase
     protected $objectManagerHelper;
 
     /**
-     * @var \Magento\Framework\View\Element\Template\Context|\PHPUnit\Framework\MockObject\MockObject
+     * @var Context|MockObject
      */
     protected $context;
 
     /**
-     * @var \Magento\Framework\App\Rss\RssManagerInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var RssManagerInterface|MockObject
      */
     protected $rssManagerInterface;
 
     protected function setUp(): void
     {
-        $this->context = $this->createMock(\Magento\Framework\View\Element\Template\Context::class);
-        $this->rssManagerInterface = $this->createMock(\Magento\Framework\App\Rss\RssManagerInterface::class);
+        $this->context = $this->createMock(Context::class);
+        $this->rssManagerInterface = $this->createMock(RssManagerInterface::class);
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->block = $this->objectManagerHelper->getObject(
-            \Magento\Rss\Block\Feeds::class,
+            Feeds::class,
             [
                 'context' => $this->context,
                 'rssManager' => $this->rssManagerInterface
@@ -50,8 +54,8 @@ class FeedsTest extends \PHPUnit\Framework\TestCase
 
     public function testGetFeeds()
     {
-        $provider1 = $this->createMock(\Magento\Framework\App\Rss\DataProviderInterface::class);
-        $provider2 = $this->createMock(\Magento\Framework\App\Rss\DataProviderInterface::class);
+        $provider1 = $this->createMock(DataProviderInterface::class);
+        $provider2 = $this->createMock(DataProviderInterface::class);
         $feed1 = [
             'group' => 'Some Group',
             'feeds' => [

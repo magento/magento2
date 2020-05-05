@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\Logger\Test\Unit\Handler;
 
 use Magento\Framework\Filesystem\DriverInterface;
@@ -10,8 +12,9 @@ use Magento\Framework\Logger\Handler\Exception;
 use Magento\Framework\Logger\Handler\System;
 use Monolog\Logger;
 use PHPUnit\Framework\MockObject\MockObject as Mock;
+use PHPUnit\Framework\TestCase;
 
-class SystemTest extends \PHPUnit\Framework\TestCase
+class SystemTest extends TestCase
 {
     /**
      * @var System

@@ -3,30 +3,47 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Eav\Test\Unit\Model\ResourceModel\Entity;
 
+use Magento\Catalog\Model\Product\Attribute\Source\Status;
+use Magento\Eav\Model\Config;
+use Magento\Eav\Model\Entity\Attribute\Source\Table;
+use Magento\Eav\Model\ResourceModel\Entity\Attribute;
+use Magento\Eav\Model\ResourceModel\Entity\Type;
+use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\DataObject;
+use Magento\Framework\DB\Adapter\Pdo\Mysql;
+use Magento\Framework\DB\Select;
+use Magento\Framework\Event\ManagerInterface;
+use Magento\Framework\Model\AbstractModel;
+use Magento\Framework\Model\Context;
+use Magento\Framework\Model\ResourceModel\Db\ObjectRelationProcessor;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Store\Model\StoreManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class AttributeTest extends \PHPUnit\Framework\TestCase
+class AttributeTest extends TestCase
 {
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $selectMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $contextMock;
 
     protected function setUp(): void
     {
-        $this->contextMock = $this->createMock(\Magento\Framework\Model\Context::class);
-        $eventManagerMock = $this->createMock(\Magento\Framework\Event\ManagerInterface::class);
+        $this->contextMock = $this->createMock(Context::class);
+        $eventManagerMock = $this->createMock(ManagerInterface::class);
         $eventManagerMock->expects($this->any())->method('dispatch');
         $this->contextMock->expects($this->any())->method('getEventDispatcher')->willReturn($eventManagerMock);
     }
@@ -36,7 +53,7 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
      */
     public function testSaveOptionSystemAttribute()
     {
-        /** @var $connectionMock \PHPUnit\Framework\MockObject\MockObject */
+        /** @var MockObject $connectionMock */
         /** @var $resourceModel \Magento\Eav\Model\ResourceModel\Entity\Attribute */
         list($connectionMock, $resourceModel) = $this->_prepareResourceModel();
 
@@ -49,19 +66,19 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
             'frontend_input' => 'select',
             'frontend_label' => 'Status',
             'frontend_class' => null,
-            'source_model' => \Magento\Catalog\Model\Product\Attribute\Source\Status::class,
+            'source_model' => Status::class,
             'is_required' => 1,
             'is_user_defined' => 0,
             'is_unique' => 0
         ];
 
-        $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        /** @var $model \Magento\Framework\Model\AbstractModel */
-        $arguments = $objectManagerHelper->getConstructArguments(\Magento\Framework\Model\AbstractModel::class);
+        $objectManagerHelper = new ObjectManager($this);
+        /** @var AbstractModel $model */
+        $arguments = $objectManagerHelper->getConstructArguments(AbstractModel::class);
         $arguments['data'] = $attributeData;
         $arguments['context'] = $this->contextMock;
 
-        $model = $this->getMockBuilder(\Magento\Framework\Model\AbstractModel::class)
+        $model = $this->getMockBuilder(AbstractModel::class)
             ->setMethods(['hasDataChanges'])
             ->setConstructorArgs($arguments)
             ->getMock();
@@ -73,16 +90,16 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
             $this->once()
         )->method(
             'insert'
-        )->willReturnMap(
-            [['eav_attribute', $attributeData, 1]]
+        )->will(
+            $this->returnValueMap([['eav_attribute', $attributeData, 1]])
         );
 
         $connectionMock->expects(
             $this->once()
         )->method(
             'fetchRow'
-        )->willReturnMap(
-            
+        )->will(
+            $this->returnValueMap(
                 [
                     [
                         'SELECT `eav_attribute`.* FROM `eav_attribute` ' .
@@ -90,7 +107,7 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
                         $attributeData,
                     ],
                 ]
-            
+            )
         );
         $connectionMock->expects(
             $this->once()
@@ -111,7 +128,7 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
      */
     public function testSaveOptionNewUserDefinedAttribute()
     {
-        /** @var $connectionMock \PHPUnit\Framework\MockObject\MockObject */
+        /** @var MockObject $connectionMock */
         /** @var $resourceModel \Magento\Eav\Model\ResourceModel\Entity\Attribute */
         list($connectionMock, $resourceModel) = $this->_prepareResourceModel();
 
@@ -123,18 +140,18 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
             'frontend_input' => 'select',
             'frontend_label' => 'A Dropdown',
             'frontend_class' => null,
-            'source_model' => \Magento\Eav\Model\Entity\Attribute\Source\Table::class,
+            'source_model' => Table::class,
             'is_required' => 0,
             'is_user_defined' => 1,
             'is_unique' => 0,
         ];
 
-        $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        /** @var $model \Magento\Framework\Model\AbstractModel */
-        $arguments = $objectManagerHelper->getConstructArguments(\Magento\Framework\Model\AbstractModel::class);
+        $objectManagerHelper = new ObjectManager($this);
+        /** @var AbstractModel $model */
+        $arguments = $objectManagerHelper->getConstructArguments(AbstractModel::class);
         $arguments['data'] = $attributeData;
         $arguments['context'] = $this->contextMock;
-        $model = $this->getMockBuilder(\Magento\Framework\Model\AbstractModel::class)
+        $model = $this->getMockBuilder(AbstractModel::class)
             ->setMethods(['hasDataChanges'])
             ->setConstructorArgs($arguments)
             ->getMock();
@@ -146,24 +163,24 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
             $this->any()
         )->method(
             'lastInsertId'
-        )->willReturnMap(
-            [['eav_attribute', 123], ['eav_attribute_option_value', 321]]
+        )->will(
+            $this->returnValueMap([['eav_attribute', 123], ['eav_attribute_option_value', 321]])
         );
         $connectionMock->expects(
             $this->once()
         )->method(
             'update'
-        )->willReturnMap(
-            
+        )->will(
+            $this->returnValueMap(
                 [['eav_attribute', ['default_value' => ''], ['attribute_id = ?' => 123], 1]]
-            
+            )
         );
         $connectionMock->expects(
             $this->once()
         )->method(
             'fetchRow'
-        )->willReturnMap(
-            
+        )->will(
+            $this->returnValueMap(
                 [
                     [
                         'SELECT `eav_attribute`.* FROM `eav_attribute` ' .
@@ -171,21 +188,21 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
                         false,
                     ],
                 ]
-            
+            )
         );
         $connectionMock->expects(
             $this->once()
         )->method(
             'delete'
-        )->willReturnMap(
-            [['eav_attribute_option_value', ['option_id = ?' => ''], 0]]
+        )->will(
+            $this->returnValueMap([['eav_attribute_option_value', ['option_id = ?' => ''], 0]])
         );
         $connectionMock->expects(
             $this->exactly(4)
         )->method(
             'insert'
-        )->willReturnMap(
-            
+        )->will(
+            $this->returnValueMap(
                 [
                     ['eav_attribute', $attributeData, 1],
                     ['eav_attribute_option', ['attribute_id' => 123, 'sort_order' => 0], 1],
@@ -200,7 +217,7 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
                         1
                     ],
                 ]
-            
+            )
         );
         $connectionMock->expects($this->any())->method('getTransactionLevel')->willReturn(1);
 
@@ -212,15 +229,15 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
      */
     public function testSaveOptionNoValue()
     {
-        /** @var $connectionMock \PHPUnit\Framework\MockObject\MockObject */
+        /** @var MockObject $connectionMock */
         /** @var $resourceModel \Magento\Eav\Model\ResourceModel\Entity\Attribute */
         list($connectionMock, $resourceModel) = $this->_prepareResourceModel();
 
-        $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        /** @var $model \Magento\Framework\Model\AbstractModel */
-        $arguments = $objectManagerHelper->getConstructArguments(\Magento\Framework\Model\AbstractModel::class);
+        $objectManagerHelper = new ObjectManager($this);
+        /** @var AbstractModel $model */
+        $arguments = $objectManagerHelper->getConstructArguments(AbstractModel::class);
         $arguments['context'] = $this->contextMock;
-        $model = $this->getMockBuilder(\Magento\Framework\Model\AbstractModel::class)
+        $model = $this->getMockBuilder(AbstractModel::class)
             ->setMethods(['hasDataChanges'])
             ->setConstructorArgs($arguments)
             ->getMock();
@@ -242,21 +259,25 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
      */
     protected function _prepareResourceModel()
     {
-        $connectionMock = $this->createPartialMock(\Magento\Framework\DB\Adapter\Pdo\Mysql::class, [
-                '_connect',
-                'delete',
-                'describeTable',
-                'fetchRow',
-                'insert',
-                'lastInsertId',
-                'quote',
-                'update',
-                'beginTransaction',
-                'commit',
-                'rollback',
-                'select',
-                'getTransactionLevel'
-            ]);
+        $connectionMock = $this->getMockBuilder(Mysql::class)
+            ->onlyMethods(
+                [
+                    'delete',
+                    'rollback',
+                    'describeTable',
+                    'fetchRow',
+                    'insert',
+                    'lastInsertId',
+                    'quote',
+                    'update',
+                    'beginTransaction',
+                    'commit',
+                    'select',
+                    'getTransactionLevel'
+                ]
+            )
+            ->disableOriginalConstructor()
+            ->getMock();
         $connectionMock->expects(
             $this->any()
         )->method(
@@ -271,16 +292,14 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
         )->method(
             'quote'
         )->willReturnMap(
-            
-                [
-                    [123, 123],
-                    ['4', '"4"'],
-                    ['a_dropdown', '"a_dropdown"'],
-                    ['status', '"status"'],
-                ]
-            
+            [
+                [123, 123],
+                ['4', '"4"'],
+                ['a_dropdown', '"a_dropdown"'],
+                ['status', '"status"'],
+            ]
         );
-        $this->selectMock = $this->createMock(\Magento\Framework\DB\Select::class);
+        $this->selectMock = $this->createMock(Select::class);
         $connectionMock->expects(
             $this->any()
         )->method(
@@ -291,7 +310,7 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
         $this->selectMock->expects($this->any())->method('from')->willReturnSelf();
         $this->selectMock->expects($this->any())->method('where')->willReturnSelf();
 
-        $storeManager = $this->createPartialMock(\Magento\Store\Model\StoreManager::class, ['getStores']);
+        $storeManager = $this->createPartialMock(StoreManager::class, ['getStores']);
         $storeManager->expects(
             $this->any()
         )->method(
@@ -299,36 +318,36 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
         )->with(
             true
         )->willReturn(
-            
-                [
-                    new \Magento\Framework\DataObject(['id' => 0]),
-                    new \Magento\Framework\DataObject(['id' => 1])
-                ]
-            
+            [
+                new DataObject(['id' => 0]),
+                new DataObject(['id' => 1])
+            ]
         );
 
         /** @var $resource \Magento\Framework\App\ResourceConnection */
-        $resource = $this->createMock(\Magento\Framework\App\ResourceConnection::class);
+        $resource = $this->createMock(ResourceConnection::class);
         $resource->expects($this->any())->method('getTableName')->willReturnArgument(0);
         $resource->expects($this->any())->method('getConnection')->with()->willReturn($connectionMock);
-        $eavEntityType = $this->createMock(\Magento\Eav\Model\ResourceModel\Entity\Type::class);
+        $eavEntityType = $this->createMock(Type::class);
 
         $relationProcessorMock = $this->createMock(
-            \Magento\Framework\Model\ResourceModel\Db\ObjectRelationProcessor::class
+            ObjectRelationProcessor::class
         );
 
         $contextMock = $this->createMock(\Magento\Framework\Model\ResourceModel\Db\Context::class);
         $contextMock->expects($this->once())->method('getResources')->willReturn($resource);
         $contextMock->expects($this->once())->method('getObjectRelationProcessor')->willReturn($relationProcessorMock);
 
-        $configMock = $this->getMockBuilder(\Magento\Eav\Model\Config::class)->disableOriginalConstructor()->getMock();
+        $configMock = $this->getMockBuilder(Config::class)
+            ->disableOriginalConstructor()
+            ->getMock();
         $arguments = [
             'context' => $contextMock,
             'storeManager' => $storeManager,
             'eavEntityType' => $eavEntityType,
         ];
         $helper = new ObjectManager($this);
-        $resourceModel = $helper->getObject(\Magento\Eav\Model\ResourceModel\Entity\Attribute::class, $arguments);
+        $resourceModel = $helper->getObject(Attribute::class, $arguments);
         $helper->setBackwardCompatibleProperty(
             $resourceModel,
             'config',

@@ -3,17 +3,21 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\Config\Test\Unit\Dom;
 
 use Magento\Framework\Config\Dom\ArrayNodeConfig;
 use Magento\Framework\Config\Dom\NodePathMatcher;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test for
  *
  * @see ArrayNodeConfig
  */
-class ArrayNodeConfigTest extends \PHPUnit\Framework\TestCase
+class ArrayNodeConfigTest extends TestCase
 {
     /**
      * @var ArrayNodeConfig
@@ -21,7 +25,7 @@ class ArrayNodeConfigTest extends \PHPUnit\Framework\TestCase
     protected $object;
 
     /**
-     * @var NodePathMatcher|\PHPUnit\Framework\MockObject\MockObject
+     * @var NodePathMatcher|MockObject
      */
     protected $nodePathMatcher;
 

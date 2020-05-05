@@ -3,23 +3,33 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\Url\Test\Unit\Helper;
 
-class DataTest extends \PHPUnit\Framework\TestCase
+use Magento\Framework\App\Helper\Context;
+use Magento\Framework\DataObject;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\Url\EncoderInterface;
+use Magento\Framework\Url\Helper\Data;
+use Magento\Framework\UrlInterface;
+use PHPUnit\Framework\TestCase;
+
+class DataTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
+     * @var ObjectManager
      */
     protected $objectManager;
 
     protected function setUp(): void
     {
-        $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $this->objectManager = new ObjectManager($this);
     }
 
     public function testGetCurrentBase64Url()
     {
-        $urlBuilderMock = $this->getMockBuilder(\Magento\Framework\UrlInterface::class)
+        $urlBuilderMock = $this->getMockBuilder(UrlInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $url = 'http://example.com';
@@ -27,21 +37,21 @@ class DataTest extends \PHPUnit\Framework\TestCase
             ->method('getCurrentUrl')
             ->willReturn($url);
         $encodedUrl = 'encodedUrl';
-        $urlEncoder = $this->getMockBuilder(\Magento\Framework\Url\EncoderInterface::class)
+        $urlEncoder = $this->getMockBuilder(EncoderInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $urlEncoder->expects($this->once())
             ->method('encode')
             ->willReturn($encodedUrl);
         $context = $this->objectManager->getObject(
-            \Magento\Framework\App\Helper\Context::class,
+            Context::class,
             [
                 'urlBuilder' => $urlBuilderMock,
                 'urlEncoder' => $urlEncoder,
             ]
         );
-        /** @var \Magento\Framework\Url\Helper\Data $helper */
-        $helper = new \Magento\Framework\Url\Helper\Data($context);
+        /** @var Data $helper */
+        $helper = new Data($context);
         $this->assertEquals($encodedUrl, $helper->getCurrentBase64Url());
     }
 
@@ -52,7 +62,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetEncodedUrl($url, $callNum)
     {
-        $urlBuilderMock = $this->getMockBuilder(\Magento\Framework\UrlInterface::class)
+        $urlBuilderMock = $this->getMockBuilder(UrlInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $encodingUrl = $url ? $url : 'http://example.com';
@@ -60,22 +70,22 @@ class DataTest extends \PHPUnit\Framework\TestCase
             ->method('getCurrentUrl')
             ->willReturn($encodingUrl);
         $encodedUrl = 'encodedUrl';
-        $urlEncoder = $this->getMockBuilder(\Magento\Framework\Url\EncoderInterface::class)
+        $urlEncoder = $this->getMockBuilder(EncoderInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $urlEncoder->expects($this->once())
             ->method('encode')
             ->willReturn($encodedUrl);
         $context = $this->objectManager->getObject(
-            \Magento\Framework\App\Helper\Context::class,
+            Context::class,
             [
                 'urlBuilder' => $urlBuilderMock,
                 'urlEncoder' => $urlEncoder,
             ]
         );
 
-        /** @var \Magento\Framework\Url\Helper\Data $helper */
-        $helper = new \Magento\Framework\Url\Helper\Data($context);
+        /** @var Data $helper */
+        $helper = new Data($context);
         $this->assertEquals($encodedUrl, $helper->getEncodedUrl($url));
     }
 
@@ -132,7 +142,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
                 'http://example.com?null&string=value&array[]=arrayVal1&array[]=arrayVal2&array[]=arrayVal3',
             ],
             'object' => [
-                ['object' => new \Magento\Framework\DataObject()],
+                ['object' => new DataObject()],
                 'http://example.com',
             ]
         ];
@@ -176,10 +186,10 @@ class DataTest extends \PHPUnit\Framework\TestCase
      * Get helper instance
      *
      * @param array $arguments
-     * @return \Magento\Framework\Url\Helper\Data
+     * @return Data
      */
     private function getHelper($arguments)
     {
-        return $this->objectManager->getObject(\Magento\Framework\Url\Helper\Data::class, $arguments);
+        return $this->objectManager->getObject(Data::class, $arguments);
     }
 }

@@ -4,19 +4,29 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Quote\Test\Unit\Model;
 
+use Magento\Customer\Api\AddressRepositoryInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Quote\Model\BillingAddressManagement;
+use Magento\Quote\Model\Quote;
+use Magento\Quote\Model\Quote\Address;
+use Magento\Quote\Model\QuoteAddressValidator;
+use Magento\Quote\Model\ShippingAddressAssignment;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class BillingAddressManagementTest extends \PHPUnit\Framework\TestCase
+class BillingAddressManagementTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
+     * @var ObjectManager
      */
     protected $objectManager;
 
@@ -26,22 +36,22 @@ class BillingAddressManagementTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $quoteRepositoryMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $validatorMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $addressRepository;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     private $shippingAssignmentMock;
 
@@ -51,12 +61,12 @@ class BillingAddressManagementTest extends \PHPUnit\Framework\TestCase
     protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
-        $this->quoteRepositoryMock = $this->createMock(\Magento\Quote\Api\CartRepositoryInterface::class);
-        $this->validatorMock = $this->createMock(\Magento\Quote\Model\QuoteAddressValidator::class);
-        $this->addressRepository = $this->createMock(\Magento\Customer\Api\AddressRepositoryInterface::class);
-        $logger = $this->createMock(\Psr\Log\LoggerInterface::class);
+        $this->quoteRepositoryMock = $this->createMock(CartRepositoryInterface::class);
+        $this->validatorMock = $this->createMock(QuoteAddressValidator::class);
+        $this->addressRepository = $this->createMock(AddressRepositoryInterface::class);
+        $logger = $this->createMock(LoggerInterface::class);
         $this->model = $this->objectManager->getObject(
-            \Magento\Quote\Model\BillingAddressManagement::class,
+            BillingAddressManagement::class,
             [
                 'quoteRepository' => $this->quoteRepositoryMock,
                 'addressValidator' => $this->validatorMock,
@@ -66,7 +76,7 @@ class BillingAddressManagementTest extends \PHPUnit\Framework\TestCase
         );
 
         $this->shippingAssignmentMock = $this->createPartialMock(
-            \Magento\Quote\Model\ShippingAddressAssignment::class,
+            ShippingAddressAssignment::class,
             ['setAddress']
         );
         $this->objectManager->setBackwardCompatibleProperty(
@@ -81,11 +91,11 @@ class BillingAddressManagementTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetAddress()
     {
-        $quoteMock = $this->createMock(\Magento\Quote\Model\Quote::class);
+        $quoteMock = $this->createMock(Quote::class);
         $this->quoteRepositoryMock->expects($this->once())->method('getActive')
             ->with('cartId')->willReturn($quoteMock);
 
-        $addressMock = $this->createMock(\Magento\Quote\Model\Quote\Address::class);
+        $addressMock = $this->createMock(Address::class);
         $quoteMock->expects($this->any())->method('getBillingAddress')->willReturn($addressMock);
 
         $this->assertEquals($addressMock, $this->model->get('cartId'));
@@ -100,9 +110,9 @@ class BillingAddressManagementTest extends \PHPUnit\Framework\TestCase
         $useForShipping = true;
         $addressId = 1;
 
-        $address = $this->createPartialMock(\Magento\Quote\Model\Quote\Address::class, ['getId']);
+        $address = $this->createPartialMock(Address::class, ['getId']);
         $quoteMock = $this->createPartialMock(
-            \Magento\Quote\Model\Quote::class,
+            Quote::class,
             ['removeAddress', 'getBillingAddress', 'setBillingAddress', 'setDataChanges']
         );
 
@@ -130,15 +140,14 @@ class BillingAddressManagementTest extends \PHPUnit\Framework\TestCase
      */
     public function testSetAddressWithInabilityToSaveQuote()
     {
-        $this->expectException(\Magento\Framework\Exception\InputException::class);
+        $this->expectException('Magento\Framework\Exception\InputException');
         $this->expectExceptionMessage('The address failed to save. Verify the address and try again.');
-
         $cartId = 100;
         $addressId = 1;
 
-        $address = $this->createPartialMock(\Magento\Quote\Model\Quote\Address::class, ['getId']);
+        $address = $this->createPartialMock(Address::class, ['getId']);
         $quoteMock = $this->createPartialMock(
-            \Magento\Quote\Model\Quote::class,
+            Quote::class,
             ['removeAddress', 'getBillingAddress', 'setBillingAddress', 'setDataChanges']
         );
 

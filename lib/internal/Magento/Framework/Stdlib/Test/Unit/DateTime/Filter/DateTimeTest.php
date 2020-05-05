@@ -3,11 +3,15 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\Stdlib\Test\Unit\DateTime\Filter;
 
-use \Magento\Framework\Stdlib\DateTime\Filter\DateTime;
+use Magento\Framework\Stdlib\DateTime\Filter\DateTime;
+use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
+use PHPUnit\Framework\TestCase;
 
-class DateTimeTest extends \PHPUnit\Framework\TestCase
+class DateTimeTest extends TestCase
 {
     /**
      * @param string $inputData
@@ -17,7 +21,7 @@ class DateTimeTest extends \PHPUnit\Framework\TestCase
      */
     public function testFilter($inputData, $expectedDate)
     {
-        $localeMock = $this->createMock(\Magento\Framework\Stdlib\DateTime\TimezoneInterface::class);
+        $localeMock = $this->createMock(TimezoneInterface::class);
         $localeMock->expects(
             $this->once()
         )->method(
@@ -54,7 +58,7 @@ class DateTimeTest extends \PHPUnit\Framework\TestCase
     {
         $this->expectException('\Exception');
 
-        $localeMock = $this->createMock(\Magento\Framework\Stdlib\DateTime\TimezoneInterface::class);
+        $localeMock = $this->createMock(TimezoneInterface::class);
         $localeMock->expects(
             $this->once()
         )->method(

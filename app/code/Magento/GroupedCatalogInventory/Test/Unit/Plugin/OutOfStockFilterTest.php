@@ -8,15 +8,15 @@ declare(strict_types=1);
 
 namespace Magento\GroupedCatalogInventory\Test\Unit\Plugin;
 
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Catalog\Model\Product;
 use Magento\CatalogInventory\Api\Data\StockStatusInterface;
+use Magento\CatalogInventory\Api\StockRegistryInterface;
 use Magento\Framework\DataObject;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\GroupedCatalogInventory\Plugin\OutOfStockFilter;
 use Magento\GroupedProduct\Model\Product\Type\Grouped;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Magento\CatalogInventory\Api\StockRegistryInterface;
 
 /**
  * Test for OutOfStockFilter plugin.

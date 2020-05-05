@@ -3,35 +3,40 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Ui\Test\Unit\Component\Filters\Type;
 
+use Magento\Framework\Api\Filter;
+use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Framework\View\Element\UiComponent\DataProvider\DataProviderInterface;
+use Magento\Framework\View\Element\UiComponent\Processor;
 use Magento\Framework\View\Element\UiComponentFactory;
+use Magento\Ui\Component\Filters\FilterModifier;
 use Magento\Ui\Component\Filters\Type\Range;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-/**
- * Class RangeTest
- */
-class RangeTest extends \PHPUnit\Framework\TestCase
+class RangeTest extends TestCase
 {
     /**
-     * @var ContextInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var ContextInterface|MockObject
      */
     protected $contextMock;
 
     /**
-     * @var UiComponentFactory|\PHPUnit\Framework\MockObject\MockObject
+     * @var UiComponentFactory|MockObject
      */
     protected $uiComponentFactory;
 
     /**
-     * @var \Magento\Framework\Api\FilterBuilder|\PHPUnit\Framework\MockObject\MockObject
+     * @var FilterBuilder|MockObject
      */
     protected $filterBuilderMock;
 
     /**
-     * @var \Magento\Ui\Component\Filters\FilterModifier|\PHPUnit\Framework\MockObject\MockObject
+     * @var FilterModifier|MockObject
      */
     protected $filterModifierMock;
 
@@ -41,15 +46,15 @@ class RangeTest extends \PHPUnit\Framework\TestCase
     protected function setUp(): void
     {
         $this->contextMock = $this->getMockForAbstractClass(
-            \Magento\Framework\View\Element\UiComponent\ContextInterface::class,
+            ContextInterface::class,
             [],
             '',
             false
         );
-        $this->uiComponentFactory = $this->createMock(\Magento\Framework\View\Element\UiComponentFactory::class);
-        $this->filterBuilderMock = $this->createMock(\Magento\Framework\Api\FilterBuilder::class);
+        $this->uiComponentFactory = $this->createMock(UiComponentFactory::class);
+        $this->filterBuilderMock = $this->createMock(FilterBuilder::class);
         $this->filterModifierMock = $this->createPartialMock(
-            \Magento\Ui\Component\Filters\FilterModifier::class,
+            FilterModifier::class,
             ['applyFilterModifier']
         );
     }
@@ -70,7 +75,7 @@ class RangeTest extends \PHPUnit\Framework\TestCase
             []
         );
 
-        $this->assertTrue($range->getComponentName() === Range::NAME);
+        $this->assertSame(Range::NAME, $range->getComponentName());
     }
 
     /**
@@ -84,11 +89,11 @@ class RangeTest extends \PHPUnit\Framework\TestCase
      */
     public function testPrepare($name, $filterData, $expectedCalls)
     {
-        $processor = $this->getMockBuilder(\Magento\Framework\View\Element\UiComponent\Processor::class)
+        $processor = $this->getMockBuilder(Processor::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->contextMock->expects($this->atLeastOnce())->method('getProcessor')->willReturn($processor);
-        $filter = $this->createMock(\Magento\Framework\Api\Filter::class);
+        $filter = $this->createMock(Filter::class);
         $this->filterBuilderMock->expects($this->any())
             ->method('setConditionType')
             ->willReturnSelf();
@@ -114,7 +119,7 @@ class RangeTest extends \PHPUnit\Framework\TestCase
 
         /** @var DataProviderInterface $dataProvider */
         $dataProvider = $this->getMockForAbstractClass(
-            \Magento\Framework\View\Element\UiComponent\DataProvider\DataProviderInterface::class,
+            DataProviderInterface::class,
             [],
             '',
             false

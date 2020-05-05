@@ -81,7 +81,10 @@ class WishlistAddProductObserverTest extends TestCase
             ->with(Event::EVENT_PRODUCT_TO_WISHLIST)
             ->willReturn(true);
 
-        $eventMock = $this->createPartialMock(Event::class, ['getProduct']);
+        $eventMock = $this->getMockBuilder(Event::class)
+            ->addMethods(['getProduct'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $eventMock->expects($this->once())
             ->method('getProduct')
             ->willReturn($this->getMockForAbstractClass(ProductInterface::class));

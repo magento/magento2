@@ -3,9 +3,15 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Setup\Test\Unit\Module\I18n\Parser\Adapter;
 
-class XmlTest extends \PHPUnit\Framework\TestCase
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Setup\Module\I18n\Parser\Adapter\Xml;
+use PHPUnit\Framework\TestCase;
+
+class XmlTest extends TestCase
 {
     /**
      * @var string
@@ -13,14 +19,14 @@ class XmlTest extends \PHPUnit\Framework\TestCase
     protected $_testFile;
 
     /**
-     * @var \Magento\Setup\Module\I18n\Parser\Adapter\Xml
+     * @var Xml
      */
     protected $_adapter;
 
     protected function setUp(): void
     {
-        $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->_adapter = $objectManagerHelper->getObject(\Magento\Setup\Module\I18n\Parser\Adapter\Xml::class);
+        $objectManagerHelper = new ObjectManager($this);
+        $this->_adapter = $objectManagerHelper->getObject(Xml::class);
     }
 
     /**

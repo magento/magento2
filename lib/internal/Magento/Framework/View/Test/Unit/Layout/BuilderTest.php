@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Framework\View\Test\Unit\Layout;
 
@@ -10,15 +11,17 @@ use Magento\Framework\App\Request\Http;
 use Magento\Framework\Event\ManagerInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\View\Layout;
+use Magento\Framework\View\Layout\Builder;
 use Magento\Framework\View\Layout\ProcessorInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
- * Class BuilderTest
  * @covers \Magento\Framework\View\Layout\Builder
  */
-class BuilderTest extends \PHPUnit\Framework\TestCase
+class BuilderTest extends TestCase
 {
-    const CLASS_NAME = \Magento\Framework\View\Layout\Builder::class;
+    const CLASS_NAME = Builder::class;
 
     /**
      * @covers \Magento\Framework\View\Layout\Builder::build()
@@ -27,17 +30,17 @@ class BuilderTest extends \PHPUnit\Framework\TestCase
     {
         $fullActionName = 'route_controller_action';
 
-        /** @var Http|\PHPUnit\Framework\MockObject\MockObject */
-        $request = $this->createMock(\Magento\Framework\App\Request\Http::class);
+        /** @var Http|MockObject */
+        $request = $this->createMock(Http::class);
         $request->expects($this->exactly(3))->method('getFullActionName')->willReturn($fullActionName);
 
-        /** @var ProcessorInterface|\PHPUnit\Framework\MockObject\MockObject $processor */
-        $processor = $this->createMock(\Magento\Framework\View\Layout\ProcessorInterface::class);
+        /** @var ProcessorInterface|MockObject $processor */
+        $processor = $this->createMock(ProcessorInterface::class);
         $processor->expects($this->once())->method('load');
 
-        /** @var Layout|\PHPUnit\Framework\MockObject\MockObject */
+        /** @var Layout|MockObject */
         $layout = $this->createPartialMock(
-            \Magento\Framework\View\Layout::class,
+            Layout::class,
             $this->getLayoutMockMethods()
         );
         $layout->expects($this->atLeastOnce())->method('getUpdate')->willReturn($processor);
@@ -45,8 +48,8 @@ class BuilderTest extends \PHPUnit\Framework\TestCase
         $layout->expects($this->atLeastOnce())->method('generateElements')->willReturn($processor);
 
         $data = ['full_action_name' => $fullActionName, 'layout' => $layout];
-        /** @var ManagerInterface|\PHPUnit\Framework\MockObject\MockObject $eventManager */
-        $eventManager = $this->createMock(\Magento\Framework\Event\ManagerInterface::class);
+        /** @var ManagerInterface|MockObject $eventManager */
+        $eventManager = $this->createMock(ManagerInterface::class);
         $eventManager->expects($this->at(0))->method('dispatch')->with('layout_load_before', $data);
         $eventManager->expects($this->at(1))->method('dispatch')->with('layout_generate_blocks_before', $data);
         $eventManager->expects($this->at(2))->method('dispatch')->with('layout_generate_blocks_after', $data);

@@ -3,14 +3,17 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\Config\Test\Unit;
 
-use \Magento\Framework\Config\FileIterator;
+use Magento\Framework\Config\FileIterator;
+use Magento\Framework\Filesystem\File\Read;
+use Magento\Framework\Filesystem\File\ReadFactory;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-/**
- * Class FileIteratorTest
- */
-class FileIteratorTest extends \PHPUnit\Framework\TestCase
+class FileIteratorTest extends TestCase
 {
     /**
      * @var FileIterator
@@ -18,7 +21,7 @@ class FileIteratorTest extends \PHPUnit\Framework\TestCase
     protected $fileIterator;
 
     /**
-     * @var \Magento\Framework\Filesystem\File\Read|\PHPUnit\Framework\MockObject\MockObject
+     * @var Read|MockObject
      */
     protected $fileRead;
 
@@ -30,15 +33,15 @@ class FileIteratorTest extends \PHPUnit\Framework\TestCase
     protected $filePaths;
 
     /**
-     * @var \Magento\Framework\Filesystem\File\ReadFactory|\PHPUnit\Framework\MockObject\MockObject
+     * @var ReadFactory|MockObject
      */
     protected $fileReadFactory;
 
     protected function setUp(): void
     {
         $this->filePaths = ['/file1', '/file2'];
-        $this->fileReadFactory = $this->createMock(\Magento\Framework\Filesystem\File\ReadFactory::class);
-        $this->fileRead = $this->createMock(\Magento\Framework\Filesystem\File\Read::class);
+        $this->fileReadFactory = $this->createMock(ReadFactory::class);
+        $this->fileRead = $this->createMock(Read::class);
         $this->fileIterator = new FileIterator($this->fileReadFactory, $this->filePaths);
     }
 

@@ -3,14 +3,18 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Analytics\Test\Unit\Model;
 
 use Magento\Analytics\Model\Connector;
 use Magento\Analytics\Model\ExportDataHandler;
 use Magento\Analytics\Model\ExportDataHandlerNotification;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class ExportDataHandlerNotificationTest extends \PHPUnit\Framework\TestCase
+class ExportDataHandlerNotificationTest extends TestCase
 {
     /**
      * @var ObjectManagerHelper
@@ -35,7 +39,7 @@ class ExportDataHandlerNotificationTest extends \PHPUnit\Framework\TestCase
         $exportDataHandlerMockObject = $this->createExportDataHandlerMock();
         $analyticsConnectorMockObject = $this->createAnalyticsConnectorMock();
         /**
-         * @var $exportDataHandlerNotification ExportDataHandlerNotification
+         * @var ExportDataHandlerNotification $exportDataHandlerNotification
          */
         $exportDataHandlerNotification = $this->objectManagerHelper->getObject(
             ExportDataHandlerNotification::class,
@@ -54,18 +58,18 @@ class ExportDataHandlerNotificationTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return \PHPUnit\Framework\MockObject\MockObject
+     * @return MockObject
      */
     private function createExportDataHandlerMock()
     {
-        return $this->getMockBuilder(ExportDataHandler::class)->disableOriginalConstructor()->getMock();
+        return $this->createMock(ExportDataHandler::class);
     }
 
     /**
-     * @return \PHPUnit\Framework\MockObject\MockObject
+     * @return MockObject
      */
     private function createAnalyticsConnectorMock()
     {
-        return $this->getMockBuilder(Connector::class)->disableOriginalConstructor()->getMock();
+        return $this->createMock(Connector::class);
     }
 }

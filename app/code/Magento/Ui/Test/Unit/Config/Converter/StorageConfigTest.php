@@ -3,13 +3,17 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Ui\Test\Unit\Config\Converter;
 
 use Magento\Ui\Config\Converter\StorageConfig;
 use Magento\Ui\Config\ConverterInterface;
 use Magento\Ui\Config\ConverterUtils;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class StorageConfigTest extends \PHPUnit\Framework\TestCase
+class StorageConfigTest extends TestCase
 {
     /**
      * @var StorageConfig
@@ -17,13 +21,14 @@ class StorageConfigTest extends \PHPUnit\Framework\TestCase
     private $converter;
 
     /**
-     * @var ConverterInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var ConverterInterface|MockObject
      */
     private $urlConverter;
 
     protected function setUp(): void
     {
-        $this->urlConverter = $this->getMockBuilder(ConverterInterface::class)->getMockForAbstractClass();
+        $this->urlConverter = $this->getMockBuilder(ConverterInterface::class)
+            ->getMockForAbstractClass();
         $this->converter = new StorageConfig($this->urlConverter, new ConverterUtils());
     }
 

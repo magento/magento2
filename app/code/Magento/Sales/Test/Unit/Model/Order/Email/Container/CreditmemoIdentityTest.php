@@ -3,29 +3,37 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Sales\Test\Unit\Model\Order\Email\Container;
 
-use \Magento\Sales\Model\Order\Email\Container\CreditmemoIdentity;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Sales\Model\Order\Email\Container\CreditmemoIdentity;
+use Magento\Store\Model\ScopeInterface;
+use Magento\Store\Model\Store;
+use Magento\Store\Model\StoreManagerInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class CreditmemoIdentityTest extends \PHPUnit\Framework\TestCase
+class CreditmemoIdentityTest extends TestCase
 {
     /**
-     * @var \Magento\Sales\Model\Order\Email\Container\CreditmemoIdentity
+     * @var CreditmemoIdentity
      */
     protected $identity;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $storeManagerMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $scopeConfigInterfaceMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $storeMock;
 
@@ -34,11 +42,14 @@ class CreditmemoIdentityTest extends \PHPUnit\Framework\TestCase
     protected function setUp(): void
     {
         $this->scopeConfigInterfaceMock = $this->getMockForAbstractClass(
-            \Magento\Framework\App\Config\ScopeConfigInterface::class
+            ScopeConfigInterface::class
         );
-        $this->storeManagerMock = $this->createMock(\Magento\Store\Model\StoreManagerInterface::class);
+        $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
 
-        $this->storeMock = $this->createPartialMock(\Magento\Store\Model\Store::class, ['getStoreId', '__wakeup']);
+        $this->storeMock = $this->getMockBuilder(Store::class)
+            ->addMethods(['getStoreId'])
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->storeId = 999999999999;
         $this->storeMock->expects($this->any())
@@ -53,9 +64,9 @@ class CreditmemoIdentityTest extends \PHPUnit\Framework\TestCase
         $this->scopeConfigInterfaceMock->expects($this->once())
             ->method('isSetFlag')
             ->with(
-                $this->equalTo(CreditmemoIdentity::XML_PATH_EMAIL_ENABLED),
-                $this->equalTo(\Magento\Store\Model\ScopeInterface::SCOPE_STORE),
-                $this->equalTo($this->storeId)
+                CreditmemoIdentity::XML_PATH_EMAIL_ENABLED,
+                ScopeInterface::SCOPE_STORE,
+                $this->storeId
             )
             ->willReturn(true);
         $this->identity->setStore($this->storeMock);
@@ -68,9 +79,9 @@ class CreditmemoIdentityTest extends \PHPUnit\Framework\TestCase
         $this->scopeConfigInterfaceMock->expects($this->once())
             ->method('getValue')
             ->with(
-                $this->equalTo(CreditmemoIdentity::XML_PATH_EMAIL_COPY_TO),
-                $this->equalTo(\Magento\Store\Model\ScopeInterface::SCOPE_STORE),
-                $this->equalTo($this->storeId)
+                CreditmemoIdentity::XML_PATH_EMAIL_COPY_TO,
+                ScopeInterface::SCOPE_STORE,
+                $this->storeId
             )
             ->willReturn('test_value,test_value2');
         $this->identity->setStore($this->storeMock);
@@ -83,9 +94,9 @@ class CreditmemoIdentityTest extends \PHPUnit\Framework\TestCase
         $this->scopeConfigInterfaceMock->expects($this->once())
             ->method('getValue')
             ->with(
-                $this->equalTo(CreditmemoIdentity::XML_PATH_EMAIL_COPY_TO),
-                $this->equalTo(\Magento\Store\Model\ScopeInterface::SCOPE_STORE),
-                $this->equalTo($this->storeId)
+                CreditmemoIdentity::XML_PATH_EMAIL_COPY_TO,
+                ScopeInterface::SCOPE_STORE,
+                $this->storeId
             )
             ->willReturn('test_value, test_value2');
         $this->identity->setStore($this->storeMock);
@@ -98,9 +109,9 @@ class CreditmemoIdentityTest extends \PHPUnit\Framework\TestCase
         $this->scopeConfigInterfaceMock->expects($this->once())
             ->method('getValue')
             ->with(
-                $this->equalTo(CreditmemoIdentity::XML_PATH_EMAIL_COPY_TO),
-                $this->equalTo(\Magento\Store\Model\ScopeInterface::SCOPE_STORE),
-                $this->equalTo($this->storeId)
+                CreditmemoIdentity::XML_PATH_EMAIL_COPY_TO,
+                ScopeInterface::SCOPE_STORE,
+                $this->storeId
             )
             ->willReturn(null);
         $this->identity->setStore($this->storeMock);
@@ -113,9 +124,9 @@ class CreditmemoIdentityTest extends \PHPUnit\Framework\TestCase
         $this->scopeConfigInterfaceMock->expects($this->once())
             ->method('getValue')
             ->with(
-                $this->equalTo(CreditmemoIdentity::XML_PATH_EMAIL_COPY_METHOD),
-                $this->equalTo(\Magento\Store\Model\ScopeInterface::SCOPE_STORE),
-                $this->equalTo($this->storeId)
+                CreditmemoIdentity::XML_PATH_EMAIL_COPY_METHOD,
+                ScopeInterface::SCOPE_STORE,
+                $this->storeId
             )
             ->willReturn('copy_method');
 
@@ -129,9 +140,9 @@ class CreditmemoIdentityTest extends \PHPUnit\Framework\TestCase
         $this->scopeConfigInterfaceMock->expects($this->once())
             ->method('getValue')
             ->with(
-                $this->equalTo(CreditmemoIdentity::XML_PATH_EMAIL_GUEST_TEMPLATE),
-                $this->equalTo(\Magento\Store\Model\ScopeInterface::SCOPE_STORE),
-                $this->equalTo($this->storeId)
+                CreditmemoIdentity::XML_PATH_EMAIL_GUEST_TEMPLATE,
+                ScopeInterface::SCOPE_STORE,
+                $this->storeId
             )
             ->willReturn('template_id');
 
@@ -145,9 +156,9 @@ class CreditmemoIdentityTest extends \PHPUnit\Framework\TestCase
         $this->scopeConfigInterfaceMock->expects($this->once())
             ->method('getValue')
             ->with(
-                $this->equalTo(CreditmemoIdentity::XML_PATH_EMAIL_TEMPLATE),
-                $this->equalTo(\Magento\Store\Model\ScopeInterface::SCOPE_STORE),
-                $this->equalTo($this->storeId)
+                CreditmemoIdentity::XML_PATH_EMAIL_TEMPLATE,
+                ScopeInterface::SCOPE_STORE,
+                $this->storeId
             )
             ->willReturn('template_id');
 
@@ -192,9 +203,9 @@ class CreditmemoIdentityTest extends \PHPUnit\Framework\TestCase
         $this->scopeConfigInterfaceMock->expects($this->once())
             ->method('getValue')
             ->with(
-                $this->equalTo(CreditmemoIdentity::XML_PATH_EMAIL_IDENTITY),
-                $this->equalTo(\Magento\Store\Model\ScopeInterface::SCOPE_STORE),
-                $this->equalTo($this->storeId)
+                CreditmemoIdentity::XML_PATH_EMAIL_IDENTITY,
+                ScopeInterface::SCOPE_STORE,
+                $this->storeId
             )
             ->willReturn($emailIdentity);
 

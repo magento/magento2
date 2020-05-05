@@ -3,21 +3,25 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\Amqp\Test\Unit;
 
 use Magento\Framework\Amqp\TopologyInstaller;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\MessageQueue\Topology\ConfigInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PhpAmqpLib\Exception\AMQPLogicException;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 
 /**
  * Unit tests for @see \Magento\Framework\Amqp\TopologyInstaller
  */
-class TopologyInstallerTest extends \PHPUnit\Framework\TestCase
+class TopologyInstallerTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\Amqp\TopologyInstaller
+     * @var TopologyInstaller
      */
     private $topologyInstaller;
 
@@ -27,12 +31,12 @@ class TopologyInstallerTest extends \PHPUnit\Framework\TestCase
     private $objectManager;
 
     /**
-     * @var ConfigInterface | \PHPUnit\Framework\MockObject\MockObject
+     * @var ConfigInterface|MockObject
      */
     private $topologyConfigMock;
 
     /**
-     * @var LoggerInterface | \PHPUnit\Framework\MockObject\MockObject
+     * @var LoggerInterface|MockObject
      */
     private $loggerMock;
 
@@ -42,8 +46,8 @@ class TopologyInstallerTest extends \PHPUnit\Framework\TestCase
     protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
-        $this->topologyConfigMock = $this->getMockForAbstractClass(ConfigInterface::class);
-        $this->loggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
+        $this->topologyConfigMock = $this->createMock(ConfigInterface::class);
+        $this->loggerMock = $this->createMock(LoggerInterface::class);
         $this->topologyInstaller = $this->objectManager->getObject(
             TopologyInstaller::class,
             ['topologyConfig' => $this->topologyConfigMock, 'logger' => $this->loggerMock]

@@ -3,18 +3,22 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Indexer\Test\Unit\Console\Command;
 
 use Magento\Framework\Console\Cli;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Indexer\Config\DependencyInfoProvider;
+use Magento\Framework\Indexer\ConfigInterface;
 use Magento\Framework\Indexer\IndexerInterface;
 use Magento\Framework\Indexer\IndexerRegistry;
 use Magento\Framework\Indexer\StateInterface;
 use Magento\Framework\Phrase;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Indexer\Console\Command\IndexerReindexCommand;
+use Magento\Indexer\Model\Config;
+use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Component\Console\Tester\CommandTester;
 
 /**
@@ -31,17 +35,17 @@ class IndexerReindexCommandTest extends AbstractIndexerCommandCommonSetup
     private $command;
 
     /**
-     * @var \Magento\Framework\Indexer\ConfigInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var ConfigInterface|MockObject
      */
     protected $configMock;
 
     /**
-     * @var IndexerRegistry|\PHPUnit\Framework\MockObject\MockObject
+     * @var IndexerRegistry|MockObject
      */
     private $indexerRegistryMock;
 
     /**
-     * @var DependencyInfoProvider|\PHPUnit\Framework\MockObject\MockObject
+     * @var DependencyInfoProvider|MockObject
      */
     private $dependencyInfoProviderMock;
 
@@ -56,7 +60,7 @@ class IndexerReindexCommandTest extends AbstractIndexerCommandCommonSetup
     protected function setUp(): void
     {
         $this->objectManagerHelper = new ObjectManagerHelper($this);
-        $this->configMock = $this->createMock(\Magento\Indexer\Model\Config::class);
+        $this->configMock = $this->createMock(Config::class);
         $this->indexerRegistryMock = $this->getMockBuilder(IndexerRegistry::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -77,7 +81,7 @@ class IndexerReindexCommandTest extends AbstractIndexerCommandCommonSetup
     protected function getObjectManagerReturnValueMap()
     {
         $result = parent::getObjectManagerReturnValueMap();
-        $result[] = [\Magento\Framework\Indexer\ConfigInterface::class, $this->configMock];
+        $result[] = [ConfigInterface::class, $this->configMock];
         $result[] = [DependencyInfoProvider::class, $this->dependencyInfoProviderMock];
         return $result;
     }
@@ -96,12 +100,10 @@ class IndexerReindexCommandTest extends AbstractIndexerCommandCommonSetup
         $this->configMock->expects($this->once())
             ->method('getIndexer')
             ->willReturn(
-                
-                    [
-                        'title' => 'Title_indexerOne',
-                        'shared_index' => null
-                    ]
-                
+                [
+                    'title' => 'Title_indexerOne',
+                    'shared_index' => null
+                ]
             );
         $this->configureAdminArea();
         $this->initIndexerCollectionByItems(
@@ -226,11 +228,11 @@ class IndexerReindexCommandTest extends AbstractIndexerCommandCommonSetup
      * @param array|null $methods
      * @param array $data
      *
-     * @return \PHPUnit\Framework\MockObject\MockObject|StateInterface
+     * @return MockObject|StateInterface
      */
     private function getStateMock(array $methods = null, array $data = [])
     {
-        /** @var \PHPUnit\Framework\MockObject\MockObject|StateInterface $state */
+        /** @var MockObject|StateInterface $state */
         $state = $this->getMockBuilder(StateInterface::class)
             ->setMethods($methods)
             ->disableOriginalConstructor()
@@ -416,7 +418,7 @@ class IndexerReindexCommandTest extends AbstractIndexerCommandCommonSetup
             ['indexer_id' => 'indexer_1', 'title' => self::STUB_INDEXER_NAME]
         );
         $localizedException = new LocalizedException(new Phrase('Some Exception Message'));
-        $indexerOne->expects($this->once())->method('reindexAll')->will($this->throwException($localizedException));
+        $indexerOne->expects($this->once())->method('reindexAll')->willThrowException($localizedException);
         $this->initIndexerCollectionByItems([$indexerOne]);
         $this->command = new IndexerReindexCommand($this->objectManagerFactory);
         $commandTester = new CommandTester($this->command);

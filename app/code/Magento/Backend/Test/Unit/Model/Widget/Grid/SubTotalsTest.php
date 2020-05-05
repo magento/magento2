@@ -3,30 +3,42 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Backend\Test\Unit\Model\Widget\Grid;
 
-class SubTotalsTest extends \PHPUnit\Framework\TestCase
+use Magento\Backend\Model\Widget\Grid\Parser;
+use Magento\Backend\Model\Widget\Grid\SubTotals;
+use Magento\Framework\Data\Collection;
+use Magento\Framework\Data\Collection\EntityFactory;
+use Magento\Framework\DataObject;
+use Magento\Framework\DataObject\Factory;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class SubTotalsTest extends TestCase
 {
     /**
-     * @var $_model \Magento\Backend\Model\Widget\Grid\SubTotals
+     * @var SubTotals $_model
      */
     protected $_model;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $_parserMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $_factoryMock;
 
     protected function setUp(): void
     {
-        $this->_parserMock = $this->createMock(\Magento\Backend\Model\Widget\Grid\Parser::class);
+        $this->_parserMock = $this->createMock(Parser::class);
 
-        $this->_factoryMock = $this->createPartialMock(\Magento\Framework\DataObject\Factory::class, ['create']);
+        $this->_factoryMock = $this->createPartialMock(Factory::class, ['create']);
         $this->_factoryMock->expects(
             $this->any()
         )->method(
@@ -34,14 +46,14 @@ class SubTotalsTest extends \PHPUnit\Framework\TestCase
         )->with(
             ['sub_test1' => 3, 'sub_test2' => 2]
         )->willReturn(
-            new \Magento\Framework\DataObject(['sub_test1' => 3, 'sub_test2' => 2])
+            new DataObject(['sub_test1' => 3, 'sub_test2' => 2])
         );
 
         $arguments = ['factory' => $this->_factoryMock, 'parser' => $this->_parserMock];
 
-        $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $objectManagerHelper = new ObjectManager($this);
         $this->_model = $objectManagerHelper->getObject(
-            \Magento\Backend\Model\Widget\Grid\SubTotals::class,
+            SubTotals::class,
             $arguments
         );
 
@@ -60,24 +72,24 @@ class SubTotalsTest extends \PHPUnit\Framework\TestCase
 
     public function testCountTotals()
     {
-        $expected = new \Magento\Framework\DataObject(['sub_test1' => 3, 'sub_test2' => 2]);
+        $expected = new DataObject(['sub_test1' => 3, 'sub_test2' => 2]);
         $this->assertEquals($expected, $this->_model->countTotals($this->_getTestCollection()));
     }
 
     /**
      * Retrieve test collection
      *
-     * @return \Magento\Framework\Data\Collection
+     * @return Collection
      */
     protected function _getTestCollection()
     {
-        $collection = new \Magento\Framework\Data\Collection(
-            $this->createMock(\Magento\Framework\Data\Collection\EntityFactory::class)
+        $collection = new Collection(
+            $this->createMock(EntityFactory::class)
         );
         $items = [
-            new \Magento\Framework\DataObject(['sub_test1' => '1', 'sub_test2' => '2']),
-            new \Magento\Framework\DataObject(['sub_test1' => '1', 'sub_test2' => '2']),
-            new \Magento\Framework\DataObject(['sub_test1' => '1', 'sub_test2' => '2']),
+            new DataObject(['sub_test1' => '1', 'sub_test2' => '2']),
+            new DataObject(['sub_test1' => '1', 'sub_test2' => '2']),
+            new DataObject(['sub_test1' => '1', 'sub_test2' => '2']),
         ];
         foreach ($items as $item) {
             $collection->addItem($item);

@@ -3,21 +3,25 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\UrlRewrite\Test\Unit\Helper;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\UrlRewrite\Helper\UrlRewrite;
+use PHPUnit\Framework\TestCase;
 
-class UrlRewriteTest extends \PHPUnit\Framework\TestCase
+class UrlRewriteTest extends TestCase
 {
     /**
-     * @var \Magento\UrlRewrite\Helper\UrlRewrite
+     * @var UrlRewrite
      */
     protected $_helper;
 
     protected function setUp(): void
     {
-        $this->_helper = (new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this))->getObject(
-            \Magento\UrlRewrite\Helper\UrlRewrite::class
+        $this->_helper = (new ObjectManager($this))->getObject(
+            UrlRewrite::class
         );
     }
 
@@ -34,8 +38,7 @@ class UrlRewriteTest extends \PHPUnit\Framework\TestCase
      */
     public function testValidateRequestPathException($requestPath)
     {
-        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
-
+        $this->expectException('Magento\Framework\Exception\LocalizedException');
         $this->_helper->validateRequestPath($requestPath);
     }
 
@@ -52,8 +55,7 @@ class UrlRewriteTest extends \PHPUnit\Framework\TestCase
      */
     public function testValidateSuffixException($suffix)
     {
-        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
-
+        $this->expectException('Magento\Framework\Exception\LocalizedException');
         $this->_helper->validateSuffix($suffix);
     }
 

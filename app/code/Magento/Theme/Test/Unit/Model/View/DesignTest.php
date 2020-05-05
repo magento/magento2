@@ -3,46 +3,60 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Theme\Test\Unit\Model\View;
 
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\State;
+use Magento\Framework\Locale\ResolverInterface;
+use Magento\Framework\ObjectManagerInterface;
+use Magento\Framework\View\Design\Theme\FlyweightFactory;
+use Magento\Framework\View\Design\ThemeInterface;
+use Magento\Framework\View\DesignInterface;
 use Magento\Store\Model\ScopeInterface;
+use Magento\Store\Model\StoreManagerInterface;
 use Magento\Theme\Model\View\Design;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class DesignTest extends \PHPUnit\Framework\TestCase
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
+class DesignTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\App\State|\PHPUnit\Framework\MockObject\MockObject
+     * @var State|MockObject
      */
     protected $state;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var StoreManagerInterface|MockObject
      */
     protected $storeManager;
 
     /**
-     * @var \Magento\Framework\View\Design\Theme\FlyweightFactory|\PHPUnit\Framework\MockObject\MockObject
+     * @var FlyweightFactory|MockObject
      */
     protected $flyweightThemeFactory;
 
     /**
-     * @var \Magento\Theme\Model\ThemeFactory|\PHPUnit\Framework\MockObject\MockObject
+     * @var \Magento\Theme\Model\ThemeFactory|MockObject
      */
     protected $themeFactory;
 
     /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var ScopeConfigInterface|MockObject
      */
     protected $config;
 
     /**
-     * @var string|\PHPUnit\Framework\MockObject\MockObject
+     * @var string|MockObject
      */
     protected $defaultTheme = 'anyName4Theme';
 
     /**
-     * @var \Magento\Framework\ObjectManagerInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var ObjectManagerInterface|MockObject
      */
     private $objectManager;
 
@@ -53,12 +67,12 @@ class DesignTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp(): void
     {
-        $this->storeManager = $this->getMockForAbstractClass(\Magento\Store\Model\StoreManagerInterface::class);
-        $this->flyweightThemeFactory = $this->createMock(\Magento\Framework\View\Design\Theme\FlyweightFactory::class);
-        $this->config = $this->getMockForAbstractClass(\Magento\Framework\App\Config\ScopeConfigInterface::class);
+        $this->storeManager = $this->getMockForAbstractClass(StoreManagerInterface::class);
+        $this->flyweightThemeFactory = $this->createMock(FlyweightFactory::class);
+        $this->config = $this->getMockForAbstractClass(ScopeConfigInterface::class);
         $this->themeFactory = $this->createPartialMock(\Magento\Theme\Model\ThemeFactory::class, ['create']);
-        $this->objectManager = $this->getMockForAbstractClass(\Magento\Framework\ObjectManagerInterface::class);
-        $this->state = $this->createMock(\Magento\Framework\App\State::class);
+        $this->objectManager = $this->getMockForAbstractClass(ObjectManagerInterface::class);
+        $this->state = $this->createMock(State::class);
         $themes = [Design::DEFAULT_AREA => $this->defaultTheme];
         $this->model = new Design(
             $this->storeManager,
@@ -79,10 +93,10 @@ class DesignTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetThemePath($themePath, $themeId, $expectedResult)
     {
-        $theme = $this->getMockForAbstractClass(\Magento\Framework\View\Design\ThemeInterface::class);
+        $theme = $this->getMockForAbstractClass(ThemeInterface::class);
         $theme->expects($this->once())->method('getThemePath')->willReturn($themePath);
         $theme->expects($this->any())->method('getId')->willReturn($themeId);
-        /** @var $theme \Magento\Framework\View\Design\ThemeInterface */
+        /** @var ThemeInterface $theme */
         $this->assertEquals($expectedResult, $this->model->getThemePath($theme));
     }
 
@@ -93,8 +107,8 @@ class DesignTest extends \PHPUnit\Framework\TestCase
     {
         return [
             ['some_path', '', 'some_path'],
-            ['', '2', \Magento\Framework\View\DesignInterface::PUBLIC_THEME_DIR . '2'],
-            ['', '', \Magento\Framework\View\DesignInterface::PUBLIC_VIEW_DIR],
+            ['', '2', DesignInterface::PUBLIC_THEME_DIR . '2'],
+            ['', '', DesignInterface::PUBLIC_VIEW_DIR],
         ];
     }
 
@@ -147,7 +161,7 @@ class DesignTest extends \PHPUnit\Framework\TestCase
     {
         $locale = 'locale';
         $area = Design::DEFAULT_AREA;
-        $localeMock = $this->getMockForAbstractClass(\Magento\Framework\Locale\ResolverInterface::class);
+        $localeMock = $this->getMockForAbstractClass(ResolverInterface::class);
         $localeMock->expects($this->once())
             ->method('getLocale')
             ->willReturn($locale);
@@ -159,11 +173,12 @@ class DesignTest extends \PHPUnit\Framework\TestCase
             ->willReturn($area);
         $this->themeFactory->expects($this->once())
             ->method('create')
-            ->willReturn($this->getMockBuilder(\Magento\Framework\View\Design\ThemeInterface::class)->getMock());
+            ->willReturn($this->getMockBuilder(ThemeInterface::class)
+            ->getMock());
 
         $params = $this->model->getDesignParams();
 
-        $this->assertInstanceOf(\Magento\Framework\View\Design\ThemeInterface::class, $params['themeModel']);
+        $this->assertInstanceOf(ThemeInterface::class, $params['themeModel']);
         $this->assertEquals($area, $params['area']);
         $this->assertEquals($locale, $params['locale']);
     }
@@ -177,7 +192,8 @@ class DesignTest extends \PHPUnit\Framework\TestCase
     public function testSetDesignTheme()
     {
         $area = 'adminhtml';
-        $theme = $this->getMockBuilder(\Magento\Framework\View\Design\ThemeInterface::class)->getMock();
+        $theme = $this->getMockBuilder(ThemeInterface::class)
+            ->getMock();
 
         $this->assertInstanceOf(get_class($this->model), $this->model->setDesignTheme($theme, $area));
     }

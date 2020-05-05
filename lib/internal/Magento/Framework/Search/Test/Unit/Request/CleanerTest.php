@@ -3,18 +3,23 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Framework\Search\Test\Unit\Request;
 
+use Magento\Framework\Search\Request\Aggregation\StatusInterface;
+use Magento\Framework\Search\Request\Cleaner;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class CleanerTest extends \PHPUnit\Framework\TestCase
+class CleanerTest extends TestCase
 {
-    /** @var  \Magento\Framework\Search\Request\Aggregation\StatusInterface|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var  StatusInterface|MockObject */
     private $status;
 
     /**
-     * @var \Magento\Framework\Search\Request\Cleaner
+     * @var Cleaner
      */
     private $cleaner;
 
@@ -22,13 +27,13 @@ class CleanerTest extends \PHPUnit\Framework\TestCase
     {
         $helper = new ObjectManager($this);
 
-        $this->status = $this->getMockBuilder(\Magento\Framework\Search\Request\Aggregation\StatusInterface::class)
+        $this->status = $this->getMockBuilder(StatusInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['isEnabled'])
             ->getMockForAbstractClass();
 
         $this->cleaner = $helper->getObject(
-            \Magento\Framework\Search\Request\Cleaner::class,
+            Cleaner::class,
             ['aggregationStatus' => $this->status]
         );
     }
@@ -196,13 +201,10 @@ class CleanerTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($exceptedRequestData, $result);
     }
 
-    /**
-     */
     public function testCleanFilteredQueryType()
     {
-        $this->expectException(\Exception::class);
+        $this->expectException('Exception');
         $this->expectExceptionMessage('Reference is not provided');
-
         $requestData = [
             'query' => 'filtered_query',
             'queries' => [
@@ -216,13 +218,10 @@ class CleanerTest extends \PHPUnit\Framework\TestCase
         $this->cleaner->clean($requestData);
     }
 
-    /**
-     */
     public function testCleanQueryType()
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException('InvalidArgumentException');
         $this->expectExceptionMessage('Invalid query type');
-
         $requestData = [
             'query' => 'filtered_query',
             'queries' => [
@@ -236,13 +235,10 @@ class CleanerTest extends \PHPUnit\Framework\TestCase
         $this->cleaner->clean($requestData);
     }
 
-    /**
-     */
     public function testCleanFilterType()
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException('InvalidArgumentException');
         $this->expectExceptionMessage('Invalid filter type');
-
         $requestData = [
             'query' => 'filtered_query',
             'queries' => [
@@ -261,13 +257,12 @@ class CleanerTest extends \PHPUnit\Framework\TestCase
         $this->cleaner->clean($requestData);
     }
 
-    /**
-     */
     public function testCleanQueryCycle()
     {
-        $this->expectException(\Magento\Framework\Exception\StateException::class);
-        $this->expectExceptionMessage('A cycle was found. The "filtered_query" query is already used in the request hierarchy.');
-
+        $this->expectException('Magento\Framework\Exception\StateException');
+        $this->expectExceptionMessage(
+            'A cycle was found. The "filtered_query" query is already used in the request hierarchy.'
+        );
         $requestData = [
             'query' => 'filtered_query',
             'queries' => [
@@ -282,12 +277,9 @@ class CleanerTest extends \PHPUnit\Framework\TestCase
         $this->cleaner->clean($requestData);
     }
 
-    /**
-     */
     public function testCleanFilterCycle()
     {
-        $this->expectException(\Magento\Framework\Exception\StateException::class);
-
+        $this->expectException('Magento\Framework\Exception\StateException');
         $requestData = [
             'query' => 'filtered_query',
             'queries' => [
@@ -307,13 +299,10 @@ class CleanerTest extends \PHPUnit\Framework\TestCase
         $this->cleaner->clean($requestData);
     }
 
-    /**
-     */
     public function testCleanFilterNotFound()
     {
-        $this->expectException(\Exception::class);
+        $this->expectException('Exception');
         $this->expectExceptionMessage('Filter bool_filter does not exist');
-
         $requestData = [
             'query' => 'filtered_query',
             'queries' => [
@@ -328,13 +317,10 @@ class CleanerTest extends \PHPUnit\Framework\TestCase
         $this->cleaner->clean($requestData);
     }
 
-    /**
-     */
     public function testCleanQueryNotExists()
     {
-        $this->expectException(\Exception::class);
+        $this->expectException('Exception');
         $this->expectExceptionMessage('Query test does not exist');
-
         $requestData = [
             'query' => 'test',
             'queries' => [],
@@ -344,13 +330,12 @@ class CleanerTest extends \PHPUnit\Framework\TestCase
         $this->cleaner->clean($requestData);
     }
 
-    /**
-     */
     public function testCleanEmptyQueryAndFilter()
     {
-        $this->expectException(\Magento\Framework\Search\Request\EmptyRequestDataException::class);
-        $this->expectExceptionMessage('The request query and filters aren\'t set. Verify the query and filters and try again.');
-
+        $this->expectException('Magento\Framework\Search\Request\EmptyRequestDataException');
+        $this->expectExceptionMessage(
+            'The request query and filters aren\'t set. Verify the query and filters and try again.'
+        );
         $this->status->expects($this->once())
             ->method('isEnabled')
             ->willReturn(true);

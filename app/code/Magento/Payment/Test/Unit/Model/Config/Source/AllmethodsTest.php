@@ -3,17 +3,21 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Payment\Test\Unit\Model\Config\Source;
 
-use \Magento\Payment\Model\Config\Source\Allmethods;
+use Magento\Payment\Helper\Data;
+use Magento\Payment\Model\Config\Source\Allmethods;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class AllmethodsTest extends \PHPUnit\Framework\TestCase
+class AllmethodsTest extends TestCase
 {
     /**
      * Payment data
      *
-     * @var \Magento\Payment\Helper\Data | \PHPUnit\Framework\MockObject\MockObject
+     * @var Data|MockObject
      */
     protected $_paymentData;
 
@@ -25,8 +29,9 @@ class AllmethodsTest extends \PHPUnit\Framework\TestCase
     protected function setUp(): void
     {
         $this->_paymentData = $this->getMockBuilder(
-            \Magento\Payment\Helper\Data::class
-        )->disableOriginalConstructor()->setMethods([])->getMock();
+            Data::class
+        )->disableOriginalConstructor()
+            ->setMethods([])->getMock();
 
         $this->_model = new Allmethods($this->_paymentData);
     }

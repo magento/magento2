@@ -3,19 +3,25 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Config\Test\Unit\Model\Config\Structure\Mapper;
 
-class DependenciesTest extends \PHPUnit\Framework\TestCase
+use Magento\Config\Model\Config\Structure\Mapper\Dependencies;
+use Magento\Config\Model\Config\Structure\Mapper\Helper\RelativePathConverter;
+use PHPUnit\Framework\TestCase;
+
+class DependenciesTest extends TestCase
 {
     /**
-     * @var \Magento\Config\Model\Config\Structure\Mapper\Dependencies
+     * @var Dependencies
      */
     protected $_model;
 
     protected function setUp(): void
     {
-        $this->_model = new \Magento\Config\Model\Config\Structure\Mapper\Dependencies(
-            new \Magento\Config\Model\Config\Structure\Mapper\Helper\RelativePathConverter()
+        $this->_model = new Dependencies(
+            new RelativePathConverter()
         );
     }
 

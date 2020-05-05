@@ -3,35 +3,42 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Customer\Test\Unit\Block\Account;
 
 use Magento\Customer\Block\Account\AuthenticationPopup;
 use Magento\Customer\Model\Form;
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\Escaper;
+use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\UrlInterface;
 use Magento\Framework\View\Element\Template\Context;
 use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\StoreManagerInterface;
+use PHPUnit\Framework\Exception;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class AuthenticationPopupTest extends \PHPUnit\Framework\TestCase
+class AuthenticationPopupTest extends TestCase
 {
-    /** @var \Magento\Customer\Block\Account\AuthenticationPopup */
+    /** @var AuthenticationPopup */
     private $model;
 
-    /** @var \Magento\Framework\View\Element\Template\Context|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var Context|MockObject */
     private $contextMock;
 
-    /** @var StoreManagerInterface|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var StoreManagerInterface|MockObject */
     private $storeManagerMock;
 
-    /** @var ScopeConfigInterface|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var ScopeConfigInterface|MockObject */
     private $scopeConfigMock;
 
-    /** @var UrlInterface|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var UrlInterface|MockObject */
     private $urlBuilderMock;
 
-    /** @var \Magento\Framework\Serialize\Serializer\Json|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var Json|MockObject */
     private $serializerMock;
 
     protected function setUp(): void
@@ -56,7 +63,7 @@ class AuthenticationPopupTest extends \PHPUnit\Framework\TestCase
         $this->contextMock->expects($this->once())
             ->method('getUrlBuilder')
             ->willReturn($this->urlBuilderMock);
-        $escaperMock = $this->getMockBuilder(\Magento\Framework\Escaper::class)
+        $escaperMock = $this->getMockBuilder(Escaper::class)
             ->disableOriginalConstructor()
             ->getMock();
         $escaperMock->method('escapeHtml')
@@ -75,7 +82,7 @@ class AuthenticationPopupTest extends \PHPUnit\Framework\TestCase
             ->method('getEscaper')
             ->willReturn($escaperMock);
 
-        $this->serializerMock = $this->getMockBuilder(\Magento\Framework\Serialize\Serializer\Json::class)
+        $this->serializerMock = $this->getMockBuilder(Json::class)
             ->getMock();
 
         $this->model = new AuthenticationPopup(
@@ -91,7 +98,7 @@ class AuthenticationPopupTest extends \PHPUnit\Framework\TestCase
      * @param string $registerUrl
      * @param string $forgotUrl
      * @param array $result
-     * @throws \PHPUnit\Framework\Exception
+     * @throws Exception
      *
      * @dataProvider dataProviderGetConfig
      */
@@ -191,7 +198,7 @@ class AuthenticationPopupTest extends \PHPUnit\Framework\TestCase
      * @param string $registerUrl
      * @param string $forgotUrl
      * @param array $result
-     * @throws \PHPUnit\Framework\Exception
+     * @throws Exception
      *
      * @dataProvider dataProviderGetConfig
      */

@@ -3,18 +3,36 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 /**
  * Test for view Context model
  */
 namespace Magento\Framework\View\Test\Unit;
 
-use \Magento\Framework\View\Context;
+use Magento\Framework\App\Cache\StateInterface;
+use Magento\Framework\App\CacheInterface;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\FrontControllerInterface;
+use Magento\Framework\App\Request\Http;
+use Magento\Framework\App\State;
+use Magento\Framework\Event\ManagerInterface;
+use Magento\Framework\Session\SessionManagerInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\TranslateInterface;
+use Magento\Framework\UrlInterface;
+use Magento\Framework\View\ConfigInterface;
+use Magento\Framework\View\Context;
+use Magento\Framework\View\DesignInterface;
+use Magento\Framework\View\LayoutInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ContextTest extends \PHPUnit\Framework\TestCase
+class ContextTest extends TestCase
 {
     /**
      * @var Context
@@ -22,38 +40,38 @@ class ContextTest extends \PHPUnit\Framework\TestCase
     protected $context;
 
     /**
-     * @var \Magento\Framework\App\State|\PHPUnit\Framework\MockObject\MockObject
+     * @var State|MockObject
      */
     protected $appState;
 
     /**
-     * @var \Magento\Framework\App\Request\Http|\PHPUnit\Framework\MockObject\MockObject
+     * @var Http|MockObject
      */
     protected $request;
 
     /**
-     * @var \Magento\Framework\View\DesignInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var DesignInterface|MockObject
      */
     protected $design;
 
     protected function setUp(): void
     {
         $this->markTestSkipped('Testcase needs to be refactored.');
-        $this->appState = $this->getMockBuilder(\Magento\Framework\App\State::class)
+        $this->appState = $this->getMockBuilder(State::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->request = $this->getMockBuilder(\Magento\Framework\App\Request\Http::class)
+        $this->request = $this->getMockBuilder(Http::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->design = $this->getMockBuilder(\Magento\Framework\View\DesignInterface::class)
+        $this->design = $this->getMockBuilder(DesignInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $objectManager = new ObjectManager($this);
         $this->context = $objectManager->getObject(
-            \Magento\Framework\View\Context::class,
+            Context::class,
             [
                 'appState' => $this->appState,
                 'request' => $this->request,
@@ -64,41 +82,41 @@ class ContextTest extends \PHPUnit\Framework\TestCase
 
     public function testGetCache()
     {
-        $this->assertInstanceOf(\Magento\Framework\App\CacheInterface::class, $this->context->getCache());
+        $this->assertInstanceOf(CacheInterface::class, $this->context->getCache());
     }
 
     public function testGetDesignPackage()
     {
-        $this->assertInstanceOf(\Magento\Framework\View\DesignInterface::class, $this->context->getDesignPackage());
+        $this->assertInstanceOf(DesignInterface::class, $this->context->getDesignPackage());
     }
 
     public function testGetEventManager()
     {
-        $this->assertInstanceOf(\Magento\Framework\Event\ManagerInterface::class, $this->context->getEventManager());
+        $this->assertInstanceOf(ManagerInterface::class, $this->context->getEventManager());
     }
 
     public function testGetFrontController()
     {
         $this->assertInstanceOf(
-            \Magento\Framework\App\FrontControllerInterface::class,
+            FrontControllerInterface::class,
             $this->context->getFrontController()
         );
     }
 
     public function testGetLayout()
     {
-        $this->assertInstanceOf(\Magento\Framework\View\LayoutInterface::class, $this->context->getLayout());
+        $this->assertInstanceOf(LayoutInterface::class, $this->context->getLayout());
     }
 
     public function testGetRequest()
     {
-        $this->assertInstanceOf(\Magento\Framework\App\Request\Http::class, $this->context->getRequest());
+        $this->assertInstanceOf(Http::class, $this->context->getRequest());
     }
 
     public function testGetSession()
     {
         $this->assertInstanceOf(
-            \Magento\Framework\Session\SessionManagerInterface::class,
+            SessionManagerInterface::class,
             $this->context->getSession()
         );
     }
@@ -106,39 +124,39 @@ class ContextTest extends \PHPUnit\Framework\TestCase
     public function testGetScopeConfig()
     {
         $this->assertInstanceOf(
-            \Magento\Framework\App\Config\ScopeConfigInterface::class,
+            ScopeConfigInterface::class,
             $this->context->getScopeConfig()
         );
     }
 
     public function testGetTranslator()
     {
-        $this->assertInstanceOf(\Magento\Framework\TranslateInterface::class, $this->context->getTranslator());
+        $this->assertInstanceOf(TranslateInterface::class, $this->context->getTranslator());
     }
 
     public function testGetUrlBuilder()
     {
-        $this->assertInstanceOf(\Magento\Framework\UrlInterface::class, $this->context->getUrlBuilder());
+        $this->assertInstanceOf(UrlInterface::class, $this->context->getUrlBuilder());
     }
 
     public function testGetViewConfig()
     {
-        $this->assertInstanceOf(\Magento\Framework\View\ConfigInterface::class, $this->context->getViewConfig());
+        $this->assertInstanceOf(ConfigInterface::class, $this->context->getViewConfig());
     }
 
     public function testGetCacheState()
     {
-        $this->assertInstanceOf(\Magento\Framework\App\Cache\StateInterface::class, $this->context->getCacheState());
+        $this->assertInstanceOf(StateInterface::class, $this->context->getCacheState());
     }
 
     public function testGetLogger()
     {
-        $this->assertInstanceOf(\Psr\Log\LoggerInterface::class, $this->context->getLogger());
+        $this->assertInstanceOf(LoggerInterface::class, $this->context->getLogger());
     }
 
     public function testGetAppState()
     {
-        $this->assertInstanceOf(\Magento\Framework\App\State::class, $this->context->getAppState());
+        $this->assertInstanceOf(State::class, $this->context->getAppState());
     }
 
     public function testGetArea()

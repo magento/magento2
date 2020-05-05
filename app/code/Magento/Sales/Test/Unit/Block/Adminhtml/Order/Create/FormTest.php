@@ -24,8 +24,8 @@ use Magento\Sales\Block\Adminhtml\Order\Create\Form;
 use Magento\Sales\Model\AdminOrder\Create;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use PHPUnit\Framework\MockObject\MockObject as MockObject;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -140,7 +140,7 @@ class FormTest extends TestCase
 
         $customer = $this->getMockBuilder(CustomerInterface::class)
             ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+            ->getMock();
         $customer->method('getAddresses')
             ->willReturn([]);
         $this->customerRepository->method('getById')

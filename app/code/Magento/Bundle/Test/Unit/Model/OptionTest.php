@@ -3,49 +3,57 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Bundle\Test\Unit\Model;
 
+use Magento\Bundle\Model\Option;
+use Magento\Catalog\Model\Product;
+use Magento\Framework\Model\ResourceModel\AbstractResource;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class OptionTest extends \PHPUnit\Framework\TestCase
+class OptionTest extends TestCase
 {
     /**
-     * @var \Magento\Catalog\Model\Product|\PHPUnit\Framework\MockObject\MockObject
+     * @var Product|MockObject
      */
     protected $selectionFirst;
 
     /**
-     * @var \Magento\Catalog\Model\Product|\PHPUnit\Framework\MockObject\MockObject
+     * @var Product|MockObject
      */
     protected $selectionSecond;
 
     /**
-     * @var \Magento\Framework\Model\ResourceModel\AbstractResource|\PHPUnit\Framework\MockObject\MockObject
+     * @var AbstractResource|MockObject
      */
     protected $resource;
 
     /**
-     * @var \Magento\Bundle\Model\Option
+     * @var Option
      */
     protected $model;
 
     protected function setUp(): void
     {
-        $this->selectionFirst = $this->createPartialMock(
-            \Magento\Catalog\Model\Product::class,
-            ['__wakeup', 'isSaleable', 'getIsDefault', 'getSelectionId']
-        );
-        $this->selectionSecond = $this->createPartialMock(
-            \Magento\Catalog\Model\Product::class,
-            ['__wakeup', 'isSaleable', 'getIsDefault', 'getSelectionId']
-        );
-        $this->resource = $this->createPartialMock(\Magento\Framework\Model\ResourceModel\AbstractResource::class, [
-                '_construct',
-                'getConnection',
-                'getIdFieldName',
-                'getSearchableData',
-            ]);
-        $this->model = (new ObjectManager($this))->getObject(\Magento\Bundle\Model\Option::class, [
+        $this->selectionFirst = $this->getMockBuilder(Product::class)
+            ->addMethods(['getIsDefault', 'getSelectionId'])
+            ->onlyMethods(['__wakeup', 'isSaleable'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->selectionSecond = $this->getMockBuilder(Product::class)
+            ->addMethods(['getIsDefault', 'getSelectionId'])
+            ->onlyMethods(['__wakeup', 'isSaleable'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->resource = $this->getMockBuilder(AbstractResource::class)
+            ->addMethods(['getIdFieldName', 'getSearchableData'])
+            ->onlyMethods(['getConnection'])
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+        $this->model = (new ObjectManager($this))->getObject(Option::class, [
             'resource' => $this->resource,
         ]);
     }

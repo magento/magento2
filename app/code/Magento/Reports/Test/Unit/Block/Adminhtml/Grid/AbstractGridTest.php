@@ -3,23 +3,29 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Reports\Test\Unit\Block\Adminhtml\Grid;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Reports\Block\Adminhtml\Grid\AbstractGrid;
+use Magento\Store\Api\Data\StoreInterface;
+use Magento\Store\Model\StoreManagerInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test for class \Magento\Reports\Block\Adminhtml\Grid\AbstractGrid.
  */
-class AbstractGridTest extends \PHPUnit\Framework\TestCase
+class AbstractGridTest extends TestCase
 {
     /**
-     * @var \Magento\Reports\Block\Adminhtml\Grid\AbstractGrid|\PHPUnit\Framework\MockObject\MockObject
+     * @var AbstractGrid|MockObject
      */
     private $model;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var StoreManagerInterface|MockObject
      */
     private $storeManagerMock;
 
@@ -28,7 +34,7 @@ class AbstractGridTest extends \PHPUnit\Framework\TestCase
         $objectManager = new ObjectManager($this);
 
         $this->storeManagerMock = $this->getMockForAbstractClass(
-            \Magento\Store\Model\StoreManagerInterface::class,
+            StoreManagerInterface::class,
             [],
             '',
             true,
@@ -38,7 +44,7 @@ class AbstractGridTest extends \PHPUnit\Framework\TestCase
         );
 
         $this->model = $objectManager->getObject(
-            \Magento\Reports\Block\Adminhtml\Grid\AbstractGrid::class,
+            AbstractGrid::class,
             ['_storeManager' => $this->storeManagerMock]
         );
     }
@@ -51,7 +57,7 @@ class AbstractGridTest extends \PHPUnit\Framework\TestCase
     public function testGetCurrentCurrencyCode($storeIds)
     {
         $storeMock = $this->getMockForAbstractClass(
-            \Magento\Store\Api\Data\StoreInterface::class,
+            StoreInterface::class,
             [],
             '',
             true,

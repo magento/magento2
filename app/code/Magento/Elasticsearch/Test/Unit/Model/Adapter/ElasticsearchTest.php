@@ -3,25 +3,33 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Elasticsearch\Test\Unit\Model\Adapter;
 
+use Elasticsearch\Client;
+use Elasticsearch\Namespaces\IndicesNamespace;
+use Magento\AdvancedSearch\Model\Client\ClientInterface as ElasticsearchClient;
 use Magento\AdvancedSearch\Model\Client\ClientOptionsInterface;
-use Magento\Elasticsearch\Model\Adapter\Elasticsearch as ElasticsearchAdapter;
-use Magento\Elasticsearch\SearchAdapter\ConnectionManager;
 use Magento\Elasticsearch\Model\Adapter\BatchDataMapperInterface;
+use Magento\Elasticsearch\Model\Adapter\Elasticsearch as ElasticsearchAdapter;
 use Magento\Elasticsearch\Model\Adapter\FieldMapperInterface;
 use Magento\Elasticsearch\Model\Adapter\Index\BuilderInterface;
-use Psr\Log\LoggerInterface;
-use Magento\AdvancedSearch\Model\Client\ClientInterface as ElasticsearchClient;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Elasticsearch\Model\Adapter\Index\IndexNameResolver;
+use Magento\Elasticsearch\Model\Config;
+use Magento\Elasticsearch\SearchAdapter\ConnectionManager;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface;
 
 /**
  * Test for Elasticsearch client
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ElasticsearchTest extends \PHPUnit\Framework\TestCase
+class ElasticsearchTest extends TestCase
 {
     /**
      * @var ElasticsearchAdapter
@@ -29,37 +37,37 @@ class ElasticsearchTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var ConnectionManager|\PHPUnit\Framework\MockObject\MockObject
+     * @var ConnectionManager|MockObject
      */
     protected $connectionManager;
 
     /**
-     * @var BatchDataMapperInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var BatchDataMapperInterface|MockObject
      */
     protected $batchDocumentDataMapper;
 
     /**
-     * @var FieldMapperInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var FieldMapperInterface|MockObject
      */
     protected $fieldMapper;
 
     /**
-     * @var ClientOptionsInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var ClientOptionsInterface|MockObject
      */
     protected $clientConfig;
 
     /**
-     * @var BuilderInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var BuilderInterface|MockObject
      */
     protected $indexBuilder;
 
     /**
-     * @var LoggerInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var LoggerInterface|MockObject
      */
     protected $logger;
 
     /**
-     * @var ElasticsearchClient|\PHPUnit\Framework\MockObject\MockObject
+     * @var ElasticsearchClient|MockObject
      */
     protected $client;
 
@@ -69,7 +77,7 @@ class ElasticsearchTest extends \PHPUnit\Framework\TestCase
     protected $objectManager;
 
     /**
-     * @var IndexNameResolver|\PHPUnit\Framework\MockObject\MockObject
+     * @var IndexNameResolver|MockObject
      */
     protected $indexNameResolver;
 
@@ -82,14 +90,14 @@ class ElasticsearchTest extends \PHPUnit\Framework\TestCase
     protected function setUp(): void
     {
         $this->objectManager = new ObjectManagerHelper($this);
-        $this->connectionManager = $this->getMockBuilder(\Magento\Elasticsearch\SearchAdapter\ConnectionManager::class)
+        $this->connectionManager = $this->getMockBuilder(ConnectionManager::class)
             ->disableOriginalConstructor()
             ->setMethods(['getConnection'])
             ->getMock();
-        $this->fieldMapper = $this->getMockBuilder(\Magento\Elasticsearch\Model\Adapter\FieldMapperInterface::class)
+        $this->fieldMapper = $this->getMockBuilder(FieldMapperInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->clientConfig = $this->getMockBuilder(\Magento\Elasticsearch\Model\Config::class)
+        $this->clientConfig = $this->getMockBuilder(Config::class)
             ->disableOriginalConstructor()
             ->setMethods(
                 [
@@ -97,13 +105,13 @@ class ElasticsearchTest extends \PHPUnit\Framework\TestCase
                     'getEntityType',
                 ]
             )->getMock();
-        $this->indexBuilder = $this->getMockBuilder(\Magento\Elasticsearch\Model\Adapter\Index\BuilderInterface::class)
+        $this->indexBuilder = $this->getMockBuilder(BuilderInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->logger = $this->getMockBuilder(\Psr\Log\LoggerInterface::class)
+        $this->logger = $this->getMockBuilder(LoggerInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $elasticsearchClientMock = $this->getMockBuilder(\Elasticsearch\Client::class)
+        $elasticsearchClientMock = $this->getMockBuilder(Client::class)
             ->setMethods(
                 [
                     'indices',
@@ -114,7 +122,7 @@ class ElasticsearchTest extends \PHPUnit\Framework\TestCase
             )
             ->disableOriginalConstructor()
             ->getMock();
-        $indicesMock = $this->getMockBuilder(\Elasticsearch\Namespaces\IndicesNamespace::class)
+        $indicesMock = $this->getMockBuilder(IndicesNamespace::class)
             ->setMethods(
                 [
                     'exists',
@@ -157,7 +165,7 @@ class ElasticsearchTest extends \PHPUnit\Framework\TestCase
             ->method('getEntityType')
             ->willReturn('product');
         $this->indexNameResolver = $this->getMockBuilder(
-            \Magento\Elasticsearch\Model\Adapter\Index\IndexNameResolver::class
+            IndexNameResolver::class
         )
             ->setMethods(
                 [
@@ -170,7 +178,7 @@ class ElasticsearchTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->batchDocumentDataMapper = $this->getMockBuilder(
-            \Magento\Elasticsearch\Model\Adapter\BatchDataMapperInterface::class
+            BatchDataMapperInterface::class
         )->disableOriginalConstructor()
             ->getMock();
         $this->model = $this->objectManager->getObject(
@@ -204,7 +212,7 @@ class ElasticsearchTest extends \PHPUnit\Framework\TestCase
      */
     public function testPingFailure()
     {
-        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+        $this->expectException(LocalizedException::class);
 
         $this->client->expects($this->once())
             ->method('ping')
@@ -233,14 +241,13 @@ class ElasticsearchTest extends \PHPUnit\Framework\TestCase
                 ]
             );
         $this->assertIsArray($this->model->prepareDocsPerStore(
-                [
-                    '1' => [
-                        'name' => 'Product Name',
-                    ],
+            [
+                '1' => [
+                    'name' => 'Product Name',
                 ],
-                1
-            )
-        );
+            ],
+            1
+        ));
     }
 
     /**
@@ -358,13 +365,11 @@ class ElasticsearchTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($model, $model->updateAlias(1, 'product'));
     }
 
-    /**
-     */
     public function testConnectException()
     {
-        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+        $this->expectException(LocalizedException::class);
 
-        $connectionManager = $this->getMockBuilder(\Magento\Elasticsearch\SearchAdapter\ConnectionManager::class)
+        $connectionManager = $this->getMockBuilder(ConnectionManager::class)
             ->disableOriginalConstructor()
             ->setMethods(
                 [

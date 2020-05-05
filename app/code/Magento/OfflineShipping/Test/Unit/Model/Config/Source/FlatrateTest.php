@@ -3,18 +3,23 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\OfflineShipping\Test\Unit\Model\Config\Source;
 
-class FlatrateTest extends \PHPUnit\Framework\TestCase
+use Magento\OfflineShipping\Model\Config\Source\Flatrate;
+use PHPUnit\Framework\TestCase;
+
+class FlatrateTest extends TestCase
 {
     /**
-     * @var \Magento\OfflineShipping\Model\Config\Source\Flatrate
+     * @var Flatrate
      */
     protected $model;
 
     protected function setUp(): void
     {
-        $this->model = new \Magento\OfflineShipping\Model\Config\Source\Flatrate();
+        $this->model = new Flatrate();
     }
 
     public function testToOptionArray()

@@ -3,19 +3,31 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Catalog\Test\Unit\Block\Rss\Product;
 
+use Magento\Catalog\Block\Rss\Product\NewProducts;
+use Magento\Catalog\Helper\Image;
+use Magento\Catalog\Model\Product;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\RequestInterface;
+use Magento\Framework\App\Rss\UrlBuilderInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Framework\View\Element\Template\Context;
+use Magento\Store\Model\Store;
+use Magento\Store\Model\StoreManager;
+use Magento\Store\Model\StoreManagerInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
- * Class NewProductsTest
- * @package Magento\Catalog\Block\Rss\Product
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class NewProductsTest extends \PHPUnit\Framework\TestCase
+class NewProductsTest extends TestCase
 {
     /**
-     * @var \Magento\Catalog\Block\Rss\Product\NewProducts
+     * @var NewProducts
      */
     protected $block;
 
@@ -25,61 +37,62 @@ class NewProductsTest extends \PHPUnit\Framework\TestCase
     protected $objectManagerHelper;
 
     /**
-     * @var \Magento\Framework\View\Element\Template\Context|\PHPUnit\Framework\MockObject\MockObject
+     * @var Context|MockObject
      */
     protected $context;
 
     /**
-     * @var \Magento\Catalog\Helper\Image|\PHPUnit\Framework\MockObject\MockObject
+     * @var Image|MockObject
      */
     protected $imageHelper;
 
     /**
-     * @var \Magento\Catalog\Model\Rss\Product\NewProducts|\PHPUnit\Framework\MockObject\MockObject
+     * @var \Magento\Catalog\Model\Rss\Product\NewProducts|MockObject
      */
     protected $newProducts;
 
     /**
-     * @var \Magento\Framework\App\Rss\UrlBuilderInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var UrlBuilderInterface|MockObject
      */
     protected $rssUrlBuilder;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var StoreManagerInterface|MockObject
      */
     protected $storeManager;
 
     /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var ScopeConfigInterface|MockObject
      */
     protected $scopeConfig;
 
     /**
-     * @var \Magento\Framework\App\RequestInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var RequestInterface|MockObject
      */
     protected $request;
 
     protected function setUp(): void
     {
-        $this->request = $this->createMock(\Magento\Framework\App\RequestInterface::class);
+        $this->request = $this->createMock(RequestInterface::class);
         $this->request->expects($this->any())->method('getParam')->with('store_id')->willReturn(null);
 
-        $this->context = $this->createMock(\Magento\Framework\View\Element\Template\Context::class);
-        $this->imageHelper = $this->createMock(\Magento\Catalog\Helper\Image::class);
+        $this->context = $this->createMock(Context::class);
+        $this->imageHelper = $this->createMock(Image::class);
         $this->newProducts = $this->createMock(\Magento\Catalog\Model\Rss\Product\NewProducts::class);
-        $this->rssUrlBuilder = $this->createMock(\Magento\Framework\App\Rss\UrlBuilderInterface::class);
-        $this->scopeConfig = $this->createMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
+        $this->rssUrlBuilder = $this->createMock(UrlBuilderInterface::class);
+        $this->scopeConfig = $this->createMock(ScopeConfigInterface::class);
 
-        $this->storeManager = $this->createMock(\Magento\Store\Model\StoreManager::class);
-        $store = $this->getMockBuilder(\Magento\Store\Model\Store::class)
-            ->setMethods(['getId', 'getFrontendName', '__wakeup'])->disableOriginalConstructor()->getMock();
+        $this->storeManager = $this->createMock(StoreManager::class);
+        $store = $this->getMockBuilder(Store::class)
+            ->setMethods(['getId', 'getFrontendName'])->disableOriginalConstructor()
+            ->getMock();
         $store->expects($this->any())->method('getId')->willReturn(1);
         $store->expects($this->any())->method('getFrontendName')->willReturn('Store 1');
         $this->storeManager->expects($this->any())->method('getStore')->willReturn($store);
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->block = $this->objectManagerHelper->getObject(
-            \Magento\Catalog\Block\Rss\Product\NewProducts::class,
+            NewProducts::class,
             [
                 'request' => $this->request,
                 'imageHelper' => $this->imageHelper,
@@ -112,21 +125,17 @@ class NewProductsTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return \PHPUnit\Framework\MockObject\MockObject
+     * @return MockObject
      */
     protected function getItemMock()
     {
-        $methods = [
-            'setAllowedInRss',
-            'setAllowedPriceInRss',
-            'getAllowedPriceInRss',
-            'getAllowedInRss',
-            'getProductUrl',
-            'getDescription',
-            'getName',
-            '__wakeup',
-        ];
-        $item = $this->createPartialMock(\Magento\Catalog\Model\Product::class, $methods);
+        $item = $this->getMockBuilder(Product::class)
+            ->addMethods(
+                ['setAllowedInRss', 'setAllowedPriceInRss', 'getAllowedPriceInRss', 'getAllowedInRss', 'getDescription']
+            )
+            ->onlyMethods(['getProductUrl', 'getName'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $item->expects($this->once())->method('setAllowedInRss')->with(true);
         $item->expects($this->once())->method('setAllowedPriceInRss')->with(true);
         $item->expects($this->once())->method('getAllowedPriceInRss')->willReturn(true);
@@ -147,8 +156,7 @@ class NewProductsTest extends \PHPUnit\Framework\TestCase
         $item = $this->getItemMock();
         $this->newProducts->expects($this->once())->method('getProductsCollection')
             ->willReturn([$item]);
-        $this->imageHelper->expects($this->once())->method('init')->with($item, 'rss_thumbnail')
-            ->willReturnSelf();
+        $this->imageHelper->expects($this->once())->method('init')->with($item, 'rss_thumbnail')->willReturnSelf();
         $this->imageHelper->expects($this->once())->method('getUrl')
             ->willReturn('image_link');
         $data = [
@@ -168,9 +176,18 @@ class NewProductsTest extends \PHPUnit\Framework\TestCase
         $description = $rssData['entries'][0]['description'];
         unset($rssData['entries'][0]['description']);
         $this->assertEquals($data, $rssData);
-        $this->assertContains('<a href="http://magento.com/product-name.html">', $description);
-        $this->assertContains('<img src="image_link" border="0" align="left" height="75" width="75">', $description);
-        $this->assertContains('<td style="text-decoration:none;">Product Description </td>', $description);
+        $this->assertStringContainsString(
+            '<a href="http://magento.com/product-name.html">',
+            $description
+        );
+        $this->assertStringContainsString(
+            '<img src="image_link" border="0" align="left" height="75" width="75">',
+            $description
+        );
+        $this->assertStringContainsString(
+            '<td style="text-decoration:none;">Product Description </td>',
+            $description
+        );
     }
 
     public function testGetCacheLifetime()

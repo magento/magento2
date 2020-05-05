@@ -3,18 +3,23 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Paypal\Test\Unit\Model\Payflow\Service\Response\Validator;
 
+use Magento\Framework\DataObject;
+use Magento\Payment\Model\Method\ConfigInterface;
 use Magento\Paypal\Model\Payflow\Service\Response\Validator\CVV2Match;
 use Magento\Paypal\Model\Payflow\Transparent;
-use Magento\Payment\Model\Method\ConfigInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Class CVV2MatchTest
  *
  * Test class for \Magento\Paypal\Model\Payflow\Service\Response\Validator\CVV2Match
  */
-class CVV2MatchTest extends \PHPUnit\Framework\TestCase
+class CVV2MatchTest extends TestCase
 {
     /**
      * @var CVV2Match
@@ -22,12 +27,12 @@ class CVV2MatchTest extends \PHPUnit\Framework\TestCase
     protected $validator;
 
     /**
-     * @var \Magento\Payment\Model\Method\ConfigInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var ConfigInterface|MockObject
      */
     protected $configMock;
 
     /**
-     * @var Transparent|\PHPUnit\Framework\MockObject\MockObject
+     * @var Transparent|MockObject
      */
     protected $payflowproFacade;
 
@@ -50,14 +55,14 @@ class CVV2MatchTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param bool $expectedResult
-     * @param \Magento\Framework\DataObject $response
+     * @param DataObject $response
      * @param string $avsSecurityCodeFlag
      *
      * @dataProvider validationDataProvider
      */
     public function testValidation(
         $expectedResult,
-        \Magento\Framework\DataObject $response,
+        DataObject $response,
         $avsSecurityCodeFlag
     ) {
         $this->payflowproFacade->expects(static::once())
@@ -84,7 +89,7 @@ class CVV2MatchTest extends \PHPUnit\Framework\TestCase
         return [
             [
                 'expectedResult' => true,
-                'response' => new \Magento\Framework\DataObject(
+                'response' => new DataObject(
                     [
                         'cvv2match' => 'Y',
                     ]
@@ -93,7 +98,7 @@ class CVV2MatchTest extends \PHPUnit\Framework\TestCase
             ],
             [
                 'expectedResult' => true,
-                'response' => new \Magento\Framework\DataObject(
+                'response' => new DataObject(
                     [
                         'cvv2match' => 'Y',
                     ]
@@ -102,7 +107,7 @@ class CVV2MatchTest extends \PHPUnit\Framework\TestCase
             ],
             [
                 'expectedResult' => true,
-                'response' => new \Magento\Framework\DataObject(
+                'response' => new DataObject(
                     [
                         'cvv2match' => 'X',
                     ]
@@ -111,7 +116,7 @@ class CVV2MatchTest extends \PHPUnit\Framework\TestCase
             ],
             [
                 'expectedResult' => false,
-                'response' => new \Magento\Framework\DataObject(
+                'response' => new DataObject(
                     [
                         'cvv2match' => 'N',
                     ]
@@ -120,7 +125,7 @@ class CVV2MatchTest extends \PHPUnit\Framework\TestCase
             ],
             [
                 'expectedResult' => true,
-                'response' => new \Magento\Framework\DataObject(
+                'response' => new DataObject(
                     [
                         'cvv2match' => null,
                     ]
@@ -129,7 +134,7 @@ class CVV2MatchTest extends \PHPUnit\Framework\TestCase
             ],
             [
                 'expectedResult' => true,
-                'response' => new \Magento\Framework\DataObject(),
+                'response' => new DataObject(),
                 'configValue' => '1',
             ],
         ];

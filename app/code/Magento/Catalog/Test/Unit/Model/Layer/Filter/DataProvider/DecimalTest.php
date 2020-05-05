@@ -3,21 +3,25 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Unit\Model\Layer\Filter\DataProvider;
 
+use Magento\Catalog\Model\Layer\Filter\FilterInterface;
+use Magento\Catalog\Model\ResourceModel\Layer\Filter\Decimal;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
-use PHPUnit\Framework\MockObject\MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test for \Magento\Catalog\Model\Layer\Filter\DataProvider\Decimal
  */
-class DecimalTest extends \PHPUnit\Framework\TestCase
+class DecimalTest extends TestCase
 {
-    /** @var  \Magento\Catalog\Model\Layer\Filter\FilterInterface|MockObject */
+    /** @var  FilterInterface|MockObject */
     private $filter;
 
-    /** @var  \Magento\Catalog\Model\ResourceModel\Layer\Filter\Decimal|MockObject */
+    /** @var  Decimal|MockObject */
     private $resource;
 
     /**
@@ -27,11 +31,11 @@ class DecimalTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp(): void
     {
-        $this->filter = $this->getMockBuilder(\Magento\Catalog\Model\Layer\Filter\FilterInterface::class)
+        $this->filter = $this->getMockBuilder(FilterInterface::class)
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMockForAbstractClass();
-        $this->resource = $this->getMockBuilder(\Magento\Catalog\Model\ResourceModel\Layer\Filter\Decimal::class)
+        $this->resource = $this->getMockBuilder(Decimal::class)
             ->disableOriginalConstructor()
             ->setMethods(['getMinMax', 'getCount'])
             ->getMock();

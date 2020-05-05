@@ -3,18 +3,23 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Cron\Test\Unit\Model\Groups\Config\Converter;
 
-class XmlTest extends \PHPUnit\Framework\TestCase
+use Magento\Cron\Model\Groups\Config\Converter\Xml;
+use PHPUnit\Framework\TestCase;
+
+class XmlTest extends TestCase
 {
     /**
-     * @var \Magento\Cron\Model\Groups\Config\Converter\Xml
+     * @var Xml
      */
     protected $object;
 
     protected function setUp(): void
     {
-        $this->object = new \Magento\Cron\Model\Groups\Config\Converter\Xml();
+        $this->object = new Xml();
     }
 
     public function testConvert()

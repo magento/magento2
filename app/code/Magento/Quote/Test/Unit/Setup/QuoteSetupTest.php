@@ -3,21 +3,27 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Quote\Test\Unit\Setup;
 
+use Magento\Eav\Model\Entity\Setup\Context;
 use Magento\Eav\Model\ResourceModel\Entity\Attribute\Group\CollectionFactory;
+use Magento\Framework\App\CacheInterface;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Quote\Setup\QuoteSetup;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test for Quote module setup model.
- *
- * @package Magento\Quote\Test\Unit\Setup
  */
-class QuoteSetupTest extends \PHPUnit\Framework\TestCase
+class QuoteSetupTest extends TestCase
 {
     /**
-     * @var \Magento\Quote\Setup\QuoteSetup
+     * @var QuoteSetup
      */
     private $model;
 
@@ -27,48 +33,48 @@ class QuoteSetupTest extends \PHPUnit\Framework\TestCase
     private $objectManagerHelper;
 
     /**
-     * @var \Magento\Framework\Setup\ModuleDataSetupInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var ModuleDataSetupInterface|MockObject
      */
     private $moduleDataSetupMock;
 
     /**
-     * @var \Magento\Eav\Model\Entity\Setup\Context|\PHPUnit\Framework\MockObject\MockObject
+     * @var Context|MockObject
      */
     private $contextMock;
 
     /**
-     * @var \Magento\Framework\App\CacheInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var CacheInterface|MockObject
      */
     private $cacheMock;
 
     /**
-     * @var CollectionFactory|\PHPUnit\Framework\MockObject\MockObject
+     * @var CollectionFactory|MockObject
      */
     private $collectionFactoryMock;
 
     /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var ScopeConfigInterface|MockObject
      */
     private $scopeConfigMock;
 
     protected function setUp(): void
     {
-        $this->moduleDataSetupMock = $this->getMockBuilder(\Magento\Framework\Setup\ModuleDataSetupInterface::class)
+        $this->moduleDataSetupMock = $this->getMockBuilder(ModuleDataSetupInterface::class)
             ->getMockForAbstractClass();
-        $this->contextMock = $this->getMockBuilder(\Magento\Eav\Model\Entity\Setup\Context::class)
+        $this->contextMock = $this->getMockBuilder(Context::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->cacheMock = $this->getMockBuilder(\Magento\Framework\App\CacheInterface::class)
+        $this->cacheMock = $this->getMockBuilder(CacheInterface::class)
             ->getMockForAbstractClass();
         $this->collectionFactoryMock = $this->getMockBuilder(CollectionFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->scopeConfigMock = $this->getMockBuilder(\Magento\Framework\App\Config\ScopeConfigInterface::class)
+        $this->scopeConfigMock = $this->getMockBuilder(ScopeConfigInterface::class)
             ->getMockForAbstractClass();
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->model = $this->objectManagerHelper->getObject(
-            \Magento\Quote\Setup\QuoteSetup::class,
+            QuoteSetup::class,
             [
                 'setup' => $this->moduleDataSetupMock,
                 'context' => $this->contextMock,

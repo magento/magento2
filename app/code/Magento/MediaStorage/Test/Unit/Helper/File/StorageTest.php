@@ -3,27 +3,37 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\MediaStorage\Test\Unit\Helper\File;
 
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\Helper\Context;
+use Magento\Framework\Model\AbstractModel;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\MediaStorage\Helper\File\Storage;
+use Magento\MediaStorage\Helper\File\Storage\Database as DatabaseHelper;
+use Magento\MediaStorage\Model\File\Storage\File;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class StorageTest extends \PHPUnit\Framework\TestCase
+class StorageTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
+     * @var ObjectManager
      */
     protected $objectManager;
 
-    /** @var \Magento\MediaStorage\Model\File\Storage\File | \PHPUnit\Framework\MockObject\MockObject  */
+    /** @var File|MockObject  */
     protected $filesystemStorageMock;
 
-    /** @var \Magento\MediaStorage\Helper\File\Storage\Database | \PHPUnit\Framework\MockObject\MockObject  */
+    /** @var DatabaseHelper|MockObject  */
     protected $coreFileStorageDbMock;
 
-    /** @var \Magento\MediaStorage\Model\File\Storage | \PHPUnit\Framework\MockObject\MockObject  */
+    /** @var \Magento\MediaStorage\Model\File\Storage|MockObject  */
     protected $storageMock;
 
-    /** @var \Magento\Framework\App\Config\ScopeConfigInterface | \PHPUnit\Framework\MockObject\MockObject  */
+    /** @var ScopeConfigInterface|MockObject  */
     protected $configMock;
 
     /** @var  Storage */
@@ -31,10 +41,10 @@ class StorageTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp(): void
     {
-        $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $className = \Magento\MediaStorage\Helper\File\Storage::class;
+        $this->objectManager = new ObjectManager($this);
+        $className = Storage::class;
         $arguments = $this->objectManager->getConstructArguments($className);
-        /** @var \Magento\Framework\App\Helper\Context $context */
+        /** @var Context $context */
         $context = $arguments['context'];
         $this->filesystemStorageMock = $arguments['filesystemStorage'];
         $this->coreFileStorageDbMock = $arguments['coreFileStorageDb'];
@@ -91,7 +101,7 @@ class StorageTest extends \PHPUnit\Framework\TestCase
 
     public function testGetStorageModel()
     {
-        $storageModelMock = $this->getMockBuilder(\Magento\Framework\Model\AbstractModel::class)
+        $storageModelMock = $this->getMockBuilder(AbstractModel::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->storageMock->expects($this->once())
@@ -122,7 +132,7 @@ class StorageTest extends \PHPUnit\Framework\TestCase
             ->with($filename)
             ->willReturn($relativePath);
 
-        $storageModelMock = $this->getMockBuilder(\Magento\Framework\Model\AbstractModel::class)
+        $storageModelMock = $this->getMockBuilder(AbstractModel::class)
             ->disableOriginalConstructor()
             ->setMethods(['loadByFileName', '__wakeup'])
             ->getMock();

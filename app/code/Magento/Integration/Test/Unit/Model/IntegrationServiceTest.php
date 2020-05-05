@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Test for \Magento\Integration\Model\IntegrationService
  *
@@ -8,34 +8,34 @@
 
 namespace Magento\Integration\Test\Unit\Model;
 
+use Magento\Integration\Api\OauthServiceInterface;
 use Magento\Integration\Model\Integration;
+use Magento\Integration\Model\IntegrationFactory;
+use Magento\Integration\Model\IntegrationService;
+use Magento\Integration\Model\Oauth\Consumer;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class IntegrationServiceTest extends \PHPUnit\Framework\TestCase
+class IntegrationServiceTest extends TestCase
 {
     const VALUE_INTEGRATION_ID = 1;
-
     const VALUE_INTEGRATION_NAME = 'Integration Name';
-
     const VALUE_INTEGRATION_ANOTHER_NAME = 'Another Integration Name';
-
     const VALUE_INTEGRATION_EMAIL = 'test@magento.com';
-
     const VALUE_INTEGRATION_SETUP_BACKEND = 0;
-
     const VALUE_INTEGRATION_ENDPOINT = 'http://magento.ll/endpoint';
-
     const VALUE_INTEGRATION_CONSUMER_ID = 1;
 
-    /** @var \PHPUnit\Framework\MockObject\MockObject */
+    /** @var MockObject */
     private $_integrationFactory;
 
-    /** @var \PHPUnit\Framework\MockObject\MockObject */
+    /** @var MockObject */
     private $_integrationMock;
 
-    /** @var \PHPUnit\Framework\MockObject\MockObject */
+    /** @var MockObject */
     private $_emptyIntegrationMock;
 
-    /** @var \Magento\Integration\Model\IntegrationService */
+    /** @var IntegrationService */
     private $_service;
 
     /** @var array */
@@ -43,31 +43,32 @@ class IntegrationServiceTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp(): void
     {
-        $this->_integrationFactory = $this->getMockBuilder(\Magento\Integration\Model\IntegrationFactory::class)
+        $this->_integrationFactory = $this->getMockBuilder(IntegrationFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
         $this->_integrationMock = $this->getMockBuilder(
-            \Magento\Integration\Model\Integration::class
-        )->disableOriginalConstructor()->setMethods(
-            [
-                'getData',
-                'getId',
-                'getName',
-                'getEmail',
-                'getEndpoint',
-                'load',
-                'loadByName',
-                'save',
-                'delete',
-                '__wakeup',
-            ]
-        )->getMock();
+            Integration::class
+        )->disableOriginalConstructor()
+            ->setMethods(
+                [
+                    'getData',
+                    'getId',
+                    'getName',
+                    'getEmail',
+                    'getEndpoint',
+                    'load',
+                    'loadByName',
+                    'save',
+                    'delete',
+                    '__wakeup',
+                ]
+            )->getMock();
         $this->_integrationData = [
             Integration::ID => self::VALUE_INTEGRATION_ID,
             Integration::NAME => self::VALUE_INTEGRATION_NAME,
             Integration::EMAIL => self::VALUE_INTEGRATION_EMAIL,
-            Integration::EMAIL => self::VALUE_INTEGRATION_ENDPOINT,
+            Integration::ENDPOINT => self::VALUE_INTEGRATION_ENDPOINT,
             Integration::SETUP_TYPE => self::VALUE_INTEGRATION_SETUP_BACKEND,
         ];
         $this->_integrationFactory->expects(
@@ -79,11 +80,13 @@ class IntegrationServiceTest extends \PHPUnit\Framework\TestCase
         );
 
         $oauthConsumerHelper = $this->getMockBuilder(
-            \Magento\Integration\Api\OauthServiceInterface::class
-        )->disableOriginalConstructor()->getMock();
+            OauthServiceInterface::class
+        )->disableOriginalConstructor()
+            ->getMock();
         $oauthConsumer = $this->getMockBuilder(
-            \Magento\Integration\Model\Oauth\Consumer::class
-        )->disableOriginalConstructor()->getMock();
+            Consumer::class
+        )->disableOriginalConstructor()
+            ->getMock();
         $oauthConsumerHelper->expects(
             $this->any()
         )->method(
@@ -93,26 +96,27 @@ class IntegrationServiceTest extends \PHPUnit\Framework\TestCase
         );
         $oauthConsumerHelper->expects($this->any())->method('loadConsumer')->willReturn($oauthConsumer);
 
-        $this->_service = new \Magento\Integration\Model\IntegrationService(
+        $this->_service = new IntegrationService(
             $this->_integrationFactory,
             $oauthConsumerHelper
         );
         $this->_emptyIntegrationMock = $this->getMockBuilder(
-            \Magento\Integration\Model\Integration::class
-        )->disableOriginalConstructor()->setMethods(
-            [
-                'getData',
-                'getId',
-                'getName',
-                'getEmail',
-                'getEndpoint',
-                'load',
-                'loadByName',
-                'save',
-                'delete',
-                '__wakeup',
-            ]
-        )->getMock();
+            Integration::class
+        )->disableOriginalConstructor()
+            ->setMethods(
+                [
+                    'getData',
+                    'getId',
+                    'getName',
+                    'getEmail',
+                    'getEndpoint',
+                    'load',
+                    'loadByName',
+                    'save',
+                    'delete',
+                    '__wakeup',
+                ]
+            )->getMock();
         $this->_emptyIntegrationMock->expects($this->any())->method('getId')->willReturn(null);
     }
 
@@ -148,13 +152,10 @@ class IntegrationServiceTest extends \PHPUnit\Framework\TestCase
         $this->assertSame($this->_integrationData, $resultData);
     }
 
-    /**
-     */
     public function testCreateIntegrationAlreadyExistsException()
     {
-        $this->expectException(\Magento\Framework\Exception\IntegrationException::class);
+        $this->expectException('Magento\Framework\Exception\IntegrationException');
         $this->expectExceptionMessage('The integration with name "Integration Name" exists.');
-
         $this->_integrationMock->expects(
             $this->any()
         )->method(
@@ -244,13 +245,10 @@ class IntegrationServiceTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($integrationData, $updatedData);
     }
 
-    /**
-     */
     public function testUpdateException()
     {
-        $this->expectException(\Magento\Framework\Exception\IntegrationException::class);
+        $this->expectException('Magento\Framework\Exception\IntegrationException');
         $this->expectExceptionMessage('The integration with name "Another Integration Name" exists.');
-
         $this->_integrationMock->expects(
             $this->any()
         )->method(
@@ -298,13 +296,10 @@ class IntegrationServiceTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($this->_integrationData, $integrationData);
     }
 
-    /**
-     */
     public function testGetException()
     {
-        $this->expectException(\Magento\Framework\Exception\IntegrationException::class);
+        $this->expectException('Magento\Framework\Exception\IntegrationException');
         $this->expectExceptionMessage('The integration with ID "1" doesn\'t exist.');
-
         $this->_integrationMock->expects($this->any())->method('getId')->willReturn(null);
         $this->_integrationMock->expects($this->once())->method('load')->willReturnSelf();
         $this->_integrationMock->expects($this->never())->method('save');
@@ -387,13 +382,10 @@ class IntegrationServiceTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($this->_integrationData[Integration::ID], $integrationData[Integration::ID]);
     }
 
-    /**
-     */
     public function testDeleteException()
     {
-        $this->expectException(\Magento\Framework\Exception\IntegrationException::class);
+        $this->expectException('Magento\Framework\Exception\IntegrationException');
         $this->expectExceptionMessage('The integration with ID "1" doesn\'t exist.');
-
         $this->_integrationMock->expects($this->any())->method('getId')->willReturn(null);
         $this->_integrationMock->expects($this->once())->method('load')->willReturnSelf();
         $this->_integrationMock->expects($this->never())->method('delete');
@@ -484,21 +476,22 @@ class IntegrationServiceTest extends \PHPUnit\Framework\TestCase
         $integrationId = self::VALUE_INTEGRATION_ID
     ) {
         $integrationMock = $this->getMockBuilder(
-            \Magento\Integration\Model\Integration::class
-        )->disableOriginalConstructor()->setMethods(
-            [
-                'getData',
-                'getId',
-                'getName',
-                'getEmail',
-                'getEndpoint',
-                'load',
-                'loadByName',
-                'save',
-                'delete',
-                '__wakeup',
-            ]
-        )->getMock();
+            Integration::class
+        )->disableOriginalConstructor()
+            ->setMethods(
+                [
+                    'getData',
+                    'getId',
+                    'getName',
+                    'getEmail',
+                    'getEndpoint',
+                    'load',
+                    'loadByName',
+                    'save',
+                    'delete',
+                    '__wakeup',
+                ]
+            )->getMock();
         $integrationMock->expects($this->any())->method('getId')->willReturn($integrationId);
         $integrationMock->expects($this->any())->method('getName')->willReturn($name);
         $integrationMock->expects(

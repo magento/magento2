@@ -3,32 +3,43 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Sales\Test\Unit\Block\Order\Item\Renderer;
 
-class DefaultRendererTest extends \PHPUnit\Framework\TestCase
+use Magento\Backend\Block\Template;
+use Magento\Backend\Block\Template\Context;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\View\Layout;
+use Magento\Quote\Model\Quote\Item;
+use Magento\Sales\Block\Order\Item\Renderer\DefaultRenderer;
+use Magento\Sales\Model\Order\Item as OrderItem;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class DefaultRendererTest extends TestCase
 {
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Sales\Block\Order\Item\Renderer\DefaultRenderer
+     * @var MockObject|DefaultRenderer
      */
     protected $block;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Backend\Block\Template
+     * @var MockObject|Template
      */
     protected $priceRenderBlock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\View\Layout
+     * @var MockObject|Layout
      */
     protected $layoutMock;
 
     /**
-     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
+     * @var ObjectManager
      */
     protected $objectManager;
 
-    /** @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Quote\Model\Quote\Item  */
+    /** @var MockObject|Item  */
     protected $itemMock;
 
     /**
@@ -36,37 +47,36 @@ class DefaultRendererTest extends \PHPUnit\Framework\TestCase
      */
     protected function setUp(): void
     {
-        $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $this->objectManager = new ObjectManager($this);
 
-        $this->layoutMock = $this->getMockBuilder(\Magento\Framework\View\Layout::class)
+        $this->layoutMock = $this->getMockBuilder(Layout::class)
             ->disableOriginalConstructor()
             ->setMethods(['getBlock'])
             ->getMock();
 
         $this->block = $this->objectManager->getObject(
-            \Magento\Sales\Block\Order\Item\Renderer\DefaultRenderer::class,
+            DefaultRenderer::class,
             [
                 'context' => $this->objectManager->getObject(
-                    \Magento\Backend\Block\Template\Context::class,
+                    Context::class,
                     ['layout' => $this->layoutMock]
                 )
             ]
         );
 
-        $this->priceRenderBlock = $this->getMockBuilder(\Magento\Backend\Block\Template::class)
+        $this->priceRenderBlock = $this->getMockBuilder(Template::class)
             ->disableOriginalConstructor()
             ->setMethods(['setItem', 'toHtml'])
             ->getMock();
 
         $itemMockMethods = [
-            '__wakeup',
             'getRowTotal',
             'getTaxAmount',
             'getDiscountAmount',
             'getDiscountTaxCompensationAmount',
             'getWeeeTaxAppliedRowAmount',
         ];
-        $this->itemMock = $this->getMockBuilder(\Magento\Sales\Model\Order\Item::class)
+        $this->itemMock = $this->getMockBuilder(OrderItem::class)
             ->disableOriginalConstructor()
             ->setMethods($itemMockMethods)
             ->getMock();

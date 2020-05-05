@@ -3,28 +3,34 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Config\Test\Unit\Model\Config\Structure\Element;
 
-use \Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Config\Model\Config\Structure\Element\Iterator\Field;
+use Magento\Config\Model\Config\Structure\Element\Tab;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class TabTest extends \PHPUnit\Framework\TestCase
+class TabTest extends TestCase
 {
     /**
-     * @var \Magento\Config\Model\Config\Structure\Element\Tab
+     * @var Tab
      */
     protected $_model;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $_iteratorMock;
 
     protected function setUp(): void
     {
-        $this->_iteratorMock = $this->createMock(\Magento\Config\Model\Config\Structure\Element\Iterator\Field::class);
+        $this->_iteratorMock = $this->createMock(Field::class);
 
         $this->_model = (new ObjectManager($this))->getObject(
-            \Magento\Config\Model\Config\Structure\Element\Tab::class,
+            Tab::class,
             ['childrenIterator' => $this->_iteratorMock]
         );
     }

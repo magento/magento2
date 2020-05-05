@@ -3,31 +3,37 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Bundle\Test\Unit\Model\Plugin;
 
+use Magento\Bundle\Model\Plugin\QuoteItem;
+use Magento\Catalog\Model\Product;
+use Magento\Catalog\Model\Product\Configuration\Item\Option;
+use Magento\Quote\Model\Quote\Item\AbstractItem;
 use Magento\Quote\Model\Quote\Item\ToOrderItem;
 use Magento\Sales\Api\Data\OrderItemInterface;
-use Magento\Quote\Model\Quote\Item\AbstractItem;
-use Magento\Catalog\Model\Product;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class QuoteItemTest extends \PHPUnit\Framework\TestCase
+class QuoteItemTest extends TestCase
 {
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|Product
+     * @var MockObject|Product
      */
     private $productMock;
 
-    /** @var \Magento\Bundle\Model\Plugin\QuoteItem */
+    /** @var QuoteItem */
     protected $model;
 
-    /** @var \PHPUnit\Framework\MockObject\MockObject|AbstractItem */
+    /** @var MockObject|AbstractItem */
     protected $quoteItemMock;
 
-    /** @var \PHPUnit\Framework\MockObject\MockObject|OrderItemInterface */
+    /** @var MockObject|OrderItemInterface */
     protected $orderItemMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|ToOrderItem
+     * @var MockObject|ToOrderItem
      */
     protected $subjectMock;
 
@@ -53,7 +59,7 @@ class QuoteItemTest extends \PHPUnit\Framework\TestCase
         );
         $this->subjectMock = $this->createMock(ToOrderItem::class);
         $this->productMock = $this->createMock(Product::class);
-        $this->model = new \Magento\Bundle\Model\Plugin\QuoteItem();
+        $this->model = new QuoteItem();
     }
 
     public function testAroundItemToOrderItemPositive()
@@ -65,7 +71,7 @@ class QuoteItemTest extends \PHPUnit\Framework\TestCase
         ];
         $expectedOptions = $productOptions + ['bundle_selection_attributes' => $attributeValue];
 
-        $bundleAttribute = $this->createMock(\Magento\Catalog\Model\Product\Configuration\Item\Option::class);
+        $bundleAttribute = $this->createMock(Option::class);
         $bundleAttribute->expects($this->once())
             ->method('getValue')
             ->willReturn($attributeValue);

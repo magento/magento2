@@ -3,22 +3,33 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\GoogleOptimizer\Test\Unit\Observer\Product;
 
-class DeleteProductGoogleExperimentScriptObserverTest extends \PHPUnit\Framework\TestCase
+use Magento\Catalog\Model\Product;
+use Magento\Framework\Event;
+use Magento\Framework\Event\Observer;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\GoogleOptimizer\Model\Code;
+use Magento\GoogleOptimizer\Observer\Product\DeleteProductGoogleExperimentScriptObserver;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class DeleteProductGoogleExperimentScriptObserverTest extends TestCase
 {
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $_codeMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $_eventObserverMock;
 
     /**
-     * @var \Magento\GoogleOptimizer\Observer\Product\DeleteProductGoogleExperimentScriptObserver
+     * @var DeleteProductGoogleExperimentScriptObserver
      */
     protected $_model;
 
@@ -27,18 +38,21 @@ class DeleteProductGoogleExperimentScriptObserverTest extends \PHPUnit\Framework
         $entityId = 3;
         $storeId = 0;
 
-        $this->_codeMock = $this->createMock(\Magento\GoogleOptimizer\Model\Code::class);
-        $event = $this->createPartialMock(\Magento\Framework\Event::class, ['getProduct']);
-        $this->_eventObserverMock = $this->createMock(\Magento\Framework\Event\Observer::class);
+        $this->_codeMock = $this->createMock(Code::class);
+        $event = $this->getMockBuilder(Event::class)
+            ->addMethods(['getProduct'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->_eventObserverMock = $this->createMock(Observer::class);
         $this->_eventObserverMock->expects($this->once())->method('getEvent')->willReturn($event);
-        $product = $this->createPartialMock(\Magento\Catalog\Model\Product::class, ['getId', 'getStoreId', '__wakeup']);
+        $product = $this->createPartialMock(Product::class, ['getId', 'getStoreId', '__wakeup']);
         $product->expects($this->once())->method('getId')->willReturn($entityId);
         $product->expects($this->once())->method('getStoreId')->willReturn($storeId);
         $event->expects($this->once())->method('getProduct')->willReturn($product);
 
-        $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $objectManagerHelper = new ObjectManager($this);
         $this->_model = $objectManagerHelper->getObject(
-            \Magento\GoogleOptimizer\Observer\Product\DeleteProductGoogleExperimentScriptObserver::class,
+            DeleteProductGoogleExperimentScriptObserver::class,
             ['modelCode' => $this->_codeMock]
         );
     }
@@ -54,7 +68,7 @@ class DeleteProductGoogleExperimentScriptObserverTest extends \PHPUnit\Framework
             'loadByEntityIdAndType'
         )->with(
             $entityId,
-            \Magento\GoogleOptimizer\Model\Code::ENTITY_TYPE_PRODUCT,
+            Code::ENTITY_TYPE_PRODUCT,
             $storeId
         );
         $this->_codeMock->expects($this->once())->method('getId')->willReturn(2);
@@ -74,7 +88,7 @@ class DeleteProductGoogleExperimentScriptObserverTest extends \PHPUnit\Framework
             'loadByEntityIdAndType'
         )->with(
             $entityId,
-            \Magento\GoogleOptimizer\Model\Code::ENTITY_TYPE_PRODUCT,
+            Code::ENTITY_TYPE_PRODUCT,
             $storeId
         );
         $this->_codeMock->expects($this->once())->method('getId')->willReturn(0);

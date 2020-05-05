@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\CatalogUrlRewrite\Test\Unit\Model\Product;
 
 use Magento\Catalog\Api\CategoryRepositoryInterface;
+use Magento\Catalog\Model\Category;
 use Magento\Catalog\Model\Product;
 use Magento\CatalogUrlRewrite\Model\ObjectRegistry;
 use Magento\CatalogUrlRewrite\Model\Product\AnchorUrlRewriteGenerator;
@@ -16,8 +17,8 @@ use Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewriteFactory;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use PHPUnit\Framework\MockObject\MockObject as MockObject;
 
 class AnchorUrlRewriteGeneratorTest extends TestCase
 {
@@ -49,19 +50,25 @@ class AnchorUrlRewriteGeneratorTest extends TestCase
     {
         $this->urlRewriteFactory = $this->getMockBuilder(UrlRewriteFactory::class)
             ->setMethods(['create'])
-            ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->urlRewrite = $this->getMockBuilder(UrlRewrite::class)
-            ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->product = $this->getMockBuilder(Product::class)
-            ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->categoryRepositoryInterface = $this->getMockBuilder(
             CategoryRepositoryInterface::class
-        )->disableOriginalConstructor()->getMock();
+        )->disableOriginalConstructor()
+            ->getMock();
         $this->categoryRegistry = $this->getMockBuilder(ObjectRegistry::class)
-            ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->productUrlPathGenerator = $this->getMockBuilder(
             ProductUrlPathGenerator::class
-        )->disableOriginalConstructor()->getMock();
+        )->disableOriginalConstructor()
+            ->getMock();
         $this->anchorUrlRewriteGenerator = (new ObjectManager($this))->getObject(
             AnchorUrlRewriteGenerator::class,
             [
@@ -109,7 +116,7 @@ class AnchorUrlRewriteGeneratorTest extends TestCase
             ->willReturn($urlPathWithCategory);
         $this->productUrlPathGenerator->expects($this->any())->method('getCanonicalUrlPath')
             ->willReturn($canonicalUrlPathWithCategory);
-        $category = $this->createMock(\Magento\Catalog\Model\Category::class);
+        $category = $this->createMock(Category::class);
         $category->expects($this->any())->method('getId')->willReturn($categoryIds);
         $category->expects($this->any())->method('getAnchorsAbove')->willReturn($categoryIds);
         $category->expects($this->any())->method('getParentId')->will(
@@ -132,18 +139,13 @@ class AnchorUrlRewriteGeneratorTest extends TestCase
         $this->categoryRegistry->expects($this->any())->method('getList')
             ->willReturn([$category]);
         $this->urlRewrite->expects($this->any())->method('setStoreId')
-            ->with($storeId)
-            ->willReturnSelf();
+            ->with($storeId)->willReturnSelf();
         $this->urlRewrite->expects($this->any())->method('setEntityId')
-            ->with($productId)
-            ->willReturnSelf();
+            ->with($productId)->willReturnSelf();
         $this->urlRewrite->expects($this->any())->method('setEntityType')
-            ->with(ProductUrlRewriteGenerator::ENTITY_TYPE)
-            ->willReturnSelf();
-        $this->urlRewrite->expects($this->any())->method('setRequestPath')
-            ->willReturnSelf();
-        $this->urlRewrite->expects($this->any())->method('setTargetPath')
-            ->willReturnSelf();
+            ->with(ProductUrlRewriteGenerator::ENTITY_TYPE)->willReturnSelf();
+        $this->urlRewrite->expects($this->any())->method('setRequestPath')->willReturnSelf();
+        $this->urlRewrite->expects($this->any())->method('setTargetPath')->willReturnSelf();
         $this->urlRewrite->expects($this->any())->method('setMetadata')
             ->will(
                 $this->onConsecutiveCalls(

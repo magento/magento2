@@ -3,11 +3,15 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\Simplexml\Test\Unit;
 
 use Magento\Framework\Simplexml\Config;
+use Magento\Framework\Simplexml\Element;
+use PHPUnit\Framework\TestCase;
 
-class ConfigTest extends \PHPUnit\Framework\TestCase
+class ConfigTest extends TestCase
 {
     /**
      * @var Config
@@ -31,7 +35,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         $this->assertXmlStringEqualsXmlString($xml, $config->getXmlString());
 
         /** @var Element $simpleXml */
-        $simpleXml = simplexml_load_string(file_get_contents($file), \Magento\Framework\Simplexml\Element::class);
+        $simpleXml = simplexml_load_string(file_get_contents($file), Element::class);
         $config = new Config($simpleXml);
         $this->assertXmlStringEqualsXmlString($xml, $config->getXmlString());
     }
@@ -65,7 +69,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         $this->assertFalse($config->getXpath('wrong_xpath'));
         $element = $config->getXpath('/root/node_2/node_2_1');
         $this->assertArrayHasKey(0, $element);
-        $this->assertInstanceOf(\Magento\Framework\Simplexml\Element::class, $element[0]);
+        $this->assertInstanceOf(Element::class, $element[0]);
         $this->assertSame('Value 2.1', $element[0]->asArray());
     }
 

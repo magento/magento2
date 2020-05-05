@@ -3,51 +3,60 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Unit\Model\Category\Attribute\Backend;
 
-class SortbyTest extends \PHPUnit\Framework\TestCase
+use Magento\Catalog\Model\Category\Attribute\Backend\Sortby;
+use Magento\Eav\Model\Entity\AbstractEntity;
+use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
+use Magento\Eav\Model\Entity\Attribute\Frontend\AbstractFrontend;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\DataObject;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\TestCase;
+
+class SortbyTest extends TestCase
 {
     const DEFAULT_ATTRIBUTE_CODE = 'attribute_name';
 
     /**
-     * @var \Magento\Catalog\Model\Category\Attribute\Backend\Sortby
+     * @var Sortby
      */
     protected $_model;
 
     /**
-     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
+     * @var ObjectManager
      */
     protected $_objectHelper;
 
     /**
-     * @var \Magento\Eav\Model\Entity\Attribute\AbstractAttribute
+     * @var AbstractAttribute
      */
     protected $_attribute;
 
     /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     * @var ScopeConfigInterface
      */
     protected $_scopeConfig;
 
     protected function setUp(): void
     {
         $this->markTestSkipped('Due to MAGETWO-48956');
-        $this->_objectHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->_scopeConfig = $this->createMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
+        $this->_objectHelper = new ObjectManager($this);
+        $this->_scopeConfig = $this->createMock(ScopeConfigInterface::class);
         $this->_model = $this->_objectHelper->getObject(
-            \Magento\Catalog\Model\Category\Attribute\Backend\Sortby::class,
+            Sortby::class,
             ['scopeConfig' => $this->_scopeConfig]
         );
         $this->_attribute = $this->createPartialMock(
-            \Magento\Eav\Model\Entity\Attribute\AbstractAttribute::class,
+            AbstractAttribute::class,
             [
                 'getName',
                 '__call',
                 'isValueEmpty',
                 'getEntity',
                 'getFrontend',
-                '__wakeup',
                 'getIsRequired',
                 'getIsUnique'
             ]
@@ -64,8 +73,8 @@ class SortbyTest extends \PHPUnit\Framework\TestCase
      */
     public function testBeforeSave($attributeCode, $data, $expected)
     {
-        $this->_attribute->expects($this->any())->method('getName')->willReturn($attributeCode);
-        $object = new \Magento\Framework\DataObject($data);
+        $this->_attribute->expects($this->any())->method('getName')->will($this->returnValue($attributeCode));
+        $object = new DataObject($data);
         $this->_model->beforeSave($object);
         $this->assertTrue($object->hasData($attributeCode));
         $this->assertSame($expected, $object->getData($attributeCode));
@@ -113,8 +122,8 @@ class SortbyTest extends \PHPUnit\Framework\TestCase
      */
     public function testAfterLoad($attributeCode, $data, $expected)
     {
-        $this->_attribute->expects($this->any())->method('getName')->willReturn($attributeCode);
-        $object = new \Magento\Framework\DataObject($data);
+        $this->_attribute->expects($this->any())->method('getName')->will($this->returnValue($attributeCode));
+        $object = new DataObject($data);
         $this->_model->afterLoad($object);
         $this->assertTrue($object->hasData($attributeCode));
         $this->assertSame($expected, $object->getData($attributeCode));
@@ -152,16 +161,16 @@ class SortbyTest extends \PHPUnit\Framework\TestCase
      */
     public function testValidate($attributeData, $data, $expected)
     {
-        $this->_attribute->expects($this->any())->method('getName')->willReturn($attributeData['code']);
+        $this->_attribute->expects($this->any())->method('getName')->will($this->returnValue($attributeData['code']));
         $this->_attribute
             ->expects($this->at(1))
             ->method('getIsRequired')
-            ->willReturn($attributeData['isRequired']);
+            ->will($this->returnValue($attributeData['isRequired']));
         $this->_attribute
             ->expects($this->any())
             ->method('isValueEmpty')
-            ->willReturn($attributeData['isValueEmpty']);
-        $object = new \Magento\Framework\DataObject($data);
+            ->will($this->returnValue($attributeData['isValueEmpty']));
+        $object = new DataObject($data);
         $this->assertSame($expected, $this->_model->validate($object));
     }
 
@@ -196,12 +205,12 @@ class SortbyTest extends \PHPUnit\Framework\TestCase
 
     public function testValidateUnique()
     {
-        $this->_attribute->expects($this->any())->method('getName')->willReturn('attribute_name');
+        $this->_attribute->expects($this->any())->method('getName')->will($this->returnValue('attribute_name'));
         $this->_attribute->expects($this->at(1))->method('getIsRequired');
-        $this->_attribute->expects($this->at(2))->method('getIsUnique')->willReturn(true);
+        $this->_attribute->expects($this->at(2))->method('getIsUnique')->will($this->returnValue(true));
 
         $entityMock = $this->getMockForAbstractClass(
-            \Magento\Eav\Model\Entity\AbstractEntity::class,
+            AbstractEntity::class,
             [],
             '',
             false,
@@ -209,23 +218,20 @@ class SortbyTest extends \PHPUnit\Framework\TestCase
             true,
             ['checkAttributeUniqueValue']
         );
-        $this->_attribute->expects($this->any())->method('getEntity')->willReturn($entityMock);
+        $this->_attribute->expects($this->any())->method('getEntity')->will($this->returnValue($entityMock));
         $entityMock->expects($this->at(0))->method('checkAttributeUniqueValue')->willReturn(true);
-        $this->assertTrue($this->_model->validate(new \Magento\Framework\DataObject()));
+        $this->assertTrue($this->_model->validate(new DataObject()));
     }
 
-    /**
-     */
     public function testValidateUniqueException()
     {
-        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
-
-        $this->_attribute->expects($this->any())->method('getName')->willReturn('attribute_name');
+        $this->expectException('Magento\Framework\Exception\LocalizedException');
+        $this->_attribute->expects($this->any())->method('getName')->will($this->returnValue('attribute_name'));
         $this->_attribute->expects($this->at(1))->method('getIsRequired');
-        $this->_attribute->expects($this->at(2))->method('getIsUnique')->willReturn(true);
+        $this->_attribute->expects($this->at(2))->method('getIsUnique')->will($this->returnValue(true));
 
         $entityMock = $this->getMockForAbstractClass(
-            \Magento\Eav\Model\Entity\AbstractEntity::class,
+            AbstractEntity::class,
             [],
             '',
             false,
@@ -234,7 +240,7 @@ class SortbyTest extends \PHPUnit\Framework\TestCase
             ['checkAttributeUniqueValue']
         );
         $frontMock = $this->getMockForAbstractClass(
-            \Magento\Eav\Model\Entity\Attribute\Frontend\AbstractFrontend::class,
+            AbstractFrontend::class,
             [],
             '',
             false,
@@ -242,10 +248,10 @@ class SortbyTest extends \PHPUnit\Framework\TestCase
             true,
             ['getLabel']
         );
-        $this->_attribute->expects($this->any())->method('getEntity')->willReturn($entityMock);
-        $this->_attribute->expects($this->any())->method('getFrontend')->willReturn($frontMock);
+        $this->_attribute->expects($this->any())->method('getEntity')->will($this->returnValue($entityMock));
+        $this->_attribute->expects($this->any())->method('getFrontend')->will($this->returnValue($frontMock));
         $entityMock->expects($this->at(0))->method('checkAttributeUniqueValue')->willReturn(false);
-        $this->assertTrue($this->_model->validate(new \Magento\Framework\DataObject()));
+        $this->assertTrue($this->_model->validate(new DataObject()));
     }
 
     /**
@@ -255,9 +261,9 @@ class SortbyTest extends \PHPUnit\Framework\TestCase
      */
     public function testValidateDefaultSort($attributeCode, $data)
     {
-        $this->_attribute->expects($this->any())->method('getName')->willReturn($attributeCode);
-        $this->_scopeConfig->expects($this->any())->method('getValue')->willReturn('value2');
-        $object = new \Magento\Framework\DataObject($data);
+        $this->_attribute->expects($this->any())->method('getName')->will($this->returnValue($attributeCode));
+        $this->_scopeConfig->expects($this->any())->method('getValue')->will($this->returnValue('value2'));
+        $object = new DataObject($data);
         $this->assertTrue($this->_model->validate($object));
     }
 
@@ -300,11 +306,10 @@ class SortbyTest extends \PHPUnit\Framework\TestCase
      */
     public function testValidateDefaultSortException($attributeCode, $data)
     {
-        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
-
-        $this->_attribute->expects($this->any())->method('getName')->willReturn($attributeCode);
-        $this->_scopeConfig->expects($this->any())->method('getValue')->willReturn('another value');
-        $object = new \Magento\Framework\DataObject($data);
+        $this->expectException('Magento\Framework\Exception\LocalizedException');
+        $this->_attribute->expects($this->any())->method('getName')->will($this->returnValue($attributeCode));
+        $this->_scopeConfig->expects($this->any())->method('getValue')->will($this->returnValue('another value'));
+        $object = new DataObject($data);
         $this->_model->validate($object);
     }
 

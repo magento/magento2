@@ -9,11 +9,11 @@ declare(strict_types=1);
 
 namespace Magento\Fedex\Test\Unit\Model\Source;
 
-use Magento\Fedex\Model\Source\Generic;
-use PHPUnit\Framework\TestCase;
-use PHPUnit\Framework\MockObject\MockObject;
 use Magento\Fedex\Model\Carrier;
+use Magento\Fedex\Model\Source\Generic;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Unit test for Magento\Fedex\Test\Unit\Model\Source\Generic
@@ -64,7 +64,7 @@ class GenericTest extends TestCase
 
         $this->assertEquals($result, $this->model->toOptionArray());
     }
-    
+
     /**
      * Data provider for testToOptionArray()
      *

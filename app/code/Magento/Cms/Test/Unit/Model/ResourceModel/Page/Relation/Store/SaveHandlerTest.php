@@ -3,14 +3,20 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Cms\Test\Unit\Model\ResourceModel\Page\Relation\Store;
 
+use Magento\Cms\Api\Data\PageInterface;
 use Magento\Cms\Model\ResourceModel\Page;
 use Magento\Cms\Model\ResourceModel\Page\Relation\Store\SaveHandler;
+use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Framework\EntityManager\EntityMetadata;
 use Magento\Framework\EntityManager\MetadataPool;
-use Magento\Cms\Api\Data\PageInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class SaveHandlerTest extends \PHPUnit\Framework\TestCase
+class SaveHandlerTest extends TestCase
 {
     /**
      * @var SaveHandler
@@ -18,22 +24,22 @@ class SaveHandlerTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var MetadataPool|\PHPUnit\Framework\MockObject\MockObject
+     * @var MetadataPool|MockObject
      */
     protected $metadataPool;
 
     /**
-     * @var Page|\PHPUnit\Framework\MockObject\MockObject
+     * @var Page|MockObject
      */
     protected $resourcePage;
 
     protected function setUp(): void
     {
-        $this->metadataPool = $this->getMockBuilder(\Magento\Framework\EntityManager\MetadataPool::class)
+        $this->metadataPool = $this->getMockBuilder(MetadataPool::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->resourcePage = $this->getMockBuilder(\Magento\Cms\Model\ResourceModel\Page::class)
+        $this->resourcePage = $this->getMockBuilder(Page::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -51,7 +57,7 @@ class SaveHandlerTest extends \PHPUnit\Framework\TestCase
         $newStore = 2;
         $linkField = 'link_id';
 
-        $adapter = $this->getMockBuilder(\Magento\Framework\DB\Adapter\AdapterInterface::class)
+        $adapter = $this->getMockBuilder(AdapterInterface::class)
             ->getMockForAbstractClass();
 
         $whereForDelete = [
@@ -72,7 +78,7 @@ class SaveHandlerTest extends \PHPUnit\Framework\TestCase
             ->with('cms_page_store', [$whereForInsert])
             ->willReturnSelf();
 
-        $entityMetadata = $this->getMockBuilder(\Magento\Framework\EntityManager\EntityMetadata::class)
+        $entityMetadata = $this->getMockBuilder(EntityMetadata::class)
             ->disableOriginalConstructor()
             ->getMock();
         $entityMetadata->expects($this->once())

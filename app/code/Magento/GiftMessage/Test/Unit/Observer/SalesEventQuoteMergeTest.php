@@ -8,15 +8,13 @@ declare(strict_types=1);
 
 namespace Magento\GiftMessage\Test\Unit\Observer;
 
-use Magento\GiftMessage\Observer\SalesEventQuoteMerge;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\Event\Observer;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\GiftMessage\Observer\SalesEventQuoteMerge;
 use Magento\Quote\Model\Quote;
+use PHPUnit\Framework\TestCase;
 
-/**
- *  SalesEventQuoteMergeTest
- */
-class SalesEventQuoteMergeTest extends \PHPUnit\Framework\TestCase
+class SalesEventQuoteMergeTest extends TestCase
 {
 
     /**
@@ -42,12 +40,18 @@ class SalesEventQuoteMergeTest extends \PHPUnit\Framework\TestCase
      */
     public function testExecute($giftMessageId): void
     {
-        $sourceQuoteMock = $this->createPartialMock(Quote::class, ['getGiftMessageId']);
+        $sourceQuoteMock = $this->getMockBuilder(Quote::class)
+            ->addMethods(['getGiftMessageId'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $sourceQuoteMock->expects($this->once())
             ->method('getGiftMessageId')
             ->willReturn($giftMessageId);
 
-        $targetQuoteMock = $this->createPartialMock(Quote::class, ['setGiftMessageId']);
+        $targetQuoteMock = $this->getMockBuilder(Quote::class)
+            ->addMethods(['setGiftMessageId'])
+            ->disableOriginalConstructor()
+            ->getMock();
 
         if ($giftMessageId) {
             $targetQuoteMock->expects($this->once())

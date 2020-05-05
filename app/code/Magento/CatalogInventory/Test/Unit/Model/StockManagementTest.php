@@ -7,63 +7,65 @@ declare(strict_types=1);
 
 namespace Magento\CatalogInventory\Test\Unit\Model;
 
-use Magento\CatalogInventory\Model\StockState;
-use Magento\CatalogInventory\Model\StockManagement;
-use Magento\CatalogInventory\Model\StockRegistryStorage;
-use Magento\CatalogInventory\Model\ResourceModel\QtyCounterInterface;
-use Magento\CatalogInventory\Model\Spi\StockRegistryProviderInterface;
-use Magento\CatalogInventory\Model\ResourceModel\Stock as ResourceStock;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\CatalogInventory\Api\Data\StockItemInterface;
 use Magento\CatalogInventory\Api\StockConfigurationInterface;
+use Magento\CatalogInventory\Model\ResourceModel\QtyCounterInterface;
+use Magento\CatalogInventory\Model\ResourceModel\Stock as ResourceStock;
+use Magento\CatalogInventory\Model\Spi\StockRegistryProviderInterface;
+use Magento\CatalogInventory\Model\StockManagement;
+use Magento\CatalogInventory\Model\StockRegistryStorage;
+use Magento\CatalogInventory\Model\StockState;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test for \Magento\CatalogInventory\Model\StockManagement
  */
-class StockManagementTest extends \PHPUnit\Framework\TestCase
+class StockManagementTest extends TestCase
 {
     /**
-     * @var StockManagement|\PHPUnit\Framework\MockObject\MockObject
+     * @var StockManagement|MockObject
      */
     private $stockManagement;
 
     /**
-     * @var ResourceStock|\PHPUnit\Framework\MockObject\MockObject
+     * @var ResourceStock|MockObject
      */
     private $stockResourceMock;
 
     /**
-     * @var StockRegistryProviderInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var StockRegistryProviderInterface|MockObject
      */
     private $stockRegistryProviderMock;
 
     /**
-     * @var StockState|\PHPUnit\Framework\MockObject\MockObject
+     * @var StockState|MockObject
      */
     private $stockStateMock;
 
     /**
-     * @var StockConfigurationInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var StockConfigurationInterface|MockObject
      */
     private $stockConfigurationMock;
 
     /**
-     * @var ProductRepositoryInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var ProductRepositoryInterface|MockObject
      */
     private $productRepositoryMock;
 
     /**
-     * @var QtyCounterInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var QtyCounterInterface|MockObject
      */
     private $qtyCounterMock;
 
     /**
-     * @var StockRegistryStorage|\PHPUnit\Framework\MockObject\MockObject
+     * @var StockRegistryStorage|MockObject
      */
     private $stockRegistryStorageMock;
 
     /**
-     * @var StockItemInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var StockItemInterface|MockObject
      */
     private $stockItemInterfaceMock;
 
@@ -201,9 +203,8 @@ class StockManagementTest extends \PHPUnit\Framework\TestCase
      */
     public function testRegisterProductsSaleException(array $items, array $lockedItems)
     {
-        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+        $this->expectException('Magento\Framework\Exception\LocalizedException');
         $this->expectExceptionMessage('Not all of your products are available in the requested quantity.');
-
         $this->stockResourceMock
             ->expects($this->once())
             ->method('beginTransaction');

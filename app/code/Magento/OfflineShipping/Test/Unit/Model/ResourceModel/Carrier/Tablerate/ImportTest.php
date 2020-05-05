@@ -3,56 +3,59 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\OfflineShipping\Test\Unit\Model\ResourceModel\Carrier\Tablerate;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\File\ReadInterface;
-use Magento\OfflineShipping\Model\ResourceModel\Carrier\Tablerate\CSV\ColumnResolverFactory;
 use Magento\OfflineShipping\Model\ResourceModel\Carrier\Tablerate\CSV\ColumnResolver;
+use Magento\OfflineShipping\Model\ResourceModel\Carrier\Tablerate\CSV\ColumnResolverFactory;
 use Magento\OfflineShipping\Model\ResourceModel\Carrier\Tablerate\CSV\RowParser;
 use Magento\OfflineShipping\Model\ResourceModel\Carrier\Tablerate\DataHashGenerator;
 use Magento\OfflineShipping\Model\ResourceModel\Carrier\Tablerate\Import;
 use Magento\Store\Model\StoreManagerInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Unit test for Magento\OfflineShipping\Model\ResourceModel\Carrier\Tablerate\Import
  */
-class ImportTest extends \PHPUnit\Framework\TestCase
+class ImportTest extends TestCase
 {
     /**
-     * @var \Magento\OfflineShipping\Model\ResourceModel\Carrier\Tablerate\Import
+     * @var Import
      */
     private $import;
 
     /**
-     * @var StoreManagerInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var StoreManagerInterface|MockObject
      */
     private $storeManagerMock;
 
     /**
-     * @var Filesystem|\PHPUnit\Framework\MockObject\MockObject
+     * @var Filesystem|MockObject
      */
     private $filesystemMock;
 
     /**
-     * @var ScopeConfigInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var ScopeConfigInterface|MockObject
      */
     private $scopeConfigMock;
 
     /**
-     * @var RowParser|\PHPUnit\Framework\MockObject\MockObject
+     * @var RowParser|MockObject
      */
     private $rowParserMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     private $columnResolverFactoryMock;
 
     /**
-     * @var DataHashGenerator|\PHPUnit\Framework\MockObject\MockObject
+     * @var DataHashGenerator|MockObject
      */
     private $dataHashGeneratorMock;
 
@@ -145,7 +148,9 @@ class ImportTest extends \PHPUnit\Framework\TestCase
             ]
         ];
 
-        $columnResolver = $this->getMockBuilder(ColumnResolver::class)->disableOriginalConstructor()->getMock();
+        $columnResolver = $this->getMockBuilder(ColumnResolver::class)
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->columnResolverFactoryMock
             ->expects($this->once())
             ->method('create')
@@ -188,7 +193,9 @@ class ImportTest extends \PHPUnit\Framework\TestCase
             ],
         ];
 
-        $columnResolver = $this->getMockBuilder(ColumnResolver::class)->disableOriginalConstructor()->getMock();
+        $columnResolver = $this->getMockBuilder(ColumnResolver::class)
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->columnResolverFactoryMock
             ->expects($this->once())
             ->method('create')
@@ -209,9 +216,8 @@ class ImportTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetDataFromEmptyFile()
     {
-        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+        $this->expectException('Magento\Framework\Exception\LocalizedException');
         $this->expectExceptionMessage('The Table Rates File Format is incorrect. Verify the format and try again.');
-
         $lines = [];
         $file = $this->createFileMock($lines);
         foreach ($this->import->getData($file, 1, 'short_name', 'full_name', 2) as $bunch) {
@@ -221,7 +227,7 @@ class ImportTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param array $lines
-     * @return ReadInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @return ReadInterface|MockObject
      */
     private function createFileMock(array $lines)
     {

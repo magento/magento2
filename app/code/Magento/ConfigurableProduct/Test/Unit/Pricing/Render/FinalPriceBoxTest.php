@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\ConfigurableProduct\Test\Unit\Pricing\Render;
 
 use Magento\Catalog\Model\Product;
@@ -18,8 +20,12 @@ use Magento\Framework\Pricing\Render\RendererPool;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\View\Element\Template\Context;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class FinalPriceBoxTest extends \PHPUnit\Framework\TestCase
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
+class FinalPriceBoxTest extends TestCase
 {
     /**
      * @var Context|MockObject
@@ -72,7 +78,9 @@ class FinalPriceBoxTest extends \PHPUnit\Framework\TestCase
         $this->rendererPool = $this->createMock(RendererPool::class);
         $this->salableResolver = $this->getMockForAbstractClass(SalableResolverInterface::class);
         $this->minimalPriceCalculator = $this->getMockForAbstractClass(MinimalPriceCalculatorInterface::class);
-        $this->configurableOptionsProvider = $this->getMockForAbstractClass(ConfigurableOptionsProviderInterface::class);
+        $this->configurableOptionsProvider = $this->getMockForAbstractClass(
+            ConfigurableOptionsProviderInterface::class
+        );
 
         $this->model = (new ObjectManager($this))->getObject(
             FinalPriceBox::class,

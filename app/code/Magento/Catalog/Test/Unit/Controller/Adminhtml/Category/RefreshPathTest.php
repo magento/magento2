@@ -8,23 +8,27 @@ declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Unit\Controller\Adminhtml\Category;
 
-use Magento\Framework\Controller\Result\JsonFactory;
-use Magento\Catalog\Controller\Adminhtml\Category\RefreshPath;
 use Magento\Backend\App\Action\Context;
+use Magento\Catalog\Controller\Adminhtml\Category\RefreshPath;
+use Magento\Catalog\Model\Category;
+use Magento\Framework\App\RequestInterface;
+use Magento\Framework\Controller\Result\JsonFactory;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test for class Magento\Catalog\Controller\Adminhtml\Category\RefreshPath.
  */
-class RefreshPathTest extends \PHPUnit\Framework\TestCase
+class RefreshPathTest extends TestCase
 {
     /**
-     * @var JsonFactory|\PHPUnit\Framework\MockObject\MockObject
+     * @var JsonFactory|MockObject
      */
     private $resultJsonFactoryMock;
 
     /**
-     * @var Context|\PHPUnit\Framework\MockObject\MockObject
+     * @var Context|MockObject
      */
     private $contextMock;
 
@@ -69,7 +73,7 @@ class RefreshPathTest extends \PHPUnit\Framework\TestCase
         $value = ['id' => 3, 'path' => '1/2/3', 'parentId' => 2, 'level' => 2];
         $result = '{"id":3,"path":"1/2/3","parentId":"2","level":"2"}';
 
-        $requestMock = $this->getMockForAbstractClass(\Magento\Framework\App\RequestInterface::class);
+        $requestMock = $this->getMockForAbstractClass(RequestInterface::class);
 
         $refreshPath = $this->getMockBuilder(RefreshPath::class)
             ->setMethods(['getRequest', 'create'])
@@ -81,7 +85,7 @@ class RefreshPathTest extends \PHPUnit\Framework\TestCase
         $refreshPath->expects($this->any())->method('getRequest')->willReturn($requestMock);
         $requestMock->expects($this->any())->method('getParam')->with('id')->willReturn($value['id']);
 
-        $categoryMock = $this->getMockBuilder(\Magento\Catalog\Model\Category::class)
+        $categoryMock = $this->getMockBuilder(Category::class)
             ->disableOriginalConstructor()
             ->setMethods(['getPath', 'getParentId', 'getResource'])
             ->getMock();
@@ -101,7 +105,7 @@ class RefreshPathTest extends \PHPUnit\Framework\TestCase
 
         $objectManagerMock->expects($this->once())
             ->method('create')
-            ->with(\Magento\Catalog\Model\Category::class)
+            ->with(Category::class)
             ->willReturn($categoryMock);
 
         $this->resultJsonFactoryMock->expects($this->any())->method('create')->willReturnSelf();
@@ -118,7 +122,7 @@ class RefreshPathTest extends \PHPUnit\Framework\TestCase
      */
     public function testExecuteWithoutCategoryId() : void
     {
-        $requestMock = $this->getMockForAbstractClass(\Magento\Framework\App\RequestInterface::class);
+        $requestMock = $this->getMockForAbstractClass(RequestInterface::class);
 
         $refreshPath = $this->getMockBuilder(RefreshPath::class)
             ->setMethods(['getRequest', 'create'])
@@ -139,7 +143,7 @@ class RefreshPathTest extends \PHPUnit\Framework\TestCase
 
         $objectManagerMock->expects($this->never())
             ->method('create')
-            ->with(\Magento\Catalog\Model\Category::class)
+            ->with(Category::class)
             ->willReturnSelf();
 
         $refreshPath->execute();

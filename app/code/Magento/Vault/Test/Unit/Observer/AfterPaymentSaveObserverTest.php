@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Vault\Test\Unit\Observer;
 
@@ -11,19 +12,19 @@ use Magento\Framework\Encryption\Encryptor;
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Math\Random;
 use Magento\Sales\Api\Data\OrderPaymentExtension;
-use Magento\Sales\Api\Data\OrderPaymentExtensionFactory;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Payment;
 use Magento\Vault\Model\PaymentToken;
 use Magento\Vault\Model\PaymentTokenManagement;
 use Magento\Vault\Model\Ui\VaultConfigProvider;
 use Magento\Vault\Observer\AfterPaymentSaveObserver;
-use PHPUnit\Framework\MockObject\MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test for payment observer.
  */
-class AfterPaymentSaveObserverTest extends \PHPUnit\Framework\TestCase
+class AfterPaymentSaveObserverTest extends TestCase
 {
     /**
      * @var \Magento\Framework\Event\Observer|MockObject
@@ -31,27 +32,27 @@ class AfterPaymentSaveObserverTest extends \PHPUnit\Framework\TestCase
     protected $eventObserverArgMock;
 
     /**
-     * @var \Magento\Vault\Observer\AfterPaymentSaveObserver
+     * @var AfterPaymentSaveObserver
      */
     protected $observer;
 
     /**
-     * @var \Magento\Framework\Encryption\Encryptor
+     * @var Encryptor
      */
     protected $encryptorModel;
 
     /**
-     * @var \Magento\Sales\Api\Data\OrderPaymentExtension|MockObject paymentExtension
+     * @var OrderPaymentExtension|MockObject paymentExtension
      */
     protected $paymentExtension;
 
     /**
-     * @var \Magento\Vault\Model\PaymentTokenManagement|MockObject paymentTokenManagementMock
+     * @var PaymentTokenManagement|MockObject paymentTokenManagementMock
      */
     protected $paymentTokenManagementMock;
 
     /**
-     * @var \Magento\Vault\Model\PaymentToken|MockObject paymentTokenMock
+     * @var PaymentToken|MockObject paymentTokenMock
      */
     protected $paymentTokenMock;
 

@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Elasticsearch\Test\Unit\Model\Adapter\BatchDataMapper;
 
 use Magento\AdvancedSearch\Model\Adapter\DataMapper\AdditionalFieldsProviderInterface;
@@ -14,13 +16,13 @@ use Magento\Elasticsearch\Model\Adapter\Document\Builder;
 use Magento\Elasticsearch\Model\Adapter\FieldMapperInterface;
 use Magento\Elasticsearch\Model\Adapter\FieldType\Date;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
- * Class ProductDataMapperTest
- *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ProductDataMapperTest extends \PHPUnit\Framework\TestCase
+class ProductDataMapperTest extends TestCase
 {
     /**
      * @var ProductDataMapper
@@ -28,32 +30,32 @@ class ProductDataMapperTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var Builder|\PHPUnit\Framework\MockObject\MockObject
+     * @var Builder|MockObject
      */
     private $builderMock;
 
     /**
-     * @var Attribute|\PHPUnit\Framework\MockObject\MockObject
+     * @var Attribute|MockObject
      */
     private $attribute;
 
     /**
-     * @var FieldMapperInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var FieldMapperInterface|MockObject
      */
     private $fieldMapperMock;
 
     /**
-     * @var Date|\PHPUnit\Framework\MockObject\MockObject
+     * @var Date|MockObject
      */
     private $dateFieldTypeMock;
 
     /**
-     * @var AdditionalFieldsProviderInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var AdditionalFieldsProviderInterface|MockObject
      */
     private $additionalFieldsProvider;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     private $dataProvider;
 
@@ -193,9 +195,9 @@ class ProductDataMapperTest extends \PHPUnit\Framework\TestCase
      * Return attribute mock
      *
      * @param array attributeData
-     * @return \PHPUnit\Framework\MockObject\MockObject
+     * @return MockObject
      */
-    private function getAttribute(array $attributeData): \PHPUnit\Framework\MockObject\MockObject
+    private function getAttribute(array $attributeData): MockObject
     {
         $attributeMock = $this->createMock(Attribute::class);
         $attributeMock->method('getAttributeCode')->willReturn($attributeData['code']);

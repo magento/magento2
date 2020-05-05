@@ -3,14 +3,20 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Payment\Test\Unit\Model;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Payment\Api\Data\PaymentMethodInterface;
+use Magento\Payment\Api\Data\PaymentMethodInterfaceFactory;
+use Magento\Payment\Helper\Data;
+use Magento\Payment\Model\Method\AbstractMethod;
+use Magento\Payment\Model\PaymentMethodList;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-/**
- * Class PaymentMethodListTest.
- */
-class PaymentMethodListTest extends \PHPUnit\Framework\TestCase
+class PaymentMethodListTest extends TestCase
 {
     /**
      * @var ObjectManagerHelper
@@ -18,17 +24,17 @@ class PaymentMethodListTest extends \PHPUnit\Framework\TestCase
     private $objectManagerHelper;
 
     /**
-     * @var \Magento\Payment\Model\PaymentMethodList|\PHPUnit\Framework\MockObject\MockObject
+     * @var PaymentMethodList|MockObject
      */
     private $paymentMethodList;
 
     /**
-     * @var \Magento\Payment\Api\Data\PaymentMethodInterfaceFactory|\PHPUnit\Framework\MockObject\MockObject
+     * @var PaymentMethodInterfaceFactory|MockObject
      */
     private $methodFactoryMock;
 
     /**
-     * @var \Magento\Payment\Helper\Data|\PHPUnit\Framework\MockObject\MockObject
+     * @var \Magento\Payment\Helper\Data|MockObject
      */
     private $helperMock;
 
@@ -39,17 +45,17 @@ class PaymentMethodListTest extends \PHPUnit\Framework\TestCase
      */
     protected function setUp(): void
     {
-        $this->methodFactoryMock = $this->getMockBuilder(\Magento\Payment\Api\Data\PaymentMethodInterfaceFactory::class)
+        $this->methodFactoryMock = $this->getMockBuilder(PaymentMethodInterfaceFactory::class)
             ->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
-        $this->helperMock = $this->getMockBuilder(\Magento\Payment\Helper\Data::class)
+        $this->helperMock = $this->getMockBuilder(Data::class)
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->paymentMethodList = $this->objectManagerHelper->getObject(
-            \Magento\Payment\Model\PaymentMethodList::class,
+            PaymentMethodList::class,
             [
                 'methodFactory' => $this->methodFactoryMock,
                 'helper' => $this->helperMock
@@ -76,7 +82,7 @@ class PaymentMethodListTest extends \PHPUnit\Framework\TestCase
         $this->methodFactoryMock->expects($this->any())
             ->method('create')
             ->willReturnCallback(function ($data) {
-                $paymentMethod = $this->getMockBuilder(\Magento\Payment\Api\Data\PaymentMethodInterface::class)
+                $paymentMethod = $this->getMockBuilder(PaymentMethodInterface::class)
                     ->getMockForAbstractClass();
                 $paymentMethod->expects($this->any())
                     ->method('getCode')
@@ -187,11 +193,11 @@ class PaymentMethodListTest extends \PHPUnit\Framework\TestCase
      * @param string $code
      * @param string $title
      * @param bool $isActive
-     * @return \PHPUnit\Framework\MockObject\MockObject
+     * @return MockObject
      */
     private function mockPaymentMethodInstance($storeId, $sortOrder, $code, $title, $isActive)
     {
-        $paymentMethodInstance = $this->getMockBuilder(\Magento\Payment\Model\Method\AbstractMethod::class)
+        $paymentMethodInstance = $this->getMockBuilder(AbstractMethod::class)
             ->setMethods(['getCode', 'getTitle', 'isActive', 'getConfigData'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();

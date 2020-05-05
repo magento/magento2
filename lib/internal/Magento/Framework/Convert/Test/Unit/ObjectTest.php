@@ -3,14 +3,17 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\Convert\Test\Unit;
 
-use \Magento\Framework\Convert\DataObject;
+use Magento\Framework\Convert\DataObject;
+use PHPUnit\Framework\TestCase;
 
-class ObjectTest extends \PHPUnit\Framework\TestCase
+class ObjectTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\Convert\DataObject
+     * @var DataObject
      */
     protected $model;
 
@@ -21,14 +24,18 @@ class ObjectTest extends \PHPUnit\Framework\TestCase
 
     public function testToOptionArray()
     {
-        $mockFirst = $this->createPartialMock(\Magento\Framework\DataObject::class, ['getId', 'getCode']);
+        $mockFirst = $this->getMockBuilder(\Magento\Framework\DataObject::class)->addMethods(['getId', 'getCode'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $mockFirst->expects($this->once())
             ->method('getId')
             ->willReturn(1);
         $mockFirst->expects($this->once())
             ->method('getCode')
             ->willReturn('code1');
-        $mockSecond = $this->createPartialMock(\Magento\Framework\DataObject::class, ['getId', 'getCode']);
+        $mockSecond = $this->getMockBuilder(\Magento\Framework\DataObject::class)->addMethods(['getId', 'getCode'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $mockSecond->expects($this->once())
             ->method('getId')
             ->willReturn(2);
@@ -53,14 +60,18 @@ class ObjectTest extends \PHPUnit\Framework\TestCase
 
     public function testToOptionHash()
     {
-        $mockFirst = $this->createPartialMock(\Magento\Framework\DataObject::class, ['getSome', 'getId']);
+        $mockFirst = $this->getMockBuilder(\Magento\Framework\DataObject::class)->addMethods(['getSome', 'getId'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $mockFirst->expects($this->once())
             ->method('getId')
             ->willReturn(3);
         $mockFirst->expects($this->once())
             ->method('getSome')
             ->willReturn('code3');
-        $mockSecond = $this->createPartialMock(\Magento\Framework\DataObject::class, ['getSome', 'getId']);
+        $mockSecond = $this->getMockBuilder(\Magento\Framework\DataObject::class)->addMethods(['getSome', 'getId'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $mockSecond->expects($this->once())
             ->method('getId')
             ->willReturn(4);

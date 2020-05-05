@@ -3,26 +3,26 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Review\Test\Unit\Ui\DataProvider\Product\Form\Modifier;
 
 use Magento\Catalog\Test\Unit\Ui\DataProvider\Product\Form\Modifier\AbstractModifierTest;
+use Magento\Framework\Module\Manager as ModuleManager;
 use Magento\Framework\UrlInterface;
 use Magento\Review\Ui\DataProvider\Product\Form\Modifier\Review;
-use Magento\Framework\Module\Manager as ModuleManager;
 use Magento\Ui\DataProvider\Modifier\ModifierInterface;
+use PHPUnit\Framework\MockObject\MockObject;
 
-/**
- * Class ReviewTest
- */
 class ReviewTest extends AbstractModifierTest
 {
     /**
-     * @var UrlInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var UrlInterface|MockObject
      */
     protected $urlBuilderMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     private $moduleManagerMock;
 
@@ -42,8 +42,8 @@ class ReviewTest extends AbstractModifierTest
         $model = $this->objectManager->getObject(
             Review::class,
             [
-            'locator' => $this->locatorMock,
-            'urlBuilder' => $this->urlBuilderMock,
+                'locator' => $this->locatorMock,
+                'urlBuilder' => $this->urlBuilderMock,
             ]
         );
 

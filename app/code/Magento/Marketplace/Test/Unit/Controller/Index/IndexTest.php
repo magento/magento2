@@ -3,19 +3,28 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Marketplace\Test\Unit\Controller\Index;
 
-class IndexTest extends \PHPUnit\Framework\TestCase
+use Magento\Framework\View\Page\Config;
+use Magento\Framework\View\Page\Title;
+use Magento\Framework\View\Result\Page;
+use Magento\Framework\View\Result\PageFactory;
+use Magento\Marketplace\Controller\Adminhtml\Index\Index;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class IndexTest extends TestCase
 {
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject| \Magento\Marketplace\Controller\Adminhtml\Index\Index
+     * @var MockObject|Index
      */
     private $indexControllerMock;
 
     protected function setUp(): void
     {
-        $this->indexControllerMock = $this->getControllerIndexMock(['getResultPageFactory']);
+        $this->indexControllerMock = $this->createPartialMock(Index::class, ['getResultPageFactory']);
     }
 
     /**
@@ -23,13 +32,17 @@ class IndexTest extends \PHPUnit\Framework\TestCase
      */
     public function testExecute()
     {
-        $pageMock = $this->getPageMock(['setActiveMenu', 'addBreadcrumb', 'getConfig']);
+        $pageMock = $this->getMockBuilder(Page::class)
+            ->addMethods(['setActiveMenu', 'addBreadcrumb'])
+            ->onlyMethods(['getConfig'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $pageMock->expects($this->once())
             ->method('setActiveMenu');
         $pageMock->expects($this->once())
             ->method('addBreadcrumb');
 
-        $resultPageFactoryMock = $this->getResultPageFactoryMock(['create']);
+        $resultPageFactoryMock = $this->createPartialMock(PageFactory::class, ['create']);
 
         $resultPageFactoryMock->expects($this->once())
             ->method('create')
@@ -39,10 +52,10 @@ class IndexTest extends \PHPUnit\Framework\TestCase
             ->method('getResultPageFactory')
             ->willReturn($resultPageFactoryMock);
 
-        $titleMock = $this->getTitleMock(['prepend']);
+        $titleMock = $this->createPartialMock(Title::class, ['prepend']);
         $titleMock->expects($this->once())
             ->method('prepend');
-        $configMock =  $this->getConfigMock(['getTitle']);
+        $configMock = $this->createPartialMock(Config::class, ['getTitle']);
         $configMock->expects($this->once())
             ->method('getTitle')
             ->willReturn($titleMock);
@@ -51,47 +64,5 @@ class IndexTest extends \PHPUnit\Framework\TestCase
             ->willReturn($configMock);
 
         $this->indexControllerMock->execute();
-    }
-
-    /**
-     * Gets index controller mock
-     *
-     * @return \PHPUnit\Framework\MockObject\MockObject|\Magento\Marketplace\Controller\Adminhtml\Index\Index
-     */
-    public function getControllerIndexMock($methods = null)
-    {
-        return $this->createPartialMock(\Magento\Marketplace\Controller\Adminhtml\Index\Index::class, $methods);
-    }
-
-    /**
-     * @return \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\View\Result\PageFactory
-     */
-    public function getResultPageFactoryMock($methods = null)
-    {
-        return $this->createPartialMock(\Magento\Framework\View\Result\PageFactory::class, $methods, []);
-    }
-
-    /**
-     * @return \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\View\Page\Config
-     */
-    public function getConfigMock($methods = null)
-    {
-        return $this->createPartialMock(\Magento\Framework\View\Page\Config::class, $methods, []);
-    }
-
-    /**
-     * @return \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\View\Page\Title
-     */
-    public function getTitleMock($methods = null)
-    {
-        return $this->createPartialMock(\Magento\Framework\View\Page\Title::class, $methods, []);
-    }
-
-    /**
-     * @return \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\View\Page\Title
-     */
-    public function getPageMock($methods = null)
-    {
-        return $this->createPartialMock(\Magento\Framework\View\Result\Page::class, $methods, []);
     }
 }

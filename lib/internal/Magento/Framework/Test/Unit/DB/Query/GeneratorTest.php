@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Framework\Test\Unit\DB\Query;
 
@@ -11,8 +12,10 @@ use Magento\Framework\DB\Query\BatchIteratorFactory;
 use Magento\Framework\DB\Query\BatchRangeIteratorFactory;
 use Magento\Framework\DB\Query\Generator;
 use Magento\Framework\DB\Select;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class GeneratorTest extends \PHPUnit\Framework\TestCase
+class GeneratorTest extends TestCase
 {
     /**
      * @var Generator
@@ -20,22 +23,22 @@ class GeneratorTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     private $selectMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     private $factoryMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     private $iteratorMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     private $rangeFactoryMock;
 
@@ -91,9 +94,8 @@ class GeneratorTest extends \PHPUnit\Framework\TestCase
      */
     public function testGenerateWithoutFromPart()
     {
-        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+        $this->expectException('Magento\Framework\Exception\LocalizedException');
         $this->expectExceptionMessage('The select object must have the correct "FROM" part. Verify and try again.');
-
         $map = [
             [Select::FROM, []],
             [

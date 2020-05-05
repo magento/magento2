@@ -3,16 +3,26 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\Test\Unit\Config;
 
+use Magento\Framework\Component\ComponentRegistrar;
 use Magento\Framework\Config\FileIterator;
-use Magento\Framework\Filesystem\DriverInterface;
+use Magento\Framework\Config\FileIteratorFactory;
+use Magento\Framework\Config\FileResolverByModule;
+use Magento\Framework\Filesystem;
+use Magento\Framework\Filesystem\Directory\ReadInterface;
+use Magento\Framework\Filesystem\Driver\File;
+use Magento\Framework\Module\Dir\Reader;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class FileResolverByModuleTest extends \PHPUnit\Framework\TestCase
+class FileResolverByModuleTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\Config\FileResolverByModule
+     * @var FileResolverByModule
      */
     private $model;
 
@@ -22,50 +32,50 @@ class FileResolverByModuleTest extends \PHPUnit\Framework\TestCase
     private $objectManagerHelper;
 
     /**
-     * @var \Magento\Framework\Module\Dir\Reader|\PHPUnit\Framework\MockObject\MockObject
+     * @var Reader|MockObject
      */
     private $readerMock;
 
     /**
-     * @var \Magento\Framework\Filesystem|\PHPUnit\Framework\MockObject\MockObject
+     * @var Filesystem|MockObject
      */
     private $filesystemMock;
 
     /**
-     * @var \Magento\Framework\Config\FileIteratorFactory|\PHPUnit\Framework\MockObject\MockObject
+     * @var FileIteratorFactory|MockObject
      */
     private $fileIteratorFactoryMock;
 
     /**
-     * @var \Magento\Framework\Component\ComponentRegistrar|\PHPUnit\Framework\MockObject\MockObject
+     * @var ComponentRegistrar|MockObject
      */
     private $componentRegistrarMock;
 
     /**
-     * @var \Magento\Framework\Filesystem\Driver\File|\PHPUnit\Framework\MockObject\MockObject
+     * @var File|MockObject
      */
     private $fileDriver;
 
     protected function setUp(): void
     {
-        $this->readerMock = $this->getMockBuilder(\Magento\Framework\Module\Dir\Reader::class)
+        $this->readerMock = $this->getMockBuilder(Reader::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->filesystemMock = $this->getMockBuilder(\Magento\Framework\Filesystem::class)
+        $this->filesystemMock = $this->getMockBuilder(Filesystem::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->fileIteratorFactoryMock = $this->getMockBuilder(\Magento\Framework\Config\FileIteratorFactory::class)
+        $this->fileIteratorFactoryMock = $this->getMockBuilder(FileIteratorFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->componentRegistrarMock = $this->getMockBuilder(\Magento\Framework\Component\ComponentRegistrar::class)
+        $this->componentRegistrarMock = $this->getMockBuilder(ComponentRegistrar::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->fileDriver = $this->getMockBuilder(\Magento\Framework\Filesystem\Driver\File::class)
+        $this->fileDriver = $this->getMockBuilder(File::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->model = $this->objectManagerHelper->getObject(
-            \Magento\Framework\Config\FileResolverByModule::class,
+            FileResolverByModule::class,
             [
                 'moduleReader' => $this->readerMock,
                 'filesystem' => $this->filesystemMock,
@@ -94,7 +104,7 @@ class FileResolverByModuleTest extends \PHPUnit\Framework\TestCase
             ->willReturn([
                 '/www/app/etc/db_schema.xml' => '<xml>Primary Content</xml>'
             ]);
-        $directoryMock = $this->getMockBuilder(\Magento\Framework\Filesystem\Directory\ReadInterface::class)
+        $directoryMock = $this->getMockBuilder(ReadInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $directoryMock->expects(self::once())
@@ -127,11 +137,9 @@ class FileResolverByModuleTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    /**
-     * @expectedExceptionMessage Primary db_schema file doesn`t exist
-     */
     public function testGetWithException()
     {
+        $this->expectExceptionMessage('Primary db_schema file doesn`t exist');
         $iterator = $this->getMockBuilder(FileIterator::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -148,7 +156,7 @@ class FileResolverByModuleTest extends \PHPUnit\Framework\TestCase
             ->willReturn([
                 '/www/app/etc/db_schema.xml' => '<xml>Primary Content</xml>'
             ]);
-        $directoryMock = $this->getMockBuilder(\Magento\Framework\Filesystem\Directory\ReadInterface::class)
+        $directoryMock = $this->getMockBuilder(ReadInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $directoryMock->expects(self::once())
@@ -168,7 +176,7 @@ class FileResolverByModuleTest extends \PHPUnit\Framework\TestCase
         $this->fileDriver->expects(self::once())
             ->method('isFile')
             ->with('/www/app/etc/db_schema.xml')
-            ->willReturn(true);
+            ->willReturn(false);
         $this->filesystemMock->expects(self::once())
             ->method('getDirectoryRead')
             ->willReturn($directoryMock);
@@ -193,7 +201,7 @@ class FileResolverByModuleTest extends \PHPUnit\Framework\TestCase
             ->willReturn([
                 '/www/app/etc/db_schema.xml' => '<xml>Primary Content</xml>'
             ]);
-        $directoryMock = $this->getMockBuilder(\Magento\Framework\Filesystem\Directory\ReadInterface::class)
+        $directoryMock = $this->getMockBuilder(ReadInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $directoryMock->expects(self::once())

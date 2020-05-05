@@ -7,17 +7,18 @@ declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Unit\Model\Api\SearchCriteria\CollectionProcessor\ConditionProcessor\ConditionBuilder;
 
-use Magento\Eav\Model\Config as EavConfig;
-use Magento\Catalog\Model\ResourceModel\Product as ProductResource;
 use Magento\Catalog\Model\Api\SearchCriteria\CollectionProcessor\ConditionProcessor\ConditionBuilder\Factory;
-use Magento\Framework\Api\SearchCriteria\CollectionProcessor\ConditionProcessor\CustomConditionInterface;
-use Magento\Framework\Api\Filter;
-use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
 use Magento\Catalog\Model\Product;
+use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
+use Magento\Catalog\Model\ResourceModel\Product as ProductResource;
+use Magento\Eav\Model\Config as EavConfig;
+use Magento\Framework\Api\Filter;
+use Magento\Framework\Api\SearchCriteria\CollectionProcessor\ConditionProcessor\CustomConditionInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\TestCase;
 
-class FactoryTest extends \PHPUnit\Framework\TestCase
+class FactoryTest extends TestCase
 {
-
     private $productResourceMock;
 
     private $eavConfigMock;
@@ -48,7 +49,7 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
-        $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $objectManagerHelper = new ObjectManager($this);
 
         $this->conditionBuilderFactory = $objectManagerHelper->getObject(
             Factory::class,

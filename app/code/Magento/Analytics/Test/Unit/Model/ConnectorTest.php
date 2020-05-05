@@ -3,16 +3,20 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Analytics\Test\Unit\Model;
 
 use Magento\Analytics\Model\Connector;
-use Magento\Framework\ObjectManagerInterface;
 use Magento\Analytics\Model\Connector\SignUpCommand;
+use Magento\Framework\ObjectManagerInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class ConnectorTest extends \PHPUnit\Framework\TestCase
+class ConnectorTest extends TestCase
 {
     /**
-     * @var ObjectManagerInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var ObjectManagerInterface|MockObject
      */
     private $objectManagerMock;
 
@@ -22,7 +26,7 @@ class ConnectorTest extends \PHPUnit\Framework\TestCase
     private $connector;
 
     /**
-     * @var SignUpCommand|\PHPUnit\Framework\MockObject\MockObject
+     * @var SignUpCommand|MockObject
      */
     private $signUpCommandMock;
 
@@ -33,12 +37,8 @@ class ConnectorTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp(): void
     {
-        $this->objectManagerMock = $this->getMockBuilder(ObjectManagerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $this->signUpCommandMock = $this->getMockBuilder(SignUpCommand::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->objectManagerMock = $this->createMock(ObjectManagerInterface::class);
+        $this->signUpCommandMock = $this->createMock(SignUpCommand::class);
         $this->commands = ['signUp' => SignUpCommand::class];
         $this->connector = new Connector($this->commands, $this->objectManagerMock);
     }
@@ -63,9 +63,8 @@ class ConnectorTest extends \PHPUnit\Framework\TestCase
      */
     public function testExecuteCommandNotFound(): void
     {
-        $this->expectException(\Magento\Framework\Exception\NotFoundException::class);
+        $this->expectException('Magento\Framework\Exception\NotFoundException');
         $this->expectExceptionMessage('Command "register" was not found.');
-
         $commandName = 'register';
         $this->connector->execute($commandName);
     }

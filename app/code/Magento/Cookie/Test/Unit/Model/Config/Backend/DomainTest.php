@@ -3,57 +3,65 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Cookie\Test\Unit\Model\Config\Backend;
 
+use Magento\Cookie\Model\Config\Backend\Domain;
+use Magento\Framework\Event\Manager;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Model\Context;
+use Magento\Framework\Model\ResourceModel\AbstractResource;
 use Magento\Framework\Session\Config\Validator\CookieDomainValidator;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
- * Test \Magento\Cookie\Model\Config\Backend\Domain
+ * @covers \Magento\Cookie\Model\Config\Backend\Domain
  */
-class DomainTest extends \PHPUnit\Framework\TestCase
+class DomainTest extends TestCase
 {
-    /** @var \Magento\Framework\Model\ResourceModel\AbstractResource | \PHPUnit\Framework\MockObject\MockObject */
-    protected $resourceMock;
-
-    /** @var \Magento\Cookie\Model\Config\Backend\Domain */
-    protected $domain;
+    /**
+     * @var AbstractResource|MockObject
+     */
+    private $resourceMock;
 
     /**
-     * @var  CookieDomainValidator | \PHPUnit\Framework\MockObject\MockObject
+     * @var Domain
      */
-    protected $validatorMock;
+    private $domain;
 
+    /**
+     * @var CookieDomainValidator|MockObject
+     */
+    private $validatorMock;
+
+    /**
+     * @inheritDoc
+     */
     protected function setUp(): void
     {
-        $eventDispatcherMock = $this->createMock(\Magento\Framework\Event\Manager::class);
-        $contextMock = $this->createMock(\Magento\Framework\Model\Context::class);
-        $contextMock->expects(
-            $this->any()
-        )->method(
-            'getEventDispatcher'
-        )->willReturn(
-            $eventDispatcherMock
-        );
+        $eventDispatcherMock = $this->createMock(Manager::class);
 
-        $this->resourceMock = $this->createPartialMock(\Magento\Framework\Model\ResourceModel\AbstractResource::class, [
-                '_construct',
-                'getConnection',
-                'getIdFieldName',
-                'beginTransaction',
-                'save',
-                'commit',
-                'addCommitCallback',
-                'rollBack',
-            ]);
+        $contextMock = $this->createMock(Context::class);
+        $contextMock->expects($this->any())
+            ->method('getEventDispatcher')
+            ->willReturn($eventDispatcherMock);
 
-        $this->validatorMock = $this->getMockBuilder(
-            \Magento\Framework\Session\Config\Validator\CookieDomainValidator::class
-        )->disableOriginalConstructor()
+        $this->resourceMock = $this->getMockBuilder(AbstractResource::class)
+            ->addMethods(['getIdFieldName', 'save'])
+            ->onlyMethods(['getConnection', 'beginTransaction', 'commit', 'addCommitCallback', 'rollBack'])
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+
+        $this->validatorMock = $this->getMockBuilder(CookieDomainValidator::class)
+            ->disableOriginalConstructor()
             ->getMock();
-        $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+
+        $helper = new ObjectManagerHelper($this);
         $this->domain = $helper->getObject(
-            \Magento\Cookie\Model\Config\Backend\Domain::class,
+            Domain::class,
             [
                 'context' => $contextMock,
                 'resource' => $this->resourceMock,
@@ -71,7 +79,7 @@ class DomainTest extends \PHPUnit\Framework\TestCase
      * @param int $callNum
      * @param int $callGetMessages
      */
-    public function testBeforeSave($value, $isValid, $callNum, $callGetMessages = 0)
+    public function testBeforeSave($value, $isValid, $callNum, $callGetMessages = 0): void
     {
         $this->resourceMock->expects($this->any())->method('addCommitCallback')->willReturnSelf();
         $this->resourceMock->expects($this->any())->method('commit')->willReturnSelf();
@@ -95,9 +103,9 @@ class DomainTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return array
+     * Data Provider for testBeforeSave
      */
-    public function beforeSaveDataProvider()
+    public function beforeSaveDataProvider(): array
     {
         return [
             'not string' => [['array'], false, 1, 1],

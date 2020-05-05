@@ -3,28 +3,33 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Catalog\Test\Unit\Model\Product;
 
+use Magento\Catalog\Model\Product\Visibility;
+use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\TestCase;
 
-class VisibilityTest extends \PHPUnit\Framework\TestCase
+class VisibilityTest extends TestCase
 {
     /**
-     * @var \Magento\Catalog\Model\Product\Visibility
+     * @var Visibility
      */
     protected $_model;
 
     protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
-        $this->_model = $objectManager->getObject(\Magento\Catalog\Model\Product\Visibility::class);
+        $this->_model = $objectManager->getObject(Visibility::class);
     }
 
     public function testGetFlatColumns()
     {
         $abstractAttributeMock = $this->createPartialMock(
-            \Magento\Eav\Model\Entity\Attribute\AbstractAttribute::class,
-            ['getAttributeCode', '__wakeup']
+            AbstractAttribute::class,
+            ['getAttributeCode']
         );
 
         $abstractAttributeMock->expects($this->any())->method('getAttributeCode')->willReturn('code');
@@ -34,7 +39,7 @@ class VisibilityTest extends \PHPUnit\Framework\TestCase
         $flatColumns = $this->_model->getFlatColumns();
 
         $this->assertIsArray($flatColumns, 'FlatColumns must be an array value');
-        $this->assertTrue(!empty($flatColumns), 'FlatColumns must be not empty');
+        $this->assertNotEmpty($flatColumns, 'FlatColumns must be not empty');
         foreach ($flatColumns as $result) {
             $this->assertArrayHasKey('unsigned', $result, 'FlatColumns must have "unsigned" column');
             $this->assertArrayHasKey('default', $result, 'FlatColumns must have "default" column');

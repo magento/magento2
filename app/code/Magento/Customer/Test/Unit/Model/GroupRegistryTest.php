@@ -3,30 +3,39 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Customer\Test\Unit\Model;
+
+use Magento\Customer\Model\Group;
+use Magento\Customer\Model\GroupFactory;
+use Magento\Customer\Model\GroupRegistry;
+use Magento\Framework\Exception\NoSuchEntityException;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Unit test for registry \Magento\Customer\Model\GroupRegistry
  */
-class GroupRegistryTest extends \PHPUnit\Framework\TestCase
+class GroupRegistryTest extends TestCase
 {
     /**
-     * @var \Magento\Customer\Model\GroupRegistry
+     * @var GroupRegistry
      */
     private $unit;
 
     /**
-     * @var \Magento\Customer\Model\CustomerGroupFactory|\PHPUnit\Framework\MockObject\MockObject
+     * @var \Magento\Customer\Model\CustomerGroupFactory|MockObject
      */
     private $groupFactory;
 
     protected function setUp(): void
     {
-        $this->groupFactory = $this->getMockBuilder(\Magento\Customer\Model\GroupFactory::class)
+        $this->groupFactory = $this->getMockBuilder(GroupFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
-        $this->unit = new \Magento\Customer\Model\GroupRegistry($this->groupFactory);
+        $this->unit = new GroupRegistry($this->groupFactory);
     }
 
     /**
@@ -37,7 +46,7 @@ class GroupRegistryTest extends \PHPUnit\Framework\TestCase
     public function testRetrieve()
     {
         $groupId = 1;
-        $group = $this->getMockBuilder(\Magento\Customer\Model\Group::class)
+        $group = $this->getMockBuilder(Group::class)
             ->setMethods(['load', 'getId', '__wakeup'])
             ->disableOriginalConstructor()
             ->getMock();
@@ -64,10 +73,10 @@ class GroupRegistryTest extends \PHPUnit\Framework\TestCase
      */
     public function testRetrieveException()
     {
-        $this->expectException(\Magento\Framework\Exception\NoSuchEntityException::class);
+        $this->expectException(NoSuchEntityException::class);
 
         $groupId = 1;
-        $group = $this->getMockBuilder(\Magento\Customer\Model\Group::class)
+        $group = $this->getMockBuilder(Group::class)
             ->setMethods(['load', 'getId', '__wakeup'])
             ->disableOriginalConstructor()
             ->getMock();
@@ -92,7 +101,7 @@ class GroupRegistryTest extends \PHPUnit\Framework\TestCase
     public function testRemove()
     {
         $groupId = 1;
-        $group = $this->getMockBuilder(\Magento\Customer\Model\Group::class)
+        $group = $this->getMockBuilder(Group::class)
             ->disableOriginalConstructor()
             ->setMethods(['load', 'getId', '__wakeup'])
             ->getMock();

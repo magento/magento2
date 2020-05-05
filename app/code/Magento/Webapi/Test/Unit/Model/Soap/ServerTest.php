@@ -5,43 +5,64 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Webapi\Test\Unit\Model\Soap;
 
-class ServerTest extends \PHPUnit\Framework\TestCase
+use Magento\Framework\App\AreaList;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\Config\ScopeInterface;
+use Magento\Framework\Reflection\TypeProcessor;
+use Magento\Framework\Webapi\Request;
+use Magento\Store\Model\Store;
+use Magento\Store\Model\StoreManager;
+use Magento\Store\Model\StoreManagerInterface;
+use Magento\Webapi\Model\Soap\Server;
+use Magento\Webapi\Model\Soap\ServerFactory;
+use Magento\Webapi\Model\Soap\Wsdl\Generator;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
+class ServerTest extends TestCase
 {
-    /** @var \Magento\Webapi\Model\Soap\Server */
+    /** @var Server */
     protected $_soapServer;
 
-    /** @var \Magento\Store\Model\Store */
+    /** @var Store */
     protected $_storeMock;
 
-    /** @var \Magento\Framework\Webapi\Request */
+    /** @var Request */
     protected $_requestMock;
 
-    /** @var \Magento\Store\Model\StoreManagerInterface */
+    /** @var StoreManagerInterface */
     protected $_storeManagerMock;
 
-    /** @var \Magento\Webapi\Model\Soap\ServerFactory */
+    /** @var ServerFactory */
     protected $_soapServerFactory;
 
-    /** @var \Magento\Framework\Reflection\TypeProcessor|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var TypeProcessor|MockObject */
     protected $_typeProcessor;
 
-    /** @var \Magento\Webapi\Model\Soap\Wsdl\Generator|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var Generator|MockObject */
     protected $wsdlGenerator;
 
-    /** @var \PHPUnit\Framework\MockObject\MockObject */
+    /** @var MockObject */
     protected $_scopeConfig;
 
     protected function setUp(): void
     {
         $this->_storeManagerMock = $this->getMockBuilder(
-            \Magento\Store\Model\StoreManager::class
-        )->disableOriginalConstructor()->getMock();
+            StoreManager::class
+        )->disableOriginalConstructor()
+            ->getMock();
 
         $this->_storeMock = $this->getMockBuilder(
-            \Magento\Store\Model\Store::class
-        )->disableOriginalConstructor()->getMock();
+            Store::class
+        )->disableOriginalConstructor()
+            ->getMock();
         $this->_storeMock->expects(
             $this->any()
         )->method(
@@ -59,24 +80,26 @@ class ServerTest extends \PHPUnit\Framework\TestCase
             $this->_storeMock
         );
 
-        $areaListMock = $this->createMock(\Magento\Framework\App\AreaList::class);
-        $configScopeMock = $this->createMock(\Magento\Framework\Config\ScopeInterface::class);
+        $areaListMock = $this->createMock(AreaList::class);
+        $configScopeMock = $this->createMock(ScopeInterface::class);
         $areaListMock->expects($this->any())->method('getFrontName')->willReturn('soap');
 
         $this->_requestMock = $this->getMockBuilder(
-            \Magento\Framework\Webapi\Request::class
-        )->disableOriginalConstructor()->getMock();
+            Request::class
+        )->disableOriginalConstructor()
+            ->getMock();
 
         $this->_soapServerFactory = $this->getMockBuilder(
-            \Magento\Webapi\Model\Soap\ServerFactory::class
-        )->disableOriginalConstructor()->getMock();
+            ServerFactory::class
+        )->disableOriginalConstructor()
+            ->getMock();
 
-        $this->_typeProcessor = $this->createMock(\Magento\Framework\Reflection\TypeProcessor::class);
-        $this->wsdlGenerator = $this->createMock(\Magento\Webapi\Model\Soap\Wsdl\Generator::class);
-        $this->_scopeConfig = $this->createMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
+        $this->_typeProcessor = $this->createMock(TypeProcessor::class);
+        $this->wsdlGenerator = $this->createMock(Generator::class);
+        $this->_scopeConfig = $this->createMock(ScopeConfigInterface::class);
 
         /** Init SUT. */
-        $this->_soapServer = new \Magento\Webapi\Model\Soap\Server(
+        $this->_soapServer = new Server(
             $areaListMock,
             $configScopeMock,
             $this->_requestMock,
@@ -121,7 +144,7 @@ class ServerTest extends \PHPUnit\Framework\TestCase
     {
         $this->_scopeConfig->expects($this->once())->method('getValue')->willReturn(null);
         $this->assertEquals(
-            \Magento\Webapi\Model\Soap\Server::SOAP_DEFAULT_ENCODING,
+            Server::SOAP_DEFAULT_ENCODING,
             $this->_soapServer->getApiCharset(),
             'Default API charset encoding getting is invalid.'
         );
@@ -143,8 +166,8 @@ class ServerTest extends \PHPUnit\Framework\TestCase
     public function testGenerateUriWithWsdlParam()
     {
         $param = "testModule1AllSoapAndRest:V1,testModule2AllSoapNoRest:V1";
-        $serviceKey = \Magento\Webapi\Model\Soap\Server::REQUEST_PARAM_SERVICES;
-        $this->_requestMock->expects($this->any())->method('getParam')->willReturn($param);
+        $serviceKey = Server::REQUEST_PARAM_SERVICES;
+        $this->_requestMock->expects($this->any())->method('getParam')->will($this->returnValue($param));
         $expectedResult = "http://magento.com/soap/storeCode?{$serviceKey}={$param}&wsdl=1";
         $actualResult = $this->_soapServer->generateUri(true);
         $this->assertEquals($expectedResult, urldecode($actualResult), 'URI (with WSDL param) generated is invalid.');
@@ -156,8 +179,8 @@ class ServerTest extends \PHPUnit\Framework\TestCase
     public function testGenerateUriWithNoWsdlParam()
     {
         $param = "testModule1AllSoapAndRest:V1,testModule2AllSoapNoRest:V1";
-        $serviceKey = \Magento\Webapi\Model\Soap\Server::REQUEST_PARAM_SERVICES;
-        $this->_requestMock->expects($this->any())->method('getParam')->willReturn($param);
+        $serviceKey = Server::REQUEST_PARAM_SERVICES;
+        $this->_requestMock->expects($this->any())->method('getParam')->will($this->returnValue($param));
         $expectedResult = "http://magento.com/soap/storeCode?{$serviceKey}={$param}";
         $actualResult = $this->_soapServer->generateUri(false);
         $this->assertEquals(

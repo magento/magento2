@@ -3,16 +3,19 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Framework\Setup\Test\Unit\Declaration\Schema\ValidationRules;
 
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Framework\Setup\Declaration\Schema\Declaration\ValidationRules\RealTypes;
 use Magento\Framework\Setup\Declaration\Schema\Dto\Columns\Real;
 use Magento\Framework\Setup\Declaration\Schema\Dto\Schema;
 use Magento\Framework\Setup\Declaration\Schema\Dto\Table;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class RealTypesTest extends \PHPUnit\Framework\TestCase
+class RealTypesTest extends TestCase
 {
     /** @var RealTypes */
     private $model;
@@ -22,7 +25,6 @@ class RealTypesTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp(): void
     {
-        
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->model = $this->objectManagerHelper->getObject(
             RealTypes::class,
@@ -45,7 +47,7 @@ class RealTypesTest extends \PHPUnit\Framework\TestCase
         $okColumn = new Real('decimal', 'decimal', $table, 10, 5);
         $invalidColumn = new Real('float', 'float', $table, 5, 10);
         $table->addColumns([$okColumn, $invalidColumn]);
-        /** @var Schema|\PHPUnit\Framework\MockObject\MockObject $schemaMock */
+        /** @var Schema|MockObject $schemaMock */
         $schemaMock = $this->getMockBuilder(Schema::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -57,8 +59,7 @@ class RealTypesTest extends \PHPUnit\Framework\TestCase
             [
                 [
                     'column' => 'name.float',
-                    'message' =>
-                        'Real type "precision" must be greater or equal to "scale". ' .
+                    'message' => 'Real type "precision" must be greater or equal to "scale". ' .
                         'float(5,10) is invalid in name.float.'
                 ]
             ],

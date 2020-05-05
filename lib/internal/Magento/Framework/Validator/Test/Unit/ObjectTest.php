@@ -3,18 +3,23 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\Validator\Test\Unit;
 
-class ObjectTest extends \PHPUnit\Framework\TestCase
+use Magento\Framework\Validator\DataObject;
+use PHPUnit\Framework\TestCase;
+
+class ObjectTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\Validator\DataObject
+     * @var DataObject
      */
     protected $_model;
 
     protected function setUp(): void
     {
-        $this->_model = new \Magento\Framework\Validator\DataObject();
+        $this->_model = new DataObject();
 
         $fieldOneExactValue = new \Zend_Validate_Identical('field_one_value');
         $fieldOneExactValue->setMessage("'field_one' does not match expected value");

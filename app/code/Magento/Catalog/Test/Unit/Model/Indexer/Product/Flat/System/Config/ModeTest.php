@@ -3,45 +3,56 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Catalog\Test\Unit\Model\Indexer\Product\Flat\System\Config;
 
-class ModeTest extends \PHPUnit\Framework\TestCase
+use Magento\Catalog\Model\Indexer\Product\Flat\Processor;
+use Magento\Catalog\Model\Indexer\Product\Flat\System\Config\Mode;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\Indexer\IndexerInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Indexer\Model\Indexer\State;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class ModeTest extends TestCase
 {
     /**
-     * @var \Magento\Catalog\Model\Indexer\Product\Flat\System\Config\Mode
+     * @var Mode
      */
     protected $model;
 
     /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var ScopeConfigInterface|MockObject
      */
     protected $configMock;
 
     /**
-     * @var \Magento\Indexer\Model\Indexer\State|\PHPUnit\Framework\MockObject\MockObject
+     * @var State|MockObject
      */
     protected $indexerStateMock;
 
     /**
-     * @var \Magento\Catalog\Model\Indexer\Product\Flat\Processor|\PHPUnit\Framework\MockObject\MockObject
+     * @var Processor|MockObject
      */
     protected $indexerProcessorMock;
 
     protected function setUp(): void
     {
-        $this->configMock = $this->createMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
+        $this->configMock = $this->createMock(ScopeConfigInterface::class);
         $this->indexerStateMock = $this->createPartialMock(
-            \Magento\Indexer\Model\Indexer\State::class,
-            ['loadByIndexer', 'setStatus', 'save', '__wakeup']
+            State::class,
+            ['loadByIndexer', 'setStatus', 'save']
         );
         $this->indexerProcessorMock = $this->createPartialMock(
-            \Magento\Catalog\Model\Indexer\Product\Flat\Processor::class,
+            Processor::class,
             ['getIndexer']
         );
 
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $objectManager = new ObjectManager($this);
         $this->model = $objectManager->getObject(
-            \Magento\Catalog\Model\Indexer\Product\Flat\System\Config\Mode::class,
+            Mode::class,
             [
                 'config' => $this->configMock,
                 'indexerState' => $this->indexerStateMock,
@@ -121,18 +132,14 @@ class ModeTest extends \PHPUnit\Framework\TestCase
             'loadByIndexer'
         )->with(
             'catalog_product_flat'
-        )->willReturnSelf(
-            
-        );
+        )->willReturnSelf();
         $this->indexerStateMock->expects(
             $this->once()
         )->method(
             'setStatus'
         )->with(
             'invalid'
-        )->willReturnSelf(
-            
-        );
+        )->willReturnSelf();
         $this->indexerStateMock->expects($this->once())->method('save')->willReturnSelf();
 
         $this->indexerProcessorMock->expects($this->never())->method('getIndexer');
@@ -173,13 +180,13 @@ class ModeTest extends \PHPUnit\Framework\TestCase
         $this->indexerStateMock->expects($this->never())->method('save');
 
         $indexerMock = $this->getMockForAbstractClass(
-            \Magento\Framework\Indexer\IndexerInterface::class,
+            IndexerInterface::class,
             [],
             '',
             false,
             false,
             true,
-            ['setScheduled', '__wakeup']
+            ['setScheduled']
         );
         $indexerMock->expects($this->once())->method('setScheduled')->with(false);
 

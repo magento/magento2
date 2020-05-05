@@ -3,29 +3,36 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 /**
  * Tests for \Magento\Framework\Data\Form\Element\Factory
  */
 namespace Magento\Framework\Data\Test\Unit\Form\Element;
 
-class FactoryTest extends \PHPUnit\Framework\TestCase
+use Magento\Framework\Data\Form\Element\Collection;
+use Magento\Framework\Data\Form\Element\Factory;
+use Magento\Framework\ObjectManager\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class FactoryTest extends TestCase
 {
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $_objectManagerMock;
 
     /**
-     * @var \Magento\Framework\Data\Form\Element\Factory
+     * @var Factory
      */
     protected $_factory;
 
     protected function setUp(): void
     {
         $this->_objectManagerMock =
-            $this->createPartialMock(\Magento\Framework\ObjectManager\ObjectManager::class, ['create']);
-        $this->_factory = new \Magento\Framework\Data\Form\Element\Factory($this->_objectManagerMock);
+            $this->createPartialMock(ObjectManager::class, ['create']);
+        $this->_factory = new Factory($this->_objectManagerMock);
     }
 
     /**
@@ -118,8 +125,7 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
      */
     public function testCreateExceptionReflectionException($type)
     {
-        $this->expectException(\ReflectionException::class);
-
+        $this->expectException('ReflectionException');
         $this->_objectManagerMock->expects(
             $this->once()
         )->method(
@@ -127,8 +133,8 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
         )->with(
             $type,
             []
-        )->will(
-            $this->throwException(new \ReflectionException())
+        )->willThrowException(
+            new \ReflectionException()
         );
         $this->_factory->create($type);
     }
@@ -151,8 +157,7 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
      */
     public function testCreateExceptionInvalidArgument($type)
     {
-        $this->expectException(\InvalidArgumentException::class);
-
+        $this->expectException('InvalidArgumentException');
         $elementMock = $this->createMock($type);
         $this->_objectManagerMock->expects(
             $this->once()
@@ -173,11 +178,11 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
     public function createExceptionInvalidArgumentDataProvider()
     {
         return [
-            \Magento\Framework\Data\Form\Element\Factory::class => [
-                \Magento\Framework\Data\Form\Element\Factory::class
+            Factory::class => [
+                Factory::class
             ],
-            \Magento\Framework\Data\Form\Element\Collection::class => [
-                \Magento\Framework\Data\Form\Element\Collection::class
+            Collection::class => [
+                Collection::class
             ]
         ];
     }

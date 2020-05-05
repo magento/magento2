@@ -4,11 +4,14 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\Acl\Test\Unit\Role;
 
-use \Magento\Framework\Acl\Role\Registry;
+use Magento\Framework\Acl\Role\Registry;
+use PHPUnit\Framework\TestCase;
 
-class RegistryTest extends \PHPUnit\Framework\TestCase
+class RegistryTest extends TestCase
 {
     /**
      * @var Registry
@@ -63,13 +66,10 @@ class RegistryTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals([$parentRoleId => $parentRole], $this->model->getParents($roleId));
     }
 
-    /**
-     */
     public function testAddParentWrongChildId()
     {
-        $this->expectException(\Zend_Acl_Role_Registry_Exception::class);
+        $this->expectException('Zend_Acl_Role_Registry_Exception');
         $this->expectExceptionMessage('Child Role id \'20\' does not exist');
-
         $roleId = 1;
         $parentRoleId = 2;
         list(, $parentRole) = $this->initRoles($roleId, $parentRoleId);
@@ -77,16 +77,13 @@ class RegistryTest extends \PHPUnit\Framework\TestCase
         $this->model->addParent(20, $parentRole);
     }
 
-    /**
-     */
     public function testAddParentWrongParentId()
     {
-        $this->expectException(\Zend_Acl_Role_Registry_Exception::class);
+        $this->expectException('Zend_Acl_Role_Registry_Exception');
         $this->expectExceptionMessage('Parent Role id \'26\' does not exist');
-
         $roleId = 1;
         $parentRoleId = 2;
-        list($role,) = $this->initRoles($roleId, $parentRoleId);
+        list($role, ) = $this->initRoles($roleId, $parentRoleId);
 
         $this->model->addParent($role, 26);
     }

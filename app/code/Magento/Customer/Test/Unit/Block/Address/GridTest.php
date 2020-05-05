@@ -3,51 +3,68 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Customer\Test\Unit\Block\Address;
 
+use Magento\Customer\Api\Data\AddressInterface;
+use Magento\Customer\Api\Data\CustomerInterface;
+use Magento\Customer\Block\Address\Grid;
+use Magento\Customer\Helper\Session\CurrentCustomer;
+use Magento\Customer\Model\Address;
+use Magento\Customer\Model\ResourceModel\Address\Collection;
 use Magento\Customer\Model\ResourceModel\Address\CollectionFactory;
+use Magento\Directory\Model\Country;
+use Magento\Directory\Model\CountryFactory;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\UrlInterface;
+use Magento\Framework\View\Element\BlockInterface;
+use Magento\Framework\View\LayoutInterface;
+use Magento\Theme\Block\Html\Pager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Unit tests for \Magento\Customer\Block\Address\Grid class
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class GridTest extends \PHPUnit\Framework\TestCase
+class GridTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
+     * @var ObjectManager
      */
     private $objectManager;
 
     /**
-     * @var \Magento\Customer\Helper\Session\CurrentCustomer|\PHPUnit\Framework\MockObject\MockObject
+     * @var CurrentCustomer|MockObject
      */
     private $addressCollectionFactory;
 
     /**
-     * @var \Magento\Customer\Model\ResourceModel\Address\CollectionFactory|\PHPUnit\Framework\MockObject\MockObject
+     * @var CollectionFactory|MockObject
      */
     private $currentCustomer;
 
     /**
-     * @var \Magento\Directory\Model\CountryFactory|\PHPUnit\Framework\MockObject\MockObject
+     * @var CountryFactory|MockObject
      */
     private $countryFactory;
 
     /**
-     * @var \Magento\Framework\UrlInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var UrlInterface|MockObject
      */
     private $urlBuilder;
 
     /**
-     * @var \Magento\Customer\Block\Address\Grid
+     * @var Grid
      */
     private $gridBlock;
 
     protected function setUp(): void
     {
-        $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $this->objectManager = new ObjectManager($this);
 
-        $this->currentCustomer = $this->getMockBuilder(\Magento\Customer\Helper\Session\CurrentCustomer::class)
+        $this->currentCustomer = $this->getMockBuilder(CurrentCustomer::class)
             ->disableOriginalConstructor()
             ->setMethods(['getCustomer'])
             ->getMock();
@@ -57,15 +74,15 @@ class GridTest extends \PHPUnit\Framework\TestCase
             ->setMethods(['create'])
             ->getMock();
 
-        $this->countryFactory = $this->getMockBuilder(\Magento\Directory\Model\CountryFactory::class)
+        $this->countryFactory = $this->getMockBuilder(CountryFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
 
-        $this->urlBuilder = $this->getMockForAbstractClass(\Magento\Framework\UrlInterface::class);
+        $this->urlBuilder = $this->getMockForAbstractClass(UrlInterface::class);
 
         $this->gridBlock = $this->objectManager->getObject(
-            \Magento\Customer\Block\Address\Grid::class,
+            Grid::class,
             [
                 'addressCollectionFactory' => $this->addressCollectionFactory,
                 'currentCustomer' => $this->currentCustomer,
@@ -82,16 +99,16 @@ class GridTest extends \PHPUnit\Framework\TestCase
     {
         $customerId = 1;
         $outputString = 'OutputString';
-        /** @var \Magento\Framework\View\Element\BlockInterface|\PHPUnit\Framework\MockObject\MockObject $block */
-        $block = $this->getMockBuilder(\Magento\Framework\View\Element\BlockInterface::class)
+        /** @var BlockInterface|MockObject $block */
+        $block = $this->getMockBuilder(BlockInterface::class)
             ->setMethods(['setCollection'])
             ->getMockForAbstractClass();
-        /** @var  $layout \Magento\Framework\View\LayoutInterface|\PHPUnit\Framework\MockObject\MockObject */
-        $layout = $this->getMockForAbstractClass(\Magento\Framework\View\LayoutInterface::class);
-        /** @var \Magento\Customer\Api\Data\CustomerInterface|\PHPUnit\Framework\MockObject\MockObject $customer */
-        $customer = $this->getMockForAbstractClass(\Magento\Customer\Api\Data\CustomerInterface::class);
-        /** @var \PHPUnit\Framework\MockObject\MockObject */
-        $addressCollection = $this->getMockBuilder(\Magento\Customer\Model\ResourceModel\Address\Collection::class)
+        /** @var LayoutInterface|MockObject $layout */
+        $layout = $this->getMockForAbstractClass(LayoutInterface::class);
+        /** @var CustomerInterface|MockObject $customer */
+        $customer = $this->getMockForAbstractClass(CustomerInterface::class);
+        /** @var MockObject */
+        $addressCollection = $this->getMockBuilder(Collection::class)
             ->disableOriginalConstructor()
             ->setMethods(['setOrder', 'setCustomerFilter', 'load','addFieldToFilter'])
             ->getMock();
@@ -101,7 +118,7 @@ class GridTest extends \PHPUnit\Framework\TestCase
         $layout->expects($this->atLeastOnce())->method('renderElement')->with('ChildName', true)
             ->willReturn('OutputString');
         $layout->expects($this->atLeastOnce())->method('createBlock')
-            ->with(\Magento\Theme\Block\Html\Pager::class, 'customer.addresses.pager')->willReturn($block);
+            ->with(Pager::class, 'customer.addresses.pager')->willReturn($block);
         $customer->expects($this->atLeastOnce())->method('getId')->willReturn($customerId);
         $this->currentCustomer->expects($this->atLeastOnce())->method('getCustomer')->willReturn($customer);
         $addressCollection->expects($this->atLeastOnce())->method('setOrder')->with('entity_id', 'desc')
@@ -133,15 +150,15 @@ class GridTest extends \PHPUnit\Framework\TestCase
     public function testGetAdditionalAddresses()
     {
         $customerId = 1;
-        /** @var \Magento\Customer\Api\Data\CustomerInterface|\PHPUnit\Framework\MockObject\MockObject $customer */
-        $customer = $this->getMockForAbstractClass(\Magento\Customer\Api\Data\CustomerInterface::class);
-        /** @var \PHPUnit\Framework\MockObject\MockObject */
-        $addressCollection = $this->getMockBuilder(\Magento\Customer\Model\ResourceModel\Address\Collection::class)
+        /** @var CustomerInterface|MockObject $customer */
+        $customer = $this->getMockForAbstractClass(CustomerInterface::class);
+        /** @var MockObject */
+        $addressCollection = $this->getMockBuilder(Collection::class)
             ->disableOriginalConstructor()
             ->setMethods(['setOrder', 'setCustomerFilter', 'load', 'getIterator','addFieldToFilter'])
             ->getMock();
-        $addressDataModel = $this->getMockForAbstractClass(\Magento\Customer\Api\Data\AddressInterface::class);
-        $address = $this->getMockBuilder(\Magento\Customer\Model\Address::class)
+        $addressDataModel = $this->getMockForAbstractClass(AddressInterface::class);
+        $address = $this->getMockBuilder(Address::class)
             ->disableOriginalConstructor()
             ->setMethods(['getId', 'getDataModel'])
             ->getMock();
@@ -174,7 +191,7 @@ class GridTest extends \PHPUnit\Framework\TestCase
     {
         $street = ['Line 1', 'Line 2'];
         $expectedAddress = 'Line 1, Line 2';
-        $address = $this->getMockForAbstractClass(\Magento\Customer\Api\Data\AddressInterface::class);
+        $address = $this->getMockForAbstractClass(AddressInterface::class);
         $address->expects($this->atLeastOnce())->method('getStreet')->willReturn($street);
         $this->assertEquals($expectedAddress, $this->gridBlock->getStreetAddress($address));
     }
@@ -186,7 +203,7 @@ class GridTest extends \PHPUnit\Framework\TestCase
     {
         $countryId = 'US';
         $countryName = 'United States';
-        $country = $this->getMockBuilder(\Magento\Directory\Model\Country::class)
+        $country = $this->getMockBuilder(Country::class)
             ->disableOriginalConstructor()
             ->setMethods(['loadByCode', 'getName'])
             ->getMock();

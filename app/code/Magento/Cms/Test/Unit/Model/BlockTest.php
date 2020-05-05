@@ -13,11 +13,13 @@ use Magento\Framework\Event\ManagerInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Model\Context;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \Magento\Cms\Model\Block
  */
-class BlockTest extends \PHPUnit\Framework\TestCase
+class BlockTest extends TestCase
 {
     /**
      * Testable Object
@@ -34,17 +36,17 @@ class BlockTest extends \PHPUnit\Framework\TestCase
     private $objectManager;
 
     /**
-     * @var ManagerInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var ManagerInterface|MockObject
      */
     private $eventManagerMock;
 
     /**
-     * @var Context|\PHPUnit\Framework\MockObject\MockObject
+     * @var Context|MockObject
      */
     private $contextMock;
 
     /**
-     * @var BlockResource|\PHPUnit\Framework\MockObject\MockObject
+     * @var BlockResource|MockObject
      */
     private $resourceMock;
 
@@ -56,7 +58,7 @@ class BlockTest extends \PHPUnit\Framework\TestCase
     protected function setUp(): void
     {
         $this->resourceMock = $this->createMock(BlockResource::class);
-        $this->eventManagerMock = $this->getMockForAbstractClass(ManagerInterface::class);
+        $this->eventManagerMock = $this->createMock(ManagerInterface::class);
         $this->contextMock = $this->createMock(Context::class);
         $this->contextMock->expects($this->any())->method('getEventDispatcher')->willReturn($this->eventManagerMock);
         $this->objectManager = new ObjectManager($this);
@@ -114,7 +116,7 @@ class BlockTest extends \PHPUnit\Framework\TestCase
     public function testGetIdentities()
     {
         $result = $this->blockModel->getIdentities();
-        self::assertIsArray($result);
+        $this->assertIsArray($result);
     }
 
     /**
@@ -332,6 +334,6 @@ class BlockTest extends \PHPUnit\Framework\TestCase
     public function testGetAvailableStatuses()
     {
         $result = $this->blockModel->getAvailableStatuses();
-        self::assertIsArray($result);
+        $this->assertIsArray($result);
     }
 }

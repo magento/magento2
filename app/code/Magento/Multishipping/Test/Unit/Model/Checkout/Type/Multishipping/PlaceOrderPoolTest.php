@@ -10,11 +10,13 @@ namespace Magento\Multishipping\Test\Unit\Model\Checkout\Type\Multishipping;
 use Magento\Framework\ObjectManager\TMapFactory;
 use Magento\Multishipping\Model\Checkout\Type\Multishipping\PlaceOrderInterface;
 use Magento\Multishipping\Model\Checkout\Type\Multishipping\PlaceOrderPool;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Tests Magento\Multishipping\Model\Checkout\Type\Multishipping\PlaceOrderPool.
  */
-class PlaceOrderPoolTest extends \PHPUnit\Framework\TestCase
+class PlaceOrderPoolTest extends TestCase
 {
     /**
      * @param string $paymentProviderCode
@@ -26,7 +28,7 @@ class PlaceOrderPoolTest extends \PHPUnit\Framework\TestCase
      */
     public function testGet(string $paymentProviderCode, array $placeOrderList, $expectedResult)
     {
-        /** @var TMapFactory|\PHPUnit\Framework\MockObject\MockObject $tMapFactory */
+        /** @var TMapFactory|MockObject $tMapFactory */
         $tMapFactory = $this->getMockBuilder(TMapFactory::class)
             ->disableOriginalConstructor()
             ->getMock();

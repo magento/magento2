@@ -3,18 +3,21 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Unit\Pricing\Price;
 
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Catalog\Pricing\Price\MinimalTierPriceCalculator;
-use Magento\Framework\Pricing\SaleableInterface;
-use Magento\Framework\Pricing\PriceInfoInterface;
 use Magento\Catalog\Pricing\Price\TierPrice;
-use Magento\Framework\Pricing\Amount\AmountInterface;
 use Magento\Framework\Pricing\Adjustment\CalculatorInterface;
+use Magento\Framework\Pricing\Amount\AmountInterface;
+use Magento\Framework\Pricing\PriceInfoInterface;
+use Magento\Framework\Pricing\SaleableInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class MinimalTierPriceCalculatorTest extends \PHPUnit\Framework\TestCase
+class MinimalTierPriceCalculatorTest extends TestCase
 {
     /**
      * @var ObjectManager
@@ -27,22 +30,22 @@ class MinimalTierPriceCalculatorTest extends \PHPUnit\Framework\TestCase
     private $object;
 
     /**
-     * @var SaleableInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var SaleableInterface|MockObject
      */
     private $saleable;
 
     /**
-     * @var PriceInfoInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var PriceInfoInterface|MockObject
      */
     private $priceInfo;
 
     /**
-     * @var TierPrice|\PHPUnit\Framework\MockObject\MockObject
+     * @var TierPrice|MockObject
      */
     private $price;
 
     /**
-     * @var CalculatorInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var CalculatorInterface|MockObject
      */
     private $calculator;
 

@@ -1,11 +1,16 @@
 <?php
+
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Customer\Test\Unit\Model\Metadata\Form;
 
+use Magento\Customer\Api\Data\OptionInterface;
 use Magento\Customer\Model\Metadata\Form\Select;
+use Magento\Framework\Phrase;
 
 /**
  * test Magento\Customer\Model\Metadata\Form\Select
@@ -20,7 +25,7 @@ class SelectTest extends AbstractFormTestCase
      */
     protected function getClass($value)
     {
-        return new \Magento\Customer\Model\Metadata\Form\Select(
+        return new Select(
             $this->localeMock,
             $this->loggerMock,
             $this->attributeMetadataMock,
@@ -73,6 +78,15 @@ class SelectTest extends AbstractFormTestCase
         if (is_bool($actual)) {
             $this->assertEquals($expected, $actual);
         } else {
+            if (is_array($actual)) {
+                $actual = array_map(
+                    function (Phrase $message) {
+                        return $message->__toString();
+                    },
+                    $actual
+                );
+            }
+
             $this->assertContains($expected, $actual);
         }
     }
@@ -85,7 +99,7 @@ class SelectTest extends AbstractFormTestCase
         return [
             'empty' => ['', '"" is a required value.'],
             'null' => [null, '"" is a required value.'],
-            '0' => [0, true],
+            '0' => [0, '"" is a required value.'],
             'string' => ['some text', true],
             'number' => [123, true],
             'true' => [true, true],
@@ -100,7 +114,7 @@ class SelectTest extends AbstractFormTestCase
      */
     public function testOutputValue($value, $expected)
     {
-        $option1 = $this->getMockBuilder(\Magento\Customer\Api\Data\OptionInterface::class)
+        $option1 = $this->getMockBuilder(OptionInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['getLabel', 'getValue'])
             ->getMockForAbstractClass();
@@ -111,7 +125,7 @@ class SelectTest extends AbstractFormTestCase
             ->method('getValue')
             ->willReturn('14');
 
-        $option2 = $this->getMockBuilder(\Magento\Customer\Api\Data\OptionInterface::class)
+        $option2 = $this->getMockBuilder(OptionInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['getLabel', 'getValue'])
             ->getMockForAbstractClass();
@@ -122,7 +136,7 @@ class SelectTest extends AbstractFormTestCase
             ->method('getValue')
             ->willReturn('some key');
 
-        $option3 = $this->getMockBuilder(\Magento\Customer\Api\Data\OptionInterface::class)
+        $option3 = $this->getMockBuilder(OptionInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['getLabel', 'getValue'])
             ->getMockForAbstractClass();
@@ -133,22 +147,18 @@ class SelectTest extends AbstractFormTestCase
             ->method('getValue')
             ->willReturn('true');
 
-        $this->attributeMetadataMock->expects(
-            $this->any()
-        )->method(
-            'getOptions'
-        )->willReturn(
-            
+        $this->attributeMetadataMock->expects($this->any())
+            ->method('getOptions')
+            ->willReturn(
                 [
                     $option1,
                     $option2,
                     $option3,
                 ]
-            
-        );
+            );
         $select = $this->getClass($value);
-        $actual = $select->outputValue();
-        $this->assertEquals($expected, $actual);
+        $actual = (string)$select->outputValue();
+        $this->assertStringContainsString($expected, $actual);
     }
 
     /**

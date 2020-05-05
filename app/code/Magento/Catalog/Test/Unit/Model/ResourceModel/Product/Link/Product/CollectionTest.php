@@ -3,97 +3,125 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Catalog\Test\Unit\Model\ResourceModel\Product\Link\Product;
 
+use Magento\Catalog\Helper\Data;
+use Magento\Catalog\Model\Indexer\Product\Flat\State;
+use Magento\Catalog\Model\Product;
+use Magento\Catalog\Model\Product\OptionFactory;
+use Magento\Catalog\Model\ResourceModel\Helper;
 use Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitation;
 use Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitationFactory;
+use Magento\Catalog\Model\ResourceModel\Product\Link\Product\Collection;
+use Magento\Catalog\Model\ResourceModel\Url;
+use Magento\Customer\Model\Session;
+use Magento\Eav\Model\Config;
+use Magento\Eav\Model\Entity\AbstractEntity;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\Data\Collection\Db\FetchStrategyInterface;
+use Magento\Framework\Data\Collection\EntityFactory;
+use Magento\Framework\DataObject;
+use Magento\Framework\DB\Adapter\Pdo\Mysql;
+use Magento\Framework\DB\Select;
 use Magento\Framework\EntityManager\EntityMetadataInterface;
 use Magento\Framework\EntityManager\MetadataPool;
+use Magento\Framework\Event\ManagerInterface;
+use Magento\Framework\Stdlib\DateTime;
+use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\Validator\UniversalFactory;
+use Magento\Store\Model\StoreManagerInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.TooManyFields)
  */
-class CollectionTest extends \PHPUnit\Framework\TestCase
+class CollectionTest extends TestCase
 {
-    /** @var \Magento\Catalog\Model\ResourceModel\Product\Link\Product\Collection */
+    /** @var Collection */
     protected $collection;
 
-    /** @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager */
+    /** @var ObjectManager */
     private $objectManager;
 
-    /** @var \Magento\Framework\Data\Collection\EntityFactory|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var EntityFactory|MockObject */
     protected $entityFactoryMock;
 
-    /** @var \Psr\Log\LoggerInterface|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var LoggerInterface|MockObject */
     protected $loggerMock;
 
-    /** @var \Magento\Framework\Data\Collection\Db\FetchStrategyInterface|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var FetchStrategyInterface|MockObject */
     protected $fetchStrategyMock;
 
-    /** @var \Magento\Framework\Event\ManagerInterface|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var ManagerInterface|MockObject */
     protected $managerInterfaceMock;
 
-    /** @var \Magento\Eav\Model\Config|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var Config|MockObject */
     protected $configMock;
 
-    /** @var \Magento\Framework\App\ResourceConnection|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var ResourceConnection|MockObject */
     protected $resourceMock;
 
-    /** @var \PHPUnit\Framework\MockObject\MockObject */
+    /** @var MockObject */
     protected $entityFactoryMock2;
 
-    /** @var \Magento\Catalog\Model\ResourceModel\Helper|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var Helper|MockObject */
     protected $helperMock;
 
-    /** @var \Magento\Framework\Validator\UniversalFactory|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var UniversalFactory|MockObject */
     protected $universalFactoryMock;
 
-    /** @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var StoreManagerInterface|MockObject */
     protected $storeManagerMock;
 
-    /** @var \Magento\Catalog\Helper\Data|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var Data|MockObject */
     protected $catalogHelperMock;
 
-    /** @var \Magento\Catalog\Model\Indexer\Product\Flat\State|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var State|MockObject */
     protected $stateMock;
 
-    /** @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var ScopeConfigInterface|MockObject */
     protected $scopeConfigInterfaceMock;
 
-    /** @var \PHPUnit\Framework\MockObject\MockObject */
+    /** @var MockObject */
     protected $optionFactoryMock;
 
-    /** @var \Magento\Catalog\Model\ResourceModel\Url|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var Url|MockObject */
     protected $urlMock;
 
-    /** @var \Magento\Framework\Stdlib\DateTime\TimezoneInterface|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var TimezoneInterface|MockObject */
     protected $timezoneInterfaceMock;
 
-    /** @var \Magento\Customer\Model\Session|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var Session|MockObject */
     protected $sessionMock;
 
-    /** @var \Magento\Framework\Stdlib\DateTime|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var DateTime|MockObject */
     protected $dateTimeMock;
 
     protected function setUp(): void
     {
-        $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->entityFactoryMock = $this->createMock(\Magento\Framework\Data\Collection\EntityFactory::class);
-        $this->loggerMock = $this->createMock(\Psr\Log\LoggerInterface::class);
+        $this->objectManager = new ObjectManager($this);
+        $this->entityFactoryMock = $this->createMock(EntityFactory::class);
+        $this->loggerMock = $this->createMock(LoggerInterface::class);
         $this->fetchStrategyMock = $this->createMock(
-            \Magento\Framework\Data\Collection\Db\FetchStrategyInterface::class
+            FetchStrategyInterface::class
         );
-        $this->managerInterfaceMock = $this->createMock(\Magento\Framework\Event\ManagerInterface::class);
-        $this->configMock = $this->createMock(\Magento\Eav\Model\Config::class);
-        $this->resourceMock = $this->createMock(\Magento\Framework\App\ResourceConnection::class);
+        $this->managerInterfaceMock = $this->createMock(ManagerInterface::class);
+        $this->configMock = $this->createMock(Config::class);
+        $this->resourceMock = $this->createMock(ResourceConnection::class);
         $this->entityFactoryMock2 = $this->createMock(\Magento\Eav\Model\EntityFactory::class);
-        $this->helperMock = $this->createMock(\Magento\Catalog\Model\ResourceModel\Helper::class);
-        $entity = $this->createMock(\Magento\Eav\Model\Entity\AbstractEntity::class);
-        $select = $this->getMockBuilder(\Magento\Framework\DB\Select::class)
+        $this->helperMock = $this->createMock(Helper::class);
+        $entity = $this->createMock(AbstractEntity::class);
+        $select = $this->getMockBuilder(Select::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $connection = $this->getMockBuilder(\Magento\Framework\DB\Adapter\Pdo\Mysql::class)
+        $connection = $this->getMockBuilder(Mysql::class)
             ->disableOriginalConstructor()
             ->getMock();
         $connection->expects($this->any())
@@ -101,39 +129,42 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
             ->willReturn($select);
         $entity->expects($this->any())->method('getConnection')->willReturn($connection);
         $entity->expects($this->any())->method('getDefaultAttributes')->willReturn([]);
-        $this->universalFactoryMock = $this->createMock(\Magento\Framework\Validator\UniversalFactory::class);
+        $this->universalFactoryMock = $this->createMock(UniversalFactory::class);
         $this->universalFactoryMock->expects($this->any())->method('create')->willReturn($entity);
-        $this->storeManagerMock = $this->getMockForAbstractClass(\Magento\Store\Model\StoreManagerInterface::class);
+        $this->storeManagerMock = $this->getMockForAbstractClass(StoreManagerInterface::class);
         $this->storeManagerMock
             ->expects($this->any())
             ->method('getStore')
             ->willReturnCallback(
                 function ($store) {
-                    return is_object($store) ? $store : new \Magento\Framework\DataObject(['id' => 42]);
+                    return is_object($store) ? $store : new DataObject(['id' => 42]);
                 }
             );
-        $this->catalogHelperMock = $this->createMock(\Magento\Catalog\Helper\Data::class);
-        $this->stateMock = $this->createMock(\Magento\Catalog\Model\Indexer\Product\Flat\State::class);
-        $this->scopeConfigInterfaceMock = $this->createMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
-        $this->optionFactoryMock = $this->createMock(\Magento\Catalog\Model\Product\OptionFactory::class);
-        $this->urlMock = $this->createMock(\Magento\Catalog\Model\ResourceModel\Url::class);
-        $this->timezoneInterfaceMock = $this->createMock(\Magento\Framework\Stdlib\DateTime\TimezoneInterface::class);
-        $this->sessionMock = $this->createMock(\Magento\Customer\Model\Session::class);
-        $this->dateTimeMock = $this->createMock(\Magento\Framework\Stdlib\DateTime::class);
+        $this->catalogHelperMock = $this->createMock(Data::class);
+        $this->stateMock = $this->createMock(State::class);
+        $this->scopeConfigInterfaceMock = $this->createMock(ScopeConfigInterface::class);
+        $this->optionFactoryMock = $this->createMock(OptionFactory::class);
+        $this->urlMock = $this->createMock(Url::class);
+        $this->timezoneInterfaceMock = $this->createMock(TimezoneInterface::class);
+        $this->sessionMock = $this->createMock(Session::class);
+        $this->dateTimeMock = $this->createMock(DateTime::class);
         $productLimitationFactoryMock = $this->getMockBuilder(
             ProductLimitationFactory::class
-        )->disableOriginalConstructor()->setMethods(['create'])->getMock();
+        )->disableOriginalConstructor()
+            ->setMethods(['create'])->getMock();
 
         $productLimitationFactoryMock->method('create')
             ->willReturn($this->createMock(ProductLimitation::class));
 
         $metadataMock = $this->getMockForAbstractClass(EntityMetadataInterface::class);
         $metadataMock->method('getLinkField')->willReturn('entity_id');
-        $metadataPoolMock = $this->getMockBuilder(MetadataPool::class)->disableOriginalConstructor()->getMock();
+        $metadataPoolMock = $this->getMockBuilder(MetadataPool::class)
+            ->disableOriginalConstructor()
+            ->getMock();
         $metadataPoolMock->method('getMetadata')->willReturn($metadataMock);
 
         $this->collection = $this->objectManager->getObject(
-            \Magento\Catalog\Model\ResourceModel\Product\Link\Product\Collection::class,
+            Collection::class,
             [
                 'entityFactory' => $this->entityFactoryMock,
                 'logger' => $this->loggerMock,
@@ -161,10 +192,10 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
 
     public function testSetProduct()
     {
-        /** @var \Magento\Catalog\Model\Product|\PHPUnit\Framework\MockObject\MockObject $product */
-        $product = $this->createMock(\Magento\Catalog\Model\Product::class);
+        /** @var Product|MockObject $product */
+        $product = $this->createMock(Product::class);
         $product->expects($this->any())->method('getId')->willReturn('5');
-        $productStore = new \Magento\Framework\DataObject(['id' => 33]);
+        $productStore = new DataObject(['id' => 33]);
         $product->expects($this->any())->method('getStore')->willReturn($productStore);
         $this->collection->setProduct($product);
         $this->assertEquals(33, $this->collection->getStoreId());

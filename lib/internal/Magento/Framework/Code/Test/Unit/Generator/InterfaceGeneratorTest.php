@@ -5,10 +5,15 @@
  */
 namespace Magento\Framework\Code\Test\Unit\Generator;
 
-class InterfaceGeneratorTest extends \PHPUnit\Framework\TestCase
+use PHPUnit\Framework\TestCase;
+use Magento\Framework\Code\Generator\InterfaceGenerator;
+use Magento\SomeModule\Model\Two\Test;
+use Magento\Framework\Code\Generator\CodeGeneratorInterface;
+
+class InterfaceGeneratorTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\Code\Generator\InterfaceGenerator
+     * @var InterfaceGenerator
      */
     protected $interfaceGenerator;
 
@@ -66,7 +71,7 @@ class InterfaceGeneratorTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp(): void
     {
-        $this->interfaceGenerator = new \Magento\Framework\Code\Generator\InterfaceGenerator();
+        $this->interfaceGenerator = new InterfaceGenerator();
     }
 
     /**
@@ -83,9 +88,9 @@ class InterfaceGeneratorTest extends \PHPUnit\Framework\TestCase
             ->addMethods($methodsData)
             ->setName('SevenInterface')
             ->setNamespaceName(\Magento\SomeModule\Model::class)
-            ->addUse(\Magento\SomeModule\Model\Two\Test::class, 'TestTwo')
+            ->addUse(Test::class, 'TestTwo')
             ->addUse(\Magento\SomeModule\Model\Three\Test::class, 'TestThree')
-            ->setExtendedClass(\Magento\Framework\Code\Generator\CodeGeneratorInterface::class);
+            ->setExtendedClass(CodeGeneratorInterface::class);
         $generatedInterface = $this->interfaceGenerator->generate();
         $expectedInterface = file_get_contents(
             __DIR__ . '/../_files/app/code/Magento/SomeModule/Model/SevenInterface.php'

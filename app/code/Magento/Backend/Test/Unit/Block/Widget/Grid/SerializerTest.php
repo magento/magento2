@@ -3,28 +3,36 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Backend\Test\Unit\Block\Widget\Grid;
 
-class SerializerTest extends \PHPUnit\Framework\TestCase
+use Magento\Backend\Block\Widget\Grid\Serializer;
+use Magento\Catalog\Block\Adminhtml\Product\Widget\Chooser;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\View\LayoutInterface;
+use PHPUnit\Framework\TestCase;
+
+class SerializerTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\View\LayoutInterface
+     * @var LayoutInterface
      */
     protected $_layoutMock;
 
     protected function setUp(): void
     {
         $this->_layoutMock = $this->getMockBuilder(
-            \Magento\Framework\View\LayoutInterface::class
+            LayoutInterface::class
         )->getMockForAbstractClass();
     }
 
     public function testPrepareLayout()
     {
-        $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $objectManagerHelper = new ObjectManager($this);
 
         $grid = $this->createPartialMock(
-            \Magento\Catalog\Block\Adminhtml\Product\Widget\Chooser::class,
+            Chooser::class,
             ['getSelectedProducts']
         );
         $grid->expects($this->once())->method('getSelectedProducts')->willReturn(['product1']);
@@ -37,7 +45,7 @@ class SerializerTest extends \PHPUnit\Framework\TestCase
             ],
         ];
 
-        $block = $objectManagerHelper->getObject(\Magento\Backend\Block\Widget\Grid\Serializer::class, $arguments);
+        $block = $objectManagerHelper->getObject(Serializer::class, $arguments);
         $block->setLayout($this->_layoutMock);
 
         $this->assertEquals($grid, $block->getGridBlock());

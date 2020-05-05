@@ -7,13 +7,13 @@ declare(strict_types=1);
 
 namespace Magento\MediaGallery\Test\Unit\Model\Asset\Command;
 
-use Magento\MediaGallery\Model\Asset\Command\DeleteByPath;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\Exception\CouldNotDeleteException;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\MediaGallery\Model\Asset\Command\DeleteByPath;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Psr\Log\LoggerInterface;
 
 /**

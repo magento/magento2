@@ -3,12 +3,17 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Sales\Test\Unit\Observer\Backend;
 
 use Magento\Framework\Event\Observer;
+use Magento\Quote\Model\ResourceModel\Quote;
 use Magento\Sales\Observer\Backend\CatalogPriceRule;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class CatalogPriceRuleTest extends \PHPUnit\Framework\TestCase
+class CatalogPriceRuleTest extends TestCase
 {
     /**
      * @var CatalogPriceRule
@@ -16,19 +21,19 @@ class CatalogPriceRuleTest extends \PHPUnit\Framework\TestCase
     protected $_model;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $_quoteMock;
 
     /**
-     * @var Observer|\PHPUnit\Framework\MockObject\MockObject
+     * @var Observer|MockObject
      */
     protected $eventObserverMock;
 
     protected function setUp(): void
     {
-        $this->eventObserverMock = $this->createMock(\Magento\Framework\Event\Observer::class);
-        $this->_quoteMock = $this->createMock(\Magento\Quote\Model\ResourceModel\Quote::class);
+        $this->eventObserverMock = $this->createMock(Observer::class);
+        $this->_quoteMock = $this->createMock(Quote::class);
         $this->_model = new CatalogPriceRule($this->_quoteMock);
     }
 

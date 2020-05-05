@@ -9,11 +9,12 @@ namespace Magento\Sales\Test\Unit\Model;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Sales\Model\ValidatorResult;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \Magento\Sales\Model\ValidatorResult
  */
-class ValidatorResultTest extends \PHPUnit\Framework\TestCase
+class ValidatorResultTest extends TestCase
 {
     /**
      * Testable Object

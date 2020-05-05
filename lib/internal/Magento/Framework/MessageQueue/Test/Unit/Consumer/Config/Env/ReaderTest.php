@@ -3,29 +3,33 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Framework\MessageQueue\Test\Unit\Consumer\Config\Env;
 
+use Magento\Framework\MessageQueue\Config\Reader\Env;
 use Magento\Framework\MessageQueue\Consumer\Config\Env\Reader;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class ReaderTest extends \PHPUnit\Framework\TestCase
+class ReaderTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\MessageQueue\Consumer\Config\Env\Reader
+     * @var Reader
      */
     private $reader;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     private $envConfig;
 
     protected function setUp(): void
     {
         $this->envConfig =
-            $this->getMockBuilder(\Magento\Framework\MessageQueue\Config\Reader\Env::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+            $this->getMockBuilder(Env::class)
+                ->disableOriginalConstructor()
+                ->getMock();
         $this->reader = new Reader($this->envConfig);
     }
 

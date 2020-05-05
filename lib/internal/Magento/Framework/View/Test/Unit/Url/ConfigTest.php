@@ -3,26 +3,34 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\View\Test\Unit\Url;
 
-class ConfigTest extends \PHPUnit\Framework\TestCase
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\View\Url\Config;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class ConfigTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\View\Url\Config
+     * @var Config
      */
     protected $_model;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\App\Config\ScopeConfigInterface
+     * @var MockObject|ScopeConfigInterface
      */
     protected $_scopeConfig;
 
     protected function setUp(): void
     {
         $this->_scopeConfig = $this->getMockBuilder(
-            \Magento\Framework\App\Config\ScopeConfigInterface::class
-        )->disableOriginalConstructor()->getMock();
-        $this->_model = new \Magento\Framework\View\Url\Config($this->_scopeConfig);
+            ScopeConfigInterface::class
+        )->disableOriginalConstructor()
+            ->getMock();
+        $this->_model = new Config($this->_scopeConfig);
     }
 
     /**

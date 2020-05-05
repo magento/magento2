@@ -8,18 +8,17 @@ declare(strict_types=1);
 
 namespace Magento\Review\Test\Unit\Helper;
 
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
-use Magento\Review\Helper\Data as HelperData;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\Helper\Context;
 use Magento\Framework\Escaper;
 use Magento\Framework\Filter\FilterManager;
-use Magento\Framework\App\Helper\Context;
-use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Review\Helper\Data as HelperData;
 use Magento\Store\Model\ScopeInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-/**
- * Class \Magento\Review\Test\Unit\Helper\DataTest
- */
-class DataTest extends \PHPUnit\Framework\TestCase
+class DataTest extends TestCase
 {
     /**
      * @var ObjectManagerHelper
@@ -32,22 +31,22 @@ class DataTest extends \PHPUnit\Framework\TestCase
     private $helper;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|Escaper
+     * @var MockObject|Escaper
      */
     private $escaper;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|FilterManager
+     * @var MockObject|FilterManager
      */
     private $filter;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|Context
+     * @var MockObject|Context
      */
     private $context;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|ScopeConfigInterface
+     * @var MockObject|ScopeConfigInterface
      */
     private $scopeConfig;
 
@@ -62,7 +61,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
 
         $this->scopeConfig = $this->getMockBuilder(ScopeConfigInterface::class)
             ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+            ->getMock();
 
         $this->filter = $this->getMockBuilder(FilterManager::class)
             ->disableOriginalConstructor()
@@ -94,7 +93,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
     public function testGetDetail()
     {
         $origDetail = "This\nis\na\nstring";
-        $expected = "This<br />"."\n"."is<br />"."\n"."a<br />"."\n"."string";
+        $expected = "This<br />" . "\n" . "is<br />" . "\n" . "a<br />" . "\n" . "string";
 
         $this->filter->expects($this->any())->method('truncate')
             ->with($origDetail, ['length' => 50])
@@ -110,7 +109,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
     {
         $origDetail = "<span>This\nis\na\nstring</span>";
         $origDetailEscapeHtml = "This\nis\na\nstring";
-        $expected = "This<br />"."\n"."is<br />"."\n"."a<br />"."\n"."string";
+        $expected = "This<br />" . "\n" . "is<br />" . "\n" . "a<br />" . "\n" . "string";
 
         $this->escaper->expects($this->any())->method('escapeHtml')
             ->with($origDetail)
@@ -132,7 +131,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
             ->with('catalog/review/allow_guest', ScopeInterface::SCOPE_STORE)
             ->willReturn('1');
 
-        $this->assertTrue($this->helper->getIsGuestAllowToWrite());
+        $this->assertEquals(true, $this->helper->getIsGuestAllowToWrite());
     }
 
     /**

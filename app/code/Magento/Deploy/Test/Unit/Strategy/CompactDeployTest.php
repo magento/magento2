@@ -3,21 +3,24 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Deploy\Test\Unit\Strategy;
 
-use Magento\Deploy\Strategy\CompactDeploy;
 use Magento\Deploy\Package\Package;
 use Magento\Deploy\Package\PackagePool;
 use Magento\Deploy\Process\Queue;
-
+use Magento\Deploy\Strategy\CompactDeploy;
 use PHPUnit\Framework\MockObject\MockObject as Mock;
+
+use PHPUnit\Framework\TestCase;
 
 /**
  * Compact deployment service class implementation unit tests
  *
  * @see CompactDeploy
  */
-class CompactDeployTest extends \PHPUnit\Framework\TestCase
+class CompactDeployTest extends TestCase
 {
     /**
      * @var CompactDeploy

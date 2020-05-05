@@ -3,39 +3,44 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Sales\Test\Unit\Observer;
 
-/**
- * Class GridProcessAddressChangeTest
- */
-class GridProcessAddressChangeTest extends \PHPUnit\Framework\TestCase
+use Magento\Framework\Event\Observer;
+use Magento\Framework\Event\ObserverInterface;
+use Magento\Sales\Model\ResourceModel\GridPool;
+use Magento\Sales\Observer\GridProcessAddressChange;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class GridProcessAddressChangeTest extends TestCase
 {
     /**
-     * @var \Magento\Sales\Observer\GridProcessAddressChange
+     * @var GridProcessAddressChange
      */
     protected $observer;
 
     /**
-     * @var \Magento\Sales\Model\ResourceModel\GridPool|\PHPUnit\Framework\MockObject\MockObject
+     * @var GridPool|MockObject
      */
     protected $gridPoolMock;
 
     /**
-     * @var \Magento\Framework\Event\ObserverInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var ObserverInterface|MockObject
      */
     protected $eventObserverMock;
 
     protected function setUp(): void
     {
-        $this->gridPoolMock = $this->getMockBuilder(\Magento\Sales\Model\ResourceModel\GridPool::class)
+        $this->gridPoolMock = $this->getMockBuilder(GridPool::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->eventObserverMock = $this->getMockBuilder(\Magento\Framework\Event\Observer::class)
+        $this->eventObserverMock = $this->getMockBuilder(Observer::class)
             ->disableOriginalConstructor()
             ->setMethods(['getOrderId'])
             ->getMock();
-        $this->observer = new \Magento\Sales\Observer\GridProcessAddressChange($this->gridPoolMock);
+        $this->observer = new GridProcessAddressChange($this->gridPoolMock);
     }
 
     public function testGridsReindex()

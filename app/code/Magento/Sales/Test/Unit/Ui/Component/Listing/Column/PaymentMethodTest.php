@@ -3,16 +3,20 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Sales\Test\Unit\Ui\Component\Listing\Column;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\View\Element\UiComponent\ContextInterface;
+use Magento\Framework\View\Element\UiComponent\Processor;
 use Magento\Payment\Helper\Data;
+use Magento\Payment\Model\MethodInterface;
 use Magento\Sales\Ui\Component\Listing\Column\PaymentMethod;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-/**
- * Class PaymentMethodTest
- */
-class PaymentMethodTest extends \PHPUnit\Framework\TestCase
+class PaymentMethodTest extends TestCase
 {
     /**
      * @var PaymentMethod
@@ -20,22 +24,22 @@ class PaymentMethodTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var Data|\PHPUnit\Framework\MockObject\MockObject
+     * @var Data|MockObject
      */
     protected $paymentHelper;
 
     protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
-        $contextMock = $this->getMockBuilder(\Magento\Framework\View\Element\UiComponent\ContextInterface::class)
+        $contextMock = $this->getMockBuilder(ContextInterface::class)
             ->getMockForAbstractClass();
-        $processor = $this->getMockBuilder(\Magento\Framework\View\Element\UiComponent\Processor::class)
+        $processor = $this->getMockBuilder(Processor::class)
             ->disableOriginalConstructor()
             ->getMock();
         $contextMock->expects($this->never())->method('getProcessor')->willReturn($processor);
-        $this->paymentHelper = $this->createMock(\Magento\Payment\Helper\Data::class);
+        $this->paymentHelper = $this->createMock(Data::class);
         $this->model = $objectManager->getObject(
-            \Magento\Sales\Ui\Component\Listing\Column\PaymentMethod::class,
+            PaymentMethod::class,
             ['paymentHelper' => $this->paymentHelper, 'context' => $contextMock]
         );
     }
@@ -53,7 +57,7 @@ class PaymentMethodTest extends \PHPUnit\Framework\TestCase
             ]
         ];
 
-        $payment = $this->getMockForAbstractClass(\Magento\Payment\Model\MethodInterface::class);
+        $payment = $this->getMockForAbstractClass(MethodInterface::class);
         $payment->expects($this->once())
             ->method('getTitle')
             ->willReturn($newItemValue);

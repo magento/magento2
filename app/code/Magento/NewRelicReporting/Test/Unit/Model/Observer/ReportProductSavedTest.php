@@ -3,14 +3,22 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\NewRelicReporting\Test\Unit\Model\Observer;
 
+use Magento\Catalog\Model\Product;
+use Magento\Framework\Event;
+use Magento\Framework\Event\Observer;
+use Magento\Framework\Json\EncoderInterface;
+use Magento\NewRelicReporting\Model\Config;
 use Magento\NewRelicReporting\Model\Observer\ReportProductSaved;
+use Magento\NewRelicReporting\Model\System;
+use Magento\NewRelicReporting\Model\SystemFactory;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-/**
- * Class ReportProductSavedTest
- */
-class ReportProductSavedTest extends \PHPUnit\Framework\TestCase
+class ReportProductSavedTest extends TestCase
 {
     /**
      * @var ReportProductSaved
@@ -18,22 +26,22 @@ class ReportProductSavedTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \Magento\NewRelicReporting\Model\Config|\PHPUnit\Framework\MockObject\MockObject
+     * @var Config|MockObject
      */
     protected $config;
 
     /**
-     * @var \Magento\NewRelicReporting\Model\SystemFactory|\PHPUnit\Framework\MockObject\MockObject
+     * @var SystemFactory|MockObject
      */
     protected $systemFactory;
 
     /**
-     * @var \Magento\NewRelicReporting\Model\System|\PHPUnit\Framework\MockObject\MockObject
+     * @var System|MockObject
      */
     protected $systemModel;
 
     /**
-     * @var \Magento\Framework\Json\EncoderInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var EncoderInterface|MockObject
      */
     protected $jsonEncoder;
 
@@ -44,18 +52,18 @@ class ReportProductSavedTest extends \PHPUnit\Framework\TestCase
      */
     protected function setUp(): void
     {
-        $this->config = $this->getMockBuilder(\Magento\NewRelicReporting\Model\Config::class)
+        $this->config = $this->getMockBuilder(Config::class)
             ->disableOriginalConstructor()
             ->setMethods(['isNewRelicEnabled'])
             ->getMock();
-        $this->systemFactory = $this->getMockBuilder(\Magento\NewRelicReporting\Model\SystemFactory::class)
+        $this->systemFactory = $this->getMockBuilder(SystemFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
-        $this->systemModel = $this->getMockBuilder(\Magento\NewRelicReporting\Model\System::class)
+        $this->systemModel = $this->getMockBuilder(System::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->jsonEncoder = $this->getMockBuilder(\Magento\Framework\Json\EncoderInterface::class)
+        $this->jsonEncoder = $this->getMockBuilder(EncoderInterface::class)
             ->getMock();
         $this->systemFactory->expects($this->any())
             ->method('create')
@@ -75,8 +83,8 @@ class ReportProductSavedTest extends \PHPUnit\Framework\TestCase
      */
     public function testReportProductSavedModuleDisabledFromConfig()
     {
-        /** @var \Magento\Framework\Event\Observer|\PHPUnit\Framework\MockObject\MockObject $eventObserver */
-        $eventObserver = $this->getMockBuilder(\Magento\Framework\Event\Observer::class)
+        /** @var Observer|MockObject $eventObserver */
+        $eventObserver = $this->getMockBuilder(Observer::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->config->expects($this->once())
@@ -96,22 +104,22 @@ class ReportProductSavedTest extends \PHPUnit\Framework\TestCase
         $testType = 'adminProductChange';
         $testAction = 'JSON string';
 
-        /** @var \Magento\Framework\Event\Observer|\PHPUnit\Framework\MockObject\MockObject $eventObserver */
-        $eventObserver = $this->getMockBuilder(\Magento\Framework\Event\Observer::class)
+        /** @var Observer|MockObject $eventObserver */
+        $eventObserver = $this->getMockBuilder(Observer::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->config->expects($this->once())
             ->method('isNewRelicEnabled')
             ->willReturn(true);
-        $event = $this->getMockBuilder(\Magento\Framework\Event::class)
+        $event = $this->getMockBuilder(Event::class)
             ->setMethods(['getProduct'])
             ->disableOriginalConstructor()
             ->getMock();
         $eventObserver->expects($this->once())
             ->method('getEvent')
             ->willReturn($event);
-        /** @var \Magento\Catalog\Model\Product|\PHPUnit\Framework\MockObject\MockObject $product */
-        $product = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
+        /** @var Product|MockObject $product */
+        $product = $this->getMockBuilder(Product::class)
             ->setMethods(['getId'])
             ->disableOriginalConstructor()
             ->getMock();
@@ -142,22 +150,22 @@ class ReportProductSavedTest extends \PHPUnit\Framework\TestCase
         $testType = 'adminProductChange';
         $testAction = 'JSON string';
 
-        /** @var \Magento\Framework\Event\Observer|\PHPUnit\Framework\MockObject\MockObject $eventObserver */
-        $eventObserver = $this->getMockBuilder(\Magento\Framework\Event\Observer::class)
+        /** @var Observer|MockObject $eventObserver */
+        $eventObserver = $this->getMockBuilder(Observer::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->config->expects($this->once())
             ->method('isNewRelicEnabled')
             ->willReturn(true);
-        $event = $this->getMockBuilder(\Magento\Framework\Event::class)
+        $event = $this->getMockBuilder(Event::class)
             ->setMethods(['getProduct'])
             ->disableOriginalConstructor()
             ->getMock();
         $eventObserver->expects($this->once())
             ->method('getEvent')
             ->willReturn($event);
-        /** @var \Magento\Catalog\Model\Product|\PHPUnit\Framework\MockObject\MockObject $product */
-        $product = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
+        /** @var Product|MockObject $product */
+        $product = $this->getMockBuilder(Product::class)
             ->setMethods(['getId'])
             ->disableOriginalConstructor()
             ->getMock();

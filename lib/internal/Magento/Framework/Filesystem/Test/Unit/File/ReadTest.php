@@ -3,14 +3,16 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\Filesystem\Test\Unit\File;
 
-use \Magento\Framework\Filesystem\File\Read;
+use Magento\Framework\Filesystem\DriverInterface;
+use Magento\Framework\Filesystem\File\Read;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-/**
- * Class ReadTest
- */
-class ReadTest extends \PHPUnit\Framework\TestCase
+class ReadTest extends TestCase
 {
     /**
      * @var Read
@@ -33,13 +35,13 @@ class ReadTest extends \PHPUnit\Framework\TestCase
     protected $mode = 'r';
 
     /**
-     * @var \Magento\Framework\Filesystem\DriverInterface | \PHPUnit\Framework\MockObject\MockObject
+     * @var DriverInterface|MockObject
      */
     protected $driver;
 
     protected function setUp(): void
     {
-        $this->driver = $this->getMockForAbstractClass(\Magento\Framework\Filesystem\DriverInterface::class);
+        $this->driver = $this->getMockForAbstractClass(DriverInterface::class);
         $this->driver->expects($this->any())
             ->method('isExists')
             ->with($this->path)
@@ -57,19 +59,16 @@ class ReadTest extends \PHPUnit\Framework\TestCase
         $this->driver = null;
     }
 
-    /**
-     */
     public function testInstanceFileNotExists()
     {
-        $this->expectException(\Magento\Framework\Exception\FileSystemException::class);
-
-        $driver = $this->getMockForAbstractClass(\Magento\Framework\Filesystem\DriverInterface::class);
+        $this->expectException('Magento\Framework\Exception\FileSystemException');
+        $driver = $this->getMockForAbstractClass(DriverInterface::class);
         $driver->expects($this->once())
             ->method('isExists')
             ->with($this->path)
             ->willReturn(false);
         $file = new Read($this->path, $driver);
-        $this->assertInstanceOf(\Magento\Framework\Filesystem\File\Read::class, $file);
+        $this->assertInstanceOf(Read::class, $file);
     }
 
     public function testRead()

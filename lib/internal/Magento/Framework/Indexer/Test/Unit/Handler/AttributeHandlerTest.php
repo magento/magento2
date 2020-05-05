@@ -7,17 +7,19 @@ declare(strict_types=1);
 
 namespace Magento\Framework\Indexer\Test\Unit\Handler;
 
+use Magento\Framework\App\ResourceConnection\SourceProviderInterface;
 use Magento\Framework\Indexer\Handler\AttributeHandler;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\Framework\App\ResourceConnection\SourceProviderInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Unit test for Magento\Framework\Indexer\Handler\AttributeHandler.
  */
-class AttributeHandlerTest extends \PHPUnit\Framework\TestCase
+class AttributeHandlerTest extends TestCase
 {
     /**
-     * @var SourceProviderInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var SourceProviderInterface|MockObject
      */
     private $source;
 

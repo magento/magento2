@@ -3,36 +3,36 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Setup\Test\Unit\Module\I18n\Dictionary\Options;
 
-/**
- * Class ResolverTest
- */
-class ResolverFactoryTest extends \PHPUnit\Framework\TestCase
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Setup\Module\I18n\Dictionary\Options\ResolverFactory;
+use PHPUnit\Framework\TestCase;
+
+class ResolverFactoryTest extends TestCase
 {
     public function testCreate()
     {
-        $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        /** @var \Magento\Setup\Module\I18n\Dictionary\Options\ResolverFactory $resolverFactory */
+        $objectManagerHelper = new ObjectManager($this);
+        /** @var ResolverFactory $resolverFactory */
         $resolverFactory = $objectManagerHelper
-            ->getObject(\Magento\Setup\Module\I18n\Dictionary\Options\ResolverFactory::class);
+            ->getObject(ResolverFactory::class);
         $this->assertInstanceOf(
-            \Magento\Setup\Module\I18n\Dictionary\Options\ResolverFactory::DEFAULT_RESOLVER,
+            ResolverFactory::DEFAULT_RESOLVER,
             $resolverFactory->create('some_dir', true)
         );
     }
 
-    /**
-     */
     public function testCreateException()
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException('InvalidArgumentException');
         $this->expectExceptionMessage('stdClass doesn\'t implement ResolverInterface');
-
-        $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        /** @var \Magento\Setup\Module\I18n\Dictionary\Options\ResolverFactory $resolverFactory */
+        $objectManagerHelper = new ObjectManager($this);
+        /** @var ResolverFactory $resolverFactory */
         $resolverFactory = $objectManagerHelper->getObject(
-            \Magento\Setup\Module\I18n\Dictionary\Options\ResolverFactory::class,
+            ResolverFactory::class,
             [
                 'resolverClass' => 'stdClass'
             ]

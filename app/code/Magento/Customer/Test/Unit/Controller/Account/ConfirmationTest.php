@@ -3,52 +3,62 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Customer\Test\Unit\Controller\Account;
 
 use Magento\Customer\Controller\Account\Confirmation;
+use Magento\Customer\Model\Session;
+use Magento\Customer\Model\Url;
+use Magento\Framework\App\Action\Context;
 use Magento\Framework\App\Request\Http;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Framework\View\Element\Template;
+use Magento\Framework\View\Layout;
+use Magento\Framework\View\Result\Page;
+use Magento\Framework\View\Result\PageFactory;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class ConfirmationTest extends \PHPUnit\Framework\TestCase
+class ConfirmationTest extends TestCase
 {
     /**
      * @var Confirmation
      */
     private $model;
-    
+
     /**
-     * @var \Magento\Customer\Model\Session|\PHPUnit\Framework\MockObject\MockObject
+     * @var Session|MockObject
      */
     private $customerSessionMock;
 
     /**
-     * @var \Magento\Framework\App\Action\Context|\PHPUnit\Framework\MockObject\MockObject
+     * @var Context|MockObject
      */
     private $contextMock;
 
     /**
-     * @var \Magento\Framework\View\Result\PageFactory|\PHPUnit\Framework\MockObject\MockObject
+     * @var PageFactory|MockObject
      */
     private $resultPageFactoryMock;
 
     /**
-     * @var \Magento\Customer\Model\Url|\PHPUnit\Framework\MockObject\MockObject
+     * @var Url|MockObject
      */
     private $customerUrlMock;
 
     /**
-     * @var \Magento\Framework\App\Request\Http|\PHPUnit\Framework\MockObject\MockObject
+     * @var Http|MockObject
      */
     private $requestMock;
 
     protected function setUp(): void
     {
-        $this->customerSessionMock = $this->getMockBuilder(\Magento\Customer\Model\Session::class)
+        $this->customerSessionMock = $this->getMockBuilder(Session::class)
             ->disableOriginalConstructor()
             ->setMethods(['isLoggedIn'])
             ->getMock();
-        $this->contextMock = $this->getMockBuilder(\Magento\Framework\App\Action\Context::class)
+        $this->contextMock = $this->getMockBuilder(Context::class)
             ->disableOriginalConstructor()
             ->setMethods(['getRequest'])
             ->getMock();
@@ -59,12 +69,12 @@ class ConfirmationTest extends \PHPUnit\Framework\TestCase
         $this->contextMock->expects($this->any())
             ->method('getRequest')
             ->willReturn($this->requestMock);
-        
-        $this->resultPageFactoryMock = $this->getMockBuilder(\Magento\Framework\View\Result\PageFactory::class)
+
+        $this->resultPageFactoryMock = $this->getMockBuilder(PageFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
-        $this->customerUrlMock = $this->getMockBuilder(\Magento\Customer\Model\Url::class)
+        $this->customerUrlMock = $this->getMockBuilder(Url::class)
             ->disableOriginalConstructor()
             ->setMethods(['getLoginUrl'])
             ->getMock();
@@ -84,24 +94,24 @@ class ConfirmationTest extends \PHPUnit\Framework\TestCase
         $this->customerSessionMock->expects($this->once())
             ->method('isLoggedIn')
             ->willReturn(false);
-        
+
         $this->requestMock->expects($this->once())->method('getPost')->with('email')->willReturn(null);
 
-        $resultPageMock = $this->getMockBuilder(\Magento\Framework\View\Result\Page::class)
+        $resultPageMock = $this->getMockBuilder(Page::class)
             ->disableOriginalConstructor()
             ->setMethods(['getLayout'])
             ->getMock();
 
         $this->resultPageFactoryMock->expects($this->once())->method('create')->willReturn($resultPageMock);
 
-        $layoutMock = $this->getMockBuilder(\Magento\Framework\View\Layout::class)
+        $layoutMock = $this->getMockBuilder(Layout::class)
             ->disableOriginalConstructor()
             ->setMethods(['getBlock'])
             ->getMock();
 
         $resultPageMock->expects($this->once())->method('getLayout')->willReturn($layoutMock);
 
-        $blockMock = $this->getMockBuilder(\Magento\Framework\View\Element\Template::class)
+        $blockMock = $this->getMockBuilder(Template::class)
             ->disableOriginalConstructor()
             ->setMethods(['setEmail', 'setLoginUrl'])
             ->getMock();

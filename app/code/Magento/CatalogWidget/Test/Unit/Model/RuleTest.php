@@ -3,35 +3,44 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\CatalogWidget\Test\Unit\Model;
 
-class RuleTest extends \PHPUnit\Framework\TestCase
+use Magento\CatalogWidget\Model\Rule;
+use Magento\CatalogWidget\Model\Rule\Condition\Combine;
+use Magento\CatalogWidget\Model\Rule\Condition\CombineFactory;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class RuleTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
+     * @var ObjectManager
      */
     private $objectManager;
 
     /**
-     * @var \Magento\CatalogWidget\Model\Rule
+     * @var Rule
      */
     protected $rule;
 
     /**
-     * @var \Magento\CatalogWidget\Model\Rule\Condition\CombineFactory|\PHPUnit\Framework\MockObject\MockObject
+     * @var CombineFactory|MockObject
      */
     protected $combineFactory;
 
     protected function setUp(): void
     {
-        $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->combineFactory = $this->getMockBuilder(\Magento\CatalogWidget\Model\Rule\Condition\CombineFactory::class)
+        $this->objectManager = new ObjectManager($this);
+        $this->combineFactory = $this->getMockBuilder(CombineFactory::class)
             ->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->rule = $this->objectManager->getObject(
-            \Magento\CatalogWidget\Model\Rule::class,
+            Rule::class,
             [
                 'conditionsFactory' => $this->combineFactory
             ]
@@ -40,7 +49,7 @@ class RuleTest extends \PHPUnit\Framework\TestCase
 
     public function testGetConditionsInstance()
     {
-        $condition = $this->getMockBuilder(\Magento\CatalogWidget\Model\Rule\Condition\Combine::class)
+        $condition = $this->getMockBuilder(Combine::class)
             ->setMethods([])
             ->disableOriginalConstructor()
             ->getMock();

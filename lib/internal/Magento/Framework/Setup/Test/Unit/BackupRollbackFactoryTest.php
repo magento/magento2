@@ -3,24 +3,31 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\Setup\Test\Unit;
 
+use Magento\Framework\ObjectManagerInterface;
+use Magento\Framework\Setup\BackupRollback;
 use Magento\Framework\Setup\BackupRollbackFactory;
+use Magento\Framework\Setup\ConsoleLogger;
+use PHPUnit\Framework\TestCase;
+use Symfony\Component\Console\Output\OutputInterface;
 
-class BackupRollbackFactoryTest extends \PHPUnit\Framework\TestCase
+class BackupRollbackFactoryTest extends TestCase
 {
     public function testCreate()
     {
         $objectManager = $this->getMockForAbstractClass(
-            \Magento\Framework\ObjectManagerInterface::class,
+            ObjectManagerInterface::class,
             [],
             '',
             false
         );
-        $consoleLogger = $this->createMock(\Magento\Framework\Setup\ConsoleLogger::class);
-        $factory = $this->createMock(\Magento\Framework\Setup\BackupRollback::class);
+        $consoleLogger = $this->createMock(ConsoleLogger::class);
+        $factory = $this->createMock(BackupRollback::class);
         $output = $this->getMockForAbstractClass(
-            \Symfony\Component\Console\Output\OutputInterface::class,
+            OutputInterface::class,
             [],
             '',
             false
@@ -28,10 +35,10 @@ class BackupRollbackFactoryTest extends \PHPUnit\Framework\TestCase
         $objectManager->expects($this->exactly(2))
             ->method('create')
             ->willReturnMap([
-                [\Magento\Framework\Setup\ConsoleLogger::class, ['output' => $output], $consoleLogger],
-                [\Magento\Framework\Setup\BackupRollback::class, ['log' => $consoleLogger], $factory],
+                [ConsoleLogger::class, ['output' => $output], $consoleLogger],
+                [BackupRollback::class, ['log' => $consoleLogger], $factory],
             ]);
         $model = new BackupRollbackFactory($objectManager);
-        $this->assertInstanceOf(\Magento\Framework\Setup\BackupRollback::class, $model->create($output));
+        $this->assertInstanceOf(BackupRollback::class, $model->create($output));
     }
 }

@@ -8,26 +8,29 @@ declare(strict_types=1);
 namespace Magento\Sales\Test\Unit\Block\Order;
 
 use Magento\Framework\Registry;
+use Magento\Framework\View\Element\Template\Context;
 use Magento\Sales\Block\Order\Totals;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Total;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class TotalsTest extends \PHPUnit\Framework\TestCase
+class TotalsTest extends TestCase
 {
     /**
-     * @var \Magento\Sales\Block\Order\Totals
+     * @var Totals
      */
     protected $block;
 
     /**
-     * @var \Magento\Framework\View\Element\Template\Context|\PHPUnit\Framework\MockObject\MockObject
+     * @var Context|MockObject
      */
     protected $context;
 
     protected function setUp(): void
     {
-        $this->context = $this->createMock(\Magento\Framework\View\Element\Template\Context::class);
-        $this->block = new Totals($this->context, new Registry);
+        $this->context = $this->createMock(Context::class);
+        $this->block = new Totals($this->context, new Registry());
         $this->block->setOrder($this->createMock(Order::class));
     }
 

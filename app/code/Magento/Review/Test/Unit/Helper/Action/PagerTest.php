@@ -3,11 +3,18 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Review\Test\Unit\Helper\Action;
 
-class PagerTest extends \PHPUnit\Framework\TestCase
+use Magento\Backend\Model\Session;
+use Magento\Framework\App\Helper\Context;
+use Magento\Review\Helper\Action\Pager;
+use PHPUnit\Framework\TestCase;
+
+class PagerTest extends TestCase
 {
-    /** @var \Magento\Review\Helper\Action\Pager */
+    /** @var Pager */
     protected $_helper = null;
 
     /**
@@ -16,16 +23,17 @@ class PagerTest extends \PHPUnit\Framework\TestCase
     protected function setUp(): void
     {
         $sessionMock = $this->getMockBuilder(
-            \Magento\Backend\Model\Session::class
-        )->disableOriginalConstructor()->setMethods(
-            ['setData', 'getData']
-        )->getMock();
+            Session::class
+        )->disableOriginalConstructor()
+            ->setMethods(
+                ['setData', 'getData']
+            )->getMock();
         $sessionMock->expects(
             $this->any()
         )->method(
             'setData'
         )->with(
-            $this->equalTo('search_result_idsreviews'),
+            'search_result_idsreviews',
             $this->anything()
         );
         $sessionMock->expects(
@@ -33,16 +41,16 @@ class PagerTest extends \PHPUnit\Framework\TestCase
         )->method(
             'getData'
         )->with(
-            $this->equalTo('search_result_idsreviews')
+            'search_result_idsreviews'
         )->willReturn(
             [3, 2, 6, 5]
         );
 
         $contextMock = $this->createPartialMock(
-            \Magento\Framework\App\Helper\Context::class,
+            Context::class,
             ['getModuleManager', 'getRequest']
         );
-        $this->_helper = new \Magento\Review\Helper\Action\Pager($contextMock, $sessionMock);
+        $this->_helper = new Pager($contextMock, $sessionMock);
         $this->_helper->setStorageId('reviews');
     }
 

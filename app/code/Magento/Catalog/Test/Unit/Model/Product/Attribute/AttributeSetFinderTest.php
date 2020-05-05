@@ -4,6 +4,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Catalog\Test\Unit\Model\Product\Attribute;
 
 use Magento\Catalog\Api\Data\ProductInterface;
@@ -13,16 +15,18 @@ use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Select;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class AttributeSetFinderTest extends \PHPUnit\Framework\TestCase
+class AttributeSetFinderTest extends TestCase
 {
     /**
-     * @var Collection|\PHPUnit\Framework\MockObject\MockObject
+     * @var Collection|MockObject
      */
     protected $productCollection;
 
     /**
-     * @var CollectionFactory|\PHPUnit\Framework\MockObject\MockObject
+     * @var CollectionFactory|MockObject
      */
     protected $productCollectionFactory;
 
@@ -63,7 +67,7 @@ class AttributeSetFinderTest extends \PHPUnit\Framework\TestCase
         $select->expects($this->once())->method('where')->with('entity_id IN (?)', $productIds)->willReturnSelf();
         $select->expects($this->once())->method('group')->with(ProductInterface::ATTRIBUTE_SET_ID)->willReturnSelf();
 
-        $connection = $this->getMockForAbstractClass(AdapterInterface::class);
+        $connection = $this->createMock(AdapterInterface::class);
         $connection->expects($this->once())->method('fetchCol')->with($select)->willReturn($attributeSetIds);
 
         $this->productCollection->expects($this->once())->method('getSelect')->willReturn($select);

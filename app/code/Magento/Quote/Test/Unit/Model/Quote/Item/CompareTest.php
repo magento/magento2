@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Quote\Test\Unit\Model\Quote\Item;
 
 use Magento\Framework\Serialize\JsonValidator;
@@ -49,18 +51,21 @@ class CompareTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->itemMock = $this->createPartialMock(
-            Item::class,
-            ['__wakeup', 'getProductId', 'getOptions', 'getOptionsByCode']
-        );
-        $this->comparedMock = $this->createPartialMock(
-            Item::class,
-            ['__wakeup', 'getProductId', 'getOptions', 'getOptionsByCode']
-        );
-        $this->optionMock = $this->createPartialMock(
-            Option::class,
-            ['__wakeup', 'getCode', 'getValue']
-        );
+        $this->itemMock = $this->getMockBuilder(Item::class)
+            ->addMethods(['getProductId'])
+            ->onlyMethods(['__wakeup', 'getOptions', 'getOptionsByCode'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->comparedMock = $this->getMockBuilder(Item::class)
+            ->addMethods(['getProductId'])
+            ->onlyMethods(['__wakeup', 'getOptions', 'getOptionsByCode'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->optionMock = $this->getMockBuilder(Option::class)
+            ->addMethods(['getCode'])
+            ->onlyMethods(['__wakeup', 'getValue'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $serializer = $this->getMockBuilder(Json::class)
             ->setMethods(['unserialize'])
             ->disableOriginalConstructor()

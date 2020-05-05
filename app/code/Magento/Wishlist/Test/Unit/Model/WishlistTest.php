@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Wishlist\Test\Unit\Model;
 
 use ArrayIterator;
@@ -32,8 +34,8 @@ use Magento\Wishlist\Model\ResourceModel\Item\CollectionFactory;
 use Magento\Wishlist\Model\ResourceModel\Wishlist as WishlistResource;
 use Magento\Wishlist\Model\ResourceModel\Wishlist\Collection as WishlistCollection;
 use Magento\Wishlist\Model\Wishlist;
-use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -275,11 +277,14 @@ class WishlistTest extends TestCase
 
         $product = $this->getMockBuilder(
             Product::class
-        )->disableOriginalConstructor()->getMock();
+        )->disableOriginalConstructor()
+            ->getMock();
         $product->expects($this->any())->method('getId')->willReturn($productId);
         $product->expects($this->any())->method('getStoreId')->willReturn($storeId);
 
-        $stockItem = $this->getMockBuilder(StockItem::class)->disableOriginalConstructor()->getMock();
+        $stockItem = $this->getMockBuilder(StockItem::class)
+            ->disableOriginalConstructor()
+            ->getMock();
         $stockItem->expects($this->any())->method('getIsInStock')->willReturn(true);
         $this->stockRegistry->expects($this->any())
             ->method('getStockItem')
@@ -291,14 +296,15 @@ class WishlistTest extends TestCase
         $instanceType->expects($this->once())
             ->method('processConfiguration')
             ->willReturn(
-                
-                    $this->getMockBuilder(Product::class)->disableOriginalConstructor()->getMock()
-                
+                $this->getMockBuilder(Product::class)
+                    ->disableOriginalConstructor()
+                    ->getMock()
             );
 
         $newProduct = $this->getMockBuilder(
             Product::class
-        )->disableOriginalConstructor()->getMock();
+        )->disableOriginalConstructor()
+            ->getMock();
         $newProduct->expects($this->any())
             ->method('setStoreId')
             ->with($storeId)
@@ -307,7 +313,9 @@ class WishlistTest extends TestCase
             ->method('getTypeInstance')
             ->willReturn($instanceType);
 
-        $item = $this->getMockBuilder(Item::class)->disableOriginalConstructor()->getMock();
+        $item = $this->getMockBuilder(Item::class)
+            ->disableOriginalConstructor()
+            ->getMock();
         $item->expects($this->once())
             ->method('getProduct')
             ->willReturn($product);
@@ -412,7 +420,8 @@ class WishlistTest extends TestCase
 
         $stockItem = $this->getMockBuilder(
             StockItem::class
-        )->disableOriginalConstructor()->getMock();
+        )->disableOriginalConstructor()
+            ->getMock();
         $stockItem->expects($this->any())->method('getIsInStock')->willReturn(true);
 
         $this->stockRegistry->expects($this->any())

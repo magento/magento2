@@ -3,34 +3,43 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\Model\Test\Unit\ResourceModel\Db;
+
+use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Framework\EntityManager\EntityMetadata;
+use Magento\Framework\EntityManager\MetadataPool;
+use Magento\Framework\Model\ResourceModel\Db\CreateEntityRow;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Unit test for CreateEntityRow class.
  */
-class CreateEntityRowTest extends \PHPUnit\Framework\TestCase
+class CreateEntityRowTest extends TestCase
 {
     /**
      * Subject of testing.
      *
-     * @var \Magento\Framework\Model\ResourceModel\Db\CreateEntityRow
+     * @var CreateEntityRow
      */
     protected $subject;
 
     /**
-     * @var \Magento\Framework\DB\Adapter\AdapterInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var AdapterInterface|MockObject
      */
     protected $connection;
 
     /**
-     * @var \Magento\Framework\EntityManager\MetadataPool|\PHPUnit\Framework\MockObject\MockObject
+     * @var MetadataPool|MockObject
      */
     protected $metadataPool;
 
     protected function setUp(): void
     {
         $this->connection = $this->getMockForAbstractClass(
-            \Magento\Framework\DB\Adapter\AdapterInterface::class,
+            AdapterInterface::class,
             [],
             '',
             false,
@@ -43,7 +52,7 @@ class CreateEntityRowTest extends \PHPUnit\Framework\TestCase
             ->method('lastInsertId')
             ->willReturn(1);
 
-        $metadata = $this->createMock(\Magento\Framework\EntityManager\EntityMetadata::class);
+        $metadata = $this->createMock(EntityMetadata::class);
 
         $metadata->expects($this->any())
             ->method('getLinkField')
@@ -65,14 +74,14 @@ class CreateEntityRowTest extends \PHPUnit\Framework\TestCase
             ->method('generateIdentifier')
             ->willReturn('100000001');
 
-        $this->metadataPool = $this->createMock(\Magento\Framework\EntityManager\MetadataPool::class);
+        $this->metadataPool = $this->createMock(MetadataPool::class);
 
         $this->metadataPool->expects($this->any())
             ->method('getMetadata')
             ->with('Test\Entity\Type')
             ->willReturn($metadata);
 
-        $this->subject = new \Magento\Framework\Model\ResourceModel\Db\CreateEntityRow(
+        $this->subject = new CreateEntityRow(
             $this->metadataPool
         );
     }

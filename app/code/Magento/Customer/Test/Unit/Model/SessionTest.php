@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Unit test for session \Magento\Customer\Model\Session
  *
@@ -78,10 +78,11 @@ class SessionTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->_storageMock = $this->createPartialMock(
-            Storage::class,
-            ['getIsCustomerEmulated', 'getData', 'unsIsCustomerEmulated', '__sleep', '__wakeup']
-        );
+        $this->_storageMock = $this->getMockBuilder(Storage::class)
+            ->addMethods(['getIsCustomerEmulated', 'unsIsCustomerEmulated'])
+            ->onlyMethods(['getData'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->_eventManagerMock = $this->getMockForAbstractClass(ManagerInterface::class);
         $this->_httpContextMock = $this->createMock(Context::class);
         $this->urlFactoryMock = $this->createMock(UrlFactory::class);
@@ -199,7 +200,7 @@ class SessionTest extends TestCase
 
         $this->customerRepositoryMock->expects($this->once())
             ->method('getById')
-            ->with($this->equalTo($customerId))
+            ->with($customerId)
             ->willReturn($customerDataMock);
 
         $this->assertTrue($this->_model->loginById($customerId));
@@ -207,7 +208,7 @@ class SessionTest extends TestCase
 
     /**
      * @param int $customerId
-     * @return \PHPUnit\Framework\MockObject\MockObject
+     * @return MockObject
      */
     protected function prepareLoginDataMock($customerId)
     {
@@ -216,10 +217,11 @@ class SessionTest extends TestCase
             ->method('getId')
             ->willReturn($customerId);
 
-        $customerMock = $this->createPartialMock(
-            Customer::class,
-            ['getId', 'getConfirmation', 'updateData', 'getGroupId']
-        );
+        $customerMock = $this->getMockBuilder(Customer::class)
+            ->addMethods(['getConfirmation'])
+            ->onlyMethods(['getId', 'updateData', 'getGroupId'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $customerMock->expects($this->exactly(3))
             ->method('getId')
             ->willReturn($customerId);
@@ -260,7 +262,7 @@ class SessionTest extends TestCase
             $this->customerRepositoryMock->expects($this->once())
                 ->method('getById')
                 ->with($customerId)
-                ->will($this->throwException(new \Exception('Customer ID is invalid.')));
+                ->willThrowException(new \Exception('Customer ID is invalid.'));
         }
         $this->_storageMock->expects($this->any())->method('getIsCustomerEmulated')
             ->willReturn($isCustomerEmulated);

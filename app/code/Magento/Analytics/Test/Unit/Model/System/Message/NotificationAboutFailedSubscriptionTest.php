@@ -3,22 +3,26 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Analytics\Test\Unit\Model\System\Message;
 
 use Magento\Analytics\Model\SubscriptionStatusProvider;
 use Magento\Analytics\Model\System\Message\NotificationAboutFailedSubscription;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Framework\UrlInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class NotificationAboutFailedSubscriptionTest extends \PHPUnit\Framework\TestCase
+class NotificationAboutFailedSubscriptionTest extends TestCase
 {
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|SubscriptionStatusProvider
+     * @var MockObject|SubscriptionStatusProvider
      */
     private $subscriptionStatusMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|UrlInterface
+     * @var MockObject|UrlInterface
      */
     private $urlBuilderMock;
 
@@ -37,9 +41,7 @@ class NotificationAboutFailedSubscriptionTest extends \PHPUnit\Framework\TestCas
      */
     protected function setUp(): void
     {
-        $this->subscriptionStatusMock = $this->getMockBuilder(SubscriptionStatusProvider::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->subscriptionStatusMock = $this->createMock(SubscriptionStatusProvider::class);
         $this->urlBuilderMock = $this->getMockBuilder(UrlInterface::class)
             ->getMockForAbstractClass();
         $this->objectManagerHelper = new ObjectManagerHelper($this);

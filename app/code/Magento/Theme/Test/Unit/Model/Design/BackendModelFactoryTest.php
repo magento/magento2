@@ -3,35 +3,46 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Theme\Test\Unit\Model\Design;
 
-class BackendModelFactoryTest extends \PHPUnit\Framework\TestCase
+use Magento\Framework\App\Config\Value;
+use Magento\Framework\ObjectManagerInterface;
+use Magento\Theme\Model\Design\Backend\Exceptions;
+use Magento\Theme\Model\Design\BackendModelFactory;
+use Magento\Theme\Model\Design\Config\MetadataProvider;
+use Magento\Theme\Model\ResourceModel\Design\Config\Collection;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class BackendModelFactoryTest extends TestCase
 {
-    /** @var \Magento\Theme\Model\Design\BackendModelFactory */
+    /** @var BackendModelFactory */
     protected $model;
 
-    /** @var \Magento\Framework\ObjectManagerInterface|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var ObjectManagerInterface|MockObject */
     protected $objectManagerMock;
 
-    /** @var \Magento\Theme\Model\Design\Config\MetadataProvider|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var MetadataProvider|MockObject */
     protected $metadataProviderMock;
 
     /**
-     * @var \Magento\Theme\Model\ResourceModel\Design\Config\CollectionFactory|\PHPUnit\Framework\MockObject\MockObject
+     * @var \Magento\Theme\Model\ResourceModel\Design\Config\CollectionFactory|MockObject
      */
     protected $collectionFactoryMock;
 
-    /** @var \Magento\Theme\Model\ResourceModel\Design\Config\Collection|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var Collection|MockObject */
     protected $collection;
 
-    /** @var \Magento\Framework\App\Config\Value|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var Value|MockObject */
     protected $backendModel;
 
     protected function setUp(): void
     {
-        $this->objectManagerMock = $this->getMockBuilder(\Magento\Framework\ObjectManagerInterface::class)
+        $this->objectManagerMock = $this->getMockBuilder(ObjectManagerInterface::class)
             ->getMockForAbstractClass();
-        $this->metadataProviderMock = $this->getMockBuilder(\Magento\Theme\Model\Design\Config\MetadataProvider::class)
+        $this->metadataProviderMock = $this->getMockBuilder(MetadataProvider::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->collectionFactoryMock = $this->getMockBuilder(
@@ -40,15 +51,15 @@ class BackendModelFactoryTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
-        $this->collection = $this->getMockBuilder(\Magento\Theme\Model\ResourceModel\Design\Config\Collection::class)
+        $this->collection = $this->getMockBuilder(Collection::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->backendModel = $this->getMockBuilder(\Magento\Framework\App\Config\Value::class)
+        $this->backendModel = $this->getMockBuilder(Value::class)
             ->disableOriginalConstructor()
             ->setMethods(['setValue'])
             ->getMock();
-        
-        $this->model = new \Magento\Theme\Model\Design\BackendModelFactory(
+
+        $this->model = new BackendModelFactory(
             $this->objectManagerMock,
             $this->metadataProviderMock,
             $this->collectionFactoryMock
@@ -65,7 +76,7 @@ class BackendModelFactoryTest extends \PHPUnit\Framework\TestCase
             'value' => 'value',
             'config' => [
                 'path' => 'design/head/default_title',
-                'backend_model' => \Magento\Framework\App\Config\Value::class
+                'backend_model' => Value::class
             ]
         ];
         $this->metadataProviderMock->expects($this->once())
@@ -98,7 +109,7 @@ class BackendModelFactoryTest extends \PHPUnit\Framework\TestCase
         $this->objectManagerMock->expects($this->once())
             ->method('create')
             ->with(
-                \Magento\Framework\App\Config\Value::class,
+                Value::class,
                 [
                     'data' => [
                         'path' => 'design/head/default_title',
@@ -119,7 +130,7 @@ class BackendModelFactoryTest extends \PHPUnit\Framework\TestCase
     public function testCreateByPath()
     {
         $path = 'design/head/default_title';
-        $backendModelType = \Magento\Theme\Model\Design\Backend\Exceptions::class;
+        $backendModelType = Exceptions::class;
         $backendModel = $this->getMockBuilder($backendModelType)
             ->disableOriginalConstructor()
             ->getMock();

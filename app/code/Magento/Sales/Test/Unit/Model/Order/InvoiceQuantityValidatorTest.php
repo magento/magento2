@@ -3,60 +3,69 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Sales\Test\Unit\Model\Order;
 
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Sales\Api\Data\InvoiceInterface;
+use Magento\Sales\Api\Data\InvoiceItemInterface;
+use Magento\Sales\Api\Data\OrderInterface;
+use Magento\Sales\Api\Data\OrderItemInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
-use Magento\Sales\Model\Order;
+use Magento\Sales\Model\Order\InvoiceQuantityValidator;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test for \Magento\Sales\Model\Order\InvoiceValidator class
  */
-class InvoiceQuantityValidatorTest extends \PHPUnit\Framework\TestCase
+class InvoiceQuantityValidatorTest extends TestCase
 {
     /**
-     * @var \Magento\Sales\Model\Order\InvoiceQuantityValidator|\PHPUnit\Framework\MockObject\MockObject
+     * @var InvoiceQuantityValidator|MockObject
      */
     private $model;
 
     /**
-     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
+     * @var ObjectManager
      */
     private $objectManager;
 
     /**
-     * @var \Magento\Sales\Api\Data\OrderInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var OrderInterface|MockObject
      */
     private $orderMock;
 
     /**
-     * @var \Magento\Sales\Api\OrderRepositoryInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var OrderRepositoryInterface|MockObject
      */
     private $orderRepositoryMock;
 
     /**
-     * @var \Magento\Sales\Api\Data\InvoiceInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var InvoiceInterface|MockObject
      */
     private $invoiceMock;
 
     protected function setUp(): void
     {
-        $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $this->objectManager = new ObjectManager($this);
 
-        $this->orderMock = $this->getMockBuilder(\Magento\Sales\Api\Data\OrderInterface::class)
+        $this->orderMock = $this->getMockBuilder(OrderInterface::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
-        $this->invoiceMock = $this->getMockBuilder(\Magento\Sales\Api\Data\InvoiceInterface::class)
+        $this->invoiceMock = $this->getMockBuilder(InvoiceInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['getTotalQty', 'getItems'])
             ->getMockForAbstractClass();
         $this->orderRepositoryMock = $this->getMockBuilder(
             OrderRepositoryInterface::class
-        )->disableOriginalConstructor()->getMockForAbstractClass();
+        )->disableOriginalConstructor()
+            ->getMockForAbstractClass();
         $this->orderRepositoryMock->expects($this->any())->method('get')->willReturn($this->orderMock);
         $this->model = $this->objectManager->getObject(
-            \Magento\Sales\Model\Order\InvoiceQuantityValidator::class,
+            InvoiceQuantityValidator::class,
             ['orderRepository' => $this->orderRepositoryMock]
         );
     }
@@ -159,11 +168,11 @@ class InvoiceQuantityValidatorTest extends \PHPUnit\Framework\TestCase
     /**
      * @param $orderItemId
      * @param $qty
-     * @return \PHPUnit\Framework\MockObject\MockObject
+     * @return MockObject
      */
     private function getInvoiceItemMock($orderItemId, $qty)
     {
-        $invoiceItemMock = $this->getMockBuilder(\Magento\Sales\Api\Data\InvoiceItemInterface::class)
+        $invoiceItemMock = $this->getMockBuilder(InvoiceItemInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['getOrderItemId', 'getQty'])
             ->getMockForAbstractClass();
@@ -176,11 +185,11 @@ class InvoiceQuantityValidatorTest extends \PHPUnit\Framework\TestCase
      * @param $id
      * @param $qtyToInvoice
      * @param $isDummy
-     * @return \PHPUnit\Framework\MockObject\MockObject
+     * @return MockObject
      */
     private function getOrderItemMock($id, $qtyToInvoice, $isDummy)
     {
-        $orderItemMock = $this->getMockBuilder(\Magento\Sales\Api\Data\OrderItemInterface::class)
+        $orderItemMock = $this->getMockBuilder(OrderItemInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['getId', 'getQtyToInvoice', 'isDummy', 'getSku'])
             ->getMockForAbstractClass();

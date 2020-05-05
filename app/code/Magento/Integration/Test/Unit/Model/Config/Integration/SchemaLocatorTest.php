@@ -3,13 +3,18 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Integration\Test\Unit\Model\Config\Integration;
 
+use Magento\Framework\Module\Dir\Reader;
 use Magento\Integration\Model\Config\Integration\SchemaLocator;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class SchemaLocatorTest extends \PHPUnit\Framework\TestCase
+class SchemaLocatorTest extends TestCase
 {
-    /** @var \Magento\Framework\Module\Dir\Reader|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var Reader|MockObject */
     protected $moduleReader;
 
     /** @var string */
@@ -21,7 +26,7 @@ class SchemaLocatorTest extends \PHPUnit\Framework\TestCase
     protected function setUp(): void
     {
         $this->moduleDir = 'moduleDirectory';
-        $this->moduleReader = $this->createMock(\Magento\Framework\Module\Dir\Reader::class);
+        $this->moduleReader = $this->createMock(Reader::class);
         $this->moduleReader->expects($this->any())
             ->method('getModuleDir')
             ->willReturn($this->moduleDir);

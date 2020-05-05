@@ -3,19 +3,27 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Catalog\Test\Unit\Model\Indexer\Category\Flat\Plugin;
 
 use Magento\Catalog\Model\Indexer\Category\Flat\Plugin\StoreView;
+use Magento\Catalog\Model\Indexer\Category\Flat\State;
+use Magento\Framework\Indexer\IndexerInterface;
+use Magento\Framework\Indexer\IndexerRegistry;
+use Magento\Store\Model\ResourceModel\Store;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class StoreViewTest extends \PHPUnit\Framework\TestCase
+class StoreViewTest extends TestCase
 {
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\Indexer\IndexerInterface
+     * @var MockObject|IndexerInterface
      */
     protected $indexerMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Catalog\Model\Indexer\Category\Flat\State
+     * @var MockObject|State
      */
     protected $stateMock;
 
@@ -25,33 +33,33 @@ class StoreViewTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \Magento\Framework\Indexer\IndexerRegistry|\PHPUnit\Framework\MockObject\MockObject
+     * @var IndexerRegistry|MockObject
      */
     protected $indexerRegistryMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $subjectMock;
 
     protected function setUp(): void
     {
         $this->indexerMock = $this->getMockForAbstractClass(
-            \Magento\Framework\Indexer\IndexerInterface::class,
+            IndexerInterface::class,
             [],
             '',
             false,
             false,
             true,
-            ['getId', 'getState', '__wakeup']
+            ['getId', 'getState']
         );
         $this->stateMock = $this->createPartialMock(
-            \Magento\Catalog\Model\Indexer\Category\Flat\State::class,
+            State::class,
             ['isFlatEnabled']
         );
-        $this->subjectMock = $this->createMock(\Magento\Store\Model\ResourceModel\Store::class);
+        $this->subjectMock = $this->createMock(Store::class);
         $this->indexerRegistryMock = $this->createPartialMock(
-            \Magento\Framework\Indexer\IndexerRegistry::class,
+            IndexerRegistry::class,
             ['get']
         );
         $this->model = new StoreView($this->indexerRegistryMock, $this->stateMock);
@@ -63,7 +71,7 @@ class StoreViewTest extends \PHPUnit\Framework\TestCase
         $this->mockIndexerMethods();
         $storeMock = $this->createPartialMock(
             \Magento\Store\Model\Store::class,
-            ['isObjectNew', 'dataHasChangedFor', '__wakeup']
+            ['isObjectNew', 'dataHasChangedFor']
         );
         $storeMock->expects($this->once())->method('isObjectNew')->willReturn(true);
         $this->model->beforeSave($this->subjectMock, $storeMock);
@@ -77,7 +85,7 @@ class StoreViewTest extends \PHPUnit\Framework\TestCase
     {
         $storeMock = $this->createPartialMock(
             \Magento\Store\Model\Store::class,
-            ['isObjectNew', 'dataHasChangedFor', '__wakeup']
+            ['isObjectNew', 'dataHasChangedFor']
         );
         $this->model->beforeSave($this->subjectMock, $storeMock);
         $this->assertSame(
@@ -91,7 +99,7 @@ class StoreViewTest extends \PHPUnit\Framework\TestCase
         $this->mockConfigFlatEnabledNever();
         $storeMock = $this->createPartialMock(
             \Magento\Store\Model\Store::class,
-            ['isObjectNew', 'dataHasChangedFor', '__wakeup']
+            ['isObjectNew', 'dataHasChangedFor']
         );
         $this->model->beforeSave($this->subjectMock, $storeMock);
         $this->assertSame(
@@ -105,7 +113,7 @@ class StoreViewTest extends \PHPUnit\Framework\TestCase
         $this->indexerMock->expects($this->once())->method('invalidate');
         $this->indexerRegistryMock->expects($this->once())
             ->method('get')
-            ->with(\Magento\Catalog\Model\Indexer\Category\Flat\State::INDEXER_ID)
+            ->with(State::INDEXER_ID)
             ->willReturn($this->indexerMock);
     }
 

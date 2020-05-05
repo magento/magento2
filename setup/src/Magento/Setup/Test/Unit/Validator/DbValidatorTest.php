@@ -3,34 +3,37 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Setup\Test\Unit\Validator;
 
-use Magento\Setup\Validator\DbValidator;
-use Magento\Setup\Module\ConnectionFactory;
 use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Setup\Module\ConnectionFactory;
+use Magento\Setup\Validator\DbValidator;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class DbValidatorTest extends \PHPUnit\Framework\TestCase
+class DbValidatorTest extends TestCase
 {
     /**
-     * @var DbValidator|\PHPUnit\Framework\MockObject\MockObject
+     * @var DbValidator|MockObject
      */
     private $dbValidator;
 
     /**
-     * @var ConnectionFactory|\PHPUnit\Framework\MockObject\MockObject
+     * @var ConnectionFactory|MockObject
      */
     private $connectionFactory;
 
     /**
-     * @var AdapterInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var AdapterInterface|MockObject
      */
     private $connection;
 
     protected function setUp(): void
     {
-        $this->connectionFactory = $this->createMock(\Magento\Setup\Module\ConnectionFactory::class);
-        $this->connection = $this->getMockForAbstractClass(\Magento\Framework\DB\Adapter\AdapterInterface::class);
+        $this->connectionFactory = $this->createMock(ConnectionFactory::class);
+        $this->connection = $this->getMockForAbstractClass(AdapterInterface::class);
         $this->connectionFactory->expects($this->any())->method('create')->willReturn($this->connection);
         $this->dbValidator = new DbValidator($this->connectionFactory);
     }
@@ -76,17 +79,14 @@ class DbValidatorTest extends \PHPUnit\Framework\TestCase
                     [\PDO::FETCH_NUM, null, $listOfPrivileges]
                 ]
             );
-        $this->assertTrue($this->dbValidator->checkDatabaseConnection('name', 'host', 'user', 'password'));
-        $this->assertTrue($this->dbValidator->checkDatabaseConnection('name', 'host:3339', 'user', 'password'));
+        $this->assertEquals(true, $this->dbValidator->checkDatabaseConnection('name', 'host', 'user', 'password'));
+        $this->assertEquals(true, $this->dbValidator->checkDatabaseConnection('name', 'host:3339', 'user', 'password'));
     }
 
-    /**
-     */
     public function testCheckDatabaseConnectionNotEnoughPrivileges()
     {
-        $this->expectException(\Magento\Setup\Exception::class);
+        $this->expectException('Magento\Setup\Exception');
         $this->expectExceptionMessage('Database user does not have enough privileges.');
-
         $this->connection
             ->expects($this->once())
             ->method('fetchOne')
@@ -111,13 +111,12 @@ class DbValidatorTest extends \PHPUnit\Framework\TestCase
         $this->dbValidator->checkDatabaseConnection('name', 'host', 'user', 'password');
     }
 
-    /**
-     */
     public function testCheckDatabaseConnectionDbNotAccessible()
     {
-        $this->expectException(\Magento\Setup\Exception::class);
-        $this->expectExceptionMessage('Database \'name\' does not exist or specified database server user does not have');
-
+        $this->expectException('Magento\Setup\Exception');
+        $this->expectExceptionMessage(
+            'Database \'name\' does not exist or specified database server user does not have'
+        );
         $this->connection
             ->expects($this->once())
             ->method('fetchOne')
@@ -138,51 +137,40 @@ class DbValidatorTest extends \PHPUnit\Framework\TestCase
 
     public function testCheckDatabaseTablePrefix()
     {
-        $this->assertTrue($this->dbValidator->checkDatabaseTablePrefix('test'));
+        $this->assertEquals(true, $this->dbValidator->checkDatabaseTablePrefix('test'));
     }
 
-    /**
-     */
     public function testCheckDatabaseTablePrefixWrongFormat()
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException('InvalidArgumentException');
         $this->expectExceptionMessage('Please correct the table prefix format');
-
-        $this->assertTrue($this->dbValidator->checkDatabaseTablePrefix('_wrong_format'));
+        $this->assertEquals(true, $this->dbValidator->checkDatabaseTablePrefix('_wrong_format'));
     }
 
-    /**
-     */
     public function testCheckDatabaseTablePrefixWrongLength()
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException('InvalidArgumentException');
         $this->expectExceptionMessage('Table prefix length can\'t be more than');
-
-        $this->assertTrue(
+        $this->assertEquals(
+            true,
             $this->dbValidator->checkDatabaseTablePrefix('mvbXzXzItSIr0wrZW3gqgV2UKrWiK1Mj7bkBlW72rZW3gqgV2UKrWiK1M')
         );
     }
 
-    /**
-     */
     public function testCheckDatabaseConnectionFailed()
     {
-        $this->expectException(\Magento\Setup\Exception::class);
+        $this->expectException('Magento\Setup\Exception');
         $this->expectExceptionMessage('Database connection failure.');
-
-        $connectionFactory = $this->createMock(\Magento\Setup\Module\ConnectionFactory::class);
+        $connectionFactory = $this->createMock(ConnectionFactory::class);
         $connectionFactory->expects($this->once())->method('create')->willReturn(false);
         $this->dbValidator = new DbValidator($connectionFactory);
         $this->dbValidator->checkDatabaseConnection('name', 'host', 'user', 'password');
     }
 
-    /**
-     */
     public function testCheckDatabaseConnectionIncompatible()
     {
-        $this->expectException(\Magento\Setup\Exception::class);
+        $this->expectException('Magento\Setup\Exception');
         $this->expectExceptionMessage('Sorry, but we support MySQL version');
-
         $this->connection
             ->expects($this->once())
             ->method('fetchOne')

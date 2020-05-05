@@ -3,15 +3,19 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Elasticsearch\Test\Unit\Model\Adapter\FieldType;
 
 use Magento\Elasticsearch\Model\Adapter\FieldType\Date as DateField;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Stdlib\DateTime;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class DateTest extends \PHPUnit\Framework\TestCase
+class DateTest extends TestCase
 {
     /**
      * @var DateField
@@ -19,17 +23,17 @@ class DateTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var DateTime|\PHPUnit\Framework\MockObject\MockObject
+     * @var DateTime|MockObject
      */
     private $dateTime;
 
     /**
-     * @var TimezoneInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var TimezoneInterface|MockObject
      */
     private $localeDate;
 
     /**
-     * @var ScopeConfigInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var ScopeConfigInterface|MockObject
      */
     private $scopeConfig;
 
@@ -40,16 +44,16 @@ class DateTest extends \PHPUnit\Framework\TestCase
      */
     protected function setUp(): void
     {
-        $this->dateTime = $this->getMockBuilder(\Magento\Framework\Stdlib\DateTime::class)
+        $this->dateTime = $this->getMockBuilder(DateTime::class)
             ->disableOriginalConstructor()
             ->setMethods(['isEmptyDate'])
             ->getMock();
 
-        $this->localeDate = $this->getMockBuilder(\Magento\Framework\Stdlib\DateTime\TimezoneInterface::class)
+        $this->localeDate = $this->getMockBuilder(TimezoneInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->scopeConfig = $this->getMockBuilder(\Magento\Framework\App\Config\ScopeConfigInterface::class)
+        $this->scopeConfig = $this->getMockBuilder(ScopeConfigInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
 

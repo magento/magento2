@@ -3,11 +3,13 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Setup\Test\Unit\Model;
 
 use Magento\Framework\Math\Random;
 use Magento\Setup\Model\CryptKeyGenerator;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -16,7 +18,7 @@ use PHPUnit\Framework\TestCase;
 class CryptKeyGeneratorTest extends TestCase
 {
     /**
-     * @var Random|\PHPUnit\Framework\MockObject\MockObject
+     * @var Random|MockObject
      */
     private $randomMock;
 
@@ -40,7 +42,7 @@ class CryptKeyGeneratorTest extends TestCase
             ->expects($this->once())
             ->method('getRandomString')
             ->willReturn('');
-        
+
         $this->cryptKeyGenerator->generate();
     }
 

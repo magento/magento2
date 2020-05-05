@@ -3,12 +3,16 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Catalog\Test\Unit\Block\Product\ProductList;
 
 use Magento\Catalog\Block\Product\ProductList\Upsell as UpsellBlock;
 use Magento\Catalog\Model\Product;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\TestCase;
 
-class UpsellTest extends \PHPUnit\Framework\TestCase
+class UpsellTest extends TestCase
 {
     const STUB_EMPTY_ARRAY = [];
     /**
@@ -18,7 +22,7 @@ class UpsellTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp(): void
     {
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $objectManager = new ObjectManager($this);
         $this->block = $objectManager->getObject(UpsellBlock::class);
     }
 

@@ -3,43 +3,43 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Catalog\Test\Unit\Ui\DataProvider\Product\Form\Modifier;
 
-use Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\CustomOptions;
-use Magento\Catalog\Model\ProductOptions\ConfigInterface;
 use Magento\Catalog\Model\Config\Source\Product\Options\Price as ProductOptionsPrice;
-use Magento\Store\Model\StoreManagerInterface;
-use Magento\Store\Api\Data\StoreInterface;
-use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Catalog\Model\Product\Option as ProductOption;
+use Magento\Catalog\Model\ProductOptions\ConfigInterface;
+use Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\CustomOptions;
+use Magento\Framework\Pricing\PriceCurrencyInterface;
+use Magento\Store\Api\Data\StoreInterface;
+use Magento\Store\Model\StoreManagerInterface;
+use PHPUnit\Framework\MockObject\MockObject;
 
-/**
- * Class CustomOptionsTest
- */
 class CustomOptionsTest extends AbstractModifierTest
 {
     /**
-     * @var ConfigInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var ConfigInterface|MockObject
      */
     protected $productOptionsConfigMock;
 
     /**
-     * @var ProductOptionsPrice|\PHPUnit\Framework\MockObject\MockObject
+     * @var ProductOptionsPrice|MockObject
      */
     protected $productOptionsPriceMock;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var StoreManagerInterface|MockObject
      */
     protected $storeManagerMock;
 
     /**
-     * @var \Magento\Store\Api\Data\StoreInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var StoreInterface|MockObject
      */
     protected $storeMock;
 
     /**
-     * @var \Magento\Framework\Pricing\PriceCurrencyInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var PriceCurrencyInterface|MockObject
      */
     protected $priceCurrency;
 
@@ -58,7 +58,7 @@ class CustomOptionsTest extends AbstractModifierTest
             ->getMockForAbstractClass();
         $this->priceCurrency = $this->getMockBuilder(PriceCurrencyInterface::class)
             ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+            ->getMock();
 
         $this->storeManagerMock->expects($this->any())
             ->method('getStore')
@@ -192,11 +192,11 @@ class CustomOptionsTest extends AbstractModifierTest
      *
      * @param array $data
      * @param array $values
-     * @return \Magento\Catalog\Model\Product\Option|\PHPUnit\Framework\MockObject\MockObject
+     * @return \Magento\Catalog\Model\Product\Option|MockObject
      */
     protected function getProductOptionMock(array $data, array $values = [])
     {
-        /** @var ProductOption|\PHPUnit\Framework\MockObject\MockObject $productOptionMock */
+        /** @var ProductOption|MockObject $productOptionMock */
         $productOptionMock = $this->getMockBuilder(ProductOption::class)
             ->disableOriginalConstructor()
             ->setMethods(['getValues'])

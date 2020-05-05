@@ -3,47 +3,57 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Checkout\Test\Unit\Block\Cart;
 
-class LayoutProcessorTest extends \PHPUnit\Framework\TestCase
+use Magento\Checkout\Block\Cart\LayoutProcessor;
+use Magento\Checkout\Block\Checkout\AttributeMerger;
+use Magento\Directory\Model\ResourceModel\Country\Collection;
+use Magento\Directory\Model\TopDestinationCountries;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class LayoutProcessorTest extends TestCase
 {
     /**
-     * @var \Magento\Checkout\Block\Cart\LayoutProcessor
+     * @var LayoutProcessor
      */
     private $layoutProcessor;
 
     /**
-     * @var \Magento\Checkout\Block\Cart\LayoutProcessor
+     * @var LayoutProcessor
      */
     protected $model;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $merger;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $countryCollection;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $regionCollection;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $topDestinationCountries;
 
     protected function setUp(): void
     {
-        $this->merger = $this->getMockBuilder(\Magento\Checkout\Block\Checkout\AttributeMerger::class)
+        $this->merger = $this->getMockBuilder(AttributeMerger::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->countryCollection =
-            $this->getMockBuilder(\Magento\Directory\Model\ResourceModel\Country\Collection::class)
+            $this->getMockBuilder(Collection::class)
                 ->disableOriginalConstructor()
                 ->getMock();
         $this->regionCollection =
@@ -51,12 +61,12 @@ class LayoutProcessorTest extends \PHPUnit\Framework\TestCase
                 ->disableOriginalConstructor()
                 ->getMock();
         $this->topDestinationCountries =
-            $this->getMockBuilder(\Magento\Directory\Model\TopDestinationCountries::class)
+            $this->getMockBuilder(TopDestinationCountries::class)
                 ->disableOriginalConstructor()
                 ->getMock();
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $objectManager = new ObjectManager($this);
         $this->layoutProcessor = $objectManager->getObject(
-            \Magento\Checkout\Block\Cart\LayoutProcessor::class,
+            LayoutProcessor::class,
             [
                 'merger' => $this->merger,
                 'countryCollection' => $this->countryCollection,

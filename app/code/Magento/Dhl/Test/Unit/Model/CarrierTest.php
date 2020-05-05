@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Dhl\Test\Unit\Model;
 
@@ -10,6 +11,7 @@ use Magento\Dhl\Model\Carrier;
 use Magento\Dhl\Model\Validator\XmlValidator;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\ProductMetadataInterface;
+use Magento\Framework\DataObject;
 use Magento\Framework\Filesystem\Directory\Read;
 use Magento\Framework\Filesystem\Directory\ReadFactory;
 use Magento\Framework\HTTP\ZendClient;
@@ -24,22 +26,21 @@ use Magento\Quote\Model\Quote\Address\RateResult\Error;
 use Magento\Quote\Model\Quote\Address\RateResult\ErrorFactory;
 use Magento\Quote\Model\Quote\Address\RateResult\Method;
 use Magento\Quote\Model\Quote\Address\RateResult\MethodFactory;
-use Magento\Sales\Model\Order;
 use Magento\Shipping\Helper\Carrier as CarrierHelper;
 use Magento\Shipping\Model\Rate\Result;
 use Magento\Shipping\Model\Rate\ResultFactory;
-use Magento\Shipping\Model\Shipment\Request;
 use Magento\Shipping\Model\Simplexml\Element;
 use Magento\Shipping\Model\Simplexml\ElementFactory;
 use Magento\Store\Model\StoreManager;
 use Magento\Store\Model\Website;
-use PHPUnit\Framework\MockObject\MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class CarrierTest extends \PHPUnit\Framework\TestCase
+class CarrierTest extends TestCase
 {
     /**
      * @var ObjectManager
@@ -129,7 +130,7 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
 
         $this->productMetadataMock = $this->getMockBuilder(ProductMetadataInterface::class)
             ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+            ->getMock();
         $this->productMetadataMock->method('getName')
             ->willReturn('Software_Product_Name_30_Char_123456789');
         $this->productMetadataMock->method('getVersion')
@@ -212,9 +213,8 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
      */
     public function testPrepareShippingLabelContentException(\SimpleXMLElement $xml)
     {
-        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+        $this->expectException('Magento\Framework\Exception\LocalizedException');
         $this->expectExceptionMessage('Unable to retrieve shipping label');
-
         $this->_invokePrepareShippingLabelContent($xml);
     }
 
@@ -243,7 +243,7 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
      * Invoke prepare shipping label content
      *
      * @param \SimpleXMLElement $xml
-     * @return \Magento\Framework\DataObject
+     * @return DataObject
      * @throws \ReflectionException
      */
     protected function _invokePrepareShippingLabelContent(\SimpleXMLElement $xml)
@@ -373,13 +373,11 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
 
     /**
      * Tests that an exception is thrown when an invalid service prefix is provided.
-     *
      */
     public function testBuildMessageReferenceInvalidPrefix()
     {
-        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+        $this->expectException('Magento\Framework\Exception\LocalizedException');
         $this->expectExceptionMessage('Invalid service prefix');
-
         $method = new \ReflectionMethod($this->model, 'buildMessageReference');
         $method->setAccessible(true);
 

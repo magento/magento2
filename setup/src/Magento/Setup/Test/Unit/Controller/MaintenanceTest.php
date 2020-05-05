@@ -3,37 +3,46 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Setup\Test\Unit\Controller;
 
-use \Magento\Setup\Controller\Maintenance;
-use \Magento\Setup\Controller\ResponseTypeInterface;
+use Laminas\Http\PhpEnvironment\Request;
+use Laminas\Http\PhpEnvironment\Response;
+use Laminas\Mvc\MvcEvent;
+use Laminas\Mvc\Router\RouteMatch;
+use Laminas\View\Model\JsonModel;
+use Magento\Framework\App\MaintenanceMode;
+use Magento\Setup\Controller\Maintenance;
+use Magento\Setup\Controller\ResponseTypeInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class MaintenanceTest extends \PHPUnit\Framework\TestCase
+class MaintenanceTest extends TestCase
 {
 
     /**
-     * @var \Magento\Framework\App\MaintenanceMode|\PHPUnit\Framework\MockObject\MockObject
+     * @var MaintenanceMode|MockObject
      */
     private $maintenanceMode;
 
     /**
      * Controller
      *
-     * @var \Magento\Setup\Controller\Maintenance
+     * @var Maintenance
      */
     private $controller;
 
     protected function setUp(): void
     {
-        $this->maintenanceMode = $this->createMock(\Magento\Framework\App\MaintenanceMode::class);
+        $this->maintenanceMode = $this->createMock(MaintenanceMode::class);
         $this->controller = new Maintenance($this->maintenanceMode);
 
-        $request = $this->createMock(\Laminas\Http\PhpEnvironment\Request::class);
-        $response = $this->createMock(\Laminas\Http\PhpEnvironment\Response::class);
-        $routeMatch = $this->createMock(\Laminas\Mvc\Router\RouteMatch::class);
+        $request = $this->createMock(Request::class);
+        $response = $this->createMock(Response::class);
+        $routeMatch = $this->createMock(RouteMatch::class);
 
-        $mvcEvent = $this->createMock(\Laminas\Mvc\MvcEvent::class);
+        $mvcEvent = $this->createMock(MvcEvent::class);
         $mvcEvent->expects($this->any())->method('setRequest')->with($request)->willReturn($mvcEvent);
         $mvcEvent->expects($this->any())->method('setResponse')->with($response)->willReturn($mvcEvent);
         $mvcEvent->expects($this->any())->method('setTarget')->with($this->controller)->willReturn($mvcEvent);
@@ -51,7 +60,7 @@ class MaintenanceTest extends \PHPUnit\Framework\TestCase
     {
         $this->maintenanceMode->expects($this->once())->method('set');
         $jsonModel = $this->controller->indexAction();
-        $this->assertInstanceOf(\Laminas\View\Model\JsonModel::class, $jsonModel);
+        $this->assertInstanceOf(JsonModel::class, $jsonModel);
         $variables = $jsonModel->getVariables();
         $this->assertArrayHasKey('responseType', $variables);
         $this->assertEquals(ResponseTypeInterface::RESPONSE_TYPE_SUCCESS, $variables['responseType']);
@@ -59,11 +68,11 @@ class MaintenanceTest extends \PHPUnit\Framework\TestCase
 
     public function testIndexActionWithExceptions()
     {
-        $this->maintenanceMode->expects($this->once())->method('set')->will(
-            $this->throwException(new \Exception("Test error message"))
+        $this->maintenanceMode->expects($this->once())->method('set')->willThrowException(
+            new \Exception("Test error message")
         );
         $jsonModel = $this->controller->indexAction();
-        $this->assertInstanceOf(\Laminas\View\Model\JsonModel::class, $jsonModel);
+        $this->assertInstanceOf(JsonModel::class, $jsonModel);
         $variables = $jsonModel->getVariables();
         $this->assertArrayHasKey('responseType', $variables);
         $this->assertEquals(ResponseTypeInterface::RESPONSE_TYPE_ERROR, $variables['responseType']);

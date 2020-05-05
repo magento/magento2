@@ -3,36 +3,45 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Catalog\Test\Unit\Model\Indexer\Product\Flat\Plugin;
 
-class StoreGroupTest extends \PHPUnit\Framework\TestCase
+use Magento\Catalog\Model\Indexer\Product\Flat\Plugin\StoreGroup;
+use Magento\Catalog\Model\Indexer\Product\Flat\Processor;
+use Magento\Store\Model\ResourceModel\Group;
+use Magento\Store\Model\Store;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class StoreGroupTest extends TestCase
 {
     /**
-     * @var \Magento\Catalog\Model\Indexer\Product\Flat\Processor|\PHPUnit\Framework\MockObject\MockObject
+     * @var Processor|MockObject
      */
     protected $processorMock;
 
     /**
-     * @var \Magento\Store\Model\Store|\PHPUnit\Framework\MockObject\MockObject
+     * @var Store|MockObject
      */
     protected $storeGroupMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $subjectMock;
 
     protected function setUp(): void
     {
         $this->processorMock = $this->createPartialMock(
-            \Magento\Catalog\Model\Indexer\Product\Flat\Processor::class,
+            Processor::class,
             ['markIndexerAsInvalid']
         );
 
-        $this->subjectMock = $this->createMock(\Magento\Store\Model\ResourceModel\Group::class);
+        $this->subjectMock = $this->createMock(Group::class);
         $this->storeGroupMock = $this->createPartialMock(
             \Magento\Store\Model\Group::class,
-            ['getId', '__wakeup', 'dataHasChangedFor']
+            ['getId', 'dataHasChangedFor']
         );
     }
 
@@ -47,7 +56,7 @@ class StoreGroupTest extends \PHPUnit\Framework\TestCase
 
         $this->storeGroupMock->expects($this->once())->method('getId')->willReturn($storeId);
 
-        $model = new \Magento\Catalog\Model\Indexer\Product\Flat\Plugin\StoreGroup($this->processorMock);
+        $model = new StoreGroup($this->processorMock);
         $model->beforeSave($this->subjectMock, $this->storeGroupMock);
     }
 
@@ -72,7 +81,7 @@ class StoreGroupTest extends \PHPUnit\Framework\TestCase
             $websiteChanged
         );
 
-        $model = new \Magento\Catalog\Model\Indexer\Product\Flat\Plugin\StoreGroup($this->processorMock);
+        $model = new StoreGroup($this->processorMock);
         $model->beforeSave($this->subjectMock, $this->storeGroupMock);
     }
 

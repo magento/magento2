@@ -14,8 +14,8 @@ use Magento\Framework\ObjectManager\ConfigInterface;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\View\Element\UiComponent\Argument\Interpreter\ConfigurableObject;
-use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Unit tests for ConfigurableObject
@@ -100,11 +100,9 @@ class ConfigurableObjectTest extends TestCase
         $this->interpreter
             ->method('evaluate')
             ->willReturnCallback(
-                
-                    function (array $arg) {
-                        return $arg['value'];
-                    }
-                
+                function (array $arg) {
+                    return $arg['value'];
+                }
             );
 
         $actualResult = $this->configurableObject->evaluate($data);
@@ -121,7 +119,6 @@ class ConfigurableObjectTest extends TestCase
         $expectedException,
         $expectedExceptionMessage
     ) {
-
         $this->expectException($expectedException);
         $this->expectExceptionMessage($expectedExceptionMessage);
 
@@ -145,11 +142,9 @@ class ConfigurableObjectTest extends TestCase
         $this->interpreter
             ->method('evaluate')
             ->willReturnCallback(
-                
-                    function (array $arg) {
-                        return $arg['value'];
-                    }
-                
+                function (array $arg) {
+                    return $arg['value'];
+                }
             );
 
         $actualResult = $this->configurableObject->evaluate($data);

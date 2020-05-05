@@ -3,19 +3,27 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Setup\Test\Unit\Module\I18n;
 
-class FactoryTest extends \PHPUnit\Framework\TestCase
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Setup\Module\I18n\Dictionary\Writer\Csv;
+use Magento\Setup\Module\I18n\Dictionary\Writer\Csv\Stdo;
+use Magento\Setup\Module\I18n\Factory;
+use PHPUnit\Framework\TestCase;
+
+class FactoryTest extends TestCase
 {
     /**
-     * @var \Magento\Setup\Module\I18n\Factory
+     * @var Factory
      */
     protected $factory;
 
     protected function setUp(): void
     {
-        $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->factory = $objectManagerHelper->getObject(\Magento\Setup\Module\I18n\Factory::class);
+        $objectManagerHelper = new ObjectManager($this);
+        $this->factory = $objectManagerHelper->getObject(Factory::class);
     }
 
     /**
@@ -38,19 +46,19 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
     {
         return [
             [
-                \Magento\Setup\Module\I18n\Dictionary\Writer\Csv::class,
+                Csv::class,
                 TESTS_TEMP_DIR . '/filename.invalid_type',
             ],
             [
-                \Magento\Setup\Module\I18n\Dictionary\Writer\Csv::class,
+                Csv::class,
                 TESTS_TEMP_DIR . '/filename'
             ],
             [
-                \Magento\Setup\Module\I18n\Dictionary\Writer\Csv::class,
+                Csv::class,
                 TESTS_TEMP_DIR . '/filename.csv'
             ],
             [
-                \Magento\Setup\Module\I18n\Dictionary\Writer\Csv\Stdo::class,
+                Stdo::class,
                 ''
             ],
         ];

@@ -4,6 +4,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Customer\Test\Unit\Model\Config\Source;
 
 use Magento\Customer\Api\GroupManagementInterface;
@@ -11,11 +13,13 @@ use Magento\Customer\Model\Config\Source\Group;
 use Magento\Customer\Model\Customer\Attribute\Source\GroupSourceLoggedInOnlyInterface;
 use Magento\Framework\Convert\DataObject;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class GroupTest extends \PHPUnit\Framework\TestCase
+class GroupTest extends TestCase
 {
     /**
-     * @var GroupSourceLoggedInOnlyInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var GroupSourceLoggedInOnlyInterface|MockObject
      */
     private $groupSource;
 
@@ -25,12 +29,12 @@ class GroupTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $groupServiceMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $converterMock;
 

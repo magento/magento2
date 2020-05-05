@@ -3,36 +3,46 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 /**
  * Tests for \Magento\Framework\Data\Form\Element\Note
  */
 namespace Magento\Framework\Data\Test\Unit\Form\Element;
 
-class NoteTest extends \PHPUnit\Framework\TestCase
+use Magento\Framework\Data\Form\Element\CollectionFactory;
+use Magento\Framework\Data\Form\Element\Factory;
+use Magento\Framework\Data\Form\Element\Note;
+use Magento\Framework\DataObject;
+use Magento\Framework\Escaper;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class NoteTest extends TestCase
 {
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $_objectManagerMock;
 
     /**
-     * @var \Magento\Framework\Data\Form\Element\Note
+     * @var Note
      */
     protected $_model;
 
     protected function setUp(): void
     {
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $factoryMock = $this->createMock(\Magento\Framework\Data\Form\Element\Factory::class);
-        $collectionFactoryMock = $this->createMock(\Magento\Framework\Data\Form\Element\CollectionFactory::class);
-        $escaperMock = $objectManager->getObject(\Magento\Framework\Escaper::class);
-        $this->_model = new \Magento\Framework\Data\Form\Element\Note(
+        $objectManager = new ObjectManager($this);
+        $factoryMock = $this->createMock(Factory::class);
+        $collectionFactoryMock = $this->createMock(CollectionFactory::class);
+        $escaperMock = $objectManager->getObject(Escaper::class);
+        $this->_model = new Note(
             $factoryMock,
             $collectionFactoryMock,
             $escaperMock
         );
-        $formMock = new \Magento\Framework\DataObject();
+        $formMock = new DataObject();
         $formMock->getHtmlIdPrefix('id_prefix');
         $formMock->getHtmlIdPrefix('id_suffix');
         $this->_model->setForm($formMock);

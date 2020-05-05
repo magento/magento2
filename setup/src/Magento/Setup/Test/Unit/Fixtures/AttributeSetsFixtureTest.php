@@ -3,46 +3,51 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Setup\Test\Unit\Fixtures;
 
 use Magento\Setup\Fixtures\AttributeSet\AttributeSetFixture;
+use Magento\Setup\Fixtures\AttributeSet\Pattern;
 use Magento\Setup\Fixtures\AttributeSetsFixture;
+use Magento\Setup\Fixtures\FixtureModel;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @SuppressWarnings(PHPMD)
  */
-class AttributeSetsFixtureTest extends \PHPUnit\Framework\TestCase
+class AttributeSetsFixtureTest extends TestCase
 {
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Setup\Fixtures\FixtureModel
+     * @var MockObject|FixtureModel
      */
     private $fixtureModelMock;
 
     /**
-     * @var \Magento\Setup\Fixtures\AttributeSetsFixture
+     * @var AttributeSetsFixture
      */
     private $model;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     private $attributeSetsFixtureMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     private $patternMock;
 
     protected function setUp(): void
     {
-        $this->fixtureModelMock = $this->getMockBuilder(\Magento\Setup\Fixtures\FixtureModel::class)
+        $this->fixtureModelMock = $this->getMockBuilder(FixtureModel::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->attributeSetsFixtureMock = $this->getMockBuilder(AttributeSetFixture::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->patternMock = $this->getMockBuilder(\Magento\Setup\Fixtures\AttributeSet\Pattern::class)
+        $this->patternMock = $this->getMockBuilder(Pattern::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -84,7 +89,7 @@ class AttributeSetsFixtureTest extends \PHPUnit\Framework\TestCase
         };
         $this->patternMock->expects($this->once())
             ->method('generateAttributeSet')
-            ->with(\Magento\Setup\Fixtures\AttributeSetsFixture::PRODUCT_SET_NAME . 1, 2, 3, $closure)
+            ->with(AttributeSetsFixture::PRODUCT_SET_NAME . 1, 2, 3, $closure)
             ->willReturn(['some-data']);
         $this->attributeSetsFixtureMock->expects($this->once())
             ->method('createAttributeSet')

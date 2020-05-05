@@ -3,12 +3,18 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Catalog\Test\Unit\Model\Config\Source;
 
+use Magento\Catalog\Model\ResourceModel\Category;
+use Magento\Catalog\Model\ResourceModel\Category\Collection;
+use Magento\Catalog\Model\ResourceModel\Category\CollectionFactory;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use PHPUnit\Framework\MockObject\MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class CategoryTest extends \PHPUnit\Framework\TestCase
+class CategoryTest extends TestCase
 {
     /**
      * @var \Magento\Catalog\Model\Config\Source\Category
@@ -16,7 +22,7 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var \Magento\Catalog\Model\ResourceModel\Category\Collection|MockObject
+     * @var Collection|MockObject
      */
     private $categoryCollection;
 
@@ -28,24 +34,24 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
     protected function setUp(): void
     {
         $this->categoryCollection = $this->getMockBuilder(
-            \Magento\Catalog\Model\ResourceModel\Category\Collection::class
+            Collection::class
         )
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->category = $this->getMockBuilder(\Magento\Catalog\Model\ResourceModel\Category::class)
+        $this->category = $this->getMockBuilder(Category::class)
             ->setMethods(['getName', 'getId'])
             ->disableOriginalConstructor()
             ->getMock();
 
         /**
-         * @var \Magento\Catalog\Model\ResourceModel\Category\CollectionFactory|MockObject $categoryCollectionFactory
+         * @var CollectionFactory|MockObject $categoryCollectionFactory
          */
         $categoryCollectionFactory =
-            $this->getMockBuilder(\Magento\Catalog\Model\ResourceModel\Category\CollectionFactory::class)
-            ->setMethods(['create'])
-            ->disableOriginalConstructor()
-            ->getMock();
+            $this->getMockBuilder(CollectionFactory::class)
+                ->setMethods(['create'])
+                ->disableOriginalConstructor()
+                ->getMock();
         $categoryCollectionFactory->expects($this->any())->method('create')->willReturn(
             $this->categoryCollection
         );
@@ -65,7 +71,7 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
         ];
 
         $this->categoryCollection->expects($this->once())->method('addAttributeToSelect')->with(
-            $this->equalTo('name')
+            'name'
         )->willReturn($this->categoryCollection);
         $this->categoryCollection->expects($this->once())->method('addRootLevelFilter')->willReturn(
             $this->categoryCollection

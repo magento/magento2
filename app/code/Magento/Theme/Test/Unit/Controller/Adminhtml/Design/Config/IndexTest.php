@@ -3,11 +3,20 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Theme\Test\Unit\Controller\Adminhtml\Design\Config;
 
+use Magento\Backend\App\Action\Context;
+use Magento\Backend\Model\View\Result\Page;
+use Magento\Framework\View\Page\Config;
+use Magento\Framework\View\Page\Title;
+use Magento\Framework\View\Result\PageFactory;
 use Magento\Theme\Controller\Adminhtml\Design\Config\Index;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class IndexTest extends \PHPUnit\Framework\TestCase
+class IndexTest extends TestCase
 {
     /**
      * @var Index
@@ -15,18 +24,18 @@ class IndexTest extends \PHPUnit\Framework\TestCase
     protected $controller;
 
     /**
-     * @var \Magento\Backend\App\Action\Context|\PHPUnit\Framework\MockObject\MockObject
+     * @var Context|MockObject
      */
     protected $context;
 
     /**
-     * @var \Magento\Backend\Model\View\Result\Page|\PHPUnit\Framework\MockObject\MockObject
+     * @var Page|MockObject
      */
     protected $resultPage;
 
     protected function setUp(): void
     {
-        $this->context = $this->getMockBuilder(\Magento\Backend\App\Action\Context::class)
+        $this->context = $this->getMockBuilder(Context::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -36,15 +45,15 @@ class IndexTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return \Magento\Framework\View\Result\PageFactory|\PHPUnit\Framework\MockObject\MockObject
+     * @return PageFactory|MockObject
      */
     protected function initResultPage()
     {
-        $this->resultPage = $this->getMockBuilder(\Magento\Backend\Model\View\Result\Page::class)
+        $this->resultPage = $this->getMockBuilder(Page::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $resultPageFactory = $this->getMockBuilder(\Magento\Framework\View\Result\PageFactory::class)
+        $resultPageFactory = $this->getMockBuilder(PageFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
         $resultPageFactory->expects($this->any())
@@ -55,7 +64,7 @@ class IndexTest extends \PHPUnit\Framework\TestCase
 
     public function testExecute()
     {
-        $pageTitle = $this->getMockBuilder(\Magento\Framework\View\Page\Title::class)
+        $pageTitle = $this->getMockBuilder(Title::class)
             ->disableOriginalConstructor()
             ->getMock();
         $pageTitle->expects($this->once())
@@ -63,7 +72,7 @@ class IndexTest extends \PHPUnit\Framework\TestCase
             ->with(__('Design Configuration'))
             ->willReturnSelf();
 
-        $pageConfig = $this->getMockBuilder(\Magento\Framework\View\Page\Config::class)
+        $pageConfig = $this->getMockBuilder(Config::class)
             ->disableOriginalConstructor()
             ->getMock();
         $pageConfig->expects($this->once())

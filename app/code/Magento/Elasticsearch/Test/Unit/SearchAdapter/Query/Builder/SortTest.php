@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Elasticsearch\Test\Unit\SearchAdapter\Query\Builder;
 
@@ -10,15 +11,13 @@ use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\AttributeAdapter;
 use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\AttributeProvider;
 use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldName\ResolverInterface
     as FieldNameResolver;
+use Magento\Elasticsearch\SearchAdapter\Query\Builder\Sort;
 use Magento\Framework\Search\RequestInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use PHPUnit\Framework\MockObject\MockObject as MockObject;
-use Magento\Elasticsearch\SearchAdapter\Query\Builder\Sort;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-/**
- * Class SortTest
- */
-class SortTest extends \PHPUnit\Framework\TestCase
+class SortTest extends TestCase
 {
     /**
      * @var AttributeProvider
@@ -134,9 +133,9 @@ class SortTest extends \PHPUnit\Framework\TestCase
                         'direction' => 'DESC'
                     ]
                 ],
-                null,
-                null,
-                null,
+                false,
+                false,
+                false,
                 null,
                 []
             ],

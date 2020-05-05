@@ -8,15 +8,17 @@ declare(strict_types=1);
 
 namespace Magento\SalesRule\Test\Unit\Model\Quote;
 
-use Magento\SalesRule\Model\Quote\ChildrenValidationLocator;
-use Magento\Quote\Model\Quote\Item\AbstractItem as QuoteItem;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Catalog\Model\Product;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Quote\Model\Quote\Item\AbstractItem as QuoteItem;
+use Magento\SalesRule\Model\Quote\ChildrenValidationLocator;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test for Magento\SalesRule\Model\Quote\ChildrenValidationLocator
  */
-class ChildrenValidationLocatorTest extends \PHPUnit\Framework\TestCase
+class ChildrenValidationLocatorTest extends TestCase
 {
     /**
      * @var array
@@ -34,12 +36,12 @@ class ChildrenValidationLocatorTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var QuoteItem|\PHPUnit\Framework\MockObject\MockObject
+     * @var QuoteItem|MockObject
      */
     private $quoteItemMock;
 
     /**
-     * @var Product|\PHPUnit\Framework\MockObject\MockObject
+     * @var Product|MockObject
      */
     private $productMock;
 

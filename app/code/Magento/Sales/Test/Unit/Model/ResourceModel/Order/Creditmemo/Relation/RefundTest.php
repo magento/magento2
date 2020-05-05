@@ -3,30 +3,40 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Sales\Test\Unit\Model\ResourceModel\Order\Creditmemo\Relation;
 
-/**
- * Class RefundTest
- */
-class RefundTest extends \PHPUnit\Framework\TestCase
+use Magento\Framework\Pricing\PriceCurrencyInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Sales\Api\InvoiceRepositoryInterface;
+use Magento\Sales\Api\OrderRepositoryInterface;
+use Magento\Sales\Model\Order;
+use Magento\Sales\Model\Order\Creditmemo;
+use Magento\Sales\Model\Order\Payment;
+use Magento\Sales\Model\ResourceModel\Order\Creditmemo\Relation\Refund;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class RefundTest extends TestCase
 {
     /**
-     * @var \Magento\Sales\Model\ResourceModel\Order\Creditmemo\Relation\Refund
+     * @var Refund
      */
     protected $refundResource;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $orderRepositoryMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $invoiceRepositoryMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $priceCurrencyMock;
 
@@ -35,21 +45,21 @@ class RefundTest extends \PHPUnit\Framework\TestCase
      */
     protected function setUp(): void
     {
-        $this->orderRepositoryMock = $this->getMockBuilder(\Magento\Sales\Api\OrderRepositoryInterface::class)
+        $this->orderRepositoryMock = $this->getMockBuilder(OrderRepositoryInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->invoiceRepositoryMock = $this->getMockBuilder(\Magento\Sales\Api\InvoiceRepositoryInterface::class)
+        $this->invoiceRepositoryMock = $this->getMockBuilder(InvoiceRepositoryInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->priceCurrencyMock = $this->getMockBuilder(\Magento\Framework\Pricing\PriceCurrencyInterface::class)
+        $this->priceCurrencyMock = $this->getMockBuilder(PriceCurrencyInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $objectManager = new ObjectManager($this);
         $this->refundResource = $objectManager->getObject(
-            \Magento\Sales\Model\ResourceModel\Order\Creditmemo\Relation\Refund::class,
+            Refund::class,
             [
                 'orderRepository' => $this->orderRepositoryMock,
                 'invoiceRepository' => $this->invoiceRepositoryMock,
@@ -60,23 +70,23 @@ class RefundTest extends \PHPUnit\Framework\TestCase
 
     public function testProcessRelation()
     {
-        $paymentMock = $this->getMockBuilder(\Magento\Sales\Model\Order\Payment::class)
+        $paymentMock = $this->getMockBuilder(Payment::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $orderMock = $this->getMockBuilder(\Magento\Sales\Model\Order::class)
+        $orderMock = $this->getMockBuilder(Order::class)
             ->disableOriginalConstructor()
             ->getMock();
         $orderMock->expects($this->once())
             ->method('getPayment')
             ->willReturn($paymentMock);
 
-        $creditmemoMock = $this->getMockBuilder(\Magento\Sales\Model\Order\Creditmemo::class)
+        $creditmemoMock = $this->getMockBuilder(Creditmemo::class)
             ->disableOriginalConstructor()
             ->getMock();
         $creditmemoMock->expects($this->once())
             ->method('getState')
-            ->willReturn(\Magento\Sales\Model\Order\Creditmemo::STATE_REFUNDED);
+            ->willReturn(Creditmemo::STATE_REFUNDED);
         $creditmemoMock->expects($this->any())
             ->method('getOrder')
             ->willReturn($orderMock);

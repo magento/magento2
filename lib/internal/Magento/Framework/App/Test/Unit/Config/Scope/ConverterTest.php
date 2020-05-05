@@ -3,18 +3,23 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\App\Test\Unit\Config\Scope;
 
-class ConverterTest extends \PHPUnit\Framework\TestCase
+use Magento\Framework\App\Config\Scope\Converter;
+use PHPUnit\Framework\TestCase;
+
+class ConverterTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\App\Config\Scope\Converter
+     * @var Converter
      */
     protected $_model;
 
     protected function setUp(): void
     {
-        $this->_model = new \Magento\Framework\App\Config\Scope\Converter();
+        $this->_model = new Converter();
     }
 
     public function testConvert()

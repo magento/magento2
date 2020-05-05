@@ -3,12 +3,20 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Captcha\Test\Unit\Helper\Adminhtml;
 
-class DataTest extends \PHPUnit\Framework\TestCase
+use Magento\Captcha\Helper\Adminhtml\Data;
+use Magento\Framework\Filesystem\Directory\Write;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class DataTest extends TestCase
 {
     /**
-     * @var \Magento\Captcha\Helper\Adminhtml\Data | |PHPUnit\Framework\MockObject\MockObject
+     * @var Data|MockObject
      */
     protected $_model;
 
@@ -17,8 +25,8 @@ class DataTest extends \PHPUnit\Framework\TestCase
      */
     protected function setUp(): void
     {
-        $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $className = \Magento\Captcha\Helper\Adminhtml\Data::class;
+        $objectManagerHelper = new ObjectManager($this);
+        $className = Data::class;
         $arguments = $objectManagerHelper->getConstructArguments($className);
 
         $backendConfig = $arguments['backendConfig'];
@@ -28,14 +36,14 @@ class DataTest extends \PHPUnit\Framework\TestCase
             'getValue'
         )->with(
             'admin/captcha/qwe'
-        )->willReturn(
-            '1'
+        )->will(
+            $this->returnValue('1')
         );
 
         $filesystemMock = $arguments['filesystem'];
-        $directoryMock = $this->createMock(\Magento\Framework\Filesystem\Directory\Write::class);
+        $directoryMock = $this->createMock(Write::class);
 
-        $filesystemMock->expects($this->any())->method('getDirectoryWrite')->willReturn($directoryMock);
+        $filesystemMock->expects($this->any())->method('getDirectoryWrite')->will($this->returnValue($directoryMock));
         $directoryMock->expects($this->any())->method('getAbsolutePath')->willReturnArgument(0);
 
         $this->_model = $objectManagerHelper->getObject($className, $arguments);

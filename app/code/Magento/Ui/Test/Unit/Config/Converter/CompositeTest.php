@@ -3,21 +3,26 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Ui\Test\Unit\Config\Converter;
 
 use Magento\Ui\Config\Converter\Composite;
 use Magento\Ui\Config\ConverterInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class CompositeTest extends \PHPUnit\Framework\TestCase
+class CompositeTest extends TestCase
 {
     /**
-     * @var ConverterInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var ConverterInterface|MockObject
      */
     private $converter;
 
     protected function setUp(): void
     {
-        $this->converter = $this->getMockBuilder(ConverterInterface::class)->getMockForAbstractClass();
+        $this->converter = $this->getMockBuilder(ConverterInterface::class)
+            ->getMockForAbstractClass();
     }
 
     public function testConvert()
@@ -40,9 +45,8 @@ class CompositeTest extends \PHPUnit\Framework\TestCase
      */
     public function testConvertWithMissedConverter()
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException('InvalidArgumentException');
         $this->expectExceptionMessage('Argument converter named \'missedKey\' has not been defined.');
-
         $element = new \DOMElement('name');
         $composite = new Composite(['key' => $this->converter], 'type');
         $composite->convert($element, ['type' => 'missedKey']);
@@ -53,9 +57,8 @@ class CompositeTest extends \PHPUnit\Framework\TestCase
      */
     public function testConvertWithInvalidConverter()
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException('InvalidArgumentException');
         $this->expectExceptionMessage('Converter named \'key\' is expected to be an argument converter instance.');
-
         $element = new \DOMElement('name');
         $std = new \stdClass();
         $composite = new Composite(['key' => $std], 'type');

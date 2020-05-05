@@ -3,50 +3,62 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Customer\Test\Unit\Block\Form\Login;
 
-class InfoTest extends \PHPUnit\Framework\TestCase
+use Magento\Checkout\Helper\Data;
+use Magento\Customer\Block\Form\Login\Info;
+use Magento\Customer\Model\Url;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class InfoTest extends TestCase
 {
     /**
-     * @var \Magento\Customer\Block\Form\Login\Info
+     * @var Info
      */
     protected $block;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject | \Magento\Customer\Model\Url
+     * @var MockObject|\Magento\Customer\Model\Url
      */
     protected $customerUrl;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject | \Magento\Checkout\Helper\Data
+     * @var MockObject|Data
      */
     protected $checkoutData;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject | \Magento\Framework\Url\Helper\Data
+     * @var MockObject|\Magento\Framework\Url\Helper\Data
      */
     protected $coreUrl;
 
     protected function setUp(): void
     {
         $this->customerUrl = $this->getMockBuilder(
-            \Magento\Customer\Model\Url::class
-        )->disableOriginalConstructor()->setMethods(
-            ['getRegisterUrl']
-        )->getMock();
+            Url::class
+        )->disableOriginalConstructor()
+            ->setMethods(
+                ['getRegisterUrl']
+            )->getMock();
         $this->checkoutData = $this->getMockBuilder(
-            \Magento\Checkout\Helper\Data::class
-        )->disableOriginalConstructor()->setMethods(
-            ['isContextCheckout']
-        )->getMock();
+            Data::class
+        )->disableOriginalConstructor()
+            ->setMethods(
+                ['isContextCheckout']
+            )->getMock();
         $this->coreUrl = $this->getMockBuilder(
             \Magento\Framework\Url\Helper\Data::class
-        )->disableOriginalConstructor()->setMethods(
-            ['addRequestParam']
-        )->getMock();
+        )->disableOriginalConstructor()
+            ->setMethods(
+                ['addRequestParam']
+            )->getMock();
 
-        $this->block = (new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this))->getObject(
-            \Magento\Customer\Block\Form\Login\Info::class,
+        $this->block = (new ObjectManager($this))->getObject(
+            Info::class,
             [
                 'customerUrl' => $this->customerUrl,
                 'checkoutData' => $this->checkoutData,

@@ -3,16 +3,20 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\Stdlib\Test\Unit;
 
+use Magento\Framework\DataObject;
 use Magento\Framework\Stdlib\ArrayUtils;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test for ArrayUtils.
  *
  * @see ArrayUtils
  */
-class ArrayUtilsTest extends \PHPUnit\Framework\TestCase
+class ArrayUtilsTest extends TestCase
 {
     /**
      * @var ArrayUtils
@@ -68,14 +72,14 @@ class ArrayUtilsTest extends \PHPUnit\Framework\TestCase
 
         // \Magento\Framework\DataObject
         $sample = [
-            new \Magento\Framework\DataObject($original[0]),
-            new \Magento\Framework\DataObject($original[1]),
-            new \Magento\Framework\DataObject($original[2]),
+            new DataObject($original[0]),
+            new DataObject($original[1]),
+            new DataObject($original[2]),
         ];
         $decoratedVo = [
-            new \Magento\Framework\DataObject($decorated[0]),
-            new \Magento\Framework\DataObject($decorated[1]),
-            new \Magento\Framework\DataObject($decorated[2]),
+            new DataObject($decorated[0]),
+            new DataObject($decorated[1]),
+            new DataObject($decorated[2]),
         ];
         $this->assertEquals($decoratedVo, $this->_arrayUtils->decorateArray($sample, ''));
     }

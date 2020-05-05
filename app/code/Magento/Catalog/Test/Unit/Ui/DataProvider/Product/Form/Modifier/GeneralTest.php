@@ -3,23 +3,25 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Catalog\Test\Unit\Ui\DataProvider\Product\Form\Modifier;
 
 use Magento\Catalog\Api\Data\ProductAttributeInterface;
 use Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\General;
 use Magento\Eav\Api\AttributeRepositoryInterface;
 use Magento\Eav\Api\Data\AttributeInterface;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Stdlib\ArrayManager;
+use PHPUnit\Framework\MockObject\MockObject;
 
 /**
- * Class GeneralTest
- *
  * @method General getModel
  */
 class GeneralTest extends AbstractModifierTest
 {
     /**
-     * @var AttributeRepositoryInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var AttributeRepositoryInterface|MockObject
      */
     private $attributeRepositoryMock;
 
@@ -55,8 +57,8 @@ class GeneralTest extends AbstractModifierTest
         return $this->objectManager->getObject(
             General::class,
             [
-            'locator' => $this->locatorMock,
-            'arrayManager' => $this->arrayManagerMock,
+                'locator' => $this->locatorMock,
+                'arrayManager' => $this->arrayManagerMock,
             ]
         );
     }
@@ -69,15 +71,15 @@ class GeneralTest extends AbstractModifierTest
         $this->assertNotEmpty(
             $this->getModel()->modifyMeta(
                 [
-                'first_panel_code' => [
-                'arguments' => [
-                    'data' => [
-                        'config' => [
-                            'label' => 'Test label',
+                    'first_panel_code' => [
+                        'arguments' => [
+                            'data' => [
+                                'config' => [
+                                    'label' => 'Test label',
+                                ]
+                            ],
                         ]
-                    ],
-                ]
-                ]
+                    ]
                 ]
             )
         );
@@ -87,7 +89,7 @@ class GeneralTest extends AbstractModifierTest
      * @param        array $data
      * @param        int   $defaultStatusValue
      * @param        array $expectedResult
-     * @throws       \Magento\Framework\Exception\NoSuchEntityException
+     * @throws       NoSuchEntityException
      * @dataProvider modifyDataDataProvider
      */
     public function testModifyDataNewProduct(array $data, int $defaultStatusValue, array $expectedResult)
@@ -115,7 +117,7 @@ class GeneralTest extends AbstractModifierTest
      * @param        int    $defaultStatus
      * @param        int    $statusAttributeValue
      * @param        array  $expectedResult
-     * @throws       \Magento\Framework\Exception\NoSuchEntityException
+     * @throws       NoSuchEntityException
      * @dataProvider modifyDataOfExistingProductDataProvider
      */
     public function testModifyDataOfExistingProduct(
@@ -157,9 +159,9 @@ class GeneralTest extends AbstractModifierTest
                 'defaultStatus' => 1,
                 'statusAttributeValue' => 1,
                 'expectedResult' => [
-                        General::DATA_SOURCE_DEFAULT => [
-                            ProductAttributeInterface::CODE_STATUS => 1,
-                        ],
+                    General::DATA_SOURCE_DEFAULT => [
+                        ProductAttributeInterface::CODE_STATUS => 1,
+                    ],
                 ],
             ],
             'Without disable status value' => [
@@ -168,9 +170,9 @@ class GeneralTest extends AbstractModifierTest
                 'defaultStatus' => 1,
                 'statusAttributeValue' => 2,
                 'expectedResult' => [
-                        General::DATA_SOURCE_DEFAULT => [
-                            ProductAttributeInterface::CODE_STATUS => 2,
-                        ],
+                    General::DATA_SOURCE_DEFAULT => [
+                        ProductAttributeInterface::CODE_STATUS => 2,
+                    ],
                 ],
             ],
             'With enable status value with empty modelId' => [

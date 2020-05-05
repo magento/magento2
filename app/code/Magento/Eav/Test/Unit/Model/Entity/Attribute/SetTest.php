@@ -3,31 +3,39 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 /**
  * Test class for \Magento\Eav\Model\Entity\Attribute\Set
  */
 namespace Magento\Eav\Test\Unit\Model\Entity\Attribute;
 
-class SetTest extends \PHPUnit\Framework\TestCase
+use Magento\Eav\Model\Entity\Attribute\GroupFactory;
+use Magento\Eav\Model\Entity\Attribute\Set;
+use Magento\Eav\Model\Entity\AttributeFactory;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\TestCase;
+
+class SetTest extends TestCase
 {
     /**
-     * @var \Magento\Eav\Model\Entity\Attribute\Set
+     * @var Set
      */
     protected $_model;
 
     protected function setUp(): void
     {
         $resource = $this->createMock(\Magento\Eav\Model\ResourceModel\Entity\Attribute\Set::class);
-        $attrGroupFactory = $this->createMock(\Magento\Eav\Model\Entity\Attribute\GroupFactory::class);
-        $attrFactory = $this->createMock(\Magento\Eav\Model\Entity\AttributeFactory::class);
+        $attrGroupFactory = $this->createMock(GroupFactory::class);
+        $attrFactory = $this->createMock(AttributeFactory::class);
         $arguments = [
             'attrGroupFactory' => $attrGroupFactory,
             'attributeFactory' => $attrFactory,
             'resource' => $resource,
         ];
-        $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->_model = $objectManagerHelper->getObject(\Magento\Eav\Model\Entity\Attribute\Set::class, $arguments);
+        $objectManagerHelper = new ObjectManager($this);
+        $this->_model = $objectManagerHelper->getObject(Set::class, $arguments);
     }
 
     protected function tearDown(): void
@@ -44,7 +52,7 @@ class SetTest extends \PHPUnit\Framework\TestCase
     {
         $this->_model->getResource()->expects($this->any())->method('validate')->willReturn(false);
 
-        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+        $this->expectException(LocalizedException::class);
         $this->expectExceptionMessage($exceptionMessage);
         $this->_model->setAttributeSetName($attributeSetName);
         $this->_model->validate();

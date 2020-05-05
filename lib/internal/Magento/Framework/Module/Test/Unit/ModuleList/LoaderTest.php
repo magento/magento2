@@ -3,12 +3,20 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Framework\Module\Test\Unit\ModuleList;
 
-use \Magento\Framework\Module\ModuleList\Loader;
+use Magento\Framework\Component\ComponentRegistrarInterface;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Filesystem\DriverInterface;
+use Magento\Framework\Module\Declaration\Converter\Dom;
+use Magento\Framework\Module\ModuleList\Loader;
+use Magento\Framework\Xml\Parser;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class LoaderTest extends \PHPUnit\Framework\TestCase
+class LoaderTest extends TestCase
 {
     /**
      * A sample empty XML
@@ -18,27 +26,27 @@ class LoaderTest extends \PHPUnit\Framework\TestCase
     private static $sampleXml = '<?xml version="1.0"?><test></test>';
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     private $converter;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     private $parser;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     private $registry;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     private $driver;
 
     /**
-     * @var \Magento\Framework\Module\ModuleList\Loader
+     * @var Loader
      */
     private $loader;
 
@@ -49,11 +57,11 @@ class LoaderTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp(): void
     {
-        $this->converter = $this->createMock(\Magento\Framework\Module\Declaration\Converter\Dom::class);
-        $this->parser = $this->createMock(\Magento\Framework\Xml\Parser::class);
+        $this->converter = $this->createMock(Dom::class);
+        $this->parser = $this->createMock(Parser::class);
         $this->parser->expects($this->once())->method('initErrorHandler');
-        $this->registry = $this->createMock(\Magento\Framework\Component\ComponentRegistrarInterface::class);
-        $this->driver = $this->createMock(\Magento\Framework\Filesystem\DriverInterface::class);
+        $this->registry = $this->createMock(ComponentRegistrarInterface::class);
+        $this->driver = $this->createMock(DriverInterface::class);
         $this->loader = new Loader($this->converter, $this->parser, $this->registry, $this->driver);
     }
 
@@ -141,13 +149,10 @@ class LoaderTest extends \PHPUnit\Framework\TestCase
         $this->assertSame($fixture['c'], $result['c']);
     }
 
-    /**
-     */
     public function testLoadCircular()
     {
-        $this->expectException(\Exception::class);
+        $this->expectException('Exception');
         $this->expectExceptionMessage('Circular sequence reference from \'b\' to \'a\'');
-
         $fixture = [
             'a' => ['name' => 'a', 'sequence' => ['b']],
             'b' => ['name' => 'b', 'sequence' => ['a']],
@@ -163,7 +168,7 @@ class LoaderTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     public function testLoadPrearranged(): void
     {

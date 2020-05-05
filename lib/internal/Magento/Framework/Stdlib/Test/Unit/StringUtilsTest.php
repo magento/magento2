@@ -3,17 +3,20 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\Stdlib\Test\Unit;
 
-use \Magento\Framework\Stdlib\StringUtils;
+use Magento\Framework\Stdlib\StringUtils;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Magento\Framework\Stdlib\StringUtilsTest test case
  */
-class StringUtilsTest extends \PHPUnit\Framework\TestCase
+class StringUtilsTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\Stdlib\StringUtils
+     * @var StringUtils
      */
     protected $_string;
 

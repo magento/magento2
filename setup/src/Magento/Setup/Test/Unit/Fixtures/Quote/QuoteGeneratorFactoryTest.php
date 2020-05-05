@@ -3,21 +3,29 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Setup\Test\Unit\Fixtures\Quote;
+
+use Magento\Framework\ObjectManagerInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Setup\Fixtures\Quote\QuoteGenerator;
+use Magento\Setup\Fixtures\Quote\QuoteGeneratorFactory;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test for Magento\Setup\Fixtures\Quote\QuoteGeneratorFactory class.
  */
-class QuoteGeneratorFactoryTest extends \PHPUnit\Framework\TestCase
+class QuoteGeneratorFactoryTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\ObjectManagerInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var ObjectManagerInterface|MockObject
      */
     private $objectManager;
 
     /**
-     * @var \Magento\Setup\Fixtures\Quote\QuoteGeneratorFactory
+     * @var QuoteGeneratorFactory
      */
     private $fixture;
 
@@ -26,16 +34,16 @@ class QuoteGeneratorFactoryTest extends \PHPUnit\Framework\TestCase
      */
     protected function setUp(): void
     {
-        $this->objectManager = $this->getMockBuilder(\Magento\Framework\ObjectManagerInterface::class)
+        $this->objectManager = $this->getMockBuilder(ObjectManagerInterface::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $objectManager = new ObjectManager($this);
 
         $this->fixture = $objectManager->getObject(
-            \Magento\Setup\Fixtures\Quote\QuoteGeneratorFactory::class,
+            QuoteGeneratorFactory::class,
             [
                 'objectManager' => $this->objectManager,
-                'instanceName' => \Magento\Setup\Fixtures\Quote\QuoteGenerator::class,
+                'instanceName' => QuoteGenerator::class,
             ]
         );
     }
@@ -47,12 +55,12 @@ class QuoteGeneratorFactoryTest extends \PHPUnit\Framework\TestCase
      */
     public function testCreate()
     {
-        $result =  $this->getMockBuilder(\Magento\Setup\Fixtures\Quote\QuoteGenerator::class)
+        $result =  $this->getMockBuilder(QuoteGenerator::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->objectManager->expects($this->once())
             ->method('create')
-            ->with(\Magento\Setup\Fixtures\Quote\QuoteGenerator::class, [])
+            ->with(QuoteGenerator::class, [])
             ->willReturn($result);
 
         $this->assertSame($result, $this->fixture->create([]));

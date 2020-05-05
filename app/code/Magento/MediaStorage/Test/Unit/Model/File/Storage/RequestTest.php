@@ -3,17 +3,24 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\MediaStorage\Test\Unit\Model\File\Storage;
 
-class RequestTest extends \PHPUnit\Framework\TestCase
+use Magento\Framework\App\Request\Http;
+use Magento\MediaStorage\Model\File\Storage\Request;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class RequestTest extends TestCase
 {
     /**
-     * @var \Magento\MediaStorage\Model\File\Storage\Request
+     * @var Request
      */
     protected $_model;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $_requestMock;
 
@@ -25,9 +32,9 @@ class RequestTest extends \PHPUnit\Framework\TestCase
     protected function setUp(): void
     {
         $path = '..PathInfo';
-        $this->_requestMock = $this->createMock(\Magento\Framework\App\Request\Http::class);
+        $this->_requestMock = $this->createMock(Http::class);
         $this->_requestMock->expects($this->once())->method('getPathInfo')->willReturn($path);
-        $this->_model = new \Magento\MediaStorage\Model\File\Storage\Request($this->_requestMock);
+        $this->_model = new Request($this->_requestMock);
     }
 
     protected function tearDown(): void
