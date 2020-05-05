@@ -35,27 +35,15 @@ spec:
           - 82
         fsGroup: 82
       initContainers:
-        - name: copy-data
+        - name: setup-pub-dir
           image: eu.gcr.io/magento2-269418/magento2-php72:$TAG_NAME
           securityContext:
             runAsUser: 0
           volumeMounts:
-          - mountPath: /var/www/html
-            name: magento-shared
-          - mountPath: /var/www/html/magento/media
-            name: magento-media-volume
-            subPath: media
-          - mountPath: /var/www/html/magento/var
-            name: magento-var-volume
-            subPath: var
-          command: 
-           - sh
-           - -c
-           - (/tmp/start.sh)
-          command: 
-           - sh
-           - -c
-           - (chmod 0775 /var/www/html/magento/var /var/www/html/magento/media; chgrp 82 /var/www/html/magento/var /var/www/html/magento/media)
+          - mountPath: /var/www/html/pub
+            name: magento-pub-volume
+            subPath: pub
+          command: ["/bin/sh","-c","/var/www/html/start.sh"]
           resources:
             requests:
               cpu: "250m"
@@ -72,8 +60,9 @@ spec:
             #  memory: "128Mi"
             #  cpu: "500m"
           volumeMounts:
-          - mountPath: /var/www/html
-            name: magento-shared
+          - mountPath: /var/www/html/pub
+            name: magento-pub-volume
+            subPath: pub
         - image: eu.gcr.io/magento2-269418/magento2-php72:$TAG_NAME
           name: php
           resources:
@@ -86,20 +75,16 @@ spec:
             - containerPort: 9000
               name: php
           volumeMounts:
-          - mountPath: /var/www/html
-            name: magento-shared
-          - mountPath: /var/www/html/magento/media
-            name: magento-media-volume
-            subPath: media
-          - mountPath: /var/www/html/magento/var
+          - mountPath: /var/www/html/pub
+            name: magento-pub-volume
+            subPath: pub
+          - mountPath: /var/www/html/var
             name: magento-var-volume
             subPath: var   
       nodeSelector: 
         private-app-pool: web-app
       volumes:
-      - name: magento-shared
-        emptyDir: {}
-      - name: magento-media-volume
+      - name: magento-pub-volume
         persistentVolumeClaim:
           claimName: nfs-pvc-1
       - name: magento-var-volume

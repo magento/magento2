@@ -14,16 +14,14 @@ docker-php-ext-configure gd --with-png-dir=/usr/include/ \
 && docker-php-ext-install mysqli bcmath gd pdo_mysql soap xsl zip intl opcache \
 && echo "memory_limit=2G" > /usr/local/etc/php/conf.d/memory-limit.ini \
 && echo "max_input_vars=10000" > /usr/local/etc/php/conf.d/max-input-vars-php.ini \
-&& mkdir -p /var/www/magento \
-&& chown www-data.www-data /var/www/magento \
 && curl -sS https://getcomposer.org/installer | php \
 && mv composer.phar /usr/local/bin/composer \
 && rm -rf /var/cache/* /tmp/* /var/tmp/* 
-COPY --chown=www-data . /var/www/magento
+COPY --chown=www-data . /var/www/html
 USER www-data
-RUN cd /var/www/magento \
-&& mv /var/www/magento/start.sh /tmp \
+RUN cd /var/www/html \
+&& mv pub pub.new \
 && composer install --no-cache \
 && composer config repositories.magento composer https://repo.magento.com/ \
 && chmod +x pub/get.php pub/static.php \
-&& chmod u+x bin/magento /tmp/start.sh
+&& chmod u+x bin/magento
