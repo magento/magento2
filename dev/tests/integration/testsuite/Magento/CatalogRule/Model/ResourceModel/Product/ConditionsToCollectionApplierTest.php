@@ -1028,9 +1028,6 @@ class ConditionsToCollectionApplierTest extends \PHPUnit\Framework\TestCase
             ->addAttributeToFilter('name', $category1Name)
             ->getAllIds();
 
-        $attributeSetMuffins = $this->setFactory->create()
-            ->load('Super Powerful Muffins', 'attribute_set_name');
-
         $conditions = [
             'type' => \Magento\CatalogRule\Model\Rule\Condition\Combine::class,
             'aggregator' => 'all',

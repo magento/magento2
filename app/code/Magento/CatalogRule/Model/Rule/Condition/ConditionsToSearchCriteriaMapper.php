@@ -7,16 +7,16 @@ declare(strict_types=1);
 
 namespace Magento\CatalogRule\Model\Rule\Condition;
 
-use Magento\Framework\Api\CombinedFilterGroupFactory;
-use Magento\Framework\Api\FilterFactory;
-use Magento\Framework\Api\SearchCriteriaBuilderFactory;
-use Magento\Framework\Exception\InputException;
-use Magento\Rule\Model\Condition\ConditionInterface;
 use Magento\CatalogRule\Model\Rule\Condition\Combine as CombinedCondition;
 use Magento\CatalogRule\Model\Rule\Condition\Product as SimpleCondition;
 use Magento\Framework\Api\CombinedFilterGroup as FilterGroup;
+use Magento\Framework\Api\CombinedFilterGroupFactory;
 use Magento\Framework\Api\Filter;
+use Magento\Framework\Api\FilterFactory;
 use Magento\Framework\Api\SearchCriteria;
+use Magento\Framework\Api\SearchCriteriaBuilderFactory;
+use Magento\Framework\Exception\InputException;
+use Magento\Rule\Model\Condition\ConditionInterface;
 
 /**
  * Maps catalog price rule conditions to search criteria
@@ -114,13 +114,7 @@ class ConditionsToSearchCriteriaMapper
             // This required to solve cases when condition is configured like:
             // "If ALL/ANY of these conditions are FALSE" - we need to reverse SQL operator for this "FALSE"
             if ((bool)$combinedCondition->getValue() === false) {
-                if ($filter instanceof FilterGroup) {
-                    foreach ($filter->getFilters() as &$singleFilter) {
-                        $this->reverseSqlOperatorInFilter($singleFilter);
-                    }
-                } else {
-                    $this->reverseSqlOperatorInFilter($filter);
-                }
+                $this->reverseSqlOperatorInFilterRecursively($filter);
             }
 
             $filters[] = $filter;
@@ -190,6 +184,24 @@ class ConditionsToSearchCriteriaMapper
         }
 
         return 'any';
+    }
+
+    /**
+     * Recursively reverse sql conditions to their corresponding negative analog
+     * for the entire FilterGroup
+     *
+     * @param Filter|FilterGroup $filter
+     * @throws InputException
+     */
+    private function reverseSqlOperatorInFilterRecursively($filter)
+    {
+        if ($filter instanceof FilterGroup) {
+            foreach ($filter->getFilters() as &$currentFilter) {
+                $this->reverseSqlOperatorInFilterRecursively($currentFilter);
+            }
+        } else {
+            $this->reverseSqlOperatorInFilter($filter);
+        }
     }
 
     /**
