@@ -10,7 +10,7 @@ use Magento\Signifyd\Api\CaseRepositoryInterface;
 /**
  * Generates message based on previous and current Case scores.
  *
- * @deprecated Starting from Magento 2.3.5 Signifyd core integration is deprecated in favor of
+ * @deprecated 100.3.5 Starting from Magento 2.3.5 Signifyd core integration is deprecated in favor of
  * official Signifyd integration available on the marketplace
  */
 class CaseRescore implements GeneratorInterface
