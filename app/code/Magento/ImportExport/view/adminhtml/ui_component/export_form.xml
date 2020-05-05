@@ -65,11 +65,21 @@
     <fieldset name="attributes" sortOrder="20" template="Magento_ImportExport/export/form/fieldset">
         <settings>
             <label translate="true">Entity Attributes</label>
+            <imports>
+                <link name="visible">${ $.provider }:entity</link>
+            </imports>
         </settings>
         <insertListing name="attributes" sortOrder="10">
             <settings>
                 <autoRender>true</autoRender>
+                <externalProvider>export_filter_grid.export_filter_grid_data_source</externalProvider>
                 <ns>export_filter_grid</ns>
+                <imports>
+                    <link name="entity">${ $.provider }:entity</link>
+                </imports>
+                <exports>
+                    <link name="entity">${ $.externalProvider }:params.entity</link>
+                </exports>
             </settings>
         </insertListing>
         <button name="continue" sortOrder="20" component="Magento_ImportExport/js/export/form/components/button">
