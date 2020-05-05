@@ -80,4 +80,4 @@ switch ($optionType) {
         $optionHtml .= '" ' . $optionAttributes . '>' . $optionLabel;
         break;
 }
-echo $optionHtml . '</div>';
+echo /* noEscape */ $optionHtml . '</div>';

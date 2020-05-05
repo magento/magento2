@@ -256,6 +256,13 @@ define([
             };
         },
 
+        /**
+         * Handles swatch controls and collecting of available product options.
+         * Although rendering of swatches was moved to PHP, this method was
+         * not renamed to maintain backward compatibility.
+         *
+         * @private
+         */
         _RenderControls: function () {
             var $widget = this,
                 $container = $widget.element,
@@ -276,7 +283,7 @@ define([
                 $widget.optionsMap[itemId] = {};
 
                 // Aggregate options array to hash (key => value)
-                item.options.forEach(function(option) {
+                item.options.forEach(function (option) {
                     var optionProducts = option.products;
 
                     if (optionProducts.length > 0) {

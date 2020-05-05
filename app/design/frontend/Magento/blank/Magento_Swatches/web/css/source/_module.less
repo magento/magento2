@@ -102,8 +102,8 @@
 
             &-options {
                 .lib-css(opacity, @swatch-option__not-rendered__opacity);
-                margin: @indent__s 0;
                 cursor: default;
+                margin: @indent__s 0;
                 pointer-events: none;
 
                 &:focus {
@@ -129,9 +129,9 @@
                     width: 100%;
                 }
 
-                [data-rendered="true"] & {
-                    opacity: 1;
+                [data-rendered='true'] & {
                     cursor: pointer;
+                    opacity: 1;
                     pointer-events: auto;
                 }
             }

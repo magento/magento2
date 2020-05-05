@@ -13,11 +13,10 @@ $swatchConfig = $block->getSwatchConfig();
 $sizeConfig = $block->getSwatchSizeConfig();
 $classes = $block->getClasses();
 $configurableViewModel = $block->getConfigurableViewModel();
+$gallerySwitchingStrategy = $block->getVar('gallery_switch_strategy', 'Magento_ConfigurableProduct');
 ?>
 <div class="swatch-opt" data-role="swatch-options">
-    <?php
-    echo $block
-        ->getChildBlock('swatch_attributes')
+    <?= $block->getChildBlock('swatch_attributes')
         ->setConfig($config)
         ->setSwatchConfig($swatchConfig)
         ->setSizeConfig($sizeConfig)
@@ -32,11 +31,12 @@ $configurableViewModel = $block->getConfigurableViewModel();
                 "jsonConfig": <?= /* @noEscape */ json_encode($config) ?>,
                 "jsonSwatchConfig": <?= /* @noEscape */ json_encode($swatchConfig) ?>,
                 "mediaCallback": "<?= $block->escapeJs($block->escapeUrl($block->getMediaCallback())) ?>",
-                "gallerySwitchStrategy": "<?= $block->escapeJs($block->getVar('gallery_switch_strategy', 'Magento_ConfigurableProduct')) ?: 'replace' ?>",
+                "gallerySwitchStrategy": "<?= $block->escapeJs($gallerySwitchingStrategy) ?: 'replace' ?>",
                 "showTooltip": <?= $block->escapeJs($configurableViewModel->getShowSwatchTooltip()) ?>,
                 "classes": {
                     "attributeClass": "<?= $block->escapeJs($classes['attribute']) ?>",
-                    "attributeSelectedOptionLabelClass": "<?= $block->escapeJs($classes['attribute_selected_option']) ?>",
+                    "attributeSelectedOptionLabelClass":
+                        "<?= $block->escapeJs($classes['attribute_selected_option']) ?>",
                     "attributeOptionsWrapper": "<?= $block->escapeJs($classes['attribute_options_wrapper']) ?>",
                     "attributeInput": "<?= $block->escapeJs($classes['attribute_input']) ?>",
                     "optionClass": "<?= $block->escapeJs($classes['option']) ?>",

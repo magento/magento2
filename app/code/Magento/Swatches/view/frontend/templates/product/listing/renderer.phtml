@@ -17,9 +17,7 @@ $classes = $block->getClasses();
 ?>
 <div class="swatch-opt-<?= $block->escapeHtmlAttr($productId) ?>"
      data-role="swatch-option-<?= $block->escapeHtmlAttr($productId) ?>">
-    <?php
-    echo $block
-        ->getChildBlock('swatch_attributes')
+    <?= $block->getChildBlock('swatch_attributes')
         ->setConfig($config)
         ->setSwatchConfig($swatchConfig)
         ->setSizeConfig($sizeConfig)
@@ -41,7 +39,8 @@ $classes = $block->getClasses();
                 "showTooltip": <?= $block->escapeJs($configurableViewModel->getShowSwatchTooltip()) ?>,
                 "classes": {
                     "attributeClass": "<?= $block->escapeJs($classes['attribute']) ?>",
-                    "attributeSelectedOptionLabelClass": "<?= $block->escapeJs($classes['attribute_selected_option']) ?>",
+                    "attributeSelectedOptionLabelClass":
+                        "<?= $block->escapeJs($classes['attribute_selected_option']) ?>",
                     "attributeOptionsWrapper": "<?= $block->escapeJs($classes['attribute_options_wrapper']) ?>",
                     "attributeInput": "<?= $block->escapeJs($classes['attribute_input']) ?>",
                     "optionClass": "<?= $block->escapeJs($classes['option']) ?>",
