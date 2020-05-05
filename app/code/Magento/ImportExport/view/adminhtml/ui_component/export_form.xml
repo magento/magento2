@@ -62,4 +62,20 @@
             </settings>
         </field>
     </fieldset>
+    <fieldset name="attributes" sortOrder="20" template="Magento_ImportExport/export/form/fieldset">
+        <settings>
+            <label translate="true">Entity Attributes</label>
+        </settings>
+        <insertListing name="attributes" sortOrder="10">
+            <settings>
+                <autoRender>true</autoRender>
+                <ns>export_filter_grid</ns>
+            </settings>
+        </insertListing>
+        <button name="continue" sortOrder="20" component="Magento_ImportExport/js/export/form/components/button">
+            <settings>
+                <title translate="true">Continue</title>
+            </settings>
+        </button>
+    </fieldset>
 </form>
