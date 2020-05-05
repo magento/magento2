@@ -14,7 +14,8 @@ $attribute = $block->getData('attribute');
 $attributeCode = $attribute['code'];
 $attributeLabel = $attribute['label'];
 
-$selectHtml = '<select class="' . $classes['select'] . ' ' . $attributeCode . '"><option value="0" data-option-id="0">' . $chooseText . '</option>';
+$selectHtml = '<select class="' . $classes['select'] . ' ' . $attributeCode . '">' .
+    '<option value="0" data-option-id="0">' . $chooseText . '</option>';
 
 foreach($attribute['options'] as $option) {
     $optionId = $option['id'];

@@ -23,6 +23,7 @@
                         <item name="select" xsi:type="string">swatch-select</item>
                     </argument>
                     <argument name="in_product_list" xsi:type="string">false</argument>
+                    <argument name="choose_text" xsi:type="string" translate="true">Choose an Option...</argument>
                 </arguments>
                 <block name="product.info.options.swatches.attributes" as="swatch_attributes" template="Magento_Swatches::product/view/renderer/attributes.phtml">
                     <arguments>
@@ -32,11 +33,7 @@
                         <argument name="more_button_limit" xsi:type="number">-1</argument>
                     </arguments>
                     <block name="product.info.options.swatches.option" as="swatch_option" template="Magento_Swatches::product/view/renderer/option.phtml"/>
-                    <block name="product.info.options.swatches.select" as="swatch_select" template="Magento_Swatches::product/view/renderer/select.phtml">
-                        <arguments>
-                            <argument name="choose_text" xsi:type="string" translate="true">Choose an option...</argument>
-                        </arguments>
-                    </block>
+                    <block name="product.info.options.swatches.select" as="swatch_select" template="Magento_Swatches::product/view/renderer/select.phtml"/>
                 </block>
             </block>
         </referenceBlock>

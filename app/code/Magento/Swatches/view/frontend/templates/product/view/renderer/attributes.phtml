@@ -77,6 +77,7 @@ foreach ($config['attributes'] as $attributeId => $attribute):
         } else {
             echo $block->getChildBlock('swatch_select')
                 ->setData('attribute', $attribute)
+                ->setChooseText($block->getChooseText())
                 ->setClasses($classes)
                 ->toHtml();
         }

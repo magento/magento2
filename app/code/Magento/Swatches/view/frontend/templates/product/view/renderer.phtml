@@ -12,6 +12,7 @@ $config = $block->getConfig();
 $swatchConfig = $block->getSwatchConfig();
 $sizeConfig = $block->getSwatchSizeConfig();
 $classes = $block->getClasses();
+$chooseText = $block->getChooseText();
 $configurableViewModel = $block->getConfigurableViewModel();
 $gallerySwitchingStrategy = $block->getVar('gallery_switch_strategy', 'Magento_ConfigurableProduct');
 ?>
@@ -21,6 +22,7 @@ $gallerySwitchingStrategy = $block->getVar('gallery_switch_strategy', 'Magento_C
         ->setSwatchConfig($swatchConfig)
         ->setSizeConfig($sizeConfig)
         ->setClasses($classes)
+        ->setChooseText($chooseText)
         ->toHtml();
     ?>
 </div>
@@ -33,6 +35,7 @@ $gallerySwitchingStrategy = $block->getVar('gallery_switch_strategy', 'Magento_C
                 "mediaCallback": "<?= $block->escapeJs($block->escapeUrl($block->getMediaCallback())) ?>",
                 "gallerySwitchStrategy": "<?= $block->escapeJs($gallerySwitchingStrategy) ?: 'replace' ?>",
                 "showTooltip": <?= $block->escapeJs($configurableViewModel->getShowSwatchTooltip()) ?>,
+                "choose_text": "<?= $block->escapeJs($chooseText) ?>",
                 "classes": {
                     "attributeClass": "<?= $block->escapeJs($classes['attribute']) ?>",
                     "attributeSelectedOptionLabelClass":
