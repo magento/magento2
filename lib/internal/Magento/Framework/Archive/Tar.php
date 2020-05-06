@@ -16,7 +16,7 @@ use Magento\Framework\Archive\Helper\File;
 class Tar extends \Magento\Framework\Archive\AbstractArchive implements \Magento\Framework\Archive\ArchiveInterface
 {
     /**
-     * Tar block size
+     * Define acceptable tar block size.
      *
      * @const int
      */
@@ -447,12 +447,12 @@ class Tar extends \Magento\Framework\Archive\AbstractArchive implements \Magento
 
         $header = unpack(self::_getFormatParseHeader(), $headerBlock);
 
-        $header['mode'] = octdec($header['mode']);
-        $header['uid'] = octdec($header['uid']);
-        $header['gid'] = octdec($header['gid']);
-        $header['size'] = octdec($header['size']);
-        $header['mtime'] = octdec($header['mtime']);
-        $header['checksum'] = octdec($header['checksum']);
+        $header['mode'] = octdec((int)$header['mode']);
+        $header['uid'] = octdec((int)$header['uid']);
+        $header['gid'] = octdec((int)$header['gid']);
+        $header['size'] = octdec((int)$header['size']);
+        $header['mtime'] = octdec((int)$header['mtime']);
+        $header['checksum'] = octdec((int)$header['checksum']);
 
         if ($header['type'] == "5") {
             $header['size'] = 0;

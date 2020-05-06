@@ -140,11 +140,11 @@ class RenderTest extends TestCase
     public function testExecuteNoParams()
     {
         $this->requestMock->expects($this->once())->method('isAjax')->willReturn(true);
-        $this->requestMock->expects($this->at(10))
+        $this->requestMock->expects($this->at(6))
             ->method('getParam')
             ->with('blocks', '')
             ->willReturn('');
-        $this->requestMock->expects($this->at(11))
+        $this->requestMock->expects($this->at(7))
             ->method('getParam')
             ->with('handles', '')
             ->willReturn('');
