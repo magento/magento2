@@ -100,7 +100,7 @@ $numColumns = $block->getColumns() !== null ? count($block->getColumns()): 0;
                                 <?= /* @noEscape */ $secureRenderer->renderEventListenerAsTag(
                                     'onclick',
                                     /* @noEscape */ $block->getJsObjectName() . '.setPage(\'' .
-                                        /* @noEscape */ ($_curPage - 1) . '\');return false;',
+                                        /* @noEscape */ ($_curPage - 1) . '\');event.preventDefault();',
                                     'button.action-previous'
                                 ) ?>
                             <?php else: ?>
@@ -136,7 +136,7 @@ $numColumns = $block->getColumns() !== null ? count($block->getColumns()): 0;
                                 <?= /* @noEscape */ $secureRenderer->renderEventListenerAsTag(
                                     'onclick',
                                     /* @noEscape */ $block->getJsObjectName() . '.setPage(\'' .
-                                    /* @noEscape */ ($_curPage + 1) . '\');return false;',
+                                    /* @noEscape */ ($_curPage + 1) . '\');event.preventDefault();',
                                     'button.action-next'
                                 ) ?>
                             <?php else: ?>

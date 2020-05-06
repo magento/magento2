@@ -10,6 +10,7 @@
 // phpcs:disable Generic.WhiteSpace.ScopeIndent
 
 /** @var \Magento\Catalog\Pricing\Render\PriceBox $block */
+/** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
 
 /** @var \Magento\Catalog\Pricing\Price\TierPrice $tierPriceModel */
 $tierPriceModel = $block->getPrice();
@@ -56,10 +57,16 @@ $product = $block->getSaleableItem();
                     }
                     ?>
                     <?= $block->escapeHtml(__('Buy %1 for: ', $price['price_qty'])) ?>
-                    <a href="javascript:void(0);"
+                    <a href="#"
                        id="<?= $block->escapeHtmlAttr($popupId) ?>"
                        data-tier-price="<?= $block->escapeHtml($block->jsonEncode($tierPriceData)) ?>">
-                        <?= $block->escapeHtml(__('Click for price')) ?></a>
+                        <?= $block->escapeHtml(__('Click for price')) ?>
+                    </a>
+                    <?= /* @noEscape */ $secureRenderer->renderEventListenerAsTag(
+                        'onclick',
+                        'event.preventDefault()',
+                        'a#' . $block->escapeHtmlAttr($popupId)
+                    ) ?>
                 <?php else:
                     $priceAmountBlock = $block->renderAmount(
                         $price['price'],

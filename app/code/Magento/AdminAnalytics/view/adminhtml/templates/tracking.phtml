@@ -9,13 +9,22 @@
  */
 ?>
 
-<script src="<?= $block->escapeUrl($block->getTrackingUrl()) ?>" async></script>
+<?= /* @noEscape */ $secureRenderer->renderTag(
+    'script',
+    [
+        'src' => '"' . $block->escapeJs($block->getTrackingUrl()) .'"',
+        'async' => true,
+    ],
+    '',
+    false
+) ?>
 
 <?php $scriptString = '
     var adminAnalyticsMetadata = {
         "version": "' . $block->escapeJs($block->getMetadata()->getMagentoVersion()) . '",
         "user": "' . $block->escapeJs($block->getMetadata()->getCurrentUser()) . '",
         "mode": "' . $block->escapeJs($block->getMetadata()->getMode()) . '"
-    };';
+    };
+';
 ?>
 <?= /* @noEscape */ $secureRenderer->renderTag('script', [], $scriptString, false); ?>

@@ -25,12 +25,18 @@ script;
             'div#order-additional_area'
         ) ?>
 
-        <div id="order-search" class="admin__page-section order-search-items">
+        <div id="order-search" class="admin__page-section order-search-items no-display">
             <?= $block->getChildHtml('search') ?>
         </div>
-        <?= /* @noEscape */ $secureRenderer->renderStyleAsTag(
-            'display:none',
-            'div#order-search'
+        <?= /* @noEscape */ $secureRenderer->renderTag(
+            'script',
+            [],
+            "let elemOrderSearch = document.querySelector('div#order-search');
+            if (elemOrderSearch) {
+                elemOrderSearch.style.display = 'none';
+                elemOrderSearch.classList.remove('no-display');
+            }",
+            false
         ) ?>
 
         <section id="order-items" class="admin__page-section order-items" data-mage-init='{"loader": {}}'>

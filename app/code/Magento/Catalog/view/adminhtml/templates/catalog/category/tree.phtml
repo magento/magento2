@@ -19,14 +19,14 @@
             <a id="colapseAll" href="#"><?= $block->escapeHtml(__('Collapse All')) ?></a>
             <?= /* @noEscape */ $secureRenderer->renderEventListenerAsTag(
                 'onclick',
-                'tree.collapseTree(); return false;',
+                'tree.collapseTree(); event.preventDefault();',
                 '#colapseAll'
             ) ?>
             <span class="separator">|</span>
             <a id="expandAll" href="#"><?= $block->escapeHtml(__('Expand All')) ?></a>
             <?= /* @noEscape */ $secureRenderer->renderEventListenerAsTag(
                 'onclick',
-                'tree.expandTree(); return false;',
+                'tree.expandTree();event.preventDefault();',
                 '#expandAll'
             ) ?>
         <?php endif; ?>

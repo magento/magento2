@@ -115,7 +115,7 @@ $numColumns = count($block->getColumns());
                             <?= /* @noEscape */ $secureRenderer->renderEventListenerAsTag(
                                 'onclick',
                                 /* @noEscape */ $block->getJsObjectName() . '.setPage(\'' .
-                                /* @noEscape */ ($_curPage - 1) . '\');return false;',
+                                /* @noEscape */ ($_curPage - 1) . '\');event.preventDefault();',
                                 '. admin__data-grid-pager button.action-previous'
                             ) ?>
                         <?php else: ?>
@@ -149,7 +149,7 @@ $numColumns = count($block->getColumns());
                             <?= /* @noEscape */ $secureRenderer->renderEventListenerAsTag(
                                 'onclick',
                                 /* @noEscape */ $block->getJsObjectName() . '.setPage(\'' .
-                                /* @noEscape */ ($_curPage + 1) . '\');return false;',
+                                /* @noEscape */ ($_curPage + 1) . '\');event.preventDefault();',
                                 '.admin__data-grid-pager button.action-next'
                             ) ?>
                         <?php else: ?>
@@ -322,11 +322,13 @@ script;
         $scriptString .= <<<script
 
     require(deps, function({$dependencyJsObject}){
+
 script;
         //TODO: getJsObjectName and getRowClickCallback has unexpected behavior. Should be removed
         $scriptString .= <<<script
 
         //<![CDATA[
+
 script;
         if ($block->getDependencyJsObject()):
             $scriptString .= <<<script
@@ -389,6 +391,7 @@ script;
             $scriptString .= <<<script
 
         });
+
 script;
         endif;
         $scriptString .= <<<script

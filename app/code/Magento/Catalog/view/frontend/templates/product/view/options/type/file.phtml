@@ -24,9 +24,14 @@
     <?php if ($_fileExists):?>
     <div class="control">
         <span class="<?= /* @noEscape */ $_fileNamed ?>"><?= $block->escapeHtml($_fileInfo->getTitle()) ?></span>
-        <a href="javascript:void(0)" class="label" id="change-<?= /* @noEscape */ $_fileName ?>" >
+        <a href="#" class="label" id="change-<?= /* @noEscape */ $_fileName ?>" >
             <?= $block->escapeHtml(__('Change')) ?>
         </a>
+        <?= /* @noEscape */ $secureRenderer->renderEventListenerAsTag(
+            'onclick',
+            'event.preventDefault()',
+            'a#change-' ./* @noEscape */ $_fileName
+        ) ?>
         <?php if (!$_option->getIsRequire()):?>
             <input type="checkbox" id="delete-<?= /* @noEscape */ $_fileName ?>" />
             <span class="label"><?= $block->escapeHtml(__('Delete')) ?></span>

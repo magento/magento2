@@ -67,6 +67,6 @@ script;
 <?= /* @noEscape */ $secureRenderer->renderTag('style', [], '#validation_result {margin-bottom: 10px;}', false); ?>
 <?= /* @noEscape */ $secureRenderer->renderEventListenerAsTag(
     'onclick',
-    'javascript:validateVat(); return false;',
+    'validateVat();event.preventDefault();',
     '#' . /* @noEscape */ $block->getHtmlId()
 ); ?>

@@ -98,7 +98,7 @@ $taxHelper = $block->getData('taxHelper');
         </div>
         <?= /* @noEscape */ $secureRenderer->renderEventListenerAsTag(
             'onclick',
-            "$('order-shipping-method-info').hide();$('order-shipping-method-choose').show();return false",
+            "$('order-shipping-method-info').hide();$('order-shipping-method-choose').show();event.preventDefault()",
             'div#order-shipping-method-info a.action-default'
         ) ?>
     <?php else: ?>
