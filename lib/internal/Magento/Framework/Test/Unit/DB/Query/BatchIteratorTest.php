@@ -97,6 +97,19 @@ class BatchIteratorTest extends TestCase
         $this->selectMock->expects($this->once())->method('where')->with($filed . ' > ?', 0);
         $this->selectMock->expects($this->once())->method('limit')->with($this->batchSize);
         $this->selectMock->expects($this->once())->method('order')->with($filed . ' ASC');
+        $this->wrapperSelectMock->expects($this->once())
+            ->method('from')
+            ->with(
+                $this->selectMock,
+                [
+                    new \Zend_Db_Expr('MAX(' . $this->rangeFieldAlias . ') as max'),
+                    new \Zend_Db_Expr('COUNT(*) as cnt'),
+                ]
+            );
+        $this->connectionMock->expects($this->once())
+            ->method('fetchRow')
+            ->with($this->wrapperSelectMock)
+            ->willReturn(['max' => 10, 'cnt' => 10]);
         $this->assertEquals($this->selectMock, $this->model->current());
         $this->assertEquals($this->selectMock, $this->model->current());
         $this->assertEquals(0, $this->model->key());
