@@ -34,7 +34,7 @@ class AreaListTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->objectManagerMock = $this->createMock(ObjectManagerInterface::class);
+        $this->objectManagerMock = $this->getMockForAbstractClass(ObjectManagerInterface::class);
         $this->_resolverFactory = $this
             ->createMock(FrontNameResolverFactory::class);
     }
@@ -49,15 +49,15 @@ class AreaListTest extends TestCase
             $expected
         );
 
-        $resolverMock = $this->createMock(FrontNameResolverInterface::class);
+        $resolverMock = $this->getMockForAbstractClass(FrontNameResolverInterface::class);
         $this->_resolverFactory->expects(
             $this->any()
         )->method(
             'create'
         )->with(
             'testValue'
-        )->will(
-            $this->returnValue($resolverMock)
+        )->willReturn(
+            $resolverMock
         );
 
         $actual = $this->_model->getCodeByFrontName('testFrontName');
@@ -156,7 +156,7 @@ class AreaListTest extends TestCase
      */
     protected function getObjectManagerMockGetArea()
     {
-        $objectManagerMock = $this->createMock(ObjectManagerInterface::class);
+        $objectManagerMock = $this->getMockForAbstractClass(ObjectManagerInterface::class);
         $objectManagerMock
             ->expects($this->any())
             ->method('create')

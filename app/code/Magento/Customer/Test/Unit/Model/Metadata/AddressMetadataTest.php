@@ -79,7 +79,7 @@ class AddressMetadataTest extends TestCase
         /** @var AttributeMetadataInterface|MockObject $metadataMock */
         $metadataMock = $this->getMockBuilder(AttributeMetadataInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $result = [$attributeCode => $metadataMock];
 
         $this->attributeConverterMock->expects($this->once())
@@ -138,7 +138,7 @@ class AddressMetadataTest extends TestCase
         /** @var AttributeMetadataInterface|MockObject $metadataMock */
         $metadataMock = $this->getMockBuilder(AttributeMetadataInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->attributeConverterMock->expects($this->once())
             ->method('createMetadataAttribute')
@@ -165,7 +165,7 @@ class AddressMetadataTest extends TestCase
         /** @var AttributeMetadataInterface|MockObject $metadataMock */
         $metadataMock = $this->getMockBuilder(AttributeMetadataInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->attributeConverterMock->expects($this->once())
             ->method('createMetadataAttribute')
@@ -213,7 +213,7 @@ class AddressMetadataTest extends TestCase
         /** @var AttributeMetadataInterface|MockObject $metadataMock */
         $metadataMock = $this->getMockBuilder(AttributeMetadataInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $result = [$metadataMock];
 
         $this->attributeConverterMock->expects($this->once())
@@ -273,7 +273,7 @@ class AddressMetadataTest extends TestCase
         /** @var AttributeMetadataInterface|MockObject $metadataMock */
         $metadataMock = $this->getMockBuilder(AttributeMetadataInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $result = [$metadataMock];
 
         $this->attributeConverterMock->expects($this->once())
@@ -320,7 +320,7 @@ class AddressMetadataTest extends TestCase
         /** @var AttributeMetadataInterface|MockObject $metadataMock */
         $metadataMock = $this->getMockBuilder(AttributeMetadataInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $result = [];
 
         $this->attributeConverterMock->expects($this->once())
@@ -361,7 +361,7 @@ class AddressMetadataTest extends TestCase
         /** @var AttributeMetadataInterface|MockObject $metadataMock */
         $metadataMock = $this->getMockBuilder(AttributeMetadataInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $result = [];
 
         $this->attributeConverterMock->expects($this->once())

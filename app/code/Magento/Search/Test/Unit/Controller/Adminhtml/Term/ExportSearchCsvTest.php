@@ -59,7 +59,7 @@ class ExportSearchCsvTest extends TestCase
     public function testExecute()
     {
         $resultLayoutMock = $this->createMock(Layout::class);
-        $layoutMock = $this->createMock(LayoutInterface::class);
+        $layoutMock = $this->getMockForAbstractClass(LayoutInterface::class);
         $contentMock = $this->getMockBuilder(AbstractBlock::class)
             ->addMethods(['getCsvFile'])
             ->disableOriginalConstructor()

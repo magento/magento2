@@ -107,7 +107,7 @@ class SynchronizerTest extends TestCase
                 'product_id' => 3,
             ]
         ];
-        $frontendConfiguration = $this->createMock(FrontendStorageConfigurationInterface::class);
+        $frontendConfiguration = $this->getMockForAbstractClass(FrontendStorageConfigurationInterface::class);
         $frontendConfiguration->expects($this->once())
             ->method('get')
             ->willReturn([
@@ -123,7 +123,7 @@ class SynchronizerTest extends TestCase
         $action2 = $this->getMockBuilder(ProductFrontendActionInterface::class)
             ->getMockForAbstractClass();
 
-        $frontendAction = $this->createMock(ProductFrontendActionInterface::class);
+        $frontendAction = $this->getMockForAbstractClass(ProductFrontendActionInterface::class);
         $collection = $this->getMockBuilder(Collection::class)
             ->disableOriginalConstructor()
             ->getMock();

@@ -64,7 +64,7 @@ class SearchTest extends TestCase
 
         $this->searchEngine = $this->getMockBuilder(SearchEngineInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->searchResponseBuilder = $this->getMockBuilder(SearchResponseBuilder::class)
             ->disableOriginalConstructor()

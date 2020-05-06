@@ -47,7 +47,7 @@ class FreeShippingTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->storeManager = $this->createMock(StoreManagerInterface::class);
+        $this->storeManager = $this->getMockForAbstractClass(StoreManagerInterface::class);
         $this->calculator = $this->createMock(Calculator::class);
 
         $this->model = new FreeShipping(
@@ -117,7 +117,7 @@ class FreeShippingTest extends TestCase
     {
         $store = $this->getMockBuilder(StoreInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->storeManager->method('getStore')
             ->with(self::$storeId)
             ->willReturn($store);

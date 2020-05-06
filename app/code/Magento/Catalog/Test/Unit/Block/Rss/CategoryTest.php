@@ -124,7 +124,7 @@ class CategoryTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->request = $this->createMock(RequestInterface::class);
+        $this->request = $this->getMockForAbstractClass(RequestInterface::class);
         $this->request->expects($this->at(0))->method('getParam')->with('cid')->willReturn(1);
         $this->request->expects($this->at(1))->method('getParam')->with('store_id')->willReturn(null);
 
@@ -138,18 +138,18 @@ class CategoryTest extends TestCase
             \Magento\Catalog\Model\Rss\Category::class,
             ['getProductCollection']
         );
-        $this->rssUrlBuilder = $this->createMock(UrlBuilderInterface::class);
+        $this->rssUrlBuilder = $this->getMockForAbstractClass(UrlBuilderInterface::class);
         $this->imageHelper = $this->createMock(Image::class);
         $this->customerSession = $this->createPartialMock(Session::class, ['getId']);
         $this->customerSession->expects($this->any())->method('getId')->willReturn(1);
-        $this->storeManager = $this->createMock(StoreManagerInterface::class);
+        $this->storeManager = $this->getMockForAbstractClass(StoreManagerInterface::class);
         $store = $this->getMockBuilder(Store::class)
             ->setMethods(['getId'])->disableOriginalConstructor()
             ->getMock();
         $store->expects($this->any())->method('getId')->willReturn(1);
         $this->storeManager->expects($this->any())->method('getStore')->willReturn($store);
-        $this->scopeConfig = $this->createMock(ScopeConfigInterface::class);
-        $this->categoryRepository = $this->createMock(CategoryRepositoryInterface::class);
+        $this->scopeConfig = $this->getMockForAbstractClass(ScopeConfigInterface::class);
+        $this->categoryRepository = $this->getMockForAbstractClass(CategoryRepositoryInterface::class);
         $this->viewConfig = $this->getMockBuilder(ConfigInterface::class)
             ->getMockForAbstractClass();
         $objectManagerHelper = new ObjectManagerHelper($this);
@@ -250,7 +250,7 @@ class CategoryTest extends TestCase
         $this->scopeConfig->expects($this->once())->method('isSetFlag')
             ->with('rss/catalog/category', ScopeInterface::SCOPE_STORE)
             ->willReturn(true);
-        $this->assertEquals(true, $this->block->isAllowed());
+        $this->assertTrue($this->block->isAllowed());
     }
 
     public function testGetFeeds()

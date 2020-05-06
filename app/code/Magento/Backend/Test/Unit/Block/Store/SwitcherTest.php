@@ -25,7 +25,7 @@ class SwitcherTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
+        $this->storeManagerMock = $this->getMockForAbstractClass(StoreManagerInterface::class);
         $objectHelper = new ObjectManager($this);
         $context = $objectHelper->getObject(
             Context::class,

@@ -24,7 +24,7 @@ class IndexTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->view = $this->createMock(ViewInterface::class);
+        $this->view = $this->getMockForAbstractClass(ViewInterface::class);
 
         $helper = new ObjectManager($this);
         $this->controller = $helper->getObject(

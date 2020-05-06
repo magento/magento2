@@ -31,13 +31,13 @@ class AttributeFactoryTest extends TestCase
     protected function setUp(): void
     {
         /** @var ObjectManagerInterface $objectManagerMock */
-        $objectManagerMock = $this->createMock(ObjectManagerInterface::class);
+        $objectManagerMock = $this->getMockForAbstractClass(ObjectManagerInterface::class);
         $objectManagerMock->expects(
             $this->any()
         )->method(
             'create'
-        )->will(
-            $this->returnCallback([$this, 'getModelInstance'])
+        )->willReturnCallback(
+            [$this, 'getModelInstance']
         );
 
         $this->_factory = new AttributeFactory($objectManagerMock);

@@ -101,7 +101,7 @@ class PublisherTest extends TestCase
             ->with('some/file.ext')
             ->willReturn(false);
         $materializationStrategy =
-            $this->createMock(StrategyInterface::class);
+            $this->getMockForAbstractClass(StrategyInterface::class);
 
         $this->materializationStrategyFactory->expects($this->once())
             ->method('create')

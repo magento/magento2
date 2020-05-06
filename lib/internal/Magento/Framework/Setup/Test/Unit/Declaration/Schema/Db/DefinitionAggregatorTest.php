@@ -41,11 +41,11 @@ class DefinitionAggregatorTest extends TestCase
         $intDefProcessor = $this->getMockBuilder(DbDefinitionProcessorInterface::class)
             ->disableOriginalConstructor()
             ->setMethods([])
-            ->getMock();
+            ->getMockForAbstractClass();
         $varcharDefProcessor = $this->getMockBuilder(DbDefinitionProcessorInterface::class)
             ->disableOriginalConstructor()
             ->setMethods([])
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->definitonProcessors = [
             'int' => $intDefProcessor,
@@ -66,15 +66,15 @@ class DefinitionAggregatorTest extends TestCase
         /** @var ElementInterface|MockObject $columnInt */
         $columnInt = $this->getMockBuilder(ElementInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         /** @var ElementInterface|MockObject $columnVarchar */
         $columnVarchar = $this->getMockBuilder(ElementInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         /** @var ElementInterface|MockObject $columnText */
         $columnText = $this->getMockBuilder(ElementInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $columnInt->expects($this->any())->method('getType')->willReturn('int');
         $columnVarchar->expects($this->any())->method('getType')->willReturn('varchar');
         $columnText->expects($this->any())->method('getType')->willReturn('text');

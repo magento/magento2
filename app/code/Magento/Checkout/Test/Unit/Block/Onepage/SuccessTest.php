@@ -58,12 +58,12 @@ class SuccessTest extends TestCase
         $objectManager = new ObjectManager($this);
 
         $this->orderConfig = $this->createMock(Config::class);
-        $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
+        $this->storeManagerMock = $this->getMockForAbstractClass(StoreManagerInterface::class);
 
         $this->layout = $this->getMockBuilder(LayoutInterface::class)
             ->disableOriginalConstructor()
             ->setMethods([])
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->checkoutSession = $this->getMockBuilder(Session::class)
             ->disableOriginalConstructor()
@@ -72,17 +72,17 @@ class SuccessTest extends TestCase
         $eventManager = $this->getMockBuilder(ManagerInterface::class)
             ->disableOriginalConstructor()
             ->setMethods([])
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $urlBuilder = $this->getMockBuilder(UrlInterface::class)
             ->disableOriginalConstructor()
             ->setMethods([])
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $scopeConfig = $this->getMockBuilder(ScopeConfigInterface::class)
             ->disableOriginalConstructor()
             ->setMethods([])
-            ->getMock();
+            ->getMockForAbstractClass();
         $scopeConfig->expects($this->any())
             ->method('getValue')
             ->with(
@@ -115,7 +115,7 @@ class SuccessTest extends TestCase
 
     public function testGetAdditionalInfoHtml()
     {
-        $layout = $this->createMock(LayoutInterface::class);
+        $layout = $this->getMockForAbstractClass(LayoutInterface::class);
         $layout->expects(
             $this->once()
         )->method(

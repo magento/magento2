@@ -57,7 +57,7 @@ class CollectionByPagesIteratorTest extends TestCase
         $select = $this->createMock(Select::class);
 
         $entityFactory = $this->createMock(EntityFactory::class);
-        $logger = $this->createMock(LoggerInterface::class);
+        $logger = $this->getMockForAbstractClass(LoggerInterface::class);
 
         /** @var AbstractDb|MockObject $collectionMock */
         $collectionMock = $this->getMockBuilder(AbstractDb::class)

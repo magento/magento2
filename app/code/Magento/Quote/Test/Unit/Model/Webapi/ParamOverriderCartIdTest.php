@@ -57,10 +57,10 @@ class ParamOverriderCartIdTest extends TestCase
 
         $this->userContext->expects($this->once())
             ->method('getUserType')
-            ->will($this->returnValue(UserContextInterface::USER_TYPE_CUSTOMER));
+            ->willReturn(UserContextInterface::USER_TYPE_CUSTOMER);
         $this->userContext->expects($this->once())
             ->method('getUserId')
-            ->will($this->returnValue($customerId));
+            ->willReturn($customerId);
 
         $cart = $this->getMockBuilder(CartInterface::class)
             ->getMockForAbstractClass();
@@ -82,10 +82,10 @@ class ParamOverriderCartIdTest extends TestCase
 
         $this->userContext->expects($this->once())
             ->method('getUserType')
-            ->will($this->returnValue(UserContextInterface::USER_TYPE_CUSTOMER));
+            ->willReturn(UserContextInterface::USER_TYPE_CUSTOMER);
         $this->userContext->expects($this->once())
             ->method('getUserId')
-            ->will($this->returnValue($customerId));
+            ->willReturn($customerId);
 
         $this->cartManagement->expects($this->once())
             ->method('getCartForCustomer')
@@ -101,10 +101,10 @@ class ParamOverriderCartIdTest extends TestCase
 
         $this->userContext->expects($this->once())
             ->method('getUserType')
-            ->will($this->returnValue(UserContextInterface::USER_TYPE_CUSTOMER));
+            ->willReturn(UserContextInterface::USER_TYPE_CUSTOMER);
         $this->userContext->expects($this->once())
             ->method('getUserId')
-            ->will($this->returnValue($customerId));
+            ->willReturn($customerId);
 
         $this->cartManagement->expects($this->once())
             ->method('getCartForCustomer')
@@ -118,7 +118,7 @@ class ParamOverriderCartIdTest extends TestCase
     {
         $this->userContext->expects($this->once())
             ->method('getUserType')
-            ->will($this->returnValue(UserContextInterface::USER_TYPE_ADMIN));
+            ->willReturn(UserContextInterface::USER_TYPE_ADMIN);
 
         $this->assertNull($this->model->getOverriddenValue());
     }

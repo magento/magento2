@@ -74,7 +74,7 @@ class BlobTest extends TestCase
         /** @var ElementInterface|MockObject $column */
         $column = $this->getMockBuilder(ElementInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $column->expects($this->any())
             ->method('getName')
             ->willReturn('col');
@@ -83,7 +83,7 @@ class BlobTest extends TestCase
             ->willReturn('blob');
         $adapterMock = $this->getMockBuilder(AdapterInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->resourceConnectionMock->expects($this->once())->method('getConnection')->willReturn($adapterMock);
         $adapterMock->expects($this->once())
             ->method('quoteIdentifier')

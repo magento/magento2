@@ -108,7 +108,7 @@ class CaptureTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->objectManagerMock = $this->createMock(ObjectManagerInterface::class);
+        $this->objectManagerMock = $this->getMockForAbstractClass(ObjectManagerInterface::class);
 
         $this->messageManagerMock = $this->getMockBuilder(Manager::class)
             ->disableOriginalConstructor()
@@ -169,7 +169,7 @@ class CaptureTest extends TestCase
 
         $this->invoiceManagement = $this->getMockBuilder(InvoiceManagementInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->objectManagerMock->expects($this->any())
             ->method('get')
             ->with(InvoiceManagementInterface::class)

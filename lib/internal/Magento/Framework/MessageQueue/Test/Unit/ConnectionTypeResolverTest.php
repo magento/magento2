@@ -15,10 +15,10 @@ class ConnectionTypeResolverTest extends TestCase
 {
     public function testGetConnectionType()
     {
-        $resolverOne = $this->createMock(ConnectionTypeResolverInterface::class);
+        $resolverOne = $this->getMockForAbstractClass(ConnectionTypeResolverInterface::class);
         $resolverOne->expects($this->once())->method('getConnectionType')->with('test')->willReturn(null);
 
-        $resolverTwo = $this->createMock(ConnectionTypeResolverInterface::class);
+        $resolverTwo = $this->getMockForAbstractClass(ConnectionTypeResolverInterface::class);
         $resolverTwo->expects($this->once())->method('getConnectionType')->with('test')->willReturn('some-type');
 
         $model = new ConnectionTypeResolver([$resolverOne, $resolverTwo]);
@@ -29,10 +29,10 @@ class ConnectionTypeResolverTest extends TestCase
     {
         $this->expectException('LogicException');
         $this->expectExceptionMessage('Unknown connection name test');
-        $resolverOne = $this->createMock(ConnectionTypeResolverInterface::class);
+        $resolverOne = $this->getMockForAbstractClass(ConnectionTypeResolverInterface::class);
         $resolverOne->expects($this->once())->method('getConnectionType')->with('test')->willReturn(null);
 
-        $resolverTwo = $this->createMock(ConnectionTypeResolverInterface::class);
+        $resolverTwo = $this->getMockForAbstractClass(ConnectionTypeResolverInterface::class);
         $resolverTwo->expects($this->once())->method('getConnectionType')->with('test')->willReturn(null);
 
         $model = new ConnectionTypeResolver([$resolverOne, $resolverTwo]);

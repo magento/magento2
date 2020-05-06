@@ -93,8 +93,8 @@ class ProductsRenderInfoSectionTest extends TestCase
 
     private function prepareProductIds()
     {
-        $actionFirst = $this->createMock(ProductFrontendActionInterface::class);
-        $actionSecond = $this->createMock(ProductFrontendActionInterface::class);
+        $actionFirst = $this->getMockForAbstractClass(ProductFrontendActionInterface::class);
+        $actionSecond = $this->getMockForAbstractClass(ProductFrontendActionInterface::class);
         $actions = [$actionFirst, $actionSecond];
         $this->synchronizerMock->expects($this->once())
             ->method('getAllActions')
@@ -109,8 +109,8 @@ class ProductsRenderInfoSectionTest extends TestCase
 
     public function testGetSectionData()
     {
-        $productRender = $this->createMock(ProductRenderInterface::class);
-        $searchResult = $this->createMock(ProductRenderSearchResultsInterface::class);
+        $productRender = $this->getMockForAbstractClass(ProductRenderInterface::class);
+        $searchResult = $this->getMockForAbstractClass(ProductRenderSearchResultsInterface::class);
 
         $store = $this->getMockBuilder(Store::class)
             ->disableOriginalConstructor()

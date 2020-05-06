@@ -108,7 +108,7 @@ class ConfigureTest extends TestCase
 
     public function testSetLayout()
     {
-        $layoutMock = $this->createMock(LayoutInterface::class);
+        $layoutMock = $this->getMockForAbstractClass(LayoutInterface::class);
 
         $blockMock = $this->getMockBuilder(AbstractBlock::class)
             ->addMethods(['setCustomAddToCartUrl'])
@@ -141,7 +141,7 @@ class ConfigureTest extends TestCase
 
     public function testSetLayoutWithNoItem()
     {
-        $layoutMock = $this->createMock(LayoutInterface::class);
+        $layoutMock = $this->getMockForAbstractClass(LayoutInterface::class);
 
         $blockMock = $this->getMockBuilder(AbstractBlock::class)
             ->addMethods(['setCustomAddToCartUrl'])
@@ -169,7 +169,7 @@ class ConfigureTest extends TestCase
 
     public function testSetLayoutWithNoBlockAndItem()
     {
-        $layoutMock = $this->createMock(LayoutInterface::class);
+        $layoutMock = $this->getMockForAbstractClass(LayoutInterface::class);
 
         $layoutMock->expects($this->once())
             ->method('getBlock')

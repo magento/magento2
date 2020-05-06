@@ -80,7 +80,7 @@ class NullableTest extends TestCase
         /** @var ElementInterface|MockObject $column */
         $column = $this->getMockBuilder(ElementInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->assertEquals(
             '',
             $this->nullable->toDefinition($column)

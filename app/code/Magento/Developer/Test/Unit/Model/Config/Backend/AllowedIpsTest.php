@@ -26,7 +26,7 @@ class AllowedIpsTest extends TestCase
             ->getMock();
         $eventMangerMock = $this->getMockBuilder(ManagerInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $contextMock->expects($this->any())
             ->method('getEventDispatcher')
             ->willReturn($eventMangerMock);

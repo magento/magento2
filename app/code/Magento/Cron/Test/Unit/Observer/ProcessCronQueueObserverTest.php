@@ -140,7 +140,7 @@ class ProcessCronQueueObserverTest extends TestCase
         $this->objectManagerMock = $this->getMockBuilder(ObjectManager::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->cacheMock = $this->createMock(CacheInterface::class);
+        $this->cacheMock = $this->getMockForAbstractClass(CacheInterface::class);
         $this->configMock = $this->getMockBuilder(Config::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -173,7 +173,7 @@ class ProcessCronQueueObserverTest extends TestCase
             ->setMethods(
             ['execute']
         )->getMock();
-        $this->loggerMock = $this->createMock(LoggerInterface::class);
+        $this->loggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
 
         $this->appStateMock = $this->getMockBuilder(AppState::class)
             ->disableOriginalConstructor()
@@ -181,7 +181,7 @@ class ProcessCronQueueObserverTest extends TestCase
 
         $this->lockManagerMock = $this->getMockBuilder(LockManagerInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->lockManagerMock->method('lock')->willReturn(true);
         $this->lockManagerMock->method('unlock')->willReturn(true);
 
@@ -202,7 +202,7 @@ class ProcessCronQueueObserverTest extends TestCase
             ->getMock();
         $connection = $this->getMockBuilder(AdapterInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->scheduleResourceMock->method('getConnection')->willReturn($connection);
         $connection->method('delete')->willReturn(1);

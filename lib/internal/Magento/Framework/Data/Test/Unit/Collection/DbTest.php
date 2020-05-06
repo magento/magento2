@@ -60,7 +60,7 @@ class DbTest extends TestCase
             $this->createPartialMock(Query::class, ['fetchAll']);
         $this->entityFactoryMock =
             $this->createPartialMock(EntityFactory::class, ['create']);
-        $this->loggerMock = $this->createMock(LoggerInterface::class);
+        $this->loggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
         $this->collection = new DbCollection(
             $this->entityFactoryMock,
             $this->loggerMock,

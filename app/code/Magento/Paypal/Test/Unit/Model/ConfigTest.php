@@ -51,13 +51,13 @@ class ConfigTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->scopeConfig = $this->createMock(ScopeConfigInterface::class);
+        $this->scopeConfig = $this->getMockForAbstractClass(ScopeConfigInterface::class);
 
         $this->directoryHelper = $this->getMockBuilder(Data::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->storeManager = $this->createMock(StoreManagerInterface::class);
+        $this->storeManager = $this->getMockForAbstractClass(StoreManagerInterface::class);
 
         $this->ccTypeFactory = $this->getMockBuilder(CctypeFactory::class)
             ->disableOriginalConstructor()

@@ -52,11 +52,11 @@ class SwitcherTest extends TestCase
         $this->scopeConfigMock = $this->getMockBuilder(ScopeConfigInterface::class)
             ->disableOriginalConstructor()
             ->setMethods([])
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->storeManagerMock = $this->getMockBuilder(StoreManagerInterface::class)
             ->disableOriginalConstructor()
             ->setMethods([])
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->storeFactoryMock = $this->getMockBuilder(StoreFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])

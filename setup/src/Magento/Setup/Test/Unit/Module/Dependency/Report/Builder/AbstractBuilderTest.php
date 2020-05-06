@@ -33,8 +33,8 @@ class AbstractBuilderTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->dependenciesParserMock = $this->createMock(ParserInterface::class);
-        $this->reportWriterMock = $this->createMock(WriterInterface::class);
+        $this->dependenciesParserMock = $this->getMockForAbstractClass(ParserInterface::class);
+        $this->reportWriterMock = $this->getMockForAbstractClass(WriterInterface::class);
 
         $this->builder = $this->getMockForAbstractClass(
             AbstractBuilder::class,
@@ -88,7 +88,7 @@ class AbstractBuilderTest extends TestCase
         ];
 
         $parseResult = ['foo', 'bar', 'baz'];
-        $configMock = $this->createMock(ConfigInterface::class);
+        $configMock = $this->getMockForAbstractClass(ConfigInterface::class);
 
         $this->dependenciesParserMock->expects(
             $this->once()

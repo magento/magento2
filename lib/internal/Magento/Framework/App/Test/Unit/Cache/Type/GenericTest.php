@@ -27,7 +27,7 @@ class GenericTest extends TestCase
      */
     public function testConstructor($className)
     {
-        $frontendMock = $this->createMock(FrontendInterface::class);
+        $frontendMock = $this->getMockForAbstractClass(FrontendInterface::class);
 
         $poolMock = $this->createMock(FrontendPool::class);
         /** @noinspection PhpUndefinedFieldInspection */

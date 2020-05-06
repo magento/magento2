@@ -42,9 +42,9 @@ class VaultDataBuilderTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->paymentDataObjectMock = $this->createMock(PaymentDataObjectInterface::class);
+        $this->paymentDataObjectMock = $this->getMockForAbstractClass(PaymentDataObjectInterface::class);
 
-        $this->paymentInfoMock = $this->createMock(InfoInterface::class);
+        $this->paymentInfoMock = $this->getMockForAbstractClass(InfoInterface::class);
 
         $this->subjectReaderMock = $this->getMockBuilder(SubjectReader::class)
             ->disableOriginalConstructor()

@@ -148,7 +148,7 @@ class AbstractTest extends AbstractImportTestCase
      */
     public function testIsNeedToLogInHistory()
     {
-        $this->assertEquals(false, $this->_model->isNeedToLogInHistory());
+        $this->assertFalse($this->_model->isNeedToLogInHistory());
     }
 
     /**

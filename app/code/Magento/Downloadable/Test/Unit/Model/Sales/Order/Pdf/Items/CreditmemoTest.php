@@ -136,19 +136,19 @@ class CreditmemoTest extends TestCase
                 ]
             )
         );
-        $this->model->expects($this->any())->method('getLinksTitle')->will($this->returnValue('Download Links'));
+        $this->model->expects($this->any())->method('getLinksTitle')->willReturn('Download Links');
         $this->model->expects(
             $this->any()
         )->method(
             'getLinks'
-        )->will(
-            $this->returnValue(
+        )->willReturn(
+            
                 new DataObject(
                     ['purchased_items' => [
                         new DataObject(['link_title' => 'Magento User Guide']), ],
                     ]
                 )
-            )
+            
         );
         $this->pdf->expects(
             $this->once()

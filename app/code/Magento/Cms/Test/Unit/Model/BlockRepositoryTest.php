@@ -113,10 +113,10 @@ class BlockRepositoryTest extends TestCase
             ->getMock();
         $this->storeManager = $this->getMockBuilder(StoreManagerInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $store = $this->getMockBuilder(StoreInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $store->expects($this->any())->method('getId')->willReturn(0);
         $this->storeManager->expects($this->any())->method('getStore')->willReturn($store);
 

@@ -521,7 +521,7 @@ class LoginPostTest extends TestCase
 
         $this->messageManager = $this->getMockBuilder(ManagerInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->redirectFactory = $this->getMockBuilder(RedirectFactory::class)
             ->disableOriginalConstructor()

@@ -59,6 +59,6 @@ class ConfigTest extends TestCase
         $this->_storageMock->expects($this->once())->method('get')
             ->willReturn([]);
         $result = $this->_model->getFieldset('test');
-        $this->assertEquals(null, $result);
+        $this->assertNull($result);
     }
 }

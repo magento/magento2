@@ -47,10 +47,10 @@ class CleanStaticFilesTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->objectManagerMock = $this->createMock(ObjectManagerInterface::class);
+        $this->objectManagerMock = $this->getMockForAbstractClass(ObjectManagerInterface::class);
         $this->eventManagerMock = $this->getMockBuilder(ManagerInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->messageManagerMock = $this->getMockBuilder(\Magento\Framework\Message\ManagerInterface::class)
             ->disableOriginalConstructor()
             ->getMock();

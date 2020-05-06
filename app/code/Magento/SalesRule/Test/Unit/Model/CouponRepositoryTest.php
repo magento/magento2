@@ -89,7 +89,7 @@ class CouponRepositoryTest extends TestCase
             CouponSearchResultInterfaceFactory::class,
             ['create']
         );
-        $this->searchResultsMock = $this->createMock(CouponSearchResultInterface::class);
+        $this->searchResultsMock = $this->getMockForAbstractClass(CouponSearchResultInterface::class);
         $this->couponFactory = $this->createPartialMock(CouponFactory::class, ['create']);
         $this->ruleFactory = $this->createPartialMock(RuleFactory::class, ['create']);
         $this->collectionFactory = $this->createPartialMock(
@@ -243,7 +243,7 @@ class CouponRepositoryTest extends TestCase
     public function testGetList()
     {
         $collectionSize = 1;
-        $couponMock = $this->createMock(CouponInterface::class);
+        $couponMock = $this->getMockForAbstractClass(CouponInterface::class);
         /**
          * @var SearchCriteriaInterface $searchCriteriaMock
          */

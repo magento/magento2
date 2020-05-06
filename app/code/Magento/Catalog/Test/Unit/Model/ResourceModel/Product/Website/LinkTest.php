@@ -41,7 +41,7 @@ class LinkTest extends TestCase
     {
         $this->resource = $this->createMock(ResourceConnection::class);
         $this->connection =
-            $this->createMock(AdapterInterface::class);
+            $this->getMockForAbstractClass(AdapterInterface::class);
         $this->dbSelect = $this->getMockBuilder(Select::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -81,7 +81,7 @@ class LinkTest extends TestCase
         $newWebsiteIds = [2,3];
         $websiteIds = [1,2];
         $productId = 1;
-        $product = $this->createMock(ProductInterface::class);
+        $product = $this->getMockForAbstractClass(ProductInterface::class);
         $product->expects($this->atLeastOnce())
             ->method('getId')
             ->willReturn($productId);

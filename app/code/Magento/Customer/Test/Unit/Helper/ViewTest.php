@@ -31,9 +31,9 @@ class ViewTest extends TestCase
         $this->context = $this->getMockBuilder(Context::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->customerMetadataService = $this->createMock(CustomerMetadataInterface::class);
+        $this->customerMetadataService = $this->getMockForAbstractClass(CustomerMetadataInterface::class);
 
-        $attributeMetadata = $this->createMock(AttributeMetadataInterface::class);
+        $attributeMetadata = $this->getMockForAbstractClass(AttributeMetadataInterface::class);
         $attributeMetadata->expects($this->any())->method('isVisible')->willReturn(true);
         $this->customerMetadataService->expects($this->any())
             ->method('getAttributeMetadata')
@@ -49,7 +49,7 @@ class ViewTest extends TestCase
     {
         $customerData = $this->getMockBuilder(CustomerInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $customerData->expects($this->any())
             ->method('getPrefix')->willReturn($prefix);
         $customerData->expects($this->any())

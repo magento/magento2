@@ -82,12 +82,12 @@ class SelectTest extends TestCase
         $this->objectManager = new ObjectManager($this);
         $this->multishippingMock =
             $this->createMock(Multishipping::class);
-        $this->addressMock = $this->createMock(AddressInterface::class);
-        $this->customerMock = $this->createMock(CustomerInterface::class);
+        $this->addressMock = $this->getMockForAbstractClass(AddressInterface::class);
+        $this->customerMock = $this->getMockForAbstractClass(CustomerInterface::class);
         $this->filterBuilderMock = $this->createMock(FilterBuilder::class);
         $this->searchCriteriaBuilderMock =
             $this->createMock(SearchCriteriaBuilder::class);
-        $this->addressRepositoryMock = $this->createMock(AddressRepositoryInterface::class);
+        $this->addressRepositoryMock = $this->getMockForAbstractClass(AddressRepositoryInterface::class);
         $this->filterMock = $this->createMock(Filter::class);
         $this->searchCriteriaMock = $this->createMock(SearchCriteria::class);
         $this->block = $this->objectManager->getObject(
@@ -140,7 +140,7 @@ class SelectTest extends TestCase
 
     public function testGetAddress()
     {
-        $searchResultMock = $this->createMock(AddressSearchResultsInterface::class);
+        $searchResultMock = $this->getMockForAbstractClass(AddressSearchResultsInterface::class);
         $this->multishippingMock->expects($this->once())->method('getCustomer')->willReturn($this->customerMock);
         $this->customerMock->expects($this->once())->method('getId')->willReturn(1);
         $this->filterBuilderMock->expects($this->once())->method('setField')->with('parent_id')->willReturnSelf();
@@ -188,7 +188,7 @@ class SelectTest extends TestCase
 
     public function testGetAddressWhenItNotExistInCustomer()
     {
-        $searchResultMock = $this->createMock(AddressSearchResultsInterface::class);
+        $searchResultMock = $this->getMockForAbstractClass(AddressSearchResultsInterface::class);
         $this->multishippingMock->expects($this->once())->method('getCustomer')->willReturn($this->customerMock);
         $this->customerMock->expects($this->once())->method('getId')->willReturn(1);
         $this->filterBuilderMock->expects($this->once())->method('setField')->with('parent_id')->willReturnSelf();

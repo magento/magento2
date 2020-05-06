@@ -74,7 +74,7 @@ class CalculatorTest extends TestCase
 
         $weeeAdjustmentMock = $this->getMockBuilder(AdjustmentInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $weeeAdjustmentMock->expects($this->once())
             ->method('getAdjustmentCode')
             ->willReturn($weeeAdjustmentCode);
@@ -91,7 +91,7 @@ class CalculatorTest extends TestCase
 
         $taxAdjustmentMock = $this->getMockBuilder(AdjustmentInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $taxAdjustmentMock->expects($this->once())
             ->method('getAdjustmentCode')
             ->willReturn($taxAdjustmentCode);
@@ -141,7 +141,7 @@ class CalculatorTest extends TestCase
 
         $taxAdjustmentMock = $this->getMockBuilder(AdjustmentInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $taxAdjustmentMock->expects($this->once())
             ->method('getAdjustmentCode')
             ->willReturn($taxAdjustmentCode);
@@ -159,7 +159,7 @@ class CalculatorTest extends TestCase
 
         $weeeAdjustmentMock = $this->getMockBuilder(AdjustmentInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $weeeAdjustmentMock->expects($this->once())
             ->method('getAdjustmentCode')
             ->willReturn($weeeAdjustmentCode);

@@ -78,10 +78,10 @@ class ApplicationDumpCommandTest extends TestCase
             ->getMock();
         $this->source = $this->getMockBuilder(SourceInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->sourceEnv = $this->getMockBuilder(SourceInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->commentMock = $this->getMockBuilder(Comment::class)
             ->disableOriginalConstructor()
             ->getMock();

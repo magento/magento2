@@ -23,7 +23,7 @@ class ExpressConfigProviderTest extends TestCase
 {
     public function testGetConfig()
     {
-        $localeResolver = $this->createMock(ResolverInterface::class);
+        $localeResolver = $this->getMockForAbstractClass(ResolverInterface::class);
         $localeResolver->expects($this->once())->method('getLocale');
 
         $configFactory = $this->createPartialMock(ConfigFactory::class, ['create']);
@@ -53,7 +53,7 @@ class ExpressConfigProviderTest extends TestCase
         $paymentHelper->expects($this->atLeastOnce())->method('getMethodInstance')->willReturn($payment);
 
         /** @var UrlInterface|MockObject $urlBuilderMock */
-        $urlBuilderMock = $this->createMock(UrlInterface::class);
+        $urlBuilderMock = $this->getMockForAbstractClass(UrlInterface::class);
 
         $smartButtonConfigMock = $this->createMock(SmartButtonConfig::class);
 

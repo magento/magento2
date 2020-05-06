@@ -50,7 +50,7 @@ class SaveTest extends TestCase
         $this->encryptMock = $this->getMockBuilder(EncryptorInterface::class)
             ->disableOriginalConstructor()
             ->setMethods([])
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->changeMock = $this->getMockBuilder(Change::class)
             ->disableOriginalConstructor()
             ->setMethods([])
@@ -58,7 +58,7 @@ class SaveTest extends TestCase
         $this->cacheMock = $this->getMockBuilder(CacheInterface::class)
             ->disableOriginalConstructor()
             ->setMethods([])
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->requestMock = $this->getMockBuilder(RequestInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['getPost'])
@@ -66,7 +66,7 @@ class SaveTest extends TestCase
         $this->managerMock = $this->getMockBuilder(ManagerInterface::class)
             ->disableOriginalConstructor()
             ->setMethods([])
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->responseMock = $this->getMockBuilder(ResponseInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['setRedirect'])

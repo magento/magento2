@@ -28,7 +28,7 @@ class BaseTest extends TestCase
     {
         $driverMock = $this->getMockBuilder(DriverInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->model = new Base($driverMock);
 
         $class = new \ReflectionClass($this->model);

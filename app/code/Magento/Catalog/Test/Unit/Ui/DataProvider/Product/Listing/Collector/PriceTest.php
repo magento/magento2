@@ -68,7 +68,7 @@ class PriceTest extends TestCase
         $product = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $productRenderInfoDto = $this->createMock(ProductRenderInterface::class);
+        $productRenderInfoDto = $this->getMockForAbstractClass(ProductRenderInterface::class);
         $productRenderInfoDto->expects($this->exactly(2))
             ->method('getPriceInfo')
             ->willReturn([]);
@@ -96,7 +96,7 @@ class PriceTest extends TestCase
         $priceInfo->expects($this->atLeastOnce())
             ->method('getPrice')
             ->willReturn($price);
-        $amount = $this->createMock(AmountInterface::class);
+        $amount = $this->getMockForAbstractClass(AmountInterface::class);
 
         $price->expects($this->atLeastOnce())
             ->method('getAmount')

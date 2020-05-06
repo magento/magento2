@@ -287,7 +287,7 @@ class CollectionTest extends TestCase
             ->getMock();
         $metadataMock = $this->getMockBuilder(EntityMetadataInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->collection->addItem($itemMock);
         $this->galleryResourceMock->expects($this->once())->method('createBatchBaseSelect')->willReturn($selectMock);
         $attributeMock->expects($this->once())->method('getAttributeId')->willReturn($attributeId);

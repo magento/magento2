@@ -59,8 +59,8 @@ class DataTest extends TestCase
         $this->configMock = $context->getScopeConfig();
         $this->_filesystem = $arguments['filesystem'];
         $storeManager = $arguments['storeManager'];
-        $storeManager->expects($this->any())->method('getWebsite')->will($this->returnValue($this->_getWebsiteStub()));
-        $storeManager->expects($this->any())->method('getStore')->will($this->returnValue($this->_getStoreStub()));
+        $storeManager->expects($this->any())->method('getWebsite')->willReturn($this->_getWebsiteStub());
+        $storeManager->expects($this->any())->method('getStore')->willReturn($this->_getStoreStub());
         $this->factoryMock = $arguments['factory'];
         $this->helper = $objectManagerHelper->getObject($className, $arguments);
     }

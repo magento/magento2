@@ -40,7 +40,7 @@ class AbstractIndexerTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->_eventManagerMock = $this->createMock(ManagerInterface::class);
+        $this->_eventManagerMock = $this->getMockForAbstractClass(ManagerInterface::class);
         $this->indexBuilder = $this->createMock(IndexBuilder::class);
 
         $this->indexer = $this->getMockForAbstractClass(
@@ -50,7 +50,7 @@ class AbstractIndexerTest extends TestCase
                 $this->_eventManagerMock
             ]
         );
-        $cacheMock = $this->createMock(CacheInterface::class);
+        $cacheMock = $this->getMockForAbstractClass(CacheInterface::class);
         $reflection = new \ReflectionClass(AbstractIndexer::class);
         $reflectionProperty = $reflection->getProperty('cacheManager');
         $reflectionProperty->setAccessible(true);

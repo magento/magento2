@@ -95,12 +95,12 @@ class AjaxLoadTest extends TestCase
 
         $this->request->expects($this->any())
             ->method('getParam')
-            ->will($this->returnValue($taxRateId));
+            ->willReturn($taxRateId);
 
         $this->taxRateRepository->expects($this->any())
             ->method('get')
             ->with($taxRateId)
-            ->will($this->returnValue($rateMock));
+            ->willReturn($rateMock);
 
         $taxRateConverter = $this->getMockBuilder(Converter::class)
             ->disableOriginalConstructor()
@@ -153,7 +153,7 @@ class AjaxLoadTest extends TestCase
 
         $this->request->expects($this->any())
             ->method('getParam')
-            ->will($this->returnValue($taxRateId));
+            ->willReturn($taxRateId);
 
         $this->taxRateRepository->expects($this->any())
             ->method('get')
@@ -203,7 +203,7 @@ class AjaxLoadTest extends TestCase
 
         $this->request->expects($this->any())
             ->method('getParam')
-            ->will($this->returnValue($taxRateId));
+            ->willReturn($taxRateId);
 
         $this->taxRateRepository->expects($this->any())
             ->method('get')

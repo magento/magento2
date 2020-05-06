@@ -72,7 +72,7 @@ class EditTest extends TestCase
         $helperMock = $this->createMock(Data::class);
         $menuConfigMock = $this->createMock(Config::class);
         $menuMock = $this->getMockBuilder(Menu::class)
-            ->setConstructorArgs([$this->createMock(LoggerInterface::class)])
+            ->setConstructorArgs([$this->getMockForAbstractClass(LoggerInterface::class)])
             ->getMock();
         $menuItemMock = $this->createMock(Item::class);
         $urlBuilder = $this->createMock(Url::class);

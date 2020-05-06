@@ -113,8 +113,8 @@ class AddCommentTest extends TestCase
             Shipment::class,
             ['save', 'addComment', '__wakeup']
         );
-        $this->viewInterfaceMock = $this->createMock(ViewInterface::class);
-        $this->objectManagerMock = $this->createMock(ObjectManagerInterface::class);
+        $this->viewInterfaceMock = $this->getMockForAbstractClass(ViewInterface::class);
+        $this->objectManagerMock = $this->getMockForAbstractClass(ObjectManagerInterface::class);
 
         $contextMock = $this->getMockBuilder(Context::class)
             ->addMethods(['getTitle', '__wakeup'])

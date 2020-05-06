@@ -58,7 +58,7 @@ class LinkPriceTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->priceCurrencyMock = $this->createMock(PriceCurrencyInterface::class);
+        $this->priceCurrencyMock = $this->getMockForAbstractClass(PriceCurrencyInterface::class);
 
         $this->linkPrice = new LinkPrice(
             $this->saleableItemMock,

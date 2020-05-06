@@ -47,9 +47,9 @@ class ImageTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->mediaConfig = $this->createMock(ConfigInterface::class);
-        $this->encryptor = $this->createMock(EncryptorInterface::class);
-        $this->context = $this->createMock(ContextInterface::class);
+        $this->mediaConfig = $this->getMockForAbstractClass(ConfigInterface::class);
+        $this->encryptor = $this->getMockForAbstractClass(EncryptorInterface::class);
+        $this->context = $this->getMockForAbstractClass(ContextInterface::class);
         $this->assetRepo = $this->createMock(Repository::class);
         $this->objectManager = new ObjectManager($this);
         $this->model = $this->objectManager->getObject(

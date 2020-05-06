@@ -69,7 +69,7 @@ class BackupActionItemsTest extends TestCase
             $this->createMock(ObjectManagerProvider::class);
         $this->backupRollback =
             $this->createPartialMock(BackupRollback::class, ['getDBDiskSpace', 'dbBackup']);
-        $objectManager = $this->createMock(ObjectManagerInterface::class);
+        $objectManager = $this->getMockForAbstractClass(ObjectManagerInterface::class);
         $objectManager->expects($this->once())->method('create')->willReturn($this->backupRollback);
         $this->objectManagerProvider->expects($this->once())->method('get')->willReturn($objectManager);
         $this->log = $this->createMock(WebLogger::class);
@@ -111,7 +111,7 @@ class BackupActionItemsTest extends TestCase
         $this->assertArrayHasKey('responseType', $variables);
         $this->assertEquals(ResponseTypeInterface::RESPONSE_TYPE_SUCCESS, $variables['responseType']);
         $this->assertArrayHasKey('size', $variables);
-        $this->assertEquals(true, $variables['size']);
+        $this->assertTrue($variables['size']);
     }
 
     public function testCheckActionWithError()

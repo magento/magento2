@@ -46,7 +46,7 @@ class ModuleServiceTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->moduleListMock = $this->createMock(ModuleListInterface::class);
+        $this->moduleListMock = $this->getMockForAbstractClass(ModuleListInterface::class);
         $this->objectManager = new ObjectManager($this);
         $this->moduleService = $this->objectManager->getObject(
             ModuleService::class,

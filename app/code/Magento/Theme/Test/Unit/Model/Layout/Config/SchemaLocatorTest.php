@@ -29,7 +29,7 @@ class SchemaLocatorTest extends TestCase
     protected function setUp(): void
     {
         /**
-         * @var UrnResolver $urnResolverMock | \PHPUnit_Framework_MockObject_MockObject
+         * @var UrnResolver $urnResolverMock | \PHPUnit\Framework\MockObject\MockObject
          */
         $urnResolverMock = $this->createMock(UrnResolver::class);
         $urnResolverMock->expects($this->once())

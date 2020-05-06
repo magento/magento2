@@ -82,22 +82,22 @@ class RequestTest extends TestCase
                     'isSecure'
                 ]
             )
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->response = $this->createMock(Response::class);
         /** @var ObjectManagerInterface|MockObject */
-        $objectManager = $this->createMock(ObjectManagerInterface::class);
+        $objectManager = $this->getMockForAbstractClass(ObjectManagerInterface::class);
         /** @var ManagerInterface|MockObject */
-        $eventManager = $this->createMock(ManagerInterface::class);
+        $eventManager = $this->getMockForAbstractClass(ManagerInterface::class);
 
         /** @var ProcessorInterface|MockObject */
-        $update = $this->createMock(ProcessorInterface::class);
+        $update = $this->getMockForAbstractClass(ProcessorInterface::class);
         /** @var Layout|MockObject */
         $layout = $this->createMock(Layout::class);
         $layout->expects($this->any())->method('getUpdate')->willReturn($update);
 
         /** @var Config */
         $pageConfig = $this->createMock(Config::class);
-        $pageConfig->expects($this->any())->method('addBodyClass')->will($this->returnSelf());
+        $pageConfig->expects($this->any())->method('addBodyClass')->willReturnSelf();
 
         /** @var Page|MockObject */
         $page = $this->createPartialMock(
@@ -109,7 +109,7 @@ class RequestTest extends TestCase
         $page->expects($this->any())->method('getLayout')->willReturn($layout);
 
         /** @var ViewInterface|MockObject */
-        $view = $this->createMock(ViewInterface::class);
+        $view = $this->getMockForAbstractClass(ViewInterface::class);
         $view->expects($this->any())->method('getLayout')->willReturn($layout);
 
         /** @var ResultFactory|MockObject */
@@ -127,7 +127,7 @@ class RequestTest extends TestCase
             ->willReturn($resultFactory);
 
         $this->helperMock = $this->createMock(Request::class);
-        $this->frameworkOauthSvcMock = $this->createMock(OauthInterface::class);
+        $this->frameworkOauthSvcMock = $this->getMockForAbstractClass(OauthInterface::class);
 
         /** @var ObjectManager $objectManagerHelper */
         $this->objectManagerHelper = new ObjectManager($this);

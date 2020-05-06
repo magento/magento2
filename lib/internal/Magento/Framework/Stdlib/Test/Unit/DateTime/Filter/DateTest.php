@@ -21,7 +21,7 @@ class DateTest extends TestCase
      */
     public function testFilter($inputData, $expectedDate)
     {
-        $localeMock = $this->createMock(TimezoneInterface::class);
+        $localeMock = $this->getMockForAbstractClass(TimezoneInterface::class);
         $localeMock->expects(
             $this->once()
         )->method(
@@ -56,7 +56,7 @@ class DateTest extends TestCase
     {
         $this->expectException('\Exception');
 
-        $localeMock = $this->createMock(TimezoneInterface::class);
+        $localeMock = $this->getMockForAbstractClass(TimezoneInterface::class);
         $localeMock->expects(
             $this->once()
         )->method(

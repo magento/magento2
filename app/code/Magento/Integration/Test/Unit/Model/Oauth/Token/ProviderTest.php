@@ -60,7 +60,7 @@ class ProviderTest extends TestCase
 
         $this->loggerMock = $this->getMockBuilder(LoggerInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->consumerMock = $this->getMockBuilder(ConsumerInterface::class)
             ->setMethods(
@@ -77,7 +77,7 @@ class ProviderTest extends TestCase
                 ]
             )
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->requestTokenMock = $this->getMockBuilder(Token::class)
             ->setMethods(
@@ -125,7 +125,7 @@ class ProviderTest extends TestCase
     public function testValidateConsumer()
     {
         $this->consumerMock->expects($this->once())->method('isValidForTokenExchange')->willReturn(true);
-        $this->assertEquals(true, $this->tokenProvider->validateConsumer($this->consumerMock));
+        $this->assertTrue($this->tokenProvider->validateConsumer($this->consumerMock));
     }
 
     public function testValidateConsumerException()

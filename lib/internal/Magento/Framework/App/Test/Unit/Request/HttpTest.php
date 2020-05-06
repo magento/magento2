@@ -73,9 +73,9 @@ class HttpTest extends TestCase
             Proxy::class,
             ['getRouteFrontName', 'getRouteByFrontName', '__wakeup']
         );
-        $this->infoProcessorMock = $this->createMock(PathInfoProcessorInterface::class);
+        $this->infoProcessorMock = $this->getMockForAbstractClass(PathInfoProcessorInterface::class);
         $this->infoProcessorMock->expects($this->any())->method('process')->willReturnArgument(1);
-        $this->objectManagerMock = $this->createMock(ObjectManagerInterface::class);
+        $this->objectManagerMock = $this->getMockForAbstractClass(ObjectManagerInterface::class);
         $this->converterMock = $this->getMockBuilder(StringUtils::class)
             ->disableOriginalConstructor()
             ->setMethods(['cleanString'])
@@ -148,7 +148,7 @@ class HttpTest extends TestCase
 
     public function testSetRouteNameWithRouter()
     {
-        $router = $this->createMock(ConfigInterface::class);
+        $router = $this->getMockForAbstractClass(ConfigInterface::class);
         $this->routerListMock->expects($this->any())->method('getRouteFrontName')->willReturn($router);
         $this->model = $this->getModel();
         $this->model->setRouteName('RouterName');
@@ -391,7 +391,7 @@ class HttpTest extends TestCase
     {
         $this->model = $this->getModel();
         $_SERVER['REQUEST_METHOD'] = $httpMethod;
-        $this->assertEquals(true, $this->model->isSafeMethod());
+        $this->assertTrue($this->model->isSafeMethod());
     }
 
     /**
@@ -403,7 +403,7 @@ class HttpTest extends TestCase
     {
         $this->model = $this->getModel();
         $_SERVER['REQUEST_METHOD'] = $httpMethod;
-        $this->assertEquals(false, $this->model->isSafeMethod());
+        $this->assertFalse($this->model->isSafeMethod());
     }
 
     /**

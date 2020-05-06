@@ -36,7 +36,7 @@ class LocaleResolverTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->resolver = $this->createMock(ResolverInterface::class);
+        $this->resolver = $this->getMockForAbstractClass(ResolverInterface::class);
         /** @var Config $config */
         $this->config = $this->createMock(Config::class);
 
@@ -58,13 +58,13 @@ class LocaleResolverTest extends TestCase
     {
         $this->resolver->method('getLocale')
             ->willReturn($locale);
-        $this->config->method('getValue')->will(
-            $this->returnValueMap(
+        $this->config->method('getValue')->willReturnMap(
+            
                 [
                     ['in_context', null, false],
                     ['supported_locales', null, 'zh_CN,zh_HK,zh_TW,fr_FR'],
                 ]
-            )
+            
         );
         $this->assertEquals($expectedLocale, $this->model->getLocale());
     }
@@ -91,13 +91,13 @@ class LocaleResolverTest extends TestCase
     {
         $this->resolver->method('getLocale')
             ->willReturn('zh_Hans_CN');
-        $this->config->method('getValue')->will(
-            $this->returnValueMap(
+        $this->config->method('getValue')->willReturnMap(
+            
                 [
                     ['in_context', null, true],
                     ['smart_buttons_supported_locales', null, 'zh_CN,zh_HK,zh_TW,fr_FR'],
                 ]
-            )
+            
         );
         $this->assertEquals('zh_CN', $this->model->getLocale());
     }

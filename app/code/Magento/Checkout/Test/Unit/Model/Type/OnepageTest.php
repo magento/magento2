@@ -145,10 +145,10 @@ class OnepageTest extends TestCase
             '',
             false
         );
-        $this->eventManagerMock = $this->createMock(ManagerInterface::class);
+        $this->eventManagerMock = $this->getMockForAbstractClass(ManagerInterface::class);
         $this->checkoutHelperMock = $this->createMock(Data::class);
         $this->customerUrlMock = $this->createMock(Url::class);
-        $this->loggerMock = $this->createMock(LoggerInterface::class);
+        $this->loggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
         $this->checkoutSessionMock = $this->getMockBuilder(Session::class)
             ->addMethods(['getLastOrderId'])
             ->onlyMethods(['getQuote', 'setStepData', 'getStepData'])
@@ -158,14 +158,14 @@ class OnepageTest extends TestCase
             \Magento\Customer\Model\Session::class,
             ['getCustomerDataObject', 'isLoggedIn']
         );
-        $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
+        $this->storeManagerMock = $this->getMockForAbstractClass(StoreManagerInterface::class);
         $this->requestMock = $this->getMockBuilder(Http::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->addressFactoryMock = $this->createMock(AddressFactory::class);
         $this->formFactoryMock = $this->createMock(\Magento\Customer\Model\Metadata\FormFactory::class);
         $this->customerFactoryMock = $this->createMock(CustomerFactory::class);
-        $this->quoteManagementMock = $this->createMock(CartManagementInterface::class);
+        $this->quoteManagementMock = $this->getMockForAbstractClass(CartManagementInterface::class);
         $this->orderFactoryMock = $this->createPartialMock(OrderFactory::class, ['create']);
         $this->copyMock = $this->createMock(Copy::class);
         $this->messageManagerMock = $this->createMock(\Magento\Framework\Message\ManagerInterface::class);
@@ -178,7 +178,7 @@ class OnepageTest extends TestCase
         $this->customerDataFactoryMock = $this->createMock(CustomerInterfaceFactory::class);
 
         $this->randomMock = $this->createMock(Random::class);
-        $this->encryptorMock = $this->createMock(EncryptorInterface::class);
+        $this->encryptorMock = $this->getMockForAbstractClass(EncryptorInterface::class);
 
         $this->customerRepositoryMock = $this->getMockForAbstractClass(
             CustomerRepositoryInterface::class,
@@ -189,7 +189,7 @@ class OnepageTest extends TestCase
 
         $orderSenderMock = $this->createMock(OrderSender::class);
 
-        $this->quoteRepositoryMock = $this->createMock(CartRepositoryInterface::class);
+        $this->quoteRepositoryMock = $this->getMockForAbstractClass(CartRepositoryInterface::class);
 
         $this->extensibleDataObjectConverterMock = $this->getMockBuilder(
             ExtensibleDataObjectConverter::class

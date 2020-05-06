@@ -81,7 +81,7 @@ class ContentTest extends TestCase
             ->onlyMethods(['getDirectoryRead'])
             ->disableOriginalConstructor()
             ->getMock();
-        $this->readMock = $this->createMock(ReadInterface::class);
+        $this->readMock = $this->getMockForAbstractClass(ReadInterface::class);
         $this->galleryMock = $this->createMock(Gallery::class);
         $this->mediaConfigMock = $this->createPartialMock(
             Config::class,
@@ -89,7 +89,7 @@ class ContentTest extends TestCase
         );
         $this->jsonEncoderMock = $this->getMockBuilder(EncoderInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->databaseMock = $this->getMockBuilder(Database::class)
             ->disableOriginalConstructor()

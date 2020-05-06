@@ -88,7 +88,7 @@ class ConfigTest extends TestCase
                     'getLocale'
                 ]
             )
-            ->getMock();
+            ->getMockForAbstractClass();
         $repo->expects($this->once())->method('getStaticViewFileContext')->willReturn($this->context);
         $this->minificationMock = $this->getMockBuilder(Minification::class)
             ->disableOriginalConstructor()

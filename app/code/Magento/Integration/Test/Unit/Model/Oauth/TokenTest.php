@@ -147,7 +147,7 @@ class TokenTest extends TestCase
         $eventManagerMock = $this->getMockBuilder(ManagerInterface::class)
             ->setMethods(['dispatch'])
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->contextMock->expects($this->once())
             ->method('getEventDispatcher')

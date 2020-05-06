@@ -43,7 +43,7 @@ class EraserTest extends TestCase
     protected function setUp(): void
     {
         $resource = $this->createMock(ResourceConnection::class);
-        $this->connection = $this->createMock(AdapterInterface::class);
+        $this->connection = $this->getMockForAbstractClass(AdapterInterface::class);
         $resource->expects($this->any())->method('getConnection')->willReturn($this->connection);
         $this->indexerHelper = $this->createMock(Indexer::class);
         $this->indexerHelper->expects($this->any())->method('getTable')->willReturnArgument(0);
@@ -52,7 +52,7 @@ class EraserTest extends TestCase
             [2, 'store_2_flat'],
         ]);
 
-        $this->storeManager = $this->createMock(StoreManagerInterface::class);
+        $this->storeManager = $this->getMockForAbstractClass(StoreManagerInterface::class);
         $this->model = new Eraser(
             $resource,
             $this->indexerHelper,

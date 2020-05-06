@@ -44,7 +44,7 @@ class SortbyTest extends TestCase
     {
         $this->markTestSkipped('Due to MAGETWO-48956');
         $this->_objectHelper = new ObjectManager($this);
-        $this->_scopeConfig = $this->createMock(ScopeConfigInterface::class);
+        $this->_scopeConfig = $this->getMockForAbstractClass(ScopeConfigInterface::class);
         $this->_model = $this->_objectHelper->getObject(
             Sortby::class,
             ['scopeConfig' => $this->_scopeConfig]
@@ -73,7 +73,7 @@ class SortbyTest extends TestCase
      */
     public function testBeforeSave($attributeCode, $data, $expected)
     {
-        $this->_attribute->expects($this->any())->method('getName')->will($this->returnValue($attributeCode));
+        $this->_attribute->expects($this->any())->method('getName')->willReturn($attributeCode);
         $object = new DataObject($data);
         $this->_model->beforeSave($object);
         $this->assertTrue($object->hasData($attributeCode));
@@ -122,7 +122,7 @@ class SortbyTest extends TestCase
      */
     public function testAfterLoad($attributeCode, $data, $expected)
     {
-        $this->_attribute->expects($this->any())->method('getName')->will($this->returnValue($attributeCode));
+        $this->_attribute->expects($this->any())->method('getName')->willReturn($attributeCode);
         $object = new DataObject($data);
         $this->_model->afterLoad($object);
         $this->assertTrue($object->hasData($attributeCode));
@@ -161,15 +161,15 @@ class SortbyTest extends TestCase
      */
     public function testValidate($attributeData, $data, $expected)
     {
-        $this->_attribute->expects($this->any())->method('getName')->will($this->returnValue($attributeData['code']));
+        $this->_attribute->expects($this->any())->method('getName')->willReturn($attributeData['code']);
         $this->_attribute
             ->expects($this->at(1))
             ->method('getIsRequired')
-            ->will($this->returnValue($attributeData['isRequired']));
+            ->willReturn($attributeData['isRequired']);
         $this->_attribute
             ->expects($this->any())
             ->method('isValueEmpty')
-            ->will($this->returnValue($attributeData['isValueEmpty']));
+            ->willReturn($attributeData['isValueEmpty']);
         $object = new DataObject($data);
         $this->assertSame($expected, $this->_model->validate($object));
     }
@@ -205,9 +205,9 @@ class SortbyTest extends TestCase
 
     public function testValidateUnique()
     {
-        $this->_attribute->expects($this->any())->method('getName')->will($this->returnValue('attribute_name'));
+        $this->_attribute->expects($this->any())->method('getName')->willReturn('attribute_name');
         $this->_attribute->expects($this->at(1))->method('getIsRequired');
-        $this->_attribute->expects($this->at(2))->method('getIsUnique')->will($this->returnValue(true));
+        $this->_attribute->expects($this->at(2))->method('getIsUnique')->willReturn(true);
 
         $entityMock = $this->getMockForAbstractClass(
             AbstractEntity::class,
@@ -218,7 +218,7 @@ class SortbyTest extends TestCase
             true,
             ['checkAttributeUniqueValue']
         );
-        $this->_attribute->expects($this->any())->method('getEntity')->will($this->returnValue($entityMock));
+        $this->_attribute->expects($this->any())->method('getEntity')->willReturn($entityMock);
         $entityMock->expects($this->at(0))->method('checkAttributeUniqueValue')->willReturn(true);
         $this->assertTrue($this->_model->validate(new DataObject()));
     }
@@ -226,9 +226,9 @@ class SortbyTest extends TestCase
     public function testValidateUniqueException()
     {
         $this->expectException('Magento\Framework\Exception\LocalizedException');
-        $this->_attribute->expects($this->any())->method('getName')->will($this->returnValue('attribute_name'));
+        $this->_attribute->expects($this->any())->method('getName')->willReturn('attribute_name');
         $this->_attribute->expects($this->at(1))->method('getIsRequired');
-        $this->_attribute->expects($this->at(2))->method('getIsUnique')->will($this->returnValue(true));
+        $this->_attribute->expects($this->at(2))->method('getIsUnique')->willReturn(true);
 
         $entityMock = $this->getMockForAbstractClass(
             AbstractEntity::class,
@@ -248,8 +248,8 @@ class SortbyTest extends TestCase
             true,
             ['getLabel']
         );
-        $this->_attribute->expects($this->any())->method('getEntity')->will($this->returnValue($entityMock));
-        $this->_attribute->expects($this->any())->method('getFrontend')->will($this->returnValue($frontMock));
+        $this->_attribute->expects($this->any())->method('getEntity')->willReturn($entityMock);
+        $this->_attribute->expects($this->any())->method('getFrontend')->willReturn($frontMock);
         $entityMock->expects($this->at(0))->method('checkAttributeUniqueValue')->willReturn(false);
         $this->assertTrue($this->_model->validate(new DataObject()));
     }
@@ -261,8 +261,8 @@ class SortbyTest extends TestCase
      */
     public function testValidateDefaultSort($attributeCode, $data)
     {
-        $this->_attribute->expects($this->any())->method('getName')->will($this->returnValue($attributeCode));
-        $this->_scopeConfig->expects($this->any())->method('getValue')->will($this->returnValue('value2'));
+        $this->_attribute->expects($this->any())->method('getName')->willReturn($attributeCode);
+        $this->_scopeConfig->expects($this->any())->method('getValue')->willReturn('value2');
         $object = new DataObject($data);
         $this->assertTrue($this->_model->validate($object));
     }
@@ -307,8 +307,8 @@ class SortbyTest extends TestCase
     public function testValidateDefaultSortException($attributeCode, $data)
     {
         $this->expectException('Magento\Framework\Exception\LocalizedException');
-        $this->_attribute->expects($this->any())->method('getName')->will($this->returnValue($attributeCode));
-        $this->_scopeConfig->expects($this->any())->method('getValue')->will($this->returnValue('another value'));
+        $this->_attribute->expects($this->any())->method('getName')->willReturn($attributeCode);
+        $this->_scopeConfig->expects($this->any())->method('getValue')->willReturn('another value');
         $object = new DataObject($data);
         $this->_model->validate($object);
     }

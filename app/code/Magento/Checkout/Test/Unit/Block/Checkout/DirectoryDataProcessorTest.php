@@ -81,7 +81,7 @@ class DirectoryDataProcessorTest extends TestCase
         $this->directoryDataHelperMock = $this->createMock(Data::class);
         $this->storeManagerMock = $this->getMockBuilder(StoreManagerInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->model = new DirectoryDataProcessor(
             $this->countryCollectionFactoryMock,
@@ -101,7 +101,7 @@ class DirectoryDataProcessorTest extends TestCase
 
         $storeMock = $this->getMockBuilder(StoreInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $storeMock->expects($this->atLeastOnce())->method('getId')->willReturn(42);
         $this->storeManagerMock->expects($this->atLeastOnce())->method('getStore')->willReturn($storeMock);
 

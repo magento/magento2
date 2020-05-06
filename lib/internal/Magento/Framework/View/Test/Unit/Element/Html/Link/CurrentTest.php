@@ -34,7 +34,7 @@ class CurrentTest extends TestCase
     protected function setUp(): void
     {
         $this->_objectManager = new ObjectManager($this);
-        $this->_urlBuilderMock = $this->createMock(UrlInterface::class);
+        $this->_urlBuilderMock = $this->getMockForAbstractClass(UrlInterface::class);
         $this->_requestMock = $this->createMock(Http::class);
     }
 

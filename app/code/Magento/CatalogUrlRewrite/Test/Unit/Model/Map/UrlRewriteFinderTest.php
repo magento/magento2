@@ -46,7 +46,7 @@ class UrlRewriteFinderTest extends TestCase
     {
         $this->serializerMock = $this->createMock(Json::class);
         $this->databaseMapPoolMock = $this->createMock(DatabaseMapPool::class);
-        $this->urlFinderMock = $this->createMock(UrlFinderInterface::class);
+        $this->urlFinderMock = $this->getMockForAbstractClass(UrlFinderInterface::class);
         $this->urlRewriteFactoryMock = $this->createPartialMock(UrlRewriteFactory::class, ['create']);
         $this->urlRewritePrototypeMock = new UrlRewrite([], $this->serializerMock);
 

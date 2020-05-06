@@ -81,7 +81,7 @@ class ServerTest extends TestCase
         );
 
         $areaListMock = $this->createMock(AreaList::class);
-        $configScopeMock = $this->createMock(ScopeInterface::class);
+        $configScopeMock = $this->getMockForAbstractClass(ScopeInterface::class);
         $areaListMock->expects($this->any())->method('getFrontName')->willReturn('soap');
 
         $this->_requestMock = $this->getMockBuilder(
@@ -96,7 +96,7 @@ class ServerTest extends TestCase
 
         $this->_typeProcessor = $this->createMock(TypeProcessor::class);
         $this->wsdlGenerator = $this->createMock(Generator::class);
-        $this->_scopeConfig = $this->createMock(ScopeConfigInterface::class);
+        $this->_scopeConfig = $this->getMockForAbstractClass(ScopeConfigInterface::class);
 
         /** Init SUT. */
         $this->_soapServer = new Server(
@@ -167,7 +167,7 @@ class ServerTest extends TestCase
     {
         $param = "testModule1AllSoapAndRest:V1,testModule2AllSoapNoRest:V1";
         $serviceKey = Server::REQUEST_PARAM_SERVICES;
-        $this->_requestMock->expects($this->any())->method('getParam')->will($this->returnValue($param));
+        $this->_requestMock->expects($this->any())->method('getParam')->willReturn($param);
         $expectedResult = "http://magento.com/soap/storeCode?{$serviceKey}={$param}&wsdl=1";
         $actualResult = $this->_soapServer->generateUri(true);
         $this->assertEquals($expectedResult, urldecode($actualResult), 'URI (with WSDL param) generated is invalid.');
@@ -180,7 +180,7 @@ class ServerTest extends TestCase
     {
         $param = "testModule1AllSoapAndRest:V1,testModule2AllSoapNoRest:V1";
         $serviceKey = Server::REQUEST_PARAM_SERVICES;
-        $this->_requestMock->expects($this->any())->method('getParam')->will($this->returnValue($param));
+        $this->_requestMock->expects($this->any())->method('getParam')->willReturn($param);
         $expectedResult = "http://magento.com/soap/storeCode?{$serviceKey}={$param}";
         $actualResult = $this->_soapServer->generateUri(false);
         $this->assertEquals(

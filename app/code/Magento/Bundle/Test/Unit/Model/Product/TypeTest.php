@@ -144,7 +144,7 @@ class TypeTest extends TestCase
             ->getMock();
         $this->storeManager = $this->getMockBuilder(StoreManagerInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->bundleOptionFactory = $this->getMockBuilder(OptionFactory::class)
             ->setMethods(['create'])
             ->disableOriginalConstructor()

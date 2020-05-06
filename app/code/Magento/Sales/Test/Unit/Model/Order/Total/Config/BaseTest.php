@@ -40,7 +40,7 @@ class BaseTest extends TestCase
     protected function setUp(): void
     {
         $this->configCacheType = $this->createMock(Config::class);
-        $this->logger = $this->createMock(LoggerInterface::class);
+        $this->logger = $this->getMockForAbstractClass(LoggerInterface::class);
         $this->salesConfig = $this->createMock(\Magento\Sales\Model\Config::class);
         $this->orderTotalFactory = $this->createMock(TotalFactory::class);
         $this->serializer = $this->getMockForAbstractClass(SerializerInterface::class);

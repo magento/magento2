@@ -55,7 +55,7 @@ class MenuTest extends TestCase
             ->getMock();
         $urlMock = $this->getMockBuilder(UrlInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $iteratorFactoryMock = $this->getMockBuilder(IteratorFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -67,7 +67,7 @@ class MenuTest extends TestCase
             ->getMock();
         $localeResolverMock = $this->getMockBuilder(ResolverInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $anchorRendererMock = $this->getMockBuilder(AnchorRenderer::class)
             ->disableOriginalConstructor()
             ->getMock();

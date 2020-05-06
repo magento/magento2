@@ -44,7 +44,7 @@ class OrderIdentityTest extends TestCase
         $this->scopeConfigInterfaceMock = $this->createMock(
             ScopeConfigInterface::class
         );
-        $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
+        $this->storeManagerMock = $this->getMockForAbstractClass(StoreManagerInterface::class);
 
         $this->storeMock = $this->getMockBuilder(Store::class)
             ->addMethods(['getStoreId'])

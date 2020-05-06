@@ -63,11 +63,11 @@ class FieldDataConverterTest extends TestCase
     protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
-        $this->connectionMock = $this->createMock(AdapterInterface::class);
+        $this->connectionMock = $this->getMockForAbstractClass(AdapterInterface::class);
         $this->queryGeneratorMock = $this->createMock(Generator::class);
-        $this->dataConverterMock = $this->createMock(DataConverterInterface::class);
+        $this->dataConverterMock = $this->getMockForAbstractClass(DataConverterInterface::class);
         $this->selectMock = $this->createMock(Select::class);
-        $this->queryModifierMock = $this->createMock(QueryModifierInterface::class);
+        $this->queryModifierMock = $this->getMockForAbstractClass(QueryModifierInterface::class);
         $this->selectFactoryMock = $this->getMockBuilder(SelectFactory::class)
             ->disableOriginalConstructor()
             ->getMock();

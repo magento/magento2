@@ -122,7 +122,7 @@ class PrintActionTest extends TestCase
             ->getMock();
         $this->objectManagerMock = $this->getMockBuilder(ObjectManagerInterface::class)
             ->getMock();
-        $this->creditmemoRepositoryMock = $this->createMock(CreditmemoRepositoryInterface::class);
+        $this->creditmemoRepositoryMock = $this->getMockForAbstractClass(CreditmemoRepositoryInterface::class);
         $this->creditmemoMock = $this->getMockBuilder(Creditmemo::class)
             ->disableOriginalConstructor()
             ->getMock();

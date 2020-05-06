@@ -33,9 +33,9 @@ class DataTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->readerMock = $this->createMock(ReaderInterface::class);
-        $this->cacheMock = $this->createMock(CacheInterface::class);
-        $this->serializerMock = $this->createMock(SerializerInterface::class);
+        $this->readerMock = $this->getMockForAbstractClass(ReaderInterface::class);
+        $this->cacheMock = $this->getMockForAbstractClass(CacheInterface::class);
+        $this->serializerMock = $this->getMockForAbstractClass(SerializerInterface::class);
     }
 
     public function testGetConfigNotCached()
@@ -59,7 +59,7 @@ class DataTest extends TestCase
         );
         $this->assertEquals($data, $config->get());
         $this->assertEquals('b', $config->get('a'));
-        $this->assertEquals(null, $config->get('a/b'));
+        $this->assertNull($config->get('a/b'));
         $this->assertEquals(33, $config->get('a/b', 33));
     }
 

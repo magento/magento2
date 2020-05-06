@@ -78,7 +78,7 @@ class GuestCartManagementTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->cartRepositoryMock = $this->createMock(CartRepositoryInterface::class);
+        $this->cartRepositoryMock = $this->getMockForAbstractClass(CartRepositoryInterface::class);
 
         $this->quoteMock = $this->getMockForAbstractClass(
             CartInterface::class,
@@ -125,7 +125,7 @@ class GuestCartManagementTest extends TestCase
         $this->quoteIdMaskFactoryMock->expects($this->once())->method('create')->willReturn($this->quoteIdMaskMock);
         $this->quoteManagementMock->expects($this->once())->method('assignCustomer')->willReturn(true);
 
-        $this->assertEquals(true, $this->guestCartManagement->assignCustomer($cartId, $customerId, $storeId));
+        $this->assertTrue($this->guestCartManagement->assignCustomer($cartId, $customerId, $storeId));
     }
 
     public function testPlaceOrder()

@@ -83,8 +83,7 @@ class SidebarTest extends TestCase
 
     public function testAroundIsConfigurationRequiredWhenProductGrouped()
     {
-        $this->assertEquals(
-            true,
+        $this->assertTrue(
             $this->sidebarMock->aroundIsConfigurationRequired(
                 $this->subjectMock,
                 $this->closureMock,

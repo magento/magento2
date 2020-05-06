@@ -37,11 +37,11 @@ class MultilineTest extends TestCase
     protected function setUp(): void
     {
         /** @var TimezoneInterface $timezoneMock */
-        $timezoneMock = $this->createMock(TimezoneInterface::class);
+        $timezoneMock = $this->getMockForAbstractClass(TimezoneInterface::class);
         /** @var LoggerInterface $loggerMock */
-        $loggerMock = $this->createMock(LoggerInterface::class);
+        $loggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
         /** @var ResolverInterface $localeResolverMock */
-        $localeResolverMock = $this->createMock(ResolverInterface::class);
+        $localeResolverMock = $this->getMockForAbstractClass(ResolverInterface::class);
         $this->stringMock = $this->createMock(StringUtils::class);
 
         $this->model = new Multiline(
@@ -62,7 +62,7 @@ class MultilineTest extends TestCase
     public function testExtractValue($param, $expectedResult)
     {
         /** @var MockObject|RequestInterface $requestMock */
-        $requestMock = $this->createMock(RequestInterface::class);
+        $requestMock = $this->getMockForAbstractClass(RequestInterface::class);
         /** @var MockObject|Attribute $attributeMock */
         $attributeMock = $this->createMock(Attribute::class);
 

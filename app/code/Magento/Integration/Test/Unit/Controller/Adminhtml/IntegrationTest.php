@@ -155,7 +155,7 @@ abstract class IntegrationTest extends TestCase
     {
         /** @var ObjectManager  $objectManagerHelper */
         $this->_objectManagerHelper = new ObjectManager($this);
-        $this->_objectManagerMock = $this->createMock(ObjectManagerInterface::class);
+        $this->_objectManagerMock = $this->getMockForAbstractClass(ObjectManagerInterface::class);
         // Initialize mocks which are used in several test cases
         $this->_configMock = $this->getMockBuilder(
             ScopeConfigInterface::class
@@ -164,7 +164,7 @@ abstract class IntegrationTest extends TestCase
         $this->_eventManagerMock = $this->getMockBuilder(ManagerInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['dispatch'])
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->_backendSessionMock = $this->getMockBuilder(Session::class)
             ->setMethods(['__call', 'getIntegrationData'])
             ->disableOriginalConstructor()
@@ -267,7 +267,7 @@ abstract class IntegrationTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $menuMock = $this->getMockBuilder(\Magento\Backend\Model\Menu::class)
-            ->setConstructorArgs([$this->createMock(LoggerInterface::class)])
+            ->setConstructorArgs([$this->getMockForAbstractClass(LoggerInterface::class)])
             ->getMock();
         $loggerMock = $this->getMockBuilder(LoggerInterface::class)
             ->getMock();

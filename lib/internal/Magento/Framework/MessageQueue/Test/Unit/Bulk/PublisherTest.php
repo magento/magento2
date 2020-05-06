@@ -87,11 +87,11 @@ class PublisherTest extends TestCase
         $this->publisherConfig = $this
             ->getMockBuilder(ConfigInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->messageIdGenerator = $this
             ->getMockBuilder(MessageIdGeneratorInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $objectManager = new ObjectManager($this);
         $this->publisher = $objectManager->getObject(
@@ -124,7 +124,7 @@ class PublisherTest extends TestCase
             ->method('encode')->with($topicName, $message)->willReturn($encodedMessage);
         $envelope = $this->getMockBuilder(EnvelopeInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->messageIdGenerator->expects($this->once())
             ->method('generate')->with($topicName)->willReturn($messageId);
         $this->envelopeFactory->expects($this->once())->method('create')->with(
@@ -139,13 +139,13 @@ class PublisherTest extends TestCase
         $publisher = $this
             ->getMockBuilder(PublisherConfigItemInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->publisherConfig->expects($this->once())
             ->method('getPublisher')->with($topicName)->willReturn($publisher);
         $connection = $this
             ->getMockBuilder(PublisherConnectionInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $publisher->expects($this->once())->method('getConnection')->with()->willReturn($connection);
         $connection->expects($this->once())->method('getName')->with()->willReturn($connectionName);
         $exchange = $this

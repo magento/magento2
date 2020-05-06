@@ -25,7 +25,7 @@ class FactoryTest extends TestCase
         $object = (new ObjectManager($this))->getObject(DataObject::class);
 
         /** @var ObjectManagerInterface|MockObject $objectManager */
-        $objectManager = $this->createMock(ObjectManagerInterface::class);
+        $objectManager = $this->getMockForAbstractClass(ObjectManagerInterface::class);
         $objectManager->expects($this->once())->method('create')->with($className, $data)
             ->willReturn($object);
 
@@ -46,10 +46,10 @@ class FactoryTest extends TestCase
         $data = ['data'];
 
         /** @var ReaderInterface|MockObject $object */
-        $object = $this->createMock(ReaderInterface::class);
+        $object = $this->getMockForAbstractClass(ReaderInterface::class);
 
         /** @var ObjectManagerInterface|MockObject $objectManager */
-        $objectManager = $this->createMock(ObjectManagerInterface::class);
+        $objectManager = $this->getMockForAbstractClass(ObjectManagerInterface::class);
         $objectManager->expects($this->once())->method('create')->with($className, $data)
             ->willReturn($object);
 

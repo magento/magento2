@@ -87,7 +87,7 @@ class AbstractMapperTest extends TestCase
             []
         );
         $this->selectMock = $this->createMock(Select::class);
-        $this->loggerMock = $this->createMock(LoggerInterface::class);
+        $this->loggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
         $this->fetchStrategyMock = $this->getMockForAbstractClass(
             FetchStrategyInterface::class,
             [],

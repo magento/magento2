@@ -50,7 +50,7 @@ class DateTest extends TestCase
         $this->factoryMock = $this->createMock(Factory::class);
         $this->collectionFactoryMock = $this->createMock(CollectionFactory::class);
         $this->escaperMock = $this->createMock(Escaper::class);
-        $this->localeDateMock = $this->createMock(TimezoneInterface::class);
+        $this->localeDateMock = $this->getMockForAbstractClass(TimezoneInterface::class);
         $this->model = new Date(
             $this->factoryMock,
             $this->collectionFactoryMock,

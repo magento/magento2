@@ -54,7 +54,7 @@ class OptionTest extends TestCase
             ->with('current_product')
             ->willReturn($this->product);
 
-        $this->layout = $this->createMock(LayoutInterface::class);
+        $this->layout = $this->getMockForAbstractClass(LayoutInterface::class);
 
         $context = $this->getMockBuilder(Context::class)
             ->disableOriginalConstructor()
@@ -127,7 +127,7 @@ class OptionTest extends TestCase
             ->getMock();
 
         $priceInfo = $this->createMock(Base::class);
-        $amount = $this->createMock(AmountInterface::class);
+        $amount = $this->getMockForAbstractClass(AmountInterface::class);
 
         $priceRenderBlock = $this->getMockBuilder(Render::class)
             ->disableOriginalConstructor()

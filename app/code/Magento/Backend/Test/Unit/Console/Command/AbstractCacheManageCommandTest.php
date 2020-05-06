@@ -23,7 +23,7 @@ abstract class AbstractCacheManageCommandTest extends AbstractCacheCommandTest
     {
         $this->eventManagerMock = $this->getMockBuilder(ManagerInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         parent::setUp();
     }
 

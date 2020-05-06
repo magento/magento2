@@ -88,11 +88,11 @@ class PluginTest extends TestCase
             MessageFactory::class,
             ['create']
         );
-        $this->bulkStatusMock = $this->createMock(BulkStatusInterface::class);
+        $this->bulkStatusMock = $this->getMockForAbstractClass(BulkStatusInterface::class);
 
-        $this->userContextMock = $this->createMock(UserContextInterface::class);
+        $this->userContextMock = $this->getMockForAbstractClass(UserContextInterface::class);
         $this->operationsDetailsMock = $this->createMock(Details::class);
-        $this->authorizationMock = $this->createMock(AuthorizationInterface::class);
+        $this->authorizationMock = $this->getMockForAbstractClass(AuthorizationInterface::class);
         $this->messageMock = $this->createMock(Message::class);
         $this->collectionMock = $this->createMock(Synchronized::class);
         $this->bulkNotificationMock = $this->createMock(BulkNotificationManagement::class);

@@ -143,7 +143,7 @@ class AbstractSwatchTest extends TestCase
                 ->expects($this->once())
                 ->method('setAttributeFilter')
                 ->with(23)
-                ->will($this->returnSelf());
+                ->willReturnSelf();
 
             $this->connectionMock
                 ->expects($this->any())

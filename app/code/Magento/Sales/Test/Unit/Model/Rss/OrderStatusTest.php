@@ -110,17 +110,17 @@ class OrderStatusTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->objectManager = $this->createMock(ObjectManagerInterface::class);
-        $this->urlInterface = $this->createMock(UrlInterface::class);
-        $this->requestInterface = $this->createMock(RequestInterface::class);
+        $this->objectManager = $this->getMockForAbstractClass(ObjectManagerInterface::class);
+        $this->urlInterface = $this->getMockForAbstractClass(UrlInterface::class);
+        $this->requestInterface = $this->getMockForAbstractClass(RequestInterface::class);
         $this->orderStatusFactory =
             $this->getMockBuilder(OrderStatusFactory::class)
                 ->setMethods(['create'])
                 ->disableOriginalConstructor()
                 ->getMock();
-        $this->timezoneInterface = $this->createMock(TimezoneInterface::class);
+        $this->timezoneInterface = $this->getMockForAbstractClass(TimezoneInterface::class);
         $this->orderFactory = $this->createPartialMock(OrderFactory::class, ['create']);
-        $this->scopeConfigInterface = $this->createMock(ScopeConfigInterface::class);
+        $this->scopeConfigInterface = $this->getMockForAbstractClass(ScopeConfigInterface::class);
 
         $this->order = $this->getMockBuilder(Order::class)
             ->setMethods(

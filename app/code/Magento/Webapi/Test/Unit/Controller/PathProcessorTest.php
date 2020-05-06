@@ -37,7 +37,7 @@ class PathProcessorTest extends TestCase
 
     protected function setUp(): void
     {
-        $store = $this->createMock(StoreInterface::class);
+        $store = $this->getMockForAbstractClass(StoreInterface::class);
         $store->method('getId')->willReturn(2);
 
         $this->storeManagerMock = $this->createConfiguredMock(
@@ -49,7 +49,7 @@ class PathProcessorTest extends TestCase
         );
         $this->storeManagerMock->expects($this->once())->method('getStores');
 
-        $this->localeResolverMock = $this->createMock(ResolverInterface::class);
+        $this->localeResolverMock = $this->getMockForAbstractClass(ResolverInterface::class);
         $this->localeResolverMock->method('emulate')->with(2);
 
         $this->model = new PathProcessor($this->storeManagerMock, $this->localeResolverMock);

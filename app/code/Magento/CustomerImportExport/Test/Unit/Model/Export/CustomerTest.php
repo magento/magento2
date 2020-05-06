@@ -94,11 +94,11 @@ class CustomerTest extends TestCase
         );
 
         $this->_model = new Customer(
-            $this->createMock(ScopeConfigInterface::class),
+            $this->getMockForAbstractClass(ScopeConfigInterface::class),
             $storeManager,
             $this->createMock(Factory::class),
             $this->createMock(CollectionByPagesIteratorFactory::class),
-            $this->createMock(TimezoneInterface::class),
+            $this->getMockForAbstractClass(TimezoneInterface::class),
             $this->createMock(Config::class),
             $this->createMock(CollectionFactory::class),
             $this->_getModelDependencies()

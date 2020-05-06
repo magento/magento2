@@ -19,7 +19,7 @@ class CompositeTest extends TestCase
     {
         $factoryMock = $this->createMock(CopyConstructorFactory::class);
 
-        $constructorMock = $this->createMock(CopyConstructorInterface::class);
+        $constructorMock = $this->getMockForAbstractClass(CopyConstructorInterface::class);
 
         $factoryMock->expects(
             $this->exactly(2)

@@ -174,7 +174,7 @@ class ImageEntryConverterTest extends TestCase
                 1 => 'swatch_image',
             ]
         );
-        $imageContentInterface = $this->createMock(ImageContentInterface::class);
+        $imageContentInterface = $this->getMockForAbstractClass(ImageContentInterface::class);
 
         $imageContentInterface->expects($this->once())->method('getBase64EncodedData')->willReturn(
             base64_encode('some_content')

@@ -55,7 +55,7 @@ class DeveloperTest extends TestCase
         ObjectManager::setInstance($objectManagerMock);
         $diConfigMock = $this->getMockBuilder(ConfigInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $configLoaderMock = $this->getMockBuilder(ConfigLoader::class)
             ->disableOriginalConstructor()
@@ -66,7 +66,7 @@ class DeveloperTest extends TestCase
             [ScopeInterface::class,
                 $this->getMockBuilder(ScopeInterface::class)
                     ->disableOriginalConstructor()
-                    ->getMock()
+                    ->getMockForAbstractClass()
             ],
             [ConfigCache::class,
                 $this->getMockBuilder(ConfigCache::class)

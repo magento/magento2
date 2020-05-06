@@ -59,7 +59,7 @@ class EngineResolverTest extends TestCase
     {
         $this->scopeConfig = $this->getMockBuilder(ScopeConfigInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->loggerMock = $this->getMockBuilder(LoggerInterface::class)
             ->getMockForAbstractClass();
 

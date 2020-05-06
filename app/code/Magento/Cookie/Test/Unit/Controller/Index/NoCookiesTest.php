@@ -72,7 +72,7 @@ class NoCookiesTest extends TestCase
             ->getMock();
         $this->redirectResponseMock = $this->getMockBuilder(RedirectInterface::class)
             ->getMock();
-        $this->viewMock = $this->createMock(ViewInterface::class);
+        $this->viewMock = $this->getMockForAbstractClass(ViewInterface::class);
 
         $objectManager = new ObjectManagerHelper($this);
         $this->controller = $objectManager->getObject(

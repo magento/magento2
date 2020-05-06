@@ -53,7 +53,7 @@ class ConfigurationTest extends TestCase
         $this->context = $this->getMockBuilder(Context::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->scopeConfig = $this->createMock(ScopeConfigInterface::class);
+        $this->scopeConfig = $this->getMockForAbstractClass(ScopeConfigInterface::class);
         $this->productConfig = $this->getMockBuilder(\Magento\Catalog\Helper\Product\Configuration::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -97,12 +97,12 @@ class ConfigurationTest extends TestCase
 
     public function testGetOptions()
     {
-        $item = $this->createMock(ItemInterface::class);
+        $item = $this->getMockForAbstractClass(ItemInterface::class);
         $product = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
             ->setMethods(['_wakeup', 'getLinksTitle', 'getTypeInstance'])
             ->getMock();
-        $option = $this->createMock(OptionInterface::class);
+        $option = $this->getMockForAbstractClass(OptionInterface::class);
         $productType = $this->getMockBuilder(Type::class)
             ->disableOriginalConstructor()
             ->setMethods(['getLinks'])

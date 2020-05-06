@@ -283,7 +283,7 @@ class OptionManagementTest extends TestCase
             true,
             ['getOptions']
         );
-        $optionsMock = [$this->createMock(EavAttributeOptionInterface::class)];
+        $optionsMock = [$this->getMockForAbstractClass(EavAttributeOptionInterface::class)];
         $this->attributeRepositoryMock->expects($this->once())->method('get')->with($entityType, $attributeCode)
             ->willReturn($attributeMock);
         $attributeMock->expects($this->once())->method('getOptions')->willReturn($optionsMock);

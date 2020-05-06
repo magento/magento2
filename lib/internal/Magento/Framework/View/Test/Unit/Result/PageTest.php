@@ -125,7 +125,7 @@ class PageTest extends TestCase
             ]
         );
 
-        $this->translateInline = $this->createMock(InlineInterface::class);
+        $this->translateInline = $this->getMockForAbstractClass(InlineInterface::class);
 
         $this->pageConfigRenderer = $this->getMockBuilder(Renderer::class)
             ->disableOriginalConstructor()

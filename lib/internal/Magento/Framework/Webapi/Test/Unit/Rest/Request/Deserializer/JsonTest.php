@@ -100,7 +100,7 @@ class JsonTest extends TestCase
             ->will($this->throwException(new \InvalidArgumentException()));
         $this->_appStateMock->expects($this->once())
             ->method('getMode')
-            ->will($this->returnValue('production'));
+            ->willReturn('production');
         /** Initialize SUT. */
         $inputInvalidJson = '{"key1":"test1"."key2":"test2"}';
         try {
@@ -130,7 +130,7 @@ class JsonTest extends TestCase
             );
         $this->_appStateMock->expects($this->once())
             ->method('getMode')
-            ->will($this->returnValue('developer'));
+            ->willReturn('developer');
         /** Initialize SUT. */
         $inputInvalidJson = '{"key1":"test1"."key2":"test2"}';
         try {

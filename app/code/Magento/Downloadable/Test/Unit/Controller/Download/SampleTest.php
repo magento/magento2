@@ -93,11 +93,11 @@ class SampleTest extends TestCase
     {
         $this->objectManagerHelper = new ObjectManagerHelper($this);
 
-        $this->request = $this->createMock(RequestInterface::class);
+        $this->request = $this->getMockForAbstractClass(RequestInterface::class);
         $this->response = $this->getMockBuilder(ResponseInterface::class)
             ->addMethods(['setHttpResponseCode', 'clearBody', 'sendHeaders', 'setHeader', 'setRedirect'])
             ->onlyMethods(['sendResponse'])
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->helperData = $this->createPartialMock(
             Data::class,
@@ -119,9 +119,9 @@ class SampleTest extends TestCase
             ->onlyMethods(['load', 'getId', 'getProductUrl', 'getName'])
             ->disableOriginalConstructor()
             ->getMock();
-        $this->messageManager = $this->createMock(ManagerInterface::class);
-        $this->redirect = $this->createMock(RedirectInterface::class);
-        $this->urlInterface = $this->createMock(UrlInterface::class);
+        $this->messageManager = $this->getMockForAbstractClass(ManagerInterface::class);
+        $this->redirect = $this->getMockForAbstractClass(RedirectInterface::class);
+        $this->urlInterface = $this->getMockForAbstractClass(UrlInterface::class);
         $this->salabilityCheckerMock = $this->createMock(SalabilityChecker::class);
         $this->objectManager = $this->createPartialMock(
             \Magento\Framework\ObjectManager\ObjectManager::class,

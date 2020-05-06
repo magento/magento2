@@ -50,7 +50,7 @@ class CompositeTest extends TestCase
     {
         $method = 'method-name';
 
-        $specificationFirst = $this->createMock(SpecificationInterface::class);
+        $specificationFirst = $this->getMockForAbstractClass(SpecificationInterface::class);
         $specificationFirst->expects(
             $this->once()
         )->method(
@@ -61,7 +61,7 @@ class CompositeTest extends TestCase
             $firstSpecificationResult
         );
 
-        $specificationSecond = $this->createMock(SpecificationInterface::class);
+        $specificationSecond = $this->getMockForAbstractClass(SpecificationInterface::class);
         $specificationSecond->expects(
             $this->any()
         )->method(

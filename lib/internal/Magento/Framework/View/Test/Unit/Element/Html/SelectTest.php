@@ -30,9 +30,9 @@ class SelectTest extends TestCase
 
     protected function setUp(): void
     {
-        $eventManager = $this->createMock(ManagerInterface::class);
+        $eventManager = $this->getMockForAbstractClass(ManagerInterface::class);
 
-        $scopeConfig = $this->createMock(ScopeConfigInterface::class);
+        $scopeConfig = $this->getMockForAbstractClass(ScopeConfigInterface::class);
 
         $this->escaper = $this->getMockBuilder(Escaper::class)
             ->disableOriginalConstructor()

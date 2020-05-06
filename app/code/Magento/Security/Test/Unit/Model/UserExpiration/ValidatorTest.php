@@ -64,7 +64,7 @@ class ValidatorTest extends TestCase
         $dateObject = $this->createMock(\DateTime::class);
         $this->timezoneMock->expects(static::once())
             ->method('date')
-            ->will(static::returnValue($dateObject));
+            ->willReturn($dateObject);
 
         $currentDate = new \DateTime();
         $currentDate = $currentDate->getTimestamp();
@@ -87,7 +87,7 @@ class ValidatorTest extends TestCase
         $dateObject = $this->createMock(\DateTime::class);
         $this->timezoneMock->expects(static::once())
             ->method('date')
-            ->will(static::returnValue($dateObject));
+            ->willReturn($dateObject);
         $currentDate = new \DateTime();
         $currentDate = $currentDate->getTimestamp();
         $expireDate = new \DateTime();

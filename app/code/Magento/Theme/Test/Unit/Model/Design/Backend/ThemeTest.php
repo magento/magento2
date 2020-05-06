@@ -55,7 +55,7 @@ class ThemeTest extends TestCase
             ->getMock();
         $this->cacheTypeListMock = $this->getMockBuilder(TypeListInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->contextMock->expects($this->once())
             ->method('getEventDispatcher')
             ->willReturn($this->getMockBuilder(ManagerInterface::class)

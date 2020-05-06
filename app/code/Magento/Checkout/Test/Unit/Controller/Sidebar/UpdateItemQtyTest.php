@@ -44,9 +44,9 @@ class UpdateItemQtyTest extends TestCase
     protected function setUp(): void
     {
         $this->sidebarMock = $this->createMock(Sidebar::class);
-        $this->loggerMock = $this->createMock(LoggerInterface::class);
+        $this->loggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
         $this->jsonHelperMock = $this->createMock(Data::class);
-        $this->requestMock = $this->createMock(RequestInterface::class);
+        $this->requestMock = $this->getMockForAbstractClass(RequestInterface::class);
         $this->responseMock = $this->getMockForAbstractClass(
             ResponseInterface::class,
             [],

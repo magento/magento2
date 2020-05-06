@@ -156,7 +156,7 @@ class SetConversionValueObserverTest extends TestCase
             $this->_eventMock
         );
 
-        $orderMock = $this->createMock(OrderInterface::class);
+        $orderMock = $this->getMockForAbstractClass(OrderInterface::class);
         $orderMock->expects($this->once())->method('getOrderCurrencyCode')->willReturn($conversionCurrency);
 
         $iteratorMock = new \ArrayIterator([$orderMock]);

@@ -54,7 +54,7 @@ class ReadHandlerTest extends TestCase
         $this->metadataPoolMock = $args['metadataPool'];
         $this->metadataMock = $this->getMockBuilder(EntityMetadataInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->metadataPoolMock->expects($this->any())
             ->method('getMetadata')
             ->willReturn($this->metadataMock);
@@ -80,7 +80,7 @@ class ReadHandlerTest extends TestCase
             ->willReturn($eavEntityType);
         $connectionMock = $this->getMockBuilder(AdapterInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $selectMock = $this->getMockBuilder(Select::class)
             ->disableOriginalConstructor()
             ->getMock();

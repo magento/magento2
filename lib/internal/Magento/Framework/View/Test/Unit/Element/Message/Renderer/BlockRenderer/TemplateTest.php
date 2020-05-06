@@ -18,8 +18,8 @@ class TemplateTest extends TestCase
     public function testGetCacheKeyInfo()
     {
         $helper = new ObjectManager($this);
-        $storeMock = $this->createMock(StoreInterface::class);
-        $storeManager = $this->createMock(StoreManagerInterface::class);
+        $storeMock = $this->getMockForAbstractClass(StoreInterface::class);
+        $storeManager = $this->getMockForAbstractClass(StoreManagerInterface::class);
         $storeManager->expects(static::once())
             ->method('getStore')
             ->willReturn($storeMock);

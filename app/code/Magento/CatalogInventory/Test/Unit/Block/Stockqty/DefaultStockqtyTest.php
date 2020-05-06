@@ -50,10 +50,10 @@ class DefaultStockqtyTest extends TestCase
         $this->registryMock = $this->createMock(Registry::class);
         $this->stockRegistryMock = $this->getMockBuilder(StockRegistryInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->scopeConfigMock = $this->getMockBuilder(ScopeConfigInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->block = $objectManager->getObject(
             DefaultStockqty::class,
             [
@@ -150,7 +150,7 @@ class DefaultStockqtyTest extends TestCase
 
         $stockItemMock = $this->getMockBuilder(StockItemInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $stockItemMock->expects($this->once())
             ->method('getMinQty')
             ->willReturn($minQty);

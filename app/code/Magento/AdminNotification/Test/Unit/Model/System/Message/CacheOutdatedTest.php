@@ -39,9 +39,9 @@ class CacheOutdatedTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->_authorizationMock = $this->createMock(AuthorizationInterface::class);
-        $this->_urlInterfaceMock = $this->createMock(UrlInterface::class);
-        $this->_cacheTypeListMock = $this->createMock(TypeListInterface::class);
+        $this->_authorizationMock = $this->getMockForAbstractClass(AuthorizationInterface::class);
+        $this->_urlInterfaceMock = $this->getMockForAbstractClass(UrlInterface::class);
+        $this->_cacheTypeListMock = $this->getMockForAbstractClass(TypeListInterface::class);
 
         $objectManagerHelper = new ObjectManager($this);
         $arguments = [

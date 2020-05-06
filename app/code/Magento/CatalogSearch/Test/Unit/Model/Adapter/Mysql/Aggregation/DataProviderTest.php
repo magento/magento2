@@ -77,9 +77,9 @@ class DataProviderTest extends TestCase
     {
         $this->eavConfigMock = $this->createMock(Config::class);
         $this->resourceConnectionMock = $this->createMock(ResourceConnection::class);
-        $this->scopeResolverMock = $this->createMock(ScopeResolverInterface::class);
+        $this->scopeResolverMock = $this->getMockForAbstractClass(ScopeResolverInterface::class);
         $this->sessionMock = $this->createMock(Session::class);
-        $this->adapterMock = $this->createMock(AdapterInterface::class);
+        $this->adapterMock = $this->getMockForAbstractClass(AdapterInterface::class);
         $this->resourceConnectionMock->expects($this->once())->method('getConnection')->willReturn($this->adapterMock);
         $this->selectBuilderForAttribute = $this->createMock(SelectBuilderForAttribute::class);
         $this->eventManager = $this->createMock(Manager::class);
@@ -104,7 +104,7 @@ class DataProviderTest extends TestCase
         $dimensionMock->expects($this->atLeastOnce())->method('getValue')->willReturn($storeId);
         $this->scopeResolverMock->expects($this->any())->method('getScope')->with($storeId)->willReturn($scopeMock);
 
-        $bucketMock = $this->createMock(BucketInterface::class);
+        $bucketMock = $this->getMockForAbstractClass(BucketInterface::class);
         $bucketMock->expects($this->once())->method('getField')->willReturn($attributeCode);
         $attributeMock = $this->createMock(Attribute::class);
         $this->eavConfigMock->expects($this->once())
@@ -131,7 +131,7 @@ class DataProviderTest extends TestCase
         $this->scopeResolverMock->expects($this->atLeastOnce())->method('getScope')->with($storeId)
             ->willReturn($scopeMock);
 
-        $bucketMock = $this->createMock(BucketInterface::class);
+        $bucketMock = $this->getMockForAbstractClass(BucketInterface::class);
         $bucketMock->expects($this->once())->method('getField')->willReturn($attributeCode);
         $attributeMock = $this->createMock(Attribute::class);
         $this->eavConfigMock->expects($this->once())

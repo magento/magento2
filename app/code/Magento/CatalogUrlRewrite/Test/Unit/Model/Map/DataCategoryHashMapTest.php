@@ -62,7 +62,7 @@ class DataCategoryHashMapTest extends TestCase
         $categoryMock = $this->getMockBuilder(CategoryInterface::class)
             ->setMethods(['getResource'])
             ->getMockForAbstractClass();
-        $connectionAdapterMock = $this->createMock(AdapterInterface::class);
+        $connectionAdapterMock = $this->getMockForAbstractClass(AdapterInterface::class);
         $selectMock = $this->createMock(Select::class);
 
         $this->categoryRepository->expects($this->any())

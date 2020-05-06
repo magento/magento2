@@ -75,7 +75,7 @@ class CompareProductsTest extends TestCase
             ->getMock();
         $this->scopeConfigMock = $this->getMockBuilder(ScopeConfigInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
 

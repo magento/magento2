@@ -43,7 +43,7 @@ class LoggerTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->config = $this->createMock(ConfigInterface::class);
+        $this->config = $this->getMockForAbstractClass(ConfigInterface::class);
         $this->config->expects($this->once())
             ->method('getLogLevel')
             ->willReturn(LoggerInterface::DEBUG);

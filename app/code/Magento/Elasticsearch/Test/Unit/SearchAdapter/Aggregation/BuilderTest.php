@@ -66,7 +66,7 @@ class BuilderTest extends TestCase
         $this->aggregationContainer = $this
             ->getMockBuilder(BucketBuilderInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->dataProviderFactory = $this->getMockBuilder(
             DataProviderFactory::class
@@ -93,11 +93,11 @@ class BuilderTest extends TestCase
     {
         $this->requestInterface = $this->getMockBuilder(RequestInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->requestBuckedInterface = $this->getMockBuilder(BucketInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->requestInterface->expects($this->once())
             ->method('getIndex')

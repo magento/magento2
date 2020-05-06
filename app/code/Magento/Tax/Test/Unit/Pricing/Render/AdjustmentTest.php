@@ -139,11 +139,11 @@ class AdjustmentTest extends TestCase
 
         $baseAmount->expects($this->any())
             ->method('getValue')
-            ->will($this->returnValue($expectedPriceValue));
+            ->willReturn($expectedPriceValue);
 
         $amountRender->expects($this->any())
             ->method('getAmount')
-            ->will($this->returnValue($baseAmount));
+            ->willReturn($baseAmount);
 
         $this->priceCurrencyMock->expects($this->any())
             ->method('format')
@@ -179,11 +179,11 @@ class AdjustmentTest extends TestCase
 
         $baseAmount->expects($this->any())
             ->method('getValue')
-            ->will($this->returnValue($expectedPriceValue));
+            ->willReturn($expectedPriceValue);
 
         $amountRender->expects($this->any())
             ->method('getAmount')
-            ->will($this->returnValue($baseAmount));
+            ->willReturn($baseAmount);
 
         $this->priceCurrencyMock->expects($this->any())
             ->method('format')
@@ -231,10 +231,10 @@ class AdjustmentTest extends TestCase
 
         $amountRender->expects($this->any())
             ->method('getSaleableItem')
-            ->will($this->returnValue($saleable));
+            ->willReturn($saleable);
         $saleable->expects($this->any())
             ->method('getId')
-            ->will($this->returnValue($saleableId));
+            ->willReturn($saleableId);
 
         $this->model->setIdSuffix($suffix);
         $this->model->render($amountRender);

@@ -50,10 +50,10 @@ class PricesTest extends TestCase
             ]
         ];
         $priceInfoMock = $this->createMock(Base::class);
-        $priceMock = $this->createMock(PriceInterface::class);
+        $priceMock = $this->getMockForAbstractClass(PriceInterface::class);
         $priceInfoMock->expects($this->atLeastOnce())->method('getPrice')->willReturn($priceMock);
 
-        $amountMock = $this->createMock(AmountInterface::class);
+        $amountMock = $this->getMockForAbstractClass(AmountInterface::class);
         $amountMock->expects($this->atLeastOnce())->method('getValue')->willReturn(500);
         $amountMock->expects($this->atLeastOnce())->method('getBaseAmount')->willReturn(1000);
         $priceMock->expects($this->atLeastOnce())->method('getAmount')->willReturn($amountMock);

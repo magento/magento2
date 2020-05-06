@@ -40,7 +40,7 @@ class ValidatorTest extends TestCase
     protected function setUp(): void
     {
         $this->_paypalConfigFactory = $this->createPartialMock(ConfigFactory::class, ['create']);
-        $this->_productTypeConfig = $this->createMock(ConfigInterface::class);
+        $this->_productTypeConfig = $this->getMockForAbstractClass(ConfigInterface::class);
         $this->_registry = $this->createMock(Registry::class);
         $this->_paymentData = $this->createMock(Data::class);
 

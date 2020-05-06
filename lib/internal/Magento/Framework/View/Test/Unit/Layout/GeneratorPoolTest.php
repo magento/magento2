@@ -95,11 +95,11 @@ class GeneratorPoolTest extends TestCase
      */
     protected function getGeneratorsMocks()
     {
-        $firstGenerator = $this->createMock(GeneratorInterface::class);
+        $firstGenerator = $this->getMockForAbstractClass(GeneratorInterface::class);
         $firstGenerator->expects($this->any())->method('getType')->willReturn('first_generator');
         $firstGenerator->expects($this->atLeastOnce())->method('process');
 
-        $secondGenerator = $this->createMock(GeneratorInterface::class);
+        $secondGenerator = $this->getMockForAbstractClass(GeneratorInterface::class);
         $secondGenerator->expects($this->any())->method('getType')->willReturn('second_generator');
         $secondGenerator->expects($this->atLeastOnce())->method('process');
         return [$firstGenerator, $secondGenerator];

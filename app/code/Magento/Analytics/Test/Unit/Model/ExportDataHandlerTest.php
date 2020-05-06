@@ -86,13 +86,13 @@ class ExportDataHandlerTest extends TestCase
 
         $this->archiveMock = $this->createMock(Archive::class);
 
-        $this->reportWriterMock = $this->createMock(ReportWriterInterface::class);
+        $this->reportWriterMock = $this->getMockForAbstractClass(ReportWriterInterface::class);
 
         $this->cryptographerMock = $this->createMock(Cryptographer::class);
 
         $this->fileRecorderMock = $this->createMock(FileRecorder::class);
 
-        $this->directoryMock = $this->createMock(WriteInterface::class);
+        $this->directoryMock = $this->getMockForAbstractClass(WriteInterface::class);
 
         $this->encodedContextMock = $this->createMock(EncodedContext::class);
 

@@ -73,7 +73,7 @@ class CategoryLinkManagementTest extends TestCase
         $productId = 55;
         $position = 25;
         $productSku = 'testSku';
-        $categoryProductLinkMock = $this->createMock(CategoryProductLinkInterface::class);
+        $categoryProductLinkMock = $this->getMockForAbstractClass(CategoryProductLinkInterface::class);
         $categoryMock = $this->createMock(Category::class);
         $productMock = $this->createMock(\Magento\Catalog\Model\Product::class);
         $productMock->expects($this->once())->method('getSku')->willReturn($productSku);

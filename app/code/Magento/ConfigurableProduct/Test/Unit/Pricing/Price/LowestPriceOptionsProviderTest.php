@@ -77,7 +77,7 @@ class LowestPriceOptionsProviderTest extends TestCase
         $this->linkedProductSelectBuilder = $this
             ->getMockBuilder(LinkedProductSelectBuilderInterface::class)
             ->setMethods(['build'])
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->productCollection = $this
             ->getMockBuilder(Collection::class)
             ->disableOriginalConstructor()

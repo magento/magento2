@@ -63,7 +63,7 @@ class PopupTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->request = $this->createMock(RequestInterface::class);
+        $this->request = $this->getMockForAbstractClass(RequestInterface::class);
         $this->factory = $this->createPartialMock(ProductFactory::class, ['create']);
         $this->registry = $this->createMock(Registry::class);
         $this->resultFactoryMock = $this->getMockBuilder(ResultFactory::class)

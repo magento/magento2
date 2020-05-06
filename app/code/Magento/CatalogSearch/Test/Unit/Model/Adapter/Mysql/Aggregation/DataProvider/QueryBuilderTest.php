@@ -63,8 +63,8 @@ class QueryBuilderTest extends TestCase
     protected function setUp(): void
     {
         $this->resourceConnectionMock = $this->createMock(ResourceConnection::class);
-        $this->scopeResolverMock = $this->createMock(ScopeResolverInterface::class);
-        $this->adapterMock = $this->createMock(AdapterInterface::class);
+        $this->scopeResolverMock = $this->getMockForAbstractClass(ScopeResolverInterface::class);
+        $this->adapterMock = $this->getMockForAbstractClass(AdapterInterface::class);
         $this->inventoryConfigMock = $this->createMock(CatalogInventoryConfiguration::class);
 
         $this->resourceConnectionMock->expects($this->atLeastOnce())
@@ -77,10 +77,10 @@ class QueryBuilderTest extends TestCase
         $this->dimensionMock = $this->createMock(Dimension::class);
         $this->dimensionFactoryMock = $this->createMock(DimensionFactory::class);
         $this->dimensionFactoryMock->method('create')->willReturn($this->dimensionMock);
-        $storeMock = $this->createMock(StoreInterface::class);
+        $storeMock = $this->getMockForAbstractClass(StoreInterface::class);
         $storeMock->method('getId')->willReturn(1);
         $storeMock->method('getWebsiteId')->willReturn(1);
-        $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
+        $this->storeManagerMock = $this->getMockForAbstractClass(StoreManagerInterface::class);
         $this->storeManagerMock->method('getStore')->willReturn($storeMock);
         $this->indexScopeResolverMock->method('resolve')->willReturn('catalog_product_index_price');
 

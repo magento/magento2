@@ -28,6 +28,6 @@ class TimezoneTest extends TestCase
         $lists = $this->createMock(Lists::class);
         $lists->expects($this->any())->method('getTimezoneList')->willReturn($this->expectedTimezones);
         $timezone = new Timezone($lists);
-        $this->assertEquals(true, $timezone->isValid('America/Los_Angeles'));
+        $this->assertTrue($timezone->isValid('America/Los_Angeles'));
     }
 }

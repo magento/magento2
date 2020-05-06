@@ -66,7 +66,7 @@ class StockTest extends TestCase
         $this->eventDispatcher = $this->getMockBuilder(ManagerInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['dispatch'])
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->context = $this->getMockBuilder(Context::class)
             ->disableOriginalConstructor()

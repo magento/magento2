@@ -60,7 +60,7 @@ class ExchangeTest extends TestCase
             ->getMock();
         $this->communicationConfig = $this->getMockBuilder(ConfigInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->publisherConfig = $this
             ->getMockBuilder(\Magento\Framework\MessageQueue\Publisher\ConfigInterface::class)
             ->disableOriginalConstructor()
@@ -105,19 +105,19 @@ class ExchangeTest extends TestCase
         $publisher = $this
             ->getMockBuilder(PublisherConfigItemInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->publisherConfig->expects($this->once())
             ->method('getPublisher')->with($topicName)->willReturn($publisher);
         $connection = $this
             ->getMockBuilder(PublisherConnectionInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $publisher->expects($this->once())->method('getConnection')->with()->willReturn($connection);
         $connection->expects($this->once())->method('getExchange')->with()->willReturn($exchangeName);
         $envelope = $this
             ->getMockBuilder(EnvelopeInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $envelope->expects($this->once())->method('getBody')->willReturn($envelopeBody);
         $envelope->expects($this->once())->method('getProperties')->willReturn($envelopeProperties);
         $channel->expects($this->once())->method('batch_basic_publish')
@@ -143,7 +143,7 @@ class ExchangeTest extends TestCase
         $envelope = $this
             ->getMockBuilder(EnvelopeInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->exchange->expects($this->once())->method('enqueue')->with($topicName, $envelope)->willReturn($response);
         $this->assertEquals([$response], $this->bulkExchange->enqueue($topicName, [$envelope]));
     }

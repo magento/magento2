@@ -153,7 +153,7 @@ abstract class AbstractSenderTest extends TestCase
 
         $this->globalConfig = $this->createPartialMock(Config::class, ['getValue']);
 
-        $this->loggerMock = $this->createMock(LoggerInterface::class);
+        $this->loggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
     }
 
     /**

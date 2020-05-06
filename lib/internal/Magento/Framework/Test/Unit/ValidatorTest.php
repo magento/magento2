@@ -79,7 +79,7 @@ class ValidatorTest extends TestCase
         $value = 'test';
 
         // Case 1. Validators fails without breaking chain
-        $validatorA = $this->createMock(ValidatorInterface::class);
+        $validatorA = $this->getMockForAbstractClass(ValidatorInterface::class);
         $validatorA->expects($this->once())->method('isValid')->with($value)->willReturn(false);
         $validatorA->expects(
             $this->once()
@@ -89,7 +89,7 @@ class ValidatorTest extends TestCase
             ['foo' => ['Foo message 1'], 'bar' => ['Foo message 2']]
         );
 
-        $validatorB = $this->createMock(ValidatorInterface::class);
+        $validatorB = $this->getMockForAbstractClass(ValidatorInterface::class);
         $validatorB->expects($this->once())->method('isValid')->with($value)->willReturn(false);
         $validatorB->expects(
             $this->once()
@@ -107,7 +107,7 @@ class ValidatorTest extends TestCase
         ];
 
         // Case 2. Validators fails with breaking chain
-        $validatorA = $this->createMock(ValidatorInterface::class);
+        $validatorA = $this->getMockForAbstractClass(ValidatorInterface::class);
         $validatorA->expects($this->once())->method('isValid')->with($value)->willReturn(false);
         $validatorA->expects(
             $this->once()
@@ -117,17 +117,17 @@ class ValidatorTest extends TestCase
             ['field' => 'Error message']
         );
 
-        $validatorB = $this->createMock(ValidatorInterface::class);
+        $validatorB = $this->getMockForAbstractClass(ValidatorInterface::class);
         $validatorB->expects($this->never())->method('isValid');
 
         $result[] = [$value, [$validatorA, $validatorB], false, ['field' => 'Error message'], true];
 
         // Case 3. Validators succeed
-        $validatorA = $this->createMock(ValidatorInterface::class);
+        $validatorA = $this->getMockForAbstractClass(ValidatorInterface::class);
         $validatorA->expects($this->once())->method('isValid')->with($value)->willReturn(true);
         $validatorA->expects($this->never())->method('getMessages');
 
-        $validatorB = $this->createMock(ValidatorInterface::class);
+        $validatorB = $this->getMockForAbstractClass(ValidatorInterface::class);
         $validatorB->expects($this->once())->method('isValid')->with($value)->willReturn(true);
         $validatorB->expects($this->never())->method('getMessages');
 

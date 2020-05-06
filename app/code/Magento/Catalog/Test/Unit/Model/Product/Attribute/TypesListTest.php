@@ -65,7 +65,7 @@ class TypesListTest extends TestCase
         $inputTypeMock = $this->createMock(Inputtype::class);
         $this->inputTypeFactoryMock->expects($this->once())->method('create')->willReturn($inputTypeMock);
         $inputTypeMock->expects($this->once())->method('toOptionArray')->willReturn(['option' => ['value']]);
-        $attributeTypeMock = $this->createMock(ProductAttributeTypeInterface::class);
+        $attributeTypeMock = $this->getMockForAbstractClass(ProductAttributeTypeInterface::class);
         $this->dataObjectHelperMock->expects($this->once())
             ->method('populateWithArray')
             ->with($attributeTypeMock, ['value'], ProductAttributeTypeInterface::class)

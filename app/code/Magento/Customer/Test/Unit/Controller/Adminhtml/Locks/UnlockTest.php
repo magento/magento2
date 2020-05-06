@@ -90,7 +90,7 @@ class UnlockTest extends TestCase
         $this->requestMock = $this->getMockBuilder(RequestInterface::class)
             ->setMethods(['getParam'])
             ->getMockForAbstractClass();
-        $this->messageManagerMock = $this->createMock(ManagerInterface::class);
+        $this->messageManagerMock = $this->getMockForAbstractClass(ManagerInterface::class);
         $this->resultFactoryMock = $this->createPartialMock(
             ResultFactory::class,
             ['create']

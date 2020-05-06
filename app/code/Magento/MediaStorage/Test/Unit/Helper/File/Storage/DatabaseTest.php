@@ -70,7 +70,7 @@ class DatabaseTest extends TestCase
         $this->filesystemMock->expects($this->any())
             ->method('getDirectoryRead')
             ->with(DirectoryList::MEDIA)
-            ->will($this->returnValue($mediaDirMock));
+            ->willReturn($mediaDirMock);
         $this->fileStorageMock = $arguments['fileStorage'];
         $this->configMock = $context->getScopeConfig();
         $this->helper = $this->objectManager->getObject($className, $arguments);
@@ -440,7 +440,7 @@ class DatabaseTest extends TestCase
             ->willReturn($dbModelMock);
         $dirWriteMock = $this->getMockBuilder(WriteInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->filesystemMock->expects($this->exactly($callDirWrite))
             ->method('getDirectoryWrite')
             ->with(DirectoryList::ROOT)

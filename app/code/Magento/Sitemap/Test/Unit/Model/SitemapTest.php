@@ -162,7 +162,7 @@ class SitemapTest extends TestCase
         $this->itemProviderMock = $this->getMockForAbstractClass(ItemProviderInterface::class);
         $this->request = $this->createMock(Http::class);
         $this->store = $this->createPartialMock(Store::class, ['isFrontUrlSecure', 'getBaseUrl']);
-        $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
+        $this->storeManagerMock = $this->getMockForAbstractClass(StoreManagerInterface::class);
         $this->storeManagerMock->expects($this->any())
             ->method('getStore')
             ->willReturn($this->store);
@@ -431,8 +431,8 @@ class SitemapTest extends TestCase
             $this->exactly($expectedWrites)
         )->method(
             'write'
-        )->will(
-            $this->returnCallback($streamWriteCallback)
+        )->willReturnCallback(
+            $streamWriteCallback
         );
 
         $checkFileCallback = function ($file) use (&$currentFile) {

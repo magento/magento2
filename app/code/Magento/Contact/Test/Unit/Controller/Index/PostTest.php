@@ -80,8 +80,8 @@ class PostTest extends TestCase
             Context::class,
             ['getRequest', 'getResponse', 'getResultRedirectFactory', 'getUrl', 'getRedirect', 'getMessageManager']
         );
-        $this->urlMock = $this->createMock(UrlInterface::class);
-        $this->messageManagerMock = $this->createMock(ManagerInterface::class);
+        $this->urlMock = $this->getMockForAbstractClass(UrlInterface::class);
+        $this->messageManagerMock = $this->getMockForAbstractClass(ManagerInterface::class);
         $this->requestStub = $this->createPartialMock(
             Http::class,
             ['getPostValue', 'getParams', 'getParam', 'isPost']
@@ -106,7 +106,7 @@ class PostTest extends TestCase
             ->willReturn($this->requestStub);
         $contextMock->expects($this->any())
             ->method('getResponse')
-            ->willReturn($this->createMock(ResponseInterface::class));
+            ->willReturn($this->getMockForAbstractClass(ResponseInterface::class));
         $contextMock->expects($this->any())
             ->method('getMessageManager')
             ->willReturn($this->messageManagerMock);

@@ -27,7 +27,7 @@ class FileTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->directory = $this->createMock(WriteInterface::class);
+        $this->directory = $this->getMockForAbstractClass(WriteInterface::class);
         $filesystem = $this->createMock(Filesystem::class);
         $filesystem
             ->expects($this->once())

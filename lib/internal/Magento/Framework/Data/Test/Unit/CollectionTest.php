@@ -208,7 +208,7 @@ class CollectionTest extends TestCase
         $this->assertEquals([$secondItemMock], $this->_model->getItemsByColumnValue('colName', 'second_value'));
         $this->assertEquals($firstItemMock, $this->_model->getItemByColumnValue('colName', 'second_value'));
         $this->assertEquals([], $this->_model->getItemsByColumnValue('colName', 'non_existing_value'));
-        $this->assertEquals(null, $this->_model->getItemByColumnValue('colName', 'non_existing_value'));
+        $this->assertNull($this->_model->getItemByColumnValue('colName', 'non_existing_value'));
 
         /** get items */
         $this->assertEquals(['item_id', 0], $this->_model->getAllIds());

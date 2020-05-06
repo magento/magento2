@@ -86,10 +86,10 @@ class StoreTest extends TestCase
             ->getMock();
         $this->storeManager = $this->getMockBuilder(StoreManagerInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->store = $this->getMockBuilder(StoreInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->storeSource = new StoreSource(
             $this->collectionFactory,
             $this->converter,

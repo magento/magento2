@@ -37,7 +37,7 @@ class OnepageTest extends TestCase
     {
         $objectManager = new ObjectManager($this);
         $this->messageMock = $this->createMock(GiftMessageManager::class);
-        $this->requestMock = $this->createMock(RequestInterface::class);
+        $this->requestMock = $this->getMockForAbstractClass(RequestInterface::class);
 
         $this->plugin = $objectManager->getObject(
             Onepage::class,

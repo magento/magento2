@@ -84,7 +84,7 @@ class RepositoryTest extends TestCase
             TaxClassSearchResultsInterfaceFactory::class,
             ['create']
         );
-        $this->searchResultMock = $this->createMock(TaxClassSearchResultsInterface::class);
+        $this->searchResultMock = $this->getMockForAbstractClass(TaxClassSearchResultsInterface::class);
 
         $this->classModelRegistryMock = $this->createMock(ClassModelRegistry::class);
 
@@ -162,7 +162,7 @@ class RepositoryTest extends TestCase
      */
     public function testGet()
     {
-        $taxClass = $this->createMock(TaxClassInterface::class);
+        $taxClass = $this->getMockForAbstractClass(TaxClassInterface::class);
         $classId = 1;
         $this->classModelRegistryMock
             ->expects($this->once())
@@ -198,9 +198,9 @@ class RepositoryTest extends TestCase
      */
     public function testGetList()
     {
-        $taxClassOne = $this->createMock(TaxClassInterface::class);
-        $taxClassTwo = $this->createMock(TaxClassInterface::class);
-        $searchCriteria = $this->createMock(SearchCriteriaInterface::class);
+        $taxClassOne = $this->getMockForAbstractClass(TaxClassInterface::class);
+        $taxClassTwo = $this->getMockForAbstractClass(TaxClassInterface::class);
+        $searchCriteria = $this->getMockForAbstractClass(SearchCriteriaInterface::class);
         $collection = $this->getMockBuilder(Collection::class)
             ->addMethods(['setItems'])
             ->onlyMethods(['getSize', 'getItems'])

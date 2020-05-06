@@ -65,12 +65,12 @@ class StockItemTest extends TestCase
         $this->typeConfig = $this
             ->getMockBuilder(ConfigInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $objectManagerHelper = new ObjectManager($this);
         $this->stockStateMock = $this->getMockBuilder(StockStateInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->stockStateProviderMock = $this
             ->getMockBuilder(StockStateProvider::class)

@@ -118,7 +118,7 @@ class AttributesTest extends TestCase
         $this->priceCurrencyInterface = $this
             ->getMockBuilder(PriceCurrencyInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->attributesBlock = new AttributesBlock(
             $this->context,
             $this->registry,

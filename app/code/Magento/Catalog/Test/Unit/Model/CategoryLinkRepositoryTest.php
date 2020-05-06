@@ -60,9 +60,9 @@ class CategoryLinkRepositoryTest extends TestCase
             ->disableOriginalConstructor()
             ->setMethods(['getProductsIdsBySkus'])
             ->getMock();
-        $this->categoryRepositoryMock = $this->createMock(CategoryRepositoryInterface::class);
-        $this->productRepositoryMock = $this->createMock(ProductRepositoryInterface::class);
-        $this->productLinkMock = $this->createMock(CategoryProductLinkInterface::class);
+        $this->categoryRepositoryMock = $this->getMockForAbstractClass(CategoryRepositoryInterface::class);
+        $this->productRepositoryMock = $this->getMockForAbstractClass(ProductRepositoryInterface::class);
+        $this->productLinkMock = $this->getMockForAbstractClass(CategoryProductLinkInterface::class);
         $this->model = new CategoryLinkRepository(
             $this->categoryRepositoryMock,
             $this->productRepositoryMock,

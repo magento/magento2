@@ -49,11 +49,11 @@ class CompiledTest extends TestCase
         $this->objectManager = new ObjectManager($this);
         $this->objectManagerMock = $this->getMockBuilder(ObjectManagerInterface::class)
             ->setMethods([])
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->config = $this->getMockBuilder(ConfigInterface::class)
             ->setMethods([])
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->sharedInstances = [];
         $this->factory = new Compiled($this->config, $this->sharedInstances, []);
@@ -218,7 +218,7 @@ class CompiledTest extends TestCase
         $this->assertInstanceOf($nonSharedType, $result->getNonSharedDependency());
         $this->assertEquals('value', $result->getValue());
         $this->assertEquals(['default_value1', 'default_value2'], $result->getValueArray());
-        $this->assertEquals(null, $result->getGlobalValue());
+        $this->assertNull($result->getGlobalValue());
         $this->assertNull($result->getNullValue());
     }
 

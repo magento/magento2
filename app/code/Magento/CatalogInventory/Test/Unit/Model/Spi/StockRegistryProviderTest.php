@@ -169,7 +169,7 @@ class StockRegistryProviderTest extends TestCase
 
         $this->stockRepository = $this->getMockBuilder(StockRepositoryInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->stockItemRepository = $this->getMockBuilder(
             StockItemRepositoryInterface::class

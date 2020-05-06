@@ -23,7 +23,7 @@ class AdditionalInfoTest extends TestCase
     }
     public function testGet()
     {
-        $productRenderInfo = $this->createMock(ProductRenderInterface::class);
+        $productRenderInfo = $this->getMockForAbstractClass(ProductRenderInterface::class);
         $productRenderInfo->expects($this->once())
             ->method('setIsSalable')
             ->with(true);

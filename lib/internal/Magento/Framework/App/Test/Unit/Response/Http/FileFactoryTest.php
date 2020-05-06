@@ -121,7 +121,7 @@ class FileFactoryTest extends TestCase
 
         $streamMock = $this->getMockBuilder(FileWriteInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->dirMock->expects($this->once())
             ->method('openFile')
             ->willReturn($streamMock);
@@ -162,7 +162,7 @@ class FileFactoryTest extends TestCase
 
         $streamMock = $this->getMockBuilder(FileWriteInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->dirMock->expects($this->once())
             ->method('openFile')
             ->willReturn($streamMock);
@@ -202,7 +202,7 @@ class FileFactoryTest extends TestCase
             ->with('fileName', 'content', 'w+');
         $streamMock = $this->getMockBuilder(FileWriteInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->dirMock->expects($this->once())
             ->method('openFile')
             ->willReturn($streamMock);

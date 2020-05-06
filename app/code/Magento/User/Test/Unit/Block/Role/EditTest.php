@@ -46,7 +46,7 @@ class EditTest extends TestCase
         $this->jsonEncoderMock = $this->getMockBuilder(EncoderInterface::class)
             ->disableOriginalConstructor()
             ->setMethods([])
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->authSessionsMock = $this->getMockBuilder(Session::class)
             ->disableOriginalConstructor()

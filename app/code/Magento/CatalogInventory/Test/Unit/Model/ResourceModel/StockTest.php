@@ -94,7 +94,7 @@ class StockTest extends TestCase
             ->getMock();
         $this->storeManagerMock = $this->getMockBuilder(StoreManagerInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->connectionMock = $this->getMockBuilder(Mysql::class)
             ->disableOriginalConstructor()
             ->getMock();

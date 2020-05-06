@@ -71,7 +71,7 @@ class MysqlTest extends TestCase
             ->getMock();
         $this->serializerMock = $this->getMockBuilder(SerializerInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->schemaListenerMock = $this->getMockBuilder(SchemaListener::class)
             ->disableOriginalConstructor()
             ->getMock();

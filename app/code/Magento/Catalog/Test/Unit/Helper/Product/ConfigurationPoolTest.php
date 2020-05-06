@@ -27,7 +27,7 @@ class ConfigurationPoolTest extends TestCase
     {
         $this->instancesType = ['simple' => 'simple', 'default' => 'default'];
 
-        $objectManagerMock = $this->createMock(ObjectManagerInterface::class);
+        $objectManagerMock = $this->getMockForAbstractClass(ObjectManagerInterface::class);
         $this->model = new ConfigurationPool($objectManagerMock, $this->instancesType);
     }
 

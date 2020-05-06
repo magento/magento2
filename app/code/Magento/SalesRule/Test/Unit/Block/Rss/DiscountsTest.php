@@ -80,12 +80,12 @@ class DiscountsTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->storeManagerInterface = $this->createMock(StoreManagerInterface::class);
-        $this->requestInterface = $this->createMock(RequestInterface::class);
-        $this->rssBuilderInterface = $this->createMock(UrlBuilderInterface::class);
-        $this->urlBuilderInterface = $this->createMock(UrlInterface::class);
-        $this->scopeConfigInterface = $this->createMock(ScopeConfigInterface::class);
-        $this->timezoneInterface = $this->createMock(TimezoneInterface::class);
+        $this->storeManagerInterface = $this->getMockForAbstractClass(StoreManagerInterface::class);
+        $this->requestInterface = $this->getMockForAbstractClass(RequestInterface::class);
+        $this->rssBuilderInterface = $this->getMockForAbstractClass(UrlBuilderInterface::class);
+        $this->urlBuilderInterface = $this->getMockForAbstractClass(UrlInterface::class);
+        $this->scopeConfigInterface = $this->getMockForAbstractClass(ScopeConfigInterface::class);
+        $this->timezoneInterface = $this->getMockForAbstractClass(TimezoneInterface::class);
         $this->rssModel = $this->createPartialMock(
             Discounts::class,
             [

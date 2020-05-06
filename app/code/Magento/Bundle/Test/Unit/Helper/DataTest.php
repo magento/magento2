@@ -28,7 +28,7 @@ class DataTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->config = $this->createMock(ConfigInterface::class);
+        $this->config = $this->getMockForAbstractClass(ConfigInterface::class);
         $this->helper = (new ObjectManager($this))->getObject(
             Data::class,
             ['config' => $this->config]

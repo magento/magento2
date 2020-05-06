@@ -123,7 +123,7 @@ class SaveTest extends TestCase
         $this->resultRedirectMock = $this->getMockBuilder(Redirect::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->_objectManager = $this->createMock(ObjectManagerInterface::class);
+        $this->_objectManager = $this->getMockForAbstractClass(ObjectManagerInterface::class);
         $registryMock = $this->createMock(Registry::class);
         $this->_objectManager->expects(
             $this->any()
@@ -134,7 +134,7 @@ class SaveTest extends TestCase
         )->willReturn(
             $registryMock
         );
-        $this->_messageManager = $this->createMock(ManagerInterface::class);
+        $this->_messageManager = $this->getMockForAbstractClass(ManagerInterface::class);
 
         $arguments = [
             'response' => $this->_responseMock,

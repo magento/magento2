@@ -78,8 +78,8 @@ class ConverterTest extends TestCase
 
     public function testCreateTitlesFromServiceObject()
     {
-        $taxRateMock = $this->createMock(TaxRateInterface::class);
-        $titlesMock = $this->createMock(TaxRateTitleInterface::class);
+        $taxRateMock = $this->getMockForAbstractClass(TaxRateInterface::class);
+        $titlesMock = $this->getMockForAbstractClass(TaxRateTitleInterface::class);
 
         $taxRateMock->expects($this->once())->method('getTitles')->willReturn([$titlesMock]);
         $titlesMock->expects($this->once())->method('getStoreId')->willReturn(1);
@@ -90,7 +90,7 @@ class ConverterTest extends TestCase
 
     public function testCreateTitlesFromServiceObjectWhenTitlesAreNotProvided()
     {
-        $taxRateMock = $this->createMock(TaxRateInterface::class);
+        $taxRateMock = $this->getMockForAbstractClass(TaxRateInterface::class);
 
         $taxRateMock->expects($this->once())->method('getTitles')->willReturn([]);
 
@@ -99,8 +99,8 @@ class ConverterTest extends TestCase
 
     public function testCreateArrayFromServiceObject()
     {
-        $taxRateMock = $this->createMock(TaxRateInterface::class);
-        $titlesMock = $this->createMock(TaxRateTitleInterface::class);
+        $taxRateMock = $this->getMockForAbstractClass(TaxRateInterface::class);
+        $titlesMock = $this->getMockForAbstractClass(TaxRateTitleInterface::class);
 
         $taxRateMock->expects($this->atLeastOnce())->method('getTitles')->willReturn([$titlesMock]);
         $titlesMock->expects($this->atLeastOnce())->method('getStoreId')->willReturn(1);

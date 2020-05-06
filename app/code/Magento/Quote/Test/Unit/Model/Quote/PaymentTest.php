@@ -54,7 +54,7 @@ class PaymentTest extends TestCase
             SpecificationFactory::class
         )->disableOriginalConstructor()
             ->getMock();
-        $this->eventManager = $this->createMock(ManagerInterface::class);
+        $this->eventManager = $this->getMockForAbstractClass(ManagerInterface::class);
         $serializer = $this->getMockBuilder(Json::class)
             ->setMethods(['unserialize'])
             ->disableOriginalConstructor()
@@ -122,7 +122,7 @@ class PaymentTest extends TestCase
         $quoteId = 1;
         $storeId = 1;
 
-        $paymentMethod = $this->createMock(MethodInterface::class);
+        $paymentMethod = $this->getMockForAbstractClass(MethodInterface::class);
         $quote = $this->getMockBuilder(Quote::class)
             ->disableOriginalConstructor()
             ->getMock();

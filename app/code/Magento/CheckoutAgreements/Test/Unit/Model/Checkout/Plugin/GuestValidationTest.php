@@ -74,14 +74,14 @@ class GuestValidationTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->agreementsValidatorMock = $this->createMock(AgreementsValidatorInterface::class);
-        $this->subjectMock = $this->createMock(GuestPaymentInformationManagementInterface::class);
-        $this->paymentMock = $this->createMock(PaymentInterface::class);
-        $this->addressMock = $this->createMock(AddressInterface::class);
+        $this->agreementsValidatorMock = $this->getMockForAbstractClass(AgreementsValidatorInterface::class);
+        $this->subjectMock = $this->getMockForAbstractClass(GuestPaymentInformationManagementInterface::class);
+        $this->paymentMock = $this->getMockForAbstractClass(PaymentInterface::class);
+        $this->addressMock = $this->getMockForAbstractClass(AddressInterface::class);
         $this->extensionAttributesMock = $this->getMockBuilder(PaymentExtension::class)
             ->addMethods(['getAgreementIds'])
             ->getMock();
-        $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
+        $this->scopeConfigMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
         $this->checkoutAgreementsListMock = $this->createMock(
             CheckoutAgreementsListInterface::class
         );

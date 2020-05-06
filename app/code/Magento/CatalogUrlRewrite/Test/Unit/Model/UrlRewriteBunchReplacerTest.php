@@ -26,7 +26,7 @@ class UrlRewriteBunchReplacerTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->urlPersistMock = $this->createMock(UrlPersistInterface::class);
+        $this->urlPersistMock = $this->getMockForAbstractClass(UrlPersistInterface::class);
         $this->urlRewriteBunchReplacer = new UrlRewriteBunchReplacer(
             $this->urlPersistMock
         );

@@ -134,7 +134,7 @@ class FormTest extends TestCase
             ->onlyMethods(['addFieldset', 'addField', 'getElement', 'setValues'])
             ->disableOriginalConstructor()
             ->getMock();
-        $this->directoryReadInterface = $this->createMock(ReadInterface::class);
+        $this->directoryReadInterface = $this->getMockForAbstractClass(ReadInterface::class);
         $this->registry = $this->createMock(Registry::class);
         $this->formFactory = $this->createMock(FormFactory::class);
         $this->optionFactory = $this->createPartialMock(OptionFactory::class, ['create']);

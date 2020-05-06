@@ -43,7 +43,7 @@ class ImageTest extends TestCase
             ->getMock();
         $this->urlEncoder = $this->getMockBuilder(EncoderInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->image = $objectManager->getObject(
             Image::class,
             [

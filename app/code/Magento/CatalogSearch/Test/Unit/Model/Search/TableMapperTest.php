@@ -64,7 +64,7 @@ class TableMapperTest extends TestCase
 
         $storeManager = $this->getMockBuilder(StoreManagerInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $attributeCollectionFactory = $this->getMockBuilder(CollectionFactory::class)
             ->setMethods(['create'])
@@ -304,7 +304,7 @@ class TableMapperTest extends TestCase
     {
         return $this->getMockBuilder(RequestInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
     }
 
     /**

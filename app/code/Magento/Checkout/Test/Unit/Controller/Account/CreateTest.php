@@ -67,8 +67,8 @@ class CreateTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->customerSession = $this->createMock(\Magento\Customer\Model\Session::class);
-        $this->orderCustomerService = $this->createMock(OrderCustomerManagementInterface::class);
-        $this->messageManager = $this->createMock(ManagerInterface::class);
+        $this->orderCustomerService = $this->getMockForAbstractClass(OrderCustomerManagementInterface::class);
+        $this->messageManager = $this->getMockForAbstractClass(ManagerInterface::class);
 
         $contextMock = $this->createPartialMock(
             Context::class,
@@ -121,7 +121,7 @@ class CreateTest extends TestCase
     {
         $this->customerSession->expects($this->once())->method('isLoggedIn')->willReturn(false);
         $this->checkoutSession->expects($this->once())->method('getLastOrderId')->willReturn(100);
-        $customer = $this->createMock(CustomerInterface::class);
+        $customer = $this->getMockForAbstractClass(CustomerInterface::class);
         $this->orderCustomerService->expects($this->once())
             ->method('create')
             ->with(100)

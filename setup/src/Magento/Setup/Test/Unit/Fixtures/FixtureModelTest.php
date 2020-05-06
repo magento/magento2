@@ -27,7 +27,7 @@ class FixtureModelTest extends TestCase
 
     public function testReindex()
     {
-        $outputMock = $this->createMock(OutputInterface::class);
+        $outputMock = $this->getMockForAbstractClass(OutputInterface::class);
         $this->model->reindex($outputMock);
     }
 }

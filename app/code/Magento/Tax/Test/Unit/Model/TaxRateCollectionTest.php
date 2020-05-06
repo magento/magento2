@@ -82,10 +82,10 @@ class TaxRateCollectionTest extends TestCase
         $this->rateServiceMock = $this->getMockBuilder(TaxRateRepositoryInterface::class)
             ->addMethods(['__wakeup'])
             ->onlyMethods(['save', 'get', 'deleteById', 'getList', 'delete'])
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->rateConverterMock = $this->createMock(Converter::class);
-        $this->searchCriteriaMock = $this->createMock(SearchCriteriaInterface::class);
-        $this->searchResultsMock = $this->createMock(TaxRateSearchResultsInterface::class);
+        $this->searchCriteriaMock = $this->getMockForAbstractClass(SearchCriteriaInterface::class);
+        $this->searchResultsMock = $this->getMockForAbstractClass(TaxRateSearchResultsInterface::class);
         $this->taxRateMock = $this->createMock(Rate::class);
 
         $this->searchCriteriaBuilderMock->expects($this->any())

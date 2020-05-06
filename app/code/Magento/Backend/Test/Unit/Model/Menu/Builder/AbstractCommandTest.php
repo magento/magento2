@@ -56,8 +56,8 @@ class AbstractCommandTest extends TestCase
             '_execute'
         )->with(
             $this->equalTo($itemParams)
-        )->will(
-            $this->returnValue($itemParams)
+        )->willReturn(
+            $itemParams
         );
 
         $command1 = $this->getMockBuilder(Update::class)

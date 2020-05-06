@@ -63,7 +63,7 @@ class ObserverTest extends TestCase
             ->getMock();
         $this->customerRepositoryMock = $this->getMockBuilder(CustomerRepositoryInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->customerViewHelperMock = $this->getMockBuilder(View::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -72,7 +72,7 @@ class ObserverTest extends TestCase
             ->getMock();
         $this->layoutMock = $this->getMockBuilder(LayoutInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->sessionMock = $this->getMockBuilder(Session::class)
             ->disableOriginalConstructor()
             ->setMethods(['getCustomerId'])

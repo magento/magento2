@@ -42,7 +42,7 @@ class AfterProductLoadTest extends TestCase
 
     protected function setUp(): void
     {
-        $stockRegistryMock = $this->createMock(StockRegistryInterface::class);
+        $stockRegistryMock = $this->getMockForAbstractClass(StockRegistryInterface::class);
         $this->productExtensionFactoryMock = $this->getMockBuilder(
             ProductExtensionFactory::class
         )
@@ -56,7 +56,7 @@ class AfterProductLoadTest extends TestCase
         );
 
         $productId = 5494;
-        $stockItemMock = $this->createMock(StockItemInterface::class);
+        $stockItemMock = $this->getMockForAbstractClass(StockItemInterface::class);
 
         $stockRegistryMock->expects($this->once())
             ->method('getStockItem')

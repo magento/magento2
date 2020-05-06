@@ -214,10 +214,10 @@ class ProductTest extends TestCase
             ->method('getAreaCode')
             ->willReturn(FrontNameResolver::AREA_CODE);
 
-        $eventManagerMock = $this->createMock(ManagerInterface::class);
+        $eventManagerMock = $this->getMockForAbstractClass(ManagerInterface::class);
         $actionValidatorMock = $this->createMock(RemoveAction::class);
         $actionValidatorMock->expects($this->any())->method('isAllowed')->willReturn(true);
-        $cacheInterfaceMock = $this->createMock(CacheInterface::class);
+        $cacheInterfaceMock = $this->getMockForAbstractClass(CacheInterface::class);
 
         $contextMock = $this->createPartialMock(
             Context::class,
@@ -270,7 +270,7 @@ class ProductTest extends TestCase
             IndexerRegistry::class,
             ['get']
         );
-        $this->categoryRepository = $this->createMock(CategoryRepositoryInterface::class);
+        $this->categoryRepository = $this->getMockForAbstractClass(CategoryRepositoryInterface::class);
 
         $this->_catalogProduct = $this->createPartialMock(
             \Magento\Catalog\Helper\Product::class,
@@ -296,7 +296,7 @@ class ProductTest extends TestCase
                 ->disableOriginalConstructor()
                 ->getMock();
 
-        $this->metadataServiceMock = $this->createMock(ProductAttributeRepositoryInterface::class);
+        $this->metadataServiceMock = $this->getMockForAbstractClass(ProductAttributeRepositoryInterface::class);
         $this->attributeValueFactory = $this->getMockBuilder(AttributeValueFactory::class)
             ->disableOriginalConstructor()
             ->getMock();

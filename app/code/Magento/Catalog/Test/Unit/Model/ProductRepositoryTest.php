@@ -247,7 +247,7 @@ class ProductRepositoryTest extends TestCase
         $this->initializationHelper = $this->createMock(Helper::class);
         $this->collectionFactory = $this->createPartialMock(CollectionFactory::class, ['create']);
         $this->searchCriteriaBuilder = $this->createMock(SearchCriteriaBuilder::class);
-        $this->metadataService = $this->createMock(ProductAttributeRepositoryInterface::class);
+        $this->metadataService = $this->getMockForAbstractClass(ProductAttributeRepositoryInterface::class);
         $this->searchResultsFactory = $this->createPartialMock(
             ProductSearchResultsInterfaceFactory::class,
             ['create']
@@ -267,9 +267,9 @@ class ProductRepositoryTest extends TestCase
         $this->contentFactory = $this->createPartialMock(ImageContentInterfaceFactory::class, ['create']);
         $this->contentValidator = $this->getMockBuilder(ImageContentValidatorInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->linkTypeProvider = $this->createPartialMock(LinkTypeProvider::class, ['getLinkTypes']);
-        $this->imageProcessor = $this->createMock(ImageProcessorInterface::class);
+        $this->imageProcessor = $this->getMockForAbstractClass(ImageProcessorInterface::class);
 
         $this->storeManager = $this->getMockBuilder(StoreManagerInterface::class)
             ->disableOriginalConstructor()
@@ -776,7 +776,7 @@ class ProductRepositoryTest extends TestCase
 
     public function testGetList()
     {
-        $searchCriteriaMock = $this->createMock(SearchCriteriaInterface::class);
+        $searchCriteriaMock = $this->getMockForAbstractClass(SearchCriteriaInterface::class);
         $collectionMock = $this->createMock(Collection::class);
         $this->collectionFactory->expects($this->once())->method('create')->willReturn($collectionMock);
         $this->product->method('getSku')->willReturn('simple');
@@ -792,7 +792,7 @@ class ProductRepositoryTest extends TestCase
         $collectionMock->expects($this->once())->method('addCategoryIds');
         $collectionMock->expects($this->atLeastOnce())->method('getItems')->willReturn([$this->product]);
         $collectionMock->expects($this->once())->method('getSize')->willReturn(128);
-        $searchResultsMock = $this->createMock(ProductSearchResultsInterface::class);
+        $searchResultsMock = $this->getMockForAbstractClass(ProductSearchResultsInterface::class);
         $searchResultsMock->expects($this->once())->method('setSearchCriteria')->with($searchCriteriaMock);
         $searchResultsMock->expects($this->once())->method('setItems')->with([$this->product]);
         $this->searchResultsFactory->expects($this->once())->method('create')->willReturn($searchResultsMock);
@@ -1321,7 +1321,7 @@ class ProductRepositoryTest extends TestCase
 
     public function testSaveWithDifferentWebsites()
     {
-        $storeMock = $this->createMock(StoreInterface::class);
+        $storeMock = $this->getMockForAbstractClass(StoreInterface::class);
         $this->resourceModel->expects($this->at(0))->method('getIdBySku')->willReturn(null);
         $this->resourceModel->expects($this->at(3))->method('getIdBySku')->willReturn(100);
         $this->productFactory->expects($this->any())

@@ -51,9 +51,9 @@ class ReviewTest extends TestCase
     {
         $helper = new ObjectManager($this);
 
-        $layout = $this->createMock(LayoutInterface::class);
-        $eventManager = $this->createMock(ManagerInterface::class);
-        $scopeConfig = $this->createMock(ScopeConfigInterface::class);
+        $layout = $this->getMockForAbstractClass(LayoutInterface::class);
+        $eventManager = $this->getMockForAbstractClass(ManagerInterface::class);
+        $scopeConfig = $this->getMockForAbstractClass(ScopeConfigInterface::class);
 
         $scopeConfig->expects($this->any())
             ->method('getValue')
@@ -62,7 +62,7 @@ class ReviewTest extends TestCase
                 ScopeInterface::SCOPE_STORE
             )->willReturn(false);
 
-        $urlBuilder = $this->createMock(UrlInterface::class);
+        $urlBuilder = $this->getMockForAbstractClass(UrlInterface::class);
         $urlBuilder->expects($this->any())->method('getUrl')->willReturnArgument(0);
 
         $context = $this->createPartialMock(
@@ -125,11 +125,11 @@ class ReviewTest extends TestCase
         $quote->getShippingAddress()
             ->expects($this->any())
             ->method('getGroupedAllShippingRates')
-            ->will($this->returnValue($shippingRates));
+            ->willReturn($shippingRates);
         $quote->getShippingAddress()
             ->expects($this->any())
             ->method('getShippingMethod')
-            ->will($this->returnValue($shippingRate->getCode()));
+            ->willReturn($shippingRate->getCode());
 
         $this->model->setQuote($quote);
         $this->model->toHtml();

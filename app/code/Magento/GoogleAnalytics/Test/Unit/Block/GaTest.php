@@ -72,7 +72,7 @@ class GaTest extends TestCase
 
         $this->storeManagerMock = $this->getMockBuilder(StoreManagerInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->storeMock = $this->getMockBuilder(Store::class)
             ->disableOriginalConstructor()
@@ -210,7 +210,7 @@ class GaTest extends TestCase
         for ($i = 0; $i < $orderItemCount; $i++) {
             $orderItemMock = $this->getMockBuilder(OrderItemInterface::class)
                 ->disableOriginalConstructor()
-                ->getMock();
+                ->getMockForAbstractClass();
             $orderItemMock->expects($this->once())->method('getSku')->willReturn('sku' . $i);
             $orderItemMock->expects($this->once())->method('getName')->willReturn('testName' . $i);
             $orderItemMock->expects($this->once())->method('getPrice')->willReturn($i . '.00');

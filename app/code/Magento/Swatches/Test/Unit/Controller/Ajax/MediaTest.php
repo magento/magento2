@@ -82,7 +82,7 @@ class MediaTest extends TestCase
         $this->productMock = $this->createMock(Product::class);
         $this->contextMock = $this->createMock(Context::class);
 
-        $this->requestMock = $this->createMock(RequestInterface::class);
+        $this->requestMock = $this->getMockForAbstractClass(RequestInterface::class);
         $this->contextMock->method('getRequest')->willReturn($this->requestMock);
         $this->responseMock = $this->getMockBuilder(ResponseInterface::class)
             ->disableOriginalConstructor()

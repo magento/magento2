@@ -71,7 +71,7 @@ class CategoryRepositoryTest extends TestCase
         );
         $this->categoryResourceMock =
             $this->createMock(\Magento\Catalog\Model\ResourceModel\Category::class);
-        $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
+        $this->storeManagerMock = $this->getMockForAbstractClass(StoreManagerInterface::class);
         $this->storeMock = $this->getMockBuilder(StoreInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['getId'])

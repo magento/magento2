@@ -297,7 +297,7 @@ class ProfilerTest extends TestCase
     {
         $this->markTestSkipped('Skipped in #27500 due to testing protected/private methods and properties');
 
-        $mockDriver = $this->createMock(DriverInterface::class);
+        $mockDriver = $this->getMockForAbstractClass(DriverInterface::class);
         $driverConfig = ['type' => 'foo'];
         $mockDriverFactory = $this->getMockBuilder(
             Factory::class

@@ -64,7 +64,7 @@ class UrlTest extends TestCase
 
         $this->buttonMock = $this->getMockBuilder(ButtonInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->model = $this->objectManagerHelper->getObject(
@@ -83,7 +83,7 @@ class UrlTest extends TestCase
         $product = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $productRenderInfoDto = $this->createMock(ProductRenderInterface::class);
+        $productRenderInfoDto = $this->getMockForAbstractClass(ProductRenderInterface::class);
         $this->catalogProductHelperMock
             ->expects($this->once())
             ->method('getPostDataParams')

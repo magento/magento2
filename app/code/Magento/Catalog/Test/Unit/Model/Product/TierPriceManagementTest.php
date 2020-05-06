@@ -89,22 +89,22 @@ class TierPriceManagementTest extends TestCase
             ProductTierPriceInterfaceFactory::class,
             ['create']
         );
-        $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
+        $this->storeManagerMock = $this->getMockForAbstractClass(StoreManagerInterface::class);
         $this->websiteMock =
             $this->createPartialMock(Website::class, ['getId']);
         $this->productMock = $this->createPartialMock(
             Product::class,
             ['getData', 'getIdBySku', 'load', 'save', 'validate', 'setData']
         );
-        $this->configMock = $this->createMock(ScopeConfigInterface::class);
+        $this->configMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
         $this->priceModifierMock =
             $this->createMock(PriceModifier::class);
         $this->repositoryMock->expects($this->any())->method('get')->with('product_sku')
             ->willReturn($this->productMock);
         $this->groupManagementMock =
-            $this->createMock(GroupManagementInterface::class);
+            $this->getMockForAbstractClass(GroupManagementInterface::class);
         $this->groupRepositoryMock =
-            $this->createMock(GroupRepositoryInterface::class);
+            $this->getMockForAbstractClass(GroupRepositoryInterface::class);
 
         $this->service = new TierPriceManagement(
             $this->repositoryMock,
@@ -143,7 +143,7 @@ class TierPriceManagementTest extends TestCase
             ->with('catalog/price/scope', ScopeInterface::SCOPE_WEBSITE)
             ->willReturn($configValue);
         if ($expected) {
-            $priceMock = $this->createMock(ProductTierPriceInterface::class);
+            $priceMock = $this->getMockForAbstractClass(ProductTierPriceInterface::class);
             $priceMock->expects($this->once())
                 ->method('setValue')
                 ->with($expected['value'])
@@ -205,7 +205,7 @@ class TierPriceManagementTest extends TestCase
             ->willReturn(0);
         $this->priceModifierMock->expects($this->once())->method('removeTierPrice')->with($this->productMock, 4, 5, 0);
 
-        $this->assertEquals(true, $this->service->remove('product_sku', 4, 5, 0));
+        $this->assertTrue($this->service->remove('product_sku', 4, 5, 0));
     }
 
     public function testDeleteTierPriceFromNonExistingProduct()
@@ -235,7 +235,7 @@ class TierPriceManagementTest extends TestCase
             ->willReturn(1);
         $this->priceModifierMock->expects($this->once())->method('removeTierPrice')->with($this->productMock, 4, 5, 1);
 
-        $this->assertEquals(true, $this->service->remove('product_sku', 4, 5, 6));
+        $this->assertTrue($this->service->remove('product_sku', 4, 5, 6));
     }
 
     public function testSetNewPriceWithGlobalPriceScopeAll()

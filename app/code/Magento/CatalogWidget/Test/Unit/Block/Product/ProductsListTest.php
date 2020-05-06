@@ -122,8 +122,8 @@ class ProductsListTest extends TestCase
         $this->widgetConditionsHelper = $this->getMockBuilder(Conditions::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->storeManager = $this->createMock(StoreManagerInterface::class);
-        $this->design = $this->createMock(DesignInterface::class);
+        $this->storeManager = $this->getMockForAbstractClass(StoreManagerInterface::class);
+        $this->design = $this->getMockForAbstractClass(DesignInterface::class);
 
         $objectManagerHelper = new ObjectManagerHelper($this);
         $arguments = $objectManagerHelper->getConstructArguments(
@@ -142,7 +142,7 @@ class ProductsListTest extends TestCase
         );
         $this->request = $arguments['context']->getRequest();
         $this->layout = $arguments['context']->getLayout();
-        $this->priceCurrency = $this->createMock(PriceCurrencyInterface::class);
+        $this->priceCurrency = $this->getMockForAbstractClass(PriceCurrencyInterface::class);
 
         $this->productsList = $objectManagerHelper->getObject(
             ProductsList::class,
@@ -159,7 +159,7 @@ class ProductsListTest extends TestCase
         $store->expects($this->once())->method('getId')->willReturn(1);
         $this->storeManager->expects($this->once())->method('getStore')->willReturn($store);
 
-        $theme = $this->createMock(ThemeInterface::class);
+        $theme = $this->getMockForAbstractClass(ThemeInterface::class);
         $theme->expects($this->once())->method('getId')->willReturn('blank');
         $this->design->expects($this->once())->method('getDesignTheme')->willReturn($theme);
 
@@ -384,9 +384,9 @@ class ProductsListTest extends TestCase
 
     public function testShowPager()
     {
-        $this->assertEquals(false, $this->productsList->showPager());
+        $this->assertFalse($this->productsList->showPager());
         $this->productsList->setData('show_pager', true);
-        $this->assertEquals(true, $this->productsList->showPager());
+        $this->assertTrue($this->productsList->showPager());
     }
 
     public function testGetIdentities()

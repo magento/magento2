@@ -52,7 +52,7 @@ class InfoTest extends TestCase
         $this->contextMock = $this->createMock(Context::class);
         $this->registryMock = $this->createMock(Registry::class);
         $this->paymentHelperMock = $this->createPartialMock(Data::class, ['getMethodInstance']);
-        $this->encryptorInterfaceMock = $this->createMock(EncryptorInterface::class);
+        $this->encryptorInterfaceMock = $this->getMockForAbstractClass(EncryptorInterface::class);
         $this->methodInstanceMock = $this->getMockBuilder(MethodInterface::class)
             ->getMockForAbstractClass();
 

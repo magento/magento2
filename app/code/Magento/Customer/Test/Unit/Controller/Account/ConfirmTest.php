@@ -126,13 +126,13 @@ class ConfirmTest extends TestCase
     protected function setUp(): void
     {
         $this->customerSessionMock = $this->createMock(Session::class);
-        $this->requestMock = $this->createMock(RequestInterface::class);
+        $this->requestMock = $this->getMockForAbstractClass(RequestInterface::class);
         $this->responseMock = $this->createPartialMock(
             Http::class,
             ['setRedirect', '__wakeup']
         );
-        $viewMock = $this->createMock(ViewInterface::class);
-        $this->redirectMock = $this->createMock(RedirectInterface::class);
+        $viewMock = $this->getMockForAbstractClass(ViewInterface::class);
+        $this->redirectMock = $this->getMockForAbstractClass(RedirectInterface::class);
 
         $this->urlMock = $this->createMock(\Magento\Framework\Url::class);
         $urlFactoryMock = $this->createMock(UrlFactory::class);
@@ -142,7 +142,7 @@ class ConfirmTest extends TestCase
 
         $this->customerAccountManagementMock =
             $this->getMockForAbstractClass(AccountManagementInterface::class);
-        $this->customerDataMock = $this->createMock(CustomerInterface::class);
+        $this->customerDataMock = $this->getMockForAbstractClass(CustomerInterface::class);
 
         $this->customerRepositoryMock =
             $this->getMockForAbstractClass(CustomerRepositoryInterface::class);
@@ -159,7 +159,7 @@ class ConfirmTest extends TestCase
             ->with(ResultFactory::TYPE_REDIRECT)
             ->willReturn($this->redirectResultMock);
 
-        $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
+        $this->scopeConfigMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
         $this->contextMock = $this->createMock(Context::class);
         $this->contextMock->expects($this->any())
             ->method('getRequest')

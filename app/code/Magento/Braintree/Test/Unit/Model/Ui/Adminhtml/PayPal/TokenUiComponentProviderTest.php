@@ -48,7 +48,7 @@ class TokenUiComponentProviderTest extends TestCase
             ->setMethods(['create'])
             ->getMock();
 
-        $this->urlBuilder = $this->createMock(UrlInterface::class);
+        $this->urlBuilder = $this->getMockForAbstractClass(UrlInterface::class);
 
         $this->config = $this->getMockBuilder(Config::class)
             ->disableOriginalConstructor()
@@ -89,7 +89,7 @@ class TokenUiComponentProviderTest extends TestCase
             ->method('getPayPalIcon')
             ->willReturn($icon);
 
-        $paymentToken = $this->createMock(PaymentTokenInterface::class);
+        $paymentToken = $this->getMockForAbstractClass(PaymentTokenInterface::class);
         $paymentToken->expects(static::once())
             ->method('getTokenDetails')
             ->willReturn('{"payerEmail":" ' . $payerEmail . '"}');
@@ -101,7 +101,7 @@ class TokenUiComponentProviderTest extends TestCase
             ->method('getUrl')
             ->willReturn($nonceUrl);
 
-        $tokenComponent = $this->createMock(TokenUiComponentInterface::class);
+        $tokenComponent = $this->getMockForAbstractClass(TokenUiComponentInterface::class);
         $tokenComponent->expects(static::once())
             ->method('getConfig')
             ->willReturn($expected);

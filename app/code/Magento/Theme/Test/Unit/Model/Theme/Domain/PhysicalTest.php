@@ -61,7 +61,7 @@ class PhysicalTest extends TestCase
         $themeCollection->expects($this->once())->method('count')->willReturn(1);
 
         $domainModel = new Physical(
-            $this->createMock(ThemeInterface::class),
+            $this->getMockForAbstractClass(ThemeInterface::class),
             $themeFactory,
             $copyService,
             $themeCollection

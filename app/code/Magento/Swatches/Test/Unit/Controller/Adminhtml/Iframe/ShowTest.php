@@ -83,7 +83,7 @@ class ShowTest extends TestCase
         );
 
         $this->uploaderMock = $this->createMock(Uploader::class);
-        $this->adapterMock = $this->createMock(AdapterInterface::class);
+        $this->adapterMock = $this->getMockForAbstractClass(AdapterInterface::class);
         $this->mediaDirectoryMock = $this->createMock(Read::class);
 
         $objectManager = new ObjectManager($this);

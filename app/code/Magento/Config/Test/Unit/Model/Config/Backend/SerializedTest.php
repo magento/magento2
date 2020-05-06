@@ -31,9 +31,9 @@ class SerializedTest extends TestCase
     {
         $objectManager = new ObjectManager($this);
         $this->serializerMock = $this->createMock(Json::class);
-        $this->loggerMock = $this->createMock(LoggerInterface::class);
+        $this->loggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
         $contextMock = $this->createMock(Context::class);
-        $eventManagerMock = $this->createMock(ManagerInterface::class);
+        $eventManagerMock = $this->getMockForAbstractClass(ManagerInterface::class);
         $contextMock->method('getEventDispatcher')
             ->willReturn($eventManagerMock);
         $contextMock->method('getLogger')

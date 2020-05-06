@@ -68,7 +68,7 @@ class ExportCouponsXmlTest extends TestCase
         $fileName = 'coupon_codes.xml';
 
         $resultLayoutMock = $this->createMock(Layout::class);
-        $layoutMock = $this->createMock(LayoutInterface::class);
+        $layoutMock = $this->getMockForAbstractClass(LayoutInterface::class);
         $contentMock = $this->getMockBuilder(AbstractBlock::class)
             ->addMethods(['getExcelFile'])
             ->disableOriginalConstructor()

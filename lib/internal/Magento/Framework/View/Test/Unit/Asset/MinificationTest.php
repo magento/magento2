@@ -41,7 +41,7 @@ class MinificationTest extends TestCase
     {
         $this->scopeConfigMock = $this->getMockBuilder(ScopeConfigInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->appStateMock = $this->getMockBuilder(State::class)
             ->disableOriginalConstructor()
             ->getMock();

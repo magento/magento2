@@ -41,7 +41,7 @@ class CvvEmsCodeMapperTest extends TestCase
         /** @var OrderPaymentInterface|MockObject $orderPayment */
         $orderPayment = $this->getMockBuilder(OrderPaymentInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $orderPayment->expects(self::once())
             ->method('getMethod')
@@ -66,7 +66,7 @@ class CvvEmsCodeMapperTest extends TestCase
         /** @var OrderPaymentInterface|MockObject $orderPayment */
         $orderPayment = $this->getMockBuilder(OrderPaymentInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $orderPayment->expects(self::exactly(2))
             ->method('getMethod')

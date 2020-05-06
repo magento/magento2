@@ -86,11 +86,11 @@ class GenerateTest extends TestCase
             ->getMockBuilder(\Magento\Framework\App\Response\Http::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->messageManager = $this->createMock(ManagerInterface::class);
+        $this->messageManager = $this->getMockForAbstractClass(ManagerInterface::class);
         $this->objectManagerMock = $this->getMockBuilder(ObjectManager::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->view = $this->createMock(ViewInterface::class);
+        $this->view = $this->getMockForAbstractClass(ViewInterface::class);
         $this->contextMock->expects($this->once())
             ->method('getView')
             ->willReturn($this->view);

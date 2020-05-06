@@ -41,15 +41,15 @@ class MenuTest extends TestCase
     {
         $this->objectManagerHelper = new ObjectManager($this);
         $this->_items['item1'] = $this->createMock(Item::class);
-        $this->_items['item1']->expects($this->any())->method('getId')->will($this->returnValue('item1'));
+        $this->_items['item1']->expects($this->any())->method('getId')->willReturn('item1');
 
         $this->_items['item2'] = $this->createMock(Item::class);
-        $this->_items['item2']->expects($this->any())->method('getId')->will($this->returnValue('item2'));
+        $this->_items['item2']->expects($this->any())->method('getId')->willReturn('item2');
 
         $this->_items['item3'] = $this->createMock(Item::class);
-        $this->_items['item3']->expects($this->any())->method('getId')->will($this->returnValue('item3'));
+        $this->_items['item3']->expects($this->any())->method('getId')->willReturn('item3');
 
-        $this->_logger = $this->createMock(LoggerInterface::class);
+        $this->_logger = $this->getMockForAbstractClass(LoggerInterface::class);
 
         $this->_model = $this->objectManagerHelper->getObject(
             Menu::class,
@@ -80,7 +80,7 @@ class MenuTest extends TestCase
             ->getMock();
         $subMenu->expects($this->once())->method("add")->with($this->_items['item2']);
 
-        $this->_items['item1']->expects($this->once())->method("getChildren")->will($this->returnValue($subMenu));
+        $this->_items['item1']->expects($this->once())->method("getChildren")->willReturn($subMenu);
 
         $this->_model->add($this->_items['item1']);
         $this->_model->add($this->_items['item2'], 'item1');
@@ -136,15 +136,15 @@ class MenuTest extends TestCase
             ]
         );
 
-        $this->_items['item1']->expects($this->any())->method('hasChildren')->will($this->returnValue(true));
-        $this->_items['item1']->expects($this->any())->method('getChildren')->will($this->returnValue($menuOne));
+        $this->_items['item1']->expects($this->any())->method('hasChildren')->willReturn(true);
+        $this->_items['item1']->expects($this->any())->method('getChildren')->willReturn($menuOne);
         $this->_model->add($this->_items['item1']);
 
-        $this->_items['item2']->expects($this->any())->method('hasChildren')->will($this->returnValue(true));
-        $this->_items['item2']->expects($this->any())->method('getChildren')->will($this->returnValue($menuTwo));
+        $this->_items['item2']->expects($this->any())->method('hasChildren')->willReturn(true);
+        $this->_items['item2']->expects($this->any())->method('getChildren')->willReturn($menuTwo);
         $menuOne->add($this->_items['item2']);
 
-        $this->_items['item3']->expects($this->any())->method('hasChildren')->will($this->returnValue(false));
+        $this->_items['item3']->expects($this->any())->method('hasChildren')->willReturn(false);
         $menuTwo->add($this->_items['item3']);
 
         $this->assertEquals($this->_items['item1'], $this->_model->get('item1'));
@@ -163,7 +163,7 @@ class MenuTest extends TestCase
             ->getMock();
         $subMenu->expects($this->once())->method("add")->with($this->_items['item3']);
 
-        $this->_items['item1']->expects($this->once())->method("getChildren")->will($this->returnValue($subMenu));
+        $this->_items['item1']->expects($this->once())->method("getChildren")->willReturn($subMenu);
 
         $this->_model->move('item3', 'item1');
 
@@ -210,8 +210,8 @@ class MenuTest extends TestCase
             ->getMock();
         $menuMock->expects($this->once())->method('remove')->with('item2');
 
-        $this->_items['item1']->expects($this->any())->method('hasChildren')->will($this->returnValue(true));
-        $this->_items['item1']->expects($this->any())->method('getChildren')->will($this->returnValue($menuMock));
+        $this->_items['item1']->expects($this->any())->method('hasChildren')->willReturn(true);
+        $this->_items['item1']->expects($this->any())->method('getChildren')->willReturn($menuMock);
         $this->_model->add($this->_items['item1']);
 
         $result = $this->_model->remove('item2');
@@ -247,9 +247,9 @@ class MenuTest extends TestCase
             ]
         );
 
-        $this->_items['item1']->expects($this->any())->method("hasChildren")->will($this->returnValue(true));
+        $this->_items['item1']->expects($this->any())->method("hasChildren")->willReturn(true);
 
-        $this->_items['item1']->expects($this->any())->method("getChildren")->will($this->returnValue($subMenu));
+        $this->_items['item1']->expects($this->any())->method("getChildren")->willReturn($subMenu);
 
         $this->_model->add($this->_items['item1']);
         $this->_model->add($this->_items['item2'], 'item1', 10);
@@ -282,8 +282,8 @@ class MenuTest extends TestCase
         $item->expects($this->never())->method('getFirstAvailable');
         $this->_model->add($item);
 
-        $this->_items['item1']->expects($this->once())->method('isAllowed')->will($this->returnValue(true));
-        $this->_items['item1']->expects($this->once())->method('isDisabled')->will($this->returnValue(false));
+        $this->_items['item1']->expects($this->once())->method('isAllowed')->willReturn(true);
+        $this->_items['item1']->expects($this->once())->method('isDisabled')->willReturn(false);
         $this->_items['item1']->expects($this->once())->method('hasChildren');
         $this->_model->add($this->_items['item1']);
 
@@ -292,15 +292,15 @@ class MenuTest extends TestCase
 
     public function testGetFirstAvailableReturnsOnlyAllowedAndNotDisabledItem()
     {
-        $this->_items['item1']->expects($this->exactly(1))->method('isAllowed')->will($this->returnValue(true));
-        $this->_items['item1']->expects($this->exactly(1))->method('isDisabled')->will($this->returnValue(true));
+        $this->_items['item1']->expects($this->exactly(1))->method('isAllowed')->willReturn(true);
+        $this->_items['item1']->expects($this->exactly(1))->method('isDisabled')->willReturn(true);
         $this->_model->add($this->_items['item1']);
 
-        $this->_items['item2']->expects($this->exactly(1))->method('isAllowed')->will($this->returnValue(false));
+        $this->_items['item2']->expects($this->exactly(1))->method('isAllowed')->willReturn(false);
         $this->_model->add($this->_items['item2']);
 
-        $this->_items['item3']->expects($this->exactly(1))->method('isAllowed')->will($this->returnValue(true));
-        $this->_items['item3']->expects($this->exactly(1))->method('isDisabled')->will($this->returnValue(false));
+        $this->_items['item3']->expects($this->exactly(1))->method('isAllowed')->willReturn(true);
+        $this->_items['item3']->expects($this->exactly(1))->method('isDisabled')->willReturn(false);
         $this->_model->add($this->_items['item3']);
 
         $this->assertEquals($this->_items['item3'], $this->_model->getFirstAvailable());
@@ -353,7 +353,7 @@ class MenuTest extends TestCase
 
     public function testSerialize()
     {
-        $serializerMock = $this->createMock(SerializerInterface::class);
+        $serializerMock = $this->getMockForAbstractClass(SerializerInterface::class);
         $serializerMock->expects($this->once())
             ->method('serialize')
             ->with([['arrayData']])
@@ -376,7 +376,7 @@ class MenuTest extends TestCase
 
     public function testUnserialize()
     {
-        $serializerMock = $this->createMock(SerializerInterface::class);
+        $serializerMock = $this->getMockForAbstractClass(SerializerInterface::class);
         $serializerMock->expects($this->once())
             ->method('unserialize')
             ->willReturn([['unserializedData']]);

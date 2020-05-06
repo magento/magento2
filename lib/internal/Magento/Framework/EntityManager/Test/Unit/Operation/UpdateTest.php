@@ -63,10 +63,10 @@ class UpdateTest extends TestCase
     public function testDuplicateExceptionProcessingOnExecute()
     {
         $this->expectException('Magento\Framework\Exception\AlreadyExistsException');
-        $metadata = $this->createMock(EntityMetadataInterface::class);
+        $metadata = $this->getMockForAbstractClass(EntityMetadataInterface::class);
         $this->metadataPool->expects($this->any())->method('getMetadata')->willReturn($metadata);
 
-        $connection = $this->createMock(AdapterInterface::class);
+        $connection = $this->getMockForAbstractClass(AdapterInterface::class);
         $connection->expects($this->once())->method('rollback');
         $this->resourceConnection->expects($this->any())->method('getConnectionByName')->willReturn($connection);
 

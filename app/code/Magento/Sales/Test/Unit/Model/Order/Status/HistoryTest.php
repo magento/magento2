@@ -66,7 +66,7 @@ class HistoryTest extends TestCase
     public function testSetIsCustomerNotified()
     {
         $this->model->setIsCustomerNotified(true);
-        $this->assertEquals(true, $this->model->getIsCustomerNotified());
+        $this->assertTrue($this->model->getIsCustomerNotified());
     }
 
     public function testSetIsCustomerNotifiedNotApplicable()

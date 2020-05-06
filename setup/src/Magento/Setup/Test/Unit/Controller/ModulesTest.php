@@ -44,7 +44,7 @@ class ModulesTest extends TestCase
     {
         $this->objectManager = $this->getMockForAbstractClass(ObjectManagerInterface::class);
         /** @var
-         * $objectManagerProvider \PHPUnit_Framework_MockObject_MockObject|\Magento\Setup\Model\ObjectManagerProvider
+         * $objectManagerProvider \PHPUnit\Framework\MockObject\MockObject|\Magento\Setup\Model\ObjectManagerProvider
          */
         $objectManagerProvider = $this->createMock(ObjectManagerProvider::class);
         $objectManagerProvider->expects($this->once())->method('get')->willReturn($this->objectManager);

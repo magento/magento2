@@ -115,7 +115,7 @@ class DefaultTest extends TestCase
         );
 
         // \Magento\Customer\Model\Session
-        $this->_objectManager = $this->createMock(ObjectManagerInterface::class);
+        $this->_objectManager = $this->getMockForAbstractClass(ObjectManagerInterface::class);
         $this->_objectManager->expects(
             $this->any()
         )->method(

@@ -63,7 +63,7 @@ class JwtParserTest extends TestCase
         $this->jwtPayloadValidatorMock = $this->getMockBuilder(JwtPayloadValidatorInterface::class)
             ->setMethods(['validate'])
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->model = $this->objectManager->getObject(
             JwtParser::class,

@@ -45,7 +45,7 @@ class ExportButtonTest extends TestCase
 
         $this->urlBuilderMock = $this->getMockBuilder(UrlInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->model = $this->objectManager->getObject(
             ExportButton::class,
             [

@@ -76,7 +76,7 @@ class FactoryTest extends TestCase
             ->setMethods(['create'])
             ->getMock();
 
-        $this->productAttributeRepository = $this->createMock(ProductAttributeRepositoryInterface::class);
+        $this->productAttributeRepository = $this->getMockForAbstractClass(ProductAttributeRepositoryInterface::class);
 
         $this->factory = new Factory(
             $this->configurable,
@@ -157,7 +157,7 @@ class FactoryTest extends TestCase
             ->with($eavAttribute)
             ->willReturn(true);
 
-        $option = $this->createMock(OptionValueInterface::class);
+        $option = $this->getMockForAbstractClass(OptionValueInterface::class);
         $option->expects(static::once())
             ->method('setValueIndex')
             ->with($valueIndex)

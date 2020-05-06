@@ -91,7 +91,7 @@ class ActivityTest extends TestCase
 
         $this->securityConfig = $this->getMockBuilder(ConfigInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->sessionMock = $this->createMock(AdminSessionInfo::class);
 

@@ -84,7 +84,7 @@ class ViewedTest extends AbstractControllerTest
 
         $this->objectManagerMock = $this->getMockBuilder(ObjectManagerInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->objectManagerMock
             ->expects($this->any())
             ->method('create')
@@ -93,7 +93,7 @@ class ViewedTest extends AbstractControllerTest
 
         $this->messageManagerMock = $this->getMockBuilder(ManagerInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $flagMock = $this->getMockBuilder(ActionFlag::class)
             ->disableOriginalConstructor()
@@ -102,7 +102,7 @@ class ViewedTest extends AbstractControllerTest
         $responseMock = $this->getMockBuilder(ResponseInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['setRedirect', 'sendResponse'])
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->contextMock->expects($this->any())->method('getObjectManager')->willReturn($this->objectManagerMock);
         $this->contextMock->expects($this->any())->method('getHelper')->willReturn($this->helperMock);
@@ -184,7 +184,7 @@ class ViewedTest extends AbstractControllerTest
 
         $logMock = $this->getMockBuilder(LoggerInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $sessionMock = $this->getMockBuilder(Session::class)
             ->setMethods(['setIsUrlNotice'])

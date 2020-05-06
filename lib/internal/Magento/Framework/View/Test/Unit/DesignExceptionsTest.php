@@ -40,7 +40,7 @@ class DesignExceptionsTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
+        $this->scopeConfigMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
         $this->requestMock = $this->createMock(Http::class);
         $this->serializerMock = $this->createMock(Json::class);
 

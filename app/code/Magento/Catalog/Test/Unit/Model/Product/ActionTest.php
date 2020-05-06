@@ -68,7 +68,7 @@ class ActionTest extends TestCase
 
     protected function setUp(): void
     {
-        $eventManagerMock = $this->createMock(ManagerInterface::class);
+        $eventManagerMock = $this->getMockForAbstractClass(ManagerInterface::class);
         $this->productWebsiteFactory = $this->createPartialMock(
             WebsiteFactory::class,
             ['create']

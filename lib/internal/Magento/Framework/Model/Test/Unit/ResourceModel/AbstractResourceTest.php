@@ -36,7 +36,7 @@ class AbstractResourceTest extends TestCase
     {
         $objectManager = new ObjectManager($this);
         $this->serializerMock = $this->createMock(Json::class);
-        $this->loggerMock = $this->createMock(LoggerInterface::class);
+        $this->loggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
         $this->abstractResource = $objectManager->getObject(AbstractResourceStub::class);
         $objectManager->setBackwardCompatibleProperty($this->abstractResource, 'serializer', $this->serializerMock);
         $objectManager->setBackwardCompatibleProperty($this->abstractResource, '_logger', $this->loggerMock);
@@ -176,7 +176,7 @@ class AbstractResourceTest extends TestCase
     public function testCommitZeroLevel()
     {
         /** @var AdapterInterface|MockObject $connection */
-        $connection = $this->createMock(AdapterInterface::class);
+        $connection = $this->getMockForAbstractClass(AdapterInterface::class);
         /** @var DataObject|MockObject $closureExpectation */
         $closureExpectation = $this->getMockBuilder(DataObject::class)
             ->disableOriginalConstructor()
@@ -212,7 +212,7 @@ class AbstractResourceTest extends TestCase
     public function testCommitZeroLevelCallbackException()
     {
         /** @var AdapterInterface|MockObject $connection */
-        $connection = $this->createMock(AdapterInterface::class);
+        $connection = $this->getMockForAbstractClass(AdapterInterface::class);
 
         $this->abstractResource->setConnection($connection);
         $this->abstractResource->addCommitCallback(
@@ -235,7 +235,7 @@ class AbstractResourceTest extends TestCase
     public function testCommitNotCompletedTransaction()
     {
         /** @var AdapterInterface|MockObject $connection */
-        $connection = $this->createMock(AdapterInterface::class);
+        $connection = $this->getMockForAbstractClass(AdapterInterface::class);
         /** @var DataObject|MockObject $closureExpectation */
         $closureExpectation = $this->getMockBuilder(DataObject::class)
             ->disableOriginalConstructor()

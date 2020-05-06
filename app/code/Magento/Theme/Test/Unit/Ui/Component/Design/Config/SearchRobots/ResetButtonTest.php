@@ -34,12 +34,12 @@ class ResetButtonTest extends TestCase
     private $scopeConfigMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject |
+     * @var \PHPUnit\Framework\MockObject\MockObject |
      */
     private $processorMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject |
+     * @var \PHPUnit\Framework\MockObject\MockObject |
      */
     private $wrappingComponentMock;
 
@@ -52,13 +52,13 @@ class ResetButtonTest extends TestCase
     {
         $this->contextMock = $this->getMockBuilder(ContextInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->componentFactoryMock = $this->getMockBuilder(UiComponentFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->scopeConfigMock = $this->getMockBuilder(ScopeConfigInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->processorMock = $this->getMockBuilder(Processor::class)
             ->disableOriginalConstructor()
             ->getMock();

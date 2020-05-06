@@ -85,7 +85,7 @@ class EditAddressTest extends TestCase
         $this->checkoutMock = $this->createMock(Multishipping::class);
         $this->titleMock = $this->createMock(Title::class);
         $this->layoutMock = $this->createMock(Layout::class);
-        $this->viewMock = $this->createMock(ViewInterface::class);
+        $this->viewMock = $this->getMockForAbstractClass(ViewInterface::class);
         $this->request = $this->getMockBuilder(RequestInterface::class)
             ->disableOriginalConstructor()
             ->setMethods([])
@@ -108,7 +108,7 @@ class EditAddressTest extends TestCase
                 ->onlyMethods(['getTitle'])
                 ->disableOriginalConstructor()
                 ->getMock();
-        $this->urlMock = $this->createMock(UrlInterface::class);
+        $this->urlMock = $this->getMockForAbstractClass(UrlInterface::class);
         $contextMock->expects($this->any())->method('getUrl')->willReturn($this->urlMock);
         $this->pageMock = $this->createMock(Page::class);
         $this->pageMock->expects($this->any())->method('getConfig')->willReturn($this->configMock);

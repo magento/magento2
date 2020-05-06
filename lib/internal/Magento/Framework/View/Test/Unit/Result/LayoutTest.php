@@ -52,8 +52,8 @@ class LayoutTest extends TestCase
     {
         $this->layout = $this->createMock(Layout::class);
         $this->request = $this->createMock(Http::class);
-        $this->eventManager = $this->createMock(ManagerInterface::class);
-        $this->translateInline = $this->createMock(InlineInterface::class);
+        $this->eventManager = $this->getMockForAbstractClass(ManagerInterface::class);
+        $this->translateInline = $this->getMockForAbstractClass(InlineInterface::class);
 
         $context = $this->createMock(Context::class);
         $context->expects($this->any())->method('getLayout')->willReturn($this->layout);
@@ -86,7 +86,7 @@ class LayoutTest extends TestCase
 
     public function testAddHandle()
     {
-        $processor = $this->createMock(ProcessorInterface::class);
+        $processor = $this->getMockForAbstractClass(ProcessorInterface::class);
         $processor->expects($this->once())->method('addHandle')->with('module_controller_action');
 
         $this->layout->expects($this->once())->method('getUpdate')->willReturn($processor);
@@ -96,7 +96,7 @@ class LayoutTest extends TestCase
 
     public function testAddUpdate()
     {
-        $processor = $this->createMock(ProcessorInterface::class);
+        $processor = $this->getMockForAbstractClass(ProcessorInterface::class);
         $processor->expects($this->once())->method('addUpdate')->with('handle_name');
 
         $this->layout->expects($this->once())->method('getUpdate')->willReturn($processor);
@@ -166,7 +166,7 @@ class LayoutTest extends TestCase
 
     public function testAddDefaultHandle()
     {
-        $processor = $this->createMock(ProcessorInterface::class);
+        $processor = $this->getMockForAbstractClass(ProcessorInterface::class);
         $processor->expects($this->once())->method('addHandle')->with('module_controller_action');
 
         $this->layout->expects($this->once())->method('getUpdate')->willReturn($processor);

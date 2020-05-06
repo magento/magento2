@@ -35,12 +35,12 @@ class RolesTest extends TestCase
         $this->jsonEncoderMock = $this->getMockBuilder(EncoderInterface::class)
             ->disableOriginalConstructor()
             ->setMethods([])
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->requestInterfaceMock = $this->getMockBuilder(RequestInterface::class)
             ->disableOriginalConstructor()
             ->setMethods([])
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $objectManagerHelper = new ObjectManager($this);
         $this->model = $objectManagerHelper->getObject(

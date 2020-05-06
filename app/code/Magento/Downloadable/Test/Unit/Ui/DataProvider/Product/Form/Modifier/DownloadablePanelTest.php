@@ -53,8 +53,8 @@ class DownloadablePanelTest extends TestCase
     protected function setUp(): void
     {
         $this->objectManagerHelper = new ObjectManagerHelper($this);
-        $this->productMock = $this->createMock(ProductInterface::class);
-        $this->locatorMock = $this->createMock(LocatorInterface::class);
+        $this->productMock = $this->getMockForAbstractClass(ProductInterface::class);
+        $this->locatorMock = $this->getMockForAbstractClass(LocatorInterface::class);
         $this->arrayManagerMock = $this->createMock(ArrayManager::class);
         $this->downloadablePanel = $this->objectManagerHelper->getObject(
             DownloadablePanel::class,

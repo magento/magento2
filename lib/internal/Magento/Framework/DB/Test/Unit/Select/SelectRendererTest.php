@@ -18,7 +18,7 @@ class SelectRendererTest extends TestCase
     {
         $rendererOne = $this->getMockBuilder(RendererInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $renders = [
             ['renderer' => $rendererOne, 'sort' => 10, 'part' => 'from'],
             ['renderer' => $rendererOne, 'sort' => 20, 'part' => 'from'],

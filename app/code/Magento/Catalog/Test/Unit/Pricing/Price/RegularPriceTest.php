@@ -57,7 +57,7 @@ class RegularPriceTest extends TestCase
             ->method('getPriceInfo')
             ->willReturn($this->priceInfoMock);
 
-        $this->priceCurrencyMock = $this->createMock(PriceCurrencyInterface::class);
+        $this->priceCurrencyMock = $this->getMockForAbstractClass(PriceCurrencyInterface::class);
 
         $this->regularPrice = new RegularPrice(
             $this->saleableItemMock,

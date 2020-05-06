@@ -114,7 +114,7 @@ class ImageUploaderTest extends TestCase
         $this->storeManagerMock = $this->createMock(
             StoreManagerInterface::class
         );
-        $this->loggerMock = $this->createMock(LoggerInterface::class);
+        $this->loggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
         $this->baseTmpPath = 'base/tmp/';
         $this->basePath =  'base/real/';
         $this->allowedExtensions = ['.jpg'];

@@ -118,7 +118,7 @@ class ResponseTest extends TestCase
         $this->paymentFailures = $this->getMockBuilder(PaymentFailuresInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['handle'])
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->sessionTransparent = $this->getMockBuilder(Session::class)
             ->disableOriginalConstructor()
             ->setMethods(['getQuoteId'])

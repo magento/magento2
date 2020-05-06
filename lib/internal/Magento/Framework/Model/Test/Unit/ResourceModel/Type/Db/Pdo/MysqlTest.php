@@ -34,7 +34,7 @@ class MysqlTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->serializerMock = $this->createMock(SerializerInterface::class);
+        $this->serializerMock = $this->getMockForAbstractClass(SerializerInterface::class);
         $this->selectFactoryMock = $this->createMock(SelectFactory::class);
         $this->mysqlFactoryMock = $this->createMock(MysqlFactory::class);
     }
@@ -116,7 +116,7 @@ class MysqlTest extends TestCase
             $config,
             $this->mysqlFactoryMock
         );
-        $loggerMock = $this->createMock(LoggerInterface::class);
+        $loggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
         $this->assertNull($object->getConnection($loggerMock, $this->selectFactoryMock));
     }
 }

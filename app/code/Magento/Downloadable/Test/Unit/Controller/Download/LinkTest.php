@@ -108,7 +108,7 @@ class LinkTest extends TestCase
         $this->response = $this->getMockBuilder(ResponseInterface::class)
             ->addMethods(['setHttpResponseCode', 'clearBody', 'sendHeaders', 'setHeader'])
             ->onlyMethods(['sendResponse'])
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->session = $this->createPartialMock(Session::class, [
             'getCustomerId',
             'authenticate',
@@ -151,9 +151,9 @@ class LinkTest extends TestCase
             ->onlyMethods(['load'])
             ->disableOriginalConstructor()
             ->getMock();
-        $this->messageManager = $this->createMock(ManagerInterface::class);
-        $this->redirect = $this->createMock(RedirectInterface::class);
-        $this->urlInterface = $this->createMock(UrlInterface::class);
+        $this->messageManager = $this->getMockForAbstractClass(ManagerInterface::class);
+        $this->redirect = $this->getMockForAbstractClass(RedirectInterface::class);
+        $this->urlInterface = $this->getMockForAbstractClass(UrlInterface::class);
         $this->objectManager = $this->createPartialMock(\Magento\Framework\ObjectManager\ObjectManager::class, [
             'create',
             'get'

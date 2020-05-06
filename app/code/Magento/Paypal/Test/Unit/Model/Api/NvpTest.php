@@ -70,12 +70,12 @@ class NvpTest extends TestCase
     protected function setUp(): void
     {
         $this->customerAddressHelper = $this->createMock(Address::class);
-        $this->logger = $this->createMock(LoggerInterface::class);
+        $this->logger = $this->getMockForAbstractClass(LoggerInterface::class);
         $this->customLoggerMock = $this->getMockBuilder(Logger::class)
             ->setConstructorArgs([$this->getMockForAbstractClass(LoggerInterface::class)])
             ->setMethods(['debug'])
             ->getMock();
-        $this->resolver = $this->createMock(ResolverInterface::class);
+        $this->resolver = $this->getMockForAbstractClass(ResolverInterface::class);
         $this->regionFactory = $this->createMock(RegionFactory::class);
         $this->countryFactory = $this->createMock(CountryFactory::class);
         $processableExceptionFactory = $this->createPartialMock(

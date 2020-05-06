@@ -53,7 +53,7 @@ class PathTest extends TestCase
     protected function setUp(): void
     {
         $this->filesystem = $this->createMock(Filesystem::class);
-        $this->mediaDirectory = $this->createMock(ReadInterface::class);
+        $this->mediaDirectory = $this->getMockForAbstractClass(ReadInterface::class);
         $this->_assetRepo = $this->createMock(Repository::class);
         $this->_storeManager = $this->createMock(StoreManager::class);
 

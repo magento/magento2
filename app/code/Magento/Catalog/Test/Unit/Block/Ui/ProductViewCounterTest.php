@@ -115,7 +115,7 @@ class ProductViewCounterTest extends TestCase
             ->getMock();
         $this->scopeConfigMock = $this->getMockBuilder(ScopeConfigInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->productViewCounter = new ProductViewCounter(
             $this->contextMock,

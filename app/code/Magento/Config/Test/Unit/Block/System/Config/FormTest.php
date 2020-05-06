@@ -105,7 +105,7 @@ class FormTest extends TestCase
     {
         $this->_systemConfigMock = $this->createMock(Structure::class);
 
-        $requestMock = $this->createMock(RequestInterface::class);
+        $requestMock = $this->getMockForAbstractClass(RequestInterface::class);
         $requestParams = [
             ['website', '', 'website_code'],
             ['section', '', 'section_code'],
@@ -125,7 +125,7 @@ class FormTest extends TestCase
         $settingCheckerMock = $this->getMockBuilder(SettingChecker::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->_coreConfigMock = $this->createMock(ScopeConfigInterface::class);
+        $this->_coreConfigMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
 
         $this->_backendConfigMock = $this->createMock(Config::class);
 
@@ -191,7 +191,7 @@ class FormTest extends TestCase
             ->method('get')
             ->willReturn([]);
 
-        $objectManagerMock = $this->createMock(ObjectManagerInterface::class);
+        $objectManagerMock = $this->getMockForAbstractClass(ObjectManagerInterface::class);
         $objectManagerMock->expects($this->any())
             ->method('get')
             ->willReturnMap([

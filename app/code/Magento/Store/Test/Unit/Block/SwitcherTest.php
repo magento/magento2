@@ -45,7 +45,7 @@ class SwitcherTest extends TestCase
     {
         $this->storeManager = $this->getMockBuilder(StoreManagerInterface::class)
             ->getMock();
-        $this->urlBuilder = $this->createMock(UrlInterface::class);
+        $this->urlBuilder = $this->getMockForAbstractClass(UrlInterface::class);
         $this->context = $this->createMock(Context::class);
         $this->context->expects($this->any())->method('getStoreManager')->willReturn($this->storeManager);
         $this->context->expects($this->any())->method('getUrlBuilder')->willReturn($this->urlBuilder);

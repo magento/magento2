@@ -76,8 +76,8 @@ class BuiltinPluginTest extends TestCase
         $this->versionMock = $this->createMock(Version::class);
         $this->kernelMock = $this->createMock(Kernel::class);
         $this->stateMock = $this->createMock(State::class);
-        $this->frontControllerMock = $this->createMock(FrontControllerInterface::class);
-        $this->requestMock = $this->createMock(RequestInterface::class);
+        $this->frontControllerMock = $this->getMockForAbstractClass(FrontControllerInterface::class);
+        $this->requestMock = $this->getMockForAbstractClass(RequestInterface::class);
         $this->responseMock = $this->createMock(Http::class);
         $response = $this->responseMock;
         $this->closure = function () use ($response) {
@@ -163,7 +163,7 @@ class BuiltinPluginTest extends TestCase
             ->method('getMode')
             ->willReturn($state);
 
-        $result = $this->createMock(ResultInterface::class);
+        $result = $this->getMockForAbstractClass(ResultInterface::class);
         $result->expects($this->never())->method('setHeader');
         $closure =  function () use ($result) {
             return $result;

@@ -297,7 +297,7 @@ class EntityAbstractTest extends TestCase
             ->willReturn($willWriteCode ? self::RESULT_CODE : null);
 
         // Add configuration for the generation step
-        /** @var \PHPUnit_Framework_MockObject_MockObject $ioObject */
+        /** @var \PHPUnit\Framework\MockObject\MockObject $ioObject */
         $ioObject = $mocks['io_object'];
         if ($willWriteCode) {
             $ioObject->expects($this->once())->method('writeResultFile')->with(self::RESULT_FILE, self::RESULT_CODE);

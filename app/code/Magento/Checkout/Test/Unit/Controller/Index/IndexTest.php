@@ -148,7 +148,7 @@ class IndexTest extends TestCase
         $this->resultPage = $this->basicMock(Page::class);
         $this->pageConfigMock = $this->basicMock(Config::class);
         $this->titleMock = $this->basicMock(Title::class);
-        $this->url = $this->createMock(UrlInterface::class);
+        $this->url = $this->getMockForAbstractClass(UrlInterface::class);
         $this->resultRedirectMock = $this->basicMock(Redirect::class);
 
         $resultPageFactoryMock = $this->getMockBuilder(PageFactory::class)

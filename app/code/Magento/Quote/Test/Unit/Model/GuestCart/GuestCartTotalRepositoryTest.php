@@ -57,7 +57,7 @@ class GuestCartTotalRepositoryTest extends TestCase
 
         $this->cartTotalRepository = $this->getMockBuilder(CartTotalRepositoryInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->maskedCartId = 'f216207248d65c789b17be8545e0aa73';
         $this->cartId = 123;

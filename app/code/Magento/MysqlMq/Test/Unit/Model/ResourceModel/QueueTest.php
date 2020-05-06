@@ -127,7 +127,7 @@ class QueueTest extends TestCase
         $tableNames = ['queue', 'queue_message_status'];
         $connection = $this->getMockBuilder(AdapterInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->resources->expects($this->atLeastOnce())
             ->method('getConnection')->with('default')->willReturn($connection);
         $this->resources->expects($this->exactly(2))->method('getTableName')
@@ -173,7 +173,7 @@ class QueueTest extends TestCase
         $messages = [['message0_data'], ['message1_data']];
         $connection = $this->getMockBuilder(AdapterInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->resources->expects($this->atLeastOnce())
             ->method('getConnection')->with('default')->willReturn($connection);
         $this->resources->expects($this->exactly(3))->method('getTableName')
@@ -241,7 +241,7 @@ class QueueTest extends TestCase
         $tableNames = ['queue_message_status', 'queue_message'];
         $connection = $this->getMockBuilder(AdapterInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->resources->expects($this->atLeastOnce())
             ->method('getConnection')->with('default')->willReturn($connection);
         $this->resources->expects($this->exactly(2))->method('getTableName')
@@ -274,7 +274,7 @@ class QueueTest extends TestCase
         $tableName = 'queue_message_status';
         $connection = $this->getMockBuilder(AdapterInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->resources->expects($this->atLeastOnce())
             ->method('getConnection')->with('default')->willReturn($connection);
         $this->resources->expects($this->once())->method('getTableName')->with($tableName)->willReturn($tableName);
@@ -304,7 +304,7 @@ class QueueTest extends TestCase
         $tableName = 'queue_message_status';
         $connection = $this->getMockBuilder(AdapterInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->resources->expects($this->atLeastOnce())
             ->method('getConnection')->with('default')->willReturn($connection);
         $this->resources->expects($this->once())->method('getTableName')->with($tableName)->willReturn($tableName);
@@ -331,7 +331,7 @@ class QueueTest extends TestCase
         $tableName = 'queue_message_status';
         $connection = $this->getMockBuilder(AdapterInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->resources->expects($this->atLeastOnce())
             ->method('getConnection')->with('default')->willReturn($connection);
         $this->resources->expects($this->once())->method('getTableName')->with($tableName)->willReturn($tableName);

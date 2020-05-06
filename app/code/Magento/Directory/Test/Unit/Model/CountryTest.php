@@ -24,7 +24,7 @@ class CountryTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->localeListsMock = $this->createMock(ListsInterface::class);
+        $this->localeListsMock = $this->getMockForAbstractClass(ListsInterface::class);
 
         $objectManager = new ObjectManager($this);
         $this->country = $objectManager->getObject(

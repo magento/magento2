@@ -53,7 +53,7 @@ class HeadTest extends TestCase
             ->getMock();
         $this->urlMock = $this->getMockBuilder(UrlInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $objectManagerHelper = new ObjectManagerHelper($this);
         $this->headGenerator = $objectManagerHelper->getObject(

@@ -39,7 +39,7 @@ class ThemeTest extends TestCase
         $this->listMock = $this->getMockBuilder(ListInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['getLabels'])
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->object = $this->objectManagerHelper->getObject($this->getClassName(), [
             'themeList' => $this->listMock,

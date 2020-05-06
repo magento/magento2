@@ -51,7 +51,7 @@ class KountPaymentDataBuilderTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->paymentDOMock = $this->createMock(PaymentDataObjectInterface::class);
+        $this->paymentDOMock = $this->getMockForAbstractClass(PaymentDataObjectInterface::class);
         $this->configMock = $this->getMockBuilder(Config::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -92,7 +92,7 @@ class KountPaymentDataBuilderTest extends TestCase
             KountPaymentDataBuilder::DEVICE_DATA => self::DEVICE_DATA,
         ];
 
-        $order = $this->createMock(OrderAdapterInterface::class);
+        $order = $this->getMockForAbstractClass(OrderAdapterInterface::class);
         $this->paymentDOMock->expects(self::once())->method('getOrder')->willReturn($order);
 
         $buildSubject = ['payment' => $this->paymentDOMock];

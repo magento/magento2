@@ -79,7 +79,7 @@ class FormTest extends TestCase
 
     public function testGetMethodCode()
     {
-        $method = $this->createMock(MethodInterface::class);
+        $method = $this->getMockForAbstractClass(MethodInterface::class);
         $method->expects($this->once())
             ->method('getCode')
             ->willReturn('method_code');

@@ -126,7 +126,7 @@ class WeeeTest extends TestCase
         $priceInfo->expects($this->atLeastOnce())
             ->method('getPrice')
             ->willReturn($price);
-        $amount = $this->createMock(AmountInterface::class);
+        $amount = $this->getMockForAbstractClass(AmountInterface::class);
         $productRender->expects($this->exactly(5))
             ->method('getStoreId')
             ->willReturn(1);

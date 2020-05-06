@@ -84,13 +84,13 @@ class AddCommentTest extends TestCase
     {
         $this->contextMock = $this->createMock(Context::class);
         $this->requestMock = $this->createMock(Http::class);
-        $this->orderRepositoryMock = $this->createMock(OrderRepositoryInterface::class);
+        $this->orderRepositoryMock = $this->getMockForAbstractClass(OrderRepositoryInterface::class);
         $this->orderMock = $this->createMock(Order::class);
         $this->resultRedirectFactoryMock = $this->createMock(RedirectFactory::class);
         $this->resultRedirectMock = $this->createMock(Redirect::class);
-        $this->authorizationMock = $this->createMock(AuthorizationInterface::class);
+        $this->authorizationMock = $this->getMockForAbstractClass(AuthorizationInterface::class);
         $this->statusHistoryCommentMock = $this->createMock(History::class);
-        $this->objectManagerMock = $this->createMock(ObjectManagerInterface::class);
+        $this->objectManagerMock = $this->getMockForAbstractClass(ObjectManagerInterface::class);
 
         $this->contextMock->expects($this->once())->method('getRequest')->willReturn($this->requestMock);
 

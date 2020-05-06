@@ -132,7 +132,7 @@ class AbstractMethodTest extends TestCase
     public function testAssignData()
     {
         $data = new DataObject();
-        $paymentInfo = $this->createMock(InfoInterface::class);
+        $paymentInfo = $this->getMockForAbstractClass(InfoInterface::class);
 
         $this->payment->setInfoInstance($paymentInfo);
 

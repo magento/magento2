@@ -63,7 +63,7 @@ class ReportUrlProviderTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->configMock = $this->createMock(ScopeConfigInterface::class);
+        $this->configMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
 
         $this->analyticsTokenMock = $this->createMock(AnalyticsToken::class);
 

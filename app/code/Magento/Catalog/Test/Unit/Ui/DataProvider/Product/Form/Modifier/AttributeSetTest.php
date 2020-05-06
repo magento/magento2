@@ -53,7 +53,7 @@ class AttributeSetTest extends AbstractModifierTest
             ->getMock();
         $this->urlBuilderMock = $this->getMockBuilder(UrlInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->productResourceMock = $this->getMockBuilder(ProductResource::class)
             ->disableOriginalConstructor()
             ->getMock();

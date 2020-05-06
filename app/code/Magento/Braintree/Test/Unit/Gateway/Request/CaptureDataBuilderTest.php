@@ -42,7 +42,7 @@ class CaptureDataBuilderTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->paymentDOMock = $this->createMock(PaymentDataObjectInterface::class);
+        $this->paymentDOMock = $this->getMockForAbstractClass(PaymentDataObjectInterface::class);
         $this->paymentMock = $this->getMockBuilder(Payment::class)
             ->disableOriginalConstructor()
             ->getMock();

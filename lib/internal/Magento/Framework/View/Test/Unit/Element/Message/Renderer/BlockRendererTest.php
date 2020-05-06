@@ -40,7 +40,7 @@ class BlockRendererTest extends TestCase
     public function testRender()
     {
         /** @var MessageInterface|MockObject $message */
-        $message = $this->createMock(MessageInterface::class);
+        $message = $this->getMockForAbstractClass(MessageInterface::class);
         $messageData = [
             'painting' => 'The Last Supper',
             'apostles_cnt' => 28,
@@ -82,7 +82,7 @@ class BlockRendererTest extends TestCase
     public function testRenderNoTemplate()
     {
         /** @var MessageInterface|MockObject $message */
-        $message = $this->createMock(MessageInterface::class);
+        $message = $this->getMockForAbstractClass(MessageInterface::class);
         $messageData = [
             'who' => 'Brian',
             'is' => 'a Very Naughty Boy'

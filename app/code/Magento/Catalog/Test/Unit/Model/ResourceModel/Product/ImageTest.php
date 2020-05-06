@@ -44,7 +44,7 @@ class ImageTest extends TestCase
     {
         $this->objectManager =
             new ObjectManager($this);
-        $this->connectionMock = $this->createMock(AdapterInterface::class);
+        $this->connectionMock = $this->getMockForAbstractClass(AdapterInterface::class);
         $this->resourceMock = $this->createMock(ResourceConnection::class);
         $this->resourceMock->method('getConnection')
             ->willReturn($this->connectionMock);

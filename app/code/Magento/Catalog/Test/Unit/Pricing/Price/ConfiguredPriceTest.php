@@ -65,7 +65,7 @@ class ConfiguredPriceTest extends TestCase
      */
     protected function setUp(): void
     {
-        $basePrice = $this->createMock(PriceInterface::class);
+        $basePrice = $this->getMockForAbstractClass(PriceInterface::class);
         $basePrice->expects($this->any())->method('getValue')->willReturn($this->basePriceValue);
 
         $this->priceInfo = $this->createMock(Base::class);
@@ -83,7 +83,7 @@ class ConfiguredPriceTest extends TestCase
 
         $this->calculator = $this->createMock(Calculator::class);
 
-        $this->priceCurrencyMock = $this->createMock(PriceCurrencyInterface::class);
+        $this->priceCurrencyMock = $this->getMockForAbstractClass(PriceCurrencyInterface::class);
 
         $this->model = new ConfiguredPrice($this->product, 1, $this->calculator, $this->priceCurrencyMock);
         $this->model->setItem($this->item);

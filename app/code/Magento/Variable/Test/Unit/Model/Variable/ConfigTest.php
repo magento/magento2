@@ -70,7 +70,7 @@ class ConfigTest extends TestCase
             ->getMock();
         $this->urlMock = $this->getMockBuilder(UrlInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->assetRepoMock->expects($this->any())
             ->method('getUrl')
             ->willReturn($this->jsPluginSourceUrl);

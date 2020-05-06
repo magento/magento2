@@ -76,9 +76,9 @@ class AbstractExtensibleModelTest extends TestCase
     {
         $this->actionValidatorMock = $this->createMock(RemoveAction::class);
         $this->contextMock = new Context(
-            $this->createMock(LoggerInterface::class),
-            $this->createMock(ManagerInterface::class),
-            $this->createMock(CacheInterface::class),
+            $this->getMockForAbstractClass(LoggerInterface::class),
+            $this->getMockForAbstractClass(ManagerInterface::class),
+            $this->getMockForAbstractClass(CacheInterface::class),
             $this->createMock(State::class),
             $this->actionValidatorMock
         );
@@ -147,8 +147,7 @@ class AbstractExtensibleModelTest extends TestCase
             $this->model->getCustomAttributes(),
             "Empty array is expected as a result of getCustomAttributes() when custom attributes are not set."
         );
-        $this->assertEquals(
-            null,
+        $this->assertNull(
             $this->model->getCustomAttribute('not_existing_custom_attribute'),
             "Null is expected as a result of getCustomAttribute(\$code) when custom attribute is not set."
         );

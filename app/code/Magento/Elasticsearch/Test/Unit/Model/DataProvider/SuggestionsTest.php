@@ -91,7 +91,7 @@ class SuggestionsTest extends TestCase
 
         $this->scopeConfig = $this->getMockBuilder(ScopeConfigInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->searchIndexNameResolver = $this
             ->getMockBuilder(SearchIndexNameResolver::class)
@@ -105,7 +105,7 @@ class SuggestionsTest extends TestCase
 
         $this->query = $this->getMockBuilder(QueryInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $objectManager = new ObjectManagerHelper($this);
 
@@ -137,7 +137,7 @@ class SuggestionsTest extends TestCase
 
         $store = $this->getMockBuilder(StoreInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->storeManager->expects($this->any())
             ->method('getStore')

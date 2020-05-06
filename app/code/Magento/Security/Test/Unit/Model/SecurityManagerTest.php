@@ -75,7 +75,7 @@ class SecurityManagerTest extends TestCase
 
         $this->securityConfigMock =  $this->getMockBuilder(ConfigInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->passwordResetRequestEventCollectionFactoryMock = $this->createPartialMock(
             CollectionFactory::class,
@@ -98,7 +98,7 @@ class SecurityManagerTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $securityChecker = $this->createMock(SecurityCheckerInterface::class);
+        $securityChecker = $this->getMockForAbstractClass(SecurityCheckerInterface::class);
 
         $this->eventManagerMock = $this->getMockForAbstractClass(
             ManagerInterface::class,
@@ -166,7 +166,7 @@ class SecurityManagerTest extends TestCase
 
         $this->remoteAddressMock->expects($this->once())
             ->method('getRemoteAddress')
-            ->will($this->returnValue($longIp));
+            ->willReturn($longIp);
 
         $this->passwordResetRequestEventFactoryMock->expects($this->once())
             ->method('create')

@@ -63,19 +63,19 @@ class CollectionTest extends TestCase
         $resource->expects($this->any())->method('getConnection')->willReturn($connection);
         $resource->expects($this->any())->method('getTable')->willReturnArgument(0);
 
-        $eventManager = $this->createMock(ManagerInterface::class);
-        $localeListsMock = $this->createMock(ListsInterface::class);
+        $eventManager = $this->getMockForAbstractClass(ManagerInterface::class);
+        $localeListsMock = $this->getMockForAbstractClass(ListsInterface::class);
         $localeListsMock->expects($this->any())->method('getCountryTranslation')->willReturnArgument(0);
 
         $fetchStrategy = $this->getMockForAbstractClass(
             FetchStrategyInterface::class
         );
         $entityFactory = $this->createMock(EntityFactory::class);
-        $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
-        $logger = $this->createMock(LoggerInterface::class);
+        $this->scopeConfigMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
+        $logger = $this->getMockForAbstractClass(LoggerInterface::class);
         $countryFactory = $this->createMock(CountryFactory::class);
         $helperDataMock = $this->createMock(Data::class);
-        $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
+        $this->storeManagerMock = $this->getMockForAbstractClass(StoreManagerInterface::class);
         $objectManager = new ObjectManager($this);
         $arguments = [
             'logger' => $logger,
@@ -102,7 +102,7 @@ class CollectionTest extends TestCase
      */
     public function testToOptionArray($optionsArray, $emptyLabel, $foregroundCountries, $expectedResults)
     {
-        $website1 = $this->createMock(WebsiteInterface::class);
+        $website1 = $this->getMockForAbstractClass(WebsiteInterface::class);
         $website1->expects($this->atLeastOnce())
             ->method('getId')
             ->willReturn(1);

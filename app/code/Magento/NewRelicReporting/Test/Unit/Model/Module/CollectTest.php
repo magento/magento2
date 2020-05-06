@@ -55,7 +55,7 @@ class CollectTest extends TestCase
         $this->moduleListMock = $this->getMockBuilder(ModuleListInterface::class)
             ->setMethods(['getNames', 'has', 'getAll', 'getOne'])
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->fullModuleListMock = $this->getMockBuilder(FullModuleList::class)
             ->setMethods(['getNames', 'getAll'])

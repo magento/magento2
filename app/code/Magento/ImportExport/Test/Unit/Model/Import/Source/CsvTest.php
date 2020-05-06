@@ -55,17 +55,17 @@ class CsvTest extends TestCase
             $this->any()
         )->method(
             'openFile'
-        )->will(
-            $this->returnValue(
+        )->willReturn(
+            
                 new Read($stream, new Http())
-            )
+            
         );
         $this->_filesystem->expects(
             $this->any()
         )->method(
             'getDirectoryWrite'
-        )->will(
-            $this->returnValue($this->_directoryMock)
+        )->willReturn(
+            $this->_directoryMock
         );
 
         $model = new Csv($stream, $this->_filesystem);

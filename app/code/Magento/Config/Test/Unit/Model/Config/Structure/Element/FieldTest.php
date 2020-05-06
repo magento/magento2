@@ -118,7 +118,7 @@ class FieldTest extends TestCase
     {
         $config = ['comment' => ['model' => 'Model_Name']];
         $this->_model->setData($config, 'scope');
-        $commentModelMock = $this->createMock(CommentInterface::class);
+        $commentModelMock = $this->getMockForAbstractClass(CommentInterface::class);
         $commentModelMock->expects(
             $this->once()
         )->method(
@@ -296,7 +296,7 @@ class FieldTest extends TestCase
     public function testGetOptionsUsesOptionsInterfaceIfNoMethodIsProvided()
     {
         $this->_model->setData(['source_model' => 'Source_Model_Name'], 'scope');
-        $sourceModelMock = $this->createMock(ArrayInterface::class);
+        $sourceModelMock = $this->getMockForAbstractClass(ArrayInterface::class);
         $this->_sourceFactoryMock->expects(
             $this->once()
         )->method(

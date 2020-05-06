@@ -47,7 +47,7 @@ class UseConfigSettingsTest extends TestCase
     protected function setUp(): void
     {
         $this->objectManagerHelper = new ObjectManagerHelper($this);
-        $this->contextMock = $this->createMock(ContextInterface::class);
+        $this->contextMock = $this->getMockForAbstractClass(ContextInterface::class);
         $this->serializerMock = $this->createMock(Json::class);
         $this->jsonValidatorMock = $this->getMockBuilder(JsonValidator::class)
             ->disableOriginalConstructor()
@@ -90,7 +90,7 @@ class UseConfigSettingsTest extends TestCase
         $processorMock->expects($this->atLeastOnce())->method('register');
         $this->contextMock->expects($this->atLeastOnce())->method('getProcessor')->willReturn($processorMock);
         /** @var ValueSourceInterface|MockObject $source */
-        $source = $this->createMock(ValueSourceInterface::class);
+        $source = $this->getMockForAbstractClass(ValueSourceInterface::class);
         $source->expects($this->once())
             ->method('getValue')
             ->with($expectedResult['keyInConfiguration'])

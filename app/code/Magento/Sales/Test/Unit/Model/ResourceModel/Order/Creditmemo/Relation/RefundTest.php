@@ -47,15 +47,15 @@ class RefundTest extends TestCase
     {
         $this->orderRepositoryMock = $this->getMockBuilder(OrderRepositoryInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->invoiceRepositoryMock = $this->getMockBuilder(InvoiceRepositoryInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->priceCurrencyMock = $this->getMockBuilder(PriceCurrencyInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $objectManager = new ObjectManager($this);
         $this->refundResource = $objectManager->getObject(

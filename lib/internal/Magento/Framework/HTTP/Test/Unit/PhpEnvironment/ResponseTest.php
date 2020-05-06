@@ -207,12 +207,12 @@ class ResponseTest extends TestCase
             ->expects($this->once())
             ->method('setHeader')
             ->with('Location', 'testUrl', true)
-            ->will($this->returnSelf());
+            ->willReturnSelf();
         $response
             ->expects($this->once())
             ->method('setHttpResponseCode')
             ->with(302)
-            ->will($this->returnSelf());
+            ->willReturnSelf();
 
         $response->setRedirect('testUrl');
     }

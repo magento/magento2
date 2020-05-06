@@ -82,7 +82,7 @@ class EmailNotificationTest extends TestCase
     public function testSendErrors()
     {
         $exception = 'Sitemap Exception';
-        $transport = $this->createMock(TransportInterface::class);
+        $transport = $this->getMockForAbstractClass(TransportInterface::class);
 
         $this->scopeConfigMock->expects($this->at(0))
             ->method('getValue')

@@ -66,13 +66,13 @@ class DataTest extends TestCase
     protected function setUp(): void
     {
         $this->stringMock = $this->createMock(StringUtils::class);
-        $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
+        $this->scopeConfigMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
         $this->escaperMock = $this->createMock(Escaper::class);
-        $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
+        $this->storeManagerMock = $this->getMockForAbstractClass(StoreManagerInterface::class);
         $this->requestMock = $this->getMockBuilder(RequestInterface::class)
             ->disableOriginalConstructor()
             ->setMethods([])
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->urlBuilderMock = $this->getMockBuilder(UrlInterface::class)
             ->setMethods(['getUrl'])
             ->disableOriginalConstructor()

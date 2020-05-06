@@ -24,7 +24,7 @@ class GridTest extends TestCase
 
         $filesystem = $this->createMock(Filesystem::class);
 
-        $urlBuilder = $this->createMock(UrlInterface::class);
+        $urlBuilder = $this->getMockForAbstractClass(UrlInterface::class);
         $urlBuilder->expects(
             $this->once()
         )->method(

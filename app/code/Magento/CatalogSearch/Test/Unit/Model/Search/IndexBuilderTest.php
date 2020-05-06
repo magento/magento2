@@ -92,7 +92,7 @@ class IndexBuilderTest extends TestCase
 
         $dimensionScopeResolver = $this->getMockBuilder(ScopeResolverInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->dimensionsProcessor = $this->getMockBuilder(DimensionsProcessor::class)
             ->disableOriginalConstructor()

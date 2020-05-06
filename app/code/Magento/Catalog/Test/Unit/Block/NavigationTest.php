@@ -56,8 +56,8 @@ class NavigationTest extends TestCase
         $objectManager = new ObjectManager($this);
         $categoryFactory = $this->createPartialMock(CategoryFactory::class, ['create']);
         $this->registry = $this->createMock(Registry::class);
-        $this->storeManager = $this->createMock(StoreManagerInterface::class);
-        $this->design = $this->createMock(DesignInterface::class);
+        $this->storeManager = $this->getMockForAbstractClass(StoreManagerInterface::class);
+        $this->design = $this->getMockForAbstractClass(DesignInterface::class);
         $this->httpContext = $this->createMock(Context::class);
         $this->block = $objectManager->getObject(
             Navigation::class,
@@ -109,7 +109,7 @@ class NavigationTest extends TestCase
 
         $this->storeManager->expects($this->atLeastOnce())->method('getStore')->willReturn($store);
 
-        $theme = $this->createMock(ThemeInterface::class);
+        $theme = $this->getMockForAbstractClass(ThemeInterface::class);
         $theme->expects($this->atLeastOnce())->method('getId')->willReturn(65);
 
         $this->design->expects($this->atLeastOnce())->method('getDesignTheme')->willReturn($theme);

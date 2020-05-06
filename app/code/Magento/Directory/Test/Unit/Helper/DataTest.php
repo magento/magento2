@@ -65,9 +65,9 @@ class DataTest extends TestCase
     protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
-        $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
+        $this->scopeConfigMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
         $this->scopeConfigMock->expects($this->any())->method('isSetFlag')->willReturn(false);
-        $requestMock = $this->createMock(RequestInterface::class);
+        $requestMock = $this->getMockForAbstractClass(RequestInterface::class);
         $context = $this->createMock(Context::class);
         $context->method('getRequest')
             ->willReturn($requestMock);
@@ -94,7 +94,7 @@ class DataTest extends TestCase
         $this->jsonHelperMock = $this->createMock(JsonDataHelper::class);
 
         $this->_store = $this->createMock(Store::class);
-        $storeManager = $this->createMock(StoreManagerInterface::class);
+        $storeManager = $this->getMockForAbstractClass(StoreManagerInterface::class);
         $storeManager->expects($this->any())->method('getStore')->willReturn($this->_store);
 
         $currencyFactory = $this->createMock(CurrencyFactory::class);

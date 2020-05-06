@@ -54,7 +54,7 @@ class TaxConfigProviderTest extends TestCase
         $this->taxHelperMock = $this->createMock(Data::class);
         $this->taxConfigMock = $this->createMock(Config::class);
         $this->checkoutSessionMock = $this->createMock(Session::class);
-        $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
+        $this->scopeConfigMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
         $this->quoteMock = $this->createMock(Quote::class);
         $this->checkoutSessionMock->expects($this->any())->method('getQuote')->willReturn($this->quoteMock);
         $this->model = new TaxConfigProvider(

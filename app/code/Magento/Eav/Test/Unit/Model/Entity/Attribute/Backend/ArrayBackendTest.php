@@ -39,11 +39,11 @@ class ArrayBackendTest extends TestCase
      */
     public function testValidate($data)
     {
-        $this->_attribute->expects($this->atLeastOnce())->method('getAttributeCode')->will($this->returnValue('code'));
+        $this->_attribute->expects($this->atLeastOnce())->method('getAttributeCode')->willReturn('code');
         $product = new DataObject(['code' => $data, 'empty' => '']);
         $this->_model->validate($product);
         $this->assertEquals('1,2,3', $product->getCode());
-        $this->assertEquals(null, $product->getEmpty());
+        $this->assertNull($product->getEmpty());
     }
 
     /**

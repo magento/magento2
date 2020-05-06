@@ -96,10 +96,10 @@ abstract class AbstractControllerTest extends TestCase
 
         $this->layoutMock = $this->getMockBuilder(LayoutInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->switcherBlockMock = $this->getMockBuilder(BlockInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->contextMock = $this->getMockBuilder(Context::class)
             ->disableOriginalConstructor()
             ->getMock();

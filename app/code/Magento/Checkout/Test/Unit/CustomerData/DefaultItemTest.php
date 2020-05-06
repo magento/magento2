@@ -55,7 +55,7 @@ class DefaultItemTest extends TestCase
             ->setMethods(['formatPrice'])->disableOriginalConstructor()
             ->getMock();
         $checkoutHelper->expects($this->any())->method('formatPrice')->willReturn(5);
-        $this->itemResolver = $this->createMock(ItemResolverInterface::class);
+        $this->itemResolver = $this->getMockForAbstractClass(ItemResolverInterface::class);
         $this->model = $objectManager->getObject(
             DefaultItem::class,
             [

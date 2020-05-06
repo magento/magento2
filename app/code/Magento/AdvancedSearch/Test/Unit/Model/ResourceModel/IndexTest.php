@@ -62,13 +62,13 @@ class IndexTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
+        $this->storeManagerMock = $this->getMockForAbstractClass(StoreManagerInterface::class);
         $this->resourceContextMock = $this->createMock(Context::class);
         $this->resourceConnectionMock = $this->createMock(ResourceConnection::class);
         $this->resourceContextMock->expects($this->any())
             ->method('getResources')
             ->willReturn($this->resourceConnectionMock);
-        $this->adapterMock = $this->createMock(AdapterInterface::class);
+        $this->adapterMock = $this->getMockForAbstractClass(AdapterInterface::class);
         $this->resourceConnectionMock->expects($this->any())
             ->method('getConnection')
             ->willReturn($this->adapterMock);
@@ -101,7 +101,7 @@ class IndexTest extends TestCase
     public function testGetPriceIndexDataUsesFrontendPriceIndexerTable(): void
     {
         $storeId = 1;
-        $storeMock = $this->createMock(StoreInterface::class);
+        $storeMock = $this->getMockForAbstractClass(StoreInterface::class);
         $storeMock->expects($this->any())->method('getId')->willReturn($storeId);
         $storeMock->method('getWebsiteId')->willReturn(1);
         $this->storeManagerMock->expects($this->once())

@@ -67,7 +67,7 @@ class CollectionProcessorTest extends TestCase
         /** @var CollectionProcessorInterface|MockObject $customFilterMock */
         $processorOneMock = $this->getMockBuilder(CollectionProcessorInterface::class)
             ->setMethods(['process'])
-            ->getMock();
+            ->getMockForAbstractClass();
 
         /** @var \stdClass|MockObject $processorTwoMock */
         $processorTwoMock = $this->getMockBuilder(\stdClass::class)

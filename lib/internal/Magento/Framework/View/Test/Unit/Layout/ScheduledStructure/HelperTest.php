@@ -59,7 +59,7 @@ class HelperTest extends TestCase
         $this->dataStructureMock = $this->getMockBuilder(Structure::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->loggerMock = $this->createMock(LoggerInterface::class);
+        $this->loggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
         $this->stateMock = $this->createMock(State::class);
 
         $helperObjectManager = new ObjectManager($this);

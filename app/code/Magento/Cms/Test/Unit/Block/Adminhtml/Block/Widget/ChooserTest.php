@@ -81,13 +81,13 @@ class ChooserTest extends TestCase
     {
         $this->layoutMock = $this->getMockBuilder(LayoutInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->mathRandomMock = $this->getMockBuilder(Random::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->urlBuilderMock = $this->getMockBuilder(UrlInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->escaper = $this->getMockBuilder(Escaper::class)
             ->disableOriginalConstructor()
             ->setMethods(
@@ -137,7 +137,7 @@ class ChooserTest extends TestCase
                     'toHtml',
                 ]
             )
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $objectManager = new ObjectManager($this);
         $this->context = $objectManager->getObject(

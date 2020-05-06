@@ -63,7 +63,7 @@ class ConfigTest extends TestCase
             ->with($this->_cacheId)
             ->willReturn('');
 
-        $serializerMock = $this->createMock(SerializerInterface::class);
+        $serializerMock = $this->getMockForAbstractClass(SerializerInterface::class);
         $serializerMock->method('unserialize')
             ->willReturn([]);
 

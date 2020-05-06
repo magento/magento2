@@ -80,7 +80,7 @@ class SingleFileTest extends TestCase
                     'getCustomization',
                 ]
             )
-            ->getMock();
+            ->getMockForAbstractClass();
         $customization = $this->getMockBuilder(CustomizationInterface::class)
             ->getMock();
 
@@ -157,7 +157,7 @@ class SingleFileTest extends TestCase
                     'getCustomization',
                 ]
             )
-            ->getMock();
+            ->getMockForAbstractClass();
         $customization = $this->getMockBuilder(CustomizationInterface::class)
             ->getMock();
 

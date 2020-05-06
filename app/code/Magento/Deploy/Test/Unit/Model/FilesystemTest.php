@@ -85,19 +85,19 @@ class FilesystemTest extends TestCase
             ->getMock();
         $this->shell = $this->getMockBuilder(ShellInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->output = $this->getMockBuilder(OutputInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->objectManager = $this->getMockBuilder(ObjectManagerInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->filesystem = $this->getMockBuilder(Filesystem::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->directoryWrite = $this->getMockBuilder(WriteInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->filesystem->method('getDirectoryWrite')
             ->willReturn($this->directoryWrite);
 

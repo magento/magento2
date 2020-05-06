@@ -55,7 +55,7 @@ class DataSourcePoolTest extends TestCase
      */
     protected function createBlock($blockClass)
     {
-        $block = $this->createMock(BlockInterface::class);
+        $block = $this->getMockForAbstractClass(BlockInterface::class);
 
         $this->blockFactory->expects($this->once())
             ->method('createBlock')

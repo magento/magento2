@@ -96,7 +96,7 @@ class ElasticsearchTest extends TestCase
             ->getMock();
         $this->fieldMapper = $this->getMockBuilder(FieldMapperInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->clientConfig = $this->getMockBuilder(Config::class)
             ->disableOriginalConstructor()
             ->setMethods(
@@ -107,10 +107,10 @@ class ElasticsearchTest extends TestCase
             )->getMock();
         $this->indexBuilder = $this->getMockBuilder(BuilderInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->logger = $this->getMockBuilder(LoggerInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $elasticsearchClientMock = $this->getMockBuilder(Client::class)
             ->setMethods(
                 [

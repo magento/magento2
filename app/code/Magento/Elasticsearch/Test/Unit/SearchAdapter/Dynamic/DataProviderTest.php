@@ -136,7 +136,7 @@ class DataProviderTest extends TestCase
             ->getMock();
         $this->storeManager = $this->getMockBuilder(StoreManagerInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->customerSession = $this->getMockBuilder(Session::class)
             ->setMethods(['getCustomerGroupId'])
             ->disableOriginalConstructor()
@@ -153,7 +153,7 @@ class DataProviderTest extends TestCase
             ->willReturn(1);
         $this->storeMock = $this->getMockBuilder(StoreInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->storeManager->expects($this->any())
             ->method('getStore')
             ->willReturn($this->storeMock);
@@ -172,14 +172,14 @@ class DataProviderTest extends TestCase
         $this->clientMock = $this->getMockBuilder(ClientInterface::class)
             ->setMethods(['query', 'testConnection'])
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->connectionManager->expects($this->any())
             ->method('getConnection')
             ->willReturn($this->clientMock);
 
         $this->fieldMapper = $this->getMockBuilder(FieldMapperInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->searchIndexNameResolver = $this
             ->getMockBuilder(SearchIndexNameResolver::class)
@@ -289,10 +289,10 @@ class DataProviderTest extends TestCase
         $dimensionValue = 1;
         $bucket = $this->getMockBuilder(BucketInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $interval = $this->getMockBuilder(IntervalInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $dimension = $this->getMockBuilder(Dimension::class)
             ->setMethods(['getValue'])
             ->disableOriginalConstructor()
@@ -330,7 +330,7 @@ class DataProviderTest extends TestCase
         ];
         $bucket = $this->getMockBuilder(BucketInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $dimension = $this->getMockBuilder(Dimension::class)
             ->setMethods(['getValue'])
             ->disableOriginalConstructor()

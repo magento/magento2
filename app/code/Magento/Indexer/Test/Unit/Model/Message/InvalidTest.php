@@ -35,7 +35,7 @@ class InvalidTest extends TestCase
 
         $this->indexerMock = $this->createPartialMock(Indexer::class, ['getStatus']);
 
-        $urlBuilder = $this->createMock(UrlInterface::class);
+        $urlBuilder = $this->getMockForAbstractClass(UrlInterface::class);
 
         $collectionMock->expects($this->any())->method('getItems')->with()->willReturn([$this->indexerMock]);
 

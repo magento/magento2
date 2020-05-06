@@ -62,7 +62,7 @@ class DateTest extends TestCase
 
         $this->timezoneMock = $this->getMockBuilder(TimezoneInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->model = $this->objectManager->getObject(
             Date::class,

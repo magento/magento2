@@ -85,7 +85,7 @@ class SaveTest extends TestCase
         $this->responseMock = $this->getMockBuilder(ResponseInterface::class)
             ->addMethods(['setRedirect'])
             ->onlyMethods(['sendResponse'])
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->messageManagerMock = $this->getMockForAbstractClass(ManagerInterface::class);
         $this->resultRedirectFactory = $this->createMock(RedirectFactory::class);
         $this->filterManager = $this->getMockBuilder(FilterManager::class)

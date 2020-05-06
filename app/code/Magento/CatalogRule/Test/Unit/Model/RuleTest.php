@@ -80,7 +80,7 @@ class RuleTest extends TestCase
     protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
-        $this->storeManager = $this->createMock(StoreManagerInterface::class);
+        $this->storeManager = $this->getMockForAbstractClass(StoreManagerInterface::class);
         $this->storeModel = $this->createPartialMock(Store::class, ['__wakeup', 'getId']);
         $this->combineFactory = $this->createPartialMock(
             CombineFactory::class,
@@ -318,7 +318,7 @@ class RuleTest extends TestCase
      */
     public function testAfterDelete()
     {
-        $indexer = $this->createMock(IndexerInterface::class);
+        $indexer = $this->getMockForAbstractClass(IndexerInterface::class);
         $indexer->expects($this->once())->method('invalidate');
         $this->_ruleProductProcessor->expects($this->once())->method('getIndexer')->willReturn($indexer);
         $this->rule->afterDelete();
@@ -346,7 +346,7 @@ class RuleTest extends TestCase
     {
         $this->rule->isObjectNew(false);
         $this->rule->setIsActive(1);
-        $indexer = $this->createMock(IndexerInterface::class);
+        $indexer = $this->getMockForAbstractClass(IndexerInterface::class);
         $indexer->expects($this->once())->method('invalidate');
         $this->_ruleProductProcessor->expects($this->once())->method('getIndexer')->willReturn($indexer);
         $this->rule->afterSave();
@@ -368,7 +368,7 @@ class RuleTest extends TestCase
     {
         $this->rule->setData('website_ids', []);
         $this->rule->isObjectNew($isObjectNew);
-        $indexer = $this->createMock(IndexerInterface::class);
+        $indexer = $this->getMockForAbstractClass(IndexerInterface::class);
         $indexer->expects($this->any())->method('invalidate');
         $this->_ruleProductProcessor->expects($this->any())->method('getIndexer')->willReturn($indexer);
 

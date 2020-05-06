@@ -93,7 +93,7 @@ class TestConnectionTest extends TestCase
             ->setMethods(['create'])
             ->getMock();
 
-        $this->clientMock = $this->createMock(ClientInterface::class);
+        $this->clientMock = $this->getMockForAbstractClass(ClientInterface::class);
 
         $this->resultJsonMock = $this->getMockBuilder(Json::class)
             ->disableOriginalConstructor()

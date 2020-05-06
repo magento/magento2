@@ -81,13 +81,13 @@ class HandleTest extends TestCase
     {
         $this->contextMock = $this->createMock(Context::class);
 
-        $this->requestMock = $this->createMock(RequestInterface::class);
+        $this->requestMock = $this->getMockForAbstractClass(RequestInterface::class);
         $this->contextMock->expects($this->atLeastOnce())->method('getRequest')->willReturn($this->requestMock);
 
         $this->responseMock = $this->createMock(Response::class);
         $this->contextMock->expects($this->atLeastOnce())->method('getResponse')->willReturn($this->responseMock);
 
-        $this->viewMock = $this->createMock(ViewInterface::class);
+        $this->viewMock = $this->getMockForAbstractClass(ViewInterface::class);
         $this->contextMock->expects($this->atLeastOnce())->method('getView')->willReturn($this->viewMock);
         $this->authorizationMock = $this->getMockBuilder(AuthorizationInterface::class)
             ->getMockForAbstractClass();
@@ -130,7 +130,7 @@ class HandleTest extends TestCase
         $this->viewMock->expects($this->once())
             ->method('loadLayout')
             ->with(['default', $result], true, true, false);
-        $layoutMock = $this->createMock(LayoutInterface::class);
+        $layoutMock = $this->getMockForAbstractClass(LayoutInterface::class);
         $this->viewMock->expects($this->once())->method('getLayout')->willReturn($layoutMock);
 
         $layoutMock->expects($this->once())->method('getBlock');
@@ -148,7 +148,7 @@ class HandleTest extends TestCase
             ->method('loadLayout')
             ->with(['default', $result], true, true, false);
 
-        $layoutMock = $this->createMock(LayoutInterface::class);
+        $layoutMock = $this->getMockForAbstractClass(LayoutInterface::class);
         $this->viewMock->expects($this->once())->method('getLayout')->willReturn($layoutMock);
 
         $layoutMock->expects($this->exactly(2))->method('getBlock');

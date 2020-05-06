@@ -45,7 +45,7 @@ class ClientResolverTest extends TestCase
         $this->engineResolverMock = $this->getMockBuilder(EngineResolverInterface::class)
             ->getMockForAbstractClass();
 
-        $this->objectManager = $this->createMock(ObjectManagerInterface::class);
+        $this->objectManager = $this->getMockForAbstractClass(ObjectManagerInterface::class);
 
         $this->model = new ClientResolver(
             $this->objectManager,
@@ -60,11 +60,11 @@ class ClientResolverTest extends TestCase
         $this->engineResolverMock->expects($this->once())->method('getCurrentSearchEngine')
             ->willReturn('engineName');
 
-        $factoryMock = $this->createMock(ClientFactoryInterface::class);
+        $factoryMock = $this->getMockForAbstractClass(ClientFactoryInterface::class);
 
-        $clientMock = $this->createMock(ClientInterface::class);
+        $clientMock = $this->getMockForAbstractClass(ClientInterface::class);
 
-        $clientOptionsMock = $this->createMock(ClientOptionsInterface::class);
+        $clientOptionsMock = $this->getMockForAbstractClass(ClientOptionsInterface::class);
 
         $this->objectManager->expects($this->exactly(2))->method('create')
             ->withConsecutive(

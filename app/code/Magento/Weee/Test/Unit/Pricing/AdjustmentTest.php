@@ -41,7 +41,7 @@ class AdjustmentTest extends TestCase
     protected function setUp(): void
     {
         $this->weeeHelper = $this->createMock(Data::class);
-        $this->priceCurrencyMock = $this->createMock(PriceCurrencyInterface::class);
+        $this->priceCurrencyMock = $this->getMockForAbstractClass(PriceCurrencyInterface::class);
         $this->priceCurrencyMock->expects($this->any())
             ->method('convertAndRound')
             ->willReturnCallback(

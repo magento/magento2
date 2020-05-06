@@ -56,7 +56,7 @@ class ExportViewedExcelTest extends AbstractControllerTest
 
         $this->objectManagerMock = $this->getMockBuilder(ObjectManagerInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->objectManagerMock
             ->expects($this->any())
             ->method('get')

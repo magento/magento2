@@ -70,7 +70,7 @@ class AbstractTypeTest extends TestCase
             Status::STATUS_ENABLED
         );
         $this->product->setData('is_salable', 3);
-        $this->assertEquals(true, $this->model->isSalable($this->product));
+        $this->assertTrue($this->model->isSalable($this->product));
     }
 
     public function testGetAttributeById()
@@ -129,6 +129,6 @@ class AbstractTypeTest extends TestCase
     public function testHasOptions()
     {
         $this->product->expects($this->once())->method('getHasOptions')->willReturn(true);
-        $this->assertEquals(true, $this->model->hasOptions($this->product));
+        $this->assertTrue($this->model->hasOptions($this->product));
     }
 }

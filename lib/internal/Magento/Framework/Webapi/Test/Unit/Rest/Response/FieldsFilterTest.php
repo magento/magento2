@@ -117,7 +117,7 @@ class FieldsFilterTest extends TestCase
         $expected = ['customer' => $this->sampleResponseValue['customer']];
 
         $simpleFilter = 'customer';
-        $this->requestMock->expects($this->any())->method('getParam')->will($this->returnValue($simpleFilter));
+        $this->requestMock->expects($this->any())->method('getParam')->willReturn($simpleFilter);
         $filteredResponse = $this->processor->filter($this->sampleResponseValue);
 
         $this->assertEquals($expected, $filteredResponse);
@@ -134,7 +134,7 @@ class FieldsFilterTest extends TestCase
 
         $simpleFilter = "customer[email,id]";
 
-        $this->requestMock->expects($this->any())->method('getParam')->will($this->returnValue($simpleFilter));
+        $this->requestMock->expects($this->any())->method('getParam')->willReturn($simpleFilter);
         $filteredResponse = $this->processor->filter($this->sampleResponseValue);
 
         $this->assertEquals($expected, $filteredResponse);
@@ -169,7 +169,7 @@ class FieldsFilterTest extends TestCase
 
         $nestedFilter = 'customer[id,email],addresses[city,postcode,region[region_code,region]]';
 
-        $this->requestMock->expects($this->any())->method('getParam')->will($this->returnValue($nestedFilter));
+        $this->requestMock->expects($this->any())->method('getParam')->willReturn($nestedFilter);
         $filteredResponse = $this->processor->filter($this->sampleResponseValue);
 
         $this->assertEquals($expected, $filteredResponse);
@@ -208,7 +208,7 @@ class FieldsFilterTest extends TestCase
         $this->requestMock
             ->expects($this->any())
             ->method('getParam')
-            ->will($this->returnValue($nonExistentFieldFilter));
+            ->willReturn($nonExistentFieldFilter);
         $filteredResponse = $this->processor->filter($this->sampleResponseValue);
 
         $this->assertEquals($expected, $filteredResponse);
@@ -219,7 +219,7 @@ class FieldsFilterTest extends TestCase
      */
     public function testInvalidFilters($invalidFilter)
     {
-        $this->requestMock->expects($this->any())->method('getParam')->will($this->returnValue($invalidFilter));
+        $this->requestMock->expects($this->any())->method('getParam')->willReturn($invalidFilter);
         $filteredResponse = $this->processor->filter($this->sampleResponseValue);
 
         $this->assertEmpty($filteredResponse);

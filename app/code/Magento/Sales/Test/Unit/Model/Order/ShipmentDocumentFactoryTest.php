@@ -94,11 +94,11 @@ class ShipmentDocumentFactoryTest extends TestCase
 
         $this->itemMock = $this->getMockBuilder(ShipmentItemCreationInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->commentMock = $this->getMockBuilder(ShipmentCommentCreationInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->shipmentMock = $this->getMockBuilder(ShipmentInterface::class)
             ->disableOriginalConstructor()

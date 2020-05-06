@@ -54,9 +54,9 @@ class UiComponentGeneratorTest extends TestCase
 
     public function testGenerateUiComponent()
     {
-        $uiComponentMock = $this->createMock(UiComponentInterface::class);
-        $uiComponentMockChild1 = $this->createMock(UiComponentInterface::class);
-        $uiComponentMockChild2 = $this->createMock(UiComponentInterface::class);
+        $uiComponentMock = $this->getMockForAbstractClass(UiComponentInterface::class);
+        $uiComponentMockChild1 = $this->getMockForAbstractClass(UiComponentInterface::class);
+        $uiComponentMockChild2 = $this->getMockForAbstractClass(UiComponentInterface::class);
         $uiComponentMockChild1->expects($this->once())
             ->method('prepare');
         $uiComponentMockChild2->expects($this->once())

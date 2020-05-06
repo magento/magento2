@@ -81,7 +81,7 @@ class IndexerTest extends TestCase
 
         $eavFactoryMock = $this->createPartialMock(AttributeFactory::class, ['create']);
 
-        $this->_storeManagerMock = $this->createMock(StoreManagerInterface::class);
+        $this->_storeManagerMock = $this->getMockForAbstractClass(StoreManagerInterface::class);
 
         $this->_connectionMock = $this->createPartialMock(
             Mysql::class,

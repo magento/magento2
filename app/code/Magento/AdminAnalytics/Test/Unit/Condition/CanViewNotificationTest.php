@@ -39,7 +39,7 @@ class CanViewNotificationTest extends TestCase
             ->getMockForAbstractClass();
         $this->logMock = $this->createMock(Log::class);
         $this->viewerLoggerMock = $this->createMock(Logger::class);
-        $this->productMetadataMock = $this->createMock(ProductMetadataInterface::class);
+        $this->productMetadataMock = $this->getMockForAbstractClass(ProductMetadataInterface::class);
         $objectManager = new ObjectManager($this);
         $this->canViewNotification = $objectManager->getObject(
             CanViewNotification::class,

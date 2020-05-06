@@ -31,8 +31,8 @@ class CompositeTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->_interpreterOne = $this->createMock(InterpreterInterface::class);
-        $this->_interpreterTwo = $this->createMock(InterpreterInterface::class);
+        $this->_interpreterOne = $this->getMockForAbstractClass(InterpreterInterface::class);
+        $this->_interpreterTwo = $this->getMockForAbstractClass(InterpreterInterface::class);
         $this->_model = new Composite(
             ['one' => $this->_interpreterOne, 'two' => $this->_interpreterTwo],
             'interpreter'
@@ -44,8 +44,8 @@ class CompositeTest extends TestCase
         $this->expectException('InvalidArgumentException');
         $this->expectExceptionMessage('Interpreter named \'wrong\' is expected to be an argument interpreter instance');
         $interpreters = [
-            'correct' => $this->createMock(InterpreterInterface::class),
-            'wrong' => $this->createMock(ObjectManagerInterface::class),
+            'correct' => $this->getMockForAbstractClass(InterpreterInterface::class),
+            'wrong' => $this->getMockForAbstractClass(ObjectManagerInterface::class),
         ];
         new Composite($interpreters, 'interpreter');
     }
@@ -88,8 +88,8 @@ class CompositeTest extends TestCase
             'evaluate'
         )->with(
             ['value' => 'test']
-        )->will(
-            $this->returnValue($expected)
+        )->willReturn(
+            $expected
         );
         $this->assertSame($expected, $this->_model->evaluate($input));
     }
@@ -97,7 +97,7 @@ class CompositeTest extends TestCase
     public function testAddInterpreter()
     {
         $input = ['interpreter' => 'new', 'value' => 'test'];
-        $newInterpreter = $this->createMock(InterpreterInterface::class);
+        $newInterpreter = $this->getMockForAbstractClass(InterpreterInterface::class);
         $this->_model->addInterpreter('new', $newInterpreter);
         $newInterpreter->expects($this->once())->method('evaluate')->with(['value' => 'test']);
         $this->_model->evaluate($input);
@@ -107,7 +107,7 @@ class CompositeTest extends TestCase
     {
         $this->expectException('InvalidArgumentException');
         $this->expectExceptionMessage('Argument interpreter named \'one\' has already been defined');
-        $newInterpreter = $this->createMock(InterpreterInterface::class);
+        $newInterpreter = $this->getMockForAbstractClass(InterpreterInterface::class);
         $this->_model->addInterpreter('one', $newInterpreter);
     }
 }

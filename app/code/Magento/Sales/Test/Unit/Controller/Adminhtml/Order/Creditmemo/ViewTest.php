@@ -146,7 +146,7 @@ class ViewTest extends TestCase
         $this->responseMock = $this->getMockBuilder(\Magento\Framework\App\Response\Http::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->objectManagerMock = $this->createMock(ObjectManagerInterface::class);
+        $this->objectManagerMock = $this->getMockForAbstractClass(ObjectManagerInterface::class);
         $this->messageManagerMock = $this->getMockBuilder(Manager::class)
             ->disableOriginalConstructor()
             ->getMock();

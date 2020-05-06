@@ -123,7 +123,7 @@ class SaveTest extends TestCase
 
         $this->_translatorMock = $this->getMockBuilder(TranslateInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $resultFactory = $this->getMockBuilder(ResultFactory::class)
             ->disableOriginalConstructor()

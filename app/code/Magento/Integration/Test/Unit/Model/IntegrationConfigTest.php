@@ -49,7 +49,7 @@ class IntegrationConfigTest extends TestCase
             ->getMock();
         $this->serializer = $this->getMockBuilder(SerializerInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->integrationConfigModel = new IntegrationConfig(
             $this->configCacheTypeMock,
             $this->configReaderMock,

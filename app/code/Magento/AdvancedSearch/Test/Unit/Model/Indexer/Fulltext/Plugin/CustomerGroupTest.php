@@ -100,7 +100,7 @@ class CustomerGroupTest extends TestCase
     ): void {
         $this->engineResolverMock->expects($this->once())
             ->method('getCurrentSearchEngine')
-            ->will($this->returnValue($searchEngine));
+            ->willReturn($searchEngine);
 
         $groupMock = $this->createPartialMock(
             CustomerGroupModel::class,
@@ -121,7 +121,7 @@ class CustomerGroupTest extends TestCase
         $this->indexerRegistryMock->expects($this->exactly($invalidateCounter))
             ->method('get')
             ->with(FulltextIndexer::INDEXER_ID)
-            ->will($this->returnValue($this->indexerMock));
+            ->willReturn($this->indexerMock);
 
         $this->assertEquals(
             $this->subjectMock,

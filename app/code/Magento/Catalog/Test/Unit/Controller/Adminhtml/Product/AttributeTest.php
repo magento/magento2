@@ -83,7 +83,7 @@ class AttributeTest extends TestCase
             ->getMock();
         $this->messageManager = $this->getMockBuilder(ManagerInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->contextMock->expects($this->any())
             ->method('getRequest')

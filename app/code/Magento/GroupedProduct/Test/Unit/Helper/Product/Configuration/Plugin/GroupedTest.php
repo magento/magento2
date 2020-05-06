@@ -49,7 +49,7 @@ class GroupedTest extends TestCase
     protected function setUp(): void
     {
         $this->groupedConfigPlugin = new Grouped();
-        $this->itemMock = $this->createMock(ItemInterface::class);
+        $this->itemMock = $this->getMockForAbstractClass(ItemInterface::class);
         $this->productMock = $this->createMock(Product::class);
         $this->typeInstanceMock = $this->createMock(\Magento\GroupedProduct\Model\Product\Type\Grouped::class);
 
@@ -101,7 +101,7 @@ class GroupedTest extends TestCase
         $quantityItemMock = $this->getMockBuilder(ItemInterface::class)
             ->addMethods(['getValue'])
             ->onlyMethods(['getProduct', 'getOptionByCode', 'getFileDownloadParams'])
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $quantityItemMock->expects($this->any())->method('getValue')->willReturn(1);
 

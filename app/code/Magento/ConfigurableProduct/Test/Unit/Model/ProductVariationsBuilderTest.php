@@ -90,7 +90,7 @@ class ProductVariationsBuilderTest extends TestCase
 
         $output->expects($this->at(0))->method('setData')->with($productData);
 
-        $attribute = $this->createMock(AttributeInterface::class);
+        $attribute = $this->getMockForAbstractClass(AttributeInterface::class);
         $attribute->expects($this->once())
             ->method('setAttributeCode')
             ->with('sort_order')

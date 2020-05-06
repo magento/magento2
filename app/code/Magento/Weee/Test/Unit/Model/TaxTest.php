@@ -126,7 +126,7 @@ class TaxTest extends TestCase
             ->onlyMethods(['create'])
             ->getMock();
 
-        $this->storeManager = $this->createMock(StoreManagerInterface::class);
+        $this->storeManager = $this->getMockForAbstractClass(StoreManagerInterface::class);
 
         $this->calculationFactory = $this->getMockBuilder(CalculationFactory::class)
             ->disableOriginalConstructor()

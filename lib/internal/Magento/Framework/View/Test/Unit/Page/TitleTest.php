@@ -36,7 +36,7 @@ class TitleTest extends TestCase
     {
         $this->scopeConfigMock = $this->getMockBuilder(ScopeConfigInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $objectManagerHelper = new ObjectManager($this);
         $this->title = $objectManagerHelper->getObject(

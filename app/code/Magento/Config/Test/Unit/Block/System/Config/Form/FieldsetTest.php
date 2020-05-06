@@ -110,7 +110,7 @@ class FieldsetTest extends TestCase
 
         $this->_requestMock = $this->getMockBuilder(RequestInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->_requestMock->expects($this->any())
             ->method('getParam')
             ->willReturn('Test Param');

@@ -34,7 +34,7 @@ class ConfigTest extends TestCase
     {
         $this->scopeConfig = $this->getMockBuilder(ScopeConfigInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $objectManager = new ObjectManagerHelper($this);
         $this->model = $objectManager->getObject(

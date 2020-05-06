@@ -98,16 +98,16 @@ class NewOrderTest extends TestCase
     protected function setUp(): void
     {
         $this->orderFactory = $this->createPartialMock(OrderFactory::class, ['create']);
-        $this->urlBuilder = $this->createMock(UrlInterface::class);
-        $this->timezoneInterface = $this->createMock(TimezoneInterface::class);
+        $this->urlBuilder = $this->getMockForAbstractClass(UrlInterface::class);
+        $this->timezoneInterface = $this->getMockForAbstractClass(TimezoneInterface::class);
         $this->dateTime = $this->createMock(DateTime::class);
-        $this->scopeConfigInterface = $this->createMock(ScopeConfigInterface::class);
-        $this->eventManager = $this->createMock(ManagerInterface::class);
-        $this->layout = $this->createMock(LayoutInterface::class);
+        $this->scopeConfigInterface = $this->getMockForAbstractClass(ScopeConfigInterface::class);
+        $this->eventManager = $this->getMockForAbstractClass(ManagerInterface::class);
+        $this->layout = $this->getMockForAbstractClass(LayoutInterface::class);
         $this->rssUrlBuilderInterface = $this->getMockBuilder(UrlBuilderInterface::class)
             ->setMethods(['getUrl'])
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->model = $this->objectManagerHelper->getObject(
             NewOrder::class,

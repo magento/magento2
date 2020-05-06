@@ -44,7 +44,7 @@ class NotificationTest extends TestCase
 
         $localeDateMock = $this->getMockBuilder(TimezoneInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $localeDateMock->expects($this->any())->method('date')->willReturn($testDatetime);
         $localeDateMock->expects($this->any())->method('getDateTimeFormat')->willReturn(null);
 
@@ -55,7 +55,7 @@ class NotificationTest extends TestCase
         $elementMock->expects($this->any())->method('getHtmlId')->willReturn($htmlId);
         $elementMock->expects($this->any())->method('getLabel')->willReturn($label);
 
-        $dateTimeFormatter = $this->createMock(DateTimeFormatterInterface::class);
+        $dateTimeFormatter = $this->getMockForAbstractClass(DateTimeFormatterInterface::class);
         $dateTimeFormatter->expects($this->once())
             ->method('formatObject')
             ->with($testDatetime)

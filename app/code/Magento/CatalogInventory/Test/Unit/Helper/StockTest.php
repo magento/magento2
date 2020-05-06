@@ -66,10 +66,10 @@ class StockTest extends TestCase
             ->getMock();
         $this->storeManagerMock = $this->getMockBuilder(StoreManagerInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->scopeConfigMock = $this->getMockBuilder(ScopeConfigInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->statusFactoryMock =
             $this->getMockBuilder(StatusFactory::class)
                 ->disableOriginalConstructor()
@@ -99,7 +99,7 @@ class StockTest extends TestCase
 
         $stockStatusMock = $this->getMockBuilder(StockStatusInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $stockStatusMock->expects($this->any())
             ->method('getStockStatus')
             ->willReturn($status);
@@ -133,7 +133,7 @@ class StockTest extends TestCase
             ->with($status);
         $stockStatusMock = $this->getMockBuilder(StockStatusInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $stockStatusMock->expects($this->once())
             ->method('getStockStatus')
             ->willReturn($status);

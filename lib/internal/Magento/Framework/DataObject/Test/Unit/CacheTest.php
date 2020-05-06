@@ -24,7 +24,7 @@ class CacheTest extends TestCase
 
     public function testSaveWhenArgumentIsNotObject()
     {
-        $this->assertEquals(false, $this->cache->save('string'));
+        $this->assertFalse($this->cache->save('string'));
     }
 
     public function testSaveWhenObjectAlreadyExistsInRegistry()
@@ -65,7 +65,7 @@ class CacheTest extends TestCase
 
     public function testReferenceWhenReferenceEmpty()
     {
-        $this->assertEquals(null, $this->cache->reference([], 'idx'));
+        $this->assertNull($this->cache->reference([], 'idx'));
     }
 
     public function testLoadWhenReferenceAndObjectAlreadyExists()
@@ -74,10 +74,10 @@ class CacheTest extends TestCase
         $this->cache->reference('refName', $idx);
         $object = new \stdClass();
         $hash = spl_object_hash($object);
-        $this->assertEquals(null, $this->cache->findByHash($hash));
+        $this->assertNull($this->cache->findByHash($hash));
         $this->cache->save($object, $idx);
         $this->assertEquals($object, $this->cache->load($idx));
-        $this->assertEquals(true, $this->cache->has($idx));
+        $this->assertTrue($this->cache->has($idx));
         $this->assertEquals($object, $this->cache->findByHash($hash));
         $this->assertEquals(['refName' => 'idx'], $this->cache->getAllReferences());
     }

@@ -115,7 +115,7 @@ class CarrierTest extends TestCase
         $this->helper = new ObjectManager($this);
         $this->scope = $this->getMockBuilder(ScopeConfigInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->scope->expects($this->any())
             ->method('getValue')
@@ -748,7 +748,7 @@ class CarrierTest extends TestCase
             ->disableOriginalConstructor()
             ->setMethods(['getBaseCurrencyCode'])
             ->getMock();
-        $storeManager = $this->createMock(StoreManagerInterface::class);
+        $storeManager = $this->getMockForAbstractClass(StoreManagerInterface::class);
         $storeManager->expects($this->any())
             ->method('getStore')
             ->willReturn($store);
@@ -762,7 +762,7 @@ class CarrierTest extends TestCase
      */
     private function getRateMethodFactory()
     {
-        $priceCurrency = $this->createMock(PriceCurrencyInterface::class);
+        $priceCurrency = $this->getMockForAbstractClass(PriceCurrencyInterface::class);
         $rateMethod = $this->getMockBuilder(Method::class)
             ->setConstructorArgs(['priceCurrency' => $priceCurrency])
             ->setMethods(null)

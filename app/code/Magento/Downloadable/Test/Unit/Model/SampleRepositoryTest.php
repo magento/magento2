@@ -162,7 +162,7 @@ class SampleRepositoryTest extends TestCase
      */
     protected function getSampleMock(array $sampleData)
     {
-        $sampleMock = $this->createMock(SampleInterface::class);
+        $sampleMock = $this->getMockForAbstractClass(SampleInterface::class);
 
         if (isset($sampleData['id'])) {
             $sampleMock->method('getId')->willReturn($sampleData['id']);
@@ -453,7 +453,7 @@ class SampleRepositoryTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $sampleInterfaceMock = $this->createMock(SampleInterface::class);
+        $sampleInterfaceMock = $this->getMockForAbstractClass(SampleInterface::class);
 
         $this->repositoryMock->expects($this->once())
             ->method('get')
@@ -478,18 +478,18 @@ class SampleRepositoryTest extends TestCase
      */
     protected function setSampleAssertions($resource, $inputData)
     {
-        $resource->method('getId')->will($this->returnValue($inputData['id']));
+        $resource->method('getId')->willReturn($inputData['id']);
         $resource->method('getStoreTitle')
-            ->will($this->returnValue($inputData['store_title']));
+            ->willReturn($inputData['store_title']);
         $resource->method('getTitle')
-            ->will($this->returnValue($inputData['title']));
+            ->willReturn($inputData['title']);
         $resource->method('getSortOrder')
-            ->will($this->returnValue($inputData['sort_order']));
+            ->willReturn($inputData['sort_order']);
         $resource->method('getSampleType')
-            ->will($this->returnValue($inputData['sample_type']));
+            ->willReturn($inputData['sample_type']);
         $resource->method('getSampleFile')
-            ->will($this->returnValue($inputData['sample_file']));
+            ->willReturn($inputData['sample_file']);
         $resource->method('getSampleUrl')
-            ->will($this->returnValue($inputData['sample_url']));
+            ->willReturn($inputData['sample_url']);
     }
 }

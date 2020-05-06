@@ -144,7 +144,7 @@ class FormTest extends TestCase
             $validator->expects($this->never())->method('getMessages');
         }
 
-        $this->_model->expects($this->once())->method('_getValidator')->will($this->returnValue($validator));
+        $this->_model->expects($this->once())->method('_getValidator')->willReturn($validator);
 
         $data = ['test' => true];
         $this->assertEquals($expected, $this->_model->validateData($data));

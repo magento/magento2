@@ -42,10 +42,10 @@ class CollectionTest extends TestCase
     {
         $objectManager = new ObjectManager($this);
         $entityFactoryMock = $this->createMock(EntityFactory::class);
-        $loggerMock = $this->createMock(LoggerInterface::class);
-        $fetchStrategyMock = $this->createMock(FetchStrategyInterface::class);
-        $eventManagerMock = $this->createMock(ManagerInterface::class);
-        $localeResolverMock = $this->createMock(ResolverInterface::class);
+        $loggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
+        $fetchStrategyMock = $this->getMockForAbstractClass(FetchStrategyInterface::class);
+        $eventManagerMock = $this->getMockForAbstractClass(ManagerInterface::class);
+        $localeResolverMock = $this->getMockForAbstractClass(ResolverInterface::class);
         $connectionMock = $this->createMock(Mysql::class);
         $resourceMock = $this->getMockForAbstractClass(
             AbstractDb::class,

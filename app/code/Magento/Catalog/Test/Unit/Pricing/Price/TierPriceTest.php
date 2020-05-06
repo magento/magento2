@@ -99,15 +99,15 @@ class TierPriceTest extends TestCase
         $this->product->expects($this->any())->method('getPriceInfo')->willReturn($this->priceInfo);
         $this->customerGroupRetriever = $this->getMockBuilder(RetrieverInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->session = $this->createMock(Session::class);
         $this->session->expects($this->any())->method('getCustomerGroupId')
             ->willReturn($this->customerGroup);
-        $this->customerGroupRetriever = $this->createMock(RetrieverInterface::class);
+        $this->customerGroupRetriever = $this->getMockForAbstractClass(RetrieverInterface::class);
         $this->calculator = $this->createMock(Calculator::class);
-        $this->groupManagement = $this->createMock(GroupManagementInterface::class);
+        $this->groupManagement = $this->getMockForAbstractClass(GroupManagementInterface::class);
 
-        $this->priceCurrencyMock = $this->createMock(PriceCurrencyInterface::class);
+        $this->priceCurrencyMock = $this->getMockForAbstractClass(PriceCurrencyInterface::class);
 
         $this->model = new TierPrice(
             $this->product,
@@ -266,7 +266,7 @@ class TierPriceTest extends TestCase
     {
         $this->product->setData(TierPrice::PRICE_CODE, $tierPrices);
 
-        $price = $this->createMock(PriceInterface::class);
+        $price = $this->getMockForAbstractClass(PriceInterface::class);
         $price->expects($this->any())->method('getValue')->willReturn($basePrice);
 
         $this->calculator->expects($this->atLeastOnce())->method('getAmount')

@@ -97,13 +97,13 @@ class SequenceApplierTest extends TestCase
             ->getMock();
         $this->hydratorMock = $this->getMockBuilder(HydratorInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->metadataMock = $this->getMockBuilder(EntityMetadataInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->sequenceMock = $this->getMockBuilder(SequenceInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->sequenceApplier = $helper->getObject(
             SequenceApplier::class,

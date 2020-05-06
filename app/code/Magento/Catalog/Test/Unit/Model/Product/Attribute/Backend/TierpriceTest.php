@@ -70,13 +70,13 @@ class TierpriceTest extends TestCase
             ->getMockForAbstractClass();
         $this->localeFormat = $this->getMockBuilder(FormatInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->storeManager = $this->getMockBuilder(StoreManagerInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->groupManagement = $this->getMockBuilder(GroupManagementInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $objectHelper = new ObjectManager($this);
         $this->tierprice = $objectHelper->getObject(
@@ -198,7 +198,7 @@ class TierpriceTest extends TestCase
             ->getMock();
         $allCustomersGroup = $this->getMockBuilder(GroupInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->groupManagement
             ->expects($this->exactly(2))
             ->method('getAllCustomersGroup')

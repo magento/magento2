@@ -76,6 +76,6 @@ class PriceModifierTest extends TestCase
     public function testModifyPriceIfPriceNotExist()
     {
         $this->ruleFactoryMock->expects($this->never())->method('create');
-        $this->assertEquals(null, $this->priceModifier->modifyPrice(null, $this->productMock));
+        $this->assertNull($this->priceModifier->modifyPrice(null, $this->productMock));
     }
 }

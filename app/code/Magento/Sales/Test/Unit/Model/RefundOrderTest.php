@@ -135,16 +135,16 @@ class RefundOrderTest extends TestCase
             ->getMock();
         $this->orderRepositoryMock = $this->getMockBuilder(OrderRepositoryInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->creditmemoDocumentFactoryMock = $this->getMockBuilder(CreditmemoDocumentFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->refundOrderValidatorMock = $this->getMockBuilder(RefundOrderInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->refundAdapterMock = $this->getMockBuilder(RefundAdapterInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->orderStateResolverMock = $this->getMockBuilder(OrderStateResolverInterface::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
@@ -181,7 +181,7 @@ class RefundOrderTest extends TestCase
         $this->validationMessagesMock = $this->getMockBuilder(ValidatorResultInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['hasMessages', 'getMessages', 'addMessage'])
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->refundOrder = new RefundOrder(
             $this->resourceConnectionMock,

@@ -192,7 +192,7 @@ class CreateTest extends TestCase
         $attributeMocks = [];
 
         foreach ($attributes as $value) {
-            $attribute = $this->createMock(AttributeMetadataInterface::class);
+            $attribute = $this->getMockForAbstractClass(AttributeMetadataInterface::class);
             $attribute->method('getAttributeCode')
                 ->willReturn($value[0]);
 
@@ -213,9 +213,9 @@ class CreateTest extends TestCase
             ->willReturn(['group_id' => 1]);
 
         $customerForm->method('prepareRequest')
-            ->willReturn($this->createMock(RequestInterface::class));
+            ->willReturn($this->getMockForAbstractClass(RequestInterface::class));
 
-        $customer = $this->createMock(CustomerInterface::class);
+        $customer = $this->getMockForAbstractClass(CustomerInterface::class);
         $this->customerMapper->expects(self::atLeastOnce())
             ->method('toFlatArray')
             ->willReturn(['group_id' => 1]);

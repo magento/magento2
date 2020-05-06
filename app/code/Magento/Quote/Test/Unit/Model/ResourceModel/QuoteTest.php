@@ -49,7 +49,7 @@ class QuoteTest extends TestCase
         $objectManagerHelper = new ObjectManager($this);
         $this->quoteMock = $this->createMock(Quote::class);
         $this->sequenceManagerMock = $this->createMock(Manager::class);
-        $this->sequenceMock = $this->createMock(SequenceInterface::class);
+        $this->sequenceMock = $this->getMockForAbstractClass(SequenceInterface::class);
         $this->model = $objectManagerHelper->getObject(
             QuoteResource::class,
             [

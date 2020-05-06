@@ -55,7 +55,7 @@ class CustomerTokenServiceTest extends TestCase
         $this->_accountManagementMock = $this
             ->getMockBuilder(AccountManagementInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->_tokenMock = $this->getMockBuilder(Token::class)
             ->disableOriginalConstructor()
@@ -90,7 +90,7 @@ class CustomerTokenServiceTest extends TestCase
         )->disableOriginalConstructor()
             ->getMock();
 
-        $this->manager = $this->createMock(ManagerInterface::class);
+        $this->manager = $this->getMockForAbstractClass(ManagerInterface::class);
 
         $this->_tokenService = new CustomerTokenService(
             $this->_tokenFactoryMock,
@@ -108,16 +108,16 @@ class CustomerTokenServiceTest extends TestCase
         $this->_tokenModelCollectionMock->expects($this->once())
             ->method('addFilterByCustomerId')
             ->with($customerId)
-            ->will($this->returnValue($this->_tokenModelCollectionMock));
+            ->willReturn($this->_tokenModelCollectionMock);
         $this->_tokenModelCollectionMock->expects($this->any())
             ->method('getSize')
-            ->will($this->returnValue(1));
+            ->willReturn(1);
         $this->_tokenModelCollectionMock->expects($this->once())
             ->method('getIterator')
-            ->will($this->returnValue(new \ArrayIterator([$this->_tokenMock])));
+            ->willReturn(new \ArrayIterator([$this->_tokenMock]));
         $this->_tokenModelCollectionMock->expects($this->any())
             ->method('_fetchAll')
-            ->will($this->returnValue(1));
+            ->willReturn(1);
         $this->_tokenMock->expects($this->once())
             ->method('delete')
             ->willReturn($this->_tokenMock);
@@ -132,7 +132,7 @@ class CustomerTokenServiceTest extends TestCase
         $this->_tokenModelCollectionMock->expects($this->once())
             ->method('addFilterByCustomerId')
             ->with(null)
-            ->will($this->returnValue($this->_tokenModelCollectionMock));
+            ->willReturn($this->_tokenModelCollectionMock);
         $this->_tokenMock->expects($this->never())
             ->method('delete')
             ->willReturn($this->_tokenMock);
@@ -148,13 +148,13 @@ class CustomerTokenServiceTest extends TestCase
         $this->_tokenModelCollectionMock->expects($this->once())
             ->method('addFilterByCustomerId')
             ->with($customerId)
-            ->will($this->returnValue($this->_tokenModelCollectionMock));
+            ->willReturn($this->_tokenModelCollectionMock);
         $this->_tokenModelCollectionMock->expects($this->once())
             ->method('getSize')
-            ->will($this->returnValue(1));
+            ->willReturn(1);
         $this->_tokenModelCollectionMock->expects($this->once())
             ->method('getIterator')
-            ->will($this->returnValue(new \ArrayIterator([$this->_tokenMock])));
+            ->willReturn(new \ArrayIterator([$this->_tokenMock]));
 
         $this->_tokenMock->expects($this->once())
             ->method('delete')

@@ -44,7 +44,7 @@ class TemporaryTableServiceTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->adapterMock = $this->createMock(AdapterInterface::class);
+        $this->adapterMock = $this->getMockForAbstractClass(AdapterInterface::class);
         $this->selectMock = $this->createMock(Select::class);
         $this->randomMock = $this->createMock(Random::class);
         $this->temporaryTableService = (new ObjectManager($this))->getObject(

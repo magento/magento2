@@ -55,7 +55,7 @@ class FixerIoTest extends TestCase
         $this->scopeConfig = $this->getMockBuilder(ScopeConfigInterface::class)
             ->disableOriginalConstructor()
             ->setMethods([])
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->model = new FixerIo($this->currencyFactory, $this->scopeConfig, $this->httpClientFactory);
     }

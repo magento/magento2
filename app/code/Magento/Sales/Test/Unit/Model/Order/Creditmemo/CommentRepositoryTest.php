@@ -81,7 +81,7 @@ class CommentRepositoryTest extends TestCase
     {
         $this->commentResource = $this->getMockBuilder(CreditmemoCommentResourceInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->commentFactory = $this->getMockBuilder(CreditmemoCommentInterfaceFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -90,16 +90,16 @@ class CommentRepositoryTest extends TestCase
             ->getMock();
         $this->collectionProcessor = $this->getMockBuilder(CollectionProcessorInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->creditmemoRepositoryMock = $this->getMockBuilder(CreditmemoRepositoryInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->creditmemoCommentSender = $this->getMockBuilder(CreditmemoCommentSender::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->loggerMock = $this->getMockBuilder(LoggerInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->creditmemoMock = $this->getMockBuilder(Creditmemo::class)
             ->disableOriginalConstructor()

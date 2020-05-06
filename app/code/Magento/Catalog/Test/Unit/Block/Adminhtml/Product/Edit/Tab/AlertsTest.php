@@ -29,7 +29,7 @@ class AlertsTest extends TestCase
     protected function setUp(): void
     {
         $helper = new ObjectManager($this);
-        $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
+        $this->scopeConfigMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
 
         $this->alerts = $helper->getObject(
             Alerts::class,

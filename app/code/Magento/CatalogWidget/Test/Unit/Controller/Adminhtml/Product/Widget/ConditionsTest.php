@@ -50,7 +50,7 @@ class ConditionsTest extends TestCase
         $this->response = $this->getMockBuilder(ResponseInterface::class)
             ->setMethods(['setBody', 'sendResponse'])
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->response->expects($this->once())->method('setBody')->willReturnSelf();
 
         $objectManagerHelper = new ObjectManagerHelper($this);

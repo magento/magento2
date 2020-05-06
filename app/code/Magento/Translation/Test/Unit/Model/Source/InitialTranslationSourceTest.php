@@ -81,7 +81,7 @@ class InitialTranslationSourceTest extends TestCase
             ->getMock();
         $this->connection = $this->getMockBuilder(AdapterInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->select = $this->getMockBuilder(Select::class)
             ->disableOriginalConstructor()
             ->getMock();
