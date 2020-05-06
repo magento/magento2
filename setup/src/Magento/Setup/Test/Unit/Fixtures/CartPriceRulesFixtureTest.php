@@ -173,7 +173,7 @@ class CartPriceRulesFixtureTest extends TestCase
                 'type' => Product::class,
                 'attribute' => 'category_ids',
                 'operator' => '==',
-                'value' => null,
+                'value' => 0,
             ];
 
             $secondCondition = [
@@ -261,8 +261,8 @@ class CartPriceRulesFixtureTest extends TestCase
     public function dataProviderGenerateAdvancedCondition()
     {
         return [
-            [1, [0], 1],
-            [1, [0], 300]
+            [1, [[0]], 1],
+            [1, [[0]], 300]
         ];
     }
 

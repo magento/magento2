@@ -99,7 +99,14 @@ class InstallTest extends TestCase
     {
         $this->webLogger->expects($this->once())->method('clear');
         $this->installer->expects($this->once())->method('install');
-        $this->installer->expects($this->exactly(2))->method('getInstallInfo');
+        $this->installer->expects($this->exactly(2))
+            ->method('getInstallInfo')
+            ->willReturn(
+                [
+                    'key' => null,
+                    'message' => null,
+                ]
+            );
         $this->deploymentConfig->expects($this->once())->method('isAvailable')->willReturn(false);
         $jsonModel = $this->controller->startAction();
         $this->assertInstanceOf(JsonModel::class, $jsonModel);
@@ -140,6 +147,14 @@ class InstallTest extends TestCase
         $this->webLogger->expects($this->never())->method('logError');
         $this->deploymentConfig->expects($this->once())->method('isAvailable')->willReturn(false);
         $this->installer->method('install');
+        $this->installer->expects($this->exactly(2))
+            ->method('getInstallInfo')
+            ->willReturn(
+                [
+                    'key' => null,
+                    'message' => null,
+                ]
+            );
         $this->sampleDataState->expects($this->once())->method('hasError')->willReturn(true);
         $jsonModel = $this->controller->startAction();
         $this->assertInstanceOf(JsonModel::class, $jsonModel);

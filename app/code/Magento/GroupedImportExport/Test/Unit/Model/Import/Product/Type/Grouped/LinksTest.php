@@ -108,16 +108,25 @@ class LinksTest extends TestCase
         $linksData['attr_product_ids'] = [12 => true, 16 => true];
         $linksData['position'] = [4 => 6];
         $linksData['qty'] = [9 => 3];
+        $attributes = [
+            ['id' => 1, 'code' => 'position', 'type' => 'int'],
+            ['id' => 2, 'code' => 'qty', 'type' => 'decimal'],
+        ];
         $this->processBehaviorGetter('append');
         $select = $this->createMock(Select::class);
-        $this->connection->expects($this->any())->method('select')->will($this->returnValue($select));
-        $select->expects($this->any())->method('from')->willReturnSelf();
-        $select->expects($this->any())->method('where')->willReturnSelf();
-        $this->connection->expects($this->once())->method('fetchAll')->with($select)->will($this->returnValue([]));
+        $this->connection->expects($this->exactly(2))->method('select')->will($this->returnValue($select));
+        $select->expects($this->exactly(2))->method('from')->willReturnSelf();
+        $select->expects($this->exactly(2))->method('where')->willReturnSelf();
+        $this->connection->expects($this->once())->method('fetchAll')
+            ->with($select)->will($this->returnValue($attributes));
         $this->connection->expects($this->once())->method('fetchPairs')->with($select)->will(
             $this->returnValue([])
         );
         $this->connection->expects($this->exactly(4))->method('insertOnDuplicate');
+        $this->link->expects($this->exactly(2))->method('getAttributeTypeTable')->willReturn(
+            'table_name'
+        );
+
         $this->links->saveLinksData($linksData);
     }
 
