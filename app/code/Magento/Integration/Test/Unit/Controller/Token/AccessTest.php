@@ -167,7 +167,8 @@ class AccessTest extends TestCase
         $this->helperMock->expects($this->once())
             ->method('getRequestUrl');
         $this->helperMock->expects($this->once())
-            ->method('prepareRequest');
+            ->method('prepareRequest')
+            ->willReturn(['oauth_consumer_key' => 'oauth_key']);
         $this->frameworkOauthSvcMock->expects($this->once())
             ->method('getAccessToken')
             ->willReturn(['response']);
