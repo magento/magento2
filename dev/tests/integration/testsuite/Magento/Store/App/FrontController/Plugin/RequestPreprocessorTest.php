@@ -90,6 +90,7 @@ class RequestPreprocessorTest extends \Magento\TestFramework\TestCase\AbstractCo
      * @param array $config
      * @param string $requestUrl
      * @param string $redirectUrl
+     * @magentoAppArea frontend
      * @dataProvider autoRedirectToBaseURLDataProvider
      */
     public function testAutoRedirectToBaseURL(array $config, string $requestUrl, string $redirectUrl)

@@ -100,7 +100,7 @@ class AddOptionToAttributeTest extends TestCase
         $optionsAfter = $this->getAttributeOptions(false);
         $this->assertEquals(count($optionsBefore) + 2, count($optionsAfter));
         foreach ($optionsBefore as $option) {
-            $this->assertTrue(in_array($option, $optionsAfter));
+            $this->assertContainsEquals($option, $optionsAfter);
         }
     }
 
@@ -119,7 +119,7 @@ class AddOptionToAttributeTest extends TestCase
         $optionsAfter = $this->getAttributeOptions();
         $this->assertEquals(count($optionsBefore), count($optionsAfter));
         foreach ($optionsBefore as $option) {
-            $this->assertTrue(in_array($option, $optionsAfter));
+            $this->assertContainsEquals($option, $optionsAfter);
         }
     }
 
@@ -203,7 +203,7 @@ class AddOptionToAttributeTest extends TestCase
         $updatedOptions = $this->getAttributeOptions();
         $this->assertEquals(count($updatedOptions), count($optionsBefore) - 1);
         foreach ($updatedOptions as $option) {
-            $this->assertTrue(in_array($option, $optionsBefore));
+            $this->assertContainsEquals($option, $optionsBefore);
         }
     }
 

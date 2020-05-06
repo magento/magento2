@@ -7,6 +7,8 @@
  */
 namespace Magento\Framework;
 
+use ReflectionClass;
+
 class ProfilerTest extends \PHPUnit\Framework\TestCase
 {
     protected function tearDown(): void
@@ -21,8 +23,15 @@ class ProfilerTest extends \PHPUnit\Framework\TestCase
      */
     public function testApplyConfigWithDrivers(array $config, array $expectedDrivers)
     {
-        \Magento\Framework\Profiler::applyConfig($config, '');
-        $this->assertAttributeEquals($expectedDrivers, '_drivers', \Magento\Framework\Profiler::class);
+        $profiler = new \Magento\Framework\Profiler();
+        $profiler::applyConfig($config, '');
+        $this->assertClassHasAttribute('_drivers', \Magento\Framework\Profiler::class);
+        $object = new ReflectionClass(\Magento\Framework\Profiler::class);
+        $attribute = $object->getProperty('_drivers');
+        $attribute->setAccessible(true);
+        $propertyObject = $attribute->getValue($profiler);
+        $attribute->setAccessible(false);
+        $this->assertEquals($expectedDrivers, $propertyObject);
     }
 
     /**

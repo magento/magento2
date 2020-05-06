@@ -16,7 +16,7 @@ use Magento\Framework\Archive\Helper\File;
 class Tar extends \Magento\Framework\Archive\AbstractArchive implements \Magento\Framework\Archive\ArchiveInterface
 {
     /**
-     * Define acceptable tar block size.
+     * The value of the tar block size
      *
      * @const int
      */
@@ -85,8 +85,8 @@ class Tar extends \Magento\Framework\Archive\AbstractArchive implements \Magento
      */
     protected static function _getFormatParseHeader()
     {
-        return 'a100name/a8mode/a8uid/a8gid/a12size/a12mtime/a8checksum/a1type/a100symlink/a6magic/a2version/' .
-            'a32uname/a32gname/a8devmajor/a8devminor/a155prefix/a12closer';
+        return 'Z100name/Z8mode/Z8uid/Z8gid/Z12size/Z12mtime/Z8checksum/Z1type/Z100symlink/Z6magic/Z2version/' .
+            'Z32uname/Z32gname/Z8devmajor/Z8devminor/Z155prefix/Z12closer';
     }
 
     /**
@@ -447,12 +447,12 @@ class Tar extends \Magento\Framework\Archive\AbstractArchive implements \Magento
 
         $header = unpack(self::_getFormatParseHeader(), $headerBlock);
 
-        $header['mode'] = octdec((int)$header['mode']);
-        $header['uid'] = octdec((int)$header['uid']);
-        $header['gid'] = octdec((int)$header['gid']);
-        $header['size'] = octdec((int)$header['size']);
-        $header['mtime'] = octdec((int)$header['mtime']);
-        $header['checksum'] = octdec((int)$header['checksum']);
+        $header['mode'] = octdec($header['mode']);
+        $header['uid'] = octdec($header['uid']);
+        $header['gid'] = octdec($header['gid']);
+        $header['size'] = octdec($header['size']);
+        $header['mtime'] = octdec($header['mtime']);
+        $header['checksum'] = octdec($header['checksum']);
 
         if ($header['type'] == "5") {
             $header['size'] = 0;
