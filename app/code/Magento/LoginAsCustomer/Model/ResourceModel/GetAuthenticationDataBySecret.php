@@ -85,8 +85,8 @@ class GetAuthenticationDataBySecret implements GetAuthenticationDataBySecretInte
         /** @var AuthenticationDataInterface $authenticationData */
         $authenticationData = $this->authenticationDataFactory->create(
             [
-                'customerId' => (int)$data['admin_id'],
-                'adminId' => (int)$data['customer_id'],
+                'customerId' => (int)$data['customer_id'],
+                'adminId' => (int)$data['admin_id'],
                 'extensionAttributes' => null,
             ]
         );
