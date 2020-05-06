@@ -177,10 +177,7 @@ class CollectionTest extends TestCase
 
         $this->selectMock->expects($this->at(3))
             ->method('where')
-            ->with(implode([
-                'test_1',
-                'test_2',
-            ], ' OR '));
+            ->with(implode(' OR ', ['test_1', 'test_2']));
 
         $ruleMock = $this->getRuleMock();
         $ruleMock->expects($this->once())

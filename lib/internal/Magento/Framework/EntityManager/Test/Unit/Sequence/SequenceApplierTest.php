@@ -138,7 +138,7 @@ class SequenceApplierTest extends TestCase
             ->method('resolve')
             ->with($this->entityMock)
             ->willReturn($entityType);
-        $this->sequenceRegistryMock->expects($this->once())
+        $this->sequenceRegistryMock->expects($this->exactly(2))
             ->method('retrieve')
             ->with($entityType)
             ->willReturn($sequenceInfo);
@@ -176,7 +176,7 @@ class SequenceApplierTest extends TestCase
             ->method('resolve')
             ->with($this->entityMock)
             ->willReturn($entityType);
-        $this->sequenceRegistryMock->expects($this->once())
+        $this->sequenceRegistryMock->expects($this->exactly(2))
             ->method('retrieve')
             ->with($entityType)
             ->willReturn($sequenceInfo);
