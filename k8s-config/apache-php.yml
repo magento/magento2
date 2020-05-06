@@ -44,6 +44,10 @@ spec:
             name: magento-pub-volume
             subPath: pub
           command: ["/bin/sh","-c","/var/www/html/start.sh"]
+          command: 
+            - sh
+            - -c
+            - (chmod 0775 /var/www/html/pub; chgrp 82 /var/www/html/pub)
           resources:
             requests:
               cpu: "250m"
