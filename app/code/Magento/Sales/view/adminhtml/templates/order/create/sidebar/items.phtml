@@ -19,8 +19,8 @@
     </div>
     <?= /* @noEscape */ $secureRenderer->renderEventListenerAsTag(
         'onclick',
-        "event.preventDefault(); order.loadArea('sidebar_" . $block->escapeJs($block->getDataId()) .
-        "', 'sidebar_data_" . $block->escapeJs($block->getDataId()) . "');return false;",
+        "order.loadArea('sidebar_" . $block->escapeJs($block->getDataId()) .
+        "', 'sidebar_data_" . $block->escapeJs($block->getDataId()) . "');event.preventDefault();",
         'div.head.sidebar-title-block'
     ) ?>
     <div class="content">
@@ -105,9 +105,9 @@
                                     </a>
                                     <?= /* @noEscape */ $secureRenderer->renderEventListenerAsTag(
                                         'onclick',
-                                        "event.preventDefault(); order.sidebarConfigureProduct('sidebar_wishlist', " .
+                                        "order.sidebarConfigureProduct('sidebar_wishlist', " .
                                         (int) $block->getProductId($_item) . ", " . (int) $block->getItemId($_item) .
-                                        "); return false;",
+                                        ");event.preventDefault();",
                                         'a.icon.icon-configure'
                                     ) ?>
                                 <?php elseif ($block->isConfigurationRequired($_item->getTypeId())): ?>
@@ -118,8 +118,8 @@
                                     </a>
                                     <?= /* @noEscape */ $secureRenderer->renderEventListenerAsTag(
                                         'onclick',
-                                        "event.preventDefault(); order.sidebarConfigureProduct('sidebar', " .
-                                        (int) $block->getProductId($_item) . "); return false;",
+                                        "order.sidebarConfigureProduct('sidebar', " .
+                                        (int) $block->getProductId($_item) . ");event.preventDefault();",
                                         'a.icon.icon-configure'
                                     ) ?>
                                 <?php else: ?>

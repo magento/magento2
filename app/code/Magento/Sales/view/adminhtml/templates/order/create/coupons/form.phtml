@@ -25,7 +25,7 @@
         </p>
             <?= /* @noEscape */ $secureRenderer->renderEventListenerAsTag(
                 'onclick',
-                "order.applyCoupon(''); return false;",
+                "order.applyCoupon('');event.preventDefault();",
                 'p.added-coupon-code a.action-remove'
             ) ?>
         <?php endif; ?>

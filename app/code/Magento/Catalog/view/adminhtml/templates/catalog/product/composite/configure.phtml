@@ -11,11 +11,11 @@
     <?= /* @noEscape */ $secureRenderer->renderEventListenerAsTag(
         'onload',
         "window.productConfigure && productConfigure.onLoadIFrame()",
-        '#product_composite_configure_form'
+        '#product_composite_configure_iframe'
     ) ?>
     <?= /* @noEscape */ $secureRenderer->renderStyleAsTag(
         "width:0; height:0; border:0px solid #fff; position:absolute; top:-1000px; left:-1000px",
-        '#product_composite_configure_confirmed'
+        '#product_composite_configure_iframe'
     ) ?>
 
     <form action="" method="post" id="product_composite_configure_form" enctype="multipart/form-data"
@@ -45,7 +45,7 @@
     </form>
     <?= /* @noEscape */ $secureRenderer->renderEventListenerAsTag(
         'onsubmit',
-        "productConfigure.onConfirmBtn(); return false;",
+        "productConfigure.onConfirmBtn();event.preventDefault()",
         '#product_composite_configure_form'
     ) ?>
 

@@ -47,7 +47,7 @@
             </a><br/>
                 <?= /* @noEscape */ $secureRenderer->renderEventListenerAsTag(
                     'onclick',
-                    "imagePreview('<?= $imgId ?>');return false;",
+                    "imagePreview('<?= $imgId ?>');event.preventDefault()",
                     '#a_' . $imgId
                 ) ?>
             <input type="file"

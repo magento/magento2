@@ -17,11 +17,11 @@
 </div>
 <?= /* @noEscape */ $secureRenderer->renderEventListenerAsTag(
     'onclick',
-    "javascript:window.open(
+    "window.open(
             '" . $block->escapeUrl($block->getButtonUrl()) . "',
             'bmlapiwizard',
             'toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=yes, resizable=yes, ,' +
             'left=100, top=100, width=550, height=550'
-        ); return false;",
+        );event.preventDefault()",
     'button#' . $block->escapeHtml($block->getHtmlId())
 ) ?>
