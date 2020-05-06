@@ -23,5 +23,4 @@ RUN cd /var/www/html \
 && chmod +x pub/get.php pub/static.php bin/magento \
 && rm -rf pub/static/frontend/Magento/blank/ .github/ phpserver/ setup/ docker/ magento2-sample-data/ \
 && mv pub pub.new \
-&& composer install --no-cache \
-&& composer config repositories.magento composer https://repo.magento.com/ 
+&& composer install --no-cache 
