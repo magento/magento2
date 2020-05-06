@@ -10,6 +10,9 @@ namespace Magento\LoginAsCustomerUi\Plugin\Button;
 use Magento\Backend\Block\Widget\Button\ButtonList;
 use Magento\Backend\Block\Widget\Button\Toolbar;
 use Magento\Framework\View\Element\AbstractBlock;
+use Magento\Framework\Escaper;
+use Magento\Framework\AuthorizationInterface;
+use Magento\LoginAsCustomerApi\Api\ConfigInterface;
 
 /**
  * Plugin for \Magento\Backend\Block\Widget\Button\Toolbar.
@@ -17,26 +20,34 @@ use Magento\Framework\View\Element\AbstractBlock;
 class ToolbarPlugin
 {
     /**
-     * @var \Magento\Framework\AuthorizationInterface
+     * @var AuthorizationInterface
      */
     private $authorization;
 
     /**
-     * @var \Magento\Framework\UrlInterface
+     * @var Escaper
      */
-    private $url;
+    private $escaper;
+
+    /**
+     * @var ConfigInterface
+     */
+    private $config;
 
     /**
      * ToolbarPlugin constructor.
-     * @param \Magento\Framework\AuthorizationInterface $authorization
-     * @param \Magento\Framework\UrlInterface $url
+     * @param AuthorizationInterface $authorization
+     * @param ConfigInterface $config
+     * @param Escaper $escaper
      */
     public function __construct(
-        \Magento\Framework\AuthorizationInterface $authorization,
-        \Magento\Framework\UrlInterface $url
+        AuthorizationInterface $authorization,
+        ConfigInterface $config,
+        Escaper $escaper
     ) {
         $this->authorization = $authorization;
-        $this->url = $url;
+        $this->config = $config;
+        $this->escaper = $escaper;
     }
 
     /**
@@ -65,7 +76,10 @@ class ToolbarPlugin
             $order = $context->getCreditmemo()->getOrder();
         }
         if ($order) {
-            if ($this->isAllowed()) {
+
+            $isAllowed = $this->authorization->isAllowed('Magento_LoginAsCustomer::login_button');
+            $isEnabled = $this->config->isEnabled();
+            if ($isAllowed && $isEnabled) {
                 if (!empty($order['customer_id'])) {
                     $buttonUrl = $context->getUrl('loginascustomer/login/login', [
                         'customer_id' => $order['customer_id']
@@ -74,7 +88,9 @@ class ToolbarPlugin
                         'guest_to_customer',
                         [
                             'label' => __('Login As Customer'),
-                            'onclick' => 'window.open(\'' . $buttonUrl . '\')',
+                            'onclick' => 'window.lacConfirmationPopup("'
+                                . $this->escaper->escapeHtml($this->escaper->escapeJs($buttonUrl))
+                                . '")',
                             'class' => 'reset'
                         ],
                         -1
@@ -82,15 +98,5 @@ class ToolbarPlugin
                 }
             }
         }
-    }
-
-    /**
-     * Check is allowed access
-     *
-     * @return bool
-     */
-    private function isAllowed(): bool
-    {
-        return (bool)$this->authorization->isAllowed('Magento_LoginAsCustomer::login_button');
     }
 }
