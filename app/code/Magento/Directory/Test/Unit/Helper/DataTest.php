@@ -8,13 +8,17 @@ declare(strict_types=1);
 namespace Magento\Directory\Test\Unit\Helper;
 
 use Magento\Directory\Helper\Data;
+use Magento\Directory\Model\AllowedCountries;
 use Magento\Directory\Model\CurrencyFactory;
-use Magento\Directory\Model\ResourceModel\Country\Collection;
+use Magento\Directory\Model\ResourceModel\Country\Collection as CountryCollection;
+use Magento\Directory\Model\ResourceModel\Region\Collection as RegionCollection;
 use Magento\Directory\Model\ResourceModel\Region\CollectionFactory;
 use Magento\Framework\App\Cache\Type\Config;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Helper\Context;
+use Magento\Framework\App\RequestInterface;
 use Magento\Framework\DataObject;
+use Magento\Framework\Json\Helper\Data as JsonDataHelper;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\Store;
@@ -29,7 +33,7 @@ use PHPUnit\Framework\TestCase;
 class DataTest extends TestCase
 {
     /**
-     * @var Collection|MockObject
+     * @var CountryCollection|MockObject
      */
     protected $_countryCollection;
 
@@ -39,7 +43,7 @@ class DataTest extends TestCase
     protected $_regionCollection;
 
     /**
-     * @var \Magento\Framework\Json\Helper\Data|MockObject
+     * @var JsonDataHelper|MockObject
      */
     protected $jsonHelperMock;
 
@@ -63,16 +67,18 @@ class DataTest extends TestCase
         $objectManager = new ObjectManager($this);
         $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
         $this->scopeConfigMock->expects($this->any())->method('isSetFlag')->willReturn(false);
+        $requestMock = $this->createMock(RequestInterface::class);
         $context = $this->createMock(Context::class);
+        $context->method('getRequest')
+            ->willReturn($requestMock);
         $context->expects($this->any())
             ->method('getScopeConfig')
             ->willReturn($this->scopeConfigMock);
-
         $configCacheType = $this->createMock(Config::class);
 
-        $this->_countryCollection = $this->createMock(Collection::class);
+        $this->_countryCollection = $this->createMock(CountryCollection::class);
 
-        $this->_regionCollection = $this->createMock(\Magento\Directory\Model\ResourceModel\Region\Collection::class);
+        $this->_regionCollection = $this->createMock(RegionCollection::class);
         $regCollectionFactory = $this->createPartialMock(
             CollectionFactory::class,
             ['create']
@@ -85,7 +91,7 @@ class DataTest extends TestCase
             $this->_regionCollection
         );
 
-        $this->jsonHelperMock = $this->createMock(\Magento\Framework\Json\Helper\Data::class);
+        $this->jsonHelperMock = $this->createMock(JsonDataHelper::class);
 
         $this->_store = $this->createMock(Store::class);
         $storeManager = $this->createMock(StoreManagerInterface::class);
@@ -107,19 +113,18 @@ class DataTest extends TestCase
 
     public function testGetRegionJson()
     {
-        $countries = [
-            new DataObject(['country_id' => 'Country1']),
-            new DataObject(['country_id' => 'Country2'])
-        ];
-        $countryIterator = new \ArrayIterator($countries);
-        $this->_countryCollection->expects(
-            $this->atLeastOnce()
-        )->method(
-            'getIterator'
-        )->willReturn(
-            $countryIterator
-        );
-
+        $this->scopeConfigMock->method('getValue')
+            ->willReturnMap(
+                [
+                    [
+                        AllowedCountries::ALLOWED_COUNTRIES_PATH,
+                        ScopeConfigInterface::SCOPE_TYPE_DEFAULT,
+                        null,
+                        'Country1,Country2'
+                    ],
+                    [Data::XML_PATH_STATES_REQUIRED, ScopeInterface::SCOPE_STORE, null, '']
+                ]
+            );
         $regions = [
             new DataObject(
                 ['country_id' => 'Country1', 'region_id' => 'r1', 'code' => 'r1-code', 'name' => 'r1-name']

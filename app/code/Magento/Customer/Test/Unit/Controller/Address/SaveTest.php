@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -165,9 +164,8 @@ class SaveTest extends TestCase
             ->withConsecutive(['parent_id'], ['entity_id'])
             ->willReturnOnConsecutiveCalls(22, 1);
 
-        $customerMock = $this->getMockBuilder(
-            CustomerInterface::class
-        )->disableOriginalConstructor()
+        $customerMock = $this->getMockBuilder(CustomerInterface::class)
+            ->disableOriginalConstructor()
             ->getMock();
 
         $this->customerRepositoryMock->expects($this->atLeastOnce())
@@ -214,7 +212,7 @@ class SaveTest extends TestCase
             ->method('setData')
             ->with(
                 [
-                    'message' => __('Customer address has been updated.'),
+                    'messages' => __('Customer address has been updated.'),
                     'error' => false,
                     'data' => [
                         'entity_id' => $addressId

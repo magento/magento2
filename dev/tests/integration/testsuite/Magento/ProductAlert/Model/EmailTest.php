@@ -7,8 +7,11 @@
 namespace Magento\ProductAlert\Model;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Customer\Api\AccountManagementInterface;
 use Magento\Customer\Api\CustomerRepositoryInterface;
-use Magento\ProductAlert\Model\Email;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\MailException;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Store\Model\Website;
 use Magento\TestFramework\Mail\Template\TransportBuilderMock;
 
@@ -30,7 +33,7 @@ class EmailTest extends \PHPUnit\Framework\TestCase
     protected $_objectManager;
 
     /**
-     * @var \Magento\Customer\Api\AccountManagementInterface
+     * @var AccountManagementInterface
      */
     protected $customerAccountManagement;
 
@@ -61,7 +64,7 @@ class EmailTest extends \PHPUnit\Framework\TestCase
     {
         $this->_objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->customerAccountManagement = $this->_objectManager->create(
-            \Magento\Customer\Api\AccountManagementInterface::class
+            AccountManagementInterface::class
         );
         $this->_customerViewHelper = $this->_objectManager->create(\Magento\Customer\Helper\View::class);
         $this->transportBuilder = $this->_objectManager->get(TransportBuilderMock::class);
@@ -78,6 +81,9 @@ class EmailTest extends \PHPUnit\Framework\TestCase
      * @dataProvider customerFunctionDataProvider
      *
      * @param bool isCustomerIdUsed
+     * @throws LocalizedException
+     * @throws MailException
+     * @throws NoSuchEntityException
      */
     public function testSend($isCustomerIdUsed)
     {
@@ -101,8 +107,8 @@ class EmailTest extends \PHPUnit\Framework\TestCase
         $this->_emailModel->send();
 
         $this->assertStringContainsString(
-            'Smith,',
-            $this->transportBuilder->getSentMessage()->getRawMessage()
+            'John Smith,',
+            $this->transportBuilder->getSentMessage()->getBody()->getParts()[0]->getRawContent()
         );
     }
 
@@ -122,6 +128,9 @@ class EmailTest extends \PHPUnit\Framework\TestCase
      * @magentoDataFixture Magento/Customer/_files/two_customers_with_different_customer_groups.php
      *
      * @return void
+     * @throws LocalizedException
+     * @throws MailException
+     * @throws NoSuchEntityException
      */
     public function testEmailForDifferentCustomers(): void
     {

@@ -25,6 +25,7 @@ use Magento\Framework\Controller\Result\Redirect;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Message\Manager;
 use Magento\Framework\Message\ManagerInterface;
+use Magento\Framework\Phrase;
 use Magento\Framework\Stdlib\Cookie\CookieMetadata;
 use Magento\Framework\Stdlib\Cookie\CookieMetadataFactory;
 use Magento\Framework\Stdlib\Cookie\PhpCookieManager;
@@ -267,11 +268,11 @@ class ConfirmTest extends TestCase
      * @param $key
      * @param $vatValidationEnabled
      * @param $addressType
-     * @param $successMessage
-     *
+     * @param Phrase $successMessage
+     * @throws \ReflectionException
      * @dataProvider getSuccessMessageDataProvider
      */
-    public function testSuccessMessage($customerId, $key, $vatValidationEnabled, $addressType, $successMessage)
+    public function testSuccessMessage($customerId, $key, $vatValidationEnabled, $addressType, Phrase $successMessage)
     {
         $this->customerSessionMock->expects($this->once())
             ->method('isLoggedIn')
@@ -306,9 +307,21 @@ class ConfirmTest extends TestCase
             ->with($this->customerDataMock)
             ->willReturnSelf();
 
-        $this->messageManagerMock->expects($this->any())
-            ->method('addSuccessMessage')
+        $this->messageManagerMock
+            ->method('addSuccess')
+            ->with($successMessage)
             ->willReturnSelf();
+
+        $this->messageManagerMock
+            ->expects($this->never())
+            ->method('addException');
+
+        $this->urlMock
+            ->method('getUrl')
+            ->willReturnMap([
+                ['customer/address/edit', null, 'http://store.web/customer/address/edit'],
+                ['*/*/admin', ['_secure' => true], 'http://store.web/back']
+            ]);
 
         $this->addressHelperMock->expects($this->once())
             ->method('isVatValidationEnabled')
@@ -365,9 +378,29 @@ class ConfirmTest extends TestCase
     public function getSuccessMessageDataProvider()
     {
         return [
-            [1, 1, false, null, (string)__('Thank you for registering with')],
-            [1, 1, true, Address::TYPE_BILLING, (string)__('enter your billing address for proper VAT calculation')],
-            [1, 1, true, Address::TYPE_SHIPPING, (string)__('enter your shipping address for proper VAT calculation')],
+            [1, 1, false, null, __('Thank you for registering with %1.', 'frontend')],
+            [
+                1,
+                1,
+                true,
+                Address::TYPE_BILLING,
+                __(
+                    'If you are a registered VAT customer, please click <a href="%1">here</a>'
+                    . ' to enter your billing address for proper VAT calculation.',
+                    'http://store.web/customer/address/edit'
+                )
+            ],
+            [
+                1,
+                1,
+                true,
+                Address::TYPE_SHIPPING,
+                __(
+                    'If you are a registered VAT customer, please click <a href="%1">here</a>'
+                    . ' to enter your shipping address for proper VAT calculation.',
+                    'http://store.web/customer/address/edit'
+                )
+            ],
         ];
     }
 
@@ -378,8 +411,8 @@ class ConfirmTest extends TestCase
      * @param $successUrl
      * @param $resultUrl
      * @param $isSetFlag
-     * @param $successMessage
-     *
+     * @param Phrase $successMessage
+     * @throws \ReflectionException
      * @dataProvider getSuccessRedirectDataProvider
      */
     public function testSuccessRedirect(
@@ -389,7 +422,7 @@ class ConfirmTest extends TestCase
         $successUrl,
         $resultUrl,
         $isSetFlag,
-        $successMessage
+        Phrase $successMessage
     ) {
         $this->customerSessionMock->expects($this->once())
             ->method('isLoggedIn')
@@ -425,9 +458,22 @@ class ConfirmTest extends TestCase
             ->with($this->customerDataMock)
             ->willReturnSelf();
 
-        $this->messageManagerMock->expects($this->any())
-            ->method('addSuccessMessage')
+        $this->messageManagerMock
+            ->method('addSuccess')
+            ->with($successMessage)
             ->willReturnSelf();
+
+        $this->messageManagerMock
+            ->expects($this->never())
+            ->method('addException');
+
+        $this->urlMock
+            ->method('getUrl')
+            ->willReturnMap([
+                ['customer/address/edit', null, 'http://store.web/customer/address/edit'],
+                ['*/*/admin', ['_secure' => true], 'http://store.web/back'],
+                ['*/*/index', ['_secure' => true], $successUrl]
+            ]);
 
         $this->storeMock->expects($this->any())
             ->method('getFrontendName')
@@ -435,11 +481,6 @@ class ConfirmTest extends TestCase
         $this->storeManagerMock->expects($this->any())
             ->method('getStore')
             ->willReturn($this->storeMock);
-
-        $this->urlMock->expects($this->any())
-            ->method('getUrl')
-            ->with('*/*/index', ['_secure' => true])
-            ->willReturn($successUrl);
 
         $this->redirectMock->expects($this->once())
             ->method('success')
@@ -483,7 +524,7 @@ class ConfirmTest extends TestCase
                 null,
                 'http://example.com/back',
                 true,
-                (string)__('Thank you for registering with'),
+                __('Thank you for registering with %1.', 'frontend'),
             ],
             [
                 1,
@@ -492,7 +533,7 @@ class ConfirmTest extends TestCase
                 'http://example.com/success',
                 'http://example.com/success',
                 true,
-                (string)__('Thank you for registering with'),
+                __('Thank you for registering with %1.', 'frontend'),
             ],
             [
                 1,
@@ -501,7 +542,7 @@ class ConfirmTest extends TestCase
                 'http://example.com/success',
                 'http://example.com/success',
                 false,
-                (string)__('Thank you for registering with'),
+                __('Thank you for registering with %1.', 'frontend'),
             ],
         ];
     }
