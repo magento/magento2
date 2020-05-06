@@ -187,13 +187,13 @@ class ConditionsToSearchCriteriaMapper
     }
 
     /**
-     * Recursively reverse sql conditions to their corresponding negative analog
-     * for the entire FilterGroup
+     * Recursively reverse sql conditions to their corresponding negative analog for the entire FilterGroup
      *
      * @param Filter|FilterGroup $filter
+     * @return void
      * @throws InputException
      */
-    private function reverseSqlOperatorInFilterRecursively($filter)
+    private function reverseSqlOperatorInFilterRecursively($filter): void
     {
         if ($filter instanceof FilterGroup) {
             foreach ($filter->getFilters() as &$currentFilter) {
