@@ -15,11 +15,12 @@ docker-php-ext-configure gd --with-png-dir=/usr/include/ \
 && echo "memory_limit=2G" > /usr/local/etc/php/conf.d/memory-limit.ini \
 && echo "max_input_vars=10000" > /usr/local/etc/php/conf.d/max-input-vars-php.ini \
 && curl -sS https://getcomposer.org/installer | php \
-&& mv composer.phar /usr/local/bin/composer 
+&& mv composer.phar /usr/local/bin/composer \
+&& rm -rf /var/cache/* /tmp/* /var/tmp/* 
 COPY --chown=www-data . /var/www/html
 USER www-data
 RUN cd /var/www/html \
+&& chmod +x pub/get.php pub/static.php bin/magento \
 && mv pub pub.new \
 && composer install --no-cache \
-&& composer config repositories.magento composer https://repo.magento.com/ \
-&& chmod +x pub/get.php pub/static.php 
+&& composer config repositories.magento composer https://repo.magento.com/ 
