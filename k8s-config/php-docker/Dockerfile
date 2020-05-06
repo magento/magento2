@@ -22,5 +22,6 @@ USER www-data
 RUN cd /var/www/html \
 && chmod +x pub/get.php pub/static.php bin/magento \
 && mv pub pub.new \
+&& rm -rf .github/ phpserver/ setup/ docker/ magento2-sample-data/ \
 && composer install --no-cache \
 && composer config repositories.magento composer https://repo.magento.com/ 
