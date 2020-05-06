@@ -19,29 +19,24 @@
         </annotations>
 
         <before>
-            <!-- Create Customer -->
             <createData entity="CustomerEntityOne" stepKey="createCustomer"/>
-            <!-- Login as admin -->
             <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
         </before>
         <after>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
-        <!-- Delete created customer -->
         <actionGroup ref="DeleteCustomerByEmailActionGroup" stepKey="deleteCustomer">
             <argument name="email" value="$$createCustomer.email$$"/>
         </actionGroup>
-        <seeElement selector="{{CustomersPageSection.deletedSuccessMessage}}" stepKey="seeSuccessMessage"/>
-        <waitForPageLoad stepKey="waitForCustomerGridPageToLoad"/>
-
-        <!--Assert Customer is not in Grid -->
-        <click selector="{{AdminCustomerFiltersSection.filtersButton}}" stepKey="clickFilterButton"/>
-        <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="cleanFiltersIfTheySet"/>
-        <waitForPageLoad stepKey="waitForClearFilters1"/>
-        <fillField selector="{{AdminCustomerFiltersSection.emailInput}}" userInput="$$createCustomer.email$$" stepKey="filterEmail"/>
-        <click selector="{{AdminCustomerFiltersSection.apply}}" stepKey="applyFilter"/>
-        <waitForPageLoad stepKey="waitForPageToLoad"/>
-        <see selector="{{AdminCustomerGridSection.customerGrid}}" userInput="We couldn't find any records." stepKey="seeEmptyRecordMessage"/>
+        <actionGroup ref="AssertMessageInAdminPanelActionGroup" stepKey="assertSuccessMessage">
+            <argument name="message" value="A total of 1 record(s) were deleted."/>
+        </actionGroup>
+        <actionGroup ref="AdminFilterCustomerByEmail" stepKey="findDeletedCustomer">
+            <argument name="email" value="$$createCustomer.email$$"/>
+        </actionGroup>
+        <actionGroup ref="AssertAdminCustomerIsNotInGridActionGroup" stepKey="assertCustomerIsNotInGrid">
+            <argument name="message" value="We couldn't find any records."/>
+        </actionGroup>
     </test>
 </tests>
