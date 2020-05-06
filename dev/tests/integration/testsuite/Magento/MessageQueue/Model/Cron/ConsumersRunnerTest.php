@@ -69,7 +69,7 @@ class ConsumersRunnerTest extends \PHPUnit\Framework\TestCase
     private $appConfig;
 
     /**
-     * @var ShellInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ShellInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $shellMock;
 
