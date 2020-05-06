@@ -60,7 +60,12 @@ class IndexersStatesApplyFixtureTest extends TestCase
             ->expects($this->once())
             ->method('getValue')
             ->willReturn([
-                'indexer' => ['id' => 1]
+                'indexer' => [
+                    [
+                        'id' => 1,
+                        'set_scheduled' => false,
+                    ]
+                ]
             ]);
         $this->fixtureModelMock
             ->method('getObjectManager')
