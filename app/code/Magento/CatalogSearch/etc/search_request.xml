@@ -20,6 +20,8 @@
             </query>
             <query xsi:type="matchQuery" value="$search_term$" name="search">
                 <match field="*"/>
+                <match field="name" matchCondition="match_phrase_prefix"/>
+                <match field="sku" matchCondition="match_phrase_prefix"/>
             </query>
             <query xsi:type="filteredQuery" name="category">
                 <filterReference clause="must" ref="category_filter"/>
