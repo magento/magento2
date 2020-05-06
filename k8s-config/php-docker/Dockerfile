@@ -15,7 +15,7 @@ docker-php-ext-configure gd --with-png-dir=/usr/include/ \
 && echo "memory_limit=2G" > /usr/local/etc/php/conf.d/memory-limit.ini \
 && echo "max_input_vars=10000" > /usr/local/etc/php/conf.d/max-input-vars-php.ini \
 && curl -sS https://getcomposer.org/installer | php \
-&& mv composer.phar /usr/local/bin/composer \
+&& mv composer.phar /usr/local/bin/composer 
 COPY --chown=www-data . /var/www/html
 USER www-data
 RUN cd /var/www/html \
