@@ -66,7 +66,10 @@ class HistoryTest extends TestCase
     public function testCustomerOrderGridWithoutOrders(): void
     {
         $this->customerSession->loginById(1);
-        $this->assertContains((string)$this->block->getEmptyOrdersMessage(), strip_tags($this->block->toHtml()));
+        $this->assertStringContainsString(
+            (string)$this->block->getEmptyOrdersMessage(),
+            strip_tags($this->block->toHtml())
+        );
     }
 
     /**
