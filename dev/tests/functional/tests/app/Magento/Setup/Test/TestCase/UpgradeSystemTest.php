@@ -40,7 +40,7 @@ class UpgradeSystemTest extends Injectable
      * @param SetupWizard $setupWizard
      * @return void
      */
-    public function __inject(
+    public function __inject( //phpcs:ignore PHPCompatibility.FunctionNameRestrictions.ReservedFunctionNames
         Dashboard $adminDashboard,
         SetupWizard $setupWizard
     ) {
