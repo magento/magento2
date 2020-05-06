@@ -47,7 +47,7 @@ spec:
           command: 
             - sh
             - -c
-            - (chmod 0775 /var/www/html/pub; chgrp 82 /var/www/html/pub)
+            - (chmod 0775 /var/www/html/pub /var/www/html/var; chgrp 82 /var/www/html/pub /var/www/html/var)
           resources:
             requests:
               cpu: "250m"
