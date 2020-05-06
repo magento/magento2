@@ -71,8 +71,7 @@ class DownloadTest extends \PHPUnit\Framework\TestCase
             ->method('escapeHtml')
             ->with('file.csv')
             ->willReturn('file.csv');
-        $this->escaperMock->expects($this->once())->method('escapeUrl')->willReturn('url');
-        $this->escaperMock->expects($this->at(2))
+        $this->escaperMock->expects($this->at(1))
             ->method('escapeHtml')
             ->with('Download')
             ->willReturn('Download');
