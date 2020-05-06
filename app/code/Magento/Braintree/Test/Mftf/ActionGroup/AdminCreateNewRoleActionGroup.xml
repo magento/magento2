@@ -14,9 +14,6 @@
         </annotations>
         <arguments>
             <argument name="role" type="string" defaultValue=""/>
-            <argument name="resource" type="string" defaultValue="All"/>
-            <argument name="scope" type="string" defaultValue="Custom"/>
-            <argument name="websites" type="string" defaultValue="Main Website"/>
         </arguments>
 
         <click selector="{{AdminCreateRoleSection.create}}" stepKey="clickToAddNewRole"/>

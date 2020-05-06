@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "97a85f53d759db036608b129fa3fe1af",
+    "content-hash": "fe503610aec6c3a4c5e1c6592e1808c7",
     "packages": [
         {
             "name": "braintree/braintree_php",
@@ -7130,16 +7130,16 @@
         },
         {
             "name": "magento/magento2-functional-testing-framework",
-            "version": "dev-3.0.0-RC2",
+            "version": "dev-MQE-2045",
             "source": {
                 "type": "git",
                 "url": "https://github.com/magento/magento2-functional-testing-framework.git",
-                "reference": "1225f25f380182cfb1cb73dd3cabbb72fc5f5bee"
+                "reference": "40a22525798c915718165d6c3134ae5173052163"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/magento/magento2-functional-testing-framework/zipball/1225f25f380182cfb1cb73dd3cabbb72fc5f5bee",
-                "reference": "1225f25f380182cfb1cb73dd3cabbb72fc5f5bee",
+                "url": "https://api.github.com/repos/magento/magento2-functional-testing-framework/zipball/40a22525798c915718165d6c3134ae5173052163",
+                "reference": "40a22525798c915718165d6c3134ae5173052163",
                 "shasum": ""
             },
             "require": {
@@ -7213,7 +7213,7 @@
                 "magento",
                 "testing"
             ],
-            "time": "2020-04-28T18:49:36+00:00"
+            "time": "2020-05-06T20:40:40+00:00"
         },
         {
             "name": "mikey179/vfsstream",
