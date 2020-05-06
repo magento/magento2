@@ -22,6 +22,7 @@ use Magento\Newsletter\Model\SubscriberFactory;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\TestFramework\TestCase\AbstractBackendController;
+use PHPUnit\Framework\MockObject\MockObject;
 
 /**
  * Tests for save customer via backend/customer/index/save controller.
@@ -534,7 +535,7 @@ class SaveTest extends AbstractBackendController
      * @param array $sender
      * @param int $customerId
      * @param string|null $newEmail
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return MockObject
      */
     private function prepareEmailMock(
         int $occurrenceNumber,
@@ -542,7 +543,7 @@ class SaveTest extends AbstractBackendController
         array $sender,
         int $customerId,
         $newEmail = null
-    ) : \PHPUnit_Framework_MockObject_MockObject {
+    ) : MockObject {
         $area = Area::AREA_FRONTEND;
         $customer = $this->customerRepository->getById($customerId);
         $storeId = $customer->getStoreId();
@@ -590,12 +591,12 @@ class SaveTest extends AbstractBackendController
     /**
      * Add email mock to class
      *
-     * @param \PHPUnit_Framework_MockObject_MockObject $transportBuilderMock
+     * @param MockObject $transportBuilderMock
      * @param string $className
      * @return void
      */
     private function addEmailMockToClass(
-        \PHPUnit_Framework_MockObject_MockObject $transportBuilderMock,
+        MockObject $transportBuilderMock,
         $className
     ): void {
         $mocked = $this->_objectManager->create(
