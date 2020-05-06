@@ -42,7 +42,7 @@ class MixSyncAndAsyncSingleQueueTest extends QueueTestCaseAbstract
 
         // Publish synchronous message to the same queue
         $input = 'Input value';
-        $response = $this->publisher->publish('sync.topic.for.mixed.sync.and.async.queue', [$input]);
+        $response = $this->publisher->publish('sync.topic.for.mixed.sync.and.async.queue', $input);
         $this->assertEquals($input . ' processed by RPC handler', $response);
 
         $this->waitForAsynchronousResult(count($this->messages), $this->logFilePath);

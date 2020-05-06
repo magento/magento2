@@ -47,7 +47,7 @@ class ValidationRulesTest extends SetupTestCase
     {
         $this->expectException(\Magento\Framework\Setup\Exception::class);
         $this->expectExceptionMessageMatches(
-            '* /Primary key can`t be applied on table "test_table". All columns should be not nullable/'
+            '/Primary key can`t be applied on table "test_table". All columns should be not nullable/'
         );
 
         $this->cliCommad->install(
@@ -70,8 +70,8 @@ class ValidationRulesTest extends SetupTestCase
     {
         $this->expectException(\Magento\Framework\Setup\Exception::class);
         $this->expectExceptionMessageMatches(
-            '* /Column definition "page_id_on" and reference column definition "page_id"'
-            . 'are different in tables "dependent" and "test_table"/'
+            '/Column definition "page_id_on" and reference column definition "page_id"'
+            . ' are different in tables "dependent" and "test_table"/'
         );
 
         $this->cliCommad->install(
