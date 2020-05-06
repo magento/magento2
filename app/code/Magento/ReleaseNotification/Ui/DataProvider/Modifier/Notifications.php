@@ -18,6 +18,8 @@ use Psr\Log\LoggerInterface;
 
 /**
  * Modifies the metadata returning to the Release Notification data provider
+ *
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  */
 class Notifications implements ModifierInterface
 {
@@ -91,7 +93,7 @@ class Notifications implements ModifierInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function modifyData(array $data)
     {
@@ -99,7 +101,7 @@ class Notifications implements ModifierInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function modifyMeta(array $meta)
     {
@@ -149,6 +151,7 @@ class Notifications implements ModifierInterface
                         'actions' => [
                             [
                                 'targetName' => '${ $.name }',
+                                '__disableTmpl' => ['targetName' => false],
                                 'actionName' => 'closeReleaseNotes'
                             ]
                         ],
@@ -232,6 +235,7 @@ class Notifications implements ModifierInterface
 
     /**
      * Returns the current Magento version used to retrieve the release notification content.
+     *
      * Version information after the dash (-) character is removed (ex. -dev or -rc).
      *
      * @return string
