@@ -28,15 +28,11 @@
                         stepKey="enableLoginAsCustomer"/>
             <magentoCLI command="config:set {{LoginAsCustomerStoreViewLogin.path}} 1"
                         stepKey="enableLoginAsCustomerManualChoose"/>
-            <magentoCLI
-                command="config:set {{StorefrontEnableAddStoreCodeToUrls.path}} {{StorefrontEnableAddStoreCodeToUrls.value}}"
-                stepKey="enableAddStoreCodeToUrls"/>
             <magentoCLI command="cache:flush config" stepKey="flushCacheBeforeTestRun"/>
             <actionGroup ref="AdminLoginActionGroup" stepKey="adminLogin"/>
             <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createCustomStoreView"/>
         </before>
         <after>
-            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
             <actionGroup ref="AdminDeleteStoreViewActionGroup" stepKey="deleteCustomStoreView">
                 <argument name="customStore" value="customStore"/>
             </actionGroup>
@@ -45,10 +41,8 @@
                         stepKey="disableLoginAsCustomer"/>
             <magentoCLI command="config:set {{LoginAsCustomerStoreViewLogin.path}} 0"
                         stepKey="enableLoginAsCustomerAutoDetection"/>
-            <magentoCLI
-                command="config:set {{StorefrontDisableAddStoreCodeToUrls.path}} {{StorefrontDisableAddStoreCodeToUrls.value}}"
-                stepKey="disableAddStoreCodeToUrls"/>
             <magentoCLI command="cache:flush config" stepKey="flushCacheAfterTestRun"/>
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
         </after>
 
         <!-- Login As Customer from Customer page -->
@@ -63,9 +57,8 @@
             <argument name="customerFullName" value="$$createCustomer.firstname$$ $$createCustomer.lastname$$"/>
             <argument name="customerEmail" value="$$createCustomer.email$$"/>
         </actionGroup>
-        <actionGroup ref="StorefrontClickOnHeaderLogoActionGroup" stepKey="clickOnStorefrontHeaderLogo"/>
-        <actionGroup ref="AssertStorefrontStoreCodeInUrlActionGroup" stepKey="seeCustomStoreCodeInUrl">
-            <argument name="storeCode" value="{{customStore.code}}"/>
+        <actionGroup ref="StorefrontAssertCustomerOnStoreViewActionGroup" stepKey="assertCustomStoreView">
+            <argument name="storeViewName" value="{{customStore.name}}"/>
         </actionGroup>
 
         <!-- Log out Customer and close tab -->

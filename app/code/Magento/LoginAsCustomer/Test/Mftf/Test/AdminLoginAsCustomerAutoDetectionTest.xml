@@ -18,6 +18,9 @@
                 value="Verify admin user can directly login into customer account to Default store view when Store View To Login In = Auto detection"/>
             <severity value="BLOCKER"/>
             <group value="login_as_customer"/>
+            <skip>
+                <issueId value="https://github.com/magento/magento2-login-as-customer/pull/135"/>
+            </skip>
         </annotations>
         <before>
             <createData entity="Simple_US_Customer" stepKey="createCustomer"/>

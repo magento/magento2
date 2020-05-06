@@ -17,8 +17,7 @@
             <argument name="customerEmail" type="string"/>
         </arguments>
 
-        <amOnPage url="{{StorefrontCustomerDashboardPage.url}}" stepKey="gotoCustomerAccountPage"/>
-        <waitForPageLoad stepKey="waitForCustomerAccountPageLoad"/>
+        <seeInCurrentUrl url="{{StorefrontCustomerDashboardPage.url}}" stepKey="assertOnCustomerAccountPage"/>
         <see selector="{{StorefrontPanelHeaderSection.welcomeMessage}}" userInput="Welcome, {{customerFullName}}!" stepKey="assertCorrectWelcomeMessage"/>
         <see selector="{{StorefrontCustomerDashboardAccountInformationSection.ContactInformation}}"
              userInput="{{customerEmail}}" stepKey="assertCustomerEmailInContactInformation"/>
