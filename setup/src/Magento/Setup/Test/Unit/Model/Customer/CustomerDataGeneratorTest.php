@@ -40,6 +40,11 @@ class CustomerDataGeneratorTest extends TestCase
      */
     private $customerGenerator;
 
+    /**
+     * @var CollectionFactory|MockObject
+     */
+    private $groupCollectionFactoryMock;
+
     protected function setUp(): void
     {
         $this->groupCollectionFactoryMock = $this->getMockBuilder(CollectionFactory::class)

@@ -6,7 +6,9 @@
  */
 namespace Magento\PageCache\Controller\Block;
 
-class Render extends \Magento\PageCache\Controller\Block
+use Magento\Framework\App\Action\HttpGetActionInterface;
+
+class Render extends \Magento\PageCache\Controller\Block implements HttpGetActionInterface
 {
     /**
      * Returns block content depends on ajax request
