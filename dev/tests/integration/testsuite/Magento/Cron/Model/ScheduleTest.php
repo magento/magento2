@@ -76,14 +76,14 @@ class ScheduleTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * If there's a job already locked, should not be able to lock another job
+     * If there's a job already has running status, should  be able to set this status for another job
      */
     public function testTryLockJobOtherLockedFails()
     {
         $this->createSchedule("test_job", Schedule::STATUS_RUNNING);
         $schedule = $this->createSchedule("test_job", Schedule::STATUS_PENDING, 60);
 
-        $this->assertFalse($schedule->tryLockJob());
+        $this->assertTrue($schedule->tryLockJob());
     }
 
     /**
