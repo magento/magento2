@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontAddProductWithCustomOptionToWishlistTest">
+        <annotations>
+            <stories value="Customer adds simple product with custom options to wishlist"/>
+            <title value="Customer should to add product with custom option to wishlist and sto see success message"/>
+            <description value="Customer should to add product with custom option to wishlist and sto see success message"/>
+            <group value="Wishlist"/>
+        </annotations>
+        <before>
+            <createData entity="SimpleSubCategory" stepKey="createCategory"/>
+            <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
+            <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin"/>
+        </before>
+        <after>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <actionGroup ref="DeleteProductUsingProductGridActionGroup" stepKey="deleteProduct">
+                <argument name="product" value="SimpleProduct"/>
+            </actionGroup>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="amOnProductGridPage"/>
+        <waitForPageLoad stepKey="waitForProductGridPageLoad"/>
+        <actionGroup ref="GoToSpecifiedCreateProductPageActionGroup" stepKey="createProduct">
+            <argument name="productType" value="simple"/>
+        </actionGroup>
+        <actionGroup ref="FillMainProductFormNoWeightActionGroup" stepKey="fillSimpleProductForm">
+            <argument name="product" value="SimpleProduct"/>
+        </actionGroup>
+        <searchAndMultiSelectOption selector="{{AdminProductFormSection.categoriesDropdown}}" parameterArray="[$$createCategory.name$$]" stepKey="fillCategory"/>
+        <click selector="{{AdminProductCustomizableOptionsSection.customizableOptions}}" stepKey="openCustomizableOptions"/>
+        <waitForPageLoad stepKey="waitForCustomOptionsOpen"/>
+        <actionGroup ref="AdminCreateCustomDropDownOptionsActionGroup" stepKey="createFirstCustomOption">
+            <argument name="customOptionName" value="{{ProductOptionDropDown.title}}"/>
+            <argument name="firstOption" value="ProductOptionValueDropdown1"/>
+            <argument name="secondOption" value="ProductOptionValueDropdown2"/>
+        </actionGroup>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct"/>
+        <magentoCLI stepKey="runCronIndex" command="cron:run --group=index"/>
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="customerLogin">
+            <argument name="Customer" value="$$createCustomer$$" />
+        </actionGroup>
+        <amOnPage url="/{{SimpleProduct.name}}.html" stepKey="goToCreatedProduct"/>
+        <waitForPageLoad stepKey="waitForProductPageLoad"/>
+        <seeElement selector="{{StorefrontProductPageSection.customOptionDropDown}}" stepKey="seeCustomOptionDropDown"/>
+        <selectOption selector="{{StorefrontProductPageSection.customOptionDropDown}}" userInput="1" stepKey="selectProductOption"/>
+        <seeElement selector="{{StorefrontProductPageSection.addToWishlist}}" stepKey="seeAddToWishlistButton"/>
+        <click selector="{{StorefrontProductPageSection.addToWishlist}}" stepKey="addToWishList"/>
+        <waitForElement selector="{{StorefrontCustomerWishlistSection.successMsg}}" time="30" stepKey="addProductToWishlistWaitForSuccessMessage"/>
+        <see selector="{{StorefrontCustomerWishlistSection.successMsg}}" userInput="{{SimpleProduct.name}} has been added to your Wish List. Click here to continue shopping." stepKey="addProductToWishlistSeeProductNameAddedToWishlist"/>
+    </test>
+</tests>
