@@ -30,6 +30,8 @@ use PHPStan\Type\VoidType;
  */
 class DataObjectMethodReflection implements MethodReflection
 {
+    private const PREFIX_LENGTH = 3;
+
     /**
      * @var ClassReflection
      */
@@ -139,6 +141,16 @@ class DataObjectMethodReflection implements MethodReflection
     }
 
     /**
+     * Get prefix from method name.
+     *
+     * @return string
+     */
+    private function getMethodNamePrefix(): string
+    {
+        return (string)substr($this->methodName, 0, self::PREFIX_LENGTH);
+    }
+
+    /**
      * Get Magic Methods parameters.
      *
      * @return ParameterReflection[]
@@ -146,7 +158,7 @@ class DataObjectMethodReflection implements MethodReflection
     private function getMethodParameters(): array
     {
         $params = [];
-        switch (substr($this->methodName, 0, 3)) {
+        switch ($this->getMethodNamePrefix()) {
             case 'set':
                 $params[] = new DummyParameter(
                     'value',
@@ -179,7 +191,7 @@ class DataObjectMethodReflection implements MethodReflection
      */
     private function getReturnType(): Type
     {
-        switch (substr($this->methodName, 0, 3)) {
+        switch ($this->getMethodNamePrefix()) {
             case 'set':
             case 'uns':
                 $returnType = new ObjectType($this->classReflection->getName());

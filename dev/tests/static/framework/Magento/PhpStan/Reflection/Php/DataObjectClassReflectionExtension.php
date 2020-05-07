@@ -20,7 +20,14 @@ use PHPStan\Reflection\MethodsClassReflectionExtension;
  */
 class DataObjectClassReflectionExtension implements MethodsClassReflectionExtension
 {
-    private const MAGIC_METHODS_PREFIXES = ['get', 'set', 'uns', 'has'];
+    private const MAGIC_METHODS_PREFIXES = [
+        'get',
+        'set',
+        'uns',
+        'has'
+    ];
+
+    private const PREFIX_LENGTH = 3;
 
     /**
      * @var Container
@@ -57,20 +64,30 @@ class DataObjectClassReflectionExtension implements MethodsClassReflectionExtens
             // In case when annotation already available for the method, we will not use 'magic methods' approach.
             return false;
         }
-
         if ($classReflection->isSubclassOf(DataObject::class) || $classReflection->getName() == DataObject::class) {
-            return in_array(substr($methodName, 0, 3), self::MAGIC_METHODS_PREFIXES);
+            return in_array($this->getPrefix($methodName), self::MAGIC_METHODS_PREFIXES);
         }
-
         /** SessionManager redirects all calls to `__call` to container which extends DataObject */
         if ($classReflection->isSubclassOf(SessionManager::class)
             || $classReflection->getName() === SessionManager::class
         ) {
             /** @see \Magento\Framework\Session\SessionManager::__call */
-            return in_array(substr($methodName, 0, 3), self::MAGIC_METHODS_PREFIXES);
+            return in_array($this->getPrefix($methodName), self::MAGIC_METHODS_PREFIXES);
         }
 
         return false;
+    }
+
+    /**
+     * Get prefix from method name.
+     *
+     * @param string $methodName
+     *
+     * @return string
+     */
+    private function getPrefix(string $methodName): string
+    {
+        return (string)substr($methodName, 0, self::PREFIX_LENGTH);
     }
 
     /**
