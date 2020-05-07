@@ -28,7 +28,8 @@ class FrontendStorageConfigurationPoolTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->defaultStorageConfiguration = $this->getMockForAbstractClass(FrontendStorageConfigurationInterface::class);
+        $this->defaultStorageConfiguration =
+            $this->getMockForAbstractClass(FrontendStorageConfigurationInterface::class);
         $productStorageConfiguration = $this->getMockForAbstractClass(ProductInterface::class);
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->model = $this->objectManagerHelper->getObject(

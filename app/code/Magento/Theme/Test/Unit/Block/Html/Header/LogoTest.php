@@ -70,7 +70,7 @@ class LogoTest extends TestCase
         ];
         $block = $objectManager->getObject(Logo::class, $arguments);
 
-        $this->assertNull($block->getLogoHeight());
+        $this->assertEquals(0, $block->getLogoHeight());
     }
 
     /**

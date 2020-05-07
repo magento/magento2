@@ -290,8 +290,8 @@ class DefaultTest extends TestCase
             Data::class
         )->disableOriginalConstructor()
             ->setMethods(
-            ['getConfig', 'getFonts', '_getWebsiteCode', 'getImgUrl']
-        )->getMock();
+                ['getConfig', 'getFonts', '_getWebsiteCode', 'getImgUrl']
+            )->getMock();
 
         $helper->expects(
             $this->any()

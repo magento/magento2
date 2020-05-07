@@ -283,13 +283,11 @@ class SaveTest extends TestCase
         $this->requestMock->expects($this->atLeastOnce())
             ->method('getParam')
             ->willReturnMap(
-                
-                    [
-                        ['id', false, $categoryId],
-                        ['store', null, $storeId],
-                        ['parent', null, $parentId],
-                    ]
-                
+                [
+                    ['id', false, $categoryId],
+                    ['store', null, $storeId],
+                    ['parent', null, $parentId],
+                ]
             );
         $this->objectManagerMock->expects($this->atLeastOnce())
             ->method('create')
@@ -297,14 +295,12 @@ class SaveTest extends TestCase
         $this->objectManagerMock->expects($this->atLeastOnce())
             ->method('get')
             ->willReturnMap(
-                
-                    [
-                        [Session::class, $sessionMock],
-                        [Registry::class, $registryMock],
-                        [Config::class, $wysiwygConfigMock],
-                        [StoreManagerInterface::class, $storeManagerMock],
-                    ]
-                
+                [
+                    [Session::class, $sessionMock],
+                    [Registry::class, $registryMock],
+                    [Config::class, $wysiwygConfigMock],
+                    [StoreManagerInterface::class, $storeManagerMock],
+                ]
             );
         $categoryMock->expects($this->once())
             ->method('setStoreId')
@@ -312,12 +308,10 @@ class SaveTest extends TestCase
         $registryMock->expects($this->any())
             ->method('register')
             ->willReturnMap(
-                
-                    [
-                        ['category', $categoryMock],
-                        ['current_category', $categoryMock],
-                    ]
-                
+                [
+                    ['category', $categoryMock],
+                    ['current_category', $categoryMock],
+                ]
             );
         $wysiwygConfigMock->expects($this->once())
             ->method('setStoreId')
@@ -325,13 +319,11 @@ class SaveTest extends TestCase
         $this->requestMock->expects($this->atLeastOnce())
             ->method('getPost')
             ->willReturnMap(
-                
-                    [
-                        ['use_config', ['attribute']],
-                        ['use_default', ['default-attribute']],
-                        ['return_session_messages_only', true],
-                    ]
-                
+                [
+                    ['use_config', ['attribute']],
+                    ['use_default', ['default-attribute']],
+                    ['return_session_messages_only', true],
+                ]
             );
         $this->requestMock->expects($this->atLeastOnce())
             ->method('getPostValue')
@@ -375,13 +367,11 @@ class SaveTest extends TestCase
         $categoryMock->expects($this->atLeastOnce())
             ->method('setData')
             ->willReturnMap(
-                
-                    [
-                        ['attribute', null, true],
-                        ['default-attribute', false, true],
-                        ['use_post_data_config', ['attribute'], true],
-                    ]
-                
+                [
+                    ['attribute', null, true],
+                    ['default-attribute', false, true],
+                    ['use_post_data_config', ['attribute'], true],
+                ]
             );
         $categoryMock->expects($this->once())
             ->method('getDefaultAttributeSetId')

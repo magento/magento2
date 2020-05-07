@@ -129,7 +129,7 @@ class DataTest extends TestCase
     {
         $this->scopeConfig->expects($this->any())->method('isSetFlag')
             ->with('catalog/review/allow_guest', ScopeInterface::SCOPE_STORE)
-            ->willReturn('1');
+            ->willReturn(true);
 
         $this->assertTrue($this->helper->getIsGuestAllowToWrite());
     }
