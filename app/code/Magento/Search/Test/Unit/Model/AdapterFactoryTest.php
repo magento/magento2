@@ -36,7 +36,7 @@ class AdapterFactoryTest extends TestCase
         $this->engineResolverMock = $this->getMockBuilder(EngineResolverInterface::class)
             ->getMockForAbstractClass();
 
-        $this->objectManager = $this->createMock(ObjectManagerInterface::class);
+        $this->objectManager = $this->getMockForAbstractClass(ObjectManagerInterface::class);
 
         $this->adapterFactory = new AdapterFactory(
             $this->objectManager,
@@ -52,7 +52,7 @@ class AdapterFactoryTest extends TestCase
 
         $adapter = $this->getMockBuilder(AdapterInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->objectManager->expects($this->once())->method('create')
             ->with('ClassName', ['input'])

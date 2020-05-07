@@ -141,7 +141,7 @@ class UrlTest extends TestCase
         )->willReturn(
             $this->_areaFrontName
         );
-        $this->_scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
+        $this->_scopeConfigMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
         $this->_scopeConfigMock->expects(
             $this->any()
         )->method(

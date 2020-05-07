@@ -54,7 +54,7 @@ class CheckConfigTest extends TestCase
             ->getMock();
         $this->messageManager = $this->getMockBuilder(ManagerInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->model = new CheckConfig(
             $this->config,

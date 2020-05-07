@@ -56,8 +56,8 @@ class FormTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->storeManager = $this->createMock(StoreManagerInterface::class);
-        $this->requestMock = $this->createMock(RequestInterface::class);
+        $this->storeManager = $this->getMockForAbstractClass(StoreManagerInterface::class);
+        $this->requestMock = $this->getMockForAbstractClass(RequestInterface::class);
         $this->reviewDataMock = $this->getMockBuilder(Data::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -80,7 +80,7 @@ class FormTest extends TestCase
             ->method('getRequest')
             ->willReturn($this->requestMock);
         $this->context->expects($this->any())->method('getUrlBuilder')->willReturn($this->urlBuilder);
-        $this->productRepository = $this->createMock(ProductRepositoryInterface::class);
+        $this->productRepository = $this->getMockForAbstractClass(ProductRepositoryInterface::class);
 
         $this->serializerMock = $this->getMockBuilder(Json::class)
             ->getMock();
@@ -120,7 +120,7 @@ class FormTest extends TestCase
             ->with('id', false)
             ->willReturn($productId);
 
-        $productMock = $this->createMock(ProductInterface::class);
+        $productMock = $this->getMockForAbstractClass(ProductInterface::class);
         $this->productRepository->expects($this->once())
             ->method('getById')
             ->with($productId, false, $storeId)

@@ -104,8 +104,8 @@ class BulkStatusTest extends TestCase
             \Magento\AsynchronousOperations\Model\ResourceModel\Operation\CollectionFactory::class,
             ['create']
         );
-        $this->operationMock = $this->createMock(OperationInterface::class);
-        $this->bulkMock = $this->createMock(BulkSummaryInterface::class);
+        $this->operationMock = $this->getMockForAbstractClass(OperationInterface::class);
+        $this->bulkMock = $this->getMockForAbstractClass(BulkSummaryInterface::class);
         $this->resourceConnectionMock = $this->createMock(ResourceConnection::class);
         $this->calculatedStatusSqlMock = $this->createMock(
             CalculatedStatusSql::class
@@ -121,8 +121,8 @@ class BulkStatusTest extends TestCase
         );
         $this->entityManager = $this->createMock(EntityManager::class);
 
-        $this->entityMetadataMock = $this->createMock(EntityMetadataInterface::class);
-        $this->connectionMock = $this->createMock(AdapterInterface::class);
+        $this->entityMetadataMock = $this->getMockForAbstractClass(EntityMetadataInterface::class);
+        $this->connectionMock = $this->getMockForAbstractClass(AdapterInterface::class);
 
         $this->model = new BulkStatus(
             $this->bulkCollectionFactory,

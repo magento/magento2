@@ -92,11 +92,11 @@ class CollectionTest extends TestCase
     protected function setUp(): void
     {
         $this->entityFactoryMock = $this->createMock(EntityFactory::class);
-        $this->loggerMock = $this->createMock(LoggerInterface::class);
+        $this->loggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
         $this->fetchStrategyMock = $this->createMock(
             FetchStrategyInterface::class
         );
-        $this->eventManagerMock = $this->createMock(ManagerInterface::class);
+        $this->eventManagerMock = $this->getMockForAbstractClass(ManagerInterface::class);
 
         $this->eavConfigMock = $this->createMock(Config::class);
         $this->entityTypeMock = $this->createPartialMock(Type::class, ['__wakeup']);
@@ -105,7 +105,7 @@ class CollectionTest extends TestCase
             ->method('getEntityType')
             ->willReturn($this->entityTypeMock);
 
-        $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
+        $this->storeManagerMock = $this->getMockForAbstractClass(StoreManagerInterface::class);
         $this->storeManagerMock->expects($this->any())->method('getStore')->willReturnSelf();
 
         $this->connectionMock = $this->createPartialMock(

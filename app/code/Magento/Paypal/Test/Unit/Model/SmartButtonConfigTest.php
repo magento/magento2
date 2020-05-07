@@ -50,7 +50,7 @@ class SmartButtonConfigTest extends TestCase
         $scopeConfigMock->method('isSetFlag')
             ->willReturn(true);
 
-        /** @var MockObject $configFactoryMock */
+        /** @var ConfigFactory|MockObject $configFactoryMock */
         $configFactoryMock = $this->getMockBuilder(ConfigFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
@@ -61,7 +61,8 @@ class SmartButtonConfigTest extends TestCase
             $configFactoryMock,
             $scopeConfigMock,
             $this->getDefaultStyles(),
-            $this->getAllowedFundings()
+            $this->getDisallowedFundingMap(),
+            $this->getUnsupportedPaymentMethods()
         );
     }
 
@@ -73,7 +74,6 @@ class SmartButtonConfigTest extends TestCase
      * @param bool $isCustomize
      * @param string $disallowedFundings
      * @param string $layout
-     * @param string $size
      * @param string $shape
      * @param string $label
      * @param string $color
@@ -90,7 +90,6 @@ class SmartButtonConfigTest extends TestCase
         bool $isCustomize,
         ?string $disallowedFundings,
         string $layout,
-        string $size,
         string $shape,
         string $label,
         string $color,
@@ -112,7 +111,21 @@ class SmartButtonConfigTest extends TestCase
                 ['disable_funding_options', null, $disallowedFundings],
                 ["{$page}_page_button_customize", null, $isCustomize],
                 ["{$page}_page_button_layout", null, $layout],
-                ["{$page}_page_button_size", null, $size],
+                ["{$page}_page_button_color", null, $color],
+                ["{$page}_page_button_shape", null, $shape],
+                ["{$page}_page_button_label", null, $label],
+                ['sandbox_client_id', null, 'sb'],
+                ['merchant_id', null, 'merchant'],
+                [
+                    'solution_type',
+                    null,
+                    $isPaypalGuestCheckoutEnabled ? Config::EC_SOLUTION_TYPE_SOLE : Config::EC_SOLUTION_TYPE_MARK
+                ],
+                ['sandbox_flag', null, true],
+                ['paymentAction', null, 'Authorization'],
+                ['disable_funding_options', null, $disallowedFundings],
+                ["{$page}_page_button_customize", null, $isCustomize],
+                ["{$page}_page_button_layout", null, $layout],
                 ["{$page}_page_button_color", null, $color],
                 ["{$page}_page_button_shape", null, $shape],
                 ["{$page}_page_button_label", null, $label],
@@ -148,12 +161,22 @@ class SmartButtonConfigTest extends TestCase
     }
 
     /**
-     * Get allowed fundings
+     * Get disallowed funding map
      *
      * @return array
      */
-    private function getAllowedFundings()
+    private function getDisallowedFundingMap()
     {
-        return include __DIR__ . '/_files/allowed_fundings.php';
+        return include __DIR__ . '/_files/disallowed_funding_map.php';
+    }
+
+    /**
+     * Get unsupported payment methods
+     *
+     * @return array
+     */
+    private function getUnsupportedPaymentMethods()
+    {
+        return include __DIR__ . '/_files/unsupported_payment_methods.php';
     }
 }

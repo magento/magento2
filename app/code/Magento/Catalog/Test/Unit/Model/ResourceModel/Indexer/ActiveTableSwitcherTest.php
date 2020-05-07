@@ -27,7 +27,7 @@ class ActiveTableSwitcherTest extends TestCase
     {
         $connectionMock = $this->getMockBuilder(AdapterInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $tableName = 'tableName';
 
         $connectionMock->expects($this->once())->method('renameTablesBatch')->with(

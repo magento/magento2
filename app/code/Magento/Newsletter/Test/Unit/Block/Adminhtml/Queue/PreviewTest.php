@@ -72,10 +72,10 @@ class PreviewTest extends TestCase
     protected function setUp(): void
     {
         $context = $this->createMock(Context::class);
-        $eventManager = $this->createMock(ManagerInterface::class);
+        $eventManager = $this->getMockForAbstractClass(ManagerInterface::class);
         $context->expects($this->once())->method('getEventManager')
             ->willReturn($eventManager);
-        $scopeConfig = $this->createMock(ScopeConfigInterface::class);
+        $scopeConfig = $this->getMockForAbstractClass(ScopeConfigInterface::class);
         $context->expects($this->once())->method('getScopeConfig')
             ->willReturn($scopeConfig);
         $this->requestMock = $this->createMock(Http::class);

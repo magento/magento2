@@ -41,7 +41,7 @@ class HideUnsupportedAttributeTypesTest extends TestCase
     {
         $target = $this->createTarget($this->createRequestMock(false));
         $event = $this->createEventMock();
-        $this->assertEquals(null, $target->execute($event));
+        $this->assertNull($target->execute($event));
     }
 
     /**
@@ -110,7 +110,7 @@ class HideUnsupportedAttributeTypesTest extends TestCase
     {
         $target = $this->createTarget($this->createRequestMock(true), $supportedTypes);
         $event = $this->createEventMock($this->createForm($originalValues, $expectedValues));
-        $this->assertEquals(null, $target->execute($event));
+        $this->assertNull($target->execute($event));
     }
 
     /**

@@ -30,7 +30,7 @@ class ShellTest extends TestCase
     {
         $this->loggerMock = $this->getMockBuilder(LoggerInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->driverMock = $this->getMockBuilder(Driver::class)
             ->disableOriginalConstructor()
             ->getMock();

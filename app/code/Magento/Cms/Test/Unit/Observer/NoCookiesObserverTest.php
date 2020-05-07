@@ -58,7 +58,7 @@ class NoCookiesObserverTest extends TestCase
         $this->scopeConfigMock = $this
             ->getMockBuilder(ScopeConfigInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->observerMock = $this
             ->getMockBuilder(Observer::class)
             ->disableOriginalConstructor()

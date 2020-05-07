@@ -27,7 +27,7 @@ class GroupedTest extends TestCase
     {
         parent::setUp();
         $objectManagerHelper = new ObjectManager($this);
-        $this->scopeConfig = $this->createMock(ScopeConfigInterface::class);
+        $this->scopeConfig = $this->getMockForAbstractClass(ScopeConfigInterface::class);
         $this->renderer = $objectManagerHelper->getObject(
             \Magento\GroupedProduct\Block\Cart\Item\Renderer\Grouped::class,
             ['scopeConfig' => $this->scopeConfig]

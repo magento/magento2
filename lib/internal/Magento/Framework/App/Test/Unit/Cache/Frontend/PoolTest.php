@@ -35,9 +35,9 @@ class PoolTest extends TestCase
     protected function setUp(): void
     {
         $this->_frontendInstances = [
-            Pool::DEFAULT_FRONTEND_ID => $this->createMock(FrontendInterface::class),
-            'resource1' => $this->createMock(FrontendInterface::class),
-            'resource2' => $this->createMock(FrontendInterface::class),
+            Pool::DEFAULT_FRONTEND_ID => $this->getMockForAbstractClass(FrontendInterface::class),
+            'resource1' => $this->getMockForAbstractClass(FrontendInterface::class),
+            'resource2' => $this->getMockForAbstractClass(FrontendInterface::class),
         ];
 
         $frontendFactoryMap = [

@@ -52,7 +52,7 @@ class UrlRewriteCollectionTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->storeManager = $this->createMock(StoreManagerInterface::class);
+        $this->storeManager = $this->getMockForAbstractClass(StoreManagerInterface::class);
         $this->select = $this->createPartialMock(Select::class, ['from', 'where']);
         $this->connectionMock = $this->createPartialMock(
             Mysql::class,

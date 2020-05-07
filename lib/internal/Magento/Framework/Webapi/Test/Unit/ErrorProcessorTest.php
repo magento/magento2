@@ -90,8 +90,8 @@ class ErrorProcessorTest extends TestCase
             $this->once()
         )->method(
             'encode'
-        )->will(
-            $this->returnCallback([$this, 'callbackJsonEncode'], $this->returnArgument(0))
+        )->willReturnCallback(
+            [$this, 'callbackJsonEncode'], $this->returnArgument(0)
         );
         /** Init output buffering to catch output via echo function. */
         ob_start();
@@ -124,14 +124,14 @@ class ErrorProcessorTest extends TestCase
     {
         $_SERVER['HTTP_ACCEPT'] = 'json';
         /** Mock app to return enabled developer mode flag. */
-        $this->_appStateMock->expects($this->any())->method('getMode')->will($this->returnValue('developer'));
+        $this->_appStateMock->expects($this->any())->method('getMode')->willReturn('developer');
         /** Assert that jsonEncode method will be executed once. */
         $this->encoderMock->expects(
             $this->once()
         )->method(
             'encode'
-        )->will(
-            $this->returnCallback([$this, 'callbackJsonEncode'], $this->returnArgument(0))
+        )->willReturnCallback(
+            [$this, 'callbackJsonEncode'], $this->returnArgument(0)
         );
         ob_start();
         $this->_errorProcessor->renderErrorMessage('Message', 'Message trace.', 401);
@@ -167,7 +167,7 @@ class ErrorProcessorTest extends TestCase
     {
         $_SERVER['HTTP_ACCEPT'] = 'xml';
         /** Mock app to return enabled developer mode flag. */
-        $this->_appStateMock->expects($this->any())->method('getMode')->will($this->returnValue('developer'));
+        $this->_appStateMock->expects($this->any())->method('getMode')->willReturn('developer');
         /** Init output buffering to catch output via echo function. */
         ob_start();
         $this->_errorProcessor->renderErrorMessage('Message', 'Trace message.', 401);
@@ -200,7 +200,7 @@ class ErrorProcessorTest extends TestCase
     public function testMaskExceptionInDeveloperMode()
     {
         /** Mock app isDeveloperMode to return true. */
-        $this->_appStateMock->expects($this->once())->method('getMode')->will($this->returnValue('developer'));
+        $this->_appStateMock->expects($this->once())->method('getMode')->willReturn('developer');
         /** Init Logical exception. */
         $errorMessage = 'Error Message';
         $logicalException = new \LogicException($errorMessage);
@@ -246,12 +246,12 @@ class ErrorProcessorTest extends TestCase
 
         $this->_loggerMock->expects($this->once())
             ->method('critical')
-            ->will(
-                $this->returnCallback(
+            ->willReturnCallback(
+                
                     function (\Exception $loggedException) use ($thrownException) {
                         $this->assertSame($thrownException, $loggedException->getPrevious());
                     }
-                )
+                
             );
         $this->_errorProcessor->maskException($thrownException);
     }

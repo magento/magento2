@@ -34,7 +34,8 @@ class OutputAbstractTest extends TestCase
     {
         $this->markTestSkipped('Skipped in #27500 due to testing protected/private methods and properties');
 
-        $this->assertAttributeEmpty('_filterPattern', $this->_output);
+        $this->assertObjectHasAttribute('_filterPattern', $this->_output);
+        $this->assertEmpty($this->_output->getFilterPattern());
         $filterPattern = '/test/';
         $this->_output->setFilterPattern($filterPattern);
         $this->assertEquals($filterPattern, $this->_output->getFilterPattern());
@@ -49,9 +50,8 @@ class OutputAbstractTest extends TestCase
 
         $thresholdKey = Stat::TIME;
         $this->_output->setThreshold($thresholdKey, 100);
-        $thresholds = class_exists('PHPUnit_Util_Class')
-            ? \PHPUnit_Util_Class::getObjectAttribute($this->_output, '_thresholds')
-            : Assert::readAttribute($this->_output, '_thresholds');
+        $this->assertObjectHasAttribute('_thresholds', $this->_output);
+        $thresholds = $this->_output->getThresholds();
         $this->assertArrayHasKey($thresholdKey, $thresholds);
         $this->assertEquals(100, $thresholds[$thresholdKey]);
 

@@ -54,14 +54,14 @@ class PaymentDataBuilderTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->paymentDOMock = $this->createMock(PaymentDataObjectInterface::class);
+        $this->paymentDOMock = $this->getMockForAbstractClass(PaymentDataObjectInterface::class);
         $this->paymentMock = $this->getMockBuilder(Payment::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->subjectReaderMock = $this->getMockBuilder(SubjectReader::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->orderMock = $this->createMock(OrderAdapterInterface::class);
+        $this->orderMock = $this->getMockForAbstractClass(OrderAdapterInterface::class);
 
         /** @var Config $config */
         $config = $this->getMockBuilder(Config::class)

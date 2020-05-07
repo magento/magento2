@@ -84,7 +84,7 @@ class PrintActionTest extends TestCase
             ->setMethods([])
             ->getMock();
 
-        $this->objectManagerMock = $this->createMock(ObjectManagerInterface::class);
+        $this->objectManagerMock = $this->getMockForAbstractClass(ObjectManagerInterface::class);
 
         $contextMock = $this->getMockBuilder(Context::class)
             ->disableOriginalConstructor()
@@ -144,7 +144,7 @@ class PrintActionTest extends TestCase
 
         $invoiceRepository = $this->getMockBuilder(InvoiceRepositoryInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $invoiceRepository->expects($this->any())
             ->method('get')
             ->willReturn($invoiceMock);

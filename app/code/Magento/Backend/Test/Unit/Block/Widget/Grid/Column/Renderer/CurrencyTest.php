@@ -66,9 +66,9 @@ class CurrencyTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->_storeManagerMock = $this->createMock(StoreManagerInterface::class);
-        $this->_localeMock = $this->createMock(CurrencyInterface::class);
-        $this->_requestMock = $this->createMock(RequestInterface::class);
+        $this->_storeManagerMock = $this->getMockForAbstractClass(StoreManagerInterface::class);
+        $this->_localeMock = $this->getMockForAbstractClass(CurrencyInterface::class);
+        $this->_requestMock = $this->getMockForAbstractClass(RequestInterface::class);
 
         $this->_curLocatorMock = $this->createMock(DefaultLocator::class);
         $this->_columnMock = $this->getMockBuilder(Column::class)

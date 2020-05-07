@@ -54,7 +54,7 @@ class FormTest extends TestCase
             ->with(Template::class)
             ->willReturn($mark);
 
-        $localeResolver = $this->createMock(ResolverInterface::class);
+        $localeResolver = $this->getMockForAbstractClass(ResolverInterface::class);
 
         $helper = new ObjectManager($this);
         $this->_model = $helper->getObject(

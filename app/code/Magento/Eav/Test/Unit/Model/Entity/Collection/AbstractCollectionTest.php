@@ -94,11 +94,11 @@ class AbstractCollectionTest extends TestCase
     protected function setUp(): void
     {
         $this->coreEntityFactoryMock = $this->createMock(EntityFactory::class);
-        $this->loggerMock = $this->createMock(LoggerInterface::class);
+        $this->loggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
         $this->fetchStrategyMock = $this->createMock(
             FetchStrategyInterface::class
         );
-        $this->eventManagerMock = $this->createMock(ManagerInterface::class);
+        $this->eventManagerMock = $this->getMockForAbstractClass(ManagerInterface::class);
         $this->configMock = $this->createMock(Config::class);
         $this->coreResourceMock = $this->createMock(ResourceConnection::class);
         $this->resourceHelperMock = $this->createMock(Helper::class);

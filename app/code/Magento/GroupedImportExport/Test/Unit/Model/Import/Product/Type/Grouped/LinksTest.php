@@ -114,13 +114,12 @@ class LinksTest extends TestCase
         ];
         $this->processBehaviorGetter('append');
         $select = $this->createMock(Select::class);
-        $this->connection->expects($this->exactly(2))->method('select')->will($this->returnValue($select));
-        $select->expects($this->exactly(2))->method('from')->willReturnSelf();
-        $select->expects($this->exactly(2))->method('where')->willReturnSelf();
-        $this->connection->expects($this->once())->method('fetchAll')
-            ->with($select)->will($this->returnValue($attributes));
-        $this->connection->expects($this->once())->method('fetchPairs')->with($select)->will(
-            $this->returnValue([])
+        $this->connection->expects($this->any())->method('select')->willReturn($select);
+        $select->expects($this->any())->method('from')->willReturnSelf();
+        $select->expects($this->any())->method('where')->willReturnSelf();
+        $this->connection->expects($this->once())->method('fetchAll')->with($select)->willReturn($attributes);
+        $this->connection->expects($this->once())->method('fetchPairs')->with($select)->willReturn(
+            []
         );
         $this->connection->expects($this->exactly(4))->method('insertOnDuplicate');
         $this->link->expects($this->exactly(2))->method('getAttributeTypeTable')->willReturn(
@@ -167,11 +166,11 @@ class LinksTest extends TestCase
     protected function processAttributeGetter($dbAttributes)
     {
         $select = $this->createMock(Select::class);
-        $this->connection->expects($this->once())->method('select')->will($this->returnValue($select));
+        $this->connection->expects($this->once())->method('select')->willReturn($select);
         $select->expects($this->once())->method('from')->willReturnSelf();
         $select->expects($this->once())->method('where')->willReturnSelf();
-        $this->connection->expects($this->once())->method('fetchAll')->with($select)->will(
-            $this->returnValue($dbAttributes)
+        $this->connection->expects($this->once())->method('fetchAll')->with($select)->willReturn(
+            $dbAttributes
         );
         $this->link->expects($this->any())->method('getAttributeTypeTable')->willReturn(
             'table_name'

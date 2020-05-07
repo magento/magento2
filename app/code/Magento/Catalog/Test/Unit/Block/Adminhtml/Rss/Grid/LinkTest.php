@@ -32,7 +32,7 @@ class LinkTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->urlBuilderInterface = $this->createMock(UrlBuilderInterface::class);
+        $this->urlBuilderInterface = $this->getMockForAbstractClass(UrlBuilderInterface::class);
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->link = $this->objectManagerHelper->getObject(
@@ -57,6 +57,6 @@ class LinkTest extends TestCase
 
     public function testIsRssAllowed()
     {
-        $this->assertEquals(true, $this->link->isRssAllowed());
+        $this->assertTrue($this->link->isRssAllowed());
     }
 }

@@ -32,10 +32,10 @@ class SecureTest extends TestCase
             ->getMockForAbstractClass();
         $mergeService = $this->createMock(MergeService::class);
         $coreRegistry = $this->createMock(Registry::class);
-        $coreConfig = $this->createMock(ScopeConfigInterface::class);
+        $coreConfig = $this->getMockForAbstractClass(ScopeConfigInterface::class);
         $cacheTypeListMock = $this->getMockBuilder(TypeListInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $model = $this->getMockBuilder(Secure::class)
             ->setMethods(['getOldValue'])

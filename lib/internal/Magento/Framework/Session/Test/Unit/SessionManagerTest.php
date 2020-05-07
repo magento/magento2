@@ -70,8 +70,8 @@ namespace Magento\Framework\Session\Test\Unit {
             $mockPHPFunctions = true;
             $this->mockSessionConfig = $this->getMockBuilder(ConfigInterface::class)
                 ->disableOriginalConstructor()
-                ->getMock();
-            $this->mockCookieManager = $this->createMock(CookieManagerInterface::class);
+                ->getMockForAbstractClass();
+            $this->mockCookieManager = $this->getMockForAbstractClass(CookieManagerInterface::class);
             $this->mockCookieMetadataFactory = $this->getMockBuilder(
                 CookieMetadataFactory::class
             )

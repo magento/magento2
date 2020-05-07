@@ -86,7 +86,7 @@ class BooleanTest extends TestCase
             ->willReturn(0);
         $adapterMock = $this->getMockBuilder(AdapterInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->resourceConnectionMock->expects($this->once())->method('getConnection')->willReturn($adapterMock);
         $adapterMock->expects($this->once())
             ->method('quoteIdentifier')

@@ -72,8 +72,8 @@ class CartTest extends TestCase
         );
         $this->checkoutCartMock = $this->createMock(\Magento\Checkout\Model\Cart::class);
         $this->checkoutHelperMock = $this->createMock(Data::class);
-        $this->layoutMock = $this->createMock(LayoutInterface::class);
-        $this->itemPoolInterfaceMock = $this->createMock(ItemPoolInterface::class);
+        $this->layoutMock = $this->getMockForAbstractClass(LayoutInterface::class);
+        $this->itemPoolInterfaceMock = $this->getMockForAbstractClass(ItemPoolInterface::class);
 
         $this->model = new Cart(
             $this->checkoutSessionMock,

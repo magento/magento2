@@ -27,9 +27,9 @@ class MultiselectTest extends TestCase
 
     protected function setUp(): void
     {
-        $timezoneMock = $this->createMock(TimezoneInterface::class);
-        $loggerMock = $this->createMock(LoggerInterface::class);
-        $localeResolverMock = $this->createMock(ResolverInterface::class);
+        $timezoneMock = $this->getMockForAbstractClass(TimezoneInterface::class);
+        $loggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
+        $localeResolverMock = $this->getMockForAbstractClass(ResolverInterface::class);
 
         $this->model = new Multiselect(
             $timezoneMock,
@@ -47,7 +47,7 @@ class MultiselectTest extends TestCase
      */
     public function testExtractValue($param, $expectedResult)
     {
-        $requestMock = $this->createMock(RequestInterface::class);
+        $requestMock = $this->getMockForAbstractClass(RequestInterface::class);
         $attributeMock = $this->createMock(Attribute::class);
 
         $requestMock->expects($this->once())->method('getParam')->willReturn($param);

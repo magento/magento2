@@ -88,7 +88,7 @@ class RouterTest extends TestCase
         $this->response = $this->getMockBuilder(ResponseInterface::class)
             ->addMethods(['setRedirect'])
             ->onlyMethods(['sendResponse'])
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->requestQuery = $this->createMock(ParametersInterface::class);
         $this->request = $this->getMockBuilder(Http::class)
             ->disableOriginalConstructor()

@@ -38,8 +38,8 @@ class QueryResolverTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->configMock = $this->createMock(ConfigInterface::class);
-        $this->cacheMock = $this->createMock(CacheInterface::class);
+        $this->configMock = $this->getMockForAbstractClass(ConfigInterface::class);
+        $this->cacheMock = $this->getMockForAbstractClass(CacheInterface::class);
         $this->serializer = $this->getMockForAbstractClass(SerializerInterface::class);
         $this->quoteResolver = new QueryResolver(
             $this->configMock,

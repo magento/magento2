@@ -85,7 +85,7 @@ class HoldTest extends TestCase
         $this->response = $this->getMockBuilder(ResponseInterface::class)
             ->addMethods(['setRedirect'])
             ->onlyMethods(['sendResponse'])
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->request = $this->getMockBuilder(Http::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -95,7 +95,7 @@ class HoldTest extends TestCase
         );
         $this->orderRepositoryMock = $this->getMockBuilder(OrderRepositoryInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->validatorMock = $this->getMockBuilder(Validator::class)
             ->disableOriginalConstructor()

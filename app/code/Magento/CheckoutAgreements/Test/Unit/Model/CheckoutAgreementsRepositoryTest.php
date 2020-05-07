@@ -97,8 +97,8 @@ class CheckoutAgreementsRepositoryTest extends TestCase
             CollectionFactory::class,
             ['create']
         );
-        $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
-        $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
+        $this->storeManagerMock = $this->getMockForAbstractClass(StoreManagerInterface::class);
+        $this->scopeConfigMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
         $this->resourceMock = $this->createMock(Agreement::class);
         $this->agrFactoryMock = $this->createPartialMock(
             AgreementFactory::class,

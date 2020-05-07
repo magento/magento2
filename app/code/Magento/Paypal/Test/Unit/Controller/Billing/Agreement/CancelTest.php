@@ -70,7 +70,7 @@ class CancelTest extends TestCase
         $this->_agreement->expects($this->once())->method('getId')->willReturn(15);
         $this->_agreement->expects($this->once())->method('getCustomerId')->willReturn(871);
 
-        $this->_objectManager = $this->createMock(ObjectManagerInterface::class);
+        $this->_objectManager = $this->getMockForAbstractClass(ObjectManagerInterface::class);
         $this->_objectManager->expects(
             $this->atLeastOnce()
         )->method(
@@ -88,14 +88,14 @@ class CancelTest extends TestCase
             $this->_agreement
         );
 
-        $this->_request = $this->createMock(RequestInterface::class);
+        $this->_request = $this->getMockForAbstractClass(RequestInterface::class);
         $this->_request->expects($this->once())->method('getParam')->with('agreement')->willReturn(15);
 
-        $response = $this->createMock(ResponseInterface::class);
+        $response = $this->getMockForAbstractClass(ResponseInterface::class);
 
-        $redirect = $this->createMock(RedirectInterface::class);
+        $redirect = $this->getMockForAbstractClass(RedirectInterface::class);
 
-        $this->_messageManager = $this->createMock(ManagerInterface::class);
+        $this->_messageManager = $this->getMockForAbstractClass(ManagerInterface::class);
 
         $context = $this->createMock(Context::class);
         $context->expects($this->any())->method('getObjectManager')->willReturn($this->_objectManager);

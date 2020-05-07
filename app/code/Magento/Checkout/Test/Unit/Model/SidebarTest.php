@@ -34,7 +34,7 @@ class SidebarTest extends TestCase
     {
         $this->cartMock = $this->createMock(Cart::class);
         $this->checkoutHelperMock = $this->createMock(Data::class);
-        $this->resolverMock = $this->createMock(ResolverInterface::class);
+        $this->resolverMock = $this->getMockForAbstractClass(ResolverInterface::class);
 
         $this->sidebar = new Sidebar(
             $this->cartMock,

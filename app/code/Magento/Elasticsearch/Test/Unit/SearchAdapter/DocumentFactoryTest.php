@@ -56,7 +56,7 @@ class DocumentFactoryTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->objectManager = $this->createMock(ObjectManagerInterface::class);
+        $this->objectManager = $this->getMockForAbstractClass(ObjectManagerInterface::class);
 
         $this->instanceName = Document::class;
 

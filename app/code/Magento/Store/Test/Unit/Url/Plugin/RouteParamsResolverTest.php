@@ -45,7 +45,7 @@ class RouteParamsResolverTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
+        $this->scopeConfigMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
 
         $this->storeMock = $this->getMockBuilder(Store::class)
             ->setMethods(['getCode'])
@@ -53,13 +53,13 @@ class RouteParamsResolverTest extends TestCase
             ->getMock();
         $this->storeMock->expects($this->any())->method('getCode')->willReturn('custom_store');
 
-        $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
+        $this->storeManagerMock = $this->getMockForAbstractClass(StoreManagerInterface::class);
         $this->storeManagerMock
             ->expects($this->once())
             ->method('getStore')
             ->willReturn($this->storeMock);
 
-        $this->queryParamsResolverMock = $this->createMock(QueryParamsResolverInterface::class);
+        $this->queryParamsResolverMock = $this->getMockForAbstractClass(QueryParamsResolverInterface::class);
         $this->model = new RouteParamsResolver(
             $this->scopeConfigMock,
             $this->storeManagerMock,

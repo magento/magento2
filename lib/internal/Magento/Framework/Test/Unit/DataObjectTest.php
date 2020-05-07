@@ -187,8 +187,8 @@ string',
 
         $this->dataObject->setData('key2', 'value2');
         $this->assertEquals('value2', $this->dataObject->getData('key2'));
-        $this->assertEquals(null, $this->dataObject->getKey2());
-        $this->assertEquals(null, $this->dataObject->getDataUsingMethod('key2'));
+        $this->assertNull($this->dataObject->getKey2());
+        $this->assertNull($this->dataObject->getDataUsingMethod('key2'));
     }
 
     /**

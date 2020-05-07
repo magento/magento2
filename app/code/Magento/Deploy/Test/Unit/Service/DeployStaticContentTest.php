@@ -188,7 +188,7 @@ class DeployStaticContentTest extends TestCase
                 ->willReturnOnConsecutiveCalls($minifyTemplates);
         }
 
-        $this->assertEquals(null, $this->service->deploy($options));
+        $this->assertNull($this->service->deploy($options));
     }
 
     /**

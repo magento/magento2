@@ -48,7 +48,7 @@ class CssTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->_objectManager = $this->createMock(ObjectManagerInterface::class);
+        $this->_objectManager = $this->getMockForAbstractClass(ObjectManagerInterface::class);
         $this->urlBuilder = $this->createMock(Url::class);
         $this->urlCoder = $this->createMock(UrlCoder::class);
 
@@ -73,7 +73,7 @@ class CssTest extends TestCase
     public function testGetUploadCssFileNote()
     {
         $method = self::getMethod('_getUploadCssFileNote');
-        /** @var $sizeModel \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\File\Size  */
+        /** @var $sizeModel \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\File\Size  */
         $sizeModel = $this->createMock(Size::class);
         $sizeModel->expects($this->any())->method('getMaxFileSizeInMb')->willReturn('2M');
 
@@ -99,7 +99,7 @@ class CssTest extends TestCase
         $method = self::getMethod('_getAdditionalElementTypes');
 
         /** @var ScopeConfigInterface $configModel */
-        $configModel = $this->createMock(ScopeConfigInterface::class);
+        $configModel = $this->getMockForAbstractClass(ScopeConfigInterface::class);
 
         $this->_objectManager->expects(
             $this->any()

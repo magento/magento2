@@ -28,7 +28,7 @@ class FlyweightFactoryTest extends TestCase
     protected function setUp(): void
     {
         $this->themeProviderMock =
-            $this->createMock(ThemeProviderInterface::class);
+            $this->getMockForAbstractClass(ThemeProviderInterface::class);
         $this->factory = new FlyweightFactory($this->themeProviderMock);
     }
 

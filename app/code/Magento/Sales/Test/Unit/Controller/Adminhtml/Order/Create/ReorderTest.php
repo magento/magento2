@@ -121,9 +121,9 @@ class ReorderTest extends TestCase
     protected function setUp(): void
     {
         $this->orderId = 111;
-        $this->orderRepositoryMock = $this->createMock(OrderRepositoryInterface::class);
-        $this->requestMock = $this->createMock(RequestInterface::class);
-        $this->objectManagerMock = $this->createMock(ObjectManagerInterface::class);
+        $this->orderRepositoryMock = $this->getMockForAbstractClass(OrderRepositoryInterface::class);
+        $this->requestMock = $this->getMockForAbstractClass(RequestInterface::class);
+        $this->objectManagerMock = $this->getMockForAbstractClass(ObjectManagerInterface::class);
         $this->resultForwardFactoryMock = $this->createMock(ForwardFactory::class);
         $this->resultRedirectFactoryMock = $this->createMock(RedirectFactory::class);
         $this->resultRedirectMock = $this->createMock(Redirect::class);

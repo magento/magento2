@@ -76,7 +76,7 @@ class InstanceTest extends TestCase
             NamespaceResolver::class
         )->disableOriginalConstructor()
             ->getMock();
-        $this->_cacheTypesListMock = $this->createMock(TypeListInterface::class);
+        $this->_cacheTypesListMock = $this->getMockForAbstractClass(TypeListInterface::class);
         $this->_readerMock = $this->getMockBuilder(
             Reader::class
         )->disableOriginalConstructor()
@@ -155,8 +155,8 @@ class InstanceTest extends TestCase
             'readFile'
         )->with(
             $this->equalTo($xmlFile)
-        )->will(
-            $this->returnValue($themeConfig)
+        )->willReturn(
+            $themeConfig
         );
 
         $result = $this->_model->getWidgetConfigAsArray();

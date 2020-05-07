@@ -46,7 +46,7 @@ class TransportInterfacePluginTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->transportMock = $this->createMock(TransportInterface::class);
+        $this->transportMock = $this->getMockForAbstractClass(TransportInterface::class);
         $this->scopeConfigMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
         $this->proceedMock = function () {
             $this->isProceedMockCalled = true;

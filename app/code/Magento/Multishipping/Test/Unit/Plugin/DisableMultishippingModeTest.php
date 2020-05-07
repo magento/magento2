@@ -68,7 +68,7 @@ class DisableMultishippingModeTest extends TestCase
             ->getMockForAbstractClass();
         $extensionAttributes->method('getShippingAssignments')
             ->willReturn(
-                $this->createMock(ShippingAssignmentInterface::class)
+                $this->getMockForAbstractClass(ShippingAssignmentInterface::class)
             );
         $extensionAttributes->expects($this->once())
             ->method('setShippingAssignments')

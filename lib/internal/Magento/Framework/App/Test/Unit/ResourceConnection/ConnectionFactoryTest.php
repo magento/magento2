@@ -38,7 +38,7 @@ class ConnectionFactoryTest extends TestCase
         $this->objectManager = new ObjectManager($this);
         $this->objectManagerMock = $this->getMockBuilder(ObjectManagerInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->connectionFactory = $this->objectManager->getObject(
             ConnectionFactory::class,
             ['objectManager' => $this->objectManagerMock]
@@ -56,7 +56,7 @@ class ConnectionFactoryTest extends TestCase
             ->getMock();
         $connectionMock = $this->getMockBuilder(AdapterInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $connectionMock->expects($this->once())
             ->method('setCacheAdapter')
             ->with($cacheAdapterMock)

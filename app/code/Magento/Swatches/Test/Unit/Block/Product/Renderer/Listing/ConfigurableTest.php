@@ -87,19 +87,19 @@ class ConfigurableTest extends TestCase
     protected function setUp(): void
     {
         $this->arrayUtils = $this->createMock(ArrayUtils::class);
-        $this->jsonEncoder = $this->createMock(EncoderInterface::class);
+        $this->jsonEncoder = $this->getMockForAbstractClass(EncoderInterface::class);
         $this->helper = $this->createMock(Data::class);
         $this->swatchHelper = $this->createMock(\Magento\Swatches\Helper\Data::class);
         $this->swatchMediaHelper = $this->createMock(Media::class);
         $this->catalogProduct = $this->createMock(Product::class);
         $this->currentCustomer = $this->createMock(CurrentCustomer::class);
-        $this->priceCurrency = $this->createMock(PriceCurrencyInterface::class);
+        $this->priceCurrency = $this->getMockForAbstractClass(PriceCurrencyInterface::class);
         $this->configurableAttributeData = $this->createMock(
             ConfigurableAttributeData::class
         );
         $this->product = $this->createMock(\Magento\Catalog\Model\Product::class);
         $this->typeInstance = $this->createMock(AbstractType::class);
-        $this->scopeConfig = $this->createMock(ScopeConfigInterface::class);
+        $this->scopeConfig = $this->getMockForAbstractClass(ScopeConfigInterface::class);
         $this->imageHelper = $this->createMock(Image::class);
         $this->imageUrlBuilder = $this->createMock(UrlBuilder::class);
         $this->variationPricesMock = $this->createMock(

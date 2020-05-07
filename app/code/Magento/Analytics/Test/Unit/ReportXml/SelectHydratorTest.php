@@ -55,11 +55,11 @@ class SelectHydratorTest extends TestCase
     {
         $this->resourceConnectionMock = $this->createMock(ResourceConnection::class);
 
-        $this->connectionMock = $this->createMock(AdapterInterface::class);
+        $this->connectionMock = $this->getMockForAbstractClass(AdapterInterface::class);
 
         $this->selectMock = $this->createMock(Select::class);
 
-        $this->objectManagerMock = $this->createMock(ObjectManagerInterface::class);
+        $this->objectManagerMock = $this->getMockForAbstractClass(ObjectManagerInterface::class);
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
 

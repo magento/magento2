@@ -63,7 +63,7 @@ class IndexTest extends TestCase
             ->getMock();
         $adapterMock = $this->getMockBuilder(AdapterInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->resourceConnectionMock->expects($this->once())
             ->method('getConnection')
             ->willReturn($adapterMock);

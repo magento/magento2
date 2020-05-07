@@ -38,7 +38,7 @@ class TierPriceTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->productPriceOptions = $this->createMock(ProductPriceOptionsInterface::class);
+        $this->productPriceOptions = $this->getMockForAbstractClass(ProductPriceOptionsInterface::class);
         $this->arrayManager = $this->createMock(ArrayManager::class);
 
         $this->tierPrice = (new ObjectManager($this))->getObject(TierPrice::class, [

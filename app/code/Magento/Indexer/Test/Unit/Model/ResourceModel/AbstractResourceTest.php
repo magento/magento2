@@ -39,7 +39,7 @@ class AbstractResourceTest extends TestCase
         )->disableOriginalConstructor()
             ->getMock();
 
-        $this->_tableStrategyInterface = $this->createMock(StrategyInterface::class);
+        $this->_tableStrategyInterface = $this->getMockForAbstractClass(StrategyInterface::class);
         $objectManager = new ObjectManager($this);
         $arguments = $objectManager->getConstructArguments(
             AbstractResourceStub::class,
@@ -69,7 +69,7 @@ class AbstractResourceTest extends TestCase
 
     public function testClearTemporaryIndexTable()
     {
-        $connectionMock = $this->createMock(AdapterInterface::class);
+        $connectionMock = $this->getMockForAbstractClass(AdapterInterface::class);
         $this->_resourceMock->expects($this->any())->method('getConnection')->willReturn($connectionMock);
         $connectionMock->expects($this->once())->method('delete')->willReturnSelf();
         $this->model->clearTemporaryIndexTable();
@@ -82,7 +82,7 @@ class AbstractResourceTest extends TestCase
         $describeTable = ['column' => 'column'];
 
         $selectMock = $this->createMock(Select::class);
-        $connectionMock = $this->createMock(AdapterInterface::class);
+        $connectionMock = $this->getMockForAbstractClass(AdapterInterface::class);
 
         $connectionMock->expects($this->any())->method('describeTable')->willReturn($describeTable);
         $connectionMock->expects($this->any())->method('select')->willReturn($selectMock);
@@ -106,7 +106,7 @@ class AbstractResourceTest extends TestCase
     {
         $this->expectException('Exception');
         $describeTable = ['column' => 'column'];
-        $connectionMock = $this->createMock(AdapterInterface::class);
+        $connectionMock = $this->getMockForAbstractClass(AdapterInterface::class);
         $connectionMock->expects($this->any())->method('describeTable')->willReturn($describeTable);
         $connectionMock->expects($this->any())->method('select')->willThrowException(new \Exception());
         $this->_resourceMock->expects($this->any())->method('getConnection')->willReturn($connectionMock);
@@ -129,7 +129,7 @@ class AbstractResourceTest extends TestCase
         $selectMock = $this->createMock(Select::class);
         $connectionMock = $this->getMockBuilder(AdapterInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $connectionMock->expects($this->any())->method('describeTable')->willReturn($tableColumns);
         $connectionMock->expects($this->any())->method('select')->willReturn($selectMock);

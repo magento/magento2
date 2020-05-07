@@ -72,16 +72,16 @@ class SaveTest extends TestCase
     {
         $this->requestMock = $this->getMockBuilder(RequestInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->responseMock = $this->getMockBuilder(ResponseInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->messageManagerMock = $this->getMockBuilder(ManagerInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->redirectMock = $this->getMockBuilder(RedirectInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->customerSessionMock = $this->getMockBuilder(Session::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -94,7 +94,7 @@ class SaveTest extends TestCase
         $this->customerRepositoryMock =
             $this->getMockBuilder(CustomerRepositoryInterface::class)
                 ->disableOriginalConstructor()
-                ->getMock();
+                ->getMockForAbstractClass();
         $objectManager = new ObjectManager($this);
 
         $this->action = $objectManager->getObject(

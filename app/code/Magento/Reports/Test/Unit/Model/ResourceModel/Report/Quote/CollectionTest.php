@@ -83,8 +83,8 @@ class CollectionTest extends TestCase
         /** @var MockObject $collection */
         $constructArgs = $this->objectManager
             ->getConstructArguments(\Magento\Reports\Model\ResourceModel\Quote\Item\Collection::class);
-        $constructArgs['eventManager'] = $this->createMock(ManagerInterface::class);
-        $connectionMock = $this->createMock(AdapterInterface::class);
+        $constructArgs['eventManager'] = $this->getMockForAbstractClass(ManagerInterface::class);
+        $connectionMock = $this->getMockForAbstractClass(AdapterInterface::class);
         $resourceMock = $this->createMock(Quote::class);
         $resourceMock->expects($this->any())->method('getConnection')
             ->willReturn($this->createMock(Mysql::class));

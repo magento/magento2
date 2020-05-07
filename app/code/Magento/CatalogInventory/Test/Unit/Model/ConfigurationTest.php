@@ -47,16 +47,16 @@ class ConfigurationTest extends TestCase
     {
         $this->configMock = $this->getMockBuilder(ConfigInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->scopeConfigMock = $this->getMockBuilder(ScopeConfigInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->minSaleQtyHelperMock = $this->getMockBuilder(Minsaleqty::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->storeManagerMock = $this->getMockBuilder(StoreManagerInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->model = new Configuration(
             $this->configMock,
             $this->scopeConfigMock,

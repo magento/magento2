@@ -36,7 +36,7 @@ class AbstractTest extends TestCase
 
     public function testGetArrayRows()
     {
-        $this->model->expects($this->any())->method('escapeHtml')->will($this->returnArgument(0));
+        $this->model->expects($this->any())->method('escapeHtml')->willReturnArgument(0);
         $objectManager = new ObjectManager($this);
         $element = $objectManager->getObject(Multiselect::class);
         $element->setValue([['te<s>t' => 't<e>st', 'data&1' => 'da&ta1']]);

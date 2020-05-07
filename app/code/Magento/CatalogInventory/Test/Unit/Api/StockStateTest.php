@@ -70,9 +70,9 @@ class StockStateTest extends TestCase
     {
         $this->objectManagerHelper = new ObjectManagerHelper($this);
 
-        $this->stock = $this->createMock(StockInterface::class);
-        $this->stockItem = $this->createMock(StockItemInterface::class);
-        $this->stockStatus = $this->createMock(StockStatusInterface::class);
+        $this->stock = $this->getMockForAbstractClass(StockInterface::class);
+        $this->stockItem = $this->getMockForAbstractClass(StockItemInterface::class);
+        $this->stockStatus = $this->getMockForAbstractClass(StockStatusInterface::class);
         $this->objectResult = $this->createMock(DataObject::class);
 
         $this->stockStateProvider = $this->createPartialMock(
@@ -125,24 +125,21 @@ class StockStateTest extends TestCase
 
     public function testVerifyStock()
     {
-        $this->assertEquals(
-            true,
+        $this->assertTrue(
             $this->stockState->verifyStock($this->productId, $this->websiteId)
         );
     }
 
     public function testVerifyNotification()
     {
-        $this->assertEquals(
-            true,
+        $this->assertTrue(
             $this->stockState->verifyNotification($this->productId, $this->websiteId)
         );
     }
 
     public function testCheckQty()
     {
-        $this->assertEquals(
-            true,
+        $this->assertTrue(
             $this->stockState->checkQty($this->productId, $this->qty, $this->websiteId)
         );
     }

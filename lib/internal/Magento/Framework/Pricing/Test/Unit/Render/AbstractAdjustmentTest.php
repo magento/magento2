@@ -40,7 +40,7 @@ class AbstractAdjustmentTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->priceCurrency = $this->createMock(PriceCurrencyInterface::class);
+        $this->priceCurrency = $this->getMockForAbstractClass(PriceCurrencyInterface::class);
         $this->data = ['argument_one' => 1];
 
         $objectManager = new ObjectManager($this);

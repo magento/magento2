@@ -50,11 +50,11 @@ class UninstallCollectorTest extends \PHPUnit\Framework\TestCase
         $uninstallB = 'Uninstall Class B';
         $objectManager->expects($this->any())
             ->method('create')
-            ->will(
-                $this->returnValueMap([
+            ->willReturnMap(
+                [
                     ['Magento\A\Setup\Uninstall', [], $uninstallA],
                     ['Magento\B\Setup\Uninstall', [], $uninstallB],
-                ])
+                ]
             );
         $setupFactory = $this->createMock(\Magento\Setup\Module\DataSetupFactory::class);
         $setupFactory->expects($this->once())->method('create')->willReturn($setup);

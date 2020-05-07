@@ -56,9 +56,9 @@ class CategoryUrlPathGeneratorTest extends TestCase
             )
             ->disableOriginalConstructor()
             ->getMock();
-        $this->storeManager = $this->createMock(StoreManagerInterface::class);
-        $this->scopeConfig = $this->createMock(ScopeConfigInterface::class);
-        $this->categoryRepository = $this->createMock(CategoryRepositoryInterface::class);
+        $this->storeManager = $this->getMockForAbstractClass(StoreManagerInterface::class);
+        $this->scopeConfig = $this->getMockForAbstractClass(ScopeConfigInterface::class);
+        $this->categoryRepository = $this->getMockForAbstractClass(CategoryRepositoryInterface::class);
 
         $this->categoryUrlPathGenerator = (new ObjectManager($this))->getObject(
             CategoryUrlPathGenerator::class,

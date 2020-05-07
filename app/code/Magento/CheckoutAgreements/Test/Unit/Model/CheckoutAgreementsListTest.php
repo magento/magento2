@@ -59,7 +59,7 @@ class CheckoutAgreementsListTest extends TestCase
 
     public function testGetList()
     {
-        $searchCriteriaMock = $this->createMock(SearchCriteriaInterface::class);
+        $searchCriteriaMock = $this->getMockForAbstractClass(SearchCriteriaInterface::class);
         $collectionMock = $this->createMock(
             Collection::class
         );
@@ -68,7 +68,7 @@ class CheckoutAgreementsListTest extends TestCase
             ->method('process')
             ->with($searchCriteriaMock, $collectionMock);
         $this->attributesJoinProcessorMock->expects($this->once())->method('process')->with($collectionMock);
-        $agreementMock = $this->createMock(AgreementInterface::class);
+        $agreementMock = $this->getMockForAbstractClass(AgreementInterface::class);
         $collectionMock->expects($this->once())->method('getItems')->willReturn([$agreementMock]);
         $this->assertEquals([$agreementMock], $this->model->getList($searchCriteriaMock));
     }

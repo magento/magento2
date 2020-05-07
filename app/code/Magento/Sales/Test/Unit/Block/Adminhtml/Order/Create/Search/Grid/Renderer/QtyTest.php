@@ -40,7 +40,7 @@ class QtyTest extends TestCase
             ->addMethods(['getTypeId', 'getIndex'])
             ->disableOriginalConstructor()
             ->getMock();
-        $this->typeConfigMock = $this->createMock(ConfigInterface::class);
+        $this->typeConfigMock = $this->getMockForAbstractClass(ConfigInterface::class);
         $this->renderer = $helper->getObject(
             Qty::class,
             ['typeConfig' => $this->typeConfigMock]

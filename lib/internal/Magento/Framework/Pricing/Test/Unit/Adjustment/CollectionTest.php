@@ -27,19 +27,19 @@ class CollectionTest extends TestCase
 
     protected function setUp(): void
     {
-        $adj1 = $this->createMock(AdjustmentInterface::class);
+        $adj1 = $this->getMockForAbstractClass(AdjustmentInterface::class);
         $adj1->expects($this->any())
             ->method('getSortOrder')
             ->willReturn(10);
-        $adj2 = $this->createMock(AdjustmentInterface::class);
+        $adj2 = $this->getMockForAbstractClass(AdjustmentInterface::class);
         $adj2->expects($this->any())
             ->method('getSortOrder')
             ->willReturn(20);
-        $adj3 = $this->createMock(AdjustmentInterface::class);
+        $adj3 = $this->getMockForAbstractClass(AdjustmentInterface::class);
         $adj3->expects($this->any())
             ->method('getSortOrder')
             ->willReturn(5);
-        $adj4 = $this->createMock(AdjustmentInterface::class);
+        $adj4 = $this->getMockForAbstractClass(AdjustmentInterface::class);
         $adj4->expects($this->any())
             ->method('getSortOrder')
             ->willReturn(Pool::DEFAULT_SORT_ORDER);

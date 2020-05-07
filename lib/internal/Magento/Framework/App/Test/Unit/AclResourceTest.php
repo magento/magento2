@@ -55,7 +55,7 @@ class AclResourceTest extends TestCase
         $this->config = $this->getMockBuilder(ConfigInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['getConnectionName'])
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->config->expects($this->any())
             ->method('getConnectionName')
             ->with(self::RESOURCE_NAME)

@@ -38,10 +38,10 @@ class FileTest extends TestCase
      */
     protected function setUp(): void
     {
-        $configMock = $this->createMock(ConfigInterface::class);
-        $storeManagerMock = $this->createMock(StoreManagerInterface::class);
+        $configMock = $this->getMockForAbstractClass(ConfigInterface::class);
+        $storeManagerMock = $this->getMockForAbstractClass(StoreManagerInterface::class);
         $priceConfigMock = new Price($storeManagerMock);
-        $this->localeFormatMock = $this->createMock(FormatInterface::class);
+        $this->localeFormatMock = $this->getMockForAbstractClass(FormatInterface::class);
 
         $config = [
             [

@@ -70,12 +70,12 @@ class RowsTest extends TestCase
     {
         $objectManager = new ObjectManager($this);
 
-        $this->_connection = $this->createMock(AdapterInterface::class);
+        $this->_connection = $this->getMockForAbstractClass(AdapterInterface::class);
         $this->_resource = $this->createMock(ResourceConnection::class);
         $this->_resource->expects($this->any())->method('getConnection')
             ->with('default')
             ->willReturn($this->_connection);
-        $this->_storeManager = $this->createMock(StoreManagerInterface::class);
+        $this->_storeManager = $this->getMockForAbstractClass(StoreManagerInterface::class);
         $this->_store = $this->createMock(Store::class);
         $this->_store->expects($this->any())->method('getId')->willReturn('store_id_1');
         $this->_storeManager->expects($this->any())->method('getStores')->willReturn(

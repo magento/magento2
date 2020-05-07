@@ -134,7 +134,7 @@ class ValidatorTest extends TestCase
         $ruleCollectionFactoryMock = $this->prepareRuleCollectionMock($this->ruleCollection);
         $this->priceCurrency = $this->getMockBuilder(PriceCurrencyInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         /** @var Validator|MockObject $validator */
         $this->model = $this->helper->getObject(
@@ -183,7 +183,7 @@ class ValidatorTest extends TestCase
 
         /** @var Quote $quote */
         $quote = $this->createPartialMock(Quote::class, ['getStoreId']);
-        $quote->expects($this->any())->method('getStoreId')->will($this->returnValue(1));
+        $quote->expects($this->any())->method('getStoreId')->willReturn(1);
 
         $itemData = include $fixturePath . 'quote_item_downloadable.php';
         $itemDownloadable->addData($itemData);

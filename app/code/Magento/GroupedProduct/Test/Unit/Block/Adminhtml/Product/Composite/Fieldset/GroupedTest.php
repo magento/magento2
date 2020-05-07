@@ -51,7 +51,7 @@ class GroupedTest extends TestCase
         $this->registryMock = $this->createMock(Registry::class);
         $this->productMock = $this->createMock(Product::class);
         $this->pricingHelperMock = $this->createMock(Data::class);
-        $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
+        $this->storeManagerMock = $this->getMockForAbstractClass(StoreManagerInterface::class);
 
         $customerMock = $this->getMockBuilder(
             CustomerInterface::class
@@ -205,7 +205,7 @@ class GroupedTest extends TestCase
      */
     public function testGetCanShowProductPrice()
     {
-        $this->assertEquals(true, $this->block->getCanShowProductPrice($this->productMock));
+        $this->assertTrue($this->block->getCanShowProductPrice($this->productMock));
     }
 
     /**
@@ -217,7 +217,7 @@ class GroupedTest extends TestCase
 
         $this->productMock->expects($this->never())->method('getOptions');
 
-        $this->assertEquals(true, $this->block->getIsLastFieldset());
+        $this->assertTrue($this->block->getIsLastFieldset());
     }
 
     /**

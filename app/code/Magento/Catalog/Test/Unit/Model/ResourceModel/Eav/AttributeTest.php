@@ -62,9 +62,9 @@ class AttributeTest extends TestCase
 
         $this->_eavProcessor = $this->createMock(\Magento\Catalog\Model\Indexer\Product\Eav\Processor::class);
 
-        $eventManagerMock = $this->createMock(ManagerInterface::class);
+        $eventManagerMock = $this->getMockForAbstractClass(ManagerInterface::class);
 
-        $cacheInterfaceMock = $this->createMock(CacheInterface::class);
+        $cacheInterfaceMock = $this->getMockForAbstractClass(CacheInterface::class);
 
         $actionValidatorMock = $this->createMock(RemoveAction::class);
         $actionValidatorMock->expects($this->any())->method('isAllowed')->willReturn(true);

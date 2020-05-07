@@ -69,7 +69,7 @@ class LinksTest extends TestCase
         $this->productMock->expects($this->any())
             ->method('getPriceInfo')
             ->willReturn($this->priceInfoMock);
-        $this->jsonEncoder = $this->createMock(EncoderInterface::class);
+        $this->jsonEncoder = $this->getMockForAbstractClass(EncoderInterface::class);
 
         $this->linksBlock = $objectManager->getObject(
             Links::class,
@@ -135,7 +135,7 @@ class LinksTest extends TestCase
             ],
         ];
 
-        $linkAmountMock = $this->createMock(AmountInterface::class);
+        $linkAmountMock = $this->getMockForAbstractClass(AmountInterface::class);
         $linkAmountMock->expects($this->once())
             ->method('getValue')
             ->willReturn($linkPrice);

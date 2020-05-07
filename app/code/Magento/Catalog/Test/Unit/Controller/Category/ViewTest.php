@@ -132,14 +132,14 @@ class ViewTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->request = $this->createMock(RequestInterface::class);
-        $this->response = $this->createMock(ResponseInterface::class);
+        $this->request = $this->getMockForAbstractClass(RequestInterface::class);
+        $this->response = $this->getMockForAbstractClass(ResponseInterface::class);
 
         $this->categoryHelper = $this->createMock(Category::class);
-        $this->objectManager = $this->createMock(ObjectManagerInterface::class);
-        $this->eventManager = $this->createMock(ManagerInterface::class);
+        $this->objectManager = $this->getMockForAbstractClass(ObjectManagerInterface::class);
+        $this->eventManager = $this->getMockForAbstractClass(ManagerInterface::class);
 
-        $this->update = $this->createMock(ProcessorInterface::class);
+        $this->update = $this->getMockForAbstractClass(ProcessorInterface::class);
         $this->layout = $this->createMock(Layout::class);
         $this->layout->expects($this->any())->method('getUpdate')->willReturn($this->update);
 
@@ -157,7 +157,7 @@ class ViewTest extends TestCase
         $this->page->expects($this->any())->method('getLayout')->willReturn($this->layout);
         $this->page->expects($this->any())->method('addUpdate')->willReturnSelf();
 
-        $this->view = $this->createMock(ViewInterface::class);
+        $this->view = $this->getMockForAbstractClass(ViewInterface::class);
         $this->view->expects($this->any())->method('getLayout')->willReturn($this->layout);
 
         $this->resultFactory = $this->createMock(ResultFactory::class);
@@ -174,10 +174,10 @@ class ViewTest extends TestCase
             ->willReturn($this->resultFactory);
 
         $this->category = $this->createMock(\Magento\Catalog\Model\Category::class);
-        $this->categoryRepository = $this->createMock(CategoryRepositoryInterface::class);
+        $this->categoryRepository = $this->getMockForAbstractClass(CategoryRepositoryInterface::class);
 
         $this->store = $this->createMock(Store::class);
-        $this->storeManager = $this->createMock(StoreManagerInterface::class);
+        $this->storeManager = $this->getMockForAbstractClass(StoreManagerInterface::class);
         $this->storeManager->expects($this->any())->method('getStore')->willReturn($this->store);
 
         $this->catalogDesign = $this->createMock(Design::class);

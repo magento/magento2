@@ -29,7 +29,7 @@ class BuilderTest extends \Magento\Framework\View\Test\Unit\Layout\BuilderTest
         $arguments['pageConfig'] = $this->createMock(Config::class);
         $arguments['pageConfig']->expects($this->once())->method('setBuilder');
         $arguments['pageConfig']->expects($this->once())->method('getPageLayout')
-            ->will($this->returnValue('test_layout'));
+            ->willReturn('test_layout');
 
         $readerContext = $this->createMock(Context::class);
 

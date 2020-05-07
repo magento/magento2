@@ -69,7 +69,7 @@ class FilterMapperTest extends TestCase
         $this->applierMock = $this->getMockBuilder(ApplierInterface::class)
             ->setMethods(['apply'])
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
     }
 
     /**
@@ -112,6 +112,6 @@ class FilterMapperTest extends TestCase
 
         $mapper = new FilterMapper($this->appliersPoolMock, $this->braintreeSearchAdapterMock);
         $result = $mapper->getFilter('orderId', []);
-        $this->assertEquals(null, $result);
+        $this->assertNull($result);
     }
 }

@@ -90,15 +90,15 @@ class CollectionTest extends TestCase
 
         $this->loggerMock = $this->getMockBuilder(LoggerInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->fetchStrategyMock = $this->getMockBuilder(FetchStrategyInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->eventManagerMock = $this->getMockBuilder(ManagerInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->eavConfigMock = $this->getMockBuilder(Config::class)
             ->disableOriginalConstructor()
@@ -110,7 +110,7 @@ class CollectionTest extends TestCase
 
         $this->storeManagerMock = $this->getMockBuilder(StoreManagerInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->resourceMock = $this->getMockBuilder(AbstractDb::class)
             ->setMethods(['__wakeup', 'getConnection', 'getMainTable', 'getTable'])

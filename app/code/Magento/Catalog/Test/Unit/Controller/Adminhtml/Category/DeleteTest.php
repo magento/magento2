@@ -62,7 +62,7 @@ class DeleteTest extends TestCase
         $this->authStorage = $this->getMockBuilder(StorageInterface::class)
             ->addMethods(['setDeletedPath'])
             ->onlyMethods(['processLogin', 'processLogout', 'isLoggedIn', 'prolong'])
-            ->getMock();
+            ->getMockForAbstractClass();
         $eventManager = $this->getMockForAbstractClass(
             ManagerInterface::class,
             [],
@@ -87,7 +87,7 @@ class DeleteTest extends TestCase
             true,
             ['addSuccessMessage']
         );
-        $this->categoryRepository = $this->createMock(CategoryRepositoryInterface::class);
+        $this->categoryRepository = $this->getMockForAbstractClass(CategoryRepositoryInterface::class);
         $context->expects($this->any())
             ->method('getRequest')
             ->willReturn($this->request);

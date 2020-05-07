@@ -75,7 +75,7 @@ class LockTest extends TestCase
         /** @var AdapterInterface|MockObject $adapterMock */
         $adapterMock = $this->getMockBuilder(AdapterInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->resourceConnectionMock->expects($this->once())->method('getConnection')->willReturn($adapterMock);
         $tableName = 'queue_lock_mock';
         $this->resourceConnectionMock->expects($this->once())->method('getTableName')->willReturn($tableName);

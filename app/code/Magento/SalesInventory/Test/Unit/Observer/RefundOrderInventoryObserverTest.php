@@ -130,7 +130,7 @@ class RefundOrderInventoryObserverTest extends TestCase
 
         $this->orderMock = $this->getMockBuilder(OrderInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->objectManagerHelper = new ObjectManager($this);
 

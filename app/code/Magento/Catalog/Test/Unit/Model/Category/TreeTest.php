@@ -173,7 +173,7 @@ class TreeTest extends TestCase
         $depth = 2;
         $currentLevel = 1;
 
-        $treeNodeMock1 = $this->createMock(CategoryTreeInterface::class);
+        $treeNodeMock1 = $this->getMockForAbstractClass(CategoryTreeInterface::class);
         $treeNodeMock1->expects($this->once())->method('setId')->with($currentLevel)->willReturnSelf();
         $treeNodeMock1->expects($this->once())->method('setParentId')->with($currentLevel - 1)->willReturnSelf();
         $treeNodeMock1->expects($this->once())->method('setName')->with('Name' . $currentLevel)->willReturnSelf();
@@ -183,7 +183,7 @@ class TreeTest extends TestCase
         $treeNodeMock1->expects($this->once())->method('setProductCount')->with(4)->willReturnSelf();
         $treeNodeMock1->expects($this->once())->method('setChildrenData')->willReturnSelf();
 
-        $treeNodeMock2 = $this->createMock(CategoryTreeInterface::class);
+        $treeNodeMock2 = $this->getMockForAbstractClass(CategoryTreeInterface::class);
         $treeNodeMock2->expects($this->once())->method('setId')->with($currentLevel)->willReturnSelf();
         $treeNodeMock2->expects($this->once())->method('setParentId')->with($currentLevel - 1)->willReturnSelf();
         $treeNodeMock2->expects($this->once())->method('setName')->with('Name' . $currentLevel)->willReturnSelf();
@@ -228,7 +228,7 @@ class TreeTest extends TestCase
     public function testGetTreeWhenChildrenAreNotExist()
     {
         $currentLevel = 1;
-        $treeNodeMock = $this->createMock(CategoryTreeInterface::class);
+        $treeNodeMock = $this->getMockForAbstractClass(CategoryTreeInterface::class);
         $this->treeFactoryMock->expects($this->any())->method('create')->willReturn($treeNodeMock);
         $treeNodeMock->expects($this->once())->method('setId')->with($currentLevel)->willReturnSelf();
         $treeNodeMock->expects($this->once())->method('setParentId')->with($currentLevel - 1)->willReturnSelf();

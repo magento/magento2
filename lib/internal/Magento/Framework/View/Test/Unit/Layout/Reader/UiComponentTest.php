@@ -76,7 +76,7 @@ class UiComponentTest extends TestCase
             ->getMock();
         $this->dataConfig = $this->getMockBuilder(DataInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->readerPool = $this->getMockBuilder(ReaderPool::class)
             ->disableOriginalConstructor()
             ->getMock();

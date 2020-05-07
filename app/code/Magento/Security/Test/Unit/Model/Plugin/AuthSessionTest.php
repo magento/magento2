@@ -69,7 +69,7 @@ class AuthSessionTest extends TestCase
             false
         );
 
-        $this->messageManagerMock = $this->createMock(ManagerInterface::class);
+        $this->messageManagerMock = $this->getMockForAbstractClass(ManagerInterface::class);
 
         $this->adminSessionsManagerMock = $this->createPartialMock(
             AdminSessionsManager::class,

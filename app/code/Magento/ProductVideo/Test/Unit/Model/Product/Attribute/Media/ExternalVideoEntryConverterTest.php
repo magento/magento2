@@ -99,7 +99,7 @@ class ExternalVideoEntryConverterTest extends TestCase
         $this->videoEntryFactoryMock =
             $this->createPartialMock(VideoContentInterfaceFactory::class, ['create']);
 
-        $this->videoEntryMock = $this->createMock(VideoContentInterface::class);
+        $this->videoEntryMock = $this->getMockForAbstractClass(VideoContentInterface::class);
 
         $this->videoEntryFactoryMock->expects($this->any())->method('create')->willReturn($this->videoEntryMock);
 

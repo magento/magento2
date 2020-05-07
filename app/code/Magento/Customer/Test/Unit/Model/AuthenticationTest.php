@@ -89,7 +89,7 @@ class AuthenticationTest extends TestCase
             ->getMockForAbstractClass();
         $this->encryptorMock = $this->getMockBuilder(EncryptorInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->dateTimeMock = $this->getMockBuilder(DateTime::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -278,7 +278,7 @@ class AuthenticationTest extends TestCase
         $password = '1234567';
         $hash = '1b2af329dd0';
 
-        $customerMock = $this->createMock(CustomerInterface::class);
+        $customerMock = $this->getMockForAbstractClass(CustomerInterface::class);
         $this->customerRepositoryMock->expects($this->any())
             ->method('getById')
             ->willReturn($customerMock);

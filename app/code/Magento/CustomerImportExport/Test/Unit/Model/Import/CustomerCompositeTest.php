@@ -126,7 +126,7 @@ class CustomerCompositeTest extends TestCase
 
     protected function setUp(): void
     {
-        $translateInline = $this->createMock(InlineInterface::class);
+        $translateInline = $this->getMockForAbstractClass(InlineInterface::class);
         $translateInline->expects($this->any())->method('isAllowed')->willReturn(false);
 
         $context =
@@ -167,7 +167,7 @@ class CustomerCompositeTest extends TestCase
             ->setConstructorArgs([$this->errorFactory])
             ->getMock();
 
-        $this->_scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
+        $this->_scopeConfigMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
         $this->indexerProcessor = $this->createMock(Processor::class);
     }
 

@@ -48,7 +48,7 @@ class ColumnsResolverTest extends TestCase
 
         $this->resourceConnectionMock = $this->createMock(ResourceConnection::class);
 
-        $this->connectionMock = $this->createMock(AdapterInterface::class);
+        $this->connectionMock = $this->getMockForAbstractClass(AdapterInterface::class);
 
         $objectManager = new ObjectManagerHelper($this);
         $this->columnsResolver = $objectManager->getObject(

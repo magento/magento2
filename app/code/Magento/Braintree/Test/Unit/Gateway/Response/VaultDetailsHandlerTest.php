@@ -69,7 +69,7 @@ class VaultDetailsHandlerTest extends TestCase
         $this->paymentTokenFactory = $this->getMockBuilder(PaymentTokenFactoryInterface::class)
             ->setMethods(['create'])
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->paymentTokenFactory->method('create')
             ->with(PaymentTokenFactoryInterface::TOKEN_TYPE_CREDIT_CARD)
             ->willReturn($paymentToken);
@@ -225,7 +225,7 @@ class VaultDetailsHandlerTest extends TestCase
                 'getNotificationMessage'
             ])
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->paymentExtensionFactory = $this->getMockBuilder(OrderPaymentExtensionInterfaceFactory::class)
             ->disableOriginalConstructor()

@@ -87,7 +87,7 @@ class PreviewTest extends TestCase
 
         $this->storeManager = $this->getMockBuilder(StoreManagerInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->request = $this->createMock(Http::class);
 
@@ -109,9 +109,9 @@ class PreviewTest extends TestCase
             ->method('create')
             ->willReturn($this->template);
 
-        $eventManage = $this->createMock(ManagerInterface::class);
-        $scopeConfig = $this->createMock(ScopeConfigInterface::class);
-        $design = $this->createMock(DesignInterface::class);
+        $eventManage = $this->getMockForAbstractClass(ManagerInterface::class);
+        $scopeConfig = $this->getMockForAbstractClass(ScopeConfigInterface::class);
+        $design = $this->getMockForAbstractClass(DesignInterface::class);
         $store = $this->createPartialMock(Store::class, ['getId']);
 
         $store->expects($this->any())

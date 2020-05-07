@@ -83,7 +83,7 @@ class HttpTest extends TestCase
             CookieMetadataFactory::class
         )->disableOriginalConstructor()
             ->getMock();
-        $this->cookieManagerMock = $this->createMock(CookieManagerInterface::class);
+        $this->cookieManagerMock = $this->getMockForAbstractClass(CookieManagerInterface::class);
         $this->contextMock = $this->getMockBuilder(
             Context::class
         )->disableOriginalConstructor()
@@ -119,7 +119,7 @@ class HttpTest extends TestCase
     {
         unset($this->model);
         /** @var ObjectManagerInterface|MockObject $objectManagerMock*/
-        $objectManagerMock = $this->createMock(ObjectManagerInterface::class);
+        $objectManagerMock = $this->getMockForAbstractClass(ObjectManagerInterface::class);
         \Magento\Framework\App\ObjectManager::setInstance($objectManagerMock);
     }
 

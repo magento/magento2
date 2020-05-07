@@ -114,7 +114,7 @@ class CheckoutTest extends TestCase
 
     public function testSetCustomerData()
     {
-        $customerDataMock = $this->createMock(CustomerInterface::class);
+        $customerDataMock = $this->getMockForAbstractClass(CustomerInterface::class);
         $this->quoteMock->expects($this->once())->method('assignCustomer')->with($customerDataMock);
         $customerDataMock->expects($this->once())
             ->method('getId');
@@ -124,7 +124,7 @@ class CheckoutTest extends TestCase
     public function testSetCustomerWithAddressChange()
     {
         /** @var CustomerInterface $customerDataMock */
-        $customerDataMock = $this->createMock(CustomerInterface::class);
+        $customerDataMock = $this->getMockForAbstractClass(CustomerInterface::class);
         /** @var Address $customerDataMock */
         $quoteAddressMock = $this->createMock(Address::class);
         $this->quoteMock

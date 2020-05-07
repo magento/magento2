@@ -81,13 +81,13 @@ class GiftMessageConfigProviderTest extends TestCase
     {
         $this->checkoutSessionMock = $this->createMock(Session::class);
         $this->httpContextMock = $this->createMock(\Magento\Framework\App\Http\Context::class);
-        $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
-        $this->localeFormatMock = $this->createMock(FormatInterface::class);
+        $this->storeManagerMock = $this->getMockForAbstractClass(StoreManagerInterface::class);
+        $this->localeFormatMock = $this->getMockForAbstractClass(FormatInterface::class);
         $this->formKeyMock = $this->createMock(FormKey::class);
-        $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
+        $this->scopeConfigMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
         $contextMock = $this->createMock(\Magento\Framework\App\Helper\Context::class);
-        $this->cartRepositoryMock = $this->createMock(CartRepositoryInterface::class);
-        $this->itemRepositoryMock = $this->createMock(ItemRepositoryInterface::class);
+        $this->cartRepositoryMock = $this->getMockForAbstractClass(CartRepositoryInterface::class);
+        $this->itemRepositoryMock = $this->getMockForAbstractClass(ItemRepositoryInterface::class);
         $contextMock->expects($this->atLeastOnce())->method('getScopeConfig')->willReturn($this->scopeConfigMock);
 
         $this->model = new GiftMessageConfigProvider(

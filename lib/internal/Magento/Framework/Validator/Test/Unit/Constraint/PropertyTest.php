@@ -35,7 +35,7 @@ class PropertyTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->_validatorMock = $this->createMock(ValidatorInterface::class);
+        $this->_validatorMock = $this->getMockForAbstractClass(ValidatorInterface::class);
         $this->_constraint = new Property(
             $this->_validatorMock,
             self::PROPERTY_NAME

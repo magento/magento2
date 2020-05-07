@@ -102,10 +102,10 @@ class PriceTest extends TestCase
             RuleFactory::class,
             ['create']
         );
-        $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
-        $this->localeDateMock = $this->createMock(TimezoneInterface::class);
+        $this->storeManagerMock = $this->getMockForAbstractClass(StoreManagerInterface::class);
+        $this->localeDateMock = $this->getMockForAbstractClass(TimezoneInterface::class);
         $this->customerSessionMock = $this->createMock(Session::class);
-        $this->eventManagerMock = $this->createMock(ManagerInterface::class);
+        $this->eventManagerMock = $this->getMockForAbstractClass(ManagerInterface::class);
         $this->catalogHelperMock = $this->createMock(Data::class);
         $this->storeMock = $this->getMockBuilder(Store::class)
             ->addMethods(['roundPrice'])
@@ -120,7 +120,7 @@ class PriceTest extends TestCase
             ProductTierPriceInterfaceFactory::class,
             ['create']
         );
-        $scopeConfig = $this->createMock(ScopeConfigInterface::class);
+        $scopeConfig = $this->getMockForAbstractClass(ScopeConfigInterface::class);
         $this->serializer = $this->getMockBuilder(Json::class)
             ->disableOriginalConstructor()
             ->getMock();

@@ -88,13 +88,13 @@ class AbstractTemplateTest extends TestCase
     {
         $this->design = $this->getMockBuilder(DesignInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->appEmulation = $this->getMockBuilder(Emulation::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->storeManager = $this->getMockBuilder(StoreManagerInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->store = $this->getMockBuilder(Store::class)
             ->setMethods(['getFrontendName', 'getId'])
@@ -118,7 +118,7 @@ class AbstractTemplateTest extends TestCase
             ->getMock();
         $this->scopeConfig = $this->getMockBuilder(ScopeConfigInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->emailConfig = $this->getMockBuilder(Config::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -437,12 +437,12 @@ class AbstractTemplateTest extends TestCase
     {
         $helper = new ObjectManager($this);
 
-        $designMock = $this->createMock(DesignInterface::class);
+        $designMock = $this->getMockForAbstractClass(DesignInterface::class);
         $designMock->expects($this->any())->method('getArea')->willReturn('test_area');
 
         $storeMock = $this->createMock(Store::class);
         $storeMock->expects($this->any())->method('getId')->willReturn(2);
-        $storeManagerMock = $this->createMock(StoreManagerInterface::class);
+        $storeManagerMock = $this->getMockForAbstractClass(StoreManagerInterface::class);
         $storeManagerMock->expects($this->any())->method('getStore')->willReturn($storeMock);
 
         $model = $this->getMockForAbstractClass(

@@ -61,10 +61,10 @@ class BillingAddressManagementTest extends TestCase
     protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
-        $this->quoteRepositoryMock = $this->createMock(CartRepositoryInterface::class);
+        $this->quoteRepositoryMock = $this->getMockForAbstractClass(CartRepositoryInterface::class);
         $this->validatorMock = $this->createMock(QuoteAddressValidator::class);
-        $this->addressRepository = $this->createMock(AddressRepositoryInterface::class);
-        $logger = $this->createMock(LoggerInterface::class);
+        $this->addressRepository = $this->getMockForAbstractClass(AddressRepositoryInterface::class);
+        $logger = $this->getMockForAbstractClass(LoggerInterface::class);
         $this->model = $this->objectManager->getObject(
             BillingAddressManagement::class,
             [

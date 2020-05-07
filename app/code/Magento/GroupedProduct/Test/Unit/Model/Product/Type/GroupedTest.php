@@ -68,12 +68,12 @@ class GroupedTest extends TestCase
     protected function setUp(): void
     {
         $this->objectHelper = new ObjectManager($this);
-        $eventManager = $this->createMock(ManagerInterface::class);
+        $eventManager = $this->getMockForAbstractClass(ManagerInterface::class);
         $fileStorageDbMock = $this->createMock(Database::class);
         $filesystem = $this->createMock(Filesystem::class);
         $coreRegistry = $this->createMock(Registry::class);
         $this->product = $this->createMock(Product::class);
-        $logger = $this->createMock(LoggerInterface::class);
+        $logger = $this->getMockForAbstractClass(LoggerInterface::class);
         $productFactoryMock = $this->createMock(ProductFactory::class);
         $this->catalogProductLink = $this->createMock(Link::class);
         $this->productStatusMock = $this->createMock(Status::class);
@@ -284,8 +284,8 @@ class GroupedTest extends TestCase
             'getAssociatedProducts'
         )->with(
             $this->product
-        )->will(
-            $this->returnValue([$associatedProduct])
+        )->willReturn(
+            [$associatedProduct]
         );
 
         $associatedId = 9384;

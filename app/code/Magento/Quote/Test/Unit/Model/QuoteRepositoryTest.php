@@ -105,11 +105,11 @@ class QuoteRepositoryTest extends TestCase
     {
         $objectManager = new ObjectManager($this);
 
-        $this->objectManagerMock = $this->createMock(ObjectManagerInterface::class);
+        $this->objectManagerMock = $this->getMockForAbstractClass(ObjectManagerInterface::class);
         \Magento\Framework\App\ObjectManager::setInstance($this->objectManagerMock);
 
         $this->cartFactoryMock = $this->createPartialMock(CartInterfaceFactory::class, ['create']);
-        $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
+        $this->storeManagerMock = $this->getMockForAbstractClass(StoreManagerInterface::class);
         $this->quoteMock = $this->getMockBuilder(Quote::class)
             ->addMethods(['setSharedStoreIds', 'getCustomerId'])
             ->onlyMethods(
@@ -516,12 +516,12 @@ class QuoteRepositoryTest extends TestCase
         $this->quoteCollectionFactoryMock->expects($this->once())
             ->method('create')
             ->willReturn($this->quoteCollectionMock);
-        $cartMock = $this->createMock(CartInterface::class);
+        $cartMock = $this->getMockForAbstractClass(CartInterface::class);
         $this->loadHandlerMock->expects($this->once())
             ->method('load')
             ->with($cartMock);
 
-        $searchResult = $this->createMock(CartSearchResultsInterface::class);
+        $searchResult = $this->getMockForAbstractClass(CartSearchResultsInterface::class);
         $searchCriteriaMock = $this->createMock(SearchCriteria::class);
         $this->searchResultsDataFactory
             ->expects($this->once())

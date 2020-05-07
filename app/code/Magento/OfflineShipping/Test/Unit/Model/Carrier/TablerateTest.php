@@ -74,7 +74,7 @@ class TablerateTest extends TestCase
         $this->scopeConfigMock = $this->getMockBuilder(ScopeConfigInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['create', 'isSetFlag', 'getValue'])
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->errorFactoryMock = $this
             ->getMockBuilder(ErrorFactory::class)
@@ -83,7 +83,7 @@ class TablerateTest extends TestCase
 
         $this->loggerMock = $this->getMockBuilder(LoggerInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->resultFactoryMock = $this->getMockBuilder(ResultFactory::class)
             ->disableOriginalConstructor()

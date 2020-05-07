@@ -67,7 +67,7 @@ class ContextTest extends TestCase
 
         $this->design = $this->getMockBuilder(DesignInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $objectManager = new ObjectManager($this);
         $this->context = $objectManager->getObject(

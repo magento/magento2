@@ -27,7 +27,7 @@ class FactoryTest extends TestCase
     {
         $this->objectManager = $this->getMockBuilder(ObjectManagerInterface::class)
             ->setMethods([])
-            ->getMock();
+            ->getMockForAbstractClass();
     }
 
     public function testCreateEmptyStrategies()
@@ -105,6 +105,6 @@ class FactoryTest extends TestCase
     {
         return $this->getMockBuilder(LocalInterface::class)
             ->setMethods([])
-            ->getMock();
+            ->getMockForAbstractClass();
     }
 }

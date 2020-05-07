@@ -100,7 +100,7 @@ class RepositoryTest extends TestCase
         $this->filterManagerMock =
             $this->createMock(FilterManager::class);
         $this->eavAttributeRepositoryMock =
-            $this->createMock(AttributeRepositoryInterface::class);
+            $this->getMockForAbstractClass(AttributeRepositoryInterface::class);
         $this->eavConfigMock = $this->createMock(Config::class);
         $this->eavConfigMock->expects($this->any())->method('getEntityType')
             ->willReturn(new DataObject(['default_attribute_set_id' => 4]));
@@ -115,9 +115,9 @@ class RepositoryTest extends TestCase
                 ->onlyMethods(
                     ['getItems', 'getSearchCriteria', 'getTotalCount', 'setItems', 'setSearchCriteria', 'setTotalCount']
                 )
-                ->getMock();
+                ->getMockForAbstractClass();
         $this->optionManagementMock =
-            $this->createMock(ProductAttributeOptionManagementInterface::class);
+            $this->getMockForAbstractClass(ProductAttributeOptionManagementInterface::class);
 
         $this->model = new Repository(
             $this->attributeResourceMock,
@@ -170,7 +170,7 @@ class RepositoryTest extends TestCase
         $attributeMock = $this->createMock(Attribute::class);
         $this->attributeResourceMock->expects($this->once())->method('delete')->with($attributeMock);
 
-        $this->assertEquals(true, $this->model->delete($attributeMock));
+        $this->assertTrue($this->model->delete($attributeMock));
     }
 
     /**
@@ -188,7 +188,7 @@ class RepositoryTest extends TestCase
             )->willReturn($attributeMock);
         $this->attributeResourceMock->expects($this->once())->method('delete')->with($attributeMock);
 
-        $this->assertEquals(true, $this->model->deleteById($attributeCode));
+        $this->assertTrue($this->model->deleteById($attributeCode));
     }
 
     /**
@@ -198,7 +198,7 @@ class RepositoryTest extends TestCase
     {
         $searchCriteriaMock = $this->createMock(SearchCriteria::class);
         $this->searchCriteriaBuilderMock->expects($this->once())->method('create')->willReturn($searchCriteriaMock);
-        $itemMock = $this->createMock(ProductInterface::class);
+        $itemMock = $this->getMockForAbstractClass(ProductInterface::class);
         $this->eavAttributeRepositoryMock->expects($this->once())
             ->method('getList')
             ->with(
@@ -301,7 +301,7 @@ class RepositoryTest extends TestCase
      */
     public function testSaveSavesDefaultFrontendLabelIfItIsPresentInPayload()
     {
-        $labelMock = $this->createMock(AttributeFrontendLabelInterface::class);
+        $labelMock = $this->getMockForAbstractClass(AttributeFrontendLabelInterface::class);
         $labelMock->expects($this->any())->method('getStoreId')->willReturn(1);
         $labelMock->expects($this->any())->method('getLabel')->willReturn('Store Scope Label');
 

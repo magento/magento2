@@ -73,8 +73,8 @@ class ProTest extends TestCase
             $this->any()
         )->method(
             '_isPaymentReviewRequired'
-        )->will(
-            $this->returnValue($isReviewRequired)
+        )->willReturn(
+            $isReviewRequired
         );
         $payment = $this->getMockBuilder(
             Info::class
@@ -206,9 +206,9 @@ class ProTest extends TestCase
 
         $httpClient->expects(static::any())
             ->method('read')
-            ->will(static::returnValue(
+            ->willReturn(
                 "\r\n" . 'ACK=Success&CORRELATIONID=32342431'
-            ));
+            );
 
         $curlFactory = $this->getMockBuilder(CurlFactory::class)
             ->disableOriginalConstructor()

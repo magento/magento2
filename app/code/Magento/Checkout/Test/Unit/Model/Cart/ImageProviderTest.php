@@ -39,8 +39,8 @@ class ImageProviderTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->itemRepositoryMock = $this->createMock(CartItemRepositoryInterface::class);
-        $this->itemPoolMock = $this->createMock(ItemPoolInterface::class);
+        $this->itemRepositoryMock = $this->getMockForAbstractClass(CartItemRepositoryInterface::class);
+        $this->itemPoolMock = $this->getMockForAbstractClass(ItemPoolInterface::class);
         $this->customerItem = $this->getMockBuilder(DefaultItem::class)
             ->disableOriginalConstructor()
             ->getMock();

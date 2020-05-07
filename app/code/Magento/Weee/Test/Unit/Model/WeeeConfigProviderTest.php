@@ -46,7 +46,7 @@ class WeeeConfigProviderTest extends TestCase
     {
         $this->weeeHelperMock = $this->createMock(Data::class);
         $this->weeeConfigMock = $this->createMock(Config::class);
-        $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
+        $this->storeManagerMock = $this->getMockForAbstractClass(StoreManagerInterface::class);
         $this->storeMock = $this->createMock(Store::class);
 
         $this->storeManagerMock->expects($this->any())->method('getStore')->willReturn($this->storeMock);

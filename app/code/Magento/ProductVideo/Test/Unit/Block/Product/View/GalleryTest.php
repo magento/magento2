@@ -66,7 +66,7 @@ class GalleryTest extends TestCase
         $this->contextMock = $this->createMock(Context::class);
         $this->arrayUtilsMock = $this->createMock(ArrayUtils::class);
         $this->mediaHelperMock = $this->createMock(Media::class);
-        $this->jsonEncoderMock = $this->createMock(EncoderInterface::class);
+        $this->jsonEncoderMock = $this->getMockForAbstractClass(EncoderInterface::class);
         $this->coreRegistry = $this->createMock(Registry::class);
         $this->contextMock->expects($this->once())->method('getRegistry')->willReturn($this->coreRegistry);
 

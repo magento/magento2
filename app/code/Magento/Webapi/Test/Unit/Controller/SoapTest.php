@@ -137,7 +137,7 @@ class SoapTest extends TestCase
         $this->_soapServerMock->expects($this->any())->method('setReturnResponse')->willReturnSelf();
         $pathProcessorMock = $this->createMock(PathProcessor::class);
         $areaListMock = $this->createMock(AreaList::class);
-        $areaMock = $this->createMock(AreaInterface::class);
+        $areaMock = $this->getMockForAbstractClass(AreaInterface::class);
         $areaListMock->expects($this->any())->method('getArea')->willReturn($areaMock);
 
         $rendererMock = $this->getMockBuilder(RendererFactory::class)
@@ -169,9 +169,9 @@ class SoapTest extends TestCase
         $this->_mockGetParam(Server::REQUEST_PARAM_WSDL, 1);
         $this->_requestMock->expects($this->once())
             ->method('getParams')
-            ->will($this->returnValue($params));
+            ->willReturn($params);
         $wsdl = 'Some WSDL content';
-        $this->_wsdlGeneratorMock->expects($this->any())->method('generate')->will($this->returnValue($wsdl));
+        $this->_wsdlGeneratorMock->expects($this->any())->method('generate')->willReturn($wsdl);
 
         $this->_soapController->dispatch($this->_requestMock);
         $this->assertEquals($wsdl, $this->_responseMock->getBody());
@@ -187,18 +187,18 @@ class SoapTest extends TestCase
         $this->_mockGetParam(Server::REQUEST_PARAM_WSDL, 1);
         $this->_requestMock->expects($this->once())
             ->method('getParams')
-            ->will($this->returnValue($params));
+            ->willReturn($params);
         $this->_errorProcessorMock->expects(
             $this->any()
         )->method(
             'maskException'
-        )->will(
-            $this->returnValue(new Exception(__('message')))
+        )->willReturn(
+            new Exception(__('message'))
         );
         $wsdl = 'Some WSDL content';
-        $this->_wsdlGeneratorMock->expects($this->any())->method('generate')->will($this->returnValue($wsdl));
+        $this->_wsdlGeneratorMock->expects($this->any())->method('generate')->willReturn($wsdl);
         $encoding = "utf-8";
-        $this->_soapServerMock->expects($this->any())->method('getApiCharset')->will($this->returnValue($encoding));
+        $this->_soapServerMock->expects($this->any())->method('getApiCharset')->willReturn($encoding);
         $this->_soapController->dispatch($this->_requestMock);
 
         $expectedMessage = <<<EXPECTED_MESSAGE
@@ -241,11 +241,11 @@ EXPECTED_MESSAGE;
             $this->any()
         )->method(
             'maskException'
-        )->will(
-            $this->returnValue($exception)
+        )->willReturn(
+            $exception
         );
         $encoding = "utf-8";
-        $this->_soapServerMock->expects($this->any())->method('getApiCharset')->will($this->returnValue($encoding));
+        $this->_soapServerMock->expects($this->any())->method('getApiCharset')->willReturn($encoding);
 
         $this->_soapController->dispatch($this->_requestMock);
 
@@ -281,8 +281,8 @@ EXPECTED_MESSAGE;
             'getParam'
         )->with(
             $param
-        )->will(
-            $this->returnValue($value)
+        )->willReturn(
+            $value
         );
     }
 }

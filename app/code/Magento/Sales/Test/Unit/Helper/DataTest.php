@@ -52,7 +52,7 @@ class DataTest extends TestCase
     {
         $this->scopeConfigMock = $this->getMockBuilder(ScopeConfigInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $contextMock = $this->getMockBuilder(Context::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -62,7 +62,7 @@ class DataTest extends TestCase
 
         $storeManagerMock = $this->getMockBuilder(StoreManagerInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $appStateMock = $this->getMockBuilder(State::class)
             ->disableOriginalConstructor()
@@ -70,7 +70,7 @@ class DataTest extends TestCase
 
         $pricingCurrencyMock = $this->getMockBuilder(PriceCurrencyInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->helper = new Data(
             $contextMock,

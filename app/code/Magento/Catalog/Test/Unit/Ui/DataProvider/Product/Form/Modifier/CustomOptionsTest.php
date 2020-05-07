@@ -58,7 +58,7 @@ class CustomOptionsTest extends AbstractModifierTest
             ->getMockForAbstractClass();
         $this->priceCurrency = $this->getMockBuilder(PriceCurrencyInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->storeManagerMock->expects($this->any())
             ->method('getStore')

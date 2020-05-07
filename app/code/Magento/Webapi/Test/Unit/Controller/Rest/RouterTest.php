@@ -82,8 +82,8 @@ class RouterTest extends TestCase
             $this->once()
         )->method(
             'getRestRoutes'
-        )->will(
-            $this->returnValue([$this->_routeMock])
+        )->willReturn(
+            [$this->_routeMock]
         );
         $this->_routeMock->expects(
             $this->once()
@@ -91,8 +91,8 @@ class RouterTest extends TestCase
             'match'
         )->with(
             $this->_request
-        )->will(
-            $this->returnValue([])
+        )->willReturn(
+            []
         );
 
         $matchedRoute = $this->_router->match($this->_request);
@@ -106,8 +106,8 @@ class RouterTest extends TestCase
             $this->once()
         )->method(
             'getRestRoutes'
-        )->will(
-            $this->returnValue([$this->_routeMock])
+        )->willReturn(
+            [$this->_routeMock]
         );
         $this->_routeMock->expects(
             $this->once()
@@ -115,8 +115,8 @@ class RouterTest extends TestCase
             'match'
         )->with(
             $this->_request
-        )->will(
-            $this->returnValue(false)
+        )->willReturn(
+            false
         );
 
         $this->_router->match($this->_request);

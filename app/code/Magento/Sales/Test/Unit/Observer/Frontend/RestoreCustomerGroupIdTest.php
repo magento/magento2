@@ -52,13 +52,13 @@ class RestoreCustomerGroupIdTest extends TestCase
         $observer = $this->createPartialMock(Observer::class, ['getEvent']);
         $observer->expects($this->exactly(2))->method('getEvent')->willReturn($eventMock);
 
-        $shippingAssignmentMock = $this->createMock(ShippingAssignmentInterface::class);
+        $shippingAssignmentMock = $this->getMockForAbstractClass(ShippingAssignmentInterface::class);
         $quoteMock = $this->createMock(Quote::class);
 
         $eventMock->expects($this->once())->method('getShippingAssignment')->willReturn($shippingAssignmentMock);
         $eventMock->expects($this->once())->method('getQuote')->willReturn($quoteMock);
 
-        $shippingMock = $this->createMock(ShippingInterface::class);
+        $shippingMock = $this->getMockForAbstractClass(ShippingInterface::class);
         $shippingAssignmentMock->expects($this->once())->method('getShipping')->willReturn($shippingMock);
 
         $quoteAddress = $this->getMockBuilder(\Magento\Quote\Model\Quote\Address::class)->addMethods(

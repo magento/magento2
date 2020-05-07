@@ -109,7 +109,7 @@ class AddressTest extends TestCase
 
         $attributeLoaderMock = $this->getMockBuilder(AttributeLoaderInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->addressResource->setAttributeLoader($attributeLoaderMock);
         $this->addressResource->save($address);

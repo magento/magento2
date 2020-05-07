@@ -75,7 +75,7 @@ class ConditionBuilderTest extends TestCase
 
         $metadata = $this->getMockBuilder(EntityMetadataInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $scopes = [];
 
@@ -145,7 +145,7 @@ class ConditionBuilderTest extends TestCase
 
         $metadata = $this->getMockBuilder(EntityMetadataInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $scopes = [];
 
@@ -219,7 +219,7 @@ class ConditionBuilderTest extends TestCase
 
         $metadata = $this->getMockBuilder(EntityMetadataInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $scope = $this->getMockBuilder(ScopeInterface::class)
             ->disableOriginalConstructor()
@@ -228,7 +228,7 @@ class ConditionBuilderTest extends TestCase
                 'getValue',
                 'getFallback',
             ])
-            ->getMock();
+            ->getMockForAbstractClass();
         $scope->expects($this->once())
             ->method('getIdentifier')
             ->willReturn(
@@ -431,7 +431,7 @@ class ConditionBuilderTest extends TestCase
 
         $metadata = $this->getMockBuilder(EntityMetadataInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $scopes = [];
 
@@ -619,7 +619,7 @@ class ConditionBuilderTest extends TestCase
                 'getValue',
                 'getFallback',
             ])
-            ->getMock();
+            ->getMockForAbstractClass();
         $scope->expects($this->once())
             ->method('getIdentifier')
             ->willReturn(

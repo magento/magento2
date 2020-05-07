@@ -63,9 +63,9 @@ class SuccessTest extends TestCase
                     'isValidForPath'
                 ]
             )
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->contextMock = $this->createMock(Context::class);
-        $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
+        $this->storeManagerMock = $this->getMockForAbstractClass(StoreManagerInterface::class);
 
         $objectManager = new ObjectManager($this);
         $this->contextMock->expects($this->once())->method('getSession')->willReturn($this->sessionMock);

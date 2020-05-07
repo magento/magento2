@@ -53,6 +53,7 @@ namespace Magento\Setup\Test\Unit\Model {
     use Magento\Setup\Validator\DbValidator;
     use PHPUnit\Framework\MockObject\MockObject;
     use PHPUnit\Framework\TestCase;
+    use Magento\Setup\Model\SearchConfig;
 
     /**
      * @SuppressWarnings(PHPMD.TooManyFields)
@@ -297,8 +298,7 @@ namespace Magento\Setup\Test\Unit\Model {
                 $this->dataSetupFactory,
                 $this->sampleDataState,
                 $this->componentRegistrar,
-                $this->phpReadinessCheck,
-                $this->declarationInstallerMock
+                $this->phpReadinessCheck
             );
         }
 
@@ -352,6 +352,7 @@ namespace Magento\Setup\Test\Unit\Model {
                 ->method('setAreaCode')
                 ->with(Area::AREA_GLOBAL);
             $registry = $this->createMock(Registry::class);
+            $searchConfigMock = $this->getMockBuilder(SearchConfig::class)->disableOriginalConstructor()->getMock();
             $this->setupFactory->expects($this->atLeastOnce())->method('create')->with($resource)->willReturn($setup);
             $this->dataSetupFactory->expects($this->atLeastOnce())->method('create')->willReturn($dataSetup);
             $this->objectManager->expects($this->any())
@@ -383,7 +384,8 @@ namespace Magento\Setup\Test\Unit\Model {
                     [\Magento\Framework\App\State::class, $appState],
                     [Manager::class, $cacheManager],
                     [DeclarationInstaller::class, $this->declarationInstallerMock],
-                    [Registry::class, $registry]
+                    [Registry::class, $registry],
+                    [SearchConfig::class, $searchConfigMock]
                 ]);
             $this->adminFactory->expects($this->any())->method('create')->willReturn(
                 $this->createMock(AdminAccount::class)
@@ -443,6 +445,7 @@ namespace Magento\Setup\Test\Unit\Model {
                         ['Schema post-updates:'],
                         ['Module \'Foo_One\':'],
                         ['Module \'Bar_Two\':'],
+                        ['Installing search configuration...'],
                         ['Installing user configuration...'],
                         ['Enabling caches:'],
                         ['Current status:'],
@@ -494,6 +497,7 @@ namespace Magento\Setup\Test\Unit\Model {
                         ['Schema post-updates:'],
                         ['Module \'Foo_One\':'],
                         ['Module \'Bar_Two\':'],
+                        ['Installing search configuration...'],
                         ['Installing user configuration...'],
                         ['Enabling caches:'],
                         ['Current status:'],

@@ -34,7 +34,7 @@ class SenderResolverTest extends TestCase
     {
         $objectManager = new ObjectManager($this);
 
-        $this->scopeConfig = $this->createMock(ScopeConfigInterface::class);
+        $this->scopeConfig = $this->getMockForAbstractClass(ScopeConfigInterface::class);
 
         $this->senderResolver = $objectManager->getObject(
             SenderResolver::class,

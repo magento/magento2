@@ -82,13 +82,13 @@ class SidebarTest extends TestCase
     {
         $this->_objectManager = new ObjectManager($this);
 
-        $this->requestMock = $this->createMock(RequestInterface::class);
+        $this->requestMock = $this->getMockForAbstractClass(RequestInterface::class);
         $this->layoutMock = $this->createMock(Layout::class);
         $this->checkoutSessionMock = $this->createMock(Session::class);
-        $this->urlBuilderMock = $this->createMock(UrlInterface::class);
-        $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
+        $this->urlBuilderMock = $this->getMockForAbstractClass(UrlInterface::class);
+        $this->storeManagerMock = $this->getMockForAbstractClass(StoreManagerInterface::class);
         $this->imageHelper = $this->createMock(Image::class);
-        $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
+        $this->scopeConfigMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
 
         $contextMock = $this->createPartialMock(
             Context::class,

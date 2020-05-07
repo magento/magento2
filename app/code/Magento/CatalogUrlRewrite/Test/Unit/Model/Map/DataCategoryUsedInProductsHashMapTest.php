@@ -70,7 +70,7 @@ class DataCategoryUsedInProductsHashMapTest extends TestCase
         $categoryIds = ['1' => [1, 2, 3], '2' => [2, 3], '3' => 3];
         $categoryIdsOther = ['2' => [2, 3, 4]];
 
-        $connectionMock = $this->createMock(AdapterInterface::class);
+        $connectionMock = $this->getMockForAbstractClass(AdapterInterface::class);
         $selectMock = $this->createMock(Select::class);
 
         $this->connectionMock->expects($this->any())

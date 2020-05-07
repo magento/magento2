@@ -91,7 +91,7 @@ class TransportBuilderTest extends TestCase
     protected function setUp(): void
     {
         $objectManagerHelper = new ObjectManager($this);
-        $this->templateFactoryMock = $this->createMock(FactoryInterface::class);
+        $this->templateFactoryMock = $this->getMockForAbstractClass(FactoryInterface::class);
         $this->messageMock = $this->getMockBuilder(MessageInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['setBodyHtml', 'setSubject'])
@@ -100,8 +100,8 @@ class TransportBuilderTest extends TestCase
         $this->emailMessageInterfaceFactoryMock = $this->createMock(EmailMessageInterfaceFactory::class);
         $this->mimePartFactoryMock = $this->createMock(MimePartInterfaceFactory::class);
 
-        $this->objectManagerMock = $this->createMock(ObjectManagerInterface::class);
-        $this->senderResolverMock = $this->createMock(SenderResolverInterface::class);
+        $this->objectManagerMock = $this->getMockForAbstractClass(ObjectManagerInterface::class);
+        $this->senderResolverMock = $this->getMockForAbstractClass(SenderResolverInterface::class);
         $this->mailTransportFactoryMock = $this->getMockBuilder(TransportInterfaceFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
@@ -145,14 +145,14 @@ class TransportBuilderTest extends TestCase
         $options = ['area' => 'frontend', 'store' => 1];
 
         /** @var MimePartInterface|MockObject $mimePartMock */
-        $mimePartMock = $this->createMock(MimePartInterface::class);
+        $mimePartMock = $this->getMockForAbstractClass(MimePartInterface::class);
 
         $this->mimePartFactoryMock->expects($this->any())
             ->method('create')
             ->willReturn($mimePartMock);
 
         /** @var EmailMessageInterface|MockObject $emailMessage */
-        $emailMessage = $this->createMock(EmailMessageInterface::class);
+        $emailMessage = $this->getMockForAbstractClass(EmailMessageInterface::class);
 
         $this->emailMessageInterfaceFactoryMock->expects($this->any())
             ->method('create')

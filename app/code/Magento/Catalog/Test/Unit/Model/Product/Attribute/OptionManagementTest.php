@@ -28,7 +28,7 @@ class OptionManagementTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->eavOptionManagementMock = $this->createMock(AttributeOptionManagementInterface::class);
+        $this->eavOptionManagementMock = $this->getMockForAbstractClass(AttributeOptionManagementInterface::class);
         $this->model = new OptionManagement(
             $this->eavOptionManagementMock
         );
@@ -47,7 +47,7 @@ class OptionManagementTest extends TestCase
     public function testAdd()
     {
         $attributeCode = 42;
-        $optionMock = $this->createMock(AttributeOptionInterface::class);
+        $optionMock = $this->getMockForAbstractClass(AttributeOptionInterface::class);
         $this->eavOptionManagementMock->expects($this->once())->method('add')->with(
             ProductAttributeInterface::ENTITY_TYPE_CODE,
             $attributeCode,

@@ -91,9 +91,9 @@ class CollectionTest extends TestCase
         $this->objectManager = new ObjectManager($this);
         $context = $this->createPartialMock(Context::class, ['getResource', 'getEavConfig']);
         $entityFactoryMock = $this->createMock(EntityFactory::class);
-        $loggerMock = $this->createMock(LoggerInterface::class);
-        $fetchStrategyMock = $this->createMock(FetchStrategyInterface::class);
-        $eventManagerMock = $this->createMock(ManagerInterface::class);
+        $loggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
+        $fetchStrategyMock = $this->getMockForAbstractClass(FetchStrategyInterface::class);
+        $eventManagerMock = $this->getMockForAbstractClass(ManagerInterface::class);
         $eavConfigMock = $this->createMock(Config::class);
         $this->resourceMock = $this->createPartialMock(ResourceConnection::class, ['getTableName', 'getConnection']);
         $eavEntityFactoryMock = $this->createMock(EavEntityFactory::class);
@@ -105,13 +105,13 @@ class CollectionTest extends TestCase
         );
         $moduleManagerMock = $this->createMock(Manager::class);
         $productFlatStateMock = $this->createMock(State::class);
-        $scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
+        $scopeConfigMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
         $optionFactoryMock = $this->createMock(OptionFactory::class);
         $catalogUrlMock = $this->createMock(Url::class);
-        $localeDateMock = $this->createMock(TimezoneInterface::class);
+        $localeDateMock = $this->getMockForAbstractClass(TimezoneInterface::class);
         $customerSessionMock = $this->createMock(Session::class);
         $dateTimeMock = $this->createMock(DateTime::class);
-        $groupManagementMock = $this->createMock(GroupManagementInterface::class);
+        $groupManagementMock = $this->getMockForAbstractClass(GroupManagementInterface::class);
         $eavConfig = $this->createPartialMock(Config::class, ['getEntityType']);
         $entityType = $this->createMock(Type::class);
 

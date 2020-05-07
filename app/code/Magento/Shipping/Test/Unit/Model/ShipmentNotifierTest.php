@@ -65,7 +65,7 @@ class ShipmentNotifierTest extends TestCase
             ShipmentSender::class,
             ['send']
         );
-        $this->loggerMock = $this->createMock(LoggerInterface::class);
+        $this->loggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
         $this->notifier = new ShipmentNotifier(
             $this->historyCollectionFactory,
             $this->loggerMock,

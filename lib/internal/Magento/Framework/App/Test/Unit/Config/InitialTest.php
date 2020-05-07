@@ -51,7 +51,7 @@ class InitialTest extends TestCase
             ->method('load')
             ->with('initial_config')
             ->willReturn(json_encode($this->data));
-        $serializerMock = $this->createMock(SerializerInterface::class);
+        $serializerMock = $this->getMockForAbstractClass(SerializerInterface::class);
         $serializerMock->method('unserialize')
             ->willReturn($this->data);
 

@@ -59,7 +59,7 @@ class SaveGoogleExperimentScriptObserverTest extends TestCase
     {
         $this->_helperMock = $this->createMock(Data::class);
         $this->_codeMock = $this->createMock(Code::class);
-        $this->_requestMock = $this->createMock(RequestInterface::class);
+        $this->_requestMock = $this->getMockForAbstractClass(RequestInterface::class);
 
         $this->_pageMock = $this->createMock(Page::class);
         $event = $this->getMockBuilder(Event::class)

@@ -65,18 +65,18 @@ class CheckUserEditObserverTest extends TestCase
     {
         $this->helperMock = $this->createMock(Data::class);
         $this->actionFlagMock = $this->createMock(ActionFlag::class);
-        $this->messageManagerMock = $this->createMock(ManagerInterface::class);
-        $this->redirectMock = $this->createMock(RedirectInterface::class);
+        $this->messageManagerMock = $this->getMockForAbstractClass(ManagerInterface::class);
+        $this->redirectMock = $this->getMockForAbstractClass(RedirectInterface::class);
         $this->captchaStringResolverMock = $this->createMock(CaptchaStringResolver::class);
         $this->authenticationMock = $this->getMockBuilder(AuthenticationInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->customerSessionMock = $this->createPartialMock(
             Session::class,
             ['getCustomerId', 'getCustomer', 'logout', 'start']
         );
-        $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
+        $this->scopeConfigMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
 
         $objectManager = new ObjectManager($this);
         $this->observer = $objectManager->getObject(

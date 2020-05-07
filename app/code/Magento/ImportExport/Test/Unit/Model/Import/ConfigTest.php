@@ -44,8 +44,8 @@ class ConfigTest extends TestCase
     protected function setUp(): void
     {
         $this->readerMock = $this->createMock(Reader::class);
-        $this->cacheMock = $this->createMock(CacheInterface::class);
-        $this->serializerMock = $this->createMock(SerializerInterface::class);
+        $this->cacheMock = $this->getMockForAbstractClass(CacheInterface::class);
+        $this->serializerMock = $this->getMockForAbstractClass(SerializerInterface::class);
     }
 
     /**

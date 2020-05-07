@@ -112,12 +112,12 @@ class OauthServiceTest extends TestCase
         );
 
         $this->_service = new OauthService(
-            $this->createMock(StoreManagerInterface::class),
+            $this->getMockForAbstractClass(StoreManagerInterface::class),
             $this->_consumerFactory,
             $this->_tokenFactoryMock,
             $this->createMock(Data::class),
             $this->createMock(ZendClient::class),
-            $this->createMock(LoggerInterface::class),
+            $this->getMockForAbstractClass(LoggerInterface::class),
             $this->createMock(Oauth::class),
             $this->_tokenProviderMock
         );

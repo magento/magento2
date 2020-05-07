@@ -721,7 +721,7 @@ class HelperTest extends TestCase
         $linkTypeCode = 1;
 
         foreach ($types as $typeName) {
-            $linkType = $this->createMock(ProductLinkTypeInterface::class);
+            $linkType = $this->getMockForAbstractClass(ProductLinkTypeInterface::class);
             $linkType->method('getCode')->willReturn($linkTypeCode++);
             $linkType->method('getName')->willReturn($typeName);
 

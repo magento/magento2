@@ -53,17 +53,17 @@ class EsConfigTest extends TestCase
         $this->objectManager = new ObjectManagerHelper($this);
         $this->reader = $this->getMockBuilder(ReaderInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->cache = $this->getMockBuilder(CacheInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->cache->expects($this->any())
             ->method('load')
             ->willReturn('serializedData');
 
-        $this->serializerMock = $this->createMock(SerializerInterface::class);
+        $this->serializerMock = $this->getMockForAbstractClass(SerializerInterface::class);
 
         $this->serializerMock->expects($this->once())
             ->method('unserialize')

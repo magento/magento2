@@ -92,7 +92,7 @@ class CollectionTest extends BaseCollection
         $this->temporaryStorageFactory = $this->createMock(
             TemporaryStorageFactory::class
         );
-        $this->search = $this->createMock(SearchInterface::class);
+        $this->search = $this->getMockForAbstractClass(SearchInterface::class);
 
         $productLimitationMock = $this->createMock(
             ProductLimitation::class
@@ -181,7 +181,7 @@ class CollectionTest extends BaseCollection
         $filter = $this->createMock(Filter::class);
         $this->filterBuilder->expects($this->any())->method('create')->willReturn($filter);
 
-        $searchResult = $this->createMock(SearchResultInterface::class);
+        $searchResult = $this->getMockForAbstractClass(SearchResultInterface::class);
         $this->search->expects($this->once())->method('search')->willReturn($searchResult);
 
         $this->advancedCollection->setPageSize($pageSize);

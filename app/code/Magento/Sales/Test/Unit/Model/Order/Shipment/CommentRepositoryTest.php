@@ -81,7 +81,7 @@ class CommentRepositoryTest extends TestCase
     {
         $this->commentResource = $this->getMockBuilder(ShipmentCommentResourceInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->commentFactory = $this->getMockBuilder(ShipmentCommentInterfaceFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -90,16 +90,16 @@ class CommentRepositoryTest extends TestCase
             ->getMock();
         $this->collectionProcessor = $this->getMockBuilder(CollectionProcessorInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->shipmentRepositoryMock = $this->getMockBuilder(ShipmentRepositoryInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->shipmentCommentSender = $this->getMockBuilder(ShipmentCommentSender::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->loggerMock = $this->getMockBuilder(LoggerInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->shipmentMock = $this->getMockBuilder(Shipment::class)
             ->disableOriginalConstructor()

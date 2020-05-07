@@ -59,8 +59,8 @@ class GalleryManagementTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->productRepositoryMock = $this->createMock(ProductRepositoryInterface::class);
-        $this->contentValidatorMock = $this->createMock(ImageContentValidatorInterface::class);
+        $this->productRepositoryMock = $this->getMockForAbstractClass(ProductRepositoryInterface::class);
+        $this->contentValidatorMock = $this->getMockForAbstractClass(ImageContentValidatorInterface::class);
         $this->productMock = $this->createPartialMock(
             Product::class,
             [
@@ -75,7 +75,7 @@ class GalleryManagementTest extends TestCase
             ]
         );
         $this->mediaGalleryEntryMock =
-            $this->createMock(ProductAttributeMediaGalleryEntryInterface::class);
+            $this->getMockForAbstractClass(ProductAttributeMediaGalleryEntryInterface::class);
         $this->model = new GalleryManagement(
             $this->productRepositoryMock,
             $this->contentValidatorMock
@@ -91,7 +91,7 @@ class GalleryManagementTest extends TestCase
         $this->expectExceptionMessage('The image content is invalid. Verify the content and try again.');
         $entryContentMock = $this->getMockBuilder(ImageContentInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->mediaGalleryEntryMock->expects($this->any())->method('getContent')->willReturn($entryContentMock);
 
         $this->contentValidatorMock->expects($this->once())->method('isValid')->with($entryContentMock)
@@ -107,7 +107,7 @@ class GalleryManagementTest extends TestCase
         $productSku = 'mediaProduct';
         $entryContentMock = $this->getMockBuilder(ImageContentInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $attributeMock = $this->getMockBuilder(AbstractAttribute::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -151,7 +151,7 @@ class GalleryManagementTest extends TestCase
 
         $this->mediaGalleryEntryMock->expects($this->any())->method('getTypes')->willReturn(['small_image']);
 
-        $newEntryMock = $this->createMock(ProductAttributeMediaGalleryEntryInterface::class);
+        $newEntryMock = $this->getMockForAbstractClass(ProductAttributeMediaGalleryEntryInterface::class);
         $newEntryMock->expects($this->exactly(2))->method('getId')->willReturn(42);
         $this->productMock->expects($this->at(2))->method('getMediaGalleryEntries')
             ->willReturn([$newEntryMock]);
@@ -166,7 +166,7 @@ class GalleryManagementTest extends TestCase
         $this->expectException('Magento\Framework\Exception\NoSuchEntityException');
         $this->expectExceptionMessage('No image with the provided ID was found. Verify the ID and try again.');
         $productSku = 'testProduct';
-        $entryMock = $this->createMock(ProductAttributeMediaGalleryEntryInterface::class);
+        $entryMock = $this->getMockForAbstractClass(ProductAttributeMediaGalleryEntryInterface::class);
         $entryId = 42;
         $this->productRepositoryMock->expects($this->once())->method('get')->with($productSku)
             ->willReturn($this->productMock);
@@ -187,7 +187,7 @@ class GalleryManagementTest extends TestCase
         $this->expectException('Magento\Framework\Exception\StateException');
         $this->expectExceptionMessage('The product can\'t be saved.');
         $productSku = 'testProduct';
-        $entryMock = $this->createMock(ProductAttributeMediaGalleryEntryInterface::class);
+        $entryMock = $this->getMockForAbstractClass(ProductAttributeMediaGalleryEntryInterface::class);
         $entryId = 42;
         $this->productRepositoryMock->expects($this->once())->method('get')->with($productSku)
             ->willReturn($this->productMock);
@@ -213,7 +213,7 @@ class GalleryManagementTest extends TestCase
     public function testUpdate()
     {
         $productSku = 'testProduct';
-        $entryMock = $this->createMock(ProductAttributeMediaGalleryEntryInterface::class);
+        $entryMock = $this->getMockForAbstractClass(ProductAttributeMediaGalleryEntryInterface::class);
         $entryId = 42;
         $entrySecondId = 43;
         $this->productRepositoryMock->expects($this->once())->method('get')->with($productSku)
@@ -328,7 +328,7 @@ class GalleryManagementTest extends TestCase
         $productSku = 'testProductSku';
         $this->productRepositoryMock->expects($this->once())->method('get')->with($productSku)
             ->willReturn($this->productMock);
-        $entryMock = $this->createMock(ProductAttributeMediaGalleryEntryInterface::class);
+        $entryMock = $this->getMockForAbstractClass(ProductAttributeMediaGalleryEntryInterface::class);
         $this->productMock->expects($this->once())->method('getMediaGalleryEntries')
             ->willReturn([$entryMock]);
         $this->assertEquals([$entryMock], $this->model->getList($productSku));

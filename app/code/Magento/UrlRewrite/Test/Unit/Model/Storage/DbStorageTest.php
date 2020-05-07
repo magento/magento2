@@ -57,7 +57,7 @@ class DbStorageTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->dataObjectHelper = $this->createMock(DataObjectHelper::class);
-        $this->connectionMock = $this->createMock(AdapterInterface::class);
+        $this->connectionMock = $this->getMockForAbstractClass(AdapterInterface::class);
         $this->select = $this->getMockBuilder(Select::class)
             ->disableOriginalConstructor()
             ->getMock();

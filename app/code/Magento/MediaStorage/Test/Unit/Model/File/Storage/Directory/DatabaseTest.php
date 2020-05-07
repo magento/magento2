@@ -98,7 +98,7 @@ class DatabaseTest extends TestCase
         $this->resourceDirectoryDatabaseMock = $this->createMock(
             \Magento\MediaStorage\Model\ResourceModel\File\Storage\Directory\Database::class
         );
-        $this->loggerMock = $this->createMock(LoggerInterface::class);
+        $this->loggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
 
         $this->directoryFactoryMock->expects(
             $this->any()
@@ -108,7 +108,7 @@ class DatabaseTest extends TestCase
             $this->directoryMock
         );
 
-        $this->configMock = $this->createMock(ScopeConfigInterface::class);
+        $this->configMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
         $this->configMock->expects(
             $this->any()
         )->method(

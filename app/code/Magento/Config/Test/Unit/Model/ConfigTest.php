@@ -107,7 +107,7 @@ class ConfigTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->eventManagerMock = $this->createMock(ManagerInterface::class);
+        $this->eventManagerMock = $this->getMockForAbstractClass(ManagerInterface::class);
         $this->structureReaderMock = $this->getMockBuilder(Reader::class)
             ->addMethods(['getConfiguration'])
             ->disableOriginalConstructor()
@@ -127,29 +127,29 @@ class ConfigTest extends TestCase
             ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
-        $this->appConfigMock = $this->createMock(ReinitableConfigInterface::class);
+        $this->appConfigMock = $this->getMockForAbstractClass(ReinitableConfigInterface::class);
         $this->configLoaderMock = $this->createPartialMock(
             Loader::class,
             ['getConfigByPath']
         );
         $this->dataFactoryMock = $this->createMock(ValueFactory::class);
 
-        $this->storeManager = $this->createMock(StoreManagerInterface::class);
+        $this->storeManager = $this->getMockForAbstractClass(StoreManagerInterface::class);
 
         $this->settingsChecker = $this
             ->createMock(SettingChecker::class);
 
         $this->scopeResolverPool = $this->createMock(ScopeResolverPool::class);
-        $this->scopeResolver = $this->createMock(ScopeResolverInterface::class);
+        $this->scopeResolver = $this->getMockForAbstractClass(ScopeResolverInterface::class);
         $this->scopeResolverPool->method('get')
             ->willReturn($this->scopeResolver);
-        $this->scope = $this->createMock(ScopeInterface::class);
+        $this->scope = $this->getMockForAbstractClass(ScopeInterface::class);
         $this->scopeResolver->method('getScope')
             ->willReturn($this->scope);
 
         $this->scopeTypeNormalizer = $this->createMock(ScopeTypeNormalizer::class);
 
-        $stubPillPut = $this->createMock(PoisonPillPutInterface::class);
+        $stubPillPut = $this->getMockForAbstractClass(PoisonPillPutInterface::class);
 
         $this->model = new Config(
             $this->appConfigMock,

@@ -180,7 +180,7 @@ class QuantityTest extends TestCase
     {
         $this->remoteAddressMock->expects($this->any())
             ->method('getRemoteAddress')
-            ->will($this->returnValue(12345));
+            ->willReturn(12345);
 
         $this->securityConfigMock->expects($this->any())
             ->method('getPasswordResetProtectionType')

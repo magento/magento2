@@ -39,7 +39,7 @@ class AccessValidatorTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->userContextMock = $this->createMock(UserContextInterface::class);
+        $this->userContextMock = $this->getMockForAbstractClass(UserContextInterface::class);
         $this->entityManagerMock = $this->createMock(EntityManager::class);
         $this->bulkSummaryFactoryMock = $this->createPartialMock(
             BulkSummaryInterfaceFactory::class,
@@ -62,7 +62,7 @@ class AccessValidatorTest extends TestCase
     {
         $adminId = 1;
         $uuid = 'test-001';
-        $bulkSummaryMock = $this->createMock(BulkSummaryInterface::class);
+        $bulkSummaryMock = $this->getMockForAbstractClass(BulkSummaryInterface::class);
 
         $this->bulkSummaryFactoryMock->expects($this->once())->method('create')->willReturn($bulkSummaryMock);
         $this->entityManagerMock->expects($this->once())

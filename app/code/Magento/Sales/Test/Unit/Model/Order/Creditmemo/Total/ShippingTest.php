@@ -57,7 +57,7 @@ class ShippingTest extends TestCase
                 ]
             )->getMock();
 
-        $priceCurrencyMock = $this->createMock(PriceCurrencyInterface::class);
+        $priceCurrencyMock = $this->getMockForAbstractClass(PriceCurrencyInterface::class);
         $priceCurrencyMock->expects($this->any())
             ->method('round')
             ->willReturnCallback(

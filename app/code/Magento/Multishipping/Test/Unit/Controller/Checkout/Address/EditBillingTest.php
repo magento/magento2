@@ -99,8 +99,8 @@ class EditBillingTest extends TestCase
             $this->createMock(Multishipping::class);
         $this->titleMock = $this->createMock(Title::class);
         $this->layoutMock = $this->createMock(Layout::class);
-        $this->viewMock = $this->createMock(ViewInterface::class);
-        $this->objectManagerMock = $this->createMock(ObjectManagerInterface::class);
+        $this->viewMock = $this->getMockForAbstractClass(ViewInterface::class);
+        $this->objectManagerMock = $this->getMockForAbstractClass(ObjectManagerInterface::class);
         $this->stateMock =
             $this->createMock(State::class);
         $valueMap = [
@@ -131,7 +131,7 @@ class EditBillingTest extends TestCase
                 ->onlyMethods(['getTitle'])
                 ->disableOriginalConstructor()
                 ->getMock();
-        $this->urlMock = $this->createMock(UrlInterface::class);
+        $this->urlMock = $this->getMockForAbstractClass(UrlInterface::class);
         $contextMock->expects($this->any())->method('getUrl')->willReturn($this->urlMock);
         $this->pageMock = $this->createMock(Page::class);
         $this->pageMock->expects($this->any())->method('getConfig')->willReturn($this->configMock);

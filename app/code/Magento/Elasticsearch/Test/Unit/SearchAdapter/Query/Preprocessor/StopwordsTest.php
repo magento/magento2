@@ -70,7 +70,7 @@ class StopwordsTest extends TestCase
     {
         $this->storeManager = $this->getMockBuilder(StoreManagerInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->localeResolver = $this->getMockBuilder(\Magento\Framework\Locale\Resolver::class)
             ->disableOriginalConstructor()
             ->setMethods([
@@ -127,7 +127,7 @@ class StopwordsTest extends TestCase
             ]);
         $storeInterface = $this->getMockBuilder(StoreInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->storeManager->expects($this->once())
             ->method('getStore')
             ->willReturn($storeInterface);
@@ -186,7 +186,7 @@ class StopwordsTest extends TestCase
             ]);
         $storeInterface = $this->getMockBuilder(StoreInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->storeManager->expects($this->once())
             ->method('getStore')
             ->willReturn($storeInterface);

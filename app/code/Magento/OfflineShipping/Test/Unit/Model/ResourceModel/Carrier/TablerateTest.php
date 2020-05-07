@@ -57,9 +57,9 @@ class TablerateTest extends TestCase
     protected function setUp(): void
     {
         $contextMock = $this->createMock(Context::class);
-        $loggerMock = $this->createMock(LoggerInterface::class);
-        $coreConfigMock = $this->createMock(ScopeConfigInterface::class);
-        $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
+        $loggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
+        $coreConfigMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
+        $this->storeManagerMock = $this->getMockForAbstractClass(StoreManagerInterface::class);
         $carrierTablerateMock = $this->createMock(\Magento\OfflineShipping\Model\Carrier\Tablerate::class);
         $this->filesystemMock = $this->createMock(Filesystem::class);
         $this->importMock = $this->createMock(Import::class);
@@ -88,10 +88,10 @@ class TablerateTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $websiteMock = $this->createMock(WebsiteInterface::class);
-        $directoryReadMock = $this->createMock(ReadInterface::class);
+        $websiteMock = $this->getMockForAbstractClass(WebsiteInterface::class);
+        $directoryReadMock = $this->getMockForAbstractClass(ReadInterface::class);
         $fileReadMock = $this->createMock(\Magento\Framework\Filesystem\File\ReadInterface::class);
-        $connectionMock = $this->createMock(AdapterInterface::class);
+        $connectionMock = $this->getMockForAbstractClass(AdapterInterface::class);
 
         $this->storeManagerMock->expects($this->once())->method('getWebsite')->willReturn($websiteMock);
         $object->expects($this->once())->method('getScopeId')->willReturn(1);

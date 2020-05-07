@@ -59,7 +59,7 @@ class RecurringTest extends TestCase
     public function testInstall()
     {
         for ($i = 1; $i <= 3; $i++) {
-            $queue = $this->createMock(QueueConfigItemInterface::class);
+            $queue = $this->getMockForAbstractClass(QueueConfigItemInterface::class);
             $queue->expects($this->once())
                 ->method('getName')
                 ->willReturn('queue_name_' . $i);

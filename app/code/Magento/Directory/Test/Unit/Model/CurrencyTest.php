@@ -29,7 +29,7 @@ class CurrencyTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->localeCurrencyMock = $this->createMock(CurrencyInterface::class);
+        $this->localeCurrencyMock = $this->getMockForAbstractClass(CurrencyInterface::class);
 
         $objectManager = new ObjectManager($this);
         $this->currency = $objectManager->getObject(

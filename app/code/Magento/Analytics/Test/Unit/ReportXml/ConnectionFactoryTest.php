@@ -55,7 +55,7 @@ class ConnectionFactoryTest extends TestCase
     {
         $this->resourceConnectionMock = $this->createMock(ResourceConnection::class);
 
-        $this->objectManagerMock = $this->createMock(ObjectManagerInterface::class);
+        $this->objectManagerMock = $this->getMockForAbstractClass(ObjectManagerInterface::class);
 
         $this->connectionMock = $this->createMock(MysqlPdoAdapter::class);
 

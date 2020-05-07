@@ -92,17 +92,17 @@ class FrontControllerTest extends TestCase
             ->setMethods(['isDispatched', 'setDispatched', 'initForward', 'setActionName'])
             ->getMock();
 
-        $this->router = $this->createMock(RouterInterface::class);
+        $this->router = $this->getMockForAbstractClass(RouterInterface::class);
         $this->routerList = $this->createMock(RouterList::class);
         $this->response = $this->createMock(Http::class);
-        $this->requestValidator = $this->createMock(ValidatorInterface::class);
+        $this->requestValidator = $this->getMockForAbstractClass(ValidatorInterface::class);
         $this->messages = $this->createMock(MessageManager::class);
-        $this->logger = $this->createMock(LoggerInterface::class);
+        $this->logger = $this->getMockForAbstractClass(LoggerInterface::class);
         $this->appStateMock  = $this->getMockBuilder(State::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->areaListMock = $this->createMock(AreaList::class);
-        $this->areaMock = $this->createMock(AreaInterface::class);
+        $this->areaMock = $this->getMockForAbstractClass(AreaInterface::class);
         $this->model = new FrontController(
             $this->routerList,
             $this->response,

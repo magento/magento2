@@ -41,7 +41,7 @@ class ContentTest extends TestCase
     {
         $this->_helperStorage = $this->createMock(\Magento\Theme\Helper\Storage::class);
         $this->_urlBuilder = $this->createMock(Url::class);
-        $this->_request = $this->createMock(RequestInterface::class);
+        $this->_request = $this->getMockForAbstractClass(RequestInterface::class);
 
         $objectManagerHelper = new ObjectManager($this);
         $constructArguments = $objectManagerHelper->getConstructArguments(

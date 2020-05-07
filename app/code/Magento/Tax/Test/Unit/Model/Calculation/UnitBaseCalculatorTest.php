@@ -204,7 +204,7 @@ class UnitBaseCalculatorTest extends TestCase
         /** @var MockObject $mockItem */
         $mockItem = $this->getMockBuilder(QuoteDetailsItemInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $mockItem->expects($this->atLeastOnce())
             ->method('getDiscountAmount')
             ->willReturn(1);

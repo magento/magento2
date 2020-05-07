@@ -48,7 +48,7 @@ class DataTest extends TestCase
             Config::class
         )->disableOriginalConstructor()
             ->getMock();
-        $this->serializerMock = $this->createMock(SerializerInterface::class);
+        $this->serializerMock = $this->getMockForAbstractClass(SerializerInterface::class);
     }
 
     public function testGet()

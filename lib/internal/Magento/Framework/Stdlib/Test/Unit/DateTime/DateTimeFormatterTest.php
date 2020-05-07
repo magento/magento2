@@ -33,7 +33,7 @@ class DateTimeFormatterTest extends TestCase
         $this->objectManager = new ObjectManager($this);
         $this->localeResolverMock = $this->getMockBuilder(ResolverInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->localeResolverMock->expects($this->any())
             ->method('getLocale')
             ->willReturn('fr-FR');

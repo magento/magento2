@@ -76,7 +76,7 @@ class ProductPriceIndexFilterTest extends TestCase
     {
         $entityIds = [1, 2, 3];
         $indexTableStructure = $this->createMock(IndexTableStructure::class);
-        $connectionMock = $this->createMock(AdapterInterface::class);
+        $connectionMock = $this->getMockForAbstractClass(AdapterInterface::class);
         $this->resourceCnnection->expects($this->once())->method('getConnection')->willReturn($connectionMock);
         $selectMock = $this->createMock(Select::class);
         $connectionMock->expects($this->once())->method('select')->willReturn($selectMock);

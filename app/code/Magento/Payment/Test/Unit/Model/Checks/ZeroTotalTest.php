@@ -25,7 +25,7 @@ class ZeroTotalTest extends TestCase
         $paymentMethod = $this->getMockBuilder(MethodInterface::class)
             ->disableOriginalConstructor()
             ->setMethods([])
-            ->getMock();
+            ->getMockForAbstractClass();
 
         if (!$total) {
             $paymentMethod->expects($this->once())

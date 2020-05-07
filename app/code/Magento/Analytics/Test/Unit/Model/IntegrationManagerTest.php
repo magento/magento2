@@ -46,9 +46,9 @@ class IntegrationManagerTest extends TestCase
     protected function setUp(): void
     {
         $objectManagerHelper = new ObjectManagerHelper($this);
-        $this->integrationServiceMock = $this->createMock(IntegrationServiceInterface::class);
+        $this->integrationServiceMock = $this->getMockForAbstractClass(IntegrationServiceInterface::class);
         $this->configMock = $this->createMock(Config::class);
-        $this->oauthServiceMock = $this->createMock(OauthServiceInterface::class);
+        $this->oauthServiceMock = $this->getMockForAbstractClass(OauthServiceInterface::class);
         $this->integrationMock = $this->getMockBuilder(Integration::class)
             ->disableOriginalConstructor()
             ->setMethods([

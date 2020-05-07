@@ -22,7 +22,7 @@ class BareTest extends TestCase
      */
     public function testProxyMethod($method, $params, $expectedResult)
     {
-        $frontendMock = $this->createMock(FrontendInterface::class);
+        $frontendMock = $this->getMockForAbstractClass(FrontendInterface::class);
 
         $object = new Bare($frontendMock);
         $helper = new ProxyTesting();

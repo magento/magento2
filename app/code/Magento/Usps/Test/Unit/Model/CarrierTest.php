@@ -85,7 +85,7 @@ class CarrierTest extends TestCase
 
         $this->scope = $this->getMockBuilder(ScopeConfigInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->scope->method('getValue')
             ->willReturnCallback([$this, 'scopeConfiggetValue']);

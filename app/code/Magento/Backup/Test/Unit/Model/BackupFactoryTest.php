@@ -61,7 +61,7 @@ class BackupFactoryTest extends TestCase
 
         $this->_backupModel = $this->createMock(Backup::class);
 
-        $this->_objectManager = $this->createMock(ObjectManagerInterface::class);
+        $this->_objectManager = $this->getMockForAbstractClass(ObjectManagerInterface::class);
         $this->_objectManager->expects(
             $this->at(0)
         )->method(
@@ -89,26 +89,26 @@ class BackupFactoryTest extends TestCase
         $this->_backupModel->expects($this->once())
             ->method('setType')
             ->with($this->_data['type'])
-            ->will($this->returnSelf());
+            ->willReturnSelf();
 
         $this->_backupModel->expects($this->once())
             ->method('setTime')
             ->with($this->_data['time'])
-            ->will($this->returnSelf());
+            ->willReturnSelf();
 
         $this->_backupModel->expects($this->once())
             ->method('setName')
             ->with($this->_data['name'])
-            ->will($this->returnSelf());
+            ->willReturnSelf();
 
         $this->_backupModel->expects($this->once())
             ->method('setPath')
             ->with($this->_data['path'])
-            ->will($this->returnSelf());
+            ->willReturnSelf();
 
         $this->_backupModel->expects($this->once())
             ->method('setData')
-            ->will($this->returnSelf());
+            ->willReturnSelf();
 
         $this->_instance->create('1385661590', 'snapshot');
     }

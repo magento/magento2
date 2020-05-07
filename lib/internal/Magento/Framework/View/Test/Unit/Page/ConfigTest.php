@@ -99,9 +99,9 @@ class ConfigTest extends TestCase
         $this->assetRepo = $this->createMock(Repository::class);
         $this->pageAssets = $this->createMock(GroupedCollection::class);
         $this->scopeConfig =
-            $this->createMock(ScopeConfigInterface::class);
-        $this->favicon = $this->createMock(FaviconInterface::class);
-        $this->builder = $this->createMock(BuilderInterface::class);
+            $this->getMockForAbstractClass(ScopeConfigInterface::class);
+        $this->favicon = $this->getMockForAbstractClass(FaviconInterface::class);
+        $this->builder = $this->getMockForAbstractClass(BuilderInterface::class);
         $this->asset = $this->createMock(File::class);
         $this->remoteAsset = $this->createMock(Remote::class);
         $this->title = $this->createMock(Title::class);

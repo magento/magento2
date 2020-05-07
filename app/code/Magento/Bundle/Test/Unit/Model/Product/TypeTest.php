@@ -27,7 +27,6 @@ use Magento\CatalogInventory\Api\StockRegistryInterface;
 use Magento\CatalogInventory\Api\StockStateInterface;
 use Magento\CatalogInventory\Model\StockRegistry;
 use Magento\CatalogInventory\Model\StockState;
-use Magento\CatalogRule\Model\ResourceModel\Product\CollectionProcessor;
 use Magento\Framework\DataObject;
 use Magento\Framework\EntityManager\EntityMetadataInterface;
 use Magento\Framework\EntityManager\MetadataPool;
@@ -144,7 +143,7 @@ class TypeTest extends TestCase
             ->getMock();
         $this->storeManager = $this->getMockBuilder(StoreManagerInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->bundleOptionFactory = $this->getMockBuilder(OptionFactory::class)
             ->setMethods(['create'])
             ->disableOriginalConstructor()
@@ -171,12 +170,6 @@ class TypeTest extends TestCase
             ->getMock();
         $this->bundleFactory = $this->getMockBuilder(BundleFactory::class)
             ->setMethods(['create'])
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->catalogRuleProcessor = $this->getMockBuilder(
-            CollectionProcessor::class
-        )
             ->disableOriginalConstructor()
             ->getMock();
 

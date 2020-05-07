@@ -46,7 +46,7 @@ class CollectionTest extends TestCase
     protected function setUp(): void
     {
         $this->entityFactoryMock = $this->createMock(EntityFactory::class);
-        $this->timezoneMock = $this->createMock(TimezoneInterface::class);
+        $this->timezoneMock = $this->getMockForAbstractClass(TimezoneInterface::class);
         $this->factoryMock = $this->createMock(ReportCollectionFactory::class);
 
         $this->timezoneMock->method('formatDate')
@@ -74,7 +74,7 @@ class CollectionTest extends TestCase
     public function testGetStoreIds()
     {
         $storeIds = [1];
-        $this->assertEquals(null, $this->collection->getStoreIds());
+        $this->assertNull($this->collection->getStoreIds());
         $this->collection->setStoreIds($storeIds);
         $this->assertEquals($storeIds, $this->collection->getStoreIds());
     }
@@ -100,7 +100,7 @@ class CollectionTest extends TestCase
     public function testGetPageSize()
     {
         $pageSize = 1;
-        $this->assertEquals(null, $this->collection->getPageSize());
+        $this->assertNull($this->collection->getPageSize());
         $this->collection->setPageSize($pageSize);
         $this->assertEquals($pageSize, $this->collection->getPageSize());
     }

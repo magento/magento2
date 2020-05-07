@@ -76,12 +76,12 @@ class SamplesTest extends TestCase
     protected function setUp(): void
     {
         $this->objectManagerHelper = new ObjectManagerHelper($this);
-        $this->locatorMock = $this->createMock(LocatorInterface::class);
-        $this->productMock = $this->createMock(ProductInterface::class);
+        $this->locatorMock = $this->getMockForAbstractClass(LocatorInterface::class);
+        $this->productMock = $this->getMockForAbstractClass(ProductInterface::class);
         $this->samplesDataMock = $this->createMock(SamplesData::class);
-        $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
+        $this->storeManagerMock = $this->getMockForAbstractClass(StoreManagerInterface::class);
         $this->typeUploadMock = $this->createMock(TypeUpload::class);
-        $this->urlBuilderMock = $this->createMock(UrlInterface::class);
+        $this->urlBuilderMock = $this->getMockForAbstractClass(UrlInterface::class);
         $this->arrayManagerMock = $this->createMock(ArrayManager::class);
         $this->samples = $this->objectManagerHelper->getObject(
             Samples::class,

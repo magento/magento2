@@ -92,7 +92,7 @@ class IndexNameResolverTest extends TestCase
 
         $this->logger = $this->getMockBuilder(LoggerInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $elasticsearchClientMock = $this->getMockBuilder(Client::class)
             ->setMethods([

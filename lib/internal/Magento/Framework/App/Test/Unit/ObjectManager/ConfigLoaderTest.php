@@ -65,7 +65,7 @@ class ConfigLoaderTest extends TestCase
                 'readerFactory' => $this->readerFactoryMock,
             ]
         );
-        $this->serializerMock = $this->createMock(SerializerInterface::class);
+        $this->serializerMock = $this->getMockForAbstractClass(SerializerInterface::class);
         $objectManagerHelper->setBackwardCompatibleProperty(
             $this->object,
             'serializer',

@@ -71,11 +71,11 @@ class ConfigTest extends TestCase
     protected function setUp(): void
     {
         $this->readerMock = $this->createMock(Dom::class);
-        $this->configScopeMock = $this->createMock(ScopeListInterface::class);
+        $this->configScopeMock = $this->getMockForAbstractClass(ScopeListInterface::class);
         $this->omConfigMock = $this->getMockForAbstractClass(
             ConfigInterface::class
         );
-        $this->definitionMock = $this->createMock(DefinitionInterface::class);
+        $this->definitionMock = $this->getMockForAbstractClass(DefinitionInterface::class);
         $this->relationsMock = $this->getMockForAbstractClass(
             RelationsInterface::class
         );

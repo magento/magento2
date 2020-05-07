@@ -41,7 +41,7 @@ class SchemaPersistorTest extends TestCase
      */
     private $xmlPersistor;
 
-    protected function setUp() : void
+    protected function setUp(): void
     {
         $this->componentRegistrarMock = $this->getMockBuilder(ComponentRegistrar::class)
             ->disableOriginalConstructor()

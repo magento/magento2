@@ -44,7 +44,7 @@ class SectionTest extends TestCase
         $this->elementVisibilityMock = $this->getMockBuilder(ElementVisibilityInterface::class)
             ->getMockForAbstractClass();
         $this->_storeManagerMock = $this->createMock(StoreManager::class);
-        $this->_authorizationMock = $this->createMock(AuthorizationInterface::class);
+        $this->_authorizationMock = $this->getMockForAbstractClass(AuthorizationInterface::class);
 
         $this->_model = $objectManager->getObject(
             Section::class,

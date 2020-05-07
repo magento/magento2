@@ -154,7 +154,7 @@ class FactoryTest extends TestCase
             }
         };
         /** @var MockObject $objectManager */
-        $objectManager = $this->createMock(ObjectManagerInterface::class);
+        $objectManager = $this->getMockForAbstractClass(ObjectManagerInterface::class);
         $objectManager->expects($this->any())->method('create')->willReturnCallback($processFrontendFunc);
 
         $dirMock = $this->getMockForAbstractClass(ReadInterface::class);

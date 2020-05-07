@@ -65,7 +65,7 @@ class AbstractSearchResultTest extends TestCase
         );
         $this->eventManagerMock = $this->getMockBuilder(ManagerInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->searchResultIteratorMock = $this->getMockBuilder(
             SearchResultIteratorFactory::class
         )->disableOriginalConstructor()

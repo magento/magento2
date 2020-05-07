@@ -77,7 +77,7 @@ class WebsiteRepositoryTest extends TestCase
         $websiteMock = $this->getMockBuilder(WebsiteInterface::class)
             ->disableOriginalConstructor()
             ->setMethods([])
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->appConfigMock->expects($this->once())
             ->method('get')
             ->with('scopes', 'websites')
@@ -106,7 +106,7 @@ class WebsiteRepositoryTest extends TestCase
         $websiteMock = $this->getMockBuilder(WebsiteInterface::class)
             ->disableOriginalConstructor()
             ->setMethods([])
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->appConfigMock->expects($this->once())
             ->method('get')
             ->with('scopes', 'websites')
@@ -136,7 +136,7 @@ class WebsiteRepositoryTest extends TestCase
         $websiteMock = $this->getMockBuilder(WebsiteInterface::class)
             ->disableOriginalConstructor()
             ->setMethods([])
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->appConfigMock->expects($this->once())
             ->method('get')
             ->with('scopes', 'websites')

@@ -89,8 +89,8 @@ class DataTest extends TestCase
 
     public function testGetAmount()
     {
-        $this->product->method('hasData')->will($this->returnValue(false));
-        $this->product->method('getData')->will($this->returnValue(11.26));
+        $this->product->method('hasData')->willReturn(false);
+        $this->product->method('getData')->willReturn(11.26);
 
         $this->assertEquals('11.26', $this->helperData->getAmountExclTax($this->product));
     }
@@ -245,7 +245,7 @@ class DataTest extends TestCase
         $expectedArray = [$prodId1 => [$fptCode1 => $expectedObject1], $prodId2 => [$fptCode2 => $expectedObject2]];
         $this->weeeTax
             ->method('getProductWeeeAttributes')
-            ->will($this->returnValue([$weeeObject1, $weeeObject2]));
+            ->willReturn([$weeeObject1, $weeeObject2]);
         $this->taxData
             ->method('getPriceDisplayType')
             ->willReturn($priceDisplay);
@@ -277,16 +277,16 @@ class DataTest extends TestCase
         );
         $product
             ->method('getTypeInstance')
-            ->will($this->returnValue($productInstance));
+            ->willReturn($productInstance);
         $product
             ->method('getStoreId')
-            ->will($this->returnValue(1));
+            ->willReturn(1);
         $product
             ->method('getStore')
-            ->will($this->returnValue($store));
+            ->willReturn($store);
         $product
             ->method('getTypeId')
-            ->will($this->returnValue('bundle'));
+            ->willReturn('bundle');
 
         $registry = $this->createMock(Registry::class);
         $registry
@@ -462,7 +462,7 @@ class DataTest extends TestCase
         $store = $this->createMock(Store::class);
         $this->product
             ->method('getStore')
-            ->will($this->returnValue($store));
+            ->willReturn($store);
 
         $result = $this->helperData->getProductWeeeAttributesForDisplay($this->product);
         $this->assertNull($result);

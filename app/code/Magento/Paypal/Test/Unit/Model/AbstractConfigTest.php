@@ -342,7 +342,7 @@ class AbstractConfigTest extends TestCase
     {
         $productMetadata = $this->getMockBuilder(ProductMetadataInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $productMetadata->method('getEdition')
             ->willReturn('SomeEdition');
 

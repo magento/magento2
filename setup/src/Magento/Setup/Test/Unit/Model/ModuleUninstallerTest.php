@@ -98,7 +98,7 @@ class ModuleUninstallerTest extends TestCase
             $this->moduleRegistryUninstaller
         );
 
-        $this->output = $this->createMock(OutputInterface::class);
+        $this->output = $this->getMockForAbstractClass(OutputInterface::class);
     }
 
     public function testUninstallRemoveData()

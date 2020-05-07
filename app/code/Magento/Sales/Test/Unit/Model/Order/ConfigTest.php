@@ -56,7 +56,7 @@ class ConfigTest extends TestCase
     {
         $objectManager = new ObjectManager($this);
 
-        $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
+        $this->storeManagerMock = $this->getMockForAbstractClass(StoreManagerInterface::class);
         $this->orderStatusModel = $objectManager->getObject(Status::class, [
             'storeManager' => $this->storeManagerMock,
         ]);
@@ -205,7 +205,7 @@ class ConfigTest extends TestCase
         $this->statusFactoryMock->method('load')
             ->willReturn($this->orderStatusModel);
 
-        $storeMock = $this->createMock(StoreInterface::class);
+        $storeMock = $this->getMockForAbstractClass(StoreInterface::class);
         $storeMock->method('getId')
             ->willReturn(1);
 

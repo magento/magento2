@@ -57,7 +57,7 @@ class CronEventTest extends TestCase
 
         $this->jsonEncoderMock = $this->getMockBuilder(EncoderInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->configMock = $this->getMockBuilder(Config::class)
             ->setMethods([

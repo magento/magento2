@@ -79,7 +79,7 @@ class AttributeRepositoryTest extends TestCase
             '',
             false
         );
-        $this->option = $this->createMock(OptionInterface::class);
+        $this->option = $this->getMockForAbstractClass(OptionInterface::class);
 
         $this->attributeFilter = $this->createMock(Filter::class);
 

@@ -40,7 +40,7 @@ class ModeTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->configMock = $this->createMock(ScopeConfigInterface::class);
+        $this->configMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
         $this->indexerStateMock = $this->createPartialMock(
             State::class,
             ['loadByIndexer', 'setStatus', 'save']

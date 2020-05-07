@@ -62,9 +62,9 @@ class IndexerSetDimensionsModeCommandTest extends AbstractIndexerCommandCommonSe
     {
         parent::setUp();
         $objectManagerHelper = new ObjectManagerHelper($this);
-        $this->configReaderMock = $this->createMock(ScopeConfigInterface::class);
+        $this->configReaderMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
         $this->dimensionModeSwitcherMock =
-            $this->createMock(ModeSwitcherInterface::class);
+            $this->getMockForAbstractClass(ModeSwitcherInterface::class);
         $this->dimensionProviders = [
             'indexer_title' => $this->dimensionModeSwitcherMock,
         ];

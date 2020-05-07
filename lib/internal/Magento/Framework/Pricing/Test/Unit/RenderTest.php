@@ -96,7 +96,7 @@ class RenderTest extends TestCase
         $this->priceLayout->expects($this->once())
             ->method('loadLayout');
 
-        $layout = $this->createMock(LayoutInterface::class);
+        $layout = $this->getMockForAbstractClass(LayoutInterface::class);
         $this->model->setPriceRenderHandle($priceRenderHandle);
         $this->model->setLayout($layout);
     }

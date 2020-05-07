@@ -127,7 +127,7 @@ class MassChangelogTest extends TestCase
         $this->response = $this->getMockBuilder(ResponseInterface::class)
             ->addMethods(['setRedirect'])
             ->onlyMethods(['sendResponse'])
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->view = $this->getMockBuilder(ViewInterface::class)
             ->addMethods(['getConfig', 'getTitle'])
@@ -145,7 +145,7 @@ class MassChangelogTest extends TestCase
                 'setIsLayoutLoaded',
                 'isLayoutLoaded'
             ])
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->session = $this->getMockBuilder(Session::class)
             ->addMethods(['setIsUrlNotice'])
@@ -202,16 +202,16 @@ class MassChangelogTest extends TestCase
         $this->model = new MassChangelog($this->contextMock);
         $this->request->expects($this->any())
             ->method('getParam')->with('indexer_ids')
-            ->will($this->returnValue($indexerIds));
+            ->willReturn($indexerIds);
 
         if (!is_array($indexerIds)) {
             $this->messageManager->expects($this->once())
                 ->method('addError')->with(__('Please select indexers.'))
-                ->will($this->returnValue(1));
+                ->willReturn(1);
         } else {
             $this->objectManager->expects($this->any())
                 ->method('get')->with(IndexerRegistry::class)
-                ->will($this->returnValue($this->indexReg));
+                ->willReturn($this->indexReg);
             $indexerInterface = $this->getMockForAbstractClass(
                 IndexerInterface::class,
                 ['setScheduled'],
@@ -220,7 +220,7 @@ class MassChangelogTest extends TestCase
             );
             $this->indexReg->expects($this->any())
                 ->method('get')->with(1)
-                ->will($this->returnValue($indexerInterface));
+                ->willReturn($indexerInterface);
 
             if ($exception !== null) {
                 $indexerInterface->expects($this->any())
@@ -230,7 +230,7 @@ class MassChangelogTest extends TestCase
                     ->method('setScheduled')->with(true)->willReturn(1);
             }
 
-            $this->messageManager->expects($this->any())->method('addSuccess')->will($this->returnValue(1));
+            $this->messageManager->expects($this->any())->method('addSuccess')->willReturn(1);
 
             if ($exception !== null) {
                 $this->messageManager

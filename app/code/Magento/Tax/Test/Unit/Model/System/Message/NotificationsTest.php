@@ -57,10 +57,10 @@ class NotificationsTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
-        $this->urlBuilderMock = $this->createMock(UrlInterface::class);
+        $this->storeManagerMock = $this->getMockForAbstractClass(StoreManagerInterface::class);
+        $this->urlBuilderMock = $this->getMockForAbstractClass(UrlInterface::class);
         $this->taxConfigMock = $this->createMock(TaxConfig::class);
-        $this->notificationMock = $this->createMock(NotificationInterface::class);
+        $this->notificationMock = $this->getMockForAbstractClass(NotificationInterface::class);
         $this->escaperMock = $this->createMock(Escaper::class);
         $this->notifications = (new ObjectManager($this))->getObject(
             Notifications::class,

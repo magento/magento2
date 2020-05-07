@@ -69,8 +69,8 @@ class PriceBoxTest extends TestCase
             ->setMethods(['createAmountRender'])
             ->getMock();
 
-        $layout = $this->createMock(LayoutInterface::class);
-        $eventManager = $this->createMock(ManagerInterface::class);
+        $layout = $this->getMockForAbstractClass(LayoutInterface::class);
+        $eventManager = $this->getMockForAbstractClass(ManagerInterface::class);
         $scopeConfigMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
         $cacheState = $this->getMockBuilder(StateInterface::class)
             ->getMockForAbstractClass();
@@ -97,9 +97,9 @@ class PriceBoxTest extends TestCase
             ->method('getCacheState')
             ->willReturn($cacheState);
 
-        $this->saleable = $this->createMock(SaleableInterface::class);
+        $this->saleable = $this->getMockForAbstractClass(SaleableInterface::class);
 
-        $this->price = $this->createMock(PriceInterface::class);
+        $this->price = $this->getMockForAbstractClass(PriceInterface::class);
 
         $this->model = $this->objectManager->getObject(
             PriceBox::class,
@@ -170,7 +170,7 @@ class PriceBoxTest extends TestCase
     {
         $priceCode = 'test_price';
 
-        $price = $this->createMock(PriceInterface::class);
+        $price = $this->getMockForAbstractClass(PriceInterface::class);
 
         $priceInfo = $this->createMock(Base::class);
         $priceInfo->expects($this->once())
@@ -187,7 +187,7 @@ class PriceBoxTest extends TestCase
 
     public function testRenderAmount()
     {
-        $amount = $this->createMock(AmountInterface::class);
+        $amount = $this->getMockForAbstractClass(AmountInterface::class);
         $arguments = [];
         $resultHtml = 'result_html';
 

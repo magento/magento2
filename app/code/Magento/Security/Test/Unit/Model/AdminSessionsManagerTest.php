@@ -108,7 +108,7 @@ class AdminSessionsManagerTest extends TestCase
 
         $this->securityConfigMock = $this->getMockBuilder(ConfigInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->userMock = $this->createPartialMock(User::class, ['getId']);
 
@@ -346,7 +346,7 @@ class AdminSessionsManagerTest extends TestCase
             ->willReturn($this->currentSessionMock);
         $this->currentSessionMock->expects($this->once())
             ->method('getStatus')
-            ->will($this->returnValue($sessionStatus));
+            ->willReturn($sessionStatus);
 
         $this->assertEquals($expectedResult, $this->model->getLogoutReasonMessage());
     }

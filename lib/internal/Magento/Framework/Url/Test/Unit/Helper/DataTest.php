@@ -31,7 +31,7 @@ class DataTest extends TestCase
     {
         $urlBuilderMock = $this->getMockBuilder(UrlInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $url = 'http://example.com';
         $urlBuilderMock->expects($this->once())
             ->method('getCurrentUrl')
@@ -39,7 +39,7 @@ class DataTest extends TestCase
         $encodedUrl = 'encodedUrl';
         $urlEncoder = $this->getMockBuilder(EncoderInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $urlEncoder->expects($this->once())
             ->method('encode')
             ->willReturn($encodedUrl);
@@ -64,7 +64,7 @@ class DataTest extends TestCase
     {
         $urlBuilderMock = $this->getMockBuilder(UrlInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $encodingUrl = $url ? $url : 'http://example.com';
         $urlBuilderMock->expects($this->exactly($callNum))
             ->method('getCurrentUrl')
@@ -72,7 +72,7 @@ class DataTest extends TestCase
         $encodedUrl = 'encodedUrl';
         $urlEncoder = $this->getMockBuilder(EncoderInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $urlEncoder->expects($this->once())
             ->method('encode')
             ->willReturn($encodedUrl);

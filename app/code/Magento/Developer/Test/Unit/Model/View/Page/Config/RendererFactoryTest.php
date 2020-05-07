@@ -51,7 +51,7 @@ class RendererFactoryTest extends TestCase
             ->getMockForAbstractClass();
         $this->rendererMock = $this->getMockBuilder(RendererInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->stateMock = $this->getMockBuilder(State::class)
             ->disableOriginalConstructor()
             ->getMock();

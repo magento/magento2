@@ -100,11 +100,11 @@ class FormTest extends TestCase
 
         $this->taxRuleRepository = $this->getMockBuilder(TaxRuleRepositoryInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->taxClassRepository = $this->getMockBuilder(TaxClassRepositoryInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->taxClassCustomer = $this->getMockBuilder(Customer::class)
             ->disableOriginalConstructor()
@@ -116,7 +116,7 @@ class FormTest extends TestCase
 
         $this->urlBuilder = $this->getMockBuilder(UrlInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->form = $objectManagerHelper->getObject(Form::class, [
             'context' => $this->context,

@@ -70,7 +70,7 @@ class TermDropdownStrategyTest extends TestCase
         $searchFilter = $this->getMockBuilder(FilterInterface::class)
             ->addMethods(['getField'])
             ->onlyMethods(['getType', 'getName'])
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $select = $this->createMock(Select::class);
         $attribute = $this->createMock(Attribute::class);

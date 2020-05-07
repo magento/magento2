@@ -42,7 +42,7 @@ class PackagesAuthTest extends TestCase
 
     protected function setUp(): void
     {
-        $laminasServiceLocator = $this->createMock(ServiceLocatorInterface::class);
+        $laminasServiceLocator = $this->getMockForAbstractClass(ServiceLocatorInterface::class);
         $laminasServiceLocator
             ->expects($this->any())
             ->method('get')

@@ -117,7 +117,7 @@ class PrintLabelTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->actionFlag = $this->createPartialMock(ActionFlag::class, ['get']);
-        $this->objectManagerMock = $this->createMock(ObjectManagerInterface::class);
+        $this->objectManagerMock = $this->getMockForAbstractClass(ObjectManagerInterface::class);
         $this->helperMock = $this->createPartialMock(Data::class, ['getUrl']);
         $contextMock = $this->createPartialMock(Context::class, [
             'getRequest',
@@ -284,7 +284,7 @@ class PrintLabelTest extends TestCase
         $labelContent = 'Label-content';
         $incrementId = '1000001';
 
-        $loggerMock = $this->createMock(LoggerInterface::class);
+        $loggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
 
         $this->shipmentLoaderMock->expects($this->once())
             ->method('load')

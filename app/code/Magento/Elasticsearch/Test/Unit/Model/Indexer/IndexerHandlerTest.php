@@ -97,7 +97,7 @@ class IndexerHandlerTest extends TestCase
 
         $this->indexStructure = $this->getMockBuilder(IndexStructureInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->indexNameResolver = $this->getMockBuilder(
             IndexNameResolver::class
@@ -108,7 +108,7 @@ class IndexerHandlerTest extends TestCase
         $this->client = $this->getMockBuilder(ClientInterface::class)
             ->setMethods(['ping', 'testConnection','prepareDocsPerStore','addDocs', 'cleanIndex'])
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->scopeResolver = $this->getMockForAbstractClass(
             ScopeResolverInterface::class,

@@ -72,8 +72,8 @@ class NotifyStockTest extends TestCase
             ->setMethods(['getProductsCollection'])
             ->disableOriginalConstructor()
             ->getMock();
-        $this->rssUrlBuilder = $this->createMock(UrlBuilderInterface::class);
-        $this->urlBuilder = $this->createMock(UrlInterface::class);
+        $this->rssUrlBuilder = $this->getMockForAbstractClass(UrlBuilderInterface::class);
+        $this->urlBuilder = $this->getMockForAbstractClass(UrlInterface::class);
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->block = $this->objectManagerHelper->getObject(
             NotifyStock::class,

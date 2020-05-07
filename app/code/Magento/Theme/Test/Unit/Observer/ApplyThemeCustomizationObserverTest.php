@@ -63,7 +63,7 @@ class ApplyThemeCustomizationObserverTest extends TestCase
             $this->themeCustomization
         );
 
-        $designMock = $this->createMock(DesignInterface::class);
+        $designMock = $this->getMockForAbstractClass(DesignInterface::class);
         $designMock->expects($this->any())->method('getDesignTheme')->willReturn($themeMock);
 
         $this->assetsMock = $this->createMock(GroupedCollection::class);

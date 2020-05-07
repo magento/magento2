@@ -98,7 +98,7 @@ class RateRepositoryTest extends TestCase
             TaxRuleSearchResultsInterfaceFactory::class,
             ['create']
         );
-        $this->searchResultMock = $this->createMock(TaxRuleSearchResultsInterface::class);
+        $this->searchResultMock = $this->getMockForAbstractClass(TaxRuleSearchResultsInterface::class);
         $this->rateFactoryMock = $this->createPartialMock(
             RateFactory::class,
             ['create']
@@ -224,8 +224,8 @@ class RateRepositoryTest extends TestCase
 
     public function testGetList()
     {
-        $searchCriteriaMock = $this->createMock(SearchCriteriaInterface::class);
-        $searchCriteriaMock = $this->createMock(SearchCriteriaInterface::class);
+        $searchCriteriaMock = $this->getMockForAbstractClass(SearchCriteriaInterface::class);
+        $searchCriteriaMock = $this->getMockForAbstractClass(SearchCriteriaInterface::class);
         $rateMock = $this->getTaxRateMock([]);
 
         $objectManager = new ObjectManager($this);
@@ -235,7 +235,7 @@ class RateRepositoryTest extends TestCase
             $items
         );
         $collectionMock->expects($this->once())->method('joinRegionTable');
-        $collectionMock->expects($this->once())->method('getSize')->will($this->returnValue(count($items)));
+        $collectionMock->expects($this->once())->method('getSize')->willReturn(count($items));
 
         $this->rateFactoryMock->expects($this->once())->method('create')->willReturn($rateMock);
         $rateMock->expects($this->any())->method('getCollection')->willReturn($collectionMock);
@@ -348,7 +348,7 @@ class RateRepositoryTest extends TestCase
 
     public function testGetListWhenFilterGroupExists()
     {
-        $searchCriteriaMock = $this->createMock(SearchCriteriaInterface::class);
+        $searchCriteriaMock = $this->getMockForAbstractClass(SearchCriteriaInterface::class);
         $objectManager = new ObjectManager($this);
         $rateMock = $this->getTaxRateMock([]);
         $items = [$rateMock];
@@ -361,7 +361,7 @@ class RateRepositoryTest extends TestCase
             ->method('process')
             ->with($searchCriteriaMock, $collectionMock);
         $collectionMock->expects($this->once())->method('joinRegionTable');
-        $collectionMock->expects($this->once())->method('getSize')->will($this->returnValue(count($items)));
+        $collectionMock->expects($this->once())->method('getSize')->willReturn(count($items));
 
         $this->rateFactoryMock->expects($this->once())->method('create')->willReturn($rateMock);
         $rateMock->expects($this->any())->method('getCollection')->willReturn($collectionMock);

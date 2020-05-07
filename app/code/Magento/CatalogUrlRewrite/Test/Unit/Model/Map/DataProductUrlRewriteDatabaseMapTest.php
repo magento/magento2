@@ -70,7 +70,7 @@ class DataProductUrlRewriteDatabaseMapTest extends TestCase
             '5' => ['store_id' => 2, 'product_id' => 2],
         ];
 
-        $connectionMock = $this->createMock(AdapterInterface::class);
+        $connectionMock = $this->getMockForAbstractClass(AdapterInterface::class);
         $selectMock = $this->createMock(Select::class);
 
         $this->connectionMock->expects($this->any())

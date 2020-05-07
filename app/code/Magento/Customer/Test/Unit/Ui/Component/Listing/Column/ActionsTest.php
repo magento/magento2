@@ -32,7 +32,7 @@ class ActionsTest extends TestCase
     /** @var UrlInterface|MockObject */
     protected $urlBuilder;
 
-    protected function setup():void
+    protected function setup(): void
     {
         $this->context = $this->getMockBuilder(ContextInterface::class)
             ->getMockForAbstractClass();

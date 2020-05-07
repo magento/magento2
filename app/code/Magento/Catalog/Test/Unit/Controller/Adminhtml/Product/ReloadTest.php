@@ -93,7 +93,7 @@ class ReloadTest extends TestCase
             ->getMock();
         $this->layoutMock = $this->getMockBuilder(LayoutInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->requestMock = $this->getMockBuilder(RequestInterface::class)
             ->getMockForAbstractClass();
         $this->productBuilderMock = $this->getMockBuilder(Builder::class)

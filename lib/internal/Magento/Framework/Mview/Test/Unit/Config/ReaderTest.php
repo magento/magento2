@@ -48,7 +48,7 @@ class ReaderTest extends TestCase
             ->willReturn('test_folder');
         $schemaLocator = new SchemaLocator($urnResolverMock);
 
-        $validationState = $this->createMock(ValidationStateInterface::class);
+        $validationState = $this->getMockForAbstractClass(ValidationStateInterface::class);
         $validationState->expects($this->any())
             ->method('isValidationRequired')
             ->willReturn(false);

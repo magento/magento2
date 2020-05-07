@@ -58,7 +58,7 @@ class ImageTest extends MediaTest
 
         $this->store = $this->getMockBuilder(StoreInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->store->expects($this->any())->method('getId')->willReturn(0);
 

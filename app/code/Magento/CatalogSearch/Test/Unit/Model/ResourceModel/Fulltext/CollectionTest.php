@@ -95,6 +95,7 @@ class CollectionTest extends BaseCollection
      */
     protected function setUp(): void
     {
+        $this->markTestSkipped("MC-18332: Mysql Search Engine is deprecated and will be removed");
         $this->objectManager = new ObjectManager($this);
         $this->storeManager = $this->getStoreManager();
         $this->universalFactory = $this->getUniversalFactory();

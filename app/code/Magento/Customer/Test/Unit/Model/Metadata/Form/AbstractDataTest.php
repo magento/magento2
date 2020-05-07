@@ -61,7 +61,7 @@ class AbstractDataTest extends TestCase
             ->getMock();
         $this->_loggerMock = $this->getMockBuilder(LoggerInterface::class)
             ->getMock();
-        $this->_attributeMock = $this->createMock(AttributeMetadataInterface::class);
+        $this->_attributeMock = $this->getMockForAbstractClass(AttributeMetadataInterface::class);
         $this->_value = 'VALUE';
         $this->_entityTypeCode = 'ENTITY_TYPE_CODE';
         $this->_isAjax = false;

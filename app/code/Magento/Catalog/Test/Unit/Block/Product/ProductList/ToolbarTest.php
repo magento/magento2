@@ -102,7 +102,7 @@ class ToolbarTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->urlBuilder = $this->createPartialMock(Url::class, ['getUrl']);
-        $this->scopeConfig = $this->createMock(ScopeConfigInterface::class);
+        $this->scopeConfig = $this->getMockForAbstractClass(ScopeConfigInterface::class);
 
         $scopeConfig = [
             [Config::XML_PATH_LIST_DEFAULT_SORT_BY, null, 'name'],

@@ -75,7 +75,7 @@ class DataTest extends TestCase
             ['getItems']
         );
 
-        $this->serializerMock = $this->createMock(SerializerInterface::class);
+        $this->serializerMock = $this->getMockForAbstractClass(SerializerInterface::class);
     }
 
     public function testConstructorWithCache()

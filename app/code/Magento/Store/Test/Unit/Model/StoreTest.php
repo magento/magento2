@@ -110,7 +110,7 @@ class StoreTest extends TestCase
             ]
         );
 
-        $this->urlModifierMock = $this->createMock(ModifierInterface::class);
+        $this->urlModifierMock = $this->getMockForAbstractClass(ModifierInterface::class);
         $this->urlModifierMock->expects($this->any())
             ->method('execute')
             ->willReturnArgument(0);
@@ -131,8 +131,8 @@ class StoreTest extends TestCase
         );
         $resource->expects($this->atLeastOnce())->method('load')
             ->with($this->isInstanceOf(Store::class), $this->equalTo($key), $this->equalTo($field))
-            ->will($this->returnSelf());
-        $resource->expects($this->atLeastOnce())->method('getIdFieldName')->will($this->returnValue('store_id'));
+            ->willReturnSelf();
+        $resource->expects($this->atLeastOnce())->method('getIdFieldName')->willReturn('store_id');
         /** @var Store $model */
         $model = $this->objectManagerHelper->getObject(Store::class, ['resource' => $resource]);
         $model->load($key);
@@ -168,7 +168,7 @@ class StoreTest extends TestCase
     public function testGetWebsite()
     {
         $websiteId = 2;
-        $website = $this->createMock(WebsiteInterface::class);
+        $website = $this->getMockForAbstractClass(WebsiteInterface::class);
 
         $websiteRepository = $this->getMockBuilder(WebsiteRepositoryInterface::class)
             ->setMethods(['getById'])
@@ -215,7 +215,7 @@ class StoreTest extends TestCase
     public function testGetGroup()
     {
         $groupId = 2;
-        $group = $this->createMock(GroupInterface::class);
+        $group = $this->getMockForAbstractClass(GroupInterface::class);
 
         $groupRepository = $this->getMockBuilder(GroupRepositoryInterface::class)
             ->setMethods(['get'])
@@ -308,12 +308,12 @@ class StoreTest extends TestCase
         $configMock = $this->getMockForAbstractClass(ReinitableConfigInterface::class);
         $configMock->expects($this->atLeastOnce())
             ->method('getValue')
-            ->will($this->returnCallback(
+            ->willReturnCallback(
                 function ($path, $scope, $scopeCode) use ($secure, $expectedPath) {
                     $url = $secure ? '{{base_url}}' : 'http://domain.com/';
                     return $expectedPath == $path ? $url . $path . '/' : null;
                 }
-            ));
+            );
         /** @var Store $model */
         $model = $this->objectManagerHelper->getObject(
             Store::class,
@@ -545,7 +545,7 @@ class StoreTest extends TestCase
         $config = $this->getMockForAbstractClass(ReinitableConfigInterface::class);
         $config->expects($this->any())
             ->method('getValue')
-            ->will($this->returnValueMap([
+            ->willReturnMap([
                 ['catalog/price/scope', ScopeInterface::SCOPE_STORE, 'scope_code', $priceScope],
                 [
                     Currency::XML_PATH_CURRENCY_BASE,
@@ -559,7 +559,7 @@ class StoreTest extends TestCase
                     'scope_code',
                     'UAH'
                 ],
-            ]));
+            ]);
 
         $currency = $this->createMock(Currency::class);
         $currency->expects($this->any())->method('load')->with($currencyCode)->willReturnSelf();

@@ -64,8 +64,8 @@ class CategoryProcessUrlRewriteMovingObserverTest extends TestCase
     protected function setUp(): void
     {
         $this->categoryUrlRewriteGeneratorMock = $this->createMock(CategoryUrlRewriteGenerator::class);
-        $this->urlPersistMock = $this->createMock(UrlPersistInterface::class);
-        $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
+        $this->urlPersistMock = $this->getMockForAbstractClass(UrlPersistInterface::class);
+        $this->scopeConfigMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
         $this->urlRewriteHandlerMock = $this->createMock(UrlRewriteHandler::class);
         /** @var UrlRewriteBunchReplacer|MockObject $urlRewriteMock */
         $urlRewriteMock = $this->createMock(UrlRewriteBunchReplacer::class);

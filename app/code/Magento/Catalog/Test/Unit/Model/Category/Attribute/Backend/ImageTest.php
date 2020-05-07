@@ -130,7 +130,7 @@ class ImageTest extends TestCase
     {
         $this->attribute->expects($this->once())
             ->method('getName')
-            ->will($this->returnValue('test_attribute'));
+            ->willReturn('test_attribute');
 
         $model = $this->objectManager->getObject(Image::class);
         $model->setAttribute($this->attribute);
@@ -139,7 +139,7 @@ class ImageTest extends TestCase
 
         $model->beforeSave($object);
 
-        $this->assertEquals(null, $object->getTestAttribute());
+        $this->assertNull($object->getTestAttribute());
     }
 
     /**
@@ -169,7 +169,7 @@ class ImageTest extends TestCase
     {
         $this->attribute->expects($this->once())
             ->method('getName')
-            ->will($this->returnValue('test_attribute'));
+            ->willReturn('test_attribute');
 
         $model = $this->objectManager->getObject(Image::class);
         $model->setAttribute($this->attribute);
@@ -188,10 +188,10 @@ class ImageTest extends TestCase
     {
         $this->attribute->expects($this->once())
             ->method('getName')
-            ->will($this->returnValue('test_attribute'));
+            ->willReturn('test_attribute');
 
         $model = $this->setUpModelForTests();
-        $mediaDirectoryMock = $this->createMock(WriteInterface::class);
+        $mediaDirectoryMock = $this->getMockForAbstractClass(WriteInterface::class);
         $this->filesystem->expects($this->once())
             ->method('getDirectoryWrite')
             ->with(DirectoryList::MEDIA)
@@ -222,7 +222,7 @@ class ImageTest extends TestCase
     {
         $this->attribute->expects($this->once())
             ->method('getName')
-            ->will($this->returnValue('test_attribute'));
+            ->willReturn('test_attribute');
 
         $model = $this->setUpModelForTests();
         $model->setAttribute($this->attribute);
@@ -260,7 +260,7 @@ class ImageTest extends TestCase
     {
         $this->attribute->expects($this->once())
             ->method('getName')
-            ->will($this->returnValue('test_attribute'));
+            ->willReturn('test_attribute');
 
         $this->storeManagerInterfaceMock->expects($this->once())
             ->method('getStore')
@@ -273,7 +273,7 @@ class ImageTest extends TestCase
         $model = $this->setUpModelForTests();
         $model->setAttribute($this->attribute);
 
-        $mediaDirectoryMock = $this->createMock(WriteInterface::class);
+        $mediaDirectoryMock = $this->getMockForAbstractClass(WriteInterface::class);
         $this->filesystem->expects($this->once())
             ->method('getDirectoryWrite')
             ->with(DirectoryList::MEDIA)
@@ -430,9 +430,9 @@ class ImageTest extends TestCase
 
         $this->attribute->expects($this->once())
             ->method('getName')
-            ->will($this->returnValue('_additional_data_test_attribute'));
+            ->willReturn('_additional_data_test_attribute');
 
-        $mediaDirectoryMock = $this->createMock(WriteInterface::class);
+        $mediaDirectoryMock = $this->getMockForAbstractClass(WriteInterface::class);
         $this->filesystem->expects($this->any())
             ->method('getDirectoryWrite')
             ->with(DirectoryList::MEDIA)

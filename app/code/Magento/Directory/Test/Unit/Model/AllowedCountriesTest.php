@@ -37,8 +37,8 @@ class AllowedCountriesTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
-        $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
+        $this->scopeConfigMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
+        $this->storeManagerMock = $this->getMockForAbstractClass(StoreManagerInterface::class);
 
         $this->allowedCountriesReader = new AllowedCountries(
             $this->scopeConfigMock,
@@ -51,7 +51,7 @@ class AllowedCountriesTest extends TestCase
      */
     public function testGetAllowedCountriesWithEmptyFilter()
     {
-        $website1 = $this->createMock(WebsiteInterface::class);
+        $website1 = $this->getMockForAbstractClass(WebsiteInterface::class);
         $website1->expects($this->once())
             ->method('getId')
             ->willReturn(1);

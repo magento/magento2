@@ -44,9 +44,9 @@ class CartPluginTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->cartRepositoryMock = $this->createMock(CartRepositoryInterface::class);
+        $this->cartRepositoryMock = $this->getMockForAbstractClass(CartRepositoryInterface::class);
         $this->checkoutSessionMock = $this->createMock(Session::class);
-        $this->addressRepositoryMock = $this->createMock(AddressRepositoryInterface::class);
+        $this->addressRepositoryMock = $this->getMockForAbstractClass(AddressRepositoryInterface::class);
         $this->model = new CartPlugin(
             $this->cartRepositoryMock,
             $this->checkoutSessionMock,
@@ -76,11 +76,11 @@ class CartPluginTest extends TestCase
 
         $shippingAddressMock = $this->createMock(Address::class);
         $quoteMock->expects($this->once())->method('getShippingAddress')->willReturn($shippingAddressMock);
-        $customerMock = $this->createMock(CustomerInterface::class);
+        $customerMock = $this->getMockForAbstractClass(CustomerInterface::class);
         $quoteMock->expects($this->once())->method('getCustomer')->willReturn($customerMock);
         $customerMock->expects($this->once())->method('getDefaultShipping')->willReturn($customerAddressId);
 
-        $customerAddressMock = $this->createMock(AddressInterface::class);
+        $customerAddressMock = $this->getMockForAbstractClass(AddressInterface::class);
         $this->addressRepositoryMock->expects($this->once())
             ->method('getById')
             ->with($customerAddressId)
@@ -95,7 +95,7 @@ class CartPluginTest extends TestCase
 
         $this->model->beforeDispatch(
             $this->createMock(Cart::class),
-            $this->createMock(RequestInterface::class)
+            $this->getMockForAbstractClass(RequestInterface::class)
         );
     }
 }

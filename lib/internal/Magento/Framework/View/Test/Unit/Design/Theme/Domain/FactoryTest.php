@@ -40,7 +40,7 @@ class FactoryTest extends TestCase
 
         $newThemeMock = $this->createMock(Theme::class);
 
-        $objectManager = $this->createMock(ObjectManagerInterface::class);
+        $objectManager = $this->getMockForAbstractClass(ObjectManagerInterface::class);
         $objectManager->expects(
             $this->once()
         )->method(
@@ -69,7 +69,7 @@ class FactoryTest extends TestCase
             ->getMock();
         $themeMock->expects($this->any())->method('getType')->willReturn($wrongThemeType);
 
-        $objectManager = $this->createMock(ObjectManagerInterface::class);
+        $objectManager = $this->getMockForAbstractClass(ObjectManagerInterface::class);
 
         $themeDomainFactory = new Factory($objectManager);
 

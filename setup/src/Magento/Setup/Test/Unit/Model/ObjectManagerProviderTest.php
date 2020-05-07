@@ -41,7 +41,7 @@ class ObjectManagerProviderTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->serviceLocatorMock = $this->createMock(ServiceLocatorInterface::class);
+        $this->serviceLocatorMock = $this->getMockForAbstractClass(ServiceLocatorInterface::class);
         $this->bootstrapMock = $this->createMock(Bootstrap::class);
 
         $this->model = new ObjectManagerProvider($this->serviceLocatorMock, $this->bootstrapMock);
@@ -72,12 +72,12 @@ class ObjectManagerProviderTest extends TestCase
                 ]
             );
 
-        $commandListMock = $this->createMock(CommandListInterface::class);
+        $commandListMock = $this->getMockForAbstractClass(CommandListInterface::class);
         $commandListMock->expects($this->once())
             ->method('getCommands')
             ->willReturn($commands);
 
-        $objectManagerMock = $this->createMock(ObjectManagerInterface::class);
+        $objectManagerMock = $this->getMockForAbstractClass(ObjectManagerInterface::class);
         $objectManagerMock->expects($this->once())
             ->method('create')
             ->with(CommandListInterface::class)

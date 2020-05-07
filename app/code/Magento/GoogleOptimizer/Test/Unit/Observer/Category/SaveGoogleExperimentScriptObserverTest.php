@@ -75,7 +75,7 @@ class SaveGoogleExperimentScriptObserverTest extends TestCase
         $this->_eventObserverMock = $this->createMock(Observer::class);
         $this->_eventObserverMock->expects($this->once())->method('getEvent')->willReturn($event);
         $this->_codeMock = $this->createMock(Code::class);
-        $this->_requestMock = $this->createMock(RequestInterface::class);
+        $this->_requestMock = $this->getMockForAbstractClass(RequestInterface::class);
 
         $objectManagerHelper = new ObjectManager($this);
         $this->_modelObserver = $objectManagerHelper->getObject(

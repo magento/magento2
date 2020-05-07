@@ -48,7 +48,7 @@ class FormTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->layout = $this->createMock(LayoutInterface::class);
+        $this->layout = $this->getMockForAbstractClass(LayoutInterface::class);
         $this->formFactory = $this->createPartialMock(FormFactory::class, ['create']);
         $this->urlRewriteFactory = $this->createPartialMock(
             UrlRewriteFactory::class,
@@ -120,7 +120,7 @@ class FormTest extends TestCase
         $storeElement->expects($this->once())->method('setValues')->with([]);
 
         $this->layout->expects($this->once())->method('createBlock')
-            ->willReturn($this->createMock(RendererInterface::class));
+            ->willReturn($this->getMockForAbstractClass(RendererInterface::class));
 
         $this->form->toHtml();
     }

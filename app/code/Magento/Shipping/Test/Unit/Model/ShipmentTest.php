@@ -38,7 +38,7 @@ class ShipmentTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->orderRepository = $this->createMock(OrderRepositoryInterface::class);
+        $this->orderRepository = $this->getMockForAbstractClass(OrderRepositoryInterface::class);
 
         $objectManagerHelper = new ObjectManagerHelper($this);
         $arguments = [

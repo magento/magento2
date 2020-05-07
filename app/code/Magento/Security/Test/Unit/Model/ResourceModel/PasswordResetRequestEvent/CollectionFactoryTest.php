@@ -35,10 +35,10 @@ class CollectionFactoryTest extends TestCase
     {
         $this->objectManagerMock = $this->getMockBuilder(ObjectManagerInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->securityConfigMock = $this->getMockBuilder(ConfigInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->model = (new ObjectManager($this))->getObject(
             CollectionFactory::class,
             [

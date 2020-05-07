@@ -132,12 +132,12 @@ class ResultTest extends TestCase
         );
         $requestMock->expects($this->any())->method('getQueryValue')->willReturn(['key' => 'value']);
 
-        $redirectMock = $this->createMock(RedirectInterface::class);
+        $redirectMock = $this->getMockForAbstractClass(RedirectInterface::class);
         $redirectMock->expects($this->any())->method('error')->with('urlstring');
 
         $messageManagerMock = $this->createMock(Manager::class);
 
-        $eventManagerMock = $this->createMock(ManagerInterface::class);
+        $eventManagerMock = $this->getMockForAbstractClass(ManagerInterface::class);
 
         $contextMock = $this->createMock(Context::class);
         $contextMock->expects($this->any())

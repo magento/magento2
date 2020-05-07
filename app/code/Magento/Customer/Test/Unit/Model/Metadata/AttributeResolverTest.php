@@ -43,7 +43,7 @@ class AttributeResolverTest extends TestCase
         /** @var AttributeMetadataInterface|MockObject $attributeMock */
         $attributeMock = $this->getMockBuilder(AttributeMetadataInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $attributeMock->expects($this->once())
             ->method('getAttributeCode')
             ->willReturn($attributeCode);
@@ -72,7 +72,7 @@ class AttributeResolverTest extends TestCase
         /** @var AttributeMetadataInterface|MockObject $attributeMock */
         $attributeMock = $this->getMockBuilder(AttributeMetadataInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $attributeMock->expects($this->exactly(2))
             ->method('getAttributeCode')
             ->willReturn($attributeCode);

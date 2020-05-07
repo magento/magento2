@@ -110,7 +110,7 @@ class SaveTest extends TestCase
         );
         $this->objectManagerMock = $this->getMockBuilder(ObjectManagerInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->eventManagerMock = $this->getMockForAbstractClass(
             ManagerInterface::class,
             [],
@@ -275,63 +275,55 @@ class SaveTest extends TestCase
 
         $messagesMock->expects($this->once())
             ->method('getCountByType')
-            ->will($this->returnValue(0));
+            ->willReturn(0);
 
         $this->resultRedirectFactoryMock->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($resultRedirectMock));
+            ->willReturn($resultRedirectMock);
         $this->requestMock->expects($this->atLeastOnce())
             ->method('getParam')
-            ->will(
-                $this->returnValueMap(
-                    [
-                        ['id', false, $categoryId],
-                        ['store', null, $storeId],
-                        ['parent', null, $parentId],
-                    ]
-                )
+            ->willReturnMap(
+                [
+                    ['id', false, $categoryId],
+                    ['store', null, $storeId],
+                    ['parent', null, $parentId],
+                ]
             );
         $this->objectManagerMock->expects($this->atLeastOnce())
             ->method('create')
-            ->will($this->returnValue($categoryMock));
+            ->willReturn($categoryMock);
         $this->objectManagerMock->expects($this->atLeastOnce())
             ->method('get')
-            ->will(
-                $this->returnValueMap(
-                    [
-                        [Session::class, $sessionMock],
-                        [Registry::class, $registryMock],
-                        [Config::class, $wysiwygConfigMock],
-                        [StoreManagerInterface::class, $storeManagerMock],
-                    ]
-                )
+            ->willReturnMap(
+                [
+                    [Session::class, $sessionMock],
+                    [Registry::class, $registryMock],
+                    [Config::class, $wysiwygConfigMock],
+                    [StoreManagerInterface::class, $storeManagerMock],
+                ]
             );
         $categoryMock->expects($this->once())
             ->method('setStoreId')
             ->with($storeId);
         $registryMock->expects($this->any())
             ->method('register')
-            ->will(
-                $this->returnValueMap(
-                    [
-                        ['category', $categoryMock],
-                        ['current_category', $categoryMock],
-                    ]
-                )
+            ->willReturnMap(
+                [
+                    ['category', $categoryMock],
+                    ['current_category', $categoryMock],
+                ]
             );
         $wysiwygConfigMock->expects($this->once())
             ->method('setStoreId')
             ->with($storeId);
         $this->requestMock->expects($this->atLeastOnce())
             ->method('getPost')
-            ->will(
-                $this->returnValueMap(
-                    [
-                        ['use_config', ['attribute']],
-                        ['use_default', ['default-attribute']],
-                        ['return_session_messages_only', true],
-                    ]
-                )
+            ->willReturnMap(
+                [
+                    ['use_config', ['attribute']],
+                    ['use_default', ['default-attribute']],
+                    ['return_session_messages_only', true],
+                ]
             );
         $this->requestMock->expects($this->atLeastOnce())
             ->method('getPostValue')
@@ -343,29 +335,29 @@ class SaveTest extends TestCase
             ->with($addData);
         $categoryMock->expects($this->any())
             ->method('getId')
-            ->will($this->returnValue($categoryId));
+            ->willReturn($categoryId);
 
         if (!$parentId) {
             if ($storeId) {
                 $storeManagerMock->expects($this->once())
                     ->method('getStore')
                     ->with($storeId)
-                    ->will($this->returnSelf());
+                    ->willReturnSelf();
                 $storeManagerMock->expects($this->once())
                     ->method('getRootCategoryId')
-                    ->will($this->returnValue($rootCategoryId));
+                    ->willReturn($rootCategoryId);
                 $parentId = $rootCategoryId;
             }
         }
         $categoryMock->expects($this->any())
             ->method('load')
-            ->will($this->returnValue($parentCategoryMock));
+            ->willReturn($parentCategoryMock);
         $parentCategoryMock->expects($this->once())
             ->method('getPath')
-            ->will($this->returnValue('parent_category_path'));
+            ->willReturn('parent_category_path');
         $parentCategoryMock->expects($this->once())
             ->method('getId')
-            ->will($this->returnValue($parentId));
+            ->willReturn($parentId);
         $categoryMock->expects($this->once())
             ->method('setPath')
             ->with('parent_category_path');
@@ -374,24 +366,22 @@ class SaveTest extends TestCase
             ->with($parentId);
         $categoryMock->expects($this->atLeastOnce())
             ->method('setData')
-            ->will(
-                $this->returnValueMap(
-                    [
-                        ['attribute', null, true],
-                        ['default-attribute', false, true],
-                        ['use_post_data_config', ['attribute'], true],
-                    ]
-                )
+            ->willReturnMap(
+                [
+                    ['attribute', null, true],
+                    ['default-attribute', false, true],
+                    ['use_post_data_config', ['attribute'], true],
+                ]
             );
         $categoryMock->expects($this->once())
             ->method('getDefaultAttributeSetId')
-            ->will($this->returnValue('default-attribute'));
+            ->willReturn('default-attribute');
         $categoryMock->expects($this->once())
             ->method('setAttributeSetId')
             ->with('default-attribute');
         $categoryMock->expects($this->once())
             ->method('getProductsReadonly')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
         $categoryMock->expects($this->once())
             ->method('setPostedProducts')
             ->with($products);
@@ -405,10 +395,10 @@ class SaveTest extends TestCase
         $categoryResource = $this->createMock(\Magento\Catalog\Model\ResourceModel\Category::class);
         $categoryMock->expects($this->once())
             ->method('getResource')
-            ->will($this->returnValue($categoryResource));
+            ->willReturn($categoryResource);
         $categoryMock->expects($this->once())
             ->method('validate')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $categoryMock->expects($this->once())
             ->method('unsetData')
             ->with('use_post_data_config');
@@ -419,28 +409,28 @@ class SaveTest extends TestCase
             ->with(__('You saved the category.'));
         $categoryMock->expects($this->at(1))
             ->method('getId')
-            ->will($this->returnValue(111));
+            ->willReturn(111);
         $this->layoutFactoryMock->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($layoutMock));
+            ->willReturn($layoutMock);
         $layoutMock->expects($this->once())
             ->method('getMessagesBlock')
-            ->will($this->returnValue($blockMock));
+            ->willReturn($blockMock);
         $this->messageManagerMock->expects($this->any())
             ->method('getMessages')
-            ->will($this->returnValue($messagesMock));
+            ->willReturn($messagesMock);
         $blockMock->expects($this->once())
             ->method('setMessages')
             ->with($messagesMock);
         $blockMock->expects($this->once())
             ->method('getGroupedHtml')
-            ->will($this->returnValue('grouped-html'));
+            ->willReturn('grouped-html');
         $this->resultJsonFactoryMock->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($resultJsonMock));
+            ->willReturn($resultJsonMock);
         $categoryMock->expects($this->once())
             ->method('toArray')
-            ->will($this->returnValue(['category-data']));
+            ->willReturn(['category-data']);
         $resultJsonMock->expects($this->once())
             ->method('setData')
             ->with(
@@ -450,11 +440,11 @@ class SaveTest extends TestCase
                     'category' => ['category-data'],
                 ]
             )
-            ->will($this->returnValue('result-execute'));
+            ->willReturn('result-execute');
 
         $categoryMock->expects($this->once())
             ->method('setStoreId')
-            ->will($this->returnValue(1));
+            ->willReturn(1);
         $this->assertEquals('result-execute', $this->save->execute());
     }
 

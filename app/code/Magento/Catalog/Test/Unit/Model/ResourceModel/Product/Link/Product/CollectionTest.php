@@ -108,11 +108,11 @@ class CollectionTest extends TestCase
     {
         $this->objectManager = new ObjectManager($this);
         $this->entityFactoryMock = $this->createMock(EntityFactory::class);
-        $this->loggerMock = $this->createMock(LoggerInterface::class);
+        $this->loggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
         $this->fetchStrategyMock = $this->createMock(
             FetchStrategyInterface::class
         );
-        $this->managerInterfaceMock = $this->createMock(ManagerInterface::class);
+        $this->managerInterfaceMock = $this->getMockForAbstractClass(ManagerInterface::class);
         $this->configMock = $this->createMock(Config::class);
         $this->resourceMock = $this->createMock(ResourceConnection::class);
         $this->entityFactoryMock2 = $this->createMock(\Magento\Eav\Model\EntityFactory::class);
@@ -142,10 +142,10 @@ class CollectionTest extends TestCase
             );
         $this->catalogHelperMock = $this->createMock(Data::class);
         $this->stateMock = $this->createMock(State::class);
-        $this->scopeConfigInterfaceMock = $this->createMock(ScopeConfigInterface::class);
+        $this->scopeConfigInterfaceMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
         $this->optionFactoryMock = $this->createMock(OptionFactory::class);
         $this->urlMock = $this->createMock(Url::class);
-        $this->timezoneInterfaceMock = $this->createMock(TimezoneInterface::class);
+        $this->timezoneInterfaceMock = $this->getMockForAbstractClass(TimezoneInterface::class);
         $this->sessionMock = $this->createMock(Session::class);
         $this->dateTimeMock = $this->createMock(DateTime::class);
         $productLimitationFactoryMock = $this->getMockBuilder(

@@ -68,7 +68,7 @@ class AddTest extends TestCase
             ->getmock();
         $this->messageManager = $this->getMockBuilder(ManagerInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->cartAdd = $this->objectManagerHelper->getObject(

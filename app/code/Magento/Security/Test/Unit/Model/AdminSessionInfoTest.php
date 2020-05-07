@@ -48,7 +48,7 @@ class AdminSessionInfoTest extends TestCase
         $this->objectManager = new ObjectManager($this);
         $this->securityConfigMock =  $this->getMockBuilder(ConfigInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->dateTimeMock =  $this->getMockBuilder(DateTime::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -73,7 +73,7 @@ class AdminSessionInfoTest extends TestCase
         $this->dateTimeMock->expects($this->once())
             ->method('gmtTimestamp')
             ->willReturn(1000);
-        $this->assertEquals(true, $this->model->isLoggedInStatus());
+        $this->assertTrue($this->model->isLoggedInStatus());
     }
 
     /**
@@ -87,7 +87,7 @@ class AdminSessionInfoTest extends TestCase
         $this->dateTimeMock->expects($this->once())
             ->method('gmtTimestamp')
             ->willReturn(1000);
-        $this->assertEquals(false, $this->model->isLoggedInStatus());
+        $this->assertFalse($this->model->isLoggedInStatus());
         $this->assertEquals(AdminSessionInfo::LOGGED_OUT, $this->model->getStatus());
     }
 
@@ -142,7 +142,7 @@ class AdminSessionInfoTest extends TestCase
      */
     public function testIsOtherSessionsTerminated()
     {
-        $this->assertEquals(false, $this->model->isOtherSessionsTerminated());
+        $this->assertFalse($this->model->isOtherSessionsTerminated());
     }
 
     /**

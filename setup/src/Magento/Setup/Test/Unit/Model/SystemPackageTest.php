@@ -47,7 +47,7 @@ class SystemPackageTest extends TestCase
     private $locker;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|/Magento\Composer\MagentoComposerApplication
+     * @var \PHPUnit\Framework\MockObject\MockObject|/Magento\Composer\MagentoComposerApplication
      */
     private $magentoComposerApp;
 

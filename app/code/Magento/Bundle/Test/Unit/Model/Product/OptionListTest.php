@@ -95,7 +95,7 @@ class OptionListTest extends TestCase
         $optionData = ['title' => 'test title'];
         $productSku = 'product_sku';
 
-        $productMock = $this->createMock(ProductInterface::class);
+        $productMock = $this->getMockForAbstractClass(ProductInterface::class);
         $productMock->expects($this->once())->method('getSku')->willReturn($productSku);
 
         $optionMock = $this->getMockBuilder(Option::class)
@@ -119,7 +119,7 @@ class OptionListTest extends TestCase
         $optionMock->expects($this->once())->method('getTitle')->willReturn(null);
         $optionMock->expects($this->exactly(2))->method('getDefaultTitle')->willReturn($optionData['title']);
 
-        $linkMock = $this->createMock(LinkInterface::class);
+        $linkMock = $this->getMockForAbstractClass(LinkInterface::class);
         $this->linkListMock->expects($this->once())
             ->method('getItems')
             ->with($productMock, $optionId)

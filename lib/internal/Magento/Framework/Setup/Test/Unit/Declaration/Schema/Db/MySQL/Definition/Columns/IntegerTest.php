@@ -130,7 +130,7 @@ class IntegerTest extends TestCase
             ->willReturn('AUTO_INCREMENT');
         $adapterMock = $this->getMockBuilder(AdapterInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->resourceConnectionMock->expects($this->once())->method('getConnection')->willReturn($adapterMock);
         $adapterMock->expects($this->once())
             ->method('quoteIdentifier')

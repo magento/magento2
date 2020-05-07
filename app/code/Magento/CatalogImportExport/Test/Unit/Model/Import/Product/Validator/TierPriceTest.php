@@ -67,7 +67,7 @@ class TierPriceTest extends TestCase
      */
     protected function processInit($groupId)
     {
-        $searchResult = $this->createMock(GroupSearchResultsInterface::class);
+        $searchResult = $this->getMockForAbstractClass(GroupSearchResultsInterface::class);
         $this->groupRepositoryInterface->expects($this->once())->method('getList')->willReturn($searchResult);
         $group = $this->createMock(Group::class);
         $group->expects($this->once())->method('getId')->willReturn($groupId);

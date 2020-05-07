@@ -81,7 +81,7 @@ class BuilderTest extends TestCase
             ->getMock();
         $this->request = $this->getMockBuilder(RequestInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->scopeResolver = $this->getMockForAbstractClass(
             ScopeResolverInterface::class,
             [],

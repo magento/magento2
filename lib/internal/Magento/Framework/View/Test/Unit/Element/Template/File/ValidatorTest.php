@@ -68,9 +68,9 @@ class ValidatorTest extends TestCase
     protected function setUp(): void
     {
         $this->fileSystemMock = $this->createMock(Filesystem::class);
-        $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
-        $this->rootDirectoryMock = $this->createMock(ReadInterface::class);
-        $this->compiledDirectoryMock = $this->createMock(ReadInterface::class);
+        $this->scopeConfigMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
+        $this->rootDirectoryMock = $this->getMockForAbstractClass(ReadInterface::class);
+        $this->compiledDirectoryMock = $this->getMockForAbstractClass(ReadInterface::class);
 
         $this->fileSystemMock->expects($this->any())
             ->method('getDirectoryRead')

@@ -79,7 +79,7 @@ class CustomOptionPriceTest extends TestCase
 
         $this->amount = $this->createMock(\Magento\Framework\Pricing\Amount\Base::class);
 
-        $this->priceCurrencyMock = $this->createMock(PriceCurrencyInterface::class);
+        $this->priceCurrencyMock = $this->getMockForAbstractClass(PriceCurrencyInterface::class);
 
         $this->object = new CustomOptionPrice(
             $this->product,

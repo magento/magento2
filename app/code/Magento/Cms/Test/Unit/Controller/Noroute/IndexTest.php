@@ -57,7 +57,7 @@ class IndexTest extends TestCase
     protected function setUp(): void
     {
         $helper = new ObjectManager($this);
-        $objectManagerMock = $this->createMock(ObjectManagerInterface::class);
+        $objectManagerMock = $this->getMockForAbstractClass(ObjectManagerInterface::class);
         $responseMock = $this->createMock(Http::class);
         $this->resultPageMock = $this->getMockBuilder(Page::class)
             ->disableOriginalConstructor()
@@ -73,7 +73,7 @@ class IndexTest extends TestCase
             ->method('create')
             ->willReturn($this->forwardMock);
 
-        $scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
+        $scopeConfigMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
         $this->_requestMock = $this->createMock(\Magento\Framework\App\Request\Http::class);
         $this->_cmsHelperMock = $this->createMock(\Magento\Cms\Helper\Page::class);
         $valueMap = [

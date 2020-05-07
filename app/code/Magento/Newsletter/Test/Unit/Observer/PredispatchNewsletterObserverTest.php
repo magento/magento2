@@ -62,15 +62,15 @@ class PredispatchNewsletterObserverTest extends TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp() : void
+    protected function setUp(): void
     {
-        $this->configMock = $this->createMock(ScopeConfigInterface::class);
-        $this->urlMock = $this->createMock(UrlInterface::class);
+        $this->configMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
+        $this->urlMock = $this->getMockForAbstractClass(UrlInterface::class);
         $this->responseMock = $this->getMockBuilder(ResponseInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['setRedirect'])
             ->getMockForAbstractClass();
-        $this->redirectMock = $this->createMock(RedirectInterface::class);
+        $this->redirectMock = $this->getMockForAbstractClass(RedirectInterface::class);
         $this->newsletterConfig = $this->createMock(Config::class);
         $this->objectManager = new ObjectManager($this);
         $this->mockObjectMock = new PredispatchNewsletterObserver(

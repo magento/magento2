@@ -60,7 +60,7 @@ class AreaTest extends TestCase
         $this->configWriterMock =
             $this->getMockBuilder(ConfigWriterInterface::class)
                 ->disableOriginalConstructor()
-                ->getMock();
+                ->getMockForAbstractClass();
         $this->configChain = $this->getMockBuilder(ModificationChain::class)
             ->disableOriginalConstructor()
             ->getMock();

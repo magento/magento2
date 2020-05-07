@@ -90,7 +90,7 @@ class AdminConfigTest extends TestCase
 
         $validatorMock = $this->getMockBuilder(ValidatorInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $validatorMock->expects($this->any())
             ->method('isValid')
             ->willReturn(true);
@@ -126,7 +126,7 @@ class AdminConfigTest extends TestCase
 
         $validatorMock = $this->getMockBuilder(ValidatorInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $validatorMock->expects($this->any())
             ->method('isValid')
             ->willReturn(true);

@@ -129,7 +129,7 @@ class TransactionVoidTest extends TestCase
      */
     private function getTransferObjectMock()
     {
-        $transferObjectMock = $this->createMock(TransferInterface::class);
+        $transferObjectMock = $this->getMockForAbstractClass(TransferInterface::class);
         $transferObjectMock->expects($this->once())
             ->method('getBody')
             ->willReturn($this->getTransferData());

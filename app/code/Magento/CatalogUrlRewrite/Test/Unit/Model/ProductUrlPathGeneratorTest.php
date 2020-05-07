@@ -57,12 +57,12 @@ class ProductUrlPathGeneratorTest extends TestCase
             ->onlyMethods(['__wakeup', 'getData', 'getName', 'formatUrlKey', 'getId', 'load', 'setStoreId'])
             ->disableOriginalConstructor()
             ->getMock();
-        $this->storeManager = $this->createMock(StoreManagerInterface::class);
-        $this->scopeConfig = $this->createMock(ScopeConfigInterface::class);
+        $this->storeManager = $this->getMockForAbstractClass(StoreManagerInterface::class);
+        $this->scopeConfig = $this->getMockForAbstractClass(ScopeConfigInterface::class);
         $this->categoryUrlPathGenerator = $this->createMock(
             CategoryUrlPathGenerator::class
         );
-        $this->productRepository = $this->createMock(ProductRepositoryInterface::class);
+        $this->productRepository = $this->getMockForAbstractClass(ProductRepositoryInterface::class);
         $this->productRepository->expects($this->any())->method('getById')->willReturn($this->product);
 
         $this->productUrlPathGenerator = (new ObjectManager($this))->getObject(

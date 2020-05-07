@@ -76,14 +76,14 @@ class CreateTest extends TestCase
         $connectionName = 'default';
         $operationData = ['key1' => 'value1'];
         $operationTable = 'magento_operation';
-        $operationList = $this->createMock(OperationListInterface::class);
+        $operationList = $this->getMockForAbstractClass(OperationListInterface::class);
         $this->typeResolver->expects($this->once())->method('resolve')->with($operationList)
             ->willReturn(OperationListInterface::class);
-        $metadata = $this->createMock(EntityMetadataInterface::class);
+        $metadata = $this->getMockForAbstractClass(EntityMetadataInterface::class);
         $this->metadataPool->expects($this->once())->method('getMetadata')
             ->with(OperationListInterface::class)->willReturn($metadata);
         $metadata->expects($this->once())->method('getEntityConnectionName')->willReturn($connectionName);
-        $connection = $this->createMock(AdapterInterface::class);
+        $connection = $this->getMockForAbstractClass(AdapterInterface::class);
         $this->resourceConnection->expects($this->once())
             ->method('getConnection')->with($connectionName)->willReturn($connection);
         $connection->expects($this->once())->method('beginTransaction')->willReturnSelf();
@@ -111,14 +111,14 @@ class CreateTest extends TestCase
         $connectionName = 'default';
         $operationData = ['key1' => 'value1'];
         $operationTable = 'magento_operation';
-        $operationList = $this->createMock(OperationListInterface::class);
+        $operationList = $this->getMockForAbstractClass(OperationListInterface::class);
         $this->typeResolver->expects($this->once())->method('resolve')->with($operationList)
             ->willReturn(OperationListInterface::class);
-        $metadata = $this->createMock(EntityMetadataInterface::class);
+        $metadata = $this->getMockForAbstractClass(EntityMetadataInterface::class);
         $this->metadataPool->expects($this->once())->method('getMetadata')
             ->with(OperationListInterface::class)->willReturn($metadata);
         $metadata->expects($this->once())->method('getEntityConnectionName')->willReturn($connectionName);
-        $connection = $this->createMock(AdapterInterface::class);
+        $connection = $this->getMockForAbstractClass(AdapterInterface::class);
         $this->resourceConnection->expects($this->once())
             ->method('getConnection')->with($connectionName)->willReturn($connection);
         $connection->expects($this->once())->method('beginTransaction')->willReturnSelf();

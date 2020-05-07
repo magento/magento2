@@ -51,9 +51,9 @@ class RssTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->storeManagerInterface = $this->createMock(StoreManagerInterface::class);
+        $this->storeManagerInterface = $this->getMockForAbstractClass(StoreManagerInterface::class);
         $this->rss = $this->createPartialMock(\Magento\Review\Model\Rss::class, ['__wakeUp', 'getProductCollection']);
-        $this->urlBuilder = $this->createMock(UrlInterface::class);
+        $this->urlBuilder = $this->getMockForAbstractClass(UrlInterface::class);
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->block = $this->objectManagerHelper->getObject(
             Rss::class,
@@ -166,7 +166,7 @@ class RssTest extends TestCase
      */
     public function testIsAllowed()
     {
-        $this->assertEquals(true, $this->block->isAllowed());
+        $this->assertTrue($this->block->isAllowed());
     }
 
     /**

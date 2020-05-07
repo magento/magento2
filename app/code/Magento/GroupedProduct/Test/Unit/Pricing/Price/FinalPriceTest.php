@@ -47,7 +47,7 @@ class FinalPriceTest extends TestCase
         $this->saleableItemMock =  $this->createMock(Product::class);
         $this->calculatorMock = $this->createMock(Calculator::class);
 
-        $this->priceCurrencyMock = $this->createMock(PriceCurrencyInterface::class);
+        $this->priceCurrencyMock = $this->getMockForAbstractClass(PriceCurrencyInterface::class);
 
         $this->finalPrice = new FinalPrice(
             $this->saleableItemMock,

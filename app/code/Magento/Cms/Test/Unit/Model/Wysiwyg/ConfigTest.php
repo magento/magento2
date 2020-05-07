@@ -102,13 +102,13 @@ class ConfigTest extends TestCase
         $this->filesystemMock = $this->createMock(Filesystem::class);
         $this->backendUrlMock = $this->getMockBuilder(UrlInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->assetRepoMock = $this->getMockBuilder(Repository::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->authorizationMock = $this->getMockBuilder(AuthorizationInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->variableConfigMock = $this->getMockBuilder(\Magento\Variable\Model\Variable\Config::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -117,10 +117,10 @@ class ConfigTest extends TestCase
             ->getMock();
         $this->scopeConfigMock = $this->getMockBuilder(ScopeConfigInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->storeManagerMock = $this->getMockBuilder(StoreManagerInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->storeMock = $this->getMockBuilder(Store::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -194,7 +194,7 @@ class ConfigTest extends TestCase
             ->method('getUri')
             ->willReturn('pub/static');
         /** @var ContextInterface|MockObject $contextMock */
-        $contextMock = $this->createMock(ContextInterface::class);
+        $contextMock = $this->getMockForAbstractClass(ContextInterface::class);
         $contextMock->expects($this->once())
             ->method('getBaseUrl')
             ->willReturn('localhost/pub/static/');

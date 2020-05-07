@@ -122,8 +122,8 @@ class RetrieveImageTest extends TestCase
         $this->adapterFactoryMock->expects($this->once())->method('create')->willReturn($this->abstractAdapter);
         $this->curlMock = $this->createMock(Curl::class);
         $this->storageFileMock = $this->createMock(File::class);
-        $this->request = $this->createMock(RequestInterface::class);
-        $this->fileDriverMock = $this->createMock(DriverInterface::class);
+        $this->request = $this->getMockForAbstractClass(RequestInterface::class);
+        $this->fileDriverMock = $this->getMockForAbstractClass(DriverInterface::class);
         $this->contextMock->expects($this->any())->method('getRequest')->willReturn($this->request);
         $managerMock = $this->getMockBuilder(ObjectManagerInterface::class)
             ->disableOriginalConstructor()

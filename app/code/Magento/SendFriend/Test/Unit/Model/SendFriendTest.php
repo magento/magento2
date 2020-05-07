@@ -41,7 +41,7 @@ class SendFriendTest extends TestCase
         $this->sendfriendDataMock = $this->getMockBuilder(Data::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->cookieManagerMock = $this->createMock(CookieManagerInterface::class);
+        $this->cookieManagerMock = $this->getMockForAbstractClass(CookieManagerInterface::class);
 
         $this->model = $objectManager->getObject(
             SendFriend::class,

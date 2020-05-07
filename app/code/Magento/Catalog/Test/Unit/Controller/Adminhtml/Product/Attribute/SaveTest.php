@@ -138,7 +138,7 @@ class SaveTest extends AttributeTest
             ->getMock();
         $this->attributeSetMock = $this->getMockBuilder(AttributeSetInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->builderMock = $this->getMockBuilder(Build::class)
             ->disableOriginalConstructor()
             ->getMock();

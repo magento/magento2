@@ -73,14 +73,14 @@ class NewProductsTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->request = $this->createMock(RequestInterface::class);
+        $this->request = $this->getMockForAbstractClass(RequestInterface::class);
         $this->request->expects($this->any())->method('getParam')->with('store_id')->willReturn(null);
 
         $this->context = $this->createMock(Context::class);
         $this->imageHelper = $this->createMock(Image::class);
         $this->newProducts = $this->createMock(\Magento\Catalog\Model\Rss\Product\NewProducts::class);
-        $this->rssUrlBuilder = $this->createMock(UrlBuilderInterface::class);
-        $this->scopeConfig = $this->createMock(ScopeConfigInterface::class);
+        $this->rssUrlBuilder = $this->getMockForAbstractClass(UrlBuilderInterface::class);
+        $this->scopeConfig = $this->getMockForAbstractClass(ScopeConfigInterface::class);
 
         $this->storeManager = $this->createMock(StoreManager::class);
         $store = $this->getMockBuilder(Store::class)

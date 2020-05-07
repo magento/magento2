@@ -28,6 +28,6 @@ class CurrencyTest extends TestCase
         $lists = $this->createMock(Lists::class);
         $lists->expects($this->any())->method('getCurrencyList')->willReturn($this->expectedCurrencies);
         $currency = new Currency($lists);
-        $this->assertEquals(true, $currency->isValid('EUR'));
+        $this->assertTrue($currency->isValid('EUR'));
     }
 }

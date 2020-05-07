@@ -388,7 +388,7 @@ class GroupRepositoryTest extends TestCase
     {
         $groupId = 86;
 
-        $groupExtension = $this->createMock(GroupExtensionInterface::class);
+        $groupExtension = $this->getMockForAbstractClass(GroupExtensionInterface::class);
         $collection = $this->createMock(Collection::class);
         $searchCriteria = $this->getMockForAbstractClass(
             SearchCriteriaInterface::class,

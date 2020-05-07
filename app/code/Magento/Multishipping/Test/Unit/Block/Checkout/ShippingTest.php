@@ -51,11 +51,11 @@ class ShippingTest extends TestCase
     protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
-        $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
+        $this->scopeConfigMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
         $this->multiShippingMock =
             $this->createMock(Multishipping::class);
         $this->priceCurrencyMock =
-            $this->createMock(PriceCurrencyInterface::class);
+            $this->getMockForAbstractClass(PriceCurrencyInterface::class);
         $this->taxHelperMock = $this->createMock(Data::class);
         $this->model = $objectManager->getObject(
             Shipping::class,

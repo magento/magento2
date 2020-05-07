@@ -42,11 +42,11 @@ class ValueTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->configMock = $this->createMock(ScopeConfigInterface::class);
-        $this->eventManagerMock = $this->createMock(ManagerInterface::class);
+        $this->configMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
+        $this->eventManagerMock = $this->getMockForAbstractClass(ManagerInterface::class);
         $this->cacheTypeListMock = $this->getMockBuilder(TypeListInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $objectManager = new ObjectManager($this);
         $this->model = $objectManager->getObject(

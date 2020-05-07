@@ -84,7 +84,7 @@ class CustomCssTest extends TestCase
                     'setData',
                 ]
             )
-            ->getMock();
+            ->getMockForAbstractClass();
         $file->expects($this->any())
             ->method('setData')
             ->willReturnMap(

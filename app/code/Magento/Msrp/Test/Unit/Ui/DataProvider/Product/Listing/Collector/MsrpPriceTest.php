@@ -83,7 +83,7 @@ class MsrpPriceTest extends TestCase
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
-        $this->adjustmentCalculator = $this->createMock(CalculatorInterface::class);
+        $this->adjustmentCalculator = $this->getMockForAbstractClass(CalculatorInterface::class);
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->model = $this->objectManagerHelper->getObject(
             MsrpPrice::class,
@@ -106,8 +106,8 @@ class MsrpPriceTest extends TestCase
         $product = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $productRenderInfoDto = $this->createMock(ProductRenderInterface::class);
-        $productPriceInfo = $this->createMock(PriceInfoInterface::class);
+        $productRenderInfoDto = $this->getMockForAbstractClass(ProductRenderInterface::class);
+        $productPriceInfo = $this->getMockForAbstractClass(PriceInfoInterface::class);
 
         $productRenderInfoDto->expects($this->once())
             ->method('getPriceInfo')
@@ -121,7 +121,7 @@ class MsrpPriceTest extends TestCase
         $priceInfo = $this->getMockBuilder(MsrpPriceInfoInterface::class)
             ->setMethods(['getPrice', 'getExtensionAttributes'])
             ->getMockForAbstractClass();
-        $amountInterface = $this->createMock(AmountInterface::class);
+        $amountInterface = $this->getMockForAbstractClass(AmountInterface::class);
         $amountInterface->expects($this->once())
             ->method('getValue')
             ->willReturn(20);

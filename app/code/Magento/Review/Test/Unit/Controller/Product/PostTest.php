@@ -126,7 +126,7 @@ class PostTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->redirect = $this->createMock(RedirectInterface::class);
+        $this->redirect = $this->getMockForAbstractClass(RedirectInterface::class);
         $this->request = $this->createPartialMock(Http::class, ['getParam']);
         $this->response = $this->createPartialMock(\Magento\Framework\App\Response\Http::class, ['setRedirect']);
         $this->formKeyValidator = $this->createPartialMock(
@@ -137,8 +137,8 @@ class PostTest extends TestCase
             ->addMethods(['getFormData', 'getRedirectUrl'])
             ->disableOriginalConstructor()
             ->getMock();
-        $this->eventManager = $this->createMock(ManagerInterface::class);
-        $this->productRepository = $this->createMock(ProductRepositoryInterface::class);
+        $this->eventManager = $this->getMockForAbstractClass(ManagerInterface::class);
+        $this->productRepository = $this->getMockForAbstractClass(ProductRepositoryInterface::class);
         $this->coreRegistry = $this->createMock(Registry::class);
         $this->review = $this->getMockBuilder(Review::class)
             ->addMethods(['setEntityPkValue', 'setStatusId', 'setCustomerId', 'setStoreId', 'setStores'])

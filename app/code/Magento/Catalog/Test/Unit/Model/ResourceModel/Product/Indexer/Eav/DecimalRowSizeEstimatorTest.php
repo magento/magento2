@@ -47,10 +47,10 @@ class DecimalRowSizeEstimatorTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->connectionMock = $this->createMock(AdapterInterface::class);
+        $this->connectionMock = $this->getMockForAbstractClass(AdapterInterface::class);
         $this->indexerResourceMock = $this->createMock(Decimal::class);
         $this->indexerResourceMock->expects($this->any())->method('getConnection')->willReturn($this->connectionMock);
-        $this->storeManagementMock = $this->createMock(StoreManagementInterface::class);
+        $this->storeManagementMock = $this->getMockForAbstractClass(StoreManagementInterface::class);
         $this->metadataPoolMock = $this->createMock(MetadataPool::class);
 
         $this->model = new DecimalRowSizeEstimator(
@@ -62,7 +62,7 @@ class DecimalRowSizeEstimatorTest extends TestCase
 
     public function testEstimateRowSize()
     {
-        $entityMetadataMock = $this->createMock(EntityMetadataInterface::class);
+        $entityMetadataMock = $this->getMockForAbstractClass(EntityMetadataInterface::class);
         $this->metadataPoolMock->expects($this->any())
             ->method('getMetadata')
             ->with(ProductInterface::class)

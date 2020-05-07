@@ -66,23 +66,23 @@ class CounterTest extends TestCase
     {
         $this->productManagement = $this->getMockBuilder(ProductManagementInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->configurableManagement = $this
             ->getMockBuilder(ConfigurableProductManagementInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->categoryManagement = $this->getMockBuilder(CategoryManagementInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->customerManagement = $this->getMockBuilder(CustomerManagementInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->websiteManagement = $this->getMockBuilder(WebsiteManagementInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->storeManagement = $this->getMockBuilder(StoreManagementInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->model = new Counter(
             $this->productManagement,

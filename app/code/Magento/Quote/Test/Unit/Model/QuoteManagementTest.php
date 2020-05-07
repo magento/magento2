@@ -213,15 +213,15 @@ class QuoteManagementTest extends TestCase
         $this->quotePaymentToOrderPayment = $this->createMock(ToOrderPayment::class);
         $this->quoteAddressToOrderAddress = $this->createMock(ToOrderAddress::class);
         $this->quoteItemToOrderItem = $this->createMock(ToOrderItem::class);
-        $this->orderManagement = $this->createMock(OrderManagementInterface::class);
+        $this->orderManagement = $this->getMockForAbstractClass(OrderManagementInterface::class);
         $this->customerManagement = $this->createMock(CustomerManagement::class);
-        $this->quoteRepositoryMock = $this->createMock(CartRepositoryInterface::class);
+        $this->quoteRepositoryMock = $this->getMockForAbstractClass(CartRepositoryInterface::class);
 
-        $this->userContextMock = $this->createMock(UserContextInterface::class);
+        $this->userContextMock = $this->getMockForAbstractClass(UserContextInterface::class);
         $this->customerRepositoryMock = $this->getMockBuilder(CustomerRepositoryInterface::class)
             ->addMethods(['create'])
             ->onlyMethods(['save', 'get', 'getById', 'getList', 'delete', 'deleteById'])
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->customerFactoryMock = $this->createPartialMock(
             CustomerFactory::class,
             ['create']
@@ -272,7 +272,7 @@ class QuoteManagementTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->customerSessionMock = $this->createMock(\Magento\Customer\Model\Session::class);
-        $this->accountManagementMock = $this->createMock(AccountManagementInterface::class);
+        $this->accountManagementMock = $this->getMockForAbstractClass(AccountManagementInterface::class);
 
         $this->quoteFactoryMock = $this->createPartialMock(QuoteFactory::class, ['create']);
         $this->addressRepositoryMock = $this->getMockBuilder(AddressRepositoryInterface::class)
@@ -426,7 +426,7 @@ class QuoteManagementTest extends TestCase
         $storeId = 5;
 
         $quoteMock = $this->createMock(Quote::class);
-        $customerMock = $this->createMock(CustomerInterface::class);
+        $customerMock = $this->getMockForAbstractClass(CustomerInterface::class);
 
         $this->quoteRepositoryMock
             ->expects($this->once())
@@ -472,7 +472,7 @@ class QuoteManagementTest extends TestCase
             ->onlyMethods(['setCustomer', 'setCustomerIsGuest'])
             ->disableOriginalConstructor()
             ->getMock();
-        $customerMock = $this->createMock(CustomerInterface::class);
+        $customerMock = $this->getMockForAbstractClass(CustomerInterface::class);
 
         $this->quoteRepositoryMock
             ->expects($this->once())
@@ -562,7 +562,7 @@ class QuoteManagementTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $customerMock = $this->createMock(CustomerInterface::class);
+        $customerMock = $this->getMockForAbstractClass(CustomerInterface::class);
 
         $this->quoteRepositoryMock
             ->expects($this->once())
@@ -632,7 +632,7 @@ class QuoteManagementTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $customerMock = $this->createMock(CustomerInterface::class);
+        $customerMock = $this->getMockForAbstractClass(CustomerInterface::class);
         $this->quoteRepositoryMock
             ->expects($this->once())
             ->method('getActive')
@@ -700,11 +700,11 @@ class QuoteManagementTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $payment = $this->createMock(Payment::class);
-        $baseOrder = $this->createMock(OrderInterface::class);
+        $baseOrder = $this->getMockForAbstractClass(OrderInterface::class);
         $convertedBilling = $this->createPartialMockForAbstractClass(OrderAddressInterface::class, ['setData']);
         $convertedShipping = $this->createPartialMockForAbstractClass(OrderAddressInterface::class, ['setData']);
-        $convertedPayment = $this->createMock(OrderPaymentInterface::class);
-        $convertedQuoteItem = $this->createMock(OrderItemInterface::class);
+        $convertedPayment = $this->getMockForAbstractClass(OrderPaymentInterface::class);
+        $convertedQuoteItem = $this->getMockForAbstractClass(OrderItemInterface::class);
 
         $addresses = [$convertedShipping, $convertedBilling];
         $quoteItems = [$quoteItem];
@@ -1193,11 +1193,11 @@ class QuoteManagementTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $payment = $this->createMock(Payment::class);
-        $baseOrder = $this->createMock(OrderInterface::class);
+        $baseOrder = $this->getMockForAbstractClass(OrderInterface::class);
         $convertedBilling = $this->createPartialMockForAbstractClass(OrderAddressInterface::class, ['setData']);
         $convertedShipping = $this->createPartialMockForAbstractClass(OrderAddressInterface::class, ['setData']);
-        $convertedPayment = $this->createMock(OrderPaymentInterface::class);
-        $convertedQuoteItem = $this->createMock(OrderItemInterface::class);
+        $convertedPayment = $this->getMockForAbstractClass(OrderPaymentInterface::class);
+        $convertedQuoteItem = $this->getMockForAbstractClass(OrderItemInterface::class);
 
         $addresses = [$convertedShipping, $convertedBilling];
         $quoteItems = [$quoteItem];

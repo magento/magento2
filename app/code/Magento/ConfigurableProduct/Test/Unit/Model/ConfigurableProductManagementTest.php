@@ -52,8 +52,8 @@ class ConfigurableProductManagementTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->attributeRepository = $this->createMock(ProductAttributeRepositoryInterface::class);
-        $this->product = $this->createMock(ProductInterface::class);
+        $this->attributeRepository = $this->getMockForAbstractClass(ProductAttributeRepositoryInterface::class);
+        $this->product = $this->getMockForAbstractClass(ProductInterface::class);
         $this->option = $this->createMock(
             Attribute::class
         );

@@ -60,7 +60,7 @@ class ContentValidatorTest extends TestCase
 
         $this->fileValidatorMock = $this->createMock(\Magento\Downloadable\Model\File\ContentValidator::class);
         $this->urlValidatorMock = $this->createMock(Validator::class);
-        $this->sampleFileMock = $this->createMock(ContentInterface::class);
+        $this->sampleFileMock = $this->getMockForAbstractClass(ContentInterface::class);
         $this->fileMock = $this->createMock(File::class);
 
         $this->validator = $objectManager->getObject(
@@ -75,7 +75,7 @@ class ContentValidatorTest extends TestCase
 
     public function testIsValid()
     {
-        $sampleFileContentMock = $this->createMock(ContentInterface::class);
+        $sampleFileContentMock = $this->getMockForAbstractClass(ContentInterface::class);
         $sampleContentData = [
             'title' => 'Title',
             'sort_order' => 1,
@@ -124,7 +124,7 @@ class ContentValidatorTest extends TestCase
      */
     protected function getSampleContentMock(array $sampleContentData)
     {
-        $contentMock = $this->createMock(SampleInterface::class);
+        $contentMock = $this->getMockForAbstractClass(SampleInterface::class);
         $contentMock->expects($this->any())->method('getTitle')->willReturn(
             $sampleContentData['title']
         );

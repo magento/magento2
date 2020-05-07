@@ -521,7 +521,7 @@ class LoginPostTest extends TestCase
 
         $this->messageManager = $this->getMockBuilder(ManagerInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->redirectFactory = $this->getMockBuilder(RedirectFactory::class)
             ->disableOriginalConstructor()
@@ -566,14 +566,12 @@ class LoginPostTest extends TestCase
                     ->with($username)
                     ->willReturn($url);
 
-                $message = __(
-                    'This account is not confirmed.' .
-                    ' <a href="%1">Click here</a> to resend confirmation email.',
-                    $url
-                );
                 $this->messageManager->expects($this->once())
-                    ->method('addErrorMessage')
-                    ->with($message)
+                    ->method('addComplexErrorMessage')
+                    ->with(
+                        'confirmAccountErrorMessage',
+                        ['url' => $url]
+                    )
                     ->willReturnSelf();
 
                 $this->session->expects($this->once())

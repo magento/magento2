@@ -120,8 +120,8 @@ class CurrencysymbolTest extends TestCase
             ReinitableConfigInterface::class,
             ['reinit', 'setValue', 'getValue', 'isSetFlag']
         );
-        $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
-        $this->cacheTypeListMock = $this->createMock(TypeListInterface::class);
+        $this->storeManagerMock = $this->getMockForAbstractClass(StoreManagerInterface::class);
+        $this->cacheTypeListMock = $this->getMockForAbstractClass(TypeListInterface::class);
         $this->serializerMock = $this->getMockBuilder(Json::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -284,7 +284,7 @@ class CurrencysymbolTest extends TestCase
         $this->serializerMock->expects($this->never())
             ->method('unserialize');
         $currencySymbol = $this->model->getCurrencySymbol('USD');
-        $this->assertEquals(false, $currencySymbol);
+        $this->assertFalse($currencySymbol);
     }
 
     /**

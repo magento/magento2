@@ -90,7 +90,7 @@ class InstantPurchaseTest extends TestCase
     protected function setUp(): void
     {
         $this->customerSession = $this->createMock(Session::class);
-        $this->storeManager = $this->createMock(StoreManagerInterface::class);
+        $this->storeManager = $this->getMockForAbstractClass(StoreManagerInterface::class);
         $this->instantPurchase = $this->createMock(InstantPurchaseModel::class);
         $this->paymentTokenFormatter = $this->createMock(PaymentTokenFormatter::class);
         $this->customerAddressesFormatter = $this->createMock(CustomerAddressesFormatter::class);

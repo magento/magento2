@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontCheckPayPalSmartButtonWithBuyNowLabelOnProductPageTest">
+        <annotations>
+            <features value="PayPal"/>
+            <stories value="PayPal Smart Button Configuration"/>
+            <title value="Check PayPal Smart Button configuration with Buy Now label on Product page"/>
+            <description value="Admin is able to customize PayPal Smart Button with Buy Now label on Product page"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-28711"/>
+            <group value="paypal"/>
+            <group value="paypalExpress"/>
+            <skip>
+                <issueId value="MC-33951"/>
+            </skip>
+        </annotations>
+        <before>
+            <!-- Create product -->
+            <createData entity="simpleProductWithoutCategory" stepKey="createProduct"/>
+
+            <!-- Configure PayPal Smart Button -->
+            <magentoCLI command="config:set {{StorefrontPaypalProductPageEnableCustomizeButtonConfigData.path}} {{StorefrontPaypalProductPageEnableCustomizeButtonConfigData.value}}" stepKey="enableCustomizeButton"/>
+            <magentoCLI command="config:set {{StorefrontPaypalProductPageButtonBuyNowLabelConfigData.path}} {{StorefrontPaypalProductPageButtonBuyNowLabelConfigData.value}}" stepKey="setLabelForPayPalSmartButton"/>
+            <magentoCLI command="config:set {{StorefrontPaypalProductPageButtonVerticalLayoutConfigData.path}} {{StorefrontPaypalProductPageButtonVerticalLayoutConfigData.value}}" stepKey="setLayoutForPayPalSmartButton"/>
+            <magentoCLI command="config:set {{StorefrontPaypalProductPageButtonRectangleShapeConfigData.path}} {{StorefrontPaypalProductPageButtonRectangleShapeConfigData.value}}" stepKey="setShapeForPayPalSmartButton"/>
+            <magentoCLI command="config:set {{StorefrontPaypalProductPageButtonSilverColorConfigData.path}} {{StorefrontPaypalProductPageButtonSilverColorConfigData.value}}" stepKey="setColorForPayPalSmartButton"/>
+        </before>
+        <after>
+            <!-- Delete product -->
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+
+            <!-- Logout from Admin -->
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
+        </after>
+        <!-- Go to PayPal Smart Button page -->
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="goToPayPalSmartButtonPage">
+            <argument name="productUrl" value="$createProduct.custom_attributes[url_key]$"/>
+        </actionGroup>
+
+        <!-- Switch to iframe of PayPal group button -->
+        <actionGroup ref="StorefrontSwitchToPayPalButtonIframeActionGroup" stepKey="switchToIframe"/>
+
+        <!-- Check PayPal smart button configurations -->
+        <seeElement selector="{{StorefrontPayPalSmartButtonStylesSection.label}}" stepKey="seeButtonLabel"/>
+        <actionGroup ref="AssertPayPalButtonLayoutActionGroup" stepKey="assertLayoutBtn">
+            <argument name="label" value="{{PayPalLabel.buynow}}"/>
+            <argument name="layout" value="{{PayPalLayout.vertical}}"/>
+            <argument name="shape" value="{{PayPalShape.rectangle}}"/>
+            <argument name="color" value="{{PayPalColor.silver}}"/>
+        </actionGroup>
+    </test>
+</tests>

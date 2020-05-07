@@ -80,7 +80,7 @@ class BuilderTest extends TestCase
 
         $filter = $this->getMockBuilder(FilterInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $filter->expects($this->any())
             ->method('getType')
             ->willReturn('unknown');
@@ -105,7 +105,7 @@ class BuilderTest extends TestCase
             ->willReturn($filterType);
         $childFilter = $this->getMockBuilder(FilterInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $childFilter->expects($this->any())
             ->method('getType')
             ->willReturn('termFilter');
@@ -140,7 +140,7 @@ class BuilderTest extends TestCase
             ->willReturn($filterType);
         $childFilter = $this->getMockBuilder(FilterInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $childFilter->expects($this->any())
             ->method('getType')
             ->willReturn('termFilter');

@@ -43,7 +43,7 @@ class AttributeTest extends TestCase
     protected function setUp(): void
     {
         $this->contextMock = $this->createMock(Context::class);
-        $eventManagerMock = $this->createMock(ManagerInterface::class);
+        $eventManagerMock = $this->getMockForAbstractClass(ManagerInterface::class);
         $eventManagerMock->expects($this->any())->method('dispatch');
         $this->contextMock->expects($this->any())->method('getEventDispatcher')->willReturn($eventManagerMock);
     }
@@ -90,16 +90,16 @@ class AttributeTest extends TestCase
             $this->once()
         )->method(
             'insert'
-        )->will(
-            $this->returnValueMap([['eav_attribute', $attributeData, 1]])
+        )->willReturnMap(
+            [['eav_attribute', $attributeData, 1]]
         );
 
         $connectionMock->expects(
             $this->once()
         )->method(
             'fetchRow'
-        )->will(
-            $this->returnValueMap(
+        )->willReturnMap(
+            
                 [
                     [
                         'SELECT `eav_attribute`.* FROM `eav_attribute` ' .
@@ -107,7 +107,7 @@ class AttributeTest extends TestCase
                         $attributeData,
                     ],
                 ]
-            )
+            
         );
         $connectionMock->expects(
             $this->once()
@@ -163,24 +163,24 @@ class AttributeTest extends TestCase
             $this->any()
         )->method(
             'lastInsertId'
-        )->will(
-            $this->returnValueMap([['eav_attribute', 123], ['eav_attribute_option_value', 321]])
+        )->willReturnMap(
+            [['eav_attribute', 123], ['eav_attribute_option_value', 321]]
         );
         $connectionMock->expects(
             $this->once()
         )->method(
             'update'
-        )->will(
-            $this->returnValueMap(
+        )->willReturnMap(
+            
                 [['eav_attribute', ['default_value' => ''], ['attribute_id = ?' => 123], 1]]
-            )
+            
         );
         $connectionMock->expects(
             $this->once()
         )->method(
             'fetchRow'
-        )->will(
-            $this->returnValueMap(
+        )->willReturnMap(
+            
                 [
                     [
                         'SELECT `eav_attribute`.* FROM `eav_attribute` ' .
@@ -188,21 +188,21 @@ class AttributeTest extends TestCase
                         false,
                     ],
                 ]
-            )
+            
         );
         $connectionMock->expects(
             $this->once()
         )->method(
             'delete'
-        )->will(
-            $this->returnValueMap([['eav_attribute_option_value', ['option_id = ?' => ''], 0]])
+        )->willReturnMap(
+            [['eav_attribute_option_value', ['option_id = ?' => ''], 0]]
         );
         $connectionMock->expects(
             $this->exactly(4)
         )->method(
             'insert'
-        )->will(
-            $this->returnValueMap(
+        )->willReturnMap(
+            
                 [
                     ['eav_attribute', $attributeData, 1],
                     ['eav_attribute_option', ['attribute_id' => 123, 'sort_order' => 0], 1],
@@ -217,7 +217,7 @@ class AttributeTest extends TestCase
                         1
                     ],
                 ]
-            )
+            
         );
         $connectionMock->expects($this->any())->method('getTransactionLevel')->willReturn(1);
 

@@ -18,10 +18,10 @@ class DebugHintsTest extends TestCase
      */
     public function testRender($showBlockHints)
     {
-        $subject = $this->createMock(TemplateEngineInterface::class);
+        $subject = $this->getMockForAbstractClass(TemplateEngineInterface::class);
         $block = $this->getMockBuilder(BlockInterface::class)
             ->setMockClassName('TestBlock')
-            ->getMock();
+            ->getMockForAbstractClass();
         $subject->expects(
             $this->once()
         )->method(

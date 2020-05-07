@@ -172,8 +172,8 @@ class CollectTotalsObserverTest extends TestCase
             ['getId']
         );
 
-        $shippingAssignmentMock = $this->createMock(ShippingAssignmentInterface::class);
-        $shippingMock = $this->createMock(ShippingInterface::class);
+        $shippingAssignmentMock = $this->getMockForAbstractClass(ShippingAssignmentInterface::class);
+        $shippingMock = $this->getMockForAbstractClass(ShippingInterface::class);
         $shippingAssignmentMock->expects($this->once())->method('getShipping')->willReturn($shippingMock);
         $shippingMock->expects($this->once())->method('getAddress')->willReturn($this->quoteAddressMock);
 
@@ -186,7 +186,7 @@ class CollectTotalsObserverTest extends TestCase
             ->method('getCustomer')
             ->willReturn($this->customerMock);
 
-        $this->addressRepository = $this->createMock(AddressRepositoryInterface::class);
+        $this->addressRepository = $this->getMockForAbstractClass(AddressRepositoryInterface::class);
         $this->customerSession = $this->getMockBuilder(Session::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -380,7 +380,7 @@ class CollectTotalsObserverTest extends TestCase
         $customerVat = "123123123";
         $defaultShipping = 1;
 
-        $customerAddress = $this->createMock(AddressInterface::class);
+        $customerAddress = $this->getMockForAbstractClass(AddressInterface::class);
         $customerAddress->expects($this->once())
             ->method("getCountryId")
             ->willReturn($customerCountryCode);

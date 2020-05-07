@@ -37,7 +37,7 @@ class JsTest extends TestCase
             Js::class,
             [
                 'formFactory' => $this->createMock(FormFactory::class),
-                'objectManager' => $this->createMock(ObjectManagerInterface::class),
+                'objectManager' => $this->getMockForAbstractClass(ObjectManagerInterface::class),
                 'urlBuilder' => $this->_urlBuilder
             ]
         );
@@ -87,7 +87,7 @@ class JsTest extends TestCase
         $themeMock = $this->createPartialMock(Theme::class, ['isVirtual', 'getId', '__wakeup']);
         $themeMock->expects($this->any())->method('getId')->willReturn($themeId);
 
-        $this->_model->expects($this->any())->method('_getCurrentTheme')->will($this->returnValue($themeMock));
+        $this->_model->expects($this->any())->method('_getCurrentTheme')->willReturn($themeMock);
 
         $this->_urlBuilder->expects(
             $this->once()
@@ -96,8 +96,8 @@ class JsTest extends TestCase
         )->with(
             'adminhtml/system_design_theme/uploadjs',
             ['id' => $themeId]
-        )->will(
-            $this->returnValue($uploadUrl)
+        )->willReturn(
+            $uploadUrl
         );
 
         $this->assertEquals($uploadUrl, $this->_model->getJsUploadUrl());

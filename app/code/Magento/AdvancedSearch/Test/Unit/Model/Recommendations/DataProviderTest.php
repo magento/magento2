@@ -77,7 +77,7 @@ class DataProviderTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
+        $this->scopeConfigMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
         $this->layerResolverMock = $this->getMockBuilder(Resolver::class)
             ->disableOriginalConstructor()
             ->setMethods(['get'])
@@ -123,7 +123,7 @@ class DataProviderTest extends TestCase
         $isEnabledSearchRecommendations = false;
 
         /** @var QueryInterface $queryInterfaceMock */
-        $queryInterfaceMock = $this->createMock(QueryInterface::class);
+        $queryInterfaceMock = $this->getMockForAbstractClass(QueryInterface::class);
 
         $this->scopeConfigMock->expects($this->any())
             ->method('isSetFlag')
@@ -147,7 +147,7 @@ class DataProviderTest extends TestCase
         $queryText = 'test';
 
         /** @var QueryInterface $queryInterfaceMock */
-        $queryInterfaceMock = $this->createMock(QueryInterface::class);
+        $queryInterfaceMock = $this->getMockForAbstractClass(QueryInterface::class);
         $queryInterfaceMock->expects($this->any())->method('getQueryText')->willReturn($queryText);
 
         $this->scopeConfigMock->expects($this->any())

@@ -87,8 +87,8 @@ class ReviewTest extends TestCase
             ['create']
         );
         $this->summaryMock = $this->createMock(Summary::class);
-        $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
-        $this->urlInterfaceMock = $this->createMock(UrlInterface::class);
+        $this->storeManagerMock = $this->getMockForAbstractClass(StoreManagerInterface::class);
+        $this->urlInterfaceMock = $this->getMockForAbstractClass(UrlInterface::class);
         $this->resource = $this->createMock(\Magento\Review\Model\ResourceModel\Review::class);
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);

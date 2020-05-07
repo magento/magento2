@@ -131,10 +131,10 @@ class ReportTest extends TestCase
      */
     public function testGetSummaryStats()
     {
-        $logger = $this->createMock(LoggerInterface::class);
+        $logger = $this->getMockForAbstractClass(LoggerInterface::class);
         $filesystem = $this->createMock(Filesystem::class);
         $importExportData = $this->createMock(Data::class);
-        $coreConfig = $this->createMock(ScopeConfigInterface::class);
+        $coreConfig = $this->getMockForAbstractClass(ScopeConfigInterface::class);
         $importConfig = $this->createPartialMock(Config::class, ['getEntities']);
         $importConfig->expects($this->any())
             ->method('getEntities')

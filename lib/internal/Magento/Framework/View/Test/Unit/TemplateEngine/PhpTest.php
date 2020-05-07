@@ -35,7 +35,7 @@ class PhpTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->_helperFactoryMock = $this->createMock(ObjectManagerInterface::class);
+        $this->_helperFactoryMock = $this->getMockForAbstractClass(ObjectManagerInterface::class);
         $this->_phpEngine = new Php($this->_helperFactoryMock);
     }
 

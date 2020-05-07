@@ -37,12 +37,12 @@ class DataTest extends TestCase
         $this->_helper = new Data(
             $this->createMock(Context::class),
             $this->createMock(Config::class),
-            $this->createMock(ResolverInterface::class),
+            $this->getMockForAbstractClass(ResolverInterface::class),
             $this->createMock(Url::class),
             $this->createMock(Auth::class),
             $this->_frontResolverMock,
             $this->createMock(Random::class),
-            $this->createMock(RequestInterface::class)
+            $this->getMockForAbstractClass(RequestInterface::class)
         );
     }
 

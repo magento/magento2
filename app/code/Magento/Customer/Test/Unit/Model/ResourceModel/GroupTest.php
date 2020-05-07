@@ -72,7 +72,7 @@ class GroupTest extends TestCase
             ->onlyMethods(
                 ['isReadOnly', 'getDefaultGroup', 'getNotLoggedInGroup', 'getLoggedInGroups', 'getAllCustomersGroup']
             )
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->groupModel = $this->createMock(\Magento\Customer\Model\Group::class);
 
@@ -92,7 +92,7 @@ class GroupTest extends TestCase
         );
         $transactionManagerMock->expects($this->any())
             ->method('start')
-            ->willReturn($this->createMock(AdapterInterface::class));
+            ->willReturn($this->getMockForAbstractClass(AdapterInterface::class));
         $contextMock->expects($this->once())
             ->method('getTransactionManager')
             ->willReturn($transactionManagerMock);
@@ -163,7 +163,7 @@ class GroupTest extends TestCase
      */
     public function testDelete()
     {
-        $dbAdapter = $this->createMock(AdapterInterface::class);
+        $dbAdapter = $this->getMockForAbstractClass(AdapterInterface::class);
         $this->resource->expects($this->any())->method('getConnection')->willReturn($dbAdapter);
 
         $customer = $this->getMockBuilder(Customer::class)

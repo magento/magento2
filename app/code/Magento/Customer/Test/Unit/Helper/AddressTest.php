@@ -363,7 +363,7 @@ class AddressTest extends TestCase
     {
         $renderer = $this->getMockBuilder(RendererInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         return [
             ['valid_code', $renderer],
             ['invalid_code', null]
@@ -380,7 +380,7 @@ class AddressTest extends TestCase
         if ($result) {
             $renderer = $this->getMockBuilder(RendererInterface::class)
                 ->disableOriginalConstructor()
-                ->getMock();
+                ->getMockForAbstractClass();
             $renderer->expects($this->once())
                 ->method('getFormatArray')
                 ->willReturn(['key' => 'value']);

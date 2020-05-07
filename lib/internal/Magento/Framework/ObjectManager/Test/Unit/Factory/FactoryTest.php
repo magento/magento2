@@ -66,7 +66,7 @@ class FactoryTest extends TestCase
             ]
         );
 
-        $definitionsMock = $this->createMock(DefinitionInterface::class);
+        $definitionsMock = $this->getMockForAbstractClass(DefinitionInterface::class);
         $definitionsMock->expects($this->once())->method('getParameters')->willReturn(
             [
                 [
@@ -167,7 +167,7 @@ class FactoryTest extends TestCase
     public function testCreateUsingReflection()
     {
         $type = Polymorphous::class;
-        $definitions = $this->createMock(DefinitionInterface::class);
+        $definitions = $this->getMockForAbstractClass(DefinitionInterface::class);
         // should be more than defined in "switch" of create() method
         $definitions->expects($this->once())->method('getParameters')->with($type)->willReturn(
             [
@@ -216,7 +216,7 @@ class FactoryTest extends TestCase
         $expectedArg1
     ) {
         $type = Variadic::class;
-        $definitions = $this->createMock(DefinitionInterface::class);
+        $definitions = $this->getMockForAbstractClass(DefinitionInterface::class);
 
         $definitions->expects($this->once())->method('getParameters')->with($type)->willReturn(
             [
@@ -334,7 +334,7 @@ class FactoryTest extends TestCase
         $expectedArg1
     ) {
         $type = SemiVariadic::class;
-        $definitions = $this->createMock(DefinitionInterface::class);
+        $definitions = $this->getMockForAbstractClass(DefinitionInterface::class);
 
         $definitions->expects($this->once())->method('getParameters')->with($type)->willReturn(
             [

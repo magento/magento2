@@ -29,7 +29,7 @@ class ProductPriceCalculatorTest extends TestCase
     {
         $this->priceCurrencyMock = $this->getMockBuilder(PriceCurrencyInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->model = new ProductPriceCalculator($this->priceCurrencyMock);
     }
 

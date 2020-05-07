@@ -76,7 +76,7 @@ class GroupTest extends TestCase
 
     public function testGetCloneModelCreatesCloneModel()
     {
-        $cloneModel = $this->createMock(ValueInterface::class);
+        $cloneModel = $this->getMockForAbstractClass(ValueInterface::class);
         $this->_depMapperMock = $this->createMock(
             Mapper::class
         );

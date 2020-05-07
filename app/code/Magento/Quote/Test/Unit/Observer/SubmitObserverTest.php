@@ -68,7 +68,7 @@ class SubmitObserverTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->loggerMock = $this->createMock(LoggerInterface::class);
+        $this->loggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
         $this->quoteMock = $this->createMock(Quote::class);
         $this->orderMock = $this->createMock(Order::class);
         $this->paymentMock = $this->createMock(Payment::class);

@@ -56,8 +56,8 @@ class LinkTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->storeManager = $this->createMock(StoreManagerInterface::class);
-        $this->urlFinder = $this->createMock(UrlFinderInterface::class);
+        $this->storeManager = $this->getMockForAbstractClass(StoreManagerInterface::class);
+        $this->urlFinder = $this->getMockForAbstractClass(UrlFinderInterface::class);
 
         $context = $this->createMock(Context::class);
         $context->expects($this->any())

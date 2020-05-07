@@ -53,7 +53,7 @@ class SymlinkTest extends TestCase
     {
         $asset = $this->getMockBuilder(LocalInterface::class)
             ->setMethods([])
-            ->getMock();
+            ->getMockForAbstractClass();
         $asset->expects($this->once())
             ->method('getSourceFile')
             ->willReturn($path);

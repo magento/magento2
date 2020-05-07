@@ -34,7 +34,7 @@ class TranslateTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->_translator = $this->createMock(TranslateInterface::class);
+        $this->_translator = $this->getMockForAbstractClass(TranslateInterface::class);
         $this->loggerMock = $this->getMockBuilder(LoggerInterface::class)
             ->getMock();
 

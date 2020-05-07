@@ -43,7 +43,7 @@ class AttributeLoaderTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->attributeRepositoryMock = $this->createMock(AttributeRepositoryInterface::class);
+        $this->attributeRepositoryMock = $this->getMockForAbstractClass(AttributeRepositoryInterface::class);
         $this->metadataPoolMock = $this->getMockBuilder(MetadataPool::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -69,7 +69,7 @@ class AttributeLoaderTest extends TestCase
      */
     public function testGetAttributes($entityType, $attributeSetId, $expectedCondition)
     {
-        $metadataMock = $this->createMock(EntityMetadataInterface::class);
+        $metadataMock = $this->getMockForAbstractClass(EntityMetadataInterface::class);
         $metadataMock->expects($this->once())
             ->method('getEavEntityType')
             ->willReturn($entityType);
@@ -78,7 +78,7 @@ class AttributeLoaderTest extends TestCase
             ->with($entityType)
             ->willReturn($metadataMock);
 
-        $searchCriteria = $this->createMock(SearchCriteriaInterface::class);
+        $searchCriteria = $this->getMockForAbstractClass(SearchCriteriaInterface::class);
         $this->searchCriteriaBuilderMock->expects($this->once())
             ->method('addFilter')
             ->with(
@@ -90,8 +90,8 @@ class AttributeLoaderTest extends TestCase
             ->method('create')
             ->willReturn($searchCriteria);
 
-        $attributeMock = $this->createMock(AttributeInterface::class);
-        $searchResultMock = $this->createMock(AttributeSearchResultsInterface::class);
+        $attributeMock = $this->getMockForAbstractClass(AttributeInterface::class);
+        $searchResultMock = $this->getMockForAbstractClass(AttributeSearchResultsInterface::class);
         $searchResultMock->expects($this->once())
             ->method('getItems')
             ->willReturn([$attributeMock]);

@@ -108,7 +108,7 @@ class DisableOutputTest extends TestCase
         $this->moduleListMock = $this->getMockBuilder(ModuleListInterface::class)
             ->setMethods(['getNames', 'has', 'getAll', 'getOne'])
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->moduleListMock->expects($this->any())
             ->method('getNames')

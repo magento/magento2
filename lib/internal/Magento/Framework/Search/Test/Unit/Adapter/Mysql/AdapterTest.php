@@ -24,6 +24,8 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
+ * Mysql search adapter test
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class AdapterTest extends TestCase
@@ -85,6 +87,7 @@ class AdapterTest extends TestCase
 
     protected function setUp(): void
     {
+        $this->markTestSkipped("MC-18948: Mysql Adapter and Search Engine is deprecated");
         $this->objectManager = new ObjectManager($this);
 
         $this->request = $this->getMockBuilder(RequestInterface::class)

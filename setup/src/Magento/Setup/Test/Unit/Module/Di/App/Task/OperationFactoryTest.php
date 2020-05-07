@@ -34,7 +34,7 @@ class OperationFactoryTest extends TestCase
     {
         $this->objectManagerMock = $this->getMockBuilder(ObjectManagerInterface::class)
             ->setMethods([])
-            ->getMock();
+            ->getMockForAbstractClass();
         $objectManagerProviderMock = $this->createMock(ObjectManagerProvider::class);
         $objectManagerProviderMock->expects($this->once())->method('get')->willReturn($this->objectManagerMock);
         $this->factory = new OperationFactory(

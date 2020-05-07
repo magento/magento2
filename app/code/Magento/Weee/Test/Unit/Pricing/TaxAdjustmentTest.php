@@ -47,7 +47,7 @@ class TaxAdjustmentTest extends TestCase
     {
         $this->weeeHelperMock = $this->createMock(Data::class);
         $this->taxHelperMock = $this->createMock(\Magento\Tax\Helper\Data::class);
-        $this->priceCurrencyMock = $this->createMock(PriceCurrencyInterface::class);
+        $this->priceCurrencyMock = $this->getMockForAbstractClass(PriceCurrencyInterface::class);
         $this->priceCurrencyMock->expects($this->any())
             ->method('convertAndRound')
             ->willReturnCallback(

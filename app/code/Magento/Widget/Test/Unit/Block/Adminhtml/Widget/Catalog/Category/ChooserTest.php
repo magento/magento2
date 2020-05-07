@@ -93,10 +93,10 @@ class ChooserTest extends TestCase
             ->getMock();
         $this->categoryTree = $this->createMock(Tree::class);
         $this->store = $this->createMock(Store::class);
-        $this->storeManager = $this->createMock(StoreManagerInterface::class);
-        $this->request = $this->createMock(RequestInterface::class);
+        $this->storeManager = $this->getMockForAbstractClass(StoreManagerInterface::class);
+        $this->request = $this->getMockForAbstractClass(RequestInterface::class);
         $this->escaper = $this->createMock(Escaper::class);
-        $this->eventManager = $this->createMock(ManagerInterface::class);
+        $this->eventManager = $this->getMockForAbstractClass(ManagerInterface::class);
         $this->context = $this->createMock(Context::class);
     }
 

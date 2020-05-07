@@ -116,7 +116,7 @@ class RestTest extends TestCase
 
     protected function setUp(): void
     {
-        $objectManagerMock = $this->createMock(ObjectManagerInterface::class);
+        $objectManagerMock = $this->getMockForAbstractClass(ObjectManagerInterface::class);
         $this->_requestMock = $this->getRequestMock();
         $this->_requestMock->expects($this->any())->method('getHttpHost')->willReturn('testHostName.com');
         $this->_responseMock = $this->getResponseMock();
@@ -149,7 +149,7 @@ class RestTest extends TestCase
 
         $layoutMock = $this->getMockBuilder(LayoutInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $errorProcessorMock = $this->createMock(ErrorProcessor::class);
         $errorProcessorMock->expects($this->any())->method('maskException')->willReturnArgument(0);
@@ -161,10 +161,10 @@ class RestTest extends TestCase
             ->setMethods(['process'])->getMock();
 
         $areaListMock = $this->createMock(AreaList::class);
-        $areaMock = $this->createMock(AreaInterface::class);
+        $areaMock = $this->getMockForAbstractClass(AreaInterface::class);
         $areaListMock->expects($this->any())->method('getArea')->willReturn($areaMock);
-        $this->storeMock = $this->createMock(StoreInterface::class);
-        $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
+        $this->storeMock = $this->getMockForAbstractClass(StoreInterface::class);
+        $this->storeManagerMock = $this->getMockForAbstractClass(StoreManagerInterface::class);
         $this->storeManagerMock->expects($this->any())->method('getStore')->willReturn($this->storeMock);
         $this->requestProcessorPool = $this->getRequestProccessotPoolMock();
 

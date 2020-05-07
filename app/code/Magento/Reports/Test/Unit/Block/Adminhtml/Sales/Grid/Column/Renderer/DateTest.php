@@ -90,7 +90,7 @@ class DateTest extends TestCase
     {
         $this->localeDate = $this->getMockBuilder(TimezoneInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->localeDate
             ->expects($this->once())
             ->method('date')

@@ -110,13 +110,13 @@ class DirectiveTest extends TestCase
             ->getMock();
         $this->requestMock = $this->getMockBuilder(RequestInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->urlDecoderMock = $this->getMockBuilder(DecoderInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->objectManagerMock = $this->getMockBuilder(ObjectManagerInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->templateFilterMock = $this->getMockBuilder(Filter::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -141,11 +141,11 @@ class DirectiveTest extends TestCase
                     'rotate'
                 ]
             )
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->responseMock = $this->getMockBuilder(ResponseInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['setHeader', 'setBody', 'sendResponse'])
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->fileMock = $this->getMockBuilder(File::class)
             ->disableOriginalConstructor()
             ->setMethods(['fileGetContents'])
@@ -155,7 +155,7 @@ class DirectiveTest extends TestCase
             ->getMock();
         $this->loggerMock = $this->getMockBuilder(LoggerInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->rawFactoryMock = $this->getMockBuilder(RawFactory::class)
             ->setMethods(['create'])
             ->disableOriginalConstructor()

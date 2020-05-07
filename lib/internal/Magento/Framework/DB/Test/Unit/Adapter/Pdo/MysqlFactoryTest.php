@@ -41,7 +41,7 @@ class MysqlFactoryTest extends TestCase
     protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
-        $this->objectManagerMock = $this->createMock(ObjectManagerInterface::class);
+        $this->objectManagerMock = $this->getMockForAbstractClass(ObjectManagerInterface::class);
         $this->mysqlFactory = $objectManager->getObject(
             MysqlFactory::class,
             [

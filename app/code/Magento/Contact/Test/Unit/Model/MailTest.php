@@ -60,8 +60,8 @@ class MailTest extends TestCase
             ->getMock();
         $this->inlineTranslationMock = $this->getMockBuilder(StateInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
-        $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
+            ->getMockForAbstractClass();
+        $this->storeManagerMock = $this->getMockForAbstractClass(StoreManagerInterface::class);
 
         $objectManager = new ObjectManagerHelper($this);
         $this->mail = $objectManager->getObject(
@@ -83,9 +83,9 @@ class MailTest extends TestCase
         $email = 'reply-to@example.com';
         $templateVars = ['comment' => 'Comment'];
 
-        $transport = $this->createMock(TransportInterface::class);
+        $transport = $this->getMockForAbstractClass(TransportInterface::class);
 
-        $storeMock = $this->createMock(StoreInterface::class);
+        $storeMock = $this->getMockForAbstractClass(StoreInterface::class);
         $storeMock->expects($this->once())->method('getId')->willReturn(555);
 
         $this->storeManagerMock->expects($this->once())->method('getStore')->willReturn($storeMock);

@@ -208,7 +208,7 @@ class AfterImportDataObserverTest extends TestCase
         $this->observer->expects($this->any())->method('getEvent')->willReturn($this->event);
         $this->urlPersist = $this->getMockBuilder(UrlPersistInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->productUrlRewriteGenerator =
             $this->getMockBuilder(ProductUrlRewriteGenerator::class)
                 ->disableOriginalConstructor()
@@ -216,7 +216,7 @@ class AfterImportDataObserverTest extends TestCase
                 ->getMock();
         $this->productRepository = $this->getMockBuilder(ProductRepositoryInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->objectRegistryFactory = $this->createMock(ObjectRegistryFactory::class);
         $this->productUrlPathGenerator = $this->createMock(

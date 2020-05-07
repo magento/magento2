@@ -52,13 +52,13 @@ class WishlistProviderTest extends TestCase
     {
         $objectManager = new ObjectManager($this);
 
-        $this->request = $this->createMock(RequestInterface::class);
+        $this->request = $this->getMockForAbstractClass(RequestInterface::class);
 
         $this->wishlistFactory = $this->createPartialMock(WishlistFactory::class, ['create']);
 
         $this->customerSession = $this->createPartialMock(Session::class, ['getCustomerId']);
 
-        $this->messageManager = $this->createMock(ManagerInterface::class);
+        $this->messageManager = $this->getMockForAbstractClass(ManagerInterface::class);
 
         $this->wishlistProvider = $objectManager->getObject(
             WishlistProvider::class,

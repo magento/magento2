@@ -46,14 +46,14 @@ class ProfilerTest extends TestCase
         $expectedResult
     ) {
         // Cache frontend setup
-        $frontendMock = $this->createMock(FrontendInterface::class);
+        $frontendMock = $this->getMockForAbstractClass(FrontendInterface::class);
 
         $frontendMock->expects($this->any())->method('getBackend')->willReturn($cacheBackend);
 
         $frontendMock->expects($this->any())->method('getLowLevelFrontend')->willReturn($cacheFrontend);
 
         // Profiler setup
-        $driver = $this->createMock(DriverInterface::class);
+        $driver = $this->getMockForAbstractClass(DriverInterface::class);
         $driver->expects($this->once())->method('start')->with($expectedProfileId, $expectedProfilerTags);
         $driver->expects($this->once())->method('stop')->with($expectedProfileId);
         Profiler::add($driver);

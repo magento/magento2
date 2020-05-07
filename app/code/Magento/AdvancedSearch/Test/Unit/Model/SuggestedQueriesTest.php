@@ -61,7 +61,7 @@ class SuggestedQueriesTest extends TestCase
             ->willReturn('my_engine');
 
         /** @var SuggestedQueriesInterface|MockObject $suggestedQueriesMock */
-        $suggestedQueriesMock = $this->createMock(SuggestedQueriesInterface::class);
+        $suggestedQueriesMock = $this->getMockForAbstractClass(SuggestedQueriesInterface::class);
         $suggestedQueriesMock->expects($this->any())
             ->method('isResultsCountEnabled')
             ->willReturn(true);
@@ -70,7 +70,7 @@ class SuggestedQueriesTest extends TestCase
             ->willReturn([]);
         $this->objectManagerMock = $this->getMockBuilder(ObjectManagerInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->objectManagerMock->expects($this->any())
             ->method('create')
             ->with('search_engine')
@@ -107,7 +107,7 @@ class SuggestedQueriesTest extends TestCase
     {
         $objectManagerMock = $this->getMockBuilder(ObjectManagerInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $objectManagerMock->expects($this->once())
             ->method('create')
             ->willReturn(null);
@@ -134,7 +134,7 @@ class SuggestedQueriesTest extends TestCase
     public function testGetItems(): void
     {
         /** @var QueryInterface|MockObject $queryInterfaceMock */
-        $queryInterfaceMock = $this->createMock(QueryInterface::class);
+        $queryInterfaceMock = $this->getMockForAbstractClass(QueryInterface::class);
         $result = $this->model->getItems($queryInterfaceMock);
         $this->assertEquals([], $result);
     }

@@ -41,10 +41,10 @@ class CollectionTest extends TestCase
      */
     protected function setUp(): void
     {
-        $entityFactory = $this->createMock(EntityFactoryInterface::class);
-        $logger = $this->createMock(LoggerInterface::class);
-        $fetchStrategy = $this->createMock(FetchStrategyInterface::class);
-        $eventManager = $this->createMock(ManagerInterface::class);
+        $entityFactory = $this->getMockForAbstractClass(EntityFactoryInterface::class);
+        $logger = $this->getMockForAbstractClass(LoggerInterface::class);
+        $fetchStrategy = $this->getMockForAbstractClass(FetchStrategyInterface::class);
+        $eventManager = $this->getMockForAbstractClass(ManagerInterface::class);
 
         $this->dateTimeMock = $this->createPartialMock(
             DateTime::class,

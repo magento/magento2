@@ -42,9 +42,9 @@ class ViewFactoryTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->objectManager = $this->createMock(ObjectManagerInterface::class);
+        $this->objectManager = $this->getMockForAbstractClass(ObjectManagerInterface::class);
         $this->model = new ViewFactory($this->objectManager);
-        $this->theme = $this->createMock(ThemeInterface::class);
+        $this->theme = $this->getMockForAbstractClass(ThemeInterface::class);
         $this->view = $this->createMock(View::class);
     }
 

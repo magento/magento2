@@ -74,7 +74,7 @@ class OauthUserContextTest extends TestCase
                     'getSelectedResources'
                 ]
             )
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->oauthRequestHelper = $this->getMockBuilder(\Magento\Framework\Oauth\Helper\Request::class)
             ->disableOriginalConstructor()

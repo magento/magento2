@@ -28,7 +28,7 @@ class CategoryTest extends TestCase
     {
         $this->authorization = $this->getMockBuilder(AuthorizationInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->objectManager = new ObjectManager($this);
     }
 

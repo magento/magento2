@@ -86,7 +86,7 @@ class EditTest extends TestCase
     protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
-        $this->messageManagerMock = $this->createMock(ManagerInterface::class);
+        $this->messageManagerMock = $this->getMockForAbstractClass(ManagerInterface::class);
         $this->coreRegistryMock = $this->createMock(Registry::class);
 
         $this->pageMock = $this->getMockBuilder(Page::class)

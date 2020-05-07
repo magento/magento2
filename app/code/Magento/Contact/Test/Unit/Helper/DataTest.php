@@ -56,7 +56,7 @@ class DataTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
+        $this->scopeConfigMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
 
         $contextMock = $this->getMockBuilder(Context::class)
             ->setMethods(['getScopeConfig'])
@@ -161,7 +161,7 @@ class DataTest extends TestCase
             ->method('isLoggedIn')
             ->willReturn(true);
 
-        $customerDataObject = $this->createMock(CustomerInterface::class);
+        $customerDataObject = $this->getMockForAbstractClass(CustomerInterface::class);
         $customerDataObject->expects($this->once())
             ->method('getEmail')
             ->willReturn('customer@email.com');

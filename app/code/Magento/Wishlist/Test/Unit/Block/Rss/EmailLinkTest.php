@@ -46,7 +46,7 @@ class EmailLinkTest extends TestCase
             ->getMock();
         $wishlist->expects($this->any())->method('getId')->willReturn(5);
         $wishlist->expects($this->any())->method('getSharingCode')->willReturn('somesharingcode');
-        $customer = $this->createMock(CustomerInterface::class);
+        $customer = $this->getMockForAbstractClass(CustomerInterface::class);
         $customer->expects($this->any())->method('getId')->willReturn(8);
         $customer->expects($this->any())->method('getEmail')->willReturn('test@example.com');
 
@@ -65,7 +65,7 @@ class EmailLinkTest extends TestCase
                 return strtr(base64_encode($url), '+/=', '-_,');
             });
 
-        $this->urlBuilder = $this->createMock(UrlBuilderInterface::class);
+        $this->urlBuilder = $this->getMockForAbstractClass(UrlBuilderInterface::class);
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->link = $this->objectManagerHelper->getObject(
             EmailLink::class,

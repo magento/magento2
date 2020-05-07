@@ -76,16 +76,16 @@ class GuestTest extends TestCase
     protected function setUp(): void
     {
         $appContextHelperMock = $this->createMock(Context::class);
-        $storeManagerInterfaceMock = $this->createMock(StoreManagerInterface::class);
+        $storeManagerInterfaceMock = $this->getMockForAbstractClass(StoreManagerInterface::class);
         $registryMock = $this->createMock(Registry::class);
         $this->sessionMock = $this->createMock(Session::class);
-        $this->cookieManagerMock = $this->createMock(CookieManagerInterface::class);
+        $this->cookieManagerMock = $this->getMockForAbstractClass(CookieManagerInterface::class);
         $this->cookieMetadataFactoryMock = $this->createMock(
             CookieMetadataFactory::class
         );
-        $this->managerInterfaceMock = $this->createMock(ManagerInterface::class);
+        $this->managerInterfaceMock = $this->getMockForAbstractClass(ManagerInterface::class);
         $this->orderFactoryMock = $this->createPartialMock(OrderFactory::class, ['create']);
-        $this->viewInterfaceMock = $this->createMock(ViewInterface::class);
+        $this->viewInterfaceMock = $this->getMockForAbstractClass(ViewInterface::class);
         $this->storeModelMock = $this->getMockBuilder(Store::class)
             ->disableOriginalConstructor()
             ->getMock();

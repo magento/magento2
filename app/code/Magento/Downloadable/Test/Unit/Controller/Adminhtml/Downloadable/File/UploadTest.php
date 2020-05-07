@@ -98,11 +98,11 @@ class UploadTest extends TestCase
         $this->context = $this->getMockBuilder(Context::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->request = $this->createMock(RequestInterface::class);
+        $this->request = $this->getMockForAbstractClass(RequestInterface::class);
         $this->response = $this->getMockBuilder(ResponseInterface::class)
             ->addMethods(['setHttpResponseCode', 'clearBody', 'sendHeaders', 'setHeader'])
             ->onlyMethods(['sendResponse'])
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->fileHelper = $this->createPartialMock(File::class, [
             'uploadFromTmp'
         ]);

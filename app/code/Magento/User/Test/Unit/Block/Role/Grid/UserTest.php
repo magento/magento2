@@ -72,7 +72,7 @@ class UserTest extends TestCase
         $this->jsonEncoderMock = $this->getMockBuilder(EncoderInterface::class)
             ->disableOriginalConstructor()
             ->setMethods([])
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->registryMock = $this->getMockBuilder(Registry::class)
             ->disableOriginalConstructor()
@@ -93,17 +93,17 @@ class UserTest extends TestCase
         $this->requestInterfaceMock = $this->getMockBuilder(RequestInterface::class)
             ->disableOriginalConstructor()
             ->setMethods([])
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->urlInterfaceMock = $this->getMockBuilder(UrlInterface::class)
             ->disableOriginalConstructor()
             ->setMethods([])
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->layoutMock = $this->getMockBuilder(LayoutInterface::class)
             ->disableOriginalConstructor()
             ->setMethods([])
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->filesystemMock = $this->getMockBuilder(Filesystem::class)
             ->disableOriginalConstructor()
@@ -219,7 +219,7 @@ class UserTest extends TestCase
         $layoutBlockMock = $this->getMockBuilder(LayoutInterface::class)
             ->disableOriginalConstructor()
             ->setMethods([])
-            ->getMock();
+            ->getMockForAbstractClass();
         $blockMock = $this->getMockBuilder(AbstractBlock::class)
             ->disableOriginalConstructor()
             ->setMethods(['setGrid', 'setId', 'setData', 'getLayout', 'getChildNames', 'isAvailable'])
@@ -239,7 +239,7 @@ class UserTest extends TestCase
         $directoryMock = $this->getMockBuilder(ReadInterface::class)
             ->disableOriginalConstructor()
             ->setMethods([])
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->filesystemMock->expects($this->any())->method('getDirectoryRead')->willReturn($directoryMock);
         $directoryMock->expects($this->any())->method('getRelativePath')->willReturn('filename');
 

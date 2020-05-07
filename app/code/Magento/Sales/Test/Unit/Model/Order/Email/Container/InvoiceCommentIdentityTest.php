@@ -44,7 +44,7 @@ class InvoiceCommentIdentityTest extends TestCase
         $this->scopeConfigInterfaceMock = $this->getMockForAbstractClass(
             ScopeConfigInterface::class
         );
-        $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
+        $this->storeManagerMock = $this->getMockForAbstractClass(StoreManagerInterface::class);
 
         $this->storeMock = $this->getMockBuilder(Store::class)
             ->addMethods(['getStoreId'])

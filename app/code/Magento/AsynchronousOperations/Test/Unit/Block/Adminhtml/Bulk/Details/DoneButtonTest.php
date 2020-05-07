@@ -33,8 +33,8 @@ class DoneButtonTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->bulkStatusMock = $this->createMock(BulkStatusInterface::class);
-        $this->requestMock = $this->createMock(RequestInterface::class);
+        $this->bulkStatusMock = $this->getMockForAbstractClass(BulkStatusInterface::class);
+        $this->requestMock = $this->getMockForAbstractClass(RequestInterface::class);
         $this->block = new DoneButton(
             $this->bulkStatusMock,
             $this->requestMock

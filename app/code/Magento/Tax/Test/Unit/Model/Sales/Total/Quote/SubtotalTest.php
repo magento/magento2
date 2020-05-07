@@ -101,8 +101,8 @@ class SubtotalTest extends TestCase
     {
         $this->objectManager = new ObjectManager($this);
         $this->totalsMock = $this->createMock(Total::class);
-        $this->shippingAssignmentMock = $this->createMock(ShippingAssignmentInterface::class);
-        $this->shippingMock = $this->createMock(ShippingInterface::class);
+        $this->shippingAssignmentMock = $this->getMockForAbstractClass(ShippingAssignmentInterface::class);
+        $this->shippingMock = $this->getMockForAbstractClass(ShippingInterface::class);
         $this->taxConfigMock = $this->getMockBuilder(Config::class)
             ->disableOriginalConstructor()
             ->setMethods(['priceIncludesTax', 'getShippingTaxClass', 'shippingPriceIncludesTax', 'discountTax'])

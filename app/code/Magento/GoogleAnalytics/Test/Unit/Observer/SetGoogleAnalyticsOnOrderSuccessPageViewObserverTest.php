@@ -60,10 +60,10 @@ class SetGoogleAnalyticsOnOrderSuccessPageViewObserverTest extends TestCase
             ->getMock();
         $this->storeManagerMock = $this->getMockBuilder(StoreManagerInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->layoutMock = $this->getMockBuilder(LayoutInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->observerMock = $this->getMockBuilder(Observer::class)
             ->getMock();
         $this->eventMock = $this->getMockBuilder(Event::class)

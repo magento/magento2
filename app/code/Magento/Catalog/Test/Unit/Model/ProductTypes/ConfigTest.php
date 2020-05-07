@@ -46,8 +46,8 @@ class ConfigTest extends TestCase
     {
         $this->objectManager = new ObjectManager($this);
         $this->readerMock = $this->createMock(Reader::class);
-        $this->cacheMock = $this->createMock(CacheInterface::class);
-        $this->serializerMock = $this->createMock(SerializerInterface::class);
+        $this->cacheMock = $this->getMockForAbstractClass(CacheInterface::class);
+        $this->serializerMock = $this->getMockForAbstractClass(SerializerInterface::class);
     }
 
     /**
@@ -129,6 +129,6 @@ class ConfigTest extends TestCase
                 'serializer' => $this->serializerMock,
             ]
         );
-        $this->assertEquals(false, $this->config->isProductSet('typeId'));
+        $this->assertFalse($this->config->isProductSet('typeId'));
     }
 }

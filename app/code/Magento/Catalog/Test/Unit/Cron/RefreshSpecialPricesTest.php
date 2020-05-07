@@ -84,10 +84,10 @@ class RefreshSpecialPricesTest extends TestCase
     {
         $this->_objectManager = new ObjectManager($this);
 
-        $this->_storeManagerMock = $this->createMock(StoreManagerInterface::class);
+        $this->_storeManagerMock = $this->getMockForAbstractClass(StoreManagerInterface::class);
         $this->_resourceMock = $this->createMock(ResourceConnection::class);
         $this->_dateTimeMock = $this->createMock(DateTime::class);
-        $this->_localeDateMock = $this->createMock(TimezoneInterface::class);
+        $this->_localeDateMock = $this->getMockForAbstractClass(TimezoneInterface::class);
         $this->_eavConfigMock = $this->createMock(Config::class);
         $this->_priceProcessorMock = $this->createMock(Processor::class);
 
@@ -130,7 +130,7 @@ class RefreshSpecialPricesTest extends TestCase
         $selectMock->expects($this->any())->method('joinLeft')->willReturnSelf();
         $selectMock->expects($this->any())->method('where')->willReturnSelf();
 
-        $connectionMock = $this->createMock(AdapterInterface::class);
+        $connectionMock = $this->getMockForAbstractClass(AdapterInterface::class);
         $connectionMock->expects($this->any())->method('select')->willReturn($selectMock);
         $connectionMock->expects(
             $this->any()

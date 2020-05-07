@@ -277,7 +277,7 @@ class ProductTest extends TestCase
         $this->extensionAttributes = $this->getMockBuilder(ExtensionAttributesInterface::class)
             ->setMethods(['getWebsiteIds', 'setWebsiteIds'])
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->stockItemFactoryMock = $this->createPartialMock(
             StockItemInterfaceFactory::class,
@@ -304,12 +304,12 @@ class ProductTest extends TestCase
             ->method('getAreaCode')
             ->willReturn(FrontNameResolver::AREA_CODE);
 
-        $this->eventManagerMock = $this->createMock(ManagerInterface::class);
+        $this->eventManagerMock = $this->getMockForAbstractClass(ManagerInterface::class);
         $actionValidatorMock = $this->createMock(
             RemoveAction::class
         );
         $actionValidatorMock->expects($this->any())->method('isAllowed')->willReturn(true);
-        $cacheInterfaceMock = $this->createMock(CacheInterface::class);
+        $cacheInterfaceMock = $this->getMockForAbstractClass(CacheInterface::class);
 
         $contextMock = $this->createPartialMock(
             Context::class,
@@ -373,7 +373,7 @@ class ProductTest extends TestCase
             IndexerRegistry::class,
             ['get']
         );
-        $this->categoryRepository = $this->createMock(CategoryRepositoryInterface::class);
+        $this->categoryRepository = $this->getMockForAbstractClass(CategoryRepositoryInterface::class);
 
         $this->_catalogProduct = $this->createPartialMock(
             \Magento\Catalog\Helper\Product::class,
@@ -394,7 +394,7 @@ class ProductTest extends TestCase
                 ->disableOriginalConstructor()
                 ->getMock();
 
-        $this->metadataServiceMock = $this->createMock(ProductAttributeRepositoryInterface::class);
+        $this->metadataServiceMock = $this->getMockForAbstractClass(ProductAttributeRepositoryInterface::class);
         $this->attributeValueFactory = $this->getMockBuilder(AttributeValueFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -800,10 +800,10 @@ class ProductTest extends TestCase
     {
         $extensionAttributesMock = $this->getMockBuilder(ExtensionAttributesInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getStockItem'])->getMock();
+            ->setMethods(['getStockItem'])->getMockForAbstractClass();
         $stockItemMock = $this->getMockBuilder(StockItemInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $extensionAttributesMock->expects($this->any())->method('getStockItem')->willReturn($stockItemMock);
         $stockItemMock->expects($this->any())->method('getIsInStock')->willReturn(true);
 
@@ -1068,8 +1068,8 @@ class ProductTest extends TestCase
         $this->productTypeInstanceMock->expects($this->once())->method('factory')->with($this->model)
             ->willReturn($productTypeMock);
 
-        $this->model->getResource()->expects($this->any())->method('addCommitCallback')->will($this->returnSelf());
-        $this->model->getResource()->expects($this->any())->method('commit')->will($this->returnSelf());
+        $this->model->getResource()->expects($this->any())->method('addCommitCallback')->willReturnSelf();
+        $this->model->getResource()->expects($this->any())->method('commit')->willReturnSelf();
     }
 
     /**
@@ -1368,7 +1368,7 @@ class ProductTest extends TestCase
             ]
         );
 
-        $directoryMock = $this->createMock(ReadInterface::class);
+        $directoryMock = $this->getMockForAbstractClass(ReadInterface::class);
         $directoryMock->method('getAbsolutePath')->willReturnOnConsecutiveCalls(
             '/var/www/html/pub/imageFile.jpg',
             '/var/www/html/pub/smallImageFile.jpg'
