@@ -68,20 +68,17 @@ class ImageFactory
     }
 
     /**
-     * Retrieve image custom attributes for HTML element
+     * Remove class from custom attributes
      *
      * @param array $attributes
-     * @return string
+     * @return array
      */
-    private function getStringCustomAttributes(array $attributes): string
+    private function filterCustomAttributes(array $attributes): array
     {
-        $result = [];
-        foreach ($attributes as $name => $value) {
-            if ($name != 'class') {
-                $result[] = $name . '="' . $value . '"';
-            }
+        if (isset($attributes['class'])) {
+            unset($attributes['class']);
         }
-        return !empty($result) ? implode(' ', $result) : '';
+        return $attributes;
     }
 
     /**
@@ -170,7 +167,7 @@ class ImageFactory
                 'height' => $imageMiscParams['image_height'],
                 'label' => $this->getLabel($product, $imageMiscParams['image_type']),
                 'ratio' => $this->getRatio($imageMiscParams['image_width'] ?? 0, $imageMiscParams['image_height'] ?? 0),
-                'custom_attributes' => $this->getStringCustomAttributes($attributes),
+                'custom_attributes' => $this->filterCustomAttributes($attributes),
                 'class' => $this->getClass($attributes),
                 'product_id' => $product->getId()
             ],

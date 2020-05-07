@@ -48,7 +48,7 @@ interface HttpInterface extends \Magento\Framework\App\ResponseInterface
      * If header with specified name was not found returns false.
      *
      * @param string $name
-     * @return \Zend\Http\Header\HeaderInterface|bool
+     * @return \Laminas\Http\Header\HeaderInterface|bool
      * @since 100.2.0
      */
     public function getHeader($name);

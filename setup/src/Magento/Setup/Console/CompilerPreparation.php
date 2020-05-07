@@ -15,7 +15,7 @@ use Magento\Framework\Phrase;
 use Magento\Setup\Console\Command\DiCompileCommand;
 use Magento\Setup\Mvc\Bootstrap\InitParamListener;
 use Symfony\Component\Console\Input\ArgvInput;
-use Zend\ServiceManager\ServiceManager;
+use Laminas\ServiceManager\ServiceManager;
 
 /**
  * Class prepares folders for code generation

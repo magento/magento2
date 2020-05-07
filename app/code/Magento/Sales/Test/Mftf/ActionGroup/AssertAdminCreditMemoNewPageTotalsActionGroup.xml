@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AssertAdminCreditMemoNewPageTotalsActionGroup">
+        <annotations>
+            <description>Checks totals values on the Credit Memo new page.</description>
+        </annotations>
+        <arguments>
+            <argument name="refundShipping" type="string" defaultValue="0"/>
+            <argument name="adjustmentRefund" type="string" defaultValue="0"/>
+            <argument name="adjustmentFee" type="string" defaultValue="0"/>
+            <argument name="grandTotal" type="string" defaultValue="0"/>
+        </arguments>
+
+        <seeInField selector="{{AdminCreditMemoTotalSection.refundShipping}}" userInput="{{refundShipping}}" stepKey="seeRefundShipping"/>
+        <seeInField selector="{{AdminCreditMemoTotalSection.adjustmentRefund}}" userInput="{{adjustmentRefund}}" stepKey="seeAdjustmentRefund"/>
+        <seeInField selector="{{AdminCreditMemoTotalSection.adjustmentFee}}" userInput="{{adjustmentFee}}" stepKey="seeAdjustmentFee"/>
+        <see selector="{{AdminCreditMemoTotalSection.grandTotal}}" userInput="{{grandTotal}}" stepKey="seeGrandTotal"/>
+    </actionGroup>
+</actionGroups>

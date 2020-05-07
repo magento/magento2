@@ -69,7 +69,7 @@
                 <requiredEntity createDataKey="createConfigProductAttribute2"/>
             </createData>
             <!-- Login as Admin -->
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
             <!-- Add created attributes with options to Attribute Set -->
             <actionGroup ref="AdminAddUnassignedAttributeToGroupActionGroup" stepKey="createDefaultAttributeSet">
                 <argument name="label" value="mySet"/>
@@ -112,7 +112,7 @@
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
 
             <!-- Reindex invalidated indices after product attribute has been created/deleted -->
-            <actionGroup ref="CliRunReindexUsingCronJobsActionGroup" stepKey="reindexInvalidatedIndices"/>
+            <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
         </after>
         <!-- Create three configurable products with options -->
         <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="amOnProductGridPage"/>

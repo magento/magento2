@@ -10,7 +10,9 @@
 ?>
 
 <img class="photo image <?= $escaper->escapeHtmlAttr($block->getClass()) ?>"
-    <?= $escaper->escapeHtml($block->getCustomAttributes()) ?>
+    <?php foreach ($block->getCustomAttributes() as $name => $value): ?>
+        <?= $escaper->escapeHtmlAttr($name) ?>="<?= $escaper->escapeHtmlAttr($value) ?>"
+    <?php endforeach; ?>
     src="<?= $escaper->escapeUrl($block->getImageUrl()) ?>"
     loading="lazy"
     width="<?= $escaper->escapeHtmlAttr($block->getWidth()) ?>"

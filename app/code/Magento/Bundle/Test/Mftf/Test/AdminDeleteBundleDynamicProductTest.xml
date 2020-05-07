@@ -21,11 +21,12 @@
             </skip>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
             <createData entity="_defaultCategory" stepKey="createCategory"/>
             <createData entity="ApiBundleProductPriceViewRange" stepKey="createDynamicBundleProduct">
                 <requiredEntity createDataKey="createCategory"/>
             </createData>
+            <magentoCron stepKey="runCronIndex" groups="index"/>
         </before>
         <after>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>

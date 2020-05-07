@@ -9,8 +9,8 @@ use Magento\Framework\UrlInterface;
 use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\Config\ConfigOptionsListConstants;
 use Magento\Framework\App\RequestInterface;
-use Zend\Uri\Uri;
-use Zend\Uri\UriFactory;
+use Laminas\Uri\Uri;
+use Laminas\Uri\UriFactory;
 
 /**
  * Cache server model.
