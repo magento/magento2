@@ -20,47 +20,41 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
-/**
- * Test GetCustomerByToken class
- */
 class GetCustomerByTokenTest extends TestCase
 {
-    protected const RESET_PASSWORD = 'resetPassword';
+    private const RESET_PASSWORD = 'resetPassword';
 
     /**
      * @var SearchCriteriaBuilder|MockObject
      */
-    protected $searchCriteriaBuilderMock;
+    private $searchCriteriaBuilderMock;
 
     /**
      * @var SearchCriteria|MockObject
      */
-    protected $searchCriteriaMock;
+    private $searchCriteriaMock;
 
     /**
      * @var CustomerRepositoryInterface|MockObject
      */
-    protected $customerRepositoryMock;
+    private $customerRepositoryMock;
 
     /**
      * @var CustomerSearchResultsInterface|MockObject
      */
-    protected $searchResultMock;
+    private $searchResultMock;
 
     /**
      * @var CustomerInterface|MockObject
      */
-    protected $customerMock;
+    private $customerMock;
 
     /**
      * @var GetCustomerByToken;
      */
-    protected $model;
+    private $model;
 
-    /**
-     * @inheritDoc
-     */
-    public function setUp()
+    protected function setUp()
     {
         $this->searchCriteriaBuilderMock = $this->createMock(SearchCriteriaBuilder::class);
         $this->searchCriteriaMock = $this->createMock(SearchCriteria::class);
@@ -86,15 +80,10 @@ class GetCustomerByTokenTest extends TestCase
             ->willReturn($this->searchResultMock);
     }
 
-    /**
-     * @return void
-     */
-    public function testExecute(): void
+    public function testExecuteReturnWhenOneItemAvailable(): void
     {
         $totalCount = 1;
-        $this->searchResultMock->expects($this->any())
-            ->method('getTotalCount')
-            ->willReturn($totalCount);
+        $this->searchResultMock->method('getTotalCount')->willReturn($totalCount);
         $this->searchResultMock->expects($this->once())
             ->method('getItems')
             ->willReturn([$this->customerMock]);
@@ -105,15 +94,10 @@ class GetCustomerByTokenTest extends TestCase
         );
     }
 
-    /**
-     * @return void
-     */
     public function testExecuteWithNoSuchEntityException(): void
     {
         $totalCount = 0;
-        $this->searchResultMock->expects($this->any())
-            ->method('getTotalCount')
-            ->willReturn($totalCount);
+        $this->searchResultMock->method('getTotalCount')->willReturn($totalCount);
         $this->expectExceptionObject(new NoSuchEntityException(
             new Phrase(
                 'No such entity with rp_token = %value',
@@ -124,15 +108,10 @@ class GetCustomerByTokenTest extends TestCase
         $this->model->execute(self::RESET_PASSWORD);
     }
 
-    /**
-     * @return void
-     */
     public function testExecuteWithExpireException(): void
     {
         $totalCount = 2;
-        $this->searchResultMock->expects($this->any())
-            ->method('getTotalCount')
-            ->willReturn($totalCount);
+        $this->searchResultMock->method('getTotalCount')->willReturn($totalCount);
 
         $this->expectExceptionObject(new ExpiredException(
             new Phrase(
