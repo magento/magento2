@@ -21,7 +21,7 @@
         </annotations>
 
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginToAdminPanel"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginToAdminPanel"/>
             <createData entity="FlatRateShippingMethodConfig" stepKey="enableFlatRate"/>
             <createData entity="FreeShippingMethodsSettingConfig" stepKey="freeShippingMethodsSettingConfig"/>
             <createData entity="MinimumOrderAmount100" stepKey="minimumOrderAmount100"/>
@@ -111,7 +111,7 @@
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
 
             <!-- Reindex invalidated indices after product attribute has been created/deleted -->
-            <actionGroup ref="CliRunReindexUsingCronJobsActionGroup" stepKey="reindexInvalidatedIndices"/>
+            <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
         </after>
 
         <!-- Create a Tax Rule -->
@@ -191,7 +191,7 @@
         <actionGroup ref="ClickPlaceOrderActionGroup" stepKey="clickOnPlaceOrder"/>
 
         <!-- Assert empty Mini Cart -->
-        <seeElement selector="{{StorefrontMiniCartSection.emptyMiniCart}}"  stepKey="assertEmptyCart" />
+        <seeElement selector="{{StorefrontMinicartSection.emptyMiniCart}}"  stepKey="assertEmptyCart" />
         <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumberWithoutLink}}" stepKey="orderId"/>
 
         <!-- Open Order Index Page -->

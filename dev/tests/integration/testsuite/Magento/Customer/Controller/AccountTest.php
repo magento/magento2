@@ -16,6 +16,7 @@ use Magento\Framework\App\Http;
 use Magento\Framework\App\Request\Http as HttpRequest;
 use Magento\Framework\Data\Form\FormKey;
 use Magento\Framework\Message\MessageInterface;
+use Magento\Framework\Phrase;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\Stdlib\CookieManagerInterface;
 use Magento\Store\Model\StoreManager;
@@ -188,14 +189,14 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
     }
 
     /**
-     * @param int         $customerId
+     * @param int $customerId
      * @param string|null $confirmation
      */
     private function assertCustomerConfirmationEquals(int $customerId, string $confirmation = null)
     {
         /** @var \Magento\Customer\Model\Customer $customer */
         $customer = Bootstrap::getObjectManager()
-                             ->create(\Magento\Customer\Model\Customer::class)->load($customerId);
+            ->create(\Magento\Customer\Model\Customer::class)->load($customerId);
         $this->assertEquals($confirmation, $customer->getConfirmation());
     }
 
@@ -227,6 +228,10 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
 
         $this->assertNull($this->getCustomerByEmail('test1@email.com'));
         $this->assertRedirect($this->stringEndsWith('customer/account/create/'));
+        $this->assertSessionMessages(
+            $this->equalTo([new Phrase('Invalid Form Key. Please refresh the page.')]),
+            MessageInterface::TYPE_ERROR
+        );
     }
 
     /**
@@ -492,14 +497,14 @@ EXPECTED_HTML;
             ->setMethod('POST')
             ->setPostValue(
                 [
-                    'form_key'         => $this->_objectManager->get(FormKey::class)->getFormKey(),
-                    'firstname'        => 'John',
-                    'lastname'         => 'Doe',
-                    'email'            => 'johndoe@email.com',
-                    'change_password'  => 1,
-                    'change_email'     => 1,
+                    'form_key' => $this->_objectManager->get(FormKey::class)->getFormKey(),
+                    'firstname' => 'John',
+                    'lastname' => 'Doe',
+                    'email' => 'johndoe@email.com',
+                    'change_password' => 1,
+                    'change_email' => 1,
                     'current_password' => 'password',
-                    'password'         => 'new-Password1',
+                    'password' => 'new-Password1',
                     'password_confirmation' => 'new-Password1',
                 ]
             );
@@ -612,6 +617,10 @@ EXPECTED_HTML;
      *
      * @magentoDataFixture Magento/Customer/_files/customer_confirmation_config_enable.php
      * @return void
+     * @throws \Magento\Framework\Exception\InputException
+     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @throws \Magento\Framework\Stdlib\Cookie\FailureToSendException
      */
     public function testRegisterCustomerWithEmailConfirmation(): void
     {
@@ -645,6 +654,7 @@ EXPECTED_HTML;
         /** @var CookieManagerInterface $cookieManager */
         $cookieManager = $this->_objectManager->get(CookieManagerInterface::class);
         $cookieManager->deleteCookie(MessagePlugin::MESSAGES_COOKIES_NAME);
+
         $this->_objectManager->removeSharedInstance(Http::class);
         $this->_objectManager->removeSharedInstance(Request::class);
         $this->_request = null;
@@ -691,14 +701,14 @@ EXPECTED_HTML;
         $message = $this->transportBuilderMock->getSentMessage();
         $rawMessage = $message->getRawMessage();
 
-        /** @var \Zend\Mime\Part $messageBodyPart */
+        /** @var \Laminas\Mime\Part $messageBodyPart */
         $messageBodyParts = $message->getBody()->getParts();
         $messageBodyPart = reset($messageBodyParts);
         $messageEncoding = $messageBodyPart->getCharset();
         $name = 'John Smith';
 
         if (strtoupper($messageEncoding) !== 'ASCII') {
-            $name = \Zend\Mail\Header\HeaderWrap::mimeEncodeValue($name, $messageEncoding);
+            $name = \Laminas\Mail\Header\HeaderWrap::mimeEncodeValue($name, $messageEncoding);
         }
 
         $nameEmail = sprintf('%s <%s>', $name, $email);
@@ -725,6 +735,10 @@ EXPECTED_HTML;
      * @magentoConfigFixture current_store customer/captcha/enable 0
      *
      * @return void
+     * @throws \Magento\Framework\Exception\InputException
+     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @throws \Magento\Framework\Exception\State\InputMismatchException
      */
     public function testResetPasswordWhenEmailChanged(): void
     {
@@ -761,8 +775,9 @@ EXPECTED_HTML;
         $customer->setEmail($newEmail);
         $customerRepository->save($customer);
 
-        /* Goes through the link in a mail */
         $this->resetRequest();
+
+        /* Goes through the link in a mail */
         $this->getRequest()
             ->setParam('token', $token)
             ->setParam('id', $customerData->getId());
@@ -842,15 +857,13 @@ EXPECTED_HTML;
     }
 
     /**
-     * Clear request object.
-     *
-     * @return void
+     * @inheritDoc
      */
-    private function resetRequest(): void
+    protected function resetRequest(): void
     {
         $this->_objectManager->removeSharedInstance(Http::class);
         $this->_objectManager->removeSharedInstance(Request::class);
-        $this->_request = null;
+        parent::resetRequest();
     }
 
     /**

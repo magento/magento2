@@ -110,6 +110,7 @@ class CategoryRepository implements \Magento\Catalog\Api\CategoryRepositoryInter
             $parentCategory = $this->get($parentId, $storeId);
             $existingData['path'] = $parentCategory->getPath();
             $existingData['parent_id'] = $parentId;
+            $existingData['level'] = null;
         }
         $category->addData($existingData);
         try {

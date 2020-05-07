@@ -82,7 +82,7 @@ class Tax extends \Magento\Framework\View\Element\Template
         $this->_order = $parent->getOrder();
         $this->_source = $parent->getSource();
 
-        $store = $this->getStore();
+        $store = $this->_order->getStore();
         $allowTax = $this->_source->getTaxAmount() > 0 || $this->_config->displaySalesZeroTax($store);
         $grandTotal = (double)$this->_source->getGrandTotal();
         if (!$grandTotal || $allowTax && !$this->_config->displaySalesTaxWithGrandTotal($store)) {
@@ -131,7 +131,7 @@ class Tax extends \Magento\Framework\View\Element\Template
      */
     protected function _initSubtotal()
     {
-        $store = $this->getStore();
+        $store = $this->_order->getStore();
         $parent = $this->getParentBlock();
         $subtotal = $parent->getTotal('subtotal');
         if (!$subtotal) {
@@ -213,7 +213,7 @@ class Tax extends \Magento\Framework\View\Element\Template
      */
     protected function _initShipping()
     {
-        $store = $this->getStore();
+        $store = $this->_order->getStore();
         /** @var \Magento\Sales\Block\Order\Totals $parent */
         $parent = $this->getParentBlock();
         $shipping = $parent->getTotal('shipping');
@@ -290,7 +290,7 @@ class Tax extends \Magento\Framework\View\Element\Template
      */
     protected function _initGrandTotal()
     {
-        $store = $this->getStore();
+        $store = $this->_order->getStore();
         $parent = $this->getParentBlock();
         $grandototal = $parent->getTotal('grand_total');
         if (!$grandototal || !(double)$this->_source->getGrandTotal()) {

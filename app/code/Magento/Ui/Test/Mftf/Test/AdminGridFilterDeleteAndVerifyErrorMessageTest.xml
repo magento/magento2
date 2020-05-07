@@ -20,7 +20,7 @@
 
         <before>
             <magentoCLI command="config:set system/backup/functionality_enabled 1" stepKey="setEnableBackupToYes"/>
-            <actionGroup ref = "LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
             <createData entity="NewRootCategory" stepKey="rootCategory"/>
             <createData entity="defaultSimpleProduct" stepKey="createProduct">
                 <requiredEntity createDataKey="rootCategory" />

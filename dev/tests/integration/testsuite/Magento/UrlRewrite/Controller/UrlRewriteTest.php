@@ -133,6 +133,21 @@ class UrlRewriteTest extends AbstractController
                 'request' => '/page-external4?param1=custom1&param2=custom2',
                 'redirect' => 'https://example.com/external2/?param2=value2',
             ],
+            'Use Case #17: Rewrite: / --(301)--> /; No redirect' => [
+                'request' => '/',
+                'redirect' => '/',
+                'expectedCode' => HttpResponse::STATUS_CODE_200,
+            ],
+            'Use Case #18: Rewrite: contact/ --(301)--> contact?param1=1; '
+            . 'Request: contact/ --(301)--> contact?param1=1' => [
+                'request' => 'contact/',
+                'redirect' => 'contact?param1=1',
+            ],
+            'Use Case #19: Rewrite: contact/?param2=2 --(301)--> contact?param1=1&param2=2; '
+            . 'Request: contact/?&param2=2 --(301)--> contact?param1=1&param2=2' => [
+                'request' => 'contact/?&param2=2',
+                'redirect' => 'contact?param1=1&param2=2',
+            ],
         ];
     }
 }
