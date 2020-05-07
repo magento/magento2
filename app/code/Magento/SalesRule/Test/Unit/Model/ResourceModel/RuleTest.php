@@ -104,7 +104,7 @@ class RuleTest extends TestCase
         $this->transactionManagerMock =
             $this->getMockBuilder(TransactionManagerInterface::class)
                 ->disableOriginalConstructor()
-                ->getMock();
+                ->getMockForAbstractClass();
 
         $context->expects($this->any())
             ->method('getResources')
@@ -117,7 +117,7 @@ class RuleTest extends TestCase
 
         $this->adapter = $this->getMockBuilder(AdapterInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->resourcesMock->expects($this->any())
             ->method('getConnection')
             ->willReturn($this->adapter);

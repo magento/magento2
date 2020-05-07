@@ -110,14 +110,14 @@ class UrlTest extends TestCase
             []
         );
 
-        $this->scopeResolverMock = $this->createMock(ScopeResolverInterface::class);
-        $this->scopeMock = $this->createMock(ScopeInterface::class);
-        $this->queryParamsResolverMock = $this->createMock(QueryParamsResolverInterface::class);
-        $this->sidResolverMock = $this->createMock(SidResolverInterface::class);
+        $this->scopeResolverMock = $this->getMockForAbstractClass(ScopeResolverInterface::class);
+        $this->scopeMock = $this->getMockForAbstractClass(ScopeInterface::class);
+        $this->queryParamsResolverMock = $this->getMockForAbstractClass(QueryParamsResolverInterface::class);
+        $this->sidResolverMock = $this->getMockForAbstractClass(SidResolverInterface::class);
         $this->sessionMock = $this->createMock(Generic::class);
-        $this->scopeConfig = $this->createMock(ScopeConfigInterface::class);
+        $this->scopeConfig = $this->getMockForAbstractClass(ScopeConfigInterface::class);
 
-        $this->urlModifier = $this->createMock(ModifierInterface::class);
+        $this->urlModifier = $this->getMockForAbstractClass(ModifierInterface::class);
         $this->urlModifier->expects($this->any())
             ->method('execute')
             ->willReturnArgument(0);
@@ -246,7 +246,7 @@ class UrlTest extends TestCase
     public function testGetUrl($query, $queryResult, $returnUri)
     {
         $requestMock = $this->getRequestMock();
-        $routeConfigMock = $this->createMock(ConfigInterface::class);
+        $routeConfigMock = $this->getMockForAbstractClass(ConfigInterface::class);
         $model = $this->getUrlModel(
             [
                 'scopeResolver' => $this->scopeResolverMock,
@@ -391,7 +391,7 @@ class UrlTest extends TestCase
     public function testGetUrlWithAsterisksPath()
     {
         $requestMock = $this->getRequestMock();
-        $routeConfigMock = $this->createMock(ConfigInterface::class);
+        $routeConfigMock = $this->getMockForAbstractClass(ConfigInterface::class);
         $model = $this->getUrlModel(
             [
                 'scopeResolver' => $this->scopeResolverMock,
@@ -427,7 +427,7 @@ class UrlTest extends TestCase
     public function testGetDirectUrl()
     {
         $requestMock = $this->getRequestMock();
-        $routeConfigMock = $this->createMock(ConfigInterface::class);
+        $routeConfigMock = $this->getMockForAbstractClass(ConfigInterface::class);
         $model = $this->getUrlModel(
             [
                 'scopeResolver' => $this->scopeResolverMock,
@@ -613,7 +613,7 @@ class UrlTest extends TestCase
      */
     public function testGetConfigData($urlType, $configPath, $isSecure, $isSecureCallCount, $key)
     {
-        $urlSecurityInfoMock = $this->createMock(SecurityInfoInterface::class);
+        $urlSecurityInfoMock = $this->getMockForAbstractClass(SecurityInfoInterface::class);
         $model = $this->getUrlModel([
             'urlSecurityInfo' => $urlSecurityInfoMock,
             'routeParamsResolverFactory' => $this->getRouteParamsResolverFactory(),

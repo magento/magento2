@@ -160,7 +160,7 @@ class QuoteTest extends TestCase
             true,
             ['getValue']
         );
-        $this->quoteRepositoryMock = $this->createMock(CartRepositoryInterface::class);
+        $this->quoteRepositoryMock = $this->getMockForAbstractClass(CartRepositoryInterface::class);
 
         $this->requestMock = $this->createMock(Http::class);
         $this->sidResolverMock = $this->getMockForAbstractClass(
@@ -188,7 +188,7 @@ class QuoteTest extends TestCase
             false
         );
         $this->storage = new Storage();
-        $this->cookieManagerMock = $this->createMock(CookieManagerInterface::class);
+        $this->cookieManagerMock = $this->getMockForAbstractClass(CookieManagerInterface::class);
         $this->cookieMetadataFactoryMock = $this->createMock(
             CookieMetadataFactory::class
         );
@@ -283,7 +283,7 @@ class QuoteTest extends TestCase
                 'getExtensionAttributes',
                 'setExtensionAttributes'
             ])
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->quoteFactoryMock->expects($this->once())->method('create')->willReturn($cartInterfaceMock);
         $this->quote->expects($this->any())->method('getStoreId')->willReturn($storeId);
         $this->quote->expects($this->any())->method('getCustomerId')->willReturn($customerId);
@@ -298,7 +298,7 @@ class QuoteTest extends TestCase
 
         $dataCustomerMock = $this->getMockBuilder(CustomerInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->customerRepositoryMock->expects($this->once())
             ->method('getById')
             ->with($customerId)
@@ -348,7 +348,7 @@ class QuoteTest extends TestCase
 
         $dataCustomerMock = $this->getMockBuilder(CustomerInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->customerRepositoryMock->expects($this->$expectedNumberOfInvokes())
             ->method('getById')
             ->with($customerId)

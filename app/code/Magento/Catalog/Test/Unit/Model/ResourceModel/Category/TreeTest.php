@@ -85,7 +85,7 @@ class TreeTest extends TestCase
         )->willReturnArgument(
             0
         );
-        $eventManager = $this->createMock(ManagerInterface::class);
+        $eventManager = $this->getMockForAbstractClass(ManagerInterface::class);
         $this->_attributeConfig = $this->createMock(Config::class);
         $this->_collectionFactory = $this->createMock(
             Factory::class
@@ -147,7 +147,7 @@ class TreeTest extends TestCase
     {
         /** @var Tree $model */
         $model = $this->createPartialMock(Tree::class, ['_clean']);
-        $model->expects($this->once())->method('_clean')->will($this->returnSelf());
+        $model->expects($this->once())->method('_clean')->willReturnSelf();
 
         $this->assertEquals($model, $model->setCollection($this->getCollectionMock()));
         $this->assertEquals($model, $model->setCollection($this->getCollectionMock()));
@@ -163,7 +163,7 @@ class TreeTest extends TestCase
         $select->expects($this->any())->method('joinLeft')->willReturnSelf();
         $select->expects($this->any())->method('where')->willReturnSelf();
 
-        $connection = $this->createMock(AdapterInterface::class);
+        $connection = $this->getMockForAbstractClass(AdapterInterface::class);
         $connection->expects($this->any())->method('select')->willReturn($select);
         $connection->expects($this->any())->method('fetchCol')->willReturn([]);
 
@@ -171,7 +171,7 @@ class TreeTest extends TestCase
         $resource->expects($this->any())->method('getConnection')->willReturn($connection);
         $resource->expects($this->any())->method('getTableName')->willReturnArgument(0);
 
-        $eventManager = $this->createMock(ManagerInterface::class);
+        $eventManager = $this->getMockForAbstractClass(ManagerInterface::class);
         $attributeConfig = $this->createMock(Config::class);
 
         $attributes = ['attribute_one', 'attribute_two'];

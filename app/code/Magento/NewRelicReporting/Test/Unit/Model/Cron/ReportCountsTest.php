@@ -80,7 +80,7 @@ class ReportCountsTest extends TestCase
         $this->productManagementMock = $this->getMockBuilder(ProductManagementInterface::class)
             ->setMethods(['getCount'])
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->configurableManagementMock = $this
             ->getMockBuilder(ConfigurableProductManagementInterface::class)
             ->setMethods(['getCount'])

@@ -60,7 +60,7 @@ class OptionRepositoryTest extends TestCase
         $this->productRepositoryMock = $this->getMockBuilder(ProductRepositoryInterface::class)
             ->getMockForAbstractClass();
 
-        $this->productMock = $this->createMock(ProductInterface::class);
+        $this->productMock = $this->getMockForAbstractClass(ProductInterface::class);
 
         $this->configurableTypeResource = $this->getMockBuilder(
             \Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable::class
@@ -102,7 +102,7 @@ class OptionRepositoryTest extends TestCase
             ->with($productSku)
             ->willReturn($this->productMock);
 
-        $optionMock = $this->createMock(OptionInterface::class);
+        $optionMock = $this->getMockForAbstractClass(OptionInterface::class);
         $optionMock->expects(self::once())
             ->method('getId')
             ->willReturn($optionId);
@@ -134,7 +134,7 @@ class OptionRepositoryTest extends TestCase
             ->with($productSku)
             ->willReturn($this->productMock);
 
-        $optionMock = $this->createMock(OptionInterface::class);
+        $optionMock = $this->getMockForAbstractClass(OptionInterface::class);
         $optionMock->expects(self::never())
             ->method('getId');
 
@@ -150,7 +150,7 @@ class OptionRepositoryTest extends TestCase
         $this->expectExceptionMessage('This is implemented for the "3" configurable product only.');
         $entityId = 3;
         /** @var OptionInterface $optionMock */
-        $optionMock = $this->createMock(OptionInterface::class);
+        $optionMock = $this->getMockForAbstractClass(OptionInterface::class);
 
         $this->configurableTypeResource->expects(self::once())
             ->method('getEntityIdByAttribute')
@@ -175,7 +175,7 @@ class OptionRepositoryTest extends TestCase
         $this->expectExceptionMessage('The variations from the "3" product can\'t be deleted.');
         $entityId = 3;
         /** @var OptionInterface $optionMock */
-        $optionMock = $this->createMock(OptionInterface::class);
+        $optionMock = $this->getMockForAbstractClass(OptionInterface::class);
 
         $this->configurableTypeResource->expects(self::once())
             ->method('getEntityIdByAttribute')
@@ -291,7 +291,7 @@ class OptionRepositoryTest extends TestCase
             ->with($productSku)
             ->willReturn($this->productMock);
 
-        $optionMock = $this->createMock(OptionInterface::class);
+        $optionMock = $this->getMockForAbstractClass(OptionInterface::class);
         $optionMock->expects(self::never())
             ->method('getId');
 
@@ -316,7 +316,7 @@ class OptionRepositoryTest extends TestCase
             ->with($productSku)
             ->willReturn($this->productMock);
 
-        $optionMock = $this->createMock(OptionInterface::class);
+        $optionMock = $this->getMockForAbstractClass(OptionInterface::class);
 
         $this->optionLoader->expects(self::once())
             ->method('load')
@@ -372,7 +372,7 @@ class OptionRepositoryTest extends TestCase
             $optionValuesMock = [$optionValueMock];
         }
 
-        $optionMock = $this->createMock(OptionInterface::class);
+        $optionMock = $this->getMockForAbstractClass(OptionInterface::class);
         $optionMock->expects($this->any())
             ->method('getAttributeId')
             ->willReturn($attributeId);

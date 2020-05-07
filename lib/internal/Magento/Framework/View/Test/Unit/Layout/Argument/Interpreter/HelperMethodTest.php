@@ -32,7 +32,7 @@ class HelperMethodTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->_objectManager = $this->createMock(ObjectManagerInterface::class);
+        $this->_objectManager = $this->getMockForAbstractClass(ObjectManagerInterface::class);
         $this->_interpreter = $this->createMock(NamedParams::class);
         $this->_model = new HelperMethod($this->_objectManager, $this->_interpreter);
     }

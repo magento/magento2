@@ -109,7 +109,7 @@ class DataTest extends TestCase
             ['create']
         );
 
-        $this->productRepoMock = $this->createMock(ProductRepositoryInterface::class);
+        $this->productRepoMock = $this->getMockForAbstractClass(ProductRepositoryInterface::class);
 
         $this->storeManagerMock = $this->createMock(StoreManager::class);
         $this->swatchCollectionFactoryMock = $this->createPartialMock(
@@ -300,7 +300,7 @@ class DataTest extends TestCase
      */
     public function testLoadVariationByFallback($product)
     {
-        $metadataMock = $this->createMock(EntityMetadataInterface::class);
+        $metadataMock = $this->getMockForAbstractClass(EntityMetadataInterface::class);
         $this->metaDataPoolMock->expects($this->once())->method('getMetadata')->willReturn($metadataMock);
         $metadataMock->expects($this->once())->method('getLinkField')->willReturn('id');
 
@@ -811,6 +811,6 @@ class DataTest extends TestCase
     {
         $this->getSwatchAttributes();
         $result = $this->swatchHelperObject->isProductHasSwatch($this->productMock);
-        $this->assertEquals(true, $result);
+        $this->assertTrue($result);
     }
 }

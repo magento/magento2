@@ -1641,11 +1641,6 @@ QUERY;
         $this->assertEquals('Colorful Category', $response['products']['filters'][0]['filter_items'][0]['label']);
         $this->assertCount(2, $response['products']['aggregations']);
         $productsInResponse = ['Blue briefs','Navy Blue Striped Shoes','Grey shorts'];
-        /** @var \Magento\Config\Model\Config $config */
-        $config = Bootstrap::getObjectManager()->get(\Magento\Config\Model\Config::class);
-        if (strpos($config->getConfigDataValue('catalog/search/engine'), 'elasticsearch') !== false) {
-            $this->markTestIncomplete('MC-20716');
-        }
         $count = count($response['products']['items']);
         for ($i = 0; $i < $count; $i++) {
             $this->assertEquals($productsInResponse[$i], $response['products']['items'][$i]['name']);

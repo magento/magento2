@@ -82,7 +82,7 @@ class MoveTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->context = $this->createMock(Context::class);
-        $this->loggerMock = $this->createMock(LoggerInterface::class);
+        $this->loggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
         $this->fillContext();
 
         $this->moveController = new Move(
@@ -102,13 +102,13 @@ class MoveTest extends TestCase
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $this->context->expects($this->once())->method('getRequest')->willReturn($this->request);
-        $this->messageManager = $this->createMock(ManagerInterface::class);
+        $this->messageManager = $this->getMockForAbstractClass(ManagerInterface::class);
         $this->context->expects($this->once())->method('getMessageManager')->willReturn($this->messageManager);
     }
 
     private function initObjectManager()
     {
-        $this->objectManager = $this->createMock(ObjectManagerInterface::class);
+        $this->objectManager = $this->getMockForAbstractClass(ObjectManagerInterface::class);
         $moveController = new \ReflectionClass($this->moveController);
         $objectManagerProp = $moveController->getProperty('_objectManager');
         $objectManagerProp->setAccessible(true);
@@ -123,7 +123,7 @@ class MoveTest extends TestCase
         $messageBlock = $this->getMockBuilder(Messages::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $layoutMock = $this->createMock(LayoutInterface::class);
+        $layoutMock = $this->getMockForAbstractClass(LayoutInterface::class);
         $this->layoutFactoryMock->expects($this->once())
             ->method('create')
             ->willReturn($layoutMock);
@@ -194,7 +194,7 @@ class MoveTest extends TestCase
         $messageBlock = $this->getMockBuilder(Messages::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $layoutMock = $this->createMock(LayoutInterface::class);
+        $layoutMock = $this->getMockForAbstractClass(LayoutInterface::class);
         $this->layoutFactoryMock->expects($this->once())
             ->method('create')
             ->willReturn($layoutMock);
@@ -263,7 +263,7 @@ class MoveTest extends TestCase
         $messageBlock = $this->getMockBuilder(Messages::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $layoutMock = $this->createMock(LayoutInterface::class);
+        $layoutMock = $this->getMockForAbstractClass(LayoutInterface::class);
         $this->layoutFactoryMock->expects($this->once())
             ->method('create')
             ->willReturn($layoutMock);

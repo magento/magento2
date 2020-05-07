@@ -78,13 +78,13 @@ class OverviewTest extends TestCase
             ->getMock();
 
         $this->priceCurrencyMock =
-            $this->createMock(PriceCurrencyInterface::class);
+            $this->getMockForAbstractClass(PriceCurrencyInterface::class);
         $this->totalsReaderMock = $this->createMock(TotalsReader::class);
         $this->totalsCollectorMock = $this->createMock(TotalsCollector::class);
         $this->checkoutMock =
             $this->createMock(Multishipping::class);
         $this->quoteMock = $this->createMock(Quote::class);
-        $this->urlBuilderMock = $this->createMock(UrlInterface::class);
+        $this->urlBuilderMock = $this->getMockForAbstractClass(UrlInterface::class);
         $this->model = $objectManager->getObject(
             Overview::class,
             [

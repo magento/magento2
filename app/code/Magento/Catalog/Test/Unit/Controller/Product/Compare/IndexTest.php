@@ -88,8 +88,8 @@ class IndexTest extends TestCase
             Context::class,
             ['getRequest', 'getResponse', 'getResultRedirectFactory']
         );
-        $this->request = $this->createMock(RequestInterface::class);
-        $this->response = $this->createMock(ResponseInterface::class);
+        $this->request = $this->getMockForAbstractClass(RequestInterface::class);
+        $this->response = $this->getMockForAbstractClass(ResponseInterface::class);
         $this->redirectFactoryMock = $this->createPartialMock(
             RedirectFactory::class,
             ['create']
@@ -115,13 +115,13 @@ class IndexTest extends TestCase
             ->addMethods(['setBeforeCompareUrl'])
             ->disableOriginalConstructor()
             ->getMock();
-        $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
+        $this->storeManagerMock = $this->getMockForAbstractClass(StoreManagerInterface::class);
         $this->formKeyValidatorMock = $this->getMockBuilder(Validator::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->pageFactoryMock = $this->createMock(PageFactory::class);
-        $this->productRepositoryMock = $this->createMock(ProductRepositoryInterface::class);
-        $this->decoderMock = $this->createMock(DecoderInterface::class);
+        $this->productRepositoryMock = $this->getMockForAbstractClass(ProductRepositoryInterface::class);
+        $this->decoderMock = $this->getMockForAbstractClass(DecoderInterface::class);
 
         $this->index = new Index(
             $this->contextMock,

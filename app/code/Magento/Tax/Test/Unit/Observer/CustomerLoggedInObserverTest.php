@@ -115,7 +115,7 @@ class CustomerLoggedInObserverTest extends TestCase
         $this->addressManagerMock = $this->getMockBuilder(TaxAddressManagerInterface::class)
             ->setMethods(['setDefaultAddressAfterSave', 'setDefaultAddressAfterLogIn'])
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->session = $objectManager->getObject(
             CustomerLoggedInObserver::class,
@@ -164,7 +164,7 @@ class CustomerLoggedInObserverTest extends TestCase
         /* @var \Magento\Customer\Api\Data\AddressInterface|MockObject $address */
         $address = $this->getMockBuilder(AddressInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $customerMock->expects($this->once())
             ->method('getAddresses')

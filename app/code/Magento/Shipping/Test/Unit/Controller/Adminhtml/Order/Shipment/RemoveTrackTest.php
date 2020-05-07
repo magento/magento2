@@ -87,7 +87,7 @@ class RemoveTrackTest extends TestCase
     protected function setUp(): void
     {
         $this->requestMock = $this->createPartialMock(Http::class, ['getParam']);
-        $this->objectManagerMock = $this->createMock(ObjectManagerInterface::class);
+        $this->objectManagerMock = $this->getMockForAbstractClass(ObjectManagerInterface::class);
         $this->shipmentTrackMock = $this->createPartialMock(
             Track::class,
             ['load', 'getId', 'delete', '__wakeup']

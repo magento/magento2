@@ -91,7 +91,7 @@ class CategoryUrlRewriteGeneratorTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->category = $this->createMock(Category::class);
-        $this->categoryRepository = $this->createMock(CategoryRepositoryInterface::class);
+        $this->categoryRepository = $this->getMockForAbstractClass(CategoryRepositoryInterface::class);
         $mergeDataProviderFactory = $this->createPartialMock(
             MergeDataProviderFactory::class,
             ['create']

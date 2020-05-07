@@ -43,7 +43,7 @@ class ResponseTest extends TestCase
             RendererFactory::class
         )->disableOriginalConstructor()
         ->getMock();
-        $rendererFactoryMock->expects($this->any())->method('get')->will($this->returnValue($this->rendererMock));
+        $rendererFactoryMock->expects($this->any())->method('get')->willReturn($this->rendererMock);
         $this->errorProcessorMock = $this->getMockBuilder(ErrorProcessor::class)
             ->disableOriginalConstructor()
         ->getMock();
@@ -164,15 +164,15 @@ class ResponseTest extends TestCase
             $this->any()
         )->method(
             'getMimeType'
-        )->will(
-            $this->returnValue('application/json')
+        )->willReturn(
+            'application/json'
         );
         $this->rendererMock->expects(
             $this->any()
         )->method(
             'render'
-        )->will(
-            $this->returnCallback([$this, 'callbackForSendResponseTest'], $this->returnArgument(0))
+        )->willReturnCallback(
+            [$this, 'callbackForSendResponseTest'], $this->returnArgument(0)
         );
         $exceptionMessage = 'Message';
         $exceptionHttpCode = \Magento\Framework\Webapi\Exception::HTTP_BAD_REQUEST;
@@ -181,8 +181,8 @@ class ResponseTest extends TestCase
             $this->any()
         )->method(
             'maskException'
-        )->will(
-            $this->returnValue($exception)
+        )->willReturn(
+            $exception
         );
 
         $this->responseRest->setException($exception);

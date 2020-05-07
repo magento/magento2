@@ -160,7 +160,7 @@ class BuilderTest extends TestCase
             ->getMock();
         $this->resource->expects($this->any())->method('getConnection')->willReturn($this->connectionMock);
 
-        $this->aggregationResolver = $this->createMock(AggregationResolverInterface::class);
+        $this->aggregationResolver = $this->getMockForAbstractClass(AggregationResolverInterface::class);
         $this->table = $this->getMockBuilder(Table::class)
             ->disableOriginalConstructor()
             ->getMock();

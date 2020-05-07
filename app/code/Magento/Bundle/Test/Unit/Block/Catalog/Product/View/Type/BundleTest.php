@@ -96,7 +96,7 @@ class BundleTest extends TestCase
             ->willReturn($this->product);
         $this->eventManager = $this->getMockBuilder(ManagerInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->jsonEncoder = $this->getMockBuilder(Encoder::class)
             ->disableOriginalConstructor()
             ->getMock();

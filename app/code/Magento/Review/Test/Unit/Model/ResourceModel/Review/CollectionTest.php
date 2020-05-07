@@ -54,7 +54,7 @@ class CollectionTest extends TestCase
     {
         $store = $this->createPartialMock(Store::class, ['getId']);
         $store->expects($this->any())->method('getId')->willReturn(1);
-        $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
+        $this->storeManagerMock = $this->getMockForAbstractClass(StoreManagerInterface::class);
         $this->storeManagerMock->expects($this->any())->method('getStore')->willReturn($store);
         $this->objectManager = (new ObjectManager($this));
         $this->resourceMock = $this->getMockBuilder(AbstractDb::class)

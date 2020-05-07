@@ -55,7 +55,7 @@ class DbStatusValidatorTest extends TestCase
         $this->_cacheMock = $this->getMockBuilder(FrontendInterface::class)
             ->setMethods(['db_is_up_to_date'])
             ->getMockForAbstractClass();
-        $this->requestMock = $this->createMock(RequestInterface::class);
+        $this->requestMock = $this->getMockForAbstractClass(RequestInterface::class);
         $this->subjectMock = $this->createMock(FrontController::class);
         $moduleList = $this->getMockForAbstractClass(ModuleListInterface::class);
         $moduleList->expects($this->any())
@@ -90,8 +90,7 @@ class DbStatusValidatorTest extends TestCase
             ->method('isDbDataUpToDate')
             ->willReturnMap($returnMap);
 
-        $this->assertEquals(
-            null,
+        $this->assertNull(
             $this->_model->beforeDispatch($this->subjectMock, $this->requestMock)
         );
     }
@@ -106,8 +105,7 @@ class DbStatusValidatorTest extends TestCase
             ->method('isDbSchemaUpToDate');
         $this->moduleManager->expects($this->never())
             ->method('isDbDataUpToDate');
-        $this->assertEquals(
-            null,
+        $this->assertNull(
             $this->_model->beforeDispatch($this->subjectMock, $this->requestMock)
         );
     }

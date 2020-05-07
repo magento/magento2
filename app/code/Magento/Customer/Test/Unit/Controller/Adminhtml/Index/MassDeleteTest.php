@@ -90,7 +90,7 @@ class MassDeleteTest extends TestCase
 
         $this->contextMock = $this->createMock(BackendContext::class);
         $resultRedirectFactory = $this->createMock(RedirectFactory::class);
-        $this->responseMock = $this->createMock(ResponseInterface::class);
+        $this->responseMock = $this->getMockForAbstractClass(ResponseInterface::class);
         $this->requestMock = $this->getMockBuilder(Http::class)
             ->disableOriginalConstructor()
             ->getMock();

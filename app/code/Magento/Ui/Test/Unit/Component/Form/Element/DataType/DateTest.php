@@ -42,8 +42,8 @@ class DateTest extends TestCase
     protected function setUp(): void
     {
         $this->contextMock = $this->createMock(Context::class);
-        $this->localeDateMock = $this->createMock(TimezoneInterface::class);
-        $this->localeResolverMock = $this->createMock(ResolverInterface::class);
+        $this->localeDateMock = $this->getMockForAbstractClass(TimezoneInterface::class);
+        $this->localeResolverMock = $this->getMockForAbstractClass(ResolverInterface::class);
         $this->objectManagerHelper = new ObjectManager($this);
         $this->processorMock = $this->createMock(Processor::class);
         $this->contextMock->method('getProcessor')->willReturn($this->processorMock);

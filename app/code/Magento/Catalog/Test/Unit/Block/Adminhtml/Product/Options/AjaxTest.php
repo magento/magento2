@@ -54,7 +54,7 @@ class AjaxTest extends TestCase
             ->setMethods(['getEventManager', 'getScopeConfig', 'getLayout', 'getRequest'])
             ->disableOriginalConstructor()
             ->getMock();
-        $this->encoderInterface = $this->createMock(EncoderInterface::class);
+        $this->encoderInterface = $this->getMockForAbstractClass(EncoderInterface::class);
         $this->productFactory = $this->createPartialMock(ProductFactory::class, ['create']);
         $this->registry = $this->createMock(Registry::class);
 

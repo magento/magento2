@@ -36,7 +36,7 @@ class ConfigTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
+        $this->scopeConfigMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
         $this->serializerMock = $this->createMock(Json::class);
 
         $objectManager = new ObjectManager($this);
@@ -206,7 +206,7 @@ class ConfigTest extends TestCase
             ->with($this->getPath(Config::KEY_USE_CVV), ScopeInterface::SCOPE_STORE, null)
             ->willReturn(1);
 
-        static::assertEquals(true, $this->model->isCvvEnabled());
+        static::assertTrue($this->model->isCvvEnabled());
     }
 
     /**

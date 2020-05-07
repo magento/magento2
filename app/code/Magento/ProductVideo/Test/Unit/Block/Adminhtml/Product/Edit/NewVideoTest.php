@@ -67,12 +67,12 @@ class NewVideoTest extends TestCase
         $this->contextMock = $this->createMock(Context::class);
         $this->mediaHelper = $this->createMock(Media::class);
         $this->mathRandom = $this->createMock(Random::class);
-        $this->urlBuilder = $this->createMock(UrlInterface::class);
+        $this->urlBuilder = $this->getMockForAbstractClass(UrlInterface::class);
         $this->contextMock->expects($this->any())->method('getMathRandom')->willReturn($this->mathRandom);
         $this->contextMock->expects($this->any())->method('getUrlBuilder')->willReturn($this->urlBuilder);
         $this->registryMock = $this->createMock(Registry::class);
         $this->formFactoryMock = $this->createMock(FormFactory::class);
-        $this->jsonEncoderMock = $this->createMock(EncoderInterface::class);
+        $this->jsonEncoderMock = $this->getMockForAbstractClass(EncoderInterface::class);
 
         $objectManager = new ObjectManager($this);
 

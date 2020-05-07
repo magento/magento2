@@ -326,7 +326,7 @@ class CategoryTest extends TestCase
                 120,
                 10
             )
-            ->will($this->returnSelf());
+            ->willReturnSelf();
         $this->itemDataBuilder->expects($this->at(1))
             ->method('addItemData')
             ->with(
@@ -334,10 +334,10 @@ class CategoryTest extends TestCase
                 5641,
                 45
             )
-            ->will($this->returnSelf());
+            ->willReturnSelf();
         $this->itemDataBuilder->expects($this->once())
             ->method('build')
-            ->will($this->returnValue($builtData));
+            ->willReturn($builtData);
 
         $this->target->getItems();
     }

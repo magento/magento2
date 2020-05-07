@@ -139,7 +139,7 @@ class MassInvalidateTest extends TestCase
         $this->response = $this->getMockBuilder(ResponseInterface::class)
             ->addMethods(['setRedirect'])
             ->onlyMethods(['sendResponse'])
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->view = $this->getMockBuilder(ViewInterface::class)
             ->addMethods(['getConfig', 'getTitle'])
@@ -157,7 +157,7 @@ class MassInvalidateTest extends TestCase
                 'setIsLayoutLoaded',
                 'isLayoutLoaded'
             ])
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->session = $this->getMockBuilder(Session::class)
             ->addMethods(['setIsUrlNotice'])

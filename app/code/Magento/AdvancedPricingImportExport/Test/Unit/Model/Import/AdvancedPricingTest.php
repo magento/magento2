@@ -330,7 +330,7 @@ class AdvancedPricingTest extends AbstractImportTestCase
         ];
         $this->dataSourceModel->expects($this->at(0))->method('getNextBunch')->willReturn($testBunch);
         $this->advancedPricing->expects($this->once())->method('validateRow')->willReturn(false);
-        $this->advancedPricing->method('saveProductPrices')->will($this->returnSelf());
+        $this->advancedPricing->method('saveProductPrices')->willReturnSelf();
 
         $this->advancedPricing
             ->expects($this->once())
@@ -538,7 +538,7 @@ class AdvancedPricingTest extends AbstractImportTestCase
                     AdvancedPricing::TABLE_TIER_PRICE
                 ]
             )
-            ->will($this->returnSelf());
+            ->willReturnSelf();
 
         $this->invokeMethod($this->advancedPricing, 'saveAndReplaceAdvancedPrices');
     }
@@ -567,7 +567,7 @@ class AdvancedPricingTest extends AbstractImportTestCase
             ->method('deleteProductTierPrices')
             ->withConsecutive(
                 [$expectedSkuList, AdvancedPricing::TABLE_TIER_PRICE]
-            )->will($this->returnSelf());
+            )->willReturnSelf();
 
         $this->advancedPricing->deleteAdvancedPricing();
     }

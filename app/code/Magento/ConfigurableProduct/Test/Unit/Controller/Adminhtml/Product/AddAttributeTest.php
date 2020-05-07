@@ -63,17 +63,17 @@ class AddAttributeTest extends TestCase
         $this->context = $this->getMockBuilder(Context::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->request = $this->createMock(RequestInterface::class);
+        $this->request = $this->getMockForAbstractClass(RequestInterface::class);
         $this->resultFactory = $this->createMock(ResultFactory::class);
         $this->response = $this->getMockBuilder(ResponseInterface::class)
             ->addMethods(['setBody'])
             ->onlyMethods(['sendResponse'])
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->productBuilder = $this->getMockBuilder(Builder::class)
             ->disableOriginalConstructor()
             ->setMethods(['build'])
             ->getMock();
-        $this->view = $this->createMock(ViewInterface::class);
+        $this->view = $this->getMockForAbstractClass(ViewInterface::class);
 
         $this->context->expects($this->any())
             ->method('getRequest')

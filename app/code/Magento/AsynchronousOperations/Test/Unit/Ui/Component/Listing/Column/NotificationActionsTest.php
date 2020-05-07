@@ -39,7 +39,7 @@ class NotificationActionsTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->context = $this->createMock(ContextInterface::class);
+        $this->context = $this->getMockForAbstractClass(ContextInterface::class);
         $this->uiComponentFactory = $this->createMock(UiComponentFactory::class);
         $processor = $this->getMockBuilder(Processor::class)
             ->addMethods(['getProcessor'])

@@ -115,7 +115,7 @@ class DefaultTest extends TestCase
         );
 
         // \Magento\Customer\Model\Session
-        $this->_objectManager = $this->createMock(ObjectManagerInterface::class);
+        $this->_objectManager = $this->getMockForAbstractClass(ObjectManagerInterface::class);
         $this->_objectManager->expects(
             $this->any()
         )->method(
@@ -290,8 +290,8 @@ class DefaultTest extends TestCase
             Data::class
         )->disableOriginalConstructor()
             ->setMethods(
-            ['getConfig', 'getFonts', '_getWebsiteCode', 'getImgUrl']
-        )->getMock();
+                ['getConfig', 'getFonts', '_getWebsiteCode', 'getImgUrl']
+            )->getMock();
 
         $helper->expects(
             $this->any()

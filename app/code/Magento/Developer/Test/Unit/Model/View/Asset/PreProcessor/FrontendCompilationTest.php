@@ -243,7 +243,7 @@ class FrontendCompilationTest extends TestCase
     {
         $assetMock = $this->getMockBuilder(LocalInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         return $assetMock;
     }

@@ -42,7 +42,7 @@ class ServerTest extends TestCase
         $this->requestMock = $this->createMock(Http::class);
         $this->urlBuilderMock = $this->getMockBuilder(UrlInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $objectManager = new ObjectManager($this);
         $this->model = $objectManager->getObject(

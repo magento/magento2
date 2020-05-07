@@ -69,12 +69,12 @@ class MergedTest extends TestCase
             ->method('getPath')
             ->willReturn('script_two.js');
 
-        $this->logger = $this->createMock(LoggerInterface::class);
-        $this->mergeStrategy = $this->createMock(MergeStrategyInterface::class);
+        $this->logger = $this->getMockForAbstractClass(LoggerInterface::class);
+        $this->mergeStrategy = $this->getMockForAbstractClass(MergeStrategyInterface::class);
         $this->assetRepo = $this->getMockBuilder(AssetRepository::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->versionStorage = $this->createMock(StorageInterface::class);
+        $this->versionStorage = $this->getMockForAbstractClass(StorageInterface::class);
     }
 
     public function testConstructorNothingToMerge()

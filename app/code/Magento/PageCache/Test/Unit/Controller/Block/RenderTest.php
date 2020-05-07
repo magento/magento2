@@ -109,7 +109,7 @@ class RenderTest extends TestCase
         $contextMock->expects($this->any())->method('getResponse')->willReturn($this->responseMock);
         $contextMock->expects($this->any())->method('getView')->willReturn($this->viewMock);
 
-        $this->translateInline = $this->createMock(InlineInterface::class);
+        $this->translateInline = $this->getMockForAbstractClass(InlineInterface::class);
 
         $helperObjectManager = new ObjectManager($this);
         $this->action = $helperObjectManager->getObject(

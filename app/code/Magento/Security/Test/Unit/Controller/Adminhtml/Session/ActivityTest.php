@@ -53,7 +53,7 @@ class ActivityTest extends TestCase
         $this->contextMock = $this->getMockBuilder(Context::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->viewMock = $this->createMock(ViewInterface::class);
+        $this->viewMock = $this->getMockForAbstractClass(ViewInterface::class);
         $this->contextMock->expects($this->any())
             ->method('getView')
             ->willReturn($this->viewMock);

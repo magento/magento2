@@ -48,8 +48,8 @@ class VersionTest extends TestCase
     {
         $objectManager = new ObjectManager($this);
         $this->appStateMock = $this->createMock(State::class);
-        $this->versionStorageMock = $this->createMock(StorageInterface::class);
-        $this->loggerMock = $this->createMock(LoggerInterface::class);
+        $this->versionStorageMock = $this->getMockForAbstractClass(StorageInterface::class);
+        $this->loggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
         $this->deploymentConfigMock = $this->createMock(DeploymentConfig::class);
 
         $this->object = new Version($this->appStateMock, $this->versionStorageMock, $this->deploymentConfigMock);

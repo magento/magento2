@@ -88,7 +88,7 @@ class CategoryProcessorTest extends TestCase
         ];
         $categoryCollection->expects($this->any())
             ->method('getItemById')
-            ->will($this->returnValueMap($map));
+            ->willReturnMap($map);
         $categoryCollection->expects($this->exactly(3))
             ->method('addAttributeToSelect')
             ->withConsecutive(
@@ -96,7 +96,7 @@ class CategoryProcessorTest extends TestCase
                 ['url_key'],
                 ['url_path']
             )
-            ->will($this->returnSelf());
+            ->willReturnSelf();
 
         $categoryColFactory = $this->createPartialMock(
             \Magento\Catalog\Model\ResourceModel\Category\CollectionFactory::class,

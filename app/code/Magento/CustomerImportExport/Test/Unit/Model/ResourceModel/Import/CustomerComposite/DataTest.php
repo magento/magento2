@@ -67,8 +67,8 @@ class DataTest extends TestCase
             ->onlyMethods(['select', 'query'])
             ->disableOriginalConstructor()
             ->getMock();
-        $connectionMock->expects($this->any())->method('select')->will($this->returnValue($selectMock));
-        $connectionMock->expects($this->any())->method('query')->will($this->returnValue($statementMock));
+        $connectionMock->expects($this->any())->method('select')->willReturn($selectMock);
+        $connectionMock->expects($this->any())->method('query')->willReturn($statementMock);
 
         /** @var $resourceModelMock \Magento\Framework\App\ResourceConnection */
         $resourceModelMock = $this->createMock(ResourceConnection::class);
@@ -101,7 +101,7 @@ class DataTest extends TestCase
         $helper = new ObjectManager($this);
         $jsonDecoderMock = $this->getMockBuilder(DecoderInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $jsonDecoderMock->expects($this->once())
             ->method('decode')
             ->willReturn(json_decode($bunchData, true));

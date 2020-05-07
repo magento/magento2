@@ -90,7 +90,7 @@ class ConfigTest extends TestCase
             $this->_configData,
             $this->_scopeConfigWriter,
             $this->_storeManagerMock,
-            $this->createMock(ManagerInterface::class),
+            $this->getMockForAbstractClass(ManagerInterface::class),
             $this->_configCacheMock,
             $this->_layoutCacheMock
         );

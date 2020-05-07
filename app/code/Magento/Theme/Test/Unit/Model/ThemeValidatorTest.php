@@ -45,8 +45,8 @@ class ThemeValidatorTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->storeManager = $this->createMock(StoreManagerInterface::class);
-        $this->themeProvider = $this->createMock(ThemeProviderInterface::class);
+        $this->storeManager = $this->getMockForAbstractClass(StoreManagerInterface::class);
+        $this->themeProvider = $this->getMockForAbstractClass(ThemeProviderInterface::class);
         $this->configData = $this->getMockBuilder(Value::class)
             ->addMethods(['addFieldToFilter'])
             ->onlyMethods(['getCollection'])

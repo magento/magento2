@@ -98,7 +98,7 @@ class InvoiceTest extends TestCase
 
         $this->orderFactory = $this->createPartialMock(SalesOrderFactory::class, ['create']);
 
-        $this->eventManagerMock = $this->createMock(ManagerInterface::class);
+        $this->eventManagerMock = $this->getMockForAbstractClass(ManagerInterface::class);
         $contextMock = $this->createMock(Context::class);
         $contextMock->expects($this->any())
             ->method('getEventDispatcher')

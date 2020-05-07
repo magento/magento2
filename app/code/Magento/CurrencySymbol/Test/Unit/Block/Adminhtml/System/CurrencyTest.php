@@ -38,9 +38,9 @@ class CurrencyTest extends TestCase
         $childBlockMock = $this->getMockBuilder(BlockInterface::class)
             ->addMethods(['addChild'])
             ->onlyMethods(['toHtml'])
-            ->getMock();
+            ->getMockForAbstractClass();
 
-        $blockMock = $this->createMock(BlockInterface::class);
+        $blockMock = $this->getMockForAbstractClass(BlockInterface::class);
 
         /** @var LayoutInterface|MockObject $layoutMock */
         $layoutMock = $this->getMockForAbstractClass(

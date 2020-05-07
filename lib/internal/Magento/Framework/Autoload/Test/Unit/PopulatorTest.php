@@ -34,7 +34,7 @@ class PopulatorTest extends TestCase
     {
         $mockAutoloader = $this->getMockBuilder(AutoloaderInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $mockAutoloader->expects($this->once())
             ->method('addPsr4')

@@ -239,7 +239,7 @@ class ExpressTest extends TestCase
             ]
         );
 
-        $paymentInfo = $this->createMock(InfoInterface::class);
+        $paymentInfo = $this->getMockForAbstractClass(InfoInterface::class);
         $this->model->setInfoInstance($paymentInfo);
 
         $this->parentAssignDataExpectation($data);

@@ -63,8 +63,8 @@ class CompositeTest extends TestCase
         $this->modifiers = ['someClass' => 'namespase\SomeClass'];
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->modifierFactoryMock = $this->createMock(ModifierFactory::class);
-        $this->locatorMock = $this->createMock(LocatorInterface::class);
-        $this->productMock = $this->createMock(ProductInterface::class);
+        $this->locatorMock = $this->getMockForAbstractClass(LocatorInterface::class);
+        $this->productMock = $this->getMockForAbstractClass(ProductInterface::class);
         $this->composite = $this->objectManagerHelper->getObject(
             Composite::class,
             [

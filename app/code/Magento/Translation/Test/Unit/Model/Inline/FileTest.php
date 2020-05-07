@@ -40,10 +40,10 @@ class FileTest extends TestCase
     {
         $this->translateResourceMock = $this->getMockBuilder(ResourceInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->localeResolverMock = $this->getMockBuilder(ResolverInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->jsonSerializer = new Json();
 
         $this->model = new File(

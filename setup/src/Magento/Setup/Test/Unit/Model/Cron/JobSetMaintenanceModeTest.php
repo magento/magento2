@@ -51,7 +51,7 @@ class JobSetMaintenanceModeTest extends TestCase
         $this->objectManagerProviderMock->expects($this->once())->method('get')->willReturn($objectManager);
 
         $this->statusMock = $this->createMock(Status::class);
-        $this->outputMock = $this->createMock(OutputInterface::class);
+        $this->outputMock = $this->getMockForAbstractClass(OutputInterface::class);
     }
 
     public function testExecuteMaintenanceModeDisable()

@@ -75,7 +75,7 @@ class CollectionTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->eventManagerMock = $this->createMock(ManagerInterface::class);
+        $this->eventManagerMock = $this->getMockForAbstractClass(ManagerInterface::class);
         $this->connectionMock = $this->createMock(Mysql::class);
         $this->selectMock = $this->createMock(Select::class);
         $this->historyItemMock = $this->createPartialMock(
@@ -123,7 +123,7 @@ class CollectionTest extends TestCase
             ->method('create')
             ->willReturn($this->historyItemMock);
 
-        $logger = $this->createMock(LoggerInterface::class);
+        $logger = $this->getMockForAbstractClass(LoggerInterface::class);
         $this->collection = new Collection(
             $this->entityFactoryMock,
             $logger,
@@ -151,14 +151,14 @@ class CollectionTest extends TestCase
         $this->connectionMock = $this->collection->getResource()->getConnection();
         $this->connectionMock->expects($this->exactly(3))
             ->method('prepareSqlCondition')
-            ->will(
-                $this->returnValueMap(
+            ->willReturnMap(
+                
                     [
                         ['entity_name', $entityType, 'sql-string'],
                         ['is_customer_notified', 0, 'sql-string'],
                         ['parent_id', $orderId, 'sql-string'],
                     ]
-                )
+                
             );
         $result = $this->collection->getUnnotifiedForInstance($order);
         $this->assertEquals($this->historyItemMock, $result);

@@ -126,7 +126,7 @@ class CatalogProductViewObserverTest extends TestCase
             ->willReturn($this->reportEventMock);
 
         /** @var StoreManagerInterface|MockObject $storeManager */
-        $storeManager = $this->createMock(StoreManagerInterface::class);
+        $storeManager = $this->getMockForAbstractClass(StoreManagerInterface::class);
         $this->storeMock = $this->getMockBuilder(Store::class)
             ->disableOriginalConstructor()
             ->getMock();

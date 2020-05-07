@@ -100,7 +100,7 @@ class DownloadCustomCssTest extends TestCase
             ->getMock();
         $this->response = $this->getMockBuilder(ResponseInterface::class)
             ->setMethods(['sendResponse', 'setRedirect'])
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->objectManager = $this->getMockBuilder(ObjectManagerInterface::class)
             ->getMock();
         $this->messageManager = $this->getMockBuilder(ManagerInterface::class)

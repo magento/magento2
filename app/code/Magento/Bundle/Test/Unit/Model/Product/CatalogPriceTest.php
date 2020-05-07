@@ -50,7 +50,7 @@ class CatalogPriceTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
+        $this->storeManagerMock = $this->getMockForAbstractClass(StoreManagerInterface::class);
         $this->commonPriceMock = $this->createMock(\Magento\Catalog\Model\Product\CatalogPrice::class);
         $this->coreRegistryMock = $this->createMock(Registry::class);
         $this->productMock = $this->getMockBuilder(Product::class)
@@ -101,9 +101,9 @@ class CatalogPriceTest extends TestCase
 
     public function testGetCatalogPriceWithCustomStore()
     {
-        $storeMock = $this->createMock(StoreInterface::class);
+        $storeMock = $this->getMockForAbstractClass(StoreInterface::class);
         $storeMock->expects($this->once())->method('getId')->willReturn('store_id');
-        $currentStoreMock = $this->createMock(StoreInterface::class);
+        $currentStoreMock = $this->getMockForAbstractClass(StoreInterface::class);
         $currentStoreMock->expects($this->once())->method('getId')->willReturn('current_store_id');
 
         $this->coreRegistryMock->expects($this->once())->method('unregister')->with('rule_data');

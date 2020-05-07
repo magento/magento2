@@ -41,7 +41,7 @@ class ProductTest extends TestCase
     {
         $this->objectManager = new ObjectManager($this);
         $this->configurableMock = $this->createMock(Configurable::class);
-        $this->actionMock = $this->createMock(ActionInterface::class);
+        $this->actionMock = $this->getMockForAbstractClass(ActionInterface::class);
 
         $this->model = $this->objectManager->getObject(
             Product::class,

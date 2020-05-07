@@ -88,19 +88,19 @@ class ViewfileTest extends TestCase
     protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
-        $this->requestMock = $this->createMock(RequestInterface::class);
-        $this->responseMock = $this->createMock(ResponseInterface::class);
-        $this->directoryMock = $this->createMock(ReadInterface::class);
+        $this->requestMock = $this->getMockForAbstractClass(RequestInterface::class);
+        $this->responseMock = $this->getMockForAbstractClass(ResponseInterface::class);
+        $this->directoryMock = $this->getMockForAbstractClass(ReadInterface::class);
         $this->fileSystemMock = $this->createMock(Filesystem::class);
         $this->storage = $this->createMock(Storage::class);
-        $this->objectManagerMock = $this->createMock(ObjectManagerInterface::class);
+        $this->objectManagerMock = $this->getMockForAbstractClass(ObjectManagerInterface::class);
 
         $this->contextMock = $this->createMock(Context::class);
         $this->contextMock->expects($this->any())->method('getRequest')->willReturn($this->requestMock);
         $this->contextMock->expects($this->any())->method('getResponse')->willReturn($this->responseMock);
         $this->contextMock->expects($this->any())->method('getObjectManager')->willReturn($this->objectManagerMock);
 
-        $this->urlDecoderMock = $this->createMock(DecoderInterface::class);
+        $this->urlDecoderMock = $this->getMockForAbstractClass(DecoderInterface::class);
         $this->resultRawMock = $this->createMock(Raw::class);
 
         $this->resultRawFactoryMock = $this->createPartialMock(
@@ -148,7 +148,7 @@ class ViewfileTest extends TestCase
 
         $this->urlDecoderMock->expects($this->once())->method('decode')->with($decodedFile)->willReturn($file);
 
-        $fileResponse = $this->createMock(ResponseInterface::class);
+        $fileResponse = $this->getMockForAbstractClass(ResponseInterface::class);
         $fileFactoryMock = $this->createMock(FileFactory::class);
         $fileFactoryMock->expects($this->once())->method('create')->with(
             $path,

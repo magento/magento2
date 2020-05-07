@@ -42,8 +42,8 @@ class CustomerDataBuilderTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->paymentDOMock = $this->createMock(PaymentDataObjectInterface::class);
-        $this->orderMock = $this->createMock(OrderAdapterInterface::class);
+        $this->paymentDOMock = $this->getMockForAbstractClass(PaymentDataObjectInterface::class);
+        $this->orderMock = $this->getMockForAbstractClass(OrderAdapterInterface::class);
         $this->subjectReaderMock = $this->getMockBuilder(SubjectReader::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -128,7 +128,7 @@ class CustomerDataBuilderTest extends TestCase
      */
     private function getBillingMock($billingData)
     {
-        $addressMock = $this->createMock(AddressAdapterInterface::class);
+        $addressMock = $this->getMockForAbstractClass(AddressAdapterInterface::class);
 
         $addressMock->expects(static::once())
             ->method('getFirstname')

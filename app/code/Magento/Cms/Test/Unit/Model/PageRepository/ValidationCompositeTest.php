@@ -30,7 +30,7 @@ class ValidationCompositeTest extends TestCase
     protected function setUp(): void
     {
         /** @var PageRepositoryInterface subject */
-        $this->subject = $this->createMock(PageRepositoryInterface::class);
+        $this->subject = $this->getMockForAbstractClass(PageRepositoryInterface::class);
     }
 
     /**
@@ -45,9 +45,9 @@ class ValidationCompositeTest extends TestCase
 
     public function testSaveInvokesValidatorsWithSucess()
     {
-        $validator1 = $this->createMock(ValidatorInterface::class);
-        $validator2 = $this->createMock(ValidatorInterface::class);
-        $page = $this->createMock(PageInterface::class);
+        $validator1 = $this->getMockForAbstractClass(ValidatorInterface::class);
+        $validator2 = $this->getMockForAbstractClass(ValidatorInterface::class);
+        $page = $this->getMockForAbstractClass(PageInterface::class);
 
         // Assert each are called
         $validator1
@@ -76,9 +76,9 @@ class ValidationCompositeTest extends TestCase
     {
         $this->expectException('Magento\Framework\Exception\LocalizedException');
         $this->expectExceptionMessage('Oh no. That isn\'t right.');
-        $validator1 = $this->createMock(ValidatorInterface::class);
-        $validator2 = $this->createMock(ValidatorInterface::class);
-        $page = $this->createMock(PageInterface::class);
+        $validator1 = $this->getMockForAbstractClass(ValidatorInterface::class);
+        $validator2 = $this->getMockForAbstractClass(ValidatorInterface::class);
+        $page = $this->getMockForAbstractClass(PageInterface::class);
 
         // Assert the first is called
         $validator1
@@ -126,17 +126,17 @@ class ValidationCompositeTest extends TestCase
             [[''], false],
             [['foo'], false],
             [[new \stdClass()], false],
-            [[$this->createMock(ValidatorInterface::class), 'foo'], false],
+            [[$this->getMockForAbstractClass(ValidatorInterface::class), 'foo'], false],
         ];
     }
 
     public function passthroughMethodDataProvider()
     {
         return [
-            ['save', $this->createMock(PageInterface::class)],
+            ['save', $this->getMockForAbstractClass(PageInterface::class)],
             ['getById', 1],
-            ['getList', $this->createMock(SearchCriteriaInterface::class)],
-            ['delete', $this->createMock(PageInterface::class)],
+            ['getList', $this->getMockForAbstractClass(SearchCriteriaInterface::class)],
+            ['delete', $this->getMockForAbstractClass(PageInterface::class)],
             ['deleteById', 1],
         ];
     }

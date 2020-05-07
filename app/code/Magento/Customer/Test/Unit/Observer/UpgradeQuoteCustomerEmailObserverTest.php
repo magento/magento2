@@ -71,10 +71,10 @@ class UpgradeQuoteCustomerEmailObserverTest extends TestCase
 
         $customer = $this->getMockBuilder(CustomerInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $customerOrig = $this->getMockBuilder(CustomerInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $quoteMock = $this->getMockBuilder(Quote::class)
             ->setMethods(['setCustomerEmail'])

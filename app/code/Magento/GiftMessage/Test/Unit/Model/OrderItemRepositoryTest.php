@@ -91,7 +91,7 @@ class OrderItemRepositoryTest extends TestCase
         $this->storeMock = $this->getMockBuilder(StoreInterface::class)
             ->disableOriginalConstructor()
             ->setMethods([])
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->messageFactoryMock = $this->getMockBuilder(MessageFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
@@ -293,7 +293,7 @@ class OrderItemRepositoryTest extends TestCase
             ->getMock();
         $messageMock = $this->getMockBuilder(MessageInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->orderFactoryMock->expects($this->any())
             ->method('create')
@@ -339,7 +339,7 @@ class OrderItemRepositoryTest extends TestCase
         $orderItemId = 2;
         $messageMock = $this->getMockBuilder(MessageInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->orderFactoryMock->expects($this->any())
             ->method('create')
@@ -378,7 +378,7 @@ class OrderItemRepositoryTest extends TestCase
             ->getMock();
         $messageMock = $this->getMockBuilder(MessageInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->orderFactoryMock->expects($this->any())
             ->method('create')
@@ -417,7 +417,7 @@ class OrderItemRepositoryTest extends TestCase
             ->getMock();
         $messageMock = $this->getMockBuilder(MessageInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->orderFactoryMock->expects($this->any())
             ->method('create')
@@ -467,7 +467,7 @@ class OrderItemRepositoryTest extends TestCase
             ->getMock();
         $messageMock = $this->getMockBuilder(MessageInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->orderFactoryMock->expects($this->any())
             ->method('create')

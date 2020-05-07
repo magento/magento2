@@ -59,7 +59,7 @@ class OptionsTest extends TestCase
             ->getMock();
         $eventManagerMock = $this->getMockBuilder(ManagerInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $productContextMock->method('getEscaper')
             ->willReturn($this->escaperMock);
         $productContextMock->method('getEventManager')
@@ -110,7 +110,7 @@ class OptionsTest extends TestCase
 
         $helperMock = $this->getMockBuilder(ConfigurationInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $helperMock->expects($this->once())
             ->method('getOptions')
             ->willReturn($options);

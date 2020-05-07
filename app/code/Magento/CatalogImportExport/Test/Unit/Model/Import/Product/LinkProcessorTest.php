@@ -89,7 +89,7 @@ class LinkProcessorTest extends TestCase
         $this->skuProcessor = $this->createMock(
             SkuProcessor::class
         );
-        $this->logger = $this->createMock(LoggerInterface::class);
+        $this->logger = $this->getMockForAbstractClass(LoggerInterface::class);
     }
 
     /**
@@ -110,7 +110,7 @@ class LinkProcessorTest extends TestCase
             );
 
         $importEntity = $this->createMock(Product::class);
-        $connection = $this->createMock(AdapterInterface::class);
+        $connection = $this->getMockForAbstractClass(AdapterInterface::class);
         $importEntity->method('getConnection')->willReturn($connection);
         $select = $this->createMock(Select::class);
 

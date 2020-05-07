@@ -51,7 +51,7 @@ class DataTest extends TestCase
             ->setMethods(['create'])
             ->setConstructorArgs(
                 [
-                    'objectManager' => $this->createMock(ObjectManagerInterface::class),
+                    'objectManager' => $this->getMockForAbstractClass(ObjectManagerInterface::class),
                     'string' => $this->createMock(StringUtils::class)
                 ]
             )
@@ -89,7 +89,7 @@ class DataTest extends TestCase
             ->setMethods(['create'])
             ->setConstructorArgs(
                 [
-                    'objectManager' => $this->createMock(ObjectManagerInterface::class),
+                    'objectManager' => $this->getMockForAbstractClass(ObjectManagerInterface::class),
                     'string' => $this->createMock(StringUtils::class)
                 ]
             )
@@ -227,7 +227,7 @@ class DataTest extends TestCase
             ->setMethods(['create'])
             ->setConstructorArgs(
                 [
-                    'objectManager' => $this->createMock(ObjectManagerInterface::class),
+                    'objectManager' => $this->getMockForAbstractClass(ObjectManagerInterface::class),
                     'string' => $this->createMock(StringUtils::class)
                 ]
             )
@@ -277,7 +277,7 @@ class DataTest extends TestCase
             ->setMethods(['create'])
             ->setConstructorArgs(
                 [
-                    'objectManager' => $this->createMock(ObjectManagerInterface::class),
+                    'objectManager' => $this->getMockForAbstractClass(ObjectManagerInterface::class),
                     'string' => $this->createMock(StringUtils::class)
                 ]
             )
@@ -322,7 +322,7 @@ class DataTest extends TestCase
         $attrDataFactory = $this->getMockBuilder(AttributeDataFactory::class)
             ->setConstructorArgs(
                 [
-                    'objectManager' => $this->createMock(ObjectManagerInterface::class),
+                    'objectManager' => $this->getMockForAbstractClass(ObjectManagerInterface::class),
                     'string' => $this->createMock(StringUtils::class)
                 ]
             )
@@ -341,7 +341,7 @@ class DataTest extends TestCase
         $attrDataFactory = $this->getMockBuilder(AttributeDataFactory::class)
             ->setConstructorArgs(
                 [
-                    'objectManager' => $this->createMock(ObjectManagerInterface::class),
+                    'objectManager' => $this->getMockForAbstractClass(ObjectManagerInterface::class),
                     'string' => $this->createMock(StringUtils::class)
                 ]
             )
@@ -378,7 +378,7 @@ class DataTest extends TestCase
             ->setMethods(['create'])
             ->setConstructorArgs(
                 [
-                    'objectManager' => $this->createMock(ObjectManagerInterface::class),
+                    'objectManager' => $this->getMockForAbstractClass(ObjectManagerInterface::class),
                     'string' => $this->createMock(StringUtils::class)
                 ]
             )

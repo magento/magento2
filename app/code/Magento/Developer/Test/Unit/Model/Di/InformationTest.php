@@ -39,11 +39,11 @@ class InformationTest extends TestCase
     {
         $this->objectManagerConfig = $this->getMockBuilder(ConfigInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->definitions = $this->getMockBuilder(DefinitionInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->pluginList = $this->getMockBuilder(PluginList::class)
             ->disableOriginalConstructor()

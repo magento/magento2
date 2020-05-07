@@ -106,7 +106,7 @@ class CancelTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->creditmemoManagementMock = $this->createMock(CreditmemoManagementInterface::class);
+        $this->creditmemoManagementMock = $this->getMockForAbstractClass(CreditmemoManagementInterface::class);
         $titleMock = $this->getMockBuilder(\Magento\Framework\App\Action\Title::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -116,7 +116,7 @@ class CancelTest extends TestCase
         $this->responseMock = $this->getMockBuilder(\Magento\Framework\App\Response\Http::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->objectManagerMock = $this->createMock(ObjectManagerInterface::class);
+        $this->objectManagerMock = $this->getMockForAbstractClass(ObjectManagerInterface::class);
         $this->messageManagerMock = $this->getMockBuilder(Manager::class)
             ->disableOriginalConstructor()
             ->getMock();

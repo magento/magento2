@@ -83,11 +83,11 @@ class CheckUserCreateObserverTest extends TestCase
         $this->_objectManager = new ObjectManager($this);
         $this->_helper = $this->createMock(Data::class);
         $this->_actionFlag = $this->createMock(ActionFlag::class);
-        $this->_messageManager = $this->createMock(ManagerInterface::class);
+        $this->_messageManager = $this->getMockForAbstractClass(ManagerInterface::class);
         $this->_session = $this->createMock(SessionManager::class);
         $this->_urlManager = $this->createMock(Url::class);
         $this->captchaStringResolver = $this->createMock(CaptchaStringResolver::class);
-        $this->redirect = $this->createMock(RedirectInterface::class);
+        $this->redirect = $this->getMockForAbstractClass(RedirectInterface::class);
         $this->checkUserCreateObserver = $this->_objectManager->getObject(
             CheckUserCreateObserver::class,
             [

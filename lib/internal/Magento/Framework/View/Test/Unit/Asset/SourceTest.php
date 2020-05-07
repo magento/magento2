@@ -108,7 +108,7 @@ class SourceTest extends TestCase
             ->method('create')
             ->willReturn($this->chain);
 
-        $themeProvider = $this->createMock(ThemeProviderInterface::class);
+        $themeProvider = $this->getMockForAbstractClass(ThemeProviderInterface::class);
         $themeProvider->expects($this->any())
             ->method('getThemeByFullPath')
             ->with('frontend/magento_theme')

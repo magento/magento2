@@ -246,7 +246,7 @@ class GridTest extends TestCase
     {
         $productId = 8;
         $itemQty = 23;
-        $layoutMock = $this->createMock(LayoutInterface::class);
+        $layoutMock = $this->getMockForAbstractClass(LayoutInterface::class);
         $blockMock = $this->getMockBuilder(AbstractBlock::class)
             ->addMethods(['getItems'])
             ->disableOriginalConstructor()
@@ -299,7 +299,7 @@ class GridTest extends TestCase
         $items = $this->block->setLayout($layoutMock)->getItems();
 
         $this->assertEquals('Message', $items[0]->getMessage());
-        $this->assertEquals(true, $this->block->getQuote()->getIsSuperMode());
+        $this->assertTrue($this->block->getQuote()->getIsSuperMode());
     }
 
     /**

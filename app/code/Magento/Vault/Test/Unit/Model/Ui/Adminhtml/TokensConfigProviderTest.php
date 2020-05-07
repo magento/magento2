@@ -152,7 +152,7 @@ class TokensConfigProviderTest extends TestCase
 
         $this->initStoreMock();
 
-        $this->tokenComponentProvider = $this->createMock(TokenUiComponentProviderInterface::class);
+        $this->tokenComponentProvider = $this->getMockForAbstractClass(TokenUiComponentProviderInterface::class);
 
         $this->configProvider = new TokensConfigProvider(
             $this->session,
@@ -471,12 +471,12 @@ class TokensConfigProviderTest extends TestCase
      */
     private function initStoreMock()
     {
-        $this->store = $this->createMock(StoreInterface::class);
+        $this->store = $this->getMockForAbstractClass(StoreInterface::class);
         $this->store->expects(static::any())
             ->method('getId')
             ->willReturn(self::STORE_ID);
 
-        $this->storeManager = $this->createMock(StoreManagerInterface::class);
+        $this->storeManager = $this->getMockForAbstractClass(StoreManagerInterface::class);
         $this->storeManager->expects(static::any())
             ->method('getStore')
             ->with(null)
@@ -513,7 +513,7 @@ class TokensConfigProviderTest extends TestCase
      */
     private function getTokenUiComponentProvider($token)
     {
-        $tokenUiComponent = $this->createMock(TokenUiComponentInterface::class);
+        $tokenUiComponent = $this->getMockForAbstractClass(TokenUiComponentInterface::class);
         $this->tokenComponentProvider->expects(static::once())
             ->method('getComponentForToken')
             ->with($token)

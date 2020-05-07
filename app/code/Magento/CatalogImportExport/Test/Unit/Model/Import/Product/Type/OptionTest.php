@@ -261,9 +261,9 @@ class OptionTest extends AbstractImportTestCase
 
         $catalogDataMock = $this->createPartialMock(Data::class, ['__construct']);
 
-        $scopeConfig = $this->createMock(ScopeConfigInterface::class);
+        $scopeConfig = $this->getMockForAbstractClass(ScopeConfigInterface::class);
 
-        $timezoneInterface = $this->createMock(TimezoneInterface::class);
+        $timezoneInterface = $this->getMockForAbstractClass(TimezoneInterface::class);
         $date = new \DateTime();
         $timezoneInterface->expects($this->any())->method('date')->willReturn($date);
         $this->metadataPoolMock = $this->createMock(MetadataPool::class);
@@ -290,7 +290,7 @@ class OptionTest extends AbstractImportTestCase
             $this->createMock(\Magento\ImportExport\Model\ResourceModel\Import\Data::class),
             $this->createMock(ResourceConnection::class),
             $this->createMock(Helper::class),
-            $this->createMock(StoreManagerInterface::class),
+            $this->getMockForAbstractClass(StoreManagerInterface::class),
             $this->createMock(\Magento\Catalog\Model\ProductFactory::class),
             $this->createMock(\Magento\Catalog\Model\ResourceModel\Product\Option\CollectionFactory::class),
             $this->createMock(\Magento\ImportExport\Model\ResourceModel\CollectionByPagesIteratorFactory::class),
@@ -461,7 +461,7 @@ class OptionTest extends AbstractImportTestCase
         $fetchStrategy = $this->getMockForAbstractClass(
             FetchStrategyInterface::class
         );
-        $logger = $this->createMock(LoggerInterface::class);
+        $logger = $this->getMockForAbstractClass(LoggerInterface::class);
         $entityFactory = $this->createMock(EntityFactory::class);
 
         $optionCollection = $this->getMockBuilder(AbstractDb::class)
@@ -722,7 +722,7 @@ class OptionTest extends AbstractImportTestCase
     {
         $this->modelMock->expects($this->any())
             ->method('_getMultiRowFormat')
-            ->will($this->returnValue([$rowData]));
+            ->willReturn([$rowData]);
     }
 
     /**

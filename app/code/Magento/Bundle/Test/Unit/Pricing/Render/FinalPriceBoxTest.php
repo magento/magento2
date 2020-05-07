@@ -30,7 +30,7 @@ class FinalPriceBoxTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->saleableItem = $this->createMock(SaleableInterface::class);
+        $this->saleableItem = $this->getMockForAbstractClass(SaleableInterface::class);
 
         $objectHelper = new ObjectManager($this);
         $this->model = $objectHelper->getObject(

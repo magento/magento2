@@ -49,7 +49,7 @@ class ConfigurablePriceResolverTest extends TestCase
         $className = PriceResolverInterface::class;
         $this->priceResolver = $this->getMockForAbstractClass($className, [], '', false, true, true, ['resolvePrice']);
 
-        $this->lowestPriceOptionsProvider = $this->createMock(LowestPriceOptionsProviderInterface::class);
+        $this->lowestPriceOptionsProvider = $this->getMockForAbstractClass(LowestPriceOptionsProviderInterface::class);
 
         $objectManager = new ObjectManager($this);
         $this->resolver = $objectManager->getObject(

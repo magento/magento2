@@ -47,7 +47,7 @@ class SecureTokenTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->url = $this->createMock(UrlInterface::class);
+        $this->url = $this->getMockForAbstractClass(UrlInterface::class);
         $this->mathRandom = $this->createMock(Random::class);
         $this->transparent = $this->createMock(Transparent::class);
 

@@ -29,10 +29,10 @@ class ImageTest extends TestCase
     protected function setUp(): void
     {
         $this->markTestSkipped('MAGETWO-34751: Test fails after being moved.  Might have hidden dependency.');
-        $timezoneMock = $this->createMock(TimezoneInterface::class);
-        $loggerMock = $this->createMock(LoggerInterface::class);
-        $localeResolverMock = $this->createMock(ResolverInterface::class);
-        $urlEncoder = $this->createMock(EncoderInterface::class);
+        $timezoneMock = $this->getMockForAbstractClass(TimezoneInterface::class);
+        $loggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
+        $localeResolverMock = $this->getMockForAbstractClass(ResolverInterface::class);
+        $urlEncoder = $this->getMockForAbstractClass(EncoderInterface::class);
         $fileValidatorMock = $this->createMock(NotProtectedExtension::class);
         $filesystemMock = $this->createMock(Filesystem::class);
 

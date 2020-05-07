@@ -438,7 +438,7 @@ class IndexerTest extends TestCase
 
         $this->stateFactoryMock->expects($this->once())->method('create')->willReturn($stateMock);
         $stateMock->expects($this->once())->method('getStatus')->willReturn($status);
-        $this->assertEquals(true, $this->model->$method());
+        $this->assertTrue($this->model->$method());
     }
 
     /**

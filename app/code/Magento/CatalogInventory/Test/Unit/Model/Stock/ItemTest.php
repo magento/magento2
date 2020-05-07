@@ -97,7 +97,7 @@ class ItemTest extends TestCase
         $this->eventDispatcher = $this->getMockBuilder(ManagerInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['dispatch'])
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->context = $this->createPartialMock(Context::class, ['getEventDispatcher']);
         $this->context->expects($this->any())->method('getEventDispatcher')->willReturn($this->eventDispatcher);
@@ -113,7 +113,7 @@ class ItemTest extends TestCase
         );
         $this->storeManager->expects($this->any())->method('getStore')->willReturn($store);
 
-        $this->stockConfiguration = $this->createMock(StockConfigurationInterface::class);
+        $this->stockConfiguration = $this->getMockForAbstractClass(StockConfigurationInterface::class);
 
         $this->stockItemRepository = $this->getMockForAbstractClass(
             StockItemRepositoryInterface::class

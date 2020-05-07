@@ -36,7 +36,7 @@ class ShippingTest extends TestCase
                 'getValue',
                 'isSetFlag'
             ])
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->model = $helper->getObject(
             Shipping::class,

@@ -136,7 +136,7 @@ class TierPriceValidatorTest extends TestCase
         $searchCriteria = $this
             ->getMockBuilder(SearchCriteriaInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $filter = $this->getMockBuilder(AbstractSimpleObject::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
@@ -148,7 +148,7 @@ class TierPriceValidatorTest extends TestCase
         $customerGroupSearchResults = $this
             ->getMockBuilder(GroupSearchResultsInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $customerGroupSearchResults->expects($this->once())->method('getItems')
             ->willReturn($returned['customerGroupSearchResults_getItems']);
         $this->customerGroupRepository->expects($this->atLeastOnce())->method('getList')

@@ -83,7 +83,7 @@ class GetNonceTest extends TestCase
 
         $this->commandResultMock = $this->getMockBuilder(CommandResultInterface::class)
             ->setMethods(['get'])
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->sessionMock = $this->getMockBuilder(Session::class)
             ->disableOriginalConstructor()
@@ -93,7 +93,7 @@ class GetNonceTest extends TestCase
             ->method('getStoreId')
             ->willReturn(null);
 
-        $this->loggerMock = $this->createMock(LoggerInterface::class);
+        $this->loggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
 
         $context = $this->getMockBuilder(Context::class)
             ->disableOriginalConstructor()
@@ -194,7 +194,7 @@ class GetNonceTest extends TestCase
     {
         $this->resultMock = $this->getMockBuilder(ResultInterface::class)
             ->setMethods(['setHttpResponseCode', 'renderResult', 'setHeader', 'setData'])
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->resultFactoryMock = $this->getMockBuilder(ResultFactory::class)
             ->disableOriginalConstructor()

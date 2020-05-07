@@ -61,7 +61,7 @@ class CouponCodeValidationTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->codeLimitManagerMock = $this->createMock(CodeLimitManagerInterface::class);
+        $this->codeLimitManagerMock = $this->getMockForAbstractClass(CodeLimitManagerInterface::class);
         $this->observerMock = $this->createMock(Observer::class);
         $this->searchCriteriaMock = $this->getMockBuilder(SearchCriteria::class)
             ->disableOriginalConstructor()

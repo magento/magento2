@@ -67,8 +67,8 @@ class ContentValidatorTest extends TestCase
         $this->fileValidatorMock = $this->createMock(\Magento\Downloadable\Model\File\ContentValidator::class);
         $this->urlValidatorMock = $this->createMock(Validator::class);
         $this->domainValidatorMock = $this->createMock(DomainValidator::class);
-        $this->linkFileMock = $this->createMock(ContentInterface::class);
-        $this->sampleFileMock = $this->createMock(ContentInterface::class);
+        $this->linkFileMock = $this->getMockForAbstractClass(ContentInterface::class);
+        $this->sampleFileMock = $this->getMockForAbstractClass(ContentInterface::class);
         $this->fileMock = $this->createMock(File::class);
 
         $this->validator = $objectManager->getObject(
@@ -84,8 +84,8 @@ class ContentValidatorTest extends TestCase
 
     public function testIsValid()
     {
-        $linkFileContentMock = $this->createMock(ContentInterface::class);
-        $sampleFileContentMock = $this->createMock(ContentInterface::class);
+        $linkFileContentMock = $this->getMockForAbstractClass(ContentInterface::class);
+        $sampleFileContentMock = $this->getMockForAbstractClass(ContentInterface::class);
         $linkData = [
             'title' => 'Title',
             'sort_order' => 1,
@@ -106,7 +106,7 @@ class ContentValidatorTest extends TestCase
 
     public function testIsValidSkipLinkContent()
     {
-        $sampleFileContentMock = $this->createMock(ContentInterface::class);
+        $sampleFileContentMock = $this->getMockForAbstractClass(ContentInterface::class);
         $linkData = [
             'title' => 'Title',
             'sort_order' => 1,
@@ -127,7 +127,7 @@ class ContentValidatorTest extends TestCase
 
     public function testIsValidSkipSampleContent()
     {
-        $sampleFileContentMock = $this->createMock(ContentInterface::class);
+        $sampleFileContentMock = $this->getMockForAbstractClass(ContentInterface::class);
         $linkData = [
             'title' => 'Title',
             'sort_order' => 1,

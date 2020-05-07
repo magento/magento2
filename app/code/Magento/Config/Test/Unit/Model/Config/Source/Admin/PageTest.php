@@ -44,7 +44,7 @@ class PageTest extends TestCase
 
     protected function setUp(): void
     {
-        $logger = $this->createMock(LoggerInterface::class);
+        $logger = $this->getMockForAbstractClass(LoggerInterface::class);
         $this->_menuModel = new Menu($logger);
         $this->_menuSubModel = new Menu($logger);
 

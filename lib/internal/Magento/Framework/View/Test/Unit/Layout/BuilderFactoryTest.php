@@ -35,7 +35,7 @@ class BuilderFactoryTest extends TestCase
     {
         $this->objectManagerHelper = new ObjectManagerHelper($this);
 
-        $this->objectManagerMock = $this->createMock(ObjectManagerInterface::class);
+        $this->objectManagerMock = $this->getMockForAbstractClass(ObjectManagerInterface::class);
 
         $this->buildFactory = $this->objectManagerHelper->getObject(
             BuilderFactory::class,

@@ -57,7 +57,7 @@ class CalculatorFactoryTest extends TestCase
         $instanceMock = $this->getMockBuilder($expectedInstanceType)
             ->disableOriginalConstructor()
             ->getMock();
-        $objectManagerMock = $this->createMock(ObjectManagerInterface::class);
+        $objectManagerMock = $this->getMockForAbstractClass(ObjectManagerInterface::class);
 
         // Verify create() is called with correct concrete type
         $objectManagerMock->expects($this->once())

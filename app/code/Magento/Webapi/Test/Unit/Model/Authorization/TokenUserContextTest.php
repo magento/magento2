@@ -94,7 +94,7 @@ class TokenUserContextTest extends TestCase
                     'getSelectedResources',
                 ]
             )
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->oauthHelperMock = $this->getMockBuilder(OauthHelper::class)
             ->disableOriginalConstructor()

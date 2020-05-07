@@ -52,13 +52,13 @@ class StoreConfigurationProviderTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
+        $this->scopeConfigMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
 
-        $this->storeManagerMock =  $this->createMock(StoreManagerInterface::class);
+        $this->storeManagerMock =  $this->getMockForAbstractClass(StoreManagerInterface::class);
 
-        $this->websiteMock =  $this->createMock(WebsiteInterface::class);
+        $this->websiteMock =  $this->getMockForAbstractClass(WebsiteInterface::class);
 
-        $this->storeMock =  $this->createMock(StoreInterface::class);
+        $this->storeMock =  $this->getMockForAbstractClass(StoreInterface::class);
 
         $this->configPaths = [
             'web/unsecure/base_url',

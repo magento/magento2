@@ -29,7 +29,7 @@ class TaxSetupTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->typeConfigMock = $this->createMock(ConfigInterface::class);
+        $this->typeConfigMock = $this->getMockForAbstractClass(ConfigInterface::class);
 
         $salesSetup = $this->createMock(SalesSetup::class);
         $salesSetupFactory = $this->createPartialMock(SalesSetupFactory::class, ['create']);

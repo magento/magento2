@@ -55,7 +55,7 @@ class NoSuchEntityExceptionTest extends TestCase
         $this->renderedMessage = 'rendered message';
         $this->rendererMock->expects($this->once())
             ->method('render')
-            ->will($this->returnValue($this->renderedMessage));
+            ->willReturn($this->renderedMessage);
         Phrase::setRenderer($this->rendererMock);
         $message = 'message %1 %2';
         $params = [

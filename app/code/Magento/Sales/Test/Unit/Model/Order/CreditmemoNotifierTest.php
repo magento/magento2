@@ -62,7 +62,7 @@ class CreditmemoNotifierTest extends TestCase
             CreditmemoSender::class,
             ['send']
         );
-        $this->loggerMock = $this->createMock(LoggerInterface::class);
+        $this->loggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
         $this->notifier = new CreditmemoNotifier(
             $this->historyCollectionFactory,
             $this->loggerMock,

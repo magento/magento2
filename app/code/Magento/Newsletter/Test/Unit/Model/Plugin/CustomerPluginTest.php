@@ -81,9 +81,9 @@ class CustomerPluginTest extends TestCase
         $this->subscriberFactory = $this->createMock(SubscriberFactory::class);
         $this->extensionFactory = $this->createMock(ExtensionAttributesFactory::class);
         $this->collectionFactory = $this->createMock(CollectionFactory::class);
-        $this->subscriptionManager = $this->createMock(SubscriptionManagerInterface::class);
+        $this->subscriptionManager = $this->getMockForAbstractClass(SubscriptionManagerInterface::class);
         $this->shareConfig = $this->createMock(Share::class);
-        $this->storeManager = $this->createMock(StoreManagerInterface::class);
+        $this->storeManager = $this->getMockForAbstractClass(StoreManagerInterface::class);
         $this->objectManager = new ObjectManager($this);
         $this->plugin = $this->objectManager->getObject(
             CustomerPlugin::class,
@@ -113,7 +113,7 @@ class CustomerPluginTest extends TestCase
         $customerId = 3;
         $customerEmail = 'email@example.com';
 
-        $store = $this->createMock(StoreInterface::class);
+        $store = $this->getMockForAbstractClass(StoreInterface::class);
         $store->method('getId')->willReturn($storeId);
         $store->method('getWebsiteId')->willReturn($websiteId);
         $this->storeManager->method('getStore')->willReturn($store);
@@ -141,7 +141,7 @@ class CustomerPluginTest extends TestCase
             ->getMockForAbstractClass();
         $customerExtension->method('getIsSubscribed')->willReturn($newValue);
         /** @var CustomerInterface|MockObject $customer */
-        $customer = $this->createMock(CustomerInterface::class);
+        $customer = $this->getMockForAbstractClass(CustomerInterface::class);
         $customer->method('getExtensionAttributes')->willReturn($customerExtension);
 
         $resultIsSubscribed = $newValue ?? $originalStatus === Subscriber::STATUS_SUBSCRIBED;
@@ -161,13 +161,13 @@ class CustomerPluginTest extends TestCase
             ->getMockForAbstractClass();
         $resultExtension->expects($this->once())->method('setIsSubscribed')->with($resultIsSubscribed);
         /** @var CustomerInterface|MockObject $result */
-        $result = $this->createMock(CustomerInterface::class);
+        $result = $this->getMockForAbstractClass(CustomerInterface::class);
         $result->method('getId')->willReturn($customerId);
         $result->method('getEmail')->willReturn($customerEmail);
         $result->method('getExtensionAttributes')->willReturn($resultExtension);
 
         /** @var CustomerRepository|MockObject $subject */
-        $subject = $this->createMock(CustomerRepositoryInterface::class);
+        $subject = $this->getMockForAbstractClass(CustomerRepositoryInterface::class);
         $this->assertEquals($result, $this->plugin->afterSave($subject, $result, $customer));
     }
 
@@ -218,9 +218,9 @@ class CustomerPluginTest extends TestCase
         $this->storeManager->method('getWebsite')->with($websiteId)->willReturn($website);
 
         /** @var CustomerRepositoryInterface|MockObject $subject */
-        $subject = $this->createMock(CustomerRepositoryInterface::class);
+        $subject = $this->getMockForAbstractClass(CustomerRepositoryInterface::class);
         /** @var CustomerInterface|MockObject $customer */
-        $customer = $this->createMock(CustomerInterface::class);
+        $customer = $this->getMockForAbstractClass(CustomerInterface::class);
         $customer->method('getEmail')->willReturn($customerEmail);
 
         $this->assertTrue($this->plugin->afterDelete($subject, true, $customer));
@@ -238,10 +238,10 @@ class CustomerPluginTest extends TestCase
         $deleteCustomerById = function () {
             return true;
         };
-        $customer = $this->createMock(CustomerInterface::class);
+        $customer = $this->getMockForAbstractClass(CustomerInterface::class);
         $customer->expects($this->once())->method('getEmail')->willReturn($customerEmail);
         /** @var CustomerRepositoryInterface|MockObject $subject */
-        $subject = $this->createMock(CustomerRepositoryInterface::class);
+        $subject = $this->getMockForAbstractClass(CustomerRepositoryInterface::class);
         $subject->expects($this->once())->method('getById')->with($customerId)->willReturn($customer);
 
         $subscriber = $this->createMock(Subscriber::class);
@@ -272,13 +272,13 @@ class CustomerPluginTest extends TestCase
         $customerEmail = 'email@example.com';
         $subscribed = true;
 
-        $store = $this->createMock(StoreInterface::class);
+        $store = $this->getMockForAbstractClass(StoreInterface::class);
         $store->method('getId')->willReturn($storeId);
         $store->method('getWebsiteId')->willReturn($websiteId);
         $this->storeManager->method('getStore')->willReturn($store);
 
         /** @var CustomerInterface|MockObject $customer */
-        $customer = $this->createMock(CustomerInterface::class);
+        $customer = $this->getMockForAbstractClass(CustomerInterface::class);
         $customer->method('getId')->willReturn($customerId);
         $customer->method('getEmail')->willReturn($customerEmail);
 
@@ -303,7 +303,7 @@ class CustomerPluginTest extends TestCase
         $customer->expects($this->once())->method('setExtensionAttributes')->with($customerExtension);
 
         /** @var CustomerRepositoryInterface|MockObject $subject */
-        $subject = $this->createMock(CustomerRepositoryInterface::class);
+        $subject = $this->getMockForAbstractClass(CustomerRepositoryInterface::class);
         $this->assertEquals(
             $customer,
             $this->plugin->afterGetById($subject, $customer)

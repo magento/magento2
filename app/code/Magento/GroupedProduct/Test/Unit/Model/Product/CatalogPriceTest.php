@@ -55,7 +55,7 @@ class CatalogPriceTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
+        $this->storeManagerMock = $this->getMockForAbstractClass(StoreManagerInterface::class);
         $this->commonPriceMock = $this->createMock(\Magento\Catalog\Model\Product\CatalogPrice::class);
         $this->productMock = $this->getMockBuilder(Product::class)
             ->addMethods(['getWebsiteId', 'getCustomerGroupId', 'setTaxClassId'])
@@ -99,7 +99,7 @@ class CatalogPriceTest extends TestCase
         );
         $this->storeManagerMock->expects($this->never())->method('getStore');
         $this->storeManagerMock->expects($this->never())->method('setCurrentStore');
-        $this->assertEquals(null, $this->catalogPrice->getCatalogPrice($this->productMock));
+        $this->assertNull($this->catalogPrice->getCatalogPrice($this->productMock));
     }
 
     public function testGetCatalogPriceWithDefaultStoreAndSubProductIsNotSalable()
@@ -142,14 +142,14 @@ class CatalogPriceTest extends TestCase
         $this->productMock->expects($this->never())->method('setTaxClassId');
         $this->storeManagerMock->expects($this->never())->method('getStore');
         $this->storeManagerMock->expects($this->never())->method('setCurrentStore');
-        $this->assertEquals(null, $this->catalogPrice->getCatalogPrice($this->productMock));
+        $this->assertNull($this->catalogPrice->getCatalogPrice($this->productMock));
     }
 
     public function testGetCatalogPriceWithCustomStoreAndSubProductIsSalable()
     {
-        $storeMock = $this->createMock(StoreInterface::class);
+        $storeMock = $this->getMockForAbstractClass(StoreInterface::class);
         $storeMock->expects($this->once())->method('getId')->willReturn('store_id');
-        $currentStoreMock = $this->createMock(StoreInterface::class);
+        $currentStoreMock = $this->getMockForAbstractClass(StoreInterface::class);
         $currentStoreMock->expects($this->once())->method('getId')->willReturn('current_store_id');
 
         $this->productMock->expects(
@@ -214,6 +214,6 @@ class CatalogPriceTest extends TestCase
 
     public function testGetCatalogRegularPrice()
     {
-        $this->assertEquals(null, $this->catalogPrice->getCatalogRegularPrice($this->productMock));
+        $this->assertNull($this->catalogPrice->getCatalogRegularPrice($this->productMock));
     }
 }

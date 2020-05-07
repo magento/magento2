@@ -43,7 +43,7 @@ class ObjectTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->_objectManager = $this->createMock(ObjectManagerInterface::class);
+        $this->_objectManager = $this->getMockForAbstractClass(ObjectManagerInterface::class);
         $this->_booleanUtils = $this->createMock(BooleanUtils::class);
         $this->_model = new DataObject($this->_objectManager, self::EXPECTED_CLASS, $this->_booleanUtils);
     }

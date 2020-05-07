@@ -47,7 +47,7 @@ class ResponseResolverTest extends TestCase
     protected function setUp(): void
     {
         $this->objectManagerHelper = new ObjectManagerHelper($this);
-        $this->converterMock = $this->createMock(ConverterInterface::class);
+        $this->converterMock = $this->getMockForAbstractClass(ConverterInterface::class);
         $this->successResponseHandlerMock = $this->getMockBuilder(ResponseHandlerInterface::class)
             ->getMockForAbstractClass();
         $this->notFoundResponseHandlerMock = $this->getMockBuilder(ResponseHandlerInterface::class)

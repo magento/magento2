@@ -89,11 +89,11 @@ class AbstractEntityTest extends \Magento\Eav\Test\Unit\Model\Entity\AbstractEnt
             $this->once()
         )->method(
             'getAffectedFields'
-        )->will(
-            $this->returnValue(['test_table' => [['value_id' => 0, 'attribute_id' => $attributeCode]]])
+        )->willReturn(
+            ['test_table' => [['value_id' => 0, 'attribute_id' => $attributeCode]]]
         );
 
-        $backendModel->expects($this->any())->method('isStatic')->will($this->returnValue(false));
+        $backendModel->expects($this->any())->method('isStatic')->willReturn(false);
         $backendModel->expects($this->never())->method('getEntityValueId');
         $backendModel->setAttribute($attribute);
 

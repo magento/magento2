@@ -90,7 +90,7 @@ class CreditmemoLoaderTest extends TestCase
         $data = [];
         $this->creditmemoRepositoryMock = $this->getMockBuilder(CreditmemoRepositoryInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->creditmemoFactoryMock = $this->createMock(CreditmemoFactory::class);
         $this->orderFactoryMock = $this->getMockBuilder(OrderFactory::class)
             ->disableOriginalConstructor()

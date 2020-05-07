@@ -54,7 +54,7 @@ class DataTest extends TestCase
     {
         $this->contextMock = $this->createMock(Context::class);
         $this->fileSizeMock = $this->createMock(FileSize::class);
-        $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
+        $this->scopeConfigMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
         $this->contextMock->expects($this->any())->method('getScopeConfig')->willReturn($this->scopeConfigMock);
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);

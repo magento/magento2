@@ -48,11 +48,11 @@ class AggregationTest extends TestCase
 
         $this->fieldMapper = $this->getMockBuilder(FieldMapperInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->requestInterface = $this->getMockBuilder(RequestInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->requestBucketInterface = $this->getMockBuilder(BucketInterface::class)
             ->disableOriginalConstructor()

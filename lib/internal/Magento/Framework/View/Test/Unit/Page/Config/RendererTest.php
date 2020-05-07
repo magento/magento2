@@ -319,7 +319,7 @@ class RendererTest extends TestCase
 
         $exception = new LocalizedException(new Phrase('my message'));
 
-        $assetMockOne = $this->createMock(AssetInterface::class);
+        $assetMockOne = $this->getMockForAbstractClass(AssetInterface::class);
         $assetMockOne->expects($this->exactly(2))
             ->method('getUrl')
             ->willReturn($assetUrl);
@@ -344,7 +344,7 @@ class RendererTest extends TestCase
                 ]
             );
 
-        $assetMockTwo = $this->createMock(AssetInterface::class);
+        $assetMockTwo = $this->getMockForAbstractClass(AssetInterface::class);
         $assetMockTwo->expects($this->once())
             ->method('getUrl')
             ->willThrowException($exception);
@@ -446,7 +446,7 @@ class RendererTest extends TestCase
     {
         $type = '';
 
-        $assetMockOne = $this->createMock(AssetInterface::class);
+        $assetMockOne = $this->getMockForAbstractClass(AssetInterface::class);
         $assetMockOne->expects($this->exactly(1))
             ->method('getUrl')
             ->willReturn('url');

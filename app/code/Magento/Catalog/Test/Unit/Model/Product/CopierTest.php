@@ -73,7 +73,7 @@ class CopierTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->copyConstructorMock = $this->createMock(CopyConstructorInterface::class);
+        $this->copyConstructorMock = $this->getMockForAbstractClass(CopyConstructorInterface::class);
         $this->productFactoryMock = $this->createPartialMock(ProductFactory::class, ['create']);
         $this->scopeOverriddenValueMock = $this->createMock(ScopeOverriddenValue::class);
         $this->optionRepositoryMock = $this->createMock(Repository::class);
@@ -107,7 +107,7 @@ class CopierTest extends TestCase
      */
     public function testCopy(): void
     {
-        $stockItem = $this->createMock(StockItemInterface::class);
+        $stockItem = $this->getMockForAbstractClass(StockItemInterface::class);
         $extensionAttributes = $this->getMockBuilder(ProductExtensionInterface::class)
             ->setMethods(['getStockItem', 'setData'])
             ->getMockForAbstractClass();

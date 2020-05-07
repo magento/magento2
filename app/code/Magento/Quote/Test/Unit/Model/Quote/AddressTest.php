@@ -166,7 +166,7 @@ class AddressTest extends TestCase
 
         $this->storeManager = $this->getMockBuilder(StoreManagerInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->store = $this->getMockBuilder(StoreInterface::class)
             ->disableOriginalConstructor()
@@ -175,7 +175,7 @@ class AddressTest extends TestCase
 
         $this->website = $this->getMockBuilder(WebsiteInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->attributeList = $this->createMock(
             CustomAttributeListInterface::class

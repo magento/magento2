@@ -15,6 +15,8 @@ use Magento\Setup\Model\Installer;
 use Magento\Setup\Model\InstallerFactory;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\Setup\Model\SearchConfig;
+use Magento\Setup\Model\SearchConfigFactory;
 use Symfony\Component\Console\Tester\CommandTester;
 
 class UpgradeCommandTest extends TestCase
@@ -38,6 +40,11 @@ class UpgradeCommandTest extends TestCase
      * @var AppState|MockObject
      */
     private $appStateMock;
+
+    /**
+     * @var SearchConfig|MockObject
+     */
+    private $searchConfigMock;
 
     /**
      * @var UpgradeCommand
@@ -68,9 +75,18 @@ class UpgradeCommandTest extends TestCase
         $this->appStateMock = $this->getMockBuilder(AppState::class)
             ->disableOriginalConstructor()
             ->getMock();
+        $this->searchConfigMock = $this->getMockBuilder(SearchConfig::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        /** @var MockObject|SearchConfigFactory $searchConfigFactoryMock */
+        $searchConfigFactoryMock = $this->getMockBuilder(SearchConfigFactory::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $searchConfigFactoryMock->expects($this->once())->method('create')->willReturn($this->searchConfigMock);
 
         $this->upgradeCommand = new UpgradeCommand(
             $this->installerFactoryMock,
+            $searchConfigFactoryMock,
             $this->deploymentConfigMock,
             $this->appStateMock
         );

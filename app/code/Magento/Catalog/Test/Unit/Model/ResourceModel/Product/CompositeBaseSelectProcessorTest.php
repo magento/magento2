@@ -28,7 +28,7 @@ class CompositeBaseSelectProcessorTest extends TestCase
     public function testInitializeWithWrongProcessorInstance()
     {
         $this->expectException('Magento\Framework\Exception\InputException');
-        $processorValid = $this->createMock(BaseSelectProcessorInterface::class);
+        $processorValid = $this->getMockForAbstractClass(BaseSelectProcessorInterface::class);
         $processorInvalid = $this->createMock(\stdClass::class);
 
         $this->objectManager->getObject(CompositeBaseSelectProcessor::class, [
@@ -42,10 +42,10 @@ class CompositeBaseSelectProcessorTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $processorFirst = $this->createMock(BaseSelectProcessorInterface::class);
+        $processorFirst = $this->getMockForAbstractClass(BaseSelectProcessorInterface::class);
         $processorFirst->expects($this->once())->method('process')->with($select)->willReturn($select);
 
-        $processorSecond = $this->createMock(BaseSelectProcessorInterface::class);
+        $processorSecond = $this->getMockForAbstractClass(BaseSelectProcessorInterface::class);
         $processorSecond->expects($this->once())->method('process')->with($select)->willReturn($select);
 
         /** @var CompositeBaseSelectProcessor $baseSelectProcessors */

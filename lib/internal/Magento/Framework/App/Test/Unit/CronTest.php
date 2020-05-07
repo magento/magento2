@@ -89,7 +89,7 @@ class CronTest extends TestCase
     public function testLaunchDispatchesCronEvent()
     {
         $configLoader = $this->getMockForAbstractClass(ConfigLoaderInterface::class);
-        $eventManagerMock = $this->createMock(ManagerInterface::class);
+        $eventManagerMock = $this->getMockForAbstractClass(ManagerInterface::class);
 
         $this->objectManager->expects($this->any())
             ->method('get')

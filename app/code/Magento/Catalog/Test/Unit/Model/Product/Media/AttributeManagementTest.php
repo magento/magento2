@@ -47,7 +47,7 @@ class AttributeManagementTest extends TestCase
             ['create']
         );
         $this->storeId = 1;
-        $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
+        $this->storeManagerMock = $this->getMockForAbstractClass(StoreManagerInterface::class);
         $storeMock = $this->createMock(Store::class);
         $storeMock->expects($this->any())
             ->method('getId')
@@ -66,7 +66,7 @@ class AttributeManagementTest extends TestCase
     {
         $attributeSetName = 'Default Attribute Set';
         $expectedResult = [
-            $this->createMock(ProductAttributeInterface::class),
+            $this->getMockForAbstractClass(ProductAttributeInterface::class),
         ];
         $collectionMock = $this->createMock(Collection::class);
         $collectionMock->expects($this->once())

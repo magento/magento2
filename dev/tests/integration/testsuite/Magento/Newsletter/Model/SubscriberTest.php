@@ -7,8 +7,9 @@ declare(strict_types=1);
 
 namespace Magento\Newsletter\Model;
 
-use Laminas\Mail\Headers;
 use Magento\Customer\Api\CustomerRepositoryInterface;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\Mail\Template\TransportBuilderMock;
@@ -108,7 +109,7 @@ class SubscriberTest extends TestCase
      */
     private function getFilteredRawMessage(TransportBuilderMock $transportBuilderMock): string
     {
-        return str_replace('=' . Headers::EOL, '', $transportBuilderMock->getSentMessage()->getRawMessage());
+        return $transportBuilderMock->getSentMessage()->getBody()->getParts()[0]->getRawContent();
     }
 
     /**
@@ -162,8 +163,8 @@ class SubscriberTest extends TestCase
      * @magentoDataFixture Magento/Newsletter/_files/newsletter_unconfirmed_customer.php
      *
      * @return void
-     * @throws \Magento\Framework\Exception\LocalizedException
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @throws LocalizedException
+     * @throws NoSuchEntityException
      */
     public function testSubscribeUnconfirmedCustomerWithSubscription(): void
     {
@@ -178,6 +179,8 @@ class SubscriberTest extends TestCase
      * @magentoDataFixture Magento/Customer/_files/unconfirmed_customer.php
      *
      * @return void
+     * @throws LocalizedException
+     * @throws NoSuchEntityException
      */
     public function testSubscribeUnconfirmedCustomerWithoutSubscription(): void
     {

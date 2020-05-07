@@ -24,7 +24,7 @@ class ConnectionFactoryTest extends TestCase
     protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
-        $serviceLocatorMock = $this->createMock(ServiceLocatorInterface::class);
+        $serviceLocatorMock = $this->getMockForAbstractClass(ServiceLocatorInterface::class);
         $objectManagerProviderMock = $this->createMock(ObjectManagerProvider::class);
         $serviceLocatorMock->expects($this->once())
             ->method('get')
@@ -32,7 +32,7 @@ class ConnectionFactoryTest extends TestCase
                 ObjectManagerProvider::class
             )
             ->willReturn($objectManagerProviderMock);
-        $objectManagerMock = $this->createMock(ObjectManagerInterface::class);
+        $objectManagerMock = $this->getMockForAbstractClass(ObjectManagerInterface::class);
         $objectManagerProviderMock->expects($this->once())
             ->method('get')
             ->willReturn($objectManagerMock);

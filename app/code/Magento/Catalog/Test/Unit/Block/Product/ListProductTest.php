@@ -121,7 +121,7 @@ class ListProductTest extends TestCase
         $this->cartHelperMock = $this->createMock(Cart::class);
         $this->catCollectionMock = $this->createMock(Collection::class);
         $this->prodCollectionMock = $this->createMock(\Magento\Catalog\Model\ResourceModel\Product\Collection::class);
-        $this->layoutMock = $this->createMock(LayoutInterface::class);
+        $this->layoutMock = $this->getMockForAbstractClass(LayoutInterface::class);
         $this->toolbarMock = $this->createMock(Toolbar::class);
 
         $this->urlHelperMock = $this->getMockBuilder(Data::class)

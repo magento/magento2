@@ -45,7 +45,7 @@ class StateTest extends TestCase
     protected function setUp(): void
     {
         $this->_contextMock = $this->createPartialMock(Context::class, ['getEventDispatcher']);
-        $eventManagerMock = $this->createMock(ManagerInterface::class);
+        $eventManagerMock = $this->getMockForAbstractClass(ManagerInterface::class);
         $this->_contextMock->expects($this->any())->method('getEventDispatcher')->willReturn($eventManagerMock);
         $this->_registryMock = $this->createMock(Registry::class);
         $this->_resourceMock =
@@ -72,9 +72,9 @@ class StateTest extends TestCase
 
     public function testBeforeSave()
     {
-        $this->assertEquals(null, $this->model->getUpdated());
+        $this->assertNull($this->model->getUpdated());
         $this->model->beforeSave();
-        $this->assertNotEquals(null, $this->model->getUpdated());
+        $this->assertNotNull($this->model->getUpdated());
     }
 
     public function testSetterAndGetter()

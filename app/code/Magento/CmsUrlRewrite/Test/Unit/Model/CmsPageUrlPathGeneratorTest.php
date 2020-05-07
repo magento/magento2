@@ -59,7 +59,7 @@ class CmsPageUrlPathGeneratorTest extends TestCase
         /* @var PageInterface $cmsPageMock*/
         $cmsPageMock = $this->getMockBuilder(PageInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $cmsPageMock->expects($this->any())
             ->method('getIdentifier')
@@ -76,7 +76,7 @@ class CmsPageUrlPathGeneratorTest extends TestCase
         /* @var PageInterface $cmsPageMock*/
         $cmsPageMock = $this->getMockBuilder(PageInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $cmsPageMock->expects($this->any())
             ->method('getId')
@@ -101,7 +101,7 @@ class CmsPageUrlPathGeneratorTest extends TestCase
         /* @var PageInterface $cmsPageMock*/
         $cmsPageMock = $this->getMockBuilder(PageInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $cmsPageMock->expects($this->any())
             ->method('getIdentifier')
@@ -135,7 +135,7 @@ class CmsPageUrlPathGeneratorTest extends TestCase
         /* @var PageInterface $cmsPageMock*/
         $cmsPageMock = $this->getMockBuilder(PageInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $cmsPageMock->expects($this->any())
             ->method('getIdentifier')

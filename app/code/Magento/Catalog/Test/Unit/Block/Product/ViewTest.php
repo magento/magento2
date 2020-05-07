@@ -39,7 +39,7 @@ class ViewTest extends TestCase
     protected function setUp(): void
     {
         $helper = new ObjectManager($this);
-        $this->productTypeConfig = $this->createMock(ConfigInterface::class);
+        $this->productTypeConfig = $this->getMockForAbstractClass(ConfigInterface::class);
         $this->registryMock = $this->createMock(Registry::class);
         $this->view = $helper->getObject(
             View::class,
@@ -72,7 +72,7 @@ class ViewTest extends TestCase
         )->willReturn(
             true
         );
-        $this->assertEquals(false, $this->view->shouldRenderQuantity());
+        $this->assertFalse($this->view->shouldRenderQuantity());
     }
 
     /**

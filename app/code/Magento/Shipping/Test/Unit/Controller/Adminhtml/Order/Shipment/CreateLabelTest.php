@@ -85,7 +85,7 @@ class CreateLabelTest extends TestCase
             \Magento\Framework\App\Response\Http::class,
             ['representJson', '__wakeup']
         );
-        $this->objectManagerMock = $this->createMock(ObjectManagerInterface::class);
+        $this->objectManagerMock = $this->getMockForAbstractClass(ObjectManagerInterface::class);
         $this->messageManagerMock = $this->getMockBuilder(Manager::class)
             ->addMethods(['__wakeup'])
             ->onlyMethods(['addSuccess', 'addError'])
@@ -199,7 +199,7 @@ class CreateLabelTest extends TestCase
      */
     public function testExecuteSaveException()
     {
-        $loggerMock = $this->createMock(LoggerInterface::class);
+        $loggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
 
         $this->shipmentLoaderMock->expects($this->once())
             ->method('load')

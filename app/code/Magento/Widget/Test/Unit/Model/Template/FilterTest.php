@@ -62,10 +62,10 @@ class FilterTest extends TestCase
     {
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->storeMock = $this->createMock(Store::class);
-        $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
+        $this->storeManagerMock = $this->getMockForAbstractClass(StoreManagerInterface::class);
         $this->widgetResourceMock = $this->createMock(Widget::class);
         $this->widgetMock = $this->createMock(\Magento\Widget\Model\Widget::class);
-        $this->layoutMock = $this->createMock(LayoutInterface::class);
+        $this->layoutMock = $this->getMockForAbstractClass(LayoutInterface::class);
 
         $this->filter = $this->objectManagerHelper->getObject(
             Filter::class,

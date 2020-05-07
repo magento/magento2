@@ -472,7 +472,7 @@ class ProductTest extends AbstractImportTestCase
         $type->expects($this->any())->method('getEntityTypeId')->willReturn(self::ENTITY_TYPE_ID);
         $this->config->expects($this->any())->method('getEntityType')->with(self::ENTITY_TYPE_CODE)->willReturn($type);
 
-        $this->_connection = $this->createMock(AdapterInterface::class);
+        $this->_connection = $this->getMockForAbstractClass(AdapterInterface::class);
         $this->resource->expects($this->any())->method('getConnection')->willReturn($this->_connection);
         return $this;
     }

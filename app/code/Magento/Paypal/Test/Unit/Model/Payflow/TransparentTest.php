@@ -203,7 +203,7 @@ class TransparentTest extends TestCase
                 ['setVaultPaymentToken', 'getVaultPaymentToken', 'setNotificationMessage', 'getNotificationMessage']
             )
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $paymentExtensionInterfaceFactory->method('create')->willReturn($orderPaymentExtension);
 

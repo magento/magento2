@@ -48,7 +48,7 @@ class ConfigTest extends TestCase
             ['getValue', 'isSetFlag']
         );
 
-        $this->scopeMock =  $this->createMock(ScopeInterface::class);
+        $this->scopeMock =  $this->getMockForAbstractClass(ScopeInterface::class);
 
         $objectManager = new ObjectManager($this);
         $this->model = $objectManager->getObject(
@@ -81,8 +81,8 @@ class ConfigTest extends TestCase
                 Config::XML_PATH_EMAIL_RECIPIENT,
                 \Magento\Store\Model\ScopeInterface::SCOPE_STORE
             )
-            ->will(
-                $this->returnValue($email)
+            ->willReturn(
+                $email
             );
         $this->assertEquals($email, $this->model->getCustomerServiceEmail());
     }
@@ -97,8 +97,8 @@ class ConfigTest extends TestCase
         $this->scopeConfigMock->expects($this->once())
             ->method('getValue')
             ->with(Session::XML_PATH_SESSION_LIFETIME)
-            ->will(
-                $this->returnValue($lifetime)
+            ->willReturn(
+                $lifetime
             );
         $this->assertEquals($lifetime, $this->model->getAdminSessionLifetime());
     }
@@ -112,8 +112,8 @@ class ConfigTest extends TestCase
         $this->scopeConfigMock->expects($this->once())
             ->method('isSetFlag')
             ->with(Config::XML_PATH_ADMIN_ACCOUNT_SHARING)
-            ->will(
-                $this->returnValue($isShared)
+            ->willReturn(
+                $isShared
             );
         $this->assertEquals($isShared, $this->model->isAdminAccountSharingEnabled());
     }

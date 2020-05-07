@@ -94,11 +94,11 @@ class TaxCalculationTest extends TestCase
         $this->taxDetailsItemDataObjectFactory = $this->createMock(
             TaxDetailsItemInterfaceFactory::class
         );
-        $this->storeManager = $this->createMock(StoreManagerInterface::class);
+        $this->storeManager = $this->getMockForAbstractClass(StoreManagerInterface::class);
         $this->dataObjectHelperMock = $this->getMockBuilder(DataObjectHelper::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->taxClassManagementMock = $this->createMock(TaxClassManagementInterface::class);
+        $this->taxClassManagementMock = $this->getMockForAbstractClass(TaxClassManagementInterface::class);
 
         $objectManager = new ObjectManager($this);
         $this->taxCalculationService = $objectManager->getObject(
@@ -189,7 +189,7 @@ class TaxCalculationTest extends TestCase
     public function testCalculateTaxIfNoItemsInQuote()
     {
         $storeId = 3;
-        $quoteDetailsMock = $this->createMock(QuoteDetailsInterface::class);
+        $quoteDetailsMock = $this->getMockForAbstractClass(QuoteDetailsInterface::class);
 
         $storeMock = $this->getMockBuilder(Store::class)
             ->addMethods(['getStoreId'])
@@ -200,7 +200,7 @@ class TaxCalculationTest extends TestCase
 
         $quoteDetailsMock->expects($this->once())->method('getItems')->willReturn(null);
 
-        $taxDetailsMock = $this->createMock(TaxDetailsInterface::class);
+        $taxDetailsMock = $this->getMockForAbstractClass(TaxDetailsInterface::class);
         $taxDetailsMock->expects($this->once())
             ->method('setSubtotal')
             ->willReturnSelf();
@@ -235,7 +235,7 @@ class TaxCalculationTest extends TestCase
             TaxDetails::KEY_ITEMS => [],
         ];
 
-        $quoteDetailsMock = $this->createMock(QuoteDetailsInterface::class);
+        $quoteDetailsMock = $this->getMockForAbstractClass(QuoteDetailsInterface::class);
 
         $storeMock = $this->getMockBuilder(Store::class)
             ->addMethods(['getStoreId'])
@@ -244,11 +244,11 @@ class TaxCalculationTest extends TestCase
         $this->storeManager->expects($this->once())->method('getStore')->willReturn($storeMock);
         $storeMock->expects($this->once())->method('getStoreId')->willReturn($storeId);
 
-        $billAddressMock = $this->createMock(AddressInterface::class);
-        $shipAddressMock = $this->createMock(AddressInterface::class);
-        $taxClassKeyMock = $this->createMock(TaxClassKeyInterface::class);
+        $billAddressMock = $this->getMockForAbstractClass(AddressInterface::class);
+        $shipAddressMock = $this->getMockForAbstractClass(AddressInterface::class);
+        $taxClassKeyMock = $this->getMockForAbstractClass(TaxClassKeyInterface::class);
 
-        $quoteDetailsItemMock = $this->createMock(QuoteDetailsItemInterface::class);
+        $quoteDetailsItemMock = $this->getMockForAbstractClass(QuoteDetailsItemInterface::class);
         $quoteDetailsMock->expects($this->once())->method('getItems')->willReturn([$quoteDetailsItemMock]);
         $quoteDetailsMock->expects($this->once())->method('getBillingAddress')->willReturn($billAddressMock);
         $quoteDetailsMock->expects($this->once())->method('getShippingAddress')->willReturn($shipAddressMock);
@@ -267,10 +267,10 @@ class TaxCalculationTest extends TestCase
             ->with($algorithm, $storeId, $billAddressMock, $shipAddressMock, $taxClassId, $customerId)
             ->willReturn($calculatorMock);
 
-        $taxDetailsMock = $this->createMock(TaxDetailsItemInterface::class);
+        $taxDetailsMock = $this->getMockForAbstractClass(TaxDetailsItemInterface::class);
         $calculatorMock->expects($this->once())->method('calculate')->willReturn($taxDetailsMock);
 
-        $taxDetailsMock = $this->createMock(TaxDetailsInterface::class);
+        $taxDetailsMock = $this->getMockForAbstractClass(TaxDetailsInterface::class);
         $this->taxDetailsDataObjectFactory->expects($this->once())->method('create')->willReturn($taxDetailsMock);
         $this->dataObjectHelperMock->expects($this->once())
             ->method('populateWithArray')

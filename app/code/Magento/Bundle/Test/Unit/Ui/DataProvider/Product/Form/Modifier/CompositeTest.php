@@ -68,9 +68,9 @@ class CompositeTest extends TestCase
         $this->modifiedMeta = ['modified_meta'];
         $this->modifierClass = 'SomeClass';
         $this->objectManagerHelper = new ObjectManagerHelper($this);
-        $this->objectManagerMock = $this->createMock(ObjectManagerInterface::class);
-        $this->locatorMock = $this->createMock(LocatorInterface::class);
-        $this->productMock = $this->createMock(ProductInterface::class);
+        $this->objectManagerMock = $this->getMockForAbstractClass(ObjectManagerInterface::class);
+        $this->locatorMock = $this->getMockForAbstractClass(LocatorInterface::class);
+        $this->productMock = $this->getMockForAbstractClass(ProductInterface::class);
 
         $this->locatorMock->expects($this->once())
             ->method('getProduct')
@@ -114,7 +114,7 @@ class CompositeTest extends TestCase
     public function testModifyMetaBundleProduct()
     {
         /** @var ModifierInterface|MockObject $modifierMock */
-        $modifierMock = $this->createMock(ModifierInterface::class);
+        $modifierMock = $this->getMockForAbstractClass(ModifierInterface::class);
         $modifierMock->expects($this->once())
             ->method('modifyMeta')
             ->with($this->meta)
@@ -137,7 +137,7 @@ class CompositeTest extends TestCase
     public function testModifyMetaNonBundleProduct()
     {
         /** @var ModifierInterface|MockObject $modifierMock */
-        $modifierMock = $this->createMock(ModifierInterface::class);
+        $modifierMock = $this->getMockForAbstractClass(ModifierInterface::class);
         $modifierMock->expects($this->never())
             ->method('modifyMeta');
 

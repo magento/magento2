@@ -147,7 +147,7 @@ class VirtualTest extends TestCase
         );
         /** @var \Magento\Theme\Model\Theme\Domain\Virtual $model */
         $model = $objectManagerHelper->getObject(Virtual::class, $constructArguments);
-        $this->assertEquals(true, $model->isAssigned());
+        $this->assertTrue($model->isAssigned());
     }
 
     /**

@@ -49,8 +49,8 @@ class IndexTest extends TestCase
     protected function setUp(): void
     {
         $objectManager =  new ObjectManager($this);
-        $this->viewMock = $this->createMock(ViewInterface::class);
-        $this->requestMock = $this->createMock(RequestInterface::class);
+        $this->viewMock = $this->getMockForAbstractClass(ViewInterface::class);
+        $this->requestMock = $this->getMockForAbstractClass(RequestInterface::class);
         $this->resultFactoryMock = $this->createMock(PageFactory::class);
 
         $this->model = $objectManager->getObject(
@@ -68,7 +68,7 @@ class IndexTest extends TestCase
     {
         $itemId = 'Magento_AsynchronousOperations::system_magento_logging_bulk_operations';
         $prependText = 'Bulk Actions Log';
-        $layoutMock = $this->createMock(LayoutInterface::class);
+        $layoutMock = $this->getMockForAbstractClass(LayoutInterface::class);
         $menuModelMock = $this->createMock(Menu::class);
         $pageMock = $this->createMock(Page::class);
         $pageConfigMock = $this->createMock(Config::class);
@@ -78,7 +78,7 @@ class IndexTest extends TestCase
         $blockMock = $this->getMockBuilder(BlockInterface::class)
             ->addMethods(['setActive', 'getMenuModel'])
             ->onlyMethods(['toHtml'])
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->viewMock->expects($this->once())->method('getLayout')->willReturn($layoutMock);
         $layoutMock->expects($this->once())->method('getBlock')->willReturn($blockMock);

@@ -228,7 +228,7 @@ class ConfigTest extends TestCase
         $attribute->expects($this->any())->method('getStoreLabel')->willReturn($storeLabel);
         $attribute->expects($this->any())->method('getAttributeCode')->willReturn($attributeCode);
 
-        $storeManager = $this->createMock(StoreManagerInterface::class);
+        $storeManager = $this->getMockForAbstractClass(StoreManagerInterface::class);
         $store = $this->createMock(Store::class);
         $storeManager->expects($this->any())->method('getStore')->willReturn($store);
         $store->expects($this->any())->method('getId')->willReturn($storeId);

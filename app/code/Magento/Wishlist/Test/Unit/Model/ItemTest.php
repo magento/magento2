@@ -113,7 +113,7 @@ class ItemTest extends TestCase
                 ->getMock();
         $this->productTypeConfig = $this->getMockBuilder(ConfigInterface::class)
             ->getMock();
-        $this->productRepository = $this->createMock(ProductRepositoryInterface::class);
+        $this->productRepository = $this->getMockForAbstractClass(ProductRepositoryInterface::class);
         $this->resource = $this->getMockBuilder(\Magento\Wishlist\Model\ResourceModel\Item::class)
             ->disableOriginalConstructor()
             ->getMock();

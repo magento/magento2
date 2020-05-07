@@ -54,12 +54,12 @@ class InlineTest extends TestCase
     protected function setUp(): void
     {
         $this->scopeResolverMock =
-            $this->createMock(ScopeResolverInterface::class);
-        $this->urlMock = $this->createMock(UrlInterface::class);
-        $this->layoutMock = $this->createMock(LayoutInterface::class);
-        $this->configMock = $this->createMock(ConfigInterface::class);
-        $this->parserMock = $this->createMock(ParserInterface::class);
-        $this->stateMock = $this->createMock(StateInterface::class);
+            $this->getMockForAbstractClass(ScopeResolverInterface::class);
+        $this->urlMock = $this->getMockForAbstractClass(UrlInterface::class);
+        $this->layoutMock = $this->getMockForAbstractClass(LayoutInterface::class);
+        $this->configMock = $this->getMockForAbstractClass(ConfigInterface::class);
+        $this->parserMock = $this->getMockForAbstractClass(ParserInterface::class);
+        $this->stateMock = $this->getMockForAbstractClass(StateInterface::class);
     }
 
     /**
@@ -294,7 +294,7 @@ class InlineTest extends TestCase
      */
     protected function prepareIsAllowed($isEnabled, $isActive, $isDevAllowed, $scope = null)
     {
-        $scopeMock = $this->createMock(ScopeConfigInterface::class);
+        $scopeMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
         $this->stateMock->expects($this->any())->method('isEnabled')->willReturn($isEnabled);
         $this->scopeResolverMock->expects(
             $this->once()

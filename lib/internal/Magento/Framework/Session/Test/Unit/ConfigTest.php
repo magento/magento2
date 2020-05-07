@@ -69,7 +69,7 @@ class ConfigTest extends TestCase
 
         $this->validatorMock = $this->getMockBuilder(ValidatorInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->validatorMock->expects($this->any())
             ->method('isValid')
             ->willReturn(true);
@@ -165,7 +165,7 @@ class ConfigTest extends TestCase
     {
         $validatorMock = $this->getMockBuilder(ValidatorInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $validatorMock->expects($this->any())
             ->method('isValid')
             ->willReturn(false);
@@ -179,7 +179,7 @@ class ConfigTest extends TestCase
     {
         $validatorMock = $this->getMockBuilder(ValidatorInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $validatorMock->expects($this->any())
             ->method('isValid')
             ->willReturn(false);
@@ -229,7 +229,7 @@ class ConfigTest extends TestCase
     {
         $validatorMock = $this->getMockBuilder(ValidatorInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $validatorMock->expects($this->any())
             ->method('isValid')
             ->willReturn(false);
@@ -243,7 +243,7 @@ class ConfigTest extends TestCase
     {
         $validatorMock = $this->getMockBuilder(ValidatorInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $validatorMock->expects($this->any())
             ->method('isValid')
             ->willReturn(false);
@@ -332,7 +332,7 @@ class ConfigTest extends TestCase
     {
         $validatorMock = $this->getMockBuilder(ValidatorInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         if ($isValidSame) {
             $validatorMock->expects($this->any())
                 ->method('isValid')
@@ -433,7 +433,7 @@ class ConfigTest extends TestCase
             ->method('create')
             ->willReturn($validator);
 
-        $this->configMock = $this->createMock(ScopeConfigInterface::class);
+        $this->configMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
         $getValueReturnMap = [
             ['test_web/test_cookie/test_cookie_lifetime', 'store', null, 7200],
             ['web/cookie/cookie_path', 'store', null, ''],

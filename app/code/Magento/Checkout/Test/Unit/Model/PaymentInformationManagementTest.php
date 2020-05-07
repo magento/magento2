@@ -68,9 +68,9 @@ class PaymentInformationManagementTest extends TestCase
         $this->paymentMethodManagementMock = $this->createMock(
             PaymentMethodManagementInterface::class
         );
-        $this->cartManagementMock = $this->createMock(CartManagementInterface::class);
+        $this->cartManagementMock = $this->getMockForAbstractClass(CartManagementInterface::class);
 
-        $this->loggerMock = $this->createMock(LoggerInterface::class);
+        $this->loggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
         $this->cartRepositoryMock = $this->getMockBuilder(CartRepositoryInterface::class)
             ->getMock();
         $this->model = $objectManager->getObject(
@@ -89,8 +89,8 @@ class PaymentInformationManagementTest extends TestCase
     {
         $cartId = 100;
         $orderId = 200;
-        $paymentMock = $this->createMock(PaymentInterface::class);
-        $billingAddressMock = $this->createMock(AddressInterface::class);
+        $paymentMock = $this->getMockForAbstractClass(PaymentInterface::class);
+        $billingAddressMock = $this->getMockForAbstractClass(AddressInterface::class);
 
         $this->getMockForAssignBillingAddress($cartId, $billingAddressMock);
         $this->paymentMethodManagementMock->expects($this->once())->method('set')->with($cartId, $paymentMock);
@@ -106,8 +106,8 @@ class PaymentInformationManagementTest extends TestCase
     {
         $this->expectException('Magento\Framework\Exception\CouldNotSaveException');
         $cartId = 100;
-        $paymentMock = $this->createMock(PaymentInterface::class);
-        $billingAddressMock = $this->createMock(AddressInterface::class);
+        $paymentMock = $this->getMockForAbstractClass(PaymentInterface::class);
+        $billingAddressMock = $this->getMockForAbstractClass(AddressInterface::class);
 
         $this->getMockForAssignBillingAddress($cartId, $billingAddressMock);
         $this->paymentMethodManagementMock->expects($this->once())->method('set')->with($cartId, $paymentMock);
@@ -126,7 +126,7 @@ class PaymentInformationManagementTest extends TestCase
     {
         $cartId = 100;
         $orderId = 200;
-        $paymentMock = $this->createMock(PaymentInterface::class);
+        $paymentMock = $this->getMockForAbstractClass(PaymentInterface::class);
 
         $this->paymentMethodManagementMock->expects($this->once())->method('set')->with($cartId, $paymentMock);
         $this->cartManagementMock->expects($this->once())->method('placeOrder')->with($cartId)->willReturn($orderId);
@@ -140,8 +140,8 @@ class PaymentInformationManagementTest extends TestCase
     public function testSavePaymentInformation()
     {
         $cartId = 100;
-        $paymentMock = $this->createMock(PaymentInterface::class);
-        $billingAddressMock = $this->createMock(AddressInterface::class);
+        $paymentMock = $this->getMockForAbstractClass(PaymentInterface::class);
+        $billingAddressMock = $this->getMockForAbstractClass(AddressInterface::class);
 
         $this->getMockForAssignBillingAddress($cartId, $billingAddressMock);
         $this->paymentMethodManagementMock->expects($this->once())->method('set')->with($cartId, $paymentMock);
@@ -152,7 +152,7 @@ class PaymentInformationManagementTest extends TestCase
     public function testSavePaymentInformationWithoutBillingAddress()
     {
         $cartId = 100;
-        $paymentMock = $this->createMock(PaymentInterface::class);
+        $paymentMock = $this->getMockForAbstractClass(PaymentInterface::class);
 
         $this->paymentMethodManagementMock->expects($this->once())->method('set')->with($cartId, $paymentMock);
 
@@ -164,8 +164,8 @@ class PaymentInformationManagementTest extends TestCase
         $this->expectException('Magento\Framework\Exception\CouldNotSaveException');
         $this->expectExceptionMessage('DB exception');
         $cartId = 100;
-        $paymentMock = $this->createMock(PaymentInterface::class);
-        $billingAddressMock = $this->createMock(AddressInterface::class);
+        $paymentMock = $this->getMockForAbstractClass(PaymentInterface::class);
+        $billingAddressMock = $this->getMockForAbstractClass(AddressInterface::class);
 
         $this->getMockForAssignBillingAddress($cartId, $billingAddressMock);
 
@@ -189,8 +189,8 @@ class PaymentInformationManagementTest extends TestCase
         $customerId = 1;
         $quoteMock = $this->createMock(Quote::class);
         $quoteBillingAddress = $this->createMock(Address::class);
-        $billingAddressMock = $this->createMock(AddressInterface::class);
-        $paymentMock = $this->createMock(PaymentInterface::class);
+        $billingAddressMock = $this->getMockForAbstractClass(AddressInterface::class);
+        $paymentMock = $this->getMockForAbstractClass(PaymentInterface::class);
 
         $quoteBillingAddress->method('getCustomerId')->willReturn($customerId);
         $quoteMock->method('getBillingAddress')->willReturn($quoteBillingAddress);

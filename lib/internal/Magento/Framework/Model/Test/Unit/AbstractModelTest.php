@@ -64,9 +64,9 @@ class AbstractModelTest extends TestCase
     {
         $this->actionValidatorMock = $this->createMock(RemoveAction::class);
         $this->contextMock = new Context(
-            $this->createMock(LoggerInterface::class),
-            $this->createMock(ManagerInterface::class),
-            $this->createMock(CacheInterface::class),
+            $this->getMockForAbstractClass(LoggerInterface::class),
+            $this->getMockForAbstractClass(ManagerInterface::class),
+            $this->getMockForAbstractClass(CacheInterface::class),
             $this->createMock(State::class),
             $this->actionValidatorMock
         );
@@ -87,7 +87,7 @@ class AbstractModelTest extends TestCase
             AbstractModel::class,
             [$this->contextMock, $this->registryMock, $this->resourceMock, $this->resourceCollectionMock]
         );
-        $this->connectionMock = $this->createMock(AdapterInterface::class);
+        $this->connectionMock = $this->getMockForAbstractClass(AdapterInterface::class);
         $this->resourceMock->expects($this->any())
             ->method('getConnection')
             ->willReturn($this->connectionMock);

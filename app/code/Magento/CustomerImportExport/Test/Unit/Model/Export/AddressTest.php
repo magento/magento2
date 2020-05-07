@@ -106,11 +106,11 @@ class AddressTest extends TestCase
 
         $this->_objectManager = new ObjectManager($this);
         $this->_model = new Address(
-            $this->createMock(ScopeConfigInterface::class),
+            $this->getMockForAbstractClass(ScopeConfigInterface::class),
             $storeManager,
             $this->createMock(Factory::class),
             $this->createMock(CollectionByPagesIteratorFactory::class),
-            $this->createMock(TimezoneInterface::class),
+            $this->getMockForAbstractClass(TimezoneInterface::class),
             $this->createMock(Config::class),
             $this->createMock(CollectionFactory::class),
             $this->createMock(CustomerFactory::class),
@@ -146,8 +146,8 @@ class AddressTest extends TestCase
             $this->once()
         )->method(
             'getEntityTypeCode'
-        )->will(
-            $this->returnValue('customer_address')
+        )->willReturn(
+            'customer_address'
         );
         foreach ($this->_attributes as $attributeData) {
             $arguments = $this->_objectManager->getConstructArguments(

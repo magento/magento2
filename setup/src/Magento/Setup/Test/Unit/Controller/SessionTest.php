@@ -84,7 +84,7 @@ class SessionTest extends TestCase
             [Url::class, $urlMock]
         ];
 
-        $this->serviceManager->expects($this->once())->method('get')->will($this->returnValue($deployConfigMock));
+        $this->serviceManager->expects($this->once())->method('get')->willReturn($deployConfigMock);
 
         $this->objectManager->expects($this->atLeastOnce())
             ->method('get')
@@ -126,7 +126,7 @@ class SessionTest extends TestCase
         );
         $sessionMock->expects($this->once())->method('isSessionExists')->willReturn(true);
 
-        $this->serviceManager->expects($this->once())->method('get')->will($this->returnValue($deployConfigMock));
+        $this->serviceManager->expects($this->once())->method('get')->willReturn($deployConfigMock);
         $this->objectManager->expects($this->once())
             ->method('get')
             ->willReturn($sessionMock);

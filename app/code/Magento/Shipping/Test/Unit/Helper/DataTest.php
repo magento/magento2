@@ -47,7 +47,7 @@ class DataTest extends TestCase
     protected function setUp(): void
     {
         $this->contextMock = $this->createMock(Context::class);
-        $this->urlDecoderMock = $this->createMock(DecoderInterface::class);
+        $this->urlDecoderMock = $this->getMockForAbstractClass(DecoderInterface::class);
         $this->contextMock->expects($this->any())->method('getUrlDecoder')
             ->willReturn($this->urlDecoderMock);
         $this->objectManagerHelper = new ObjectManagerHelper($this);

@@ -179,7 +179,7 @@ class AclRetrieverTest extends TestCase
             $aclBuilderMock,
             $roleCollectionFactoryMock,
             $rulesCollectionFactoryMock,
-            $this->createMock(LoggerInterface::class)
+            $this->getMockForAbstractClass(LoggerInterface::class)
         );
     }
 }

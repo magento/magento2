@@ -55,7 +55,7 @@ class GuestCartRepositoryTest extends TestCase
     protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
-        $this->quoteRepositoryMock = $this->createMock(CartRepositoryInterface::class);
+        $this->quoteRepositoryMock = $this->getMockForAbstractClass(CartRepositoryInterface::class);
         $this->quoteMock = $this->createMock(Quote::class);
 
         $this->maskedCartId = 'f216207248d65c789b17be8545e0aa73';

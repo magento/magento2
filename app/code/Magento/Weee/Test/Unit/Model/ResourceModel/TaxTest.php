@@ -48,11 +48,11 @@ class TaxTest extends TestCase
     {
         $objectManager = new ObjectManager($this);
 
-        $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
+        $this->storeManagerMock = $this->getMockForAbstractClass(StoreManagerInterface::class);
 
         $this->selectMock = $this->createMock(Select::class);
 
-        $this->connectionMock = $this->createMock(AdapterInterface::class);
+        $this->connectionMock = $this->getMockForAbstractClass(AdapterInterface::class);
         $this->connectionMock->expects($this->once())
             ->method('select')
             ->willReturn($this->selectMock);

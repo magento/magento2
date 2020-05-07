@@ -32,10 +32,10 @@ class DataTest extends TestCase
         $objectManager = new ObjectManager($this);
         $this->jsonEncoderMock = $this->getMockBuilder(EncoderInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->jsonDecoderMock = $this->getMockBuilder(DecoderInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->helper = $objectManager->getObject(
             Data::class,
             [

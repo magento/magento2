@@ -103,7 +103,7 @@ class FinalPriceBoxTest extends TestCase
             ->onlyMethods(['getPriceInfo', 'isSalable', 'getId'])
             ->disableOriginalConstructor()
             ->getMock();
-        $this->priceInfo = $this->createMock(PriceInfoInterface::class);
+        $this->priceInfo = $this->getMockForAbstractClass(PriceInfoInterface::class);
         $this->product->expects($this->any())
             ->method('getPriceInfo')
             ->willReturn($this->priceInfo);
@@ -112,7 +112,7 @@ class FinalPriceBoxTest extends TestCase
         $this->layout = $this->createMock(Layout::class);
 
         $this->priceBox = $this->createMock(PriceBox::class);
-        $this->logger = $this->createMock(LoggerInterface::class);
+        $this->logger = $this->getMockForAbstractClass(LoggerInterface::class);
 
         $this->layout->expects($this->any())->method('getBlock')->willReturn($this->priceBox);
 
@@ -171,7 +171,7 @@ class FinalPriceBoxTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->price = $this->createMock(PriceInterface::class);
+        $this->price = $this->getMockForAbstractClass(PriceInterface::class);
         $this->price->expects($this->any())
             ->method('getPriceCode')
             ->willReturn(FinalPrice::PRICE_CODE);

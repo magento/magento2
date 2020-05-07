@@ -123,7 +123,7 @@ class MatrixTest extends TestCase
             ]
         ];
 
-        $layout = $this->createMock(LayoutInterface::class);
+        $layout = $this->getMockForAbstractClass(LayoutInterface::class);
         $wizardBlock = $this->createMock(StepsWizard::class);
         $layout->expects($this->any())->method('getChildName')->with(null, $wizardName)
             ->willReturn($wizardBlockName);

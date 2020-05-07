@@ -39,7 +39,7 @@ class PaymentTokenAssignerTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->paymentTokenManagement = $this->createMock(PaymentTokenManagementInterface::class);
+        $this->paymentTokenManagement = $this->getMockForAbstractClass(PaymentTokenManagementInterface::class);
         $this->observer = new PaymentTokenAssigner($this->paymentTokenManagement);
     }
 
@@ -66,7 +66,7 @@ class PaymentTokenAssignerTest extends TestCase
                 ]
             ]
         );
-        $paymentModel = $this->createMock(InfoInterface::class);
+        $paymentModel = $this->getMockForAbstractClass(InfoInterface::class);
 
         $observer = $this->getPreparedObserverWithMap(
             [
@@ -95,8 +95,8 @@ class PaymentTokenAssignerTest extends TestCase
         $paymentModel = $this->getMockBuilder(Payment::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $quote = $this->createMock(CartInterface::class);
-        $customer = $this->createMock(CustomerInterface::class);
+        $quote = $this->getMockForAbstractClass(CartInterface::class);
+        $customer = $this->getMockForAbstractClass(CustomerInterface::class);
 
         $paymentModel->expects(static::once())
             ->method('getQuote')
@@ -141,9 +141,9 @@ class PaymentTokenAssignerTest extends TestCase
         $paymentModel = $this->getMockBuilder(Payment::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $quote = $this->createMock(CartInterface::class);
-        $customer = $this->createMock(CustomerInterface::class);
-        $paymentToken = $this->createMock(PaymentTokenInterface::class);
+        $quote = $this->getMockForAbstractClass(CartInterface::class);
+        $customer = $this->getMockForAbstractClass(CustomerInterface::class);
+        $paymentToken = $this->getMockForAbstractClass(PaymentTokenInterface::class);
 
         $paymentModel->expects(static::once())
             ->method('getQuote')

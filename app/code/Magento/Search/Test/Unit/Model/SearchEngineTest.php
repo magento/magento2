@@ -38,7 +38,7 @@ class SearchEngineTest extends TestCase
 
         $this->adapter = $this->getMockBuilder(AdapterInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $adapterFactory->expects($this->once())->method('create')->willReturn($this->adapter);
 
@@ -54,11 +54,11 @@ class SearchEngineTest extends TestCase
     {
         $request = $this->getMockBuilder(RequestInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $response = $this->getMockBuilder(ResponseInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->adapter->expects($this->once())
             ->method('query')

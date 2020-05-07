@@ -18,7 +18,7 @@ class CustomerTest extends TestCase
     public function testGetButtonsHtml()
     {
         $contextMock = $this->createPartialMock(Context::class, ['getAuthorization']);
-        $authorizationMock = $this->createMock(AuthorizationInterface::class);
+        $authorizationMock = $this->getMockForAbstractClass(AuthorizationInterface::class);
         $contextMock->expects($this->any())->method('getAuthorization')->willReturn($authorizationMock);
         $arguments = ['context' => $contextMock];
 

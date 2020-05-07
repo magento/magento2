@@ -34,7 +34,7 @@ class AttributeSetManagementTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->repositoryMock = $this->createMock(AttributeSetRepositoryInterface::class);
+        $this->repositoryMock = $this->getMockForAbstractClass(AttributeSetRepositoryInterface::class);
         $this->eavConfigMock = $this->createPartialMock(Config::class, ['getEntityType']);
 
         $this->model = new AttributeSetManagement(

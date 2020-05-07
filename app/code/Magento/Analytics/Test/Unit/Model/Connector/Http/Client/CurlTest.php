@@ -56,7 +56,7 @@ class CurlTest extends TestCase
     {
         $this->curlAdapterMock = $this->createMock(\Magento\Framework\HTTP\Adapter\Curl::class);
 
-        $this->loggerMock = $this->createMock(LoggerInterface::class);
+        $this->loggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
         $curlFactoryMock = $this->getMockBuilder(CurlFactory::class)
             ->setMethods(['create'])
             ->disableOriginalConstructor()

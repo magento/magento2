@@ -65,7 +65,7 @@ class StoreTest extends TestCase
         $this->contextMock = $this->getMockBuilder(ContextInterface::class)
             ->disableOriginalConstructor()
             ->setMethods([])
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->uiComponentFactoryMock = $this->getMockBuilder(UiComponentFactory::class)
             ->disableOriginalConstructor()
             ->setMethods([])
@@ -81,7 +81,7 @@ class StoreTest extends TestCase
         $this->storeManagerMock = $this->getMockBuilder(StoreManagerInterface::class)
             ->disableOriginalConstructor()
             ->setMethods([])
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->model = $objectManager->getObject(
             \Magento\Store\Ui\Component\Listing\Column\Store::class,
             [

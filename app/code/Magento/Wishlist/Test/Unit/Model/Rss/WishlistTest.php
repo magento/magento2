@@ -99,7 +99,7 @@ class WishlistTest extends TestCase
             ['getWishlist', 'getCustomer', 'getCustomerName']
         );
         $this->urlBuilderMock = $this->getMockForAbstractClass(UrlInterface::class);
-        $this->scopeConfig = $this->createMock(ScopeConfigInterface::class);
+        $this->scopeConfig = $this->getMockForAbstractClass(ScopeConfigInterface::class);
 
         $this->imageHelperMock = $this->createMock(Image::class);
 
@@ -117,7 +117,7 @@ class WishlistTest extends TestCase
             ->setMethods(['create'])->disableOriginalConstructor()
             ->getMock();
 
-        $requestMock = $this->createMock(RequestInterface::class);
+        $requestMock = $this->getMockForAbstractClass(RequestInterface::class);
         $requestMock->expects($this->any())->method('getParam')->with('sharing_code')
             ->willReturn('somesharingcode');
 
@@ -149,7 +149,7 @@ class WishlistTest extends TestCase
             ->onlyMethods(['getId', '__wakeup', 'getCustomerId', 'getItemCollection'])
             ->disableOriginalConstructor()
             ->getMock();
-        $customerServiceMock = $this->createMock(CustomerInterface::class);
+        $customerServiceMock = $this->getMockForAbstractClass(CustomerInterface::class);
         $wishlistSharingUrl = 'wishlist/shared/index/1';
         $locale = 'en_US';
         $productUrl = 'http://product.url/';
@@ -162,24 +162,24 @@ class WishlistTest extends TestCase
         $customer->expects($this->once())->method('load')->willReturnSelf();
         $customer->expects($this->once())->method('getName')->willReturn('Customer Name');
 
-        $this->customerFactory->expects($this->once())->method('create')->will($this->returnValue($customer));
+        $this->customerFactory->expects($this->once())->method('create')->willReturn($customer);
 
         $this->wishlistHelperMock->expects($this->any())
             ->method('getWishlist')
-            ->will($this->returnValue($wishlistModelMock));
+            ->willReturn($wishlistModelMock);
         $this->wishlistHelperMock->expects($this->any())
             ->method('getCustomer')
-            ->will($this->returnValue($customerServiceMock));
+            ->willReturn($customerServiceMock);
         $wishlistModelMock->expects($this->once())
             ->method('getId')
             ->willReturn($wishlistId);
         $this->urlBuilderMock->expects($this->once())
             ->method('getUrl')
-            ->will($this->returnValue($wishlistSharingUrl));
+            ->willReturn($wishlistSharingUrl);
         $this->scopeConfig->expects($this->any())
             ->method('getValue')
-            ->will(
-                $this->returnValueMap(
+            ->willReturnMap(
+                
                     [
                         [
                             'advanced/modules_disable_output/Magento_Rss',
@@ -194,7 +194,7 @@ class WishlistTest extends TestCase
                             $locale
                         ],
                     ]
-                )
+                
             );
 
         $staticArgs = [
@@ -246,7 +246,7 @@ class WishlistTest extends TestCase
 
         $wishlistModelMock->expects($this->once())
             ->method('getItemCollection')
-            ->will($this->returnValue($wishlistItemsCollection));
+            ->willReturn($wishlistItemsCollection);
         $wishlistItem->expects($this->once())
             ->method('getProduct')
             ->willReturn($productMock);
@@ -262,10 +262,10 @@ class WishlistTest extends TestCase
         $this->imageHelperMock->expects($this->once())
             ->method('init')
             ->with($productMock, 'rss_thumbnail')
-            ->will($this->returnSelf());
+            ->willReturnSelf();
         $this->imageHelperMock->expects($this->once())
             ->method('getUrl')
-            ->will($this->returnValue($imgThumbSrc));
+            ->willReturn($imgThumbSrc);
         $priceRendererMock = $this->createPartialMock(Render::class, ['render']);
 
         $this->layoutMock->expects($this->once())
@@ -282,12 +282,12 @@ class WishlistTest extends TestCase
             ->willReturn($productShortDescription);
         $this->catalogOutputMock->expects($this->any())
             ->method('productAttribute')
-            ->will($this->returnArgument(1));
+            ->willReturnArgument(1);
         $this->wishlistBlock
             ->expects($this->any())
             ->method('getProductUrl')
             ->with($productMock, ['_rss' => true])
-            ->will($this->returnValue($staticArgs['productUrl']));
+            ->willReturn($staticArgs['productUrl']);
 
         $description = '<table><tr><td><a href="' . $staticArgs['productUrl'] . '"><img src="' . $imgThumbSrc .
             '" border="0" align="left" height="75" width="75"></a></td><td style="text-decoration:none;">' .
@@ -300,21 +300,21 @@ class WishlistTest extends TestCase
     public function testIsAllowed()
     {
         $customerId = 1;
-        $customerServiceMock = $this->createMock(CustomerInterface::class);
+        $customerServiceMock = $this->getMockForAbstractClass(CustomerInterface::class);
         $wishlist = $this->getMockBuilder(\Magento\Wishlist\Model\Wishlist::class)->setMethods(
             ['getId', '__wakeup', 'getCustomerId', 'getItemCollection', 'getSharingCode']
         )->disableOriginalConstructor()
             ->getMock();
         $wishlist->expects($this->once())->method('getCustomerId')->willReturn($customerId);
         $this->wishlistHelperMock->expects($this->any())->method('getWishlist')
-            ->will($this->returnValue($wishlist));
+            ->willReturn($wishlist);
         $this->wishlistHelperMock->expects($this->any())
             ->method('getCustomer')
-            ->will($this->returnValue($customerServiceMock));
+            ->willReturn($customerServiceMock);
         $customerServiceMock->expects($this->once())->method('getId')->willReturn($customerId);
         $this->scopeConfig->expects($this->once())->method('isSetFlag')
             ->with('rss/wishlist/active', ScopeInterface::SCOPE_STORE)
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $this->assertTrue($this->model->isAllowed());
     }
@@ -328,7 +328,7 @@ class WishlistTest extends TestCase
             ->getMock();
         $wishlist->expects($this->once())->method('getId')->willReturn($wishlistId);
         $this->wishlistHelperMock->expects($this->any())->method('getWishlist')
-            ->will($this->returnValue($wishlist));
+            ->willReturn($wishlist);
         $this->assertEquals('rss_wishlist_data_1', $this->model->getCacheKey());
     }
 
@@ -346,8 +346,8 @@ class WishlistTest extends TestCase
         $wishlist->expects($this->any())->method('getSharingCode')
             ->willReturn('somesharingcode');
         $this->wishlistHelperMock->expects($this->any())->method('getWishlist')
-            ->will($this->returnValue($wishlist));
-        $this->assertEquals(false, $this->model->isAuthRequired());
+            ->willReturn($wishlist);
+        $this->assertFalse($this->model->isAuthRequired());
     }
 
     public function testGetProductPriceHtmlBlockDoesntExists()

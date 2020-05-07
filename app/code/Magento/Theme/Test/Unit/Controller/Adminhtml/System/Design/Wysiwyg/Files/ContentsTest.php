@@ -46,8 +46,8 @@ class ContentsTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->view = $this->createMock(ViewInterface::class);
-        $this->objectManager = $this->createMock(ObjectManagerInterface::class);
+        $this->view = $this->getMockForAbstractClass(ViewInterface::class);
+        $this->objectManager = $this->getMockForAbstractClass(ObjectManagerInterface::class);
         $this->session = $this->createMock(Session::class);
         $this->response = $this->createMock(Http::class);
         $this->storage = $this->createMock(Storage::class);

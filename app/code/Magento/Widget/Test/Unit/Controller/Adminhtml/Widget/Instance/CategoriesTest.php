@@ -68,7 +68,7 @@ class CategoriesTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->request = $this->createMock(RequestInterface::class);
+        $this->request = $this->getMockForAbstractClass(RequestInterface::class);
         $this->mathRandom = $this->createMock(Random::class);
         $this->chooser = $this->getMockBuilder($this->blockClass)
             ->disableOriginalConstructor()

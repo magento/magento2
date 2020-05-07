@@ -50,10 +50,10 @@ class DataTest extends TestCase
 
         $this->orderTaxManagementMock = $this->getMockBuilder(OrderTaxManagementInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->priceCurrencyMock = $this->getMockBuilder(PriceCurrencyInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->taxConfigMock = $this->getMockBuilder(Config::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -106,7 +106,7 @@ class DataTest extends TestCase
 
         $orderDetailsItem = $this->getMockBuilder(OrderTaxDetailsAppliedTaxInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $orderDetailsItem->expects($this->once())
             ->method('getCode')
             ->willReturn($itemCode);
@@ -135,7 +135,7 @@ class DataTest extends TestCase
 
         $orderDetails = $this->getMockBuilder(OrderTaxDetailsInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $orderDetails->expects($this->once())
             ->method('getAppliedTaxes')
             ->willReturn($appliedTaxes);

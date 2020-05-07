@@ -106,7 +106,7 @@ class FileResolverByModuleTest extends TestCase
             ]);
         $directoryMock = $this->getMockBuilder(ReadInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $directoryMock->expects(self::once())
             ->method('search')
             ->with('{db_schema.xml,*/db_schema.xml}')
@@ -158,7 +158,7 @@ class FileResolverByModuleTest extends TestCase
             ]);
         $directoryMock = $this->getMockBuilder(ReadInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $directoryMock->expects(self::once())
             ->method('search')
             ->with('{db_schema.xml,*/db_schema.xml}')
@@ -203,7 +203,7 @@ class FileResolverByModuleTest extends TestCase
             ]);
         $directoryMock = $this->getMockBuilder(ReadInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $directoryMock->expects(self::once())
             ->method('search')
             ->with('{db_schema.xml,*/db_schema.xml}')

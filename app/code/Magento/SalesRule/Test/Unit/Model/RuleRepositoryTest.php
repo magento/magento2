@@ -89,7 +89,7 @@ class RuleRepositoryTest extends TestCase
             ->onlyMethods(['create'])
             ->getMock();
 
-        $this->searchResultsMock = $this->createMock(RuleSearchResultInterface::class);
+        $this->searchResultsMock = $this->getMockForAbstractClass(RuleSearchResultInterface::class);
 
         $this->collectionFactory = $this->getMockBuilder(CollectionFactory::class)
             ->disableOriginalConstructor()

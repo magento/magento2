@@ -86,14 +86,14 @@ class DataTest extends TestCase
 
         $this->storeManager = $this->getMockBuilder(StoreManagerInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->storeManager->expects($this->any())
             ->method('getStore')
             ->willReturn($this->store);
 
         $this->urlEncoderMock = $this->getMockBuilder(EncoderInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->requestMock = $this->getMockBuilder(RequestInterface::class)
             ->disableOriginalConstructor()
@@ -102,7 +102,7 @@ class DataTest extends TestCase
 
         $this->urlBuilder = $this->getMockBuilder(UrlInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->context = $this->getMockBuilder(Context::class)
             ->disableOriginalConstructor()
@@ -119,7 +119,7 @@ class DataTest extends TestCase
 
         $this->wishlistProvider = $this->getMockBuilder(WishlistProviderInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->coreRegistry = $this->getMockBuilder(Registry::class)
             ->disableOriginalConstructor()

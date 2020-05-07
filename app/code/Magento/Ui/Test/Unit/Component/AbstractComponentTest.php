@@ -31,7 +31,7 @@ class AbstractComponentTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->contextMock = $this->createMock(ContextInterface::class);
+        $this->contextMock = $this->getMockForAbstractClass(ContextInterface::class);
         $this->contextMock->expects($this->never())->method('getProcessor');
         $this->abstractComponent = $this->getMockBuilder(AbstractComponent::class)
             ->enableOriginalConstructor()
@@ -68,7 +68,7 @@ class AbstractComponentTest extends TestCase
         $this->abstractComponent->setData('template', $template);
 
         /** @var ContentTypeInterface|MockObject $renderEngineMock */
-        $renderEngineMock = $this->createMock(ContentTypeInterface::class);
+        $renderEngineMock = $this->getMockForAbstractClass(ContentTypeInterface::class);
         $renderEngineMock->expects($this->once())
             ->method('render')
             ->with($this->abstractComponent, $template . '.xhtml')
@@ -111,7 +111,7 @@ class AbstractComponentTest extends TestCase
     public function testAddGetChildComponents()
     {
         /** @var UiComponentInterface|MockObject $uiComponentMock */
-        $uiComponentMock = $this->createMock(UiComponentInterface::class);
+        $uiComponentMock = $this->getMockForAbstractClass(UiComponentInterface::class);
         $name = 'componentName';
 
         $this->abstractComponent->addComponent($name, $uiComponentMock);
@@ -124,7 +124,7 @@ class AbstractComponentTest extends TestCase
     public function testGetChildComponents()
     {
         /** @var UiComponentInterface|MockObject $uiComponentMock */
-        $uiComponentMock = $this->createMock(UiComponentInterface::class);
+        $uiComponentMock = $this->getMockForAbstractClass(UiComponentInterface::class);
         $name = 'componentName';
         $expectedResult = [$name => $uiComponentMock];
 
@@ -137,7 +137,7 @@ class AbstractComponentTest extends TestCase
      */
     public function testRenderChildComponentNotExists()
     {
-        $this->assertEquals(null, $this->abstractComponent->renderChildComponent('someComponent'));
+        $this->assertNull($this->abstractComponent->renderChildComponent('someComponent'));
     }
 
     /**
@@ -148,7 +148,7 @@ class AbstractComponentTest extends TestCase
         $name = 'componentName';
         $expectedResult = 'some html code';
         /** @var UiComponentInterface|MockObject $uiComponentMock */
-        $uiComponentMock = $this->createMock(UiComponentInterface::class);
+        $uiComponentMock = $this->getMockForAbstractClass(UiComponentInterface::class);
         $uiComponentMock->expects($this->once())
             ->method('render')
             ->willReturn($expectedResult);

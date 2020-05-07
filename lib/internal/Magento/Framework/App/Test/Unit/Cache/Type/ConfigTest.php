@@ -36,7 +36,7 @@ class ConfigTest extends TestCase
             Config::class,
             ['cacheFrontendPool' => $cacheFrontendPoolMock]
         );
-        $this->frontendMock = $this->createMock(FrontendInterface::class);
+        $this->frontendMock = $this->getMockForAbstractClass(FrontendInterface::class);
         $cacheFrontendPoolMock->expects($this->once())
             ->method('get')
             ->with(Config::TYPE_IDENTIFIER)

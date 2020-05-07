@@ -75,7 +75,7 @@ class CustomerTokenManagementTest extends TestCase
     public function testGetCustomerSessionTokens()
     {
         $customerId = 1;
-        $token = $this->createMock(PaymentTokenInterface::class);
+        $token = $this->getMockForAbstractClass(PaymentTokenInterface::class);
         $expectation = [$token];
 
         $this->customerSession->expects(static::once())

@@ -28,7 +28,7 @@ class AbstractCollectionTest extends TestCase
     protected function setUp(): void
     {
         $entityFactory = $this->createMock(EntityFactory::class);
-        $logger = $this->createMock(LoggerInterface::class);
+        $logger = $this->getMockForAbstractClass(LoggerInterface::class);
         $fetchStrategy = $this->createMock(Query::class);
         $eventManager = $this->createMock(Manager::class);
         $connection = $this->createMock(Mysql::class);

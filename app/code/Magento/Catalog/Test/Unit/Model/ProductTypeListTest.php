@@ -33,7 +33,7 @@ class ProductTypeListTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->typeConfigMock = $this->createMock(ConfigInterface::class);
+        $this->typeConfigMock = $this->getMockForAbstractClass(ConfigInterface::class);
         $this->factoryMock = $this->createPartialMock(
             ProductTypeInterfaceFactory::class,
             ['create']
@@ -53,7 +53,7 @@ class ProductTypeListTest extends TestCase
         $productTypeData = [
             'simple' => $simpleProductType,
         ];
-        $productTypeMock = $this->createMock(ProductTypeInterface::class);
+        $productTypeMock = $this->getMockForAbstractClass(ProductTypeInterface::class);
         $this->typeConfigMock->expects($this->any())->method('getAll')->willReturn($productTypeData);
 
         $this->factoryMock->expects($this->once())->method('create')->willReturn($productTypeMock);

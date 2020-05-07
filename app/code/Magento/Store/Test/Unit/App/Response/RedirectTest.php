@@ -62,11 +62,11 @@ class RedirectTest extends TestCase
         $this->_requestMock = $this->getMockBuilder(Http::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->_storeManagerMock = $this->createMock(StoreManagerInterface::class);
+        $this->_storeManagerMock = $this->getMockForAbstractClass(StoreManagerInterface::class);
         $this->_urlCoderMock = $this->createMock(UrlCoder::class);
-        $this->_sessionMock = $this->createMock(SessionManagerInterface::class);
-        $this->_sidResolverMock = $this->createMock(SidResolverInterface::class);
-        $this->_urlBuilderMock = $this->createMock(UrlInterface::class);
+        $this->_sessionMock = $this->getMockForAbstractClass(SessionManagerInterface::class);
+        $this->_sidResolverMock = $this->getMockForAbstractClass(SidResolverInterface::class);
+        $this->_urlBuilderMock = $this->getMockForAbstractClass(UrlInterface::class);
 
         $this->_model = new Redirect(
             $this->_requestMock,

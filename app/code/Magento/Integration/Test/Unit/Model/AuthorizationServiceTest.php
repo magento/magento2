@@ -109,7 +109,7 @@ class AuthorizationServiceTest extends TestCase
             $roleCollectionFactoryMock,
             $rulesFactoryMock,
             $this->createMock(\Magento\Authorization\Model\ResourceModel\Rules\CollectionFactory::class),
-            $this->createMock(LoggerInterface::class),
+            $this->getMockForAbstractClass(LoggerInterface::class),
             $this->rootAclResourceMock
         );
     }

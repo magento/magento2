@@ -28,7 +28,7 @@ class BatchSizeCalculatorTest extends TestCase
             $batchSizes,
             $batchManagers
         );
-        $connectionMock = $this->createMock(AdapterInterface::class);
+        $connectionMock = $this->getMockForAbstractClass(AdapterInterface::class);
 
         $batchManagerMock->expects($this->once())
             ->method('ensureBatchSize')
@@ -43,7 +43,7 @@ class BatchSizeCalculatorTest extends TestCase
             [],
             []
         );
-        $connectionMock = $this->createMock(AdapterInterface::class);
+        $connectionMock = $this->getMockForAbstractClass(AdapterInterface::class);
 
         $model->estimateBatchSize($connectionMock, 'wrong_indexer_id');
     }

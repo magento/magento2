@@ -77,7 +77,7 @@ class ShippingTest extends TestCase
     protected function setUp(): void
     {
         $this->taxConfigMock = $this->createMock(Config::class);
-        $this->taxCalculationMock = $this->createMock(TaxCalculationInterface::class);
+        $this->taxCalculationMock = $this->getMockForAbstractClass(TaxCalculationInterface::class);
         $this->quoteDetailsDataObjectFactory = $this->createPartialMock(
             QuoteDetailsInterfaceFactory::class,
             ['create']
@@ -119,13 +119,13 @@ class ShippingTest extends TestCase
         ]);
         $this->taxCalculationMock->expects($this->never())->method('calculateTax');
 
-        $shippingMock = $this->createMock(ShippingInterface::class);
+        $shippingMock = $this->getMockForAbstractClass(ShippingInterface::class);
         $shippingMock->expects($this->atLeastOnce())->method('getAddress')->willReturn($addressMock);
-        $shippingAssignmentMock = $this->createMock(ShippingAssignmentInterface::class);
+        $shippingAssignmentMock = $this->getMockForAbstractClass(ShippingAssignmentInterface::class);
         $shippingAssignmentMock->expects($this->atLeastOnce())->method('getShipping')->willReturn($shippingMock);
         $shippingAssignmentMock->expects($this->once())
             ->method('getItems')
-            ->willReturn([$this->createMock(CartItemInterface::class)]);
+            ->willReturn([$this->getMockForAbstractClass(CartItemInterface::class)]);
 
         $totalMock = $this->createMock(Total::class);
 

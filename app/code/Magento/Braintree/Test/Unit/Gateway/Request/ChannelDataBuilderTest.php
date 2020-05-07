@@ -40,7 +40,7 @@ class ChannelDataBuilderTest extends TestCase
     {
         $this->productMetadata = $this->getMockBuilder(ProductMetadataInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->config = $this->getMockBuilder(Config::class)
             ->disableOriginalConstructor()
             ->getMock();

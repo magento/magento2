@@ -68,7 +68,7 @@ class PluginListTest extends TestCase
     private $serializerMock;
 
     /**
-     * @var ObjectManagerInterface||\PHPUnit_Framework_MockObject_MockObject
+     * @var ObjectManagerInterface||\PHPUnit\Framework\MockObject\MockObject
      */
     private $objectManagerMock;
 
@@ -78,7 +78,7 @@ class PluginListTest extends TestCase
         $readerMock = $this->createMock(Dom::class);
         $readerMock->expects($this->any())->method('read')->willReturnMap($readerMap);
 
-        $this->configScopeMock = $this->createMock(ScopeInterface::class);
+        $this->configScopeMock = $this->getMockForAbstractClass(ScopeInterface::class);
         $this->cacheMock = $this->getMockBuilder(CacheInterface::class)
             ->setMethods(['get'])
             ->getMockForAbstractClass();
@@ -99,7 +99,7 @@ class PluginListTest extends TestCase
         $this->objectManagerMock->expects($this->any())
             ->method('get')
             ->willReturnArgument(0);
-        $this->serializerMock = $this->createMock(SerializerInterface::class);
+        $this->serializerMock = $this->getMockForAbstractClass(SerializerInterface::class);
 
         $definitions = new Runtime();
 
@@ -121,7 +121,7 @@ class PluginListTest extends TestCase
             ]
         );
 
-        $this->loggerMock = $this->createMock(LoggerInterface::class);
+        $this->loggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
         $objectManagerHelper->setBackwardCompatibleProperty(
             $this->object,
             'logger',
@@ -275,7 +275,7 @@ class PluginListTest extends TestCase
         $this->cacheMock->expects($this->once())
             ->method('save');
 
-        $this->assertEquals(null, $this->object->getNext('Type', 'method'));
+        $this->assertNull($this->object->getNext('Type', 'method'));
     }
 
     /**
@@ -317,7 +317,7 @@ class PluginListTest extends TestCase
             ->with('global|scope|interception')
             ->willReturn($serializedData);
 
-        $this->assertEquals(null, $this->object->getNext('Type', 'method'));
+        $this->assertNull($this->object->getNext('Type', 'method'));
     }
 
     /**
@@ -328,7 +328,7 @@ class PluginListTest extends TestCase
     {
         $this->objectManagerMock->expects($this->any())
             ->method('get')
-            ->will($this->returnArgument(0));
+            ->willReturnArgument(0);
         $this->configScopeMock->expects($this->any())
             ->method('getCurrentScope')
             ->willReturn('emptyscope');

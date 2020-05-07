@@ -38,7 +38,7 @@ class AbstractWriterTest extends TestCase
     public function testWrite()
     {
         $options = ['report_filename' => 'some_filename'];
-        $configMock = $this->createMock(ConfigInterface::class);
+        $configMock = $this->getMockForAbstractClass(ConfigInterface::class);
         $preparedData = ['foo', 'baz', 'bar'];
 
         $this->writer->expects(
@@ -63,7 +63,7 @@ class AbstractWriterTest extends TestCase
     {
         $this->expectException('InvalidArgumentException');
         $this->expectExceptionMessage('Writing error: Passed option "report_filename" is wrong.');
-        $configMock = $this->createMock(ConfigInterface::class);
+        $configMock = $this->getMockForAbstractClass(ConfigInterface::class);
 
         $this->writer->write($options, $configMock);
     }

@@ -92,7 +92,7 @@ class SpecialTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->request = $this->createMock(RequestInterface::class);
+        $this->request = $this->getMockForAbstractClass(RequestInterface::class);
         $this->request->expects($this->at(0))->method('getParam')->with('store_id')->willReturn(null);
         $this->request->expects($this->at(1))->method('getParam')->with('cid')->willReturn(null);
 
@@ -104,11 +104,11 @@ class SpecialTest extends TestCase
         $this->imageHelper = $this->createMock(Image::class);
         $this->outputHelper = $this->createPartialMock(Output::class, ['productAttribute']);
         $this->msrpHelper = $this->createPartialMock(MsrpHelper::class, ['canApplyMsrp']);
-        $this->priceCurrency = $this->createMock(PriceCurrencyInterface::class);
+        $this->priceCurrency = $this->getMockForAbstractClass(PriceCurrencyInterface::class);
         $this->rssModel = $this->createMock(Special::class);
-        $this->rssUrlBuilder = $this->createMock(UrlBuilderInterface::class);
+        $this->rssUrlBuilder = $this->getMockForAbstractClass(UrlBuilderInterface::class);
 
-        $this->storeManager = $this->createMock(StoreManagerInterface::class);
+        $this->storeManager = $this->getMockForAbstractClass(StoreManagerInterface::class);
         $store = $this->getMockBuilder(Store::class)
             ->setMethods(['getId', 'getFrontendName'])->disableOriginalConstructor()
             ->getMock();
@@ -116,10 +116,10 @@ class SpecialTest extends TestCase
         $store->expects($this->any())->method('getFrontendName')->willReturn('Store 1');
         $this->storeManager->expects($this->any())->method('getStore')->willReturn($store);
 
-        $this->scopeConfig = $this->createMock(ScopeConfigInterface::class);
+        $this->scopeConfig = $this->getMockForAbstractClass(ScopeConfigInterface::class);
         $this->scopeConfig->expects($this->any())->method('getValue')->willReturn('en_US');
 
-        $this->localeDate = $this->createMock(TimezoneInterface::class);
+        $this->localeDate = $this->getMockForAbstractClass(TimezoneInterface::class);
 
         $objectManagerHelper = new ObjectManagerHelper($this);
         $this->block = $objectManagerHelper->getObject(
@@ -224,7 +224,7 @@ class SpecialTest extends TestCase
         $this->scopeConfig->expects($this->once())->method('isSetFlag')
             ->with('rss/catalog/special', ScopeInterface::SCOPE_STORE)
             ->willReturn(true);
-        $this->assertEquals(true, $this->block->isAllowed());
+        $this->assertTrue($this->block->isAllowed());
     }
 
     public function testGetCacheLifetime()

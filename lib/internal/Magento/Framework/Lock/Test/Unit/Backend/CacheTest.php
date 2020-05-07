@@ -32,7 +32,7 @@ class CacheTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->frontendCacheMock = $this->createMock(FrontendInterface::class);
+        $this->frontendCacheMock = $this->getMockForAbstractClass(FrontendInterface::class);
 
         $objectManager = new ObjectManagerHelper($this);
 
@@ -53,12 +53,40 @@ class CacheTest extends TestCase
     {
         $identifier = 'lock_name';
 
+        $closure = \Closure::bind(function ($cacheInstance) {
+            return $cacheInstance->lockSign;
+        }, null, $this->cache);
+        $lockSign = $closure($this->cache);
+
+        $this->frontendCacheMock
+            ->expects($this->once())->method('load')
+            ->with(self::LOCK_PREFIX . $identifier)
+            ->willReturn($lockSign);
+
         $this->frontendCacheMock
             ->expects($this->once())
             ->method('remove')
             ->with(self::LOCK_PREFIX . $identifier)
             ->willReturn(true);
 
-        $this->assertEquals(true, $this->cache->unlock($identifier));
+        $this->assertTrue($this->cache->unlock($identifier));
+    }
+
+    /**
+     * Verify that lock will no be released without sign matches.
+     * Sign generates in Cache class constructor.
+     *
+     * @return void
+     */
+    public function testUnlockWithAnotherSign(): void
+    {
+        $identifier = 'lock_name';
+
+        $this->frontendCacheMock
+            ->expects($this->once())->method('load')
+            ->with(self::LOCK_PREFIX . $identifier)
+            ->willReturn(\uniqid('some_rand-'));
+
+        $this->assertFalse($this->cache->unlock($identifier));
     }
 }

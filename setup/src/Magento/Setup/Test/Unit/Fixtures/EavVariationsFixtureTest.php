@@ -81,7 +81,7 @@ class EavVariationsFixtureTest extends TestCase
             ->getMock();
         $this->cacheMock = $this->getMockBuilder(CacheInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->attributeFactoryMock = $this->getMockBuilder(AttributeFactory::class)
             ->setMethods(['create'])
             ->disableOriginalConstructor()

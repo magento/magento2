@@ -129,7 +129,7 @@ class MassactionTest extends TestCase
 
         $this->gridCollectionMock = $this->createMock(Collection::class);
         $this->gridCollectionSelectMock = $this->createMock(Select::class);
-        $this->connectionMock = $this->createMock(AdapterInterface::class);
+        $this->connectionMock = $this->getMockForAbstractClass(AdapterInterface::class);
 
         $this->gridCollectionMock->expects($this->any())
             ->method('getSelect')

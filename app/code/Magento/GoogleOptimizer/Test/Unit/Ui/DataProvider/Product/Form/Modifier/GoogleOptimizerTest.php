@@ -64,7 +64,7 @@ class GoogleOptimizerTest extends TestCase
         $this->objectManagerHelper = new ObjectManagerHelper($this);
 
         $this->productMock = $this->createMock(Product::class);
-        $this->locatorMock = $this->createMock(LocatorInterface::class);
+        $this->locatorMock = $this->getMockForAbstractClass(LocatorInterface::class);
         $this->locatorMock->expects($this->any())
             ->method('getProduct')
             ->willReturn($this->productMock);

@@ -90,7 +90,7 @@ class GetClientTokenTest extends TestCase
         $clientToken = 'client_token';
         $responseMock = $this->getMockBuilder(ResultInterface::class)
             ->setMethods(['setHttpResponseCode', 'renderResult', 'setHeader', 'setData'])
-            ->getMock();
+            ->getMockForAbstractClass();
         $responseMock->expects(static::once())
             ->method('setData')
             ->with(['clientToken' => $clientToken])

@@ -50,7 +50,7 @@ class CurrencyConfigTest extends TestCase
     {
         $this->config = $this->getMockBuilder(ScopeConfigInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->storeManager = $this->getMockBuilder(StoreManagerInterface::class)
             ->setMethods(['getStores', 'getWebsites'])
             ->disableOriginalConstructor()

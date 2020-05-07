@@ -118,7 +118,7 @@ class PaymentMethodManagementTest extends TestCase
             ->with($cartId)
             ->willReturn($quoteMock);
 
-        $paymentMethod = $this->createMock(PaymentMethodInterface::class);
+        $paymentMethod = $this->getMockForAbstractClass(PaymentMethodInterface::class);
         $this->methodListMock->expects($this->once())
             ->method('getAvailableMethods')
             ->with($quoteMock)

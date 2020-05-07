@@ -30,15 +30,15 @@ class XmlCatalogGenerateCommandTest extends TestCase
         $filesMock = $this->createPartialMock(Files::class, ['getXmlCatalogFiles']);
         $filesMock->expects($this->at(0))
             ->method('getXmlCatalogFiles')
-            ->will($this->returnValue([[$fixtureXmlFile]]));
+            ->willReturn([[$fixtureXmlFile]]);
         $filesMock->expects($this->at(1))
             ->method('getXmlCatalogFiles')
-            ->will($this->returnValue([]));
+            ->willReturn([]);
         $urnResolverMock = $this->createMock(UrnResolver::class);
         $urnResolverMock->expects($this->once())
             ->method('getRealPath')
             ->with($this->equalTo('urn:magento:framework:Module/etc/module.xsd'))
-            ->will($this->returnValue($fixtureXmlFile));
+            ->willReturn($fixtureXmlFile);
 
         $phpstormFormatMock = $this->createMock(PhpStorm::class);
         $phpstormFormatMock->expects($this->once())
@@ -46,21 +46,21 @@ class XmlCatalogGenerateCommandTest extends TestCase
             ->with(
                 $this->equalTo(['urn:magento:framework:Module/etc/module.xsd' => $fixtureXmlFile]),
                 $this->equalTo('test')
-            )->will($this->returnValue(null));
+            )->willReturn(null);
 
         $formats = ['phpstorm' => $phpstormFormatMock];
         $readFactory = $this->createMock(ReadFactory::class);
-        $readDirMock = $this->createMock(ReadInterface::class);
+        $readDirMock = $this->getMockForAbstractClass(ReadInterface::class);
 
         $content = file_get_contents($fixtureXmlFile);
 
         $readDirMock->expects($this->once())
             ->method('readFile')
             ->with($this->equalTo('test.xml'))
-            ->will($this->returnValue($content));
+            ->willReturn($content);
         $readFactory->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($readDirMock));
+            ->willReturn($readDirMock);
 
         $this->command = new XmlCatalogGenerateCommand(
             $filesMock,
@@ -81,15 +81,15 @@ class XmlCatalogGenerateCommandTest extends TestCase
         $filesMock = $this->createPartialMock(Files::class, ['getXmlCatalogFiles']);
         $filesMock->expects($this->at(0))
             ->method('getXmlCatalogFiles')
-            ->will($this->returnValue([[$fixtureXmlFile]]));
+            ->willReturn([[$fixtureXmlFile]]);
         $filesMock->expects($this->at(1))
             ->method('getXmlCatalogFiles')
-            ->will($this->returnValue([]));
+            ->willReturn([]);
         $urnResolverMock = $this->createMock(UrnResolver::class);
         $urnResolverMock->expects($this->once())
             ->method('getRealPath')
             ->with($this->equalTo('urn:magento:framework:Module/etc/module.xsd'))
-            ->will($this->returnValue($fixtureXmlFile));
+            ->willReturn($fixtureXmlFile);
 
         $vscodeFormatMock = $this->createMock(VsCode::class);
         $vscodeFormatMock->expects($this->once())
@@ -97,21 +97,21 @@ class XmlCatalogGenerateCommandTest extends TestCase
             ->with(
                 $this->equalTo(['urn:magento:framework:Module/etc/module.xsd' => $fixtureXmlFile]),
                 $this->equalTo('test')
-            )->will($this->returnValue(null));
+            )->willReturn(null);
 
         $formats = ['vscode' => $vscodeFormatMock];
         $readFactory = $this->createMock(ReadFactory::class);
-        $readDirMock = $this->createMock(ReadInterface::class);
+        $readDirMock = $this->getMockForAbstractClass(ReadInterface::class);
 
         $content = file_get_contents($fixtureXmlFile);
 
         $readDirMock->expects($this->once())
             ->method('readFile')
             ->with($this->equalTo('test.xml'))
-            ->will($this->returnValue($content));
+            ->willReturn($content);
         $readFactory->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($readDirMock));
+            ->willReturn($readDirMock);
 
         $this->command = new XmlCatalogGenerateCommand(
             $filesMock,

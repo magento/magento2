@@ -100,7 +100,7 @@ class MergeServiceTest extends TestCase
      */
     public function testGetMergedAssets(array $assets, $contentType, $appMode, $mergeStrategy)
     {
-        $mergedAsset = $this->createMock(AssetInterface::class);
+        $mergedAsset = $this->getMockForAbstractClass(AssetInterface::class);
         $mergeStrategyMock = $this->createMock($mergeStrategy);
 
         $this->configMock->expects($this->once())->method('isMergeCssFiles')->willReturn(true);

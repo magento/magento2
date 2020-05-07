@@ -344,7 +344,7 @@ class ViewTest extends TestCase
             $listId
         );
 
-        $actionMock = $this->createMock(ActionInterface::class);
+        $actionMock = $this->getMockForAbstractClass(ActionInterface::class);
         $actionMock->expects($this->once())->method('execute')->with($listId)->willReturnSelf();
         $this->actionFactoryMock->expects(
             $this->once()
@@ -400,7 +400,7 @@ class ViewTest extends TestCase
                 ]
             );
 
-        $actionMock = $this->createMock(ActionInterface::class);
+        $actionMock = $this->getMockForAbstractClass(ActionInterface::class);
         $actionMock->expects($this->once())
             ->method('execute')
             ->with($this->generateChangeLog(150, 1, 150))

@@ -56,7 +56,7 @@ class ToOrderAddressTest extends TestCase
             ['create']
         );
         $this->objectCopyMock = $this->createMock(Copy::class);
-        $this->orderInterfaceMock = $this->createMock(OrderAddressInterface::class);
+        $this->orderInterfaceMock = $this->getMockForAbstractClass(OrderAddressInterface::class);
         $this->dataObjectHelper = $this->createMock(DataObjectHelper::class);
         $objectManager = new ObjectManager($this);
         $this->converter = $objectManager->getObject(

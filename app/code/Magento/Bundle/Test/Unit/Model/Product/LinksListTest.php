@@ -101,7 +101,7 @@ class LinksListTest extends TestCase
         $this->selectionMock->expects($this->once())->method('getIsDefault')->willReturn(true);
         $this->selectionMock->expects($this->once())->method('getSelectionQty')->willReturn(66);
         $this->selectionMock->expects($this->once())->method('getSelectionCanChangeQty')->willReturn(22);
-        $linkMock = $this->createMock(LinkInterface::class);
+        $linkMock = $this->getMockForAbstractClass(LinkInterface::class);
         $this->dataObjectHelperMock->expects($this->once())
             ->method('populateWithArray')
             ->with($linkMock, ['some data'], LinkInterface::class)->willReturnSelf();

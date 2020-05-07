@@ -94,7 +94,7 @@ class ItemTest extends TestCase
 
         $this->localeFormat = $this->getMockBuilder(FormatInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->modelContext = $this->getMockBuilder(Context::class)
             ->disableOriginalConstructor()
@@ -104,7 +104,7 @@ class ItemTest extends TestCase
         $this->eventDispatcher = $this->getMockBuilder(ManagerInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['dispatch'])
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->modelContext->expects($this->any())
             ->method('getEventDispatcher')
@@ -212,12 +212,12 @@ class ItemTest extends TestCase
         $this->localeFormat->expects($this->at(0))
             ->method('getNumber')
             ->with($quantityToAdd)
-            ->will($this->returnValue($preparedQuantityToAdd));
+            ->willReturn($preparedQuantityToAdd);
 
         $this->localeFormat->expects($this->at(1))
             ->method('getNumber')
             ->with($preparedQuantityToAdd + $existingQuantity)
-            ->will($this->returnValue($preparedQuantityToAdd + $existingQuantity));
+            ->willReturn($preparedQuantityToAdd + $existingQuantity);
 
         $this->model->addQty($quantityToAdd);
         $this->assertEquals($preparedQuantityToAdd, $this->model->getQtyToAdd());
@@ -255,7 +255,7 @@ class ItemTest extends TestCase
         $this->localeFormat->expects($this->once())
             ->method('getNumber')
             ->with($quantityToAdd)
-            ->will($this->returnValue($preparedQuantityToAdd));
+            ->willReturn($preparedQuantityToAdd);
 
         $this->model->setData('qty', $existingQuantity);
 
@@ -276,7 +276,7 @@ class ItemTest extends TestCase
         $this->localeFormat->expects($this->once())
             ->method('getNumber')
             ->with($quantityToAdd)
-            ->will($this->returnValue($preparedQuantityToAdd));
+            ->willReturn($preparedQuantityToAdd);
 
         $quoteMock = $this->getMockBuilder(Quote::class)
             ->disableOriginalConstructor()
@@ -310,7 +310,7 @@ class ItemTest extends TestCase
         $this->localeFormat->expects($this->once())
             ->method('getNumber')
             ->with($quantityToAdd)
-            ->will($this->returnValue($preparedQuantityToAdd));
+            ->willReturn($preparedQuantityToAdd);
 
         $this->model->setData('qty', $existingQuantity);
         $this->model->setUseOldQty(true);
@@ -927,7 +927,7 @@ class ItemTest extends TestCase
 
         $this->itemOptionFactory->expects($this->at(0))
             ->method('create')
-            ->will($this->returnValue($optionMock));
+            ->willReturn($optionMock);
 
         $this->model->addOption($optionData);
         $this->assertEquals([$optionMock], $this->model->getOptions());
@@ -1068,7 +1068,7 @@ class ItemTest extends TestCase
         $this->localeFormat->expects($this->at(0))
             ->method('getNumber')
             ->with($quantity)
-            ->will($this->returnValue($quantity));
+            ->willReturn($quantity);
         $this->model->setQty($quantity);
         $this->assertEquals($quantity, $this->model->getQty());
         $buyRequest = $this->model->getBuyRequest();
@@ -1101,7 +1101,7 @@ class ItemTest extends TestCase
         $this->localeFormat->expects($this->at(0))
             ->method('getNumber')
             ->with($quantity)
-            ->will($this->returnValue($quantity));
+            ->willReturn($quantity);
         $this->model->setQty($quantity);
         $this->assertEquals($quantity, $this->model->getQty());
         $this->serializer->expects($this->any())
@@ -1158,7 +1158,7 @@ class ItemTest extends TestCase
 
         $this->errorInfos->expects($this->once())
             ->method('getItems')
-            ->will($this->returnValue($retValue));
+            ->willReturn($retValue);
 
         $this->assertEquals($retValue, $this->model->getErrorInfos());
     }
@@ -1184,11 +1184,11 @@ class ItemTest extends TestCase
         $this->errorInfos->expects($this->once())
             ->method('removeItemsByParams')
             ->with($params)
-            ->will($this->returnValue($removedItems));
+            ->willReturn($removedItems);
 
         $this->errorInfos->expects($this->once())
             ->method('getItems')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $this->assertEquals($this->model, $this->model->removeErrorInfosByParams($params));
         $this->assertEquals($message2, $this->model->getMessage());
@@ -1215,11 +1215,11 @@ class ItemTest extends TestCase
         $this->errorInfos->expects($this->once())
             ->method('removeItemsByParams')
             ->with($params)
-            ->will($this->returnValue($removedItems));
+            ->willReturn($removedItems);
 
         $this->errorInfos->expects($this->once())
             ->method('getItems')
-            ->will($this->returnValue([]));
+            ->willReturn([]);
 
         $this->assertEquals($this->model, $this->model->removeErrorInfosByParams($params));
         $this->assertFalse($this->model->getHasError());

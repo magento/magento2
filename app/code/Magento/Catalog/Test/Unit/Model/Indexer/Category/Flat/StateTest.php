@@ -74,7 +74,7 @@ class StateTest extends TestCase
             $this->scopeConfigMock,
             $this->indexerRegistryMock
         );
-        $this->assertEquals(true, $this->model->isFlatEnabled());
+        $this->assertTrue($this->model->isFlatEnabled());
     }
 
     /**

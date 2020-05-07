@@ -27,14 +27,14 @@ class ResourceLoaderTest extends TestCase
         /** @var Acl $acl */
         $acl = $this->createPartialMock(Acl::class, ['addResource']);
         $acl->expects($this->exactly(2))->method('addResource');
-        $acl->expects($this->at(0))->method('addResource')->with($aclResource, null)->will($this->returnSelf());
-        $acl->expects($this->at(1))->method('addResource')->with($aclResource, $aclResource)->will($this->returnSelf());
+        $acl->expects($this->at(0))->method('addResource')->with($aclResource, null)->willReturnSelf();
+        $acl->expects($this->at(1))->method('addResource')->with($aclResource, $aclResource)->willReturnSelf();
 
         $factoryObject = $this->createPartialMock(AclResourceFactory::class, ['createResource']);
         $factoryObject->expects($this->any())->method('createResource')->willReturn($aclResource);
 
         /** @var $resourceProvider \Magento\Framework\Acl\AclResource\ProviderInterface */
-        $resourceProvider = $this->createMock(ProviderInterface::class);
+        $resourceProvider = $this->getMockForAbstractClass(ProviderInterface::class);
         $resourceProvider->expects($this->once())
             ->method('getAclResources')
             ->willReturn(
@@ -79,7 +79,7 @@ class ResourceLoaderTest extends TestCase
         $factoryObject->expects($this->any())->method('createResource')->willReturn($aclResource);
 
         /** @var $resourceProvider \Magento\Framework\Acl\AclResource\ProviderInterface */
-        $resourceProvider = $this->createMock(ProviderInterface::class);
+        $resourceProvider = $this->getMockForAbstractClass(ProviderInterface::class);
         $resourceProvider->expects($this->once())
             ->method('getAclResources')
             ->willReturn(

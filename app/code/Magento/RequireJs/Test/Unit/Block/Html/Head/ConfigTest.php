@@ -62,7 +62,7 @@ class ConfigTest extends TestCase
         $this->config = $this->createMock(\Magento\Framework\RequireJs\Config::class);
         $this->fileManager = $this->createMock(FileManager::class);
         $this->pageConfig = $this->createMock(\Magento\Framework\View\Page\Config::class);
-        $this->bundleConfig = $this->createMock(ConfigInterface::class);
+        $this->bundleConfig = $this->getMockForAbstractClass(ConfigInterface::class);
     }
 
     public function testSetLayout()
@@ -108,7 +108,7 @@ class ConfigTest extends TestCase
             ->method('createMinResolverAsset')
             ->willReturn($minResolverAsset);
 
-        $layout = $this->createMock(LayoutInterface::class);
+        $layout = $this->getMockForAbstractClass(LayoutInterface::class);
 
         $assetCollection = $this->getMockBuilder(GroupedCollection::class)
             ->disableOriginalConstructor()

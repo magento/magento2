@@ -105,10 +105,10 @@ class MapperTest extends TestCase
 
         $request = $this->getMockBuilder(RequestInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $query = $this->getMockBuilder(QueryInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $request->expects($this->once())
             ->method('getQuery')
             ->willReturn($query);
@@ -132,7 +132,7 @@ class MapperTest extends TestCase
     {
         $request = $this->getMockBuilder(RequestInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $query = $this->getMockBuilder($queryMock)
             ->setMethods(['getMust', 'getMustNot', 'getType', 'getShould', 'getReferenceType', 'getReference'])
             ->disableOriginalConstructor()

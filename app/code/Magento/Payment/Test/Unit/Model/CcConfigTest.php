@@ -41,9 +41,9 @@ class CcConfigTest extends TestCase
     {
         $this->configMock = $this->createMock(Config::class);
         $this->repositoryMock = $this->createMock(Repository::class);
-        $this->requestMock = $this->createMock(RequestInterface::class);
-        $this->urlMock = $this->createMock(UrlInterface::class);
-        $this->loggerMock = $this->createMock(LoggerInterface::class);
+        $this->requestMock = $this->getMockForAbstractClass(RequestInterface::class);
+        $this->urlMock = $this->getMockForAbstractClass(UrlInterface::class);
+        $this->loggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
 
         $this->model = new CcConfig(
             $this->configMock,
@@ -86,7 +86,7 @@ class CcConfigTest extends TestCase
 
     public function testHasVerification()
     {
-        $this->assertEquals(true, $this->model->hasVerification());
+        $this->assertTrue($this->model->hasVerification());
     }
 
     public function testGetCvvImageUrl()

@@ -49,8 +49,8 @@ class CartTotalManagementTest extends TestCase
     {
         $this->objectManager = new ObjectManager($this);
         $this->shippingMock = $this->createMock(ShippingMethodManagement::class);
-        $this->paymentMock = $this->createMock(PaymentMethodManagementInterface::class);
-        $this->cartTotalMock = $this->createMock(CartTotalRepositoryInterface::class);
+        $this->paymentMock = $this->getMockForAbstractClass(PaymentMethodManagementInterface::class);
+        $this->cartTotalMock = $this->getMockForAbstractClass(CartTotalRepositoryInterface::class);
         $this->model = $this->objectManager->getObject(
             CartTotalManagement::class,
             [
@@ -67,7 +67,7 @@ class CartTotalManagementTest extends TestCase
         $shippingCarrierCode = 'careful_carrier';
         $shippingMethodCode = 'drone_delivery';
         $total = 3322.31;
-        $paymentDataMock = $this->createMock(PaymentInterface::class);
+        $paymentDataMock = $this->getMockForAbstractClass(PaymentInterface::class);
 
         $this->shippingMock->expects($this->once())
             ->method('set')
@@ -89,7 +89,7 @@ class CartTotalManagementTest extends TestCase
     {
         $cartId = 123;
         $total = 3322.31;
-        $paymentDataMock = $this->createMock(PaymentInterface::class);
+        $paymentDataMock = $this->getMockForAbstractClass(PaymentInterface::class);
 
         $this->shippingMock->expects($this->never())
             ->method('set')

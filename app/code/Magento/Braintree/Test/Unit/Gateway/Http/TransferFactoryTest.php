@@ -33,7 +33,7 @@ class TransferFactoryTest extends TestCase
     protected function setUp(): void
     {
         $this->transferBuilder = $this->createMock(TransferBuilder::class);
-        $this->transferMock = $this->createMock(TransferInterface::class);
+        $this->transferMock = $this->getMockForAbstractClass(TransferInterface::class);
 
         $this->transferFactory = new TransferFactory(
             $this->transferBuilder

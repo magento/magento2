@@ -72,7 +72,7 @@ class InfoTest extends TestCase
             ->getMock();
         $this->shipmentRepository = $this->getMockBuilder(ShipmentRepositoryInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->trackFactory = $this->getMockBuilder(TrackFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])

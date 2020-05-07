@@ -29,7 +29,7 @@ class ActionPoolTest extends TestCase
     {
         $this->objectManagerMock = $this->getMockBuilder(ObjectManagerInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $objectManager = new ObjectManager($this);
 
         $entityType = 'Entity_Test';

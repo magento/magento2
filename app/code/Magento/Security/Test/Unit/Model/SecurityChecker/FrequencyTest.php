@@ -212,19 +212,19 @@ class FrequencyTest extends TestCase
     {
         $this->remoteAddressMock->expects($this->once())
             ->method('getRemoteAddress')
-            ->will($this->returnValue(12345));
+            ->willReturn(12345);
 
         $this->securityConfigMock->expects($this->any())
             ->method('getPasswordResetProtectionType')
-            ->will($this->returnValue($requestsMethod));
+            ->willReturn($requestsMethod);
 
         $this->securityConfigMock->expects($this->once())
             ->method('getMinTimeBetweenPasswordResetRequests')
-            ->will($this->returnValue($limitTimeBetweenPasswordResetRequests));
+            ->willReturn($limitTimeBetweenPasswordResetRequests);
 
         $this->securityConfigMock->expects($this->any())
             ->method('getCustomerServiceEmail')
-            ->will($this->returnValue('test@host.com'));
+            ->willReturn('test@host.com');
 
         $this->collectionFactoryMock->expects($this->once())
             ->method('create')

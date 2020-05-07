@@ -63,7 +63,7 @@ class ProductProcessUrlRewriteSavingObserverTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->urlPersist = $this->createMock(UrlPersistInterface::class);
+        $this->urlPersist = $this->getMockForAbstractClass(UrlPersistInterface::class);
         $this->product = $this->getMockBuilder(Product::class)
             ->addMethods(['getIsChangedWebsites', 'getIsChangedCategories'])
             ->onlyMethods(['getId', 'dataHasChangedFor', 'isVisibleInSiteVisibility', 'getStoreId'])

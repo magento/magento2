@@ -109,10 +109,10 @@ class BlockTest extends TestCase
         $readerContext->expects($this->once())->method('getScheduledStructure')
             ->willReturn($scheduleStructure);
 
-        $layout = $this->createMock(LayoutInterface::class);
+        $layout = $this->getMockForAbstractClass(LayoutInterface::class);
 
         /**
-         * @var \Magento\Framework\View\Element\AbstractBlock|\PHPUnit_Framework_MockObject_MockObject $blockInstance
+         * @var \Magento\Framework\View\Element\AbstractBlock|\PHPUnit\Framework\MockObject\MockObject $blockInstance
          */
         // explicitly set mocked methods for successful expectation of magic methods
         $blockInstance = $this->getMockBuilder(AbstractBlock::class)
@@ -143,7 +143,7 @@ class BlockTest extends TestCase
         /**
          * @var MockObject $argumentInterpreter
          */
-        $argumentInterpreter = $this->createMock(InterpreterInterface::class);
+        $argumentInterpreter = $this->getMockForAbstractClass(InterpreterInterface::class);
         if ($isNeedEvaluate) {
             $argumentInterpreter
                 ->expects($this->any())
@@ -162,15 +162,15 @@ class BlockTest extends TestCase
             ->willReturn($blockInstance);
 
         /** @var ManagerInterface|MockObject $eventManager */
-        $eventManager = $this->createMock(ManagerInterface::class);
+        $eventManager = $this->getMockForAbstractClass(ManagerInterface::class);
         $eventManager->expects($this->once())->method('dispatch')
             ->with('core_layout_block_create_after', [$literal => $blockInstance]);
 
-        $scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
+        $scopeConfigMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
         $scopeConfigMock->expects($this->once())->method('isSetFlag')
             ->with('config_path', 'scope', 'default')->willReturn($testIsFlag);
 
-        $scopeResolverMock = $this->createMock(ScopeResolverInterface::class);
+        $scopeResolverMock = $this->getMockForAbstractClass(ScopeResolverInterface::class);
         $scopeResolverMock->expects($this->once())->method('getScope')
             ->willReturn('default');
 

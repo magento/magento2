@@ -31,7 +31,7 @@ class SaveTest extends TestCase
 
     protected function setUp(): void
     {
-        $productRepositoryMock = $this->createMock(ProductRepositoryInterface::class);
+        $productRepositoryMock = $this->getMockForAbstractClass(ProductRepositoryInterface::class);
         $this->messageFactoryMock = $this->getMockBuilder(MessageFactory::class)
             ->setMethods(['create'])
             ->disableOriginalConstructor()

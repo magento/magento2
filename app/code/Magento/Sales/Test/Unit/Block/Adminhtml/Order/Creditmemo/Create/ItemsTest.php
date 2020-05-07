@@ -76,7 +76,7 @@ class ItemsTest extends TestCase
             ->willReturn($this->stockItemMock);
 
         $this->registryMock = $this->createMock(Registry::class);
-        $this->scopeConfig = $this->createMock(ScopeConfigInterface::class);
+        $this->scopeConfig = $this->getMockForAbstractClass(ScopeConfigInterface::class);
         $this->contextMock->expects($this->once())
             ->method('getScopeConfig')
             ->willReturn($this->scopeConfig);

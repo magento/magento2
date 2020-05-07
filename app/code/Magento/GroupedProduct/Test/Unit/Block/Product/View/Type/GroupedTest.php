@@ -61,7 +61,7 @@ class GroupedTest extends TestCase
             ->addMethods(['getSuperGroup'])
             ->disableOriginalConstructor()
             ->getMock();
-        $layout = $this->createMock(LayoutInterface::class);
+        $layout = $this->getMockForAbstractClass(LayoutInterface::class);
         $this->groupedView = $helper->getObject(
             Grouped::class,
             [

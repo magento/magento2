@@ -101,7 +101,7 @@ class GetPaymentNonceCommandTest extends TestCase
 
         $this->validationResultMock = $this->getMockBuilder(ResultInterface::class)
             ->setMethods(['isValid', 'getFailsDescription', 'getErrorCodes'])
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->responseValidatorMock = $this->getMockBuilder(PaymentNonceResponseValidator::class)
             ->disableOriginalConstructor()

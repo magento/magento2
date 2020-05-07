@@ -36,7 +36,7 @@ class BatchSizeManagementTest extends TestCase
         $this->rowSizeEstimatorMock = $this->createMock(
             IndexTableRowSizeEstimatorInterface::class
         );
-        $this->loggerMock = $this->createMock(LoggerInterface::class);
+        $this->loggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
         $this->model = new BatchSizeManagement($this->rowSizeEstimatorMock, $this->loggerMock);
     }
 
@@ -49,7 +49,7 @@ class BatchSizeManagementTest extends TestCase
         $innodbPollSize = 100;
 
         $this->rowSizeEstimatorMock->expects($this->once())->method('estimateRowSize')->willReturn(100);
-        $adapterMock = $this->createMock(AdapterInterface::class);
+        $adapterMock = $this->getMockForAbstractClass(AdapterInterface::class);
         $adapterMock->expects($this->at(0))
             ->method('fetchOne')
             ->with('SELECT @@max_heap_table_size;', [])

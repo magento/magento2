@@ -54,35 +54,35 @@ class CollectionTest extends TestCase
 
         $attribute = $this->createMock(AbstractAttribute::class);
         $eavConfig = $this->createMock(Config::class);
-        $eavConfig->expects($this->any())->method('getAttribute')->will($this->returnValue($attribute));
+        $eavConfig->expects($this->any())->method('getAttribute')->willReturn($attribute);
         $this->dbSelect = $this->createMock(Select::class);
-        $this->dbSelect->expects($this->any())->method('from')->will($this->returnSelf());
-        $this->dbSelect->expects($this->any())->method('join')->will($this->returnSelf());
+        $this->dbSelect->expects($this->any())->method('from')->willReturnSelf();
+        $this->dbSelect->expects($this->any())->method('join')->willReturnSelf();
         $this->connectionMock = $this->createMock(
             Mysql::class
         );
-        $this->connectionMock->expects($this->once())->method('select')->will($this->returnValue($this->dbSelect));
+        $this->connectionMock->expects($this->once())->method('select')->willReturn($this->dbSelect);
         $entity = $this->createMock(
             Product::class
         );
-        $entity->expects($this->once())->method('getConnection')->will($this->returnValue($this->connectionMock));
-        $entity->expects($this->any())->method('getTable')->will($this->returnValue('table'));
-        $entity->expects($this->any())->method('getEntityTable')->will($this->returnValue('table'));
-        $entity->expects($this->any())->method('getDefaultAttributes')->will($this->returnValue([1 => 1]));
-        $entity->expects($this->any())->method('getType')->will($this->returnValue('type'));
-        $entity->expects($this->any())->method('getEntityType')->will($this->returnValue('type'));
+        $entity->expects($this->once())->method('getConnection')->willReturn($this->connectionMock);
+        $entity->expects($this->any())->method('getTable')->willReturn('table');
+        $entity->expects($this->any())->method('getEntityTable')->willReturn('table');
+        $entity->expects($this->any())->method('getDefaultAttributes')->willReturn([1 => 1]);
+        $entity->expects($this->any())->method('getType')->willReturn('type');
+        $entity->expects($this->any())->method('getEntityType')->willReturn('type');
         $universalFactory = $this->createMock(
             UniversalFactory::class
         );
-        $universalFactory->expects($this->any())->method('create')->will($this->returnValue($entity));
+        $universalFactory->expects($this->any())->method('create')->willReturn($entity);
         $store = $this->createMock(Store::class);
-        $store->expects($this->any())->method('getId')->will($this->returnValue(1));
-        $storeManager = $this->createMock(StoreManagerInterface::class);
-        $storeManager->expects($this->any())->method('getStore')->will($this->returnValue($store));
+        $store->expects($this->any())->method('getId')->willReturn(1);
+        $storeManager = $this->getMockForAbstractClass(StoreManagerInterface::class);
+        $storeManager->expects($this->any())->method('getStore')->willReturn($store);
         $fetchStrategy = $this->createMock(
             Query::class
         );
-        $fetchStrategy->expects($this->any())->method('fetchAll')->will($this->returnValue([]));
+        $fetchStrategy->expects($this->any())->method('fetchAll')->willReturn([]);
         $productLimitationMock = $this->createMock(
             ProductLimitation::class
         );

@@ -53,9 +53,9 @@ class CheckUserLoginBackendObserverTest extends TestCase
     protected function setUp(): void
     {
         $this->helperMock = $this->createMock(Data::class);
-        $this->messageManagerMock = $this->createMock(ManagerInterface::class);
+        $this->messageManagerMock = $this->getMockForAbstractClass(ManagerInterface::class);
         $this->captchaStringResolverMock = $this->createMock(CaptchaStringResolver::class);
-        $this->requestMock = $this->createMock(RequestInterface::class);
+        $this->requestMock = $this->getMockForAbstractClass(RequestInterface::class);
 
         $this->observer = new CheckUserLoginBackendObserver(
             $this->helperMock,

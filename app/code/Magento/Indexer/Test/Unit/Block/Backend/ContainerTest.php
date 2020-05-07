@@ -24,7 +24,7 @@ class ContainerTest extends TestCase
         );
         $buttonList->expects($this->once())->method('add');
         $buttonList->expects($this->once())->method('remove')->with('add');
-        $urlBuilderMock = $this->createMock(UrlInterface::class);
+        $urlBuilderMock = $this->getMockForAbstractClass(UrlInterface::class);
         $contextMock = $this->createPartialMock(
             Context::class,
             ['getUrlBuilder', 'getButtonList']

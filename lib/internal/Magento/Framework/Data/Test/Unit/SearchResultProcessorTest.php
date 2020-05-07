@@ -35,7 +35,7 @@ class SearchResultProcessorTest extends TestCase
     {
         $this->searchCriteriaMock = $this->getMockBuilder(CriteriaInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->searchResultCollectionMock = $this->getMockBuilder(AbstractSearchResult::class)
             ->disableOriginalConstructor()

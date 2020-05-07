@@ -71,8 +71,8 @@ class CheckForgotpasswordObserverTest extends TestCase
         $this->_objectManager = new ObjectManager($this);
         $this->_helper = $this->createMock(Data::class);
         $this->_actionFlag = $this->createMock(ActionFlag::class);
-        $this->_messageManager = $this->createMock(ManagerInterface::class);
-        $this->redirect = $this->createMock(RedirectInterface::class);
+        $this->_messageManager = $this->getMockForAbstractClass(ManagerInterface::class);
+        $this->redirect = $this->getMockForAbstractClass(RedirectInterface::class);
         $this->captchaStringResolver = $this->createMock(CaptchaStringResolver::class);
         $this->checkForgotpasswordObserver = $this->_objectManager->getObject(
             CheckForgotpasswordObserver::class,

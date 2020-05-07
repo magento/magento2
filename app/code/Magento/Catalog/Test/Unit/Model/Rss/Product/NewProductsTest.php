@@ -91,17 +91,17 @@ class NewProductsTest extends TestCase
         );
         $storeId = 1;
         $productCollection->expects($this->once())->method('setStoreId')->with($storeId);
-        $productCollection->expects($this->once())->method('addStoreFilter')->will($this->returnSelf());
-        $productCollection->expects($this->any())->method('addAttributeToFilter')->will($this->returnSelf());
-        $productCollection->expects($this->any())->method('addAttributeToSelect')->will($this->returnSelf());
-        $productCollection->expects($this->once())->method('addAttributeToSort')->will($this->returnSelf());
-        $productCollection->expects($this->once())->method('applyFrontendPriceLimitations')->will($this->returnSelf());
+        $productCollection->expects($this->once())->method('addStoreFilter')->willReturnSelf();
+        $productCollection->expects($this->any())->method('addAttributeToFilter')->willReturnSelf();
+        $productCollection->expects($this->any())->method('addAttributeToSelect')->willReturnSelf();
+        $productCollection->expects($this->once())->method('addAttributeToSort')->willReturnSelf();
+        $productCollection->expects($this->once())->method('applyFrontendPriceLimitations')->willReturnSelf();
         $visibleIds = [1, 3];
         $this->visibility->expects($this->once())->method('getVisibleInCatalogIds')->willReturn(
             $visibleIds
         );
-        $productCollection->expects($this->once())->method('setVisibility')->with($visibleIds)->will(
-            $this->returnSelf()
+        $productCollection->expects($this->once())->method('setVisibility')->with($visibleIds)->willReturnSelf(
+            
         );
 
         $products = $this->newProducts->getProductsCollection($storeId);

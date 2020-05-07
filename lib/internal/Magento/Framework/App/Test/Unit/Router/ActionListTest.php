@@ -46,9 +46,9 @@ class ActionListTest extends TestCase
     protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
-        $this->cacheMock = $this->createMock(CacheInterface::class);
+        $this->cacheMock = $this->getMockForAbstractClass(CacheInterface::class);
         $this->readerMock = $this->createMock(Reader::class);
-        $this->serializerMock = $this->createMock(SerializerInterface::class);
+        $this->serializerMock = $this->getMockForAbstractClass(SerializerInterface::class);
     }
 
     public function testConstructActionsCached()

@@ -97,7 +97,7 @@ class ImageTest extends TestCase
         $this->_imageMock = $this->createMock(\Magento\Framework\Image::class);
         $imageFactory->expects($this->any())->method('create')->willReturn($this->_imageMock);
 
-        $logger = $this->createMock(LoggerInterface::class);
+        $logger = $this->getMockForAbstractClass(LoggerInterface::class);
         $this->_themeMock = $this->getMockBuilder(Theme::class)
             ->disableOriginalConstructor()
             ->addMethods(['getPreviewImage'])

@@ -58,7 +58,7 @@ class GuestShippingInformationManagementTest extends TestCase
     {
         $cartId = 'masked_id';
         $quoteId = 100;
-        $addressInformationMock = $this->createMock(ShippingInformationInterface::class);
+        $addressInformationMock = $this->getMockForAbstractClass(ShippingInformationInterface::class);
 
         $quoteIdMaskMock = $this->getMockBuilder(QuoteIdMask::class)
             ->addMethods(['getQuoteId'])
@@ -70,7 +70,7 @@ class GuestShippingInformationManagementTest extends TestCase
         $quoteIdMaskMock->expects($this->once())->method('load')->with($cartId, 'masked_id')->willReturnSelf();
         $quoteIdMaskMock->expects($this->once())->method('getQuoteId')->willReturn($quoteId);
 
-        $paymentInformationMock = $this->createMock(PaymentDetailsInterface::class);
+        $paymentInformationMock = $this->getMockForAbstractClass(PaymentDetailsInterface::class);
         $this->shippingInformationManagementMock->expects($this->once())
             ->method('saveAddressInformation')
             ->with($quoteId, $addressInformationMock)

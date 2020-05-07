@@ -30,7 +30,7 @@ class LockValidatorCompositeTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->objectManagerMock = $this->createMock(ObjectManagerInterface::class);
+        $this->objectManagerMock = $this->getMockForAbstractClass(ObjectManagerInterface::class);
     }
 
     public function testCompositionsWithInvalidValidatorInstance()
@@ -46,7 +46,7 @@ class LockValidatorCompositeTest extends TestCase
     public function testValidateWithValidValidatorInstance()
     {
         $validators = [LockValidatorComposite::class];
-        $lockValidatorMock = $this->createMock(LockValidatorInterface::class);
+        $lockValidatorMock = $this->getMockForAbstractClass(LockValidatorInterface::class);
         $this->objectManagerMock->expects(
             $this->any()
         )->method(

@@ -35,7 +35,7 @@ class QueryLogEnableCommandTest extends TestCase
     /**
      * {@inheritdoc}
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->configWriter = $this->getMockBuilder(Writer::class)
             ->disableOriginalConstructor()

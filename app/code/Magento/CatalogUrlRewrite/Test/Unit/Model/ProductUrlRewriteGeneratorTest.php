@@ -75,7 +75,7 @@ class ProductUrlRewriteGeneratorTest extends TestCase
             ->willReturn($this->categoriesCollection);
         $this->storeManager = $this->getMockBuilder(StoreManagerInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->currentUrlRewritesRegenerator = $this->getMockBuilder(
             CurrentUrlRewritesRegenerator::class
         )->disableOriginalConstructor()

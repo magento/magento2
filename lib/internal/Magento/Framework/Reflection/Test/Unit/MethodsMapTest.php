@@ -56,7 +56,7 @@ class MethodsMapTest extends TestCase
                 'fieldNamer' => $fieldNamerMock,
             ]
         );
-        $this->serializerMock = $this->createMock(SerializerInterface::class);
+        $this->serializerMock = $this->getMockForAbstractClass(SerializerInterface::class);
         $objectManager->setBackwardCompatibleProperty(
             $this->object,
             'serializer',

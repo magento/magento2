@@ -124,17 +124,17 @@ class UpdateQtyTest extends TestCase
 
         $this->viewMock = $this->getMockBuilder(ViewInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->viewMock->expects($this->any())->method('loadLayout')->willReturnSelf();
 
-        $this->objectManagerMock = $this->createMock(ObjectManagerInterface::class);
+        $this->objectManagerMock = $this->getMockForAbstractClass(ObjectManagerInterface::class);
 
         $this->pageConfigMock->expects($this->any())->method('getTitle')->willReturn($this->titleMock);
 
         $this->objectManagerMock = $this->getMockBuilder(ObjectManagerInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $contextMock = $this->getMockBuilder(Context::class)
             ->disableOriginalConstructor()

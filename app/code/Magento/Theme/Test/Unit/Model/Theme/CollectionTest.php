@@ -62,7 +62,7 @@ class CollectionTest extends TestCase
             ->getMock();
         $this->directory = $this->getMockBuilder(ReadInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->themePackageList = $this->createMock(ThemePackageList::class);
         $this->readDirFactory = $this->createMock(ReadFactory::class);

@@ -51,7 +51,7 @@ class CombineTest extends TestCase
         $this->loggerMock = $this->getMockBuilder(LoggerInterface::class)
             ->disableOriginalConstructor()
             ->setMethods([])
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->conditionObjectMock = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()

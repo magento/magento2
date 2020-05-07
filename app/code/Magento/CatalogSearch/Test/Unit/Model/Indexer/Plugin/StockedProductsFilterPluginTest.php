@@ -54,10 +54,10 @@ class StockedProductsFilterPluginTest extends TestCase
     {
         $this->stockConfigurationMock = $this->getMockBuilder(StockConfigurationInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->stockStatusRepositoryMock = $this->getMockBuilder(StockStatusRepositoryInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->stockStatusCriteriaFactoryMock = $this->getMockBuilder(StockStatusCriteriaInterfaceFactory::class)
             ->disableOriginalConstructor()
             ->getMock();

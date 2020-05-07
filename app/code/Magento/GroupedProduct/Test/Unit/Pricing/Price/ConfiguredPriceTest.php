@@ -78,7 +78,7 @@ class ConfiguredPriceTest extends TestCase
                 'getCustomOption',
                 'hasFinalPrice'
             ])
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->saleableItem->expects($this->once())
             ->method('getPriceInfo')
             ->willReturn($this->priceInfo);

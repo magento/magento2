@@ -71,7 +71,7 @@ class CategoriesTest extends AbstractModifierTest
             ->getMock();
         $this->authorizationMock = $this->getMockBuilder(AuthorizationInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->categoryCollectionFactoryMock->expects($this->any())
             ->method('create')

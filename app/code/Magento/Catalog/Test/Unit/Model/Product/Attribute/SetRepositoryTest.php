@@ -55,7 +55,7 @@ class SetRepositoryTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->attrSetRepositoryMock = $this->createMock(AttributeSetRepositoryInterface::class);
+        $this->attrSetRepositoryMock = $this->getMockForAbstractClass(AttributeSetRepositoryInterface::class);
         $this->searchCriteriaBuilderMock = $this->createMock(SearchCriteriaBuilder::class);
         $this->filterBuilderMock = $this->createMock(FilterBuilder::class);
         $this->eavConfig = $this->createMock(Config::class);
@@ -70,7 +70,7 @@ class SetRepositoryTest extends TestCase
 
     public function testSave()
     {
-        $attributeSetMock = $this->createMock(AttributeSetInterface::class);
+        $attributeSetMock = $this->getMockForAbstractClass(AttributeSetInterface::class);
         $this->setMockForValidation($attributeSetMock, 4);
 
         $this->attrSetRepositoryMock->expects($this->once())
@@ -84,7 +84,7 @@ class SetRepositoryTest extends TestCase
     {
         $this->expectException('Magento\Framework\Exception\StateException');
         $this->expectExceptionMessage('Provided Attribute set non product Attribute set.');
-        $attributeSetMock = $this->createMock(AttributeSetInterface::class);
+        $attributeSetMock = $this->getMockForAbstractClass(AttributeSetInterface::class);
         $this->setMockForValidation($attributeSetMock, 3);
         $this->attrSetRepositoryMock->expects($this->never())->method('save');
         $this->model->save($attributeSetMock);
@@ -93,7 +93,7 @@ class SetRepositoryTest extends TestCase
     public function testGet()
     {
         $attributeSetId = 1;
-        $attributeSetMock = $this->createMock(AttributeSetInterface::class);
+        $attributeSetMock = $this->getMockForAbstractClass(AttributeSetInterface::class);
         $this->setMockForValidation($attributeSetMock, 4);
 
         $this->attrSetRepositoryMock->expects($this->once())
@@ -108,7 +108,7 @@ class SetRepositoryTest extends TestCase
         $this->expectException('Magento\Framework\Exception\StateException');
         $this->expectExceptionMessage('Provided Attribute set non product Attribute set.');
         $attributeSetId = 1;
-        $attributeSetMock = $this->createMock(AttributeSetInterface::class);
+        $attributeSetMock = $this->getMockForAbstractClass(AttributeSetInterface::class);
         $this->setMockForValidation($attributeSetMock, 3);
 
         $this->attrSetRepositoryMock->expects($this->once())
@@ -120,7 +120,7 @@ class SetRepositoryTest extends TestCase
 
     public function testDelete()
     {
-        $attributeSetMock = $this->createMock(AttributeSetInterface::class);
+        $attributeSetMock = $this->getMockForAbstractClass(AttributeSetInterface::class);
         $this->setMockForValidation($attributeSetMock, 4);
         $this->attrSetRepositoryMock->expects($this->once())
             ->method('delete')
@@ -133,7 +133,7 @@ class SetRepositoryTest extends TestCase
     {
         $this->expectException('Magento\Framework\Exception\StateException');
         $this->expectExceptionMessage('Provided Attribute set non product Attribute set.');
-        $attributeSetMock = $this->createMock(AttributeSetInterface::class);
+        $attributeSetMock = $this->getMockForAbstractClass(AttributeSetInterface::class);
         $this->setMockForValidation($attributeSetMock, 3);
         $this->attrSetRepositoryMock->expects($this->never())
             ->method('delete');
@@ -143,7 +143,7 @@ class SetRepositoryTest extends TestCase
     public function testDeleteById()
     {
         $attributeSetId = 1;
-        $attributeSetMock = $this->createMock(AttributeSetInterface::class);
+        $attributeSetMock = $this->getMockForAbstractClass(AttributeSetInterface::class);
         $this->setMockForValidation($attributeSetMock, 4);
 
         $this->attrSetRepositoryMock->expects($this->once())
@@ -160,9 +160,9 @@ class SetRepositoryTest extends TestCase
 
     public function testGetList()
     {
-        $searchResultMock = $this->createMock(AttributeSetSearchResultsInterface::class);
+        $searchResultMock = $this->getMockForAbstractClass(AttributeSetSearchResultsInterface::class);
 
-        $searchCriteriaMock = $this->createMock(SearchCriteriaInterface::class);
+        $searchCriteriaMock = $this->getMockForAbstractClass(SearchCriteriaInterface::class);
         $searchCriteriaMock->expects($this->once())->method('getCurrentPage')->willReturn(1);
         $searchCriteriaMock->expects($this->once())->method('getPageSize')->willReturn(2);
 
@@ -196,7 +196,7 @@ class SetRepositoryTest extends TestCase
             ->willReturnSelf();
         $this->searchCriteriaBuilderMock->expects($this->once())
             ->method('create')
-            ->willReturn($this->createMock(SearchCriteriaInterface::class));
+            ->willReturn($this->getMockForAbstractClass(SearchCriteriaInterface::class));
 
         $this->attrSetRepositoryMock->expects($this->once())
             ->method('getList')

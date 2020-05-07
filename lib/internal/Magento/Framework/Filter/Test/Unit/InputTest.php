@@ -15,7 +15,7 @@ class InputTest extends TestCase
 {
     public function testFilterZendFilterAsObject()
     {
-        $objectManagerMock = $this->createMock(ObjectManagerInterface::class);
+        $objectManagerMock = $this->getMockForAbstractClass(ObjectManagerInterface::class);
         $inputFilter = new Input($objectManagerMock);
 
         /** @var \Zend_Filter_Interface $filterMock */
@@ -36,7 +36,7 @@ class InputTest extends TestCase
 
     public function testFilterZendFilterAsArray()
     {
-        $objectManagerMock = $this->createMock(ObjectManagerInterface::class);
+        $objectManagerMock = $this->getMockForAbstractClass(ObjectManagerInterface::class);
         $inputFilter = new Input($objectManagerMock);
 
         /** This filter should be applied to 'field1' field value only */

@@ -63,7 +63,7 @@ class UpdateEntityRowTest extends TestCase
             ->getMock();
         $connectionMock = $this->getMockBuilder(AdapterInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $connectionMock->expects($this->once())
             ->method('describeTable')
             ->willReturn($describeTable);

@@ -52,7 +52,7 @@ class DataTest extends TestCase
         /** @var Context $context */
         $context = $arguments['context'];
         $this->scopeConfig = $context->getScopeConfig();
-        $this->layoutMock = $this->createMock(LayoutInterface::class);
+        $this->layoutMock = $this->getMockForAbstractClass(LayoutInterface::class);
         $layoutFactoryMock = $arguments['layoutFactory'];
         $layoutFactoryMock->expects($this->once())->method('create')->willReturn($this->layoutMock);
 
@@ -178,11 +178,11 @@ class DataTest extends TestCase
         $layoutMock = $this->getMockBuilder(LayoutInterface::class)
             ->disableOriginalConstructor()
             ->setMethods([])
-            ->getMock();
+            ->getMockForAbstractClass();
         $blockMock = $this->getMockBuilder(BlockInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['setMethod', 'toHtml'])
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $methodMock->expects($this->once())->method('getFormBlockType')->willReturn($blockType);
         $methodMock->expects($this->once())->method('getCode')->willReturn($methodCode);
@@ -207,7 +207,7 @@ class DataTest extends TestCase
         $blockMock = $this->getMockBuilder(BlockInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['setInfo', 'toHtml'])
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $infoMock->expects($this->once())->method('getMethodInstance')->willReturn($methodMock);
         $methodMock->expects($this->once())->method('getInfoBlockType')->willReturn($blockType);
@@ -232,7 +232,7 @@ class DataTest extends TestCase
         $paymentBlockMock = $this->getMockBuilder(BlockInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['setArea', 'setIsSecureMode', 'getMethod', 'setStore', 'toHtml', 'setInfo'])
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->appEmulation->expects($this->once())->method('startEnvironmentEmulation')->with($storeId);
         $infoMock->expects($this->once())->method('getMethodInstance')->willReturn($methodMock);

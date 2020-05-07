@@ -31,7 +31,7 @@ class RendererFactoryTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->_objectManagerMock = $this->createMock(ObjectManagerInterface::class);
+        $this->_objectManagerMock = $this->getMockForAbstractClass(ObjectManagerInterface::class);
         $this->_requestMock = $this->getMockBuilder(
             Request::class
         )->disableOriginalConstructor()
@@ -60,7 +60,7 @@ class RendererFactoryTest extends TestCase
         $acceptTypes = ['application/json'];
 
         /** Mock request getAcceptTypes method to return specified value. */
-        $this->_requestMock->expects($this->once())->method('getAcceptTypes')->will($this->returnValue($acceptTypes));
+        $this->_requestMock->expects($this->once())->method('getAcceptTypes')->willReturn($acceptTypes);
         /** Mock renderer. */
         $rendererMock = $this->getMockBuilder(
             Json::class
@@ -73,8 +73,8 @@ class RendererFactoryTest extends TestCase
             'get'
         )->with(
             Json::class
-        )->will(
-            $this->returnValue($rendererMock)
+        )->willReturn(
+            $rendererMock
         );
         $this->_factory->get();
     }
@@ -85,7 +85,7 @@ class RendererFactoryTest extends TestCase
     public function testGetWithWrongAcceptHttpHeader()
     {
         /** Mock request to return empty Accept Types. */
-        $this->_requestMock->expects($this->once())->method('getAcceptTypes')->will($this->returnValue(''));
+        $this->_requestMock->expects($this->once())->method('getAcceptTypes')->willReturn('');
         try {
             $this->_factory->get();
             $this->fail("Exception is expected to be raised");
@@ -109,7 +109,7 @@ class RendererFactoryTest extends TestCase
     {
         $acceptTypes = ['application/json'];
         /** Mock request getAcceptTypes method to return specified value. */
-        $this->_requestMock->expects($this->once())->method('getAcceptTypes')->will($this->returnValue($acceptTypes));
+        $this->_requestMock->expects($this->once())->method('getAcceptTypes')->willReturn($acceptTypes);
         /** Mock object to return \Magento\Framework\DataObject */
         $this->_objectManagerMock->expects(
             $this->once()
@@ -117,8 +117,8 @@ class RendererFactoryTest extends TestCase
             'get'
         )->with(
             Json::class
-        )->will(
-            $this->returnValue(new DataObject())
+        )->willReturn(
+            new DataObject()
         );
 
         $this->expectException('LogicException');

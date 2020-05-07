@@ -30,7 +30,7 @@ class RendererTest extends TestCase
         $eventManager = $this->getMockBuilder(ManagerInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['dispatch'])
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $eventManager->expects($this->once())->method('dispatch')->with('store_address_format');
 

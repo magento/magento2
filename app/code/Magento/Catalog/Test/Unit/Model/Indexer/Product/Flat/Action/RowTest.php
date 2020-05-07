@@ -84,12 +84,12 @@ class RowTest extends TestCase
 
         $attributeTable = 'catalog_product_entity_int';
         $statusId = 22;
-        $this->connection = $this->createMock(AdapterInterface::class);
+        $this->connection = $this->getMockForAbstractClass(AdapterInterface::class);
         $this->resource = $this->createMock(ResourceConnection::class);
         $this->resource->expects($this->any())->method('getConnection')
             ->with('default')
             ->willReturn($this->connection);
-        $this->storeManager = $this->createMock(StoreManagerInterface::class);
+        $this->storeManager = $this->getMockForAbstractClass(StoreManagerInterface::class);
         $this->store = $this->createMock(Store::class);
         $this->store->expects($this->any())->method('getId')->willReturn('store_id_1');
         $this->storeManager->expects($this->any())->method('getStores')->willReturn([$this->store]);

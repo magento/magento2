@@ -74,7 +74,7 @@ class UrlTest extends TestCase
                 ['setScope', 'getUrl']
             )->getMock();
 
-        $this->sidResolver = $this->createMock(SidResolverInterface::class);
+        $this->sidResolver = $this->getMockForAbstractClass(SidResolverInterface::class);
 
         $store = $this->createPartialMock(Store::class, ['getId']);
         $store->expects($this->any())->method('getId')->willReturn(1);

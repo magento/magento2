@@ -110,7 +110,7 @@ class SidebarTest extends TestCase
 
         $this->stockRegistry->expects($this->any())
             ->method('getStockItem')
-            ->will($this->returnValue($this->stockItemMock));
+            ->willReturn($this->stockItemMock);
     }
 
     protected function tearDown(): void

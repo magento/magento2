@@ -61,7 +61,7 @@ class CustomerGroupsFixtureTest extends TestCase
         //Mock repository for customer groups
         $this->groupRepositoryMock = $this->getMockBuilder(GroupRepositoryInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         //Mock for customer groups collection
         $this->groupCollectionFactoryMock = $this->getMockBuilder(CollectionFactory::class)

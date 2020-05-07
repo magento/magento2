@@ -74,7 +74,7 @@ class GrandTest extends TestCase
 
         $this->model->collect(
             $this->createMock(Quote::class),
-            $this->createMock(ShippingAssignmentInterface::class),
+            $this->getMockForAbstractClass(ShippingAssignmentInterface::class),
             $totalMock
         );
     }

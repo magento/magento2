@@ -61,12 +61,12 @@ class AttributeRepositoryTest extends TestCase
     {
         $this->searchBuilderMock = $this->createMock(SearchCriteriaBuilder::class);
         $this->filterBuilderMock = $this->createMock(FilterBuilder::class);
-        $this->attributeRepositoryMock = $this->createMock(AttributeRepositoryInterface::class);
+        $this->attributeRepositoryMock = $this->getMockForAbstractClass(AttributeRepositoryInterface::class);
         $this->searchResultMock = $this->getMockBuilder(SearchResultsInterface::class)
             ->onlyMethods(
                 ['getItems', 'getSearchCriteria', 'getTotalCount', 'setItems', 'setSearchCriteria', 'setTotalCount']
             )
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->eavConfigMock = $this->createMock(Config::class);
         $this->eavConfigMock->expects($this->any())->method('getEntityType')
             ->willReturn(new DataObject(['default_attribute_set_id' => 3]));
@@ -96,7 +96,7 @@ class AttributeRepositoryTest extends TestCase
     {
         $attributeCode = 'some Attribute Code';
         $dataInterfaceMock =
-            $this->createMock(CategoryAttributeInterface::class);
+            $this->getMockForAbstractClass(CategoryAttributeInterface::class);
         $this->attributeRepositoryMock->expects($this->once())
             ->method('get')
             ->with(CategoryAttributeInterface::ENTITY_TYPE_CODE, $attributeCode)

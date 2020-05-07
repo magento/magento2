@@ -27,9 +27,9 @@ class AbstractDataTest extends TestCase
 
     protected function setUp(): void
     {
-        $timezoneMock = $this->createMock(TimezoneInterface::class);
-        $loggerMock = $this->createMock(LoggerInterface::class);
-        $localeResolverMock = $this->createMock(ResolverInterface::class);
+        $timezoneMock = $this->getMockForAbstractClass(TimezoneInterface::class);
+        $loggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
+        $localeResolverMock = $this->getMockForAbstractClass(ResolverInterface::class);
         $stringMock = $this->createMock(StringUtils::class);
 
         /* testing abstract model through its child */

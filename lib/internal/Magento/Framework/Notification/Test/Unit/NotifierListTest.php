@@ -25,7 +25,7 @@ class NotifierListTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->objectManager = $this->createMock(ObjectManagerInterface::class);
+        $this->objectManager = $this->getMockForAbstractClass(ObjectManagerInterface::class);
         $this->objectManagerHelper = new ObjectManagerHelper($this);
     }
 

@@ -68,7 +68,7 @@ class CleanCacheTest extends TestCase
         $this->subjectMock = $this->createMock(Processor::class);
         $this->contextMock = $this->createMock(CacheContext::class);
         $this->eventManagerMock = $this->createMock(Manager::class);
-        $this->cacheMock = $this->createMock(CacheInterface::class);
+        $this->cacheMock = $this->getMockForAbstractClass(CacheInterface::class);
         $this->plugin = new CleanCache(
             $this->contextMock,
             $this->eventManagerMock

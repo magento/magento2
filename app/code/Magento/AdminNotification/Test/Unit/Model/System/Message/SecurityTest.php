@@ -41,8 +41,8 @@ class SecurityTest extends TestCase
     protected function setUp(): void
     {
         //Prepare objects for constructor
-        $this->cacheMock = $this->createMock(CacheInterface::class);
-        $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
+        $this->cacheMock = $this->getMockForAbstractClass(CacheInterface::class);
+        $this->scopeConfigMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
         $this->curlFactoryMock = $this->createPartialMock(
             CurlFactory::class,
             ['create']

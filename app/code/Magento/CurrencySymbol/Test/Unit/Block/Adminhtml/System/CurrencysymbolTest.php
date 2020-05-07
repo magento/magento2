@@ -44,7 +44,7 @@ class CurrencysymbolTest extends TestCase
         $blockMock = $this->getMockBuilder(BlockInterface::class)
             ->addMethods(['addChild'])
             ->onlyMethods(['toHtml'])
-            ->getMock();
+            ->getMockForAbstractClass();
 
         /** @var LayoutInterface|MockObject $layoutMock */
         $layoutMock = $this->getMockForAbstractClass(

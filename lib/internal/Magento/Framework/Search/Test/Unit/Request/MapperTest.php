@@ -80,7 +80,7 @@ class MapperTest extends TestCase
     {
         $this->helper = new ObjectManager($this);
 
-        $this->objectManager = $this->createMock(ObjectManagerInterface::class);
+        $this->objectManager = $this->getMockForAbstractClass(ObjectManagerInterface::class);
 
         $this->queryMatch = $this->getMockBuilder(Match::class)
             ->disableOriginalConstructor()

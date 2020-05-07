@@ -68,7 +68,7 @@ class AmountTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->priceCurrency = $this->createMock(PriceCurrencyInterface::class);
+        $this->priceCurrency = $this->getMockForAbstractClass(PriceCurrencyInterface::class);
         $data = [
             'default' => [
                 'adjustments' => [

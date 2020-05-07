@@ -42,7 +42,7 @@ class CcTest extends TestCase
     {
         $this->objectManager = new ObjectManager($this);
         $this->paymentConfig = $this->createMock(Config::class);
-        $this->localeDate = $this->createMock(TimezoneInterface::class);
+        $this->localeDate = $this->getMockForAbstractClass(TimezoneInterface::class);
         $context = $this->createPartialMock(Context::class, ['getLocaleDate']);
         $context->expects($this->any())
             ->method('getLocaleDate')

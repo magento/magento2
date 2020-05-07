@@ -38,7 +38,7 @@ class MinsaleqtyTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
+        $this->scopeConfigMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
         $this->randomMock = $this->createMock(Random::class);
         $this->randomMock->expects($this->any())
             ->method('getUniqueHash')

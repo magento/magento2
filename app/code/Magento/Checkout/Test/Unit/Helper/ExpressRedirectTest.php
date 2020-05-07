@@ -56,7 +56,7 @@ class ExpressRedirectTest extends TestCase
                 ['set']
             )->getMock();
 
-        $this->_objectManager = $this->createMock(ObjectManagerInterface::class);
+        $this->_objectManager = $this->getMockForAbstractClass(ObjectManagerInterface::class);
 
         $this->_customerSession = $this->getMockBuilder(
             Session::class

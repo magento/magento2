@@ -53,7 +53,7 @@ class ItemConverterTest extends TestCase
     protected function setUp(): void
     {
         $this->configPoolMock = $this->createMock(ConfigurationPool::class);
-        $this->eventManagerMock = $this->createMock(ManagerInterface::class);
+        $this->eventManagerMock = $this->getMockForAbstractClass(ManagerInterface::class);
         $this->dataObjectHelperMock = $this->createMock(DataObjectHelper::class);
         $this->totalsFactoryMock = $this->createPartialMock(
             TotalsItemInterfaceFactory::class,

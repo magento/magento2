@@ -46,7 +46,7 @@ class ContactFormTest extends TestCase
 
         $this->urlBuilderMock = $this->getMockBuilder(UrlInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->contextMock->expects($this->any())
             ->method('getUrlBuilder')

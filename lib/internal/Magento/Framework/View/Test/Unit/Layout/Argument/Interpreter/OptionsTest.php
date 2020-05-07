@@ -33,7 +33,7 @@ class OptionsTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->_objectManager = $this->createMock(ObjectManagerInterface::class);
+        $this->_objectManager = $this->getMockForAbstractClass(ObjectManagerInterface::class);
         $this->_model = new Options($this->_objectManager);
     }
 

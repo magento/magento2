@@ -34,7 +34,7 @@ class SignatureTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->config = $this->createMock(ConfigInterface::class);
+        $this->config = $this->getMockForAbstractClass(ConfigInterface::class);
         $this->deploymentVersion = $this->createMock(Version::class);
         $this->object = new Signature($this->config, $this->deploymentVersion);
     }

@@ -51,7 +51,7 @@ class FileSystemTest extends TestCase
 
     /**
      * @var EmailTemplateFile
-     * |\PHPUnit_Framework_MockObject_MockObject
+     * |\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_emailTemplateFileResolution;
 
@@ -95,7 +95,7 @@ class FileSystemTest extends TestCase
     {
         $params = [
             'area' => 'some_area',
-            'themeModel' => $this->createMock(ThemeInterface::class),
+            'themeModel' => $this->getMockForAbstractClass(ThemeInterface::class),
             'module' => 'Some_Module',   //It should be set in \Magento\Framework\View\Asset\Repository::extractScope
             // but PHPUnit has troubles with passing arguments by reference
         ];
@@ -120,7 +120,7 @@ class FileSystemTest extends TestCase
     {
         $params = [
             'area'       => 'some_area',
-            'themeModel' => $this->createMock(ThemeInterface::class),
+            'themeModel' => $this->getMockForAbstractClass(ThemeInterface::class),
             'module'     => 'Some_Module', //It should be set in \Magento\Framework\View\Asset\Repository::extractScope
             // but PHPUnit has troubles with passing arguments by reference
         ];
@@ -145,7 +145,7 @@ class FileSystemTest extends TestCase
     {
         $params = [
             'area' => 'some_area',
-            'themeModel' => $this->createMock(ThemeInterface::class),
+            'themeModel' => $this->getMockForAbstractClass(ThemeInterface::class),
             'locale' => 'some_locale',
         ];
         $file = 'some_file.ext';
@@ -164,7 +164,7 @@ class FileSystemTest extends TestCase
     {
         $params = [
             'area' => 'some_area',
-            'themeModel' => $this->createMock(ThemeInterface::class),
+            'themeModel' => $this->getMockForAbstractClass(ThemeInterface::class),
             'locale' => 'some_locale',
             'module' => 'Some_Module',
         ];
@@ -255,7 +255,7 @@ class FileSystemTest extends TestCase
         $locale = Locale::DEFAULT_SYSTEM_LOCALE;
         $params = [
             'area'       => 'some_area',
-            'themeModel' => $this->createMock(ThemeInterface::class),
+            'themeModel' => $this->getMockForAbstractClass(ThemeInterface::class),
             'module'     => 'Some_Module',
             'locale'     => $locale
         ];
@@ -265,7 +265,7 @@ class FileSystemTest extends TestCase
         $this->_emailTemplateFileResolution->expects($this->once())
             ->method('getFile')
             ->with($params['area'], $params['themeModel'], $locale, $file, 'Some_Module')
-            ->will($this->returnValue($expected));
+            ->willReturn($expected);
 
         $actual = $this->_model->getEmailTemplateFileName($file, $params, 'Some_Module');
         $this->assertEquals($expected, $actual);

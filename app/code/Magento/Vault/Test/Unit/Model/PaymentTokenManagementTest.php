@@ -109,7 +109,7 @@ class PaymentTokenManagementTest extends TestCase
         $this->searchCriteriaBuilder = $this->getMockBuilder(SearchCriteriaBuilder::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->encryptor = $this->createMock(EncryptorInterface::class);
+        $this->encryptor = $this->getMockForAbstractClass(EncryptorInterface::class);
         $this->dateTimeFactory = $this->getMockBuilder(DateTimeFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -211,7 +211,7 @@ class PaymentTokenManagementTest extends TestCase
         $this->paymentTokenFactory->expects(self::never())
             ->method('create');
 
-        self::assertEquals(null, $this->paymentTokenManagement->getByPaymentId(1));
+        self::assertNull($this->paymentTokenManagement->getByPaymentId(1));
     }
 
     /**
@@ -249,7 +249,7 @@ class PaymentTokenManagementTest extends TestCase
         $this->paymentTokenFactory->expects(self::never())
             ->method('create');
 
-        self::assertEquals(null, $this->paymentTokenManagement->getByGatewayToken('some-not-exists-token', 1, 1));
+        self::assertNull($this->paymentTokenManagement->getByGatewayToken('some-not-exists-token', 1, 1));
     }
 
     /**
@@ -265,7 +265,7 @@ class PaymentTokenManagementTest extends TestCase
         $this->paymentTokenFactory->expects(self::never())
             ->method('create');
 
-        self::assertEquals(null, $this->paymentTokenManagement->getByPublicHash('some-not-exists-token', 1));
+        self::assertNull($this->paymentTokenManagement->getByPublicHash('some-not-exists-token', 1));
     }
 
     /**
@@ -274,9 +274,9 @@ class PaymentTokenManagementTest extends TestCase
     public function testSaveTokenWithPaymentLinkNoDuplicate()
     {
         /** @var OrderPaymentInterface|MockObject $paymentMock */
-        $paymentMock = $this->createMock(OrderPaymentInterface::class);
+        $paymentMock = $this->getMockForAbstractClass(OrderPaymentInterface::class);
         /** @var PaymentTokenInterface|MockObject $tokenMock */
-        $tokenMock = $this->createMock(PaymentTokenInterface::class);
+        $tokenMock = $this->getMockForAbstractClass(PaymentTokenInterface::class);
 
         $customerId = 1;
         $entityId = 1;
@@ -322,11 +322,11 @@ class PaymentTokenManagementTest extends TestCase
     public function testSaveTokenWithPaymentLinkWithDuplicateTokenVisible()
     {
         /** @var OrderPaymentInterface|MockObject $paymentMock */
-        $paymentMock = $this->createMock(OrderPaymentInterface::class);
+        $paymentMock = $this->getMockForAbstractClass(OrderPaymentInterface::class);
         /** @var PaymentTokenInterface|MockObject $tokenMock */
-        $tokenMock = $this->createMock(PaymentTokenInterface::class);
+        $tokenMock = $this->getMockForAbstractClass(PaymentTokenInterface::class);
         /** @var PaymentTokenInterface|MockObject $duplicateToken */
-        $duplicateToken = $this->createMock(PaymentTokenInterface::class);
+        $duplicateToken = $this->getMockForAbstractClass(PaymentTokenInterface::class);
 
         $entityId = 1;
         $customerId = 1;
@@ -382,11 +382,11 @@ class PaymentTokenManagementTest extends TestCase
     public function testSaveTokenWithPaymentLinkWithDuplicateTokenNotVisible()
     {
         /** @var OrderPaymentInterface|MockObject $paymentMock */
-        $paymentMock = $this->createMock(OrderPaymentInterface::class);
+        $paymentMock = $this->getMockForAbstractClass(OrderPaymentInterface::class);
         /** @var PaymentTokenInterface|MockObject $tokenMock */
-        $tokenMock = $this->createMock(PaymentTokenInterface::class);
+        $tokenMock = $this->getMockForAbstractClass(PaymentTokenInterface::class);
         /** @var PaymentTokenInterface|MockObject $duplicateToken */
-        $duplicateToken = $this->createMock(PaymentTokenInterface::class);
+        $duplicateToken = $this->getMockForAbstractClass(PaymentTokenInterface::class);
 
         $entityId = 1;
         $newEntityId = 1;

@@ -86,7 +86,7 @@ class PrintPackageTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->requestMock = $this->createPartialMock(Http::class, ['getParam']);
-        $this->objectManagerMock = $this->createMock(ObjectManagerInterface::class);
+        $this->objectManagerMock = $this->getMockForAbstractClass(ObjectManagerInterface::class);
         $this->responseMock = $this->createMock(\Magento\Framework\App\Response\Http::class);
         $this->sessionMock = $this->getMockBuilder(Session::class)
             ->addMethods(['setIsUrlNotice'])

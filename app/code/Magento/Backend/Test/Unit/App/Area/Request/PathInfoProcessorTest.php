@@ -42,7 +42,7 @@ class PathInfoProcessorTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->_requestMock = $this->createMock(RequestInterface::class);
+        $this->_requestMock = $this->getMockForAbstractClass(RequestInterface::class);
         $this->_subjectMock = $this->createMock(\Magento\Store\App\Request\PathInfoProcessor::class);
         $this->_backendHelperMock = $this->createMock(Data::class);
         $this->_model = new PathInfoProcessor(

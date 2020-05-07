@@ -42,7 +42,7 @@ class FilterManagerTest extends TestCase
             ->disableOriginalConstructor()
             ->onlyMethods(['canCreateFilter', 'createFilter'])
             ->getMock();
-        $this->_objectManager = $this->createMock(ObjectManagerInterface::class);
+        $this->_objectManager = $this->getMockForAbstractClass(ObjectManagerInterface::class);
         $this->_objectManager->expects(
             $this->atLeastOnce()
         )->method(
@@ -81,7 +81,7 @@ class FilterManagerTest extends TestCase
         );
         $factoryName = Factory::class;
         $this->_factoryMock = new \stdClass();
-        $this->_objectManager = $this->createMock(ObjectManagerInterface::class);
+        $this->_objectManager = $this->getMockForAbstractClass(ObjectManagerInterface::class);
         $this->_objectManager->expects(
             $this->atLeastOnce()
         )->method(
@@ -131,8 +131,8 @@ class FilterManagerTest extends TestCase
             'canCreateFilter'
         )->with(
             $this->equalTo($filterAlias)
-        )->will(
-            $this->returnValue(false)
+        )->willReturn(
+            false
         );
 
         $method = new \ReflectionMethod(FilterManager::class, 'createFilterInstance');
@@ -153,8 +153,8 @@ class FilterManagerTest extends TestCase
             'canCreateFilter'
         )->with(
             $this->equalTo($alias)
-        )->will(
-            $this->returnValue(true)
+        )->willReturn(
+            true
         );
 
         $this->_factoryMock->expects(
@@ -164,8 +164,8 @@ class FilterManagerTest extends TestCase
         )->with(
             $this->equalTo($alias),
             $this->equalTo($arguments)
-        )->will(
-            $this->returnValue($filter)
+        )->willReturn(
+            $filter
         );
     }
 

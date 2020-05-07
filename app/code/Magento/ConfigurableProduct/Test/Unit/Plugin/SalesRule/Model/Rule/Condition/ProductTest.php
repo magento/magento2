@@ -105,10 +105,10 @@ class ProductTest extends TestCase
         $formatMock = new Format(
             $this->getMockBuilder(ScopeResolverInterface::class)
                 ->disableOriginalConstructor()
-                ->getMock(),
+                ->getMockForAbstractClass(),
             $this->getMockBuilder(ResolverInterface::class)
                 ->disableOriginalConstructor()
-                ->getMock(),
+                ->getMockForAbstractClass(),
             $this->getMockBuilder(CurrencyFactory::class)
                 ->disableOriginalConstructor()
                 ->getMock()

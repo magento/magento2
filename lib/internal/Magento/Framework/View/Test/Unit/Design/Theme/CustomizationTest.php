@@ -44,7 +44,7 @@ class CustomizationTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->fileProvider = $this->createMock(FileProviderInterface::class);
+        $this->fileProvider = $this->getMockForAbstractClass(FileProviderInterface::class);
         $collectionFactory = $this->createPartialMock(
             \Magento\Theme\Model\ResourceModel\Theme\File\CollectionFactory::class,
             ['create']

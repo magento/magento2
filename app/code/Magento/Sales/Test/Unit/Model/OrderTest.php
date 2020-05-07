@@ -185,8 +185,8 @@ class OrderTest extends TestCase
             true,
             ['round']
         );
-        $this->localeResolver = $this->createMock(ResolverInterface::class);
-        $this->timezone = $this->createMock(TimezoneInterface::class);
+        $this->localeResolver = $this->getMockForAbstractClass(ResolverInterface::class);
+        $this->timezone = $this->getMockForAbstractClass(TimezoneInterface::class);
         $this->incrementId = '#00000001';
         $this->eventManager = $this->createMock(Manager::class);
         $context = $this->createPartialMock(Context::class, ['getEventDispatcher']);
@@ -202,7 +202,7 @@ class OrderTest extends TestCase
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
-        $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
+        $this->scopeConfigMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
         $this->order = $helper->getObject(
             Order::class,
             [
@@ -276,7 +276,7 @@ class OrderTest extends TestCase
         $this->prepareOrderItem($realOrderItemId);
 
         $this->assertEquals($this->item, $this->order->getItemById($realOrderItemId));
-        $this->assertEquals(null, $this->order->getItemById($fakeOrderItemId));
+        $this->assertNull($this->order->getItemById($fakeOrderItemId));
     }
 
     /**
@@ -1228,7 +1228,7 @@ class OrderTest extends TestCase
 
     public function testSetPaymentNull()
     {
-        $this->assertEquals(null, $this->order->setPayment(null));
+        $this->assertNull($this->order->setPayment(null));
 
         $this->assertEquals(
             $this->order->getData(

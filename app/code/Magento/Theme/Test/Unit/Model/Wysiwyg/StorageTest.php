@@ -109,7 +109,7 @@ class StorageTest extends TestCase
         $reflection_property->setAccessible(true);
         $reflection_property->setValue($this->_helperStorage, $file);
 
-        $this->_objectManager = $this->createMock(ObjectManagerInterface::class);
+        $this->_objectManager = $this->getMockForAbstractClass(ObjectManagerInterface::class);
         $this->_imageFactory = $this->createMock(AdapterFactory::class);
         $this->directoryWrite = $this->createMock(Write::class);
         $this->urlEncoder = $this->createPartialMock(EncoderInterface::class, ['encode']);
@@ -215,7 +215,7 @@ class StorageTest extends TestCase
     {
         $uploader = $this->createMock(Uploader::class);
 
-        $this->_objectManager->expects($this->once())->method('create')->will($this->returnValue($uploader));
+        $this->_objectManager->expects($this->once())->method('create')->willReturn($uploader);
 
         $uploader->expects($this->once())->method('setAllowedExtensions')->willReturn($uploader);
 

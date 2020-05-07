@@ -46,8 +46,8 @@ class SessionTest extends TestCase
     protected function setUp(): void
     {
         $helper = new ObjectManager($this);
-        $this->configMock = $this->createMock(ConfigInterface::class);
-        $this->cookieManagerMock = $this->createMock(CookieManagerInterface::class);
+        $this->configMock = $this->getMockForAbstractClass(ConfigInterface::class);
+        $this->cookieManagerMock = $this->getMockForAbstractClass(CookieManagerInterface::class);
         $this->cookieMetadataFactoryMock = $this->getMockBuilder(
             CookieMetadataFactory::class
         )->disableOriginalConstructor()

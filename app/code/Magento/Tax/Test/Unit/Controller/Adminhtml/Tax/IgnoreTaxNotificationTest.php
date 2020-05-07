@@ -68,7 +68,7 @@ class IgnoreTaxNotificationTest extends TestCase
         $manager = $this->getMockBuilder(ObjectManagerInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['get', 'create', 'configure'])
-            ->getMock();
+            ->getMockForAbstractClass();
         $manager->expects($this->any())
             ->method('get')
             ->willReturn($config);

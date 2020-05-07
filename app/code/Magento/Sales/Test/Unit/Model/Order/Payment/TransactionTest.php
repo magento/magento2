@@ -69,6 +69,6 @@ class TransactionTest extends TestCase
         $this->transaction->setData('txn_id', 'test');
 
         $this->assertEquals('test', $this->transaction->getHtmlTxnId());
-        $this->assertEquals(null, $this->transaction->getData('html_txn_id'));
+        $this->assertNull($this->transaction->getData('html_txn_id'));
     }
 }

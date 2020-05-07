@@ -123,11 +123,11 @@ class InitParamListenerTest extends TestCase
         /**
          * @var ServiceLocatorInterface|MockObject $serviceLocator
          */
-        $serviceLocator = $this->createMock(ServiceLocatorInterface::class);
+        $serviceLocator = $this->getMockForAbstractClass(ServiceLocatorInterface::class);
         $mvcApplication = $this->getMockBuilder(Application::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $request = $this->createMock(RequestInterface::class);
+        $request = $this->getMockForAbstractClass(RequestInterface::class);
         $mvcApplication->expects($this->any())->method('getRequest')->willReturn($request);
         $serviceLocator->expects($this->once())->method('get')->with('Application')
             ->willReturn($mvcApplication);
@@ -151,7 +151,7 @@ class InitParamListenerTest extends TestCase
         /**
          * @var ServiceLocatorInterface|MockObject $serviceLocator
          */
-        $serviceLocator = $this->createMock(ServiceLocatorInterface::class);
+        $serviceLocator = $this->getMockForAbstractClass(ServiceLocatorInterface::class);
         $mvcApplication = $this->getMockBuilder(Application::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -242,7 +242,7 @@ class InitParamListenerTest extends TestCase
 
         /**
          * @var DirectoryList|
-         * \PHPUnit_Framework_MockObject_MockObject $directoryList
+         * \PHPUnit\Framework\MockObject\MockObject $directoryList
          */
         $directoryList = $this->getMockBuilder(DirectoryList::class)
             ->disableOriginalConstructor()
@@ -264,7 +264,7 @@ class InitParamListenerTest extends TestCase
         $this->callbacks[] = [$this->listener, 'onBootstrap'];
 
         /** @var EventManagerInterface|MockObject $events */
-        $eventManager = $this->createMock(EventManagerInterface::class);
+        $eventManager = $this->getMockForAbstractClass(EventManagerInterface::class);
 
         $sharedManager = $this->createMock(SharedEventManager::class);
         $sharedManager->expects($this->once())->method('attach')->with(

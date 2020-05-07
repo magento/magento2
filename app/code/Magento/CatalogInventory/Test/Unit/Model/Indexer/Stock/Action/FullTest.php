@@ -28,7 +28,7 @@ class FullTest extends TestCase
         );
         $resourceMock = $this->createMock(ResourceConnection::class);
         $productTypeMock = $this->createMock(Type::class);
-        $connectionMock = $this->createMock(AdapterInterface::class);
+        $connectionMock = $this->getMockForAbstractClass(AdapterInterface::class);
 
         $productTypeMock
             ->method('getTypesByPriority')

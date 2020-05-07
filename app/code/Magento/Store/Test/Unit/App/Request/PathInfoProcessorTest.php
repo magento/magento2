@@ -66,11 +66,11 @@ class PathInfoProcessorTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->validatorConfigMock = $this->createMock(ReinitableConfigInterface::class);
+        $this->validatorConfigMock = $this->getMockForAbstractClass(ReinitableConfigInterface::class);
 
-        $this->processorConfigMock = $this->createMock(ReinitableConfigInterface::class);
+        $this->processorConfigMock = $this->getMockForAbstractClass(ReinitableConfigInterface::class);
 
-        $this->storeRepositoryMock = $this->createMock(StoreRepositoryInterface::class);
+        $this->storeRepositoryMock = $this->getMockForAbstractClass(StoreRepositoryInterface::class);
 
         $this->pathInfoMock = $this->getMockBuilder(PathInfo ::class)
             ->disableOriginalConstructor()

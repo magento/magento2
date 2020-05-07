@@ -76,14 +76,14 @@ class GuestPaymentInformationManagementTest extends TestCase
         $this->paymentMethodManagementMock = $this->createMock(
             GuestPaymentMethodManagementInterface::class
         );
-        $this->cartManagementMock = $this->createMock(GuestCartManagementInterface::class);
-        $this->cartRepositoryMock = $this->createMock(CartRepositoryInterface::class);
+        $this->cartManagementMock = $this->getMockForAbstractClass(GuestCartManagementInterface::class);
+        $this->cartRepositoryMock = $this->getMockForAbstractClass(CartRepositoryInterface::class);
 
         $this->quoteIdMaskFactoryMock = $this->createPartialMock(
             QuoteIdMaskFactory::class,
             ['create']
         );
-        $this->loggerMock = $this->createMock(LoggerInterface::class);
+        $this->loggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
         $this->model = $objectManager->getObject(
             GuestPaymentInformationManagement::class,
             [
@@ -102,8 +102,8 @@ class GuestPaymentInformationManagementTest extends TestCase
         $cartId = 100;
         $orderId = 200;
         $email = 'email@magento.com';
-        $paymentMock = $this->createMock(PaymentInterface::class);
-        $billingAddressMock = $this->createMock(AddressInterface::class);
+        $paymentMock = $this->getMockForAbstractClass(PaymentInterface::class);
+        $billingAddressMock = $this->getMockForAbstractClass(AddressInterface::class);
         $this->getMockForAssignBillingAddress($cartId, $billingAddressMock);
 
         $billingAddressMock->expects($this->once())->method('setEmail')->with($email)->willReturnSelf();
@@ -122,8 +122,8 @@ class GuestPaymentInformationManagementTest extends TestCase
         $this->expectException('Magento\Framework\Exception\CouldNotSaveException');
         $cartId = 100;
         $email = 'email@magento.com';
-        $paymentMock = $this->createMock(PaymentInterface::class);
-        $billingAddressMock = $this->createMock(AddressInterface::class);
+        $paymentMock = $this->getMockForAbstractClass(PaymentInterface::class);
+        $billingAddressMock = $this->getMockForAbstractClass(AddressInterface::class);
 
         $this->getMockForAssignBillingAddress($cartId, $billingAddressMock);
         $billingAddressMock->expects($this->once())->method('setEmail')->with($email)->willReturnSelf();
@@ -143,8 +143,8 @@ class GuestPaymentInformationManagementTest extends TestCase
     {
         $cartId = 100;
         $email = 'email@magento.com';
-        $paymentMock = $this->createMock(PaymentInterface::class);
-        $billingAddressMock = $this->createMock(AddressInterface::class);
+        $paymentMock = $this->getMockForAbstractClass(PaymentInterface::class);
+        $billingAddressMock = $this->getMockForAbstractClass(AddressInterface::class);
         $this->getMockForAssignBillingAddress($cartId, $billingAddressMock);
         $billingAddressMock->expects($this->once())->method('setEmail')->with($email)->willReturnSelf();
 
@@ -157,8 +157,8 @@ class GuestPaymentInformationManagementTest extends TestCase
     {
         $cartId = 100;
         $email = 'email@magento.com';
-        $paymentMock = $this->createMock(PaymentInterface::class);
-        $billingAddressMock = $this->createMock(AddressInterface::class);
+        $paymentMock = $this->getMockForAbstractClass(PaymentInterface::class);
+        $billingAddressMock = $this->getMockForAbstractClass(AddressInterface::class);
         $quoteMock = $this->createMock(Quote::class);
 
         $billingAddressMock->expects($this->once())->method('setEmail')->with($email)->willReturnSelf();
@@ -185,8 +185,8 @@ class GuestPaymentInformationManagementTest extends TestCase
         $this->expectExceptionMessage('DB exception');
         $cartId = 100;
         $email = 'email@magento.com';
-        $paymentMock = $this->createMock(PaymentInterface::class);
-        $billingAddressMock = $this->createMock(AddressInterface::class);
+        $paymentMock = $this->getMockForAbstractClass(PaymentInterface::class);
+        $billingAddressMock = $this->getMockForAbstractClass(AddressInterface::class);
 
         $quoteMock = $this->createMock(Quote::class);
         $quoteMock->method('getBillingAddress')->willReturn($billingAddressMock);

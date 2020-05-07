@@ -42,7 +42,7 @@ class StructureTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->loggerMock = $this->createMock(LoggerInterface::class);
+        $this->loggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
         $this->stateMock = $this->createMock(State::class);
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);

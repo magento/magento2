@@ -92,7 +92,7 @@ class TaxRuleRepositoryTest extends TestCase
             TaxRuleSearchResultsInterfaceFactory::class,
             ['create']
         );
-        $this->searchResultsMock = $this->createMock(TaxRuleSearchResultsInterface::class);
+        $this->searchResultsMock = $this->getMockForAbstractClass(TaxRuleSearchResultsInterface::class);
         $this->ruleFactory = $this->createMock(RuleFactory::class);
         $this->collectionFactory = $this->createPartialMock(
             CollectionFactory::class,

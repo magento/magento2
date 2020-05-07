@@ -75,7 +75,7 @@ class CollectionTimeLabelTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->formMock = $this->createMock(Form::class);
-        $this->timeZoneMock = $this->createMock(TimezoneInterface::class);
+        $this->timeZoneMock = $this->getMockForAbstractClass(TimezoneInterface::class);
         $this->contextMock->method('getLocaleDate')
             ->willReturn($this->timeZoneMock);
         $this->localeResolverMock = $this->getMockBuilder(ResolverInterface::class)

@@ -87,7 +87,7 @@ class CaptureStrategyCommandTest extends TestCase
         $this->commandPool = $this->getMockBuilder(CommandPoolInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['get', '__wakeup'])
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->subjectReader = $this->getMockBuilder(SubjectReader::class)
             ->disableOriginalConstructor()
@@ -277,7 +277,7 @@ class CaptureStrategyCommandTest extends TestCase
 
         $order = $this->getMockBuilder(OrderAdapterInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $mock->method('getOrder')
             ->willReturn($order);
@@ -353,6 +353,6 @@ class CaptureStrategyCommandTest extends TestCase
         $this->transactionRepository = $this->getMockBuilder(TransactionRepositoryInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['getList', 'getTotalCount', 'delete', 'get', 'save', 'create', '__wakeup'])
-            ->getMock();
+            ->getMockForAbstractClass();
     }
 }

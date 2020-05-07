@@ -89,7 +89,7 @@ class InfoTest extends TestCase
         $this->_customerSession = $this->createMock(Session::class);
         $this->_customerSession->expects($this->any())->method('getId')->willReturn(self::CUSTOMER_ID);
 
-        $this->_customer = $this->createMock(CustomerInterface::class);
+        $this->_customer = $this->getMockForAbstractClass(CustomerInterface::class);
         $this->_customer->expects($this->any())->method('getEmail')->willReturn(self::EMAIL_ADDRESS);
         $this->_helperView = $this->getMockBuilder(
             View::class

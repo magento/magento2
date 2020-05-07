@@ -99,17 +99,17 @@ class FilterTest extends TestCase
             ->onlyMethods(['setConditionType', 'create', 'setField'])
             ->disableOriginalConstructor()
             ->getMock();
-        $this->requestMock = $this->createMock(RequestInterface::class);
-        $this->dataProviderMock = $this->createMock(DataProviderInterface::class);
-        $this->uiComponentMock = $this->createMock(UiComponentInterface::class);
+        $this->requestMock = $this->getMockForAbstractClass(RequestInterface::class);
+        $this->dataProviderMock = $this->getMockForAbstractClass(DataProviderInterface::class);
+        $this->uiComponentMock = $this->getMockForAbstractClass(UiComponentInterface::class);
         $this->abstractDbMock = $this->createPartialMock(
             AbstractDb::class,
             ['getResource', 'addFieldToFilter']
         );
         $this->resourceAbstractDbMock = $this->createMock(ResourceAbstractDb::class);
-        $this->contextMock = $this->createMock(ContextInterface::class);
-        $this->searchResultMock = $this->createMock(SearchResultInterface::class);
-        $uiComponentMockTwo = $this->createMock(UiComponentInterface::class);
+        $this->contextMock = $this->getMockForAbstractClass(ContextInterface::class);
+        $this->searchResultMock = $this->getMockForAbstractClass(SearchResultInterface::class);
+        $uiComponentMockTwo = $this->getMockForAbstractClass(UiComponentInterface::class);
         $this->filter = $this->objectManager->getObject(
             Filter::class,
             [

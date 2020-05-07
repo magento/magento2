@@ -140,7 +140,7 @@ class FormTest extends TestCase
 
         $customer = $this->getMockBuilder(CustomerInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $customer->method('getAddresses')
             ->willReturn([]);
         $this->customerRepository->method('getById')

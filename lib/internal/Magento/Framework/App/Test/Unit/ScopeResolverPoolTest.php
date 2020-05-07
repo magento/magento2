@@ -27,7 +27,7 @@ class ScopeResolverPoolTest extends TestCase
 
     public function testGet()
     {
-        $scope = $this->createMock(ScopeResolverInterface::class);
+        $scope = $this->getMockForAbstractClass(ScopeResolverInterface::class);
         $scopeResolver = $this->_helper->getObject(
             ScopeResolverPool::class,
             [

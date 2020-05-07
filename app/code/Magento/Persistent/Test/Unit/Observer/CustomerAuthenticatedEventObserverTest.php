@@ -48,7 +48,7 @@ class CustomerAuthenticatedEventObserverTest extends TestCase
         $this->customerSessionMock = $this->createMock(Session::class);
         $this->observerMock = $this->createMock(Observer::class);
         $this->quoteManagerMock = $this->createMock(QuoteManager::class);
-        $this->requestMock = $this->createMock(RequestInterface::class);
+        $this->requestMock = $this->getMockForAbstractClass(RequestInterface::class);
         $this->model = new CustomerAuthenticatedEventObserver(
             $this->customerSessionMock,
             $this->requestMock,

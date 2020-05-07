@@ -43,7 +43,7 @@ class RecentTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->storeManager = $this->createMock(StoreManagerInterface::class);
+        $this->storeManager = $this->getMockForAbstractClass(StoreManagerInterface::class);
         $this->context = $this->createMock(Context::class);
         $this->context->expects(
             $this->any()

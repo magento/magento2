@@ -39,7 +39,7 @@ class ExchangeRepositoryTest extends TestCase
         $this->exchangeFactory = $this
             ->getMockBuilder(ExchangeFactoryInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $objectManager = new ObjectManager($this);
         $this->exchangeRepository = $objectManager->getObject(

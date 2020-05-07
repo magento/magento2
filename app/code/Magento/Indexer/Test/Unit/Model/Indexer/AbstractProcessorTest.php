@@ -80,14 +80,14 @@ class AbstractProcessorTest extends TestCase
                 self::INDEXER_ID
             )->willReturnSelf();
             $this->_indexerRegistryMock->expects($this->once())->method('isScheduled')->willReturn($scheduled);
-            $this->assertEquals(null, $this->model->reindexRow($id));
+            $this->assertNull($this->model->reindexRow($id));
         } else {
             $this->_indexerRegistryMock->expects($this->exactly(2))->method('get')->with(
                 self::INDEXER_ID
             )->willReturnSelf();
             $this->_indexerRegistryMock->expects($this->once())->method('isScheduled')->willReturn($scheduled);
             $this->_indexerRegistryMock->expects($this->once())->method('reindexRow')->with($id)->willReturnSelf();
-            $this->assertEquals(null, $this->model->reindexRow($id));
+            $this->assertNull($this->model->reindexRow($id));
         }
     }
 
@@ -103,14 +103,14 @@ class AbstractProcessorTest extends TestCase
                 self::INDEXER_ID
             )->willReturnSelf();
             $this->_indexerRegistryMock->expects($this->once())->method('isScheduled')->willReturn($scheduled);
-            $this->assertEquals(null, $this->model->reindexList($ids));
+            $this->assertNull($this->model->reindexList($ids));
         } else {
             $this->_indexerRegistryMock->expects($this->exactly(2))->method('get')->with(
                 self::INDEXER_ID
             )->willReturnSelf();
             $this->_indexerRegistryMock->expects($this->once())->method('isScheduled')->willReturn($scheduled);
             $this->_indexerRegistryMock->expects($this->once())->method('reindexList')->with($ids)->willReturnSelf();
-            $this->assertEquals(null, $this->model->reindexList($ids));
+            $this->assertNull($this->model->reindexList($ids));
         }
     }
 

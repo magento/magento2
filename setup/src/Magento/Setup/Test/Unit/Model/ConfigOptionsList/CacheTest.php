@@ -94,7 +94,7 @@ class CacheTest extends TestCase
             'cache' => [
                 'frontend' => [
                     'default' => [
-                        'backend' => 'Cm_Cache_Backend_Redis',
+                        'backend' => '\\Magento\\Framework\\Cache\\Backend\Redis',
                         'backend_options' => [
                             'server' => '',
                             'port' => '',
@@ -123,7 +123,7 @@ class CacheTest extends TestCase
             'cache' => [
                 'frontend' => [
                     'default' => [
-                        'backend' => 'Cm_Cache_Backend_Redis',
+                        'backend' => '\\Magento\\Framework\\Cache\\Backend\Redis',
                         'backend_options' => [
                             'server' => 'localhost',
                             'port' => '1234',
@@ -240,6 +240,6 @@ class CacheTest extends TestCase
      */
     private function expectedIdPrefix(): string
     {
-        return substr(hash('md5', dirname(__DIR__, 8)), 0, 3) . '_';
+        return substr(\hash('sha256', dirname(__DIR__, 8)), 0, 3) . '_';
     }
 }

@@ -92,7 +92,7 @@ class OptionRepositoryTest extends TestCase
     protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
-        $this->productRepositoryMock = $this->createMock(ProductRepositoryInterface::class);
+        $this->productRepositoryMock = $this->getMockForAbstractClass(ProductRepositoryInterface::class);
         $this->typeMock = $this->createMock(Type::class);
         $this->optionFactoryMock = $this->getMockBuilder(OptionInterfaceFactory::class)
             ->disableOriginalConstructor()
@@ -107,8 +107,8 @@ class OptionRepositoryTest extends TestCase
             ->onlyMethods(['delete', '__wakeup', 'save', 'removeOptionSelections'])
             ->disableOriginalConstructor()
             ->getMock();
-        $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
-        $this->linkManagementMock = $this->createMock(ProductLinkManagementInterface::class);
+        $this->storeManagerMock = $this->getMockForAbstractClass(StoreManagerInterface::class);
+        $this->linkManagementMock = $this->getMockForAbstractClass(ProductLinkManagementInterface::class);
         $this->optionListMock = $this->createMock(OptionList::class);
         $this->optionSaveActionMock = $this->createMock(SaveAction::class);
 
@@ -130,7 +130,7 @@ class OptionRepositoryTest extends TestCase
         $this->expectExceptionMessage('This is implemented for bundle products only.');
 
         $productSku = 'sku';
-        $productMock = $this->createMock(ProductInterface::class);
+        $productMock = $this->getMockForAbstractClass(ProductInterface::class);
         $productMock->expects($this->once())
             ->method('getTypeId')
             ->willReturn(\Magento\Catalog\Model\Product\Type::TYPE_SIMPLE);
@@ -148,7 +148,7 @@ class OptionRepositoryTest extends TestCase
 
         $productSku = 'sku';
         $optionId = 100;
-        $productMock = $this->createMock(ProductInterface::class);
+        $productMock = $this->getMockForAbstractClass(ProductInterface::class);
         $productMock->expects($this->once())
             ->method('getTypeId')
             ->willReturn(\Magento\Catalog\Model\Product\Type::TYPE_BUNDLE);
@@ -204,7 +204,7 @@ class OptionRepositoryTest extends TestCase
 
         $linkMock = ['item'];
 
-        $newOptionMock = $this->createMock(OptionInterface::class);
+        $newOptionMock = $this->getMockForAbstractClass(OptionInterface::class);
         $this->dataObjectHelperMock->expects($this->once())
             ->method('populateWithArray')
             ->with($newOptionMock, $optionData, OptionInterface::class)
@@ -412,7 +412,7 @@ class OptionRepositoryTest extends TestCase
     public function testGetList()
     {
         $productSku = 'simple';
-        $productMock = $this->createMock(ProductInterface::class);
+        $productMock = $this->getMockForAbstractClass(ProductInterface::class);
         $productMock->expects($this->once())->method('getTypeId')->willReturn('bundle');
         $this->productRepositoryMock
             ->expects($this->once())
@@ -429,7 +429,7 @@ class OptionRepositoryTest extends TestCase
         $this->expectExceptionMessage('This is implemented for bundle products only.');
 
         $productSku = 'simple';
-        $productMock = $this->createMock(ProductInterface::class);
+        $productMock = $this->getMockForAbstractClass(ProductInterface::class);
         $productMock->expects($this->once())->method('getTypeId')->willReturn('simple');
         $this->productRepositoryMock
             ->expects($this->once())

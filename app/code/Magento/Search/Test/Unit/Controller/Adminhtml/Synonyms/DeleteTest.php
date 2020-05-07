@@ -59,7 +59,7 @@ class DeleteTest extends TestCase
     {
         $this->objectManager = new ObjectManager($this);
 
-        $this->messageManagerMock = $this->createMock(ManagerInterface::class);
+        $this->messageManagerMock = $this->getMockForAbstractClass(ManagerInterface::class);
 
         $this->requestMock = $this->getMockForAbstractClass(
             RequestInterface::class,
@@ -94,7 +94,7 @@ class DeleteTest extends TestCase
 
         $this->synonymGroupMock = $this->createMock(SynonymGroup::class);
 
-        $this->repository = $this->createMock(SynonymGroupRepositoryInterface::class);
+        $this->repository = $this->getMockForAbstractClass(SynonymGroupRepositoryInterface::class);
 
         $this->contextMock->expects($this->any())->method('getRequest')->willReturn($this->requestMock);
         $this->contextMock->expects($this->any())->method('getMessageManager')->willReturn($this->messageManagerMock);

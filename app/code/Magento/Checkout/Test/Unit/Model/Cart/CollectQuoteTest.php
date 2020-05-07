@@ -97,15 +97,15 @@ class CollectQuoteTest extends TestCase
             true,
             ['getById']
         );
-        $this->addressRepositoryMock = $this->createMock(AddressRepositoryInterface::class);
-        $this->estimateAddressMock = $this->createMock(EstimateAddressInterface::class);
+        $this->addressRepositoryMock = $this->getMockForAbstractClass(AddressRepositoryInterface::class);
+        $this->estimateAddressMock = $this->getMockForAbstractClass(EstimateAddressInterface::class);
         $this->estimateAddressFactoryMock =
             $this->createPartialMock(EstimateAddressInterfaceFactory::class, ['create']);
-        $this->shippingMethodManagerMock = $this->createMock(ShippingMethodManagementInterface::class);
-        $this->quoteRepositoryMock = $this->createMock(CartRepositoryInterface::class);
+        $this->shippingMethodManagerMock = $this->getMockForAbstractClass(ShippingMethodManagementInterface::class);
+        $this->quoteRepositoryMock = $this->getMockForAbstractClass(CartRepositoryInterface::class);
         $this->quoteMock = $this->createMock(Quote::class);
-        $this->customerMock = $this->createMock(CustomerInterface::class);
-        $this->addressMock = $this->createMock(AddressInterface::class);
+        $this->customerMock = $this->getMockForAbstractClass(CustomerInterface::class);
+        $this->addressMock = $this->getMockForAbstractClass(AddressInterface::class);
 
         $this->model = new CollectQuote(
             $this->customerSessionMock,
@@ -126,7 +126,7 @@ class CollectQuoteTest extends TestCase
         $defaultAddressId = 999;
         $countryId = 'USA';
         $regionId = 'CA';
-        $regionMock = $this->createMock(RegionInterface::class);
+        $regionMock = $this->getMockForAbstractClass(RegionInterface::class);
 
         $this->customerSessionMock->expects(self::once())
             ->method('isLoggedIn')

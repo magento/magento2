@@ -112,7 +112,7 @@ class LoginTest extends TestCase
         $this->response = $this->getMockBuilder(ResponseInterface::class)
             ->addMethods(['setRedirect', 'representJson', 'setHttpResponseCode'])
             ->onlyMethods(['sendResponse'])
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->customerSession = $this->getMockBuilder(Session::class)
             ->addMethods(['getLastCustomerId', 'getBeforeAuthUrl'])
             ->onlyMethods(['isLoggedIn', 'setBeforeAuthUrl', 'setCustomerDataAsLoggedIn', 'regenerateId', 'getData'])

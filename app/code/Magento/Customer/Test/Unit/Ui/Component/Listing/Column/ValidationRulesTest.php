@@ -25,7 +25,7 @@ class ValidationRulesTest extends TestCase
     {
         $this->validationRule = $this->getMockBuilder(ValidationRuleInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->validationRules = new ValidationRules();
     }

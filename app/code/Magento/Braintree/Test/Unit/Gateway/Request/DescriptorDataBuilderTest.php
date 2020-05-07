@@ -52,7 +52,7 @@ class DescriptorDataBuilderTest extends TestCase
      */
     public function testBuild(array $descriptors, array $expected)
     {
-        $paymentDOMock = $this->createMock(PaymentDataObjectInterface::class);
+        $paymentDOMock = $this->getMockForAbstractClass(PaymentDataObjectInterface::class);
         $buildSubject = [
             'payment' => $paymentDOMock,
         ];
@@ -61,7 +61,7 @@ class DescriptorDataBuilderTest extends TestCase
             ->with($buildSubject)
             ->willReturn($paymentDOMock);
 
-        $order = $this->createMock(OrderAdapterInterface::class);
+        $order = $this->getMockForAbstractClass(OrderAdapterInterface::class);
         $order->expects(self::once())->method('getStoreId')->willReturn('1');
 
         $paymentDOMock->expects(self::once())->method('getOrder')->willReturn($order);

@@ -46,8 +46,8 @@ class RequestTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->objectManager = $this->createMock(ObjectManagerInterface::class);
-        $this->cookieReader = $this->createMock(CookieReaderInterface::class);
+        $this->objectManager = $this->getMockForAbstractClass(ObjectManagerInterface::class);
+        $this->cookieReader = $this->getMockForAbstractClass(CookieReaderInterface::class);
         $this->converter = $this->createMock(StringUtils::class);
         // Stash the $_SERVER array to protect it from modification in test
         $this->serverArray = $_SERVER;

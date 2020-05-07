@@ -60,8 +60,8 @@ class LoaderTest extends TestCase
         $this->converter = $this->createMock(Dom::class);
         $this->parser = $this->createMock(Parser::class);
         $this->parser->expects($this->once())->method('initErrorHandler');
-        $this->registry = $this->createMock(ComponentRegistrarInterface::class);
-        $this->driver = $this->createMock(DriverInterface::class);
+        $this->registry = $this->getMockForAbstractClass(ComponentRegistrarInterface::class);
+        $this->driver = $this->getMockForAbstractClass(DriverInterface::class);
         $this->loader = new Loader($this->converter, $this->parser, $this->registry, $this->driver);
     }
 

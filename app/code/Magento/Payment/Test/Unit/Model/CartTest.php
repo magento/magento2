@@ -28,8 +28,8 @@ class CartTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->_eventManagerMock = $this->createMock(ManagerInterface::class);
-        $this->_salesModelMock = $this->createMock(SalesModelInterface::class);
+        $this->_eventManagerMock = $this->getMockForAbstractClass(ManagerInterface::class);
+        $this->_salesModelMock = $this->getMockForAbstractClass(SalesModelInterface::class);
         $factoryMock = $this->createMock(Factory::class);
         $factoryMock->expects($this->once())->method('create')->willReturn($this->_salesModelMock);
 

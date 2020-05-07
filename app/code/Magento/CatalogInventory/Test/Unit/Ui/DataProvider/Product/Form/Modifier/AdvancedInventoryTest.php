@@ -44,7 +44,7 @@ class AdvancedInventoryTest extends AbstractModifierTest
      */
     private $jsonValidatorMock;
 
-    protected function setUp():void
+    protected function setUp(): void
     {
         parent::setUp();
         $this->stockRegistryMock = $this->getMockBuilder(StockRegistryInterface::class)

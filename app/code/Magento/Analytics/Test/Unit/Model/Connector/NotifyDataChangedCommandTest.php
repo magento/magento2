@@ -55,11 +55,11 @@ class NotifyDataChangedCommandTest extends TestCase
     {
         $this->analyticsTokenMock =  $this->createMock(AnalyticsToken::class);
 
-        $this->httpClientMock =  $this->createMock(ClientInterface::class);
+        $this->httpClientMock =  $this->getMockForAbstractClass(ClientInterface::class);
 
-        $this->configMock =  $this->createMock(ScopeConfigInterface::class);
+        $this->configMock =  $this->getMockForAbstractClass(ScopeConfigInterface::class);
 
-        $this->loggerMock =  $this->createMock(LoggerInterface::class);
+        $this->loggerMock =  $this->getMockForAbstractClass(LoggerInterface::class);
         $successHandler = $this->getMockBuilder(ResponseHandlerInterface::class)
             ->getMockForAbstractClass();
         $successHandler->method('handleResponse')

@@ -69,7 +69,7 @@ class RegisterTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->_scopeConfig = $this->createMock(ScopeConfigInterface::class);
+        $this->_scopeConfig = $this->getMockForAbstractClass(ScopeConfigInterface::class);
         $this->_moduleManager = $this->createMock(Manager::class);
         $this->directoryHelperMock = $this->createMock(Data::class);
         $this->_customerUrl = $this->createMock(Url::class);

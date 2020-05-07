@@ -49,7 +49,7 @@ class VaultEnableAssignerTest extends TestCase
                 ]
             ]
         );
-        $paymentModel = $this->createMock(InfoInterface::class);
+        $paymentModel = $this->getMockForAbstractClass(InfoInterface::class);
 
         $paymentModel->expects(static::once())
             ->method('setAdditionalInformation')
@@ -92,7 +92,7 @@ class VaultEnableAssignerTest extends TestCase
                 PaymentInterface::KEY_ADDITIONAL_DATA => []
             ]
         );
-        $paymentModel = $this->createMock(InfoInterface::class);
+        $paymentModel = $this->getMockForAbstractClass(InfoInterface::class);
 
         $paymentModel->expects(static::never())
             ->method('setAdditionalInformation');

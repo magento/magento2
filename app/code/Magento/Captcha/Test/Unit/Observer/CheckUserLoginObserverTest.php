@@ -65,15 +65,15 @@ class CheckUserLoginObserverTest extends TestCase
     {
         $this->helperMock = $this->createMock(Data::class);
         $this->actionFlagMock = $this->createMock(ActionFlag::class);
-        $this->messageManagerMock = $this->createMock(ManagerInterface::class);
+        $this->messageManagerMock = $this->getMockForAbstractClass(ManagerInterface::class);
         $this->customerSessionMock = $this->getMockBuilder(Session::class)
             ->addMethods(['setUsername', 'getBeforeAuthUrl'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->captchaStringResolverMock = $this->createMock(CaptchaStringResolver::class);
         $this->customerUrlMock = $this->createMock(Url::class);
-        $this->customerRepositoryMock = $this->createMock(CustomerRepositoryInterface::class);
-        $this->authenticationMock = $this->createMock(AuthenticationInterface::class);
+        $this->customerRepositoryMock = $this->getMockForAbstractClass(CustomerRepositoryInterface::class);
+        $this->authenticationMock = $this->getMockForAbstractClass(AuthenticationInterface::class);
 
         $objectManager = new ObjectManager($this);
         $this->observer = $objectManager->getObject(

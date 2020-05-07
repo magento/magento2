@@ -53,14 +53,14 @@ class SpecialPriceTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->localeDate = $this->createMock(TimezoneInterface::class);
+        $this->localeDate = $this->getMockForAbstractClass(TimezoneInterface::class);
         $this->priceInfo = $this->createMock(Base::class);
 
         $this->saleable->expects($this->once())
             ->method('getPriceInfo')
             ->willReturn($this->priceInfo);
 
-        $this->priceCurrencyMock = $this->createMock(PriceCurrencyInterface::class);
+        $this->priceCurrencyMock = $this->getMockForAbstractClass(PriceCurrencyInterface::class);
 
         $objectHelper = new ObjectManager($this);
         $this->model = $objectHelper->getObject(
@@ -106,7 +106,7 @@ class SpecialPriceTest extends TestCase
             ->method('convertAndRound');
 
         if ($isScopeDateInInterval) {
-            $price = $this->createMock(PriceInterface::class);
+            $price = $this->getMockForAbstractClass(PriceInterface::class);
             $this->priceInfo->expects($this->once())
                 ->method('getPrice')
                 ->with(RegularPrice::PRICE_CODE)

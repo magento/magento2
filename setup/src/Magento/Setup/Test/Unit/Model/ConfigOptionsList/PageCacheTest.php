@@ -33,7 +33,7 @@ class PageCacheTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->validatorMock = $this->createMock(RedisConnectionValidator::class, [], [], '', false);
+        $this->validatorMock = $this->createMock(RedisConnectionValidator::class);
         $this->deploymentConfigMock = $this->createMock(DeploymentConfig::class);
 
         $this->configList = new PageCache($this->validatorMock);
@@ -91,7 +91,7 @@ class PageCacheTest extends TestCase
             'cache' => [
                 'frontend' => [
                     'page_cache' => [
-                        'backend' => 'Cm_Cache_Backend_Redis',
+                        'backend' => '\\Magento\\Framework\\Cache\\Backend\Redis',
                         'backend_options' => [
                             'server'=> '',
                             'port' => '',
@@ -120,7 +120,7 @@ class PageCacheTest extends TestCase
             'cache' => [
                 'frontend' => [
                     'page_cache' => [
-                        'backend' => 'Cm_Cache_Backend_Redis',
+                        'backend' => '\\Magento\\Framework\\Cache\\Backend\Redis',
                         'backend_options' => [
                             'server' => 'foo.bar',
                             'port' => '9000',
@@ -238,6 +238,6 @@ class PageCacheTest extends TestCase
      */
     private function expectedIdPrefix(): string
     {
-        return substr(hash('md5', dirname(__DIR__, 8)), 0, 3) . '_';
+        return substr(\hash('sha256', dirname(__DIR__, 8)), 0, 3) . '_';
     }
 }

@@ -74,7 +74,7 @@ class EavAbstractTest extends AbstractImportTestCase
         parent::setUp();
 
         $this->_string = new StringUtils();
-        $scopeConfig = $this->createMock(ScopeConfigInterface::class);
+        $scopeConfig = $this->getMockForAbstractClass(ScopeConfigInterface::class);
 
         $this->_importFactory = $this->createMock(ImportFactory::class);
         $this->_resource = $this->createMock(ResourceConnection::class);
