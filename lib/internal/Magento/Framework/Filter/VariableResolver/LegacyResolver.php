@@ -160,7 +160,7 @@ class LegacyResolver implements VariableResolverInterface
     {
         $object = $stackArgs[$i - 1]['variable'];
         $method = $stackArgs[$i]['name'];
-        if (method_exists($object, $method)) {
+        if (method_exists($object, $method) && substr($method, 0, 3) !== 'set') {
             $args = $this->getStackArgs($stackArgs[$i]['args'], $filter, $templateVariables);
             $stackArgs[$i]['variable'] = call_user_func_array([$object, $method], $args);
         }
