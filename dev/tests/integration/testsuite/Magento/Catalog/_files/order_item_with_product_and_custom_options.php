@@ -48,6 +48,7 @@ foreach ($productOptions as $option) {
 /** @var \Magento\Sales\Model\Order\Item $orderItem */
 $orderItem = $objectManager->create(\Magento\Sales\Model\Order\Item::class);
 $orderItem->setProductId($product->getId());
+$orderItem->setSku($product->getSku());
 $orderItem->setQtyOrdered(1);
 $orderItem->setBasePrice($product->getPrice());
 $orderItem->setPrice($product->getPrice());

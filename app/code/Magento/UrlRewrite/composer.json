@@ -12,7 +12,8 @@
         "magento/module-catalog-url-rewrite": "*",
         "magento/module-cms": "*",
         "magento/module-cms-url-rewrite": "*",
-        "magento/module-store": "*"
+        "magento/module-store": "*",
+        "magento/module-ui": "*"
     },
     "type": "magento2-module",
     "license": [

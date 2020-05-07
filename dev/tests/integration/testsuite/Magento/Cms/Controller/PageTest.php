@@ -85,4 +85,20 @@ class PageTest extends \Magento\TestFramework\TestCase\AbstractController
         $handles = $layout->getUpdate()->getHandles();
         $this->assertContains('cms_page_view_selectable_test_custom_layout_page_3_test_selected', $handles);
     }
+
+    /**
+     * Check home page custom handle is applied when rendering a page.
+     *
+     * @return void
+     * @throws \Throwable
+     * @magentoDataFixture Magento/Cms/_files/home_with_custom_handle.php
+     */
+    public function testHomePageCustomHandles(): void
+    {
+        $this->dispatch('/');
+        /** @var LayoutInterface $layout */
+        $layout = Bootstrap::getObjectManager()->get(LayoutInterface::class);
+        $handles = $layout->getUpdate()->getHandles();
+        $this->assertContains('cms_page_view_selectable_home_page_custom_layout', $handles);
+    }
 }
