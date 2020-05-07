@@ -6,6 +6,7 @@
 namespace Magento\CurrencySymbol\Test\Unit\Observer;
 
 use Magento\CurrencySymbol\Model\System\CurrencysymbolFactory;
+use Magento\Framework\Locale\Currency;
 
 /**
  * Test for \Magento\CurrencySymbol\Observer\CurrencyDisplayOptions
@@ -65,7 +66,7 @@ class CurrencyDisplayOptionsTest extends \PHPUnit\Framework\TestCase
     public function testCurrencyDisplayOptionsEmpty()
     {
         $baseData = [
-            \Magento\Framework\Locale\Currency::CURRENCY_OPTION_NAME => 'US Dollar'
+            Currency::CURRENCY_OPTION_NAME => 'US Dollar'
         ];
         $sampleCurrencyOptionObject = new \Magento\Framework\DataObject($baseData);
 
@@ -83,7 +84,7 @@ class CurrencyDisplayOptionsTest extends \PHPUnit\Framework\TestCase
     public function testCurrencyDisplayOptions()
     {
         $baseData = [
-            \Magento\Framework\Locale\Currency::CURRENCY_OPTION_NAME => 'US Dollar'
+            Currency::CURRENCY_OPTION_NAME => 'US Dollar'
         ];
         $sampleCurrencyOptionObject = new \Magento\Framework\DataObject($baseData);
         $sampleCurrency = 'USD';
@@ -92,9 +93,9 @@ class CurrencyDisplayOptionsTest extends \PHPUnit\Framework\TestCase
         $expectedCurrencyOptions = array_merge(
             $baseData,
             [
-                \Magento\Framework\Locale\Currency::CURRENCY_OPTION_NAME => 'US Dollar',
-                \Magento\Framework\Locale\Currency::CURRENCY_OPTION_SYMBOL => $sampleCurrencySymbol,
-                \Magento\Framework\Locale\Currency::CURRENCY_OPTION_DISPLAY => \Magento\Framework\Currency::USE_SYMBOL
+                Currency::CURRENCY_OPTION_NAME => 'US Dollar',
+                Currency::CURRENCY_OPTION_SYMBOL => $sampleCurrencySymbol,
+                Currency::CURRENCY_OPTION_DISPLAY => \Magento\Framework\Currency::USE_SYMBOL
             ]
         );
 

@@ -214,6 +214,11 @@ define([
                     this.reload(storageInvalidation.keys(), false);
                 }
             }
+
+            if (!_.isEmpty($.cookieStorage.get('section_data_clean'))) {
+                this.reload(sectionConfig.getSectionNames(), true);
+                $.cookieStorage.set('section_data_clean', '');
+            }
         },
 
         /**

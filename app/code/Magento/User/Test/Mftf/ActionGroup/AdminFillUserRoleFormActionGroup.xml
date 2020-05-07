@@ -24,6 +24,7 @@
         <waitForPageLoad stepKey="waitForRoleResourceTab" />
         
         <selectOption userInput="{{role.resourceAccess}}" selector="{{AdminCreateRoleSection.resourceAccess}}" stepKey="selectResourceAccess" />
-        <performOn stepKey="checkNeededResources" selector="{{AdminCreateRoleSection.resourceTree}}" function="function($I,$userRoles={{role.resource}}){foreach($userRoles as $userRole){$I->conditionalClick('//li[@data-id=\'' . $userRole . '\']//*[@class=\'jstree-checkbox\']','//li[@data-id=\'' . $userRole . '\' and contains(@class, \'jstree-checked\')]',false);}}" />
+        <!--TODO waiting for custom action functionality with MQE-1964 -->
+        <!--<performOn stepKey="checkNeededResources" selector="{{AdminCreateRoleSection.resourceTree}}" function="function($I,$userRoles={{role.resource}}){foreach($userRoles as $userRole){$I->conditionalClick('//li[@data-id=\'' . $userRole . '\']//*[@class=\'jstree-checkbox\']','//li[@data-id=\'' . $userRole . '\' and contains(@class, \'jstree-checked\')]',false);}}" />-->
     </actionGroup>
 </actionGroups>

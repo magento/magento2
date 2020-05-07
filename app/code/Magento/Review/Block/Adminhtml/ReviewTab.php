@@ -11,9 +11,7 @@ use Magento\Framework\Registry;
 use Magento\Ui\Component\Layout\Tabs\TabWrapper;
 
 /**
- * Class ReviewTab
- *
- * @package Magento\Review\Block\Adminhtml
+ * Review tab block.
  */
 class ReviewTab extends TabWrapper
 {
@@ -30,8 +28,6 @@ class ReviewTab extends TabWrapper
     protected $isAjaxLoaded = true;
 
     /**
-     * Constructor
-     *
      * @param Context $context
      * @param Registry $registry
      * @param array $data
@@ -67,6 +63,6 @@ class ReviewTab extends TabWrapper
      */
     public function getTabUrl()
     {
-        return $this->getUrl('customer/*/productReviews', ['_current' => true]);
+        return $this->getUrl('review/customer/productReviews', ['_current' => true]);
     }
 }

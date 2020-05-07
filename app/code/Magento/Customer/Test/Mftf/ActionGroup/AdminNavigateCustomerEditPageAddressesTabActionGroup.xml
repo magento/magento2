@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminNavigateCustomerEditPageAddressesTabActionGroup" extends="AdminOpenCustomerEditPageActionGroup">
+        <annotations>
+            <description>EXTENDS: AdminOpenCustomerEditPageActionGroup. Navigates to Addresses Tab in Admin Customer Edit page for the provided Customer ID #.</description>
+        </annotations>
+
+        <click selector="{{AdminEditCustomerInformationSection.addresses}}" after="waitForPageLoad" stepKey="navigateToAddressesTab"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+    </actionGroup>
+</actionGroups>

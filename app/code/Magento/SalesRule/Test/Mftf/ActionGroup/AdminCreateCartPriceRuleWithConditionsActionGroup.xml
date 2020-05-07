@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminCreateCartPriceRuleWithConditionsActionGroup" extends="AdminCreateCartPriceRuleActionGroup">
+        <annotations>
+            <description>EXTENDS: AdminCreateCartPriceRuleActionGroup. Removes 'fillDiscountAmount'. Adds the 2 provided Conditions (Name, Rule, Rule to Change and Category Name) to a Cart Price Rule.</description>
+        </annotations>
+        <arguments>
+            <argument name="condition1" type="string" defaultValue="Products subselection"/>
+            <argument name="condition2" type="string" defaultValue="Category"/>
+            <argument name="ruleToChange1" type="string" defaultValue="is"/>
+            <argument name="rule1" type="string" defaultValue="equals or greater than"/>
+            <argument name="ruleToChange2" type="string" defaultValue="..."/>
+            <argument name="rule2" type="string" defaultValue="2"/>
+            <argument name="categoryName" type="string" defaultValue="_defaultCategory.name"/>
+        </arguments>
+
+        <remove keyForRemoval="fillDiscountAmount"/>
+
+        <!--Go to Conditions section-->
+        <click selector="{{AdminCartPriceRulesFormSection.conditionsHeader}}" stepKey="openConditionsSection" after="selectActionType"/>
+        <click selector="{{AdminCartPriceRulesFormSection.addCondition('1')}}" stepKey="addFirstCondition" after="openConditionsSection"/>
+        <selectOption selector="{{AdminCartPriceRulesFormSection.ruleCondition('1')}}" userInput="{{condition1}}" stepKey="selectRule" after="addFirstCondition"/>
+        <waitForElementVisible selector="{{AdminCartPriceRulesFormSection.ruleParameter(ruleToChange1)}}" stepKey="waitForFirstRuleElement" after="selectRule"/>
+        <click selector="{{AdminCartPriceRulesFormSection.ruleParameter(ruleToChange1)}}" stepKey="clickToChangeRule" after="waitForFirstRuleElement"/>
+        <selectOption selector="{{AdminCartPriceRulesFormSection.ruleParameterSelect('1--1')}}" userInput="{{rule1}}" stepKey="selectRule1" after="clickToChangeRule"/>
+        <waitForElementVisible selector="{{AdminCartPriceRulesFormSection.ruleParameter(ruleToChange2)}}" stepKey="waitForSecondRuleElement" after="selectRule1"/>
+        <click selector="{{AdminCartPriceRulesFormSection.ruleParameter(ruleToChange2)}}" stepKey="clickToChangeRule1" after="waitForSecondRuleElement"/>
+        <fillField selector="{{AdminCartPriceRulesFormSection.ruleParameterInput('1--1')}}" userInput="{{rule2}}" stepKey="fillRule" after="clickToChangeRule1"/>
+        <click selector="{{AdminCartPriceRulesFormSection.addCondition('1--1')}}" stepKey="addSecondCondition" after="fillRule"/>
+        <selectOption selector="{{AdminCartPriceRulesFormSection.ruleCondition('1--1')}}" userInput="{{condition2}}" stepKey="selectSecondCondition" after="addSecondCondition"/>
+        <waitForElementVisible selector="{{AdminCartPriceRulesFormSection.ruleParameter(ruleToChange2)}}" stepKey="waitForThirdRuleElement" after="selectSecondCondition"/>
+        <click selector="{{AdminCartPriceRulesFormSection.ruleParameter(ruleToChange2)}}" stepKey="addThirdCondition" after="waitForThirdRuleElement"/>
+        <waitForElementVisible selector="{{AdminCartPriceRulesFormSection.openChooser('1--1--1')}}" stepKey="waitForForthRuleElement" after="addThirdCondition"/>
+        <click selector="{{AdminCartPriceRulesFormSection.openChooser('1--1--1')}}" stepKey="openChooser" after="waitForForthRuleElement"/>
+        <waitForElementVisible selector="{{AdminCartPriceRulesFormSection.categoryCheckbox(categoryName)}}" stepKey="waitForCategoryVisible" after="openChooser"/>
+        <checkOption selector="{{AdminCartPriceRulesFormSection.categoryCheckbox(categoryName)}}" stepKey="checkCategoryName" after="waitForCategoryVisible"/>
+    </actionGroup>
+</actionGroups>

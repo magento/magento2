@@ -15,7 +15,7 @@ use Magento\Framework\Reflection\Test\Unit\Fixture\UseClasses\SampleTwo;
 use Magento\Framework\Reflection\Test\Unit\Fixture\UseClasses\SampleTwo\SampleFour;
 use Magento\Framework\Reflection\Test\Unit\Fixture\UseSample;
 use Magento\Framework\Reflection\TypeProcessor;
-use Zend\Code\Reflection\ClassReflection;
+use Laminas\Code\Reflection\ClassReflection;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -362,6 +362,25 @@ class TypeProcessorTest extends \PHPUnit\Framework\TestCase
         $classReflection = new ClassReflection(TSample::class);
         $methodReflection = $classReflection->getMethod('getName');
         $this->typeProcessor->getGetterReturnType($methodReflection);
+    }
+
+    /**
+     * Checks a case when method return annotation has a null-type at first position,
+     * and a valid type at second.
+     */
+    public function testGetReturnTypeNullAtFirstPos()
+    {
+        $expected = [
+            'type' => 'string',
+            'isRequired' => false,
+            'description' => null,
+            'parameterCount' => 0
+        ];
+
+        $classReflection = new ClassReflection(TSample::class);
+        $methodReflection = $classReflection->getMethod('getWithNull');
+
+        self::assertEquals($expected, $this->typeProcessor->getGetterReturnType($methodReflection));
     }
 
     /**

@@ -21,9 +21,15 @@ use Magento\TestFramework\TestCase\AbstractBackendController;
  *
  * @magentoAppArea adminhtml
  * @magentoDbIsolation enabled
+ * @magentoDataFixture Magento/Catalog/_files/product_without_options.php
  */
 class DeleteCustomOptionsTest extends AbstractBackendController
 {
+    /**
+     * @var string
+     */
+    protected $productSku = 'simple';
+
     /**
      * @var ProductRepositoryInterface
      */
@@ -54,8 +60,6 @@ class DeleteCustomOptionsTest extends AbstractBackendController
     /**
      * Test delete custom option with type "field".
      *
-     * @magentoDataFixture Magento/Catalog/_files/product_without_options.php
-     *
      * @dataProvider \Magento\TestFramework\Catalog\Model\Product\Option\DataProvider\Type\Field::getDataForCreateOptions
      *
      * @param array $optionData
@@ -63,7 +67,7 @@ class DeleteCustomOptionsTest extends AbstractBackendController
      */
     public function testDeleteCustomOptionWithTypeField(array $optionData): void
     {
-        $product = $this->productRepository->get('simple');
+        $product = $this->productRepository->get($this->productSku);
         /** @var ProductCustomOptionInterface $option */
         $option = $this->optionRepositoryFactory->create(['data' => $optionData]);
         $option->setProductSku($product->getSku());

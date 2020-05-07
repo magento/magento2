@@ -18,8 +18,8 @@
             <argument name="indexA" type="string"/>
             <argument name="indexB" type="string"/>
         </arguments>
-        
-        <click selector="{{AdminNewCatalogPriceRule.conditionsTab}}" stepKey="openConditionsTab"/>
+
+        <conditionalClick selector="{{AdminNewCatalogPriceRule.conditionsTabTitle}}" dependentSelector="{{AdminNewCatalogPriceRule.conditionsTabBody}}" visible="false" stepKey="openConditionsTab"/>
         <waitForPageLoad stepKey="waitForConditionTabOpened"/>
         <click selector="{{AdminNewCatalogPriceRuleConditions.newCondition}}" stepKey="addNewCondition"/>
         <selectOption selector="{{AdminNewCatalogPriceRuleConditions.conditionSelect(indexA)}}" userInput="{{attributeName}}" stepKey="selectTypeCondition"/>

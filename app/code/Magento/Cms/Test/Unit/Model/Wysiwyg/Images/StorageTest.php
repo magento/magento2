@@ -131,6 +131,7 @@ class StorageTest extends \PHPUnit\Framework\TestCase
      */
     protected function setUp()
     {
+        $this->objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->filesystemMock = $this->createMock(\Magento\Framework\Filesystem::class);
         $this->driverMock = $this->getMockBuilder(\Magento\Framework\Filesystem\DriverInterface::class)
             ->setMethods(['getRealPathSafety'])
@@ -159,10 +160,7 @@ class StorageTest extends \PHPUnit\Framework\TestCase
             $this->returnValue($this->directoryMock)
         );
 
-        $this->fileMock   = $this->createPartialMock(
-            \Magento\Framework\Filesystem\Driver\File::class,
-            ['getParentDirectory']
-        );
+        $this->fileMock   = $this->objectManagerHelper->getObject(\Magento\Framework\Filesystem\Driver\File::class);
         $this->ioFileMock = $this->createPartialMock(\Magento\Framework\Filesystem\Io\File::class, ['getPathInfo']);
         $this->ioFileMock->expects(
             $this->any()
@@ -232,8 +230,6 @@ class StorageTest extends \PHPUnit\Framework\TestCase
             'allowed' => $this->allowedImageExtensions,
             'image_allowed' => $this->allowedImageExtensions,
         ];
-
-        $this->objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
         $this->imagesStorage = $this->objectManagerHelper->getObject(
             \Magento\Cms\Model\Wysiwyg\Images\Storage::class,
@@ -524,8 +520,6 @@ class StorageTest extends \PHPUnit\Framework\TestCase
                     [$thumbnailTargetPath, true],
                 ]
             );
-
-        $this->fileMock->expects($this->any())->method('getParentDirectory')->willReturn($path);
 
         $image = $this->getMockBuilder(\Magento\Catalog\Model\Product\Image::class)
             ->disableOriginalConstructor()

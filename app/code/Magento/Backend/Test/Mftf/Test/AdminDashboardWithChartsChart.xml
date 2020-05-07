@@ -28,6 +28,7 @@
                 <field key="firstname">John1</field>
                 <field key="lastname">Doe1</field>
             </createData>
+            <magentoCron stepKey="runCronIndex" groups="index"/>
         </before>
         <after>
             <!-- Reset admin order filter -->
@@ -37,11 +38,11 @@
             <magentoCLI command="config:set admin/dashboard/enable_charts 0" stepKey="setDisableChartsAsDefault"/>
             <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
         <!-- Login as admin -->
         <comment userInput="Login as admin" stepKey="adminLogin"/>
-        <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         <!-- Grab quantity value -->
         <comment userInput="Grab quantity value from dashboard" stepKey="grabQuantityFromDashboard"/>
         <grabTextFrom selector="{{AdminDashboardSection.dashboardTotals('Quantity')}}" stepKey="grabStartQuantity"/>
@@ -54,7 +55,7 @@
         <comment userInput="Add product to the shopping cart" stepKey="addProductToCart"/>
         <amOnPage url="{{StorefrontProductPage.url($$createProduct.custom_attributes[url_key]$$)}}" stepKey="navigateToSimpleProductPage"/>
         <waitForPageLoad stepKey="waitForProductPageLoad"/>
-        <actionGroup ref="addToCartFromStorefrontProductPage" stepKey="addToCartFromStorefrontProductPage">
+        <actionGroup ref="AddToCartFromStorefrontProductPageActionGroup" stepKey="addToCartFromStorefrontProductPage">
             <argument name="productName" value="$$createProduct.name$$"/>
         </actionGroup>
         <!--Go to Checkout-->
@@ -76,14 +77,14 @@
         <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber22}}" stepKey="grabOrderNumber"/>
         <!-- Search for Order in the order grid -->
         <comment userInput="Search for Order in the order grid" stepKey="searchOrderInGrid"/>
-        <actionGroup ref="filterOrderGridById" stepKey="filterOrderGridById">
+        <actionGroup ref="FilterOrderGridByIdActionGroup" stepKey="filterOrderGridById">
             <argument name="orderId" value="$grabOrderNumber"/>
         </actionGroup>
         <waitForLoadingMaskToDisappear stepKey="waitForSearchingOrder"/>
         <!-- Create invoice -->
         <comment userInput="Create invoice" stepKey="createInvoice"/>
-        <click selector="{{AdminOrdersGridSection.firstRow}}" stepKey="clickOrderRow"/>
-        <waitForPageLoad stepKey="waitForOrderPageToLoad"/>
+
+        <actionGroup ref="AdminOrderGridClickFirstRowActionGroup" stepKey="clickOrderRow"/>
         <click selector="{{AdminOrderDetailsMainActionsSection.invoice}}" stepKey="clickInvoiceButton"/>
         <waitForPageLoad stepKey="waitForInvoicePageToLoad"/>
         <see selector="{{AdminHeaderSection.pageTitle}}" userInput="New Invoice" stepKey="seeNewInvoiceInPageTitle" after="clickInvoiceButton"/>
@@ -94,8 +95,7 @@
         <comment userInput="Create Shipment for the order" stepKey="createShipmentForOrder"/>
         <amOnPage url="{{AdminOrdersPage.url}}" stepKey="onOrdersPage2"/>
         <waitForPageLoad time="30" stepKey="waitForOrderListPageLoading"/>
-        <click selector="{{AdminOrdersGridSection.firstRow}}" stepKey="openOrderPageForShip"/>
-        <waitForPageLoad stepKey="waitForOrderDetailsPage"/>
+        <actionGroup ref="AdminOrderGridClickFirstRowActionGroup" stepKey="openOrderPageForShip"/>
         <click selector="{{AdminOrderDetailsMainActionsSection.ship}}" stepKey="clickShipAction"/>
         <waitForPageLoad stepKey="waitForShipmentPagePage"/>
         <seeInCurrentUrl url="{{AdminShipmentNewPage.url}}" stepKey="seeOrderShipmentUrl"/>
@@ -120,6 +120,9 @@
         <seeElement selector="{{AdminDashboardSection.dashboardDiagramAmountsContentTab}}" stepKey="seeDiagramAmountContent"/>
         <seeElement selector="{{AdminDashboardSection.dashboardDiagramTotals}}" stepKey="seeAmountTotals"/>
         <dontSeeJsError stepKey="dontSeeJsError"/>
-        <assertGreaterThan expected="$grabStartQuantity" actual="$grabEndQuantity" stepKey="checkQuantityWasChanged"/>
+        <assertGreaterThan stepKey="checkQuantityWasChanged">
+			<actualResult type="const">$grabEndQuantity</actualResult>
+			<expectedResult type="const">$grabStartQuantity</expectedResult>
+        </assertGreaterThan>
     </test>
 </tests>

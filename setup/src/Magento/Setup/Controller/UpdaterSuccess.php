@@ -3,12 +3,16 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Setup\Controller;
 
+use Laminas\Mvc\Controller\AbstractActionController;
+use Laminas\View\Model\ViewModel;
 use Magento\Framework\App\MaintenanceMode;
-use Zend\Mvc\Controller\AbstractActionController;
-use Zend\View\Model\ViewModel;
 
+/**
+ * UpdaterSuccess controller
+ */
 class UpdaterSuccess extends AbstractActionController
 {
     /**
@@ -27,12 +31,14 @@ class UpdaterSuccess extends AbstractActionController
     }
 
     /**
+     * Index action
+     *
      * @return ViewModel
      */
     public function indexAction()
     {
         $this->maintenanceMode->set(false);
-        $view = new ViewModel;
+        $view = new ViewModel();
         $view->setTerminal(true);
         return $view;
     }

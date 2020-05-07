@@ -206,6 +206,10 @@
                     <item name="path" xsi:type="string">design/header/welcome</item>
                     <item name="fieldset" xsi:type="string">other_settings/header</item>
                 </item>
+                <item name="header_translate_title" xsi:type="array">
+                    <item name="path" xsi:type="string">design/header/translate_title</item>
+                    <item name="fieldset" xsi:type="string">other_settings/header</item>
+                </item>
                 <item name="footer_copyright" xsi:type="array">
                     <item name="path" xsi:type="string">design/footer/copyright</item>
                     <item name="fieldset" xsi:type="string">other_settings/footer</item>
@@ -283,6 +287,26 @@
             <argument name="mainTable" xsi:type="string">theme</argument>
             <argument name="resourceModel" xsi:type="string">Magento\Theme\Model\ResourceModel\Theme</argument>
             <argument name="identifierName" xsi:type="string">theme_id</argument>
+        </arguments>
+    </type>
+    <virtualType name="configured_design_cache" type="Magento\Framework\App\Cache">
+        <arguments>
+            <argument name="cacheIdentifier" xsi:type="string">layout</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="design_context" type="Magento\Framework\Model\Context">
+        <arguments>
+            <argument name="cacheManager" xsi:type="object">configured_design_cache</argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\Theme\Model\Design">
+        <arguments>
+            <argument name="context" xsi:type="object">design_context</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Theme\Model\Theme\ThemeProvider">
+        <arguments>
+            <argument name="cache" xsi:type="object">configured_design_cache</argument>
         </arguments>
     </type>
 </config>

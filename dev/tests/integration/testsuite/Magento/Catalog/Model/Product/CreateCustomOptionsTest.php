@@ -120,6 +120,8 @@ class CreateCustomOptionsTest extends TestCase
      * @dataProvider productCustomOptionsTypeTextDataProvider
      *
      * @param array $optionData
+     *
+     * @magentoDbIsolation enabled
      */
     public function testCreateOptionsWithTypeText(array $optionData): void
     {
@@ -140,6 +142,8 @@ class CreateCustomOptionsTest extends TestCase
      *
      * @param string $rawExtensions
      * @param string $expectedExtensions
+     *
+     * @magentoDbIsolation enabled
      */
     public function testFileExtensions(string $rawExtensions, string $expectedExtensions): void
     {
@@ -174,6 +178,8 @@ class CreateCustomOptionsTest extends TestCase
      *
      * @param array $optionData
      * @param array $optionValueData
+     *
+     * @magentoDbIsolation enabled
      */
     public function testCreateOptionsWithTypeSelect(array $optionData, array $optionValueData): void
     {
@@ -199,6 +205,8 @@ class CreateCustomOptionsTest extends TestCase
      * @dataProvider productCustomOptionsTypeDateDataProvider
      *
      * @param array $optionData
+     *
+     * @magentoDbIsolation enabled
      */
     public function testCreateOptionsWithTypeDate(array $optionData): void
     {
@@ -217,6 +225,8 @@ class CreateCustomOptionsTest extends TestCase
      *
      * @param array $optionData
      * @param \Exception $expectedErrorObject
+     *
+     * @magentoDbIsolation enabled
      */
     public function testCreateOptionWithError(array $optionData, \Exception $expectedErrorObject): void
     {

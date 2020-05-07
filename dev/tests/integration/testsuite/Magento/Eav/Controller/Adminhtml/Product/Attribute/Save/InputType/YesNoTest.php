@@ -7,19 +7,20 @@ declare(strict_types=1);
 
 namespace Magento\Eav\Controller\Adminhtml\Product\Attribute\Save\InputType;
 
-use Magento\Catalog\Controller\Adminhtml\Product\Attribute\Save\InputType\AbstractSaveAttributeTest;
+use Magento\Catalog\Controller\Adminhtml\Product\Attribute\Save\AbstractSaveAttributeTest;
 
 /**
  * Test cases related to create attribute with yes/no input type.
  *
  * @magentoDbIsolation enabled
+ * @magentoAppArea adminhtml
  */
 class YesNoTest extends AbstractSaveAttributeTest
 {
     /**
      * Test create attribute and compare attribute data and input data.
      *
-     * @dataProvider \Magento\TestFramework\Eav\Model\Attribute\DataProvider\YesNo::getAttributeDataWithCheckArray()
+     * @dataProvider \Magento\TestFramework\Eav\Model\Attribute\DataProvider\YesNo::getAttributeDataWithCheckArray
      *
      * @param array $attributePostData
      * @param array $checkArray
@@ -33,7 +34,7 @@ class YesNoTest extends AbstractSaveAttributeTest
     /**
      * Test create attribute with error.
      *
-     * @dataProvider \Magento\TestFramework\Eav\Model\Attribute\DataProvider\YesNo::getAttributeDataWithErrorMessage()
+     * @dataProvider \Magento\TestFramework\Eav\Model\Attribute\DataProvider\YesNo::getAttributeDataWithErrorMessage
      *
      * @param array $attributePostData
      * @param string $errorMessage

@@ -21,6 +21,7 @@ Magento\ConfigurableProduct\Controller\Adminhtml\Product\Initialization\Helper\P
 Magento\Downloadable\Controller\Adminhtml\Product\Initialization\Helper\Plugin\Downloadable
 Magento\Paypal\Controller\Adminhtml\Transparent\RequestSecureToken
 Magento\Paypal\Controller\Adminhtml\Transparent\Response
+Magento\Paypal\Controller\Adminhtml\Transparent\Redirect
 Magento\Sales\Controller\Adminhtml\Order\CreditmemoLoader
 Magento\Search\Controller\Adminhtml\Synonyms\ResultPageBuilder
 Magento\Shipping\Controller\Adminhtml\Order\ShipmentLoader

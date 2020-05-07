@@ -7,6 +7,8 @@ declare(strict_types=1);
 
 namespace Magento\LayeredNavigation\Block\Navigation\Category;
 
+use Magento\Catalog\Model\Layer\Resolver;
+use Magento\LayeredNavigation\Block\Navigation\AbstractFiltersTest;
 use Magento\Catalog\Model\Layer\Filter\AbstractFilter;
 
 /**
@@ -23,13 +25,13 @@ class SelectFilterTest extends AbstractFiltersTest
      * @magentoDataFixture Magento/Catalog/_files/category_with_different_price_products.php
      * @dataProvider getFiltersWithCustomAttributeDataProvider
      * @param array $products
-     * @param int $filterable
+     * @param array $attributeData
      * @param array $expectation
      * @return void
      */
-    public function testGetFiltersWithCustomAttribute(array $products, int $filterable, array $expectation): void
+    public function testGetFiltersWithCustomAttribute(array $products, array $attributeData, array $expectation): void
     {
-        $this->getFiltersAndAssert($products, $filterable, $expectation, 'dropdown_attribute');
+        $this->getCategoryFiltersAndAssert($products, $attributeData, $expectation, 'Category 999');
     }
 
     /**
@@ -40,7 +42,7 @@ class SelectFilterTest extends AbstractFiltersTest
         return [
             'not_used_in_navigation' => [
                 'products_data' => [],
-                'filterable' => 0,
+                'attribute_data' => ['is_filterable' => 0],
                 'expectation' => [],
             ],
             'used_in_navigation_with_results' => [
@@ -48,7 +50,7 @@ class SelectFilterTest extends AbstractFiltersTest
                     'simple1000' => 'Option 1',
                     'simple1001' => 'Option 2',
                 ],
-                'filterable' => AbstractFilter::ATTRIBUTE_OPTIONS_ONLY_WITH_RESULTS,
+                'attribute_data' => ['is_filterable' => AbstractFilter::ATTRIBUTE_OPTIONS_ONLY_WITH_RESULTS],
                 'expectation' => [
                     ['label' => 'Option 1', 'count' => 1],
                     ['label' => 'Option 2', 'count' => 1],
@@ -59,7 +61,7 @@ class SelectFilterTest extends AbstractFiltersTest
                     'simple1000' => 'Option 1',
                     'simple1001' => 'Option 2',
                 ],
-                'filterable' => 2,
+                'attribute_data' => ['is_filterable' => 2],
                 'expectation' => [
                     ['label' => 'Option 1', 'count' => 1],
                     ['label' => 'Option 2', 'count' => 1],
@@ -67,5 +69,21 @@ class SelectFilterTest extends AbstractFiltersTest
                 ],
             ],
         ];
+    }
+
+    /**
+     * @inheritdoc
+     */
+    protected function getLayerType(): string
+    {
+        return Resolver::CATALOG_LAYER_CATEGORY;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    protected function getAttributeCode(): string
+    {
+        return 'dropdown_attribute';
     }
 }
