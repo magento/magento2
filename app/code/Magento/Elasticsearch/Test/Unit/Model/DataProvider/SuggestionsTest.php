@@ -148,9 +148,10 @@ class SuggestionsTest extends \PHPUnit\Framework\TestCase
             ->method('getQueryText')
             ->willReturn('query');
 
-        $client = $this->getMockBuilder(\Magento\Elasticsearch\Model\Client\Elasticsearch::class)
+        $client = $this->getMockBuilder(\Magento\AdvancedSearch\Model\Client\ClientInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->setMethods(['suggest'])
+            ->getMockForAbstractClass();
 
         $this->connectionManager->expects($this->any())
             ->method('getConnection')

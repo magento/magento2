@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\PageCache\Model\Layout;
 
@@ -13,21 +14,19 @@ use Magento\Framework\View\Layout;
 use Magento\PageCache\Model\Config;
 
 /**
- * Class LayoutPlugin
- *
- * Plugin for Magento\Framework\View\Layout
+ * Append cacheable pages response headers.
  */
 class LayoutPlugin
 {
     /**
      * @var Config
      */
-    protected $config;
+    private $config;
 
     /**
      * @var ResponseInterface
      */
-    protected $response;
+    private $response;
 
     /**
      * @var MaintenanceMode
@@ -35,8 +34,6 @@ class LayoutPlugin
     private $maintenanceMode;
 
     /**
-     * Constructor
-     *
      * @param ResponseInterface $response
      * @param Config $config
      * @param MaintenanceMode $maintenanceMode
@@ -52,24 +49,22 @@ class LayoutPlugin
     }
 
     /**
-     * Set appropriate Cache-Control headers
+     * Set appropriate Cache-Control headers.
      *
      * We have to set public headers in order to tell Varnish and Builtin app that page should be cached
      *
      * @param Layout $subject
-     * @param mixed $result
-     * @return mixed
+     * @return void
      */
-    public function afterGenerateXml(Layout $subject, $result)
+    public function afterGenerateElements(Layout $subject)
     {
         if ($subject->isCacheable() && !$this->maintenanceMode->isOn() && $this->config->isEnabled()) {
             $this->response->setPublicHeaders($this->config->getTtl());
         }
-        return $result;
     }
 
     /**
-     * Retrieve all identities from blocks for further cache invalidation
+     * Retrieve all identities from blocks for further cache invalidation.
      *
      * @param Layout $subject
      * @param mixed $result
@@ -92,6 +87,7 @@ class LayoutPlugin
             $tags = array_unique(array_merge(...$tags));
             $this->response->setHeader('X-Magento-Tags', implode(',', $tags));
         }
+
         return $result;
     }
 }

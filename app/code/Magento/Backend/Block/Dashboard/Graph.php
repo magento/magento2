@@ -9,6 +9,8 @@ namespace Magento\Backend\Block\Dashboard;
 
 /**
  * Adminhtml dashboard google chart block
+ * @deprecated dashboard graphs were migrated to dynamic chart.js solution
+ * @see dashboard.chart.amounts and dashboard.chart.orders in adminhtml_dashboard_index.xml
  *
  * @author     Magento Core Team <core@magentocommerce.com>
  */

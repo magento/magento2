@@ -8,7 +8,7 @@ namespace Magento\Setup\Model;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Setup\Model\Cron\JobComponentUninstall;
-use Zend\Json\Json;
+use Laminas\Json\Json;
 
 /**
  * Validates payloads for updater tasks

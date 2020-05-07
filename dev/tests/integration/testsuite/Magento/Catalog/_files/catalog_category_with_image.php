@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-require_once 'catalog_category_image.php';
+require 'catalog_category_image.php';
 
 /** @var $category \Magento\Catalog\Model\Category */
 $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();

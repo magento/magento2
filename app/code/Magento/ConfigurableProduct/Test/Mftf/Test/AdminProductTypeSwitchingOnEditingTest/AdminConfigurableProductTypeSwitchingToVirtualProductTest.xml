@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminConfigurableProductTypeSwitchingToVirtualProductTest" extends="AdminSimpleProductTypeSwitchingToConfigurableProductTest">
+        <annotations>
+            <features value="ConfigurableProduct"/>
+            <stories value="Product type switching"/>
+            <title value="Configurable product type switching on editing to virtual product"/>
+            <description value="Configurable product type switching on editing to virtual product"/>
+            <testCaseId value="MC-28742"/>
+            <useCaseId value="MAGETWO-44170"/>
+            <severity value="MAJOR"/>
+            <group value="catalog"/>
+        </annotations>
+        <!--Delete product configurations-->
+        <comment userInput="Delete product configuration" stepKey="commentDeleteConfigs"/>
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="gotToConfigProductPage">
+            <argument name="productId" value="$createProduct.id$"/>
+        </actionGroup>
+        <waitForPageLoad stepKey="waitForConfigurableProductPageLoad"/>
+        <conditionalClick selector="{{ AdminProductFormConfigurationsSection.sectionHeader}}" dependentSelector="{{AdminProductFormConfigurationsSection.createConfigurations}}" visible="false" stepKey="openConfigurationSection"/>
+        <click selector="{{AdminProductFormConfigurationsSection.actionsBtn('1')}}" stepKey="clickToExpandOption1Actions"/>
+        <click selector="{{AdminProductFormConfigurationsSection.removeProductBtn}}" stepKey="clickRemoveOption1"/>
+        <click selector="{{AdminProductFormConfigurationsSection.actionsBtn('1')}}" stepKey="clickToExpandOption2Actions"/>
+        <click selector="{{AdminProductFormConfigurationsSection.removeProductBtn}}" stepKey="clickRemoveOption2"/>
+        <fillField selector="{{AdminProductFormSection.productPrice}}" userInput="{{SimpleProduct2.price}}" stepKey="fillProductPrice"/>
+        <fillField selector="{{AdminProductFormSection.productQuantity}}" userInput="{{SimpleProduct2.quantity}}" stepKey="fillProductQty"/>
+        <clearField selector="{{AdminProductFormSection.productWeight}}" stepKey="clearWeightField"/>
+        <selectOption selector="{{AdminProductFormSection.productWeightSelect}}" userInput="This item has no weight" stepKey="selectNoWeight"/>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveVirtualProductForm"/>
+        <!--Assert virtual product on Admin product page grid-->
+        <comment userInput="Assert virtual product on Admin product page grid" stepKey="commentAssertVirtualProductOnAdmin"/>
+        <amOnPage url="{{AdminCatalogProductPage.url}}" stepKey="goToCatalogProductPageForVirtual"/>
+        <actionGroup ref="FilterProductGridBySku2ActionGroup" stepKey="filterProductGridBySkuForVirtual">
+            <argument name="sku" value="$createProduct.sku$"/>
+        </actionGroup>
+        <seeElement selector="{{AdminProductGridSection.productRowByTypeAndName('Virtual Product',$createProduct.name$)}}" stepKey="seeVirtualProductInGrid"/>
+        <!--Assert virtual product on storefront-->
+        <comment userInput="Assert virtual product on storefront" stepKey="commentAssertVirtualProductOnStorefront"/>
+        <amOnPage url="{{StorefrontProductPage.url($createProduct.name$)}}" stepKey="openVirtualProductPage"/>
+        <waitForPageLoad stepKey="waitForStorefrontVirtualProductPageLoad"/>
+        <see userInput="IN STOCK" selector="{{StorefrontProductInfoMainSection.productStockStatus}}" stepKey="assertVirtualProductInStock"/>
+    </test>
+</tests>
