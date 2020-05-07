@@ -13,6 +13,7 @@ use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Customer\Api\Data\CustomerInterfaceFactory;
 use Magento\Customer\Model\Data\Customer;
+use Magento\Framework\DataObject;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Quote\Api\Data\AddressInterface;
 use Magento\TestFramework\Helper\Bootstrap;
@@ -20,11 +21,14 @@ use Magento\TestFramework\ObjectManager;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Framework\Api\ExtensibleDataInterface;
+use PHPUnit\Framework\TestCase;
 
 /**
+ * Test for \Magento\Quote\Model\Quote.
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class QuoteTest extends \PHPUnit\Framework\TestCase
+class QuoteTest extends TestCase
 {
     /**
      * @var ObjectManager
@@ -71,6 +75,27 @@ class QuoteTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(1, $quote->getVirtualItemsQty());
         $this->assertEquals(20, $quote->getGrandTotal());
         $this->assertEquals(20, $quote->getBaseGrandTotal());
+    }
+
+    /**
+     * Test add product with zero custom_price request
+     *
+     * @magentoDataFixture Magento/Catalog/_files/product_simple_duplicated.php
+     * @return void
+     */
+    public function testAddProductWithZeroCustomPrice(): void
+    {
+        /** @var Quote $quote */
+        $quote = $this->objectManager->create(Quote::class);
+        $request = new DataObject(['qty' => 1, 'custom_price' => 0]);
+
+        $productRepository = $this->objectManager->create(ProductRepositoryInterface::class);
+        $product = $productRepository->get('simple-1', false, null, true);
+
+        $item = $quote->addProduct($product, $request);
+
+        $this->assertSame(0, $item->getCustomPrice());
+        $this->assertSame(0, $item->getOriginalCustomPrice());
     }
 
     /**
@@ -420,7 +445,7 @@ class QuoteTest extends \PHPUnit\Framework\TestCase
             'qty' => 1,
             'id' => 0
         ];
-        $updateParams = new \Magento\Framework\DataObject($params);
+        $updateParams = new DataObject($params);
         $quote->updateItem($updateParams['id'], $updateParams);
         $quote->setTotalsCollectedFlag(false)->collectTotals();
         $this->assertEquals(1, $quote->getItemsQty());
