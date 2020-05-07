@@ -8,7 +8,7 @@
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="StorefrontVerifySecureURLRedirectMultishipping">
+    <test name="StorefrontVerifySecureURLRedirectMultishippingTest">
         <!--todo MC-5858: some urls don't redirect to https-->
         <annotations>
             <features value="Multishipping"/>

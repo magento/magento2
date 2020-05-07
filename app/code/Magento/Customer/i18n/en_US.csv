@@ -539,3 +539,5 @@ Addresses,Addresses
 "Middle Name/Initial","Middle Name/Initial"
 "Suffix","Suffix"
 "The Date of Birth should not be greater than today.","The Date of Birth should not be greater than today."
+"The store view is not in the associated website.","The store view is not in the associated website."
+"The Store View selected for sending Welcome email from is not related to the customer's associated website.","The Store View selected for sending Welcome email from is not related to the customer's associated website."

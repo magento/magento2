@@ -21,27 +21,27 @@ class FilterTest extends \PHPUnit\Framework\TestCase
     protected $objectManagerHelper;
 
     /**
-     * @var \Magento\Store\Model\Store|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Store\Model\Store|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $storeMock;
 
     /**
-     * @var StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var StoreManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $storeManagerMock;
 
     /**
-     * @var \Magento\Widget\Model\ResourceModel\Widget|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Widget\Model\ResourceModel\Widget|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $widgetResourceMock;
 
     /**
-     * @var \Magento\Widget\Model\Widget|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Widget\Model\Widget|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $widgetMock;
 
     /**
-     * @var \Magento\Framework\View\LayoutInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\LayoutInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $layoutMock;
 
@@ -235,11 +235,11 @@ class FilterTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param string $returnedResult
-     * @return \Magento\Widget\Block\BlockInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @return \Magento\Widget\Block\BlockInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected function getBlockMock($returnedResult = '')
     {
-        /** @var \Magento\Widget\Block\BlockInterface|\PHPUnit_Framework_MockObject_MockObject $blockMock */
+        /** @var \Magento\Widget\Block\BlockInterface|\PHPUnit\Framework\MockObject\MockObject $blockMock */
         $blockMock = $this->getMockBuilder(\Magento\Widget\Block\BlockInterface::class)
             ->setMethods(['toHtml'])
             ->getMockForAbstractClass();

@@ -36,6 +36,7 @@
         <arguments>
             <argument name="attributesInstances" xsi:type="array">
                 <item name="products" xsi:type="object">Magento\CatalogGraphQl\Model\Resolver\Products\FilterArgument\ProductEntityAttributesForAst</item>
+                <item name="categoryList" xsi:type="object">Magento\CatalogGraphQl\Model\Category\CategoryFilterAttributesForAst</item>
             </argument>
         </arguments>
     </type>

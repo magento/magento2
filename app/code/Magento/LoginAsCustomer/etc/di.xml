@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <preference for="Magento\LoginAsCustomerApi\Api\Data\AuthenticationDataInterface" type="Magento\LoginAsCustomer\Model\AuthenticationData"/>
+    <preference for="Magento\LoginAsCustomerApi\Api\SaveAuthenticationDataInterface" type="Magento\LoginAsCustomer\Model\ResourceModel\SaveAuthenticationData"/>
+    <preference for="Magento\LoginAsCustomerApi\Api\GetAuthenticationDataBySecretInterface" type="Magento\LoginAsCustomer\Model\ResourceModel\GetAuthenticationDataBySecret"/>
+    <preference for="Magento\LoginAsCustomerApi\Api\AuthenticateCustomerInterface" type="Magento\LoginAsCustomer\Model\AuthenticateCustomer"/>
+    <preference for="Magento\LoginAsCustomerApi\Api\DeleteAuthenticationDataBySecretInterface" type="Magento\LoginAsCustomer\Model\ResourceModel\DeleteAuthenticationDataBySecret"/>
+    <preference for="Magento\LoginAsCustomerApi\Api\DeleteExpiredAuthenticationDataInterface" type="Magento\LoginAsCustomer\Model\ResourceModel\DeleteExpiredAuthenticationData"/>
+    <preference for="Magento\LoginAsCustomerApi\Api\ConfigInterface" type="Magento\LoginAsCustomer\Model\Config"/>
+    <preference for="Magento\LoginAsCustomerApi\Api\IsLoginAsCustomerSessionActiveInterface" type="Magento\LoginAsCustomer\Model\ResourceModel\IsLoginAsCustomerSessionActive"/>
+</config>

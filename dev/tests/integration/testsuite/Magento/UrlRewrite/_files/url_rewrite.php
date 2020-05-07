@@ -158,6 +158,24 @@ $rewriteResource->save($rewrite);
 
 $rewrite = $objectManager->create(UrlRewrite::class);
 $rewrite->setEntityType('custom')
+    ->setRequestPath('/')
+    ->setTargetPath('/')
+    ->setRedirectType(OptionProvider::PERMANENT)
+    ->setStoreId($storeID)
+    ->setDescription('From / to /');
+$rewriteResource->save($rewrite);
+
+$rewrite = $objectManager->create(UrlRewrite::class);
+$rewrite->setEntityType('custom')
+    ->setRequestPath('contact/')
+    ->setTargetPath('contact?param1=1')
+    ->setRedirectType(OptionProvider::PERMANENT)
+    ->setStoreId($storeID)
+    ->setDescription('From contact with trailing slash to contact with query param');
+$rewriteResource->save($rewrite);
+
+$rewrite = $objectManager->create(UrlRewrite::class);
+$rewrite->setEntityType('custom')
     ->setRequestPath('page-external1')
     ->setTargetPath('http://example.com/external')
     ->setRedirectType(OptionProvider::PERMANENT)

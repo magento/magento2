@@ -53,7 +53,7 @@
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
 
             <!-- Admin logout -->
-            <actionGroup ref="logout" stepKey="adminLogout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
         </after>
 
         <!-- Open Downloadable product from precondition on Storefront -->
@@ -84,10 +84,10 @@
         <closeTab stepKey="closeLinkSampleTab"/>
 
         <!-- Login as admin -->
-        <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
 
         <!-- Open Downloadable product from precondition -->
-        <actionGroup ref="GoToProductPageViaIDActionGroup" stepKey="openProductEditPage">
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="openProductEditPage">
             <argument name="productId" value="$createProduct.id$"/>
         </actionGroup>
 
