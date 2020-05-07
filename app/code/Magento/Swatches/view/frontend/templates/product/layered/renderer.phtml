@@ -23,7 +23,7 @@
                     <?php switch ($swatchData['swatches'][$option]['type']) {
                         case '3':
                             ?>
-                            <div class="swatch-option"
+                            <div class="swatch-option <?= $block->escapeHtmlAttr($label['custom_style']) ?>"
                                  tabindex="-1"
                                  data-option-type="3"
                                  data-option-id="<?= $block->escapeHtmlAttr($option) ?>"
@@ -31,13 +31,6 @@
                                  data-option-tooltip-thumb=""
                                  data-option-tooltip-value=""
                                 ></div>
-                            <?php if ($block->escapeHtmlAttr($label['custom_style'])): ?>
-                            <?= /* @noEscape */ $secureRenderer->renderStyleAsTag(
-                                $block->escapeHtmlAttr($label['custom_style']),
-                                "div[data-option-id='" . $block->escapeHtmlAttr($option) . "']"
-                            ) ?>
-                            <?php endif; ?>
-
                             <?php break;
                         case '2':
                             ?>
@@ -51,20 +44,17 @@
                             );
                             $escapedUrl = $block->escapeUrl($swatchImagePath);
                             ?>
-                            <div class="swatch-option image"
+                            <div class="swatch-option image <?= $block->escapeHtmlAttr($label['custom_style']) ?>"
                                  tabindex="-1"
                                  data-option-type="2"
                                  data-option-id="<?= $block->escapeHtmlAttr($option) ?>"
                                  data-option-label="<?= $block->escapeHtmlAttr($label['label']) ?>"
                                  data-option-tooltip-thumb="<?= $block->escapeUrl($swatchThumbPath) ?>"
-                                 data-option-tooltip-value="">
+                                 data-option-tooltip-value=""
+                                 style="background: url(<?=
+                                 /*  @noEscape */ $escapedUrl
+                                                        ?>) no-repeat center; background-size: initial;">
                             </div>
-                            <?php if ($block->escapeHtmlAttr($label['custom_style'])): ?>
-                            <?= /* @noEscape */ $secureRenderer->renderStyleAsTag(
-                                $block->escapeHtmlAttr($label['custom_style']),
-                                "div[data-option-id='" . $block->escapeHtmlAttr($option) . "']"
-                            ) ?>
-                            <?php endif; ?>
                             <?= /* @noEscape */ $secureRenderer->renderStyleAsTag(
                                 "background: url(" . /*  @noEscape */ $escapedUrl .
                                 ") no-repeat center; background-size: initial;",
@@ -73,7 +63,7 @@
                             <?php break;
                         case '1':
                             ?>
-                            <div class="swatch-option color"
+                            <div class="swatch-option color <?= $block->escapeHtmlAttr($label['custom_style']) ?>"
                                  tabindex="-1"
                                  data-option-type="1"
                                  data-option-id="<?= $block->escapeHtmlAttr($option) ?>"
@@ -83,12 +73,6 @@
                                      $swatchData['swatches'][$option]['value']
                                  ) ?>">
                             </div>
-                            <?php if ($block->escapeHtmlAttr($label['custom_style'])): ?>
-                            <?= /* @noEscape */ $secureRenderer->renderStyleAsTag(
-                                $block->escapeHtmlAttr($label['custom_style']),
-                                "div[data-option-id='" . $block->escapeHtmlAttr($option) . "']"
-                            ) ?>
-                            <?php endif; ?>
                             <?= /* @noEscape */ $secureRenderer->renderStyleAsTag(
                                 "background: " . $block->escapeHtmlAttr(
                                     $swatchData['swatches'][$option]['value']
@@ -99,7 +83,7 @@
                         case '0':
                         default:
                             ?>
-                            <div class="swatch-option text"
+                            <div class="swatch-option text <?= $block->escapeHtmlAttr($label['custom_style']) ?>"
                                  tabindex="-1"
                                  data-option-type="0"
                                  data-option-id="<?= $block->escapeHtmlAttr($option) ?>"
@@ -107,12 +91,6 @@
                                  data-option-tooltip-thumb=""
                                  data-option-tooltip-value=""
                                 ><?= $block->escapeHtml($swatchData['swatches'][$option]['value']) ?></div>
-                            <?php if ($block->escapeHtmlAttr($label['custom_style'])): ?>
-                            <?= /* @noEscape */ $secureRenderer->renderStyleAsTag(
-                                $block->escapeHtmlAttr($label['custom_style']),
-                                "div[data-option-id='" . $block->escapeHtmlAttr($option) . "']"
-                            ) ?>
-                            <?php endif; ?>
                         <?php break;
                     } ?>
                 <?php endif; ?>

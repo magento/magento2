@@ -16,19 +16,19 @@ $jsonHelper = $block->getData('jsonHelper');
     <div class="categories-side-col">
         <div class="tree-actions">
             <a id="collapseAll"><?= $block->escapeHtml(__('Collapse All')) ?></a>
-            <?= /* @noEscape */ $secureRenderer->renderEventListenerAsTag(
-                'onclick',
-                "jQuery('[data-role=tree]').jstree('close_all');",
-                '#div.tree-actions a#collapseAll'
-            ) ?>
             <span class="separator">|</span>
             <a id="expandAll"><?= $block->escapeHtml(__('Expand All')) ?></a>
-            <?= /* @noEscape */ $secureRenderer->renderEventListenerAsTag(
-                'onclick',
-                "jQuery('[data-role=tree]').jstree('open_all');",
-                '#div.tree-actions a#expandAll'
-            ) ?>
         </div>
+        <?= /* @noEscape */ $secureRenderer->renderEventListenerAsTag(
+            'onclick',
+            "jQuery('[data-role=tree]').jstree('close_all');",
+            '#div.tree-actions a#collapseAll'
+        ) ?>
+        <?= /* @noEscape */ $secureRenderer->renderEventListenerAsTag(
+            'onclick',
+            "jQuery('[data-role=tree]').jstree('open_all');",
+            '#div.tree-actions a#expandAll'
+        ) ?>
     </div>
     <div data-role="tree" data-mage-init='<?= $block->escapeHtml(
         $jsonHelper->jsonEncode($block->getTreeWidgetOptions())

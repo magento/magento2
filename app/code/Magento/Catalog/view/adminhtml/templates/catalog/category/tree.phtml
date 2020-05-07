@@ -17,21 +17,21 @@
     <div class="tree-actions">
         <?php if ($block->getRoot()):?>
             <a id="colapseAll" href="#"><?= $block->escapeHtml(__('Collapse All')) ?></a>
-            <?= /* @noEscape */ $secureRenderer->renderEventListenerAsTag(
-                'onclick',
-                'tree.collapseTree(); event.preventDefault();',
-                '#colapseAll'
-            ) ?>
             <span class="separator">|</span>
             <a id="expandAll" href="#"><?= $block->escapeHtml(__('Expand All')) ?></a>
-            <?= /* @noEscape */ $secureRenderer->renderEventListenerAsTag(
-                'onclick',
-                'tree.expandTree();event.preventDefault();',
-                '#expandAll'
-            ) ?>
         <?php endif; ?>
     </div>
     <?php if ($block->getRoot()):?>
+        <?= /* @noEscape */ $secureRenderer->renderEventListenerAsTag(
+            'onclick',
+            'tree.collapseTree(); event.preventDefault();',
+            '#colapseAll'
+        ) ?>
+        <?= /* @noEscape */ $secureRenderer->renderEventListenerAsTag(
+            'onclick',
+            'tree.expandTree();event.preventDefault();',
+            '#expandAll'
+        ) ?>
     <div class="tree-holder">
         <div id="tree-div" class="tree-wrapper"></div>
     </div>

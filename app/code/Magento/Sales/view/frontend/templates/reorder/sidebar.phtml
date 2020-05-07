@@ -36,8 +36,8 @@
                                    data-bind="attr: {
                                         id: 'reorder-item-' + id,
                                         value: id,
-                                        title: is_saleable ? '<?= $block->escapeHtml(__('Add to Cart')) ?>' : '
-                                        <?= $block->escapeHtml(__('Product is not salable.')) ?>'
+                                        title: is_saleable ? '<?= $block->escapeHtml(__('Add to Cart')) ?>' :
+                                         '<?= $block->escapeHtml(__('Product is not salable.')) ?>'
                                    },
                                    disable: !is_saleable"
                                    class="checkbox" data-validate='{"validate-one-checkbox-required-by-name": true}'/>

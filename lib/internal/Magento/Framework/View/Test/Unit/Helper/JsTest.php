@@ -5,6 +5,9 @@
  */
 namespace Magento\Framework\View\Test\Unit\Helper;
 
+use Magento\Framework\DataObject;
+use Magento\Framework\View\Helper\SecureHtmlRenderer;
+
 class JsTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -12,9 +15,18 @@ class JsTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetScript()
     {
-        $helper = new \Magento\Framework\View\Helper\Js();
+        $secureRendererMock = $this->createMock(SecureHtmlRenderer::class);
+        $secureRendererMock->method('renderTag')
+            ->willReturnCallback(
+                function (string $tag, array $attributes, string $content): string {
+                    $attributes = new DataObject($attributes);
+
+                    return "<$tag {$attributes->serialize()}>$content</$tag>";
+                }
+            );
+        $helper = new \Magento\Framework\View\Helper\Js($secureRendererMock);
         $this->assertEquals(
-            "<script type=\"text/javascript\">//<![CDATA[\ntest\n//]]></script>",
+            "<script >//<![CDATA[\ntest\n//]]></script>",
             $helper->getScript('test')
         );
     }

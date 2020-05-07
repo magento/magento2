@@ -146,13 +146,5 @@ script;
             </span>
 <?php endif; ?>
 <?php if ($element->getScript()): ?>
-    <script>
-        <?= /* @noEscape */ $element->getScript() ?>
-    </script>
-
-    <?php $scriptString = <<<script
-    <?= /* @noEscape */ $element->getScript() ?>
-script;
-    ?>
-    <?php /* @noEscape */ $secureRenderer->renderTag('script', [], $scriptString, false) ?>
+    <?php /* @noEscape */ $secureRenderer->renderTag('script', [], $element->getScript(), false) ?>
 <?php endif; ?>

@@ -21,17 +21,17 @@ class GroupTest extends \PHPUnit\Framework\TestCase
     private $_element;
 
     /**
-     * @var \Magento\Backend\Model\Auth\Session|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Backend\Model\Auth\Session|\PHPUnit\Framework\MockObject\MockObject
      */
     private $_authSession;
 
     /**
-     * @var \Magento\User\Model\User|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\User\Model\User|\PHPUnit\Framework\MockObject\MockObject
      */
     private $_user;
 
     /**
-     * @var \Magento\Config\Model\Config\Structure\Element\Group|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Config\Model\Config\Structure\Element\Group|\PHPUnit\Framework\MockObject\MockObject
      */
     private $_group;
 
