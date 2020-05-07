@@ -11,29 +11,37 @@ use Magento\Framework\Console\Cli;
 use Magento\Setup\Console\Command\UpgradeCommand;
 use Magento\Setup\Model\Installer;
 use Magento\Setup\Model\InstallerFactory;
+use Magento\Setup\Model\SearchConfig;
+use Magento\Setup\Model\SearchConfigFactory;
+use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Component\Console\Tester\CommandTester;
 
 class UpgradeCommandTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var DeploymentConfig|\PHPUnit_Framework_MockObject_MockObject
+     * @var DeploymentConfig|MockObject
      */
     private $deploymentConfigMock;
 
     /**
-     * @var InstallerFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var InstallerFactory|MockObject
      */
     private $installerFactoryMock;
 
     /**
-     * @var Installer|\PHPUnit_Framework_MockObject_MockObject
+     * @var Installer|MockObject
      */
     private $installerMock;
 
     /**
-     * @var AppState|\PHPUnit_Framework_MockObject_MockObject
+     * @var AppState|MockObject
      */
     private $appStateMock;
+
+    /**
+     * @var SearchConfig|MockObject
+     */
+    private $searchConfigMock;
 
     /**
      * @var UpgradeCommand
@@ -64,9 +72,17 @@ class UpgradeCommandTest extends \PHPUnit\Framework\TestCase
         $this->appStateMock = $this->getMockBuilder(AppState::class)
             ->disableOriginalConstructor()
             ->getMock();
+        $this->searchConfigMock = $this->getMockBuilder(SearchConfig::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $searchConfigFactoryMock = $this->getMockBuilder(SearchConfigFactory::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $searchConfigFactoryMock->expects($this->once())->method('create')->willReturn($this->searchConfigMock);
 
         $this->upgradeCommand = new UpgradeCommand(
             $this->installerFactoryMock,
+            $searchConfigFactoryMock,
             $this->deploymentConfigMock,
             $this->appStateMock
         );
