@@ -65,6 +65,9 @@
             <settings>
                 <label translate="true">Attribute Label</label>
                 <filter>text</filter>
+                <fieldClass>
+                    <class name="frontend_label">true</class>
+                </fieldClass>
             </settings>
         </column>
         <column name="attribute_code">
@@ -72,6 +75,9 @@
                 <label translate="true">Attribute Code</label>
                 <sorting>asc</sorting>
                 <filter>text</filter>
+                <fieldClass>
+                    <class name="attribute_code">true</class>
+                </fieldClass>
             </settings>
         </column>
         <column name="filter" class="Magento\ImportExport\Ui\Component\Columns\ExportFilter"
@@ -84,6 +90,9 @@
             <settings>
                 <label translate="true">Filter</label>
                 <sortable>false</sortable>
+                <fieldClass>
+                    <class name="filter">true</class>
+                </fieldClass>
             </settings>
         </column>
     </columns>

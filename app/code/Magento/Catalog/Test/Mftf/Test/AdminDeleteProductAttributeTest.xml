@@ -62,6 +62,7 @@
          <!-- Filter By Attribute Code on Export > Products page -->
         <amOnPage url="{{AdminExportIndexPage.url}}" stepKey="navigateToSystemExport"/>
         <selectOption selector="{{AdminExportMainSection.entityType}}" userInput="Products" stepKey="selectProductsOption"/>
+        <waitForAjaxLoad stepKey="waitForAjaxLoad"/>
         <waitForElementVisible selector="{{AdminExportMainSection.entityAttributes}}" stepKey="waitForElementVisible"/>
         <click selector="{{AdminExportAttributeSection.resetFilter}}" stepKey="resetFilter"/>
         <fillField selector="{{AdminExportAttributeSection.filterByAttributeCode}}" userInput="$$createProductAttribute.attribute_code$$" stepKey="setAttributeCode"/>

@@ -19,6 +19,7 @@
         </arguments>
 
         <selectOption selector="{{AdminExportMainSection.entityType}}" userInput="Products" stepKey="selectProductsOption"/>
+        <waitForAjaxLoad stepKey="waitForAjaxLoad"/>
         <waitForElementVisible selector="{{AdminExportMainSection.entityAttributes}}" stepKey="waitForElementVisible"/>
         <scrollTo selector="{{AdminExportAttributeSection.chooseAttribute('attribute')}}" stepKey="scrollToAttribute"/>
         <checkOption selector="{{AdminExportAttributeSection.chooseAttribute('attribute')}}" stepKey="selectAttribute"/>
