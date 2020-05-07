@@ -36,7 +36,6 @@ class GetCartProducts
     ) {
         $this->productRepository = $productRepository;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
-
     }
 
     /**
