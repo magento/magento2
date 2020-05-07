@@ -37,7 +37,6 @@ class Configurable extends \Magento\ConfigurableProduct\Block\Product\View\Type\
      * @param Format|null $localeFormat
      * @param Session|null $customerSession
      * @param \Magento\ConfigurableProduct\Model\Product\Type\Configurable\Variations\Prices|null $variationPrices
-     * @param ProductHelper|null $productHelper
      */
     public function __construct(
         \Magento\Catalog\Block\Product\Context $context,
@@ -51,10 +50,9 @@ class Configurable extends \Magento\ConfigurableProduct\Block\Product\View\Type\
         array $data = [],
         Format $localeFormat = null,
         Session $customerSession = null,
-        \Magento\ConfigurableProduct\Model\Product\Type\Configurable\Variations\Prices $variationPrices = null,
-        ?ProductHelper $productHelper = null
+        \Magento\ConfigurableProduct\Model\Product\Type\Configurable\Variations\Prices $variationPrices = null
     ) {
-        $data['productHelper'] = $productHelper ?? ObjectManager::getInstance()->get(ProductHelper::class);
+        $data['productHelper'] = $catalogProduct;
         parent::__construct(
             $context,
             $arrayUtils,

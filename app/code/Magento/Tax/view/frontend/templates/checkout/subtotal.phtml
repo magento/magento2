@@ -25,6 +25,10 @@ $checkoutHelper = $block->getData('checkoutHelper');
         <?= /* @noEscape */ $checkoutHelper->formatPrice($block->getTotal()->getValueExclTax()) ?>
     </td>
 </tr>
+    <?php if ($style): ?>
+        <?= /* @noEscape */ $secureRenderer->renderStyleAsTag($style, 'tr.totals.sub.excl th.mark') ?>
+        <?= /* @noEscape */ $secureRenderer->renderStyleAsTag($style, 'tr.totals.sub.excl td.amount') ?>
+    <?php endif; ?>
 <tr class="totals sub incl">
     <th class="mark" colspan="<?= /* @noEscape */ $colspan ?>" scope="row">
         <?= $block->escapeHtml(__('Subtotal (Incl. Tax)')) ?>
@@ -33,6 +37,10 @@ $checkoutHelper = $block->getData('checkoutHelper');
         <?= /* @noEscape */ $checkoutHelper->formatPrice($block->getTotal()->getValueInclTax()) ?>
     </td>
 </tr>
+    <?php if ($style): ?>
+        <?= /* @noEscape */ $secureRenderer->renderStyleAsTag($style, 'tr.totals.sub.incl th.mark') ?>
+        <?= /* @noEscape */ $secureRenderer->renderStyleAsTag($style, 'tr.totals.sub.incl td.amount') ?>
+    <?php endif; ?>
 <?php else: ?>
 <tr class="totals sub">
     <th class="mark" colspan="<?= /* @noEscape */ $colspan ?>" scope="row">
@@ -42,7 +50,8 @@ $checkoutHelper = $block->getData('checkoutHelper');
         <?= /* @noEscape */ $checkoutHelper->formatPrice($block->getTotal()->getValue()) ?>
     </td>
 </tr>
+    <?php if ($style): ?>
+        <?= /* @noEscape */ $secureRenderer->renderStyleAsTag($style, 'tr.totals.sub th.mark') ?>
+        <?= /* @noEscape */ $secureRenderer->renderStyleAsTag($style, 'tr.totals.sub td.amount') ?>
+    <?php endif; ?>
 <?php endif; ?>
-<?= /* @noEscape */ $secureRenderer->renderStyleAsTag(/* @noEscape */ $style, 'tr.totals.shipping th.mark') ?>
-<?= /* @noEscape */ $secureRenderer->renderStyleAsTag(/* @noEscape */ $style, 'tr.totals.shipping td.amount') ?>
-

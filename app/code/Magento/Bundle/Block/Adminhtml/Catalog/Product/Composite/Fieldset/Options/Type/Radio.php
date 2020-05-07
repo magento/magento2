@@ -81,6 +81,6 @@ class Radio extends \Magento\Bundle\Block\Catalog\Product\View\Type\Bundle\Optio
             $containerId .
             '\';';
 
-        return /* @noEscape */ $this->secureRenderer->renderTag('script', [], $scriptString, false);
+        return $this->secureRenderer->renderTag('script', [], $scriptString, false);
     }
 }

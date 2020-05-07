@@ -24,6 +24,10 @@ $checkoutHelper = $block->getData('checkoutHelper');
             <strong><?= /* @noEscape */ $checkoutHelper->formatPrice($block->getTotalExclTax()) ?></strong>
         </td>
     </tr>
+    <?php if ($style): ?>
+        <?= /* @noEscape */ $secureRenderer->renderStyleAsTag($style, 'tr.grand.totals.excl th.mark') ?>
+        <?= /* @noEscape */ $secureRenderer->renderStyleAsTag($style, 'tr.grand.totals.excl td.amount') ?>
+    <?php endif; ?>
     <?= /* @noEscape */ $block->renderTotals('taxes', $colspan) ?>
     <tr class="grand totals incl">
         <th class="mark" colspan="<?= /* @noEscape */ $colspan ?>" scope="row">
@@ -33,6 +37,10 @@ $checkoutHelper = $block->getData('checkoutHelper');
             <strong><?= /* @noEscape */ $checkoutHelper->formatPrice($block->getTotal()->getValue()) ?></strong>
         </td>
     </tr>
+    <?php if ($style): ?>
+        <?= /* @noEscape */ $secureRenderer->renderStyleAsTag($style, 'tr.grand.totals.incl th.mark') ?>
+        <?= /* @noEscape */ $secureRenderer->renderStyleAsTag($style, 'tr.grand.totals.incl td.amount') ?>
+    <?php endif; ?>
 <?php else: ?>
     <tr class="grand totals">
         <th class="mark" colspan="<?= /* @noEscape */ $colspan ?>" scope="row">
@@ -42,6 +50,8 @@ $checkoutHelper = $block->getData('checkoutHelper');
             <strong><?= /* @noEscape */ $checkoutHelper->formatPrice($block->getTotal()->getValue()) ?></strong>
         </td>
     </tr>
+    <?php if ($style): ?>
+        <?= /* @noEscape */ $secureRenderer->renderStyleAsTag($style, 'tr.grand.totals th.mark') ?>
+        <?= /* @noEscape */ $secureRenderer->renderStyleAsTag($style, 'tr.grand.totals td.amount') ?>
+    <?php endif; ?>
 <?php endif; ?>
-<?= /* @noEscape */ $secureRenderer->renderStyleAsTag(/* @noEscape */ $style, 'tr.totals.shipping th.mark') ?>
-<?= /* @noEscape */ $secureRenderer->renderStyleAsTag(/* @noEscape */ $style, 'tr.totals.shipping td.amount') ?>

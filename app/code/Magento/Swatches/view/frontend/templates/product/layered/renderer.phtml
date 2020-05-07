@@ -50,10 +50,7 @@
                                  data-option-id="<?= $block->escapeHtmlAttr($option) ?>"
                                  data-option-label="<?= $block->escapeHtmlAttr($label['label']) ?>"
                                  data-option-tooltip-thumb="<?= $block->escapeUrl($swatchThumbPath) ?>"
-                                 data-option-tooltip-value=""
-                                 style="background: url(<?=
-                                 /*  @noEscape */ $escapedUrl
-                                                        ?>) no-repeat center; background-size: initial;">
+                                 data-option-tooltip-value="">
                             </div>
                             <?= /* @noEscape */ $secureRenderer->renderStyleAsTag(
                                 "background: url(" . /*  @noEscape */ $escapedUrl .

@@ -27,6 +27,10 @@
             <?= /* @noEscape */ $checkoutHelper->formatPrice($block->getShippingExcludeTax()) ?>
         </td>
     </tr>
+        <?php if ($style): ?>
+            <?= /* @noEscape */ $secureRenderer->renderStyleAsTag($style, 'tr.totals.shipping.excl th.mark') ?>
+            <?= /* @noEscape */ $secureRenderer->renderStyleAsTag($style, 'tr.totals.shipping.excl td.amount') ?>
+        <?php endif; ?>
     <tr class="totals shipping incl">
         <th class="mark" colspan="<?= /* @noEscape */ $colspan ?>" scope="row">
             <?= $block->escapeHtml($block->getIncludeTaxLabel()) ?>
@@ -35,6 +39,10 @@
             <?= /* @noEscape */ $checkoutHelper->formatPrice($block->getShippingIncludeTax()) ?>
         </td>
     </tr>
+        <?php if ($style): ?>
+            <?= /* @noEscape */ $secureRenderer->renderStyleAsTag($style, 'tr.totals.shipping.incl th.mark') ?>
+            <?= /* @noEscape */ $secureRenderer->renderStyleAsTag($style, 'tr.totals.shipping.incl td.amount') ?>
+        <?php endif; ?>
     <?php elseif ($block->displayIncludeTax()): ?>
     <tr class="totals shipping incl">
         <th class="mark" colspan="<?= /* @noEscape */ $colspan ?>" scope="row">
@@ -44,6 +52,10 @@
             <?= /* @noEscape */ $checkoutHelper->formatPrice($block->getShippingIncludeTax()) ?>
         </td>
     </tr>
+        <?php if ($style): ?>
+            <?= /* @noEscape */ $secureRenderer->renderStyleAsTag($style, 'tr.totals.shipping.incl th.mark') ?>
+            <?= /* @noEscape */ $secureRenderer->renderStyleAsTag($style, 'tr.totals.shipping.incl td.amount') ?>
+        <?php endif; ?>
     <?php else: ?>
     <tr class="totals shipping excl">
         <th class="mark" colspan="<?= /* @noEscape */ $colspan ?>" scope="row">
@@ -53,7 +65,9 @@
             <?= /* @noEscape */ $checkoutHelper->formatPrice($block->getShippingExcludeTax()) ?>
         </td>
     </tr>
+        <?php if ($style): ?>
+            <?= /* @noEscape */ $secureRenderer->renderStyleAsTag($style, 'tr.totals.shipping.excl th.mark') ?>
+            <?= /* @noEscape */ $secureRenderer->renderStyleAsTag($style, 'tr.totals.shipping.excl td.amount') ?>
+        <?php endif; ?>
     <?php endif; ?>
-    <?= /* @noEscape */ $secureRenderer->renderStyleAsTag(/* @noEscape */ $style, 'tr.totals.shipping th.mark') ?>
-    <?= /* @noEscape */ $secureRenderer->renderStyleAsTag(/* @noEscape */ $style, 'tr.totals.shipping td.amount') ?>
 <?php endif; ?>

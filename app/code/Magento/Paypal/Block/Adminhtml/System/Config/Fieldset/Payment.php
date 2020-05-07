@@ -112,7 +112,7 @@ class Payment extends \Magento\Config\Block\System\Config\Form\Fieldset
         $html .= /* @noEscape */ $this->secureRenderer->renderEventListenerAsTag(
             'onclick',
             "paypalToggleSolution.call(this, '" . $htmlId . "', '" . $this->getUrl('adminhtml/*/state') .
-            "'); return false;",
+            "');event.preventDefault();",
             'button#' . $htmlId . '-head'
         );
 
@@ -177,7 +177,7 @@ class Payment extends \Magento\Config\Block\System\Config\Form\Fieldset
                 var doScroll = false;
                 Fieldset.toggleCollapse(id, url);
                 if ($(this).hasClassName(\"open\")) {
-                    $$(\".with-button button.button\").each(function(anotherButton) {
+                    \$$(\".with-button button.button\").each(function(anotherButton) {
                         if (anotherButton != this && $(anotherButton).hasClassName(\"open\")) {
                             $(anotherButton).click();
                             doScroll = true;

@@ -80,6 +80,6 @@ class Select extends \Magento\Bundle\Block\Catalog\Product\View\Type\Bundle\Opti
             $containerId .
             '\';';
 
-        return /* @noEscape */ $this->secureRenderer->renderTag('script', [], $scriptString, false);
+        return $this->secureRenderer->renderTag('script', [], $scriptString, false);
     }
 }
