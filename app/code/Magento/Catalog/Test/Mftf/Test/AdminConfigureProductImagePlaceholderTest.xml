@@ -63,7 +63,7 @@
             <deleteData createDataKey="productWithImages" stepKey="deleteProductWithImages"/>
         </after>
 
-        <actionGroup ref="LoginAsAdmin" stepKey="loginToAdminArea"/>
+        <actionGroup ref="AdminLoginActionGroup" stepKey="loginToAdminArea"/>
 
         <!--Admin area: configure Product Image Placeholders-->
         <comment userInput="Configure product image placeholders in store config" stepKey="configurePlaceholderComment"/>
@@ -114,7 +114,7 @@
         <seeElement selector="{{StorefrontProductMediaSection.imageFile(placeholderBaseImage.name)}}" stepKey="seeBasePlaceholderImage"/>
         <click selector="{{StorefrontProductPageSection.addToCartBtn}}" stepKey="addProductToCart1"/>
         <waitForElementVisible selector="{{StorefrontProductPageSection.successMsg}}" stepKey="waitForProductAdded1"/>
-        <click selector="{{StorefrontMinicartSection.showCart}}" stepKey="openMiniCart1"/>
+        <actionGroup ref="StorefrontClickOnMiniCartActionGroup" stepKey="openMiniCart1"/>
         <grabAttributeFrom selector="{{StorefrontMinicartSection.productImageByName($$productNoImages.name$$)}}" userInput="src" stepKey="getThumbnailPlaceholderImageSrc"/>
         <assertContains stepKey="checkThumbnailPlaceholderImage">
             <actualResult type="variable">$getThumbnailPlaceholderImageSrc</actualResult>
@@ -132,7 +132,7 @@
         <dontSeeElement selector="{{StorefrontProductMediaSection.imageFile(placeholderBaseImage.name)}}" stepKey="dontSeeBasePlaceholderImage"/>
         <click selector="{{StorefrontProductPageSection.addToCartBtn}}" stepKey="addProductToCart2"/>
         <waitForElementVisible selector="{{StorefrontProductPageSection.successMsg}}" stepKey="waitForProductAdded2"/>
-        <click selector="{{StorefrontMinicartSection.showCart}}" stepKey="openMiniCart2"/>
+        <actionGroup ref="StorefrontClickOnMiniCartActionGroup" stepKey="openMiniCart2"/>
         <grabAttributeFrom selector="{{StorefrontMinicartSection.productImageByName($$productWithImages.name$$)}}" userInput="src" stepKey="getThumbnailImageSrc"/>
         <assertNotContains stepKey="checkThumbnailImage">
             <actualResult type="variable">$getThumbnailImageSrc</actualResult>

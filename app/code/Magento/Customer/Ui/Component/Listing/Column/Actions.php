@@ -60,7 +60,6 @@ class Actions extends Column
                     ),
                     'label' => __('Edit'),
                     'hidden' => false,
-                    '__disableTmpl' => true
                 ];
             }
         }

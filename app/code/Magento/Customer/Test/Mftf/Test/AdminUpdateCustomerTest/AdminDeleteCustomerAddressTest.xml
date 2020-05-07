@@ -21,7 +21,7 @@
         <before>
             <createData stepKey="customer" entity="Simple_US_Customer_Multiple_Addresses"/>
             <magentoCLI command="indexer:reindex" stepKey="reindex"/>
-            <actionGroup ref="LoginAsAdmin" stepKey="login"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
         </before>
         <after>
             <deleteData stepKey="deleteCustomer" createDataKey="customer"/>

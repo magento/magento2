@@ -12,7 +12,7 @@
                 <item name="scope" xsi:type="string">default</item>
                 <item name="scope_id" xsi:type="number">0</item>
                 <item name="label" xsi:type="string">Yes</item>
-                <item name="value" xsi:type="string">AIzaSyDwqDWuw1lra-LnpJL2Mr02DYuFmkuRSns</item>
+                <item name="value" xsi:type="string">AIzaSyAzWKu17L5BcpPwtcHMdVDLma2hHoJQb5w</item>
             </field>
         </dataset>
         <dataset name="youtube_api_key_rollback">

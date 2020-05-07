@@ -18,7 +18,7 @@
             <group value="catalog"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
             <!--Create website, Store and Store View-->
             <actionGroup ref="AdminCreateWebsiteActionGroup" stepKey="createSecondWebsite">
                 <argument name="newWebsiteName" value="{{secondCustomWebsite.name}}"/>
@@ -100,7 +100,7 @@
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
         <!-- Step 1-2: Open Category page and Set scope selector to All Store Views-->
-        <amOnPage url="{{AdminCategoryPage.url}}" stepKey="goToCategoryPage"/>
+        <actionGroup ref="AdminOpenCategoryPageActionGroup" stepKey="goToCategoryPage"/>
         <click selector="{{AdminCategorySidebarTreeSection.categoryInTree($$createCategory.name$$)}}"
                stepKey="clickCategoryName"/>
         <click selector="{{AdminCategoryProductsSection.sectionHeader}}" stepKey="openProductSection"/>
