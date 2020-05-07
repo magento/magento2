@@ -20,13 +20,16 @@ use Magento\TestFramework\Helper\Bootstrap;
  */
 class FullTest extends \PHPUnit\Framework\TestCase
 {
+    protected function setUp()
+    {
+        $this->markTestSkipped("MC-18332: Mysql Search Engine is deprecated and will be removed");
+    }
     /**
      * Testing fulltext index rebuild
      *
      * @magentoDataFixture Magento/CatalogSearch/_files/products_for_index.php
      * @magentoDataFixture Magento/CatalogSearch/_files/product_configurable_not_available.php
      * @magentoDataFixture Magento/Framework/Search/_files/product_configurable.php
-     * @magentoConfigFixture default/catalog/search/engine mysql
      */
     public function testGetIndexData()
     {
