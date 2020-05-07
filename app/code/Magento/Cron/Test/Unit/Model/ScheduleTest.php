@@ -9,10 +9,11 @@ namespace Magento\Cron\Test\Unit\Model;
 
 use Magento\Cron\Model\ResourceModel\Schedule as SchoduleResourceModel;
 use Magento\Cron\Model\Schedule;
+use Magento\Cron\Model\DeadlockRetrierInterface;
 use Magento\Framework\Exception\CronException;
 use Magento\Framework\Intl\DateTimeFactory;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -43,15 +44,29 @@ class ScheduleTest extends TestCase
     private $dateTimeFactoryMock;
 
     /**
+     * @var DeadlockRetrierInterface|MockObject
+     */
+    private $retrierMock;
+
+    /**
      * @inheritdoc
      */
     protected function setUp(): void
     {
-        $this->objectManagerHelper = new ObjectManager($this);
+        $this->objectManagerHelper = new ObjectManagerHelper($this);
 
         $this->resourceJobMock = $this->getMockBuilder(SchoduleResourceModel::class)
             ->disableOriginalConstructor()
-            ->setMethods(['trySetJobUniqueStatusAtomic', '__wakeup', 'getIdFieldName'])
+            ->setMethods(
+                [
+                    'trySetJobStatusAtomic',
+                    '__wakeup',
+                    'getIdFieldName',
+                    'trySetJobStatuses',
+                    'getConnection',
+                    'getTable'
+                ]
+            )
             ->getMockForAbstractClass();
 
         $this->resourceJobMock->expects($this->any())
@@ -65,6 +80,8 @@ class ScheduleTest extends TestCase
         $this->dateTimeFactoryMock = $this->getMockBuilder(DateTimeFactory::class)
             ->setMethods(['create'])
             ->getMock();
+
+        $this->retrierMock = $this->createMock(DeadlockRetrierInterface::class);
     }
 
     /**
@@ -457,20 +474,49 @@ class ScheduleTest extends TestCase
     public function testTryLockJobSuccess(): void
     {
         $scheduleId = 1;
+        $jobCode = 'test_job';
+        $tableName = 'cron_schedule';
+
+        $connectionMock = $this->createMock(AdapterInterface::class);
+        $connectionMock->expects($this->once())
+            ->method('update')
+            ->with(
+                $tableName,
+                ['status' => Schedule::STATUS_ERROR],
+                ['job_code = ?' => $jobCode, 'status = ?' => Schedule::STATUS_RUNNING]
+            )
+            ->willReturn(1);
 
         $this->resourceJobMock->expects($this->once())
-            ->method('trySetJobUniqueStatusAtomic')
+            ->method('trySetJobStatusAtomic')
             ->with($scheduleId, Schedule::STATUS_RUNNING, Schedule::STATUS_PENDING)
             ->willReturn(true);
+        $this->resourceJobMock->expects($this->once())
+            ->method('getTable')
+            ->with($tableName)
+            ->willReturn($tableName);
+        $this->resourceJobMock->expects($this->exactly(3))
+            ->method('getConnection')
+            ->willReturn($connectionMock);
+
+        $this->retrierMock->expects($this->exactly(2))
+            ->method('execute')
+            ->willReturnCallback(
+                function ($callback) {
+                    return $callback();
+                }
+            );
 
         /** @var Schedule $model */
         $model = $this->objectManagerHelper->getObject(
             Schedule::class,
             [
-                'resource' => $this->resourceJobMock
+                'resource' => $this->resourceJobMock,
+                'retrier' => $this->retrierMock,
             ]
         );
         $model->setId($scheduleId);
+        $model->setJobCode($jobCode);
         $this->assertEquals(0, $model->getStatus());
 
         $model->tryLockJob();
@@ -486,20 +532,49 @@ class ScheduleTest extends TestCase
     public function testTryLockJobFailure(): void
     {
         $scheduleId = 1;
+        $jobCode = 'test_job';
+        $tableName = 'cron_schedule';
+
+        $connectionMock = $this->createMock(AdapterInterface::class);
+        $connectionMock->expects($this->once())
+            ->method('update')
+            ->with(
+                $tableName,
+                ['status' => Schedule::STATUS_ERROR],
+                ['job_code = ?' => $jobCode, 'status = ?' => Schedule::STATUS_RUNNING]
+            )
+            ->willReturn(1);
 
         $this->resourceJobMock->expects($this->once())
-            ->method('trySetJobUniqueStatusAtomic')
+            ->method('trySetJobStatusAtomic')
             ->with($scheduleId, Schedule::STATUS_RUNNING, Schedule::STATUS_PENDING)
             ->willReturn(false);
+        $this->resourceJobMock->expects($this->once())
+            ->method('getTable')
+            ->with($tableName)
+            ->willReturn($tableName);
+        $this->resourceJobMock->expects($this->exactly(3))
+            ->method('getConnection')
+            ->willReturn($connectionMock);
+
+        $this->retrierMock->expects($this->exactly(2))
+            ->method('execute')
+            ->willReturnCallback(
+                function ($callback) {
+                    return $callback();
+                }
+            );
 
         /** @var Schedule $model */
         $model = $this->objectManagerHelper->getObject(
             Schedule::class,
             [
-                'resource' => $this->resourceJobMock
+                'resource' => $this->resourceJobMock,
+                'retrier' => $this->retrierMock,
             ]
         );
         $model->setId($scheduleId);
+        $model->setJobCode($jobCode);
         $this->assertEquals(0, $model->getStatus());
 
         $model->tryLockJob();

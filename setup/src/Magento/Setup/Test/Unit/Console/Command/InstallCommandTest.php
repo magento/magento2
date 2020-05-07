@@ -21,6 +21,7 @@ use Magento\Setup\Model\InstallerFactory;
 use Magento\Setup\Model\StoreConfigurationDataMapper;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\Setup\Model\SearchConfigOptionsList;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Helper\HelperSet;
 use Symfony\Component\Console\Input\InputDefinition;
@@ -115,6 +116,7 @@ class InstallCommandTest extends TestCase
             ->method('getOptionsList')
             ->willReturn($this->getOptionsListAdminUser());
 
+        $searchConfigOptionsList = new SearchConfigOptionsList();
         $this->installerFactory = $this->createMock(InstallerFactory::class);
         $this->installer = $this->createMock(Installer::class);
         $this->applicationMock = $this->getMockBuilder(Application::class)
@@ -148,7 +150,8 @@ class InstallCommandTest extends TestCase
             $this->installerFactory,
             $configModel,
             $userConfig,
-            $this->adminUserMock
+            $this->adminUserMock,
+            $searchConfigOptionsList
         );
         $this->command->setApplication(
             $this->applicationMock
