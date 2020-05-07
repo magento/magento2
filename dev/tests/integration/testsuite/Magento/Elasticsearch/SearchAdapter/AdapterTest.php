@@ -31,7 +31,7 @@ class AdapterTest extends \Magento\Framework\Search\Adapter\Mysql\AdapterTest
      */
     protected $searchEngine;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
 

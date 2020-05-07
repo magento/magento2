@@ -81,7 +81,7 @@ class ScheduleTest extends TestCase
             ->setMethods(['create'])
             ->getMock();
 
-        $this->retrierMock = $this->createMock(DeadlockRetrierInterface::class);
+        $this->retrierMock = $this->getMockForAbstractClass(DeadlockRetrierInterface::class);
     }
 
     /**
@@ -477,7 +477,7 @@ class ScheduleTest extends TestCase
         $jobCode = 'test_job';
         $tableName = 'cron_schedule';
 
-        $connectionMock = $this->createMock(AdapterInterface::class);
+        $connectionMock = $this->getMockForAbstractClass(AdapterInterface::class);
         $connectionMock->expects($this->once())
             ->method('update')
             ->with(
@@ -535,7 +535,7 @@ class ScheduleTest extends TestCase
         $jobCode = 'test_job';
         $tableName = 'cron_schedule';
 
-        $connectionMock = $this->createMock(AdapterInterface::class);
+        $connectionMock = $this->getMockForAbstractClass(AdapterInterface::class);
         $connectionMock->expects($this->once())
             ->method('update')
             ->with(

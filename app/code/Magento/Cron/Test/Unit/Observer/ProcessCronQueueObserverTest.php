@@ -223,7 +223,7 @@ class ProcessCronQueueObserverTest extends TestCase
             ->getMock();
         $this->statFactory->expects($this->any())->method('create')->willReturn($this->stat);
 
-        $this->retrierMock = $this->createMock(DeadlockRetrierInterface::class);
+        $this->retrierMock = $this->getMockForAbstractClass(DeadlockRetrierInterface::class);
 
         $this->cronQueueObserver = new ProcessCronQueueObserver(
             $this->objectManagerMock,
@@ -313,7 +313,7 @@ class ProcessCronQueueObserverTest extends TestCase
         $schedule->expects($this->never())->method('setFinishedAt');
         $schedule->expects($this->once())->method('getResource')->willReturn($this->scheduleResourceMock);
 
-        $connectionMock = $this->createMock(AdapterInterface::class);
+        $connectionMock = $this->getMockForAbstractClass(AdapterInterface::class);
 
         $this->scheduleResourceMock->expects($this->once())
             ->method('getConnection')
@@ -398,7 +398,7 @@ class ProcessCronQueueObserverTest extends TestCase
         $schedule->expects($this->once())->method('save');
         $schedule->expects($this->once())->method('getResource')->willReturn($this->scheduleResourceMock);
 
-        $connectionMock = $this->createMock(AdapterInterface::class);
+        $connectionMock = $this->getMockForAbstractClass(AdapterInterface::class);
 
         $this->scheduleResourceMock->expects($this->once())
             ->method('getConnection')
@@ -482,7 +482,7 @@ class ProcessCronQueueObserverTest extends TestCase
         $schedule->expects($this->any())->method('getStatus')->willReturn(Schedule::STATUS_ERROR);
         $schedule->expects($this->once())->method('save');
         $schedule->expects($this->once())->method('getResource')->willReturn($this->scheduleResourceMock);
-        $connectionMock = $this->createMock(AdapterInterface::class);
+        $connectionMock = $this->getMockForAbstractClass(AdapterInterface::class);
 
         $this->scheduleResourceMock->expects($this->once())
             ->method('getConnection')
@@ -593,7 +593,7 @@ class ProcessCronQueueObserverTest extends TestCase
         $schedule->expects($this->exactly($saveCalls))->method('save');
         $schedule->expects($this->exactly($saveCalls))->method('getResource')->willReturn($this->scheduleResourceMock);
 
-        $connectionMock = $this->createMock(AdapterInterface::class);
+        $connectionMock = $this->getMockForAbstractClass(AdapterInterface::class);
 
         $this->scheduleResourceMock->expects($this->exactly($saveCalls))
             ->method('getConnection')
@@ -717,7 +717,7 @@ class ProcessCronQueueObserverTest extends TestCase
         $schedule->expects($this->any())->method('setFinishedAt')->willReturnSelf();
         $schedule->expects($this->exactly(2))->method('getResource')->willReturn($this->scheduleResourceMock);
 
-        $connectionMock = $this->createMock(AdapterInterface::class);
+        $connectionMock = $this->getMockForAbstractClass(AdapterInterface::class);
 
         $this->scheduleResourceMock->expects($this->exactly(2))
             ->method('getConnection')
@@ -1050,7 +1050,7 @@ class ProcessCronQueueObserverTest extends TestCase
         $scheduleMock->expects($this->exactly(9))->method('getResource')->willReturn($this->scheduleResourceMock);
         $this->scheduleFactoryMock->expects($this->exactly(10))->method('create')->willReturn($scheduleMock);
 
-        $connectionMock = $this->createMock(AdapterInterface::class);
+        $connectionMock = $this->getMockForAbstractClass(AdapterInterface::class);
 
         $connectionMock->expects($this->exactly(5))
             ->method('delete')

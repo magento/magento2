@@ -20,7 +20,7 @@ use Magento\TestFramework\Helper\Bootstrap;
  */
 class FullTest extends \PHPUnit\Framework\TestCase
 {
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->markTestSkipped("MC-18332: Mysql Search Engine is deprecated and will be removed");
     }
