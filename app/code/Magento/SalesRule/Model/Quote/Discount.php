@@ -8,7 +8,6 @@ namespace Magento\SalesRule\Model\Quote;
 use Magento\Framework\App\ObjectManager;
 use Magento\SalesRule\Api\Data\RuleDiscountInterfaceFactory;
 use Magento\SalesRule\Api\Data\DiscountDataInterfaceFactory;
-use Magento\Quote\Api\Data\AddressExtensionFactory;
 
 /**
  * Discount totals calculation model.
@@ -52,18 +51,12 @@ class Discount extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
     private $discountDataInterfaceFactory;
 
     /**
-     * @var AddressExtensionFactory
-     */
-    private $addressExtensionFactory;
-
-    /**
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\SalesRule\Model\Validator $validator
      * @param \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency
      * @param RuleDiscountInterfaceFactory|null $discountInterfaceFactory
      * @param DiscountDataInterfaceFactory|null $discountDataInterfaceFactory
-     * @param AddressExtensionFactory|null $addressExtensionFactory
      */
     public function __construct(
         \Magento\Framework\Event\ManagerInterface $eventManager,
@@ -71,8 +64,7 @@ class Discount extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
         \Magento\SalesRule\Model\Validator $validator,
         \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency,
         RuleDiscountInterfaceFactory $discountInterfaceFactory = null,
-        DiscountDataInterfaceFactory $discountDataInterfaceFactory = null,
-        AddressExtensionFactory $addressExtensionFactory = null
+        DiscountDataInterfaceFactory $discountDataInterfaceFactory = null
     ) {
         $this->setCode(self::COLLECTOR_TYPE_CODE);
         $this->eventManager = $eventManager;
@@ -83,8 +75,6 @@ class Discount extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
             ?: ObjectManager::getInstance()->get(RuleDiscountInterfaceFactory::class);
         $this->discountDataInterfaceFactory = $discountDataInterfaceFactory
             ?: ObjectManager::getInstance()->get(DiscountDataInterfaceFactory::class);
-        $this->addressExtensionFactory = $addressExtensionFactory
-            ?: ObjectManager::getInstance()->get(AddressExtensionFactory::class);
     }
 
     /**
@@ -94,7 +84,6 @@ class Discount extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
      * @param \Magento\Quote\Api\Data\ShippingAssignmentInterface $shippingAssignment
      * @param \Magento\Quote\Model\Quote\Address\Total $total
      * @return $this
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
@@ -130,20 +119,7 @@ class Discount extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
 
         $address->setDiscountDescription([]);
         $items = $this->calculator->sortItemsByPriority($items, $address);
-
-        if (!is_object($address->getExtensionAttributes())) {
-            $addressExtensionAttributes = $address->getExtensionAttributes();
-            $addressExtension = $this->addressExtensionFactory->create();
-
-            foreach ($addressExtensionAttributes as $key => $value) {
-                $addressExtension->setData($key, $value);
-            }
-            $addressExtension->setDiscounts([]);
-            $address->setExtensionAttributes($addressExtension);
-        } else {
-            $address->getExtensionAttributes()->setDiscounts([]);
-        }
-
+        $address->getExtensionAttributes()->setDiscounts([]);
         $addressDiscountAggregator = [];
 
         /** @var \Magento\Quote\Model\Quote\Item $item */
@@ -324,7 +300,6 @@ class Discount extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
                 }
             }
         }
-
         $address->getExtensionAttributes()->setDiscounts(array_values($addressDiscountAggregator));
     }
 }
