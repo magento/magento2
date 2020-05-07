@@ -42,7 +42,7 @@
         <argument name="data" xsi:type="array">
             <item name="js_config" xsi:type="array">
                 <item name="modules" xsi:type="array">
-                    <item name="filter" xsi:type="string">${ $.parentName }.listing_top.listing_filter</item>
+                    <item name="filter" xsi:type="string">ns = ${ $.ns }, index = listing_filter</item>
                 </item>
             </item>
         </argument>
@@ -56,6 +56,9 @@
                 <label translate="true">Exclude</label>
                 <headerTmpl>ui/grid/columns/text</headerTmpl>
                 <indexField>attribute_id</indexField>
+                <imports>
+                    <link name="deselectAll">${ $.provider }:params.entity</link>
+                </imports>
             </settings>
         </selectionsColumn>
         <column name="frontend_label">

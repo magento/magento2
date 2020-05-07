@@ -18,11 +18,12 @@ define([
             bodyTmpl: 'Magento_ImportExport/export/filter-grid/cells/filter',
             templates: {
                 base: {
-                    index: '${ $.$data.index }',
+                    entity: '${ $.$data.column.entity }',
+                    code: '${ $.$data.code }',
                     parent: '${ $.$data.column.name }',
-                    name: '${ $.index }',
+                    name: '${ $.entity }_${ $.code }',
                     provider: '${ $.$data.column.name }',
-                    dataScope: 'filters.${ $.index }'
+                    dataScope: 'filters.${ $.code }'
                 },
                 text: {
                     component: 'Magento_Ui/js/grid/columns/column',
@@ -51,7 +52,9 @@ define([
             },
             filters: {},
             imports: {
-                onDataUpdate: '${ $.provider }:data'
+                entity: '${ $.provider }:params.entity',
+                onDataUpdate: '${ $.provider }:data',
+                onEntityUpdate: 'entity'
             }
         },
 
@@ -77,7 +80,8 @@ define([
          */
         getChild: function (row) {
             let elem = _.findWhere(this.elems(), {
-                index: row[this.indexField]
+                entity: this.entity,
+                code: row[this.indexField]
             });
 
             return elem ? [elem] : [];
@@ -116,7 +120,7 @@ define([
 
             return utils.template(template, {
                 column: this,
-                index: row[this.indexField],
+                code: row[this.indexField],
                 options: row[this.index].options || {}
             }, true, true);
         },
@@ -135,6 +139,21 @@ define([
             }, this);
 
             layout(children);
+        },
+
+        /**
+         * Clears the filters if entity type is changed.
+         *
+         * @param {String} entity
+         */
+        onEntityUpdate: function (entity) {
+            this.elems().forEach(function (elem) {
+                if (_.isFunction(elem.clear)) {
+                    elem.clear();
+                }
+            });
+
+            this.filters = {};
         }
     });
 });
