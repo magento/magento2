@@ -91,6 +91,7 @@ class CalculateCustomOptionCatalogRule
         $basePrice = null;
         foreach ($product->getPriceInfo()->getPrices() as $price) {
             if ($price instanceof BasePriceProviderInterface
+                && !$price instanceof ConfiguredPriceInterface
                 && $price->getPriceCode() !== CatalogRulePrice::PRICE_CODE
                 && $price->getValue() !== false
             ) {
