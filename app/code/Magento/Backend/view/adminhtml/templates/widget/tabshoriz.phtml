@@ -42,22 +42,23 @@
         </div>
         <?= /* @noEscape */ $secureRenderer->renderStyleAsTag(
             'display:none',
-            '#' . $block->escapeJs($block->getTabId($_tab))
+            '#' . $block->escapeJs($block->getTabId($_tab)) . '_content'
         ); ?>
     </li>
     <?php endforeach; ?>
 </ul>
 </div>
-    <?php $scriptString = '
-require([\'jquery\',\'mage/backend/tabs\'], function($){
+    <?php $scriptString = <<<script
+require(["jquery","mage/backend/tabs"], function($){
     $(function() {
-        $(\'#' . /* @noEscape */ $block->getId() . '\').tabs({
-            active: \'' . /* @noEscape */ $block->getActiveTabId() . '\',
-            destination: \'#' . /* @noEscape */ $block->getDestElementId() . '\',
-            shadowTabs: ' . /* @noEscape */ $block->getAllShadowTabs() . '
+        $('#{$block->getId()}').tabs({
+            active: '{$block->getActiveTabId()}',
+            destination: '#{$block->getDestElementId()}',
+            shadowTabs: {$block->getAllShadowTabs()}
         });
     });
-});';
+});
+script;
     ?>
-    <?= $secureRenderer->renderTag('script', [], /* @noEscape */ $scriptString, false); ?>
+    <?= /* @noEscape */ $secureRenderer->renderTag('script', [], $scriptString, false) ?>
 <?php endif; ?>
