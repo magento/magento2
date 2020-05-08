@@ -81,6 +81,7 @@ define([
          */
         chooseTokenSwitcher: function () {
             var lastTokenSwitcherId = $('#' + this.selector).data('lastTokenSwitcherId');
+
             if (lastTokenSwitcherId) {
                 $('#' + lastTokenSwitcherId).trigger('click');
             } else {
