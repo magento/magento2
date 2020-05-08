@@ -204,18 +204,6 @@ class BlockByIdentifierTest extends TestCase
     }
 
     /**
-     * Returns stub of Identity based on `$identifier` and `$storeId`
-     *
-     * @param string $identifier
-     * @param int $storeId
-     * @return string
-     */
-    private function getIdentityStubByIdentifier(string $identifier, int $storeId = self::STUB_DEFAULT_STORE): string
-    {
-        return BlockByIdentifier::CACHE_KEY_PREFIX . '_' . $identifier . '_' . $storeId;
-    }
-
-    /**
      * Returns stub of Identity based on `$cmsBlockId`
      *
      * @param int $cmsBlockId

@@ -22,7 +22,7 @@ use Magento\Store\Model\StoreManagerInterface;
  */
 class BlockByIdentifier extends AbstractBlock implements IdentityInterface
 {
-    const CACHE_KEY_PREFIX = 'CMS_BLOCK';
+    public const CACHE_KEY_PREFIX = 'CMS_BLOCK';
 
     /**
      * @var GetBlockByIdentifierInterface
