@@ -55,6 +55,11 @@ class CategoryUrlRewriteGenerator
     private $mergeDataProviderPrototype;
 
     /**
+     * @var CategoryRepositoryInterface
+     */
+    private $categoryRepository;
+
+    /**
      * @var bool
      */
     protected $overrideStoreUrls;
