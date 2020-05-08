@@ -14,6 +14,7 @@ use Magento\Cms\Block\BlockByIdentifier;
 use Magento\Cms\Model\Template\FilterProvider;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Event\ManagerInterface;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Filter\Template;
 use Magento\Framework\View\Element\Context;
 use Magento\Store\Api\Data\StoreInterface;
@@ -25,6 +26,7 @@ class BlockByIdentifierTest extends TestCase
 {
     private const STUB_MODULE_OUTPUT_DISABLED = false;
     private const STUB_EXISTING_IDENTIFIER = 'existingOne';
+    private const STUB_UNAVAILABLE_IDENTIFIER = 'notExists';
     private const STUB_DEFAULT_STORE = 1;
     private const STUB_CMS_BLOCK_ID = 1;
     private const STUB_CONTENT = 'Content';
@@ -32,6 +34,10 @@ class BlockByIdentifierTest extends TestCase
     private const ASSERT_EMPTY_BLOCK_HTML = '';
     private const ASSERT_CONTENT_HTML = self::STUB_CONTENT;
     private const ASSERT_NO_CACHE_IDENTITIES = [];
+    private const ASSERT_UNAVAILABLE_IDENTIFIER_BASED_IDENTITIES = [
+        BlockByIdentifier::CACHE_KEY_PREFIX . '_' . self::STUB_UNAVAILABLE_IDENTIFIER,
+        BlockByIdentifier::CACHE_KEY_PREFIX . '_' . self::STUB_UNAVAILABLE_IDENTIFIER . '_' . self::STUB_DEFAULT_STORE
+    ];
 
     /** @var MockObject|GetBlockByIdentifierInterface */
     private $getBlockByIdentifierMock;
@@ -61,10 +67,28 @@ class BlockByIdentifierTest extends TestCase
     {
         // Given
         $missingIdentifierBlock = $this->getTestedBlockUsingIdentifier(null);
+        $this->storeMock->method('getId')->willReturn(self::STUB_DEFAULT_STORE);
 
         // Expect
         $this->assertSame(self::ASSERT_EMPTY_BLOCK_HTML, $missingIdentifierBlock->toHtml());
         $this->assertSame(self::ASSERT_NO_CACHE_IDENTITIES, $missingIdentifierBlock->getIdentities());
+    }
+
+    public function testBlockReturnsEmptyStringWhenIdentifierProvidedNotFound(): void
+    {
+        // Given
+        $this->getBlockByIdentifierMock->method('execute')->willThrowException(
+            new NoSuchEntityException(__('NoSuchEntityException'))
+        );
+        $missingIdentifierBlock = $this->getTestedBlockUsingIdentifier(self::STUB_UNAVAILABLE_IDENTIFIER);
+        $this->storeMock->method('getId')->willReturn(self::STUB_DEFAULT_STORE);
+
+        // Expect
+        $this->assertSame(self::ASSERT_EMPTY_BLOCK_HTML, $missingIdentifierBlock->toHtml());
+        $this->assertSame(
+            self::ASSERT_UNAVAILABLE_IDENTIFIER_BASED_IDENTITIES,
+            $missingIdentifierBlock->getIdentities()
+        );
     }
 
     public function testBlockReturnsCmsContentsWhenIdentifierFound(): void

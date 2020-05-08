@@ -131,23 +131,28 @@ class BlockByIdentifier extends AbstractBlock implements IdentityInterface
      */
     public function getIdentities(): array
     {
+        if (!$this->getIdentifier()) {
+            return [];
+        }
+
+        $identities = [
+            self::CACHE_KEY_PREFIX . '_' . $this->getIdentifier(),
+            self::CACHE_KEY_PREFIX . '_' . $this->getIdentifier() . '_' . $this->getCurrentStoreId()
+        ];
+
         try {
             $cmsBlock = $this->getCmsBlock();
 
-            $identities = [self::CACHE_KEY_PREFIX . '_' . $cmsBlock->getId()];
+            $identities[] = self::CACHE_KEY_PREFIX . '_' . $cmsBlock->getId();
 
             if (method_exists($this->getCmsBlock(), 'getStores')) {
-                foreach ($cmsBlock->getStores() as $store) {
-                    $identities[] = self::CACHE_KEY_PREFIX . '_' . $this->getIdentifier() . '_' . $store;
+                foreach ($cmsBlock->getStores() as $storeId) {
+                    $identities[] = self::CACHE_KEY_PREFIX . '_' . $this->getIdentifier() . '_' . $storeId;
                 }
             }
-
-            $identities[] = self::CACHE_KEY_PREFIX . '_' . $this->getIdentifier() . '_' . $this->getCurrentStoreId();
-
-            return $identities;
+            // phpcs:disable Magento2.CodeAnalysis.EmptyBlock.DetectedCatch
         } catch (NoSuchEntityException $e) {
-            // If CMS Block does not exist, it should not be cached
-            return [];
         }
+        return $identities;
     }
 }
