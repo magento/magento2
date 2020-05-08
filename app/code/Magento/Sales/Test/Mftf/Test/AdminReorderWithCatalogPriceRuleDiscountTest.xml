@@ -23,7 +23,7 @@
         <before>
             <!--Create product-->
             <createData entity="SimpleProduct2" stepKey="createSimpleProductApi"/>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
             <actionGroup ref="AdminCatalogPriceRuleDeleteAllActionGroup" stepKey="deleteAllCatalogPriceRule"/>
             <!--Create the catalog price rule -->
             <createData entity="CatalogRuleToPercent" stepKey="createCatalogRule"/>

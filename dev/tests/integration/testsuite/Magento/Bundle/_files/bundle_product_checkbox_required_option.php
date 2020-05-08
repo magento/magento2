@@ -33,7 +33,7 @@ $bundleProduct = $productFactory->create();
 $bundleProduct->setTypeId(Type::TYPE_BUNDLE)
     ->setAttributeSetId($bundleProduct->getDefaultAttributeSetId())
     ->setWebsiteIds([$baseWebsiteId])
-    ->setName('Bundle Product')
+    ->setName('Bundle Product Checkbox Required Option')
     ->setSku('bundle-product-checkbox-required-option')
     ->setVisibility(Visibility::VISIBILITY_BOTH)
     ->setStatus(Status::STATUS_ENABLED)
