@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c31e584a1fe818949e29afbf6ef2df8f",
+    "content-hash": "087f8432a6f317056b40a0b8a160a2cf",
     "packages": [
         {
             "name": "braintree/braintree_php",
@@ -257,16 +257,16 @@
         },
         {
             "name": "composer/composer",
-            "version": "1.10.5",
+            "version": "1.10.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/composer/composer.git",
-                "reference": "7a4d5b6aa30d2118af27c04f5e897b57156ccfa9"
+                "reference": "be81b9c4735362c26876bdbfd3b5bc7e7f711c88"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/composer/composer/zipball/7a4d5b6aa30d2118af27c04f5e897b57156ccfa9",
-                "reference": "7a4d5b6aa30d2118af27c04f5e897b57156ccfa9",
+                "url": "https://api.github.com/repos/composer/composer/zipball/be81b9c4735362c26876bdbfd3b5bc7e7f711c88",
+                "reference": "be81b9c4735362c26876bdbfd3b5bc7e7f711c88",
                 "shasum": ""
             },
             "require": {
@@ -285,7 +285,8 @@
                 "symfony/process": "^2.7 || ^3.0 || ^4.0 || ^5.0"
             },
             "conflict": {
-                "symfony/console": "2.8.38"
+                "symfony/console": "2.8.38",
+                "symfony/phpunit-bridge": "3.4.40"
             },
             "require-dev": {
                 "phpspec/prophecy": "^1.10",
@@ -333,7 +334,7 @@
                 "dependency",
                 "package"
             ],
-            "time": "2020-04-10T09:44:22+00:00"
+            "time": "2020-05-06T08:28:10+00:00"
         },
         {
             "name": "composer/semver",
@@ -3304,16 +3305,16 @@
         },
         {
             "name": "magento/composer",
-            "version": "dev-MC-33066",
+            "version": "1.6.x-dev",
             "source": {
                 "type": "git",
-                "url": "https://github.com/magento-trigger/composer.git",
-                "reference": "7af1abacb779cb9862f04947407b90fc944870b8"
+                "url": "https://github.com/magento/composer.git",
+                "reference": "f3e4bec8fc73a97a6cbc391b1b93d4c32566763d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/magento-trigger/composer/zipball/7af1abacb779cb9862f04947407b90fc944870b8",
-                "reference": "7af1abacb779cb9862f04947407b90fc944870b8",
+                "url": "https://api.github.com/repos/magento/composer/zipball/f3e4bec8fc73a97a6cbc391b1b93d4c32566763d",
+                "reference": "f3e4bec8fc73a97a6cbc391b1b93d4c32566763d",
                 "shasum": ""
             },
             "require": {
@@ -3330,15 +3331,13 @@
                     "Magento\\Composer\\": "src"
                 }
             },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "OSL-3.0",
                 "AFL-3.0"
             ],
             "description": "Magento composer library helps to instantiate Composer application and run composer commands.",
-            "support": {
-                "source": "https://github.com/magento-trigger/composer/tree/MC-33066"
-            },
-            "time": "2020-04-14T21:36:48+00:00"
+            "time": "2020-05-08T01:07:09+00:00"
         },
         {
             "name": "magento/magento-composer-installer",
@@ -5537,16 +5536,16 @@
         },
         {
             "name": "aws/aws-sdk-php",
-            "version": "3.137.3",
+            "version": "3.137.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aws/aws-sdk-php.git",
-                "reference": "d70ccd508c9a9fa5a1579f80fd1f6b8fff79a7c8"
+                "reference": "b3309075ec2a2c695c33d8e21c07b3d5c10cdb9a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/d70ccd508c9a9fa5a1579f80fd1f6b8fff79a7c8",
-                "reference": "d70ccd508c9a9fa5a1579f80fd1f6b8fff79a7c8",
+                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/b3309075ec2a2c695c33d8e21c07b3d5c10cdb9a",
+                "reference": "b3309075ec2a2c695c33d8e21c07b3d5c10cdb9a",
                 "shasum": ""
             },
             "require": {
@@ -5617,7 +5616,7 @@
                 "s3",
                 "sdk"
             ],
-            "time": "2020-05-05T18:14:48+00:00"
+            "time": "2020-05-07T18:16:43+00:00"
         },
         {
             "name": "behat/gherkin",
@@ -8365,16 +8364,16 @@
         },
         {
             "name": "phpunit/php-token-stream",
-            "version": "4.0.0",
+            "version": "4.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/php-token-stream.git",
-                "reference": "b2560a0c33f7710e4d7f8780964193e8e8f8effe"
+                "reference": "cdc0db5aed8fbfaf475fbd95bfd7bab83c7a779c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/php-token-stream/zipball/b2560a0c33f7710e4d7f8780964193e8e8f8effe",
-                "reference": "b2560a0c33f7710e4d7f8780964193e8e8f8effe",
+                "url": "https://api.github.com/repos/sebastianbergmann/php-token-stream/zipball/cdc0db5aed8fbfaf475fbd95bfd7bab83c7a779c",
+                "reference": "cdc0db5aed8fbfaf475fbd95bfd7bab83c7a779c",
                 "shasum": ""
             },
             "require": {
@@ -8410,7 +8409,7 @@
             "keywords": [
                 "tokenizer"
             ],
-            "time": "2020-02-07T06:19:00+00:00"
+            "time": "2020-05-06T09:56:31+00:00"
         },
         {
             "name": "phpunit/phpunit",

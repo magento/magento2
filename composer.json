@@ -65,7 +65,7 @@
         "laminas/laminas-uri": "^2.5.1",
         "laminas/laminas-validator": "^2.6.0",
         "laminas/laminas-view": "~2.11.2",
-        "magento/composer": "MC-33066-dev",
+        "magento/composer": "1.6.x-dev",
         "magento/magento-composer-installer": ">=0.1.11",
         "magento/zendframework1": "~1.14.2",
         "monolog/monolog": "^1.17",
@@ -356,11 +356,5 @@
             "Magento\\PhpStan\\": "dev/tests/static/framework/Magento/PhpStan/"
         }
     },
-    "repositories": [
-        {
-            "type": "vcs",
-            "url": "git@github.com:magento-trigger/composer.git"
-        }
-    ],
     "prefer-stable": true
 }
