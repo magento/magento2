@@ -47,7 +47,7 @@ class CheckProductPriceTest extends TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
         $this->pageFactory = $this->objectManager->get(PageFactory::class);
@@ -232,7 +232,7 @@ class CheckProductPriceTest extends TestCase
      */
     private function assertAsLowAsPrice(string $priceHtml, float $expectedPrice): void
     {
-        $this->assertRegExp(
+        $this->assertMatchesRegularExpression(
             sprintf(
                 '/<span class="price-label">As low as<\/span> {1,}<span.*data-price-amount="%s".*>\$%01.2f<\/span>/',
                 round($expectedPrice, 2),
@@ -251,7 +251,7 @@ class CheckProductPriceTest extends TestCase
      */
     private function assertFinalPrice(string $priceHtml, float $expectedPrice): void
     {
-        $this->assertRegExp(
+        $this->assertMatchesRegularExpression(
             sprintf(
                 '/data-price-type="finalPrice".*<span class="price">\$%01.2f<\/span><\/span>/',
                 $expectedPrice
@@ -270,7 +270,7 @@ class CheckProductPriceTest extends TestCase
     private function assertRegularPrice(string $priceHtml, float $expectedPrice): void
     {
         $regex = '<span class="price-label">Regular Price<\/span> {1,}<span.*data-price-amount="%s".*>\$%01.2f<\/span>';
-        $this->assertRegExp(
+        $this->assertMatchesRegularExpression(
             sprintf("/{$regex}/", round($expectedPrice, 2), $expectedPrice),
             $priceHtml
         );
