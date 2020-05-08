@@ -11,6 +11,10 @@
  */
 namespace Magento\ImportExport\Block\Adminhtml\Export\Edit;
 
+/**
+ * @deprecated Not used since export form has been moved to Ui components.
+ * @see Magento_ImportExport::view/adminhtml/ui_component/export_form.xml
+ */
 class Form extends \Magento\Backend\Block\Widget\Form\Generic
 {
     /**

@@ -10,6 +10,10 @@ use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\ImportExport\Controller\Adminhtml\Export as ExportController;
 use Magento\Framework\Controller\ResultFactory;
 
+/**
+ * @deprecated Not used since export filter grid has been moved to Ui components.
+ * @see Magento_ImportExport::view/adminhtml/ui_component/export_filter_grid.xml
+ */
 class GetFilter extends ExportController implements HttpGetActionInterface, HttpPostActionInterface
 {
     /**
