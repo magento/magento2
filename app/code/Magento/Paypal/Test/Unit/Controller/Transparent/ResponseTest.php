@@ -3,12 +3,18 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Paypal\Test\Unit\Controller\Transparent;
 
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\App\RequestInterface;
+use Magento\Framework\Controller\ResultInterface;
+use Magento\Framework\DataObject;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Registry;
 use Magento\Framework\Session\Generic as Session;
+use Magento\Framework\View\Layout\ProcessorInterface;
 use Magento\Framework\View\Result\Layout;
 use Magento\Framework\View\Result\LayoutFactory;
 use Magento\Paypal\Controller\Transparent\Response;
@@ -16,74 +22,73 @@ use Magento\Paypal\Model\Payflow\Service\Response\Transaction;
 use Magento\Paypal\Model\Payflow\Service\Response\Validator\ResponseValidator;
 use Magento\Paypal\Model\Payflow\Transparent;
 use Magento\Sales\Api\PaymentFailuresInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test for class \Magento\Paypal\Controller\Transparent\Response
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ResponseTest extends \PHPUnit\Framework\TestCase
+class ResponseTest extends TestCase
 {
-    /** @var Response|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var Response|MockObject */
     private $object;
 
-    /** @var RequestInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var RequestInterface|MockObject */
     private $requestMock;
 
-    /** @var Registry|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var Registry|MockObject */
     private $coreRegistryMock;
 
-    /** @var LayoutFactory|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var LayoutFactory|MockObject */
     private $resultLayoutFactoryMock;
 
-    /** @var Layout|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var Layout|MockObject */
     private $resultLayoutMock;
 
-    /** @var Context|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var Context|MockObject */
     private $contextMock;
 
-    /** @var Transaction|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var Transaction|MockObject */
     private $transactionMock;
 
-    /** @var ResponseValidator|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var ResponseValidator|MockObject */
     private $responseValidatorMock;
 
     /**
-     * @var Transparent | \PHPUnit_Framework_MockObject_MockObject
+     * @var Transparent|MockObject
      */
     private $payflowFacade;
 
     /**
-     * @var PaymentFailuresInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var PaymentFailuresInterface|MockObject
      */
     private $paymentFailures;
 
     /**
-     * @var Session|\PHPUnit_Framework_MockObject_MockObject
+     * @var Session|MockObject
      */
     private $sessionTransparent;
 
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->requestMock = $this->getMockBuilder(\Magento\Framework\App\RequestInterface::class)
+        $this->requestMock = $this->getMockBuilder(RequestInterface::class)
             ->setMethods(['getPostValue'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
-        $this->viewMock = $this->getMockBuilder(\Magento\Framework\App\ViewInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $this->coreRegistryMock = $this->getMockBuilder(\Magento\Framework\Registry::class)
+        $this->coreRegistryMock = $this->getMockBuilder(Registry::class)
             ->setMethods(['register'])
             ->disableOriginalConstructor()
             ->getMock();
-        $this->resultLayoutMock = $this->getMockBuilder(\Magento\Framework\View\Result\Layout::class)
+        $this->resultLayoutMock = $this->getMockBuilder(Layout::class)
             ->setMethods(['addDefaultHandle', 'getLayout', 'getUpdate', 'load'])
             ->disableOriginalConstructor()
             ->getMock();
-        $this->resultLayoutFactoryMock = $this->getMockBuilder(\Magento\Framework\View\Result\LayoutFactory::class)
+        $this->resultLayoutFactoryMock = $this->getMockBuilder(LayoutFactory::class)
             ->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
@@ -91,11 +96,11 @@ class ResponseTest extends \PHPUnit\Framework\TestCase
             ->method('create')
             ->willReturn($this->resultLayoutMock);
         $this->transactionMock = $this->getMockBuilder(
-            \Magento\Paypal\Model\Payflow\Service\Response\Transaction::class
+            Transaction::class
         )->setMethods(['getResponseObject', 'validateResponse', 'savePaymentInQuote'])
             ->disableOriginalConstructor()
             ->getMock();
-        $this->contextMock = $this->getMockBuilder(\Magento\Framework\App\Action\Context::class)
+        $this->contextMock = $this->getMockBuilder(Context::class)
             ->setMethods(['getRequest'])
             ->disableOriginalConstructor()
             ->getMock();
@@ -103,7 +108,7 @@ class ResponseTest extends \PHPUnit\Framework\TestCase
             ->method('getRequest')
             ->willReturn($this->requestMock);
         $this->responseValidatorMock = $this->getMockBuilder(
-            \Magento\Paypal\Model\Payflow\Service\Response\Validator\ResponseValidator::class
+            ResponseValidator::class
         )->disableOriginalConstructor()
             ->getMock();
         $this->payflowFacade = $this->getMockBuilder(Transparent::class)
@@ -113,7 +118,7 @@ class ResponseTest extends \PHPUnit\Framework\TestCase
         $this->paymentFailures = $this->getMockBuilder(PaymentFailuresInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['handle'])
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->sessionTransparent = $this->getMockBuilder(Session::class)
             ->disableOriginalConstructor()
             ->setMethods(['getQuoteId'])
@@ -133,7 +138,7 @@ class ResponseTest extends \PHPUnit\Framework\TestCase
 
     public function testExecute()
     {
-        $objectMock = $this->getMockBuilder(\Magento\Framework\DataObject::class)
+        $objectMock = $this->getMockBuilder(DataObject::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->transactionMock->expects($this->once())
@@ -157,12 +162,12 @@ class ResponseTest extends \PHPUnit\Framework\TestCase
         $this->paymentFailures->expects($this->never())
             ->method('handle');
 
-        $this->assertInstanceOf(\Magento\Framework\Controller\ResultInterface::class, $this->object->execute());
+        $this->assertInstanceOf(ResultInterface::class, $this->object->execute());
     }
 
     public function testExecuteWithException()
     {
-        $objectMock = $this->getMockBuilder(\Magento\Framework\DataObject::class)
+        $objectMock = $this->getMockBuilder(DataObject::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->transactionMock->expects($this->once())
@@ -171,7 +176,7 @@ class ResponseTest extends \PHPUnit\Framework\TestCase
         $this->responseValidatorMock->expects($this->once())
             ->method('validate')
             ->with($objectMock, $this->payflowFacade)
-            ->willThrowException(new \Magento\Framework\Exception\LocalizedException(__('Error')));
+            ->willThrowException(new LocalizedException(__('Error')));
         $this->coreRegistryMock->expects($this->once())
             ->method('register')
             ->with('transparent_form_params', $this->arrayHasKey('error'));
@@ -188,15 +193,15 @@ class ResponseTest extends \PHPUnit\Framework\TestCase
             ->with(1)
             ->willReturnSelf();
 
-        $this->assertInstanceOf(\Magento\Framework\Controller\ResultInterface::class, $this->object->execute());
+        $this->assertInstanceOf(ResultInterface::class, $this->object->execute());
     }
 
     /**
-     * @return \Magento\Framework\View\Layout | \PHPUnit_Framework_MockObject_MockObject
+     * @return \Magento\Framework\View\Layout|MockObject
      */
     private function getLayoutMock()
     {
-        $processorInterfaceMock = $this->getMockBuilder(\Magento\Framework\View\Layout\ProcessorInterface::class)
+        $processorInterfaceMock = $this->getMockBuilder(ProcessorInterface::class)
             ->getMockForAbstractClass();
         $layoutMock = $this->getMockBuilder(\Magento\Framework\View\Layout::class)
             ->setMethods(['getUpdate'])

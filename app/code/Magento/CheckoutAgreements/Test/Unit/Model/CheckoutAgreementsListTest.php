@@ -3,43 +3,54 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\CheckoutAgreements\Test\Unit\Model;
 
-class CheckoutAgreementsListTest extends \PHPUnit\Framework\TestCase
+use Magento\CheckoutAgreements\Api\Data\AgreementInterface;
+use Magento\CheckoutAgreements\Model\CheckoutAgreementsList;
+use Magento\CheckoutAgreements\Model\ResourceModel\Agreement\Collection;
+use Magento\CheckoutAgreements\Model\ResourceModel\Agreement\CollectionFactory;
+use Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface;
+use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
+use Magento\Framework\Api\SearchCriteriaInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class CheckoutAgreementsListTest extends TestCase
 {
     /**
-     * @var \Magento\CheckoutAgreements\Model\CheckoutAgreementsList
+     * @var CheckoutAgreementsList
      */
     private $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     private $collectionFactoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     private $attributesJoinProcessorMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     private $collectionProcessorMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->collectionFactoryMock = $this->createMock(
-            \Magento\CheckoutAgreements\Model\ResourceModel\Agreement\CollectionFactory::class
+            CollectionFactory::class
         );
         $this->attributesJoinProcessorMock = $this->createMock(
-            \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface::class
+            JoinProcessorInterface::class
         );
         $this->collectionProcessorMock = $this->createMock(
-            \Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface::class
+            CollectionProcessorInterface::class
         );
-        $this->model = new \Magento\CheckoutAgreements\Model\CheckoutAgreementsList(
+        $this->model = new CheckoutAgreementsList(
             $this->collectionFactoryMock,
             $this->attributesJoinProcessorMock,
             $this->collectionProcessorMock
@@ -48,16 +59,16 @@ class CheckoutAgreementsListTest extends \PHPUnit\Framework\TestCase
 
     public function testGetList()
     {
-        $searchCriteriaMock = $this->createMock(\Magento\Framework\Api\SearchCriteriaInterface::class);
+        $searchCriteriaMock = $this->getMockForAbstractClass(SearchCriteriaInterface::class);
         $collectionMock = $this->createMock(
-            \Magento\CheckoutAgreements\Model\ResourceModel\Agreement\Collection::class
+            Collection::class
         );
         $this->collectionFactoryMock->expects($this->once())->method('create')->willReturn($collectionMock);
         $this->collectionProcessorMock->expects($this->once())
             ->method('process')
             ->with($searchCriteriaMock, $collectionMock);
         $this->attributesJoinProcessorMock->expects($this->once())->method('process')->with($collectionMock);
-        $agreementMock = $this->createMock(\Magento\CheckoutAgreements\Api\Data\AgreementInterface::class);
+        $agreementMock = $this->getMockForAbstractClass(AgreementInterface::class);
         $collectionMock->expects($this->once())->method('getItems')->willReturn([$agreementMock]);
         $this->assertEquals([$agreementMock], $this->model->getList($searchCriteriaMock));
     }

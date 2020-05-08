@@ -3,19 +3,22 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Braintree\Test\Unit\Gateway\Request\PayPal;
 
-use Magento\Braintree\Gateway\SubjectReader;
 use Magento\Braintree\Gateway\Request\PayPal\VaultDataBuilder;
+use Magento\Braintree\Gateway\SubjectReader;
 use Magento\Payment\Gateway\Data\PaymentDataObjectInterface;
 use Magento\Payment\Model\InfoInterface;
 use Magento\Vault\Model\Ui\VaultConfigProvider;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Tests \Magento\Braintree\Gateway\Request\PayPal\VaultDataBuilder.
  */
-class VaultDataBuilderTest extends \PHPUnit\Framework\TestCase
+class VaultDataBuilderTest extends TestCase
 {
     /**
      * @var SubjectReader|MockObject
@@ -37,11 +40,11 @@ class VaultDataBuilderTest extends \PHPUnit\Framework\TestCase
      */
     private $builder;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->paymentDataObjectMock = $this->createMock(PaymentDataObjectInterface::class);
+        $this->paymentDataObjectMock = $this->getMockForAbstractClass(PaymentDataObjectInterface::class);
 
-        $this->paymentInfoMock = $this->createMock(InfoInterface::class);
+        $this->paymentInfoMock = $this->getMockForAbstractClass(InfoInterface::class);
 
         $this->subjectReaderMock = $this->getMockBuilder(SubjectReader::class)
             ->disableOriginalConstructor()

@@ -49,7 +49,7 @@ class CurrencyConfigTest extends TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->currency = Bootstrap::getObjectManager()->get(CurrencyModel::class);
         $this->config = Bootstrap::getObjectManager()->get(ConfigInterface::class);
@@ -203,7 +203,7 @@ class CurrencyConfigTest extends TestCase
         Bootstrap::getObjectManager()->create(StoreManagerInterface::class)->reinitStores();
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->clearCurrencyConfig();
     }
