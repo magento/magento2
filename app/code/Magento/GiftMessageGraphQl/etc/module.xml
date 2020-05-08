@@ -9,7 +9,7 @@
         xsi:noNamespaceSchemaLocation="urn:magento:framework:Module/etc/module.xsd">
     <module name="Magento_GiftMessageGraphQl">
         <sequence>
-            <module name="Magento_GraphQl"/>
+            <module name="Magento_GiftMessage"/>
         </sequence>
     </module>
 </config>
