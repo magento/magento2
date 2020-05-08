@@ -27,8 +27,8 @@ define([
          * @returns {exports.initObservable}
          */
         initObservable: function () {
-            var self = this;
-            var paymentSelector = '[name="payment[method]"][value="' + this.getCode() + '"]:checked';
+            var self = this,
+                paymentSelector = '[name="payment[method]"][value="' + this.getCode() + '"]:checked';
 
             self.$selector = $('#' + self.selector);
             this._super()
