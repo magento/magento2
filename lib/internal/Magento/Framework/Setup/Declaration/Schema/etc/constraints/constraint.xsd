@@ -7,6 +7,7 @@
 -->
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
     <xs:include schemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/operations.xsd" />
+    <xs:include schemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/name.xsd" />
 
     <xs:attributeGroup name="baseConstraint">
         <xs:attribute name="disabled" type="xs:boolean" />
