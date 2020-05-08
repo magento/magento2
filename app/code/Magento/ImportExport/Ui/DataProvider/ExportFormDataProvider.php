@@ -16,7 +16,7 @@ class ExportFormDataProvider extends DataProvider
      *
      * @return array
      */
-    public function getData()
+    public function getData() :array
     {
         return [];
     }
