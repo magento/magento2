@@ -239,7 +239,7 @@ class AbstractResourceTest extends TestCase
      */
     public function testCommitZeroLevelCallbackException(): void
     {
-        /** @var AdapterInterface|\PHPUnit_Framework_MockObject_MockObject $connection */
+        /** @var AdapterInterface|MockObject $connection */
         $connection = $this->createMock(AdapterInterface::class);
 
         $this->model->setConnection($connection);
