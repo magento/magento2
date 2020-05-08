@@ -161,7 +161,7 @@ class BlockByIdentifier extends AbstractBlock implements IdentityInterface
             if ($cmsBlock instanceof IdentityInterface) {
                 $identities = array_merge($identities, $cmsBlock->getIdentities());
             }
-            // phpcs:disable Magento2.CodeAnalysis.EmptyBlock.DetectedCatch
+            // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock.DetectedCatch
         } catch (NoSuchEntityException $e) {
         }
 
