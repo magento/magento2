@@ -14,7 +14,6 @@ use Magento\Framework\DataObject\IdentityInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\View\Element\AbstractBlock;
 use Magento\Framework\View\Element\Context;
-use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Model\StoreManagerInterface;
 
 /**
@@ -83,7 +82,7 @@ class BlockByIdentifier extends AbstractBlock implements IdentityInterface
     private function filterOutput(string $content): string
     {
         return $this->filterProvider->getBlockFilter()
-            ->setStoreId($this->getCurrentStore()->getId())
+            ->setStoreId($this->getCurrentStoreId())
             ->filter($content);
     }
 
@@ -104,7 +103,7 @@ class BlockByIdentifier extends AbstractBlock implements IdentityInterface
         if (null === $this->cmsBlock) {
             $this->cmsBlock = $this->blockByIdentifier->execute(
                 (string)$this->getIdentifier(),
-                (int)$this->getCurrentStore()->getId()
+                $this->getCurrentStoreId()
             );
         }
 
@@ -112,14 +111,14 @@ class BlockByIdentifier extends AbstractBlock implements IdentityInterface
     }
 
     /**
-     * Returns the StoreInterface of currently opened Store scope
+     * Returns the current Store ID
      *
-     * @return StoreInterface
+     * @return int
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
-    private function getCurrentStore(): StoreInterface
+    private function getCurrentStoreId(): int
     {
-        return $this->storeManager->getStore();
+        return (int)$this->storeManager->getStore()->getId();
     }
 
     /**
@@ -133,10 +132,19 @@ class BlockByIdentifier extends AbstractBlock implements IdentityInterface
     public function getIdentities(): array
     {
         try {
-            return [
-                self::CACHE_KEY_PREFIX . '_' . $this->getCmsBlock()->getId(),
-                self::CACHE_KEY_PREFIX . '_' . $this->getIdentifier() . '_' . $this->getCurrentStore()->getId()
-            ];
+            $cmsBlock = $this->getCmsBlock();
+
+            $identities = [self::CACHE_KEY_PREFIX . '_' . $cmsBlock->getId()];
+
+            if (method_exists($this->getCmsBlock(), 'getStores')) {
+                foreach ($cmsBlock->getStores() as $store) {
+                    $identities[] = self::CACHE_KEY_PREFIX . '_' . $this->getIdentifier() . '_' . $store;
+                }
+            }
+
+            $identities[] = self::CACHE_KEY_PREFIX . '_' . $this->getIdentifier() . '_' . $this->getCurrentStoreId();
+
+            return $identities;
         } catch (NoSuchEntityException $e) {
             // If CMS Block does not exist, it should not be cached
             return [];
