@@ -16,7 +16,7 @@ use Magento\TestFramework\ObjectManager;
 use Magento\TestFramework\TestCase\WebapiAbstract;
 
 /**
- * SpecialPriceStorage test.
+ * SpecialPriceStorage API operations test
  */
 class SpecialPriceStorageTest extends WebapiAbstract
 {
