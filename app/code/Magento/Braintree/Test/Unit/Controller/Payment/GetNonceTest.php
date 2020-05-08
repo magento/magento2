@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Braintree\Test\Unit\Controller\Payment;
 
 use Magento\Braintree\Controller\Payment\GetNonce;
@@ -10,20 +12,20 @@ use Magento\Braintree\Gateway\Command\GetPaymentNonceCommand;
 use Magento\Customer\Model\Session;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\App\Request\Http;
+use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Controller\ResultInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\Webapi\Exception;
 use Magento\Payment\Gateway\Command\ResultInterface as CommandResultInterface;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 
 /**
- * Class GetNonceTest
- *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class GetNonceTest extends \PHPUnit\Framework\TestCase
+class GetNonceTest extends TestCase
 {
     /**
      * @var GetNonce
@@ -65,14 +67,14 @@ class GetNonceTest extends \PHPUnit\Framework\TestCase
      */
     private $commandResultMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->initResultFactoryMock();
 
         $this->requestMock = $this->getMockBuilder(RequestInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['getParam'])
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->commandMock = $this->getMockBuilder(GetPaymentNonceCommand::class)
             ->disableOriginalConstructor()
@@ -81,7 +83,7 @@ class GetNonceTest extends \PHPUnit\Framework\TestCase
 
         $this->commandResultMock = $this->getMockBuilder(CommandResultInterface::class)
             ->setMethods(['get'])
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->sessionMock = $this->getMockBuilder(Session::class)
             ->disableOriginalConstructor()
@@ -91,7 +93,7 @@ class GetNonceTest extends \PHPUnit\Framework\TestCase
             ->method('getStoreId')
             ->willReturn(null);
 
-        $this->loggerMock = $this->createMock(LoggerInterface::class);
+        $this->loggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
 
         $context = $this->getMockBuilder(Context::class)
             ->disableOriginalConstructor()
@@ -192,7 +194,7 @@ class GetNonceTest extends \PHPUnit\Framework\TestCase
     {
         $this->resultMock = $this->getMockBuilder(ResultInterface::class)
             ->setMethods(['setHttpResponseCode', 'renderResult', 'setHeader', 'setData'])
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->resultFactoryMock = $this->getMockBuilder(ResultFactory::class)
             ->disableOriginalConstructor()

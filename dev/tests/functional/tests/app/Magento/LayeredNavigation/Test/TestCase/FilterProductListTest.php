@@ -83,7 +83,7 @@ class FilterProductListTest extends Injectable
      *
      * @return void
      */
-    public function tearDown()
+    public function tearDown(): void
     {
         $this->objectManager->create(
             \Magento\Config\Test\TestStep\SetupConfigurationStep::class,

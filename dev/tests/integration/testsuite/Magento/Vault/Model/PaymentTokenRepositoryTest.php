@@ -43,7 +43,7 @@ class PaymentTokenRepositoryTest extends \PHPUnit\Framework\TestCase
      */
     private $objectManager;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
         $this->repository = $this->objectManager->create(PaymentTokenRepository::class);

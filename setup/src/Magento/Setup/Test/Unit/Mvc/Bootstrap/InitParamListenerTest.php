@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Setup\Test\Unit\Mvc\Bootstrap;
 
@@ -12,9 +13,11 @@ use Laminas\EventManager\SharedEventManager;
 use Laminas\Http\Headers;
 use Laminas\Http\Response;
 use Laminas\Mvc\Application;
+use Laminas\Mvc\MvcEvent;
 use Laminas\Mvc\Router\Http\RouteMatch;
 use Laminas\ServiceManager\ServiceLocatorInterface;
 use Laminas\ServiceManager\ServiceManager;
+use Laminas\Stdlib\RequestInterface;
 use Magento\Backend\App\BackendApp;
 use Magento\Backend\App\BackendAppList;
 use Magento\Backend\Model\Auth;
@@ -22,21 +25,22 @@ use Magento\Backend\Model\Auth\Session;
 use Magento\Backend\Model\Session\AdminConfig;
 use Magento\Backend\Model\Url;
 use Magento\Framework\App\Area;
+use Magento\Framework\App\Bootstrap as AppBootstrap;
 use Magento\Framework\App\DeploymentConfig;
+use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\State;
 use Magento\Framework\Filesystem;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Setup\Model\ObjectManagerProvider;
 use Magento\Setup\Mvc\Bootstrap\InitParamListener;
-use Magento\Framework\App\Bootstrap as AppBootstrap;
-use Magento\Framework\App\Filesystem\DirectoryList;
-use Laminas\Mvc\MvcEvent;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test for \Magento\Setup\Mvc\Bootstrap\InitParamListener
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class InitParamListenerTest extends \PHPUnit\Framework\TestCase
+class InitParamListenerTest extends TestCase
 {
 
     /**
@@ -47,7 +51,7 @@ class InitParamListenerTest extends \PHPUnit\Framework\TestCase
     /** callable[][] */
     private $callbacks = [];
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->listener = new InitParamListener();
     }
@@ -68,7 +72,7 @@ class InitParamListenerTest extends \PHPUnit\Framework\TestCase
 
     public function testOnBootstrap()
     {
-        /** @var MvcEvent|\PHPUnit_Framework_MockObject_MockObject $mvcEvent */
+        /** @var MvcEvent|MockObject $mvcEvent */
         $mvcEvent = $this->createMock(MvcEvent::class);
         $mvcApplication = $this->getMockBuilder(Application::class)
             ->disableOriginalConstructor()
@@ -107,25 +111,23 @@ class InitParamListenerTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('/test/root/app', $directoryList->getPath(DirectoryList::APP));
     }
 
-    /**
-     * @expectedException \LogicException
-     * @expectedExceptionMessage Magento root directory is not specified.
-     */
     public function testCreateDirectoryListException()
     {
+        $this->expectException('LogicException');
+        $this->expectExceptionMessage('Magento root directory is not specified.');
         $this->listener->createDirectoryList([]);
     }
 
     public function testCreateServiceNotConsole()
     {
         /**
-         * @var ServiceLocatorInterface|\PHPUnit_Framework_MockObject_MockObject $serviceLocator
+         * @var ServiceLocatorInterface|MockObject $serviceLocator
          */
-        $serviceLocator = $this->createMock(ServiceLocatorInterface::class);
+        $serviceLocator = $this->getMockForAbstractClass(ServiceLocatorInterface::class);
         $mvcApplication = $this->getMockBuilder(Application::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $request = $this->createMock(\Laminas\Stdlib\RequestInterface::class);
+        $request = $this->getMockForAbstractClass(RequestInterface::class);
         $mvcApplication->expects($this->any())->method('getRequest')->willReturn($request);
         $serviceLocator->expects($this->once())->method('get')->with('Application')
             ->willReturn($mvcApplication);
@@ -147,13 +149,15 @@ class InitParamListenerTest extends \PHPUnit\Framework\TestCase
         }
         $listener = new InitParamListener();
         /**
-         * @var ServiceLocatorInterface|\PHPUnit_Framework_MockObject_MockObject $serviceLocator
+         * @var ServiceLocatorInterface|MockObject $serviceLocator
          */
-        $serviceLocator = $this->createMock(ServiceLocatorInterface::class);
+        $serviceLocator = $this->getMockForAbstractClass(ServiceLocatorInterface::class);
         $mvcApplication = $this->getMockBuilder(Application::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $request = $this->getMockBuilder(Request::class)->disableOriginalConstructor()->getMock();
+        $request = $this->getMockBuilder(Request::class)
+            ->disableOriginalConstructor()
+            ->getMock();
         $request->expects($this->any())
             ->method('getContent')
             ->willReturn(
@@ -238,10 +242,11 @@ class InitParamListenerTest extends \PHPUnit\Framework\TestCase
 
         /**
          * @var DirectoryList|
-         * \PHPUnit_Framework_MockObject_MockObject $directoryList
+         * \PHPUnit\Framework\MockObject\MockObject $directoryList
          */
         $directoryList = $this->getMockBuilder(DirectoryList::class)
-            ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
         $directoryList->expects($this->any())->method('getPath')->willReturn($testPath);
         $filesystem = $this->listener->createFilesystem($directoryList);
 
@@ -252,14 +257,14 @@ class InitParamListenerTest extends \PHPUnit\Framework\TestCase
     /**
      * Prepare the event manager with a SharedEventManager, it will expect attach() to be called once.
      *
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return MockObject
      */
     private function prepareEventManager()
     {
         $this->callbacks[] = [$this->listener, 'onBootstrap'];
 
-        /** @var EventManagerInterface|\PHPUnit_Framework_MockObject_MockObject $events */
-        $eventManager = $this->createMock(EventManagerInterface::class);
+        /** @var EventManagerInterface|MockObject $events */
+        $eventManager = $this->getMockForAbstractClass(EventManagerInterface::class);
 
         $sharedManager = $this->createMock(SharedEventManager::class);
         $sharedManager->expects($this->once())->method('attach')->with(
