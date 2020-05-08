@@ -39,6 +39,8 @@ class Cache implements ConfigOptionsListInterface
     const CONFIG_PATH_CACHE_BACKEND_COMPRESS_DATA = 'cache/frontend/default/backend_options/compress_data';
     const CONFIG_PATH_CACHE_BACKEND_COMPRESSION_LIB = 'cache/frontend/default/backend_options/compression_lib';
     const CONFIG_PATH_CACHE_ID_PREFIX = 'cache/frontend/default/id_prefix';
+    const CONFIG_PATH_ALLOW_BLOCKING_GENERATION = 'cache/allow_parallel_generation';
+
 
     /**
      * @var array
@@ -164,6 +166,8 @@ class Cache implements ConfigOptionsListInterface
                 $configData->set(self::CONFIG_PATH_CACHE_BACKEND, $options[self::INPUT_KEY_CACHE_BACKEND]);
             }
         }
+
+        $configData->set(self::CONFIG_PATH_ALLOW_BLOCKING_GENERATION, false);
 
         foreach ($this->inputKeyToConfigPathMap as $inputKey => $configPath) {
             if (isset($options[$inputKey])) {

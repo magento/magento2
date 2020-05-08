@@ -1107,49 +1107,33 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
             }
 
             $this->_beforeToHtml();
-            $data = $this->_toHtml();
-
-            if ($this->hasData('translate_inline')) {
-                $this->inlineTranslation->resume();
-            }
-
-            return $data;
+            return $this->_toHtml();
         };
 
         if ($this->getCacheLifetime() === null || !$this->_cacheState->isEnabled(self::CACHE_GROUP)) {
-            return $collectAction();
+            $html = $collectAction();
+            if ($this->hasData('translate_inline')) {
+                $this->inlineTranslation->resume();
+            }
+            return $html;
         }
-
         $loadAction = function () {
             return $this->_cache->load($this->getCacheKey());
         };
 
         $saveAction = function ($data) {
             $this->_saveCache($data);
-            return $data;
+            if ($this->hasData('translate_inline')) {
+                $this->inlineTranslation->resume();
+            }
         };
 
-        return (string)$this->lockQuery->nonBlockingLockedLoadData(
-            $this->shortenLockName($this->getCacheKey()),
+        return (string)$this->lockQuery->lockedLoadData(
+            $this->getCacheKey(),
             $loadAction,
             $collectAction,
             $saveAction
         );
-    }
-
-    /**
-     * Shortens lock name in case plugin increased cache key size out of sha1 length
-     *
-     * @param string $cacheKey
-     * @return string
-     */
-    private function shortenLockName(string $cacheKey)
-    {
-        if (strlen(self::CACHE_KEY_PREFIX) + 40 < strlen($cacheKey)) {
-            return self::CACHE_KEY_PREFIX . sha1($cacheKey);
-        }
-
-        return $cacheKey;
     }
 
     /**

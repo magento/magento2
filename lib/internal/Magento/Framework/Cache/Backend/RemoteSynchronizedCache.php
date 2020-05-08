@@ -6,6 +6,9 @@
 
 namespace Magento\Framework\Cache\Backend;
 
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Lock\LockManagerInterface;
+
 /**
  * Remote synchronized cache
  *
@@ -41,6 +44,11 @@ class RemoteSynchronizedCache extends \Zend_Cache_Backend implements \Zend_Cache
      * Suffix for hash to compare data version in cache storage.
      */
     private const HASH_SUFFIX = ':hash';
+
+    /**
+     * @var LockManagerInterface
+     */
+    private $lockManager;
 
     /**
      * @inheritdoc
@@ -101,6 +109,8 @@ class RemoteSynchronizedCache extends \Zend_Cache_Backend implements \Zend_Cache
                 );
             }
         }
+
+        $this->lockManager = ObjectManager::getInstance()->get(LockManagerInterface::class);
     }
 
     /**
