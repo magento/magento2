@@ -193,7 +193,12 @@ class Switcher extends \Magento\Framework\View\Element\Template
                 $stores = [];
             } else {
                 $stores = $rawStores[$groupId];
+
+                uasort($stores, static function ($itemA, $itemB) {
+                    return (int)$itemA->getSortOrder() <=> (int)$itemB->getSortOrder();
+                });
             }
+
             $this->setData('stores', $stores);
         }
         return $this->getData('stores');
