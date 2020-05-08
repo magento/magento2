@@ -10,9 +10,11 @@ use Magento\Framework\App\Request\Http as HttpRequest;
 use Magento\Framework\App\Request\InvalidRequestException;
 use Magento\Framework\App\Request\ValidatorInterface as RequestValidator;
 use Magento\Framework\Controller\ResultInterface;
+use Magento\Framework\Event\ManagerInterface as EventManagerInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NotFoundException;
 use Magento\Framework\Message\ManagerInterface as MessageManager;
+use Magento\Framework\Profiler;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -63,13 +65,31 @@ class FrontController implements FrontControllerInterface
     private $areaList;
 
     /**
+     * @var ActionFlag
+     */
+    private $actionFlag;
+
+    /**
+     * @var EventManagerInterface
+     */
+    private $eventManager;
+
+    /**
+     * @var RequestInterface
+     */
+    private $request;
+
+    /**
      * @param RouterListInterface $routerList
      * @param ResponseInterface $response
      * @param RequestValidator|null $requestValidator
      * @param MessageManager|null $messageManager
      * @param LoggerInterface|null $logger
-     * @param State $appState
-     * @param AreaList $areaList
+     * @param State|null $appState
+     * @param AreaList|null $areaList
+     * @param ActionFlag|null $actionFlag
+     * @param EventManagerInterface|null $eventManager
+     * @param RequestInterface|null $request
      */
     public function __construct(
         RouterListInterface $routerList,
@@ -78,7 +98,10 @@ class FrontController implements FrontControllerInterface
         ?MessageManager $messageManager = null,
         ?LoggerInterface $logger = null,
         ?State $appState = null,
-        ?AreaList $areaList = null
+        ?AreaList $areaList = null,
+        ?RequestInterface $request = null,
+        ?ActionFlag $actionFlag = null,
+        ?EventManagerInterface $eventManager = null
     ) {
         $this->_routerList = $routerList;
         $this->response = $response;
@@ -92,6 +115,12 @@ class FrontController implements FrontControllerInterface
             ?? ObjectManager::getInstance()->get(State::class);
         $this->areaList = $areaList
             ?? ObjectManager::getInstance()->get(AreaList::class);
+        $this->actionFlag = $actionFlag
+            ?? ObjectManager::getInstance()->get(ActionFlag::class);
+        $this->eventManager = $eventManager
+            ?? ObjectManager::getInstance()->get(EventManagerInterface::class);
+        $this->request = $request
+            ?? ObjectManager::getInstance()->get(RequestInterface::class);
     }
 
     /**
@@ -104,7 +133,7 @@ class FrontController implements FrontControllerInterface
      */
     public function dispatch(RequestInterface $request)
     {
-        \Magento\Framework\Profiler::start('routers_match');
+        Profiler::start('routers_match');
         $this->validatedRequest = false;
         $routingCycleCounter = 0;
         $result = null;
@@ -128,7 +157,7 @@ class FrontController implements FrontControllerInterface
                 }
             }
         }
-        \Magento\Framework\Profiler::stop('routers_match');
+        Profiler::stop('routers_match');
         if ($routingCycleCounter > 100) {
             throw new \LogicException('Front controller reached 100 router match iterations');
         }
@@ -156,15 +185,11 @@ class FrontController implements FrontControllerInterface
         //Validating a request only once.
         if (!$this->validatedRequest) {
             try {
-                $this->requestValidator->validate(
-                    $request,
-                    $actionInstance
-                );
+                $this->requestValidator->validate($request, $actionInstance);
             } catch (InvalidRequestException $exception) {
                 //Validation failed - processing validation results.
                 $this->logger->debug(
-                    'Request validation failed for action "'
-                    . get_class($actionInstance) . '"',
+                    sprintf('Request validation failed for action "%s"', get_class($actionInstance)),
                     ["exception" => $exception]
                 );
                 $result = $exception->getReplaceResult();
@@ -180,12 +205,12 @@ class FrontController implements FrontControllerInterface
             $this->validatedRequest = true;
         }
 
-        //Validation did not produce a result to replace the action's.
+        // Validation did not produce a result to replace the action's.
         if (!$result) {
-            if ($actionInstance instanceof AbstractAction) {
-                $result = $actionInstance->dispatch($request);
-            } else {
-                $result = $actionInstance->execute();
+            $this->dispatchPreDispatchEvents($actionInstance);
+            $result = $this->getActionResponse($actionInstance, $request);
+            if (!$this->isSetActionNoPostDispatchFlag()) {
+                $this->dispatchPostDispatchEvents($actionInstance);
             }
         }
 
@@ -194,5 +219,91 @@ class FrontController implements FrontControllerInterface
             throw $result;
         }
         return $result;
+    }
+
+    /**
+     * Return the result of processed request
+     *
+     * There are 3 ways of handling requests:
+     * - Result without dispatching event when FLAG_NO_DISPATCH is set, just return ResponseInterface
+     * - Backwards-compatible way using `AbstractAction::dispatch` which is deprecated
+     * - Correct way for handling requests with `ActionInterface::execute`
+     *
+     * @param ActionInterface $actionInstance
+     * @param HttpRequest $request
+     * @return ResponseInterface|ResultInterface
+     * @throws NotFoundException
+     */
+    private function getActionResponse(ActionInterface $actionInstance, HttpRequest $request)
+    {
+        if ($this->actionFlag->get('', ActionInterface::FLAG_NO_DISPATCH)) {
+            return $this->response;
+        }
+
+        if ($actionInstance instanceof AbstractAction) {
+            return $actionInstance->dispatch($request);
+        }
+
+        return $actionInstance->execute();
+    }
+
+    /**
+     * Check if action flags are set that would suppress the post dispatch events.
+     *
+     * @return bool
+     */
+    private function isSetActionNoPostDispatchFlag(): bool
+    {
+        return $this->actionFlag->get('', ActionInterface::FLAG_NO_DISPATCH) ||
+            $this->actionFlag->get('', ActionInterface::FLAG_NO_POST_DISPATCH);
+    }
+
+    /**
+     * Dispatch the controller_action_predispatch events.
+     *
+     * @param ActionInterface $action
+     */
+    private function dispatchPreDispatchEvents(ActionInterface $action)
+    {
+        $this->eventManager->dispatch('controller_action_predispatch', $this->getEventParameters($action));
+        $this->eventManager->dispatch(
+            'controller_action_predispatch_' . $this->request->getRouteName(),
+            $this->getEventParameters($action)
+        );
+        $this->eventManager->dispatch(
+            'controller_action_predispatch_' . $this->request->getFullActionName(),
+            $this->getEventParameters($action)
+        );
+    }
+
+    /**
+     * Dispatch the controller_action_postdispatch events.
+     *
+     * @param ActionInterface $action
+     */
+    private function dispatchPostDispatchEvents(ActionInterface $action)
+    {
+        Profiler::start('postdispatch');
+        $this->eventManager->dispatch(
+            'controller_action_postdispatch_' . $this->request->getFullActionName(),
+            $this->getEventParameters($action)
+        );
+        $this->eventManager->dispatch(
+            'controller_action_postdispatch_' . $this->request->getRouteName(),
+            $this->getEventParameters($action)
+        );
+        $this->eventManager->dispatch('controller_action_postdispatch', $this->getEventParameters($action));
+        Profiler::stop('postdispatch');
+    }
+
+    /**
+     * Build the event parameter array
+     *
+     * @param ActionInterface $subject
+     * @return array
+     */
+    private function getEventParameters(ActionInterface $subject): array
+    {
+        return ['controller_action' => $subject, 'request' => $this->request];
     }
 }

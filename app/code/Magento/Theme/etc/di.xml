@@ -309,4 +309,7 @@
             <argument name="cache" xsi:type="object">configured_design_cache</argument>
         </arguments>
     </type>
+    <type name="Magento\Framework\App\ActionInterface">
+        <plugin name="designLoader" type="Magento\Theme\Plugin\LoadDesignPlugin"/>
+    </type>
 </config>

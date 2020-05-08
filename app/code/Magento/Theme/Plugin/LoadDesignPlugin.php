@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Framework\App\Action\Plugin;
+namespace Magento\Theme\Plugin;
 
 use Magento\Framework\App\ActionInterface;
 use Magento\Framework\Config\Dom\ValidationException;
