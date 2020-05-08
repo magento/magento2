@@ -12,7 +12,6 @@ define([
     'use strict';
 
     return function (config) {
-        $('body').trigger('processStart');
         customerData.reload(sectionConfig.getSectionNames()).done(function () {
             window.location.href = config.redirectUrl;
         });

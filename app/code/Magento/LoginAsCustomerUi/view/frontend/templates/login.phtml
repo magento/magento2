@@ -4,7 +4,16 @@
  * See COPYING.txt for license details.
  */
 /** @var \Magento\Framework\View\Element\Template $block */
+/** @var \Magento\Framework\Escaper $escaper */
 ?>
+
+<div class="loading-mask">
+    <div class="loader">
+        <img src="<?= $escaper->escapeUrl($block->getViewFileUrl('images/loader-1.gif')) ?>"
+             alt="<?= $escaper->escapeHtmlAttr(__('Loading...')) ?>"
+             style="position: absolute;">
+    </div>
+</div>
 
 <script type="text/x-magento-init">
 {
