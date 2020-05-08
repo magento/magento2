@@ -124,6 +124,9 @@ class CategoryUrlRewriteGenerator
         $mergeDataProvider = clone $this->mergeDataProviderPrototype;
         $categoryId = $category->getId();
         foreach ($category->getStoreIds() as $storeId) {
+            if ($storeId !== Store::DEFAULT_STORE_ID) {
+                $category = clone $category; // prevent undesired side effects on original object
+            }
             $category->setStoreId($storeId);
             if (!$this->isGlobalScope($storeId)
                 && $this->isOverrideUrlsForStore($storeId, $categoryId, $overrideStoreUrls)
