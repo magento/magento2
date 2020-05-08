@@ -44,7 +44,7 @@ QUERY;
      * Check if customer account is not available
      *
      * @expectedException \Exception
-     * @expectedExceptionMessage Cannot reset customer password
+     * @expectedExceptionMessage Cannot reset the customer's password
      */
     public function testCustomerAccountWithEmailNotAvailable()
     {
@@ -61,7 +61,7 @@ QUERY;
      * Check if email value empty
      *
      * @expectedException \Exception
-     * @expectedExceptionMessage Email must be specified
+     * @expectedExceptionMessage You must specify an email address.
      */
     public function testEmailAvailableEmptyValue()
     {
@@ -77,7 +77,7 @@ QUERY;
      * Check if email is invalid
      *
      * @expectedException \Exception
-     * @expectedExceptionMessage Email is invalid
+     * @expectedExceptionMessage The email address has an invalid format.
      */
     public function testEmailAvailableInvalidValue()
     {

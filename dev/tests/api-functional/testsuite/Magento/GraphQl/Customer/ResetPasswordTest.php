@@ -81,7 +81,7 @@ QUERY;
      * @magentoApiDataFixture    Magento/Customer/_files/customer.php
      *
      * @expectedException \Exception
-     * @expectedExceptionMessage Email must be specified
+     * @expectedExceptionMessage You must specify an email address.
      *
      * @throws NoSuchEntityException
      * @throws Exception
@@ -105,7 +105,7 @@ QUERY;
      * @magentoApiDataFixture    Magento/Customer/_files/customer.php
      *
      * @expectedException \Exception
-     * @expectedExceptionMessage Email is invalid
+     * @expectedExceptionMessage The email address has an invalid format.
      *
      * @throws NoSuchEntityException
      * @throws Exception
@@ -153,7 +153,7 @@ QUERY;
      * @magentoApiDataFixture    Magento/Customer/_files/customer.php
      *
      * @expectedException \Exception
-     * @expectedExceptionMessage Cannot set customer password
+     * @expectedExceptionMessage Cannot set the customer's password
      *
      * @throws NoSuchEntityException
      * @throws Exception

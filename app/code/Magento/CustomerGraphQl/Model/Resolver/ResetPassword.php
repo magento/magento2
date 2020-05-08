@@ -86,11 +86,11 @@ class ResetPassword implements ResolverInterface
         array $args = null
     ) {
         if (empty($args['email'])) {
-            throw new GraphQlInputException(__('Email must be specified'));
+            throw new GraphQlInputException(__('You must specify an email address.'));
         }
 
         if (!$this->emailValidator->isValid($args['email'])) {
-            throw new GraphQlInputException(__('Email is invalid'));
+            throw new GraphQlInputException(__('The email address has an invalid format.'));
         }
 
         if (empty($args['resetPasswordToken'])) {
@@ -104,7 +104,7 @@ class ResetPassword implements ResolverInterface
         try {
             $customer = $this->customerRepository->get($args['email']);
         } catch (LocalizedException $e) {
-            throw new GraphQlInputException(__('Cannot set customer password'), $e);
+            throw new GraphQlInputException(__('Cannot set the customer\'s password'), $e);
         }
 
         if (true === $this->authentication->isLocked($customer->getId())) {
@@ -118,7 +118,7 @@ class ResetPassword implements ResolverInterface
                 $args['newPassword']
             );
         } catch (LocalizedException $e) {
-            throw new GraphQlInputException(__('Cannot set customer password'), $e);
+            throw new GraphQlInputException(__('Cannot set the customer\'s password'), $e);
         }
     }
 }
