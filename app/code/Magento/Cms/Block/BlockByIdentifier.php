@@ -9,6 +9,7 @@ namespace Magento\Cms\Block;
 
 use Magento\Cms\Api\Data\BlockInterface;
 use Magento\Cms\Api\GetBlockByIdentifierInterface;
+use Magento\Cms\Model\Block as BlockModel;
 use Magento\Cms\Model\Template\FilterProvider;
 use Magento\Framework\DataObject\IdentityInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
@@ -45,6 +46,13 @@ class BlockByIdentifier extends AbstractBlock implements IdentityInterface
      */
     private $cmsBlock;
 
+    /**
+     * @param GetBlockByIdentifierInterface $blockByIdentifier
+     * @param StoreManagerInterface $storeManager
+     * @param FilterProvider $filterProvider
+     * @param Context $context
+     * @param array $data
+     */
     public function __construct(
         GetBlockByIdentifierInterface $blockByIdentifier,
         StoreManagerInterface $storeManager,
@@ -89,7 +97,7 @@ class BlockByIdentifier extends AbstractBlock implements IdentityInterface
     /**
      * Loads the CMS block by `identifier` provided as an argument
      *
-     * @return BlockInterface
+     * @return BlockInterface|BlockModel
      * @throws NoSuchEntityException
      */
     private function getCmsBlock(): BlockInterface
@@ -142,17 +150,13 @@ class BlockByIdentifier extends AbstractBlock implements IdentityInterface
 
         try {
             $cmsBlock = $this->getCmsBlock();
-
-            $identities[] = self::CACHE_KEY_PREFIX . '_' . $cmsBlock->getId();
-
-            if (method_exists($this->getCmsBlock(), 'getStores')) {
-                foreach ($cmsBlock->getStores() as $storeId) {
-                    $identities[] = self::CACHE_KEY_PREFIX . '_' . $this->getIdentifier() . '_' . $storeId;
-                }
+            if ($cmsBlock instanceof IdentityInterface) {
+                $identities = array_merge($identities, $cmsBlock->getIdentities());
             }
             // phpcs:disable Magento2.CodeAnalysis.EmptyBlock.DetectedCatch
         } catch (NoSuchEntityException $e) {
         }
+
         return $identities;
     }
 }

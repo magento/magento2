@@ -10,6 +10,7 @@ namespace Magento\Cms\Test\Unit\Block;
 use Magento\Cms\Api\Data\BlockInterface;
 use Magento\Cms\Api\GetBlockByIdentifierInterface;
 use Magento\Cms\Block\BlockByIdentifier;
+use Magento\Cms\Model\Block;
 use Magento\Cms\Model\Template\FilterProvider;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Event\ManagerInterface;
@@ -21,6 +22,9 @@ use Magento\Store\Model\StoreManagerInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class BlockByIdentifierTest extends TestCase
 {
     private const STUB_MODULE_OUTPUT_DISABLED = false;
@@ -37,6 +41,8 @@ class BlockByIdentifierTest extends TestCase
         BlockByIdentifier::CACHE_KEY_PREFIX . '_' . self::STUB_UNAVAILABLE_IDENTIFIER,
         BlockByIdentifier::CACHE_KEY_PREFIX . '_' . self::STUB_UNAVAILABLE_IDENTIFIER . '_' . self::STUB_DEFAULT_STORE
     ];
+    private const STUB_CMS_BLOCK_IDENTITY_BY_ID = 'CMS_BLOCK_' . self::STUB_CMS_BLOCK_ID;
+    private const STUB_CMS_BLOCK_IDENTITY_BY_IDENTIFIER = 'CMS_BLOCK_' . self::STUB_EXISTING_IDENTIFIER;
 
     /** @var MockObject|GetBlockByIdentifierInterface */
     private $getBlockByIdentifierMock;
@@ -108,14 +114,19 @@ class BlockByIdentifierTest extends TestCase
         $this->assertSame(self::ASSERT_CONTENT_HTML, $block->toHtml());
     }
 
-    public function testBlockCacheIdentitiesContainExplicitScopeInformation(): void
+    public function testBlockCacheIdentitiesContainCmsBlockIdentities(): void
     {
         // Given
-        $cmsBlockMock = $this->getCmsBlockMock(
-            self::STUB_CMS_BLOCK_ID,
-            self::STUB_EXISTING_IDENTIFIER,
-            self::STUB_CONTENT
+        $cmsBlockMock = $this->createMock(Block::class);
+        $cmsBlockMock->method('getId')->willReturn(self::STUB_CMS_BLOCK_ID);
+        $cmsBlockMock->method('getIdentifier')->willReturn(self::STUB_EXISTING_IDENTIFIER);
+        $cmsBlockMock->method('getIdentities')->willReturn(
+            [
+                self::STUB_CMS_BLOCK_IDENTITY_BY_ID,
+                self::STUB_CMS_BLOCK_IDENTITY_BY_IDENTIFIER
+            ]
         );
+
         $this->storeMock->method('getId')->willReturn(self::STUB_DEFAULT_STORE);
         $this->getBlockByIdentifierMock->method('execute')
             ->with(self::STUB_EXISTING_IDENTIFIER, self::STUB_DEFAULT_STORE)
@@ -127,10 +138,8 @@ class BlockByIdentifierTest extends TestCase
 
         // Then
         $this->assertContains($this->getIdentityStubById(self::STUB_CMS_BLOCK_ID), $identities);
-        $this->assertContains(
-            $this->getIdentityStubByIdentifier(self::STUB_EXISTING_IDENTIFIER, self::STUB_DEFAULT_STORE),
-            $identities
-        );
+        $this->assertContains(self::STUB_CMS_BLOCK_IDENTITY_BY_ID, $identities);
+        $this->assertContains(self::STUB_CMS_BLOCK_IDENTITY_BY_IDENTIFIER, $identities);
     }
 
     /**
