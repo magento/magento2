@@ -19,8 +19,6 @@ use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * This class is replacement of \Magento\Cms\Block\Block, that accepts only `string` identifier of CMS Block
- *
- * @method getIdentifier(): int Returns the value of `identifier` injected in `<block>` definition
  */
 class BlockByIdentifier extends AbstractBlock implements IdentityInterface
 {
@@ -78,6 +76,16 @@ class BlockByIdentifier extends AbstractBlock implements IdentityInterface
         } catch (NoSuchEntityException $e) {
             return '';
         }
+    }
+
+    /**
+     * Returns the value of `identifier` injected in `<block>` definition
+     *
+     * @return string|null
+     */
+    private function getIdentifier(): ?string
+    {
+        return $this->getdata('identifier') ?: null;
     }
 
     /**
