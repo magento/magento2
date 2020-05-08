@@ -40,7 +40,7 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->transportBuilderMock = $this->_objectManager->get(TransportBuilderMock::class);
@@ -70,7 +70,7 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
         $this->dispatch('customer/account/index');
 
         $body = $this->getResponse()->getBody();
-        $this->assertContains('Green str, 67', $body);
+        $this->assertStringContainsString('Green str, 67', $body);
     }
 
     /**
@@ -81,12 +81,12 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
         $this->dispatch('customer/account/create');
         $body = $this->getResponse()->getBody();
 
-        $this->assertRegExp('~<input type="text"[^>]*id="firstname"~', $body);
-        $this->assertRegExp('~<input type="text"[^>]*id="lastname"~', $body);
-        $this->assertRegExp('~<input type="checkbox"[^>]*id="is_subscribed"~', $body);
-        $this->assertRegExp('~<input type="email"[^>]*id="email_address"~', $body);
-        $this->assertRegExp('~<input type="password"[^>]*id="password"~', $body);
-        $this->assertRegExp('~<input type="password"[^>]*id="password-confirmation"~', $body);
+        $this->assertMatchesRegularExpression('~<input type="text"[^>]*id="firstname"~', $body);
+        $this->assertMatchesRegularExpression('~<input type="text"[^>]*id="lastname"~', $body);
+        $this->assertMatchesRegularExpression('~<input type="checkbox"[^>]*id="is_subscribed"~', $body);
+        $this->assertMatchesRegularExpression('~<input type="email"[^>]*id="email_address"~', $body);
+        $this->assertMatchesRegularExpression('~<input type="password"[^>]*id="password"~', $body);
+        $this->assertMatchesRegularExpression('~<input type="password"[^>]*id="password-confirmation"~', $body);
     }
 
     /**
@@ -129,7 +129,7 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
         /** @var Session $customer */
         $session = Bootstrap::getObjectManager()->get(Session::class);
         $this->assertEquals($token, $session->getRpToken());
-        $this->assertNotContains($token, $response->getHeader('Location')->getFieldValue());
+        $this->assertStringNotContainsString($token, $response->getHeader('Location')->getFieldValue());
         $this->assertCustomerConfirmationEquals(1, null);
     }
 
@@ -184,7 +184,10 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
         // should be redirected to forgotpassword page
         $response = $this->getResponse();
         $this->assertEquals(302, $response->getHttpResponseCode());
-        $this->assertContains('customer/account/forgotpassword', $response->getHeader('Location')->getFieldValue());
+        $this->assertStringContainsString(
+            'customer/account/forgotpassword',
+            $response->getHeader('Location')->getFieldValue()
+        );
         $this->assertCustomerConfirmationEquals(1, 'confirmation');
     }
 
@@ -399,14 +402,14 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
 
         $body = $this->getResponse()->getBody();
         $this->assertEquals(200, $this->getResponse()->getHttpResponseCode(), $body);
-        $this->assertContains('<div class="field field-name-firstname required">', $body);
+        $this->assertStringContainsString('<div class="field field-name-firstname required">', $body);
         // Verify the password check box is not checked
         $expectedString = <<<EXPECTED_HTML
 <input type="checkbox" name="change_password" id="change-password" data-role="change-password" value="1"
                    title="Change&#x20;Password"
                  class="checkbox" />
 EXPECTED_HTML;
-        $this->assertContains($expectedString, $body);
+        $this->assertStringContainsString($expectedString, $body);
     }
 
     /**
@@ -420,14 +423,14 @@ EXPECTED_HTML;
 
         $body = $this->getResponse()->getBody();
         $this->assertEquals(200, $this->getResponse()->getHttpResponseCode(), $body);
-        $this->assertContains('<div class="field field-name-firstname required">', $body);
+        $this->assertStringContainsString('<div class="field field-name-firstname required">', $body);
         // Verify the password check box is checked
         $expectedString = <<<EXPECTED_HTML
 <input type="checkbox" name="change_password" id="change-password" data-role="change-password" value="1"
                    title="Change&#x20;Password"
                  checked="checked" class="checkbox" />
 EXPECTED_HTML;
-        $this->assertContains($expectedString, $body);
+        $this->assertStringContainsString($expectedString, $body);
     }
 
     /**
@@ -713,7 +716,7 @@ EXPECTED_HTML;
 
         $nameEmail = sprintf('%s <%s>', $name, $email);
 
-        $this->assertContains('To: ' . $nameEmail, $rawMessage);
+        $this->assertStringContainsString('To: ' . $nameEmail, $rawMessage);
 
         $content = $messageBodyPart->getRawContent();
         $confirmationUrl = $this->getConfirmationUrlFromMessageContent($content);
