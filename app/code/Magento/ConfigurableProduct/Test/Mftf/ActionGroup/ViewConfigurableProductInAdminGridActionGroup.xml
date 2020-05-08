@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="ViewConfigurableProductInAdminGridActionGroup">
+        <annotations>
+            <description>Goes to the Admin Product grid page. Validates the provided Configurable Product is present and correct in the grid.</description>
+        </annotations>
+        <arguments>
+            <argument name="product" defaultValue="_defaultProduct"/>
+        </arguments>
+
+        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="visitAdminProductPage"/>
+        <waitForPageLoad stepKey="waitForPageLoadInitial"/>
+        <conditionalClick selector="{{AdminProductGridFilterSection.clearFilters}}" dependentSelector="{{AdminProductGridFilterSection.clearFilters}}" visible="true" stepKey="clickClearFiltersInitial"/>
+        <click selector="{{AdminProductGridFilterSection.filters}}" stepKey="openProductFilters"/>
+        <fillField selector="{{AdminProductGridFilterSection.skuFilter}}" userInput="{{product.sku}}" stepKey="fillProductSkuFilter"/>
+        <click selector="{{AdminProductGridFilterSection.applyFilters}}" stepKey="clickApplyFilters"/>
+        <seeNumberOfElements selector="{{AdminProductGridSection.productGridRows}}" userInput="3" stepKey="seeCorrectNumberOfProducts"/>
+
+        <click selector="{{AdminProductGridFilterSection.filters}}" stepKey="openProductFiltersSimple"/>
+        <selectOption selector="{{AdminProductGridFilterSection.typeFilter}}" userInput="simple" stepKey="selectionProductType"/>
+        <click selector="{{AdminProductGridFilterSection.applyFilters}}" stepKey="clickApplyFiltersWithSimpleType"/>
+        <see selector="{{AdminProductGridSection.firstProductRow}}" userInput="{{product.name}}"  stepKey="seeSimpleProductNameInGrid"/>
+        <see selector="{{AdminProductGridSection.firstProductRow}}" userInput="{{product.price}}"  stepKey="seeSimpleProductPriceInGrid"/>
+
+        <click selector="{{AdminProductGridFilterSection.filters}}" stepKey="openProductFiltersConfigurable"/>
+        <selectOption selector="{{AdminProductGridFilterSection.typeFilter}}" userInput="{{product.type_id}}" stepKey="selectionConfigurableProductType"/>
+        <click selector="{{AdminProductGridFilterSection.applyFilters}}" stepKey="clickApplyFiltersWithConfigurableType"/>
+        <see selector="{{AdminProductGridSection.firstProductRow}}" userInput="{{product.name}}"  stepKey="seeConfigurableProductNameInGrid"/>
+        <dontSee selector="{{AdminProductGridSection.firstProductRow}}" userInput="{{product.price}}"  stepKey="dontSeeProductPriceNameInGrid"/>
+
+        <click selector="{{AdminProductGridFilterSection.clearFilters}}" stepKey="clickClearFiltersAfter"/>
+    </actionGroup>
+</actionGroups>

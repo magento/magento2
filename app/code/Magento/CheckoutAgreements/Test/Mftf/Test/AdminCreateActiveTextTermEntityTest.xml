@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCreateActiveTextTermEntityTest" extends="AdminCreateActiveHtmlTermEntityTest">
+        <annotations>
+            <features value="CheckoutAgreements"/>
+            <stories value="Checkout agreements"/>
+            <title value="Create active text checkout agreement"/>
+            <description value="Admin should be able to create active text checkout agreement"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-14667"/>
+            <group value="checkoutAgreements"/>
+            <group value="mtf_migrated"/>
+        </annotations>
+        <after>
+            <actionGroup ref="AdminTermsConditionsEditTermByNameActionGroup" stepKey="openTermToDelete">
+                <argument name="termName" value="{{activeTextTerm.name}}"/>
+            </actionGroup>
+        </after>
+
+        <actionGroup ref="AdminTermsConditionsFillTermEditFormActionGroup" stepKey="fillNewTerm">
+            <argument name="term" value="activeTextTerm"/>
+        </actionGroup>
+        <actionGroup ref="AssertAdminTermsConditionsInGridActionGroup" stepKey="assertTermInGrid">
+            <argument name="termName" value="{{activeTextTerm.name}}"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontTermInCheckoutActionGroup" stepKey="assertTermInCheckout">
+            <argument name="termCheckboxText" value="{{activeTextTerm.checkboxText}}"/>
+        </actionGroup>
+    </test>
+</tests>

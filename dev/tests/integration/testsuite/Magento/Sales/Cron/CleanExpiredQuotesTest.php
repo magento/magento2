@@ -53,10 +53,14 @@ class CleanExpiredQuotesTest extends \PHPUnit\Framework\TestCase
      */
     public function testExecute()
     {
-        $this->cleanExpiredQuotes->execute();
         $searchCriteria = $this->searchCriteriaBuilder->create();
-        $totalCount = $this->quoteRepository->getList($searchCriteria)->getTotalCount();
+        //Initial count - should be equal to stores number.
+        $this->assertEquals(2, $this->quoteRepository->getList($searchCriteria)->getTotalCount());
 
+        //Deleting expired quotes
+        $this->cleanExpiredQuotes->execute();
+        $totalCount = $this->quoteRepository->getList($searchCriteria)->getTotalCount();
+        //Only 1 will be deleted for the store that has all of them expired by config (default_store)
         $this->assertEquals(
             1,
             $totalCount

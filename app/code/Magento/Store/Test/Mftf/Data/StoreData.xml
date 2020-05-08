@@ -197,4 +197,13 @@
         <data key="name">third_store_view</data>
         <data key="code">third_store_view</data>
     </entity>
+    <entity name="storeViewChinese" type="store">
+        <data key="group_id">1</data>
+        <data key="name">Chinese</data>
+        <data key="code">chinese</data>
+        <data key="is_active">1</data>
+        <data key="store_id">null</data>
+        <data key="store_type">store</data>
+        <data key="store_action">add</data>
+    </entity>
 </entities>

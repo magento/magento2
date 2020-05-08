@@ -25,17 +25,4 @@
         <seeElement selector="{{StorefrontMinicartSection.productImage}}" stepKey="seeProductImage"/>
         <see selector="{{StorefrontMinicartSection.productSubTotal}}" userInput="{{cartSubtotal}}" stepKey="seeSubTotal"/>
     </actionGroup>
-
-    <actionGroup name="AssertStorefrontMiniCartProductDetailsAbsentActionGroup">
-        <annotations>
-            <description>Validates that the provided Product details (Name, Price) are
-                not present in the Storefront Mini Shopping Cart.</description>
-        </annotations>
-        <arguments>
-            <argument name="productName" type="string"/>
-            <argument name="productPrice" type="string"/>
-        </arguments>
-
-        <dontSee selector="{{StorefrontMinicartSection.productPriceByName(productName)}}" userInput="{{productPrice}}" stepKey="dontSeeProductPriceInMiniCart"/>
-    </actionGroup>
 </actionGroups>

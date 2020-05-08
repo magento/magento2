@@ -16,17 +16,19 @@ $_item = $block->getItem();
                 <dt><?= $block->escapeHtml($_option['label']) ?></dt>
                 <?php if (!$block->getPrintStatus()) : ?>
                     <?php $_formatedOptionValue = $block->getFormatedOptionValue($_option) ?>
-                    <dd>
+                    <dd<?= (isset($_formatedOptionValue['full_view']) ? ' class="tooltip wrapper"' : '') ?>>
+                        <?= $block->escapeHtml($_formatedOptionValue['value'], ['a', 'img']) ?>
                         <?php if (isset($_formatedOptionValue['full_view'])) : ?>
-                            <?= $block->escapeHtml($_formatedOptionValue['full_view'], ['a']) ?>
-                        <?php else : ?>
-                            <?=$block->escapeHtml($_formatedOptionValue['value'], ['a']) ?>
+                            <div class="tooltip content">
+                                <dl class="item options">
+                                    <dt><?= $block->escapeHtml($_option['label']) ?></dt>
+                                    <dd><?= $block->escapeHtml($_formatedOptionValue['full_view']) ?></dd>
+                                </dl>
+                            </div>
                         <?php endif; ?>
                     </dd>
                 <?php else : ?>
-                    <dd>
-                        <?= /* @noEscape */ nl2br($block->escapeHtml($_option['print_value'] ?? $_option['value'])) ?>
-                    </dd>
+                    <dd><?= $block->escapeHtml((isset($_option['print_value']) ? $_option['print_value'] : $_option['value'])) ?></dd>
                 <?php endif; ?>
             <?php endforeach; ?>
             </dl>

@@ -56,7 +56,7 @@ class Block
             );
         }
 
-        $renderedContent = $this->widgetFilter->filter($block->getContent());
+        $renderedContent = $this->widgetFilter->filterDirective($block->getContent());
 
         $blockData = [
             BlockInterface::BLOCK_ID => $block->getId(),

@@ -7,10 +7,12 @@ namespace Magento\Elasticsearch\SearchAdapter;
 
 use Magento\AdvancedSearch\Model\Client\ClientOptionsInterface;
 use Magento\AdvancedSearch\Model\Client\ClientFactoryInterface;
-use Magento\Elasticsearch\Model\Client\Elasticsearch;
+use Magento\AdvancedSearch\Model\Client\ClientInterface as Elasticsearch;
 use Psr\Log\LoggerInterface;
 
 /**
+ * Class provides interface for Elasticsearch connection
+ *
  * @api
  * @since 100.1.0
  */

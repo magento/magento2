@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\GraphQl\Customer;
 
+use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Model\CustomerAuthUpdate;
 use Magento\Customer\Model\CustomerRegistry;
 use Magento\Integration\Api\CustomerTokenServiceInterface;
@@ -30,13 +31,19 @@ class GetCustomerTest extends GraphQlAbstract
      */
     private $customerAuthUpdate;
 
-    protected function setUp()
+    /**
+     * @var CustomerRepositoryInterface
+     */
+    private $customerRepository;
+
+    protected function setUp(): void
     {
         parent::setUp();
 
         $this->customerTokenService = Bootstrap::getObjectManager()->get(CustomerTokenServiceInterface::class);
         $this->customerRegistry = Bootstrap::getObjectManager()->get(CustomerRegistry::class);
         $this->customerAuthUpdate = Bootstrap::getObjectManager()->get(CustomerAuthUpdate::class);
+        $this->customerRepository = Bootstrap::getObjectManager()->get(CustomerRepositoryInterface::class);
     }
 
     /**
@@ -57,7 +64,12 @@ query {
     }
 }
 QUERY;
-        $response = $this->graphQlQuery($query, [], '', $this->getCustomerAuthHeaders($currentEmail, $currentPassword));
+        $response = $this->graphQlQuery(
+            $query,
+            [],
+            '',
+            $this->getCustomerAuthHeaders($currentEmail, $currentPassword)
+        );
 
         $this->assertEquals(null, $response['customer']['id']);
         $this->assertEquals('John', $response['customer']['firstname']);
@@ -104,7 +116,38 @@ query {
     }
 }
 QUERY;
-        $this->graphQlQuery($query, [], '', $this->getCustomerAuthHeaders($currentEmail, $currentPassword));
+        $this->graphQlQuery(
+            $query,
+            [],
+            '',
+            $this->getCustomerAuthHeaders($currentEmail, $currentPassword)
+        );
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Customer/_files/customer_confirmation_config_enable.php
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     * @expectedExceptionMessage This account isn't confirmed. Verify and try again.
+     */
+    public function testAccountIsNotConfirmed()
+    {
+        $customerEmail = 'customer@example.com';
+        $currentPassword = 'password';
+        $headersMap = $this->getCustomerAuthHeaders($customerEmail, $currentPassword);
+        $customer = $this->customerRepository->getById(1)->setConfirmation(
+            \Magento\Customer\Api\AccountManagementInterface::ACCOUNT_CONFIRMATION_REQUIRED
+        );
+        $this->customerRepository->save($customer);
+        $query = <<<QUERY
+query {
+    customer {
+        firstname
+        lastname
+        email
+    }
+}
+QUERY;
+        $this->graphQlQuery($query, [], '', $headersMap);
     }
 
     /**

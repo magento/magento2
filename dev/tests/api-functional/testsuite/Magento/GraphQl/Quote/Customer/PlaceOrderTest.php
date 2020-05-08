@@ -69,7 +69,6 @@ class PlaceOrderTest extends GraphQlAbstract
      * @magentoConfigFixture default_store payment/cashondelivery/active 1
      * @magentoConfigFixture default_store payment/checkmo/active 1
      * @magentoConfigFixture default_store payment/purchaseorder/active 1
-     * @magentoConfigFixture default_store payment/authorizenet_acceptjs/active 1
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_new_shipping_address.php
@@ -99,26 +98,6 @@ class PlaceOrderTest extends GraphQlAbstract
     {
         $maskedQuoteId = '';
         $query = $this->getQuery($maskedQuoteId);
-
-        $this->graphQlMutation($query, [], '', $this->getHeaderMap());
-    }
-
-    /**
-     * @magentoApiDataFixture Magento/Customer/_files/customer.php
-     * @expectedException Exception
-     * @expectedExceptionMessage Required parameter "cart_id" is missing
-     */
-    public function testPlaceOrderIfCartIdIsMissed()
-    {
-        $query = <<<QUERY
-mutation {
-  placeOrder(input: {}) {
-    order {
-      order_number
-    }
-  }
-}
-QUERY;
 
         $this->graphQlMutation($query, [], '', $this->getHeaderMap());
     }
@@ -256,7 +235,6 @@ QUERY;
      * @magentoConfigFixture default_store payment/cashondelivery/active 1
      * @magentoConfigFixture default_store payment/checkmo/active 1
      * @magentoConfigFixture default_store payment/purchaseorder/active 1
-     * @magentoConfigFixture default_store payment/authorizenet_acceptjs/active 1
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_new_shipping_address.php
@@ -285,7 +263,6 @@ QUERY;
      * @magentoConfigFixture default_store payment/cashondelivery/active 1
      * @magentoConfigFixture default_store payment/checkmo/active 1
      * @magentoConfigFixture default_store payment/purchaseorder/active 1
-     * @magentoConfigFixture default_store payment/authorizenet_acceptjs/active 1
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_new_shipping_address.php

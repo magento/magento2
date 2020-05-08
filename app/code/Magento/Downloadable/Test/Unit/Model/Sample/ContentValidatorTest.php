@@ -6,7 +6,11 @@
 namespace Magento\Downloadable\Test\Unit\Model\Sample;
 
 use Magento\Downloadable\Model\Sample\ContentValidator;
+use Magento\Downloadable\Helper\File;
 
+/**
+ * Unit tests for Magento\Downloadable\Model\Sample\ContentValidator.
+ */
 class ContentValidatorTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -34,12 +38,31 @@ class ContentValidatorTest extends \PHPUnit\Framework\TestCase
      */
     protected $sampleFileMock;
 
+    /**
+     * @var File|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $fileMock;
+
+    /**
+     * @inheritdoc
+     */
     protected function setUp()
     {
+        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+
         $this->fileValidatorMock = $this->createMock(\Magento\Downloadable\Model\File\ContentValidator::class);
         $this->urlValidatorMock = $this->createMock(\Magento\Framework\Url\Validator::class);
         $this->sampleFileMock = $this->createMock(\Magento\Downloadable\Api\Data\File\ContentInterface::class);
-        $this->validator = new ContentValidator($this->fileValidatorMock, $this->urlValidatorMock);
+        $this->fileMock = $this->createMock(File::class);
+
+        $this->validator = $objectManager->getObject(
+            ContentValidator::class,
+            [
+                'fileContentValidator' => $this->fileValidatorMock,
+                'urlValidator' => $this->urlValidatorMock,
+                'fileHelper' => $this->fileMock,
+            ]
+        );
     }
 
     public function testIsValid()
@@ -94,28 +117,29 @@ class ContentValidatorTest extends \PHPUnit\Framework\TestCase
     protected function getSampleContentMock(array $sampleContentData)
     {
         $contentMock = $this->createMock(\Magento\Downloadable\Api\Data\SampleInterface::class);
-        $contentMock->expects($this->any())->method('getTitle')->will($this->returnValue(
-            $sampleContentData['title']
-        ));
+        $contentMock->expects($this->any())->method('getTitle')->will(
+            $this->returnValue($sampleContentData['title'])
+        );
 
-        $contentMock->expects($this->any())->method('getSortOrder')->will($this->returnValue(
-            $sampleContentData['sort_order']
-        ));
-        $contentMock->expects($this->any())->method('getSampleType')->will($this->returnValue(
-            $sampleContentData['sample_type']
-        ));
+        $contentMock->expects($this->any())->method('getSortOrder')->will(
+            $this->returnValue($sampleContentData['sort_order'])
+        );
+        $contentMock->expects($this->any())->method('getSampleType')->will(
+            $this->returnValue($sampleContentData['sample_type'])
+        );
         if (isset($sampleContentData['sample_url'])) {
-            $contentMock->expects($this->any())->method('getSampleUrl')->will($this->returnValue(
-                $sampleContentData['sample_url']
-            ));
+            $contentMock->expects($this->any())->method('getSampleUrl')->will(
+                $this->returnValue($sampleContentData['sample_url'])
+            );
         }
         if (isset($sampleContentData['sample_file_content'])) {
             $contentMock->expects($this->any())->method('getSampleFileContent')
                 ->willReturn($sampleContentData['sample_file_content']);
         }
-        $contentMock->expects($this->any())->method('getSampleFile')->will($this->returnValue(
-            $this->sampleFileMock
-        ));
+        $contentMock->expects($this->any())->method('getSampleFile')->will(
+            $this->returnValue($this->sampleFileMock)
+        );
+
         return $contentMock;
     }
 }

@@ -14,7 +14,7 @@
             <stories value="Add Products to Order from Shopping Cart"/>
             <title value="Add configurable product to order from shopping cart test"/>
             <description value="Add configurable product to order from shopping cart"/>
-            <severity value="CRITICAL"/>
+            <severity value="BLOCKER"/>
             <testCaseId value="MC-16008"/>
             <group value="sales"/>
             <group value="mtf_migrated"/>
@@ -57,7 +57,7 @@
         </before>
         <after>
             <!-- Admin log out -->
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
 
             <!-- Customer log out -->
             <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="customerLogout"/>
@@ -72,6 +72,9 @@
 
             <!-- Delete category -->
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+
+            <!-- Reindex invalidated indices after product attribute has been created/deleted -->
+            <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
         </after>
 
         <!-- Login as customer -->
@@ -88,7 +91,7 @@
         </actionGroup>
 
         <!-- Login as admin -->
-        <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
 
         <!-- Search and open customer -->
         <actionGroup ref="AdminFilterCustomerByEmail" stepKey="filterCreatedCustomer">

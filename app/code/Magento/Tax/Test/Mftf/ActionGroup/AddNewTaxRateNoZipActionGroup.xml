@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AddNewTaxRateNoZipActionGroup">
+        <annotations>
+            <description>Goes to the Admin Tax Rules grid page. Adds the provided Tax Code.</description>
+        </annotations>
+        <arguments>
+            <argument name="taxCode"/>
+        </arguments>
+
+        <!-- Go to the tax rate page -->
+        <click stepKey="addNewTaxRate" selector="{{AdminTaxRulesSection.addNewTaxRate}}"/>
+
+        <!-- Fill out a new tax rate -->
+        <fillField stepKey="fillTaxIdentifier" selector="{{AdminTaxRulesSection.taxIdentifier}}" userInput="{{taxCode.state}}-{{taxCode.rate}}"/>
+        <fillField stepKey="fillZipCode" selector="{{AdminTaxRulesSection.zipCode}}" userInput="{{taxCode.zip}}"/>
+        <selectOption stepKey="selectState" selector="{{AdminTaxRulesSection.state}}" userInput="{{taxCode.state}}"/>
+        <selectOption stepKey="selectCountry" selector="{{AdminTaxRulesSection.country}}" userInput="{{taxCode.country}}"/>
+        <fillField stepKey="fillRate" selector="{{AdminTaxRulesSection.rate}}" userInput="{{taxCode.rate}}"/>
+
+        <!-- Save the tax rate -->
+        <click stepKey="saveTaxRate" selector="{{AdminTaxRulesSection.save}}"/>
+    </actionGroup>
+</actionGroups>

@@ -47,6 +47,11 @@ class DiscountTest extends \PHPUnit\Framework\TestCase
      */
     protected $addressMock;
 
+    /**
+     * @var \Magento\SalesRule\Model\Rule\Action\Discount\DataFactory|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $discountFactory;
+
     protected function setUp()
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
@@ -72,16 +77,35 @@ class DiscountTest extends \PHPUnit\Framework\TestCase
         $priceCurrencyMock = $this->createMock(\Magento\Framework\Pricing\PriceCurrencyInterface::class);
         $priceCurrencyMock->expects($this->any())
             ->method('round')
-            ->will($this->returnCallback(
-                function ($argument) {
-                    return round($argument, 2);
-                }
-            ));
+            ->will(
+                $this->returnCallback(
+                    function ($argument) {
+                        return round($argument, 2);
+                    }
+                )
+            );
 
         $this->addressMock = $this->createPartialMock(
             \Magento\Quote\Model\Quote\Address::class,
-            ['getQuote', 'getAllItems', 'getShippingAmount', '__wakeup', 'getCustomAttributesCodes']
+            [
+                'getQuote',
+                'getAllItems',
+                'getShippingAmount',
+                '__wakeup',
+                'getCustomAttributesCodes',
+                'getExtensionAttributes'
+            ]
         );
+        $addressExtension = $this->getMockBuilder(
+            \Magento\Framework\Api\ExtensionAttributesInterface::class
+        )->setMethods(['setDiscounts', 'getDiscounts'])->getMock();
+        $addressExtension->method('getDiscounts')->willReturn([]);
+        $addressExtension->expects($this->any())
+            ->method('setDiscounts')
+            ->willReturn([]);
+        $this->addressMock->expects(
+            $this->any()
+        )->method('getExtensionAttributes')->will($this->returnValue($addressExtension));
         $this->addressMock->expects($this->any())
             ->method('getCustomAttributesCodes')
             ->willReturn([]);
@@ -90,6 +114,10 @@ class DiscountTest extends \PHPUnit\Framework\TestCase
         $shipping->expects($this->any())->method('getAddress')->willReturn($this->addressMock);
         $this->shippingAssignmentMock = $this->createMock(\Magento\Quote\Api\Data\ShippingAssignmentInterface::class);
         $this->shippingAssignmentMock->expects($this->any())->method('getShipping')->willReturn($shipping);
+        $this->discountFactory = $this->createPartialMock(
+            \Magento\SalesRule\Model\Rule\Action\Discount\DataFactory::class,
+            ['create']
+        );
 
         /** @var \Magento\SalesRule\Model\Quote\Discount $discount */
         $this->discount = $this->objectManager->getObject(
@@ -101,14 +129,38 @@ class DiscountTest extends \PHPUnit\Framework\TestCase
                 'priceCurrency' => $priceCurrencyMock,
             ]
         );
+        $discountData = $this->getMockBuilder(\Magento\SalesRule\Model\Rule\Action\Discount\Data::class)
+            ->setConstructorArgs(
+                [
+                    'amount' => 0,
+                    'baseAmount' => 0,
+                    'originalAmount' => 0,
+                    'baseOriginalAmount' => 0
+                ]
+            )
+            ->getMock();
+        $this->discountFactory->expects($this->any())
+            ->method('create')
+            ->with($this->anything())
+            ->will($this->returnValue($discountData));
     }
 
     public function testCollectItemNoDiscount()
     {
         $itemNoDiscount = $this->createPartialMock(
             \Magento\Quote\Model\Quote\Item::class,
-            ['getNoDiscount', '__wakeup']
+            ['getNoDiscount', '__wakeup', 'getExtensionAttributes']
         );
+        $itemExtension = $this->getMockBuilder(
+            \Magento\Framework\Api\ExtensionAttributesInterface::class
+        )->setMethods(['setDiscounts', 'getDiscounts'])->getMock();
+        $itemExtension->method('getDiscounts')->willReturn([]);
+        $itemExtension->expects($this->any())
+            ->method('setDiscounts')
+            ->willReturn([]);
+        $itemNoDiscount->expects(
+            $this->any()
+        )->method('getExtensionAttributes')->will($this->returnValue($itemExtension));
         $itemNoDiscount->expects($this->once())->method('getNoDiscount')->willReturn(true);
         $this->validatorMock->expects($this->once())->method('sortItemsByPriority')
             ->with([$itemNoDiscount], $this->addressMock)
@@ -178,10 +230,21 @@ class DiscountTest extends \PHPUnit\Framework\TestCase
                     'getHasChildren',
                     'isChildrenCalculated',
                     'getChildren',
+                    'getExtensionAttributes',
                     '__wakeup',
                 ]
             )
             ->getMock();
+        $itemExtension = $this->getMockBuilder(
+            \Magento\Framework\Api\ExtensionAttributesInterface::class
+        )->setMethods(['setDiscounts', 'getDiscounts'])->getMock();
+        $itemExtension->method('getDiscounts')->willReturn([]);
+        $itemExtension->expects($this->any())
+            ->method('setDiscounts')
+            ->willReturn([]);
+        $itemWithChildren->expects(
+            $this->any()
+        )->method('getExtensionAttributes')->will($this->returnValue($itemExtension));
         $itemWithChildren->expects($this->once())->method('getNoDiscount')->willReturn(false);
         $itemWithChildren->expects($this->once())->method('getParentItem')->willReturn(false);
         $itemWithChildren->expects($this->once())->method('getHasChildren')->willReturn(true);
@@ -310,10 +373,21 @@ class DiscountTest extends \PHPUnit\Framework\TestCase
                     'getHasChildren',
                     'isChildrenCalculated',
                     'getChildren',
+                    'getExtensionAttributes',
                     '__wakeup',
                 ]
             )
             ->getMock();
+        $itemExtension = $this->getMockBuilder(
+            \Magento\Framework\Api\ExtensionAttributesInterface::class
+        )->setMethods(['setDiscounts', 'getDiscounts'])->getMock();
+        $itemExtension->method('getDiscounts')->willReturn([]);
+        $itemExtension->expects($this->any())
+            ->method('setDiscounts')
+            ->willReturn([]);
+        $itemWithChildren->expects(
+            $this->any()
+        )->method('getExtensionAttributes')->will($this->returnValue($itemExtension));
         $itemWithChildren->expects($this->once())->method('getNoDiscount')->willReturn(false);
         $itemWithChildren->expects($this->once())->method('getParentItem')->willReturn(false);
         $itemWithChildren->expects($this->once())->method('getHasChildren')->willReturn(false);

@@ -264,9 +264,6 @@ class Attribute extends \Magento\Framework\Model\AbstractExtensibleModel impleme
 
     /**
      * @inheritdoc
-     *
-     * @SuppressWarnings(PHPMD.SerializationAware)
-     * @deprecated Do not use PHP serialization.
      */
     public function __sleep()
     {
@@ -278,9 +275,6 @@ class Attribute extends \Magento\Framework\Model\AbstractExtensibleModel impleme
 
     /**
      * @inheritdoc
-     *
-     * @SuppressWarnings(PHPMD.SerializationAware)
-     * @deprecated Do not use PHP serialization.
      */
     public function __wakeup()
     {

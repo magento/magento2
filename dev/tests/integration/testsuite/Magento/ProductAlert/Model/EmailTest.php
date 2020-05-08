@@ -102,7 +102,7 @@ class EmailTest extends \PHPUnit\Framework\TestCase
 
         $this->assertContains(
             'John Smith,',
-            $this->transportBuilder->getSentMessage()->getRawMessage()
+            $this->transportBuilder->getSentMessage()->getBody()->getParts()[0]->getRawContent()
         );
     }
 

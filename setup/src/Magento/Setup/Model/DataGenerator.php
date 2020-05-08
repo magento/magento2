@@ -4,11 +4,11 @@
  * See COPYING.txt for license details.
  */
 
-/**
- * A custom adapter that allows generating arbitrary descriptions
- */
 namespace Magento\Setup\Model;
 
+/**
+ * A custom adapter that allows generating arbitrary descriptions.
+ */
 class DataGenerator
 {
     /**
@@ -67,12 +67,12 @@ class DataGenerator
      */
     public function generate($minAmountOfWords, $maxAmountOfWords, $key = null)
     {
-        $numberOfWords = random_int($minAmountOfWords, $maxAmountOfWords);
+        $numberOfWords = mt_rand($minAmountOfWords, $maxAmountOfWords);
         $result = '';
 
         if ($key === null || !array_key_exists($key, $this->generatedValues)) {
             for ($i = 0; $i < $numberOfWords; $i++) {
-                $result .= ' ' . $this->dictionaryData[random_int(0, count($this->dictionaryData) - 1)];
+                $result .= ' ' . $this->dictionaryData[mt_rand(0, count($this->dictionaryData) - 1)];
             }
             $result = trim($result);
 

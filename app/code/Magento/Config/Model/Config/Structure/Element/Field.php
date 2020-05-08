@@ -56,7 +56,7 @@ class Field extends \Magento\Config\Model\Config\Structure\AbstractElement
 
     /**
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Framework\Module\ModuleManagerInterface $moduleManager
+     * @param \Magento\Framework\Module\Manager $moduleManager
      * @param \Magento\Config\Model\Config\BackendFactory $backendFactory
      * @param \Magento\Config\Model\Config\SourceFactory $sourceFactory
      * @param \Magento\Config\Model\Config\CommentFactory $commentFactory
@@ -65,7 +65,7 @@ class Field extends \Magento\Config\Model\Config\Structure\AbstractElement
      */
     public function __construct(
         \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Framework\Module\ModuleManagerInterface $moduleManager,
+        \Magento\Framework\Module\Manager $moduleManager,
         \Magento\Config\Model\Config\BackendFactory $backendFactory,
         \Magento\Config\Model\Config\SourceFactory $sourceFactory,
         \Magento\Config\Model\Config\CommentFactory $commentFactory,
@@ -150,7 +150,7 @@ class Field extends \Magento\Config\Model\Config\Structure\AbstractElement
      */
     public function getType()
     {
-        return isset($this->_data['type']) ? $this->_data['type'] : 'text';
+        return $this->_data['type'] ?? 'text';
     }
 
     /**
@@ -204,7 +204,7 @@ class Field extends \Magento\Config\Model\Config\Structure\AbstractElement
      */
     public function getFrontendClass()
     {
-        return isset($this->_data['frontend_class']) ? $this->_data['frontend_class'] : '';
+        return $this->_data['frontend_class'] ?? '';
     }
 
     /**
@@ -256,7 +256,7 @@ class Field extends \Magento\Config\Model\Config\Structure\AbstractElement
      */
     public function getConfigPath()
     {
-        return isset($this->_data['config_path']) ? $this->_data['config_path'] : null;
+        return $this->_data['config_path'] ?? null;
     }
 
     /**
@@ -334,7 +334,7 @@ class Field extends \Magento\Config\Model\Config\Structure\AbstractElement
      */
     public function getValidation()
     {
-        return isset($this->_data['validate']) ? $this->_data['validate'] : null;
+        return $this->_data['validate'] ?? null;
     }
 
     /**

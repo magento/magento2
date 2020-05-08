@@ -8,7 +8,7 @@
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <actionGroup name="ConfigureBraintree">
+    <actionGroup name="ConfigureBraintreeActionGroup">
         <annotations>
             <description>Sets up the Braintree configuration setting using the BraintreeConfigurationSection Data Entity. PLEASE NOTE: The Action Group values are Hardcoded.</description>
         </annotations>
@@ -48,14 +48,5 @@
         <click stepKey="chooseAuthorize" selector="{{BraintreeConfiguraionSection.actionAuthorize}}"/>
         <click stepKey="save" selector="{{BraintreeConfiguraionSection.save}}"/>
         <waitForElementVisible selector="{{BraintreeConfiguraionSection.successfulMessage}}" stepKey="waitForSuccessfullyConfigured" time="10"/>
-    </actionGroup>
-
-    <actionGroup name="DisableBrainTree">
-        <annotations>
-            <description>Disables the Braintree and BraintreePaypal configuration settings via the CLI.</description>
-        </annotations>
-
-        <magentoCLI stepKey="disableBrainTree" command="config:set payment/braintree/active 0"/>
-        <magentoCLI stepKey="disableBrainTreePaypal" command="config:set payment/braintree_paypal/active 0"/>
     </actionGroup>
 </actionGroups>

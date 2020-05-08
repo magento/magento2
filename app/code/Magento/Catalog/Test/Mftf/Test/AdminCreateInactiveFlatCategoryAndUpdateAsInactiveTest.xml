@@ -19,15 +19,15 @@
         </annotations>
         <before>
             <!--Login as admin -->
-            <actionGroup ref="LoginAsAdmin" stepKey="loginToAdminPanel"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginToAdminPanel"/>
             <!--Create category-->
             <createData entity="CatNotActive" stepKey="createCategory"/>
             <!-- Create First StoreView  -->
-            <actionGroup ref="CreateStoreView" stepKey="createCustomStoreViewEn">
+            <actionGroup ref="CreateStoreViewActionGroup" stepKey="createCustomStoreViewEn">
                 <argument name="storeView" value="customStoreEN"/>
             </actionGroup>
             <!-- Create Second StoreView -->
-            <actionGroup ref="CreateStoreView" stepKey="createCustomStoreViewFr">
+            <actionGroup ref="CreateStoreViewActionGroup" stepKey="createCustomStoreViewFr">
                 <argument name="storeView" value="customStoreFR"/>
             </actionGroup>
             <!--Run full reindex and clear caches -->
@@ -52,11 +52,10 @@
             <actionGroup ref="AdminDeleteStoreViewActionGroup" stepKey="deleteStoreViewFr">
                 <argument name="customStore" value="customStoreFR"/>
             </actionGroup>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
         <!-- Select created category and make category inactive-->
-        <amOnPage url="{{AdminCategoryPage.url}}" stepKey="openAdminCategoryIndexPage"/>
-        <waitForPageLoad stepKey="waitForPageToLoad"/>
+        <actionGroup ref="AdminOpenCategoryPageActionGroup" stepKey="openAdminCategoryIndexPage"/>
         <click selector="{{AdminCategorySidebarTreeSection.expandAll}}" stepKey="clickOnExpandTree"/>
         <click selector="{{AdminCategorySidebarTreeSection.categoryInTree(CatNotActive.name)}}" stepKey="selectCreatedCategory"/>
         <waitForPageLoad stepKey="waitForCategoryPageToLoad"/>

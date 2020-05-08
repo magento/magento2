@@ -10,7 +10,7 @@
 <?php $_selections = $_option->getSelections(); ?>
 <?php $_skipSaleableCheck = $this->helper(Magento\Catalog\Helper\Product::class)->getSkipSaleableCheck(); ?>
 
-<div class="field admin__field options<?php if ($_option->getRequired()) { echo ' required _required'; } ?>">
+<div class="field admin__field options<?php if ($_option->getRequired()) { echo ' _required'; } ?>">
     <label class="label admin__field-label">
         <span><?= $block->escapeHtml($_option->getTitle()) ?></span>
     </label>

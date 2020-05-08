@@ -3,12 +3,10 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Backend\Model\Locale;
 
 use Magento\Framework\Locale\Resolver;
 use Magento\TestFramework\Helper\Bootstrap;
-use Magento\User\Model\User;
 
 /**
  * @magentoAppArea adminhtml
@@ -20,9 +18,6 @@ class ResolverTest extends \PHPUnit\Framework\TestCase
      */
     protected $_model;
 
-    /**
-     * {@inheritDoc}
-     */
     protected function setUp()
     {
         parent::setUp();
@@ -32,7 +27,7 @@ class ResolverTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Tests setLocale() with default locale
+     * @covers \Magento\Backend\Model\Locale\Resolver::setLocale
      */
     public function testSetLocaleWithDefaultLocale()
     {
@@ -40,11 +35,11 @@ class ResolverTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Tests setLocale() with interface locale
+     * @covers \Magento\Backend\Model\Locale\Resolver::setLocale
      */
     public function testSetLocaleWithBaseInterfaceLocale()
     {
-        $user = Bootstrap::getObjectManager()->create(User::class);
+        $user = new \Magento\Framework\DataObject();
         $session = Bootstrap::getObjectManager()->get(
             \Magento\Backend\Model\Auth\Session::class
         );
@@ -58,7 +53,7 @@ class ResolverTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Tests setLocale() with session locale
+     * @covers \Magento\Backend\Model\Locale\Resolver::setLocale
      */
     public function testSetLocaleWithSessionLocale()
     {
@@ -71,7 +66,7 @@ class ResolverTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Tests setLocale() with post parameter
+     * @covers \Magento\Backend\Model\Locale\Resolver::setLocale
      */
     public function testSetLocaleWithRequestLocale()
     {
@@ -119,7 +114,7 @@ class ResolverTest extends \PHPUnit\Framework\TestCase
      * @param string $localeCodeToCheck
      * @return void
      */
-    private function _checkSetLocale($localeCodeToCheck)
+    protected function _checkSetLocale($localeCodeToCheck)
     {
         $this->_model->setLocale();
         $localeCode = $this->_model->getLocale();

@@ -6,25 +6,26 @@
 namespace Magento\Customer\Test\Unit\Ui\Component;
 
 use Magento\Customer\Ui\Component\FilterFactory;
+use PHPUnit\Framework\MockObject\MockObject;
 
 /**
  * Test FilterFactory Class
  */
 class FilterFactoryTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var \Magento\Customer\Api\Data\OptionInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Customer\Api\Data\OptionInterface|MockObject */
     protected $attributeOption;
 
-    /** @var \Magento\Framework\View\Element\UiComponent\ContextInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\View\Element\UiComponent\ContextInterface|MockObject */
     protected $context;
 
-    /** @var \Magento\Framework\View\Element\UiComponentFactory|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\View\Element\UiComponentFactory|MockObject */
     protected $componentFactory;
 
-    /** @var \Magento\Customer\Api\Data\AttributeMetadataInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Customer\Api\Data\AttributeMetadataInterface|MockObject */
     protected $attributeMetadata;
 
-    /** @var \Magento\Ui\Component\Listing\Columns\ColumnInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Ui\Component\Listing\Columns\ColumnInterface|MockObject */
     protected $filter;
 
     /** @var FilterFactory */
@@ -72,7 +73,6 @@ class FilterFactoryTest extends \PHPUnit\Framework\TestCase
                 'config' => [
                     'dataScope' => $filterName,
                     'label' => __('Label'),
-                    '__disableTmpl' => 'true',
                     'options' => [['value' => 'Value', 'label' => 'Label']],
                     'caption' => __('Select...'),
                 ],

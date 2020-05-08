@@ -6,54 +6,65 @@
 
 namespace Magento\Wishlist\Test\Unit\Controller\Index;
 
+use Magento\Store\Model\ScopeInterface;
+
+/**
+ * Test for wishlist plugin before dispatch
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class PluginTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Customer\Model\Session|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Customer\Model\Session|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $customerSession;
 
     /**
-     * @var \Magento\Wishlist\Model\AuthenticationStateInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Wishlist\Model\AuthenticationStateInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $authenticationState;
 
     /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $config;
 
     /**
-     * @var \Magento\Framework\App\Response\RedirectInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Response\RedirectInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $redirector;
 
     /**
-     * @var \Magento\Framework\Message\ManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Message\ManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $messageManager;
 
     /**
-     * @var \Magento\Framework\App\Request\Http|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Request\Http|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $request;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp()
     {
         $this->customerSession = $this->getMockBuilder(\Magento\Customer\Model\Session::class)
             ->disableOriginalConstructor()
-            ->setMethods([
-                'authenticate',
-                'getBeforeWishlistUrl',
-                'setBeforeWishlistUrl',
-                'setBeforeWishlistRequest',
-                'getBeforeWishlistRequest',
-                'setBeforeRequestParams',
-                'setBeforeModuleName',
-                'setBeforeControllerName',
-                'setBeforeAction',
-            ])
-            ->getMock();
+            ->setMethods(
+                [
+                    'authenticate',
+                    'getBeforeWishlistUrl',
+                    'setBeforeWishlistUrl',
+                    'setBeforeWishlistRequest',
+                    'getBeforeWishlistRequest',
+                    'setBeforeRequestParams',
+                    'setBeforeModuleName',
+                    'setBeforeControllerName',
+                    'setBeforeAction',
+                ]
+            )->getMock();
 
         $this->authenticationState = $this->createMock(\Magento\Wishlist\Model\AuthenticationState::class);
         $this->config = $this->createMock(\Magento\Framework\App\Config::class);
@@ -62,6 +73,9 @@ class PluginTest extends \PHPUnit\Framework\TestCase
         $this->request = $this->createMock(\Magento\Framework\App\Request\Http::class);
     }
 
+    /**
+     * @inheritdoc
+     */
     protected function tearDown()
     {
         unset(
@@ -96,6 +110,7 @@ class PluginTest extends \PHPUnit\Framework\TestCase
         $refererUrl = 'http://referer-url.com';
         $params = [
             'product' => 1,
+            'login' => [],
         ];
 
         $actionFlag = $this->createMock(\Magento\Framework\App\ActionFlag::class);
@@ -139,7 +154,7 @@ class PluginTest extends \PHPUnit\Framework\TestCase
             ->willReturnSelf();
         $this->customerSession->expects($this->once())
             ->method('setBeforeWishlistRequest')
-            ->with($params)
+            ->with(['product' => 1])
             ->willReturnSelf();
         $this->customerSession->expects($this->once())
             ->method('getBeforeWishlistRequest')
@@ -164,7 +179,7 @@ class PluginTest extends \PHPUnit\Framework\TestCase
         $this->config
             ->expects($this->once())
             ->method('isSetFlag')
-            ->with('wishlist/general/active')
+            ->with('wishlist/general/active', ScopeInterface::SCOPE_STORES)
             ->willReturn(false);
 
         $this->getPlugin()->beforeDispatch($indexController, $this->request);

@@ -44,6 +44,8 @@ class GetCartTest extends GraphQlAbstract
 
         self::assertArrayHasKey('cart', $response);
         self::assertArrayHasKey('items', $response['cart']);
+        self::assertArrayHasKey('id', $response['cart']);
+        self::assertEquals($maskedQuoteId, $response['cart']['id']);
         self::assertCount(2, $response['cart']['items']);
 
         self::assertNotEmpty($response['cart']['items'][0]['id']);
@@ -117,7 +119,7 @@ QUERY;
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/make_cart_inactive.php
      *
      * @expectedException Exception
-     * @expectedExceptionMessage Current user does not have an active cart.
+     * @expectedExceptionMessage The cart isn't active.
      */
     public function testGetInactiveCart()
     {
@@ -184,6 +186,7 @@ QUERY;
         return <<<QUERY
 {
   cart(cart_id: "{$maskedQuoteId}") {
+    id
     items {
       id
       quantity

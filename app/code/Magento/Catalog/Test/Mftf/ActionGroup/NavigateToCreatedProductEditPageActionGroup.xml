@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="NavigateToCreatedProductEditPageActionGroup">
+        <annotations>
+            <description>Goes to the Admin Product grid page. Filters the Product grid based on the provided Product details (SKU). Edits the provided Product. Validates that the Product SKU is present and correct.</description>
+        </annotations>
+        <arguments>
+            <argument name="product" defaultValue="_defaultProduct"/>
+        </arguments>
+
+        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="goToAdminProductIndexPage"/>
+        <waitForPageLoad stepKey="waitForProductIndexPageToLoad"/>
+        <conditionalClick selector="{{AdminProductGridFilterSection.clearFilters}}" dependentSelector="{{AdminProductGridFilterSection.clearFilters}}" visible="true" stepKey="clickClearFilters"/>
+        <waitForPageLoad stepKey="waitForClearFilters"/>
+        <dontSeeElement selector="{{AdminProductGridFilterSection.clearFilters}}" stepKey="dontSeeClearFilters"/>
+        <click selector="{{AdminProductGridFilterSection.viewDropdown}}" stepKey="openViewBookmarksTab"/>
+        <click selector="{{AdminProductGridFilterSection.viewBookmark('Default View')}}" stepKey="resetToDefaultGridView"/>
+        <waitForPageLoad stepKey="waitForResetToDefaultView"/>
+        <see selector="{{AdminProductGridFilterSection.viewDropdown}}" userInput="Default View" stepKey="seeDefaultViewSelected"/>
+        <click selector="{{AdminProductGridFilterSection.filters}}" stepKey="openProductFilters"/>
+        <fillField selector="{{AdminProductGridFilterSection.skuFilter}}" userInput="{{product.sku}}" stepKey="fillProductSkuFilter"/>
+        <click selector="{{AdminProductGridFilterSection.applyFilters}}" stepKey="clickApplyFilters"/>
+        <waitForPageLoad stepKey="waitForFilterOnGrid"/>
+        <click selector="{{AdminProductGridSection.selectRowBasedOnName(product.name)}}" stepKey="clickProduct"/>
+        <waitForPageLoad stepKey="waitForProductEditPageLoad"/>
+        <waitForElementVisible selector="{{AdminProductFormBundleSection.productSku}}" stepKey="waitForProductSKUField"/>
+        <seeInField selector="{{AdminProductFormBundleSection.productSku}}" userInput="{{product.sku}}" stepKey="seeProductSKU"/>
+    </actionGroup>
+</actionGroups>

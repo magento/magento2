@@ -15,6 +15,7 @@
             <constraint name="Magento\Checkout\Test\Constraint\AssertCartIsEmpty" />
         </variation>
         <variation name="MoveProductFromShoppingCartToWishlistTestVariation2">
+            <data name="tag" xsi:type="string">mftf_migrated:yes</data>
             <data name="product/0" xsi:type="string">catalogProductVirtual::default</data>
             <constraint name="Magento\Wishlist\Test\Constraint\AssertMoveProductToWishlistSuccessMessage" />
             <constraint name="Magento\Wishlist\Test\Constraint\AssertProductIsPresentInWishlist" />
@@ -29,7 +30,7 @@
             <constraint name="Magento\Wishlist\Test\Constraint\AssertProductDetailsInWishlist" />
         </variation>
         <variation name="MoveProductFromShoppingCartToWishlistTestVariation4">
-            <data name="tag" xsi:type="string">test_type:extended_acceptance_test</data>
+            <data name="tag" xsi:type="string">test_type:extended_acceptance_test, mftf_migrated:yes</data>
             <data name="product/0" xsi:type="string">configurableProduct::default</data>
             <constraint name="Magento\Wishlist\Test\Constraint\AssertMoveProductToWishlistSuccessMessage" />
             <constraint name="Magento\Wishlist\Test\Constraint\AssertProductIsPresentInWishlist" />
@@ -37,6 +38,7 @@
             <constraint name="Magento\Wishlist\Test\Constraint\AssertProductDetailsInWishlist" />
         </variation>
         <variation name="MoveProductFromShoppingCartToWishlistTestVariation5">
+            <data name="tag" xsi:type="string">mftf_migrated:yes</data>
             <data name="product/0" xsi:type="string">bundleProduct::bundle_dynamic_product</data>
             <constraint name="Magento\Wishlist\Test\Constraint\AssertMoveProductToWishlistSuccessMessage" />
             <constraint name="Magento\Wishlist\Test\Constraint\AssertProductIsPresentInWishlist" />
@@ -44,6 +46,7 @@
             <constraint name="Magento\Wishlist\Test\Constraint\AssertProductDetailsInWishlist" />
         </variation>
         <variation name="MoveProductFromShoppingCartToWishlistTestVariation6">
+            <data name="tag" xsi:type="string">mftf_migrated:yes</data>
             <data name="product/0" xsi:type="string">bundleProduct::bundle_fixed_product</data>
             <constraint name="Magento\Wishlist\Test\Constraint\AssertMoveProductToWishlistSuccessMessage" />
             <constraint name="Magento\Wishlist\Test\Constraint\AssertProductIsPresentInWishlist" />

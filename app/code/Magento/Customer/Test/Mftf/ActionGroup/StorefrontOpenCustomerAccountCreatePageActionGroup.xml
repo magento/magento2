@@ -16,15 +16,4 @@
         <amOnPage url="{{StorefrontCustomerCreatePage.url}}" stepKey="goToCustomerAccountCreatePage"/>
         <waitForPageLoad stepKey="waitForPageLoaded"/>
     </actionGroup>
-
-    <actionGroup name="StorefrontOpenCustomerAccountCreatePageUsingStoreCodeInUrlActionGroup">
-        <annotations>
-            <description>Goes to the Storefront Customer Create page using Store code in URL option.</description>
-        </annotations>
-        <arguments>
-            <argument name="storeView" type="string" defaultValue="{{customStore.code}}"/>
-        </arguments>
-
-        <amOnPage url="{{StorefrontStoreHomePage.url(storeView)}}{{StorefrontCustomerCreatePage.url}}" stepKey="goToCustomerAccountCreatePage"/>
-    </actionGroup>
 </actionGroups>

@@ -20,7 +20,7 @@
         </annotations>
         <before>
             <!-- Login as admin -->
-            <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>
 
             <!-- Create customer -->
             <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
@@ -47,11 +47,11 @@
             <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
 
             <!-- Log out -->
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
         <!-- Create order -->
-        <actionGroup ref="navigateToNewOrderPageExistingCustomer" stepKey="goToCreateOrderPage">
+        <actionGroup ref="NavigateToNewOrderPageExistingCustomerActionGroup" stepKey="goToCreateOrderPage">
             <argument name="customer" value="$$createCustomer$$"/>
         </actionGroup>
 
@@ -79,7 +79,7 @@
         <!-- Open created order -->
         <amOnPage url="{{AdminOrdersPage.url}}" stepKey="goToOrdersPage"/>
         <waitForPageLoad stepKey="waitForOrdersPageLoad"/>
-        <actionGroup ref="filterOrderGridById" stepKey="filterOrdersGridById">
+        <actionGroup ref="FilterOrderGridByIdActionGroup" stepKey="filterOrdersGridById">
             <argument name="orderId" value="$getOrderId"/>
         </actionGroup>
         <click selector="{{AdminDataGridTableSection.firstRow}}" stepKey="clickCreatedOrderInGrid"/>

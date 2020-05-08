@@ -19,7 +19,7 @@ class Fulltext
      *
      * @var string
      */
-    const SPECIAL_CHARACTERS = '-+<>*()~';
+    const SPECIAL_CHARACTERS = '-+<>*()~?';
 
     /**
      * FULLTEXT search in MySQL search mode "natural language"

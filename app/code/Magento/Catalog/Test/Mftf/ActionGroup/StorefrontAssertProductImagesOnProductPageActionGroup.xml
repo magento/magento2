@@ -24,12 +24,4 @@
         <click selector="{{StorefrontProductMediaSection.closeFullscreenImage}}" stepKey="closeFullScreenImage"/>
         <waitForPageLoad stepKey="waitForGalleryDisappear"/>
     </actionGroup>
-
-    <!--Check availability image in fotorama-->
-    <actionGroup name="StorefrontAssertFotoramaImageAvailablity">
-        <arguments>
-            <argument name="fileName" type="string" defaultValue="magento-logo"/>
-        </arguments>
-        <seeElement selector="{{StorefrontProductMediaSection.productImageInFotorama(fileName)}}" stepKey="seeActiveImageDefault"/>
-    </actionGroup>
 </actionGroups>

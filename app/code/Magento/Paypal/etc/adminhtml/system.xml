@@ -8,12 +8,12 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
     <system>
         <section id="payment">
-            <group id="account" translate="label" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="0">
+            <group id="account" translate="label" sortOrder="1" showInDefault="1" showInWebsite="1">
                 <label>Merchant Location</label>
                 <frontend_model>Magento\Paypal\Block\Adminhtml\System\Config\Fieldset\Expanded</frontend_model>
-                <field id="merchant_country" type="select" translate="label comment" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="0">
+                <field id="merchant_country" type="select" translate="label comment" sortOrder="5" showInDefault="1" showInWebsite="1">
                     <label>Merchant Country</label>
-                    <comment>If not specified, Default Country from General Config will be used</comment>
+                    <comment>If not specified, Default Country from General Config will be used.</comment>
                     <frontend_model>Magento\Paypal\Block\Adminhtml\System\Config\Field\Country</frontend_model>
                     <source_model>Magento\Paypal\Model\System\Config\Source\MerchantCountry</source_model>
                     <backend_model>Magento\Paypal\Model\System\Config\Backend\MerchantCountry</backend_model>

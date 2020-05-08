@@ -91,3 +91,4 @@ Options,Options
 "Ship to:","Ship to:"
 "Error:","Error:"
 "We are unable to process your request. Please, try again later.","We are unable to process your request. Please, try again later."
+"Quote address for failed order ID "%1" not found.","Quote address for failed order ID "%1" not found."

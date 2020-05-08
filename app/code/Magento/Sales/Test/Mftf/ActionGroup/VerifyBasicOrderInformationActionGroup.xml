@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="VerifyBasicOrderInformationActionGroup">
+        <annotations>
+            <description>Validates that the provided Customer, Shipping/Billing Address and Customer Group are present and correct on the Admin Orders view page.</description>
+        </annotations>
+        <arguments>
+            <argument name="customer"/>
+            <argument name="shippingAddress"/>
+            <argument name="billingAddress"/>
+            <argument name="customerGroup" defaultValue="GeneralCustomerGroup"/>
+        </arguments>
+
+        <see selector="{{AdminOrderDetailsInformationSection.customerName}}" userInput="{{customer.firstname}}" stepKey="seeCustomerName"/>
+        <see selector="{{AdminOrderDetailsInformationSection.customerEmail}}" userInput="{{customer.email}}" stepKey="seeCustomerEmail"/>
+        <see selector="{{AdminOrderDetailsInformationSection.customerGroup}}" userInput="{{customerGroup.code}}" stepKey="seeCustomerGroup"/>
+        <see selector="{{AdminOrderAddressInformationSection.billingAddress}}" userInput="{{billingAddress.street[0]}}" stepKey="seeBillingAddressStreet"/>
+        <see selector="{{AdminOrderAddressInformationSection.billingAddress}}" userInput="{{billingAddress.city}}" stepKey="seeBillingAddressCity"/>
+        <see selector="{{AdminOrderAddressInformationSection.billingAddress}}" userInput="{{billingAddress.country_id}}" stepKey="seeBillingAddressCountry"/>
+        <see selector="{{AdminOrderAddressInformationSection.billingAddress}}" userInput="{{billingAddress.postcode}}" stepKey="seeBillingAddressPostcode"/>
+        <see selector="{{AdminOrderAddressInformationSection.shippingAddress}}" userInput="{{shippingAddress.street[0]}}" stepKey="seeShippingAddressStreet"/>
+        <see selector="{{AdminOrderAddressInformationSection.shippingAddress}}" userInput="{{shippingAddress.city}}" stepKey="seeShippingAddressCity"/>
+        <see selector="{{AdminOrderAddressInformationSection.shippingAddress}}" userInput="{{shippingAddress.country_id}}" stepKey="seeShippingAddressCountry"/>
+        <see selector="{{AdminOrderAddressInformationSection.shippingAddress}}" userInput="{{shippingAddress.postcode}}" stepKey="seeShippingAddressPostcode"/>
+    </actionGroup>
+</actionGroups>

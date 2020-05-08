@@ -19,32 +19,32 @@ class AddToCartTest extends \PHPUnit\Framework\TestCase
     protected $observer;
 
     /**
-     * @var \Magento\Wishlist\Helper\Data|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Wishlist\Helper\Data|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $helper;
 
     /**
-     * @var \Magento\Checkout\Model\Session|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Checkout\Model\Session|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $checkoutSession;
 
     /**
-     * @var \Magento\Customer\Model\Session|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Customer\Model\Session|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $customerSession;
 
     /**
-     * @var \Magento\Wishlist\Model\WishlistFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Wishlist\Model\WishlistFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $wishlistFactory;
 
     /**
-     * @var \Magento\Wishlist\Model\Wishlist|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Wishlist\Model\Wishlist|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $wishlist;
 
     /**
-     * @var \Magento\Framework\Message\ManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Message\ManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $messageManager;
 
@@ -113,7 +113,7 @@ class AddToCartTest extends \PHPUnit\Framework\TestCase
         $wishlists = $this->getMockBuilder(\Magento\Wishlist\Model\ResourceModel\Wishlist\Collection::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $loadedWishlist = $this->getMockBuilder(\Magento\Wishlist\Model\Wishlist\Item::class)
+        $loadedWishlist = $this->getMockBuilder(\Magento\Wishlist\Model\Wishlist::class)
             ->setMethods(['getId', 'delete'])
             ->disableOriginalConstructor()
             ->getMock();

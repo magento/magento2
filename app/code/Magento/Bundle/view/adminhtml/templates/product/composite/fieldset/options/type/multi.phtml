@@ -9,7 +9,7 @@
 <?php $_option = $block->getOption(); ?>
 <?php $_selections = $_option->getSelections(); ?>
 <?php $_skipSaleableCheck = $this->helper(Magento\Catalog\Helper\Product::class)->getSkipSaleableCheck(); ?>
-<div class="field admin__field <?php if ($_option->getRequired()) { echo ' required'; } ?><?php if ($_option->getDecoratedIsLast()) :?> last<?php endif; ?>">
+<div class="field admin__field <?php if ($_option->getRequired()) { echo ' _required'; } ?><?php if ($_option->getDecoratedIsLast()) :?> last<?php endif; ?>">
     <label class="label admin__field-label"><span><?= $block->escapeHtml($_option->getTitle()) ?></span></label>
     <div class="control admin__field-control">
         <?php if (count($_selections) == 1 && $_option->getRequired()) : ?>

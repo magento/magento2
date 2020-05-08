@@ -7,7 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\QuoteGraphQl\Model\Cart;
 
-use Magento\Customer\Model\Address\AbstractAddress;
 use Magento\Framework\Api\ExtensibleDataObjectConverter;
 use Magento\Quote\Api\Data\AddressInterface;
 use Magento\Quote\Model\Quote\Address as QuoteAddress;
@@ -41,33 +40,46 @@ class ExtractQuoteAddressData
         $addressData = $this->dataObjectConverter->toFlatArray($address, [], AddressInterface::class);
         $addressData['model'] = $address;
 
-        $addressData = array_merge($addressData, [
-            'country' => [
-                'code' => $address->getCountryId(),
-                'label' => $address->getCountry()
-            ],
-            'region' => [
-                'code' => $address->getRegionCode(),
-                'label' => $address->getRegion()
-            ],
-            'street' => $address->getStreet(),
-            'items_weight' => $address->getWeight(),
-            'customer_notes' => $address->getCustomerNotes()
-        ]);
+        $addressData = array_merge(
+            $addressData,
+            [
+                'country' => [
+                    'code' => $address->getCountryId(),
+                    'label' => $address->getCountry()
+                ],
+                'region' => [
+                    'code' => $address->getRegionCode(),
+                    'label' => $address->getRegion()
+                ],
+                'street' => $address->getStreet(),
+                'items_weight' => $address->getWeight(),
+                'customer_notes' => $address->getCustomerNotes()
+            ]
+        );
 
         if (!$address->hasItems()) {
             return $addressData;
         }
 
-        $addressItemsData = [];
         foreach ($address->getAllItems() as $addressItem) {
-            $addressItemsData[] = [
-                'cart_item_id' => $addressItem->getQuoteItemId(),
+            if ($addressItem instanceof \Magento\Quote\Model\Quote\Item) {
+                $itemId = $addressItem->getItemId();
+            } else {
+                $itemId = $addressItem->getQuoteItemId();
+            }
+            $productData = $addressItem->getProduct()->getData();
+            $productData['model'] = $addressItem->getProduct();
+            $addressData['cart_items'][] = [
+                'cart_item_id' => $itemId,
                 'quantity' => $addressItem->getQty()
             ];
+            $addressData['cart_items_v2'][] = [
+                'id' => $itemId,
+                'quantity' => $addressItem->getQty(),
+                'product' => $productData,
+                'model' => $addressItem,
+            ];
         }
-        $addressData['cart_items'] = $addressItemsData;
-
         return $addressData;
     }
 }

@@ -5,6 +5,7 @@
  */
 namespace Magento\Eav\Model;
 
+use Magento\Framework\App\Config\MutableScopeConfigInterface;
 use Magento\Framework\DataObject;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\Helper\CacheCleaner;
@@ -12,7 +13,6 @@ use Magento\TestFramework\Helper\CacheCleaner;
 /**
  * @magentoAppIsolation enabled
  * @magentoDbIsolation enabled
- * @magentoDataFixture Magento/Eav/_files/attribute_for_search.php
  */
 class ConfigTest extends \PHPUnit\Framework\TestCase
 {
@@ -27,6 +27,9 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         $this->config = $objectManager->get(Config::class);
     }
 
+    /**
+     * @magentoDataFixture Magento/Eav/_files/attribute_for_search.php
+     */
     public function testGetEntityAttributeCodes()
     {
         $entityType = 'test';
@@ -47,6 +50,9 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($entityAttributeCodes1, $entityAttributeCodes2);
     }
 
+    /**
+     * @magentoDataFixture Magento/Eav/_files/attribute_for_search.php
+     */
     public function testGetEntityAttributeCodesWithObject()
     {
         $entityType = 'test';
@@ -74,6 +80,9 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($entityAttributeCodes1, $entityAttributeCodes2);
     }
 
+    /**
+     * @magentoDataFixture Magento/Eav/_files/attribute_for_search.php
+     */
     public function testGetAttributes()
     {
         $entityType = 'test';
@@ -96,6 +105,9 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($attributes1, $attributes2);
     }
 
+    /**
+     * @magentoDataFixture Magento/Eav/_files/attribute_for_search.php
+     */
     public function testGetAttribute()
     {
         $entityType = 'test';
@@ -108,5 +120,78 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(0, $attribute1->getIsUnique());
         $attribute2 = $this->config->getAttribute($entityType, 'attribute_for_search_1');
         $this->assertEquals($attribute1, $attribute2);
+    }
+
+    /**
+     * @magentoDataFixture Magento/Eav/_files/attribute_for_caching.php
+     */
+    public function testGetAttributeWithCacheUserDefinedAttribute()
+    {
+        /** @var MutableScopeConfigInterface $mutableScopeConfig */
+        $mutableScopeConfig = Bootstrap::getObjectManager()->get(MutableScopeConfigInterface::class);
+        $mutableScopeConfig->setValue('dev/caching/cache_user_defined_attributes', 1);
+        $entityType = 'catalog_product';
+        $attribute = $this->config->getAttribute($entityType, 'foo');
+        $this->assertEquals('foo', $attribute->getAttributeCode());
+        $this->assertEquals('foo', $attribute->getFrontendLabel());
+        $this->assertEquals('varchar', $attribute->getBackendType());
+        $this->assertEquals(1, $attribute->getIsRequired());
+        $this->assertEquals(1, $attribute->getIsUserDefined());
+        $this->assertEquals(0, $attribute->getIsUnique());
+        // Update attribute
+        $eavSetupFactory = Bootstrap::getObjectManager()->create(\Magento\Eav\Setup\EavSetupFactory::class);
+        /** @var \Magento\Eav\Setup\EavSetup $eavSetup */
+        $eavSetup = $eavSetupFactory->create();
+        $eavSetup->updateAttribute(
+            \Magento\Catalog\Model\Product::ENTITY,
+            'foo',
+            [
+                'frontend_label' => 'bar',
+            ]
+        );
+        // Check that attribute data has not changed
+        $config = Bootstrap::getObjectManager()->create(\Magento\Eav\Model\Config::class);
+        $updatedAttribute = $config->getAttribute($entityType, 'foo');
+        $this->assertEquals('foo', $updatedAttribute->getFrontendLabel());
+        // Clean cache
+        CacheCleaner::cleanAll();
+        $config = Bootstrap::getObjectManager()->create(\Magento\Eav\Model\Config::class);
+        // Check that attribute data has changed
+        $updatedAttributeAfterCacheClean = $config->getAttribute($entityType, 'foo');
+        $this->assertEquals('bar', $updatedAttributeAfterCacheClean->getFrontendLabel());
+        $mutableScopeConfig->setValue('dev/caching/cache_user_defined_attributes', 0);
+    }
+
+    /**
+     * @magentoDataFixture Magento/Eav/_files/attribute_for_caching.php
+     */
+    public function testGetAttributeWithInitUserDefinedAttribute()
+    {
+        /** @var MutableScopeConfigInterface $mutableScopeConfig */
+        $mutableScopeConfig = Bootstrap::getObjectManager()->get(MutableScopeConfigInterface::class);
+        $mutableScopeConfig->setValue('dev/caching/cache_user_defined_attributes', 0);
+        $entityType = 'catalog_product';
+        $attribute = $this->config->getAttribute($entityType, 'foo');
+        $this->assertEquals('foo', $attribute->getAttributeCode());
+        $this->assertEquals('foo', $attribute->getFrontendLabel());
+        $this->assertEquals('varchar', $attribute->getBackendType());
+        $this->assertEquals(1, $attribute->getIsRequired());
+        $this->assertEquals(1, $attribute->getIsUserDefined());
+        $this->assertEquals(0, $attribute->getIsUnique());
+        // Update attribute
+        $eavSetupFactory = Bootstrap::getObjectManager()->create(\Magento\Eav\Setup\EavSetupFactory::class);
+        /** @var \Magento\Eav\Setup\EavSetup $eavSetup */
+        $eavSetup = $eavSetupFactory->create();
+        $eavSetup->updateAttribute(
+            \Magento\Catalog\Model\Product::ENTITY,
+            'foo',
+            [
+                'frontend_label' => 'bar',
+            ]
+        );
+        // Check that attribute data has changed
+        $config = Bootstrap::getObjectManager()->create(\Magento\Eav\Model\Config::class);
+        $updatedAttributeAfterCacheClean = $config->getAttribute($entityType, 'foo');
+        $this->assertEquals('bar', $updatedAttributeAfterCacheClean->getFrontendLabel());
     }
 }

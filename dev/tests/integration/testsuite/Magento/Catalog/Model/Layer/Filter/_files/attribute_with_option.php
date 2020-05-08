@@ -20,6 +20,7 @@ $attribute->setData(
         'is_global' => 1,
         'frontend_input' => 'select',
         'is_filterable' => 1,
+        'is_user_defined' => 1,
         'option' => ['value' => ['option_0' => [0 => 'Option Label']]],
         'backend_type' => 'int',
     ]

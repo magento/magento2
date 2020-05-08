@@ -47,11 +47,15 @@ class InterfaceFactory implements ConfigElementFactoryInterface
 
     /**
      * Instantiate an object representing 'interface' GraphQL config element.
+     *
+     * @param array $data
+     * @return ConfigElementInterface
      */
     public function createFromConfigData(array $data): ConfigElementInterface
     {
+        $fieldsData = $data['fieldsInQuery'] ?? ($data['fields'] ?? []);
         $fields = [];
-        foreach ($data['fields'] as $field) {
+        foreach ($fieldsData as $field) {
             $arguments = [];
             foreach ($field['arguments'] as $argument) {
                 $arguments[$argument['name']] = $this->argumentFactory->createFromConfigData($argument);

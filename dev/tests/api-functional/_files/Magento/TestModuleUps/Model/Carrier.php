@@ -7,10 +7,10 @@ declare(strict_types=1);
 
 namespace Magento\TestModuleUps\Model;
 
-use Magento\Framework\Async\ProxyDeferredFactory;
 use Magento\Framework\HTTP\AsyncClientInterface;
 use Magento\Framework\HTTP\ClientFactory;
 use Magento\Framework\Xml\Security;
+use Magento\Shipping\Model\Rate\Result\ProxyDeferredFactory;
 use Magento\Ups\Helper\Config;
 
 /**

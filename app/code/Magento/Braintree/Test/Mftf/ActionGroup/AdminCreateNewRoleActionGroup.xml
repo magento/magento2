@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminCreateNewRoleActionGroup">
+        <annotations>
+            <description>Creates a User Role using the provided Data.</description>
+        </annotations>
+        <arguments>
+            <argument name="role" type="string" defaultValue=""/>
+            <argument name="resource" type="string" defaultValue="All"/>
+            <argument name="scope" type="string" defaultValue="Custom"/>
+            <argument name="websites" type="string" defaultValue="Main Website"/>
+        </arguments>
+
+        <click selector="{{AdminCreateRoleSection.create}}" stepKey="clickToAddNewRole"/>
+        <fillField selector="{{AdminCreateRoleSection.name}}" userInput="{{role.name}}" stepKey="setRoleName"/>
+        <fillField stepKey="setPassword" selector="{{AdminCreateRoleSection.password}}" userInput="{{_ENV.MAGENTO_ADMIN_PASSWORD}}"/>
+        <click selector="{{AdminCreateRoleSection.roleResources}}" stepKey="clickToOpenRoleResources"/>
+        <waitForPageLoad stepKey="waitForRoleResourcePage" time="5"/>
+        <click stepKey="checkSales" selector="//a[text()='Sales']"/>
+        <click selector="{{AdminCreateRoleSection.save}}" stepKey="clickToSaveRole"/>
+        <waitForPageLoad stepKey="waitForPageLoad" time="10"/>
+        <see userInput="You saved the role." stepKey="seeSuccessMessage"/>
+    </actionGroup>
+</actionGroups>

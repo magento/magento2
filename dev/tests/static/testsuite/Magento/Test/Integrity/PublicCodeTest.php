@@ -42,6 +42,7 @@ class PublicCodeTest extends \PHPUnit\Framework\TestCase
             );
             $whiteListItems = [];
             foreach (glob($whiteListFiles) as $fileName) {
+                // phpcs:ignore Magento2.Performance.ForeachArrayMerge
                 $whiteListItems = array_merge(
                     $whiteListItems,
                     file($fileName, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES)
@@ -167,7 +168,7 @@ class PublicCodeTest extends \PHPUnit\Framework\TestCase
      * Retrieve list of classes and interfaces declared in the file
      *
      * @param string $file
-     * @return \Zend\Code\Scanner\ClassScanner[]
+     * @return \Laminas\Code\Scanner\ClassScanner[]
      */
     private function getDeclaredClassesAndInterfaces($file)
     {

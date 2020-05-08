@@ -11,7 +11,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\UrlInterface;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Framework\View\Element\UiComponent\Processor;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
 
 /**
  * BlockActionsTest contains unit tests for \Magento\Cms\Ui\Component\Listing\Column\BlockActions class.
@@ -58,7 +58,10 @@ class BlockActionsTest extends \PHPUnit\Framework\TestCase
 
         $this->blockActions = $objectManager->getObject(
             BlockActions::class,
-            ['context' => $context, 'urlBuilder' => $this->urlBuilder]
+            [
+                'context' => $context,
+                'urlBuilder' => $this->urlBuilder
+            ]
         );
 
         $objectManager->setBackwardCompatibleProperty($this->blockActions, 'escaper', $this->escaper);

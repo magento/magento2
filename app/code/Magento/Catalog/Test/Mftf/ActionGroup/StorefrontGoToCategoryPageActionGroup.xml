@@ -17,11 +17,4 @@
         <click selector="{{StorefrontHeaderSection.NavigationCategoryByName(categoryName)}}" stepKey="toCategory"/>
         <waitForPageLoad stepKey="waitForCategoryPage"/>
     </actionGroup>
-    <actionGroup name="StorefrontGoToSubCategoryPageActionGroup" extends="StorefrontGoToCategoryPageActionGroup">
-        <arguments>
-            <argument name="subCategoryName" type="string"/>
-        </arguments>
-        <moveMouseOver selector="{{StorefrontHeaderSection.NavigationCategoryByName(categoryName)}}" stepKey="toCategory"/>
-        <click selector="{{StorefrontHeaderSection.NavigationCategoryByName(subCategoryName)}}" stepKey="openSubCategory" after="toCategory"/>
-    </actionGroup>
 </actionGroups>

@@ -71,7 +71,7 @@
                                 <argument name="sortable" xsi:type="string">0</argument>
                                 <argument name="id" xsi:type="string">updated_at</argument>
                                 <argument name="index" xsi:type="string">updated_at</argument>
-                                <argument name="default" xsi:type="string" translate="true">undefined</argument>
+                                <argument name="default" xsi:type="string" translate="true">Never</argument>
                                 <argument name="column_css_class" xsi:type="string">col-period</argument>
                                 <argument name="header_css_class" xsi:type="string">col-period</argument>
                             </arguments>

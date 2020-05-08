@@ -4,6 +4,7 @@
  * See COPYING.txt for license details.
  */
 declare(strict_types=1);
+
 namespace Magento\MysqlMq\Model;
 
 /**

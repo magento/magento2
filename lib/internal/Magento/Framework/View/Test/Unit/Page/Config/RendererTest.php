@@ -427,4 +427,48 @@ class RendererTest extends \PHPUnit\Framework\TestCase
             ],
         ];
     }
+
+    public function testRenderAssetWithNoContentType() : void
+    {
+        $type = '';
+
+        $assetMockOne = $this->createMock(\Magento\Framework\View\Asset\AssetInterface::class);
+        $assetMockOne->expects($this->exactly(1))
+            ->method('getUrl')
+            ->willReturn('url');
+
+        $assetMockOne->expects($this->atLeastOnce())->method('getContentType')->willReturn($type);
+
+        $groupAssetsOne = [$assetMockOne];
+
+        $groupMockOne = $this->getMockBuilder(\Magento\Framework\View\Asset\PropertyGroup::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $groupMockOne->expects($this->once())
+            ->method('getAll')
+            ->willReturn($groupAssetsOne);
+        $groupMockOne->expects($this->any())
+            ->method('getProperty')
+            ->willReturnMap(
+                [
+                    [GroupedCollection::PROPERTY_CAN_MERGE, true],
+                    [GroupedCollection::PROPERTY_CONTENT_TYPE, $type],
+                    ['attributes', 'rel="some-rel"'],
+                    ['ie_condition', null],
+                ]
+            );
+
+        $this->pageConfigMock->expects($this->once())
+            ->method('getAssetCollection')
+            ->willReturn($this->assetsCollection);
+
+        $this->assetsCollection->expects($this->once())
+            ->method('getGroups')
+            ->willReturn([$groupMockOne]);
+
+        $this->assertEquals(
+            '<link  rel="some-rel" href="url" />' . "\n",
+            $this->renderer->renderAssets($this->renderer->getAvailableResultGroups())
+        );
+    }
 }

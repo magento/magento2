@@ -6,18 +6,18 @@
 
 namespace Magento\Setup\Controller;
 
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Module\Status;
+use Magento\Framework\Phrase;
 use Magento\Setup\Model\DependencyReadinessCheck;
 use Magento\Setup\Model\ModuleStatusFactory;
 use Magento\Setup\Model\UninstallDependencyCheck;
-use Zend\Json\Json;
-use Zend\Mvc\Controller\AbstractActionController;
-use Zend\View\Model\JsonModel;
+use Laminas\Json\Json;
+use Laminas\Mvc\Controller\AbstractActionController;
+use Laminas\View\Model\JsonModel;
 
 /**
- * Class DependencyCheck
- *
- * Checks dependencies.
+ * DependencyCheck controller
  */
 class DependencyCheck extends AbstractActionController
 {
@@ -43,8 +43,6 @@ class DependencyCheck extends AbstractActionController
     protected $moduleStatus;
 
     /**
-     * Constructor
-     *
      * @param DependencyReadinessCheck $dependencyReadinessCheck
      * @param UninstallDependencyCheck $uninstallDependencyCheck
      * @param ModuleStatusFactory $moduleStatusFactory
@@ -63,6 +61,7 @@ class DependencyCheck extends AbstractActionController
      * Verifies component dependency
      *
      * @return JsonModel
+     * @throws \Exception
      */
     public function componentDependencyAction()
     {
@@ -119,11 +118,11 @@ class DependencyCheck extends AbstractActionController
 
         try {
             if (empty($data['packages'])) {
-                throw new \Exception('No packages have been found.');
+                throw new LocalizedException(new Phrase('No packages have been found.'));
             }
 
             if (empty($data['type'])) {
-                throw new \Exception('Can not determine the flow.');
+                throw new LocalizedException(new Phrase('Can not determine the flow.'));
             }
 
             $modules = $data['packages'];
@@ -133,7 +132,7 @@ class DependencyCheck extends AbstractActionController
             $modulesToChange = [];
             foreach ($modules as $module) {
                 if (!isset($module['name'])) {
-                    throw new \Exception('Can not find module name.');
+                    throw new LocalizedException(new Phrase('Can not find module name.'));
                 }
                 $modulesToChange[] = $module['name'];
             }

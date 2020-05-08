@@ -53,8 +53,8 @@
                 <height>100</height>
             </image>
             <image id="mini_cart_product_thumbnail" type="thumbnail">
-                <width>75</width>
-                <height>75</height>
+                <width>150</width>
+                <height>150</height>
             </image>
             <image id="new_products_content_widget_grid" type="small_image">
                 <width>240</width>
@@ -270,6 +270,7 @@
         <var name="bundle_size">1MB</var>
     </vars>
     <exclude>
+        <item type="file">Lib::chartjs/Chart.min.js</item>
         <item type="file">Lib::jquery/jquery.min.js</item>
         <item type="file">Lib::jquery/jquery-ui-1.9.2.js</item>
         <item type="file">Lib::jquery/jquery.details.js</item>

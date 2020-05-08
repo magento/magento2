@@ -52,6 +52,7 @@ class SaveTest extends AbstractBackendController
     /**
      * Checks a case when indexers are invalidated if products for category were changed.
      *
+     * @magentoConfigFixture current_store catalog/frontend/flat_catalog_category true
      * @magentoDataFixture Magento/Catalog/_files/category_product.php
      * @magentoDataFixture Magento/Catalog/_files/multiple_products.php
      */

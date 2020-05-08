@@ -15,8 +15,7 @@
         "magento/module-theme": "*",
         "magento/module-ui": "*",
         "magento/module-variable": "*",
-        "magento/module-widget": "*",
-        "magento/module-authorization": "*"
+        "magento/module-widget": "*"
     },
     "suggest": {
         "magento/module-cms-sample-data": "*"

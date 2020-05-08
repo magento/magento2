@@ -48,7 +48,7 @@ use Magento\Framework\App\TemplateTypesInterface;
     <?= /* @noEscape */ $block->getFormHtml() ?>
 </form>
 
-<form action="<?= $block->escapeUrl($block->getPreviewUrl()) ?>" method="get" id="email_template_preview_form" target="_blank">
+<form action="<?= $block->escapeUrl($block->getPreviewUrl()) ?>" method="post" id="email_template_preview_form" target="_blank">
     <?= /* @noEscape */ $block->getBlockHtml('formkey') ?>
     <div class="no-display">
         <input type="hidden" id="preview_type" name="type" value="<?= /* @noEscape */ $block->isTextType() ? 1 : 2 ?>" />
@@ -153,6 +153,7 @@ require([
             } else {
                 $('preview_type').value = <?= (int) $block->getTemplateType() ?>;
             }
+
             if (typeof tinyMCE == 'undefined' || !tinyMCE.get('template_text')) {
                 $('preview_text').value = $('template_text').value;
             } else {

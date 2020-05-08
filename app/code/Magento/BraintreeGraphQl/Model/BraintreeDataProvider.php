@@ -31,19 +31,6 @@ class BraintreeDataProvider implements AdditionalDataProviderInterface
                 __('Required parameter "braintree" for "payment_method" is missing.')
             );
         }
-
-        if (!isset($args[self::PATH_ADDITIONAL_DATA]['payment_method_nonce'])) {
-            throw new GraphQlInputException(
-                __('Required parameter "payment_method_nonce" for "braintree" is missing.')
-            );
-        }
-
-        if (!isset($args[self::PATH_ADDITIONAL_DATA]['is_active_payment_token_enabler'])) {
-            throw new GraphQlInputException(
-                __('Required parameter "is_active_payment_token_enabler" for "braintree" is missing.')
-            );
-        }
-
         return $args[self::PATH_ADDITIONAL_DATA];
     }
 }

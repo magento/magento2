@@ -78,8 +78,6 @@
     </php>
     <!-- Test listeners -->
     <listeners>
-        <listener class="Magento\TestFramework\Event\PhpUnit"/>
-        <listener class="Magento\TestFramework\ErrorLog\Listener"/>
         <listener class="Yandex\Allure\Adapter\AllureAdapter">
             <arguments>
                 <string>var/allure-results</string> <!-- XML files output directory -->
@@ -127,5 +125,8 @@
                 </array>
             </arguments>
         </listener>
+        <!-- Run after AllureAdapter to allow it to initialize properly -->
+        <listener class="Magento\TestFramework\Event\PhpUnit"/>
+        <listener class="Magento\TestFramework\ErrorLog\Listener"/>
     </listeners>
 </phpunit>

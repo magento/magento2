@@ -18,17 +18,18 @@
             <group value="mtf_migrated"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
             <createData entity="_defaultCategory" stepKey="createCategory"/>
             <createData entity="FixedBundleProduct" stepKey="createFixedBundleProduct">
                 <requiredEntity createDataKey="createCategory"/>
             </createData>
+            <magentoCron stepKey="runCronIndex" groups="index"/>
         </before>
         <after>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
-        <actionGroup ref="deleteProductUsingProductGrid" stepKey="deleteBundleProductFilteredBySkuAndName">
+        <actionGroup ref="DeleteProductUsingProductGridActionGroup" stepKey="deleteBundleProductFilteredBySkuAndName">
             <argument name="product" value="$$createFixedBundleProduct$$"/>
         </actionGroup>
         <see selector="{{AdminCategoryMessagesSection.SuccessMessage}}" userInput="A total of 1 record(s) have been deleted." stepKey="deleteMessage"/>

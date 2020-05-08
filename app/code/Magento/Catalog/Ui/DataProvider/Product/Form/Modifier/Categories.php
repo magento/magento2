@@ -210,6 +210,7 @@ class Categories extends AbstractModifier
                                     'ns' => 'new_category_form',
                                     'externalProvider' => 'new_category_form.new_category_form_data_source',
                                     'toolbarContainer' => '${ $.parentName }',
+                                    '__disableTmpl' => ['toolbarContainer' => false],
                                     'formSubmitType' => 'ajax',
                                 ],
                             ],
@@ -243,13 +244,14 @@ class Categories extends AbstractModifier
             'arguments' => [
                 'data' => [
                     'config' => [
-                        'label' => __('Categories'),
+                        'label' => false,
+                        'required' => false,
                         'dataScope' => '',
                         'breakLine' => false,
                         'formElement' => 'container',
                         'componentType' => 'container',
                         'component' => 'Magento_Ui/js/form/components/group',
-                        'scopeLabel' => __('[GLOBAL]'),
+                        'disabled' => $this->locator->getProduct()->isLockedAttribute($fieldCode),
                     ],
                 ],
             ],

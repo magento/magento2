@@ -162,7 +162,7 @@ class CreateHandler implements ExtensionInterface
 
                 if (!empty($image['removed'])) {
                     $clearImages[] = $image['file'];
-                } elseif (empty($image['value_id'])) {
+                } elseif (empty($image['value_id']) || !empty($image['recreate'])) {
                     $newFile = $this->moveImageFromTmp($image['file']);
                     $image['new_file'] = $newFile;
                     $newImages[$image['file']] = $image;

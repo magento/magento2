@@ -86,7 +86,6 @@ class DatabaseTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @throws \Magento\Framework\Exception\AlreadyExistsException
-     * @throws \Magento\Framework\Exception\InputException
      * @throws \Zend_Db_Statement_Exception
      */
     public function testLock()
@@ -104,9 +103,7 @@ class DatabaseTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @throws \Magento\Framework\Exception\AlreadyExistsException
-     * @throws \Magento\Framework\Exception\InputException
      * @throws \Zend_Db_Statement_Exception
-     * @expectedException \Magento\Framework\Exception\InputException
      */
     public function testlockWithTooLongName()
     {
@@ -114,12 +111,15 @@ class DatabaseTest extends \PHPUnit\Framework\TestCase
             ->method('isDbAvailable')
             ->with()
             ->willReturn(true);
-        $this->database->lock('BbXbyf9rIY5xuAVdviQJmh76FyoeeVHTDpcjmcImNtgpO4Hnz4xk76ZGEyYALvrQu');
+            $this->statement->expects($this->once())
+            ->method('fetchColumn')
+            ->willReturn(true);
+
+        $this->assertTrue($this->database->lock('BbXbyf9rIY5xuAVdviQJmh76FyoeeVHTDpcjmcImNtgpO4Hnz4xk76ZGEyYALvrQu'));
     }
 
     /**
      * @throws \Magento\Framework\Exception\AlreadyExistsException
-     * @throws \Magento\Framework\Exception\InputException
      * @throws \Zend_Db_Statement_Exception
      * @expectedException \Magento\Framework\Exception\AlreadyExistsException
      */
@@ -139,7 +139,6 @@ class DatabaseTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @throws \Magento\Framework\Exception\AlreadyExistsException
-     * @throws \Magento\Framework\Exception\InputException
      * @throws \Zend_Db_Statement_Exception
      */
     public function testLockWithUnavailableDeploymentConfig()
@@ -153,7 +152,6 @@ class DatabaseTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @throws \Magento\Framework\Exception\InputException
      * @throws \Zend_Db_Statement_Exception
      */
     public function testUnlockWithUnavailableDeploymentConfig()
@@ -167,7 +165,6 @@ class DatabaseTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @throws \Magento\Framework\Exception\InputException
      * @throws \Zend_Db_Statement_Exception
      */
     public function testIsLockedWithUnavailableDB()

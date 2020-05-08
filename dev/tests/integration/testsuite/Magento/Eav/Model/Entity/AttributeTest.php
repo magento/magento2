@@ -3,15 +3,19 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 declare(strict_types=1);
 
 namespace Magento\Eav\Model\Entity;
 
-use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Framework\Locale\ResolverInterface;
+use Magento\Framework\ObjectManagerInterface;
+use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\TestCase;
 
-class AttributeTest extends \PHPUnit\Framework\TestCase
+/**
+ * Class to test EAV Entity attribute model
+ */
+class AttributeTest extends TestCase
 {
     /**
      * @var Attribute
@@ -19,33 +23,33 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
     private $attribute;
 
     /**
-     * @var \Magento\Framework\ObjectManagerInterface
+     * @var ObjectManagerInterface
      */
     private $objectManager;
 
     /**
      * @var ResolverInterface
      */
-    private $_localeResolver;
+    private $localeResolver;
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function setUp()
     {
         $this->objectManager = Bootstrap::getObjectManager();
         $this->attribute = $this->objectManager->get(Attribute::class);
-        $this->_localeResolver = $this->objectManager->get(ResolverInterface::class);
+        $this->localeResolver = $this->objectManager->get(ResolverInterface::class);
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function tearDown()
     {
         $this->attribute = null;
         $this->objectManager = null;
-        $this->_localeResolver = null;
+        $this->localeResolver = null;
     }
 
     /**
@@ -56,11 +60,17 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
      * @dataProvider beforeSaveDataProvider
      * @throws
      */
-    public function testBeforeSave($defaultValue, $backendType, $locale, $expected)
-    {
+    public function testBeforeSave(
+        string $defaultValue,
+        string $backendType,
+        string $frontendInput,
+        string $locale,
+        string $expected
+    ) {
         $this->attribute->setDefaultValue($defaultValue);
         $this->attribute->setBackendType($backendType);
-        $this->_localeResolver->setLocale($locale);
+        $this->attribute->setFrontendInput($frontendInput);
+        $this->localeResolver->setLocale($locale);
         $this->attribute->beforeSave();
 
         $this->assertEquals($expected, $this->attribute->getDefaultValue());
@@ -74,13 +84,15 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
     public function beforeSaveDataProvider()
     {
         return [
-            ['21/07/18', 'datetime', 'en_AU', '2018-07-21 00:00:00'],
-            ['07/21/18', 'datetime', 'en_US', '2018-07-21 00:00:00'],
-            ['21/07/18', 'datetime', 'fr_FR', '2018-07-21 00:00:00'],
-            ['21/07/18', 'datetime', 'de_DE', '2018-07-21 00:00:00'],
-            ['21/07/18', 'datetime', 'uk_UA', '2018-07-21 00:00:00'],
-            ['100.50', 'decimal', 'en_US', '100.50'],
-            ['100,50', 'decimal', 'uk_UA', '100.5'],
+            ['21/07/18', 'datetime', 'date', 'en_AU', '2018-07-21 00:00:00'],
+            ['07/21/18', 'datetime', 'date', 'en_US', '2018-07-21 00:00:00'],
+            ['21/07/18', 'datetime', 'date', 'fr_FR', '2018-07-21 00:00:00'],
+            ['21/07/18', 'datetime', 'date', 'de_DE', '2018-07-21 00:00:00'],
+            ['21/07/18', 'datetime', 'date', 'uk_UA', '2018-07-21 00:00:00'],
+            ['100.50', 'decimal', 'decimal', 'en_US', '100.50'],
+            ['100,50', 'decimal', 'decimal', 'uk_UA', '100.5'],
+            ['07/21/2019 2:30 PM', 'datetime', 'datetime', 'en_US', '2019-07-21 21:30:00'],
+            ['21.07.2019 14:30', 'datetime', 'datetime', 'uk_UA', '2019-07-21 21:30:00'],
         ];
     }
 
@@ -96,7 +108,7 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
     {
         $this->attribute->setDefaultValue($defaultValue);
         $this->attribute->setBackendType($backendType);
-        $this->_localeResolver->setLocale($locale);
+        $this->localeResolver->setLocale($locale);
         $this->attribute->beforeSave();
 
         $this->expectExceptionMessage($expected);
