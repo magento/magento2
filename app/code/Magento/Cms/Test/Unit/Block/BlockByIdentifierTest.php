@@ -127,9 +127,9 @@ class BlockByIdentifierTest extends TestCase
         $identities = $block->getIdentities();
 
         // Then
-        $this->assertContains($this->getCacheKeyStubById(self::STUB_CMS_BLOCK_ID), $identities);
+        $this->assertContains($this->getIdentityStubById(self::STUB_CMS_BLOCK_ID), $identities);
         $this->assertContains(
-            $this->getCacheKeyStubByIdentifier(self::STUB_EXISTING_IDENTIFIER, self::STUB_DEFAULT_STORE),
+            $this->getIdentityStubByIdentifier(self::STUB_EXISTING_IDENTIFIER, self::STUB_DEFAULT_STORE),
             $identities
         );
     }
@@ -195,12 +195,25 @@ class BlockByIdentifierTest extends TestCase
         return $filterMock;
     }
 
-    private function getCacheKeyStubByIdentifier(string $identifier, int $storeId = self::STUB_DEFAULT_STORE): string
+    /**
+     * Returns stub of Identity based on `$identifier` and `$storeId`
+     *
+     * @param string $identifier
+     * @param int $storeId
+     * @return string
+     */
+    private function getIdentityStubByIdentifier(string $identifier, int $storeId = self::STUB_DEFAULT_STORE): string
     {
         return BlockByIdentifier::CACHE_KEY_PREFIX . '_' . $identifier . '_' . $storeId;
     }
 
-    private function getCacheKeyStubById(int $cmsBlockId): string
+    /**
+     * Returns stub of Identity based on `$cmsBlockId`
+     *
+     * @param int $cmsBlockId
+     * @return string
+     */
+    private function getIdentityStubById(int $cmsBlockId): string
     {
         return BlockByIdentifier::CACHE_KEY_PREFIX . '_' . $cmsBlockId;
     }
