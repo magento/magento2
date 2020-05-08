@@ -6,6 +6,7 @@
 namespace Magento\Elasticsearch\SearchAdapter;
 
 use Magento\Framework\Search\EngineResolverInterface;
+use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestModuleCatalogSearch\Model\ElasticsearchVersionChecker;
 
 /**
@@ -29,6 +30,33 @@ class AdapterTest extends \Magento\Framework\Search\Adapter\Mysql\AdapterTest
      * @var string
      */
     protected $searchEngine;
+
+    protected function setUp()
+    {
+        $this->objectManager = Bootstrap::getObjectManager();
+
+        /** @var \Magento\Framework\Search\Request\Config\Converter $converter */
+        $converter = $this->objectManager->create(\Magento\Framework\Search\Request\Config\Converter::class);
+
+        $document = new \DOMDocument();
+        $document->load($this->getRequestConfigPath());
+        $requestConfig = $converter->convert($document);
+
+        /** @var \Magento\Framework\Search\Request\Config $config */
+        $config = $this->objectManager->create(\Magento\Framework\Search\Request\Config::class);
+        $config->merge($requestConfig);
+
+        $this->requestBuilder = $this->objectManager->create(
+            \Magento\Framework\Search\Request\Builder::class,
+            ['config' => $config]
+        );
+
+        $this->adapter = $this->createAdapter();
+
+        $indexer = $this->objectManager->create(\Magento\Indexer\Model\Indexer::class);
+        $indexer->load('catalogsearch_fulltext');
+        $indexer->reindexAll();
+    }
 
     /**
      * Get request config path
