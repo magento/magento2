@@ -82,6 +82,7 @@ abstract class AbstractResource
     /**
      * Commit resource transaction
      *
+     * @deprecated see \Magento\Framework\Model\ExecuteCommitCallbacks::afterCommit
      * @return $this
      * @api
      */
