@@ -6,13 +6,15 @@
 
 namespace Magento\Wishlist\Block;
 
+use Magento\Framework\View\Element\Template;
+
 /**
  * Wishlist js plugin initialization block
  *
  * @api
  * @since 100.1.0
  */
-class AddToWishlist extends \Magento\Framework\View\Element\Template
+class AddToWishlist extends Template
 {
     /**
      * Product types
@@ -22,20 +24,6 @@ class AddToWishlist extends \Magento\Framework\View\Element\Template
     private $productTypes;
 
     /**
-     * @param \Magento\Framework\View\Element\Template\Context $context
-     * @param array $data
-     */
-    public function __construct(
-        \Magento\Framework\View\Element\Template\Context $context,
-        array $data = []
-    ) {
-        parent::__construct(
-            $context,
-            $data
-        );
-    }
-
-    /**
      * Returns wishlist widget options
      *
      * @return array
@@ -43,7 +31,10 @@ class AddToWishlist extends \Magento\Framework\View\Element\Template
      */
     public function getWishlistOptions()
     {
-        return ['productType' => $this->getProductTypes()];
+        return [
+            'productType' => $this->getProductTypes(),
+            'isProductList' => (bool)$this->getData('is_product_list')
+        ];
     }
 
     /**
@@ -56,7 +47,7 @@ class AddToWishlist extends \Magento\Framework\View\Element\Template
     {
         if ($this->productTypes === null) {
             $this->productTypes = [];
-            $block = $this->getLayout()->getBlock('category.products.list');
+            $block = $this->getLayout()->getBlock($this->getProductListBlockName());
             if ($block) {
                 $productCollection = $block->getLoadedProductCollection();
                 $productTypes = [];
@@ -71,7 +62,18 @@ class AddToWishlist extends \Magento\Framework\View\Element\Template
     }
 
     /**
-     * {@inheritdoc}
+     * Get product list block name in layout
+     *
+     * @return string
+     */
+    private function getProductListBlockName(): string
+    {
+        return $this->getData('product_list_block') ?: 'category.products.list';
+    }
+
+    /**
+     * @inheritDoc
+     *
      * @since 100.1.0
      */
     protected function _toHtml()

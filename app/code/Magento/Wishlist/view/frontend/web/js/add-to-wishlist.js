@@ -17,7 +17,10 @@ define([
             downloadableInfo: '#downloadable-links-list input',
             customOptionsInfo: '.product-custom-option',
             qtyInfo: '#qty',
-            actionElement: '[data-action="add-to-wishlist"]'
+            actionElement: '[data-action="add-to-wishlist"]',
+            productListItem: '.item.product-item',
+            productListPriceBox: '.price-box',
+            isProductList: false
         },
 
         /** @inheritdoc */
@@ -65,6 +68,7 @@ define([
         _updateWishlistData: function (event) {
             var dataToAdd = {},
                 isFileUploaded = false,
+                productId = null,
                 self = this;
 
             if (event.handleObj.selector == this.options.qtyInfo) { //eslint-disable-line eqeqeq
@@ -83,7 +87,19 @@ define([
                     $(element).is('textarea') ||
                     $('#' + element.id + ' option:selected').length
                 ) {
-                    if ($(element).data('selector') || $(element).attr('name')) {
+                    if (!($(element).data('selector') || $(element).attr('name'))) {
+                        return;
+                    }
+
+                    if (self.options.isProductList) {
+                        productId = self.retrieveListProductId(this);
+
+                        dataToAdd[productId] = $.extend(
+                            {},
+                            dataToAdd[productId] ? dataToAdd[productId] : {},
+                            self._getElementData(element)
+                        );
+                    } else {
                         dataToAdd = $.extend({}, dataToAdd, self._getElementData(element));
                     }
 
@@ -107,10 +123,17 @@ define([
          * @private
          */
         _updateAddToWishlistButton: function (dataToAdd) {
-            var self = this;
+            var productId = null,
+                self = this;
 
             $('[data-action="add-to-wishlist"]').each(function (index, element) {
-                var params = $(element).data('post');
+                var params = $(element).data('post'),
+                    dataToAddObj = dataToAdd;
+
+                if (self.options.isProductList) {
+                    productId = self.retrieveListProductId(element);
+                    dataToAddObj = typeof dataToAdd[productId] !== 'undefined' ? dataToAdd[productId] : {};
+                }
 
                 if (!params) {
                     params = {
@@ -118,7 +141,7 @@ define([
                     };
                 }
 
-                params.data = $.extend({}, params.data, dataToAdd, {
+                params.data = $.extend({}, params.data, dataToAddObj, {
                     'qty': $(self.options.qtyInfo).val()
                 });
                 $(element).data('post', params);
@@ -241,6 +264,21 @@ define([
 
                 return;
             }
+        },
+
+        /**
+         * Retrieve product id from element on products list
+         *
+         * @param {jQuery.Object} element
+         * @private
+         */
+        retrieveListProductId: function (element) {
+            return parseInt(
+                $(element).closest(this.options.productListItem)
+                    .find(this.options.productListPriceBox)
+                    .data('product-id'),
+                10
+            );
         }
     });
 
