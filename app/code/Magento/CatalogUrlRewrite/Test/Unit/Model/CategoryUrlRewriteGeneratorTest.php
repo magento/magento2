@@ -9,37 +9,35 @@ namespace Magento\CatalogUrlRewrite\Test\Unit\Model;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 /**
- * Class CategoryUrlRewriteGeneratorTest
- *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class CategoryUrlRewriteGeneratorTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    /** @var \PHPUnit\Framework\MockObject\MockObject */
     private $canonicalUrlRewriteGenerator;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    /** @var \PHPUnit\Framework\MockObject\MockObject */
     private $currentUrlRewritesRegenerator;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    /** @var \PHPUnit\Framework\MockObject\MockObject */
     private $childrenUrlRewriteGenerator;
 
     /** @var \Magento\CatalogUrlRewrite\Model\CategoryUrlRewriteGenerator */
     private $categoryUrlRewriteGenerator;
 
-    /** @var \Magento\CatalogUrlRewrite\Service\V1\StoreViewService|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\CatalogUrlRewrite\Service\V1\StoreViewService|\PHPUnit\Framework\MockObject\MockObject */
     private $storeViewService;
 
-    /** @var \Magento\Catalog\Model\Category|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Catalog\Model\Category|\PHPUnit\Framework\MockObject\MockObject */
     private $category;
 
-    /** @var \Magento\Catalog\Api\CategoryRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Catalog\Api\CategoryRepositoryInterface|\PHPUnit\Framework\MockObject\MockObject */
     private $categoryRepository;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    /** @var \PHPUnit\Framework\MockObject\MockObject */
     private $mergeDataProvider;
 
-    /** @var \Magento\Framework\Serialize\Serializer\Json|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Serialize\Serializer\Json|\PHPUnit\Framework\MockObject\MockObject */
     protected $serializer;
 
     /**
@@ -141,6 +139,7 @@ class CategoryUrlRewriteGeneratorTest extends \PHPUnit\Framework\TestCase
             ],
             $this->categoryUrlRewriteGenerator->generate($this->category, false, $categoryId)
         );
+        $this->assertEquals(0, $this->category->getStoreId(), 'Store ID should not have been modified');
     }
 
     /**
