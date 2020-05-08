@@ -3,14 +3,19 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Store\Test\Unit\Model;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Store\Model\ResourceModel\Website\Collection;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\Website;
 use Magento\Store\Model\WebsiteFactory;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class WebsiteTest extends \PHPUnit\Framework\TestCase
+class WebsiteTest extends TestCase
 {
     /**
      * @var Website
@@ -23,7 +28,7 @@ class WebsiteTest extends \PHPUnit\Framework\TestCase
     protected $objectManagerHelper;
 
     /**
-     * @var WebsiteFactory|\PHPUnit\Framework\MockObject\MockObject
+     * @var WebsiteFactory|MockObject
      */
     protected $websiteFactory;
 
@@ -31,14 +36,14 @@ class WebsiteTest extends \PHPUnit\Framework\TestCase
     {
         $this->objectManagerHelper = new ObjectManager($this);
 
-        $this->websiteFactory = $this->getMockBuilder(\Magento\Store\Model\WebsiteFactory::class)
+        $this->websiteFactory = $this->getMockBuilder(WebsiteFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create', 'getCollection', '__wakeup'])
             ->getMock();
 
         /** @var Website $websiteModel */
         $this->model = $this->objectManagerHelper->getObject(
-            \Magento\Store\Model\Website::class,
+            Website::class,
             ['websiteFactory' => $this->websiteFactory]
         );
     }
@@ -46,7 +51,7 @@ class WebsiteTest extends \PHPUnit\Framework\TestCase
     public function testIsCanDelete()
     {
         $websiteCollection = $this->createPartialMock(
-            \Magento\Store\Model\ResourceModel\Website\Collection::class,
+            Collection::class,
             ['getSize']
         );
         $websiteCollection->expects($this->any())->method('getSize')->willReturn(2);

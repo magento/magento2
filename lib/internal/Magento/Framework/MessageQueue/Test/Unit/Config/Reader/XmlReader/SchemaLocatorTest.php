@@ -3,23 +3,28 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Framework\MessageQueue\Test\Unit\Config\Reader\XmlReader;
 
-class SchemaLocatorTest extends \PHPUnit\Framework\TestCase
+use Magento\Framework\Config\Dom\UrnResolver;
+use Magento\Framework\MessageQueue\Config\Reader\Xml\SchemaLocator;
+use PHPUnit\Framework\TestCase;
+
+class SchemaLocatorTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\MessageQueue\Config\Reader\Xml\SchemaLocator
+     * @var SchemaLocator
      */
     protected $model;
 
-    /** @var \Magento\Framework\Config\Dom\UrnResolver */
+    /** @var UrnResolver */
     protected $urnResolver;
 
     protected function setUp(): void
     {
-        $this->urnResolver = new \Magento\Framework\Config\Dom\UrnResolver();
-        $this->model = new \Magento\Framework\MessageQueue\Config\Reader\Xml\SchemaLocator($this->urnResolver);
+        $this->urnResolver = new UrnResolver();
+        $this->model = new SchemaLocator($this->urnResolver);
     }
 
     public function testGetSchema()

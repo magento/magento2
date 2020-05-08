@@ -3,26 +3,38 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Eav\Test\Unit\Model;
 
-/**
- * Class CustomAttributesMapperTest
- */
-class CustomAttributesMapperTest extends \PHPUnit\Framework\TestCase
+use Magento\Eav\Model\AttributeRepository;
+use Magento\Eav\Model\CustomAttributesMapper;
+use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
+use Magento\Framework\Api\AttributeInterface;
+use Magento\Framework\Api\CustomAttributesDataInterface;
+use Magento\Framework\Api\SearchCriteria;
+use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Framework\Api\SearchResults;
+use Magento\Framework\EntityManager\EntityMetadata;
+use Magento\Framework\EntityManager\MetadataPool;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\TestCase;
+
+class CustomAttributesMapperTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
+     * @var ObjectManager
      */
     private $objectManager;
 
     protected function setUp(): void
     {
-        $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $this->objectManager = new ObjectManager($this);
     }
 
     public function testEntityToDatabase()
     {
-        $searchResult = $this->getMockBuilder(\Magento\Framework\Api\SearchResults::class)
+        $searchResult = $this->getMockBuilder(SearchResults::class)
             ->disableOriginalConstructor()
             ->setMethods(['getItems'])
             ->getMock();
@@ -30,7 +42,7 @@ class CustomAttributesMapperTest extends \PHPUnit\Framework\TestCase
             ->method('getItems')
             ->willReturn($this->getAttributes());
 
-        $attributeRepository = $this->getMockBuilder(\Magento\Eav\Model\AttributeRepository::class)
+        $attributeRepository = $this->getMockBuilder(AttributeRepository::class)
             ->disableOriginalConstructor()
             ->setMethods(['getList'])
             ->getMock();
@@ -39,7 +51,7 @@ class CustomAttributesMapperTest extends \PHPUnit\Framework\TestCase
             ->willReturn($searchResult);
 
         $metadata = $this->objectManager->getObject(
-            \Magento\Framework\EntityManager\EntityMetadata::class,
+            EntityMetadata::class,
             [
                 'entityTableName' => 'test',
                 'identifierField' => 'entity_id',
@@ -47,7 +59,7 @@ class CustomAttributesMapperTest extends \PHPUnit\Framework\TestCase
             ]
         );
 
-        $metadataPool = $this->getMockBuilder(\Magento\Framework\EntityManager\MetadataPool::class)
+        $metadataPool = $this->getMockBuilder(MetadataPool::class)
             ->disableOriginalConstructor()
             ->setMethods(['getMetadata', 'hasConfiguration'])
             ->getMock();
@@ -56,17 +68,17 @@ class CustomAttributesMapperTest extends \PHPUnit\Framework\TestCase
             ->willReturn(true);
         $metadataPool->expects($this->any())
             ->method('getMetadata')
-            ->with($this->equalTo(\Magento\Framework\Api\CustomAttributesDataInterface::class))
+            ->with(CustomAttributesDataInterface::class)
             ->willReturn($metadata);
         $metadataPool->expects($this->once())
             ->method('hasConfiguration')
             ->willReturn(true);
 
-        $searchCriteriaBuilder = $this->getMockBuilder(\Magento\Framework\Api\SearchCriteriaBuilder::class)
+        $searchCriteriaBuilder = $this->getMockBuilder(SearchCriteriaBuilder::class)
             ->disableOriginalConstructor()
             ->setMethods(['addFilter', 'create'])
             ->getMock();
-        $searchCriteria = $this->getMockBuilder(\Magento\Framework\Api\SearchCriteria::class)
+        $searchCriteria = $this->getMockBuilder(SearchCriteria::class)
             ->disableOriginalConstructor()
             ->getMock();
         $searchCriteriaBuilder->expects($this->any())
@@ -76,42 +88,42 @@ class CustomAttributesMapperTest extends \PHPUnit\Framework\TestCase
             ->method('create')
             ->willReturn($searchCriteria);
 
-        /** @var \Magento\Eav\Model\CustomAttributesMapper $customAttributesMapper */
+        /** @var CustomAttributesMapper $customAttributesMapper */
         $customAttributesMapper = $this->objectManager
-            ->getObject(\Magento\Eav\Model\CustomAttributesMapper::class, [
+            ->getObject(CustomAttributesMapper::class, [
                 'attributeRepository' => $attributeRepository,
                 'metadataPool' => $metadataPool,
                 'searchCriteriaBuilder' => $searchCriteriaBuilder
             ]);
 
         $actual = $customAttributesMapper->entityToDatabase(
-            \Magento\Framework\Api\CustomAttributesDataInterface::class,
+            CustomAttributesDataInterface::class,
             [
-                \Magento\Framework\Api\CustomAttributesDataInterface::CUSTOM_ATTRIBUTES => [
+                CustomAttributesDataInterface::CUSTOM_ATTRIBUTES => [
                     'test' => [
-                        \Magento\Framework\Api\AttributeInterface::ATTRIBUTE_CODE => 'test',
-                        \Magento\Framework\Api\AttributeInterface::VALUE => 'test'
+                        AttributeInterface::ATTRIBUTE_CODE => 'test',
+                        AttributeInterface::VALUE => 'test'
                     ],
                     'test1' => [
-                        \Magento\Framework\Api\AttributeInterface::ATTRIBUTE_CODE => 'test4',
-                        \Magento\Framework\Api\AttributeInterface::VALUE => 'test4'
+                        AttributeInterface::ATTRIBUTE_CODE => 'test4',
+                        AttributeInterface::VALUE => 'test4'
                     ],
                     'test2' => [
-                        \Magento\Framework\Api\AttributeInterface::ATTRIBUTE_CODE => 'test2',
-                        \Magento\Framework\Api\AttributeInterface::VALUE => 'test2'
+                        AttributeInterface::ATTRIBUTE_CODE => 'test2',
+                        AttributeInterface::VALUE => 'test2'
                     ]
                 ]
             ]
         );
         $expected = [
-            \Magento\Framework\Api\CustomAttributesDataInterface::CUSTOM_ATTRIBUTES => [
+            CustomAttributesDataInterface::CUSTOM_ATTRIBUTES => [
                 'test1' => [
-                    \Magento\Framework\Api\AttributeInterface::ATTRIBUTE_CODE => 'test4',
-                    \Magento\Framework\Api\AttributeInterface::VALUE => 'test4'
+                    AttributeInterface::ATTRIBUTE_CODE => 'test4',
+                    AttributeInterface::VALUE => 'test4'
                 ],
                 'test2' => [
-                    \Magento\Framework\Api\AttributeInterface::ATTRIBUTE_CODE => 'test2',
-                    \Magento\Framework\Api\AttributeInterface::VALUE => 'test2'
+                    AttributeInterface::ATTRIBUTE_CODE => 'test2',
+                    AttributeInterface::VALUE => 'test2'
                 ],
             ],
             'test' => 'test'
@@ -121,7 +133,7 @@ class CustomAttributesMapperTest extends \PHPUnit\Framework\TestCase
 
     public function testDatabaseToEntity()
     {
-        $searchResult = $this->getMockBuilder(\Magento\Framework\Api\SearchResults::class)
+        $searchResult = $this->getMockBuilder(SearchResults::class)
             ->disableOriginalConstructor()
             ->setMethods(['getItems'])
             ->getMock();
@@ -129,7 +141,7 @@ class CustomAttributesMapperTest extends \PHPUnit\Framework\TestCase
             ->method('getItems')
             ->willReturn($this->getAttributes());
 
-        $attributeRepository = $this->getMockBuilder(\Magento\Eav\Model\AttributeRepository::class)
+        $attributeRepository = $this->getMockBuilder(AttributeRepository::class)
             ->disableOriginalConstructor()
             ->setMethods(['getList'])
             ->getMock();
@@ -138,7 +150,7 @@ class CustomAttributesMapperTest extends \PHPUnit\Framework\TestCase
             ->willReturn($searchResult);
 
         $metadata = $this->objectManager->getObject(
-            \Magento\Framework\EntityManager\EntityMetadata::class,
+            EntityMetadata::class,
             [
                 'entityTableName' => 'test',
                 'identifierField' => 'entity_id',
@@ -146,20 +158,20 @@ class CustomAttributesMapperTest extends \PHPUnit\Framework\TestCase
             ]
         );
 
-        $metadataPool = $this->getMockBuilder(\Magento\Framework\EntityManager\MetadataPool::class)
+        $metadataPool = $this->getMockBuilder(MetadataPool::class)
             ->disableOriginalConstructor()
             ->setMethods(['getMetadata'])
             ->getMock();
         $metadataPool->expects($this->any())
             ->method('getMetadata')
-            ->with($this->equalTo(\Magento\Framework\Api\CustomAttributesDataInterface::class))
+            ->with(CustomAttributesDataInterface::class)
             ->willReturn($metadata);
 
-        $searchCriteriaBuilder = $this->getMockBuilder(\Magento\Framework\Api\SearchCriteriaBuilder::class)
+        $searchCriteriaBuilder = $this->getMockBuilder(SearchCriteriaBuilder::class)
             ->disableOriginalConstructor()
             ->setMethods(['addFilter', 'create'])
             ->getMock();
-        $searchCriteria = $this->getMockBuilder(\Magento\Framework\Api\SearchCriteria::class)
+        $searchCriteria = $this->getMockBuilder(SearchCriteria::class)
             ->disableOriginalConstructor()
             ->getMock();
         $searchCriteriaBuilder->expects($this->any())
@@ -169,15 +181,15 @@ class CustomAttributesMapperTest extends \PHPUnit\Framework\TestCase
             ->method('create')
             ->willReturn($searchCriteria);
 
-        /** @var \Magento\Eav\Model\CustomAttributesMapper $customAttributesMapper */
+        /** @var CustomAttributesMapper $customAttributesMapper */
         $customAttributesMapper = $this->objectManager
-            ->getObject(\Magento\Eav\Model\CustomAttributesMapper::class, [
+            ->getObject(CustomAttributesMapper::class, [
                 'attributeRepository' => $attributeRepository,
                 'metadataPool' => $metadataPool,
                 'searchCriteriaBuilder' => $searchCriteriaBuilder
             ]);
         $actual = $customAttributesMapper->databaseToEntity(
-            \Magento\Framework\Api\CustomAttributesDataInterface::class,
+            CustomAttributesDataInterface::class,
             [
                 'test' => 'test',
                 'test4' => 'test4',
@@ -187,10 +199,10 @@ class CustomAttributesMapperTest extends \PHPUnit\Framework\TestCase
         $expected = [
             'test4' => 'test4',
             'test2' => 'test2',
-            \Magento\Framework\Api\CustomAttributesDataInterface::CUSTOM_ATTRIBUTES => [
+            CustomAttributesDataInterface::CUSTOM_ATTRIBUTES => [
                 [
-                    \Magento\Framework\Api\AttributeInterface::ATTRIBUTE_CODE => 'test',
-                    \Magento\Framework\Api\AttributeInterface::VALUE => 'test'
+                    AttributeInterface::ATTRIBUTE_CODE => 'test',
+                    AttributeInterface::VALUE => 'test'
                 ]
             ],
             'test' => 'test'
@@ -204,7 +216,7 @@ class CustomAttributesMapperTest extends \PHPUnit\Framework\TestCase
     private function getAttributes()
     {
         /* Attribute with the code we want to copy */
-        $attribute = $this->getMockBuilder(\Magento\Eav\Model\Entity\Attribute\AbstractAttribute::class)
+        $attribute = $this->getMockBuilder(AbstractAttribute::class)
             ->disableOriginalConstructor()
             ->setMethods(['isStatic', 'getAttributeCode'])
             ->getMockForAbstractClass();
@@ -216,7 +228,7 @@ class CustomAttributesMapperTest extends \PHPUnit\Framework\TestCase
             ->willReturn('test');
 
         /* Attribute with the code we don't want to copy */
-        $attribute1 = $this->getMockBuilder(\Magento\Eav\Model\Entity\Attribute\AbstractAttribute::class)
+        $attribute1 = $this->getMockBuilder(AbstractAttribute::class)
             ->disableOriginalConstructor()
             ->setMethods(['isStatic', 'getAttributeCode'])
             ->getMockForAbstractClass();
@@ -228,7 +240,7 @@ class CustomAttributesMapperTest extends \PHPUnit\Framework\TestCase
             ->willReturn('test1');
 
         /* Static attribute but with the code which exists in custom attributes */
-        $attribute2 = $this->getMockBuilder(\Magento\Eav\Model\Entity\Attribute\AbstractAttribute::class)
+        $attribute2 = $this->getMockBuilder(AbstractAttribute::class)
             ->disableOriginalConstructor()
             ->setMethods(['isStatic', 'getAttributeCode'])
             ->getMockForAbstractClass();

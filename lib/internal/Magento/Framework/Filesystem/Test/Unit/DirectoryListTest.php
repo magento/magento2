@@ -3,11 +3,14 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\Filesystem\Test\Unit;
 
-use \Magento\Framework\Filesystem\DirectoryList;
+use Magento\Framework\Filesystem\DirectoryList;
+use PHPUnit\Framework\TestCase;
 
-class DirectoryListTest extends \PHPUnit\Framework\TestCase
+class DirectoryListTest extends TestCase
 {
     public function testGetDefaultConfig()
     {
@@ -49,13 +52,10 @@ class DirectoryListTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('/root/dir', $object->getRoot());
     }
 
-    /**
-     */
     public function testUnknownType()
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException('InvalidArgumentException');
         $this->expectExceptionMessage('Unknown type: foo');
-
         new DirectoryList('/root/dir', ['foo' => [DirectoryList::PATH => '/foo/dir']]);
     }
 
@@ -65,9 +65,8 @@ class DirectoryListTest extends \PHPUnit\Framework\TestCase
      */
     public function testAssertCode($method)
     {
-        $this->expectException(\Magento\Framework\Exception\FileSystemException::class);
+        $this->expectException('Magento\Framework\Exception\FileSystemException');
         $this->expectExceptionMessage('Unknown directory type: \'foo\'');
-
         $object = new DirectoryList('/root/dir');
         $object->$method('foo');
     }
@@ -120,9 +119,10 @@ class DirectoryListTest extends \PHPUnit\Framework\TestCase
      */
     public function testAssertUrlPath($value)
     {
-        $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage('URL path must be relative directory path in lowercase with \'/\' directory separator:');
-
+        $this->expectException('InvalidArgumentException');
+        $this->expectExceptionMessage(
+            'URL path must be relative directory path in lowercase with \'/\' directory separator:'
+        );
         new DirectoryList('/root/dir', [DirectoryList::SYS_TMP => [DirectoryList::URL_PATH => $value]]);
     }
 

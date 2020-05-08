@@ -3,24 +3,31 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\CatalogRule\Test\Unit\Model\Rule;
 
-class WebsitesOptionsProviderTest extends \PHPUnit\Framework\TestCase
+use Magento\CatalogRule\Model\Rule\WebsitesOptionsProvider;
+use Magento\Store\Model\System\Store;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class WebsitesOptionsProviderTest extends TestCase
 {
     /**
-     * @var \Magento\CatalogRule\Model\Rule\WebsitesOptionsProvider
+     * @var WebsitesOptionsProvider
      */
     private $model;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     private $storeMock;
 
     protected function setup(): void
     {
-        $this->storeMock = $this->createMock(\Magento\Store\Model\System\Store::class);
-        $this->model = new \Magento\CatalogRule\Model\Rule\WebsitesOptionsProvider($this->storeMock);
+        $this->storeMock = $this->createMock(Store::class);
+        $this->model = new WebsitesOptionsProvider($this->storeMock);
     }
 
     public function testToOptionArray()

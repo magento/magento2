@@ -3,19 +3,28 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Setup\Test\Unit\Model;
 
+use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\Config\ConfigOptionsListConstants;
+use Magento\Framework\Config\Data\ConfigData;
+use Magento\Framework\Encryption\KeyValidator;
+use Magento\Framework\Setup\Option\FlagConfigOption;
+use Magento\Framework\Setup\Option\TextConfigOption;
 use Magento\Setup\Model\ConfigGenerator;
 use Magento\Setup\Model\ConfigOptionsList;
+use Magento\Setup\Model\ConfigOptionsList\DriverOptions;
 use Magento\Setup\Model\ConfigOptionsList\Lock;
 use Magento\Setup\Validator\DbValidator;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ConfigOptionsListTest extends \PHPUnit\Framework\TestCase
+class ConfigOptionsListTest extends TestCase
 {
     /**
      * @var ConfigOptionsList
@@ -23,22 +32,22 @@ class ConfigOptionsListTest extends \PHPUnit\Framework\TestCase
     private $object;
 
     /**
-     * @var ConfigGenerator|\PHPUnit\Framework\MockObject\MockObject
+     * @var ConfigGenerator|MockObject
      */
     private $generator;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\App\DeploymentConfig
+     * @var MockObject|DeploymentConfig
      */
     private $deploymentConfig;
 
     /**
-     * @var DbValidator|\PHPUnit\Framework\MockObject\MockObject
+     * @var DbValidator|MockObject
      */
     private $dbValidator;
 
     /**
-     * @var \Magento\Framework\Encryption\KeyValidator|\PHPUnit\Framework\MockObject\MockObject
+     * @var KeyValidator|MockObject
      */
     private $encryptionKeyValidator;
 
@@ -49,11 +58,11 @@ class ConfigOptionsListTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp(): void
     {
-        $this->generator = $this->createMock(\Magento\Setup\Model\ConfigGenerator::class);
-        $this->deploymentConfig = $this->createMock(\Magento\Framework\App\DeploymentConfig::class);
-        $this->dbValidator = $this->createMock(\Magento\Setup\Validator\DbValidator::class);
-        $this->encryptionKeyValidator = $this->createMock(\Magento\Framework\Encryption\KeyValidator::class);
-        $this->driverOptionsMock = $this->createMock(ConfigOptionsList\DriverOptions::class);
+        $this->generator = $this->createMock(ConfigGenerator::class);
+        $this->deploymentConfig = $this->createMock(DeploymentConfig::class);
+        $this->dbValidator = $this->createMock(DbValidator::class);
+        $this->encryptionKeyValidator = $this->createMock(KeyValidator::class);
+        $this->driverOptionsMock = $this->createMock(DriverOptions::class);
         $this->object = new ConfigOptionsList(
             $this->generator,
             $this->dbValidator,
@@ -65,37 +74,37 @@ class ConfigOptionsListTest extends \PHPUnit\Framework\TestCase
     public function testGetOptions()
     {
         $options = $this->object->getOptions();
-        $this->assertInstanceOf(\Magento\Framework\Setup\Option\TextConfigOption::class, $options[0]);
+        $this->assertInstanceOf(TextConfigOption::class, $options[0]);
         $this->assertSame('Encryption key', $options[0]->getDescription());
-        $this->assertInstanceOf(\Magento\Framework\Setup\Option\TextConfigOption::class, $options[1]);
+        $this->assertInstanceOf(TextConfigOption::class, $options[1]);
         $this->assertSame('Database server host', $options[1]->getDescription());
-        $this->assertInstanceOf(\Magento\Framework\Setup\Option\TextConfigOption::class, $options[2]);
+        $this->assertInstanceOf(TextConfigOption::class, $options[2]);
         $this->assertSame('Database name', $options[2]->getDescription());
-        $this->assertInstanceOf(\Magento\Framework\Setup\Option\TextConfigOption::class, $options[3]);
+        $this->assertInstanceOf(TextConfigOption::class, $options[3]);
         $this->assertSame('Database server username', $options[3]->getDescription());
-        $this->assertInstanceOf(\Magento\Framework\Setup\Option\TextConfigOption::class, $options[4]);
+        $this->assertInstanceOf(TextConfigOption::class, $options[4]);
         $this->assertSame('Database server engine', $options[4]->getDescription());
-        $this->assertInstanceOf(\Magento\Framework\Setup\Option\TextConfigOption::class, $options[5]);
+        $this->assertInstanceOf(TextConfigOption::class, $options[5]);
         $this->assertSame('Database server password', $options[5]->getDescription());
-        $this->assertInstanceOf(\Magento\Framework\Setup\Option\TextConfigOption::class, $options[6]);
+        $this->assertInstanceOf(TextConfigOption::class, $options[6]);
         $this->assertSame('Database table prefix', $options[6]->getDescription());
-        $this->assertInstanceOf(\Magento\Framework\Setup\Option\TextConfigOption::class, $options[7]);
+        $this->assertInstanceOf(TextConfigOption::class, $options[7]);
         $this->assertSame('Database type', $options[7]->getDescription());
-        $this->assertInstanceOf(\Magento\Framework\Setup\Option\TextConfigOption::class, $options[8]);
+        $this->assertInstanceOf(TextConfigOption::class, $options[8]);
         $this->assertSame('Database  initial set of commands', $options[8]->getDescription());
-        $this->assertInstanceOf(\Magento\Framework\Setup\Option\FlagConfigOption::class, $options[9]);
+        $this->assertInstanceOf(FlagConfigOption::class, $options[9]);
         $this->assertSame(
             'If specified, then db connection validation will be skipped',
             $options[9]->getDescription()
         );
-        $this->assertInstanceOf(\Magento\Framework\Setup\Option\TextConfigOption::class, $options[10]);
+        $this->assertInstanceOf(TextConfigOption::class, $options[10]);
         $this->assertSame('http Cache hosts', $options[10]->getDescription());
         $this->assertGreaterThanOrEqual(11, count($options));
     }
 
     public function testCreateOptions()
     {
-        $configDataMock = $this->createMock(\Magento\Framework\Config\Data\ConfigData::class);
+        $configDataMock = $this->createMock(ConfigData::class);
         $this->generator->expects($this->once())->method('createCryptConfig')->willReturn($configDataMock);
         $this->generator->expects($this->once())->method('createDefinitionsConfig')->willReturn($configDataMock);
         $this->generator->expects($this->once())->method('createDbConfig')->willReturn($configDataMock);
@@ -109,7 +118,7 @@ class ConfigOptionsListTest extends \PHPUnit\Framework\TestCase
 
     public function testCreateOptionsWithOptionalNull()
     {
-        $configDataMock = $this->createMock(\Magento\Framework\Config\Data\ConfigData::class);
+        $configDataMock = $this->createMock(ConfigData::class);
         $this->generator->expects($this->once())->method('createCryptConfig')->willReturn($configDataMock);
         $this->generator->expects($this->once())->method('createDefinitionsConfig')->willReturn(null);
         $this->generator->expects($this->once())->method('createDbConfig')->willReturn($configDataMock);
@@ -175,7 +184,7 @@ class ConfigOptionsListTest extends \PHPUnit\Framework\TestCase
 
     private function prepareValidationMocks()
     {
-        $configDataMock = $this->getMockBuilder(\Magento\Framework\Config\Data\ConfigData::class)
+        $configDataMock = $this->getMockBuilder(ConfigData::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->dbValidator->expects($this->once())->method('checkDatabaseTablePrefix')->willReturn($configDataMock);

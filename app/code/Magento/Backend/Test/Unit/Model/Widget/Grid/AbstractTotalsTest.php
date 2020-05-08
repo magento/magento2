@@ -3,22 +3,33 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Backend\Test\Unit\Model\Widget\Grid;
 
-class AbstractTotalsTest extends \PHPUnit\Framework\TestCase
+use Magento\Backend\Model\Widget\Grid\AbstractTotals;
+use Magento\Backend\Model\Widget\Grid\Parser;
+use Magento\Framework\Data\Collection;
+use Magento\Framework\Data\Collection\EntityFactory;
+use Magento\Framework\DataObject;
+use Magento\Framework\DataObject\Factory;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class AbstractTotalsTest extends TestCase
 {
     /**
-     * @var $_model \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject $_model
      */
     protected $_model;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $_parserMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $_factoryMock;
 
@@ -36,7 +47,7 @@ class AbstractTotalsTest extends \PHPUnit\Framework\TestCase
 
         $arguments = ['factory' => $this->_factoryMock, 'parser' => $this->_parserMock];
         $this->_model = $this->getMockForAbstractClass(
-            \Magento\Backend\Model\Widget\Grid\AbstractTotals::class,
+            AbstractTotals::class,
             $arguments,
             '',
             true,
@@ -59,14 +70,14 @@ class AbstractTotalsTest extends \PHPUnit\Framework\TestCase
     /**
      * Retrieve test collection
      *
-     * @return \Magento\Framework\Data\Collection
+     * @return Collection
      */
     protected function _getTestCollection()
     {
-        $collection = new \Magento\Framework\Data\Collection(
-            $this->createMock(\Magento\Framework\Data\Collection\EntityFactory::class)
+        $collection = new Collection(
+            $this->createMock(EntityFactory::class)
         );
-        $items = [new \Magento\Framework\DataObject(['test1' => '1', 'test2' => '2'])];
+        $items = [new DataObject(['test1' => '1', 'test2' => '2'])];
         foreach ($items as $item) {
             $collection->addItem($item);
         }
@@ -100,7 +111,7 @@ class AbstractTotalsTest extends \PHPUnit\Framework\TestCase
     protected function _prepareParserMock()
     {
         $this->_parserMock = $this->createPartialMock(
-            \Magento\Backend\Model\Widget\Grid\Parser::class,
+            Parser::class,
             ['parseExpression', 'isOperation']
         );
 
@@ -142,7 +153,7 @@ class AbstractTotalsTest extends \PHPUnit\Framework\TestCase
      */
     protected function _prepareFactoryMock()
     {
-        $this->_factoryMock = $this->createPartialMock(\Magento\Framework\DataObject\Factory::class, ['create']);
+        $this->_factoryMock = $this->createPartialMock(Factory::class, ['create']);
 
         $createValueMap = [
             [
@@ -155,7 +166,7 @@ class AbstractTotalsTest extends \PHPUnit\Framework\TestCase
                     'test6' => 1,
                     'test7' => 0,
                 ],
-                new \Magento\Framework\DataObject(
+                new DataObject(
                     [
                         'test1' => 2,
                         'test2' => 2,
@@ -167,7 +178,7 @@ class AbstractTotalsTest extends \PHPUnit\Framework\TestCase
                     ]
                 ),
             ],
-            [[], new \Magento\Framework\DataObject()],
+            [[], new DataObject()],
         ];
         $this->_factoryMock->expects($this->any())->method('create')->willReturnMap($createValueMap);
     }
@@ -189,7 +200,7 @@ class AbstractTotalsTest extends \PHPUnit\Framework\TestCase
 
     public function testCountTotals()
     {
-        $expected = new \Magento\Framework\DataObject(
+        $expected = new DataObject(
             ['test1' => 2, 'test2' => 2, 'test3' => 4, 'test4' => 0, 'test5' => 4, 'test6' => 1, 'test7' => 0]
         );
         $this->assertEquals($expected, $this->_model->countTotals($this->_getTestCollection()));
@@ -200,7 +211,7 @@ class AbstractTotalsTest extends \PHPUnit\Framework\TestCase
         $this->_model->countTotals($this->_getTestCollection());
         $this->_model->reset();
 
-        $this->assertEquals(new \Magento\Framework\DataObject(), $this->_model->getTotals());
+        $this->assertEquals(new DataObject(), $this->_model->getTotals());
         $this->assertNotEmpty($this->_model->getColumns());
     }
 
@@ -209,7 +220,7 @@ class AbstractTotalsTest extends \PHPUnit\Framework\TestCase
         $this->_model->countTotals($this->_getTestCollection());
         $this->_model->reset(true);
 
-        $this->assertEquals(new \Magento\Framework\DataObject(), $this->_model->getTotals());
+        $this->assertEquals(new DataObject(), $this->_model->getTotals());
         $this->assertEmpty($this->_model->getColumns());
     }
 }

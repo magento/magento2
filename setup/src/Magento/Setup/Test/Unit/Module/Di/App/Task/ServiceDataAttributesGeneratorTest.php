@@ -3,44 +3,47 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Setup\Test\Unit\Module\Di\App\Task;
 
-use Magento\Setup\Module\Di\Code\Scanner;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Setup\Module\Di\App\Task\Operation\ServiceDataAttributesGenerator;
+use Magento\Setup\Module\Di\Code\Scanner\ConfigurationScanner;
+use Magento\Setup\Module\Di\Code\Scanner\ServiceDataAttributesScanner;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-/**
- * Class ServiceDataAttributesGeneratorTest
- */
-class ServiceDataAttributesGeneratorTest extends \PHPUnit\Framework\TestCase
+class ServiceDataAttributesGeneratorTest extends TestCase
 {
     /**
-     * @var \Magento\Setup\Module\Di\Code\Scanner\ConfigurationScanner | \PHPUnit\Framework\MockObject\MockObject
+     * @var ConfigurationScanner|MockObject
      */
     private $configurationScannerMock;
 
     /**
-     * @var \Magento\Setup\Module\Di\Code\Scanner\ServiceDataAttributesScanner|\PHPUnit\Framework\MockObject\MockObject
+     * @var ServiceDataAttributesScanner|MockObject
      */
     private $serviceDataAttributesScannerMock;
 
     /**
-     * @var \Magento\Setup\Module\Di\App\Task\Operation\ServiceDataAttributesGenerator
+     * @var ServiceDataAttributesGenerator
      */
     private $model;
 
     protected function setUp(): void
     {
         $this->configurationScannerMock = $this->getMockBuilder(
-            \Magento\Setup\Module\Di\Code\Scanner\ConfigurationScanner::class
+            ConfigurationScanner::class
         )->disableOriginalConstructor()
             ->getMock();
         $this->serviceDataAttributesScannerMock = $this->getMockBuilder(
-            \Magento\Setup\Module\Di\Code\Scanner\ServiceDataAttributesScanner::class
+            ServiceDataAttributesScanner::class
         )->disableOriginalConstructor()
             ->getMock();
-        $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $objectManagerHelper = new ObjectManager($this);
         $this->model = $objectManagerHelper->getObject(
-            \Magento\Setup\Module\Di\App\Task\Operation\ServiceDataAttributesGenerator::class,
+            ServiceDataAttributesGenerator::class,
             [
                 'serviceDataAttributesScanner' => $this->serviceDataAttributesScannerMock,
                 'configurationScanner' => $this->configurationScannerMock,

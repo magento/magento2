@@ -3,29 +3,35 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\CatalogSearch\Test\Unit\Model\Layer\Catalog;
 
+use Magento\Catalog\Model\Category;
+use Magento\Catalog\Model\ResourceModel\Product\Collection;
+use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
+use Magento\CatalogSearch\Model\Layer\Category\ItemCollectionProvider;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use PHPUnit\Framework\TestCase;
 
-class ItemCollectionProviderTest extends \PHPUnit\Framework\TestCase
+class ItemCollectionProviderTest extends TestCase
 {
     public function testGetCollection()
     {
-        $categoryMock = $this->createMock(\Magento\Catalog\Model\Category::class);
+        $categoryMock = $this->createMock(Category::class);
 
-        $collectionMock = $this->createMock(\Magento\Catalog\Model\ResourceModel\Product\Collection::class);
+        $collectionMock = $this->createMock(Collection::class);
         $collectionMock->expects($this->once())->method('addCategoryFilter')->with($categoryMock);
 
         $collectionFactoryMock = $this->createPartialMock(
-            \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory::class,
+            CollectionFactory::class,
             ['create']
         );
         $collectionFactoryMock->expects($this->any())->method('create')->willReturn($collectionMock);
 
         $objectManager = new ObjectManagerHelper($this);
         $provider = $objectManager->getObject(
-            \Magento\CatalogSearch\Model\Layer\Category\ItemCollectionProvider::class,
+            ItemCollectionProvider::class,
             ['collectionFactory' => $collectionFactoryMock]
         );
 

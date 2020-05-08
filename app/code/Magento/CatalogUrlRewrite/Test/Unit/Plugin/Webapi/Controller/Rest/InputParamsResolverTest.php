@@ -8,18 +8,20 @@ declare(strict_types=1);
 
 namespace Magento\CatalogUrlRewrite\Test\Unit\Plugin\Webapi\Controller\Rest;
 
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\Webapi\Controller\Rest\InputParamsResolver;
-use Magento\CatalogUrlRewrite\Plugin\Webapi\Controller\Rest\InputParamsResolver as InputParamsResolverPlugin;
-use Magento\Framework\Webapi\Rest\Request as RestRequest;
-use Magento\Catalog\Model\Product;
-use Magento\Webapi\Controller\Rest\Router\Route;
 use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Catalog\Model\Product;
+use Magento\CatalogUrlRewrite\Plugin\Webapi\Controller\Rest\InputParamsResolver as InputParamsResolverPlugin;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\Webapi\Rest\Request as RestRequest;
+use Magento\Webapi\Controller\Rest\InputParamsResolver;
+use Magento\Webapi\Controller\Rest\Router\Route;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Unit test for InputParamsResolver plugin
  */
-class InputParamsResolverTest extends \PHPUnit\Framework\TestCase
+class InputParamsResolverTest extends TestCase
 {
     /**
      * @var string
@@ -42,22 +44,22 @@ class InputParamsResolverTest extends \PHPUnit\Framework\TestCase
     private $objectManager;
 
     /**
-     * @var InputParamsResolver|\PHPUnit\Framework\MockObject\MockObject
+     * @var InputParamsResolver|MockObject
      */
     private $subject;
 
     /**
-     * @var RestRequest|\PHPUnit\Framework\MockObject\MockObject
+     * @var RestRequest|MockObject
      */
     private $request;
 
     /**
-     * @var Product|\PHPUnit\Framework\MockObject\MockObject
+     * @var Product|MockObject
      */
     private $product;
 
     /**
-     * @var Route|\PHPUnit\Framework\MockObject\MockObject
+     * @var Route|MockObject
      */
     private $route;
 

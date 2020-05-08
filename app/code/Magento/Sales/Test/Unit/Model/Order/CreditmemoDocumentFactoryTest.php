@@ -3,27 +3,31 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Sales\Test\Unit\Model\Order;
 
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\Sales\Api\Data\CreditmemoCommentInterfaceFactory;
-use Magento\Sales\Api\OrderRepositoryInterface;
-use Magento\Sales\Model\Order\CreditmemoDocumentFactory;
-use Magento\Sales\Api\Data\CreditmemoCommentInterface;
-use Magento\Sales\Model\Order;
-use Magento\Sales\Model\Order\Invoice;
-use Magento\Sales\Api\Data\CreditmemoItemCreationInterface;
-use Magento\Sales\Api\Data\CreditmemoCommentCreationInterface;
-use Magento\Framework\EntityManager\HydratorPool;
-use Magento\Sales\Api\Data\CreditmemoCreationArgumentsInterface;
-use Magento\Sales\Model\Order\CreditmemoFactory;
 use Magento\Framework\EntityManager\HydratorInterface;
+use Magento\Framework\EntityManager\HydratorPool;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Sales\Api\Data\CreditmemoCommentCreationInterface;
+use Magento\Sales\Api\Data\CreditmemoCommentInterface;
+use Magento\Sales\Api\Data\CreditmemoCommentInterfaceFactory;
+use Magento\Sales\Api\Data\CreditmemoCreationArgumentsInterface;
+use Magento\Sales\Api\Data\CreditmemoItemCreationInterface;
+use Magento\Sales\Api\OrderRepositoryInterface;
+use Magento\Sales\Model\Order;
+use Magento\Sales\Model\Order\Creditmemo;
+use Magento\Sales\Model\Order\CreditmemoDocumentFactory;
+use Magento\Sales\Model\Order\CreditmemoFactory;
+use Magento\Sales\Model\Order\Invoice;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
- * Class CreditmemoDocumentFactoryTest
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class CreditmemoDocumentFactoryTest extends \PHPUnit\Framework\TestCase
+class CreditmemoDocumentFactoryTest extends TestCase
 {
     /**
      * @var ObjectManager
@@ -31,67 +35,67 @@ class CreditmemoDocumentFactoryTest extends \PHPUnit\Framework\TestCase
     private $objectManager;
 
     /**
-     * @var CreditmemoDocumentFactory|\PHPUnit\Framework\MockObject\MockObject
+     * @var CreditmemoDocumentFactory|MockObject
      */
     private $factory;
 
     /**
-     * @var CreditmemoFactory|\PHPUnit\Framework\MockObject\MockObject
+     * @var CreditmemoFactory|MockObject
      */
     private $creditmemoFactoryMock;
 
     /**
-     * @var CreditmemoCommentInterfaceFactory|\PHPUnit\Framework\MockObject\MockObject
+     * @var CreditmemoCommentInterfaceFactory|MockObject
      */
     private $commentFactoryMock;
 
     /**
-     * @var HydratorPool|\PHPUnit\Framework\MockObject\MockObject
+     * @var HydratorPool|MockObject
      */
     private $hydratorPoolMock;
 
     /**
-     * @var HydratorInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var HydratorInterface|MockObject
      */
     private $hydratorMock;
 
     /**
-     * @var \Magento\Sales\Model\Order|\PHPUnit\Framework\MockObject\MockObject
+     * @var \Magento\Sales\Model\Order|MockObject
      */
     private $orderMock;
 
     /**
-     * @var \Magento\Sales\Model\Order\Invoice|\PHPUnit\Framework\MockObject\MockObject
+     * @var Invoice|MockObject
      */
     private $invoiceMock;
 
     /**
-     * @var CreditmemoItemCreationInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var CreditmemoItemCreationInterface|MockObject
      */
     private $creditmemoItemCreationMock;
 
     /**
-     * @var CreditmemoCommentCreationInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var CreditmemoCommentCreationInterface|MockObject
      */
     private $commentCreationMock;
 
     /**
-     * @var CreditmemoCreationArgumentsInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var CreditmemoCreationArgumentsInterface|MockObject
      */
     private $commentCreationArgumentsMock;
 
     /**
-     * @var Order\Creditmemo|\PHPUnit\Framework\MockObject\MockObject
+     * @var Order\Creditmemo|MockObject
      */
     private $creditmemoMock;
 
     /**
-     * @var CreditmemoCommentInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var CreditmemoCommentInterface|MockObject
      */
     private $commentMock;
 
     /**
-     * @var OrderRepositoryInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var OrderRepositoryInterface|MockObject
      */
     private $orderRepositoryMock;
 
@@ -110,7 +114,7 @@ class CreditmemoDocumentFactoryTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $this->orderRepositoryMock = $this->getMockBuilder(OrderRepositoryInterface::class)
             ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+            ->getMock();
         $this->orderMock = $this->getMockBuilder(Order::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -119,19 +123,19 @@ class CreditmemoDocumentFactoryTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $this->creditmemoItemCreationMock = $this->getMockBuilder(CreditmemoItemCreationInterface::class)
             ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $this->creditmemoMock = $this->getMockBuilder(Order\Creditmemo::class)
+            ->getMock();
+        $this->creditmemoMock = $this->getMockBuilder(Creditmemo::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->hydratorMock = $this->getMockBuilder(HydratorInterface::class)
             ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+            ->getMock();
         $this->commentCreationArgumentsMock = $this->getMockBuilder(CreditmemoCreationArgumentsInterface::class)
             ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+            ->getMock();
         $this->commentCreationMock = $this->getMockBuilder(CreditmemoCommentCreationInterface::class)
             ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+            ->getMock();
         $this->creditmemoMock->expects($this->once())
             ->method('getEntityId')
             ->willReturn(11);

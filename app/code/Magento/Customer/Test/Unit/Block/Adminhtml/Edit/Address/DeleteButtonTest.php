@@ -3,42 +3,52 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Customer\Test\Unit\Block\Adminhtml\Edit\Address;
 
+use Magento\Customer\Block\Adminhtml\Edit\Address\DeleteButton;
+use Magento\Customer\Model\AddressFactory;
+use Magento\Customer\Model\ResourceModel\Address;
+use Magento\Customer\Model\ResourceModel\AddressRepository;
+use Magento\Customer\Ui\Component\Listing\Address\Column\Actions;
+use Magento\Framework\App\RequestInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Framework\UrlInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-/**
- * Class for \Magento\Customer\Block\Adminhtml\Edit\Address\DeleteButton unit tests
+/** \Magento\Customer\Block\Adminhtml\Edit\Address\DeleteButton unit tests
  */
-class DeleteButtonTest extends \PHPUnit\Framework\TestCase
+class DeleteButtonTest extends TestCase
 {
     /**
-     * @var \Magento\Customer\Model\AddressFactory|\PHPUnit\Framework\MockObject\MockObject
+     * @var AddressFactory|MockObject
      */
     private $addressFactory;
 
     /**
-     * @var \Magento\Framework\UrlInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var UrlInterface|MockObject
      */
     private $urlBuilder;
 
     /**
-     * @var \Magento\Customer\Model\ResourceModel\Address|\PHPUnit\Framework\MockObject\MockObject
+     * @var Address|MockObject
      */
     private $addressResourceModel;
 
     /**
-     * @var \Magento\Framework\App\RequestInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var RequestInterface|MockObject
      */
     private $request;
 
     /**
-     * @var \Magento\Customer\Model\ResourceModel\AddressRepository|\PHPUnit\Framework\MockObject\MockObject
+     * @var AddressRepository|MockObject
      */
     private $addressRepository;
 
     /**
-     * @var \Magento\Customer\Block\Adminhtml\Edit\Address\DeleteButton
+     * @var DeleteButton
      */
     private $deleteButton;
 
@@ -47,23 +57,23 @@ class DeleteButtonTest extends \PHPUnit\Framework\TestCase
      */
     protected function setUp(): void
     {
-        $this->addressFactory = $this->getMockBuilder(\Magento\Customer\Model\AddressFactory::class)
+        $this->addressFactory = $this->getMockBuilder(AddressFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->urlBuilder = $this->getMockForAbstractClass(\Magento\Framework\UrlInterface::class);
-        $this->addressResourceModel = $this->getMockBuilder(\Magento\Customer\Model\ResourceModel\Address::class)
+        $this->urlBuilder = $this->getMockForAbstractClass(UrlInterface::class);
+        $this->addressResourceModel = $this->getMockBuilder(Address::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->request = $this->getMockForAbstractClass(\Magento\Framework\App\RequestInterface::class);
+        $this->request = $this->getMockForAbstractClass(RequestInterface::class);
         $this->addressRepository = $this->getMockBuilder(
-            \Magento\Customer\Model\ResourceModel\AddressRepository::class
+            AddressRepository::class
         )
             ->disableOriginalConstructor()
             ->getMock();
         $objectManagerHelper = new ObjectManagerHelper($this);
 
         $this->deleteButton = $objectManagerHelper->getObject(
-            \Magento\Customer\Block\Adminhtml\Edit\Address\DeleteButton::class,
+            DeleteButton::class,
             [
                 'addressFactory' => $this->addressFactory,
                 'urlBuilder' => $this->urlBuilder,
@@ -82,7 +92,7 @@ class DeleteButtonTest extends \PHPUnit\Framework\TestCase
         $addressId = 1;
         $customerId = 2;
 
-        /** @var \Magento\Customer\Model\Address|\PHPUnit\Framework\MockObject\MockObject $address */
+        /** @var \Magento\Customer\Model\Address|MockObject $address */
         $address = $this->getMockBuilder(\Magento\Customer\Model\Address::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -96,7 +106,7 @@ class DeleteButtonTest extends \PHPUnit\Framework\TestCase
             ->willReturn($address);
         $this->urlBuilder->expects($this->atLeastOnce())->method('getUrl')
             ->with(
-                \Magento\Customer\Ui\Component\Listing\Address\Column\Actions::CUSTOMER_ADDRESS_PATH_DELETE,
+                Actions::CUSTOMER_ADDRESS_PATH_DELETE,
                 ['parent_id' => $customerId, 'id' => $addressId]
             )->willReturn('url');
 

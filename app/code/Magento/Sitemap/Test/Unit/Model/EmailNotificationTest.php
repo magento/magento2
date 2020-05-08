@@ -18,6 +18,7 @@ use Magento\Sitemap\Model\EmailNotification;
 use Magento\Sitemap\Model\Observer;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\Store;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -36,22 +37,22 @@ class EmailNotificationTest extends TestCase
     private $model;
 
     /**
-     * @var ScopeConfigInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var ScopeConfigInterface|MockObject
      */
     private $scopeConfigMock;
 
     /**
-     * @var TransportBuilder|\PHPUnit\Framework\MockObject\MockObject
+     * @var TransportBuilder|MockObject
      */
     private $transportBuilderMock;
 
     /**
-     * @var StateInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var StateInterface|MockObject
      */
     private $inlineTranslationMock;
 
     /**
-     * @var ObjectManagerInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var ObjectManagerInterface|MockObject
      */
     private $objectManagerMock;
 
@@ -81,7 +82,7 @@ class EmailNotificationTest extends TestCase
     public function testSendErrors()
     {
         $exception = 'Sitemap Exception';
-        $transport = $this->getMockForAbstractClass(TransportInterface::class);
+        $transport = $this->createMock(TransportInterface::class);
 
         $this->scopeConfigMock->expects($this->at(0))
             ->method('getValue')
@@ -95,29 +96,24 @@ class EmailNotificationTest extends TestCase
             ->method('suspend');
 
         $this->transportBuilderMock->expects($this->once())
-            ->method('setTemplateIdentifier')
-            ->willReturnSelf();
+            ->method('setTemplateIdentifier')->willReturnSelf();
 
         $this->transportBuilderMock->expects($this->once())
             ->method('setTemplateOptions')
             ->with([
                 'area' => FrontNameResolver::AREA_CODE,
                 'store' => Store::DEFAULT_STORE_ID,
-            ])
-            ->willReturnSelf();
+            ])->willReturnSelf();
 
         $this->transportBuilderMock->expects($this->once())
             ->method('setTemplateVars')
-            ->with(['warnings' => $exception])
-            ->willReturnSelf();
+            ->with(['warnings' => $exception])->willReturnSelf();
 
         $this->transportBuilderMock->expects($this->once())
-            ->method('setFrom')
-            ->willReturnSelf();
+            ->method('setFrom')->willReturnSelf();
 
         $this->transportBuilderMock->expects($this->once())
-            ->method('addTo')
-            ->willReturnSelf();
+            ->method('addTo')->willReturnSelf();
 
         $this->transportBuilderMock->expects($this->once())
             ->method('getTransport')

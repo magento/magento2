@@ -136,7 +136,7 @@ class StorageTest extends TestCase
     public function pathPathDataProvider(): array
     {
         return [
-            'Non string path' => [2020],
+            'Non string path' => ['2020'],
             'Invalid path' => [self::INVALID_PATH],
             'Existent path' => [self::VALID_PATH]
         ];

@@ -3,20 +3,25 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Checkout\Test\Unit\Model\Cart;
 
-/**
- * Class RequestInfoFilterTest
- */
-class RequestInfoFilterCompositeTest extends \PHPUnit\Framework\TestCase
+use Magento\Checkout\Model\Cart\RequestInfoFilter;
+use Magento\Checkout\Model\Cart\RequestInfoFilterComposite;
+use Magento\Framework\DataObject;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\TestCase;
+
+class RequestInfoFilterCompositeTest extends TestCase
 {
     /**
-     * @var \Magento\Checkout\Model\Cart\RequestInfoFilterComposite
+     * @var RequestInfoFilterComposite
      */
     protected $model;
 
     /**
-     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
+     * @var ObjectManager
      */
     protected $objectManager;
 
@@ -25,14 +30,14 @@ class RequestInfoFilterCompositeTest extends \PHPUnit\Framework\TestCase
      */
     protected function setUp(): void
     {
-        $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $this->objectManager = new ObjectManager($this);
 
         $requestInfoFilterMock1 = $this->createPartialMock(
-            \Magento\Checkout\Model\Cart\RequestInfoFilter::class,
+            RequestInfoFilter::class,
             ['filter']
         );
         $requestInfoFilterMock2 = $this->createPartialMock(
-            \Magento\Checkout\Model\Cart\RequestInfoFilter::class,
+            RequestInfoFilter::class,
             ['filter']
         );
 
@@ -44,7 +49,7 @@ class RequestInfoFilterCompositeTest extends \PHPUnit\Framework\TestCase
         $filterList = [ $requestInfoFilterMock1, $requestInfoFilterMock2];
 
         $this->model = $this->objectManager->getObject(
-            \Magento\Checkout\Model\Cart\RequestInfoFilterComposite::class,
+            RequestInfoFilterComposite::class,
             [
                 'filters' => $filterList,
             ]
@@ -56,9 +61,9 @@ class RequestInfoFilterCompositeTest extends \PHPUnit\Framework\TestCase
      */
     public function testFilter()
     {
-        /** @var \Magento\Framework\DataObject $params */
+        /** @var DataObject $params */
         $params = $this->objectManager->getObject(
-            \Magento\Framework\DataObject::class,
+            DataObject::class,
             ['data' => ['abc' => 1, 'efg' => 1, 'xyz' => 1]]
         );
         $result = $this->model->filter($params);

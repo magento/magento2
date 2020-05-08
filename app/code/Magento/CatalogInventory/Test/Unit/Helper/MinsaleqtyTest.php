@@ -3,45 +3,53 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\CatalogInventory\Test\Unit\Helper;
 
+use Magento\CatalogInventory\Helper\Minsaleqty;
+use Magento\CatalogInventory\Model\Configuration;
+use Magento\Customer\Api\Data\GroupInterface;
+use Magento\Customer\Api\GroupManagementInterface;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\Math\Random;
+use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Store\Model\ScopeInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-/**
- * Class MinsaleqtyTest
- */
-class MinsaleqtyTest extends \PHPUnit\Framework\TestCase
+class MinsaleqtyTest extends TestCase
 {
-    /** @var \Magento\CatalogInventory\Helper\Minsaleqty */
+    /** @var Minsaleqty */
     protected $minsaleqty;
 
     /** @var ObjectManagerHelper */
     protected $objectManagerHelper;
 
-    /** @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var ScopeConfigInterface|MockObject */
     protected $scopeConfigMock;
 
-    /** @var \Magento\Framework\Math\Random|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var Random|MockObject */
     protected $randomMock;
 
-    /** @var \Magento\Framework\Serialize\Serializer\Json|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var Json|MockObject */
     private $serializerMock;
 
     protected function setUp(): void
     {
-        $this->scopeConfigMock = $this->createMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
-        $this->randomMock = $this->createMock(\Magento\Framework\Math\Random::class);
+        $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
+        $this->randomMock = $this->createMock(Random::class);
         $this->randomMock->expects($this->any())
             ->method('getUniqueHash')
-            ->with($this->equalTo('_'))
+            ->with('_')
             ->willReturn('unique_hash');
 
-        $groupManagement = $this->getMockBuilder(\Magento\Customer\Api\GroupManagementInterface::class)
+        $groupManagement = $this->getMockBuilder(GroupManagementInterface::class)
             ->setMethods(['getAllCustomersGroup'])
             ->getMockForAbstractClass();
 
-        $allGroup = $this->getMockBuilder(\Magento\Customer\Api\Data\GroupInterface::class)
+        $allGroup = $this->getMockBuilder(GroupInterface::class)
             ->setMethods(['getId'])
             ->getMockForAbstractClass();
 
@@ -53,11 +61,11 @@ class MinsaleqtyTest extends \PHPUnit\Framework\TestCase
             ->method('getAllCustomersGroup')
             ->willReturn($allGroup);
 
-        $this->serializerMock = $this->createMock(\Magento\Framework\Serialize\Serializer\Json::class);
+        $this->serializerMock = $this->createMock(Json::class);
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->minsaleqty = $this->objectManagerHelper->getObject(
-            \Magento\CatalogInventory\Helper\Minsaleqty::class,
+            Minsaleqty::class,
             [
                 'scopeConfig' => $this->scopeConfigMock,
                 'mathRandom' => $this->randomMock,
@@ -79,9 +87,9 @@ class MinsaleqtyTest extends \PHPUnit\Framework\TestCase
         $this->scopeConfigMock->expects($this->once())
             ->method('getValue')
             ->with(
-                $this->equalTo(\Magento\CatalogInventory\Model\Configuration::XML_PATH_MIN_SALE_QTY),
-                $this->equalTo(\Magento\Store\Model\ScopeInterface::SCOPE_STORE),
-                $this->equalTo($store)
+                Configuration::XML_PATH_MIN_SALE_QTY,
+                ScopeInterface::SCOPE_STORE,
+                $store
             )
             ->willReturn($minSaleQty);
 

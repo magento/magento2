@@ -3,32 +3,37 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Sales\Test\Unit\Model\ResourceModel;
 
+use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Framework\DB\Adapter\Pdo\Mysql;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Sales\Model\ResourceModel\Helper;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-/**
- * Class HelperTest
- */
-class HelperTest extends \PHPUnit\Framework\TestCase
+class HelperTest extends TestCase
 {
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     private $resourceHelper;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     private $appResource;
 
     /**
-     * @var \Magento\Framework\DB\Adapter\AdapterInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var AdapterInterface|MockObject
      */
     private $connectionMock;
 
     /**
-     * @var \Magento\Sales\Model\ResourceModel\Helper
+     * @var Helper
      */
     private $helper;
 
@@ -38,14 +43,14 @@ class HelperTest extends \PHPUnit\Framework\TestCase
     protected function setUp(): void
     {
         $objectManager = new ObjectManagerHelper($this);
-        $this->appResource = $this->createMock(\Magento\Framework\App\ResourceConnection::class);
+        $this->appResource = $this->createMock(ResourceConnection::class);
 
         $this->resourceHelper = $this->createMock(\Magento\Reports\Model\ResourceModel\Helper::class);
 
-        $this->connectionMock = $this->createMock(\Magento\Framework\DB\Adapter\Pdo\Mysql::class);
+        $this->connectionMock = $this->createMock(Mysql::class);
 
         $this->helper = $objectManager->getObject(
-            \Magento\Sales\Model\ResourceModel\Helper::class,
+            Helper::class,
             [
                 'resource' => $this->appResource,
                 'reportsResourceHelper' => $this->resourceHelper

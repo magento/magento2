@@ -3,52 +3,59 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Unit\Model\Product\Attribute\Backend\Media;
 
-/**
- * Class aggregate all Media Gallery Entry Converters
- */
-class EntryConverterPoolTest extends \PHPUnit\Framework\TestCase
+use Magento\Catalog\Model\Product\Attribute\Backend\Media\EntryConverterPool;
+use Magento\Catalog\Model\Product\Attribute\Backend\Media\ImageEntryConverter;
+use Magento\Framework\DataObject;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\ProductVideo\Model\Product\Attribute\Media\ExternalVideoEntryConverter;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class EntryConverterPoolTest extends TestCase
 {
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      * |\Magento\Catalog\Model\Product\Attribute\Backend\Media\ImageEntryConverter
      */
     protected $imageMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      * |\Magento\ProductVideo\Model\Product\Attribute\Media\ExternalVideoEntryConverter
      */
     protected $videoMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\DataObject
+     * @var MockObject|DataObject
      */
     protected $dataObjectMock;
 
     protected function setUp(): void
     {
         $this->imageMock =
-            $this->createMock(\Magento\Catalog\Model\Product\Attribute\Backend\Media\ImageEntryConverter::class);
+            $this->createMock(ImageEntryConverter::class);
 
         $this->imageMock->expects($this->any())->method('getMediaEntryType')->willReturn('image');
 
         $this->videoMock =
-            $this->createMock(\Magento\ProductVideo\Model\Product\Attribute\Media\ExternalVideoEntryConverter::class);
+            $this->createMock(ExternalVideoEntryConverter::class);
 
         $this->videoMock->expects($this->any())->method('getMediaEntryType')->willReturn('external-video');
 
-        $this->dataObjectMock = $this->createMock(\Magento\Framework\DataObject::class);
+        $this->dataObjectMock = $this->createMock(DataObject::class);
     }
 
     public function testGetConverterByMediaTypeImage()
     {
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $objectManager = new ObjectManager($this);
 
         $converterPool = $objectManager->getObject(
-            \Magento\Catalog\Model\Product\Attribute\Backend\Media\EntryConverterPool::class,
+            EntryConverterPool::class,
             [
                 'mediaGalleryEntryConvertersCollection' => [$this->imageMock, $this->videoMock]
             ]
@@ -60,10 +67,10 @@ class EntryConverterPoolTest extends \PHPUnit\Framework\TestCase
 
     public function testGetConverterByMediaTypeVideo()
     {
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $objectManager = new ObjectManager($this);
 
         $converterPool = $objectManager->getObject(
-            \Magento\Catalog\Model\Product\Attribute\Backend\Media\EntryConverterPool::class,
+            EntryConverterPool::class,
             [
                 'mediaGalleryEntryConvertersCollection' => [$this->imageMock, $this->videoMock]
             ]
@@ -77,10 +84,10 @@ class EntryConverterPoolTest extends \PHPUnit\Framework\TestCase
     {
         $this->expectException('\InvalidArgumentException');
 
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $objectManager = new ObjectManager($this);
 
         $converterPool = $objectManager->getObject(
-            \Magento\Catalog\Model\Product\Attribute\Backend\Media\EntryConverterPool::class,
+            EntryConverterPool::class,
             [
                 'mediaGalleryEntryConvertersCollection' => [$this->dataObjectMock]
             ]
@@ -91,16 +98,16 @@ class EntryConverterPoolTest extends \PHPUnit\Framework\TestCase
 
     public function testGetConverterByMediaTypeImageException()
     {
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $objectManager = new ObjectManager($this);
 
         $converterPool = $objectManager->getObject(
-            \Magento\Catalog\Model\Product\Attribute\Backend\Media\EntryConverterPool::class,
+            EntryConverterPool::class,
             [
                 'mediaGalleryEntryConvertersCollection' => [$this->imageMock, $this->videoMock]
             ]
         );
 
-        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+        $this->expectException(LocalizedException::class);
 
         $converterPool->getConverterByMediaType('something_wrong');
     }

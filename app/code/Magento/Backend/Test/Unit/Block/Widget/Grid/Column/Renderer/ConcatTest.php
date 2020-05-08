@@ -3,23 +3,29 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Backend\Test\Unit\Block\Widget\Grid\Column\Renderer;
 
+use Magento\Backend\Block\Widget\Grid\Column;
+use Magento\Backend\Block\Widget\Grid\Column\Renderer\Concat;
 use Magento\Framework\DataObject;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\TestCase;
 
-class ConcatTest extends \PHPUnit\Framework\TestCase
+class ConcatTest extends TestCase
 {
-    /** @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager  */
+    /** @var ObjectManager  */
     protected $objectManagerHelper;
 
-    /** @var \Magento\Backend\Block\Widget\Grid\Column\Renderer\Concat */
+    /** @var Concat */
     protected $renderer;
 
     protected function setUp(): void
     {
-        $this->objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $this->objectManagerHelper = new ObjectManager($this);
         $this->renderer = $this->objectManagerHelper->getObject(
-            \Magento\Backend\Block\Widget\Grid\Column\Renderer\Concat::class
+            Concat::class
         );
     }
 
@@ -40,7 +46,10 @@ class ConcatTest extends \PHPUnit\Framework\TestCase
     public function testRender($method, $getters)
     {
         $object = new DataObject(['test' => 'a', 'best' => 'b']);
-        $column = $this->createPartialMock(\Magento\Backend\Block\Widget\Grid\Column::class, [$method, 'getSeparator']);
+        $column = $this->getMockBuilder(Column::class)
+            ->addMethods([$method, 'getSeparator'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $column->expects($this->any())
             ->method('getSeparator')
             ->willReturn('-');

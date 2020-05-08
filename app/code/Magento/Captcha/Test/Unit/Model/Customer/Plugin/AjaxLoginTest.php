@@ -3,48 +3,60 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Captcha\Test\Unit\Model\Customer\Plugin;
 
-class AjaxLoginTest extends \PHPUnit\Framework\TestCase
+use Magento\Captcha\Helper\Data;
+use Magento\Captcha\Model\Customer\Plugin\AjaxLogin;
+use Magento\Captcha\Model\DefaultModel;
+use Magento\Checkout\Model\Session;
+use Magento\Customer\Controller\Ajax\Login;
+use Magento\Framework\App\Request\Http;
+use Magento\Framework\Controller\Result\JsonFactory;
+use Magento\Framework\Serialize\Serializer\Json;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class AjaxLoginTest extends TestCase
 {
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject | \Magento\Checkout\Model\Session
+     * @var MockObject|Session
      */
     protected $sessionManagerMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject | \Magento\Captcha\Helper\Data
+     * @var MockObject|Data
      */
     protected $captchaHelperMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject | \Magento\Framework\Controller\Result\JsonFactory
+     * @var MockObject|JsonFactory
      */
     protected $jsonFactoryMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $captchaMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $resultJsonMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $requestMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject | \Magento\Customer\Controller\Ajax\Login
+     * @var MockObject|Login
      */
     protected $loginControllerMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject | \Magento\Framework\Serialize\Serializer\Json
+     * @var MockObject|Json
      */
     protected $serializerMock;
 
@@ -54,7 +66,7 @@ class AjaxLoginTest extends \PHPUnit\Framework\TestCase
     protected $formIds;
 
     /**
-     * @var \Magento\Captcha\Model\Customer\Plugin\AjaxLogin
+     * @var AjaxLogin
      */
     protected $model;
 
@@ -63,16 +75,19 @@ class AjaxLoginTest extends \PHPUnit\Framework\TestCase
      */
     protected function setUp(): void
     {
-        $this->sessionManagerMock = $this->createPartialMock(\Magento\Checkout\Model\Session::class, ['setUsername']);
-        $this->captchaHelperMock = $this->createMock(\Magento\Captcha\Helper\Data::class);
-        $this->captchaMock = $this->createMock(\Magento\Captcha\Model\DefaultModel::class);
+        $this->sessionManagerMock = $this->getMockBuilder(Session::class)
+            ->addMethods(['setUsername'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->captchaHelperMock = $this->createMock(Data::class);
+        $this->captchaMock = $this->createMock(DefaultModel::class);
         $this->jsonFactoryMock = $this->createPartialMock(
-            \Magento\Framework\Controller\Result\JsonFactory::class,
+            JsonFactory::class,
             ['create']
         );
         $this->resultJsonMock = $this->createMock(\Magento\Framework\Controller\Result\Json::class);
-        $this->requestMock = $this->createMock(\Magento\Framework\App\Request\Http::class);
-        $this->loginControllerMock = $this->createMock(\Magento\Customer\Controller\Ajax\Login::class);
+        $this->requestMock = $this->createMock(Http::class);
+        $this->loginControllerMock = $this->createMock(Login::class);
 
         $this->loginControllerMock->expects($this->any())->method('getRequest')
             ->willReturn($this->requestMock);
@@ -83,9 +98,9 @@ class AjaxLoginTest extends \PHPUnit\Framework\TestCase
             ->willReturn($this->captchaMock);
 
         $this->formIds = ['user_login'];
-        $this->serializerMock = $this->createMock(\Magento\Framework\Serialize\Serializer\Json::class);
+        $this->serializerMock = $this->createMock(Json::class);
 
-        $this->model = new \Magento\Captcha\Model\Customer\Plugin\AjaxLogin(
+        $this->model = new AjaxLogin(
             $this->captchaHelperMock,
             $this->sessionManagerMock,
             $this->jsonFactoryMock,
@@ -158,8 +173,7 @@ class AjaxLoginTest extends \PHPUnit\Framework\TestCase
         $this->resultJsonMock
             ->expects($this->once())
             ->method('setData')
-            ->with(['errors' => true, 'message' => __('Incorrect CAPTCHA')])
-            ->willReturnSelf();
+            ->with(['errors' => true, 'message' => __('Incorrect CAPTCHA')])->willReturnSelf();
 
         $closure = function () {
         };
@@ -201,30 +215,27 @@ class AjaxLoginTest extends \PHPUnit\Framework\TestCase
             ],
             [
                 'username' => 'name',
-                'requestData' =>
-                    [
-                        'username' => 'name',
-                        'captcha_string' => 'string',
-                        'captcha_form_id' => $this->formIds[0]
-                    ],
+                'requestData' => [
+                    'username' => 'name',
+                    'captcha_string' => 'string',
+                    'captcha_form_id' => $this->formIds[0]
+                ],
             ],
             [
                 'username' => null,
-                'requestData' =>
-                    [
-                        'username' => null,
-                        'captcha_string' => 'string',
-                        'captcha_form_id' => $this->formIds[0]
-                    ],
+                'requestData' => [
+                    'username' => null,
+                    'captcha_string' => 'string',
+                    'captcha_form_id' => $this->formIds[0]
+                ],
             ],
             [
                 'username' => 'name',
-                'requestData' =>
-                    [
-                        'username' => 'name',
-                        'captcha_string' => 'string',
-                        'captcha_form_id' => null
-                    ],
+                'requestData' => [
+                    'username' => 'name',
+                    'captcha_string' => 'string',
+                    'captcha_form_id' => null
+                ],
             ],
         ];
     }

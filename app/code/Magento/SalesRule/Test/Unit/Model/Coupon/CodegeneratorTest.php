@@ -3,22 +3,25 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\SalesRule\Test\Unit\Model\Coupon;
 
-/**
- * Class CodegeneratorTest
- */
-class CodegeneratorTest extends \PHPUnit\Framework\TestCase
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\SalesRule\Model\Coupon\Codegenerator;
+use PHPUnit\Framework\TestCase;
+
+class CodegeneratorTest extends TestCase
 {
     /**
-     * @var \Magento\SalesRule\Model\Coupon\Codegenerator
+     * @var Codegenerator
      */
     protected $codegenerator;
 
     protected function setUp(): void
     {
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->codegenerator = $objectManager->getObject(\Magento\SalesRule\Model\Coupon\Codegenerator::class);
+        $objectManager = new ObjectManager($this);
+        $this->codegenerator = $objectManager->getObject(Codegenerator::class);
     }
 
     /**

@@ -3,38 +3,51 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Sales\Test\Unit\Model\Order;
 
+use Magento\Framework\Api\SearchCriteria;
+use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
+use Magento\Framework\Exception\InputException;
+use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Sales\Api\Data\ShipmentSearchResultInterfaceFactory;
+use Magento\Sales\Model\Order\Shipment;
+use Magento\Sales\Model\Order\ShipmentRepository;
+use Magento\Sales\Model\ResourceModel\Metadata;
+use Magento\Sales\Model\ResourceModel\Order\Shipment\Collection;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Unit test for shipment repository class.
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ShipmentRepositoryTest extends \PHPUnit\Framework\TestCase
+class ShipmentRepositoryTest extends TestCase
 {
     /**
      * Subject of testing.
      *
-     * @var \Magento\Sales\Model\Order\ShipmentRepository
+     * @var ShipmentRepository
      */
     protected $subject;
 
     /**
      * Sales resource metadata.
      *
-     * @var \Magento\Sales\Model\ResourceModel\Metadata|\PHPUnit\Framework\MockObject\MockObject
+     * @var Metadata|MockObject
      */
     protected $metadata;
 
     /**
-     * @var \Magento\Sales\Api\Data\ShipmentSearchResultInterfaceFactory|\PHPUnit\Framework\MockObject\MockObject
+     * @var ShipmentSearchResultInterfaceFactory|MockObject
      */
     protected $searchResultFactory;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     private $collectionProcessor;
 
@@ -43,19 +56,19 @@ class ShipmentRepositoryTest extends \PHPUnit\Framework\TestCase
         $objectManager = new ObjectManager($this);
 
         $this->metadata = $this->createPartialMock(
-            \Magento\Sales\Model\ResourceModel\Metadata::class,
+            Metadata::class,
             ['getNewInstance', 'getMapper']
         );
 
         $this->searchResultFactory = $this->createPartialMock(
-            \Magento\Sales\Api\Data\ShipmentSearchResultInterfaceFactory::class,
+            ShipmentSearchResultInterfaceFactory::class,
             ['create']
         );
         $this->collectionProcessor = $this->createMock(
-            \Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface::class
+            CollectionProcessorInterface::class
         );
         $this->subject = $objectManager->getObject(
-            \Magento\Sales\Model\Order\ShipmentRepository::class,
+            ShipmentRepository::class,
             [
                 'metadata' => $this->metadata,
                 'searchResultFactory' => $this->searchResultFactory,
@@ -72,11 +85,11 @@ class ShipmentRepositoryTest extends \PHPUnit\Framework\TestCase
     public function testGet($id, $entityId)
     {
         if (!$id) {
-            $this->expectException(\Magento\Framework\Exception\InputException::class);
+            $this->expectException(InputException::class);
 
             $this->subject->get($id);
         } else {
-            $shipment = $this->createPartialMock(\Magento\Sales\Model\Order\Shipment::class, ['load', 'getEntityId']);
+            $shipment = $this->createPartialMock(Shipment::class, ['load', 'getEntityId']);
             $shipment->expects($this->once())
                 ->method('load')
                 ->with($id)
@@ -90,7 +103,7 @@ class ShipmentRepositoryTest extends \PHPUnit\Framework\TestCase
                 ->willReturn($shipment);
 
             if (!$entityId) {
-                $this->expectException(\Magento\Framework\Exception\NoSuchEntityException::class);
+                $this->expectException(NoSuchEntityException::class);
 
                 $this->subject->get($id);
             } else {
@@ -128,9 +141,9 @@ class ShipmentRepositoryTest extends \PHPUnit\Framework\TestCase
 
     public function testGetList()
     {
-        $searchCriteria = $this->createMock(\Magento\Framework\Api\SearchCriteria::class);
+        $searchCriteria = $this->createMock(SearchCriteria::class);
 
-        $collection = $this->createMock(\Magento\Sales\Model\ResourceModel\Order\Shipment\Collection::class);
+        $collection = $this->createMock(Collection::class);
         $this->collectionProcessor->expects($this->once())
             ->method('process')
             ->with($searchCriteria, $collection);
@@ -143,13 +156,13 @@ class ShipmentRepositoryTest extends \PHPUnit\Framework\TestCase
 
     public function testDelete()
     {
-        $shipment = $this->createPartialMock(\Magento\Sales\Model\Order\Shipment::class, ['getEntityId']);
+        $shipment = $this->createPartialMock(Shipment::class, ['getEntityId']);
         $shipment->expects($this->once())
             ->method('getEntityId')
             ->willReturn(1);
 
         $mapper = $this->getMockForAbstractClass(
-            \Magento\Framework\Model\ResourceModel\Db\AbstractDb::class,
+            AbstractDb::class,
             [],
             '',
             false,
@@ -168,19 +181,16 @@ class ShipmentRepositoryTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($this->subject->delete($shipment));
     }
 
-    /**
-     */
     public function testDeleteWithException()
     {
-        $this->expectException(\Magento\Framework\Exception\CouldNotDeleteException::class);
+        $this->expectException('Magento\Framework\Exception\CouldNotDeleteException');
         $this->expectExceptionMessage('The shipment couldn\'t be deleted.');
-
-        $shipment = $this->createPartialMock(\Magento\Sales\Model\Order\Shipment::class, ['getEntityId']);
+        $shipment = $this->createPartialMock(Shipment::class, ['getEntityId']);
         $shipment->expects($this->never())
             ->method('getEntityId');
 
         $mapper = $this->getMockForAbstractClass(
-            \Magento\Framework\Model\ResourceModel\Db\AbstractDb::class,
+            AbstractDb::class,
             [],
             '',
             false,
@@ -201,13 +211,13 @@ class ShipmentRepositoryTest extends \PHPUnit\Framework\TestCase
 
     public function testSave()
     {
-        $shipment = $this->createPartialMock(\Magento\Sales\Model\Order\Shipment::class, ['getEntityId']);
+        $shipment = $this->createPartialMock(Shipment::class, ['getEntityId']);
         $shipment->expects($this->any())
             ->method('getEntityId')
             ->willReturn(1);
 
         $mapper = $this->getMockForAbstractClass(
-            \Magento\Framework\Model\ResourceModel\Db\AbstractDb::class,
+            AbstractDb::class,
             [],
             '',
             false,
@@ -226,19 +236,16 @@ class ShipmentRepositoryTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($shipment, $this->subject->save($shipment));
     }
 
-    /**
-     */
     public function testSaveWithException()
     {
-        $this->expectException(\Magento\Framework\Exception\CouldNotSaveException::class);
+        $this->expectException('Magento\Framework\Exception\CouldNotSaveException');
         $this->expectExceptionMessage('The shipment couldn\'t be saved.');
-
-        $shipment = $this->createPartialMock(\Magento\Sales\Model\Order\Shipment::class, ['getEntityId']);
+        $shipment = $this->createPartialMock(Shipment::class, ['getEntityId']);
         $shipment->expects($this->never())
             ->method('getEntityId');
 
         $mapper = $this->getMockForAbstractClass(
-            \Magento\Framework\Model\ResourceModel\Db\AbstractDb::class,
+            AbstractDb::class,
             [],
             '',
             false,
@@ -259,7 +266,7 @@ class ShipmentRepositoryTest extends \PHPUnit\Framework\TestCase
 
     public function testCreate()
     {
-        $shipment = $this->createMock(\Magento\Sales\Model\Order\Shipment::class);
+        $shipment = $this->createMock(Shipment::class);
 
         $this->metadata->expects($this->once())
             ->method('getNewInstance')

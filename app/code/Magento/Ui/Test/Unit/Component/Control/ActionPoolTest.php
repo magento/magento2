@@ -3,15 +3,22 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Ui\Test\Unit\Component\Control;
 
+use Magento\Backend\Block\Widget\Button\Toolbar\Container;
 use Magento\Framework\View\Element\AbstractBlock;
 use Magento\Framework\View\Element\UiComponent\Context;
 use Magento\Framework\View\Element\UiComponentInterface;
 use Magento\Framework\View\LayoutInterface;
 use Magento\Ui\Component\Control\ActionPool;
+use Magento\Ui\Component\Control\Item;
+use Magento\Ui\Component\Control\ItemFactory;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class ActionPoolTest extends \PHPUnit\Framework\TestCase
+class ActionPoolTest extends TestCase
 {
     /**
      * Actions toolbar block name
@@ -24,32 +31,32 @@ class ActionPoolTest extends \PHPUnit\Framework\TestCase
     protected $actionPool;
 
     /**
-     * @var Context| \PHPUnit\Framework\MockObject\MockObject
+     * @var Context|MockObject
      */
     protected $contextMock;
 
     /**
-     * @var ItemFactory| \PHPUnit\Framework\MockObject\MockObject
+     * @var ItemFactory|MockObject
      */
     protected $itemFactoryMock;
 
     /**
-     * @var AbstractBlock| \PHPUnit\Framework\MockObject\MockObject
+     * @var AbstractBlock|MockObject
      */
     protected $toolbarBlockMock;
 
     /**
-     * @var UiComponentInterface| \PHPUnit\Framework\MockObject\MockObject
+     * @var UiComponentInterface|MockObject
      */
     protected $uiComponentInterfaceMock;
 
     /**
-     * @var Object[]| \PHPUnit\Framework\MockObject\MockObject
+     * @var Object[]|MockObject
      */
     protected $items;
 
     /**
-     * @var LayoutInterface[]| \PHPUnit\Framework\MockObject\MockObject
+     * @var LayoutInterface[]|MockObject
      */
     protected $layoutMock;
 
@@ -61,26 +68,26 @@ class ActionPoolTest extends \PHPUnit\Framework\TestCase
     protected function setUp(): void
     {
         $this->contextMock = $this->createPartialMock(
-            \Magento\Framework\View\Element\UiComponent\Context::class,
+            Context::class,
             ['getPageLayout']
         );
         $this->toolbarBlockMock = $this->createPartialMock(
-            \Magento\Framework\View\Element\AbstractBlock::class,
+            AbstractBlock::class,
             ['setChild']
         );
-        $this->layoutMock = $this->getMockForAbstractClass(\Magento\Framework\View\LayoutInterface::class);
+        $this->layoutMock = $this->getMockForAbstractClass(LayoutInterface::class);
         $this->contextMock->expects($this->any())->method('getPageLayout')->willReturn($this->layoutMock);
         $this->layoutMock->expects($this->once())
             ->method('getBlock')
             ->with(static::ACTIONS_PAGE_TOOLBAR)
             ->willReturn($this->toolbarBlockMock);
 
-        $this->itemFactoryMock = $this->createPartialMock(\Magento\Ui\Component\Control\ItemFactory::class, ['create']);
+        $this->itemFactoryMock = $this->createPartialMock(ItemFactory::class, ['create']);
 
         $this->uiComponentInterfaceMock = $this->getMockForAbstractClass(
-            \Magento\Framework\View\Element\UiComponentInterface::class
+            UiComponentInterface::class
         );
-        $this->items[$this->key] = $this->createPartialMock(\Magento\Ui\Component\Control\Item::class, ['setData']);
+        $this->items[$this->key] = $this->createPartialMock(Item::class, ['setData']);
         $this->actionPool = new ActionPool(
             $this->contextMock,
             $this->itemFactoryMock
@@ -95,7 +102,7 @@ class ActionPoolTest extends \PHPUnit\Framework\TestCase
         $this->items[$this->key]->expects($this->any())->method('setData')->with($data)->willReturnSelf();
 
         $this->contextMock->expects($this->any())->method('getPageLayout')->willReturn($this->layoutMock);
-        $toolbarContainerMock = $this->createMock(\Magento\Backend\Block\Widget\Button\Toolbar\Container::class);
+        $toolbarContainerMock = $this->createMock(Container::class);
         $this->layoutMock->expects($this->once())
             ->method('createBlock')
             ->with(

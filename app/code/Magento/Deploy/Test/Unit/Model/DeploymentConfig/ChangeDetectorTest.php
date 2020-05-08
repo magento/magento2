@@ -3,27 +3,31 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Deploy\Test\Unit\Model\DeploymentConfig;
 
-use Magento\Deploy\Model\DeploymentConfig\Hash\Generator as HashGenerator;
-use Magento\Deploy\Model\DeploymentConfig\Hash;
-use Magento\Deploy\Model\DeploymentConfig\DataCollector;
 use Magento\Deploy\Model\DeploymentConfig\ChangeDetector;
+use Magento\Deploy\Model\DeploymentConfig\DataCollector;
+use Magento\Deploy\Model\DeploymentConfig\Hash;
+use Magento\Deploy\Model\DeploymentConfig\Hash\Generator as HashGenerator;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class ChangeDetectorTest extends \PHPUnit\Framework\TestCase
+class ChangeDetectorTest extends TestCase
 {
     /**
-     * @var Hash|\PHPUnit\Framework\MockObject\MockObject
+     * @var Hash|MockObject
      */
     private $configHashMock;
 
     /**
-     * @var HashGenerator|\PHPUnit\Framework\MockObject\MockObject
+     * @var HashGenerator|MockObject
      */
     private $hashGeneratorMock;
 
     /**
-     * @var DataCollector|\PHPUnit\Framework\MockObject\MockObject
+     * @var DataCollector|MockObject
      */
     private $dataConfigCollectorMock;
 

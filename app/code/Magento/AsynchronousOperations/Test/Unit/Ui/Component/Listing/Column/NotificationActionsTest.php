@@ -3,26 +3,34 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\AsynchronousOperations\Test\Unit\Ui\Component\Listing\Column;
 
 use Magento\AsynchronousOperations\Model\BulkSummary;
+use Magento\AsynchronousOperations\Ui\Component\Listing\Column\NotificationActions;
 use Magento\Framework\Bulk\BulkSummaryInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\View\Element\UiComponent\ContextInterface;
+use Magento\Framework\View\Element\UiComponent\Processor;
+use Magento\Framework\View\Element\UiComponentFactory;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class NotificationActionsTest extends \PHPUnit\Framework\TestCase
+class NotificationActionsTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\View\Element\UiComponent\ContextInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var ContextInterface|MockObject
      */
     private $context;
 
     /**
-     * @var \Magento\Framework\View\Element\UiComponentFactory|\PHPUnit\Framework\MockObject\MockObject
+     * @var UiComponentFactory|MockObject
      */
     private $uiComponentFactory;
 
     /**
-     * @var \Magento\AsynchronousOperations\Ui\Component\Listing\Column\NotificationActions
+     * @var NotificationActions
      */
     private $actionColumn;
 
@@ -31,16 +39,16 @@ class NotificationActionsTest extends \PHPUnit\Framework\TestCase
      */
     protected function setUp(): void
     {
-        $this->context = $this->createMock(\Magento\Framework\View\Element\UiComponent\ContextInterface::class);
-        $this->uiComponentFactory = $this->createMock(\Magento\Framework\View\Element\UiComponentFactory::class);
-        $processor = $this->createPartialMock(
-            \Magento\Framework\View\Element\UiComponent\Processor::class,
-            ['getProcessor']
-        );
+        $this->context = $this->createMock(ContextInterface::class);
+        $this->uiComponentFactory = $this->createMock(UiComponentFactory::class);
+        $processor = $this->getMockBuilder(Processor::class)
+            ->addMethods(['getProcessor'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->context->expects($this->never())->method('getProcessor')->willReturn($processor);
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $objectManager = new ObjectManager($this);
         $this->actionColumn = $objectManager->getObject(
-            \Magento\AsynchronousOperations\Ui\Component\Listing\Column\NotificationActions::class,
+            NotificationActions::class,
             [
                 'context' => $this->context,
                 'uiComponentFactory' => $this->uiComponentFactory,

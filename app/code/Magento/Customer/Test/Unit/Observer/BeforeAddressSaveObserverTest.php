@@ -3,40 +3,44 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Customer\Test\Unit\Observer;
 
 use Magento\Customer\Helper\Address as HelperAddress;
 use Magento\Customer\Model\Address\AbstractAddress;
+use Magento\Customer\Model\Customer;
 use Magento\Customer\Observer\BeforeAddressSaveObserver;
-use Magento\Framework\App\Area;
-use Magento\Framework\App\State as AppState;
+use Magento\Framework\Event\Observer;
 use Magento\Framework\Registry;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class BeforeAddressSaveObserverTest extends \PHPUnit\Framework\TestCase
+class BeforeAddressSaveObserverTest extends TestCase
 {
     /**
-     * @var \Magento\Customer\Observer\BeforeAddressSaveObserver
+     * @var BeforeAddressSaveObserver
      */
     protected $model;
 
     /**
-     * @var Registry |\PHPUnit\Framework\MockObject\MockObject
+     * @var Registry|MockObject
      */
     protected $registry;
 
     /**
-     * @var \Magento\Customer\Model\Customer|\PHPUnit\Framework\MockObject\MockObject
+     * @var Customer|MockObject
      */
     protected $customerMock;
 
     /**
-     * @var HelperAddress |\PHPUnit\Framework\MockObject\MockObject
+     * @var HelperAddress|MockObject
      */
     protected $helperAddress;
 
     protected function setUp(): void
     {
-        $this->registry = $this->getMockBuilder(\Magento\Framework\Registry::class)
+        $this->registry = $this->getMockBuilder(Registry::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -61,7 +65,7 @@ class BeforeAddressSaveObserverTest extends \PHPUnit\Framework\TestCase
             ->method('getId')
             ->willReturn($customerAddressId);
 
-        $observer = $this->getMockBuilder(\Magento\Framework\Event\Observer::class)
+        $observer = $this->getMockBuilder(Observer::class)
             ->disableOriginalConstructor()
             ->setMethods([
                 'getCustomerAddress',
@@ -118,7 +122,7 @@ class BeforeAddressSaveObserverTest extends \PHPUnit\Framework\TestCase
             ->with(true)
             ->willReturnSelf();
 
-        $observer = $this->getMockBuilder(\Magento\Framework\Event\Observer::class)
+        $observer = $this->getMockBuilder(Observer::class)
             ->disableOriginalConstructor()
             ->setMethods([
                 'getCustomerAddress',

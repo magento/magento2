@@ -3,39 +3,53 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Eav\Test\Unit\Model\Attribute\Data;
 
-class FileTest extends \PHPUnit\Framework\TestCase
+use Magento\Eav\Model\Attribute;
+use Magento\Eav\Model\Attribute\Data\File;
+use Magento\Eav\Model\AttributeDataFactory;
+use Magento\Framework\Filesystem;
+use Magento\Framework\Locale\ResolverInterface;
+use Magento\Framework\Model\AbstractModel;
+use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
+use Magento\Framework\Url\EncoderInterface;
+use Magento\MediaStorage\Model\File\Validator\NotProtectedExtension;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface;
+
+class FileTest extends TestCase
 {
     /**
-     * @var \Magento\Eav\Model\Attribute\Data\File
+     * @var File
      */
     protected $model;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\Url\EncoderInterface
+     * @var MockObject|EncoderInterface
      */
     protected $urlEncoder;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $fileValidatorMock;
 
     protected function setUp(): void
     {
-        $timezoneMock = $this->createMock(\Magento\Framework\Stdlib\DateTime\TimezoneInterface::class);
-        $loggerMock = $this->createMock(\Psr\Log\LoggerInterface::class);
-        $localeResolverMock = $this->createMock(\Magento\Framework\Locale\ResolverInterface::class);
-        $this->urlEncoder = $this->createMock(\Magento\Framework\Url\EncoderInterface::class);
+        $timezoneMock = $this->createMock(TimezoneInterface::class);
+        $loggerMock = $this->createMock(LoggerInterface::class);
+        $localeResolverMock = $this->createMock(ResolverInterface::class);
+        $this->urlEncoder = $this->createMock(EncoderInterface::class);
         $this->fileValidatorMock = $this->createPartialMock(
-            \Magento\MediaStorage\Model\File\Validator\NotProtectedExtension::class,
+            NotProtectedExtension::class,
             ['isValid', 'getMessages']
         );
-        $filesystemMock = $this->createMock(\Magento\Framework\Filesystem::class);
+        $filesystemMock = $this->createMock(Filesystem::class);
 
-        $this->model = new \Magento\Eav\Model\Attribute\Data\File(
+        $this->model = new File(
             $timezoneMock,
             $loggerMock,
             $localeResolverMock,
@@ -56,10 +70,10 @@ class FileTest extends \PHPUnit\Framework\TestCase
      */
     public function testOutputValue($format, $value, $callTimes, $expectedResult)
     {
-        $entityMock = $this->createMock(\Magento\Framework\Model\AbstractModel::class);
+        $entityMock = $this->createMock(AbstractModel::class);
         $entityMock->expects($this->once())->method('getData')->willReturn($value);
 
-        $attributeMock = $this->createMock(\Magento\Eav\Model\Attribute::class);
+        $attributeMock = $this->createMock(Attribute::class);
         $this->urlEncoder->expects($this->exactly($callTimes))
             ->method('encode')
             ->willReturn('url_key');
@@ -76,19 +90,19 @@ class FileTest extends \PHPUnit\Framework\TestCase
     {
         return [
             [
-                'format' => \Magento\Eav\Model\AttributeDataFactory::OUTPUT_FORMAT_JSON,
+                'format' => AttributeDataFactory::OUTPUT_FORMAT_JSON,
                 'value' => 'value',
                 'callTimes' => 1,
                 'expectedResult' => ['value' => 'value', 'url_key' => 'url_key'],
             ],
             [
-                'format' => \Magento\Eav\Model\AttributeDataFactory::OUTPUT_FORMAT_TEXT,
+                'format' => AttributeDataFactory::OUTPUT_FORMAT_TEXT,
                 'value' => 'value',
                 'callTimes' => 0,
                 'expectedResult' => ''
             ],
             [
-                'format' => \Magento\Eav\Model\AttributeDataFactory::OUTPUT_FORMAT_TEXT,
+                'format' => AttributeDataFactory::OUTPUT_FORMAT_TEXT,
                 'value' => false,
                 'callTimes' => 0,
                 'expectedResult' => ''
@@ -119,17 +133,17 @@ class FileTest extends \PHPUnit\Framework\TestCase
         $expectedResult
     ) {
         $this->markTestSkipped('MAGETWO-34751: Test fails after being moved.  Might have hidden dependency.');
-        $entityMock = $this->createMock(\Magento\Framework\Model\AbstractModel::class);
-        $entityMock->expects($this->any())->method('getData')->willReturn($originalValue);
+        $entityMock = $this->createMock(AbstractModel::class);
+        $entityMock->expects($this->any())->method('getData')->will($this->returnValue($originalValue));
 
-        $attributeMock = $this->createMock(\Magento\Eav\Model\Attribute::class);
-        $attributeMock->expects($this->any())->method('getStoreLabel')->willReturn('Label');
-        $attributeMock->expects($this->any())->method('getIsRequired')->willReturn($isRequired);
-        $attributeMock->expects($this->any())->method('getIsAjaxRequest')->willReturn($isAjaxRequest);
-        $attributeMock->expects($this->any())->method('getValidateRules')->willReturn($rules);
+        $attributeMock = $this->createMock(Attribute::class);
+        $attributeMock->expects($this->any())->method('getStoreLabel')->will($this->returnValue('Label'));
+        $attributeMock->expects($this->any())->method('getIsRequired')->will($this->returnValue($isRequired));
+        $attributeMock->expects($this->any())->method('getIsAjaxRequest')->will($this->returnValue($isAjaxRequest));
+        $attributeMock->expects($this->any())->method('getValidateRules')->will($this->returnValue($rules));
 
-        $this->fileValidatorMock->expects($this->any())->method('isValid')->willReturn($fileIsValid);
-        $this->fileValidatorMock->expects($this->any())->method('getMessages')->willReturn(['m1', 'm2']);
+        $this->fileValidatorMock->expects($this->any())->method('isValid')->will($this->returnValue($fileIsValid));
+        $this->fileValidatorMock->expects($this->any())->method('getMessages')->will($this->returnValue(['m1', 'm2']));
 
         $this->model->setEntity($entityMock);
         $this->model->setAttribute($attributeMock);

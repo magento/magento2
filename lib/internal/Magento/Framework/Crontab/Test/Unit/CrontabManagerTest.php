@@ -16,8 +16,8 @@ use Magento\Framework\Filesystem\Directory\ReadInterface;
 use Magento\Framework\Filesystem\DriverPool;
 use Magento\Framework\Phrase;
 use Magento\Framework\ShellInterface;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use PHPUnit\Framework\MockObject\MockObject as MockObject;
 
 /**
  * Tests crontab manager functionality.
@@ -134,9 +134,8 @@ class CrontabManagerTest extends TestCase
      */
     public function testRemoveTasksWithException(): void
     {
-        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+        $this->expectException('Magento\Framework\Exception\LocalizedException');
         $this->expectExceptionMessage('Shell error');
-
         $exception = new \Exception('Shell error');
         $localizedException = new LocalizedException(new Phrase('Some error'), $exception);
 
@@ -216,9 +215,8 @@ class CrontabManagerTest extends TestCase
      */
     public function testSaveTasksWithEmptyTasksList(): void
     {
-        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+        $this->expectException('Magento\Framework\Exception\LocalizedException');
         $this->expectExceptionMessage('The list of tasks is empty. Add tasks and try again.');
-
         $baseDirMock = $this->getMockBuilder(ReadInterface::class)
             ->getMockForAbstractClass();
         $baseDirMock->expects($this->never())
@@ -246,9 +244,8 @@ class CrontabManagerTest extends TestCase
      */
     public function testSaveTasksWithoutCommand(): void
     {
-        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+        $this->expectException('Magento\Framework\Exception\LocalizedException');
         $this->expectExceptionMessage('The command shouldn\'t be empty. Enter and try again.');
-
         $baseDirMock = $this->getMockBuilder(ReadInterface::class)
             ->getMockForAbstractClass();
         $baseDirMock->expects($this->once())

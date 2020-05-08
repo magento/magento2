@@ -3,29 +3,34 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Unit\Model\Product\Attribute\Source;
 
+use Magento\Catalog\Model\Product\Attribute\Source\Inputtype;
+use Magento\Framework\Registry;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class InputtypeTest extends \PHPUnit\Framework\TestCase
+class InputtypeTest extends TestCase
 {
-    /** @var \Magento\Catalog\Model\Product\Attribute\Source\Inputtype */
+    /** @var Inputtype */
     protected $inputtypeModel;
 
     /** @var ObjectManagerHelper */
     protected $objectManagerHelper;
 
-    /** @var \Magento\Framework\Registry|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var Registry|MockObject */
     protected $registry;
 
     protected function setUp(): void
     {
-        $this->registry = $this->createMock(\Magento\Framework\Registry::class);
+        $this->registry = $this->createMock(Registry::class);
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->inputtypeModel = $this->objectManagerHelper->getObject(
-            \Magento\Catalog\Model\Product\Attribute\Source\Inputtype::class,
+            Inputtype::class,
             [
                 'coreRegistry' => $this->registry,
                 'optionsArray' => $this->getInputTypeSet()
@@ -35,7 +40,6 @@ class InputtypeTest extends \PHPUnit\Framework\TestCase
 
     public function testToOptionArray()
     {
-
         $extraValues = [
             ['value' => 'price', 'label' => 'Price'],
             ['value' => 'media_image', 'label' => 'Media Image']

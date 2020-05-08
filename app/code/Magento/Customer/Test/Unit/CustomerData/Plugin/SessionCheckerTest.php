@@ -3,11 +3,20 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Customer\Test\Unit\CustomerData\Plugin;
 
 use Magento\Customer\CustomerData\Plugin\SessionChecker;
+use Magento\Customer\Model\Session;
+use Magento\Framework\Session\SessionManager;
+use Magento\Framework\Stdlib\Cookie\CookieMetadata;
+use Magento\Framework\Stdlib\Cookie\CookieMetadataFactory;
+use Magento\Framework\Stdlib\Cookie\PhpCookieManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class SessionCheckerTest extends \PHPUnit\Framework\TestCase
+class SessionCheckerTest extends TestCase
 {
     /**
      * @var SessionChecker
@@ -15,37 +24,37 @@ class SessionCheckerTest extends \PHPUnit\Framework\TestCase
     protected $plugin;
 
     /**
-     * @var \Magento\Framework\Stdlib\Cookie\PhpCookieManager|\PHPUnit\Framework\MockObject\MockObject
+     * @var PhpCookieManager|MockObject
      */
     protected $cookieManager;
 
     /**
-     * @var \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory|\PHPUnit\Framework\MockObject\MockObject
+     * @var CookieMetadataFactory|MockObject
      */
     protected $metadataFactory;
 
     /**
-     * @var \Magento\Framework\Stdlib\Cookie\CookieMetadata|\PHPUnit\Framework\MockObject\MockObject
+     * @var CookieMetadata|MockObject
      */
     protected $metadata;
 
     /**
-     * @var \Magento\Customer\Model\Session|\PHPUnit\Framework\MockObject\MockObject
+     * @var Session|MockObject
      */
     protected $sessionManager;
 
     protected function setUp(): void
     {
-        $this->cookieManager = $this->getMockBuilder(\Magento\Framework\Stdlib\Cookie\PhpCookieManager::class)
+        $this->cookieManager = $this->getMockBuilder(PhpCookieManager::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->metadataFactory = $this->getMockBuilder(\Magento\Framework\Stdlib\Cookie\CookieMetadataFactory::class)
+        $this->metadataFactory = $this->getMockBuilder(CookieMetadataFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->metadata = $this->getMockBuilder(\Magento\Framework\Stdlib\Cookie\CookieMetadata::class)
+        $this->metadata = $this->getMockBuilder(CookieMetadata::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->sessionManager = $this->getMockBuilder(\Magento\Framework\Session\SessionManager::class)
+        $this->sessionManager = $this->getMockBuilder(SessionManager::class)
             ->disableOriginalConstructor()
             ->getMock();
 

@@ -3,39 +3,50 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Theme\Test\Unit\Observer;
 
-class CheckThemeIsAssignedObserverTest extends \PHPUnit\Framework\TestCase
+use Magento\Framework\Event;
+use Magento\Framework\Event\ManagerInterface;
+use Magento\Framework\Event\Observer;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\View\Design\ThemeInterface;
+use Magento\Theme\Model\Config\Customization;
+use Magento\Theme\Observer\CheckThemeIsAssignedObserver;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class CheckThemeIsAssignedObserverTest extends TestCase
 {
     /**
-     * @var \Magento\Theme\Model\Config\Customization|\PHPUnit\Framework\MockObject\MockObject
+     * @var Customization|MockObject
      */
     protected $themeConfig;
 
     /**
-     * @var \Magento\Framework\Event\ManagerInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var ManagerInterface|MockObject
      */
     protected $eventDispatcher;
 
     /**
-     * @var \Magento\Theme\Observer\CheckThemeIsAssignedObserver
+     * @var CheckThemeIsAssignedObserver
      */
     protected $themeObserver;
 
     protected function setUp(): void
     {
-        $this->themeConfig = $this->getMockBuilder(\Magento\Theme\Model\Config\Customization::class)
+        $this->themeConfig = $this->getMockBuilder(Customization::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->eventDispatcher = $this->getMockBuilder(\Magento\Framework\Event\ManagerInterface::class)
+        $this->eventDispatcher = $this->getMockBuilder(ManagerInterface::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
-        $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $objectManagerHelper = new ObjectManager($this);
         $this->themeObserver = $objectManagerHelper->getObject(
-            \Magento\Theme\Observer\CheckThemeIsAssignedObserver::class,
+            CheckThemeIsAssignedObserver::class,
             [
                 'themeConfig' => $this->themeConfig,
                 'eventDispatcher' => $this->eventDispatcher,
@@ -46,13 +57,15 @@ class CheckThemeIsAssignedObserverTest extends \PHPUnit\Framework\TestCase
     public function testCheckThemeIsAssigned()
     {
         $themeMock = $this->getMockBuilder(
-            \Magento\Framework\View\Design\ThemeInterface::class
+            ThemeInterface::class
         )->getMockForAbstractClass();
 
-        $eventMock = $this->getMockBuilder(\Magento\Framework\Event::class)->disableOriginalConstructor()->getMock();
+        $eventMock = $this->getMockBuilder(Event::class)
+            ->disableOriginalConstructor()
+            ->getMock();
         $eventMock->expects($this->any())->method('getData')->with('theme')->willReturn($themeMock);
 
-        $observerMock = $this->getMockBuilder(\Magento\Framework\Event\Observer::class)
+        $observerMock = $this->getMockBuilder(Observer::class)
             ->disableOriginalConstructor()
             ->getMock();
         $observerMock->expects($this->any())->method('getEvent')->willReturn($eventMock);

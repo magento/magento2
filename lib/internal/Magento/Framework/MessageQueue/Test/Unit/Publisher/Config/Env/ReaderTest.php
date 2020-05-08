@@ -3,20 +3,28 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Framework\MessageQueue\Test\Unit\Publisher\Config\Env;
 
+use Magento\Framework\App\DeploymentConfig;
+use Magento\Framework\Config\CacheInterface;
+use Magento\Framework\MessageQueue\Config\CompositeReader;
+use Magento\Framework\MessageQueue\Config\Data;
 use Magento\Framework\MessageQueue\Publisher\Config\Env\Reader;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class ReaderTest extends \PHPUnit\Framework\TestCase
+class ReaderTest extends TestCase
 {
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     private $deploymentConfigMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     private $configDataMock;
 
@@ -28,11 +36,11 @@ class ReaderTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp(): void
     {
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->deploymentConfigMock = $this->getMockBuilder(\Magento\Framework\App\DeploymentConfig::class)
+        $objectManager = new ObjectManager($this);
+        $this->deploymentConfigMock = $this->getMockBuilder(DeploymentConfig::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $cache = $this->getMockBuilder(\Magento\Framework\Config\CacheInterface::class)
+        $cache = $this->getMockBuilder(CacheInterface::class)
             ->getMock();
         $data = [
             'topics' => [
@@ -50,13 +58,13 @@ class ReaderTest extends \PHPUnit\Framework\TestCase
             ]
 
         ];
-        $reader = $this->getMockBuilder(\Magento\Framework\MessageQueue\Config\CompositeReader::class)
+        $reader = $this->getMockBuilder(CompositeReader::class)
             ->disableOriginalConstructor()
             ->getMock();
         $reader->expects($this->any())->method('read')->willReturn($data);
         $cache->expects($this->any())->method('load')->willReturn(false);
         $this->configDataMock = $objectManager->getObject(
-            \Magento\Framework\MessageQueue\Config\Data::class,
+            Data::class,
             [
                 'cache' => $cache,
                 'reader' => $reader

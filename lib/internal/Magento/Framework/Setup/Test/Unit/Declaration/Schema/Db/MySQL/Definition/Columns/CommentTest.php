@@ -3,13 +3,17 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\Setup\Test\Unit\Declaration\Schema\Db\MySQL\Definition\Columns;
 
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\Setup\Declaration\Schema\Db\MySQL\Definition\Columns\Comment;
 use Magento\Framework\Setup\Declaration\Schema\Dto\Column;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class CommentTest extends \PHPUnit\Framework\TestCase
+class CommentTest extends TestCase
 {
     /**
      * @var ObjectManager
@@ -17,7 +21,7 @@ class CommentTest extends \PHPUnit\Framework\TestCase
     private $objectManager;
 
     /**
-     * @var \Magento\Framework\Setup\Declaration\Schema\Db\MySQL\Definition\Columns\Comment
+     * @var Comment
      */
     private $comment;
 
@@ -34,7 +38,7 @@ class CommentTest extends \PHPUnit\Framework\TestCase
      */
     public function testToDefinition()
     {
-        /** @var Column|\PHPUnit\Framework\MockObject\MockObject $column */
+        /** @var Column|MockObject $column */
         $column = $this->getMockBuilder(Column::class)
             ->disableOriginalConstructor()
             ->getMock();

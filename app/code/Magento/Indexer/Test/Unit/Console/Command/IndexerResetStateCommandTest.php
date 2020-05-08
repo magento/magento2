@@ -3,11 +3,15 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Indexer\Test\Unit\Console\Command;
 
 use Magento\Backend\App\Area\FrontNameResolver;
-use Symfony\Component\Console\Tester\CommandTester;
+use Magento\Framework\Indexer\StateInterface;
 use Magento\Indexer\Console\Command\IndexerResetStateCommand;
+use Magento\Indexer\Model\Indexer\State;
+use Symfony\Component\Console\Tester\CommandTester;
 
 class IndexerResetStateCommandTest extends AbstractIndexerCommandCommonSetup
 {
@@ -33,11 +37,10 @@ class IndexerResetStateCommandTest extends AbstractIndexerCommandCommonSetup
         );
         $this->initIndexerCollectionByItems([$indexerOne]);
 
-        $stateMock = $this->createMock(\Magento\Indexer\Model\Indexer\State::class);
+        $stateMock = $this->createMock(State::class);
         $stateMock->expects($this->exactly(1))
             ->method('setStatus')
-            ->with(\Magento\Framework\Indexer\StateInterface::STATUS_INVALID)
-            ->willReturnSelf();
+            ->with(StateInterface::STATUS_INVALID)->willReturnSelf();
 
         $stateMock->expects($this->exactly(1))
             ->method('save');

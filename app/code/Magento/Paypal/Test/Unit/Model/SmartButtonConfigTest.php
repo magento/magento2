@@ -21,7 +21,7 @@ use PHPUnit\Framework\TestCase;
 class SmartButtonConfigTest extends TestCase
 {
     /**
-     * @var \Magento\Paypal\Model\SmartButtonConfig
+     * @var SmartButtonConfig
      */
     private $model;
 
@@ -102,26 +102,26 @@ class SmartButtonConfigTest extends TestCase
         $this->localeResolverMock->method('getLocale')->willReturn($locale);
         $this->configMock->method('getValue')->willReturnMap(
             [
-                    ['merchant_id', null, 'merchant'],
-                    [
-                        'solution_type',
-                        null,
-                        $isPaypalGuestCheckoutEnabled ? Config::EC_SOLUTION_TYPE_SOLE : Config::EC_SOLUTION_TYPE_MARK
-                    ],
-                    ['sandbox_flag', null, true],
-                    ['disable_funding_options', null, $disallowedFundings],
-                    ["{$page}_page_button_customize", null, $isCustomize],
-                    ["{$page}_page_button_layout", null, $layout],
-                    ["{$page}_page_button_size", null, $size],
-                    ["{$page}_page_button_color", null, $color],
-                    ["{$page}_page_button_shape", null, $shape],
-                    ["{$page}_page_button_label", null, $label],
-                    [
-                        $page . '_page_button_' . $installmentPeriodLocale . '_installment_period',
-                        null,
-                        $installmentPeriodLabel
-                    ]
+                ['merchant_id', null, 'merchant'],
+                [
+                    'solution_type',
+                    null,
+                    $isPaypalGuestCheckoutEnabled ? Config::EC_SOLUTION_TYPE_SOLE : Config::EC_SOLUTION_TYPE_MARK
+                ],
+                ['sandbox_flag', null, true],
+                ['disable_funding_options', null, $disallowedFundings],
+                ["{$page}_page_button_customize", null, $isCustomize],
+                ["{$page}_page_button_layout", null, $layout],
+                ["{$page}_page_button_size", null, $size],
+                ["{$page}_page_button_color", null, $color],
+                ["{$page}_page_button_shape", null, $shape],
+                ["{$page}_page_button_label", null, $label],
+                [
+                    $page . '_page_button_' . $installmentPeriodLocale . '_installment_period',
+                    null,
+                    $installmentPeriodLabel
                 ]
+            ]
         );
 
         self::assertEquals($expected, $this->model->getConfig($page));

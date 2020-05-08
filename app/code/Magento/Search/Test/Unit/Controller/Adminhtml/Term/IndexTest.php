@@ -4,16 +4,20 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Search\Test\Unit\Controller\Adminhtml\Term;
 
-use Magento\Framework\Controller\ResultFactory;
 use Magento\Backend\Model\View\Result\Page;
+use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Framework\View\Page\Config;
 use Magento\Framework\View\Page\Title;
 use Magento\Search\Controller\Adminhtml\Term\Index;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class IndexTest extends \PHPUnit\Framework\TestCase
+class IndexTest extends TestCase
 {
     /**
      * @var ObjectManagerHelper
@@ -21,22 +25,22 @@ class IndexTest extends \PHPUnit\Framework\TestCase
     private $objectManagerHelper;
 
     /**
-     * @var ResultFactory|\PHPUnit\Framework\MockObject\MockObject
+     * @var ResultFactory|MockObject
      */
     private $resultFactoryMock;
 
     /**
-     * @var Page|\PHPUnit\Framework\MockObject\MockObject
+     * @var Page|MockObject
      */
     private $pageMock;
 
     /**
-     * @var Config|\PHPUnit\Framework\MockObject\MockObject
+     * @var Config|MockObject
      */
     private $pageConfigMock;
 
     /**
-     * @var Title|\PHPUnit\Framework\MockObject\MockObject
+     * @var Title|MockObject
      */
     private $titleMock;
 

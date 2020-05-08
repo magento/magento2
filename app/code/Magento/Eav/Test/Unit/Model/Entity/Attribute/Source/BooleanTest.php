@@ -3,29 +3,38 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Eav\Test\Unit\Model\Entity\Attribute\Source;
 
 use Magento\Eav\Model\Entity\AbstractEntity;
+use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
+use Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend;
+use Magento\Eav\Model\Entity\Attribute\Source\Boolean;
+use Magento\Eav\Model\Entity\Collection\AbstractCollection;
+use Magento\Framework\DB\Adapter\Pdo\Mysql;
+use Magento\Framework\DB\Select;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class BooleanTest extends \PHPUnit\Framework\TestCase
+class BooleanTest extends TestCase
 {
     /**
-     * @var \Magento\Eav\Model\Entity\Attribute\Source\Boolean
+     * @var Boolean
      */
     protected $_model;
 
     protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
-        $this->_model = $objectManager->getObject(\Magento\Eav\Model\Entity\Attribute\Source\Boolean::class);
+        $this->_model = $objectManager->getObject(Boolean::class);
     }
 
     public function testGetFlatColumns()
     {
         $abstractAttributeMock = $this->createPartialMock(
-            \Magento\Eav\Model\Entity\Attribute\AbstractAttribute::class,
+            AbstractAttribute::class,
             ['getAttributeCode', '__wakeup']
         );
 
@@ -36,7 +45,7 @@ class BooleanTest extends \PHPUnit\Framework\TestCase
         $flatColumns = $this->_model->getFlatColumns();
 
         $this->assertIsArray($flatColumns, 'FlatColumns must be an array value');
-        $this->assertTrue(!empty($flatColumns), 'FlatColumns must be not empty');
+        $this->assertNotEmpty($flatColumns, 'FlatColumns must be not empty');
         foreach ($flatColumns as $result) {
             $this->assertArrayHasKey('unsigned', $result, 'FlatColumns must have "unsigned" column');
             $this->assertArrayHasKey('default', $result, 'FlatColumns must have "default" column');
@@ -73,7 +82,7 @@ class BooleanTest extends \PHPUnit\Framework\TestCase
         $entity->expects($this->once())->method('getLinkField')->willReturn('entity_id');
         $attributeMock->expects($this->once())->method('getEntity')->willReturn($entity);
 
-        $selectMock = $this->createMock(\Magento\Framework\DB\Select::class);
+        $selectMock = $this->createMock(Select::class);
 
         $collectionMock = $this->getCollectionMock();
         $collectionMock->expects($this->any())->method('getSelect')->willReturn($selectMock);
@@ -157,17 +166,20 @@ class BooleanTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return \PHPUnit\Framework\MockObject\MockObject
+     * @return MockObject
      */
     protected function getCollectionMock()
     {
-        $collectionMethods = ['getSelect', 'getStoreId', 'getConnection'];
-        $collectionMock = $this->createPartialMock(
-            \Magento\Eav\Model\Entity\Collection\AbstractCollection::class,
-            $collectionMethods
-        );
+        $collectionMock = $this->getMockBuilder(AbstractCollection::class)
+            ->addMethods(['getStoreId'])
+            ->onlyMethods(['getSelect', 'getConnection'])
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
 
-        $connectionMock = $this->createPartialMock(\Magento\Framework\DB\Adapter\Pdo\Mysql::class, ['method']);
+        $connectionMock = $this->getMockBuilder(Mysql::class)
+            ->addMethods(['method'])
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $collectionMock->expects($this->any())->method('getConnection')->willReturn($connectionMock);
         $collectionMock->expects($this->any())->method('getStoreId')->willReturn('12');
@@ -176,16 +188,16 @@ class BooleanTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return \PHPUnit\Framework\MockObject\MockObject
+     * @return MockObject
      */
     protected function getAttributeMock()
     {
-        $attributeMockMethods = ['getAttributeCode', 'getId', 'getBackend', 'isScopeGlobal', '__wakeup' , 'getEntity'];
-        $attributeMock = $this->createPartialMock(
-            \Magento\Eav\Model\Entity\Attribute\AbstractAttribute::class,
-            $attributeMockMethods
-        );
-        $backendMock = $this->createMock(\Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend::class);
+        $attributeMock = $this->getMockBuilder(AbstractAttribute::class)
+            ->addMethods(['isScopeGlobal'])
+            ->onlyMethods(['getAttributeCode', 'getId', 'getBackend', '__wakeup', 'getEntity'])
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+        $backendMock = $this->createMock(AbstractBackend::class);
 
         $attributeMock->expects($this->any())->method('getAttributeCode')->willReturn('code');
         $attributeMock->expects($this->any())->method('getId')->willReturn('123');

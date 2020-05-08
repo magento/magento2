@@ -3,28 +3,36 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Sales\Test\Unit\Block\Adminhtml\Order\Comments;
 
-class ViewTest extends \PHPUnit\Framework\TestCase
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Sales\Block\Adminhtml\Order\Comments\View;
+use Magento\Sales\Helper\Admin;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class ViewTest extends TestCase
 {
     /**
-     * @var \Magento\Sales\Helper\Admin|\PHPUnit\Framework\MockObject\MockObject
+     * @var Admin|MockObject
      */
     protected $adminHelperMock;
 
     /**
-     * @var \Magento\Sales\Block\Adminhtml\Order\Comments\View
+     * @var View
      */
     protected $commentsView;
 
     protected function setUp(): void
     {
-        $this->adminHelperMock = $this->getMockBuilder(\Magento\Sales\Helper\Admin::class)
+        $this->adminHelperMock = $this->getMockBuilder(Admin::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->commentsView = (new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this))->getObject(
-            \Magento\Sales\Block\Adminhtml\Order\Comments\View::class,
+        $this->commentsView = (new ObjectManager($this))->getObject(
+            View::class,
             [
                 'adminHelper' => $this->adminHelperMock
             ]

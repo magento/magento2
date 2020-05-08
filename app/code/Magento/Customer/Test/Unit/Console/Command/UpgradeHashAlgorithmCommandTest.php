@@ -3,13 +3,17 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Customer\Test\Unit\Console\Command;
 
 use Magento\Customer\Console\Command\UpgradeHashAlgorithmCommand;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Customer\Model\ResourceModel\Customer\CollectionFactory;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class UpgradeHashAlgorithmCommandTest extends \PHPUnit\Framework\TestCase
+class UpgradeHashAlgorithmCommandTest extends TestCase
 {
     /**
      * @var UpgradeHashAlgorithmCommand
@@ -22,14 +26,14 @@ class UpgradeHashAlgorithmCommandTest extends \PHPUnit\Framework\TestCase
     private $objectManager;
 
     /**
-     * @var CollectionFactory|\PHPUnit\Framework\MockObject\MockObject
+     * @var CollectionFactory|MockObject
      */
     private $customerCollectionFactory;
 
     protected function setUp(): void
     {
         $this->customerCollectionFactory = $this->getMockBuilder(
-            \Magento\Customer\Model\ResourceModel\Customer\CollectionFactory::class
+            CollectionFactory::class
         )->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
@@ -37,7 +41,7 @@ class UpgradeHashAlgorithmCommandTest extends \PHPUnit\Framework\TestCase
         $this->objectManager = new ObjectManager($this);
 
         $this->command = $this->objectManager->getObject(
-            \Magento\Customer\Console\Command\UpgradeHashAlgorithmCommand::class,
+            UpgradeHashAlgorithmCommand::class,
             [
                 'customerCollectionFactory' => $this->customerCollectionFactory
             ]

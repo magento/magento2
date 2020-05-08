@@ -3,19 +3,30 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\CatalogInventory\Test\Unit\Model\Stock;
 
-use Magento\CatalogInventory\Model\Stock\StockStatusRepository;
 use Magento\CatalogInventory\Api\Data as InventoryApiData;
+use Magento\CatalogInventory\Api\Data\StockStatusCollectionInterface;
+use Magento\CatalogInventory\Api\Data\StockStatusCollectionInterfaceFactory;
+use Magento\CatalogInventory\Api\StockStatusCriteriaInterface;
+use Magento\CatalogInventory\Model\Stock\Status;
+use Magento\CatalogInventory\Model\Stock\StatusFactory;
+use Magento\CatalogInventory\Model\Stock\StockStatusRepository;
 use Magento\CatalogInventory\Model\StockRegistryStorage;
+use Magento\Framework\DB\MapperFactory;
+use Magento\Framework\DB\QueryBuilder;
+use Magento\Framework\DB\QueryBuilderFactory;
+use Magento\Framework\DB\QueryInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
- * Class StockStatusRepositoryTest
- *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class StockStatusRepositoryTest extends \PHPUnit\Framework\TestCase
+class StockStatusRepositoryTest extends TestCase
 {
     /**
      * @var StockStatusRepository
@@ -23,66 +34,66 @@ class StockStatusRepositoryTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \Magento\CatalogInventory\Model\Stock\Status|\PHPUnit\Framework\MockObject\MockObject
+     * @var Status|MockObject
      */
     protected $stockStatusMock;
 
     /**
-     * @var \Magento\CatalogInventory\Model\ResourceModel\Stock\Status|\PHPUnit\Framework\MockObject\MockObject
+     * @var \Magento\CatalogInventory\Model\ResourceModel\Stock\Status|MockObject
      */
     protected $stockStatusResourceMock;
 
     /**
-     * @var Magento\CatalogInventory\Model\Stock\StatusFactory |\PHPUnit\Framework\MockObject\MockObject
+     * @var StatusFactory|MockObject
      */
     protected $stockStatusFactoryMock;
 
     /**
-     * @var InventoryApiData\StockStatusCollectionInterfaceFactory|\PHPUnit\Framework\MockObject\MockObject
+     * @var InventoryApiData\StockStatusCollectionInterfaceFactory|MockObject
      */
     protected $stockStatusCollectionMock;
 
     /**
-     * @var \Magento\Framework\DB\QueryBuilderFactory|\PHPUnit\Framework\MockObject\MockObject
+     * @var QueryBuilderFactory|MockObject
      */
     protected $queryBuilderFactoryMock;
 
     /**
-     * @var \Magento\Framework\DB\MapperFactory|\PHPUnit\Framework\MockObject\MockObject
+     * @var MapperFactory|MockObject
      */
     protected $mapperMock;
 
     /**
-     * @var StockRegistryStorage|\PHPUnit\Framework\MockObject\MockObject
+     * @var StockRegistryStorage|MockObject
      */
     protected $stockRegistryStorage;
 
     protected function setUp(): void
     {
-        $this->stockStatusMock = $this->getMockBuilder(\Magento\CatalogInventory\Model\Stock\Status::class)
+        $this->stockStatusMock = $this->getMockBuilder(Status::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->stockStatusResourceMock =
             $this->getMockBuilder(\Magento\CatalogInventory\Model\ResourceModel\Stock\Status::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+                ->disableOriginalConstructor()
+                ->getMock();
         $this->stockStatusFactoryMock = $this->getMockBuilder(
-            \Magento\CatalogInventory\Model\Stock\StatusFactory::class
+            StatusFactory::class
         )
             ->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->stockStatusCollectionMock = $this->getMockBuilder(
-            \Magento\CatalogInventory\Api\Data\StockStatusCollectionInterfaceFactory::class
+            StockStatusCollectionInterfaceFactory::class
         )
             ->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
-        $this->queryBuilderFactoryMock = $this->getMockBuilder(\Magento\Framework\DB\QueryBuilderFactory::class)
+        $this->queryBuilderFactoryMock = $this->getMockBuilder(QueryBuilderFactory::class)
             ->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
-        $this->mapperMock = $this->getMockBuilder(\Magento\Framework\DB\MapperFactory::class)
+        $this->mapperMock = $this->getMockBuilder(MapperFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->stockRegistryStorage = $this->getMockBuilder(StockRegistryStorage::class)
@@ -112,12 +123,9 @@ class StockStatusRepositoryTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($this->stockStatusMock, $this->model->save($this->stockStatusMock));
     }
 
-    /**
-     */
     public function testSaveException()
     {
-        $this->expectException(\Magento\Framework\Exception\CouldNotSaveException::class);
-
+        $this->expectException('Magento\Framework\Exception\CouldNotSaveException');
         $this->stockStatusResourceMock->expects($this->once())
             ->method('save')
             ->with($this->stockStatusMock)
@@ -128,16 +136,16 @@ class StockStatusRepositoryTest extends \PHPUnit\Framework\TestCase
 
     public function testGetList()
     {
-        $criteriaMock = $this->getMockBuilder(\Magento\CatalogInventory\Api\StockStatusCriteriaInterface::class)
+        $criteriaMock = $this->getMockBuilder(StockStatusCriteriaInterface::class)
             ->getMock();
-        $queryBuilderMock = $this->getMockBuilder(\Magento\Framework\DB\QueryBuilder::class)
+        $queryBuilderMock = $this->getMockBuilder(QueryBuilder::class)
             ->disableOriginalConstructor()
             ->setMethods(['setCriteria', 'setResource', 'create'])
             ->getMock();
-        $queryMock = $this->getMockBuilder(\Magento\Framework\DB\QueryInterface::class)
+        $queryMock = $this->getMockBuilder(QueryInterface::class)
             ->getMock();
         $queryCollectionMock = $this->getMockBuilder(
-            \Magento\CatalogInventory\Api\Data\StockStatusCollectionInterface::class
+            StockStatusCollectionInterface::class
         )->getMock();
 
         $this->queryBuilderFactoryMock->expects($this->once())->method('create')->willReturn($queryBuilderMock);
@@ -166,12 +174,9 @@ class StockStatusRepositoryTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($this->model->delete($this->stockStatusMock));
     }
 
-    /**
-     */
     public function testDeleteException()
     {
-        $this->expectException(\Magento\Framework\Exception\CouldNotDeleteException::class);
-
+        $this->expectException('Magento\Framework\Exception\CouldNotDeleteException');
         $this->stockStatusResourceMock->expects($this->once())
             ->method('delete')
             ->with($this->stockStatusMock)
@@ -190,12 +195,9 @@ class StockStatusRepositoryTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($this->model->deleteById($id));
     }
 
-    /**
-     */
     public function testDeleteByIdException()
     {
-        $this->expectException(\Magento\Framework\Exception\CouldNotDeleteException::class);
-
+        $this->expectException('Magento\Framework\Exception\CouldNotDeleteException');
         $id = 1;
 
         $this->stockStatusFactoryMock->expects($this->once())->method('create')->willReturn($this->stockStatusMock);

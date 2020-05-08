@@ -3,23 +3,24 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Framework\Setup\Test\Unit\Declaration\Schema\Db;
 
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Framework\Setup\Declaration\Schema\Db\ReferenceStatement;
 use Magento\Framework\Setup\Declaration\Schema\Db\Statement;
 use Magento\Framework\Setup\Declaration\Schema\Db\StatementAggregator;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test for StatementAggregator.
  *
- * @package Magento\Framework\Setup\Test\Unit\Declaration\Schema\Db
  */
-class StatementAggregatorTest extends \PHPUnit\Framework\TestCase
+class StatementAggregatorTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\Setup\Declaration\Schema\Db\StatementAggregator
+     * @var StatementAggregator
      */
     private $model;
 

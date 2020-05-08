@@ -4,32 +4,40 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Quote\Test\Unit\Model\GuestCart;
 
-class GuestCartTotalRepositoryTest extends \PHPUnit\Framework\TestCase
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Quote\Api\CartTotalRepositoryInterface;
+use Magento\Quote\Model\GuestCart\GuestCartTotalRepository;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class GuestCartTotalRepositoryTest extends TestCase
 {
     /**
-     * @var \Magento\Quote\Model\GuestCart\GuestCartTotalRepository
+     * @var GuestCartTotalRepository
      */
     protected $model;
 
     /**
-     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
+     * @var ObjectManager
      */
     protected $objectManager;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $cartTotalRepository;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $quoteIdMaskFactoryMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $quoteIdMaskMock;
 
@@ -45,9 +53,9 @@ class GuestCartTotalRepositoryTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp(): void
     {
-        $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $this->objectManager = new ObjectManager($this);
 
-        $this->cartTotalRepository = $this->getMockBuilder(\Magento\Quote\Api\CartTotalRepositoryInterface::class)
+        $this->cartTotalRepository = $this->getMockBuilder(CartTotalRepositoryInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -61,7 +69,7 @@ class GuestCartTotalRepositoryTest extends \PHPUnit\Framework\TestCase
         );
 
         $this->model = $this->objectManager->getObject(
-            \Magento\Quote\Model\GuestCart\GuestCartTotalRepository::class,
+            GuestCartTotalRepository::class,
             [
                 'cartTotalRepository' => $this->cartTotalRepository,
                 'quoteIdMaskFactory' => $this->quoteIdMaskFactoryMock,

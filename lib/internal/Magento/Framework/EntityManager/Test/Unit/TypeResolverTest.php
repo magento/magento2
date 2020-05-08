@@ -3,31 +3,43 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\EntityManager\Test\Unit;
 
-class TypeResolverTest extends \PHPUnit\Framework\TestCase
+use Magento\Catalog\Api\Data\CategoryInterface;
+use Magento\Catalog\Model\Category;
+use Magento\Customer\Api\Data\CustomerInterface;
+use Magento\Customer\Model\Data\Customer;
+use Magento\Framework\EntityManager\MetadataPool;
+use Magento\Framework\EntityManager\TypeResolver;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class TypeResolverTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
+     * @var ObjectManager
      */
     private $objectManager;
 
     /**
-     * @var \Magento\Framework\EntityManager\TypeResolver
+     * @var TypeResolver
      */
     private $resolver;
 
     /**
-     * @var \Magento\Framework\EntityManager\MetadataPool|\PHPUnit\Framework\MockObject\MockObject
+     * @var MetadataPool|MockObject
      */
     private $metadataPoolMock;
 
     protected function setUp(): void
     {
-        $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $this->objectManager = new ObjectManager($this);
         $this->metadataPoolMock =
-            $this->createMock(\Magento\Framework\EntityManager\MetadataPool::class);
-        $this->resolver = new \Magento\Framework\EntityManager\TypeResolver($this->metadataPoolMock);
+            $this->createMock(MetadataPool::class);
+        $this->resolver = new TypeResolver($this->metadataPoolMock);
     }
 
     /**
@@ -42,7 +54,7 @@ class TypeResolverTest extends \PHPUnit\Framework\TestCase
             ->method('hasConfiguration')
             ->willReturnMap(
                 [
-                   [$interfaceName, true]
+                    [$interfaceName, true]
                 ]
             );
         $this->assertEquals($interfaceName, $this->resolver->resolve($customerDataObject));
@@ -55,12 +67,12 @@ class TypeResolverTest extends \PHPUnit\Framework\TestCase
     {
         return [
             [
-                \Magento\Customer\Model\Data\Customer::class,
-                \Magento\Customer\Api\Data\CustomerInterface::class
+                Customer::class,
+                CustomerInterface::class
             ],
             [
-                \Magento\Catalog\Model\Category::class,
-                \Magento\Catalog\Api\Data\CategoryInterface::class,
+                Category::class,
+                CategoryInterface::class,
             ]
         ];
     }

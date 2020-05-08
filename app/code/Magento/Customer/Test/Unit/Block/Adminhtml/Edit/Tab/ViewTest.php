@@ -3,15 +3,16 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Customer\Test\Unit\Block\Adminhtml\Edit\Tab;
 
+use Magento\Customer\Block\Adminhtml\Edit\Tab\View;
+use Magento\Framework\Registry;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use PHPUnit\Framework\TestCase;
 
-/**
- * Class ViewTest
- * @package Magento\Customer\Block\Adminhtml\Edit\Tab
- */
-class ViewTest extends \PHPUnit\Framework\TestCase
+class ViewTest extends TestCase
 {
     /**
      * @var \Magento\Customer\Block\Adminhtml\Edit\Tab\View
@@ -20,11 +21,11 @@ class ViewTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp(): void
     {
-        $registry = $this->createMock(\Magento\Framework\Registry::class);
+        $registry = $this->createMock(Registry::class);
 
         $objectManagerHelper = new ObjectManagerHelper($this);
         $this->view = $objectManagerHelper->getObject(
-            \Magento\Customer\Block\Adminhtml\Edit\Tab\View::class,
+            View::class,
             [
                 'registry' => $registry
             ]

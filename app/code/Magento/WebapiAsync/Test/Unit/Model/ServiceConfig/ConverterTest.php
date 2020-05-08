@@ -8,16 +8,19 @@ declare(strict_types=1);
 
 namespace Magento\WebapiAsync\Test\Unit\Model\ServiceConfig;
 
-class ConverterTest extends \PHPUnit\Framework\TestCase
+use Magento\WebapiAsync\Model\ServiceConfig\Converter;
+use PHPUnit\Framework\TestCase;
+
+class ConverterTest extends TestCase
 {
     /**
-     * @var \Magento\WebapiAsync\Model\ServiceConfig\Converter
+     * @var Converter
      */
     private $model;
 
     protected function setUp(): void
     {
-        $this->model = new \Magento\WebapiAsync\Model\ServiceConfig\Converter();
+        $this->model = new Converter();
     }
 
     /**

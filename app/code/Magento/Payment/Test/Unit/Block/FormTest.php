@@ -3,72 +3,83 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Payment\Test\Unit\Block;
 
 use Magento\Framework\DataObject;
+use Magento\Framework\Escaper;
+use Magento\Framework\Event\ManagerInterface;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\View\Element\Template\Context;
+use Magento\Payment\Block\Form;
+use Magento\Payment\Model\Method\AbstractMethod;
+use Magento\Payment\Model\MethodInterface;
+use Magento\Store\Model\StoreManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class FormTest extends \PHPUnit\Framework\TestCase
+class FormTest extends TestCase
 {
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $_object;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $_storeManager;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $_eventManager;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $_escaper;
 
     protected function setUp(): void
     {
-        $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $helper = new ObjectManager($this);
         $this->_storeManager = $this->getMockBuilder(
-            \Magento\Store\Model\StoreManager::class
+            StoreManager::class
         )->setMethods(
             ['getStore']
-        )->disableOriginalConstructor()->getMock();
+        )->disableOriginalConstructor()
+            ->getMock();
         $this->_eventManager = $this->getMockBuilder(
-            \Magento\Framework\Event\ManagerInterface::class
+            ManagerInterface::class
         )->setMethods(
             ['dispatch']
-        )->disableOriginalConstructor()->getMock();
-        $this->_escaper = $helper->getObject(\Magento\Framework\Escaper::class);
+        )->disableOriginalConstructor()
+            ->getMock();
+        $this->_escaper = $helper->getObject(Escaper::class);
         $context = $helper->getObject(
-            \Magento\Framework\View\Element\Template\Context::class,
+            Context::class,
             [
                 'storeManager' => $this->_storeManager,
                 'eventManager' => $this->_eventManager,
                 'escaper' => $this->_escaper
             ]
         );
-        $this->_object = $helper->getObject(\Magento\Payment\Block\Form::class, ['context' => $context]);
+        $this->_object = $helper->getObject(Form::class, ['context' => $context]);
     }
 
-    /**
-     */
     public function testGetMethodException()
     {
-        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
-
-        $method = new \Magento\Framework\DataObject([]);
+        $this->expectException(LocalizedException::class);
+        $method = new DataObject([]);
         $this->_object->setData('method', $method);
         $this->_object->getMethod();
     }
 
     public function testGetMethodCode()
     {
-        $method = $this->createMock(\Magento\Payment\Model\MethodInterface::class);
+        $method = $this->createMock(MethodInterface::class);
         $method->expects($this->once())
             ->method('getCode')
             ->willReturn('method_code');
@@ -81,7 +92,7 @@ class FormTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetInfoData($field, $value, $expected)
     {
-        $methodInstance = $this->getMockBuilder(\Magento\Payment\Model\Method\AbstractMethod::class)
+        $methodInstance = $this->getMockBuilder(AbstractMethod::class)
             ->setMethods(['getData'])
             ->disableOriginalConstructor()
             ->getMock();
@@ -90,7 +101,7 @@ class FormTest extends \PHPUnit\Framework\TestCase
             ->with($field)
             ->willReturn($value);
         $method = $this->getMockBuilder(
-            \Magento\Payment\Model\MethodInterface::class
+            MethodInterface::class
         )->getMockForAbstractClass();
         $method->expects($this->any())
             ->method('getInfoInstance')
@@ -117,7 +128,7 @@ class FormTest extends \PHPUnit\Framework\TestCase
 
     public function testSetMethod()
     {
-        $methodInterfaceMock = $this->getMockBuilder(\Magento\Payment\Model\MethodInterface::class)
+        $methodInterfaceMock = $this->getMockBuilder(MethodInterface::class)
             ->getMockForAbstractClass();
 
         $this->assertSame($this->_object, $this->_object->setMethod($methodInterfaceMock));

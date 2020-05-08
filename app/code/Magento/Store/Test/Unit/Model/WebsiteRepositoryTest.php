@@ -3,48 +3,56 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Store\Test\Unit\Model;
 
 use Magento\Framework\App\Config;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Store\Api\Data\WebsiteInterface;
+use Magento\Store\Model\ResourceModel\Website\CollectionFactory;
+use Magento\Store\Model\WebsiteFactory;
+use Magento\Store\Model\WebsiteRepository;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class WebsiteRepositoryTest extends \PHPUnit\Framework\TestCase
+class WebsiteRepositoryTest extends TestCase
 {
     /**
-     * @var \Magento\Store\Model\WebsiteRepository
+     * @var WebsiteRepository
      */
     protected $model;
 
     /**
-     * @var \Magento\Store\Model\WebsiteFactory|\PHPUnit\Framework\MockObject\MockObject
+     * @var WebsiteFactory|MockObject
      */
     protected $websiteFactoryMock;
 
     /**
-     * @var \Magento\Store\Model\ResourceModel\Website\CollectionFactory|\PHPUnit\Framework\MockObject\MockObject
+     * @var CollectionFactory|MockObject
      */
     protected $websiteCollectionFactoryMock;
 
     /**
-     * @var Config | \PHPUnit\Framework\MockObject\MockObject
+     * @var Config|MockObject
      */
     private $appConfigMock;
 
     protected function setUp(): void
     {
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $objectManager = new ObjectManager($this);
         $this->websiteFactoryMock =
-            $this->getMockBuilder(\Magento\Store\Model\WebsiteFactory::class)
+            $this->getMockBuilder(WebsiteFactory::class)
                 ->disableOriginalConstructor()
                 ->setMethods(['create'])
                 ->getMock();
         $this->websiteCollectionFactoryMock =
-            $this->getMockBuilder(\Magento\Store\Model\ResourceModel\Website\CollectionFactory::class)
+            $this->getMockBuilder(CollectionFactory::class)
                 ->disableOriginalConstructor()
                 ->setMethods(['create'])
                 ->getMock();
         $this->model = $objectManager->getObject(
-            \Magento\Store\Model\WebsiteRepository::class,
+            WebsiteRepository::class,
             [
                 'factory' => $this->websiteFactoryMock,
                 'websiteCollectionFactory' => $this->websiteCollectionFactoryMock
@@ -66,7 +74,7 @@ class WebsiteRepositoryTest extends \PHPUnit\Framework\TestCase
 
     public function testGetDefault()
     {
-        $websiteMock = $this->getMockBuilder(\Magento\Store\Api\Data\WebsiteInterface::class)
+        $websiteMock = $this->getMockBuilder(WebsiteInterface::class)
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();
@@ -88,17 +96,14 @@ class WebsiteRepositoryTest extends \PHPUnit\Framework\TestCase
             ->willReturn($websiteMock);
 
         $website = $this->model->getDefault();
-        $this->assertInstanceOf(\Magento\Store\Api\Data\WebsiteInterface::class, $website);
+        $this->assertInstanceOf(WebsiteInterface::class, $website);
         $this->assertEquals($websiteMock, $website);
     }
 
-    /**
-     */
     public function testGetDefaultIsSeveral()
     {
         $this->expectException(\DomainException::class);
-
-        $websiteMock = $this->getMockBuilder(\Magento\Store\Api\Data\WebsiteInterface::class)
+        $websiteMock = $this->getMockBuilder(WebsiteInterface::class)
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();
@@ -124,14 +129,11 @@ class WebsiteRepositoryTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    /**
-     */
     public function testGetDefaultIsZero()
     {
         $this->expectException(\DomainException::class);
         $this->expectExceptionMessage('The default website isn\'t defined. Set the website and try again.');
-
-        $websiteMock = $this->getMockBuilder(\Magento\Store\Api\Data\WebsiteInterface::class)
+        $websiteMock = $this->getMockBuilder(WebsiteInterface::class)
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();

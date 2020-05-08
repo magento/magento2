@@ -3,38 +3,47 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Setup\Test\Unit\Module\Di\Code\Reader\InstancesNamesList;
 
+use Magento\Framework\Code\Reader\ClassReader;
+use Magento\Framework\Code\Validator;
+use Magento\Framework\Exception\ValidatorException;
+use Magento\Framework\Phrase;
+use Magento\Setup\Module\Di\Code\Reader\ClassesScanner;
+use Magento\Setup\Module\Di\Code\Reader\Decorator\Directory;
 use Magento\Setup\Module\Di\Compiler\Log\Log;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test for Directory Decorator
- * @package Magento\Setup\Test\Unit\Module\Di\Code\Reader\InstancesNamesList
  */
-class DirectoryTest extends \PHPUnit\Framework\TestCase
+class DirectoryTest extends TestCase
 {
     /**
-     * @var \Magento\Setup\Module\Di\Code\Reader\ClassesScanner | \PHPUnit\Framework\MockObject\MockObject
+     * @var ClassesScanner|MockObject
      */
     private $classesScanner;
 
     /**
-     * @var \Magento\Framework\Code\Reader\ClassReader | \PHPUnit\Framework\MockObject\MockObject
+     * @var ClassReader|MockObject
      */
     private $classReaderMock;
 
     /**
-     * @var \Magento\Setup\Module\Di\Code\Reader\Decorator\Directory
+     * @var Directory
      */
     private $model;
 
     /**
-     * @var \Magento\Framework\Code\Validator | \PHPUnit\Framework\MockObject\MockObject
+     * @var Validator|MockObject
      */
     private $validatorMock;
 
     /**
-     * @var \Magento\Setup\Module\Di\Compiler\Log\Log | \PHPUnit\Framework\MockObject\MockObject
+     * @var Log|MockObject
      */
     private $logMock;
 
@@ -43,27 +52,27 @@ class DirectoryTest extends \PHPUnit\Framework\TestCase
      */
     protected function setUp(): void
     {
-        $this->logMock = $this->getMockBuilder(\Magento\Setup\Module\Di\Compiler\Log\Log::class)
+        $this->logMock = $this->getMockBuilder(Log::class)
             ->disableOriginalConstructor()
             ->setMethods(['add'])
             ->getMock();
 
-        $this->classesScanner = $this->getMockBuilder(\Magento\Setup\Module\Di\Code\Reader\ClassesScanner::class)
+        $this->classesScanner = $this->getMockBuilder(ClassesScanner::class)
             ->disableOriginalConstructor()
             ->setMethods(['getList'])
             ->getMock();
 
-        $this->classReaderMock = $this->getMockBuilder(\Magento\Framework\Code\Reader\ClassReader::class)
+        $this->classReaderMock = $this->getMockBuilder(ClassReader::class)
             ->disableOriginalConstructor()
             ->setMethods(['getParents'])
             ->getMock();
 
-        $this->validatorMock = $this->getMockBuilder(\Magento\Framework\Code\Validator::class)
+        $this->validatorMock = $this->getMockBuilder(Validator::class)
             ->disableOriginalConstructor()
             ->setMethods(['validate'])
             ->getMock();
 
-        $this->model = new \Magento\Setup\Module\Di\Code\Reader\Decorator\Directory(
+        $this->model = new Directory(
             $this->logMock,
             $this->classReaderMock,
             $this->classesScanner,
@@ -176,8 +185,8 @@ class DirectoryTest extends \PHPUnit\Framework\TestCase
 
         $this->validatorMock->expects($this->exactly(count($classes)))
             ->method('validate')
-            ->will(
-                $this->throwException($exception)
+            ->willThrowException(
+                $exception
             );
 
         $this->model->getList($path);
@@ -195,7 +204,7 @@ class DirectoryTest extends \PHPUnit\Framework\TestCase
     public function getListExceptionDataProvider()
     {
         return [
-            [new \Magento\Framework\Exception\ValidatorException(new \Magento\Framework\Phrase('Not Valid!'))],
+            [new ValidatorException(new Phrase('Not Valid!'))],
             [new \ReflectionException('Not Valid!')]
         ];
     }

@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Sales\Test\Unit\Model\Order;
 
 use Magento\Sales\Api\Data\InvoiceCommentCreationInterface;
@@ -12,39 +14,38 @@ use Magento\Sales\Api\Data\InvoiceItemCreationInterface;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\InvoiceDocumentFactory;
 use Magento\Sales\Model\Service\InvoiceService;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-/**
- * Class InvoiceDocumentFactoryTest
- */
-class InvoiceDocumentFactoryTest extends \PHPUnit\Framework\TestCase
+class InvoiceDocumentFactoryTest extends TestCase
 {
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|InvoiceService
+     * @var MockObject|InvoiceService
      */
     private $invoiceServiceMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|InvoiceInterface
+     * @var MockObject|InvoiceInterface
      */
     private $invoiceMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|InvoiceDocumentFactory
+     * @var MockObject|InvoiceDocumentFactory
      */
     private $invoiceDocumentFactory;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|InvoiceCreationArgumentsInterface
+     * @var MockObject|InvoiceCreationArgumentsInterface
      */
     private $itemMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|Order
+     * @var MockObject|Order
      */
     private $orderMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|InvoiceCommentCreationInterface
+     * @var MockObject|InvoiceCommentCreationInterface
      */
     private $commentMock;
 
@@ -65,11 +66,11 @@ class InvoiceDocumentFactoryTest extends \PHPUnit\Framework\TestCase
 
         $this->itemMock = $this->getMockBuilder(InvoiceItemCreationInterface::class)
             ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+            ->getMock();
 
         $this->commentMock = $this->getMockBuilder(InvoiceCommentCreationInterface::class)
             ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+            ->getMock();
 
         $this->invoiceDocumentFactory = new InvoiceDocumentFactory($this->invoiceServiceMock);
     }

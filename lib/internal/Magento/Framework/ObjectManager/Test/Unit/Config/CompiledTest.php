@@ -3,12 +3,15 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\ObjectManager\Test\Unit\Config;
 
 use Magento\Framework\ObjectManager\Config\Compiled;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\TestCase;
 
-class CompiledTest extends \PHPUnit\Framework\TestCase
+class CompiledTest extends TestCase
 {
     /**
      * @var ObjectManager

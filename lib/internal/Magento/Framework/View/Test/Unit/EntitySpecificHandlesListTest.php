@@ -3,12 +3,15 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Framework\View\Test\Unit;
 
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\View\EntitySpecificHandlesList;
+use PHPUnit\Framework\TestCase;
 
-class EntitySpecificHandlesListTest extends \PHPUnit\Framework\TestCase
+class EntitySpecificHandlesListTest extends TestCase
 {
     /**
      * @var EntitySpecificHandlesList
@@ -17,7 +20,7 @@ class EntitySpecificHandlesListTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp(): void
     {
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $objectManager = new ObjectManager($this);
         $this->entitySpecificHandlesList = $objectManager->getObject(EntitySpecificHandlesList::class);
     }
 

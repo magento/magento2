@@ -3,26 +3,32 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\ObjectManager\Test\Unit\Config;
 
-class SchemaLocatorTest extends \PHPUnit\Framework\TestCase
+use Magento\Framework\Config\Dom\UrnResolver;
+use Magento\Framework\ObjectManager\Config\SchemaLocator as SchemaLocatorConfig;
+use PHPUnit\Framework\TestCase;
+
+class SchemaLocatorTest extends TestCase
 {
     /**
      * @var \Magento\Framework\App\ResourceConnection\Config\SchemaLocator
      */
     protected $model;
 
-    /** @var \Magento\Framework\Config\Dom\UrnResolver */
+    /** @var UrnResolver */
     protected $urnResolver;
 
-    /** @var \Magento\Framework\Config\Dom\UrnResolver */
+    /** @var UrnResolver */
     protected $urnResolverMock;
 
     protected function setUp(): void
     {
-        $this->urnResolver = new \Magento\Framework\Config\Dom\UrnResolver();
-        $this->urnResolverMock = $this->createMock(\Magento\Framework\Config\Dom\UrnResolver::class);
-        $this->model = new \Magento\Framework\ObjectManager\Config\SchemaLocator($this->urnResolverMock);
+        $this->urnResolver = new UrnResolver();
+        $this->urnResolverMock = $this->createMock(UrnResolver::class);
+        $this->model = new SchemaLocatorConfig($this->urnResolverMock);
         $property = new \ReflectionProperty($this->model, 'urnResolver');
         $property->setAccessible(true);
         $property->setValue($this->model, $this->urnResolverMock);
@@ -44,8 +50,6 @@ class SchemaLocatorTest extends \PHPUnit\Framework\TestCase
 
     public function testGetPerFileSchema()
     {
-        $this->assertNull(
-            $this->model->getPerFileSchema()
-        );
+        $this->assertNull($this->model->getPerFileSchema());
     }
 }

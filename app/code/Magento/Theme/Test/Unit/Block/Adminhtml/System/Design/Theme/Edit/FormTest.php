@@ -3,35 +3,44 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Theme\Test\Unit\Block\Adminhtml\System\Design\Theme\Edit;
 
-class FormTest extends \PHPUnit\Framework\TestCase
+use Magento\Framework\Data\Form;
+use Magento\Framework\Data\FormFactory;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\UrlInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class FormTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
+     * @var ObjectManager
      */
     protected $_objectManagerHelper;
 
     protected function setUp(): void
     {
-        $this->_objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $this->_objectManagerHelper = new ObjectManager($this);
     }
 
     public function testToHtml()
     {
-        /** @var \Magento\Framework\Data\FormFactory|\PHPUnit\Framework\MockObject\MockObject $customerHelper */
-        $formFactoryMock = $this->getMockBuilder(\Magento\Framework\Data\FormFactory::class)
+        /** @var FormFactory|MockObject $customerHelper */
+        $formFactoryMock = $this->getMockBuilder(FormFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        /** @var \Magento\Framework\Data\Form|\PHPUnit\Framework\MockObject\MockObject $customerHelper */
-        $formMock = $this->getMockBuilder(\Magento\Framework\Data\Form::class)
+        /** @var Form|MockObject $customerHelper */
+        $formMock = $this->getMockBuilder(Form::class)
             ->setMethods(['setUseContainer', 'setParent', 'setBaseUrl'])
             ->disableOriginalConstructor()
             ->getMock();
 
-        /** @var \Magento\Framework\UrlInterface|\PHPUnit\Framework\MockObject\MockObject $customerHelper */
-        $urlBuilderMock = $this->getMockBuilder(\Magento\Framework\UrlInterface::class)
+        /** @var UrlInterface|MockObject $customerHelper */
+        $urlBuilderMock = $this->getMockBuilder(UrlInterface::class)
             ->getMockForAbstractClass();
 
         /** @var \Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\Form $block */

@@ -15,13 +15,13 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\MediaGallery\Model\Asset\Command\GetById;
 use Magento\MediaGalleryApi\Api\Data\AssetInterfaceFactory;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
-use Laminas\Db\Adapter\Driver\Pdo\Statement;
 
 /**
  * Test the GetById command with exception during media asset initialization
  */
-class GetByIdExceptionDuringMediaAssetInitializationTest extends \PHPUnit\Framework\TestCase
+class GetByIdExceptionDuringMediaAssetInitializationTest extends TestCase
 {
     private const MEDIA_ASSET_STUB_ID = 45;
     private const MEDIA_ASSET_DATA = [

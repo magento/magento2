@@ -3,32 +3,40 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Setup\Test\Unit\Model\Description\Mixin;
 
-class BoldMixinTest extends \PHPUnit\Framework\TestCase
+use Magento\Setup\Model\Description\Mixin\BoldMixin;
+use Magento\Setup\Model\Description\Mixin\Helper\RandomWordSelector;
+use Magento\Setup\Model\Description\Mixin\Helper\WordWrapper;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class BoldMixinTest extends TestCase
 {
     /**
-     * @var \Magento\Setup\Model\Description\Mixin\BoldMixin
+     * @var BoldMixin
      */
     private $mixin;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Setup\Model\Description\Mixin\Helper\RandomWordSelector
+     * @var MockObject|RandomWordSelector
      */
     private $randomWordSelectorMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Setup\Model\Description\Mixin\Helper\WordWrapper
+     * @var MockObject|WordWrapper
      */
     private $wordWrapperMock;
 
     protected function setUp(): void
     {
         $this->randomWordSelectorMock =
-            $this->createMock(\Magento\Setup\Model\Description\Mixin\Helper\RandomWordSelector::class);
-        $this->wordWrapperMock = $this->createMock(\Magento\Setup\Model\Description\Mixin\Helper\WordWrapper::class);
+            $this->createMock(RandomWordSelector::class);
+        $this->wordWrapperMock = $this->createMock(WordWrapper::class);
 
-        $this->mixin = new \Magento\Setup\Model\Description\Mixin\BoldMixin(
+        $this->mixin = new BoldMixin(
             $this->randomWordSelectorMock,
             $this->wordWrapperMock
         );
@@ -48,7 +56,7 @@ class BoldMixinTest extends \PHPUnit\Framework\TestCase
         $this->randomWordSelectorMock
             ->expects($this->once())
             ->method('getRandomWords')
-            ->with($this->equalTo($fixtureString), $this->greaterThan(0))
+            ->with($fixtureString, $this->greaterThan(0))
             ->willReturn($randWordsFixture);
 
         $this->wordWrapperMock

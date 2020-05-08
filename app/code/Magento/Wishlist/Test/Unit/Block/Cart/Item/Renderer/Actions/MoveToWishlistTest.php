@@ -3,32 +3,37 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Wishlist\Test\Unit\Block\Cart\Item\Renderer\Actions;
 
-use Magento\Wishlist\Block\Cart\Item\Renderer\Actions\MoveToWishlist;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Quote\Model\Quote\Item;
+use Magento\Wishlist\Block\Cart\Item\Renderer\Actions\MoveToWishlist;
 use Magento\Wishlist\Helper\Data;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class MoveToWishlistTest extends \PHPUnit\Framework\TestCase
+class MoveToWishlistTest extends TestCase
 {
     /**
      * @var MoveToWishlist
      */
     protected $model;
 
-    /** @var Data|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var Data|MockObject */
     protected $wishlistHelperMock;
 
     protected function setUp(): void
     {
-        $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $objectManagerHelper = new ObjectManager($this);
 
-        $this->wishlistHelperMock = $this->getMockBuilder(\Magento\Wishlist\Helper\Data::class)
+        $this->wishlistHelperMock = $this->getMockBuilder(Data::class)
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->model = $objectManagerHelper->getObject(
-            \Magento\Wishlist\Block\Cart\Item\Renderer\Actions\MoveToWishlist::class,
+            MoveToWishlist::class,
             [
                 'wishlistHelper' => $this->wishlistHelperMock,
             ]
@@ -50,9 +55,9 @@ class MoveToWishlistTest extends \PHPUnit\Framework\TestCase
         $json = '{json;}';
 
         /**
-         * @var Item|\PHPUnit\Framework\MockObject\MockObject $itemMock
+         * @var Item|MockObject $itemMock
          */
-        $itemMock = $this->getMockBuilder(\Magento\Quote\Model\Quote\Item::class)
+        $itemMock = $this->getMockBuilder(Item::class)
             ->disableOriginalConstructor()
             ->getMock();
 

@@ -3,20 +3,31 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\CurrencySymbol\Test\Unit\Block\Adminhtml\System\Currency\Rate;
 
-class ServicesTest extends \PHPUnit\Framework\TestCase
+use Magento\Backend\Model\Session;
+use Magento\CurrencySymbol\Block\Adminhtml\System\Currency\Rate\Services;
+use Magento\Directory\Model\Currency\Import\Source\Service;
+use Magento\Directory\Model\Currency\Import\Source\ServiceFactory;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\View\Element\Html\Select;
+use Magento\Framework\View\LayoutInterface;
+use PHPUnit\Framework\TestCase;
+
+class ServicesTest extends TestCase
 {
     /**
      * Object manager helper
      *
-     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
+     * @var ObjectManager
      */
     protected $objectManagerHelper;
 
     protected function setUp(): void
     {
-        $this->objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $this->objectManagerHelper = new ObjectManager($this);
     }
 
     protected function tearDown(): void
@@ -30,18 +41,18 @@ class ServicesTest extends \PHPUnit\Framework\TestCase
         $service = 'service';
 
         $sourceServiceFactoryMock = $this->createPartialMock(
-            \Magento\Directory\Model\Currency\Import\Source\ServiceFactory::class,
+            ServiceFactory::class,
             ['create']
         );
-        $sourceServiceMock = $this->createMock(\Magento\Directory\Model\Currency\Import\Source\Service::class);
-        $backendSessionMock = $this->createPartialMock(
-            \Magento\Backend\Model\Session::class,
-            ['getCurrencyRateService']
-        );
+        $sourceServiceMock = $this->createMock(Service::class);
+        $backendSessionMock = $this->getMockBuilder(Session::class)
+            ->addMethods(['getCurrencyRateService'])
+            ->disableOriginalConstructor()
+            ->getMock();
 
-        /** @var $layoutMock \Magento\Framework\View\LayoutInterface|\PHPUnit\Framework\MockObject\MockObject */
+        /** @var LayoutInterface|MockObject $layoutMock */
         $layoutMock = $this->getMockForAbstractClass(
-            \Magento\Framework\View\LayoutInterface::class,
+            LayoutInterface::class,
             [],
             '',
             false,
@@ -50,10 +61,11 @@ class ServicesTest extends \PHPUnit\Framework\TestCase
             ['createBlock']
         );
 
-        $blockMock = $this->createPartialMock(
-            \Magento\Framework\View\Element\Html\Select::class,
-            ['setOptions', 'setId', 'setName', 'setValue', 'setTitle']
-        );
+        $blockMock = $this->getMockBuilder(Select::class)
+            ->addMethods(['setName', 'setValue'])
+            ->onlyMethods(['setOptions', 'setId', 'setTitle'])
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $layoutMock->expects($this->once())->method('createBlock')->willReturn($blockMock);
 
@@ -67,9 +79,9 @@ class ServicesTest extends \PHPUnit\Framework\TestCase
         $blockMock->expects($this->once())->method('setValue')->with($service)->willReturnSelf();
         $blockMock->expects($this->once())->method('setTitle')->with('Import Service')->willReturnSelf();
 
-        /** @var $block \Magento\CurrencySymbol\Block\Adminhtml\System\Currency\Rate\Services */
+        /** @var Services $block */
         $block = $this->objectManagerHelper->getObject(
-            \Magento\CurrencySymbol\Block\Adminhtml\System\Currency\Rate\Services::class,
+            Services::class,
             [
                 'srcCurrencyFactory' => $sourceServiceFactoryMock,
                 'backendSession' => $backendSessionMock

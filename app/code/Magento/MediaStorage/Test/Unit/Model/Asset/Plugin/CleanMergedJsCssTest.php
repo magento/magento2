@@ -3,34 +3,44 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\MediaStorage\Test\Unit\Model\Asset\Plugin;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Filesystem;
+use Magento\Framework\Filesystem\Directory\ReadInterface;
+use Magento\Framework\TestFramework\Unit\BaseTestCase;
+use Magento\Framework\View\Asset\Merged;
+use Magento\Framework\View\Asset\MergeService;
+use Magento\MediaStorage\Helper\File\Storage\Database;
+use Magento\MediaStorage\Model\Asset\Plugin\CleanMergedJsCss;
+use PHPUnit\Framework\MockObject\MockObject;
 
-class CleanMergedJsCssTest extends \Magento\Framework\TestFramework\Unit\BaseTestCase
+class CleanMergedJsCssTest extends BaseTestCase
 {
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject | \Magento\MediaStorage\Helper\File\Storage\Database
+     * @var MockObject|Database
      */
     private $databaseMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject | \Magento\Framework\Filesystem
+     * @var MockObject|Filesystem
      */
     private $filesystemMock;
 
     /**
-     * @var \Magento\MediaStorage\Model\Asset\Plugin\CleanMergedJsCss
+     * @var CleanMergedJsCss
      */
     private $model;
 
     protected function setUp(): void
     {
         parent::setUp();
-        $this->filesystemMock = $this->basicMock(\Magento\Framework\Filesystem::class);
-        $this->databaseMock = $this->basicMock(\Magento\MediaStorage\Helper\File\Storage\Database::class);
+        $this->filesystemMock = $this->basicMock(Filesystem::class);
+        $this->databaseMock = $this->basicMock(Database::class);
         $this->model = $this->objectManager->getObject(
-            \Magento\MediaStorage\Model\Asset\Plugin\CleanMergedJsCss::class,
+            CleanMergedJsCss::class,
             [
                 'database' => $this->databaseMock,
                 'filesystem' => $this->filesystemMock,
@@ -41,9 +51,9 @@ class CleanMergedJsCssTest extends \Magento\Framework\TestFramework\Unit\BaseTes
     public function testAfterCleanMergedJsCss()
     {
         $readDir = 'read directory';
-        $mergedDir = $readDir .  '/' . \Magento\Framework\View\Asset\Merged::getRelativeDir();
+        $mergedDir = $readDir . '/' . Merged::getRelativeDir();
 
-        $readDirectoryMock = $this->basicMock(\Magento\Framework\Filesystem\Directory\ReadInterface::class);
+        $readDirectoryMock = $this->basicMock(ReadInterface::class);
         $readDirectoryMock->expects($this->any())->method('getAbsolutePath')->willReturn($readDir);
 
         $this->databaseMock->expects($this->once())
@@ -55,7 +65,7 @@ class CleanMergedJsCssTest extends \Magento\Framework\TestFramework\Unit\BaseTes
             ->willReturn($readDirectoryMock);
 
         $this->model->afterCleanMergedJsCss(
-            $this->basicMock(\Magento\Framework\View\Asset\MergeService::class),
+            $this->basicMock(MergeService::class),
             null
         );
     }

@@ -3,9 +3,15 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Indexer\Test\Unit\Block\Backend\Grid;
 
-class ItemsUpdaterTest extends \PHPUnit\Framework\TestCase
+use Magento\Framework\AuthorizationInterface;
+use Magento\Indexer\Block\Backend\Grid\ItemsUpdater;
+use PHPUnit\Framework\TestCase;
+
+class ItemsUpdaterTest extends TestCase
 {
     /**
      * @param bool $argument
@@ -15,7 +21,7 @@ class ItemsUpdaterTest extends \PHPUnit\Framework\TestCase
     {
         $params = ['change_mode_onthefly' => 1, 'change_mode_changelog' => 2];
 
-        $auth = $this->getMockBuilder(\Magento\Framework\AuthorizationInterface::class)
+        $auth = $this->getMockBuilder(AuthorizationInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $auth->expects($this->once())
@@ -23,7 +29,7 @@ class ItemsUpdaterTest extends \PHPUnit\Framework\TestCase
             ->with('Magento_Indexer::changeMode')
             ->willReturn($argument);
 
-        $model = new \Magento\Indexer\Block\Backend\Grid\ItemsUpdater($auth);
+        $model = new ItemsUpdater($auth);
         $params = $model->update($params);
         $this->assertEquals(
             $argument,

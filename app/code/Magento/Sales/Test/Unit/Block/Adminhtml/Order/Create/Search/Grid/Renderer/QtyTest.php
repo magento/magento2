@@ -3,33 +3,46 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Sales\Test\Unit\Block\Adminhtml\Order\Create\Search\Grid\Renderer;
 
-class QtyTest extends \PHPUnit\Framework\TestCase
+use Magento\Backend\Block\Widget\Grid\Column;
+use Magento\Catalog\Model\ProductTypes\ConfigInterface;
+use Magento\Framework\DataObject;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Sales\Block\Adminhtml\Order\Create\Search\Grid\Renderer\Qty;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class QtyTest extends TestCase
 {
     /**
-     * @var \Magento\Sales\Block\Adminhtml\Order\Create\Search\Grid\Renderer\Qty
+     * @var Qty
      */
     protected $renderer;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $rowMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $typeConfigMock;
 
     protected function setUp(): void
     {
-        $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $helper = new ObjectManager($this);
 
-        $this->rowMock = $this->createPartialMock(\Magento\Framework\DataObject::class, ['getTypeId', 'getIndex']);
-        $this->typeConfigMock = $this->createMock(\Magento\Catalog\Model\ProductTypes\ConfigInterface::class);
+        $this->rowMock = $this->getMockBuilder(DataObject::class)
+            ->addMethods(['getTypeId', 'getIndex'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->typeConfigMock = $this->createMock(ConfigInterface::class);
         $this->renderer = $helper->getObject(
-            \Magento\Sales\Block\Adminhtml\Order\Create\Search\Grid\Renderer\Qty::class,
+            Qty::class,
             ['typeConfig' => $this->typeConfigMock]
         );
     }
@@ -48,10 +61,11 @@ class QtyTest extends \PHPUnit\Framework\TestCase
             true
         );
         $this->rowMock->expects($this->once())->method('getTypeId')->willReturn('id');
-        $columnMock = $this->createPartialMock(
-            \Magento\Backend\Block\Widget\Grid\Column::class,
-            ['getInlineCss', 'getId']
-        );
+        $columnMock = $this->getMockBuilder(Column::class)
+            ->addMethods(['getInlineCss'])
+            ->onlyMethods(['getId'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->renderer->setColumn($columnMock);
 
         $columnMock->expects($this->once())->method('getId')->willReturn('id_name');

@@ -3,15 +3,20 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\SalesRule\Test\Unit\Model\Validator;
+
+use Magento\SalesRule\Model\Validator\Pool;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test Class PoolTest
  */
-class PoolTest extends \PHPUnit\Framework\TestCase
+class PoolTest extends TestCase
 {
     /**
-     * @var \Magento\SalesRule\Model\Validator\Pool;
+     * @var Pool ;
      */
     protected $pool;
 
@@ -23,7 +28,7 @@ class PoolTest extends \PHPUnit\Framework\TestCase
     protected function setUp(): void
     {
         $this->validators = ['discount' => ['validator1', 'validator2']];
-        $this->pool = new \Magento\SalesRule\Model\Validator\Pool($this->validators);
+        $this->pool = new Pool($this->validators);
     }
 
     public function testGetValidators()

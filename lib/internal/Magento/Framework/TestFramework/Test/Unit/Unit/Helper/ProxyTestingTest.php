@@ -3,9 +3,14 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\TestFramework\Test\Unit\Unit\Helper;
 
-class ProxyTestingTest extends \PHPUnit\Framework\TestCase
+use Magento\Framework\TestFramework\Unit\Helper\ProxyTesting;
+use PHPUnit\Framework\TestCase;
+
+class ProxyTestingTest extends TestCase
 {
     /**
      * @param string $method
@@ -30,20 +35,24 @@ class ProxyTestingTest extends \PHPUnit\Framework\TestCase
         $expectedResult
     ) {
         // Create proxied object with $callProxiedMethod
-        $proxiedObject = $this->createPartialMock('stdClass', [$callProxiedMethod]);
+        $proxiedObject = $this->getMockBuilder('stdClass')
+            ->addMethods([$callProxiedMethod])
+            ->getMock();
 
         // Create object, which reacts on called $method by calling $callProxiedMethod from proxied object
         $callProxy = function () use ($proxiedObject, $callProxiedMethod, $passProxiedParams) {
             return call_user_func_array([$proxiedObject, $callProxiedMethod], $passProxiedParams);
         };
 
-        $object = $this->createPartialMock('stdClass', [$method]);
+        $object = $this->getMockBuilder('stdClass')
+            ->addMethods([$method])
+            ->getMock();
         $builder = $object->expects($this->once())->method($method);
         call_user_func_array([$builder, 'with'], $params);
         $builder->willReturnCallback($callProxy);
 
         // Test it
-        $helper = new \Magento\Framework\TestFramework\Unit\Helper\ProxyTesting();
+        $helper = new ProxyTesting();
         $result = $helper->invokeWithExpectations(
             $object,
             $proxiedObject,

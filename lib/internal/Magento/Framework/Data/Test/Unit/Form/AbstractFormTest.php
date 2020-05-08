@@ -3,48 +3,55 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Framework\Data\Test\Unit\Form;
 
-use \Magento\Framework\Data\Form\AbstractForm;
+use Magento\Framework\Data\Form\AbstractForm;
+use Magento\Framework\Data\Form\Element\AbstractElement;
+use Magento\Framework\Data\Form\Element\Collection;
+use Magento\Framework\Data\Form\Element\CollectionFactory;
+use Magento\Framework\Data\Form\Element\Factory;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class AbstractFormTest extends \PHPUnit\Framework\TestCase
+class AbstractFormTest extends TestCase
 {
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $factoryElementMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $factoryCollectionMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $elementMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $allElementsMock;
 
     /**
-     * @var \Magento\Framework\Data\Form\AbstractForm
+     * @var AbstractForm
      */
     protected $abstractForm;
 
     protected function setUp(): void
     {
         $this->factoryElementMock =
-            $this->createPartialMock(\Magento\Framework\Data\Form\Element\Factory::class, ['create']);
+            $this->createPartialMock(Factory::class, ['create']);
         $this->factoryCollectionMock =
-            $this->createPartialMock(\Magento\Framework\Data\Form\Element\CollectionFactory::class, ['create']);
+            $this->createPartialMock(CollectionFactory::class, ['create']);
         $this->allElementsMock =
-            $this->createMock(\Magento\Framework\Data\Form\Element\Collection::class);
+            $this->createMock(Collection::class);
         $this->elementMock =
-            $this->createMock(\Magento\Framework\Data\Form\Element\AbstractElement::class);
+            $this->createMock(AbstractElement::class);
 
         $this->abstractForm = new AbstractForm($this->factoryElementMock, $this->factoryCollectionMock, []);
     }

@@ -3,11 +3,18 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Translation\Test\Unit\Block;
 
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Translation\Block\Js;
+use Magento\Translation\Model\FileManager;
+use Magento\Translation\Model\Js\Config;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class JsTest extends \PHPUnit\Framework\TestCase
+class JsTest extends TestCase
 {
     /**
      * @var Js
@@ -15,26 +22,26 @@ class JsTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $configMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $fileManagerMock;
 
     protected function setUp(): void
     {
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->configMock = $this->getMockBuilder(\Magento\Translation\Model\Js\Config::class)
+        $objectManager = new ObjectManager($this);
+        $this->configMock = $this->getMockBuilder(Config::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->fileManagerMock = $this->getMockBuilder(\Magento\Translation\Model\FileManager::class)
+        $this->fileManagerMock = $this->getMockBuilder(FileManager::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->model = $objectManager->getObject(
-            \Magento\Translation\Block\Js::class,
+            Js::class,
             [
                 'config' => $this->configMock,
                 'fileManager' => $this->fileManagerMock

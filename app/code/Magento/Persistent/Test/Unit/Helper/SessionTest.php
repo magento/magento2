@@ -8,48 +8,55 @@ declare(strict_types=1);
 
 namespace Magento\Persistent\Test\Unit\Helper;
 
-use Magento\Persistent\Helper\Session as SessionHelper;
-use Magento\Framework\App\Helper\Context;
-use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Checkout\Model\Session as CheckoutSession;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\Helper\Context;
 use Magento\Persistent\Helper\Data as DataHelper;
-use Magento\Persistent\Model\SessionFactory;
+use Magento\Persistent\Helper\Session as SessionHelper;
 use Magento\Persistent\Model\Session;
+use Magento\Persistent\Model\SessionFactory;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Class \Magento\Persistent\Test\Unit\Helper\SessionTest
  */
-class SessionTest extends \PHPUnit\Framework\TestCase
+class SessionTest extends TestCase
 {
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|Context
+     * @var MockObject|Context
      */
     private $context;
 
     /**
-     * @var  \PHPUnit\Framework\MockObject\MockObject|SessionHelper
+     * @var  MockObject|SessionHelper
      */
     private $helper;
 
     /**
-     * @var  \PHPUnit\Framework\MockObject\MockObject|DataHelper
+     * @var  MockObject|DataHelper
      */
     private $dataHelper;
 
     /**
-     * @var  \PHPUnit\Framework\MockObject\MockObject|CheckoutSession
+     * @var  MockObject|CheckoutSession
      */
     private $checkoutSession;
 
     /**
-     * @var  \PHPUnit\Framework\MockObject\MockObject|SessionFactory
+     * @var  MockObject|SessionFactory
      */
     private $sessionFactory;
 
     /**
-     * @var  \PHPUnit\Framework\MockObject\MockObject|Session
+     * @var  MockObject|Session
      */
     private $session;
+
+    /**
+     * @var MockObject|ScopeConfigInterface
+     */
+    private $scopeConfig;
 
     /**
      * Setup environment
@@ -67,7 +74,7 @@ class SessionTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $this->scopeConfig = $this->getMockBuilder(ScopeConfigInterface::class)
             ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+            ->getMock();
         $this->sessionFactory = $this->getMockBuilder(SessionFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])

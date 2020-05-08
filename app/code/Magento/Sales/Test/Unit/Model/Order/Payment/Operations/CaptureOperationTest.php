@@ -18,31 +18,33 @@ use Magento\Sales\Model\Order\Payment\Operations\ProcessInvoiceOperation;
 use Magento\Sales\Model\Order\Payment\State\CommandInterface;
 use Magento\Sales\Model\Order\Payment\Transaction\BuilderInterface;
 use Magento\Sales\Model\Order\Payment\Transaction\ManagerInterface as TransactionManagerInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class CaptureOperationTest extends \PHPUnit\Framework\TestCase
+class CaptureOperationTest extends TestCase
 {
     /**
-     * @var TransactionManagerInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var TransactionManagerInterface|MockObject
      */
     private $transactionManager;
 
     /**
-     * @var EventManagerInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var EventManagerInterface|MockObject
      */
     private $eventManager;
 
     /**
-     * @var BuilderInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var BuilderInterface|MockObject
      */
     private $transactionBuilder;
 
     /**
-     * @var CommandInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var CommandInterface|MockObject
      */
     private $stateCommand;
 
     /**
-     * @var ProcessInvoiceOperation|\PHPUnit\Framework\MockObject\MockObject
+     * @var ProcessInvoiceOperation|MockObject
      */
     private $processInvoiceOperation;
 
@@ -103,7 +105,7 @@ class CaptureOperationTest extends \PHPUnit\Framework\TestCase
         $paymentMethod->method('canCapture')
             ->willReturn(true);
 
-        /** @var Payment|\PHPUnit\Framework\MockObject\MockObject  $orderPayment| */
+        /** @var Payment|MockObject  $orderPayment | */
         $orderPayment = $this->getMockBuilder(Payment::class)
             ->setMethods(['setCreatedInvoice', 'getOrder', 'getMethodInstance', 'getIsFraudDetected'])
             ->disableOriginalConstructor()
@@ -131,12 +133,12 @@ class CaptureOperationTest extends \PHPUnit\Framework\TestCase
      */
     public function testCaptureWithInvoice()
     {
-        /** @var Invoice|\PHPUnit\Framework\MockObject\MockObject  $invoice */
+        /** @var Invoice|MockObject  $invoice */
         $invoice = $this->getMockBuilder(Invoice::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        /** @var Payment|\PHPUnit\Framework\MockObject\MockObject  $orderPayment| */
+        /** @var Payment|MockObject  $orderPayment | */
         $orderPayment = $this->getMockBuilder(Payment::class)
             ->disableOriginalConstructor()
             ->getMock();

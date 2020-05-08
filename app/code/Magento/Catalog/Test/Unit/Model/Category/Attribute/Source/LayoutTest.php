@@ -3,16 +3,22 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Catalog\Test\Unit\Model\Category\Attribute\Source;
 
+use Magento\Catalog\Model\Category\Attribute\Source\Layout;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\View\Model\PageLayout\Config\BuilderInterface;
+use Magento\Framework\View\PageLayout\Config;
+use PHPUnit\Framework\TestCase;
 
-class LayoutTest extends \PHPUnit\Framework\TestCase
+class LayoutTest extends TestCase
 {
     private $testArray = ['test1', ['test1']];
 
     /**
-     * @var \Magento\Catalog\Model\Category\Attribute\Source\Layout
+     * @var Layout
      */
     private $model;
 
@@ -27,7 +33,7 @@ class LayoutTest extends \PHPUnit\Framework\TestCase
     {
         $helper = new ObjectManager($this);
         $this->model = $helper->getObject(
-            \Magento\Catalog\Model\Category\Attribute\Source\Layout::class,
+            Layout::class,
             [
                 'pageLayoutBuilder' => $this->getMockedPageLayoutBuilder()
             ]
@@ -35,11 +41,11 @@ class LayoutTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return \Magento\Framework\View\Model\PageLayout\Config\BuilderInterface
+     * @return BuilderInterface
      */
     private function getMockedPageLayoutBuilder()
     {
-        $mockPageLayoutConfig = $this->getMockBuilder(\Magento\Framework\View\PageLayout\Config::class)
+        $mockPageLayoutConfig = $this->getMockBuilder(Config::class)
             ->disableOriginalConstructor()
             ->getMock();
         $mockPageLayoutConfig->expects($this->any())
@@ -47,8 +53,9 @@ class LayoutTest extends \PHPUnit\Framework\TestCase
             ->willReturn($this->testArray);
 
         $mockPageLayoutBuilder = $this->getMockBuilder(
-            \Magento\Framework\View\Model\PageLayout\Config\BuilderInterface::class
-        )->disableOriginalConstructor()->getMock();
+            BuilderInterface::class
+        )->disableOriginalConstructor()
+            ->getMock();
         $mockPageLayoutBuilder->expects($this->once())
             ->method('getPageLayoutsConfig')
             ->willReturn($mockPageLayoutConfig);

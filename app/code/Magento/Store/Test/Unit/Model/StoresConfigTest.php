@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Test class for \Magento\Store\Model\Store\StoresConfig
  *
@@ -8,41 +8,48 @@
 
 namespace Magento\Store\Test\Unit\Model;
 
-class StoresConfigTest extends \PHPUnit\Framework\TestCase
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Store\Model\Store;
+use Magento\Store\Model\StoreManagerInterface;
+use Magento\Store\Model\StoresConfig;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class StoresConfigTest extends TestCase
 {
     /**
-     * @var \Magento\Store\Model\StoresConfig
+     * @var StoresConfig
      */
     protected $_model;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $_storeManager;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $_storeOne;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $_storeTwo;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $_config;
 
     protected function setUp(): void
     {
-        $this->_storeOne = $this->createMock(\Magento\Store\Model\Store::class);
-        $this->_storeTwo = $this->createMock(\Magento\Store\Model\Store::class);
-        $this->_storeManager = $this->createMock(\Magento\Store\Model\StoreManagerInterface::class);
-        $this->_config = $this->createMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
+        $this->_storeOne = $this->createMock(Store::class);
+        $this->_storeTwo = $this->createMock(Store::class);
+        $this->_storeManager = $this->createMock(StoreManagerInterface::class);
+        $this->_config = $this->createMock(ScopeConfigInterface::class);
 
-        $this->_model = new \Magento\Store\Model\StoresConfig(
+        $this->_model = new StoresConfig(
             $this->_storeManager,
             $this->_config
         );

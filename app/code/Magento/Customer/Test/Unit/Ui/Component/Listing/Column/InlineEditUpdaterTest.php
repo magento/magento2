@@ -3,21 +3,26 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Customer\Test\Unit\Ui\Component\Listing\Column;
 
-use Magento\Customer\Ui\Component\Listing\Column\ValidationRules;
-use Magento\Customer\Ui\Component\Listing\Column\InlineEditUpdater;
 use Magento\Customer\Api\Data\ValidationRuleInterface;
+use Magento\Customer\Ui\Component\Listing\Column\InlineEditUpdater;
+use Magento\Customer\Ui\Component\Listing\Column\ValidationRules;
+use Magento\Framework\View\Element\UiComponentInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class InlineEditUpdaterTest extends \PHPUnit\Framework\TestCase
+class InlineEditUpdaterTest extends TestCase
 {
-    /** @var ValidationRules|\PHPUnit\Framework\MockObject\MockObject  */
+    /** @var ValidationRules|MockObject  */
     protected $validationRules;
 
-    /** @var ValidationRuleInterface|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var ValidationRuleInterface|MockObject */
     protected $validationRule;
 
-    /** @var \Magento\Framework\View\Element\UiComponentInterface|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var UiComponentInterface|MockObject */
     protected $column;
 
     /** @var InlineEditUpdater */
@@ -26,14 +31,15 @@ class InlineEditUpdaterTest extends \PHPUnit\Framework\TestCase
     protected function setUp(): void
     {
         $this->validationRules = $this->getMockBuilder(
-            \Magento\Customer\Ui\Component\Listing\Column\ValidationRules::class
-        )->disableOriginalConstructor()->getMock();
+            ValidationRules::class
+        )->disableOriginalConstructor()
+            ->getMock();
 
-        $this->validationRule = $this->getMockBuilder(\Magento\Customer\Api\Data\ValidationRuleInterface::class)
+        $this->validationRule = $this->getMockBuilder(ValidationRuleInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->column = $this->getMockBuilder(\Magento\Framework\View\Element\UiComponentInterface::class)
+        $this->column = $this->getMockBuilder(UiComponentInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
 

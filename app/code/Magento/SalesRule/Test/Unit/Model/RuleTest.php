@@ -3,40 +3,51 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\SalesRule\Test\Unit\Model;
 
-class RuleTest extends \PHPUnit\Framework\TestCase
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\SalesRule\Model\Coupon;
+use Magento\SalesRule\Model\CouponFactory;
+use Magento\SalesRule\Model\Rule;
+use Magento\SalesRule\Model\Rule\Condition\CombineFactory;
+use Magento\SalesRule\Model\Rule\Condition\Product\Combine;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class RuleTest extends TestCase
 {
     /**
-     * @var \Magento\SalesRule\Model\Rule
+     * @var Rule
      */
     protected $model;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $coupon;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\SalesRule\Model\Rule\Condition\CombineFactory
+     * @var MockObject|CombineFactory
      */
     protected $conditionCombineFactoryMock;
 
     /**
-     * @var \Magento\SalesRule\Model\Rule\Condition\Product\CombineFactory|\PHPUnit\Framework\MockObject\MockObject
+     * @var \Magento\SalesRule\Model\Rule\Condition\Product\CombineFactory|MockObject
      */
     protected $condProdCombineFactoryMock;
 
     protected function setUp(): void
     {
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $objectManager = new ObjectManager($this);
 
-        $this->coupon = $this->getMockBuilder(\Magento\SalesRule\Model\Coupon::class)
+        $this->coupon = $this->getMockBuilder(Coupon::class)
             ->disableOriginalConstructor()
             ->setMethods(['loadPrimaryByRule', 'setRule', 'setIsPrimary', 'getCode', 'getUsageLimit'])
             ->getMock();
 
-        $couponFactory = $this->getMockBuilder(\Magento\SalesRule\Model\CouponFactory::class)
+        $couponFactory = $this->getMockBuilder(CouponFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
@@ -45,7 +56,7 @@ class RuleTest extends \PHPUnit\Framework\TestCase
             ->willReturn($this->coupon);
 
         $this->conditionCombineFactoryMock = $this->getMockBuilder(
-            \Magento\SalesRule\Model\Rule\Condition\CombineFactory::class
+            CombineFactory::class
         )->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
@@ -57,7 +68,7 @@ class RuleTest extends \PHPUnit\Framework\TestCase
             ->getMock();
 
         $this->model = $objectManager->getObject(
-            \Magento\SalesRule\Model\Rule::class,
+            Rule::class,
             [
                 'couponFactory' => $couponFactory,
                 'condCombineFactory' => $this->conditionCombineFactoryMock,
@@ -114,11 +125,11 @@ class RuleTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return \PHPUnit\Framework\MockObject\MockObject
+     * @return MockObject
      */
     protected function setupProdConditionMock()
     {
-        $prodConditionMock = $this->getMockBuilder(\Magento\SalesRule\Model\Rule\Condition\Product\Combine::class)
+        $prodConditionMock = $this->getMockBuilder(Combine::class)
             ->disableOriginalConstructor()
             ->setMethods(['setRule', 'setId', 'loadArray', 'getConditions'])
             ->getMock();
@@ -137,7 +148,7 @@ class RuleTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return \PHPUnit\Framework\MockObject\MockObject
+     * @return MockObject
      */
     protected function setupConditionMock()
     {

@@ -3,42 +3,50 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\CatalogRule\Test\Unit\Model\Indexer\Product;
 
+use Magento\Catalog\Model\Product;
+use Magento\CatalogRule\Model\Indexer\IndexBuilder;
+use Magento\CatalogRule\Model\Indexer\Product\ProductRuleIndexer;
+use Magento\Framework\Indexer\CacheContext;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class ProductRuleIndexerTest extends \PHPUnit\Framework\TestCase
+class ProductRuleIndexerTest extends TestCase
 {
     /**
-     * @var \Magento\CatalogRule\Model\Indexer\IndexBuilder|\PHPUnit\Framework\MockObject\MockObject
+     * @var IndexBuilder|MockObject
      */
     protected $indexBuilder;
 
     /**
-     * @var \Magento\CatalogRule\Model\Indexer\Product\ProductRuleIndexer
+     * @var ProductRuleIndexer
      */
     protected $indexer;
 
     /**
-     * @var \Magento\Framework\Indexer\CacheContext|\PHPUnit\Framework\MockObject\MockObject
+     * @var CacheContext|MockObject
      */
     protected $cacheContextMock;
 
     protected function setUp(): void
     {
-        $this->indexBuilder = $this->createMock(\Magento\CatalogRule\Model\Indexer\IndexBuilder::class);
+        $this->indexBuilder = $this->createMock(IndexBuilder::class);
 
         $this->indexer = (new ObjectManager($this))->getObject(
-            \Magento\CatalogRule\Model\Indexer\Product\ProductRuleIndexer::class,
+            ProductRuleIndexer::class,
             [
                 'indexBuilder' => $this->indexBuilder,
             ]
         );
 
-        $this->cacheContextMock = $this->createMock(\Magento\Framework\Indexer\CacheContext::class);
+        $this->cacheContextMock = $this->createMock(CacheContext::class);
 
         $cacheContextProperty = new \ReflectionProperty(
-            \Magento\CatalogRule\Model\Indexer\Product\ProductRuleIndexer::class,
+            ProductRuleIndexer::class,
             'cacheContext'
         );
         $cacheContextProperty->setAccessible(true);
@@ -57,7 +65,7 @@ class ProductRuleIndexerTest extends \PHPUnit\Framework\TestCase
             ->with($idsForIndexer);
         $this->cacheContextMock->expects($this->once())
             ->method('registerEntities')
-            ->with(\Magento\Catalog\Model\Product::CACHE_TAG, $ids);
+            ->with(Product::CACHE_TAG, $ids);
         $this->indexer->executeList($ids);
     }
 

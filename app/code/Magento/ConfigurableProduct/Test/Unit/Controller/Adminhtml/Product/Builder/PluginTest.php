@@ -3,96 +3,101 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\ConfigurableProduct\Test\Unit\Controller\Adminhtml\Product\Builder;
 
-class PluginTest extends \PHPUnit\Framework\TestCase
+use Magento\Catalog\Controller\Adminhtml\Product\Builder;
+use Magento\Catalog\Model\Product;
+use Magento\Catalog\Model\Product\Type;
+use Magento\Catalog\Model\ProductFactory;
+use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
+use Magento\ConfigurableProduct\Controller\Adminhtml\Product\Builder\Plugin;
+use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
+use Magento\Framework\App\Request\Http;
+use Magento\Quote\Model\ResourceModel\Quote\Address\Attribute\Frontend;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class PluginTest extends TestCase
 {
     /**
-     * @var \Magento\ConfigurableProduct\Controller\Adminhtml\Product\Builder\Plugin
+     * @var Plugin
      */
     protected $plugin;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $productFactoryMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $configurableTypeMock;
 
     /**
-     * @var \Magento\Framework\App\Request\Http|\PHPUnit\Framework\MockObject\MockObject
+     * @var Http|MockObject
      */
     protected $requestMock;
 
     /**
-     * @var \Magento\Catalog\Model\Product|\PHPUnit\Framework\MockObject\MockObject
+     * @var Product|MockObject
      */
     protected $productMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $attributeMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $configurableMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $frontendAttrMock;
 
     /**
-     * @var \Magento\Catalog\Controller\Adminhtml\Product\Builder|\PHPUnit\Framework\MockObject\MockObject
+     * @var Builder|MockObject
      */
     protected $subjectMock;
 
     protected function setUp(): void
     {
-        $this->productFactoryMock = $this->createPartialMock(\Magento\Catalog\Model\ProductFactory::class, ['create']);
+        $this->productFactoryMock = $this->createPartialMock(ProductFactory::class, ['create']);
         $this->configurableTypeMock = $this->createMock(
-            \Magento\ConfigurableProduct\Model\Product\Type\Configurable::class
+            Configurable::class
         );
-        $this->requestMock = $this->createMock(\Magento\Framework\App\Request\Http::class);
-        $methods = ['setTypeId', 'getAttributes', 'addData', 'setWebsiteIds', '__wakeup'];
-        $this->productMock = $this->createPartialMock(\Magento\Catalog\Model\Product::class, $methods);
-        $attributeMethods = [
-            'getId',
-            'getFrontend',
-            'getAttributeCode',
-            '__wakeup',
-            'setIsRequired',
-            'getIsUnique',
-        ];
+        $this->requestMock = $this->createMock(Http::class);
+        $this->productMock = $this->getMockBuilder(Product::class)
+            ->addMethods(['setWebsiteIds'])
+            ->onlyMethods(['setTypeId', 'getAttributes', 'addData'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->attributeMock = $this->createPartialMock(
-            \Magento\Catalog\Model\ResourceModel\Eav\Attribute::class,
-            $attributeMethods
+            Attribute::class,
+            [
+                'getId',
+                'getFrontend',
+                'getAttributeCode',
+                'setIsRequired',
+                'getIsUnique',
+            ]
         );
-        $configMethods = [
-            'setStoreId',
-            'getTypeInstance',
-            'getIdFieldName',
-            'getData',
-            'getWebsiteIds',
-            '__wakeup',
-            'load',
-            'setTypeId',
-            'getSetAttributes',
-        ];
-        $this->configurableMock = $this->createPartialMock(
-            \Magento\ConfigurableProduct\Model\Product\Type\Configurable::class,
-            $configMethods
-        );
+        $this->configurableMock = $this->getMockBuilder(Configurable::class)
+            ->addMethods(['setStoreId', 'getTypeInstance', 'getIdFieldName', 'getData', 'getWebsiteIds', 'load'])
+            ->onlyMethods(['setTypeId', 'getSetAttributes'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->frontendAttrMock = $this->createMock(
-            \Magento\Quote\Model\ResourceModel\Quote\Address\Attribute\Frontend::class
+            Frontend::class
         );
-        $this->subjectMock = $this->createMock(\Magento\Catalog\Controller\Adminhtml\Product\Builder::class);
-        $this->plugin = new \Magento\ConfigurableProduct\Controller\Adminhtml\Product\Builder\Plugin(
+        $this->subjectMock = $this->createMock(Builder::class);
+        $this->plugin = new Plugin(
             $this->productFactoryMock,
             $this->configurableTypeMock
         );
@@ -119,10 +124,8 @@ class PluginTest extends \PHPUnit\Framework\TestCase
         )->method(
             'setTypeId'
         )->with(
-            \Magento\ConfigurableProduct\Model\Product\Type\Configurable::TYPE_CODE
-        )->willReturnSelf(
-            
-        );
+            Configurable::TYPE_CODE
+        )->willReturnSelf();
         $this->productMock->expects(
             $this->once()
         )->method(
@@ -147,9 +150,7 @@ class PluginTest extends \PHPUnit\Framework\TestCase
             'setTypeId'
         )->with(
             'store_type'
-        )->willReturnSelf(
-            
-        );
+        )->willReturnSelf();
         $this->configurableMock->expects($this->once())->method('getTypeInstance')->willReturnSelf();
         $this->configurableMock->expects(
             $this->once()
@@ -199,9 +200,7 @@ class PluginTest extends \PHPUnit\Framework\TestCase
             'addData'
         )->with(
             [$attributeCode => 'attribute_data']
-        )->willReturnSelf(
-            
-        );
+        )->willReturnSelf();
         $this->configurableMock->expects(
             $this->once()
         )->method(
@@ -215,9 +214,7 @@ class PluginTest extends \PHPUnit\Framework\TestCase
             'setWebsiteIds'
         )->with(
             'website_id'
-        )->willReturnSelf(
-            
-        );
+        )->willReturnSelf();
 
         $this->assertEquals(
             $this->productMock,
@@ -240,7 +237,7 @@ class PluginTest extends \PHPUnit\Framework\TestCase
         )->method(
             'setTypeId'
         )->with(
-            \Magento\Catalog\Model\Product\Type::TYPE_SIMPLE
+            Type::TYPE_SIMPLE
         );
         $this->productMock->expects($this->never())->method('getAttributes');
         $this->productFactoryMock->expects($this->never())->method('create');

@@ -3,28 +3,33 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Ui\Test\Unit\Model\Export;
 
 use Magento\Framework\Api\Search\DocumentInterface;
+use Magento\Framework\Api\Search\SearchResultInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Convert\Excel;
 use Magento\Framework\Convert\ExcelFactory;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\WriteInterface as DirectoryWriteInterface;
 use Magento\Framework\Filesystem\File\WriteInterface as FileWriteInterface;
+use Magento\Framework\View\Element\UiComponent\ContextInterface;
+use Magento\Framework\View\Element\UiComponent\DataProvider\DataProviderInterface;
 use Magento\Framework\View\Element\UiComponentInterface;
 use Magento\Ui\Component\MassAction\Filter;
 use Magento\Ui\Model\Export\ConvertToXml;
 use Magento\Ui\Model\Export\MetadataProvider;
-use Magento\Ui\Model\Export\SearchResultIteratorFactory;
-use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Ui\Model\Export\SearchResultIterator;
-use Magento\Framework\Api\Search\SearchResultInterface;
-use Magento\Framework\View\Element\UiComponent\DataProvider\DataProviderInterface;
+use Magento\Ui\Model\Export\SearchResultIteratorFactory;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ConvertToXmlTest extends \PHPUnit\Framework\TestCase
+class ConvertToXmlTest extends TestCase
 {
     /**
      * @var ConvertToXml
@@ -32,42 +37,42 @@ class ConvertToXmlTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var Filesystem | \PHPUnit\Framework\MockObject\MockObject
+     * @var Filesystem|MockObject
      */
     protected $filesystem;
 
     /**
-     * @var Filter | \PHPUnit\Framework\MockObject\MockObject
+     * @var Filter|MockObject
      */
     protected $filter;
 
     /**
-     * @var MetadataProvider | \PHPUnit\Framework\MockObject\MockObject
+     * @var MetadataProvider|MockObject
      */
     protected $metadataProvider;
 
     /**
-     * @var ExcelFactory | \PHPUnit\Framework\MockObject\MockObject
+     * @var ExcelFactory|MockObject
      */
     protected $excelFactory;
 
     /**
-     * @var SearchResultIteratorFactory | \PHPUnit\Framework\MockObject\MockObject
+     * @var SearchResultIteratorFactory|MockObject
      */
     protected $iteratorFactory;
 
     /**
-     * @var DirectoryWriteInterface | \PHPUnit\Framework\MockObject\MockObject
+     * @var DirectoryWriteInterface|MockObject
      */
     protected $directory;
 
     /**
-     * @var FileWriteInterface | \PHPUnit\Framework\MockObject\MockObject
+     * @var FileWriteInterface|MockObject
      */
     protected $stream;
 
     /**
-     * @var UiComponentInterface | \PHPUnit\Framework\MockObject\MockObject
+     * @var UiComponentInterface|MockObject
      */
     protected $component;
 
@@ -97,7 +102,7 @@ class ConvertToXmlTest extends \PHPUnit\Framework\TestCase
             ->setMethods(['create'])
             ->getMock();
 
-        $this->iteratorFactory = $this->getMockBuilder(\Magento\Ui\Model\Export\SearchResultIteratorFactory::class)
+        $this->iteratorFactory = $this->getMockBuilder(SearchResultIteratorFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
@@ -177,8 +182,8 @@ class ConvertToXmlTest extends \PHPUnit\Framework\TestCase
         $this->assertArrayHasKey('type', $result);
         $this->assertArrayHasKey('value', $result);
         $this->assertArrayHasKey('rm', $result);
-        $this->assertContains($componentName, $result);
-        $this->assertContains('.xml', $result);
+        $this->assertStringContainsString($componentName, $result['value']);
+        $this->assertStringContainsString('.xml', $result['value']);
     }
 
     protected function mockStream()
@@ -204,7 +209,7 @@ class ConvertToXmlTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $excel = $this->getMockBuilder(\Magento\Framework\Convert\Excel::class)
+        $excel = $this->getMockBuilder(Excel::class)
             ->disableOriginalConstructor()
             ->getMock();
 

@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Customer\Test\Unit\Model;
 
@@ -73,7 +74,8 @@ class VisitorTest extends TestCase
                 'addCommitCallback',
                 'commit',
                 'clean',
-            ])->disableOriginalConstructor()->getMock();
+            ])->disableOriginalConstructor()
+            ->getMock();
         $this->visitorResourceModelMock->expects($this->any())->method('getIdFieldName')->willReturn('visitor_id');
         $this->visitorResourceModelMock->expects($this->any())->method('addCommitCallback')->willReturnSelf();
 

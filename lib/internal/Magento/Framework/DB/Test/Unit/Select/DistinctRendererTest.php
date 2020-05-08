@@ -3,23 +3,25 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Framework\DB\Test\Unit\Select;
 
 use Magento\Framework\DB\Select;
+use Magento\Framework\DB\Select\DistinctRenderer;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-/**
- * Class DistinctRendererTest
- */
-class DistinctRendererTest extends \PHPUnit\Framework\TestCase
+class DistinctRendererTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\DB\Select\DistinctRenderer
+     * @var DistinctRenderer
      */
     protected $model;
 
     /**
-     * @var \Magento\Framework\DB\Select|\PHPUnit\Framework\MockObject\MockObject
+     * @var Select|MockObject
      */
     protected $selectMock;
 
@@ -30,9 +32,9 @@ class DistinctRendererTest extends \PHPUnit\Framework\TestCase
      */
     protected function setUp(): void
     {
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->selectMock = $this->createPartialMock(\Magento\Framework\DB\Select::class, ['getPart']);
-        $this->model = $objectManager->getObject(\Magento\Framework\DB\Select\DistinctRenderer::class);
+        $objectManager = new ObjectManager($this);
+        $this->selectMock = $this->createPartialMock(Select::class, ['getPart']);
+        $this->model = $objectManager->getObject(DistinctRenderer::class);
     }
 
     public function testRenderNoPart()
@@ -48,7 +50,7 @@ class DistinctRendererTest extends \PHPUnit\Framework\TestCase
     public function testRender()
     {
         $sql = 'SELECT';
-        $expectedResult = $sql . ' ' . Select::SQL_DISTINCT  . ' ';
+        $expectedResult = $sql . ' ' . Select::SQL_DISTINCT . ' ';
         $this->selectMock->expects($this->once())
             ->method('getPart')
             ->with(Select::DISTINCT)

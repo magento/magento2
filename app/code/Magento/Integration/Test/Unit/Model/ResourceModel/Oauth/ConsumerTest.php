@@ -3,25 +3,37 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Integration\Test\Unit\Model\ResourceModel\Oauth;
+
+use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Framework\DB\Adapter\Pdo\Mysql;
+use Magento\Framework\DB\Select;
+use Magento\Framework\Model\ResourceModel\Db\Context;
+use Magento\Framework\Stdlib\DateTime;
+use Magento\Integration\Model\Oauth\Consumer;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Unit test for \Magento\Integration\Model\ResourceModel\Oauth\Consumer
  */
-class ConsumerTest extends \PHPUnit\Framework\TestCase
+class ConsumerTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\DB\Adapter\AdapterInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var AdapterInterface|MockObject
      */
     protected $connectionMock;
 
     /**
-     * @var \Magento\Framework\App\ResourceConnection|\PHPUnit\Framework\MockObject\MockObject
+     * @var ResourceConnection|MockObject
      */
     protected $resourceMock;
 
     /**
-     * @var \Magento\Integration\Model\Oauth\Consumer
+     * @var Consumer
      */
     protected $consumerMock;
 
@@ -32,21 +44,22 @@ class ConsumerTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp(): void
     {
-        $this->consumerMock = $this->createPartialMock(
-            \Magento\Integration\Model\Oauth\Consumer::class,
-            ['setUpdatedAt', 'getId']
-        );
+        $this->consumerMock = $this->getMockBuilder(Consumer::class)
+            ->addMethods(['setUpdatedAt'])
+            ->onlyMethods(['getId'])
+            ->disableOriginalConstructor()
+            ->getMock();
 
-        $this->connectionMock = $this->createMock(\Magento\Framework\DB\Adapter\Pdo\Mysql::class);
+        $this->connectionMock = $this->createMock(Mysql::class);
 
-        $this->resourceMock = $this->createMock(\Magento\Framework\App\ResourceConnection::class);
+        $this->resourceMock = $this->createMock(ResourceConnection::class);
         $this->resourceMock->expects($this->any())->method('getConnection')->willReturn($this->connectionMock);
 
-        $contextMock = $this->createMock(\Magento\Framework\Model\ResourceModel\Db\Context::class);
+        $contextMock = $this->createMock(Context::class);
         $contextMock->expects($this->once())->method('getResources')->willReturn($this->resourceMock);
         $this->consumerResource = new \Magento\Integration\Model\ResourceModel\Oauth\Consumer(
             $contextMock,
-            new \Magento\Framework\Stdlib\DateTime()
+            new DateTime()
         );
     }
 
@@ -61,7 +74,7 @@ class ConsumerTest extends \PHPUnit\Framework\TestCase
 
     public function testGetTimeInSecondsSinceCreation()
     {
-        $selectMock = $this->createMock(\Magento\Framework\DB\Select::class);
+        $selectMock = $this->createMock(Select::class);
         $selectMock->expects($this->any())->method('from')->willReturn($selectMock);
         $selectMock->expects($this->any())->method('reset')->willReturn($selectMock);
         $selectMock->expects($this->any())->method('columns')->willReturn($selectMock);

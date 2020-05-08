@@ -3,17 +3,20 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Analytics\Test\Unit\ReportXml;
 
 use Magento\Analytics\ReportXml\SelectHydrator;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Select;
-use Magento\Framework\DB\Sql\JsonSerializableExpression;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class SelectHydratorTest extends \PHPUnit\Framework\TestCase
+class SelectHydratorTest extends TestCase
 {
     /**
      * @var SelectHydrator
@@ -21,22 +24,22 @@ class SelectHydratorTest extends \PHPUnit\Framework\TestCase
     private $selectHydrator;
 
     /**
-     * @var ResourceConnection|\PHPUnit\Framework\MockObject\MockObject
+     * @var ResourceConnection|MockObject
      */
     private $resourceConnectionMock;
 
     /**
-     * @var AdapterInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var AdapterInterface|MockObject
      */
     private $connectionMock;
 
     /**
-     * @var Select|\PHPUnit\Framework\MockObject\MockObject
+     * @var Select|MockObject
      */
     private $selectMock;
 
     /**
-     * @var ObjectManagerInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var ObjectManagerInterface|MockObject
      */
     private $objectManagerMock;
 
@@ -50,21 +53,13 @@ class SelectHydratorTest extends \PHPUnit\Framework\TestCase
      */
     protected function setUp(): void
     {
-        $this->resourceConnectionMock = $this->getMockBuilder(ResourceConnection::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->resourceConnectionMock = $this->createMock(ResourceConnection::class);
 
-        $this->connectionMock = $this->getMockBuilder(AdapterInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->connectionMock = $this->createMock(AdapterInterface::class);
 
-        $this->selectMock = $this->getMockBuilder(Select::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->selectMock = $this->createMock(Select::class);
 
-        $this->objectManagerMock = $this->getMockBuilder(ObjectManagerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->objectManagerMock = $this->createMock(ObjectManagerInterface::class);
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
 
@@ -98,7 +93,7 @@ class SelectHydratorTest extends \PHPUnit\Framework\TestCase
         foreach ($selectParts as $part) {
             $result[$part] = "Part";
         }
-        $this->selectMock->expects($this->any())
+        $this->selectMock
             ->method('getPart')
             ->willReturn("Part");
         $this->assertEquals($this->selectHydrator->extract($this->selectMock), $result);
@@ -169,7 +164,7 @@ class SelectHydratorTest extends \PHPUnit\Framework\TestCase
      * @dataProvider recreateWithExpressionDataProvider
      * @param array $selectParts
      * @param array $expectedParts
-     * @param \PHPUnit\Framework\MockObject\MockObject[] $expressionMocks
+     * @param MockObject[] $expressionMocks
      */
     public function testRecreateWithExpression(
         array $selectParts,
@@ -206,9 +201,7 @@ class SelectHydratorTest extends \PHPUnit\Framework\TestCase
      */
     public function recreateWithExpressionDataProvider()
     {
-        $expressionMock = $this->getMockBuilder(JsonSerializableExpression::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $expressionMock = $this->createMock(\JsonSerializable::class);
 
         return [
             'Select without expressions' => [

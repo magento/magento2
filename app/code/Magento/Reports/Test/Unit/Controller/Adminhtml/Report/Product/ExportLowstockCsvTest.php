@@ -3,20 +3,26 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Reports\Test\Unit\Controller\Adminhtml\Report\Product;
 
+use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Stdlib\DateTime\Filter\Date;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Reports\Controller\Adminhtml\Report\Product\ExportLowstockCsv;
+use Magento\Reports\Test\Unit\Controller\Adminhtml\Report\AbstractControllerTest;
+use PHPUnit\Framework\MockObject\MockObject;
 
-class ExportLowstockCsvTest extends \Magento\Reports\Test\Unit\Controller\Adminhtml\Report\AbstractControllerTest
+class ExportLowstockCsvTest extends AbstractControllerTest
 {
     /**
-     * @var \Magento\Reports\Controller\Adminhtml\Report\Product\ExportLowstockCsv
+     * @var ExportLowstockCsv
      */
     protected $exportLowstockCsv;
 
     /**
-     * @var \Magento\Framework\Stdlib\DateTime\Filter\Date|\PHPUnit\Framework\MockObject\MockObject
+     * @var Date|MockObject
      */
     protected $dateMock;
 
@@ -27,13 +33,13 @@ class ExportLowstockCsvTest extends \Magento\Reports\Test\Unit\Controller\Adminh
     {
         parent::setUp();
 
-        $this->dateMock = $this->getMockBuilder(\Magento\Framework\Stdlib\DateTime\Filter\Date::class)
+        $this->dateMock = $this->getMockBuilder(Date::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $objectManager = new ObjectManager($this);
         $this->exportLowstockCsv = $objectManager->getObject(
-            \Magento\Reports\Controller\Adminhtml\Report\Product\ExportLowstockCsv::class,
+            ExportLowstockCsv::class,
             [
                 'context' => $this->contextMock,
                 'fileFactory' => $this->fileFactoryMock,
@@ -63,7 +69,7 @@ class ExportLowstockCsvTest extends \Magento\Reports\Test\Unit\Controller\Adminh
         $this->fileFactoryMock
             ->expects($this->once())
             ->method('create')
-            ->with('products_lowstock.csv', $content, \Magento\Framework\App\Filesystem\DirectoryList::VAR_DIR);
+            ->with('products_lowstock.csv', $content, DirectoryList::VAR_DIR);
 
         $this->exportLowstockCsv->execute();
     }

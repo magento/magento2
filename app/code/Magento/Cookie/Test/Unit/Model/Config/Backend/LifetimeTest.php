@@ -1,40 +1,49 @@
 <?php
 /**
- * Unit test for Magento\Cookie\Model\Config\Backend\Lifetime
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Cookie\Test\Unit\Model\Config\Backend;
 
+use Magento\Cookie\Model\Config\Backend\Lifetime;
+use Magento\Framework\Module\ModuleResource;
 use Magento\Framework\Session\Config\Validator\CookieLifetimeValidator;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class LifetimeTest extends \PHPUnit\Framework\TestCase
+/**
+ * @covers \Magento\Cookie\Model\Config\Backend\Lifetime
+ */
+class LifetimeTest extends TestCase
 {
-    /** @var \PHPUnit\Framework\MockObject\MockObject | CookieLifetimeValidator */
+    /** @var MockObject|CookieLifetimeValidator */
     private $validatorMock;
 
-    /** @var \PHPUnit\Framework\MockObject\MockObject | \Magento\Framework\Module\ModuleResource */
+    /** @var MockObject|ModuleResource */
     private $resourceMock;
 
-    /** @var \Magento\Cookie\Model\Config\Backend\Lifetime */
+    /** @var Lifetime */
     private $model;
 
+    /**
+     * @inheritDoc
+     */
     protected function setUp(): void
     {
-        $this->validatorMock = $this->getMockBuilder(
-            \Magento\Framework\Session\Config\Validator\CookieLifetimeValidator::class
-        )->disableOriginalConstructor()
+        $this->validatorMock = $this->getMockBuilder(CookieLifetimeValidator::class)
+            ->disableOriginalConstructor()
             ->getMock();
-        $this->resourceMock = $this->getMockBuilder(\Magento\Framework\Module\ModuleResource::class)
+
+        $this->resourceMock = $this->getMockBuilder(ModuleResource::class)
             ->disableOriginalConstructor('delete')
             ->getMock();
 
         $objectManager = new ObjectManager($this);
         $this->model = $objectManager->getObject(
-            \Magento\Cookie\Model\Config\Backend\Lifetime::class,
+            Lifetime::class,
             [
                 'configValidator' => $this->validatorMock,
                 'resource' => $this->resourceMock
@@ -44,13 +53,11 @@ class LifetimeTest extends \PHPUnit\Framework\TestCase
 
     /**
      * Method is not publicly accessible, so it must be called through parent
-     *
      */
-    public function testBeforeSaveException()
+    public function testBeforeSaveException(): void
     {
-        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+        $this->expectException('Magento\Framework\Exception\LocalizedException');
         $this->expectExceptionMessage('Invalid cookie lifetime: must be numeric');
-
         $invalidCookieLifetime = 'invalid lifetime';
         $messages = ['must be numeric'];
         $this->validatorMock->expects($this->once())
@@ -71,7 +78,7 @@ class LifetimeTest extends \PHPUnit\Framework\TestCase
      * No assertions exist because the purpose of the test is to make sure that no
      * exception gets thrown
      */
-    public function testBeforeSaveNoException()
+    public function testBeforeSaveNoException(): void
     {
         $validCookieLifetime = 1;
         $this->validatorMock->expects($this->once())
@@ -89,7 +96,7 @@ class LifetimeTest extends \PHPUnit\Framework\TestCase
      * No assertions exist because the purpose of the test is to make sure that no
      * exception gets thrown
      */
-    public function testBeforeEmptyString()
+    public function testBeforeEmptyString(): void
     {
         $validCookieLifetime = '';
         $this->validatorMock->expects($this->never())

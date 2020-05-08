@@ -3,21 +3,25 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Deploy\Test\Unit\Model\DeploymentConfig;
 
 use Magento\Deploy\Model\DeploymentConfig\DataCollector;
 use Magento\Deploy\Model\DeploymentConfig\ImporterPool;
 use Magento\Framework\App\DeploymentConfig;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class DataCollectorTest extends \PHPUnit\Framework\TestCase
+class DataCollectorTest extends TestCase
 {
     /**
-     * @var ImporterPool|\PHPUnit\Framework\MockObject\MockObject
+     * @var ImporterPool|MockObject
      */
     private $configImporterPoolMock;
 
     /**
-     * @var DeploymentConfig|\PHPUnit\Framework\MockObject\MockObject
+     * @var DeploymentConfig|MockObject
      */
     private $deploymentConfigMock;
 

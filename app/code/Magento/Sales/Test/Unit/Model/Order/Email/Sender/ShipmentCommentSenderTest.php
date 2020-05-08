@@ -3,30 +3,36 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Sales\Test\Unit\Model\Order\Email\Sender;
 
+use Magento\Sales\Api\Data\OrderInterface;
+use Magento\Sales\Model\Order\Email\Container\ShipmentCommentIdentity;
 use Magento\Sales\Model\Order\Email\Sender\ShipmentCommentSender;
+use Magento\Sales\Model\Order\Shipment;
+use PHPUnit\Framework\MockObject\MockObject;
 
 class ShipmentCommentSenderTest extends AbstractSenderTest
 {
     /**
-     * @var \Magento\Sales\Model\Order\Email\Sender\ShipmentCommentSender
+     * @var ShipmentCommentSender
      */
     protected $sender;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $shipmentMock;
 
     protected function setUp(): void
     {
         $this->stepMockSetup();
-        $this->stepIdentityContainerInit(\Magento\Sales\Model\Order\Email\Container\ShipmentCommentIdentity::class);
+        $this->stepIdentityContainerInit(ShipmentCommentIdentity::class);
         $this->addressRenderer->expects($this->any())->method('format')->willReturn(1);
         $this->shipmentMock = $this->createPartialMock(
-            \Magento\Sales\Model\Order\Shipment::class,
-            ['getStore', '__wakeup', 'getOrder']
+            Shipment::class,
+            ['getStore', 'getOrder']
         );
         $this->shipmentMock->expects($this->any())
             ->method('getStore')
@@ -76,21 +82,19 @@ class ShipmentCommentSenderTest extends AbstractSenderTest
         $this->templateContainerMock->expects($this->once())
             ->method('setTemplateVars')
             ->with(
-                $this->equalTo(
-                    [
-                        'order' => $this->orderMock,
-                        'shipment' => $this->shipmentMock,
-                        'billing' => $billingAddress,
-                        'comment' => $comment,
-                        'store' => $this->storeMock,
-                        'formattedShippingAddress' => 1,
-                        'formattedBillingAddress' => 1,
-                        'order_data' => [
-                            'customer_name' => $customerName,
-                            'frontend_status_label' => $frontendStatusLabel
-                        ]
+                [
+                    'order' => $this->orderMock,
+                    'shipment' => $this->shipmentMock,
+                    'billing' => $billingAddress,
+                    'comment' => $comment,
+                    'store' => $this->storeMock,
+                    'formattedShippingAddress' => 1,
+                    'formattedBillingAddress' => 1,
+                    'order_data' => [
+                        'customer_name' => $customerName,
+                        'frontend_status_label' => $frontendStatusLabel
                     ]
-                )
+                ]
             );
         $this->stepSendWithoutSendCopy();
         $result = $this->sender->send($this->shipmentMock, true, $comment);
@@ -121,21 +125,19 @@ class ShipmentCommentSenderTest extends AbstractSenderTest
         $this->templateContainerMock->expects($this->once())
             ->method('setTemplateVars')
             ->with(
-                $this->equalTo(
-                    [
-                        'order' => $this->orderMock,
-                        'shipment' => $this->shipmentMock,
-                        'billing' => $billingAddress,
-                        'comment' => $comment,
-                        'store' => $this->storeMock,
-                        'formattedShippingAddress' => 1,
-                        'formattedBillingAddress' => 1,
-                        'order_data' => [
-                            'customer_name' => $customerName,
-                            'frontend_status_label' => $frontendStatusLabel
-                        ]
+                [
+                    'order' => $this->orderMock,
+                    'shipment' => $this->shipmentMock,
+                    'billing' => $billingAddress,
+                    'comment' => $comment,
+                    'store' => $this->storeMock,
+                    'formattedShippingAddress' => 1,
+                    'formattedBillingAddress' => 1,
+                    'order_data' => [
+                        'customer_name' => $customerName,
+                        'frontend_status_label' => $frontendStatusLabel
                     ]
-                )
+                ]
             );
         $this->stepSendWithCallSendCopyTo();
         $result = $this->sender->send($this->shipmentMock, false, $comment);
@@ -145,7 +147,7 @@ class ShipmentCommentSenderTest extends AbstractSenderTest
     public function testSendVirtualOrder()
     {
         $isVirtualOrder = true;
-        $this->orderMock->setData(\Magento\Sales\Api\Data\OrderInterface::IS_VIRTUAL, $isVirtualOrder);
+        $this->orderMock->setData(OrderInterface::IS_VIRTUAL, $isVirtualOrder);
         $this->stepAddressFormat($this->addressMock, $isVirtualOrder);
         $customerName='Test Customer';
         $frontendStatusLabel='Complete';
@@ -162,22 +164,20 @@ class ShipmentCommentSenderTest extends AbstractSenderTest
         $this->templateContainerMock->expects($this->once())
             ->method('setTemplateVars')
             ->with(
-                $this->equalTo(
-                    [
-                        'order' => $this->orderMock,
-                        'shipment' => $this->shipmentMock,
-                        'billing' => $this->addressMock,
-                        'comment' => '',
-                        'store' => $this->storeMock,
-                        'formattedShippingAddress' => null,
-                        'formattedBillingAddress' => 1,
-                        'order_data' => [
-                            'customer_name' => $customerName,
-                            'frontend_status_label' => $frontendStatusLabel
-                        ]
-
+                [
+                    'order' => $this->orderMock,
+                    'shipment' => $this->shipmentMock,
+                    'billing' => $this->addressMock,
+                    'comment' => '',
+                    'store' => $this->storeMock,
+                    'formattedShippingAddress' => null,
+                    'formattedBillingAddress' => 1,
+                    'order_data' => [
+                        'customer_name' => $customerName,
+                        'frontend_status_label' => $frontendStatusLabel
                     ]
-                )
+
+                ]
             );
         $this->assertFalse($this->sender->send($this->shipmentMock));
     }

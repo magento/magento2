@@ -7,10 +7,11 @@ declare(strict_types=1);
 
 namespace Magento\Tax\Test\Unit\CustomerData;
 
-use PHPUnit\Framework\TestCase;
-use Magento\Tax\CustomerData\CheckoutTotalsJsLayoutDataProvider;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Tax\CustomerData\CheckoutTotalsJsLayoutDataProvider;
 use Magento\Tax\Model\Config as TaxConfig;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test class to cover CheckoutTotalsJsLayoutDataProvider
@@ -25,7 +26,7 @@ class CheckoutTotalsJsLayoutDataProviderTest extends TestCase
     private $dataProvider;
 
     /**
-     * @var TaxConfig|PHPUnit\Framework\MockObject\MockObject
+     * @var TaxConfig|MockObject
      */
     private $taxConfigMock;
 

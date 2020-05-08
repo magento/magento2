@@ -3,14 +3,19 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Catalog\Test\Unit\Model\Product\Option;
 
+use Magento\Catalog\Model\Product\Option\UrlBuilder;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\UrlInterface;
+use PHPUnit\Framework\TestCase;
 
-class UrlBuilderTest extends \PHPUnit\Framework\TestCase
+class UrlBuilderTest extends TestCase
 {
     /**
-     * @var \Magento\Catalog\Model\Product\Option\UrlBuilder
+     * @var UrlBuilder
      */
     private $model;
 
@@ -24,17 +29,17 @@ class UrlBuilderTest extends \PHPUnit\Framework\TestCase
         $mockedFrontendUrlBuilder = $this->getMockedFrontendUrlBuilder();
         $helper = new ObjectManager($this);
         $this->model = $helper->getObject(
-            \Magento\Catalog\Model\Product\Option\UrlBuilder::class,
+            UrlBuilder::class,
             ['frontendUrlBuilder' => $mockedFrontendUrlBuilder]
         );
     }
 
     /**
-     * @return \Magento\Framework\UrlInterface
+     * @return UrlInterface
      */
     private function getMockedFrontendUrlBuilder()
     {
-        $mockBuilder = $this->getMockBuilder(\Magento\Framework\UrlInterface::class)
+        $mockBuilder = $this->getMockBuilder(UrlInterface::class)
             ->disableOriginalConstructor();
         $mock = $mockBuilder->getMockForAbstractClass();
 

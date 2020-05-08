@@ -3,20 +3,28 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Newsletter\Test\Unit\Block\Adminhtml\Template\Grid\Renderer;
+
+use Magento\Framework\DataObject;
+use Magento\Framework\Escaper;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Newsletter\Block\Adminhtml\Template\Grid\Renderer\Sender;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test for \Magento\Newsletter\Block\Adminhtml\Template\Grid\Renderer\Sender.
  */
-class SenderTest extends \PHPUnit\Framework\TestCase
+class SenderTest extends TestCase
 {
     /**
-     * @var \Magento\Newsletter\Block\Adminhtml\Template\Grid\Renderer\Sender
+     * @var Sender
      */
     private $sender;
 
     /**
-     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
+     * @var ObjectManager
      */
     private $objectManagerHelper;
 
@@ -25,12 +33,12 @@ class SenderTest extends \PHPUnit\Framework\TestCase
      */
     protected function setUp(): void
     {
-        $this->objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $this->objectManagerHelper = new ObjectManager($this);
         $escaper = $this->objectManagerHelper->getObject(
-            \Magento\Framework\Escaper::class
+            Escaper::class
         );
         $this->sender = $this->objectManagerHelper->getObject(
-            \Magento\Newsletter\Block\Adminhtml\Template\Grid\Renderer\Sender::class,
+            Sender::class,
             [
                 'escaper' => $escaper
             ]
@@ -46,7 +54,7 @@ class SenderTest extends \PHPUnit\Framework\TestCase
      */
     public function testRender(array $passedSender, array $expectedSender)
     {
-        $row = $this->getMockBuilder(\Magento\Framework\DataObject::class)
+        $row = $this->getMockBuilder(DataObject::class)
             ->setMethods(['getTemplateSenderName', 'getTemplateSenderEmail'])
             ->getMock();
         $row->expects($this->atLeastOnce())->method('getTemplateSenderName')

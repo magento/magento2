@@ -3,91 +3,99 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Email\Test\Unit\Controller\Adminhtml\Email\Template;
 
+use Magento\Backend\App\Action\Context;
 use Magento\Email\Controller\Adminhtml\Email\Template\Preview;
-use Magento\Framework\App\Action\Context;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\App\View;
+use Magento\Framework\Registry;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\View\Config;
+use Magento\Framework\View\Page\Config as PageConfig;
 use Magento\Framework\View\Page\Title;
 use Magento\Framework\View\Result\Page;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-/**
- * Preview Test.
- */
-class PreviewTest extends \PHPUnit\Framework\TestCase
+class PreviewTest extends TestCase
 {
     /**
      * @var Preview
      */
-    protected $object;
+    private $object;
 
     /**
      * @var Context
      */
-    protected $context;
+    private $context;
 
     /**
-     * @var View|\PHPUnit\Framework\MockObject\MockObject
+     * @var View|MockObject
      */
-    protected $viewMock;
+    private $viewMock;
 
     /**
-     * @var RequestInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var RequestInterface|MockObject
      */
-    protected $requestMock;
+    private $requestMock;
 
     /**
-     * @var Page|\PHPUnit\Framework\MockObject\MockObject
+     * @var Page|MockObject
      */
-    protected $pageMock;
+    private $pageMock;
 
     /**
-     * @var Config|\PHPUnit\Framework\MockObject\MockObject
+     * @var Config|MockObject
      */
-    protected $pageConfigMock;
+    private $pageConfigMock;
 
     /**
-     * @var Title|\PHPUnit\Framework\MockObject\MockObject
+     * @var Title|MockObject
      */
-    protected $pageTitleMock;
+    private $pageTitleMock;
+
+    /**
+     * @var MockObject|Registry
+     */
+    private $coreRegistryMock;
 
     protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
 
-        $this->coreRegistryMock = $this->getMockBuilder(\Magento\Framework\Registry::class)
+        $this->coreRegistryMock = $this->getMockBuilder(Registry::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->viewMock = $this->getMockBuilder(\Magento\Framework\App\View::class)
+        $this->viewMock = $this->getMockBuilder(View::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->requestMock = $this->getMockBuilder(\Magento\Framework\App\RequestInterface::class)
+        $this->requestMock = $this->getMockBuilder(RequestInterface::class)
             ->getMock();
-        $this->pageMock = $this->getMockBuilder(\Magento\Framework\View\Result\Page::class)
+        $this->pageMock = $this->getMockBuilder(Page::class)
             ->disableOriginalConstructor()
             ->setMethods(['getConfig'])
             ->getMock();
-        $this->pageConfigMock = $this->getMockBuilder(\Magento\Framework\View\Page\Config::class)
+        $this->pageConfigMock = $this->getMockBuilder(PageConfig::class)
             ->setMethods(['getTitle'])
             ->disableOriginalConstructor()
             ->getMock();
-        $this->pageTitleMock = $this->getMockBuilder(\Magento\Framework\View\Page\Title::class)
+        $this->pageTitleMock = $this->getMockBuilder(Title::class)
             ->setMethods(['prepend'])
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->context = $objectManager->getObject(
-            \Magento\Backend\App\Action\Context::class,
+            Context::class,
             [
                 'request' => $this->requestMock,
                 'view' => $this->viewMock
             ]
         );
         $this->object = $objectManager->getObject(
-            \Magento\Email\Controller\Adminhtml\Email\Template\Preview::class,
+            Preview::class,
             [
                 'context' => $this->context,
             ]

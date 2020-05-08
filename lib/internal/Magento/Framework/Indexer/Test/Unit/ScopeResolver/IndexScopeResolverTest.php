@@ -3,47 +3,54 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Framework\Indexer\Test\Unit\ScopeResolver;
 
+use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\App\ScopeInterface;
+use Magento\Framework\App\ScopeResolverInterface;
+use Magento\Framework\Indexer\ScopeResolver\IndexScopeResolver;
 use Magento\Framework\Search\Request\Dimension;
-use \Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test for \Magento\Framework\Indexer\ScopeResolver\IndexScopeResolver
  */
-class IndexScopeResolverTest extends \PHPUnit\Framework\TestCase
+class IndexScopeResolverTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\App\ScopeResolverInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var \Magento\Framework\App\ScopeResolverInterface|MockObject
      */
     protected $scopeResolver;
 
     /**
-     * @var \Magento\Framework\App\ResourceConnection|\PHPUnit\Framework\MockObject\MockObject
+     * @var ResourceConnection|MockObject
      */
     private $resource;
 
     /**
-     * @var \Magento\Framework\Indexer\ScopeResolver\IndexScopeResolver
+     * @var IndexScopeResolver
      */
     private $target;
 
     protected function setUp(): void
     {
-        $this->resource = $this->getMockBuilder(\Magento\Framework\App\ResourceConnection::class)
+        $this->resource = $this->getMockBuilder(ResourceConnection::class)
             ->setMethods(['getTableName'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
-        $this->scopeResolver = $this->getMockBuilder(\Magento\Framework\App\ScopeResolverInterface::class)
+        $this->scopeResolver = $this->getMockBuilder(ScopeResolverInterface::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
         $objectManager = new ObjectManager($this);
 
         $this->target = $objectManager->getObject(
-            \Magento\Framework\Indexer\ScopeResolver\IndexScopeResolver::class,
+            IndexScopeResolver::class,
             [
                 'resource' => $this->resource,
                 'scopeResolver' => $this->scopeResolver
@@ -65,7 +72,7 @@ class IndexScopeResolverTest extends \PHPUnit\Framework\TestCase
             },
             $dimensions
         );
-        $scope = $this->getMockBuilder(\Magento\Framework\App\ScopeInterface::class)
+        $scope = $this->getMockBuilder(ScopeInterface::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
@@ -123,11 +130,11 @@ class IndexScopeResolverTest extends \PHPUnit\Framework\TestCase
     /**
      * @param $name
      * @param $value
-     * @return \PHPUnit\Framework\MockObject\MockObject
+     * @return MockObject
      */
     private function createDimension($name, $value)
     {
-        $dimension = $this->getMockBuilder(\Magento\Framework\Search\Request\Dimension::class)
+        $dimension = $this->getMockBuilder(Dimension::class)
             ->setMethods(['getName', 'getValue'])
             ->disableOriginalConstructor()
             ->getMock();

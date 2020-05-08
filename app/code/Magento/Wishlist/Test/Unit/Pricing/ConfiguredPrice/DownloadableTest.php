@@ -3,29 +3,37 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Wishlist\Test\Unit\Pricing\ConfiguredPrice;
 
 use Magento\Catalog\Pricing\Price\BasePrice;
+use Magento\Downloadable\Model\Link;
+use Magento\Downloadable\Model\Product\Type;
 use Magento\Framework\Pricing\Adjustment\CalculatorInterface;
+use Magento\Framework\Pricing\Price\PriceInterface;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Framework\Pricing\PriceInfoInterface;
 use Magento\Framework\Pricing\SaleableInterface;
+use Magento\Wishlist\Model\Item\Option;
 use Magento\Wishlist\Pricing\ConfiguredPrice\Downloadable;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class DownloadableTest extends \PHPUnit\Framework\TestCase
+class DownloadableTest extends TestCase
 {
     /**
-     * @var SaleableInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var SaleableInterface|MockObject
      */
     private $saleableItem;
 
     /**
-     * @var CalculatorInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var CalculatorInterface|MockObject
      */
     private $calculator;
 
     /**
-     * @var PriceCurrencyInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var PriceCurrencyInterface|MockObject
      */
     private $priceCurrency;
 
@@ -35,16 +43,16 @@ class DownloadableTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var PriceInfoInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var PriceInfoInterface|MockObject
      */
     private $priceInfoMock;
 
     protected function setUp(): void
     {
-        $this->priceInfoMock = $this->getMockBuilder(\Magento\Framework\Pricing\PriceInfoInterface::class)
+        $this->priceInfoMock = $this->getMockBuilder(PriceInfoInterface::class)
             ->getMockForAbstractClass();
 
-        $this->saleableItem = $this->getMockBuilder(\Magento\Framework\Pricing\SaleableInterface::class)
+        $this->saleableItem = $this->getMockBuilder(SaleableInterface::class)
             ->setMethods([
                 'getPriceInfo',
                 'getLinksPurchasedSeparately',
@@ -56,10 +64,10 @@ class DownloadableTest extends \PHPUnit\Framework\TestCase
             ->method('getPriceInfo')
             ->willReturn($this->priceInfoMock);
 
-        $this->calculator = $this->getMockBuilder(\Magento\Framework\Pricing\Adjustment\CalculatorInterface::class)
+        $this->calculator = $this->getMockBuilder(CalculatorInterface::class)
             ->getMockForAbstractClass();
 
-        $this->priceCurrency = $this->getMockBuilder(\Magento\Framework\Pricing\PriceCurrencyInterface::class)
+        $this->priceCurrency = $this->getMockBuilder(PriceCurrencyInterface::class)
             ->getMockForAbstractClass();
 
         $this->model = new Downloadable(
@@ -74,21 +82,21 @@ class DownloadableTest extends \PHPUnit\Framework\TestCase
     {
         $priceValue = 10;
 
-        $wishlistItemOptionMock = $this->getMockBuilder(\Magento\Wishlist\Model\Item\Option::class)
+        $wishlistItemOptionMock = $this->getMockBuilder(Option::class)
             ->disableOriginalConstructor()
             ->getMock();
         $wishlistItemOptionMock->expects($this->once())
             ->method('getValue')
             ->willReturn('1,2');
 
-        $linkMock = $this->getMockBuilder(\Magento\Downloadable\Model\Link::class)
+        $linkMock = $this->getMockBuilder(Link::class)
             ->disableOriginalConstructor()
             ->getMock();
         $linkMock->expects($this->once())
             ->method('getPrice')
             ->willReturn(10);
 
-        $productTypeMock = $this->getMockBuilder(\Magento\Downloadable\Model\Product\Type::class)
+        $productTypeMock = $this->getMockBuilder(Type::class)
             ->disableOriginalConstructor()
             ->getMock();
         $productTypeMock->expects($this->once())
@@ -96,7 +104,7 @@ class DownloadableTest extends \PHPUnit\Framework\TestCase
             ->with($this->saleableItem)
             ->willReturn([1 => $linkMock]);
 
-        $priceMock = $this->getMockBuilder(\Magento\Framework\Pricing\Price\PriceInterface::class)
+        $priceMock = $this->getMockBuilder(PriceInterface::class)
             ->getMockForAbstractClass();
         $priceMock->expects($this->once())
             ->method('getValue')
@@ -125,7 +133,7 @@ class DownloadableTest extends \PHPUnit\Framework\TestCase
     {
         $priceValue = 10;
 
-        $priceMock = $this->getMockBuilder(\Magento\Framework\Pricing\Price\PriceInterface::class)
+        $priceMock = $this->getMockBuilder(PriceInterface::class)
             ->getMockForAbstractClass();
         $priceMock->expects($this->once())
             ->method('getValue')
@@ -147,7 +155,7 @@ class DownloadableTest extends \PHPUnit\Framework\TestCase
     {
         $priceValue = 10;
 
-        $priceMock = $this->getMockBuilder(\Magento\Framework\Pricing\Price\PriceInterface::class)
+        $priceMock = $this->getMockBuilder(PriceInterface::class)
             ->getMockForAbstractClass();
         $priceMock->expects($this->once())
             ->method('getValue')
@@ -158,14 +166,14 @@ class DownloadableTest extends \PHPUnit\Framework\TestCase
             ->with(BasePrice::PRICE_CODE)
             ->willReturn($priceMock);
 
-        $wishlistItemOptionMock = $this->getMockBuilder(\Magento\Wishlist\Model\Item\Option::class)
+        $wishlistItemOptionMock = $this->getMockBuilder(Option::class)
             ->disableOriginalConstructor()
             ->getMock();
         $wishlistItemOptionMock->expects($this->once())
             ->method('getValue')
             ->willReturn(null);
 
-        $productTypeMock = $this->getMockBuilder(\Magento\Downloadable\Model\Product\Type::class)
+        $productTypeMock = $this->getMockBuilder(Type::class)
             ->disableOriginalConstructor()
             ->getMock();
         $productTypeMock->expects($this->once())
@@ -189,7 +197,7 @@ class DownloadableTest extends \PHPUnit\Framework\TestCase
 
     public function testGetValueWithNoCustomOption()
     {
-        $priceMock = $this->getMockBuilder(\Magento\Framework\Pricing\Price\PriceInterface::class)
+        $priceMock = $this->getMockBuilder(PriceInterface::class)
             ->getMockForAbstractClass();
         $priceMock->expects($this->once())
             ->method('getValue')

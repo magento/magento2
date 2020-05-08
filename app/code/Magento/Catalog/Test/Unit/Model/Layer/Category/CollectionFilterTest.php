@@ -3,32 +3,39 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Unit\Model\Layer\Category;
 
-use \Magento\Catalog\Model\Layer\Category\CollectionFilter;
+use Magento\Catalog\Model\Category;
+use Magento\Catalog\Model\Config;
+use Magento\Catalog\Model\Layer\Category\CollectionFilter;
+use Magento\Catalog\Model\Product\Visibility;
+use Magento\Catalog\Model\ResourceModel\Product\Collection;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class CollectionFilterTest extends \PHPUnit\Framework\TestCase
+class CollectionFilterTest extends TestCase
 {
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $visibilityMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $catalogConfigMock;
 
     /**
-     * @var \Magento\Catalog\Model\Layer\Category\CollectionFilter
+     * @var CollectionFilter
      */
     protected $model;
 
     protected function setUp(): void
     {
-        $this->visibilityMock = $this->createMock(\Magento\Catalog\Model\Product\Visibility::class);
-        $this->catalogConfigMock = $this->createMock(\Magento\Catalog\Model\Config::class);
+        $this->visibilityMock = $this->createMock(Visibility::class);
+        $this->catalogConfigMock = $this->createMock(Config::class);
         $this->model = new CollectionFilter($this->visibilityMock, $this->catalogConfigMock);
     }
 
@@ -38,9 +45,9 @@ class CollectionFilterTest extends \PHPUnit\Framework\TestCase
      */
     public function testFilter()
     {
-        $collectionMock = $this->createMock(\Magento\Catalog\Model\ResourceModel\Product\Collection::class);
+        $collectionMock = $this->createMock(Collection::class);
 
-        $categoryMock = $this->createMock(\Magento\Catalog\Model\Category::class);
+        $categoryMock = $this->createMock(Category::class);
         $categoryMock->expects($this->once())->method('getId');
 
         $this->catalogConfigMock->expects($this->once())->method('getProductAttributes');

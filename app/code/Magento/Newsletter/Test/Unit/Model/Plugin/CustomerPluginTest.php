@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Newsletter\Test\Unit\Model\Plugin;
 
 use Magento\Customer\Api\CustomerRepositoryInterface;
@@ -79,9 +81,9 @@ class CustomerPluginTest extends TestCase
         $this->subscriberFactory = $this->createMock(SubscriberFactory::class);
         $this->extensionFactory = $this->createMock(ExtensionAttributesFactory::class);
         $this->collectionFactory = $this->createMock(CollectionFactory::class);
-        $this->subscriptionManager = $this->getMockForAbstractClass(SubscriptionManagerInterface::class);
+        $this->subscriptionManager = $this->createMock(SubscriptionManagerInterface::class);
         $this->shareConfig = $this->createMock(Share::class);
-        $this->storeManager = $this->getMockForAbstractClass(StoreManagerInterface::class);
+        $this->storeManager = $this->createMock(StoreManagerInterface::class);
         $this->objectManager = new ObjectManager($this);
         $this->plugin = $this->objectManager->getObject(
             CustomerPlugin::class,
@@ -111,7 +113,7 @@ class CustomerPluginTest extends TestCase
         $customerId = 3;
         $customerEmail = 'email@example.com';
 
-        $store = $this->getMockForAbstractClass(StoreInterface::class);
+        $store = $this->createMock(StoreInterface::class);
         $store->method('getId')->willReturn($storeId);
         $store->method('getWebsiteId')->willReturn($websiteId);
         $this->storeManager->method('getStore')->willReturn($store);
@@ -134,17 +136,12 @@ class CustomerPluginTest extends TestCase
         }
         $this->subscriberFactory->method('create')->willReturn($subscriber);
 
-        $customerExtension = $this->createPartialMock(
-            CustomerExtensionInterface::class,
-            [
-                'getIsSubscribed',
-                'CustomerExtensionInterface',
-                'setIsSubscribed'
-            ]
-        );
+        $customerExtension = $this->getMockBuilder(CustomerExtensionInterface::class)
+            ->setMethods(['getIsSubscribed', 'setIsSubscribed'])
+            ->getMockForAbstractClass();
         $customerExtension->method('getIsSubscribed')->willReturn($newValue);
         /** @var CustomerInterface|MockObject $customer */
-        $customer = $this->getMockForAbstractClass(CustomerInterface::class);
+        $customer = $this->createMock(CustomerInterface::class);
         $customer->method('getExtensionAttributes')->willReturn($customerExtension);
 
         $resultIsSubscribed = $newValue ?? $originalStatus === Subscriber::STATUS_SUBSCRIBED;
@@ -159,23 +156,18 @@ class CustomerPluginTest extends TestCase
             $this->subscriptionManager->expects($this->never())->method('subscribeCustomer');
             $this->subscriptionManager->expects($this->never())->method('unsubscribeCustomer');
         }
-        $resultExtension = $this->createPartialMock(
-            CustomerExtensionInterface::class,
-            [
-                'setIsSubscribed',
-                'getIsSubscribed',
-                'CustomerExtensionInterface'
-            ]
-        );
+        $resultExtension = $this->getMockBuilder(CustomerExtensionInterface::class)
+            ->setMethods(['getIsSubscribed', 'setIsSubscribed'])
+            ->getMockForAbstractClass();
         $resultExtension->expects($this->once())->method('setIsSubscribed')->with($resultIsSubscribed);
         /** @var CustomerInterface|MockObject $result */
-        $result = $this->getMockForAbstractClass(CustomerInterface::class);
+        $result = $this->createMock(CustomerInterface::class);
         $result->method('getId')->willReturn($customerId);
         $result->method('getEmail')->willReturn($customerEmail);
         $result->method('getExtensionAttributes')->willReturn($resultExtension);
 
         /** @var CustomerRepository|MockObject $subject */
-        $subject = $this->getMockForAbstractClass(CustomerRepositoryInterface::class);
+        $subject = $this->createMock(CustomerRepositoryInterface::class);
         $this->assertEquals($result, $this->plugin->afterSave($subject, $result, $customer));
     }
 
@@ -226,9 +218,9 @@ class CustomerPluginTest extends TestCase
         $this->storeManager->method('getWebsite')->with($websiteId)->willReturn($website);
 
         /** @var CustomerRepositoryInterface|MockObject $subject */
-        $subject = $this->getMockForAbstractClass(CustomerRepositoryInterface::class);
+        $subject = $this->createMock(CustomerRepositoryInterface::class);
         /** @var CustomerInterface|MockObject $customer */
-        $customer = $this->getMockForAbstractClass(CustomerInterface::class);
+        $customer = $this->createMock(CustomerInterface::class);
         $customer->method('getEmail')->willReturn($customerEmail);
 
         $this->assertTrue($this->plugin->afterDelete($subject, true, $customer));
@@ -246,10 +238,10 @@ class CustomerPluginTest extends TestCase
         $deleteCustomerById = function () {
             return true;
         };
-        $customer = $this->getMockForAbstractClass(CustomerInterface::class);
+        $customer = $this->createMock(CustomerInterface::class);
         $customer->expects($this->once())->method('getEmail')->willReturn($customerEmail);
         /** @var CustomerRepositoryInterface|MockObject $subject */
-        $subject = $this->getMockForAbstractClass(CustomerRepositoryInterface::class);
+        $subject = $this->createMock(CustomerRepositoryInterface::class);
         $subject->expects($this->once())->method('getById')->with($customerId)->willReturn($customer);
 
         $subscriber = $this->createMock(Subscriber::class);
@@ -280,13 +272,13 @@ class CustomerPluginTest extends TestCase
         $customerEmail = 'email@example.com';
         $subscribed = true;
 
-        $store = $this->getMockForAbstractClass(StoreInterface::class);
+        $store = $this->createMock(StoreInterface::class);
         $store->method('getId')->willReturn($storeId);
         $store->method('getWebsiteId')->willReturn($websiteId);
         $this->storeManager->method('getStore')->willReturn($store);
 
         /** @var CustomerInterface|MockObject $customer */
-        $customer = $this->getMockForAbstractClass(CustomerInterface::class);
+        $customer = $this->createMock(CustomerInterface::class);
         $customer->method('getId')->willReturn($customerId);
         $customer->method('getEmail')->willReturn($customerEmail);
 
@@ -303,16 +295,15 @@ class CustomerPluginTest extends TestCase
             ->willReturnSelf();
         $this->subscriberFactory->method('create')->willReturn($subscriber);
 
-        $customerExtension = $this->createPartialMock(
-            CustomerExtensionInterface::class,
-            ['getIsSubscribed', 'setIsSubscribed','CustomerExtensionInterface']
-        );
+        $customerExtension = $this->getMockBuilder(CustomerExtensionInterface::class)
+            ->setMethods(['getIsSubscribed', 'setIsSubscribed'])
+            ->getMockForAbstractClass();
         $customerExtension->expects($this->once())->method('setIsSubscribed')->with($subscribed);
         $this->extensionFactory->expects($this->once())->method('create')->willReturn($customerExtension);
         $customer->expects($this->once())->method('setExtensionAttributes')->with($customerExtension);
 
         /** @var CustomerRepositoryInterface|MockObject $subject */
-        $subject = $this->getMockForAbstractClass(CustomerRepositoryInterface::class);
+        $subject = $this->createMock(CustomerRepositoryInterface::class);
         $this->assertEquals(
             $customer,
             $this->plugin->afterGetById($subject, $customer)

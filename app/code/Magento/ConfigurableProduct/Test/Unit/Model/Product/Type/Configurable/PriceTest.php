@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\ConfigurableProduct\Test\Unit\Model\Product\Type\Configurable;
 
@@ -15,8 +16,9 @@ use Magento\Framework\Pricing\Price\PriceInterface;
 use Magento\Framework\Pricing\PriceInfo\Base as PriceInfoBase;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class PriceTest extends \PHPUnit\Framework\TestCase
+class PriceTest extends TestCase
 {
     /**
      * @var ObjectManagerHelper
@@ -93,20 +95,22 @@ class PriceTest extends \PHPUnit\Framework\TestCase
         $customerGroupId = 1;
 
         /** @var Product|MockObject $configurableProduct */
-        $configurableProduct = $this->createPartialMock(
-            Product::class,
-            ['getCustomOption', 'setFinalPrice', 'getCustomerGroupId']
-        );
+        $configurableProduct = $this->getMockBuilder(Product::class)
+            ->addMethods(['getCustomerGroupId'])
+            ->onlyMethods(['getCustomOption', 'setFinalPrice'])
+            ->disableOriginalConstructor()
+            ->getMock();
         /** @var Option|MockObject $customOption */
-        $customOption = $this->createPartialMock(
-            Option::class,
-            ['getProduct']
-        );
+        $customOption = $this->getMockBuilder(Option::class)
+            ->addMethods(['getProduct'])
+            ->disableOriginalConstructor()
+            ->getMock();
         /** @var Product|MockObject $simpleProduct */
-        $simpleProduct = $this->createPartialMock(
-            Product::class,
-            ['setCustomerGroupId', 'setFinalPrice', 'getPrice', 'getTierPrice', 'getData', 'getCustomOption']
-        );
+        $simpleProduct = $this->getMockBuilder(Product::class)
+            ->addMethods(['setCustomerGroupId'])
+            ->onlyMethods(['setFinalPrice', 'getPrice', 'getTierPrice', 'getData', 'getCustomOption'])
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $configurableProduct->method('getCustomOption')
             ->willReturnMap([

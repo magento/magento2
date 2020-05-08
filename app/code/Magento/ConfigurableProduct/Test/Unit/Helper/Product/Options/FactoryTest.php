@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\ConfigurableProduct\Test\Unit\Helper\Product\Options;
 
 use Magento\Catalog\Api\ProductAttributeRepositoryInterface;
@@ -14,14 +16,13 @@ use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable\Attribute;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable\AttributeFactory;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use PHPUnit\Framework\MockObject\MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
- * Class FactoryTest
- *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class FactoryTest extends \PHPUnit\Framework\TestCase
+class FactoryTest extends TestCase
 {
     /**
      * @var Configurable|MockObject
@@ -75,7 +76,7 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
             ->setMethods(['create'])
             ->getMock();
 
-        $this->productAttributeRepository = $this->getMockForAbstractClass(ProductAttributeRepositoryInterface::class);
+        $this->productAttributeRepository = $this->createMock(ProductAttributeRepositoryInterface::class);
 
         $this->factory = new Factory(
             $this->configurable,
@@ -90,9 +91,8 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
      */
     public function testCreateWithException()
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException('InvalidArgumentException');
         $this->expectExceptionMessage('Provided attribute can not be used with configurable product.');
-
         $attributeId = 90;
         $data = [
             ['attribute_id' => $attributeId, 'values' => [
@@ -137,7 +137,7 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
 
         $attribute = $this->getMockBuilder(Attribute::class)
             ->disableOriginalConstructor()
-            ->setMethods(['setValues', 'setData', '__wakeup'])
+            ->setMethods(['setValues', 'setData'])
             ->getMock();
 
         $this->attributeFactory->expects(static::once())
@@ -157,7 +157,7 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
             ->with($eavAttribute)
             ->willReturn(true);
 
-        $option = $this->getMockForAbstractClass(OptionValueInterface::class);
+        $option = $this->createMock(OptionValueInterface::class);
         $option->expects(static::once())
             ->method('setValueIndex')
             ->with($valueIndex)

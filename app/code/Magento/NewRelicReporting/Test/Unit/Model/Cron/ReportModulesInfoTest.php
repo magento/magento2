@@ -3,14 +3,20 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\NewRelicReporting\Test\Unit\Model\Cron;
 
+use Magento\Framework\Json\EncoderInterface;
+use Magento\NewRelicReporting\Model\Config;
 use Magento\NewRelicReporting\Model\Cron\ReportModulesInfo;
+use Magento\NewRelicReporting\Model\Module\Collect;
+use Magento\NewRelicReporting\Model\System;
+use Magento\NewRelicReporting\Model\SystemFactory;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-/**
- * Class ReportModulesInfoTest
- */
-class ReportModulesInfoTest extends \PHPUnit\Framework\TestCase
+class ReportModulesInfoTest extends TestCase
 {
     /**
      * @var ReportModulesInfo
@@ -18,27 +24,27 @@ class ReportModulesInfoTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \Magento\NewRelicReporting\Model\Config|\PHPUnit\Framework\MockObject\MockObject
+     * @var Config|MockObject
      */
     protected $config;
 
     /**
-     * @var \Magento\NewRelicReporting\Model\Module\Collect|\PHPUnit\Framework\MockObject\MockObject
+     * @var Collect|MockObject
      */
     protected $collectMock;
 
     /**
-     * @var \Magento\NewRelicReporting\Model\SystemFactory|\PHPUnit\Framework\MockObject\MockObject
+     * @var SystemFactory|MockObject
      */
     protected $systemFactoryMock;
 
     /**
-     * @var \Magento\NewRelicReporting\Model\System|\PHPUnit\Framework\MockObject\MockObject
+     * @var System|MockObject
      */
     protected $systemModelMock;
 
     /**
-     * @var \Magento\Framework\Json\EncoderInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var EncoderInterface|MockObject
      */
     protected $jsonEncoderMock;
 
@@ -49,22 +55,22 @@ class ReportModulesInfoTest extends \PHPUnit\Framework\TestCase
      */
     protected function setUp(): void
     {
-        $this->config = $this->getMockBuilder(\Magento\NewRelicReporting\Model\Config::class)
+        $this->config = $this->getMockBuilder(Config::class)
             ->disableOriginalConstructor()
             ->setMethods(['isNewRelicEnabled'])
             ->getMock();
-        $this->collectMock = $this->getMockBuilder(\Magento\NewRelicReporting\Model\Module\Collect::class)
+        $this->collectMock = $this->getMockBuilder(Collect::class)
             ->disableOriginalConstructor()
             ->setMethods(['getModuleData'])
             ->getMock();
-        $this->systemFactoryMock = $this->getMockBuilder(\Magento\NewRelicReporting\Model\SystemFactory::class)
+        $this->systemFactoryMock = $this->getMockBuilder(SystemFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
-        $this->systemModelMock = $this->getMockBuilder(\Magento\NewRelicReporting\Model\System::class)
+        $this->systemModelMock = $this->getMockBuilder(System::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->jsonEncoderMock = $this->getMockBuilder(\Magento\Framework\Json\EncoderInterface::class)
+        $this->jsonEncoderMock = $this->getMockBuilder(EncoderInterface::class)
             ->getMock();
 
         $this->systemFactoryMock->expects($this->any())

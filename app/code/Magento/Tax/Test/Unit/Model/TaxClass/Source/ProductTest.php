@@ -3,27 +3,42 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Tax\Test\Unit\Model\TaxClass\Source;
 
+use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
+use Magento\Framework\Api\Filter;
+use Magento\Framework\Api\FilterBuilder;
+use Magento\Framework\Api\SearchCriteria;
+use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Tax\Api\Data\TaxClassInterface;
+use Magento\Tax\Api\Data\TaxClassSearchResultsInterface;
+use Magento\Tax\Api\TaxClassManagementInterface;
+use Magento\Tax\Api\TaxClassRepositoryInterface;
+use Magento\Tax\Model\ClassModel;
+use Magento\Tax\Model\TaxClass\Source\Product;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ProductTest extends \PHPUnit\Framework\TestCase
+class ProductTest extends TestCase
 {
     /**
-     * @var \Magento\Tax\Api\TaxClassRepositoryInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var TaxClassRepositoryInterface|MockObject
      */
     protected $taxClassRepositoryMock;
 
     /**
-     * @var \Magento\Framework\Api\SearchCriteriaBuilder|\PHPUnit\Framework\MockObject\MockObject
+     * @var SearchCriteriaBuilder|MockObject
      */
     protected $searchCriteriaBuilderMock;
 
     /**
-     * @var \Magento\Framework\Api\FilterBuilder|\PHPUnit\Framework\MockObject\MockObject
+     * @var FilterBuilder|MockObject
      */
     protected $filterBuilderMock;
 
@@ -33,7 +48,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
     protected $objectManager;
 
     /**
-     * @var \Magento\Tax\Model\TaxClass\Source\Product
+     * @var Product
      */
     protected $product;
 
@@ -42,7 +57,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         $this->objectManager = new ObjectManager($this);
 
         $this->taxClassRepositoryMock = $this->getMockForAbstractClass(
-            \Magento\Tax\Api\TaxClassRepositoryInterface::class,
+            TaxClassRepositoryInterface::class,
             ['getList'],
             '',
             false,
@@ -51,16 +66,16 @@ class ProductTest extends \PHPUnit\Framework\TestCase
             []
         );
         $this->searchCriteriaBuilderMock = $this->createPartialMock(
-            \Magento\Framework\Api\SearchCriteriaBuilder::class,
+            SearchCriteriaBuilder::class,
             ['addFilters', 'create']
         );
         $this->filterBuilderMock = $this->createPartialMock(
-            \Magento\Framework\Api\FilterBuilder::class,
+            FilterBuilder::class,
             ['setField', 'setValue', 'create']
         );
 
         $this->product = $this->objectManager->getObject(
-            \Magento\Tax\Model\TaxClass\Source\Product::class,
+            Product::class,
             [
                 'taxClassRepository' => $this->taxClassRepositoryMock,
                 'searchCriteriaBuilder' => $this->searchCriteriaBuilderMock,
@@ -72,7 +87,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
     public function testGetFlatColumns()
     {
         $abstractAttrMock = $this->createPartialMock(
-            \Magento\Eav\Model\Entity\Attribute\AbstractAttribute::class,
+            AbstractAttribute::class,
             ['getAttributeCode', '__wakeup']
         );
 
@@ -83,7 +98,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         $flatColumns = $this->product->getFlatColumns();
 
         $this->assertIsArray($flatColumns, 'FlatColumns must be an array value');
-        $this->assertTrue(!empty($flatColumns), 'FlatColumns must be not empty');
+        $this->assertNotEmpty($flatColumns, 'FlatColumns must be not empty');
         foreach ($flatColumns as $result) {
             $this->assertArrayHasKey('unsigned', $result, 'FlatColumns must have "unsigned" column');
             $this->assertArrayHasKey('default', $result, 'FlatColumns must have "default" column');
@@ -102,10 +117,10 @@ class ProductTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetAllOptionsNameIntegrity(array $value)
     {
-        $filterMock = $this->createMock(\Magento\Framework\Api\Filter::class);
-        $searchCriteriaMock = $this->createMock(\Magento\Framework\Api\SearchCriteria::class);
+        $filterMock = $this->createMock(Filter::class);
+        $searchCriteriaMock = $this->createMock(SearchCriteria::class);
         $searchResultsMock = $this->getMockForAbstractClass(
-            \Magento\Tax\Api\Data\TaxClassSearchResultsInterface::class,
+            TaxClassSearchResultsInterface::class,
             [],
             '',
             false,
@@ -114,7 +129,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
             ['getItems']
         );
         $taxClassMock = $this->getMockForAbstractClass(
-            \Magento\Tax\Api\Data\TaxClassInterface::class,
+            TaxClassInterface::class,
             ['getClassId', 'getClassName'],
             '',
             false,
@@ -124,11 +139,11 @@ class ProductTest extends \PHPUnit\Framework\TestCase
 
         $this->filterBuilderMock->expects($this->once())
             ->method('setField')
-            ->with(\Magento\Tax\Model\ClassModel::KEY_TYPE)
+            ->with(ClassModel::KEY_TYPE)
             ->willReturnSelf();
         $this->filterBuilderMock->expects($this->once())
             ->method('setValue')
-            ->with(\Magento\Tax\Api\TaxClassManagementInterface::TYPE_PRODUCT)
+            ->with(TaxClassManagementInterface::TYPE_PRODUCT)
             ->willReturnSelf();
         $this->filterBuilderMock->expects($this->once())
             ->method('create')

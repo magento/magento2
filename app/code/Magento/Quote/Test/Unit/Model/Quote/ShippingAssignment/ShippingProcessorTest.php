@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Quote\Test\Unit\Model\Quote\ShippingAssignment;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
@@ -12,12 +14,10 @@ use Magento\Quote\Api\Data\ShippingInterface;
 use Magento\Quote\Model\Quote\ShippingAssignment\ShippingProcessor;
 use Magento\Quote\Model\ShippingAddressManagement;
 use Magento\Quote\Model\ShippingMethodManagement;
-use PHPUnit\Framework\MockObject\MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-/**
- * Class ShippingProcessorTest
- */
-class ShippingProcessorTest extends \PHPUnit\Framework\TestCase
+class ShippingProcessorTest extends TestCase
 {
     /**
      * @var ShippingAddressManagement|MockObject
@@ -40,14 +40,14 @@ class ShippingProcessorTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->setMethods(['assign'])
             ->getMock();
-        
+
         $this->shippingMethodManagement = $this->getMockBuilder(ShippingMethodManagement::class)
             ->disableOriginalConstructor()
             ->setMethods(['apply'])
             ->getMock();
-        
+
         $objectManager = new ObjectManager($this);
-        
+
         $this->shippingProcessor = $objectManager->getObject(ShippingProcessor::class, [
             'shippingAddressManagement' => $this->shippingAddressManagement,
             'shippingMethodManagement' => $this->shippingMethodManagement
@@ -67,11 +67,11 @@ class ShippingProcessorTest extends \PHPUnit\Framework\TestCase
         $quoteId = 1;
 
         $address = $this->getMockForAbstractClass(AddressInterface::class);
-        
+
         $quote->expects(static::exactly(2))
             ->method('getId')
             ->willReturn($quoteId);
-        
+
         $shipping->expects(static::once())
             ->method('getAddress')
             ->willReturn($address);

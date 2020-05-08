@@ -3,61 +3,69 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Framework\App\Test\Unit\ObjectManager;
 
+use Magento\Framework\App\Cache\Type\Config;
+use Magento\Framework\App\ObjectManager\ConfigLoader;
+use Magento\Framework\ObjectManager\Config\Reader\Dom;
+use Magento\Framework\ObjectManager\Config\Reader\DomFactory;
 use Magento\Framework\Serialize\SerializerInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class ConfigLoaderTest extends \PHPUnit\Framework\TestCase
+class ConfigLoaderTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\App\ObjectManager\ConfigLoader
+     * @var ConfigLoader
      */
     private $object;
 
     /**
-     * @var \Magento\Framework\ObjectManager\Config\Reader\DomFactory|\PHPUnit\Framework\MockObject\MockObject
+     * @var DomFactory|MockObject
      */
     private $readerFactoryMock;
 
     /**
-     * @var \Magento\Framework\ObjectManager\Config\Reader\Dom|\PHPUnit\Framework\MockObject\MockObject
+     * @var Dom|MockObject
      */
     private $readerMock;
 
     /**
-     * @var \Magento\Framework\App\Cache\Type\Config|\PHPUnit\Framework\MockObject\MockObject
+     * @var Config|MockObject
      */
     private $cacheMock;
 
     /**
-     * @var \Magento\Framework\Serialize\SerializerInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var SerializerInterface|MockObject
      */
     private $serializerMock;
 
     protected function setUp(): void
     {
-        $this->readerMock = $this->createMock(\Magento\Framework\ObjectManager\Config\Reader\Dom::class);
+        $this->readerMock = $this->createMock(Dom::class);
 
         $this->readerFactoryMock =
-            $this->createPartialMock(\Magento\Framework\ObjectManager\Config\Reader\DomFactory::class, ['create']);
+            $this->createPartialMock(DomFactory::class, ['create']);
 
         $this->readerFactoryMock->expects($this->any())
             ->method('create')
             ->willReturn($this->readerMock);
 
-        $this->cacheMock = $this->createMock(\Magento\Framework\App\Cache\Type\Config::class);
+        $this->cacheMock = $this->createMock(Config::class);
 
-        $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $objectManagerHelper = new ObjectManager($this);
 
         $this->object = $objectManagerHelper->getObject(
-            \Magento\Framework\App\ObjectManager\ConfigLoader::class,
+            ConfigLoader::class,
             [
                 'cache' => $this->cacheMock,
                 'readerFactory' => $this->readerFactoryMock,
             ]
         );
-        $this->serializerMock = $this->getMockForAbstractClass(SerializerInterface::class);
+        $this->serializerMock = $this->createMock(SerializerInterface::class);
         $objectManagerHelper->setBackwardCompatibleProperty(
             $this->object,
             'serializer',

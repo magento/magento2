@@ -7,50 +7,52 @@ declare(strict_types=1);
 
 namespace Magento\ReleaseNotification\Test\Unit\Controller\Notification;
 
-use Psr\Log\LoggerInterface;
 use Magento\Backend\App\Action\Context;
-use Magento\Backend\Model\Auth\Credential\StorageInterface;
 use Magento\Backend\Model\Auth;
+use Magento\Backend\Model\Auth\Credential\StorageInterface;
+use Magento\Framework\App\ProductMetadataInterface;
 use Magento\Framework\Controller\Result\Json;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\ReleaseNotification\Model\ResourceModel\Viewer\Logger as NotificationLogger;
-use Magento\Framework\App\ProductMetadataInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\ReleaseNotification\Controller\Adminhtml\Notification\MarkUserNotified;
+use Magento\ReleaseNotification\Model\ResourceModel\Viewer\Logger as NotificationLogger;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class MarkUserNotifiedTest extends \PHPUnit\Framework\TestCase
+class MarkUserNotifiedTest extends TestCase
 {
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|StorageInterface
+     * @var MockObject|StorageInterface
      */
     private $storageMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|Auth
+     * @var MockObject|Auth
      */
     private $authMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|LoggerInterface
+     * @var MockObject|LoggerInterface
      */
     private $loggerMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|Json
+     * @var MockObject|Json
      */
     private $resultMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|ProductMetadataInterface
+     * @var MockObject|ProductMetadataInterface
      */
     private $productMetadataMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|NotificationLogger
+     * @var MockObject|NotificationLogger
      */
     private $notificationLoggerMock;
 

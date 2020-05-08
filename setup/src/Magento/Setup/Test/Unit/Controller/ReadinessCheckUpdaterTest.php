@@ -3,12 +3,15 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Setup\Test\Unit\Controller;
 
-use \Magento\Setup\Controller\ReadinessCheckUpdater;
+use Laminas\View\Model\ViewModel;
+use Magento\Setup\Controller\ReadinessCheckUpdater;
+use PHPUnit\Framework\TestCase;
 
-class ReadinessCheckUpdaterTest extends \PHPUnit\Framework\TestCase
+class ReadinessCheckUpdaterTest extends TestCase
 {
     /**
      * @var ReadinessCheckUpdater
@@ -23,7 +26,7 @@ class ReadinessCheckUpdaterTest extends \PHPUnit\Framework\TestCase
     public function testIndexAction()
     {
         $viewModel = $this->controller->indexAction();
-        $this->assertInstanceOf(\Laminas\View\Model\ViewModel::class, $viewModel);
+        $this->assertInstanceOf(ViewModel::class, $viewModel);
         $this->assertTrue($viewModel->terminate());
         $variables = $viewModel->getVariables();
         $this->assertArrayHasKey('actionFrom', $variables);
@@ -33,7 +36,7 @@ class ReadinessCheckUpdaterTest extends \PHPUnit\Framework\TestCase
     public function testProgressAction()
     {
         $viewModel = $this->controller->progressAction();
-        $this->assertInstanceOf(\Laminas\View\Model\ViewModel::class, $viewModel);
+        $this->assertInstanceOf(ViewModel::class, $viewModel);
         $this->assertTrue($viewModel->terminate());
         $this->assertSame('/magento/setup/readiness-check/progress.phtml', $viewModel->getTemplate());
     }

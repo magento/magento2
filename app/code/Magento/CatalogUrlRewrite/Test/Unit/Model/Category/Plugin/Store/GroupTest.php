@@ -3,24 +3,28 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\CatalogUrlRewrite\Test\Unit\Model\Category\Plugin\Store;
 
-use Magento\CatalogUrlRewrite\Model\Category\Plugin\Store\Group as GroupPlugin;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\Framework\Model\AbstractModel;
-use Magento\Store\Model\StoreManagerInterface;
-use Magento\Store\Model\ResourceModel\Group;
 use Magento\Catalog\Model\Category;
 use Magento\Catalog\Model\CategoryFactory;
-use Magento\Catalog\Model\ResourceModel\Product\Collection as ProductCollection;
 use Magento\Catalog\Model\Product as Product;
-use Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator;
 use Magento\Catalog\Model\ProductFactory;
+use Magento\Catalog\Model\ResourceModel\Product\Collection as ProductCollection;
+use Magento\CatalogUrlRewrite\Model\Category\Plugin\Store\Group as GroupPlugin;
+use Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator;
+use Magento\Framework\Model\AbstractModel;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Store\Model\ResourceModel\Group;
+use Magento\Store\Model\StoreManagerInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class GroupTest extends \PHPUnit\Framework\TestCase
+class GroupTest extends TestCase
 {
     /**
      * @var ObjectManager
@@ -33,47 +37,47 @@ class GroupTest extends \PHPUnit\Framework\TestCase
     private $plugin;
 
     /**
-     * @var AbstractModel|\PHPUnit\Framework\MockObject\MockObject
+     * @var AbstractModel|MockObject
      */
     private $abstractModelMock;
 
     /**
-     * @var Group|\PHPUnit\Framework\MockObject\MockObject
+     * @var Group|MockObject
      */
     private $subjectMock;
 
     /**
-     * @var StoreManagerInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var StoreManagerInterface|MockObject
      */
     private $storeManagerMock;
 
     /**
-     * @var CategoryFactory|\PHPUnit\Framework\MockObject\MockObject
+     * @var CategoryFactory|MockObject
      */
     private $categoryFactoryMock;
 
     /**
-     * @var Category|\PHPUnit\Framework\MockObject\MockObject
+     * @var Category|MockObject
      */
     private $categoryMock;
 
     /**
-     * @var ProductCollection|\PHPUnit\Framework\MockObject\MockObject
+     * @var ProductCollection|MockObject
      */
     private $productCollectionMock;
 
     /**
-     * @var Product|\PHPUnit\Framework\MockObject\MockObject
+     * @var Product|MockObject
      */
     private $productMock;
 
     /**
-     * @var ProductFactory|\PHPUnit\Framework\MockObject\MockObject
+     * @var ProductFactory|MockObject
      */
     private $productFactoryMock;
 
     /**
-     * @var ProductUrlRewriteGenerator|\PHPUnit\Framework\MockObject\MockObject
+     * @var ProductUrlRewriteGenerator|MockObject
      */
     private $productUrlRewriteGeneratorMock;
 

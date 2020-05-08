@@ -8,11 +8,11 @@ declare(strict_types=1);
 
 namespace Magento\Customer\Test\Unit\ViewModel\Customer;
 
-use Magento\Framework\App\Config\ScopeConfigInterface;
-use PHPUnit\Framework\TestCase;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Customer\ViewModel\Customer\Website as CustomerWebsite;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Store\Model\System\Store as SystemStore;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test for customer's website view model

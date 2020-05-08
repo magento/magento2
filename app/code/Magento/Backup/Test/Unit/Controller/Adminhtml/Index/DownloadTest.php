@@ -3,128 +3,145 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Backup\Test\Unit\Controller\Adminhtml\Index;
 
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Backend\App\Action\Context;
+use Magento\Backend\Model\View\Result\Redirect;
+use Magento\Backend\Model\View\Result\RedirectFactory;
+use Magento\Backup\Controller\Adminhtml\Index\Download;
+use Magento\Backup\Helper\Data;
+use Magento\Backup\Model\Backup;
+use Magento\Backup\Model\BackupFactory;
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\App\RequestInterface;
+use Magento\Framework\App\Response\Http\FileFactory;
+use Magento\Framework\App\ResponseInterface;
+use Magento\Framework\Controller\Result\Raw;
+use Magento\Framework\Controller\Result\RawFactory;
+use Magento\Framework\ObjectManagerInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \Magento\Backup\Controller\Adminhtml\Index\Download
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class DownloadTest extends \PHPUnit\Framework\TestCase
+class DownloadTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
+     * @var ObjectManager
      */
     protected $objectManager;
 
     /**
-     * @var \Magento\Backend\App\Action\Context
+     * @var Context
      */
     protected $context;
 
     /**
-     * @var \Magento\Backup\Controller\Adminhtml\Index\Download
+     * @var Download
      */
     protected $downloadController;
 
     /**
-     * @var \Magento\Framework\ObjectManagerInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var ObjectManagerInterface|MockObject
      */
     protected $objectManagerMock;
 
     /**
-     * @var \Magento\Framework\App\RequestInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var RequestInterface|MockObject
      */
     protected $requestMock;
 
     /**
-     * @var \Magento\Framework\App\ResponseInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var ResponseInterface|MockObject
      */
     protected $responseMock;
 
     /**
-     * @var \Magento\Backup\Model\BackupFactory|\PHPUnit\Framework\MockObject\MockObject
+     * @var BackupFactory|MockObject
      */
     protected $backupModelFactoryMock;
 
     /**
-     * @var \Magento\Backup\Model\Backup|\PHPUnit\Framework\MockObject\MockObject
+     * @var Backup|MockObject
      */
     protected $backupModelMock;
 
     /**
-     * @var \Magento\Backup\Helper\Data|\PHPUnit\Framework\MockObject\MockObject
+     * @var Data|MockObject
      */
     protected $dataHelperMock;
 
     /**
-     * @var \Magento\Framework\App\Response\Http\FileFactory|\PHPUnit\Framework\MockObject\MockObject
+     * @var FileFactory|MockObject
      */
     protected $fileFactoryMock;
 
     /**
-     * @var \Magento\Framework\Controller\Result\RawFactory|\PHPUnit\Framework\MockObject\MockObject
+     * @var RawFactory|MockObject
      */
     protected $resultRawFactoryMock;
 
     /**
-     * @var \Magento\Backend\Model\View\Result\RedirectFactory|\PHPUnit\Framework\MockObject\MockObject
+     * @var RedirectFactory|MockObject
      */
     protected $resultRedirectFactoryMock;
 
     /**
-     * @var \Magento\Framework\Controller\Result\Raw|\PHPUnit\Framework\MockObject\MockObject
+     * @var Raw|MockObject
      */
     protected $resultRawMock;
 
     /**
-     * @var \Magento\Backend\Model\View\Result\Redirect|\PHPUnit\Framework\MockObject\MockObject
+     * @var Redirect|MockObject
      */
     protected $resultRedirectMock;
 
     protected function setUp(): void
     {
-        $this->objectManagerMock = $this->getMockBuilder(\Magento\Framework\ObjectManagerInterface::class)
+        $this->objectManagerMock = $this->getMockBuilder(ObjectManagerInterface::class)
             ->getMock();
-        $this->requestMock = $this->getMockBuilder(\Magento\Framework\App\RequestInterface::class)
+        $this->requestMock = $this->getMockBuilder(RequestInterface::class)
             ->getMock();
-        $this->responseMock = $this->getMockBuilder(\Magento\Framework\App\ResponseInterface::class)
+        $this->responseMock = $this->getMockBuilder(ResponseInterface::class)
             ->getMock();
-        $this->backupModelFactoryMock = $this->getMockBuilder(\Magento\Backup\Model\BackupFactory::class)
+        $this->backupModelFactoryMock = $this->getMockBuilder(BackupFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
-        $this->backupModelMock = $this->getMockBuilder(\Magento\Backup\Model\Backup::class)
+        $this->backupModelMock = $this->getMockBuilder(Backup::class)
             ->disableOriginalConstructor()
             ->setMethods(['getTime', 'exists', 'getSize', 'output'])
             ->getMock();
-        $this->dataHelperMock = $this->getMockBuilder(\Magento\Backup\Helper\Data::class)
+        $this->dataHelperMock = $this->getMockBuilder(Data::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->fileFactoryMock = $this->getMockBuilder(\Magento\Framework\App\Response\Http\FileFactory::class)
+        $this->fileFactoryMock = $this->getMockBuilder(FileFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->resultRawFactoryMock = $this->getMockBuilder(\Magento\Framework\Controller\Result\RawFactory::class)
+        $this->resultRawFactoryMock = $this->getMockBuilder(RawFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
         $this->resultRedirectFactoryMock = $this->getMockBuilder(
-            \Magento\Backend\Model\View\Result\RedirectFactory::class
+            RedirectFactory::class
         )->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
-        $this->resultRawMock = $this->getMockBuilder(\Magento\Framework\Controller\Result\Raw::class)
+        $this->resultRawMock = $this->getMockBuilder(Raw::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->resultRedirectMock = $this->getMockBuilder(\Magento\Backend\Model\View\Result\Redirect::class)
+        $this->resultRedirectMock = $this->getMockBuilder(Redirect::class)
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->objectManager = new ObjectManager($this);
         $this->context = $this->objectManager->getObject(
-            \Magento\Backend\App\Action\Context::class,
+            Context::class,
             [
                 'objectManager' => $this->objectManagerMock,
                 'request' => $this->requestMock,
@@ -133,7 +150,7 @@ class DownloadTest extends \PHPUnit\Framework\TestCase
             ]
         );
         $this->downloadController = $this->objectManager->getObject(
-            \Magento\Backup\Controller\Adminhtml\Index\Download::class,
+            Download::class,
             [
                 'context' => $this->context,
                 'backupModelFactory' => $this->backupModelFactoryMock,
@@ -184,7 +201,7 @@ class DownloadTest extends \PHPUnit\Framework\TestCase
             ->willReturn($filename);
         $this->objectManagerMock->expects($this->once())
             ->method('get')
-            ->with(\Magento\Backup\Helper\Data::class)
+            ->with(Data::class)
             ->willReturn($this->dataHelperMock);
         $this->fileFactoryMock->expects($this->once())
             ->method('create')->with(

@@ -3,40 +3,52 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Indexer\Test\Unit\App;
 
-class IndexerTest extends \PHPUnit\Framework\TestCase
+use Magento\Framework\App\Bootstrap;
+use Magento\Framework\App\Console\Response;
+use Magento\Framework\Filesystem;
+use Magento\Framework\Filesystem\Directory\Write;
+use Magento\Indexer\App\Indexer;
+use Magento\Indexer\Model\Processor;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class IndexerTest extends TestCase
 {
     /**
-     * @var \Magento\Indexer\App\Indexer
+     * @var Indexer
      */
     protected $entryPoint;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Indexer\Model\Processor
+     * @var MockObject|Processor
      */
     protected $processor;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\Filesystem
+     * @var MockObject|Filesystem
      */
     protected $filesystem;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\App\Console\Response
+     * @var MockObject|Response
      */
     protected $_response;
 
     protected function setUp(): void
     {
-        $this->filesystem = $this->createPartialMock(\Magento\Framework\Filesystem::class, ['getDirectoryWrite']);
-        $this->processor = $this->createMock(\Magento\Indexer\Model\Processor::class);
-        $this->_response = $this->createPartialMock(
-            \Magento\Framework\App\Console\Response::class,
-            ['setCode', 'getCode']
-        );
+        $this->filesystem = $this->createPartialMock(Filesystem::class, ['getDirectoryWrite']);
+        $this->processor = $this->createMock(Processor::class);
+        $this->_response = $this->getMockBuilder(Response::class)
+            ->addMethods(['getCode'])
+            ->onlyMethods(['setCode'])
+            ->disableOriginalConstructor()
+            ->getMock();
 
-        $this->entryPoint = new \Magento\Indexer\App\Indexer(
+        $this->entryPoint = new Indexer(
             'reportDir',
             $this->filesystem,
             $this->processor,
@@ -53,7 +65,7 @@ class IndexerTest extends \PHPUnit\Framework\TestCase
     {
         $this->_response->expects($this->once())->method('setCode')->with(0);
         $this->_response->expects($this->once())->method('getCode')->willReturn(0);
-        $dir = $this->createMock(\Magento\Framework\Filesystem\Directory\Write::class);
+        $dir = $this->createMock(Write::class);
         $dir->expects($this->any())->method('getRelativePath')->willReturnArgument(0);
         $dir->expects($this->once())->method('isExist')->willReturn($isExist);
         $dir->expects($this->exactly($callCount))->method('delete')->willReturn(true);
@@ -69,13 +81,13 @@ class IndexerTest extends \PHPUnit\Framework\TestCase
     {
         return [
             'set1' => ['isExist' => true, 'expectsValue' => 1],
-            'set1' => ['delete' => false, 'expectsValue' => 0]
+            'set2' => ['delete' => false, 'expectsValue' => 0]
         ];
     }
 
     public function testCatchException()
     {
-        $bootstrap = $this->createMock(\Magento\Framework\App\Bootstrap::class);
+        $bootstrap = $this->createMock(Bootstrap::class);
         $this->assertFalse($this->entryPoint->catchException($bootstrap, new \Exception()));
     }
 }

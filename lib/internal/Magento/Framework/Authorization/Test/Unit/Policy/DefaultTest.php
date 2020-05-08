@@ -3,18 +3,23 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\Authorization\Test\Unit\Policy;
 
-class DefaultTest extends \PHPUnit\Framework\TestCase
+use Magento\Framework\Authorization\Policy\DefaultPolicy;
+use PHPUnit\Framework\TestCase;
+
+class DefaultTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\Authorization\Policy\DefaultPolicy
+     * @var DefaultPolicy
      */
     protected $_model;
 
     protected function setUp(): void
     {
-        $this->_model = new \Magento\Framework\Authorization\Policy\DefaultPolicy();
+        $this->_model = new DefaultPolicy();
     }
 
     public function testIsAllowedReturnsTrueForAnyResource()

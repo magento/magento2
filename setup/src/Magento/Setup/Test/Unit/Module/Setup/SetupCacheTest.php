@@ -3,11 +3,14 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Setup\Test\Unit\Module\Setup;
 
 use Magento\Setup\Module\Setup\SetupCache;
+use PHPUnit\Framework\TestCase;
 
-class SetupCacheTest extends \PHPUnit\Framework\TestCase
+class SetupCacheTest extends TestCase
 {
     /**
      * @var SetupCache

@@ -4,32 +4,44 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\PageCache\Test\Unit\Observer;
 
+use Magento\Framework\DataObject;
+use Magento\Framework\Event;
+use Magento\Framework\Event\Observer;
+use Magento\Framework\Serialize\Serializer\Base64Json;
+use Magento\Framework\Serialize\Serializer\Json;
+use Magento\Framework\View\Element\AbstractBlock;
 use Magento\Framework\View\EntitySpecificHandlesList;
+use Magento\Framework\View\Layout;
+use Magento\PageCache\Model\Config;
+use Magento\PageCache\Observer\ProcessLayoutRenderElement;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class ProcessLayoutRenderElementTest extends \PHPUnit\Framework\TestCase
+class ProcessLayoutRenderElementTest extends TestCase
 {
-    /** @var \Magento\PageCache\Observer\ProcessLayoutRenderElement */
+    /** @var ProcessLayoutRenderElement */
     private $_model;
 
-    /** @var \PHPUnit\Framework\MockObject\MockObject|EntitySpecificHandlesList */
+    /** @var MockObject|EntitySpecificHandlesList */
     private $entitySpecificHandlesListMock;
 
-    /** @var \PHPUnit\Framework\MockObject\MockObject|\Magento\PageCache\Model\Config */
+    /** @var MockObject|Config */
     private $_configMock;
 
-    /** @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\View\Element\AbstractBlock */
+    /** @var MockObject|AbstractBlock */
     private $_blockMock;
 
-    /** @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\View\Layout */
+    /** @var MockObject|Layout */
     private $_layoutMock;
 
-    /** @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\Event\Observer */
+    /** @var MockObject|Observer */
     private $_observerMock;
 
-    /** @var \Magento\Framework\DataObject */
+    /** @var DataObject */
     private $_transport;
 
     /**
@@ -37,22 +49,23 @@ class ProcessLayoutRenderElementTest extends \PHPUnit\Framework\TestCase
      */
     protected function setUp(): void
     {
-        $this->_configMock = $this->createPartialMock(\Magento\PageCache\Model\Config::class, ['getType', 'isEnabled']);
+        $this->_configMock = $this->createPartialMock(Config::class, ['getType', 'isEnabled']);
         $this->entitySpecificHandlesListMock = $this->createMock(EntitySpecificHandlesList::class);
 
-        $this->_model = new \Magento\PageCache\Observer\ProcessLayoutRenderElement(
+        $this->_model = new ProcessLayoutRenderElement(
             $this->_configMock,
             $this->entitySpecificHandlesListMock,
-            new \Magento\Framework\Serialize\Serializer\Json(),
-            new \Magento\Framework\Serialize\Serializer\Base64Json()
+            new Json(),
+            new Base64Json()
         );
-        $this->_observerMock = $this->createPartialMock(\Magento\Framework\Event\Observer::class, ['getEvent']);
-        $this->_layoutMock = $this->createPartialMock(
-            \Magento\Framework\View\Layout::class,
-            ['isCacheable', 'getBlock', 'getUpdate', 'getHandles']
-        );
+        $this->_observerMock = $this->createPartialMock(Observer::class, ['getEvent']);
+        $this->_layoutMock = $this->getMockBuilder(Layout::class)
+            ->addMethods(['getHandles'])
+            ->onlyMethods(['isCacheable', 'getBlock', 'getUpdate'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->_blockMock = $this->getMockForAbstractClass(
-            \Magento\Framework\View\Element\AbstractBlock::class,
+            AbstractBlock::class,
             [],
             '',
             false,
@@ -60,7 +73,7 @@ class ProcessLayoutRenderElementTest extends \PHPUnit\Framework\TestCase
             true,
             ['getData', 'isScopePrivate', 'getNameInLayout', 'getUrl']
         );
-        $this->_transport = new \Magento\Framework\DataObject(['output' => 'test output html']);
+        $this->_transport = new DataObject(['output' => 'test output html']);
     }
 
     /**
@@ -78,10 +91,10 @@ class ProcessLayoutRenderElementTest extends \PHPUnit\Framework\TestCase
         $blockTtl,
         $expectedOutput
     ) {
-        $eventMock = $this->createPartialMock(
-            \Magento\Framework\Event::class,
-            ['getLayout', 'getElementName', 'getTransport']
-        );
+        $eventMock = $this->getMockBuilder(Event::class)
+            ->addMethods(['getLayout', 'getElementName', 'getTransport'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->_observerMock->expects($this->once())->method('getEvent')->willReturn($eventMock);
         $eventMock->expects($this->once())->method('getLayout')->willReturn($this->_layoutMock);
         $this->_configMock->expects($this->any())->method('isEnabled')->willReturn($cacheState);
@@ -100,8 +113,7 @@ class ProcessLayoutRenderElementTest extends \PHPUnit\Framework\TestCase
                 ->willReturn(true);
 
             $this->_layoutMock->expects($this->any())
-                ->method('getUpdate')
-                ->willReturnSelf();
+                ->method('getUpdate')->willReturnSelf();
 
             $this->_layoutMock->expects($this->any())
                 ->method('getHandles')
@@ -128,9 +140,7 @@ class ProcessLayoutRenderElementTest extends \PHPUnit\Framework\TestCase
                             'handles' => 'WyJkZWZhdWx0IiwiY2F0YWxvZ19wcm9kdWN0X3ZpZXciXQ==']
                     )
                     ->willReturn(
-                        
-                            'page_cache/block/wrapesi/with/handles/WyJkZWZhdWx0IiwiY2F0YWxvZ19wcm9kdWN0X3ZpZXciXQ=='
-                        
+                        'page_cache/block/wrapesi/with/handles/WyJkZWZhdWx0IiwiY2F0YWxvZ19wcm9kdWN0X3ZpZXciXQ=='
                     );
             }
             if ($scopeIsPrivate) {
@@ -151,10 +161,10 @@ class ProcessLayoutRenderElementTest extends \PHPUnit\Framework\TestCase
     public function testExecuteWithBase64Encode()
     {
         $expectedOutput = '<esi:include src="page_cache/block/wrapesi/with/handles/YW5kL290aGVyL3N0dWZm" />';
-        $eventMock = $this->createPartialMock(
-            \Magento\Framework\Event::class,
-            ['getLayout', 'getElementName', 'getTransport']
-        );
+        $eventMock = $this->getMockBuilder(Event::class)
+            ->addMethods(['getLayout', 'getElementName', 'getTransport'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $expectedUrl = 'page_cache/block/wrapesi/with/handles/' . base64_encode('and/other/stuff');
 
         $this->_observerMock->expects($this->once())->method('getEvent')->willReturn($eventMock);
@@ -162,28 +172,27 @@ class ProcessLayoutRenderElementTest extends \PHPUnit\Framework\TestCase
         $this->_configMock->expects($this->any())->method('isEnabled')->willReturn(true);
 
         $eventMock->expects($this->once())
-                ->method('getElementName')
-                ->willReturn('blockName');
+            ->method('getElementName')
+            ->willReturn('blockName');
 
         $eventMock->expects($this->once())
-                ->method('getTransport')
-                ->willReturn($this->_transport);
+            ->method('getTransport')
+            ->willReturn($this->_transport);
 
         $this->_layoutMock->expects($this->once())
-                ->method('isCacheable')
-                ->willReturn(true);
+            ->method('isCacheable')
+            ->willReturn(true);
 
         $this->_layoutMock->expects($this->any())
-                ->method('getUpdate')
-                ->willReturnSelf();
+            ->method('getUpdate')->willReturnSelf();
 
         $this->_layoutMock->expects($this->any())
-                ->method('getHandles')
-                ->willReturn([]);
+            ->method('getHandles')
+            ->willReturn([]);
 
         $this->_layoutMock->expects($this->once())
-                ->method('getBlock')
-                ->willReturn($this->_blockMock);
+            ->method('getBlock')
+            ->willReturn($this->_blockMock);
 
         $this->entitySpecificHandlesListMock->expects($this->any())
             ->method('getHandles')

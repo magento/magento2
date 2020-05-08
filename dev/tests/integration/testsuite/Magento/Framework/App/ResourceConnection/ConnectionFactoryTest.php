@@ -5,6 +5,8 @@
  */
 namespace Magento\Framework\App\ResourceConnection;
 
+use ReflectionClass;
+
 class ConnectionFactoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -34,6 +36,12 @@ class ConnectionFactoryTest extends \PHPUnit\Framework\TestCase
         ];
         $connection = $this->model->create($dbConfig);
         $this->assertInstanceOf(\Magento\Framework\DB\Adapter\AdapterInterface::class, $connection);
-        $this->assertAttributeInstanceOf(\Magento\Framework\DB\LoggerInterface::class, 'logger', $connection);
+        $this->assertClassHasAttribute('logger', get_class($connection));
+        $object = new ReflectionClass(get_class($connection));
+        $attribute = $object->getProperty('logger');
+        $attribute->setAccessible(true);
+        $propertyObject = $attribute->getValue($connection);
+        $attribute->setAccessible(false);
+        $this->assertInstanceOf(\Magento\Framework\DB\LoggerInterface::class, $propertyObject);
     }
 }

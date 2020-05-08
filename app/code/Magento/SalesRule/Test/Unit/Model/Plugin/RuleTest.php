@@ -3,18 +3,23 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\SalesRule\Test\Unit\Model\Plugin;
 
-class RuleTest extends \PHPUnit\Framework\TestCase
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\SalesRule\Model\Plugin\Rule;
+use PHPUnit\Framework\TestCase;
+
+class RuleTest extends TestCase
 {
     /**
-     * @var \Magento\SalesRule\Model\Plugin\Rule
+     * @var Rule
      */
     protected $plugin;
 
     /**}
-     * @var \Magento\SalesRule\Model\Rule|\PHPUnit\Framework\MockObject\MockObject
+     * @var \Magento\SalesRule\Model\Rule|MockObject
      */
     protected $subject;
 
@@ -25,7 +30,7 @@ class RuleTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp(): void
     {
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $objectManager = new ObjectManager($this);
         $this->subject = $this->getMockBuilder(\Magento\SalesRule\Model\Rule::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -33,7 +38,7 @@ class RuleTest extends \PHPUnit\Framework\TestCase
             return;
         };
 
-        $this->plugin = $objectManager->getObject(\Magento\SalesRule\Model\Plugin\Rule::class);
+        $this->plugin = $objectManager->getObject(Rule::class);
     }
 
     public function testLoadRelations()

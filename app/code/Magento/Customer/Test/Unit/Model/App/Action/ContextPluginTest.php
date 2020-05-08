@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Customer\Test\Unit\Model\App\Action;
 
@@ -66,12 +67,10 @@ class ContextPluginTest extends TestCase
         $this->httpContextMock->expects($this->atLeastOnce())
             ->method('setValue')
             ->willReturnMap(
-                
-                    [
-                        [Context::CONTEXT_GROUP, self::STUB_CUSTOMER_GROUP, $this->httpContextMock],
-                        [Context::CONTEXT_AUTH, self::STUB_CUSTOMER_NOT_LOGGED_IN, $this->httpContextMock],
-                    ]
-                
+                [
+                    [Context::CONTEXT_GROUP, self::STUB_CUSTOMER_GROUP, $this->httpContextMock],
+                    [Context::CONTEXT_AUTH, self::STUB_CUSTOMER_NOT_LOGGED_IN, $this->httpContextMock],
+                ]
             );
         $this->plugin->beforeExecute($this->subjectMock);
     }

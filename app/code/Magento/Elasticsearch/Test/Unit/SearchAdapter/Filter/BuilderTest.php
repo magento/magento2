@@ -3,15 +3,21 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Elasticsearch\Test\Unit\SearchAdapter\Filter;
 
 use Magento\Elasticsearch\SearchAdapter\Filter\Builder;
 use Magento\Elasticsearch\SearchAdapter\Filter\Builder\Range;
 use Magento\Elasticsearch\SearchAdapter\Filter\Builder\Term;
 use Magento\Elasticsearch\SearchAdapter\Filter\Builder\Wildcard;
+use Magento\Framework\Search\Request\Filter\BoolExpression;
+use Magento\Framework\Search\Request\FilterInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class BuilderTest extends \PHPUnit\Framework\TestCase
+class BuilderTest extends TestCase
 {
     /**
      * @var Builder
@@ -19,17 +25,17 @@ class BuilderTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var Range|\PHPUnit\Framework\MockObject\MockObject
+     * @var Range|MockObject
      */
     protected $range;
 
     /**
-     * @var Term|\PHPUnit\Framework\MockObject\MockObject
+     * @var Term|MockObject
      */
     protected $term;
 
     /**
-     * @var Wildcard|\PHPUnit\Framework\MockObject\MockObject
+     * @var Wildcard|MockObject
      */
     protected $wildcard;
 
@@ -40,13 +46,13 @@ class BuilderTest extends \PHPUnit\Framework\TestCase
      */
     protected function setUp(): void
     {
-        $this->range = $this->getMockBuilder(\Magento\Elasticsearch\SearchAdapter\Filter\Builder\Range::class)
+        $this->range = $this->getMockBuilder(Range::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->term = $this->getMockBuilder(\Magento\Elasticsearch\SearchAdapter\Filter\Builder\Term::class)
+        $this->term = $this->getMockBuilder(Term::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->wildcard = $this->getMockBuilder(\Magento\Elasticsearch\SearchAdapter\Filter\Builder\Wildcard::class)
+        $this->wildcard = $this->getMockBuilder(Wildcard::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -56,7 +62,7 @@ class BuilderTest extends \PHPUnit\Framework\TestCase
 
         $objectManagerHelper = new ObjectManagerHelper($this);
         $this->model = $objectManagerHelper->getObject(
-            \Magento\Elasticsearch\SearchAdapter\Filter\Builder::class,
+            Builder::class,
             [
                 'range' => $this->range,
                 'term' => $this->term,
@@ -72,7 +78,7 @@ class BuilderTest extends \PHPUnit\Framework\TestCase
     {
         $this->expectException(\InvalidArgumentException::class);
 
-        $filter = $this->getMockBuilder(\Magento\Framework\Search\Request\FilterInterface::class)
+        $filter = $this->getMockBuilder(FilterInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $filter->expects($this->any())
@@ -97,7 +103,7 @@ class BuilderTest extends \PHPUnit\Framework\TestCase
         $filter->expects($this->any())
             ->method('getType')
             ->willReturn($filterType);
-        $childFilter = $this->getMockBuilder(\Magento\Framework\Search\Request\FilterInterface::class)
+        $childFilter = $this->getMockBuilder(FilterInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $childFilter->expects($this->any())
@@ -132,7 +138,7 @@ class BuilderTest extends \PHPUnit\Framework\TestCase
         $filter->expects($this->any())
             ->method('getType')
             ->willReturn($filterType);
-        $childFilter = $this->getMockBuilder(\Magento\Framework\Search\Request\FilterInterface::class)
+        $childFilter = $this->getMockBuilder(FilterInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $childFilter->expects($this->any())
@@ -158,10 +164,10 @@ class BuilderTest extends \PHPUnit\Framework\TestCase
     public function buildDataProvider()
     {
         return [
-            [\Magento\Framework\Search\Request\FilterInterface::class,
+            [FilterInterface::class,
                 'termFilter'
             ],
-            [\Magento\Framework\Search\Request\Filter\BoolExpression::class,
+            [BoolExpression::class,
                 'boolFilter'
             ],
         ];

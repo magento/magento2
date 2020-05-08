@@ -3,50 +3,65 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Sales\Test\Unit\Model\Order\Invoice;
+
+use Magento\Framework\Event\ManagerInterface;
+use Magento\Framework\Model\Context;
+use Magento\Payment\Model\MethodInterface;
+use Magento\Sales\Api\Data\InvoiceInterface;
+use Magento\Sales\Api\Data\InvoiceItemInterface;
+use Magento\Sales\Api\Data\OrderInterface;
+use Magento\Sales\Api\Data\OrderPaymentInterface;
+use Magento\Sales\Model\Order;
+use Magento\Sales\Model\Order\Invoice;
+use Magento\Sales\Model\Order\Invoice\PayOperation;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Unit test for Invoice pay operation.
  */
-class PayOperationTest extends \PHPUnit\Framework\TestCase
+class PayOperationTest extends TestCase
 {
     /**
-     * @var \Magento\Sales\Model\Order\Invoice\PayOperation
+     * @var PayOperation
      */
     private $subject;
 
     /**
-     * @var \Magento\Sales\Model\Order|\PHPUnit\Framework\MockObject\MockObject
+     * @var Order|MockObject
      */
     private $orderMock;
 
     /**
-     * @var \Magento\Sales\Api\Data\InvoiceInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var InvoiceInterface|MockObject
      */
     private $invoiceMock;
 
     /**
-     * @var \Magento\Framework\Model\Context|\PHPUnit\Framework\MockObject\MockObject
+     * @var Context|MockObject
      */
     private $contextMock;
 
     /**
-     * @var \Magento\Sales\Api\Data\InvoiceItemInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var InvoiceItemInterface|MockObject
      */
     private $invoiceItemMock;
 
     /**
-     * @var \Magento\Sales\Api\Data\OrderPaymentInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var OrderPaymentInterface|MockObject
      */
     private $orderPaymentMock;
 
     /**
-     * @var \Magento\Framework\Event\ManagerInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var ManagerInterface|MockObject
      */
     private $eventManagerMock;
 
     /**
-     * @var \Magento\Payment\Model\MethodInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var MethodInterface|MockObject
      */
     private $paymentMethodMock;
 
@@ -56,7 +71,7 @@ class PayOperationTest extends \PHPUnit\Framework\TestCase
     protected function setUp(): void
     {
         $this->orderMock = $this->getMockForAbstractClass(
-            \Magento\Sales\Api\Data\OrderInterface::class,
+            OrderInterface::class,
             [],
             '',
             false,
@@ -143,7 +158,7 @@ class PayOperationTest extends \PHPUnit\Framework\TestCase
             ->willReturn(31);
 
         $this->invoiceMock = $this->getMockForAbstractClass(
-            \Magento\Sales\Api\Data\InvoiceInterface::class,
+            InvoiceInterface::class,
             [],
             '',
             false,
@@ -218,10 +233,10 @@ class PayOperationTest extends \PHPUnit\Framework\TestCase
             ->method('getBaseCost')
             ->willReturn(31);
 
-        $this->contextMock = $this->createMock(\Magento\Framework\Model\Context::class);
+        $this->contextMock = $this->createMock(Context::class);
 
         $this->invoiceItemMock = $this->getMockForAbstractClass(
-            \Magento\Sales\Api\Data\InvoiceItemInterface::class,
+            InvoiceItemInterface::class,
             [],
             '',
             false,
@@ -240,7 +255,7 @@ class PayOperationTest extends \PHPUnit\Framework\TestCase
             ->willReturn(1);
 
         $this->orderPaymentMock = $this->getMockForAbstractClass(
-            \Magento\Sales\Api\Data\OrderPaymentInterface::class,
+            OrderPaymentInterface::class,
             [],
             '',
             false,
@@ -257,7 +272,7 @@ class PayOperationTest extends \PHPUnit\Framework\TestCase
             ->willReturn($this->orderPaymentMock);
 
         $this->eventManagerMock = $this->getMockForAbstractClass(
-            \Magento\Framework\Event\ManagerInterface::class,
+            ManagerInterface::class,
             [],
             '',
             false,
@@ -270,7 +285,7 @@ class PayOperationTest extends \PHPUnit\Framework\TestCase
             ->willReturn($this->eventManagerMock);
 
         $this->paymentMethodMock = $this->getMockForAbstractClass(
-            \Magento\Payment\Model\MethodInterface::class,
+            MethodInterface::class,
             [],
             '',
             false,
@@ -282,7 +297,7 @@ class PayOperationTest extends \PHPUnit\Framework\TestCase
             ->method('getMethodInstance')
             ->willReturn($this->paymentMethodMock);
 
-        $this->subject = new \Magento\Sales\Model\Order\Invoice\PayOperation(
+        $this->subject = new PayOperation(
             $this->contextMock
         );
     }
@@ -307,7 +322,7 @@ class PayOperationTest extends \PHPUnit\Framework\TestCase
         if ($canCapture) {
             $this->invoiceMock->expects($this->any())
                 ->method('getState')
-                ->willReturn(\Magento\Sales\Model\Order\Invoice::STATE_OPEN);
+                ->willReturn(Invoice::STATE_OPEN);
 
             $this->orderPaymentMock->expects($this->any())
                 ->method('canCapture')

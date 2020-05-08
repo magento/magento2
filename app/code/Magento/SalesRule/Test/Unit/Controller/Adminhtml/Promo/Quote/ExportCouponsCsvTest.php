@@ -8,15 +8,16 @@ declare(strict_types=1);
 
 namespace Magento\SalesRule\Test\Unit\Controller\Adminhtml\Promo\Quote;
 
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
-use Magento\SalesRule\Controller\Adminhtml\Promo\Quote\ExportCouponsCsv;
-use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\Response\Http\FileFactory;
-use Magento\Framework\View\Result\Layout;
-use Magento\Framework\View\LayoutInterface;
+use Magento\Framework\Controller\ResultFactory;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Framework\View\Element\AbstractBlock;
+use Magento\Framework\View\LayoutInterface;
+use Magento\Framework\View\Result\Layout;
 use Magento\SalesRule\Block\Adminhtml\Promo\Quote\Edit\Tab\Coupons\Grid;
+use Magento\SalesRule\Controller\Adminhtml\Promo\Quote\ExportCouponsCsv;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class ExportCouponsCsvTest extends TestCase
@@ -27,7 +28,7 @@ class ExportCouponsCsvTest extends TestCase
     private $controller;
 
     /**
-     * @var FileFactory|\PHPUnit\Framework\MockObject\MockObject
+     * @var FileFactory|MockObject
      */
     private $fileFactoryMock;
 
@@ -37,7 +38,7 @@ class ExportCouponsCsvTest extends TestCase
     private $objectManagerHelper;
 
     /**
-     * @var ResultFactory|\PHPUnit\Framework\MockObject\MockObject
+     * @var ResultFactory|MockObject
      */
     private $resultFactoryMock;
 
@@ -67,8 +68,11 @@ class ExportCouponsCsvTest extends TestCase
         $fileName = 'coupon_codes.csv';
 
         $resultLayoutMock = $this->createMock(Layout::class);
-        $layoutMock = $this->getMockForAbstractClass(LayoutInterface::class);
-        $contentMock = $this->createPartialMock(AbstractBlock::class, ['getCsvFile']);
+        $layoutMock = $this->createMock(LayoutInterface::class);
+        $contentMock = $this->getMockBuilder(AbstractBlock::class)
+            ->addMethods(['getCsvFile'])
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
         $this->resultFactoryMock
             ->expects($this->once())
             ->method('create')

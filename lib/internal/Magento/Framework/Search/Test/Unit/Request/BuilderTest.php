@@ -3,44 +3,55 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\Search\Test\Unit\Request;
 
+use Magento\Framework\ObjectManagerInterface;
+use Magento\Framework\Search\Request;
+use Magento\Framework\Search\Request\Binder;
+use Magento\Framework\Search\Request\Builder;
+use Magento\Framework\Search\Request\Cleaner;
+use Magento\Framework\Search\Request\Config;
+use Magento\Framework\Search\Request\Mapper;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class BuilderTest extends \PHPUnit\Framework\TestCase
+class BuilderTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\Search\Request\Builder
+     * @var Builder
      */
     private $requestBuilder;
 
     /**
-     * @var \Magento\Framework\ObjectManagerInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var ObjectManagerInterface|MockObject
      */
     private $objectManager;
 
     /**
-     * @var \Magento\Framework\Search\Request\Config|\PHPUnit\Framework\MockObject\MockObject
+     * @var Config|MockObject
      */
     private $config;
 
     /**
-     * @var \Magento\Framework\Search\Request\Mapper|\PHPUnit\Framework\MockObject\MockObject
+     * @var Mapper|MockObject
      */
     private $requestMapper;
 
     /**
-     * @var \Magento\Framework\Search\Request|\PHPUnit\Framework\MockObject\MockObject
+     * @var Request|MockObject
      */
     private $request;
 
     /**
-     * @var \Magento\Framework\Search\Request\Binder|\PHPUnit\Framework\MockObject\MockObject
+     * @var Binder|MockObject
      */
     private $binder;
 
     /**
-     * @var \Magento\Framework\Search\Request\Cleaner|\PHPUnit\Framework\MockObject\MockObject
+     * @var Cleaner|MockObject
      */
     private $cleaner;
 
@@ -48,34 +59,34 @@ class BuilderTest extends \PHPUnit\Framework\TestCase
     {
         $helper = new ObjectManager($this);
 
-        $this->config = $this->getMockBuilder(\Magento\Framework\Search\Request\Config::class)
+        $this->config = $this->getMockBuilder(Config::class)
             ->setMethods(['get'])
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->objectManager = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
+        $this->objectManager = $this->createMock(ObjectManagerInterface::class);
 
-        $this->requestMapper = $this->getMockBuilder(\Magento\Framework\Search\Request\Mapper::class)
+        $this->requestMapper = $this->getMockBuilder(Mapper::class)
             ->setMethods(['getRootQuery', 'getBuckets'])
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->request = $this->getMockBuilder(\Magento\Framework\Search\Request::class)
+        $this->request = $this->getMockBuilder(Request::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->binder = $this->getMockBuilder(\Magento\Framework\Search\Request\Binder::class)
+        $this->binder = $this->getMockBuilder(Binder::class)
             ->setMethods(['bind'])
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->cleaner = $this->getMockBuilder(\Magento\Framework\Search\Request\Cleaner::class)
+        $this->cleaner = $this->getMockBuilder(Cleaner::class)
             ->setMethods(['clean'])
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->requestBuilder = $helper->getObject(
-            \Magento\Framework\Search\Request\Builder::class,
+            Builder::class,
             [
                 'config' => $this->config,
                 'objectManager' => $this->objectManager,
@@ -85,26 +96,20 @@ class BuilderTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    /**
-     */
     public function testCreateInvalidArgumentExceptionNotDefined()
     {
-        $this->expectException(\InvalidArgumentException::class);
-
+        $this->expectException('InvalidArgumentException');
         $this->requestBuilder->create();
     }
 
-    /**
-     */
     public function testCreateInvalidArgumentException()
     {
-        $this->expectException(\Magento\Framework\Search\Request\NonExistingRequestNameException::class);
+        $this->expectException('Magento\Framework\Search\Request\NonExistingRequestNameException');
         $this->expectExceptionMessage('Request name \'rn\' doesn\'t exist.');
-
         $requestName = 'rn';
 
         $this->requestBuilder->setRequestName($requestName);
-        $this->config->expects($this->once())->method('get')->with($this->equalTo($requestName))->willReturn(null);
+        $this->config->expects($this->once())->method('get')->with($requestName)->willReturn(null);
 
         $this->requestBuilder->create();
     }
@@ -208,8 +213,8 @@ class BuilderTest extends \PHPUnit\Framework\TestCase
         $this->requestMapper->expects($this->once())->method('getRootQuery')->willReturn([]);
         $this->objectManager->expects($this->at(0))->method('create')->willReturn($this->requestMapper);
         $this->objectManager->expects($this->at(2))->method('create')->willReturn($this->request);
-        $this->config->expects($this->once())->method('get')->with($this->equalTo($requestName))->willReturn($data);
+        $this->config->expects($this->once())->method('get')->with($requestName)->willReturn($data);
         $result = $this->requestBuilder->create();
-        $this->assertInstanceOf(\Magento\Framework\Search\Request::class, $result);
+        $this->assertInstanceOf(Request::class, $result);
     }
 }

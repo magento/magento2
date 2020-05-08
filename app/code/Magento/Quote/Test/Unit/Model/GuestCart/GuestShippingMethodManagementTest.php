@@ -4,17 +4,21 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Quote\Test\Unit\Model\GuestCart;
 
-use PHPUnit\Framework\MockObject\MockObject as MockObject;
-use Magento\Quote\Model\QuoteIdMask;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Quote\Api\Data\AddressInterface;
-use Magento\Quote\Api\ShipmentEstimationInterface;
 use Magento\Quote\Api\Data\ShippingMethodInterface;
+use Magento\Quote\Api\ShipmentEstimationInterface;
 use Magento\Quote\Model\GuestCart\GuestShippingMethodManagement;
+use Magento\Quote\Model\QuoteIdMask;
+use Magento\Quote\Model\ShippingMethodManagement;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class GuestShippingMethodManagementTest extends \PHPUnit\Framework\TestCase
+class GuestShippingMethodManagementTest extends TestCase
 {
     /**
      * @var GuestShippingMethodManagement
@@ -22,12 +26,12 @@ class GuestShippingMethodManagementTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     private $shippingMethodManagementMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     private $quoteIdMaskFactoryMock;
 
@@ -53,10 +57,10 @@ class GuestShippingMethodManagementTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp(): void
     {
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $objectManager = new ObjectManager($this);
 
         $this->shippingMethodManagementMock =
-            $this->createMock(\Magento\Quote\Model\ShippingMethodManagement::class);
+            $this->createMock(ShippingMethodManagement::class);
 
         $guestCartTestHelper = new GuestCartTestHelper($this);
         list($this->quoteIdMaskFactoryMock, $this->quoteIdMask) = $guestCartTestHelper->mockQuoteIdMask(

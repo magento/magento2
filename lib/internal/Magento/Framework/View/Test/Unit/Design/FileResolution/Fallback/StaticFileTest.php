@@ -3,17 +3,22 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Framework\View\Test\Unit\Design\FileResolution\Fallback;
 
-use \Magento\Framework\View\Design\FileResolution\Fallback\StaticFile;
-
 use Magento\Framework\View\Design\Fallback\RulePool;
+use Magento\Framework\View\Design\FileResolution\Fallback\ResolverInterface;
+use Magento\Framework\View\Design\FileResolution\Fallback\StaticFile;
+use Magento\Framework\View\Design\ThemeInterface;
+use PHPUnit\Framework\MockObject\MockObject;
 
-class StaticFileTest extends \PHPUnit\Framework\TestCase
+use PHPUnit\Framework\TestCase;
+
+class StaticFileTest extends TestCase
 {
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $resolver;
 
@@ -25,14 +30,14 @@ class StaticFileTest extends \PHPUnit\Framework\TestCase
     protected function setUp(): void
     {
         $this->resolver = $this->createMock(
-            \Magento\Framework\View\Design\FileResolution\Fallback\ResolverInterface::class
+            ResolverInterface::class
         );
         $this->object = new StaticFile($this->resolver);
     }
 
     public function testGetFile()
     {
-        $theme = $this->getMockForAbstractClass(\Magento\Framework\View\Design\ThemeInterface::class);
+        $theme = $this->getMockForAbstractClass(ThemeInterface::class);
         $expected = 'some/file.ext';
         $this->resolver->expects($this->once())
             ->method('resolve')

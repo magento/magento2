@@ -20,7 +20,6 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Class AttributeMetadataResolverTest
  *
  * Validate attributeMetadata contains correct values in meta data array
  */

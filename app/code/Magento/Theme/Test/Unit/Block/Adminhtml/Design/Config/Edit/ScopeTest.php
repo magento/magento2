@@ -3,14 +3,20 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Theme\Test\Unit\Block\Adminhtml\Design\Config\Edit;
 
 use Magento\Backend\Block\Template\Context;
 use Magento\Framework\App\Request\Http;
+use Magento\Framework\App\ScopeInterface;
+use Magento\Framework\App\ScopeResolverInterface;
 use Magento\Framework\App\ScopeResolverPool;
 use Magento\Theme\Block\Adminhtml\Design\Config\Edit\Scope;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class ScopeTest extends \PHPUnit\Framework\TestCase
+class ScopeTest extends TestCase
 {
     /**
      * @var Scope
@@ -23,12 +29,12 @@ class ScopeTest extends \PHPUnit\Framework\TestCase
     protected $context;
 
     /**
-     * @var ScopeResolverPool|\PHPUnit\Framework\MockObject\MockObject
+     * @var ScopeResolverPool|MockObject
      */
     protected $scopeResolverPool;
 
     /**
-     * @var Http|\PHPUnit\Framework\MockObject\MockObject
+     * @var Http|MockObject
      */
     protected $request;
 
@@ -36,7 +42,7 @@ class ScopeTest extends \PHPUnit\Framework\TestCase
     {
         $this->initContext();
 
-        $this->scopeResolverPool = $this->getMockBuilder(\Magento\Framework\App\ScopeResolverPool::class)
+        $this->scopeResolverPool = $this->getMockBuilder(ScopeResolverPool::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -59,13 +65,13 @@ class ScopeTest extends \PHPUnit\Framework\TestCase
                 ['scope_id', null, $scopeId],
             ]);
 
-        $scopeObject = $this->getMockBuilder(\Magento\Framework\App\ScopeInterface::class)
+        $scopeObject = $this->getMockBuilder(ScopeInterface::class)
             ->getMockForAbstractClass();
         $scopeObject->expects($this->once())
             ->method('getScopeTypeName')
             ->willReturn($scopeTypeName);
 
-        $scopeResolver = $this->getMockBuilder(\Magento\Framework\App\ScopeResolverInterface::class)
+        $scopeResolver = $this->getMockBuilder(ScopeResolverInterface::class)
             ->getMockForAbstractClass();
         $scopeResolver->expects($this->once())
             ->method('getScope')
@@ -98,11 +104,11 @@ class ScopeTest extends \PHPUnit\Framework\TestCase
 
     protected function initContext()
     {
-        $this->request = $this->getMockBuilder(\Magento\Framework\App\Request\Http::class)
+        $this->request = $this->getMockBuilder(Http::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->context = $this->getMockBuilder(\Magento\Backend\Block\Template\Context::class)
+        $this->context = $this->getMockBuilder(Context::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->context->expects($this->any())

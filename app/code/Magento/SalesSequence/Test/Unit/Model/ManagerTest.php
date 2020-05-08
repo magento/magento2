@@ -3,40 +3,48 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\SalesSequence\Test\Unit\Model;
 
-/**
- * Class ManagerTest
- */
-class ManagerTest extends \PHPUnit\Framework\TestCase
+use Magento\Framework\DB\Sequence\SequenceInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\SalesSequence\Model\Manager;
+use Magento\SalesSequence\Model\ResourceModel\Meta;
+use Magento\SalesSequence\Model\SequenceFactory;
+use Magento\Store\Model\Store;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class ManagerTest extends TestCase
 {
     /**
-     * @var \Magento\SalesSequence\Model\ResourceModel\Meta | \PHPUnit\Framework\MockObject\MockObject
+     * @var Meta|MockObject
      */
     private $resourceSequenceMeta;
 
     /**
-     * @var \Magento\SalesSequence\Model\SequenceFactory | \PHPUnit\Framework\MockObject\MockObject
+     * @var SequenceFactory|MockObject
      */
     private $sequenceFactory;
 
     /**
-     * @var \Magento\SalesSequence\Model\Manager
+     * @var Manager
      */
     private $sequenceManager;
 
     /**
-     * @var \Magento\Store\Model\Store | \PHPUnit\Framework\MockObject\MockObject
+     * @var Store|MockObject
      */
     private $store;
 
     /**
-     * @var \Magento\SalesSequence\Model\Meta | \PHPUnit\Framework\MockObject\MockObject
+     * @var \Magento\SalesSequence\Model\Meta|MockObject
      */
     private $meta;
 
     /**
-     * @var \Magento\Framework\DB\Sequence\SequenceInterface | \PHPUnit\Framework\MockObject\MockObject
+     * @var SequenceInterface|MockObject
      */
     private $sequence;
 
@@ -45,9 +53,9 @@ class ManagerTest extends \PHPUnit\Framework\TestCase
      */
     protected function setUp(): void
     {
-        $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $helper = new ObjectManager($this);
         $this->sequence = $this->getMockForAbstractClass(
-            \Magento\Framework\DB\Sequence\SequenceInterface::class,
+            SequenceInterface::class,
             [],
             '',
             false,
@@ -56,17 +64,17 @@ class ManagerTest extends \PHPUnit\Framework\TestCase
             []
         );
         $this->resourceSequenceMeta = $this->createPartialMock(
-            \Magento\SalesSequence\Model\ResourceModel\Meta::class,
+            Meta::class,
             ['loadByEntityTypeAndStore']
         );
         $this->sequenceFactory = $this->createPartialMock(
-            \Magento\SalesSequence\Model\SequenceFactory::class,
+            SequenceFactory::class,
             ['create']
         );
         $this->meta = $this->createMock(\Magento\SalesSequence\Model\Meta::class);
-        $this->store = $this->createPartialMock(\Magento\Store\Model\Store::class, ['getId']);
+        $this->store = $this->createPartialMock(Store::class, ['getId']);
         $this->sequenceManager = $helper->getObject(
-            \Magento\SalesSequence\Model\Manager::class,
+            Manager::class,
             [
                 'resourceSequenceMeta' => $this->resourceSequenceMeta,
                 'sequenceFactory' => $this->sequenceFactory

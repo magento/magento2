@@ -3,22 +3,26 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Config\Test\Unit\App\Config\Source;
 
 use Magento\Config\App\Config\Source\EnvironmentConfigSource;
 use Magento\Config\Model\Placeholder\PlaceholderFactory;
 use Magento\Config\Model\Placeholder\PlaceholderInterface;
 use Magento\Framework\Stdlib\ArrayManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class EnvironmentConfigSourceTest extends \PHPUnit\Framework\TestCase
+class EnvironmentConfigSourceTest extends TestCase
 {
     /**
-     * @var ArrayManager|\PHPUnit\Framework\MockObject\MockObject
+     * @var ArrayManager|MockObject
      */
     private $arrayManagerMock;
 
     /**
-     * @var PlaceholderInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var PlaceholderInterface|MockObject
      */
     private $placeholderMock;
 
@@ -35,7 +39,7 @@ class EnvironmentConfigSourceTest extends \PHPUnit\Framework\TestCase
         $this->placeholderMock = $this->getMockBuilder(PlaceholderInterface::class)
             ->getMockForAbstractClass();
 
-        /** @var PlaceholderFactory|\PHPUnit\Framework\MockObject\MockObject $placeholderFactoryMock */
+        /** @var PlaceholderFactory|MockObject $placeholderFactoryMock */
         $placeholderFactoryMock = $this->getMockBuilder(PlaceholderFactory::class)
             ->disableOriginalConstructor()
             ->getMock();

@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\AdminNotification\Test\Unit\Model\System\Message;
 
 use Magento\AdminNotification\Model\System\Message\Security;
@@ -39,8 +41,8 @@ class SecurityTest extends TestCase
     protected function setUp(): void
     {
         //Prepare objects for constructor
-        $this->cacheMock = $this->getMockForAbstractClass(CacheInterface::class);
-        $this->scopeConfigMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
+        $this->cacheMock = $this->createMock(CacheInterface::class);
+        $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
         $this->curlFactoryMock = $this->createPartialMock(
             CurlFactory::class,
             ['create']
@@ -68,14 +70,14 @@ class SecurityTest extends TestCase
      */
     public function testIsDisplayed($expectedResult, $cached, $response)
     {
-        $this->cacheMock->expects($this->any())->method('load')->willReturn($cached);
-        $this->cacheMock->expects($this->any())->method('save')->willReturn(null);
+        $this->cacheMock->method('load')->willReturn($cached);
+        $this->cacheMock->method('save')->willReturn(null);
 
         $httpAdapterMock = $this->createMock(Curl::class);
-        $httpAdapterMock->expects($this->any())->method('read')->willReturn($response);
-        $this->curlFactoryMock->expects($this->any())->method('create')->willReturn($httpAdapterMock);
+        $httpAdapterMock->method('read')->willReturn($response);
+        $this->curlFactoryMock->method('create')->willReturn($httpAdapterMock);
 
-        $this->scopeConfigMock->expects($this->any())->method('getValue')->willReturn(null);
+        $this->scopeConfigMock->method('getValue')->willReturn(null);
 
         $this->assertEquals($expectedResult, $this->messageModel->isDisplayed());
     }

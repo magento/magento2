@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Ui\Test\Unit\Model\Export;
 
@@ -21,6 +22,7 @@ use Magento\Ui\Component\Listing\Columns;
 use Magento\Ui\Component\Listing\Columns\Column;
 use Magento\Ui\Component\MassAction\Filter;
 use Magento\Ui\Model\Export\MetadataProvider;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -34,17 +36,17 @@ class MetadataProviderTest extends TestCase
     private $model;
 
     /**
-     * @var Filter | \PHPUnit\Framework\MockObject\MockObject
+     * @var Filter|MockObject
      */
     private $filter;
 
     /**
-     * @var TimezoneInterface | \PHPUnit\Framework\MockObject\MockObject
+     * @var TimezoneInterface|MockObject
      */
     private $localeDate;
 
     /**
-     * @var ResolverInterface | \PHPUnit\Framework\MockObject\MockObject
+     * @var ResolverInterface|MockObject
      */
     private $localeResolver;
 
@@ -54,20 +56,20 @@ class MetadataProviderTest extends TestCase
     protected function setUp(): void
     {
         $this->filter = $this->getMockBuilder(Filter::class)
-                             ->disableOriginalConstructor()
-                             ->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->localeDate = $this->getMockBuilder(TimezoneInterface::class)
-                                 ->disableOriginalConstructor()
-                                 ->getMockForAbstractClass();
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->localeResolver = $this->getMockBuilder(ResolverInterface::class)
-                                     ->disableOriginalConstructor()
-                                     ->getMockForAbstractClass();
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->localeResolver->expects($this->any())
-                             ->method('getLocale')
-                             ->willReturn(null);
+            ->method('getLocale')
+            ->willReturn(null);
 
         $objectManager = new ObjectManager($this);
         $this->model = $objectManager->getObject(
@@ -137,7 +139,7 @@ class MetadataProviderTest extends TestCase
      * @param string $columnActionsName
      * @param string $columnActionsLabel
      *
-     * @return UiComponentInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @return UiComponentInterface|MockObject
      */
     protected function prepareColumns(
         $componentName,
@@ -146,58 +148,58 @@ class MetadataProviderTest extends TestCase
         $columnActionsName = 'actions_name',
         $columnActionsLabel = 'actions_label'
     ) {
-        /** @var UiComponentInterface|\PHPUnit\Framework\MockObject\MockObject $component */
+        /** @var UiComponentInterface|MockObject $component */
         $component = $this->getMockBuilder(UiComponentInterface::class)
-                          ->getMockForAbstractClass();
+            ->getMockForAbstractClass();
 
-        /** @var Columns|\PHPUnit\Framework\MockObject\MockObject $columns */
+        /** @var Columns|MockObject $columns */
         $columns = $this->getMockBuilder(Columns::class)
-                        ->disableOriginalConstructor()
-                        ->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
 
-        /** @var Column|\PHPUnit\Framework\MockObject\MockObject $column */
+        /** @var Column|MockObject $column */
         $column = $this->getMockBuilder(Column::class)
-                       ->disableOriginalConstructor()
-                       ->getMock();
-        /** @var Column|\PHPUnit\Framework\MockObject\MockObject $columnActions */
+            ->disableOriginalConstructor()
+            ->getMock();
+        /** @var Column|MockObject $columnActions */
         $columnActions = $this->getMockBuilder(Column::class)
-                              ->disableOriginalConstructor()
-                              ->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $component->expects($this->any())
-                  ->method('getName')
-                  ->willReturn($componentName);
+            ->method('getName')
+            ->willReturn($componentName);
         $component->expects($this->atLeastOnce())
-                  ->method('getChildComponents')
-                  ->willReturn([$columns]);
+            ->method('getChildComponents')
+            ->willReturn([$columns]);
 
         $columns->expects($this->atLeastOnce())
-                ->method('getChildComponents')
-                ->willReturn([$column, $columnActions]);
+            ->method('getChildComponents')
+            ->willReturn([$column, $columnActions]);
 
         $column->expects($this->any())
-               ->method('getName')
-               ->willReturn($columnName);
+            ->method('getName')
+            ->willReturn($columnName);
         $column->expects($this->any())
-               ->method('getData')
-               ->willReturnMap(
-                   [
-                       ['config/label', null, $columnLabel],
-                       ['config/dataType', null, 'data_type'],
-                   ]
-               );
+            ->method('getData')
+            ->willReturnMap(
+                [
+                    ['config/label', null, $columnLabel],
+                    ['config/dataType', null, 'data_type'],
+                ]
+            );
 
         $columnActions->expects($this->any())
-                      ->method('getName')
-                      ->willReturn($columnActionsName);
+            ->method('getName')
+            ->willReturn($columnActionsName);
         $columnActions->expects($this->any())
-                      ->method('getData')
-                      ->willReturnMap(
-                          [
-                              ['config/label', null, $columnActionsLabel],
-                              ['config/dataType', null, 'actions'],
-                          ]
-                      );
+            ->method('getData')
+            ->willReturnMap(
+                [
+                    ['config/label', null, $columnActionsLabel],
+                    ['config/dataType', null, 'actions'],
+                ]
+            );
 
         return $component;
     }
@@ -212,21 +214,21 @@ class MetadataProviderTest extends TestCase
      */
     public function testGetRowData($key, $fields, $options, $expected)
     {
-        /** @var DocumentInterface|\PHPUnit\Framework\MockObject\MockObject $document */
+        /** @var DocumentInterface|MockObject $document */
         $document = $this->getMockBuilder(DocumentInterface::class)
-                         ->getMockForAbstractClass();
+            ->getMockForAbstractClass();
 
         $attribute = $this->getMockBuilder(AttributeInterface::class)
-                          ->getMockForAbstractClass();
+            ->getMockForAbstractClass();
 
         $document->expects($this->once())
-                 ->method('getCustomAttribute')
-                 ->with($fields[0])
-                 ->willReturn($attribute);
+            ->method('getCustomAttribute')
+            ->with($fields[0])
+            ->willReturn($attribute);
 
         $attribute->expects($this->once())
-                  ->method('getValue')
-                  ->willReturn($key);
+            ->method('getValue')
+            ->willReturn($key);
 
         $result = $this->model->getRowData($document, $fields, $options);
         $this->assertIsArray($result);
@@ -289,8 +291,8 @@ class MetadataProviderTest extends TestCase
         $component = $this->prepareColumnsWithOptions($filter, $filterOptions, $columnsOptions);
 
         $this->filter->expects($this->exactly(2))
-                     ->method('getComponent')
-                     ->willReturn($component);
+            ->method('getComponent')
+            ->willReturn($component);
 
         $result = $this->model->getOptions();
         $this->assertIsArray($result);
@@ -304,102 +306,102 @@ class MetadataProviderTest extends TestCase
      *
      * @param array $columnsOptions
      *
-     * @return UiComponentInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @return UiComponentInterface|MockObject
      */
     protected function prepareColumnsWithOptions(string $filter, array $filterOptions, array $columnsOptions)
     {
-        /** @var UiComponentInterface|\PHPUnit\Framework\MockObject\MockObject $component */
+        /** @var UiComponentInterface|MockObject $component */
         $component = $this->getMockBuilder(UiComponentInterface::class)
-                          ->getMockForAbstractClass();
+            ->getMockForAbstractClass();
 
         $listingTopComponent = $this->getMockBuilder(UiComponentInterface::class)
-                                    ->getMockForAbstractClass();
+            ->getMockForAbstractClass();
 
         $filters = $this->getMockBuilder(Filters::class)
-                        ->disableOriginalConstructor()
-                        ->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
 
-        /** @var Columns|\PHPUnit\Framework\MockObject\MockObject $columns */
+        /** @var Columns|MockObject $columns */
         $columns = $this->getMockBuilder(Columns::class)
-                        ->disableOriginalConstructor()
-                        ->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
 
-        /** @var Column|\PHPUnit\Framework\MockObject\MockObject $column */
+        /** @var Column|MockObject $column */
         $column = $this->getMockBuilder(Column::class)
-                       ->disableOriginalConstructor()
-                       ->getMock();
-        /** @var Column|\PHPUnit\Framework\MockObject\MockObject $columnActions */
+            ->disableOriginalConstructor()
+            ->getMock();
+        /** @var Column|MockObject $columnActions */
         $columnActions = $this->getMockBuilder(Column::class)
-                              ->disableOriginalConstructor()
-                              ->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $component->expects($this->any())
-                  ->method('getName')
-                  ->willReturn('columns_component_name');
+            ->method('getName')
+            ->willReturn('columns_component_name');
         $component->expects($this->atLeastOnce())
-                  ->method('getChildComponents')
-                  ->willReturn(['columns' => $columns, 'listing_top' => $listingTopComponent]);
+            ->method('getChildComponents')
+            ->willReturn(['columns' => $columns, 'listing_top' => $listingTopComponent]);
 
         $listingTopComponent->expects($this->once())
-                            ->method('getChildComponents')
-                            ->willReturn([$filters]);
+            ->method('getChildComponents')
+            ->willReturn([$filters]);
 
         $select = $this->getMockBuilder(Select::class)
-                       ->disableOriginalConstructor()
-                       ->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $filters->expects($this->once())
-                ->method('getChildComponents')
-                ->willReturn([$select]);
+            ->method('getChildComponents')
+            ->willReturn([$select]);
 
         $select->expects($this->any())
-               ->method('getName')
-               ->willReturn($filter);
+            ->method('getName')
+            ->willReturn($filter);
         $select->expects($this->any())
-               ->method('getData')
-               ->with('config/options')
-               ->willReturn($filterOptions);
+            ->method('getData')
+            ->with('config/options')
+            ->willReturn($filterOptions);
 
         $columns->expects($this->atLeastOnce())
-                ->method('getChildComponents')
-                ->willReturn([$column, $columnActions]);
+            ->method('getChildComponents')
+            ->willReturn([$column, $columnActions]);
 
         $column->expects($this->any())
-               ->method('getName')
-               ->willReturn('column_name');
+            ->method('getName')
+            ->willReturn('column_name');
 
         $optionSource = $this->getMockBuilder(OptionSourceInterface::class)
-                             ->getMockForAbstractClass();
+            ->getMockForAbstractClass();
         $optionSource->expects($this->once())
-                     ->method('toOptionArray')
-                     ->willReturn($columnsOptions);
+            ->method('toOptionArray')
+            ->willReturn($columnsOptions);
 
         $column->expects($this->any())
-               ->method('getData')
-               ->willReturnMap(
-                   [
-                       ['config/label', null, 'column_label'],
-                       ['config/dataType', null, 'data_type'],
-                       ['options', null, $optionSource],
-                   ]
-               );
+            ->method('getData')
+            ->willReturnMap(
+                [
+                    ['config/label', null, 'column_label'],
+                    ['config/dataType', null, 'data_type'],
+                    ['options', null, $optionSource],
+                ]
+            );
 
         $column->expects($this->once())
-               ->method('hasData')
-               ->willReturn(true)
-               ->with('options');
+            ->method('hasData')
+            ->willReturn(true)
+            ->with('options');
 
         $columnActions->expects($this->any())
-                      ->method('getName')
-                      ->willReturn('column_actions_name');
+            ->method('getName')
+            ->willReturn('column_actions_name');
         $columnActions->expects($this->any())
-                      ->method('getData')
-                      ->willReturnMap(
-                          [
-                              ['config/label', null, 'column_actions_label'],
-                              ['config/dataType', null, 'actions'],
-                          ]
-                      );
+            ->method('getData')
+            ->willReturnMap(
+                [
+                    ['config/label', null, 'column_actions_label'],
+                    ['config/dataType', null, 'actions'],
+                ]
+            );
 
         return $component;
     }
@@ -508,23 +510,23 @@ class MetadataProviderTest extends TestCase
     public function testConvertDate($fieldValue, $expected)
     {
         $componentName = 'component_name';
-        /** @var DocumentInterface|\PHPUnit\Framework\MockObject\MockObject $document */
+        /** @var DocumentInterface|MockObject $document */
         $document = $this->getMockBuilder(DataObject::class)
-                         ->disableOriginalConstructor()
-                         ->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $document->expects($this->once())
-                 ->method('getData')
-                 ->with('field')
-                 ->willReturn($fieldValue);
+            ->method('getData')
+            ->with('field')
+            ->willReturn($fieldValue);
 
         $this->localeDate->expects($this->once())
-                         ->method('date')
-                         ->willReturn(new \DateTime($fieldValue, new \DateTimeZone('UTC')));
+            ->method('date')
+            ->willReturn(new \DateTime($fieldValue, new \DateTimeZone('UTC')));
 
         $document->expects($this->once())
-                 ->method('setData')
-                 ->with('field', $expected);
+            ->method('setData')
+            ->with('field', $expected);
 
         $this->model->convertDate($document, $componentName);
     }

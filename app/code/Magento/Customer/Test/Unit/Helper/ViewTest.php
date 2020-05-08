@@ -3,35 +3,43 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Customer\Test\Unit\Helper;
 
 use Magento\Customer\Api\CustomerMetadataInterface;
+use Magento\Customer\Api\Data\AttributeMetadataInterface;
+use Magento\Customer\Api\Data\CustomerInterface;
+use Magento\Customer\Helper\View;
+use Magento\Framework\App\Helper\Context;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class ViewTest extends \PHPUnit\Framework\TestCase
+class ViewTest extends TestCase
 {
-    /** @var \Magento\Framework\App\Helper\Context|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var Context|MockObject */
     protected $context;
 
-    /** @var \Magento\Customer\Helper\View|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var View|MockObject */
     protected $object;
 
-    /** @var CustomerMetadataInterface|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var CustomerMetadataInterface|MockObject */
     protected $customerMetadataService;
 
     protected function setUp(): void
     {
-        $this->context = $this->getMockBuilder(\Magento\Framework\App\Helper\Context::class)
+        $this->context = $this->getMockBuilder(Context::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->customerMetadataService = $this->createMock(\Magento\Customer\Api\CustomerMetadataInterface::class);
+        $this->customerMetadataService = $this->createMock(CustomerMetadataInterface::class);
 
-        $attributeMetadata = $this->createMock(\Magento\Customer\Api\Data\AttributeMetadataInterface::class);
+        $attributeMetadata = $this->createMock(AttributeMetadataInterface::class);
         $attributeMetadata->expects($this->any())->method('isVisible')->willReturn(true);
         $this->customerMetadataService->expects($this->any())
             ->method('getAttributeMetadata')
             ->willReturn($attributeMetadata);
 
-        $this->object = new \Magento\Customer\Helper\View($this->context, $this->customerMetadataService);
+        $this->object = new View($this->context, $this->customerMetadataService);
     }
 
     /**
@@ -39,7 +47,7 @@ class ViewTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetCustomerName($prefix, $firstName, $middleName, $lastName, $suffix, $result)
     {
-        $customerData = $this->getMockBuilder(\Magento\Customer\Api\Data\CustomerInterface::class)
+        $customerData = $this->getMockBuilder(CustomerInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $customerData->expects($this->any())

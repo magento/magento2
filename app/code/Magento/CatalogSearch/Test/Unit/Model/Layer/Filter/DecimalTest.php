@@ -3,79 +3,89 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\CatalogSearch\Test\Unit\Model\Layer\Filter;
 
+use Magento\Catalog\Model\Layer;
+use Magento\Catalog\Model\Layer\Filter\Item;
+use Magento\Catalog\Model\Layer\Filter\ItemFactory;
+use Magento\Catalog\Model\Layer\State;
+use Magento\Catalog\Model\ResourceModel\Layer\Filter\DecimalFactory;
+use Magento\CatalogSearch\Model\Layer\Filter\Decimal;
+use Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection;
+use Magento\Eav\Model\Entity\Attribute;
+use Magento\Framework\App\RequestInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
-use PHPUnit\Framework\MockObject\MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test for \Magento\CatalogSearch\Model\Layer\Filter\Decimal
  */
-class DecimalTest extends \PHPUnit\Framework\TestCase
+class DecimalTest extends TestCase
 {
     private $filterItem;
 
     /**
-     * @var \Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection|MockObject
+     * @var Collection|MockObject
      */
     private $fulltextCollection;
 
     /**
-     * @var \Magento\Catalog\Model\Layer|MockObject
+     * @var Layer|MockObject
      */
     private $layer;
 
     /**
-     * @var \Magento\CatalogSearch\Model\Layer\Filter\Decimal
+     * @var Decimal
      */
     private $target;
 
-    /** @var \Magento\Framework\App\RequestInterface|MockObject */
+    /** @var RequestInterface|MockObject */
     private $request;
 
-    /** @var  \Magento\Catalog\Model\Layer\State|MockObject */
+    /** @var  State|MockObject */
     private $state;
 
-    /** @var  \Magento\Catalog\Model\Layer\Filter\ItemFactory|MockObject */
+    /** @var  ItemFactory|MockObject */
     private $filterItemFactory;
 
-    /** @var  \Magento\Eav\Model\Entity\Attribute|MockObject */
+    /** @var  Attribute|MockObject */
     private $attribute;
 
     protected function setUp(): void
     {
-        $this->request = $this->getMockBuilder(\Magento\Framework\App\RequestInterface::class)
+        $this->request = $this->getMockBuilder(RequestInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['getParam'])
             ->getMockForAbstractClass();
 
-        $this->layer = $this->getMockBuilder(\Magento\Catalog\Model\Layer::class)
+        $this->layer = $this->getMockBuilder(Layer::class)
             ->disableOriginalConstructor()
             ->setMethods(['getState', 'getProductCollection'])
             ->getMock();
         $this->filterItemFactory = $this->getMockBuilder(
-            \Magento\Catalog\Model\Layer\Filter\ItemFactory::class
+            ItemFactory::class
         )
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
 
         $this->filterItem = $this->getMockBuilder(
-            \Magento\Catalog\Model\Layer\Filter\Item::class
+            Item::class
         )
             ->disableOriginalConstructor()
             ->setMethods(['setFilter', 'setLabel', 'setValue', 'setCount'])
             ->getMock();
         $this->filterItem->expects($this->any())
-            ->method($this->anything())
-            ->willReturnSelf();
+            ->method($this->anything())->willReturnSelf();
         $this->filterItemFactory->expects($this->any())
             ->method('create')
             ->willReturn($this->filterItem);
 
         $this->fulltextCollection = $this->fulltextCollection = $this->getMockBuilder(
-            \Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection::class
+            Collection::class
         )
             ->disableOriginalConstructor()
             ->getMock();
@@ -85,10 +95,10 @@ class DecimalTest extends \PHPUnit\Framework\TestCase
             ->willReturn($this->fulltextCollection);
 
         $filterDecimalFactory =
-            $this->getMockBuilder(\Magento\Catalog\Model\ResourceModel\Layer\Filter\DecimalFactory::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['create'])
-            ->getMock();
+            $this->getMockBuilder(DecimalFactory::class)
+                ->disableOriginalConstructor()
+                ->setMethods(['create'])
+                ->getMock();
         $resource = $this->getMockBuilder(\Magento\Catalog\Model\ResourceModel\Layer\Filter\Decimal::class)
             ->disableOriginalConstructor()
             ->setMethods([])
@@ -97,12 +107,12 @@ class DecimalTest extends \PHPUnit\Framework\TestCase
             ->method('create')
             ->willReturn($resource);
 
-        $this->attribute = $this->getMockBuilder(\Magento\Eav\Model\Entity\Attribute::class)
+        $this->attribute = $this->getMockBuilder(Attribute::class)
             ->disableOriginalConstructor()
             ->setMethods(['getAttributeCode', 'getFrontend', 'getIsFilterable'])
             ->getMock();
 
-        $this->state = $this->getMockBuilder(\Magento\Catalog\Model\Layer\State::class)
+        $this->state = $this->getMockBuilder(State::class)
             ->disableOriginalConstructor()
             ->setMethods(['addFilter'])
             ->getMock();
@@ -112,7 +122,7 @@ class DecimalTest extends \PHPUnit\Framework\TestCase
 
         $objectManagerHelper = new ObjectManagerHelper($this);
         $this->target = $objectManagerHelper->getObject(
-            \Magento\CatalogSearch\Model\Layer\Filter\Decimal::class,
+            Decimal::class,
             [
                 'filterItemFactory' => $this->filterItemFactory,
                 'layer' => $this->layer,
@@ -140,16 +150,14 @@ class DecimalTest extends \PHPUnit\Framework\TestCase
             ->method('getParam')
             ->with($requestField)
             ->willReturnCallback(
-                
-                    function ($field) use ($requestField, $idField, $requestValue, $idValue) {
-                        switch ($field) {
-                            case $requestField:
-                                return $requestValue;
-                            case $idField:
-                                return $idValue;
-                        }
+                function ($field) use ($requestField, $idField, $requestValue, $idValue) {
+                    switch ($field) {
+                        case $requestField:
+                            return $requestValue;
+                        case $idField:
+                            return $idValue;
                     }
-                
+                }
             );
 
         $result = $this->target->apply($this->request);
@@ -186,12 +194,10 @@ class DecimalTest extends \PHPUnit\Framework\TestCase
         $this->request->expects($this->exactly(1))
             ->method('getParam')
             ->willReturnCallback(
-                
-                    function ($field) use ($requestVar, $filter) {
-                        $this->assertTrue(in_array($field, [$requestVar, 'id']));
-                        return $filter;
-                    }
-                
+                function ($field) use ($requestVar, $filter) {
+                    $this->assertContains($field, [$requestVar, 'id']);
+                    return $filter;
+                }
             );
 
         $attributeCode = 'AttributeCode';
@@ -201,8 +207,7 @@ class DecimalTest extends \PHPUnit\Framework\TestCase
 
         $this->fulltextCollection->expects($this->once())
             ->method('addFieldToFilter')
-            ->with($attributeCode)
-            ->willReturnSelf();
+            ->with($attributeCode)->willReturnSelf();
 
         $this->target->apply($this->request);
     }

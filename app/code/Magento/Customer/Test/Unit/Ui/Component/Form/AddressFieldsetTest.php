@@ -1,18 +1,22 @@
 <?php
-declare(strict_types=1);
+
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Customer\Test\Unit\Ui\Component\Form;
 
 use Magento\Customer\Ui\Component\Form\AddressFieldset;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test for class \Magento\Customer\Ui\Component\Form\AddressFieldset
  */
-class AddressFieldsetTest extends \PHPUnit\Framework\TestCase
+class AddressFieldsetTest extends TestCase
 {
     /**
      * @var AddressFieldset
@@ -20,7 +24,7 @@ class AddressFieldsetTest extends \PHPUnit\Framework\TestCase
     protected $fieldset;
 
     /**
-     * @var ContextInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var ContextInterface|MockObject
      */
     private $context;
 
@@ -32,7 +36,7 @@ class AddressFieldsetTest extends \PHPUnit\Framework\TestCase
     protected function setUp(): void
     {
         $this->context = $this->getMockForAbstractClass(
-            \Magento\Framework\View\Element\UiComponent\ContextInterface::class
+            ContextInterface::class
         );
         $this->fieldset = new AddressFieldset(
             $this->context,

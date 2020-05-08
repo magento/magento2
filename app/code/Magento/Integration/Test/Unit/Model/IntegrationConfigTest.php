@@ -3,16 +3,21 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Integration\Test\Unit\Model;
 
 use Magento\Framework\Serialize\SerializerInterface;
-use Magento\Integration\Model\IntegrationConfig;
 use Magento\Integration\Model\Cache\TypeIntegration;
+use Magento\Integration\Model\Config\Integration\Reader;
+use Magento\Integration\Model\IntegrationConfig;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Unit test for \Magento\Integration\Model\IntegrationConfig
  */
-class IntegrationConfigTest extends \PHPUnit\Framework\TestCase
+class IntegrationConfigTest extends TestCase
 {
     /**
      * @var IntegrationConfig
@@ -20,31 +25,31 @@ class IntegrationConfigTest extends \PHPUnit\Framework\TestCase
     private $integrationConfigModel;
 
     /**
-     * @var TypeIntegration|\PHPUnit\Framework\MockObject\MockObject
+     * @var TypeIntegration|MockObject
      */
     private $configCacheTypeMock;
 
     /**
-     * @var  \Magento\Integration\Model\Config\Integration\Reader|\PHPUnit\Framework\MockObject\MockObject
+     * @var  Reader|MockObject
      */
     private $configReaderMock;
 
     /**
-     * @var SerializerInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var SerializerInterface|MockObject
      */
     private $serializer;
 
     protected function setUp(): void
     {
-        $this->configCacheTypeMock = $this->getMockBuilder(\Magento\Integration\Model\Cache\TypeIntegration::class)
+        $this->configCacheTypeMock = $this->getMockBuilder(TypeIntegration::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->configReaderMock = $this->getMockBuilder(\Magento\Integration\Model\Config\Integration\Reader::class)
+        $this->configReaderMock = $this->getMockBuilder(Reader::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->serializer = $this->getMockBuilder(SerializerInterface::class)
             ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+            ->getMock();
         $this->integrationConfigModel = new IntegrationConfig(
             $this->configCacheTypeMock,
             $this->configReaderMock,

@@ -3,28 +3,35 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Config\Test\Unit\Model\Config\Source\Email;
 
+use Magento\Config\Model\Config\Source\Email\Template;
+use Magento\Email\Model\ResourceModel\Template\Collection;
+use Magento\Email\Model\ResourceModel\Template\CollectionFactory;
+use Magento\Email\Model\Template\Config;
+use Magento\Framework\Registry;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test class for Template.
  */
-class TemplateTest extends \PHPUnit\Framework\TestCase
+class TemplateTest extends TestCase
 {
     /**
-     * @var \Magento\Config\Model\Config\Source\Email\Template
+     * @var Template
      */
     protected $_model;
 
     /**
-     * @var \Magento\Framework\Registry|MockObject
+     * @var Registry|MockObject
      */
     protected $_coreRegistry;
 
     /**
-     * @var \Magento\Email\Model\Template\Config|MockObject
+     * @var Config|MockObject
      */
     protected $_emailConfig;
 
@@ -35,12 +42,12 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp(): void
     {
-        $this->_coreRegistry = $this->createMock(\Magento\Framework\Registry::class);
-        $this->_emailConfig = $this->createMock(\Magento\Email\Model\Template\Config::class);
+        $this->_coreRegistry = $this->createMock(Registry::class);
+        $this->_emailConfig = $this->createMock(Config::class);
         $this->_templatesFactory = $this->createMock(
-            \Magento\Email\Model\ResourceModel\Template\CollectionFactory::class
+            CollectionFactory::class
         );
-        $this->_model = new \Magento\Config\Model\Config\Source\Email\Template(
+        $this->_model = new Template(
             $this->_coreRegistry,
             $this->_templatesFactory,
             $this->_emailConfig
@@ -49,16 +56,16 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
 
     public function testToOptionArray()
     {
-        $collection = $this->createMock(\Magento\Email\Model\ResourceModel\Template\Collection::class);
+        $collection = $this->createMock(Collection::class);
         $collection->expects(
             $this->once()
         )->method(
             'toOptionArray'
         )->willReturn(
             [
-                    ['value' => 'template_one', 'label' => 'Template One'],
-                    ['value' => 'template_two', 'label' => 'Template Two'],
-                ]
+                ['value' => 'template_one', 'label' => 'Template One'],
+                ['value' => 'template_two', 'label' => 'Template Two'],
+            ]
         );
         $this->_coreRegistry->expects(
             $this->once()

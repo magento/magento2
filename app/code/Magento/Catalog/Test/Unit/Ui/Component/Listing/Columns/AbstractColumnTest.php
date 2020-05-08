@@ -3,18 +3,19 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Catalog\Test\Unit\Ui\Component\Listing\Columns;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
+use Magento\Framework\View\Element\UiComponent\Processor;
 use Magento\Framework\View\Element\UiComponentFactory;
 use Magento\Ui\Component\Listing\Columns\Column;
-use Magento\Framework\View\Element\UiComponent\Processor;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-/**
- * Class AbstractColumnTest
- */
-abstract class AbstractColumnTest extends \PHPUnit\Framework\TestCase
+abstract class AbstractColumnTest extends TestCase
 {
     /**
      * @var Column
@@ -22,17 +23,17 @@ abstract class AbstractColumnTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var ContextInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var ContextInterface|MockObject
      */
     protected $contextMock;
 
     /**
-     * @var UiComponentFactory|\PHPUnit\Framework\MockObject\MockObject
+     * @var UiComponentFactory|MockObject
      */
     protected $uiComponentFactoryMock;
 
     /**
-     * @var Processor|\PHPUnit\Framework\MockObject\MockObject
+     * @var Processor|MockObject
      */
     protected $processorMock;
 

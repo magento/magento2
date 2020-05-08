@@ -3,19 +3,26 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Search\Test\Unit\Adapter\Query\Preprocessor;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Search\Adapter\Query\Preprocessor\Synonyms;
+use Magento\Search\Api\SynonymAnalyzerInterface;
+use Magento\Search\Model\SynonymAnalyzer;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class SynonymsTest extends \PHPUnit\Framework\TestCase
+class SynonymsTest extends TestCase
 {
     /**
-     * @var \Magento\Search\Api\SynonymAnalyzerInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var SynonymAnalyzerInterface|MockObject
      */
     private $synonymAnalyzer;
 
     /**
-     * @var \Magento\Search\Adapter\Query\Preprocessor\Synonyms
+     * @var Synonyms
      */
     private $synonymPreprocessor;
 
@@ -23,13 +30,13 @@ class SynonymsTest extends \PHPUnit\Framework\TestCase
     {
         $objectManager = new ObjectManager($this);
 
-        $this->synonymAnalyzer = $this->getMockBuilder(\Magento\Search\Model\SynonymAnalyzer::class)
+        $this->synonymAnalyzer = $this->getMockBuilder(SynonymAnalyzer::class)
             ->setMethods(['getSynonymsForPhrase'])
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->synonymPreprocessor = $objectManager->getObject(
-            \Magento\Search\Adapter\Query\Preprocessor\Synonyms::class,
+            Synonyms::class,
             [
                 'synonymsAnalyzer' => $this->synonymAnalyzer
             ]
@@ -71,7 +78,7 @@ class SynonymsTest extends \PHPUnit\Framework\TestCase
     {
         $this->synonymAnalyzer->expects($this->once())
             ->method('getSynonymsForPhrase')
-            ->with($this->equalTo($query))
+            ->with($query)
             ->willReturn($result);
 
         $result = $this->synonymPreprocessor->process($query);

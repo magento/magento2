@@ -3,22 +3,27 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\Simplexml\Test\Unit;
 
-class ElementTest extends \PHPUnit\Framework\TestCase
+use Magento\Framework\Simplexml\Element;
+use PHPUnit\Framework\TestCase;
+
+class ElementTest extends TestCase
 {
     /**
      * @dataProvider xmlDataProvider
      */
     public function testUnsetSelf($xmlData)
     {
-        /** @var $xml \Magento\Framework\Simplexml\Element */
+        /** @var Element $xml */
         $xml = simplexml_load_file($xmlData[0], $xmlData[1]);
-        $this->assertTrue(isset($xml->node3->node4));
+        $this->assertObjectHasAttribute('node4', $xml->node3);
         $xml->node3->unsetSelf();
-        $this->assertFalse(isset($xml->node3->node4));
-        $this->assertFalse(isset($xml->node3));
-        $this->assertTrue(isset($xml->node1));
+        $this->assertObjectNotHasAttribute('node4', $xml->node3);
+        $this->assertObjectNotHasAttribute('node3', $xml);
+        $this->assertObjectHasAttribute('node1', $xml);
     }
 
     /**
@@ -26,12 +31,11 @@ class ElementTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetParent($xmlData)
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException('InvalidArgumentException');
         $this->expectExceptionMessage('Root node could not be unset.');
-
-        /** @var $xml \Magento\Framework\Simplexml\Element */
+        /** @var Element $xml */
         $xml = simplexml_load_file($xmlData[0], $xmlData[1]);
-        $this->assertTrue($xml->getName() == 'root');
+        $this->assertEquals('root', $xml->getName());
         $xml->unsetSelf();
     }
 
@@ -41,15 +45,15 @@ class ElementTest extends \PHPUnit\Framework\TestCase
     public static function xmlDataProvider()
     {
         return [
-            [[__DIR__ . '/_files/data.xml', \Magento\Framework\Simplexml\Element::class]]
+            [[__DIR__ . '/_files/data.xml', Element::class]]
         ];
     }
 
     public function testAsNiceXmlMixedData()
     {
         $dataFile = file_get_contents(__DIR__ . '/_files/mixed_data.xml');
-        /** @var \Magento\Framework\Simplexml\Element $xml  */
-        $xml = simplexml_load_string($dataFile, \Magento\Framework\Simplexml\Element::class);
+        /** @var Element $xml  */
+        $xml = simplexml_load_string($dataFile, Element::class);
 
         $expected = <<<XML
 <root>
@@ -69,12 +73,12 @@ XML;
 
     public function testAppendChild()
     {
-        /** @var \Magento\Framework\Simplexml\Element $baseXml */
-        $baseXml = simplexml_load_string('<root/>', \Magento\Framework\Simplexml\Element::class);
-        /** @var \Magento\Framework\Simplexml\Element $appendXml */
+        /** @var Element $baseXml */
+        $baseXml = simplexml_load_string('<root/>', Element::class);
+        /** @var Element $appendXml */
         $appendXml = simplexml_load_string(
             '<node_a attr="abc"><node_b innerAttribute="xyz">text</node_b></node_a>',
-            \Magento\Framework\Simplexml\Element::class
+            Element::class
         );
         $baseXml->appendChild($appendXml);
 
@@ -86,8 +90,8 @@ XML;
     {
         $path = '/node1/node2';
         $value = 'value';
-        /** @var \Magento\Framework\Simplexml\Element $xml */
-        $xml = simplexml_load_string('<root/>', \Magento\Framework\Simplexml\Element::class);
+        /** @var Element $xml */
+        $xml = simplexml_load_string('<root/>', Element::class);
         $this->assertEmpty($xml->xpath('/root/node1/node2'));
         $xml->setNode($path, $value);
         $this->assertNotEmpty($xml->xpath('/root/node1/node2'));
@@ -101,8 +105,8 @@ XML;
      */
     public function testSetAttribute($name, $value)
     {
-        /** @var \Magento\Framework\Simplexml\Element $xml */
-        $xml = simplexml_load_string('<root name="test2" data=""/>', \Magento\Framework\Simplexml\Element::class);
+        /** @var Element $xml */
+        $xml = simplexml_load_string('<root name="test2" data=""/>', Element::class);
         $this->assertEquals($xml->getAttribute('name'), 'test2');
         $this->assertNull($xml->getAttribute('new'));
         $xml->setAttribute($name, $value);

@@ -3,67 +3,80 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Shipping\Test\Unit\Controller\Adminhtml\Order\Shipment;
 
-/**
- * Class GetShippingItemsGridTest
- */
-class GetShippingItemsGridTest extends \PHPUnit\Framework\TestCase
+use Magento\Backend\App\Action\Context;
+use Magento\Framework\App\Request\Http;
+use Magento\Framework\App\View;
+use Magento\Framework\View\Layout;
+use Magento\Shipping\Block\Adminhtml\Order\Packaging\Grid;
+use Magento\Shipping\Controller\Adminhtml\Order\Shipment\GetShippingItemsGrid;
+use Magento\Shipping\Controller\Adminhtml\Order\ShipmentLoader;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class GetShippingItemsGridTest extends TestCase
 {
     /**
-     * @var \Magento\Shipping\Controller\Adminhtml\Order\ShipmentLoader|\PHPUnit\Framework\MockObject\MockObject
+     * @var ShipmentLoader|MockObject
      */
     protected $shipmentLoaderMock;
 
     /**
-     * @var \Magento\Framework\App\Request\Http|\PHPUnit\Framework\MockObject\MockObject
+     * @var Http|MockObject
      */
     protected $requestMock;
 
     /**
-     * @var \Magento\Framework\App\Response\Http|\PHPUnit\Framework\MockObject\MockObject
+     * @var \Magento\Framework\App\Response\Http|MockObject
      */
     protected $responseMock;
 
     /**
-     * @var \Magento\Framework\App\View|\PHPUnit\Framework\MockObject\MockObject
+     * @var View|MockObject
      */
     protected $viewMock;
 
     /**
-     * @var \Magento\Shipping\Controller\Adminhtml\Order\Shipment\GetShippingItemsGrid
+     * @var GetShippingItemsGrid
      */
     protected $controller;
 
     protected function setUp(): void
     {
-        $this->requestMock = $this->createPartialMock(
-            \Magento\Framework\App\Request\Http::class,
-            ['getParam', '__wakeup']
-        );
-        $this->shipmentLoaderMock = $this->createPartialMock(
-            \Magento\Shipping\Controller\Adminhtml\Order\ShipmentLoader::class,
-            ['setOrderId', 'setShipmentId', 'setShipment', 'setTracking', 'load', '__wakeup']
-        );
-        $this->viewMock = $this->createPartialMock(
-            \Magento\Framework\App\View::class,
-            ['getLayout', 'renderLayout', '__wakeup']
-        );
+        $this->requestMock = $this->getMockBuilder(Http::class)
+            ->addMethods(['__wakeup'])
+            ->onlyMethods(['getParam'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->shipmentLoaderMock = $this->getMockBuilder(ShipmentLoader::class)
+            ->addMethods(['setOrderId', 'setShipmentId', 'setShipment', 'setTracking', '__wakeup'])
+            ->onlyMethods(['load'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->viewMock = $this->getMockBuilder(View::class)
+            ->addMethods(['__wakeup'])
+            ->onlyMethods(['getLayout', 'renderLayout'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->responseMock = $this->createPartialMock(
             \Magento\Framework\App\Response\Http::class,
             ['setBody', '__wakeup']
         );
 
-        $contextMock = $this->createPartialMock(
-            \Magento\Backend\App\Action\Context::class,
-            ['getRequest', 'getResponse', 'getView', '__wakeup']
-        );
+        $contextMock = $this->getMockBuilder(Context::class)
+            ->addMethods(['__wakeup'])
+            ->onlyMethods(['getRequest', 'getResponse', 'getView'])
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $contextMock->expects($this->any())->method('getRequest')->willReturn($this->requestMock);
         $contextMock->expects($this->any())->method('getResponse')->willReturn($this->responseMock);
         $contextMock->expects($this->any())->method('getView')->willReturn($this->viewMock);
 
-        $this->controller = new \Magento\Shipping\Controller\Adminhtml\Order\Shipment\GetShippingItemsGrid(
+        $this->controller = new GetShippingItemsGrid(
             $contextMock,
             $this->shipmentLoaderMock
         );
@@ -80,11 +93,12 @@ class GetShippingItemsGridTest extends \PHPUnit\Framework\TestCase
         $tracking = [];
         $result = 'result-html';
 
-        $layoutMock = $this->createPartialMock(\Magento\Framework\View\Layout::class, ['createBlock']);
-        $gridMock = $this->createPartialMock(
-            \Magento\Shipping\Block\Adminhtml\Order\Packaging\Grid::class,
-            ['setIndex', 'toHtml']
-        );
+        $layoutMock = $this->createPartialMock(Layout::class, ['createBlock']);
+        $gridMock = $this->getMockBuilder(Grid::class)
+            ->addMethods(['setIndex'])
+            ->onlyMethods(['toHtml'])
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->requestMock->expects($this->at(0))
             ->method('getParam')
@@ -109,25 +123,23 @@ class GetShippingItemsGridTest extends \PHPUnit\Framework\TestCase
         $this->shipmentLoaderMock->expects($this->once())->method('load');
         $layoutMock->expects($this->once())
             ->method('createBlock')
-            ->with(\Magento\Shipping\Block\Adminhtml\Order\Packaging\Grid::class)
+            ->with(Grid::class)
             ->willReturn($gridMock);
         $this->viewMock->expects($this->once())
             ->method('getLayout')
             ->willReturn($layoutMock);
         $this->responseMock->expects($this->once())
             ->method('setBody')
-            ->with($result)
-            ->willReturnSelf();
+            ->with($result)->willReturnSelf();
         $this->requestMock->expects($this->at(4))
             ->method('getParam')
             ->with('index');
         $gridMock->expects($this->once())
-            ->method('setIndex')
-            ->willReturnSelf();
+            ->method('setIndex')->willReturnSelf();
         $gridMock->expects($this->once())
             ->method('toHtml')
             ->willReturn($result);
 
-        $this->assertNotEmpty('result-html', $this->controller->execute());
+        $this->assertNotEmpty($this->controller->execute());
     }
 }

@@ -3,26 +3,35 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 /**
  * Test theme domain physical model
  */
 namespace Magento\Theme\Test\Unit\Model\Theme\Domain;
 
-class PhysicalTest extends \PHPUnit\Framework\TestCase
+use Magento\Framework\View\Design\ThemeInterface;
+use Magento\Theme\Model\CopyService;
+use Magento\Theme\Model\ResourceModel\Theme\Collection;
+use Magento\Theme\Model\Theme;
+use Magento\Theme\Model\Theme\Domain\Physical;
+use PHPUnit\Framework\TestCase;
+
+class PhysicalTest extends TestCase
 {
     public function testCreateVirtualTheme()
     {
-        $physicalTheme = $this->createPartialMock(\Magento\Theme\Model\Theme::class, ['__wakeup']);
+        $physicalTheme = $this->createPartialMock(Theme::class, ['__wakeup']);
         $physicalTheme->setData(['parent_id' => 10, 'theme_title' => 'Test Theme']);
 
-        $copyService = $this->createPartialMock(\Magento\Theme\Model\CopyService::class, ['copy']);
+        $copyService = $this->createPartialMock(CopyService::class, ['copy']);
         $copyService->expects($this->once())->method('copy')->willReturn($copyService);
 
-        $virtualTheme = $this->createPartialMock(
-            \Magento\Theme\Model\Theme::class,
-            ['__wakeup', 'getThemeImage', 'createPreviewImageCopy', 'save']
-        );
+        $virtualTheme = $this->getMockBuilder(Theme::class)
+            ->addMethods(['createPreviewImageCopy'])
+            ->onlyMethods(['__wakeup', 'getThemeImage', 'save'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $virtualTheme->expects($this->once())->method('getThemeImage')->willReturn($virtualTheme);
 
         $virtualTheme->expects(
@@ -39,7 +48,7 @@ class PhysicalTest extends \PHPUnit\Framework\TestCase
         $themeFactory->expects($this->once())->method('create')->willReturn($virtualTheme);
 
         $themeCollection = $this->createPartialMock(
-            \Magento\Theme\Model\ResourceModel\Theme\Collection::class,
+            Collection::class,
             ['addTypeFilter', 'addAreaFilter', 'addFilter', 'count']
         );
 
@@ -51,8 +60,8 @@ class PhysicalTest extends \PHPUnit\Framework\TestCase
 
         $themeCollection->expects($this->once())->method('count')->willReturn(1);
 
-        $domainModel = new \Magento\Theme\Model\Theme\Domain\Physical(
-            $this->createMock(\Magento\Framework\View\Design\ThemeInterface::class),
+        $domainModel = new Physical(
+            $this->createMock(ThemeInterface::class),
             $themeFactory,
             $copyService,
             $themeCollection

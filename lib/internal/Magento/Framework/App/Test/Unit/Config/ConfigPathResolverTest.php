@@ -3,16 +3,19 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\App\Test\Unit\Config;
 
-use Magento\Framework\App\Config\ScopeCodeResolver;
 use Magento\Framework\App\Config\ConfigPathResolver;
-use \PHPUnit\Framework\MockObject\MockObject as Mock;
+use Magento\Framework\App\Config\ScopeCodeResolver;
+use PHPUnit\Framework\MockObject\MockObject as Mock;
+use PHPUnit\Framework\TestCase;
 
 /**
  * {@inheritdoc}
  */
-class ConfigPathResolverTest extends \PHPUnit\Framework\TestCase
+class ConfigPathResolverTest extends TestCase
 {
     /**
      * @var ConfigPathResolver

@@ -3,23 +3,30 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Theme\Test\Unit\Controller\Adminhtml\Design\Config\FileUploader;
 
-use Magento\Theme\Controller\Adminhtml\Design\Config\FileUploader\Save;
+use Magento\Backend\App\Action\Context;
 use Magento\Framework\Controller\ResultFactory;
+use Magento\Framework\Controller\ResultInterface;
+use Magento\Theme\Controller\Adminhtml\Design\Config\FileUploader\Save;
+use Magento\Theme\Model\Design\Config\FileUploader\FileProcessor;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class SaveTest extends \PHPUnit\Framework\TestCase
+class SaveTest extends TestCase
 {
-    /** @var \Magento\Backend\App\Action\Context|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var Context|MockObject */
     protected $context;
 
-    /** @var \Magento\Framework\Controller\ResultFactory|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var ResultFactory|MockObject */
     protected $resultFactory;
 
-    /** @var \Magento\Framework\Controller\ResultInterface|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var ResultInterface|MockObject */
     protected $resultPage;
 
-    /** @var \Magento\Theme\Model\Design\Config\FileUploader\FileProcessor|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var FileProcessor|MockObject */
     protected $fileProcessor;
 
     /** @var Save */
@@ -27,17 +34,17 @@ class SaveTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp(): void
     {
-        $this->context = $this->getMockBuilder(\Magento\Backend\App\Action\Context::class)
+        $this->context = $this->getMockBuilder(Context::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->resultFactory = $this->getMockBuilder(\Magento\Framework\Controller\ResultFactory::class)
+        $this->resultFactory = $this->getMockBuilder(ResultFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->resultPage = $this->getMockBuilder(\Magento\Framework\Controller\ResultInterface::class)
+        $this->resultPage = $this->getMockBuilder(ResultInterface::class)
             ->setMethods(['setData'])
             ->getMockForAbstractClass();
         $this->fileProcessor = $this->getMockBuilder(
-            \Magento\Theme\Model\Design\Config\FileUploader\FileProcessor::class
+            FileProcessor::class
         )->disableOriginalConstructor()
             ->getMock();
         $this->context->expects($this->once())

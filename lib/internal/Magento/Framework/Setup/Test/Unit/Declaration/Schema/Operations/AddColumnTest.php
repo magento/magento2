@@ -3,10 +3,10 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Framework\Setup\Test\Unit\Declaration\Schema\Operations;
 
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Framework\Setup\Declaration\Schema\Db\DbSchemaWriterInterface;
 use Magento\Framework\Setup\Declaration\Schema\Db\DefinitionAggregator;
 use Magento\Framework\Setup\Declaration\Schema\Db\MySQL\DDL\Triggers\MigrateDataFrom;
@@ -21,15 +21,17 @@ use Magento\Framework\Setup\Declaration\Schema\ElementHistoryFactory;
 use Magento\Framework\Setup\Declaration\Schema\Operations\AddColumn;
 use Magento\Framework\Setup\Declaration\Schema\Operations\AddComplexElement;
 use Magento\Framework\Setup\Declaration\Schema\Operations\DropElement;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test for AddColumn.
  *
- * @package Magento\Framework\Setup\Test\Unit\Declaration\Schema\Operations
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class AddColumnTest extends \PHPUnit\Framework\TestCase
+class AddColumnTest extends TestCase
 {
     /**
      * @var AddColumn
@@ -42,36 +44,36 @@ class AddColumnTest extends \PHPUnit\Framework\TestCase
     private $objectManagerHelper;
 
     /**
-     * @var DefinitionAggregator|\PHPUnit\Framework\MockObject\MockObject
+     * @var DefinitionAggregator|MockObject
      */
     private $definitionAggregatorMock;
 
     /**
-     * @var DbSchemaWriterInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var DbSchemaWriterInterface|MockObject
      */
     private $dbSchemaWriterMock;
 
     /**
-     * @var ElementFactory|\PHPUnit\Framework\MockObject\MockObject
+     * @var ElementFactory|MockObject
      */
     private $elementFactoryMock;
 
     /**
-     * @var ElementHistoryFactory|\PHPUnit\Framework\MockObject\MockObject
+     * @var ElementHistoryFactory|MockObject
      */
     private $elementHistoryFactoryMock;
 
     /**
-     * @var AddComplexElement|\PHPUnit\Framework\MockObject\MockObject
+     * @var AddComplexElement|MockObject
      */
     private $addComplexElementMock;
 
     /**
-     * @var DropElement|\PHPUnit\Framework\MockObject\MockObject
+     * @var DropElement|MockObject
      */
     private $dropElementMock;
 
-    /** @var MigrateDataFrom|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var MigrateDataFrom|MockObject */
     private $migrateDataTrigger;
 
     protected function setUp(): void

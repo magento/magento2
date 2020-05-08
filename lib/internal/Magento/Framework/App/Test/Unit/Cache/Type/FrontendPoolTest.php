@@ -3,37 +3,46 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\App\Test\Unit\Cache\Type;
 
-use \Magento\Framework\App\Cache\Type\FrontendPool;
+use Magento\Framework\App\Cache\Frontend\Pool;
+use Magento\Framework\App\Cache\Type\AccessProxy;
+use Magento\Framework\App\Cache\Type\FrontendPool;
+use Magento\Framework\App\DeploymentConfig;
+use Magento\Framework\Cache\FrontendInterface;
+use Magento\Framework\ObjectManagerInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class FrontendPoolTest extends \PHPUnit\Framework\TestCase
+class FrontendPoolTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\App\Cache\Type\FrontendPool
+     * @var FrontendPool
      */
     protected $_model;
 
     /**
-     * @var \Magento\Framework\ObjectManagerInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var ObjectManagerInterface|MockObject
      */
     protected $_objectManager;
 
     /**
-     * @var \Magento\Framework\App\DeploymentConfig|\PHPUnit\Framework\MockObject\MockObject
+     * @var DeploymentConfig|MockObject
      */
     protected $deploymentConfig;
 
     /**
-     * @var \Magento\Framework\App\Cache\Frontend\Pool|\PHPUnit\Framework\MockObject\MockObject
+     * @var Pool|MockObject
      */
     protected $_cachePool;
 
     protected function setUp(): void
     {
-        $this->_objectManager = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
-        $this->deploymentConfig = $this->createMock(\Magento\Framework\App\DeploymentConfig::class);
-        $this->_cachePool = $this->createMock(\Magento\Framework\App\Cache\Frontend\Pool::class);
+        $this->_objectManager = $this->createMock(ObjectManagerInterface::class);
+        $this->deploymentConfig = $this->createMock(DeploymentConfig::class);
+        $this->_cachePool = $this->createMock(Pool::class);
         $this->_model = new FrontendPool(
             $this->_objectManager,
             $this->deploymentConfig,
@@ -61,7 +70,7 @@ class FrontendPoolTest extends \PHPUnit\Framework\TestCase
             $fixtureConfigData
         );
 
-        $cacheFrontend = $this->createMock(\Magento\Framework\Cache\FrontendInterface::class);
+        $cacheFrontend = $this->createMock(FrontendInterface::class);
         $this->_cachePool->expects(
             $this->once()
         )->method(
@@ -72,13 +81,13 @@ class FrontendPoolTest extends \PHPUnit\Framework\TestCase
             $cacheFrontend
         );
 
-        $accessProxy = $this->createMock(\Magento\Framework\App\Cache\Type\AccessProxy::class);
+        $accessProxy = $this->createMock(AccessProxy::class);
         $this->_objectManager->expects(
             $this->once()
         )->method(
             'create'
         )->with(
-            \Magento\Framework\App\Cache\Type\AccessProxy::class,
+            AccessProxy::class,
             $this->identicalTo(['frontend' => $cacheFrontend, 'identifier' => $inputCacheType])
         )->willReturn(
             $accessProxy
@@ -106,7 +115,7 @@ class FrontendPoolTest extends \PHPUnit\Framework\TestCase
             'fallback to default id' => [
                 $configData3,
                 'unknown_cache_type',
-                \Magento\Framework\App\Cache\Frontend\Pool::DEFAULT_FRONTEND_ID,
+                Pool::DEFAULT_FRONTEND_ID,
             ]
         ];
     }

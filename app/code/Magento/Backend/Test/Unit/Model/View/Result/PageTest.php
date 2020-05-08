@@ -3,19 +3,27 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Backend\Test\Unit\Model\View\Result;
 
+use Magento\Backend\Block\Widget\Breadcrumbs;
+use Magento\Backend\Model\View\Result\Page;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Framework\View\Element\Template\Context;
+use Magento\Framework\View\LayoutInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class PageTest extends \PHPUnit\Framework\TestCase
+class PageTest extends TestCase
 {
     /**
-     * @var \Magento\Backend\Model\View\Result\Page
+     * @var Page
      */
     protected $resultPage;
 
     /**
-     * @var \Magento\Framework\View\Element\Template\Context
+     * @var Context
      */
     protected $context;
 
@@ -25,31 +33,31 @@ class PageTest extends \PHPUnit\Framework\TestCase
     protected $objectManagerHelper;
 
     /**
-     * @var \Magento\Framework\View\LayoutInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var LayoutInterface|MockObject
      */
     protected $layoutMock;
 
     /**
-     * @var \Magento\Backend\Block\Widget\Breadcrumbs|\PHPUnit\Framework\MockObject\MockObject
+     * @var Breadcrumbs|MockObject
      */
     protected $breadcrumbsBlockMock;
 
     protected function setUp(): void
     {
-        $this->layoutMock = $this->getMockBuilder(\Magento\Framework\View\LayoutInterface::class)
+        $this->layoutMock = $this->getMockBuilder(LayoutInterface::class)
             ->setMethods(['setGeneratorPool'])
             ->getMockForAbstractClass();
-        $this->breadcrumbsBlockMock = $this->getMockBuilder(\Magento\Backend\Block\Widget\Breadcrumbs::class)
+        $this->breadcrumbsBlockMock = $this->getMockBuilder(Breadcrumbs::class)
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->context = $this->objectManagerHelper->getObject(
-            \Magento\Framework\View\Element\Template\Context::class,
+            Context::class,
             ['layout' => $this->layoutMock]
         );
         $this->resultPage = $this->objectManagerHelper->getObject(
-            \Magento\Backend\Model\View\Result\Page::class,
+            Page::class,
             ['context' => $this->context]
         );
     }

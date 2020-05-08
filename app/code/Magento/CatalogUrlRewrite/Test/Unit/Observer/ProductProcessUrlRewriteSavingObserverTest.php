@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\CatalogUrlRewrite\Test\Unit\Observer;
 
@@ -17,8 +18,6 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Test for \Magento\CatalogUrlRewrite\Observer\ProductProcessUrlRewriteSavingObserver
- *
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
@@ -64,17 +63,17 @@ class ProductProcessUrlRewriteSavingObserverTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->urlPersist = $this->createMock(\Magento\UrlRewrite\Model\UrlPersistInterface::class);
-        $this->product = $this->createPartialMock(Product::class, [
-                'getId',
-                'dataHasChangedFor',
-                'isVisibleInSiteVisibility',
-                'getIsChangedWebsites',
-                'getIsChangedCategories',
-                'getStoreId'
-            ]);
+        $this->urlPersist = $this->createMock(UrlPersistInterface::class);
+        $this->product = $this->getMockBuilder(Product::class)
+            ->addMethods(['getIsChangedWebsites', 'getIsChangedCategories'])
+            ->onlyMethods(['getId', 'dataHasChangedFor', 'isVisibleInSiteVisibility', 'getStoreId'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->product->expects($this->any())->method('getId')->willReturn(3);
-        $this->event = $this->createPartialMock(Event::class, ['getProduct']);
+        $this->event = $this->getMockBuilder(Event::class)
+            ->addMethods(['getProduct'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->event->expects($this->any())->method('getProduct')->willReturn($this->product);
         $this->observer = $this->createPartialMock(Observer::class, ['getEvent']);
         $this->observer->expects($this->any())->method('getEvent')->willReturn($this->event);
@@ -174,14 +173,13 @@ class ProductProcessUrlRewriteSavingObserverTest extends TestCase
         $expectedReplaceCount
     ) {
         $this->product->expects($this->any())->method('getStoreId')->willReturn(12);
+
         $this->product->expects($this->any())
             ->method('dataHasChangedFor')
-            ->willReturnMap(
-                [
-                    ['visibility', $isChangedVisibility],
-                    ['url_key', $isChangedUrlKey]
-                ]
-            );
+            ->willReturnMap([
+                ['visibility', $isChangedVisibility],
+                ['url_key', $isChangedUrlKey]
+            ]);
 
         $this->product->expects($this->any())
             ->method('getIsChangedWebsites')

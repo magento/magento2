@@ -3,25 +3,32 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\Session\Test\Unit\SaveHandler\Redis;
 
-use Magento\Store\Model\ScopeInterface;
+use Magento\Framework\App\DeploymentConfig;
+use Magento\Framework\App\State;
 use Magento\Framework\Session\SaveHandler\Redis\Config;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Store\Model\ScopeInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class ConfigTest extends \PHPUnit\Framework\TestCase
+class ConfigTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\App\DeploymentConfig|\PHPUnit\Framework\MockObject\MockObject
+     * @var DeploymentConfig|MockObject
      */
     private $deploymentConfigMock;
 
     /**
-     * @var \Magento\Framework\App\State|\PHPUnit\Framework\MockObject\MockObject
+     * @var State|MockObject
      */
     private $appStateMock;
 
     /**
-     * @var \Magento\Framework\App\Config|\PHPUnit\Framework\MockObject\MockObject
+     * @var \Magento\Framework\App\Config|MockObject
      */
     private $scopeConfigMock;
 
@@ -32,11 +39,11 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp(): void
     {
-        $this->deploymentConfigMock = $this->createMock(\Magento\Framework\App\DeploymentConfig::class);
-        $this->appStateMock = $this->createMock(\Magento\Framework\App\State::class);
+        $this->deploymentConfigMock = $this->createMock(DeploymentConfig::class);
+        $this->appStateMock = $this->createMock(State::class);
         $this->scopeConfigMock = $this->createMock(\Magento\Framework\App\Config::class);
 
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $objectManager = new ObjectManager($this);
         $this->config = $objectManager->getObject(
             Config::class,
             [

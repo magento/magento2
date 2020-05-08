@@ -3,19 +3,25 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Setup\Test\Unit\Model\Cron\Queue;
 
+use Magento\Framework\Filesystem;
+use Magento\Framework\Filesystem\Directory\ReadInterface;
 use Magento\Setup\Model\Cron\Queue\Reader;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class ReaderTest extends \PHPUnit\Framework\TestCase
+class ReaderTest extends TestCase
 {
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\Filesystem
+     * @var MockObject|Filesystem
      */
     private $filesystem;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\Filesystem\Directory\ReadInterface
+     * @var MockObject|ReadInterface
      */
     private $directoryRead;
 
@@ -26,9 +32,9 @@ class ReaderTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp(): void
     {
-        $this->filesystem = $this->createMock(\Magento\Framework\Filesystem::class);
+        $this->filesystem = $this->createMock(Filesystem::class);
         $this->directoryRead = $this->getMockForAbstractClass(
-            \Magento\Framework\Filesystem\Directory\ReadInterface::class,
+            ReadInterface::class,
             [],
             '',
             false
@@ -43,13 +49,10 @@ class ReaderTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('', $this->reader->read());
     }
 
-    /**
-     */
     public function testReadException()
     {
-        $this->expectException(\RuntimeException::class);
+        $this->expectException('RuntimeException');
         $this->expectExceptionMessage('must be a valid JSON');
-
         $this->directoryRead->expects($this->once())->method('isExist')->willReturn(true);
         $this->directoryRead->expects($this->once())->method('readFile')->willReturn('invalid json');
         $this->reader->read();

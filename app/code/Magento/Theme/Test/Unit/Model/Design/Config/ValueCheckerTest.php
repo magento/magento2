@@ -3,34 +3,41 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Theme\Test\Unit\Model\Design\Config;
 
+use Magento\Framework\App\Config;
+use Magento\Framework\App\ScopeFallbackResolverInterface;
 use Magento\Theme\Model\Design\Config\ValueChecker;
+use Magento\Theme\Model\Design\Config\ValueProcessor;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class ValueCheckerTest extends \PHPUnit\Framework\TestCase
+class ValueCheckerTest extends TestCase
 {
-    /** @var \Magento\Framework\App\ScopeFallbackResolverInterface|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var ScopeFallbackResolverInterface|MockObject */
     protected $fallbackResolver;
 
-    /** @var \Magento\Framework\App\Config|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var Config|MockObject */
     protected $appConfig;
 
     /** @var ValueChecker */
     protected $valueChecker;
 
-    /** @var \Magento\Theme\Model\Design\Config\ValueProcessor|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var ValueProcessor|MockObject */
     protected $valueProcessor;
 
     protected function setUp(): void
     {
         $this->fallbackResolver = $this->getMockForAbstractClass(
-            \Magento\Framework\App\ScopeFallbackResolverInterface::class,
+            ScopeFallbackResolverInterface::class,
             [],
             '',
             false
         );
-        $this->appConfig = $this->createMock(\Magento\Framework\App\Config::class);
-        $this->valueProcessor = $this->getMockBuilder(\Magento\Theme\Model\Design\Config\ValueProcessor::class)
+        $this->appConfig = $this->createMock(Config::class);
+        $this->valueProcessor = $this->getMockBuilder(ValueProcessor::class)
             ->disableOriginalConstructor()
             ->getMock();
 

@@ -3,31 +3,40 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\HTTP\Test\Unit\PhpEnvironment;
 
-class ServerAddressTest extends \PHPUnit\Framework\TestCase
+use Magento\Framework\App\Request\Http;
+use Magento\Framework\HTTP\PhpEnvironment\ServerAddress;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class ServerAddressTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\HTTP\PhpEnvironment\ServerAddress
+     * @var ServerAddress
      */
     protected $_serverAddress;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\App\Request\Http
+     * @var MockObject|Http
      */
     protected $_request;
 
     protected function setUp(): void
     {
         $this->_request = $this->getMockBuilder(
-            \Magento\Framework\App\Request\Http::class
-        )->disableOriginalConstructor()->setMethods(
-            ['getServer']
-        )->getMock();
+            Http::class
+        )->disableOriginalConstructor()
+            ->setMethods(
+                ['getServer']
+            )->getMock();
 
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $objectManager = new ObjectManager($this);
         $this->_serverAddress = $objectManager->getObject(
-            \Magento\Framework\HTTP\PhpEnvironment\ServerAddress::class,
+            ServerAddress::class,
             ['httpRequest' => $this->_request]
         );
     }

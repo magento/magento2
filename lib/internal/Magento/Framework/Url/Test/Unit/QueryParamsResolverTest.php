@@ -3,20 +3,23 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Framework\Url\Test\Unit;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\Url\QueryParamsResolver;
+use PHPUnit\Framework\TestCase;
 
-class QueryParamsResolverTest extends \PHPUnit\Framework\TestCase
+class QueryParamsResolverTest extends TestCase
 {
-    /** @var \Magento\Framework\Url\QueryParamsResolver */
+    /** @var QueryParamsResolver */
     protected $object;
 
     protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
-        $this->object = $objectManager->getObject(\Magento\Framework\Url\QueryParamsResolver::class);
+        $this->object = $objectManager->getObject(QueryParamsResolver::class);
     }
 
     public function testGetQuery()

@@ -3,24 +3,32 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Directory\Test\Unit\Model\Country\Postcode\Config;
 
-class ConverterTest extends \PHPUnit\Framework\TestCase
+use Magento\Customer\Model\Address\Config\Converter as AddressConverter;
+use Magento\Directory\Model\Country\Postcode\Config\Converter as CountryConverter;
+use Magento\Framework\Stdlib\BooleanUtils;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class ConverterTest extends TestCase
 {
     /**
-     * @var \Magento\Customer\Model\Address\Config\Converter
+     * @var AddressConverter
      */
     protected $model;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     protected $booleanUtilsMock;
 
     protected function setUp(): void
     {
-        $this->booleanUtilsMock = $this->createMock(\Magento\Framework\Stdlib\BooleanUtils::class);
-        $this->model = new \Magento\Directory\Model\Country\Postcode\Config\Converter($this->booleanUtilsMock);
+        $this->booleanUtilsMock = $this->createMock(BooleanUtils::class);
+        $this->model = new CountryConverter($this->booleanUtilsMock);
     }
 
     public function testConvert()

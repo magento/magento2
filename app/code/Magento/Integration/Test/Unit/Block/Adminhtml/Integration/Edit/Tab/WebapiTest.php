@@ -3,71 +3,80 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Integration\Test\Unit\Block\Adminhtml\Integration\Edit\Tab;
 
+use Magento\Framework\Acl\AclResource\ProviderInterface;
+use Magento\Framework\Acl\RootResource;
+use Magento\Framework\Registry;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Integration\Block\Adminhtml\Integration\Edit\Tab\Info;
+use Magento\Integration\Block\Adminhtml\Integration\Edit\Tab\Webapi;
 use Magento\Integration\Controller\Adminhtml\Integration as IntegrationController;
+use Magento\Integration\Helper\Data;
 use Magento\Integration\Model\Integration as IntegrationModel;
+use Magento\Integration\Model\IntegrationService;
+use PHPUnit\Framework\TestCase;
 
-class WebapiTest extends \PHPUnit\Framework\TestCase
+class WebapiTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
+     * @var ObjectManager
      */
     private $objectManager;
 
     /**
-     * @var \Magento\Integration\Block\Adminhtml\Integration\Edit\Tab\Info
+     * @var Info
      */
     private $webapiBlock;
 
     /**
-     * @var \Magento\Framework\Registry
+     * @var Registry
      */
     private $registry;
 
     /**
-     * @var \Magento\Framework\Acl\RootResource
+     * @var RootResource
      */
     private $rootResource;
 
     /**
-     * @var \Magento\Framework\Acl\AclResource\ProviderInterface
+     * @var ProviderInterface
      */
     private $aclResourceProvider;
 
     /**
-     * @var \Magento\Integration\Helper\Data
+     * @var Data
      */
     private $integrationHelper;
 
     /**
-     * @var \Magento\Integration\Model\IntegrationService
+     * @var IntegrationService
      */
     private $integrationService;
 
     protected function setUp(): void
     {
-        $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $this->objectManager = new ObjectManager($this);
 
-        $this->registry = $this->getMockBuilder(\Magento\Framework\Registry::class)
+        $this->registry = $this->getMockBuilder(Registry::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->rootResource = $this->getMockBuilder(\Magento\Framework\Acl\RootResource::class)
+        $this->rootResource = $this->getMockBuilder(RootResource::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->aclResourceProvider = $this->getMockBuilder(\Magento\Framework\Acl\AclResource\ProviderInterface::class)
+        $this->aclResourceProvider = $this->getMockBuilder(ProviderInterface::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
-        $this->integrationHelper = $this->getMockBuilder(\Magento\Integration\Helper\Data::class)
+        $this->integrationHelper = $this->getMockBuilder(Data::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->integrationService = $this->getMockBuilder(\Magento\Integration\Model\IntegrationService::class)
+        $this->integrationService = $this->getMockBuilder(IntegrationService::class)
             ->disableOriginalConstructor()
             ->getMock();
     }
@@ -218,7 +227,7 @@ class WebapiTest extends \PHPUnit\Framework\TestCase
     /**
      * @param array $integrationData
      * @param array $selectedResources
-     * @return \Magento\Integration\Block\Adminhtml\Integration\Edit\Tab\Webapi
+     * @return Webapi
      */
     private function getWebapiBlock($integrationData = [], array $selectedResources = [])
     {
@@ -240,7 +249,7 @@ class WebapiTest extends \PHPUnit\Framework\TestCase
             ->willReturnOnConsecutiveCalls(false, $integrationData, $integrationData);
 
         return $this->objectManager->getObject(
-            \Magento\Integration\Block\Adminhtml\Integration\Edit\Tab\Webapi::class,
+            Webapi::class,
             [
                 'registry' => $this->registry,
                 'rootResource' => $this->rootResource,

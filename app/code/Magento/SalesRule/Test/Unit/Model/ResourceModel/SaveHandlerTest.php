@@ -3,17 +3,20 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\SalesRule\Test\Unit\Model\ResourceModel;
 
-use Magento\SalesRule\Model\ResourceModel\SaveHandler;
-use Magento\SalesRule\Model\ResourceModel\Rule;
+use Magento\Framework\EntityManager\EntityMetadata;
 use Magento\Framework\EntityManager\MetadataPool;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\SalesRule\Api\Data\RuleInterface;
+use Magento\SalesRule\Model\ResourceModel\Rule;
+use Magento\SalesRule\Model\ResourceModel\SaveHandler;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-/**
- * Class SaveHandlerTest
- */
-class SaveHandlerTest extends \PHPUnit\Framework\TestCase
+class SaveHandlerTest extends TestCase
 {
     /**
      * @var SaveHandler
@@ -21,17 +24,17 @@ class SaveHandlerTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var Rule|\PHPUnit\Framework\MockObject\MockObject
+     * @var Rule|MockObject
      */
     protected $ruleResource;
 
     /**
-     * @var MetadataPool|\PHPUnit\Framework\MockObject\MockObject
+     * @var MetadataPool|MockObject
      */
     protected $metadataPool;
 
     /**
-     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
+     * @var ObjectManager
      */
     protected $objectManager;
 
@@ -40,16 +43,16 @@ class SaveHandlerTest extends \PHPUnit\Framework\TestCase
      */
     protected function setUp(): void
     {
-        $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $this->objectManager = new ObjectManager($this);
 
-        $className = \Magento\SalesRule\Model\ResourceModel\Rule::class;
+        $className = Rule::class;
         $this->ruleResource = $this->createMock($className);
 
-        $className = \Magento\Framework\EntityManager\MetadataPool::class;
+        $className = MetadataPool::class;
         $this->metadataPool = $this->createMock($className);
 
         $this->model = $this->objectManager->getObject(
-            \Magento\SalesRule\Model\ResourceModel\SaveHandler::class,
+            SaveHandler::class,
             [
                 'ruleResource' => $this->ruleResource,
                 'metadataPool' => $this->metadataPool,
@@ -67,7 +70,7 @@ class SaveHandlerTest extends \PHPUnit\Framework\TestCase
             'rule_id' => 1
         ];
 
-        $className = \Magento\Framework\EntityManager\EntityMetadata::class;
+        $className = EntityMetadata::class;
         $metadata = $this->createMock($className);
 
         $metadata->expects($this->once())
@@ -94,7 +97,7 @@ class SaveHandlerTest extends \PHPUnit\Framework\TestCase
             'customer_group_ids' => $customers
         ];
 
-        $className = \Magento\Framework\EntityManager\EntityMetadata::class;
+        $className = EntityMetadata::class;
         $metadata = $this->createMock($className);
 
         $metadata->expects($this->once())
@@ -124,7 +127,7 @@ class SaveHandlerTest extends \PHPUnit\Framework\TestCase
             'customer_group_ids' => $customers
         ];
 
-        $className = \Magento\Framework\EntityManager\EntityMetadata::class;
+        $className = EntityMetadata::class;
         $metadata = $this->createMock($className);
 
         $metadata->expects($this->once())

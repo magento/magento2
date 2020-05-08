@@ -44,7 +44,7 @@ class StoreValidatorTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->storeManagerMock = $this->getMockForAbstractClass(StoreManagerInterface::class);
+        $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
         $this->requestMock = $this->getMockBuilder(HttpRequestInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(
@@ -58,7 +58,7 @@ class StoreValidatorTest extends TestCase
                     'getHeader'
                 ]
             )
-            ->getMockForAbstractClass();
+            ->getMock();
 
         $objectManager = new ObjectManagerHelper($this);
 
@@ -115,15 +115,15 @@ class StoreValidatorTest extends TestCase
             ->with('Store')
             ->willReturn($config['default']);
         $this->storeManagerMock
-             ->expects($this->once())
-             ->method('getStores')
-             ->with(false, true)
-             ->willReturn($config['default']);
+            ->expects($this->once())
+            ->method('getStores')
+            ->with(false, true)
+            ->willReturn($config['default']);
         $this->storeManagerMock
-             ->expects($this->never())
-             ->method('setCurrentStore')
-             ->with(null)
-             ->willReturnSelf();
+            ->expects($this->never())
+            ->method('setCurrentStore')
+            ->with(null)
+            ->willReturnSelf();
         $this->storeValidator->validate($this->requestMock);
     }
 
@@ -137,8 +137,8 @@ class StoreValidatorTest extends TestCase
         return [
             [
                 [
-                'default'   =>  self::DEFAULT_STORE_VIEW_CODE,
-                'store'     =>  self::STORE_CODE
+                    'default'   =>  self::DEFAULT_STORE_VIEW_CODE,
+                    'store'     =>  self::STORE_CODE
                 ]
             ]
         ];

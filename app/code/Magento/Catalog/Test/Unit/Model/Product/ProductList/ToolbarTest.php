@@ -3,14 +3,18 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Unit\Model\Product\ProductList;
 
-use \Magento\Catalog\Model\Product\ProductList\Toolbar;
-
+use Magento\Catalog\Model\Product\ProductList\Toolbar;
+use Magento\Framework\App\Request\Http;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
 
-class ToolbarTest extends \PHPUnit\Framework\TestCase
+use PHPUnit\Framework\TestCase;
+
+class ToolbarTest extends TestCase
 {
     /**
      * @var Toolbar
@@ -18,7 +22,7 @@ class ToolbarTest extends \PHPUnit\Framework\TestCase
     protected $toolbarModel;
 
     /**
-     * @var \Magento\Framework\App\Request\Http |\PHPUnit\Framework\MockObject\MockObject
+     * @var Http|MockObject
      */
     protected $requestMock;
 
@@ -27,11 +31,11 @@ class ToolbarTest extends \PHPUnit\Framework\TestCase
      */
     protected function setUp(): void
     {
-        $this->requestMock = $this->getMockBuilder(\Magento\Framework\App\Request\Http::class)
+        $this->requestMock = $this->getMockBuilder(Http::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->toolbarModel = (new ObjectManager($this))->getObject(
-            \Magento\Catalog\Model\Product\ProductList\Toolbar::class,
+            Toolbar::class,
             [
                 'request' => $this->requestMock,
             ]

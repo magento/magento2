@@ -3,21 +3,22 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Translation\Test\Unit\App\Config\Type;
 
-use Magento\Framework\App\Cache\Type\Translate;
 use Magento\Framework\App\Config\ConfigSourceInterface;
-use Magento\Framework\Cache\FrontendInterface;
 use Magento\Translation\App\Config\Type\Translation;
-use Magento\Framework\DataObject;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \Magento\Translation\App\Config\Type\Translation
  */
-class TranslationTest extends \PHPUnit\Framework\TestCase
+class TranslationTest extends TestCase
 {
     /**
-     * @var ConfigSourceInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var ConfigSourceInterface|MockObject
      */
     private $source;
 

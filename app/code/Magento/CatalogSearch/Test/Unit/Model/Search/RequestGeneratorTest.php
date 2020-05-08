@@ -3,30 +3,38 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\CatalogSearch\Test\Unit\Model\Search;
 
+use Magento\Catalog\Model\ResourceModel\Eav\Attribute as AttributeResourceModel;
+use Magento\Catalog\Model\ResourceModel\Product\Attribute\Collection;
 use Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory;
-use Magento\CatalogSearch\Model\Search\RequestGenerator\GeneratorResolver;
+use Magento\CatalogSearch\Model\Search\RequestGenerator;
 use Magento\CatalogSearch\Model\Search\RequestGenerator\GeneratorInterface;
+use Magento\CatalogSearch\Model\Search\RequestGenerator\GeneratorResolver;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test for \Magento\CatalogSearch\Model\Search\RequestGenerator
  */
-class RequestGeneratorTest extends \PHPUnit\Framework\TestCase
+class RequestGeneratorTest extends TestCase
 {
-    /** @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager  */
+    /** @var ObjectManager  */
     protected $objectManagerHelper;
 
-    /** @var \Magento\CatalogSearch\Model\Search\RequestGenerator */
+    /** @var RequestGenerator */
     protected $object;
 
-    /** @var  CollectionFactory | \PHPUnit\Framework\MockObject\MockObject */
+    /** @var  CollectionFactory|MockObject */
     protected $productAttributeCollectionFactory;
 
     protected function setUp(): void
     {
         $this->productAttributeCollectionFactory =
-            $this->getMockBuilder(\Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory::class)
+            $this->getMockBuilder(CollectionFactory::class)
                 ->setMethods(['create'])
                 ->disableOriginalConstructor()
                 ->getMock();
@@ -46,9 +54,9 @@ class RequestGeneratorTest extends \PHPUnit\Framework\TestCase
         $generatorResolver->method('getGeneratorForType')
             ->willReturn($generator);
 
-        $this->objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $this->objectManagerHelper = new ObjectManager($this);
         $this->object = $this->objectManagerHelper->getObject(
-            \Magento\CatalogSearch\Model\Search\RequestGenerator::class,
+            RequestGenerator::class,
             [
                 'productAttributeCollectionFactory' => $this->productAttributeCollectionFactory,
                 'generatorResolver' => $generatorResolver
@@ -128,7 +136,7 @@ class RequestGeneratorTest extends \PHPUnit\Framework\TestCase
      */
     public function testGenerate($countResult, $attributeOptions)
     {
-        $collection = $this->getMockBuilder(\Magento\Catalog\Model\ResourceModel\Product\Attribute\Collection::class)
+        $collection = $this->getMockBuilder(Collection::class)
             ->disableOriginalConstructor()
             ->getMock();
         $collection->expects($this->any())
@@ -145,8 +153,7 @@ class RequestGeneratorTest extends \PHPUnit\Framework\TestCase
             ->with(
                 ['is_searchable', 'is_visible_in_advanced_search', 'is_filterable', 'is_filterable_in_search'],
                 [1, 1, [1, 2], 1]
-            )
-            ->willReturnSelf();
+            )->willReturnSelf();
 
         $this->productAttributeCollectionFactory->expects($this->any())
             ->method('create')
@@ -189,12 +196,12 @@ class RequestGeneratorTest extends \PHPUnit\Framework\TestCase
      * Create attribute mock
      *
      * @param $attributeOptions
-     * @return \Magento\Catalog\Model\Entity\Attribute|\PHPUnit\Framework\MockObject\MockObject
+     * @return \Magento\Catalog\Model\Entity\Attribute|MockObject
      */
     private function createAttributeMock($attributeOptions)
     {
-        /** @var \Magento\Catalog\Model\Entity\Attribute|\PHPUnit\Framework\MockObject\MockObject $attribute */
-        $attribute = $this->getMockBuilder(\Magento\Catalog\Model\ResourceModel\Eav\Attribute::class)
+        /** @var \Magento\Catalog\Model\Entity\Attribute|MockObject $attribute */
+        $attribute = $this->getMockBuilder(AttributeResourceModel::class)
             ->disableOriginalConstructor()
             ->setMethods(
                 [

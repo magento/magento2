@@ -4,18 +4,22 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Search\Test\Unit\Controller\Adminhtml\Term;
 
-use Magento\Framework\Controller\ResultFactory;
+use Magento\Backend\App\Action\Context;
 use Magento\Backend\Model\View\Result\Page;
+use Magento\Framework\Controller\ResultFactory;
+use Magento\Framework\Event\ManagerInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Framework\View\Page\Config;
 use Magento\Framework\View\Page\Title;
-use Magento\Framework\Event\ManagerInterface;
-use Magento\Backend\App\Action\Context;
 use Magento\Search\Controller\Adminhtml\Term\Report;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class ReportTest extends \PHPUnit\Framework\TestCase
+class ReportTest extends TestCase
 {
     /**
      * @var ObjectManagerHelper
@@ -23,27 +27,27 @@ class ReportTest extends \PHPUnit\Framework\TestCase
     private $objectManagerHelper;
 
     /**
-     * @var ResultFactory|\PHPUnit\Framework\MockObject\MockObject
+     * @var ResultFactory|MockObject
      */
     private $resultFactoryMock;
 
     /**
-     * @var Page|\PHPUnit\Framework\MockObject\MockObject
+     * @var Page|MockObject
      */
     private $pageMock;
 
     /**
-     * @var Config|\PHPUnit\Framework\MockObject\MockObject
+     * @var Config|MockObject
      */
     private $pageConfigMock;
 
     /**
-     * @var Title|\PHPUnit\Framework\MockObject\MockObject
+     * @var Title|MockObject
      */
     private $titleMock;
 
     /**
-     * @var ManagerInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var ManagerInterface|MockObject
      */
     private $eventManagerMock;
 
@@ -51,6 +55,11 @@ class ReportTest extends \PHPUnit\Framework\TestCase
      * @var Report
      */
     private $reportController;
+
+    /**
+     * @var MockObject|Context
+     */
+    private $contextMock;
 
     protected function setUp(): void
     {
@@ -69,7 +78,7 @@ class ReportTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $this->eventManagerMock = $this->getMockBuilder(ManagerInterface::class)
             ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+            ->getMock();
         $this->contextMock = $this->getMockBuilder(Context::class)
             ->disableOriginalConstructor()
             ->getMock();

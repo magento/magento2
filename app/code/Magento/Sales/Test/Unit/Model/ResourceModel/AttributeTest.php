@@ -3,43 +3,51 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Sales\Test\Unit\Model\ResourceModel;
 
-/**
- * Class AttributeTest
- */
-class AttributeTest extends \PHPUnit\Framework\TestCase
+use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Framework\DB\Adapter\Pdo\Mysql;
+use Magento\Framework\Event\ManagerInterface;
+use Magento\Sales\Model\AbstractModel;
+use Magento\Sales\Model\ResourceModel\Attribute;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class AttributeTest extends TestCase
 {
     /**
-     * @var \Magento\Sales\Model\ResourceModel\Attribute|\PHPUnit\Framework\MockObject\MockObject
+     * @var Attribute|MockObject
      */
     protected $attribute;
 
     /**
-     * @var \Magento\Framework\App\ResourceConnection|\PHPUnit\Framework\MockObject\MockObject
+     * @var ResourceConnection|MockObject
      */
     protected $appResourceMock;
 
     /**
-     * @var \Magento\Framework\Event\ManagerInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var ManagerInterface|MockObject
      */
     protected $eventManagerMock;
 
     /**
-     * @var \Magento\Sales\Model\AbstractModel|\PHPUnit\Framework\MockObject\MockObject
+     * @var AbstractModel|MockObject
      */
     protected $modelMock;
 
     /**
-     * @var \Magento\Framework\DB\Adapter\AdapterInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var AdapterInterface|MockObject
      */
     protected $connectionMock;
 
     protected function setUp(): void
     {
-        $this->appResourceMock = $this->createMock(\Magento\Framework\App\ResourceConnection::class);
+        $this->appResourceMock = $this->createMock(ResourceConnection::class);
         $this->eventManagerMock = $this->getMockForAbstractClass(
-            \Magento\Framework\Event\ManagerInterface::class,
+            ManagerInterface::class,
             [],
             '',
             false,
@@ -48,18 +56,18 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
             []
         );
         $this->modelMock = $this->getMockForAbstractClass(
-            \Magento\Sales\Model\AbstractModel::class,
+            AbstractModel::class,
             [],
             '',
             false,
             false,
             true,
-            ['__wakeup', 'getId', 'getEventPrefix', 'getEventObject']
+            ['getId', 'getEventPrefix', 'getEventObject']
         );
-        $this->connectionMock = $this->createPartialMock(
-            \Magento\Framework\DB\Adapter\Pdo\Mysql::class,
-            ['describeTable', 'insert', 'lastInsertId', 'beginTransaction', 'rollback', 'commit']
-        );
+        $this->connectionMock = $this->getMockBuilder(Mysql::class)
+            ->onlyMethods(['rollback', 'describeTable', 'insert', 'lastInsertId', 'beginTransaction', 'commit'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->connectionMock->expects($this->any())
             ->method('describeTable')
             ->willReturn([]);
@@ -67,7 +75,7 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
             ->method('insert');
         $this->connectionMock->expects($this->any())
             ->method('lastInsertId');
-        $this->attribute = new \Magento\Sales\Model\ResourceModel\Attribute(
+        $this->attribute = new Attribute(
             $this->appResourceMock,
             $this->eventManagerMock
         );
@@ -113,9 +121,8 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
      */
     public function testSaveFailed()
     {
-        $this->expectException(\Exception::class);
+        $this->expectException('Exception');
         $this->expectExceptionMessage('Expected Exception');
-
         $this->modelMock->expects($this->any())
             ->method('getEventPrefix')
             ->willReturn('event_prefix');
@@ -128,7 +135,7 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
         $exception  = new \Exception('Expected Exception');
         $this->modelMock->expects($this->any())
             ->method('getId')
-            ->will($this->throwException($exception));
+            ->willThrowException($exception);
         $this->connectionMock->expects($this->once())
             ->method('beginTransaction');
         $this->connectionMock->expects($this->once())

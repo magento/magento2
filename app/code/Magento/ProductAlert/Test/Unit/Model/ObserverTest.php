@@ -3,11 +3,32 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\ProductAlert\Test\Unit\Model;
 
+use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Catalog\Model\Product;
+use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Api\Data\CustomerInterface;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\DataObject;
+use Magento\Framework\Mail\Template\TransportBuilder;
+use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\Translate\Inline\StateInterface;
+use Magento\ProductAlert\Model\Email;
+use Magento\ProductAlert\Model\EmailFactory;
+use Magento\ProductAlert\Model\Observer;
 use Magento\ProductAlert\Model\ProductSalability;
+use Magento\Sitemap\Model\ResourceModel\Sitemap\Collection;
+use Magento\Sitemap\Model\ResourceModel\Sitemap\CollectionFactory;
+use Magento\Sitemap\Model\Sitemap;
+use Magento\Store\Model\Store;
+use Magento\Store\Model\StoreManagerInterface;
+use Magento\Store\Model\Website;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Class ObserverTest
@@ -17,105 +38,105 @@ use Magento\ProductAlert\Model\ProductSalability;
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.TooManyFields)
  */
-class ObserverTest extends \PHPUnit\Framework\TestCase
+class ObserverTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
+     * @var ObjectManager
      */
     private $objectManager;
 
     /**
-     * @var \Magento\ProductAlert\Model\Observer
+     * @var Observer
      */
     private $observer;
 
     /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var ScopeConfigInterface|MockObject
      */
     private $scopeConfigMock;
 
     /**
-     * @var \Magento\Sitemap\Model\ResourceModel\Sitemap\CollectionFactory|\PHPUnit\Framework\MockObject\MockObject
+     * @var CollectionFactory|MockObject
      */
     private $collectionFactoryMock;
 
     /**
-     * @var \Magento\Framework\Mail\Template\TransportBuilder|\PHPUnit\Framework\MockObject\MockObject
+     * @var TransportBuilder|MockObject
      */
     private $transportBuilderMock;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var StoreManagerInterface|MockObject
      */
     private $storeManagerMock;
 
     /**
-     * @var \Magento\Framework\Translate\Inline\StateInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var StateInterface|MockObject
      */
     private $inlineTranslationMock;
 
     /**
-     * @var \Magento\Sitemap\Model\ResourceModel\Sitemap\Collection|\PHPUnit\Framework\MockObject\MockObject
+     * @var Collection|MockObject
      */
     private $sitemapCollectionMock;
 
     /**
-     * @var \Magento\Sitemap\Model\Sitemap|\PHPUnit\Framework\MockObject\MockObject
+     * @var Sitemap|MockObject
      */
     private $sitemapMock;
 
     /**
-     * @var \Magento\ProductAlert\Model\EmailFactory|\PHPUnit\Framework\MockObject\MockObject
+     * @var EmailFactory|MockObject
      */
     private $emailFactoryMock;
 
     /**
-     * @var \Magento\ProductAlert\Model\Email|\PHPUnit\Framework\MockObject\MockObject
+     * @var Email|MockObject
      */
     private $emailMock;
 
     /**
-     * @var \Magento\ProductAlert\Model\ResourceModel\Price\CollectionFactory|\PHPUnit\Framework\MockObject\MockObject
+     * @var \Magento\ProductAlert\Model\ResourceModel\Price\CollectionFactory|MockObject
      */
     private $priceColFactoryMock;
 
     /**
-     * @var \Magento\ProductAlert\Model\ResourceModel\Stock\CollectionFactory|\PHPUnit\Framework\MockObject\MockObject
+     * @var \Magento\ProductAlert\Model\ResourceModel\Stock\CollectionFactory|MockObject
      */
     private $stockColFactoryMock;
 
     /**
-     * @var \Magento\Store\Model\Website|\PHPUnit\Framework\MockObject\MockObject
+     * @var Website|MockObject
      */
     private $websiteMock;
 
     /**
-     * @var \Magento\Store\Model\Store|\PHPUnit\Framework\MockObject\MockObject
+     * @var Store|MockObject
      */
     private $storeMock;
 
     /**
-     * @var \Magento\Customer\Api\CustomerRepositoryInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var CustomerRepositoryInterface|MockObject
      */
     private $customerRepositoryMock;
 
     /**
-     * @var \Magento\Catalog\Api\ProductRepositoryInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var ProductRepositoryInterface|MockObject
      */
     private $productRepositoryMock;
 
     /**
-     * @var \Magento\Catalog\Model\Product|\PHPUnit\Framework\MockObject\MockObject
+     * @var Product|MockObject
      */
     private $productMock;
 
     /**
-     * @var \Magento\Framework\ObjectManagerInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var ObjectManagerInterface|MockObject
      */
     private $objectManagerMock;
 
     /**
-     * @var ProductSalability|\PHPUnit\Framework\MockObject\MockObject
+     * @var ProductSalability|MockObject
      */
     private $productSalabilityMock;
 
@@ -124,34 +145,34 @@ class ObserverTest extends \PHPUnit\Framework\TestCase
      */
     protected function setUp(): void
     {
-        $this->objectManagerMock = $this->getMockBuilder(\Magento\Framework\ObjectManagerInterface::class)
+        $this->objectManagerMock = $this->getMockBuilder(ObjectManagerInterface::class)
             ->getMock();
-        $this->scopeConfigMock = $this->getMockBuilder(\Magento\Framework\App\Config\ScopeConfigInterface::class)
+        $this->scopeConfigMock = $this->getMockBuilder(ScopeConfigInterface::class)
             ->getMock();
         $this->collectionFactoryMock = $this->getMockBuilder(
-            \Magento\Sitemap\Model\ResourceModel\Sitemap\CollectionFactory::class
+            CollectionFactory::class
         )->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
-        $this->transportBuilderMock = $this->getMockBuilder(\Magento\Framework\Mail\Template\TransportBuilder::class)
+        $this->transportBuilderMock = $this->getMockBuilder(TransportBuilder::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->storeManagerMock = $this->getMockBuilder(\Magento\Store\Model\StoreManagerInterface::class)
+        $this->storeManagerMock = $this->getMockBuilder(StoreManagerInterface::class)
             ->getMock();
-        $this->inlineTranslationMock = $this->getMockBuilder(\Magento\Framework\Translate\Inline\StateInterface::class)
+        $this->inlineTranslationMock = $this->getMockBuilder(StateInterface::class)
             ->getMock();
         $this->sitemapCollectionMock = $this->createPartialMock(
-            \Magento\Sitemap\Model\ResourceModel\Sitemap\Collection::class,
+            Collection::class,
             ['getIterator']
         );
-        $this->sitemapMock = $this->createPartialMock(\Magento\Sitemap\Model\Sitemap::class, ['generateXml']);
+        $this->sitemapMock = $this->createPartialMock(Sitemap::class, ['generateXml']);
 
         $this->emailFactoryMock = $this->getMockBuilder(
-            \Magento\ProductAlert\Model\EmailFactory::class
+            EmailFactory::class
         )->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
-        $this->emailMock = $this->getMockBuilder(\Magento\ProductAlert\Model\Email::class)
+        $this->emailMock = $this->getMockBuilder(Email::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->priceColFactoryMock = $this->getMockBuilder(
@@ -166,18 +187,18 @@ class ObserverTest extends \PHPUnit\Framework\TestCase
             ->getMock();
 
         $this->websiteMock = $this->createPartialMock(
-            \Magento\Store\Model\Website::class,
+            Website::class,
             ['getDefaultGroup', 'getDefaultStore']
         );
-        $this->storeMock = $this->getMockBuilder(\Magento\Store\Model\Store::class)
+        $this->storeMock = $this->getMockBuilder(Store::class)
             ->disableOriginalConstructor()
             ->setMethods(['getDefaultStore', 'getId', 'setWebsiteId'])
             ->getMock();
-        $this->customerRepositoryMock = $this->getMockBuilder(\Magento\Customer\Api\CustomerRepositoryInterface::class)
+        $this->customerRepositoryMock = $this->getMockBuilder(CustomerRepositoryInterface::class)
             ->getMock();
-        $this->productRepositoryMock = $this->getMockBuilder(\Magento\Catalog\Api\ProductRepositoryInterface::class)
+        $this->productRepositoryMock = $this->getMockBuilder(ProductRepositoryInterface::class)
             ->getMock();
-        $this->productMock = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
+        $this->productMock = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
             ->setMethods(
                 [
@@ -190,7 +211,7 @@ class ObserverTest extends \PHPUnit\Framework\TestCase
 
         $this->objectManager = new ObjectManager($this);
         $this->observer = $this->objectManager->getObject(
-            \Magento\ProductAlert\Model\Observer::class,
+            Observer::class,
             [
                 'scopeConfig' => $this->scopeConfigMock,
                 'collectionFactory' => $this->collectionFactoryMock,
@@ -207,12 +228,9 @@ class ObserverTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    /**
-     */
     public function testGetWebsitesThrowsException()
     {
-        $this->expectException(\Exception::class);
-
+        $this->expectException('Exception');
         $this->scopeConfigMock->expects($this->any())->method('isSetFlag')->willReturn(false);
 
         $this->emailFactoryMock->expects($this->once())->method('create')->willReturn($this->emailMock);
@@ -222,12 +240,9 @@ class ObserverTest extends \PHPUnit\Framework\TestCase
         $this->observer->process();
     }
 
-    /**
-     */
     public function testProcessPriceThrowsException()
     {
-        $this->expectException(\Exception::class);
-
+        $this->expectException('Exception');
         $this->scopeConfigMock->expects($this->any())->method('isSetFlag')->willReturn(false);
 
         $this->emailFactoryMock->expects($this->once())->method('create')->willReturn($this->emailMock);
@@ -243,12 +258,9 @@ class ObserverTest extends \PHPUnit\Framework\TestCase
         $this->observer->process();
     }
 
-    /**
-     */
     public function testProcessPriceCustomerRepositoryThrowsException()
     {
-        $this->expectException(\Exception::class);
-
+        $this->expectException('Exception');
         $this->scopeConfigMock->expects($this->any())->method('isSetFlag')->willReturn(false);
 
         $this->emailFactoryMock->expects($this->once())->method('create')->willReturn($this->emailMock);
@@ -262,7 +274,7 @@ class ObserverTest extends \PHPUnit\Framework\TestCase
         $this->priceColFactoryMock->expects($this->once())->method('create')->willReturnSelf();
         $this->priceColFactoryMock->expects($this->once())->method('addWebsiteFilter')->willReturnSelf();
         $items = [
-            new \Magento\Framework\DataObject([
+            new DataObject([
                 'customer_id' => '42'
             ])
         ];
@@ -276,12 +288,9 @@ class ObserverTest extends \PHPUnit\Framework\TestCase
         $this->observer->process();
     }
 
-    /**
-     */
     public function testProcessPriceEmailThrowsException()
     {
-        $this->expectException(\Exception::class);
-
+        $this->expectException('Exception');
         $id = 1;
         $this->scopeConfigMock->expects($this->any())->method('isSetFlag')->willReturn(false);
 
@@ -300,7 +309,7 @@ class ObserverTest extends \PHPUnit\Framework\TestCase
         $this->priceColFactoryMock->expects($this->once())->method('addWebsiteFilter')->willReturnSelf();
         $this->storeManagerMock->expects($this->any())->method('getStore')->willReturn($this->storeMock);
         $items = [
-            new \Magento\Framework\DataObject([
+            new DataObject([
                 'customer_id' => $id
             ])
         ];
@@ -320,12 +329,9 @@ class ObserverTest extends \PHPUnit\Framework\TestCase
         $this->observer->process();
     }
 
-    /**
-     */
     public function testProcessStockThrowsException()
     {
-        $this->expectException(\Exception::class);
-
+        $this->expectException('Exception');
         $this->scopeConfigMock->expects($this->any())->method('isSetFlag')->willReturn(false);
 
         $this->emailFactoryMock->expects($this->once())->method('create')->willReturn($this->emailMock);
@@ -342,12 +348,9 @@ class ObserverTest extends \PHPUnit\Framework\TestCase
         $this->observer->process();
     }
 
-    /**
-     */
     public function testProcessStockCustomerRepositoryThrowsException()
     {
-        $this->expectException(\Exception::class);
-
+        $this->expectException('Exception');
         $this->scopeConfigMock->expects($this->any())->method('isSetFlag')->willReturn(false);
 
         $this->emailFactoryMock->expects($this->once())->method('create')->willReturn($this->emailMock);
@@ -363,7 +366,7 @@ class ObserverTest extends \PHPUnit\Framework\TestCase
         $this->stockColFactoryMock->expects($this->once())->method('addWebsiteFilter')->willReturnSelf();
         $this->stockColFactoryMock->expects($this->once())->method('addStatusFilter')->willReturnSelf();
         $items = [
-            new \Magento\Framework\DataObject([
+            new DataObject([
                 'customer_id' => '42'
             ])
         ];
@@ -377,12 +380,9 @@ class ObserverTest extends \PHPUnit\Framework\TestCase
         $this->observer->process();
     }
 
-    /**
-     */
     public function testProcessStockEmailThrowsException()
     {
-        $this->expectException(\Exception::class);
-
+        $this->expectException('Exception');
         $this->scopeConfigMock->expects($this->any())->method('isSetFlag')->willReturn(false);
 
         $this->emailFactoryMock->expects($this->once())->method('create')->willReturn($this->emailMock);
@@ -400,7 +400,7 @@ class ObserverTest extends \PHPUnit\Framework\TestCase
         $this->stockColFactoryMock->expects($this->once())->method('addWebsiteFilter')->willReturnSelf();
         $this->stockColFactoryMock->expects($this->once())->method('addStatusFilter')->willReturnSelf();
         $items = [
-            new \Magento\Framework\DataObject([
+            new DataObject([
                 'customer_id' => '42'
             ])
         ];
