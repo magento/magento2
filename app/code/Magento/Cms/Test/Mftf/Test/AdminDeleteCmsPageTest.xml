@@ -25,6 +25,7 @@
             <actionGroup ref="SaveCmsPageActionGroup" stepKey="clickSaveCmsPageButton"/>
         </before>
         <after>
+            <actionGroup ref="AdminGridFilterResetActionGroup" stepKey="clearGridFilters"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
         </after>
 
