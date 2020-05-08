@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Braintree\Test\Unit\Model\Paypal\Helper;
 
 use Magento\Quote\Model\Quote;
@@ -10,38 +12,46 @@ use Magento\Quote\Model\Quote\Address;
 use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Braintree\Gateway\Config\PayPal\Config;
 use Magento\Braintree\Model\Paypal\Helper\ShippingMethodUpdater;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
- * Class ShippingMethodUpdaterTest
- *
- * @see \Magento\Braintree\Model\Paypal\Helper\ShippingMethodUpdater
+ * Test shipping method updater
  */
-class ShippingMethodUpdaterTest extends \PHPUnit\Framework\TestCase
+class ShippingMethodUpdaterTest extends TestCase
 {
     const TEST_SHIPPING_METHOD = 'test-shipping-method';
 
     const TEST_EMAIL = 'test@test.loc';
 
     /**
-     * @var Config|\PHPUnit_Framework_MockObject_MockObject
+     * @var Config|MockObject
      */
     private $configMock;
 
     /**
-     * @var CartRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var CartRepositoryInterface|MockObject
      */
     private $quoteRepositoryMock;
 
     /**
-     * @var Address|\PHPUnit_Framework_MockObject_MockObject
+     * @var Address|MockObject
      */
     private $shippingAddressMock;
+
+    /**
+     * @var Address|MockObject
+     */
+    private $billingAddressMock;
 
     /**
      * @var ShippingMethodUpdater
      */
     private $shippingMethodUpdater;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp()
     {
         $this->configMock = $this->getMockBuilder(Config::class)
@@ -68,17 +78,22 @@ class ShippingMethodUpdaterTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Test execute exception
+     *
      * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage The "shippingMethod" field does not exists.
      */
-    public function testExecuteException()
+    public function testExecuteException(): void
     {
         $quoteMock = $this->getQuoteMock();
 
         $this->shippingMethodUpdater->execute('', $quoteMock);
     }
 
-    public function testExecute()
+    /**
+     * Test execute
+     */
+    public function testExecute(): void
     {
         $quoteMock = $this->getQuoteMock();
 
@@ -114,9 +129,13 @@ class ShippingMethodUpdaterTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @param \PHPUnit_Framework_MockObject_MockObject $quoteMock
+     * Disable quote address validation
+     *
+     * @param MockObject $quoteMock
+     *
+     * @return void
      */
-    private function disabledQuoteAddressValidationStep(\PHPUnit_Framework_MockObject_MockObject $quoteMock)
+    private function disabledQuoteAddressValidationStep(MockObject $quoteMock): void
     {
         $billingAddressMock = $this->getBillingAddressMock($quoteMock);
 
@@ -139,10 +158,12 @@ class ShippingMethodUpdaterTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @param \PHPUnit_Framework_MockObject_MockObject $quoteMock
-     * @return Address|\PHPUnit_Framework_MockObject_MockObject
+     * Get billing address mock object
+     *
+     * @param MockObject $quoteMock
+     * @return Address|MockObject
      */
-    private function getBillingAddressMock(\PHPUnit_Framework_MockObject_MockObject $quoteMock)
+    private function getBillingAddressMock(MockObject $quoteMock): MockObject
     {
         if (!isset($this->billingAddressMock)) {
             $this->billingAddressMock = $this->getMockBuilder(Address::class)
@@ -159,9 +180,11 @@ class ShippingMethodUpdaterTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return Quote|\PHPUnit_Framework_MockObject_MockObject
+     * Get quote mock object
+     *
+     * @return Quote|MockObject
      */
-    private function getQuoteMock()
+    private function getQuoteMock(): MockObject
     {
         return $this->getMockBuilder(Quote::class)
             ->setMethods(
@@ -169,7 +192,8 @@ class ShippingMethodUpdaterTest extends \PHPUnit\Framework\TestCase
                     'collectTotals',
                     'getBillingAddress',
                     'getShippingAddress',
-                    'getIsVirtual'
+                    'getIsVirtual',
+                    'getExtensionAttributes'
                 ]
             )->disableOriginalConstructor()
             ->getMock();
