@@ -124,7 +124,7 @@ class UpdateProductReviewEntityTest extends Injectable
      *
      * @return void
      */
-    public function tearDown()
+    public function tearDown(): void
     {
         $this->ratingIndex->open();
         if ($this->review instanceof Review) {

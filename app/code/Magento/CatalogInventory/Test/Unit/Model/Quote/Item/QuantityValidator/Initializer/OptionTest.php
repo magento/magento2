@@ -1,59 +1,78 @@
 <?php
+
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\CatalogInventory\Test\Unit\Model\Quote\Item\QuantityValidator\Initializer;
 
-class OptionTest extends \PHPUnit\Framework\TestCase
+use Magento\Catalog\Model\Product;
+use Magento\CatalogInventory\Api\Data\StockItemInterface;
+use Magento\CatalogInventory\Api\StockRegistryInterface;
+use Magento\CatalogInventory\Api\StockStateInterface;
+use Magento\CatalogInventory\Model\Quote\Item\QuantityValidator\Initializer\Option;
+use Magento\CatalogInventory\Model\Quote\Item\QuantityValidator\QuoteItemQtyList;
+use Magento\Framework\DataObject;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Quote\Model\Quote\Item;
+use Magento\Store\Model\Store;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
+class OptionTest extends TestCase
 {
     /**
-     * @var \Magento\CatalogInventory\Model\Quote\Item\QuantityValidator\Initializer\Option
+     * @var Option
      */
     protected $validator;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $qtyItemListMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $optionMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $quoteItemMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $stockItemMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $productMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $resultMock;
 
     /**
-     * @var \Magento\CatalogInventory\Api\StockRegistryInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var StockRegistryInterface|MockObject
      */
     protected $stockRegistry;
 
     /**
-     * @var \Magento\CatalogInventory\Api\StockStateInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var StockStateInterface|MockObject
      */
     protected $stockState;
 
     /**
-     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
+     * @var ObjectManager
      */
     protected $objectManager;
 
@@ -67,71 +86,61 @@ class OptionTest extends \PHPUnit\Framework\TestCase
      */
     protected $websiteId = 111;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $optionMethods = [
-            'getValue',
-            'getProduct',
-            'setIsQtyDecimal',
-            'setHasQtyOptionUpdate',
-            'setValue',
-            'setMessage',
-            'setBackorders',
-            '__wakeup',
-        ];
-        $this->optionMock = $this->createPartialMock(\Magento\Quote\Model\Quote\Item\Option::class, $optionMethods);
+        $this->optionMock = $this->getMockBuilder(\Magento\Quote\Model\Quote\Item\Option::class)
+            ->addMethods(['setIsQtyDecimal', 'setHasQtyOptionUpdate', 'setValue', 'setMessage', 'setBackorders'])
+            ->onlyMethods(['getValue', 'getProduct'])
+            ->disableOriginalConstructor()
+            ->getMock();
 
-        $store = $this->createPartialMock(\Magento\Store\Model\Store::class, ['getWebsiteId', '__wakeup']);
+        $store = $this->createPartialMock(Store::class, ['getWebsiteId']);
         $store->expects($this->any())->method('getWebsiteId')->willReturn($this->websiteId);
 
-        $methods = ['getQtyToAdd', '__wakeup', 'getId', 'updateQtyOption', 'setData', 'getQuoteId', 'getStore'];
-        $this->quoteItemMock = $this->createPartialMock(\Magento\Quote\Model\Quote\Item::class, $methods);
+        $this->quoteItemMock = $this->getMockBuilder(Item::class)
+            ->addMethods(['getQtyToAdd'])
+            ->onlyMethods(['getId', 'updateQtyOption', 'setData', 'getQuoteId', 'getStore'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->quoteItemMock->expects($this->any())->method('getStore')->willReturn($store);
 
-        $stockItemMethods = [
-            'setIsChildItem',
-            'setSuppressCheckQtyIncrements',
-            '__wakeup',
-            'unsIsChildItem',
-            'getItemId',
-            'setProductName'
-        ];
-
-        $this->stockItemMock = $this->getMockBuilder(\Magento\CatalogInventory\Api\Data\StockItemInterface::class)
-            ->setMethods($stockItemMethods)
+        $this->stockItemMock = $this->getMockBuilder(StockItemInterface::class)
+            ->setMethods(
+                [
+                    'setIsChildItem',
+                    'setSuppressCheckQtyIncrements',
+                    'unsIsChildItem',
+                    'getItemId',
+                    'setProductName'
+                ]
+            )
             ->getMockForAbstractClass();
-        $productMethods = ['getId', '__wakeup', 'getStore'];
-        $this->productMock = $this->createPartialMock(\Magento\Catalog\Model\Product::class, $productMethods, []);
-        $store = $this->createPartialMock(\Magento\Store\Model\Store::class, ['getWebsiteId', '__wakeup']);
+        $this->productMock = $this->createPartialMock(Product::class, ['getId', 'getStore']);
+        $store = $this->createPartialMock(Store::class, ['getWebsiteId']);
         $store->expects($this->any())->method('getWebsiteId')->willReturn($this->websiteId);
         $this->productMock->expects($this->any())->method('getStore')->willReturn($store);
 
         $this->qtyItemListMock = $this->createMock(
-            \Magento\CatalogInventory\Model\Quote\Item\QuantityValidator\QuoteItemQtyList::class
+            QuoteItemQtyList::class
         );
-        $resultMethods = [
-            'getItemIsQtyDecimal',
-            'getHasQtyOptionUpdate',
-            'getOrigQty',
-            'getMessage',
-            'getItemBackorders',
-            '__wakeup',
-        ];
-        $this->resultMock = $this->createPartialMock(\Magento\Framework\DataObject::class, $resultMethods);
+        $this->resultMock = $this->getMockBuilder(DataObject::class)
+            ->addMethods(
+                ['getItemIsQtyDecimal', 'getHasQtyOptionUpdate', 'getOrigQty', 'getMessage', 'getItemBackorders']
+            )
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->stockRegistry = $this->getMockForAbstractClass(
-            \Magento\CatalogInventory\Api\StockRegistryInterface::class,
-            ['getStockItem']
+            StockRegistryInterface::class
         );
 
         $this->stockState = $this->getMockForAbstractClass(
-            \Magento\CatalogInventory\Api\StockStateInterface::class,
-            ['checkQuoteItemQty']
+            StockStateInterface::class
         );
 
-        $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $this->objectManager = new ObjectManager($this);
         $this->validator = $this->objectManager->getObject(
-            \Magento\CatalogInventory\Model\Quote\Item\QuantityValidator\Initializer\Option::class,
+            Option::class,
             [
                 'quoteItemQtyList' => $this->qtyItemListMock,
                 'stockRegistry' => $this->stockRegistry,
@@ -146,21 +155,21 @@ class OptionTest extends \PHPUnit\Framework\TestCase
         $qtyForCheck = 50;
         $qty = 10;
         $qtyToAdd = 20;
-        $this->optionMock->expects($this->once())->method('getValue')->will($this->returnValue($optionValue));
-        $this->quoteItemMock->expects($this->exactly(2))->method('getQtyToAdd')->will($this->returnValue($qtyToAdd));
-        $this->optionMock->expects($this->any())->method('getProduct')->will($this->returnValue($this->productMock));
+        $this->optionMock->expects($this->once())->method('getValue')->willReturn($optionValue);
+        $this->quoteItemMock->expects($this->exactly(2))->method('getQtyToAdd')->willReturn($qtyToAdd);
+        $this->optionMock->expects($this->any())->method('getProduct')->willReturn($this->productMock);
 
         $this->stockItemMock->expects($this->once())->method('setIsChildItem')->with(true);
-        $this->stockItemMock->expects($this->once())->method('getItemId')->will($this->returnValue(true));
+        $this->stockItemMock->expects($this->once())->method('getItemId')->willReturn(true);
 
         $this->stockRegistry
             ->expects($this->once())
             ->method('getStockItem')
-            ->will($this->returnValue($this->stockItemMock));
+            ->willReturn($this->stockItemMock);
 
-        $this->productMock->expects($this->any())->method('getId')->will($this->returnValue($this->productId));
-        $this->quoteItemMock->expects($this->any())->method('getId')->will($this->returnValue('quote_item_id'));
-        $this->quoteItemMock->expects($this->once())->method('getQuoteId')->will($this->returnValue('quote_id'));
+        $this->productMock->expects($this->any())->method('getId')->willReturn($this->productId);
+        $this->quoteItemMock->expects($this->any())->method('getId')->willReturn('quote_item_id');
+        $this->quoteItemMock->expects($this->once())->method('getQuoteId')->willReturn('quote_id');
         $this->qtyItemListMock->expects(
             $this->once()
         )->method(
@@ -170,8 +179,8 @@ class OptionTest extends \PHPUnit\Framework\TestCase
             'quote_item_id',
             'quote_id',
             $qtyToAdd * $optionValue
-        )->will(
-            $this->returnValue($qtyForCheck)
+        )->willReturn(
+            $qtyForCheck
         );
         $this->stockState->expects($this->once())->method('checkQuoteItemQty')->with(
             $this->productId,
@@ -179,31 +188,31 @@ class OptionTest extends \PHPUnit\Framework\TestCase
             $qtyForCheck,
             $optionValue,
             $this->websiteId
-        )->will(
-            $this->returnValue($this->resultMock)
+        )->willReturn(
+            $this->resultMock
         );
         $this->resultMock->expects(
             $this->exactly(2)
         )->method(
             'getItemIsQtyDecimal'
-        )->will(
-            $this->returnValue('is_decimal')
+        )->willReturn(
+            'is_decimal'
         );
         $this->optionMock->expects($this->once())->method('setIsQtyDecimal')->with('is_decimal');
-        $this->resultMock->expects($this->once())->method('getHasQtyOptionUpdate')->will($this->returnValue(true));
+        $this->resultMock->expects($this->once())->method('getHasQtyOptionUpdate')->willReturn(true);
         $this->optionMock->expects($this->once())->method('setHasQtyOptionUpdate')->with(true);
-        $this->resultMock->expects($this->exactly(2))->method('getOrigQty')->will($this->returnValue('orig_qty'));
+        $this->resultMock->expects($this->exactly(2))->method('getOrigQty')->willReturn('orig_qty');
         $this->quoteItemMock->expects($this->once())->method('updateQtyOption')->with($this->optionMock, 'orig_qty');
         $this->optionMock->expects($this->once())->method('setValue')->with('orig_qty');
         $this->quoteItemMock->expects($this->once())->method('setData')->with('qty', $qty);
-        $this->resultMock->expects($this->exactly(3))->method('getMessage')->will($this->returnValue('message'));
+        $this->resultMock->expects($this->exactly(3))->method('getMessage')->willReturn('message');
         $this->optionMock->expects($this->once())->method('setMessage')->with('message');
         $this->resultMock->expects(
             $this->exactly(2)
         )->method(
             'getItemBackorders'
-        )->will(
-            $this->returnValue('backorders')
+        )->willReturn(
+            'backorders'
         );
         $this->optionMock->expects($this->once())->method('setBackorders')->with('backorders');
 
@@ -216,21 +225,21 @@ class OptionTest extends \PHPUnit\Framework\TestCase
         $optionValue = 5;
         $qtyForCheck = 50;
         $qty = 10;
-        $this->optionMock->expects($this->once())->method('getValue')->will($this->returnValue($optionValue));
-        $this->quoteItemMock->expects($this->once())->method('getQtyToAdd')->will($this->returnValue(false));
-        $this->optionMock->expects($this->any())->method('getProduct')->will($this->returnValue($this->productMock));
+        $this->optionMock->expects($this->once())->method('getValue')->willReturn($optionValue);
+        $this->quoteItemMock->expects($this->once())->method('getQtyToAdd')->willReturn(false);
+        $this->optionMock->expects($this->any())->method('getProduct')->willReturn($this->productMock);
 
         $this->stockItemMock->expects($this->once())->method('setIsChildItem')->with(true);
-        $this->stockItemMock->expects($this->once())->method('getItemId')->will($this->returnValue(true));
+        $this->stockItemMock->expects($this->once())->method('getItemId')->willReturn(true);
 
         $this->stockRegistry
             ->expects($this->once())
             ->method('getStockItem')
-            ->will($this->returnValue($this->stockItemMock));
+            ->willReturn($this->stockItemMock);
 
-        $this->productMock->expects($this->any())->method('getId')->will($this->returnValue($this->productId));
-        $this->quoteItemMock->expects($this->any())->method('getId')->will($this->returnValue('quote_item_id'));
-        $this->quoteItemMock->expects($this->once())->method('getQuoteId')->will($this->returnValue('quote_id'));
+        $this->productMock->expects($this->any())->method('getId')->willReturn($this->productId);
+        $this->quoteItemMock->expects($this->any())->method('getId')->willReturn('quote_item_id');
+        $this->quoteItemMock->expects($this->once())->method('getQuoteId')->willReturn('quote_id');
         $this->qtyItemListMock->expects(
             $this->once()
         )->method(
@@ -240,8 +249,8 @@ class OptionTest extends \PHPUnit\Framework\TestCase
             'quote_item_id',
             'quote_id',
             $qty * $optionValue
-        )->will(
-            $this->returnValue($qtyForCheck)
+        )->willReturn(
+            $qtyForCheck
         );
         $this->stockState->expects($this->once())->method('checkQuoteItemQty')->with(
             $this->productId,
@@ -249,39 +258,37 @@ class OptionTest extends \PHPUnit\Framework\TestCase
             $qtyForCheck,
             $optionValue,
             $this->websiteId
-        )->will(
-            $this->returnValue($this->resultMock)
+        )->willReturn(
+            $this->resultMock
         );
-        $this->resultMock->expects($this->once())->method('getItemIsQtyDecimal')->will($this->returnValue(null));
+        $this->resultMock->expects($this->once())->method('getItemIsQtyDecimal')->willReturn(null);
         $this->optionMock->expects($this->never())->method('setIsQtyDecimal');
-        $this->resultMock->expects($this->once())->method('getHasQtyOptionUpdate')->will($this->returnValue(null));
+        $this->resultMock->expects($this->once())->method('getHasQtyOptionUpdate')->willReturn(null);
         $this->optionMock->expects($this->never())->method('setHasQtyOptionUpdate');
-        $this->resultMock->expects($this->once())->method('getMessage')->will($this->returnValue(null));
-        $this->resultMock->expects($this->once())->method('getItemBackorders')->will($this->returnValue(null));
+        $this->resultMock->expects($this->once())->method('getMessage')->willReturn(null);
+        $this->resultMock->expects($this->once())->method('getItemBackorders')->willReturn(null);
         $this->optionMock->expects($this->never())->method('setBackorders');
 
         $this->stockItemMock->expects($this->once())->method('unsIsChildItem');
         $this->validator->initialize($this->optionMock, $this->quoteItemMock, $qty);
     }
 
-    /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage The stock item for Product in option is not valid.
-     */
     public function testInitializeWithInvalidOptionQty()
     {
+        $this->expectException('Magento\Framework\Exception\LocalizedException');
+        $this->expectExceptionMessage('The stock item for Product in option is not valid.');
         $optionValue = 5;
         $qty = 10;
-        $this->optionMock->expects($this->once())->method('getValue')->will($this->returnValue($optionValue));
-        $this->quoteItemMock->expects($this->once())->method('getQtyToAdd')->will($this->returnValue(false));
-        $this->productMock->expects($this->any())->method('getId')->will($this->returnValue($this->productId));
-        $this->optionMock->expects($this->any())->method('getProduct')->will($this->returnValue($this->productMock));
-        $this->stockItemMock->expects($this->once())->method('getItemId')->will($this->returnValue(false));
+        $this->optionMock->expects($this->once())->method('getValue')->willReturn($optionValue);
+        $this->quoteItemMock->expects($this->once())->method('getQtyToAdd')->willReturn(false);
+        $this->productMock->expects($this->any())->method('getId')->willReturn($this->productId);
+        $this->optionMock->expects($this->any())->method('getProduct')->willReturn($this->productMock);
+        $this->stockItemMock->expects($this->once())->method('getItemId')->willReturn(false);
 
         $this->stockRegistry
             ->expects($this->once())
             ->method('getStockItem')
-            ->will($this->returnValue($this->stockItemMock));
+            ->willReturn($this->stockItemMock);
 
         $this->validator->initialize($this->optionMock, $this->quoteItemMock, $qty);
     }

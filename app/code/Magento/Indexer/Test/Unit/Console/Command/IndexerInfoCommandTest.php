@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Indexer\Test\Unit\Console\Command;
 
 use Magento\Backend\App\Area\FrontNameResolver;
@@ -18,7 +20,7 @@ class IndexerInfoCommandTest extends AbstractIndexerCommandCommonSetup
      */
     private $command;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->stateMock->expects($this->once())->method('setAreaCode')->with(FrontNameResolver::AREA_CODE);

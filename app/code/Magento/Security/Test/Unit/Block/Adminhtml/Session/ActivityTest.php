@@ -3,32 +3,40 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Security\Test\Unit\Block\Adminhtml\Session;
 
 use Magento\Framework\HTTP\PhpEnvironment\RemoteAddress;
+use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Security\Block\Adminhtml\Session\Activity;
+use Magento\Security\Model\AdminSessionInfo;
+use Magento\Security\Model\AdminSessionsManager;
 use Magento\Security\Model\ConfigInterface;
+use Magento\Security\Model\ResourceModel\AdminSessionInfo\Collection;
+use Magento\Security\Model\ResourceModel\AdminSessionInfo\CollectionFactory;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test class for \Magento\Security\Block\Adminhtml\Session\Activity testing
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ActivityTest extends \PHPUnit\Framework\TestCase
+class ActivityTest extends TestCase
 {
     /**
-     * @var  \Magento\Security\Block\Adminhtml\Session\Activity
+     * @var  Activity
      */
     protected $block;
 
     /**
-     * @var \Magento\Security\Model\AdminSessionsManager
+     * @var AdminSessionsManager
      */
     protected $sessionsManager;
 
     /**
-     * @var \Magento\Security\Model\ResourceModel\AdminSessionInfo\CollectionFactory
+     * @var CollectionFactory
      */
     protected $sessionsInfoCollection;
 
@@ -38,22 +46,22 @@ class ActivityTest extends \PHPUnit\Framework\TestCase
     protected $securityConfig;
 
     /**
-     * @var \Magento\Security\Model\ResourceModel\AdminSessionInfo\Collection
+     * @var Collection
      */
     protected $collectionMock;
 
     /**
-     * @var \Magento\Security\Model\AdminSessionInfo
+     * @var AdminSessionInfo
      */
     protected $sessionMock;
 
     /**
-     * @var \Magento\Framework\Stdlib\DateTime\TimezoneInterface
+     * @var TimezoneInterface
      */
     protected $localeDate;
 
     /**
-     * @var  \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
+     * @var  ObjectManager
      */
     protected $objectManager;
 
@@ -67,44 +75,45 @@ class ActivityTest extends \PHPUnit\Framework\TestCase
      *
      * @return void
      */
-    public function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
 
         $this->sessionsInfoCollection = $this->createPartialMock(
-            \Magento\Security\Model\ResourceModel\AdminSessionInfo\CollectionFactory::class,
+            CollectionFactory::class,
             ['create']
         );
 
         $this->sessionsManager = $this->createPartialMock(
-            \Magento\Security\Model\AdminSessionsManager::class,
+            AdminSessionsManager::class,
             ['getSessionsForCurrentUser']
         );
 
-        $this->securityConfig = $this->getMockBuilder(\Magento\Security\Model\ConfigInterface::class)
+        $this->securityConfig = $this->getMockBuilder(ConfigInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
-        $this->sessionMock = $this->createMock(\Magento\Security\Model\AdminSessionInfo::class);
+        $this->sessionMock = $this->createMock(AdminSessionInfo::class);
 
         $this->localeDate = $this->getMockForAbstractClass(
-            \Magento\Framework\Stdlib\DateTime\TimezoneInterface::class,
+            TimezoneInterface::class,
             ['formatDateTime'],
             '',
             false
         );
 
-        $this->collectionMock = $this->createPartialMock(
-            \Magento\Security\Model\ResourceModel\AdminSessionInfo\Collection::class,
-            ['count', 'is_null']
-        );
+        $this->collectionMock = $this->getMockBuilder(Collection::class)
+            ->addMethods(['is_null'])
+            ->onlyMethods(['count'])
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->remoteAddressMock = $this->getMockBuilder(RemoteAddress::class)
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->block = $this->objectManager->getObject(
-            \Magento\Security\Block\Adminhtml\Session\Activity::class,
+            Activity::class,
             [
                 'sessionsManager' => $this->sessionsManager,
                 'securityConfig' => $this->securityConfig,
@@ -123,7 +132,7 @@ class ActivityTest extends \PHPUnit\Framework\TestCase
             ->method('getSessionsForCurrentUser')
             ->willReturn($this->collectionMock);
         $this->assertInstanceOf(
-            \Magento\Security\Model\ResourceModel\AdminSessionInfo\Collection::class,
+            Collection::class,
             $this->block->getSessionInfoCollection()
         );
     }
