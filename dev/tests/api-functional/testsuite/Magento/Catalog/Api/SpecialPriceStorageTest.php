@@ -117,7 +117,7 @@ class SpecialPriceStorageTest extends WebapiAbstract
         $product = $productRepository->get($data['sku'], true);
         $product->setData('special_price', $data['price']);
         $product->setData('special_from_date', $data['price_from']);
-        if (array_key_exists('price_to', $data)) {
+        if ($data['price_to']) {
             $product->setData('special_to_date', $data['price_to']);
         }
         $productRepository->save($product);
@@ -163,7 +163,7 @@ class SpecialPriceStorageTest extends WebapiAbstract
                     'store_id' => 0,
                     'sku' => self::VIRTUAL_PRODUCT_SKU,
                     'price_from' => $fromDate,
-                    'price_to' => $toDate,
+                    'price_to' => $toDate
                 ]
             ],
             [
@@ -172,7 +172,8 @@ class SpecialPriceStorageTest extends WebapiAbstract
                     'price' => 31337,
                     'store_id' => 0,
                     'sku' => self::VIRTUAL_PRODUCT_SKU,
-                    'price_from' => $fromDate
+                    'price_from' => $fromDate,
+                    'price_to' => false
                 ]
             ],
         ];
@@ -196,7 +197,7 @@ class SpecialPriceStorageTest extends WebapiAbstract
                     'store_id' => 0,
                     'sku' => self::SIMPLE_PRODUCT_SKU,
                     'price_from' => $fromDate,
-                    'price_to' => $toDate,
+                    'price_to' => $toDate
                 ]
             ],
             [
@@ -205,7 +206,8 @@ class SpecialPriceStorageTest extends WebapiAbstract
                     'price' => 3057,
                     'store_id' => 0,
                     'sku' => self::SIMPLE_PRODUCT_SKU,
-                    'price_from' => $fromDate
+                    'price_from' => $fromDate,
+                    'price_to' => false
                 ]
             ],
         ];
