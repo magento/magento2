@@ -17,6 +17,7 @@ use Magento\Framework\Api\DataObjectHelper;
 use Magento\Framework\App\RequestInterface;
 use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Model\StoreManagerInterface;
+use PHPUnit\Framework\MockObject\MockObject;
 
 /**
  * Unit test CustomerExtractorTest
@@ -26,34 +27,34 @@ class CustomerExtractorTest extends \PHPUnit\Framework\TestCase
     /** @var CustomerExtractor */
     protected $customerExtractor;
 
-    /** @var FormFactory|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var FormFactory|MockObject */
     protected $formFactory;
 
-    /** @var CustomerInterfaceFactory|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var CustomerInterfaceFactory|MockObject */
     protected $customerFactory;
 
-    /** @var StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var StoreManagerInterface|MockObject */
     protected $storeManager;
 
-    /** @var GroupManagementInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var GroupManagementInterface|MockObject */
     protected $customerGroupManagement;
 
-    /** @var DataObjectHelper|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var DataObjectHelper|MockObject */
     protected $dataObjectHelper;
 
-    /** @var RequestInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var RequestInterface|MockObject */
     protected $request;
 
-    /** @var Form|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var Form|MockObject */
     protected $customerForm;
 
-    /** @var CustomerInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var CustomerInterface|MockObject */
     protected $customerData;
 
-    /** @var StoreInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var StoreInterface|MockObject */
     protected $store;
 
-    /** @var GroupInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var GroupInterface|MockObject */
     protected $customerGroup;
 
     protected function setUp()
