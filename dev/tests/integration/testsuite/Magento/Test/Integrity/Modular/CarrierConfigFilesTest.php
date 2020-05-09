@@ -16,7 +16,7 @@ class CarrierConfigFilesTest extends \PHPUnit\Framework\TestCase
      */
     protected $_reader;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $urnResolver = new \Magento\Framework\Config\Dom\UrnResolver();
         $schemaFile = $urnResolver->getRealPath('urn:magento:module:Magento_Config:etc/system.xsd');
