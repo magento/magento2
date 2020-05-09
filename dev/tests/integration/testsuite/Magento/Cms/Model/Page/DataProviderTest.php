@@ -45,7 +45,7 @@ class DataProviderTest extends TestCase
     /**
      * @inheritDoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = Bootstrap::getObjectManager();
         $this->repo = $objectManager->get(GetPageByIdentifierInterface::class);
@@ -87,7 +87,7 @@ class DataProviderTest extends TestCase
         $this->assertNotEmpty($page1Data);
         $this->assertNotEmpty($page2Data);
         $this->assertEquals('_existing_', $page1Data['layout_update_selected']);
-        $this->assertEquals(null, $page2Data['layout_update_selected']);
+        $this->assertNull($page2Data['layout_update_selected']);
         $this->assertEquals('test_selected', $page3Data['layout_update_selected']);
     }
 
