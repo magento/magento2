@@ -34,7 +34,7 @@ use Magento\Store\Model\StoreManagerInterface;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Login extends Action implements HttpGetActionInterface, HttpPostActionInterface
+class Login extends Action implements HttpGetActionInterface
 {
     /**
      * Authorization level of a basic admin session
@@ -140,7 +140,7 @@ class Login extends Action implements HttpGetActionInterface, HttpPostActionInte
         }
 
         try {
-            $this->customerRepository->getById($customerId);
+            $customer = $this->customerRepository->getById($customerId);
         } catch (NoSuchEntityException $e) {
             $this->messageManager->addErrorMessage(__('Customer with this ID are no longer exist.'));
             return $resultRedirect->setPath('customer/index/index');
@@ -167,6 +167,10 @@ class Login extends Action implements HttpGetActionInterface, HttpPostActionInte
         $this->deleteExpiredAuthenticationData->execute($userId);
         $secret = $this->saveAuthenticationData->execute($authenticationData);
 
+        if (empty($storeId)) {
+            $storeId = (int)$customer->getStoreId();
+        }
+
         $redirectUrl = $this->getLoginProceedRedirectUrl($secret, $storeId);
         $resultRedirect->setUrl($redirectUrl);
         return $resultRedirect;
@@ -182,7 +186,7 @@ class Login extends Action implements HttpGetActionInterface, HttpPostActionInte
      */
     private function getLoginProceedRedirectUrl(string $secret, ?int $storeId): string
     {
-        if (null === $storeId) {
+        if (empty($storeId)) {
             $store = $this->storeManager->getDefaultStoreView();
         } else {
             $store = $this->storeManager->getStore($storeId);
