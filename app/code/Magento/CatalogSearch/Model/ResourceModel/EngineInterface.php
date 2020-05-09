@@ -13,6 +13,9 @@ namespace Magento\CatalogSearch\Model\ResourceModel;
  */
 interface EngineInterface
 {
+    /**
+     * @deprecated
+     */
     const FIELD_PREFIX = 'attr_';
 
     /**

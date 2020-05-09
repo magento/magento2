@@ -42,10 +42,12 @@ class AlgorithmBaseTest extends \PHPUnit\Framework\TestCase
      * @param $categoryId
      * @param array $entityIds
      * @param array $intervalItems
-     * @covers       \Magento\Framework\Search\Dynamic\Algorithm::calculateSeparators
+     * @covers \Magento\Framework\Search\Dynamic\Algorithm::calculateSeparators
      */
     public function testPricesSegmentation($categoryId, array $entityIds, array $intervalItems)
     {
+        $this->markTestSkipped('MC-33826:'
+        . 'Stabilize skipped test cases for Integration AlgorithmBaseTest with elasticsearch');
         $objectManager = Bootstrap::getObjectManager();
         $layer = $objectManager->create(\Magento\Catalog\Model\Layer\Category::class);
         /** @var \Magento\Framework\Search\Request\Aggregation\TermBucket $termBucket */
@@ -65,6 +67,7 @@ class AlgorithmBaseTest extends \PHPUnit\Framework\TestCase
         $entityMetadata = $objectManager->create(\Magento\Framework\Search\EntityMetadata::class, ['entityId' => 'id']);
         $idKey = $entityMetadata->getEntityId();
 
+        // this class has been removed
         /** @var \Magento\Framework\Search\Adapter\Mysql\DocumentFactory $documentFactory */
         $documentFactory = $objectManager->create(
             \Magento\Framework\Search\Adapter\Mysql\DocumentFactory::class,
@@ -81,16 +84,19 @@ class AlgorithmBaseTest extends \PHPUnit\Framework\TestCase
             $documents[] = $documentFactory->create($rawDocument);
         }
 
+        // this class has been removed
         /** @var \Magento\Framework\Search\Adapter\Mysql\TemporaryStorage $temporaryStorage */
         $temporaryStorage = $objectManager->create(\Magento\Framework\Search\Adapter\Mysql\TemporaryStorage::class);
         $table = $temporaryStorage->storeDocuments($documents);
 
+        // this class has been removed
         /** @var \Magento\CatalogSearch\Model\Adapter\Mysql\Aggregation\DataProvider $dataProvider */
         $dataProvider = $objectManager->create(
             \Magento\CatalogSearch\Model\Adapter\Mysql\Aggregation\DataProvider::class
         );
         $select = $dataProvider->getDataSet($termBucket, $dimensions, $table);
 
+        // this class has been removed
         /** @var \Magento\Framework\Search\Adapter\Mysql\Aggregation\IntervalFactory $intervalFactory */
         $intervalFactory = $objectManager->create(
             \Magento\Framework\Search\Adapter\Mysql\Aggregation\IntervalFactory::class

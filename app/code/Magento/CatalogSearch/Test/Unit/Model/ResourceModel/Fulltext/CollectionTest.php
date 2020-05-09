@@ -14,7 +14,6 @@ use Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection\SearchResultAp
 use Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection\TotalRecordsResolverInterface;
 use Magento\CatalogSearch\Test\Unit\Model\ResourceModel\BaseCollection;
 use PHPUnit\Framework\MockObject\MockObject;
-use Magento\Framework\Search\Adapter\Mysql\TemporaryStorageFactory;
 
 /**
  * Test class for Fulltext Collection
@@ -27,11 +26,6 @@ class CollectionTest extends BaseCollection
      * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
      */
     private $objectManager;
-
-    /**
-     * @var \Magento\Framework\Search\Adapter\Mysql\TemporaryStorage|MockObject
-     */
-    private $temporaryStorage;
 
     /**
      * @var \Magento\Search\Api\SearchInterface|MockObject
@@ -101,16 +95,6 @@ class CollectionTest extends BaseCollection
         $productLimitationFactoryMock->method('create')
             ->willReturn($productLimitationMock);
 
-        $this->temporaryStorage = $this->getMockBuilder(\Magento\Framework\Search\Adapter\Mysql\TemporaryStorage::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $temporaryStorageFactory = $this->getMockBuilder(TemporaryStorageFactory::class)
-            ->setMethods(['create'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $temporaryStorageFactory->expects($this->any())
-            ->method('create')
-            ->willReturn($this->temporaryStorage);
         $searchCriteriaResolver = $this->getMockBuilder(SearchCriteriaResolverInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['resolve'])
@@ -146,7 +130,6 @@ class CollectionTest extends BaseCollection
                 'storeManager' => $this->storeManager,
                 'universalFactory' => $this->universalFactory,
                 'scopeConfig' => $this->scopeConfig,
-                'temporaryStorageFactory' => $temporaryStorageFactory,
                 'productLimitationFactory' => $productLimitationFactoryMock,
                 'searchCriteriaResolverFactory' => $searchCriteriaResolverFactory,
                 'searchResultApplierFactory' => $this->searchResultApplierFactory,
