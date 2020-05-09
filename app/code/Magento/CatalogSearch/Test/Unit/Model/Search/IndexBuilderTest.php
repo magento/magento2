@@ -3,52 +3,56 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\CatalogSearch\Test\Unit\Model\Search;
 
-use Magento\Framework\App\ResourceConnection;
-use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Store\Model\StoreManagerInterface;
-use Magento\Framework\Search\Adapter\Mysql\ConditionManager;
-use Magento\Framework\Indexer\ScopeResolver\IndexScopeResolver;
-use Magento\CatalogSearch\Model\Search\TableMapper;
-use Magento\Framework\App\ScopeResolverInterface;
-use Magento\CatalogSearch\Model\Search\FilterMapper\DimensionsProcessor;
-use Magento\CatalogSearch\Model\Search\SelectContainer\SelectContainer;
-use Magento\CatalogSearch\Model\Search\SelectContainer\SelectContainerBuilder;
-use Magento\CatalogSearch\Model\Search\BaseSelectStrategy\StrategyMapper as BaseSelectStrategyMapper;
 use Magento\CatalogSearch\Model\Search\BaseSelectStrategy\BaseSelectStrategyInterface;
+use Magento\CatalogSearch\Model\Search\BaseSelectStrategy\StrategyMapper as BaseSelectStrategyMapper;
+use Magento\CatalogSearch\Model\Search\FilterMapper\DimensionsProcessor;
 use Magento\CatalogSearch\Model\Search\FilterMapper\FilterMapper;
 use Magento\CatalogSearch\Model\Search\IndexBuilder;
-use Magento\Framework\Search\RequestInterface;
+use Magento\CatalogSearch\Model\Search\SelectContainer\SelectContainer;
+use Magento\CatalogSearch\Model\Search\SelectContainer\SelectContainerBuilder;
+use Magento\CatalogSearch\Model\Search\TableMapper;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\App\ScopeResolverInterface;
 use Magento\Framework\DB\Select;
+use Magento\Framework\Indexer\ScopeResolver\IndexScopeResolver;
+use Magento\Framework\Search\Adapter\Mysql\ConditionManager;
+use Magento\Framework\Search\RequestInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Store\Model\StoreManagerInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test for \Magento\CatalogSearch\Model\Search\IndexBuilder
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @deprecated
+ * @deprecated Implementation class was replaced
  * @see \Magento\ElasticSearch
  */
-class IndexBuilderTest extends \PHPUnit\Framework\TestCase
+class IndexBuilderTest extends TestCase
 {
     /**
-     * @var DimensionsProcessor|\PHPUnit_Framework_MockObject_MockObject
+     * @var DimensionsProcessor|MockObject
      */
     private $dimensionsProcessor;
 
     /**
-     * @var SelectContainerBuilder|\PHPUnit_Framework_MockObject_MockObject
+     * @var SelectContainerBuilder|MockObject
      */
     private $selectContainerBuilder;
 
     /**
-     * @var BaseSelectStrategyMapper|\PHPUnit_Framework_MockObject_MockObject
+     * @var BaseSelectStrategyMapper|MockObject
      */
     private $baseSelectStrategyMapper;
 
     /**
-     * @var FilterMapper|\PHPUnit_Framework_MockObject_MockObject
+     * @var FilterMapper|MockObject
      */
     private $filterMapper;
 
@@ -61,7 +65,7 @@ class IndexBuilderTest extends \PHPUnit\Framework\TestCase
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $resource = $this->getMockBuilder(ResourceConnection::class)
             ->disableOriginalConstructor()
@@ -88,7 +92,7 @@ class IndexBuilderTest extends \PHPUnit\Framework\TestCase
 
         $dimensionScopeResolver = $this->getMockBuilder(ScopeResolverInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->dimensionsProcessor = $this->getMockBuilder(DimensionsProcessor::class)
             ->disableOriginalConstructor()
@@ -106,7 +110,7 @@ class IndexBuilderTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $objectManagerHelper = new ObjectManager($this);
         $this->indexBuilder = $objectManagerHelper->getObject(
             IndexBuilder::class,
             [

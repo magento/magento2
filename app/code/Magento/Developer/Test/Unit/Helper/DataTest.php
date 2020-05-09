@@ -1,38 +1,48 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Developer\Test\Unit\Helper;
 
-class DataTest extends \PHPUnit\Framework\TestCase
+use Magento\Developer\Helper\Data;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\Helper\Context;
+use Magento\Framework\HTTP\Header;
+use Magento\Framework\HTTP\PhpEnvironment\RemoteAddress;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Store\Model\ScopeInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class DataTest extends TestCase
 {
     /**
-     * @var \Magento\Developer\Helper\Data
+     * @var Data
      */
     protected $helper;
 
     /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface | \PHPUnit_Framework_MockObject_MockObject
+     * @var ScopeConfigInterface|MockObject
      */
     protected $scopeConfigMock;
 
     /**
-     * @var \Magento\Framework\HTTP\PhpEnvironment\RemoteAddress | \PHPUnit_Framework_MockObject_MockObject
+     * @var RemoteAddress|MockObject
      */
     protected $remoteAddressMock;
 
     /**
-     * @var \Magento\Framework\HTTP\Header | \PHPUnit_Framework_MockObject_MockObject
+     * @var Header|MockObject
      */
     protected $httpHeaderMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $className = \Magento\Developer\Helper\Data::class;
+        $objectManagerHelper = new ObjectManager($this);
+        $className = Data::class;
         $arguments = $objectManagerHelper->getConstructArguments($className);
-        /** @var \Magento\Framework\App\Helper\Context $context */
+        /** @var Context $context */
         $context = $arguments['context'];
         $this->scopeConfigMock = $context->getScopeConfig();
         $this->remoteAddressMock = $context->getRemoteAddress();
@@ -52,18 +62,18 @@ class DataTest extends \PHPUnit\Framework\TestCase
         $this->scopeConfigMock->expects($this->once())
             ->method('getValue')
             ->with(
-                \Magento\Developer\Helper\Data::XML_PATH_DEV_ALLOW_IPS,
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                Data::XML_PATH_DEV_ALLOW_IPS,
+                ScopeInterface::SCOPE_STORE,
                 $storeId
-            )->will($this->returnValue($allowedIps));
+            )->willReturn($allowedIps);
 
         $this->remoteAddressMock->expects($this->once())
             ->method('getRemoteAddress')
-            ->will($this->returnValue('remoteAddress'));
+            ->willReturn('remoteAddress');
 
         $this->httpHeaderMock->expects($this->exactly($callNum))
             ->method('getHttpHost')
-            ->will($this->returnValue('httpHost'));
+            ->willReturn('httpHost');
 
         $this->assertEquals($expected, $this->helper->isDevAllowed($storeId));
     }
