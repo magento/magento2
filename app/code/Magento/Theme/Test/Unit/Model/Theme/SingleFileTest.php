@@ -3,11 +3,18 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Theme\Test\Unit\Model\Theme;
 
-use \Magento\Theme\Model\Theme\SingleFile;
+use Magento\Framework\View\Design\Theme\Customization\FileInterface;
+use Magento\Framework\View\Design\Theme\CustomizationInterface;
+use Magento\Framework\View\Design\ThemeInterface;
+use Magento\Theme\Model\Theme\SingleFile;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class SingleFileTest extends \PHPUnit\Framework\TestCase
+class SingleFileTest extends TestCase
 {
     /**
      * @var SingleFile
@@ -15,16 +22,16 @@ class SingleFileTest extends \PHPUnit\Framework\TestCase
     protected $object;
 
     /**
-     * @var \Magento\Framework\View\Design\Theme\Customization\FileInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var FileInterface|MockObject
      */
     protected $file;
 
     /**
      * Initialize testable object
      */
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->file = $this->getMockBuilder(\Magento\Framework\View\Design\Theme\Customization\FileInterface::class)
+        $this->file = $this->getMockBuilder(FileInterface::class)
             ->getMock();
 
         $this->object = new SingleFile($this->file);
@@ -59,7 +66,7 @@ class SingleFileTest extends \PHPUnit\Framework\TestCase
                 ]
             )
             ->getMock();
-        $theme = $this->getMockBuilder(\Magento\Framework\View\Design\ThemeInterface::class)
+        $theme = $this->getMockBuilder(ThemeInterface::class)
             ->setMethods(
                 [
                     'getArea',
@@ -73,8 +80,8 @@ class SingleFileTest extends \PHPUnit\Framework\TestCase
                     'getCustomization',
                 ]
             )
-            ->getMock();
-        $customization = $this->getMockBuilder(\Magento\Framework\View\Design\Theme\CustomizationInterface::class)
+            ->getMockForAbstractClass();
+        $customization = $this->getMockBuilder(CustomizationInterface::class)
             ->getMock();
 
         $customCss->expects($this->once())
@@ -99,7 +106,7 @@ class SingleFileTest extends \PHPUnit\Framework\TestCase
             ->method('getCustomization')
             ->willReturn($customization);
 
-        /** @var \Magento\Framework\View\Design\ThemeInterface $theme */
+        /** @var ThemeInterface $theme */
         $this->assertInstanceOf(
             \Magento\Framework\View\Design\Theme\FileInterface::class,
             $this->object->update($theme, $fileContent)
@@ -136,7 +143,7 @@ class SingleFileTest extends \PHPUnit\Framework\TestCase
         $customFiles = [$customCss];
         $fileType = 'png';
 
-        $theme = $this->getMockBuilder(\Magento\Framework\View\Design\ThemeInterface::class)
+        $theme = $this->getMockBuilder(ThemeInterface::class)
             ->setMethods(
                 [
                     'getArea',
@@ -150,8 +157,8 @@ class SingleFileTest extends \PHPUnit\Framework\TestCase
                     'getCustomization',
                 ]
             )
-            ->getMock();
-        $customization = $this->getMockBuilder(\Magento\Framework\View\Design\Theme\CustomizationInterface::class)
+            ->getMockForAbstractClass();
+        $customization = $this->getMockBuilder(CustomizationInterface::class)
             ->getMock();
 
         $customCss->expects($this->once())
@@ -167,7 +174,7 @@ class SingleFileTest extends \PHPUnit\Framework\TestCase
             ->method('getCustomization')
             ->willReturn($customization);
 
-        /** @var \Magento\Framework\View\Design\ThemeInterface $theme */
+        /** @var ThemeInterface $theme */
         $this->assertInstanceOf(
             \Magento\Framework\View\Design\Theme\FileInterface::class,
             $this->object->update($theme, $fileContent)

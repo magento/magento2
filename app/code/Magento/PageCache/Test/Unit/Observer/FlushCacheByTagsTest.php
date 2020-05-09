@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\PageCache\Test\Unit\Observer;
 
@@ -45,7 +46,7 @@ class FlushCacheByTagsTest extends TestCase
     /**
      * @inheritDoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->configMock = $this->createPartialMock(Config::class, ['getType', 'isEnabled']);
         $this->fullPageCacheMock = $this->createPartialMock(Type::class, ['clean']);
@@ -79,7 +80,10 @@ class FlushCacheByTagsTest extends TestCase
             $tags = ['cache_1', 'cache_group'];
             $expectedTags = ['cache_1', 'cache_group'];
 
-            $eventMock = $this->createPartialMock(Event::class, ['getObject']);
+            $eventMock = $this->getMockBuilder(Event::class)
+                ->addMethods(['getObject'])
+                ->disableOriginalConstructor()
+                ->getMock();
             $eventMock->expects($this->once())->method('getObject')->willReturn($observedObject);
             $observerObject->expects($this->once())->method('getEvent')->willReturn($eventMock);
             $this->configMock->expects($this->once())
@@ -89,7 +93,7 @@ class FlushCacheByTagsTest extends TestCase
 
             $this->fullPageCacheMock->expects($this->once())
                 ->method('clean')
-                ->with(\Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG, $this->equalTo($expectedTags));
+                ->with(\Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG, $expectedTags);
         }
 
         $result = $this->model->execute($observerObject);
@@ -118,7 +122,10 @@ class FlushCacheByTagsTest extends TestCase
 
         $tags = [];
 
-        $eventMock = $this->createPartialMock(Event::class, ['getObject']);
+        $eventMock = $this->getMockBuilder(Event::class)
+            ->addMethods(['getObject'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $eventMock->expects($this->once())->method('getObject')->willReturn($observedObject);
         $observerObject->expects($this->once())->method('getEvent')->willReturn($eventMock);
         $this->configMock->expects(

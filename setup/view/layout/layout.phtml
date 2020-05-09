@@ -3,6 +3,9 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 ?>
 <?= $this->doctype() ?>
 <!--[if !IE]><!-->
@@ -32,6 +35,7 @@
         ->appendFile($this->basePath() . '/pub/magento/setup/add-database.js')
         ->appendFile($this->basePath() . '/pub/magento/setup/web-configuration.js')
         ->appendFile($this->basePath() . '/pub/magento/setup/customize-your-store.js')
+        ->appendFile($this->basePath() . '/pub/magento/setup/configure-catalog-search.js')
         ->appendFile($this->basePath() . '/pub/magento/setup/create-admin-account.js')
         ->appendFile($this->basePath() . '/pub/magento/setup/install.js')
         ->appendFile($this->basePath() . '/pub/magento/setup/success.js')
