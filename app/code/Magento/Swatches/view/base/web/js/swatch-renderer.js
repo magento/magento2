@@ -278,7 +278,7 @@ define([
             // tier prise selectors end
 
             // A price label selector
-            normalPriceLabelSelector: '.normal-price .price-label'
+            normalPriceLabelSelector: '.product-info-main .normal-price .price-label'
         },
 
         /**
