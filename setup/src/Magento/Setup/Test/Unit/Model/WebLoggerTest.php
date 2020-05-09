@@ -3,20 +3,25 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Setup\Test\Unit\Model;
 
-use \Magento\Setup\Model\WebLogger;
+use Magento\Framework\Filesystem;
+use Magento\Framework\Filesystem\Directory\Write;
+use Magento\Setup\Model\WebLogger;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class WebLoggerTest extends \PHPUnit\Framework\TestCase
+class WebLoggerTest extends TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Filesystem\Directory\Write
+     * @var MockObject|Write
      */
     private $directoryWriteMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Filesystem
+     * @var MockObject|Filesystem
      */
     private $filesystemMock;
 
@@ -30,31 +35,31 @@ class WebLoggerTest extends \PHPUnit\Framework\TestCase
      */
     private $webLogger;
 
-    public function setUp()
+    protected function setUp(): void
     {
         self::$log = '';
 
-        $this->directoryWriteMock = $this->createMock(\Magento\Framework\Filesystem\Directory\Write::class);
+        $this->directoryWriteMock = $this->createMock(Write::class);
         $this->directoryWriteMock
             ->expects($this->any())
             ->method('readFile')
             ->with('install.log')
-            ->will($this->returnCallback([\Magento\Setup\Test\Unit\Model\WebLoggerTest::class, 'readLog']));
+            ->willReturnCallback([\Magento\Setup\Test\Unit\Model\WebLoggerTest::class, 'readLog']);
         $this->directoryWriteMock
             ->expects($this->any())
             ->method('writeFile')
             ->with('install.log')
-            ->will($this->returnCallback([\Magento\Setup\Test\Unit\Model\WebLoggerTest::class, 'writeToLog']));
+            ->willReturnCallback([\Magento\Setup\Test\Unit\Model\WebLoggerTest::class, 'writeToLog']);
         $this->directoryWriteMock
             ->expects($this->any())
             ->method('isExist')
-            ->will($this->returnCallback([\Magento\Setup\Test\Unit\Model\WebLoggerTest::class, 'isExist']));
+            ->willReturnCallback([\Magento\Setup\Test\Unit\Model\WebLoggerTest::class, 'isExist']);
 
-        $this->filesystemMock = $this->createMock(\Magento\Framework\Filesystem::class);
+        $this->filesystemMock = $this->createMock(Filesystem::class);
         $this->filesystemMock
             ->expects($this->once())
             ->method('getDirectoryWrite')
-            ->will($this->returnValue($this->directoryWriteMock));
+            ->willReturn($this->directoryWriteMock);
 
         $this->webLogger = new WebLogger($this->filesystemMock);
     }
@@ -62,15 +67,15 @@ class WebLoggerTest extends \PHPUnit\Framework\TestCase
     public function testConstructorLogFileSpecified()
     {
         $logFile = 'custom.log';
-        $directoryWriteMock = $this->createMock(\Magento\Framework\Filesystem\Directory\Write::class);
+        $directoryWriteMock = $this->createMock(Write::class);
         $directoryWriteMock->expects($this->once())->method('readFile')->with($logFile);
         $directoryWriteMock->expects($this->once())->method('writeFile')->with($logFile);
 
-        $filesystemMock = $this->createMock(\Magento\Framework\Filesystem::class);
+        $filesystemMock = $this->createMock(Filesystem::class);
         $filesystemMock
             ->expects($this->once())
             ->method('getDirectoryWrite')
-            ->will($this->returnValue($directoryWriteMock));
+            ->willReturn($directoryWriteMock);
 
         $webLogger = new WebLogger($filesystemMock, $logFile);
 
@@ -97,15 +102,15 @@ class WebLoggerTest extends \PHPUnit\Framework\TestCase
         $e2 = new \Exception('Dummy Exception2');
 
         $this->webLogger->logError($e1);
-        $this->assertContains('[ERROR]', self::$log);
-        $this->assertContains('Exception', self::$log);
-        $this->assertContains($e1->getMessage(), self::$log);
+        $this->assertStringContainsString('[ERROR]', self::$log);
+        $this->assertStringContainsString('Exception', self::$log);
+        $this->assertStringContainsString($e1->getMessage(), self::$log);
 
         $this->webLogger->logError($e2);
-        $this->assertContains('[ERROR]', self::$log);
-        $this->assertContains('Exception', self::$log);
-        $this->assertContains($e1->getMessage(), self::$log);
-        $this->assertContains($e2->getMessage(), self::$log);
+        $this->assertStringContainsString('[ERROR]', self::$log);
+        $this->assertStringContainsString('Exception', self::$log);
+        $this->assertStringContainsString($e1->getMessage(), self::$log);
+        $this->assertStringContainsString($e2->getMessage(), self::$log);
     }
 
     public function testLog()
@@ -166,7 +171,7 @@ class WebLoggerTest extends \PHPUnit\Framework\TestCase
         $this->directoryWriteMock
             ->expects($this->once())
             ->method('delete')
-            ->will($this->returnCallback([\Magento\Setup\Test\Unit\Model\WebLoggerTest::class, 'deleteLog']));
+            ->willReturnCallback([\Magento\Setup\Test\Unit\Model\WebLoggerTest::class, 'deleteLog']);
 
         $this->webLogger->log('Message1');
         $this->assertEquals('<span class="text-info">Message1</span><br>', self::$log);

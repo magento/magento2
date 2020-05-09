@@ -67,7 +67,7 @@ class CompilerTest extends \PHPUnit\Framework\TestCase
      */
     private $pluginBlacklist;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_shell = new \Magento\Framework\Shell(new \Magento\Framework\Shell\CommandRenderer());
         $basePath = BP;

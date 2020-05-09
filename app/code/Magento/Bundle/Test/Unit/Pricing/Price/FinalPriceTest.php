@@ -7,15 +7,15 @@ declare(strict_types=1);
 
 namespace Magento\Bundle\Test\Unit\Pricing\Price;
 
+use Magento\Bundle\Model\Product\Price;
 use Magento\Bundle\Pricing\Adjustment\BundleCalculatorInterface;
 use Magento\Bundle\Pricing\Price\BundleOptionPrice;
 use Magento\Bundle\Pricing\Price\FinalPrice;
 use Magento\Catalog\Api\Data\ProductCustomOptionInterface;
+use Magento\Catalog\Api\ProductCustomOptionRepositoryInterface;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Pricing\Price\BasePrice;
 use Magento\Catalog\Pricing\Price\CustomOptionPrice;
-use Magento\Bundle\Model\Product\Price;
-use Magento\Catalog\Api\ProductCustomOptionRepositoryInterface;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Framework\Pricing\PriceInfo\Base;
 use Magento\Framework\Pricing\SaleableInterface;
@@ -131,7 +131,7 @@ class FinalPriceTest extends TestCase
             ->method('getPriceInfo')
             ->willReturn($this->priceInfoMock);
 
-        $this->priceCurrencyMock = $this->createMock(PriceCurrencyInterface::class);
+        $this->priceCurrencyMock = $this->getMockForAbstractClass(PriceCurrencyInterface::class);
         $this->productOptionRepositoryMock = $this->getMockForAbstractClass(
             ProductCustomOptionRepositoryInterface::class
         );
@@ -190,7 +190,7 @@ class FinalPriceTest extends TestCase
 
         $this->bundleCalculatorMock->expects($this->once())
             ->method('getMaxAmount')
-            ->with($this->equalTo($this->baseAmount), $this->equalTo($this->saleableInterfaceMock))
+            ->with($this->baseAmount, $this->saleableInterfaceMock)
             ->willReturn($result);
         $this->assertSame($result, $this->finalPrice->getMaximalPrice());
         //The second call should use cached value
@@ -214,7 +214,7 @@ class FinalPriceTest extends TestCase
 
         $this->bundleCalculatorMock->expects($this->once())
             ->method('getMaxAmount')
-            ->with($this->equalTo($this->baseAmount + $optionMaxPrice), $this->equalTo($this->saleableInterfaceMock))
+            ->with($this->baseAmount + $optionMaxPrice, $this->saleableInterfaceMock)
             ->willReturn($result);
         $this->assertSame($result, $this->finalPrice->getMaximalPrice());
         //The second call should use cached value
@@ -248,7 +248,7 @@ class FinalPriceTest extends TestCase
 
         $this->bundleCalculatorMock->expects($this->once())
             ->method('getAmount')
-            ->with($this->equalTo($this->baseAmount + $optionMaxPrice), $this->equalTo($this->saleableInterfaceMock))
+            ->with($this->baseAmount + $optionMaxPrice, $this->saleableInterfaceMock)
             ->willReturn($result);
         $this->assertSame($result, $this->finalPrice->getMinimalPrice());
         //The second call should use cached value
@@ -266,7 +266,7 @@ class FinalPriceTest extends TestCase
 
         $this->bundleCalculatorMock->expects($this->once())
             ->method('getAmount')
-            ->with($this->equalTo($this->baseAmount), $this->equalTo($this->saleableInterfaceMock))
+            ->with($this->baseAmount, $this->saleableInterfaceMock)
             ->willReturn($result);
         $this->assertSame($result, $this->finalPrice->getMinimalPrice());
         //The second call should use cached value
@@ -279,7 +279,7 @@ class FinalPriceTest extends TestCase
         $this->prepareMock();
         $this->bundleCalculatorMock->expects($this->once())
             ->method('getAmountWithoutOption')
-            ->with($this->equalTo($this->baseAmount), $this->equalTo($this->saleableInterfaceMock))
+            ->with($this->baseAmount, $this->saleableInterfaceMock)
             ->willReturn($result);
         $this->assertSame($result, $this->finalPrice->getPriceWithoutOption());
         //The second call should use cached value

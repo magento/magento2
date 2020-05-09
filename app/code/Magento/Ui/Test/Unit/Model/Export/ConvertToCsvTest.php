@@ -3,21 +3,30 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Ui\Test\Unit\Model\Export;
 
+use Magento\Framework\Api\Search\DocumentInterface;
+use Magento\Framework\Api\Search\SearchResultInterface;
+use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\WriteInterface as DirectoryWriteInterface;
 use Magento\Framework\Filesystem\File\WriteInterface as FileWriteInterface;
+use Magento\Framework\View\Element\UiComponent\ContextInterface;
+use Magento\Framework\View\Element\UiComponent\DataProvider\DataProviderInterface;
 use Magento\Framework\View\Element\UiComponentInterface;
 use Magento\Ui\Component\MassAction\Filter;
 use Magento\Ui\Model\Export\ConvertToCsv;
 use Magento\Ui\Model\Export\MetadataProvider;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ConvertToCsvTest extends \PHPUnit\Framework\TestCase
+class ConvertToCsvTest extends TestCase
 {
     /**
      * @var ConvertToCsv
@@ -25,41 +34,41 @@ class ConvertToCsvTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var DirectoryWriteInterface | \PHPUnit_Framework_MockObject_MockObject
+     * @var DirectoryWriteInterface|MockObject
      */
     protected $directory;
 
     /**
-     * @var Filesystem | \PHPUnit_Framework_MockObject_MockObject
+     * @var Filesystem|MockObject
      */
     protected $filesystem;
 
     /**
-     * @var Filter | \PHPUnit_Framework_MockObject_MockObject
+     * @var Filter|MockObject
      */
     protected $filter;
 
     /**
-     * @var MetadataProvider | \PHPUnit_Framework_MockObject_MockObject
+     * @var MetadataProvider|MockObject
      */
     protected $metadataProvider;
 
     /**
-     * @var FileWriteInterface | \PHPUnit_Framework_MockObject_MockObject
+     * @var FileWriteInterface|MockObject
      */
     protected $stream;
 
     /**
-     * @var UiComponentInterface | \PHPUnit_Framework_MockObject_MockObject
+     * @var UiComponentInterface|MockObject
      */
     protected $component;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->directory = $this->getMockBuilder(\Magento\Framework\Filesystem\Directory\WriteInterface::class)
             ->getMockForAbstractClass();
 
-        $this->filesystem = $this->getMockBuilder(\Magento\Framework\Filesystem::class)
+        $this->filesystem = $this->getMockBuilder(Filesystem::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->filesystem->expects($this->any())
@@ -67,15 +76,15 @@ class ConvertToCsvTest extends \PHPUnit\Framework\TestCase
             ->with(DirectoryList::VAR_DIR)
             ->willReturn($this->directory);
 
-        $this->filter = $this->getMockBuilder(\Magento\Ui\Component\MassAction\Filter::class)
+        $this->filter = $this->getMockBuilder(Filter::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->metadataProvider = $this->getMockBuilder(\Magento\Ui\Model\Export\MetadataProvider::class)
+        $this->metadataProvider = $this->getMockBuilder(MetadataProvider::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->component = $this->getMockBuilder(\Magento\Framework\View\Element\UiComponentInterface::class)
+        $this->component = $this->getMockBuilder(UiComponentInterface::class)
             ->getMockForAbstractClass();
 
         $this->stream = $this->getMockBuilder(\Magento\Framework\Filesystem\File\WriteInterface::class)
@@ -98,7 +107,7 @@ class ConvertToCsvTest extends \PHPUnit\Framework\TestCase
         $componentName = 'component_name';
         $data = ['data_value'];
 
-        $document = $this->getMockBuilder(\Magento\Framework\Api\Search\DocumentInterface::class)
+        $document = $this->getMockBuilder(DocumentInterface::class)
             ->getMockForAbstractClass();
 
         $this->mockComponent($componentName, [$document]);
@@ -139,12 +148,12 @@ class ConvertToCsvTest extends \PHPUnit\Framework\TestCase
             ->with($document, $componentName);
 
         $result = $this->model->getCsvFile();
-        $this->assertTrue(is_array($result));
+        $this->assertIsArray($result);
         $this->assertArrayHasKey('type', $result);
         $this->assertArrayHasKey('value', $result);
         $this->assertArrayHasKey('rm', $result);
-        $this->assertContains($componentName, $result);
-        $this->assertContains('.csv', $result);
+        $this->assertStringContainsString($componentName, $result['value']);
+        $this->assertStringContainsString('.csv', $result['value']);
     }
 
     /**
@@ -181,21 +190,21 @@ class ConvertToCsvTest extends \PHPUnit\Framework\TestCase
      */
     protected function mockComponent($componentName, $items)
     {
-        $context = $this->getMockBuilder(\Magento\Framework\View\Element\UiComponent\ContextInterface::class)
+        $context = $this->getMockBuilder(ContextInterface::class)
             ->setMethods(['getDataProvider'])
             ->getMockForAbstractClass();
 
         $dataProvider = $this->getMockBuilder(
-            \Magento\Framework\View\Element\UiComponent\DataProvider\DataProviderInterface::class
+            DataProviderInterface::class
         )
             ->setMethods(['getSearchResult'])
             ->getMockForAbstractClass();
 
-        $searchResult = $this->getMockBuilder(\Magento\Framework\Api\Search\SearchResultInterface::class)
+        $searchResult = $this->getMockBuilder(SearchResultInterface::class)
             ->setMethods(['getItems'])
             ->getMockForAbstractClass();
 
-        $searchCriteria = $this->getMockBuilder(\Magento\Framework\Api\SearchCriteriaInterface::class)
+        $searchCriteria = $this->getMockBuilder(SearchCriteriaInterface::class)
             ->setMethods(['setPageSize', 'setCurrentPage'])
             ->getMockForAbstractClass();
         $this->component->expects($this->any())
