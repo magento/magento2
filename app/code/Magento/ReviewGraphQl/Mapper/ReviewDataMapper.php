@@ -18,11 +18,11 @@ class ReviewDataMapper
     /**
      * Mapping the review data
      *
-     * @param Review|Product $review
+     * @param Review $review
      *
      * @return array
      */
-    public function map($review): array
+    public function map(Review $review): array
     {
         return [
             'summary' => $review->getData('title'),
@@ -30,7 +30,8 @@ class ReviewDataMapper
             'nickname' => $review->getData('nickname'),
             'created_at' => $review->getData('created_at'),
             'rating_votes' => $review->getData('rating_votes'),
-            'sku' => $review->getSku()
+            'sku' => $review->getSku(),
+            'model' => $review
         ];
     }
 }

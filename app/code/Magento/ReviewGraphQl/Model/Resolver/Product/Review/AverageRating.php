@@ -13,8 +13,8 @@ use Magento\Framework\GraphQl\Query\Resolver\ContextInterface;
 use Magento\Framework\GraphQl\Query\Resolver\Value;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
-use Magento\Review\Model\ResourceModel\Rating\Option\Vote\Collection as VoteCollection;
-use Magento\Review\Service\GetReviewAverageRatingService;
+use Magento\Review\Model\RatingFactory;
+use Magento\Review\Model\Review;
 
 /**
  * Review average rating resolver
@@ -22,17 +22,17 @@ use Magento\Review\Service\GetReviewAverageRatingService;
 class AverageRating implements ResolverInterface
 {
     /**
-     * @var GetReviewAverageRatingService
+     * @var RatingFactory
      */
-    private $getReviewAverageRatingService;
+    private $ratingFactory;
 
     /**
-     * @param GetReviewAverageRatingService $getReviewAverageRatingService
+     * @param RatingFactory $ratingFactory
      */
     public function __construct(
-        GetReviewAverageRatingService $getReviewAverageRatingService
+        RatingFactory $ratingFactory
     ) {
-        $this->getReviewAverageRatingService = $getReviewAverageRatingService;
+        $this->ratingFactory = $ratingFactory;
     }
 
     /**
@@ -57,13 +57,19 @@ class AverageRating implements ResolverInterface
         array $value = null,
         array $args = null
     ) {
-        if (!isset($value['rating_votes'])) {
-            throw new GraphQlInputException(__('Value must contain "rating_votes" property.'));
+        if (!isset($value['model'])) {
+            throw new GraphQlInputException(__('Value must contain "model" property.'));
         }
 
-        /** @var VoteCollection $ratingVotes */
-        $ratingVotes = $value['rating_votes'];
+        /** @var Review $review */
+        $review = $value['model'];
+        $summary = $this->ratingFactory->create()->getReviewSummary($review->getId());
+        $averageRating = $summary->getSum();
 
-        return $this->getReviewAverageRatingService->execute($ratingVotes->getItems());
+        if ($summary->getSum() > 0) {
+            $averageRating = (float) number_format($summary->getSum() / $summary->getCount() / 20, 2);
+        }
+
+        return $averageRating;
     }
 }

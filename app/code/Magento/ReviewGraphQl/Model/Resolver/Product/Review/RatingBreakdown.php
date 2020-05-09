@@ -13,7 +13,7 @@ use Magento\Framework\GraphQl\Query\Resolver\ContextInterface;
 use Magento\Framework\GraphQl\Query\Resolver\Value;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
-use Magento\Review\Model\ResourceModel\Rating\Option\Vote\Collection as VoteCollection;
+use Magento\Review\Model\Review;
 use Magento\ReviewGraphQl\Model\DataProvider\ReviewRatingsDataProvider;
 
 /**
@@ -57,13 +57,13 @@ class RatingBreakdown implements ResolverInterface
         array $value = null,
         array $args = null
     ) {
-        if (!isset($value['rating_votes'])) {
-            throw new GraphQlInputException(__('Value must contain "rating_votes" property.'));
+        if (!isset($value['model'])) {
+            throw new GraphQlInputException(__('Value must contain "model" property.'));
         }
 
-        /** @var VoteCollection $ratingVotes */
-        $ratingVotes = $value['rating_votes'];
+        /** @var Review $review */
+        $review = $value['model'];
 
-        return $this->reviewRatingsDataProvider->getData($ratingVotes->getItems());
+        return $this->reviewRatingsDataProvider->getData((int) $review->getId());
     }
 }

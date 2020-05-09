@@ -7,35 +7,26 @@ declare(strict_types=1);
 
 namespace Magento\ReviewGraphQl\Model\DataProvider;
 
-use Magento\Review\Model\ResourceModel\Review\Product\Collection as ProductReviewsCollection;
-use Magento\Review\Model\ResourceModel\Review\Product\CollectionFactory;
-use Magento\Review\Model\Review\AddRatingVotesToCustomerReviews;
-
+use Magento\Review\Model\ResourceModel\Review\Collection as ReviewsCollection;
+use Magento\Review\Model\ResourceModel\Review\CollectionFactory as ReviewsCollectionFactory;
+use Magento\Review\Model\Review;
 /**
  * Provides customer reviews
  */
 class CustomerReviewsDataProvider
 {
     /**
-     * @var CollectionFactory
+     * @var ReviewsCollectionFactory
      */
     private $collectionFactory;
 
     /**
-     * @var AddRatingVotesToCustomerReviews
-     */
-    private $addRatingVotesToCustomerReviews;
-
-    /**
-     * @param CollectionFactory $collectionFactory
-     * @param AddRatingVotesToCustomerReviews $addRatingVotesToCustomerReviews
+     * @param ReviewsCollectionFactory $collectionFactory
      */
     public function __construct(
-        CollectionFactory $collectionFactory,
-        AddRatingVotesToCustomerReviews $addRatingVotesToCustomerReviews
+        ReviewsCollectionFactory $collectionFactory
     ) {
         $this->collectionFactory = $collectionFactory;
-        $this->addRatingVotesToCustomerReviews = $addRatingVotesToCustomerReviews;
     }
 
     /**
@@ -45,17 +36,23 @@ class CustomerReviewsDataProvider
      * @param int $currentPage
      * @param int $pageSize
      *
-     * @return ProductReviewsCollection
+     * @return ReviewsCollection
      */
-    public function getData(int $customerId, int $currentPage, int $pageSize): ProductReviewsCollection
+    public function getData(int $customerId, int $currentPage, int $pageSize): ReviewsCollection
     {
-        /** @var ProductReviewsCollection $reviewsCollection */
+        /** @var ReviewsCollection $reviewsCollection */
         $reviewsCollection = $this->collectionFactory->create();
-        $reviewsCollection->addCustomerFilter($customerId)
+        $reviewsCollection->addStatusFilter(Review::STATUS_APPROVED)
+            ->addCustomerFilter($customerId)
             ->setPageSize($pageSize)
             ->setCurPage($currentPage)
             ->setDateOrder();
-        $this->addRatingVotesToCustomerReviews->execute($reviewsCollection);
+        $reviewsCollection->getSelect()->join(
+            ['cpe' => $reviewsCollection->getTable('catalog_product_entity')],
+            'cpe.entity_id = main_table.entity_pk_value',
+            ['sku']
+        );
+        $reviewsCollection->addRateVotes();
 
         return $reviewsCollection;
     }
