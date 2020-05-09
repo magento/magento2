@@ -7,11 +7,12 @@ declare(strict_types=1);
 
 namespace Magento\Shipping\Test\Unit\Helper;
 
-use PHPUnit\Framework\TestCase;
-use Magento\Shipping\Helper\Data as HelperData;
-use Magento\Framework\Url\DecoderInterface;
 use Magento\Framework\App\Helper\Context;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Framework\Url\DecoderInterface;
+use Magento\Shipping\Helper\Data as HelperData;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Data helper test
@@ -26,12 +27,12 @@ class DataTest extends TestCase
     private $helper;
 
     /**
-     * @var DecoderInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var DecoderInterface|MockObject
      */
     private $urlDecoderMock;
 
     /**
-     * @var Context|\PHPUnit_Framework_MockObject_MockObject
+     * @var Context|MockObject
      */
     private $contextMock;
 
@@ -43,10 +44,10 @@ class DataTest extends TestCase
     /**
      * Setup environment to test
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->contextMock = $this->createMock(Context::class);
-        $this->urlDecoderMock = $this->createMock(DecoderInterface::class);
+        $this->urlDecoderMock = $this->getMockForAbstractClass(DecoderInterface::class);
         $this->contextMock->expects($this->any())->method('getUrlDecoder')
             ->willReturn($this->urlDecoderMock);
         $this->objectManagerHelper = new ObjectManagerHelper($this);
