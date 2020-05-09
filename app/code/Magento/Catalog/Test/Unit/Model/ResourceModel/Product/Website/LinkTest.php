@@ -3,12 +3,19 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Catalog\Test\Unit\Model\ResourceModel\Product\Website;
 
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Model\ResourceModel\Product\Website\Link;
+use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Framework\DB\Select;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class LinkTest extends \PHPUnit\Framework\TestCase
+class LinkTest extends TestCase
 {
     /**
      * @var Link
@@ -16,26 +23,26 @@ class LinkTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $resource;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $connection;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $dbSelect;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->resource = $this->createMock(\Magento\Framework\App\ResourceConnection::class);
+        $this->resource = $this->createMock(ResourceConnection::class);
         $this->connection =
-            $this->createMock(\Magento\Framework\DB\Adapter\AdapterInterface::class);
-        $this->dbSelect = $this->getMockBuilder(\Magento\Framework\Db\Select::class)
+            $this->getMockForAbstractClass(AdapterInterface::class);
+        $this->dbSelect = $this->getMockBuilder(Select::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->connection->expects($this->any())
@@ -74,7 +81,7 @@ class LinkTest extends \PHPUnit\Framework\TestCase
         $newWebsiteIds = [2,3];
         $websiteIds = [1,2];
         $productId = 1;
-        $product = $this->createMock(ProductInterface::class);
+        $product = $this->getMockForAbstractClass(ProductInterface::class);
         $product->expects($this->atLeastOnce())
             ->method('getId')
             ->willReturn($productId);

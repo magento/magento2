@@ -29,7 +29,7 @@ class SubsetTest extends \Magento\Webapi\Routing\BaseService
     /**
      * @Override
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_version = 'V1';
         $this->_restResourcePath = "/{$this->_version}/testModule2SubsetRest/";

@@ -3,21 +3,25 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Bundle\Test\Unit\Block\Adminhtml\Catalog\Product\Composite\Fieldset\Options\Type;
 
+use Magento\Bundle\Block\Adminhtml\Catalog\Product\Composite\Fieldset\Options\Type\Select;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\TestCase;
 
-class SelectTest extends \PHPUnit\Framework\TestCase
+class SelectTest extends TestCase
 {
     /**
-     * @var \Magento\Bundle\Block\Adminhtml\Catalog\Product\Composite\Fieldset\Options\Type\Select
+     * @var Select
      */
     protected $block;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->block = (new ObjectManager($this))
-            ->getObject(\Magento\Bundle\Block\Adminhtml\Catalog\Product\Composite\Fieldset\Options\Type\Select::class);
+            ->getObject(Select::class);
     }
 
     public function testSetValidationContainer()
@@ -27,7 +31,7 @@ class SelectTest extends \PHPUnit\Framework\TestCase
 
         $result = $this->block->setValidationContainer($elementId, $containerId);
 
-        $this->assertContains($elementId, $result);
-        $this->assertContains($containerId, $result);
+        $this->assertStringContainsString($elementId, $result);
+        $this->assertStringContainsString($containerId, $result);
     }
 }
