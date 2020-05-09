@@ -16,18 +16,18 @@ class ExportFormDataProviderTest extends TestCase
     /**
      * @var ExportFormDataProvider
      */
-    private $provider;
+    private $dataProvider;
 
     protected function setUp()
     {
         $objectManager = new ObjectManager($this);
-        $this->provider = $objectManager->getObject(ExportFormDataProvider::class);
+        $this->dataProvider = $objectManager->getObject(ExportFormDataProvider::class);
     }
 
     public function testGetData()
     {
         $expected = [];
 
-        $this->assertEquals($expected, $this->provider->getData());
+        $this->assertEquals($expected, $this->dataProvider->getData());
     }
 }

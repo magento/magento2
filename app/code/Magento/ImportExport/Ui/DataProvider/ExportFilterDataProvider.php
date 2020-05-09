@@ -62,7 +62,7 @@ class ExportFilterDataProvider extends AbstractDataProvider
      *
      * @return AbstractCollection
      */
-    public function getCollection()
+    public function getCollection() :AbstractCollection
     {
         if (!$this->collection) {
             $entity = $this->request->getParam('entity');
