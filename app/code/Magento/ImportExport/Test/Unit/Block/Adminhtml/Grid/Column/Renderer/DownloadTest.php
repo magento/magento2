@@ -13,6 +13,7 @@ use Magento\Framework\DataObject;
 use Magento\Framework\Escaper;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\ImportExport\Block\Adminhtml\Grid\Column\Renderer\Download;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -21,7 +22,7 @@ use PHPUnit\Framework\TestCase;
 class DownloadTest extends TestCase
 {
     /**
-     * @var Context
+     * @var Context|MockObject
      */
     protected $context;
 
@@ -36,7 +37,7 @@ class DownloadTest extends TestCase
     protected $download;
 
     /**
-     * @var Escaper|\PHPUnit_Framework_MockObject_MockObjecti
+     * @var Escaper|MockObject
      */
     private $escaperMock;
 
@@ -48,7 +49,7 @@ class DownloadTest extends TestCase
         $this->escaperMock = $this->createMock(Escaper::class);
         $urlModel = $this->createPartialMock(Url::class, ['getUrl']);
         $urlModel->expects($this->any())->method('getUrl')->willReturn('url');
-        $this->context = $this->createPartialMock(Context::class, ['getUrlBuilder']);
+        $this->context = $this->createPartialMock(Context::class, ['getUrlBuilder', 'getEscaper']);
         $this->context->expects($this->any())->method('getUrlBuilder')->willReturn($urlModel);
         $this->context->expects($this->any())->method('getEscaper')->willReturn($this->escaperMock);
         $data = [];
@@ -58,7 +59,7 @@ class DownloadTest extends TestCase
             Download::class,
             [
                 'context' => $this->context,
-                'data' => $data
+                'data' => $data,
             ]
         );
     }
