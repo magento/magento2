@@ -153,15 +153,23 @@ class PluginListTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @param $expectedResult
-     * @param $type
-     * @param $method
-     * @param $scopeCode
+     * @param array $expectedResult
+     * @param string $type
+     * @param string $method
+     * @param string $scopeCode
      * @param string $code
+     * @param array $scopePriorityScheme
      * @dataProvider getPluginsDataProvider
      */
-    public function testGetPlugins($expectedResult, $type, $method, $scopeCode, $code = '__self')
-    {
+    public function testGetPlugins(
+        ?array $expectedResult,
+        string $type,
+        string $method,
+        string $scopeCode,
+        string $code = '__self',
+        array $scopePriorityScheme = ['global']
+    ): void {
+        $this->setScopePriorityScheme($scopePriorityScheme);
         $this->configScopeMock->expects(
             $this->any()
         )->method(
@@ -226,7 +234,47 @@ class PluginListTest extends \PHPUnit\Framework\TestCase
                 \Magento\Framework\Interception\Test\Unit\Custom\Module\Model\ItemContainer::class,
                 'getName',
                 'backend'
-            ]
+            ],
+            [
+                // even though the scope is primary, both primary and global scopes are loaded
+                // because global is in default priority scheme
+                [
+                    4 => [
+                        'primary_plugin',
+                        'simple_plugin',
+                    ]
+                ],
+                \Magento\Framework\Interception\Test\Unit\Custom\Module\Model\Item::class,
+                'getName',
+                'primary',
+                '__self',
+                ['primary', 'global']
+            ],
+            [
+                [
+                    4 => [
+                        'primary_plugin',
+                        'simple_plugin',
+                    ]
+                ],
+                \Magento\Framework\Interception\Test\Unit\Custom\Module\Model\Item::class,
+                'getName',
+                'global',
+                '__self',
+                ['primary', 'global']
+            ],
+            [
+                [
+                    4 => [
+                        'primary_plugin',
+                    ]
+                ],
+                \Magento\Framework\Interception\Test\Unit\Custom\Module\Model\Item::class,
+                'getName',
+                'frontend',
+                '__self',
+                ['primary', 'global']
+            ],
         ];
     }
 
@@ -328,5 +376,17 @@ class PluginListTest extends \PHPUnit\Framework\TestCase
                 'simple_plugin'
             )
         );
+    }
+
+    /**
+     * @param array $areaCodes
+     * @throws \ReflectionException
+     */
+    private function setScopePriorityScheme(array $areaCodes): void
+    {
+        $reflection = new \ReflectionClass($this->object);
+        $reflection_property = $reflection->getProperty('_scopePriorityScheme');
+        $reflection_property->setAccessible(true);
+        $reflection_property->setValue($this->object, $areaCodes);
     }
 }
