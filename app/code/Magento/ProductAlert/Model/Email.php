@@ -40,7 +40,7 @@ use Magento\Store\Model\Website;
  * @api
  * @since 100.0.2
  * @method int getStoreId()
- * @method $this setStoreId()
+ * @method $this setStoreId(int $storeId)
  */
 class Email extends AbstractModel
 {

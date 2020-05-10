@@ -25,7 +25,6 @@ if ($storeId = $store->load('fixture_second_store', 'code')->getId()) {
         'Fixture Store Owner',
         ScopeInterface::SCOPE_STORES,
         $storeId
-
     );
     $configResource->saveConfig(
         'trans_email/ident_general/email',
