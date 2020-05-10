@@ -20,7 +20,7 @@ class RegionTest extends TestCase
     /**
      * @inheritDoc
      */
-    public function setUp()
+    protected function setUp(): void
     {
         $this->country = Bootstrap::getObjectManager()->create(Country::class);
     }

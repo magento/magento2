@@ -11,11 +11,13 @@ use Magento\Braintree\Gateway\Command\GetPaymentNonceCommand;
 use Magento\Braintree\Model\InstantPurchase\PaymentAdditionalInformationProvider;
 use Magento\Payment\Gateway\Command\Result\ArrayResult;
 use Magento\Vault\Api\Data\PaymentTokenInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \Magento\Braintree\Model\InstantPurchase\PaymentAdditionalInformationProvider
  */
-class PaymentAdditionalInformationProviderTest extends \PHPUnit\Framework\TestCase
+class PaymentAdditionalInformationProviderTest extends TestCase
 {
     /**
      * Testable Object
@@ -25,17 +27,17 @@ class PaymentAdditionalInformationProviderTest extends \PHPUnit\Framework\TestCa
     private $paymentAdditionalInformationProvider;
 
     /**
-     * @var GetPaymentNonceCommand|\PHPUnit_Framework_MockObject_MockObject
+     * @var GetPaymentNonceCommand|MockObject
      */
     private $getPaymentNonceCommandMock;
 
     /**
-     * @var PaymentTokenInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var PaymentTokenInterface|MockObject
      */
     private $paymentTokenMock;
 
     /**
-     * @var ArrayResult|\PHPUnit_Framework_MockObject_MockObject
+     * @var ArrayResult|MockObject
      */
     private $arrayResultMock;
 
@@ -44,10 +46,10 @@ class PaymentAdditionalInformationProviderTest extends \PHPUnit\Framework\TestCa
      *
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->getPaymentNonceCommandMock = $this->createMock(GetPaymentNonceCommand::class);
-        $this->paymentTokenMock = $this->createMock(PaymentTokenInterface::class);
+        $this->paymentTokenMock = $this->getMockForAbstractClass(PaymentTokenInterface::class);
         $this->arrayResultMock = $this->createMock(ArrayResult::class);
         $this->paymentAdditionalInformationProvider = new PaymentAdditionalInformationProvider(
             $this->getPaymentNonceCommandMock

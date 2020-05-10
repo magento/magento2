@@ -3,20 +3,29 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\CatalogSearch\Test\Unit\Model\Search\QueryChecker;
 
-class FullTextSearchCheckTest extends \PHPUnit\Framework\TestCase
+use Magento\CatalogSearch\Model\Search\QueryChecker\FullTextSearchCheck;
+use Magento\Framework\Search\Request\Query\BoolExpression;
+use Magento\Framework\Search\Request\Query\Filter;
+use Magento\Framework\Search\Request\QueryInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class FullTextSearchCheckTest extends TestCase
 {
     /**
-     * @var \Magento\CatalogSearch\Model\Search\QueryChecker\FullTextSearchCheck
+     * @var FullTextSearchCheck
      */
     private $fullTextSearchCheck;
 
-    public function setUp()
+    protected function setUp(): void
     {
-        $this->fullTextSearchCheck = (new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this))
-            ->getObject(\Magento\CatalogSearch\Model\Search\QueryChecker\FullTextSearchCheck::class);
+        $this->fullTextSearchCheck = (new ObjectManager($this))
+            ->getObject(FullTextSearchCheck::class);
     }
 
     /**
@@ -47,12 +56,10 @@ class FullTextSearchCheckTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     */
     public function testInvalidArgumentException1()
     {
-        $matchQueryMock = $this->getMockBuilder(\Magento\Framework\Search\Request\QueryInterface::class)
+        $this->expectException('InvalidArgumentException');
+        $matchQueryMock = $this->getMockBuilder(QueryInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['getType'])
             ->getMockForAbstractClass();
@@ -64,11 +71,9 @@ class FullTextSearchCheckTest extends \PHPUnit\Framework\TestCase
         $this->fullTextSearchCheck->isRequiredForQuery($matchQueryMock);
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     */
     public function testInvalidArgumentException2()
     {
+        $this->expectException('InvalidArgumentException');
         $filterMock = $this->getFilterQueryMock();
 
         $filterMock->expects($this->any())
@@ -97,7 +102,7 @@ class FullTextSearchCheckTest extends \PHPUnit\Framework\TestCase
 
         $filterMock->expects($this->any())
             ->method('getReferenceType')
-            ->willReturn(\Magento\Framework\Search\Request\Query\Filter::REFERENCE_QUERY);
+            ->willReturn(Filter::REFERENCE_QUERY);
 
         $filterMock->expects($this->any())
             ->method('getReference')
@@ -140,7 +145,7 @@ class FullTextSearchCheckTest extends \PHPUnit\Framework\TestCase
 
         $filterMock->expects($this->any())
             ->method('getReferenceType')
-            ->willReturn(\Magento\Framework\Search\Request\Query\Filter::REFERENCE_FILTER);
+            ->willReturn(Filter::REFERENCE_FILTER);
 
         return [
             [
@@ -154,52 +159,52 @@ class FullTextSearchCheckTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return MockObject
      */
     private function getMatchQueryMock()
     {
-        $matchQueryMock = $this->getMockBuilder(\Magento\Framework\Search\Request\QueryInterface::class)
+        $matchQueryMock = $this->getMockBuilder(QueryInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['getType'])
             ->getMockForAbstractClass();
 
         $matchQueryMock->expects($this->any())
             ->method('getType')
-            ->willReturn(\Magento\Framework\Search\Request\QueryInterface::TYPE_MATCH);
+            ->willReturn(QueryInterface::TYPE_MATCH);
 
         return $matchQueryMock;
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return MockObject
      */
     private function getBoolQueryMock()
     {
-        $boolQueryMock = $this->getMockBuilder(\Magento\Framework\Search\Request\Query\BoolExpression::class)
+        $boolQueryMock = $this->getMockBuilder(BoolExpression::class)
             ->disableOriginalConstructor()
             ->setMethods(['getType', 'getShould', 'getMust', 'getMustNot'])
             ->getMock();
 
         $boolQueryMock->expects($this->any())
             ->method('getType')
-            ->willReturn(\Magento\Framework\Search\Request\QueryInterface::TYPE_BOOL);
+            ->willReturn(QueryInterface::TYPE_BOOL);
 
         return $boolQueryMock;
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return MockObject
      */
     private function getFilterQueryMock()
     {
-        $filterQueryMock = $this->getMockBuilder(\Magento\Framework\Search\Request\Query\Filter::class)
+        $filterQueryMock = $this->getMockBuilder(Filter::class)
             ->disableOriginalConstructor()
             ->setMethods(['getType', 'getReferenceType', 'getReference'])
             ->getMock();
 
         $filterQueryMock->expects($this->any())
             ->method('getType')
-            ->willReturn(\Magento\Framework\Search\Request\QueryInterface::TYPE_FILTER);
+            ->willReturn(QueryInterface::TYPE_FILTER);
 
         return $filterQueryMock;
     }
