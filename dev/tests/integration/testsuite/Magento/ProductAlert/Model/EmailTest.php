@@ -20,6 +20,7 @@ use Magento\TestFramework\Mail\Template\TransportBuilderMock;
  * Test for Magento\ProductAlert\Model\Email class.
  *
  * @magentoAppIsolation enabled
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class EmailTest extends \PHPUnit\Framework\TestCase
 {
