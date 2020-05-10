@@ -3,33 +3,39 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Analytics\Test\Unit\ReportXml\Config\Converter;
+
+use Magento\Analytics\ReportXml\Config\Converter\Xml;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\TestCase;
 
 /**
  * A unit test for testing of the reports configuration converter (XML to PHP array).
  */
-class XmlTest extends \PHPUnit\Framework\TestCase
+class XmlTest extends TestCase
 {
     /**
-     * @var \Magento\Analytics\ReportXml\Config\Converter\Xml
+     * @var Xml
      */
     private $subject;
 
     /**
-     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
+     * @var ObjectManager
      */
     private $objectManagerHelper;
 
     /**
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManagerHelper =
-            new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+            new ObjectManager($this);
 
         $this->subject = $this->objectManagerHelper->getObject(
-            \Magento\Analytics\ReportXml\Config\Converter\Xml::class
+            Xml::class
         );
     }
 

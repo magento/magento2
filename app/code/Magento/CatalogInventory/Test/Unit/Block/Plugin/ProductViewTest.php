@@ -3,39 +3,52 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\CatalogInventory\Test\Unit\Block\Plugin;
 
-class ProductViewTest extends \PHPUnit\Framework\TestCase
+use Magento\Catalog\Block\Product\View;
+use Magento\Catalog\Model\Product;
+use Magento\CatalogInventory\Api\Data\StockItemInterface;
+use Magento\CatalogInventory\Api\StockRegistryInterface;
+use Magento\CatalogInventory\Block\Plugin\ProductView;
+use Magento\CatalogInventory\Model\Stock\Item;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Store\Model\Store;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class ProductViewTest extends TestCase
 {
     /**
-     * @var \Magento\CatalogInventory\Block\Plugin\ProductView
+     * @var ProductView
      */
     protected $block;
 
     /**
-     * @var \Magento\CatalogInventory\Api\Data\StockItemInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var StockItemInterface|MockObject
      */
     protected $stockItem;
 
     /**
-     * @var \Magento\CatalogInventory\Api\StockRegistryInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var StockRegistryInterface|MockObject
      */
     protected $stockRegistry;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $objectManager = new ObjectManager($this);
 
-        $this->stockItem = $this->getMockBuilder(\Magento\CatalogInventory\Model\Stock\Item::class)
+        $this->stockItem = $this->getMockBuilder(Item::class)
             ->disableOriginalConstructor()
             ->setMethods(['getMinSaleQty', 'getMaxSaleQty', 'getQtyIncrements'])
             ->getMock();
 
-        $this->stockRegistry = $this->getMockBuilder(\Magento\CatalogInventory\Api\StockRegistryInterface::class)
+        $this->stockRegistry = $this->getMockBuilder(StockRegistryInterface::class)
             ->getMock();
 
         $this->block = $objectManager->getObject(
-            \Magento\CatalogInventory\Block\Plugin\ProductView::class,
+            ProductView::class,
             [
                 'stockRegistry' => $this->stockRegistry
             ]
@@ -45,22 +58,21 @@ class ProductViewTest extends \PHPUnit\Framework\TestCase
     public function testAfterGetQuantityValidators()
     {
         $result = [
-            'validate-item-quantity' =>
-                [
-                    'minAllowed' => 0.5,
-                    'maxAllowed' => 5.0,
-                    'qtyIncrements' => 3.0
-                ]
+            'validate-item-quantity' => [
+                'minAllowed' => 0.5,
+                'maxAllowed' => 5.0,
+                'qtyIncrements' => 3.0
+            ]
         ];
         $validators = [];
-        $productViewBlock = $this->getMockBuilder(\Magento\Catalog\Block\Product\View::class)
+        $productViewBlock = $this->getMockBuilder(View::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $productMock = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
+        $productMock = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
             ->setMethods(['_wakeup', 'getId', 'getStore'])
             ->getMock();
-        $storeMock = $this->getMockBuilder(\Magento\Store\Model\Store::class)
+        $storeMock = $this->getMockBuilder(Store::class)
             ->disableOriginalConstructor()
             ->setMethods(['getWebsiteId', '_wakeup'])
             ->getMock();

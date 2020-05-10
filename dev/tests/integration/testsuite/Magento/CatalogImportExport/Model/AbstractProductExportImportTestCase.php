@@ -76,7 +76,7 @@ abstract class AbstractProductExportImportTestCase extends \PHPUnit\Framework\Te
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->fileSystem = $this->objectManager->get(\Magento\Framework\Filesystem::class);
@@ -89,7 +89,7 @@ abstract class AbstractProductExportImportTestCase extends \PHPUnit\Framework\Te
     /**
      * @inheritdoc
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->executeFixtures($this->fixtures, true);
 

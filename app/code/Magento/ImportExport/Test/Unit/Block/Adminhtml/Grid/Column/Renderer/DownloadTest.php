@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\ImportExport\Test\Unit\Block\Adminhtml\Grid\Column\Renderer;
 
 use Magento\Backend\Block\Context;
@@ -11,11 +13,12 @@ use Magento\Framework\DataObject;
 use Magento\Framework\Escaper;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\ImportExport\Block\Adminhtml\Grid\Column\Renderer\Download;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test for \Magento\ImportExport\Block\Adminhtml\Grid\Column\Renderer\Download class.
  */
-class DownloadTest extends \PHPUnit\Framework\TestCase
+class DownloadTest extends TestCase
 {
     /**
      * @var Context
@@ -38,14 +41,14 @@ class DownloadTest extends \PHPUnit\Framework\TestCase
     private $escaperMock;
 
     /**
-     * Set up
+     * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->escaperMock = $this->createMock(Escaper::class);
         $urlModel = $this->createPartialMock(Url::class, ['getUrl']);
         $urlModel->expects($this->any())->method('getUrl')->willReturn('url');
-        $this->context = $this->createPartialMock(Context::class, ['getUrlBuilder', 'getEscaper']);
+        $this->context = $this->createPartialMock(Context::class, ['getUrlBuilder']);
         $this->context->expects($this->any())->method('getUrlBuilder')->willReturn($urlModel);
         $this->context->expects($this->any())->method('getEscaper')->willReturn($this->escaperMock);
         $data = [];

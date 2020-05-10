@@ -79,7 +79,7 @@ class PrintOrderFrontendGuestTest extends Scenario
      *
      * @return void
      */
-    public function tearDown()
+    public function tearDown(): void
     {
         $this->envWhitelist->removeHost('example.com');
         $this->browser->closeWindow();

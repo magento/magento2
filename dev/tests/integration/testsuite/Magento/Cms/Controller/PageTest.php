@@ -18,7 +18,7 @@ class PageTest extends \Magento\TestFramework\TestCase\AbstractController
     public function testViewAction()
     {
         $this->dispatch('/enable-cookies');
-        $this->assertContains('What are Cookies?', $this->getResponse()->getBody());
+        $this->assertStringContainsString('What are Cookies?', $this->getResponse()->getBody());
     }
 
     public function testViewRedirectWithTrailingSlash()
@@ -41,7 +41,7 @@ class PageTest extends \Magento\TestFramework\TestCase\AbstractController
             \Magento\Framework\View\LayoutInterface::class
         );
         $breadcrumbsBlock = $layout->getBlock('breadcrumbs');
-        $this->assertContains($breadcrumbsBlock->toHtml(), $this->getResponse()->getBody());
+        $this->assertStringContainsString($breadcrumbsBlock->toHtml(), $this->getResponse()->getBody());
     }
 
     /**
@@ -51,7 +51,7 @@ class PageTest extends \Magento\TestFramework\TestCase\AbstractController
     {
         $this->dispatch('/shipping');
         $content = $this->getResponse()->getBody();
-        $this->assertContains('Shipping Test Page', $content);
+        $this->assertStringContainsString('Shipping Test Page', $content);
     }
 
     public static function cmsPageWithSystemRouteFixture()
