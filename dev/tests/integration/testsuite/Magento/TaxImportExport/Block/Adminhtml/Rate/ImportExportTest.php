@@ -12,7 +12,7 @@ class ImportExportTest extends \PHPUnit\Framework\TestCase
      */
     protected $_block = null;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         \Magento\TestFramework\Helper\Bootstrap::getInstance()
             ->loadArea(\Magento\Backend\App\Area\FrontNameResolver::AREA_CODE);
@@ -21,7 +21,7 @@ class ImportExportTest extends \PHPUnit\Framework\TestCase
         )->createBlock(\Magento\TaxImportExport\Block\Adminhtml\Rate\ImportExport::class);
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->_block = null;
     }
@@ -35,8 +35,8 @@ class ImportExportTest extends \PHPUnit\Framework\TestCase
     {
         $html = $this->_block->toHtml();
 
-        $this->assertContains('<form id="import-form"', $html);
+        $this->assertStringContainsString('<form id="import-form"', $html);
 
-        $this->assertContains('<form id="export_form"', $html);
+        $this->assertStringContainsString('<form id="export_form"', $html);
     }
 }

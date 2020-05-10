@@ -3,12 +3,16 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\MessageQueue\Test\Unit\Publisher\Config;
 
 use Magento\Framework\MessageQueue\Publisher\Config\CompositeValidator;
 use Magento\Framework\MessageQueue\Publisher\Config\ValidatorInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class CompositeValidatorTest extends \PHPUnit\Framework\TestCase
+class CompositeValidatorTest extends TestCase
 {
     /**
      * @var CompositeValidator
@@ -16,22 +20,22 @@ class CompositeValidatorTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     private $validatorOneMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     private $validatorTwoMock;
 
     /**
      * Initialize parameters
      */
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->validatorOneMock = $this->createMock(ValidatorInterface::class);
-        $this->validatorTwoMock = $this->createMock(ValidatorInterface::class);
+        $this->validatorOneMock = $this->getMockForAbstractClass(ValidatorInterface::class);
+        $this->validatorTwoMock = $this->getMockForAbstractClass(ValidatorInterface::class);
 
         $this->model = new CompositeValidator([$this->validatorOneMock, $this->validatorTwoMock]);
     }
@@ -44,12 +48,10 @@ class CompositeValidatorTest extends \PHPUnit\Framework\TestCase
         $this->model->validate($expectedValidationData);
     }
 
-    /**
-     * @expectedException \LogicException
-     * @expectedExceptionMessage test
-     */
     public function testValidatorThrowsException()
     {
+        $this->expectException('LogicException');
+        $this->expectExceptionMessage('test');
         $expectedValidationData = include __DIR__ . '/../../_files/queue_publisher/data_to_validate.php';
         $this->validatorOneMock
             ->expects($this->once())

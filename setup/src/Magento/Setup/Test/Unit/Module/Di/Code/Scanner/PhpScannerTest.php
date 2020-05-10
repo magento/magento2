@@ -7,18 +7,20 @@ declare(strict_types=1);
 
 namespace Magento\Setup\Test\Unit\Module\Di\Code\Scanner;
 
+use Magento\Framework\Reflection\TypeProcessor;
+
 require_once __DIR__ . '/../../_files/app/code/Magento/SomeModule/Helper/Test.php';
 require_once __DIR__ . '/../../_files/app/code/Magento/SomeModule/ElementFactory.php';
 require_once __DIR__ . '/../../_files/app/code/Magento/SomeModule/Model/DoubleColon.php';
 require_once __DIR__ . '/../../_files/app/code/Magento/SomeModule/Api/Data/SomeInterface.php';
 require_once __DIR__ . '/../../_files/app/code/Magento/SomeModule/Model/StubWithAnonymousClass.php';
 
-use Magento\Framework\Reflection\TypeProcessor;
 use Magento\Setup\Module\Di\Code\Scanner\PhpScanner;
 use Magento\Setup\Module\Di\Compiler\Log\Log;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class PhpScannerTest extends \PHPUnit\Framework\TestCase
+class PhpScannerTest extends TestCase
 {
     /**
      * @var PhpScanner
@@ -35,7 +37,7 @@ class PhpScannerTest extends \PHPUnit\Framework\TestCase
      */
     private $log;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->log = $this->createMock(Log::class);
         $this->scanner = new PhpScanner($this->log, new TypeProcessor());

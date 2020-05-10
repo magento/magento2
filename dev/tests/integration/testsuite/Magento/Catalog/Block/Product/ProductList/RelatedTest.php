@@ -25,7 +25,7 @@ class RelatedTest extends AbstractLinksTest
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -48,9 +48,9 @@ class RelatedTest extends AbstractLinksTest
         $this->prepareBlock();
         $html = $this->block->toHtml();
         $this->assertNotEmpty($html);
-        $this->assertContains($relatedProduct->getName(), $html);
+        $this->assertStringContainsString($relatedProduct->getName(), $html);
         /* name */
-        $this->assertContains('id="related-checkbox' . $relatedProduct->getId() . '"', $html);
+        $this->assertStringContainsString('id="related-checkbox' . $relatedProduct->getId() . '"', $html);
         /* part of url */
         $this->assertInstanceOf(
             LinkProductCollection::class,

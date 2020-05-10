@@ -44,7 +44,7 @@ class ChartTest extends TestCase
      */
     private $collectionMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManagerHelper = new ObjectManager($this);
 
