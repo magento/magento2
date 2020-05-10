@@ -32,7 +32,7 @@ class PageRepositoryTest extends TestCase
     /**
      * @inheritDoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->repo = Bootstrap::getObjectManager()->get(PageRepositoryInterface::class);
         $this->retriever = Bootstrap::getObjectManager()->get(GetPageByIdentifierInterface::class);

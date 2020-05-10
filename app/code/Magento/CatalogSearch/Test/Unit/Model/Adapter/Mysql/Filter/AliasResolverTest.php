@@ -3,31 +3,35 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\CatalogSearch\Test\Unit\Model\Adapter\Mysql\Filter;
 
+use Magento\CatalogSearch\Model\Adapter\Mysql\Filter\AliasResolver;
 use Magento\CatalogSearch\Model\Search\RequestGenerator;
+use Magento\Framework\Search\Request\Filter\Term;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use PHPUnit\Framework\TestCase;
 
 /**
- * @deprecated
+ * @deprecated Implementation class was replaced
  * @see \Magento\ElasticSearch
  */
-class AliasResolverTest extends \PHPUnit\Framework\TestCase
+class AliasResolverTest extends TestCase
 {
     /**
-     * @var \Magento\CatalogSearch\Model\Adapter\Mysql\Filter\AliasResolver
+     * @var AliasResolver
      */
     private $aliasResolver;
 
     /**
      * @inheritDoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManagerHelper = new ObjectManagerHelper($this);
         $this->aliasResolver = $objectManagerHelper->getObject(
-            \Magento\CatalogSearch\Model\Adapter\Mysql\Filter\AliasResolver::class,
+            AliasResolver::class,
             []
         );
     }
@@ -39,7 +43,7 @@ class AliasResolverTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetFilterAlias($field, $expectedAlias)
     {
-        $filter = $this->getMockBuilder(\Magento\Framework\Search\Request\Filter\Term::class)
+        $filter = $this->getMockBuilder(Term::class)
             ->setMethods(['getField'])
             ->disableOriginalConstructor()
             ->getMock();

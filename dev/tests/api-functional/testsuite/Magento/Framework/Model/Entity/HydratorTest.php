@@ -35,7 +35,7 @@ class HydratorTest extends \Magento\TestFramework\TestCase\WebapiAbstract
 
     const PASSWORD = 'test@123';
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_markTestAsRestOnly('Hydrator can be tested using REST adapter only');
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();

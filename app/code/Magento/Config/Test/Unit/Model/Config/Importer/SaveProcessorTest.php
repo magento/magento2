@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Config\Test\Unit\Model\Config\Importer;
 
 use Magento\Config\Model\Config\Backend\Currency\AbstractCurrency;
@@ -12,14 +14,15 @@ use Magento\Config\Model\PreparedValueFactory;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Config\Value;
 use Magento\Framework\Stdlib\ArrayUtils;
-use PHPUnit_Framework_MockObject_MockObject as Mock;
+use PHPUnit\Framework\MockObject\MockObject as Mock;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test for SaveProcessor.
  *
  * @see Importer
  */
-class SaveProcessorTest extends \PHPUnit\Framework\TestCase
+class SaveProcessorTest extends TestCase
 {
     /**
      * @var SaveProcessor
@@ -54,7 +57,7 @@ class SaveProcessorTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->arrayUtilsMock = $this->getMockBuilder(ArrayUtils::class)
             ->disableOriginalConstructor()
@@ -134,7 +137,7 @@ class SaveProcessorTest extends \PHPUnit\Framework\TestCase
                 ['web/unsecure/base_url', 'http://magento3.local/', 'websites', 'base', $value2]
             ]);
 
-        $this->assertSame(null, $this->model->process($data));
+        $this->assertNull($this->model->process($data));
     }
 
     public function testProcessWithNullValues()
@@ -167,6 +170,6 @@ class SaveProcessorTest extends \PHPUnit\Framework\TestCase
             ->method('getValue')
             ->willReturn(null);
 
-        $this->assertSame(null, $this->model->process($data));
+        $this->assertNull($this->model->process($data));
     }
 }

@@ -27,7 +27,7 @@ class DryRunTest extends SetupTestCase
      */
     private $cliCommad;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $objectManager = Bootstrap::getObjectManager();
         $this->moduleManager = $objectManager->get(TestModuleManager::class);
