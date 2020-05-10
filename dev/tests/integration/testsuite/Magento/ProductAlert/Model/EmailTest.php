@@ -8,7 +8,7 @@ namespace Magento\ProductAlert\Model;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Customer\Api\CustomerRepositoryInterface;
-use Magento\ProductAlert\Model\Email;
+use Magento\Store\Model\StoreManagerInterface;
 use Magento\Store\Model\Website;
 use Magento\TestFramework\Mail\Template\TransportBuilderMock;
 
@@ -155,5 +155,37 @@ class EmailTest extends \PHPUnit\Framework\TestCase
                 $this->transportBuilder->getSentMessage()->getBody()->getParts()[0]->getRawContent()
             );
         }
+    }
+
+    /**
+     * @magentoAppArea frontend
+     * @magentoDataFixture Magento/Customer/_files/customer.php
+     * @magentoDataFixture Magento/Catalog/_files/product_simple.php
+     * @magentoDataFixture Magento/Store/_files/second_store_with_second_identity.php
+     */
+    public function testScopedMessageIdentity()
+    {
+        /** @var Website $website */
+        $website = $this->_objectManager->create(Website::class);
+        $website->load(1);
+        $this->_emailModel->setWebsite($website);
+
+        /** @var StoreManagerInterface $storeManager */
+        $storeManager = $this->_objectManager->create(StoreManagerInterface::class);
+        $store = $storeManager->getStore('fixture_second_store');
+        $this->_emailModel->setStoreId($store->getId());
+
+        $customer = $this->customerRepository->getById(1);
+        $this->_emailModel->setCustomerData($customer);
+
+        /** @var \Magento\Catalog\Model\Product $product */
+        $product = $this->productRepository->getById(1);
+
+        $this->_emailModel->addPriceProduct($product);
+        $this->_emailModel->send();
+
+        $from = $this->transportBuilder->getSentMessage()->getFrom()[0];
+        $this->assertEquals('Fixture Store Owner', $from->getName());
+        $this->assertEquals('fixture.store.owner@example.com', $from->getEmail());
     }
 }
