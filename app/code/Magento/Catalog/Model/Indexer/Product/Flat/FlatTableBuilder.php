@@ -261,7 +261,7 @@ class FlatTableBuilder
 
         $select->from(
             ['et' => $entityTemporaryTableName],
-            $allColumns
+            array_merge(...$allColumns)
         )->joinInner(
             ['e' => $this->resource->getTableName('catalog_product_entity')],
             'e.entity_id = et.entity_id',
