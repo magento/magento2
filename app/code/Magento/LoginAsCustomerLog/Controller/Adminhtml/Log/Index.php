@@ -13,7 +13,7 @@ use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Controller\ResultInterface;
 
 /**
- * Login As Customer log grid controller.
+ * Login as Customer log grid controller.
  */
 class Index extends Action implements HttpGetActionInterface
 {

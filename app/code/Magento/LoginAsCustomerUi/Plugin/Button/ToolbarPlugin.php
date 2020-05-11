@@ -51,7 +51,7 @@ class ToolbarPlugin
     }
 
     /**
-     * Add Login As Customer button.
+     * Add Login as Customer button.
      *
      * @param \Magento\Backend\Block\Widget\Button\Toolbar $subject
      * @param \Magento\Framework\View\Element\AbstractBlock $context
@@ -87,7 +87,7 @@ class ToolbarPlugin
                     $buttonList->add(
                         'guest_to_customer',
                         [
-                            'label' => __('Login As Customer'),
+                            'label' => __('Login as Customer'),
                             'onclick' => 'window.lacConfirmationPopup("'
                                 . $this->escaper->escapeHtml($this->escaper->escapeJs($buttonUrl))
                                 . '")',

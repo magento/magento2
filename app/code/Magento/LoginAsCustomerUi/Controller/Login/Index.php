@@ -21,7 +21,7 @@ use Magento\LoginAsCustomerApi\Api\AuthenticateCustomerInterface;
 use Psr\Log\LoggerInterface;
 
 /**
- * Login As Customer storefront login action
+ * Login as Customer storefront login action
  */
 class Index implements HttpGetActionInterface
 {
@@ -88,7 +88,7 @@ class Index implements HttpGetActionInterface
     }
 
     /**
-     * Login As Customer storefront login
+     * Login as Customer storefront login
      *
      * @return ResultInterface
      */

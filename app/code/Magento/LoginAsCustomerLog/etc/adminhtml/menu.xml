@@ -9,7 +9,7 @@
         xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
     <menu>
         <add id="Magento_LoginAsCustomerLog::login_log"
-             title="Login As Customer Log"
+             title="Login as Customer Log"
              module="Magento_LoginAsCustomerLog"
              parent="Magento_Customer::customer"
              sortOrder="40"
