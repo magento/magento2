@@ -137,7 +137,7 @@ class UpdateCustomVariableEntityTest extends Injectable
      *
      * @return void
      */
-    public function tearDown()
+    public function tearDown(): void
     {
         if ($this->store !== null) {
             $storeIndex = $this->objectManager->create(\Magento\Backend\Test\Page\Adminhtml\StoreIndex::class);

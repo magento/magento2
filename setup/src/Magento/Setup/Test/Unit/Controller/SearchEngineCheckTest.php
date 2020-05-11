@@ -33,7 +33,7 @@ class SearchEngineCheckTest extends TestCase
      */
     private $objectManagerHelper;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $searchConfigOptionsList = new SearchConfigOptionsList();
         $this->objectManagerHelper = new ObjectManager($this);

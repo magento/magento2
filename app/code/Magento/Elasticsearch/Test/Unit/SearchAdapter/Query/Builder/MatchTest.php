@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Elasticsearch\Test\Unit\SearchAdapter\Query\Builder;
 
 use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\AttributeAdapter;
@@ -15,7 +17,7 @@ use Magento\Elasticsearch\SearchAdapter\Query\ValueTransformerInterface;
 use Magento\Elasticsearch\SearchAdapter\Query\ValueTransformerPool;
 use Magento\Framework\Search\Request\Query\Match as MatchRequestQuery;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use PHPUnit\Framework\MockObject\MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -49,7 +51,7 @@ class MatchTest extends TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->attributeProvider = $this->createMock(AttributeProvider::class);
         $this->fieldTypeResolver = $this->createMock(TypeResolver::class);
@@ -58,7 +60,7 @@ class MatchTest extends TestCase
         $this->fieldMapper->method('getFieldName')
             ->willReturnArgument(0);
         $valueTransformerPoolMock = $this->createMock(ValueTransformerPool::class);
-        $valueTransformerMock = $this->createMock(ValueTransformerInterface::class);
+        $valueTransformerMock = $this->getMockForAbstractClass(ValueTransformerInterface::class);
         $valueTransformerPoolMock->method('get')
             ->willReturn($valueTransformerMock);
         $valueTransformerMock->method('transform')
@@ -190,6 +192,28 @@ class MatchTest extends TestCase
                 [
                     [
                         'match_phrase' => [
+                            'name' => [
+                                'query' => 'fitness bottle',
+                                'boost' => 6,
+                                'minimum_should_match' => '2<75%',
+                            ],
+                        ],
+                    ],
+                ],
+                '2<75%'
+            ],
+            'match_phrase_prefix query with minimum_should_match' => [
+                '"fitness bottle"',
+                [
+                    [
+                        'field' => 'name',
+                        'boost' => 5,
+                        'matchCondition' => 'match_phrase_prefix'
+                    ]
+                ],
+                [
+                    [
+                        'match_phrase_prefix' => [
                             'name' => [
                                 'query' => 'fitness bottle',
                                 'boost' => 6,

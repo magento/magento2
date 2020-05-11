@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Captcha\Test\Unit\Controller\Refresh;
 
 use Magento\Captcha\Controller\Refresh\Index;
@@ -46,7 +48,7 @@ class IndexTest extends TestCase
     /** @var Index */
     private $refreshAction;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->requestMock = $this->getMockBuilder(RequestInterface::class)
             ->setMethods(['getPost', 'getContent'])

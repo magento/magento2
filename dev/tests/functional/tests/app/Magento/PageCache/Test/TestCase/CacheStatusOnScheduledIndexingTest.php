@@ -128,7 +128,7 @@ class CacheStatusOnScheduledIndexingTest extends Injectable
      *
      * @return void
      */
-    public function tearDown()
+    public function tearDown(): void
     {
         $this->indexManagement->open();
         $this->indexManagement->getMainBlock()->massaction([], 'Update on Save', false, 'Select All');
