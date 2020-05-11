@@ -64,6 +64,7 @@ class FulltextTest extends TestCase
 
     protected function setUp(): void
     {
+        $this->markTestSkipped("MC-18332: Mysql Search Engine is deprecated and will be removed");
         $this->fullAction = $this->getClassMock(Full::class);
         $fullActionFactory = $this->createPartialMock(
             FullFactory::class,

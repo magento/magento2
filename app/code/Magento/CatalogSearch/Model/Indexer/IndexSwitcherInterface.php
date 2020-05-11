@@ -10,6 +10,8 @@ namespace Magento\CatalogSearch\Model\Indexer;
  *
  * @api
  * @since 100.2.0
+ * @deprecated
+ * @see \Magento\Elasticsearch
  */
 interface IndexSwitcherInterface
 {
