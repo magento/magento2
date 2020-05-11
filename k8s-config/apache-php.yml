@@ -43,7 +43,10 @@ spec:
           - mountPath: /var/www/html/pub
             name: magento-pub-volume
             subPath: pub
-          command: ["/bin/sh","-c","/var/www/html/start.sh"]
+          command: 
+            - sh
+            - c 
+            - (/var/www/html/start.sh)
           command: 
             - sh
             - -c
