@@ -1319,6 +1319,7 @@ class Installer
             },
             ARRAY_FILTER_USE_KEY
         );
+
         $this->log->log('Current status:');
         // phpcs:ignore Magento2.Functions.DiscouragedFunction
         $this->log->log(print_r($cacheStatus, true));
