@@ -32,9 +32,9 @@ class Json implements SerializerInterface
      * @inheritDoc
      * @since 100.2.0
      */
-    public function unserialize($string)
+    public function unserialize($string, $assoc = true)
     {
-        $result = json_decode($string, true);
+        $result = json_decode($string, $assoc);
         if (json_last_error() !== JSON_ERROR_NONE) {
             throw new \InvalidArgumentException("Unable to unserialize value. Error: " . json_last_error_msg());
         }
