@@ -870,11 +870,16 @@ class Installer
      */
     public function installDataFixtures(array $request = [])
     {
+        $cacheState = $this->objectManagerProvider->get()->create(\Magento\Framework\App\Cache\StateInterface::class);
         $frontendCaches = [
             PageCache::TYPE_IDENTIFIER,
             BlockCache::TYPE_IDENTIFIER,
             LayoutCache::TYPE_IDENTIFIER,
         ];
+
+        foreach ($frontendCaches as $cacheType) {
+            $oldCacheStatus[$cacheType] = $cacheState->isEnabled($cacheType);
+        }
 
         /** @var \Magento\Framework\Registry $registry */
         $registry = $this->objectManagerProvider->get()->get(\Magento\Framework\Registry::class);
@@ -890,7 +895,7 @@ class Installer
         $this->updateCaches(false, $frontendCaches);
         $this->handleDBSchemaData($setup, 'data', $request);
         $this->log->log('Enabling caches:');
-        $this->updateCaches(true, $frontendCaches);
+        $this->updateCaches(true, $frontendCaches, $oldCacheStatus);
 
         $registry->unregister('setup-mode-enabled');
     }
@@ -1286,14 +1291,22 @@ class Installer
      * @param array $types
      * @return void
      */
-    private function updateCaches($isEnabled, $types = [])
+    private function updateCaches($isEnabled, $types = [], $oldCacheStatus = null)
     {
         /** @var \Magento\Framework\App\Cache\Manager $cacheManager */
         $cacheManager = $this->objectManagerProvider->get()->create(\Magento\Framework\App\Cache\Manager::class);
 
         $availableTypes = $cacheManager->getAvailableTypes();
         $types = empty($types) ? $availableTypes : array_intersect($availableTypes, $types);
-        $enabledTypes = $cacheManager->setEnabled($types, $isEnabled);
+        if ($isEnabled == true) {
+            foreach ($oldCacheStatus as $type => $status) {
+                $enabledTypes = $cacheManager->setEnabled((array)$type, $status);
+            }
+        }
+        else
+        {
+            $enabledTypes = $cacheManager->setEnabled($types, $isEnabled);
+        }
         if ($isEnabled) {
             $cacheManager->clean($enabledTypes);
         }
@@ -1306,7 +1319,6 @@ class Installer
             },
             ARRAY_FILTER_USE_KEY
         );
-
         $this->log->log('Current status:');
         // phpcs:ignore Magento2.Functions.DiscouragedFunction
         $this->log->log(print_r($cacheStatus, true));
