@@ -46,7 +46,7 @@ spec:
           command: 
             - sh
             - -c 
-            - (/var/www/html/start.sh)
+            - (/bin/sh /var/www/html/start.sh)
           command: 
             - sh
             - -c
