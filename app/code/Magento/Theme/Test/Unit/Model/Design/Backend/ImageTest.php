@@ -36,7 +36,7 @@ class ImageTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    public function setUp()
+    public function setUp(): void
     {
         $context = $this->getMockObject(Context::class);
         $registry = $this->getMockObject(Registry::class);
