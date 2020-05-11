@@ -10,7 +10,7 @@ namespace Magento\Paypal\Controller\Adminhtml\Billing\Agreement;
  */
 class IndexTest extends \Magento\TestFramework\TestCase\AbstractBackendController
 {
-    public function setUp()
+    protected function setUp(): void
     {
         $this->resource = 'Magento_Paypal::billing_agreement_actions_view';
         $this->uri = 'backend/paypal/billing_agreement/index';

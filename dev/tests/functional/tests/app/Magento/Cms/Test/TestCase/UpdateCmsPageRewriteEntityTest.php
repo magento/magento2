@@ -141,7 +141,7 @@ class UpdateCmsPageRewriteEntityTest extends Injectable
      *
      * @return void|null
      */
-    public function tearDown()
+    public function tearDown(): void
     {
         if (in_array($this->storeName, $this->skippedStores)) {
             return;

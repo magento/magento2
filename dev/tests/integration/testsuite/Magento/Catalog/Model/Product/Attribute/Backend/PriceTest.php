@@ -30,7 +30,7 @@ class PriceTest extends \PHPUnit\Framework\TestCase
     /** @var ProductRepositoryInterface */
     private $productRepository;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         /** @var ReinitableConfigInterface $reinitiableConfig */
@@ -105,7 +105,7 @@ class PriceTest extends \PHPUnit\Framework\TestCase
         $product->setStoreId($globalStoreId);
         $product->getResource()->save($product);
         $product = $this->productRepository->get('simple', false, $globalStoreId, true);
-        $this->assertEquals('9.99', $product->getPrice());
+        $this->assertEquals('9.990000', $product->getPrice());
     }
 
     /**
@@ -140,10 +140,10 @@ class PriceTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(10, $product->getPrice());
 
         $product = $this->productRepository->get('simple', false, $secondStoreId, true);
-        $this->assertEquals('9.99', $product->getPrice());
+        $this->assertEquals('9.990000', $product->getPrice());
 
         $product = $this->productRepository->get('simple', false, $thirdStoreId, true);
-        $this->assertEquals('9.99', $product->getPrice());
+        $this->assertEquals('9.990000', $product->getPrice());
     }
 
     /**
@@ -179,10 +179,10 @@ class PriceTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(10, $product->getPrice());
 
         $product = $this->productRepository->get('simple', false, $secondStoreId, true);
-        $this->assertEquals('9.99', $product->getPrice());
+        $this->assertEquals('9.990000', $product->getPrice());
 
         $product = $this->productRepository->get('simple', false, $thirdStoreId, true);
-        $this->assertEquals('9.99', $product->getPrice());
+        $this->assertEquals('9.990000', $product->getPrice());
     }
 
     /**
@@ -218,10 +218,10 @@ class PriceTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(10, $product->getPrice());
 
         $product = $this->productRepository->get('simple', false, $secondStoreId, true);
-        $this->assertEquals('9.99', $product->getPrice());
+        $this->assertEquals('9.990000', $product->getPrice());
 
         $product = $this->productRepository->get('simple', false, $thirdStoreId, true);
-        $this->assertEquals('9.99', $product->getPrice());
+        $this->assertEquals('9.990000', $product->getPrice());
 
         $product->setStoreId($thirdStoreId);
         $product->setPrice(null);
@@ -293,7 +293,7 @@ class PriceTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(100, $product->getPrice());
     }
 
-    public static function tearDownAfterClass()
+    public static function tearDownAfterClass(): void
     {
         parent::tearDownAfterClass();
         /** @var ReinitableConfigInterface $reinitiableConfig */

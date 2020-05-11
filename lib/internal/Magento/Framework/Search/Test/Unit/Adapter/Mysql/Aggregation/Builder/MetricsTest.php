@@ -3,29 +3,35 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\Search\Test\Unit\Adapter\Mysql\Aggregation\Builder;
 
+use Magento\Framework\Search\Adapter\Mysql\Aggregation\Builder\Metrics;
+use Magento\Framework\Search\Request\Aggregation\Metric;
 use Magento\Framework\Search\Request\BucketInterface as RequestBucketInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class MetricsTest extends \PHPUnit\Framework\TestCase
+class MetricsTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\Search\Adapter\Mysql\Aggregation\Builder\Metrics
+     * @var Metrics
      */
     private $metrics;
 
     /**
-     * @var RequestBucketInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var RequestBucketInterface|MockObject
      */
     private $requestBucket;
 
     /**
-     * @var \Magento\Framework\Search\Request\Aggregation\Metric|\PHPUnit_Framework_MockObject_MockObject
+     * @var Metric|MockObject
      */
     private $metric;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $helper = new ObjectManager($this);
 
@@ -34,12 +40,12 @@ class MetricsTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
-        $this->metric = $this->getMockBuilder(\Magento\Framework\Search\Request\Aggregation\Metric::class)
+        $this->metric = $this->getMockBuilder(Metric::class)
             ->setMethods(['getType'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
-        $this->metrics = $helper->getObject(\Magento\Framework\Search\Adapter\Mysql\Aggregation\Builder\Metrics::class);
+        $this->metrics = $helper->getObject(Metrics::class);
     }
 
     public function testBuild()

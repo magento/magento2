@@ -7,13 +7,13 @@ declare(strict_types=1);
 
 namespace Magento\Theme\Test\Unit\Controller\Result;
 
-use Magento\Theme\Controller\Result\AsyncCssPlugin;
-use Magento\Framework\App\Response\Http;
-use PHPUnit\Framework\TestCase;
-use PHPUnit\Framework\MockObject\MockObject;
 use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Store\Model\ScopeInterface;
+use Magento\Framework\App\Response\Http;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Store\Model\ScopeInterface;
+use Magento\Theme\Controller\Result\AsyncCssPlugin;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Unit test for Magento\Theme\Test\Unit\Controller\Result\AsyncCssPlugin.
