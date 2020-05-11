@@ -7,14 +7,39 @@ declare(strict_types=1);
 
 namespace Magento\ImportExport\Ui\Component\Columns;
 
-use Magento\Eav\Model\Attribute;
+use Magento\Eav\Model\Entity\Attribute;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\ImportExport\Model\Export;
+use Magento\Framework\View\Element\UiComponent\ContextInterface;
+use Magento\Framework\View\Element\UiComponentFactory;
+use Magento\ImportExport\Model\Export\AttributeFilterType;
 use Magento\Ui\Component\Listing\Columns\Column;
 use Magento\Ui\DataProvider\AbstractDataProvider;
 
 class ExportFilter extends Column
 {
+    /**
+     * @var AttributeFilterType
+     */
+    protected $attributeFilterType;
+
+    /**
+     * @param ContextInterface $context
+     * @param UiComponentFactory $uiComponentFactory
+     * @param AttributeFilterType $attributeFilterType
+     * @param array $components
+     * @param array $data
+     */
+    public function __construct(
+        ContextInterface $context,
+        UiComponentFactory $uiComponentFactory,
+        AttributeFilterType $attributeFilterType,
+        array $components = [],
+        array $data = []
+    ) {
+        parent::__construct($context, $uiComponentFactory, $components, $data);
+        $this->attributeFilterType = $attributeFilterType;
+    }
+
     /**
      * Prepare Data Source
      *
@@ -34,7 +59,7 @@ class ExportFilter extends Column
 
                 try {
                     $filter = [
-                        'type' => Export::getAttributeFilterType($attribute)
+                        'type' => $this->attributeFilterType->getAttributeFilterType($attribute)
                     ];
 
                     if ($attribute->usesSource()) {
