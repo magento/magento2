@@ -6,18 +6,8 @@
 namespace Magento\Catalog\Model\Indexer\Product\Flat;
 
 use Magento\Catalog\Api\Data\ProductInterface;
-use Magento\Catalog\Helper\Product\Flat\Indexer;
-use Magento\Catalog\Model\Product\Attribute\Source\Status;
-use Magento\Eav\Model\Entity\Attribute;
-use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\ResourceConnection;
-use Magento\Framework\DB\Adapter\AdapterInterface;
-use Magento\Framework\DB\Ddl\Table;
-use Magento\Framework\DB\Select;
 use Magento\Framework\EntityManager\MetadataPool;
-use Magento\Framework\Exception\LocalizedException;
-use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Class for building flat index
@@ -37,22 +27,22 @@ class FlatTableBuilder
     const XML_NODE_MAX_INDEX_COUNT = 'catalog/product/flat/max_index_count';
 
     /**
-     * @var Indexer
+     * @var \Magento\Catalog\Helper\Product\Flat\Indexer
      */
     protected $_productIndexerHelper;
 
     /**
-     * @var AdapterInterface
+     * @var \Magento\Framework\DB\Adapter\AdapterInterface
      */
     protected $_connection;
 
     /**
-     * @var ScopeConfigInterface $config
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface $config
      */
     protected $_config;
 
     /**
-     * @var StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -62,23 +52,23 @@ class FlatTableBuilder
     protected $_tableData;
 
     /**
-     * @var ResourceConnection
+     * @var \Magento\Framework\App\ResourceConnection
      */
     protected $resource;
 
     /**
-     * @param Indexer $productIndexerHelper
+     * @param \Magento\Catalog\Helper\Product\Flat\Indexer $productIndexerHelper
      * @param ResourceConnection $resource
-     * @param ScopeConfigInterface $config
-     * @param StoreManagerInterface $storeManager
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $config
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param TableDataInterface $tableData
      */
     public function __construct(
-        Indexer $productIndexerHelper,
-        ResourceConnection $resource,
-        ScopeConfigInterface $config,
-        StoreManagerInterface $storeManager,
-        TableDataInterface $tableData
+        \Magento\Catalog\Helper\Product\Flat\Indexer $productIndexerHelper,
+        \Magento\Framework\App\ResourceConnection $resource,
+        \Magento\Framework\App\Config\ScopeConfigInterface $config,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Catalog\Model\Indexer\Product\Flat\TableDataInterface $tableData
     ) {
         $this->_productIndexerHelper = $productIndexerHelper;
         $this->resource = $resource;
@@ -124,8 +114,7 @@ class FlatTableBuilder
      *
      * @param int|string $storeId
      * @return void
-     * @throws LocalizedException
-     * @throws \Zend_Db_Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
@@ -139,7 +128,7 @@ class FlatTableBuilder
             self::XML_NODE_MAX_INDEX_COUNT
         );
         if ($maxIndex && count($indexesNeed) > $maxIndex) {
-            throw new LocalizedException(
+            throw new \Magento\Framework\Exception\LocalizedException(
                 __(
                     'The Flat Catalog module has a limit of %2$d filterable and/or sortable attributes.'
                     . 'Currently there are %1$d of them.'
@@ -152,7 +141,7 @@ class FlatTableBuilder
 
         $indexKeys = [];
         $indexProps = array_values($indexesNeed);
-        $upperPrimaryKey = strtoupper(AdapterInterface::INDEX_TYPE_PRIMARY);
+        $upperPrimaryKey = strtoupper(\Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_PRIMARY);
         foreach ($indexProps as $i => $indexProp) {
             $indexName = $this->_connection->getIndexName(
                 $this->_getTemporaryTableName($this->_productIndexerHelper->getFlatTableName($storeId)),
@@ -175,7 +164,7 @@ class FlatTableBuilder
         }
         $indexesNeed = array_combine($indexKeys, $indexProps);
 
-        /** @var $table Table */
+        /** @var $table \Magento\Framework\DB\Ddl\Table */
         $table = $this->_connection->newTable(
             $this->_getTemporaryTableName($this->_productIndexerHelper->getFlatTableName($storeId))
         );

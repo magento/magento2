@@ -317,6 +317,7 @@ class Status extends AbstractDb
 
     /**
      * Retrieve Product(s) status for store
+     *
      * Return array where key is a product_id, value - status
      *
      * @param int[] $productIds

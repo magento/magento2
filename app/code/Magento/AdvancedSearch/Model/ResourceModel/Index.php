@@ -5,19 +5,18 @@
  */
 namespace Magento\AdvancedSearch\Model\ResourceModel;
 
-use Magento\Catalog\Api\Data\CategoryInterface;
-use Magento\Catalog\Model\Indexer\Category\Product\AbstractAction;
-use Magento\Catalog\Model\Indexer\Product\Price\DimensionCollectionFactory;
-use Magento\Framework\App\ObjectManager;
-use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
-use Magento\Framework\Model\ResourceModel\Db\Context;
-use Magento\Framework\Search\Request\Dimension;
 use Magento\Framework\Search\Request\IndexScopeResolverInterface;
-use Magento\Framework\Search\Request\IndexScopeResolverInterface as TableResolver;
-use Magento\Store\Model\Indexer\WebsiteDimensionProvider;
-use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
+use Magento\Framework\Model\ResourceModel\Db\Context;
+use Magento\Framework\EntityManager\MetadataPool;
+use Magento\Catalog\Api\Data\CategoryInterface;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Search\Request\Dimension;
+use Magento\Catalog\Model\Indexer\Category\Product\AbstractAction;
+use Magento\Framework\Search\Request\IndexScopeResolverInterface as TableResolver;
+use Magento\Catalog\Model\Indexer\Product\Price\DimensionCollectionFactory;
+use Magento\Store\Model\Indexer\WebsiteDimensionProvider;
 
 /**
  * @api
@@ -56,7 +55,6 @@ class Index extends AbstractDb
 
     /**
      * Index constructor.
-     *
      * @param Context $context
      * @param StoreManagerInterface $storeManager
      * @param MetadataPool $metadataPool
@@ -82,9 +80,7 @@ class Index extends AbstractDb
 
     /**
      * Implementation of abstract construct
-     *
      * @return void
-     * @SuppressWarnings(PHPMD)
      * @since 100.1.0
      */
     protected function _construct()
@@ -112,7 +108,7 @@ class Index extends AbstractDb
                     ['entity_id', 'customer_group_id', 'website_id', 'min_price']
                 );
                 if ($productIds) {
-                    $select->where('entity_id IN (?)', $productIds, \Zend_Db::BIGINT_TYPE);
+                    $select->where('entity_id IN (?)', $productIds);
                 }
                 $catalogProductIndexPriceSelect[] = $select;
             }
@@ -163,7 +159,7 @@ class Index extends AbstractDb
     {
         $connection = $this->getConnection();
 
-        $catalogCategoryProductDimension = new Dimension(Store::ENTITY, $storeId);
+        $catalogCategoryProductDimension = new Dimension(\Magento\Store\Model\Store::ENTITY, $storeId);
 
         $catalogCategoryProductTableName = $this->tableResolver->resolve(
             AbstractAction::MAIN_INDEX_TABLE,
@@ -181,7 +177,7 @@ class Index extends AbstractDb
         );
 
         if ($productIds) {
-            $select->where('product_id IN (?)', $productIds, \Zend_Db::BIGINT_TYPE);
+            $select->where('product_id IN (?)', $productIds);
         }
 
         $result = [];

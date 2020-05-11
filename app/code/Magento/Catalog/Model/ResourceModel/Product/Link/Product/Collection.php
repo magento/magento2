@@ -9,7 +9,7 @@ use Magento\Catalog\Model\Indexer\Category\Product\TableMaintainer;
 use Magento\Catalog\Model\Indexer\Product\Flat\State;
 use Magento\Catalog\Model\Indexer\Product\Price\PriceTableResolver;
 use Magento\Catalog\Model\Product;
-use Magento\Catalog\Model\Product\Link;
+use Magento\Catalog\Model\Product\Link as LinkModel;
 use Magento\Catalog\Model\Product\OptionFactory;
 use Magento\Catalog\Model\ResourceModel\Category;
 use Magento\Catalog\Model\ResourceModel\Helper;
@@ -53,7 +53,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
     /**
      * Store product link model
      *
-     * @var Link
+     * @var LinkModel
      */
     protected $_linkModel;
 
@@ -186,10 +186,10 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
     /**
      * Declare link model and initialize type attributes join
      *
-     * @param Link $linkModel
+     * @param LinkModel $linkModel
      * @return $this
      */
-    public function setLinkModel(Link $linkModel)
+    public function setLinkModel(LinkModel $linkModel)
     {
         $this->_linkModel = $linkModel;
         if ($linkModel->getLinkTypeId()) {
@@ -212,7 +212,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
     /**
      * Retrieve collection link model
      *
-     * @return Link
+     * @return LinkModel
      */
     public function getLinkModel()
     {
@@ -239,7 +239,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
     /**
      * Retrieve collection base product object
      *
-     * @return Product
+     * @return \Magento\Catalog\Model\Product
      */
     public function getProduct()
     {
@@ -259,7 +259,11 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
                 $products = [$products];
             }
             $this->_hasLinkFilter = true;
-            $this->getSelect()->where('links.linked_product_id NOT IN (?)', $products, \Zend_Db::BIGINT_TYPE);
+            $this->getSelect()->where(
+                'links.linked_product_id NOT IN (?)',
+                $products,
+                \Zend_Db::BIGINT_TYPE
+            );
         }
         return $this;
     }

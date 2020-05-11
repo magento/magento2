@@ -53,6 +53,7 @@ class Memory
             // fall back to the Unix command line
             $result = $this->_getUnixProcessMemoryUsage($pid);
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
+            echo  $e;
             // try to use the Windows command line
             // some ports of Unix commands on Windows, such as MinGW, have limited capabilities and cannot be used
             $result = $this->_getWinProcessMemoryUsage($pid);
@@ -69,6 +70,13 @@ class Memory
      */
     protected function _getUnixProcessMemoryUsage($pid)
     {
+        if (!$this->isMacOS()
+            && ($content = @file_get_contents('/proc/' . (int) $pid . '/status'))
+            && \preg_match('/VmRSS:\s*(\d* \w)/mi', $content, $m)
+            && !empty($m[1])
+        ) {
+            return self::convertToBytes($m[1]);
+        }
         // RSS - resident set size, the non-swapped physical memory
         $command = 'ps --pid %s --format rss --no-headers';
         if ($this->isMacOS()) {

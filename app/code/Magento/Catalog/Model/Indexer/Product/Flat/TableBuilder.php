@@ -233,9 +233,7 @@ class TableBuilder
             $select->from(['e' => $tableName], $columns);
             $onDuplicate = false;
             if (!empty($changedIds)) {
-                $select->where(
-                    $this->_connection->quoteInto('e.entity_id IN (?)', $changedIds, \Zend_Db::BIGINT_TYPE)
-                );
+                $select->where($this->_connection->quoteInto('e.entity_id IN (?)', $changedIds));
                 $onDuplicate = true;
             }
             $sql = $select->insertFromSelect($temporaryEntityTable, $columns, $onDuplicate);

@@ -172,11 +172,11 @@ class Collection extends AbstractCollection
      *
      * @param string $attributeSetName
      * @param string $entityTypeCode
-     * @return Collection
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @return void
      */
     public function setAttributeSetFilterBySetName($attributeSetName, $entityTypeCode)
     {
+        //@codeCoverageIgnoreStart
         $entityTypeId = $this->eavConfig->getEntityType($entityTypeCode)->getId();
         $this->join(
             ['entity_attribute' => $this->getTable('eav_entity_attribute')],
@@ -190,8 +190,7 @@ class Collection extends AbstractCollection
         $this->addFieldToFilter('attribute_set.entity_type_id', $entityTypeId);
         $this->addFieldToFilter('attribute_set.attribute_set_name', $attributeSetName);
         $this->setOrder('entity_attribute.sort_order', self::SORT_ORDER_ASC);
-
-        return $this;
+        //@codeCoverageIgnoreEnd
     }
 
     /**
@@ -440,7 +439,7 @@ class Collection extends AbstractCollection
     /**
      * Ad information about attribute sets to collection result data
      *
-     * @return AbstractCollection
+     * @return $this
      */
     protected function _afterLoadData()
     {
