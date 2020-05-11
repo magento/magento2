@@ -3,49 +3,56 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\SendFriend\Test\Unit\Block;
 
+use Magento\Framework\App\RequestInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\UrlInterface;
+use Magento\SendFriend\Block\Send;
+use Magento\SendFriend\Model\SendFriend;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class SendTest extends \PHPUnit\Framework\TestCase
+class SendTest extends TestCase
 {
     /**
-     * @var \Magento\SendFriend\Block\Send
+     * @var Send
      */
     protected $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\SendFriend\Model\SendFriend
+     * @var MockObject|SendFriend
      */
     protected $sendfriendMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\UrlInterface
+     * @var MockObject|UrlInterface
      */
     protected $urlBuilderMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\RequestInterface
+     * @var MockObject|RequestInterface
      */
     protected $requestMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
 
-        $this->sendfriendMock = $this->getMockBuilder(\Magento\SendFriend\Model\SendFriend::class)
+        $this->sendfriendMock = $this->getMockBuilder(SendFriend::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->urlBuilderMock = $this->getMockBuilder(\Magento\Framework\UrlInterface::class)
+        $this->urlBuilderMock = $this->getMockBuilder(UrlInterface::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
-        $this->requestMock = $this->getMockBuilder(\Magento\Framework\App\RequestInterface::class)
+        $this->requestMock = $this->getMockBuilder(RequestInterface::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
         $this->model = $objectManager->getObject(
-            \Magento\SendFriend\Block\Send::class,
+            Send::class,
             [
                 'sendfriend' => $this->sendfriendMock,
                 'urlBuilder' => $this->urlBuilderMock,

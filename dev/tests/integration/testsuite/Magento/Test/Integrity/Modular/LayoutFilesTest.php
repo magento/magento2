@@ -20,7 +20,7 @@ class LayoutFilesTest extends \PHPUnit\Framework\TestCase
      */
     protected $_argInterpreter;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->_argParser = $objectManager->get(\Magento\Framework\View\Layout\Argument\Parser::class);

@@ -10,78 +10,81 @@ use Magento\TestFramework\Helper;
 class Listener implements \PHPUnit\Framework\TestListener
 {
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      * @SuppressWarnings(PHPMD.ShortVariable)
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function addError(\PHPUnit\Framework\Test $test, \Exception $e, $time)
+    public function addError(\PHPUnit\Framework\Test $test, \Throwable $t, float $time): void
     {
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      * @SuppressWarnings(PHPMD.ShortVariable)
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function addFailure(\PHPUnit\Framework\Test $test, \PHPUnit\Framework\AssertionFailedError $e, $time)
-    {
+    public function addFailure(
+        \PHPUnit\Framework\Test $test,
+        \PHPUnit\Framework\AssertionFailedError $e,
+        float $time
+    ): void {
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      * @SuppressWarnings(PHPMD.ShortVariable)
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function addIncompleteTest(\PHPUnit\Framework\Test $test, \Exception $e, $time)
+    public function addIncompleteTest(\PHPUnit\Framework\Test $test, \Throwable $t, float $time): void
     {
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      * @SuppressWarnings(PHPMD.ShortVariable)
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function addRiskyTest(\PHPUnit\Framework\Test $test, \Exception $e, $time)
+    public function addRiskyTest(\PHPUnit\Framework\Test $test, \Throwable $t, float $time): void
     {
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      * @SuppressWarnings(PHPMD.ShortVariable)
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function addSkippedTest(\PHPUnit\Framework\Test $test, \Exception $e, $time)
+    public function addSkippedTest(\PHPUnit\Framework\Test $test, \Throwable $t, float $time): void
     {
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
-    public function startTestSuite(\PHPUnit\Framework\TestSuite $suite)
+    public function startTestSuite(\PHPUnit\Framework\TestSuite $suite): void
     {
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
-    public function endTestSuite(\PHPUnit\Framework\TestSuite $suite)
+    public function endTestSuite(\PHPUnit\Framework\TestSuite $suite): void
     {
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
-    public function startTest(\PHPUnit\Framework\Test $test)
+    public function startTest(\PHPUnit\Framework\Test $test): void
     {
         $this->logger = Helper\Bootstrap::getObjectManager()->get(\Magento\TestFramework\ErrorLog\Logger::class);
         $this->logger->clearMessages();
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function endTest(\PHPUnit\Framework\Test $test, $time)
+    public function endTest(\PHPUnit\Framework\Test $test, float $time): void
     {
         if ($test instanceof \PHPUnit\Framework\TestCase) {
             $messages = $this->logger->getMessages();
@@ -100,9 +103,9 @@ class Listener implements \PHPUnit\Framework\TestListener
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
-    public function addWarning(\PHPUnit\Framework\Test $test, \PHPUnit\Framework\Warning $e, $time)
+    public function addWarning(\PHPUnit\Framework\Test $test, \PHPUnit\Framework\Warning $e, float $time): void
     {
     }
 }

@@ -8,7 +8,7 @@ namespace Magento\Translation\Controller;
 
 class AjaxTest extends \Magento\TestFramework\TestCase\AbstractController
 {
-    protected function setUp()
+    protected function setUp(): void
     {
         /* Called getConfig as workaround for setConfig bug */
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
