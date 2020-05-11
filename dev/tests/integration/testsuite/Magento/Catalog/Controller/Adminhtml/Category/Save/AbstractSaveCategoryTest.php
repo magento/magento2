@@ -24,7 +24,7 @@ class AbstractSaveCategoryTest extends AbstractBackendController
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->serializer = $this->_objectManager->get(SerializerInterface::class);
@@ -57,6 +57,6 @@ class AbstractSaveCategoryTest extends AbstractBackendController
         $this->assertTrue(isset($responseData['category']['entity_id']));
         $this->assertFalse($responseData['error'], 'Response message: ' . $responseData['messages']);
         $message = str_replace('.', '\.', (string)__('You saved the category.'));
-        $this->assertRegExp("/>{$message}</", $responseData['messages']);
+        $this->assertMatchesRegularExpression("/>{$message}</", $responseData['messages']);
     }
 }

@@ -30,7 +30,7 @@ class LoginAsCustomerWebapiCreateCustomerAccessTokenTest extends WebapiAbstract
     /**
      * @inheritdoc
      */
-    public function setUp()
+    protected function setUp(): void
     {
         $this->_markTestAsRestOnly();
         $tokenCollectionFactory = Bootstrap::getObjectManager()->get(CollectionFactory::class);
