@@ -45,7 +45,7 @@ spec:
             subPath: pub
           command: 
             - sh
-            - c 
+            - -c 
             - (/var/www/html/start.sh)
           command: 
             - sh
