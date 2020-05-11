@@ -27,16 +27,6 @@ class SwitcherUsedInFulltextTest extends \PHPUnit\Framework\TestCase
     protected $indexer;
 
     /**
-     * @var \Magento\CatalogSearch\Model\ResourceModel\Engine
-     */
-    protected $engine;
-
-    /**
-     * @var \Magento\CatalogSearch\Model\Fulltext
-     */
-    protected $fulltext;
-
-    /**
      * @var \Magento\Search\Model\QueryFactory
      */
     protected $queryFactory;
@@ -92,10 +82,6 @@ class SwitcherUsedInFulltextTest extends \PHPUnit\Framework\TestCase
             \Magento\Indexer\Model\Indexer::class
         );
         $this->indexer->load('catalogsearch_fulltext');
-
-        $this->engine = $objectManager->get(
-            \Magento\CatalogSearch\Model\ResourceModel\Engine::class
-        );
 
         $this->queryFactory = $objectManager->get(
             \Magento\Search\Model\QueryFactory::class
