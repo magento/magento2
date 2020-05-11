@@ -3,85 +3,99 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\CatalogSearch\Test\Unit\Model\Indexer;
 
-use \Magento\Framework\Indexer\Dimension;
+use Magento\CatalogSearch\Model\Indexer\Fulltext;
+use Magento\CatalogSearch\Model\Indexer\Fulltext\Action\Full;
+use Magento\CatalogSearch\Model\Indexer\Fulltext\Action\FullFactory;
+use Magento\CatalogSearch\Model\Indexer\IndexerHandler;
+use Magento\CatalogSearch\Model\Indexer\IndexerHandlerFactory;
+use Magento\CatalogSearch\Model\Indexer\Scope\IndexSwitcher;
+use Magento\CatalogSearch\Model\Indexer\Scope\State;
+use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\Indexer\Dimension;
 use Magento\Framework\Indexer\DimensionProviderInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Indexer\Model\ProcessManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class FulltextTest extends \PHPUnit\Framework\TestCase
+class FulltextTest extends TestCase
 {
     /**
-     * @var \Magento\CatalogSearch\Model\Indexer\Fulltext
+     * @var Fulltext
      */
     protected $model;
 
     /**
-     * @var \Magento\CatalogSearch\Model\Indexer\Fulltext\Action\Full|\PHPUnit_Framework_MockObject_MockObject
+     * @var Full|MockObject
      */
     protected $fullAction;
 
     /**
-     * @var \Magento\CatalogSearch\Model\Indexer\IndexerHandler|\PHPUnit_Framework_MockObject_MockObject
+     * @var IndexerHandler|MockObject
      */
     protected $saveHandler;
 
     /**
-     * @var \Magento\CatalogSearch\Model\ResourceModel\Fulltext|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\CatalogSearch\Model\ResourceModel\Fulltext|MockObject
      */
     protected $fulltextResource;
 
     /**
-     * @var \Magento\CatalogSearch\Model\Indexer\Scope\IndexSwitcher|\PHPUnit_Framework_MockObject_MockObject
+     * @var IndexSwitcher|MockObject
      */
     private $indexSwitcher;
 
     /**
-     * @var DimensionProviderInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var DimensionProviderInterface|MockObject
      */
     private $dimensionProviderMock;
 
     /**
-     * @var \Magento\Indexer\Model\ProcessManager|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProcessManager|MockObject
      */
     private $processManager;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->fullAction = $this->getClassMock(\Magento\CatalogSearch\Model\Indexer\Fulltext\Action\Full::class);
+        $this->fullAction = $this->getClassMock(Full::class);
         $fullActionFactory = $this->createPartialMock(
-            \Magento\CatalogSearch\Model\Indexer\Fulltext\Action\FullFactory::class,
+            FullFactory::class,
             ['create']
         );
         $fullActionFactory->expects($this->any())->method('create')->willReturn($this->fullAction);
-        $this->saveHandler = $this->getClassMock(\Magento\CatalogSearch\Model\Indexer\IndexerHandler::class);
+        $this->saveHandler = $this->getClassMock(IndexerHandler::class);
         $indexerHandlerFactory = $this->createPartialMock(
-            \Magento\CatalogSearch\Model\Indexer\IndexerHandlerFactory::class,
+            IndexerHandlerFactory::class,
             ['create']
         );
         $indexerHandlerFactory->expects($this->any())->method('create')->willReturn($this->saveHandler);
 
         $this->fulltextResource = $this->getClassMock(\Magento\CatalogSearch\Model\ResourceModel\Fulltext::class);
 
-        $this->indexSwitcher = $this->getMockBuilder(\Magento\CatalogSearch\Model\Indexer\Scope\IndexSwitcher::class)
+        $this->indexSwitcher = $this->getMockBuilder(IndexSwitcher::class)
             ->disableOriginalConstructor()
             ->setMethods(['switchIndex'])
             ->getMock();
 
-        $this->dimensionProviderMock = $this->getMockBuilder(DimensionProviderInterface::class)->getMock();
-        $stateMock = $this->getMockBuilder(\Magento\CatalogSearch\Model\Indexer\Scope\State::class)
+        $this->dimensionProviderMock = $this->getMockBuilder(DimensionProviderInterface::class)
+            ->getMock();
+        $stateMock = $this->getMockBuilder(State::class)
             ->getMock();
         $objectManagerHelper = new ObjectManagerHelper($this);
 
-        $this->processManager = new \Magento\Indexer\Model\ProcessManager(
-            $this->getClassMock(\Magento\Framework\App\ResourceConnection::class)
+        $this->processManager = new ProcessManager(
+            $this->getClassMock(ResourceConnection::class)
         );
 
         $this->model = $objectManagerHelper->getObject(
-            \Magento\CatalogSearch\Model\Indexer\Fulltext::class,
+            Fulltext::class,
             [
                 'fullActionFactory' => $fullActionFactory,
                 'indexerHandlerFactory' => $indexerHandlerFactory,
@@ -97,7 +111,7 @@ class FulltextTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param string $className
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return MockObject
      */
     private function getClassMock($className)
     {
@@ -139,7 +153,9 @@ class FulltextTest extends \PHPUnit\Framework\TestCase
         $this->dimensionProviderMock->expects($this->once())->method('getIterator')->willReturn(
             (function () use ($stores) {
                 foreach ($stores as $storeId) {
-                    $dimension = $this->getMockBuilder(Dimension::class)->disableOriginalConstructor()->getMock();
+                    $dimension = $this->getMockBuilder(Dimension::class)
+                        ->disableOriginalConstructor()
+                        ->getMock();
                     $dimension->expects($this->once())
                         ->method('getValue')
                         ->willReturn($storeId);

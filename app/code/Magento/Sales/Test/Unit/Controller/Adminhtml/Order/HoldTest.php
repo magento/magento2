@@ -3,94 +3,105 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Sales\Test\Unit\Controller\Adminhtml\Order;
 
-use Magento\Framework\App\Action\Context;
+use Magento\Backend\App\Action\Context;
+use Magento\Backend\Model\View\Result\Redirect;
+use Magento\Backend\Model\View\Result\RedirectFactory;
+use Magento\Framework\App\Request\Http;
+use Magento\Framework\App\ResponseInterface;
+use Magento\Framework\Data\Form\FormKey\Validator;
+use Magento\Framework\Message\Manager;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Sales\Api\OrderRepositoryInterface;
+use Magento\Sales\Controller\Adminhtml\Order\Hold;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
- * Class HoldTest
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class HoldTest extends \PHPUnit\Framework\TestCase
+class HoldTest extends TestCase
 {
     /**
-     * @var \Magento\Sales\Controller\Adminhtml\Order\Hold
+     * @var Hold
      */
     protected $controller;
 
     /**
-     * @var Context|\PHPUnit_Framework_MockObject_MockObject
+     * @var Context|MockObject
      */
     protected $context;
 
     /**
-     * @var \Magento\Backend\Model\View\Result\Redirect|\PHPUnit_Framework_MockObject_MockObject
+     * @var Redirect|MockObject
      */
     protected $resultRedirect;
 
     /**
-     * @var \Magento\Framework\App\Request\Http|\PHPUnit_Framework_MockObject_MockObject
+     * @var Http|MockObject
      */
     protected $request;
 
     /**
-     * @var \Magento\Framework\App\ResponseInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ResponseInterface|MockObject
      */
     protected $response;
 
     /**
-     * @var \Magento\Framework\Message\Manager|\PHPUnit_Framework_MockObject_MockObject
+     * @var Manager|MockObject
      */
     protected $messageManager;
 
     /**
-     * @var \Magento\Sales\Api\OrderRepositoryInterface
+     * @var OrderRepositoryInterface
      */
     protected $orderRepositoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $validatorMock;
 
     /**
-     * @var \Magento\Framework\ObjectManager\ObjectManager|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\ObjectManager\ObjectManager|MockObject
      */
     protected $objectManager;
 
     /**
      * Test setup
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManagerHelper = new ObjectManagerHelper($this);
-        $this->context = $this->createMock(\Magento\Backend\App\Action\Context::class);
+        $this->context = $this->createMock(Context::class);
         $resultRedirectFactory = $this->createPartialMock(
-            \Magento\Backend\Model\View\Result\RedirectFactory::class,
+            RedirectFactory::class,
             ['create']
         );
-        $this->response = $this->createPartialMock(
-            \Magento\Framework\App\ResponseInterface::class,
-            ['setRedirect', 'sendResponse']
-        );
-        $this->request = $this->getMockBuilder(\Magento\Framework\App\Request\Http::class)
-            ->disableOriginalConstructor()->getMock();
+        $this->response = $this->getMockBuilder(ResponseInterface::class)
+            ->addMethods(['setRedirect'])
+            ->onlyMethods(['sendResponse'])
+            ->getMockForAbstractClass();
+        $this->request = $this->getMockBuilder(Http::class)
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->messageManager = $this->createPartialMock(
-            \Magento\Framework\Message\Manager::class,
+            Manager::class,
             ['addSuccessMessage', 'addErrorMessage']
         );
-        $this->orderRepositoryMock = $this->getMockBuilder(\Magento\Sales\Api\OrderRepositoryInterface::class)
+        $this->orderRepositoryMock = $this->getMockBuilder(OrderRepositoryInterface::class)
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+
+        $this->validatorMock = $this->getMockBuilder(Validator::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->validatorMock = $this->getMockBuilder(\Magento\Framework\Data\Form\FormKey\Validator::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->resultRedirect = $this->createMock(\Magento\Backend\Model\View\Result\Redirect::class);
+        $this->resultRedirect = $this->createMock(Redirect::class);
         $resultRedirectFactory->expects($this->any())->method('create')->willReturn($this->resultRedirect);
 
         $this->context->expects($this->once())->method('getMessageManager')->willReturn($this->messageManager);
@@ -101,7 +112,7 @@ class HoldTest extends \PHPUnit\Framework\TestCase
         $this->context->expects($this->once())->method('getFormKeyValidator')->willReturn($this->validatorMock);
 
         $this->controller = $objectManagerHelper->getObject(
-            \Magento\Sales\Controller\Adminhtml\Order\Hold::class,
+            Hold::class,
             [
                 'context' => $this->context,
                 'request' => $this->request,
