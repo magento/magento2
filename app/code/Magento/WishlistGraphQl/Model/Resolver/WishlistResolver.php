@@ -34,8 +34,10 @@ class WishlistResolver implements ResolverInterface
      * @param WishlistResourceModel $wishlistResource
      * @param WishlistFactory $wishlistFactory
      */
-    public function __construct(WishlistResourceModel $wishlistResource, WishlistFactory $wishlistFactory)
-    {
+    public function __construct(
+        WishlistResourceModel $wishlistResource,
+        WishlistFactory $wishlistFactory
+    ) {
         $this->wishlistResource = $wishlistResource;
         $this->wishlistFactory = $wishlistFactory;
     }
@@ -50,6 +52,7 @@ class WishlistResolver implements ResolverInterface
         array $value = null,
         array $args = null
     ) {
+        // Todo: Check if wishlist is enabled
         $customerId = $context->getUserId();
 
         /* Guest checking */

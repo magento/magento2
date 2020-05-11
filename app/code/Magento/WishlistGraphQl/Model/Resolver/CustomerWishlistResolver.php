@@ -27,8 +27,9 @@ class CustomerWishlistResolver implements ResolverInterface
     /**
      * @param WishlistFactory $wishlistFactory
      */
-    public function __construct(WishlistFactory $wishlistFactory)
-    {
+    public function __construct(
+        WishlistFactory $wishlistFactory
+    ) {
         $this->wishlistFactory = $wishlistFactory;
     }
 
@@ -42,6 +43,7 @@ class CustomerWishlistResolver implements ResolverInterface
         array $value = null,
         array $args = null
     ) {
+        // Todo: Check if wishlist is enabled
         if (false === $context->getExtensionAttributes()->getIsCustomer()) {
             throw new GraphQlAuthorizationException(__('The current customer isn\'t authorized.'));
         }

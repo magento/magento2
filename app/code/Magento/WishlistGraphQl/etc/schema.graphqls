@@ -32,3 +32,45 @@ type WishlistItem {
     added_at: String @doc(description: "The time when the customer added the item to the wish list"),
     product: ProductInterface @resolver(class: "\\Magento\\WishlistGraphQl\\Model\\Resolver\\ProductResolver")
 }
+
+type Mutation {
+    addProductsToWishlist(wishlist_id: ID!, wishlist_items: [WishlistItemInput!]!): AddProductsToWishlistOutput @resolver(class: "\\Magento\\WishlistGraphQl\\Model\\Resolver\\AddProductsToWishlistResolver")
+    removeProductsFromWishlist(wishlist_id: ID!, wishlist_items_ids: [ID!]!): RemoveProductsFromWishlistOutput @resolver(class: "\\Magento\\WishlistGraphQl\\Model\\Resolver\\RemoveProductsFromWishlistResolver")
+    updateProductsInWishlist(wishlist_id: ID!, wishlist_items: [WishlistItemUpdateInput!]!): UpdateProductsInWishlistOutput  @resolver(class: "\\Magento\\WishlistGraphQl\\Model\\Resolver\\UpdateProductsInWishlistResolver")
+}
+
+input WishlistItemInput {
+    sku: String
+    quantity: Float
+    parent_sku: String,
+    selected_options: [String!]
+    entered_options: [EnteredOptionInput!]
+}
+
+type AddProductsToWishlistOutput {
+    wishlist: Wishlist!
+    userInputErrors:[CheckoutUserInputError]! @doc(description: "An array of wishlist adding errors.")
+}
+
+input EnteredOptionInput {
+    id: String! @doc(description: "base64 encoded id")
+    value: String!
+}
+
+type RemoveProductsFromWishlistOutput {
+    wishlist: Wishlist!
+    userInputErrors:[CheckoutUserInputError]! @doc(description:"An array of wishlist removing errors.")
+}
+
+input WishlistItemUpdateInput {
+    wishlist_item_id: ID
+    quantity: Float
+    description: String
+    selected_options: [String!]
+    entered_options: [EnteredOptionInput!]
+}
+
+type UpdateProductsInWishlistOutput {
+    wishlist: Wishlist!
+    userInputErrors:[CheckoutUserInputError]! @doc(description:"An array of wishlist updating errors.")
+}
