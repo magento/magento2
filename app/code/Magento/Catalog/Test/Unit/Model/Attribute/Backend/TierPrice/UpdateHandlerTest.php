@@ -7,19 +7,27 @@ declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Unit\Model\Attribute\Backend\TierPrice;
 
+use Magento\Catalog\Api\Data\ProductAttributeInterface;
+use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductAttributeRepositoryInterface;
 use Magento\Catalog\Model\Product\Attribute\Backend\TierPrice\UpdateHandler;
 use Magento\Catalog\Model\ResourceModel\Product\Attribute\Backend\Tierprice;
+use Magento\Customer\Api\Data\GroupInterface;
 use Magento\Customer\Api\GroupManagementInterface;
+use Magento\Framework\EntityManager\EntityMetadataInterface;
 use Magento\Framework\EntityManager\MetadataPool;
+use Magento\Framework\Exception\InputException;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Model\StoreManagerInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Unit tests for \Magento\Catalog\Model\Product\Attribute\Backend\TierPrice\UpdateHandler
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class UpdateHandlerTest extends \PHPUnit\Framework\TestCase
+class UpdateHandlerTest extends TestCase
 {
     /**
      * Magento\Framework\TestFramework\Unit\Helper\ObjectManager
@@ -27,39 +35,39 @@ class UpdateHandlerTest extends \PHPUnit\Framework\TestCase
     private $objectManager;
 
     /**
-     * @var UpdateHandler|\PHPUnit_Framework_MockObject_MockObject
+     * @var UpdateHandler|MockObject
      */
     private $updateHandler;
 
     /**
-     * @var StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var StoreManagerInterface|MockObject
      */
     private $storeManager;
 
     /**
-     * @var ProductAttributeRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProductAttributeRepositoryInterface|MockObject
      */
     private $attributeRepository;
 
     /**
-     * @var GroupManagementInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var GroupManagementInterface|MockObject
      */
     private $groupManagement;
 
     /**
-     * @var MetadataPool|\PHPUnit_Framework_MockObject_MockObject
+     * @var MetadataPool|MockObject
      */
     private $metadataPoll;
 
     /**
-     * @var Tierprice|\PHPUnit_Framework_MockObject_MockObject
+     * @var Tierprice|MockObject
      */
     private $tierPriceResource;
 
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
         $this->storeManager = $this->getMockBuilder(StoreManagerInterface::class)
@@ -84,7 +92,7 @@ class UpdateHandlerTest extends \PHPUnit\Framework\TestCase
             ->getMock();
 
         $this->updateHandler = $this->objectManager->getObject(
-            \Magento\Catalog\Model\Product\Attribute\Backend\TierPrice\UpdateHandler::class,
+            UpdateHandler::class,
             [
                 'storeManager' => $this->storeManager,
                 'attributeRepository' => $this->attributeRepository,
@@ -104,7 +112,7 @@ class UpdateHandlerTest extends \PHPUnit\Framework\TestCase
      * @param string $linkField
      * @param int $productId
      * @param int $originalProductId
-     * @throws \Magento\Framework\Exception\InputException
+     * @throws InputException
      *
      * @dataProvider configDataProvider
      */
@@ -117,8 +125,8 @@ class UpdateHandlerTest extends \PHPUnit\Framework\TestCase
         $originalProductId
     ): void {
 
-        /** @var \PHPUnit_Framework_MockObject_MockObject $product */
-        $product = $this->getMockBuilder(\Magento\Catalog\Api\Data\ProductInterface::class)
+        /** @var MockObject $product */
+        $product = $this->getMockBuilder(ProductInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['getData','setData', 'getStoreId', 'getOrigData'])
             ->getMockForAbstractClass();
@@ -141,14 +149,14 @@ class UpdateHandlerTest extends \PHPUnit\Framework\TestCase
         $product->expects($this->atLeastOnce())
             ->method('setData')
             ->with('tier_price_changed', 1);
-        $store = $this->getMockBuilder(\Magento\Store\Api\Data\StoreInterface::class)
+        $store = $this->getMockBuilder(StoreInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['getWebsiteId'])
             ->getMockForAbstractClass();
         $store->expects($this->atLeastOnce())->method('getWebsiteId')->willReturn(0);
         $this->storeManager->expects($this->atLeastOnce())->method('getStore')->willReturn($store);
-        /** @var \PHPUnit_Framework_MockObject_MockObject $attribute */
-        $attribute = $this->getMockBuilder(\Magento\Catalog\Api\Data\ProductAttributeInterface::class)
+        /** @var MockObject $attribute */
+        $attribute = $this->getMockBuilder(ProductAttributeInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['getName', 'isScopeGlobal'])
             ->getMockForAbstractClass();
@@ -156,15 +164,15 @@ class UpdateHandlerTest extends \PHPUnit\Framework\TestCase
         $attribute->expects($this->atLeastOnce())->method('isScopeGlobal')->willReturn(true);
         $this->attributeRepository->expects($this->atLeastOnce())->method('get')->with('tier_price')
             ->willReturn($attribute);
-        $productMetadata = $this->getMockBuilder(\Magento\Framework\EntityManager\EntityMetadataInterface::class)
+        $productMetadata = $this->getMockBuilder(EntityMetadataInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['getLinkField'])
             ->getMockForAbstractClass();
         $productMetadata->expects($this->atLeastOnce())->method('getLinkField')->willReturn($linkField);
         $this->metadataPoll->expects($this->atLeastOnce())->method('getMetadata')
-            ->with(\Magento\Catalog\Api\Data\ProductInterface::class)
+            ->with(ProductInterface::class)
             ->willReturn($productMetadata);
-        $customerGroup = $this->getMockBuilder(\Magento\Customer\Api\Data\GroupInterface::class)
+        $customerGroup = $this->getMockBuilder(GroupInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['getId'])
             ->getMockForAbstractClass();
@@ -179,22 +187,21 @@ class UpdateHandlerTest extends \PHPUnit\Framework\TestCase
 
     /**
      * Verify update handle with exception.
-     *
-     * @expectedException \Magento\Framework\Exception\InputException
-     * @expectedExceptionMessage Tier prices data should be array, but actually other type is received
      */
     public function testExecuteWithException(): void
     {
-        /** @var \PHPUnit_Framework_MockObject_MockObject $attribute */
-        $attribute = $this->getMockBuilder(\Magento\Catalog\Api\Data\ProductAttributeInterface::class)
+        $this->expectException('Magento\Framework\Exception\InputException');
+        $this->expectExceptionMessage('Tier prices data should be array, but actually other type is received');
+        /** @var MockObject $attribute */
+        $attribute = $this->getMockBuilder(ProductAttributeInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['getName', 'isScopeGlobal'])
             ->getMockForAbstractClass();
         $attribute->expects($this->atLeastOnce())->method('getName')->willReturn('tier_price');
         $this->attributeRepository->expects($this->atLeastOnce())->method('get')->with('tier_price')
             ->willReturn($attribute);
-        /** @var \PHPUnit_Framework_MockObject_MockObject $product */
-        $product = $this->getMockBuilder(\Magento\Catalog\Api\Data\ProductInterface::class)
+        /** @var MockObject $product */
+        $product = $this->getMockBuilder(ProductInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['getData','setData', 'getStoreId', 'getOrigData'])
             ->getMockForAbstractClass();
