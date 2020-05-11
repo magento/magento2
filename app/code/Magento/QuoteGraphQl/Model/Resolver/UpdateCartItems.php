@@ -14,6 +14,7 @@ use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Exception\GraphQlNoSuchEntityException;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
+use Magento\GiftMessage\Api\ItemRepositoryInterface;
 use Magento\Quote\Api\CartItemRepositoryInterface;
 use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Quote\Model\Quote;
@@ -46,21 +47,29 @@ class UpdateCartItems implements ResolverInterface
     private $cartRepository;
 
     /**
-     * @param GetCartForUser $getCartForUser
+     * @var ItemRepositoryInterface
+     */
+    private $itemRepository;
+
+    /**
+     * @param GetCartForUser              $getCartForUser
      * @param CartItemRepositoryInterface $cartItemRepository
-     * @param UpdateCartItem $updateCartItem
-     * @param CartRepositoryInterface $cartRepository
+     * @param UpdateCartItem              $updateCartItem
+     * @param CartRepositoryInterface     $cartRepository
+     * @param ItemRepositoryInterface     $itemRepository
      */
     public function __construct(
         GetCartForUser $getCartForUser,
         CartItemRepositoryInterface $cartItemRepository,
         UpdateCartItem $updateCartItem,
-        CartRepositoryInterface $cartRepository
+        CartRepositoryInterface $cartRepository,
+        ItemRepositoryInterface $itemRepository
     ) {
         $this->getCartForUser = $getCartForUser;
         $this->cartItemRepository = $cartItemRepository;
         $this->updateCartItem = $updateCartItem;
         $this->cartRepository = $cartRepository;
+        $this->itemRepository = $itemRepository;
     }
 
     /**
@@ -131,6 +140,32 @@ class UpdateCartItems implements ResolverInterface
             } else {
                 $this->updateCartItem->execute($cart, $itemId, $quantity, $customizableOptions);
             }
+
+            if (!empty($item['gift_message'])) {
+                $this->updateGiftMessageForItem($cart, $item, $itemId);
+            }
+        }
+    }
+
+    /**
+     * Update Gift Message for Quote item
+     *
+     * @param Quote $cart
+     * @param array $item
+     * @param int   $itemId
+     *
+     * @throws GraphQlInputException
+     */
+    private function updateGiftMessageForItem(Quote $cart, array $item, int $itemId)
+    {
+        try {
+            $giftItemMessage = $this->itemRepository->get($cart->getEntityId(), $itemId);
+            $giftItemMessage->setRecipient($item['gift_message']['to']);
+            $giftItemMessage->setSender($item['gift_message']['from']);
+            $giftItemMessage->setMessage($item['gift_message']['message']);
+            $this->itemRepository->save($cart->getEntityId(), $giftItemMessage, $itemId);
+        } catch (LocalizedException $exception) {
+            throw new GraphQlInputException(__('Gift Message can not be updated.'));
         }
     }
 }
