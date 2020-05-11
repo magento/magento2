@@ -155,24 +155,20 @@ class EditTest extends \PHPUnit\Framework\TestCase
         if (isset($expected['back_button'])) {
             if ($expected['back_button']) {
                 if ($block->getProduct()->getId()) {
-                    $this->assertEquals(
-                        1,
-                        \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
-                            '//button[contains(@class, "back") and contains(@onclick, "/product")]',
-                            $buttonsHtml
-                        ),
-                        'Back button is not present in product URL rewrite edit block'
-                    );
-                } else {
-                    $this->assertEquals(
-                        1,
-                        \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
-                            '//button[contains(@class,"back")]',
-                            $buttonsHtml
-                        ),
-                        'Back button is not present in product URL rewrite edit block'
+                    $this->assertRegExp(
+                        '/setLocation\([\\\'\"]\S+?\/product/i',
+                        $buttonsHtml,
+                        'Back button is not present in category URL rewrite edit block'
                     );
                 }
+                $this->assertEquals(
+                    1,
+                    \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
+                        '//button[contains(@class,"back")]',
+                        $buttonsHtml
+                    ),
+                    'Back button is not present in product URL rewrite edit block'
+                );
             } else {
                 $this->assertEquals(
                     0,

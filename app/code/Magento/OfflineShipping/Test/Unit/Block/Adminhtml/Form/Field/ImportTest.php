@@ -18,6 +18,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\OfflineShipping\Block\Adminhtml\Form\Field\Import;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\Framework\Math\Random;
 
 class ImportTest extends TestCase
 {
@@ -38,13 +39,16 @@ class ImportTest extends TestCase
             ->onlyMethods(['addSuffixToName'])
             ->disableOriginalConstructor()
             ->getMock();
+        $randomMock = $this->getMockBuilder(Random::class)->disableOriginalConstructor()->getMock();
+        $randomMock->method('getRandomString')->willReturn('123456abcdefg');
         $testData = ['name' => 'test_name', 'html_id' => 'test_html_id'];
         $testHelper = new ObjectManager($this);
         $this->_object = $testHelper->getObject(
             Import::class,
             [
                 'data' => $testData,
-                '_escaper' => $testHelper->getObject(Escaper::class)
+                '_escaper' => $testHelper->getObject(Escaper::class),
+                'random' => $randomMock
             ]
         );
         $this->_object->setForm($this->_formMock);
@@ -89,7 +93,7 @@ class ImportTest extends TestCase
         );
         $this->assertStringEndsWith(
             '<input id="test_name_prefixtest_html_idtest_name_suffix" ' .
-            'name="test_name"  data-ui-id="form-element-test_name" value="" type="file"/>',
+            'name="test_name"  data-ui-id="form-element-test_name" value="" type="file"',
             $testString
         );
     }

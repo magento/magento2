@@ -41,14 +41,14 @@ class Grid extends \Magento\Backend\Test\Block\Widget\Grid
      *
      * @var string
      */
-    protected $deleteLink = 'a[onclick*="removeItem"]';
+    protected $deleteLink = 'a.wishlist-remove-button';
 
     /**
      * Configure link selector
      *
      * @var string
      */
-    protected $configureLink = 'a[onclick*="configureItem"]';
+    protected $configureLink = 'a.configure-item-link';
 
     /**
      * Secondary part of row locator template for getRow() method with strict option.

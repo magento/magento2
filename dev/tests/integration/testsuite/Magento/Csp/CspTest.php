@@ -67,7 +67,7 @@ class CspTest extends AbstractController
         $this->assertFalse($this->searchInResponse($response, '\'none\''));
         $this->assertTrue($this->searchInResponse($response, 'script-src'));
         $this->assertTrue($this->searchInResponse($response, '\'unsafe-inline\''));
-        $this->assertFalse($this->searchInResponse($response, 'font-src'));
+        $this->assertTrue($this->searchInResponse($response, 'font-src'));
         //Policies configured in cps_whitelist.xml files
         $this->assertTrue($this->searchInResponse($response, 'object-src'));
         $this->assertTrue($this->searchInResponse($response, 'media-src'));
@@ -104,7 +104,7 @@ class CspTest extends AbstractController
         $this->assertFalse($this->searchInResponse($response, '\'none\''));
         $this->assertTrue($this->searchInResponse($response, 'script-src'));
         $this->assertTrue($this->searchInResponse($response, '\'unsafe-inline\''));
-        $this->assertFalse($this->searchInResponse($response, 'font-src'));
+        $this->assertTrue($this->searchInResponse($response, 'font-src'));
     }
 
     /**

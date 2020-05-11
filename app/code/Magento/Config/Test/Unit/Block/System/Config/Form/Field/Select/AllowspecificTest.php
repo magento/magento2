@@ -14,6 +14,8 @@ use Magento\Framework\Escaper;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\Framework\Math\Random;
+use Magento\Framework\View\Helper\SecureHtmlRenderer;
 
 class AllowspecificTest extends TestCase
 {
@@ -30,10 +32,22 @@ class AllowspecificTest extends TestCase
     protected function setUp(): void
     {
         $testHelper = new ObjectManager($this);
+
+        $randomMock = $this->createMock(Random::class);
+        $randomMock->method('getRandomString')->willReturn('some-rando-string');
+        $secureRendererMock = $this->createMock(SecureHtmlRenderer::class);
+        $secureRendererMock->method('renderEventListenerAsTag')
+            ->willReturnCallback(
+                function (string $event, string $listener, string $selector): string {
+                    return "<script>document.querySelector('{$selector}').{$event} = () => { {$listener} };</script>";
+                }
+            );
         $this->_object = $testHelper->getObject(
             Allowspecific::class,
             [
-                '_escaper' => $testHelper->getObject(Escaper::class)
+                '_escaper' => $testHelper->getObject(Escaper::class),
+                'random' => $randomMock,
+                'secureRenderer' => $secureRendererMock
             ]
         );
         $this->_object->setData('html_id', 'spec_element');
