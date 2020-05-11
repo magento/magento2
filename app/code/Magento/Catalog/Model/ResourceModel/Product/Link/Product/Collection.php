@@ -347,10 +347,18 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
         $linkField = $this->getLinkField();
         if ($this->productIds) {
             if ($this->_isStrongMode) {
-                $this->getSelect()->where('links.product_id in (?)', $this->productIds, \Zend_Db::BIGINT_TYPE);
+                $this->getSelect()->where(
+                    'links.product_id in (?)',
+                    $this->productIds,
+                    \Zend_Db::BIGINT_TYPE
+                );
             } else {
                 $joinType = 'joinLeft';
-                $joinCondition[] = $connection->quoteInto('links.product_id in (?)', $this->productIds, \Zend_Db::BIGINT_TYPE);
+                $joinCondition[] = $connection->quoteInto(
+                    'links.product_id in (?)',
+                    $this->productIds,
+                    \Zend_Db::BIGINT_TYPE
+                );
             }
             if (count($this->productIds) === 1) {
                 $this->addFieldToFilter(

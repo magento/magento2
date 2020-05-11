@@ -9,7 +9,7 @@ use Magento\Catalog\Model\Indexer\Product\Flat\Table\BuilderInterfaceFactory;
 use Magento\Store\Model\Store;
 
 /**
- * Class TableBuilder
+ * Prepare temporary tables structure for product flat indexer
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
