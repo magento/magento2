@@ -68,6 +68,10 @@ class AreaList
     public function getCodeByFrontName($frontName)
     {
         foreach ($this->_areas as $areaCode => &$areaInfo) {
+            if (!isset($areaInfo['frontName'])) {
+                continue;
+            }
+            
             if (!isset($areaInfo['frontName']) && isset($areaInfo['frontNameResolver'])) {
                 $resolver = $this->_resolverFactory->create($areaInfo['frontNameResolver']);
                 $areaInfo['frontName'] = $resolver->getFrontName(true);
