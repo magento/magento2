@@ -27,12 +27,14 @@ class ConfigurableProductsProvider
     }
 
     /**
+     * Return list of ID for product variation
+     *
      * @param array $ids
      * @return array
      */
     public function getIds(array $ids)
     {
-        $key =  md5(json_encode($ids));
+        $key = md5(json_encode($ids)); //phpcs:ignore
         if (!isset($this->productIds[$key])) {
             $connection = $this->resource->getConnection();
             $this->productIds[$key] = $connection->fetchCol(

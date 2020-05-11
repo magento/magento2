@@ -6,7 +6,17 @@
 
 namespace Magento\Eav\Model\ResourceModel\Entity\Attribute;
 
+use Magento\Eav\Model\Config;
 use Magento\Eav\Model\Entity\Type;
+use Magento\Eav\Model\ResourceModel\Entity\Attribute;
+use Magento\Framework\Data\Collection\Db\FetchStrategyInterface;
+use Magento\Framework\Data\Collection\EntityFactoryInterface;
+use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Framework\DB\Select;
+use Magento\Framework\Event\ManagerInterface;
+use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
+use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
+use Psr\Log\LoggerInterface;
 
 /**
  * EAV attribute resource collection
@@ -14,8 +24,9 @@ use Magento\Eav\Model\Entity\Type;
  * @api
  * @author      Magento Core Team <core@magentocommerce.com>
  * @since 100.0.2
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
+class Collection extends AbstractCollection
 {
     /**
      * Add attribute set info flag
@@ -25,28 +36,28 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     protected $_addSetInfoFlag = false;
 
     /**
-     * @var \Magento\Eav\Model\Config
+     * @var Config
      */
     protected $eavConfig;
 
     /**
-     * @param \Magento\Framework\Data\Collection\EntityFactoryInterface $entityFactory
-     * @param \Psr\Log\LoggerInterface $logger
-     * @param \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
-     * @param \Magento\Framework\Event\ManagerInterface $eventManager
-     * @param \Magento\Eav\Model\Config $eavConfig
-     * @param \Magento\Framework\DB\Adapter\AdapterInterface $connection
-     * @param \Magento\Framework\Model\ResourceModel\Db\AbstractDb $resource
+     * @param EntityFactoryInterface $entityFactory
+     * @param LoggerInterface $logger
+     * @param FetchStrategyInterface $fetchStrategy
+     * @param ManagerInterface $eventManager
+     * @param Config $eavConfig
+     * @param AdapterInterface $connection
+     * @param AbstractDb $resource
      * @codeCoverageIgnore
      */
     public function __construct(
-        \Magento\Framework\Data\Collection\EntityFactoryInterface $entityFactory,
-        \Psr\Log\LoggerInterface $logger,
-        \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy,
-        \Magento\Framework\Event\ManagerInterface $eventManager,
-        \Magento\Eav\Model\Config $eavConfig,
-        \Magento\Framework\DB\Adapter\AdapterInterface $connection = null,
-        \Magento\Framework\Model\ResourceModel\Db\AbstractDb $resource = null
+        EntityFactoryInterface $entityFactory,
+        LoggerInterface $logger,
+        FetchStrategyInterface $fetchStrategy,
+        ManagerInterface $eventManager,
+        Config $eavConfig,
+        AdapterInterface $connection = null,
+        AbstractDb $resource = null
     ) {
         $this->eavConfig = $eavConfig;
         parent::__construct($entityFactory, $logger, $fetchStrategy, $eventManager, $connection, $resource);
@@ -62,7 +73,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     {
         $this->_init(
             \Magento\Eav\Model\Entity\Attribute::class,
-            \Magento\Eav\Model\ResourceModel\Entity\Attribute::class
+            Attribute::class
         );
     }
 
@@ -94,7 +105,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      */
     public function useLoadDataFields()
     {
-        $this->getSelect()->reset(\Magento\Framework\DB\Select::COLUMNS);
+        $this->getSelect()->reset(Select::COLUMNS);
         $this->getSelect()->columns($this->_getLoadDataFields());
 
         return $this;
@@ -161,11 +172,11 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      *
      * @param string $attributeSetName
      * @param string $entityTypeCode
-     * @return void
+     * @return Collection
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function setAttributeSetFilterBySetName($attributeSetName, $entityTypeCode)
     {
-        //@codeCoverageIgnoreStart
         $entityTypeId = $this->eavConfig->getEntityType($entityTypeCode)->getId();
         $this->join(
             ['entity_attribute' => $this->getTable('eav_entity_attribute')],
@@ -179,7 +190,8 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
         $this->addFieldToFilter('attribute_set.entity_type_id', $entityTypeId);
         $this->addFieldToFilter('attribute_set.attribute_set_name', $attributeSetName);
         $this->setOrder('entity_attribute.sort_order', self::SORT_ORDER_ASC);
-        //@codeCoverageIgnoreEnd
+
+        return $this;
     }
 
     /**
@@ -428,7 +440,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     /**
      * Ad information about attribute sets to collection result data
      *
-     * @return \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
+     * @return AbstractCollection
      */
     protected function _afterLoadData()
     {
@@ -483,7 +495,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     public function getSelectCountSql()
     {
         $countSelect = parent::getSelectCountSql();
-        $countSelect->reset(\Magento\Framework\DB\Select::COLUMNS);
+        $countSelect->reset(Select::COLUMNS);
         $countSelect->columns('COUNT(DISTINCT main_table.attribute_id)');
         return $countSelect;
     }

@@ -5,9 +5,18 @@
  */
 namespace Magento\CatalogInventory\Model\ResourceModel\Stock;
 
+use Magento\Catalog\Model\Product;
 use Magento\CatalogInventory\Api\StockConfigurationInterface;
 use Magento\CatalogInventory\Model\Stock;
+use Magento\Eav\Model\Config;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\DB\Select;
+use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
+use Magento\Framework\Model\ResourceModel\Db\Context;
+use Magento\Store\Model\Store;
+use Magento\Store\Model\StoreManagerInterface;
+use Magento\Store\Model\Website;
+use Magento\Store\Model\WebsiteFactory;
 
 /**
  * CatalogInventory Stock Status per website Resource Model
@@ -18,12 +27,12 @@ use Magento\Framework\App\ObjectManager;
  * @link https://devdocs.magento.com/guides/v2.3/inventory/index.html
  * @link https://devdocs.magento.com/guides/v2.3/inventory/catalog-inventory-replacements.html
  */
-class Status extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
+class Status extends AbstractDb
 {
     /**
      * Store model manager
      *
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var StoreManagerInterface
      * @deprecated 100.1.0
      */
     protected $_storeManager;
@@ -31,12 +40,12 @@ class Status extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     /**
      * Website model factory
      *
-     * @var \Magento\Store\Model\WebsiteFactory
+     * @var WebsiteFactory
      */
     protected $_websiteFactory;
 
     /**
-     * @var \Magento\Eav\Model\Config
+     * @var Config
      */
     protected $eavConfig;
 
@@ -46,18 +55,18 @@ class Status extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     private $stockConfiguration;
 
     /**
-     * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Store\Model\WebsiteFactory $websiteFactory
-     * @param \Magento\Eav\Model\Config $eavConfig
+     * @param Context $context
+     * @param StoreManagerInterface $storeManager
+     * @param WebsiteFactory $websiteFactory
+     * @param Config $eavConfig
      * @param string $connectionName
-     * @param \Magento\CatalogInventory\Api\StockConfigurationInterface $stockConfiguration
+     * @param StockConfigurationInterface $stockConfiguration
      */
     public function __construct(
-        \Magento\Framework\Model\ResourceModel\Db\Context $context,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Store\Model\WebsiteFactory $websiteFactory,
-        \Magento\Eav\Model\Config $eavConfig,
+        Context $context,
+        StoreManagerInterface $storeManager,
+        WebsiteFactory $websiteFactory,
+        Config $eavConfig,
         $connectionName = null,
         $stockConfiguration = null
     ) {
@@ -127,6 +136,7 @@ class Status extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 
     /**
      * Retrieve product status
+     *
      * Return array as key product id, value - stock status
      *
      * @param int[] $productIds
@@ -150,13 +160,14 @@ class Status extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 
     /**
      * Retrieve websites and default stores
+     *
      * Return array as key website_id, value store_id
      *
      * @return array
      */
     public function getWebsiteStores()
     {
-        /** @var \Magento\Store\Model\Website $website */
+        /** @var Website $website */
         $website = $this->_websiteFactory->create();
         return $this->getConnection()->fetchPairs($website->getDefaultStoresSelect(false));
     }
@@ -185,6 +196,7 @@ class Status extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 
     /**
      * Retrieve Product part Collection array
+     *
      * Return array as key product id, value product type
      *
      * @param int $lastEntityId
@@ -206,12 +218,12 @@ class Status extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     /**
      * Add stock status to prepare index select
      *
-     * @param \Magento\Framework\DB\Select $select
-     * @param \Magento\Store\Model\Website $website
+     * @param Select $select
+     * @param Website $website
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @return Status
      */
-    public function addStockStatusToSelect(\Magento\Framework\DB\Select $select, \Magento\Store\Model\Website $website)
+    public function addStockStatusToSelect(Select $select, Website $website)
     {
         $websiteId = $this->getWebsiteId($website->getId());
         $select->joinLeft(
@@ -224,6 +236,8 @@ class Status extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     }
 
     /**
+     * Add Stock information to Product Collection
+     *
      * @param \Magento\Catalog\Model\ResourceModel\Product\Collection $collection
      * @param bool $isFilterInStock
      * @return \Magento\Catalog\Model\ResourceModel\Product\Collection $collection
@@ -287,7 +301,9 @@ class Status extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     }
 
     /**
-     * @param \Magento\Store\Model\Website $websiteId
+     * Get website with fallback to default
+     *
+     * @param Website $websiteId
      * @return int
      */
     private function getWebsiteId($websiteId = null)
@@ -313,17 +329,17 @@ class Status extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             $productIds = [$productIds];
         }
 
-        $attribute = $this->eavConfig->getAttribute(\Magento\Catalog\Model\Product::ENTITY, 'status');
+        $attribute = $this->eavConfig->getAttribute(Product::ENTITY, 'status');
         $attributeTable = $attribute->getBackend()->getTable();
         $linkField = $attribute->getEntity()->getLinkField();
 
         $connection = $this->getConnection();
 
-        if ($storeId === null || $storeId == \Magento\Store\Model\Store::DEFAULT_STORE_ID) {
+        if ($storeId === null || $storeId == Store::DEFAULT_STORE_ID) {
             $select = $connection->select()->from($attributeTable, [$linkField, 'value'])
                 ->where("{$linkField} IN (?)", $productIds, \Zend_Db::BIGINT_TYPE)
                 ->where('attribute_id = ?', $attribute->getAttributeId())
-                ->where('store_id = ?', \Magento\Store\Model\Store::DEFAULT_STORE_ID);
+                ->where('store_id = ?', Store::DEFAULT_STORE_ID);
 
             $rows = $connection->fetchPairs($select);
         } else {
@@ -335,7 +351,7 @@ class Status extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
                 "t1.{$linkField} = t2.{$linkField} AND t1.attribute_id = t2.attribute_id AND t2.store_id = {$storeId}"
             )->where(
                 't1.store_id = ?',
-                \Magento\Store\Model\Store::DEFAULT_STORE_ID
+                Store::DEFAULT_STORE_ID
             )->where(
                 't1.attribute_id = ?',
                 $attribute->getAttributeId()

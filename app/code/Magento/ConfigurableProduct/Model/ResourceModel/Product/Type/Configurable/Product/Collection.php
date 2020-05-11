@@ -8,7 +8,7 @@
 namespace Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Product;
 
 /**
- * Class Collection
+ * Collection of configurable product variation
  *
  * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)

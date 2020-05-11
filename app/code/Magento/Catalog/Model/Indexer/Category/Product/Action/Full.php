@@ -174,7 +174,7 @@ class Full extends AbstractAction
         foreach ($this->storeManager->getStores() as $store) {
             if ($this->getPathFromCategoryId($store->getRootCategoryId())) {
                 $userFunctions[$store->getId()] = function () use ($store) {
-                    return $this->reindexStore($store);
+                    $this->reindexStore($store);
                 };
             }
         }

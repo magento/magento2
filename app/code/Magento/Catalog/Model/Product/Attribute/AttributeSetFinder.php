@@ -27,7 +27,7 @@ class AttributeSetFinder implements AttributeSetFinderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function findAttributeSetIdsByProductIds(array $productIds)
     {
