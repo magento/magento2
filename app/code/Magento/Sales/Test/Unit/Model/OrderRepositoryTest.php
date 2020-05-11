@@ -1,34 +1,52 @@
 <?php
+
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Sales\Test\Unit\Model;
 
+use Magento\Framework\Api\SearchCriteria;
+use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\Sales\Api\Data\OrderInterface;
-use Magento\Sales\Api\Data\OrderSearchResultInterfaceFactory as SearchResultFactory;
-use Magento\Sales\Model\ResourceModel\Metadata;
-use Magento\Tax\Api\OrderTaxManagementInterface;
+use Magento\Payment\Api\Data\PaymentAdditionalInfoInterface;
 use Magento\Payment\Api\Data\PaymentAdditionalInfoInterfaceFactory;
+use Magento\Sales\Api\Data\OrderExtension;
+use Magento\Sales\Api\Data\OrderExtensionFactory;
+use Magento\Sales\Api\Data\OrderInterface;
+use Magento\Sales\Api\Data\OrderPaymentInterface;
+use Magento\Sales\Api\Data\OrderSearchResultInterfaceFactory as SearchResultFactory;
+use Magento\Sales\Model\Order\Shipping;
+use Magento\Sales\Model\Order\ShippingAssignment;
+use Magento\Sales\Model\Order\ShippingAssignmentBuilder;
+use Magento\Sales\Model\OrderRepository;
+use Magento\Sales\Model\ResourceModel\Metadata;
+use Magento\Sales\Model\ResourceModel\Order;
+use Magento\Sales\Model\ResourceModel\Order\Collection;
+use Magento\Tax\Api\Data\OrderTaxDetailsInterface;
+use Magento\Tax\Api\OrderTaxManagementInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class OrderRepositoryTest extends \PHPUnit\Framework\TestCase
+class OrderRepositoryTest extends TestCase
 {
     /**
-     * @var \Magento\Sales\Model\OrderRepository
+     * @var OrderRepository
      */
     private $orderRepository;
 
     /**
-     * @var Metadata|\PHPUnit_Framework_MockObject_MockObject
+     * @var Metadata|MockObject
      */
     private $metadata;
 
     /**
-     * @var SearchResultFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var SearchResultFactory|MockObject
      */
     private $searchResultFactory;
 
@@ -38,17 +56,17 @@ class OrderRepositoryTest extends \PHPUnit\Framework\TestCase
     private $objectManager;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     private $collectionProcessor;
 
     /**
-     * @var OrderTaxManagementInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var OrderTaxManagementInterface|MockObject
      */
     private $orderTaxManagementMock;
 
     /**
-     * @var PaymentAdditionalInfoInterfaceFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var PaymentAdditionalInfoInterfaceFactory|MockObject
      */
     private $paymentAdditionalInfoFactory;
 
@@ -57,28 +75,30 @@ class OrderRepositoryTest extends \PHPUnit\Framework\TestCase
      *
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
 
-        $className = \Magento\Sales\Model\ResourceModel\Metadata::class;
-        $this->metadata = $this->createMock($className);
+        $this->metadata = $this->createMock(Metadata::class);
 
-        $className = \Magento\Sales\Api\Data\OrderSearchResultInterfaceFactory::class;
-        $this->searchResultFactory = $this->createPartialMock($className, ['create']);
+        $this->searchResultFactory = $this->getMockBuilder(SearchResultFactory::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['create'])
+            ->getMock();
         $this->collectionProcessor = $this->createMock(
-            \Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface::class
+            CollectionProcessorInterface::class
         );
-        $orderExtensionFactoryMock = $this->getMockBuilder(\Magento\Sales\Api\Data\OrderExtensionFactory::class)
+        $orderExtensionFactoryMock = $this->getMockBuilder(OrderExtensionFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->orderTaxManagementMock = $this->getMockBuilder(OrderTaxManagementInterface::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $this->paymentAdditionalInfoFactory = $this->getMockBuilder(PaymentAdditionalInfoInterfaceFactory::class)
-            ->disableOriginalConstructor()->setMethods(['create'])->getMockForAbstractClass();
+            ->disableOriginalConstructor()
+            ->setMethods(['create'])->getMockForAbstractClass();
         $this->orderRepository = $this->objectManager->getObject(
-            \Magento\Sales\Model\OrderRepository::class,
+            OrderRepository::class,
             [
                 'metadata' => $this->metadata,
                 'searchResultFactory' => $this->searchResultFactory,
@@ -97,27 +117,35 @@ class OrderRepositoryTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetList()
     {
-        $searchCriteriaMock = $this->createMock(\Magento\Framework\Api\SearchCriteria::class);
-        $collectionMock = $this->createMock(\Magento\Sales\Model\ResourceModel\Order\Collection::class);
-        $itemsMock = $this->getMockBuilder(OrderInterface::class)->disableOriginalConstructor()
+        $searchCriteriaMock = $this->createMock(SearchCriteria::class);
+        $collectionMock = $this->createMock(Collection::class);
+        $itemsMock = $this->getMockBuilder(OrderInterface::class)
+            ->disableOriginalConstructor()
             ->getMockForAbstractClass();
-        $orderTaxDetailsMock = $this->getMockBuilder(\Magento\Tax\Api\Data\OrderTaxDetailsInterface::class)
+        $orderTaxDetailsMock = $this->getMockBuilder(OrderTaxDetailsInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['getAppliedTaxes', 'getItems'])->getMockForAbstractClass();
-        $paymentMock = $this->getMockBuilder(\Magento\Sales\Api\Data\OrderPaymentInterface::class)
-            ->disableOriginalConstructor()->getMockForAbstractClass();
-        $paymentAdditionalInfo = $this->getMockBuilder(\Magento\Payment\Api\Data\PaymentAdditionalInfoInterface::class)
-            ->disableOriginalConstructor()->setMethods(['setKey', 'setValue'])->getMockForAbstractClass();
+        $paymentMock = $this->getMockBuilder(OrderPaymentInterface::class)
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+        $paymentAdditionalInfo = $this->getMockBuilder(PaymentAdditionalInfoInterface::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['setKey', 'setValue'])->getMockForAbstractClass();
 
-        $extensionAttributes = $this->createPartialMock(
-            \Magento\Sales\Api\Data\OrderExtension::class,
-            [
-                'getShippingAssignments', 'setShippingAssignments', 'setConvertingFromQuote',
-                'setAppliedTaxes', 'setItemAppliedTaxes', 'setPaymentAdditionalInfo'
-            ]
-        );
+        $extensionAttributes = $this->getMockBuilder(OrderExtension::class)
+            ->addMethods(
+                [
+                    'getShippingAssignments',
+                    'setShippingAssignments',
+                    'setConvertingFromQuote',
+                    'setAppliedTaxes',
+                    'setItemAppliedTaxes',
+                    'setPaymentAdditionalInfo'
+                ]
+            )
+            ->getMock();
         $shippingAssignmentBuilder = $this->createMock(
-            \Magento\Sales\Model\Order\ShippingAssignmentBuilder::class
+            ShippingAssignmentBuilder::class
         );
         $itemsMock->expects($this->atLeastOnce())->method('getEntityId')->willReturn(1);
         $this->collectionProcessor->expects($this->once())
@@ -150,19 +178,18 @@ class OrderRepositoryTest extends \PHPUnit\Framework\TestCase
      */
     public function testSave()
     {
-        $mapperMock = $this->getMockBuilder(\Magento\Sales\Model\ResourceModel\Order::class)
+        $mapperMock = $this->getMockBuilder(Order::class)
             ->disableOriginalConstructor()
             ->getMock();
         $orderEntity = $this->createMock(\Magento\Sales\Model\Order::class);
-        $extensionAttributes = $this->createPartialMock(
-            \Magento\Sales\Api\Data\OrderExtension::class,
-            ['getShippingAssignments']
-        );
-        $shippingAssignment = $this->getMockBuilder(\Magento\Sales\Model\Order\ShippingAssignment::class)
+        $extensionAttributes = $this->getMockBuilder(OrderExtension::class)
+            ->addMethods(['getShippingAssignments'])
+            ->getMock();
+        $shippingAssignment = $this->getMockBuilder(ShippingAssignment::class)
             ->disableOriginalConstructor()
             ->setMethods(['getShipping'])
             ->getMock();
-        $shippingMock = $this->getMockBuilder(\Magento\Sales\Model\Order\Shipping::class)
+        $shippingMock = $this->getMockBuilder(Shipping::class)
             ->disableOriginalConstructor()
             ->setMethods(['getAddress', 'getMethod'])
             ->getMock();

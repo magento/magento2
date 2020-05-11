@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\MediaGallery\Test\Unit\Model\Keyword\Command;
+namespace Magento\MediaGallery\Test\Unit\Model\ResourceModel\Keyword;
 
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Adapter\AdapterInterface;
@@ -15,9 +15,6 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 
-/**
- * Test for SaveAssetLinks
- */
 class SaveAssetLinksTest extends TestCase
 {
     /**
@@ -43,11 +40,11 @@ class SaveAssetLinksTest extends TestCase
     /**
      * Prepare test objects.
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
-        $this->connectionMock = $this->createMock(AdapterInterface::class);
+        $this->connectionMock = $this->getMockForAbstractClass(AdapterInterface::class);
         $this->resourceConnectionMock = $this->createMock(ResourceConnection::class);
-        $this->loggerMock = $this->createMock(LoggerInterface::class);
+        $this->loggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
 
         $this->sut = new SaveAssetLinks(
             $this->resourceConnectionMock,

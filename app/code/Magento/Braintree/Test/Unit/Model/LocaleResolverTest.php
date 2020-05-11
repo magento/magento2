@@ -10,11 +10,13 @@ namespace Magento\Braintree\Test\Unit\Model;
 use Magento\Braintree\Gateway\Config\PayPal\Config;
 use Magento\Braintree\Model\LocaleResolver;
 use Magento\Framework\Locale\ResolverInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \Magento\Braintree\Model\LocaleResolver
  */
-class LocaleResolverTest extends \PHPUnit\Framework\TestCase
+class LocaleResolverTest extends TestCase
 {
     /**
      * Testable Object
@@ -24,12 +26,12 @@ class LocaleResolverTest extends \PHPUnit\Framework\TestCase
     private $localeResolver;
 
     /**
-     * @var Config|\PHPUnit_Framework_MockObject_MockObject
+     * @var Config|MockObject
      */
     private $configMock;
 
     /**
-     * @var ResolverInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ResolverInterface|MockObject
      */
     private $resolverMock;
 
@@ -38,10 +40,10 @@ class LocaleResolverTest extends \PHPUnit\Framework\TestCase
      *
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->configMock = $this->createMock(Config::class);
-        $this->resolverMock = $this->createMock(ResolverInterface::class);
+        $this->resolverMock = $this->getMockForAbstractClass(ResolverInterface::class);
         $this->localeResolver = new LocaleResolver($this->resolverMock, $this->configMock);
     }
 
