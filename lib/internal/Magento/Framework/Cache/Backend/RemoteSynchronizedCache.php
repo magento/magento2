@@ -6,9 +6,6 @@
 
 namespace Magento\Framework\Cache\Backend;
 
-use Magento\Framework\App\ObjectManager;
-use Magento\Framework\Lock\LockManagerInterface;
-
 /**
  * Remote synchronized cache
  *
@@ -45,10 +42,6 @@ class RemoteSynchronizedCache extends \Zend_Cache_Backend implements \Zend_Cache
      */
     private const HASH_SUFFIX = ':hash';
 
-    /**
-     * @var LockManagerInterface
-     */
-    private $lockManager;
 
     /**
      * @inheritdoc
@@ -61,8 +54,23 @@ class RemoteSynchronizedCache extends \Zend_Cache_Backend implements \Zend_Cache
         'local_backend' => '',
         'local_backend_options' => [],
         'local_backend_custom_naming' => true,
-        'local_backend_autoload' => true
+        'local_backend_autoload' => true,
+        'use_stale_cache' => false,
     ];
+
+    /**
+     * In memory state for locks.
+     *
+     * @var array
+     */
+    private $lockArray = [];
+
+    /**
+     * Sign for locks, helps to avoid removing a lock that was created by another client
+     *
+     * @string
+     */
+    private $lockSign;
 
     /**
      * @param array $options
@@ -110,7 +118,7 @@ class RemoteSynchronizedCache extends \Zend_Cache_Backend implements \Zend_Cache
             }
         }
 
-        $this->lockManager = ObjectManager::getInstance()->get(LockManagerInterface::class);
+        $this->lockSign = $this->generateLockSign();
     }
 
     /**
@@ -186,14 +194,21 @@ class RemoteSynchronizedCache extends \Zend_Cache_Backend implements \Zend_Cache
             }
         } else {
             if ($this->getDataVersion($localData) !== $this->loadRemoteDataVersion($id)) {
-                $localData = false;
                 $remoteData = $this->remote->load($id);
+
+                if (!$this->_options['use_stale_cache']) {
+                    $localData = false;
+                }
             }
         }
 
         if ($remoteData !== false) {
             $this->local->save($remoteData, $id);
             $localData = $remoteData;
+        } elseif ($this->_options['use_stale_cache'] && $localData !== false) {
+            if ($this->lock($id)) {
+                return false;
+            }
         }
 
         return $localData;
@@ -220,6 +235,10 @@ class RemoteSynchronizedCache extends \Zend_Cache_Backend implements \Zend_Cache
         } else {
             $this->remote->save($data, $id, $tags, $specificLifetime);
             $this->saveRemoteDataVersion($data, $id, $tags, $specificLifetime);
+        }
+
+        if ($this->_options['use_stale_cache']) {
+            $this->unlock($id);
         }
 
         return $this->local->save($dataToSave, $id, [], $specificLifetime);
@@ -313,5 +332,115 @@ class RemoteSynchronizedCache extends \Zend_Cache_Backend implements \Zend_Cache
     public function getCapabilities()
     {
         return $this->local->getCapabilities();
+    }
+
+    /**
+     * Sets a lock
+     *
+     * @param string $id
+     * @return bool
+     */
+    private function lock(string $id): bool
+    {
+        $timeout = 10;
+        $this->lockArray[$id] = microtime(true);
+
+        $data = $this->remote->load($this->getLockName($id));
+
+        if (false !== $data) {
+            return false;
+        }
+
+        $this->remote->save($this->lockSign, $this->getLockName($id), [], $timeout * 100);
+
+        $data = $this->remote->load($this->getLockName($id));
+
+        if ($data === $this->lockSign) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Release a lock.
+     *
+     * @param string $id
+     * @return bool
+     */
+    private function unlock(string $id): bool
+    {
+        if (isset($this->lockArray[$id])) {
+            unset($this->lockArray[$id]);
+        }
+
+        $data = $this->remote->load($this->getLockName($id));
+
+        if (false === $data) {
+            return false;
+        }
+
+        $removeResult = false;
+        if ($data === $this->lockSign) {
+            $removeResult = (bool)$this->remote->remove($this->getLockName($id));
+        }
+
+        return $removeResult;
+    }
+
+    /**
+     * Calculate lock name.
+     *
+     * @param $id
+     * @return string
+     */
+    private function getLockName($id): string
+    {
+        return 'REMOTE_SYNC_LOCK_' . $id;
+    }
+
+    /**
+     * Release all locks.
+     *
+     * @return void
+     */
+    private function unlockAll()
+    {
+        foreach ($this->lockArray as $id => $ttl) {
+            $this->unlock($id);
+        }
+    }
+
+    /**
+     * Release all locks on destruct.
+     *
+     * @return void
+     */
+    public function __destruct()
+    {
+        $this->unlockAll();
+    }
+
+    /**
+     * Function that generates lock sign that helps to avoid removing a lock that was created by another client.
+     *
+     * @return string
+     */
+    private function generateLockSign()
+    {
+        $sign = implode(
+            '-',
+            [
+                \getmypid(), \crc32(\gethostname())
+            ]
+        );
+
+        try {
+            $sign .= '-' . \bin2hex(\random_bytes(4));
+        } catch (\Exception $e) {
+            $sign .= '-' . \uniqid('-uniqid-');
+        }
+
+        return $sign;
     }
 }

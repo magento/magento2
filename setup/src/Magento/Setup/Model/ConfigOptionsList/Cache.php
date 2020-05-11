@@ -10,6 +10,7 @@ use Magento\Framework\Setup\ConfigOptionsListInterface;
 use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\Config\Data\ConfigData;
 use Magento\Framework\Config\File\ConfigFilePool;
+use Magento\Framework\Setup\Option\FlagConfigOption;
 use Magento\Framework\Setup\Option\SelectConfigOption;
 use Magento\Framework\Setup\Option\TextConfigOption;
 use Magento\Setup\Validator\RedisConnectionValidator;
@@ -30,6 +31,7 @@ class Cache implements ConfigOptionsListInterface
     const INPUT_KEY_CACHE_BACKEND_REDIS_COMPRESS_DATA = 'cache-backend-redis-compress-data';
     const INPUT_KEY_CACHE_BACKEND_REDIS_COMPRESSION_LIB = 'cache-backend-redis-compression-lib';
     const INPUT_KEY_CACHE_ID_PREFIX = 'cache-id-prefix';
+    const INPUT_KEY_CACHE_ALLOW_PARALLEL_CACHE_GENERATION = 'allow-parallel-generation';
 
     const CONFIG_PATH_CACHE_BACKEND = 'cache/frontend/default/backend';
     const CONFIG_PATH_CACHE_BACKEND_SERVER = 'cache/frontend/default/backend_options/server';
@@ -39,7 +41,7 @@ class Cache implements ConfigOptionsListInterface
     const CONFIG_PATH_CACHE_BACKEND_COMPRESS_DATA = 'cache/frontend/default/backend_options/compress_data';
     const CONFIG_PATH_CACHE_BACKEND_COMPRESSION_LIB = 'cache/frontend/default/backend_options/compression_lib';
     const CONFIG_PATH_CACHE_ID_PREFIX = 'cache/frontend/default/id_prefix';
-    const CONFIG_PATH_ALLOW_BLOCKING_GENERATION = 'cache/allow_parallel_generation';
+    const CONFIG_PATH_ALLOW_PARALLEL_CACHE_GENERATION = 'cache/allow_parallel_generation';
 
 
     /**
@@ -52,6 +54,7 @@ class Cache implements ConfigOptionsListInterface
         self::INPUT_KEY_CACHE_BACKEND_REDIS_PASSWORD => '',
         self::INPUT_KEY_CACHE_BACKEND_REDIS_COMPRESS_DATA => '1',
         self::INPUT_KEY_CACHE_BACKEND_REDIS_COMPRESSION_LIB => '',
+        self::INPUT_KEY_CACHE_ALLOW_PARALLEL_CACHE_GENERATION => 'false',
     ];
 
     /**
@@ -71,6 +74,7 @@ class Cache implements ConfigOptionsListInterface
         self::INPUT_KEY_CACHE_BACKEND_REDIS_PASSWORD => self::CONFIG_PATH_CACHE_BACKEND_PASSWORD,
         self::INPUT_KEY_CACHE_BACKEND_REDIS_COMPRESS_DATA => self::CONFIG_PATH_CACHE_BACKEND_COMPRESS_DATA,
         self::INPUT_KEY_CACHE_BACKEND_REDIS_COMPRESSION_LIB => self::CONFIG_PATH_CACHE_BACKEND_COMPRESSION_LIB,
+        self::INPUT_KEY_CACHE_ALLOW_PARALLEL_CACHE_GENERATION => self::CONFIG_PATH_ALLOW_PARALLEL_CACHE_GENERATION,
     ];
 
     /**
@@ -143,6 +147,12 @@ class Cache implements ConfigOptionsListInterface
                 self::CONFIG_PATH_CACHE_ID_PREFIX,
                 'ID prefix for cache keys'
             ),
+            new FlagConfigOption(
+                self::INPUT_KEY_CACHE_ALLOW_PARALLEL_CACHE_GENERATION,
+                FlagConfigOption::FRONTEND_WIZARD_FLAG,
+                self::CONFIG_PATH_ALLOW_PARALLEL_CACHE_GENERATION,
+                'Allow generate cache in non-blocking way'
+            ),
         ];
     }
 
@@ -167,7 +177,7 @@ class Cache implements ConfigOptionsListInterface
             }
         }
 
-        $configData->set(self::CONFIG_PATH_ALLOW_BLOCKING_GENERATION, false);
+        $configData->set(self::CONFIG_PATH_ALLOW_PARALLEL_CACHE_GENERATION, false);
 
         foreach ($this->inputKeyToConfigPathMap as $inputKey => $configPath) {
             if (isset($options[$inputKey])) {

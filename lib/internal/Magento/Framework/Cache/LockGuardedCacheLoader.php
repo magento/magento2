@@ -66,7 +66,7 @@ class LockGuardedCacheLoader
      *
      * @var string
      */
-    private const CONFIG_PATH_ALLOW_BLOCKING_GENERATION = 'cache/allow_parallel_generation';
+    private const CONFIG_PATH_ALLOW_PARALLEL_CACHE_GENERATION = 'cache/allow_parallel_generation';
 
     /**
      * Config value of parallel generation.
@@ -121,7 +121,7 @@ class LockGuardedCacheLoader
         if (empty($this->allowParallelGenerationConfigValue)) {
             $this->allowParallelGenerationConfigValue = $this
                 ->deploymentConfig
-                ->getConfigData([self::CONFIG_PATH_ALLOW_BLOCKING_GENERATION]);
+                ->getConfigData(self::CONFIG_PATH_ALLOW_PARALLEL_CACHE_GENERATION);
         }
 
         while ($cachedData === false) {
