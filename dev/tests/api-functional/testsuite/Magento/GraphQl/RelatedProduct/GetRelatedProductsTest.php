@@ -41,7 +41,7 @@ QUERY;
 
         self::assertArrayHasKey('products', $response);
         self::assertArrayHasKey('items', $response['products']);
-        self::assertEquals(1, count($response['products']['items']));
+        self::assertCount(1, $response['products']['items']);
         self::assertArrayHasKey(0, $response['products']['items']);
         self::assertArrayHasKey('related_products', $response['products']['items'][0]);
         $relatedProducts = $response['products']['items'][0]['related_products'];
@@ -76,7 +76,7 @@ QUERY;
 
         self::assertArrayHasKey('products', $response);
         self::assertArrayHasKey('items', $response['products']);
-        self::assertEquals(1, count($response['products']['items']));
+        self::assertCount(1, $response['products']['items']);
         self::assertArrayHasKey(0, $response['products']['items']);
         self::assertArrayHasKey('crosssell_products', $response['products']['items'][0]);
         $crossSellProducts = $response['products']['items'][0]['crosssell_products'];
@@ -119,7 +119,7 @@ QUERY;
 
         self::assertArrayHasKey('products', $response);
         self::assertArrayHasKey('items', $response['products']);
-        self::assertEquals(1, count($response['products']['items']));
+        self::assertCount(1, $response['products']['items']);
         self::assertArrayHasKey(0, $response['products']['items']);
         self::assertArrayHasKey('upsell_products', $response['products']['items'][0]);
         $upSellProducts = $response['products']['items'][0]['upsell_products'];

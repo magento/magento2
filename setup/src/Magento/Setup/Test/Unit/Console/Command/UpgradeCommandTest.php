@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Setup\Test\Unit\Console\Command;
 
 use Magento\Framework\App\DeploymentConfig;
@@ -11,12 +13,13 @@ use Magento\Framework\Console\Cli;
 use Magento\Setup\Console\Command\UpgradeCommand;
 use Magento\Setup\Model\Installer;
 use Magento\Setup\Model\InstallerFactory;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 use Magento\Setup\Model\SearchConfig;
 use Magento\Setup\Model\SearchConfigFactory;
-use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Component\Console\Tester\CommandTester;
 
-class UpgradeCommandTest extends \PHPUnit\Framework\TestCase
+class UpgradeCommandTest extends TestCase
 {
     /**
      * @var DeploymentConfig|MockObject
@@ -55,7 +58,7 @@ class UpgradeCommandTest extends \PHPUnit\Framework\TestCase
     /**
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->deploymentConfigMock = $this->getMockBuilder(DeploymentConfig::class)
             ->disableOriginalConstructor()
@@ -75,6 +78,7 @@ class UpgradeCommandTest extends \PHPUnit\Framework\TestCase
         $this->searchConfigMock = $this->getMockBuilder(SearchConfig::class)
             ->disableOriginalConstructor()
             ->getMock();
+        /** @var MockObject|SearchConfigFactory $searchConfigFactoryMock */
         $searchConfigFactoryMock = $this->getMockBuilder(SearchConfigFactory::class)
             ->disableOriginalConstructor()
             ->getMock();

@@ -37,7 +37,7 @@ class SearchConfigTest extends TestCase
      */
     private $searchEngineValidatorMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->installConfigMock = $this->getMockBuilder(CompositeInstallConfig::class)
             ->disableOriginalConstructor()
@@ -78,11 +78,12 @@ class SearchConfigTest extends TestCase
      * @param array $installInput
      * @param array $searchInput
      * @dataProvider installInputDataProvider
-     * @expectedException \Magento\Setup\Exception
-     * @expectedExceptionMessage Search engine 'other-engine' is not an available search engine.
      */
     public function testSaveConfigurationInvalidSearchEngine(array $installInput, array $searchInput)
     {
+        $this->expectException(\Magento\Setup\Exception::class);
+        $this->expectExceptionMessage('Search engine \'other-engine\' is not an available search engine.');
+
         $installInput['search-engine'] = 'other-engine';
         $searchInput['search-engine'] = 'other-engine';
         $this->installConfigMock->expects($this->never())->method('configure');
@@ -94,11 +95,12 @@ class SearchConfigTest extends TestCase
      * @param array $installInput
      * @param array $searchInput
      * @dataProvider installInputDataProvider
-     * @expectedExceptionMessage Could not connect to host
-     * @expectedException \Magento\Framework\Validation\ValidationException
      */
     public function testSaveConfigurationValidationFail(array $installInput, array $searchInput)
     {
+        $this->expectException(\Magento\Framework\Validation\ValidationException::class);
+        $this->expectExceptionMessage('Could not connect to host');
+
         $this->installConfigMock->expects($this->once())->method('configure')->with($searchInput);
         $this->searchEngineValidatorMock
             ->expects($this->once())

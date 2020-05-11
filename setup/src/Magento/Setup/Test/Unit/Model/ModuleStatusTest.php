@@ -3,47 +3,55 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Setup\Test\Unit\Model;
 
-use \Magento\Setup\Model\ModuleStatus;
+use Magento\Framework\App\DeploymentConfig;
+use Magento\Framework\Module\DependencyChecker;
+use Magento\Framework\Module\ModuleList\Loader;
+use Magento\Framework\ObjectManagerInterface;
+use Magento\Setup\Model\ModuleStatus;
+use Magento\Setup\Model\ObjectManagerProvider;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class ModuleStatusTest extends \PHPUnit\Framework\TestCase
+class ModuleStatusTest extends TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Module\ModuleList\Loader
+     * @var MockObject|Loader
      */
     private $moduleLoader;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\DeploymentConfig
+     * @var MockObject|DeploymentConfig
      */
     private $deploymentConfig;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Module\DependencyChecker
+     * @var MockObject|DependencyChecker
      */
     private $dependencyChecker;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\ObjectManagerInterface
+     * @var MockObject|ObjectManagerInterface
      */
     private $objectManager;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Setup\Model\ObjectManagerProvider
+     * @var MockObject|ObjectManagerProvider
      */
     private $objectManagerProvider;
 
-    public function setUp()
+    protected function setUp(): void
     {
-        $this->moduleLoader = $this->createMock(\Magento\Framework\Module\ModuleList\Loader::class);
+        $this->moduleLoader = $this->createMock(Loader::class);
         $this->dependencyChecker =
-            $this->createMock(\Magento\Framework\Module\DependencyChecker::class);
-        $this->deploymentConfig = $this->createMock(\Magento\Framework\App\DeploymentConfig::class);
-        $this->objectManager = $this->getMockForAbstractClass(\Magento\Framework\ObjectManagerInterface::class);
+            $this->createMock(DependencyChecker::class);
+        $this->deploymentConfig = $this->createMock(DeploymentConfig::class);
+        $this->objectManager = $this->getMockForAbstractClass(ObjectManagerInterface::class);
         $this->objectManagerProvider =
-            $this->createMock(\Magento\Setup\Model\ObjectManagerProvider::class);
+            $this->createMock(ObjectManagerProvider::class);
         $this->objectManagerProvider->expects($this->once())->method('get')->willReturn($this->objectManager);
         $this->objectManager->expects($this->once())->method('get')->willReturn($this->dependencyChecker);
     }
@@ -57,9 +65,9 @@ class ModuleStatusTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetAllModules($expectedAllModules, $expectedConfig, $expectedResult)
     {
-        $this->moduleLoader->expects($this->once())->method('load')->will($this->returnValue($expectedAllModules));
+        $this->moduleLoader->expects($this->once())->method('load')->willReturn($expectedAllModules);
         $this->deploymentConfig->expects($this->once())->method('get')
-            ->will($this->returnValue($expectedConfig));
+            ->willReturn($expectedConfig);
         $this->dependencyChecker->expects($this->any())->method('checkDependenciesWhenDisableModules')->willReturn(
             ['module1' => [], 'module2' => [], 'module3' => [], 'module4' => []]
         );
@@ -82,19 +90,19 @@ class ModuleStatusTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetAllModulesWithInputs($expectedAllModules, $expectedConfig, $expectedResult)
     {
-        $this->moduleLoader->expects($this->once())->method('load')->will($this->returnValue($expectedAllModules));
+        $this->moduleLoader->expects($this->once())->method('load')->willReturn($expectedAllModules);
         $this->deploymentConfig->expects($this->never())->method('get')
-            ->will($this->returnValue($expectedConfig));
+            ->willReturn($expectedConfig);
         $this->dependencyChecker->expects($this->any())->method('checkDependenciesWhenDisableModules')->willReturn(
             ['module1' => [], 'module2' => [], 'module3' => [], 'module4' => []]
         );
 
         $moduleStatus = new ModuleStatus($this->moduleLoader, $this->deploymentConfig, $this->objectManagerProvider);
         $allModules = $moduleStatus->getAllModules(['module1', 'module2']);
-        $this->assertSame(true, $allModules['module1']['selected']);
-        $this->assertSame(true, $allModules['module2']['selected']);
-        $this->assertSame(false, $allModules['module3']['selected']);
-        $this->assertSame(false, $allModules['module4']['selected']);
+        $this->assertTrue($allModules['module1']['selected']);
+        $this->assertTrue($allModules['module2']['selected']);
+        $this->assertFalse($allModules['module3']['selected']);
+        $this->assertFalse($allModules['module4']['selected']);
     }
 
     /**
@@ -106,9 +114,9 @@ class ModuleStatusTest extends \PHPUnit\Framework\TestCase
      */
     public function testSetIsEnabled($expectedAllModules, $expectedConfig, $expectedResult)
     {
-        $this->moduleLoader->expects($this->once())->method('load')->will($this->returnValue($expectedAllModules));
+        $this->moduleLoader->expects($this->once())->method('load')->willReturn($expectedAllModules);
         $this->deploymentConfig->expects($this->once())->method('get')
-            ->will($this->returnValue($expectedConfig));
+            ->willReturn($expectedConfig);
         $this->dependencyChecker->expects($this->any())->method('checkDependenciesWhenDisableModules')->willReturn(
             ['module1' => [], 'module2' => [], 'module3' => [], 'module4' => []]
         );
@@ -116,7 +124,7 @@ class ModuleStatusTest extends \PHPUnit\Framework\TestCase
         $moduleStatus = new ModuleStatus($this->moduleLoader, $this->deploymentConfig, $this->objectManagerProvider);
         $moduleStatus->setIsEnabled(false, 'module1');
         $allModules = $moduleStatus->getAllModules();
-        $this->assertSame(false, $allModules['module1']['selected']);
+        $this->assertFalse($allModules['module1']['selected']);
         $this->assertSame($expectedResult[1], $allModules['module2']['selected']);
         $this->assertSame($expectedResult[2], $allModules['module3']['selected']);
         $this->assertSame($expectedResult[3], $allModules['module4']['selected']);

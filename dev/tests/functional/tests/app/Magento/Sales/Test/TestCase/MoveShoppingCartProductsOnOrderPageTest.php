@@ -163,7 +163,7 @@ class MoveShoppingCartProductsOnOrderPageTest extends Injectable
      *
      * @return void
      */
-    public function tearDown()
+    public function tearDown(): void
     {
         $this->customerAccountLogout->open();
     }
