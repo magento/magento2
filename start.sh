@@ -10,10 +10,7 @@
 #
 cd /var/www/html
 cp -a pub.new/* pub/
+cp -a .htaccess pub/
 
 #php bin/magento sampledata:deploy
-#php bin/magento setup:upgrade
-
-#mkdir /var/www/html/magento
-#echo "<h1>HELLO WORLD!!!</h1>" > /var/www/html/magento/index.html
-
+php bin/magento setup:upgrade
