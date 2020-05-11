@@ -1818,30 +1818,6 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
     
     /**
-     * Retrieve order total due or cancel label
-     *
-     * @return float|null
-     */
-    public function getTotalDueCancelLabel()
-    {
-        $itemCancel = true;
-        foreach ($this->getAllItems() as $item) {
-            if ($item->getQtyCanceled() > 0) {
-                $itemCancel = false;
-                break;
-            }
-        }
-        if ($this->isCanceled() || $itemCancel == false) {
-
-            $label = __('Total Canceled');
-        } else {
-
-            $label = __('Total Due');
-        }
-        return $label;
-    }
-
-    /**
      * Retrieve order total due value
      *
      * @return float|null
