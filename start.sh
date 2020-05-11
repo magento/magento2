@@ -6,11 +6,13 @@
 #
 #############################################
 
-#find /var/www/magento -type f -or -type d -exec mv -f '{}' /var/www/html/ \;
-#
+#/// Copy the public data from the .new onto the peristent volume 
 cd /var/www/html
 cp -a pub.new/* pub/
 cp -a .htaccess pub/
 
-#php bin/magento sampledata:deploy
+#/// run setup, deploy the static content and flush the cache :)
 php bin/magento setup:upgrade
+php bin/magento setup:static-content:deploy -f
+php bin/magento cache:flush
+
