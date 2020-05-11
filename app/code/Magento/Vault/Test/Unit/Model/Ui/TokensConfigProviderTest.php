@@ -62,10 +62,10 @@ class TokensConfigProviderTest extends TestCase
     protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
-        $this->vaultPaymentList = $this->createMock(PaymentMethodListInterface::class);
+        $this->vaultPaymentList = $this->getMockForAbstractClass(PaymentMethodListInterface::class);
         $this->vaultPayment = $this->getMockForAbstractClass(VaultPaymentInterface::class);
-        $this->storeManager = $this->createMock(StoreManagerInterface::class);
-        $this->store = $this->createMock(StoreInterface::class);
+        $this->storeManager = $this->getMockForAbstractClass(StoreManagerInterface::class);
+        $this->store = $this->getMockForAbstractClass(StoreInterface::class);
 
         $this->customerTokenManagement = $this->getMockBuilder(CustomerTokenManagement::class)
             ->disableOriginalConstructor()

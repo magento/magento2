@@ -35,7 +35,7 @@ class ModuleDependencyTest extends TestCase
     protected function setUp(): void
     {
         $this->_fileSource = $this->getMockForAbstractClass(CollectorInterface::class);
-        $this->_moduleListMock = $this->createMock(ModuleListInterface::class);
+        $this->_moduleListMock = $this->getMockForAbstractClass(ModuleListInterface::class);
         $this->_moduleListMock->expects($this->any())
             ->method('getNames')
             ->willReturn(['Fixture_ModuleB', 'Fixture_ModuleA']);

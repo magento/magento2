@@ -48,7 +48,7 @@ class ApplyDiscountOnPricesTest extends TestCase
     {
         parent::setUp();
 
-        $websiteMock = $this->createMock(WebsiteInterface::class);
+        $websiteMock = $this->getMockForAbstractClass(WebsiteInterface::class);
         $websiteMock->expects($this->any())->method('getName')->willReturn('testWebsiteName');
         $storeMock = $this->getMockForAbstractClass(
             StoreInterface::class,
@@ -61,10 +61,10 @@ class ApplyDiscountOnPricesTest extends TestCase
         );
         $storeMock->expects($this->any())->method('getName')->willReturn('testStoreName');
         $storeMock->expects($this->any())->method('getWebsite')->willReturn($websiteMock);
-        $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
+        $this->storeManagerMock = $this->getMockForAbstractClass(StoreManagerInterface::class);
         $this->storeManagerMock->expects($this->any())->method('getStores')->willReturn([$storeMock]);
 
-        $this->urlBuilderMock = $this->createMock(UrlInterface::class);
+        $this->urlBuilderMock = $this->getMockForAbstractClass(UrlInterface::class);
         $this->taxConfigMock = $this->createMock(TaxConfig::class);
         $this->applyDiscountOnPricesNotification = (new ObjectManager($this))->getObject(
             ApplyDiscountOnPricesNotification::class,

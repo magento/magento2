@@ -33,7 +33,7 @@ class CleanMediaTest extends TestCase
         $response = $this->createMock(Http::class);
         $request = $this->createMock(\Magento\Framework\App\Request\Http::class);
 
-        $objectManager = $this->createMock(ObjectManagerInterface::class);
+        $objectManager = $this->getMockForAbstractClass(ObjectManagerInterface::class);
         $backendHelper = $this->createMock(Data::class);
         $helper = new ObjectManager($this);
 

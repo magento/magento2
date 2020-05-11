@@ -159,6 +159,6 @@ class HttpTest extends TestCase
             ->willReturn(true);
 
         $this->object->send($file);
-        $this->assertEquals(false, $this->hasOutput());
+        $this->assertFalse($this->hasOutput());
     }
 }

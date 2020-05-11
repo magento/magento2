@@ -87,20 +87,20 @@ class HttpTest extends TestCase
         $this->objectManager = new HelperObjectManager($this);
         $cookieReaderMock = $this->getMockBuilder(CookieReaderInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $routeConfigMock = $this->getMockBuilder(Proxy::class)
             ->disableOriginalConstructor()
             ->getMock();
         $pathInfoProcessorMock = $this->getMockBuilder(PathInfoProcessorInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $converterMock = $this->getMockBuilder(StringUtils::class)
             ->disableOriginalConstructor()
             ->setMethods(['cleanString'])
             ->getMock();
         $objectManagerMock = $this->getMockBuilder(ObjectManagerInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->requestMock = $this->getMockBuilder(RequestHttp::class)
             ->setConstructorArgs(
                 [
@@ -121,17 +121,17 @@ class HttpTest extends TestCase
             ->disableOriginalConstructor()
             ->setMethods(['load'])
             ->getMock();
-        $this->objectManagerMock = $this->createMock(ObjectManagerInterface::class);
+        $this->objectManagerMock = $this->getMockForAbstractClass(ObjectManagerInterface::class);
         $this->responseMock = $this->createMock(ResponseHttp::class);
         $this->frontControllerMock = $this->getMockBuilder(FrontControllerInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['dispatch'])
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->eventManagerMock = $this->getMockBuilder(Manager::class)
             ->disableOriginalConstructor()
             ->setMethods(['dispatch'])
             ->getMock();
-        $this->exceptionHandlerMock = $this->createMock(ExceptionHandlerInterface::class);
+        $this->exceptionHandlerMock = $this->getMockForAbstractClass(ExceptionHandlerInterface::class);
 
         $this->http = $this->objectManager->getObject(
             AppHttp::class,

@@ -96,11 +96,11 @@ abstract class ThemeTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->_objectManagerMock = $this->createMock(ObjectManagerInterface::class);
+        $this->_objectManagerMock = $this->getMockForAbstractClass(ObjectManagerInterface::class);
 
         $this->_request = $this->createMock(\Magento\Framework\App\Request\Http::class);
-        $this->eventManager = $this->createMock(ManagerInterface::class);
-        $this->view = $this->createMock(ViewInterface::class);
+        $this->eventManager = $this->getMockForAbstractClass(ManagerInterface::class);
+        $this->view = $this->getMockForAbstractClass(ViewInterface::class);
         $this->messageManager = $this->getMockForAbstractClass(
             \Magento\Framework\Message\ManagerInterface::class,
             [],

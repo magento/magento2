@@ -181,6 +181,6 @@ class InventoryTest extends TestCase
      */
     public function testIsEnabled()
     {
-        $this->assertEquals(true, $this->inventory->isAvailable('field'));
+        $this->assertTrue($this->inventory->isAvailable('field'));
     }
 }

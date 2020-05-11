@@ -109,7 +109,7 @@ class RenderTest extends TestCase
         $contextMock->expects($this->any())->method('getResponse')->willReturn($this->responseMock);
         $contextMock->expects($this->any())->method('getView')->willReturn($this->viewMock);
 
-        $this->translateInline = $this->createMock(InlineInterface::class);
+        $this->translateInline = $this->getMockForAbstractClass(InlineInterface::class);
 
         $helperObjectManager = new ObjectManager($this);
         $this->action = $helperObjectManager->getObject(
@@ -140,11 +140,11 @@ class RenderTest extends TestCase
     public function testExecuteNoParams()
     {
         $this->requestMock->expects($this->once())->method('isAjax')->willReturn(true);
-        $this->requestMock->expects($this->at(10))
+        $this->requestMock->expects($this->at(6))
             ->method('getParam')
             ->with('blocks', '')
             ->willReturn('');
-        $this->requestMock->expects($this->at(11))
+        $this->requestMock->expects($this->at(7))
             ->method('getParam')
             ->with('handles', '')
             ->willReturn('');

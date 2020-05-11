@@ -52,7 +52,7 @@ class ConsolidatedConfigTest extends TestCase
             ->getMock();
         $this->serializer = $this->getMockBuilder(SerializerInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $objectManagerHelper = new ObjectManager($this);
         $this->configModel = $objectManagerHelper->getObject(
             \Magento\Integration\Model\ConsolidatedConfig::class,

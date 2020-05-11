@@ -73,7 +73,7 @@ class TypeTest extends TestCase
     protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
-        $eventManager = $this->createMock(ManagerInterface::class);
+        $eventManager = $this->getMockForAbstractClass(ManagerInterface::class);
         $fileStorageDb = $this->getMockBuilder(
             Database::class
         )->disableOriginalConstructor()
@@ -82,7 +82,7 @@ class TypeTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $coreRegistry = $this->createMock(Registry::class);
-        $logger = $this->createMock(LoggerInterface::class);
+        $logger = $this->getMockForAbstractClass(LoggerInterface::class);
         $productFactoryMock = $this->createMock(ProductFactory::class);
         $sampleResFactory = $this->createMock(SampleFactory::class);
         $linkResource = $this->createMock(Link::class);

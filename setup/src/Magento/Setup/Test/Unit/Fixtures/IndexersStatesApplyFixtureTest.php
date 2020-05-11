@@ -37,7 +37,7 @@ class IndexersStatesApplyFixtureTest extends TestCase
 
     public function testExecute()
     {
-        $cacheInterfaceMock = $this->createMock(CacheInterface::class);
+        $cacheInterfaceMock = $this->getMockForAbstractClass(CacheInterface::class);
         $indexerRegistryMock = $this->createMock(IndexerRegistry::class);
         $indexerMock = $this->getMockForAbstractClass(IndexerInterface::class);
 
@@ -60,7 +60,12 @@ class IndexersStatesApplyFixtureTest extends TestCase
             ->expects($this->once())
             ->method('getValue')
             ->willReturn([
-                'indexer' => ['id' => 1]
+                'indexer' => [
+                    [
+                        'id' => 1,
+                        'set_scheduled' => false,
+                    ]
+                ]
             ]);
         $this->fixtureModelMock
             ->method('getObjectManager')
@@ -71,7 +76,7 @@ class IndexersStatesApplyFixtureTest extends TestCase
 
     public function testNoFixtureConfigValue()
     {
-        $cacheInterfaceMock = $this->createMock(CacheInterface::class);
+        $cacheInterfaceMock = $this->getMockForAbstractClass(CacheInterface::class);
         $cacheInterfaceMock->expects($this->never())->method('clean');
 
         $objectManagerMock = $this->createMock(ObjectManager::class);

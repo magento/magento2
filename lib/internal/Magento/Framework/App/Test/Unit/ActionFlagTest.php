@@ -92,6 +92,6 @@ class ActionFlagTest extends TestCase
         )->willReturn(
             'controller'
         );
-        $this->assertEquals(false, $this->_actionFlag->get('action', 'flag'));
+        $this->assertFalse($this->_actionFlag->get('action', 'flag'));
     }
 }

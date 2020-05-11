@@ -78,7 +78,7 @@ class SaveTest extends TestCase
 
         $this->messageManagerMock = $this->getMockBuilder(ManagerInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $contextMock = $this->getMockBuilder(Context::class)
             ->disableOriginalConstructor()

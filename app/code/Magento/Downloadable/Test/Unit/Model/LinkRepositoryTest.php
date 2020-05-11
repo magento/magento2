@@ -519,7 +519,7 @@ class LinkRepositoryTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $linkInterfaceMock = $this->createMock(LinkInterface::class);
+        $linkInterfaceMock = $this->getMockForAbstractClass(LinkInterface::class);
 
         $this->repositoryMock->expects($this->once())
             ->method('get')
@@ -543,30 +543,30 @@ class LinkRepositoryTest extends TestCase
      */
     protected function setLinkAssertions($resource, $inputData)
     {
-        $resource->expects($this->any())->method('getId')->will($this->returnValue($inputData['id']));
+        $resource->expects($this->any())->method('getId')->willReturn($inputData['id']);
         $resource->expects($this->any())->method('getStoreTitle')
-            ->will($this->returnValue($inputData['store_title']));
+            ->willReturn($inputData['store_title']);
         $resource->expects($this->any())->method('getTitle')
-            ->will($this->returnValue($inputData['title']));
+            ->willReturn($inputData['title']);
         $resource->expects($this->any())->method('getSampleType')
-            ->will($this->returnValue($inputData['sample_type']));
+            ->willReturn($inputData['sample_type']);
         $resource->expects($this->any())->method('getSampleFile')
-            ->will($this->returnValue($inputData['sample_file']));
+            ->willReturn($inputData['sample_file']);
         $resource->expects($this->any())->method('getSampleUrl')
-            ->will($this->returnValue($inputData['sample_url']));
+            ->willReturn($inputData['sample_url']);
         $resource->expects($this->any())->method('getPrice')
-            ->will($this->returnValue($inputData['price']));
+            ->willReturn($inputData['price']);
         $resource->expects($this->once())->method('getNumberOfDownloads')
-            ->will($this->returnValue($inputData['number_of_downloads']));
+            ->willReturn($inputData['number_of_downloads']);
         $resource->expects($this->once())->method('getSortOrder')
-            ->will($this->returnValue($inputData['sort_order']));
+            ->willReturn($inputData['sort_order']);
         $resource->expects($this->once())->method('getIsShareable')
-            ->will($this->returnValue($inputData['is_shareable']));
+            ->willReturn($inputData['is_shareable']);
         $resource->expects($this->any())->method('getLinkType')
-            ->will($this->returnValue($inputData['link_type']));
+            ->willReturn($inputData['link_type']);
         $resource->expects($this->any())->method('getlinkFile')
-            ->will($this->returnValue($inputData['link_file']));
+            ->willReturn($inputData['link_file']);
         $resource->expects($this->any())->method('getLinkUrl')
-            ->will($this->returnValue($inputData['link_url']));
+            ->willReturn($inputData['link_url']);
     }
 }

@@ -71,7 +71,7 @@ class CollectionTest extends TestCase
         $this->fetchStrategyMock = $this->getMockForAbstractClass(
             FetchStrategyInterface::class
         );
-        $this->eventManagerMock = $this->createMock(ManagerInterface::class);
+        $this->eventManagerMock = $this->getMockForAbstractClass(ManagerInterface::class);
 
         $this->selectMock = $this->createMock(Select::class);
         $this->connectionMock = $this->createMock(Mysql::class);

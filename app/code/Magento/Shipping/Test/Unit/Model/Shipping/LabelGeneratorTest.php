@@ -77,7 +77,7 @@ class LabelGeneratorTest extends TestCase
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
-        $this->scopeConfig = $this->createMock(ScopeConfigInterface::class);
+        $this->scopeConfig = $this->getMockForAbstractClass(ScopeConfigInterface::class);
         $this->trackFactory = $this->getMockBuilder(TrackFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
@@ -137,7 +137,7 @@ class LabelGeneratorTest extends TestCase
 
         $this->filesystem->expects(static::once())
             ->method('getDirectoryWrite')
-            ->willReturn($this->createMock(WriteInterface::class));
+            ->willReturn($this->getMockForAbstractClass(WriteInterface::class));
 
         $this->scopeConfig->expects(static::once())
             ->method('getValue')
@@ -180,7 +180,7 @@ class LabelGeneratorTest extends TestCase
         /**
          * @var $requestMock \Magento\Framework\App\RequestInterface|MockObject
          */
-        $requestMock = $this->createMock(RequestInterface::class);
+        $requestMock = $this->getMockForAbstractClass(RequestInterface::class);
         $this->labelGenerator->create($shipmentMock, $requestMock);
     }
 

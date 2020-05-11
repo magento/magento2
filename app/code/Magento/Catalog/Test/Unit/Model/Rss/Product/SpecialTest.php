@@ -79,12 +79,12 @@ class SpecialTest extends TestCase
             $productCollection
         );
         $customerGroupId = 1;
-        $productCollection->expects($this->once())->method('addPriceDataFieldFilter')->will($this->returnSelf());
-        $productCollection->expects($this->once())->method('addPriceData')->with($storeId, $customerGroupId)->will(
-            $this->returnSelf()
+        $productCollection->expects($this->once())->method('addPriceDataFieldFilter')->willReturnSelf();
+        $productCollection->expects($this->once())->method('addPriceData')->with($storeId, $customerGroupId)->willReturnSelf(
+            
         );
-        $productCollection->expects($this->once())->method('addAttributeToSelect')->will($this->returnSelf());
-        $productCollection->expects($this->once())->method('addAttributeToSort')->will($this->returnSelf());
+        $productCollection->expects($this->once())->method('addAttributeToSelect')->willReturnSelf();
+        $productCollection->expects($this->once())->method('addAttributeToSort')->willReturnSelf();
 
         $products = $this->special->getProductsCollection($storeId, $customerGroupId);
         $this->assertEquals($productCollection, $products);

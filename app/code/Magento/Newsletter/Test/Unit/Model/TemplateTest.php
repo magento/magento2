@@ -121,7 +121,7 @@ class TemplateTest extends TestCase
 
         $this->designMock = $this->getMockBuilder(DesignInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->registryMock = $this->getMockBuilder(Registry::class)
             ->disableOriginalConstructor()
@@ -133,7 +133,7 @@ class TemplateTest extends TestCase
 
         $this->storeManagerMock = $this->getMockBuilder(StoreManagerInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->storeMock = $this->getMockBuilder(Store::class)
             ->setMethods(['getFrontendName', 'getId'])
@@ -162,7 +162,7 @@ class TemplateTest extends TestCase
 
         $this->scopeConfigMock = $this->getMockBuilder(ScopeConfigInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->emailConfigMock = $this->getMockBuilder(Config::class)
             ->disableOriginalConstructor()
@@ -182,7 +182,7 @@ class TemplateTest extends TestCase
 
         $this->requestMock = $this->getMockBuilder(RequestInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->filterFactoryMock = $this->getMockBuilder(FilterFactory::class)
             ->disableOriginalConstructor()

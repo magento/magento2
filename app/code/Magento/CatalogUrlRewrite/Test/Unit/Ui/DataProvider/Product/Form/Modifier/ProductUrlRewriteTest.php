@@ -21,7 +21,7 @@ class ProductUrlRewriteTest extends AbstractModifierTest
      */
     protected $scopeConfigMock;
 
-    protected function setUp():void
+    protected function setUp(): void
     {
         parent::setUp();
         $this->scopeConfigMock = $this->getMockBuilder(ScopeConfigInterface::class)

@@ -60,7 +60,7 @@ class AccountManagementTest extends TestCase
     {
         $this->objectManager = new ObjectManager($this);
 
-        $this->request =  $this->createMock(RequestInterface::class);
+        $this->request =  $this->getMockForAbstractClass(RequestInterface::class);
 
         $this->securityManager = $this->createPartialMock(
             SecurityManager::class,
@@ -68,7 +68,7 @@ class AccountManagementTest extends TestCase
         );
 
         $this->accountManagement =  $this->createMock(AccountManagement::class);
-        $this->scope =  $this->createMock(ScopeInterface::class);
+        $this->scope =  $this->getMockForAbstractClass(ScopeInterface::class);
     }
 
     /**

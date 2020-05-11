@@ -42,7 +42,7 @@ class LinkTest extends TestCase
         $objectManager = new ObjectManager($this);
         $this->resource = $this->createMock(ResourceConnection::class);
         $this->connection =
-            $this->createMock(AdapterInterface::class);
+            $this->getMockForAbstractClass(AdapterInterface::class);
 
         $this->model = $objectManager->getObject(
             Link::class,

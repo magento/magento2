@@ -35,7 +35,7 @@ class StockDataFilterTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
+        $this->scopeConfigMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
 
         $this->scopeConfigMock->expects($this->any())->method('getValue')->willReturn(1);
 

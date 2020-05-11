@@ -64,7 +64,7 @@ class MediaTest extends TestCase
         $objectManager = new ObjectManager($this);
 
         $this->mediaConfigMock = $this->createMock(Config::class);
-        $this->writeInstanceMock = $this->createMock(WriteInterface::class);
+        $this->writeInstanceMock = $this->getMockForAbstractClass(WriteInterface::class);
         $this->fileStorageDbMock = $this->createPartialMock(
             Database::class,
             ['checkDbUsage', 'getUniqueFilename', 'renameFile']

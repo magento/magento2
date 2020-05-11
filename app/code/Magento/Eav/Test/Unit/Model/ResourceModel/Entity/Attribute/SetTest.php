@@ -135,12 +135,12 @@ class SetTest extends TestCase
         $this->expectExceptionMessage('The default attribute set can\'t be deleted.');
         $this->resourceMock->expects($this->any())
             ->method('getConnection')
-            ->willReturn($this->createMock(AdapterInterface::class));
+            ->willReturn($this->getMockForAbstractClass(AdapterInterface::class));
 
         $this->transactionManagerMock->expects($this->once())
             ->method('start')
-            ->with($this->createMock(AdapterInterface::class))
-            ->willReturn($this->createMock(AdapterInterface::class));
+            ->with($this->getMockForAbstractClass(AdapterInterface::class))
+            ->willReturn($this->getMockForAbstractClass(AdapterInterface::class));
 
         $this->objectMock->expects($this->once())->method('getEntityTypeId')->willReturn(665);
         $this->eavConfigMock->expects($this->once())->method('getEntityType')->with(665)->willReturn($this->typeMock);
@@ -159,12 +159,12 @@ class SetTest extends TestCase
         $this->expectExceptionMessage('test exception');
         $this->resourceMock->expects($this->any())
             ->method('getConnection')
-            ->willReturn($this->createMock(AdapterInterface::class));
+            ->willReturn($this->getMockForAbstractClass(AdapterInterface::class));
 
         $this->transactionManagerMock->expects($this->once())
             ->method('start')
-            ->with($this->createMock(AdapterInterface::class))
-            ->willReturn($this->createMock(AdapterInterface::class));
+            ->with($this->getMockForAbstractClass(AdapterInterface::class))
+            ->willReturn($this->getMockForAbstractClass(AdapterInterface::class));
 
         $this->objectMock->expects($this->once())->method('getEntityTypeId')->willReturn(665);
         $this->eavConfigMock->expects($this->once())->method('getEntityType')->with(665)->willReturn($this->typeMock);
@@ -201,7 +201,7 @@ class SetTest extends TestCase
         $cacheMock = $this->getMockBuilder(CacheInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['load', 'save', 'getFrontend', 'remove', 'clean'])
-            ->getMock();
+            ->getMockForAbstractClass();
         $cacheKey = Set::ATTRIBUTES_CACHE_ID . 1;
         $cacheMock
             ->expects($this->once())
@@ -283,7 +283,7 @@ class SetTest extends TestCase
         $cacheMock = $this->getMockBuilder(CacheInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['load', 'save', 'getFrontend', 'remove', 'clean'])
-            ->getMock();
+            ->getMockForAbstractClass();
         $cacheMock->expects($this->once())
             ->method('load')
             ->with(Set::ATTRIBUTES_CACHE_ID . 1)

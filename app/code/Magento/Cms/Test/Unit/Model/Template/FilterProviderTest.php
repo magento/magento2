@@ -33,7 +33,7 @@ class FilterProviderTest extends TestCase
     protected function setUp(): void
     {
         $this->_filterMock = $this->createMock(Filter::class);
-        $this->_objectManagerMock = $this->createMock(ObjectManagerInterface::class);
+        $this->_objectManagerMock = $this->getMockForAbstractClass(ObjectManagerInterface::class);
         $this->_objectManagerMock->expects($this->any())->method('get')->willReturn($this->_filterMock);
         $this->_model = new FilterProvider($this->_objectManagerMock);
     }
@@ -71,7 +71,7 @@ class FilterProviderTest extends TestCase
     {
         $this->expectException('Exception');
         $someClassMock = $this->createMock('SomeClass');
-        $objectManagerMock = $this->createMock(ObjectManagerInterface::class);
+        $objectManagerMock = $this->getMockForAbstractClass(ObjectManagerInterface::class);
         $objectManagerMock->expects($this->once())->method('get')->willReturn($someClassMock);
         $model = new FilterProvider($objectManagerMock, 'SomeClass', 'SomeClass');
         $model->getPageFilter();

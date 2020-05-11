@@ -97,13 +97,13 @@ class SequenceApplierTest extends TestCase
             ->getMock();
         $this->hydratorMock = $this->getMockBuilder(HydratorInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->metadataMock = $this->getMockBuilder(EntityMetadataInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->sequenceMock = $this->getMockBuilder(SequenceInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->sequenceApplier = $helper->getObject(
             SequenceApplier::class,
@@ -138,7 +138,7 @@ class SequenceApplierTest extends TestCase
             ->method('resolve')
             ->with($this->entityMock)
             ->willReturn($entityType);
-        $this->sequenceRegistryMock->expects($this->once())
+        $this->sequenceRegistryMock->expects($this->exactly(2))
             ->method('retrieve')
             ->with($entityType)
             ->willReturn($sequenceInfo);
@@ -176,7 +176,7 @@ class SequenceApplierTest extends TestCase
             ->method('resolve')
             ->with($this->entityMock)
             ->willReturn($entityType);
-        $this->sequenceRegistryMock->expects($this->once())
+        $this->sequenceRegistryMock->expects($this->exactly(2))
             ->method('retrieve')
             ->with($entityType)
             ->willReturn($sequenceInfo);

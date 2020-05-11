@@ -143,7 +143,7 @@ class TaxAddressManagerTest extends TestCase
         /* @var \Magento\Customer\Api\Data\AddressInterface|MockObject $address */
         $address = $this->getMockBuilder(AddressInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $address->expects($this->any())->method('getCountryId')->willReturn(1);
         $address->expects($this->any())->method('getRegion')->willReturn(null);

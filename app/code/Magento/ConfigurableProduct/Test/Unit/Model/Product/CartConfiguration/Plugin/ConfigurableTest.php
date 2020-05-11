@@ -55,8 +55,7 @@ class ConfigurableTest extends TestCase
         )->willReturn(
             \Magento\ConfigurableProduct\Model\Product\Type\Configurable::TYPE_CODE
         );
-        $this->assertEquals(
-            true,
+        $this->assertTrue(
             $this->model->aroundIsProductConfigured(
                 $this->subjectMock,
                 $this->closureMock,

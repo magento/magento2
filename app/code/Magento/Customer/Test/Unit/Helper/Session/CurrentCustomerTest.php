@@ -91,8 +91,8 @@ class CurrentCustomerTest extends TestCase
             ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
-        $this->customerDataMock = $this->createMock(CustomerInterface::class);
-        $this->customerRepositoryMock = $this->createMock(CustomerRepositoryInterface::class);
+        $this->customerDataMock = $this->getMockForAbstractClass(CustomerInterface::class);
+        $this->customerRepositoryMock = $this->getMockForAbstractClass(CustomerRepositoryInterface::class);
         $this->requestMock = $this->createMock(Http::class);
         $this->moduleManagerMock = $this->createMock(Manager::class);
         $this->viewMock = $this->createMock(View::class);

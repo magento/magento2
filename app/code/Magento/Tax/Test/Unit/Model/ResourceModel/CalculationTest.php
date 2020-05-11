@@ -27,7 +27,7 @@ class CalculationTest extends TestCase
     {
         // create the mocks
         $resource = $this->createMock(ResourceConnection::class);
-        $storeManager = $this->createMock(StoreManagerInterface::class);
+        $storeManager = $this->getMockForAbstractClass(StoreManagerInterface::class);
 
         $taxData = $this->createPartialMock(Data::class, ['getPostCodeSubStringLength']);
         $taxData

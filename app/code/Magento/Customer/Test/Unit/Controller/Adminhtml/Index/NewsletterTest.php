@@ -238,7 +238,7 @@ class NewsletterTest extends TestCase
         $contextMock->expects($this->any())->method('getTitle')->willReturn($this->titleMock);
         $this->viewInterfaceMock =  $this->getMockBuilder(ViewInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->viewInterfaceMock->expects($this->any())->method('loadLayout')->willReturnSelf();
         $contextMock->expects($this->any())->method('getView')->willReturn($this->viewInterfaceMock);

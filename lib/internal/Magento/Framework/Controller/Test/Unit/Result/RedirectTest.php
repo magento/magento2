@@ -33,10 +33,10 @@ class RedirectTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->redirectInterface = $this->createMock(RedirectInterface::class);
-        $this->urlBuilder = $this->createMock(UrlInterface::class);
-        $this->urlInterface = $this->createMock(UrlInterface::class);
-        $this->response = $this->createMock(HttpResponseInterface::class);
+        $this->redirectInterface = $this->getMockForAbstractClass(RedirectInterface::class);
+        $this->urlBuilder = $this->getMockForAbstractClass(UrlInterface::class);
+        $this->urlInterface = $this->getMockForAbstractClass(UrlInterface::class);
+        $this->response = $this->getMockForAbstractClass(HttpResponseInterface::class);
         $this->redirect = new Redirect($this->redirectInterface, $this->urlInterface);
     }
 

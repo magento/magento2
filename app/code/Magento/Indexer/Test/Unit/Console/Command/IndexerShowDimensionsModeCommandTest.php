@@ -48,7 +48,7 @@ class IndexerShowDimensionsModeCommandTest extends AbstractIndexerCommandCommonS
     {
         parent::setUp();
         $objectManagerHelper = new ObjectManagerHelper($this);
-        $this->configReaderMock = $this->createMock(ScopeConfigInterface::class);
+        $this->configReaderMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
         $this->indexers = ['indexer_1' => 'indexer_1', 'indexer_2' => 'indexer_2'];
         $this->command = $objectManagerHelper->getObject(
             IndexerShowDimensionsModeCommand::class,

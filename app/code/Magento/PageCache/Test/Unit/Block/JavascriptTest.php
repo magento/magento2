@@ -83,13 +83,13 @@ class JavascriptTest extends TestCase
             )->getMockForAbstractClass();
         $this->layoutMock = $this->getMockBuilder(LayoutInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->layoutUpdateMock = $this->getMockBuilder(ProcessorInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->urlBuilderMock = $this->getMockBuilder(UrlInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->contextMock->expects($this->any())
             ->method('getRequest')
             ->willReturn($this->requestMock);
@@ -130,16 +130,16 @@ class JavascriptTest extends TestCase
             ->willReturn($isSecure);
         $this->requestMock->expects($this->once())
             ->method('getRouteName')
-            ->will($this->returnValue('route'));
+            ->willReturn('route');
         $this->requestMock->expects($this->once())
             ->method('getControllerName')
-            ->will($this->returnValue('controller'));
+            ->willReturn('controller');
         $this->requestMock->expects($this->once())
             ->method('getActionName')
-            ->will($this->returnValue('action'));
+            ->willReturn('action');
         $this->requestMock->expects($this->once())
             ->method('getRequestUri')
-            ->will($this->returnValue('uri'));
+            ->willReturn('uri');
         $this->urlBuilderMock->expects($this->once())
             ->method('getUrl')
             ->willReturn($url);
@@ -191,19 +191,19 @@ class JavascriptTest extends TestCase
 
         $this->requestMock->expects($this->once())
             ->method('getRouteName')
-            ->will($this->returnValue($route));
+            ->willReturn($route);
 
         $this->requestMock->expects($this->once())
             ->method('getControllerName')
-            ->will($this->returnValue($controller));
+            ->willReturn($controller);
 
         $this->requestMock->expects($this->once())
             ->method('getActionName')
-            ->will($this->returnValue($action));
+            ->willReturn($action);
 
         $this->requestMock->expects($this->once())
             ->method('getRequestUri')
-            ->will($this->returnValue($uri));
+            ->willReturn($uri);
 
         $this->urlBuilderMock->expects($this->once())
             ->method('getUrl')

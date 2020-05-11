@@ -44,9 +44,9 @@ class ExclusionStrategyTest extends TestCase
     protected function setUp(): void
     {
         $resourceConnectionMock = $this->createMock(ResourceConnection::class);
-        $adapterMock = $this->createMock(AdapterInterface::class);
+        $adapterMock = $this->getMockForAbstractClass(AdapterInterface::class);
         $resourceConnectionMock->expects($this->any())->method('getConnection')->willReturn($adapterMock);
-        $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
+        $this->storeManagerMock = $this->getMockForAbstractClass(StoreManagerInterface::class);
         $aliasResolverMock = $this->createMock(AliasResolver::class);
 
         $indexScopeResolverMock = $this->createMock(
@@ -58,7 +58,7 @@ class ExclusionStrategyTest extends TestCase
         $dimensionMock = $this->createMock(Dimension::class);
         $dimensionFactoryMock = $this->createMock(DimensionFactory::class);
         $dimensionFactoryMock->method('create')->willReturn($dimensionMock);
-        $storeMock = $this->createMock(StoreInterface::class);
+        $storeMock = $this->getMockForAbstractClass(StoreInterface::class);
         $storeMock->method('getId')->willReturn(1);
         $storeMock->method('getWebsiteId')->willReturn(1);
         $this->storeManagerMock->method('getStore')->willReturn($storeMock);
@@ -88,7 +88,7 @@ class ExclusionStrategyTest extends TestCase
         $searchFilterMock = $this->createMock(Term::class);
         $searchFilterMock->expects($this->any())->method('getField')->willReturn($attributeCode);
 
-        $websiteMock = $this->createMock(WebsiteInterface::class);
+        $websiteMock = $this->getMockForAbstractClass(WebsiteInterface::class);
         $websiteMock->expects($this->any())->method('getId')->willReturn($websiteId);
         $this->storeManagerMock->expects($this->any())->method('getWebsite')->willReturn($websiteMock);
 

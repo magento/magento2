@@ -64,8 +64,8 @@ abstract class AbstractSampleDataCommandTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->directoryReadMock = $this->createMock(ReadInterface::class);
-        $this->directoryWriteMock = $this->createMock(WriteInterface::class);
+        $this->directoryReadMock = $this->getMockForAbstractClass(ReadInterface::class);
+        $this->directoryWriteMock = $this->getMockForAbstractClass(WriteInterface::class);
         $this->filesystemMock = $this->createMock(Filesystem::class);
         $this->sampleDataDependencyMock = $this->createMock(Dependency::class);
         $this->arrayInputFactoryMock = $this->createMock(ArrayInputFactory::class);

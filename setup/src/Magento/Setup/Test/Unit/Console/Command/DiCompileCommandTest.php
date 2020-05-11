@@ -105,7 +105,7 @@ class DiCompileCommandTest extends TestCase
         $this->outputFormatterMock = $this->createMock(
             OutputFormatterInterface::class
         );
-        $this->outputMock = $this->createMock(OutputInterface::class);
+        $this->outputMock = $this->getMockForAbstractClass(OutputInterface::class);
         $this->outputMock->method('getFormatter')
             ->willReturn($this->outputFormatterMock);
 
@@ -143,7 +143,7 @@ class DiCompileCommandTest extends TestCase
             ->with(Cache::class)
             ->willReturn($this->cacheMock);
         $this->cacheMock->expects($this->once())->method('clean');
-        $writeDirectory = $this->createMock(WriteInterface::class);
+        $writeDirectory = $this->getMockForAbstractClass(WriteInterface::class);
         $writeDirectory->expects($this->atLeastOnce())->method('delete');
         $this->filesystemMock->expects($this->atLeastOnce())->method('getDirectoryWrite')->willReturn($writeDirectory);
 

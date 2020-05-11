@@ -45,7 +45,7 @@ class FieldMapperResolverTest extends TestCase
     {
         $this->objectManagerMock = $this->getMockBuilder(ObjectManagerInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->fieldMapperEntity = $this->getMockBuilder(
             FieldMapperInterface::class
         )

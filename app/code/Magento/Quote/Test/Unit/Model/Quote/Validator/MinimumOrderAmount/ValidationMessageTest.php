@@ -47,9 +47,9 @@ class ValidationMessageTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
-        $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
-        $this->currencyMock = $this->createMock(CurrencyInterface::class);
+        $this->scopeConfigMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
+        $this->storeManagerMock = $this->getMockForAbstractClass(StoreManagerInterface::class);
+        $this->currencyMock = $this->getMockForAbstractClass(CurrencyInterface::class);
         $this->priceHelperMock = $this->createMock(Data::class);
 
         $this->model = new ValidationMessage(

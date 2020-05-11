@@ -124,9 +124,9 @@ class CustomerTest extends TestCase
         $this->_attribute = $this->createMock(Attribute::class);
         $this->_storeManager = $this->createMock(StoreManager::class);
         $this->_storetMock = $this->createMock(Store::class);
-        $this->_scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
+        $this->_scopeConfigMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
         $this->_transportBuilderMock = $this->createMock(TransportBuilder::class);
-        $this->_transportMock = $this->createMock(TransportInterface::class);
+        $this->_transportMock = $this->getMockForAbstractClass(TransportInterface::class);
         $this->attributeFactoryMock = $this->createPartialMock(
             \Magento\Customer\Model\AttributeFactory::class,
             ['create']
@@ -146,7 +146,7 @@ class CustomerTest extends TestCase
             ->method('getIdFieldName')
             ->willReturn('id');
         $this->registryMock = $this->createPartialMock(Registry::class, ['registry']);
-        $this->_encryptor = $this->createMock(EncryptorInterface::class);
+        $this->_encryptor = $this->getMockForAbstractClass(EncryptorInterface::class);
         $helper = new ObjectManager($this);
         $this->accountConfirmation = $this->createMock(AccountConfirmation::class);
         $this->addressesFactory = $this->getMockBuilder(AddressCollectionFactory::class)
@@ -243,7 +243,7 @@ class CustomerTest extends TestCase
                 ->method($method)
                 ->willReturnSelf();
         }
-        $transportMock = $this->createMock(TransportInterface::class);
+        $transportMock = $this->getMockForAbstractClass(TransportInterface::class);
         $transportMock->expects($this->once())
             ->method('sendMessage')
             ->willReturnSelf();

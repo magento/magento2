@@ -118,7 +118,7 @@ class NewActionTest extends TestCase
             Invoice::class,
             ['getIncrementId']
         );
-        $this->objectManagerMock = $this->createMock(ObjectManagerInterface::class);
+        $this->objectManagerMock = $this->getMockForAbstractClass(ObjectManagerInterface::class);
         $this->requestMock = $this->getMockForAbstractClass(
             RequestInterface::class,
             [],

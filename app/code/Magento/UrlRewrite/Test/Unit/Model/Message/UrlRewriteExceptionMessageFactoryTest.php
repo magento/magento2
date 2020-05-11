@@ -34,7 +34,7 @@ class UrlRewriteExceptionMessageFactoryTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->urlMock = $this->createMock(UrlInterface::class);
+        $this->urlMock = $this->getMockForAbstractClass(UrlInterface::class);
 
         $this->messageFactoryMock = $this->createPartialMock(
             Factory::class,
@@ -61,7 +61,7 @@ class UrlRewriteExceptionMessageFactoryTest extends TestCase
             ->method('getUrl')
             ->willReturn('htmlUrl');
 
-        $message = $this->createMock(MessageInterface::class);
+        $message = $this->getMockForAbstractClass(MessageInterface::class);
 
         $message->expects($this->once())
             ->method('setText')

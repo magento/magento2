@@ -34,7 +34,7 @@ class FactoryTest extends TestCase
         $classMock->expects($this->once())->method('getClassType')->willReturn($classType);
         $classMock->expects($this->once())->method('getId')->willReturn(1);
 
-        $objectManager = $this->createMock(ObjectManagerInterface::class);
+        $objectManager = $this->getMockForAbstractClass(ObjectManagerInterface::class);
         $objectManager->expects(
             $this->once()
         )->method(
@@ -80,7 +80,7 @@ class FactoryTest extends TestCase
         );
         $classMock->expects($this->once())->method('getClassType')->willReturn($wrongClassType);
 
-        $objectManager = $this->createMock(ObjectManagerInterface::class);
+        $objectManager = $this->getMockForAbstractClass(ObjectManagerInterface::class);
 
         $taxClassFactory = new Factory($objectManager);
 

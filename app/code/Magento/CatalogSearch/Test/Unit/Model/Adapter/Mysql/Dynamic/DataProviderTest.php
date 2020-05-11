@@ -69,10 +69,10 @@ class DataProviderTest extends TestCase
     {
         $this->resourceConnectionMock = $this->createMock(ResourceConnection::class);
         $this->sessionMock = $this->createMock(Session::class);
-        $this->adapterMock = $this->createMock(AdapterInterface::class);
+        $this->adapterMock = $this->getMockForAbstractClass(AdapterInterface::class);
         $this->resourceConnectionMock->expects($this->once())->method('getConnection')->willReturn($this->adapterMock);
         $this->rangeMock = $this->createMock(Range::class);
-        $this->mysqlDataProviderMock = $this->createMock(DataProviderInterface::class);
+        $this->mysqlDataProviderMock = $this->getMockForAbstractClass(DataProviderInterface::class);
         $this->intervalFactoryMock = $this->createMock(IntervalFactory::class);
         $this->storeManagerMock = $this->createMock(StoreManager::class);
         $this->indexScopeResolverMock = $this->createMock(
@@ -81,7 +81,7 @@ class DataProviderTest extends TestCase
         $this->dimensionMock = $this->createMock(Dimension::class);
         $this->dimensionFactoryMock = $this->createMock(DimensionFactory::class);
         $this->dimensionFactoryMock->method('create')->willReturn($this->dimensionMock);
-        $storeMock = $this->createMock(StoreInterface::class);
+        $storeMock = $this->getMockForAbstractClass(StoreInterface::class);
         $storeMock->method('getId')->willReturn(1);
         $storeMock->method('getWebsiteId')->willReturn(1);
         $this->storeManagerMock->method('getStore')->willReturn($storeMock);

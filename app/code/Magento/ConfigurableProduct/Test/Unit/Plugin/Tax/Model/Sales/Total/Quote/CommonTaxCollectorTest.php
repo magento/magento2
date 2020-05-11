@@ -79,11 +79,11 @@ class CommonTaxCollectorTest extends TestCase
         $quoteItemMock->method('getChildren')->willReturn([$childQuoteItemMock]);
 
         /* @var TaxClassKeyInterface|MockObject $taxClassObjectMock */
-        $taxClassObjectMock = $this->createMock(TaxClassKeyInterface::class);
+        $taxClassObjectMock = $this->getMockForAbstractClass(TaxClassKeyInterface::class);
         $taxClassObjectMock->expects($this->once())->method('setValue')->with($childTaxClassId);
 
         /* @var QuoteDetailsItemInterface|MockObject $quoteDetailsItemMock */
-        $quoteDetailsItemMock = $this->createMock(QuoteDetailsItemInterface::class);
+        $quoteDetailsItemMock = $this->getMockForAbstractClass(QuoteDetailsItemInterface::class);
         $quoteDetailsItemMock->method('getTaxClassKey')->willReturn($taxClassObjectMock);
 
         $this->commonTaxCollectorPlugin->afterMapItem(

@@ -35,9 +35,9 @@ class TextTest extends TestCase
      */
     protected function setUp(): void
     {
-        $locale = $this->createMock(TimezoneInterface::class);
-        $localeResolver = $this->createMock(ResolverInterface::class);
-        $logger = $this->createMock(LoggerInterface::class);
+        $locale = $this->getMockForAbstractClass(TimezoneInterface::class);
+        $localeResolver = $this->getMockForAbstractClass(ResolverInterface::class);
+        $logger = $this->getMockForAbstractClass(LoggerInterface::class);
         $helper = new StringUtils();
 
         $this->model = new Text($locale, $logger, $localeResolver, $helper);

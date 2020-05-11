@@ -561,7 +561,7 @@ class PayflowproTest extends TestCase
         $request = new DataObject();
 
         /** @var ConfigInterface $config */
-        $config = $this->createMock(ConfigInterface::class);
+        $config = $this->getMockForAbstractClass(ConfigInterface::class);
 
         $this->gatewayMock->expects(static::once())
             ->method('postRequest')
@@ -580,7 +580,7 @@ class PayflowproTest extends TestCase
         $request = new DataObject();
 
         /** @var ConfigInterface $config */
-        $config = $this->createMock(ConfigInterface::class);
+        $config = $this->getMockForAbstractClass(ConfigInterface::class);
 
         $this->gatewayMock->expects(static::once())
             ->method('postRequest')

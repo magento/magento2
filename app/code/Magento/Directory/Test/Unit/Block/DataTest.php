@@ -87,7 +87,7 @@ class DataTest extends TestCase
             ]
         );
 
-        $this->serializerMock = $this->createMock(SerializerInterface::class);
+        $this->serializerMock = $this->getMockForAbstractClass(SerializerInterface::class);
         $objectManagerHelper->setBackwardCompatibleProperty(
             $this->block,
             'serializer',

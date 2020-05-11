@@ -185,7 +185,7 @@ class AbstractBlockTest extends TestCase
                 ]
             );
 
-        $configManager = $this->createMock(ConfigInterface::class);
+        $configManager = $this->getMockForAbstractClass(ConfigInterface::class);
         $configManager->expects($this->exactly(2))->method('getViewConfig')->willReturn($config);
 
         /** @var AbstractBlock|MockObject $block */

@@ -109,7 +109,7 @@ class EditTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $objectManager = $this->createMock(ObjectManagerInterface::class);
+        $objectManager = $this->getMockForAbstractClass(ObjectManagerInterface::class);
         $product = $this->getMockBuilder(Product::class)
             ->setMethods(['isProductsHasSku'])
             ->disableOriginalConstructor()
@@ -124,7 +124,7 @@ class EditTest extends TestCase
         $messageManager = $this->getMockBuilder(ManagerInterface::class)
             ->setMethods([])
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $messageManager->expects($this->any())->method('addErrorMessage')->willReturn(true);
         $this->context = $this->getMockBuilder(Context::class)
             ->setMethods(['getRequest', 'getObjectManager', 'getMessageManager', 'getResultRedirectFactory'])

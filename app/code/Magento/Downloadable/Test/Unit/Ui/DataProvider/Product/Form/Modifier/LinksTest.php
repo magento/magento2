@@ -84,10 +84,10 @@ class LinksTest extends TestCase
     protected function setUp(): void
     {
         $this->objectManagerHelper = new ObjectManagerHelper($this);
-        $this->locatorMock = $this->createMock(LocatorInterface::class);
-        $this->productMock = $this->createMock(ProductInterface::class);
-        $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
-        $this->urlBuilderMock = $this->createMock(UrlInterface::class);
+        $this->locatorMock = $this->getMockForAbstractClass(LocatorInterface::class);
+        $this->productMock = $this->getMockForAbstractClass(ProductInterface::class);
+        $this->storeManagerMock = $this->getMockForAbstractClass(StoreManagerInterface::class);
+        $this->urlBuilderMock = $this->getMockForAbstractClass(UrlInterface::class);
         $this->linksDataMock = $this->createMock(LinksData::class);
         $this->typeUploadMock = $this->createMock(TypeUpload::class);
         $this->shareableMock = $this->createMock(Shareable::class);

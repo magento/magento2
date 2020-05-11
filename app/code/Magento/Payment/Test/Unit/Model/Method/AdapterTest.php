@@ -81,10 +81,10 @@ class AdapterTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->eventManager = $this->createMock(ManagerInterface::class);
-        $this->valueHandlerPool = $this->createMock(ValueHandlerPoolInterface::class);
-        $this->validatorPool = $this->createMock(ValidatorPoolInterface::class);
-        $this->commandPool = $this->createMock(CommandPoolInterface::class);
+        $this->eventManager = $this->getMockForAbstractClass(ManagerInterface::class);
+        $this->valueHandlerPool = $this->getMockForAbstractClass(ValueHandlerPoolInterface::class);
+        $this->validatorPool = $this->getMockForAbstractClass(ValidatorPoolInterface::class);
+        $this->commandPool = $this->getMockForAbstractClass(CommandPoolInterface::class);
         $this->paymentDataObjectFactory = $this->getMockBuilder(PaymentDataObjectFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -152,7 +152,7 @@ class AdapterTest extends TestCase
      */
     public function testIsAvailableNotActive()
     {
-        $activeValueHandler = $this->createMock(ValueHandlerInterface::class);
+        $activeValueHandler = $this->getMockForAbstractClass(ValueHandlerInterface::class);
 
         $this->valueHandlerPool->expects(static::once())
             ->method('get')
@@ -174,11 +174,11 @@ class AdapterTest extends TestCase
      */
     public function testIsAvailableEmptyQuote()
     {
-        $activeValueHandler = $this->createMock(ValueHandlerInterface::class);
-        $availabilityValidator = $this->createMock(ValidatorInterface::class);
-        $paymentDO = $this->createMock(PaymentDataObjectInterface::class);
-        $validationResult = $this->createMock(ResultInterface::class);
-        $paymentInfo = $this->createMock(InfoInterface::class);
+        $activeValueHandler = $this->getMockForAbstractClass(ValueHandlerInterface::class);
+        $availabilityValidator = $this->getMockForAbstractClass(ValidatorInterface::class);
+        $paymentDO = $this->getMockForAbstractClass(PaymentDataObjectInterface::class);
+        $validationResult = $this->getMockForAbstractClass(ResultInterface::class);
+        $paymentInfo = $this->getMockForAbstractClass(InfoInterface::class);
 
         $this->valueHandlerPool->expects(static::once())
             ->method('get')
@@ -216,7 +216,7 @@ class AdapterTest extends TestCase
      */
     public function testIsAvailableWithEmptyInfoInstance()
     {
-        $activeValueHandler = $this->createMock(ValueHandlerInterface::class);
+        $activeValueHandler = $this->getMockForAbstractClass(ValueHandlerInterface::class);
         $this->valueHandlerPool->expects(static::once())
             ->method('get')
             ->with('active')
@@ -260,8 +260,8 @@ class AdapterTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $paymentInfo = $this->createMock(InfoInterface::class);
-        $paymentDO = $this->createMock(PaymentDataObjectInterface::class);
+        $paymentInfo = $this->getMockForAbstractClass(InfoInterface::class);
+        $paymentDO = $this->getMockForAbstractClass(PaymentDataObjectInterface::class);
 
         $adapter = new Adapter(
             $eventManager,
@@ -276,7 +276,7 @@ class AdapterTest extends TestCase
             $this->logger
         );
 
-        $valueHandler = $this->createMock(ValueHandlerInterface::class);
+        $valueHandler = $this->getMockForAbstractClass(ValueHandlerInterface::class);
 
         $valueHandlerPool->expects(static::once())
             ->method('get')
@@ -303,21 +303,21 @@ class AdapterTest extends TestCase
     public function testExecuteCommandWithCommandPool()
     {
         /** @var ManagerInterface|MockObject $eventManager */
-        $eventManager = $this->createMock(ManagerInterface::class);
+        $eventManager = $this->getMockForAbstractClass(ManagerInterface::class);
 
         /** @var ValueHandlerPoolInterface|MockObject $valueHandlerPool */
-        $valueHandlerPool = $this->createMock(ValueHandlerPoolInterface::class);
+        $valueHandlerPool = $this->getMockForAbstractClass(ValueHandlerPoolInterface::class);
 
         /** @var CommandPoolInterface|MockObject $commandPool */
-        $commandPool = $this->createMock(CommandPoolInterface::class);
+        $commandPool = $this->getMockForAbstractClass(CommandPoolInterface::class);
 
         /** @var PaymentDataObjectFactory|MockObject $paymentDataObjectFactory */
         $paymentDataObjectFactory = $this->getMockBuilder(PaymentDataObjectFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $paymentInfo = $this->createMock(InfoInterface::class);
-        $paymentDO = $this->createMock(PaymentDataObjectInterface::class);
+        $paymentInfo = $this->getMockForAbstractClass(InfoInterface::class);
+        $paymentDO = $this->getMockForAbstractClass(PaymentDataObjectInterface::class);
 
         $adapter = new Adapter(
             $eventManager,
@@ -332,8 +332,8 @@ class AdapterTest extends TestCase
             $this->logger
         );
 
-        $valueHandler = $this->createMock(ValueHandlerInterface::class);
-        $command = $this->createMock(CommandInterface::class);
+        $valueHandler = $this->getMockForAbstractClass(ValueHandlerInterface::class);
+        $command = $this->getMockForAbstractClass(CommandInterface::class);
 
         $valueHandlerPool->expects(static::once())
             ->method('get')

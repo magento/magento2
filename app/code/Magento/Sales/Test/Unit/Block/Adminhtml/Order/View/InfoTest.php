@@ -61,7 +61,7 @@ class InfoTest extends TestCase
     {
         $this->contextMock
             = $this->createPartialMock(Context::class, ['getAuthorization']);
-        $this->authorizationMock = $this->createMock(AuthorizationInterface::class);
+        $this->authorizationMock = $this->getMockForAbstractClass(AuthorizationInterface::class);
         $this->contextMock
             ->expects($this->any())->method('getAuthorization')->willReturn($this->authorizationMock);
         $this->groupRepositoryMock = $this->getMockForAbstractClass(
@@ -90,7 +90,7 @@ class InfoTest extends TestCase
     public function testGetAddressEditLink()
     {
         $contextMock = $this->createPartialMock(Context::class, ['getAuthorization']);
-        $authorizationMock = $this->createMock(AuthorizationInterface::class);
+        $authorizationMock = $this->getMockForAbstractClass(AuthorizationInterface::class);
         $contextMock->expects($this->any())->method('getAuthorization')->willReturn($authorizationMock);
         $arguments = ['context' => $contextMock];
 

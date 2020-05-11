@@ -94,22 +94,22 @@ class EmulationTest extends TestCase
             ->setMethods([])->getMock();
         $this->storeManagerMock = $this->getMockBuilder(StoreManagerInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods([])->getMock();
+            ->setMethods([])->getMockForAbstractClass();
         $this->translateMock = $this->getMockBuilder(TranslateInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods([])->getMock();
+            ->setMethods([])->getMockForAbstractClass();
         $this->scopeConfigMock = $this->getMockBuilder(ScopeConfigInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods([])->getMock();
+            ->setMethods([])->getMockForAbstractClass();
         $this->localeResolverMock = $this->getMockBuilder(ResolverInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods([])->getMock();
+            ->setMethods([])->getMockForAbstractClass();
         $this->inlineConfigMock = $this->getMockBuilder(ConfigInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods([])->getMock();
+            ->setMethods([])->getMockForAbstractClass();
         $this->inlineTranslationMock = $this->getMockBuilder(StateInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods([])->getMock();
+            ->setMethods([])->getMockForAbstractClass();
         $this->viewDesignMock = $this->getMockForAbstractClass(DesignInterface::class);
         $this->storeMock = $this->getMockBuilder(Store::class)
             ->disableOriginalConstructor()

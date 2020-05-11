@@ -65,17 +65,17 @@ class ForceAdminPasswordChangeObserverTest extends TestCase
         $this->authMock = $this->getMockBuilder(AuthorizationInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['isAllowed'])
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->configInterfaceMock = $this->getMockBuilder(ConfigInterface::class)
             ->disableOriginalConstructor()
             ->setMethods([])
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->urlInterfaceMock = $this->getMockBuilder(UrlInterface::class)
             ->disableOriginalConstructor()
             ->setMethods([])
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->sessionMock = $this->getMockBuilder(Session::class)
             ->disableOriginalConstructor()
@@ -102,7 +102,7 @@ class ForceAdminPasswordChangeObserverTest extends TestCase
         $this->managerInterfaceMock = $this->getMockBuilder(ManagerInterface::class)
             ->disableOriginalConstructor()
             ->setMethods([])
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->eventManagerMock = $this->getMockBuilder(\Magento\Framework\Event\ManagerInterface::class)
             ->disableOriginalConstructor()

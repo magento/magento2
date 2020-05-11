@@ -55,8 +55,7 @@ class GroupedTest extends TestCase
         )->willReturn(
             \Magento\GroupedProduct\Model\Product\Type\Grouped::TYPE_CODE
         );
-        $this->assertEquals(
-            true,
+        $this->assertTrue(
             $this->groupedPlugin->aroundIsProductConfigured(
                 $this->subjectMock,
                 $this->closureMock,

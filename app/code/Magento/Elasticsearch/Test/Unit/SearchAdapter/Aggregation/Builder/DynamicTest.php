@@ -71,7 +71,7 @@ class DynamicTest extends TestCase
     {
         $this->requestBuckedInterface = $this->getMockBuilder(BucketInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->dataProviderContainer = $this
             ->getMockBuilder(DataProvider::class)
@@ -93,7 +93,7 @@ class DynamicTest extends TestCase
         $this->algorithmInterface = $this
             ->getMockBuilder(AlgorithmInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->bucket = $this->getMockBuilder(DynamicBucket::class)
             ->setMethods(['getMethod'])

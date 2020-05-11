@@ -44,7 +44,7 @@ class ChangeQuoteControlTest extends TestCase
     protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
-        $this->userContextMock = $this->createMock(UserContextInterface::class);
+        $this->userContextMock = $this->getMockForAbstractClass(UserContextInterface::class);
 
         $this->model = $this->objectManager->getObject(
             ChangeQuoteControl::class,
@@ -77,7 +77,7 @@ class ChangeQuoteControlTest extends TestCase
         $this->userContextMock->expects($this->any())->method('getUserId')
             ->willReturn($quoteCustomerId);
 
-        $this->assertEquals(true, $this->model->isAllowed($this->quoteMock));
+        $this->assertTrue($this->model->isAllowed($this->quoteMock));
     }
 
     /**
@@ -95,7 +95,7 @@ class ChangeQuoteControlTest extends TestCase
         $this->userContextMock->expects($this->any())->method('getUserId')
             ->willReturn($currentCustomerId);
 
-        $this->assertEquals(false, $this->model->isAllowed($this->quoteMock));
+        $this->assertFalse($this->model->isAllowed($this->quoteMock));
     }
 
     /**
@@ -108,7 +108,7 @@ class ChangeQuoteControlTest extends TestCase
             ->willReturn($quoteCustomerId);
         $this->userContextMock->expects($this->any())->method('getUserType')
             ->willReturn(UserContextInterface::USER_TYPE_GUEST);
-        $this->assertEquals(true, $this->model->isAllowed($this->quoteMock));
+        $this->assertTrue($this->model->isAllowed($this->quoteMock));
     }
 
     /**
@@ -121,7 +121,7 @@ class ChangeQuoteControlTest extends TestCase
             ->willReturn($quoteCustomerId);
         $this->userContextMock->expects($this->any())->method('getUserType')
             ->willReturn(UserContextInterface::USER_TYPE_GUEST);
-        $this->assertEquals(false, $this->model->isAllowed($this->quoteMock));
+        $this->assertFalse($this->model->isAllowed($this->quoteMock));
     }
 
     /**
@@ -131,7 +131,7 @@ class ChangeQuoteControlTest extends TestCase
     {
         $this->userContextMock->expects($this->any())->method('getUserType')
             ->willReturn(UserContextInterface::USER_TYPE_ADMIN);
-        $this->assertEquals(true, $this->model->isAllowed($this->quoteMock));
+        $this->assertTrue($this->model->isAllowed($this->quoteMock));
     }
 
     /**
@@ -141,6 +141,6 @@ class ChangeQuoteControlTest extends TestCase
     {
         $this->userContextMock->expects($this->any())->method('getUserType')
             ->willReturn(UserContextInterface::USER_TYPE_INTEGRATION);
-        $this->assertEquals(true, $this->model->isAllowed($this->quoteMock));
+        $this->assertTrue($this->model->isAllowed($this->quoteMock));
     }
 }

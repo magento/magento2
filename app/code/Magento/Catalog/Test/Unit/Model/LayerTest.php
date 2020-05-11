@@ -189,7 +189,7 @@ class LayerTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->categoryRepository = $this->createMock(CategoryRepositoryInterface::class);
+        $this->categoryRepository = $this->getMockForAbstractClass(CategoryRepositoryInterface::class);
         $this->currentCategory = $this->createPartialMock(
             Category::class,
             ['getId']

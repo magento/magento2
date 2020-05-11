@@ -79,7 +79,7 @@ class ExtensionAttributesProcessorTest extends TestCase
             ->getMock();
         $this->authorizationMock = $this->getMockBuilder(AuthorizationInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->model = $objectManager->getObject(
             ExtensionAttributesProcessor::class,

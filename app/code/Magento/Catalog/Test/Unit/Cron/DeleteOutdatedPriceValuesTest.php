@@ -72,8 +72,8 @@ class DeleteOutdatedPriceValuesTest extends TestCase
         $this->attributeRepositoryMock = $this->createMock(AttributeRepository::class);
         $this->attributeMock = $this->createMock(Attribute::class);
         $this->scopeConfigMock = $this->createMock(ScopeConfig::class);
-        $this->dbAdapterMock = $this->createMock(AdapterInterface::class);
-        $this->attributeBackendMock = $this->createMock(BackendInterface::class);
+        $this->dbAdapterMock = $this->getMockForAbstractClass(AdapterInterface::class);
+        $this->attributeBackendMock = $this->getMockForAbstractClass(BackendInterface::class);
         $this->deleteOutdatedPriceValues = new DeleteOutdatedPriceValues(
             $this->resourceConnectionMock,
             $this->attributeRepositoryMock,

@@ -28,7 +28,7 @@ class ContentValidatorTest extends TestCase
     {
         $this->validator = new ContentValidator();
 
-        $this->fileContentMock = $this->createMock(ContentInterface::class);
+        $this->fileContentMock = $this->getMockForAbstractClass(ContentInterface::class);
     }
 
     public function testIsValid()

@@ -87,7 +87,7 @@ class FileRecorderTest extends TestCase
 
         $this->fileInfoMock = $this->createMock(FileInfo::class);
 
-        $this->directoryMock = $this->createMock(WriteInterface::class);
+        $this->directoryMock = $this->getMockForAbstractClass(WriteInterface::class);
 
         $this->encodedContextMock = $this->createMock(EncodedContext::class);
 

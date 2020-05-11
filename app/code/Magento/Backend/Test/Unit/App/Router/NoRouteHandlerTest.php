@@ -39,7 +39,7 @@ class NoRouteHandlerTest extends TestCase
     protected function setUp(): void
     {
         $this->_requestMock = $this->createMock(Http::class);
-        $this->_routeConfigMock = $this->createMock(ConfigInterface::class);
+        $this->_routeConfigMock = $this->getMockForAbstractClass(ConfigInterface::class);
         $this->_helperMock = $this->createMock(Data::class);
         $this->_helperMock->expects($this->any())->method('getAreaFrontName')->willReturn('backend');
         $this->_model = new NoRouteHandler($this->_helperMock, $this->_routeConfigMock);
@@ -91,7 +91,7 @@ class NoRouteHandlerTest extends TestCase
             $this->_requestMock
         );
 
-        $this->assertEquals(true, $this->_model->process($this->_requestMock));
+        $this->assertTrue($this->_model->process($this->_requestMock));
     }
 
     /**
@@ -113,6 +113,6 @@ class NoRouteHandlerTest extends TestCase
 
         $this->_requestMock->expects($this->never())->method('setActionName');
 
-        $this->assertEquals(false, $this->_model->process($this->_requestMock));
+        $this->assertFalse($this->_model->process($this->_requestMock));
     }
 }

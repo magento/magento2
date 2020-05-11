@@ -86,7 +86,7 @@ class InvoiceTest extends TestCase
             ->willReturn($this->directoryMock);
 
         $this->databaseMock = $this->createMock(Database::class);
-        $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
+        $this->scopeConfigMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
         $this->addressRendererMock = $this->createMock(Renderer::class);
         $this->paymentDataMock = $this->createMock(Data::class);
 
@@ -176,7 +176,7 @@ class InvoiceTest extends TestCase
         $orderMock->expects($this->any())
             ->method('getIsVirtual')
             ->willReturn(true);
-        $infoMock = $this->createMock(InfoInterface::class);
+        $infoMock = $this->getMockForAbstractClass(InfoInterface::class);
         $orderMock->expects($this->any())
             ->method('getPayment')
             ->willReturn($infoMock);

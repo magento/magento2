@@ -64,9 +64,9 @@ class ValidatorResultMergerTest extends TestCase
      */
     public function testMerge()
     {
-        $validatorResultMock = $this->createMock(ValidatorResultInterface::class);
-        $orderValidationResultMock = $this->createMock(ValidatorResultInterface::class);
-        $creditmemoValidationResultMock = $this->createMock(ValidatorResultInterface::class);
+        $validatorResultMock = $this->getMockForAbstractClass(ValidatorResultInterface::class);
+        $orderValidationResultMock = $this->getMockForAbstractClass(ValidatorResultInterface::class);
+        $creditmemoValidationResultMock = $this->getMockForAbstractClass(ValidatorResultInterface::class);
         $itemsValidationMessages = [['test04', 'test05'], ['test06']];
         $this->validatorResultFactoryMock->expects($this->once())->method('create')
             ->willReturn($validatorResultMock);

@@ -50,14 +50,14 @@ class ConfigTest extends TestCase
 
     public function testExtendWithCacheMock()
     {
-        $definitions = $this->createMock(DefinitionInterface::class);
+        $definitions = $this->getMockForAbstractClass(DefinitionInterface::class);
         $definitions->expects($this->once())->method('getClasses')->willReturn(['FooType']);
 
-        $cache = $this->createMock(ConfigCacheInterface::class);
+        $cache = $this->getMockForAbstractClass(ConfigCacheInterface::class);
         $cache->expects($this->once())->method('get')->willReturn(false);
 
         $config = new Config(null, $definitions);
-        $serializerMock = $this->createMock(SerializerInterface::class);
+        $serializerMock = $this->getMockForAbstractClass(SerializerInterface::class);
         $serializerMock->expects($this->exactly(2))
             ->method('serialize');
         $this->objectManagerHelper->setBackwardCompatibleProperty(

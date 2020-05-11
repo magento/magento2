@@ -27,7 +27,7 @@ class NewsletterTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->urlBuilder = $this->createMock(UrlInterface::class);
+        $this->urlBuilder = $this->getMockForAbstractClass(UrlInterface::class);
         $helper = new ObjectManager($this);
         $this->block = $helper->getObject(
             Newsletter::class,

@@ -34,7 +34,7 @@ class TableDataTest extends TestCase
     protected function setUp(): void
     {
         $this->_objectManager = new ObjectManager($this);
-        $this->_connectionMock = $this->createMock(AdapterInterface::class);
+        $this->_connectionMock = $this->getMockForAbstractClass(AdapterInterface::class);
         $this->_resourceMock = $this->createMock(ResourceConnection::class);
     }
 

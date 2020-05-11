@@ -81,8 +81,8 @@ class RequestValidatorTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $objectManager = new ObjectManager($this);
-        $this->storeMock = $this->createMock(StoreInterface::class);
-        $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
+        $this->storeMock = $this->getMockForAbstractClass(StoreInterface::class);
+        $this->storeManagerMock = $this->getMockForAbstractClass(StoreManagerInterface::class);
         $this->storeManagerMock->expects($this->any())->method('getStore')->willReturn($this->storeMock);
 
         $this->requestValidator =

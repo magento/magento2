@@ -53,11 +53,11 @@ class DwstreeTest extends TestCase
     {
         $this->requestMock = $this->getMockBuilder(RequestInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->storeManagerMock = $this->getMockBuilder(StoreManagerInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->websiteMock = $this->getMockBuilder(Website::class)
             ->disableOriginalConstructor()

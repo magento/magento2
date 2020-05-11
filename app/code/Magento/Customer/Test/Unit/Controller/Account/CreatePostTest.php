@@ -169,7 +169,7 @@ class CreatePostTest extends TestCase
          */
         $this->markTestSkipped('Cannot be unit tested with the auto generated builder dependencies');
         $this->customerSessionMock = $this->createMock(Session::class);
-        $this->redirectMock = $this->createMock(RedirectInterface::class);
+        $this->redirectMock = $this->getMockForAbstractClass(RedirectInterface::class);
         $this->responseMock = $this->createMock(Response::class);
         $this->requestMock = $this->createMock(Http::class);
 
@@ -179,20 +179,20 @@ class CreatePostTest extends TestCase
             ->method('create')
             ->willReturn($this->urlMock);
 
-        $this->customerMock = $this->createMock(CustomerInterface::class);
-        $this->customerDetailsMock = $this->createMock(CustomerInterface::class);
+        $this->customerMock = $this->getMockForAbstractClass(CustomerInterface::class);
+        $this->customerDetailsMock = $this->getMockForAbstractClass(CustomerInterface::class);
         $this->customerDetailsFactoryMock = $this->createMock(
             CustomerInterfaceFactory::class
         );
 
         $this->messageManagerMock = $this->createMock(Manager::class);
-        $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
+        $this->scopeConfigMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
 
         $this->storeManagerMock = $this->createMock(StoreManager::class);
         $this->storeMock = $this->createMock(Store::class);
 
-        $this->customerRepository = $this->createMock(CustomerRepositoryInterface::class);
-        $this->accountManagement = $this->createMock(AccountManagementInterface::class);
+        $this->customerRepository = $this->getMockForAbstractClass(CustomerRepositoryInterface::class);
+        $this->accountManagement = $this->getMockForAbstractClass(AccountManagementInterface::class);
         $this->addressHelperMock = $this->createMock(Address::class);
         $formFactoryMock = $this->createMock(FormFactory::class);
 
@@ -213,7 +213,7 @@ class CreatePostTest extends TestCase
         $this->customerExtractorMock = $this->createMock(CustomerExtractor::class);
         $this->dataObjectHelperMock = $this->createMock(DataObjectHelper::class);
 
-        $eventManagerMock = $this->createMock(ManagerInterface::class);
+        $eventManagerMock = $this->getMockForAbstractClass(ManagerInterface::class);
 
         $this->resultRedirectFactoryMock = $this->getMockBuilder(
             RedirectFactory::class

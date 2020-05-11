@@ -32,7 +32,7 @@ class AbstractHelperTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->_adapterMock = $this->createMock(AdapterInterface::class);
+        $this->_adapterMock = $this->getMockForAbstractClass(AdapterInterface::class);
 
         $this->_resourceMock = $this->createMock(ResourceConnection::class);
         $this->_resourceMock->expects($this->any())

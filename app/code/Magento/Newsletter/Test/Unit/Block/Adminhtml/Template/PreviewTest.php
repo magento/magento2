@@ -52,9 +52,9 @@ class PreviewTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->requestMock = $this->createMock(RequestInterface::class);
+        $this->requestMock = $this->getMockForAbstractClass(RequestInterface::class);
         $this->appStateMock = $this->createMock(State::class);
-        $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
+        $this->storeManagerMock = $this->getMockForAbstractClass(StoreManagerInterface::class);
         $this->templateMock = $this->getMockBuilder(Template::class)
             ->addMethods(['setTemplateType', 'setTemplateText', 'setTemplateStyles'])
             ->onlyMethods(['isPlain', 'emulateDesign', 'revertDesign', 'getProcessedTemplate', 'load'])

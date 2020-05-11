@@ -49,8 +49,8 @@ class EncryptedTest extends TestCase
             ->onlyMethods(['getConnection', 'beginTransaction', 'commit', 'addCommitCallback'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
-        $this->_configMock = $this->createMock(ScopeConfigInterface::class);
-        $this->_encryptorMock = $this->createMock(EncryptorInterface::class);
+        $this->_configMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
+        $this->_encryptorMock = $this->getMockForAbstractClass(EncryptorInterface::class);
         $this->_model = $helper->getObject(
             Encrypted::class,
             [

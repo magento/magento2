@@ -35,7 +35,7 @@ class BuilderTest extends TestCase
         $request->expects($this->exactly(3))->method('getFullActionName')->willReturn($fullActionName);
 
         /** @var ProcessorInterface|MockObject $processor */
-        $processor = $this->createMock(ProcessorInterface::class);
+        $processor = $this->getMockForAbstractClass(ProcessorInterface::class);
         $processor->expects($this->once())->method('load');
 
         /** @var Layout|MockObject */
@@ -49,7 +49,7 @@ class BuilderTest extends TestCase
 
         $data = ['full_action_name' => $fullActionName, 'layout' => $layout];
         /** @var ManagerInterface|MockObject $eventManager */
-        $eventManager = $this->createMock(ManagerInterface::class);
+        $eventManager = $this->getMockForAbstractClass(ManagerInterface::class);
         $eventManager->expects($this->at(0))->method('dispatch')->with('layout_load_before', $data);
         $eventManager->expects($this->at(1))->method('dispatch')->with('layout_generate_blocks_before', $data);
         $eventManager->expects($this->at(2))->method('dispatch')->with('layout_generate_blocks_after', $data);

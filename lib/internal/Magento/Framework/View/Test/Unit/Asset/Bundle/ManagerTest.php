@@ -53,7 +53,7 @@ class ManagerTest extends TestCase
             ->getMock();
         $this->bundleConfig = $this->getMockBuilder(ConfigInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->assetConfig = $this->getMockBuilder(\Magento\Framework\View\Asset\ConfigInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -94,7 +94,7 @@ class ManagerTest extends TestCase
     {
         $dirRead = $this->getMockBuilder(ReadInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $context = $this->getMockBuilder(FallbackContext::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -137,7 +137,7 @@ class ManagerTest extends TestCase
     {
         $dirRead = $this->getMockBuilder(ReadInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $context = $this->getMockBuilder(FallbackContext::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -189,7 +189,7 @@ class ManagerTest extends TestCase
     {
         $dirRead = $this->getMockBuilder(ReadInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $context = $this->getMockBuilder(FallbackContext::class)
             ->disableOriginalConstructor()
             ->getMock();

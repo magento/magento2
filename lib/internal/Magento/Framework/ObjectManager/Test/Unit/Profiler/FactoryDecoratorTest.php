@@ -44,7 +44,7 @@ class FactoryDecoratorTest extends TestCase
 
         $this->objectManagerMock = $this->getMockBuilder(FactoryInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         // Instantiate SUT
         $this->model = $objectManager->getObject(

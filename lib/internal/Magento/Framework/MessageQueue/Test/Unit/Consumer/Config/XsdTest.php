@@ -46,7 +46,7 @@ class XsdTest extends TestCase
      */
     public function testExemplarXml($fixtureXml, array $expectedErrors)
     {
-        $validationState = $this->createMock(ValidationStateInterface::class);
+        $validationState = $this->getMockForAbstractClass(ValidationStateInterface::class);
         $validationState->expects($this->atLeastOnce())
             ->method('isValidationRequired')
             ->willReturn(true);
@@ -151,7 +151,7 @@ class XsdTest extends TestCase
      */
     public function testExemplarQueueXml($fixtureXml, array $expectedErrors)
     {
-        $validationState = $this->createMock(ValidationStateInterface::class);
+        $validationState = $this->getMockForAbstractClass(ValidationStateInterface::class);
         $validationState->expects($this->atLeastOnce())
             ->method('isValidationRequired')
             ->willReturn(true);

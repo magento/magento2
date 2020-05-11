@@ -85,7 +85,7 @@ class NewWidgetTest extends TestCase
         $this->layout = $this->createMock(Layout::class);
         $this->requestMock = $this->getMockBuilder(RequestInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->context = $this->getMockBuilder(ProductBlockContext::class)
             ->setMethods(

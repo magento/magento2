@@ -41,8 +41,8 @@ class AbstractActionTest extends TestCase
     {
         $this->request = $this->getMockBuilder(RequestInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
-        $this->response = $this->createMock(ResponseInterface::class);
+            ->getMockForAbstractClass();
+        $this->response = $this->getMockForAbstractClass(ResponseInterface::class);
 
         $this->redirect = $this->getMockBuilder(Redirect::class)
             ->setMethods(['setRefererOrBaseUrl'])

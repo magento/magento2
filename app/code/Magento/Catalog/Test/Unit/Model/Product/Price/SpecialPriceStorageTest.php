@@ -68,13 +68,13 @@ class SpecialPriceStorageTest extends TestCase
     {
         $this->specialPriceResource = $this->getMockBuilder(SpecialPriceInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['get', 'update', 'delete', 'getEntityLinkField'])->getMock();
+            ->setMethods(['get', 'update', 'delete', 'getEntityLinkField'])->getMockForAbstractClass();
         $this->productIdLocator = $this->getMockBuilder(ProductIdLocatorInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->storeRepository = $this->getMockBuilder(StoreRepositoryInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->invalidSkuProcessor = $this
             ->getMockBuilder(InvalidSkuProcessor::class)
             ->disableOriginalConstructor()

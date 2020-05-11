@@ -205,8 +205,8 @@ class DataTest extends TestCase
             Data::class,
             ['context' => $context]
         );
-        $context->getRequest()->expects($this->once())->method('getParam')->with('context')->will(
-            $this->returnValue('checkout')
+        $context->getRequest()->expects($this->once())->method('getParam')->with('context')->willReturn(
+            'checkout'
         );
         $this->assertTrue($helper->isContextCheckout());
     }
@@ -238,7 +238,7 @@ class DataTest extends TestCase
         $rowTotal = 15;
         $roundPrice = 17;
         $expected = 17;
-        $storeManager = $this->createMock(StoreManagerInterface::class);
+        $storeManager = $this->getMockForAbstractClass(StoreManagerInterface::class);
         $objectManagerHelper = new ObjectManager($this);
         $helper = $objectManagerHelper->getObject(
             Data::class,
@@ -303,7 +303,7 @@ class DataTest extends TestCase
 
     public function testGetBasePriceInclTaxWithoutQty()
     {
-        $storeManager = $this->createMock(StoreManagerInterface::class);
+        $storeManager = $this->getMockForAbstractClass(StoreManagerInterface::class);
         $objectManagerHelper = new ObjectManager($this);
         $helper = $objectManagerHelper->getObject(
             Data::class,
@@ -323,7 +323,7 @@ class DataTest extends TestCase
 
     public function testGetBasePriceInclTax()
     {
-        $storeManager = $this->createMock(StoreManagerInterface::class);
+        $storeManager = $this->getMockForAbstractClass(StoreManagerInterface::class);
         $objectManagerHelper = new ObjectManager($this);
         $helper = $objectManagerHelper->getObject(
             Data::class,

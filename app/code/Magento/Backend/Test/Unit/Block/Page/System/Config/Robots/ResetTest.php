@@ -34,7 +34,7 @@ class ResetTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->configMock = $this->createMock(ScopeConfigInterface::class);
+        $this->configMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
 
         $objectHelper = new ObjectManager($this);
         $context = $objectHelper->getObject(

@@ -56,7 +56,7 @@ class CopyTest extends TestCase
     protected function setUp(): void
     {
         $this->fieldsetConfigMock = $this->createMock(Config::class);
-        $this->eventManagerMock = $this->createMock(ManagerInterface::class);
+        $this->eventManagerMock = $this->getMockForAbstractClass(ManagerInterface::class);
         $this->sourceMock = $this->createMock(DataObject::class);
         $this->targetMock = $this->createMock(DataObject::class);
         $this->extensionAttributesFactoryMock =
@@ -71,8 +71,7 @@ class CopyTest extends TestCase
     public function testCopyFieldsetToTargetWhenFieldsetInputInvalid()
     {
         $this->fieldsetConfigMock->expects($this->never())->method('getFieldset');
-        $this->assertEquals(
-            null,
+        $this->assertNull(
             $this->copy->copyFieldsetToTarget('fieldset', 'aspect', [], 'target')
         );
     }
@@ -192,10 +191,10 @@ class CopyTest extends TestCase
 
         $sourceMock = $this->getMockBuilder(ExtensibleDataInterface::class)
             ->addMethods(['getExtensionAttributes', 'getCode'])
-            ->getMock();
+            ->getMockForAbstractClass();
         $targetMock = $this->getMockBuilder(ExtensibleDataInterface::class)
             ->addMethods(['getExtensionAttributes', 'setCode', 'setExtensionAttributes'])
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $sourceMock
             ->expects($this->any())

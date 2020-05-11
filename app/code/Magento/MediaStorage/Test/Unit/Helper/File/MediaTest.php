@@ -36,7 +36,7 @@ class MediaTest extends TestCase
         $this->objectManager = new ObjectManager($this);
         $this->dirMock = $this->getMockBuilder(ReadInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $filesystemMock = $this->getMockBuilder(Filesystem::class)
             ->disableOriginalConstructor()
             ->getMock();

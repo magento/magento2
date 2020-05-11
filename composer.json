@@ -65,7 +65,7 @@
         "laminas/laminas-uri": "^2.5.1",
         "laminas/laminas-validator": "^2.6.0",
         "laminas/laminas-view": "~2.11.2",
-        "magento/composer": "MC-33066-dev",
+        "magento/composer": "1.6.x-dev",
         "magento/magento-composer-installer": ">=0.1.11",
         "magento/zendframework1": "~1.14.2",
         "monolog/monolog": "^1.17",
@@ -89,7 +89,7 @@
         "friendsofphp/php-cs-fixer": "~2.16.0",
         "lusitanian/oauth": "~0.8.10",
         "magento/magento-coding-standard": "*",
-        "magento/magento2-functional-testing-framework": "dev-MQE-2045",
+        "magento/magento2-functional-testing-framework": "dev-3.0.0-RC2",
         "pdepend/pdepend": "~2.7.1",
         "phpcompatibility/php-compatibility": "^9.3",
         "phpmd/phpmd": "^2.8.0",
@@ -193,6 +193,13 @@
         "magento/module-instant-purchase": "*",
         "magento/module-integration": "*",
         "magento/module-layered-navigation": "*",
+        "magento/module-login-as-customer": "*",
+        "magento/module-login-as-customer-api": "*",
+        "magento/module-login-as-customer-log": "*",
+        "magento/module-login-as-customer-page-cache": "*",
+        "magento/module-login-as-customer-sales": "*",
+        "magento/module-login-as-customer-ui": "*",
+        "magento/module-login-as-customer-webapi": "*",
         "magento/module-media-content": "*",
         "magento/module-media-content-api": "*",
         "magento/module-media-content-catalog": "*",
@@ -349,11 +356,5 @@
             "Magento\\PhpStan\\": "dev/tests/static/framework/Magento/PhpStan/"
         }
     },
-    "repositories": [
-        {
-            "type": "vcs",
-            "url": "git@github.com:magento-trigger/composer.git"
-        }
-    ],
     "prefer-stable": true
 }

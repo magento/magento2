@@ -97,9 +97,9 @@ class NotifyStockTest extends TestCase
             $this->createMock(Collection::class);
         $this->product->expects($this->once())->method('getCollection')->willReturn($productCollection);
 
-        $productCollection->expects($this->once())->method('addAttributeToSelect')->will($this->returnSelf());
-        $productCollection->expects($this->once())->method('addAttributeToFilter')->will($this->returnSelf());
-        $productCollection->expects($this->once())->method('setOrder')->will($this->returnSelf());
+        $productCollection->expects($this->once())->method('addAttributeToSelect')->willReturnSelf();
+        $productCollection->expects($this->once())->method('addAttributeToFilter')->willReturnSelf();
+        $productCollection->expects($this->once())->method('setOrder')->willReturnSelf();
 
         $this->eventManager->expects($this->once())->method('dispatch')->with(
             'rss_catalog_notify_stock_collection_select'

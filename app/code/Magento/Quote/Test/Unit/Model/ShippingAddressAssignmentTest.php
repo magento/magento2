@@ -70,7 +70,7 @@ class ShippingAddressAssignmentTest extends TestCase
             ->addMethods(['setShippingAssignments'])
             ->getMock();
 
-        $this->shippingAssignmentMock = $this->createMock(ShippingAssignmentInterface::class);
+        $this->shippingAssignmentMock = $this->getMockForAbstractClass(ShippingAssignmentInterface::class);
         //shipping assignment processing
         $this->quoteMock->expects($this->once())->method('getExtensionAttributes')->willReturn(null);
         $this->cartExtensionFactoryMock
@@ -96,7 +96,7 @@ class ShippingAddressAssignmentTest extends TestCase
     public function testSetAddressUseForShippingTrue()
     {
         $addressId = 1;
-        $addressMock = $this->createMock(AddressInterface::class);
+        $addressMock = $this->getMockForAbstractClass(AddressInterface::class);
         $this->quoteMock->expects($this->once())->method('getShippingAddress')->willReturn($addressMock);
         $addressMock->expects($this->once())->method('getId')->willReturn($addressId);
         $this->addressMock->expects($this->once())->method('setSameAsBilling')->with(1);
@@ -107,7 +107,7 @@ class ShippingAddressAssignmentTest extends TestCase
 
     public function testSetAddressUseForShippingFalse()
     {
-        $addressMock = $this->createMock(AddressInterface::class);
+        $addressMock = $this->getMockForAbstractClass(AddressInterface::class);
         $this->quoteMock->expects($this->once())->method('getShippingAddress')->willReturn($addressMock);
         $addressMock->expects($this->once())->method('setSameAsBilling')->with(0)->willReturnSelf();
         $this->quoteMock->expects($this->once())->method('setShippingAddress')->with($addressMock);

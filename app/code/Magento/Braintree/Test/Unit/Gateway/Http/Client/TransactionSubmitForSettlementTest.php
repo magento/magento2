@@ -106,7 +106,7 @@ class TransactionSubmitForSettlementTest extends TestCase
      */
     private function getTransferObjectMock()
     {
-        $mock = $this->createMock(TransferInterface::class);
+        $mock = $this->getMockForAbstractClass(TransferInterface::class);
         $mock->expects($this->once())
             ->method('getBody')
             ->willReturn([

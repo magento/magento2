@@ -76,7 +76,7 @@ class FormTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $localeResolver = $this->createMock(ResolverInterface::class);
+        $localeResolver = $this->getMockForAbstractClass(ResolverInterface::class);
 
         $helper = new ObjectManager($this);
         $this->_model = $helper->getObject(

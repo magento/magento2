@@ -79,7 +79,7 @@ class PersonalInfoTest extends TestCase
      */
     protected function setUp(): void
     {
-        $customer = $this->createMock(CustomerInterface::class);
+        $customer = $this->getMockForAbstractClass(CustomerInterface::class);
         $customer->expects($this->any())->method('getId')->willReturn(1);
         $customer->expects($this->any())->method('getStoreId')->willReturn(1);
 

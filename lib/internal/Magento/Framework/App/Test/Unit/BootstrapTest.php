@@ -84,13 +84,13 @@ class BootstrapTest extends TestCase
     protected function setUp(): void
     {
         $this->objectManagerFactory = $this->createMock(ObjectManagerFactory::class);
-        $this->objectManager = $this->createMock(ObjectManagerInterface::class);
+        $this->objectManager = $this->getMockForAbstractClass(ObjectManagerInterface::class);
         $this->dirs = $this->createPartialMock(DirectoryList::class, ['getPath']);
         $this->maintenanceMode = $this->createPartialMock(MaintenanceMode::class, ['isOn']);
         $this->remoteAddress = $this->createMock(RemoteAddress::class);
         $filesystem = $this->createMock(Filesystem::class);
 
-        $this->logger = $this->createMock(LoggerInterface::class);
+        $this->logger = $this->getMockForAbstractClass(LoggerInterface::class);
 
         $this->deploymentConfig = $this->createMock(DeploymentConfig::class);
 

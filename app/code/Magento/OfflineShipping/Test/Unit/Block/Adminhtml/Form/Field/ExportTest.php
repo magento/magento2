@@ -26,7 +26,7 @@ class ExportTest extends TestCase
 
     protected function setUp(): void
     {
-        $backendUrl = $this->createMock(UrlInterface::class);
+        $backendUrl = $this->getMockForAbstractClass(UrlInterface::class);
         $backendUrl->expects($this->once())->method('getUrl')->with("*/*/exportTablerates", ['website' => 1]);
 
         $objectManager = new ObjectManager($this);
@@ -49,7 +49,7 @@ class ExportTest extends TestCase
 
         $blockMock = $this->createMock(Button::class);
 
-        $requestMock = $this->createMock(RequestInterface::class);
+        $requestMock = $this->getMockForAbstractClass(RequestInterface::class);
         $requestMock->expects($this->once())->method('getParam')->with('website')->willReturn(1);
 
         $mockData = $this->getMockBuilder(\stdClass::class)->addMethods(['toHtml'])

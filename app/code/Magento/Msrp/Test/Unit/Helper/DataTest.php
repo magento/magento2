@@ -45,7 +45,7 @@ class DataTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->priceCurrencyMock = $this->createMock(PriceCurrencyInterface::class);
+        $this->priceCurrencyMock = $this->getMockForAbstractClass(PriceCurrencyInterface::class);
         $this->productMock = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
             ->setMethods(['getMsrp', 'getPriceInfo', '__wakeup'])

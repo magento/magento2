@@ -106,8 +106,8 @@ class ShippingMethodManagementTest extends TestCase
     protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
-        $this->quoteRepository = $this->createMock(CartRepositoryInterface::class);
-        $this->addressRepository = $this->createMock(AddressRepositoryInterface::class);
+        $this->quoteRepository = $this->getMockForAbstractClass(CartRepositoryInterface::class);
+        $this->addressRepository = $this->getMockForAbstractClass(AddressRepositoryInterface::class);
 
         $this->methodDataFactoryMock = $this->getMockBuilder(ShippingMethodInterfaceFactory::class)
             ->disableOriginalConstructor()
@@ -233,7 +233,7 @@ class ShippingMethodManagementTest extends TestCase
             ->with('one_two')
             ->willReturn($shippingRateMock);
 
-        $this->shippingMethodMock = $this->createMock(ShippingMethodInterface::class);
+        $this->shippingMethodMock = $this->getMockForAbstractClass(ShippingMethodInterface::class);
         $this->converter->expects($this->once())
             ->method('modelToDataObject')
             ->with($shippingRateMock, $currencyCode)

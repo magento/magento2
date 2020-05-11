@@ -95,17 +95,17 @@ class AdminTokenServiceTest extends TestCase
         $this->_tokenModelCollectionMock->expects($this->once())
             ->method('addFilterByAdminId')
             ->with($adminId)
-            ->will($this->returnValue($this->_tokenModelCollectionMock));
+            ->willReturn($this->_tokenModelCollectionMock);
         $this->_tokenModelCollectionMock->expects($this->any())
             ->method('getSize')
-            ->will($this->returnValue(1));
+            ->willReturn(1);
         $this->_tokenModelCollectionMock->expects($this->once())
             ->method('getIterator')
-            ->will($this->returnValue(new \ArrayIterator([$this->_tokenMock])));
+            ->willReturn(new \ArrayIterator([$this->_tokenMock]));
         $this->_tokenModelCollectionMock->expects($this->any())
             ->method('_fetchAll')
             ->with(null)
-            ->will($this->returnValue(1));
+            ->willReturn(1);
         $this->_tokenMock->expects($this->once())
             ->method('delete')
             ->willReturn($this->_tokenMock);
@@ -118,7 +118,7 @@ class AdminTokenServiceTest extends TestCase
         $this->_tokenModelCollectionMock->expects($this->once())
             ->method('addFilterByAdminId')
             ->with(null)
-            ->will($this->returnValue($this->_tokenModelCollectionMock));
+            ->willReturn($this->_tokenModelCollectionMock);
         $this->_tokenMock->expects($this->never())
             ->method('delete')
             ->willReturn($this->_tokenMock);
@@ -134,13 +134,13 @@ class AdminTokenServiceTest extends TestCase
         $this->_tokenModelCollectionMock->expects($this->once())
             ->method('addFilterByAdminId')
             ->with($adminId)
-            ->will($this->returnValue($this->_tokenModelCollectionMock));
+            ->willReturn($this->_tokenModelCollectionMock);
         $this->_tokenModelCollectionMock->expects($this->once())
             ->method('getSize')
-            ->will($this->returnValue(1));
+            ->willReturn(1);
         $this->_tokenModelCollectionMock->expects($this->once())
             ->method('getIterator')
-            ->will($this->returnValue(new \ArrayIterator([$this->_tokenMock])));
+            ->willReturn(new \ArrayIterator([$this->_tokenMock]));
 
         $this->_tokenMock->expects($this->once())
             ->method('delete')

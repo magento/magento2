@@ -43,7 +43,7 @@ class ColumnFactoryTest extends TestCase
     /** @var ColumnFactory */
     protected $columnFactory;
 
-    protected function setUp():void
+    protected function setUp(): void
     {
         $this->context = $this->getMockForAbstractClass(
             ContextInterface::class,

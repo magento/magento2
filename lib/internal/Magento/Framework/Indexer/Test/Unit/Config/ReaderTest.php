@@ -40,7 +40,7 @@ class ReaderTest extends TestCase
         $this->_fileResolverMock = $this->createPartialMock(FileResolver::class, ['get']);
 
         $this->_converter = $this->createPartialMock(Converter::class, ['convert']);
-        $validationState = $this->createMock(ValidationStateInterface::class);
+        $validationState = $this->getMockForAbstractClass(ValidationStateInterface::class);
         $validationState->expects($this->any())
             ->method('isValidationRequired')
             ->willReturn(false);

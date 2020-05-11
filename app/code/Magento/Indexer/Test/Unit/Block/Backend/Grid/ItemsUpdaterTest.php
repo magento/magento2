@@ -23,7 +23,7 @@ class ItemsUpdaterTest extends TestCase
 
         $auth = $this->getMockBuilder(AuthorizationInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $auth->expects($this->once())
             ->method('isAllowed')
             ->with('Magento_Indexer::changeMode')

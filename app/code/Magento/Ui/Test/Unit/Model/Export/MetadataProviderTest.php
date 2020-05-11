@@ -61,11 +61,11 @@ class MetadataProviderTest extends TestCase
 
         $this->localeDate = $this->getMockBuilder(TimezoneInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->localeResolver = $this->getMockBuilder(ResolverInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->localeResolver->expects($this->any())
             ->method('getLocale')

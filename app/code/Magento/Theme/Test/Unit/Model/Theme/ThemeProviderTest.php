@@ -62,7 +62,7 @@ class ThemeProviderTest extends TestCase
         $this->themeFactory = $this->createPartialMock(\Magento\Theme\Model\ThemeFactory::class, ['create']);
         $this->cache = $this->getMockBuilder(CacheInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->serializer = $this->createMock(Json::class);
         $this->themeProvider = $this->objectManager->getObject(
             ThemeProvider::class,
@@ -106,7 +106,7 @@ class ThemeProviderTest extends TestCase
             ->method('isDbAvailable')
             ->willReturn(true);
 
-        $objectManagerMock = $this->createMock(ObjectManagerInterface::class);
+        $objectManagerMock = $this->getMockForAbstractClass(ObjectManagerInterface::class);
         $objectManagerMock->expects($this->any())
             ->method('get')
             ->willReturnMap([
@@ -135,7 +135,7 @@ class ThemeProviderTest extends TestCase
             ->method('isDbAvailable')
             ->willReturn(true);
 
-        $objectManagerMock = $this->createMock(ObjectManagerInterface::class);
+        $objectManagerMock = $this->getMockForAbstractClass(ObjectManagerInterface::class);
         $objectManagerMock->expects($this->any())
             ->method('get')
             ->willReturnMap([

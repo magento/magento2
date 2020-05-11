@@ -208,7 +208,7 @@ class AdvancedPricingTest extends TestCase
         $this->storeResolver = $this->createMock(
             StoreResolver::class
         );
-        $this->groupRepository = $this->createMock(GroupRepositoryInterface::class);
+        $this->groupRepository = $this->getMockForAbstractClass(GroupRepositoryInterface::class);
         $this->writer = $this->createPartialMock(
             AbstractAdapter::class,
             [

@@ -93,7 +93,7 @@ class ReportTest extends TestCase
         $this->varDirectory->expects($this->any())->method('getRelativePath')->willReturn('path');
         $this->varDirectory->expects($this->any())->method('readFile')->willReturn('contents');
         $this->varDirectory->expects($this->any())->method('isFile')->willReturn(true);
-        $this->varDirectory->expects($this->any())->method('stat')->willReturn(100);
+        $this->varDirectory->expects($this->any())->method('stat')->willReturn(false);
         $this->filesystem->expects($this->any())->method('getDirectoryWrite')->willReturn($this->varDirectory);
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->report = $this->objectManagerHelper->getObject(
@@ -131,10 +131,10 @@ class ReportTest extends TestCase
      */
     public function testGetSummaryStats()
     {
-        $logger = $this->createMock(LoggerInterface::class);
+        $logger = $this->getMockForAbstractClass(LoggerInterface::class);
         $filesystem = $this->createMock(Filesystem::class);
         $importExportData = $this->createMock(Data::class);
-        $coreConfig = $this->createMock(ScopeConfigInterface::class);
+        $coreConfig = $this->getMockForAbstractClass(ScopeConfigInterface::class);
         $importConfig = $this->createPartialMock(Config::class, ['getEntities']);
         $importConfig->expects($this->any())
             ->method('getEntities')

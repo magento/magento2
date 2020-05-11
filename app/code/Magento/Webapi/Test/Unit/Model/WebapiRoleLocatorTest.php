@@ -113,7 +113,7 @@ class WebapiRoleLocatorTest extends TestCase
     {
         $this->role->expects($this->once())
             ->method('getId')
-            ->will($this->returnValue(null));
+            ->willReturn(null);
 
         $this->assertEquals('', $this->locator->getAclRoleId());
     }
@@ -124,7 +124,7 @@ class WebapiRoleLocatorTest extends TestCase
 
         $this->role->expects($this->exactly(2))
             ->method('getId')
-            ->will($this->returnValue($roleId));
+            ->willReturn($roleId);
 
         $this->assertEquals($roleId, $this->locator->getAclRoleId());
     }

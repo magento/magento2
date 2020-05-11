@@ -67,11 +67,11 @@ class AbstractCollectionTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->entityFactoryMock = $this->createMock(EntityFactoryInterface::class);
-        $this->loggerMock = $this->createMock(LoggerInterface::class);
+        $this->entityFactoryMock = $this->getMockForAbstractClass(EntityFactoryInterface::class);
+        $this->loggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
         $this->fetchStrategyMock =
-            $this->createMock(FetchStrategyInterface::class);
-        $this->managerMock = $this->createMock(ManagerInterface::class);
+            $this->getMockForAbstractClass(FetchStrategyInterface::class);
+        $this->managerMock = $this->getMockForAbstractClass(ManagerInterface::class);
         $this->connectionMock = $this->createMock(Mysql::class);
         $renderer = $this->createMock(SelectRenderer::class);
         $this->resourceMock = $this->createMock(FlagResource::class);
@@ -103,7 +103,7 @@ class AbstractCollectionTest extends TestCase
     {
         parent::tearDown();
         /** @var ObjectManagerInterface|MockObject $objectManagerMock*/
-        $objectManagerMock = $this->createMock(ObjectManagerInterface::class);
+        $objectManagerMock = $this->getMockForAbstractClass(ObjectManagerInterface::class);
         \Magento\Framework\App\ObjectManager::setInstance($objectManagerMock);
     }
 
@@ -141,7 +141,7 @@ class AbstractCollectionTest extends TestCase
         $this->uut = $this->getUut();
 
         $this->assertInstanceOf(Uut::class, $this->uut->setMainTable(''));
-        $this->assertEquals(null, $this->uut->getMainTable());
+        $this->assertNull($this->uut->getMainTable());
     }
 
     public function testSetMainTableFirst()

@@ -136,7 +136,7 @@ class ConfigurableTest extends TestCase
 
         $this->priceCurrency = $this->getMockBuilder(PriceCurrencyInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $appState = $this->getMockBuilder(State::class)
             ->disableOriginalConstructor()
@@ -149,7 +149,7 @@ class ConfigurableTest extends TestCase
             ->willReturn('frontend');
         $urlBuilder = $this->getMockBuilder(UrlInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->context->expects($this->once())
             ->method('getUrlBuilder')
             ->willReturn($urlBuilder);

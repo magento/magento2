@@ -38,9 +38,9 @@ class CompositeTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->objectManagerMock = $this->createMock(ObjectManagerInterface::class);
+        $this->objectManagerMock = $this->getMockForAbstractClass(ObjectManagerInterface::class);
         $this->productMock = $this->createMock(Product::class);
-        $this->priceModifierMock = $this->createMock(PriceModifierInterface::class);
+        $this->priceModifierMock = $this->getMockForAbstractClass(PriceModifierInterface::class);
     }
 
     public function testModifyPriceIfModifierExists()

@@ -51,10 +51,10 @@ class ScopedTest extends TestCase
     protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
-        $this->_readerMock = $this->createMock(ReaderInterface::class);
-        $this->_configScopeMock = $this->createMock(ScopeInterface::class);
-        $this->_cacheMock = $this->createMock(CacheInterface::class);
-        $this->serializerMock = $this->createMock(SerializerInterface::class);
+        $this->_readerMock = $this->getMockForAbstractClass(ReaderInterface::class);
+        $this->_configScopeMock = $this->getMockForAbstractClass(ScopeInterface::class);
+        $this->_cacheMock = $this->getMockForAbstractClass(CacheInterface::class);
+        $this->serializerMock = $this->getMockForAbstractClass(SerializerInterface::class);
 
         $this->_model = $this->objectManager->getObject(
             Scoped::class,

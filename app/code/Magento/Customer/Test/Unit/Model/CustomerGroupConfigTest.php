@@ -50,7 +50,7 @@ class CustomerGroupConfigTest extends TestCase
             ->getMock();
         $this->groupRepositoryMock = $this->getMockBuilder(GroupRepositoryInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->customerGroupConfig = $this->objectManagerHelper->getObject(
@@ -71,7 +71,7 @@ class CustomerGroupConfigTest extends TestCase
 
         $customerGroupMock = $this->getMockBuilder(GroupInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->groupRepositoryMock->expects($this->once())->method('getById')->willReturn($customerGroupMock);
         $this->configMock->expects($this->once())->method('setDataByPath')
             ->with(GroupManagement::XML_PATH_DEFAULT_ID, $customerGroupId)->willReturnSelf();

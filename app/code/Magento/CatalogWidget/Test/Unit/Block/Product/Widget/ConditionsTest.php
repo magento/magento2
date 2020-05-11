@@ -204,16 +204,16 @@ class ConditionsTest extends TestCase
             ->addMethods(['getContainer'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
-        $eventManagerMock = $this->createMock(ManagerInterface::class);
-        $scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
+        $eventManagerMock = $this->getMockForAbstractClass(ManagerInterface::class);
+        $scopeConfigMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
         $fieldsetMock = $this->createMock(Fieldset::class);
         $combineMock = $this->createMock(Combine::class);
         $resolverMock = $this->createMock(Resolver::class);
         $filesystemMock = $this->createPartialMock(Filesystem::class, ['getDirectoryRead']);
         $validatorMock = $this->createMock(Validator::class);
         $templateEnginePoolMock = $this->createMock(TemplateEnginePool::class);
-        $templateEngineMock = $this->createMock(TemplateEngineInterface::class);
-        $directoryReadMock = $this->createMock(ReadInterface::class);
+        $templateEngineMock = $this->getMockForAbstractClass(TemplateEngineInterface::class);
+        $directoryReadMock = $this->getMockForAbstractClass(ReadInterface::class);
 
         $this->ruleMock->expects($this->once())->method('getConditions')->willReturn($combineMock);
         $combineMock->expects($this->once())->method('setJsFormObject')->willReturnSelf();

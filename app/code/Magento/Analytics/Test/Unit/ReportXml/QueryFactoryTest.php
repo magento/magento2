@@ -99,11 +99,11 @@ class QueryFactoryTest extends TestCase
 
         $this->selectMock = $this->createMock(Select::class);
 
-        $this->assemblerMock = $this->createMock(AssemblerInterface::class);
+        $this->assemblerMock = $this->getMockForAbstractClass(AssemblerInterface::class);
 
-        $this->queryCacheMock = $this->createMock(CacheInterface::class);
+        $this->queryCacheMock = $this->getMockForAbstractClass(CacheInterface::class);
 
-        $this->objectManagerMock = $this->createMock(ObjectManagerInterface::class);
+        $this->objectManagerMock = $this->getMockForAbstractClass(ObjectManagerInterface::class);
 
         $this->selectHydratorMock = $this->createMock(SelectHydrator::class);
 

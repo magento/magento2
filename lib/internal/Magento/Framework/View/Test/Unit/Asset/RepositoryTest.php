@@ -101,11 +101,11 @@ class RepositoryTest extends TestCase
         );
         $this->urlMock = $this->getMockBuilder(UrlInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->designMock = $this->getMockBuilder(DesignInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
-        $this->themeProvider = $this->createMock(ThemeProviderInterface::class);
+            ->getMockForAbstractClass();
+        $this->themeProvider = $this->getMockForAbstractClass(ThemeProviderInterface::class);
         $this->sourceMock = $this->getMockBuilder(Source::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -315,7 +315,7 @@ class RepositoryTest extends TestCase
      */
     public function testGetStaticViewFileContext()
     {
-        $themeMock = $this->createMock(ThemeInterface::class);
+        $themeMock = $this->getMockForAbstractClass(ThemeInterface::class);
         $this->designMock
             ->expects($this->any())
             ->method('getDesignParams')
@@ -368,7 +368,7 @@ class RepositoryTest extends TestCase
     {
         $originalContextMock = $this->getMockBuilder(ContextInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $originalAssetMock = $this->getMockBuilder(File::class)
             ->disableOriginalConstructor()
@@ -421,7 +421,7 @@ class RepositoryTest extends TestCase
     {
         $contextMock = $this->getMockBuilder(ContextInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->contextFactoryMock
             ->expects($this->once())
@@ -464,7 +464,7 @@ class RepositoryTest extends TestCase
      */
     public function testGetUrl()
     {
-        $themeMock = $this->createMock(ThemeInterface::class);
+        $themeMock = $this->getMockForAbstractClass(ThemeInterface::class);
         $this->designMock
             ->expects($this->any())
             ->method('getDesignParams')
@@ -524,7 +524,7 @@ class RepositoryTest extends TestCase
     private function getThemeMock()
     {
         if (null === $this->themeMock) {
-            $this->themeMock = $this->createMock(ThemeInterface::class);
+            $this->themeMock = $this->getMockForAbstractClass(ThemeInterface::class);
         }
 
         return $this->themeMock;

@@ -127,7 +127,7 @@ class NewActionTest extends TestCase
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();
-        $this->objectManager = $this->createMock(ObjectManagerInterface::class);
+        $this->objectManager = $this->getMockForAbstractClass(ObjectManagerInterface::class);
         $this->context = $this->createPartialMock(Context::class, [
             'getRequest', 'getResponse', 'getMessageManager', 'getRedirect', 'getObjectManager',
             'getSession', 'getActionFlag', 'getHelper', 'getView'
@@ -135,7 +135,7 @@ class NewActionTest extends TestCase
         $this->response = $this->getMockBuilder(ResponseInterface::class)
             ->addMethods(['setRedirect'])
             ->onlyMethods(['sendResponse'])
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->request = $this->getMockBuilder(Http::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -153,7 +153,7 @@ class NewActionTest extends TestCase
             ->getMockForAbstractClass();
         $this->actionFlag = $this->createPartialMock(ActionFlag::class, ['get']);
         $this->helper = $this->createPartialMock(Data::class, ['getUrl']);
-        $this->view = $this->createMock(ViewInterface::class);
+        $this->view = $this->getMockForAbstractClass(ViewInterface::class);
         $this->resultPageMock = $this->getMockBuilder(Page::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -249,11 +249,11 @@ class NewActionTest extends TestCase
         $this->pageConfigMock->expects($this->any())
             ->method('getTitle')
             ->willReturn($this->pageTitleMock);
-        $layout = $this->createMock(LayoutInterface::class);
+        $layout = $this->getMockForAbstractClass(LayoutInterface::class);
         $menuBlock = $this->getMockBuilder(BlockInterface::class)
             ->addMethods(['setActive', 'getMenuModel'])
             ->onlyMethods(['toHtml'])
-            ->getMock();
+            ->getMockForAbstractClass();
         $menuModel = $this->getMockBuilder(Menu::class)
             ->disableOriginalConstructor()
             ->getMock();

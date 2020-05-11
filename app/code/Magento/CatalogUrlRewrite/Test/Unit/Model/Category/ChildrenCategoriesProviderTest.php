@@ -47,7 +47,7 @@ class ChildrenCategoriesProviderTest extends TestCase
         $this->select = $this->getMockBuilder(Select::class)
             ->disableOriginalConstructor()
             ->setMethods(['from', 'where', 'deleteFromSelect'])->getMock();
-        $this->connection = $this->createMock(AdapterInterface::class);
+        $this->connection = $this->getMockForAbstractClass(AdapterInterface::class);
         $categoryResource = $this->getMockBuilder(\Magento\Catalog\Model\ResourceModel\Category::class)
             ->disableOriginalConstructor()
             ->getMock();

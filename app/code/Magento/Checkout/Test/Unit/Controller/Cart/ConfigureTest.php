@@ -81,10 +81,10 @@ class ConfigureTest extends TestCase
     protected function setUp(): void
     {
         $this->contextMock = $this->createMock(Context::class);
-        $this->objectManagerMock = $this->createMock(ObjectManagerInterface::class);
-        $this->responseMock = $this->createMock(ResponseInterface::class);
-        $this->requestMock = $this->createMock(RequestInterface::class);
-        $this->messageManagerMock = $this->createMock(ManagerInterface::class);
+        $this->objectManagerMock = $this->getMockForAbstractClass(ObjectManagerInterface::class);
+        $this->responseMock = $this->getMockForAbstractClass(ResponseInterface::class);
+        $this->requestMock = $this->getMockForAbstractClass(RequestInterface::class);
+        $this->messageManagerMock = $this->getMockForAbstractClass(ManagerInterface::class);
         $this->cartMock = $this->getMockBuilder(Cart::class)
             ->disableOriginalConstructor()
             ->getMock();

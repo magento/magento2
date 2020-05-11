@@ -78,7 +78,7 @@ class AttributeManagementTest extends TestCase
     protected function setUp(): void
     {
         $this->setRepositoryMock =
-            $this->createMock(AttributeSetRepositoryInterface::class);
+            $this->getMockForAbstractClass(AttributeSetRepositoryInterface::class);
         $this->attributeCollectionMock =
             $this->createMock(Collection::class);
         $this->eavConfigMock =
@@ -86,9 +86,9 @@ class AttributeManagementTest extends TestCase
         $this->entityTypeFactoryMock =
             $this->createPartialMock(ConfigFactory::class, ['create']);
         $this->groupRepositoryMock =
-            $this->createMock(AttributeGroupRepositoryInterface::class);
+            $this->getMockForAbstractClass(AttributeGroupRepositoryInterface::class);
         $this->attributeRepositoryMock =
-            $this->createMock(AttributeRepositoryInterface::class);
+            $this->getMockForAbstractClass(AttributeRepositoryInterface::class);
         $this->attributeResourceMock =
             $this->createMock(Attribute::class);
         $this->attributeCollectionFactoryMock = $this->getMockBuilder(CollectionFactory::class)
@@ -142,7 +142,7 @@ class AttributeManagementTest extends TestCase
         $attributeGroupId = 3;
         $attributeCode = 4;
         $sortOrder = 5;
-        $attributeSetMock = $this->createMock(AttributeSetInterface::class);
+        $attributeSetMock = $this->getMockForAbstractClass(AttributeSetInterface::class);
         $this->setRepositoryMock->expects($this->once())
             ->method('get')
             ->with($attributeSetId)
@@ -171,7 +171,7 @@ class AttributeManagementTest extends TestCase
         $attributeGroupId = 3;
         $attributeCode = 4;
         $sortOrder = 5;
-        $attributeSetMock = $this->createMock(AttributeSetInterface::class);
+        $attributeSetMock = $this->getMockForAbstractClass(AttributeSetInterface::class);
         $this->setRepositoryMock->expects($this->once())
             ->method('get')
             ->with($attributeSetId)
@@ -206,7 +206,7 @@ class AttributeManagementTest extends TestCase
         $attributeGroupId = 3;
         $attributeCode = 4;
         $sortOrder = 5;
-        $attributeSetMock = $this->createMock(AttributeSetInterface::class);
+        $attributeSetMock = $this->getMockForAbstractClass(AttributeSetInterface::class);
         $this->setRepositoryMock->expects($this->once())
             ->method('get')
             ->with($attributeSetId)
@@ -260,7 +260,7 @@ class AttributeManagementTest extends TestCase
         $attributeSetId = 1;
         $attributeCode = 'code';
 
-        $attributeSetMock = $this->createMock(AttributeSetInterface::class);
+        $attributeSetMock = $this->getMockForAbstractClass(AttributeSetInterface::class);
         $this->setRepositoryMock->expects($this->once())
             ->method('get')
             ->with($attributeSetId)
@@ -297,7 +297,7 @@ class AttributeManagementTest extends TestCase
         $attributeSetId = 1;
         $attributeCode = 'code';
 
-        $attributeSetMock = $this->createMock(AttributeSetInterface::class);
+        $attributeSetMock = $this->getMockForAbstractClass(AttributeSetInterface::class);
         $this->setRepositoryMock->expects($this->once())
             ->method('get')
             ->with($attributeSetId)
@@ -354,7 +354,7 @@ class AttributeManagementTest extends TestCase
         $attributeSetId = 1;
         $attributeCode = 'code';
 
-        $attributeSetMock = $this->createMock(AttributeSetInterface::class);
+        $attributeSetMock = $this->getMockForAbstractClass(AttributeSetInterface::class);
         $this->setRepositoryMock->expects($this->once())
             ->method('get')
             ->with($attributeSetId)
@@ -405,7 +405,7 @@ class AttributeManagementTest extends TestCase
             $attributeCollectionFactoryMock
         );
 
-        $attributeSetMock = $this->createMock(AttributeSetInterface::class);
+        $attributeSetMock = $this->getMockForAbstractClass(AttributeSetInterface::class);
         $this->setRepositoryMock->expects($this->once())
             ->method('get')
             ->with($attributeSetId)
@@ -436,7 +436,7 @@ class AttributeManagementTest extends TestCase
         $entityType = 'type';
         $attributeSetId = 148;
 
-        $attributeSetMock = $this->createMock(AttributeSetInterface::class);
+        $attributeSetMock = $this->getMockForAbstractClass(AttributeSetInterface::class);
         $this->setRepositoryMock->expects($this->once())
             ->method('get')
             ->with($attributeSetId)

@@ -51,9 +51,9 @@ class LinkTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->urlBuilderInterface = $this->createMock(UrlBuilderInterface::class);
-        $this->scopeConfigInterface = $this->createMock(ScopeConfigInterface::class);
-        $this->storeManagerInterface = $this->createMock(StoreManagerInterface::class);
+        $this->urlBuilderInterface = $this->getMockForAbstractClass(UrlBuilderInterface::class);
+        $this->scopeConfigInterface = $this->getMockForAbstractClass(ScopeConfigInterface::class);
+        $this->storeManagerInterface = $this->getMockForAbstractClass(StoreManagerInterface::class);
         $this->registry = $this->createMock(Registry::class);
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);

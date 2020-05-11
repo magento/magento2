@@ -52,8 +52,8 @@ class BulkSummaryMapperTest extends TestCase
     {
         $this->metadataPoolMock = $this->createMock(MetadataPool::class);
         $this->resourceConnectionMock = $this->createMock(ResourceConnection::class);
-        $this->entityMetadataMock = $this->createMock(EntityMetadataInterface::class);
-        $this->connectionMock = $this->createMock(AdapterInterface::class);
+        $this->entityMetadataMock = $this->getMockForAbstractClass(EntityMetadataInterface::class);
+        $this->connectionMock = $this->getMockForAbstractClass(AdapterInterface::class);
         $this->selectMock = $this->createMock(Select::class);
         $this->model = new BulkSummaryMapper(
             $this->metadataPoolMock,

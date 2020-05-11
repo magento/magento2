@@ -54,7 +54,7 @@ class GuestCouponManagementTest extends TestCase
     protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
-        $this->couponManagementMock = $this->createMock(CouponManagementInterface::class);
+        $this->couponManagementMock = $this->getMockForAbstractClass(CouponManagementInterface::class);
 
         $this->couponCode = 'test_coupon_code';
         $this->maskedCartId = 'f216207248d65c789b17be8545e0aa73';

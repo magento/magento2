@@ -56,11 +56,11 @@ class CustomerQuoteObserverTest extends TestCase
     {
         $this->storeManagerMock = $this->getMockBuilder(StoreManagerInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->configMock = $this->getMockBuilder(Share::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->quoteRepositoryMock = $this->createMock(CartRepositoryInterface::class);
+        $this->quoteRepositoryMock = $this->getMockForAbstractClass(CartRepositoryInterface::class);
         $this->observerMock = $this->getMockBuilder(Observer::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -84,13 +84,13 @@ class CustomerQuoteObserverTest extends TestCase
     {
         $customerDataObjectMock = $this->getMockBuilder(CustomerInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $customerDataObjectMock->expects($this->any())
             ->method('getGroupId')
             ->willReturn(1);
         $origCustomerDataObjectMock = $this->getMockBuilder(CustomerInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $origCustomerDataObjectMock->expects($this->any())
             ->method('getGroupId')
             ->willReturn(1);
@@ -119,7 +119,7 @@ class CustomerQuoteObserverTest extends TestCase
             ->willReturn($isWebsiteScope);
         $customerDataObjectMock = $this->getMockBuilder(CustomerInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $customerDataObjectMock->expects($this->any())
             ->method('getGroupId')
             ->willReturn(1);

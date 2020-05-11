@@ -81,7 +81,7 @@ class VariationHandlerTest extends TestCase
             SetFactory::class,
             ['create']
         );
-        $this->stockConfiguration = $this->createMock(StockConfigurationInterface::class);
+        $this->stockConfiguration = $this->getMockForAbstractClass(StockConfigurationInterface::class);
         $this->configurableProduct = $this->createMock(
             Configurable::class
         );

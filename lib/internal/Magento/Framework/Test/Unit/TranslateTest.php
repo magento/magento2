@@ -87,14 +87,14 @@ class TranslateTest extends TestCase
     protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
-        $this->viewDesign = $this->createMock(DesignInterface::class);
-        $this->cache = $this->createMock(FrontendInterface::class);
+        $this->viewDesign = $this->getMockForAbstractClass(DesignInterface::class);
+        $this->cache = $this->getMockForAbstractClass(FrontendInterface::class);
         $this->viewFileSystem = $this->createMock(FilesystemView::class);
         $this->moduleList = $this->createMock(ModuleList::class);
         $this->modulesReader = $this->createMock(Reader::class);
-        $this->scopeResolver = $this->createMock(ScopeResolverInterface::class);
-        $this->resource = $this->createMock(ResourceInterface::class);
-        $this->locale = $this->createMock(ResolverInterface::class);
+        $this->scopeResolver = $this->getMockForAbstractClass(ScopeResolverInterface::class);
+        $this->resource = $this->getMockForAbstractClass(ResourceInterface::class);
+        $this->locale = $this->getMockForAbstractClass(ResolverInterface::class);
         $this->appState = $this->createMock(State::class);
         $this->request = $this->getMockForAbstractClass(
             RequestInterface::class,
@@ -107,10 +107,10 @@ class TranslateTest extends TestCase
         );
         $this->csvParser = $this->createMock(Csv::class);
         $this->packDictionary = $this->createMock(Dictionary::class);
-        $this->directory = $this->createMock(ReadInterface::class);
+        $this->directory = $this->getMockForAbstractClass(ReadInterface::class);
         $filesystem = $this->createMock(Filesystem::class);
         $filesystem->expects($this->once())->method('getDirectoryRead')->willReturn($this->directory);
-        $this->fileDriver = $this->createMock(DriverInterface::class);
+        $this->fileDriver = $this->getMockForAbstractClass(DriverInterface::class);
 
         $this->translate = new Translate(
             $this->viewDesign,
@@ -129,7 +129,7 @@ class TranslateTest extends TestCase
             $this->fileDriver
         );
 
-        $serializerMock = $this->createMock(SerializerInterface::class);
+        $serializerMock = $this->getMockForAbstractClass(SerializerInterface::class);
         $serializerMock->method('serialize')
             ->willReturnCallback(function ($data) {
                 return json_encode($data);

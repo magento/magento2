@@ -56,9 +56,9 @@ class FrontendActionsFlushTest extends TestCase
 
     public function testExecute()
     {
-        $connectionMock = $this->createMock(AdapterInterface::class);
+        $connectionMock = $this->getMockForAbstractClass(AdapterInterface::class);
         $selectMock = $this->createMock(Select::class);
-        $frontendConfiguration = $this->createMock(FrontendStorageConfigurationInterface::class);
+        $frontendConfiguration = $this->getMockForAbstractClass(FrontendStorageConfigurationInterface::class);
 
         $selectMock
             ->expects($this->once())

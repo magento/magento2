@@ -130,7 +130,7 @@ class CarrierTest extends TestCase
 
         $this->productMetadataMock = $this->getMockBuilder(ProductMetadataInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->productMetadataMock->method('getName')
             ->willReturn('Software_Product_Name_30_Char_123456789');
         $this->productMetadataMock->method('getVersion')

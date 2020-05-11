@@ -56,8 +56,8 @@ class TransactionWrapperTest extends TestCase
     protected function setUp(): void
     {
         $this->resourceMock = $this->createMock(Customer::class);
-        $this->subjectMock = $this->createMock(CustomerRepositoryInterface::class);
-        $this->customerMock = $this->createMock(CustomerInterface::class);
+        $this->subjectMock = $this->getMockForAbstractClass(CustomerRepositoryInterface::class);
+        $this->customerMock = $this->getMockForAbstractClass(CustomerInterface::class);
         $customerMock = $this->customerMock;
         $this->closureMock = function () use ($customerMock) {
             return $customerMock;

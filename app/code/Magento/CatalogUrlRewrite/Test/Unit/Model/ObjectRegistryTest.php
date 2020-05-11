@@ -37,7 +37,7 @@ class ObjectRegistryTest extends TestCase
 
     public function testGetNotExistObject()
     {
-        $this->assertEquals(null, $this->objectRegistry->get('no-id'));
+        $this->assertNull($this->objectRegistry->get('no-id'));
     }
 
     public function testGetList()

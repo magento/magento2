@@ -75,9 +75,9 @@ class TierPriceTest extends TestCase
 
         $this->calculator = $this->createMock(Calculator::class);
         $this->groupManagement = $this
-            ->createMock(GroupManagementInterface::class);
+            ->getMockForAbstractClass(GroupManagementInterface::class);
 
-        $this->priceCurrencyMock = $this->createMock(PriceCurrencyInterface::class);
+        $this->priceCurrencyMock = $this->getMockForAbstractClass(PriceCurrencyInterface::class);
 
         $objectHelper = new ObjectManager($this);
         $this->model = $objectHelper->getObject(
@@ -99,7 +99,7 @@ class TierPriceTest extends TestCase
     {
         $this->product->setData(TierPrice::PRICE_CODE, $tierPrices);
 
-        $price = $this->createMock(PriceInterface::class);
+        $price = $this->getMockForAbstractClass(PriceInterface::class);
         $price->expects($this->any())
             ->method('getValue')
             ->willReturn($basePrice);
@@ -205,7 +205,7 @@ class TierPriceTest extends TestCase
             ->method('getValue')
             ->willReturn($baseAmount);
 
-        $price = $this->createMock(PriceInterface::class);
+        $price = $this->getMockForAbstractClass(PriceInterface::class);
         $price->expects($this->any())
             ->method('getAmount')
             ->willReturn($priceAmount);

@@ -40,7 +40,7 @@ class FrontendPoolTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->_objectManager = $this->createMock(ObjectManagerInterface::class);
+        $this->_objectManager = $this->getMockForAbstractClass(ObjectManagerInterface::class);
         $this->deploymentConfig = $this->createMock(DeploymentConfig::class);
         $this->_cachePool = $this->createMock(Pool::class);
         $this->_model = new FrontendPool(
@@ -70,7 +70,7 @@ class FrontendPoolTest extends TestCase
             $fixtureConfigData
         );
 
-        $cacheFrontend = $this->createMock(FrontendInterface::class);
+        $cacheFrontend = $this->getMockForAbstractClass(FrontendInterface::class);
         $this->_cachePool->expects(
             $this->once()
         )->method(

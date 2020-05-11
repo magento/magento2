@@ -46,7 +46,7 @@ class DomTest extends TestCase
             [['true', true], ['false', false]]
         );
 
-        $this->argumentInterpreter = $this->createMock(InterpreterInterface::class);
+        $this->argumentInterpreter = $this->getMockForAbstractClass(InterpreterInterface::class);
         $this->argumentInterpreter->expects(
             $this->any()
         )->method(

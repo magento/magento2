@@ -61,7 +61,7 @@ class RenderLayeredTest extends TestCase
     protected function setUp(): void
     {
         $this->contextMock = $this->createMock(Context::class);
-        $this->requestMock = $this->createMock(RequestInterface::class);
+        $this->requestMock = $this->getMockForAbstractClass(RequestInterface::class);
         $this->urlBuilder = $this->createPartialMock(
             Url::class,
             ['getCurrentUrl', 'getRedirectUrl', 'getUrl']

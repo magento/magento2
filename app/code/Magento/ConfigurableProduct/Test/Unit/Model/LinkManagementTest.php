@@ -66,7 +66,7 @@ class LinkManagementTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->productRepository = $this->createMock(ProductRepositoryInterface::class);
+        $this->productRepository = $this->getMockForAbstractClass(ProductRepositoryInterface::class);
         $this->objectManagerHelper = new ObjectManager($this);
         $this->productFactory = $this->createPartialMock(
             ProductInterfaceFactory::class,
@@ -121,14 +121,14 @@ class LinkManagementTest extends TestCase
             ->method('get')->with($productId)
             ->willReturn($product);
 
-        $attribute = $this->createMock(AttributeInterface::class);
+        $attribute = $this->getMockForAbstractClass(AttributeInterface::class);
         $attribute->expects($this->once())->method('getAttributeCode')->willReturn('code');
         $childProduct->expects($this->once())->method('getDataUsingMethod')->with('code')->willReturn(false);
         $childProduct->expects($this->once())->method('getData')->with('code')->willReturn(10);
         $childProduct->expects($this->once())->method('getStoreId')->willReturn(1);
         $childProduct->expects($this->once())->method('getAttributes')->willReturn([$attribute]);
 
-        $productMock = $this->createMock(ProductInterface::class);
+        $productMock = $this->getMockForAbstractClass(ProductInterface::class);
 
         $this->dataObjectHelperMock->expects($this->once())
             ->method('populateWithArray')
@@ -335,7 +335,7 @@ class LinkManagementTest extends TestCase
         $productSku = 'configurable';
         $childSku = 'simple_10';
 
-        $product = $this->createMock(ProductInterface::class);
+        $product = $this->getMockForAbstractClass(ProductInterface::class);
 
         $product->expects($this->any())
             ->method('getTypeId')

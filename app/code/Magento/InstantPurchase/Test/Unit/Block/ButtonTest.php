@@ -54,8 +54,8 @@ class ButtonTest extends TestCase
     protected function setUp(): void
     {
         $this->context = $this->createMock(Context::class);
-        $this->storeManager = $this->createMock(StoreManagerInterface::class);
-        $this->store = $this->createMock(StoreInterface::class);
+        $this->storeManager = $this->getMockForAbstractClass(StoreManagerInterface::class);
+        $this->store = $this->getMockForAbstractClass(StoreInterface::class);
 
         $this->storeManager->expects($this->any())->method('getStore')
             ->willReturn($this->store);

@@ -48,7 +48,7 @@ class CountryofmanufactureTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
+        $this->storeManagerMock = $this->getMockForAbstractClass(StoreManagerInterface::class);
         $this->storeMock = $this->createMock(Store::class);
         $this->cacheConfig = $this->createMock(Config::class);
         $this->objectManagerHelper = new ObjectManager($this);
@@ -60,7 +60,7 @@ class CountryofmanufactureTest extends TestCase
             ]
         );
 
-        $this->serializerMock = $this->createMock(SerializerInterface::class);
+        $this->serializerMock = $this->getMockForAbstractClass(SerializerInterface::class);
         $this->objectManagerHelper->setBackwardCompatibleProperty(
             $this->countryOfManufacture,
             'serializer',
@@ -78,12 +78,12 @@ class CountryofmanufactureTest extends TestCase
      */
     public function testGetAllOptions($cachedDataSrl, $cachedDataUnsrl)
     {
-        $this->storeMock->expects($this->once())->method('getCode')->will($this->returnValue('store_code'));
-        $this->storeManagerMock->expects($this->once())->method('getStore')->will($this->returnValue($this->storeMock));
+        $this->storeMock->expects($this->once())->method('getCode')->willReturn('store_code');
+        $this->storeManagerMock->expects($this->once())->method('getStore')->willReturn($this->storeMock);
         $this->cacheConfig->expects($this->once())
             ->method('load')
             ->with($this->equalTo('COUNTRYOFMANUFACTURE_SELECT_STORE_store_code'))
-            ->will($this->returnValue($cachedDataSrl));
+            ->willReturn($cachedDataSrl);
         $this->serializerMock->expects($this->once())
             ->method('unserialize')
             ->willReturn($cachedDataUnsrl);

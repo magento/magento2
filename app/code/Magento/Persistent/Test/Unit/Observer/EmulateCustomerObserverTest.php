@@ -72,7 +72,7 @@ class EmulateCustomerObserverTest extends TestCase
         $this->sessionHelperMock = $this->createMock(\Magento\Persistent\Helper\Session::class);
         $this->helperMock = $this->createMock(Data::class);
         $this->observerMock = $this->createMock(Observer::class);
-        $this->addressRepositoryMock = $this->createMock(AddressRepositoryInterface::class);
+        $this->addressRepositoryMock = $this->getMockForAbstractClass(AddressRepositoryInterface::class);
         $this->model = new EmulateCustomerObserver(
             $this->sessionHelperMock,
             $this->helperMock,
@@ -127,7 +127,7 @@ class EmulateCustomerObserverTest extends TestCase
             ->onlyMethods(['getRegion', 'getRegionId'])
             ->disableOriginalConstructor()
             ->getMock();
-        $customerMock = $this->createMock(CustomerInterface::class);
+        $customerMock = $this->getMockForAbstractClass(CustomerInterface::class);
         $customerMock
             ->expects($this->once())
             ->method('getDefaultShipping')

@@ -31,9 +31,9 @@ class DateTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->timezoneMock = $this->createMock(TimezoneInterface::class);
-        $loggerMock = $this->createMock(LoggerInterface::class);
-        $localeResolverMock = $this->createMock(ResolverInterface::class);
+        $this->timezoneMock = $this->getMockForAbstractClass(TimezoneInterface::class);
+        $loggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
+        $localeResolverMock = $this->getMockForAbstractClass(ResolverInterface::class);
 
         $this->model = new Date(
             $this->timezoneMock,

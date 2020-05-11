@@ -43,7 +43,7 @@ class ImageFactoryTest extends TestCase
     protected function setUp(): void
     {
         $this->viewConfig = $this->createMock(View::class);
-        $configInterface = $this->createMock(ConfigInterface::class);
+        $configInterface = $this->getMockForAbstractClass(ConfigInterface::class);
         $configInterface->method('getViewConfig')->willReturn($this->viewConfig);
         $this->viewAssetImageFactory = $this->createMock(ViewAssetImageFactory::class);
         $this->paramsBuilder = $this->createMock(ParamsBuilder::class);

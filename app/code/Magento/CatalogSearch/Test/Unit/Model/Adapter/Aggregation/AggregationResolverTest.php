@@ -83,7 +83,7 @@ class AggregationResolverTest extends TestCase
             ->getMock();
         $this->aggregationChecker = $this->getMockBuilder(RequestCheckerInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->aggregationResolver = (new ObjectManager($this))->getObject(
             AggregationResolver::class,

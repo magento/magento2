@@ -29,7 +29,7 @@ class FactoryTest extends TestCase
     {
         $helper = new ObjectManager($this);
 
-        $this->_objectManagerMock = $this->createMock(ObjectManagerInterface::class);
+        $this->_objectManagerMock = $this->getMockForAbstractClass(ObjectManagerInterface::class);
         $this->_factory = $helper->getObject(
             Factory::class,
             ['objectManager' => $this->_objectManagerMock]

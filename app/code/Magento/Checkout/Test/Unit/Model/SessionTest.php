@@ -69,7 +69,7 @@ class SessionTest extends TestCase
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
-        $quoteRepository = $this->createMock(CartRepositoryInterface::class);
+        $quoteRepository = $this->getMockForAbstractClass(CartRepositoryInterface::class);
 
         $appState = $this->getMockBuilder(State::class)
             ->addMethods(['isInstalled'])
@@ -404,10 +404,10 @@ class SessionTest extends TestCase
     {
         $storeManager = $this->getMockForAbstractClass(StoreManagerInterface::class);
         $customerSession = $this->createMock(\Magento\Customer\Model\Session::class);
-        $quoteRepository = $this->createMock(CartRepositoryInterface::class);
+        $quoteRepository = $this->getMockForAbstractClass(CartRepositoryInterface::class);
         $quoteFactory = $this->createMock(QuoteFactory::class);
         $quote = $this->createMock(Quote::class);
-        $logger = $this->createMock(LoggerInterface::class);
+        $logger = $this->getMockForAbstractClass(LoggerInterface::class);
         $loggerMethods = get_class_methods(LoggerInterface::class);
 
         $quoteFactory->expects($this->once())

@@ -52,12 +52,12 @@ class SearchTest extends TestCase
         $this->context = $this->getMockBuilder(Context::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->request = $this->createMock(RequestInterface::class);
+        $this->request = $this->getMockForAbstractClass(RequestInterface::class);
         $this->response = $this->getMockBuilder(ResponseInterface::class)
             ->addMethods(['setBody'])
             ->onlyMethods(['sendResponse'])
-            ->getMock();
-        $this->view = $this->createMock(ViewInterface::class);
+            ->getMockForAbstractClass();
+        $this->view = $this->getMockForAbstractClass(ViewInterface::class);
 
         $this->context->expects($this->any())
             ->method('getRequest')
@@ -79,7 +79,7 @@ class SearchTest extends TestCase
 
     public function testExecute()
     {
-        $layout = $this->createMock(LayoutInterface::class);
+        $layout = $this->getMockForAbstractClass(LayoutInterface::class);
         $block = $this->getMockBuilder(
             \Magento\Bundle\Block\Adminhtml\Catalog\Product\Edit\Tab\Bundle\Option\Search::class
         )->disableOriginalConstructor()

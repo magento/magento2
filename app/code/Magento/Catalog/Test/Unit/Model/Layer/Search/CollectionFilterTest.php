@@ -45,7 +45,7 @@ class CollectionFilterTest extends TestCase
         $this->visibilityMock = $this->createMock(Visibility::class);
         $this->catalogConfigMock = $this->createMock(Config::class);
 
-        $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
+        $this->storeManagerMock = $this->getMockForAbstractClass(StoreManagerInterface::class);
 
         $this->model = $objectManager->getObject(
             CollectionFilter::class,

@@ -41,7 +41,7 @@ class StateKeyTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
+        $this->storeManagerMock = $this->getMockForAbstractClass(StoreManagerInterface::class);
         $this->customerSessionMock = $this->createMock(Session::class);
         $this->queryFactoryMock = $this->createMock(QueryFactory::class);
 

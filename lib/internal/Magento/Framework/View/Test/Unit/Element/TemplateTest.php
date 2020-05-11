@@ -94,7 +94,7 @@ class TemplateTest extends TestCase
             ->onlyMethods(['get'])
             ->disableOriginalConstructor()
             ->getMock();
-        $this->loggerMock = $this->createMock(LoggerInterface::class);
+        $this->loggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
         $this->templateEngine->expects($this->any())->method('get')->willReturn($this->templateEngine);
 
         $this->appState = $this->createPartialMock(State::class, ['getAreaCode', 'getMode']);
@@ -107,7 +107,7 @@ class TemplateTest extends TestCase
         $storeMock->expects($this->any())
             ->method('getCode')
             ->willReturn('storeCode');
-        $urlBuilderMock = $this->createMock(UrlInterface::class);
+        $urlBuilderMock = $this->getMockForAbstractClass(UrlInterface::class);
         $urlBuilderMock->expects($this->any())
             ->method('getBaseUrl')
             ->willReturn('baseUrl');

@@ -185,7 +185,7 @@ class StockItemRepositoryTest extends TestCase
             ->getMock();
         $this->localeDateMock = $this->getMockBuilder(TimezoneInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->indexProcessorMock = $this->createPartialMock(
             Processor::class,
             ['reindexRow']

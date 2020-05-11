@@ -36,14 +36,14 @@ class DataTest extends TestCase
             'getValue'
         )->with(
             'admin/captcha/qwe'
-        )->will(
-            $this->returnValue('1')
+        )->willReturn(
+            '1'
         );
 
         $filesystemMock = $arguments['filesystem'];
         $directoryMock = $this->createMock(Write::class);
 
-        $filesystemMock->expects($this->any())->method('getDirectoryWrite')->will($this->returnValue($directoryMock));
+        $filesystemMock->expects($this->any())->method('getDirectoryWrite')->willReturn($directoryMock);
         $directoryMock->expects($this->any())->method('getAbsolutePath')->willReturnArgument(0);
 
         $this->_model = $objectManagerHelper->getObject($className, $arguments);

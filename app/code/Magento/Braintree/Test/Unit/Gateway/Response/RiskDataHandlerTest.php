@@ -58,7 +58,7 @@ class RiskDataHandlerTest extends TestCase
             ->setMethods(['setAdditionalInformation', 'setIsFraudDetected'])
             ->getMock();
         /** @var PaymentDataObjectInterface|MockObject $paymentDO */
-        $paymentDO = $this->createMock(PaymentDataObjectInterface::class);
+        $paymentDO = $this->getMockForAbstractClass(PaymentDataObjectInterface::class);
         $paymentDO->expects(self::once())
             ->method('getPayment')
             ->willReturn($payment);

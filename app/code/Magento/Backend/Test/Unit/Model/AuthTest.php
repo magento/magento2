@@ -40,7 +40,7 @@ class AuthTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->_eventManagerMock = $this->createMock(ManagerInterface::class);
+        $this->_eventManagerMock = $this->getMockForAbstractClass(ManagerInterface::class);
         $this->_credentialStorage = $this->getMockBuilder(
             StorageInterface::class
         )

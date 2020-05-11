@@ -49,7 +49,7 @@ class PaymentAdditionalInformationProviderTest extends TestCase
     protected function setUp(): void
     {
         $this->getPaymentNonceCommandMock = $this->createMock(GetPaymentNonceCommand::class);
-        $this->paymentTokenMock = $this->createMock(PaymentTokenInterface::class);
+        $this->paymentTokenMock = $this->getMockForAbstractClass(PaymentTokenInterface::class);
         $this->arrayResultMock = $this->createMock(ArrayResult::class);
         $this->paymentAdditionalInformationProvider = new PaymentAdditionalInformationProvider(
             $this->getPaymentNonceCommandMock

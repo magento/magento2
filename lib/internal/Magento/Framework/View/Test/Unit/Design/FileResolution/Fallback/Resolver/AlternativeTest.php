@@ -41,7 +41,7 @@ class AlternativeTest extends TestCase
         $readFactory->expects($this->any())
             ->method('create')
             ->willReturn($this->directory);
-        $this->rule = $this->createMock(RuleInterface::class);
+        $this->rule = $this->getMockForAbstractClass(RuleInterface::class);
         $rulePool = $this->createMock(RulePool::class);
         $rulePool->expects($this->any())
             ->method('getRule')

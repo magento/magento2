@@ -43,8 +43,8 @@ class LayoutTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->layout = $this->createMock(LayoutInterface::class);
-        $this->generalLayout = $this->createMock(LayoutInterface::class);
+        $this->layout = $this->getMockForAbstractClass(LayoutInterface::class);
+        $this->generalLayout = $this->getMockForAbstractClass(LayoutInterface::class);
 
         $isCacheable = false;
         $this->generalLayout->expects($this->once())
@@ -73,7 +73,7 @@ class LayoutTest extends TestCase
     {
         $handle = 'test_handle';
 
-        $layoutProcessor = $this->createMock(ProcessorInterface::class);
+        $layoutProcessor = $this->getMockForAbstractClass(ProcessorInterface::class);
         $layoutProcessor->expects($this->once())
             ->method('addHandle')
             ->with($handle);
@@ -86,7 +86,7 @@ class LayoutTest extends TestCase
 
     public function testLoadLayout()
     {
-        $layoutProcessor = $this->createMock(ProcessorInterface::class);
+        $layoutProcessor = $this->getMockForAbstractClass(ProcessorInterface::class);
         $layoutProcessor->expects($this->once())
             ->method('load');
         $this->layout->expects($this->once())
@@ -106,7 +106,7 @@ class LayoutTest extends TestCase
     {
         $blockName = 'block.name';
 
-        $block = $this->createMock(BlockInterface::class);
+        $block = $this->getMockForAbstractClass(BlockInterface::class);
 
         $this->layout->expects($this->once())
             ->method('getBlock')

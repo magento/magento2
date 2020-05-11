@@ -74,7 +74,7 @@ class ShippingMethodConverterTest extends TestCase
             ShippingMethodInterfaceFactory::class,
             ['create']
         );
-        $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
+        $this->storeManagerMock = $this->getMockForAbstractClass(StoreManagerInterface::class);
         $this->currencyMock = $this->createMock(Currency::class);
         $this->shippingMethodMock = $this->getMockBuilder(ShippingMethod::class)
             ->addMethods(['create'])

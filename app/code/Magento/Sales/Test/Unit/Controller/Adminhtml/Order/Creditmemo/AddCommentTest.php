@@ -115,7 +115,7 @@ class AddCommentTest extends TestCase
         $this->responseMock = $this->getMockBuilder(\Magento\Framework\App\Response\Http::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->objectManagerMock = $this->createMock(ObjectManagerInterface::class);
+        $this->objectManagerMock = $this->getMockForAbstractClass(ObjectManagerInterface::class);
         $this->contextMock = $this->getMockBuilder(Context::class)
             ->setMethods(['getRequest', 'getResponse', 'getObjectManager', 'getTitle'])
             ->disableOriginalConstructor()

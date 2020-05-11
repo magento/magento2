@@ -50,7 +50,7 @@ class NavigationTest extends TestCase
     {
         $this->catalogLayerMock = $this->createMock(Layer::class);
         $this->filterListMock = $this->createMock(FilterList::class);
-        $this->visibilityFlagMock = $this->createMock(AvailabilityFlagInterface::class);
+        $this->visibilityFlagMock = $this->getMockForAbstractClass(AvailabilityFlagInterface::class);
 
         /** @var MockObject|Resolver $layerResolver */
         $layerResolver = $this->getMockBuilder(Resolver::class)
@@ -70,7 +70,7 @@ class NavigationTest extends TestCase
                 'visibilityFlag' => $this->visibilityFlagMock
             ]
         );
-        $this->layoutMock = $this->createMock(LayoutInterface::class);
+        $this->layoutMock = $this->getMockForAbstractClass(LayoutInterface::class);
     }
 
     public function testGetStateHtml()

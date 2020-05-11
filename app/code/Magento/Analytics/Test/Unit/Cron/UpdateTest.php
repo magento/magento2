@@ -56,9 +56,9 @@ class UpdateTest extends TestCase
     protected function setUp(): void
     {
         $this->connectorMock =  $this->createMock(Connector::class);
-        $this->configWriterMock =  $this->createMock(WriterInterface::class);
+        $this->configWriterMock =  $this->getMockForAbstractClass(WriterInterface::class);
         $this->flagManagerMock =  $this->createMock(FlagManager::class);
-        $this->reinitableConfigMock = $this->createMock(ReinitableConfigInterface::class);
+        $this->reinitableConfigMock = $this->getMockForAbstractClass(ReinitableConfigInterface::class);
         $this->analyticsTokenMock = $this->createMock(AnalyticsToken::class);
 
         $this->update = new Update(

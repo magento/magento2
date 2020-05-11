@@ -102,10 +102,10 @@ class ConfigTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->scopeConfig = $this->createMock(ScopeConfigInterface::class);
+        $this->scopeConfig = $this->getMockForAbstractClass(ScopeConfigInterface::class);
         $this->paymentMethodFactory = $this->createMock(Factory::class);
-        $this->localeResolver = $this->createMock(ResolverInterface::class);
-        $this->dataStorage = $this->createMock(DataInterface::class);
+        $this->localeResolver = $this->getMockForAbstractClass(ResolverInterface::class);
+        $this->dataStorage = $this->getMockForAbstractClass(DataInterface::class);
         $this->date = $this->createMock(DateTime::class);
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
@@ -128,7 +128,7 @@ class ConfigTest extends TestCase
      */
     public function testGetActiveMethods($isActive)
     {
-        $adapter = $this->createMock(MethodInterface::class);
+        $adapter = $this->getMockForAbstractClass(MethodInterface::class);
         $this->scopeConfig->expects(static::once())
             ->method('getValue')
             ->with('payment', ScopeInterface::SCOPE_STORE, null)

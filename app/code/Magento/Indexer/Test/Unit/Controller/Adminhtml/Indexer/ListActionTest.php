@@ -102,7 +102,7 @@ class ListActionTest extends TestCase
         $response = $this->getMockBuilder(ResponseInterface::class)
             ->addMethods(['setRedirect'])
             ->onlyMethods(['sendResponse'])
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $request = $this->getMockForAbstractClass(
             RequestInterface::class,
@@ -127,7 +127,7 @@ class ListActionTest extends TestCase
                 'setIsLayoutLoaded',
                 'isLayoutLoaded'
             ])
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->block = $this->getMockBuilder(AbstractBlock::class)
             ->addMethods(['setActive', 'getMenuModel'])
@@ -174,27 +174,27 @@ class ListActionTest extends TestCase
     {
         $this->view->expects($this->any())
             ->method('loadLayout')
-            ->will($this->returnValue(1));
+            ->willReturn(1);
 
         $this->view->expects($this->any())
             ->method('getPage')
-            ->will($this->returnValue($this->page));
+            ->willReturn($this->page);
 
         $this->page->expects($this->any())
             ->method('getConfig')
-            ->will($this->returnValue($this->config));
+            ->willReturn($this->config);
 
         $this->config->expects($this->any())
             ->method('getTitle')
-            ->will($this->returnValue($this->title));
+            ->willReturn($this->title);
 
         $this->title->expects($this->any())
             ->method('prepend')->with(__('Index Management'))
-            ->will($this->returnValue(1));
+            ->willReturn(1);
 
         $this->view->expects($this->any())
             ->method('renderLayout')
-            ->will($this->returnValue(1));
+            ->willReturn(1);
 
         $result = $this->object->execute();
         $this->assertNull($result);

@@ -67,7 +67,7 @@ class AttributeSetFinderTest extends TestCase
         $select->expects($this->once())->method('where')->with('entity_id IN (?)', $productIds)->willReturnSelf();
         $select->expects($this->once())->method('group')->with(ProductInterface::ATTRIBUTE_SET_ID)->willReturnSelf();
 
-        $connection = $this->createMock(AdapterInterface::class);
+        $connection = $this->getMockForAbstractClass(AdapterInterface::class);
         $connection->expects($this->once())->method('fetchCol')->with($select)->willReturn($attributeSetIds);
 
         $this->productCollection->expects($this->once())->method('getSelect')->willReturn($select);

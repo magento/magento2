@@ -110,7 +110,7 @@ class ProductScopeRewriteGeneratorTest extends TestCase
         $this->storeViewService = $this->getMockBuilder(StoreViewService::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->storeManager = $this->createMock(StoreManagerInterface::class);
+        $this->storeManager = $this->getMockForAbstractClass(StoreManagerInterface::class);
         $storeRootCategoryId = 2;
         $store = $this->getMockBuilder(Store::class)
             ->disableOriginalConstructor()

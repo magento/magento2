@@ -25,7 +25,7 @@ class DataTest extends TestCase
             Xml::class
         )->disableOriginalConstructor()
             ->getMock();
-        $cache = $this->createMock(CacheInterface::class);
+        $cache = $this->getMockForAbstractClass(CacheInterface::class);
         $dbReader = $this->getMockBuilder(
             Db::class
         )->disableOriginalConstructor()
@@ -48,7 +48,7 @@ class DataTest extends TestCase
 
         $dbReader->expects($this->once())->method('get')->willReturn($dbReaderData);
 
-        $serializerMock = $this->createMock(SerializerInterface::class);
+        $serializerMock = $this->getMockForAbstractClass(SerializerInterface::class);
         $serializerMock->method('unserialize')
             ->willReturn($jobs);
 

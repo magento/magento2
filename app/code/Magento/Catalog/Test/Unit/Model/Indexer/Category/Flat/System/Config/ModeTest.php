@@ -45,7 +45,7 @@ class ModeTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->configMock = $this->createMock(ScopeConfigInterface::class);
+        $this->configMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
         $this->indexerStateMock = $this->createPartialMock(
             State::class,
             ['loadByIndexer', 'setStatus', 'save']
@@ -56,7 +56,7 @@ class ModeTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->flatIndexer = $this->createMock(IndexerInterface::class);
+        $this->flatIndexer = $this->getMockForAbstractClass(IndexerInterface::class);
 
         $objectManager = new ObjectManager($this);
         $this->model = $objectManager->getObject(

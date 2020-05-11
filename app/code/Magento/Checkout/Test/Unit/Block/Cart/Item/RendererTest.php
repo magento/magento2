@@ -51,7 +51,7 @@ class RendererTest extends TestCase
     {
         $objectManagerHelper = new ObjectManager($this);
 
-        $this->layout = $this->createMock(LayoutInterface::class);
+        $this->layout = $this->getMockForAbstractClass(LayoutInterface::class);
 
         $context = $this->getMockBuilder(Context::class)
             ->disableOriginalConstructor()

@@ -122,7 +122,7 @@ class ExchangeTest extends TestCase
             ->method('getExchanges')->willReturn([$exchange1, $exchange2]);
         $envelope = $this->getMockBuilder(EnvelopeInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $envelope->expects($this->once())->method('getBody')->willReturn($envelopeBody);
         $this->queueManagement->expects($this->once())
             ->method('addMessagesToQueues')->with($topicName, [$envelopeBody], $queueNames);

@@ -57,7 +57,7 @@ class VaultConfigProviderTest extends TestCase
         $this->session = $this->getMockBuilder(Session::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->vaultPaymentList = $this->createMock(PaymentMethodListInterface::class);
+        $this->vaultPaymentList = $this->getMockForAbstractClass(PaymentMethodListInterface::class);
 
         $objectManager = new ObjectManager($this);
         $this->vaultConfigProvider = new VaultConfigProvider($this->storeManager, $this->session);

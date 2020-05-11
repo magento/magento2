@@ -106,7 +106,7 @@ class EmulateQuoteObserverTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->requestMock = $this->createMock(Http::class);
-        $this->customerMock = $this->createMock(CustomerInterface::class);
+        $this->customerMock = $this->getMockForAbstractClass(CustomerInterface::class);
         $this->sessionMock =
             $this->getMockBuilder(PersistentSessionModel::class)
                 ->addMethods(['getCustomerId'])

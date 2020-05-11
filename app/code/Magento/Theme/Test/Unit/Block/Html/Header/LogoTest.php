@@ -25,9 +25,9 @@ class LogoTest extends TestCase
     {
         $filesystem = $this->createMock(Filesystem::class);
         $mediaDirectory = $this->createMock(Read::class);
-        $scopeConfig = $this->createMock(ScopeConfigInterface::class);
+        $scopeConfig = $this->getMockForAbstractClass(ScopeConfigInterface::class);
 
-        $urlBuilder = $this->createMock(UrlInterface::class);
+        $urlBuilder = $this->getMockForAbstractClass(UrlInterface::class);
 
         $scopeConfig->expects($this->once())->method('getValue')->willReturn('default/image.gif');
         $urlBuilder->expects(
@@ -61,7 +61,7 @@ class LogoTest extends TestCase
      */
     public function testGetLogoHeight()
     {
-        $scopeConfig = $this->createMock(ScopeConfigInterface::class);
+        $scopeConfig = $this->getMockForAbstractClass(ScopeConfigInterface::class);
         $scopeConfig->expects($this->once())->method('getValue')->willReturn(null);
 
         $objectManager = new ObjectManager($this);
@@ -70,7 +70,7 @@ class LogoTest extends TestCase
         ];
         $block = $objectManager->getObject(Logo::class, $arguments);
 
-        $this->assertEquals(null, $block->getLogoHeight());
+        $this->assertEquals(0, $block->getLogoHeight());
     }
 
     /**
@@ -78,7 +78,7 @@ class LogoTest extends TestCase
      */
     public function testGetLogoWidth()
     {
-        $scopeConfig = $this->createMock(ScopeConfigInterface::class);
+        $scopeConfig = $this->getMockForAbstractClass(ScopeConfigInterface::class);
         $scopeConfig->expects($this->once())->method('getValue')->willReturn('170');
 
         $objectManager = new ObjectManager($this);

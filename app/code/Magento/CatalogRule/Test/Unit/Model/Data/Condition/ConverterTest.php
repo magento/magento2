@@ -36,7 +36,7 @@ class ConverterTest extends TestCase
 
     public function testDataModelToArray()
     {
-        $childConditionMock = $this->createMock(ConditionInterface::class);
+        $childConditionMock = $this->getMockForAbstractClass(ConditionInterface::class);
         $childConditionMock->expects($this->once())->method('getType')->willReturn('child-type');
         $childConditionMock->expects($this->once())->method('getAttribute')->willReturn('child-attr');
         $childConditionMock->expects($this->once())->method('getOperator')->willReturn('child-operator');
@@ -45,7 +45,7 @@ class ConverterTest extends TestCase
         $childConditionMock->expects($this->once())->method('getAggregator')->willReturn('all');
         $childConditionMock->expects($this->once())->method('getConditions')->willReturn([]);
 
-        $dataModelMock = $this->createMock(ConditionInterface::class);
+        $dataModelMock = $this->getMockForAbstractClass(ConditionInterface::class);
         $dataModelMock->expects($this->once())->method('getType')->willReturn('type');
         $dataModelMock->expects($this->once())->method('getAttribute')->willReturn('attr');
         $dataModelMock->expects($this->once())->method('getOperator')->willReturn('operator');
@@ -96,8 +96,8 @@ class ConverterTest extends TestCase
             ]
         ];
 
-        $conditionMock = $this->createMock(ConditionInterface::class);
-        $conditionChildMock = $this->createMock(ConditionInterface::class);
+        $conditionMock = $this->getMockForAbstractClass(ConditionInterface::class);
+        $conditionChildMock = $this->getMockForAbstractClass(ConditionInterface::class);
 
         $this->conditionFactoryMock->expects($this->at(0))->method('create')->willReturn($conditionMock);
         $this->conditionFactoryMock->expects($this->at(1))->method('create')->willReturn($conditionChildMock);

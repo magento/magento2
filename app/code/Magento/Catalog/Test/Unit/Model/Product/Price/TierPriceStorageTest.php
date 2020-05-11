@@ -62,7 +62,7 @@ class TierPriceStorageTest extends TestCase
         $this->tierPriceValidator = $this->createMock(TierPriceValidator::class);
         $this->tierPriceFactory = $this->createMock(TierPriceFactory::class);
         $this->priceIndexProcessor = $this->createMock(PriceIndexerProcessor::class);
-        $this->productIdLocator = $this->createMock(ProductIdLocatorInterface::class);
+        $this->productIdLocator = $this->getMockForAbstractClass(ProductIdLocatorInterface::class);
 
         $objectManager = new ObjectManager($this);
         $this->tierPriceStorage = $objectManager->getObject(
@@ -159,7 +159,7 @@ class TierPriceStorageTest extends TestCase
      */
     public function testUpdate()
     {
-        $price = $this->createMock(TierPriceInterface::class);
+        $price = $this->getMockForAbstractClass(TierPriceInterface::class);
         $result = $this->createMock(PriceValidationResult::class);
         $result->expects($this->once())
             ->method('getFailedRowIds')
@@ -218,7 +218,7 @@ class TierPriceStorageTest extends TestCase
      */
     public function testReplace()
     {
-        $price = $this->createMock(TierPriceInterface::class);
+        $price = $this->getMockForAbstractClass(TierPriceInterface::class);
         $price->expects($this->atLeastOnce())
             ->method('getSku')
             ->willReturn('virtual');
@@ -263,7 +263,7 @@ class TierPriceStorageTest extends TestCase
      */
     public function testDelete()
     {
-        $price = $this->createMock(TierPriceInterface::class);
+        $price = $this->getMockForAbstractClass(TierPriceInterface::class);
         $price->expects($this->atLeastOnce())
             ->method('getSku')
             ->willReturn('simple');

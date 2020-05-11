@@ -47,7 +47,7 @@ class LinkTest extends TestCase
         $wishlist = $this->createPartialMock(Wishlist::class, ['getId']);
         $wishlist->expects($this->any())->method('getId')->willReturn(5);
 
-        $customer = $this->createMock(CustomerInterface::class);
+        $customer = $this->getMockForAbstractClass(CustomerInterface::class);
         $customer->expects($this->any())->method('getId')->willReturn(8);
         $customer->expects($this->any())->method('getEmail')->willReturn('test@example.com');
 
@@ -66,8 +66,8 @@ class LinkTest extends TestCase
                 return strtr(base64_encode($url), '+/=', '-_,');
             });
 
-        $this->urlBuilder = $this->createMock(UrlBuilderInterface::class);
-        $this->scopeConfig = $this->createMock(ScopeConfigInterface::class);
+        $this->urlBuilder = $this->getMockForAbstractClass(UrlBuilderInterface::class);
+        $this->scopeConfig = $this->getMockForAbstractClass(ScopeConfigInterface::class);
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->link = $this->objectManagerHelper->getObject(
@@ -101,6 +101,6 @@ class LinkTest extends TestCase
             ->method('isSetFlag')
             ->with('rss/wishlist/active', ScopeInterface::SCOPE_STORE)
             ->willReturn(true);
-        $this->assertEquals(true, $this->link->isRssAllowed());
+        $this->assertTrue($this->link->isRssAllowed());
     }
 }

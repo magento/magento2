@@ -49,7 +49,7 @@ class TrackAdminNewPasswordObserverTest extends TestCase
         $this->configInterfaceMock = $this->getMockBuilder(ConfigInterface::class)
             ->disableOriginalConstructor()
             ->setMethods([])
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->userMock = $this->getMockBuilder(User::class)
             ->disableOriginalConstructor()
@@ -71,7 +71,7 @@ class TrackAdminNewPasswordObserverTest extends TestCase
         $this->managerInterfaceMock = $this->getMockBuilder(ManagerInterface::class)
             ->disableOriginalConstructor()
             ->setMethods([])
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $helper = new ObjectManager($this);
 

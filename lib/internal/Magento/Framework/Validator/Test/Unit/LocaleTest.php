@@ -28,6 +28,6 @@ class LocaleTest extends TestCase
         $lists = $this->createMock(Lists::class);
         $lists->expects($this->any())->method('getLocaleList')->willReturn($this->expectedLocales);
         $locale = new Locale($lists);
-        $this->assertEquals(true, $locale->isValid('en_US'));
+        $this->assertTrue($locale->isValid('en_US'));
     }
 }

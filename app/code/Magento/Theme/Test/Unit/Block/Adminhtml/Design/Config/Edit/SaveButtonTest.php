@@ -46,7 +46,7 @@ class SaveButtonTest extends TestCase
     {
         $this->urlBuilder = $this->getMockBuilder(UrlInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->context = $this->getMockBuilder(Context::class)
             ->disableOriginalConstructor()

@@ -117,8 +117,8 @@ class AbstractFileTest extends TestCase
     public function testPrepareFile($type, $fileContent, $expectedContent, $existedFiles)
     {
         $model = $this->_modelBuilder->getMock();
-        $model->expects($this->any())->method('getType')->will($this->returnValue($type));
-        $model->expects($this->any())->method('getContentType')->will($this->returnValue($type));
+        $model->expects($this->any())->method('getType')->willReturn($type);
+        $model->expects($this->any())->method('getContentType')->willReturn($type);
 
         $files = [];
         foreach ($existedFiles as $fileData) {
@@ -209,7 +209,7 @@ class AbstractFileTest extends TestCase
                 'sort_order' => 12,
             ]
         );
-        $model->expects($this->once())->method('getFullPath')->with($file)->will($this->returnValue('test_path'));
+        $model->expects($this->once())->method('getFullPath')->with($file)->willReturn('test_path');
 
         $directoryMock = $this->createPartialMock(
             Write::class,
@@ -266,7 +266,7 @@ class AbstractFileTest extends TestCase
             $directoryMock
         );
 
-        $model->expects($this->once())->method('getFullPath')->with($file)->will($this->returnValue('test_path'));
+        $model->expects($this->once())->method('getFullPath')->with($file)->willReturn('test_path');
         /** @var \Magento\Framework\View\Design\Theme\Customization\AbstractFile $model */
         /** @var File $file */
         $model->delete($file);

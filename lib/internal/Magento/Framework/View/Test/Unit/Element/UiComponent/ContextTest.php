@@ -78,7 +78,7 @@ class ContextTest extends TestCase
                 ->getMock();
         $this->authorization = $this->getMockBuilder(AuthorizationInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $objectManagerHelper = new ObjectManagerHelper($this);
         $this->context = $objectManagerHelper->getObject(
@@ -101,7 +101,7 @@ class ContextTest extends TestCase
     {
         $component = $this->getMockBuilder(UiComponentInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->actionPool->expects($this->once())->method('add');
         $this->authorization->expects($this->never())->method('isAllowed');
@@ -117,7 +117,7 @@ class ContextTest extends TestCase
     {
         $component = $this->getMockBuilder(UiComponentInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->actionPool->expects($this->once())->method('add');
         $this->authorization->expects($this->once())->method('isAllowed')->willReturn(true);
@@ -134,7 +134,7 @@ class ContextTest extends TestCase
     {
         $component = $this->getMockBuilder(UiComponentInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->actionPool->expects($this->never())->method('add');
         $this->authorization->expects($this->once())->method('isAllowed')->willReturn(false);

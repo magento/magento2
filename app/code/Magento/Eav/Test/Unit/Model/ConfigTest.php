@@ -69,7 +69,7 @@ class ConfigTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->cacheMock = $this->createMock(CacheInterface::class);
+        $this->cacheMock = $this->getMockForAbstractClass(CacheInterface::class);
         $this->typeFactoryMock = $this->getMockBuilder(TypeFactory::class)
             ->setMethods(['create'])
             ->disableOriginalConstructor()
@@ -79,13 +79,13 @@ class ConfigTest extends TestCase
                 ->setMethods(['create'])
                 ->disableOriginalConstructor()
                 ->getMock();
-        $this->cacheStateMock = $this->createMock(StateInterface::class);
+        $this->cacheStateMock = $this->getMockForAbstractClass(StateInterface::class);
         $this->universalFactoryMock = $this->getMockBuilder(UniversalFactory::class)
             ->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->serializerMock = $this->createMock(SerializerInterface::class);
+        $this->serializerMock = $this->getMockForAbstractClass(SerializerInterface::class);
 
         $this->typeMock = $this->createMock(Type::class);
 

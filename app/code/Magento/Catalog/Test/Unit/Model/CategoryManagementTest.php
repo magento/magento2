@@ -65,7 +65,7 @@ class CategoryManagementTest extends TestCase
     protected function setUp(): void
     {
         $this->objectManagerHelper = new ObjectManager($this);
-        $this->categoryRepositoryMock = $this->createMock(CategoryRepositoryInterface::class);
+        $this->categoryRepositoryMock = $this->getMockForAbstractClass(CategoryRepositoryInterface::class);
         $this->categoryTreeMock = $this->createMock(Tree::class);
         $this->categoriesFactoryMock = $this->getMockBuilder(CollectionFactory::class)
             ->addMethods(['addFilter', 'getFirstItem'])
@@ -82,9 +82,9 @@ class CategoryManagementTest extends TestCase
             ]
         );
 
-        $this->scopeResolverMock = $this->createMock(ScopeResolverInterface::class);
+        $this->scopeResolverMock = $this->getMockForAbstractClass(ScopeResolverInterface::class);
 
-        $this->scopeMock = $this->createMock(ScopeInterface::class);
+        $this->scopeMock = $this->getMockForAbstractClass(ScopeInterface::class);
 
         $this->objectManagerHelper->setBackwardCompatibleProperty(
             $this->model,

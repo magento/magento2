@@ -29,7 +29,7 @@ class ConfigTest extends TestCase
     {
         $this->dataStorage = $this->getMockBuilder(DataInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->_model = new Config($this->dataStorage);
     }
 

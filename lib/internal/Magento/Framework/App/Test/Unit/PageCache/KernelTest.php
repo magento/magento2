@@ -71,7 +71,7 @@ class KernelTest extends TestCase
         $this->httpResponseMock = $this->createMock(\Magento\Framework\App\Response\Http::class);
         $this->identifierMock = $this->createMock(Identifier::class);
         $this->requestMock = $this->createMock(Http::class);
-        $this->serializer = $this->createMock(SerializerInterface::class);
+        $this->serializer = $this->getMockForAbstractClass(SerializerInterface::class);
         $this->responseMock = $this->createMock(\Magento\Framework\App\Response\Http::class);
         $this->contextFactoryMock = $this->createPartialMock(ContextFactory::class, ['create']);
         $this->httpFactoryMock = $this->createPartialMock(HttpFactory::class, ['create']);
@@ -187,7 +187,7 @@ class KernelTest extends TestCase
             json_encode($cache)
         );
         $this->identifierMock->expects($this->any())->method('getValue')->willReturn($id);
-        $this->assertEquals(false, $this->kernel->load());
+        $this->assertFalse($this->kernel->load());
     }
 
     /**

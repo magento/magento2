@@ -67,8 +67,8 @@ class ImageTest extends TestCase
         $this->state = $this->getMockBuilder(State::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->storeManager = $this->createMock(StoreManagerInterface::class);
-        $this->design = $this->createMock(DesignInterface::class);
+        $this->storeManager = $this->getMockForAbstractClass(StoreManagerInterface::class);
+        $this->design = $this->getMockForAbstractClass(DesignInterface::class);
         $this->designLoader = $this->createMock(DesignLoader::class);
         $this->model = new Image(
             $this->imageFactory,
@@ -88,10 +88,10 @@ class ImageTest extends TestCase
             ->getMock();
         $image = $this->getMockBuilder(ImageInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $imageCode = 'widget_recently_viewed';
-        $productRenderInfoDto = $this->createMock(ProductRenderInterface::class);
+        $productRenderInfoDto = $this->getMockForAbstractClass(ProductRenderInterface::class);
 
         $productRenderInfoDto->expects($this->once())
             ->method('getStoreId')

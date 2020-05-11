@@ -30,13 +30,13 @@ class TypeTest extends TestCase
     {
         $this->eventManagerMock = $this->getMockBuilder(ManagerInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->cacheFrontendPoolMock = $this->getMockBuilder(FrontendPool::class)
             ->disableOriginalConstructor()
             ->getMock();
         $cacheFrontend = $this->getMockBuilder(FrontendInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->cacheFrontendPoolMock->expects($this->once())
             ->method('get')
             ->willReturn($cacheFrontend);

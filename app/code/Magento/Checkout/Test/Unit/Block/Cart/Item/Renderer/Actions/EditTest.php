@@ -31,7 +31,7 @@ class EditTest extends TestCase
 
         $this->urlBuilderMock = $this->getMockBuilder(UrlInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->model = $objectManagerHelper->getObject(
             Edit::class,

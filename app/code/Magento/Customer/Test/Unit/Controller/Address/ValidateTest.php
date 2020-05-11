@@ -57,7 +57,7 @@ class ValidateTest extends TestCase
     protected function setUp(): void
     {
         $this->formFactoryMock = $this->createMock(FormFactory::class);
-        $this->requestMock = $this->createMock(RequestInterface::class);
+        $this->requestMock = $this->getMockForAbstractClass(RequestInterface::class);
         $this->resultJsonFactoryMock = $this->createMock(JsonFactory::class);
         $this->resultRedirectFactoryMock = $this->createMock(RedirectFactory::class);
 

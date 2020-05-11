@@ -41,7 +41,7 @@ class AbstractParserTest extends TestCase
 
         $this->_parserMock->addAdapter(
             'php',
-            $this->createMock(AdapterInterface::class)
+            $this->getMockForAbstractClass(AdapterInterface::class)
         );
         $this->_parserMock->parse($options);
     }

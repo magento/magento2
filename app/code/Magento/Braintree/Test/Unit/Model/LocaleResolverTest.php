@@ -43,7 +43,7 @@ class LocaleResolverTest extends TestCase
     protected function setUp(): void
     {
         $this->configMock = $this->createMock(Config::class);
-        $this->resolverMock = $this->createMock(ResolverInterface::class);
+        $this->resolverMock = $this->getMockForAbstractClass(ResolverInterface::class);
         $this->localeResolver = new LocaleResolver($this->resolverMock, $this->configMock);
     }
 

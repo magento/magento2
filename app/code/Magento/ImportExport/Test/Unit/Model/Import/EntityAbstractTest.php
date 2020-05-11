@@ -65,7 +65,7 @@ class EntityAbstractTest extends AbstractImportTestCase
     protected function _getModelDependencies()
     {
         $string = new StringUtils();
-        $scopeConfig = $this->createMock(ScopeConfigInterface::class);
+        $scopeConfig = $this->getMockForAbstractClass(ScopeConfigInterface::class);
         $importFactory = $this->createMock(ImportFactory::class);
         $resourceHelper = $this->createMock(Helper::class);
         $resource = $this->createMock(ResourceConnection::class);

@@ -86,7 +86,7 @@ class CartItemProcessorTest extends TestCase
 
     public function testConvertToBuyRequestReturnsNullIfItemDoesNotContainProductOption()
     {
-        $cartItemMock = $this->createMock(CartItemInterface::class);
+        $cartItemMock = $this->getMockForAbstractClass(CartItemInterface::class);
         $this->assertNull($this->model->convertToBuyRequest($cartItemMock));
     }
 
@@ -99,7 +99,7 @@ class CartItemProcessorTest extends TestCase
             Item::class,
             ['getProductOption', 'setProductOption', 'getOptionByCode', 'getQty']
         );
-        $productOptionMock = $this->createMock(ProductOptionInterface::class);
+        $productOptionMock = $this->getMockForAbstractClass(ProductOptionInterface::class);
 
         $cartItemMock->expects($this->any())->method('getProductOption')->willReturn($productOptionMock);
         $cartItemMock->expects($this->any())->method('getQty')->willReturn($itemQty);
@@ -108,7 +108,7 @@ class CartItemProcessorTest extends TestCase
             ->getMockForAbstractClass();
         $productOptionMock->expects($this->any())->method('getExtensionAttributes')->willReturn($extAttributesMock);
 
-        $downloadableOptionMock = $this->createMock(DownloadableOptionInterface::class);
+        $downloadableOptionMock = $this->getMockForAbstractClass(DownloadableOptionInterface::class);
         $extAttributesMock->expects($this->any())
             ->method('getDownloadableOption')
             ->willReturn($downloadableOptionMock);
@@ -133,7 +133,7 @@ class CartItemProcessorTest extends TestCase
             Item::class,
             ['getProductOption', 'setProductOption', 'getOptionByCode', 'getQty']
         );
-        $productOptionMock = $this->createMock(ProductOptionInterface::class);
+        $productOptionMock = $this->getMockForAbstractClass(ProductOptionInterface::class);
 
         $cartItemMock->expects($this->any())->method('getProductOption')->willReturn($productOptionMock);
         $productOptionMock->expects($this->atLeastOnce())->method('getExtensionAttributes')->willReturn(null);
@@ -161,12 +161,12 @@ class CartItemProcessorTest extends TestCase
             ->method('getProductOption')
             ->willReturn(null);
 
-        $downloadableOptionMock = $this->createMock(DownloadableOptionInterface::class);
+        $downloadableOptionMock = $this->getMockForAbstractClass(DownloadableOptionInterface::class);
         $this->downloadableOptionFactoryMock->expects($this->any())
             ->method('create')
             ->willReturn($downloadableOptionMock);
 
-        $productOptionMock = $this->createMock(ProductOptionInterface::class);
+        $productOptionMock = $this->getMockForAbstractClass(ProductOptionInterface::class);
         $this->optionFactoryMock->expects($this->once())->method('create')->willReturn($productOptionMock);
         $productOptionMock->expects($this->once())->method('getExtensionAttributes')->willReturn(null);
 
@@ -209,7 +209,7 @@ class CartItemProcessorTest extends TestCase
         $extAttributeMock = $this->getMockBuilder(ProductOptionExtension::class)
             ->addMethods(['setDownloadableOption'])
             ->getMock();
-        $productOptionMock = $this->createMock(ProductOptionInterface::class);
+        $productOptionMock = $this->getMockForAbstractClass(ProductOptionInterface::class);
         $productOptionMock->expects($this->any())
             ->method('getExtensionAttributes')
             ->willReturn($extAttributeMock);
@@ -217,7 +217,7 @@ class CartItemProcessorTest extends TestCase
             ->method('getProductOption')
             ->willReturn($productOptionMock);
 
-        $downloadableOptionMock = $this->createMock(DownloadableOptionInterface::class);
+        $downloadableOptionMock = $this->getMockForAbstractClass(DownloadableOptionInterface::class);
         $this->downloadableOptionFactoryMock->expects($this->any())
             ->method('create')
             ->willReturn($downloadableOptionMock);

@@ -70,13 +70,13 @@ class ValidatorTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->objectManagerMock = $this->createMock(ObjectManagerInterface::class);
-        $this->entityMock = $this->createMock(OrderInterface::class);
-        $this->validatorMock = $this->createMock(ValidatorInterface::class);
+        $this->objectManagerMock = $this->getMockForAbstractClass(ObjectManagerInterface::class);
+        $this->entityMock = $this->getMockForAbstractClass(OrderInterface::class);
+        $this->validatorMock = $this->getMockForAbstractClass(ValidatorInterface::class);
         $this->validatorResultFactoryMock = $this->getMockBuilder(ValidatorResultInterfaceFactory::class)
             ->setMethods(['create'])->disableOriginalConstructor()
             ->getMock();
-        $this->validatorResultMock = $this->createMock(ValidatorResultInterface::class);
+        $this->validatorResultMock = $this->getMockForAbstractClass(ValidatorResultInterface::class);
         $this->validatorResultFactoryMock->expects($this->any())->method('create')
             ->willReturn($this->validatorResultMock);
         $this->objectManager = new ObjectManager($this);

@@ -28,7 +28,7 @@ class DefaultRouterTest extends TestCase
 
     public function testMatch()
     {
-        $request = $this->createMock(RequestInterface::class);
+        $request = $this->getMockForAbstractClass(RequestInterface::class);
         $helper = new ObjectManager($this);
         $actionFactory = $this->createMock(ActionFactory::class);
         $actionFactory->expects($this->once())->method('create')->with(

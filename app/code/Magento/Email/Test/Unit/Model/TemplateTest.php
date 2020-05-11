@@ -121,7 +121,7 @@ class TemplateTest extends TestCase
 
         $this->design = $this->getMockBuilder(DesignInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->registry = $this->getMockBuilder(Registry::class)
             ->disableOriginalConstructor()
@@ -133,7 +133,7 @@ class TemplateTest extends TestCase
 
         $this->storeManager = $this->getMockBuilder(StoreManagerInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->assetRepo = $this->getMockBuilder(Repository::class)
             ->disableOriginalConstructor()
@@ -145,7 +145,7 @@ class TemplateTest extends TestCase
 
         $this->scopeConfig = $this->getMockBuilder(ScopeConfigInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->emailConfig = $this->getMockBuilder(Config::class)
             ->disableOriginalConstructor()
@@ -769,7 +769,7 @@ class TemplateTest extends TestCase
                     $this->createMock(StoreManager::class),
                     $this->createMock(Repository::class),
                     $this->createMock(Filesystem::class),
-                    $this->createMock(ScopeConfigInterface::class),
+                    $this->getMockForAbstractClass(ScopeConfigInterface::class),
                     $emailConfig,
                     $this->createMock(TemplateFactory::class),
                     $this->createMock(FilterManager::class),

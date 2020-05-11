@@ -26,7 +26,7 @@ class InfoBackupsListCommandTest extends TestCase
         $tableFactoryMock = $this->createMock(\Symfony\Component\Console\Helper\TableFactory::class);
         $tableFactoryMock->expects($this->once())->method('create')->willReturn($table);
         /** @var DirectoryList
-         * |\PHPUnit_Framework_MockObject_MockObject $directoryList
+         * |\PHPUnit\Framework\MockObject\MockObject $directoryList
          */
         $directoryList = $this->createMock(DirectoryList::class);
         /** @var File|MockObject $file */

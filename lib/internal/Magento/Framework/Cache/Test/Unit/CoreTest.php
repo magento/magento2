@@ -112,6 +112,9 @@ class CoreTest extends TestCase
             ->method('save')
             ->with($data, $this->anything(), $prefixedTags)
             ->willReturn(true);
+        $backendMock->expects($this->once())
+            ->method('getCapabilities')
+            ->willReturn(['priority' => null]);
         $frontend = new Core([
             'disable_save'              => false,
             'caching'                   => true,

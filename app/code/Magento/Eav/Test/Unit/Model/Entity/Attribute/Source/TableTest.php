@@ -316,7 +316,7 @@ class TableTest extends TestCase
         $collection->expects($this->once())->method('getStoreId')->willReturn(1);
         $connection = $this->getMockBuilder(AdapterInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $expr = $this->getMockBuilder(\Zend_Db_Expr::class)
             ->disableOriginalConstructor()
             ->getMock();

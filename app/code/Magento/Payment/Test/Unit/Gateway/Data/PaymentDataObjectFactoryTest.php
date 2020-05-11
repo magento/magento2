@@ -67,7 +67,7 @@ class PaymentDataObjectFactoryTest extends TestCase
                 ->getMock();
 
         $this->paymentDataObjectMock =
-            $this->createMock(PaymentDataObjectInterface::class);
+            $this->getMockForAbstractClass(PaymentDataObjectInterface::class);
 
         $this->model = new PaymentDataObjectFactory(
             $this->objectManagerMock,

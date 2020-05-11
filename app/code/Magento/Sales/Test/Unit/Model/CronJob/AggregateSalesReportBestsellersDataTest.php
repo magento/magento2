@@ -44,7 +44,7 @@ class AggregateSalesReportBestsellersDataTest extends TestCase
     {
         $this->localeResolverMock = $this->getMockBuilder(ResolverInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->bestsellersFactoryMock =
             $this->getMockBuilder(BestsellersFactory::class)
@@ -53,7 +53,7 @@ class AggregateSalesReportBestsellersDataTest extends TestCase
                 ->getMock();
         $this->localeDateMock = $this->getMockBuilder(TimezoneInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->observer = new AggregateSalesReportBestsellersData(
             $this->localeResolverMock,

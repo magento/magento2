@@ -30,7 +30,7 @@ class TabAbstractTest extends TestCase
                 $this->createMock(Context::class),
                 $this->createMock(Registry::class),
                 $this->createMock(FormFactory::class),
-                $this->createMock(ObjectManagerInterface::class),
+                $this->getMockForAbstractClass(ObjectManagerInterface::class),
             ],
             '',
             true,
@@ -48,7 +48,7 @@ class TabAbstractTest extends TestCase
     public function testGetTabTitle()
     {
         $label = 'test label';
-        $this->_model->expects($this->once())->method('getTabLabel')->will($this->returnValue($label));
+        $this->_model->expects($this->once())->method('getTabLabel')->willReturn($label);
         $this->assertEquals($label, $this->_model->getTabTitle());
     }
 
@@ -65,7 +65,7 @@ class TabAbstractTest extends TestCase
 
         $themeMock->expects($this->any())->method('getId')->willReturn($themeId);
 
-        $this->_model->expects($this->any())->method('_getCurrentTheme')->will($this->returnValue($themeMock));
+        $this->_model->expects($this->any())->method('_getCurrentTheme')->willReturn($themeMock);
 
         if ($result === true) {
             $this->assertTrue($this->_model->canShowTab());

@@ -26,7 +26,7 @@ class TotalsProcessorTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
+        $this->scopeConfigMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
 
         $this->model = new TotalsProcessor($this->scopeConfigMock);
     }

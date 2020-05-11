@@ -51,9 +51,9 @@ class PropertiesTest extends TestCase
      */
     public function testIsValidSuccessWithInvokedSetter()
     {
-        $this->_object->expects($this->once())->method('hasDataChanges')->will($this->returnValue(true));
-        $this->_object->expects($this->once())->method('getData')->with('attr1')->will($this->returnValue(1));
-        $this->_object->expects($this->once())->method('getOrigData')->with('attr1')->will($this->returnValue(1));
+        $this->_object->expects($this->once())->method('hasDataChanges')->willReturn(true);
+        $this->_object->expects($this->once())->method('getData')->with('attr1')->willReturn(1);
+        $this->_object->expects($this->once())->method('getOrigData')->with('attr1')->willReturn(1);
 
         $validator = new Properties();
         $validator->setReadOnlyProperties(['attr1']);
@@ -74,7 +74,7 @@ class PropertiesTest extends TestCase
      */
     public function testIsValidSuccessWithoutHasDataChanges()
     {
-        $this->_object->expects($this->once())->method('hasDataChanges')->will($this->returnValue(false));
+        $this->_object->expects($this->once())->method('hasDataChanges')->willReturn(false);
         $validator = new Properties();
         $validator->setReadOnlyProperties(['attr1']);
         $this->assertTrue($validator->isValid($this->_object));
@@ -85,9 +85,9 @@ class PropertiesTest extends TestCase
      */
     public function testIsValidFailed()
     {
-        $this->_object->expects($this->once())->method('hasDataChanges')->will($this->returnValue(true));
-        $this->_object->expects($this->once())->method('getData')->with('attr1')->will($this->returnValue(1));
-        $this->_object->expects($this->once())->method('getOrigData')->with('attr1')->will($this->returnValue(2));
+        $this->_object->expects($this->once())->method('hasDataChanges')->willReturn(true);
+        $this->_object->expects($this->once())->method('getData')->with('attr1')->willReturn(1);
+        $this->_object->expects($this->once())->method('getOrigData')->with('attr1')->willReturn(2);
 
         $validator = new Properties();
         $validator->setReadOnlyProperties(['attr1']);

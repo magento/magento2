@@ -95,9 +95,9 @@ class ShowUpdateResultTest extends TestCase
         $responseInterfaceMock = $this->getMockBuilder(ResponseInterface::class)
             ->addMethods(['setRedirect'])
             ->onlyMethods(['sendResponse'])
-            ->getMock();
+            ->getMockForAbstractClass();
 
-        $managerInterfaceMock = $this->createMock(ManagerInterface::class);
+        $managerInterfaceMock = $this->getMockForAbstractClass(ManagerInterface::class);
         $this->session = $this->getSession();
         $actionFlagMock = $this->createMock(ActionFlag::class);
         $helperDataMock = $this->createMock(Data::class);

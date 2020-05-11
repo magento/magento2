@@ -95,28 +95,28 @@ class AreaTest extends TestCase
         $this->objectManager = new ObjectManager($this);
         $this->loggerMock = $this->getMockBuilder(LoggerInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->eventManagerMock = $this->getMockBuilder(ManagerInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->translatorMock = $this->getMockBuilder(TranslateInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->diConfigLoaderMock = $this->getMockBuilder(ConfigLoader::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->objectManagerMock = $this->getMockBuilder(ObjectManagerInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->designMock = $this->getMockBuilder(DesignInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->scopeResolverMock = $this->getMockBuilder(ScopeResolverInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $scopeMock = $this->getMockBuilder(ScopeInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $scopeMock->expects($this->any())
             ->method('getId')
             ->willReturn(self::SCOPE_ID);
@@ -161,7 +161,7 @@ class AreaTest extends TestCase
             ->method('loadData');
         $renderMock = $this->getMockBuilder(RendererInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->objectManagerMock->expects($this->once())
             ->method('get')
             ->with(RendererInterface::class)
@@ -203,7 +203,7 @@ class AreaTest extends TestCase
             ->method('loadData');
         $renderMock = $this->getMockBuilder(RendererInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $designMock = $this->getMockBuilder(\Magento\Framework\View\DesignInterface::class)
             ->disableOriginalConstructor()
             ->getMock();

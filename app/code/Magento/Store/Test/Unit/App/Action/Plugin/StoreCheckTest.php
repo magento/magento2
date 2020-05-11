@@ -39,7 +39,7 @@ class StoreCheckTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->_storeManagerMock = $this->createMock(StoreManagerInterface::class);
+        $this->_storeManagerMock = $this->getMockForAbstractClass(StoreManagerInterface::class);
         $this->_storeMock = $this->createMock(Store::class);
         $this->_storeManagerMock->expects(
             $this->any()

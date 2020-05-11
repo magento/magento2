@@ -79,7 +79,7 @@ class CartRepositoryTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->quoteRepositoryMock = $this->createMock(CartRepositoryInterface::class);
+        $this->quoteRepositoryMock = $this->getMockForAbstractClass(CartRepositoryInterface::class);
         $this->messageFactoryMock = $this->getMockBuilder(MessageFactory::class)
             ->addMethods(['__wakeup'])
             ->onlyMethods(['create'])
@@ -96,7 +96,7 @@ class CartRepositoryTest extends TestCase
             ->onlyMethods(['getItemById', 'getItemsCount', 'isVirtual', '__wakeup'])
             ->disableOriginalConstructor()
             ->getMock();
-        $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
+        $this->storeManagerMock = $this->getMockForAbstractClass(StoreManagerInterface::class);
         $this->giftMessageManagerMock =
             $this->createMock(GiftMessageManager::class);
         $this->helperMock = $this->createMock(\Magento\GiftMessage\Helper\Message::class);

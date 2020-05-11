@@ -44,11 +44,11 @@ class AbstractTest extends TestCase
         $paymentData = $this->createMock(Data::class);
         $addressRenderer = $this->createMock(Renderer::class);
         $string = $this->createMock(StringUtils::class);
-        $scopeConfig = $this->createMock(ScopeConfigInterface::class);
-        $translate = $this->createMock(StateInterface::class);
+        $scopeConfig = $this->getMockForAbstractClass(ScopeConfigInterface::class);
+        $translate = $this->getMockForAbstractClass(StateInterface::class);
         $filesystem = $this->createMock(Filesystem::class);
         $pdfItemsFactory = $this->createMock(ItemsFactory::class);
-        $localeMock = $this->createMock(TimezoneInterface::class);
+        $localeMock = $this->getMockForAbstractClass(TimezoneInterface::class);
 
         // Setup config file totals
         $configTotals = ['item1' => [''], 'item2' => ['model' => 'custom_class']];
@@ -106,7 +106,7 @@ class AbstractTest extends TestCase
             true,
             ['drawLineBlocks']
         );
-        $model->expects($this->once())->method('drawLineBlocks')->will($this->returnValue($page));
+        $model->expects($this->once())->method('drawLineBlocks')->willReturn($page);
 
         $reflectionMethod = new \ReflectionMethod(AbstractPdf::class, 'insertTotals');
         $reflectionMethod->setAccessible(true);

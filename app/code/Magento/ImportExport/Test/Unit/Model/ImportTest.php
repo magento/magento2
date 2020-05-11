@@ -147,7 +147,7 @@ class ImportTest extends AbstractImportTestCase
 
         $logger = $this->getMockBuilder(LoggerInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->_filesystem = $this->getMockBuilder(Filesystem::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -156,7 +156,7 @@ class ImportTest extends AbstractImportTestCase
             ->getMock();
         $this->_coreConfig = $this->getMockBuilder(ScopeConfigInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->_importConfig = $this->getMockBuilder(Config::class)
             ->disableOriginalConstructor()
             ->setMethods(['getEntityTypeCode', 'getBehavior', 'getEntities', 'getRelatedIndexers'])
@@ -313,7 +313,7 @@ class ImportTest extends AbstractImportTestCase
             $this->import->expects($this->once())->method($method)->willReturn(null);
         }
 
-        $this->assertEquals(true, $this->import->importSource());
+        $this->assertTrue($this->import->importSource());
     }
 
     /**
@@ -518,7 +518,7 @@ class ImportTest extends AbstractImportTestCase
         $indexer2 = clone $indexer1;
         $logger = $this->getMockBuilder(LoggerInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $indexer1->expects($this->once())
             ->method('isScheduled')
@@ -576,7 +576,7 @@ class ImportTest extends AbstractImportTestCase
 
         $logger = $this->getMockBuilder(LoggerInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $import = new Import(
             $logger,
@@ -606,7 +606,7 @@ class ImportTest extends AbstractImportTestCase
 
         $logger = $this->getMockBuilder(LoggerInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $import = new Import(
             $logger,
@@ -642,7 +642,7 @@ class ImportTest extends AbstractImportTestCase
 
         $logger = $this->getMockBuilder(LoggerInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $import = new Import(
             $logger,

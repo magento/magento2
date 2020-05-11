@@ -69,7 +69,7 @@ class PatchRegirtryTest extends TestCase
             ->with(\SomeDataPatch::class)
             ->willReturn(true);
 
-        $this->assertEquals(false, $this->patchRegistry->registerPatch(\SomeDataPatch::class));
+        $this->assertFalse($this->patchRegistry->registerPatch(\SomeDataPatch::class));
     }
 
     public function testGetIterator()

@@ -36,7 +36,7 @@ class CurrencyTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->urlBuilderMock = $this->createMock(UrlInterface::class);
+        $this->urlBuilderMock = $this->getMockForAbstractClass(UrlInterface::class);
         $this->urlBuilderMock->expects($this->any())->method('getUrl')->willReturnArgument(0);
 
         /**
@@ -65,7 +65,7 @@ class CurrencyTest extends TestCase
         $this->postDataHelperMock = $this->createMock(PostHelper::class);
 
         /** @var ResolverInterface $localeResolverMock */
-        $localeResolverMock = $this->createMock(ResolverInterface::class);
+        $localeResolverMock = $this->getMockForAbstractClass(ResolverInterface::class);
 
         $this->object = new Currency(
             $contextMock,

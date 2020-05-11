@@ -85,7 +85,7 @@ class LinkTypeProviderTest extends TestCase
         $linkTypeMocks = [];
         foreach ($this->linkTypes as $type => $typeCode) {
             $value = ['name' => $type, 'code' => $typeCode];
-            $linkTypeMock = $this->createMock(ProductLinkTypeInterface::class);
+            $linkTypeMock = $this->getMockForAbstractClass(ProductLinkTypeInterface::class);
             $linkTypeMock->expects($this->once())
                 ->method('setName')
                 ->with($type)
@@ -111,7 +111,7 @@ class LinkTypeProviderTest extends TestCase
         $attributes = [
             ['code' => 'test_code_1', 'type' => 'test_type_1'],
         ];
-        $linkAttributeMock = $this->createMock(ProductLinkAttributeInterface::class);
+        $linkAttributeMock = $this->getMockForAbstractClass(ProductLinkAttributeInterface::class);
         $linkAttributeMock->expects($this->once())
             ->method('setCode')
             ->with($attributes[0]['code'])

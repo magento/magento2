@@ -60,7 +60,7 @@ class EditTest extends TestCase
     {
         $this->_systemConfigMock = $this->createMock(Structure::class);
 
-        $this->_requestMock = $this->createMock(RequestInterface::class);
+        $this->_requestMock = $this->getMockForAbstractClass(RequestInterface::class);
         $this->_requestMock->expects(
             $this->any()
         )->method(
@@ -194,7 +194,7 @@ class EditTest extends TestCase
      */
     public function testGetConfigSearchParamsJson(array $requestData, array $expected)
     {
-        $requestMock = $this->createMock(RequestInterface::class);
+        $requestMock = $this->getMockForAbstractClass(RequestInterface::class);
 
         $requestMock->expects($this->any())
             ->method('getParam')

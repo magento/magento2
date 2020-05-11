@@ -42,8 +42,8 @@ class RedirectTest extends TestCase
     {
         $this->session = $this->createMock(Session::class);
         $this->actionFlag = $this->createMock(ActionFlag::class);
-        $this->urlBuilder = $this->createMock(UrlInterface::class);
-        $this->redirect = $this->createMock(RedirectInterface::class);
+        $this->urlBuilder = $this->getMockForAbstractClass(UrlInterface::class);
+        $this->redirect = $this->getMockForAbstractClass(RedirectInterface::class);
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->action = $this->objectManagerHelper->getObject(
             Redirect::class,

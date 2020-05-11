@@ -364,7 +364,7 @@ class AddressTest extends TestCase
      */
     protected function _getModelMock()
     {
-        $scopeConfig = $this->createMock(ScopeConfigInterface::class);
+        $scopeConfig = $this->getMockForAbstractClass(ScopeConfigInterface::class);
         $modelMock = new Address(
             $this->_stringLib,
             $scopeConfig,

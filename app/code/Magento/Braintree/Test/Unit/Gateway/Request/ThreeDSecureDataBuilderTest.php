@@ -66,7 +66,7 @@ class ThreeDSecureDataBuilderTest extends TestCase
         $this->paymentDOMock = $this->getMockBuilder(PaymentDataObjectInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['getOrder', 'getPayment'])
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->paymentDOMock->expects(static::once())
             ->method('getOrder')
             ->willReturn($this->orderMock);

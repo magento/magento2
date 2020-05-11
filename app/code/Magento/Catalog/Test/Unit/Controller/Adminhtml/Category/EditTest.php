@@ -192,7 +192,7 @@ class EditTest extends TestCase
         );
         $this->objectManagerMock = $this->getMockBuilder(ObjectManagerInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->eventManagerMock = $this->getMockForAbstractClass(
             ManagerInterface::class,
             [],

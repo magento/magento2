@@ -80,11 +80,11 @@ class LinksTest extends TestCase
         $this->productMock = $this->getMockBuilder(ProductInterface::class)
             ->setMethods(['getLinksTitle', 'getId', 'getTypeId'])
             ->getMockForAbstractClass();
-        $this->locatorMock = $this->createMock(LocatorInterface::class);
-        $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
+        $this->locatorMock = $this->getMockForAbstractClass(LocatorInterface::class);
+        $this->scopeConfigMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
         $this->escaperMock = $this->createMock(Escaper::class);
         $this->downloadableFileMock = $this->createMock(DownloadableFile::class);
-        $this->urlBuilderMock = $this->createMock(UrlInterface::class);
+        $this->urlBuilderMock = $this->getMockForAbstractClass(UrlInterface::class);
         $this->linkModelMock = $this->createMock(LinkModel::class);
         $this->links = $this->objectManagerHelper->getObject(
             Links::class,

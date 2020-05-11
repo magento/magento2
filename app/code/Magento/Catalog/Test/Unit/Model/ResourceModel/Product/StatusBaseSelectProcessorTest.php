@@ -82,7 +82,7 @@ class StatusBaseSelectProcessorTest extends TestCase
         $attributeId = 2;
         $currentStoreId = 1;
 
-        $metadata = $this->createMock(EntityMetadataInterface::class);
+        $metadata = $this->getMockForAbstractClass(EntityMetadataInterface::class);
         $metadata->expects($this->once())
             ->method('getLinkField')
             ->willReturn($linkField);
@@ -94,7 +94,7 @@ class StatusBaseSelectProcessorTest extends TestCase
         /** @var AttributeInterface|MockObject $statusAttribute */
         $statusAttribute = $this->getMockBuilder(AttributeInterface::class)
             ->setMethods(['getBackendTable', 'getAttributeId'])
-            ->getMock();
+            ->getMockForAbstractClass();
         $statusAttribute->expects($this->atLeastOnce())
             ->method('getBackendTable')
             ->willReturn($backendTable);

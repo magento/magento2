@@ -39,7 +39,7 @@ class CacheInvalidateTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->typeList = $this->createMock(TypeListInterface::class);
+        $this->typeList = $this->getMockForAbstractClass(TypeListInterface::class);
         $this->swatchHelper = $this->createMock(Data::class);
         $this->attribute = $this->createMock(Attribute::class);
 

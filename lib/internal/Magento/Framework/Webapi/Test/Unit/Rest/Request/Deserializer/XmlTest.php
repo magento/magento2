@@ -62,7 +62,7 @@ class XmlTest extends TestCase
         $this->_xmlParserMock->expects($this->once())->method('loadXML');
         $validInputXml = '<?xml version="1.0"?><xml><key1>test1</key1><key2>test2</key2></xml>';
         $returnArray = ['xml' => ['key1' => 'test1', 'key2' => 'test2']];
-        $this->_xmlParserMock->expects($this->once())->method('xmlToArray')->will($this->returnValue($returnArray));
+        $this->_xmlParserMock->expects($this->once())->method('xmlToArray')->willReturn($returnArray);
         $expectedArray = ['key1' => 'test1', 'key2' => 'test2'];
         /** Initialize SUT. */
         $this->assertEquals(
@@ -104,7 +104,7 @@ class XmlTest extends TestCase
         /** Prepare mocks for SUT constructor. */
         $this->_appStateMock->expects($this->once())
             ->method('getMode')
-            ->will($this->returnValue('developer'));
+            ->willReturn('developer');
         $errorMessage = 'End tag for "key1" was omitted.';
         $this->_xmlDeserializer->handleErrors(null, $errorMessage, null, null);
         $this->_xmlParserMock->expects($this->once())->method('loadXML');
@@ -130,7 +130,7 @@ class XmlTest extends TestCase
         /** Prepare mocks for SUT constructor. */
         $this->_appStateMock->expects($this->once())
             ->method('getMode')
-            ->will($this->returnValue('production'));
+            ->willReturn('production');
         $errorMessage = 'End tag for "key1" was omitted.';
         $this->_xmlDeserializer->handleErrors(null, $errorMessage, null, null);
         $this->_xmlParserMock->expects($this->once())->method('loadXML');

@@ -42,7 +42,7 @@ class DataMapperFactoryTest extends TestCase
     {
         $this->objectManagerMock = $this->getMockBuilder(ObjectManagerInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->dataMappers = [
             'product' => 'productDataMapper',
         ];

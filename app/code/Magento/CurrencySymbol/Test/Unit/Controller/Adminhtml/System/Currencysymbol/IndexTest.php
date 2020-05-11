@@ -92,7 +92,7 @@ class IndexTest extends TestCase
 
         $this->layoutMock = $this->createMock(Layout::class);
 
-        $this->viewMock = $this->createMock(ViewInterface::class);
+        $this->viewMock = $this->getMockForAbstractClass(ViewInterface::class);
 
         $this->action = $objectManager->getObject(
             Index::class,

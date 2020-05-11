@@ -36,7 +36,7 @@ class DeleteFolderTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->objectManager = $this->createMock(ObjectManagerInterface::class);
+        $this->objectManager = $this->getMockForAbstractClass(ObjectManagerInterface::class);
         $this->response = $this->createMock(Http::class);
         $this->storage = $this->createMock(\Magento\Theme\Model\Wysiwyg\Storage::class);
         $this->storageHelper = $this->createMock(Storage::class);

@@ -209,27 +209,27 @@ class AccountManagementTest extends TestCase
     protected function setUp(): void
     {
         $this->customerFactory = $this->createPartialMock(CustomerFactory::class, ['create']);
-        $this->manager = $this->createMock(ManagerInterface::class);
+        $this->manager = $this->getMockForAbstractClass(ManagerInterface::class);
         $this->store = $this->getMockBuilder(Store::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->storeManager = $this->createMock(StoreManagerInterface::class);
+        $this->storeManager = $this->getMockForAbstractClass(StoreManagerInterface::class);
         $this->random = $this->createMock(Random::class);
         $this->validator = $this->createMock(Validator::class);
         $this->validationResultsInterfaceFactory = $this->createMock(
             ValidationResultsInterfaceFactory::class
         );
-        $this->addressRepository = $this->createMock(AddressRepositoryInterface::class);
-        $this->customerMetadata = $this->createMock(CustomerMetadataInterface::class);
+        $this->addressRepository = $this->getMockForAbstractClass(AddressRepositoryInterface::class);
+        $this->customerMetadata = $this->getMockForAbstractClass(CustomerMetadataInterface::class);
         $this->customerRegistry = $this->createMock(CustomerRegistry::class);
-        $this->logger = $this->createMock(LoggerInterface::class);
-        $this->encryptor = $this->createMock(EncryptorInterface::class);
+        $this->logger = $this->getMockForAbstractClass(LoggerInterface::class);
+        $this->encryptor = $this->getMockForAbstractClass(EncryptorInterface::class);
         $this->share = $this->createMock(Share::class);
         $this->string = $this->createMock(StringUtils::class);
-        $this->customerRepository = $this->createMock(CustomerRepositoryInterface::class);
+        $this->customerRepository = $this->getMockForAbstractClass(CustomerRepositoryInterface::class);
         $this->scopeConfig = $this->getMockBuilder(ScopeConfigInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->transportBuilder = $this->createMock(TransportBuilder::class);
         $this->dataObjectProcessor = $this->createMock(DataObjectProcessor::class);
         $this->registry = $this->createMock(Registry::class);
@@ -266,10 +266,10 @@ class AccountManagementTest extends TestCase
             ->getMock();
         $this->sessionManager = $this->getMockBuilder(SessionManagerInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->saveHandler = $this->getMockBuilder(SaveHandlerInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->accountManagement = $this->objectManagerHelper->getObject(
@@ -380,7 +380,7 @@ class AccountManagementTest extends TestCase
 
         $address = $this->getMockBuilder(AddressInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $store = $this->getMockBuilder(Store::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -458,7 +458,7 @@ class AccountManagementTest extends TestCase
 
         $address = $this->getMockBuilder(AddressInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $store = $this->getMockBuilder(Store::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -535,7 +535,7 @@ class AccountManagementTest extends TestCase
 
         $address = $this->getMockBuilder(AddressInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $address->expects($this->once())
             ->method('setCustomerId')
             ->with($customerId);
@@ -707,7 +707,7 @@ class AccountManagementTest extends TestCase
 
         $address = $this->getMockBuilder(AddressInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $address->expects($this->once())
             ->method('setCustomerId')
             ->with($customerId);
@@ -969,7 +969,7 @@ class AccountManagementTest extends TestCase
             ->willReturn($hash);
         $address = $this->getMockBuilder(AddressInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $address->expects($this->once())
             ->method('setCustomerId')
             ->with($customerId);
@@ -1205,7 +1205,7 @@ class AccountManagementTest extends TestCase
             ->setMethods(['setShouldIgnoreValidation'])->getMock();
 
         /** @var AddressInterface|MockObject $customer */
-        $address = $this->createMock(AddressInterface::class);
+        $address = $this->getMockForAbstractClass(AddressInterface::class);
         $address->expects($this->once())
             ->method('getId')
             ->willReturn($addressId);
@@ -1667,7 +1667,7 @@ class AccountManagementTest extends TestCase
             ->setMethods(['setShouldIgnoreValidation'])->getMock();
 
         /** @var AddressInterface|MockObject $customer */
-        $address = $this->createMock(AddressInterface::class);
+        $address = $this->getMockForAbstractClass(AddressInterface::class);
         $address->expects($this->any())
             ->method('getId')
             ->willReturn($addressId);
@@ -1936,10 +1936,10 @@ class AccountManagementTest extends TestCase
         //Handle address - existing and non-existing. Non-Existing should return null when call getId method
         $existingAddress = $this->getMockBuilder(AddressInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $nonExistingAddress = $this->getMockBuilder(AddressInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         //Ensure that existing address is not in use
         $this->addressRepository
             ->expects($this->atLeastOnce())
@@ -2081,7 +2081,7 @@ class AccountManagementTest extends TestCase
 
         $datetime = $this->prepareDateTimeFactory();
 
-        $address = $this->createMock(AddressInterface::class);
+        $address = $this->getMockForAbstractClass(AddressInterface::class);
         $address->expects($this->once())
             ->method('setCustomerId')
             ->with($customerId);

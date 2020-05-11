@@ -153,7 +153,7 @@ class ConfigurableTest extends TestCase
         $this->objectHelper = new ObjectManager($this);
         $eventManager = $this->getMockBuilder(ManagerInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $fileStorageDbMock = $this->getMockBuilder(Database::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -165,7 +165,7 @@ class ConfigurableTest extends TestCase
             ->getMock();
         $logger = $this->getMockBuilder(LoggerInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->typeConfigurableFactory = $this->getMockBuilder(ConfigurableFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create', 'saveProducts'])
@@ -184,10 +184,10 @@ class ConfigurableTest extends TestCase
             ->getMock();
         $this->productRepository = $this->getMockBuilder(ProductRepositoryInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->extensionAttributesJoinProcessorMock = $this->getMockBuilder(JoinProcessorInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->entityMetadata = $this->getMockBuilder(EntityMetadata::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -196,7 +196,7 @@ class ConfigurableTest extends TestCase
             ->getMock();
         $this->cache = $this->getMockBuilder(FrontendInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->catalogConfig = $this->getMockBuilder(Config::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -655,7 +655,7 @@ class ConfigurableTest extends TestCase
             ->getMock();
         $optionMock = $this->getMockBuilder(OptionInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $usedAttributeMock = $this->getMockBuilder(
             Attribute::class
         )

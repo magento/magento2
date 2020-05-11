@@ -107,7 +107,7 @@ class AbstractAttributeTest extends TestCase
 
     public function testConvertToObjects()
     {
-        $attributeOptionMock = $this->createMock(AttributeOptionInterface::class);
+        $attributeOptionMock = $this->getMockForAbstractClass(AttributeOptionInterface::class);
         $dataFactoryMock = $this->createPartialMock(
             AttributeOptionInterfaceFactory::class,
             ['create']
@@ -159,7 +159,7 @@ class AbstractAttributeTest extends TestCase
         $modelClassName = AbstractAttribute::class;
         $model = $this->getMockForAbstractClass($modelClassName, [], '', false);
 
-        $serializerMock = $this->createMock(SerializerInterface::class);
+        $serializerMock = $this->getMockForAbstractClass(SerializerInterface::class);
 
         $reflection = new \ReflectionClass($modelClassName);
         $reflectionProperty = $reflection->getProperty('serializer');

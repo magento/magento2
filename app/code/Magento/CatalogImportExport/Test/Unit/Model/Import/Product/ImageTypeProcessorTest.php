@@ -30,7 +30,7 @@ class ImageTypeProcessorTest extends TestCase
             ->method('getTable')
             ->with('eav_attribute')
             ->willReturnArgument(0);
-        $connection = $this->createMock(AdapterInterface::class);
+        $connection = $this->getMockForAbstractClass(AdapterInterface::class);
         $resource->expects($this->any())
             ->method('getConnection')
             ->willReturn($connection);

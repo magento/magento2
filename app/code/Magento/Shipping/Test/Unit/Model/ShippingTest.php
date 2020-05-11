@@ -68,7 +68,7 @@ class ShippingTest extends TestCase
     {
         $this->stockRegistry = $this->createMock(StockRegistry::class);
         $this->stockItemData = $this->createMock(StockItem::class);
-        $this->scopeConfig = $this->createMock(ScopeConfigInterface::class);
+        $this->scopeConfig = $this->getMockForAbstractClass(ScopeConfigInterface::class);
 
         $this->shipping = (new ObjectManagerHelper($this))->getObject(
             Shipping::class,

@@ -34,13 +34,13 @@ class ConfigCacheTest extends TestCase
     protected function setUp(): void
     {
         $objectManagerHelper = new ObjectManager($this);
-        $this->cacheFrontendMock = $this->createMock(FrontendInterface::class);
+        $this->cacheFrontendMock = $this->getMockForAbstractClass(FrontendInterface::class);
         $this->configCache = $objectManagerHelper->getObject(
             ConfigCache::class,
             ['cacheFrontend' => $this->cacheFrontendMock]
         );
 
-        $this->serializerMock = $this->createMock(SerializerInterface::class);
+        $this->serializerMock = $this->getMockForAbstractClass(SerializerInterface::class);
         $objectManagerHelper->setBackwardCompatibleProperty(
             $this->configCache,
             'serializer',

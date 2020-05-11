@@ -46,9 +46,9 @@ class DeviceDataBuilderTest extends TestCase
             ->setMethods(['readPayment'])
             ->getMock();
 
-        $this->paymentDataObjectMock = $this->createMock(PaymentDataObjectInterface::class);
+        $this->paymentDataObjectMock = $this->getMockForAbstractClass(PaymentDataObjectInterface::class);
 
-        $this->paymentInfoMock = $this->createMock(InfoInterface::class);
+        $this->paymentInfoMock = $this->getMockForAbstractClass(InfoInterface::class);
 
         $this->builder = new DeviceDataBuilder($this->subjectReaderMock);
     }

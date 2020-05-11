@@ -63,7 +63,7 @@ class OptionPriceRendererTest extends TestCase
         $priceRenderer = $this->getMockBuilder(BlockInterface::class)
             ->addMethods(['render'])
             ->onlyMethods(['toHtml'])
-            ->getMock();
+            ->getMockForAbstractClass();
         $priceRenderer->expects($this->once())
             ->method('render')
             ->with('tier_price', $productMock, $expectedArguments)

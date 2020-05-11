@@ -32,7 +32,7 @@ class ReverseResolverTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->_moduleList = $this->createMock(ModuleListInterface::class);
+        $this->_moduleList = $this->getMockForAbstractClass(ModuleListInterface::class);
         $this->_moduleDirs = $this->createMock(Dir::class);
         $this->_model = new ReverseResolver($this->_moduleList, $this->_moduleDirs);
     }

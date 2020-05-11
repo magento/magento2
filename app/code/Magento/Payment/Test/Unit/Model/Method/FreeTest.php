@@ -39,12 +39,12 @@ class FreeTest extends TestCase
     protected function setUp(): void
     {
         $paymentData  = $this->createMock(Data::class);
-        $this->scopeConfig = $this->createMock(ScopeConfigInterface::class);
+        $this->scopeConfig = $this->getMockForAbstractClass(ScopeConfigInterface::class);
         $this->currencyPrice = $this->getMockBuilder(PriceCurrencyInterface::class)
             ->getMock();
 
         $context = $this->createPartialMock(Context::class, ['getEventDispatcher']);
-        $eventManagerMock = $this->createMock(ManagerInterface::class);
+        $eventManagerMock = $this->getMockForAbstractClass(ManagerInterface::class);
         $context->expects($this->any())->method('getEventDispatcher')->willReturn($eventManagerMock);
 
         $registry = $this->createMock(Registry::class);

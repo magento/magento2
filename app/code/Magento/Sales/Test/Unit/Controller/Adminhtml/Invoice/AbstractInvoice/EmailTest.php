@@ -110,8 +110,8 @@ class EmailTest extends TestCase
     {
         $objectManagerHelper = new ObjectManagerHelper($this);
         $this->context = $this->createMock(Context::class);
-        $this->response = $this->createMock(ResponseInterface::class);
-        $this->request = $this->createMock(RequestInterface::class);
+        $this->response = $this->getMockForAbstractClass(ResponseInterface::class);
+        $this->request = $this->getMockForAbstractClass(RequestInterface::class);
         $this->objectManager = $this->createMock(\Magento\Framework\ObjectManager\ObjectManager::class);
         $this->messageManager = $this->createMock(Manager::class);
         $this->session = $this->getMockBuilder(Session::class)
@@ -155,7 +155,7 @@ class EmailTest extends TestCase
 
         $this->invoiceManagement = $this->getMockBuilder(InvoiceManagementInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->resultForward = $this->getMockBuilder(Forward::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -197,7 +197,7 @@ class EmailTest extends TestCase
             ->willReturn($invoiceId);
         $invoiceRepository = $this->getMockBuilder(InvoiceRepositoryInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $invoiceRepository->expects($this->any())
             ->method('get')
             ->willReturn($invoice);
@@ -265,7 +265,7 @@ class EmailTest extends TestCase
 
         $invoiceRepository = $this->getMockBuilder(InvoiceRepositoryInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $invoiceRepository->expects($this->any())
             ->method('get')
             ->willReturn(null);

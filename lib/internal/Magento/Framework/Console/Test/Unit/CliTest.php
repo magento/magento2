@@ -55,7 +55,7 @@ class CliTest extends TestCase
         $this->expectExceptionMessage('Test message');
         $e = new \Exception('Test message');
         $this->inputMock->expects($this->once())->method('getFirstArgument')->willThrowException($e);
-        $loggerMock = $this->createMock(LoggerInterface::class);
+        $loggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
         $loggerMock->expects($this->once())
             ->method('error')
             ->with($e->getMessage() . PHP_EOL . $e->getTraceAsString());

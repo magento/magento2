@@ -68,13 +68,13 @@ class GatewayCommandTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->requestBuilder = $this->createMock(BuilderInterface::class);
-        $this->transferFactory = $this->createMock(TransferFactoryInterface::class);
-        $this->client = $this->createMock(ClientInterface::class);
-        $this->responseHandler = $this->createMock(HandlerInterface::class);
-        $this->validator = $this->createMock(ValidatorInterface::class);
-        $this->logger = $this->createMock(LoggerInterface::class);
-        $this->errorMessageMapper = $this->createMock(ErrorMessageMapperInterface::class);
+        $this->requestBuilder = $this->getMockForAbstractClass(BuilderInterface::class);
+        $this->transferFactory = $this->getMockForAbstractClass(TransferFactoryInterface::class);
+        $this->client = $this->getMockForAbstractClass(ClientInterface::class);
+        $this->responseHandler = $this->getMockForAbstractClass(HandlerInterface::class);
+        $this->validator = $this->getMockForAbstractClass(ValidatorInterface::class);
+        $this->logger = $this->getMockForAbstractClass(LoggerInterface::class);
+        $this->errorMessageMapper = $this->getMockForAbstractClass(ErrorMessageMapperInterface::class);
 
         $this->command = new GatewayCommand(
             $this->requestBuilder,

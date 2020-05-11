@@ -176,7 +176,7 @@ class IndexTest extends TestCase
 
         $this->eventManager = $this->getMockBuilder(ManagerInterface::class)
             ->setMethods(['dispatch'])
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->product = $this->getMockBuilder(ProductInterface::class)
             ->disableOriginalConstructor()
@@ -194,7 +194,7 @@ class IndexTest extends TestCase
 
         $this->connection = $this->getMockBuilder(AdapterInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->select = $this->getMockBuilder(Select::class)
             ->disableOriginalConstructor()
@@ -245,7 +245,7 @@ class IndexTest extends TestCase
 
         $connection = $this->getMockBuilder(AdapterInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $resource = $this->getMockBuilder(ResourceConnection::class)
             ->setMethods([

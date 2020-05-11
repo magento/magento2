@@ -79,14 +79,14 @@ class ItemTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->_aclMock = $this->createMock(AuthorizationInterface::class);
-        $this->_scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
+        $this->_aclMock = $this->getMockForAbstractClass(AuthorizationInterface::class);
+        $this->_scopeConfigMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
         $this->_menuFactoryMock = $this->createPartialMock(MenuFactory::class, ['create']);
         $this->_urlModelMock = $this->createMock(Url::class);
         $this->_moduleManager = $this->createMock(Manager::class);
         $validatorMock = $this->createMock(Validator::class);
         $validatorMock->expects($this->any())->method('validate');
-        $this->_moduleListMock = $this->createMock(ModuleListInterface::class);
+        $this->_moduleListMock = $this->getMockForAbstractClass(ModuleListInterface::class);
 
         $this->objectManager = new ObjectManager($this);
         $this->_model = $this->objectManager->getObject(

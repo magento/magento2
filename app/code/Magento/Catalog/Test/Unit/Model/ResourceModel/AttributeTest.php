@@ -116,10 +116,10 @@ class AttributeTest extends TestCase
         $this->lockValidatorMock = $this->getMockBuilder(LockValidatorInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['validate'])
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->entityMetaDataInterfaceMock = $this->getMockBuilder(EntityMetadataInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
     }
 
     /**

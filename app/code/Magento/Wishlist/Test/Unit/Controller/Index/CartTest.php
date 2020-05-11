@@ -7,8 +7,11 @@ declare(strict_types=1);
 
 namespace Magento\Wishlist\Test\Unit\Controller\Index;
 
-use Magento\Catalog\Helper\Product;
+use Magento\Catalog\Helper\Product as ProductHelper;
+use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Exception as ProductException;
+use Magento\Checkout\Model\Cart as CheckoutCart;
+use Magento\Checkout\Helper\Cart as CartHelper;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\App\Response\RedirectInterface;
@@ -21,6 +24,8 @@ use Magento\Framework\Escaper;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Message\ManagerInterface;
 use Magento\Framework\ObjectManagerInterface;
+use Magento\Framework\Stdlib\Cookie\CookieMetadataFactory;
+use Magento\Framework\Stdlib\CookieManagerInterface;
 use Magento\Framework\UrlInterface;
 use Magento\Quote\Model\Quote;
 use Magento\Wishlist\Controller\Index\Cart;
@@ -68,7 +73,7 @@ class CartTest extends TestCase
     protected $itemFactoryMock;
 
     /**
-     * @var \Magento\Checkout\Model\Cart|MockObject
+     * @var CheckoutCart|MockObject
      */
     protected $checkoutCartMock;
 
@@ -78,7 +83,7 @@ class CartTest extends TestCase
     protected $optionFactoryMock;
 
     /**
-     * @var Product|MockObject
+     * @var ProductHelper|MockObject
      */
     protected $productHelperMock;
 
@@ -118,7 +123,7 @@ class CartTest extends TestCase
     protected $urlMock;
 
     /**
-     * @var \Magento\Checkout\Helper\Cart|MockObject
+     * @var CartHelper|MockObject
      */
     protected $cartHelperMock;
 
@@ -143,6 +148,16 @@ class CartTest extends TestCase
     protected $formKeyValidator;
 
     /**
+     * @var CookieManagerInterface|MockObject
+     */
+    private $cookieManagerMock;
+
+    /**
+     * @var CookieMetadataFactory|MockObject
+     */
+    private $cookieMetadataFactoryMock;
+
+    /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function setUp(): void
@@ -162,7 +177,7 @@ class CartTest extends TestCase
             ->setMethods(['create'])
             ->getMock();
 
-        $this->checkoutCartMock = $this->getMockBuilder(\Magento\Checkout\Model\Cart::class)
+        $this->checkoutCartMock = $this->getMockBuilder(CheckoutCart::class)
             ->disableOriginalConstructor()
             ->setMethods(['save', 'getQuote', 'getShouldRedirectToCart', 'getCartUrl'])
             ->getMock();
@@ -172,7 +187,7 @@ class CartTest extends TestCase
             ->setMethods(['create'])
             ->getMock();
 
-        $this->productHelperMock = $this->getMockBuilder(Product::class)
+        $this->productHelperMock = $this->getMockBuilder(ProductHelper::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -206,7 +221,7 @@ class CartTest extends TestCase
             ->disableOriginalConstructor()
             ->setMethods(['getUrl'])
             ->getMockForAbstractClass();
-        $this->cartHelperMock = $this->getMockBuilder(\Magento\Checkout\Helper\Cart::class)
+        $this->cartHelperMock = $this->getMockBuilder(CartHelper::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->resultFactoryMock = $this->getMockBuilder(ResultFactory::class)
@@ -253,6 +268,22 @@ class CartTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
+        $this->cookieManagerMock = $this->getMockForAbstractClass(CookieManagerInterface::class);
+
+        $this->cookieMetadataFactoryMock = $this->getMockBuilder(CookieMetadataFactory::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['createPublicCookieMetadata', 'setDuration', 'setPath', 'setHttpOnly'])
+            ->getMock();
+        $this->cookieMetadataFactoryMock->expects($this->any())
+            ->method('createPublicCookieMetadata')
+            ->willReturnSelf();
+        $this->cookieMetadataFactoryMock->expects($this->any())
+            ->method('setDuration')
+            ->willReturnSelf();
+        $this->cookieMetadataFactoryMock->expects($this->any())
+            ->method('setPath')
+            ->willReturnSelf();
+
         $this->model = new Cart(
             $this->contextMock,
             $this->wishlistProviderMock,
@@ -264,7 +295,9 @@ class CartTest extends TestCase
             $this->escaperMock,
             $this->helperMock,
             $this->cartHelperMock,
-            $this->formKeyValidator
+            $this->formKeyValidator,
+            $this->cookieManagerMock,
+            $this->cookieMetadataFactoryMock
         );
     }
 
@@ -575,15 +608,15 @@ class CartTest extends TestCase
             ->method('getHasError')
             ->willReturn(false);
 
-        $productMock = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
+        $productMock = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $itemMock->expects($this->once())
+        $itemMock->expects($this->atLeastOnce())
             ->method('getProduct')
             ->willReturn($productMock);
 
-        $productMock->expects($this->once())
+        $productMock->expects($this->atLeastOnce())
             ->method('getName')
             ->willReturn($productName);
 

@@ -160,10 +160,10 @@ class OrderServiceTest extends TestCase
             ->getMock();
 
         /** @var PaymentFailuresInterface|MockObject  $paymentFailures */
-        $paymentFailures = $this->createMock(PaymentFailuresInterface::class);
+        $paymentFailures = $this->getMockForAbstractClass(PaymentFailuresInterface::class);
 
         /** @var LoggerInterface|MockObject $logger */
-        $logger = $this->createMock(LoggerInterface::class);
+        $logger = $this->getMockForAbstractClass(LoggerInterface::class);
 
         $this->orderService = new OrderService(
             $this->orderRepositoryMock,

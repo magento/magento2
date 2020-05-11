@@ -120,7 +120,7 @@ class PostTest extends TestCase
         $this->requestMock = $this->getMockBuilder(Http::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->objectManagerMock = $this->createMock(ObjectManagerInterface::class);
+        $this->objectManagerMock = $this->getMockForAbstractClass(ObjectManagerInterface::class);
         $this->storeManagerMock = $this->getMockForAbstractClass(StoreManagerInterface::class);
         $this->storeModelMock = $this->createPartialMock(Store::class, ['__wakeup', 'getId']);
         $this->reviewMock = $this->getMockBuilder(Review::class)

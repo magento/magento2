@@ -33,7 +33,7 @@ class RetryButtonTest extends TestCase
     protected function setUp(): void
     {
         $this->detailsMock = $this->createMock(Details::class);
-        $this->requestMock = $this->createMock(RequestInterface::class);
+        $this->requestMock = $this->getMockForAbstractClass(RequestInterface::class);
         $this->block = new RetryButton(
             $this->detailsMock,
             $this->requestMock

@@ -88,7 +88,7 @@ class RendererTest extends TestCase
             ['less/config.less.js', [], $lessConfigFile],
             ['less/less.min.js', [], $lessMinFile]
         ];
-        $this->assetRepo->expects($this->exactly(2))->method('createAsset')->will($this->returnValueMap($assetMap));
+        $this->assetRepo->expects($this->exactly(2))->method('createAsset')->willReturnMap($assetMap);
 
         $resultGroups = "<script src=\"$lessConfigUrl\"></script>\n<script src=\"$lessMinUrl\"></script>\n";
 

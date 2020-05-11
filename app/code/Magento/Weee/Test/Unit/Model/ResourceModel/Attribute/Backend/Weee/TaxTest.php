@@ -40,8 +40,8 @@ class TaxTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
-        $this->connectionMock = $this->createMock(AdapterInterface::class);
+        $this->storeManagerMock = $this->getMockForAbstractClass(StoreManagerInterface::class);
+        $this->connectionMock = $this->getMockForAbstractClass(AdapterInterface::class);
 
         $this->resourceMock = $this->createMock(ResourceConnection::class);
         $this->resourceMock->expects($this->once())

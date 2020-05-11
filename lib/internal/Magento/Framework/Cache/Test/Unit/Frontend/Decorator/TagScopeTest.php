@@ -26,7 +26,7 @@ class TagScopeTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->_frontend = $this->createMock(FrontendInterface::class);
+        $this->_frontend = $this->getMockForAbstractClass(FrontendInterface::class);
         $this->_object = new TagScope($this->_frontend, 'enforced_tag');
     }
 

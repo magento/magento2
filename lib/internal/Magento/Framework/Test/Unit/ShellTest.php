@@ -31,7 +31,7 @@ class ShellTest extends TestCase
     {
         $this->logger = $this->getMockBuilder(LoggerInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->commandRenderer = new CommandRenderer();
     }
 

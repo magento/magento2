@@ -130,7 +130,7 @@ class ModuleTest extends TestCase
 
     public function testGetList()
     {
-        $objectManager = $this->createMock(ObjectManagerInterface::class);
+        $objectManager = $this->getMockForAbstractClass(ObjectManagerInterface::class);
         $this->objectManagerProvider->expects($this->once())
             ->method('get')
             ->willReturn($objectManager);

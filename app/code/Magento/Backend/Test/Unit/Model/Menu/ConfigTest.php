@@ -59,7 +59,7 @@ class ConfigTest extends TestCase
 
         $this->configReaderMock = $this->createMock(Reader::class);
 
-        $this->logger = $this->createMock(LoggerInterface::class);
+        $this->logger = $this->getMockForAbstractClass(LoggerInterface::class);
 
         $this->menuMock = $this->createMock(Menu::class);
 

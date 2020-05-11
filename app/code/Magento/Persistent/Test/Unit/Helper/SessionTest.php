@@ -74,7 +74,7 @@ class SessionTest extends TestCase
             ->getMock();
         $this->scopeConfig = $this->getMockBuilder(ScopeConfigInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->sessionFactory = $this->getMockBuilder(SessionFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])

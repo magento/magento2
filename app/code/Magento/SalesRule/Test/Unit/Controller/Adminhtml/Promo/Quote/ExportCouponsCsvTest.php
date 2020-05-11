@@ -68,7 +68,7 @@ class ExportCouponsCsvTest extends TestCase
         $fileName = 'coupon_codes.csv';
 
         $resultLayoutMock = $this->createMock(Layout::class);
-        $layoutMock = $this->createMock(LayoutInterface::class);
+        $layoutMock = $this->getMockForAbstractClass(LayoutInterface::class);
         $contentMock = $this->getMockBuilder(AbstractBlock::class)
             ->addMethods(['getCsvFile'])
             ->disableOriginalConstructor()

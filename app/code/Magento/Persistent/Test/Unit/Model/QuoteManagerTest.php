@@ -81,7 +81,7 @@ class QuoteManagerTest extends TestCase
         $this->abstractCollectionMock =
             $this->createMock(AbstractCollection::class);
 
-        $this->quoteRepositoryMock = $this->createMock(CartRepositoryInterface::class);
+        $this->quoteRepositoryMock = $this->getMockForAbstractClass(CartRepositoryInterface::class);
         $this->quoteMock = $this->getMockBuilder(Quote::class)
             ->addMethods([
                 'getIsPersistent',

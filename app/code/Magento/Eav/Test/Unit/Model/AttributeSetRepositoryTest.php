@@ -242,7 +242,7 @@ class AttributeSetRepositoryTest extends TestCase
 
         $this->collectionFactoryMock->expects($this->once())->method('create')->willReturn($collectionMock);
 
-        $searchCriteriaMock = $this->createMock(SearchCriteriaInterface::class);
+        $searchCriteriaMock = $this->getMockForAbstractClass(SearchCriteriaInterface::class);
 
         $resultMock = $this->getMockBuilder(AttributeSetSearchResultsInterface::class)
             ->getMockForAbstractClass();
@@ -298,7 +298,7 @@ class AttributeSetRepositoryTest extends TestCase
             ->method('create')
             ->willReturn($collectionMock);
 
-        $searchCriteriaMock = $this->createMock(SearchCriteriaInterface::class);
+        $searchCriteriaMock = $this->getMockForAbstractClass(SearchCriteriaInterface::class);
 
         $resultMock = $this->getMockBuilder(AttributeSetSearchResultsInterface::class)
             ->getMockForAbstractClass();

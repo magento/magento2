@@ -89,10 +89,10 @@ class RssTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->cacheMock = $this->createMock(CacheInterface::class);
-        $this->serializerMock = $this->createMock(SerializerInterface::class);
-        $this->feedFactoryMock = $this->createMock(FeedFactoryInterface::class);
-        $this->feedMock = $this->createMock(FeedInterface::class);
+        $this->cacheMock = $this->getMockForAbstractClass(CacheInterface::class);
+        $this->serializerMock = $this->getMockForAbstractClass(SerializerInterface::class);
+        $this->feedFactoryMock = $this->getMockForAbstractClass(FeedFactoryInterface::class);
+        $this->feedMock = $this->getMockForAbstractClass(FeedInterface::class);
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->rss = $this->objectManagerHelper->getObject(
@@ -107,7 +107,7 @@ class RssTest extends TestCase
 
     public function testGetFeeds()
     {
-        $dataProvider = $this->createMock(DataProviderInterface::class);
+        $dataProvider = $this->getMockForAbstractClass(DataProviderInterface::class);
         $dataProvider->expects($this->any())->method('getCacheKey')->willReturn('cache_key');
         $dataProvider->expects($this->any())->method('getCacheLifetime')->willReturn(100);
         $dataProvider->expects($this->any())->method('getRssData')->willReturn($this->feedData);
@@ -132,7 +132,7 @@ class RssTest extends TestCase
 
     public function testGetFeedsWithCache()
     {
-        $dataProvider = $this->createMock(DataProviderInterface::class);
+        $dataProvider = $this->getMockForAbstractClass(DataProviderInterface::class);
         $dataProvider->expects($this->any())->method('getCacheKey')->willReturn('cache_key');
         $dataProvider->expects($this->any())->method('getCacheLifetime')->willReturn(100);
         $dataProvider->expects($this->never())->method('getRssData');
@@ -154,7 +154,7 @@ class RssTest extends TestCase
 
     public function testCreateRssXml()
     {
-        $dataProvider = $this->createMock(DataProviderInterface::class);
+        $dataProvider = $this->getMockForAbstractClass(DataProviderInterface::class);
         $dataProvider->expects($this->any())->method('getCacheKey')->willReturn('cache_key');
         $dataProvider->expects($this->any())->method('getCacheLifetime')->willReturn(100);
         $dataProvider->expects($this->any())->method('getRssData')->willReturn($this->feedData);

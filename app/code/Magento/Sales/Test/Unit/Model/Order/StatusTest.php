@@ -144,7 +144,7 @@ class StatusTest extends TestCase
             $resource = $this->createMock(Status::class);
         }
         if (!$eventDispatcher) {
-            $eventDispatcher = $this->createMock(ManagerInterface::class);
+            $eventDispatcher = $this->getMockForAbstractClass(ManagerInterface::class);
         }
         $helper = new ObjectManager($this);
         $model = $helper->getObject(
@@ -174,7 +174,7 @@ class StatusTest extends TestCase
             );
         $resource->expects($this->once())->method('commit');
 
-        $eventDispatcher = $this->createMock(ManagerInterface::class);
+        $eventDispatcher = $this->getMockForAbstractClass(ManagerInterface::class);
 
         $model = $this->_getPreparedModel($resource, $eventDispatcher);
         $model->setStatus($status);

@@ -72,7 +72,7 @@ class MagentoImportTest extends TestCase
         $this->asset = $this->createMock(File::class);
         $this->asset->expects($this->any())->method('getContentType')->willReturn('css');
         $this->assetRepo = $this->createMock(Repository::class);
-        $this->themeProvider = $this->createMock(ThemeProviderInterface::class);
+        $this->themeProvider = $this->getMockForAbstractClass(ThemeProviderInterface::class);
         $this->object = (new ObjectManager($this))->getObject(MagentoImport::class, [
             'design' => $this->design,
             'fileSource' => $this->fileSource,

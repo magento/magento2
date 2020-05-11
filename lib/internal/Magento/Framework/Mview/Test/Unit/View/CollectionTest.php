@@ -63,7 +63,7 @@ class CollectionTest extends TestCase
         $this->entityFactoryMock = $this->getMockBuilder(EntityFactoryInterface::class)
             ->setMethods(['create'])
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->mviewConfigMock = $this->getMockBuilder(MviewConfigInterface::class)
             ->disableOriginalConstructor()

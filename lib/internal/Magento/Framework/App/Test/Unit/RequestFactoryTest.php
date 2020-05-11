@@ -27,7 +27,7 @@ class RequestFactoryTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->objectManagerMock = $this->createMock(ObjectManagerInterface::class);
+        $this->objectManagerMock = $this->getMockForAbstractClass(ObjectManagerInterface::class);
         $this->model = new RequestFactory($this->objectManagerMock);
     }
 
@@ -39,7 +39,7 @@ class RequestFactoryTest extends TestCase
     {
         $arguments = ['some_key' => 'same_value'];
 
-        $appRequest = $this->createMock(RequestInterface::class);
+        $appRequest = $this->getMockForAbstractClass(RequestInterface::class);
 
         $this->objectManagerMock->expects($this->once())
             ->method('create')

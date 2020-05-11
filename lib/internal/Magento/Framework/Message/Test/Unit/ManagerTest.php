@@ -93,8 +93,8 @@ class ManagerTest extends TestCase
                 ['getData', 'setData']
             )
             ->getMock();
-        $this->eventManager = $this->createMock(ManagerInterface::class);
-        $this->logger = $this->createMock(LoggerInterface::class);
+        $this->eventManager = $this->getMockForAbstractClass(ManagerInterface::class);
+        $this->logger = $this->getMockForAbstractClass(LoggerInterface::class);
 
         $this->exceptionMessageFactory = $this->getMockBuilder(
             ExceptionMessageLookupFactory::class
@@ -102,7 +102,7 @@ class ManagerTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->messageMock = $this->createMock(MessageInterface::class);
+        $this->messageMock = $this->getMockForAbstractClass(MessageInterface::class);
         $this->objectManager = new ObjectManager($this);
         $this->model = new Manager(
             $this->session,
@@ -258,7 +258,7 @@ class ManagerTest extends TestCase
             'critical'
         );
 
-        $message = $this->createMock(MessageInterface::class);
+        $message = $this->getMockForAbstractClass(MessageInterface::class);
 
         $this->messageFactory->expects(
             $this->never()

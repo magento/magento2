@@ -64,7 +64,7 @@ class FrontNameResolverTest extends TestCase
         $this->request = $this->createMock(Http::class);
 
         $this->configMock = $this->createMock(Config::class);
-        $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
+        $this->scopeConfigMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
         $this->model = new FrontNameResolver(
             $this->configMock,
             $deploymentConfigMock,

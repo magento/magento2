@@ -77,8 +77,8 @@ class HistoryTest extends TestCase
         $this->orderCollectionFactoryInterface =
             $this->getMockBuilder(CollectionFactoryInterface::class)
                 ->disableOriginalConstructor()
-                ->setMethods(['create'])->getMock();
-        $this->objectManager = $this->createMock(ObjectManagerInterface::class);
+                ->setMethods(['create'])->getMockForAbstractClass();
+        $this->objectManager = $this->getMockForAbstractClass(ObjectManagerInterface::class);
         $this->objectManager->expects($this->any())
             ->method('get')
             ->willReturn($this->orderCollectionFactoryInterface);

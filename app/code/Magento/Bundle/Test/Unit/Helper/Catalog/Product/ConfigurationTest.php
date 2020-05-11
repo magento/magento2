@@ -65,7 +65,7 @@ class ConfigurationTest extends TestCase
         $this->item = $this->getMockBuilder(ItemInterface::class)
             ->addMethods(['getQty'])
             ->onlyMethods(['getProduct', 'getOptionByCode', 'getFileDownloadParams'])
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->serializer = $this->getMockBuilder(Json::class)
             ->setMethods(['unserialize'])
             ->getMockForAbstractClass();

@@ -45,7 +45,7 @@ class CatalogEavValidationRulesTest extends TestCase
     public function testBuild($frontendInput, $frontendClass, array $eavConfig, array $expectedResult)
     {
         /** @var ProductAttributeInterface|MockObject $attribute */
-        $attribute = $this->createMock(ProductAttributeInterface::class);
+        $attribute = $this->getMockForAbstractClass(ProductAttributeInterface::class);
 
         $attribute->expects($this->once())
             ->method('getFrontendInput')

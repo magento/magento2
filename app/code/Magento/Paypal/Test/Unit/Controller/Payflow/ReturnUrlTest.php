@@ -147,7 +147,7 @@ class ReturnUrlTest extends TestCase
 
         $this->paymentFailures = $this->getMockBuilder(PaymentFailuresInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->context->method('getView')
             ->willReturn($this->view);

@@ -62,6 +62,6 @@ class AbstractSidebarTest extends TestCase
     public function testIsConfigurationRequired()
     {
         $productTypeMock = $this->createMock(Type::class);
-        $this->assertEquals(false, $this->abstractSidebar->isConfigurationRequired($productTypeMock));
+        $this->assertFalse($this->abstractSidebar->isConfigurationRequired($productTypeMock));
     }
 }

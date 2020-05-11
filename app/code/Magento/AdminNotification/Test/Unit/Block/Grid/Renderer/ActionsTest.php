@@ -38,7 +38,7 @@ class ActionsTest extends TestCase
         $escaperMock->expects($this->once())->method('escapeUrl')->willReturn('https://magento.com');
 
         /** @var UrlInterface|MockObject $urlBuilder */
-        $urlBuilder = $this->createMock(UrlInterface::class);
+        $urlBuilder = $this->getMockForAbstractClass(UrlInterface::class);
         $urlBuilder->expects($this->once())->method('getUrl')->willReturn('http://magento.com');
 
         /** @var Context|MockObject $contextMock */

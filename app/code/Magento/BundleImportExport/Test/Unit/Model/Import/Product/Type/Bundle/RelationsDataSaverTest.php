@@ -45,7 +45,7 @@ class RelationsDataSaverTest extends TestCase
             ->getMock();
         $this->connectionMock = $this->getMockBuilder(AdapterInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->productRelationMock = $this->getMockBuilder(Relation::class)
             ->disableOriginalConstructor()

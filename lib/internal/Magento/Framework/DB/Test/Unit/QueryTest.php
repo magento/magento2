@@ -85,7 +85,7 @@ class QueryTest extends TestCase
             ['getIdFieldName']
         );
         $this->fetchStmtMock = $this->createPartialMock(\Zend_Db_Statement_Pdo::class, ['fetch']);
-        $this->loggerMock = $this->createMock(LoggerInterface::class);
+        $this->loggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
         $this->fetchStrategyMock = $this->getMockForAbstractClass(
             FetchStrategyInterface::class,
             [],

@@ -73,9 +73,9 @@ class TaxRuleCollectionTest extends TestCase
         $this->searchCriteriaBuilderMock =
             $this->createMock(SearchCriteriaBuilder::class);
         $this->sortOrderBuilderMock = $this->createMock(SortOrderBuilder::class);
-        $this->ruleServiceMock = $this->createMock(TaxRuleRepositoryInterface::class);
+        $this->ruleServiceMock = $this->getMockForAbstractClass(TaxRuleRepositoryInterface::class);
         $this->searchCriteriaMock = $this->createMock(SearchCriteria::class);
-        $this->searchResultsMock = $this->createMock(TaxRateSearchResultsInterface::class);
+        $this->searchResultsMock = $this->getMockForAbstractClass(TaxRateSearchResultsInterface::class);
         $this->taxRuleMock = $this->getMockBuilder(Rule::class)
             ->disableOriginalConstructor()
             ->setMethods([

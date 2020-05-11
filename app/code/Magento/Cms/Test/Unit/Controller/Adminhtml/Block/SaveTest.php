@@ -132,7 +132,7 @@ class SaveTest extends TestCase
         )->disableOriginalConstructor()
             ->getMock();
 
-        $this->messageManagerMock = $this->createMock(ManagerInterface::class);
+        $this->messageManagerMock = $this->getMockForAbstractClass(ManagerInterface::class);
 
         $this->eventManagerMock = $this->getMockForAbstractClass(
             \Magento\Framework\Event\ManagerInterface::class,

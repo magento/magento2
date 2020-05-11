@@ -49,7 +49,7 @@ class DumpTest extends TestCase
         $this->themeList = $this->getMockBuilder(ListInterface::class)
             ->setMethods(['getItemById', 'getThemeByFullPath'])
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->prepareThemeMock();
 
         $this->dumpPlugin = new Dump($this->themeList, $this->arrayManager);

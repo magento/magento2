@@ -131,8 +131,8 @@ class NewActionTest extends TestCase
             ->setMethods([])
             ->getMock();
 
-        $this->messageManagerMock = $this->createMock(ManagerInterface::class);
-        $this->objectManagerMock = $this->createMock(ObjectManagerInterface::class);
+        $this->messageManagerMock = $this->getMockForAbstractClass(ManagerInterface::class);
+        $this->objectManagerMock = $this->getMockForAbstractClass(ObjectManagerInterface::class);
 
         $this->actionFlagMock = $this->getMockBuilder(ActionFlag::class)
             ->disableOriginalConstructor()
@@ -243,7 +243,7 @@ class NewActionTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->orderRepositoryMock = $this->createMock(OrderRepositoryInterface::class);
+        $this->orderRepositoryMock = $this->getMockForAbstractClass(OrderRepositoryInterface::class);
 
         $this->controller = $objectManager->getObject(
             NewAction::class,

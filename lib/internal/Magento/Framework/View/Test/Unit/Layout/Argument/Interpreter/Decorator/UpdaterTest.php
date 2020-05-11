@@ -33,7 +33,7 @@ class UpdaterTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->_objectManager = $this->createMock(ObjectManagerInterface::class);
+        $this->_objectManager = $this->getMockForAbstractClass(ObjectManagerInterface::class);
         $this->_interpreter = $this->getMockForAbstractClass(
             InterpreterInterface::class
         );

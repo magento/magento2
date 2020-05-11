@@ -27,7 +27,7 @@ class BackendAuthenticationTest extends TestCase
         $subject = $this->createMock(AbstractAction::class);
 
         /** @var ResponseInterface|MockObject $response */
-        $response = $this->createMock(ResponseInterface::class);
+        $response = $this->getMockForAbstractClass(ResponseInterface::class);
 
         $proceed = function () use ($response) {
             return $response;
@@ -40,7 +40,7 @@ class BackendAuthenticationTest extends TestCase
         $request->expects($this->once())->method('getParam')->with('type')->willReturn('notifystock');
 
         /** @var StorageInterface|MockObject $session */
-        $session = $this->createMock(StorageInterface::class);
+        $session = $this->getMockForAbstractClass(StorageInterface::class);
         $session->expects($this->at(0))->method('isLoggedIn')->willReturn(false);
         $session->expects($this->at(1))->method('isLoggedIn')->willReturn(true);
 
@@ -56,7 +56,7 @@ class BackendAuthenticationTest extends TestCase
             ->willReturn([$username, $password]);
         $httpAuthentication->expects($this->once())->method('setAuthenticationFailed')->with('RSS Feeds');
 
-        $authorization = $this->createMock(AuthorizationInterface::class);
+        $authorization = $this->getMockForAbstractClass(AuthorizationInterface::class);
         $authorization->expects($this->at(0))->method('isAllowed')->with('Magento_Rss::rss')
             ->willReturn(true);
         $authorization->expects($this->at(1))->method('isAllowed')->with('Magento_Catalog::catalog_inventory')

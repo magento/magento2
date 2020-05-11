@@ -39,12 +39,12 @@ class ConfigurableTest extends TestCase
     {
         parent::setUp();
         $objectManagerHelper = new ObjectManager($this);
-        $this->configManager = $this->createMock(ConfigInterface::class);
+        $this->configManager = $this->getMockForAbstractClass(ConfigInterface::class);
         $this->imageHelper = $this->createPartialMock(
             Image::class,
             ['init', 'resize']
         );
-        $this->scopeConfig = $this->createMock(ScopeConfigInterface::class);
+        $this->scopeConfig = $this->getMockForAbstractClass(ScopeConfigInterface::class);
         $this->productConfigMock = $this->createMock(Configuration::class);
         $this->renderer = $objectManagerHelper->getObject(
             \Magento\ConfigurableProduct\Block\Cart\Item\Renderer\Configurable::class,

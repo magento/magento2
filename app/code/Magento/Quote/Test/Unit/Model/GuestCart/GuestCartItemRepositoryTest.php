@@ -87,7 +87,7 @@ class GuestCartItemRepositoryTest extends TestCase
             ->method('setQuoteId')
             ->with($this->cartId);
 
-        $this->cartItemRepositoryMock = $this->createMock(CartItemRepositoryInterface::class);
+        $this->cartItemRepositoryMock = $this->getMockForAbstractClass(CartItemRepositoryInterface::class);
         $this->guestCartItemRepository =
             $objectManager->getObject(
                 GuestCartItemRepository::class,

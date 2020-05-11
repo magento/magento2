@@ -55,16 +55,16 @@ class IndexTest extends TestCase
     protected function setUp(): void
     {
         $this->rssManager = $this->createPartialMock(RssManager::class, ['getProvider']);
-        $this->scopeConfigInterface = $this->createMock(ScopeConfigInterface::class);
+        $this->scopeConfigInterface = $this->getMockForAbstractClass(ScopeConfigInterface::class);
         $this->rssFactory = $this->createPartialMock(RssFactory::class, ['create']);
 
-        $request = $this->createMock(RequestInterface::class);
+        $request = $this->getMockForAbstractClass(RequestInterface::class);
         $request->expects($this->once())->method('getParam')->with('type')->willReturn('rss_feed');
 
         $this->response = $this->getMockBuilder(ResponseInterface::class)
             ->setMethods(['setHeader', 'setBody', 'sendResponse'])
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $objectManagerHelper = new ObjectManagerHelper($this);
 
@@ -83,7 +83,7 @@ class IndexTest extends TestCase
     public function testExecute()
     {
         $this->scopeConfigInterface->expects($this->once())->method('getValue')->willReturn(true);
-        $dataProvider = $this->createMock(DataProviderInterface::class);
+        $dataProvider = $this->getMockForAbstractClass(DataProviderInterface::class);
         $dataProvider->expects($this->once())->method('isAllowed')->willReturn(true);
         $dataProvider->expects($this->once())->method('isAuthRequired')->willReturn(false);
 
@@ -103,7 +103,7 @@ class IndexTest extends TestCase
     public function testExecuteWithException()
     {
         $this->scopeConfigInterface->expects($this->once())->method('getValue')->willReturn(true);
-        $dataProvider = $this->createMock(DataProviderInterface::class);
+        $dataProvider = $this->getMockForAbstractClass(DataProviderInterface::class);
         $dataProvider->expects($this->once())->method('isAllowed')->willReturn(true);
 
         $rssModel = $this->createPartialMock(Rss::class, ['setDataProvider', 'createRssXml']);
