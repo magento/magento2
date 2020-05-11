@@ -20,7 +20,7 @@ class SearchConfigOptionsListTest extends TestCase
      */
     private $searchConfigOptionsList;
 
-    protected function setup()
+    protected function setup(): void
     {
         $objectManager = new ObjectManager($this);
         $this->searchConfigOptionsList = $objectManager->getObject(SearchConfigOptionsList::class);

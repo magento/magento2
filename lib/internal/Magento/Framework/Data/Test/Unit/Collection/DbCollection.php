@@ -3,12 +3,16 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\Data\Test\Unit\Collection;
+
+use Magento\Framework\Data\Collection\AbstractDb;
 
 /**
  * Concrete implementation of abstract collection, created for abstract collection testing purposes.
  */
-class DbCollection extends \Magento\Framework\Data\Collection\AbstractDb
+class DbCollection extends AbstractDb
 {
     /**
      * @var \Magento\Framework\Model\ResourceModel\Db\AbstractDb

@@ -30,7 +30,7 @@ class LockTest extends \PHPUnit\Framework\TestCase
      */
     protected $reader;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
