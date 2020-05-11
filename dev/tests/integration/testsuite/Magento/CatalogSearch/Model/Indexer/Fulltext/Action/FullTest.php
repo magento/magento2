@@ -20,7 +20,7 @@ use Magento\TestFramework\Helper\Bootstrap;
  */
 class FullTest extends \PHPUnit\Framework\TestCase
 {
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->markTestSkipped("MC-18332: Mysql Search Engine is deprecated and will be removed");
     }
@@ -54,8 +54,8 @@ class FullTest extends \PHPUnit\Framework\TestCase
         $productsIds = array_keys($result);
         foreach ($productsIds as $productId) {
             $product = $productRepository->getById($productId);
-            $this->assertContains($product->getVisibility(), $allowedVisibility);
-            $this->assertContains($product->getStatus(), $allowedStatuses);
+            $this->assertContainsEquals($product->getVisibility(), $allowedVisibility);
+            $this->assertContainsEquals($product->getStatus(), $allowedStatuses);
         }
 
         $expectedData = $this->getExpectedIndexData();

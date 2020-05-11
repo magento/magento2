@@ -31,7 +31,7 @@ class ValidatorTest extends TestCase
      */
     private $elasticsearchClientMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->clientResolverMock = $this->getMockBuilder(ClientResolver::class)
             ->disableOriginalConstructor()
