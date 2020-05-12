@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Bundle\Test\Unit\Observer;
 
 use Magento\Bundle\Helper\Data as BundleHelper;
@@ -90,7 +92,7 @@ class AppendUpsellProductsObserverTest extends TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp() : void
+    protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
         $this->observerMock = $this->createMock(Observer::class);
@@ -338,7 +340,7 @@ class AppendUpsellProductsObserverTest extends TestCase
             ->expects($this->once())
             ->method('getProduct')
             ->willReturn($this->productMock);
-        
+
         $this->bundleDataMock
             ->expects($this->once())
             ->method('getAllowedSelectionTypes')
@@ -348,7 +350,7 @@ class AppendUpsellProductsObserverTest extends TestCase
             ->expects($this->once())
             ->method('getTypeId')
             ->willReturn(ProductType::TYPE_SIMPLE);
-        
+
         $this->eventMock
             ->expects($this->once())
             ->method('getCollection')

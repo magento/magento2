@@ -3,33 +3,38 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\AsynchronousOperations\Test\Unit\Block\Adminhtml\Bulk\Details;
 
-class RetryButtonTest extends \PHPUnit\Framework\TestCase
+use Magento\AsynchronousOperations\Block\Adminhtml\Bulk\Details\RetryButton;
+use Magento\AsynchronousOperations\Model\Operation\Details;
+use Magento\Framework\App\RequestInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class RetryButtonTest extends TestCase
 {
     /**
-     * @var \Magento\AsynchronousOperations\Block\Adminhtml\Bulk\Details\RetryButton
+     * @var RetryButton
      */
     protected $block;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $detailsMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $requestMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->detailsMock = $this->getMockBuilder(\Magento\AsynchronousOperations\Model\Operation\Details::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->requestMock = $this->getMockBuilder(\Magento\Framework\App\RequestInterface::class)
-            ->getMock();
-        $this->block = new \Magento\AsynchronousOperations\Block\Adminhtml\Bulk\Details\RetryButton(
+        $this->detailsMock = $this->createMock(Details::class);
+        $this->requestMock = $this->getMockForAbstractClass(RequestInterface::class);
+        $this->block = new RetryButton(
             $this->detailsMock,
             $this->requestMock
         );

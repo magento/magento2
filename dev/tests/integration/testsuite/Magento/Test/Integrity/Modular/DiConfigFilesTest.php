@@ -115,12 +115,12 @@ class DiConfigFilesTest extends \PHPUnit\Framework\TestCase
         $fileResolverMock = $this->getMockBuilder(\Magento\Framework\Config\FileResolverInterface::class)
             ->setMethods(['read'])
             ->getMockForAbstractClass();
-        $fileResolverMock->expects($this->any())->method('read')->will($this->returnValue($files));
+        $fileResolverMock->expects($this->any())->method('read')->willReturn($files);
         $validationStateMock = $this->createPartialMock(
             \Magento\Framework\Config\ValidationStateInterface::class,
             ['isValidationRequired']
         );
-        $validationStateMock->expects($this->any())->method('isValidationRequired')->will($this->returnValue(true));
+        $validationStateMock->expects($this->any())->method('isValidationRequired')->willReturn(true);
 
         /** @var \Magento\Framework\ObjectManager\Config\SchemaLocator $schemaLocator */
         $schemaLocator = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(

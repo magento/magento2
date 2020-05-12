@@ -169,7 +169,7 @@ class UpdateProductReviewEntityOnProductPageTest extends Injectable
      *
      * @return void
      */
-    public function tearDown()
+    public function tearDown(): void
     {
         if (!$this->reviewInitial instanceof Review) {
             return;

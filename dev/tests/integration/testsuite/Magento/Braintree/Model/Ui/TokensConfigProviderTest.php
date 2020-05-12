@@ -41,7 +41,7 @@ class TokensConfigProviderTest extends \PHPUnit\Framework\TestCase
      */
     private $bootstrap;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->bootstrap = Bootstrap::getInstance();
         $this->bootstrap->loadArea(Area::AREA_FRONTEND);
