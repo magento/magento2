@@ -18,9 +18,9 @@
             <testCaseId value="MC-20359"/>
             <group value="Bundle"/>
             <group value="SearchEngineElasticsearch"/>
-            <skip>
-                <issueId value="MC-21228"/>
-            </skip>
+<!--            <skip>-->
+<!--                <issueId value="MC-21228"/>-->
+<!--            </skip>-->
         </annotations>
         <before>
             <createData entity="ApiProductWithDescription" stepKey="simple1" before="simple2"/>

@@ -18,9 +18,9 @@
             <testCaseId value="MC-20519"/>
             <group value="GroupedProduct"/>
             <group value="SearchEngineElasticsearch"/>
-            <skip>
-                  <issueId value="MC-21228"/>
-           </skip>
+<!--            <skip>-->
+<!--                  <issueId value="MC-21228"/>-->
+<!--           </skip>-->
 
         </annotations>
         <before>

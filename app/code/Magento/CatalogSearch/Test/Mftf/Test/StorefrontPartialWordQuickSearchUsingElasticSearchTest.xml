@@ -13,9 +13,9 @@
             <features value="Search"/>
             <stories value="Partial Word search using Elasticsearch"/>
             <title value="Support partial word search in Elasticsearch"/>
-            <description value="User should be able to search decimal attribute using ElasticSearch"/>
+            <description value="Support quick search with Partial word search using ES"/>
             <severity value="CRITICAL"/>
-            <testCaseId value="MC-21228"/>
+            <testCaseId value="MC-34205"/>
             <group value="SearchEngineElasticsearch" />
         </annotations>
         <before>
