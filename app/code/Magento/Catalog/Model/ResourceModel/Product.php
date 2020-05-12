@@ -227,6 +227,9 @@ class Product extends AbstractResource
      */
     public function getWebsiteIdsByProductIds($productIds)
     {
+        if (!is_array($productIds) || empty($productIds)) {
+            return [];
+        }
         $select = $this->getConnection()->select()->from(
             $this->getProductWebsiteTable(),
             ['product_id', 'website_id']

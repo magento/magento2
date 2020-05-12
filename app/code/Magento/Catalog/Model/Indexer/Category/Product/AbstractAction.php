@@ -15,6 +15,7 @@ use Magento\Framework\DB\Select;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Store\Model\Store;
 
+// phpcs:disable Magento2.Classes.AbstractApi
 /**
  * Class AbstractAction
  *
