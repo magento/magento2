@@ -214,7 +214,7 @@ class PricePersistence
      */
     private function retrieveAffectedIds(array $skus)
     {
-        $affectedIds = [];
+        $affectedIds = [[]];
 
         foreach ($this->productIdLocator->retrieveProductIdsBySkus($skus) as $productIds) {
             $affectedIds[] = array_keys($productIds);
