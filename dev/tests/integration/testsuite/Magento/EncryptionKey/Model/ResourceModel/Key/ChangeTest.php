@@ -15,19 +15,20 @@ class ChangeTest extends \PHPUnit\Framework\TestCase
      */
     protected $objectManager;
 
-    protected function setup()
+    protected function setup(): void
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
     }
 
     /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage Deployment configuration file is not writable
      */
     public function testChangeEncryptionKeyConfigNotWritable()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Deployment configuration file is not writable');
+
         $writerMock = $this->createMock(\Magento\Framework\App\DeploymentConfig\Writer::class);
-        $writerMock->expects($this->once())->method('checkIfWritable')->will($this->returnValue(false));
+        $writerMock->expects($this->once())->method('checkIfWritable')->willReturn(false);
 
         /** @var \Magento\EncryptionKey\Model\ResourceModel\Key\Change $keyChangeModel */
         $keyChangeModel = $this->objectManager->create(
@@ -47,12 +48,12 @@ class ChangeTest extends \PHPUnit\Framework\TestCase
         $testValue = 'test';
 
         $writerMock = $this->createMock(\Magento\Framework\App\DeploymentConfig\Writer::class);
-        $writerMock->expects($this->once())->method('checkIfWritable')->will($this->returnValue(true));
+        $writerMock->expects($this->once())->method('checkIfWritable')->willReturn(true);
 
         $structureMock = $this->createMock(\Magento\Config\Model\Config\Structure::class);
         $structureMock->expects($this->once())
             ->method('getFieldPathsByAttribute')
-            ->will($this->returnValue([$testPath]));
+            ->willReturn([$testPath]);
 
         /** @var \Magento\EncryptionKey\Model\ResourceModel\Key\Change $keyChangeModel */
         $keyChangeModel = $this->objectManager->create(
@@ -81,7 +82,7 @@ class ChangeTest extends \PHPUnit\Framework\TestCase
             )
         );
         $this->assertNotContains($testValue, $values1);
-        $this->assertRegExp('|([0-9]+:)([0-9]+:)([a-zA-Z0-9+/]+=*)|', current($values1));
+        $this->assertMatchesRegularExpression('|([0-9]+:)([0-9]+:)([a-zA-Z0-9+/]+=*)|', current($values1));
 
         // Verify that the credit card number has been encrypted
         $values2 = $connection->fetchPairs(
@@ -91,7 +92,7 @@ class ChangeTest extends \PHPUnit\Framework\TestCase
             )
         );
         $this->assertNotContains('1111111111', $values2);
-        $this->assertRegExp('|([0-9]+:)([0-9]+:)([a-zA-Z0-9+/]+=*)|', current($values2));
+        $this->assertMatchesRegularExpression('|([0-9]+:)([0-9]+:)([a-zA-Z0-9+/]+=*)|', current($values2));
 
         /** clean up */
         $select = $connection->select()->from($configModel->getMainTable())->where('path=?', $testPath);

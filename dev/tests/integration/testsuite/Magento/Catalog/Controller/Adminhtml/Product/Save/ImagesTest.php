@@ -41,7 +41,7 @@ class ImagesTest extends AbstractBackendController
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->config = $this->_objectManager->get(Config::class);
