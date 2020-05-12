@@ -7,14 +7,14 @@ declare(strict_types=1);
 
 namespace Magento\TestModuleOverrideConfig\Skip;
 
-use PHPUnit\Framework\TestCase;
+use Magento\TestModuleOverrideConfig\AbstractOverridesTest;
 
 /**
  * Class checks that full test class can be skipped
  *
  * @magentoAppIsolation enabled
  */
-class SkipClassTest extends TestCase
+class SkipClassTest extends AbstractOverridesTest
 {
     /**
      * This test should not be executed according to override config it should be mark as skipped

@@ -21,7 +21,7 @@ class DataFixtureTest extends TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -34,11 +34,8 @@ class DataFixtureTest extends TestCase
     public function testGetPrioritizedConfig(): void
     {
         $this->object = $this->getMockBuilder(DataFixture::class)
-            ->setMethods(['getGlobalConfig', 'getClassConfig', 'getMethodConfig', 'getDataSetConfig'])
+            ->setMethods(['getClassConfig', 'getMethodConfig', 'getDataSetConfig'])
             ->getMock();
-        $this->object->expects($this->once())
-            ->method('getGlobalConfig')
-            ->willReturn(['global_config']);
         $this->object->expects($this->once())
             ->method('getClassConfig')
             ->willReturn(['class_config']);
@@ -49,7 +46,6 @@ class DataFixtureTest extends TestCase
             ->method('getDataSetConfig')
             ->willReturn(['data_set_config']);
         $expectedResult = [
-            ['global_config'],
             ['class_config'],
             ['method_config'],
             ['data_set_config'],
@@ -275,7 +271,6 @@ class DataFixtureTest extends TestCase
      */
     private function setConfig(array $config): void
     {
-        $this->object->setGlobalConfig([]);
         $this->object->setClassConfig([]);
         $this->object->setDataSetConfig([]);
         $this->object->setMethodConfig($config);

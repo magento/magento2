@@ -44,7 +44,7 @@ class IntegrationTest extends TestSuite
                 foreach ($testSuite as $test) {
                     $testName = $test->getName();
 
-                    if ($overrideConfig->hasConfiguration($testName) && !$test instanceof SkippableInterface) {
+                    if ($overrideConfig->hasSkippedTest($testName) && !$test instanceof SkippableInterface) {
                         $reflectionClass = new \ReflectionClass($testName);
                         $resultTest = $generator->generateTestWrapper($reflectionClass);
                         $suite->addTest(new TestSuite($resultTest, $testName));

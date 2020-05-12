@@ -7,16 +7,15 @@ declare(strict_types=1);
 
 namespace Magento\TestModuleOverrideConfig\MagentoDataFixtureBeforeTransaction;
 
-use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestModuleOverrideConfig\AbstractOverridesTest;
 use Magento\TestModuleOverrideConfig\Model\FixtureCallStorage;
-use PHPUnit\Framework\TestCase;
 
 /**
  * Class check that magentoDataFixturesBeforeTransaction can be replaced using override config
  *
  * @magentoAppIsolation enabled
  */
-class ReplaceFixtureTest extends TestCase
+class ReplaceFixtureTest extends AbstractOverridesTest
 {
     /** @var FixtureCallStorage */
     private $fixtureCallStorage;
@@ -24,11 +23,11 @@ class ReplaceFixtureTest extends TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
-        $this->fixtureCallStorage = Bootstrap::getObjectManager()->get(FixtureCallStorage::class);
+        $this->fixtureCallStorage = $this->objectManager->get(FixtureCallStorage::class);
     }
 
     /**

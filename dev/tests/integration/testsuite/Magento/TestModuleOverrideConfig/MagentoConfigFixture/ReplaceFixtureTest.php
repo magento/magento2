@@ -9,15 +9,14 @@ namespace Magento\TestModuleOverrideConfig\MagentoConfigFixture;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Store\Model\ScopeInterface;
-use Magento\TestFramework\Helper\Bootstrap;
-use PHPUnit\Framework\TestCase;
+use Magento\TestModuleOverrideConfig\AbstractOverridesTest;
 
 /**
  * Class check that fixtures can be replaced using override config
  *
  * @magentoAppIsolation enabled
  */
-class ReplaceFixtureTest extends TestCase
+class ReplaceFixtureTest extends AbstractOverridesTest
 {
     /** @var ScopeConfigInterface */
     private $config;
@@ -25,11 +24,11 @@ class ReplaceFixtureTest extends TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
-        $this->config = Bootstrap::getObjectManager()->get(ScopeConfigInterface::class);
+        $this->config = $this->objectManager->get(ScopeConfigInterface::class);
     }
 
     /**

@@ -49,7 +49,7 @@ class SuiteLoader implements TestSuiteLoader
     {
         $resultClass = $this->suiteLoader->load($suiteClassFile);
 
-        if ($this->testsConfig->hasConfiguration($resultClass->getName())
+        if ($this->testsConfig->hasSkippedTest($resultClass->getName())
             && !in_array(SkippableInterface::class, $resultClass->getInterfaceNames(), true)
         ) {
             $resultClass = new \ReflectionClass($this->generator->generateTestWrapper($resultClass));

@@ -74,9 +74,32 @@ class Config
      * @param string $className
      * @return bool
      */
-    public function hasConfiguration(string $className): bool
+    public function hasSkippedTest(string $className): bool
     {
-        return !empty($this->config[$className]) || !empty($this->getGlobalConfig());
+        $classConfig = $this->config[$className] ?? [];
+
+        return $this->isSkippedByConfig($classConfig);
+    }
+
+    /**
+     * Check that class has even one test skipped
+     *
+     * @param array $config
+     * @return bool
+     */
+    private function isSkippedByConfig(array $config): bool
+    {
+        if (isset($config['skip']) && $config['skip']) {
+            return true;
+        }
+
+        foreach ($config as $lowerLevelConfig) {
+            if (is_array($lowerLevelConfig)) {
+                return $this->isSkippedByConfig($lowerLevelConfig);
+            }
+        }
+
+        return false;
     }
 
     /**
@@ -131,22 +154,6 @@ class Config
         }
 
         return self::$instance;
-    }
-
-    /**
-     * Get config from global node
-     *
-     * @param string|null $fixtureType
-     * @return array
-     */
-    public function getGlobalConfig(?string $fixtureType = null): array
-    {
-        $result = $this->config['global'] ?? [];
-        if ($fixtureType) {
-            $result = $result[$fixtureType] ?? [];
-        }
-
-        return $result;
     }
 
     /**
@@ -222,6 +229,6 @@ class Config
         return [
             'skip' => $config['skip'],
             'skipMessage' => $config['skipMessage'] ?: 'Skipped according to override configurations',
-            ];
+        ];
     }
 }

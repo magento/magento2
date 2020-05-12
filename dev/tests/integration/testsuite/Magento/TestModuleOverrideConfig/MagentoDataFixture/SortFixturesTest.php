@@ -7,16 +7,15 @@ declare(strict_types=1);
 
 namespace Magento\TestModuleOverrideConfig\MagentoDataFixture;
 
-use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestModuleOverrideConfig\AbstractOverridesTest;
 use Magento\TestModuleOverrideConfig\Model\FixtureCallStorage;
-use PHPUnit\Framework\TestCase;
 
 /**
  * Class checks that magentoConfigFixtures can be placed into certain place using override config
  *
  * @magentoAppIsolation enabled
  */
-class SortFixturesTest extends TestCase
+class SortFixturesTest extends AbstractOverridesTest
 {
     /** @var FixtureCallStorage */
     private $fixtureCallStorage;
@@ -24,11 +23,11 @@ class SortFixturesTest extends TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
-        $this->fixtureCallStorage = Bootstrap::getObjectManager()->get(FixtureCallStorage::class);
+        $this->fixtureCallStorage = $this->objectManager->get(FixtureCallStorage::class);
     }
 
     /**
