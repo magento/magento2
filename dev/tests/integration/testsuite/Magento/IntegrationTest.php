@@ -11,7 +11,9 @@ use Magento\TestFramework\SkippableInterface;
 use Magento\TestFramework\Workaround\Override\Config;
 use Magento\TestFramework\Workaround\Override\WrapperGenerator;
 use PHPUnit\Framework\TestSuite;
-use PHPUnit\Util\Configuration;
+use PHPUnit\TextUI\Configuration\Registry;
+use PHPUnit\TextUI\Configuration\TestSuiteCollection;
+use PHPUnit\TextUI\Configuration\TestSuiteMapper;
 
 /**
  * Integration tests wrapper.
@@ -27,14 +29,15 @@ class IntegrationTest extends TestSuite
     {
         $generator = new WrapperGenerator();
         $overrideConfig = Config::getInstance();
-        $configuration = Configuration::getInstance(self::getConfigurationFile());
-        $suites = $configuration->getTestSuiteConfiguration();
+        $configuration = Registry::getInstance()->get(self::getConfigurationFile());
+        $suitesConfig = $configuration->testSuite();
         $suite = new TestSuite();
-        /** @var TestSuite $testSuite */
-        foreach ($suites as $testSuite) {
-            if ($testSuite->getName() === 'Magento Integration Tests') {
+        /** @var \PHPUnit\TextUI\Configuration\TestSuite $suiteConfig */
+        foreach ($suitesConfig as $suiteConfig) {
+            if ($suiteConfig->name() === 'Magento Integration Tests') {
                 continue;
             }
+            $testSuite = (new TestSuiteMapper())->map(TestSuiteCollection::fromArray([$suiteConfig]), '');
             /** @var TestSuite $test */
             foreach ($testSuite as $test) {
                 $testName = $test->getName();
