@@ -37,17 +37,20 @@ class IntegrationTest extends TestSuite
             if ($suiteConfig->name() === 'Magento Integration Tests') {
                 continue;
             }
-            $testSuite = (new TestSuiteMapper())->map(TestSuiteCollection::fromArray([$suiteConfig]), '');
-            /** @var TestSuite $test */
-            foreach ($testSuite as $test) {
-                $testName = $test->getName();
+            $suites = (new TestSuiteMapper())->map(TestSuiteCollection::fromArray([$suiteConfig]), '');
+            /** @var TestSuite $testSuite */
+            foreach ($suites as $testSuite) {
+                /** @var TestSuite $test */
+                foreach ($testSuite as $test) {
+                    $testName = $test->getName();
 
-                if ($overrideConfig->hasConfiguration($testName) && !$test instanceof SkippableInterface) {
-                    $reflectionClass = new \ReflectionClass($testName);
-                    $resultTest = $generator->generateTestWrapper($reflectionClass);
-                    $suite->addTest(new TestSuite($resultTest, $testName));
-                } else {
-                    $suite->addTest($test);
+                    if ($overrideConfig->hasConfiguration($testName) && !$test instanceof SkippableInterface) {
+                        $reflectionClass = new \ReflectionClass($testName);
+                        $resultTest = $generator->generateTestWrapper($reflectionClass);
+                        $suite->addTest(new TestSuite($resultTest, $testName));
+                    } else {
+                        $suite->addTest($test);
+                    }
                 }
             }
         }
