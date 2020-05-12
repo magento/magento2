@@ -83,7 +83,7 @@ class Match implements QueryInterface
             $matchKey = array_keys($queryBody)[0];
             foreach ($queryBody[$matchKey] as $field => $matchQuery) {
                 $matchQuery['boost'] = $requestQueryBoost + $matchQuery['boost'];
-                if ($minimumShouldMatch) {
+                if ($minimumShouldMatch && $matchKey != 'match_phrase_prefix') {
                     $matchQuery['minimum_should_match'] = $minimumShouldMatch;
                 }
                 $queryBody[$matchKey][$field] = $matchQuery;
