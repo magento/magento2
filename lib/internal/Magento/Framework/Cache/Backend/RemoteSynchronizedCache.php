@@ -185,6 +185,7 @@ class RemoteSynchronizedCache extends \Zend_Cache_Backend implements \Zend_Cache
     {
         $localData = $this->local->load($id);
         $remoteData = false;
+        $versionCheckFailed = false;
 
         if (false === $localData) {
             $remoteData = $this->remote->load($id);
@@ -193,7 +194,7 @@ class RemoteSynchronizedCache extends \Zend_Cache_Backend implements \Zend_Cache
                 return false;
             }
         } else {
-            if ($this->getDataVersion($localData) !== $this->loadRemoteDataVersion($id)) {
+            if ($versionCheckFailed = $this->getDataVersion($localData) !== $this->loadRemoteDataVersion($id)) {
                 $remoteData = $this->remote->load($id);
 
                 if (!$this->_options['use_stale_cache']) {
@@ -205,7 +206,7 @@ class RemoteSynchronizedCache extends \Zend_Cache_Backend implements \Zend_Cache
         if ($remoteData !== false) {
             $this->local->save($remoteData, $id);
             $localData = $remoteData;
-        } elseif ($this->_options['use_stale_cache'] && $localData !== false) {
+        } elseif ($this->_options['use_stale_cache'] && $localData !== false && $versionCheckFailed) {
             if ($this->lock($id)) {
                 return false;
             }
