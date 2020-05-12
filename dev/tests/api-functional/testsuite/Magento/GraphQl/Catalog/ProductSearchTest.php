@@ -1866,7 +1866,6 @@ QUERY;
 
         $prod1 = $productRepository->get('simple1');
         $prod2 = $productRepository->get('simple2');
-        $prod3 = $productRepository->get('simple3');
         $response = $this->graphQlQuery($query);
         $this->assertEquals(2, $response['products']['total_count']);
 
