@@ -3,11 +3,15 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\MessageQueue\Test\Unit\Consumer\Config\Validator;
 
 use Magento\Framework\MessageQueue\Consumer\Config\Validator\RequiredFields as RequiredFieldsValidator;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\TestCase;
 
-class RequiredFieldsTest extends \PHPUnit\Framework\TestCase
+class RequiredFieldsTest extends TestCase
 {
     /**
      * @var RequiredFieldsValidator
@@ -17,9 +21,9 @@ class RequiredFieldsTest extends \PHPUnit\Framework\TestCase
     /**
      * Initialize parameters
      */
-    protected function setUp()
+    protected function setUp(): void
     {
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $objectManager = new ObjectManager($this);
         $this->validator = $objectManager->getObject(RequiredFieldsValidator::class);
     }
 

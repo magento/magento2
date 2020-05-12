@@ -3,26 +3,37 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\CatalogSearch\Test\Unit\Model\ResourceModel;
+
+use Magento\Eav\Model\Entity\AbstractEntity;
+use Magento\Framework\DB\Adapter\Pdo\Mysql;
+use Magento\Framework\DB\Select;
+use Magento\Framework\Validator\UniversalFactory;
+use Magento\Store\Model\Store;
+use Magento\Store\Model\StoreManagerInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Base class for Collection tests.
  *
  * Contains helper methods to get commonly used mocks used for collection tests.
  *
- * @deprecated
+ * @deprecated Implementation class was replaced
  * @see \Magento\ElasticSearch
  **/
-class BaseCollection extends \PHPUnit\Framework\TestCase
+class BaseCollection extends TestCase
 {
     /**
      * Get Mocks for StoreManager so Collection can be used.
      *
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return MockObject
      */
     protected function getStoreManager()
     {
-        $store = $this->getMockBuilder(\Magento\Store\Model\Store::class)
+        $store = $this->getMockBuilder(Store::class)
             ->setMethods(['getId'])
             ->disableOriginalConstructor()
             ->getMock();
@@ -30,7 +41,7 @@ class BaseCollection extends \PHPUnit\Framework\TestCase
             ->method('getId')
             ->willReturn(1);
 
-        $storeManager = $this->getMockBuilder(\Magento\Store\Model\StoreManagerInterface::class)
+        $storeManager = $this->getMockBuilder(StoreManagerInterface::class)
             ->setMethods(['getStore'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
@@ -44,20 +55,20 @@ class BaseCollection extends \PHPUnit\Framework\TestCase
     /**
      * Get mock for UniversalFactory so Collection can be used.
      *
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return MockObject
      */
     protected function getUniversalFactory()
     {
-        $connection = $this->getMockBuilder(\Magento\Framework\DB\Adapter\Pdo\Mysql::class)
+        $connection = $this->getMockBuilder(Mysql::class)
             ->disableOriginalConstructor()
             ->setMethods(['select'])
             ->getMockForAbstractClass();
-        $select = $this->getMockBuilder(\Magento\Framework\DB\Select::class)
+        $select = $this->getMockBuilder(Select::class)
             ->disableOriginalConstructor()
             ->getMock();
         $connection->expects($this->any())->method('select')->willReturn($select);
 
-        $entity = $this->getMockBuilder(\Magento\Eav\Model\Entity\AbstractEntity::class)
+        $entity = $this->getMockBuilder(AbstractEntity::class)
             ->setMethods(['getConnection', 'getTable', 'getDefaultAttributes', 'getEntityTable'])
             ->disableOriginalConstructor()
             ->getMock();
@@ -74,7 +85,7 @@ class BaseCollection extends \PHPUnit\Framework\TestCase
             ->method('getEntityTable')
             ->willReturn('table');
 
-        $universalFactory = $this->getMockBuilder(\Magento\Framework\Validator\UniversalFactory::class)
+        $universalFactory = $this->getMockBuilder(UniversalFactory::class)
             ->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();

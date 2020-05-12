@@ -25,7 +25,7 @@ class InstallConfigTest extends TestCase
      */
     private $configWriterMock;
 
-    protected function setup()
+    protected function setup(): void
     {
         $this->configWriterMock = $this->getMockBuilder(WriterInterface::class)->getMockForAbstractClass();
 

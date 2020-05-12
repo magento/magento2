@@ -23,7 +23,7 @@ class ConfigManagerTest extends TestCase
     /**
      * @inheritDoc
      */
-    public function setUp()
+    protected function setUp(): void
     {
         $this->manager = Bootstrap::getObjectManager()->get(ConfigManager::class);
     }

@@ -14,7 +14,7 @@ class CacheFilesTest extends \PHPUnit\Framework\TestCase
     public function testCacheConfig($area)
     {
         $validationStateMock = $this->createMock(\Magento\Framework\Config\ValidationStateInterface::class);
-        $validationStateMock->expects($this->any())->method('isValidationRequired')->will($this->returnValue(true));
+        $validationStateMock->expects($this->any())->method('isValidationRequired')->willReturn(true);
 
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 

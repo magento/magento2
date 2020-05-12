@@ -24,7 +24,7 @@ class PluginTest extends \PHPUnit\Framework\TestCase
      */
     protected $customerRepository;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->accountManagement = Bootstrap::getObjectManager()->get(
             \Magento\Customer\Api\AccountManagementInterface::class
@@ -34,7 +34,7 @@ class PluginTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function tearDown()
+    protected function tearDown(): void
     {
         /** @var \Magento\Customer\Model\CustomerRegistry $customerRegistry */
         $customerRegistry = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
