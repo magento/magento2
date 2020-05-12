@@ -25,6 +25,6 @@ class ProductsViewedTest extends \Magento\TestFramework\TestCase\AbstractBackend
         $this->assertEquals(200, $this->getResponse()->getHttpResponseCode());
 
         $actual = $this->getResponse()->getBody();
-        $this->assertContains('Simple Product', $actual);
+        $this->assertStringContainsString('Simple Product', $actual);
     }
 }

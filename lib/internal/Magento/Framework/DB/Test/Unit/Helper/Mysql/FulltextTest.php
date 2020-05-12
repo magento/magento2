@@ -3,19 +3,25 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\DB\Test\Unit\Helper\Mysql;
 
+use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Helper\Mysql\Fulltext;
 use Magento\Framework\DB\Select;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class FulltextTest extends \PHPUnit\Framework\TestCase
+class FulltextTest extends TestCase
 {
     public function testGetMatchQuery()
     {
         /** @var Fulltext $select */
         $select = (new ObjectManager($this))->getObject(
-            \Magento\Framework\DB\Helper\Mysql\Fulltext::class,
+            Fulltext::class,
             ['resource' => $this->getResourceMock()]
         );
 
@@ -39,8 +45,8 @@ class FulltextTest extends \PHPUnit\Framework\TestCase
 
         $resource = $this->getResourceMock();
 
-        /** @var \Magento\Framework\DB\Select|\PHPUnit_Framework_MockObject_MockObject $select */
-        $select = $this->getMockBuilder(\Magento\Framework\DB\Select::class)
+        /** @var Select|MockObject $select */
+        $select = $this->getMockBuilder(Select::class)
             ->disableOriginalConstructor()
             ->getMock();
         $select->expects($this->once())
@@ -49,7 +55,7 @@ class FulltextTest extends \PHPUnit\Framework\TestCase
 
         /** @var Fulltext $fulltext */
         $fulltext = (new ObjectManager($this))->getObject(
-            \Magento\Framework\DB\Helper\Mysql\Fulltext::class,
+            Fulltext::class,
             ['resource' => $resource]
         );
 
@@ -73,19 +79,19 @@ class FulltextTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return MockObject
      */
     protected function getResourceMock()
     {
-        $connection = $this->getMockBuilder(\Magento\Framework\DB\Adapter\AdapterInterface::class)
+        $connection = $this->getMockBuilder(AdapterInterface::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $connection->expects($this->at(0))
             ->method('quote')
-            ->with($this->equalTo('some searchable text'))
-            ->will($this->returnValue("'some searchable text'"));
+            ->with('some searchable text')
+            ->willReturn("'some searchable text'");
 
-        $resource = $this->getMockBuilder(\Magento\Framework\App\ResourceConnection::class)
+        $resource = $this->getMockBuilder(ResourceConnection::class)
             ->disableOriginalConstructor()
             ->getMock();
         $resource->expects($this->any())
