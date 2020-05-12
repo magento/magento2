@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Weee\Test\Unit\App\Action;
 
@@ -92,7 +93,7 @@ class ContextPluginTest extends TestCase
      */
     protected $contextPlugin;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
 

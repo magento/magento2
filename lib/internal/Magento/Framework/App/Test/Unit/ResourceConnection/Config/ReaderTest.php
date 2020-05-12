@@ -3,12 +3,23 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\App\Test\Unit\ResourceConnection\Config;
 
-class ReaderTest extends \PHPUnit\Framework\TestCase
+use Magento\Framework\App\DeploymentConfig;
+use Magento\Framework\App\ResourceConnection\Config\Converter;
+use Magento\Framework\App\ResourceConnection\Config\Reader;
+use Magento\Framework\App\ResourceConnection\Config\SchemaLocator;
+use Magento\Framework\Config\FileResolverInterface;
+use Magento\Framework\Config\ValidationStateInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class ReaderTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\App\ResourceConnection\Config\Reader
+     * @var Reader
      */
     protected $_model;
 
@@ -18,45 +29,45 @@ class ReaderTest extends \PHPUnit\Framework\TestCase
     protected $_filePath;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $_fileResolverMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $_converterMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $_schemaLocatorMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $_configLocalMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $_validationStateMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_filePath = __DIR__ . '/_files/';
 
-        $this->_fileResolverMock = $this->createMock(\Magento\Framework\Config\FileResolverInterface::class);
-        $this->_validationStateMock = $this->createMock(\Magento\Framework\Config\ValidationStateInterface::class);
+        $this->_fileResolverMock = $this->getMockForAbstractClass(FileResolverInterface::class);
+        $this->_validationStateMock = $this->getMockForAbstractClass(ValidationStateInterface::class);
         $this->_schemaLocatorMock =
-            $this->createMock(\Magento\Framework\App\ResourceConnection\Config\SchemaLocator::class);
+            $this->createMock(SchemaLocator::class);
 
         $this->_converterMock =
-            $this->createMock(\Magento\Framework\App\ResourceConnection\Config\Converter::class);
+            $this->createMock(Converter::class);
 
-        $this->_configLocalMock = $this->createMock(\Magento\Framework\App\DeploymentConfig::class);
+        $this->_configLocalMock = $this->createMock(DeploymentConfig::class);
 
-        $this->_model = new \Magento\Framework\App\ResourceConnection\Config\Reader(
+        $this->_model = new Reader(
             $this->_fileResolverMock,
             $this->_converterMock,
             $this->_schemaLocatorMock,
@@ -79,11 +90,11 @@ class ReaderTest extends \PHPUnit\Framework\TestCase
             $this->once()
         )->method(
             'get'
-        )->will(
-            $this->returnValue([file_get_contents($this->_filePath . 'resources.xml')])
+        )->willReturn(
+            [file_get_contents($this->_filePath . 'resources.xml')]
         );
 
-        $this->_converterMock->expects($this->once())->method('convert')->will($this->returnValue($modulesConfig));
+        $this->_converterMock->expects($this->once())->method('convert')->willReturn($modulesConfig);
 
         $this->assertEquals($expectedResult, $this->_model->read());
     }
