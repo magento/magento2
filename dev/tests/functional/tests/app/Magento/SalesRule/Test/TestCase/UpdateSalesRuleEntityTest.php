@@ -131,7 +131,7 @@ class UpdateSalesRuleEntityTest extends Injectable
      *
      * @return void
      */
-    public function tearDown()
+    public function tearDown(): void
     {
         $filter = [
             'name' => $this->salesRuleName,
