@@ -45,7 +45,7 @@ class SuiteLoader implements TestSuiteLoader
     /**
      * @inheritdoc
      */
-    public function load($suiteClassName, $suiteClassFile = '')
+    public function load($suiteClassName, $suiteClassFile = ''): \ReflectionClass
     {
         $resultClass = $this->suiteLoader->load($suiteClassName, $suiteClassFile);
 
@@ -61,7 +61,7 @@ class SuiteLoader implements TestSuiteLoader
     /**
      * @inheritdoc
      */
-    public function reload(\ReflectionClass $aClass)
+    public function reload(\ReflectionClass $aClass): \ReflectionClass
     {
         return $aClass;
     }
