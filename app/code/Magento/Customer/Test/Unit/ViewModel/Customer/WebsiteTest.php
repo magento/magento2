@@ -8,11 +8,11 @@ declare(strict_types=1);
 
 namespace Magento\Customer\Test\Unit\ViewModel\Customer;
 
-use Magento\Framework\App\Config\ScopeConfigInterface;
-use PHPUnit\Framework\TestCase;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Customer\ViewModel\Customer\Website as CustomerWebsite;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Store\Model\System\Store as SystemStore;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test for customer's website view model
@@ -37,10 +37,10 @@ class WebsiteTest extends TestCase
      */
     private $scopeConfig;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->systemStore = $this->createMock(SystemStore::class);
-        $this->scopeConfig = $this->createMock(ScopeConfigInterface::class);
+        $this->scopeConfig = $this->getMockForAbstractClass(ScopeConfigInterface::class);
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->customerWebsite = $this->objectManagerHelper->getObject(
             CustomerWebsite::class,

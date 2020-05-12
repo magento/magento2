@@ -3,76 +3,87 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\LayeredNavigation\Test\Unit\Block;
 
 use Magento\Catalog\Model\Category;
+use Magento\Catalog\Model\Layer;
+use Magento\Catalog\Model\Layer\AvailabilityFlagInterface;
+use Magento\Catalog\Model\Layer\FilterList;
+use Magento\Catalog\Model\Layer\Resolver;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\View\Element\AbstractBlock;
+use Magento\Framework\View\LayoutInterface;
+use Magento\LayeredNavigation\Block\Navigation;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class NavigationTest extends \PHPUnit\Framework\TestCase
+class NavigationTest extends TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $catalogLayerMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $filterListMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $layoutMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $visibilityFlagMock;
 
     /**
-     * @var \Magento\LayeredNavigation\Block\Navigation
+     * @var Navigation
      */
     protected $model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->catalogLayerMock = $this->createMock(\Magento\Catalog\Model\Layer::class);
-        $this->filterListMock = $this->createMock(\Magento\Catalog\Model\Layer\FilterList::class);
-        $this->visibilityFlagMock = $this->createMock(\Magento\Catalog\Model\Layer\AvailabilityFlagInterface::class);
+        $this->catalogLayerMock = $this->createMock(Layer::class);
+        $this->filterListMock = $this->createMock(FilterList::class);
+        $this->visibilityFlagMock = $this->getMockForAbstractClass(AvailabilityFlagInterface::class);
 
-        /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Catalog\Model\Layer\Resolver $layerResolver */
-        $layerResolver = $this->getMockBuilder(\Magento\Catalog\Model\Layer\Resolver::class)
+        /** @var MockObject|Resolver $layerResolver */
+        $layerResolver = $this->getMockBuilder(Resolver::class)
             ->disableOriginalConstructor()
             ->setMethods(['get', 'create'])
             ->getMock();
         $layerResolver->expects($this->any())
             ->method($this->anything())
-            ->will($this->returnValue($this->catalogLayerMock));
+            ->willReturn($this->catalogLayerMock);
 
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $objectManager = new ObjectManager($this);
         $this->model = $objectManager->getObject(
-            \Magento\LayeredNavigation\Block\Navigation::class,
+            Navigation::class,
             [
                 'layerResolver' => $layerResolver,
                 'filterList' => $this->filterListMock,
                 'visibilityFlag' => $this->visibilityFlagMock
             ]
         );
-        $this->layoutMock = $this->createMock(\Magento\Framework\View\LayoutInterface::class);
+        $this->layoutMock = $this->getMockForAbstractClass(LayoutInterface::class);
     }
 
     public function testGetStateHtml()
     {
         $stateHtml = 'I feel good';
-        $this->filterListMock->expects($this->any())->method('getFilters')->will($this->returnValue([]));
+        $this->filterListMock->expects($this->any())->method('getFilters')->willReturn([]);
         $this->layoutMock->expects($this->at(0))->method('getChildName')
             ->with(null, 'state')
-            ->will($this->returnValue('state block'));
+            ->willReturn('state block');
 
         $this->layoutMock->expects($this->once())->method('renderElement')
             ->with('state block', true)
-            ->will($this->returnValue($stateHtml));
+            ->willReturn($stateHtml);
 
         $this->model->setLayout($this->layoutMock);
         $this->assertEquals($stateHtml, $this->model->getStateHtml());
@@ -90,7 +101,7 @@ class NavigationTest extends \PHPUnit\Framework\TestCase
 
         $this->filterListMock->expects($this->exactly(2))->method('getFilters')
             ->with($this->catalogLayerMock)
-            ->will($this->returnValue($filters));
+            ->willReturn($filters);
         $this->assertEquals($filters, $this->model->getFilters());
 
         // canShowBlock()
@@ -99,7 +110,7 @@ class NavigationTest extends \PHPUnit\Framework\TestCase
             ->expects($this->once())
             ->method('isEnabled')
             ->with($this->catalogLayerMock, $filters)
-            ->will($this->returnValue($enabled));
+            ->willReturn($enabled);
 
         $category = $this->createMock(Category::class);
         $this->catalogLayerMock->expects($this->atLeastOnce())->method('getCurrentCategory')->willReturn($category);
@@ -122,14 +133,14 @@ class NavigationTest extends \PHPUnit\Framework\TestCase
 
         $this->filterListMock->expects($this->atLeastOnce())->method('getFilters')
             ->with($this->catalogLayerMock)
-            ->will($this->returnValue($filters));
+            ->willReturn($filters);
         $this->assertEquals($filters, $this->model->getFilters());
 
         $this->visibilityFlagMock
             ->expects($this->any())
             ->method('isEnabled')
             ->with($this->catalogLayerMock, $filters)
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $category = $this->createMock(Category::class);
         $this->catalogLayerMock->expects($this->atLeastOnce())->method('getCurrentCategory')->willReturn($category);
@@ -160,12 +171,12 @@ class NavigationTest extends \PHPUnit\Framework\TestCase
 
     public function testGetClearUrl()
     {
-        $this->filterListMock->expects($this->any())->method('getFilters')->will($this->returnValue([]));
+        $this->filterListMock->expects($this->any())->method('getFilters')->willReturn([]);
         $this->model->setLayout($this->layoutMock);
-        $this->layoutMock->expects($this->once())->method('getChildName')->will($this->returnValue('sample block'));
+        $this->layoutMock->expects($this->once())->method('getChildName')->willReturn('sample block');
 
         $blockMock = $this->getMockForAbstractClass(
-            \Magento\Framework\View\Element\AbstractBlock::class,
+            AbstractBlock::class,
             [],
             '',
             false
@@ -173,7 +184,7 @@ class NavigationTest extends \PHPUnit\Framework\TestCase
         $clearUrl = 'very clear URL';
         $blockMock->setClearUrl($clearUrl);
 
-        $this->layoutMock->expects($this->once())->method('getBlock')->will($this->returnValue($blockMock));
+        $this->layoutMock->expects($this->once())->method('getBlock')->willReturn($blockMock);
         $this->assertEquals($clearUrl, $this->model->getClearUrl());
     }
 }
