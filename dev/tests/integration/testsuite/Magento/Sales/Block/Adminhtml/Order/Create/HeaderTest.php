@@ -15,7 +15,7 @@ class HeaderTest extends \PHPUnit\Framework\TestCase
     /** @var \Magento\Sales\Block\Adminhtml\Order\Create\Header */
     protected $_block;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_block = Bootstrap::getObjectManager()->create(
             \Magento\Sales\Block\Adminhtml\Order\Create\Header::class

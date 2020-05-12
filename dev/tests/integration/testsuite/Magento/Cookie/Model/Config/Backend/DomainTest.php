@@ -36,7 +36,7 @@ class DomainTest extends \PHPUnit\Framework\TestCase
                 $this->assertNotNull($domain->getId());
             }
         } catch (LocalizedException $e) {
-            $this->assertContains('Invalid domain name: ', $e->getMessage());
+            $this->assertStringContainsString('Invalid domain name: ', $e->getMessage());
             $this->assertEquals($exceptionMessage, $e->getMessage());
             $this->assertNull($domain->getId());
         }
