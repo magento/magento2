@@ -3,49 +3,64 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Customer\Test\Unit\Model\Address;
 
-class ConfigTest extends \PHPUnit\Framework\TestCase
+use Magento\Customer\Helper\Address;
+use Magento\Customer\Model\Address\Config;
+use Magento\Customer\Model\Address\Config\Reader;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\Config\CacheInterface;
+use Magento\Framework\DataObject;
+use Magento\Framework\Serialize\SerializerInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Store\Model\Store;
+use Magento\Store\Model\StoreManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class ConfigTest extends TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $addressHelperMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $storeMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $scopeConfigMock;
 
     /**
-     * @var \Magento\Customer\Model\Address\Config
+     * @var Config
      */
     protected $model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $cacheId = 'cache_id';
-        $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->storeMock = $this->createMock(\Magento\Store\Model\Store::class);
-        $this->scopeConfigMock = $this->createMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
+        $objectManagerHelper = new ObjectManager($this);
+        $this->storeMock = $this->createMock(Store::class);
+        $this->scopeConfigMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
 
-        $readerMock = $this->createMock(\Magento\Customer\Model\Address\Config\Reader::class);
-        $cacheMock = $this->createMock(\Magento\Framework\Config\CacheInterface::class);
-        $storeManagerMock = $this->createMock(\Magento\Store\Model\StoreManager::class);
+        $readerMock = $this->createMock(Reader::class);
+        $cacheMock = $this->getMockForAbstractClass(CacheInterface::class);
+        $storeManagerMock = $this->createMock(StoreManager::class);
         $storeManagerMock->expects(
             $this->once()
         )->method(
             'getStore'
-        )->will(
-            $this->returnValue($this->storeMock)
+        )->willReturn(
+            $this->storeMock
         );
 
-        $this->addressHelperMock = $this->createMock(\Magento\Customer\Helper\Address::class);
+        $this->addressHelperMock = $this->createMock(Address::class);
 
         $cacheMock->expects(
             $this->once()
@@ -53,13 +68,13 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
             'load'
         )->with(
             $cacheId
-        )->will(
-            $this->returnValue(false)
+        )->willReturn(
+            false
         );
 
         $fixtureConfigData = require __DIR__ . '/Config/_files/formats_merged.php';
 
-        $readerMock->expects($this->once())->method('read')->will($this->returnValue($fixtureConfigData));
+        $readerMock->expects($this->once())->method('read')->willReturn($fixtureConfigData);
 
         $cacheMock->expects($this->once())
             ->method('save')
@@ -68,14 +83,14 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
                 $cacheId
             );
 
-        $serializerMock = $this->createMock(\Magento\Framework\Serialize\SerializerInterface::class);
+        $serializerMock = $this->getMockForAbstractClass(SerializerInterface::class);
         $serializerMock->method('serialize')
             ->willReturn(json_encode($fixtureConfigData));
         $serializerMock->method('unserialize')
             ->willReturn($fixtureConfigData);
 
         $this->model = $objectManagerHelper->getObject(
-            \Magento\Customer\Model\Address\Config::class,
+            Config::class,
             [
                 'reader' => $readerMock,
                 'cache' => $cacheMock,
@@ -103,19 +118,19 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
     {
         $this->storeMock->expects($this->once())->method('getId');
 
-        $this->scopeConfigMock->expects($this->any())->method('getValue')->will($this->returnValue('someValue'));
+        $this->scopeConfigMock->expects($this->any())->method('getValue')->willReturn('someValue');
 
-        $rendererMock = $this->createMock(\Magento\Framework\DataObject::class);
+        $rendererMock = $this->createMock(DataObject::class);
 
         $this->addressHelperMock->expects(
             $this->any()
         )->method(
             'getRenderer'
-        )->will(
-            $this->returnValue($rendererMock)
+        )->willReturn(
+            $rendererMock
         );
 
-        $firstExpected = new \Magento\Framework\DataObject();
+        $firstExpected = new DataObject();
         $firstExpected->setCode(
             'format_one'
         )->setTitle(
@@ -128,7 +143,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
             null
         );
 
-        $secondExpected = new \Magento\Framework\DataObject();
+        $secondExpected = new DataObject();
         $secondExpected->setCode(
             'format_two'
         )->setTitle(

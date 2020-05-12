@@ -3,85 +3,85 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\CatalogSearch\Test\Unit\Model\Adapter\Mysql\Dynamic;
 
+use Magento\Catalog\Model\Layer\Filter\Price\Range;
 use Magento\CatalogSearch\Model\Adapter\Mysql\Dynamic\DataProvider;
 use Magento\Customer\Model\Session;
 use Magento\Framework\App\ResourceConnection;
-use Magento\Framework\Search\Dynamic\IntervalFactory;
-use Magento\Framework\DB\Select;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Ddl\Table;
-use Magento\Catalog\Model\Layer\Filter\Price\Range;
+use Magento\Framework\DB\Select;
+use Magento\Framework\Indexer\Dimension;
+use Magento\Framework\Indexer\DimensionFactory;
 use Magento\Framework\Search\Adapter\Mysql\Aggregation\DataProviderInterface;
 use Magento\Framework\Search\Dynamic\EntityStorage;
+use Magento\Framework\Search\Dynamic\IntervalFactory;
+use Magento\Framework\Search\Request\IndexScopeResolverInterface;
+use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Model\StoreManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @deprecated
+ * @deprecated Implementation class was replaced
  * @see \Magento\ElasticSearch
  */
-class DataProviderTest extends \PHPUnit\Framework\TestCase
+class DataProviderTest extends TestCase
 {
-    /**
-     * @var DataProvider
-     */
+    /**@var DataProvider */
     private $model;
 
-    /**
-     * @var Session|\PHPUnit_Framework_MockObject_MockObject
-     */
+    /**@var Session|MockObject */
     private $sessionMock;
 
-    /**
-     * @var ResourceConnection|\PHPUnit_Framework_MockObject_MockObject
-     */
+    /**@var ResourceConnection|MockObject */
     private $resourceConnectionMock;
 
-    /**
-     * @var Range|\PHPUnit_Framework_MockObject_MockObject
-     */
+    /**@var Range|MockObject */
     private $rangeMock;
 
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
+    /**@var MockObject */
     private $adapterMock;
 
-    /**
-     * @var DataProviderInterface|\PHPUnit_Framework_MockObject_MockObject
-     */
+    /**@var DataProviderInterface|MockObject */
     private $mysqlDataProviderMock;
 
-    /**
-     * @var IntervalFactory|\PHPUnit_Framework_MockObject_MockObject
-     */
+    /**@var IntervalFactory|MockObject */
     private $intervalFactoryMock;
 
-    /**
-     * @var StoreManager|\PHPUnit_Framework_MockObject_MockObject
-     */
+    /**@var StoreManager|MockObject */
     private $storeManagerMock;
 
-    protected function setUp()
+    /**@var IndexScopeResolverInterface|MockObject */
+    private $indexScopeResolverMock;
+
+    /**@var Dimension|MockObject */
+    private $dimensionMock;
+
+    /**@var DimensionFactory|MockObject */
+    private $dimensionFactoryMock;
+
+    protected function setUp(): void
     {
         $this->resourceConnectionMock = $this->createMock(ResourceConnection::class);
         $this->sessionMock = $this->createMock(Session::class);
-        $this->adapterMock = $this->createMock(AdapterInterface::class);
+        $this->adapterMock = $this->getMockForAbstractClass(AdapterInterface::class);
         $this->resourceConnectionMock->expects($this->once())->method('getConnection')->willReturn($this->adapterMock);
         $this->rangeMock = $this->createMock(Range::class);
-        $this->mysqlDataProviderMock = $this->createMock(DataProviderInterface::class);
+        $this->mysqlDataProviderMock = $this->getMockForAbstractClass(DataProviderInterface::class);
         $this->intervalFactoryMock = $this->createMock(IntervalFactory::class);
         $this->storeManagerMock = $this->createMock(StoreManager::class);
         $this->indexScopeResolverMock = $this->createMock(
-            \Magento\Framework\Search\Request\IndexScopeResolverInterface::class
+            IndexScopeResolverInterface::class
         );
-        $this->dimensionMock = $this->createMock(\Magento\Framework\Indexer\Dimension::class);
-        $this->dimensionFactoryMock = $this->createMock(\Magento\Framework\Indexer\DimensionFactory::class);
+        $this->dimensionMock = $this->createMock(Dimension::class);
+        $this->dimensionFactoryMock = $this->createMock(DimensionFactory::class);
         $this->dimensionFactoryMock->method('create')->willReturn($this->dimensionMock);
-        $storeMock = $this->createMock(\Magento\Store\Api\Data\StoreInterface::class);
+        $storeMock = $this->getMockForAbstractClass(StoreInterface::class);
         $storeMock->method('getId')->willReturn(1);
         $storeMock->method('getWebsiteId')->willReturn(1);
         $this->storeManagerMock->method('getStore')->willReturn($storeMock);

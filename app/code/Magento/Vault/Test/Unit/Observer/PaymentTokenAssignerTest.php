@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Vault\Test\Unit\Observer;
 
 use Magento\Customer\Api\Data\CustomerInterface;
@@ -16,17 +18,17 @@ use Magento\Quote\Api\Data\PaymentInterface;
 use Magento\Quote\Model\Quote\Payment;
 use Magento\Vault\Api\Data\PaymentTokenInterface;
 use Magento\Vault\Api\PaymentTokenManagementInterface;
-use Magento\Vault\Model\Method\Vault;
 use Magento\Vault\Observer\PaymentTokenAssigner;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
- * Class PaymentTokenAssignerTest
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class PaymentTokenAssignerTest extends \PHPUnit\Framework\TestCase
+class PaymentTokenAssignerTest extends TestCase
 {
     /**
-     * @var PaymentTokenManagementInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var PaymentTokenManagementInterface|MockObject
      */
     private $paymentTokenManagement;
 
@@ -35,9 +37,9 @@ class PaymentTokenAssignerTest extends \PHPUnit\Framework\TestCase
      */
     private $observer;
 
-    public function setUp()
+    protected function setUp(): void
     {
-        $this->paymentTokenManagement = $this->createMock(PaymentTokenManagementInterface::class);
+        $this->paymentTokenManagement = $this->getMockForAbstractClass(PaymentTokenManagementInterface::class);
         $this->observer = new PaymentTokenAssigner($this->paymentTokenManagement);
     }
 
@@ -64,7 +66,7 @@ class PaymentTokenAssignerTest extends \PHPUnit\Framework\TestCase
                 ]
             ]
         );
-        $paymentModel = $this->createMock(InfoInterface::class);
+        $paymentModel = $this->getMockForAbstractClass(InfoInterface::class);
 
         $observer = $this->getPreparedObserverWithMap(
             [
@@ -93,8 +95,8 @@ class PaymentTokenAssignerTest extends \PHPUnit\Framework\TestCase
         $paymentModel = $this->getMockBuilder(Payment::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $quote = $this->createMock(CartInterface::class);
-        $customer = $this->createMock(CustomerInterface::class);
+        $quote = $this->getMockForAbstractClass(CartInterface::class);
+        $customer = $this->getMockForAbstractClass(CustomerInterface::class);
 
         $paymentModel->expects(static::once())
             ->method('getQuote')
@@ -139,9 +141,9 @@ class PaymentTokenAssignerTest extends \PHPUnit\Framework\TestCase
         $paymentModel = $this->getMockBuilder(Payment::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $quote = $this->createMock(CartInterface::class);
-        $customer = $this->createMock(CustomerInterface::class);
-        $paymentToken = $this->createMock(PaymentTokenInterface::class);
+        $quote = $this->getMockForAbstractClass(CartInterface::class);
+        $customer = $this->getMockForAbstractClass(CustomerInterface::class);
+        $paymentToken = $this->getMockForAbstractClass(PaymentTokenInterface::class);
 
         $paymentModel->expects(static::once())
             ->method('getQuote')
@@ -179,7 +181,7 @@ class PaymentTokenAssignerTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param array $returnMap
-     * @return \PHPUnit_Framework_MockObject_MockObject|Observer
+     * @return MockObject|Observer
      */
     private function getPreparedObserverWithMap(array $returnMap)
     {
