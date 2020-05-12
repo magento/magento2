@@ -71,6 +71,7 @@ class AuthenticateCustomerPlugin
             $quote = $this->checkoutSession->getQuote();
             /* Remove items from guest cart */
             $quote->removeAllItems();
+            $this->quoteRepository->save($quote);
         }
         return null;
     }
