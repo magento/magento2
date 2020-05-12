@@ -29,9 +29,9 @@ class FormatTest extends TestCase
     /**
      * Setup environment for test
      */
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->exportConfigMock = $this->createMock(ConfigInterface::class);
+        $this->exportConfigMock = $this->getMockForAbstractClass(ConfigInterface::class);
 
         $objectManager = new ObjectManager($this);
         $this->model = $objectManager->getObject(

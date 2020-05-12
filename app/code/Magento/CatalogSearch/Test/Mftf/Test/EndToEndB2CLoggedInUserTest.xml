@@ -22,7 +22,8 @@
         <click selector="{{StorefrontCatalogSearchAdvancedFormSection.SubmitButton}}" stepKey="searchClickAdvancedSearchSubmitButton" after="searchAdvancedFillPriceTo"/>
         <waitForLoadingMaskToDisappear stepKey="waitForSearchProductsloaded" after="searchClickAdvancedSearchSubmitButton"/>
         <actionGroup ref="StorefrontCheckAdvancedSearchResultActionGroup" stepKey="searchCheckAdvancedSearchResult" after="waitForSearchProductsloaded"/>
-        <see userInput="1" selector="{{StorefrontCatalogSearchAdvancedResultMainSection.productCount}} span" stepKey="searchAdvancedAssertProductCount" after="searchCheckAdvancedSearchResult"/>
+        <!-- Results returned will be different with ES vs MySQL -->
+        <see userInput="4" selector="{{StorefrontCatalogSearchAdvancedResultMainSection.productCount}} span" stepKey="searchAdvancedAssertProductCount" after="searchCheckAdvancedSearchResult"/>
         <actionGroup ref="StorefrontCheckCategorySimpleProductActionGroup" stepKey="searchAssertSimpleProduct1" after="searchAdvancedAssertProductCount">
             <argument name="product" value="$$createSimpleProduct1$$"/>
         </actionGroup>

@@ -13,4 +13,5 @@
     <preference for="Magento\LoginAsCustomerApi\Api\DeleteAuthenticationDataBySecretInterface" type="Magento\LoginAsCustomer\Model\ResourceModel\DeleteAuthenticationDataBySecret"/>
     <preference for="Magento\LoginAsCustomerApi\Api\DeleteExpiredAuthenticationDataInterface" type="Magento\LoginAsCustomer\Model\ResourceModel\DeleteExpiredAuthenticationData"/>
     <preference for="Magento\LoginAsCustomerApi\Api\ConfigInterface" type="Magento\LoginAsCustomer\Model\Config"/>
+    <preference for="Magento\LoginAsCustomerApi\Api\IsLoginAsCustomerSessionActiveInterface" type="Magento\LoginAsCustomer\Model\ResourceModel\IsLoginAsCustomerSessionActive"/>
 </config>

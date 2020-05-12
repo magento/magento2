@@ -48,7 +48,7 @@ class SetPaymentMethodTest extends GraphQlAbstract
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = Bootstrap::getObjectManager();
         $this->getMaskedQuoteIdByReservedOrderId = $objectManager->get(GetMaskedQuoteIdByReservedOrderId::class);
@@ -117,10 +117,11 @@ class SetPaymentMethodTest extends GraphQlAbstract
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_new_shipping_address.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_new_billing_address.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_flatrate_shipping_method.php
-     * @expectedException \Exception
      */
     public function testSetPaymentMethodInvalidInput()
     {
+        $this->expectException(\Exception::class);
+
         $reservedOrderId = 'test_quote';
         $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute($reservedOrderId);
 
@@ -218,7 +219,7 @@ QUERY;
     /**
      * @inheritdoc
      */
-    public function tearDown()
+    protected function tearDown(): void
     {
         $this->registry->unregister('isSecureArea');
         $this->registry->register('isSecureArea', true);

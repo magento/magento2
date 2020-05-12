@@ -8,26 +8,30 @@ declare(strict_types=1);
 namespace Magento\Framework\Lock\Test\Unit\Backend;
 
 use Magento\Framework\App\DeploymentConfig;
+use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\Lock\Backend\Database;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @inheritdoc
  */
-class DatabaseTest extends \PHPUnit\Framework\TestCase
+class DatabaseTest extends TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\ResourceConnection
+     * @var MockObject|ResourceConnection
      */
     private $resource;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\DB\Adapter\AdapterInterface
+     * @var MockObject|AdapterInterface
      */
     private $connection;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Zend_Db_Statement_Interface
+     * @var MockObject|\Zend_Db_Statement_Interface
      */
     private $statement;
 
@@ -42,19 +46,19 @@ class DatabaseTest extends \PHPUnit\Framework\TestCase
     private $database;
 
     /**
-     * @var DeploymentConfig|\PHPUnit_Framework_MockObject_MockObject
+     * @var DeploymentConfig|MockObject
      */
     private $deploymentConfig;
 
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->connection = $this->getMockBuilder(\Magento\Framework\DB\Adapter\AdapterInterface::class)
+        $this->connection = $this->getMockBuilder(AdapterInterface::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
-        $this->resource = $this->getMockBuilder(\Magento\Framework\App\ResourceConnection::class)
+        $this->resource = $this->getMockBuilder(ResourceConnection::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->statement = $this->getMockBuilder(\Zend_Db_Statement_Interface::class)
@@ -109,7 +113,7 @@ class DatabaseTest extends \PHPUnit\Framework\TestCase
             ->method('isDbAvailable')
             ->with()
             ->willReturn(true);
-            $this->statement->expects($this->once())
+        $this->statement->expects($this->once())
             ->method('fetchColumn')
             ->willReturn(true);
 
@@ -130,7 +134,7 @@ class DatabaseTest extends \PHPUnit\Framework\TestCase
             ->willReturn(true);
 
         $this->assertTrue($this->database->lock('testLock'));
-        $this->assertFalse($this->database->lock('differentLock'));
+        $this->assertTrue($this->database->lock('differentLock'));
     }
 
     /**
