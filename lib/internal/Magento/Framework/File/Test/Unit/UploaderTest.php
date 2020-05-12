@@ -7,10 +7,13 @@ declare(strict_types=1);
 
 namespace Magento\Framework\File\Test\Unit;
 
+use Magento\Framework\File\Uploader;
+use PHPUnit\Framework\TestCase;
+
 /**
  * Unit Test class for \Magento\Framework\File\Uploader
  */
-class UploaderTest extends \PHPUnit\Framework\TestCase
+class UploaderTest extends TestCase
 {
     /**
      * @param string $fileName
@@ -28,7 +31,7 @@ class UploaderTest extends \PHPUnit\Framework\TestCase
 
         $this->assertEquals(
             $expectedCorrectedFileName,
-            \Magento\Framework\File\Uploader::getCorrectFileName($fileName)
+            Uploader::getCorrectFileName($fileName)
         );
     }
 

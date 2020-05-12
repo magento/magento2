@@ -96,8 +96,8 @@
         <actionGroup ref="StorefrontNavigateCategoryPageActionGroup" stepKey="openCategoryPageOnFrontend">
             <argument name="category" value="$categoryEntity$"/>
         </actionGroup>
-        <actionGroup ref="AssertProductOnCategoryPageActionGroup" stepKey="checkProductOnCategoryPage">
-            <argument name="product" value="virtualProductGeneralGroup"/>
+        <actionGroup ref="AssertStorefrontProductIsPresentOnCategoryPageActionGroup" stepKey="checkProductOnCategoryPage">
+            <argument name="productName" value="{{virtualProductGeneralGroup.name}}"/>
         </actionGroup>
 
         <!--Verify customer see updated virtual product with tier price on product storefront page -->

@@ -13,7 +13,7 @@
             <stories value="Product type switching"/>
             <title value="Configurable product type switching on editing to virtual product"/>
             <description value="Configurable product type switching on editing to virtual product"/>
-            <testCaseId value="MC-17952"/>
+            <testCaseId value="MC-28742"/>
             <useCaseId value="MAGETWO-44170"/>
             <severity value="MAJOR"/>
             <group value="catalog"/>
@@ -21,7 +21,7 @@
         <!--Delete product configurations-->
         <comment userInput="Delete product configuration" stepKey="commentDeleteConfigs"/>
         <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="gotToConfigProductPage">
-            <argument name="productId" value="$$createProduct.id$$"/>
+            <argument name="productId" value="$createProduct.id$"/>
         </actionGroup>
         <waitForPageLoad stepKey="waitForConfigurableProductPageLoad"/>
         <conditionalClick selector="{{ AdminProductFormConfigurationsSection.sectionHeader}}" dependentSelector="{{AdminProductFormConfigurationsSection.createConfigurations}}" visible="false" stepKey="openConfigurationSection"/>
@@ -38,13 +38,12 @@
         <comment userInput="Assert virtual product on Admin product page grid" stepKey="commentAssertVirtualProductOnAdmin"/>
         <amOnPage url="{{AdminCatalogProductPage.url}}" stepKey="goToCatalogProductPageForVirtual"/>
         <actionGroup ref="FilterProductGridBySku2ActionGroup" stepKey="filterProductGridBySkuForVirtual">
-            <argument name="sku" value="$$createProduct.sku$$"/>
+            <argument name="sku" value="$createProduct.sku$"/>
         </actionGroup>
-        <see selector="{{AdminProductGridSection.productGridCell('1', 'Name')}}" userInput="$$createProduct.name$$" stepKey="seeVirtualProductNameInGrid"/>
-        <see selector="{{AdminProductGridSection.productGridCell('1', 'Type')}}" userInput="Virtual Product" stepKey="seeVirtualProductTypeInGrid"/>
+        <seeElement selector="{{AdminProductGridSection.productRowByTypeAndName('Virtual Product',$createProduct.name$)}}" stepKey="seeVirtualProductInGrid"/>
         <!--Assert virtual product on storefront-->
         <comment userInput="Assert virtual product on storefront" stepKey="commentAssertVirtualProductOnStorefront"/>
-        <amOnPage url="{{StorefrontProductPage.url($$createProduct.name$$)}}" stepKey="openVirtualProductPage"/>
+        <amOnPage url="{{StorefrontProductPage.url($createProduct.name$)}}" stepKey="openVirtualProductPage"/>
         <waitForPageLoad stepKey="waitForStorefrontVirtualProductPageLoad"/>
         <see userInput="IN STOCK" selector="{{StorefrontProductInfoMainSection.productStockStatus}}" stepKey="assertVirtualProductInStock"/>
     </test>
