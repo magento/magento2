@@ -3,60 +3,68 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Customer\Test\Unit\Model\ResourceModel\Group\Grid;
 
-use Magento\Framework\Api\SearchCriteria;
+use Magento\Customer\Api\Data\GroupSearchResultsInterface;
+use Magento\Customer\Api\GroupRepositoryInterface;
 use Magento\Customer\Model\ResourceModel\Group\Grid\ServiceCollection;
+use Magento\Framework\Api\FilterBuilder;
+use Magento\Framework\Api\Search\FilterGroupBuilder;
+use Magento\Framework\Api\SearchCriteria;
+use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Framework\Api\SearchResultsInterface;
 use Magento\Framework\Api\SortOrder;
+use Magento\Framework\Api\SortOrderBuilder;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Unit test for \Magento\Customer\Model\ResourceModel\Group\Grid\ServiceCollection
  */
-class ServiceCollectionTest extends \PHPUnit\Framework\TestCase
+class ServiceCollectionTest extends TestCase
 {
-    /** @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager  */
+    /** @var ObjectManager */
     protected $objectManager;
 
-    /** @var \Magento\Framework\Api\FilterBuilder */
+    /** @var FilterBuilder */
     protected $filterBuilder;
 
-    /** @var \Magento\Framework\Api\SearchCriteriaBuilder */
+    /** @var SearchCriteriaBuilder */
     protected $searchCriteriaBuilder;
 
-    /** @var \Magento\Framework\Api\SortOrderBuilder */
+    /** @var SortOrderBuilder */
     protected $sortOrderBuilder;
 
-    /** @var \Magento\Customer\Api\Data\GroupSearchResultsInterface */
+    /** @var GroupSearchResultsInterface */
     protected $searchResults;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject| */
+    /** @var \PHPUnit\Framework\MockObject\MockObject| */
     protected $groupRepositoryMock;
 
     /** @var ServiceCollection */
     protected $serviceCollection;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->filterBuilder = $this->objectManager->getObject(\Magento\Framework\Api\FilterBuilder::class);
+        $this->objectManager = new ObjectManager($this);
+        $this->filterBuilder = $this->objectManager->getObject(FilterBuilder::class);
         $filterGroupBuilder = $this->objectManager
-            ->getObject(\Magento\Framework\Api\Search\FilterGroupBuilder::class);
-        /** @var \Magento\Framework\Api\SearchCriteriaBuilder $searchBuilder */
+            ->getObject(FilterGroupBuilder::class);
+        /** @var SearchCriteriaBuilder $searchBuilder */
         $this->searchCriteriaBuilder = $this->objectManager->getObject(
-            \Magento\Framework\Api\SearchCriteriaBuilder::class,
+            SearchCriteriaBuilder::class,
             ['filterGroupBuilder' => $filterGroupBuilder]
         );
         $this->sortOrderBuilder = $this->objectManager->getObject(
-            \Magento\Framework\Api\SortOrderBuilder::class
+            SortOrderBuilder::class
         );
-        $this->groupRepositoryMock = $this->getMockBuilder(\Magento\Customer\Api\GroupRepositoryInterface::class)
+        $this->groupRepositoryMock = $this->getMockBuilder(GroupRepositoryInterface::class)
             ->getMock();
 
-        $this->searchResults = $this->getMockForAbstractClass(
-            \Magento\Framework\Api\SearchResultsInterface::class,
-            ['getTotalCount', 'getItems']
-        );
+        $this->searchResults = $this->getMockForAbstractClass(SearchResultsInterface::class);
 
         $this->searchResults
             ->expects($this->any())
@@ -68,7 +76,7 @@ class ServiceCollectionTest extends \PHPUnit\Framework\TestCase
 
         $this->serviceCollection = $this->objectManager
             ->getObject(
-                \Magento\Customer\Model\ResourceModel\Group\Grid\ServiceCollection::class,
+                ServiceCollection::class,
                 [
                     'filterBuilder' => $this->filterBuilder,
                     'searchCriteriaBuilder' => $this->searchCriteriaBuilder,
@@ -97,7 +105,7 @@ class ServiceCollectionTest extends \PHPUnit\Framework\TestCase
         $this->groupRepositoryMock->expects($this->once())
             ->method('getList')
             ->with($this->equalTo($expectedSearchCriteria))
-            ->will($this->returnValue($this->searchResults));
+            ->willReturn($this->searchResults);
 
         // Now call service collection to load the data.  This causes it to create the search criteria Data Object
         $this->serviceCollection->addFieldToFilter('name', 'Magento');
@@ -127,7 +135,7 @@ class ServiceCollectionTest extends \PHPUnit\Framework\TestCase
         $this->groupRepositoryMock->expects($this->once())
             ->method('getList')
             ->with($this->equalTo($expectedSearchCriteria))
-            ->will($this->returnValue($this->searchResults));
+            ->willReturn($this->searchResults);
 
         // Now call service collection to load the data.  This causes it to create the search criteria Data Object
         $this->serviceCollection->addFieldToFilter($field, [$conditionType => $value]);
@@ -163,7 +171,7 @@ class ServiceCollectionTest extends \PHPUnit\Framework\TestCase
         $this->groupRepositoryMock->expects($this->once())
             ->method('getList')
             ->with($this->equalTo($expectedSearchCriteria))
-            ->will($this->returnValue($this->searchResults));
+            ->willReturn($this->searchResults);
 
         // Now call service collection to load the data.  This causes it to create the search criteria Data Object
         $this->serviceCollection->addFieldToFilter([$fieldA, $fieldB], [$value, $value]);
@@ -205,7 +213,7 @@ class ServiceCollectionTest extends \PHPUnit\Framework\TestCase
         $this->groupRepositoryMock->expects($this->once())
             ->method('getList')
             ->with($this->equalTo($expectedSearchCriteria))
-            ->will($this->returnValue($this->searchResults));
+            ->willReturn($this->searchResults);
 
         // Now call service collection to load the data.  This causes it to create the search criteria Data Object
         $this->serviceCollection->addFieldToFilter($fieldA, ['gt' => $value]);
@@ -218,12 +226,15 @@ class ServiceCollectionTest extends \PHPUnit\Framework\TestCase
      * @param string[] $fields
      * @param array $conditions
      *
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage The field array failed to pass. The array must have a matching condition array.
      * @dataProvider addFieldToFilterInconsistentArraysDataProvider
      */
     public function testAddFieldToFilterInconsistentArrays($fields, $conditions)
     {
+        $this->expectException(LocalizedException::class);
+        $this->expectExceptionMessage(
+            'The field array failed to pass. The array must have a matching condition array.'
+        );
+
         $this->serviceCollection->addFieldToFilter($fields, $conditions);
     }
 
@@ -245,12 +256,13 @@ class ServiceCollectionTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage The array of fields failed to pass. The array must include at one field.
      * @dataProvider addFieldToFilterInconsistentArraysDataProvider
      */
     public function testAddFieldToFilterEmptyArrays()
     {
+        $this->expectException(LocalizedException::class);
+        $this->expectExceptionMessage('The array of fields failed to pass. The array must include at one field.');
+
         $this->serviceCollection->addFieldToFilter([], []);
     }
 }

@@ -146,7 +146,7 @@ class MoveRecentlyComparedProductsOnOrderPageTest extends Injectable
         $this->catalogProductCompare = $catalogProductCompare;
     }
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->config->setConfig('reports/options/enabled', 1);
         parent::setUp();
@@ -187,7 +187,7 @@ class MoveRecentlyComparedProductsOnOrderPageTest extends Injectable
         return ['products' => $products, 'productsIsConfigured' => $productsIsConfigured];
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         $this->config->setConfig('reports/options/enabled', 0);
         parent::tearDown();

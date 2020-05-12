@@ -16,7 +16,7 @@ class FieldsetTest extends \PHPUnit\Framework\TestCase
      */
     protected $_fieldset;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         /** @var $elementFactory \Magento\Framework\Data\Form\ElementFactory */
