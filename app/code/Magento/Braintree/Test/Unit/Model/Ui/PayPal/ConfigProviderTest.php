@@ -3,36 +3,33 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Braintree\Test\Unit\Model\Ui\PayPal;
 
 use Magento\Braintree\Gateway\Config\PayPal\Config;
 use Magento\Braintree\Model\Ui\PayPal\ConfigProvider;
 use Magento\Framework\Locale\ResolverInterface;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
- * Class ConfigProviderTest
- *
  * Test for class \Magento\Braintree\Model\Ui\PayPal\ConfigProvider
  */
-class ConfigProviderTest extends \PHPUnit\Framework\TestCase
+class ConfigProviderTest extends TestCase
 {
-    /**
-     * @var Config|MockObject
-     */
+    private const STUB_IMAGE_SRC = 'https://www.paypalobjects.com/webstatic/en_US/i/buttons/pp-acceptance-medium.png';
+
+    /** @var Config|MockObject */
     private $config;
 
-    /**
-     * @var ResolverInterface|MockObject
-     */
+    /** @var ResolverInterface|MockObject */
     private $localeResolver;
 
-    /**
-     * @var ConfigProvider
-     */
+    /** @var ConfigProvider */
     private $configProvider;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->config = $this->getMockBuilder(Config::class)
             ->disableOriginalConstructor()
@@ -98,8 +95,7 @@ class ConfigProviderTest extends \PHPUnit\Framework\TestCase
                             'isAllowShippingAddressOverride' => true,
                             'merchantName' => 'Test',
                             'locale' => 'en_US',
-                            'paymentAcceptanceMarkSrc' =>
-                                'https://www.paypalobjects.com/webstatic/en_US/i/buttons/pp-acceptance-medium.png',
+                            'paymentAcceptanceMarkSrc' => self::STUB_IMAGE_SRC,
                             'vaultCode' => ConfigProvider::PAYPAL_VAULT_CODE,
                             'skipOrderReview' => false,
                             'paymentIcon' => [

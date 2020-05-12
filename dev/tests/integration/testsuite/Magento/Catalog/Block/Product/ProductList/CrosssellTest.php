@@ -35,9 +35,9 @@ class CrosssellTest extends \PHPUnit\Framework\TestCase
         $block->setItemCount(1);
         $html = $block->toHtml();
         $this->assertNotEmpty($html);
-        $this->assertContains('Simple Cross Sell', $html);
+        $this->assertStringContainsString('Simple Cross Sell', $html);
         /* name */
-        $this->assertContains('product/' . $firstProduct->getId() . '/', $html);
+        $this->assertStringContainsString('product/' . $firstProduct->getId() . '/', $html);
         /* part of url */
         $this->assertInstanceOf(
             \Magento\Catalog\Model\ResourceModel\Product\Link\Product\Collection::class,

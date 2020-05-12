@@ -37,7 +37,7 @@ class CreditmemoListTest extends WebapiAbstract
     /**
      * Set up
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
     }

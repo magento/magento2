@@ -79,7 +79,7 @@ class DeleteTest extends TestCase
     /**
      * Set up
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->requestMock = $this->getMockBuilder(Http::class)
             ->disableOriginalConstructor()
@@ -91,15 +91,15 @@ class DeleteTest extends TestCase
 
         $this->directoryMock = $this->getMockBuilder(ReadInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->fileMock = $this->getMockBuilder(DriverInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->messageManagerMock = $this->getMockBuilder(ManagerInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->contextMock = $this->createPartialMock(
             Context::class,
@@ -144,7 +144,7 @@ class DeleteTest extends TestCase
 
         $this->fileSystemMock->expects($this->once())
             ->method('getDirectoryRead')
-            ->will($this->returnValue($this->directoryMock));
+            ->willReturn($this->directoryMock);
         $this->directoryMock->expects($this->once())->method('isFile')->willReturn(true);
         $this->fileMock->expects($this->once())->method('deleteFile')->willReturn(true);
         $this->messageManagerMock->expects($this->once())->method('addSuccessMessage');
@@ -163,7 +163,7 @@ class DeleteTest extends TestCase
 
         $this->fileSystemMock->expects($this->once())
             ->method('getDirectoryRead')
-            ->will($this->returnValue($this->directoryMock));
+            ->willReturn($this->directoryMock);
         $this->directoryMock->expects($this->once())->method('isFile')->willReturn(false);
         $this->messageManagerMock->expects($this->once())->method('addErrorMessage');
 

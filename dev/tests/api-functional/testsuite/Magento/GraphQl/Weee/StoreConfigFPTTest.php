@@ -26,7 +26,7 @@ class StoreConfigFPTTest extends GraphQlAbstract
     /**
      * @inheritdoc
      */
-    protected function setUp() :void
+    protected function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
     }
