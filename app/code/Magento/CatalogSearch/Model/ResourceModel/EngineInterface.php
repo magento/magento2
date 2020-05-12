@@ -15,6 +15,7 @@ interface EngineInterface
 {
     /**
      * @deprecated
+     * @see \Magento\Framework\Search\EngineResolverInterface
      */
     const FIELD_PREFIX = 'attr_';
 
