@@ -18,9 +18,9 @@
             <group value="searchFrontend"/>
             <group value="mtf_migrated"/>
             <group value="SearchEngineElasticsearch"/>
-<!--            <skip>-->
-<!--                <issueId value="MC-21228"/>-->
-<!--            </skip>-->
+            <skip>
+                <issueId value="MC-34217"/>
+            </skip>
         </annotations>
         <actionGroup ref="StorefrontFillFormAdvancedSearchActionGroup" stepKey="search">
             <argument name="productName" value="abc"/>
