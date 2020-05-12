@@ -45,9 +45,9 @@ class SuiteLoader implements TestSuiteLoader
     /**
      * @inheritdoc
      */
-    public function load($suiteClassName, $suiteClassFile = ''): \ReflectionClass
+    public function load(string $suiteClassFile): \ReflectionClass
     {
-        $resultClass = $this->suiteLoader->load($suiteClassName, $suiteClassFile);
+        $resultClass = $this->suiteLoader->load($suiteClassFile);
 
         if ($this->testsConfig->hasConfiguration($resultClass->getName())
             && !in_array(SkippableInterface::class, $resultClass->getInterfaceNames(), true)
