@@ -392,7 +392,7 @@ class QueryComplexityLimiterTest extends GraphQlAbstract
 }
 QUERY;
 
-        self::expectExceptionMessageRegExp('/Max query complexity should be 300 but got 302/');
+        self::expectExceptionMessageMatches('/Max query complexity should be 300 but got 302/');
         //Use POST request because request uri is too large for some servers
         $this->graphQlMutation($query);
     }
@@ -460,7 +460,7 @@ QUERY;
   }
 }
 QUERY;
-        self::expectExceptionMessageRegExp('/Max query depth should be 20 but got 23/');
+        self::expectExceptionMessageMatches('/Max query depth should be 20 but got 23/');
         $this->graphQlQuery($query);
     }
 }

@@ -33,7 +33,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
      */
     private $attributeConfig;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = ObjectManager::getInstance();
         $this->wishlist = $this->objectManager->create(Wishlist::class);

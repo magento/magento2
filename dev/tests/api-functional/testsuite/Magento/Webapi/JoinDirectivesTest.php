@@ -36,7 +36,7 @@ class JoinDirectivesTest extends \Magento\TestFramework\TestCase\WebapiAbstract
      */
     private $user;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->searchBuilder = $objectManager->create(\Magento\Framework\Api\SearchCriteriaBuilder::class);
