@@ -22,7 +22,7 @@ class SortOrderBuilderTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->interceptedBuilder = Bootstrap::getObjectManager()->get(SortOrderBuilder::class . '\Interceptor');

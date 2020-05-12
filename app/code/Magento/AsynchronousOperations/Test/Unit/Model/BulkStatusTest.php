@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\AsynchronousOperations\Test\Unit\Model;
 
@@ -82,7 +83,7 @@ class BulkStatusTest extends TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->bulkCollectionFactory = $this->createPartialMock(BulkCollectionFactory::class, ['create']);
         $this->operationCollectionFactory = $this->createPartialMock(OperationCollectionFactory::class, ['create']);
@@ -345,7 +346,7 @@ class BulkStatusTest extends TestCase
             ->method('addFieldToFilter')
             ->with('status', OperationInterface::STATUS_TYPE_COMPLETE)
             ->willReturnSelf();
-        $completeOperationCollection->expects($this->any())->method('getSize')->willReturn(5);
+        $completeOperationCollection->method('getSize')->willReturn(5);
         $this->assertEquals(BulkSummaryInterface::IN_PROGRESS, $this->model->getBulkStatus($bulkUuid));
     }
 }

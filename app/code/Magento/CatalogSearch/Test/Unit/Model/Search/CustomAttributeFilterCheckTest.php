@@ -3,32 +3,36 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\CatalogSearch\Test\Unit\Model\Search;
 
-use Magento\Eav\Model\Config;
-use Magento\CatalogSearch\Model\Search\CustomAttributeFilterCheck;
-use Magento\Framework\Search\Request\Filter\Term;
 use Magento\Catalog\Model\Product;
-use Magento\Framework\Search\Request\FilterInterface;
+use Magento\CatalogSearch\Model\Search\CustomAttributeFilterCheck;
+use Magento\Eav\Model\Config;
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
+use Magento\Framework\Search\Request\Filter\Term;
+use Magento\Framework\Search\Request\FilterInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class CustomAttributeFilterCheckTest extends \PHPUnit\Framework\TestCase
+class CustomAttributeFilterCheckTest extends TestCase
 {
-    /** @var Config|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var Config|MockObject */
     private $eavConfig;
 
     /** @var CustomAttributeFilterCheck */
     private $customAttributeFilterCheck;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->eavConfig = $this->getMockBuilder(Config::class)
             ->disableOriginalConstructor()
             ->setMethods(['getAttribute'])
             ->getMock();
 
-        $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $objectManagerHelper = new ObjectManager($this);
         $this->customAttributeFilterCheck = $objectManagerHelper->getObject(
             CustomAttributeFilterCheck::class,
             [

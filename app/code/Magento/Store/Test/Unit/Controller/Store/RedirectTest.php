@@ -110,9 +110,9 @@ class RedirectTest extends TestCase
     /**
      * @inheritDoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
+        $this->storeManagerMock = $this->getMockForAbstractClass(StoreManagerInterface::class);
         $this->requestMock = $this->getMockBuilder(RequestInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['getParam'])
@@ -244,7 +244,7 @@ class RedirectTest extends TestCase
                 ]
             );
 
-        $this->assertEquals(null, $this->model->execute());
+        $this->assertNull($this->model->execute());
     }
 
     /**
@@ -287,7 +287,7 @@ class RedirectTest extends TestCase
             ->with($this->responseMock, $this->currentStoreMock)
             ->willReturnSelf();
 
-        $this->assertEquals(null, $this->model->execute());
+        $this->assertNull($this->model->execute());
     }
 
     /**
