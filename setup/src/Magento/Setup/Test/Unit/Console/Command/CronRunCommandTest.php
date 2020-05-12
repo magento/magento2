@@ -3,16 +3,24 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Setup\Test\Unit\Console\Command;
 
 use Magento\Framework\App\DeploymentConfig;
 use Magento\Setup\Console\Command\CronRunCommand;
+use Magento\Setup\Model\Cron\AbstractJob;
+use Magento\Setup\Model\Cron\Queue;
+use Magento\Setup\Model\Cron\ReadinessCheck;
+use Magento\Setup\Model\Cron\Status;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Tester\CommandTester;
 
-class CronRunCommandTest extends \PHPUnit\Framework\TestCase
+class CronRunCommandTest extends TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|DeploymentConfig
+     * @var MockObject|DeploymentConfig
      */
     private $deploymentConfig;
 
@@ -27,26 +35,26 @@ class CronRunCommandTest extends \PHPUnit\Framework\TestCase
     private $commandTester;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Setup\Model\Cron\Queue
+     * @var MockObject|Queue
      */
     private $queue;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Setup\Model\Cron\ReadinessCheck
+     * @var MockObject|ReadinessCheck
      */
     private $readinessCheck;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Setup\Model\Cron\Status
+     * @var MockObject|Status
      */
     private $status;
 
-    public function setUp()
+    protected function setUp(): void
     {
-        $this->deploymentConfig = $this->createMock(\Magento\Framework\App\DeploymentConfig::class);
-        $this->queue = $this->createMock(\Magento\Setup\Model\Cron\Queue::class);
-        $this->readinessCheck = $this->createMock(\Magento\Setup\Model\Cron\ReadinessCheck::class);
-        $this->status = $this->createMock(\Magento\Setup\Model\Cron\Status::class);
+        $this->deploymentConfig = $this->createMock(DeploymentConfig::class);
+        $this->queue = $this->createMock(Queue::class);
+        $this->readinessCheck = $this->createMock(ReadinessCheck::class);
+        $this->status = $this->createMock(Status::class);
         $this->command = new CronRunCommand(
             $this->deploymentConfig,
             $this->queue,
@@ -150,7 +158,7 @@ class CronRunCommandTest extends \PHPUnit\Framework\TestCase
         $this->setUpPreliminarySuccess();
         $this->queue->expects($this->at(0))->method('peek')->willReturn(['name' => 'setup:']);
         $this->queue->expects($this->at(1))->method('peek')->willReturn(['name' => 'setup:']);
-        $job = $this->getMockForAbstractClass(\Magento\Setup\Model\Cron\AbstractJob::class, [], '', false);
+        $job = $this->getMockForAbstractClass(AbstractJob::class, [], '', false);
         $job->expects($this->once())->method('execute')->willThrowException(new \Exception('job failed'));
         $this->queue->expects($this->at(2))->method('popQueuedJob')->willReturn($job);
         $this->status->expects($this->atLeastOnce())->method('toggleUpdateError')->with(true);
@@ -162,7 +170,7 @@ class CronRunCommandTest extends \PHPUnit\Framework\TestCase
         $this->setUpPreliminarySuccess();
         $this->queue->expects($this->at(0))->method('peek')->willReturn(['name' => 'setup:']);
         $this->queue->expects($this->at(1))->method('peek')->willReturn(['name' => 'setup:']);
-        $job = $this->getMockForAbstractClass(\Magento\Setup\Model\Cron\AbstractJob::class, [], '', false);
+        $job = $this->getMockForAbstractClass(AbstractJob::class, [], '', false);
         $job->expects($this->once())->method('execute');
         $this->queue->expects($this->at(2))->method('popQueuedJob')->willReturn($job);
         $this->status->expects($this->never())->method('toggleUpdateError')->with(true);

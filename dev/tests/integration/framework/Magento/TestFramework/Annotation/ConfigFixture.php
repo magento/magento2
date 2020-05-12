@@ -117,8 +117,8 @@ class ConfigFixture
     ): void {
         $config = $this->getMutableScopeConfig();
         if (strpos($configPath, 'default/') === 0) {
-                $configPath = substr($configPath, 8);
-                $config->setValue($configPath, $value, ScopeConfigInterface::SCOPE_TYPE_DEFAULT);
+            $configPath = substr($configPath, 8);
+            $config->setValue($configPath, $value, ScopeConfigInterface::SCOPE_TYPE_DEFAULT);
         } else {
             $config->setValue($configPath, $value, $scopeType, $scopeCode);
         }

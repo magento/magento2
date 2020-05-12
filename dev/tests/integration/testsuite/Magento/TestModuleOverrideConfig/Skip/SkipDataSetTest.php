@@ -7,14 +7,14 @@ declare(strict_types=1);
 
 namespace Magento\TestModuleOverrideConfig\Skip;
 
-use PHPUnit\Framework\TestCase;
+use Magento\TestModuleOverrideConfig\AbstractOverridesTest;
 
 /**
  * Class checks that only specific data set can be skipped using override config
  *
  * @magentoAppIsolation enabled
  */
-class SkipDataSetTest extends TestCase
+class SkipDataSetTest extends AbstractOverridesTest
 {
     /**
      * The first_data_set should not be executed according to override config it should be mark as skipped

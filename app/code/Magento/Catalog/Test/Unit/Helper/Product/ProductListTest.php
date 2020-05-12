@@ -26,7 +26,7 @@ class ProductListTest extends TestCase
      */
     private $productListHelper;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
 

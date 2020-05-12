@@ -34,7 +34,7 @@ class Converter implements ConverterInterface
     public function convert($source)
     {
         $this->xpath = new \DOMXPath($source);
-        $config = $this->getGlobalConfig($this->xpath);
+        $config = [];
         foreach ($this->xpath->query('//test') as $testOverride) {
             $className = ltrim($testOverride->getAttribute('class'), '\\');
             $config[$className] = $this->getTestConfigByFixtureType($testOverride);
@@ -69,39 +69,6 @@ class Converter implements ConverterInterface
     {
         $config['skip'] = $node->getAttribute('skip') === 'true';
         $config['skipMessage'] = $node->getAttribute('skipMessage') ?: null;
-
-        return $config;
-    }
-
-    /**
-     * Get global configurations
-     *
-     * @param \DOMXPath $xpath
-     * @return array
-     */
-    private function getGlobalConfig(\DOMXPath $xpath): array
-    {
-        foreach ($xpath->query('//global') as $globalOverride) {
-            $config = $this->fillGlobalConfigByFixtureType($globalOverride);
-        }
-
-        return $config ?? [];
-    }
-
-    /**
-     * Fill global configurations node
-     *
-     * @param \DOMElement $node
-     * @return array
-     */
-    private function fillGlobalConfigByFixtureType(\DOMElement $node): array
-    {
-        $config = [];
-        foreach (self::FIXTURE_TYPES as $fixtureType) {
-            foreach ($node->getElementsByTagName($fixtureType) as $fixture) {
-                $config['global'][$fixtureType][] = $this->fillAttributes($fixture);
-            }
-        }
 
         return $config;
     }

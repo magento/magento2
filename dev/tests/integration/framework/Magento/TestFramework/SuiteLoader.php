@@ -45,11 +45,11 @@ class SuiteLoader implements TestSuiteLoader
     /**
      * @inheritdoc
      */
-    public function load($suiteClassName, $suiteClassFile = '')
+    public function load(string $suiteClassFile): \ReflectionClass
     {
-        $resultClass = $this->suiteLoader->load($suiteClassName, $suiteClassFile);
+        $resultClass = $this->suiteLoader->load($suiteClassFile);
 
-        if ($this->testsConfig->hasConfiguration($resultClass->getName())
+        if ($this->testsConfig->hasSkippedTest($resultClass->getName())
             && !in_array(SkippableInterface::class, $resultClass->getInterfaceNames(), true)
         ) {
             $resultClass = new \ReflectionClass($this->generator->generateTestWrapper($resultClass));
@@ -61,7 +61,7 @@ class SuiteLoader implements TestSuiteLoader
     /**
      * @inheritdoc
      */
-    public function reload(\ReflectionClass $aClass)
+    public function reload(\ReflectionClass $aClass): \ReflectionClass
     {
         return $aClass;
     }

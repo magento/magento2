@@ -26,7 +26,7 @@ class ConfigFixtureTest extends TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->object = $this->createPartialMock(
             ConfigFixture::class,
@@ -59,8 +59,8 @@ class ConfigFixtureTest extends TestCase
             '_getConfigValue'
         )->with(
             'default/web/unsecure/base_url'
-        )->will(
-            $this->returnValue('http://localhost/')
+        )->willReturn(
+            'http://localhost/'
         );
         $this->object->expects(
             $this->at(1)
@@ -99,8 +99,8 @@ class ConfigFixtureTest extends TestCase
             'web/unsecure/base_url',
             ScopeInterface::SCOPE_WEBSITES,
             'base'
-        )->will(
-            $this->returnValue('http://localhost/')
+        )->willReturn(
+            'http://localhost/'
         );
         $this->object->expects(
             $this->at(1)
@@ -142,8 +142,8 @@ class ConfigFixtureTest extends TestCase
         )->with(
             'web/unsecure/base_url',
             ScopeInterface::SCOPE_WEBSITES
-        )->will(
-            $this->returnValue('http://localhost/')
+        )->willReturn(
+            'http://localhost/'
         );
         $this->object->expects(
             $this->at(1)
@@ -185,8 +185,8 @@ class ConfigFixtureTest extends TestCase
         )->with(
             'dev/restrict/allow_ips',
             ''
-        )->will(
-            $this->returnValue('127.0.0.1')
+        )->willReturn(
+            '127.0.0.1'
         );
         $this->object->expects(
             $this->at(1)
@@ -227,8 +227,8 @@ class ConfigFixtureTest extends TestCase
         )->with(
             'dev/restrict/allow_ips',
             'admin'
-        )->will(
-            $this->returnValue('192.168.0.1')
+        )->willReturn(
+            '192.168.0.1'
         );
         $this->object->expects(
             $this->at(1)
@@ -279,8 +279,8 @@ class ConfigFixtureTest extends TestCase
             '_getConfigValue'
         )->with(
             'web/unsecure/base_url'
-        )->will(
-            $this->returnValue('http://localhost/')
+        )->willReturn(
+            'http://localhost/'
         );
         $this->object->expects(
             $this->at(1)
