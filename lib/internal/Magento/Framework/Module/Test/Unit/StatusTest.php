@@ -3,36 +3,44 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Framework\Module\Test\Unit;
 
-use \Magento\Framework\Module\Status;
+use Magento\Framework\App\DeploymentConfig\Writer;
 use Magento\Framework\Config\File\ConfigFilePool;
+use Magento\Framework\Module\ConflictChecker;
+use Magento\Framework\Module\DependencyChecker;
+use Magento\Framework\Module\ModuleList;
+use Magento\Framework\Module\ModuleList\Loader;
+use Magento\Framework\Module\Status;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class StatusTest extends \PHPUnit\Framework\TestCase
+class StatusTest extends TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     private $loader;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     private $moduleList;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     private $writer;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     private $conflictChecker;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     private $dependencyChecker;
 
@@ -41,13 +49,13 @@ class StatusTest extends \PHPUnit\Framework\TestCase
      */
     private $object;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->loader = $this->createMock(\Magento\Framework\Module\ModuleList\Loader::class);
-        $this->moduleList = $this->createMock(\Magento\Framework\Module\ModuleList::class);
-        $this->writer = $this->createMock(\Magento\Framework\App\DeploymentConfig\Writer::class);
-        $this->conflictChecker = $this->createMock(\Magento\Framework\Module\ConflictChecker::class);
-        $this->dependencyChecker = $this->createMock(\Magento\Framework\Module\DependencyChecker::class);
+        $this->loader = $this->createMock(Loader::class);
+        $this->moduleList = $this->createMock(ModuleList::class);
+        $this->writer = $this->createMock(Writer::class);
+        $this->conflictChecker = $this->createMock(ConflictChecker::class);
+        $this->dependencyChecker = $this->createMock(DependencyChecker::class);
         $this->object = new Status(
             $this->loader,
             $this->moduleList,
@@ -61,10 +69,10 @@ class StatusTest extends \PHPUnit\Framework\TestCase
     {
         $this->conflictChecker->expects($this->once())
             ->method('checkConflictsWhenEnableModules')
-            ->will($this->returnValue(['Module_Foo' => [], 'Module_Bar' => []]));
+            ->willReturn(['Module_Foo' => [], 'Module_Bar' => []]);
         $this->dependencyChecker->expects($this->once())
             ->method('checkDependenciesWhenEnableModules')
-            ->will($this->returnValue(['Module_Foo' => [], 'Module_Bar' => []]));
+            ->willReturn(['Module_Foo' => [], 'Module_Bar' => []]);
         $result = $this->object->checkConstraints(
             true,
             ['Module_Foo' => '', 'Module_Bar' => ''],
@@ -77,15 +85,13 @@ class StatusTest extends \PHPUnit\Framework\TestCase
     {
         $this->conflictChecker->expects($this->once())
             ->method('checkConflictsWhenEnableModules')
-            ->will($this->returnValue(['Module_Foo' => ['Module_Bar'], 'Module_Bar' => ['Module_Foo']]));
+            ->willReturn(['Module_Foo' => ['Module_Bar'], 'Module_Bar' => ['Module_Foo']]);
         $this->dependencyChecker->expects($this->once())
             ->method('checkDependenciesWhenEnableModules')
-            ->will($this->returnValue(
-                [
-                    'Module_Foo' => ['Module_Baz' => ['Module_Foo', 'Module_Baz']],
-                    'Module_Bar' => ['Module_Baz' => ['Module_Bar', 'Module_Baz']],
-                ]
-            ));
+            ->willReturn([
+                'Module_Foo' => ['Module_Baz' => ['Module_Foo', 'Module_Baz']],
+                'Module_Bar' => ['Module_Baz' => ['Module_Bar', 'Module_Baz']],
+            ]);
         $result = $this->object->checkConstraints(true, ['Module_Foo' => '', 'Module_Bar' => ''], [], false);
         $expect = [
             'Cannot enable Module_Foo because it depends on disabled modules:',
@@ -104,15 +110,13 @@ class StatusTest extends \PHPUnit\Framework\TestCase
     {
         $this->conflictChecker->expects($this->once())
             ->method('checkConflictsWhenEnableModules')
-            ->will($this->returnValue(['Module_Foo' => ['Module_Bar'], 'Module_Bar' => ['Module_Foo']]));
+            ->willReturn(['Module_Foo' => ['Module_Bar'], 'Module_Bar' => ['Module_Foo']]);
         $this->dependencyChecker->expects($this->once())
             ->method('checkDependenciesWhenEnableModules')
-            ->will($this->returnValue(
-                [
-                    'Module_Foo' => ['Module_Baz' => ['Module_Foo', 'Module_Baz']],
-                    'Module_Bar' => ['Module_Baz' => ['Module_Bar', 'Module_Baz']],
-                ]
-            ));
+            ->willReturn([
+                'Module_Foo' => ['Module_Baz' => ['Module_Foo', 'Module_Baz']],
+                'Module_Bar' => ['Module_Baz' => ['Module_Bar', 'Module_Baz']],
+            ]);
         $result = $this->object->checkConstraints(true, ['Module_Foo' => '', 'Module_Bar' => ''], [], true);
         $expect = [
             'Cannot enable Module_Foo',
@@ -129,7 +133,7 @@ class StatusTest extends \PHPUnit\Framework\TestCase
     {
         $this->dependencyChecker->expects($this->once())
             ->method('checkDependenciesWhenDisableModules')
-            ->will($this->returnValue(['Module_Foo' => [], 'Module_Bar' => []]));
+            ->willReturn(['Module_Foo' => [], 'Module_Bar' => []]);
         $result = $this->object->checkConstraints(false, ['Module_Foo' => '', 'Module_Bar' => '']);
         $this->assertEquals([], $result);
     }
@@ -138,12 +142,10 @@ class StatusTest extends \PHPUnit\Framework\TestCase
     {
         $this->dependencyChecker->expects($this->once())
             ->method('checkDependenciesWhenDisableModules')
-            ->will($this->returnValue(
-                [
-                    'Module_Foo' => ['Module_Baz' => ['Module_Baz', 'Module_Foo']],
-                    'Module_Bar' => ['Module_Baz' => ['Module_Baz', 'Module_Bar']],
-                ]
-            ));
+            ->willReturn([
+                'Module_Foo' => ['Module_Baz' => ['Module_Baz', 'Module_Foo']],
+                'Module_Bar' => ['Module_Baz' => ['Module_Baz', 'Module_Bar']],
+            ]);
         $result = $this->object->checkConstraints(false, ['Module_Foo' => '', 'Module_Bar' => '']);
         $expect = [
             'Cannot disable Module_Foo because modules depend on it:',
@@ -167,12 +169,10 @@ class StatusTest extends \PHPUnit\Framework\TestCase
         $this->object->setIsEnabled(true, ['Module_Foo', 'Module_Bar']);
     }
 
-    /**
-     * @expectedException \LogicException
-     * @expectedExceptionMessage Unknown module(s): 'Module_Baz'
-     */
     public function testSetIsEnabledUnknown()
     {
+        $this->expectException('LogicException');
+        $this->expectExceptionMessage('Unknown module(s): \'Module_Baz\'');
         $modules = ['Module_Foo' => '', 'Module_Bar' => ''];
         $this->loader->expects($this->once())->method('load')->willReturn($modules);
         $this->object->setIsEnabled(true, ['Module_Baz']);

@@ -75,7 +75,7 @@ class StoreTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
         $this->dispatch('backend/admin/system_store/save');
         //Check that errors was generated and set to session
         $this->assertSessionMessages(
-            $this->contains($message),
+            $this->containsEqual($message),
             \Magento\Framework\Message\MessageInterface::TYPE_ERROR,
             \Magento\Framework\Message\ManagerInterface::class
         );

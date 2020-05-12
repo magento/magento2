@@ -177,18 +177,18 @@ class Set extends \Magento\Framework\Model\AbstractExtensibleModel implements
         $modelGroupArray = [];
         $modelAttributeArray = [];
         $attributeIds = [];
-        if ($data['attributes']) {
+        if (isset($data['attributes'])) {
             $ids = [];
             foreach ($data['attributes'] as $attribute) {
                 $ids[] = $attribute[0];
             }
             $attributeIds = $this->_resourceAttribute->getValidAttributeIds($ids);
         }
-        if ($data['groups']) {
+        if (isset($data['groups'])) {
             foreach ($data['groups'] as $group) {
                 $modelGroup = $this->initGroupModel($group);
 
-                if ($data['attributes']) {
+                if (isset($data['attributes'])) {
                     foreach ($data['attributes'] as $attribute) {
                         if ($attribute[1] == $group[0] && in_array($attribute[0], $attributeIds)) {
                             $modelAttribute = $this->_attributeFactory->create();
@@ -214,7 +214,7 @@ class Set extends \Magento\Framework\Model\AbstractExtensibleModel implements
             $this->setGroups($modelGroupArray);
         }
 
-        if ($data['not_attributes']) {
+        if (isset($data['not_attributes'])) {
             $modelAttributeArray = [];
             $data['not_attributes'] = array_filter($data['not_attributes']);
             foreach ($data['not_attributes'] as $entityAttributeId) {
@@ -237,7 +237,7 @@ class Set extends \Magento\Framework\Model\AbstractExtensibleModel implements
             $this->setRemoveAttributes($modelAttributeArray);
         }
 
-        if ($data['removeGroups']) {
+        if (isset($data['removeGroups'])) {
             $modelGroupArray = [];
             foreach ($data['removeGroups'] as $groupId) {
                 $modelGroup = $this->_attrGroupFactory->create();

@@ -1,0 +1,26 @@
+{
+    "name": "magento/module-login-as-customer-ui",
+    "description": "",
+    "require": {
+        "php": "~7.3.0||~7.4.0",
+        "magento/framework": "*",
+        "magento/module-login-as-customer-api": "*",
+        "magento/module-backend": "*",
+        "magento/module-customer": "*",
+        "magento/module-store": "*"
+    },
+    "suggest": {
+        "magento/module-login-as-customer": "*"
+    },
+    "type": "magento2-module",
+    "license": [
+        "OSL-3.0",
+        "AFL-3.0"
+    ],
+    "autoload": {
+        "files": [ "registration.php" ],
+        "psr-4": {
+            "Magento\\LoginAsCustomerUi\\": ""
+        }
+    }
+}

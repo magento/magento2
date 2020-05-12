@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 /**
  * Test class for \Magento\AdminNotification\Block\ToolbarEntry
@@ -30,7 +31,7 @@ class ToolbarEntryTest extends TestCase
             Unread::class,
             ['getSize', 'setCurPage', 'setPageSize']
         );
-        $notificationList->expects($this->any())->method('getSize')->will($this->returnValue($unreadNotifications));
+        $notificationList->method('getSize')->willReturn($unreadNotifications);
 
         $block = $objectManagerHelper->getObject(
             ToolbarEntry::class,
@@ -52,9 +53,7 @@ class ToolbarEntryTest extends TestCase
         $helper = new ObjectManager($this);
 
         // 1. Create mocks
-        $notificationList = $this->getMockBuilder(Unread::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $notificationList = $this->createMock(Unread::class);
 
         /** @var ToolbarEntry $model */
         $model = $helper->getObject(
@@ -65,8 +64,7 @@ class ToolbarEntryTest extends TestCase
         // 2. Set expectations
         $notificationList->expects($this->atLeastOnce())
             ->method('setPageSize')
-            ->with(ToolbarEntry::NOTIFICATIONS_NUMBER)
-            ->will($this->returnSelf());
+            ->with(ToolbarEntry::NOTIFICATIONS_NUMBER)->willReturnSelf();
 
         // 3. Run tested method
         $result = $model->getLatestUnreadNotifications();

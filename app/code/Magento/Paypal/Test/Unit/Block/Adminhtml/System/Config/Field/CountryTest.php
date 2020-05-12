@@ -3,11 +3,23 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Paypal\Test\Unit\Block\Adminhtml\System\Config\Field;
 
+use Magento\Backend\Model\Url;
+use Magento\Framework\App\RequestInterface;
+use Magento\Framework\Data\Form\Element\AbstractElement;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\View\Helper\Js;
 use Magento\Paypal\Block\Adminhtml\System\Config\Field\Country;
+use Magento\Paypal\Model\Config\StructurePlugin;
+use PHPUnit\Framework\Constraint\LogicalAnd;
+use PHPUnit\Framework\Constraint\StringContains;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class CountryTest extends \PHPUnit\Framework\TestCase
+class CountryTest extends TestCase
 {
     /**
      * @var Country
@@ -15,30 +27,30 @@ class CountryTest extends \PHPUnit\Framework\TestCase
     protected $_model;
 
     /**
-     * @var \Magento\Framework\Data\Form\Element\AbstractElement
+     * @var AbstractElement
      */
     protected $_element;
 
     /**
-     * @var \Magento\Framework\App\RequestInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var RequestInterface|MockObject
      */
     protected $_request;
 
     /**
-     * @var \Magento\Framework\View\Helper\Js|\PHPUnit_Framework_MockObject_MockObject
+     * @var Js|MockObject
      */
     protected $_jsHelper;
 
     /**
-     * @var \Magento\Backend\Model\Url|\PHPUnit_Framework_MockObject_MockObject
+     * @var Url|MockObject
      */
     protected $_url;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $helper = new ObjectManager($this);
         $this->_element = $this->getMockForAbstractClass(
-            \Magento\Framework\Data\Form\Element\AbstractElement::class,
+            AbstractElement::class,
             [],
             '',
             false,
@@ -48,18 +60,18 @@ class CountryTest extends \PHPUnit\Framework\TestCase
         );
         $this->_element->expects($this->any())
             ->method('getHtmlId')
-            ->will($this->returnValue('html id'));
+            ->willReturn('html id');
         $this->_element->expects($this->any())
             ->method('getElementHtml')
-            ->will($this->returnValue('element html'));
+            ->willReturn('element html');
         $this->_element->expects($this->any())
             ->method('getName')
-            ->will($this->returnValue('name'));
-        $this->_request = $this->getMockForAbstractClass(\Magento\Framework\App\RequestInterface::class);
-        $this->_jsHelper = $this->createMock(\Magento\Framework\View\Helper\Js::class);
-        $this->_url = $this->createMock(\Magento\Backend\Model\Url::class);
+            ->willReturn('name');
+        $this->_request = $this->getMockForAbstractClass(RequestInterface::class);
+        $this->_jsHelper = $this->createMock(Js::class);
+        $this->_url = $this->createMock(Url::class);
         $this->_model = $helper->getObject(
-            \Magento\Paypal\Block\Adminhtml\System\Config\Field\Country::class,
+            Country::class,
             ['request' => $this->_request, 'jsHelper' => $this->_jsHelper, 'url' => $this->_url]
         );
     }
@@ -75,31 +87,31 @@ class CountryTest extends \PHPUnit\Framework\TestCase
     {
         $this->_request->expects($this->any())
             ->method('getParam')
-            ->will($this->returnCallback(function ($param) use ($requestCountry, $requestDefaultCountry) {
-                if ($param == \Magento\Paypal\Model\Config\StructurePlugin::REQUEST_PARAM_COUNTRY) {
+            ->willReturnCallback(function ($param) use ($requestCountry, $requestDefaultCountry) {
+                if ($param == StructurePlugin::REQUEST_PARAM_COUNTRY) {
                     return $requestCountry;
                 }
                 if ($param == Country::REQUEST_PARAM_DEFAULT_COUNTRY) {
                     return $requestDefaultCountry;
                 }
                 return $param;
-            }));
+            });
         $this->_element->setInherit($inherit);
         $this->_element->setCanUseDefaultValue($canUseDefault);
         $constraints = [
-            new \PHPUnit\Framework\Constraint\StringContains('document.observe("dom:loaded", function() {'),
-            new \PHPUnit\Framework\Constraint\StringContains(
+            new StringContains('document.observe("dom:loaded", function() {'),
+            new StringContains(
                 '$("' . $this->_element->getHtmlId() . '").observe("change", function () {'
             ),
         ];
         if ($canUseDefault && ($requestCountry == 'US') && $requestDefaultCountry) {
-            $constraints[] = new \PHPUnit\Framework\Constraint\StringContains(
+            $constraints[] = new StringContains(
                 '$("' . $this->_element->getHtmlId() . '_inherit").observe("click", function () {'
             );
         }
         $this->_jsHelper->expects($this->once())
             ->method('getScript')
-            ->with(new \PHPUnit\Framework\Constraint\LogicalAnd($constraints));
+            ->with(new LogicalAnd($constraints));
         $this->_url->expects($this->once())
             ->method('getUrl')
             ->with(
@@ -108,7 +120,7 @@ class CountryTest extends \PHPUnit\Framework\TestCase
                     'section' => 'section',
                     'website' => 'website',
                     'store' => 'store',
-                    \Magento\Paypal\Model\Config\StructurePlugin::REQUEST_PARAM_COUNTRY => '__country__'
+                    StructurePlugin::REQUEST_PARAM_COUNTRY => '__country__'
                 ]
             );
         $this->_model->render($this->_element);
