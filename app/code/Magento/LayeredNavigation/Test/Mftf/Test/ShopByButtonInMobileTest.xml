@@ -18,9 +18,6 @@
             <testCaseId value="MC-6092"/>
             <group value="LayeredNavigation"/>
             <group value="SearchEngineElasticsearch"/>
-<!--            <skip>-->
-<!--                <issueId value="MC-21228"/>-->
-<!--            </skip>-->
         </annotations>
         <before>
             <createData entity="productDropDownAttribute" stepKey="attribute"/>
