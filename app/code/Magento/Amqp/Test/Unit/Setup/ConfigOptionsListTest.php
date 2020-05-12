@@ -3,15 +3,20 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Amqp\Test\Unit\Setup;
 
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Amqp\Setup\ConfigOptionsList;
-use Magento\Framework\Setup\Option\TextConfigOption;
+use Magento\Amqp\Setup\ConnectionValidator;
 use Magento\Framework\App\DeploymentConfig;
+use Magento\Framework\Config\Data\ConfigData;
+use Magento\Framework\Setup\Option\TextConfigOption;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class ConfigOptionsListTest extends \PHPUnit\Framework\TestCase
+class ConfigOptionsListTest extends TestCase
 {
     /**
      * @var ObjectManager
@@ -24,12 +29,12 @@ class ConfigOptionsListTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var \Magento\Amqp\Setup\ConnectionValidator|\PHPUnit_Framework_MockObject_MockObject
+     * @var ConnectionValidator|MockObject
      */
     private $connectionValidatorMock;
 
     /**
-     * @var \Magento\Framework\App\DeploymentConfig|\PHPUnit_Framework_MockObject_MockObject
+     * @var DeploymentConfig|MockObject
      */
     private $deploymentConfigMock;
 
@@ -38,7 +43,7 @@ class ConfigOptionsListTest extends \PHPUnit\Framework\TestCase
      */
     private $options;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->options = [
             ConfigOptionsList::INPUT_KEY_QUEUE_AMQP_HOST => 'host',
@@ -51,18 +56,18 @@ class ConfigOptionsListTest extends \PHPUnit\Framework\TestCase
         ];
 
         $this->objectManager = new ObjectManager($this);
-        $this->connectionValidatorMock = $this->getMockBuilder(\Magento\Amqp\Setup\ConnectionValidator::class)
+        $this->connectionValidatorMock = $this->getMockBuilder(ConnectionValidator::class)
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();
 
-        $this->deploymentConfigMock = $this->getMockBuilder(\Magento\Framework\App\DeploymentConfig::class)
+        $this->deploymentConfigMock = $this->getMockBuilder(DeploymentConfig::class)
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();
 
         $this->model = $this->objectManager->getObject(
-            \Magento\Amqp\Setup\ConfigOptionsList::class,
+            ConfigOptionsList::class,
             [
                 'connectionValidator' => $this->connectionValidatorMock,
             ]
@@ -133,11 +138,11 @@ class ConfigOptionsListTest extends \PHPUnit\Framework\TestCase
     public function testCreateConfig($options, $expectedConfigData)
     {
         $result = $this->model->createConfig($options, $this->deploymentConfigMock);
-        $this->assertInternalType('array', $result);
+        $this->assertIsArray($result);
         $this->assertNotEmpty($result);
-        /** @var \Magento\Framework\Config\Data\ConfigData $configData */
+        /** @var ConfigData $configData */
         $configData = $result[0];
-        $this->assertInstanceOf(\Magento\Framework\Config\Data\ConfigData::class, $configData);
+        $this->assertInstanceOf(ConfigData::class, $configData);
         $this->assertEquals($expectedConfigData, $configData->getData());
     }
 
@@ -179,18 +184,16 @@ class ConfigOptionsListTest extends \PHPUnit\Framework\TestCase
                     ConfigOptionsList::INPUT_KEY_QUEUE_AMQP_SSL => 'ssl',
                     ConfigOptionsList::INPUT_KEY_QUEUE_AMQP_SSL_OPTIONS => '{"ssl_option":"test"}',
                 ],
-                ['queue' =>
-                    ['amqp' =>
-                        [
-                            'host' => 'host',
-                            'port' => 'port',
-                            'user' => 'user',
-                            'password' => 'password',
-                            'virtualhost' => 'virtual host',
-                            'ssl' => 'ssl',
-                            'ssl_options' => ['ssl_option' => 'test'],
-                         ]
-                    ]
+                ['queue' => ['amqp' => [
+                    'host' => 'host',
+                    'port' => 'port',
+                    'user' => 'user',
+                    'password' => 'password',
+                    'virtualhost' => 'virtual host',
+                    'ssl' => 'ssl',
+                    'ssl_options' => ['ssl_option' => 'test'],
+                ]
+                ]
                 ],
             ],
             [
@@ -203,18 +206,16 @@ class ConfigOptionsListTest extends \PHPUnit\Framework\TestCase
                     ConfigOptionsList::INPUT_KEY_QUEUE_AMQP_SSL => 'ssl',
                     ConfigOptionsList::INPUT_KEY_QUEUE_AMQP_SSL_OPTIONS => '{"ssl_option":"test"}',
                 ],
-                ['queue' =>
-                    ['amqp' =>
-                        [
-                            'host' => 'host',
-                            'port' => ConfigOptionsList::DEFAULT_AMQP_PORT,
-                            'user' => 'user',
-                            'password' => 'password',
-                            'virtualhost' => 'virtual host',
-                            'ssl' => 'ssl',
-                            'ssl_options' => ['ssl_option' => 'test'],
-                         ]
-                    ]
+                ['queue' => ['amqp' => [
+                    'host' => 'host',
+                    'port' => ConfigOptionsList::DEFAULT_AMQP_PORT,
+                    'user' => 'user',
+                    'password' => 'password',
+                    'virtualhost' => 'virtual host',
+                    'ssl' => 'ssl',
+                    'ssl_options' => ['ssl_option' => 'test'],
+                ]
+                ]
                 ],
             ],
             [
@@ -223,9 +224,8 @@ class ConfigOptionsListTest extends \PHPUnit\Framework\TestCase
                     ConfigOptionsList::INPUT_KEY_QUEUE_AMQP_PORT => ConfigOptionsList::DEFAULT_AMQP_PORT,
                     ConfigOptionsList::INPUT_KEY_QUEUE_AMQP_USER => ConfigOptionsList::DEFAULT_AMQP_USER,
                     ConfigOptionsList::INPUT_KEY_QUEUE_AMQP_PASSWORD => ConfigOptionsList::DEFAULT_AMQP_PASSWORD,
-                    ConfigOptionsList::INPUT_KEY_QUEUE_AMQP_VIRTUAL_HOST =>
-                        ConfigOptionsList::DEFAULT_AMQP_VIRTUAL_HOST,
                     ConfigOptionsList::INPUT_KEY_QUEUE_AMQP_SSL => ConfigOptionsList::DEFAULT_AMQP_SSL,
+                    ConfigOptionsList::INPUT_KEY_QUEUE_AMQP_VIRTUAL_HOST => ConfigOptionsList::DEFAULT_AMQP_VIRTUAL_HOST
                 ],
                 [],
             ],

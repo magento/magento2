@@ -3,143 +3,179 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Customer\Test\Unit\Model\Layout;
 
+use Magento\Customer\Model\Customer;
+use Magento\Customer\Model\CustomerFactory;
+use Magento\Customer\Model\Layout\DepersonalizePlugin;
+use Magento\Customer\Model\Session as CustomerSession;
+use Magento\Customer\Model\Visitor as VisitorModel;
+use Magento\Framework\Data\Form\FormKey;
+use Magento\Framework\Session\Generic as GenericSession;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Framework\View\LayoutInterface;
+use Magento\PageCache\Model\DepersonalizeChecker;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
 /**
- * Class DepersonalizePluginTest
+ * Unit tests for \Magento\Customer\Model\Layout\DepersonalizePlugin class.
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class DepersonalizePluginTest extends \PHPUnit\Framework\TestCase
+class DepersonalizePluginTest extends TestCase
 {
     /**
-     * @var \Magento\Customer\Model\Layout\DepersonalizePlugin
+     * @var DepersonalizePlugin
      */
-    protected $plugin;
+    private $plugin;
 
     /**
-     * @var \Magento\Framework\View\Layout|\PHPUnit_Framework_MockObject_MockObject
+     * @var LayoutInterface|MockObject
      */
-    protected $layoutMock;
+    private $layoutMock;
 
     /**
-     * @var \Magento\Framework\Session\Generic|\PHPUnit_Framework_MockObject_MockObject
+     * @var GenericSession|MockObject
      */
-    protected $sessionMock;
+    private $sessionMock;
 
     /**
-     * @var \Magento\Customer\Model\Session|\PHPUnit_Framework_MockObject_MockObject
+     * @var CustomerSession|MockObject
      */
-    protected $customerSessionMock;
+    private $customerSessionMock;
 
     /**
-     * @var \Magento\Customer\Model\CustomerFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var CustomerFactory|MockObject
      */
-    protected $customerFactoryMock;
+    private $customerFactoryMock;
 
     /**
-     * @var \Magento\Customer\Model\Customer|\PHPUnit_Framework_MockObject_MockObject
+     * @var Customer|MockObject
      */
-    protected $customerMock;
+    private $customerMock;
 
     /**
-     * @var \Magento\Customer\Model\Visitor|\PHPUnit_Framework_MockObject_MockObject
+     * @var VisitorModel|MockObject
      */
-    protected $visitorMock;
+    private $visitorMock;
 
     /**
-     * @var \Magento\PageCache\Model\DepersonalizeChecker|\PHPUnit_Framework_MockObject_MockObject
+     * @var DepersonalizeChecker|MockObject
      */
-    protected $depersonalizeCheckerMock;
+    private $depersonalizeCheckerMock;
 
     /**
-     * SetUp
+     * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->layoutMock = $this->createMock(\Magento\Framework\View\Layout::class);
-        $this->sessionMock = $this->createPartialMock(
-            \Magento\Framework\Session\Generic::class,
-            ['clearStorage', 'setData', 'getData']
-        );
+        $this->layoutMock = $this->getMockForAbstractClass(LayoutInterface::class);
+        $this->sessionMock = $this->getMockBuilder(GenericSession::class)
+            ->addMethods(['setData'])
+            ->onlyMethods(['clearStorage', 'getData'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->customerSessionMock = $this->createPartialMock(
-            \Magento\Customer\Model\Session::class,
+            CustomerSession::class,
             ['getCustomerGroupId', 'setCustomerGroupId', 'clearStorage', 'setCustomer']
         );
-        $this->customerFactoryMock = $this->createPartialMock(
-            \Magento\Customer\Model\CustomerFactory::class,
-            ['create']
-        );
-        $this->customerMock = $this->createPartialMock(
-            \Magento\Customer\Model\Customer::class,
-            ['setGroupId', '__wakeup']
-        );
-        $this->visitorMock = $this->createMock(\Magento\Customer\Model\Visitor::class);
+        $this->customerFactoryMock = $this->createPartialMock(CustomerFactory::class, ['create']);
+        $this->customerMock = $this->getMockBuilder(Customer::class)
+            ->addMethods(['setGroupId'])
+            ->onlyMethods(['__wakeup'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->visitorMock = $this->createMock(VisitorModel::class);
         $this->customerFactoryMock->expects($this->any())
             ->method('create')
-            ->will($this->returnValue($this->customerMock));
-        $this->depersonalizeCheckerMock = $this->createMock(\Magento\PageCache\Model\DepersonalizeChecker::class);
+            ->willReturn($this->customerMock);
+        $this->depersonalizeCheckerMock = $this->createMock(DepersonalizeChecker::class);
 
-        $this->plugin = new \Magento\Customer\Model\Layout\DepersonalizePlugin(
-            $this->depersonalizeCheckerMock,
-            $this->sessionMock,
-            $this->customerSessionMock,
-            $this->customerFactoryMock,
-            $this->visitorMock
+        $this->plugin = (new ObjectManagerHelper($this))->getObject(
+            DepersonalizePlugin::class,
+            [
+                'depersonalizeChecker' => $this->depersonalizeCheckerMock,
+                'session' => $this->sessionMock,
+                'customerSession' => $this->customerSessionMock,
+                'customerFactory' => $this->customerFactoryMock,
+                'visitor' => $this->visitorMock,
+            ]
         );
     }
 
-    public function testBeforeGenerateXml()
+    /**
+     * Test beforeGenerateXml method when depersonalization is needed.
+     *
+     * @return void
+     */
+    public function testBeforeGenerateXml(): void
     {
         $this->depersonalizeCheckerMock->expects($this->once())->method('checkIfDepersonalize')->willReturn(true);
         $this->customerSessionMock->expects($this->once())->method('getCustomerGroupId');
         $this->sessionMock
             ->expects($this->once())
             ->method('getData')
-            ->with($this->equalTo(\Magento\Framework\Data\Form\FormKey::FORM_KEY));
-        $output = $this->plugin->beforeGenerateXml($this->layoutMock);
-        $this->assertEquals([], $output);
+            ->with(FormKey::FORM_KEY);
+        $this->plugin->beforeGenerateXml($this->layoutMock);
     }
 
-    public function testBeforeGenerateXmlNoDepersonalize()
+    /**
+     * Test beforeGenerateXml method when depersonalization is not needed.
+     *
+     * @return void
+     */
+    public function testBeforeGenerateXmlNoDepersonalize(): void
     {
         $this->depersonalizeCheckerMock->expects($this->once())->method('checkIfDepersonalize')->willReturn(false);
         $this->customerSessionMock->expects($this->never())->method('getCustomerGroupId');
         $this->sessionMock
             ->expects($this->never())
             ->method('getData');
-        $output = $this->plugin->beforeGenerateXml($this->layoutMock);
-        $this->assertEquals([], $output);
+        $this->plugin->beforeGenerateXml($this->layoutMock);
     }
 
-    public function testAfterGenerateXml()
+    /**
+     * Test afterGenerateElements method when depersonalization is needed.
+     *
+     * @return void
+     */
+    public function testAfterGenerateElements(): void
     {
-        $expectedResult = $this->createMock(\Magento\Framework\View\Layout::class);
         $this->depersonalizeCheckerMock->expects($this->once())->method('checkIfDepersonalize')->willReturn(true);
-        $this->visitorMock->expects($this->once())->method('setSkipRequestLogging')->with($this->equalTo(true));
+        $this->visitorMock->expects($this->once())->method('setSkipRequestLogging')->with(true);
         $this->visitorMock->expects($this->once())->method('unsetData');
         $this->sessionMock->expects($this->once())->method('clearStorage');
         $this->customerSessionMock->expects($this->once())->method('clearStorage');
-        $this->customerSessionMock->expects($this->once())->method('setCustomerGroupId')->with($this->equalTo(null));
-        $this->customerMock->expects($this->once())->method('setGroupId')->with($this->equalTo(null))->willReturnSelf();
+        $this->customerSessionMock->expects($this->once())->method('setCustomerGroupId')->with(null);
+        $this->customerMock
+            ->expects($this->once())
+            ->method('setGroupId')
+            ->with(null)
+            ->willReturnSelf();
         $this->sessionMock
             ->expects($this->once())
             ->method('setData')
             ->with(
-                $this->equalTo(\Magento\Framework\Data\Form\FormKey::FORM_KEY),
-                $this->equalTo(null)
+                FormKey::FORM_KEY,
+                null
             );
         $this->customerSessionMock
             ->expects($this->once())
             ->method('setCustomer')
-            ->with($this->equalTo($this->customerMock));
-        $actualResult = $this->plugin->afterGenerateXml($this->layoutMock, $expectedResult);
-        $this->assertSame($expectedResult, $actualResult);
+            ->with($this->customerMock);
+        $this->assertEmpty($this->plugin->afterGenerateElements($this->layoutMock));
     }
 
-    public function testAfterGenerateXmlNoDepersonalize()
+    /**
+     * Test afterGenerateElements method when depersonalization is not needed.
+     *
+     * @return void
+     */
+    public function testAfterGenerateElementsNoDepersonalize(): void
     {
-        $expectedResult = $this->createMock(\Magento\Framework\View\Layout::class);
         $this->depersonalizeCheckerMock->expects($this->once())->method('checkIfDepersonalize')->willReturn(false);
         $this->visitorMock->expects($this->never())->method('setSkipRequestLogging');
         $this->visitorMock->expects($this->never())->method('unsetData');
@@ -149,7 +185,6 @@ class DepersonalizePluginTest extends \PHPUnit\Framework\TestCase
         $this->customerMock->expects($this->never())->method('setGroupId');
         $this->sessionMock->expects($this->never())->method('setData');
         $this->customerSessionMock->expects($this->never())->method('setCustomer');
-        $actualResult = $this->plugin->afterGenerateXml($this->layoutMock, $expectedResult);
-        $this->assertSame($expectedResult, $actualResult);
+        $this->assertEmpty($this->plugin->afterGenerateElements($this->layoutMock));
     }
 }

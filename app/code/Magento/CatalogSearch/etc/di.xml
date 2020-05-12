@@ -208,14 +208,6 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\CatalogSearch\Model\Advanced\ProductCollectionPrepareStrategyProvider">
-        <arguments>
-            <argument name="strategies" xsi:type="array">
-                <item name="default" xsi:type="object">Magento\CatalogSearch\Model\Advanced\ProductCollectionPrepareStrategy</item>
-                <item name="mysql" xsi:type="object">Magento\CatalogSearch\Model\Advanced\ProductCollectionPrepareStrategy</item>
-            </argument>
-        </arguments>
-    </type>
     <virtualType name="Magento\CatalogSearch\Model\Layer\Category\Context" type="Magento\Catalog\Model\Layer\Category\Context">
         <arguments>
             <argument name="collectionProvider" xsi:type="object">Magento\CatalogSearch\Model\Layer\Category\ItemCollectionProvider</argument>
@@ -258,13 +250,6 @@
             <argument name="attributePrefix" xsi:type="const">Magento\CatalogSearch\Model\ResourceModel\Engine::ATTRIBUTE_PREFIX</argument>
         </arguments>
     </type>
-    <type name="Magento\CatalogSearch\Model\ResourceModel\EngineProvider">
-        <arguments>
-            <argument name="engines" xsi:type="array">
-                <item name="mysql" xsi:type="string">Magento\CatalogSearch\Model\ResourceModel\Engine</item>
-            </argument>
-        </arguments>
-    </type>
     <type name="Magento\Search\Model\Autocomplete">
         <arguments>
             <argument name="dataProviders" xsi:type="array">
@@ -284,7 +269,6 @@
             <argument name="defaultGenerator" xsi:type="object">\Magento\CatalogSearch\Model\Search\RequestGenerator\General</argument>
             <argument name="generators" xsi:type="array">
                 <item name="decimal" xsi:type="object">Magento\CatalogSearch\Model\Search\RequestGenerator\Decimal</item>
-                <item name="price" xsi:type="object">Magento\CatalogSearch\Model\Search\RequestGenerator\Price</item>
             </argument>
         </arguments>
     </type>

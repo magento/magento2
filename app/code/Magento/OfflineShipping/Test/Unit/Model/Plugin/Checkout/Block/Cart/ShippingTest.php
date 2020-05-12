@@ -3,34 +3,43 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\OfflineShipping\Test\Unit\Model\Plugin\Checkout\Block\Cart;
 
-class ShippingTest extends \PHPUnit\Framework\TestCase
+use Magento\Checkout\Block\Cart\LayoutProcessor;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\OfflineShipping\Model\Plugin\Checkout\Block\Cart\Shipping;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class ShippingTest extends TestCase
 {
     /**
-     * @var \Magento\OfflineShipping\Model\Plugin\Checkout\Block\Cart\Shipping
+     * @var Shipping
      */
     protected $model;
 
     /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ScopeConfigInterface|MockObject
      */
     protected $scopeConfigMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $helper = new ObjectManager($this);
 
-        $this->scopeConfigMock = $this->getMockBuilder(\Magento\Framework\App\Config\ScopeConfigInterface::class)
+        $this->scopeConfigMock = $this->getMockBuilder(ScopeConfigInterface::class)
             ->disableOriginalConstructor()
             ->setMethods([
                 'getValue',
                 'isSetFlag'
             ])
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->model = $helper->getObject(
-            \Magento\OfflineShipping\Model\Plugin\Checkout\Block\Cart\Shipping::class,
+            Shipping::class,
             ['scopeConfig' => $this->scopeConfigMock]
         );
     }
@@ -40,8 +49,8 @@ class ShippingTest extends \PHPUnit\Framework\TestCase
      */
     public function testAfterGetStateActive($scopeConfigMockReturnValue, $result, $assertResult)
     {
-        /** @var \Magento\Checkout\Block\Cart\LayoutProcessor $subjectMock */
-        $subjectMock = $this->getMockBuilder(\Magento\Checkout\Block\Cart\LayoutProcessor::class)
+        /** @var LayoutProcessor $subjectMock */
+        $subjectMock = $this->getMockBuilder(LayoutProcessor::class)
             ->disableOriginalConstructor()
             ->getMock();
 
