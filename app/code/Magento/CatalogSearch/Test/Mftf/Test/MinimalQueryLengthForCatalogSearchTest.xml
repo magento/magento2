@@ -19,9 +19,7 @@
             <useCaseId value="MAGETWO-58764"/>
             <group value="CatalogSearch"/>
             <group value="SearchEngineElasticsearch"/>
-            <skip>
-                <issueId value="MC-21228"/>
-            </skip>
+
         </annotations>
         <before>
             <createData entity="ApiCategory" stepKey="createCategory"/>
