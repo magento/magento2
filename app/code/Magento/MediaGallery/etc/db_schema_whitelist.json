@@ -14,7 +14,8 @@
         },
         "index": {
             "MEDIA_GALLERY_ID": true,
-            "MEDIA_GALLERY_ASSET_ID": true
+            "MEDIA_GALLERY_ASSET_ID": true,
+            "MEDIA_GALLERY_ASSET_TITLE": true
         },
         "constraint": {
             "MEDIA_GALLERY_ID_PATH_TITLE_CONTENT_TYPE_WIDTH_HEIGHT": true,

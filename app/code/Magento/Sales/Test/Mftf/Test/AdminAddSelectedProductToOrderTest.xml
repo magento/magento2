@@ -70,9 +70,6 @@
             <argument name="productQty" value="1"/>
         </actionGroup>
         <!-- Check that error remains -->
-        <actionGroup ref="AssertAdminItemOrderedErrorActionGroup" stepKey="assertProductErrorRemains">
-            <argument name="productName" value="$simpleProduct.name$"/>
-            <argument name="messageType" value="error"/>
-        </actionGroup>
+        <see userInput="The requested qty is not available" stepKey="assertProductErrorRemains"/>
     </test>
 </tests>

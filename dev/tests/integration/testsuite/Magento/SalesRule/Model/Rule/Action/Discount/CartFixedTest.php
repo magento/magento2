@@ -70,7 +70,7 @@ class CartFixedTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = Bootstrap::getObjectManager();
         $this->cartManagement = $objectManager->create(GuestCartManagementInterface::class);
@@ -93,7 +93,7 @@ class CartFixedTest extends \PHPUnit\Framework\TestCase
      */
     public function testApplyFixedDiscount(array $productPrices): void
     {
-        $expectedDiscount = '-15.00';
+        $expectedDiscount = '-15.0000';
         $couponCode =  'CART_FIXED_DISCOUNT_15';
         $cartId = $this->cartManagement->createEmptyCart();
 
@@ -226,7 +226,7 @@ class CartFixedTest extends \PHPUnit\Framework\TestCase
      */
     public function testCouponCodeWithWildcard()
     {
-        $expectedDiscount = '-5.00';
+        $expectedDiscount = '-5.0000';
         $couponCode =  '2?ds5!2d';
         $cartId = $this->cartManagement->createEmptyCart();
         $productPrice = 10;

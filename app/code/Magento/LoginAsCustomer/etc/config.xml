@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
+    <default>
+        <login_as_customer>
+            <general>
+                <enabled>0</enabled>
+                <store_view_manual_choice_enabled>0</store_view_manual_choice_enabled>
+                <authentication_data_expiration_time>60</authentication_data_expiration_time>
+            </general>
+        </login_as_customer>
+    </default>
+</config>

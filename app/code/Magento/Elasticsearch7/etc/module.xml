@@ -9,6 +9,7 @@
     <module name="Magento_Elasticsearch7">
         <sequence>
             <module name="Magento_Elasticsearch"/>
+            <module name="Magento_Elasticsearch6"/>
         </sequence>
     </module>
 </config>

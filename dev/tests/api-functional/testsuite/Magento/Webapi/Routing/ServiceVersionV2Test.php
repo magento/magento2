@@ -7,7 +7,7 @@ namespace Magento\Webapi\Routing;
 
 class ServiceVersionV2Test extends \Magento\Webapi\Routing\BaseService
 {
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_version = 'V2';
         $this->_soapService = 'testModule1AllSoapAndRestV2';
