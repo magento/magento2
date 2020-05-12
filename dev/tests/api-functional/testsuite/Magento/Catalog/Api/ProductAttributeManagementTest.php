@@ -63,7 +63,7 @@ class ProductAttributeManagementTest extends \Magento\TestFramework\TestCase\Web
             $this->_webApiCall($this->getAssignServiceInfo(), $payload);
             $this->fail("Expected exception");
         } catch (\SoapFault $e) {
-            $this->assertContains(
+            $this->assertStringContainsString(
                 $expectedMessage,
                 $e->getMessage(),
                 "SoapFault does not contain expected message."
@@ -86,7 +86,7 @@ class ProductAttributeManagementTest extends \Magento\TestFramework\TestCase\Web
             $this->_webApiCall($this->getAssignServiceInfo(), $payload);
             $this->fail("Expected exception");
         } catch (\SoapFault $e) {
-            $this->assertContains(
+            $this->assertStringContainsString(
                 $expectedMessage,
                 $e->getMessage(),
                 "SoapFault does not contain expected message."
@@ -110,7 +110,7 @@ class ProductAttributeManagementTest extends \Magento\TestFramework\TestCase\Web
             $this->_webApiCall($this->getAssignServiceInfo(), $payload);
             $this->fail("Expected exception");
         } catch (\SoapFault $e) {
-            $this->assertContains(
+            $this->assertStringContainsString(
                 $expectedMessage,
                 $e->getMessage(),
                 "SoapFault does not contain expected message."

@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Customer\Test\Unit\Ui\Component\Listing\Column;
 
 use Magento\Customer\Api\GroupManagementInterface;
@@ -16,7 +18,6 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Class GroupActionsTest
  *
  * Testing GroupAction grid column
  */
@@ -85,14 +86,15 @@ class GroupActionsTest extends TestCase
     /**
      * Set Up
      */
-    public function setUp()
+    protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
 
-        $this->contextMock = $this->getMockBuilder(ContextInterface::class)->getMockForAbstractClass();
+        $this->contextMock = $this->getMockBuilder(ContextInterface::class)
+            ->getMockForAbstractClass();
         $this->uiComponentFactoryMock = $this->createMock(UiComponentFactory::class);
         $this->escaperMock = $this->createMock(Escaper::class);
-        $this->groupManagementMock = $this->createMock(GroupManagementInterface::class);
+        $this->groupManagementMock = $this->getMockForAbstractClass(GroupManagementInterface::class);
         $this->urlBuilderMock = $this->getMockForAbstractClass(
             UrlInterface::class,
             [],
