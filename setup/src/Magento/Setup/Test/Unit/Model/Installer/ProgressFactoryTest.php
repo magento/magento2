@@ -3,12 +3,15 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Setup\Test\Unit\Model\Installer;
 
-use \Magento\Setup\Model\Installer\ProgressFactory;
+use Magento\Setup\Model\Installer\ProgressFactory;
+use Magento\Setup\Model\WebLogger;
+use PHPUnit\Framework\TestCase;
 
-class ProgressFactoryTest extends \PHPUnit\Framework\TestCase
+class ProgressFactoryTest extends TestCase
 {
     public function testCreateFromLog()
     {
@@ -20,8 +23,8 @@ class ProgressFactoryTest extends \PHPUnit\Framework\TestCase
             '[Progress: 3 / 5] Installing C...',
             'Output from C...',
         ];
-        $logger = $this->createMock(\Magento\Setup\Model\WebLogger::class);
-        $logger->expects($this->once())->method('get')->will($this->returnValue($contents));
+        $logger = $this->createMock(WebLogger::class);
+        $logger->expects($this->once())->method('get')->willReturn($contents);
 
         $progressFactory = new ProgressFactory();
         $progress = $progressFactory->createFromLog($logger);
