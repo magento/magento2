@@ -27,7 +27,7 @@ class TokenUiComponentProviderTest extends \PHPUnit\Framework\TestCase
      */
     private $tokenComponentProvider;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
         $this->tokenComponentProvider = $this->objectManager->get(TokenUiComponentProvider::class);

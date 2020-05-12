@@ -3,20 +3,26 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Cms\Test\Unit\Model\Config\Source;
 
-/**
- * Class PageTest
- */
-class PageTest extends \PHPUnit\Framework\TestCase
+use Magento\Cms\Model\Config\Source\Page;
+use Magento\Cms\Model\ResourceModel\Page\Collection;
+use Magento\Cms\Model\ResourceModel\Page\CollectionFactory;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class PageTest extends TestCase
 {
     /**
-     * @var \Magento\Cms\Model\ResourceModel\Page\CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var CollectionFactory|MockObject
      */
     protected $collectionFactory;
 
     /**
-     * @var \Magento\Cms\Model\Config\Source\Page
+     * @var Page
      */
     protected $page;
 
@@ -25,17 +31,17 @@ class PageTest extends \PHPUnit\Framework\TestCase
      *
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $objectManager = new ObjectManager($this);
 
         $this->collectionFactory = $this->createPartialMock(
-            \Magento\Cms\Model\ResourceModel\Page\CollectionFactory::class,
+            CollectionFactory::class,
             ['create']
         );
 
         $this->page = $objectManager->getObject(
-            \Magento\Cms\Model\Config\Source\Page::class,
+            Page::class,
             [
                 'collectionFactory' => $this->collectionFactory,
             ]
@@ -49,15 +55,15 @@ class PageTest extends \PHPUnit\Framework\TestCase
      */
     public function testToOptionArray()
     {
-        $pageCollectionMock = $this->createMock(\Magento\Cms\Model\ResourceModel\Page\Collection::class);
+        $pageCollectionMock = $this->createMock(Collection::class);
 
         $this->collectionFactory->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($pageCollectionMock));
+            ->willReturn($pageCollectionMock);
 
         $pageCollectionMock->expects($this->once())
             ->method('toOptionIdArray')
-            ->will($this->returnValue('return-value'));
+            ->willReturn('return-value');
 
         $this->assertEquals('return-value', $this->page->toOptionArray());
     }

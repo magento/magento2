@@ -3,14 +3,26 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\Pricing\Test\Unit;
 
-use \Magento\Framework\Pricing\Render;
+use Magento\Framework\Pricing\Amount\Base;
+use Magento\Framework\Pricing\Price\PriceInterface;
+use Magento\Framework\Pricing\Render;
+use Magento\Framework\Pricing\Render\Amount;
+use Magento\Framework\Pricing\Render\Layout;
+use Magento\Framework\Pricing\Render\RendererPool;
+use Magento\Framework\Pricing\SaleableInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\View\LayoutInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test class for \Magento\Framework\Pricing\Render
  */
-class RenderTest extends \PHPUnit\Framework\TestCase
+class RenderTest extends TestCase
 {
     /**
      * @var Render
@@ -18,55 +30,55 @@ class RenderTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var Render\Layout|\PHPUnit_Framework_MockObject_MockObject
+     * @var Render\Layout|MockObject
      */
     protected $priceLayout;
 
     /**
-     * @var \Magento\Framework\Pricing\Price\PriceInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var PriceInterface|MockObject
      */
     protected $price;
 
     /**
-     * @var \Magento\Framework\Pricing\Amount\Base|\PHPUnit_Framework_MockObject_MockObject
+     * @var Base|MockObject
      */
     protected $amount;
 
     /**
-     * @var \Magento\Framework\Pricing\SaleableInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var SaleableInterface|MockObject
      */
     protected $saleableItem;
 
     /**
-     * @var \Magento\Framework\Pricing\Render\RendererPool|\PHPUnit_Framework_MockObject_MockObject
+     * @var RendererPool|MockObject
      */
     protected $renderPool;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->priceLayout = $this->getMockBuilder(\Magento\Framework\Pricing\Render\Layout::class)
+        $this->priceLayout = $this->getMockBuilder(Layout::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->price = $this->getMockBuilder(\Magento\Framework\Pricing\Price\PriceInterface::class)
+        $this->price = $this->getMockBuilder(PriceInterface::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
-        $this->amount = $this->getMockBuilder(\Magento\Framework\Pricing\Amount\Base::class)
+        $this->amount = $this->getMockBuilder(Base::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->saleableItem = $this->getMockBuilder(\Magento\Framework\Pricing\SaleableInterface::class)
+        $this->saleableItem = $this->getMockBuilder(SaleableInterface::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
-        $this->renderPool = $this->getMockBuilder(\Magento\Framework\Pricing\Render\RendererPool::class)
+        $this->renderPool = $this->getMockBuilder(RendererPool::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $objectManager = new ObjectManager($this);
         $this->model = $objectManager->getObject(
-            \Magento\Framework\Pricing\Render::class,
+            Render::class,
             [
                 'priceLayout' => $this->priceLayout
             ]
@@ -84,16 +96,14 @@ class RenderTest extends \PHPUnit\Framework\TestCase
         $this->priceLayout->expects($this->once())
             ->method('loadLayout');
 
-        $layout = $this->createMock(\Magento\Framework\View\LayoutInterface::class);
+        $layout = $this->getMockForAbstractClass(LayoutInterface::class);
         $this->model->setPriceRenderHandle($priceRenderHandle);
         $this->model->setLayout($layout);
     }
 
-    /**
-     * @expectedException \RuntimeException
-     */
     public function testRenderWithoutRenderList()
     {
+        $this->expectException('RuntimeException');
         $priceType = 'final';
         $arguments = ['param' => 1];
         $result = '';
@@ -101,7 +111,7 @@ class RenderTest extends \PHPUnit\Framework\TestCase
         $this->priceLayout->expects($this->once())
             ->method('getBlock')
             ->with('render.product.prices')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
 
         $this->assertEquals($result, $this->model->render($priceType, $this->saleableItem, $arguments));
     }
@@ -112,17 +122,17 @@ class RenderTest extends \PHPUnit\Framework\TestCase
         $arguments = ['param' => 1];
         $result = 'simple.final';
 
-        $pricingRender = $this->createMock(\Magento\Framework\Pricing\Render::class);
+        $pricingRender = $this->createMock(Render::class);
         $this->renderPool->expects($this->once())
             ->method('createPriceRender')
-            ->will($this->returnValue($pricingRender));
+            ->willReturn($pricingRender);
         $pricingRender->expects($this->once())
             ->method('toHtml')
-            ->will($this->returnValue('simple.final'));
+            ->willReturn('simple.final');
         $this->priceLayout->expects($this->once())
             ->method('getBlock')
             ->with('render.product.prices')
-            ->will($this->returnValue($this->renderPool));
+            ->willReturn($this->renderPool);
         $this->assertEquals($result, $this->model->render($priceType, $this->saleableItem, $arguments));
     }
 
@@ -131,17 +141,17 @@ class RenderTest extends \PHPUnit\Framework\TestCase
         $priceType = 'special';
         $arguments = ['param' => 15];
         $result = 'default.special';
-        $pricingRender = $this->createMock(\Magento\Framework\Pricing\Render::class);
+        $pricingRender = $this->createMock(Render::class);
         $this->renderPool->expects($this->once())
             ->method('createPriceRender')
-            ->will($this->returnValue($pricingRender));
+            ->willReturn($pricingRender);
         $pricingRender->expects($this->once())
             ->method('toHtml')
-            ->will($this->returnValue('default.special'));
+            ->willReturn('default.special');
         $this->priceLayout->expects($this->once())
             ->method('getBlock')
             ->with('render.product.prices')
-            ->will($this->returnValue($this->renderPool));
+            ->willReturn($this->renderPool);
 
         $this->assertEquals($result, $this->model->render($priceType, $this->saleableItem, $arguments));
     }
@@ -152,17 +162,17 @@ class RenderTest extends \PHPUnit\Framework\TestCase
         $arguments = ['param' => 15];
         $result = 'default.default';
 
-        $pricingRender = $this->createMock(\Magento\Framework\Pricing\Render::class);
+        $pricingRender = $this->createMock(Render::class);
         $this->renderPool->expects($this->once())
             ->method('createPriceRender')
-            ->will($this->returnValue($pricingRender));
+            ->willReturn($pricingRender);
         $pricingRender->expects($this->once())
             ->method('toHtml')
-            ->will($this->returnValue('default.default'));
+            ->willReturn('default.default');
         $this->priceLayout->expects($this->once())
             ->method('getBlock')
             ->with('render.product.prices')
-            ->will($this->returnValue($this->renderPool));
+            ->willReturn($this->renderPool);
 
         $this->assertEquals($result, $this->model->render($priceType, $this->saleableItem, $arguments));
     }
@@ -173,39 +183,37 @@ class RenderTest extends \PHPUnit\Framework\TestCase
         $expectedResult = 'default.default';
 
         $pricingRender = $this->createMock(
-            \Magento\Framework\Pricing\Render\Amount::class
+            Amount::class
         );
         $this->renderPool->expects($this->once())
             ->method('createAmountRender')
             ->with(
-                $this->equalTo($this->amount),
-                $this->equalTo($this->saleableItem),
-                $this->equalTo($this->price),
-                $this->equalTo($arguments)
+                $this->amount,
+                $this->saleableItem,
+                $this->price,
+                $arguments
             )
-            ->will($this->returnValue($pricingRender));
+            ->willReturn($pricingRender);
         $pricingRender->expects($this->once())
             ->method('toHtml')
-            ->will($this->returnValue('default.default'));
+            ->willReturn('default.default');
         $this->priceLayout->expects($this->once())
             ->method('getBlock')
             ->with('render.product.prices')
-            ->will($this->returnValue($this->renderPool));
+            ->willReturn($this->renderPool);
 
         $result = $this->model->renderAmount($this->amount, $this->price, $this->saleableItem, $arguments);
         $this->assertEquals($expectedResult, $result);
     }
 
-    /**
-     * @expectedException \RuntimeException
-     * @expectedExceptionMessage Wrong Price Rendering layout configuration. Factory block is missed
-     */
     public function testAmountRenderNoRenderPool()
     {
+        $this->expectException('RuntimeException');
+        $this->expectExceptionMessage('Wrong Price Rendering layout configuration. Factory block is missed');
         $this->priceLayout->expects($this->once())
             ->method('getBlock')
             ->with('render.product.prices')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
 
         $this->model->renderAmount($this->amount, $this->price, $this->saleableItem);
     }

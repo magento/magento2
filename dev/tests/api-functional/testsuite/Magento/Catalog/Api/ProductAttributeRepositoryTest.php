@@ -31,7 +31,7 @@ class ProductAttributeRepositoryTest extends \Magento\TestFramework\TestCase\Web
         $attributeCode = 'test_attribute_code_333';
         $attribute = $this->getAttribute($attributeCode);
 
-        $this->assertTrue(is_array($attribute));
+        $this->assertIsArray($attribute);
         $this->assertArrayHasKey('attribute_id', $attribute);
         $this->assertArrayHasKey('attribute_code', $attribute);
         $this->assertEquals($attributeCode, $attribute['attribute_code']);
@@ -200,7 +200,7 @@ class ProductAttributeRepositoryTest extends \Magento\TestFramework\TestCase\Web
         $result = $this->updateAttribute($attributeCode, $attributeData);
 
         $this->assertEquals($attribute['attribute_id'], $result['attribute_id']);
-        $this->assertEquals(true, $result['is_used_in_grid']);
+        $this->assertTrue($result['is_used_in_grid']);
         $this->assertEquals($attributeCode, $result['attribute_code']);
         $this->assertEquals('default_label_new', $result['default_frontend_label']);
         $this->assertEquals('front_lbl_store1_new', $result['frontend_labels'][0]['label']);
@@ -236,7 +236,7 @@ class ProductAttributeRepositoryTest extends \Magento\TestFramework\TestCase\Web
         $result = $this->updateAttribute($attributeCode, $attributeData);
 
         $this->assertEquals($attribute['attribute_id'], $result['attribute_id']);
-        $this->assertEquals(true, $result['is_used_in_grid']);
+        $this->assertTrue($result['is_used_in_grid']);
         $this->assertEquals($attributeCode, $result['attribute_code']);
         $this->assertEquals('front_lbl_store0_new', $result['default_frontend_label']);
         $this->assertEquals('front_lbl_store1_new', $result['frontend_labels'][0]['label']);
@@ -268,7 +268,7 @@ class ProductAttributeRepositoryTest extends \Magento\TestFramework\TestCase\Web
         $result = $this->updateAttribute($attributeCode, $attributeData);
 
         $this->assertEquals($attribute['attribute_id'], $result['attribute_id']);
-        $this->assertEquals(true, $result['is_used_in_grid']);
+        $this->assertTrue($result['is_used_in_grid']);
         $this->assertEquals($attributeCode, $result['attribute_code']);
         $this->assertEquals('default_label', $result['default_frontend_label']);
         $this->assertEquals('front_lbl_store1_new', $result['frontend_labels'][0]['label']);
@@ -309,7 +309,7 @@ class ProductAttributeRepositoryTest extends \Magento\TestFramework\TestCase\Web
         ];
 
         $output = $this->updateAttribute($attributeCode, $attributeData);
-        $this->assertEquals(4, count($output['options']));
+        $this->assertCount(4, $output['options']);
     }
 
     /**
@@ -326,12 +326,13 @@ class ProductAttributeRepositoryTest extends \Magento\TestFramework\TestCase\Web
      * Trying to delete system attribute.
      *
      * @magentoApiDataFixture Magento/Catalog/_files/product_system_attribute.php
-     * @expectedException \Exception
-     * @expectedExceptionMessage The system attribute can't be deleted.
      * @return void
      */
     public function testDeleteSystemAttributeById(): void
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('The system attribute can\'t be deleted.');
+
         $attributeCode = 'test_attribute_code_333';
         $this->deleteAttribute($attributeCode);
     }
@@ -361,7 +362,7 @@ class ProductAttributeRepositoryTest extends \Magento\TestFramework\TestCase\Web
             $this->_webApiCall($serviceInfo, ['attributeCode' => $attributeCode]);
             $this->fail("Expected exception");
         } catch (\SoapFault $e) {
-            $this->assertContains(
+            $this->assertStringContainsString(
                 $expectedMessage,
                 $e->getMessage(),
                 "SoapFault does not contain expected message."
@@ -523,7 +524,7 @@ class ProductAttributeRepositoryTest extends \Magento\TestFramework\TestCase\Web
     /**
      * @inheritdoc
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         foreach ($this->createdAttributes as $attributeCode) {
             $this->deleteAttribute($attributeCode);
