@@ -80,4 +80,16 @@
         <data key="store_id">1</data>
         <data key="label">Blue</data>
     </entity>
+    <entity name="Option12Store1" type="StoreLabel">
+        <data key="store_id">1</data>
+        <data key="label">3.5</data>
+    </entity>
+    <entity name="Option13Store1" type="StoreLabel">
+        <data key="store_id">1</data>
+        <data key="label">10.12</data>
+    </entity>
+    <entity name="Option14Store1" type="StoreLabel">
+        <data key="store_id">1</data>
+        <data key="label">36</data>
+    </entity>
 </entities>

@@ -61,17 +61,12 @@
     <entity name="DefaultApiSignature" type="api_signature">
         <data key="value"/>
     </entity>
-    <entity name="Payer" type="paypal_buyer">
-        <data key="buyerEmail">buyer.mpi@gmail.com</data>
-        <data key="buyerPassword">12345678</data>
-    </entity>
     <entity name="PayPalLabel" type="paypal">
-        <data key="checkout">checkout</data>
-        <data key="credit">credit</data>
-        <data key="pay">pay</data>
-        <data key="buynow">buy now</data>
-        <data key="paypal">pay pal</data>
-        <data key="installment">installment</data>
+        <data key="checkout">Checkout</data>
+        <data key="pay">Pay</data>
+        <data key="buynow">Buy Now</data>
+        <data key="paypal">Paypal</data>
+        <data key="installment">Pagos en</data>
     </entity>
     <entity name="PayPalLayout" type="paypal">
         <data key="horizontal">horizontal</data>
@@ -84,7 +79,7 @@
     </entity>
     <entity name="PayPalShape" type="paypal">
         <data key="pill">pill</data>
-        <data key="rectangle">rectangle</data>
+        <data key="rectangle">rect</data>
     </entity>
     <entity name="PayPalColor" type="paypal">
         <data key="gold">gold</data>

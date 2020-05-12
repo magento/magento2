@@ -11,6 +11,7 @@ use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\ImportExport\Model\Import;
+use Magento\Framework\Indexer\StateInterface;
 
 /**
  * Test for class \Magento\CustomerImportExport\Model\Import\Customer which covers validation logic
@@ -23,7 +24,7 @@ class CustomerTest extends \PHPUnit\Framework\TestCase
     /**
      * Model object which used for tests
      *
-     * @var Customer|\PHPUnit_Framework_MockObject_MockObject
+     * @var Customer|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_model;
 
@@ -40,15 +41,22 @@ class CustomerTest extends \PHPUnit\Framework\TestCase
     protected $directoryWrite;
 
     /**
+     * @var \Magento\Customer\Model\Indexer\Processor
+     */
+    private $indexerProcessor;
+
+    /**
      * Create all necessary data for tests
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
         $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
             ->create(\Magento\CustomerImportExport\Model\Import\Customer::class);
         $this->_model->setParameters(['behavior' => Import::BEHAVIOR_ADD_UPDATE]);
+        $this->indexerProcessor = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+            ->create(\Magento\Customer\Model\Indexer\Processor::class);
 
         $propertyAccessor = new \ReflectionProperty($this->_model, 'errorMessageTemplates');
         $propertyAccessor->setAccessible(true);
@@ -375,6 +383,23 @@ class CustomerTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('David-updated', $customer->getFirstname());
         $this->assertEquals('Lamar-updated', $customer->getLastname());
         $this->assertEquals(1, $customer->getStoreId());
+    }
+
+    /**
+     * Test customer indexer gets invalidated after import when Update on Schedule mode is set
+     *
+     * @magentoDbIsolation enabled
+     * @return void
+     */
+    public function testCustomerIndexer(): void
+    {
+        $this->indexerProcessor->getIndexer()->reindexAll();
+        $statusBeforeImport = $this->indexerProcessor->getIndexer()->getStatus();
+        $this->indexerProcessor->getIndexer()->setScheduled(true);
+        $this->doImport(__DIR__ . '/_files/customers_with_gender_to_import.csv', Import::BEHAVIOR_ADD_UPDATE);
+        $statusAfterImport = $this->indexerProcessor->getIndexer()->getStatus();
+        $this->assertEquals(StateInterface::STATUS_VALID, $statusBeforeImport);
+        $this->assertEquals(StateInterface::STATUS_INVALID, $statusAfterImport);
     }
 
     /**

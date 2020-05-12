@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Braintree\Test\Unit\Controller\Adminhtml\Payment;
 
 use Magento\Backend\App\Action\Context;
@@ -14,12 +16,13 @@ use Magento\Braintree\Model\Adapter\BraintreeAdapterFactory;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Controller\ResultInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Tests \Magento\Braintree\Controller\Adminhtml\Payment\GetClientToken
  */
-class GetClientTokenTest extends \PHPUnit\Framework\TestCase
+class GetClientTokenTest extends TestCase
 {
     /**
      * @var GetClientToken
@@ -46,7 +49,7 @@ class GetClientTokenTest extends \PHPUnit\Framework\TestCase
      */
     private $resultFactoryMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->resultFactoryMock = $this->getMockBuilder(ResultFactory::class)
             ->disableOriginalConstructor()
@@ -87,7 +90,7 @@ class GetClientTokenTest extends \PHPUnit\Framework\TestCase
         $clientToken = 'client_token';
         $responseMock = $this->getMockBuilder(ResultInterface::class)
             ->setMethods(['setHttpResponseCode', 'renderResult', 'setHeader', 'setData'])
-            ->getMock();
+            ->getMockForAbstractClass();
         $responseMock->expects(static::once())
             ->method('setData')
             ->with(['clientToken' => $clientToken])
