@@ -18,9 +18,9 @@
              <testCaseId value="MC-252"/>
              <group value="Downloadable"/>
              <group value="SearchEngineElasticsearch"/>
-<!--             <skip>-->
-<!--                 <issueId value="MC-21228"/>-->
-<!--             </skip>-->
+             <skip>
+                 <issueId value="MC-34217"/>
+             </skip>
          </annotations>
          <before>
              <magentoCLI command="downloadable:domains:add example.com static.magento.com" before="product" stepKey="addDownloadableDomain"/>

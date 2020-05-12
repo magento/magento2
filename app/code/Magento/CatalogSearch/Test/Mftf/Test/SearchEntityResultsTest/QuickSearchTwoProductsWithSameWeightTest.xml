@@ -17,9 +17,6 @@
             <group value="CatalogSearch"/>
             <group value="SearchEngineElasticsearch"/>
             <group value="mtf_migrated"/>
-<!--            <skip>-->
-<!--                <issueId value="MC-21228"/>-->
-<!--            </skip>-->
         </annotations>
         <before>
             <createData entity="_defaultCategory" stepKey="createCategory"/>
