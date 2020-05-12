@@ -3,63 +3,79 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Review\Test\Unit\Block\Adminhtml\Rating\Edit\Tab;
 
+use Magento\Framework\Data\Form;
+use Magento\Framework\Data\Form\Element\Text;
+use Magento\Framework\Data\FormFactory;
+use Magento\Framework\Filesystem;
+use Magento\Framework\Filesystem\Directory\ReadInterface;
+use Magento\Framework\Registry;
+use Magento\Framework\Session\Generic;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Framework\View\FileSystem as FilesystemView;
+use Magento\Review\Model\Rating;
+use Magento\Review\Model\Rating\Option;
+use Magento\Review\Model\Rating\OptionFactory;
+use Magento\Review\Model\ResourceModel\Rating\Option\Collection;
+use Magento\Store\Model\Store;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class FormTest extends \PHPUnit\Framework\TestCase
+class FormTest extends TestCase
 {
     /**
-     * @var \Magento\Review\Model\Rating
+     * @var Rating
      */
     protected $rating;
 
     /**
-     * @var \Magento\Review\Model\ResourceModel\Rating\Option\Collection
+     * @var Collection
      */
     protected $ratingOptionCollection;
 
     /**
-     * @var \Magento\Review\Model\Rating\Option
+     * @var Option
      */
     protected $optionRating;
 
     /**
-     * @var \Magento\Store\Model\Store
+     * @var Store
      */
     protected $store;
 
     /**
-     * @var \Magento\Framework\Data\Form\Element\Text
+     * @var Text
      */
     protected $element;
 
     /**
-     * @var \Magento\Framework\Data\Form
+     * @var Form
      */
     protected $form;
 
     /**
-     * @var \Magento\Framework\Filesystem\Directory\ReadInterface
+     * @var ReadInterface
      */
     protected $directoryReadInterface;
 
     /**
-     * @var \Magento\Framework\Registry
+     * @var Registry
      */
     protected $registry;
 
     /**
-     * @var \Magento\Framework\Data\FormFactory
+     * @var FormFactory
      */
     protected $formFactory;
 
     /**
-     * @var \Magento\Review\Model\Rating\OptionFactory
+     * @var OptionFactory
      */
     protected $optionFactory;
 
@@ -69,22 +85,22 @@ class FormTest extends \PHPUnit\Framework\TestCase
     protected $systemStore;
 
     /**
-     * @var \Magento\Framework\Session\Generic
+     * @var Generic
      */
     protected $session;
 
     /**
-     * @var \Magento\Framework\View\FileSystem
+     * @var FilesystemView
      */
     protected $viewFileSystem;
 
     /**
-     * @var \Magento\Framework\Filesystem
+     * @var Filesystem
      */
     protected $fileSystem;
 
     /**
-     * @var \Magento\Framework\Registry
+     * @var Registry
      */
     protected $coreRegistry;
 
@@ -93,58 +109,63 @@ class FormTest extends \PHPUnit\Framework\TestCase
      */
     protected $block;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->ratingOptionCollection = $this->createMock(
-            \Magento\Review\Model\ResourceModel\Rating\Option\Collection::class
+            Collection::class
         );
-        $this->element = $this->createPartialMock(
-            \Magento\Framework\Data\Form\Element\Text::class,
-            ['setValue', 'setIsChecked']
-        );
-        $this->session = $this->createPartialMock(
-            \Magento\Framework\Session\Generic::class,
-            ['getRatingData', 'setRatingData']
-        );
-        $this->rating = $this->createPartialMock(\Magento\Review\Model\Rating::class, ['getId', 'getRatingCodes']);
-        $this->optionRating = $this->createMock(\Magento\Review\Model\Rating\Option::class);
-        $this->store = $this->createMock(\Magento\Store\Model\Store::class);
-        $this->form = $this->createPartialMock(
-            \Magento\Framework\Data\Form::class,
-            ['setForm', 'addFieldset', 'addField', 'setRenderer', 'getElement', 'setValues']
-        );
-        $this->directoryReadInterface = $this->createMock(\Magento\Framework\Filesystem\Directory\ReadInterface::class);
-        $this->registry = $this->createMock(\Magento\Framework\Registry::class);
-        $this->formFactory = $this->createMock(\Magento\Framework\Data\FormFactory::class);
-        $this->optionFactory = $this->createPartialMock(\Magento\Review\Model\Rating\OptionFactory::class, ['create']);
+        $this->element = $this->getMockBuilder(Text::class)
+            ->addMethods(['setValue', 'setIsChecked'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->session = $this->getMockBuilder(Generic::class)
+            ->addMethods(['getRatingData', 'setRatingData'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->rating = $this->getMockBuilder(Rating::class)
+            ->addMethods(['getRatingCodes'])
+            ->onlyMethods(['getId'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->optionRating = $this->createMock(Option::class);
+        $this->store = $this->createMock(Store::class);
+        $this->form = $this->getMockBuilder(Form::class)
+            ->addMethods(['setForm', 'setRenderer'])
+            ->onlyMethods(['addFieldset', 'addField', 'getElement', 'setValues'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->directoryReadInterface = $this->getMockForAbstractClass(ReadInterface::class);
+        $this->registry = $this->createMock(Registry::class);
+        $this->formFactory = $this->createMock(FormFactory::class);
+        $this->optionFactory = $this->createPartialMock(OptionFactory::class, ['create']);
         $this->systemStore = $this->createMock(\Magento\Store\Model\System\Store::class);
-        $this->viewFileSystem = $this->createMock(\Magento\Framework\View\FileSystem::class);
-        $this->fileSystem = $this->createPartialMock(\Magento\Framework\Filesystem::class, ['getDirectoryRead']);
+        $this->viewFileSystem = $this->createMock(FilesystemView::class);
+        $this->fileSystem = $this->createPartialMock(Filesystem::class, ['getDirectoryRead']);
 
-        $this->rating->expects($this->any())->method('getId')->will($this->returnValue('1'));
-        $this->ratingOptionCollection->expects($this->any())->method('addRatingFilter')->will($this->returnSelf());
-        $this->ratingOptionCollection->expects($this->any())->method('load')->will($this->returnSelf());
+        $this->rating->expects($this->any())->method('getId')->willReturn('1');
+        $this->ratingOptionCollection->expects($this->any())->method('addRatingFilter')->willReturnSelf();
+        $this->ratingOptionCollection->expects($this->any())->method('load')->willReturnSelf();
         $this->ratingOptionCollection->expects($this->any())->method('getItems')
-            ->will($this->returnValue([$this->optionRating]));
+            ->willReturn([$this->optionRating]);
         $this->optionRating->expects($this->any())->method('getResourceCollection')
-            ->will($this->returnValue($this->ratingOptionCollection));
-        $this->store->expects($this->any())->method('getId')->will($this->returnValue('0'));
-        $this->store->expects($this->any())->method('getName')->will($this->returnValue('store_name'));
-        $this->element->expects($this->any())->method('setValue')->will($this->returnSelf());
-        $this->element->expects($this->any())->method('setIsChecked')->will($this->returnSelf());
-        $this->form->expects($this->any())->method('setForm')->will($this->returnSelf());
-        $this->form->expects($this->any())->method('addFieldset')->will($this->returnSelf());
-        $this->form->expects($this->any())->method('addField')->will($this->returnSelf());
-        $this->form->expects($this->any())->method('setRenderer')->will($this->returnSelf());
-        $this->form->expects($this->any())->method('setValues')->will($this->returnSelf());
-        $this->optionFactory->expects($this->any())->method('create')->will($this->returnValue($this->optionRating));
+            ->willReturn($this->ratingOptionCollection);
+        $this->store->expects($this->any())->method('getId')->willReturn('0');
+        $this->store->expects($this->any())->method('getName')->willReturn('store_name');
+        $this->element->expects($this->any())->method('setValue')->willReturnSelf();
+        $this->element->expects($this->any())->method('setIsChecked')->willReturnSelf();
+        $this->form->expects($this->any())->method('setForm')->willReturnSelf();
+        $this->form->expects($this->any())->method('addFieldset')->willReturnSelf();
+        $this->form->expects($this->any())->method('addField')->willReturnSelf();
+        $this->form->expects($this->any())->method('setRenderer')->willReturnSelf();
+        $this->form->expects($this->any())->method('setValues')->willReturnSelf();
+        $this->optionFactory->expects($this->any())->method('create')->willReturn($this->optionRating);
         $this->systemStore->expects($this->any())->method('getStoreCollection')
-            ->will($this->returnValue(['0' => $this->store]));
-        $this->formFactory->expects($this->any())->method('create')->will($this->returnValue($this->form));
+            ->willReturn(['0' => $this->store]);
+        $this->formFactory->expects($this->any())->method('create')->willReturn($this->form);
         $this->viewFileSystem->expects($this->any())->method('getTemplateFileName')
-            ->will($this->returnValue('template_file_name.html'));
+            ->willReturn('template_file_name.html');
         $this->fileSystem->expects($this->any())->method('getDirectoryRead')
-            ->will($this->returnValue($this->directoryReadInterface));
+            ->willReturn($this->directoryReadInterface);
 
         $objectManagerHelper = new ObjectManagerHelper($this);
         $this->block = $objectManagerHelper->getObject(
@@ -163,42 +184,42 @@ class FormTest extends \PHPUnit\Framework\TestCase
 
     public function testToHtmlSessionRatingData()
     {
-        $this->registry->expects($this->any())->method('registry')->will($this->returnValue($this->rating));
-        $this->form->expects($this->at(5))->method('getElement')->will($this->returnValue($this->element));
-        $this->form->expects($this->at(11))->method('getElement')->will($this->returnValue($this->element));
-        $this->form->expects($this->at(14))->method('getElement')->will($this->returnValue($this->element));
-        $this->form->expects($this->at(15))->method('getElement')->will($this->returnValue($this->element));
-        $this->form->expects($this->any())->method('getElement')->will($this->returnValue(false));
+        $this->registry->expects($this->any())->method('registry')->willReturn($this->rating);
+        $this->form->expects($this->at(5))->method('getElement')->willReturn($this->element);
+        $this->form->expects($this->at(11))->method('getElement')->willReturn($this->element);
+        $this->form->expects($this->at(14))->method('getElement')->willReturn($this->element);
+        $this->form->expects($this->at(15))->method('getElement')->willReturn($this->element);
+        $this->form->expects($this->any())->method('getElement')->willReturn(false);
         $ratingCodes = ['rating_codes' => ['0' => 'rating_code']];
-        $this->session->expects($this->any())->method('getRatingData')->will($this->returnValue($ratingCodes));
-        $this->session->expects($this->any())->method('setRatingData')->will($this->returnSelf());
+        $this->session->expects($this->any())->method('getRatingData')->willReturn($ratingCodes);
+        $this->session->expects($this->any())->method('setRatingData')->willReturnSelf();
         $this->block->toHtml();
     }
 
     public function testToHtmlCoreRegistryRatingData()
     {
-        $this->registry->expects($this->any())->method('registry')->will($this->returnValue($this->rating));
-        $this->form->expects($this->at(5))->method('getElement')->will($this->returnValue($this->element));
-        $this->form->expects($this->at(11))->method('getElement')->will($this->returnValue($this->element));
-        $this->form->expects($this->at(14))->method('getElement')->will($this->returnValue($this->element));
-        $this->form->expects($this->at(15))->method('getElement')->will($this->returnValue($this->element));
-        $this->form->expects($this->any())->method('getElement')->will($this->returnValue(false));
-        $this->session->expects($this->any())->method('getRatingData')->will($this->returnValue(false));
+        $this->registry->expects($this->any())->method('registry')->willReturn($this->rating);
+        $this->form->expects($this->at(5))->method('getElement')->willReturn($this->element);
+        $this->form->expects($this->at(11))->method('getElement')->willReturn($this->element);
+        $this->form->expects($this->at(14))->method('getElement')->willReturn($this->element);
+        $this->form->expects($this->at(15))->method('getElement')->willReturn($this->element);
+        $this->form->expects($this->any())->method('getElement')->willReturn(false);
+        $this->session->expects($this->any())->method('getRatingData')->willReturn(false);
         $ratingCodes = ['rating_codes' => ['0' => 'rating_code']];
-        $this->rating->expects($this->any())->method('getRatingCodes')->will($this->returnValue($ratingCodes));
+        $this->rating->expects($this->any())->method('getRatingCodes')->willReturn($ratingCodes);
         $this->block->toHtml();
     }
 
     public function testToHtmlWithoutRatingData()
     {
-        $this->registry->expects($this->any())->method('registry')->will($this->returnValue(false));
+        $this->registry->expects($this->any())->method('registry')->willReturn(false);
         $this->systemStore->expects($this->atLeastOnce())->method('getStoreCollection')
-            ->will($this->returnValue(['0' => $this->store]));
-        $this->formFactory->expects($this->any())->method('create')->will($this->returnValue($this->form));
+            ->willReturn(['0' => $this->store]);
+        $this->formFactory->expects($this->any())->method('create')->willReturn($this->form);
         $this->viewFileSystem->expects($this->any())->method('getTemplateFileName')
-            ->will($this->returnValue('template_file_name.html'));
+            ->willReturn('template_file_name.html');
         $this->fileSystem->expects($this->any())->method('getDirectoryRead')
-            ->will($this->returnValue($this->directoryReadInterface));
+            ->willReturn($this->directoryReadInterface);
         $this->block->toHtml();
     }
 }

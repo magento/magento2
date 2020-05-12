@@ -96,7 +96,7 @@ class RegisterCustomerEntityWithDifferentPasswordClassesTest extends Injectable
      *
      * @return void
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         //Set default required character classes for the password
         $this->objectManager->create(

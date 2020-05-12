@@ -3,50 +3,65 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\GroupedProduct\Test\Unit\Block\Adminhtml\Product\Composite\Fieldset;
 
-class GroupedTest extends \PHPUnit\Framework\TestCase
+use Magento\Catalog\Model\Product;
+use Magento\Customer\Api\Data\CustomerInterface;
+use Magento\Framework\DataObject;
+use Magento\Framework\Pricing\Helper\Data;
+use Magento\Framework\Registry;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\GroupedProduct\Block\Adminhtml\Product\Composite\Fieldset\Grouped;
+use Magento\Store\Model\Store;
+use Magento\Store\Model\StoreManagerInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class GroupedTest extends TestCase
 {
     /**
-     * @var \Magento\GroupedProduct\Block\Adminhtml\Product\Composite\Fieldset\Grouped
+     * @var Grouped
      */
     protected $block;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $storeManagerMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $registryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $pricingHelperMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $productMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->registryMock = $this->createMock(\Magento\Framework\Registry::class);
-        $this->productMock = $this->createMock(\Magento\Catalog\Model\Product::class);
-        $this->pricingHelperMock = $this->createMock(\Magento\Framework\Pricing\Helper\Data::class);
-        $this->storeManagerMock = $this->createMock(\Magento\Store\Model\StoreManagerInterface::class);
+        $this->registryMock = $this->createMock(Registry::class);
+        $this->productMock = $this->createMock(Product::class);
+        $this->pricingHelperMock = $this->createMock(Data::class);
+        $this->storeManagerMock = $this->getMockForAbstractClass(StoreManagerInterface::class);
 
         $customerMock = $this->getMockBuilder(
-            \Magento\Customer\Api\Data\CustomerInterface::class
-        )->disableOriginalConstructor()->getMock();
-        $customerMock->expects($this->any())->method('getId')->will($this->returnValue(1));
+            CustomerInterface::class
+        )->disableOriginalConstructor()
+            ->getMock();
+        $customerMock->expects($this->any())->method('getId')->willReturn(1);
 
-        $objectHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $objectHelper = new ObjectManager($this);
         $this->block = $objectHelper->getObject(
-            \Magento\GroupedProduct\Block\Adminhtml\Product\Composite\Fieldset\Grouped::class,
+            Grouped::class,
             [
                 'registry' => $this->registryMock,
                 'storeManager' => $this->storeManagerMock,
@@ -62,11 +77,11 @@ class GroupedTest extends \PHPUnit\Framework\TestCase
     public function testGetProductPositive()
     {
         $instanceMock = $this->createMock(\Magento\GroupedProduct\Model\Product\Type\Grouped::class);
-        $storeMock = $this->createMock(\Magento\Store\Model\Store::class);
+        $storeMock = $this->createMock(Store::class);
 
-        $this->productMock->expects($this->any())->method('getTypeInstance')->will($this->returnValue($instanceMock));
+        $this->productMock->expects($this->any())->method('getTypeInstance')->willReturn($instanceMock);
 
-        $instanceMock->expects($this->once())->method('getStoreFilter')->will($this->returnValue($storeMock));
+        $instanceMock->expects($this->once())->method('getStoreFilter')->willReturn($storeMock);
 
         $instanceMock->expects($this->never())->method('setStoreFilter');
 
@@ -80,9 +95,9 @@ class GroupedTest extends \PHPUnit\Framework\TestCase
     {
         $storeId = 2;
         $instanceMock = $this->createMock(\Magento\GroupedProduct\Model\Product\Type\Grouped::class);
-        $storeMock = $this->createMock(\Magento\Store\Model\Store::class);
+        $storeMock = $this->createMock(Store::class);
 
-        $this->productMock->expects($this->any())->method('getTypeInstance')->will($this->returnValue($instanceMock));
+        $this->productMock->expects($this->any())->method('getTypeInstance')->willReturn($instanceMock);
 
         $instanceMock->expects(
             $this->once()
@@ -90,11 +105,11 @@ class GroupedTest extends \PHPUnit\Framework\TestCase
             'getStoreFilter'
         )->with(
             $this->productMock
-        )->will(
-            $this->returnValue(null)
+        )->willReturn(
+            null
         );
 
-        $this->productMock->expects($this->once())->method('getStoreId')->will($this->returnValue($storeId));
+        $this->productMock->expects($this->once())->method('getStoreId')->willReturn($storeId);
 
         $this->storeManagerMock->expects(
             $this->any()
@@ -102,8 +117,8 @@ class GroupedTest extends \PHPUnit\Framework\TestCase
             'getStore'
         )->with(
             $storeId
-        )->will(
-            $this->returnValue($storeMock)
+        )->willReturn(
+            $storeMock
         );
 
         $instanceMock->expects($this->once())->method('setStoreFilter')->with($storeMock, $this->productMock);
@@ -120,7 +135,7 @@ class GroupedTest extends \PHPUnit\Framework\TestCase
 
         $instanceMock = $this->createMock(\Magento\GroupedProduct\Model\Product\Type\Grouped::class);
 
-        $this->productMock->expects($this->any())->method('getTypeInstance')->will($this->returnValue($instanceMock));
+        $this->productMock->expects($this->any())->method('getTypeInstance')->willReturn($instanceMock);
 
         $associatedProduct = clone $this->productMock;
 
@@ -132,11 +147,11 @@ class GroupedTest extends \PHPUnit\Framework\TestCase
             'getAssociatedProducts'
         )->with(
             $this->productMock
-        )->will(
-            $this->returnValue([$associatedProduct])
+        )->willReturn(
+            [$associatedProduct]
         );
 
-        $this->productMock->expects($this->any())->method('getStoreId')->will($this->returnValue($storeId));
+        $this->productMock->expects($this->any())->method('getStoreId')->willReturn($storeId);
 
         $this->assertEquals([$associatedProduct], $this->block->getAssociatedProducts());
     }
@@ -148,20 +163,23 @@ class GroupedTest extends \PHPUnit\Framework\TestCase
     {
         $storeId = 2;
 
-        $objectMock = $this->createPartialMock(\Magento\Framework\DataObject::class, ['getSuperGroup']);
+        $objectMock = $this->getMockBuilder(DataObject::class)
+            ->addMethods(['getSuperGroup'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $instanceMock = $this->createMock(\Magento\GroupedProduct\Model\Product\Type\Grouped::class);
 
-        $objectMock->expects($this->once())->method('getSuperGroup')->will($this->returnValue([]));
+        $objectMock->expects($this->once())->method('getSuperGroup')->willReturn([]);
 
         $this->productMock->expects(
             $this->once()
         )->method(
             'getPreconfiguredValues'
-        )->will(
-            $this->returnValue($objectMock)
+        )->willReturn(
+            $objectMock
         );
 
-        $this->productMock->expects($this->any())->method('getTypeInstance')->will($this->returnValue($instanceMock));
+        $this->productMock->expects($this->any())->method('getTypeInstance')->willReturn($instanceMock);
 
         $associatedProduct = clone $this->productMock;
 
@@ -173,11 +191,11 @@ class GroupedTest extends \PHPUnit\Framework\TestCase
             'getAssociatedProducts'
         )->with(
             $this->productMock
-        )->will(
-            $this->returnValue([$associatedProduct])
+        )->willReturn(
+            [$associatedProduct]
         );
 
-        $this->productMock->expects($this->any())->method('getStoreId')->will($this->returnValue($storeId));
+        $this->productMock->expects($this->any())->method('getStoreId')->willReturn($storeId);
 
         $this->assertEquals($this->block, $this->block->setPreconfiguredValue());
     }
@@ -187,7 +205,7 @@ class GroupedTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetCanShowProductPrice()
     {
-        $this->assertEquals(true, $this->block->getCanShowProductPrice($this->productMock));
+        $this->assertTrue($this->block->getCanShowProductPrice($this->productMock));
     }
 
     /**
@@ -199,7 +217,7 @@ class GroupedTest extends \PHPUnit\Framework\TestCase
 
         $this->productMock->expects($this->never())->method('getOptions');
 
-        $this->assertEquals(true, $this->block->getIsLastFieldset());
+        $this->assertTrue($this->block->getIsLastFieldset());
     }
 
     /**
@@ -215,11 +233,11 @@ class GroupedTest extends \PHPUnit\Framework\TestCase
 
         $this->block->setData('is_last_fieldset', false);
 
-        $this->productMock->expects($this->once())->method('getOptions')->will($this->returnValue($options));
+        $this->productMock->expects($this->once())->method('getOptions')->willReturn($options);
 
-        $this->productMock->expects($this->any())->method('getTypeInstance')->will($this->returnValue($instanceMock));
+        $this->productMock->expects($this->any())->method('getTypeInstance')->willReturn($instanceMock);
 
-        $instanceMock->expects($this->once())->method('getStoreFilter')->will($this->returnValue(true));
+        $instanceMock->expects($this->once())->method('getStoreFilter')->willReturn(true);
 
         $this->assertEquals($expectedResult, $this->block->getIsLastFieldset());
     }
@@ -248,11 +266,11 @@ class GroupedTest extends \PHPUnit\Framework\TestCase
 
         $instanceMock = $this->createMock(\Magento\GroupedProduct\Model\Product\Type\Grouped::class);
 
-        $this->productMock->expects($this->any())->method('getTypeInstance')->will($this->returnValue($instanceMock));
+        $this->productMock->expects($this->any())->method('getTypeInstance')->willReturn($instanceMock);
 
-        $instanceMock->expects($this->once())->method('getStoreFilter')->will($this->returnValue(true));
+        $instanceMock->expects($this->once())->method('getStoreFilter')->willReturn(true);
 
-        $this->productMock->expects($this->once())->method('getStore')->will($this->returnValue($storeId));
+        $this->productMock->expects($this->once())->method('getStore')->willReturn($storeId);
 
         $this->pricingHelperMock->expects(
             $this->once()
@@ -262,8 +280,8 @@ class GroupedTest extends \PHPUnit\Framework\TestCase
             $price,
             $storeId,
             false
-        )->will(
-            $this->returnValue($expectedPrice)
+        )->willReturn(
+            $expectedPrice
         );
 
         $this->assertEquals($expectedPrice, $this->block->getCurrencyPrice($price));
