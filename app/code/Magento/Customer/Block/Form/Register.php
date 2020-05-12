@@ -76,6 +76,7 @@ class Register extends \Magento\Directory\Block\Data
         $this->_customerSession = $customerSession;
         $this->newsLetterConfig = $newsLetterConfig ?: ObjectManager::getInstance()->get(Config::class);
         $data['addressHelper'] = $addressHelper ?? ObjectManager::getInstance()->get(AddressHelper::class);
+        $data['directoryHelper'] = $directoryHelper;
         parent::__construct(
             $context,
             $directoryHelper,

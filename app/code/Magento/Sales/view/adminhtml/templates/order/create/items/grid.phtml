@@ -115,7 +115,7 @@ $catalogHelper =$block->getData('catalogHelper');
                                 <?php endif; ?>
                                 <?= /* @noEscape */ $secureRenderer->renderEventListenerAsTag(
                                     'onclick',
-                                    "$('item_tier_<?= (int) $_item->getId() ?>').toggle();event.preventDefault();",
+                                    "$('item_tier_" . (int) $_item->getId() ."').toggle();event.preventDefault();",
                                     'div#item_tier_block_' . (int) $_item->getId() . ' a'
                                 ) ?>
                             <?php endif; ?>

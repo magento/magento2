@@ -61,14 +61,14 @@
         <?php endif; ?>
         <?php if ($_option->getImageSizeX() > 0):?>
             <p class="note">
-                <?= $block->escapeHtml(__('Maximum image width')) ?>:
-                <strong><?= (int)$_option->getImageSizeX() ?> <?= $block->escapeHtml(__('px.')) ?></strong>
+                <?= $block->escapeHtml(__('Maximum image width')) ?>: <strong><?= (int)$_option->getImageSizeX()
+                ?> <?= $block->escapeHtml(__('px.')) ?></strong>
             </p>
         <?php endif; ?>
         <?php if ($_option->getImageSizeY() > 0):?>
             <p class="note">
-                <?= $block->escapeHtml(__('Maximum image height')) ?>:
-                <strong><?= (int)$_option->getImageSizeY() ?> <?= $block->escapeHtml(__('px.')) ?></strong>
+                <?= $block->escapeHtml(__('Maximum image height')) ?>: <strong><?= (int)$_option->getImageSizeY()
+                ?> <?= $block->escapeHtml(__('px.')) ?></strong>
             </p>
         <?php endif; ?>
     </div>

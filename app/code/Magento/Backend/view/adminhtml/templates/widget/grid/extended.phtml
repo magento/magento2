@@ -340,8 +340,7 @@ script;
         $encodedId = /* @noEscape */ $jsonHelper->jsonEncode($block->getId());
         $scriptString .= <<<script
 
-    {$block->escapeJs($block->getJsObjectName())} = new varienGrid(
-        {$encodedId},
+    {$block->escapeJs($block->getJsObjectName())} = new varienGrid({$encodedId},
          '{$block->escapeJs($block->getGridUrl())}',
          '{$block->escapeJs($block->getVarNamePage())}',
          '{$block->escapeJs($block->getVarNameSort())}',

@@ -104,7 +104,8 @@ script;
         </div>
     </div>
     <?php if ($block->canDisplayContainer()): ?>
-        <?php $scriptString = <<<script
+        <?php $useAjax = $block->getUseAjax() ? 'true' : 'false';
+        $scriptString = <<<script
 
             require([
                 "jquery",
@@ -119,7 +120,7 @@ script;
                  '{$block->escapeJs($block->getVarNameSort())}', '{$block->escapeJs($block->getVarNameDir())}',
                  '{$block->escapeJs($block->getVarNameFilter())}');
                 {$block->escapeJs($block->getJsObjectName())}.useAjax =
-                 '{($block->getUseAjax() ? 'true' : 'false')}';
+                 '{$useAjax}';
 
 script;
         ?>

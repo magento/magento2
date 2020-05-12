@@ -11,7 +11,9 @@ use Magento\Customer\Helper\Address;
 /** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
 
 /** @var Magento\Customer\Helper\Address $addressHelper */
-$addressHelper = $block->getData('adressHelper');
+$addressHelper = $block->getData('addressHelper');
+/** @var \Magento\Directory\Helper\Data $directoryHelper */
+$directoryHelper = $block->getData('directoryHelper');
 $formData = $block->getFormData();
 ?>
 <?php $displayAll = $block->getConfig('general/region/display_all'); ?>
@@ -322,9 +324,9 @@ script;
 <?= /* @noEscape */ $secureRenderer->renderTag('script', [], $scriptString, false) ?>
 <?php if ($block->getShowAddressFields()): ?>
     <?php
-    $regionJson = /* @noEscape */ $addressHelper->getRegionJson();
+    $regionJson = /* @noEscape */ $directoryHelper->getRegionJson();
     $regionId = (int) $formData->getRegionId();
-    $countriesWithOptionalZip = /* @noEscape */ $addressHelper->getCountriesWithOptionalZip(true);
+    $countriesWithOptionalZip = /* @noEscape */ $directoryHelper->getCountriesWithOptionalZip(true);
     ?>
 <script type="text/x-magento-init">
     {
