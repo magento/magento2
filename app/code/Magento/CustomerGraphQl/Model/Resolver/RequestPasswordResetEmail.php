@@ -77,6 +77,7 @@ class RequestPasswordResetEmail implements ResolverInterface
      * @return bool|Value|mixed
      *
      * @throws GraphQlInputException
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function resolve(
         Field $field,
