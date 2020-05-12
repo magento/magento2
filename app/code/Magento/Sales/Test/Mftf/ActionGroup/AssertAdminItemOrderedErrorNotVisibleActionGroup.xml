@@ -17,5 +17,6 @@
             <argument name="message" defaultValue="The requested qty is not available" type="string"/>
         </arguments>
         <dontSee userInput="{{message}}" selector="{{AdminOrderFormItemsOrderedSection.productMessage(productName, messageType)}}" stepKey="assertItemErrorNotVisible"/>
+        <dontSee userInput="{{message}}" selector="{{AdminOrderFormMessagesSection.messageByType(messageType)}}" stepKey="assertOrderErrorNotVisible"/>
     </actionGroup>
 </actionGroups>

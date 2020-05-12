@@ -3,31 +3,38 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Elasticsearch\Test\Unit\SearchAdapter;
 
+use Magento\Elasticsearch\SearchAdapter\AggregationFactory;
 use Magento\Elasticsearch\SearchAdapter\DocumentFactory;
+use Magento\Framework\Api\Search\Document;
+use Magento\Framework\ObjectManagerInterface;
+use Magento\Framework\Search\EntityMetadata;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class DocumentFactoryTest extends \PHPUnit\Framework\TestCase
+class DocumentFactoryTest extends TestCase
 {
     /**
-     * @var DocumentFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var DocumentFactory|MockObject
      */
     private $model;
 
     /**
-     * @var \Magento\Framework\ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ObjectManagerInterface|MockObject
      */
     protected $objectManager;
 
     /**
-     * @var \Magento\Elasticsearch\SearchAdapter\AggregationFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var AggregationFactory|MockObject
      */
     protected $aggregationFactory;
 
     /**
-     * @var \Magento\Framework\Search\EntityMetadata|\PHPUnit_Framework_MockObject_MockObject
+     * @var EntityMetadata|MockObject
      */
     protected $entityMetadata;
 
@@ -43,19 +50,19 @@ class DocumentFactoryTest extends \PHPUnit\Framework\TestCase
      *
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->entityMetadata = $this->getMockBuilder(\Magento\Framework\Search\EntityMetadata::class)
+        $this->entityMetadata = $this->getMockBuilder(EntityMetadata::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->objectManager = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
+        $this->objectManager = $this->getMockForAbstractClass(ObjectManagerInterface::class);
 
-        $this->instanceName = \Magento\Framework\Api\Search\Document::class;
+        $this->instanceName = Document::class;
 
         $objectManagerHelper = new ObjectManagerHelper($this);
         $this->model = $objectManagerHelper->getObject(
-            \Magento\Elasticsearch\SearchAdapter\DocumentFactory::class,
+            DocumentFactory::class,
             [
                 'objectManager' => $this->objectManager,
                 'entityMetadata' => $this->entityMetadata
