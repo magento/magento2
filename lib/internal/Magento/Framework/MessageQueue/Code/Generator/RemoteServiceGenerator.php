@@ -136,7 +136,7 @@ class RemoteServiceGenerator extends \Magento\Framework\Code\Generator\EntityAbs
                 $parameterName = $methodParameter->getName();
                 $parameter = [
                     'name' => $parameterName,
-                    'type' => $methodParameter->getType(),
+                    'type' => $this->convertMethodType($methodParameter->getType()),
                 ];
                 if ($methodParameter->isDefaultValueAvailable()) {
                     $parameter['defaultValue'] = $methodParameter->getDefaultValue() !== null
@@ -155,7 +155,7 @@ class RemoteServiceGenerator extends \Magento\Framework\Code\Generator\EntityAbs
             $annotations = [['name' => 'inheritdoc']];
             $method = [
                 'name' => $methodName,
-                'returnType' => $methodReflection->getReturnType(),
+                'returnType' => $this->convertMethodType($methodReflection->getReturnType()),
                 'parameters' => $methodParameters,
                 'body' => $methodBody,
                 'docblock' => ['tags' => $annotations],
@@ -163,6 +163,17 @@ class RemoteServiceGenerator extends \Magento\Framework\Code\Generator\EntityAbs
             $methods[] = $method;
         }
         return $methods;
+    }
+
+    /**
+     * Converts method type if needed.
+     *
+     * @param mixed $type
+     * @return string|null
+     */
+    private function convertMethodType($type)
+    {
+        return $type instanceof \ReflectionNamedType ? $type->getName() : $type;
     }
 
     /**

@@ -3,45 +3,64 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Catalog\Test\Unit\Block;
 
-class NavigationTest extends \PHPUnit\Framework\TestCase
+use Magento\Catalog\Block\Navigation;
+use Magento\Catalog\Model\Category;
+use Magento\Catalog\Model\CategoryFactory;
+use Magento\Framework\App\Http\Context;
+use Magento\Framework\Registry;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\View\Design\ThemeInterface;
+use Magento\Framework\View\DesignInterface;
+use Magento\Store\Model\Group;
+use Magento\Store\Model\Store;
+use Magento\Store\Model\StoreManagerInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
+class NavigationTest extends TestCase
 {
     /**
-     * @var \Magento\Catalog\Block\Navigation
+     * @var Navigation
      */
     protected $block;
 
     /**
-     * @var \Magento\Framework\Registry|\PHPUnit_Framework_MockObject_MockObject
+     * @var Registry|MockObject
      */
     protected $registry;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var StoreManagerInterface|MockObject
      */
     protected $storeManager;
 
     /**
-     * @var \Magento\Framework\View\DesignInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var DesignInterface|MockObject
      */
     protected $design;
 
     /**
-     * @var \Magento\Framework\App\Http\Context|\PHPUnit_Framework_MockObject_MockObject
+     * @var Context|MockObject
      */
     protected $httpContext;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $categoryFactory = $this->createPartialMock(\Magento\Catalog\Model\CategoryFactory::class, ['create']);
-        $this->registry = $this->createMock(\Magento\Framework\Registry::class);
-        $this->storeManager = $this->createMock(\Magento\Store\Model\StoreManagerInterface::class);
-        $this->design = $this->createMock(\Magento\Framework\View\DesignInterface::class);
-        $this->httpContext = $this->createMock(\Magento\Framework\App\Http\Context::class);
+        $objectManager = new ObjectManager($this);
+        $categoryFactory = $this->createPartialMock(CategoryFactory::class, ['create']);
+        $this->registry = $this->createMock(Registry::class);
+        $this->storeManager = $this->getMockForAbstractClass(StoreManagerInterface::class);
+        $this->design = $this->getMockForAbstractClass(DesignInterface::class);
+        $this->httpContext = $this->createMock(Context::class);
         $this->block = $objectManager->getObject(
-            \Magento\Catalog\Block\Navigation::class,
+            Navigation::class,
             [
                 'categoryFactory' => $categoryFactory,
                 'registry' => $this->registry,
@@ -55,7 +74,7 @@ class NavigationTest extends \PHPUnit\Framework\TestCase
     public function testGetIdentities()
     {
         $this->assertEquals(
-            [\Magento\Catalog\Model\Category::CACHE_TAG, \Magento\Store\Model\Group::CACHE_TAG],
+            [Category::CACHE_TAG, Group::CACHE_TAG],
             $this->block->getIdentities()
         );
     }
@@ -63,7 +82,7 @@ class NavigationTest extends \PHPUnit\Framework\TestCase
     public function testGetCurrentCategoryKey()
     {
         $categoryKey = 101;
-        $category = $this->createMock(\Magento\Catalog\Model\Category::class);
+        $category = $this->createMock(Category::class);
         $category->expects($this->any())->method('getPath')->willReturn($categoryKey);
 
         $this->registry->expects($this->any())->method('registry')->with('current_category')->willReturn($category);
@@ -74,7 +93,7 @@ class NavigationTest extends \PHPUnit\Framework\TestCase
     public function testGetCurrentCategoryKeyFromRootCategory()
     {
         $categoryKey = 102;
-        $store = $this->createMock(\Magento\Store\Model\Store::class);
+        $store = $this->createMock(Store::class);
         $store->expects($this->any())->method('getRootCategoryId')->willReturn($categoryKey);
 
         $this->storeManager->expects($this->any())->method('getStore')->willReturn($store);
@@ -84,13 +103,13 @@ class NavigationTest extends \PHPUnit\Framework\TestCase
 
     public function testGetCacheKeyInfo()
     {
-        $store = $this->createMock(\Magento\Store\Model\Store::class);
+        $store = $this->createMock(Store::class);
         $store->expects($this->atLeastOnce())->method('getId')->willReturn(55);
         $store->expects($this->atLeastOnce())->method('getRootCategoryId')->willReturn(60);
 
         $this->storeManager->expects($this->atLeastOnce())->method('getStore')->willReturn($store);
 
-        $theme = $this->createMock(\Magento\Framework\View\Design\ThemeInterface::class);
+        $theme = $this->getMockForAbstractClass(ThemeInterface::class);
         $theme->expects($this->atLeastOnce())->method('getId')->willReturn(65);
 
         $this->design->expects($this->atLeastOnce())->method('getDesignTheme')->willReturn($theme);

@@ -3,34 +3,45 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Config\Test\Unit\Block\System\Config\Form\Field\Select;
 
-class AllowspecificTest extends \PHPUnit\Framework\TestCase
+use Magento\Config\Block\System\Config\Form\Field\Select\Allowspecific;
+use Magento\Framework\Data\Form;
+use Magento\Framework\Data\Form\Element\Select;
+use Magento\Framework\Escaper;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class AllowspecificTest extends TestCase
 {
     /**
-     * @var \Magento\Config\Block\System\Config\Form\Field\Select\Allowspecific
+     * @var Allowspecific
      */
     protected $_object;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $_formMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $testHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $testHelper = new ObjectManager($this);
         $this->_object = $testHelper->getObject(
-            \Magento\Config\Block\System\Config\Form\Field\Select\Allowspecific::class,
+            Allowspecific::class,
             [
-                '_escaper' => $testHelper->getObject(\Magento\Framework\Escaper::class)
+                '_escaper' => $testHelper->getObject(Escaper::class)
             ]
         );
         $this->_object->setData('html_id', 'spec_element');
-        $this->_formMock = $this->createPartialMock(
-            \Magento\Framework\Data\Form::class,
-            ['getHtmlIdPrefix', 'getHtmlIdSuffix', 'getElement']
-        );
+        $this->_formMock = $this->getMockBuilder(Form::class)
+            ->addMethods(['getHtmlIdPrefix', 'getHtmlIdSuffix'])
+            ->onlyMethods(['getElement'])
+            ->disableOriginalConstructor()
+            ->getMock();
     }
 
     public function testGetAfterElementHtml()
@@ -39,15 +50,15 @@ class AllowspecificTest extends \PHPUnit\Framework\TestCase
             $this->once()
         )->method(
             'getHtmlIdPrefix'
-        )->will(
-            $this->returnValue('test_prefix_')
+        )->willReturn(
+            'test_prefix_'
         );
         $this->_formMock->expects(
             $this->once()
         )->method(
             'getHtmlIdSuffix'
-        )->will(
-            $this->returnValue('_test_suffix')
+        )->willReturn(
+            '_test_suffix'
         );
 
         $afterHtmlCode = 'after html';
@@ -58,7 +69,7 @@ class AllowspecificTest extends \PHPUnit\Framework\TestCase
 
         $this->assertStringEndsWith('</script>' . $afterHtmlCode, $actual);
         $this->assertStringStartsWith('<script type="text/javascript">', trim($actual));
-        $this->assertContains('test_prefix_spec_element_test_suffix', $actual);
+        $this->assertStringContainsString('test_prefix_spec_element_test_suffix', $actual);
     }
 
     /**
@@ -69,7 +80,10 @@ class AllowspecificTest extends \PHPUnit\Framework\TestCase
     {
         $this->_object->setForm($this->_formMock);
 
-        $elementMock = $this->createPartialMock(\Magento\Framework\Data\Form\Element\Select::class, ['setDisabled']);
+        $elementMock = $this->getMockBuilder(Select::class)
+            ->addMethods(['setDisabled'])
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $elementMock->expects($this->once())->method('setDisabled')->with('disabled');
         $countryId = 'tetst_county_specificcountry';
@@ -80,8 +94,8 @@ class AllowspecificTest extends \PHPUnit\Framework\TestCase
             'getElement'
         )->with(
             $countryId
-        )->will(
-            $this->returnValue($elementMock)
+        )->willReturn(
+            $elementMock
         );
 
         $this->_object->setValue($value);

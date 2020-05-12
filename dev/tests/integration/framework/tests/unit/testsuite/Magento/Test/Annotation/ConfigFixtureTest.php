@@ -12,11 +12,11 @@ namespace Magento\Test\Annotation;
 class ConfigFixtureTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\TestFramework\Annotation\ConfigFixture|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\TestFramework\Annotation\ConfigFixture|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_object;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_object = $this->createPartialMock(
             \Magento\TestFramework\Annotation\ConfigFixture::class,
@@ -35,8 +35,8 @@ class ConfigFixtureTest extends \PHPUnit\Framework\TestCase
             '_getConfigValue'
         )->with(
             'web/unsecure/base_url'
-        )->will(
-            $this->returnValue('http://localhost/')
+        )->willReturn(
+            'http://localhost/'
         );
         $this->_object->expects(
             $this->at(1)
@@ -71,8 +71,8 @@ class ConfigFixtureTest extends \PHPUnit\Framework\TestCase
         )->with(
             'dev/restrict/allow_ips',
             ''
-        )->will(
-            $this->returnValue('127.0.0.1')
+        )->willReturn(
+            '127.0.0.1'
         );
         $this->_object->expects(
             $this->at(1)
@@ -109,8 +109,8 @@ class ConfigFixtureTest extends \PHPUnit\Framework\TestCase
         )->with(
             'dev/restrict/allow_ips',
             'admin'
-        )->will(
-            $this->returnValue('192.168.0.1')
+        )->willReturn(
+            '192.168.0.1'
         );
         $this->_object->expects(
             $this->at(1)
@@ -154,8 +154,8 @@ class ConfigFixtureTest extends \PHPUnit\Framework\TestCase
             '_getConfigValue'
         )->with(
             'web/unsecure/base_url'
-        )->will(
-            $this->returnValue('http://localhost/')
+        )->willReturn(
+            'http://localhost/'
         );
         $this->_object->expects(
             $this->at(1)

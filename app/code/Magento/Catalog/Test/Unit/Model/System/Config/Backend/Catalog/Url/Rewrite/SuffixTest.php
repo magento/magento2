@@ -3,102 +3,121 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Catalog\Test\Unit\Model\System\Config\Backend\Catalog\Url\Rewrite;
 
+use Magento\Catalog\Model\System\Config\Backend\Catalog\Url\Rewrite\Suffix;
+use Magento\CatalogUrlRewrite\Model\CategoryUrlPathGenerator;
+use Magento\CatalogUrlRewrite\Model\ProductUrlPathGenerator;
+use Magento\Framework\App\Cache\Type\Block;
+use Magento\Framework\App\Cache\Type\Collection;
+use Magento\Framework\App\Cache\TypeList;
+use Magento\Framework\App\Cache\TypeListInterface;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\Event\ManagerInterface;
+use Magento\Framework\Model\Context;
+use Magento\Framework\Registry;
+use Magento\Store\Model\StoreManager;
+use Magento\Store\Model\StoreManagerInterface;
+use Magento\UrlRewrite\Helper\UrlRewrite;
+use Magento\UrlRewrite\Model\UrlFinderInterface;
+use PHPUnit\Framework\TestCase;
+
 /**
- * Class SuffixTest
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class SuffixTest extends \PHPUnit\Framework\TestCase
+class SuffixTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\Model\Context
+     * @var Context
      */
     protected $context;
 
     /**
-     * @var \Magento\Framework\Event\ManagerInterface
+     * @var ManagerInterface
      */
     protected $eventDispatcher;
-    
+
     /**
-     * @var \Magento\Framework\Registry
+     * @var Registry
      */
     protected $registry;
-    
+
     /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     * @var ScopeConfigInterface
      */
     protected $config;
-    
+
     /**
-     * @var \Magento\Framework\App\Cache\TypeListInterface
+     * @var TypeListInterface
      */
     protected $cacheTypeList;
-    
+
     /**
-     * @var \Magento\UrlRewrite\Helper\UrlRewrite
+     * @var UrlRewrite
      */
     protected $urlRewriteHelper;
-    
+
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var StoreManagerInterface
      */
     protected $storeManager;
-    
+
     /**
-     * @var \Magento\Framework\App\ResourceConnection
+     * @var ResourceConnection
      */
     protected $appResource;
-    
+
     /**
-     * @var \Magento\UrlRewrite\Model\UrlFinderInterface
+     * @var UrlFinderInterface
      */
     protected $urlFinder;
 
     /**
-     * @var \Magento\Catalog\Model\System\Config\Backend\Catalog\Url\Rewrite\Suffix
+     * @var Suffix
      */
     protected $suffixModel;
 
-    public function setUp()
+    protected function setUp(): void
     {
-        $this->eventDispatcher = $this->getMockBuilder(\Magento\Framework\Event\ManagerInterface::class)
+        $this->eventDispatcher = $this->getMockBuilder(ManagerInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['dispatch'])
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->eventDispatcher->method('dispatch')->willReturnSelf();
-        $this->context = $this->getMockBuilder(\Magento\Framework\Model\Context::class)
+        $this->context = $this->getMockBuilder(Context::class)
             ->disableOriginalConstructor()
             ->setMethods(['getEventDispatcher'])
             ->getMock();
         $this->context->method('getEventDispatcher')->willReturn($this->eventDispatcher);
-        
-        $this->registry = $this->createMock(\Magento\Framework\Registry::class);
-        $this->config = $this->createMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
-        $this->cacheTypeList = $this->getMockBuilder(\Magento\Framework\App\Cache\TypeList::class)
+
+        $this->registry = $this->createMock(Registry::class);
+        $this->config = $this->getMockForAbstractClass(ScopeConfigInterface::class);
+        $this->cacheTypeList = $this->getMockBuilder(TypeList::class)
             ->disableOriginalConstructor()
             ->setMethods(['invalidate'])
             ->getMock();
 
-        $this->urlRewriteHelper = $this->getMockBuilder(\Magento\UrlRewrite\Helper\UrlRewrite::class)
+        $this->urlRewriteHelper = $this->getMockBuilder(UrlRewrite::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->storeManager = $this->getMockBuilder(\Magento\Store\Model\StoreManager::class)
+        $this->storeManager = $this->getMockBuilder(StoreManager::class)
             ->disableOriginalConstructor()
             ->setMethods(['getStores'])
             ->getMock();
         $this->storeManager->method('getStores')->willReturn([]);
-        
-        $this->appResource =$this->getMockBuilder(\Magento\Framework\App\ResourceConnection::class)
+
+        $this->appResource =$this->getMockBuilder(ResourceConnection::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->urlFinder =$this->getMockBuilder(\Magento\UrlRewrite\Model\UrlFinderInterface::class)
+        $this->urlFinder =$this->getMockBuilder(UrlFinderInterface::class)
             ->setMethods(['findAllByData', 'findOneByData'])
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->urlFinder->method('findAllByData')->willReturn([]);
-        
-        $this->suffixModel = new \Magento\Catalog\Model\System\Config\Backend\Catalog\Url\Rewrite\Suffix(
+
+        $this->suffixModel = new Suffix(
             $this->context,
             $this->registry,
             $this->config,
@@ -114,33 +133,33 @@ class SuffixTest extends \PHPUnit\Framework\TestCase
     {
         $this->suffixModel->setValue('new');
         $this->suffixModel->setPath(
-            \Magento\CatalogUrlRewrite\Model\CategoryUrlPathGenerator::XML_PATH_CATEGORY_URL_SUFFIX
+            CategoryUrlPathGenerator::XML_PATH_CATEGORY_URL_SUFFIX
         );
         $this->cacheTypeList->expects($this->exactly(2))->method('invalidate')->withConsecutive(
             [$this->equalTo([
-                \Magento\Framework\App\Cache\Type\Block::TYPE_IDENTIFIER,
-                \Magento\Framework\App\Cache\Type\Collection::TYPE_IDENTIFIER
+                Block::TYPE_IDENTIFIER,
+                Collection::TYPE_IDENTIFIER
             ])],
             [$this->equalTo('config')]
         );
         $this->suffixModel->afterSave();
     }
-    
+
     public function testAfterSaveWithoutChanges()
     {
         $this->suffixModel->setValue('');
         $this->suffixModel->setPath(
-            \Magento\CatalogUrlRewrite\Model\CategoryUrlPathGenerator::XML_PATH_CATEGORY_URL_SUFFIX
+            CategoryUrlPathGenerator::XML_PATH_CATEGORY_URL_SUFFIX
         );
         $this->cacheTypeList->expects($this->never())->method('invalidate');
         $this->suffixModel->afterSave();
     }
-    
+
     public function testAfterSaveProduct()
     {
         $this->suffixModel->setValue('new');
         $this->suffixModel->setPath(
-            \Magento\CatalogUrlRewrite\Model\ProductUrlPathGenerator::XML_PATH_PRODUCT_URL_SUFFIX
+            ProductUrlPathGenerator::XML_PATH_PRODUCT_URL_SUFFIX
         );
         $this->cacheTypeList->expects($this->once())->method('invalidate')->with('config');
         $this->suffixModel->afterSave();

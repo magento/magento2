@@ -3,41 +3,50 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Setup\Test\Unit\Model;
 
-use \Magento\Setup\Model\ObjectManagerProvider;
-use \Magento\Setup\Model\UpdaterTaskCreator;
+use Magento\Framework\App\Cache\Manager;
+use Magento\Framework\Filesystem;
+use Magento\Framework\Filesystem\Directory\WriteInterface;
+use Magento\Framework\ObjectManagerInterface;
+use Magento\Setup\Model\Navigation;
+use Magento\Setup\Model\ObjectManagerProvider;
+use Magento\Setup\Model\Updater;
+use Magento\Setup\Model\UpdaterTaskCreator;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class UpdaterTaskCreatorTest extends \PHPUnit\Framework\TestCase
+class UpdaterTaskCreatorTest extends TestCase
 {
     /**
-     * @var \Magento\Setup\Model\Updater|\PHPUnit_Framework_MockObject_MockObject
+     * @var Updater|MockObject
      */
     private $updater;
 
     /**
-     * @var \Magento\Framework\Filesystem|\PHPUnit_Framework_MockObject_MockObject
+     * @var Filesystem|MockObject
      */
     private $filesystem;
 
     /**
-     * @var Navigation|\PHPUnit_Framework_MockObject_MockObject
+     * @var Navigation|MockObject
      */
     private $navigation;
 
     /**
-     * @var ObjectManagerProvider|\PHPUnit_Framework_MockObject_MockObject
+     * @var ObjectManagerProvider|MockObject
      */
     private $objectManagerProvider;
 
-    public function setUp()
+    protected function setUp(): void
     {
-        $this->updater = $this->createMock(\Magento\Setup\Model\Updater::class);
+        $this->updater = $this->createMock(Updater::class);
         $this->objectManagerProvider =
-            $this->createMock(\Magento\Setup\Model\ObjectManagerProvider::class);
-        $this->filesystem = $this->createMock(\Magento\Framework\Filesystem::class);
-        $this->navigation = $this->createMock(\Magento\Setup\Model\Navigation::class);
+            $this->createMock(ObjectManagerProvider::class);
+        $this->filesystem = $this->createMock(Filesystem::class);
+        $this->navigation = $this->createMock(Navigation::class);
         $this->model = new UpdaterTaskCreator(
             $this->filesystem,
             $this->navigation,
@@ -61,15 +70,15 @@ class UpdaterTaskCreatorTest extends \PHPUnit\Framework\TestCase
     public function testCreateUpdaterTasks($payload)
     {
         $write = $this->getMockForAbstractClass(
-            \Magento\Framework\Filesystem\Directory\WriteInterface::class,
+            WriteInterface::class,
             [],
             '',
             false
         );
         $this->filesystem->expects($this->once())->method('getDirectoryWrite')->willReturn($write);
         $write->expects($this->once())->method('writeFile');
-        $cacheManager = $this->createMock(\Magento\Framework\App\Cache\Manager::class);
-        $objectManager = $this->getMockForAbstractClass(\Magento\Framework\ObjectManagerInterface::class);
+        $cacheManager = $this->createMock(Manager::class);
+        $objectManager = $this->getMockForAbstractClass(ObjectManagerInterface::class);
         $objectManager->expects($this->once())->method('get')->willReturn($cacheManager);
         $this->objectManagerProvider->expects($this->once())->method('get')->willReturn($objectManager);
 
@@ -90,15 +99,15 @@ class UpdaterTaskCreatorTest extends \PHPUnit\Framework\TestCase
                 'headerTitle'=>'Uninstall Package1', 'dataOption' => true
             ], 0, false],
             [['type' => 'update',
-                'packages' => [['name' => 'vendor\/package', 'version' => '1.0.1',]],
+                'packages' => [['name' => 'vendor\/package', 'version' => '1.0.1']],
                 'headerTitle'=>'Uninstall Package1'
             ], 0, false],
             [['type' => 'enable',
-                'packages' => [['name' => 'vendor\/package', 'version' => '1.0.1',]],
+                'packages' => [['name' => 'vendor\/package', 'version' => '1.0.1']],
                 'headerTitle'=>'Uninstall Package1'
             ], 1, true],
             [['type' => 'disable',
-                'packages' => [['name' => 'vendor\/package', 'version' => '1.0.1',]],
+                'packages' => [['name' => 'vendor\/package', 'version' => '1.0.1']],
                 'headerTitle'=>'Uninstall Package1'
             ], 1, true],
         ];

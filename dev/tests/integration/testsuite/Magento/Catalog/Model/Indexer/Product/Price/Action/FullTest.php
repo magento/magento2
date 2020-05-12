@@ -15,7 +15,7 @@ class FullTest extends \PHPUnit\Framework\TestCase
      */
     protected $_processor;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_processor = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
             \Magento\Catalog\Model\Indexer\Product\Price\Processor::class

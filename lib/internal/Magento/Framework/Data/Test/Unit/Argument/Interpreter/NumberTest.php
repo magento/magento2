@@ -3,30 +3,33 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\Data\Test\Unit\Argument\Interpreter;
 
-use \Magento\Framework\Data\Argument\Interpreter\Number;
+use Magento\Framework\Data\Argument\Interpreter\Number;
+use PHPUnit\Framework\TestCase;
 
-class NumberTest extends \PHPUnit\Framework\TestCase
+class NumberTest extends TestCase
 {
     /**
      * @var Number
      */
     protected $_model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_model = new Number();
     }
 
     /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Numeric value is expected
      *
      * @dataProvider evaluateExceptionDataProvider
      */
     public function testEvaluateException($input)
     {
+        $this->expectException('InvalidArgumentException');
+        $this->expectExceptionMessage('Numeric value is expected');
         $this->_model->evaluate($input);
     }
 
