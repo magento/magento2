@@ -275,9 +275,8 @@ $numColumns = count($block->getColumns());
             <?php elseif ($block->getEmptyText()): ?>
                 <tr class="data-grid-tr-no-data">
                     <td class="<?= $block->escapeHtmlAttr($block->getEmptyTextClass()) ?>"
-                        colspan="<?= $block->escapeHtmlAttr($numColumns) ?>">
-                        <?= $block->escapeHtml($block->getEmptyText()) ?>
-                    </td>
+                        colspan="<?= $block->escapeHtmlAttr($numColumns) ?>"><?=
+                        $block->escapeHtml($block->getEmptyText()) ?></td>
                 </tr>
             <?php endif; ?>
             </tbody>

@@ -79,9 +79,8 @@ $catalogHelper =$block->getData('catalogHelper');
                 <tbody class="<?= /* @noEscape */ ($i%2) ? 'even' : 'odd' ?>">
                     <tr>
                         <td class="col-product">
-                            <span id="order_item_<?= (int) $_item->getId() ?>_title">
-                                <?= $block->escapeHtml($_item->getName()) ?>
-                            </span>
+                            <span id="order_item_<?= (int) $_item->getId() ?>_title"><?=
+                                $block->escapeHtml($_item->getName()) ?></span>
                             <div class="product-sku-block">
                                 <span><?= $block->escapeHtml(__('SKU')) ?>:</span>
                                 <?= /* @noEscape */ implode(
@@ -125,16 +124,16 @@ $catalogHelper =$block->getData('catalogHelper');
                                            class="admin__control-checkbox"
                                            id="item_use_custom_price_<?= (int) $_item->getId() ?>"
                                            <?php if ($_isCustomPrice): ?> checked="checked"<?php endif; ?> />
+                                    <label
+                                        class="normal admin__field-label"
+                                        for="item_use_custom_price_<?= (int) $_item->getId() ?>">
+                                        <span><?= $block->escapeHtml(__('Custom Price')) ?>*</span></label>
                                     <?= /* @noEscape */ $secureRenderer->renderEventListenerAsTag(
                                         'onclick',
                                         "order.toggleCustomPrice(this, 'item_custom_price_" . (int) $_item->getId() .
                                         "', 'item_tier_block_" . (int) $_item->getId() . "');",
                                         'input#item_use_custom_price_' . (int) $_item->getId()
                                     ) ?>
-                                    <label
-                                        class="normal admin__field-label"
-                                        for="item_use_custom_price_<?= (int) $_item->getId() ?>">
-                                        <span><?= $block->escapeHtml(__('Custom Price')) ?>*</span></label>
                                 </div>
                             <?php endif; ?>
                             <input id="item_custom_price_<?= (int) $_item->getId() ?>"

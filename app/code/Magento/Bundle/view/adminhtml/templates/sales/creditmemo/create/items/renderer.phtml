@@ -16,8 +16,8 @@
 <?php $_count = count($items) ?>
 <?php $_index = 0 ?>
 <?php
-/** @var \Magento\Framework\Json\Helper\Data $helper */
-$helper = $block->getData('jsonHelper');
+/** @var \Magento\Catalog\Helper\Data $catalogHelper */
+$catalogHelper = $block->getData('catalogHelper');
 ?>
 
 <?php $_prevOptionId = '' ?>
@@ -55,7 +55,7 @@ $helper = $block->getData('jsonHelper');
             <div class="product-title"><?= $block->escapeHtml($_item->getName()) ?></div>
             <div class="product-sku-block">
                 <span><?= $block->escapeHtml(__('SKU')) ?>:</span>
-                <?= /* @noEscape */ implode('<br />', $helper->splitSku($_item->getSku())) ?>
+                <?= /* @noEscape */ implode('<br />', $catalogHelper->splitSku($_item->getSku())) ?>
             </div>
         </td>
         <?php else: ?>
