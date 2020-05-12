@@ -5,7 +5,7 @@
 
 define([
     'underscore',
-    'Magento_Ui/js/grid/dnd',
+    'Magento_Ui/js/grid/dnd'
 ], function (_, Dnd) {
     'use strict';
 

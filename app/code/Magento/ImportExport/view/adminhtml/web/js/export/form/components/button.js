@@ -4,8 +4,9 @@
  */
 
 define([
+    'underscore',
     'Magento_Ui/js/form/components/button'
-], function (Button) {
+], function (_, Button) {
     'use strict';
 
     return Button.extend({
