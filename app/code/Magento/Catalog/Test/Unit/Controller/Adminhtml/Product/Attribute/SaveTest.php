@@ -3,27 +3,31 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Catalog\Test\Unit\Controller\Adminhtml\Product\Attribute;
 
+use Magento\Backend\Model\View\Result\Redirect as ResultRedirect;
 use Magento\Catalog\Api\Data\ProductAttributeInterface;
 use Magento\Catalog\Controller\Adminhtml\Product\Attribute\Save;
-use Magento\Eav\Model\Validator\Attribute\Code as AttributeCodeValidator;
-use Magento\Framework\Serialize\Serializer\FormData;
-use Magento\Catalog\Test\Unit\Controller\Adminhtml\Product\AttributeTest;
-use Magento\Catalog\Model\Product\AttributeSet\BuildFactory;
+use Magento\Catalog\Helper\Product as ProductHelper;
 use Magento\Catalog\Model\Product\AttributeSet\Build;
+use Magento\Catalog\Model\Product\AttributeSet\BuildFactory;
 use Magento\Catalog\Model\ResourceModel\Eav\AttributeFactory;
+use Magento\Catalog\Test\Unit\Controller\Adminhtml\Product\AttributeTest;
 use Magento\Eav\Api\Data\AttributeSetInterface;
+use Magento\Eav\Model\Adminhtml\System\Config\Source\Inputtype\Validator as InputTypeValidator;
 use Magento\Eav\Model\Adminhtml\System\Config\Source\Inputtype\ValidatorFactory;
 use Magento\Eav\Model\ResourceModel\Entity\Attribute\Group\CollectionFactory;
+use Magento\Eav\Model\Validator\Attribute\Code as AttributeCodeValidator;
 use Magento\Framework\Controller\ResultFactory;
+use Magento\Framework\Exception\NotFoundException;
 use Magento\Framework\Filter\FilterManager;
-use Magento\Catalog\Helper\Product as ProductHelper;
+use Magento\Framework\Serialize\Serializer\FormData;
 use Magento\Framework\View\Element\Messages;
 use Magento\Framework\View\LayoutFactory;
-use Magento\Backend\Model\View\Result\Redirect as ResultRedirect;
-use Magento\Eav\Model\Adminhtml\System\Config\Source\Inputtype\Validator as InputTypeValidator;
 use Magento\Framework\View\LayoutInterface;
+use PHPUnit\Framework\MockObject\MockObject;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -31,76 +35,76 @@ use Magento\Framework\View\LayoutInterface;
 class SaveTest extends AttributeTest
 {
     /**
-     * @var BuildFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var BuildFactory|MockObject
      */
     protected $buildFactoryMock;
 
     /**
-     * @var FilterManager|\PHPUnit_Framework_MockObject_MockObject
+     * @var FilterManager|MockObject
      */
     protected $filterManagerMock;
 
     /**
-     * @var ProductHelper|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProductHelper|MockObject
      */
     protected $productHelperMock;
 
     /**
-     * @var AttributeFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var AttributeFactory|MockObject
      */
     protected $attributeFactoryMock;
 
     /**
-     * @var ValidatorFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var ValidatorFactory|MockObject
      */
     protected $validatorFactoryMock;
 
     /**
-     * @var CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var CollectionFactory|MockObject
      */
     protected $groupCollectionFactoryMock;
 
     /**
-     * @var LayoutFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var LayoutFactory|MockObject
      */
     protected $layoutFactoryMock;
 
     /**
-     * @var ResultRedirect|\PHPUnit_Framework_MockObject_MockObject
+     * @var ResultRedirect|MockObject
      */
     protected $redirectMock;
 
     /**
-     * @var AttributeSet|\PHPUnit_Framework_MockObject_MockObject
+     * @var AttributeSet|MockObject
      */
     protected $attributeSetMock;
 
     /**
-     * @var Build|\PHPUnit_Framework_MockObject_MockObject
+     * @var Build|MockObject
      */
     protected $builderMock;
 
     /**
-     * @var InputTypeValidator|\PHPUnit_Framework_MockObject_MockObject
+     * @var InputTypeValidator|MockObject
      */
     protected $inputTypeValidatorMock;
 
     /**
-     * @var FormData|\PHPUnit_Framework_MockObject_MockObject
+     * @var FormData|MockObject
      */
     private $formDataSerializerMock;
 
     /**
-     * @var ProductAttributeInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProductAttributeInterface|MockObject
      */
     private $productAttributeMock;
 
     /**
-     * @var AttributeCodeValidator|\PHPUnit_Framework_MockObject_MockObject
+     * @var AttributeCodeValidator|MockObject
      */
     private $attributeCodeValidatorMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->buildFactoryMock = $this->getMockBuilder(BuildFactory::class)
@@ -134,7 +138,7 @@ class SaveTest extends AttributeTest
             ->getMock();
         $this->attributeSetMock = $this->getMockBuilder(AttributeSetInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->builderMock = $this->getMockBuilder(Build::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -273,7 +277,7 @@ class SaveTest extends AttributeTest
     }
 
     /**
-     * @throws \Magento\Framework\Exception\NotFoundException
+     * @throws NotFoundException
      */
     public function testExecuteWithOptionsDataError()
     {
@@ -305,7 +309,6 @@ class SaveTest extends AttributeTest
      * @param string $path
      * @param array $params
      * @param array $response
-     * @return mixed
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     private function addReturnResultConditions(string $path = '', array $params = [], array $response = [])

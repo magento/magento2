@@ -38,7 +38,7 @@ abstract class AbstractBundleProductSaveTest extends AbstractBackendController
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -51,7 +51,7 @@ abstract class AbstractBundleProductSaveTest extends AbstractBackendController
     /**
      * @inheritdoc
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         if ($this->productToDelete) {
             $this->productRepository->deleteById($this->productToDelete);
@@ -149,8 +149,8 @@ abstract class AbstractBundleProductSaveTest extends AbstractBackendController
     private function prepareSelection(array $productIdsBySkus, array $selection): array
     {
         $staticData = [
-            'price' => '10',
-            'selection_qty' => '5',
+            'price' => '10.000000',
+            'selection_qty' => '5.0000',
             'selection_can_change_qty' => '0'
         ];
         $selection['product_id'] = $productIdsBySkus[$selection['sku']];

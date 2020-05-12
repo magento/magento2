@@ -14,13 +14,13 @@ class AreaTest extends \PHPUnit\Framework\TestCase
      */
     protected $_model;
 
-    public static function tearDownAfterClass()
+    public static function tearDownAfterClass(): void
     {
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(\Magento\Framework\App\CacheInterface::class)
             ->clean([\Magento\Theme\Model\Design::CACHE_TAG]);
     }
 
-    protected function setUp()
+    protected function setUp(): void
     {
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(\Magento\Framework\App\State::class)
             ->setAreaCode('frontend');

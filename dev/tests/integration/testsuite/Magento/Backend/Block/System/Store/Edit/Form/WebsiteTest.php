@@ -16,7 +16,7 @@ class WebsiteTest extends \PHPUnit\Framework\TestCase
      */
     protected $_block;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -39,7 +39,7 @@ class WebsiteTest extends \PHPUnit\Framework\TestCase
         $this->_block->toHtml();
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         /** @var $objectManager \Magento\TestFramework\ObjectManager */
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
