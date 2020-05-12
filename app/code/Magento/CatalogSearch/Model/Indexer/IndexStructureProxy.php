@@ -9,6 +9,9 @@ use Magento\Framework\Indexer\IndexStructureInterface;
 
 /**
  * Catalog search index structure proxy.
+ *
+ * @deprecated
+ * @see \Magento\Elasticsearch
  */
 class IndexStructureProxy implements IndexStructureInterface
 {

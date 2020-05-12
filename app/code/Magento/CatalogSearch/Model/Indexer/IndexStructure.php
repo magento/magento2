@@ -6,9 +6,8 @@
 
 namespace Magento\CatalogSearch\Model\Indexer;
 
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\ResourceConnection;
-use Magento\Framework\DB\Adapter\AdapterInterface;
-use Magento\Framework\DB\Ddl\Table;
 use Magento\Framework\Indexer\IndexStructureInterface;
 use Magento\Framework\Indexer\ScopeResolver\IndexScopeResolver;
 use Magento\Framework\Search\Request\IndexScopeResolverInterface;
@@ -22,25 +21,43 @@ use Magento\Framework\Search\Request\IndexScopeResolverInterface;
 class IndexStructure implements IndexStructureInterface
 {
     /**
+     * @var IndexStructureInterface
+     */
+    private $indexStructureEntity;
+
+    /**
+     * @var IndexStructureFactory
+     */
+    private $indexStructureFactory;
+
+    /**
      * @var Resource
+     * @deprecated
+     * @see \Magento\Elasticsearch
      */
     private $resource;
 
     /**
      * @var IndexScopeResolver
+     * @deprecated
+     * @see \Magento\Elasticsearch
      */
     private $indexScopeResolver;
 
     /**
      * @param ResourceConnection $resource
      * @param IndexScopeResolverInterface $indexScopeResolver
+     * @param IndexStructureFactory|null $indexStructureFactory
      */
     public function __construct(
         ResourceConnection $resource,
-        IndexScopeResolverInterface $indexScopeResolver
+        IndexScopeResolverInterface $indexScopeResolver,
+        IndexStructureFactory $indexStructureFactory = null
     ) {
         $this->resource = $resource;
         $this->indexScopeResolver = $indexScopeResolver;
+        $this->indexStructureFactory = $indexStructureFactory ? : ObjectManager::getInstance()
+            ->get(IndexStructureFactory::class);
     }
 
     /**
@@ -48,10 +65,7 @@ class IndexStructure implements IndexStructureInterface
      */
     public function delete($index, array $dimensions = [])
     {
-        $tableName = $this->indexScopeResolver->resolve($index, $dimensions);
-        if ($this->resource->getConnection()->isTableExists($tableName)) {
-            $this->resource->getConnection()->dropTable($tableName);
-        }
+        return $this->getEntity()->delete($index, $dimensions);
     }
 
     /**
@@ -59,45 +73,19 @@ class IndexStructure implements IndexStructureInterface
      */
     public function create($index, array $fields, array $dimensions = [])
     {
-        $this->createFulltextIndex($this->indexScopeResolver->resolve($index, $dimensions));
+        return $this->getEntity()->create($index, $fields, $dimensions);
     }
 
     /**
-     * Create fulltext index table.
+     * Get instance of current index structure
      *
-     * @param string $tableName
-     * @throws \Zend_Db_Exception
-     * @return void
+     * @return IndexStructureInterface
      */
-    protected function createFulltextIndex($tableName)
+    private function getEntity()
     {
-        $table = $this->resource->getConnection()->newTable($tableName)
-            ->addColumn(
-                'entity_id',
-                Table::TYPE_INTEGER,
-                10,
-                ['unsigned' => true, 'nullable' => false],
-                'Entity ID'
-            )->addColumn(
-                'attribute_id',
-                Table::TYPE_INTEGER,
-                10,
-                ['unsigned' => true, 'nullable' => false]
-            )->addColumn(
-                'data_index',
-                Table::TYPE_TEXT,
-                '4g',
-                ['nullable' => true],
-                'Data index'
-            )->addIndex(
-                'idx_primary',
-                ['entity_id', 'attribute_id'],
-                ['type' => AdapterInterface::INDEX_TYPE_PRIMARY]
-            )->addIndex(
-                'FTI_FULLTEXT_DATA_INDEX',
-                ['data_index'],
-                ['type' => AdapterInterface::INDEX_TYPE_FULLTEXT]
-            );
-        $this->resource->getConnection()->createTable($table);
+        if (empty($this->indexStructureEntity)) {
+            $this->indexStructureEntity = $this->indexStructureFactory->create();
+        }
+        return $this->indexStructureEntity;
     }
 }
