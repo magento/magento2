@@ -29,7 +29,7 @@ class VaultTokenRendererTest extends \PHPUnit\Framework\TestCase
      */
     private $objectManager;
     
-    protected function setUp()
+    protected function setUp(): void
     {
         $bootstrap = Bootstrap::getInstance();
         $bootstrap->loadArea(Area::AREA_FRONTEND);

@@ -10,12 +10,15 @@
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AdminEditCMSPageContentActionGroup">
         <arguments>
-            <argument name="content" type="string" />
-            <argument name="pageId" type="string" />
+            <argument name="content" type="string"/>
+            <argument name="pageId" type="string"/>
         </arguments>
-     <amOnPage url="{{AdminCmsPageEditPage.url(pageId)}}" stepKey="navigateToEditCMSPage"/>
+
+        <amOnPage url="{{AdminCmsPageEditPage.url(pageId)}}" stepKey="navigateToEditCMSPage"/>
         <waitForPageLoad stepKey="waitForCmsPageEditPage"/>
-        <conditionalClick selector="{{CmsNewPagePageActionsSection.contentSectionName}}" dependentSelector="{{CatalogWidgetSection.insertWidgetButton}}" visible="false" stepKey="clickShowHideEditorIfVisible"/>
+        <conditionalClick selector="{{CmsNewPagePageContentSection.header}}" dependentSelector="{{CmsNewPagePageContentSection.contentHeading}}" visible="false" stepKey="expandContentTab"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoadContentSection"/>
+        <conditionalClick selector="{{CmsNewPagePageActionsSection.showHideEditor}}" dependentSelector="{{CatalogWidgetSection.insertWidgetButton}}" visible="false" stepKey="clickNextShowHideEditorIfVisible"/>
         <waitForElementVisible selector="{{CmsNewPagePageContentSection.content}}" stepKey="waitForContentField"/>
         <fillField selector="{{CmsNewPagePageContentSection.content}}" userInput="{{content}}" stepKey="resetCMSPageToDefaultContent"/>
         <click selector="{{CmsNewPagePageActionsSection.saveAndContinueEdit}}" stepKey="clickSave"/>

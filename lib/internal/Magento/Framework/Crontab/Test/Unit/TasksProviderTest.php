@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 /**
  * Copyright © Magento, Inc. All rights reserved.
@@ -7,8 +7,9 @@
 namespace Magento\Framework\Crontab\Test\Unit;
 
 use Magento\Framework\Crontab\TasksProvider;
+use PHPUnit\Framework\TestCase;
 
-class TasksProviderTest extends \PHPUnit\Framework\TestCase
+class TasksProviderTest extends TestCase
 {
     /**
      * @return void
