@@ -4,12 +4,20 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Unit\Model\Product\Attribute;
 
+use Magento\Catalog\Api\Data\ProductAttributeTypeInterface;
+use Magento\Catalog\Api\Data\ProductAttributeTypeInterfaceFactory;
+use Magento\Catalog\Model\Product\Attribute\Source\Inputtype;
+use Magento\Catalog\Model\Product\Attribute\Source\InputtypeFactory;
 use Magento\Catalog\Model\Product\Attribute\TypesList;
+use Magento\Framework\Api\DataObjectHelper;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class TypesListTest extends \PHPUnit\Framework\TestCase
+class TypesListTest extends TestCase
 {
     /**
      * @var TypesList
@@ -17,32 +25,32 @@ class TypesListTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $inputTypeFactoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $attributeTypeFactoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Api\DataObjectHelper
+     * @var MockObject|DataObjectHelper
      */
     protected $dataObjectHelperMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->inputTypeFactoryMock = $this->createPartialMock(
-            \Magento\Catalog\Model\Product\Attribute\Source\InputtypeFactory::class,
-            ['create', '__wakeup']
+            InputtypeFactory::class,
+            ['create']
         );
         $this->attributeTypeFactoryMock =
-            $this->createPartialMock(\Magento\Catalog\Api\Data\ProductAttributeTypeInterfaceFactory::class, [
-                    'create',
-                ]);
+            $this->createPartialMock(ProductAttributeTypeInterfaceFactory::class, [
+                'create',
+            ]);
 
-        $this->dataObjectHelperMock = $this->getMockBuilder(\Magento\Framework\Api\DataObjectHelper::class)
+        $this->dataObjectHelperMock = $this->getMockBuilder(DataObjectHelper::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->model = new TypesList(
@@ -54,13 +62,13 @@ class TypesListTest extends \PHPUnit\Framework\TestCase
 
     public function testGetItems()
     {
-        $inputTypeMock = $this->createMock(\Magento\Catalog\Model\Product\Attribute\Source\Inputtype::class);
+        $inputTypeMock = $this->createMock(Inputtype::class);
         $this->inputTypeFactoryMock->expects($this->once())->method('create')->willReturn($inputTypeMock);
         $inputTypeMock->expects($this->once())->method('toOptionArray')->willReturn(['option' => ['value']]);
-        $attributeTypeMock = $this->createMock(\Magento\Catalog\Api\Data\ProductAttributeTypeInterface::class);
+        $attributeTypeMock = $this->getMockForAbstractClass(ProductAttributeTypeInterface::class);
         $this->dataObjectHelperMock->expects($this->once())
             ->method('populateWithArray')
-            ->with($attributeTypeMock, ['value'], \Magento\Catalog\Api\Data\ProductAttributeTypeInterface::class)
+            ->with($attributeTypeMock, ['value'], ProductAttributeTypeInterface::class)
             ->willReturnSelf();
         $this->attributeTypeFactoryMock->expects($this->once())->method('create')->willReturn($attributeTypeMock);
         $this->assertEquals([$attributeTypeMock], $this->model->getItems());

@@ -16,12 +16,12 @@ class GuestPaymentMethodManagementTest extends \Magento\TestFramework\TestCase\W
      */
     protected $objectManager;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->deleteCart('test_order_1');
         $this->deleteCart('test_order_1_with_payment');
@@ -155,11 +155,12 @@ class GuestPaymentMethodManagementTest extends \Magento\TestFramework\TestCase\W
 
     /**
      * @magentoApiDataFixture Magento/Checkout/_files/quote_with_simple_product_saved.php
-     * @expectedException \Exception
-     * @expectedExceptionMessage The shipping address is missing. Set the address and try again.
      */
     public function testSetPaymentWithSimpleProductWithoutAddress()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('The shipping address is missing. Set the address and try again.');
+
         /** @var \Magento\Quote\Model\Quote  $quote */
         $quote = $this->objectManager->create(\Magento\Quote\Model\Quote::class);
         $quote->load('test_order_with_simple_product_without_address', 'reserved_order_id');

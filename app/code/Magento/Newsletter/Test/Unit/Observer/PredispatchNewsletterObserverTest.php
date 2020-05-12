@@ -16,35 +16,36 @@ use Magento\Framework\UrlInterface;
 use Magento\Newsletter\Model\Config;
 use Magento\Newsletter\Observer\PredispatchNewsletterObserver;
 use Magento\Store\Model\ScopeInterface;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Test class for \Magento\Newsletter\Observer\PredispatchNewsletterObserver
+ * @covers \Magento\Newsletter\Observer\PredispatchNewsletterObserver
  */
 class PredispatchNewsletterObserverTest extends TestCase
 {
     /**
-     * @var Observer|\PHPUnit_Framework_MockObject_MockObject
+     * @var Observer|MockObject
      */
-    private $mockObject;
+    private $mockObjectMock;
 
     /**
-     * @var ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ScopeConfigInterface|MockObject
      */
     private $configMock;
 
     /**
-     * @var UrlInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var UrlInterface|MockObject
      */
     private $urlMock;
 
     /**
-     * @var \Magento\Framework\App\Response\RedirectInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var RedirectInterface|MockObject
      */
     private $redirectMock;
 
     /**
-     * @var ResponseInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ResponseInterface|MockObject
      */
     private $responseMock;
 
@@ -54,25 +55,25 @@ class PredispatchNewsletterObserverTest extends TestCase
     private $objectManager;
 
     /**
-     * @var Config
+     * @var Config|MockObject
      */
     private $newsletterConfig;
 
     /**
      * @inheritdoc
      */
-    protected function setUp() : void
+    protected function setUp(): void
     {
-        $this->configMock = $this->createMock(ScopeConfigInterface::class);
-        $this->urlMock = $this->createMock(UrlInterface::class);
+        $this->configMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
+        $this->urlMock = $this->getMockForAbstractClass(UrlInterface::class);
         $this->responseMock = $this->getMockBuilder(ResponseInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['setRedirect'])
             ->getMockForAbstractClass();
-        $this->redirectMock = $this->createMock(RedirectInterface::class);
+        $this->redirectMock = $this->getMockForAbstractClass(RedirectInterface::class);
         $this->newsletterConfig = $this->createMock(Config::class);
         $this->objectManager = new ObjectManager($this);
-        $this->mockObject = new PredispatchNewsletterObserver(
+        $this->mockObjectMock = new PredispatchNewsletterObserver(
             $this->configMock,
             $this->urlMock,
             $this->newsletterConfig
@@ -102,7 +103,7 @@ class PredispatchNewsletterObserverTest extends TestCase
             ->method('getResponse')
             ->willReturnSelf();
 
-        $this->assertNull($this->mockObject->execute($observerMock));
+        $this->assertNull($this->mockObjectMock->execute($observerMock));
     }
 
     /**
@@ -142,6 +143,6 @@ class PredispatchNewsletterObserverTest extends TestCase
             ->method('setRedirect')
             ->with($expectedRedirectUrl);
 
-        $this->assertNull($this->mockObject->execute($observerMock));
+        $this->assertNull($this->mockObjectMock->execute($observerMock));
     }
 }

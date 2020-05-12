@@ -56,7 +56,7 @@ class CustomerTokenServiceTest extends WebapiAbstract
     /**
      * Setup CustomerTokenService
      */
-    public function setUp()
+    protected function setUp(): void
     {
         $this->_markTestAsRestOnly();
         $this->tokenService = Bootstrap::getObjectManager()->get(

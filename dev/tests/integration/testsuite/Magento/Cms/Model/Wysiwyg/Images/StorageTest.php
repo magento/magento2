@@ -42,7 +42,7 @@ class StorageTest extends \PHPUnit\Framework\TestCase
      * @inheritdoc
      */
     // phpcs:disable
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         self::$_baseDir = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
             \Magento\Cms\Helper\Wysiwyg\Images::class
@@ -58,7 +58,7 @@ class StorageTest extends \PHPUnit\Framework\TestCase
      * @inheritdoc
      */
     // phpcs:ignore
-    public static function tearDownAfterClass()
+    public static function tearDownAfterClass(): void
     {
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             \Magento\Framework\Filesystem\Driver\File::class
@@ -70,7 +70,7 @@ class StorageTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    public function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->filesystem = $this->objectManager->get(\Magento\Framework\Filesystem::class);
@@ -126,11 +126,12 @@ class StorageTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @return void
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage We cannot delete directory /downloadable.
      */
     public function testDeleteDirectoryWithExcludedDirPath(): void
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+        $this->expectExceptionMessage('We cannot delete directory /downloadable.');
+
         $dir = $this->objectManager->get(\Magento\Cms\Helper\Wysiwyg\Images::class)->getCurrentPath() . 'downloadable';
         $this->storage->deleteDirectory($dir);
     }
@@ -162,11 +163,12 @@ class StorageTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @return void
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage We can't upload the file to current folder right now. Please try another folder.
      */
     public function testUploadFileWithExcludedDirPath(): void
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+        $this->expectExceptionMessage('We can\'t upload the file to current folder right now. Please try another folder.');
+
         $fileName = 'magento_small_image.jpg';
         $tmpDirectory = $this->filesystem->getDirectoryWrite(\Magento\Framework\App\Filesystem\DirectoryList::SYS_TMP);
         $filePath = $tmpDirectory->getAbsolutePath($fileName);
@@ -194,11 +196,12 @@ class StorageTest extends \PHPUnit\Framework\TestCase
      *
      * @return void
      * @dataProvider testUploadFileWithWrongExtensionDataProvider
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage File validation failed.
      */
     public function testUploadFileWithWrongExtension(string $fileName, string $fileType, ?string $storageType): void
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+        $this->expectExceptionMessage('File validation failed.');
+
         $tmpDirectory = $this->filesystem->getDirectoryWrite(\Magento\Framework\App\Filesystem\DirectoryList::SYS_TMP);
         $filePath = $tmpDirectory->getAbsolutePath($fileName);
         // phpcs:disable
@@ -238,12 +241,13 @@ class StorageTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage File validation failed.
      * @return void
      */
     public function testUploadFileWithWrongFile(): void
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+        $this->expectExceptionMessage('File validation failed.');
+
         $fileName = 'file.gif';
         $tmpDirectory = $this->filesystem->getDirectoryWrite(\Magento\Framework\App\Filesystem\DirectoryList::SYS_TMP);
         $filePath = $tmpDirectory->getAbsolutePath($fileName);
