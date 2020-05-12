@@ -3,20 +3,24 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Braintree\Test\Unit\Gateway\Http\Client;
 
 use Magento\Braintree\Gateway\Http\Client\TransactionVoid;
 use Magento\Braintree\Model\Adapter\BraintreeAdapter;
 use Magento\Braintree\Model\Adapter\BraintreeAdapterFactory;
+use Magento\Payment\Gateway\Http\ClientException;
 use Magento\Payment\Gateway\Http\TransferInterface;
 use Magento\Payment\Model\Method\Logger;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 
 /**
  * Tests \Magento\Braintree\Gateway\Http\Client\TransactionVoid.
  */
-class TransactionVoidTest extends \PHPUnit\Framework\TestCase
+class TransactionVoidTest extends TestCase
 {
     /**
      * @var TransactionVoid
@@ -41,7 +45,7 @@ class TransactionVoidTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         /** @var LoggerInterface|MockObject $criticalLoggerMock */
         $criticalLoggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
@@ -64,12 +68,11 @@ class TransactionVoidTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @return void
-     *
-     * @expectedException \Magento\Payment\Gateway\Http\ClientException
-     * @expectedExceptionMessage Test messages
      */
     public function testPlaceRequestException()
     {
+        $this->expectException(ClientException::class);
+        $this->expectExceptionMessage('Test messages');
         $this->loggerMock->expects($this->once())
             ->method('debug')
             ->with(
@@ -96,7 +99,7 @@ class TransactionVoidTest extends \PHPUnit\Framework\TestCase
      */
     public function testPlaceRequestSuccess()
     {
-        $response = new \stdClass;
+        $response = new \stdClass();
         $response->success = true;
         $this->adapterMock->expects($this->once())
             ->method('void')
@@ -115,7 +118,7 @@ class TransactionVoidTest extends \PHPUnit\Framework\TestCase
 
         $actualResult = $this->client->placeRequest($this->getTransferObjectMock());
 
-        $this->assertTrue(is_object($actualResult['object']));
+        $this->assertIsObject($actualResult['object']);
         $this->assertEquals(['object' => $response], $actualResult);
     }
 
@@ -126,7 +129,7 @@ class TransactionVoidTest extends \PHPUnit\Framework\TestCase
      */
     private function getTransferObjectMock()
     {
-        $transferObjectMock = $this->createMock(TransferInterface::class);
+        $transferObjectMock = $this->getMockForAbstractClass(TransferInterface::class);
         $transferObjectMock->expects($this->once())
             ->method('getBody')
             ->willReturn($this->getTransferData());

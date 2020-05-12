@@ -58,6 +58,7 @@ class DeletePaymentToken implements ResolverInterface
             throw new GraphQlAuthorizationException(__('The current customer isn\'t authorized.'));
         }
 
+        $args['public_hash'] = $args['public_hash'] ?? '';
         $token = $this->paymentTokenManagement->getByPublicHash($args['public_hash'], $context->getUserId());
         if (!$token) {
             throw new GraphQlNoSuchEntityException(
