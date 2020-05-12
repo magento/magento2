@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Setup\Test\Unit\Model\Grid;
 
@@ -15,47 +16,48 @@ use Magento\Framework\ObjectManagerInterface;
 use Magento\Setup\Model\Grid\Module;
 use Magento\Setup\Model\ObjectManagerProvider;
 use Magento\Setup\Model\PackagesData;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
- * Class ModuleTest
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ModuleTest extends \PHPUnit\Framework\TestCase
+class ModuleTest extends TestCase
 {
     /**
-     * @var ComposerInformation|\PHPUnit_Framework_MockObject_MockObject
+     * @var ComposerInformation|MockObject
      */
     private $composerInformationMock;
 
     /**
-     * @var FullModuleList|\PHPUnit_Framework_MockObject_MockObject
+     * @var FullModuleList|MockObject
      */
     private $fullModuleListMock;
 
     /**
-     * @var ModuleList|\PHPUnit_Framework_MockObject_MockObject
+     * @var ModuleList|MockObject
      */
     private $moduleListMock;
 
     /**
-     * @var PackageInfoFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var PackageInfoFactory|MockObject
      */
     private $packageInfoFactoryMock;
 
     /**
      * Module package info
      *
-     * @var PackageInfo|\PHPUnit_Framework_MockObject_MockObject
+     * @var PackageInfo|MockObject
      */
     private $packageInfoMock;
 
     /**
-     * @var ObjectManagerProvider|\PHPUnit_Framework_MockObject_MockObject
+     * @var ObjectManagerProvider|MockObject
      */
     private $objectManagerProvider;
 
     /**
-     * @var PackagesData|\PHPUnit_Framework_MockObject_MockObject
+     * @var PackagesData|MockObject
      */
     private $packagesDataMock;
 
@@ -71,7 +73,7 @@ class ModuleTest extends \PHPUnit\Framework\TestCase
      */
     private $moduleData = [];
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->moduleData = [
             'magento/sample-module-one' => [
@@ -128,7 +130,7 @@ class ModuleTest extends \PHPUnit\Framework\TestCase
 
     public function testGetList()
     {
-        $objectManager = $this->createMock(ObjectManagerInterface::class);
+        $objectManager = $this->getMockForAbstractClass(ObjectManagerInterface::class);
         $this->objectManagerProvider->expects($this->once())
             ->method('get')
             ->willReturn($objectManager);
@@ -150,9 +152,9 @@ class ModuleTest extends \PHPUnit\Framework\TestCase
         $this->packageInfoMock->expects(static::exactly(2))
             ->method('getPackageName')
             ->willReturnMap([
-                    ['Sample_ModuleOne', 'magento/sample-module-one'],
-                    ['Sample_ModuleTwo', ''],
-                ]);
+                ['Sample_ModuleOne', 'magento/sample-module-one'],
+                ['Sample_ModuleTwo', ''],
+            ]);
         $this->packageInfoMock->expects(static::exactly(2))
             ->method('getVersion')
             ->willReturnMap([
@@ -162,12 +164,12 @@ class ModuleTest extends \PHPUnit\Framework\TestCase
 
         $this->packagesDataMock->expects(static::exactly(2))
             ->method('addPackageExtraInfo')
-            ->will(
-                $this->returnCallback(function ($package) {
+            ->willReturnCallback(
+                function ($package) {
                     $package['package_title'] = 'packageTitle';
                     $package['package_type'] = 'packageType';
                     return $package;
-                })
+                }
             );
 
         $this->moduleListMock->expects(static::exactly(2))

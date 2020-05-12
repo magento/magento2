@@ -10,8 +10,8 @@ namespace Magento\MediaGalleryCatalog\Test\Unit\Plugin\Product\Gallery;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Gallery\Processor as ProcessorSubject;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
-use Magento\MediaGalleryCatalog\Plugin\Product\Gallery\RemoveAssetAfterRemoveImage;
 use Magento\MediaGalleryApi\Api\DeleteAssetsByPathsInterface;
+use Magento\MediaGalleryCatalog\Plugin\Product\Gallery\RemoveAssetAfterRemoveImage;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
@@ -51,13 +51,13 @@ class RemoveAssetAfterRemoveImageTest extends TestCase
     /**
      * @inheritDoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->processorSubjectMock = $this->createMock(ProcessorSubject::class);
         $this->productMock = $this->createMock(Product::class);
 
-        $this->deleteMediaAssetByPathMock = $this->createMock(DeleteAssetsByPathsInterface::class);
-        $this->loggerMock = $this->createMock(LoggerInterface::class);
+        $this->deleteMediaAssetByPathMock = $this->getMockForAbstractClass(DeleteAssetsByPathsInterface::class);
+        $this->loggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
 
         $this->plugin = (new ObjectManagerHelper($this))->getObject(
             RemoveAssetAfterRemoveImage::class,

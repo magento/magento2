@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Cms\Test\Unit\Ui\Component\Listing\Column;
 
 use Magento\Cms\Ui\Component\Listing\Column\BlockActions;
@@ -12,11 +14,12 @@ use Magento\Framework\UrlInterface;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Framework\View\Element\UiComponent\Processor;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * BlockActionsTest contains unit tests for \Magento\Cms\Ui\Component\Listing\Column\BlockActions class.
  */
-class BlockActionsTest extends \PHPUnit\Framework\TestCase
+class BlockActionsTest extends TestCase
 {
     /**
      * @var BlockActions
@@ -36,11 +39,11 @@ class BlockActionsTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
 
-        $context = $this->createMock(ContextInterface::class);
+        $context = $this->getMockForAbstractClass(ContextInterface::class);
 
         $processor = $this->getMockBuilder(Processor::class)
             ->disableOriginalConstructor()
@@ -49,7 +52,7 @@ class BlockActionsTest extends \PHPUnit\Framework\TestCase
             ->method('getProcessor')
             ->willReturn($processor);
 
-        $this->urlBuilder = $this->createMock(UrlInterface::class);
+        $this->urlBuilder = $this->getMockForAbstractClass(UrlInterface::class);
 
         $this->escaper = $this->getMockBuilder(Escaper::class)
             ->disableOriginalConstructor()
