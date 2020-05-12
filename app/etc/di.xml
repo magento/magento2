@@ -1786,7 +1786,7 @@
     </type>
     <type name="Magento\Framework\Cache\LockGuardedCacheLoader">
         <arguments>
-            <argument name="locker" xsi:type="object">Magento\Framework\Lock\Backend\Cache</argument>
+            <argument name="locker" xsi:type="object">Magento\Framework\Lock\Backend\Database</argument>
         </arguments>
     </type>
     <preference for="Magento\Framework\HTTP\AsyncClientInterface" type="Magento\Framework\HTTP\AsyncClient\GuzzleAsyncClient" />

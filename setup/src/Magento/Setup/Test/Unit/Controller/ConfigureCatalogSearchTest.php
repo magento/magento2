@@ -25,7 +25,7 @@ class ConfigureCatalogSearchTest extends TestCase
      */
     private $searchConfigOptionsList;
 
-    protected function setup()
+    protected function setup(): void
     {
         $this->searchConfigOptionsList = new SearchConfigOptionsList();
         $this->controller = new ConfigureCatalogSearch($this->searchConfigOptionsList);

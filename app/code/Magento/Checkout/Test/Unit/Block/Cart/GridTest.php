@@ -3,85 +3,101 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Checkout\Test\Unit\Block\Cart;
 
+use Magento\Checkout\Block\Cart\Grid;
+use Magento\Checkout\Model\Session;
+use Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Framework\View\LayoutInterface;
+use Magento\Quote\Model\Quote;
+use Magento\Quote\Model\Quote\Item;
+use Magento\Quote\Model\ResourceModel\Quote\Item\Collection;
+use Magento\Quote\Model\ResourceModel\Quote\Item\CollectionFactory;
+use Magento\Store\Api\Data\StoreInterface;
+use Magento\Store\Model\ScopeInterface;
+use Magento\Store\Model\StoreManagerInterface;
+use Magento\Theme\Block\Html\Pager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class GridTest extends \PHPUnit\Framework\TestCase
+class GridTest extends TestCase
 {
     /**
-     * @var \Magento\Checkout\Block\Cart\Grid
+     * @var Grid
      */
     private $block;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     private $itemCollectionFactoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     private $joinAttributeProcessorMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     private $scopeConfigMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     private $checkoutSessionMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     private $itemCollectionMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     private $quoteMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     private $layoutMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     private $pagerBlockMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManagerHelper = new ObjectManagerHelper($this);
         $this->itemCollectionFactoryMock =
-            $this->getMockBuilder(\Magento\Quote\Model\ResourceModel\Quote\Item\CollectionFactory::class)
+            $this->getMockBuilder(CollectionFactory::class)
                 ->disableOriginalConstructor()
                 ->setMethods(['create'])
                 ->getMock();
         $this->joinAttributeProcessorMock =
-            $this->getMockBuilder(\Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface::class)
+            $this->getMockBuilder(JoinProcessorInterface::class)
                 ->getMockForAbstractClass();
-        $this->scopeConfigMock = $this->getMockBuilder(\Magento\Framework\App\Config\ScopeConfigInterface::class)
+        $this->scopeConfigMock = $this->getMockBuilder(ScopeConfigInterface::class)
             ->getMockForAbstractClass();
-        $this->checkoutSessionMock = $this->getMockBuilder(\Magento\Checkout\Model\Session::class)
+        $this->checkoutSessionMock = $this->getMockBuilder(Session::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->itemCollectionMock = $objectManagerHelper
-            ->getCollectionMock(\Magento\Quote\Model\ResourceModel\Quote\Item\Collection::class, []);
-        $this->quoteMock = $this->getMockBuilder(\Magento\Quote\Model\Quote::class)
+            ->getCollectionMock(Collection::class, []);
+        $this->quoteMock = $this->getMockBuilder(Quote::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->layoutMock = $this->getMockBuilder(\Magento\Framework\View\LayoutInterface::class)
+        $this->layoutMock = $this->getMockBuilder(LayoutInterface::class)
             ->getMockForAbstractClass();
-        $this->pagerBlockMock = $this->getMockBuilder(\Magento\Theme\Block\Html\Pager::class)
+        $this->pagerBlockMock = $this->getMockBuilder(Pager::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->checkoutSessionMock->expects($this->any())->method('getQuote')->willReturn($this->quoteMock);
@@ -89,12 +105,12 @@ class GridTest extends \PHPUnit\Framework\TestCase
         $this->scopeConfigMock->expects($this->at(0))
             ->method('getValue')
             ->with(
-                \Magento\Checkout\Block\Cart\Grid::XPATH_CONFIG_NUMBER_ITEMS_TO_DISPLAY_PAGER,
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                Grid::XPATH_CONFIG_NUMBER_ITEMS_TO_DISPLAY_PAGER,
+                ScopeInterface::SCOPE_STORE,
                 null
             )->willReturn(20);
         $this->block = $objectManagerHelper->getObject(
-            \Magento\Checkout\Block\Cart\Grid::class,
+            Grid::class,
             [
                 'itemCollectionFactory' => $this->itemCollectionFactoryMock,
                 'joinAttributeProcessor' => $this->joinAttributeProcessorMock,
@@ -129,14 +145,14 @@ class GridTest extends \PHPUnit\Framework\TestCase
         $this->scopeConfigMock->expects($this->at(1))
             ->method('getValue')
             ->with(
-                \Magento\Checkout\Block\Cart\Grid::XPATH_CONFIG_NUMBER_ITEMS_TO_DISPLAY_PAGER,
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                Grid::XPATH_CONFIG_NUMBER_ITEMS_TO_DISPLAY_PAGER,
+                ScopeInterface::SCOPE_STORE,
                 null
             )->willReturn($availableLimit);
         $this->layoutMock
             ->expects($this->once())
             ->method('createBlock')
-            ->with(\Magento\Theme\Block\Html\Pager::class)
+            ->with(Pager::class)
             ->willReturn($this->pagerBlockMock);
         $this->pagerBlockMock
             ->expects($this->once())
@@ -184,17 +200,17 @@ class GridTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetItemsIfCustomItemsExists()
     {
-        $itemMock = $this->getMockBuilder(\Magento\Quote\Model\Quote\Item::class)
+        $itemMock = $this->getMockBuilder(Item::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $storeManager = $this->getMockBuilder(\Magento\Store\Model\StoreManagerInterface::class)
+        $storeManager = $this->getMockBuilder(StoreManagerInterface::class)
             ->getMockForAbstractClass();
-        $storeMock = $this->getMockBuilder(\Magento\Store\Api\Data\StoreInterface::class)
+        $storeMock = $this->getMockBuilder(StoreInterface::class)
             ->getMockForAbstractClass();
         $storeManager->expects($this->once())->method('getStore')->willReturn($storeMock);
         $objectManagerHelper = new ObjectManagerHelper($this);
         $this->block = $objectManagerHelper->getObject(
-            \Magento\Checkout\Block\Cart\Grid::class,
+            Grid::class,
             [
                 'itemCollectionFactory' => $this->itemCollectionFactoryMock,
                 'joinAttributeProcessor' => $this->joinAttributeProcessorMock,

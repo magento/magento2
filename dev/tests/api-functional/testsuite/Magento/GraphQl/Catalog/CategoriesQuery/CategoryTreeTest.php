@@ -42,7 +42,7 @@ class CategoryTreeTest extends GraphQlAbstract
      */
     private $metadataPool;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->categoryRepository = $this->objectManager->get(CategoryRepository::class);
@@ -204,7 +204,7 @@ QUERY;
 
         $this->assertArrayHasKey('categories', $response);
         $this->assertArrayHasKey('children', $response['categories']['items'][0]);
-        $this->assertSame(6, count($response['categories']['items'][0]['children']));
+        $this->assertCount(6, $response['categories']['items'][0]['children']);
     }
 
     /**

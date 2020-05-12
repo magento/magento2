@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Customer\Test\Unit\Model;
 
@@ -18,11 +19,12 @@ use Magento\Framework\App\RequestInterface;
 use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Unit test CustomerExtractorTest
  */
-class CustomerExtractorTest extends \PHPUnit\Framework\TestCase
+class CustomerExtractorTest extends TestCase
 {
     /** @var CustomerExtractor */
     protected $customerExtractor;
@@ -57,7 +59,7 @@ class CustomerExtractorTest extends \PHPUnit\Framework\TestCase
     /** @var GroupInterface|MockObject */
     protected $customerGroup;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->formFactory = $this->getMockForAbstractClass(
             FormFactory::class,

@@ -11,19 +11,19 @@ use Magento\Braintree\Gateway\Config\PayPal\Config;
 use Magento\Braintree\Model\Paypal\Helper\QuoteUpdater;
 use Magento\Braintree\Model\Ui\PayPal\ConfigProvider;
 use Magento\Braintree\Observer\DataAssignObserver;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Quote\Api\Data\CartExtensionInterface;
 use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\Quote\Address;
 use Magento\Quote\Model\Quote\Payment;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
- * Class QuoteUpdaterTest
- *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class QuoteUpdaterTest extends \PHPUnit\Framework\TestCase
+class QuoteUpdaterTest extends TestCase
 {
     const TEST_NONCE = '3ede7045-2aea-463e-9754-cd658ffeeb48';
 
@@ -55,7 +55,7 @@ class QuoteUpdaterTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->config = $this->getMockBuilder(Config::class)
             ->disableOriginalConstructor()
@@ -108,7 +108,7 @@ class QuoteUpdaterTest extends \PHPUnit\Framework\TestCase
     /**
      * Checks if quote details can be update by the response from Braintree.
      *
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     public function testExecute(): void
     {

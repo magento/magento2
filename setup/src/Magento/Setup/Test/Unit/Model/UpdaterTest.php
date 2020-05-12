@@ -3,17 +3,19 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Setup\Test\Unit\Model;
 
-use Magento\Framework\Exception\FileSystemException;
-use Magento\Framework\Phrase;
+use Magento\Setup\Model\Cron\Queue;
 use Magento\Setup\Model\Updater;
+use PHPUnit\Framework\TestCase;
 
-class UpdaterTest extends \PHPUnit\Framework\TestCase
+class UpdaterTest extends TestCase
 {
     public function testCreateUpdaterTaskUpdate()
     {
-        $queue = $this->createMock(\Magento\Setup\Model\Cron\Queue::class);
+        $queue = $this->createMock(Queue::class);
         $queue->expects($this->once())
             ->method('addJobs')
             ->with(
@@ -33,7 +35,7 @@ class UpdaterTest extends \PHPUnit\Framework\TestCase
 
     public function testCreateUpdaterTaskUninstall()
     {
-        $queue = $this->createMock(\Magento\Setup\Model\Cron\Queue::class);
+        $queue = $this->createMock(Queue::class);
         $queue->expects($this->once())
             ->method('addJobs')
             ->with(
