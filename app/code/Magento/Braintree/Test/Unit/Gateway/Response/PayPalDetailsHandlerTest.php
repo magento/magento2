@@ -3,19 +3,19 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Braintree\Test\Unit\Gateway\Response;
 
 use Braintree\Transaction;
 use Magento\Braintree\Gateway\Response\PayPalDetailsHandler;
+use Magento\Braintree\Gateway\SubjectReader;
 use Magento\Payment\Gateway\Data\PaymentDataObject;
 use Magento\Sales\Model\Order\Payment;
-use Magento\Braintree\Gateway\SubjectReader;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-/**
- * Class PayPalDetailsHandlerTest
- */
-class PayPalDetailsHandlerTest extends \PHPUnit\Framework\TestCase
+class PayPalDetailsHandlerTest extends TestCase
 {
     /**
      * @var PayPalDetailsHandler|MockObject
@@ -32,7 +32,7 @@ class PayPalDetailsHandlerTest extends \PHPUnit\Framework\TestCase
      */
     private $subjectReaderMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->paymentMock = $this->getMockBuilder(Payment::class)
             ->disableOriginalConstructor()

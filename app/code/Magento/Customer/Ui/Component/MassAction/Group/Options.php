@@ -10,7 +10,9 @@ use Magento\Framework\UrlInterface;
 use Magento\Customer\Model\ResourceModel\Group\CollectionFactory;
 
 /**
- * Class Options
+ * Class Options for Mass Action Group
+ *
+ * Disable template needed for customers
  */
 class Options implements \JsonSerializable
 {
