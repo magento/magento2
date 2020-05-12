@@ -3,66 +3,73 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\CatalogSearch\Test\Unit\Model\Search\FilterMapper;
 
+use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
 use Magento\CatalogSearch\Model\Adapter\Mysql\Filter\AliasResolver;
 use Magento\CatalogSearch\Model\Search\FilterMapper\ExclusionStrategy;
 use Magento\CatalogSearch\Model\Search\FilterMapper\FilterContext;
 use Magento\CatalogSearch\Model\Search\FilterMapper\StaticAttributeStrategy;
 use Magento\CatalogSearch\Model\Search\FilterMapper\TermDropdownStrategy;
+use Magento\Eav\Model\Config;
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
+use Magento\Framework\DB\Select;
 use Magento\Framework\Search\Request\FilterInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
- * @deprecated
+ * @deprecated Implementation class was replaced
  * @see \Magento\ElasticSearch
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class FilterContextTest extends \PHPUnit\Framework\TestCase
+class FilterContextTest extends TestCase
 {
     /**
-     * @var FilterContext|\PHPUnit_Framework_MockObject_MockObject
+     * @var FilterContext|MockObject
      */
     private $filterContext;
 
     /**
-     * @var AliasResolver|\PHPUnit_Framework_MockObject_MockObject
+     * @var AliasResolver|MockObject
      */
     private $aliasResolver;
 
     /**
-     * @var \Magento\Eav\Model\Config|\PHPUnit_Framework_MockObject_MockObject
+     * @var Config|MockObject
      */
     private $eavConfig;
 
     /**
-     * @var ExclusionStrategy|\PHPUnit_Framework_MockObject_MockObject
+     * @var ExclusionStrategy|MockObject
      */
     private $exclusionStrategy;
 
     /**
-     * @var TermDropdownStrategy|\PHPUnit_Framework_MockObject_MockObject
+     * @var TermDropdownStrategy|MockObject
      */
     private $termDropdownStrategy;
 
     /**
-     * @var StaticAttributeStrategy|\PHPUnit_Framework_MockObject_MockObject
+     * @var StaticAttributeStrategy|MockObject
      */
     private $staticAttributeStrategy;
 
     /**
-     * @var \Magento\Framework\DB\Select
+     * @var Select
      */
     private $select;
 
     /**
      * @inheritDoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->eavConfig = $this->getMockBuilder(\Magento\Eav\Model\Config::class)
+        $this->eavConfig = $this->getMockBuilder(Config::class)
             ->disableOriginalConstructor()
             ->setMethods(['getAttribute'])
             ->getMock();
@@ -84,7 +91,7 @@ class FilterContextTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->setMethods(['apply'])
             ->getMock();
-        $this->select = $this->getMockBuilder(\Magento\Framework\DB\Select::class)
+        $this->select = $this->getMockBuilder(Select::class)
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();
@@ -121,7 +128,7 @@ class FilterContextTest extends \PHPUnit\Framework\TestCase
             ->willReturn(false);
         $this->eavConfig->expects($this->once())
             ->method('getAttribute')
-            ->with(\Magento\Catalog\Model\Product::ENTITY, 'some_field')
+            ->with(Product::ENTITY, 'some_field')
             ->willReturn(null);
         $this->assertFalse($this->filterContext->apply($filter, $this->select));
     }
@@ -132,7 +139,7 @@ class FilterContextTest extends \PHPUnit\Framework\TestCase
         $attribute = $this->createAttributeMock('select');
         $this->eavConfig->expects($this->once())
             ->method('getAttribute')
-            ->with(\Magento\Catalog\Model\Product::ENTITY, 'select_field')
+            ->with(Product::ENTITY, 'select_field')
             ->willReturn($attribute);
         $this->exclusionStrategy->expects($this->once())
             ->method('apply')
@@ -151,7 +158,7 @@ class FilterContextTest extends \PHPUnit\Framework\TestCase
         $attribute = $this->createAttributeMock('multiselect');
         $this->eavConfig->expects($this->once())
             ->method('getAttribute')
-            ->with(\Magento\Catalog\Model\Product::ENTITY, 'multiselect_field')
+            ->with(Product::ENTITY, 'multiselect_field')
             ->willReturn($attribute);
         $this->exclusionStrategy->expects($this->once())
             ->method('apply')
@@ -170,7 +177,7 @@ class FilterContextTest extends \PHPUnit\Framework\TestCase
         $attribute = $this->createAttributeMock('text', AbstractAttribute::TYPE_STATIC);
         $this->eavConfig->expects($this->once())
             ->method('getAttribute')
-            ->with(\Magento\Catalog\Model\Product::ENTITY, 'multiselect_field')
+            ->with(Product::ENTITY, 'multiselect_field')
             ->willReturn($attribute);
         $this->exclusionStrategy->expects($this->once())
             ->method('apply')
@@ -189,7 +196,7 @@ class FilterContextTest extends \PHPUnit\Framework\TestCase
         $attribute = $this->createAttributeMock('text', 'text');
         $this->eavConfig->expects($this->once())
             ->method('getAttribute')
-            ->with(\Magento\Catalog\Model\Product::ENTITY, 'multiselect_field')
+            ->with(Product::ENTITY, 'multiselect_field')
             ->willReturn($attribute);
         $this->exclusionStrategy->expects($this->once())
             ->method('apply')
@@ -201,7 +208,7 @@ class FilterContextTest extends \PHPUnit\Framework\TestCase
     /**
      * @param string $field
      * @param string $type
-     * @return FilterInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @return FilterInterface|MockObject
      */
     private function createFilterMock($field = null, $type = null)
     {
@@ -221,7 +228,7 @@ class FilterContextTest extends \PHPUnit\Framework\TestCase
     /**
      * @param string|null $frontendInput
      * @param string|null $backendType
-     * @return Attribute|\PHPUnit_Framework_MockObject_MockObject
+     * @return Attribute|MockObject
      */
     private function createAttributeMock($frontendInput = null, $backendType = null)
     {

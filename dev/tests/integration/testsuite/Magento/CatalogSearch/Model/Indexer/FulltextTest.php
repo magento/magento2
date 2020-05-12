@@ -67,7 +67,7 @@ class FulltextTest extends \PHPUnit\Framework\TestCase
      */
     protected $dimension;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         /** @var \Magento\Framework\Indexer\IndexerInterface indexer */
         $this->indexer = Bootstrap::getObjectManager()->create(
