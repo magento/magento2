@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="VariableSection">
+        <element name="InsertWidget" type="button" selector="#insert_variable"/>
+        <element name="InsertVariableBtnEnabled" type="button" selector="//button[@id='insert_variable' and not(contains(@class,'disabled'))]"/>
+        <element name="InsertVariableBtnDisabled" type="button" selector="//button[@id='insert_variable' and contains(@class,'disabled')]"/>
+        <element name="CancelBtnEnabled" type="button" selector="//button[@class='action-scalable cancel' and not(contains(@class,'disabled'))]"/>
+        <element name="Close" type="button" selector="#close"/>
+        <element name="SearchTxtbox" type="input" selector="input[placeholder='Search by keyword']"/>
+        <element name="ColName" type="text" selector="//table[@class='data-grid data-grid-draggable']/thead/tr/th/span[text()='{{var1}}']" parameterized="true"/>
+        <element name="Radio" type="input" selector="//input[@type='radio' and contains(@value, '{{var1}}')]" parameterized="true"/>
+        <element name="VariableRadio" type="input" selector="//div[text()='{{var1}}']/parent::td//preceding-sibling::td/input[@type='radio']" parameterized="true"/>
+        <element name="VariableInAscSort" type="input" selector="#variable"/>
+        <element name="VariableInDescSort" type="input" selector="#variable"/>
+        <element name="Type" type="input" selector="#value"/>
+        <element name="Code" type="input" selector="#code"/>
+        <element name="searchResult" type="text" selector="//table/tbody/tr//td/div[text()='{{var1}}']" parameterized="true"/>
+        <element name="VariableTitle" type="text" selector="//h1[contains(text(), 'Insert Variable')]"/>
+    </section>
+</sections>

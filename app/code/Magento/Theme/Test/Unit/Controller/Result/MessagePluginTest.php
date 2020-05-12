@@ -3,11 +3,12 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Theme\Test\Unit\Controller\Result;
 
 use Magento\Framework\Controller\Result\Json;
 use Magento\Framework\Controller\Result\Redirect;
-use Magento\Framework\Json\Helper\Data;
 use Magento\Framework\Message\Collection;
 use Magento\Framework\Message\ManagerInterface;
 use Magento\Framework\Message\MessageInterface;
@@ -17,34 +18,36 @@ use Magento\Framework\Stdlib\CookieManagerInterface;
 use Magento\Framework\Translate\InlineInterface;
 use Magento\Framework\View\Element\Message\InterpretationStrategyInterface;
 use Magento\Theme\Controller\Result\MessagePlugin;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class MessagePluginTest extends \PHPUnit\Framework\TestCase
+class MessagePluginTest extends TestCase
 {
     /** @var MessagePlugin */
     protected $model;
 
-    /** @var CookieManagerInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var CookieManagerInterface|MockObject */
     protected $cookieManagerMock;
 
-    /** @var CookieMetadataFactory|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var CookieMetadataFactory|MockObject */
     protected $cookieMetadataFactoryMock;
 
-    /** @var ManagerInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var ManagerInterface|MockObject */
     protected $managerMock;
 
-    /** @var InterpretationStrategyInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var InterpretationStrategyInterface|MockObject */
     protected $interpretationStrategyMock;
 
-    /** @var \Magento\Framework\Serialize\Serializer\Json|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Serialize\Serializer\Json|MockObject */
     private $serializerMock;
 
-    /** @var InlineInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var InlineInterface|MockObject */
     private $inlineTranslateMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->cookieManagerMock = $this->getMockBuilder(CookieManagerInterface::class)
             ->getMockForAbstractClass();
@@ -57,7 +60,8 @@ class MessagePluginTest extends \PHPUnit\Framework\TestCase
             ->getMockForAbstractClass();
         $this->serializerMock = $this->getMockBuilder(\Magento\Framework\Serialize\Serializer\Json::class)
             ->getMock();
-        $this->inlineTranslateMock = $this->getMockBuilder(InlineInterface::class)->getMockForAbstractClass();
+        $this->inlineTranslateMock = $this->getMockBuilder(InlineInterface::class)
+            ->getMockForAbstractClass();
 
         $this->model = new MessagePlugin(
             $this->cookieManagerMock,
@@ -71,7 +75,7 @@ class MessagePluginTest extends \PHPUnit\Framework\TestCase
 
     public function testAfterRenderResultJson()
     {
-        /** @var Json|\PHPUnit_Framework_MockObject_MockObject $resultMock */
+        /** @var Json|MockObject $resultMock */
         $resultMock = $this->getMockBuilder(Json::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -99,13 +103,13 @@ class MessagePluginTest extends \PHPUnit\Framework\TestCase
             ],
         ];
         $messages = array_merge($existingMessages, $messages);
-        
-        /** @var Redirect|\PHPUnit_Framework_MockObject_MockObject $resultMock */
+
+        /** @var Redirect|MockObject $resultMock */
         $resultMock = $this->getMockBuilder(Redirect::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        /** @var PublicCookieMetadata|\PHPUnit_Framework_MockObject_MockObject $cookieMetadataMock */
+        /** @var PublicCookieMetadata|MockObject $cookieMetadataMock */
         $cookieMetadataMock = $this->getMockBuilder(PublicCookieMetadata::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -143,7 +147,7 @@ class MessagePluginTest extends \PHPUnit\Framework\TestCase
                 }
             );
 
-        /** @var MessageInterface|\PHPUnit_Framework_MockObject_MockObject $messageMock */
+        /** @var MessageInterface|MockObject $messageMock */
         $messageMock = $this->getMockBuilder(MessageInterface::class)
             ->getMock();
         $messageMock->expects($this->once())
@@ -155,7 +159,7 @@ class MessagePluginTest extends \PHPUnit\Framework\TestCase
             ->with($messageMock)
             ->willReturn($messageText);
 
-        /** @var Collection|\PHPUnit_Framework_MockObject_MockObject $collectionMock */
+        /** @var Collection|MockObject $collectionMock */
         $collectionMock = $this->getMockBuilder(Collection::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -173,7 +177,7 @@ class MessagePluginTest extends \PHPUnit\Framework\TestCase
 
     public function testAfterRenderResultWithNoMessages()
     {
-        /** @var Redirect|\PHPUnit_Framework_MockObject_MockObject $resultMock */
+        /** @var Redirect|MockObject $resultMock */
         $resultMock = $this->getMockBuilder(Redirect::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -195,7 +199,7 @@ class MessagePluginTest extends \PHPUnit\Framework\TestCase
         $this->serializerMock->expects($this->never())
             ->method('serialize');
 
-        /** @var Collection|\PHPUnit_Framework_MockObject_MockObject $collectionMock */
+        /** @var Collection|MockObject $collectionMock */
         $collectionMock = $this->getMockBuilder(Collection::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -226,12 +230,12 @@ class MessagePluginTest extends \PHPUnit\Framework\TestCase
             ],
         ];
 
-        /** @var Redirect|\PHPUnit_Framework_MockObject_MockObject $resultMock */
+        /** @var Redirect|MockObject $resultMock */
         $resultMock = $this->getMockBuilder(Redirect::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        /** @var PublicCookieMetadata|\PHPUnit_Framework_MockObject_MockObject $cookieMetadataMock */
+        /** @var PublicCookieMetadata|MockObject $cookieMetadataMock */
         $cookieMetadataMock = $this->getMockBuilder(PublicCookieMetadata::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -269,7 +273,7 @@ class MessagePluginTest extends \PHPUnit\Framework\TestCase
                 }
             );
 
-        /** @var MessageInterface|\PHPUnit_Framework_MockObject_MockObject $messageMock */
+        /** @var MessageInterface|MockObject $messageMock */
         $messageMock = $this->getMockBuilder(MessageInterface::class)
             ->getMock();
         $messageMock->expects($this->once())
@@ -281,7 +285,7 @@ class MessagePluginTest extends \PHPUnit\Framework\TestCase
             ->with($messageMock)
             ->willReturn($messageText);
 
-        /** @var Collection|\PHPUnit_Framework_MockObject_MockObject $collectionMock */
+        /** @var Collection|MockObject $collectionMock */
         $collectionMock = $this->getMockBuilder(Collection::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -308,12 +312,12 @@ class MessagePluginTest extends \PHPUnit\Framework\TestCase
             ],
         ];
 
-        /** @var Redirect|\PHPUnit_Framework_MockObject_MockObject $resultMock */
+        /** @var Redirect|MockObject $resultMock */
         $resultMock = $this->getMockBuilder(Redirect::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        /** @var PublicCookieMetadata|\PHPUnit_Framework_MockObject_MockObject $cookieMetadataMock */
+        /** @var PublicCookieMetadata|MockObject $cookieMetadataMock */
         $cookieMetadataMock = $this->getMockBuilder(PublicCookieMetadata::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -347,7 +351,7 @@ class MessagePluginTest extends \PHPUnit\Framework\TestCase
                 }
             );
 
-        /** @var MessageInterface|\PHPUnit_Framework_MockObject_MockObject $messageMock */
+        /** @var MessageInterface|MockObject $messageMock */
         $messageMock = $this->getMockBuilder(MessageInterface::class)
             ->getMock();
         $messageMock->expects($this->once())
@@ -359,7 +363,7 @@ class MessagePluginTest extends \PHPUnit\Framework\TestCase
             ->with($messageMock)
             ->willReturn($messageText);
 
-        /** @var Collection|\PHPUnit_Framework_MockObject_MockObject $collectionMock */
+        /** @var Collection|MockObject $collectionMock */
         $collectionMock = $this->getMockBuilder(Collection::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -386,12 +390,12 @@ class MessagePluginTest extends \PHPUnit\Framework\TestCase
             ],
         ];
 
-        /** @var Redirect|\PHPUnit_Framework_MockObject_MockObject $resultMock */
+        /** @var Redirect|MockObject $resultMock */
         $resultMock = $this->getMockBuilder(Redirect::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        /** @var PublicCookieMetadata|\PHPUnit_Framework_MockObject_MockObject $cookieMetadataMock */
+        /** @var PublicCookieMetadata|MockObject $cookieMetadataMock */
         $cookieMetadataMock = $this->getMockBuilder(PublicCookieMetadata::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -429,7 +433,7 @@ class MessagePluginTest extends \PHPUnit\Framework\TestCase
                 }
             );
 
-        /** @var MessageInterface|\PHPUnit_Framework_MockObject_MockObject $messageMock */
+        /** @var MessageInterface|MockObject $messageMock */
         $messageMock = $this->getMockBuilder(MessageInterface::class)
             ->getMock();
         $messageMock->expects($this->once())
@@ -441,7 +445,7 @@ class MessagePluginTest extends \PHPUnit\Framework\TestCase
             ->with($messageMock)
             ->willReturn($messageText);
 
-        /** @var Collection|\PHPUnit_Framework_MockObject_MockObject $collectionMock */
+        /** @var Collection|MockObject $collectionMock */
         $collectionMock = $this->getMockBuilder(Collection::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -471,12 +475,12 @@ class MessagePluginTest extends \PHPUnit\Framework\TestCase
             ],
         ];
 
-        /** @var Redirect|\PHPUnit_Framework_MockObject_MockObject $resultMock */
+        /** @var Redirect|MockObject $resultMock */
         $resultMock = $this->getMockBuilder(Redirect::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        /** @var PublicCookieMetadata|\PHPUnit_Framework_MockObject_MockObject $cookieMetadataMock */
+        /** @var PublicCookieMetadata|MockObject $cookieMetadataMock */
         $cookieMetadataMock = $this->getMockBuilder(PublicCookieMetadata::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -514,7 +518,7 @@ class MessagePluginTest extends \PHPUnit\Framework\TestCase
                 }
             );
 
-        /** @var MessageInterface|\PHPUnit_Framework_MockObject_MockObject $messageMock */
+        /** @var MessageInterface|MockObject $messageMock */
         $messageMock = $this->getMockBuilder(MessageInterface::class)
             ->getMock();
         $messageMock->expects($this->once())
@@ -530,7 +534,7 @@ class MessagePluginTest extends \PHPUnit\Framework\TestCase
             ->method('isAllowed')
             ->willReturn(true);
 
-        /** @var Collection|\PHPUnit_Framework_MockObject_MockObject $collectionMock */
+        /** @var Collection|MockObject $collectionMock */
         $collectionMock = $this->getMockBuilder(Collection::class)
             ->disableOriginalConstructor()
             ->getMock();

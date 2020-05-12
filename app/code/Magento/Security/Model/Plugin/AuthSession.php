@@ -7,6 +7,7 @@ namespace Magento\Security\Model\Plugin;
 
 use Magento\Backend\Model\Auth\Session;
 use Magento\Security\Model\AdminSessionsManager;
+use Magento\Security\Model\UserExpirationManager;
 
 /**
  * Magento\Backend\Model\Auth\Session decorator
@@ -34,21 +35,31 @@ class AuthSession
     protected $securityCookie;
 
     /**
+     * @var UserExpirationManager
+     */
+    private $userExpirationManager;
+
+    /**
      * @param \Magento\Framework\App\RequestInterface $request
      * @param \Magento\Framework\Message\ManagerInterface $messageManager
      * @param AdminSessionsManager $sessionsManager
      * @param \Magento\Security\Model\SecurityCookie $securityCookie
+     * @param UserExpirationManager|null $userExpirationManager
      */
     public function __construct(
         \Magento\Framework\App\RequestInterface $request,
         \Magento\Framework\Message\ManagerInterface $messageManager,
         AdminSessionsManager $sessionsManager,
-        \Magento\Security\Model\SecurityCookie $securityCookie
+        \Magento\Security\Model\SecurityCookie $securityCookie,
+        \Magento\Security\Model\UserExpirationManager $userExpirationManager = null
     ) {
         $this->request = $request;
         $this->messageManager = $messageManager;
         $this->sessionsManager = $sessionsManager;
         $this->securityCookie = $securityCookie;
+        $this->userExpirationManager = $userExpirationManager ?:
+            \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(\Magento\Security\Model\UserExpirationManager::class);
     }
 
     /**
@@ -61,6 +72,11 @@ class AuthSession
     public function aroundProlong(Session $session, \Closure $proceed)
     {
         if (!$this->sessionsManager->getCurrentSession()->isLoggedInStatus()) {
+            $session->destroy();
+            $this->addUserLogoutNotification();
+            return null;
+        } elseif ($this->userExpirationManager->isUserExpired($session->getUser()->getId())) {
+            $this->userExpirationManager->deactivateExpiredUsersById([$session->getUser()->getId()]);
             $session->destroy();
             $this->addUserLogoutNotification();
             return null;

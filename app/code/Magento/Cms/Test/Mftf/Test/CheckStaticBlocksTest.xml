@@ -20,7 +20,7 @@
         </annotations>
         <before>
             <magentoCLI command="config:set cms/wysiwyg/enabled disabled" stepKey="disableWYSIWYG"/>
-            <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>
             <actionGroup ref="AdminCreateWebsiteActionGroup" stepKey="AdminCreateWebsite">
                 <argument name="newWebsiteName" value="secondWebsite"/>
                 <argument name="websiteCode" value="second_website"/>

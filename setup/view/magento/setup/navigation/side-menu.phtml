@@ -20,9 +20,11 @@
     ng-show="<?= implode( '&&', $expressions) ?>"
     >
 <nav class="admin__menu" ng-controller="mainController">
-    <span class="logo logo-static" data-edition="Community Edition">
-        <img class="logo-img" src="<?= $this->basePath() ?>/pub/images/logo.svg" alt="Magento Admin Panel">
-    </span>
+    <a href="<?= $this->backendUrl ?>" class="logo" data-edition="Community Edition">
+        <span>
+            <img class="logo-img" src="<?= $this->basePath() ?>/pub/images/logo.svg" alt="Magento Admin Panel">
+        </span>
+    </a>
     <ul id="nav" role="menubar">
         <li class="item-home level-0" ng-class="{_active: $state.current.name === 'root.home'}">
             <a href="" ui-sref="root.home">

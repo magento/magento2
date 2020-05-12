@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Braintree\Test\Unit\Gateway\Command;
 
 use Magento\Braintree\Gateway\Command\GetPaymentNonceCommand;
@@ -15,14 +17,13 @@ use Magento\Payment\Gateway\Command\Result\ArrayResultFactory;
 use Magento\Payment\Gateway\Validator\ResultInterface;
 use Magento\Vault\Model\PaymentToken;
 use Magento\Vault\Model\PaymentTokenManagement;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
- * Class GetPaymentNonceCommandTest
- *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class GetPaymentNonceCommandTest extends \PHPUnit\Framework\TestCase
+class GetPaymentNonceCommandTest extends TestCase
 {
     /**
      * @var GetPaymentNonceCommand
@@ -64,7 +65,7 @@ class GetPaymentNonceCommandTest extends \PHPUnit\Framework\TestCase
      */
     private $validationResultMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->paymentTokenMock = $this->getMockBuilder(PaymentToken::class)
             ->disableOriginalConstructor()
@@ -100,7 +101,7 @@ class GetPaymentNonceCommandTest extends \PHPUnit\Framework\TestCase
 
         $this->validationResultMock = $this->getMockBuilder(ResultInterface::class)
             ->setMethods(['isValid', 'getFailsDescription', 'getErrorCodes'])
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->responseValidatorMock = $this->getMockBuilder(PaymentNonceResponseValidator::class)
             ->disableOriginalConstructor()
@@ -118,11 +119,11 @@ class GetPaymentNonceCommandTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @covers \Magento\Braintree\Gateway\Command\GetPaymentNonceCommand::execute
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage The "publicHash" field does not exists
      */
     public function testExecuteWithExceptionForPublicHash()
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('The "publicHash" field does not exists');
         $exception = new \InvalidArgumentException('The "publicHash" field does not exists');
 
         $this->subjectReaderMock->expects(static::once())
@@ -137,11 +138,11 @@ class GetPaymentNonceCommandTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @covers \Magento\Braintree\Gateway\Command\GetPaymentNonceCommand::execute
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage The "customerId" field does not exists
      */
     public function testExecuteWithExceptionForCustomerId()
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('The "customerId" field does not exists');
         $publicHash = '3wv2m24d2er3';
 
         $this->subjectReaderMock->expects(static::once())
@@ -161,11 +162,11 @@ class GetPaymentNonceCommandTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @covers \Magento\Braintree\Gateway\Command\GetPaymentNonceCommand::execute
-     * @expectedException \Exception
-     * @expectedExceptionMessage No available payment tokens
      */
     public function testExecuteWithExceptionForTokenManagement()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('No available payment tokens');
         $publicHash = '3wv2m24d2er3';
         $customerId = 1;
 
@@ -190,11 +191,11 @@ class GetPaymentNonceCommandTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @covers \Magento\Braintree\Gateway\Command\GetPaymentNonceCommand::execute
-     * @expectedException \Exception
-     * @expectedExceptionMessage Payment method nonce can't be retrieved.
      */
     public function testExecuteWithFailedValidation()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Payment method nonce can\'t be retrieved.');
         $publicHash = '3wv2m24d2er3';
         $customerId = 1;
         $token = 'jd2vnq';
