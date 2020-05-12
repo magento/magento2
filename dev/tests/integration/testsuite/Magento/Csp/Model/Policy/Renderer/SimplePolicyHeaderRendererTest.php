@@ -30,7 +30,7 @@ class SimplePolicyHeaderRendererTest extends TestCase
     /**
      * @inheritDoc
      */
-    public function setUp()
+    protected function setUp(): void
     {
         $this->renderer = Bootstrap::getObjectManager()->get(SimplePolicyHeaderRenderer::class);
         $this->response = Bootstrap::getObjectManager()->create(HttpResponse::class);
@@ -58,8 +58,6 @@ class SimplePolicyHeaderRendererTest extends TestCase
             foreach ($header as $item) {
                 $contentSecurityPolicyContent[] = $item->getFieldValue();
             }
-        } else {
-            $contentSecurityPolicyContent = [$header->getFieldValue()];
         }
         $this->assertEquals(['default-src https://magento.com \'self\';'], $contentSecurityPolicyContent);
     }
@@ -86,8 +84,6 @@ class SimplePolicyHeaderRendererTest extends TestCase
             foreach ($header as $item) {
                 $contentSecurityPolicyContent[] = $item->getFieldValue();
             }
-        } else {
-            $contentSecurityPolicyContent = [$header->getFieldValue()];
         }
         $this->assertEquals(
             ['default-src https://magento.com \'self\'; report-uri /csp-reports/; report-to report-endpoint;'],

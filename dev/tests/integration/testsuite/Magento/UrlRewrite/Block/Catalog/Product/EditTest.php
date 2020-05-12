@@ -101,7 +101,7 @@ class EditTest extends \PHPUnit\Framework\TestCase
                 'Child block with product link has invalid item name'
             );
 
-            $this->assertRegExp(
+            $this->assertMatchesRegularExpression(
                 '/http:\/\/localhost\/index.php\/.*\/product/',
                 $productLinkBlock->getItemUrl(),
                 'Child block with product link contains invalid URL'
@@ -132,7 +132,7 @@ class EditTest extends \PHPUnit\Framework\TestCase
                 'Child block with category link has invalid item name'
             );
 
-            $this->assertRegExp(
+            $this->assertMatchesRegularExpression(
                 '/http:\/\/localhost\/index.php\/.*\/category/',
                 $categoryLinkBlock->getItemUrl(),
                 'Child block with category link contains invalid URL'

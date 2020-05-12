@@ -3,19 +3,32 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Setup\Test\Unit\Model;
 
 use Composer\Package\RootPackage;
+use Magento\Composer\MagentoComposerApplication;
 use Magento\Framework\Composer\ComposerInformation;
+use Magento\Framework\Composer\MagentoComposerApplicationFactory;
+use Magento\Framework\Filesystem;
+use Magento\Framework\Filesystem\Directory\ReadInterface;
+use Magento\Framework\Filesystem\Directory\WriteInterface;
+use Magento\Framework\ObjectManagerInterface;
+use Magento\Framework\Stdlib\DateTime\Timezone;
+use Magento\Setup\Model\DateTime\TimeZoneProvider;
+use Magento\Setup\Model\Grid\TypeMapper;
+use Magento\Setup\Model\ObjectManagerProvider;
+use Magento\Setup\Model\PackagesAuth;
 use Magento\Setup\Model\PackagesData;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Tests Magento\Setup\Model\PackagesData
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class PackagesDataTest extends \PHPUnit\Framework\TestCase
+class PackagesDataTest extends TestCase
 {
     /**
      * @var PackagesData
@@ -28,48 +41,48 @@ class PackagesDataTest extends \PHPUnit\Framework\TestCase
     private $composerInformation;
 
     /**
-     * @var \Magento\Setup\Model\DateTime\TimeZoneProvider|MockObject
+     * @var TimeZoneProvider|MockObject
      */
     private $timeZoneProvider;
 
     /**
-     * @var \Magento\Setup\Model\PackagesAuth|MockObject
+     * @var PackagesAuth|MockObject
      */
     private $packagesAuth;
 
     /**
-     * @var \Magento\Framework\Filesystem|MockObject
+     * @var Filesystem|MockObject
      */
     private $filesystem;
 
     /**
-     * @var \Magento\Setup\Model\ObjectManagerProvider|MockObject
+     * @var ObjectManagerProvider|MockObject
      */
     private $objectManagerProvider;
 
     /**
-     * @var \Magento\Setup\Model\Grid\TypeMapper|MockObject
+     * @var TypeMapper|MockObject
      */
     private $typeMapper;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->composerInformation = $this->getComposerInformation();
-        $this->timeZoneProvider = $this->getMockBuilder(\Magento\Setup\Model\DateTime\TimeZoneProvider::class)
+        $this->timeZoneProvider = $this->getMockBuilder(TimeZoneProvider::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $timeZone = $this->createMock(\Magento\Framework\Stdlib\DateTime\Timezone::class);
+        $timeZone = $this->createMock(Timezone::class);
         $this->timeZoneProvider->expects($this->any())->method('get')->willReturn($timeZone);
-        $this->packagesAuth = $this->createMock(\Magento\Setup\Model\PackagesAuth::class);
-        $this->filesystem = $this->createMock(\Magento\Framework\Filesystem::class);
-        $this->objectManagerProvider = $this->getMockBuilder(\Magento\Setup\Model\ObjectManagerProvider::class)
+        $this->packagesAuth = $this->createMock(PackagesAuth::class);
+        $this->filesystem = $this->createMock(Filesystem::class);
+        $this->objectManagerProvider = $this->getMockBuilder(ObjectManagerProvider::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $objectManager = $this->getMockForAbstractClass(\Magento\Framework\ObjectManagerInterface::class);
-        $appFactory = $this->getMockBuilder(\Magento\Framework\Composer\MagentoComposerApplicationFactory::class)
+        $objectManager = $this->getMockForAbstractClass(ObjectManagerInterface::class);
+        $appFactory = $this->getMockBuilder(MagentoComposerApplicationFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $application = $this->createMock(\Magento\Composer\MagentoComposerApplication::class);
+        $application = $this->createMock(MagentoComposerApplication::class);
         $application->expects($this->any())
             ->method('runComposerCommand')
             ->willReturnMap([
@@ -104,16 +117,16 @@ class PackagesDataTest extends \PHPUnit\Framework\TestCase
         $appFactory->expects($this->any())->method('create')->willReturn($application);
         $objectManager->expects($this->any())
             ->method('get')
-            ->with(\Magento\Framework\Composer\MagentoComposerApplicationFactory::class)
+            ->with(MagentoComposerApplicationFactory::class)
             ->willReturn($appFactory);
         $this->objectManagerProvider->expects($this->any())->method('get')->willReturn($objectManager);
 
-        $directoryWrite = $this->getMockForAbstractClass(\Magento\Framework\Filesystem\Directory\WriteInterface::class);
-        $directoryRead = $this->getMockForAbstractClass(\Magento\Framework\Filesystem\Directory\ReadInterface::class);
-        $this->filesystem->expects($this->any())->method('getDirectoryRead')->will($this->returnValue($directoryRead));
+        $directoryWrite = $this->getMockForAbstractClass(WriteInterface::class);
+        $directoryRead = $this->getMockForAbstractClass(ReadInterface::class);
+        $this->filesystem->expects($this->any())->method('getDirectoryRead')->willReturn($directoryRead);
         $this->filesystem->expects($this->any())
             ->method('getDirectoryWrite')
-            ->will($this->returnValue($directoryWrite));
+            ->willReturn($directoryWrite);
         $directoryWrite->expects($this->any())->method('isExist')->willReturn(true);
         $directoryWrite->expects($this->any())->method('isReadable')->willReturn(true);
         $directoryWrite->expects($this->any())->method('delete')->willReturn(true);
@@ -139,13 +152,13 @@ class PackagesDataTest extends \PHPUnit\Framework\TestCase
                 . '}}}'
             );
 
-        $this->typeMapper = $this->getMockBuilder(\Magento\Setup\Model\Grid\TypeMapper::class)
+        $this->typeMapper = $this->getMockBuilder(TypeMapper::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->typeMapper->expects(static::any())
             ->method('map')
             ->willReturnMap([
-                [ComposerInformation::MODULE_PACKAGE_TYPE, \Magento\Setup\Model\Grid\TypeMapper::MODULE_PACKAGE_TYPE],
+                [ComposerInformation::MODULE_PACKAGE_TYPE, TypeMapper::MODULE_PACKAGE_TYPE],
             ]);
 
         $this->createPackagesData();
@@ -224,19 +237,17 @@ class PackagesDataTest extends \PHPUnit\Framework\TestCase
         $this->assertArrayHasKey('date', $latestData['lastSyncDate']);
         $this->assertArrayHasKey('time', $latestData['lastSyncDate']);
         $this->assertArrayHasKey('packages', $latestData);
-        $this->assertSame(3, count($latestData['packages']));
+        $this->assertCount(3, $latestData['packages']);
         $this->assertSame(3, $latestData['countOfUpdate']);
         $this->assertArrayHasKey('installPackages', $latestData);
-        $this->assertSame(1, count($latestData['installPackages']));
+        $this->assertCount(1, $latestData['installPackages']);
         $this->assertSame(1, $latestData['countOfInstall']);
     }
 
-    /**
-     * @expectedException \RuntimeException
-     * @expectedExceptionMessage Couldn't get available versions for package partner/package-4
-     */
     public function testGetPackagesForUpdateWithException()
     {
+        $this->expectException('RuntimeException');
+        $this->expectExceptionMessage('Couldn\'t get available versions for package partner/package-4');
         $requiredPackages = [
             'partner/package-4' => '4.0.4',
         ];
@@ -260,7 +271,7 @@ class PackagesDataTest extends \PHPUnit\Framework\TestCase
             ->willReturn('repo1');
         $this->createPackagesData();
         $packages = $this->packagesData->getPackagesForUpdate();
-        $this->assertEquals(2, count($packages));
+        $this->assertCount(2, $packages);
         $this->assertArrayHasKey('magento/package-1', $packages);
         $this->assertArrayHasKey('partner/package-3', $packages);
         $firstPackage = array_values($packages)[0];
@@ -271,7 +282,7 @@ class PackagesDataTest extends \PHPUnit\Framework\TestCase
     public function testGetPackagesForUpdate()
     {
         $packages = $this->packagesData->getPackagesForUpdate();
-        $this->assertEquals(3, count($packages));
+        $this->assertCount(3, $packages);
         $this->assertArrayHasKey('magento/package-1', $packages);
         $this->assertArrayHasKey('magento/package-2', $packages);
         $this->assertArrayHasKey('partner/package-3', $packages);
@@ -283,7 +294,7 @@ class PackagesDataTest extends \PHPUnit\Framework\TestCase
     public function testGetInstalledPackages()
     {
         $installedPackages = $this->packagesData->getInstalledPackages();
-        $this->assertEquals(3, count($installedPackages));
+        $this->assertCount(3, $installedPackages);
         $this->assertArrayHasKey('magento/package-1', $installedPackages);
         $this->assertArrayHasKey('magento/package-2', $installedPackages);
         $this->assertArrayHasKey('partner/package-3', $installedPackages);

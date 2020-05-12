@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AssertSeeProductDetailsOnStorefrontRecentlyViewedWidgetActionGroup">
+        <annotations>
+            <description>Goes to the home Page Recently VIewed Product and Grab the Prdouct name and Position from it.</description>
+        </annotations>
+        <arguments>
+            <argument name="productName" type="string"/>
+            <argument name="productPosition" type="string"/>
+        </arguments>
+        <grabTextFrom selector="{{StoreFrontRecentlyViewedProductSection.ProductName(productPosition)}}" stepKey="grabRelatedProductPosition"/>
+        <assertStringContainsString stepKey="assertRelatedProductName">
+			<actualResult type="const">$grabRelatedProductPosition</actualResult>
+			<expectedResult type="const">{{productName}}</expectedResult>
+        </assertStringContainsString>
+    </actionGroup>
+</actionGroups>

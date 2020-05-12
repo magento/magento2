@@ -15,7 +15,7 @@ use Magento\TestFramework\Helper\Xpath;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Class test my wish list on customer account page.
+ * Class test block wish list on customer account page.
  *
  * @magentoAppArea frontend
  * @magentoDbIsolation enabled
@@ -38,7 +38,7 @@ class WishlistTest extends TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -50,7 +50,7 @@ class WishlistTest extends TestCase
     /**
      * @inheritdoc
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->customerSession->setCustomerId(null);
 
@@ -66,9 +66,11 @@ class WishlistTest extends TestCase
     public function testDisplayNumberOfItemsInWishList(): void
     {
         $this->customerSession->setCustomerId(1);
+        $pagerBlockHtml = $this->getWishListBlock()->getChildBlock('wishlist_item_pager')->toHtml();
         $this->assertEquals(
             1,
-            Xpath::getElementsCountForXpath(sprintf(self::ITEMS_COUNT_XPATH, 1), $this->getWishListPagerBlockHtml())
+            Xpath::getElementsCountForXpath(sprintf(self::ITEMS_COUNT_XPATH, 1), $pagerBlockHtml),
+            "Element items count wasn't found."
         );
     }
 
@@ -82,27 +84,46 @@ class WishlistTest extends TestCase
     {
         $this->markTestSkipped('Test is blocked by issue MC-31595');
         $this->customerSession->setCustomerId(1);
+        $pagerBlockHtml = $this->getWishListBlock()->getChildBlock('wishlist_item_pager')->toHtml();
         $this->assertEquals(
             1,
-            Xpath::getElementsCountForXpath(sprintf(self::ITEMS_COUNT_XPATH, 3), $this->getWishListPagerBlockHtml())
+            Xpath::getElementsCountForXpath(sprintf(self::ITEMS_COUNT_XPATH, 3), $pagerBlockHtml),
+            "Element items count wasn't found."
         );
     }
 
     /**
-     * Get wish list pager block html.
+     * @magentoDataFixture Magento/Wishlist/_files/wishlist.php
      *
-     * @return string
+     * @return void
      */
-    private function getWishListPagerBlockHtml(): string
+    public function testDisplayActionButtonsInWishList(): void
+    {
+        $buttonsXpath = [
+            "//button[contains(@class, 'update') and @type='submit']/span[contains(text(), 'Update Wish List')]",
+            "//button[contains(@class, 'share') and @type='submit']/span[contains(text(), 'Share Wish List')]",
+            "//button[contains(@class, 'tocart') and @type='button']/span[contains(text(), 'Add All to Cart')]",
+        ];
+        $this->customerSession->setCustomerId(1);
+        $blockHtml = $this->getWishListBlock()->toHtml();
+        foreach ($buttonsXpath as $xpath) {
+            $this->assertEquals(1, Xpath::getElementsCountForXpath($xpath, $blockHtml));
+        }
+    }
+
+    /**
+     * Get wish list block.
+     *
+     * @return Wishlist
+     */
+    private function getWishListBlock(): Wishlist
     {
         $this->page->addHandle([
             'default',
             'wishlist_index_index',
         ]);
         $this->page->getLayout()->generateXml();
-        /** @var Wishlist $customerWishlistBlock */
-        $customerWishlistBlock = $this->page->getLayout()->getBlock('customer.wishlist');
 
-        return $customerWishlistBlock->getChildBlock('wishlist_item_pager')->toHtml();
+        return $this->page->getLayout()->getBlock('customer.wishlist');
     }
 }

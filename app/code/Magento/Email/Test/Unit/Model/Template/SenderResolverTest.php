@@ -8,14 +8,14 @@ declare(strict_types=1);
 namespace Magento\Email\Test\Unit\Model\Template;
 
 use Magento\Email\Model\Template\SenderResolver;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Exception\MailException;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Store\Model\ScopeInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-/**
- *  SenderResolverTest
- */
-class SenderResolverTest extends \PHPUnit\Framework\TestCase
+class SenderResolverTest extends TestCase
 {
     /**
      * @var SenderResolver
@@ -23,18 +23,18 @@ class SenderResolverTest extends \PHPUnit\Framework\TestCase
     private $senderResolver;
 
     /**
-     * @var ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ScopeConfigInterface|MockObject
      */
     private $scopeConfig;
 
     /**
      * @return void
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
 
-        $this->scopeConfig = $this->createMock(ScopeConfigInterface::class);
+        $this->scopeConfig = $this->getMockForAbstractClass(ScopeConfigInterface::class);
 
         $this->senderResolver = $objectManager->getObject(
             SenderResolver::class,
@@ -57,26 +57,26 @@ class SenderResolverTest extends \PHPUnit\Framework\TestCase
         $this->scopeConfig->expects($this->exactly(2))
             ->method('getValue')
             ->willReturnMap([
-               [
-                   'trans_email/ident_' . $sender . '/name',
-                   \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
-                   $scopeId,
-                   'Test Name'
-               ],
-               [
-                   'trans_email/ident_' . $sender . '/email',
-                   \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
-                   $scopeId,
-                   'test@email.com'
-               ]
+                [
+                    'trans_email/ident_' . $sender . '/name',
+                    ScopeInterface::SCOPE_STORE,
+                    $scopeId,
+                    'Test Name'
+                ],
+                [
+                    'trans_email/ident_' . $sender . '/email',
+                    ScopeInterface::SCOPE_STORE,
+                    $scopeId,
+                    'test@email.com'
+                ]
             ]);
 
         $result = $this->senderResolver->resolve($sender);
 
-        $this->assertTrue(isset($result['name']));
+        $this->assertArrayHasKey('name', $result);
         $this->assertEquals('Test Name', $result['name']);
 
-        $this->assertTrue(isset($result['email']));
+        $this->assertArrayHasKey('email', $result);
         $this->assertEquals('test@email.com', $result['email']);
     }
 

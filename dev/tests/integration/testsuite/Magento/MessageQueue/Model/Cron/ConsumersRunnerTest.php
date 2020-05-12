@@ -66,7 +66,7 @@ class ConsumersRunnerTest extends \PHPUnit\Framework\TestCase
     private $appConfig;
 
     /**
-     * @var ShellInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ShellInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $shellMock;
 
@@ -78,7 +78,7 @@ class ConsumersRunnerTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->shellMock = $this->getMockBuilder(ShellInterface::class)
@@ -191,7 +191,7 @@ class ConsumersRunnerTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         foreach ($this->consumerConfig->getConsumers() as $consumer) {
             foreach ($this->getConsumerProcessIds($consumer->getName()) as $consumerProcessId) {
