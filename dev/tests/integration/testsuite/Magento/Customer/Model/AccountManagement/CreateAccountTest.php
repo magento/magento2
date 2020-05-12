@@ -19,6 +19,7 @@ use Magento\Framework\Api\SimpleDataObjectConverter;
 use Magento\Framework\Encryption\EncryptorInterface;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\State\InputMismatchException;
 use Magento\Framework\Math\Random;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Validator\Exception;
@@ -103,7 +104,7 @@ class CreateAccountTest extends TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
         $this->accountManagement = $this->objectManager->get(AccountManagementInterface::class);
@@ -496,9 +497,33 @@ class CreateAccountTest extends TestCase
         $this->assertCustomerData($customer, $expectedCustomerData);
         $this->accountManagement->authenticate(
             $customer->getEmail(),
-            '_aPassword1',
-            true
+            '_aPassword1'
         );
+    }
+
+    /**
+     * Test for create customer account for second website (with existing email for default website)
+     * with global account scope config.
+     *
+     * @magentoConfigFixture current_store customer/account_share/scope 0
+     * @magentoDataFixture Magento/Customer/_files/customer.php
+     * @magentoDataFixture Magento/Store/_files/second_website_with_two_stores.php
+     *
+     * @return void
+     */
+    public function testCreateAccountInGlobalScope(): void
+    {
+        $customerEntity = $this->customerFactory->create();
+        $this->dataObjectHelper->populateWithArray(
+            $customerEntity,
+            $this->defaultCustomerData,
+            CustomerInterface::class
+        );
+        $storeId = $this->storeManager->getStore('fixture_second_store')->getStoreId();
+        $customerEntity->setStoreId($storeId);
+        $message = 'A customer with the same email address already exists in an associated website.';
+        $this->expectExceptionObject(new InputMismatchException(__($message)));
+        $this->accountManagement->createAccount($customerEntity, '_aPassword1');
     }
 
     /**

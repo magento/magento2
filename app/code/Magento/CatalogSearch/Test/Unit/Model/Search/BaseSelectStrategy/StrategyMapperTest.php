@@ -3,50 +3,54 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\CatalogSearch\Test\Unit\Model\Search\BaseSelectStrategy;
 
 use Magento\CatalogSearch\Model\Adapter\Mysql\BaseSelectStrategy\BaseSelectAttributesSearchStrategy;
 use Magento\CatalogSearch\Model\Adapter\Mysql\BaseSelectStrategy\BaseSelectFullTextSearchStrategy;
-use \Magento\CatalogSearch\Model\Search\BaseSelectStrategy\StrategyMapper;
-use \Magento\CatalogSearch\Model\Search\SelectContainer\SelectContainer;
+use Magento\CatalogSearch\Model\Search\BaseSelectStrategy\StrategyMapper;
+use Magento\CatalogSearch\Model\Search\SelectContainer\SelectContainer;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
- * @deprecated
+ * @deprecated Implementation class was replaced
  * @see \Magento\ElasticSearch
  */
-class StrategyMapperTest extends \PHPUnit\Framework\TestCase
+class StrategyMapperTest extends TestCase
 {
-    /** @var  BaseSelectAttributesSearchStrategy|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var  BaseSelectAttributesSearchStrategy|MockObject */
     private $baseSelectAttributeSearchStrategyMock;
 
-    /** @var  BaseSelectFullTextSearchStrategy|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var  BaseSelectFullTextSearchStrategy|MockObject */
     private $baseSelectFullTextSearchStrategyMock;
 
-    /** @var  SelectContainer|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var  SelectContainer|MockObject */
     private $selectContainerMock;
 
-    /** @var  StrategyMapper|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var  StrategyMapper|MockObject */
     private $strategyMapper;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->baseSelectAttributeSearchStrategyMock = $this->getMockBuilder(
             BaseSelectAttributesSearchStrategy::class
         )->disableOriginalConstructor()
-        ->getMock();
+            ->getMock();
 
         $this->baseSelectFullTextSearchStrategyMock = $this->getMockBuilder(
             BaseSelectFullTextSearchStrategy::class
         )->disableOriginalConstructor()
-        ->getMock();
+            ->getMock();
 
         $this->selectContainerMock = $this->getMockBuilder(SelectContainer::class)
             ->disableOriginalConstructor()
             ->setMethods(['isFullTextSearchRequired', 'hasCustomAttributesFilters', 'hasVisibilityFilter'])
             ->getMock();
 
-        $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $objectManagerHelper = new ObjectManager($this);
 
         $this->strategyMapper = $objectManagerHelper->getObject(
             StrategyMapper::class,

@@ -66,7 +66,7 @@ class CreateMultipleSynonymGroupsTest extends Injectable
      *
      * @return void
      */
-    public function tearDown()
+    public function tearDown(): void
     {
         $this->objectManager->create(\Magento\Search\Test\TestStep\DeleteAllSynonymGroupsStep::class)->run();
     }

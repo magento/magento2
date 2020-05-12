@@ -3,43 +3,51 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Security\Test\Unit\Model;
 
+use Magento\Backend\Model\Auth\Session;
 use Magento\Framework\HTTP\PhpEnvironment\RemoteAddress;
 use Magento\Framework\Stdlib\DateTime\DateTime;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Security\Model\AdminSessionInfo;
+use Magento\Security\Model\AdminSessionInfoFactory;
 use Magento\Security\Model\AdminSessionsManager;
 use Magento\Security\Model\ConfigInterface;
+use Magento\Security\Model\ResourceModel\AdminSessionInfo\Collection;
+use Magento\Security\Model\ResourceModel\AdminSessionInfo\CollectionFactory;
+use Magento\User\Model\User;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test class for AdminSessionsManager testing
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class AdminSessionsManagerTest extends \PHPUnit\Framework\TestCase
+class AdminSessionsManagerTest extends TestCase
 {
     /** @var  AdminSessionsManager */
     protected $model;
 
-    /** @var \Magento\Security\Model\AdminSessionInfo */
+    /** @var AdminSessionInfo */
     protected $currentSessionMock;
 
-    /** @var \Magento\Backend\Model\Auth\Session */
+    /** @var Session */
     protected $authSessionMock;
 
     /** @var ConfigInterface */
     protected $securityConfigMock;
 
-    /** @var \Magento\User\Model\User */
+    /** @var User */
     protected $userMock;
 
-    /** @var \Magento\Security\Model\ResourceModel\AdminSessionInfo\CollectionFactory */
+    /** @var CollectionFactory */
     protected $adminSessionInfoCollectionFactoryMock;
 
-    /** @var \Magento\Security\Model\ResourceModel\AdminSessionInfo\Collection */
+    /** @var Collection */
     protected $adminSessionInfoCollectionMock;
 
-    /** @var \Magento\Security\Model\AdminSessionInfoFactory */
+    /** @var AdminSessionInfoFactory */
     protected $adminSessionInfoFactoryMock;
 
     /**
@@ -47,7 +55,7 @@ class AdminSessionsManagerTest extends \PHPUnit\Framework\TestCase
      */
     protected $dateTimeMock;
 
-    /** @var  \Magento\Framework\TestFramework\Unit\Helper\ObjectManager */
+    /** @var  ObjectManager */
     protected $objectManager;
 
     /*
@@ -59,22 +67,23 @@ class AdminSessionsManagerTest extends \PHPUnit\Framework\TestCase
      * Init mocks for tests
      * @return void
      */
-    public function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
 
-        $this->authSessionMock = $this->createPartialMock(
-            \Magento\Backend\Model\Auth\Session::class,
-            ['isActive', 'getStatus', 'getUser', 'getId', 'getSessionId', 'getUpdatedAt']
-        );
+        $this->authSessionMock = $this->getMockBuilder(Session::class)
+            ->addMethods(['isActive', 'getStatus', 'getUser', 'getId', 'getUpdatedAt'])
+            ->onlyMethods(['getSessionId'])
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->adminSessionInfoCollectionFactoryMock = $this->createPartialMock(
-            \Magento\Security\Model\ResourceModel\AdminSessionInfo\CollectionFactory::class,
+            CollectionFactory::class,
             ['create']
         );
 
         $this->adminSessionInfoCollectionMock = $this->createPartialMock(
-            \Magento\Security\Model\ResourceModel\AdminSessionInfo\Collection::class,
+            Collection::class,
             [
                 'filterByUser',
                 'filterExpiredSessions',
@@ -87,27 +96,21 @@ class AdminSessionsManagerTest extends \PHPUnit\Framework\TestCase
         );
 
         $this->adminSessionInfoFactoryMock = $this->createPartialMock(
-            \Magento\Security\Model\AdminSessionInfoFactory::class,
+            AdminSessionInfoFactory::class,
             ['create']
         );
 
-        $this->currentSessionMock = $this->createPartialMock(\Magento\Security\Model\AdminSessionInfo::class, [
-                'isActive',
-                'getStatus',
-                'load',
-                'setData',
-                'setIsOtherSessionsTerminated',
-                'save',
-                'getUserId',
-                'getSessionId',
-                'getUpdatedAt'
-            ]);
-
-        $this->securityConfigMock = $this->getMockBuilder(\Magento\Security\Model\ConfigInterface::class)
+        $this->currentSessionMock = $this->getMockBuilder(AdminSessionInfo::class)
+            ->addMethods(['isActive', 'getStatus', 'getUserId', 'getSessionId', 'getUpdatedAt'])
+            ->onlyMethods(['load', 'setData', 'setIsOtherSessionsTerminated', 'save'])
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->userMock = $this->createPartialMock(\Magento\User\Model\User::class, ['getId']);
+        $this->securityConfigMock = $this->getMockBuilder(ConfigInterface::class)
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+
+        $this->userMock = $this->createPartialMock(User::class, ['getId']);
 
         $this->dateTimeMock =  $this->getMockBuilder(DateTime::class)
             ->disableOriginalConstructor()
@@ -118,7 +121,7 @@ class AdminSessionsManagerTest extends \PHPUnit\Framework\TestCase
             ->getMock();
 
         $this->model = $this->objectManager->getObject(
-            \Magento\Security\Model\AdminSessionsManager::class,
+            AdminSessionsManager::class,
             [
                 'securityConfig' => $this->securityConfigMock,
                 'authSession' => $this->authSessionMock,
@@ -196,7 +199,7 @@ class AdminSessionsManagerTest extends \PHPUnit\Framework\TestCase
 
         $this->adminSessionInfoCollectionMock->expects($this->once())->method('updateActiveSessionsStatus')
             ->with(
-                \Magento\Security\Model\AdminSessionInfo::LOGGED_OUT_BY_LOGIN,
+                AdminSessionInfo::LOGGED_OUT_BY_LOGIN,
                 $useId,
                 $sessionId,
                 $olderThen
@@ -277,7 +280,7 @@ class AdminSessionsManagerTest extends \PHPUnit\Framework\TestCase
 
         $this->currentSessionMock->expects($this->once())
             ->method('setData')
-            ->with('status', \Magento\Security\Model\AdminSessionInfo::LOGGED_OUT)
+            ->with('status', AdminSessionInfo::LOGGED_OUT)
             ->willReturnSelf();
 
         $this->currentSessionMock->expects($this->once())
@@ -343,7 +346,7 @@ class AdminSessionsManagerTest extends \PHPUnit\Framework\TestCase
             ->willReturn($this->currentSessionMock);
         $this->currentSessionMock->expects($this->once())
             ->method('getStatus')
-            ->will($this->returnValue($sessionStatus));
+            ->willReturn($sessionStatus);
 
         $this->assertEquals($expectedResult, $this->model->getLogoutReasonMessage());
     }
@@ -359,23 +362,23 @@ class AdminSessionsManagerTest extends \PHPUnit\Framework\TestCase
                     'Someone logged into this account from another device or browser.'
                     . ' Your current session is terminated.'
                 ),
-                'sessionStatus' => \Magento\Security\Model\AdminSessionInfo::LOGGED_OUT_BY_LOGIN
+                'sessionStatus' => AdminSessionInfo::LOGGED_OUT_BY_LOGIN
             ],
             [
                 'expectedResult' => __('Your current session is terminated by another user of this account.'),
-                'sessionStatus' => \Magento\Security\Model\AdminSessionInfo::LOGGED_OUT_MANUALLY
+                'sessionStatus' => AdminSessionInfo::LOGGED_OUT_MANUALLY
             ],
             [
                 'expectedResult' => __('Your current session has been expired.'),
-                'sessionStatus' => \Magento\Security\Model\AdminSessionInfo::LOGGED_OUT
+                'sessionStatus' => AdminSessionInfo::LOGGED_OUT
             ],
             [
                 'expectedResult' => __('Your account is temporarily disabled. Please try again later.'),
-                'sessionStatus' => \Magento\Security\Model\AdminSessionsManager::LOGOUT_REASON_USER_LOCKED
+                'sessionStatus' => AdminSessionsManager::LOGOUT_REASON_USER_LOCKED
             ],
             [
                 'expectedResult' => '',
-                'sessionStatus' => \Magento\Security\Model\AdminSessionInfo::LOGGED_IN
+                'sessionStatus' => AdminSessionInfo::LOGGED_IN
             ]
         ];
     }
@@ -397,7 +400,7 @@ class AdminSessionsManagerTest extends \PHPUnit\Framework\TestCase
             ->method('getId')
             ->willReturn($useId);
         $this->adminSessionInfoCollectionMock->expects($this->once())->method('filterByUser')
-            ->with($useId, \Magento\Security\Model\AdminSessionInfo::LOGGED_IN)
+            ->with($useId, AdminSessionInfo::LOGGED_IN)
             ->willReturnSelf();
         $this->securityConfigMock->expects($this->once())
             ->method('getAdminSessionLifetime')
@@ -435,7 +438,7 @@ class AdminSessionsManagerTest extends \PHPUnit\Framework\TestCase
             ->willReturn($useId);
         $this->adminSessionInfoCollectionMock->expects($this->once())
             ->method('filterByUser')
-            ->with($useId, \Magento\Security\Model\AdminSessionInfo::LOGGED_IN, $sessionId)
+            ->with($useId, AdminSessionInfo::LOGGED_IN, $sessionId)
             ->willReturnSelf();
         $this->securityConfigMock->expects($this->once())
             ->method('getAdminSessionLifetime')
@@ -449,7 +452,7 @@ class AdminSessionsManagerTest extends \PHPUnit\Framework\TestCase
             ->willReturnSelf();
         $this->adminSessionInfoCollectionMock->expects($this->once())
             ->method('setDataToAll')
-            ->with($this->equalTo('status'), \Magento\Security\Model\AdminSessionInfo::LOGGED_OUT_MANUALLY)
+            ->with($this->equalTo('status'), AdminSessionInfo::LOGGED_OUT_MANUALLY)
             ->willReturnSelf();
         $this->adminSessionInfoCollectionMock->expects($this->once())
             ->method('save');
