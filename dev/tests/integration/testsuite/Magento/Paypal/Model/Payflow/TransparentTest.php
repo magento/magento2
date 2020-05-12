@@ -40,7 +40,7 @@ class TransparentTest extends TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
         $this->management = $this->objectManager->get(PaymentInformationManagementInterface::class);
@@ -72,7 +72,7 @@ class TransparentTest extends TestCase
         self::assertEquals(Order::STATE_PAYMENT_REVIEW, $order->getState());
 
         $transactions = $this->getPaymentTransactionList((int) $orderId);
-        self::assertEquals(1, sizeof($transactions), 'Only one transaction should be present.');
+        self::assertCount(1, $transactions, 'Only one transaction should be present.');
 
         /** @var TransactionInterface $transaction */
         $transaction = array_pop($transactions);
@@ -82,7 +82,7 @@ class TransparentTest extends TestCase
             'Authorization transaction id should be equal to PNREF.'
         );
 
-        self::assertContains(
+        self::assertStringContainsString(
             'Order is suspended as an account verification transaction is suspected to be fraudulent.',
             $this->getOrderComment($orderId)
         );
