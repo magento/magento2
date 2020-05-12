@@ -31,7 +31,7 @@ class WishlistTest extends GraphQlAbstract
      */
     private $wishlistResource;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->customerTokenService = Bootstrap::getObjectManager()->get(CustomerTokenServiceInterface::class);
         $this->wishlistFactory = Bootstrap::getObjectManager()->get(WishlistFactory::class);
@@ -94,11 +94,12 @@ QUERY;
     }
 
     /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage The current user cannot perform operations on wishlist
      */
     public function testGetGuestWishlist()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('The current user cannot perform operations on wishlist');
+
         $query =
             <<<QUERY
 {

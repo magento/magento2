@@ -3,19 +3,23 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Analytics\Test\Unit\Model\Connector;
 
 use Magento\Analytics\Model\AnalyticsToken;
 use Magento\Analytics\Model\Config\Backend\Baseurl\SubscriptionUpdateHandler;
+use Magento\Analytics\Model\Connector\Http\ClientInterface;
 use Magento\Analytics\Model\Connector\Http\ResponseResolver;
+use Magento\Analytics\Model\Connector\UpdateCommand;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\FlagManager;
 use Magento\Framework\HTTP\ZendClient;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
-use Magento\Analytics\Model\Connector\UpdateCommand;
-use Magento\Analytics\Model\Connector\Http\ClientInterface;
 
-class UpdateCommandTest extends \PHPUnit\Framework\TestCase
+class UpdateCommandTest extends TestCase
 {
     /**
      * @var UpdateCommand
@@ -23,60 +27,48 @@ class UpdateCommandTest extends \PHPUnit\Framework\TestCase
     private $updateCommand;
 
     /**
-     * @var AnalyticsToken|\PHPUnit_Framework_MockObject_MockObject
+     * @var AnalyticsToken|MockObject
      */
     private $analyticsTokenMock;
 
     /**
-     * @var ClientInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ClientInterface|MockObject
      */
     private $httpClientMock;
 
     /**
-     * @var ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ScopeConfigInterface|MockObject
      */
     public $configMock;
 
     /**
-     * @var LoggerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var LoggerInterface|MockObject
      */
     private $loggerMock;
 
     /**
-     * @var FlagManager|\PHPUnit_Framework_MockObject_MockObject
+     * @var FlagManager|MockObject
      */
     private $flagManagerMock;
 
     /**
-     * @var ResponseResolver|\PHPUnit_Framework_MockObject_MockObject
+     * @var ResponseResolver|MockObject
      */
     private $responseResolverMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->analyticsTokenMock =  $this->getMockBuilder(AnalyticsToken::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->analyticsTokenMock =  $this->createMock(AnalyticsToken::class);
 
-        $this->httpClientMock =  $this->getMockBuilder(ClientInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->httpClientMock =  $this->getMockForAbstractClass(ClientInterface::class);
 
-        $this->configMock =  $this->getMockBuilder(ScopeConfigInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->configMock =  $this->getMockForAbstractClass(ScopeConfigInterface::class);
 
-        $this->loggerMock =  $this->getMockBuilder(LoggerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->loggerMock =  $this->getMockForAbstractClass(LoggerInterface::class);
 
-        $this->flagManagerMock =  $this->getMockBuilder(FlagManager::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->flagManagerMock =  $this->createMock(FlagManager::class);
 
-        $this->responseResolverMock = $this->getMockBuilder(ResponseResolver::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->responseResolverMock = $this->createMock(ResponseResolver::class);
 
         $this->updateCommand = new UpdateCommand(
             $this->analyticsTokenMock,
@@ -97,7 +89,7 @@ class UpdateCommandTest extends \PHPUnit\Framework\TestCase
             ->method('isTokenExist')
             ->willReturn(true);
 
-        $this->configMock->expects($this->any())
+        $this->configMock
             ->method('getValue')
             ->willReturn($configVal);
 
