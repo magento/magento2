@@ -6,25 +6,34 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\CatalogInventory\Test\Unit\Model\Indexer\Stock\Plugin;
 
-class StoreGroupTest extends \PHPUnit\Framework\TestCase
+use Magento\CatalogInventory\Model\Indexer\Stock\Plugin\StoreGroup;
+use Magento\CatalogInventory\Model\Indexer\Stock\Processor;
+use Magento\Framework\Indexer\IndexerInterface;
+use Magento\Framework\Model\AbstractModel;
+use Magento\Store\Model\ResourceModel\Group;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class StoreGroupTest extends TestCase
 {
     /**
-     * @var \Magento\CatalogInventory\Model\Indexer\Stock\Plugin\StoreGroup
+     * @var StoreGroup
      */
     protected $_model;
 
     /**
-     * @var \Magento\Framework\Indexer\IndexerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var IndexerInterface|MockObject
      */
     protected $_indexerMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->_indexerMock = $this->createMock(\Magento\CatalogInventory\Model\Indexer\Stock\Processor::class);
-        $this->_model = new \Magento\CatalogInventory\Model\Indexer\Stock\Plugin\StoreGroup($this->_indexerMock);
+        $this->_indexerMock = $this->createMock(Processor::class);
+        $this->_model = new StoreGroup($this->_indexerMock);
     }
 
     /**
@@ -33,18 +42,18 @@ class StoreGroupTest extends \PHPUnit\Framework\TestCase
      */
     public function testBeforeSave(array $data)
     {
-        $subjectMock = $this->createMock(\Magento\Store\Model\ResourceModel\Group::class);
+        $subjectMock = $this->createMock(Group::class);
         $objectMock = $this->createPartialMock(
-            \Magento\Framework\Model\AbstractModel::class,
+            AbstractModel::class,
             ['getId', 'dataHasChangedFor', '__wakeup']
         );
         $objectMock->expects($this->once())
             ->method('getId')
-            ->will($this->returnValue($data['object_id']));
+            ->willReturn($data['object_id']);
         $objectMock->expects($this->any())
             ->method('dataHasChangedFor')
             ->with('website_id')
-            ->will($this->returnValue($data['has_website_id_changed']));
+            ->willReturn($data['has_website_id_changed']);
 
         $this->_indexerMock->expects($this->once())
             ->method('markIndexerAsInvalid');

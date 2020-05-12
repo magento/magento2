@@ -3,12 +3,18 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Theme\Test\Unit\Model\Layout\Config;
 
-class SchemaLocatorTest extends \PHPUnit\Framework\TestCase
+use Magento\Framework\Config\Dom\UrnResolver;
+use Magento\Theme\Model\Layout\Config\SchemaLocator;
+use PHPUnit\Framework\TestCase;
+
+class SchemaLocatorTest extends TestCase
 {
     /**
-     * @var \Magento\Theme\Model\Layout\Config\SchemaLocator
+     * @var SchemaLocator
      */
     protected $object;
 
@@ -20,17 +26,17 @@ class SchemaLocatorTest extends \PHPUnit\Framework\TestCase
     /**
      * Initialize testable object
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         /**
-         * @var \Magento\Framework\Config\Dom\UrnResolver $urnResolverMock | \PHPUnit_Framework_MockObject_MockObject
+         * @var UrnResolver $urnResolverMock | \PHPUnit\Framework\MockObject\MockObject
          */
-        $urnResolverMock = $this->createMock(\Magento\Framework\Config\Dom\UrnResolver::class);
+        $urnResolverMock = $this->createMock(UrnResolver::class);
         $urnResolverMock->expects($this->once())
             ->method('getRealPath')
             ->with('urn:magento:framework:View/PageLayout/etc/layouts.xsd')
             ->willReturn($this->schema);
-        $this->object = new \Magento\Theme\Model\Layout\Config\SchemaLocator($urnResolverMock);
+        $this->object = new SchemaLocator($urnResolverMock);
     }
 
     /**

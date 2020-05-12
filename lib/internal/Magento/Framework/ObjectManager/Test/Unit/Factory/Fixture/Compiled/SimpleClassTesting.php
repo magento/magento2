@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\ObjectManager\Test\Unit\Factory\Fixture\Compiled;
 
 class SimpleClassTesting
@@ -50,13 +52,12 @@ class SimpleClassTesting
         DependencySharedTesting $sharedDependency,
         $value = 'value',
         array $valueArray = [
-        'default_value1',
-        'default_value2'
+            'default_value1',
+            'default_value2'
         ],
         $globalValue = '',
         $nullValue = null
     ) {
-
         $this->nonSharedDependency = $nonSharedDependency;
         $this->sharedDependency = $sharedDependency;
         $this->value = $value;

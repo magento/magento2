@@ -49,8 +49,8 @@
         <comment userInput="Start of browsing catalog" stepKey="startOfBrowsingCatalog" after="endOfSigningUpUserAccount"/>
         <amOnPage url="{{StorefrontHomePage.url}}" stepKey="amOnHomePage" after="startOfBrowsingCatalog"/>
         <waitForPageLoad stepKey="homeWaitForPageLoad" after="amOnHomePage"/>
-        <waitForElementVisible selector="{{StorefrontPanelHeaderSection.WelcomeMessage}}" stepKey="homeWaitForWelcomeMessage" after="homeWaitForPageLoad"/>
-        <see userInput="Welcome, John Doe!" selector="{{StorefrontPanelHeaderSection.WelcomeMessage}}" stepKey="homeCheckWelcome" after="homeWaitForWelcomeMessage"/>
+        <waitForElementVisible selector="{{StorefrontPanelHeaderSection.welcomeMessage}}" stepKey="homeWaitForWelcomeMessage" after="homeWaitForPageLoad"/>
+        <see userInput="Welcome, John Doe!" selector="{{StorefrontPanelHeaderSection.welcomeMessage}}" stepKey="homeCheckWelcome" after="homeWaitForWelcomeMessage"/>
 
         <!-- Open Category -->
         <comment userInput="Open category" stepKey="commentOpenCategory" after="homeCheckWelcome"/>

@@ -69,7 +69,7 @@ class MassScheduleTest extends \PHPUnit\Framework\TestCase
      */
     private $registry;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
         $this->registry = $this->objectManager->get(Registry::class);
@@ -140,7 +140,7 @@ class MassScheduleTest extends \PHPUnit\Framework\TestCase
         $this->assertCount(count($this->skus), $result->getRequestItems());
     }
 
-    public function tearDown()
+    protected function tearDown(): void
     {
         $this->publisherConsumerController->stopConsumers();
         $this->clearProducts();
