@@ -1,10 +1,8 @@
 <?php
 /**
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 declare(strict_types=1);
 
 namespace Magento\Backend\Controller\Adminhtml\Dashboard;
@@ -20,6 +18,9 @@ class AjaxBlockTest extends AbstractBackendController
     /**
      * Test execute to check render block
      *
+     * @param string $block
+     * @param string $expectedResult
+     *
      * @dataProvider ajaxBlockDataProvider
      */
     public function testExecute($block, $expectedResult)
@@ -33,7 +34,7 @@ class AjaxBlockTest extends AbstractBackendController
 
         $actual = $this->getResponse()->getBody();
 
-        $this->assertContains($expectedResult, $actual);
+        $this->assertStringContainsString($expectedResult, $actual);
     }
 
     /**
@@ -41,17 +42,9 @@ class AjaxBlockTest extends AbstractBackendController
      *
      * @return array
      */
-    public function ajaxBlockDataProvider()
+    public function ajaxBlockDataProvider(): array
     {
         return [
-            [
-                'tab_orders',
-                'order_orders_period'
-            ],
-            [
-                'tab_amounts',
-                'order_amounts_period'
-            ],
             [
                 'totals',
                 'dashboard_diagram_totals'

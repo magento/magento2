@@ -14,7 +14,7 @@
             <stories value="Add/Update attribute set"/>
             <title value="Admin should be able to unassign attributes from an attribute set"/>
             <description value="Admin should be able to unassign attributes from an attribute set"/>
-            <severity value="CRITICAL"/>
+            <severity value="BLOCKER"/>
             <testCaseId value="MC-194"/>
             <group value="Catalog"/>
         </annotations>
@@ -30,7 +30,7 @@
                 <requiredEntity createDataKey="attribute"/>
             </createData>
             <createData entity="ApiProductWithDescription" stepKey="product"/>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
             <deleteData createDataKey="product" stepKey="deleteProduct"/>
@@ -39,7 +39,7 @@
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
 
             <!-- Reindex invalidated indices after product attribute has been created/deleted -->
-            <actionGroup ref="CliRunReindexUsingCronJobsActionGroup" stepKey="reindexInvalidatedIndices"/>
+            <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
         </after>
         <!-- Assert attribute presence in storefront product additional information -->
         <amOnPage url="/$$product.custom_attributes[url_key]$$.html" stepKey="onProductPage1"/>

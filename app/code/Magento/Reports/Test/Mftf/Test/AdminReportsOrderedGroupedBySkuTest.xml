@@ -15,7 +15,7 @@
         </annotations>
         <before>
             <createData entity="_defaultCategory" stepKey="createCategory"/>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
             <actionGroup ref="CreateConfigurableProductActionGroup" stepKey="createConfigurableProduct">
                 <argument name="product" value="_defaultProduct"/>
                 <argument name="category" value="$$createCategory$$"/>
@@ -28,8 +28,8 @@
             <actionGroup ref="DeleteProductBySkuActionGroup" stepKey="deleteConfigurableProduct">
                 <argument name="sku" value="{{_defaultProduct.sku}}"/>
             </actionGroup>
-            <actionGroup ref="DeleteProductAttributeByLabelActionGroup" stepKey="deleteAttributeSet">
-                <argument name="ProductAttribute" value="colorProductAttribute"/>
+            <actionGroup ref="AdminDeleteProductAttributeByLabelActionGroup" stepKey="deleteAttributeSet">
+                <argument name="productAttributeLabel" value="{{colorProductAttribute.default_label}}"/>
             </actionGroup>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
@@ -66,13 +66,13 @@
 
         <!-- Verify data -->
         <grabTextFrom selector="{{SoldReportFilterSection.gridProduct}}" stepKey="grabData"/>
-        <assertContains stepKey="assertFirst">
+        <assertStringContainsString stepKey="assertFirst">
             <actualResult type="string">{$grabData}</actualResult>
             <expectedResult type="string">{{_defaultProduct.sku}}-{{colorProductAttribute1.name}}</expectedResult>
-        </assertContains>
-        <assertContains stepKey="assertSecond">
+        </assertStringContainsString>
+        <assertStringContainsString stepKey="assertSecond">
             <actualResult type="string">{$grabData}</actualResult>
             <expectedResult type="string">{{_defaultProduct.sku}}-{{colorProductAttribute2.name}}</expectedResult>
-        </assertContains>
+        </assertStringContainsString>
     </test>
 </tests>

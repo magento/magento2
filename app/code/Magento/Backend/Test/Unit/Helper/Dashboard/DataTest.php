@@ -3,7 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 declare(strict_types=1);
 
 namespace Magento\Backend\Test\Unit\Helper\Dashboard;
@@ -31,7 +30,7 @@ class DataTest extends TestCase
     private const STUB_CHART_DATA_HASH = '52870842b23068a78220e01eb9d4404d';
 
     /**
-     * @var \Magento\Backend\Helper\Dashboard\Data
+     * @var HelperData
      */
     private $helper;
 
@@ -48,13 +47,13 @@ class DataTest extends TestCase
     /**
      * Prepare environment for test
      */
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
+        $this->storeManagerMock = $this->getMockForAbstractClass(StoreManagerInterface::class);
         $this->deploymentConfigMock = $this->createMock(DeploymentConfig::class);
         $this->deploymentConfigMock->expects($this->once())->method('get')
             ->with(ConfigOptionsListConstants::CONFIG_PATH_INSTALL_DATE)
-            ->will($this->returnValue(self::STUB_PATH_INSTALL));
+            ->willReturn(self::STUB_PATH_INSTALL);
 
         $objectManager = new ObjectManager($this);
         $this->helper = $objectManager->getObject(
@@ -79,23 +78,6 @@ class DataTest extends TestCase
         $this->storeManagerMock->expects($this->once())->method('getStore')->willReturn($storeMock);
 
         $this->assertEquals($storeCollectionMock, $this->helper->getStores());
-    }
-
-    /**
-     * Test getDatePeriods() method
-     */
-    public function testGetDatePeriods()
-    {
-        $this->assertEquals(
-            [
-                '24h' => (string)__('Last 24 Hours'),
-                '7d' => (string)__('Last 7 Days'),
-                '1m' => (string)__('Current Month'),
-                '1y' => (string)__('YTD'),
-                '2y' => (string)__('2YTD')
-            ],
-            $this->helper->getDatePeriods()
-        );
     }
 
     /**
