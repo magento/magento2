@@ -3,22 +3,31 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\ImportExport\Test\Unit\Model\Import;
 
-class ConfigTest extends \PHPUnit\Framework\TestCase
+use Magento\Framework\Config\CacheInterface;
+use Magento\Framework\Serialize\SerializerInterface;
+use Magento\ImportExport\Model\Import\Config;
+use Magento\ImportExport\Model\Import\Config\Reader;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class ConfigTest extends TestCase
 {
     /**
-     * @var \Magento\ImportExport\Model\Import\Config\Reader|\PHPUnit_Framework_MockObject_MockObject
+     * @var Reader|MockObject
      */
     protected $readerMock;
 
     /**
-     * @var \Magento\Framework\Config\CacheInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var CacheInterface|MockObject
      */
     protected $cacheMock;
 
     /**
-     * @var \Magento\Framework\Serialize\SerializerInterface
+     * @var SerializerInterface
      */
     private $serializerMock;
 
@@ -28,15 +37,15 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
     protected $cacheId = 'some_id';
 
     /**
-     * @var \Magento\ImportExport\Model\Import\Config
+     * @var Config
      */
     protected $model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->readerMock = $this->createMock(\Magento\ImportExport\Model\Import\Config\Reader::class);
-        $this->cacheMock = $this->createMock(\Magento\Framework\Config\CacheInterface::class);
-        $this->serializerMock = $this->createMock(\Magento\Framework\Serialize\SerializerInterface::class);
+        $this->readerMock = $this->createMock(Reader::class);
+        $this->cacheMock = $this->getMockForAbstractClass(CacheInterface::class);
+        $this->serializerMock = $this->getMockForAbstractClass(SerializerInterface::class);
     }
 
     /**
@@ -52,11 +61,11 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
             'load'
         )->with(
             $this->cacheId
-        )->will(
-            $this->returnValue(false)
+        )->willReturn(
+            false
         );
-        $this->readerMock->expects($this->any())->method('read')->will($this->returnValue($value));
-        $this->model = new \Magento\ImportExport\Model\Import\Config(
+        $this->readerMock->expects($this->any())->method('read')->willReturn($value);
+        $this->model = new Config(
             $this->readerMock,
             $this->cacheMock,
             $this->cacheId,
@@ -90,11 +99,11 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
             'load'
         )->with(
             $this->cacheId
-        )->will(
-            $this->returnValue(false)
+        )->willReturn(
+            false
         );
-        $this->readerMock->expects($this->any())->method('read')->will($this->returnValue($configData));
-        $this->model = new \Magento\ImportExport\Model\Import\Config(
+        $this->readerMock->expects($this->any())->method('read')->willReturn($configData);
+        $this->model = new Config(
             $this->readerMock,
             $this->cacheMock,
             $this->cacheId,

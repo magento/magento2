@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 /**
  * Test class for \Magento\Catalog\Model\ResourceModel\Attribute\AttributeConditionsBuilder
@@ -10,25 +11,24 @@
 namespace Magento\Catalog\Test\Unit\Model\ResourceModel\Attribute;
 
 use Magento\Catalog\Model\Entity\Attribute;
-use Magento\Framework\DB\Adapter\Pdo\Mysql;
-use Magento\Store\Model\Website;
 use Magento\Catalog\Model\ResourceModel\Attribute\ConditionBuilder;
+use Magento\Catalog\Model\ResourceModel\Eav\Attribute as CatalogEavAttribute;
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
+use Magento\Framework\DB\Adapter\Pdo\Mysql;
 use Magento\Framework\EntityManager\EntityMetadata;
 use Magento\Framework\EntityManager\EntityMetadataInterface;
-use Magento\Store\Api\Data\StoreInterface;
 use Magento\Framework\Model\Entity\ScopeInterface;
+use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManager;
-use Magento\Catalog\Model\ResourceModel\Eav\Attribute as CatalogEavAttribute;
+use Magento\Store\Model\Website;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
- * Class AttributeConditionsBuilderTest
- * @package Magento\Catalog\Test\Unit\Model\ResourceModel\Attribute
- *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ConditionBuilderTest extends \PHPUnit\Framework\TestCase
+class ConditionBuilderTest extends TestCase
 {
     /**
      * @param AbstractAttribute $attribute
@@ -75,7 +75,7 @@ class ConditionBuilderTest extends \PHPUnit\Framework\TestCase
 
         $metadata = $this->getMockBuilder(EntityMetadataInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $scopes = [];
 
@@ -139,13 +139,13 @@ class ConditionBuilderTest extends \PHPUnit\Framework\TestCase
 
         $attribute->expects($this->never())
             ->method('isScopeWebsite')
-            ->will(
-                $this->returnValue(true)
+            ->willReturn(
+                true
             );
 
         $metadata = $this->getMockBuilder(EntityMetadataInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $scopes = [];
 
@@ -185,8 +185,8 @@ class ConditionBuilderTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $storeManager->expects($this->once())
             ->method('getStore')
-            ->will(
-                $this->returnValue($store)
+            ->willReturn(
+                $store
             );
 
         $conditionsBuilder = new ConditionBuilder($storeManager);
@@ -213,13 +213,13 @@ class ConditionBuilderTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $attribute->expects($this->never())
             ->method('isScopeWebsite')
-            ->will(
-                $this->returnValue(true)
+            ->willReturn(
+                true
             );
 
         $metadata = $this->getMockBuilder(EntityMetadataInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $scope = $this->getMockBuilder(ScopeInterface::class)
             ->disableOriginalConstructor()
@@ -228,16 +228,16 @@ class ConditionBuilderTest extends \PHPUnit\Framework\TestCase
                 'getValue',
                 'getFallback',
             ])
-            ->getMock();
+            ->getMockForAbstractClass();
         $scope->expects($this->once())
             ->method('getIdentifier')
-            ->will(
-                $this->returnValue(Store::STORE_ID)
+            ->willReturn(
+                Store::STORE_ID
             );
         $scope->expects($this->once())
             ->method('getValue')
-            ->will(
-                $this->returnValue(1)
+            ->willReturn(
+                1
             );
         $scopes = [
             $scope,
@@ -251,8 +251,8 @@ class ConditionBuilderTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $store->expects($this->once())
             ->method('getWebsite')
-            ->will(
-                $this->returnValue(false)
+            ->willReturn(
+                false
             );
 
         $linkFieldValue = 5;
@@ -294,8 +294,8 @@ class ConditionBuilderTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $storeManager->expects($this->once())
             ->method('getStore')
-            ->will(
-                $this->returnValue($store)
+            ->willReturn(
+                $store
             );
 
         $conditionsBuilder = new ConditionBuilder($storeManager);
@@ -324,10 +324,10 @@ class ConditionBuilderTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $dbAdapater->expects($this->exactly(3))
             ->method('quoteIdentifier')
-            ->will(
-                $this->returnCallback(function ($input) {
+            ->willReturnCallback(
+                function ($input) {
                     return sprintf('`%s`', $input);
-                })
+                }
             );
 
         $metadata = $this->getMockBuilder(EntityMetadata::class)
@@ -339,13 +339,13 @@ class ConditionBuilderTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $metadata->expects($this->once())
             ->method('getLinkField')
-            ->will(
-                $this->returnValue('entity_id')
+            ->willReturn(
+                'entity_id'
             );
         $metadata->expects($this->exactly(3))
             ->method('getEntityConnection')
-            ->will(
-                $this->returnValue($dbAdapater)
+            ->willReturn(
+                $dbAdapater
             );
 
         $scopes = [
@@ -431,7 +431,7 @@ class ConditionBuilderTest extends \PHPUnit\Framework\TestCase
 
         $metadata = $this->getMockBuilder(EntityMetadataInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $scopes = [];
 
@@ -473,8 +473,8 @@ class ConditionBuilderTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $storeManager->expects($this->once())
             ->method('getStore')
-            ->will(
-                $this->returnValue($store)
+            ->willReturn(
+                $store
             );
 
         $conditionsBuilder = new ConditionBuilder($storeManager);
@@ -503,8 +503,8 @@ class ConditionBuilderTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $metadata->expects($this->once())
             ->method('getLinkField')
-            ->will(
-                $this->returnValue('entity_id')
+            ->willReturn(
+                'entity_id'
             );
 
         $scopes = [
@@ -546,7 +546,7 @@ class ConditionBuilderTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return MockObject
      */
     private function getValidAttributeMock()
     {
@@ -559,20 +559,20 @@ class ConditionBuilderTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $attribute->expects($this->never())
             ->method('isScopeWebsite')
-            ->will(
-                $this->returnValue(true)
+            ->willReturn(
+                true
             );
         $attribute->expects($this->once())
             ->method('getAttributeId')
-            ->will(
-                $this->returnValue(12)
+            ->willReturn(
+                12
             );
 
         return $attribute;
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return MockObject
      */
     private function getValidStoreMock()
     {
@@ -584,12 +584,12 @@ class ConditionBuilderTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $website->expects($this->once())
             ->method('getStoreIds')
-            ->will(
-                $this->returnValue([
+            ->willReturn(
+                [
                     1,
                     2,
                     3,
-                ])
+                ]
             );
 
         $store = $this->getMockBuilder(Store::class)
@@ -600,15 +600,15 @@ class ConditionBuilderTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $store->expects($this->once())
             ->method('getWebsite')
-            ->will(
-                $this->returnValue($website)
+            ->willReturn(
+                $website
             );
 
         return $store;
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return MockObject
      */
     private function getValidScopeMock()
     {
@@ -619,16 +619,16 @@ class ConditionBuilderTest extends \PHPUnit\Framework\TestCase
                 'getValue',
                 'getFallback',
             ])
-            ->getMock();
+            ->getMockForAbstractClass();
         $scope->expects($this->once())
             ->method('getIdentifier')
-            ->will(
-                $this->returnValue(Store::STORE_ID)
+            ->willReturn(
+                Store::STORE_ID
             );
         $scope->expects($this->once())
             ->method('getValue')
-            ->will(
-                $this->returnValue(1)
+            ->willReturn(
+                1
             );
 
         return $scope;

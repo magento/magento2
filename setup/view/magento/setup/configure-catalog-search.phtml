@@ -1,0 +1,242 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+?>
+<div class="nav-bar-outer-actions">
+    <div class="outer-actions-inner-wrap">
+        <div class="btn-wrap btn-wrap-triangle-right btn-wrap-next">
+            <button
+                type="button"
+                class="btn btn-prime"
+                ng-click="testConnection(true)"
+            >Next</button>
+        </div>
+        <div class="btn-wrap btn-wrap-triangle-left btn-wrap-prev">
+            <button
+                type="button"
+                class="btn"
+                ng-click="previousState()"
+            >Back</button>
+        </div>
+    </div>
+</div>
+
+<h2 class="page-sub-title">{{$state.current.header}}</h2>
+
+<div
+    class="message message-success"
+    ng-show="search.testConnection.result.success && search.testConnection.result.message"
+>
+    <span class="message-text">{{search.testConnection.result.message}}</span>
+</div>
+<div
+    class="message message-error"
+    ng-show="search.testConnection.result.success === false && search.testConnection.result.message"
+>
+    <span class="message-text">{{search.testConnection.result.message}}</span>
+</div>
+
+<form novalidate name="searchConfig" role="form">
+
+    <fieldset class="form-fieldset configure-catalog-search">
+        <div class="row form-row">
+            <div class="col-m-3">
+                <label class="form-label required" for="searchEngine">
+                    Search Engine
+                </label>
+            </div>
+            <div class="col-m-4">
+                <label class="form-select-label" for="searchEngine">
+                    <select
+                        id="searchEngine"
+                        class="form-el-select"
+                        ng-model="search.config.engine"
+                        tooltip-placement="right"
+                        tooltip="Select your version of Elasticsearch."
+                        tooltip-trigger="focus"
+                        tooltip-append-to-body="true"
+                    >
+                        <?php foreach ( $this->availableSearchEngines as $value => $label ): ?>
+                            <?= "<option value=\"" . $value . "\">" . $label . "</option>" ?>
+                        <?php endforeach; ?>
+                    </select>
+                </label>
+            </div>
+        </div>
+        <div class="row form-row">
+            <div class="col-m-3">
+                <label class="form-label required" for="elasticsearchHost">
+                    Elasticsearch Hostname
+                </label>
+            </div>
+            <div class="col-m-4">
+                <input
+                    id="elasticsearchHost"
+                    class="form-el-input"
+                    tooltip-placement="right"
+                    tooltip="The host name or IP address of the Elasticsearch server."
+                    tooltip-trigger="focus"
+                    tooltip-append-to-body="true"
+                    type="text"
+                    ng-class="{'invalid' : searchConfig.elasticsearchHost.$invalid && searchConfig.submitted}"
+                    name="elasticsearchHost"
+                    ng-model="search.config.elasticsearch.hostname"
+                    required
+                >
+                <div class="error-container">
+                    <span ng-show="searchConfig.elasticsearchHost.$invalid">
+                        Hostname is required.
+                    </span>
+                </div>
+            </div>
+        </div>
+        <div class="row form-row">
+            <div class="col-m-3">
+                <label class="form-label required" for="elasticsearchPort">
+                    Elasticsearch Port
+                </label>
+            </div>
+            <div class="col-m-4">
+                <input
+                    id="elasticsearchPort"
+                    class="form-el-input"
+                    tooltip-placement="right"
+                    tooltip="The port for incoming HTTP requests. The default is 9200."
+                    tooltip-trigger="focus"
+                    tooltip-append-to-body="true"
+                    type="text"
+                    ng-pattern="/^[0-9]+$/"
+                    ng-class="{'invalid' : searchConfig.elasticsearchPort.$invalid && searchConfig.submitted}"
+                    name="elasticsearchPort"
+                    ng-model="search.config.elasticsearch.port"
+                    required
+                >
+                <div class="error-container">
+                    <span ng-show="searchConfig.elasticsearchPort.$invalid">
+                        Port is required and must be a numeric value.
+                    </span>
+                </div>
+            </div>
+        </div>
+        <div class="row form-row">
+            <div class="col-m-3">
+                <label class="form-label" for="elasticsearchEnableAuth">
+                    Elasticsearch HTTP Authentication
+                </label>
+            </div>
+            <div class="col-m-4">
+                <input
+                    id="elasticsearchEnableAuth"
+                    class="form-el-checkbox"
+                    type="checkbox"
+                    name="elasticsearchEnableAuth"
+                    ng-model="search.config.elasticsearch.enableAuth"
+                    ng-checked="search.config.elasticsearch.enableAuth"
+                >
+                <label class="form-label" for="elasticsearchEnableAuth">
+                    Enable HTTP Authentication
+                </label>
+            </div>
+        </div>
+        <div class="row form-row" ng-show="search.config.elasticsearch.enableAuth">
+            <div class="col-m-3">
+                <label class="form-label" for="elasticsearchUsername">
+                    Elasticsearch Username
+                </label>
+            </div>
+            <div class="col-m-4">
+                <input
+                    id="elasticsearchUsername"
+                    class="form-el-input"
+                    tooltip-placement="right"
+                    tooltip="Elasticsearch username. Only applicable if HTTP authentication is enabled."
+                    tooltip-trigger="focus"
+                    tooltip-append-to-body="true"
+                    type="text"
+                    name="elasticsearchUsername"
+                    ng-model="search.config.elasticsearch.username"
+                >
+            </div>
+        </div>
+        <div class="row form-row" ng-show="search.config.elasticsearch.enableAuth">
+            <div class="col-m-3">
+                <label class="form-label" for="elasticsearchPassword">
+                    Elasticsearch Password
+                </label>
+            </div>
+            <div class="col-m-4">
+                <input
+                    id="elasticsearchPassword"
+                    class="form-el-input"
+                    tooltip-placement="right"
+                    tooltip="Elasticsearch password. Only applicable if HTTP authentication is enabled."
+                    tooltip-trigger="focus"
+                    tooltip-append-to-body="true"
+                    type="password"
+                    name="elasticsearchPassword"
+                    ng-model="search.config.elasticsearch.password"
+                >
+            </div>
+        </div>
+        <div class="row form-row">
+            <div class="col-m-3">
+                <label class="form-label" for="elasticsearchIndexPrefix">
+                    Elasticsearch Index Prefix
+                </label>
+            </div>
+            <div class="col-m-4">
+                <input
+                    id="elasticsearchIndexPrefix"
+                    class="form-el-input"
+                    tooltip-placement="right"
+                    tooltip="A prefix that identifies the Elasticsearch index."
+                    tooltip-trigger="focus"
+                    tooltip-append-to-body="true"
+                    type="text"
+                    name="elasticsearchIndexPrefix"
+                    ng-model="search.config.elasticsearch.indexPrefix"
+                >
+            </div>
+        </div>
+        <div class="row form-row">
+            <div class="col-m-3">
+                <label class="form-label" for="elasticsearchTimeout">
+                    Elasticsearch Timeout (seconds)
+                </label>
+            </div>
+            <div class="col-m-4">
+                <input
+                    id="elasticsearchTimeout"
+                    class="form-el-input"
+                    tooltip-placement="right"
+                    tooltip="The number of seconds to wait for an Elasticsearch request to complete before it times out."
+                    tooltip-trigger="focus"
+                    tooltip-append-to-body="true"
+                    type="text"
+                    ng-pattern="/^[0-9]+$/"
+                    ng-class="{'invalid' : searchConfig.elasticsearchTimeout.$invalid && searchConfig.submitted}"
+                    name="elasticsearchTimeout"
+                    ng-model="search.config.elasticsearch.timeout"
+                    required
+                >
+                <div class="error-container">
+                    <span ng-show="searchConfig.elasticsearchTimeout.$invalid">
+                        Please enter a number greater than 0.
+                    </span>
+                </div>
+            </div>
+        </div>
+        <div class="row form-row">
+            <div class="col-m-3">
+            </div>
+            <div class="col-m-4">
+                <button name="testConnection" ng-click="testConnection()" ng-disabled="{{checking}}">Test Connection</button>
+            </div>
+        </div>
+    </fieldset>
+</form>
