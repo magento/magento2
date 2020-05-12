@@ -3,43 +3,56 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 /**
  * Test theme model
  */
 namespace Magento\Theme\Test\Unit\Model;
 
-class ThemeValidatorTest extends \PHPUnit\Framework\TestCase
+use Magento\Framework\App\Config\Value;
+use Magento\Framework\DataObject;
+use Magento\Framework\View\Design\Theme\ThemeProviderInterface;
+use Magento\Store\Model\Store;
+use Magento\Store\Model\StoreManagerInterface;
+use Magento\Store\Model\Website;
+use Magento\Theme\Model\Theme;
+use Magento\Theme\Model\ThemeValidator;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class ThemeValidatorTest extends TestCase
 {
     /**
-     * @var \Magento\Theme\Model\ThemeValidator
+     * @var ThemeValidator
      */
     protected $themeValidator;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var StoreManagerInterface|MockObject
      */
     protected $storeManager;
 
     /**
-     * @var \Magento\Framework\View\Design\Theme\ThemeProviderInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ThemeProviderInterface|MockObject
      */
     protected $themeProvider;
 
     /**
-     * @var \Magento\Framework\App\Config\Value|\PHPUnit_Framework_MockObject_MockObject
+     * @var Value|MockObject
      */
     protected $configData;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->storeManager = $this->createMock(\Magento\Store\Model\StoreManagerInterface::class);
-        $this->themeProvider = $this->createMock(\Magento\Framework\View\Design\Theme\ThemeProviderInterface::class);
-        $this->configData = $this->createPartialMock(
-            \Magento\Framework\App\Config\Value::class,
-            ['getCollection', 'addFieldToFilter']
-        );
-        $this->themeValidator = new \Magento\Theme\Model\ThemeValidator(
+        $this->storeManager = $this->getMockForAbstractClass(StoreManagerInterface::class);
+        $this->themeProvider = $this->getMockForAbstractClass(ThemeProviderInterface::class);
+        $this->configData = $this->getMockBuilder(Value::class)
+            ->addMethods(['addFieldToFilter'])
+            ->onlyMethods(['getCollection'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->themeValidator = new ThemeValidator(
             $this->storeManager,
             $this->themeProvider,
             $this->configData
@@ -48,11 +61,11 @@ class ThemeValidatorTest extends \PHPUnit\Framework\TestCase
 
     public function testValidateIsThemeInUse()
     {
-        $theme = $this->createMock(\Magento\Theme\Model\Theme::class);
+        $theme = $this->createMock(Theme::class);
         $theme->expects($this->once())->method('getId')->willReturn(6);
-        $defaultEntity = new \Magento\Framework\DataObject(['value' => 6, 'scope' => 'default', 'scope_id' => 8]);
-        $websitesEntity = new \Magento\Framework\DataObject(['value' => 6, 'scope' => 'websites', 'scope_id' => 8]);
-        $storesEntity = new \Magento\Framework\DataObject(['value' => 6, 'scope' => 'stores', 'scope_id' => 8]);
+        $defaultEntity = new DataObject(['value' => 6, 'scope' => 'default', 'scope_id' => 8]);
+        $websitesEntity = new DataObject(['value' => 6, 'scope' => 'websites', 'scope_id' => 8]);
+        $storesEntity = new DataObject(['value' => 6, 'scope' => 'stores', 'scope_id' => 8]);
         $this->themeProvider->expects($this->once())->method('getThemeByFullPath')->willReturn($theme);
         $this->configData->expects($this->once())->method('getCollection')->willReturn($this->configData);
         $this->configData
@@ -63,9 +76,9 @@ class ThemeValidatorTest extends \PHPUnit\Framework\TestCase
             ->expects($this->at(2))
             ->method('addFieldToFilter')
             ->willReturn([$defaultEntity, $websitesEntity, $storesEntity]);
-        $website = $this->createPartialMock(\Magento\Store\Model\Website::class, ['getName']);
+        $website = $this->createPartialMock(Website::class, ['getName']);
         $website->expects($this->once())->method('getName')->willReturn('websiteA');
-        $store = $this->createPartialMock(\Magento\Store\Model\Store::class, ['getName']);
+        $store = $this->createPartialMock(Store::class, ['getName']);
         $store->expects($this->once())->method('getName')->willReturn('storeA');
         $this->storeManager->expects($this->once())->method('getWebsite')->willReturn($website);
         $this->storeManager->expects($this->once())->method('getStore')->willReturn($store);
