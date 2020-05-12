@@ -87,14 +87,14 @@ class ExportTest extends \Magento\TestFramework\TestCase\AbstractBackendControll
         $this->assertEquals(
             1,
             \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
-                '//fieldset[@id="base_fieldset"]',
+                '//div[@data-bind="scope: \'export_form.export_form\'"]',
                 $body
             )
         );
         $this->assertEquals(
-            3,
+            1,
             \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
-                '//fieldset[@id="base_fieldset"]/div[contains(@class,"field")]',
+                '//div[@data-bind="scope: \'export_grid.export_grid\'"]',
                 $body
             )
         );
