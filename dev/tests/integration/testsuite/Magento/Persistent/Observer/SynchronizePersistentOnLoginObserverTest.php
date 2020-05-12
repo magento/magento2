@@ -30,7 +30,7 @@ class SynchronizePersistentOnLoginObserverTest extends \PHPUnit\Framework\TestCa
      */
     protected $_customerSession;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->_objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->_persistentSession = $this->_objectManager->get(\Magento\Persistent\Helper\Session::class);

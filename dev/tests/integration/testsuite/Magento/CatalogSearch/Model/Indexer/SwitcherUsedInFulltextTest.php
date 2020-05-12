@@ -71,7 +71,7 @@ class SwitcherUsedInFulltextTest extends \PHPUnit\Framework\TestCase
      */
     protected $dimension;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = Bootstrap::getObjectManager();
 
