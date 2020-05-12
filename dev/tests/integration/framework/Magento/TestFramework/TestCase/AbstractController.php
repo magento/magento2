@@ -68,7 +68,7 @@ abstract class AbstractController extends TestCase
     /**
      * Bootstrap application before any test
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_assertSessionErrors = false;
         $this->_objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
@@ -79,7 +79,7 @@ abstract class AbstractController extends TestCase
     /**
      * @inheritDoc
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->_request = null;
         $this->_response = null;
@@ -89,7 +89,7 @@ abstract class AbstractController extends TestCase
     /**
      * Ensure that there were no error messages displayed on the admin panel
      */
-    protected function assertPostConditions()
+    protected function assertPostConditions(): void
     {
         if ($this->_assertSessionErrors) {
             // equalTo() is intentionally used instead of isEmpty() to provide the informative diff
@@ -112,7 +112,7 @@ abstract class AbstractController extends TestCase
         $request->setDispatched(false);
         $request->setRequestUri($uri);
         if ($request->isPost()
-            && !array_key_exists('form_key', $request->getPost())
+            && !property_exists($request->getPost(), 'form_key')
         ) {
             /** @var FormKey $formKey */
             $formKey = $this->_objectManager->get(FormKey::class);
@@ -164,7 +164,7 @@ abstract class AbstractController extends TestCase
     public function assert404NotFound()
     {
         $this->assertEquals('noroute', $this->getRequest()->getControllerName());
-        $this->assertContains('404 Not Found', $this->getResponse()->getBody());
+        $this->assertStringContainsString('404 Not Found', $this->getResponse()->getBody());
     }
 
     /**
