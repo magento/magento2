@@ -70,7 +70,7 @@ class CatalogProductListCollectionAppendSummaryFieldsObserverTest extends TestCa
     /**
      * @inheritdoc
      */
-    protected function setUp() : void
+    protected function setUp(): void
     {
         $this->eventMock = $this->getMockBuilder(Event::class)
             ->disableOriginalConstructor()

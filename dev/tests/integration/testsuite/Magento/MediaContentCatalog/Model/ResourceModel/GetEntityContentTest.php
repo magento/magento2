@@ -42,7 +42,7 @@ class GetEntityContentTest extends TestCase
     /**
      * @inheritdoc
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
         $objectManager = Bootstrap::getObjectManager();
         $this->getContent = $objectManager->get(GetEntityContentsInterface::class);

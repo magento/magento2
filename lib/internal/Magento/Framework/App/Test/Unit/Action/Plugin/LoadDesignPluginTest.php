@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\App\Test\Unit\Action\Plugin;
 
 use Magento\Framework\App\Action\Action;
@@ -24,7 +26,7 @@ class LoadDesignPluginTest extends TestCase
         $designLoaderMock = $this->createMock(DesignLoader::class);
 
         /** @var MockObject|ManagerInterface $messageManagerMock */
-        $messageManagerMock = $this->createMock(ManagerInterface::class);
+        $messageManagerMock = $this->getMockForAbstractClass(ManagerInterface::class);
 
         $plugin = new LoadDesignPlugin($designLoaderMock, $messageManagerMock);
 
