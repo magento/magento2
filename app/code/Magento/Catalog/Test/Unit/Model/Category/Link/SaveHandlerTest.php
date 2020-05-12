@@ -3,21 +3,21 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Catalog\Test\Unit\Model\Category\Link;
 
 use Magento\Catalog\Api\Data\CategoryLinkInterface;
+use Magento\Catalog\Api\Data\ProductExtensionInterface;
 use Magento\Catalog\Model\Category\Link\SaveHandler;
+use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\ResourceModel\Product\CategoryLink;
 use Magento\Framework\EntityManager\HydratorInterface;
 use Magento\Framework\EntityManager\HydratorPool;
-use Magento\Catalog\Model\Product;
-use Magento\Framework\Indexer\IndexerRegistry;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-/**
- * Class SaveHandlerTest
- */
-class SaveHandlerTest extends \PHPUnit\Framework\TestCase
+class SaveHandlerTest extends TestCase
 {
     /**
      * @var SaveHandler
@@ -42,12 +42,13 @@ class SaveHandlerTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->productCategoryLink = $this->getMockBuilder(CategoryLink::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->hydrator = $this->getMockBuilder(HydratorInterface::class)->getMockForAbstractClass();
+        $this->hydrator = $this->getMockBuilder(HydratorInterface::class)
+            ->getMockForAbstractClass();
         $this->hydratorPool = $this->getMockBuilder(HydratorPool::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -79,7 +80,7 @@ class SaveHandlerTest extends \PHPUnit\Framework\TestCase
                 ->willReturn($this->hydrator);
         }
 
-        $extensionAttributes = $this->getMockBuilder(\Magento\Catalog\Api\Data\ProductExtensionInterface::class)
+        $extensionAttributes = $this->getMockBuilder(ProductExtensionInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['setCategoryLinks', 'getCategoryLinks'])
             ->getMockForAbstractClass();

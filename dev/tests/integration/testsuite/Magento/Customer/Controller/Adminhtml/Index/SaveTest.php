@@ -57,7 +57,7 @@ class SaveTest extends AbstractBackendController
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->customerRepository = $this->_objectManager->get(CustomerRepositoryInterface::class);
@@ -157,8 +157,10 @@ class SaveTest extends AbstractBackendController
             $this->equalTo($expectedMessage),
             MessageInterface::TYPE_ERROR
         );
-        $this->assertNotEmpty($this->session->getCustomerFormData());
-        $this->assertArraySubset($expectedData, $this->session->getCustomerFormData());
+        $customerFormData = $this->session->getCustomerFormData();
+        $this->assertNotEmpty($customerFormData);
+        unset($customerFormData['form_key']);
+        $this->assertEquals($expectedData, $customerFormData);
         $this->assertRedirect($this->stringContains($this->baseControllerUrl . 'new/key/'));
     }
 
@@ -405,10 +407,12 @@ class SaveTest extends AbstractBackendController
             ]),
             MessageInterface::TYPE_ERROR
         );
-        $this->assertArraySubset(
+        $customerFormData = $this->session->getCustomerFormData();
+        $this->assertNotEmpty($customerFormData);
+        unset($customerFormData['form_key']);
+        $this->assertEquals(
             $postFormatted,
-            $this->session->getCustomerFormData(),
-            true,
+            $customerFormData,
             'Customer form data should be formatted'
         );
         $this->assertRedirect($this->stringContains($this->baseControllerUrl . 'new/key/'));

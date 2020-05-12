@@ -36,7 +36,7 @@ class PurchaseorderTest extends TestCase
     protected function setUp(): void
     {
         $objectManagerHelper = new ObjectManager($this);
-        $eventManager = $this->createMock(EventManagerInterface::class);
+        $eventManager = $this->getMockForAbstractClass(EventManagerInterface::class);
         $paymentDataMock = $this->createMock(PaymentHelper::class);
         $this->scopeConfigMock = $this->createPartialMock(
             ScopeConfigInterface::class,
@@ -71,10 +71,10 @@ class PurchaseorderTest extends TestCase
 
         $data = new DataObject([]);
 
-        $addressMock = $this->createMock(OrderAddressInterface::class);
+        $addressMock = $this->getMockForAbstractClass(OrderAddressInterface::class);
         $addressMock->expects($this->once())->method('getCountryId')->willReturn('UY');
 
-        $orderMock = $this->createMock(OrderInterface::class);
+        $orderMock = $this->getMockForAbstractClass(OrderInterface::class);
         $orderMock->expects($this->once())->method('getBillingAddress')->willReturn($addressMock);
 
         $instance = $this->createMock(Payment::class);

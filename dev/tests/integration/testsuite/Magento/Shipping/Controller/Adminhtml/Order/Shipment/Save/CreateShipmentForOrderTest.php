@@ -30,7 +30,7 @@ class CreateShipmentForOrderTest extends AbstractShipmentControllerTest
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->escaper = $this->_objectManager->get(Escaper::class);
@@ -245,8 +245,8 @@ class CreateShipmentForOrderTest extends AbstractShipmentControllerTest
     public function assert404NotFound()
     {
         $this->assertEquals('noroute', $this->getRequest()->getControllerName());
-        $this->assertContains('404 Error', $this->getResponse()->getBody());
-        $this->assertContains('Page not found', $this->getResponse()->getBody());
+        $this->assertStringContainsString('404 Error', $this->getResponse()->getBody());
+        $this->assertStringContainsString('Page not found', $this->getResponse()->getBody());
     }
 
     /**
