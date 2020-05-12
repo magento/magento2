@@ -52,7 +52,7 @@ class CacheManager
     }
 
     /**
-     * Clears cache and updates translations file
+     * Clear cache and update translations file.
      *
      * @return array
      */
@@ -60,7 +60,8 @@ class CacheManager
     {
         $this->eventManager->dispatch('adminhtml_cache_flush_system');
         $translations = $this->translateResource->getTranslationArray(null, $this->localeResolver->getLocale());
-        $this->fileManager->updateTranslationFileContent(json_encode($translations));
+        $this->fileManager->updateTranslationFileContent($translations);
+
         return $translations;
     }
 }

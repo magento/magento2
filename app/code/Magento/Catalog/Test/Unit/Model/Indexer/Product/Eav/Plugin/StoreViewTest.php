@@ -3,9 +3,17 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Catalog\Test\Unit\Model\Indexer\Product\Eav\Plugin;
 
-class StoreViewTest extends \PHPUnit\Framework\TestCase
+use Magento\Catalog\Model\Indexer\Product\Eav\Plugin\StoreView;
+use Magento\Catalog\Model\Indexer\Product\Eav\Processor;
+use Magento\Framework\Model\AbstractModel;
+use Magento\Store\Model\ResourceModel\Store;
+use PHPUnit\Framework\TestCase;
+
+class StoreViewTest extends TestCase
 {
     /**
      * @param array $data
@@ -13,33 +21,33 @@ class StoreViewTest extends \PHPUnit\Framework\TestCase
      */
     public function testBeforeSave(array $data)
     {
-        $eavProcessorMock = $this->getMockBuilder(\Magento\Catalog\Model\Indexer\Product\Eav\Processor::class)
+        $eavProcessorMock = $this->getMockBuilder(Processor::class)
             ->disableOriginalConstructor()
             ->getMock();
         $matcher = $data['matcher'];
         $eavProcessorMock->expects($this->$matcher())
             ->method('markIndexerAsInvalid');
 
-        $subjectMock = $this->getMockBuilder(\Magento\Store\Model\ResourceModel\Store::class)
+        $subjectMock = $this->getMockBuilder(Store::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $objectMock = $this->getMockBuilder(\Magento\Framework\Model\AbstractModel::class)
+        $objectMock = $this->getMockBuilder(AbstractModel::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getId', 'dataHasChangedFor', 'getIsActive', '__wakeup'])
+            ->setMethods(['getId', 'dataHasChangedFor', 'getIsActive'])
             ->getMock();
         $objectMock->expects($this->any())
             ->method('getId')
-            ->will($this->returnValue($data['object_id']));
+            ->willReturn($data['object_id']);
         $objectMock->expects($this->any())
             ->method('dataHasChangedFor')
             ->with('group_id')
-            ->will($this->returnValue($data['has_group_id_changed']));
+            ->willReturn($data['has_group_id_changed']);
         $objectMock->expects($this->any())
             ->method('getIsActive')
-            ->will($this->returnValue($data['is_active']));
+            ->willReturn($data['is_active']);
 
-        $model = new \Magento\Catalog\Model\Indexer\Product\Eav\Plugin\StoreView($eavProcessorMock);
+        $model = new StoreView($eavProcessorMock);
         $model->beforeSave($subjectMock, $objectMock);
     }
 

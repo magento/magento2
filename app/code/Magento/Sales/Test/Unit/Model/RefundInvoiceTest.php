@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Sales\Test\Unit\Model;
 
 use Magento\Framework\App\ResourceConnection;
@@ -16,8 +18,11 @@ use Magento\Sales\Api\Data\InvoiceInterface;
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Api\InvoiceRepositoryInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
+use Magento\Sales\Exception\CouldNotRefundException;
+use Magento\Sales\Exception\DocumentValidationException;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Config as OrderConfig;
+use Magento\Sales\Model\Order\Creditmemo;
 use Magento\Sales\Model\Order\Creditmemo\NotifierInterface;
 use Magento\Sales\Model\Order\CreditmemoDocumentFactory;
 use Magento\Sales\Model\Order\OrderStateResolverInterface;
@@ -25,135 +30,136 @@ use Magento\Sales\Model\Order\RefundAdapterInterface;
 use Magento\Sales\Model\Order\Validation\RefundInvoiceInterface;
 use Magento\Sales\Model\RefundInvoice;
 use Magento\Sales\Model\ValidatorResultInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 
 /**
- * Class RefundInvoiceTest
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.TooManyFields)
  */
-class RefundInvoiceTest extends \PHPUnit\Framework\TestCase
+class RefundInvoiceTest extends TestCase
 {
     /**
-     * @var ResourceConnection|\PHPUnit_Framework_MockObject_MockObject
+     * @var ResourceConnection|MockObject
      */
     private $resourceConnectionMock;
 
     /**
-     * @var OrderRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var OrderRepositoryInterface|MockObject
      */
     private $orderRepositoryMock;
 
     /**
-     * @var InvoiceRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var InvoiceRepositoryInterface|MockObject
      */
     private $invoiceRepositoryMock;
 
     /**
-     * @var CreditmemoDocumentFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var CreditmemoDocumentFactory|MockObject
      */
     private $creditmemoDocumentFactoryMock;
 
     /**
-     * @var RefundAdapterInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var RefundAdapterInterface|MockObject
      */
     private $refundAdapterMock;
 
     /**
-     * @var OrderStateResolverInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var OrderStateResolverInterface|MockObject
      */
     private $orderStateResolverMock;
 
     /**
-     * @var OrderConfig|\PHPUnit_Framework_MockObject_MockObject
+     * @var OrderConfig|MockObject
      */
     private $configMock;
 
     /**
-     * @var Order\CreditmemoRepository|\PHPUnit_Framework_MockObject_MockObject
+     * @var Order\CreditmemoRepository|MockObject
      */
     private $creditmemoRepositoryMock;
 
     /**
-     * @var NotifierInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var NotifierInterface|MockObject
      */
     private $notifierMock;
 
     /**
-     * @var RefundInvoice|\PHPUnit_Framework_MockObject_MockObject
+     * @var RefundInvoice|MockObject
      */
     private $refundInvoice;
 
     /**
-     * @var CreditmemoCreationArgumentsInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var CreditmemoCreationArgumentsInterface|MockObject
      */
     private $creditmemoCommentCreationMock;
 
     /**
-     * @var CreditmemoCommentCreationInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var CreditmemoCommentCreationInterface|MockObject
      */
     private $creditmemoCreationArgumentsMock;
 
     /**
-     * @var OrderInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var OrderInterface|MockObject
      */
     private $orderMock;
 
     /**
-     * @var OrderInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var OrderInterface|MockObject
      */
     private $invoiceMock;
 
     /**
-     * @var CreditmemoInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var CreditmemoInterface|MockObject
      */
     private $creditmemoMock;
 
     /**
-     * @var AdapterInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var AdapterInterface|MockObject
      */
     private $adapterInterface;
 
     /**
-     * @var CreditmemoItemCreationInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var CreditmemoItemCreationInterface|MockObject
      */
     private $creditmemoItemCreationMock;
 
     /**
-     * @var RefundInvoiceInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var RefundInvoiceInterface|MockObject
      */
     private $refundInvoiceValidatorMock;
 
     /**
-     * @var ValidatorResultInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ValidatorResultInterface|MockObject
      */
     private $validationMessagesMock;
 
     /**
-     * @var LoggerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var LoggerInterface|MockObject
      */
     private $loggerMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->resourceConnectionMock = $this->getMockBuilder(ResourceConnection::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->orderRepositoryMock = $this->getMockBuilder(OrderRepositoryInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->invoiceRepositoryMock = $this->getMockBuilder(InvoiceRepositoryInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->creditmemoDocumentFactoryMock = $this->getMockBuilder(CreditmemoDocumentFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->refundAdapterMock = $this->getMockBuilder(RefundAdapterInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->refundInvoiceValidatorMock = $this->getMockBuilder(RefundInvoiceInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->orderStateResolverMock = $this->getMockBuilder(OrderStateResolverInterface::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
@@ -203,7 +209,7 @@ class RefundInvoiceTest extends \PHPUnit\Framework\TestCase
         $this->validationMessagesMock = $this->getMockBuilder(ValidatorResultInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['hasMessages', 'getMessages', 'addMessage'])
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->refundInvoice = new RefundInvoice(
             $this->resourceConnectionMock,
@@ -226,8 +232,8 @@ class RefundInvoiceTest extends \PHPUnit\Framework\TestCase
      * @param array $items
      * @param bool $notify
      * @param bool $appendComment
-     * @throws \Magento\Sales\Exception\CouldNotRefundException
-     * @throws \Magento\Sales\Exception\DocumentValidationException
+     * @throws CouldNotRefundException
+     * @throws DocumentValidationException
      * @dataProvider dataProvider
      */
     public function testOrderCreditmemo($invoiceId, $isOnline, $items, $notify, $appendComment)
@@ -293,7 +299,7 @@ class RefundInvoiceTest extends \PHPUnit\Framework\TestCase
             ->willReturnSelf();
         $this->creditmemoMock->expects($this->once())
             ->method('setState')
-            ->with(\Magento\Sales\Model\Order\Creditmemo::STATE_REFUNDED)
+            ->with(Creditmemo::STATE_REFUNDED)
             ->willReturnSelf();
         $this->creditmemoRepositoryMock->expects($this->once())
             ->method('save')
@@ -326,11 +332,9 @@ class RefundInvoiceTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    /**
-     * @expectedException \Magento\Sales\Api\Exception\DocumentValidationExceptionInterface
-     */
     public function testDocumentValidationException()
     {
+        $this->expectException('Magento\Sales\Api\Exception\DocumentValidationExceptionInterface');
         $invoiceId = 1;
         $items = [1 => $this->creditmemoItemCreationMock];
         $notify = true;
@@ -389,11 +393,9 @@ class RefundInvoiceTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    /**
-     * @expectedException \Magento\Sales\Api\Exception\CouldNotRefundExceptionInterface
-     */
     public function testCouldNotCreditmemoException()
     {
+        $this->expectException('Magento\Sales\Api\Exception\CouldNotRefundExceptionInterface');
         $invoiceId = 1;
         $items = [1 => $this->creditmemoItemCreationMock];
         $notify = true;

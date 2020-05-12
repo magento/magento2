@@ -106,7 +106,7 @@
             <item>1</item>
         </array>
         <data key="simple_action">by_fixed</data>
-        <data key="discount_amount">10</data>
+        <data key="discount_amount">10.000000</data>
     </entity>
 
     <entity name="CatalogRuleWithoutDiscount" type="catalogRule">

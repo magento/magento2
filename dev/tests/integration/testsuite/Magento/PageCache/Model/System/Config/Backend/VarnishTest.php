@@ -17,7 +17,7 @@ class VarnishTest extends \PHPUnit\Framework\TestCase
      */
     protected $_config;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_config = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             \Magento\Framework\App\Config\MutableScopeConfigInterface::class

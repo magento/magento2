@@ -3,39 +3,45 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Quote\Test\Unit\Model;
 
+use Magento\Framework\App\ResourceConnection\ConfigInterface;
+use Magento\Framework\Config\CacheInterface;
 use Magento\Framework\Serialize\SerializerInterface;
+use Magento\Quote\Model\QueryResolver;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class QueryResolverTest extends \PHPUnit\Framework\TestCase
+class QueryResolverTest extends TestCase
 {
     /**
-     * @var \Magento\Quote\Model\QueryResolver
+     * @var QueryResolver
      */
     private $quoteResolver;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     private $configMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     private $cacheMock;
 
     /**
-     * @var SerializerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var SerializerInterface|MockObject
      */
     private $serializer;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->configMock = $this->createMock(\Magento\Framework\App\ResourceConnection\ConfigInterface::class);
-        $this->cacheMock = $this->createMock(\Magento\Framework\Config\CacheInterface::class);
+        $this->configMock = $this->getMockForAbstractClass(ConfigInterface::class);
+        $this->cacheMock = $this->getMockForAbstractClass(CacheInterface::class);
         $this->serializer = $this->getMockForAbstractClass(SerializerInterface::class);
-        $this->quoteResolver = new \Magento\Quote\Model\QueryResolver(
+        $this->quoteResolver = new QueryResolver(
             $this->configMock,
             $this->cacheMock,
             'connection_config_cache',
