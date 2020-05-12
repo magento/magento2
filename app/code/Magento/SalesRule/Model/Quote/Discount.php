@@ -300,6 +300,6 @@ class Discount extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
                 }
             }
         }
-        $address->getExtensionAttributes()->setDiscounts(array_values($addressDiscountAggregator));
+            $address->getExtensionAttributes()->setDiscounts(array_values($addressDiscountAggregator));
     }
 }
