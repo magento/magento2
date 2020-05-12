@@ -28,7 +28,7 @@ class PayflowproTest extends \PHPUnit\Framework\TestCase
      */
     protected $gatewayMock;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->_objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $httpClientFactoryMock = $this->getMockBuilder(\Magento\Framework\HTTP\ZendClientFactory::class)
@@ -37,15 +37,15 @@ class PayflowproTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $this->_httpClientMock = $this->getMockBuilder(\Magento\Framework\HTTP\ZendClient::class)->setMethods([])
             ->disableOriginalConstructor()->getMock();
-        $this->_httpClientMock->expects($this->any())->method('setUri')->will($this->returnSelf());
-        $this->_httpClientMock->expects($this->any())->method('setConfig')->will($this->returnSelf());
-        $this->_httpClientMock->expects($this->any())->method('setMethod')->will($this->returnSelf());
-        $this->_httpClientMock->expects($this->any())->method('setParameterPost')->will($this->returnSelf());
-        $this->_httpClientMock->expects($this->any())->method('setHeaders')->will($this->returnSelf());
-        $this->_httpClientMock->expects($this->any())->method('setUrlEncodeBody')->will($this->returnSelf());
+        $this->_httpClientMock->expects($this->any())->method('setUri')->willReturnSelf();
+        $this->_httpClientMock->expects($this->any())->method('setConfig')->willReturnSelf();
+        $this->_httpClientMock->expects($this->any())->method('setMethod')->willReturnSelf();
+        $this->_httpClientMock->expects($this->any())->method('setParameterPost')->willReturnSelf();
+        $this->_httpClientMock->expects($this->any())->method('setHeaders')->willReturnSelf();
+        $this->_httpClientMock->expects($this->any())->method('setUrlEncodeBody')->willReturnSelf();
 
         $httpClientFactoryMock->expects($this->any())->method('create')
-            ->will($this->returnValue($this->_httpClientMock));
+            ->willReturn($this->_httpClientMock);
 
         $mathRandomMock = $this->createMock(\Magento\Framework\Math\Random::class);
         $loggerMock = $this->createMock(\Magento\Payment\Model\Method\Logger::class);
@@ -73,7 +73,7 @@ class PayflowproTest extends \PHPUnit\Framework\TestCase
         $order->loadByIncrementId('100000001');
 
         $this->_httpClientMock->expects($this->any())->method('request')
-            ->will($this->returnValue(new \Magento\Framework\DataObject(['body' => 'RESULTval=12&val2=34'])));
+            ->willReturn(new \Magento\Framework\DataObject(['body' => 'RESULTval=12&val2=34']));
         $expectedResult = ['resultval' => '12', 'val2' => '34', 'result_code' => null];
 
         $this->assertEquals($expectedResult, $this->_model->acceptPayment($order->getPayment()));
