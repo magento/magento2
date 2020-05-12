@@ -51,7 +51,7 @@ class ViewTest extends TestCase
      */
     protected $resultPageMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new ObjectManagerHelper($this);
 
@@ -69,7 +69,7 @@ class ViewTest extends TestCase
             ->method('create')
             ->willReturn($this->forwardMock);
 
-        $this->requestMock = $this->createMock(RequestInterface::class);
+        $this->requestMock = $this->getMockForAbstractClass(RequestInterface::class);
         $this->pageHelperMock = $this->createMock(PageHelper::class);
 
         $this->controller = $objectManager->getObject(

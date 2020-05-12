@@ -28,7 +28,7 @@ class DataFixtureTest extends TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->object = $this->getMockBuilder(DataFixture::class)
             ->setMethods(['_applyOneFixture', 'getComponentRegistrar', 'getTestKey'])

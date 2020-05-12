@@ -50,7 +50,7 @@ class MultishippingTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
 
@@ -242,7 +242,7 @@ class MultishippingTest extends \PHPUnit\Framework\TestCase
      */
     private function getPaymentNonceMock(): MockObject
     {
-        $commandResult = $this->createMock(CommandResultInterface::class);
+        $commandResult = $this->getMockForAbstractClass(CommandResultInterface::class);
         $commandResult->method('get')
             ->willReturn(['paymentMethodNonce' => 'testNonce']);
         $paymentNonce = $this->createMock(GetPaymentNonceCommand::class);

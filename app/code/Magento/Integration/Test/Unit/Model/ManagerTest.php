@@ -3,69 +3,75 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Integration\Test\Unit\Model;
 
-use \Magento\Integration\Model\Integration;
+use Magento\Authorization\Model\Acl\AclRetriever;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Integration\Api\IntegrationServiceInterface;
+use Magento\Integration\Model\Config;
+use Magento\Integration\Model\ConfigBasedIntegrationManager;
+use Magento\Integration\Model\Integration;
+use PHPUnit\Framework\TestCase;
 
-/**
- * Class to test Integration Manager
- */
-class ManagerTest extends \PHPUnit\Framework\TestCase
+class ManagerTest extends TestCase
 {
     /**
      * Integration service
      *
-     * @var \Magento\Integration\Api\IntegrationServiceInterface
+     * @var IntegrationServiceInterface
      */
     protected $integrationServiceMock;
 
     /**
-     * @var \Magento\Authorization\Model\Acl\AclRetriever
+     * @var AclRetriever
      */
     protected $aclRetriever;
 
     /**
-     * @var \Magento\Integration\Model\Config
+     * @var Config
      */
     protected $configMock;
 
     /**
      * Integration config
      *
-     * @var \Magento\Integration\Model\ConfigBasedIntegrationManager
+     * @var ConfigBasedIntegrationManager
      */
     protected $integrationManager;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->integrationServiceMock = $this->getMockBuilder(
-            \Magento\Integration\Api\IntegrationServiceInterface::class
-        )->disableOriginalConstructor()->setMethods(
-            [
-                'findByName',
-                'update',
-                'create',
-                'get',
-                'findByConsumerId',
-                'findActiveIntegrationByConsumerId',
-                'delete',
-                'getSelectedResources'
-            ]
-        )->getMock();
+            IntegrationServiceInterface::class
+        )->disableOriginalConstructor()
+            ->setMethods(
+                [
+                    'findByName',
+                    'update',
+                    'create',
+                    'get',
+                    'findByConsumerId',
+                    'findActiveIntegrationByConsumerId',
+                    'delete',
+                    'getSelectedResources'
+                ]
+            )->getMock();
 
-        $this->aclRetriever = $this->getMockBuilder(\Magento\Authorization\Model\Acl\AclRetriever::class)
+        $this->aclRetriever = $this->getMockBuilder(AclRetriever::class)
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();
 
-        $this->configMock = $this->getMockBuilder(\Magento\Integration\Model\Config::class)
+        $this->configMock = $this->getMockBuilder(Config::class)
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();
-        $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $objectManagerHelper = new ObjectManager($this);
 
         $this->integrationManager = $objectManagerHelper->getObject(
-            \Magento\Integration\Model\ConfigBasedIntegrationManager::class,
+            ConfigBasedIntegrationManager::class,
             [
                 'integrationService' => $this->integrationServiceMock,
                 'aclRetriever' => $this->aclRetriever,
@@ -74,7 +80,7 @@ class ManagerTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function tearDown()
+    protected function tearDown(): void
     {
         unset($this->integrationServiceMock);
         unset($this->integrationManager);
@@ -92,8 +98,8 @@ class ManagerTest extends \PHPUnit\Framework\TestCase
             $this->once()
         )->method(
             'getIntegrations'
-        )->will(
-            $this->returnValue(
+        )->willReturn(
+            
                 [
                     'TestIntegration1' => [
                         'email' => 'test-integration1@magento.com',
@@ -102,14 +108,14 @@ class ManagerTest extends \PHPUnit\Framework\TestCase
                     ],
                     'TestIntegration2' => ['email' => 'test-integration2@magento.com'],
                 ]
-            )
+            
         );
-        $intLookupData1 = $this->getMockBuilder(\Magento\Integration\Model\Integration::class)
+        $intLookupData1 = $this->getMockBuilder(Integration::class)
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();
         $intLookupData1->expects($this->any())->method('getId')->willReturn(1);
-        $intLookupData2 = $this->getMockBuilder(\Magento\Integration\Model\Integration::class)
+        $intLookupData2 = $this->getMockBuilder(Integration::class)
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();
@@ -134,8 +140,8 @@ class ManagerTest extends \PHPUnit\Framework\TestCase
             'findByName'
         )->with(
             'TestIntegration1'
-        )->will(
-            $this->returnValue($intLookupData1)
+        )->willReturn(
+            $intLookupData1
         );
         $this->integrationServiceMock->expects($this->once())->method('create')->with($integrationsData2);
         $this->integrationServiceMock->expects(
@@ -144,8 +150,8 @@ class ManagerTest extends \PHPUnit\Framework\TestCase
             'findByName'
         )->with(
             'TestIntegration2'
-        )->will(
-            $this->returnValue($intLookupData2)
+        )->willReturn(
+            $intLookupData2
         );
         $this->integrationServiceMock->expects($this->at(1))->method('update')->with($intUpdateData1);
         $this->integrationManager->processIntegrationConfig(['TestIntegration1', 'TestIntegration2']);
@@ -180,14 +186,14 @@ class ManagerTest extends \PHPUnit\Framework\TestCase
             'Magento_Customer::customer'
         ];
 
-        $integrationObject = $this->getMockBuilder(\Magento\Integration\Model\Integration::class)
+        $integrationObject = $this->getMockBuilder(Integration::class)
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();
 
         // Integration already exists, so update with new data and recreate
-        $this->integrationServiceMock->expects($this->at(0))->method('findByName')->with('TestIntegration1')->will(
-            $this->returnValue($integrationObject)
+        $this->integrationServiceMock->expects($this->at(0))->method('findByName')->with('TestIntegration1')->willReturn(
+            $integrationObject
         );
         $this->aclRetriever->expects($this->once())->method('getAllowedResourcesByUser')
             ->willReturn($originalResources);
@@ -221,21 +227,21 @@ class ManagerTest extends \PHPUnit\Framework\TestCase
             ]
         ];
 
-        $integrationObject = $this->getMockBuilder(\Magento\Integration\Model\Integration::class)
+        $integrationObject = $this->getMockBuilder(Integration::class)
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();
 
         // Integration1 does not exist, so create it
-        $this->integrationServiceMock->expects($this->at(0))->method('findByName')->with('TestIntegration1')->will(
-            $this->returnValue($integrationObject)
+        $this->integrationServiceMock->expects($this->at(0))->method('findByName')->with('TestIntegration1')->willReturn(
+            $integrationObject
         );
         $integrationObject->expects($this->any())->method('getId')->willReturn(false);
         $this->integrationServiceMock->expects($this->any())->method('create');
 
         // Integration2 does not exist, so create it
-        $this->integrationServiceMock->expects($this->at(2))->method('findByName')->with('TestIntegration2')->will(
-            $this->returnValue($integrationObject)
+        $this->integrationServiceMock->expects($this->at(2))->method('findByName')->with('TestIntegration2')->willReturn(
+            $integrationObject
         );
 
         $this->integrationManager->processConfigBasedIntegrations($integrations);

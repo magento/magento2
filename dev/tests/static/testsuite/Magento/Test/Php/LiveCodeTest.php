@@ -36,7 +36,7 @@ class LiveCodeTest extends \PHPUnit\Framework\TestCase
      *
      * @return void
      */
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         self::$pathToSource = BP;
         self::$reportDir = self::$pathToSource . '/dev/tests/static/report';
@@ -430,9 +430,9 @@ class LiveCodeTest extends \PHPUnit\Framework\TestCase
             }
         }
 
-        $this->assertEquals(
+        $this->assertCount(
             0,
-            count($filesMissingStrictTyping),
+            $filesMissingStrictTyping,
             "Following files are missing strict type declaration:"
             . PHP_EOL
             . implode(PHP_EOL, $filesMissingStrictTyping)

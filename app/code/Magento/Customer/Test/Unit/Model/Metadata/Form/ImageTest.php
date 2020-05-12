@@ -3,13 +3,25 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Customer\Test\Unit\Model\Metadata\Form;
 
 use Magento\Customer\Api\AddressMetadataInterface;
 use Magento\Customer\Api\CustomerMetadataInterface;
+use Magento\Customer\Api\Data\ValidationRuleInterface;
 use Magento\Customer\Model\FileProcessor;
-use Magento\MediaStorage\Model\File\Validator\NotProtectedExtension;
+use Magento\Customer\Model\FileProcessorFactory;
+use Magento\Customer\Model\Metadata\Form\File;
+use Magento\Customer\Model\Metadata\Form\Image;
+use Magento\Framework\Api\Data\ImageContentInterface;
 use Magento\Framework\Api\Data\ImageContentInterfaceFactory;
+use Magento\Framework\App\Request\Http;
+use Magento\Framework\File\UploaderFactory;
+use Magento\Framework\Filesystem;
+use Magento\Framework\Url\EncoderInterface;
+use Magento\MediaStorage\Model\File\Validator\NotProtectedExtension;
+use PHPUnit\Framework\MockObject\MockObject;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -17,72 +29,72 @@ use Magento\Framework\Api\Data\ImageContentInterfaceFactory;
 class ImageTest extends AbstractFormTestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Url\EncoderInterface
+     * @var MockObject|EncoderInterface
      */
     private $urlEncode;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\MediaStorage\Model\File\Validator\NotProtectedExtension
+     * @var MockObject|NotProtectedExtension
      */
     private $fileValidatorMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Filesystem
+     * @var MockObject|Filesystem
      */
     private $fileSystemMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\Request\Http
+     * @var MockObject|Http
      */
     private $requestMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\File\UploaderFactory
+     * @var MockObject|UploaderFactory
      */
     private $uploaderFactoryMock;
 
     /**
-     * @var FileProcessor|\PHPUnit_Framework_MockObject_MockObject
+     * @var FileProcessor|MockObject
      */
     private $fileProcessorMock;
 
     /**
-     * @var \Magento\Framework\Api\Data\ImageContentInterfaceFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var ImageContentInterfaceFactory|MockObject
      */
     private $imageContentFactory;
 
     /**
-     * @var \Magento\Customer\Model\FileProcessorFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var FileProcessorFactory|MockObject
      */
     private $fileProcessorFactoryMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
-        $this->urlEncode = $this->getMockBuilder(\Magento\Framework\Url\EncoderInterface::class)
+        $this->urlEncode = $this->getMockBuilder(EncoderInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->fileValidatorMock = $this->getMockBuilder(NotProtectedExtension::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->fileSystemMock = $this->getMockBuilder(\Magento\Framework\Filesystem::class)
+        $this->fileSystemMock = $this->getMockBuilder(Filesystem::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->requestMock = $this->getMockBuilder(\Magento\Framework\App\Request\Http::class)
+        $this->requestMock = $this->getMockBuilder(Http::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->uploaderFactoryMock = $this->getMockBuilder(\Magento\Framework\File\UploaderFactory::class)
+        $this->uploaderFactoryMock = $this->getMockBuilder(UploaderFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->fileProcessorMock = $this->getMockBuilder(\Magento\Customer\Model\FileProcessor::class)
+        $this->fileProcessorMock = $this->getMockBuilder(FileProcessor::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->imageContentFactory = $this->getMockBuilder(ImageContentInterfaceFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
-        $this->fileProcessorFactoryMock = $this->getMockBuilder(\Magento\Customer\Model\FileProcessorFactory::class)
+        $this->fileProcessorFactoryMock = $this->getMockBuilder(FileProcessorFactory::class)
             ->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
@@ -93,11 +105,11 @@ class ImageTest extends AbstractFormTestCase
 
     /**
      * @param array $data
-     * @return \Magento\Customer\Model\Metadata\Form\File
+     * @return File
      */
     private function initialize(array $data)
     {
-        return new \Magento\Customer\Model\Metadata\Form\Image(
+        return new Image(
             $this->localeMock,
             $this->loggerMock,
             $this->attributeMetadataMock,
@@ -175,7 +187,7 @@ class ImageTest extends AbstractFormTestCase
         $maxFileSize = 1;
 
         $validationRuleMock = $this->getMockBuilder(
-            \Magento\Customer\Api\Data\ValidationRuleInterface::class
+            ValidationRuleInterface::class
         )->getMockForAbstractClass();
         $validationRuleMock->expects($this->any())
             ->method('getName')
@@ -215,7 +227,7 @@ class ImageTest extends AbstractFormTestCase
         $maxImageWidth = 1;
 
         $validationRuleMock = $this->getMockBuilder(
-            \Magento\Customer\Api\Data\ValidationRuleInterface::class
+            ValidationRuleInterface::class
         )->getMockForAbstractClass();
         $validationRuleMock->expects($this->any())
             ->method('getName')
@@ -255,7 +267,7 @@ class ImageTest extends AbstractFormTestCase
         $maxImageHeight = 1;
 
         $validationRuleMock = $this->getMockBuilder(
-            \Magento\Customer\Api\Data\ValidationRuleInterface::class
+            ValidationRuleInterface::class
         )->getMockForAbstractClass();
         $validationRuleMock->expects($this->any())
             ->method('getName')
@@ -350,7 +362,7 @@ class ImageTest extends AbstractFormTestCase
             ->willReturnSelf();
 
         $imageContentMock = $this->getMockBuilder(
-            \Magento\Framework\Api\Data\ImageContentInterface::class
+            ImageContentInterface::class
         )->getMockForAbstractClass();
         $imageContentMock->expects($this->once())
             ->method('setName')

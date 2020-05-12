@@ -24,7 +24,7 @@ class AdminConfigFixtureTest extends TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->object = $this->createPartialMock(
             AdminConfigFixture::class,
@@ -46,8 +46,8 @@ class AdminConfigFixtureTest extends TestCase
             '_getConfigValue'
         )->with(
             'any_config'
-        )->will(
-            $this->returnValue('some_value')
+        )->willReturn(
+            'some_value'
         );
         $this->object->expects($this->at(1))->method('_setConfigValue')->with('any_config', 'some_value');
         $this->object->startTest($this);
@@ -81,8 +81,8 @@ class AdminConfigFixtureTest extends TestCase
             '_getConfigValue'
         )->with(
             'any_config'
-        )->will(
-            $this->returnValue('some_value')
+        )->willReturn(
+            'some_value'
         );
         $this->object->expects($this->at(1))->method('_setConfigValue')->with('any_config', 'some_value');
         $this->object->initStoreAfter();

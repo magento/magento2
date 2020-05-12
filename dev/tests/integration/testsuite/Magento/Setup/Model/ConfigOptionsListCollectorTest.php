@@ -8,11 +8,11 @@ namespace Magento\Setup\Model;
 class ConfigOptionsListCollectorTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Framework\ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\ObjectManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $objectManagerProvider;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->objectManagerProvider = $this->createMock(\Magento\Setup\Model\ObjectManagerProvider::class);
         $this->objectManagerProvider
