@@ -67,9 +67,9 @@ class AjaxTest extends \Magento\TestFramework\TestCase\AbstractController
     }
 
     /**
-     * @inheritdoc
+     * @inheritDoc
      */
-    public static function tearDownAfterClass()
+    public static function tearDownAfterClass(): void
     {
         try {
             Bootstrap::getObjectManager()->get(StringUtils::class)->deleteTranslate('phrase with &');
