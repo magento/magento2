@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Quote\Test\Unit\Model\Quote\Address\Total;
 
 use Magento\Catalog\Api\Data\ProductExtensionInterface;
@@ -48,7 +50,7 @@ class SubtotalTest extends TestCase
      */
     protected $stockRegistry;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
         $this->subtotalModel = $this->objectManager->getObject(
