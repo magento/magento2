@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="StorefrontAddSimpleProductWithCustomOptionToWishlistActionGroup">
+        <annotations>
+            <description>Add product with dropdown custom options to wishlist</description>
+        </annotations>
+        <waitForPageLoad stepKey="waitForProductPageLoad"/>
+        <seeElement selector="{{StorefrontProductPageSection.customOptionDropDown}}" stepKey="seeCustomOptionDropDown"/>
+        <selectOption selector="{{StorefrontProductPageSection.customOptionDropDown}}" userInput="1" stepKey="selectProductOption"/>
+        <seeElement selector="{{StorefrontProductPageSection.addToWishlist}}" stepKey="seeAddToWishlistButton"/>
+        <click selector="{{StorefrontProductPageSection.addToWishlist}}" stepKey="addToWishList"/>
+    </actionGroup>
+</actionGroups>

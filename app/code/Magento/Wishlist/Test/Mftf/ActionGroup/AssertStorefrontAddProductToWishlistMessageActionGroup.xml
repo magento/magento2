@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AssertStorefrontAddProductToWishlistMessageActionGroup">
+        <annotations>
+            <description>Assert success message after the product is added to wishlist</description>
+        </annotations>
+        <arguments>
+            <argument name="productName" type="string"/>
+        </arguments>
+        <waitForElement selector="{{StorefrontCustomerWishlistSection.successMsg}}" time="30" stepKey="addProductToWishlistWaitForSuccessMessage"/>
+        <see selector="{{StorefrontCustomerWishlistSection.successMsg}}" userInput="{{productName}} has been added to your Wish List. Click here to continue shopping." stepKey="addProductToWishlistSeeProductNameAddedToWishlist"/>
+    </actionGroup>
+</actionGroups>
