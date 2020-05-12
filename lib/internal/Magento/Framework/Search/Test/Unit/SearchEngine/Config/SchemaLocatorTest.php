@@ -3,20 +3,24 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\Search\Test\Unit\SearchEngine\Config;
 
+use Magento\Framework\Config\Dom\UrnResolver;
 use Magento\Framework\Search\SearchEngine\Config\SchemaLocator;
+use PHPUnit\Framework\TestCase;
 
-class SchemaLocatorTest extends \PHPUnit\Framework\TestCase
+class SchemaLocatorTest extends TestCase
 {
     /**
      * @var SchemaLocator
      */
     private $model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $urnResolver = $this->createMock(\Magento\Framework\Config\Dom\UrnResolver::class);
+        $urnResolver = $this->createMock(UrnResolver::class);
         $urnResolver->expects($this->any())
             ->method('getRealPath')
             ->with(SchemaLocator::SEARCH_ENGINE_XSD_PATH)

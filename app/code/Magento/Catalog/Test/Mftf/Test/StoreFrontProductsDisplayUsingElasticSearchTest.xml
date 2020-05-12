@@ -113,7 +113,7 @@
                 <requiredEntity createDataKey="createCategory1"/>
             </createData>
 
-            <actionGroup ref="CliRunReindexUsingCronJobsActionGroup" stepKey="reindexInvalidatedIndices"/>
+            <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
             <magentoCLI command="indexer:reindex" arguments="catalogsearch_fulltext" stepKey="performReindex"/>
             <magentoCLI command="cache:clean" arguments="full_page" stepKey="cleanFullPageCache"/>
         </before>

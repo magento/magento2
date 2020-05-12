@@ -3,53 +3,61 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Rule\Test\Unit\Model\Condition\Sql;
 
+use Magento\Eav\Model\Entity\Collection\AbstractCollection;
+use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Framework\DB\Adapter\Pdo\Mysql;
+use Magento\Framework\DB\Select;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Rule\Model\Condition\AbstractCondition;
+use Magento\Rule\Model\Condition\Combine;
+use Magento\Rule\Model\Condition\Sql\Builder;
+use Magento\Rule\Model\Condition\Sql\Expression;
+use Magento\Rule\Model\Condition\Sql\ExpressionFactory;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class BuilderTest extends \PHPUnit\Framework\TestCase
+class BuilderTest extends TestCase
 {
     /**
-     * @var \Magento\Rule\Model\Condition\Sql\Builder|\PHPUnit_Framework_MockObject_MockObject
+     * @var Builder|MockObject
      */
     protected $_builder;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $expressionMock = $this->createMock(\Magento\Rule\Model\Condition\Sql\Expression::class);
+        $expressionMock = $this->createMock(Expression::class);
         $expressionFactory = $this->createPartialMock(
-            \Magento\Rule\Model\Condition\Sql\ExpressionFactory::class,
+            ExpressionFactory::class,
             ['create']
         );
         $expressionFactory->expects($this->any())
             ->method('create')
-            ->will($this->returnValue($expressionMock));
+            ->willReturn($expressionMock);
         $this->_builder = (new ObjectManagerHelper($this))->getObject(
-            \Magento\Rule\Model\Condition\Sql\Builder::class,
+            Builder::class,
             ['expressionFactory' => $expressionFactory]
         );
     }
 
     public function testAttachConditionToCollection()
     {
-        $collection = $this->createPartialMock(
-            \Magento\Eav\Model\Entity\Collection\AbstractCollection::class,
-            [
-                'getResource',
-                'getSelect',
-                'getStoreId',
-                'getDefaultStoreId',
-            ]
-        );
-        $combine = $this->createPartialMock(\Magento\Rule\Model\Condition\Combine::class, ['getConditions']);
-        $resource = $this->createPartialMock(\Magento\Framework\DB\Adapter\Pdo\Mysql::class, ['getConnection']);
-        $select = $this->createPartialMock(\Magento\Framework\DB\Select::class, ['where']);
+        $collection = $this->getMockBuilder(AbstractCollection::class)
+            ->addMethods(['getStoreId', 'getDefaultStoreId'])
+            ->onlyMethods(['getResource', 'getSelect'])
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+        $combine = $this->createPartialMock(Combine::class, ['getConditions']);
+        $resource = $this->createPartialMock(Mysql::class, ['getConnection']);
+        $select = $this->createPartialMock(Select::class, ['where']);
         $select->expects($this->never())
             ->method('where');
 
         $connection = $this->getMockForAbstractClass(
-            \Magento\Framework\DB\Adapter\AdapterInterface::class,
+            AdapterInterface::class,
             [],
             '',
             false
@@ -57,18 +65,18 @@ class BuilderTest extends \PHPUnit\Framework\TestCase
 
         $collection->expects($this->once())
             ->method('getResource')
-            ->will($this->returnValue($resource));
+            ->willReturn($resource);
         $collection->expects($this->any())
             ->method('getSelect')
-            ->will($this->returnValue($select));
+            ->willReturn($select);
 
         $resource->expects($this->once())
             ->method('getConnection')
-            ->will($this->returnValue($connection));
+            ->willReturn($connection);
 
         $combine->expects($this->any())
             ->method('getConditions')
-            ->will($this->returnValue([]));
+            ->willReturn([]);
 
         $this->_builder->attachConditionToCollection($collection, $combine);
     }
@@ -82,7 +90,7 @@ class BuilderTest extends \PHPUnit\Framework\TestCase
     public function testAttachConditionAsHtmlToCollection()
     {
         $abstractCondition = $this->getMockForAbstractClass(
-            \Magento\Rule\Model\Condition\AbstractCondition::class,
+            AbstractCondition::class,
             [],
             '',
             false,
@@ -91,49 +99,46 @@ class BuilderTest extends \PHPUnit\Framework\TestCase
             ['getOperatorForValidate', 'getMappedSqlField', 'getAttribute', 'getBindArgumentValue']
         );
 
-        $abstractCondition->expects($this->once())->method('getMappedSqlField')->will($this->returnValue('argument'));
-        $abstractCondition->expects($this->once())->method('getOperatorForValidate')->will($this->returnValue('&gt;'));
-        $abstractCondition->expects($this->at(1))->method('getAttribute')->will($this->returnValue('attribute'));
-        $abstractCondition->expects($this->at(2))->method('getAttribute')->will($this->returnValue('attribute'));
-        $abstractCondition->expects($this->once())->method('getBindArgumentValue')->will($this->returnValue(10));
+        $abstractCondition->expects($this->once())->method('getMappedSqlField')->willReturn('argument');
+        $abstractCondition->expects($this->once())->method('getOperatorForValidate')->willReturn('&gt;');
+        $abstractCondition->expects($this->at(1))->method('getAttribute')->willReturn('attribute');
+        $abstractCondition->expects($this->at(2))->method('getAttribute')->willReturn('attribute');
+        $abstractCondition->expects($this->once())->method('getBindArgumentValue')->willReturn(10);
 
         $conditions = [$abstractCondition];
         $collection = $this->createPartialMock(
-            \Magento\Eav\Model\Entity\Collection\AbstractCollection::class,
+            AbstractCollection::class,
             [
                 'getResource',
                 'getSelect'
             ]
         );
-        $combine = $this->createPartialMock(
-            \Magento\Rule\Model\Condition\Combine::class,
-            [
-                'getConditions',
-                'getValue',
-                'getAggregator'
-            ]
-        );
+        $combine = $this->getMockBuilder(Combine::class)
+            ->addMethods(['getAggregator'])
+            ->onlyMethods(['getConditions', 'getValue'])
+            ->disableOriginalConstructor()
+            ->getMock();
 
-        $resource = $this->createPartialMock(\Magento\Framework\DB\Adapter\Pdo\Mysql::class, ['getConnection']);
-        $select = $this->createPartialMock(\Magento\Framework\DB\Select::class, ['where']);
+        $resource = $this->createPartialMock(Mysql::class, ['getConnection']);
+        $select = $this->createPartialMock(Select::class, ['where']);
         $select->expects($this->never())->method('where');
 
         $connection = $this->getMockForAbstractClass(
-            \Magento\Framework\DB\Adapter\AdapterInterface::class,
+            AdapterInterface::class,
             ['quoteInto'],
             '',
             false
         );
 
-        $connection->expects($this->once())->method('quoteInto')->with(' > ?', 10)->will($this->returnValue(' > 10'));
-        $collection->expects($this->once())->method('getResource')->will($this->returnValue($resource));
-        $resource->expects($this->once())->method('getConnection')->will($this->returnValue($connection));
+        $connection->expects($this->once())->method('quoteInto')->with(' > ?', 10)->willReturn(' > 10');
+        $collection->expects($this->once())->method('getResource')->willReturn($resource);
+        $resource->expects($this->once())->method('getConnection')->willReturn($connection);
         $combine->expects($this->once())->method('getValue')->willReturn('attribute');
         $combine->expects($this->once())->method('getAggregator')->willReturn(' AND ');
-        $combine->expects($this->at(0))->method('getConditions')->will($this->returnValue($conditions));
-        $combine->expects($this->at(1))->method('getConditions')->will($this->returnValue($conditions));
-        $combine->expects($this->at(2))->method('getConditions')->will($this->returnValue($conditions));
-        $combine->expects($this->at(3))->method('getConditions')->will($this->returnValue($conditions));
+        $combine->expects($this->at(0))->method('getConditions')->willReturn($conditions);
+        $combine->expects($this->at(1))->method('getConditions')->willReturn($conditions);
+        $combine->expects($this->at(2))->method('getConditions')->willReturn($conditions);
+        $combine->expects($this->at(3))->method('getConditions')->willReturn($conditions);
 
         $this->_builder->attachConditionToCollection($collection, $combine);
     }
