@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Unit\Observer;
 
@@ -10,8 +11,9 @@ use Magento\Catalog\Model\ResourceModel\Attribute\WebsiteAttributesSynchronizer;
 use Magento\Catalog\Observer\SynchronizeWebsiteAttributesOnStoreChange;
 use Magento\Framework\Event\Observer;
 use Magento\Store\Model\Store;
+use PHPUnit\Framework\TestCase;
 
-class SynchronizeWebsiteAttributesOnStoreChangeTest extends \PHPUnit\Framework\TestCase
+class SynchronizeWebsiteAttributesOnStoreChangeTest extends TestCase
 {
     /**
      * @param $invalidDataObject
@@ -90,8 +92,8 @@ class SynchronizeWebsiteAttributesOnStoreChangeTest extends \PHPUnit\Framework\T
 
         $store->expects($this->once())
             ->method('hasDataChanges')
-            ->will(
-                $this->returnValue(false)
+            ->willReturn(
+                false
             );
 
         $store->expects($this->never())
@@ -147,27 +149,27 @@ class SynchronizeWebsiteAttributesOnStoreChangeTest extends \PHPUnit\Framework\T
 
         $store->expects($this->once())
             ->method('hasDataChanges')
-            ->will(
-                $this->returnValue(true)
+            ->willReturn(
+                true
             );
 
         $store->expects($this->once())
             ->method('getOrigData')
             ->with('website_id')
-            ->will(
-                $this->returnValue($sameWebsiteId)
+            ->willReturn(
+                $sameWebsiteId
             );
 
         $store->expects($this->once())
             ->method('getWebsiteId')
-            ->will(
-                $this->returnValue($sameWebsiteId)
+            ->willReturn(
+                $sameWebsiteId
             );
 
         $store->expects($this->once())
             ->method('isObjectNew')
-            ->will(
-                $this->returnValue(false)
+            ->willReturn(
+                false
             );
 
         return [
@@ -220,27 +222,27 @@ class SynchronizeWebsiteAttributesOnStoreChangeTest extends \PHPUnit\Framework\T
 
         $storeNew->expects($this->once())
             ->method('hasDataChanges')
-            ->will(
-                $this->returnValue(true)
+            ->willReturn(
+                true
             );
 
         $storeNew->expects($this->once())
             ->method('getOrigData')
             ->with('website_id')
-            ->will(
-                $this->returnValue($sameWebsiteId)
+            ->willReturn(
+                $sameWebsiteId
             );
 
         $storeNew->expects($this->once())
             ->method('getWebsiteId')
-            ->will(
-                $this->returnValue($sameWebsiteId)
+            ->willReturn(
+                $sameWebsiteId
             );
 
         $storeNew->expects($this->once())
             ->method('isObjectNew')
-            ->will(
-                $this->returnValue(true)
+            ->willReturn(
+                true
             );
 
         $sameWebsiteId = 1;
@@ -257,27 +259,27 @@ class SynchronizeWebsiteAttributesOnStoreChangeTest extends \PHPUnit\Framework\T
 
         $storeChangedWebsite->expects($this->once())
             ->method('hasDataChanges')
-            ->will(
-                $this->returnValue(true)
+            ->willReturn(
+                true
             );
 
         $storeChangedWebsite->expects($this->once())
             ->method('getOrigData')
             ->with('website_id')
-            ->will(
-                $this->returnValue($sameWebsiteId)
+            ->willReturn(
+                $sameWebsiteId
             );
 
         $storeChangedWebsite->expects($this->once())
             ->method('getWebsiteId')
-            ->will(
-                $this->returnValue($newWebsiteId)
+            ->willReturn(
+                $newWebsiteId
             );
 
         $storeChangedWebsite->expects($this->once())
             ->method('isObjectNew')
-            ->will(
-                $this->returnValue(false)
+            ->willReturn(
+                false
             );
 
         return [

@@ -12,7 +12,7 @@ class MapperTest extends \PHPUnit\Framework\TestCase
      */
     protected $mapper;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $config = include __DIR__ . '/../_files/search_request_config.php';
         $request = reset($config);
@@ -40,7 +40,7 @@ class MapperTest extends \PHPUnit\Framework\TestCase
     public function testGetBuckets()
     {
         $buckets = $this->mapper->getBuckets();
-        $this->assertEquals(2, count($buckets));
+        $this->assertCount(2, $buckets);
 
         $this->assertInstanceOf(\Magento\Framework\Search\Request\Aggregation\TermBucket::class, $buckets[0]);
         $this->assertEquals('category_bucket', $buckets[0]->getName());

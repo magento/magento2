@@ -3,21 +3,24 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Braintree\Test\Unit\Gateway\Request;
 
+use Magento\Braintree\Gateway\Config\Config;
 use Magento\Braintree\Gateway\Request\PaymentDataBuilder;
 use Magento\Braintree\Gateway\SubjectReader;
 use Magento\Braintree\Observer\DataAssignObserver;
 use Magento\Payment\Gateway\Data\OrderAdapterInterface;
 use Magento\Payment\Gateway\Data\PaymentDataObjectInterface;
 use Magento\Sales\Model\Order\Payment;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
-use Magento\Braintree\Gateway\Config\Config;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Tests \Magento\Braintree\Gateway\Request\PaymentDataBuilder.
  */
-class PaymentDataBuilderTest extends \PHPUnit\Framework\TestCase
+class PaymentDataBuilderTest extends TestCase
 {
     const PAYMENT_METHOD_NONCE = 'nonce';
 
@@ -49,16 +52,16 @@ class PaymentDataBuilderTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->paymentDOMock = $this->createMock(PaymentDataObjectInterface::class);
+        $this->paymentDOMock = $this->getMockForAbstractClass(PaymentDataObjectInterface::class);
         $this->paymentMock = $this->getMockBuilder(Payment::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->subjectReaderMock = $this->getMockBuilder(SubjectReader::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->orderMock = $this->createMock(OrderAdapterInterface::class);
+        $this->orderMock = $this->getMockForAbstractClass(OrderAdapterInterface::class);
 
         /** @var Config $config */
         $config = $this->getMockBuilder(Config::class)
@@ -70,10 +73,10 @@ class PaymentDataBuilderTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @return void
-     * @expectedException \InvalidArgumentException
      */
     public function testBuildReadPaymentException(): void
     {
+        $this->expectException(\InvalidArgumentException::class);
         $buildSubject = [];
 
         $this->subjectReaderMock->expects(self::once())
@@ -86,10 +89,10 @@ class PaymentDataBuilderTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @return void
-     * @expectedException \InvalidArgumentException
      */
     public function testBuildReadAmountException(): void
     {
+        $this->expectException(\InvalidArgumentException::class);
         $buildSubject = [
             'payment' => $this->paymentDOMock,
             'amount' => null,

@@ -23,7 +23,7 @@ class SearchResultFactoryTest extends TestCase
      */
     private $searchResultFactory;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $objectManager = Bootstrap::getObjectManager();
 
