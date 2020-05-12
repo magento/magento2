@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Shipping\Test\Unit\Model\Config\Source;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
@@ -10,11 +12,12 @@ use Magento\Shipping\Model\Carrier\AbstractCarrierInterface;
 use Magento\Shipping\Model\Config;
 use Magento\Shipping\Model\Config\Source\Allmethods;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Tests for Allmethods Class
  */
-class AllmethodsTest extends \PHPUnit\Framework\TestCase
+class AllmethodsTest extends TestCase
 {
     /**
      * @var ScopeConfigInterface|MockObject $scopeConfig
@@ -39,9 +42,9 @@ class AllmethodsTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->scopeConfig = $this->createMock(ScopeConfigInterface::class);
+        $this->scopeConfig = $this->getMockForAbstractClass(ScopeConfigInterface::class);
         $this->shippingConfig = $this->createMock(Config::class);
         $this->carriersMock = $this->getMockBuilder(AbstractCarrierInterface::class)
             ->setMethods(
@@ -69,14 +72,14 @@ class AllmethodsTest extends \PHPUnit\Framework\TestCase
         $expectedArray['getAllCarriers'] = [$this->carriersMock];
 
         $this->shippingConfig->expects($this->once())
-                             ->method('getAllCarriers')
-                             ->willReturn($expectedArray['getAllCarriers']);
+            ->method('getAllCarriers')
+            ->willReturn($expectedArray['getAllCarriers']);
         $this->carriersMock->expects($this->once())
-                             ->method('isActive')
-                             ->willReturn(true);
+            ->method('isActive')
+            ->willReturn(true);
         $this->carriersMock->expects($this->once())
-                             ->method('getAllowedMethods')
-                             ->willReturn($expectedArray['allowedMethods']);
+            ->method('getAllowedMethods')
+            ->willReturn($expectedArray['allowedMethods']);
         $this->assertEquals([$expectedArray['expected_result']], $this->allmethods->toOptionArray());
     }
 

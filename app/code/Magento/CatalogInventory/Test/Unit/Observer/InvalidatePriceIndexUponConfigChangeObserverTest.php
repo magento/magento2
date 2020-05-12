@@ -18,8 +18,6 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Class InvalidatePriceIndexUponConfigChangeObserverTest
- *
  * Testing invalidating product price index onn config changing
  */
 class InvalidatePriceIndexUponConfigChangeObserverTest extends TestCase
@@ -52,7 +50,7 @@ class InvalidatePriceIndexUponConfigChangeObserverTest extends TestCase
     /**
      * Set Up
      */
-    public function setUp()
+    protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
         $this->priceIndexProcessorMock = $this->createMock(Processor::class);

@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -10,6 +10,8 @@ use Magento\Developer\Console\Command\QueryLogEnableCommand;
 use Magento\Framework\App\DeploymentConfig\Writer;
 use Magento\Framework\Config\File\ConfigFilePool;
 use Magento\Framework\DB\Logger\LoggerProxy;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Tester\CommandTester;
 
 /**
@@ -18,22 +20,22 @@ use Symfony\Component\Console\Tester\CommandTester;
  * Tests dev:query-log:enable command.
  * Tests that the correct configuration is passed to the deployment config writer with and without parameters.
  */
-class QueryLogEnableCommandTest extends \PHPUnit\Framework\TestCase
+class QueryLogEnableCommandTest extends TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\DeploymentConfig\Writer
+     * @var MockObject|Writer
      */
     private $configWriter;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Developer\Console\Command\QueryLogEnableCommand
+     * @var MockObject|QueryLogEnableCommand
      */
     private $command;
 
     /**
      * {@inheritdoc}
      */
-    public function setUp()
+    protected function setUp(): void
     {
         $this->configWriter = $this->getMockBuilder(Writer::class)
             ->disableOriginalConstructor()

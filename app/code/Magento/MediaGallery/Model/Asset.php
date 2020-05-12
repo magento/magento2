@@ -10,36 +10,113 @@ namespace Magento\MediaGallery\Model;
 
 use Magento\MediaGalleryApi\Api\Data\AssetExtensionInterface;
 use Magento\MediaGalleryApi\Api\Data\AssetInterface;
-use Magento\Framework\Model\AbstractExtensibleModel;
 
 /**
  * Media Gallery Asset
+ * @SuppressWarnings(PHPMD.ExcessiveParameterList)
  */
-class Asset extends AbstractExtensibleModel implements AssetInterface
+class Asset implements AssetInterface
 {
-    private const ID = 'id';
-    private const PATH = 'path';
-    private const TITLE = 'title';
-    private const SOURCE = 'source';
-    private const CONTENT_TYPE = 'content_type';
-    private const WIDTH = 'width';
-    private const HEIGHT = 'height';
-    private const SIZE = 'size';
-    private const CREATED_AT = 'created_at';
-    private const UPDATED_AT = 'updated_at';
+    /**
+     * @var int|null
+     */
+    private $id;
+
+    /**
+     * @var string
+     */
+    private $path;
+
+    /**
+     * @var string|null
+     */
+    private $title;
+
+    /**
+     * @var string|null
+     */
+    private $source;
+
+    /**
+     * @var string
+     */
+    private $contentType;
+
+    /**
+     * @var int
+     */
+    private $width;
+
+    /**
+     * @var int
+     */
+    private $height;
+
+    /**
+     * @var int
+     */
+    private $size;
+
+    /**
+     * @var string|null
+     */
+    private $createdAt;
+
+    /**
+     * @var string|null
+     */
+    private $updatedAt;
+
+    /**
+     * @var AssetExtensionInterface|null
+     */
+    private $extensionAttributes;
+
+    /**
+     * @param string $path
+     * @param string $contentType
+     * @param int $width
+     * @param int $height
+     * @param int $size
+     * @param int|null $id
+     * @param string|null $title
+     * @param string|null $source
+     * @param string|null $createdAt
+     * @param string|null $updatedAt
+     * @param AssetExtensionInterface|null $extensionAttributes
+     */
+    public function __construct(
+        string $path,
+        string $contentType,
+        int $width,
+        int $height,
+        int $size,
+        ?int $id = null,
+        ?string $title = null,
+        ?string $source = null,
+        ?string $createdAt = null,
+        ?string $updatedAt = null,
+        ?AssetExtensionInterface $extensionAttributes = null
+    ) {
+        $this->path = $path;
+        $this->contentType = $contentType;
+        $this->width = $width;
+        $this->height = $height;
+        $this->size = $size;
+        $this->id = $id;
+        $this->title = $title;
+        $this->source = $source;
+        $this->createdAt = $createdAt;
+        $this->updatedAt = $updatedAt;
+        $this->extensionAttributes = $extensionAttributes;
+    }
 
     /**
      * @inheritdoc
      */
     public function getId(): ?int
     {
-        $id = $this->getData(self::ID);
-
-        if (!$id) {
-            return null;
-        }
-
-        return (int) $id;
+        return $this->id;
     }
 
     /**
@@ -47,7 +124,7 @@ class Asset extends AbstractExtensibleModel implements AssetInterface
      */
     public function getPath(): string
     {
-        return (string) $this->getData(self::PATH);
+        return $this->path;
     }
 
     /**
@@ -55,7 +132,7 @@ class Asset extends AbstractExtensibleModel implements AssetInterface
      */
     public function getTitle(): ?string
     {
-        return $this->getData(self::TITLE);
+        return $this->title;
     }
 
     /**
@@ -63,7 +140,7 @@ class Asset extends AbstractExtensibleModel implements AssetInterface
      */
     public function getSource(): ?string
     {
-        return $this->getData(self::SOURCE);
+        return $this->source;
     }
 
     /**
@@ -71,7 +148,7 @@ class Asset extends AbstractExtensibleModel implements AssetInterface
      */
     public function getContentType(): string
     {
-        return (string) $this->getData(self::CONTENT_TYPE);
+        return $this->contentType;
     }
 
     /**
@@ -79,7 +156,7 @@ class Asset extends AbstractExtensibleModel implements AssetInterface
      */
     public function getWidth(): int
     {
-        return (int) $this->getData(self::WIDTH);
+        return $this->width;
     }
 
     /**
@@ -87,7 +164,7 @@ class Asset extends AbstractExtensibleModel implements AssetInterface
      */
     public function getHeight(): int
     {
-        return (int) $this->getData(self::HEIGHT);
+        return $this->height;
     }
 
     /**
@@ -95,38 +172,38 @@ class Asset extends AbstractExtensibleModel implements AssetInterface
      */
     public function getSize(): int
     {
-        return (int) $this->getData(self::SIZE);
+        return $this->size;
     }
 
     /**
      * @inheritdoc
      */
-    public function getCreatedAt(): string
+    public function getCreatedAt(): ?string
     {
-        return (string) $this->getData(self::CREATED_AT);
+        return $this->createdAt;
     }
 
     /**
      * @inheritdoc
      */
-    public function getUpdatedAt(): string
+    public function getUpdatedAt(): ?string
     {
-        return (string) $this->getData(self::UPDATED_AT);
+        return $this->updatedAt;
     }
 
     /**
      * @inheritdoc
      */
-    public function getExtensionAttributes(): AssetExtensionInterface
+    public function getExtensionAttributes(): ?AssetExtensionInterface
     {
-        return $this->_getExtensionAttributes();
+        return $this->extensionAttributes;
     }
 
     /**
      * @inheritdoc
      */
-    public function setExtensionAttributes(AssetExtensionInterface $extensionAttributes): void
+    public function setExtensionAttributes(?AssetExtensionInterface $extensionAttributes): void
     {
-        $this->_setExtensionAttributes($extensionAttributes);
+        $this->extensionAttributes = $extensionAttributes;
     }
 }

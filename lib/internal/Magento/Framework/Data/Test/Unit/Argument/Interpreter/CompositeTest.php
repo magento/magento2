@@ -3,19 +3,24 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\Data\Test\Unit\Argument\Interpreter;
 
-use \Magento\Framework\Data\Argument\Interpreter\Composite;
+use Magento\Framework\Data\Argument\Interpreter\Composite;
+use Magento\Framework\Data\Argument\InterpreterInterface;
+use Magento\Framework\ObjectManagerInterface;
+use PHPUnit\Framework\TestCase;
 
-class CompositeTest extends \PHPUnit\Framework\TestCase
+class CompositeTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\Data\Argument\InterpreterInterface
+     * @var InterpreterInterface
      */
     protected $_interpreterOne;
 
     /**
-     * @var \Magento\Framework\Data\Argument\InterpreterInterface
+     * @var InterpreterInterface
      */
     protected $_interpreterTwo;
 
@@ -24,25 +29,23 @@ class CompositeTest extends \PHPUnit\Framework\TestCase
      */
     protected $_model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->_interpreterOne = $this->createMock(\Magento\Framework\Data\Argument\InterpreterInterface::class);
-        $this->_interpreterTwo = $this->createMock(\Magento\Framework\Data\Argument\InterpreterInterface::class);
+        $this->_interpreterOne = $this->getMockForAbstractClass(InterpreterInterface::class);
+        $this->_interpreterTwo = $this->getMockForAbstractClass(InterpreterInterface::class);
         $this->_model = new Composite(
             ['one' => $this->_interpreterOne, 'two' => $this->_interpreterTwo],
             'interpreter'
         );
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Interpreter named 'wrong' is expected to be an argument interpreter instance
-     */
     public function testConstructWrongInterpreter()
     {
+        $this->expectException('InvalidArgumentException');
+        $this->expectExceptionMessage('Interpreter named \'wrong\' is expected to be an argument interpreter instance');
         $interpreters = [
-            'correct' => $this->createMock(\Magento\Framework\Data\Argument\InterpreterInterface::class),
-            'wrong' => $this->createMock(\Magento\Framework\ObjectManagerInterface::class),
+            'correct' => $this->getMockForAbstractClass(InterpreterInterface::class),
+            'wrong' => $this->getMockForAbstractClass(ObjectManagerInterface::class),
         ];
         new Composite($interpreters, 'interpreter');
     }
@@ -85,8 +88,8 @@ class CompositeTest extends \PHPUnit\Framework\TestCase
             'evaluate'
         )->with(
             ['value' => 'test']
-        )->will(
-            $this->returnValue($expected)
+        )->willReturn(
+            $expected
         );
         $this->assertSame($expected, $this->_model->evaluate($input));
     }
@@ -94,20 +97,17 @@ class CompositeTest extends \PHPUnit\Framework\TestCase
     public function testAddInterpreter()
     {
         $input = ['interpreter' => 'new', 'value' => 'test'];
-        $newInterpreter = $this->createMock(\Magento\Framework\Data\Argument\InterpreterInterface::class);
+        $newInterpreter = $this->getMockForAbstractClass(InterpreterInterface::class);
         $this->_model->addInterpreter('new', $newInterpreter);
         $newInterpreter->expects($this->once())->method('evaluate')->with(['value' => 'test']);
         $this->_model->evaluate($input);
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Argument interpreter named 'one' has already been defined
-     *
-     */
     public function testAddInterpreterException()
     {
-        $newInterpreter = $this->createMock(\Magento\Framework\Data\Argument\InterpreterInterface::class);
+        $this->expectException('InvalidArgumentException');
+        $this->expectExceptionMessage('Argument interpreter named \'one\' has already been defined');
+        $newInterpreter = $this->getMockForAbstractClass(InterpreterInterface::class);
         $this->_model->addInterpreter('one', $newInterpreter);
     }
 }

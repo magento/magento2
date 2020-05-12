@@ -48,7 +48,10 @@
         <actionGroup ref="StorefrontAttachOptionFileActionGroup" stepKey="selectAndAttachFile"/>
 
         <!--Select Option From DropDown option -->
-        <actionGroup ref="StorefrontSelectOptionDropDownActionGroup" stepKey="selectDropDownOption"/>
+        <actionGroup ref="StorefrontProductPageSelectDropDownOptionValueActionGroup" stepKey="selectFirstOption">
+            <argument name="attributeLabel" value="{{ProductOptionDropDown.title}}"/>
+            <argument name="optionLabel" value="{{ProductOptionValueDropdown2.title}}"/>
+        </actionGroup>
         <scrollTo selector="{{StorefrontProductInfoMainSection.customOptionLabel(ProductOptionMultiSelect.title)}}" stepKey="scrollToMultiSelect"/>
 
         <!-- Select CheckBox From CheckBox option -->

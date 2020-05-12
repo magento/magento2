@@ -3,21 +3,22 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Braintree\Test\Unit\Gateway\Response;
 
 use Braintree\Transaction;
-use Magento\Braintree\Gateway\SubjectReader;
 use Magento\Braintree\Gateway\Response\RiskDataHandler;
+use Magento\Braintree\Gateway\SubjectReader;
 use Magento\Payment\Gateway\Data\PaymentDataObjectInterface;
 use Magento\Sales\Model\Order\Payment;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
- * Class RiskDataHandlerTest
- *
  * @see \Magento\Braintree\Gateway\Response\RiskDataHandler
  */
-class RiskDataHandlerTest extends \PHPUnit\Framework\TestCase
+class RiskDataHandlerTest extends TestCase
 {
     /**
      * @var RiskDataHandler
@@ -32,7 +33,7 @@ class RiskDataHandlerTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->subjectReaderMock = $this->getMockBuilder(SubjectReader::class)
             ->disableOriginalConstructor()
@@ -57,7 +58,7 @@ class RiskDataHandlerTest extends \PHPUnit\Framework\TestCase
             ->setMethods(['setAdditionalInformation', 'setIsFraudDetected'])
             ->getMock();
         /** @var PaymentDataObjectInterface|MockObject $paymentDO */
-        $paymentDO = $this->createMock(PaymentDataObjectInterface::class);
+        $paymentDO = $this->getMockForAbstractClass(PaymentDataObjectInterface::class);
         $paymentDO->expects(self::once())
             ->method('getPayment')
             ->willReturn($payment);

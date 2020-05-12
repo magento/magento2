@@ -3,31 +3,37 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\Setup\Test\Unit;
 
-use \Magento\Framework\Setup\FilePermissions;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\State;
+use Magento\Framework\Filesystem;
+use Magento\Framework\Filesystem\Directory\Write;
+use Magento\Framework\Setup\FilePermissions;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class FilePermissionsTest extends \PHPUnit\Framework\TestCase
+class FilePermissionsTest extends TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Filesystem\Directory\Write
+     * @var MockObject|Write
      */
     private $directoryWriteMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Filesystem
+     * @var MockObject|Filesystem
      */
     private $filesystemMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\Filesystem\DirectoryList
+     * @var MockObject|DirectoryList
      */
     private $directoryListMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|State
+     * @var MockObject|State
      */
     private $stateMock;
 
@@ -36,17 +42,17 @@ class FilePermissionsTest extends \PHPUnit\Framework\TestCase
      */
     private $filePermissions;
 
-    public function setUp()
+    protected function setUp(): void
     {
-        $this->directoryWriteMock = $this->createMock(\Magento\Framework\Filesystem\Directory\Write::class);
-        $this->filesystemMock = $this->createMock(\Magento\Framework\Filesystem::class);
+        $this->directoryWriteMock = $this->createMock(Write::class);
+        $this->filesystemMock = $this->createMock(Filesystem::class);
         $this->stateMock = $this->createMock(State::class);
 
         $this->filesystemMock
             ->expects($this->any())
             ->method('getDirectoryWrite')
-            ->will($this->returnValue($this->directoryWriteMock));
-        $this->directoryListMock = $this->createMock(\Magento\Framework\App\Filesystem\DirectoryList::class);
+            ->willReturn($this->directoryWriteMock);
+        $this->directoryListMock = $this->createMock(DirectoryList::class);
 
         $this->filePermissions = new FilePermissions(
             $this->filesystemMock,
@@ -100,7 +106,7 @@ class FilePermissionsTest extends \PHPUnit\Framework\TestCase
             ->expects($this->once())
             ->method('getPath')
             ->with(DirectoryList::CONFIG)
-            ->will($this->returnValue(BP . '/app/etc'));
+            ->willReturn(BP . '/app/etc');
 
         $expected = [BP . '/app/etc'];
         $this->assertEquals($expected, $this->filePermissions->getApplicationNonWritableDirectories());
@@ -129,15 +135,15 @@ class FilePermissionsTest extends \PHPUnit\Framework\TestCase
             ->expects($this->at(0))
             ->method('getPath')
             ->with(DirectoryList::CONFIG)
-            ->will($this->returnValue(BP . '/app/etc'));
+            ->willReturn(BP . '/app/etc');
 
         $index = 0;
         foreach ($mockMethods as $mockMethod => $returnValue) {
             $this->directoryWriteMock
                 ->expects($this->at($index))
                 ->method($mockMethod)
-                ->will($this->returnValue($returnValue));
-            $index += 1;
+                ->willReturn($returnValue);
+            $index++;
         }
 
         $this->filePermissions->getApplicationNonWritableDirectories();
@@ -245,15 +251,15 @@ class FilePermissionsTest extends \PHPUnit\Framework\TestCase
             ->expects($this->at(0))
             ->method('getPath')
             ->with(DirectoryList::CONFIG)
-            ->will($this->returnValue(BP . '/app/etc'));
+            ->willReturn(BP . '/app/etc');
 
         $index = 0;
         foreach ($mockMethods as $mockMethod => $returnValue) {
             $this->directoryWriteMock
                 ->expects($this->at($index))
                 ->method($mockMethod)
-                ->will($this->returnValue($returnValue));
-            $index += 1;
+                ->willReturn($returnValue);
+            $index++;
         }
 
         $this->assertEquals(
@@ -280,7 +286,7 @@ class FilePermissionsTest extends \PHPUnit\Framework\TestCase
             ->expects($this->at(4))
             ->method('getPath')
             ->with(DirectoryList::GENERATED)
-            ->will($this->returnValue(BP . '/generated'));
+            ->willReturn(BP . '/generated');
     }
 
     public function setUpDirectoryListInstallationInProduction()
@@ -289,22 +295,22 @@ class FilePermissionsTest extends \PHPUnit\Framework\TestCase
             ->expects($this->at(0))
             ->method('getPath')
             ->with(DirectoryList::CONFIG)
-            ->will($this->returnValue(BP . '/app/etc'));
+            ->willReturn(BP . '/app/etc');
         $this->directoryListMock
             ->expects($this->at(1))
             ->method('getPath')
             ->with(DirectoryList::VAR_DIR)
-            ->will($this->returnValue(BP . '/var'));
+            ->willReturn(BP . '/var');
         $this->directoryListMock
             ->expects($this->at(2))
             ->method('getPath')
             ->with(DirectoryList::MEDIA)
-            ->will($this->returnValue(BP . '/pub/media'));
+            ->willReturn(BP . '/pub/media');
         $this->directoryListMock
             ->expects($this->at(3))
             ->method('getPath')
             ->with(DirectoryList::STATIC_VIEW)
-            ->will($this->returnValue(BP . '/pub/static'));
+            ->willReturn(BP . '/pub/static');
     }
 
     public function setUpDirectoryWriteInstallation()
@@ -313,53 +319,53 @@ class FilePermissionsTest extends \PHPUnit\Framework\TestCase
         $this->directoryWriteMock
             ->expects($this->at(0))
             ->method('isExist')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $this->directoryWriteMock
             ->expects($this->at(1))
             ->method('isDirectory')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $this->directoryWriteMock
             ->expects($this->at(2))
             ->method('isReadable')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $this->directoryWriteMock
             ->expects($this->at(3))
             ->method('isWritable')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         // VAR
         $this->directoryWriteMock
             ->expects($this->at(4))
             ->method('isExist')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
 
         // MEDIA
         $this->directoryWriteMock
             ->expects($this->at(5))
             ->method('isExist')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $this->directoryWriteMock
             ->expects($this->at(6))
             ->method('isDirectory')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
 
         // STATIC_VIEW
         $this->directoryWriteMock
             ->expects($this->at(7))
             ->method('isExist')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $this->directoryWriteMock
             ->expects($this->at(8))
             ->method('isDirectory')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $this->directoryWriteMock
             ->expects($this->at(9))
             ->method('isReadable')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $this->directoryWriteMock
             ->expects($this->at(10))
             ->method('isWritable')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
     }
 
     /**
