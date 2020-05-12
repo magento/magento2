@@ -89,4 +89,15 @@
             <argument name="cspRenderer" xsi:type="object">Magento\Csp\Api\CspRendererInterface</argument>
         </arguments>
     </type>
+
+    <type name="Magento\Csp\Model\BlockCache">
+        <arguments>
+            <argument name="cache" xsi:type="object">configured_block_cache</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\View\Element\Context">
+        <arguments>
+            <argument name="cache" xsi:type="object">Magento\Csp\Model\BlockCache</argument>
+        </arguments>
+    </type>
 </config>
