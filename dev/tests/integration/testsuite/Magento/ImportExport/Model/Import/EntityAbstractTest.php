@@ -32,7 +32,7 @@ class EntityAbstractTest extends \PHPUnit\Framework\TestCase
         $expected = $source->current();
 
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        /** @var $model \Magento\ImportExport\Model\Import\AbstractEntity|\PHPUnit_Framework_MockObject_MockObject */
+        /** @var $model \Magento\ImportExport\Model\Import\AbstractEntity|\PHPUnit\Framework\MockObject\MockObject */
         $model = $this->getMockForAbstractClass(
             \Magento\ImportExport\Model\Import\AbstractEntity::class,
             [
@@ -51,9 +51,9 @@ class EntityAbstractTest extends \PHPUnit\Framework\TestCase
             true,
             ['getMasterAttributeCode', 'validateRow', 'getEntityTypeCode']
         );
-        $model->expects($this->any())->method('getMasterAttributeCode')->will($this->returnValue("email"));
-        $model->expects($this->any())->method('validateRow')->will($this->returnValue(true));
-        $model->expects($this->any())->method('getEntityTypeCode')->will($this->returnValue('customer'));
+        $model->expects($this->any())->method('getMasterAttributeCode')->willReturn("email");
+        $model->expects($this->any())->method('validateRow')->willReturn(true);
+        $model->expects($this->any())->method('getEntityTypeCode')->willReturn('customer');
 
         $model->setSource($source);
 

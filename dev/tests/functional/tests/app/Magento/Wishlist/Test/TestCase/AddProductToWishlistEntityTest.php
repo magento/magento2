@@ -80,7 +80,7 @@ class AddProductToWishlistEntityTest extends AbstractWishlistTest
      *
      * @return void
      */
-    public function tearDown()
+    public function tearDown(): void
     {
         $this->envWhitelist->removeHost('example.com');
     }

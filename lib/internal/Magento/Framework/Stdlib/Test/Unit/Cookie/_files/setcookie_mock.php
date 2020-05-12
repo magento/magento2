@@ -3,10 +3,11 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Framework\Stdlib\Cookie;
 
-use \Magento\Framework\Stdlib\Test\Unit\Cookie\PhpCookieManagerTest;
+use Magento\Framework\Stdlib\Test\Unit\Cookie\PhpCookieManagerTest;
 
 /**
  * Mock global setcookie function

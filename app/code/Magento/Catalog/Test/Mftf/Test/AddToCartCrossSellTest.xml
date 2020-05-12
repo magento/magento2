@@ -30,7 +30,7 @@
                 <requiredEntity createDataKey="category1"/>
             </createData>
 
-            <actionGroup ref="LoginAsAdmin" stepKey="logInAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="logInAsAdmin"/>
         </before>
         <after>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
@@ -77,8 +77,7 @@
         </actionGroup>
 
         <!-- Check that cart page contains cross-sell to simpleProduct2 and simpleProduct3-->
-        <amOnPage url="{{CheckoutCartPage.url}}" stepKey="goToCart1"/>
-        <waitForPageLoad stepKey="waitForCartToLoad"/>
+        <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="goToCart1"/>
         <waitForElementVisible selector="{{CheckoutCartCrossSellSection.products}}" stepKey="waitForCrossSellLoading"/>
         <see stepKey="seeProduct2InCrossSell" selector="{{CheckoutCartCrossSellSection.products}}" userInput="$simpleProduct2.name$"/>
         <see stepKey="seeProduct3InCrossSell" selector="{{CheckoutCartCrossSellSection.products}}" userInput="$simpleProduct3.name$"/>

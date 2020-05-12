@@ -20,7 +20,7 @@
 
         <before>
             <createData entity="ApiCategory" stepKey="createCategory"/>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin1"/>
 
             <!-- Create a configurable product via the UI -->
             <actionGroup ref="CreateConfigurableProductActionGroup" stepKey="createProduct">
@@ -42,9 +42,9 @@
         <click selector="{{StorefrontCategoryMainSection.AddToCartBtn}}" stepKey="clickAddToCart"/>
         <waitForPageLoad stepKey="wait3"/>
         <grabFromCurrentUrl stepKey="grabUrl"/>
-        <assertContains stepKey="assertUrl">
+        <assertStringContainsString stepKey="assertUrl">
             <expectedResult type="string">{{_defaultProduct.urlKey}}</expectedResult>
             <actualResult type="string">{$grabUrl}</actualResult>
-        </assertContains>
+        </assertStringContainsString>
     </test>
 </tests>

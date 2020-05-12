@@ -15,8 +15,11 @@
             <severity value="MAJOR"/>
             <testCaseId value="MC-14796"/>
             <group value="CatalogSearch"/>
-            <group value="SearchEngineMysql"/>
+            <group value="SearchEngineElasticsearch"/>
             <group value="mtf_migrated"/>
+            <skip>
+                <issueId value="MC-21228"/>
+            </skip>
         </annotations>
         <before>
             <createData entity="_defaultCategory" stepKey="createCategory"/>
@@ -26,7 +29,7 @@
             <createData entity="productAlphabeticalB" stepKey="product2">
                 <requiredEntity createDataKey="createCategory"/>
             </createData>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin1"/>
 
 
             <!-- Create and Assign Attribute to product1-->
