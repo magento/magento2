@@ -3,24 +3,27 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Reports\Test\Unit\Controller\Adminhtml\Report\Customer;
 
-use Magento\Reports\Controller\Adminhtml\Report\Customer\Totals;
 use Magento\Framework\DataObject;
 use Magento\Framework\Phrase;
+use Magento\Framework\View\Page\Title;
+use Magento\Reports\Controller\Adminhtml\Report\Customer\Totals;
+use Magento\Reports\Test\Unit\Controller\Adminhtml\Report\AbstractControllerTest;
 
-class TotalsTest extends \Magento\Reports\Test\Unit\Controller\Adminhtml\Report\AbstractControllerTest
+class TotalsTest extends AbstractControllerTest
 {
     /**
-     * @var \Magento\Reports\Controller\Adminhtml\Report\Customer\Totals
+     * @var Totals
      */
     protected $totals;
 
     /**
      * {@inheritDoc}
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -35,7 +38,7 @@ class TotalsTest extends \Magento\Reports\Test\Unit\Controller\Adminhtml\Report\
      */
     public function testExecute()
     {
-        $titleMock = $this->getMockBuilder(\Magento\Framework\View\Page\Title::class)
+        $titleMock = $this->getMockBuilder(Title::class)
             ->disableOriginalConstructor()
             ->getMock();
         $titleMock
