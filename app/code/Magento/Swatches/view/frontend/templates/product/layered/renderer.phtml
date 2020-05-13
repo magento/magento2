@@ -55,7 +55,7 @@
                             <?= /* @noEscape */ $secureRenderer->renderStyleAsTag(
                                 "background: url(" . /*  @noEscape */ $escapedUrl .
                                 ") no-repeat center; background-size: initial;",
-                                "div[data-option-id='" . $block->escapeHtmlAttr($option) . "']"
+                                'div[data-option-id="' . $block->escapeHtmlAttr($option) . '"]'
                             ) ?>
                             <?php break;
                         case '1':
@@ -74,7 +74,7 @@
                                 "background: " . $block->escapeHtmlAttr(
                                     $swatchData['swatches'][$option]['value']
                                 ) . " no-repeat center; background-size: initial;",
-                                "div[data-option-id='" . $block->escapeHtmlAttr($option) . "']"
+                                'div[data-option-id="' . $block->escapeHtmlAttr($option) . '"]'
                             ) ?>
                             <?php break;
                         case '0':

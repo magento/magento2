@@ -104,7 +104,10 @@ script;
         </div>
     </div>
     <?php if ($block->canDisplayContainer()): ?>
-        <?php $useAjax = $block->getUseAjax() ? 'true' : 'false';
+        <?php $useAjax = '';
+        if ($block->getUseAjax()):
+            $useAjax = $block->escapeJs($block->getUseAjax());
+        endif;
         $scriptString = <<<script
 
             require([
@@ -119,8 +122,7 @@ script;
                  '{$block->escapeJs($block->getGridUrl())}', '{$block->escapeJs($block->getVarNamePage())}',
                  '{$block->escapeJs($block->getVarNameSort())}', '{$block->escapeJs($block->getVarNameDir())}',
                  '{$block->escapeJs($block->getVarNameFilter())}');
-                {$block->escapeJs($block->getJsObjectName())}.useAjax =
-                 '{$useAjax}';
+                {$block->escapeJs($block->getJsObjectName())}.useAjax = '{$useAjax}';
 
 script;
         ?>

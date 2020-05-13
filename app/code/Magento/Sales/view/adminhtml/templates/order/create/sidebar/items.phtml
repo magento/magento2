@@ -59,7 +59,7 @@
 
             <tbody>
                 <?php foreach ($block->getItems() as $_item): ?>
-                    <tr>
+                    <tr id="product-id-<?= (int) $block->getProductId($_item) ?>">
                         <td class="col-item"><?= $block->escapeHtml($_item->getName()) ?></td>
 
                         <?php if ($block->canDisplayItemQty()): ?>
@@ -108,7 +108,7 @@
                                         "order.sidebarConfigureProduct('sidebar_wishlist', " .
                                         (int) $block->getProductId($_item) . ", " . (int) $block->getItemId($_item) .
                                         ");event.preventDefault();",
-                                        'a.icon.icon-configure'
+                                        'tr#product-id-' . (int) $block->getProductId($_item) .' a.icon.icon-configure'
                                     ) ?>
                                 <?php elseif ($block->isConfigurationRequired($_item->getTypeId())): ?>
                                     <a href="#"
@@ -120,7 +120,7 @@
                                         'onclick',
                                         "order.sidebarConfigureProduct('sidebar', " .
                                         (int) $block->getProductId($_item) . ");event.preventDefault();",
-                                        'a.icon.icon-configure'
+                                        'tr#product-id-' . (int) $block->getProductId($_item) . ' a.icon.icon-configure'
                                     ) ?>
                                 <?php else: ?>
                                     <input id="sidebar-<?= $block->escapeHtmlAttr($block->getSidebarStorageAction())
