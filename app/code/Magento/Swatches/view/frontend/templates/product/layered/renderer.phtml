@@ -53,8 +53,8 @@
                                  data-option-tooltip-value="">
                             </div>
                             <?= /* @noEscape */ $secureRenderer->renderStyleAsTag(
-                                "background: url(" . /*  @noEscape */ $escapedUrl .
-                                ") no-repeat center; background-size: initial;",
+                                'background: url(' . /*  @noEscape */ $escapedUrl .
+                                ') no-repeat center; background-size: initial;',
                                 'div[data-option-id="' . $block->escapeHtmlAttr($option) . '"]'
                             ) ?>
                             <?php break;
@@ -71,9 +71,9 @@
                                  ) ?>">
                             </div>
                             <?= /* @noEscape */ $secureRenderer->renderStyleAsTag(
-                                "background: " . $block->escapeHtmlAttr(
+                                'background: ' . $block->escapeHtml(
                                     $swatchData['swatches'][$option]['value']
-                                ) . " no-repeat center; background-size: initial;",
+                                ) . ' no-repeat center; background-size: initial;',
                                 'div[data-option-id="' . $block->escapeHtmlAttr($option) . '"]'
                             ) ?>
                             <?php break;
