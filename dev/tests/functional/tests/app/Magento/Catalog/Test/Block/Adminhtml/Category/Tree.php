@@ -36,7 +36,7 @@ class Tree extends Block
      *
      * @var string
      */
-    protected $expandAll = 'a[onclick*=expandTree]';
+    protected $expandAll = 'a#expandAll';
 
     /**
      * Backend abstract block.

@@ -5,6 +5,7 @@
  */
 
 /** @var $block Magento\Catalog\Block\Adminhtml\Product\Edit\Action\Attribute\Tab\Websites */
+/** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
 ?>
 
 <div class="fieldset-wrapper" id="add-products-to-website-wrapper">
@@ -15,24 +16,27 @@
         <br>
         <div class="store-scope">
             <div class="store-tree" id="add-products-to-website-content">
-                <?php foreach ($block->getWebsiteCollection() as $_website) :?>
+                <?php foreach ($block->getWebsiteCollection() as $_website):?>
                     <div class="website-name">
                         <input name="add_website_ids[]"
                                value="<?= $block->escapeHtmlAttr($_website->getId()) ?>"
-                            <?php if ($block->getWebsitesReadonly()) :?>
+                            <?php if ($block->getWebsitesReadonly()):?>
                                 disabled="disabled"
                             <?php endif;?>
                                class="checkbox website-checkbox"
                                id="add_product_website_<?= $block->escapeHtmlAttr($_website->getId()) ?>"
                                type="checkbox" />
-                        <label for="add_product_website_<?= $block->escapeHtmlAttr($_website->getId()) ?>"><?= $block->escapeHtml($_website->getName()) ?></label>
+                        <label for="add_product_website_<?= $block->escapeHtmlAttr($_website->getId()) ?>">
+                            <?= $block->escapeHtml($_website->getName()) ?>
+                        </label>
                     </div>
-                    <dl class="webiste-groups" id="add_product_website_<?= $block->escapeHtmlAttr($_website->getId()) ?>_data">
-                        <?php foreach ($block->getGroupCollection($_website) as $_group) :?>
+                    <dl class="webiste-groups"
+                        id="add_product_website_<?= $block->escapeHtmlAttr($_website->getId()) ?>_data">
+                        <?php foreach ($block->getGroupCollection($_website) as $_group):?>
                             <dt><?= $block->escapeHtml($_group->getName()) ?></dt>
                             <dd class="group-stores">
                                 <ul>
-                                <?php foreach ($block->getStoreCollection($_group) as $_store) :?>
+                                <?php foreach ($block->getStoreCollection($_group) as $_store):?>
                                     <li>
                                         <?= $block->escapeHtml($_store->getName()) ?>
                                     </li>
@@ -55,30 +59,35 @@
         <br>
         <div class="messages">
             <div class="message message-notice">
-                <div><?= $block->escapeHtml(__('To hide an item in catalog or search results, set the status to "Disabled".')) ?></div>
+                <div><?= $block->escapeHtml(
+                    __('To hide an item in catalog or search results, set the status to "Disabled".')
+                ) ?>
+                </div>
             </div>
         </div>
         <div class="store-scope">
             <div class="store-tree" id="remove-products-to-website-content">
-                <?php foreach ($block->getWebsiteCollection() as $_website) :?>
+                <?php foreach ($block->getWebsiteCollection() as $_website):?>
                     <div class="website-name">
                         <input name="remove_website_ids[]"
                                value="<?= $block->escapeHtmlAttr($_website->getId()) ?>"
-                            <?php if ($block->getWebsitesReadonly()) :?>
+                            <?php if ($block->getWebsitesReadonly()):?>
                                 disabled="disabled"
                             <?php endif;?>
                                class="checkbox website-checkbox"
                                id="remove_product_website_<?= $block->escapeHtmlAttr($_website->getId()) ?>"
                                type="checkbox" />
-                        <label for="remove_product_website_<?= $block->escapeHtmlAttr($_website->getId()) ?>"><?= $block->escapeHtml($_website->getName()) ?></label>
+                        <label for="remove_product_website_<?= $block->escapeHtmlAttr($_website->getId()) ?>">
+                            <?= $block->escapeHtml($_website->getName()) ?>
+                        </label>
                     </div>
                     <dl class="webiste-groups"
                         id="remove_product_website_<?= $block->escapeHtmlAttr($_website->getId()) ?>_data">
-                        <?php foreach ($block->getGroupCollection($_website) as $_group) :?>
+                        <?php foreach ($block->getGroupCollection($_website) as $_group):?>
                             <dt><?= $block->escapeHtml($_group->getName()) ?></dt>
                             <dd class="group-stores">
                                 <ul>
-                                <?php foreach ($block->getStoreCollection($_group) as $_store) :?>
+                                <?php foreach ($block->getStoreCollection($_group) as $_store):?>
                                     <li>
                                         <?= $block->escapeHtml($_store->getName()) ?>
                                     </li>
@@ -93,7 +102,7 @@
     </fieldset>
 </div>
 
-<script>
+<?php $scriptString = <<<script
 require([
     'prototype'
 ], function () {
@@ -120,4 +129,6 @@ require([
         }
     }
 });
-</script>
+script;
+?>
+<?= /* @noEscape */ $secureRenderer->renderTag('script', [], $scriptString, false) ?>

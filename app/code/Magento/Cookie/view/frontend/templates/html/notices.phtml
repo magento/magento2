@@ -5,17 +5,23 @@
  */
 
 /** @var \Magento\Cookie\Block\Html\Notices $block */
+/** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
 ?>
-<?php if ($this->helper(\Magento\Cookie\Helper\Cookie::class)->isCookieRestrictionModeEnabled()) : ?>
+<?php
+/** @var \Magento\Cookie\Helper\Cookie $cookieHelper */
+$cookieHelper = $block->getData('cookieHelper');
+if ($cookieHelper->isCookieRestrictionModeEnabled()): ?>
     <div role="alertdialog"
          tabindex="-1"
          class="message global cookie"
-         id="notice-cookie-block"
-         style="display: none;">
+         id="notice-cookie-block">
         <div role="document" class="content" tabindex="0">
             <p>
                 <strong><?= $block->escapeHtml(__('We use cookies to make your experience better.')) ?></strong>
-                <span><?= $block->escapeHtml(__('To comply with the new e-Privacy directive, we need to ask for your consent to set the cookies.')) ?></span>
+                <span><?= $block->escapeHtml(__(
+                    'To comply with the new e-Privacy directive, we need to ask for your consent to set the cookies.'
+                )) ?>
+                </span>
                 <?= $block->escapeHtml(__('<a href="%1">Learn more</a>.', $block->getPrivacyPolicyLink()), ['a']) ?>
             </p>
             <div class="actions">
@@ -25,15 +31,16 @@
             </div>
         </div>
     </div>
+    <?= /* @noEscape */ $secureRenderer->renderStyleAsTag("display: none;", 'div#notice-cookie-block') ?>
     <script type="text/x-magento-init">
         {
             "#notice-cookie-block": {
                 "cookieNotices": {
                     "cookieAllowButtonSelector": "#btn-cookie-allow",
                     "cookieName": "<?= /* @noEscape */ \Magento\Cookie\Helper\Cookie::IS_USER_ALLOWED_SAVE_COOKIE ?>",
-                    "cookieValue": <?= /* @noEscape */ $this->helper(\Magento\Cookie\Helper\Cookie::class)->getAcceptedSaveCookiesWebsiteIds() ?>,
-                    "cookieLifetime": <?= /* @noEscape */ $this->helper(\Magento\Cookie\Helper\Cookie::class)->getCookieRestrictionLifetime() ?>,
-                    "noCookiesUrl": "<?= $block->escapeJs($block->escapeUrl($block->getUrl('cookie/index/noCookies'))) ?>"
+                    "cookieValue": <?= /* @noEscape */ $cookieHelper->getAcceptedSaveCookiesWebsiteIds() ?>,
+                    "cookieLifetime": <?= /* @noEscape */ $cookieHelper->getCookieRestrictionLifetime() ?>,
+                    "noCookiesUrl": "<?= $block->escapeJs($block->getUrl('cookie/index/noCookies')) ?>"
                 }
             }
         }

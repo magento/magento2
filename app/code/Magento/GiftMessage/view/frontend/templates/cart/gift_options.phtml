@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+/** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
 ?>
 <div id="gift-options-cart" data-bind="scope:'giftOptionsCart'">
     <!-- ko template: getTemplate() --><!-- /ko -->
@@ -13,7 +15,10 @@
             }
         }
     </script>
-    <script>
-        window.giftOptionsConfig = <?= /* @noEscape */ $block->getGiftOptionsConfigJson() ?>;
-    </script>
+<?= /* @noEscape */ $secureRenderer->renderTag(
+    'script',
+    [],
+    'window.giftOptionsConfig = '. /* @noEscape */ $block->getGiftOptionsConfigJson(),
+    false
+) ?>
 </div>

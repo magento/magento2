@@ -84,7 +84,7 @@ $htmlId = $element->getHtmlId();
 <?php elseif ($type === 'wysiwyg'): ?>
     <span class="form_row">
       <label for="<?= /* @noEscape */ $htmlId ?>"><?= $block->escapeHtml($element->getLabel()) ?>:</label>
-        <script>
+        <?php $scriptString = <<<script
         require([
             "wysiwygAdapter"
         ], function(tinyMCE){
@@ -92,7 +92,7 @@ $htmlId = $element->getHtmlId();
             tinyMCE.init({
                 mode : "exact",
                 theme : "advanced",
-                elements : "<?= $block->escapeJs($element->getName()) ?>",
+                elements : "{$block->escapeJs($element->getName())}",
                 plugins : "inlinepopups,style,layer,table,save,advhr,advimage,advlink,emotions,iespell,"
                     + "insertdatetime,preview,zoom,media,searchreplace,print,contextmenu,paste,directionality,"
                     + "fullscreen,noneditable,visualchars,nonbreaking,xhtmlxtras",
@@ -121,7 +121,9 @@ $htmlId = $element->getHtmlId();
                     + ' "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">'
             });
         });
-</script>
+script;
+        ?>
+        <?= /* @noEscape */ $secureRenderer->renderTag('script', [], $scriptString, false) ?>
       <textarea name="<?= $block->escapeHtmlAttr($element->getName()) ?>"
                 title="<?=  $block->escapeHtmlAttr($element->getTitle()) ?>"
                 id="<?= /* @noEscape */ $htmlId ?>"
@@ -144,7 +146,5 @@ $htmlId = $element->getHtmlId();
             </span>
 <?php endif; ?>
 <?php if ($element->getScript()): ?>
-<script>
-    <?= /* @noEscape */ $element->getScript() ?>
-</script>
+    <?php /* @noEscape */ $secureRenderer->renderTag('script', [], $element->getScript(), false) ?>
 <?php endif; ?>
