@@ -119,7 +119,7 @@ class CreateDownloadableProductEntityTest extends Injectable
      *
      * @return void
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->envWhitelist->removeHost('example.com');
     }

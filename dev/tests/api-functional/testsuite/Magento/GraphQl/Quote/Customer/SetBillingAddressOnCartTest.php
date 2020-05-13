@@ -61,7 +61,7 @@ class SetBillingAddressOnCartTest extends GraphQlAbstract
      */
     private $customerRepository;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = Bootstrap::getObjectManager();
         $this->getMaskedQuoteIdByReservedOrderId = $objectManager->get(GetMaskedQuoteIdByReservedOrderId::class);
@@ -318,11 +318,12 @@ QUERY;
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
      *
-     * @expectedException \Exception
-     * @expectedExceptionMessage Could not find a address with ID "100"
      */
     public function testSetNotExistedBillingAddressFromAddressBook()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Could not find a address with ID "100"');
+
         $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
 
         $query = <<<QUERY
@@ -553,11 +554,12 @@ QUERY;
      * @magentoApiDataFixture Magento/Customer/_files/customer_address.php
      * @magentoApiDataFixture Magento/Checkout/_files/quote_with_simple_product_saved.php
      *
-     * @expectedException \Exception
-     * @expectedExceptionMessage Current customer does not have permission to address with ID "1"
      */
     public function testSetBillingAddressIfCustomerIsNotOwnerOfAddress()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Current customer does not have permission to address with ID "1"');
+
         $maskedQuoteId = $this->assignQuoteToCustomer('test_order_with_simple_product_without_address', 2);
 
         $query = <<<QUERY
@@ -584,11 +586,12 @@ QUERY;
     /**
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
      * @magentoApiDataFixture Magento/Customer/_files/customer_address.php
-     * @expectedException \Exception
-     * @expectedExceptionMessage Could not find a cart with ID "non_existent_masked_id"
      */
     public function testSetBillingAddressOnNonExistentCart()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Could not find a cart with ID "non_existent_masked_id"');
+
         $maskedQuoteId = 'non_existent_masked_id';
         $query = <<<QUERY
 mutation {
@@ -960,6 +963,88 @@ QUERY;
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
      */
+    public function testSetBillingAddressWithDefaultValueOfSaveInAddressBookAndPlaceOrder()
+    {
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
+        $query = <<<QUERY
+mutation {
+  setBillingAddressOnCart(
+    input: {
+      cart_id: "$maskedQuoteId"
+      billing_address: {
+        same_as_shipping: true
+         address: {
+          firstname: "test firstname"
+            lastname: "test lastname"
+            company: "test company"
+            street: ["test street 1", "test street 2"]
+            city: "test city"
+            region: "AZ"
+            postcode: "88776"
+            country_code: "US"
+            telephone: "88776655"
+         }
+      }
+    }
+  ) {
+    cart {
+      billing_address {
+        firstname
+        lastname
+        company
+        street
+        city
+        postcode
+        telephone
+        country {
+          code
+          label
+        }
+        __typename
+      }
+    }
+  }
+}
+QUERY;
+        $response = $this->graphQlMutation($query, [], '', $this->getHeaderMap());
+        $this->graphQlMutation(
+            $this->getSetShippingMethodsQuery($maskedQuoteId, 'flatrate', 'flatrate'),
+            [],
+            '',
+            $this->getHeaderMap()
+        );
+        $this->graphQlMutation(
+            $this->getSetPaymentMethodQuery(
+                $maskedQuoteId,
+                'checkmo'
+            ),
+            [],
+            '',
+            $this->getHeaderMap()
+        );
+        $this->graphQlMutation(
+            $this->getPlaceOrderQuery($maskedQuoteId),
+            [],
+            '',
+            $this->getHeaderMap()
+        );
+        $customer = $this->customerRepository->get('customer@example.com');
+        $searchCriteria = $this->searchCriteriaBuilder->addFilter('parent_id', $customer->getId())->create();
+        $addresses = $this->customerAddressRepository->getList($searchCriteria)->getItems();
+
+        $this->assertCount(1, $addresses);
+        $this->assertArrayHasKey('cart', $response['setBillingAddressOnCart']);
+        foreach ($addresses as $address) {
+            $this->customerAddressRepository->delete($address);
+        }
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
+     */
     public function testSetNewBillingAddressWithNotSaveInAddressBook()
     {
         $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
@@ -1208,9 +1293,9 @@ QUERY;
     ): string {
         return <<<QUERY
 mutation {
-  setShippingMethodsOnCart(input: 
+  setShippingMethodsOnCart(input:
     {
-      cart_id: "$maskedQuoteId", 
+      cart_id: "$maskedQuoteId",
       shipping_methods: [{
         carrier_code: "$shippingCarrierCode"
         method_code: "$shippingMethodCode"
@@ -1251,7 +1336,7 @@ mutation {
       payment_method: {
           code: "$methodCode"
       }
-  }) {    
+  }) {
     cart {
       selected_payment_method {
         code

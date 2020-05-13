@@ -5,46 +5,25 @@
  */
 namespace Magento\CatalogUrlRewrite\Observer;
 
-use Magento\Catalog\Api\ProductRepositoryInterface;
-use Magento\Catalog\Model\Product;
-use Magento\Framework\ObjectManagerInterface;
 use Magento\Store\Model\StoreManagerInterface;
-use Magento\TestFramework\Helper\Bootstrap;
-use Magento\UrlRewrite\Model\UrlFinderInterface;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
-use Magento\Catalog\Model\Product\Visibility;
-use Magento\Store\Model\Store;
-use PHPUnit\Framework\TestCase;
+use Magento\CatalogUrlRewrite\Model\CategoryUrlRewriteGenerator;
 
 /**
  * @magentoAppArea adminhtml
  * @magentoDbIsolation disabled
  */
-class ProductProcessUrlRewriteSavingObserverTest extends TestCase
+class ProductProcessUrlRewriteSavingObserverTest extends \PHPUnit\Framework\TestCase
 {
-    /**
-     * @var ObjectManagerInterface
-     */
-    private $objectManager;
-
-    /**
-     * @var StoreManagerInterface
-     */
-    private $storeManager;
-
-    /**
-     * @var ProductRepositoryInterface
-     */
-    private $productRepository;
+    /** @var \Magento\Framework\ObjectManagerInterface */
+    protected $objectManager;
 
     /**
      * Set up
      */
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->objectManager = Bootstrap::getObjectManager();
-        $this->storeManager = $this->objectManager->get(StoreManagerInterface::class);
-        $this->productRepository = $this->objectManager->get(ProductRepositoryInterface::class);
+        $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
     }
 
     /**
@@ -53,8 +32,8 @@ class ProductProcessUrlRewriteSavingObserverTest extends TestCase
      */
     private function getActualResults(array $filter)
     {
-        /** @var UrlFinderInterface $urlFinder */
-        $urlFinder = $this->objectManager->get(UrlFinderInterface::class);
+        /** @var \Magento\UrlRewrite\Model\UrlFinderInterface $urlFinder */
+        $urlFinder = $this->objectManager->get(\Magento\UrlRewrite\Model\UrlFinderInterface::class);
         $actualResults = [];
         foreach ($urlFinder->findAllByData($filter) as $url) {
             $actualResults[] = [
@@ -74,14 +53,16 @@ class ProductProcessUrlRewriteSavingObserverTest extends TestCase
      */
     public function testUrlKeyHasChangedInGlobalContext()
     {
-        $testStore1 = $this->storeManager->getStore('default');
-        $testStore4 = $this->storeManager->getStore('test');
+        /** @var \Magento\Catalog\Api\ProductRepositoryInterface $productRepository*/
+        $productRepository = $this->objectManager->create(\Magento\Catalog\Api\ProductRepositoryInterface::class);
+        /** @var \Magento\Catalog\Model\Product $product*/
+        $product = $productRepository->get('product1');
 
-        $this->storeManager->setCurrentStore(Store::DEFAULT_STORE_ID);
+        /** @var StoreManagerInterface $storeManager */
+        $storeManager = $this->objectManager->get(StoreManagerInterface::class);
+        $storeManager->setCurrentStore(0);
 
-        /** @var Product $product*/
-        $product = $this->productRepository->get('product1');
-
+        $testStore = $storeManager->getStore('test');
         $productFilter = [
             UrlRewrite::ENTITY_TYPE => 'product',
         ];
@@ -92,25 +73,25 @@ class ProductProcessUrlRewriteSavingObserverTest extends TestCase
                 'target_path' => "catalog/product/view/id/" . $product->getId(),
                 'is_auto_generated' => 1,
                 'redirect_type' => 0,
-                'store_id' => $testStore1->getId(),
+                'store_id' => 1,
             ],
             [
                 'request_path' => "product-1.html",
                 'target_path' => "catalog/product/view/id/" . $product->getId(),
                 'is_auto_generated' => 1,
                 'redirect_type' => 0,
-                'store_id' => $testStore4->getId(),
+                'store_id' => $testStore->getId(),
             ],
         ];
         $actual = $this->getActualResults($productFilter);
         foreach ($expected as $row) {
-            $this->assertContains($row, $actual);
+            $this->assertContainsEquals($row, $actual);
         }
 
         $product->setData('save_rewrites_history', true);
         $product->setUrlKey('new-url');
         $product->setUrlPath('new-path');
-        $this->productRepository->save($product);
+        $product->save();
 
         $expected = [
             [
@@ -118,34 +99,34 @@ class ProductProcessUrlRewriteSavingObserverTest extends TestCase
                 'target_path' => "catalog/product/view/id/" . $product->getId(),
                 'is_auto_generated' => 1,
                 'redirect_type' => 0,
-                'store_id' => $testStore1->getId(),
+                'store_id' => 1,
             ],
             [
                 'request_path' => "new-url.html",
                 'target_path' => "catalog/product/view/id/" . $product->getId(),
                 'is_auto_generated' => 1,
                 'redirect_type' => 0,
-                'store_id' => $testStore4->getId(),
+                'store_id' => $testStore->getId(),
             ],
             [
                 'request_path' => "product-1.html",
                 'target_path' => "new-url.html",
                 'is_auto_generated' => 0,
                 'redirect_type' => 301,
-                'store_id' => $testStore1->getId(),
+                'store_id' => 1,
             ],
             [
                 'request_path' => "product-1.html",
                 'target_path' => "new-url.html",
                 'is_auto_generated' => 0,
                 'redirect_type' => 301,
-                'store_id' => $testStore4->getId(),
+                'store_id' => $testStore->getId(),
             ],
         ];
 
         $actual = $this->getActualResults($productFilter);
         foreach ($expected as $row) {
-            $this->assertContains($row, $actual);
+            $this->assertContainsEquals($row, $actual);
         }
     }
 
@@ -155,13 +136,16 @@ class ProductProcessUrlRewriteSavingObserverTest extends TestCase
      */
     public function testUrlKeyHasChangedInStoreviewContextWithPermanentRedirection()
     {
-        $testStore1 = $this->storeManager->getStore('default');
-        $testStore4 = $this->storeManager->getStore('test');
+        /** @var \Magento\Catalog\Api\ProductRepositoryInterface $productRepository*/
+        $productRepository = $this->objectManager->create(\Magento\Catalog\Api\ProductRepositoryInterface::class);
+        /** @var \Magento\Catalog\Model\Product $product*/
+        $product = $productRepository->get('product1');
 
-        $this->storeManager->setCurrentStore($testStore1);
+        /** @var StoreManagerInterface $storeManager */
+        $storeManager = $this->objectManager->get(StoreManagerInterface::class);
+        $storeManager->setCurrentStore(1);
 
-        /** @var Product $product*/
-        $product = $this->productRepository->get('product1');
+        $testStore = $storeManager->getStore('test');
 
         $productFilter = [
             UrlRewrite::ENTITY_TYPE => 'product',
@@ -170,7 +154,7 @@ class ProductProcessUrlRewriteSavingObserverTest extends TestCase
         $product->setData('save_rewrites_history', true);
         $product->setUrlKey('new-url');
         $product->setUrlPath('new-path');
-        $this->productRepository->save($product);
+        $product->save();
 
         $expected = [
             [
@@ -178,27 +162,27 @@ class ProductProcessUrlRewriteSavingObserverTest extends TestCase
                 'target_path' => "catalog/product/view/id/" . $product->getId(),
                 'is_auto_generated' => 1,
                 'redirect_type' => 0,
-                'store_id' => $testStore1->getId(),
+                'store_id' => 1,
             ],
             [
                 'request_path' => "product-1.html",
                 'target_path' => "catalog/product/view/id/" . $product->getId(),
                 'is_auto_generated' => 1,
                 'redirect_type' => 0,
-                'store_id' => $testStore4->getId(),
+                'store_id' => $testStore->getId(),
             ],
             [
                 'request_path' => "product-1.html",
                 'target_path' => "new-url.html",
                 'is_auto_generated' => 0,
                 'redirect_type' => 301,
-                'store_id' => $testStore1->getId(),
+                'store_id' => 1,
             ],
         ];
 
         $actual = $this->getActualResults($productFilter);
         foreach ($expected as $row) {
-            $this->assertContains($row, $actual);
+            $this->assertContainsEquals($row, $actual);
         }
     }
 
@@ -208,13 +192,16 @@ class ProductProcessUrlRewriteSavingObserverTest extends TestCase
      */
     public function testUrlKeyHasChangedInStoreviewContextWithoutPermanentRedirection()
     {
-        $testStore1 = $this->storeManager->getStore('default');
-        $testStore4 = $this->storeManager->getStore('test');
+        /** @var \Magento\Catalog\Api\ProductRepositoryInterface $productRepository*/
+        $productRepository = $this->objectManager->create(\Magento\Catalog\Api\ProductRepositoryInterface::class);
+        /** @var \Magento\Catalog\Model\Product $product*/
+        $product = $productRepository->get('product1');
 
-        $this->storeManager->setCurrentStore(1);
+        /** @var StoreManagerInterface $storeManager */
+        $storeManager = $this->objectManager->get(StoreManagerInterface::class);
+        $storeManager->setCurrentStore(1);
 
-        /** @var Product $product*/
-        $product = $this->productRepository->get('product1');
+        $testStore = $storeManager->getStore('test');
 
         $productFilter = [
             UrlRewrite::ENTITY_TYPE => 'product',
@@ -223,7 +210,7 @@ class ProductProcessUrlRewriteSavingObserverTest extends TestCase
         $product->setData('save_rewrites_history', false);
         $product->setUrlKey('new-url');
         $product->setUrlPath('new-path');
-        $this->productRepository->save($product);
+        $product->save();
 
         $expected = [
             [
@@ -231,404 +218,20 @@ class ProductProcessUrlRewriteSavingObserverTest extends TestCase
                 'target_path' => "catalog/product/view/id/" . $product->getId(),
                 'is_auto_generated' => 1,
                 'redirect_type' => 0,
-                'store_id' => $testStore1->getId(),
+                'store_id' => 1,
             ],
             [
                 'request_path' => "product-1.html",
                 'target_path' => "catalog/product/view/id/" . $product->getId(),
                 'is_auto_generated' => 1,
                 'redirect_type' => 0,
-                'store_id' => $testStore4->getId(),
+                'store_id' => $testStore->getId(),
             ],
         ];
 
         $actual = $this->getActualResults($productFilter);
         foreach ($expected as $row) {
-            $this->assertContains($row, $actual);
-        }
-    }
-
-    /**
-     * @magentoDataFixture Magento/Store/_files/second_website_with_two_stores.php
-     * @magentoDataFixture Magento/CatalogUrlRewrite/_files/product_rewrite_multistore.php
-     * @magentoAppIsolation enabled
-     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
-     */
-    public function testAddAndRemoveProductFromWebsite()
-    {
-        $testStore1 = $this->storeManager->getStore('default');
-        $testStore2 = $this->storeManager->getStore('fixture_second_store');
-        $testStore3 = $this->storeManager->getStore('fixture_third_store');
-        $testStore4 = $this->storeManager->getStore('test');
-
-        $this->storeManager->setCurrentStore(Store::DEFAULT_STORE_ID);
-
-        /** @var Product $product*/
-        $product = $this->productRepository->get('product1');
-
-        $productFilter = [
-            UrlRewrite::ENTITY_TYPE => 'product',
-        ];
-
-        //Product in 1st website. Should result in being in 1st and 4th stores.
-        $expected = [
-            [
-                'request_path' => "product-1.html",
-                'target_path' => "catalog/product/view/id/" . $product->getId(),
-                'is_auto_generated' => 1,
-                'redirect_type' => 0,
-                'store_id' => $testStore1->getId(),
-            ],
-            [
-                'request_path' => "product-1.html",
-                'target_path' => "catalog/product/view/id/" . $product->getId(),
-                'is_auto_generated' => 1,
-                'redirect_type' => 0,
-                'store_id' => $testStore4->getId(),
-            ]
-        ];
-        $actual = $this->getActualResults($productFilter);
-        foreach ($expected as $row) {
-            $this->assertContains($row, $actual);
-        }
-
-        //Add product to websites corresponding to all 4 stores.
-        //Rewrites should not be present as the product is hidden
-        //at the global scope.
-        $product->setWebsiteIds(
-            array_unique(
-                [
-                    $testStore1->getWebsiteId(),
-                    $testStore2->getWebsiteId(),
-                    $testStore3->getWebsiteId(),
-                    $testStore4->getWebsiteId()
-                ]
-            )
-        );
-        $this->productRepository->save($product);
-        $expected = [
-            [
-                'request_path' => "product-1.html",
-                'target_path' => "catalog/product/view/id/" . $product->getId(),
-                'is_auto_generated' => 1,
-                'redirect_type' => 0,
-                'store_id' => $testStore1->getId(),
-            ],
-            [
-                'request_path' => "product-1.html",
-                'target_path' => "catalog/product/view/id/" . $product->getId(),
-                'is_auto_generated' => 1,
-                'redirect_type' => 0,
-                'store_id' => $testStore2->getId(),
-            ],
-            [
-                'request_path' => "product-1.html",
-                'target_path' => "catalog/product/view/id/" . $product->getId(),
-                'is_auto_generated' => 1,
-                'redirect_type' => 0,
-                'store_id' => $testStore3->getId(),
-            ],
-            [
-                'request_path' => "product-1.html",
-                'target_path' => "catalog/product/view/id/" . $product->getId(),
-                'is_auto_generated' => 1,
-                'redirect_type' => 0,
-                'store_id' => $testStore4->getId(),
-            ]
-        ];
-
-        //Add product to websites corresponding to stores 2 and 3.
-        $product->setWebsiteIds(
-            array_unique(
-                [
-                    $testStore2->getWebsiteId(),
-                    $testStore3->getWebsiteId(),
-                ]
-            )
-        );
-        $this->productRepository->save($product);
-        $expected = [
-            [
-                'request_path' => "product-1.html",
-                'target_path' => "catalog/product/view/id/" . $product->getId(),
-                'is_auto_generated' => 1,
-                'redirect_type' => 0,
-                'store_id' => $testStore2->getId(),
-            ],
-            [
-                'request_path' => "product-1.html",
-                'target_path' => "catalog/product/view/id/" . $product->getId(),
-                'is_auto_generated' => 1,
-                'redirect_type' => 0,
-                'store_id' => $testStore3->getId(),
-            ]
-        ];
-        $actual = $this->getActualResults($productFilter);
-        foreach ($expected as $row) {
-            $this->assertContains($row, $actual);
-        }
-    }
-
-    /**
-     * @magentoDataFixture Magento/Store/_files/second_website_with_two_stores.php
-     * @magentoDataFixture Magento/CatalogUrlRewrite/_files/product_rewrite_multistore.php
-     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
-     */
-    public function testChangeVisibilityGlobalScope()
-    {
-        $testStore1 = $this->storeManager->getStore('default');
-        $testStore2 = $this->storeManager->getStore('fixture_second_store');
-        $testStore3 = $this->storeManager->getStore('fixture_third_store');
-        $testStore4 = $this->storeManager->getStore('test');
-
-        $this->storeManager->setCurrentStore(Store::DEFAULT_STORE_ID);
-
-        /** @var Product $product*/
-        $product = $this->productRepository->get('product1');
-
-        $productFilter = [
-            UrlRewrite::ENTITY_TYPE => 'product',
-        ];
-
-        //Product in 1st website. Should result in being in 1st and 4th stores.
-        $expected = [
-            [
-                'request_path' => "product-1.html",
-                'target_path' => "catalog/product/view/id/" . $product->getId(),
-                'is_auto_generated' => 1,
-                'redirect_type' => 0,
-                'store_id' => $testStore1->getId(),
-            ],
-            [
-                'request_path' => "product-1.html",
-                'target_path' => "catalog/product/view/id/" . $product->getId(),
-                'is_auto_generated' => 1,
-                'redirect_type' => 0,
-                'store_id' => $testStore4->getId(),
-            ]
-        ];
-        $actual = $this->getActualResults($productFilter);
-        foreach ($expected as $row) {
-            $this->assertContains($row, $actual);
-        }
-
-        //Set product to be not visible at global scope
-        $this->storeManager->setCurrentStore(Store::DEFAULT_STORE_ID);
-        $product->setVisibility(Visibility::VISIBILITY_NOT_VISIBLE);
-        $this->productRepository->save($product);
-        $expected = [];
-        $actual = $this->getActualResults($productFilter);
-        foreach ($expected as $row) {
-            $this->assertContains($row, $actual);
-        }
-
-        //Add product to websites corresponding to all 4 stores.
-        //Rewrites should not be present as the product is hidden
-        //at the global scope.
-        $this->storeManager->setCurrentStore(Store::DEFAULT_STORE_ID);
-        $product->setWebsiteIds(
-            array_unique(
-                [
-                    $testStore1->getWebsiteId(),
-                    $testStore2->getWebsiteId(),
-                    $testStore3->getWebsiteId(),
-                    $testStore4->getWebsiteId()
-                ]
-            )
-        );
-        $this->productRepository->save($product);
-        $expected = [];
-        $actual = $this->getActualResults($productFilter);
-        foreach ($expected as $row) {
-            $this->assertContains($row, $actual);
-        }
-
-        //Set product to be visible at global scope
-        $this->storeManager->setCurrentStore(Store::DEFAULT_STORE_ID);
-        $product->setVisibility(Visibility::VISIBILITY_BOTH);
-        $this->productRepository->save($product);
-        $expected = [
-            [
-                'request_path' => "product-1.html",
-                'target_path' => "catalog/product/view/id/" . $product->getId(),
-                'is_auto_generated' => 1,
-                'redirect_type' => 0,
-                'store_id' => $testStore1->getId(),
-            ],
-            [
-                'request_path' => "product-1.html",
-                'target_path' => "catalog/product/view/id/" . $product->getId(),
-                'is_auto_generated' => 1,
-                'redirect_type' => 0,
-                'store_id' => $testStore2->getId(),
-            ],
-            [
-                'request_path' => "product-1.html",
-                'target_path' => "catalog/product/view/id/" . $product->getId(),
-                'is_auto_generated' => 1,
-                'redirect_type' => 0,
-                'store_id' => $testStore3->getId(),
-            ],
-            [
-                'request_path' => "product-1.html",
-                'target_path' => "catalog/product/view/id/" . $product->getId(),
-                'is_auto_generated' => 1,
-                'redirect_type' => 0,
-                'store_id' => $testStore4->getId(),
-            ]
-        ];
-        $actual = $this->getActualResults($productFilter);
-        foreach ($expected as $row) {
-            $this->assertContains($row, $actual);
-        }
-    }
-
-    /**
-     * @magentoDataFixture Magento/Store/_files/second_website_with_two_stores.php
-     * @magentoDataFixture Magento/CatalogUrlRewrite/_files/product_rewrite_multistore.php
-     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
-     */
-    public function testChangeVisibilityLocalScope()
-    {
-        $testStore1 = $this->storeManager->getStore('default');
-        $testStore2 = $this->storeManager->getStore('fixture_second_store');
-        $testStore3 = $this->storeManager->getStore('fixture_third_store');
-        $testStore4 = $this->storeManager->getStore('test');
-
-        $this->storeManager->setCurrentStore(Store::DEFAULT_STORE_ID);
-
-         /** @var Product $product*/
-        $product = $this->productRepository->get('product1');
-
-        $productFilter = [
-            UrlRewrite::ENTITY_TYPE => 'product',
-        ];
-
-        //Product in 1st website. Should result in being in 1st and 4th stores.
-        $expected = [
-            [
-                'request_path' => "product-1.html",
-                'target_path' => "catalog/product/view/id/" . $product->getId(),
-                'is_auto_generated' => 1,
-                'redirect_type' => 0,
-                'store_id' => $testStore1->getId(),
-            ],
-            [
-                'request_path' => "product-1.html",
-                'target_path' => "catalog/product/view/id/" . $product->getId(),
-                'is_auto_generated' => 1,
-                'redirect_type' => 0,
-                'store_id' => $testStore4->getId(),
-            ]
-        ];
-        $actual = $this->getActualResults($productFilter);
-        foreach ($expected as $row) {
-            $this->assertContains($row, $actual);
-        }
-
-        //Set product to be not visible at store 4 scope
-        //Rewrite should only be present for store 1
-        $this->storeManager->setCurrentStore($testStore4);
-        $product = $this->productRepository->get('product1');
-        $product->setVisibility(Visibility::VISIBILITY_NOT_VISIBLE);
-        $this->productRepository->save($product);
-        $expected = [
-            [
-                'request_path' => "product-1.html",
-                'target_path' => "catalog/product/view/id/" . $product->getId(),
-                'is_auto_generated' => 1,
-                'redirect_type' => 0,
-                'store_id' => $testStore1->getId(),
-            ]
-        ];
-        $actual = $this->getActualResults($productFilter);
-        foreach ($expected as $row) {
-            $this->assertContains($row, $actual);
-        }
-
-        //Add product to websites corresponding to all 4 stores.
-        //Rewrites should be present for stores 1,2 and 3.
-        //No rewrites should be present for store 4 as that is not visible
-        //at local scope.
-        $this->storeManager->setCurrentStore(Store::DEFAULT_STORE_ID);
-        $product = $this->productRepository->get('product1');
-        $product->setWebsiteIds(
-            array_unique(
-                [
-                    $testStore1->getWebsiteId(),
-                    $testStore2->getWebsiteId(),
-                    $testStore3->getWebsiteId(),
-                    $testStore4->getWebsiteId()
-                ]
-            )
-        );
-        $this->productRepository->save($product);
-        $expected = [
-            [
-                'request_path' => "product-1.html",
-                'target_path' => "catalog/product/view/id/" . $product->getId(),
-                'is_auto_generated' => 1,
-                'redirect_type' => 0,
-                'store_id' => $testStore1->getId(),
-            ],
-            [
-                'request_path' => "product-1.html",
-                'target_path' => "catalog/product/view/id/" . $product->getId(),
-                'is_auto_generated' => 1,
-                'redirect_type' => 0,
-                'store_id' => $testStore2->getId(),
-            ],
-            [
-                'request_path' => "product-1.html",
-                'target_path' => "catalog/product/view/id/" . $product->getId(),
-                'is_auto_generated' => 1,
-                'redirect_type' => 0,
-                'store_id' => $testStore3->getId(),
-            ]
-        ];
-        $actual = $this->getActualResults($productFilter);
-        foreach ($expected as $row) {
-            $this->assertContains($row, $actual);
-        }
-
-        //Set product to be visible at store 4 scope only
-        $this->storeManager->setCurrentStore($testStore4);
-        $product = $this->productRepository->get('product1');
-        $product->setVisibility(Visibility::VISIBILITY_BOTH);
-        $this->productRepository->save($product);
-        $expected = [
-            [
-                'request_path' => "product-1.html",
-                'target_path' => "catalog/product/view/id/" . $product->getId(),
-                'is_auto_generated' => 1,
-                'redirect_type' => 0,
-                'store_id' => $testStore1->getId(),
-            ],
-            [
-                'request_path' => "product-1.html",
-                'target_path' => "catalog/product/view/id/" . $product->getId(),
-                'is_auto_generated' => 1,
-                'redirect_type' => 0,
-                'store_id' => $testStore2->getId(),
-            ],
-            [
-                'request_path' => "product-1.html",
-                'target_path' => "catalog/product/view/id/" . $product->getId(),
-                'is_auto_generated' => 1,
-                'redirect_type' => 0,
-                'store_id' => $testStore3->getId(),
-            ],
-            [
-                'request_path' => "product-1.html",
-                'target_path' => "catalog/product/view/id/" . $product->getId(),
-                'is_auto_generated' => 1,
-                'redirect_type' => 0,
-                'store_id' => $testStore4->getId(),
-            ]
-        ];
-        $actual = $this->getActualResults($productFilter);
-        foreach ($expected as $row) {
-            $this->assertContains($row, $actual);
+            $this->assertContainsEquals($row, $actual);
         }
     }
 }
