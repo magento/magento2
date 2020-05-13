@@ -117,7 +117,6 @@ class BulkManagement implements BulkManagementInterface
             $bulkSummary->setUserId($userId);
             $bulkSummary->setUserType($userType);
             $bulkSummary->setOperationCount((int)$bulkSummary->getOperationCount() + count($operations));
-
             $this->entityManager->save($bulkSummary);
 
             $connection->commit();

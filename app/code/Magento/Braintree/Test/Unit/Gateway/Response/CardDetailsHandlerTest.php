@@ -3,41 +3,45 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Braintree\Test\Unit\Gateway\Response;
 
 use Braintree\Transaction;
+use Magento\Braintree\Gateway\Config\Config;
 use Magento\Braintree\Gateway\Response\CardDetailsHandler;
+use Magento\Braintree\Gateway\SubjectReader;
 use Magento\Payment\Gateway\Data\PaymentDataObject;
 use Magento\Sales\Model\Order\Payment;
-use Magento\Braintree\Gateway\Config\Config;
-use Magento\Braintree\Gateway\SubjectReader;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Tests \Magento\Braintree\Gateway\Response\CardDetailsHandler.
  */
-class CardDetailsHandlerTest extends \PHPUnit\Framework\TestCase
+class CardDetailsHandlerTest extends TestCase
 {
     /**
-     * @var \Magento\Braintree\Gateway\Response\CardDetailsHandler
+     * @var CardDetailsHandler
      */
     private $cardHandler;
 
     /**
-     * @var \Magento\Sales\Model\Order\Payment|\PHPUnit_Framework_MockObject_MockObject
+     * @var Payment|MockObject
      */
     private $paymentMock;
 
     /**
-     * @var \Magento\Braintree\Gateway\Config\Config|\PHPUnit_Framework_MockObject_MockObject
+     * @var Config|MockObject
      */
     private $configMock;
 
     /**
-     * @var SubjectReader|\PHPUnit_Framework_MockObject_MockObject
+     * @var SubjectReader|MockObject
      */
     private $subjectReaderMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->initConfigMock();
         $this->subjectReaderMock = $this->getMockBuilder(SubjectReader::class)
@@ -105,7 +109,7 @@ class CardDetailsHandlerTest extends \PHPUnit\Framework\TestCase
 
     /**
      * Create mock for payment data object and order payment
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return MockObject
      */
     private function getPaymentDataObjectMock()
     {
@@ -134,7 +138,7 @@ class CardDetailsHandlerTest extends \PHPUnit\Framework\TestCase
 
     /**
      * Create Braintree transaction
-     * @return \Braintree\Transaction
+     * @return Transaction
      */
     private function getBraintreeTransaction()
     {

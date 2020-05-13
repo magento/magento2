@@ -81,7 +81,7 @@
         <see selector="{{StorefrontProductInfoMainSection.productAttributeOptions1}}" userInput="option2" stepKey="seeOption2Storefront"/>
 
         <!--go to admin and disable an option-->
-        <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="goToEditPage">
             <argument name="productId" value="$$createConfigProduct.id$$"/>
         </actionGroup>

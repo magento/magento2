@@ -18,7 +18,7 @@
             <group value="mtf_migrated"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginToAdminPanel"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginToAdminPanel"/>
             <createData entity="NewRootCategory" stepKey="rootCategory" />
             <createData entity="SimpleRootSubCategory" stepKey="category">
                 <requiredEntity createDataKey="rootCategory"/>
@@ -70,8 +70,7 @@
         <deleteData createDataKey="category" stepKey="deleteCategory"/>
 
         <!--Verify Sub Category is absent in backend -->
-        <amOnPage url="{{AdminCategoryPage.url}}" stepKey="openAdminCategoryIndexPage"/>
-        <waitForPageLoad stepKey="waitForCategoryIndexPageToBeLoaded"/>
+        <actionGroup ref="AdminOpenCategoryPageActionGroup" stepKey="openAdminCategoryIndexPage"/>
         <click selector="{{AdminCategorySidebarTreeSection.expandAll}}" stepKey="expandToSeeAllCategories2"/>
         <dontSee selector="{{AdminCategorySidebarTreeSection.categoryInTree(SimpleRootSubCategory.name)}}" stepKey="dontSeeCategoryInTree"/>
 

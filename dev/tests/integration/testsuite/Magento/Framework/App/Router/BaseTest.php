@@ -12,7 +12,7 @@ class BaseTest extends \PHPUnit\Framework\TestCase
      */
     protected $_model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $options = ['routerId' => 'standard'];
         $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(

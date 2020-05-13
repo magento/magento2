@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Wishlist\Test\Unit\Controller\Shared;
 
@@ -86,7 +87,7 @@ class CartTest extends TestCase
     protected $product;
 
     // phpcs:ignore Generic.Files.LineLength.TooLong
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->request = $this->getMockBuilder(RequestInterface::class)
             ->getMockForAbstractClass();

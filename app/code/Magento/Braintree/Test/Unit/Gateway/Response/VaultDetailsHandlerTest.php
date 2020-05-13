@@ -3,15 +3,17 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Braintree\Test\Unit\Gateway\Response;
 
 use Braintree\Result\Successful;
 use Braintree\Transaction;
 use Braintree\Transaction\CreditCardDetails;
 use Magento\Braintree\Gateway\Config\Config;
-use Magento\Braintree\Gateway\SubjectReader;
 use Magento\Braintree\Gateway\Response\PaymentDetailsHandler;
 use Magento\Braintree\Gateway\Response\VaultDetailsHandler;
+use Magento\Braintree\Gateway\SubjectReader;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Payment\Gateway\Data\PaymentDataObject;
@@ -21,11 +23,11 @@ use Magento\Sales\Api\Data\OrderPaymentExtensionInterfaceFactory;
 use Magento\Sales\Model\Order\Payment;
 use Magento\Vault\Api\Data\PaymentTokenFactoryInterface;
 use Magento\Vault\Model\PaymentToken;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 /**
- * VaultDetailsHandler Test
+ * Verify class VaultDetailsHandler
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
@@ -60,14 +62,14 @@ class VaultDetailsHandlerTest extends TestCase
      */
     private $paymentExtensionFactory;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
         $paymentToken = $objectManager->getObject(PaymentToken::class);
         $this->paymentTokenFactory = $this->getMockBuilder(PaymentTokenFactoryInterface::class)
             ->setMethods(['create'])
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->paymentTokenFactory->method('create')
             ->with(PaymentTokenFactoryInterface::TOKEN_TYPE_CREDIT_CARD)
             ->willReturn($paymentToken);
@@ -216,9 +218,14 @@ class VaultDetailsHandlerTest extends TestCase
     private function initPaymentExtensionAttributesMock()
     {
         $this->paymentExtension = $this->getMockBuilder(OrderPaymentExtensionInterface::class)
-            ->setMethods(['setVaultPaymentToken', 'getVaultPaymentToken'])
+            ->setMethods([
+                'setVaultPaymentToken',
+                'getVaultPaymentToken',
+                'setNotificationMessage',
+                'getNotificationMessage'
+            ])
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->paymentExtensionFactory = $this->getMockBuilder(OrderPaymentExtensionInterfaceFactory::class)
             ->disableOriginalConstructor()
