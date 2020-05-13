@@ -18,7 +18,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
      */
     protected $_collection;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_collection = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             \Magento\Authorization\Model\ResourceModel\Role\Collection::class
@@ -33,15 +33,15 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
 
         $selectQueryStr = $this->_collection->getSelect()->__toString();
 
-        $this->assertContains('user_id', $selectQueryStr);
-        $this->assertContains('user_type', $selectQueryStr);
+        $this->assertStringContainsString('user_id', $selectQueryStr);
+        $this->assertStringContainsString('user_type', $selectQueryStr);
     }
 
     public function testSetRolesFilter()
     {
         $this->_collection->setRolesFilter();
 
-        $this->assertContains('role_type', $this->_collection->getSelect()->__toString());
+        $this->assertStringContainsString('role_type', $this->_collection->getSelect()->__toString());
     }
 
     public function testToOptionArray()

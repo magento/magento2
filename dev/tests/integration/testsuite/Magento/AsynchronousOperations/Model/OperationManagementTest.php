@@ -32,7 +32,7 @@ class OperationManagementTest extends \PHPUnit\Framework\TestCase
      */
     private $entityManager;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             \Magento\AsynchronousOperations\Model\OperationManagement::class
@@ -68,7 +68,7 @@ class OperationManagementTest extends \PHPUnit\Framework\TestCase
         $updatedOperation = $this->operationFactory->create();
         $this->entityManager->load($updatedOperation, $operationId);
         $this->assertEquals(OperationInterface::STATUS_TYPE_OPEN, $updatedOperation->getStatus());
-        $this->assertEquals(null, $updatedOperation->getResultMessage());
-        $this->assertEquals(null, $updatedOperation->getSerializedData());
+        $this->assertNull($updatedOperation->getResultMessage());
+        $this->assertNull($updatedOperation->getSerializedData());
     }
 }

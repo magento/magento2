@@ -3,96 +3,120 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Cron\Test\Unit\Observer;
 
+use Magento\Cron\Model\Config;
+use Magento\Cron\Model\DeadlockRetrierInterface;
+use Magento\Cron\Model\ResourceModel\Schedule as ScheduleResourceModel;
+use Magento\Cron\Model\ResourceModel\Schedule\Collection as ScheduleCollection;
 use Magento\Cron\Model\Schedule;
+use Magento\Cron\Model\ScheduleFactory;
 use Magento\Cron\Observer\ProcessCronQueueObserver;
+use Magento\Cron\Test\Unit\Model\CronJobException;
+use Magento\Framework\App\CacheInterface;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\Console\Request as ConsoleRequest;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\State;
+use Magento\Framework\App\State as AppState;
+use Magento\Framework\DataObject;
+use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Framework\Event\Observer;
+use Magento\Framework\Lock\LockManagerInterface;
+use Magento\Framework\Model\AbstractModel;
+use Magento\Framework\Process\PhpExecutableFinderFactory;
 use Magento\Framework\Profiler\Driver\Standard\Stat;
 use Magento\Framework\Profiler\Driver\Standard\StatFactory;
-use Magento\Cron\Model\DeadlockRetrierInterface;
-use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Framework\ShellInterface;
+use Magento\Framework\Stdlib\DateTime\DateTime;
+use Magento\Store\Model\ScopeInterface;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface;
+use Symfony\Component\Process\PhpExecutableFinder;
 
 /**
- * Class \Magento\Cron\Test\Unit\Model\ObserverTest
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.TooManyFields)
  */
-class ProcessCronQueueObserverTest extends \PHPUnit\Framework\TestCase
+class ProcessCronQueueObserverTest extends TestCase
 {
     /**
      * @var ProcessCronQueueObserver
      */
-    protected $_observer;
+    private $cronQueueObserver;
 
     /**
-     * @var \Magento\Framework\App\ObjectManager|MockObject
+     * @var ObjectManager|MockObject
      */
-    protected $_objectManager;
+    private $objectManagerMock;
 
     /**
-     * @var MockObject
+     * @var CacheInterface|MockObject
      */
-    protected $_cache;
+    private $cacheMock;
 
     /**
-     * @var \Magento\Cron\Model\Config|MockObject
+     * @var Config|MockObject
      */
-    protected $_config;
+    private $configMock;
 
     /**
-     * @var \Magento\Cron\Model\ScheduleFactory|MockObject
+     * @var ScheduleFactory|MockObject
      */
-    protected $_scheduleFactory;
+    private $scheduleFactoryMock;
 
     /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface|MockObject
+     * @var ScopeConfigInterface|MockObject
      */
-    protected $_scopeConfig;
+    private $scopeConfigMock;
 
     /**
-     * @var \Magento\Framework\App\Console\Request|MockObject
+     * @var ConsoleRequest|MockObject
      */
-    protected $_request;
+    private $consoleRequestMock;
 
     /**
-     * @var \Magento\Framework\ShellInterface|MockObject
+     * @var ShellInterface|MockObject
      */
-    protected $_shell;
-
-    /** @var \Magento\Cron\Model\ResourceModel\Schedule\Collection|MockObject */
-    protected $_collection;
+    private $shellMock;
 
     /**
-     * @var \Magento\Cron\Model\Groups\Config\Data
+     * @var ScheduleCollection|MockObject
      */
-    protected $_cronGroupConfig;
+    private $scheduleCollectionMock;
 
     /**
-     * @var \Magento\Framework\Stdlib\DateTime\DateTime
+     * @var DateTime|MockObject
      */
-    protected $dateTimeMock;
+    private $dateTimeMock;
 
     /**
-     * @var \Magento\Framework\Event\Observer
+     * @var Observer|MockObject
      */
-    protected $observer;
+    private $observerMock;
 
     /**
-     * @var \Psr\Log\LoggerInterface|MockObject
+     * @var LoggerInterface|MockObject
      */
-    protected $loggerMock;
+    private $loggerMock;
 
     /**
-     * @var \Magento\Framework\App\State|MockObject
+     * @var AppState|MockObject
      */
-    protected $appStateMock;
+    private $appStateMock;
 
     /**
-     * @var \Magento\Framework\Lock\LockManagerInterface|MockObject
+     * @var LockManagerInterface|MockObject
      */
     private $lockManagerMock;
+
+    /**
+     * @var ScheduleResourceModel|MockObject
+     */
+    private $scheduleResourceMock;
 
     /**
      * @var \Magento\Framework\Event\ManagerInterface|MockObject
@@ -105,19 +129,14 @@ class ProcessCronQueueObserverTest extends \PHPUnit\Framework\TestCase
     private $retrierMock;
 
     /**
-     * @var \Magento\Cron\Model\ResourceModel\Schedule|MockObject
+     * @var MockObject|Stat
      */
-    protected $scheduleResource;
+    private $stat;
 
     /**
      * @var StatFactory|MockObject
      */
     private $statFactory;
-
-    /**
-     * @var Stat|MockObject
-     */
-    private $stat;
 
     /**
      * @var int
@@ -127,68 +146,70 @@ class ProcessCronQueueObserverTest extends \PHPUnit\Framework\TestCase
     /**
      * Prepare parameters
      */
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->_objectManager = $this->getMockBuilder(
-            \Magento\Framework\App\ObjectManager::class
-        )->disableOriginalConstructor()->getMock();
-        $this->_cache = $this->createMock(\Magento\Framework\App\CacheInterface::class);
-        $this->_config = $this->getMockBuilder(
-            \Magento\Cron\Model\Config::class
-        )->disableOriginalConstructor()->getMock();
-        $this->_scopeConfig = $this->getMockBuilder(
-            \Magento\Framework\App\Config\ScopeConfigInterface::class
-        )->disableOriginalConstructor()->getMock();
-        $this->_collection = $this->getMockBuilder(
-            \Magento\Cron\Model\ResourceModel\Schedule\Collection::class
+        $this->objectManagerMock = $this->getMockBuilder(ObjectManager::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->cacheMock = $this->getMockForAbstractClass(CacheInterface::class);
+        $this->configMock = $this->getMockBuilder(Config::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->scopeConfigMock = $this->getMockBuilder(
+            ScopeConfigInterface::class
+        )->disableOriginalConstructor()
+            ->getMock();
+        $this->scheduleCollectionMock = $this->getMockBuilder(
+            ScheduleCollection::class
         )->setMethods(
             ['addFieldToFilter', 'load', '__wakeup']
-        )->disableOriginalConstructor()->getMock();
-        $this->_collection->expects($this->any())->method('addFieldToFilter')->willReturnSelf();
-        $this->_collection->expects($this->any())->method('load')->willReturnSelf();
+        )->disableOriginalConstructor()
+            ->getMock();
+        $this->scheduleCollectionMock->expects($this->any())->method('addFieldToFilter')->willReturnSelf();
+        $this->scheduleCollectionMock->expects($this->any())->method('load')->willReturnSelf();
 
-        $this->_scheduleFactory = $this->getMockBuilder(
-            \Magento\Cron\Model\ScheduleFactory::class
+        $this->scheduleFactoryMock = $this->getMockBuilder(
+            ScheduleFactory::class
         )->setMethods(
             ['create']
-        )->disableOriginalConstructor()->getMock();
-        $this->_request = $this->getMockBuilder(
-            \Magento\Framework\App\Console\Request::class
-        )->disableOriginalConstructor()->getMock();
-        $this->_shell = $this->getMockBuilder(
-            \Magento\Framework\ShellInterface::class
-        )->disableOriginalConstructor()->setMethods(
-            ['execute']
-        )->getMock();
-        $this->loggerMock = $this->createMock(\Psr\Log\LoggerInterface::class);
+        )->disableOriginalConstructor()
+            ->getMock();
+        $this->consoleRequestMock = $this->getMockBuilder(
+            ConsoleRequest::class
+        )->disableOriginalConstructor()
+            ->getMock();
+        $this->shellMock = $this->getMockBuilder(
+            ShellInterface::class
+        )->disableOriginalConstructor()
+            ->setMethods(
+                ['execute']
+            )->getMock();
+        $this->loggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
 
-        $this->appStateMock = $this->getMockBuilder(\Magento\Framework\App\State::class)
+        $this->appStateMock = $this->getMockBuilder(AppState::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->lockManagerMock = $this->getMockBuilder(\Magento\Framework\Lock\LockManagerInterface::class)
+        $this->lockManagerMock = $this->getMockBuilder(LockManagerInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->lockManagerMock->method('lock')->willReturn(true);
         $this->lockManagerMock->method('unlock')->willReturn(true);
 
+        $this->observerMock = $this->createMock(Observer::class);
         $this->eventManager = $this->createMock(\Magento\Framework\Event\ManagerInterface::class);
 
-        $this->observer = $this->createMock(\Magento\Framework\Event\Observer::class);
-
-        $this->dateTimeMock = $this->getMockBuilder(\Magento\Framework\Stdlib\DateTime\DateTime::class)
+        $this->dateTimeMock = $this->getMockBuilder(DateTime::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->dateTimeMock->expects($this->any())->method('gmtTimestamp')->willReturn($this->time);
 
-        $phpExecutableFinder = $this->createMock(\Symfony\Component\Process\PhpExecutableFinder::class);
+        $phpExecutableFinder = $this->createMock(PhpExecutableFinder::class);
         $phpExecutableFinder->expects($this->any())->method('find')->willReturn('php');
-        $phpExecutableFinderFactory = $this->createMock(
-            \Magento\Framework\Process\PhpExecutableFinderFactory::class
-        );
+        $phpExecutableFinderFactory = $this->createMock(PhpExecutableFinderFactory::class);
         $phpExecutableFinderFactory->expects($this->any())->method('create')->willReturn($phpExecutableFinder);
 
-        $this->scheduleResource = $this->getMockBuilder(\Magento\Cron\Model\ResourceModel\Schedule::class)
+        $this->scheduleResourceMock = $this->getMockBuilder(ScheduleResourceModel::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -197,21 +218,21 @@ class ProcessCronQueueObserverTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->stat = $this->getMockBuilder(\Magento\Framework\Profiler\Driver\Standard\Stat::class)
+        $this->stat = $this->getMockBuilder(Stat::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->statFactory->expects($this->any())->method('create')->willReturn($this->stat);
 
-        $this->retrierMock = $this->createMock(DeadlockRetrierInterface::class);
+        $this->retrierMock = $this->getMockForAbstractClass(DeadlockRetrierInterface::class);
 
-        $this->_observer = new ProcessCronQueueObserver(
-            $this->_objectManager,
-            $this->_scheduleFactory,
-            $this->_cache,
-            $this->_config,
-            $this->_scopeConfig,
-            $this->_request,
-            $this->_shell,
+        $this->cronQueueObserver = new ProcessCronQueueObserver(
+            $this->objectManagerMock,
+            $this->scheduleFactoryMock,
+            $this->cacheMock,
+            $this->configMock,
+            $this->scopeConfigMock,
+            $this->consoleRequestMock,
+            $this->shellMock,
             $this->dateTimeMock,
             $phpExecutableFinderFactory,
             $this->loggerMock,
@@ -230,27 +251,40 @@ class ProcessCronQueueObserverTest extends \PHPUnit\Framework\TestCase
     {
         $this->eventManager->expects($this->never())->method('dispatch');
         $lastRun = $this->time + 10000000;
-        $this->_cache->expects($this->atLeastOnce())->method('load')->willReturn($lastRun);
-        $this->_scopeConfig->expects($this->atLeastOnce())->method('getValue')->willReturn(0);
+        $this->cacheMock->expects($this->atLeastOnce())->method('load')->willReturn($lastRun);
+        $this->scopeConfigMock->expects($this->atLeastOnce())->method('getValue')->willReturn(0);
 
-        $this->_config->expects($this->atLeastOnce())->method('getJobs')->willReturn(['test_job1' => ['test_data']]);
+        $this->configMock->expects(
+            $this->atLeastOnce()
+        )->method(
+            'getJobs'
+        )->willReturn(
+            ['test_job1' => ['test_data']]
+        );
 
-        $schedule = $this->createPartialMock(\Magento\Cron\Model\Schedule::class, ['getJobCode', '__wakeup']);
-        $schedule->expects($this->atLeastOnce())->method('getJobCode')->willReturn('not_existed_job_code');
+        $schedule = $this->getMockBuilder(Schedule::class)
+            ->addMethods(['getJobCode'])
+            ->onlyMethods(['__wakeup'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $schedule->expects($this->atLeastOnce())
+            ->method('getJobCode')
+            ->willReturn('not_existed_job_code');
 
-        $this->_collection->addItem($schedule);
+        $this->scheduleCollectionMock->addItem($schedule);
 
         $scheduleMock = $this->getMockBuilder(
-            \Magento\Cron\Model\Schedule::class
-        )->disableOriginalConstructor()->getMock();
+            Schedule::class
+        )->disableOriginalConstructor()
+            ->getMock();
         $scheduleMock->expects($this->atLeastOnce())
             ->method('getCollection')
-            ->willReturn($this->_collection);
-        $this->_scheduleFactory->expects($this->atLeastOnce())
+            ->willReturn($this->scheduleCollectionMock);
+        $this->scheduleFactoryMock->expects($this->atLeastOnce())
             ->method('create')
             ->willReturn($scheduleMock);
 
-        $this->_observer->execute($this->observer);
+        $this->cronQueueObserver->execute($this->observerMock);
     }
 
     /**
@@ -260,25 +294,28 @@ class ProcessCronQueueObserverTest extends \PHPUnit\Framework\TestCase
     {
         $lastRun = $this->time + 10000000;
         $this->eventManager->expects($this->never())->method('dispatch');
-        $this->_cache->expects($this->any())->method('load')->willReturn($lastRun);
-        $this->_scopeConfig->expects($this->any())->method('getValue')->willReturn(0);
-        $this->_request->expects($this->any())->method('getParam')->willReturn('test_group');
+        $this->cacheMock->expects($this->any())->method('load')->willReturn($lastRun);
+        $this->scopeConfigMock->expects($this->any())
+            ->method('getValue')->willReturn(0);
+        $this->consoleRequestMock->expects($this->any())
+            ->method('getParam')->willReturn('test_group');
 
         $dateScheduledAt = date('Y-m-d H:i:s', $this->time - 86400);
         $schedule = $this->getMockBuilder(
-            \Magento\Cron\Model\Schedule::class
+            Schedule::class
         )->setMethods(
             ['getJobCode', 'tryLockJob', 'getScheduledAt', '__wakeup', 'save', 'setFinishedAt', 'getResource']
-        )->disableOriginalConstructor()->getMock();
+        )->disableOriginalConstructor()
+            ->getMock();
         $schedule->expects($this->any())->method('getJobCode')->willReturn('test_job1');
         $schedule->expects($this->atLeastOnce())->method('getScheduledAt')->willReturn($dateScheduledAt);
         $schedule->expects($this->exactly(5))->method('tryLockJob')->willReturn(false);
         $schedule->expects($this->never())->method('setFinishedAt');
-        $schedule->expects($this->once())->method('getResource')->willReturn($this->scheduleResource);
+        $schedule->expects($this->once())->method('getResource')->willReturn($this->scheduleResourceMock);
 
-        $connectionMock = $this->createMock(AdapterInterface::class);
+        $connectionMock = $this->getMockForAbstractClass(AdapterInterface::class);
 
-        $this->scheduleResource->expects($this->once())
+        $this->scheduleResourceMock->expects($this->once())
             ->method('getConnection')
             ->willReturn($connectionMock);
 
@@ -290,26 +327,26 @@ class ProcessCronQueueObserverTest extends \PHPUnit\Framework\TestCase
                 }
             );
 
-        $abstractModel = $this->createMock(\Magento\Framework\Model\AbstractModel::class);
+        $abstractModel = $this->createMock(AbstractModel::class);
         $schedule->expects($this->any())->method('save')->willReturn($abstractModel);
-        $this->_collection->addItem($schedule);
+        $this->scheduleCollectionMock->addItem($schedule);
 
-        $this->_config->expects(
-            $this->exactly(2)
-        )->method(
-            'getJobs'
-        )->willReturn(['test_group' => ['test_job1' => ['test_data']]]);
+        $this->configMock->expects($this->exactly(2))
+            ->method('getJobs')
+            ->willReturn(['test_group' => ['test_job1' => ['test_data']]]);
 
-        $scheduleMock = $this->getMockBuilder(
-            \Magento\Cron\Model\Schedule::class
-        )->disableOriginalConstructor()->getMock();
-        $scheduleMock->expects($this->any())->method('getCollection')->willReturn($this->_collection);
-        $scheduleMock->expects($this->any())->method('getResource')->willReturn($this->scheduleResource);
-        $this->_scheduleFactory->expects($this->atLeastOnce())
+        $scheduleMock = $this->getMockBuilder(Schedule::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $scheduleMock->expects($this->any())
+            ->method('getCollection')->willReturn($this->scheduleCollectionMock);
+        $scheduleMock->expects($this->any())
+            ->method('getResource')->willReturn($this->scheduleResourceMock);
+        $this->scheduleFactoryMock->expects($this->atLeastOnce())
             ->method('create')
             ->willReturn($scheduleMock);
 
-        $this->_observer->execute($this->observer);
+        $this->cronQueueObserver->execute($this->observerMock);
     }
 
     /**
@@ -322,13 +359,13 @@ class ProcessCronQueueObserverTest extends \PHPUnit\Framework\TestCase
 
         $lastRun = $this->time + 10000000;
         $this->eventManager->expects($this->never())->method('dispatch');
-        $this->_cache->expects($this->any())->method('load')->willReturn($lastRun);
-        $this->_scopeConfig->expects($this->any())->method('getValue')->willReturn(0);
-        $this->_request->expects($this->any())->method('getParam')->willReturn('test_group');
+        $this->cacheMock->expects($this->any())->method('load')->willReturn($lastRun);
+        $this->scopeConfigMock->expects($this->any())->method('getValue')->willReturn(0);
+        $this->consoleRequestMock->expects($this->any())->method('getParam')->willReturn('test_group');
 
         $dateScheduledAt = date('Y-m-d H:i:s', $this->time - 86400);
         $schedule = $this->getMockBuilder(
-            \Magento\Cron\Model\Schedule::class
+            Schedule::class
         )->setMethods(
             [
                 'getJobCode',
@@ -343,7 +380,8 @@ class ProcessCronQueueObserverTest extends \PHPUnit\Framework\TestCase
                 'getScheduleId',
                 'getResource',
             ]
-        )->disableOriginalConstructor()->getMock();
+        )->disableOriginalConstructor()
+            ->getMock();
         $schedule->expects($this->atLeastOnce())->method('getJobCode')->willReturn($jobCode);
         $schedule->expects($this->atLeastOnce())->method('getScheduledAt')->willReturn($dateScheduledAt);
         $schedule->expects($this->once())->method('tryLockJob')->willReturn(true);
@@ -352,17 +390,17 @@ class ProcessCronQueueObserverTest extends \PHPUnit\Framework\TestCase
         )->method(
             'setStatus'
         )->with(
-            $this->equalTo(\Magento\Cron\Model\Schedule::STATUS_MISSED)
+            Schedule::STATUS_MISSED
         )->willReturnSelf();
-        $schedule->expects($this->once())->method('setMessages')->with($this->equalTo($exceptionMessage));
+        $schedule->expects($this->once())->method('setMessages')->with($exceptionMessage);
         $schedule->expects($this->atLeastOnce())->method('getStatus')->willReturn(Schedule::STATUS_MISSED);
         $schedule->expects($this->atLeastOnce())->method('getMessages')->willReturn($exceptionMessage);
         $schedule->expects($this->once())->method('save');
-        $schedule->expects($this->once())->method('getResource')->willReturn($this->scheduleResource);
+        $schedule->expects($this->once())->method('getResource')->willReturn($this->scheduleResourceMock);
 
-        $connectionMock = $this->createMock(AdapterInterface::class);
+        $connectionMock = $this->getMockForAbstractClass(AdapterInterface::class);
 
-        $this->scheduleResource->expects($this->once())
+        $this->scheduleResourceMock->expects($this->once())
             ->method('getConnection')
             ->willReturn($connectionMock);
 
@@ -379,9 +417,9 @@ class ProcessCronQueueObserverTest extends \PHPUnit\Framework\TestCase
         $this->loggerMock->expects($this->once())->method('info')
             ->with('Cron Job test_job1 is missed at 2017-07-30 15:00:00');
 
-        $this->_collection->addItem($schedule);
+        $this->scheduleCollectionMock->addItem($schedule);
 
-        $this->_config->expects(
+        $this->configMock->expects(
             $this->exactly(2)
         )->method(
             'getJobs'
@@ -389,13 +427,17 @@ class ProcessCronQueueObserverTest extends \PHPUnit\Framework\TestCase
             ['test_group' => ['test_job1' => ['test_data']]]
         );
 
-        $scheduleMock = $this->getMockBuilder(\Magento\Cron\Model\Schedule::class)
-            ->disableOriginalConstructor()->getMock();
-        $scheduleMock->expects($this->any())->method('getCollection')->willReturn($this->_collection);
-        $scheduleMock->expects($this->any())->method('getResource')->willReturn($this->scheduleResource);
-        $this->_scheduleFactory->expects($this->atLeastOnce())->method('create')->willReturn($scheduleMock);
+        $scheduleMock = $this->getMockBuilder(Schedule::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $scheduleMock->expects($this->any())
+            ->method('getCollection')->willReturn($this->scheduleCollectionMock);
+        $scheduleMock->expects($this->any())
+            ->method('getResource')->willReturn($this->scheduleResourceMock);
+        $this->scheduleFactoryMock->expects($this->atLeastOnce())
+            ->method('create')->willReturn($scheduleMock);
 
-        $this->_observer->execute($this->observer);
+        $this->cronQueueObserver->execute($this->observerMock);
     }
 
     /**
@@ -405,13 +447,13 @@ class ProcessCronQueueObserverTest extends \PHPUnit\Framework\TestCase
     {
         $jobName = 'test_job1';
         $exceptionMessage = 'No callbacks found for cron job ' . $jobName;
-        $exception = new \Exception(__($exceptionMessage));
+        $exception = new \Exception($exceptionMessage);
 
         $this->eventManager->expects($this->never())->method('dispatch');
 
         $dateScheduledAt = date('Y-m-d H:i:s', $this->time - 86400);
         $schedule = $this->getMockBuilder(
-            \Magento\Cron\Model\Schedule::class
+            Schedule::class
         )->setMethods(
             [
                 'getJobCode',
@@ -424,7 +466,8 @@ class ProcessCronQueueObserverTest extends \PHPUnit\Framework\TestCase
                 'getStatus',
                 'getResource'
             ]
-        )->disableOriginalConstructor()->getMock();
+        )->disableOriginalConstructor()
+            ->getMock();
         $schedule->expects($this->any())->method('getJobCode')->willReturn('test_job1');
         $schedule->expects($this->once())->method('getScheduledAt')->willReturn($dateScheduledAt);
         $schedule->expects($this->once())->method('tryLockJob')->willReturn(true);
@@ -433,16 +476,15 @@ class ProcessCronQueueObserverTest extends \PHPUnit\Framework\TestCase
         )->method(
             'setStatus'
         )->with(
-            $this->equalTo(\Magento\Cron\Model\Schedule::STATUS_ERROR)
+            Schedule::STATUS_ERROR
         )->willReturnSelf();
-        $schedule->expects($this->once())->method('setMessages')->with($this->equalTo($exceptionMessage));
+        $schedule->expects($this->once())->method('setMessages')->with($exceptionMessage);
         $schedule->expects($this->any())->method('getStatus')->willReturn(Schedule::STATUS_ERROR);
         $schedule->expects($this->once())->method('save');
-        $schedule->expects($this->once())->method('getResource')->willReturn($this->scheduleResource);
+        $schedule->expects($this->once())->method('getResource')->willReturn($this->scheduleResourceMock);
+        $connectionMock = $this->getMockForAbstractClass(AdapterInterface::class);
 
-        $connectionMock = $this->createMock(AdapterInterface::class);
-
-        $this->scheduleResource->expects($this->once())
+        $this->scheduleResourceMock->expects($this->once())
             ->method('getConnection')
             ->willReturn($connectionMock);
 
@@ -453,31 +495,42 @@ class ProcessCronQueueObserverTest extends \PHPUnit\Framework\TestCase
                     return $callback();
                 }
             );
-
-        $this->_request->expects($this->any())->method('getParam')->willReturn('test_group');
-        $this->_collection->addItem($schedule);
+        $this->consoleRequestMock->expects($this->any())
+            ->method('getParam')->willReturn('test_group');
+        $this->scheduleCollectionMock->addItem($schedule);
 
         $this->loggerMock->expects($this->once())->method('critical')->with($exception);
 
         $jobConfig = ['test_group' => [$jobName => ['instance' => 'Some_Class']]];
 
-        $this->_config->expects($this->exactly(2))->method('getJobs')->willReturn($jobConfig);
+        $this->configMock->expects($this->exactly(2))
+            ->method('getJobs')->willReturn($jobConfig);
 
         $lastRun = $this->time + 10000000;
-        $this->_cache->expects($this->any())->method('load')->willReturn($lastRun);
+        $this->cacheMock->expects($this->any())->method('load')->willReturn($lastRun);
 
-        $this->_scopeConfig->expects($this->any())
+        $this->scopeConfigMock->expects($this->any())
             ->method('getValue')
             ->willReturn($this->time + 86400);
 
         $scheduleMock = $this->getMockBuilder(
             \Magento\Cron\Model\Schedule::class
         )->disableOriginalConstructor()->getMock();
-        $scheduleMock->expects($this->any())->method('getCollection')->willReturn($this->_collection);
-        $scheduleMock->expects($this->any())->method('getResource')->willReturn($this->scheduleResource);
-        $this->_scheduleFactory->expects($this->once())->method('create')->willReturn($scheduleMock);
+        $scheduleMock->expects($this->any())->method('getCollection')->willReturn($this->scheduleCollectionMock);
+        $scheduleMock->expects($this->any())->method('getResource')->willReturn($this->scheduleResourceMock);
+        $this->scheduleFactoryMock->expects($this->once())->method('create')->willReturn($scheduleMock);
 
-        $this->_observer->execute($this->observer);
+        $scheduleMock = $this->getMockBuilder(Schedule::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $scheduleMock->expects($this->any())
+            ->method('getCollection')->willReturn($this->scheduleCollectionMock);
+        $scheduleMock->expects($this->any())
+            ->method('getResource')->willReturn($this->scheduleResourceMock);
+        $this->scheduleFactoryMock->expects($this->once())
+            ->method('create')->willReturn($scheduleMock);
+
+        $this->cronQueueObserver->execute($this->observerMock);
     }
 
     /**
@@ -509,12 +562,12 @@ class ProcessCronQueueObserverTest extends \PHPUnit\Framework\TestCase
         $this->eventManager->expects($this->exactly($dispatchCalls))
             ->method('dispatch')
             ->with('cron_job_run', ['job_name' => 'cron/test_group/test_job1']);
-
-        $this->_request->expects($this->any())->method('getParam')->willReturn('test_group');
+        $this->consoleRequestMock->expects($this->any())
+            ->method('getParam')->willReturn('test_group');
 
         $dateScheduledAt = date('Y-m-d H:i:s', $this->time - 86400);
         $schedule = $this->getMockBuilder(
-            \Magento\Cron\Model\Schedule::class
+            Schedule::class
         )->setMethods(
             [
                 'getJobCode',
@@ -527,22 +580,22 @@ class ProcessCronQueueObserverTest extends \PHPUnit\Framework\TestCase
                 'getStatus',
                 'getResource'
             ]
-        )->disableOriginalConstructor()->getMock();
+        )->disableOriginalConstructor()
+            ->getMock();
         $schedule->expects($this->any())->method('getJobCode')->willReturn('test_job1');
         $schedule->expects($this->once())->method('getScheduledAt')->willReturn($dateScheduledAt);
         $schedule->expects($this->once())->method('tryLockJob')->willReturn(true);
         $schedule->expects($this->once())
             ->method('setStatus')
-            ->with($this->equalTo(\Magento\Cron\Model\Schedule::STATUS_ERROR))
-            ->willReturnSelf();
-        $schedule->expects($this->once())->method('setMessages')->with($this->equalTo($exceptionMessage));
+            ->with(Schedule::STATUS_ERROR)->willReturnSelf();
+        $schedule->expects($this->once())->method('setMessages')->with($exceptionMessage);
         $schedule->expects($this->any())->method('getStatus')->willReturn(Schedule::STATUS_ERROR);
         $schedule->expects($this->exactly($saveCalls))->method('save');
-        $schedule->expects($this->exactly($saveCalls))->method('getResource')->willReturn($this->scheduleResource);
+        $schedule->expects($this->exactly($saveCalls))->method('getResource')->willReturn($this->scheduleResourceMock);
 
-        $connectionMock = $this->createMock(AdapterInterface::class);
+        $connectionMock = $this->getMockForAbstractClass(AdapterInterface::class);
 
-        $this->scheduleResource->expects($this->exactly($saveCalls))
+        $this->scheduleResourceMock->expects($this->exactly($saveCalls))
             ->method('getConnection')
             ->willReturn($connectionMock);
 
@@ -556,29 +609,32 @@ class ProcessCronQueueObserverTest extends \PHPUnit\Framework\TestCase
 
         $this->loggerMock->expects($this->once())->method('critical')->with($exception);
 
-        $this->_collection->addItem($schedule);
+        $this->scheduleCollectionMock->addItem($schedule);
 
-        $this->_config->expects($this->exactly(2))->method('getJobs')->willReturn($jobConfig);
+        $this->configMock->expects($this->exactly(2))->method('getJobs')->willReturn($jobConfig);
 
         $lastRun = $this->time + 10000000;
-        $this->_cache->expects($this->any())->method('load')->willReturn($lastRun);
-        $this->_scopeConfig->expects($this->any())
+        $this->cacheMock->expects($this->any())->method('load')->willReturn($lastRun);
+        $this->scopeConfigMock->expects($this->any())
             ->method('getValue')
             ->willReturn($this->time + 86400);
 
-        $scheduleMock = $this->getMockBuilder(
-            \Magento\Cron\Model\Schedule::class
-        )->disableOriginalConstructor()->getMock();
-        $scheduleMock->expects($this->any())->method('getCollection')->willReturn($this->_collection);
-        $scheduleMock->expects($this->any())->method('getResource')->willReturn($this->scheduleResource);
-        $this->_scheduleFactory->expects($this->once())->method('create')->willReturn($scheduleMock);
-        $this->_objectManager
+        $scheduleMock = $this->getMockBuilder(Schedule::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $scheduleMock->expects($this->any())
+            ->method('getCollection')->willReturn($this->scheduleCollectionMock);
+        $scheduleMock->expects($this->any())
+            ->method('getResource')->willReturn($this->scheduleResourceMock);
+        $this->scheduleFactoryMock->expects($this->once())
+            ->method('create')->willReturn($scheduleMock);
+        $this->objectManagerMock
             ->expects($this->once())
             ->method('create')
-            ->with($this->equalTo($cronJobType))
+            ->with($cronJobType)
             ->willReturn($cronJobObject);
 
-        $this->_observer->execute($this->observer);
+        $this->cronQueueObserver->execute($this->observerMock);
     }
 
     /**
@@ -594,19 +650,19 @@ class ProcessCronQueueObserverTest extends \PHPUnit\Framework\TestCase
                 'Invalid callback: Not_Existed_Class::execute can\'t be called',
                 1,
                 0,
-                new \Exception(__('Invalid callback: Not_Existed_Class::execute can\'t be called'))
+                new \Exception('Invalid callback: Not_Existed_Class::execute can\'t be called')
             ],
             'exception in execution' => [
                 'CronJobException',
-                new \Magento\Cron\Test\Unit\Model\CronJobException(),
+                new CronJobException(),
                 'Test exception',
                 2,
                 1,
-                new \Exception(__('Test exception'))
+                new \Exception('Test exception')
             ],
             'throwable in execution' => [
                 'CronJobException',
-                new \Magento\Cron\Test\Unit\Model\CronJobException(
+                new CronJobException(
                     $throwable
                 ),
                 'Error when running a cron job',
@@ -629,7 +685,7 @@ class ProcessCronQueueObserverTest extends \PHPUnit\Framework\TestCase
         $jobConfig = [
             'test_group' => ['test_job1' => ['instance' => 'CronJob', 'method' => 'execute']],
         ];
-        $this->_request->expects($this->any())->method('getParam')->willReturn('test_group');
+        $this->consoleRequestMock->expects($this->any())->method('getParam')->willReturn('test_group');
 
         $this->eventManager->expects($this->once())
             ->method('dispatch')
@@ -648,21 +704,22 @@ class ProcessCronQueueObserverTest extends \PHPUnit\Framework\TestCase
             '__wakeup',
             'getResource',
         ];
-        /** @var \Magento\Cron\Model\Schedule|MockObject $schedule */
+        /** @var Schedule|MockObject $schedule */
         $schedule = $this->getMockBuilder(
-            \Magento\Cron\Model\Schedule::class
+            Schedule::class
         )->setMethods(
             $scheduleMethods
-        )->disableOriginalConstructor()->getMock();
+        )->disableOriginalConstructor()
+            ->getMock();
         $schedule->expects($this->any())->method('getJobCode')->willReturn('test_job1');
         $schedule->expects($this->atLeastOnce())->method('getScheduledAt')->willReturn($dateScheduledAt);
         $schedule->expects($this->atLeastOnce())->method('tryLockJob')->willReturn(true);
         $schedule->expects($this->any())->method('setFinishedAt')->willReturnSelf();
-        $schedule->expects($this->exactly(2))->method('getResource')->willReturn($this->scheduleResource);
+        $schedule->expects($this->exactly(2))->method('getResource')->willReturn($this->scheduleResourceMock);
 
-        $connectionMock = $this->createMock(AdapterInterface::class);
+        $connectionMock = $this->getMockForAbstractClass(AdapterInterface::class);
 
-        $this->scheduleResource->expects($this->exactly(2))
+        $this->scheduleResourceMock->expects($this->exactly(2))
             ->method('getConnection')
             ->willReturn($connectionMock);
 
@@ -684,39 +741,47 @@ class ProcessCronQueueObserverTest extends \PHPUnit\Framework\TestCase
         )->method(
             'setStatus'
         )->with(
-            $this->equalTo(\Magento\Cron\Model\Schedule::STATUS_SUCCESS)
+            Schedule::STATUS_SUCCESS
         )->willReturnSelf();
 
         $schedule->expects($this->at(8))->method('save');
 
-        $this->_collection->addItem($schedule);
+        $this->scheduleCollectionMock->addItem($schedule);
 
-        $this->_config->expects($this->exactly(2))->method('getJobs')->willReturn($jobConfig);
+        $this->configMock->expects($this->exactly(2))->method('getJobs')->willReturn($jobConfig);
 
         $lastRun = $this->time + 10000000;
-        $this->_cache->expects($this->any())->method('load')->willReturn($lastRun);
-        $this->_scopeConfig->expects($this->any())
+        $this->cacheMock->expects($this->any())->method('load')->willReturn($lastRun);
+        $this->scopeConfigMock->expects($this->any())
             ->method('getValue')
             ->willReturn($this->time + 86400);
 
         $scheduleMock = $this->getMockBuilder(
-            \Magento\Cron\Model\Schedule::class
-        )->disableOriginalConstructor()->getMock();
-        $scheduleMock->expects($this->any())->method('getCollection')->willReturn($this->_collection);
-        $this->_scheduleFactory->expects($this->once())->method('create')->willReturn($scheduleMock);
+            Schedule::class
+        )->disableOriginalConstructor()
+            ->getMock();
+        $scheduleMock->expects($this->any())
+            ->method('getCollection')->willReturn($this->scheduleCollectionMock);
+        $scheduleMock->expects($this->any())
+            ->method('getResource')->willReturn($this->scheduleResourceMock);
+        $this->scheduleFactoryMock->expects($this->once(2))
+            ->method('create')->willReturn($scheduleMock);
 
-        $testCronJob = $this->getMockBuilder('CronJob')->setMethods(['execute'])->getMock();
+        $testCronJob = $this->getMockBuilder('CronJob')
+            ->setMethods(['execute'])->getMock();
         $testCronJob->expects($this->atLeastOnce())->method('execute')->with($schedule);
 
-        $this->_objectManager->expects(
+        $this->objectManagerMock->expects(
             $this->once()
         )->method(
             'create'
         )->with(
-            $this->equalTo('CronJob')
-        )->willReturn($testCronJob);
+            'CronJob'
+        )->willReturn(
+            $testCronJob
+        );
 
-        $this->_observer->execute($this->observer);
+        $this->cronQueueObserver->execute($this->observerMock);
     }
 
     /**
@@ -729,55 +794,66 @@ class ProcessCronQueueObserverTest extends \PHPUnit\Framework\TestCase
         ];
 
         $this->eventManager->expects($this->never())->method('dispatch');
-
-        $this->_config->expects($this->at(0))->method('getJobs')->willReturn($jobConfig);
-        $this->_config->expects(
+        $this->configMock->expects($this->at(0))->method('getJobs')->willReturn($jobConfig);
+        $this->configMock->expects(
             $this->at(1)
         )->method(
             'getJobs'
-        )->willReturn(['test_group' => []]);
-        $this->_config->expects($this->at(2))->method('getJobs')->willReturn($jobConfig);
-        $this->_config->expects($this->at(3))->method('getJobs')->willReturn($jobConfig);
-        $this->_request->expects($this->any())->method('getParam')->willReturn('test_group');
-        $this->_cache->expects(
+        )->willReturn(
+            ['test_group' => []]
+        );
+        $this->configMock->expects($this->at(2))
+            ->method('getJobs')->willReturn($jobConfig);
+        $this->configMock->expects($this->at(3))
+            ->method('getJobs')->willReturn($jobConfig);
+        $this->consoleRequestMock->expects($this->any())
+            ->method('getParam')->willReturn('test_group');
+        $this->cacheMock->expects(
             $this->at(0)
         )->method(
             'load'
         )->with(
-            $this->equalTo(ProcessCronQueueObserver::CACHE_KEY_LAST_HISTORY_CLEANUP_AT . 'test_group')
-        )->willReturn($this->time + 10000000);
-        $this->_cache->expects(
+            ProcessCronQueueObserver::CACHE_KEY_LAST_HISTORY_CLEANUP_AT . 'test_group'
+        )->willReturn(
+            $this->time + 10000000
+        );
+        $this->cacheMock->expects(
             $this->at(1)
         )->method(
             'load'
         )->with(
-            $this->equalTo(ProcessCronQueueObserver::CACHE_KEY_LAST_SCHEDULE_GENERATE_AT . 'test_group')
-        )->willReturn($this->time - 10000000);
+            ProcessCronQueueObserver::CACHE_KEY_LAST_SCHEDULE_GENERATE_AT . 'test_group'
+        )->willReturn(
+            $this->time - 10000000
+        );
 
-        $this->_scopeConfig->expects($this->any())->method('getValue')->willReturn(0);
+        $this->scopeConfigMock->expects($this->any())->method('getValue')->willReturn(0);
 
         $schedule = $this->getMockBuilder(
-            \Magento\Cron\Model\Schedule::class
+            Schedule::class
         )->setMethods(
             ['getJobCode', 'getScheduledAt', '__wakeup']
-        )->disableOriginalConstructor()->getMock();
+        )->disableOriginalConstructor()
+            ->getMock();
         $schedule->expects($this->any())->method('getJobCode')->willReturn('job_code1');
         $schedule->expects($this->once())->method('getScheduledAt')->willReturn('* * * * *');
 
-        $this->_collection->addItem(new \Magento\Framework\DataObject());
-        $this->_collection->addItem($schedule);
+        $this->scheduleCollectionMock->addItem(new DataObject());
+        $this->scheduleCollectionMock->addItem($schedule);
 
-        $this->_cache->expects($this->any())->method('save');
+        $this->cacheMock->expects($this->any())->method('save');
 
         $scheduleMock = $this->getMockBuilder(
-            \Magento\Cron\Model\Schedule::class
-        )->disableOriginalConstructor()->getMock();
-        $scheduleMock->expects($this->any())->method('getCollection')->willReturn($this->_collection);
-        $this->_scheduleFactory->expects($this->any())->method('create')->willReturn($scheduleMock);
+            Schedule::class
+        )->disableOriginalConstructor()
+            ->getMock();
+        $scheduleMock->expects($this->any())
+            ->method('getCollection')->willReturn($this->scheduleCollectionMock);
+        $this->scheduleFactoryMock->expects($this->any())->method('create')->willReturn($scheduleMock);
 
-        $this->_scheduleFactory->expects($this->any())->method('create')->willReturn($schedule);
+        $this->scheduleFactoryMock->expects($this->any())->method('create')->willReturn($schedule);
 
-        $this->_observer->execute($this->observer);
+        $this->cronQueueObserver->execute($this->observerMock);
     }
 
     /**
@@ -802,37 +878,37 @@ class ProcessCronQueueObserverTest extends \PHPUnit\Framework\TestCase
             ],
         ];
         $this->eventManager->expects($this->never())->method('dispatch');
-        $this->_config->expects($this->at(0))->method('getJobs')->willReturn($jobConfig);
-        $this->_config->expects($this->at(1))->method('getJobs')->willReturn($jobs);
-        $this->_config->expects($this->at(2))->method('getJobs')->willReturn($jobs);
-        $this->_config->expects($this->at(3))->method('getJobs')->willReturn($jobs);
-        $this->_request->expects($this->any())->method('getParam')->willReturn('default');
-        $this->_cache->expects(
+        $this->configMock->expects($this->at(0))->method('getJobs')->willReturn($jobConfig);
+        $this->configMock->expects($this->at(1))->method('getJobs')->willReturn($jobs);
+        $this->configMock->expects($this->at(2))->method('getJobs')->willReturn($jobs);
+        $this->configMock->expects($this->at(3))->method('getJobs')->willReturn($jobs);
+        $this->consoleRequestMock->expects($this->any())->method('getParam')->willReturn('default');
+        $this->cacheMock->expects(
             $this->at(0)
         )->method(
             'load'
         )->with(
-            $this->equalTo(ProcessCronQueueObserver::CACHE_KEY_LAST_HISTORY_CLEANUP_AT . 'default')
+            ProcessCronQueueObserver::CACHE_KEY_LAST_HISTORY_CLEANUP_AT . 'default'
         )->willReturn($this->time + 10000000);
-        $this->_cache->expects(
+        $this->cacheMock->expects(
             $this->at(1)
         )->method(
             'load'
         )->with(
-            $this->equalTo(ProcessCronQueueObserver::CACHE_KEY_LAST_SCHEDULE_GENERATE_AT . 'default')
+            ProcessCronQueueObserver::CACHE_KEY_LAST_SCHEDULE_GENERATE_AT . 'default'
         )->willReturn($this->time - 10000000);
 
-        $this->_scopeConfig->expects($this->any())->method('getValue')->willReturnMap(
+        $this->scopeConfigMock->expects($this->any())->method('getValue')->willReturnMap(
             [
                 [
                     'system/cron/default/schedule_generate_every',
-                    \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                    ScopeInterface::SCOPE_STORE,
                     null,
                     0
                 ],
                 [
                     'system/cron/default/schedule_ahead_for',
-                    \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                    ScopeInterface::SCOPE_STORE,
                     null,
                     2
                 ]
@@ -840,26 +916,27 @@ class ProcessCronQueueObserverTest extends \PHPUnit\Framework\TestCase
         );
 
         $schedule = $this->getMockBuilder(
-            \Magento\Cron\Model\Schedule::class
+            Schedule::class
         )->setMethods(
             ['getJobCode', 'save', 'getScheduledAt', 'unsScheduleId', 'trySchedule', 'getCollection', 'getResource']
-        )->disableOriginalConstructor()->getMock();
+        )->disableOriginalConstructor()
+            ->getMock();
         $schedule->expects($this->any())->method('getJobCode')->willReturn('job_code1');
         $schedule->expects($this->once())->method('getScheduledAt')->willReturn('* * * * *');
         $schedule->expects($this->any())->method('unsScheduleId')->willReturnSelf();
         $schedule->expects($this->any())->method('trySchedule')->willReturnSelf();
-        $schedule->expects($this->any())->method('getCollection')->willReturn($this->_collection);
+        $schedule->expects($this->any())->method('getCollection')->willReturn($this->scheduleCollectionMock);
         $schedule->expects($this->atLeastOnce())->method('save')->willReturnSelf();
-        $schedule->expects($this->any())->method('getResource')->willReturn($this->scheduleResource);
+        $schedule->expects($this->any())->method('getResource')->willReturn($this->scheduleResourceMock);
 
-        $this->_collection->addItem(new \Magento\Framework\DataObject());
-        $this->_collection->addItem($schedule);
+        $this->scheduleCollectionMock->addItem(new DataObject());
+        $this->scheduleCollectionMock->addItem($schedule);
 
-        $this->_cache->expects($this->any())->method('save');
+        $this->cacheMock->expects($this->any())->method('save');
 
-        $this->_scheduleFactory->expects($this->any())->method('create')->willReturn($schedule);
+        $this->scheduleFactoryMock->expects($this->any())->method('create')->willReturn($schedule);
 
-        $this->_observer->execute($this->observer);
+        $this->cronQueueObserver->execute($this->observerMock);
     }
 
     /**
@@ -873,46 +950,56 @@ class ProcessCronQueueObserverTest extends \PHPUnit\Framework\TestCase
 
         $this->eventManager->expects($this->never())->method('dispatch');
         $dateExecutedAt = date('Y-m-d H:i:s', $this->time - 86400);
-        $schedule = $this->getMockBuilder(
-            \Magento\Cron\Model\Schedule::class
-        )->disableOriginalConstructor()->setMethods(
-            ['getExecutedAt', 'getStatus', 'delete', '__wakeup']
-        )->getMock();
+        $schedule = $this->getMockBuilder(Schedule::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['getExecutedAt', 'getStatus', 'delete', '__wakeup'])->getMock();
         $schedule->expects($this->any())->method('getExecutedAt')->willReturn($dateExecutedAt);
         $schedule->expects($this->any())->method('getStatus')->willReturn('success');
-        $this->_request->expects($this->any())->method('getParam')->willReturn('test_group');
-        $this->_collection->addItem($schedule);
+        $this->consoleRequestMock->expects($this->any())
+            ->method('getParam')->willReturn('test_group');
+        $this->scheduleCollectionMock->addItem($schedule);
 
-        $this->_config->expects($this->atLeastOnce())->method('getJobs')->willReturn($jobConfig);
+        $this->configMock->expects($this->atLeastOnce())->method('getJobs')->willReturn($jobConfig);
 
-        $this->_cache->expects($this->at(0))->method('load')->willReturn($this->time + 10000000);
-        $this->_cache->expects($this->at(1))->method('load')->willReturn($this->time - 10000000);
+        $this->cacheMock->expects($this->at(0))
+            ->method('load')->willReturn($this->time + 10000000);
+        $this->cacheMock->expects($this->at(1))
+            ->method('load')->willReturn($this->time - 10000000);
 
-        $this->_scopeConfig->expects($this->any())->method('getValue')->willReturn(0);
+        $this->scopeConfigMock->expects($this->any())
+            ->method('getValue')->willReturn(0);
 
         $scheduleMock = $this->getMockBuilder(
-            \Magento\Cron\Model\Schedule::class
-        )->disableOriginalConstructor()->getMock();
-        $scheduleMock->expects($this->any())->method('getCollection')->willReturn($this->_collection);
-        $this->_scheduleFactory->expects($this->at(0))->method('create')->willReturn($scheduleMock);
+            Schedule::class
+        )->disableOriginalConstructor()
+            ->getMock();
+        $scheduleMock->expects($this->any())
+            ->method('getCollection')->willReturn($this->scheduleCollectionMock);
+        $this->scheduleFactoryMock->expects($this->at(0))
+            ->method('create')->willReturn($scheduleMock);
 
-        $collection = $this->getMockBuilder(
-            \Magento\Cron\Model\ResourceModel\Schedule\Collection::class
-        )->setMethods(
-            ['addFieldToFilter', 'load', '__wakeup']
-        )->disableOriginalConstructor()->getMock();
-        $collection->expects($this->any())->method('addFieldToFilter')->willReturnSelf();
-        $collection->expects($this->any())->method('load')->willReturnSelf();
+        $collection = $this->getMockBuilder(ScheduleCollection::class)
+            ->setMethods(['addFieldToFilter', 'load', '__wakeup'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $collection->expects($this->any())
+            ->method('addFieldToFilter')->willReturnSelf();
+        $collection->expects($this->any())
+            ->method('load')->willReturnSelf();
         $collection->addItem($schedule);
 
         $scheduleMock = $this->getMockBuilder(
-            \Magento\Cron\Model\Schedule::class
-        )->setMethods(['getCollection', 'getResource'])->disableOriginalConstructor()->getMock();
-        $scheduleMock->expects($this->any())->method('getCollection')->willReturn($collection);
-        $scheduleMock->expects($this->any())->method('getResource')->willReturn($this->scheduleResource);
-        $this->_scheduleFactory->expects($this->any())->method('create')->willReturn($scheduleMock);
+            Schedule::class
+        )->setMethods(['getCollection', 'getResource'])->disableOriginalConstructor()
+            ->getMock();
+        $scheduleMock->expects($this->any())
+            ->method('getCollection')->willReturn($collection);
+        $scheduleMock->expects($this->any())
+            ->method('getResource')->willReturn($this->scheduleResourceMock);
+        $this->scheduleFactoryMock->expects($this->any())
+            ->method('create')->willReturn($scheduleMock);
 
-        $this->_observer->execute($this->observer);
+        $this->cronQueueObserver->execute($this->observerMock);
     }
 
     public function testMissedJobsCleanedInTime()
@@ -923,42 +1010,47 @@ class ProcessCronQueueObserverTest extends \PHPUnit\Framework\TestCase
 
         /* 1. Initialize dependencies of _cleanup() method which is called first */
         $scheduleMock = $this->getMockBuilder(
-            \Magento\Cron\Model\Schedule::class
-        )->disableOriginalConstructor()->getMock();
-        $scheduleMock->expects($this->any())->method('getCollection')->willReturn($this->_collection);
+            Schedule::class
+        )->disableOriginalConstructor()
+            ->getMock();
+        $scheduleMock->expects($this->any())
+            ->method('getCollection')->willReturn($this->scheduleCollectionMock);
         //get configuration value CACHE_KEY_LAST_HISTORY_CLEANUP_AT in the "_cleanup()"
-        $this->_cache->expects($this->at(0))->method('load')->willReturn($this->time - 10000000);
+        $this->cacheMock->expects($this->at(0))
+            ->method('load')->willReturn($this->time - 10000000);
 
         /* 2. Initialize dependencies of _generate() method which is called second */
         $jobConfig = [
             'test_group' => ['test_job1' => ['instance' => 'CronJob', 'method' => 'execute']],
         ];
         //get configuration value CACHE_KEY_LAST_HISTORY_CLEANUP_AT in the "_generate()"
-        $this->_cache->expects($this->at(2))->method('load')->willReturn($this->time + 10000000);
-        $this->_scheduleFactory->expects($this->at(2))->method('create')->willReturn($scheduleMock);
+        $this->cacheMock->expects($this->at(2))
+            ->method('load')->willReturn($this->time + 10000000);
+        $this->scheduleFactoryMock->expects($this->at(2))
+            ->method('create')->willReturn($scheduleMock);
 
-        $this->_config->expects($this->atLeastOnce())->method('getJobs')->willReturn($jobConfig);
+        $this->configMock->expects($this->atLeastOnce())
+            ->method('getJobs')->willReturn($jobConfig);
 
-        $this->_scopeConfig->expects($this->any())->method('getValue')
-            ->willReturnMap(
-                [
-                    ['system/cron/test_group/use_separate_process', 0],
-                    ['system/cron/test_group/history_cleanup_every', 10],
-                    ['system/cron/test_group/schedule_lifetime', 2*24*60],
-                    ['system/cron/test_group/history_success_lifetime', 0],
-                    ['system/cron/test_group/history_failure_lifetime', 0],
-                    ['system/cron/test_group/schedule_generate_every', 0],
-                ]
-            );
+        $this->scopeConfigMock->expects($this->any())
+            ->method('getValue')
+            ->willReturnMap([
+                ['system/cron/test_group/use_separate_process', 0],
+                ['system/cron/test_group/history_cleanup_every', 10],
+                ['system/cron/test_group/schedule_lifetime', 2 * 24 * 60],
+                ['system/cron/test_group/history_success_lifetime', 0],
+                ['system/cron/test_group/history_failure_lifetime', 0],
+                ['system/cron/test_group/schedule_generate_every', 0],
+            ]);
 
-        $this->_collection->expects($this->any())->method('addFieldToFilter')->willReturnSelf();
-        $this->_collection->expects($this->any())->method('load')->willReturnSelf();
+        $this->scheduleCollectionMock->expects($this->any())->method('addFieldToFilter')->willReturnSelf();
+        $this->scheduleCollectionMock->expects($this->any())->method('load')->willReturnSelf();
 
-        $scheduleMock->expects($this->any())->method('getCollection')->willReturn($this->_collection);
-        $scheduleMock->expects($this->exactly(9))->method('getResource')->willReturn($this->scheduleResource);
-        $this->_scheduleFactory->expects($this->exactly(10))->method('create')->willReturn($scheduleMock);
+        $scheduleMock->expects($this->any())->method('getCollection')->willReturn($this->scheduleCollectionMock);
+        $scheduleMock->expects($this->exactly(9))->method('getResource')->willReturn($this->scheduleResourceMock);
+        $this->scheduleFactoryMock->expects($this->exactly(10))->method('create')->willReturn($scheduleMock);
 
-        $connectionMock = $this->createMock(AdapterInterface::class);
+        $connectionMock = $this->getMockForAbstractClass(AdapterInterface::class);
 
         $connectionMock->expects($this->exactly(5))
             ->method('delete')
@@ -986,11 +1078,11 @@ class ProcessCronQueueObserverTest extends \PHPUnit\Framework\TestCase
             )
             ->willReturn(1);
 
-        $this->scheduleResource->expects($this->exactly(5))
+        $this->scheduleResourceMock->expects($this->exactly(5))
             ->method('getTable')
             ->with($tableName)
             ->willReturn($tableName);
-        $this->scheduleResource->expects($this->exactly(14))
+        $this->scheduleResourceMock->expects($this->exactly(14))
             ->method('getConnection')
             ->willReturn($connectionMock);
 
@@ -1002,6 +1094,6 @@ class ProcessCronQueueObserverTest extends \PHPUnit\Framework\TestCase
                 }
             );
 
-        $this->_observer->execute($this->observer);
+        $this->cronQueueObserver->execute($this->observerMock);
     }
 }

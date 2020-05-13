@@ -9,18 +9,20 @@ namespace Magento\Framework\Setup\Test\Unit;
 
 use Magento\Framework\Component\ComponentRegistrar;
 use Magento\Framework\Setup\SchemaListener;
+use Magento\Framework\Setup\SchemaPersistor;
 use Magento\Framework\Setup\XmlPersistor;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Unit test for schema persistor.
  *
- * @package Magento\Framework\Setup\Test\Unit
  */
-class SchemaPersistorTest extends \PHPUnit\Framework\TestCase
+class SchemaPersistorTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\Setup\SchemaPersistor
+     * @var SchemaPersistor
      */
     private $model;
 
@@ -30,16 +32,16 @@ class SchemaPersistorTest extends \PHPUnit\Framework\TestCase
     private $objectManagerHelper;
 
     /**
-     * @var ComponentRegistrar|\PHPUnit_Framework_MockObject_MockObject
+     * @var ComponentRegistrar|MockObject
      */
     private $componentRegistrarMock;
 
     /**
-     * @var XmlPersistor|\PHPUnit_Framework_MockObject_MockObject
+     * @var XmlPersistor|MockObject
      */
     private $xmlPersistor;
 
-    protected function setUp() : void
+    protected function setUp(): void
     {
         $this->componentRegistrarMock = $this->getMockBuilder(ComponentRegistrar::class)
             ->disableOriginalConstructor()
@@ -48,7 +50,7 @@ class SchemaPersistorTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->model = $this->objectManagerHelper->getObject(
-            \Magento\Framework\Setup\SchemaPersistor::class,
+            SchemaPersistor::class,
             [
                 'componentRegistrar' => $this->componentRegistrarMock,
                 'xmlPersistor' => $this->xmlPersistor
@@ -64,7 +66,7 @@ class SchemaPersistorTest extends \PHPUnit\Framework\TestCase
     public function testPersist(array $tables, $expectedXML) : void
     {
         $moduleName = 'First_Module';
-        /** @var SchemaListener|\PHPUnit_Framework_MockObject_MockObject $schemaListenerMock */
+        /** @var SchemaListener|MockObject $schemaListenerMock */
         $schemaListenerMock = $this->getMockBuilder(SchemaListener::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -146,14 +148,14 @@ class SchemaPersistorTest extends \PHPUnit\Framework\TestCase
                 ],
                 // @codingStandardsIgnoreStart
                 'XMLResult' => '<?xml version="1.0"?>
-                        <schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+                        <schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                             xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
                             <table name="first_table" resource="default" engine="innodb">
-                                <column xmlns:xsi="xsi" xsi:type="integer" name="first_column" nullable="1" 
+                                <column xmlns:xsi="xsi" xsi:type="integer" name="first_column" nullable="1"
                                     unsigned="0"/>
                                 <column xmlns:xsi="xsi" xsi:type="date" name="second_column" nullable="0"/>
-                                <constraint xmlns:xsi="xsi" xsi:type="foreign" referenceId="some_foreign_constraint" 
-                                    referenceTable="table" referenceColumn="column" 
+                                <constraint xmlns:xsi="xsi" xsi:type="foreign" referenceId="some_foreign_constraint"
+                                    referenceTable="table" referenceColumn="column"
                                     table="first_table" column="first_column"/>
                                 <constraint xmlns:xsi="xsi" xsi:type="primary" referenceId="PRIMARY">
                                     <column name="second_column"/>

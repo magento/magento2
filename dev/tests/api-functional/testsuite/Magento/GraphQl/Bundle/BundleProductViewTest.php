@@ -237,7 +237,7 @@ QUERY;
         $childProductSku = $bundleProductLink->getSku();
         $productRepository = ObjectManager::getInstance()->get(ProductRepositoryInterface::class);
         $childProduct = $productRepository->get($childProductSku);
-        $this->assertEquals(1, count($options));
+        $this->assertCount(1, $options);
         $this->assertResponseFields(
             $actualResponse['items'][0],
             [
