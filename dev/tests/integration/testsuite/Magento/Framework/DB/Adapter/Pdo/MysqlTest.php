@@ -17,7 +17,7 @@ class MysqlTest extends \PHPUnit\Framework\TestCase
      */
     private $resourceConnection;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         set_error_handler(null);
         $this->resourceConnection = Bootstrap::getObjectManager()
@@ -25,7 +25,7 @@ class MysqlTest extends \PHPUnit\Framework\TestCase
         CacheCleaner::cleanAll();
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         restore_error_handler();
     }

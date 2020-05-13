@@ -3,17 +3,21 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\DB\Test\Unit\Select;
 
+use Magento\Framework\DB\Select;
 use Magento\Framework\DB\Select\LikeQueryModifier;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\TestCase;
 
-class LikeQueryModifierTest extends \PHPUnit\Framework\TestCase
+class LikeQueryModifierTest extends TestCase
 {
     /** @var ObjectManager */
     private $objectManager;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
     }
@@ -24,7 +28,7 @@ class LikeQueryModifierTest extends \PHPUnit\Framework\TestCase
             'field1' => 'pattern1',
             'field2' => 'pattern2',
         ];
-        $selectMock = $this->getMockBuilder(\Magento\Framework\DB\Select::class)
+        $selectMock = $this->getMockBuilder(Select::class)
             ->disableOriginalConstructor()
             ->getMock();
         $selectMock->expects($this->at(0))

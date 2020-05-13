@@ -8,13 +8,17 @@ declare(strict_types=1);
 
 namespace Magento\WebapiAsync\Test\Unit\Model;
 
+use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Framework\Serialize\SerializerInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Webapi\Model\Cache\Type\Webapi;
 use Magento\Webapi\Model\Config as WebapiConfig;
-use Magento\WebapiAsync\Model\Config;
 use Magento\Webapi\Model\Config\Converter;
+use Magento\WebapiAsync\Model\Config;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class ConfigTest extends \PHPUnit\Framework\TestCase
+class ConfigTest extends TestCase
 {
     /**
      * @var Config
@@ -22,27 +26,27 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
     private $config;
 
     /**
-     * @var Webapi|\PHPUnit_Framework_MockObject_MockObject
+     * @var Webapi|MockObject
      */
     private $webapiCacheMock;
 
     /**
-     * @var WebapiConfig|\PHPUnit_Framework_MockObject_MockObject
+     * @var WebapiConfig|MockObject
      */
     private $configMock;
 
     /**
-     * @var SerializerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var SerializerInterface|MockObject
      */
     private $serializerMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $objectManager = new ObjectManager($this);
 
-        $this->webapiCacheMock = $this->createMock(\Magento\Webapi\Model\Cache\Type\Webapi::class);
+        $this->webapiCacheMock = $this->createMock(Webapi::class);
         $this->configMock = $this->createMock(WebapiConfig::class);
-        $this->serializerMock = $this->createMock(SerializerInterface::class);
+        $this->serializerMock = $this->getMockForAbstractClass(SerializerInterface::class);
 
         $this->config = $objectManager->getObject(
             Config::class,
@@ -61,7 +65,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
                 '/V1/products' => [
                     'POST' => [
                         'service' => [
-                            'class' => \Magento\Catalog\Api\ProductRepositoryInterface::class,
+                            'class' => ProductRepositoryInterface::class,
                             'method' => 'save',
                         ]
                     ]

@@ -5,6 +5,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Framework\Filesystem;
 
 use Magento\Framework\App\Filesystem\DirectoryList as AppDirectoryList;
@@ -23,7 +24,7 @@ class FilesystemTest extends \PHPUnit\Framework\TestCase
      */
     protected $filesystem;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->filesystem = Bootstrap::getObjectManager()->create(\Magento\Framework\Filesystem::class);
     }
@@ -51,6 +52,9 @@ class FilesystemTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetUri()
     {
-        $this->assertContains('media', $this->filesystem->getDirectoryRead(AppDirectoryList::MEDIA)->getAbsolutePath());
+        $this->assertStringContainsString(
+            'media',
+            $this->filesystem->getDirectoryRead(AppDirectoryList::MEDIA)->getAbsolutePath()
+        );
     }
 }
