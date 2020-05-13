@@ -10,7 +10,7 @@ return [
         'table_prefix' => '',
         'connection' => [
             'default' => [
-                'host' => 'magento-mysql',
+                'host' => 'mysql',
                 'dbname' => 'magento',
                 'username' => 'magento',
                 'password' => 'magento',

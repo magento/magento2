@@ -1,0 +1,20 @@
+{
+  "name": "dxc/logger",
+  "version": "1.0.0",
+  "description": "Ensure log channel is being logged by default to the logss",
+  "type": "magento2-module",
+  "require": {
+    "magento/framework": "*"
+  },
+  "license": [
+    "Open Software License (OSL)"
+  ],
+  "autoload": {
+    "files": [
+      "registration.php"
+    ],
+    "psr-4": {
+      "Dxc\\Logger\\": ""
+    }
+  }
+}
