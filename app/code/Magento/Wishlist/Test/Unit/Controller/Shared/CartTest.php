@@ -86,7 +86,9 @@ class CartTest extends TestCase
     /** @var  Product|MockObject */
     protected $product;
 
-    // phpcs:ignore Generic.Files.LineLength.TooLong
+    /**
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
     protected function setUp(): void
     {
         $this->request = $this->getMockBuilder(RequestInterface::class)
