@@ -6,6 +6,10 @@
 
 namespace Magento\Framework\Cache\Backend;
 
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Cache\CompositeStaleCacheNotifier;
+use Magento\Framework\Cache\StaleCacheNotifierInterface;
+
 /**
  * Remote synchronized cache
  *
@@ -73,6 +77,11 @@ class RemoteSynchronizedCache extends \Zend_Cache_Backend implements \Zend_Cache
     private $lockSign;
 
     /**
+     * @var StaleCacheNotifierInterface
+     */
+    private $notifier;
+
+    /**
      * @param array $options
      * @throws \Zend_Cache_Exception
      */
@@ -119,6 +128,7 @@ class RemoteSynchronizedCache extends \Zend_Cache_Backend implements \Zend_Cache
         }
 
         $this->lockSign = $this->generateLockSign();
+        $this->notifier = ObjectManager::getInstance()->get(CompositeStaleCacheNotifier::class);
     }
 
     /**
@@ -209,6 +219,8 @@ class RemoteSynchronizedCache extends \Zend_Cache_Backend implements \Zend_Cache
         } elseif ($this->_options['use_stale_cache'] && $localData !== false && $versionCheckFailed) {
             if ($this->lock($id)) {
                 return false;
+            } else {
+                $this->notifier->cacheLoaderIsUsingStaleCache();
             }
         }
 
