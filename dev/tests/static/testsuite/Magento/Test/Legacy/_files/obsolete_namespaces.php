@@ -201,4 +201,9 @@ return [
     ['Magento\MysqlMq\Model\Resource', 'Magento\MysqlMq\Model\ResourceModel'],
     ['Magento\BulkOperations', 'Magento\AsynchronousOperations'],
     ['Zend', 'Laminas'],
+    ['Magento\Signifyd'],
+    ['Magento\Authorizenet'],
+    ['Magento\AuthorizenetAcceptjs'],
+    ['Magento\AuthorizenetCardinal'],
+    ['Magento\AuthorizenetGraphQl'],
 ];

@@ -10,6 +10,9 @@ namespace Magento\Catalog\Test\Unit\Ui\DataProvider\Product\Form\Modifier;
 use Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\Categories;
 use Magento\Catalog\Model\ResourceModel\Category\CollectionFactory as CategoryCollectionFactory;
 use Magento\Catalog\Model\ResourceModel\Category\Collection as CategoryCollection;
+use Magento\Catalog\Model\ResourceModel\Category\CollectionFactory as CategoryCollectionFactory;
+use Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\Categories;
+use Magento\Framework\AuthorizationInterface;
 use Magento\Framework\DB\Helper as DbHelper;
 use Magento\Framework\UrlInterface;
 use Magento\Store\Model\Store;
@@ -19,39 +22,39 @@ use Magento\Authorization\Model\Role;
 use Magento\User\Model\User;
 
 /**
- * Tests for \Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\Categories
+ * Class CategoriesTest
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class CategoriesTest extends AbstractModifierTest
 {
     /**
-     * @var CategoryCollectionFactory|\PHPUnit\Framework\MockObject\MockObject
+     * @var CategoryCollectionFactory|MockObject
      */
     protected $categoryCollectionFactoryMock;
 
     /**
-     * @var DbHelper|\PHPUnit\Framework\MockObject\MockObject
+     * @var DbHelper|MockObject
      */
     protected $dbHelperMock;
 
     /**
-     * @var UrlInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var UrlInterface|MockObject
      */
     protected $urlBuilderMock;
 
     /**
-     * @var Store|\PHPUnit\Framework\MockObject\MockObject
+     * @var Store|MockObject
      */
     protected $storeMock;
 
     /**
-     * @var CategoryCollection|\PHPUnit\Framework\MockObject\MockObject
+     * @var CategoryCollection|MockObject
      */
     protected $categoryCollectionMock;
 
     /**
-     * @var AuthorizationInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var AuthorizationInterface|MockObject
      */
     private $authorizationMock;
 
@@ -60,7 +63,7 @@ class CategoriesTest extends AbstractModifierTest
      */
     private $sessionMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->categoryCollectionFactoryMock = $this->getMockBuilder(CategoryCollectionFactory::class)
@@ -80,7 +83,7 @@ class CategoriesTest extends AbstractModifierTest
             ->getMock();
         $this->authorizationMock = $this->getMockBuilder(AuthorizationInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->sessionMock = $this->getMockBuilder(Session::class)
             ->setMethods(['getUser'])
             ->disableOriginalConstructor()

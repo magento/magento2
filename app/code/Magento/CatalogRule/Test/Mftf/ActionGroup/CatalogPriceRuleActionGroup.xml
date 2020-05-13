@@ -11,7 +11,7 @@
     <!-- action group to create a new catalog price rule giving a catalogRule entity -->
     <actionGroup name="NewCatalogPriceRuleByUIActionGroup">
         <annotations>
-            <description>DEPRECATED. Please use set of AG: AdminOpenNewCatalogPriceRuleFormPageActionGroup, AdminCatalogPriceRuleFillMainInfoActionGroup, AdminCatalogPriceRuleFillActionsActionGroup, AdminCatalogPriceRuleSaveAndApplyActionGroup
+            <description>Consider using set of AG: AdminOpenNewCatalogPriceRuleFormPageActionGroup, AdminCatalogPriceRuleFillMainInfoActionGroup, AdminCatalogPriceRuleFillActionsActionGroup, AdminCatalogPriceRuleSaveAndApplyActionGroup
                 Goes to the Catalog Price Rule grid. Clicks on Add. Fills in the provided Catalog Rule details.</description>
         </annotations>
         <arguments>

@@ -13,6 +13,7 @@ use Magento\Framework\Setup\ConsoleLogger;
 use Magento\Framework\Setup\Declaration\Schema\DryRunLogger;
 use Magento\Framework\Setup\Declaration\Schema\OperationsExecutor;
 use Magento\Setup\Model\InstallerFactory;
+use Magento\Setup\Model\SearchConfigFactory;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -47,16 +48,24 @@ class UpgradeCommand extends AbstractSetupCommand
     private $appState;
 
     /**
+     * @var SearchConfigFactory
+     */
+    private $searchConfigFactory;
+
+    /**
      * @param InstallerFactory $installerFactory
+     * @param SearchConfigFactory $searchConfigFactory
      * @param DeploymentConfig $deploymentConfig
      * @param AppState|null $appState
      */
     public function __construct(
         InstallerFactory $installerFactory,
+        SearchConfigFactory $searchConfigFactory,
         DeploymentConfig $deploymentConfig = null,
         AppState $appState = null
     ) {
         $this->installerFactory = $installerFactory;
+        $this->searchConfigFactory = $searchConfigFactory;
         $this->deploymentConfig = $deploymentConfig ?: ObjectManager::getInstance()->get(DeploymentConfig::class);
         $this->appState = $appState ?: ObjectManager::getInstance()->get(AppState::class);
         parent::__construct();
@@ -119,6 +128,8 @@ class UpgradeCommand extends AbstractSetupCommand
             $keepGenerated = $input->getOption(self::INPUT_KEY_KEEP_GENERATED);
             $installer = $this->installerFactory->create(new ConsoleLogger($output));
             $installer->updateModulesSequence($keepGenerated);
+            $searchConfig = $this->searchConfigFactory->create();
+            $searchConfig->validateSearchEngine();
             $installer->installSchema($request);
             $installer->installDataFixtures($request);
 
@@ -128,7 +139,9 @@ class UpgradeCommand extends AbstractSetupCommand
                 $arrayInput->setInteractive($input->isInteractive());
                 $result = $importConfigCommand->run($arrayInput, $output);
                 if ($result === \Magento\Framework\Console\Cli::RETURN_FAILURE) {
-                    throw new \Magento\Framework\Exception\RuntimeException(__('%1 failed. See previous output.', ConfigImportCommand::COMMAND_NAME));
+                    throw new \Magento\Framework\Exception\RuntimeException(
+                        __('%1 failed. See previous output.', ConfigImportCommand::COMMAND_NAME)
+                    );
                 }
             }
 
@@ -138,7 +151,7 @@ class UpgradeCommand extends AbstractSetupCommand
                 );
             }
         } catch (\Exception $e) {
-            $output->writeln($e->getMessage());
+            $output->writeln('<error>' . $e->getMessage() . '</error>');
             return \Magento\Framework\Console\Cli::RETURN_FAILURE;
         }
 

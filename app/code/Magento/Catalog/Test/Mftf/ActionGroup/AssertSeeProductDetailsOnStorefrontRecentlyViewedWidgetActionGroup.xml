@@ -17,6 +17,9 @@
             <argument name="productPosition" type="string"/>
         </arguments>
         <grabTextFrom selector="{{StoreFrontRecentlyViewedProductSection.ProductName(productPosition)}}" stepKey="grabRelatedProductPosition"/>
-        <assertContains expected="{{productName}}" actual="$grabRelatedProductPosition" stepKey="assertRelatedProductName"/>
+        <assertStringContainsString stepKey="assertRelatedProductName">
+			<actualResult type="const">$grabRelatedProductPosition</actualResult>
+			<expectedResult type="const">{{productName}}</expectedResult>
+        </assertStringContainsString>
     </actionGroup>
 </actionGroups>

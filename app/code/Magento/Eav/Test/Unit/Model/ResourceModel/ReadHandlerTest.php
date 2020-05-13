@@ -3,47 +3,58 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Eav\Test\Unit\Model\ResourceModel;
 
+use Magento\Eav\Model\Config;
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
+use Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend;
+use Magento\Eav\Model\ResourceModel\ReadHandler;
+use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Framework\DB\Select;
 use Magento\Framework\EntityManager\EntityMetadataInterface;
+use Magento\Framework\EntityManager\MetadataPool;
+use Magento\Framework\Model\Entity\ScopeResolver;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class ReadHandlerTest extends \PHPUnit\Framework\TestCase
+class ReadHandlerTest extends TestCase
 {
     /**
-     * @var \Magento\Eav\Model\Config|\PHPUnit_Framework_MockObject_MockObject
+     * @var Config|MockObject
      */
     private $configMock;
 
     /**
-     * @var \Magento\Framework\EntityManager\MetadataPool|\PHPUnit_Framework_MockObject_MockObject
+     * @var MetadataPool|MockObject
      */
     private $metadataPoolMock;
 
     /**
-     * @var EntityMetadataInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var EntityMetadataInterface|MockObject
      */
     private $metadataMock;
 
     /**
-     * @var \Magento\Eav\Model\ResourceModel\ReadHandler
+     * @var ReadHandler
      */
     private $readHandler;
 
     /**
-     * @var \Magento\Framework\Model\Entity\ScopeResolver|\PHPUnit_Framework_MockObject_MockObject
+     * @var ScopeResolver|MockObject
      */
     private $scopeResolverMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
-        $args = $objectManager->getConstructArguments(\Magento\Eav\Model\ResourceModel\ReadHandler::class);
+        $args = $objectManager->getConstructArguments(ReadHandler::class);
         $this->metadataPoolMock = $args['metadataPool'];
         $this->metadataMock = $this->getMockBuilder(EntityMetadataInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->metadataPoolMock->expects($this->any())
             ->method('getMetadata')
             ->willReturn($this->metadataMock);
@@ -52,7 +63,7 @@ class ReadHandlerTest extends \PHPUnit\Framework\TestCase
         $this->scopeResolverMock->method('getEntityContext')
             ->willReturn([]);
 
-        $this->readHandler = $objectManager->getObject(\Magento\Eav\Model\ResourceModel\ReadHandler::class, $args);
+        $this->readHandler = $objectManager->getObject(ReadHandler::class, $args);
     }
 
     /**
@@ -67,10 +78,10 @@ class ReadHandlerTest extends \PHPUnit\Framework\TestCase
         $entityData = ['linkField' => 'theLinkField'];
         $this->metadataMock->method('getEavEntityType')
             ->willReturn($eavEntityType);
-        $connectionMock = $this->getMockBuilder(\Magento\Framework\DB\Adapter\AdapterInterface::class)
+        $connectionMock = $this->getMockBuilder(AdapterInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
-        $selectMock = $this->getMockBuilder(\Magento\Framework\DB\Select::class)
+            ->getMockForAbstractClass();
+        $selectMock = $this->getMockBuilder(Select::class)
             ->disableOriginalConstructor()
             ->getMock();
         $selectMock->method('from')
@@ -98,7 +109,7 @@ class ReadHandlerTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $attributeMock->method('isStatic')
             ->willReturn($isStatic);
-        $backendMock = $this->getMockBuilder(\Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend::class)
+        $backendMock = $this->getMockBuilder(AbstractBackend::class)
             ->disableOriginalConstructor()
             ->getMock();
         $backendMock->method('getTable')
@@ -135,11 +146,9 @@ class ReadHandlerTest extends \PHPUnit\Framework\TestCase
         ];
     }
 
-    /**
-     * @expectedException \Exception
-     */
     public function testExecuteWithException()
     {
+        $this->expectException('Exception');
         $this->metadataPoolMock->expects($this->once())
             ->method('getMetadata')
             ->willThrowException(new \Exception('Unknown entity type'));

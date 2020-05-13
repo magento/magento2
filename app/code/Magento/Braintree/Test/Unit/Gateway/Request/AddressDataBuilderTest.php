@@ -3,19 +3,22 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Braintree\Test\Unit\Gateway\Request;
 
 use Magento\Braintree\Gateway\Request\AddressDataBuilder;
-use Magento\Payment\Gateway\Data\PaymentDataObjectInterface;
-use Magento\Payment\Gateway\Data\OrderAdapterInterface;
-use Magento\Payment\Gateway\Data\AddressAdapterInterface;
 use Magento\Braintree\Gateway\SubjectReader;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use Magento\Payment\Gateway\Data\AddressAdapterInterface;
+use Magento\Payment\Gateway\Data\OrderAdapterInterface;
+use Magento\Payment\Gateway\Data\PaymentDataObjectInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Tests \Magento\Braintree\Gateway\Request\AddressDataBuilder.
  */
-class AddressDataBuilderTest extends \PHPUnit\Framework\TestCase
+class AddressDataBuilderTest extends TestCase
 {
     /**
      * @var PaymentDataObjectInterface|MockObject
@@ -37,10 +40,10 @@ class AddressDataBuilderTest extends \PHPUnit\Framework\TestCase
      */
     private $subjectReaderMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->paymentDOMock = $this->createMock(PaymentDataObjectInterface::class);
-        $this->orderMock = $this->createMock(OrderAdapterInterface::class);
+        $this->paymentDOMock = $this->getMockForAbstractClass(PaymentDataObjectInterface::class);
+        $this->orderMock = $this->getMockForAbstractClass(OrderAdapterInterface::class);
         $this->subjectReaderMock = $this->getMockBuilder(SubjectReader::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -48,11 +51,9 @@ class AddressDataBuilderTest extends \PHPUnit\Framework\TestCase
         $this->builder = new AddressDataBuilder($this->subjectReaderMock);
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     */
     public function testBuildReadPaymentException()
     {
+        $this->expectException(\InvalidArgumentException::class);
         $buildSubject = [
             'payment' => null,
         ];
@@ -176,7 +177,7 @@ class AddressDataBuilderTest extends \PHPUnit\Framework\TestCase
      */
     private function getAddressMock($addressData)
     {
-        $addressMock = $this->createMock(AddressAdapterInterface::class);
+        $addressMock = $this->getMockForAbstractClass(AddressAdapterInterface::class);
 
         $addressMock->expects(self::exactly(2))
             ->method('getFirstname')
