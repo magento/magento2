@@ -5,13 +5,19 @@
  */
 declare(strict_types=1);
 
+use Magento\Framework\Registry;
 use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Sales\Model\OrderFactory;
 use Magento\TestFramework\Downloadable\Model\RemoveLinkPurchasedByOrderIncrementId;
+use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
 
-require __DIR__ . '/../../../Magento/Customer/_files/customer_rollback.php';
-require __DIR__ . '/../../../Magento/Downloadable/_files/product_downloadable_rollback.php';
+Resolver::getInstance()->requireDataFixture('Magento/Downloadable/_files/product_downloadable_rollback.php');
+Resolver::getInstance()->requireDataFixture('Magento/Customer/_files/customer_rollback.php');
 
+$objectManager = Bootstrap::getObjectManager();
+/** @var Registry $registry */
+$registry = $objectManager->get(Registry::class);
 $registry->unregister('isSecureArea');
 $registry->register('isSecureArea', true);
 
