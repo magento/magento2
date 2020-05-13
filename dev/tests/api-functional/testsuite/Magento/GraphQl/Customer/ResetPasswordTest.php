@@ -80,15 +80,14 @@ QUERY;
     /**
      * @magentoApiDataFixture    Magento/Customer/_files/customer.php
      *
-     * @expectedException \Exception
-     * @expectedExceptionMessage You must specify an email address.
-     *
      * @throws NoSuchEntityException
      * @throws Exception
      * @throws LocalizedException
      */
     public function testEmailAvailableEmptyValue()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('You must specify an email address.');
         $query = <<<QUERY
 mutation {
     resetPassword (
@@ -104,15 +103,14 @@ QUERY;
     /**
      * @magentoApiDataFixture    Magento/Customer/_files/customer.php
      *
-     * @expectedException \Exception
-     * @expectedExceptionMessage The email address has an invalid format.
-     *
      * @throws NoSuchEntityException
      * @throws Exception
      * @throws LocalizedException
      */
     public function testEmailInvalidValue()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('The email address has an invalid format.');
         $query = <<<QUERY
 mutation {
     resetPassword (
@@ -128,15 +126,14 @@ QUERY;
     /**
      * @magentoApiDataFixture    Magento/Customer/_files/customer.php
      *
-     * @expectedException \Exception
-     * @expectedExceptionMessage resetPasswordToken must be specified
-     *
      * @throws NoSuchEntityException
      * @throws Exception
      * @throws LocalizedException
      */
     public function testResetPasswordTokenEmptyValue()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('resetPasswordToken must be specified');
         $query = <<<QUERY
 mutation {
     resetPassword (
@@ -152,15 +149,14 @@ QUERY;
     /**
      * @magentoApiDataFixture    Magento/Customer/_files/customer.php
      *
-     * @expectedException \Exception
-     * @expectedExceptionMessage Cannot set the customer's password
-     *
      * @throws NoSuchEntityException
      * @throws Exception
      * @throws LocalizedException
      */
     public function testResetPasswordTokenMismatched()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Cannot set the customer\'s password');
         $query = <<<QUERY
 mutation {
     resetPassword (
@@ -176,15 +172,14 @@ QUERY;
     /**
      * @magentoApiDataFixture    Magento/Customer/_files/customer.php
      *
-     * @expectedException \Exception
-     * @expectedExceptionMessage newPassword must be specified
-     *
      * @throws NoSuchEntityException
      * @throws Exception
      * @throws LocalizedException
      */
     public function testNewPasswordEmptyValue()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('newPassword must be specified');
         $query = <<<QUERY
 mutation {
     resetPassword (
@@ -202,14 +197,13 @@ QUERY;
      *
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
      *
-     * @expectedException \Exception
-     * @expectedExceptionMessage The account is locked
-     *
      * @throws LocalizedException
      * @throws NoSuchEntityException
      */
     public function testPasswordResetForLockCustomer()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('The account is locked');
         $this->lockCustomer->execute(1);
         $query = <<<QUERY
 mutation {

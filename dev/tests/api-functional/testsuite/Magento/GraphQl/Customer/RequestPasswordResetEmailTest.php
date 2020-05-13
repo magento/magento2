@@ -42,12 +42,11 @@ QUERY;
 
     /**
      * Check if customer account is not available
-     *
-     * @expectedException \Exception
-     * @expectedExceptionMessage Cannot reset the customer's password
      */
     public function testCustomerAccountWithEmailNotAvailable()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Cannot reset the customer\'s password');
         $query =
             <<<QUERY
 mutation {
@@ -59,12 +58,11 @@ QUERY;
 
     /**
      * Check if email value empty
-     *
-     * @expectedException \Exception
-     * @expectedExceptionMessage You must specify an email address.
      */
     public function testEmailAvailableEmptyValue()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('You must specify an email address.');
         $query = <<<QUERY
 mutation {
   requestPasswordResetEmail(email: "")
@@ -75,12 +73,11 @@ QUERY;
 
     /**
      * Check if email is invalid
-     *
-     * @expectedException \Exception
-     * @expectedExceptionMessage The email address has an invalid format.
      */
     public function testEmailAvailableInvalidValue()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('The email address has an invalid format.');
         $query = <<<QUERY
 mutation {
   requestPasswordResetEmail(email: "invalid-email")
@@ -93,12 +90,11 @@ QUERY;
      * Check if email was sent for lock customer
      *
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
-     *
-     * @expectedException \Exception
-     * @expectedExceptionMessage The account is locked
      */
     public function testRequestPasswordResetEmailForLockCustomer()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('The account is locked');
         $this->lockCustomer->execute(1);
         $query =
             <<<QUERY
