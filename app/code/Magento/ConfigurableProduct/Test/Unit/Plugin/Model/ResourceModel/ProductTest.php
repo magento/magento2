@@ -20,12 +20,14 @@ use Magento\Framework\Api\ExtensionAttributesInterface;
 use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\Api\SearchCriteria;
 use Magento\Framework\Api\SearchCriteriaBuilder;
-use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Indexer\ActionInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class ProductTest extends TestCase
 {
     /**
@@ -39,7 +41,7 @@ class ProductTest extends TestCase
     private $objectManagerHelper;
 
     /**
-     * @var Configurable|\PHPUnit_Framework_MockObject_MockObject
+     * @var Configurable|MockObject
      */
     private $configurableMock;
 
@@ -65,7 +67,6 @@ class ProductTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->configurableMock = $this->createMock(Configurable::class);
         $this->actionMock = $this->getMockForAbstractClass(ActionInterface::class);
         $this->productAttributeRepositoryMock = $this->getMockBuilder(ProductAttributeRepositoryInterface::class)
@@ -80,6 +81,7 @@ class ProductTest extends TestCase
             FilterBuilder::class,
             ['setField', 'setConditionType', 'setValue', 'create']
         );
+        $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->model = $this->objectManagerHelper->getObject(
             PluginResourceModelProduct::class,
             [
@@ -110,11 +112,10 @@ class ProductTest extends TestCase
             Configurable::class,
             ['getSetAttributes']
         );
-
-        $extensionAttributes = $this->createPartialMock(
-            ExtensionAttributesInterface::class,
-            ['getConfigurableProductOptions']
-        );
+        $extensionAttributes = $this->getMockBuilder(ExtensionAttributesInterface::class)
+            ->disableOriginalConstructor()
+            ->addMethods(['getConfigurableProductOptions'])
+            ->getMock();
         $option = $this->createPartialMock(
             ConfigurableAttribute::class,
             ['getAttributeId']
@@ -142,7 +143,6 @@ class ProductTest extends TestCase
         $this->searchCriteriaBuilderMock->expects($this->once())
             ->method('create')
             ->willReturn($searchCriteria);
-
         $searchResultMockClass = $this->createPartialMock(
             ProductAttributeSearchResults::class,
             ['getItems']
@@ -161,7 +161,6 @@ class ProductTest extends TestCase
         $type->expects($this->once())
             ->method('getSetAttributes')
             ->with($object);
-
         $object->expects($this->once())
             ->method('getTypeId')
             ->will($this->returnValue(Configurable::TYPE_CODE));
