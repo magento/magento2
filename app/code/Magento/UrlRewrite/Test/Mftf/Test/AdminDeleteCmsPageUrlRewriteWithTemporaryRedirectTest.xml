@@ -19,7 +19,7 @@
         </annotations>
         <before>
             <createData entity="simpleCmsPage" stepKey="createCMSPage"/>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginToAdminPanel"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginToAdminPanel"/>
         </before>
         <after>
             <deleteData createDataKey="createCMSPage" stepKey="deleteCMSPage"/>
