@@ -78,6 +78,7 @@ define([
                 '/type/image/?isAjax=true';
 
             if (this.mediaGallery.initialOpenSubpath) {
+                openDialogUrl += '/tree_path/' + this.mediaGallery.initialOpenSubpath;
                 openDialogUrl += '&current_tree_path=' + Base64.mageEncode(this.mediaGallery.initialOpenSubpath);
             }
 

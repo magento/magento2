@@ -78,6 +78,8 @@ class DefaultConfigProvider implements \Magento\Framework\Data\Wysiwyg\ConfigPro
         if (is_string($this->currentTreePath)) {
             $fileBrowserUrlParams = [
                 'current_tree_path' => $this->imagesHelper->idEncode($this->currentTreePath),
+                'tree_path' => $this->currentTreePath . '&'
+
             ];
         }
 
