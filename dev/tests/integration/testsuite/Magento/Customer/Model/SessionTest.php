@@ -37,7 +37,7 @@ class SessionTest extends \PHPUnit\Framework\TestCase
      */
     private $response;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_customerSession = Bootstrap::getObjectManager()->create(
             \Magento\Customer\Model\Session::class
@@ -121,14 +121,14 @@ class SessionTest extends \PHPUnit\Framework\TestCase
         $this->_customerSession->authenticate();
         $location = (string)$this->response->getHeader('Location');
         $this->assertNotEmpty($location);
-        $this->assertNotContains(SidResolverInterface::SESSION_ID_QUERY_PARAM .'=', $location);
+        $this->assertStringNotContainsString(SidResolverInterface::SESSION_ID_QUERY_PARAM .'=', $location);
         $beforeAuthUrl = $this->_customerSession->getData('before_auth_url');
         $this->assertNotEmpty($beforeAuthUrl);
-        $this->assertNotContains(SidResolverInterface::SESSION_ID_QUERY_PARAM .'=', $beforeAuthUrl);
+        $this->assertStringNotContainsString(SidResolverInterface::SESSION_ID_QUERY_PARAM .'=', $beforeAuthUrl);
 
         $this->_customerSession->authenticate('/customer/account');
         $location = (string)$this->response->getHeader('Location');
         $this->assertNotEmpty($location);
-        $this->assertNotContains(SidResolverInterface::SESSION_ID_QUERY_PARAM .'=', $location);
+        $this->assertStringNotContainsString(SidResolverInterface::SESSION_ID_QUERY_PARAM .'=', $location);
     }
 }

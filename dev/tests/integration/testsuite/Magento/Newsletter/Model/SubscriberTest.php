@@ -9,6 +9,8 @@ namespace Magento\Newsletter\Model;
 
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Framework\Mail\EmailMessage;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\Mail\Template\TransportBuilderMock;
@@ -39,7 +41,7 @@ class SubscriberTest extends TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
         $this->subscriberFactory = $this->objectManager->get(SubscriberFactory::class);
@@ -59,7 +61,7 @@ class SubscriberTest extends TestCase
         $subscriber = $this->subscriberFactory->create();
         $subscriber->subscribe('customer_confirm@example.com');
         // confirmationCode 'ysayquyajua23iq29gxwu2eax2qb6gvy' is taken from fixture
-        $this->assertContains(
+        $this->assertStringContainsString(
             '/newsletter/subscriber/confirm/id/' . $subscriber->getSubscriberId()
             . '/code/ysayquyajua23iq29gxwu2eax2qb6gvy',
             $this->transportBuilder->getSentMessage()->getBody()->getParts()[0]->getRawContent()
@@ -160,6 +162,8 @@ class SubscriberTest extends TestCase
      * @magentoDataFixture Magento/Newsletter/_files/newsletter_unconfirmed_customer.php
      *
      * @return void
+     * @throws LocalizedException
+     * @throws NoSuchEntityException
      */
     public function testSubscribeUnconfirmedCustomerWithSubscription(): void
     {
@@ -174,6 +178,8 @@ class SubscriberTest extends TestCase
      * @magentoDataFixture Magento/Customer/_files/unconfirmed_customer.php
      *
      * @return void
+     * @throws LocalizedException
+     * @throws NoSuchEntityException
      */
     public function testSubscribeUnconfirmedCustomerWithoutSubscription(): void
     {
