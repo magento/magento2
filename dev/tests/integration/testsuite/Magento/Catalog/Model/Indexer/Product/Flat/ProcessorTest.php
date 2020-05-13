@@ -22,7 +22,7 @@ class ProcessorTest extends \Magento\TestFramework\Indexer\TestCase
      */
     protected $_processor;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_state = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
             \Magento\Catalog\Model\Indexer\Product\Flat\State::class

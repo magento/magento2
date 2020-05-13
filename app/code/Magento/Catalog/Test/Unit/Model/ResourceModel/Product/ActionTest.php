@@ -3,11 +3,11 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Unit\Model\ResourceModel\Product;
 
 use Magento\Catalog\Api\Data\ProductAttributeInterface;
-use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Model\Factory;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Edit\WeightResolver;
@@ -35,6 +35,7 @@ use PHPUnit\Framework\TestCase;
 class ActionTest extends TestCase
 {
     private const ENTITY_IDS = [1, 2, 5, 10];
+    private const STUB_PRIMARY_KEY = 'PK';
 
     /**
      * @var Action
@@ -101,7 +102,7 @@ class ActionTest extends TestCase
      */
     private $productCollectionMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->contextMock = $this->getMockBuilder(Context::class)
             ->disableOriginalConstructor()
@@ -205,6 +206,16 @@ class ActionTest extends TestCase
             ProductAttributeInterface::CODE_HAS_WEIGHT => $hasWeight
         ];
         $storeId = 0;
+
+        $this->connectionMock->method('getPrimaryKeyName')->willReturn(self::STUB_PRIMARY_KEY);
+        $this->connectionMock->method('getIndexList')
+            ->willReturn(
+                [
+                    self::STUB_PRIMARY_KEY => [
+                        'COLUMNS_LIST' => ['Column']
+                    ]
+                ]
+            );
 
         $this->connectionMock->expects($this->once())
             ->method('update')

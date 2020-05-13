@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\ConfigurableProduct\Test\Unit\Plugin\Model\ResourceModel;
 
@@ -25,11 +26,6 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
-/**
- * Unit test and integration test for plugin
- *
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- */
 class ProductTest extends TestCase
 {
     /**
@@ -43,7 +39,7 @@ class ProductTest extends TestCase
     private $objectManagerHelper;
 
     /**
-     * @var Configurable|MockObject
+     * @var Configurable|\PHPUnit_Framework_MockObject_MockObject
      */
     private $configurableMock;
 
@@ -67,14 +63,11 @@ class ProductTest extends TestCase
      */
     private $filterBuilderMock;
 
-    /**
-     * @inheritDoc
-     */
-    public function setUp()
+    protected function setUp(): void
     {
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->configurableMock = $this->createMock(Configurable::class);
-        $this->actionMock = $this->createMock(ActionInterface::class);
+        $this->actionMock = $this->getMockForAbstractClass(ActionInterface::class);
         $this->productAttributeRepositoryMock = $this->getMockBuilder(ProductAttributeRepositoryInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['getList'])
@@ -87,7 +80,6 @@ class ProductTest extends TestCase
             FilterBuilder::class,
             ['setField', 'setConditionType', 'setValue', 'create']
         );
-
         $this->model = $this->objectManagerHelper->getObject(
             PluginResourceModelProduct::class,
             [
@@ -100,11 +92,7 @@ class ProductTest extends TestCase
         );
     }
 
-    /**
-     * @return void
-     * @throws NoSuchEntityException
-     */
-    public function testBeforeSaveConfigurable():void
+    public function testBeforeSaveConfigurable(): void
     {
         /** @var ResourceModelProduct|MockObject $subject */
         $subject = $this->createMock(ResourceModelProduct::class);
@@ -193,13 +181,9 @@ class ProductTest extends TestCase
         );
     }
 
-    /**
-     * @return void
-     * @throws NoSuchEntityException
-     */
-    public function testBeforeSaveSimple():void
+    public function testBeforeSaveSimple(): void
     {
-        /** @var ResourceModelProduct|MockObject $subject */
+        /** @var ResourceModelProduct|MockObject$subject */
         $subject = $this->createMock(ResourceModelProduct::class);
         /** @var ModelProduct|MockObject $object */
         $object = $this->createPartialMock(
@@ -221,10 +205,7 @@ class ProductTest extends TestCase
         );
     }
 
-    /**
-     * @return void
-     */
-    public function testAroundDelete():void
+    public function testAroundDelete(): void
     {
         $productId = '1';
         $parentConfigId = ['2'];

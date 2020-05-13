@@ -21,7 +21,7 @@ class OverviewTest extends \PHPUnit\Framework\TestCase
      */
     protected $_objectManager;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         \Magento\TestFramework\Helper\Bootstrap::getInstance()->loadArea(\Magento\Framework\App\Area::AREA_FRONTEND);
         $this->_objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();

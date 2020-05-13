@@ -7,16 +7,16 @@ declare(strict_types=1);
 
 namespace Magento\Framework\Lock\Test\Unit;
 
-use Magento\Framework\Lock\Backend\Database as DatabaseLock;
-use Magento\Framework\Lock\Backend\Zookeeper as ZookeeperLock;
-use Magento\Framework\Lock\Backend\Cache as CacheLock;
-use Magento\Framework\Lock\Backend\FileLock;
-use Magento\Framework\Lock\LockBackendFactory;
-use Magento\Framework\ObjectManagerInterface;
-use Magento\Framework\Lock\LockManagerInterface;
 use Magento\Framework\App\DeploymentConfig;
-use PHPUnit\Framework\TestCase;
+use Magento\Framework\Lock\Backend\Cache as CacheLock;
+use Magento\Framework\Lock\Backend\Database as DatabaseLock;
+use Magento\Framework\Lock\Backend\FileLock;
+use Magento\Framework\Lock\Backend\Zookeeper as ZookeeperLock;
+use Magento\Framework\Lock\LockBackendFactory;
+use Magento\Framework\Lock\LockManagerInterface;
+use Magento\Framework\ObjectManagerInterface;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 class LockBackendFactoryTest extends TestCase
 {
@@ -38,19 +38,17 @@ class LockBackendFactoryTest extends TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManagerMock = $this->getMockForAbstractClass(ObjectManagerInterface::class);
         $this->deploymentConfigMock = $this->createMock(DeploymentConfig::class);
         $this->factory = new LockBackendFactory($this->objectManagerMock, $this->deploymentConfigMock);
     }
 
-    /**
-     * @expectedException \Magento\Framework\Exception\RuntimeException
-     * @expectedExceptionMessage Unknown locks provider: someProvider
-     */
     public function testCreateWithException()
     {
+        $this->expectException('Magento\Framework\Exception\RuntimeException');
+        $this->expectExceptionMessage('Unknown locks provider: someProvider');
         $this->deploymentConfigMock->expects($this->exactly(2))
             ->method('get')
             ->withConsecutive(['lock/provider', LockBackendFactory::LOCK_DB], ['lock/config', []])
