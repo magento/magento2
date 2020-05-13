@@ -119,10 +119,11 @@ class FilterTest extends TestCase
      * Test using media directive with a URL path including schema.
      *
      * @covers \Magento\Cms\Model\Template\Filter::mediaDirective
-     * @expectedException \InvalidArgumentException
      */
     public function testMediaDirectiveURL()
     {
+        $this->expectException(\InvalidArgumentException::class);
+
         $baseMediaDir = 'pub/media';
         $construction = [
             '{{media url="http://wysiwyg/images/image.jpg"}}',
