@@ -180,7 +180,7 @@ class Changelog implements ChangelogInterface
         }
         $select = $this->connection->select()->from($changelogTableName)->order('version_id DESC')->limit(1);
         $row = $this->connection->fetchRow($select);
-        if ($row === false) {
+        if (!$row) {
             return 0;
         } else {
             if (is_array($row) && array_key_exists('version_id', $row)) {

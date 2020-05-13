@@ -3,77 +3,91 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Store\Test\Unit\App\FrontController\Plugin;
 
-class RequestPreprocessorTest extends \PHPUnit\Framework\TestCase
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\FrontController;
+use Magento\Framework\App\Request\Http;
+use Magento\Framework\App\ResponseFactory;
+use Magento\Framework\Url;
+use Magento\Store\App\FrontController\Plugin\RequestPreprocessor;
+use Magento\Store\Model\BaseUrlChecker;
+use Magento\Store\Model\Store;
+use Magento\Store\Model\StoreManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class RequestPreprocessorTest extends TestCase
 {
     /**
-     * @var \Magento\Store\App\FrontController\Plugin\RequestPreprocessor
+     * @var RequestPreprocessor
      */
     protected $_model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $_storeManagerMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $_urlMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $_scopeConfigMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $closureMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $_requestMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $_storeMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $subjectMock;
 
     /**
-     * @var \Magento\Store\Model\BaseUrlChecker|\PHPUnit_Framework_MockObject_MockObject
+     * @var BaseUrlChecker|MockObject
      */
     protected $baseUrlChecker;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->_storeMock = $this->createMock(\Magento\Store\Model\Store::class);
-        $this->_requestMock = $this->createMock(\Magento\Framework\App\Request\Http::class);
+        $this->_storeMock = $this->createMock(Store::class);
+        $this->_requestMock = $this->createMock(Http::class);
         $this->closureMock = function () {
             return 'Expected';
         };
-        $this->_storeManagerMock = $this->createMock(\Magento\Store\Model\StoreManager::class);
-        $this->_urlMock = $this->createMock(\Magento\Framework\Url::class);
-        $this->_scopeConfigMock = $this->createMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
-        $this->subjectMock = $this->createMock(\Magento\Framework\App\FrontController::class);
+        $this->_storeManagerMock = $this->createMock(StoreManager::class);
+        $this->_urlMock = $this->createMock(Url::class);
+        $this->_scopeConfigMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
+        $this->subjectMock = $this->createMock(FrontController::class);
 
-        $this->baseUrlChecker = $this->createMock(\Magento\Store\Model\BaseUrlChecker::class);
+        $this->baseUrlChecker = $this->createMock(BaseUrlChecker::class);
         $this->baseUrlChecker->expects($this->any())
             ->method('execute')
             ->willReturn(true);
 
-        $this->_model = new \Magento\Store\App\FrontController\Plugin\RequestPreprocessor(
+        $this->_model = new RequestPreprocessor(
             $this->_storeManagerMock,
             $this->_urlMock,
             $this->_scopeConfigMock,
-            $this->createMock(\Magento\Framework\App\ResponseFactory::class)
+            $this->createMock(ResponseFactory::class)
         );
 
         $modelProperty = (new \ReflectionClass(get_class($this->_model)))
@@ -102,8 +116,8 @@ class RequestPreprocessorTest extends \PHPUnit\Framework\TestCase
             $this->any()
         )->method(
             'getStore'
-        )->will(
-            $this->returnValue($this->_storeMock)
+        )->willReturn(
+            $this->_storeMock
         );
         $this->_storeMock->expects($this->once())->method('getBaseUrl');
         $this->_requestMock->expects($this->never())->method('getRequestUri');
@@ -121,10 +135,10 @@ class RequestPreprocessorTest extends \PHPUnit\Framework\TestCase
             $this->any()
         )->method(
             'getStore'
-        )->will(
-            $this->returnValue($this->_storeMock)
+        )->willReturn(
+            $this->_storeMock
         );
-        $this->_storeMock->expects($this->once())->method('getBaseUrl')->will($this->returnValue(false));
+        $this->_storeMock->expects($this->once())->method('getBaseUrl')->willReturn(false);
         $this->_requestMock->expects($this->never())->method('getRequestUri');
         $this->baseUrlChecker->expects($this->any())->method('isEnabled')->willReturn(true);
         $this->assertEquals(

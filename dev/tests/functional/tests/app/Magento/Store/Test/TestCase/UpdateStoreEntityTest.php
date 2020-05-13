@@ -106,7 +106,7 @@ class UpdateStoreEntityTest extends Injectable
     /**
      * {@inheritdoc}
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         if ($this->storeInitial->getCode() == 'default') {
             $this->restoreDefaultStoreViewStep->run();
