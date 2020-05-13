@@ -46,12 +46,10 @@ spec:
           - mountPath: /var/www/html/var
             name: magento-var-volume
             subPath: var
-          command: ["/bin/sh", "-c", "/var/www/html/start.sh"] 
-          command: ["/bin/sh", "-c", "chmod 0775 /var/www/html/pub; chgrp 82 /var/www/html/pub"]
-          command: ["/bin/sh", "-c", "chmod 0775 /var/www/html/var; chgrp 82 /var/www/html/var"]
+          command: ["/bin/sh", "-c", "/var/www/html/start.sh; chmod 0775 /var/www/html/pub; chgrp 82 /var/www/html/pub; chmod 0775 /var/www/html/var; chgrp 82 /var/www/html/var"] 
           resources:
             requests:
-              cpu: "250m"
+              cpu: "500m"
       containers:
         - image: eu.gcr.io/magento2-269418/magento2-apache24:$TAG_NAME
           name: apache
