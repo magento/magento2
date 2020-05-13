@@ -53,6 +53,7 @@ class ExtractDataFromCategoryTree
         while ($iterator->valid()) {
             /** @var CategoryInterface $currentCategory */
             $currentCategory = $iterator->current();
+            $currentCategory->setCustomAttribute('children', []);
             $iterator->next();
             if ($this->areParentsActive($currentCategory, $rootCategory, (array)$iterator)) {
                 $pathElements = explode("/", $currentCategory->getPath());
