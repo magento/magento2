@@ -151,9 +151,9 @@ define([
             var convertedArray = [];
 
             $.each(object, function (key) {
-                return (typeof object[key] === 'string') || object[key] === null
-                    ? convertedArray.push(object[key])
-                    : false;
+                return (typeof object[key] === 'string') || object[key] === null ?
+                    convertedArray.push(object[key]) :
+                    false;
             });
 
             return convertedArray.slice(0);
