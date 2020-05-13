@@ -9,11 +9,13 @@ namespace Magento\Catalog\Test\Unit\Cron;
 
 use Magento\Catalog\Cron\DeleteAbandonedStoreFlatTables;
 use Magento\Catalog\Helper\Product\Flat\Indexer;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \Magento\Catalog\Cron\DeleteAbandonedStoreFlatTables
  */
-class DeleteAbandonedStoreFlatTablesTest extends \PHPUnit\Framework\TestCase
+class DeleteAbandonedStoreFlatTablesTest extends TestCase
 {
     /**
      * Testable Object
@@ -23,7 +25,7 @@ class DeleteAbandonedStoreFlatTablesTest extends \PHPUnit\Framework\TestCase
     private $deleteAbandonedStoreFlatTables;
 
     /**
-     * @var Indexer|\PHPUnit_Framework_MockObject_MockObject
+     * @var Indexer|MockObject
      */
     private $indexerMock;
 
@@ -32,7 +34,7 @@ class DeleteAbandonedStoreFlatTablesTest extends \PHPUnit\Framework\TestCase
      *
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->indexerMock = $this->createMock(Indexer::class);
         $this->deleteAbandonedStoreFlatTables = new DeleteAbandonedStoreFlatTables($this->indexerMock);

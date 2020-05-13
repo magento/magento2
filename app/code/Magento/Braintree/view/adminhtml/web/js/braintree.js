@@ -309,6 +309,7 @@ define([
 
             self.hostedFieldsInstance.tokenize(function (err, payload) {
                 if (err) {
+                    $('body').trigger('processStop');
                     self.error($t('Some payment input fields are invalid.'));
 
                     return false;

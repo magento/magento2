@@ -3,22 +3,23 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Braintree\Test\Unit\Model\Adminhtml\System\Config;
 
 use Magento\Braintree\Model\Adminhtml\System\Config\CountryCreditCard;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Math\Random;
 use Magento\Framework\Model\ResourceModel\AbstractResource;
+use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-/**
- * Class CountryCreditCardTest
- *
- */
-class CountryCreditCardTest extends \PHPUnit\Framework\TestCase
+class CountryCreditCardTest extends TestCase
 {
     /**
-     * @var \Magento\Braintree\Model\Adminhtml\System\Config\CountryCreditCard
+     * @var CountryCreditCard
      */
     protected $model;
 
@@ -28,27 +29,27 @@ class CountryCreditCardTest extends \PHPUnit\Framework\TestCase
     protected $objectManager;
 
     /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ScopeConfigInterface|MockObject
      */
     protected $resourceMock;
 
     /**
-     * @var \Magento\Framework\Math\Random|\PHPUnit_Framework_MockObject_MockObject
+     * @var Random|MockObject
      */
     protected $mathRandomMock;
 
     /**
-     * @var \Magento\Framework\Serialize\Serializer\Json|\PHPUnit_Framework_MockObject_MockObject
+     * @var Json|MockObject
      */
     private $serializerMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->resourceMock = $this->getMockForAbstractClass(AbstractResource::class);
         $this->mathRandomMock = $this->getMockBuilder(Random::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->serializerMock = $this->createMock(\Magento\Framework\Serialize\Serializer\Json::class);
+        $this->serializerMock = $this->createMock(Json::class);
 
         $this->objectManager = new ObjectManager($this);
         $this->model = $this->objectManager->getObject(

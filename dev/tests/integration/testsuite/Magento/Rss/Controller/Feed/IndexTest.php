@@ -29,7 +29,7 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
      */
     private $customerSession;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->urlBuilder = $this->_objectManager->get(\Magento\Rss\Model\UrlBuilder::class);
@@ -57,7 +57,7 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
         $wishlistId = $this->wishlist->loadByCustomerId($firstCustomerId)->getId();
         $this->dispatch($this->getLink($firstCustomerId, $customerEmail, $wishlistId));
         $body = $this->getResponse()->getBody();
-        $this->assertContains('<title>John Smith\'s Wishlist</title>', $body);
+        $this->assertStringContainsString('<title>John Smith\'s Wishlist</title>', $body);
     }
 
     /**
@@ -78,7 +78,7 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
         $wishlistId = $this->wishlist->loadByCustomerId($secondCustomerId, true)->getId();
         $this->dispatch($this->getLink($firstCustomerId, $customerEmail, $wishlistId));
         $body = $this->getResponse()->getBody();
-        $this->assertContains('<title>404 Not Found</title>', $body);
+        $this->assertStringContainsString('<title>404 Not Found</title>', $body);
     }
 
     private function getLink($customerId, $customerEmail, $wishlistId)

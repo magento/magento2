@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdvanceCatalogSearchDownloadableByDescriptionTest" extends="AdvanceCatalogSearchSimpleProductByDescriptionTest">
+        <annotations>
+            <features value="Downloadable"/>
+            <stories value="Advanced Catalog Product Search for all product types"/>
+            <title value="Guest customer should be able to advance search Downloadable product with product description"/>
+            <description value="Guest customer should be able to advance search Downloadable product with product description"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-243"/>
+            <group value="Downloadable"/>
+        </annotations>
+        <before>
+            <magentoCLI stepKey="addDownloadableDomain" command="downloadable:domains:add static.magento.com" before="product"/>
+            <createData entity="ApiDownloadableProduct" stepKey="product"/>
+            <createData entity="ApiDownloadableLink" stepKey="addDownloadableLink1">
+                <requiredEntity createDataKey="product"/>
+            </createData>
+            <createData entity="ApiDownloadableLink" stepKey="addDownloadableLink2">
+                <requiredEntity createDataKey="product"/>
+            </createData>
+        </before>
+        <after>
+            <magentoCLI stepKey="removeDownloadableDomain" command="downloadable:domains:remove static.magento.com" before="delete"/>
+        </after>
+    </test>
+</tests>

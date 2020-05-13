@@ -25,7 +25,7 @@ class TierPricesForCustomersTest extends GraphQlAbstract
     /** @var  CustomerTokenServiceInterface */
     private $customerTokenService;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->getMaskedQuoteIdByReservedOrderId = $this->objectManager->get(GetMaskedQuoteIdByReservedOrderId::class);

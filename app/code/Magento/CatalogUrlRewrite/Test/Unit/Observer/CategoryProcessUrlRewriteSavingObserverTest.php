@@ -7,28 +7,31 @@ declare(strict_types=1);
 
 namespace Magento\CatalogUrlRewrite\Test\Unit\Observer;
 
-use Magento\CatalogUrlRewrite\Model\CategoryUrlRewriteGenerator;
-use Magento\CatalogUrlRewrite\Observer\CategoryProcessUrlRewriteSavingObserver;
-use Magento\CatalogUrlRewrite\Model\UrlRewriteBunchReplacer;
-use Magento\CatalogUrlRewrite\Observer\UrlRewriteHandler;
-use Magento\CatalogUrlRewrite\Model\Map\DatabaseMapPool;
-use Magento\Framework\App\Config\ScopeConfigInterface as ScopeConfigInterfaceAlias;
-use Magento\Store\Model\ResourceModel\Group\CollectionFactory;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Catalog\Model\Category;
+use Magento\CatalogUrlRewrite\Model\CategoryUrlRewriteGenerator;
+use Magento\CatalogUrlRewrite\Model\Map\DatabaseMapPool;
+use Magento\CatalogUrlRewrite\Model\UrlRewriteBunchReplacer;
+use Magento\CatalogUrlRewrite\Observer\CategoryProcessUrlRewriteSavingObserver;
+use Magento\CatalogUrlRewrite\Observer\UrlRewriteHandler;
+use Magento\Framework\App\Config\ScopeConfigInterface as ScopeConfigInterfaceAlias;
+use Magento\Framework\Event\Observer;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Store\Model\ResourceModel\Group\CollectionFactory;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Unit tests for \Magento\CatalogUrlRewrite\Observer\CategoryProcessUrlRewriteSavingObserver class.
  */
-class CategoryProcessUrlRewriteSavingObserverTest extends \PHPUnit\Framework\TestCase
+class CategoryProcessUrlRewriteSavingObserverTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\Event\Observer|\PHPUnit_Framework_MockObject_MockObject
+     * @var Observer|MockObject
      */
     private $observer;
 
     /**
-     * @var \Magento\Catalog\Model\Category|\PHPUnit_Framework_MockObject_MockObject
+     * @var Category|MockObject
      */
     private $category;
 
@@ -38,54 +41,49 @@ class CategoryProcessUrlRewriteSavingObserverTest extends \PHPUnit\Framework\Tes
     private $categoryProcessUrlRewriteSavingObserver;
 
     /**
-     * @var CategoryUrlRewriteGenerator|\PHPUnit_Framework_MockObject_MockObject
+     * @var CategoryUrlRewriteGenerator|MockObject
      */
     private $categoryUrlRewriteGeneratorMock;
 
     /**
-     * @var UrlRewriteBunchReplacer|\PHPUnit_Framework_MockObject_MockObject
+     * @var UrlRewriteBunchReplacer|MockObject
      */
     private $urlRewriteBunchReplacerMock;
 
     /**
-     * @var UrlRewriteHandler|\PHPUnit_Framework_MockObject_MockObject
+     * @var UrlRewriteHandler|MockObject
      */
     private $urlRewriteHandlerMock;
 
     /**
-     * @var DatabaseMapPool|\PHPUnit_Framework_MockObject_MockObject
+     * @var DatabaseMapPool|MockObject
      */
     private $databaseMapPoolMock;
 
     /**
-     * @var CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var CollectionFactory|MockObject
      */
     private $storeGroupFactory;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     private $scopeConfigMock;
 
     /**
      * {@inheritDoc}
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->observer = $this->createPartialMock(
-            \Magento\Framework\Event\Observer::class,
+            Observer::class,
             ['getEvent', 'getData']
         );
-        $this->category = $this->createPartialMock(
-            Category::class,
-            [
-                'hasData',
-                'getParentId',
-                'getStoreId',
-                'dataHasChangedFor',
-                'getChangedProductIds',
-            ]
-        );
+        $this->category = $this->getMockBuilder(Category::class)
+            ->addMethods(['getChangedProductIds'])
+            ->onlyMethods(['hasData', 'getParentId', 'getStoreId', 'dataHasChangedFor'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->observer->expects($this->any())
             ->method('getEvent')
             ->willReturnSelf();

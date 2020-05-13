@@ -11,9 +11,6 @@ use Braintree\Result\Error;
 use Magento\Braintree\Gateway\Validator\ErrorCodeProvider;
 use PHPUnit\Framework\TestCase;
 
-/**
- * Class ErrorCodeProviderTest
- */
 class ErrorCodeProviderTest extends TestCase
 {
     /**
