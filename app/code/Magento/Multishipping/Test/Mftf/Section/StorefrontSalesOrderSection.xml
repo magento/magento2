@@ -7,7 +7,7 @@
 -->
 
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="StorefrontSalesOrderSection">
         <element name="orderLinkByPosition" type="text" selector="//li[@class='shipping-list'][position()={{orderLinkPosition}}]//a" parameterized="true"/>
         <element name="viewOrderLink" type="text" selector="//td[@data-th='Actions']//a[contains(@href,'{{orderLink}}')]//span[text()='View Order']"  parameterized="true" timeout="5"/>

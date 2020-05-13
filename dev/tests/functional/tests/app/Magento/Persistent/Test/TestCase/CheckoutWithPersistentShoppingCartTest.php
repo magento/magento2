@@ -171,7 +171,7 @@ class CheckoutWithPersistentShoppingCartTest extends Injectable
      *
      * @return void
      */
-    public function tearDown()
+    public function tearDown(): void
     {
         $this->stepFactory->create(
             \Magento\Config\Test\TestStep\SetupConfigurationStep::class,

@@ -19,7 +19,7 @@ class ProductRuleTest extends \PHPUnit\Framework\TestCase
      */
     protected $resourceRule;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->resourceRule = Bootstrap::getObjectManager()->get(\Magento\CatalogRule\Model\ResourceModel\Rule::class);
 

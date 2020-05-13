@@ -12,19 +12,21 @@ use Magento\Multishipping\Model\Checkout\Type\Multishipping\PlaceOrderDefault;
 use Magento\Multishipping\Model\Checkout\Type\Multishipping\PlaceOrderFactory;
 use Magento\Multishipping\Model\Checkout\Type\Multishipping\PlaceOrderInterface;
 use Magento\Multishipping\Model\Checkout\Type\Multishipping\PlaceOrderPool;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Tests Magento\Multishipping\Model\Checkout\Type\Multishipping\PlaceOrderFactory.
  */
-class PlaceOrderFactoryTest extends \PHPUnit\Framework\TestCase
+class PlaceOrderFactoryTest extends TestCase
 {
     /**
-     * @var ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ObjectManagerInterface|MockObject
      */
     private $objectManager;
 
     /**
-     * @var PlaceOrderPool|\PHPUnit_Framework_MockObject_MockObject
+     * @var PlaceOrderPool|MockObject
      */
     private $placeOrderPool;
 
@@ -36,7 +38,7 @@ class PlaceOrderFactoryTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = $this->getMockForAbstractClass(ObjectManagerInterface::class);
 

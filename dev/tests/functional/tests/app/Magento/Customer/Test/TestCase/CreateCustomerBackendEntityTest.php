@@ -297,7 +297,7 @@ class CreateCustomerBackendEntityTest extends Injectable
     /**
      * @inheritdoc
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         foreach ($this->steps as $key => $stepData) {
             if (method_exists($this, $key . 'Rollback')) {

@@ -23,7 +23,7 @@ class MultiStoreCurrencyTest extends AbstractCurrencyTest
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 

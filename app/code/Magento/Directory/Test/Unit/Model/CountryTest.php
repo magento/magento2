@@ -3,27 +3,32 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Directory\Test\Unit\Model;
 
 use Magento\Directory\Model\Country;
+use Magento\Framework\Locale\ListsInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class CountryTest extends \PHPUnit\Framework\TestCase
+class CountryTest extends TestCase
 {
     protected $country;
 
     /**
-     * @var \Magento\Framework\Locale\ListsInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ListsInterface|MockObject
      */
     protected $localeListsMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->localeListsMock = $this->createMock(\Magento\Framework\Locale\ListsInterface::class);
+        $this->localeListsMock = $this->getMockForAbstractClass(ListsInterface::class);
 
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $objectManager = new ObjectManager($this);
         $this->country = $objectManager->getObject(
-            \Magento\Directory\Model\Country::class,
+            Country::class,
             ['localeLists' => $this->localeListsMock]
         );
     }

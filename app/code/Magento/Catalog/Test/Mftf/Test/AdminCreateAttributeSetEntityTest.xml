@@ -15,11 +15,11 @@
             <title value="Create attribute set with new product attribute"/>
             <description value="Admin should be able to create attribute set with new product attribute"/>
             <testCaseId value="MC-10884"/>
-            <severity value="CRITICAL"/>
+            <severity value="BLOCKER"/>
             <group value="mtf_migrated"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
             <createData entity="productAttributeWysiwyg" stepKey="createProductAttribute"/>
             <createData entity="CatalogAttributeSet" stepKey="createAttributeSet"/>
         </before>
