@@ -8,8 +8,7 @@ declare(strict_types=1);
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Config\Storage\WriterInterface;
 use Magento\TestFramework\Helper\Bootstrap;
-
-require __DIR__ . '/process_config_data.php';
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
 
 $objectManager = Bootstrap::getObjectManager();
 
@@ -21,4 +20,6 @@ $configData = [
 ];
 /** @var WriterInterface $configWriter */
 $configWriter = $objectManager->get(WriterInterface::class);
-$deleteConfigData($configWriter, $configData, ScopeConfigInterface::SCOPE_TYPE_DEFAULT, 0);
+foreach ($configData as $path) {
+    $configWriter->delete($path, ScopeConfigInterface::SCOPE_TYPE_DEFAULT, 0);
+}

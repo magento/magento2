@@ -10,6 +10,7 @@ use Magento\CatalogInventory\Model\StockRegistryStorage;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Registry;
 use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
 
 $objectManager = Bootstrap::getObjectManager();
 /** @var Registry $registry */
@@ -30,4 +31,6 @@ $stockRegistryStorage->clean();
 $registry->unregister('isSecureArea');
 $registry->register('isSecureArea', false);
 
-require __DIR__ . '/attribute_set_based_on_default_with_custom_group_rollback.php';
+Resolver::getInstance()->requireDataFixture(
+    'Magento/Catalog/_files/attribute_set_based_on_default_with_custom_group_rollback.php'
+);
