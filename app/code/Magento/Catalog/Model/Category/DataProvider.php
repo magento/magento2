@@ -22,6 +22,7 @@ use Magento\Eav\Model\Entity\Attribute\Source\SpecificSourceInterface;
 use Magento\Eav\Model\Entity\Type;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\RequestInterface;
+use Magento\Framework\Config\DataInterfaceFactory;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Registry;
@@ -154,6 +155,11 @@ class DataProvider extends ModifierPoolDataProvider
     private $categoryFactory;
 
     /**
+     * @var DataInterfaceFactory
+     */
+    protected $uiConfigFactory;
+
+    /**
      * @var ScopeOverriddenValue
      */
     private $scopeOverriddenValue;
@@ -193,6 +199,7 @@ class DataProvider extends ModifierPoolDataProvider
      * @param Config $eavConfig
      * @param RequestInterface $request
      * @param CategoryFactory $categoryFactory
+     * @param DataInterfaceFactory $uiConfigFactory
      * @param array $meta
      * @param array $data
      * @param PoolInterface|null $pool
@@ -215,6 +222,7 @@ class DataProvider extends ModifierPoolDataProvider
         Config $eavConfig,
         RequestInterface $request,
         CategoryFactory $categoryFactory,
+        DataInterfaceFactory $uiConfigFactory,
         array $meta = [],
         array $data = [],
         PoolInterface $pool = null,
@@ -233,6 +241,7 @@ class DataProvider extends ModifierPoolDataProvider
         $this->storeManager = $storeManager;
         $this->request = $request;
         $this->categoryFactory = $categoryFactory;
+        $this->uiConfigFactory = $uiConfigFactory;
         $this->auth = $auth ?? ObjectManager::getInstance()->get(AuthorizationInterface::class);
         $this->arrayUtils = $arrayUtils ?? ObjectManager::getInstance()->get(ArrayUtils::class);
         $this->scopeOverriddenValue = $scopeOverriddenValue ?:
@@ -645,56 +654,22 @@ class DataProvider extends ModifierPoolDataProvider
      */
     protected function getFieldsMap()
     {
-        return [
-            'general' => [
-                'parent',
-                'path',
-                'is_active',
-                'include_in_menu',
-                'name',
-            ],
-            'content' => [
-                'image',
-                'description',
-                'landing_page',
-            ],
-            'display_settings' => [
-                'display_mode',
-                'is_anchor',
-                'available_sort_by',
-                'use_config.available_sort_by',
-                'default_sort_by',
-                'use_config.default_sort_by',
-                'filter_price_range',
-                'use_config.filter_price_range',
-            ],
-            'search_engine_optimization' => [
-                'url_key',
-                'url_key_create_redirect',
-                'url_key_group',
-                'meta_title',
-                'meta_keywords',
-                'meta_description',
-            ],
-            'assign_products' => [
-            ],
-            'design' => [
-                'custom_use_parent_settings',
-                'custom_apply_to_products',
-                'custom_design',
-                'page_layout',
-                'custom_layout_update',
-                'custom_layout_update_file'
-            ],
-            'schedule_design_update' => [
-                'custom_design_from',
-                'custom_design_to',
-            ],
-            'category_view_optimization' => [
-            ],
-            'category_permissions' => [
-            ],
-        ];
+        $referenceName = 'category_form';
+        $config = $this->uiConfigFactory
+            ->create(['componentName' => $referenceName])
+            ->get($referenceName);
+
+        $fieldsMap = [];
+
+        if (isset($config['children']) && !empty($config['children'])) {
+            foreach ($config['children'] as $name => $child) {
+                if (isset($child['children']) && !empty($child['children'])) {
+                    $fieldsMap[$name] = array_keys($child['children']);
+                }
+            }
+        }
+
+        return $fieldsMap;
     }
 
     /**
