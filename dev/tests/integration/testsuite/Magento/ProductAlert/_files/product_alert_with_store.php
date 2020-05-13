@@ -5,15 +5,26 @@
  */
 declare(strict_types=1);
 
-use Magento\TestFramework\Helper\Bootstrap;
+use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Customer\Model\CustomerRegistry;
 use Magento\ProductAlert\Model\Price;
 use Magento\ProductAlert\Model\Stock;
 use Magento\Store\Api\StoreRepositoryInterface;
+use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
 
-require __DIR__ . '/../../../Magento/Customer/_files/customer_for_second_store.php';
-require __DIR__ . '/../../../Magento/Catalog/_files/product_simple_out_of_stock_without_categories.php';
+Resolver::getInstance()->requireDataFixture('Magento/Customer/_files/customer_for_second_store.php');
+Resolver::getInstance()->requireDataFixture(
+    'Magento/Catalog/_files/product_simple_out_of_stock_without_categories.php'
+);
 
 $objectManager = Bootstrap::getObjectManager();
+/** @var CustomerRegistry $customerRegistry */
+$customerRegistry = Bootstrap::getObjectManager()->create(CustomerRegistry::class);
+$customer = $customerRegistry->retrieve(1);
+/** @var ProductRepositoryInterface $productRepository */
+$productRepository = $objectManager->create(ProductRepositoryInterface::class);
+$product = $productRepository->get('simple');
 $storeRepository = $objectManager->get(StoreRepositoryInterface::class);
 $storeId = $storeRepository->get('fixture_second_store')->getId();
 
