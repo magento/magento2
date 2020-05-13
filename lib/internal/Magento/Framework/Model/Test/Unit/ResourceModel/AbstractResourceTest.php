@@ -15,6 +15,9 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 
+/**
+ * Test for \Magento\Framework\Model\ResourceModel\AbstractResource.
+ */
 class AbstractResourceTest extends TestCase
 {
     /**
@@ -32,16 +35,17 @@ class AbstractResourceTest extends TestCase
      */
     private $loggerMock;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp(): void
-
     {
         $objectManager = new ObjectManager($this);
-        $this->model = $objectManager->getObject(AbstractResourceStub::class);
         $this->serializerMock = $this->createMock(Json::class);
         $this->loggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
-        $this->abstractResource = $objectManager->getObject(AbstractResourceStub::class);
-        $objectManager->setBackwardCompatibleProperty($this->abstractResource, 'serializer', $this->serializerMock);
-        $objectManager->setBackwardCompatibleProperty($this->abstractResource, '_logger', $this->loggerMock);
+        $this->model = $objectManager->getObject(AbstractResourceStub::class);
+        $objectManager->setBackwardCompatibleProperty($this->model, 'serializer', $this->serializerMock);
+        $objectManager->setBackwardCompatibleProperty($this->model, '_logger', $this->loggerMock);
     }
 
     /**
@@ -187,8 +191,12 @@ class AbstractResourceTest extends TestCase
         ];
     }
 
-
-    public function testCommitZeroLevel()
+    /**
+     * Commit zero level
+     *
+     * @return void
+     */
+    public function testCommitZeroLevel(): void
     {
         /** @var AdapterInterface|MockObject $connection */
         $connection = $this->getMockForAbstractClass(AdapterInterface::class);
