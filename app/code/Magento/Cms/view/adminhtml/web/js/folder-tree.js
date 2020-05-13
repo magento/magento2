@@ -103,6 +103,13 @@ define([
                     }
                 };
 
+            $(window).on('reload.MediaGallery', function () {
+                tree.jstree('deselect_all');
+                tree.jstree('open_node', $('[data-id="' + window.MediabrowserUtility.pathId.replace(',,', '--') + '"]'), function () {
+                    tree.jstree('select_node',  $('[data-id="' + window.MediabrowserUtility.pathId.replace(',,', '--') + '"]'));
+                });
+            });
+
             recursiveOpen();
         },
 
