@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Braintree\Test\Unit\Gateway\Request;
 
 use Magento\Braintree\Gateway\Config\Config;
@@ -10,12 +12,10 @@ use Magento\Braintree\Gateway\Request\DescriptorDataBuilder;
 use Magento\Braintree\Gateway\SubjectReader;
 use Magento\Payment\Gateway\Data\OrderAdapterInterface;
 use Magento\Payment\Gateway\Data\PaymentDataObjectInterface;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-/**
- * Class DescriptorDataBuilderTest
- */
-class DescriptorDataBuilderTest extends \PHPUnit\Framework\TestCase
+class DescriptorDataBuilderTest extends TestCase
 {
     /**
      * @var SubjectReader|MockObject
@@ -32,7 +32,7 @@ class DescriptorDataBuilderTest extends \PHPUnit\Framework\TestCase
      */
     private $builder;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->configMock = $this->getMockBuilder(Config::class)
             ->disableOriginalConstructor()
@@ -52,7 +52,7 @@ class DescriptorDataBuilderTest extends \PHPUnit\Framework\TestCase
      */
     public function testBuild(array $descriptors, array $expected)
     {
-        $paymentDOMock = $this->createMock(PaymentDataObjectInterface::class);
+        $paymentDOMock = $this->getMockForAbstractClass(PaymentDataObjectInterface::class);
         $buildSubject = [
             'payment' => $paymentDOMock,
         ];
@@ -61,7 +61,7 @@ class DescriptorDataBuilderTest extends \PHPUnit\Framework\TestCase
             ->with($buildSubject)
             ->willReturn($paymentDOMock);
 
-        $order = $this->createMock(OrderAdapterInterface::class);
+        $order = $this->getMockForAbstractClass(OrderAdapterInterface::class);
         $order->expects(self::once())->method('getStoreId')->willReturn('1');
 
         $paymentDOMock->expects(self::once())->method('getOrder')->willReturn($order);

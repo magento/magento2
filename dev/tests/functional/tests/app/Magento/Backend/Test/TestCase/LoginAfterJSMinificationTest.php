@@ -82,7 +82,7 @@ class LoginAfterJSMinificationTest extends Injectable
     /**
      * @inheritdoc
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->stepFactory->create(
             \Magento\Config\Test\TestStep\SetupConfigurationStep::class,

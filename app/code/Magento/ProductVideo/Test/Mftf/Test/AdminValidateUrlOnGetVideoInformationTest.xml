@@ -10,14 +10,12 @@
         xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="AdminValidateUrlOnGetVideoInformationTest">
         <annotations>
+            <features value="ProductVideo"/>
             <stories value="Admin validates the url when getting video information"/>
             <title value="Admin validates the url when getting video information"/>
             <description value="Testing for a required video url when getting video information"/>
             <severity value="CRITICAL"/>
-            <group value="ProductVideo"/>
-            <skip>
-                <issueId value="MC-32197"/>
-            </skip>
+            <group value="productVideo"/>
         </annotations>
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
@@ -38,7 +36,7 @@
         </actionGroup>
         <actionGroup ref="AdminFillProductVideoFieldActionGroup" stepKey="fillVideoUrlField">
             <argument name="input" value="{{AdminProductNewVideoSection.videoUrlTextField}}"/>
-            <argument name="value" value="{{mftfTestProductVideo.videoUrl}}"/>
+            <argument name="value" value="{{YoutubeProductVideo.videoUrl}}"/>
         </actionGroup>
         <actionGroup ref="AdminGetVideoInformationActionGroup" stepKey="clickOnGetVideoInformation2"/>
         <actionGroup ref="AdminAssertVideoNoValidationErrorActionGroup" stepKey="dontSeeUrlValidationMessage">

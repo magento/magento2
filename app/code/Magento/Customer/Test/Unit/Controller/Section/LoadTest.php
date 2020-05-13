@@ -7,7 +7,10 @@ declare(strict_types=1);
 
 namespace Magento\Customer\Test\Unit\Controller\Section;
 
+use Laminas\Http\AbstractMessage;
+use Laminas\Http\Response;
 use Magento\Customer\Controller\Section\Load;
+use Magento\Customer\CustomerData\Section\Identifier;
 use Magento\Customer\CustomerData\SectionPoolInterface;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\App\RequestInterface;
@@ -16,8 +19,6 @@ use Magento\Framework\Controller\Result\JsonFactory;
 use Magento\Framework\Escaper;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Laminas\Http\AbstractMessage;
-use Laminas\Http\Response;
 
 class LoadTest extends TestCase
 {
@@ -51,7 +52,7 @@ class LoadTest extends TestCase
      */
     private $requestMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->resultJsonFactoryMock = $this->createMock(JsonFactory::class);
         $this->sectionPoolMock = $this->getMockForAbstractClass(SectionPoolInterface::class);
@@ -152,7 +153,11 @@ class LoadTest extends TestCase
 
         $this->resultJsonMock->expects($this->once())
             ->method('setStatusHeader')
-            ->with(Response::STATUS_CODE_400, AbstractMessage::VERSION_11, 'Bad Request');
+            ->with(
+                Response::STATUS_CODE_400,
+                AbstractMessage::VERSION_11,
+                'Bad Request'
+            );
 
         $this->escaperMock->expects($this->once())
             ->method('escapeHtml')
