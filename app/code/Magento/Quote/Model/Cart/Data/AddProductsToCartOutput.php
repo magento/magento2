@@ -45,7 +45,7 @@ class AddProductsToCartOutput
     }
 
     /**
-     * Get errors happened during reorder
+     * Get errors happened during adding item to the cart
      *
      * @return Error[]
      */

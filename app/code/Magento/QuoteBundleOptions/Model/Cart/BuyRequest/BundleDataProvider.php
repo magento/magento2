@@ -68,8 +68,7 @@ class BundleDataProvider implements BuyRequestDataProviderInterface
     private function validateInput(array $optionData): void
     {
         if (count($optionData) !== 4) {
-            $errorMessage = __('Wrong format of the entered option data. ' .
-                'Must be "bundle/option_id/option_value_id/option_quantity"');
+            $errorMessage = __('Wrong format of the entered option data');
             throw new LocalizedException($errorMessage);
         }
     }

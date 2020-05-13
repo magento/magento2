@@ -68,7 +68,7 @@ class DownloadableLinkDataProvider implements BuyRequestDataProviderInterface
     {
         if (count($optionData) !== 2) {
             throw new LocalizedException(
-                __('Wrong format of the entered option data. Must be "downloadable/link_id"')
+                __('Wrong format of the entered option data')
             );
         }
     }

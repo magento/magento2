@@ -175,6 +175,8 @@ class AddProductsToCart implements AddProductsToCartInterface
     /**
      * Get message error code.
      *
+     * TODO: introduce a separate class for getting error code from a message
+     *
      * @param string $message
      * @return string
      */

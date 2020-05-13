@@ -96,7 +96,7 @@ class CustomizableOptionDataProvider implements BuyRequestDataProviderInterface
     {
         if (count($optionData) !== 3) {
             throw new LocalizedException(
-                __('Wrong format of the entered option data. Must be "custom-option/option_id/option_value_id"')
+                __('Wrong format of the entered option data')
             );
         }
     }

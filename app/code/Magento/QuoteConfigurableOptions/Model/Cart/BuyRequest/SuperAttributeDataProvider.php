@@ -67,7 +67,7 @@ class SuperAttributeDataProvider implements BuyRequestDataProviderInterface
     {
         if (count($optionData) !== 3) {
             throw new LocalizedException(
-                __('Wrong format of the entered option data. Must be "configurable/attribute_id/value_index"')
+                __('Wrong format of the entered option data')
             );
         }
     }
