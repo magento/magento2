@@ -123,6 +123,7 @@ class FilterTest extends TestCase
     public function testMediaDirectiveURL()
     {
         $this->expectException(\InvalidArgumentException::class);
+
         $baseMediaDir = 'pub/media';
         $construction = [
             '{{media url="http://wysiwyg/images/image.jpg"}}',

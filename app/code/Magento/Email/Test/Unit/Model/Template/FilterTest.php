@@ -479,7 +479,10 @@ class FilterTest extends TestCase
      */
     public function testProtocolDirectiveWithInvalidSchema()
     {
-        $this->expectException(\Magento\Framework\Exception\MailException::class);
+        $this->expectException(
+            \Magento\Framework\Exception\MailException::class
+        );
+
         $model = $this->getModel();
         $storeMock = $this->createMock(\Magento\Store\Model\Store::class);
         $storeMock->expects($this->once())->method('isCurrentlySecure')->willReturn(true);
