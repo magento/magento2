@@ -3,11 +3,23 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Setup\Test\Unit\Model\Cron;
 
+use Magento\Framework\App\State;
+use Magento\Framework\ObjectManager\ConfigLoaderInterface;
+use Magento\Framework\ObjectManagerInterface;
+use Magento\Framework\Setup\BackupRollback;
+use Magento\Framework\Setup\BackupRollbackFactory;
 use Magento\Setup\Model\Cron\JobDbRollback;
+use Magento\Setup\Model\Cron\Status;
+use Magento\Setup\Model\ObjectManagerProvider;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+use Symfony\Component\Console\Output\OutputInterface;
 
-class JobDbRollbackTest extends \PHPUnit\Framework\TestCase
+class JobDbRollbackTest extends TestCase
 {
     /**
      * @var JobDbRollback
@@ -15,51 +27,51 @@ class JobDbRollbackTest extends \PHPUnit\Framework\TestCase
     private $jobDbRollback;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Setup\BackupRollbackFactory
+     * @var MockObject|BackupRollbackFactory
      */
     private $backupRollbackFactory;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Setup\BackupRollback
+     * @var MockObject|BackupRollback
      */
     private $backupRollback;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Setup\Model\Cron\Status
+     * @var MockObject|Status
      */
     private $status;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Setup\Model\ObjectManagerProvider
+     * @var MockObject|ObjectManagerProvider
      */
     private $objectManagerProvider;
 
-    public function setup()
+    protected function setup(): void
     {
-        $this->backupRollbackFactory = $this->createMock(\Magento\Framework\Setup\BackupRollbackFactory::class);
-        $this->backupRollback = $this->createMock(\Magento\Framework\Setup\BackupRollback::class);
-        $this->status = $this->createMock(\Magento\Setup\Model\Cron\Status::class);
+        $this->backupRollbackFactory = $this->createMock(BackupRollbackFactory::class);
+        $this->backupRollback = $this->createMock(BackupRollback::class);
+        $this->status = $this->createMock(Status::class);
         $output =
-            $this->getMockForAbstractClass(\Symfony\Component\Console\Output\OutputInterface::class, [], '', false);
+            $this->getMockForAbstractClass(OutputInterface::class, [], '', false);
         $this->objectManagerProvider =
-            $this->createMock(\Magento\Setup\Model\ObjectManagerProvider::class);
+            $this->createMock(ObjectManagerProvider::class);
 
-        $appState = $this->createMock(\Magento\Framework\App\State::class);
+        $appState = $this->createMock(State::class);
         $configLoader = $this->getMockForAbstractClass(
-            \Magento\Framework\ObjectManager\ConfigLoaderInterface::class,
+            ConfigLoaderInterface::class,
             [],
             '',
             false
         );
         $configLoader->expects($this->any())->method('load')->willReturn([]);
         $objectManager =
-            $this->getMockForAbstractClass(\Magento\Framework\ObjectManagerInterface::class, [], '', false);
+            $this->getMockForAbstractClass(ObjectManagerInterface::class, [], '', false);
         $objectManager->expects($this->any())
             ->method('get')
-            ->will($this->returnValueMap([
-                [\Magento\Framework\App\State::class, $appState],
-                [\Magento\Framework\ObjectManager\ConfigLoaderInterface::class, $configLoader],
-            ]));
+            ->willReturnMap([
+                [State::class, $appState],
+                [ConfigLoaderInterface::class, $configLoader],
+            ]);
 
         $this->objectManagerProvider->expects($this->once())->method('get')->willReturn($objectManager);
 
@@ -80,13 +92,11 @@ class JobDbRollbackTest extends \PHPUnit\Framework\TestCase
         $this->jobDbRollback->execute();
     }
 
-    /**
-     * @expectedException \RuntimeException
-     * @expectedExceptionMessage Could not complete
-     */
     public function testExceptionOnExecute()
     {
-        $this->backupRollbackFactory->expects($this->once())->method('create')->willThrowException(new \Exception);
+        $this->expectException('RuntimeException');
+        $this->expectExceptionMessage('Could not complete');
+        $this->backupRollbackFactory->expects($this->once())->method('create')->willThrowException(new \Exception());
         $this->jobDbRollback->execute();
     }
 }

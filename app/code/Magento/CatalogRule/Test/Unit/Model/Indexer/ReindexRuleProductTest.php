@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 
 namespace Magento\CatalogRule\Test\Unit\Model\Indexer;
 
@@ -15,8 +17,9 @@ use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 use Magento\Store\Model\ScopeInterface;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class ReindexRuleProductTest extends \PHPUnit\Framework\TestCase
+class ReindexRuleProductTest extends TestCase
 {
     /**
      * @var ReindexRuleProduct
@@ -43,12 +46,12 @@ class ReindexRuleProductTest extends \PHPUnit\Framework\TestCase
      */
     private $localeDateMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->resourceMock = $this->createMock(ResourceConnection::class);
         $this->activeTableSwitcherMock = $this->createMock(ActiveTableSwitcher::class);
-        $this->tableSwapperMock = $this->createMock(IndexerTableSwapperInterface::class);
-        $this->localeDateMock = $this->createMock(TimezoneInterface::class);
+        $this->tableSwapperMock = $this->getMockForAbstractClass(IndexerTableSwapperInterface::class);
+        $this->localeDateMock = $this->getMockForAbstractClass(TimezoneInterface::class);
 
         $this->model = new ReindexRuleProduct(
             $this->resourceMock,
@@ -94,7 +97,7 @@ class ReindexRuleProductTest extends \PHPUnit\Framework\TestCase
             ->with('catalogrule_product')
             ->willReturn('catalogrule_product_replica');
 
-        $connectionMock = $this->createMock(AdapterInterface::class);
+        $connectionMock = $this->getMockForAbstractClass(AdapterInterface::class);
         $this->resourceMock->expects($this->at(0))
             ->method('getConnection')
             ->willReturn($connectionMock);
