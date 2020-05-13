@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Config\Test\Unit\App\Config\Source;
 
 use ArrayIterator;
@@ -57,7 +59,7 @@ class RuntimeConfigSourceTest extends TestCase
      */
     private $deploymentConfig;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->collectionFactory = $this->getMockBuilder(CollectionFactory::class)
             ->disableOriginalConstructor()

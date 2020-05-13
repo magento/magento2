@@ -3,9 +3,9 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
 
-// phpcs:ignore Magento2.Security.IncludeFile
-require __DIR__ . '/../../../Magento/Catalog/_files/product_simple.php';
+Resolver::getInstance()->requireDataFixture('Magento/Catalog/_files/product_simple.php');
 
 $review = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
     \Magento\Review\Model\Review::class,
