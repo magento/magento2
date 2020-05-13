@@ -36,7 +36,7 @@ class ImageTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    public function setUp() : void
+    public function setUp(): void
     {
         $context = $this->getMockObject(Context::class);
         $registry = $this->getMockObject(Registry::class);
@@ -70,7 +70,7 @@ class ImageTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    public function tearDown() : void
+    public function tearDown(): void
     {
         unset($this->imageBackend);
     }
@@ -95,8 +95,12 @@ class ImageTest extends \PHPUnit\Framework\TestCase
      */
     public function testBeforeSaveWithInvalidExtensionFile()
     {
-        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
-        $this->expectExceptionMessage('Something is wrong with the file upload settings.');
+        $this->expectException(
+            \Magento\Framework\Exception\LocalizedException::class
+        );
+        $this->expectExceptionMessage(
+            'Something is wrong with the file upload settings.'
+        );
 
         $invalidFileName = 'fileName.invalidExtension';
         $this->imageBackend->setData(

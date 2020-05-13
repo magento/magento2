@@ -41,7 +41,7 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritDoc
      */
-    protected function setUp() : void
+    protected function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
         $this->model = $this->objectManager->get(Attribute::class);
@@ -73,8 +73,11 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
      */
     public function testAttributeSaveWithChangedEntityType(): void
     {
-        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+        $this->expectException(
+            \Magento\Framework\Exception\LocalizedException::class
+        );
         $this->expectExceptionMessage('Do not change entity type.');
+
         $attribute = $this->attributeRepository->get($this->customerEntityType, 'user_attribute');
         $attribute->setEntityTypeId(5);
         $attribute->save();

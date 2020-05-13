@@ -230,6 +230,14 @@ class ImageTest extends AbstractFormTestCase
             'name' => 'logo.gif',
         ];
 
+        $this->ioFileSystemMock->expects($this->any())
+            ->method('getPathInfo')
+            ->with($value['name'])
+            ->willReturn([
+                'filename' => 'logo',
+                'extension' => 'gif'
+            ]);
+
         $this->attributeMetadataMock->expects($this->once())
             ->method('getStoreLabel')
             ->willReturn('File Input Field Label');
@@ -276,6 +284,14 @@ class ImageTest extends AbstractFormTestCase
         $validationRuleMock->expects($this->any())
             ->method('getValue')
             ->willReturn($maxFileSize);
+
+        $this->ioFileSystemMock->expects($this->any())
+            ->method('getPathInfo')
+            ->with($value['name'])
+            ->willReturn([
+                'filename' => 'logo',
+                'extension' => 'gif'
+            ]);
 
         $this->attributeMetadataMock->expects($this->once())
             ->method('getStoreLabel')
@@ -326,6 +342,14 @@ class ImageTest extends AbstractFormTestCase
             ->method('getValue')
             ->willReturn($maxImageWidth);
 
+        $this->ioFileSystemMock->expects($this->any())
+            ->method('getPathInfo')
+            ->with($value['name'])
+            ->willReturn([
+                'filename' => 'logo',
+                'extension' => 'gif'
+            ]);
+
         $this->attributeMetadataMock->expects($this->once())
             ->method('getStoreLabel')
             ->willReturn('File Input Field Label');
@@ -374,6 +398,14 @@ class ImageTest extends AbstractFormTestCase
         $validationRuleMock->expects($this->any())
             ->method('getValue')
             ->willReturn($maxImageHeight);
+
+        $this->ioFileSystemMock->expects($this->any())
+            ->method('getPathInfo')
+            ->with($value['name'])
+            ->willReturn([
+                'filename' => 'logo',
+                'extension' => 'gif'
+            ]);
 
         $this->attributeMetadataMock->expects($this->once())
             ->method('getStoreLabel')

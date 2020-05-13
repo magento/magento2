@@ -101,11 +101,12 @@ class ImageMagickTest extends TestCase
     }
 
     /**
-     * Check case with invalid URL
+     * Test open() with invalid URL.
      */
     public function testOpenInvalidUrl()
     {
         $this->expectException(\InvalidArgumentException::class);
+
         $this->imageMagic->open('bar://foo.bar');
     }
 }

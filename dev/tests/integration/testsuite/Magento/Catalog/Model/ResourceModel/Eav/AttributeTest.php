@@ -8,7 +8,6 @@ namespace Magento\Catalog\Model\ResourceModel\Eav;
 use Magento\Eav\Api\AttributeRepositoryInterface;
 use Magento\Eav\Api\Data\AttributeInterface;
 use Magento\Eav\Model\Config;
-use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 
@@ -72,7 +71,9 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
      */
     public function testAttributeSaveWithChangedEntityType(): void
     {
-        $this->expectException(LocalizedException::class);
+        $this->expectException(
+            \Magento\Framework\Exception\LocalizedException::class
+        );
         $this->expectExceptionMessage('Do not change entity type.');
 
         $attribute = $this->attributeRepository->get($this->catalogProductEntityType, 'test_attribute_code_333');
