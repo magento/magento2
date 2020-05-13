@@ -72,6 +72,17 @@ class Render implements HttpGetActionInterface
      */
     private $response;
 
+    /**
+     * @param Context $context
+     * @param UiComponentFactory $uiComponentFactory
+     * @param RequestInterface $request
+     * @param RedirectInterface $redirect
+     * @param ResponseInterface $response
+     * @param UiComponentTypeResolver|null $contentTypeResolver
+     * @param JsonFactory|null $resultJsonFactory
+     * @param Escaper|null $escaper
+     * @param LoggerInterface|null $logger
+     */
     public function __construct(
         Context $context,
         UiComponentFactory $uiComponentFactory,
