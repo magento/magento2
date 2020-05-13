@@ -3,16 +3,21 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Bundle\Test\Unit\Ui\DataProvider\Product;
 
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Bundle\Helper\Data;
 use Magento\Bundle\Ui\DataProvider\Product\BundleDataProvider;
-use Magento\Framework\App\RequestInterface;
 use Magento\Catalog\Model\ResourceModel\Product\Collection;
 use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
-use Magento\Bundle\Helper\Data;
+use Magento\Framework\App\RequestInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Store\Model\Store;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class BundleDataProviderTest extends \PHPUnit\Framework\TestCase
+class BundleDataProviderTest extends TestCase
 {
     const ALLOWED_TYPE = 'simple';
 
@@ -22,29 +27,29 @@ class BundleDataProviderTest extends \PHPUnit\Framework\TestCase
     protected $objectManager;
 
     /**
-     * @var RequestInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var RequestInterface|MockObject
      */
     protected $requestMock;
 
     /**
-     * @var CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var CollectionFactory|MockObject
      */
     protected $collectionFactoryMock;
 
     /**
-     * @var Collection|\PHPUnit_Framework_MockObject_MockObject
+     * @var Collection|MockObject
      */
     protected $collectionMock;
 
     /**
-     * @var Data|\PHPUnit_Framework_MockObject_MockObject
+     * @var Data|MockObject
      */
     protected $dataHelperMock;
 
     /**
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
 
@@ -116,7 +121,7 @@ class BundleDataProviderTest extends \PHPUnit\Framework\TestCase
             ->method('addFilterByRequiredOptions');
         $this->collectionMock->expects($this->once())
             ->method('addStoreFilter')
-            ->with(\Magento\Store\Model\Store::DEFAULT_STORE_ID);
+            ->with(Store::DEFAULT_STORE_ID);
         $this->collectionMock->expects($this->once())
             ->method('toArray')
             ->willReturn($items);

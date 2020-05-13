@@ -112,7 +112,7 @@ class CreateFlatCatalogProductTest extends Injectable
      *
      * @return void
      */
-    public function tearDown()
+    public function tearDown(): void
     {
         $this->objectManager->create(
             SetupConfigurationStep::class,
