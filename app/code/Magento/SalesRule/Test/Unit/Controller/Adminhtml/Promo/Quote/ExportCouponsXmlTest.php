@@ -8,15 +8,16 @@ declare(strict_types=1);
 
 namespace Magento\SalesRule\Test\Unit\Controller\Adminhtml\Promo\Quote;
 
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
-use Magento\SalesRule\Controller\Adminhtml\Promo\Quote\ExportCouponsXml;
-use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\Response\Http\FileFactory;
-use Magento\Framework\View\Result\Layout;
-use Magento\Framework\View\LayoutInterface;
+use Magento\Framework\Controller\ResultFactory;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Framework\View\Element\AbstractBlock;
+use Magento\Framework\View\LayoutInterface;
+use Magento\Framework\View\Result\Layout;
 use Magento\SalesRule\Block\Adminhtml\Promo\Quote\Edit\Tab\Coupons\Grid;
+use Magento\SalesRule\Controller\Adminhtml\Promo\Quote\ExportCouponsXml;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class ExportCouponsXmlTest extends TestCase
@@ -27,7 +28,7 @@ class ExportCouponsXmlTest extends TestCase
     private $controller;
 
     /**
-     * @var FileFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var FileFactory|MockObject
      */
     private $fileFactoryMock;
 
@@ -37,14 +38,14 @@ class ExportCouponsXmlTest extends TestCase
     private $objectManagerHelper;
 
     /**
-     * @var ResultFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var ResultFactory|MockObject
      */
     private $resultFactoryMock;
 
     /**
      * Setup environment
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->fileFactoryMock = $this->createMock(FileFactory::class);
@@ -67,8 +68,11 @@ class ExportCouponsXmlTest extends TestCase
         $fileName = 'coupon_codes.xml';
 
         $resultLayoutMock = $this->createMock(Layout::class);
-        $layoutMock = $this->createMock(LayoutInterface::class);
-        $contentMock = $this->createPartialMock(AbstractBlock::class, ['getExcelFile']);
+        $layoutMock = $this->getMockForAbstractClass(LayoutInterface::class);
+        $contentMock = $this->getMockBuilder(AbstractBlock::class)
+            ->addMethods(['getExcelFile'])
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
         $this->resultFactoryMock
             ->expects($this->once())
             ->method('create')

@@ -3,48 +3,56 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Backend\Test\Unit\Block\Store;
 
-class SwitcherTest extends \PHPUnit\Framework\TestCase
+use Magento\Backend\Block\Store\Switcher;
+use Magento\Backend\Block\Template\Context;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Store\Model\StoreManagerInterface;
+use Magento\Store\Model\Website;
+use PHPUnit\Framework\TestCase;
+
+class SwitcherTest extends TestCase
 {
     /**
-     * @var \Magento\Backend\Block\Store\Switcher
+     * @var Switcher
      */
     private $switcherBlock;
 
     private $storeManagerMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->storeManagerMock = $this->createMock(\Magento\Store\Model\StoreManagerInterface::class);
-        $objectHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $this->storeManagerMock = $this->getMockForAbstractClass(StoreManagerInterface::class);
+        $objectHelper = new ObjectManager($this);
         $context = $objectHelper->getObject(
-            \Magento\Backend\Block\Template\Context::class,
+            Context::class,
             [
                 'storeManager' => $this->storeManagerMock,
             ]
         );
 
         $this->switcherBlock = $objectHelper->getObject(
-            \Magento\Backend\Block\Store\Switcher::class,
+            Switcher::class,
             ['context' => $context]
         );
     }
 
     public function testGetWebsites()
     {
-        $websiteMock =  $this->createMock(\Magento\Store\Model\Website::class);
+        $websiteMock =  $this->createMock(Website::class);
         $websites = [0 => $websiteMock, 1 => $websiteMock];
-        $this->storeManagerMock->expects($this->once())->method('getWebsites')->will($this->returnValue($websites));
+        $this->storeManagerMock->expects($this->once())->method('getWebsites')->willReturn($websites);
         $this->assertEquals($websites, $this->switcherBlock->getWebsites());
     }
 
     public function testGetWebsitesIfSetWebsiteIds()
     {
-        $websiteMock =  $this->createMock(\Magento\Store\Model\Website::class);
+        $websiteMock =  $this->createMock(Website::class);
         $websites = [0 => $websiteMock, 1 => $websiteMock];
-        $this->storeManagerMock->expects($this->once())->method('getWebsites')->will($this->returnValue($websites));
+        $this->storeManagerMock->expects($this->once())->method('getWebsites')->willReturn($websites);
 
         $this->switcherBlock->setWebsiteIds([1]);
         $expected = [1 => $websiteMock];

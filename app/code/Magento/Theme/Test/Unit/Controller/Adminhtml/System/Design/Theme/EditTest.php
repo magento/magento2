@@ -3,12 +3,27 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Theme\Test\Unit\Controller\Adminhtml\System\Design\Theme;
+
+use Magento\Backend\Block\Menu;
+use Magento\Backend\Model\Menu\Item;
+use Magento\Framework\View\Asset\LocalInterface;
+use Magento\Framework\View\Design\ThemeInterface;
+use Magento\Framework\View\LayoutInterface;
+use Magento\Framework\View\Page\Config;
+use Magento\Framework\View\Page\Title;
+use Magento\Framework\View\Result\Page;
+use Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\Tab\Css;
+use Magento\Theme\Helper\Theme;
+use Magento\Theme\Test\Unit\Controller\Adminhtml\System\Design\ThemeTest;
+use Psr\Log\LoggerInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class EditTest extends \Magento\Theme\Test\Unit\Controller\Adminhtml\System\Design\ThemeTest
+class EditTest extends ThemeTest
 {
     /** @var string  */
     protected $name = 'Edit';
@@ -22,7 +37,7 @@ class EditTest extends \Magento\Theme\Test\Unit\Controller\Adminhtml\System\Desi
             ->willReturn($themeId);
 
         $theme = $this->getMockForAbstractClass(
-            \Magento\Framework\View\Design\ThemeInterface::class,
+            ThemeInterface::class,
             [],
             '',
             false,
@@ -45,7 +60,7 @@ class EditTest extends \Magento\Theme\Test\Unit\Controller\Adminhtml\System\Desi
 
         $this->_objectManagerMock->expects($this->once())
             ->method('create')
-            ->with(\Magento\Framework\View\Design\ThemeInterface::class)
+            ->with(ThemeInterface::class)
             ->willReturn($theme);
         $this->messageManager->expects($this->once())
             ->method('addError');
@@ -74,7 +89,7 @@ class EditTest extends \Magento\Theme\Test\Unit\Controller\Adminhtml\System\Desi
             ->willReturn($themeId);
 
         $theme = $this->getMockForAbstractClass(
-            \Magento\Framework\View\Design\ThemeInterface::class,
+            ThemeInterface::class,
             [],
             '',
             false,
@@ -97,7 +112,7 @@ class EditTest extends \Magento\Theme\Test\Unit\Controller\Adminhtml\System\Desi
 
         $this->_objectManagerMock->expects($this->once())
             ->method('create')
-            ->with(\Magento\Framework\View\Design\ThemeInterface::class)
+            ->with(ThemeInterface::class)
             ->willReturn($theme);
 
         $this->coreRegistry
@@ -105,12 +120,12 @@ class EditTest extends \Magento\Theme\Test\Unit\Controller\Adminhtml\System\Desi
             ->method('register')
             ->willThrowException(new \Exception('Message'));
 
-        $logger = $this->getMockForAbstractClass(\Psr\Log\LoggerInterface::class, [], '', false);
+        $logger = $this->getMockForAbstractClass(LoggerInterface::class, [], '', false);
         $logger->expects($this->once())
             ->method('critical');
         $this->_objectManagerMock->expects($this->once())
             ->method('get')
-            ->with(\Psr\Log\LoggerInterface::class)
+            ->with(LoggerInterface::class)
             ->willReturn($logger);
 
         $this->messageManager->expects($this->once())
@@ -138,26 +153,31 @@ class EditTest extends \Magento\Theme\Test\Unit\Controller\Adminhtml\System\Desi
     {
         $themeId = 23;
 
-        $layout = $this->getMockForAbstractClass(\Magento\Framework\View\LayoutInterface::class, [], '', false);
-        $tab = $this->createPartialMock(
-            \Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\Tab\Css::class,
-            ['setFiles', 'canShowTab']
-        );
-        $menu = $this->createPartialMock(\Magento\Backend\Block\Menu::class, ['setActive', 'getMenuModel']);
+        $layout = $this->getMockForAbstractClass(LayoutInterface::class, [], '', false);
+        $tab = $this->getMockBuilder(Css::class)
+            ->addMethods(['setFiles'])
+            ->onlyMethods(['canShowTab'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $menu = $this->getMockBuilder(Menu::class)
+            ->addMethods(['setActive'])
+            ->onlyMethods(['getMenuModel'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $menuModel = $this->createMock(\Magento\Backend\Model\Menu::class);
-        $themeHelper = $this->createMock(\Magento\Theme\Helper\Theme::class);
-        $cssAsset = $this->getMockForAbstractClass(\Magento\Framework\View\Asset\LocalInterface::class, [], '', false);
-        $menuItem = $this->createMock(\Magento\Backend\Model\Menu\Item::class);
-        $resultPage = $this->createMock(\Magento\Framework\View\Result\Page::class);
-        $pageConfig = $this->createMock(\Magento\Framework\View\Page\Config::class);
-        $pageTitle = $this->createMock(\Magento\Framework\View\Page\Title::class);
+        $themeHelper = $this->createMock(Theme::class);
+        $cssAsset = $this->getMockForAbstractClass(LocalInterface::class, [], '', false);
+        $menuItem = $this->createMock(Item::class);
+        $resultPage = $this->createMock(Page::class);
+        $pageConfig = $this->createMock(Config::class);
+        $pageTitle = $this->createMock(Title::class);
         $this->_request->expects($this->at(0))
             ->method('getParam')
             ->with('id')
             ->willReturn($themeId);
 
         $theme = $this->getMockForAbstractClass(
-            \Magento\Framework\View\Design\ThemeInterface::class,
+            ThemeInterface::class,
             [],
             '',
             false,
@@ -181,7 +201,7 @@ class EditTest extends \Magento\Theme\Test\Unit\Controller\Adminhtml\System\Desi
         $this->_objectManagerMock
             ->expects($this->once())
             ->method('create')
-            ->with(\Magento\Framework\View\Design\ThemeInterface::class)
+            ->with(ThemeInterface::class)
             ->willReturn($theme);
 
         $this->coreRegistry
@@ -228,7 +248,7 @@ class EditTest extends \Magento\Theme\Test\Unit\Controller\Adminhtml\System\Desi
             ->willReturn($cssAsset);
         $this->_objectManagerMock->expects($this->once())
             ->method('get')
-            ->with(\Magento\Theme\Helper\Theme::class)
+            ->with(Theme::class)
             ->willReturn($themeHelper);
         $this->view->expects($this->once())
             ->method('getPage')

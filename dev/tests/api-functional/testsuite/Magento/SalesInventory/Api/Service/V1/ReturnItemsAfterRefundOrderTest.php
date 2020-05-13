@@ -18,7 +18,7 @@ class ReturnItemsAfterRefundOrderTest extends \Magento\TestFramework\TestCase\We
      */
     private $objectManager;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
     }
