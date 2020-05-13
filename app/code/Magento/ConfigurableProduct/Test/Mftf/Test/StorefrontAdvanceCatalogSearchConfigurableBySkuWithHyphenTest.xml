@@ -18,9 +18,9 @@
             <testCaseId value="MC-20389"/>
             <group value="ConfigurableProduct"/>
             <group value="SearchEngineElasticsearch"/>
-<!--            <skip>-->
-<!--                <issueId value="MC-21228"/>-->
-<!--            </skip>-->
+            <skip>
+                <issueId value="MC-34217"/>
+            </skip>
         </annotations>
         <before>
             <createData entity="SimpleSubCategory" stepKey="categoryHandle" before="simple1Handle"/>
