@@ -30,14 +30,12 @@
             <createData entity="ApiSimpleProductWithNoSpace" stepKey="product3">
                 <requiredEntity createDataKey="newCategory"/>
             </createData>
-            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
             <deleteData createDataKey="product1" stepKey="deleteProduct1"/>
             <deleteData createDataKey="product2" stepKey="deleteProduct2"/>
             <deleteData createDataKey="product3" stepKey="deleteProduct3"/>
             <deleteData createDataKey="newCategory" stepKey="deleteCategory"/>
-            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutOfAdmin"/>
         </after>
 
         <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToHomePage"/>
