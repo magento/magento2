@@ -13,7 +13,8 @@ use Magento\Framework\Api\Search\SearchResultInterface;
 
 /**
  * Resolve specific attributes for search criteria.
- * @deprecated
+ *
+ * @deprecated mysql search engine has been removed
  * @see \Magento\Elasticsearch\Model\ResourceModel\Fulltext\Collection\SearchResultApplier
  */
 class SearchResultApplier implements SearchResultApplierInterface

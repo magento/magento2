@@ -14,7 +14,9 @@ namespace Magento\CatalogSearch\Model\ResourceModel;
 interface EngineInterface
 {
     /**
-     * @deprecated
+     * Field prefix
+     *
+     * @deprecated mysql search engine has been removed
      * @see \Magento\Framework\Search\EngineResolverInterface
      */
     const FIELD_PREFIX = 'attr_';

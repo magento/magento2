@@ -5,6 +5,7 @@
  */
 namespace Magento\Catalog\Model\Layer\Filter\Price;
 
+use Magento\Framework\Search\Dynamic\IntervalInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 
 /**
@@ -50,27 +51,15 @@ class AlgorithmBaseTest extends \PHPUnit\Framework\TestCase
         . 'Stabilize skipped test cases for Integration AlgorithmBaseTest with elasticsearch');
         $objectManager = Bootstrap::getObjectManager();
         $layer = $objectManager->create(\Magento\Catalog\Model\Layer\Category::class);
-        /** @var \Magento\Framework\Search\Request\Aggregation\TermBucket $termBucket */
-        $termBucket = $objectManager->create(
-            \Magento\Framework\Search\Request\Aggregation\TermBucket::class,
-            ['name' => 'name', 'field' => 'price', 'metrics' => []]
-        );
-
-        $dimensions = [
-            'scope' => $objectManager->create(
-                \Magento\Framework\Search\Request\Dimension::class,
-                ['name' => 'someName', 'value' => 'default']
-            ),
-        ];
 
         /** @var \Magento\Framework\Search\EntityMetadata $entityMetadata */
         $entityMetadata = $objectManager->create(\Magento\Framework\Search\EntityMetadata::class, ['entityId' => 'id']);
         $idKey = $entityMetadata->getEntityId();
 
         // this class has been removed
-        /** @var \Magento\Framework\Search\Adapter\Mysql\DocumentFactory $documentFactory */
+        /** @var \Magento\Elasticsearch\SearchAdapter\DocumentFactory $documentFactory */
         $documentFactory = $objectManager->create(
-            \Magento\Framework\Search\Adapter\Mysql\DocumentFactory::class,
+            \Magento\Elasticsearch\SearchAdapter\DocumentFactory::class,
             ['entityMetadata' => $entityMetadata]
         );
 
@@ -83,25 +72,12 @@ class AlgorithmBaseTest extends \PHPUnit\Framework\TestCase
             ];
             $documents[] = $documentFactory->create($rawDocument);
         }
-
-        // this class has been removed
-        /** @var \Magento\Framework\Search\Adapter\Mysql\TemporaryStorage $temporaryStorage */
-        $temporaryStorage = $objectManager->create(\Magento\Framework\Search\Adapter\Mysql\TemporaryStorage::class);
-        $table = $temporaryStorage->storeDocuments($documents);
-
-        // this class has been removed
-        /** @var \Magento\CatalogSearch\Model\Adapter\Mysql\Aggregation\DataProvider $dataProvider */
-        $dataProvider = $objectManager->create(
-            \Magento\CatalogSearch\Model\Adapter\Mysql\Aggregation\DataProvider::class
-        );
-        $select = $dataProvider->getDataSet($termBucket, $dimensions, $table);
-
-        // this class has been removed
-        /** @var \Magento\Framework\Search\Adapter\Mysql\Aggregation\IntervalFactory $intervalFactory */
+        /** @var \Magento\CatalogSearch\Model\Price\IntervalFactory $intervalFactory */
         $intervalFactory = $objectManager->create(
-            \Magento\Framework\Search\Adapter\Mysql\Aggregation\IntervalFactory::class
+            \Magento\CatalogSearch\Model\Price\IntervalFactory::class
         );
-        $interval = $intervalFactory->create(['select' => $select]);
+        /** @var \Magento\CatalogSearch\Model\Price\Interval $interval */
+        $interval = $intervalFactory->create();
 
         /** @var \Magento\Framework\Search\Dynamic\Algorithm $model */
         $model = $objectManager->create(\Magento\Framework\Search\Dynamic\Algorithm::class);

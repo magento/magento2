@@ -26,6 +26,7 @@ use Magento\TestModuleCatalogSearch\Model\ElasticsearchVersionChecker;
  * testAdvancedSearchDateField().
  * phpstan:ignore
  *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class AdapterTest extends \PHPUnit\Framework\TestCase
 {

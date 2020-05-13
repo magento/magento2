@@ -70,6 +70,7 @@ class Engine implements EngineInterface
 
     /**
      * Prepare index array as a string glued by separator
+     *
      * Support 2 level array gluing
      *
      * @param array $index

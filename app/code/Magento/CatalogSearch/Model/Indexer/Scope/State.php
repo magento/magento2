@@ -19,7 +19,7 @@ namespace Magento\CatalogSearch\Model\Indexer\Scope;
  *   which means that default indexer table should be left unchanged during indexation
  *   and temporary table should be used instead.
  *
- * @deprecated
+ * @deprecated mysql search engine has been removed
  * @see \Magento\Elasticsearch
  */
 class State

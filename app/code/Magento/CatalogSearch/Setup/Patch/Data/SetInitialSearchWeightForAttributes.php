@@ -64,6 +64,7 @@ class SetInitialSearchWeightForAttributes implements DataPatchInterface, PatchVe
                     ->save();
             }
         );
+        return $this;
     }
 
     /**

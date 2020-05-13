@@ -8,6 +8,8 @@ namespace Magento\CatalogSearch\Model\Indexer;
 
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Framework\DB\Ddl\Table;
 use Magento\Framework\Indexer\IndexStructureInterface;
 use Magento\Framework\Indexer\ScopeResolver\IndexScopeResolver;
 use Magento\Framework\Search\Request\IndexScopeResolverInterface;
@@ -87,5 +89,46 @@ class IndexStructure implements IndexStructureInterface
             $this->indexStructureEntity = $this->indexStructureFactory->create();
         }
         return $this->indexStructureEntity;
+    }
+
+    /**
+     * Create fulltext index table.
+     *
+     * @param string $tableName
+     * @throws \Zend_Db_Exception
+     * @return void
+     * @deprecated
+     * @see \Magento\ElasticSearch
+     */
+    protected function createFulltextIndex($tableName)
+    {
+        $table = $this->resource->getConnection()->newTable($tableName)
+            ->addColumn(
+                'entity_id',
+                Table::TYPE_INTEGER,
+                10,
+                ['unsigned' => true, 'nullable' => false],
+                'Entity ID'
+            )->addColumn(
+                'attribute_id',
+                Table::TYPE_INTEGER,
+                10,
+                ['unsigned' => true, 'nullable' => false]
+            )->addColumn(
+                'data_index',
+                Table::TYPE_TEXT,
+                '4g',
+                ['nullable' => true],
+                'Data index'
+            )->addIndex(
+                'idx_primary',
+                ['entity_id', 'attribute_id'],
+                ['type' => AdapterInterface::INDEX_TYPE_PRIMARY]
+            )->addIndex(
+                'FTI_FULLTEXT_DATA_INDEX',
+                ['data_index'],
+                ['type' => AdapterInterface::INDEX_TYPE_FULLTEXT]
+            );
+        $this->resource->getConnection()->createTable($table);
     }
 }

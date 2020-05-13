@@ -10,7 +10,7 @@ use Magento\Framework\Indexer\IndexStructureInterface;
 /**
  * Catalog search index structure proxy.
  *
- * @deprecated
+ * @deprecated mysql search engine has been removed
  * @see \Magento\Elasticsearch
  */
 class IndexStructureProxy implements IndexStructureInterface
