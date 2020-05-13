@@ -10,6 +10,7 @@ use Magento\Store\Api\StoreRepositoryInterface;
 use Magento\Store\Api\WebsiteRepositoryInterface;
 use Magento\Store\Model\ScopeInterface;
 use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
 
 $objectManager = Bootstrap::getObjectManager();
 
@@ -38,5 +39,5 @@ $websiteRepository = $objectManager->get(WebsiteRepositoryInterface::class);
 $website = $websiteRepository->get('test');
 $deleteConfigData($configWriter, ScopeInterface::SCOPE_WEBSITES, $website->getId());
 
-require __DIR__ . '/../../Store/_files/second_website_with_two_stores_rollback.php';
-require __DIR__ . '/../../Store/_files/store_rollback.php';
+Resolver::getInstance()->requireDataFixture('Magento/Store/_files/second_website_with_two_stores_rollback.php');
+Resolver::getInstance()->requireDataFixture('Magento/Store/_files/store_rollback.php');
