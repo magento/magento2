@@ -149,7 +149,6 @@ class Cache implements ConfigOptionsListInterface
             ),
             new FlagConfigOption(
                 self::INPUT_KEY_CACHE_ALLOW_PARALLEL_CACHE_GENERATION,
-                FlagConfigOption::FRONTEND_WIZARD_FLAG,
                 self::CONFIG_PATH_ALLOW_PARALLEL_CACHE_GENERATION,
                 'Allow generate cache in non-blocking way'
             ),
