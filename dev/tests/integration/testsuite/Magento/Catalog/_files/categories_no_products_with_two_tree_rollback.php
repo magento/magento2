@@ -5,4 +5,6 @@
  */
 declare(strict_types=1);
 
-require __DIR__ . '/categories_no_products_rollback.php';
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
+
+Resolver::getInstance()->requireDataFixture('Magento/Catalog/_files/categories_no_products_rollback.php');
