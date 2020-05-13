@@ -89,7 +89,12 @@ spec:
           - name: mountd
             containerPort: 20048
           - name: rpcbind
-            containerPort: 111        
+            containerPort: 111 
+        resources:
+            requests:
+              cpu: "250m"
+            limits:
+              cpu: "100m"       
         volumeMounts:
           - mountPath: /data
             name: nfs-pvc
