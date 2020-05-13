@@ -402,6 +402,7 @@ class Application
                 ]
             ]
         );
+        
         if ($this->canLoadArea) {
             $this->loadArea(\Magento\TestFramework\Application::DEFAULT_APP_AREA);
         }
