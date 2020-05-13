@@ -156,10 +156,11 @@ class Gd2Test extends TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
+     * Check case with invalid URL
      */
     public function testOpenInvalidURL()
     {
+        $this->expectException(\InvalidArgumentException::class);
         $this->adapter->open('bar://foo.bar');
     }
 }

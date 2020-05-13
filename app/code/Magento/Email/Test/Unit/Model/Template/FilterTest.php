@@ -475,11 +475,11 @@ class FilterTest extends TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\MailException
      * @throws NoSuchEntityException
      */
     public function testProtocolDirectiveWithInvalidSchema()
     {
+        $this->expectException(\Magento\Framework\Exception\MailException::class);
         $model = $this->getModel();
         $storeMock = $this->createMock(\Magento\Store\Model\Store::class);
         $storeMock->expects($this->once())->method('isCurrentlySecure')->willReturn(true);

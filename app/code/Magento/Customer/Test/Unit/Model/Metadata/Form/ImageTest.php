@@ -239,6 +239,11 @@ class ImageTest extends AbstractFormTestCase
             ->with(FileProcessor::TMP_DIR . '/' . $value['name'])
             ->willReturn(true);
 
+        $this->ioFileSystemMock->expects($this->once())
+            ->method('getPathInfo')
+            ->with($value['name'])
+            ->willReturn(['extension' => 'gif']);
+
         $model = $this->initialize([
             'value' => $value,
             'isAjax' => false,
@@ -284,6 +289,11 @@ class ImageTest extends AbstractFormTestCase
             ->with(FileProcessor::TMP_DIR . '/' . $value['name'])
             ->willReturn(true);
 
+        $this->ioFileSystemMock->expects($this->once())
+            ->method('getPathInfo')
+            ->with($value['name'])
+            ->willReturn(['extension' => 'gif']);
+
         $model = $this->initialize([
             'value' => $value,
             'isAjax' => false,
@@ -328,6 +338,11 @@ class ImageTest extends AbstractFormTestCase
             ->with(FileProcessor::TMP_DIR . '/' . $value['name'])
             ->willReturn(true);
 
+        $this->ioFileSystemMock->expects($this->once())
+            ->method('getPathInfo')
+            ->with($value['name'])
+            ->willReturn(['extension' => 'gif']);
+
         $model = $this->initialize([
             'value' => $value,
             'isAjax' => false,
@@ -371,6 +386,11 @@ class ImageTest extends AbstractFormTestCase
             ->method('isExist')
             ->with(FileProcessor::TMP_DIR . '/' . $value['name'])
             ->willReturn(true);
+
+        $this->ioFileSystemMock->expects($this->once())
+            ->method('getPathInfo')
+            ->with($value['name'])
+            ->willReturn(['extension' => 'gif']);
 
         $model = $this->initialize([
             'value' => $value,
