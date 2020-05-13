@@ -23,6 +23,7 @@ use Zend\View\Model\ViewModel;
  * Install controller
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @deprecated Starting from Magento 2.3.6 Web Setup Wizard is deprecated
  */
 class Install extends AbstractActionController
 {
