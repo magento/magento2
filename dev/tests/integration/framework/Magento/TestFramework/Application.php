@@ -389,7 +389,19 @@ class Application
             );
         }
         $objectManager->configure($objectManagerConfiguration);
-
+        /** Register event observer of Integration Framework */
+        /** @var \Magento\Framework\Event\Config\Data $eventConfigData */
+        $eventConfigData = $objectManager->get(\Magento\Framework\Event\Config\Data::class);
+        $eventConfigData->merge(
+            [
+                'core_app_init_current_store_after' => [
+                    'integration_tests' => [
+                        'instance' => \Magento\TestFramework\Event\Magento::class,
+                        'name' => 'integration_tests'
+                    ]
+                ]
+            ]
+        );
         if ($this->canLoadArea) {
             $this->loadArea(\Magento\TestFramework\Application::DEFAULT_APP_AREA);
         }
