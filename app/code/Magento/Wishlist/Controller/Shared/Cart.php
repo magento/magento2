@@ -76,6 +76,17 @@ class Cart implements HttpGetActionInterface
      */
     private $resultFactory;
 
+    /**
+     * @param CustomerCart $cart
+     * @param OptionFactory $optionFactory
+     * @param ItemFactory $itemFactory
+     * @param CartHelper $cartHelper
+     * @param Escaper $escaper
+     * @param RequestInterface $request
+     * @param RedirectInterface $redirect
+     * @param MessageManagerInterface $messageManager
+     * @param ResultFactory $resultFactory
+     */
     public function __construct(
         CustomerCart $cart,
         OptionFactory $optionFactory,

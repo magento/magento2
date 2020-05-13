@@ -37,6 +37,12 @@ class Allcart implements HttpGetActionInterface
      */
     private $resultFactory;
 
+    /**
+     * @param ItemCarrier $itemCarrier
+     * @param RequestInterface $request
+     * @param ResultFactory $resultFactory
+     * @param WishlistProvider $wishlistProvider
+     */
     public function __construct(
         ItemCarrier $itemCarrier,
         RequestInterface $request,
@@ -52,7 +58,7 @@ class Allcart implements HttpGetActionInterface
     /**
      * Add all items from wishlist to shopping cart
      *
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function execute()
     {
