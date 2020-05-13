@@ -15,6 +15,7 @@ use Magento\ImportExport\Model\Import as ImportModel;
 use Magento\ImportExport\Model\Import\Adapter as ImportAdapter;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Framework\Indexer\StateInterface;
+use ReflectionClass;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -93,7 +94,7 @@ class AddressTest extends \PHPUnit\Framework\TestCase
     /**
      * Init new instance of address entity adapter
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         /** @var \Magento\Catalog\Model\ResourceModel\Product $productResource */
         $this->customerResource = Bootstrap::getObjectManager()->get(
@@ -105,53 +106,6 @@ class AddressTest extends \PHPUnit\Framework\TestCase
         $this->indexerProcessor = Bootstrap::getObjectManager()->create(
             \Magento\Customer\Model\Indexer\Processor::class
         );
-    }
-
-    /**
-     * Test constructor
-     *
-     * @magentoDataFixture Magento/Customer/_files/import_export/customer_with_addresses.php
-     */
-    public function testConstruct()
-    {
-        // check entity table
-        $this->assertAttributeInternalType(
-            'string',
-            '_entityTable',
-            $this->_entityAdapter,
-            'Entity table must be a string.'
-        );
-        $this->assertAttributeNotEmpty('_entityTable', $this->_entityAdapter, 'Entity table must not be empty');
-
-        // check message templates
-        $this->assertAttributeInternalType(
-            'array',
-            'errorMessageTemplates',
-            $this->_entityAdapter,
-            'Templates must be an array.'
-        );
-        $this->assertAttributeNotEmpty('errorMessageTemplates', $this->_entityAdapter, 'Templates must not be empty');
-
-        // check attributes
-        $this->assertAttributeInternalType(
-            'array',
-            '_attributes',
-            $this->_entityAdapter,
-            'Attributes must be an array.'
-        );
-        $this->assertAttributeNotEmpty('_attributes', $this->_entityAdapter, 'Attributes must not be empty');
-
-        // check country regions and regions
-        $this->assertAttributeInternalType(
-            'array',
-            '_countryRegions',
-            $this->_entityAdapter,
-            'Country regions must be an array.'
-        );
-        $this->assertAttributeNotEmpty('_countryRegions', $this->_entityAdapter, 'Country regions must not be empty');
-
-        $this->assertAttributeInternalType('array', '_regions', $this->_entityAdapter, 'Regions must be an array.');
-        $this->assertAttributeNotEmpty('_regions', $this->_entityAdapter, 'Regions must not be empty');
     }
 
     /**

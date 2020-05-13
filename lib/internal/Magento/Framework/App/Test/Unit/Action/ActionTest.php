@@ -3,22 +3,25 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Framework\App\Test\Unit\Action;
 
-use \Magento\Framework\App\Action\Action;
-
+use Magento\Framework\App\Action\Action;
 use Magento\Framework\App\ActionFlag;
 use Magento\Framework\App\Request\Http as HttpRequest;
+
 use Magento\Framework\App\Response\RedirectInterface;
 use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\App\ViewInterface;
 use Magento\Framework\Event\ManagerInterface;
+use Magento\Framework\Profiler;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Framework\View\Page\Config as PageConfig;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class ActionTest extends \PHPUnit\Framework\TestCase
+class ActionTest extends TestCase
 {
     /**
      * @var ActionFake
@@ -73,17 +76,20 @@ class ActionTest extends \PHPUnit\Framework\TestCase
 
     public static $actionParams = ['param' => 'value'];
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->_eventManagerMock = $this->createMock(ManagerInterface::class);
+        $this->_eventManagerMock = $this->getMockForAbstractClass(ManagerInterface::class);
         $this->_actionFlagMock = $this->createMock(ActionFlag::class);
-        $this->_redirectMock = $this->createMock(RedirectInterface::class);
+        $this->_redirectMock = $this->getMockForAbstractClass(RedirectInterface::class);
         $this->_requestMock = $this->createMock(HttpRequest::class);
-        $this->_responseMock = $this->createMock(ResponseInterface::class);
+        $this->_responseMock = $this->getMockForAbstractClass(ResponseInterface::class);
 
-        $this->pageConfigMock = $this->createPartialMock(PageConfig::class, ['getConfig']);
-        $this->viewMock = $this->createMock(ViewInterface::class);
-        $this->viewMock->expects($this->any())->method('getPage')->will($this->returnValue($this->pageConfigMock));
+        $this->pageConfigMock = $this->getMockBuilder(PageConfig::class)
+            ->addMethods(['getConfig'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->viewMock = $this->getMockForAbstractClass(ViewInterface::class);
+        $this->viewMock->expects($this->any())->method('getPage')->willReturn($this->pageConfigMock);
         $this->pageConfigMock->expects($this->any())->method('getConfig')->willReturn(1);
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
@@ -98,7 +104,7 @@ class ActionTest extends \PHPUnit\Framework\TestCase
                 'view' => $this->viewMock,
             ]
         );
-        \Magento\Framework\Profiler::disable();
+        Profiler::disable();
     }
 
     public function testDispatchPostDispatch()

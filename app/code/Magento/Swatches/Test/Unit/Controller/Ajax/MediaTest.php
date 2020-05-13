@@ -57,7 +57,7 @@ class MediaTest extends TestCase
     /** @var Media */
     private $mediaAction;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->mediaGalleryStub = [
             'image' => '/m/a/magento.png',

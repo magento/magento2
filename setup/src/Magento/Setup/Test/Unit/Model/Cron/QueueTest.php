@@ -3,24 +3,32 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Setup\Test\Unit\Model\Cron;
 
+use Magento\Setup\Model\Cron\AbstractJob;
+use Magento\Setup\Model\Cron\JobFactory;
 use Magento\Setup\Model\Cron\Queue;
+use Magento\Setup\Model\Cron\Queue\Reader;
+use Magento\Setup\Model\Cron\Queue\Writer;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class QueueTest extends \PHPUnit\Framework\TestCase
+class QueueTest extends TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Setup\Model\Cron\Queue\Reader
+     * @var MockObject|Reader
      */
     private $reader;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Setup\Model\Cron\Queue\Writer
+     * @var MockObject|Writer
      */
     private $writer;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Setup\Model\Cron\JobFactory
+     * @var MockObject|JobFactory
      */
     private $jobFactory;
 
@@ -29,11 +37,11 @@ class QueueTest extends \PHPUnit\Framework\TestCase
      */
     private $queue;
 
-    public function setUp()
+    protected function setUp(): void
     {
-        $this->reader = $this->createMock(\Magento\Setup\Model\Cron\Queue\Reader::class);
-        $this->writer = $this->createMock(\Magento\Setup\Model\Cron\Queue\Writer::class);
-        $this->jobFactory = $this->createMock(\Magento\Setup\Model\Cron\JobFactory::class);
+        $this->reader = $this->createMock(Reader::class);
+        $this->writer = $this->createMock(Writer::class);
+        $this->jobFactory = $this->createMock(JobFactory::class);
         $this->queue = new Queue($this->reader, $this->writer, $this->jobFactory);
     }
 
@@ -53,24 +61,20 @@ class QueueTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals([], $this->queue->peek());
     }
 
-    /**
-     * @expectedException \RuntimeException
-     * @expectedExceptionMessage "params" field is missing for one or more jobs
-     */
     public function testPeekException()
     {
+        $this->expectException('RuntimeException');
+        $this->expectExceptionMessage('"params" field is missing for one or more jobs');
         $this->reader->expects($this->once())
             ->method('read')
             ->willReturn('{"jobs": [{"name": "job A"}, {"name": "job B"}]}');
         $this->queue->peek();
     }
 
-    /**
-     * @expectedException \RuntimeException
-     * @expectedExceptionMessage "jobs" field is missing or is not an array
-     */
     public function testPeekExceptionNoJobsKey()
     {
+        $this->expectException('RuntimeException');
+        $this->expectExceptionMessage('"jobs" field is missing or is not an array');
         $this->reader->expects($this->once())
             ->method('read')
             ->willReturn('{"foo": "bar"}');
@@ -82,7 +86,7 @@ class QueueTest extends \PHPUnit\Framework\TestCase
         $this->reader->expects($this->once())
             ->method('read')
             ->willReturn('{"jobs": [{"name": "job A", "params" : []}, {"name": "job B", "params" : []}]}');
-        $job = $this->getMockForAbstractClass(\Magento\Setup\Model\Cron\AbstractJob::class, [], '', false);
+        $job = $this->getMockForAbstractClass(AbstractJob::class, [], '', false);
         $this->jobFactory->expects($this->once())->method('create')->with('job A', [])->willReturn($job);
         $rawData = ['jobs' => [['name' => 'job B', 'params' => []]]];
         $this->writer->expects($this->once())->method('write')->with(json_encode($rawData, JSON_PRETTY_PRINT));
@@ -94,18 +98,16 @@ class QueueTest extends \PHPUnit\Framework\TestCase
         $this->reader->expects($this->once())
             ->method('read')
             ->willReturn('{"jobs": [{"name": "job A", "params" : []}]}');
-        $job = $this->getMockForAbstractClass(\Magento\Setup\Model\Cron\AbstractJob::class, [], '', false);
+        $job = $this->getMockForAbstractClass(AbstractJob::class, [], '', false);
         $this->jobFactory->expects($this->once())->method('create')->with('job A', [])->willReturn($job);
         $this->writer->expects($this->once())->method('write')->with('');
         $this->assertEquals($job, $this->queue->popQueuedJob());
     }
 
-    /**
-     * @expectedException \RuntimeException
-     * @expectedExceptionMessage "params" field is missing for one or more jobs
-     */
     public function testPopQueuedJobException()
     {
+        $this->expectException('RuntimeException');
+        $this->expectExceptionMessage('"params" field is missing for one or more jobs');
         $this->reader->expects($this->once())
             ->method('read')
             ->willReturn('{"jobs": [{"name": "job A"}, {"name": "job B"}]}');
@@ -113,12 +115,10 @@ class QueueTest extends \PHPUnit\Framework\TestCase
         $this->queue->popQueuedJob();
     }
 
-    /**
-     * @expectedException \RuntimeException
-     * @expectedExceptionMessage "jobs" field is missing or is not an array
-     */
     public function testPopQueuedJobExceptionNoJobsKey()
     {
+        $this->expectException('RuntimeException');
+        $this->expectExceptionMessage('"jobs" field is missing or is not an array');
         $this->reader->expects($this->once())
             ->method('read')
             ->willReturn('{"foo": "bar"}');
@@ -158,12 +158,10 @@ class QueueTest extends \PHPUnit\Framework\TestCase
         $this->queue->addJobs([['name' => 'job A', 'params' => []], ['name' => 'job B', 'params' => []]]);
     }
 
-    /**
-     * @expectedException \RuntimeException
-     * @expectedExceptionMessage field is missing for one or more jobs
-     */
     public function testAddJobsInvalidJobs()
     {
+        $this->expectException('RuntimeException');
+        $this->expectExceptionMessage('field is missing for one or more jobs');
         $this->queue->addJobs([['no_name' => 'no job', 'no_params' => []]]);
     }
 }

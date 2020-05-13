@@ -3,29 +3,35 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Setup\Test\Unit\Controller;
 
-use \Magento\Setup\Controller\SelectVersion;
-use \Magento\Setup\Controller\ResponseTypeInterface;
+use Laminas\View\Model\JsonModel;
+use Laminas\View\Model\ViewModel;
+use Magento\Setup\Controller\ResponseTypeInterface;
+use Magento\Setup\Controller\SelectVersion;
+use Magento\Setup\Model\SystemPackage;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class SelectVersionTest extends \PHPUnit\Framework\TestCase
+class SelectVersionTest extends TestCase
 {
     /**
-     * @var \Magento\Setup\Model\SystemPackage|\PHPUnit_Framework_MockObject_MockObject
+     * @var SystemPackage|MockObject
      */
     private $systemPackage;
 
     /**
      * Controller
      *
-     * @var \Magento\Setup\Controller\SelectVersion
+     * @var SelectVersion
      */
     private $controller;
 
-    public function setUp()
+    protected function setUp(): void
     {
-        $this->systemPackage = $this->createMock(\Magento\Setup\Model\SystemPackage::class);
+        $this->systemPackage = $this->createMock(SystemPackage::class);
         $this->controller = new SelectVersion(
             $this->systemPackage
         );
@@ -34,7 +40,7 @@ class SelectVersionTest extends \PHPUnit\Framework\TestCase
     public function testIndexAction()
     {
         $viewModel = $this->controller->indexAction();
-        $this->assertInstanceOf(\Zend\View\Model\ViewModel::class, $viewModel);
+        $this->assertInstanceOf(ViewModel::class, $viewModel);
         $this->assertTrue($viewModel->terminate());
     }
 
@@ -50,7 +56,7 @@ class SelectVersionTest extends \PHPUnit\Framework\TestCase
                 ]
             ]);
         $jsonModel = $this->controller->systemPackageAction();
-        $this->assertInstanceOf(\Zend\View\Model\JsonModel::class, $jsonModel);
+        $this->assertInstanceOf(JsonModel::class, $jsonModel);
         $variables = $jsonModel->getVariables();
         $this->assertArrayHasKey('responseType', $variables);
         $this->assertEquals(ResponseTypeInterface::RESPONSE_TYPE_SUCCESS, $variables['responseType']);
@@ -60,9 +66,9 @@ class SelectVersionTest extends \PHPUnit\Framework\TestCase
     {
         $this->systemPackage->expects($this->once())
             ->method('getPackageVersions')
-            ->will($this->throwException(new \Exception("Test error message")));
+            ->willThrowException(new \Exception("Test error message"));
         $jsonModel = $this->controller->systemPackageAction();
-        $this->assertInstanceOf(\Zend\View\Model\JsonModel::class, $jsonModel);
+        $this->assertInstanceOf(JsonModel::class, $jsonModel);
         $variables = $jsonModel->getVariables();
         $this->assertArrayHasKey('responseType', $variables);
         $this->assertEquals(ResponseTypeInterface::RESPONSE_TYPE_ERROR, $variables['responseType']);
@@ -80,7 +86,7 @@ class SelectVersionTest extends \PHPUnit\Framework\TestCase
                 ]
             ]);
         $jsonModel = $this->controller->installedSystemPackageAction();
-        $this->assertInstanceOf(\Zend\View\Model\JsonModel::class, $jsonModel);
+        $this->assertInstanceOf(JsonModel::class, $jsonModel);
         $variables = $jsonModel->getVariables();
         $this->assertArrayHasKey('responseType', $variables);
         $this->assertEquals(ResponseTypeInterface::RESPONSE_TYPE_SUCCESS, $variables['responseType']);
@@ -90,7 +96,7 @@ class SelectVersionTest extends \PHPUnit\Framework\TestCase
     {
         $this->systemPackage->expects($this->once())
             ->method('getInstalledSystemPackages')
-            ->will($this->throwException(new \Exception("Test error message")));
+            ->willThrowException(new \Exception("Test error message"));
         $jsonModel = $this->controller->installedSystemPackageAction();
         $variables = $jsonModel->getVariables();
         $this->assertArrayHasKey('responseType', $variables);

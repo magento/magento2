@@ -32,7 +32,7 @@ class PriceFilterTest extends AbstractFiltersTest
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->moduleManager = $this->objectManager->get(Manager::class);

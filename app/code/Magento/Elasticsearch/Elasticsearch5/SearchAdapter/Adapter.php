@@ -24,24 +24,24 @@ class Adapter implements AdapterInterface
      *
      * @var Mapper
      */
-    protected $mapper;
+    private $mapper;
 
     /**
      * Response Factory
      *
      * @var ResponseFactory
      */
-    protected $responseFactory;
+    private $responseFactory;
 
     /**
      * @var ConnectionManager
      */
-    protected $connectionManager;
+    private $connectionManager;
 
     /**
      * @var AggregationBuilder
      */
-    protected $aggregationBuilder;
+    private $aggregationBuilder;
 
     /**
      * @var QueryContainerFactory

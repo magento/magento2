@@ -457,6 +457,9 @@
         <constraint xsi:type="foreign" referenceId="CUSTOMER_EAV_ATTRIBUTE_ATTRIBUTE_ID_EAV_ATTRIBUTE_ATTRIBUTE_ID"
                     table="customer_eav_attribute" column="attribute_id" referenceTable="eav_attribute"
                     referenceColumn="attribute_id" onDelete="CASCADE"/>
+        <index referenceId="CUSTOMER_EAV_ATTRIBUTE_SORT_ORDER" indexType="btree">
+            <column name="sort_order"/>
+        </index>
     </table>
     <table name="customer_form_attribute" resource="default" engine="innodb" comment="Customer Form Attribute">
         <column xsi:type="varchar" name="form_code" nullable="false" length="32" comment="Form Code"/>
