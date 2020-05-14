@@ -8,5 +8,6 @@
 <view xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Config/etc/view.xsd">
     <vars module="Magento_Catalog">
         <var name="product_image_white_borders">1</var>
+        <var name="enable_lazy_loading_for_images_without_borders">0</var> <!-- variable to enable lazy loading for catalog product images without borders -->
     </vars>
 </view>
