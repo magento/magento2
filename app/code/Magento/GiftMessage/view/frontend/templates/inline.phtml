@@ -448,11 +448,10 @@ script;
             </dt>
         </dl>
     </fieldset>
+    <?php $entityId = (int) $block->getEntity()->getId(); ?>
     <script type="text/x-magento-init">
         {
-            "#allow_gift_options_<?= (int) $block->getEntity()->getId() ?>,
-             #allow_gift_options_for_order_<?= (int) $block->getEntity()->getId() ?>,
-              #allow_gift_options_for_items_<?= (int) $block->getEntity()->getId() ?>": {
+            "#allow_gift_options_<?= /* @noEscape */ $entityId ?>, #allow_gift_options_for_order_<?= /* @noEscape */ $entityId ?>, #allow_gift_options_for_items_<?= /* @noEscape */ $entityId ?>": {
                 "giftOptions": {}
             }
         }

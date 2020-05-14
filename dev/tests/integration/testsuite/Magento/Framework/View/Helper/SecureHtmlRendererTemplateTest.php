@@ -28,19 +28,19 @@ class SecureHtmlRendererTemplateTest extends AbstractController
         $this->dispatch('securehtml/secure/helper');
         $content = $this->getResponse()->getContent();
 
-        $this->assertContains(
+        $this->assertStringContainsString(
             '<h1 onclick="alert&#x28;&#x29;">Hello there!</h1>',
             $content
         );
-        $this->assertContains(
+        $this->assertStringContainsString(
             '<script src="http&#x3A;&#x2F;&#x2F;my.magento.com&#x2F;static&#x2F;script.js"/>',
             $content
         );
-        $this->assertContains(
+        $this->assertStringContainsString(
             "<script>\n    let myVar = 1;\n</script>",
             $content
         );
-        $this->assertContains(
+        $this->assertStringContainsString(
             '<div>I am just &lt;a&gt; text</div>',
             $content
         );

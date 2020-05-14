@@ -33,11 +33,6 @@ class LinkTest extends TestCase
      */
     private $objectManager;
 
-    protected function setUp(): void
-    {
-        $this->objectManager = new ObjectManager($this);
-    }
-
     /**
      * @var array
      */

@@ -72,12 +72,12 @@ class ButtonTest extends TestCase
         );
 
         $html = $block->toHtml();
-        $this->assertContains('<button ', $html);
-        $this->assertContains('<span>A button control</span>', $html);
-        $this->assertNotContains('onclick=', $html);
-        $this->assertNotContains('style=', $html);
-        $this->assertRegExp('/\<script.*?\>.*?' .preg_quote($onclick) .'.*?\<\/script\>/ims', $html);
-        $this->assertContains('height', $html);
-        $this->assertContains('200px', $html);
+        $this->assertStringContainsString('<button ', $html);
+        $this->assertStringContainsString('<span>A button control</span>', $html);
+        $this->assertStringNotContainsString('onclick=', $html);
+        $this->assertStringNotContainsString('style=', $html);
+        $this->assertMatchesRegularExpression('/\<script.*?\>.*?' .preg_quote($onclick) .'.*?\<\/script\>/ims', $html);
+        $this->assertStringContainsString('height', $html);
+        $this->assertStringContainsString('200px', $html);
     }
 }

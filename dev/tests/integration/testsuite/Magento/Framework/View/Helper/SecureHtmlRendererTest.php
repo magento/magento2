@@ -97,9 +97,9 @@ class SecureHtmlRendererTest extends TestCase
     public function testRenderEventListenerAsTag(): void
     {
         $html = $this->helper->renderEventListenerAsTag('onclick', 'alert(1)', '#id');
-        $this->assertContains('alert(1)', $html);
-        $this->assertContains('#id', $html);
-        $this->assertContains('click', $html);
+        $this->assertStringContainsString('alert(1)', $html);
+        $this->assertStringContainsString('#id', $html);
+        $this->assertStringContainsString('click', $html);
     }
 
     /**
@@ -121,21 +121,21 @@ class SecureHtmlRendererTest extends TestCase
     public function testRenderStyleAsTag(): void
     {
         $html = $this->helper->renderStyleAsTag('display: none; font-size: 3em;  ', '#id');
-        $this->assertContains('#id', $html);
-        $this->assertContains('display', $html);
-        $this->assertContains('none', $html);
-        $this->assertContains('fontSize', $html);
-        $this->assertContains('3em', $html);
+        $this->assertStringContainsString('#id', $html);
+        $this->assertStringContainsString('display', $html);
+        $this->assertStringContainsString('none', $html);
+        $this->assertStringContainsString('fontSize', $html);
+        $this->assertStringContainsString('3em', $html);
     }
 
     /**
      * Check style validation
      *
      * @return void
-     * @expectedException \InvalidArgumentException
      */
     public function testInvalidStyle(): void
     {
+        $this->expectException(\InvalidArgumentException::class);
         $this->helper->renderStyleAsTag('display;', '');
     }
 }

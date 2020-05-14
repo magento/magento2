@@ -45,7 +45,7 @@ class ConfigCollectorTest extends TestCase
                 'child-src',
                 false,
                 ['http://magento.com', 'http://devdocs.magento.com'],
-                ['http'],
+                ['http', 'https', 'blob'],
                 true,
                 true,
                 false,
