@@ -1,0 +1,10 @@
+# Copyright © Magento, Inc. All rights reserved.
+# See COPYING.txt for license details.
+
+type Mutation {
+    subscribeNewsletter (email: String!, storeId: Int!): NewsletterOutput @resolver(class: "\\Magento\\NewsletterGraphQl\\Model\\Resolver\\SubscribeNewsletter") @doc(description:"Subscribe Newsletter")
+}
+
+type NewsletterOutput {
+    result: Boolean!
+}

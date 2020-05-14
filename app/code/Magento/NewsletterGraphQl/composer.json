@@ -1,0 +1,24 @@
+{
+    "name": "magento/module-newsletter-graph-ql",
+    "description": "N/A",
+    "type": "magento2-module",
+    "require": {
+        "php": "~7.1.3||~7.2.0||~7.3.0",
+        "magento/framework": "*",
+        "magento/module-graph-ql": "*",
+        "magento/module-newsletter": "*",
+        "magento/module-store": "*"
+    },
+    "license": [
+        "OSL-3.0",
+        "AFL-3.0"
+    ],
+    "autoload": {
+        "files": [
+            "registration.php"
+        ],
+        "psr-4": {
+            "Magento\\NewsletterGraphQl\\": ""
+        }
+    }
+}
