@@ -19,7 +19,7 @@
             <group value="catalog"/>
             <group value="widget"/>
             <skip>
-                <issueId value="MC-33099"/>
+                <issueId value="MC-34091"/>
             </skip>
         </annotations>
         <before>
