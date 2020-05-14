@@ -117,7 +117,7 @@ class Breadcrumbs extends DataObject implements ArgumentInterface
      * Returns breadcrumb json.
      *
      * @return string
-     * @deprecated 103.0.0 in favor of new method with name {suffix}Html{postfix}()
+     * @deprecated 102.0.11 in favor of new method with name {suffix}Html{postfix}()
      */
     public function getJsonConfiguration()
     {

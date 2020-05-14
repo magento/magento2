@@ -22,6 +22,8 @@ use Psr\Log\LoggerInterface;
 
 /**
  * Integration tests for Carrier model class
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class CarrierTest extends TestCase
 {
@@ -240,6 +242,7 @@ class CarrierTest extends TestCase
     public function testRequestToShipment(): void
     {
         //phpcs:disable Magento2.Functions.DiscouragedFunction
+        $expectedShipmentRequest = file_get_contents(__DIR__ .'/../_files/ShipmentConfirmRequest.xml');
         $shipmentResponse = file_get_contents(__DIR__ .'/../_files/ShipmentConfirmResponse.xml');
         $acceptResponse = file_get_contents(__DIR__ .'/../_files/ShipmentAcceptResponse.xml');
         //phpcs:enable Magento2.Functions.DiscouragedFunction
@@ -249,6 +252,8 @@ class CarrierTest extends TestCase
                 new Response(200, [], $acceptResponse)
             ]
         );
+        $this->httpClient->clearRequests();
+
         $request = new Request(
             [
                 'packages' => [
@@ -269,11 +274,37 @@ class CarrierTest extends TestCase
                             ],
                         ],
                     ],
+                    'package2' => [
+                        'params' => [
+                            'width' => '4',
+                            'length' => '4',
+                            'height' => '4',
+                            'dimension_units' => 'INCH',
+                            'weight_units' => 'POUND',
+                            'weight' => '0.55',
+                            'customs_value' => '20.00',
+                            'container' => 'Large Express Box',
+                        ],
+                        'items' => [
+                            'item2' => [
+                                'name' => 'item2_name',
+                            ],
+                        ],
+                    ],
                 ]
             ]
         );
 
         $result = $this->carrier->requestToShipment($request);
+
+        $requests = $this->httpClient->getRequests();
+        $this->assertNotEmpty($requests);
+        $shipmentRequest = $this->extractShipmentRequest($requests[0]->getBody());
+        $this->assertEquals(
+            $this->formatXml($expectedShipmentRequest),
+            $this->formatXml($shipmentRequest)
+        );
+
         $this->assertEmpty($result->getErrors());
         $this->assertNotEmpty($result->getInfo());
         $this->assertEquals(
@@ -281,5 +312,44 @@ class CarrierTest extends TestCase
             $result->getInfo()[0]['tracking_number'],
             'Tracking Number must match.'
         );
+        $this->assertEquals(
+            '2V467W886398839541',
+            $result->getInfo()[1]['tracking_number'],
+            'Tracking Number must match.'
+        );
+        $this->httpClient->clearRequests();
+    }
+
+    /**
+     * Extracts shipment request.
+     *
+     * @param string $requestBody
+     * @return string
+     */
+    private function extractShipmentRequest(string $requestBody): string
+    {
+        $resultXml = '';
+        $pattern = '%(<\?xml version="1.0"\?>\n<ShipmentConfirmRequest)(.*)$%im';
+        if (preg_match($pattern, $requestBody, $result)) {
+            $resultXml = array_shift($result);
+        }
+
+        return $resultXml;
+    }
+
+    /**
+     * Format XML string.
+     *
+     * @param string $xmlString
+     * @return string
+     */
+    private function formatXml(string $xmlString): string
+    {
+        $xmlDocument = new \DOMDocument('1.0');
+        $xmlDocument->preserveWhiteSpace = false;
+        $xmlDocument->formatOutput = true;
+        $xmlDocument->loadXML($xmlString);
+
+        return $xmlDocument->saveXML();
     }
 }
