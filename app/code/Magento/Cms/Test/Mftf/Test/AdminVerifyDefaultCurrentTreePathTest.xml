@@ -11,7 +11,7 @@
         <annotations>
             <features value="Cms"/>
             <group value="Cms"/>
-             <stories value="CMS Block Creation and Reset Removal"/>
+            <stories value="MediaGallery Verify Preselcted folders on Category Page"/>
             <title value="Admin should be see preselcted default folder in Media Gallery"/>
             <description value="Admin should be see preselcted default folder in Media Gallery"/>
         </annotations>        
@@ -23,7 +23,7 @@
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
-	<actionGroup ref="NavigateToMediaGalleryActionGroup" stepKey="navigateToMediaGallery"/>
+        <actionGroup ref="NavigateToMediaGalleryActionGroup" stepKey="navigateToMediaGallery"/>
         <!-- Verify catalog/category folder selected -->
         <waitForPageLoad stepKey="waitForFoldersLoad"/>
         <seeElement selector="{{MediaGallerySection.higlightedFolder('Y2F0YWxvZy9jYXRlZ29yeQ--')}}" stepKey="assertCategoryFolder"/>
