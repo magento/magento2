@@ -175,8 +175,7 @@ class LegacyResolver implements VariableResolverInterface
      */
     private function isMethodCallable($object, string $method): bool
     {
-        if (
-            method_exists($object, $method)
+        if (method_exists($object, $method)
             && substr($method, 0, 3) !== 'set'
             && $method !== '___callParent'
         ) {
