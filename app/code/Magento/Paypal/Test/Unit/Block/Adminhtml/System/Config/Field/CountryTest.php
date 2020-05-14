@@ -130,7 +130,7 @@ class CountryTest extends TestCase
         }
         $this->_jsHelper->expects($this->once())
             ->method('getScript')
-            ->with(new LogicalAnd($constraints));
+            ->with(self::logicalAnd($constraints));
         $this->_url->expects($this->once())
             ->method('getUrl')
             ->with(

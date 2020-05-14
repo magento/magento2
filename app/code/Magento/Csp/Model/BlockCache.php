@@ -70,6 +70,7 @@ class BlockCache implements CacheInterface
             }
         } catch (\Throwable $exception) {
             //Most likely block HTML was cached without policy data.
+            $data = null;
         }
         if ($data) {
             foreach ($data['policies'] as $policyData) {

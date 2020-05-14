@@ -44,6 +44,7 @@ class ButtonTest extends TestCase
     {
         $this->escaperMock = $this->createMock(Escaper::class);
         $this->escaperMock->expects($this->any())->method('escapeHtml')->willReturnArgument(0);
+        $this->escaperMock->expects($this->any())->method('escapeHtmlAttr')->willReturnArgument(0);
         $this->contextMock = $this->createPartialMock(Context::class, ['getEscaper']);
         $this->contextMock->expects($this->any())->method('getEscaper')->willReturn($this->escaperMock);
         $randomMock = $this->createMock(Random::class);

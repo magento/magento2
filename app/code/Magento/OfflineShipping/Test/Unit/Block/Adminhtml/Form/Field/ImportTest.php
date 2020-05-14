@@ -91,7 +91,7 @@ class ImportTest extends TestCase
             '<input id="time_condition" type="hidden" name="test_name" value="',
             $testString
         );
-        $this->assertStringEndsWith(
+        $this->assertStringContainsString(
             '<input id="test_name_prefixtest_html_idtest_name_suffix" ' .
             'name="test_name"  data-ui-id="form-element-test_name" value="" type="file"',
             $testString

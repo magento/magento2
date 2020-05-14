@@ -23,10 +23,6 @@ class CspTest extends AbstractController
      */
     private function searchInResponse($response, string $search): bool
     {
-        if (mb_stripos(mb_strtolower($response->getBody()), mb_strtolower($search)) !== false) {
-            return true;
-        }
-
         foreach ($response->getHeaders() as $header) {
             if (mb_stripos(mb_strtolower($header->toString()), mb_strtolower($search)) !== false) {
                 return true;

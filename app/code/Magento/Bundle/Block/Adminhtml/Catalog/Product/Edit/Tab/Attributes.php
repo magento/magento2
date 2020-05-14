@@ -127,9 +127,7 @@ class Attributes extends \Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Attri
                 });
                 ";
 
-            $tax->setAfterElementHtml(
-                /* @noEscape */ $this->secureRenderer->renderTag('script', [], $scriptString, false)
-            );
+            $tax->setAfterElementHtml($this->secureRenderer->renderTag('script', [], $scriptString, false));
         }
 
         $weight = $this->getForm()->getElement('weight');

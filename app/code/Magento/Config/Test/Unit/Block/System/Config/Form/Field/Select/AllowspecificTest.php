@@ -92,7 +92,7 @@ class AllowspecificTest extends TestCase
 
         $this->assertStringEndsWith('</script>' . $afterHtmlCode, $actual);
         $this->assertStringStartsWith('<script >', trim($actual));
-        $this->assertContains('test_prefix_spec_element_test_suffix', $actual);
+        $this->assertStringContainsString('test_prefix_spec_element_test_suffix', $actual);
     }
 
     /**
