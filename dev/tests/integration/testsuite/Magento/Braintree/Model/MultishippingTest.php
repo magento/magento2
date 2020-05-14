@@ -21,7 +21,7 @@ use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Sales\Model\Order\Email\Sender\OrderSender;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\ObjectManager;
-use \PHPUnit\Framework\MockObject\MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject as MockObject;
 use Magento\Payment\Gateway\Command\ResultInterface as CommandResultInterface;
 
 /**
@@ -118,7 +118,7 @@ class MultishippingTest extends \PHPUnit\Framework\TestCase
     private function createOrders()
     {
         $expectedPlacedOrdersNumber = 3;
-        $quote = $this->getQuote('multishipping_quote_id_braintree');
+        $quote = $this->getQuote('multishipping_quote_id');
 
         /** @var CheckoutSession $session */
         $session = $this->objectManager->get(CheckoutSession::class);

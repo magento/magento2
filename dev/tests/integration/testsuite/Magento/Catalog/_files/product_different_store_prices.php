@@ -4,6 +4,7 @@
  * See COPYING.txt for license details.
  */
 
+use Magento\Store\Api\StoreRepositoryInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Framework\Indexer\IndexerRegistry;
 use Magento\Catalog\Model\Product;
@@ -11,8 +12,9 @@ use Magento\Catalog\Model\Product\Type;
 use Magento\Catalog\Model\Product\Visibility;
 use Magento\Catalog\Model\Product\Attribute\Source\Status;
 use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
 
-require __DIR__ . '/../../Store/_files/core_fixturestore.php';
+Resolver::getInstance()->requireDataFixture('Magento/Store/_files/core_fixturestore.php');
 
 $objectManager = Bootstrap::getObjectManager();
 
@@ -21,7 +23,9 @@ $indexerRegistry = $objectManager->create(IndexerRegistry::class);
 $indexer =  $indexerRegistry->get('catalogsearch_fulltext');
 
 $indexer->reindexAll();
-
+/** @var StoreRepositoryInterface $storeRepository */
+$storeRepository = $objectManager->get(StoreRepositoryInterface::class);
+$store = $storeRepository->get('fixturestore');
 /** @var $product Product */
 $product = $objectManager->create(Product::class);
 $product->isObjectNew(true);
