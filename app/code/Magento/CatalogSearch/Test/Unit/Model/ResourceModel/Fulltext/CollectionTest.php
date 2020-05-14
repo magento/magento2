@@ -280,7 +280,7 @@ class CollectionTest extends TestCase
     /**
      * Get Mocks for StoreManager so Collection can be used.
      *
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     private function getStoreManager()
     {
@@ -306,7 +306,7 @@ class CollectionTest extends TestCase
     /**
      * Get mock for UniversalFactory so Collection can be used.
      *
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     private function getUniversalFactory()
     {

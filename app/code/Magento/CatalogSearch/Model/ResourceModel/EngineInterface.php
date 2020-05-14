@@ -14,7 +14,7 @@ namespace Magento\CatalogSearch\Model\ResourceModel;
 interface EngineInterface
 {
     /**
-     * Field prefix
+     * Field prefix constant
      *
      * @deprecated mysql search engine has been removed
      * @see \Magento\Framework\Search\EngineResolverInterface
@@ -22,7 +22,7 @@ interface EngineInterface
     const FIELD_PREFIX = 'attr_';
 
     /**
-     * Scope identifier
+     * Scope identifier constant
      *
      * @deprecated since using engine resolver
      * @see \Magento\Framework\Search\EngineResolverInterface
