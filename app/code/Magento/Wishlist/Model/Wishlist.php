@@ -748,10 +748,11 @@ class Wishlist extends AbstractModel implements IdentityInterface
                 throw new LocalizedException(__($resultItem));
             }
 
+            if ($resultItem->getDescription() != $item->getDescription()) {
+                $resultItem->setDescription($item->getDescription())->save();
+            }
+
             if ($resultItem->getId() != $itemId) {
-                if ($resultItem->getDescription() != $item->getDescription()) {
-                    $resultItem->setDescription($item->getDescription())->save();
-                }
                 $item->isDeleted(true);
                 $this->setDataChanges(true);
             } else {
