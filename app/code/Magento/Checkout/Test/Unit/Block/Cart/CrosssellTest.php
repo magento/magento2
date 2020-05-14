@@ -66,7 +66,7 @@ class CrosssellTest extends TestCase
     /**
      * @inheritDoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
         $this->storeManager = $this->createMock(
@@ -78,13 +78,12 @@ class CrosssellTest extends TestCase
                 'storeManager' => $this->storeManager
             ]
         );
-        $this->checkoutSession = $this->createPartialMock(
-            Session::class,
-            [
-                'getQuote',
-                'getLastAddedProductId'
-            ]
-        );
+        $this->checkoutSession = $this
+            ->getMockBuilder(Session::class)
+            ->addMethods(['getLastAddedProductId'])
+            ->onlyMethods(['getQuote'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->productRepository = $this->createMock(
             ProductRepositoryInterface::class
         );
