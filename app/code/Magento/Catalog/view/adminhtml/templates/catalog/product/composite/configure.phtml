@@ -11,33 +11,34 @@
     <?= /* @noEscape */ $secureRenderer->renderEventListenerAsTag(
         'onload',
         "window.productConfigure && productConfigure.onLoadIFrame()",
-        '#product_composite_configure_iframe'
+        'iframe[name=\'product_composite_configure_iframe\']:last-of-type'
     ) ?>
     <?= /* @noEscape */ $secureRenderer->renderStyleAsTag(
         "width:0; height:0; border:0px solid #fff; position:absolute; top:-1000px; left:-1000px",
-        '#product_composite_configure_iframe'
+        'iframe[name=\'product_composite_configure_iframe\']:last-of-type'
     ) ?>
 
     <form action="" method="post" id="product_composite_configure_form" enctype="multipart/form-data"
-          target="product_composite_configure_iframe">
+          target="product_composite_configure_iframe" class="product_composite_configure_form">
         <div class="entry-edit">
-            <div id="product_composite_configure_messages">
+            <div id="product_composite_configure_messages" class="product_composite_configure_messages">
                 <div class="messages"><div class="message message-error error"><div></div></div></div>
             </div>
             <?= /* @noEscape */ $secureRenderer->renderStyleAsTag(
                 'display:none;',
-                '#product_composite_configure_messages'
+                '.product_composite_configure_messages:last-of-type'
             ) ?>
             <div id="product_composite_configure_form_fields" class="content product-composite-configure-inner"></div>
-            <div id="product_composite_configure_form_additional"></div>
+            <div id="product_composite_configure_form_additional" class="product_composite_configure_form_additional">
+            </div>
             <?= /* @noEscape */ $secureRenderer->renderStyleAsTag(
                 'display:none;',
-                '#product_composite_configure_form_additional'
+                '.product_composite_configure_form_additional:last-of-type'
             ) ?>
-            <div id="product_composite_configure_form_confirmed"></div>
+            <div id="product_composite_configure_form_confirmed" class="product_composite_configure_form_confirmed"></div>
             <?= /* @noEscape */ $secureRenderer->renderStyleAsTag(
                 'display:none;',
-                '#product_composite_configure_form_confirmed'
+                '.product_composite_configure_form_confirmed:last-of-type'
             ) ?>
         </div>
         <input type="hidden" name="as_js_varname" value="iFrameResponse" />
@@ -46,13 +47,13 @@
     <?= /* @noEscape */ $secureRenderer->renderEventListenerAsTag(
         'onsubmit',
         "productConfigure.onConfirmBtn();event.preventDefault()",
-        '#product_composite_configure_form'
+        '.product_composite_configure_form:last-of-type'
     ) ?>
 
-    <div id="product_composite_configure_confirmed"></div>
+    <div id="product_composite_configure_confirmed" class="product_composite_configure_confirmed"></div>
     <?= /* @noEscape */ $secureRenderer->renderStyleAsTag(
         'display:none;',
-        '#product_composite_configure_confirmed'
+        '.product_composite_configure_confirmed:last-of-type'
     ) ?>
 
     <?php $scriptString = <<<script
@@ -60,9 +61,9 @@
             "jquery",
             "mage/mage"
         ], function(jQuery){
-
-            jQuery('#product_composite_configure_form').mage('form').mage('validation');
-
+            jQuery('.product_composite_configure_form').each(function () {
+                Jquery(this).mage('form').mage('validation');
+            });
         });
 script;
     ?>
@@ -70,6 +71,6 @@ script;
 </div>
 <?= /* @noEscape */ $secureRenderer->renderStyleAsTag(
     'display:none',
-    '#product_composite_configure'
+    '.product-configure-popup:last-of-type'
 ) ?>
 
