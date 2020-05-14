@@ -11,7 +11,6 @@ use Magento\Cms\Api\BlockRepositoryInterface;
 use Magento\Cms\Api\Data\BlockInterface;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\Store\Model\StoreManagerInterface;
 use Magento\Widget\Model\Template\FilterEmulate;
 
 /**
@@ -28,66 +27,88 @@ class Block
      * @var FilterEmulate
      */
     private $widgetFilter;
-    
-    /**
-     * @var \Magento\Framework\Api\SearchCriteriaBuilder
-     */
-    protected $searchCriteriaBuilder;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var SearchCriteriaBuilder
      */
-    private $storeManager;
+    private $searchCriteriaBuilder;
 
     /**
      * @param BlockRepositoryInterface $blockRepository
      * @param FilterEmulate $widgetFilter
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
-     * @param StoreManagerInterface $storeManager
      */
     public function __construct(
         BlockRepositoryInterface $blockRepository,
         FilterEmulate $widgetFilter,
-        SearchCriteriaBuilder $searchCriteriaBuilder = null,
-        StoreManagerInterface $storeManager = null
+        SearchCriteriaBuilder $searchCriteriaBuilder
     ) {
         $this->blockRepository = $blockRepository;
         $this->widgetFilter = $widgetFilter;
-        $this->searchCriteriaBuilder = $searchCriteriaBuilder ?: \Magento\Framework
-            \App\ObjectManager::getInstance()->get(SearchCriteriaBuilder::class);
-        $this->storeManager = $storeManager ?: \Magento\Framework
-            \App\ObjectManager::getInstance()->get(StoreManagerInterface::class);
+        $this->searchCriteriaBuilder = $searchCriteriaBuilder;
     }
 
     /**
-     * Get block data
+     * Get block data by identifier
      *
      * @param string $blockIdentifier
+     * @param int $storeId
      * @return array
      * @throws NoSuchEntityException
      */
-    public function getData(string $blockIdentifier): array
+    public function getBlockByIdentifier(string $blockIdentifier, int $storeId): array
+    {
+        $blockData = $this->fetchBlockData($blockIdentifier, BlockInterface::IDENTIFIER, $storeId);
+
+        return $blockData;
+    }
+
+    /**
+     * Get block data by block_id
+     *
+     * @param int $blockId
+     * @param int $storeId
+     * @return array
+     * @throws NoSuchEntityException
+     */
+    public function getBlockById(int $blockId, int $storeId): array
+    {
+        $blockData = $this->fetchBlockData($blockId, BlockInterface::BLOCK_ID, $storeId);
+
+        return $blockData;
+    }
+
+    /**
+     * Fetch black data by either id or identifier field
+     *
+     * @param mixed $identifier
+     * @param string $field
+     * @param int $storeId
+     * @return array
+     * @throws NoSuchEntityException
+     */
+    private function fetchBlockData($identifier, string $field, int $storeId): array
     {
         $searchCriteria = $this->searchCriteriaBuilder
-            ->addFilter('identifier', $blockIdentifier, 'eq')
-            ->addFilter('store_id', $this->storeManager->getStore()->getId(), 'eq')
-            ->addFilter('is_active', true, 'eq')->create();
-        $block = current($this->blockRepository->getList($searchCriteria)->getItems());
+            ->addFilter($field, $identifier)
+            ->addFilter('store_id', $storeId)
+            ->addFilter(BlockInterface::IS_ACTIVE, true)->create();
 
-        if (empty($block)) {
+        $blockResults = $this->blockRepository->getList($searchCriteria)->getItems();
+
+        if (empty($blockResults)) {
             throw new NoSuchEntityException(
-                __('The CMS block with the "%1" ID doesn\'t exist.', $blockIdentifier)
+                __('The CMS block with the "%1" ID doesn\'t exist.', $identifier)
             );
         }
 
+        $block = current($blockResults);
         $renderedContent = $this->widgetFilter->filterDirective($block->getContent());
-
-        $blockData = [
+        return [
             BlockInterface::BLOCK_ID => $block->getId(),
             BlockInterface::IDENTIFIER => $block->getIdentifier(),
             BlockInterface::TITLE => $block->getTitle(),
             BlockInterface::CONTENT => $renderedContent,
         ];
-        return $blockData;
     }
 }
