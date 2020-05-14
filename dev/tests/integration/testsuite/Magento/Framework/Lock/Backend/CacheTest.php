@@ -3,7 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Lock\Backend;
+namespace Magento\Framework\Lock\Backend;
 
 use Magento\Framework\Lock\Backend\Cache;
 
