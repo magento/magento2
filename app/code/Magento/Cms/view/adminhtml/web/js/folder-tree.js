@@ -78,6 +78,7 @@ define([
             var path = this.options.currentPath,
                 tree = this.element,
                 lastExistentFolderEl,
+                pathId,
 
                 /**
                  * Recursively open folders specified in path array.
@@ -104,9 +105,10 @@ define([
                 };
 
             $(window).on('reload.MediaGallery', function () {
+                pathId =  window.MediabrowserUtility.pathId.replace(',,', '--');
                 tree.jstree('deselect_all');
-                tree.jstree('open_node', $('[data-id="' + window.MediabrowserUtility.pathId.replace(',,', '--') + '"]'), function () {
-                    tree.jstree('select_node',  $('[data-id="' + window.MediabrowserUtility.pathId.replace(',,', '--') + '"]'));
+                tree.jstree('open_node', $('[data-id="' + pathId + '"]'), function () {
+                    tree.jstree('select_node',  $('[data-id="' + pathId + '"]'));
                 });
             });
 
