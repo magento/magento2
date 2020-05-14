@@ -355,7 +355,6 @@ class RemoteSynchronizedCache extends \Zend_Cache_Backend implements \Zend_Cache
      */
     private function lock(string $id): bool
     {
-        $timeout = 10;
         $this->lockArray[$id] = microtime(true);
 
         $data = $this->remote->load($this->getLockName($id));
@@ -364,7 +363,7 @@ class RemoteSynchronizedCache extends \Zend_Cache_Backend implements \Zend_Cache
             return false;
         }
 
-        $this->remote->save($this->lockSign, $this->getLockName($id), [], $timeout * 100);
+        $this->remote->save($this->lockSign, $this->getLockName($id), [], 10);
 
         $data = $this->remote->load($this->getLockName($id));
 
