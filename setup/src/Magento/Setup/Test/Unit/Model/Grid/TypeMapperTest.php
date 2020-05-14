@@ -3,16 +3,15 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Setup\Test\Unit\Model\Grid;
 
 use Magento\Framework\Composer\ComposerInformation;
 use Magento\Setup\Model\Grid\TypeMapper;
+use PHPUnit\Framework\TestCase;
 
-/**
- * Class TypeMapperTest
- */
-class TypeMapperTest extends \PHPUnit\Framework\TestCase
+class TypeMapperTest extends TestCase
 {
     /**
      * Model
@@ -21,7 +20,7 @@ class TypeMapperTest extends \PHPUnit\Framework\TestCase
      */
     private $model;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->model = new TypeMapper();
     }

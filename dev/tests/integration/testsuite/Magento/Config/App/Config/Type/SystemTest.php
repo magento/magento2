@@ -24,7 +24,7 @@ class SystemTest extends \PHPUnit\Framework\TestCase
      */
     private $objectManager;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
         $this->system = $this->objectManager->create(System::class);
