@@ -29,7 +29,7 @@ class AdvancedPricingTest extends AbstractBackendController
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->productRepository = $this->_objectManager->get(ProductRepositoryInterface::class);
@@ -98,7 +98,7 @@ class AdvancedPricingTest extends AbstractBackendController
         $this->getRequest()->setMethod(Http::METHOD_POST);
         $this->dispatch('backend/catalog/product/save/id/' . $productId);
         $this->assertSessionMessages(
-            $this->contains('You saved the product.'),
+            $this->containsEqual('You saved the product.'),
             MessageInterface::TYPE_SUCCESS
         );
     }
