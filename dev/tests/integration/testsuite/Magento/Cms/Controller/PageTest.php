@@ -18,7 +18,7 @@ class PageTest extends \Magento\TestFramework\TestCase\AbstractController
     /**
      * @inheritDoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         Bootstrap::getObjectManager()->configure([
             'preferences' => [

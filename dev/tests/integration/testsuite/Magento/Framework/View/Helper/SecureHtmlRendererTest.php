@@ -25,7 +25,7 @@ class SecureHtmlRendererTest extends TestCase
     /**
      * @inheritDoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = Bootstrap::getObjectManager();
         //Clearing the processors list to ensure stable results.

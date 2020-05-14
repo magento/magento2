@@ -38,7 +38,7 @@ class InlineUtilTest extends TestCase
     /**
      * @inheritDoc
      */
-    public function setUp()
+    public function setUp(): void
     {
         Bootstrap::getObjectManager()->configure([
             'preferences' => [
@@ -53,7 +53,7 @@ class InlineUtilTest extends TestCase
     /**
      * @inheritDoc
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->util = null;
         $this->secureHtmlRenderer = null;
