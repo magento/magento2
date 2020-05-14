@@ -38,7 +38,7 @@ spec:
         - name: setup-pub-dir
           image: eu.gcr.io/magento2-269418/magento2-php72:$TAG_NAME
           securityContext:
-            runAsUser: 0
+            runAsUser: 82
           volumeMounts:
           - mountPath: /var/www/html/pub
             name: magento-pub-volume
