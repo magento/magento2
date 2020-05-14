@@ -3,36 +3,42 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\App\Test\Unit\Config\Storage;
 
+use Magento\Framework\App\Config\ConfigResource\ConfigInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Framework\App\ScopeInterface;
+use Magento\Framework\App\Config\Storage\Writer;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class WriterTest extends \PHPUnit\Framework\TestCase
+class WriterTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
+     * @var ObjectManager
      */
     protected $objectManager;
 
     /**
-     * @var \Magento\Framework\App\Config\Storage\Writer
+     * @var Writer
      */
     protected $model;
 
     /**
-     * @var \Magento\Framework\App\Config\ConfigResource\ConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ConfigInterface|MockObject
      */
     protected $resource;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->resource = $this->getMockBuilder(\Magento\Framework\App\Config\ConfigResource\ConfigInterface::class)
+        $this->objectManager = new ObjectManager($this);
+        $this->resource = $this->getMockBuilder(ConfigInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->model = $this->objectManager->getObject(
-            \Magento\Framework\App\Config\Storage\Writer::class,
+            Writer::class,
             ['resource' => $this->resource]
         );
     }

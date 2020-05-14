@@ -3,35 +3,45 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Unit\Model\Product\Option\Validator;
 
-class FileTest extends \PHPUnit\Framework\TestCase
+use Magento\Catalog\Model\Config\Source\Product\Options\Price;
+use Magento\Catalog\Model\Product\Option;
+use Magento\Catalog\Model\Product\Option\Validator\File;
+use Magento\Catalog\Model\ProductOptions\ConfigInterface;
+use Magento\Framework\Locale\FormatInterface;
+use Magento\Store\Model\StoreManagerInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class FileTest extends TestCase
 {
     /**
-     * @var \Magento\Catalog\Model\Product\Option\Validator\File
+     * @var File
      */
     protected $validator;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $valueMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $localeFormatMock;
 
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
-        $configMock = $this->createMock(\Magento\Catalog\Model\ProductOptions\ConfigInterface::class);
-        $storeManagerMock = $this->createMock(\Magento\Store\Model\StoreManagerInterface::class);
-        $priceConfigMock = new \Magento\Catalog\Model\Config\Source\Product\Options\Price($storeManagerMock);
-        $this->localeFormatMock = $this->createMock(\Magento\Framework\Locale\FormatInterface::class);
+        $configMock = $this->getMockForAbstractClass(ConfigInterface::class);
+        $storeManagerMock = $this->getMockForAbstractClass(StoreManagerInterface::class);
+        $priceConfigMock = new Price($storeManagerMock);
+        $this->localeFormatMock = $this->getMockForAbstractClass(FormatInterface::class);
 
         $config = [
             [
@@ -55,10 +65,10 @@ class FileTest extends \PHPUnit\Framework\TestCase
                 ]
             ],
         ];
-        $configMock->expects($this->once())->method('getAll')->will($this->returnValue($config));
+        $configMock->expects($this->once())->method('getAll')->willReturn($config);
         $methods = ['getTitle', 'getType', 'getPriceType', 'getPrice', 'getImageSizeX', 'getImageSizeY','__wakeup'];
-        $this->valueMock = $this->createPartialMock(\Magento\Catalog\Model\Product\Option::class, $methods);
-        $this->validator = new \Magento\Catalog\Model\Product\Option\Validator\File(
+        $this->valueMock = $this->createPartialMock(Option::class, $methods);
+        $this->validator = new File(
             $configMock,
             $priceConfigMock,
             $this->localeFormatMock
@@ -70,23 +80,23 @@ class FileTest extends \PHPUnit\Framework\TestCase
      */
     public function testIsValidSuccess()
     {
-        $this->valueMock->expects($this->once())->method('getTitle')->will($this->returnValue('option_title'));
-        $this->valueMock->expects($this->exactly(2))->method('getType')->will($this->returnValue('name 1.1'));
+        $this->valueMock->expects($this->once())->method('getTitle')->willReturn('option_title');
+        $this->valueMock->expects($this->exactly(2))->method('getType')->willReturn('name 1.1');
         $this->valueMock->method('getPriceType')
             ->willReturn('fixed');
         $this->valueMock->method('getPrice')
             ->willReturn(10);
-        $this->valueMock->expects($this->once())->method('getImageSizeX')->will($this->returnValue(10));
-        $this->valueMock->expects($this->once())->method('getImageSizeY')->will($this->returnValue(15));
+        $this->valueMock->expects($this->once())->method('getImageSizeX')->willReturn(10);
+        $this->valueMock->expects($this->once())->method('getImageSizeY')->willReturn(15);
         $this->localeFormatMock->expects($this->at(0))
             ->method('getNumber')
-            ->with($this->equalTo(10))
-            ->will($this->returnValue(10));
+            ->with(10)
+            ->willReturn(10);
         $this->localeFormatMock
             ->expects($this->at(2))
             ->method('getNumber')
-            ->with($this->equalTo(15))
-            ->will($this->returnValue(15));
+            ->with(15)
+            ->willReturn(15);
         $this->assertEmpty($this->validator->getMessages());
         $this->assertTrue($this->validator->isValid($this->valueMock));
     }
@@ -96,23 +106,23 @@ class FileTest extends \PHPUnit\Framework\TestCase
      */
     public function testIsValidWithNegativeImageSize()
     {
-        $this->valueMock->expects($this->once())->method('getTitle')->will($this->returnValue('option_title'));
-        $this->valueMock->expects($this->exactly(2))->method('getType')->will($this->returnValue('name 1.1'));
+        $this->valueMock->expects($this->once())->method('getTitle')->willReturn('option_title');
+        $this->valueMock->expects($this->exactly(2))->method('getType')->willReturn('name 1.1');
         $this->valueMock->method('getPriceType')
             ->willReturn('fixed');
         $this->valueMock->method('getPrice')
             ->willReturn(10);
-        $this->valueMock->expects($this->once())->method('getImageSizeX')->will($this->returnValue(-10));
+        $this->valueMock->expects($this->once())->method('getImageSizeX')->willReturn(-10);
         $this->valueMock->expects($this->never())->method('getImageSizeY');
         $this->localeFormatMock->expects($this->at(0))
             ->method('getNumber')
-            ->with($this->equalTo(10))
-            ->will($this->returnValue(10));
+            ->with(10)
+            ->willReturn(10);
         $this->localeFormatMock
             ->expects($this->at(1))
             ->method('getNumber')
-            ->with($this->equalTo(-10))
-            ->will($this->returnValue(-10));
+            ->with(-10)
+            ->willReturn(-10);
 
         $messages = [
             'option values' => 'Invalid option value',
@@ -126,23 +136,23 @@ class FileTest extends \PHPUnit\Framework\TestCase
      */
     public function testIsValidWithNegativeImageSizeY()
     {
-        $this->valueMock->expects($this->once())->method('getTitle')->will($this->returnValue('option_title'));
-        $this->valueMock->expects($this->exactly(2))->method('getType')->will($this->returnValue('name 1.1'));
+        $this->valueMock->expects($this->once())->method('getTitle')->willReturn('option_title');
+        $this->valueMock->expects($this->exactly(2))->method('getType')->willReturn('name 1.1');
         $this->valueMock->method('getPriceType')
             ->willReturn('fixed');
         $this->valueMock->method('getPrice')
             ->willReturn(10);
-        $this->valueMock->expects($this->once())->method('getImageSizeX')->will($this->returnValue(10));
-        $this->valueMock->expects($this->once())->method('getImageSizeY')->will($this->returnValue(-10));
+        $this->valueMock->expects($this->once())->method('getImageSizeX')->willReturn(10);
+        $this->valueMock->expects($this->once())->method('getImageSizeY')->willReturn(-10);
         $this->localeFormatMock->expects($this->at(0))
             ->method('getNumber')
-            ->with($this->equalTo(10))
-            ->will($this->returnValue(10));
+            ->with(10)
+            ->willReturn(10);
         $this->localeFormatMock
             ->expects($this->at(2))
             ->method('getNumber')
-            ->with($this->equalTo(-10))
-            ->will($this->returnValue(-10));
+            ->with(-10)
+            ->willReturn(-10);
         $messages = [
             'option values' => 'Invalid option value',
         ];
