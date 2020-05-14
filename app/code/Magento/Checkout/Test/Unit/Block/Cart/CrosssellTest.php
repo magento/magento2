@@ -78,8 +78,7 @@ class CrosssellTest extends TestCase
                 'storeManager' => $this->storeManager
             ]
         );
-        $this->checkoutSession = $this
-            ->getMockBuilder(Session::class)
+        $this->checkoutSession = $this->getMockBuilder(Session::class)
             ->addMethods(['getLastAddedProductId'])
             ->onlyMethods(['getQuote'])
             ->disableOriginalConstructor()
