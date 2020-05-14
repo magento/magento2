@@ -34,7 +34,7 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
      */
     protected $productMetadata;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->model = $this->objectManager->create(\Magento\CatalogImportExport\Model\Import\Product::class);
@@ -97,7 +97,7 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
         /** @var \Magento\Catalog\Model\ResourceModel\Product $resource */
         $resource = $this->objectManager->get(\Magento\Catalog\Model\ResourceModel\Product::class);
         $productId = $resource->getIdBySku($productName);
-        $this->assertTrue(is_numeric($productId));
+        $this->assertIsNumeric($productId);
         /** @var \Magento\Catalog\Model\Product $product */
         $product = $this->objectManager->get(ProductRepositoryInterface::class)->getById($productId);
 
@@ -118,7 +118,7 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
         }
 
         $configurableOptionCollection = $product->getExtensionAttributes()->getConfigurableProductOptions();
-        $this->assertEquals(1, count($configurableOptionCollection));
+        $this->assertCount(1, $configurableOptionCollection);
         foreach ($configurableOptionCollection as $option) {
             $optionData = $option->getData();
             $this->assertArrayHasKey('product_super_attribute_id', $optionData);
@@ -147,7 +147,7 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
             $this->assertEquals('Option 2', $optionData['options'][1]['store_label']);
             $this->assertArrayHasKey('values', $optionData);
             $valuesData = $optionData['values'];
-            $this->assertEquals(2, count($valuesData));
+            $this->assertCount(2, $valuesData);
         }
     }
 

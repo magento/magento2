@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Braintree\Test\Unit\Gateway\Validator;
 
 use Braintree\Result\Error;
@@ -12,12 +14,10 @@ use Magento\Braintree\Gateway\Validator\GeneralResponseValidator;
 use Magento\Framework\Phrase;
 use Magento\Payment\Gateway\Validator\Result;
 use Magento\Payment\Gateway\Validator\ResultInterfaceFactory;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-/**
- * Class GeneralResponseValidatorTest
- */
-class GeneralResponseValidatorTest extends \PHPUnit\Framework\TestCase
+class GeneralResponseValidatorTest extends TestCase
 {
     /**
      * @var GeneralResponseValidator
@@ -34,7 +34,7 @@ class GeneralResponseValidatorTest extends \PHPUnit\Framework\TestCase
      *
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->resultInterfaceFactory = $this->getMockBuilder(ResultInterfaceFactory::class)
             ->disableOriginalConstructor()

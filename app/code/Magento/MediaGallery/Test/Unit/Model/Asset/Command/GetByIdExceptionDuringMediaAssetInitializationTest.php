@@ -15,13 +15,13 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\MediaGallery\Model\Asset\Command\GetById;
 use Magento\MediaGalleryApi\Api\Data\AssetInterfaceFactory;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
-use Laminas\Db\Adapter\Driver\Pdo\Statement;
 
 /**
  * Test the GetById command with exception during media asset initialization
  */
-class GetByIdExceptionDuringMediaAssetInitializationTest extends \PHPUnit\Framework\TestCase
+class GetByIdExceptionDuringMediaAssetInitializationTest extends TestCase
 {
     private const MEDIA_ASSET_STUB_ID = 45;
     private const MEDIA_ASSET_DATA = [
@@ -69,7 +69,7 @@ class GetByIdExceptionDuringMediaAssetInitializationTest extends \PHPUnit\Framew
     {
         $resourceConnection = $this->createMock(ResourceConnection::class);
         $this->assetFactory = $this->createMock(AssetInterfaceFactory::class);
-        $this->logger = $this->createMock(LoggerInterface::class);
+        $this->logger = $this->getMockForAbstractClass(LoggerInterface::class);
 
         $this->getMediaAssetById = (new ObjectManager($this))->getObject(
             GetById::class,
@@ -79,7 +79,7 @@ class GetByIdExceptionDuringMediaAssetInitializationTest extends \PHPUnit\Framew
                 'logger' =>  $this->logger,
             ]
         );
-        $this->adapter = $this->createMock(AdapterInterface::class);
+        $this->adapter = $this->getMockForAbstractClass(AdapterInterface::class);
         $resourceConnection->method('getConnection')->willReturn($this->adapter);
 
         $this->selectStub = $this->createMock(Select::class);

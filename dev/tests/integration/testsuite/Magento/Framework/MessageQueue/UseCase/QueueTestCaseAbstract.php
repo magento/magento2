@@ -50,7 +50,7 @@ class QueueTestCaseAbstract extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
         $this->logFilePath = TESTS_TEMP_DIR . "/MessageQueueTestLog.txt";
@@ -79,7 +79,7 @@ class QueueTestCaseAbstract extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->publisherConsumerController->stopConsumers();
     }
@@ -120,7 +120,7 @@ class QueueTestCaseAbstract extends \PHPUnit\Framework\TestCase
      * Workaround for https://bugs.php.net/bug.php?id=72286
      * phpcs:disable Magento2.Functions.StaticFunction
      */
-    public static function tearDownAfterClass()
+    public static function tearDownAfterClass(): void
     {
         // phpcs:enable Magento2.Functions.StaticFunction
         if (version_compare(phpversion(), '7') == -1) {
