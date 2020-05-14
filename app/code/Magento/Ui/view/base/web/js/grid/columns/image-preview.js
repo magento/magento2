@@ -16,7 +16,7 @@ define([
             visibleRecord: null,
             height: 0,
             displayedRecord: {},
-            lastOpenedImage: null,
+            lastOpenedImage: false,
             fields: {
                 previewUrl: 'preview_url',
                 title: 'title'
