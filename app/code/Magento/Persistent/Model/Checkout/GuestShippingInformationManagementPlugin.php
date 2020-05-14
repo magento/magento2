@@ -19,7 +19,7 @@ use Magento\Persistent\Model\QuoteManager;
  *
  * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  */
-class GuessShippingInformationManagementPlugin
+class GuestShippingInformationManagementPlugin
 {
     /**
      * Persistence Session Helper
@@ -74,6 +74,7 @@ class GuessShippingInformationManagementPlugin
      *
      * Check if shopping cart is persistent and customer is not logged in, and only one payment method is available,
      * then converts the shopping cart guest cart.
+     * If only one payment is available, it's preselected by default and the payment information is automatically saved.
      *
      * @param GuestShippingInformationManagement $subject
      * @param PaymentDetailsInterface $result

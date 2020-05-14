@@ -12,12 +12,12 @@ use Magento\Checkout\Model\GuestShippingInformationManagement;
 use Magento\Customer\Model\Session as CustomerSession;
 use Magento\Persistent\Helper\Data;
 use Magento\Persistent\Helper\Session as PersistenceSession;
-use Magento\Persistent\Model\Checkout\GuessShippingInformationManagementPlugin;
+use Magento\Persistent\Model\Checkout\GuestShippingInformationManagementPlugin;
 use Magento\Persistent\Model\QuoteManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
-class GuessShippingInformationManagementPluginTest extends TestCase
+class GuestShippingInformationManagementPluginTest extends TestCase
 {
     /**
      * @var Data|MockObject
@@ -39,7 +39,7 @@ class GuessShippingInformationManagementPluginTest extends TestCase
      */
     private $quoteManager;
     /**
-     * @var GuessShippingInformationManagementPlugin
+     * @var GuestShippingInformationManagementPlugin
      */
     private $model;
 
@@ -53,7 +53,7 @@ class GuessShippingInformationManagementPluginTest extends TestCase
         $this->persistenceSessionHelper = $this->createMock(PersistenceSession::class);
         $this->customerSession = $this->createMock(CustomerSession::class);
         $this->quoteManager = $this->createMock(QuoteManager::class);
-        $this->model = new GuessShippingInformationManagementPlugin(
+        $this->model = new GuestShippingInformationManagementPlugin(
             $this->persistenceDataHelper,
             $this->persistenceSessionHelper,
             $this->customerSession,

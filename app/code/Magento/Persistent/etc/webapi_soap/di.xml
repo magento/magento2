@@ -11,6 +11,6 @@
     </type>
     <type name="Magento\Checkout\Model\GuestShippingInformationManagement">
         <plugin name="persistent_convert_customer_cart_to_guest_cart"
-                type="Magento\Persistent\Model\Checkout\GuessShippingInformationManagementPlugin"/>
+                type="Magento\Persistent\Model\Checkout\GuestShippingInformationManagementPlugin"/>
     </type>
 </config>
