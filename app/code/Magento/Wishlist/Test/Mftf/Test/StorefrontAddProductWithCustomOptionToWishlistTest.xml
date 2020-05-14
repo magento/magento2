@@ -19,7 +19,6 @@
             <createData entity="_defaultCategory" stepKey="createCategory"/>
             <createData entity="_defaultProduct" stepKey="createSimpleProduct">
                 <requiredEntity createDataKey="createCategory"/>
-                <field key="price">56.78</field>
             </createData>
             <updateData createDataKey="createSimpleProduct" entity="productWithCustomOptions" stepKey="updateProductWithOptions1"/>
             <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
