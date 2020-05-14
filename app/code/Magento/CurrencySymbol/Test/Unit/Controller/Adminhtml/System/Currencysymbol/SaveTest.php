@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\CurrencySymbol\Test\Unit\Controller\Adminhtml\System\Currencysymbol;
 
 use Magento\Backend\Helper\Data;
@@ -17,11 +19,12 @@ use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\Filter\FilterManager;
 use Magento\Framework\Message\ManagerInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test ot to save currency symbol controller
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class SaveTest extends TestCase
 {
@@ -73,22 +76,22 @@ class SaveTest extends TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
-        $this->requestMock = $this->createMock(RequestInterface::class);
+        $this->requestMock = $this->getMockForAbstractClass(RequestInterface::class);
         $this->helperMock = $this->createMock(Data::class);
-        $this->redirectMock = $this->createMock(RedirectInterface::class);
-        $this->responseMock = $this->createPartialMock(
-            ResponseInterface::class,
-            ['setRedirect', 'sendResponse']
-        );
-        $this->messageManagerMock = $this->createMock(ManagerInterface::class);
+        $this->redirectMock = $this->getMockForAbstractClass(RedirectInterface::class);
+        $this->responseMock = $this->getMockBuilder(ResponseInterface::class)
+            ->addMethods(['setRedirect'])
+            ->onlyMethods(['sendResponse'])
+            ->getMockForAbstractClass();
+        $this->messageManagerMock = $this->getMockForAbstractClass(ManagerInterface::class);
         $this->resultRedirectFactory = $this->createMock(RedirectFactory::class);
-        $this->filterManager = $this->createPartialMock(
-            FilterManager::class,
-            ['stripTags']
-        );
+        $this->filterManager = $this->getMockBuilder(FilterManager::class)
+            ->addMethods(['stripTags'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->currencySymbolFactory = $this->createMock(CurrencysymbolFactory::class);
 
         $this->action = $objectManager->getObject(
@@ -132,7 +135,7 @@ class SaveTest extends TestCase
             ->with(__('You applied the custom currency symbols.'));
 
         $redirect = $this->createMock(Redirect::class);
-        $redirect->expects($this->once())->method('setPath')->with('*')->willReturnSelf();
+        $redirect->expects($this->once())->method('setPath')->with('adminhtml/*/')->willReturnSelf();
         $this->resultRedirectFactory->method('create')->willReturn($redirect);
 
         $this->assertEquals($redirect, $this->action->execute());

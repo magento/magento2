@@ -10,11 +10,13 @@ namespace Magento\Wishlist\Test\Unit\Plugin\Ui\DataProvider;
 use Magento\Catalog\Ui\DataProvider\Product\Listing\DataProvider;
 use Magento\Wishlist\Helper\Data;
 use Magento\Wishlist\Plugin\Ui\DataProvider\WishlistSettings;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Covers \Magento\Wishlist\Plugin\Ui\DataProvider\WishlistSettings
  */
-class WishlistSettingsTest extends \PHPUnit\Framework\TestCase
+class WishlistSettingsTest extends TestCase
 {
     /**
      * Testable Object
@@ -24,7 +26,7 @@ class WishlistSettingsTest extends \PHPUnit\Framework\TestCase
     private $wishlistSettings;
 
     /**
-     * @var Data|\PHPUnit_Framework_MockObject_MockObject
+     * @var Data|MockObject
      */
     private $helperMock;
 
@@ -33,7 +35,7 @@ class WishlistSettingsTest extends \PHPUnit\Framework\TestCase
      *
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->helperMock = $this->createMock(Data::class);
         $this->wishlistSettings = new WishlistSettings($this->helperMock);
@@ -46,7 +48,7 @@ class WishlistSettingsTest extends \PHPUnit\Framework\TestCase
      */
     public function testAfterGetData()
     {
-        /** @var DataProvider|\PHPUnit_Framework_MockObject_MockObject $subjectMock */
+        /** @var DataProvider|MockObject $subjectMock */
         $subjectMock = $this->createMock(DataProvider::class);
         $result = [];
         $isAllow = true;

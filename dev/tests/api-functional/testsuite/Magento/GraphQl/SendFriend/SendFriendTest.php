@@ -36,7 +36,7 @@ class SendFriendTest extends GraphQlAbstract
      */
     private $customerTokenService;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->sendFriendFactory = Bootstrap::getObjectManager()->get(SendFriendFactory::class);
         $this->productRepository = Bootstrap::getObjectManager()->get(ProductRepositoryInterface::class);
@@ -45,6 +45,7 @@ class SendFriendTest extends GraphQlAbstract
 
     /**
      * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
+     * @magentoConfigFixture default_store sendfriend/email/enabled 1
      * @magentoConfigFixture default_store sendfriend/email/allow_guest 1
      */
     public function testSendFriendGuestEnable()
@@ -66,12 +67,14 @@ class SendFriendTest extends GraphQlAbstract
 
     /**
      * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
+     * @magentoConfigFixture default_store sendfriend/email/enabled 1
      * @magentoConfigFixture default_store sendfriend/email/allow_guest 0
-     * @expectedException \Exception
-     * @expectedExceptionMessage The current customer isn't authorized.
      */
     public function testSendFriendGuestDisableAsGuest()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('The current customer isn\'t authorized.');
+
         $productId = (int)$this->productRepository->get('simple_product')->getId();
         $recipients = '{
                   name: "Recipient Name 1"
@@ -90,10 +93,13 @@ class SendFriendTest extends GraphQlAbstract
     /**
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
      * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
-     * @magentoConfigFixture default_store sendfriend/email/allow_guest 0
+     * @magentoConfigFixture default_store sendfriend/email/enabled 0
      */
-    public function testSendFriendGuestDisableAsCustomer()
+    public function testSendFriendDisableAsCustomer()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('"Email to a Friend" is not enabled.');
+
         $productId = (int)$this->productRepository->get('simple_product')->getId();
         $recipients = '{
                   name: "Recipient Name 1"
@@ -111,9 +117,13 @@ class SendFriendTest extends GraphQlAbstract
 
     /**
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     * @magentoConfigFixture default_store sendfriend/email/enabled 1
      */
     public function testSendWithoutExistProduct()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('The product that was requested doesn\'t exist. Verify the product and try again.');
+
         $productId = 2018;
         $recipients = '{
                   name: "Recipient Name 1"
@@ -125,15 +135,13 @@ class SendFriendTest extends GraphQlAbstract
               }';
         $query = $this->getQuery($productId, $recipients);
 
-        $this->expectExceptionMessage(
-            'The product that was requested doesn\'t exist. Verify the product and try again.'
-        );
         $this->graphQlMutation($query, [], '', $this->getHeaderMap());
     }
 
     /**
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
      * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
+     * @magentoConfigFixture default_store sendfriend/email/enabled 1
      */
     public function testMaxSendEmailToFriend()
     {
@@ -176,6 +184,7 @@ class SendFriendTest extends GraphQlAbstract
     /**
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
      * @magentoApiDataFixture Magento/Catalog/_files/product_simple.php
+     * @magentoConfigFixture default_store sendfriend/email/enabled 1
      * @dataProvider sendFriendsErrorsDataProvider
      * @param string $input
      * @param string $errorMessage
@@ -188,7 +197,7 @@ mutation {
     sendEmailToFriend(
         input: {
           $input
-        } 
+        }
     ) {
         sender {
             name
@@ -210,6 +219,7 @@ QUERY;
     /**
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
      * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
+     * @magentoConfigFixture default_store sendfriend/email/enabled 1
      * @magentoConfigFixture default_store sendfriend/email/max_per_hour 1
      * @magentoApiDataFixture Magento/SendFriend/Fixtures/sendfriend_configuration.php
      */
@@ -238,6 +248,7 @@ QUERY;
     /**
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
      * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
+     * @magentoConfigFixture default_store sendfriend/email/enabled 1
      */
     public function testSendProductWithoutSenderEmail()
     {
@@ -256,6 +267,7 @@ QUERY;
     /**
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
      * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product_without_visibility.php
+     * @magentoConfigFixture default_store sendfriend/email/enabled 1
      */
     public function testSendProductWithoutVisibility()
     {
@@ -282,12 +294,12 @@ QUERY;
     {
         return [
             [
-          'product_id: 1	
+          'product_id: 1
          sender: {
             name: "Name"
             email: "e@mail.com"
             message: "Lorem Ipsum"
-        }          
+        }
           recipients: [
               {
                   name: ""
@@ -300,12 +312,12 @@ QUERY;
           ]', 'Please provide Name for all of recipients.'
             ],
             [
-                'product_id: 1	
+                'product_id: 1
           sender: {
             name: "Name"
             email: "e@mail.com"
             message: "Lorem Ipsum"
-        }          
+        }
           recipients: [
               {
                   name: "Recipient Name 1"
@@ -318,12 +330,12 @@ QUERY;
           ]', 'Please provide Email for all of recipients.'
             ],
             [
-                'product_id: 1	
+                'product_id: 1
           sender: {
             name: ""
             email: "e@mail.com"
             message: "Lorem Ipsum"
-        }          
+        }
           recipients: [
               {
                   name: "Recipient Name 1"
@@ -336,12 +348,12 @@ QUERY;
           ]', 'Please provide Name of sender.'
             ],
             [
-                'product_id: 1	
+                'product_id: 1
           sender: {
             name: "Name"
             email: "e@mail.com"
             message: ""
-        }          
+        }
           recipients: [
               {
                   name: "Recipient Name 1"
@@ -403,9 +415,9 @@ mutation {
             name: "Name"
             email: "e@mail.com"
             message: "Lorem Ipsum"
-        }          
+        }
           recipients: [{$recipients}]
-        } 
+        }
     ) {
         sender {
             name

@@ -13,6 +13,7 @@
             <argument name="ruleName" type="string" defaultValue="CustomCatalogRule.name"/>
         </arguments>
         <amOnPage url="{{AdminCatalogPriceRuleGridPage.url}}" stepKey="goToAdminCatalogPriceRuleGridPage"/>
+        <waitForPageLoad stepKey="waitForAdminCatalogPriceRuleGridPageLoad"/>
         <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clearExistingFilters"/>
         <fillField selector="{{AdminCatalogPriceRuleGridSection.filterByRuleName}}" userInput="{{ruleName}}" stepKey="filterByRuleName"/>
         <click selector="{{AdminDataGridHeaderSection.applyFilters}}" stepKey="clickSearch"/>

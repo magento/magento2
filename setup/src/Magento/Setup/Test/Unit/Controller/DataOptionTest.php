@@ -3,30 +3,39 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Setup\Test\Unit\Controller;
 
+use Laminas\Http\PhpEnvironment\Request;
+use Laminas\Http\PhpEnvironment\Response;
+use Laminas\Mvc\MvcEvent;
+use Laminas\Mvc\Router\RouteMatch;
+use Laminas\View\Model\ViewModel;
 use Magento\Setup\Controller\DataOption;
+use Magento\Setup\Model\UninstallCollector;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class DataOptionTest extends \PHPUnit\Framework\TestCase
+class DataOptionTest extends TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|Magento\Setup\Model\UninstallCollector
+     * @var MockObject|UninstallCollector
      */
     private $uninstallCollector;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Zend\Http\PhpEnvironment\Request
+     * @var MockObject|Request
      */
     private $request;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Zend\Http\PhpEnvironment\Response
+     * @var MockObject|Response
      */
     private $response;
 
     /**
-     * @var \Zend\Mvc\MvcEvent|\PHPUnit_Framework_MockObject_MockObject
+     * @var MvcEvent|MockObject
      */
     private $mvcEvent;
 
@@ -35,16 +44,16 @@ class DataOptionTest extends \PHPUnit\Framework\TestCase
      */
     private $controller;
 
-    public function setUp()
+    protected function setUp(): void
     {
-        $this->request = $this->createMock(\Zend\Http\PhpEnvironment\Request::class);
-        $this->response = $this->createMock(\Zend\Http\PhpEnvironment\Response::class);
-        $routeMatch = $this->createMock(\Zend\Mvc\Router\RouteMatch::class);
+        $this->request = $this->createMock(Request::class);
+        $this->response = $this->createMock(Response::class);
+        $routeMatch = $this->createMock(RouteMatch::class);
 
-        $this->uninstallCollector = $this->createMock(\Magento\Setup\Model\UninstallCollector::class);
+        $this->uninstallCollector = $this->createMock(UninstallCollector::class);
         $this->controller = new DataOption($this->uninstallCollector);
 
-        $this->mvcEvent = $this->createMock(\Zend\Mvc\MvcEvent::class);
+        $this->mvcEvent = $this->createMock(MvcEvent::class);
         $this->mvcEvent->expects($this->any())
             ->method('setRequest')
             ->with($this->request)
@@ -64,7 +73,7 @@ class DataOptionTest extends \PHPUnit\Framework\TestCase
     public function testIndexAction()
     {
         $viewModel = $this->controller->indexAction();
-        $this->assertInstanceOf(\Zend\View\Model\ViewModel::class, $viewModel);
+        $this->assertInstanceOf(ViewModel::class, $viewModel);
         $this->assertTrue($viewModel->terminate());
     }
 

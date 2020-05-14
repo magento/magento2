@@ -8,13 +8,13 @@
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="ProductsQtyReturnAfterOrderCancel">
+    <test name="ProductsQtyReturnAfterOrderCancelTest">
 
         <annotations>
             <features value="ConfigurableProduct"/>
             <stories value="Cancel order"/>
-            <title value="Product qunatity return after order cancel"/>
-            <description value="Check Product qunatity return after order cancel"/>
+            <title value="Product quantity return after order cancel"/>
+            <description value="Check Product quantity return after order cancel"/>
             <severity value="CRITICAL"/>
             <testCaseId value="MAGETWO-97228"/>
             <useCaseId value="MAGETWO-82221"/>
@@ -26,13 +26,13 @@
             <createData entity="ApiConfigurableProduct" stepKey="createConfigProduct">
                 <requiredEntity createDataKey="createCategory"/>
             </createData>
-            <actionGroup ref="LoginAsAdmin" stepKey="login"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
         </before>
 
         <after>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <deleteData createDataKey="createConfigProduct" stepKey="deleteConfigProduct"/>
-            <actionGroup ref="logout" stepKey="amOnLogoutPage"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="amOnLogoutPage"/>
         </after>
 
         <amOnPage url="{{AdminCatalogProductPage.url}}" stepKey="GoToCatalogProductPage1"/>
@@ -70,12 +70,11 @@
             <argument name="orderId" value="$grabOrderNumber"/>
         </actionGroup>
 
-        <click selector="{{AdminOrdersGridSection.firstRow}}" stepKey="clickOrderRow"/>
-        <waitForPageLoad stepKey="waitForOrderPageToLoad"/>
+        <actionGroup ref="AdminOrderGridClickFirstRowActionGroup" stepKey="clickOrderRow"/>
         <click selector="{{AdminOrderDetailsMainActionsSection.invoice}}" stepKey="clickInvoiceButton"/>
         <waitForPageLoad stepKey="waitForNewInvoicePageLoad"/>
         <fillField selector="{{AdminInvoiceItemsSection.qtyToInvoiceColumn}}" userInput="1" stepKey="ChangeQtyToInvoice"/>
-        <click selector="{{AdminInvoiceItemsSection.updateQty}}" stepKey="updateQunatity"/>
+        <click selector="{{AdminInvoiceItemsSection.updateQty}}" stepKey="updateQuantity"/>
         <waitForPageLoad stepKey="waitPageToBeLoaded"/>
         <click selector="{{AdminInvoiceMainActionsSection.submitInvoice}}" stepKey="clickSubmitInvoice"/>
         <click selector="{{AdminOrderDetailsMainActionsSection.ship}}" stepKey="clickShipAction"/>

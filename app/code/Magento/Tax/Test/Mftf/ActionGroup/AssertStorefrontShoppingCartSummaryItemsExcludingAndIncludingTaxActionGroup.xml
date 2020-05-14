@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AssertStorefrontShoppingCartSummaryItemsExcludingAndIncludingTaxActionGroup">
+        <annotations>
+            <description>Validates that the provided Subtotal/Total excluding and including tax are present and correct on shopping cart page.</description>
+        </annotations>
+        <arguments>
+            <argument name="subtotalExcludingTax" defaultValue="100" type="string"/>
+            <argument name="subtotalIncludingTax" defaultValue="108.25" type="string"/>
+            <argument name="tax" defaultValue="8.25" type="string"/>
+            <argument name="total" defaultValue="113.25" type="string"/>
+        </arguments>
+
+        <seeInCurrentUrl url="{{CheckoutCartPage.url}}" stepKey="assertUrl"/>
+        <waitForElementVisible selector="{{CheckoutCartSummarySection.subtotalExcludingTax}}" stepKey="waitForSubtotalVisible"/>
+        <see selector="{{CheckoutCartSummarySection.subtotalExcludingTax}}" userInput="{{subtotalExcludingTax}}" stepKey="assertSubtotalExcludingTax"/>
+        <see selector="{{CheckoutCartSummarySection.subtotalIncludingTax}}" userInput="{{subtotalIncludingTax}}" stepKey="assertSubtotalIncludingTax"/>
+        <see selector="{{CheckoutCartSummarySection.taxAmount}}" userInput="{{tax}}" stepKey="assertTaxAmount"/>
+        <waitForElementVisible selector="{{CheckoutCartSummarySection.total}}" stepKey="waitForTotalVisible"/>
+        <waitForElementVisible selector="{{CheckoutCartSummarySection.totalAmount(total)}}" stepKey="waitForTotalAmountVisible"/>
+        <see selector="{{CheckoutCartSummarySection.total}}" userInput="{{total}}" stepKey="assertTotal"/>
+        <seeElement selector="{{CheckoutCartSummarySection.proceedToCheckout}}" stepKey="seeProceedToCheckoutButton"/>
+    </actionGroup>
+</actionGroups>

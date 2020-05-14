@@ -3,21 +3,25 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Setup\Test\Unit\Controller;
 
-use \Magento\Setup\Controller\CompleteBackup;
+use Laminas\Http\Response;
+use Laminas\View\Model\ViewModel;
+use Magento\Setup\Controller\CompleteBackup;
+use PHPUnit\Framework\TestCase;
 
-class CompleteBackupTest extends \PHPUnit\Framework\TestCase
+class CompleteBackupTest extends TestCase
 {
     /**
      * Controller
      *
-     * @var \Magento\Setup\Controller\CompleteBackup
+     * @var CompleteBackup
      */
     private $controller;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->controller = new CompleteBackup();
     }
@@ -25,10 +29,10 @@ class CompleteBackupTest extends \PHPUnit\Framework\TestCase
     public function testIndexAction()
     {
         $viewModel = $this->controller->indexAction();
-        $this->assertInstanceOf(\Zend\View\Model\ViewModel::class, $viewModel);
+        $this->assertInstanceOf(ViewModel::class, $viewModel);
         $this->assertSame('/error/404.phtml', $viewModel->getTemplate());
         $this->assertSame(
-            \Zend\Http\Response::STATUS_CODE_404,
+            Response::STATUS_CODE_404,
             $this->controller->getResponse()->getStatusCode()
         );
     }
@@ -36,7 +40,7 @@ class CompleteBackupTest extends \PHPUnit\Framework\TestCase
     public function testProgressAction()
     {
         $viewModel = $this->controller->progressAction();
-        $this->assertInstanceOf(\Zend\View\Model\ViewModel::class, $viewModel);
+        $this->assertInstanceOf(ViewModel::class, $viewModel);
         $this->assertTrue($viewModel->terminate());
         $this->assertSame('/magento/setup/complete-backup/progress.phtml', $viewModel->getTemplate());
     }

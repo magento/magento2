@@ -20,7 +20,7 @@
         </annotations>
         <before>
             <!--Log In-->
-            <actionGroup ref="LoginAsAdmin" stepKey="logIn"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="logIn"/>
             <!--Create category-->
             <createData entity="_defaultCategory" stepKey="createCategory"/>
             <!--Create product-->
@@ -67,12 +67,14 @@
         </actionGroup>
 
         <!--Register customer on storefront-->
-        <actionGroup ref="SignUpNewCustomerStorefrontActionGroup" stepKey="createAnAccount">
-            <argument name="Customer" value="CustomerEntityOne"/>
+        <actionGroup ref="StorefrontOpenCustomerAccountCreatePageActionGroup" stepKey="openCreateAccountPage"/>
+        <actionGroup ref="StorefrontFillCustomerAccountCreationFormActionGroup" stepKey="fillCreateAccountForm">
+            <argument name="customer" value="CustomerEntityOne"/>
         </actionGroup>
+        <actionGroup ref="StorefrontClickCreateAnAccountCustomerAccountCreationFormActionGroup" stepKey="submitCreateAccountForm"/>
 
         <!--Go to My account > Address book-->
-        <actionGroup ref="EnterCustomerAddressInfoFillState" stepKey="enterAddressInfo">
+        <actionGroup ref="EnterCustomerAddressInfoFillStateActionGroup" stepKey="enterAddressInfo">
             <argument name="Address" value="UK_Simple_Address"/>
         </actionGroup>
 
@@ -143,7 +145,7 @@
             </actionGroup>
 
            <!--Log Out-->
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
     </test>
 </tests>

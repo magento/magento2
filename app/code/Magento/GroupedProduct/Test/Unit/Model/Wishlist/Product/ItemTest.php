@@ -1,0 +1,191 @@
+<?php
+/**
+ *
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+declare(strict_types=1);
+
+namespace Magento\GroupedProduct\Test\Unit\Model\Wishlist\Product;
+
+use Magento\Catalog\Model\Product;
+use Magento\Framework\DataObject;
+use Magento\GroupedProduct\Model\Product\Type\Grouped as TypeGrouped;
+use Magento\GroupedProduct\Model\Wishlist\Product\Item;
+use Magento\Wishlist\Model\Item\Option;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+/**
+ * Unit test for Wishlist Item Plugin.
+ */
+class ItemTest extends TestCase
+{
+    /**
+     * @var Item
+     */
+    protected $model;
+
+    /**
+     * @var \Magento\Catalog\Model\Product|MockObject
+     */
+    protected $productMock;
+
+    /**
+     * @var \Magento\Wishlist\Model\Item|MockObject
+     */
+    protected $subjectMock;
+
+    /**
+     * Init Mock Objects
+     */
+    protected function setUp(): void
+    {
+        $this->subjectMock = $this->createPartialMock(
+            \Magento\Wishlist\Model\Item::class,
+            [
+                'getOptionsByCode',
+                'getBuyRequest',
+                'setOptions',
+                'mergeBuyRequest',
+                'getProduct'
+            ]
+        );
+
+        $this->productMock = $this->createPartialMock(
+            Product::class,
+            [
+                'getId',
+                'getTypeId',
+                'getCustomOptions'
+            ]
+        );
+
+        $this->model = new Item();
+    }
+
+    /**
+     * Test Before Represent Product method
+     */
+    public function testBeforeRepresentProduct()
+    {
+        $testSimpleProdId = 34;
+        $prodInitQty = 2;
+        $prodQtyInWishlist = 3;
+        $resWishlistQty = $prodInitQty + $prodQtyInWishlist;
+        $superGroup = [
+            'super_group' => [
+                33 => "0",
+                34 => 3,
+                35 => "0"
+            ]
+        ];
+
+        $superGroupObj = new DataObject($superGroup);
+
+        $this->productMock->expects($this->once())->method('getId')->willReturn($testSimpleProdId);
+        $this->productMock->expects($this->once())->method('getTypeId')
+            ->willReturn(TypeGrouped::TYPE_CODE);
+        $this->productMock->expects($this->once())->method('getCustomOptions')
+            ->willReturn(
+                $this->getProductAssocOption($prodInitQty, $testSimpleProdId)
+            );
+
+        $wishlistItemProductMock = $this->createPartialMock(
+            Product::class,
+            [
+                'getId',
+            ]
+        );
+        $wishlistItemProductMock->expects($this->once())->method('getId')->willReturn($testSimpleProdId);
+
+        $this->subjectMock->expects($this->once())->method('getProduct')
+            ->willReturn($wishlistItemProductMock);
+        $this->subjectMock->expects($this->once())->method('getOptionsByCode')
+            ->willReturn(
+                $this->getWishlistAssocOption($prodQtyInWishlist, $resWishlistQty, $testSimpleProdId)
+            );
+        $this->subjectMock->expects($this->once())->method('getBuyRequest')->willReturn($superGroupObj);
+
+        $this->model->beforeRepresentProduct($this->subjectMock, $this->productMock);
+    }
+
+    /**
+     * Test Before Compare Options method with same keys
+     */
+    public function testBeforeCompareOptionsSameKeys()
+    {
+        $options1 = ['associated_product_34' => 3];
+        $options2 = ['associated_product_34' => 2];
+
+        $res = $this->model->beforeCompareOptions($this->subjectMock, $options1, $options2);
+
+        $this->assertEquals([], $res[0]);
+        $this->assertEquals([], $res[1]);
+    }
+
+    /**
+     * Test Before Compare Options method with diff keys
+     */
+    public function testBeforeCompareOptionsDiffKeys()
+    {
+        $options1 = ['associated_product_1' => 3];
+        $options2 = ['associated_product_34' => 2];
+
+        $res = $this->model->beforeCompareOptions($this->subjectMock, $options1, $options2);
+
+        $this->assertEquals($options1, $res[0]);
+        $this->assertEquals($options2, $res[1]);
+    }
+
+    /**
+     * Return mock array with wishlist options
+     *
+     * @param int $initVal
+     * @param int $resVal
+     * @param int $prodId
+     * @return array
+     */
+    private function getWishlistAssocOption($initVal, $resVal, $prodId)
+    {
+        $items = [];
+
+        $optionMock = $this->createPartialMock(
+            Option::class,
+            [
+                'getValue',
+            ]
+        );
+        $optionMock->expects($this->at(0))->method('getValue')->willReturn($initVal);
+        $optionMock->expects($this->at(1))->method('getValue')->willReturn($resVal);
+
+        $items['associated_product_' . $prodId] = $optionMock;
+
+        return $items;
+    }
+
+    /**
+     * Return mock array with product options
+     *
+     * @param int $initVal
+     * @param int $prodId
+     * @return array
+     */
+    private function getProductAssocOption($initVal, $prodId)
+    {
+        $items = [];
+
+        $optionMock = $this->createPartialMock(
+            \Magento\Catalog\Model\Product\Configuration\Item\Option::class,
+            [
+                'getValue',
+            ]
+        );
+
+        $optionMock->expects($this->once())->method('getValue')->willReturn($initVal);
+
+        $items['associated_product_' . $prodId] = $optionMock;
+
+        return $items;
+    }
+}

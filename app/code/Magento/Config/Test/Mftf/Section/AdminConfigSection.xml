@@ -22,5 +22,6 @@
         <element name="useSystemValue" type="checkbox" selector="#{{configRowId}} > .use-default > input" parameterized="true"/>
         <element name="collapsibleSectionByTitle" type="text" selector="//form[@id='config-edit-form']//div[@class='section-config'][contains(.,'{{sectionTitle}}')]" parameterized="true" />
         <element name="expandedSectionByTitle" type="text" selector="//form[@id='config-edit-form']//div[@class='section-config active'][contains(.,'{{sectionTitle}}')]" parameterized="true" />
+        <element name="errorElement" type="text" selector="#{{inputId}}-error" parameterized="true" />
     </section>
 </sections>

@@ -59,12 +59,12 @@ QUERY;
         $booleanAggregation = reset($booleanAggregation);
         $this->assertEquals('Boolean Attribute', $booleanAggregation['label']);
         $this->assertEquals('boolean_attribute', $booleanAggregation['attribute_code']);
-        $this->assertContains(['label' => '1', 'value'=> '1', 'count' => '3'], $booleanAggregation['options']);
+        $this->assertContainsEquals(['label' => '1', 'value'=> '1', 'count' => '3'], $booleanAggregation['options']);
 
         $this->markTestIncomplete('MC-22184: Elasticsearch returns incorrect aggregation options for booleans');
         $this->assertEquals(2, $booleanAggregation['count']);
         $this->assertCount(2, $booleanAggregation['options']);
-        $this->assertContains(['label' => '0', 'value'=> '0', 'count' => '2'], $booleanAggregation['options']);
+        $this->assertContainsEquals(['label' => '0', 'value'=> '0', 'count' => '2'], $booleanAggregation['options']);
     }
 
     /**

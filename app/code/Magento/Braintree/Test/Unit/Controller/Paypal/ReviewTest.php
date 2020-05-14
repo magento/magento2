@@ -3,61 +3,64 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Braintree\Test\Unit\Controller\Paypal;
 
-use Magento\Payment\Model\Method\Logger;
-use Magento\Quote\Model\Quote;
-use Magento\Framework\View\Layout;
-use Magento\Checkout\Model\Session;
-use Magento\Framework\View\Result\Page;
-use Magento\Framework\App\Action\Context;
-use Magento\Framework\App\RequestInterface;
-use Magento\Framework\Message\ManagerInterface;
-use Magento\Framework\Controller\ResultFactory;
-use Magento\Framework\Controller\Result\Redirect;
-use Magento\Framework\View\Element\AbstractBlock;
+use Magento\Braintree\Block\Paypal\Checkout\Review as CheckoutReview;
 use Magento\Braintree\Controller\Paypal\Review;
 use Magento\Braintree\Gateway\Config\PayPal\Config;
 use Magento\Braintree\Model\Paypal\Helper\QuoteUpdater;
-use Magento\Braintree\Block\Paypal\Checkout\Review as CheckoutReview;
+use Magento\Checkout\Model\Session;
+use Magento\Framework\App\Action\Context;
+use Magento\Framework\App\RequestInterface;
+use Magento\Framework\Controller\Result\Redirect;
+use Magento\Framework\Controller\ResultFactory;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Message\ManagerInterface;
+use Magento\Framework\View\Element\AbstractBlock;
+use Magento\Framework\View\Layout;
+use Magento\Framework\View\Result\Page;
+use Magento\Payment\Model\Method\Logger;
+use Magento\Quote\Model\Quote;
+use Magento\Quote\Model\Quote\Payment;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
- * Class ReviewTest
- *
  * @see \Magento\Braintree\Controller\Paypal\Review
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ReviewTest extends \PHPUnit\Framework\TestCase
+class ReviewTest extends TestCase
 {
     /**
-     * @var QuoteUpdater|\PHPUnit_Framework_MockObject_MockObject
+     * @var QuoteUpdater|MockObject
      */
     private $quoteUpdaterMock;
 
     /**
-     * @var Config|\PHPUnit_Framework_MockObject_MockObject
+     * @var Config|MockObject
      */
     private $configMock;
 
     /**
-     * @var Session|\PHPUnit_Framework_MockObject_MockObject
+     * @var Session|MockObject
      */
     private $checkoutSessionMock;
 
     /**
-     * @var RequestInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var RequestInterface|MockObject
      */
     private $requestMock;
 
     /**
-     * @var ResultFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var ResultFactory|MockObject
      */
     private $resultFactoryMock;
 
     /**
-     * @var ManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ManagerInterface|MockObject
      */
     private $messageManagerMock;
 
@@ -67,13 +70,13 @@ class ReviewTest extends \PHPUnit\Framework\TestCase
     private $review;
 
     /**
-     * @var Logger|\PHPUnit_Framework_MockObject_MockObject
+     * @var Logger|MockObject
      */
     private $loggerMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        /** @var Context|\PHPUnit_Framework_MockObject_MockObject $contextMock */
+        /** @var Context|MockObject $contextMock */
         $contextMock = $this->getMockBuilder(Context::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -225,7 +228,7 @@ class ReviewTest extends \PHPUnit\Framework\TestCase
             ->method('getItemsCount')
             ->willReturn(1);
 
-        $paymentMock = $this->getMockBuilder(\Magento\Quote\Model\Quote\Payment::class)
+        $paymentMock = $this->getMockBuilder(Payment::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -245,7 +248,7 @@ class ReviewTest extends \PHPUnit\Framework\TestCase
         $this->messageManagerMock->expects(self::once())
             ->method('addExceptionMessage')
             ->with(
-                self::isInstanceOf(\Magento\Framework\Exception\LocalizedException::class),
+                self::isInstanceOf(LocalizedException::class),
                 'Checkout failed to initialize. Verify and try again.'
             );
 
@@ -263,7 +266,7 @@ class ReviewTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return Redirect|\PHPUnit_Framework_MockObject_MockObject
+     * @return Redirect|MockObject
      */
     private function getResultRedirectMock()
     {
@@ -273,7 +276,7 @@ class ReviewTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return AbstractBlock|\PHPUnit_Framework_MockObject_MockObject
+     * @return AbstractBlock|MockObject
      */
     private function getChildBlockMock()
     {
@@ -283,7 +286,7 @@ class ReviewTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return CheckoutReview|\PHPUnit_Framework_MockObject_MockObject
+     * @return CheckoutReview|MockObject
      */
     private function getBlockMock()
     {
@@ -293,7 +296,7 @@ class ReviewTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return Layout|\PHPUnit_Framework_MockObject_MockObject
+     * @return Layout|MockObject
      */
     private function getLayoutMock()
     {
@@ -303,7 +306,7 @@ class ReviewTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return Page|\PHPUnit_Framework_MockObject_MockObject
+     * @return Page|MockObject
      */
     private function getResultPageMock()
     {
@@ -313,7 +316,7 @@ class ReviewTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return Quote|\PHPUnit_Framework_MockObject_MockObject
+     * @return Quote|MockObject
      */
     private function getQuoteMock()
     {

@@ -1262,7 +1262,7 @@ class Multishipping extends \Magento\Framework\DataObject
             }
         }
 
-        throw new NotFoundException(__('Quote address for failed order not found.'));
+        throw new NotFoundException(__('Quote address for failed order ID "%1" not found.', $order->getEntityId()));
     }
 
     /**

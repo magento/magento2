@@ -35,7 +35,7 @@ class ModuleDBChangeTest extends \PHPUnit\Framework\TestCase
     /**
      *  Set changed files paths and list for all projects
      */
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         foreach (glob(self::$branchesFilesPattern) as $branchesFile) {
             //get the current branchname from the first line
@@ -61,21 +61,6 @@ class ModuleDBChangeTest extends \PHPUnit\Framework\TestCase
 
         foreach (glob(self::$changedFilesPattern) as $changedFile) {
             self::$changedFileList .= file_get_contents($changedFile) . PHP_EOL;
-        }
-    }
-
-    /**
-     * Test changes for module.xml files
-     */
-    public function testModuleXmlFiles()
-    {
-        if (!self::$actualBranch) {
-            preg_match_all('|etc/module\.xml$|mi', self::$changedFileList, $matches);
-            $this->assertEmpty(
-                reset($matches),
-                'module.xml changes for patch releases in non-actual branches are not allowed:' . PHP_EOL .
-                implode(PHP_EOL, array_values(reset($matches)))
-            );
         }
     }
 
