@@ -36,7 +36,7 @@
                 <requiredEntity createDataKey="simpleProduct2"/>
                 <field key="qty">4</field>
             </createData>
-            <magentoCLI command="indexer:reindex" arguments="cataloginventory_stock" stepKey="reindex"/>
+            <magentoCron stepKey="runCronIndex" groups="indexer:reindex"/>
         </before>
         <after>
             <deleteData createDataKey="bundleProduct" stepKey="deleteBundleProduct"/>
@@ -48,7 +48,7 @@
         </actionGroup>
         <actionGroup ref="StorefrontSelectCustomizeAndAddToTheCartButtonActionGroup" stepKey="customizeBundleProduct"/>
         <actionGroup ref="StorefrontAddToTheCartButtonActionGroup" stepKey="addToCartBundleProduct"/>
-        <actionGroup ref="AssertStorefrontBundleValidationCountActionGroup" stepKey="assertBundleValidationCount"/>
+        <actionGroup ref="AssertStorefrontBundleValidationMessagesCountActionGroup" stepKey="assertBundleValidationCount"/>
         <actionGroup ref="AssertStorefrontBundleValidationMessageActionGroup" stepKey="assertBundleValidationMessage">
             <argument name="message" value="Please select one of the options."/>
         </actionGroup>
