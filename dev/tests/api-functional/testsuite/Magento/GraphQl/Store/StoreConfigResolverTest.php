@@ -30,7 +30,7 @@ class StoreConfigResolverTest extends GraphQlAbstract
 
     /**
      * @magentoApiDataFixture Magento/Store/_files/store.php
-     * @magentoConfigFixture default_store store/information/name Test Store
+     * @magentoConfigFixture default_store general/store_information/name Test Store
      */
     public function testGetStoreConfig()
     {
