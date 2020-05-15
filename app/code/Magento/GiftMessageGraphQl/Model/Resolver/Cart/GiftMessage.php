@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\GiftMessageGraphQl\Model\Resolver\Cart;
 
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Query\Resolver\ContextInterface;
@@ -62,16 +63,20 @@ class GiftMessage implements ResolverInterface
         }
         $cart = $value['model'];
 
-        $giftCartMessage = $this->cartRepository->get($cart->getId());
+        try {
+            $giftCartMessage = $this->cartRepository->get($cart->getId());
+        } catch (LocalizedException $e) {
+            throw new GraphQlInputException(__('Can\'t load cart.'));
+        }
 
-        if ($giftCartMessage === null) {
-            throw new GraphQlInputException(__("Gift message doesn't exist for current cart"));
+        if (!isset($giftCartMessage)) {
+            return null;
         }
 
         return [
             'to' => $giftCartMessage->getRecipient() ?? '',
-            'from' => $giftCartMessage->getSender() ?? '',
-            'message'=> $giftCartMessage->getMessage() ?? ''
+            'from' =>  $giftCartMessage->getSender() ?? '',
+            'message'=>  $giftCartMessage->getMessage() ?? ''
         ];
     }
 }

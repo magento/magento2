@@ -34,9 +34,40 @@ class GiftMessageTest extends GraphQlAbstract
     public function testGiftMessageForCart()
     {
         $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('message_order_21');
-        $query = <<<QUERY
+        $response = $this->requestCartAndAssertResult($maskedQuoteId);
+        self::assertArrayHasKey('gift_message', $response['cart']);
+        self::assertSame('Mercutio', $response['cart']['gift_message']['to']);
+        self::assertSame('Romeo', $response['cart']['gift_message']['from']);
+        self::assertSame('I thought all for the best.', $response['cart']['gift_message']['message']);
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
+     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
+     * @throws NoSuchEntityException
+     * @throws Exception
+     */
+    public function testGiftMessageForCartWithoutMessage()
+    {
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
+        $response = $this->requestCartAndAssertResult($maskedQuoteId);
+        self::assertArrayHasKey('gift_message', $response['cart']);
+        self::assertNull($response['cart']['gift_message']);
+    }
+
+    /**
+     * Get Gift Message Assertion
+     *
+     * @param string $quoteId
+     *
+     * @return array
+     * @throws Exception
+     */
+    private function requestCartAndAssertResult(string $quoteId)
+    {
+        $query =  <<<QUERY
 {
-    cart(cart_id: "$maskedQuoteId") {
+    cart(cart_id: "$quoteId") {
         gift_message {
             to
             from
@@ -45,10 +76,6 @@ class GiftMessageTest extends GraphQlAbstract
     }
 }
 QUERY;
-        $response = $this->graphQlQuery($query);
-        self::assertArrayHasKey('gift_message', $response['cart']);
-        self::assertArrayHasKey('to', $response['cart']['gift_message']);
-        self::assertArrayHasKey('from', $response['cart']['gift_message']);
-        self::assertArrayHasKey('message', $response['cart']['gift_message']);
+        return $this->graphQlQuery($query);
     }
 }
