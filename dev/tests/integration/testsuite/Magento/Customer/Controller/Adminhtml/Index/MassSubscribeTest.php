@@ -28,7 +28,7 @@ class MassSubscribeTest extends \Magento\TestFramework\TestCase\AbstractBackendC
      */
     protected $baseControllerUrl = 'http://localhost/index.php/backend/customer/index/index';
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         /**
          * Unset customer data

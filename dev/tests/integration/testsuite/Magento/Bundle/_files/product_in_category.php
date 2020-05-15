@@ -3,13 +3,16 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-require __DIR__ . '/product.php';
+
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
+
+Resolver::getInstance()->requireDataFixture('Magento/Bundle/_files/product.php');
 
 /** @var \Magento\Catalog\Api\CategoryLinkManagementInterface $categoryLinkManagement */
 $categoryLinkManagement = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
     ->create(\Magento\Catalog\Api\CategoryLinkManagementInterface::class);
 
 $categoryLinkManagement->assignProductToCategories(
-    $product->getSku(),
+    'bundle-product',
     [2]
 );

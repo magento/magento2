@@ -3,86 +3,100 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Backend\Test\Unit\Controller\Adminhtml\Dashboard;
+
+use Magento\Backend\App\Action\Context;
+use Magento\Backend\Controller\Adminhtml\Dashboard\RefreshStatistics;
+use Magento\Backend\Model\View\Result\Redirect;
+use Magento\Backend\Model\View\Result\RedirectFactory;
+use Magento\Framework\App\RequestInterface;
+use Magento\Framework\App\ResponseInterface;
+use Magento\Framework\Message\Manager;
+use Magento\Framework\ObjectManagerInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Sales\Model\ResourceModel\Report\Order;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test for \Magento\Backend\Controller\Adminhtml\Dashboard\RefreshStatistics
  */
-class RefreshStatisticsTest extends \PHPUnit\Framework\TestCase
+class RefreshStatisticsTest extends TestCase
 {
     /**
-     * @var \Magento\Backend\Model\View\Result\Redirect|\PHPUnit_Framework_MockObject_MockObject
+     * @var Redirect|MockObject
      */
     protected $resultRedirect;
 
     /**
-     * @var  \Magento\Backend\Model\View\Result\RedirectFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var  RedirectFactory|MockObject
      */
     protected $resultRedirectFactory;
 
     /**
-     * @var \Magento\Framework\App\RequestInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var RequestInterface|MockObject
      */
     protected $request;
 
     /**
-     * @var \Magento\Framework\App\ResponseInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ResponseInterface|MockObject
      */
     protected $response;
 
     /**
-     * @var \Magento\Framework\Message\Manager|\PHPUnit_Framework_MockObject_MockObject
+     * @var Manager|MockObject
      */
     protected $messageManager;
 
     /**
-     * @var \Magento\Sales\Model\ResourceModel\Report\Order|\PHPUnit_Framework_MockObject_MockObject
+     * @var Order|MockObject
      */
     protected $order;
 
     /**
-     * @var \Magento\Framework\ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ObjectManagerInterface|MockObject
      */
     protected $objectManager;
 
     /**
-     * @var \Magento\Backend\Controller\Adminhtml\Dashboard\RefreshStatistics
+     * @var RefreshStatistics
      */
     protected $refreshStatisticsController;
 
     /**
-     * @var \Magento\Backend\App\Action\Context|\PHPUnit_Framework_MockObject_MockObject
+     * @var Context|MockObject
      */
     protected $context;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $reportTypes = [
-            'sales' => \Magento\Sales\Model\ResourceModel\Report\Order::class
+            'sales' => Order::class
         ];
 
-        $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $objectManagerHelper = new ObjectManager($this);
 
         $this->resultRedirectFactory = $this->createPartialMock(
-            \Magento\Backend\Model\View\Result\RedirectFactory::class,
+            RedirectFactory::class,
             ['create']
         );
-        $this->resultRedirect = $this->createMock(\Magento\Backend\Model\View\Result\Redirect::class);
+        $this->resultRedirect = $this->createMock(Redirect::class);
 
-        $this->request = $this->createMock(\Magento\Framework\App\RequestInterface::class);
-        $this->response = $this->createPartialMock(
-            \Magento\Framework\App\ResponseInterface::class,
-            ['setRedirect', 'sendResponse']
-        );
+        $this->request = $this->getMockForAbstractClass(RequestInterface::class);
+        $this->response = $this->getMockBuilder(ResponseInterface::class)
+            ->addMethods(['setRedirect'])
+            ->onlyMethods(['sendResponse'])
+            ->getMockForAbstractClass();
 
-        $this->messageManager = $this->createMock(\Magento\Framework\Message\Manager::class);
+        $this->messageManager = $this->createMock(Manager::class);
 
-        $this->order = $this->createMock(\Magento\Sales\Model\ResourceModel\Report\Order::class);
+        $this->order = $this->createMock(Order::class);
 
-        $this->objectManager = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
+        $this->objectManager = $this->getMockForAbstractClass(ObjectManagerInterface::class);
 
-        $this->context = $this->createMock(\Magento\Backend\App\Action\Context::class);
+        $this->context = $this->createMock(Context::class);
         $this->context->expects($this->once())->method('getRequest')->willReturn($this->request);
         $this->context->expects($this->once())->method('getResponse')->willReturn($this->response);
         $this->context->expects($this->once())->method('getMessageManager')->willReturn($this->messageManager);
@@ -92,7 +106,7 @@ class RefreshStatisticsTest extends \PHPUnit\Framework\TestCase
             ->willReturn($this->resultRedirectFactory);
 
         $this->refreshStatisticsController = $objectManagerHelper->getObject(
-            \Magento\Backend\Controller\Adminhtml\Dashboard\RefreshStatistics::class,
+            RefreshStatistics::class,
             [
                 'context' => $this->context,
                 'reportTypes' => $reportTypes
@@ -112,7 +126,7 @@ class RefreshStatisticsTest extends \PHPUnit\Framework\TestCase
 
         $this->objectManager->expects($this->any())
             ->method('create')
-            ->with(\Magento\Sales\Model\ResourceModel\Report\Order::class)
+            ->with(Order::class)
             ->willReturn($this->order);
 
         $this->resultRedirect->expects($this->once())
@@ -121,7 +135,7 @@ class RefreshStatisticsTest extends \PHPUnit\Framework\TestCase
             ->willReturnSelf();
 
         $this->assertInstanceOf(
-            \Magento\Backend\Model\View\Result\Redirect::class,
+            Redirect::class,
             $this->refreshStatisticsController->execute()
         );
     }
