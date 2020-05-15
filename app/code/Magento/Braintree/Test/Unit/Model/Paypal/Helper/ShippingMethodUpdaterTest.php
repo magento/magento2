@@ -80,11 +80,12 @@ class ShippingMethodUpdaterTest extends TestCase
     /**
      * Test execute exception
      *
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage The "shippingMethod" field does not exists.
+     * @return void
      */
     public function testExecuteException(): void
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage("The \"shippingMethod\" field does not exists.");
         $quoteMock = $this->getQuoteMock();
 
         $this->shippingMethodUpdater->execute('', $quoteMock);
