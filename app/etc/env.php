@@ -30,7 +30,7 @@ return [
         ]
     ],
     'x-frame-options' => 'SAMEORIGIN',
-    'MAGE_MODE' => 'developer',
+    'MAGE_MODE' => 'production',
     'session' => [
         'save' => 'files'
     ],
