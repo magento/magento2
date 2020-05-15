@@ -218,6 +218,27 @@ class WishlistTest extends TestCase
     }
 
     /**
+     * Update description of wishlist item
+     *
+     * @magentoDataFixture Magento/Wishlist/_files/wishlist.php
+     *
+     * @return void
+     */
+    public function testUpdateItemDescriptionInWishList(): void
+    {
+        $itemDescription = 'Test Description';
+        $wishlist = $this->getWishlistByCustomerId->execute(1);
+        $item = $this->getWishlistByCustomerId->getItemBySku(1, 'simple');
+        $item->setDescription($itemDescription);
+        $this->assertNotNull($item);
+        $buyRequest = $this->dataObjectFactory->create(['data' => ['qty' => 55]]);
+        $wishlist->updateItem($item, $buyRequest);
+        $updatedItem = $this->getWishlistByCustomerId->getItemBySku(1, 'simple');
+        $this->assertEquals(55, $updatedItem->getQty());
+        $this->assertEquals($itemDescription, $updatedItem->getDescription());
+    }
+
+    /**
      * @return void
      */
     public function testUpdateNotExistingItemInWishList(): void
