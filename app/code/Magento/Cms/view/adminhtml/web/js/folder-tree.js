@@ -3,6 +3,7 @@
  * See COPYING.txt for license details.
  */
 
+/* global Base64 */
 define([
     'jquery',
     'jquery/ui',
@@ -79,6 +80,7 @@ define([
                 tree = this.element,
                 lastExistentFolderEl,
                 pathId,
+                encodedPath,
 
                 /**
                  * Recursively open folders specified in path array.
@@ -102,14 +104,43 @@ define([
                             tree.jstree('select_node', folderEl);
                         });
                     }
+                },
+
+                /**
+                 * Get currentPath decode it returns new path array
+                 */
+                _parseCurrentPath = function () {
+                    var paths = [];
+
+                    $.each(encodedPath, function (i, val) {
+                        var isLastElement = i === encodedPath.length - 1;
+
+                        if (isLastElement) {
+                            paths[i] = window.MediabrowserUtility.pathId.replace(',,', '--');
+                        } else {
+                            paths[i] = Base64.encode(val).replace('==', '--');
+                        }
+                    });
+                    paths.unshift('root');
+                    paths.reverse();
+
+                    return paths;
                 };
 
             $(window).on('reload.MediaGallery', function () {
+                encodedPath = Base64.decode(window.MediabrowserUtility.pathId.replace(/--|,,/, '==')).split('/');
                 pathId =  window.MediabrowserUtility.pathId.replace(',,', '--');
+
                 tree.jstree('deselect_all');
-                tree.jstree('open_node', $('[data-id="' + pathId + '"]'), function () {
-                    tree.jstree('select_node',  $('[data-id="' + pathId + '"]'));
-                });
+
+                if (encodedPath.length > 1) {
+                    path =  _parseCurrentPath(encodedPath);
+                    recursiveOpen();
+                } else {
+                    tree.jstree('open_node', $('[data-id="' + pathId + '"]'), function () {
+                        tree.jstree('select_node',  $('[data-id="' + pathId + '"]'));
+                    });
+                }
             });
 
             recursiveOpen();
