@@ -59,6 +59,23 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     }
 
     /**
+     * @inheritDoc
+     */
+    protected function _initSelect()
+    {
+        parent::_initSelect();
+
+        $productMetadata = $this->metadataPool->getMetadata(ProductInterface::class);
+        $this->getSelect()->joinInner(
+            ['cpe' => $this->getTable('catalog_product_entity')],
+            sprintf('cpe.%s = main_table.product_id', $productMetadata->getLinkField()),
+            ['product_id' => $productMetadata->getIdentifierField()]
+        );
+
+        return $this;
+    }
+
+    /**
      * Method for product filter
      *
      * @param \Magento\Catalog\Model\Product|array|integer|null $product
@@ -69,18 +86,12 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
         if (empty($product)) {
             $this->addFieldToFilter('product_id', '');
         } else {
-            $this->join(
-                ['cpe' => $this->getTable('catalog_product_entity')],
-                sprintf(
-                    'cpe.%s = main_table.product_id',
-                    $this->metadataPool->getMetadata(ProductInterface::class)->getLinkField()
-                )
-            );
+            $identifierField = $this->metadataPool->getMetadata(ProductInterface::class)->getIdentifierField();
             if ($product instanceof \Magento\Catalog\Model\Product) {
-                $this->addFieldToFilter('cpe.entity_id', $product->getEntityId());
-            } else {
-                $this->addFieldToFilter('cpe.entity_id', ['in' => $product]);
+                $product = $product->getEntityId();
             }
+            $condition = is_array($product) ? ['in' => $product] : $product;
+            $this->addFieldToFilter('cpe.' . $identifierField, $condition);
         }
 
         return $this;

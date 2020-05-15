@@ -24,7 +24,7 @@ class Sample extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     /**
      * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
      * @param \Magento\Framework\EntityManager\MetadataPool $metadataPool
-     * @param null $connectionName
+     * @param string|null $connectionName
      */
     public function __construct(
         \Magento\Framework\Model\ResourceModel\Db\Context $context,
@@ -43,6 +43,23 @@ class Sample extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     protected function _construct()
     {
         $this->_init('downloadable_sample', 'sample_id');
+    }
+
+    /**
+     * @inheritDoc
+     */
+    protected function _getLoadSelect($field, $value, $object)
+    {
+        $select = parent::_getLoadSelect($field, $value, $object);
+
+        $productMetadata = $this->metadataPool->getMetadata(ProductInterface::class);
+        $select->joinInner(
+            ['cpe' => $this->getTable('catalog_product_entity')],
+            sprintf('cpe.%s = %s.product_id', $productMetadata->getLinkField(), $this->getMainTable()),
+            ['product_id' => $productMetadata->getIdentifierField()]
+        );
+
+        return $select;
     }
 
     /**
@@ -126,7 +143,7 @@ class Sample extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         )->join(
             ['cpe' => $this->getTable('catalog_product_entity')],
             sprintf(
-                'cpe.entity_id = m.product_id',
+                'cpe.%s = m.product_id',
                 $this->metadataPool->getMetadata(ProductInterface::class)->getLinkField()
             ),
             []
