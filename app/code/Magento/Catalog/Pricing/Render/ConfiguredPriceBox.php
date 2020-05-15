@@ -90,15 +90,7 @@ class ConfiguredPriceBox extends FinalPriceBox
      */
     public function getPriceType($priceCode)
     {
-        $price = $this->saleableItem->getPriceInfo()->getPrice($priceCode);
-        $item = $this->getData('item');
-        if ($price instanceof ConfiguredPriceInterface
-            && $item instanceof ItemInterface
-        ) {
-            $price->setItem($item);
-        }
-
-        return $price;
+        return $this->saleableItem->getPriceInfo()->getPrice($priceCode);
     }
 
     /**
