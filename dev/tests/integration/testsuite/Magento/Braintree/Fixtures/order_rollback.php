@@ -8,6 +8,7 @@ declare(strict_types=1);
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\TestFramework\ObjectManager;
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
 
 $objectManager = ObjectManager::getInstance();
 
@@ -25,4 +26,4 @@ foreach ($items as $item) {
     $orderRepository->delete($item);
 }
 
-require __DIR__ . '/../../../Magento/Catalog/_files/product_simple_rollback.php';
+Resolver::getInstance()->requireDataFixture('Magento/Catalog/_files/product_simple_rollback.php');
