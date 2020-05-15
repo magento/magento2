@@ -18,6 +18,9 @@
             <useCaseId value="MC-32763"/>
             <group value="catalog"/>
             <group value="widget"/>
+            <skip>
+                <issueId value="MC-34091"/>
+            </skip>
         </annotations>
         <before>
             <!--  Set Stores > Configurations > Catalog > Recently Viewed/Compared Products > Show for Current = Website -->
