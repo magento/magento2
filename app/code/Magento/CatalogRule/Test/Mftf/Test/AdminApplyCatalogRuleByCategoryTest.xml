@@ -26,8 +26,8 @@
             <createData entity="ApiSimpleProduct" stepKey="createSimpleProductTwo">
                 <requiredEntity createDataKey="createCategoryTwo"/>
             </createData>
-
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <magentoCron stepKey="runCronIndex" groups="index"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
             <deleteData createDataKey="createCategoryOne" stepKey="deleteCategoryOne"/>

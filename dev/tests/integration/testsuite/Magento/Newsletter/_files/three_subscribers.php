@@ -7,8 +7,9 @@ declare(strict_types=1);
 
 use Magento\Newsletter\Model\SubscriberFactory;
 use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
 
-require __DIR__ . '/../../../Magento/Customer/_files/three_customers.php';
+Resolver::getInstance()->requireDataFixture('Magento/Customer/_files/three_customers.php');
 
 $objectManager = Bootstrap::getObjectManager();
 $subscriberFactory = $objectManager->get(SubscriberFactory::class);

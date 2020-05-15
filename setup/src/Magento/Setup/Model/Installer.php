@@ -339,6 +339,7 @@ class Installer
             $script[] = ['Cleaning up database...', 'cleanupDb', []];
         }
         $script[] = ['Installing database schema:', 'installSchema', [$request]];
+        $script[] = ['Installing search configuration...', 'installSearchConfiguration', [$request]];
         $script[] = ['Installing user configuration...', 'installUserConfig', [$request]];
         $script[] = ['Enabling caches:', 'updateCaches', [true]];
         $script[] = ['Installing data...', 'installDataFixtures', [$request]];
@@ -1105,6 +1106,21 @@ class Installer
             $configModel->setDataByPath($key, $val);
             $configModel->save();
         }
+    }
+
+    /**
+     * Configure search engine on install
+     *
+     * @param \ArrayObject|array $data
+     * @return void
+     * @throws \Magento\Framework\Validation\ValidationException
+     * @throws \Magento\Setup\Exception
+     */
+    public function installSearchConfiguration($data)
+    {
+        /** @var SearchConfig $searchConfig */
+        $searchConfig = $this->objectManagerProvider->get()->get(SearchConfig::class);
+        $searchConfig->saveConfiguration($data);
     }
 
     /**

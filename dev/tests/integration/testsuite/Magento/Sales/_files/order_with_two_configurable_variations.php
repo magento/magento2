@@ -4,14 +4,22 @@
  * See COPYING.txt for license details.
  */
 
+use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
+use Magento\Customer\Model\CustomerRegistry;
+
+Resolver::getInstance()->requireDataFixture('Magento/Customer/_files/customer.php');
+Resolver::getInstance()->requireDataFixture('Magento/ConfigurableProduct/_files/product_configurable.php');
 
 $objectManager = Bootstrap::getObjectManager();
-
-require __DIR__ . '/../../../Magento/Customer/_files/customer.php';
-require __DIR__ . '/../../../Magento/ConfigurableProduct/_files/product_configurable.php';
-$configurableProduct = $productRepository->get($product->getSku());
+/** @var CustomerRegistry $customerRegistry */
+$customerRegistry = $objectManager->create(CustomerRegistry::class);
+$customer = $customerRegistry->retrieve(1);
+/** @var ProductRepositoryInterface $productRepository */
+$productRepository = $objectManager->create(ProductRepositoryInterface::class);
+$configurableProduct = $productRepository->get('configurable');
 
 /** \Magento\Customer\Model\Customer $customer */
 $addressData = include __DIR__ . '/../../../Magento/Sales/_files/address_data.php';

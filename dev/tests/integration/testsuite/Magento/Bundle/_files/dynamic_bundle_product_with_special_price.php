@@ -6,16 +6,28 @@
 declare(strict_types=1);
 
 use Magento\Bundle\Model\Product\Price;
+use Magento\Catalog\Api\Data\ProductInterfaceFactory;
+use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product\Attribute\Source\Status;
 use Magento\Catalog\Model\Product\Type;
 use Magento\Catalog\Model\Product\Type\AbstractType;
 use Magento\Catalog\Model\Product\Visibility;
+use Magento\Store\Model\StoreManagerInterface;
 use Magento\TestFramework\Bundle\Model\PrepareBundleLinks;
+use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
 
-require __DIR__ . '/../../../Magento/Catalog/_files/category_with_different_price_products.php';
+Resolver::getInstance()->requireDataFixture('Magento/Catalog/_files/category_with_different_price_products.php');
 
+$objectManager = Bootstrap::getObjectManager();
 /** @var PrepareBundleLinks $prepareBundleLinks */
 $prepareBundleLinks = $objectManager->get(PrepareBundleLinks::class);
+/** @var ProductRepositoryInterface $productRepository */
+$productRepository = $objectManager->create(ProductRepositoryInterface::class);
+/** @var ProductInterfaceFactory $productFactory */
+$productFactory = $objectManager->get(ProductInterfaceFactory::class);
+/** @var StoreManagerInterface $storeManager */
+$storeManager = $objectManager->get(StoreManagerInterface::class);
 $defaultWebsiteId = $storeManager->getWebsite('base')->getId();
 
 $bundleProduct = $productFactory->create();
@@ -53,13 +65,13 @@ $bundleOptionsData = [
 $bundleSelectionsData = [
     [
         [
-            'sku' => $product->getSku(),
+            'sku' => 'simple1000',
             'selection_qty' => 1,
             'selection_price_value' => 0,
             'selection_can_change_qty' => 1,
         ],
         [
-            'sku' => $product2->getSku(),
+            'sku' => 'simple1001',
             'selection_qty' => 1,
             'selection_price_value' => 0,
             'selection_can_change_qty' => 1,
