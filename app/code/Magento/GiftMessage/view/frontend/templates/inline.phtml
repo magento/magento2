@@ -87,9 +87,7 @@ switch ($block->getCheckoutType()):
                                 <div class="control">
                                     <textarea id="gift-message-whole-message" class="input-text"
                                               name="giftmessage[quote][<?=(int)$block->getEntity()->getId()?>][message]"
-                                              title="<?= $block->escapeHtmlAttr(__('Message')) ?>" rows="5" cols="10">
-                                        <?= /* @noEscape */ $block->getEscaped($block->getMessage()->getMessage()) ?>
-                                    </textarea>
+                                              title="<?= $block->escapeHtmlAttr(__('Message')) ?>" rows="5" cols="10"><?= /* @noEscape */ $block->getEscaped($block->getMessage()->getMessage()) ?></textarea>
                                 </div>
                             </div>
                         </fieldset>
@@ -196,11 +194,7 @@ script;
                                                       name="giftmessage[quote_item][<?= (int) $_item->getId()
                                                         ?>][message]"
                                                       title="<?= $block->escapeHtmlAttr(__('Message')) ?>"
-                                                      rows="5" cols="40">
-                                                <?= /* @noEscape */ $block->getEscaped(
-                                                    $block->getMessage($_item)->getMessage()
-                                                ) ?>
-                                            </textarea>
+                                                      rows="5" cols="40"><?= /* @noEscape */ $block->getEscaped($block->getMessage($_item)->getMessage()) ?></textarea>
                                          </div>
                                      </div>
                                 </fieldset>
@@ -322,9 +316,7 @@ script;
                                     <textarea id="gift-message-<?= (int) $block->getEntity()->getId() ?>-message"
                                               class="input-text" name="giftmessage[quote_address][<?= (int) $block
                                                 ->getEntity()->getId() ?>][message]"
-                                              title="<?= $block->escapeHtmlAttr(__('Message')) ?>" rows="5" cols="40">
-                                        <?= /* @noEscape */ $block->getEscaped($block->getMessage()->getMessage()) ?>
-                                    </textarea>
+                                              title="<?= $block->escapeHtmlAttr(__('Message')) ?>" rows="5" cols="40"><?= /* @noEscape */ $block->getEscaped($block->getMessage()->getMessage()) ?></textarea>
                                 </div>
                             </div>
                         </fieldset>
@@ -429,10 +421,7 @@ script;
                                                           name="giftmessage[quote_address_item][<?= (int) $_item
                                                               ->getId() ?>][message]"
                                                           title="<?= $block->escapeHtmlAttr(__('Message')) ?>" rows="5"
-                                                          cols="10">
-                                                    <?= /* @noEscape */ $block->getEscaped($block->getMessage($_item)
-                                                        ->getMessage()) ?>
-                                                </textarea>
+                                                          cols="10"><?= /* @noEscape */ $block->getEscaped($block->getMessage($_item)->getMessage()) ?></textarea>
                                             </div>
                                         </div>
                                  </fieldset>

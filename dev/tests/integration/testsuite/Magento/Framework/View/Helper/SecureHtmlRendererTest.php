@@ -106,10 +106,10 @@ class SecureHtmlRendererTest extends TestCase
      * Check handler validation
      *
      * @return void
-     * @expectedException \InvalidArgumentException
      */
     public function testInvalidEventListener(): void
     {
+        $this->expectException(\InvalidArgumentException::class);
         $this->helper->renderEventListenerAsTag('nonevent', '', '');
     }
 
