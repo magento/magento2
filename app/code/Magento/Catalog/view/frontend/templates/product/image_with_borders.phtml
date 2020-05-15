@@ -7,6 +7,11 @@
 <?php
 /** @var $block \Magento\Catalog\Block\Product\Image */
 /** @var $escaper \Magento\Framework\Escaper */
+/**
+ * Enable lazy loading for images with borders and if variable enable_lazy_loading_for_images_without_borders
+ * is enabled in view.xml. Otherwise small size images without borders may be distorted. So max-width is used for them
+ * to prevent stretching and lazy loading does not work.
+ */
 $borders = (bool)$block->getVar('product_image_white_borders', 'Magento_Catalog');
 $enableLazyLoadingWithoutBorders = (bool)$block->getVar(
     'enable_lazy_loading_for_images_without_borders',
@@ -24,8 +29,6 @@ $enableLazyLoadingWithoutBorders = (bool)$block->getVar(
             <?php endforeach; ?>
             src="<?= $escaper->escapeUrl($block->getImageUrl()) ?>"
             loading="lazy"
-        <!-- Enable lazy loading for images with borders and if variable
-        enable_lazy_loading_for_images_without_borders in view.xml is enabled -->
             <?php if ($borders || $enableLazyLoadingWithoutBorders): ?>
                 width="<?= $escaper->escapeHtmlAttr($block->getWidth()) ?>"
                 height="<?= $escaper->escapeHtmlAttr($block->getHeight()) ?>"
