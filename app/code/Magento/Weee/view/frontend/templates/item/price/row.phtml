@@ -26,17 +26,13 @@ $item = $block->getItem();
             </span>
 
         <?php if ($weeeHelper->getApplied($item)): ?>
-            <div class="cart-tax-info" id="subtotal-item-tax-details<?= (int) $item->getId() ?>">
+            <div class="cart-tax-info no-display" id="subtotal-item-tax-details<?= (int) $item->getId() ?>">
                 <?php foreach ($weeeHelper->getApplied($item) as $tax): ?>
                     <span class="weee" data-label="<?= $block->escapeHtmlAttr($tax['title']) ?>">
                         <?= /* @noEscape */ $block->formatPrice($tax['row_amount_incl_tax'], true, true) ?>
                     </span>
                 <?php endforeach; ?>
             </div>
-            <?= /* @noEscape */ $secureRenderer->renderStyleAsTag(
-                'display: none',
-                'div#subtotal-item-tax-details' . (int) $item->getId()
-            ) ?>
 
             <?php if ($block->displayFinalPrice()): ?>
                 <span class="cart-tax-total"
@@ -63,17 +59,13 @@ $item = $block->getItem();
             </span>
 
         <?php if ($weeeHelper->getApplied($item)): ?>
-            <span class="cart-tax-info" id="esubtotal-item-tax-details<?= (int) $item->getId() ?>">
+            <span class="cart-tax-info no-display" id="esubtotal-item-tax-details<?= (int) $item->getId() ?>">
                 <?php foreach ($weeeHelper->getApplied($item) as $tax): ?>
                     <span class="weee" data-label="<?= $block->escapeHtmlAttr($tax['title']) ?>">
                         <?= /* @noEscape */ $block->formatPrice($tax['row_amount'], true, true) ?>
                     </span>
                 <?php endforeach; ?>
             </span>
-            <?= /* @noEscape */ $secureRenderer->renderStyleAsTag(
-                'display: none',
-                'div#esubtotal-item-tax-details' . (int) $item->getId()
-            ) ?>
 
             <?php if ($block->displayFinalPrice()): ?>
                 <span class="cart-tax-total"
