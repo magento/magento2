@@ -43,7 +43,7 @@ class IndexTest extends TestCase
     /** @var AjaxIndex */
     private $indexAction;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->requestMock = $this->getMockBuilder(RequestInterface::class)
             ->setMethods(['getPost'])
