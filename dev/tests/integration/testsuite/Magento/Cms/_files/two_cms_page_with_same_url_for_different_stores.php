@@ -5,11 +5,15 @@
  */
 declare(strict_types=1);
 
-// phpcs:ignore Magento2.Security.IncludeFile
-require __DIR__ . '/../../../Magento/Store/_files/second_store.php';
+use Magento\Store\Api\StoreRepositoryInterface;
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
+
+Resolver::getInstance()->requireDataFixture('Magento/Store/_files/second_store.php');
 
 $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-
+/** @var StoreRepositoryInterface $storeRepository */
+$storeRepository = $objectManager->get(StoreRepositoryInterface::class);
+$store = $storeRepository->get('fixture_second_store');
 /** @var $page \Magento\Cms\Model\Page */
 $page = $objectManager->create(\Magento\Cms\Model\Page::class);
 $page->setTitle('First test page')

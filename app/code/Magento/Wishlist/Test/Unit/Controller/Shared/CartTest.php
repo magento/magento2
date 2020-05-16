@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Wishlist\Test\Unit\Controller\Shared;
 
 use Magento\Catalog\Model\Product;
@@ -23,80 +25,82 @@ use Magento\Wishlist\Model\Item\Option;
 use Magento\Wishlist\Model\Item\OptionFactory;
 use Magento\Wishlist\Model\ItemFactory;
 use Magento\Wishlist\Model\ResourceModel\Item\Option\Collection as OptionCollection;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class CartTest extends \PHPUnit\Framework\TestCase
+class CartTest extends TestCase
 {
-    /** @var  SharedCart|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var  SharedCart|MockObject */
     protected $model;
 
-    /** @var  RequestInterface|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var  RequestInterface|MockObject */
     protected $request;
 
-    /** @var  ManagerInterface|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var  ManagerInterface|MockObject */
     protected $messageManager;
 
-    /** @var  ActionContext|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var  ActionContext|MockObject */
     protected $context;
 
-    /** @var  Cart|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var  Cart|MockObject */
     protected $cart;
 
-    /** @var  CartHelper|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var  CartHelper|MockObject */
     protected $cartHelper;
 
-    /** @var  Quote|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var  Quote|MockObject */
     protected $quote;
 
-    /** @var  OptionCollection|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var  OptionCollection|MockObject */
     protected $optionCollection;
 
-    /** @var  OptionFactory|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var  OptionFactory|MockObject */
     protected $optionFactory;
 
-    /** @var  Option|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var  Option|MockObject */
     protected $option;
 
-    /** @var  ItemFactory|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var  ItemFactory|MockObject */
     protected $itemFactory;
 
-    /** @var  Item|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var  Item|MockObject */
     protected $item;
 
-    /** @var  Escaper|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var  Escaper|MockObject */
     protected $escaper;
 
-    /** @var  RedirectInterface|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var  RedirectInterface|MockObject */
     protected $redirect;
 
-    /** @var  ResultFactory|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var  ResultFactory|MockObject */
     protected $resultFactory;
 
-    /** @var  Redirect|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var  Redirect|MockObject */
     protected $resultRedirect;
 
-    /** @var  Product|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var  Product|MockObject */
     protected $product;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->request = $this->getMockBuilder(\Magento\Framework\App\RequestInterface::class)
+        $this->request = $this->getMockBuilder(RequestInterface::class)
             ->getMockForAbstractClass();
 
-        $this->redirect = $this->getMockBuilder(\Magento\Framework\App\Response\RedirectInterface::class)
+        $this->redirect = $this->getMockBuilder(RedirectInterface::class)
             ->getMockForAbstractClass();
 
-        $this->messageManager = $this->getMockBuilder(\Magento\Framework\Message\ManagerInterface::class)
+        $this->messageManager = $this->getMockBuilder(ManagerInterface::class)
             ->getMockForAbstractClass();
 
-        $this->resultRedirect = $this->getMockBuilder(\Magento\Framework\Controller\Result\Redirect::class)
+        $this->resultRedirect = $this->getMockBuilder(Redirect::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->resultFactory = $this->getMockBuilder(\Magento\Framework\Controller\ResultFactory::class)
+        $this->resultFactory = $this->getMockBuilder(ResultFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->resultFactory->expects($this->once())
@@ -128,20 +132,21 @@ class CartTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->quote = $this->getMockBuilder(\Magento\Quote\Model\Quote::class)
+        $this->quote = $this->getMockBuilder(Quote::class)
             ->disableOriginalConstructor()
             ->setMethods(['getHasError'])
             ->getMock();
 
         $this->optionCollection = $this->getMockBuilder(
             \Magento\Wishlist\Model\ResourceModel\Item\Option\Collection::class
-        )->disableOriginalConstructor()->getMock();
+        )->disableOriginalConstructor()
+            ->getMock();
 
-        $this->option = $this->getMockBuilder(\Magento\Wishlist\Model\Item\Option::class)
+        $this->option = $this->getMockBuilder(Option::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->optionFactory = $this->getMockBuilder(\Magento\Wishlist\Model\Item\OptionFactory::class)
+        $this->optionFactory = $this->getMockBuilder(OptionFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
@@ -149,11 +154,11 @@ class CartTest extends \PHPUnit\Framework\TestCase
             ->method('create')
             ->willReturn($this->option);
 
-        $this->item = $this->getMockBuilder(\Magento\Wishlist\Model\Item::class)
+        $this->item = $this->getMockBuilder(Item::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->itemFactory = $this->getMockBuilder(\Magento\Wishlist\Model\ItemFactory::class)
+        $this->itemFactory = $this->getMockBuilder(ItemFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
@@ -161,11 +166,11 @@ class CartTest extends \PHPUnit\Framework\TestCase
             ->method('create')
             ->willReturn($this->item);
 
-        $this->escaper = $this->getMockBuilder(\Magento\Framework\Escaper::class)
+        $this->escaper = $this->getMockBuilder(Escaper::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->product = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
+        $this->product = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
             ->getMock();
 

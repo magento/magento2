@@ -3,17 +3,20 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Payment\Test\Unit\Gateway\Data;
 
 use Magento\Payment\Gateway\Data\OrderAdapterInterface;
 use Magento\Payment\Gateway\Data\PaymentDataObject;
 use Magento\Payment\Model\InfoInterface;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Tests for PaymentDataObject
  */
-class PaymentDataObjectTest extends \PHPUnit\Framework\TestCase
+class PaymentDataObjectTest extends TestCase
 {
     /**
      * @var PaymentDataObject
@@ -33,7 +36,7 @@ class PaymentDataObjectTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->orderMock = $this->getMockBuilder(OrderAdapterInterface::class)
             ->getMockForAbstractClass();

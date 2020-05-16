@@ -5,14 +5,13 @@
  */
 declare(strict_types=1);
 
-require __DIR__ . '/website.php';
-
 use Magento\Catalog\Api\CategoryRepositoryInterface;
 use Magento\Catalog\Api\Data\CategoryInterface;
 use Magento\Catalog\Model\Category;
 use Magento\Catalog\Model\CategoryFactory;
 use Magento\Catalog\Model\ResourceModel\Category\Collection;
 use Magento\Catalog\Model\ResourceModel\Category\CollectionFactory;
+use Magento\Store\Api\WebsiteRepositoryInterface;
 use Magento\Store\Model\Group;
 use Magento\Store\Model\GroupFactory;
 use Magento\Store\Model\ResourceModel\Group as GroupResource;
@@ -21,9 +20,15 @@ use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreFactory;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
+
+Resolver::getInstance()->requireDataFixture('Magento/Store/_files/website.php');
 
 $objectManager = Bootstrap::getObjectManager();
 $categoryCollectionFactory = $objectManager->get(CollectionFactory::class);
+/** @var WebsiteRepositoryInterface $websiteRepository */
+$websiteRepository = $objectManager->get(WebsiteRepositoryInterface::class);
+$website = $websiteRepository->get('test');
 
 /** @var Collection $categoryCollection */
 $categoryCollection = $categoryCollectionFactory->create();
