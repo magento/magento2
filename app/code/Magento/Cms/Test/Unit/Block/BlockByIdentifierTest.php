@@ -56,7 +56,7 @@ class BlockByIdentifierTest extends TestCase
     /** @var MockObject|StoreInterface */
     private $storeMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->storeMock = $this->createMock(StoreInterface::class);
         $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
