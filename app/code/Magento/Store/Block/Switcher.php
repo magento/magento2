@@ -170,9 +170,15 @@ class Switcher extends \Magento\Framework\View\Element\Template
 
                 if ($store) {
                     $group->setHomeUrl($store->getHomeUrl());
+                    $group->setSortOrder($store->getSortOrder());
                     $groups[] = $group;
                 }
             }
+
+            usort($groups, static function ($itemA, $itemB) {
+                return (int)$itemA->getSortOrder() <=> (int)$itemB->getSortOrder();
+            });
+
             $this->setData('groups', $groups);
         }
         return $this->getData('groups');
