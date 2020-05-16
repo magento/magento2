@@ -5,10 +5,6 @@
  */
 namespace Magento\Downloadable\Model\ResourceModel;
 
-use Magento\Catalog\Api\Data\ProductInterface;
-use Magento\Framework\App\ObjectManager;
-use Magento\Framework\EntityManager\MetadataPool;
-
 /**
  * Downloadable Product  Samples resource model
  *
@@ -40,18 +36,12 @@ class Link extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     protected $_storeManager;
 
     /**
-     * @var MetadataPool
-     */
-    private $metadataPool;
-
-    /**
      * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
      * @param \Magento\Catalog\Helper\Data $catalogData
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $configuration
      * @param \Magento\Directory\Model\CurrencyFactory $currencyFactory
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param string $connectionName
-     * @param MetadataPool|null $metadataPool
      */
     public function __construct(
         \Magento\Framework\Model\ResourceModel\Db\Context $context,
@@ -59,15 +49,12 @@ class Link extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         \Magento\Framework\App\Config\ScopeConfigInterface $configuration,
         \Magento\Directory\Model\CurrencyFactory $currencyFactory,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
-        $connectionName = null,
-        ?MetadataPool $metadataPool = null
+        $connectionName = null
     ) {
         $this->_catalogData = $catalogData;
         $this->_configuration = $configuration;
         $this->_currencyFactory = $currencyFactory;
         $this->_storeManager = $storeManager;
-        $this->metadataPool = $metadataPool ?? ObjectManager::getInstance()->get(MetadataPool::class);
-
         parent::__construct($context, $connectionName);
     }
 
@@ -79,23 +66,6 @@ class Link extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     protected function _construct()
     {
         $this->_init('downloadable_link', 'link_id');
-    }
-
-    /**
-     * @inheritDoc
-     */
-    protected function _getLoadSelect($field, $value, $object)
-    {
-        $select = parent::_getLoadSelect($field, $value, $object);
-
-        $productMetadata = $this->metadataPool->getMetadata(ProductInterface::class);
-        $select->joinInner(
-            ['cpe' => $this->getTable('catalog_product_entity')],
-            sprintf('cpe.%s = %s.product_id', $productMetadata->getLinkField(), $this->getMainTable()),
-            ['product_id' => $productMetadata->getIdentifierField()]
-        );
-
-        return $select;
     }
 
     /**

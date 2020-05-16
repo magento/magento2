@@ -9,6 +9,8 @@ namespace Magento\Downloadable\Controller\Download;
 
 use Magento\Catalog\Model\Product\SalabilityChecker;
 use Magento\Downloadable\Helper\Download as DownloadHelper;
+use Magento\Downloadable\Model\Link as LinkModel;
+use Magento\Downloadable\Model\RelatedProductRetriever;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\App\ResponseInterface;
 
@@ -25,15 +27,24 @@ class LinkSample extends \Magento\Downloadable\Controller\Download
     private $salabilityChecker;
 
     /**
+     * @var RelatedProductRetriever
+     */
+    private $relatedProductRetriever;
+
+    /**
      * @param Context $context
-     * @param SalabilityChecker|null $salabilityChecker
+     * @param SalabilityChecker $salabilityChecker
+     * @param RelatedProductRetriever $relatedProductRetriever
      */
     public function __construct(
         Context $context,
-        SalabilityChecker $salabilityChecker = null
+        SalabilityChecker $salabilityChecker,
+        RelatedProductRetriever $relatedProductRetriever
     ) {
         parent::__construct($context);
-        $this->salabilityChecker = $salabilityChecker ?: $this->_objectManager->get(SalabilityChecker::class);
+
+        $this->salabilityChecker = $salabilityChecker;
+        $this->relatedProductRetriever = $relatedProductRetriever;
     }
 
     /**
@@ -44,9 +55,10 @@ class LinkSample extends \Magento\Downloadable\Controller\Download
     public function execute()
     {
         $linkId = $this->getRequest()->getParam('link_id', 0);
-        /** @var \Magento\Downloadable\Model\Link $link */
-        $link = $this->_objectManager->create(\Magento\Downloadable\Model\Link::class)->load($linkId);
-        if ($link->getId() && $this->salabilityChecker->isSalable($link->getProductId())) {
+        /** @var LinkModel $link */
+        $link = $this->_objectManager->create(LinkModel::class);
+        $link->load($linkId);
+        if ($link->getId() && $this->isProductSalable($link)) {
             $resource = '';
             $resourceType = '';
             if ($link->getSampleType() == DownloadHelper::LINK_TYPE_URL) {
@@ -73,5 +85,17 @@ class LinkSample extends \Magento\Downloadable\Controller\Download
         }
 
         return $this->getResponse()->setRedirect($this->_redirect->getRedirectUrl());
+    }
+
+    /**
+     * Check is related product salable.
+     *
+     * @param LinkModel $link
+     * @return bool
+     */
+    private function isProductSalable(LinkModel $link): bool
+    {
+        $product = $this->relatedProductRetriever->getProduct((int) $link->getProductId());
+        return $product ? $this->salabilityChecker->isSalable($product) : false;
     }
 }
