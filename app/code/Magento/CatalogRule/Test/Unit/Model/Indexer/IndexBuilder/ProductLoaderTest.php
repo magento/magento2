@@ -7,14 +7,16 @@ declare(strict_types=1);
 
 namespace Magento\CatalogRule\Test\Unit\Model\Indexer\IndexBuilder;
 
-use Magento\CatalogRule\Model\Indexer\IndexBuilder\ProductLoader;
-use Magento\Catalog\Api\ProductRepositoryInterface;
-use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Catalog\Api\Data\ProductSearchResultsInterface;
+use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product;
+use Magento\CatalogRule\Model\Indexer\IndexBuilder\ProductLoader;
 use Magento\Framework\Api\SearchCriteria;
+use Magento\Framework\Api\SearchCriteriaBuilder;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class ProductLoaderTest extends \PHPUnit\Framework\TestCase
+class ProductLoaderTest extends TestCase
 {
     /**
      * @var ProductLoader
@@ -22,27 +24,27 @@ class ProductLoaderTest extends \PHPUnit\Framework\TestCase
     protected $productLoader;
 
     /**
-     * @var ProductRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProductRepositoryInterface|MockObject
      */
     private $productRepository;
 
     /**
-     * @var SearchCriteriaBuilder|\PHPUnit_Framework_MockObject_MockObject
+     * @var SearchCriteriaBuilder|MockObject
      */
     private $searchCriteriaBuilder;
 
     /**
-     * @var ProductSearchResultsInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProductSearchResultsInterface|MockObject
      */
     private $productSearchResultsInterface;
 
     /**
-     * @var \Magento\Framework\Api\SearchCriteria|\PHPUnit_Framework_MockObject_MockObject
+     * @var SearchCriteria|MockObject
      */
     private $searchCriteria;
 
     /**
-     * @var Product|\PHPUnit_Framework_MockObject_MockObject
+     * @var Product|MockObject
      */
     protected $product;
 
@@ -51,11 +53,11 @@ class ProductLoaderTest extends \PHPUnit\Framework\TestCase
      *
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->productRepository = $this->getMockBuilder(ProductRepositoryInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->searchCriteriaBuilder = $this->getMockBuilder(SearchCriteriaBuilder::class)
             ->disableOriginalConstructor()
             ->getMock();

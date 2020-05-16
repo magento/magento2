@@ -3,36 +3,45 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Reports\Test\Unit\Model\ResourceModel\Report\Quote;
 
-use Magento\Framework\App\ResourceConnection;
-use \Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use \Magento\Reports\Model\ResourceModel\Quote\Collection as Collection;
+use Magento\Eav\Model\Entity\AbstractEntity;
+use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
+use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Framework\DB\Adapter\Pdo\Mysql;
+use Magento\Framework\DB\Select;
+use Magento\Framework\Event\ManagerInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Quote\Model\ResourceModel\Quote;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class CollectionTest extends \PHPUnit\Framework\TestCase
+class CollectionTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
+     * @var ObjectManager
      */
     protected $objectManager;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $selectMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
-        $this->selectMock = $this->createMock(\Magento\Framework\DB\Select::class);
+        $this->selectMock = $this->createMock(Select::class);
     }
 
     public function testGetSelectCountSql()
     {
-        /** @var $collection \PHPUnit_Framework_MockObject_MockObject */
+        /** @var MockObject $collection */
         $collection = $this->getMockBuilder(\Magento\Reports\Model\ResourceModel\Quote\Collection::class)
             ->setMethods(['getSelect'])
             ->disableOriginalConstructor()
@@ -49,7 +58,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
 
     public function testPrepareActiveCartItems()
     {
-        /** @var $collection \PHPUnit_Framework_MockObject_MockObject */
+        /** @var MockObject $collection */
         $constructArgs = $this->objectManager
             ->getConstructArguments(\Magento\Reports\Model\ResourceModel\Quote\Item\Collection::class);
         $collection = $this->getMockBuilder(\Magento\Reports\Model\ResourceModel\Quote\Item\Collection::class)
@@ -71,14 +80,14 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
 
     public function testLoadWithFilter()
     {
-        /** @var $collection \PHPUnit_Framework_MockObject_MockObject */
+        /** @var MockObject $collection */
         $constructArgs = $this->objectManager
             ->getConstructArguments(\Magento\Reports\Model\ResourceModel\Quote\Item\Collection::class);
-        $constructArgs['eventManager'] = $this->createMock(\Magento\Framework\Event\ManagerInterface::class);
-        $connectionMock = $this->createMock(\Magento\Framework\DB\Adapter\AdapterInterface::class);
-        $resourceMock = $this->createMock(\Magento\Quote\Model\ResourceModel\Quote::class);
+        $constructArgs['eventManager'] = $this->getMockForAbstractClass(ManagerInterface::class);
+        $connectionMock = $this->getMockForAbstractClass(AdapterInterface::class);
+        $resourceMock = $this->createMock(Quote::class);
         $resourceMock->expects($this->any())->method('getConnection')
-            ->willReturn($this->createMock(\Magento\Framework\DB\Adapter\Pdo\Mysql::class));
+            ->willReturn($this->createMock(Mysql::class));
         $constructArgs['resource'] = $resourceMock;
         $productResourceMock = $this->createMock(\Magento\Catalog\Model\ResourceModel\Product\Collection::class);
         $constructArgs['productResource'] = $productResourceMock;
@@ -112,13 +121,13 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
         $collection->expects($this->once())->method('getData')->willReturn(null);
         $collection->expects($this->once())->method('_setIsLoaded')->willReturnSelf();
         //productLoad()
-        $productAttributeMock = $this->createMock(\Magento\Eav\Model\Entity\Attribute\AbstractAttribute::class);
-        $priceAttributeMock = $this->createMock(\Magento\Eav\Model\Entity\Attribute\AbstractAttribute::class);
+        $productAttributeMock = $this->createMock(AbstractAttribute::class);
+        $priceAttributeMock = $this->createMock(AbstractAttribute::class);
         $productResourceMock->expects($this->once())->method('getConnection')->willReturn($connectionMock);
         $productResourceMock->expects($this->any())->method('getAttribute')
             ->willReturnMap([['name', $productAttributeMock], ['price', $priceAttributeMock]]);
         $productResourceMock->expects($this->once())->method('getSelect')->willReturn($this->selectMock);
-        $eavEntity = $this->createMock(\Magento\Eav\Model\Entity\AbstractEntity::class);
+        $eavEntity = $this->createMock(AbstractEntity::class);
         $eavEntity->expects($this->once())->method('getLinkField')->willReturn('entity_id');
         $productResourceMock->expects($this->once())->method('getEntity')->willReturn($eavEntity);
         $this->selectMock->expects($this->once())->method('reset')->willReturnSelf();

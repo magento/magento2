@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Multishipping\Test\Unit\Model\Checkout\Type;
 
+use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Type;
 use Magento\Catalog\Model\Product\Type\Simple;
 use Magento\Checkout\Model\Session;
@@ -17,6 +18,7 @@ use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Customer\Model\Session as CustomerSession;
 use Magento\Directory\Model\AllowedCountries;
 use Magento\Directory\Model\Currency;
+use Magento\Framework\Api\DataObjectHelper;
 use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\Api\SearchCriteria;
 use Magento\Framework\Api\SearchCriteriaBuilder;
@@ -39,6 +41,7 @@ use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\Quote\Address;
 use Magento\Quote\Model\Quote\Address as QuoteAddress;
 use Magento\Quote\Model\Quote\Address\Item as AddressItem;
+use Magento\Quote\Model\Quote\Address\Rate;
 use Magento\Quote\Model\Quote\Address\ToOrder;
 use Magento\Quote\Model\Quote\Address\ToOrderAddress;
 use Magento\Quote\Model\Quote\AddressFactory;
@@ -53,11 +56,15 @@ use Magento\Quote\Model\ShippingAssignment;
 use Magento\Sales\Api\Data\OrderAddressInterface;
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Api\Data\OrderPaymentInterface;
+use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Email\Sender\OrderSender;
 use Magento\Sales\Model\OrderFactory;
+use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface;
 
 /**
  * Test class Multishipping
@@ -65,7 +72,7 @@ use PHPUnit_Framework_MockObject_MockObject as MockObject;
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.TooManyFields)
  */
-class MultishippingTest extends \PHPUnit\Framework\TestCase
+class MultishippingTest extends TestCase
 {
     /**
      * @var Multishipping
@@ -138,7 +145,7 @@ class MultishippingTest extends \PHPUnit\Framework\TestCase
     private $orderFactoryMock;
 
     /**
-     * @var \Magento\Framework\Api\DataObjectHelper|MockObject
+     * @var DataObjectHelper|MockObject
      */
     private $dataObjectHelperMock;
 
@@ -185,7 +192,7 @@ class MultishippingTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritDoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->checkoutSessionMock = $this->createSimpleMock(Session::class);
         $this->customerSessionMock = $this->createSimpleMock(CustomerSession::class);
@@ -226,7 +233,7 @@ class MultishippingTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $allowedCountryReaderMock->method('getAllowedCountries')
             ->willReturn(['EN'=>'EN']);
-        $this->dataObjectHelperMock = $this->getMockBuilder(\Magento\Framework\Api\DataObjectHelper::class)
+        $this->dataObjectHelperMock = $this->getMockBuilder(DataObjectHelper::class)
             ->disableOriginalConstructor()
             ->setMethods(['mergeDataObjects'])
             ->getMock();
@@ -234,7 +241,7 @@ class MultishippingTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
-        $logger = $this->createSimpleMock(\Psr\Log\LoggerInterface::class);
+        $logger = $this->createSimpleMock(LoggerInterface::class);
 
         $this->model = new Multishipping(
             $this->checkoutSessionMock,
@@ -758,7 +765,7 @@ class MultishippingTest extends \PHPUnit\Framework\TestCase
      */
     private function getProductMock($simpleProductTypeMock): MockObject
     {
-        $productMock = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
+        $productMock = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
             ->setMethods(['getTypeInstance'])
             ->getMock();
@@ -836,7 +843,7 @@ class MultishippingTest extends \PHPUnit\Framework\TestCase
         $shippingAddressMock->method('getAddressType')->willReturn('shipping');
         $shippingAddressMock->method('getGrandTotal')->willReturn($addressTotal);
 
-        $shippingRateMock = $this->getMockBuilder(Address\Rate::class)
+        $shippingRateMock = $this->getMockBuilder(Rate::class)
             ->disableOriginalConstructor()
             ->setMethods([ 'getPrice' ])
             ->getMock();
@@ -888,7 +895,7 @@ class MultishippingTest extends \PHPUnit\Framework\TestCase
      */
     private function getOrderMock($orderAddressMock, $orderPaymentMock, $orderItemMock): MockObject
     {
-        $orderMock = $this->getMockBuilder(\Magento\Sales\Model\Order::class)
+        $orderMock = $this->getMockBuilder(Order::class)
             ->disableOriginalConstructor()
             ->setMethods(
                 [
@@ -981,15 +988,15 @@ class MultishippingTest extends \PHPUnit\Framework\TestCase
         $this->scopeConfigMock->expects($this->exactly(2))
             ->method('isSetFlag')
             ->withConsecutive(
-                ['sales/minimum_order/active', \Magento\Store\Model\ScopeInterface::SCOPE_STORE],
-                ['sales/minimum_order/multi_address', \Magento\Store\Model\ScopeInterface::SCOPE_STORE]
+                ['sales/minimum_order/active', ScopeInterface::SCOPE_STORE],
+                ['sales/minimum_order/multi_address', ScopeInterface::SCOPE_STORE]
             )->willReturnOnConsecutiveCalls(true, false);
 
         $this->scopeConfigMock->expects($this->exactly(2))
             ->method('getValue')
             ->withConsecutive(
-                ['sales/minimum_order/amount', \Magento\Store\Model\ScopeInterface::SCOPE_STORE],
-                ['sales/minimum_order/tax_including', \Magento\Store\Model\ScopeInterface::SCOPE_STORE]
+                ['sales/minimum_order/amount', ScopeInterface::SCOPE_STORE],
+                ['sales/minimum_order/tax_including', ScopeInterface::SCOPE_STORE]
             )->willReturnOnConsecutiveCalls(100, false);
 
         $this->checkoutSessionMock->expects($this->atLeastOnce())
@@ -1018,8 +1025,8 @@ class MultishippingTest extends \PHPUnit\Framework\TestCase
         $this->scopeConfigMock->expects($this->exactly(2))
             ->method('isSetFlag')
             ->withConsecutive(
-                ['sales/minimum_order/active', \Magento\Store\Model\ScopeInterface::SCOPE_STORE],
-                ['sales/minimum_order/multi_address', \Magento\Store\Model\ScopeInterface::SCOPE_STORE]
+                ['sales/minimum_order/active', ScopeInterface::SCOPE_STORE],
+                ['sales/minimum_order/multi_address', ScopeInterface::SCOPE_STORE]
             )->willReturnOnConsecutiveCalls(true, true);
 
         $this->checkoutSessionMock->expects($this->atLeastOnce())
