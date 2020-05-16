@@ -872,14 +872,10 @@ class Installer
     {
         $cacheState = $this->objectManagerProvider->get()->create(\Magento\Framework\App\Cache\StateInterface::class);
         $frontendCaches = [
-            PageCache::TYPE_IDENTIFIER,
-            BlockCache::TYPE_IDENTIFIER,
-            LayoutCache::TYPE_IDENTIFIER,
+            PageCache::TYPE_IDENTIFIER => $cacheState->isEnabled(PageCache::TYPE_IDENTIFIER),
+            BlockCache::TYPE_IDENTIFIER => $cacheState->isEnabled(BlockCache::TYPE_IDENTIFIER),
+            LayoutCache::TYPE_IDENTIFIER => $cacheState->isEnabled(LayoutCache::TYPE_IDENTIFIER)
         ];
-
-        foreach ($frontendCaches as $cacheType) {
-            $oldCacheStatus[$cacheType] = $cacheState->isEnabled($cacheType);
-        }
 
         /** @var \Magento\Framework\Registry $registry */
         $registry = $this->objectManagerProvider->get()->get(\Magento\Framework\Registry::class);
@@ -895,7 +891,7 @@ class Installer
         $this->updateCaches(false, $frontendCaches);
         $this->handleDBSchemaData($setup, 'data', $request);
         $this->log->log('Enabling caches:');
-        $this->updateCaches(true, $frontendCaches, $oldCacheStatus);
+        $this->updateCaches(true, $frontendCaches);
 
         $registry->unregister('setup-mode-enabled');
     }
@@ -1291,21 +1287,23 @@ class Installer
      * @param array $types
      * @return void
      */
-    private function updateCaches($isEnabled, $types = [], $oldCacheStatus = null)
+    private function updateCaches($isEnabled, $types = [])
     {
         /** @var \Magento\Framework\App\Cache\Manager $cacheManager */
         $cacheManager = $this->objectManagerProvider->get()->create(\Magento\Framework\App\Cache\Manager::class);
 
+        $cacheTypes = array_keys($types);
+        $cachestatuses = array_values($types);
         $availableTypes = $cacheManager->getAvailableTypes();
-        $types = empty($types) ? $availableTypes : array_intersect($availableTypes, $types);
+        $cacheTypes = empty($cacheTypes) ? $availableTypes : array_intersect($availableTypes, $cacheTypes);
         if ($isEnabled == true) {
-            foreach ($oldCacheStatus as $type => $status) {
+            foreach ($types as $type => $status) {
                 $enabledTypes = $cacheManager->setEnabled((array)$type, $status);
             }
         }
         else
         {
-            $enabledTypes = $cacheManager->setEnabled($types, $isEnabled);
+            $enabledTypes = $cacheManager->setEnabled($cacheTypes, $isEnabled);
         }
         if ($isEnabled) {
             $cacheManager->clean($enabledTypes);
@@ -1314,8 +1312,8 @@ class Installer
         // Only get statuses of specific cache types
         $cacheStatus = array_filter(
             $cacheManager->getStatus(),
-            function (string $key) use ($types) {
-                return in_array($key, $types);
+            function (string $key) use ($cacheTypes) {
+                return in_array($key, $cacheTypes);
             },
             ARRAY_FILTER_USE_KEY
         );
