@@ -13,7 +13,7 @@ use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Framework\Setup\Patch\DataPatchInterface;
 
 /**
- * Add Italy States
+ * Add Italian Provinces
  */
 class AddDataForItaly implements DataPatchInterface
 {
@@ -55,7 +55,7 @@ class AddDataForItaly implements DataPatchInterface
     }
 
     /**
-     * Italy states data.
+     * Italian provinces data.
      *
      * @return array
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
@@ -67,9 +67,8 @@ class AddDataForItaly implements DataPatchInterface
             ['IT', 'AL', 'Alessandria'],
             ['IT', 'AN', 'Ancona'],
             ['IT', 'AO', 'Aosta'],
-            ['IT', 'AQ', 'L\'Aquila'],
             ['IT', 'AR', 'Arezzo'],
-            ['IT', 'AP', 'Ascoli-Piceno'],
+            ['IT', 'AP', 'Ascoli Piceno'],
             ['IT', 'AT', 'Asti'],
             ['IT', 'AV', 'Avellino'],
             ['IT', 'BA', 'Bari'],
@@ -85,7 +84,6 @@ class AddDataForItaly implements DataPatchInterface
             ['IT', 'CA', 'Cagliari'],
             ['IT', 'CL', 'Caltanissetta'],
             ['IT', 'CB', 'Campobasso'],
-            ['IT', 'CI', 'Carbonia Iglesias'],
             ['IT', 'CE', 'Caserta'],
             ['IT', 'CT', 'Catania'],
             ['IT', 'CZ', 'Catanzaro'],
@@ -100,14 +98,15 @@ class AddDataForItaly implements DataPatchInterface
             ['IT', 'FE', 'Ferrara'],
             ['IT', 'FI', 'Firenze'],
             ['IT', 'FG', 'Foggia'],
-            ['IT', 'FC', 'Forli-Cesena'],
+            ['IT', 'FC', 'Forlì-Cesena'],
             ['IT', 'FR', 'Frosinone'],
             ['IT', 'GE', 'Genova'],
             ['IT', 'GO', 'Gorizia'],
             ['IT', 'GR', 'Grosseto'],
             ['IT', 'IM', 'Imperia'],
             ['IT', 'IS', 'Isernia'],
-            ['IT', 'SP', 'La-Spezia'],
+            ['IT', 'SP', 'La Spezia'],
+            ['IT', 'AQ', 'L\'Aquila'],
             ['IT', 'LT', 'Latina'],
             ['IT', 'LE', 'Lecce'],
             ['IT', 'LC', 'Lecco'],
@@ -118,23 +117,20 @@ class AddDataForItaly implements DataPatchInterface
             ['IT', 'MN', 'Mantova'],
             ['IT', 'MS', 'Massa-Carrara'],
             ['IT', 'MT', 'Matera'],
-            ['IT', 'VS', 'Medio Campidano'],
             ['IT', 'ME', 'Messina'],
             ['IT', 'MI', 'Milano'],
             ['IT', 'MO', 'Modena'],
-            ['IT', 'MB', 'Monza-Brianza'],
+            ['IT', 'MB', 'Monza e della Brianza'],
             ['IT', 'NA', 'Napoli'],
             ['IT', 'NO', 'Novara'],
             ['IT', 'NU', 'Nuoro'],
-            ['IT', 'OG', 'Ogliastra'],
-            ['IT', 'OT', 'Olbia Tempio'],
             ['IT', 'OR', 'Oristano'],
             ['IT', 'PD', 'Padova'],
             ['IT', 'PA', 'Palermo'],
             ['IT', 'PR', 'Parma'],
             ['IT', 'PV', 'Pavia'],
             ['IT', 'PG', 'Perugia'],
-            ['IT', 'PU', 'Pesaro-Urbino'],
+            ['IT', 'PU', 'Pesaro e Urbino'],
             ['IT', 'PE', 'Pescara'],
             ['IT', 'PC', 'Piacenza'],
             ['IT', 'PI', 'Pisa'],
@@ -144,8 +140,8 @@ class AddDataForItaly implements DataPatchInterface
             ['IT', 'PO', 'Prato'],
             ['IT', 'RG', 'Ragusa'],
             ['IT', 'RA', 'Ravenna'],
-            ['IT', 'RC', 'Reggio-Calabria'],
-            ['IT', 'RE', 'Reggio-Emilia'],
+            ['IT', 'RC', 'Reggio Calabria'],
+            ['IT', 'RE', 'Reggio Emilia'],
             ['IT', 'RI', 'Rieti'],
             ['IT', 'RN', 'Rimini'],
             ['IT', 'RM', 'Roma'],
@@ -156,6 +152,7 @@ class AddDataForItaly implements DataPatchInterface
             ['IT', 'SI', 'Siena'],
             ['IT', 'SR', 'Siracusa'],
             ['IT', 'SO', 'Sondrio'],
+            ['IT', 'SU', 'Sud Sardegna'],
             ['IT', 'TA', 'Taranto'],
             ['IT', 'TE', 'Teramo'],
             ['IT', 'TR', 'Terni'],
@@ -167,12 +164,12 @@ class AddDataForItaly implements DataPatchInterface
             ['IT', 'UD', 'Udine'],
             ['IT', 'VA', 'Varese'],
             ['IT', 'VE', 'Venezia'],
-            ['IT', 'VB', 'Verbania'],
+            ['IT', 'VB', 'Verbano-Cusio-Ossola'],
             ['IT', 'VC', 'Vercelli'],
             ['IT', 'VR', 'Verona'],
-            ['IT', 'VV', 'Vibo-Valentia'],
+            ['IT', 'VV', 'Vibo Valentia'],
             ['IT', 'VI', 'Vicenza'],
-            ['IT', 'VT', 'Viterbo'],
+            ['IT', 'VT', 'Viterbo']
         ];
     }
 
