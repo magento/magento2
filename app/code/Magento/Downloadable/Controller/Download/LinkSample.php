@@ -7,7 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\Downloadable\Controller\Download;
 
-use Magento\Catalog\Model\Product\SalabilityChecker;
 use Magento\Downloadable\Helper\Download as DownloadHelper;
 use Magento\Downloadable\Model\Link as LinkModel;
 use Magento\Downloadable\Model\RelatedProductRetriever;
@@ -22,28 +21,20 @@ use Magento\Framework\App\ResponseInterface;
 class LinkSample extends \Magento\Downloadable\Controller\Download
 {
     /**
-     * @var SalabilityChecker
-     */
-    private $salabilityChecker;
-
-    /**
      * @var RelatedProductRetriever
      */
     private $relatedProductRetriever;
 
     /**
      * @param Context $context
-     * @param SalabilityChecker $salabilityChecker
      * @param RelatedProductRetriever $relatedProductRetriever
      */
     public function __construct(
         Context $context,
-        SalabilityChecker $salabilityChecker,
         RelatedProductRetriever $relatedProductRetriever
     ) {
         parent::__construct($context);
 
-        $this->salabilityChecker = $salabilityChecker;
         $this->relatedProductRetriever = $relatedProductRetriever;
     }
 
@@ -96,6 +87,6 @@ class LinkSample extends \Magento\Downloadable\Controller\Download
     private function isProductSalable(LinkModel $link): bool
     {
         $product = $this->relatedProductRetriever->getProduct((int) $link->getProductId());
-        return $product ? $this->salabilityChecker->isSalable($product) : false;
+        return $product ? $product->isSalable() : false;
     }
 }
