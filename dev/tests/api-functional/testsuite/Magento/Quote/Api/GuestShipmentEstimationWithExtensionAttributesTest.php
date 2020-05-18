@@ -21,7 +21,7 @@ class GuestShipmentEstimationWithExtensionAttributesTest extends WebapiAbstract
      */
     private $objectManager;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
     }
@@ -32,7 +32,7 @@ class GuestShipmentEstimationWithExtensionAttributesTest extends WebapiAbstract
      * @magentoApiDataFixture Magento/SalesRule/_files/cart_rule_free_shipping.php
      * @magentoApiDataFixture Magento/Sales/_files/quote.php
      */
-    public function testEstimateByExtendedAddress()
+    public function testEstimateByExtendedAddress(): void
     {
         /** @var \Magento\Quote\Model\Quote $quote */
         $quote = $this->objectManager->create(\Magento\Quote\Model\Quote::class);
