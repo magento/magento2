@@ -30,7 +30,7 @@ class Index extends Action implements HttpGetActionInterface
     /**
      * @var ResultFactory
      */
-    private $resultFactory;
+    protected $resultFactory;
 
     /**
      * @var RequestInterface
