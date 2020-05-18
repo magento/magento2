@@ -86,14 +86,6 @@ class ConfiguredPriceBox extends FinalPriceBox
     }
 
     /**
-     * {@inheritdoc}
-     */
-    public function getPriceType($priceCode)
-    {
-        return $this->saleableItem->getPriceInfo()->getPrice($priceCode);
-    }
-
-    /**
      * @return PriceInterface
      */
     public function getConfiguredPrice(): PriceInterface
