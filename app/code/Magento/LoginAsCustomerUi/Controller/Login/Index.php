@@ -7,8 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\LoginAsCustomerUi\Controller\Login;
 
-use Magento\Framework\App\Action\Action;
-use Magento\Framework\App\Action\Context;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Controller\Result\Redirect;
@@ -25,12 +23,12 @@ use Psr\Log\LoggerInterface;
 /**
  * Login As Customer storefront login action
  */
-class Index extends Action implements HttpGetActionInterface
+class Index implements HttpGetActionInterface
 {
     /**
      * @var ResultFactory
      */
-    protected $resultFactory;
+    private $resultFactory;
 
     /**
      * @var RequestInterface
@@ -55,7 +53,7 @@ class Index extends Action implements HttpGetActionInterface
     /**
      * @var ManagerInterface
      */
-    protected $messageManager;
+    private $messageManager;
 
     /**
      * @var LoggerInterface
@@ -63,7 +61,6 @@ class Index extends Action implements HttpGetActionInterface
     private $logger;
 
     /**
-     * @param Context $context
      * @param ResultFactory $resultFactory
      * @param RequestInterface $request
      * @param CustomerRepositoryInterface $customerRepository
@@ -73,7 +70,6 @@ class Index extends Action implements HttpGetActionInterface
      * @param LoggerInterface $logger
      */
     public function __construct(
-        Context $context,
         ResultFactory $resultFactory,
         RequestInterface $request,
         CustomerRepositoryInterface $customerRepository,
@@ -82,7 +78,6 @@ class Index extends Action implements HttpGetActionInterface
         ManagerInterface $messageManager,
         LoggerInterface $logger
     ) {
-        parent::__construct($context);
         $this->resultFactory = $resultFactory;
         $this->request = $request;
         $this->customerRepository = $customerRepository;
