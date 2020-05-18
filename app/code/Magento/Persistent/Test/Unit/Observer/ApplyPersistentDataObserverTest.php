@@ -4,56 +4,66 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Persistent\Test\Unit\Observer;
 
-class ApplyPersistentDataObserverTest extends \PHPUnit\Framework\TestCase
+use Magento\Framework\Event\Observer;
+use Magento\Persistent\Helper\Data;
+use Magento\Persistent\Helper\Session;
+use Magento\Persistent\Model\Persistent\Config;
+use Magento\Persistent\Model\Persistent\ConfigFactory;
+use Magento\Persistent\Observer\ApplyPersistentDataObserver;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class ApplyPersistentDataObserverTest extends TestCase
 {
     /**
-     * @var \Magento\Persistent\Observer\ApplyPersistentDataObserver
+     * @var ApplyPersistentDataObserver
      */
     protected $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $sessionMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $persistentHelperMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $customerSessionMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $persistentConfigMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $observerMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $configMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->sessionMock = $this->createMock(\Magento\Persistent\Helper\Session::class);
+        $this->sessionMock = $this->createMock(Session::class);
         $this->customerSessionMock = $this->createMock(\Magento\Customer\Model\Session::class);
-        $this->persistentHelperMock = $this->createMock(\Magento\Persistent\Helper\Data::class);
-        $this->observerMock = $this->createMock(\Magento\Framework\Event\Observer::class);
-        $this->persistentConfigMock = $this->createMock(\Magento\Persistent\Model\Persistent\Config::class);
+        $this->persistentHelperMock = $this->createMock(Data::class);
+        $this->observerMock = $this->createMock(Observer::class);
+        $this->persistentConfigMock = $this->createMock(Config::class);
         $this->configMock =
-            $this->createPartialMock(\Magento\Persistent\Model\Persistent\ConfigFactory::class, ['create']);
-        $this->model = new \Magento\Persistent\Observer\ApplyPersistentDataObserver(
+            $this->createPartialMock(ConfigFactory::class, ['create']);
+        $this->model = new ApplyPersistentDataObserver(
             $this->sessionMock,
             $this->persistentHelperMock,
             $this->customerSessionMock,
@@ -67,7 +77,7 @@ class ApplyPersistentDataObserverTest extends \PHPUnit\Framework\TestCase
             ->expects($this->once())
             ->method('canProcess')
             ->with($this->observerMock)
-            ->will($this->returnValue(false));
+            ->willReturn(false);
         $this->configMock->expects($this->never())->method('create');
         $this->model->execute($this->observerMock);
     }
@@ -78,8 +88,8 @@ class ApplyPersistentDataObserverTest extends \PHPUnit\Framework\TestCase
             ->expects($this->once())
             ->method('canProcess')
             ->with($this->observerMock)
-            ->will($this->returnValue(true));
-        $this->sessionMock->expects($this->once())->method('isPersistent')->will($this->returnValue(false));
+            ->willReturn(true);
+        $this->sessionMock->expects($this->once())->method('isPersistent')->willReturn(false);
         $this->configMock->expects($this->never())->method('create');
         $this->model->execute($this->observerMock);
     }
@@ -90,9 +100,9 @@ class ApplyPersistentDataObserverTest extends \PHPUnit\Framework\TestCase
             ->expects($this->once())
             ->method('canProcess')
             ->with($this->observerMock)
-            ->will($this->returnValue(true));
-        $this->sessionMock->expects($this->once())->method('isPersistent')->will($this->returnValue(true));
-        $this->customerSessionMock->expects($this->once())->method('isLoggedIn')->will($this->returnValue(true));
+            ->willReturn(true);
+        $this->sessionMock->expects($this->once())->method('isPersistent')->willReturn(true);
+        $this->customerSessionMock->expects($this->once())->method('isLoggedIn')->willReturn(true);
         $this->configMock->expects($this->never())->method('create');
         $this->model->execute($this->observerMock);
     }
@@ -103,22 +113,21 @@ class ApplyPersistentDataObserverTest extends \PHPUnit\Framework\TestCase
             ->expects($this->once())
             ->method('canProcess')
             ->with($this->observerMock)
-            ->will($this->returnValue(true));
-        $this->sessionMock->expects($this->once())->method('isPersistent')->will($this->returnValue(true));
-        $this->customerSessionMock->expects($this->once())->method('isLoggedIn')->will($this->returnValue(false));
+            ->willReturn(true);
+        $this->sessionMock->expects($this->once())->method('isPersistent')->willReturn(true);
+        $this->customerSessionMock->expects($this->once())->method('isLoggedIn')->willReturn(false);
         $this->configMock
             ->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($this->persistentConfigMock));
+            ->willReturn($this->persistentConfigMock);
         $this->persistentHelperMock
             ->expects($this->once())
             ->method('getPersistentConfigFilePath')
-            ->will($this->returnValue('path/path1'));
+            ->willReturn('path/path1');
         $this->persistentConfigMock
             ->expects($this->once())
             ->method('setConfigFilePath')
-            ->with('path/path1')
-            ->will($this->returnSelf());
+            ->with('path/path1')->willReturnSelf();
         $this->persistentConfigMock->expects($this->once())->method('fire');
         $this->model->execute($this->observerMock);
     }

@@ -19,7 +19,7 @@ class ListTest extends \PHPUnit\Framework\TestCase
      */
     protected $_block;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(\Magento\Framework\App\State::class)
             ->setAreaCode('frontend');
@@ -92,8 +92,10 @@ class ListTest extends \PHPUnit\Framework\TestCase
 
     public function testSetCollection()
     {
-        $this->_block->setCollection('test');
-        $this->assertEquals('test', $this->_block->getLoadedProductCollection());
+        $collection = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+            ->create(\Magento\Framework\Data\Collection::class);
+        $this->_block->setCollection($collection);
+        $this->assertEquals($collection, $this->_block->getLoadedProductCollection());
     }
 
     public function testGetPriceBlockTemplate()

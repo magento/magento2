@@ -3,40 +3,49 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Weee\Test\Unit\Block\Item\Price;
 
+use Magento\Directory\Model\PriceCurrency;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Quote\Model\Quote\Item;
+use Magento\Weee\Block\Item\Price\Renderer;
+use Magento\Weee\Helper\Data;
 use Magento\Weee\Model\Tax as WeeeDisplayConfig;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class RendererTest extends \PHPUnit\Framework\TestCase
+class RendererTest extends TestCase
 {
     /**
-     * @var \Magento\Weee\Block\Item\Price\Renderer
+     * @var Renderer
      */
     protected $renderer;
 
     /**
-     * @var \Magento\Weee\Helper\Data|\PHPUnit_Framework_MockObject_MockObject
+     * @var Data|MockObject
      */
     protected $weeeHelper;
 
     /**
-     * @var \Magento\Directory\Model\PriceCurrency|\PHPUnit_Framework_MockObject_MockObject
+     * @var PriceCurrency|MockObject
      */
     protected $priceCurrency;
 
     /**
-     * @var \Magento\Quote\Model\Quote\Item|\PHPUnit_Framework_MockObject_MockObject
+     * @var Item|MockObject
      */
     protected $item;
 
     const STORE_ID = 'store_id';
     const ZONE = 'zone';
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $objectManager = new ObjectManager($this);
 
-        $this->weeeHelper = $this->getMockBuilder(\Magento\Weee\Helper\Data::class)
+        $this->weeeHelper = $this->getMockBuilder(Data::class)
             ->disableOriginalConstructor()
             ->setMethods([
                 'isEnabled',
@@ -48,15 +57,14 @@ class RendererTest extends \PHPUnit\Framework\TestCase
             ])
             ->getMock();
 
-        $this->priceCurrency = $this->getMockBuilder(\Magento\Directory\Model\PriceCurrency::class)
+        $this->priceCurrency = $this->getMockBuilder(PriceCurrency::class)
             ->disableOriginalConstructor()
             ->setMethods(['format'])
             ->getMock();
 
-        $this->item = $this->getMockBuilder(\Magento\Quote\Model\Quote\Item::class)
+        $this->item = $this->getMockBuilder(Item::class)
             ->disableOriginalConstructor()
             ->setMethods([
-                '__wakeup',
                 'getWeeeTaxAppliedAmount',
                 'getPriceInclTax',
                 'getRowTotalInclTax',
@@ -77,10 +85,10 @@ class RendererTest extends \PHPUnit\Framework\TestCase
 
         $this->item->expects($this->any())
             ->method('getStoreId')
-            ->will($this->returnValue(self::STORE_ID));
+            ->willReturn(self::STORE_ID);
 
         $this->renderer = $objectManager->getObject(
-            \Magento\Weee\Block\Item\Price\Renderer::class,
+            Renderer::class,
             [
                 'weeeHelper' => $this->weeeHelper,
                 'priceCurrency' => $this->priceCurrency,
@@ -105,7 +113,7 @@ class RendererTest extends \PHPUnit\Framework\TestCase
     ) {
         $this->weeeHelper->expects($this->once())
             ->method('isEnabled')
-            ->will($this->returnValue($isWeeeEnabled));
+            ->willReturn($isWeeeEnabled);
 
         $this->weeeHelper->expects($this->any())
             ->method('typeOfDisplay')
@@ -113,11 +121,11 @@ class RendererTest extends \PHPUnit\Framework\TestCase
                 [WeeeDisplayConfig::DISPLAY_INCL_DESCR, WeeeDisplayConfig::DISPLAY_EXCL_DESCR_INCL],
                 self::ZONE,
                 self::STORE_ID
-            )->will($this->returnValue($showWeeeDetails));
+            )->willReturn($showWeeeDetails);
 
         $this->item->expects($this->any())
             ->method('getWeeeTaxAppliedAmount')
-            ->will($this->returnValue($hasWeeeAmount));
+            ->willReturn($hasWeeeAmount);
 
         $this->assertEquals($expectedValue, $this->renderer->displayPriceWithWeeeDetails());
     }
@@ -204,21 +212,21 @@ class RendererTest extends \PHPUnit\Framework\TestCase
     ) {
         $this->weeeHelper->expects($this->once())
             ->method('isEnabled')
-            ->will($this->returnValue($weeeEnabled));
+            ->willReturn($weeeEnabled);
 
         $this->weeeHelper->expects($this->any())
             ->method('getWeeeTaxInclTax')
             ->with($this->item)
-            ->will($this->returnValue($weeeTaxInclTax));
+            ->willReturn($weeeTaxInclTax);
 
         $this->item->expects($this->once())
             ->method('getPriceInclTax')
-            ->will($this->returnValue($priceInclTax));
+            ->willReturn($priceInclTax);
 
         $this->weeeHelper->expects($this->any())
             ->method('typeOfDisplay')
             ->with([WeeeDisplayConfig::DISPLAY_INCL_DESCR, WeeeDisplayConfig::DISPLAY_INCL], self::ZONE)
-            ->will($this->returnValue($includeWeee));
+            ->willReturn($includeWeee);
 
         $this->assertEquals($expectedValue, $this->renderer->getUnitDisplayPriceInclTax());
     }
@@ -240,21 +248,21 @@ class RendererTest extends \PHPUnit\Framework\TestCase
     ) {
         $this->weeeHelper->expects($this->once())
             ->method('isEnabled')
-            ->will($this->returnValue($weeeEnabled));
+            ->willReturn($weeeEnabled);
 
         $this->weeeHelper->expects($this->any())
             ->method('getBaseWeeeTaxInclTax')
             ->with($this->item)
-            ->will($this->returnValue($baseWeeeTaxInclTax));
+            ->willReturn($baseWeeeTaxInclTax);
 
         $this->item->expects($this->once())
             ->method('getBasePriceInclTax')
-            ->will($this->returnValue($basePriceInclTax));
+            ->willReturn($basePriceInclTax);
 
         $this->weeeHelper->expects($this->any())
             ->method('typeOfDisplay')
             ->with([WeeeDisplayConfig::DISPLAY_INCL_DESCR, WeeeDisplayConfig::DISPLAY_INCL], self::ZONE)
-            ->will($this->returnValue($includeWeee));
+            ->willReturn($includeWeee);
 
         $this->assertEquals($expectedValue, $this->renderer->getBaseUnitDisplayPriceInclTax());
     }
@@ -276,20 +284,20 @@ class RendererTest extends \PHPUnit\Framework\TestCase
     ) {
         $this->weeeHelper->expects($this->once())
             ->method('isEnabled')
-            ->will($this->returnValue($weeeEnabled));
+            ->willReturn($weeeEnabled);
 
         $this->item->expects($this->any())
             ->method('getWeeeTaxAppliedAmount')
-            ->will($this->returnValue($weeeTaxExclTax));
+            ->willReturn($weeeTaxExclTax);
 
         $this->item->expects($this->once())
             ->method('getCalculationPrice')
-            ->will($this->returnValue($priceExclTax));
+            ->willReturn($priceExclTax);
 
         $this->weeeHelper->expects($this->any())
             ->method('typeOfDisplay')
             ->with([WeeeDisplayConfig::DISPLAY_INCL_DESCR, WeeeDisplayConfig::DISPLAY_INCL], self::ZONE)
-            ->will($this->returnValue($includeWeee));
+            ->willReturn($includeWeee);
 
         $this->assertEquals($expectedValue, $this->renderer->getUnitDisplayPriceExclTax());
     }
@@ -311,24 +319,24 @@ class RendererTest extends \PHPUnit\Framework\TestCase
     ) {
         $this->weeeHelper->expects($this->once())
             ->method('isEnabled')
-            ->will($this->returnValue($weeeEnabled));
+            ->willReturn($weeeEnabled);
 
         $this->item->expects($this->any())
             ->method('getBaseWeeeTaxAppliedAmount')
-            ->will($this->returnValue($baseWeeeTaxExclTax));
+            ->willReturn($baseWeeeTaxExclTax);
 
         $this->item->expects($this->once())
             ->method('getBaseRowTotal')
-            ->will($this->returnValue($basePriceExclTax));
+            ->willReturn($basePriceExclTax);
 
         $this->item->expects($this->once())
             ->method('getQtyOrdered')
-            ->will($this->returnValue(1));
+            ->willReturn(1);
 
         $this->weeeHelper->expects($this->any())
             ->method('typeOfDisplay')
             ->with([WeeeDisplayConfig::DISPLAY_INCL_DESCR, WeeeDisplayConfig::DISPLAY_INCL], self::ZONE)
-            ->will($this->returnValue($includeWeee));
+            ->willReturn($includeWeee);
 
         $this->assertEquals($expectedValue, $this->renderer->getBaseUnitDisplayPriceExclTax());
     }
@@ -350,20 +358,20 @@ class RendererTest extends \PHPUnit\Framework\TestCase
     ) {
         $this->weeeHelper->expects($this->once())
             ->method('isEnabled')
-            ->will($this->returnValue($weeeEnabled));
+            ->willReturn($weeeEnabled);
 
         $this->item->expects($this->any())
             ->method('getWeeeTaxAppliedRowAmount')
-            ->will($this->returnValue($rowWeeeTaxExclTax));
+            ->willReturn($rowWeeeTaxExclTax);
 
         $this->item->expects($this->once())
             ->method('getRowTotal')
-            ->will($this->returnValue($rowTotal));
+            ->willReturn($rowTotal);
 
         $this->weeeHelper->expects($this->any())
             ->method('typeOfDisplay')
             ->with([WeeeDisplayConfig::DISPLAY_INCL_DESCR, WeeeDisplayConfig::DISPLAY_INCL], self::ZONE)
-            ->will($this->returnValue($includeWeee));
+            ->willReturn($includeWeee);
 
         $this->assertEquals($expectedValue, $this->renderer->getRowDisplayPriceExclTax());
     }
@@ -385,20 +393,20 @@ class RendererTest extends \PHPUnit\Framework\TestCase
     ) {
         $this->weeeHelper->expects($this->once())
             ->method('isEnabled')
-            ->will($this->returnValue($weeeEnabled));
+            ->willReturn($weeeEnabled);
 
         $this->item->expects($this->any())
             ->method('getBaseWeeeTaxAppliedRowAmnt')
-            ->will($this->returnValue($baseRowWeeeTaxExclTax));
+            ->willReturn($baseRowWeeeTaxExclTax);
 
         $this->item->expects($this->once())
             ->method('getBaseRowTotal')
-            ->will($this->returnValue($baseRowTotal));
+            ->willReturn($baseRowTotal);
 
         $this->weeeHelper->expects($this->any())
             ->method('typeOfDisplay')
             ->with([WeeeDisplayConfig::DISPLAY_INCL_DESCR, WeeeDisplayConfig::DISPLAY_INCL], self::ZONE)
-            ->will($this->returnValue($includeWeee));
+            ->willReturn($includeWeee);
 
         $this->assertEquals($expectedValue, $this->renderer->getBaseRowDisplayPriceExclTax());
     }
@@ -420,21 +428,21 @@ class RendererTest extends \PHPUnit\Framework\TestCase
     ) {
         $this->weeeHelper->expects($this->once())
             ->method('isEnabled')
-            ->will($this->returnValue($weeeEnabled));
+            ->willReturn($weeeEnabled);
 
         $this->weeeHelper->expects($this->any())
             ->method('getRowWeeeTaxInclTax')
             ->with($this->item)
-            ->will($this->returnValue($rowWeeeTaxInclTax));
+            ->willReturn($rowWeeeTaxInclTax);
 
         $this->item->expects($this->once())
             ->method('getRowTotalInclTax')
-            ->will($this->returnValue($rowTotalInclTax));
+            ->willReturn($rowTotalInclTax);
 
         $this->weeeHelper->expects($this->any())
             ->method('typeOfDisplay')
             ->with([WeeeDisplayConfig::DISPLAY_INCL_DESCR, WeeeDisplayConfig::DISPLAY_INCL], self::ZONE)
-            ->will($this->returnValue($includeWeee));
+            ->willReturn($includeWeee);
 
         $this->assertEquals($expectedValue, $this->renderer->getRowDisplayPriceInclTax());
     }
@@ -456,21 +464,21 @@ class RendererTest extends \PHPUnit\Framework\TestCase
     ) {
         $this->weeeHelper->expects($this->once())
             ->method('isEnabled')
-            ->will($this->returnValue($weeeEnabled));
+            ->willReturn($weeeEnabled);
 
         $this->weeeHelper->expects($this->any())
             ->method('getBaseRowWeeeTaxInclTax')
             ->with($this->item)
-            ->will($this->returnValue($baseRowWeeeTaxInclTax));
+            ->willReturn($baseRowWeeeTaxInclTax);
 
         $this->item->expects($this->once())
             ->method('getBaseRowTotalInclTax')
-            ->will($this->returnValue($baseRowTotalInclTax));
+            ->willReturn($baseRowTotalInclTax);
 
         $this->weeeHelper->expects($this->any())
             ->method('typeOfDisplay')
             ->with([WeeeDisplayConfig::DISPLAY_INCL_DESCR, WeeeDisplayConfig::DISPLAY_INCL], self::ZONE)
-            ->will($this->returnValue($includeWeee));
+            ->willReturn($includeWeee);
 
         $this->assertEquals($expectedValue, $this->renderer->getBaseRowDisplayPriceInclTax());
     }
@@ -528,16 +536,16 @@ class RendererTest extends \PHPUnit\Framework\TestCase
     ) {
         $this->weeeHelper->expects($this->once())
             ->method('isEnabled')
-            ->will($this->returnValue($weeeEnabled));
+            ->willReturn($weeeEnabled);
 
         $this->weeeHelper->expects($this->any())
             ->method('getWeeeTaxInclTax')
             ->with($this->item)
-            ->will($this->returnValue($weeeTaxInclTax));
+            ->willReturn($weeeTaxInclTax);
 
         $this->item->expects($this->once())
             ->method('getPriceInclTax')
-            ->will($this->returnValue($priceInclTax));
+            ->willReturn($priceInclTax);
 
         $this->assertEquals($expectedValue, $this->renderer->getFinalUnitDisplayPriceInclTax());
     }
@@ -557,16 +565,16 @@ class RendererTest extends \PHPUnit\Framework\TestCase
     ) {
         $this->weeeHelper->expects($this->once())
             ->method('isEnabled')
-            ->will($this->returnValue($weeeEnabled));
+            ->willReturn($weeeEnabled);
 
         $this->weeeHelper->expects($this->any())
             ->method('getBaseWeeeTaxInclTax')
             ->with($this->item)
-            ->will($this->returnValue($baseWeeeTaxInclTax));
+            ->willReturn($baseWeeeTaxInclTax);
 
         $this->item->expects($this->once())
             ->method('getBasePriceInclTax')
-            ->will($this->returnValue($basePriceInclTax));
+            ->willReturn($basePriceInclTax);
 
         $this->assertEquals($expectedValue, $this->renderer->getBaseFinalUnitDisplayPriceInclTax());
     }
@@ -586,15 +594,15 @@ class RendererTest extends \PHPUnit\Framework\TestCase
     ) {
         $this->weeeHelper->expects($this->once())
             ->method('isEnabled')
-            ->will($this->returnValue($weeeEnabled));
+            ->willReturn($weeeEnabled);
 
         $this->item->expects($this->any())
             ->method('getWeeeTaxAppliedAmount')
-            ->will($this->returnValue($weeeTaxExclTax));
+            ->willReturn($weeeTaxExclTax);
 
         $this->item->expects($this->once())
             ->method('getCalculationPrice')
-            ->will($this->returnValue($priceExclTax));
+            ->willReturn($priceExclTax);
 
         $this->assertEquals($expectedValue, $this->renderer->getFinalUnitDisplayPriceExclTax());
     }
@@ -614,19 +622,19 @@ class RendererTest extends \PHPUnit\Framework\TestCase
     ) {
         $this->weeeHelper->expects($this->once())
             ->method('isEnabled')
-            ->will($this->returnValue($weeeEnabled));
+            ->willReturn($weeeEnabled);
 
         $this->item->expects($this->any())
             ->method('getBaseWeeeTaxAppliedAmount')
-            ->will($this->returnValue($baseWeeeTaxExclTax));
+            ->willReturn($baseWeeeTaxExclTax);
 
         $this->item->expects($this->once())
             ->method('getBaseRowTotal')
-            ->will($this->returnValue($basePriceExclTax));
+            ->willReturn($basePriceExclTax);
 
         $this->item->expects($this->once())
             ->method('getQtyOrdered')
-            ->will($this->returnValue(1));
+            ->willReturn(1);
 
         $this->assertEquals($expectedValue, $this->renderer->getBaseFinalUnitDisplayPriceExclTax());
     }
@@ -646,15 +654,15 @@ class RendererTest extends \PHPUnit\Framework\TestCase
     ) {
         $this->weeeHelper->expects($this->once())
             ->method('isEnabled')
-            ->will($this->returnValue($weeeEnabled));
+            ->willReturn($weeeEnabled);
 
         $this->item->expects($this->any())
             ->method('getWeeeTaxAppliedRowAmount')
-            ->will($this->returnValue($rowWeeeTaxExclTax));
+            ->willReturn($rowWeeeTaxExclTax);
 
         $this->item->expects($this->once())
             ->method('getRowTotal')
-            ->will($this->returnValue($rowTotal));
+            ->willReturn($rowTotal);
 
         $this->assertEquals($expectedValue, $this->renderer->getFinalRowDisplayPriceExclTax());
     }
@@ -674,15 +682,15 @@ class RendererTest extends \PHPUnit\Framework\TestCase
     ) {
         $this->weeeHelper->expects($this->once())
             ->method('isEnabled')
-            ->will($this->returnValue($weeeEnabled));
+            ->willReturn($weeeEnabled);
 
         $this->item->expects($this->any())
             ->method('getBaseWeeeTaxAppliedRowAmnt')
-            ->will($this->returnValue($baseRowWeeeTaxExclTax));
+            ->willReturn($baseRowWeeeTaxExclTax);
 
         $this->item->expects($this->once())
             ->method('getBaseRowTotal')
-            ->will($this->returnValue($baseRowTotal));
+            ->willReturn($baseRowTotal);
 
         $this->assertEquals($expectedValue, $this->renderer->getBaseFinalRowDisplayPriceExclTax());
     }
@@ -702,16 +710,16 @@ class RendererTest extends \PHPUnit\Framework\TestCase
     ) {
         $this->weeeHelper->expects($this->once())
             ->method('isEnabled')
-            ->will($this->returnValue($weeeEnabled));
+            ->willReturn($weeeEnabled);
 
         $this->weeeHelper->expects($this->any())
             ->method('getRowWeeeTaxInclTax')
             ->with($this->item)
-            ->will($this->returnValue($rowWeeeTaxInclTax));
+            ->willReturn($rowWeeeTaxInclTax);
 
         $this->item->expects($this->once())
             ->method('getRowTotalInclTax')
-            ->will($this->returnValue($rowTotalInclTax));
+            ->willReturn($rowTotalInclTax);
 
         $this->assertEquals($expectedValue, $this->renderer->getFinalRowDisplayPriceInclTax());
     }
@@ -731,16 +739,16 @@ class RendererTest extends \PHPUnit\Framework\TestCase
     ) {
         $this->weeeHelper->expects($this->once())
             ->method('isEnabled')
-            ->will($this->returnValue($weeeEnabled));
+            ->willReturn($weeeEnabled);
 
         $this->weeeHelper->expects($this->any())
             ->method('getBaseRowWeeeTaxInclTax')
             ->with($this->item)
-            ->will($this->returnValue($baseRowWeeeTaxInclTax));
+            ->willReturn($baseRowWeeeTaxInclTax);
 
         $this->item->expects($this->once())
             ->method('getBaseRowTotalInclTax')
-            ->will($this->returnValue($baseRowTotalInclTax));
+            ->willReturn($baseRowTotalInclTax);
 
         $this->assertEquals($expectedValue, $this->renderer->getBaseFinalRowDisplayPriceInclTax());
     }
@@ -784,32 +792,31 @@ class RendererTest extends \PHPUnit\Framework\TestCase
                     'getRowTotal',
                     'getTaxAmount',
                     'getDiscountTaxCompensationAmount',
-                    'getDiscountAmount',
-                    '__wakeup'
+                    'getDiscountAmount'
                 ]
             )
             ->getMock();
 
         $itemMock->expects($this->once())
             ->method('getRowTotal')
-            ->will($this->returnValue($rowTotal));
+            ->willReturn($rowTotal);
 
         $itemMock->expects($this->once())
             ->method('getTaxAmount')
-            ->will($this->returnValue($taxAmount));
+            ->willReturn($taxAmount);
 
         $itemMock->expects($this->once())
             ->method('getDiscountTaxCompensationAmount')
-            ->will($this->returnValue($discountTaxCompensationAmount));
+            ->willReturn($discountTaxCompensationAmount);
 
         $itemMock->expects($this->once())
             ->method('getDiscountAmount')
-            ->will($this->returnValue($discountAmount));
+            ->willReturn($discountAmount);
 
         $this->weeeHelper->expects($this->once())
             ->method('getRowWeeeTaxInclTax')
             ->with($itemMock)
-            ->will($this->returnValue($weeeAmount));
+            ->willReturn($weeeAmount);
 
         $this->assertEquals($expectedValue, $this->renderer->getTotalAmount($itemMock));
     }
@@ -832,32 +839,31 @@ class RendererTest extends \PHPUnit\Framework\TestCase
                     'getBaseRowTotal',
                     'getBaseTaxAmount',
                     'getBaseDiscountTaxCompensationAmount',
-                    'getBaseDiscountAmount',
-                    '__wakeup'
+                    'getBaseDiscountAmount'
                 ]
             )
             ->getMock();
 
         $itemMock->expects($this->once())
             ->method('getBaseRowTotal')
-            ->will($this->returnValue($baseRowTotal));
+            ->willReturn($baseRowTotal);
 
         $itemMock->expects($this->once())
             ->method('getBaseTaxAmount')
-            ->will($this->returnValue($baseTaxAmount));
+            ->willReturn($baseTaxAmount);
 
         $itemMock->expects($this->once())
             ->method('getBaseDiscountTaxCompensationAmount')
-            ->will($this->returnValue($baseDiscountTaxCompensationAmount));
+            ->willReturn($baseDiscountTaxCompensationAmount);
 
         $itemMock->expects($this->once())
             ->method('getBaseDiscountAmount')
-            ->will($this->returnValue($baseDiscountAmount));
+            ->willReturn($baseDiscountAmount);
 
         $this->weeeHelper->expects($this->once())
             ->method('getBaseRowWeeeTaxInclTax')
             ->with($itemMock)
-            ->will($this->returnValue($baseWeeeAmount));
+            ->willReturn($baseWeeeAmount);
 
         $this->assertEquals($expectedValue, $this->renderer->getBaseTotalAmount($itemMock));
     }

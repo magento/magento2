@@ -12,14 +12,13 @@ use Magento\Braintree\Model\Adapter\BraintreeAdapter;
 use Magento\Braintree\Model\Adapter\BraintreeAdapterFactory;
 use Magento\Braintree\Model\Ui\ConfigProvider;
 use Magento\Customer\Model\Session;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
- * Class ConfigProviderTest
- *
  * Test for class \Magento\Braintree\Model\Ui\ConfigProvider
  */
-class ConfigProviderTest extends \PHPUnit\Framework\TestCase
+class ConfigProviderTest extends TestCase
 {
     const SDK_URL = 'https://js.braintreegateway.com/v2/braintree.js';
     const CLIENT_TOKEN = 'token';
@@ -45,7 +44,7 @@ class ConfigProviderTest extends \PHPUnit\Framework\TestCase
      */
     private $configProvider;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->config = $this->getMockBuilder(Config::class)
             ->disableOriginalConstructor()

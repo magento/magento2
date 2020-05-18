@@ -5,5 +5,11 @@
  */
 declare(strict_types=1);
 
-require __DIR__ . '/category_with_different_price_products_rollback.php';
-require __DIR__ . '/../../Store/_files/second_website_with_two_stores_rollback.php';
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
+
+Resolver::getInstance()->requireDataFixture(
+    'Magento/Catalog/_files/category_with_different_price_products_rollback.php'
+);
+Resolver::getInstance()->requireDataFixture(
+    'Magento/Store/_files/second_website_with_two_stores_rollback.php'
+);

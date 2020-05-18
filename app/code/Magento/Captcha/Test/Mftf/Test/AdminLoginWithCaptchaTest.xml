@@ -30,19 +30,22 @@
             <magentoCLI command="config:set {{AdminCaptchaDefaultSymbolsConfigData.path}} {{AdminCaptchaDefaultSymbolsConfigData.value}}" stepKey="setDefaultCaptchaSymbols" />
             <magentoCLI command="cache:clean config full_page" stepKey="cleanInvalidatedCaches"/>
         </after>
-        
-        <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdminWithWrongCredentialsFirstAttempt">
-            <argument name="adminUser" value="AdminUserWrongCredentials" />
+
+        <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdminWithWrongCredentialsFirstAttempt">
+            <argument name="username" value="{{AdminUserWrongCredentials.username}}"/>
+            <argument name="password" value="{{AdminUserWrongCredentials.password}}"/>
         </actionGroup>
         <actionGroup ref="AssertMessageOnAdminLoginActionGroup" stepKey="seeFirstLoginErrorMessage" />
 
-        <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdminWithWrongCredentialsSecondAttempt">
-            <argument name="adminUser" value="AdminUserWrongCredentials" />
+        <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdminWithWrongCredentialsSecondAttempt">
+            <argument name="username" value="{{AdminUserWrongCredentials.username}}"/>
+            <argument name="password" value="{{AdminUserWrongCredentials.password}}"/>
         </actionGroup>
         <actionGroup ref="AssertMessageOnAdminLoginActionGroup" stepKey="seeSecondLoginErrorMessage" />
 
-        <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdminWithWrongCredentialsThirdAttempt">
-            <argument name="adminUser" value="AdminUserWrongCredentials" />
+        <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdminWithWrongCredentialsThirdAttempt">
+            <argument name="username" value="{{AdminUserWrongCredentials.username}}"/>
+            <argument name="password" value="{{AdminUserWrongCredentials.password}}"/>
         </actionGroup>
         <actionGroup ref="AssertMessageOnAdminLoginActionGroup" stepKey="seeThirdLoginErrorMessage" />
 
@@ -51,17 +54,19 @@
 
         <!-- Submit form with incorrect captcha -->
         <actionGroup ref="AdminLoginWithCaptchaActionGroup" stepKey="loginAsAdminWithIncorrectCaptcha">
-            <argument name="adminUser" value="DefaultAdminUser" />
-            <argument name="captcha" value="{{WrongCaptcha.value}}" />
+            <argument name="username" value="{{DefaultAdminUser.username}}"/>
+            <argument name="password" value="{{DefaultAdminUser.password}}"/>
+            <argument name="captcha" value="{{WrongCaptcha.value}}"/>
         </actionGroup>
         <actionGroup ref="AssertMessageOnAdminLoginActionGroup" stepKey="seeIncorrectCaptchaErrorMessage">
-            <argument name="message" value="Incorrect CAPTCHA." />
+            <argument name="message" value="Incorrect CAPTCHA."/>
         </actionGroup>
         <actionGroup ref="AssertCaptchaVisibleOnAdminLoginFormActionGroup" stepKey="assertCaptchaVisibleAfterIncorrectCaptcha" />
 
         <actionGroup ref="AdminLoginWithCaptchaActionGroup" stepKey="loginAsAdminWithCorrectCaptcha">
-            <argument name="adminUser" value="DefaultAdminUser" />
-            <argument name="captcha" value="{{PreconfiguredCaptcha.value}}" />
+            <argument name="username" value="{{DefaultAdminUser.username}}"/>
+            <argument name="password" value="{{DefaultAdminUser.password}}"/>
+            <argument name="captcha" value="{{PreconfiguredCaptcha.value}}"/>
         </actionGroup>
         <actionGroup ref="AssertAdminSuccessLoginActionGroup" stepKey="verifyAdminLoggedIn" />
     </test>

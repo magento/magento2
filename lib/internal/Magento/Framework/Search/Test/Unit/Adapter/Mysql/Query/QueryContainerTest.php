@@ -3,47 +3,54 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\Search\Test\Unit\Adapter\Mysql\Query;
 
+use Magento\Framework\DB\Select;
 use Magento\Framework\Search\Adapter\Mysql\Query\MatchContainerFactory;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\Search\Adapter\Mysql\Query\QueryContainer;
 use Magento\Framework\Search\Request\Query\BoolExpression;
+use Magento\Framework\Search\Request\QueryInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class QueryContainerTest extends \PHPUnit\Framework\TestCase
+class QueryContainerTest extends TestCase
 {
-    /** @var \Magento\Framework\DB\Select|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var Select|MockObject */
     private $select;
 
-    /** @var MatchContainerFactory|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var MatchContainerFactory|MockObject */
     private $matchContainerFactory;
 
-    /** @var \Magento\Framework\Search\Request\QueryInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var QueryInterface|MockObject */
     private $requestQuery;
 
-    /** @var \Magento\Framework\Search\Adapter\Mysql\Query\QueryContainer */
+    /** @var QueryContainer */
     private $queryContainer;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $helper = new ObjectManager($this);
 
-        $this->select = $this->getMockBuilder(\Magento\Framework\DB\Select::class)
+        $this->select = $this->getMockBuilder(Select::class)
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->matchContainerFactory = $this->getMockBuilder(
-            \Magento\Framework\Search\Adapter\Mysql\Query\MatchContainerFactory::class
+            MatchContainerFactory::class
         )
             ->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->requestQuery = $this->getMockBuilder(\Magento\Framework\Search\Request\QueryInterface::class)
+        $this->requestQuery = $this->getMockBuilder(QueryInterface::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
         $this->queryContainer = $helper->getObject(
-            \Magento\Framework\Search\Adapter\Mysql\Query\QueryContainer::class,
+            QueryContainer::class,
             [
                 'matchContainerFactory' => $this->matchContainerFactory,
             ]

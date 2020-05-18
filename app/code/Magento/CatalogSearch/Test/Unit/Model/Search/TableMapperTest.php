@@ -3,66 +3,75 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\CatalogSearch\Test\Unit\Model\Search;
 
 use Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory;
 use Magento\CatalogSearch\Model\Adapter\Mysql\Filter\AliasResolver;
+use Magento\CatalogSearch\Model\Search\FilterMapper\FilterStrategyInterface;
+use Magento\CatalogSearch\Model\Search\FiltersExtractor;
+use Magento\CatalogSearch\Model\Search\TableMapper;
+use Magento\Eav\Model\Config;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\DB\Select;
+use Magento\Framework\Search\Request\Filter\Term;
 use Magento\Framework\Search\Request\FilterInterface;
 use Magento\Framework\Search\Request\QueryInterface;
-use \Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\CatalogSearch\Model\Search\FiltersExtractor;
-use Magento\CatalogSearch\Model\Search\FilterMapper\FilterStrategyInterface;
-use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Framework\Search\Request\Filter\Term;
+use Magento\Framework\Search\RequestInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Store\Model\StoreManagerInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test for \Magento\CatalogSearch\Model\Search\TableMapper
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @deprecated
+ * @deprecated Implementation class was replaced
  * @see \Magento\ElasticSearch
  */
-class TableMapperTest extends \PHPUnit\Framework\TestCase
+class TableMapperTest extends TestCase
 {
     /**
-     * @var AliasResolver|\PHPUnit_Framework_MockObject_MockObject
+     * @var AliasResolver|MockObject
      */
     private $aliasResolver;
 
     /**
-     * @var \Magento\CatalogSearch\Model\Search\TableMapper
+     * @var TableMapper
      */
     private $tableMapper;
 
     /**
-     * @var FiltersExtractor|\PHPUnit_Framework_MockObject_MockObject
+     * @var FiltersExtractor|MockObject
      */
     private $filterExtractorMock;
 
     /**
-     * @var FilterStrategyInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var FilterStrategyInterface|MockObject
      */
     private $filterStrategy;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
 
-        $resource = $this->getMockBuilder(\Magento\Framework\App\ResourceConnection::class)
+        $resource = $this->getMockBuilder(ResourceConnection::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $storeManager = $this->getMockBuilder(\Magento\Store\Model\StoreManagerInterface::class)
+        $storeManager = $this->getMockBuilder(StoreManagerInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $attributeCollectionFactory = $this->getMockBuilder(CollectionFactory::class)
             ->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
 
-        $eavConfig = $this->getMockBuilder(\Magento\Eav\Model\Config::class)
+        $eavConfig = $this->getMockBuilder(Config::class)
             ->setMethods(['getAttribute'])
             ->disableOriginalConstructor()
             ->getMock();
@@ -84,7 +93,7 @@ class TableMapperTest extends \PHPUnit\Framework\TestCase
             ->getMockForAbstractClass();
 
         $this->tableMapper = $objectManager->getObject(
-            \Magento\CatalogSearch\Model\Search\TableMapper::class,
+            TableMapper::class,
             [
                 'resource' => $resource,
                 'storeManager' => $storeManager,
@@ -279,27 +288,27 @@ class TableMapperTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return MockObject
      */
     private function getSelectMock()
     {
-        return $this->getMockBuilder(\Magento\Framework\DB\Select::class)
+        return $this->getMockBuilder(Select::class)
             ->disableOriginalConstructor()
             ->getMock();
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return MockObject
      */
     private function getRequestMock()
     {
-        return $this->getMockBuilder(\Magento\Framework\Search\RequestInterface::class)
+        return $this->getMockBuilder(RequestInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return MockObject
      */
     private function getQueryMock()
     {

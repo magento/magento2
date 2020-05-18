@@ -70,7 +70,8 @@ angular.module('install', ['ngStorage'])
                 'db': $localStorage.db,
                 'admin': $localStorage.admin,
                 'store': $localStorage.store,
-                'config': $localStorage.config
+                'config': $localStorage.config,
+                'search': $localStorage.search
             };
             $scope.isStarted = true;
             $scope.isInProgress = true;
