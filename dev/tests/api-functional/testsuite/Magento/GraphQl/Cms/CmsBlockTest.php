@@ -206,4 +206,38 @@ QUERY;
             $responseData['errors'][0]['message']
         );
     }
+    /**
+     * Verify the CMS Block per storeview
+     *
+     * @magentoApiDataFixture Magento/Store/_files/multiple_websites_with_store_groups_stores.php
+     * @magentoApiDataFixture Magento/Cms/_files/blocks_for_different_stores.php
+     */
+    public function testGetCmsBlockPerSpecificStore(): void
+    {
+        $blockIdentitifier1 = 'test-block';
+        $blockIdentitifier2 = 'test-block-2';
+        $storeCode = 'third_store_view';
+        $this->getCmsBlockQuery($blockIdentitifier2, $storeCode);
+
+    }
+    private function getCmsBlockQuery($blockIdentitifier, $storeCode)
+    {
+        $query =
+            <<<QUERY
+{
+  cmsBlocks(identifiers: "$blockIdentitifier") {
+    items {
+      identifier
+      title
+      content
+    }
+  }
+  storeConfig{code}
+}
+QUERY;
+        $headerMap['Store'] = $storeCode;
+        $response = $this->graphQlQuery($query, [], '', $headerMap);
+        self::assertArrayHasKey('cmsBlocks', $response);
+        self::assertArrayHasKey('items', $response['cmsBlocks']);
+    }
 }
