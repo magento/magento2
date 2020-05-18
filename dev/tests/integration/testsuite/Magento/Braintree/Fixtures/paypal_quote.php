@@ -8,10 +8,21 @@ declare(strict_types=1);
 
 use Magento\Braintree\Model\Ui\PayPal\ConfigProvider;
 use Magento\Quote\Api\CartRepositoryInterface;
+use Magento\Quote\Model\Quote;
+use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
+use Magento\Vault\Model\PaymentTokenManagement;
 
-require __DIR__ . '/../_files/paypal_vault_token.php';
-require __DIR__ . '/../../Sales/_files/quote_with_customer.php';
+Resolver::getInstance()->requireDataFixture('Magento/Braintree/_files/paypal_vault_token.php');
+Resolver::getInstance()->requireDataFixture('Magento/Sales/_files/quote_with_customer.php');
 
+$objectManager = Bootstrap::getObjectManager();
+/** @var PaymentTokenManagement $tokenManagement */
+$tokenManagement = $objectManager->get(PaymentTokenManagement::class);
+$paymentToken = $tokenManagement->getByGatewayToken('mx29vk', ConfigProvider::PAYPAL_CODE, 1);
+/** @var $quote Quote */
+$quote = $objectManager->create(Quote::class);
+$quote->load('test01', 'reserved_order_id');
 $quote->getShippingAddress()
     ->setShippingMethod('flatrate_flatrate')
     ->setCollectShippingRates(true);
