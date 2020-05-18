@@ -57,8 +57,8 @@ class OperationRepositoryInterfaceTest extends WebapiAbstract
         $this->assertArrayHasKey('items', $response);
 
         $this->assertEquals($searchCriteria['searchCriteria'], $response['search_criteria']);
-        $this->assertEquals(5, $response['total_count']);
-        $this->assertCount(5, $response['items']);
+        $this->assertEquals(6, $response['total_count']);
+        $this->assertCount(6, $response['items']);
 
         foreach ($response['items'] as $item) {
             $this->assertEquals('bulk-uuid-searchable-6', $item['bulk_uuid']);
