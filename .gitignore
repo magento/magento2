@@ -39,7 +39,7 @@ atlassian*
 /pub/media/attribute/*
 !/pub/media/attribute/.htaccess
 /pub/media/analytics/*
-!/pub/media/catalog/* <--needs to go back
+/pub/media/catalog/*
 !/pub/media/catalog/.htaccess
 /pub/media/customer/*
 !/pub/media/customer/.htaccess
@@ -48,13 +48,13 @@ atlassian*
 /pub/media/favicon/*
 /pub/media/import/*
 !/pub/media/import/.htaccess
-!/pub/media/logo/* <--needs to go back
+/pub/media/logo/* 
 /pub/media/custom_options/*
 !/pub/media/custom_options/.htaccess
-!/pub/media/theme/* <--needs to go back
+/pub/media/theme/*
 /pub/media/theme_customization/*
 !/pub/media/theme_customization/.htaccess
-!/pub/media/wysiwyg/* <--needs to go back
+/pub/media/wysiwyg/*
 !/pub/media/wysiwyg/.htaccess
 /pub/media/tmp/*
 !/pub/media/tmp/.htaccess

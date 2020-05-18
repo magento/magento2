@@ -1,0 +1,91 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: redis-backend
+  name: redis-backend
+spec:
+  type: ClusterIP
+  ports:
+  - name: "redis-service"
+    port: 6379
+    targetPort: 6379
+  selector:
+    app: redis-backend
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: redis-session
+  name: redis-session
+spec:
+  type: ClusterIP
+  ports:
+  - name: "redis-session"
+    port: 6380
+    targetPort: 6380
+  selector:
+    app: redis-session
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: redis-backend
+  name: redis-backend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: redis-backend
+  template:
+    metadata:
+      labels:
+        app: redis-backend
+    spec:
+      containers:
+      - image: eu.gcr.io/magento2-269418/redis-alpine:1
+        name: redis-backend
+        ports:
+        - containerPort: 6379
+          name: redis-backend
+        volumeMounts:
+        - mountPath: /data
+          name: redis-data
+      nodeSelector: 
+        private-redis-single-pool: redis-single
+      volumes:
+      - name: redis-data
+        emptyDir: {} 
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: redis-session
+  name: redis-session
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: redis-session
+  template:
+    metadata:
+      labels:
+        app: redis-session
+    spec:
+      containers:
+      - image: eu.gcr.io/magento2-269418/redis-alpine:1
+        name: redis-session
+        ports:
+        - containerPort: 6380
+          name: redis-session
+        volumeMounts:
+        - mountPath: /data
+          name: redis-data
+      nodeSelector: 
+        private-redis-single-pool: redis-single
+      volumes:
+      - name: redis-data
+        emptyDir: {} 
