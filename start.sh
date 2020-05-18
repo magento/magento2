@@ -13,6 +13,6 @@ cp -a .htaccess pub/
 
 #/// run setup, deploy the static content and flush the cache :)
 php bin/magento setup:upgrade
-php bin/magento setup:static-content:deploy
+php bin/magento setup:static-content:deploy -f
 php bin/magento cache:flush
 
