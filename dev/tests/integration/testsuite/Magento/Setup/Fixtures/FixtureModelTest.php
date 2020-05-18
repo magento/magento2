@@ -47,7 +47,7 @@ class FixtureModelTest extends \Magento\TestFramework\Indexer\TestCase
     /**
      * Set indexer mode to "scheduled" for do not perform reindex after creation entity
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
         $this->indexerRegistry = $this->objectManager->get(IndexerRegistry::class);
@@ -67,7 +67,7 @@ class FixtureModelTest extends \Magento\TestFramework\Indexer\TestCase
     /**
      * Return indexer to previous state
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         foreach ($this->indexersState as $indexerId => $state) {
             $indexer = $this->indexerRegistry->get($indexerId);
@@ -75,7 +75,7 @@ class FixtureModelTest extends \Magento\TestFramework\Indexer\TestCase
         }
     }
 
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         $db = Bootstrap::getInstance()->getBootstrap()
             ->getApplication()
@@ -125,7 +125,7 @@ class FixtureModelTest extends \Magento\TestFramework\Indexer\TestCase
         }
     }
 
-    public static function tearDownAfterClass()
+    public static function tearDownAfterClass(): void
     {
         parent::tearDownAfterClass();
 

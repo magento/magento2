@@ -24,7 +24,7 @@ class CspWhitelistXmlCollectorTest extends TestCase
     /**
      * @inheritDoc
      */
-    public function setUp()
+    protected function setUp(): void
     {
         $this->collector = Bootstrap::getObjectManager()->get(CspWhitelistXmlCollector::class);
     }

@@ -7,35 +7,28 @@ declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Unit\Controller\Adminhtml\Product\Attribute;
 
-use Magento\Backend\Model\Session;
-use Magento\Backend\Model\View\Result\Redirect as ResultRedirect;
 use Magento\Catalog\Api\Data\ProductAttributeInterface;
 use Magento\Catalog\Controller\Adminhtml\Product\Attribute\Save;
-use Magento\Catalog\Helper\Product as ProductHelper;
-use Magento\Catalog\Model\Product\Attribute\Frontend\Inputtype\Presentation;
-use Magento\Catalog\Model\Product\AttributeSet\Build;
-use Magento\Catalog\Model\Product\AttributeSet\BuildFactory;
-use Magento\Catalog\Model\ResourceModel\Eav\AttributeFactory;
+use Magento\Eav\Model\Validator\Attribute\Code as AttributeCodeValidator;
+use Magento\Framework\Serialize\Serializer\FormData;
 use Magento\Catalog\Test\Unit\Controller\Adminhtml\Product\AttributeTest;
+use Magento\Catalog\Model\Product\AttributeSet\BuildFactory;
+use Magento\Catalog\Model\Product\AttributeSet\Build;
+use Magento\Catalog\Model\ResourceModel\Eav\AttributeFactory;
 use Magento\Eav\Api\Data\AttributeSetInterface;
-use Magento\Eav\Model\Adminhtml\System\Config\Source\Inputtype\Validator as InputTypeValidator;
 use Magento\Eav\Model\Adminhtml\System\Config\Source\Inputtype\ValidatorFactory;
 use Magento\Eav\Model\ResourceModel\Entity\Attribute\Group\CollectionFactory;
-use Magento\Eav\Model\Validator\Attribute\Code as AttributeCodeValidator;
 use Magento\Framework\Controller\ResultFactory;
-use Magento\Framework\Exception\NotFoundException;
 use Magento\Framework\Filter\FilterManager;
-use Magento\Framework\Serialize\Serializer\FormData;
+use Magento\Catalog\Helper\Product as ProductHelper;
 use Magento\Framework\View\Element\Messages;
 use Magento\Framework\View\LayoutFactory;
+use Magento\Backend\Model\View\Result\Redirect as ResultRedirect;
+use Magento\Eav\Model\Adminhtml\System\Config\Source\Inputtype\Validator as InputTypeValidator;
 use Magento\Framework\View\LayoutInterface;
-use PHPUnit\Framework\MockObject\MockObject;
 
 /**
- * Test product attribute controller
- *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @SuppressWarnings(PHPMD.TooManyFields)
  */
 class SaveTest extends AttributeTest
 {
@@ -107,22 +100,19 @@ class SaveTest extends AttributeTest
     /**
      * @var Presentation|MockObject
      */
-    protected $presentationMock;
+    private $formDataSerializerMock;
 
     /**
-     * @var Session|MockObject
+     * @var ProductAttributeInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $sessionMock;
+    private $productAttributeMock;
 
     /**
      * @var AttributeCodeValidator|MockObject
      */
-    protected $attributeCodeValidatorMock;
+    private $attributeCodeValidatorMock;
 
-    /**
-     * @inheritDoc
-     */
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
         $this->filterManagerMock = $this->createMock(FilterManager::class);
@@ -139,6 +129,12 @@ class SaveTest extends AttributeTest
             ->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
+        $this->filterManagerMock = $this->getMockBuilder(FilterManager::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->productHelperMock = $this->getMockBuilder(ProductHelper::class)
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->attributeFactoryMock = $this->getMockBuilder(AttributeFactory::class)
             ->setMethods(['create'])
             ->disableOriginalConstructor()
@@ -151,8 +147,26 @@ class SaveTest extends AttributeTest
             ->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
+        $this->layoutFactoryMock = $this->getMockBuilder(LayoutFactory::class)
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->redirectMock = $this->getMockBuilder(ResultRedirect::class)
             ->setMethods(['setData', 'setPath'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->attributeSetMock = $this->getMockBuilder(AttributeSetInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->builderMock = $this->getMockBuilder(Build::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->inputTypeValidatorMock = $this->getMockBuilder(InputTypeValidator::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->formDataSerializerMock = $this->getMockBuilder(FormData::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->attributeCodeValidatorMock = $this->getMockBuilder(AttributeCodeValidator::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->productAttributeMock = $this->getMockBuilder(ProductAttributeInterface::class)
@@ -203,11 +217,7 @@ class SaveTest extends AttributeTest
         ]);
     }
 
-    /**
-     * @return void
-     * @throws NotFoundException
-     */
-    public function testExecuteWithEmptyData(): void
+    public function testExecuteWithEmptyData()
     {
         $this->requestMock->expects($this->any())
             ->method('getParam')
@@ -233,11 +243,7 @@ class SaveTest extends AttributeTest
         $this->assertInstanceOf(ResultRedirect::class, $this->getModel()->execute());
     }
 
-    /**
-     * @return void
-     * @throws NotFoundException
-     */
-    public function testExecuteSaveFrontendClass(): void
+    public function testExecuteSaveFrontendClass()
     {
         $data = [
             'frontend_input' => 'test_frontend_input',
@@ -298,11 +304,7 @@ class SaveTest extends AttributeTest
         $this->assertInstanceOf(ResultRedirect::class, $this->getModel()->execute());
     }
 
-    /**
-     * @return void
-     * @throws NotFoundException
-     */
-    public function testExecute(): void
+    public function testExecute()
     {
         $data = [
             'new_attribute_set_name' => 'Test attribute set name',
@@ -365,10 +367,9 @@ class SaveTest extends AttributeTest
     }
 
     /**
-     * @return void
      * @throws NotFoundException
      */
-    public function testExecuteWithOptionsDataError(): void
+    public function testExecuteWithOptionsDataError()
     {
         $serializedOptions = '{"key":"value"}';
         $message = "The attribute couldn't be saved due to an error. Verify your information and try again. "
@@ -398,10 +399,9 @@ class SaveTest extends AttributeTest
      * @param string $path
      * @param array $params
      * @param array $response
-     * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    private function addReturnResultConditions(string $path = '', array $params = [], array $response = []): void
+    private function addReturnResultConditions(string $path = '', array $params = [], array $response = [])
     {
         $layoutMock = $this->getMockBuilder(LayoutInterface::class)
             ->setMethods(['initMessages', 'getMessagesBlock'])

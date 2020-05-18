@@ -18,7 +18,7 @@ class FilterApplierTest extends TestCase
      */
     private $applier;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->applier = ObjectManager::getInstance()->get(FilterApplier::class);
     }

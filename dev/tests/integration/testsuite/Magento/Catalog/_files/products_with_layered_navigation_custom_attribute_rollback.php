@@ -5,9 +5,6 @@
  */
 declare(strict_types=1);
 
-require __DIR__ . '/../../Eav/_files/empty_attribute_set_rollback.php';
-require __DIR__ . '/../../Catalog/_files/categories_rollback.php';
-
 use Magento\Eav\Api\Data\AttributeInterface;
 use Magento\Eav\Model\Config;
 use Magento\Eav\Model\Entity\Attribute\Set as AttributeSet;
@@ -16,7 +13,10 @@ use Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\Collection as Attribute
 use Magento\Framework\App\ObjectManager;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Eav\Api\AttributeRepositoryInterface;
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
 
+Resolver::getInstance()->requireDataFixture('Magento/Eav/_files/empty_attribute_set_rollback.php');
+Resolver::getInstance()->requireDataFixture('Magento/Catalog/_files/categories_rollback.php');
 /** @var ObjectManager $objectManager */
 $objectManager = Bootstrap::getObjectManager();
 
