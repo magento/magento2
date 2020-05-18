@@ -82,37 +82,4 @@ class Navigation extends AbstractActionController
         $this->view->setTerminal(true);
         return $this->view;
     }
-
-    /**
-     * Side menu action
-     *
-     * @return array|ViewModel
-     */
-    public function sideMenuAction()
-    {
-        /** @var UrlInterface $backendUrl */
-        $backendUrl = $this->objectManagerProvider->get(UrlInterface::class);
-        $this->view->setTemplate('/magento/setup/navigation/side-menu.phtml');
-        $this->view->setVariable('isInstaller', $this->navigation->getType() ==  NavModel::NAV_INSTALLER);
-        $this->view->setVariable('backendUrl', $backendUrl->getRouteUrl('adminhtml'));
-        $this->view->setTerminal(true);
-        return $this->view;
-    }
-
-    /**
-     * Head bar action
-     *
-     * @return array|ViewModel
-     */
-    public function headerBarAction()
-    {
-        if ($this->navigation->getType() === NavModel::NAV_UPDATER) {
-            if ($this->status->isUpdateError() || $this->status->isUpdateInProgress()) {
-                $this->view->setVariable('redirect', '../' . Environment::UPDATER_DIR . '/index.php');
-            }
-        }
-        $this->view->setTemplate('/magento/setup/navigation/header-bar.phtml');
-        $this->view->setTerminal(true);
-        return $this->view;
-    }
 }

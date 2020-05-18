@@ -9,11 +9,11 @@ namespace Magento\Setup\Test\Unit\Controller;
 
 use Laminas\View\Model\ViewModel;
 use Magento\Framework\App\ProductMetadata;
-use Magento\Setup\Controller\LandingUpdater;
+use Magento\Setup\Controller\Landing;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
-class LandingUpdaterTest extends TestCase
+class LandingTest extends TestCase
 {
     /**
      * Test Product Version Value
@@ -30,8 +30,8 @@ class LandingUpdaterTest extends TestCase
         $productMetadataMock->expects($this->once())
             ->method('getVersion')
             ->willReturn($this::TEST_PRODUCT_VERSION);
-        /** @var LandingUpdater $controller */
-        $controller = new LandingUpdater($productMetadataMock);
+        /** @var Landing $controller */
+        $controller = new Landing($productMetadataMock);
         $_SERVER['DOCUMENT_ROOT'] = 'some/doc/root/value';
         $viewModel = $controller->indexAction();
         $this->assertInstanceOf(ViewModel::class, $viewModel);
@@ -40,9 +40,5 @@ class LandingUpdaterTest extends TestCase
         $variables = $viewModel->getVariables();
         $this->assertArrayHasKey('version', $variables);
         $this->assertEquals($this::TEST_PRODUCT_VERSION, $variables['version']);
-        $this->assertArrayHasKey('welcomeMsg', $variables);
-        $this->assertArrayHasKey('docRef', $variables);
-        $this->assertArrayHasKey('agreeButtonText', $variables);
-        $this->assertEquals('Agree and Update Magento', $variables['agreeButtonText']);
     }
 }

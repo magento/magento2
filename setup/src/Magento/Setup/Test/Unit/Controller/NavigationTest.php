@@ -77,28 +77,4 @@ class NavigationTest extends TestCase
         $this->assertTrue($viewModel->terminate());
         $this->assertSame('/magento/setup/navigation/menu.phtml', $viewModel->getTemplate());
     }
-
-    public function testHeaderBarInstaller()
-    {
-        $this->navigationModel->expects($this->once())->method('getType')->willReturn(NavModel::NAV_INSTALLER);
-        $viewModel = $this->controller->headerBarAction();
-        $this->assertInstanceOf(ViewModel::class, $viewModel);
-        $variables = $viewModel->getVariables();
-        $this->assertArrayHasKey('menu', $variables);
-        $this->assertArrayHasKey('main', $variables);
-        $this->assertTrue($viewModel->terminate());
-        $this->assertSame('/magento/setup/navigation/header-bar.phtml', $viewModel->getTemplate());
-    }
-
-    public function testHeaderBarUpdater()
-    {
-        $this->navigationModel->expects($this->once())->method('getType')->willReturn(NavModel::NAV_UPDATER);
-        $viewModel = $this->controller->headerBarAction();
-        $this->assertInstanceOf(ViewModel::class, $viewModel);
-        $variables = $viewModel->getVariables();
-        $this->assertArrayHasKey('menu', $variables);
-        $this->assertArrayHasKey('main', $variables);
-        $this->assertTrue($viewModel->terminate());
-        $this->assertSame('/magento/setup/navigation/header-bar.phtml', $viewModel->getTemplate());
-    }
 }
