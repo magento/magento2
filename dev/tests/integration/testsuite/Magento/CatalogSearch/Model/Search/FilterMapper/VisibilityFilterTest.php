@@ -27,7 +27,7 @@ class VisibilityFilterTest extends \PHPUnit\Framework\TestCase
     /** @var StoreManagerInterface */
     private $storeManager;
 
-    /** @var EavConfig|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var EavConfig|\PHPUnit\Framework\MockObject\MockObject */
     private $eavConfigMock;
 
     /** @var VisibilityFilter */
@@ -36,7 +36,7 @@ class VisibilityFilterTest extends \PHPUnit\Framework\TestCase
     /** @var int */
     private $answerToLifeTheUniverseAndEverything = 42;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->resource = $this->objectManager->create(ResourceConnection::class);
@@ -56,11 +56,12 @@ class VisibilityFilterTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException InvalidArgumentException
-     * @expectedExceptionMessage Invalid filter type: Luke, I am your father!
      */
     public function testApplyWithWrongType()
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Invalid filter type: Luke, I am your father!');
+
         $select = $this->resource->getConnection()->select();
         $filter = $this->mockFilter();
 

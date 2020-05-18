@@ -3,10 +3,11 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Unit\Model\Product;
 
-use Magento\Catalog\Api\Data\ProductExtension;
+use Magento\Catalog\Api\Data\ProductExtensionInterface;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Model\Attribute\ScopeOverriddenValue;
 use Magento\Catalog\Model\Product;
@@ -21,6 +22,7 @@ use Magento\Eav\Model\Entity\AbstractEntity;
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
 use Magento\Framework\EntityManager\EntityMetadata;
 use Magento\Framework\EntityManager\MetadataPool;
+use Magento\UrlRewrite\Model\Exception\UrlAlreadyExistsException;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -69,9 +71,9 @@ class CopierTest extends TestCase
     /**
      * @ingeritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->copyConstructorMock = $this->createMock(CopyConstructorInterface::class);
+        $this->copyConstructorMock = $this->getMockForAbstractClass(CopyConstructorInterface::class);
         $this->productFactoryMock = $this->createPartialMock(ProductFactory::class, ['create']);
         $this->scopeOverriddenValueMock = $this->createMock(ScopeOverriddenValue::class);
         $this->optionRepositoryMock = $this->createMock(Repository::class);
@@ -105,10 +107,10 @@ class CopierTest extends TestCase
      */
     public function testCopy(): void
     {
-        $stockItem = $this->createMock(StockItemInterface::class);
-        $extensionAttributes = $this->getMockBuilder(ProductExtension::class)
+        $stockItem = $this->getMockForAbstractClass(StockItemInterface::class);
+        $extensionAttributes = $this->getMockBuilder(ProductExtensionInterface::class)
             ->setMethods(['getStockItem', 'setData'])
-            ->getMock();
+            ->getMockForAbstractClass();
         $extensionAttributes
             ->expects($this->once())
             ->method('getStockItem')
@@ -174,29 +176,34 @@ class CopierTest extends TestCase
             ->method('getResource')
             ->willReturn($resourceMock);
 
-        $duplicateMock = $this->createPartialMock(
-            Product::class,
-            [
-                '__wakeup',
-                'setData',
-                'setOptions',
-                'getData',
-                'setIsDuplicate',
-                'setOriginalLinkId',
-                'setStatus',
-                'setCreatedAt',
-                'setUpdatedAt',
-                'setId',
-                'getEntityId',
-                'save',
-                'setUrlKey',
-                'setStoreId',
-                'getStoreIds',
-                'setMetaTitle',
-                'setMetaKeyword',
-                'setMetaDescription',
-            ]
-        );
+        $duplicateMock = $this->getMockBuilder(Product::class)
+            ->addMethods(
+                [
+                    'setIsDuplicate',
+                    'setOriginalLinkId',
+                    'setUrlKey',
+                    'setMetaTitle',
+                    'setMetaKeyword',
+                    'setMetaDescription'
+                ]
+            )
+            ->onlyMethods(
+                [
+                    'setData',
+                    'setOptions',
+                    'getData',
+                    'setStatus',
+                    'setCreatedAt',
+                    'setUpdatedAt',
+                    'setId',
+                    'getEntityId',
+                    'save',
+                    'setStoreId',
+                    'getStoreIds'
+                ]
+            )
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->productFactoryMock->expects($this->once())
             ->method('create')
             ->willReturn($duplicateMock);
@@ -262,9 +269,9 @@ class CopierTest extends TestCase
     {
         $stockItem = $this->getMockBuilder(StockItemInterface::class)
             ->getMock();
-        $extensionAttributes = $this->getMockBuilder(ProductExtension::class)
+        $extensionAttributes = $this->getMockBuilder(ProductExtensionInterface::class)
             ->setMethods(['getStockItem', 'setData'])
-            ->getMock();
+            ->getMockForAbstractClass();
         $extensionAttributes
             ->expects($this->once())
             ->method('getStockItem')
@@ -286,7 +293,7 @@ class CopierTest extends TestCase
         ]);
 
         $entityMock = $this->getMockForAbstractClass(
-            \Magento\Eav\Model\Entity\AbstractEntity::class,
+            AbstractEntity::class,
             [],
             '',
             false,
@@ -299,7 +306,7 @@ class CopierTest extends TestCase
             ->willReturn(true, false);
 
         $attributeMock = $this->getMockForAbstractClass(
-            \Magento\Eav\Model\Entity\Attribute\AbstractAttribute::class,
+            AbstractAttribute::class,
             [],
             '',
             false,
@@ -322,29 +329,28 @@ class CopierTest extends TestCase
             ->method('getAttribute')
             ->willReturn($attributeMock);
 
-        $this->productMock->expects($this->any())->method('getResource')->will($this->returnValue($resourceMock));
+        $this->productMock->expects($this->any())->method('getResource')->willReturn($resourceMock);
 
-        $duplicateMock = $this->createPartialMock(
-            Product::class,
-            [
-                '__wakeup',
-                'setData',
-                'setOptions',
-                'getData',
-                'setIsDuplicate',
-                'setOriginalLinkId',
-                'setStatus',
-                'setCreatedAt',
-                'setUpdatedAt',
-                'setId',
-                'getEntityId',
-                'save',
-                'setUrlKey',
-                'setStoreId',
-                'getStoreIds',
-            ]
-        );
-        $this->productFactoryMock->expects($this->once())->method('create')->will($this->returnValue($duplicateMock));
+        $duplicateMock = $this->getMockBuilder(Product::class)
+            ->addMethods(['setIsDuplicate', 'setOriginalLinkId', 'setUrlKey'])
+            ->onlyMethods(
+                [
+                    'setData',
+                    'setOptions',
+                    'getData',
+                    'setStatus',
+                    'setCreatedAt',
+                    'setUpdatedAt',
+                    'setId',
+                    'getEntityId',
+                    'save',
+                    'setStoreId',
+                    'getStoreIds'
+                ]
+            )
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->productFactoryMock->expects($this->once())->method('create')->willReturn($duplicateMock);
 
         $duplicateMock->expects($this->once())->method('setOptions')->with([]);
         $duplicateMock->expects($this->once())->method('setIsDuplicate')->with(true);
@@ -354,7 +360,7 @@ class CopierTest extends TestCase
         )->method(
             'setStatus'
         )->with(
-            \Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_DISABLED
+            Status::STATUS_DISABLED
         );
         $duplicateMock->expects($this->atLeastOnce())->method('setStoreId');
         $duplicateMock->expects($this->once())->method('setCreatedAt')->with(null);
@@ -382,7 +388,7 @@ class CopierTest extends TestCase
             ['linkField', null, '2'],
         ]);
 
-        $this->expectException(\Magento\UrlRewrite\Model\Exception\UrlAlreadyExistsException::class);
+        $this->expectException(UrlAlreadyExistsException::class);
         $this->_model->copy($this->productMock);
     }
 }

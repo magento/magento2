@@ -3,18 +3,23 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Braintree\Test\Unit\Gateway\Response;
 
-use Magento\Braintree\Gateway\SubjectReader;
+use Braintree\Result\Successful;
+use Braintree\Transaction;
 use Magento\Braintree\Gateway\Response\VoidHandler;
+use Magento\Braintree\Gateway\SubjectReader;
 use Magento\Payment\Gateway\Data\PaymentDataObjectInterface;
 use Magento\Sales\Model\Order\Payment;
+use PHPUnit\Framework\TestCase;
 
-class VoidHandlerTest extends \PHPUnit\Framework\TestCase
+class VoidHandlerTest extends TestCase
 {
     public function testHandle()
     {
-        $paymentDO = $this->createMock(PaymentDataObjectInterface::class);
+        $paymentDO = $this->getMockForAbstractClass(PaymentDataObjectInterface::class);
         $paymentInfo = $this->getMockBuilder(Payment::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -22,9 +27,9 @@ class VoidHandlerTest extends \PHPUnit\Framework\TestCase
             'payment' => $paymentDO
         ];
 
-        $transaction = \Braintree\Transaction::factory(['id' => 1]);
+        $transaction = Transaction::factory(['id' => 1]);
         $response = [
-            'object' => new \Braintree\Result\Successful($transaction, 'transaction')
+            'object' => new Successful($transaction, 'transaction')
         ];
 
         $subjectReader = $this->getMockBuilder(SubjectReader::class)

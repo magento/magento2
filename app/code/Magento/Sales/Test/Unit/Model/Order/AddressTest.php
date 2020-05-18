@@ -3,48 +3,53 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Sales\Test\Unit\Model\Order;
 
-/**
- * Class PaymentTest
- *
- * @package Magento\Sales\Model\Order
- */
-class AddressTest extends \PHPUnit\Framework\TestCase
+use Magento\Directory\Model\Region;
+use Magento\Directory\Model\RegionFactory;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Sales\Model\Order;
+use Magento\Sales\Model\Order\Address;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class AddressTest extends TestCase
 {
     /**
-     * @var \Magento\Sales\Model\Order\Address
+     * @var Address
      */
     protected $address;
 
     /**
-     * @var \Magento\Sales\Model\Order|\PHPUnit_Framework_MockObject_MockObject
+     * @var Order|MockObject
      */
     protected $orderMock;
 
     /**
-     * @var \Magento\Directory\Model\RegionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var RegionFactory|MockObject
      */
     protected $regionFactoryMock;
 
     /**
-     * @var \Magento\Directory\Model\Region|\PHPUnit_Framework_MockObject_MockObject
+     * @var Region|MockObject
      */
     protected $regionMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->orderMock = $this->createMock(\Magento\Sales\Model\Order::class);
-        $this->orderMock = $this->createMock(\Magento\Sales\Model\Order::class);
-        $this->regionFactoryMock = $this->createMock(\Magento\Directory\Model\RegionFactory::class);
-        $this->regionMock = $this->createPartialMock(
-            \Magento\Directory\Model\Region::class,
-            ['load', 'getCountryId', 'getCode']
-        );
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $this->orderMock = $this->createMock(Order::class);
+        $this->orderMock = $this->createMock(Order::class);
+        $this->regionFactoryMock = $this->createMock(RegionFactory::class);
+        $this->regionMock = $this->getMockBuilder(Region::class)
+            ->addMethods(['getCountryId', 'getCode'])
+            ->onlyMethods(['load'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $objectManager = new ObjectManager($this);
         $this->address = $objectManager->getObject(
-            \Magento\Sales\Model\Order\Address::class,
+            Address::class,
             [
                 'regionFactory' => $this->regionFactoryMock
             ]
@@ -127,7 +132,7 @@ class AddressTest extends \PHPUnit\Framework\TestCase
             ->willReturn(2);
         $this->regionMock->expects($this->never())
             ->method('getCode');
-        $this->assertEquals(null, $this->address->getRegionCode());
+        $this->assertNull($this->address->getRegionCode());
     }
 
     public function testGetName()

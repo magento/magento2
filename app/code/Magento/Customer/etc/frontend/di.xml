@@ -92,6 +92,12 @@
                         <item name="template" xsi:type="string">Magento_Customer::messages/confirmAccountSuccessMessage.phtml</item>
                     </item>
                 </item>
+                <item name="confirmAccountErrorMessage" xsi:type="array">
+                    <item name="renderer" xsi:type="const">\Magento\Framework\View\Element\Message\Renderer\BlockRenderer::CODE</item>
+                    <item name="data" xsi:type="array">
+                        <item name="template" xsi:type="string">Magento_Customer::messages/confirmAccountErrorMessage.phtml</item>
+                    </item>
+                </item>
                 <item name="customerVatShippingAddressSuccessMessage" xsi:type="array">
                     <item name="renderer" xsi:type="const">\Magento\Framework\View\Element\Message\Renderer\BlockRenderer::CODE</item>
                     <item name="data" xsi:type="array">

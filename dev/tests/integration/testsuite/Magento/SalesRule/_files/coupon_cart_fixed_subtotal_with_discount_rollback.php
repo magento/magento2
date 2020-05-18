@@ -5,4 +5,6 @@
  */
 declare(strict_types=1);
 
-include __DIR__ . '/coupon_cart_fixed_discount_rollback.php';
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
+
+Resolver::getInstance()->requireDataFixture('Magento/SalesRule/_files/coupon_cart_fixed_discount_rollback.php');
