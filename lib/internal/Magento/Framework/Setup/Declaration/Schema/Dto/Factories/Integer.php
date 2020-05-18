@@ -6,6 +6,8 @@
 
 namespace Magento\Framework\Setup\Declaration\Schema\Dto\Factories;
 
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\DB\Adapter\SqlVersionProvider;
 use Magento\Framework\ObjectManagerInterface;
 
 /**
@@ -21,7 +23,7 @@ class Integer implements FactoryInterface
     private static $defaultPadding = [
         'int' => '11',
         'tinyint' => '2',
-        'smallint' => '5',
+        'smallint' => '6',
         'bigint' => '20'
     ];
 
@@ -36,17 +38,25 @@ class Integer implements FactoryInterface
     private $className;
 
     /**
+     * @var SqlVersionProvider
+     */
+    private $sqlVersionProvider;
+
+    /**
      * Constructor.
      *
-     * @param ObjectManagerInterface $objectManager
-     * @param string                 $className
+     * @param ObjectManagerInterface    $objectManager
+     * @param string                    $className
+     * @param SqlVersionProvider|null   $sqlVersionProvider
      */
     public function __construct(
         ObjectManagerInterface $objectManager,
-        $className = \Magento\Framework\Setup\Declaration\Schema\Dto\Columns\Integer::class
+        $className = \Magento\Framework\Setup\Declaration\Schema\Dto\Columns\Integer::class,
+        SqlVersionProvider $sqlVersionProvider = null
     ) {
         $this->objectManager = $objectManager;
         $this->className = $className;
+        $this->sqlVersionProvider = $sqlVersionProvider ?: $objectManager->get(SqlVersionProvider::class);
     }
 
     /**
@@ -54,9 +64,13 @@ class Integer implements FactoryInterface
      */
     public function create(array $data)
     {
-        if (!isset($data['padding'])) {
+        if (isset($data['padding'])) {
+            unset($data['padding']);
+        }
+        if ($this->sqlVersionProvider->getSqlVersion() !== SqlVersionProvider::MYSQL_8_VERSION) {
             $data['padding'] = self::$defaultPadding[$data['type']];
         }
+
         //Auto increment field can`t be null
         if (isset($data['identity']) && $data['identity']) {
             $data['nullable'] = false;

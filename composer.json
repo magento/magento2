@@ -6,6 +6,7 @@
         "OSL-3.0",
         "AFL-3.0"
     ],
+    "minimum-stability": "dev",
     "config": {
         "preferred-install": "dist",
         "sort-packages": true
@@ -67,7 +68,7 @@
         "laminas/laminas-view": "~2.11.2",
         "magento/composer": "1.6.x-dev",
         "magento/magento-composer-installer": ">=0.1.11",
-        "magento/zendframework1": "~1.14.2",
+        "magento/zendframework1": "MC-14884-Discribe-Table-doesnt-return-column-type-width-dev",
         "monolog/monolog": "^1.17",
         "paragonie/sodium_compat": "^1.6",
         "pelago/emogrifier": "^3.1.0",
@@ -356,5 +357,11 @@
             "Magento\\PhpStan\\": "dev/tests/static/framework/Magento/PhpStan/"
         }
     },
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/magento-techdivision/zf1.git"
+        }
+    ],
     "prefer-stable": true
 }

@@ -29,6 +29,12 @@ $review->setEntityId(
     ]
 )->save();
 
+/*
+ * Added a sleep because otherwise it could be that the three reviews have the same created at timestamp.
+ * In this case some tests would (randomly) fail because the sort order depends on mysql and not on order by.
+ */
+sleep(1);
+
 $review = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
     \Magento\Review\Model\Review::class,
     ['data' => ['nickname' => 'Nickname', 'title' => '2 filter first review', 'detail' => 'Review text']]
@@ -50,6 +56,12 @@ $review->setEntityId(
         )->getStore()->getId()
     ]
 )->save();
+
+/*
+ * Added a sleep because otherwise it could be that the three reviews have the same created at timestamp.
+ * In this case some tests could (randomly) fail because the sort order depends on mysql and not on order by.
+ */
+sleep(1);
 
 $review = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
     \Magento\Review\Model\Review::class,

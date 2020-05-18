@@ -81,11 +81,22 @@ class Integer implements DbDefinitionProcessorInterface
      */
     public function toDefinition(ElementInterface $column)
     {
-        return sprintf(
-            '%s %s(%s) %s %s %s %s %s',
+        $definition = sprintf(
+            '%s %s',
             $this->resourceConnection->getConnection()->quoteIdentifier($column->getName()),
-            $column->getType(),
-            $column->getPadding(),
+            $column->getType()
+        );
+
+        if ($column->getPadding() !== null) {
+            $definition .= sprintf(
+                '(%s)',
+                $column->getPadding()
+            );
+        }
+
+        return sprintf(
+            '%s %s %s %s %s %s',
+            $definition,
             $this->unsigned->toDefinition($column),
             $this->nullable->toDefinition($column),
             $column->getDefault() !== null ?
@@ -101,13 +112,20 @@ class Integer implements DbDefinitionProcessorInterface
     public function fromDefinition(array $data)
     {
         $matches = [];
-        if (preg_match('/^(big|small|tiny|medium)?int\((\d+)\)/', $data['definition'], $matches)) {
+        if (preg_match(
+            '/^(?<type>big|small|tiny|medium)?int(\((?<padding>\d+)\))*/',
+            $data['definition'],
+            $matches
+        )) {
             /**
              * match[1] - prefix
-             * match[2] - padding, like 5 or 11
+             * match[2] - padding with beaked, like (5) or (11)
+             * match[3] - padding, like 5 or 11
              */
-            //Use shortcut for mediuminteger
-            $data['padding'] = $matches[2];
+            if (count($matches) >= 4) {
+                //Use shortcut for mediuminteger
+                $data['padding'] = $matches['padding'];
+            }
             $data = $this->unsigned->fromDefinition($data);
             $data = $this->nullable->fromDefinition($data);
             $data = $this->identity->fromDefinition($data);

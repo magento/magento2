@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "087f8432a6f317056b40a0b8a160a2cf",
+    "content-hash": "39f3780d89bff51360c667aa4d52ac1d",
     "packages": [
         {
             "name": "braintree/braintree_php",
@@ -3420,17 +3420,24 @@
         },
         {
             "name": "magento/zendframework1",
-            "version": "1.14.3",
+            "version": "dev-MC-14884-Discribe-Table-doesnt-return-column-type-width",
             "source": {
                 "type": "git",
-                "url": "https://github.com/magento/zf1.git",
-                "reference": "726855dfb080089dc7bc7b016624129f8e7bc4e5"
+                "url": "https://github.com/magento-techdivision/zf1.git",
+                "reference": "92c628e96cc3e3242d55be12a0f8535c413a8fa3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/magento/zf1/zipball/726855dfb080089dc7bc7b016624129f8e7bc4e5",
-                "reference": "726855dfb080089dc7bc7b016624129f8e7bc4e5",
+                "url": "https://api.github.com/repos/magento-techdivision/zf1/zipball/92c628e96cc3e3242d55be12a0f8535c413a8fa3",
+                "reference": "92c628e96cc3e3242d55be12a0f8535c413a8fa3",
                 "shasum": ""
+            },
+            "archive": {
+                "exclude": [
+                    "/demos",
+                    "/documentation",
+                    "/tests"
+                ]
             },
             "require": {
                 "php": ">=5.2.11"
@@ -3440,17 +3447,11 @@
                 "phpunit/phpunit": "3.7.*"
             },
             "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "1.12.x-dev"
-                }
-            },
             "autoload": {
                 "psr-0": {
                     "Zend_": "library/"
                 }
             },
-            "notification-url": "https://packagist.org/downloads/",
             "include-path": [
                 "library/"
             ],
@@ -3460,10 +3461,13 @@
             "description": "Magento Zend Framework 1",
             "homepage": "http://framework.zend.com/",
             "keywords": [
-                "ZF1",
-                "framework"
+                "framework",
+                "zf1"
             ],
-            "time": "2019-11-26T15:09:40+00:00"
+            "support": {
+                "source": "https://github.com/magento-techdivision/zf1/tree/MC-14884-Discribe-Table-doesnt-return-column-type-width"
+            },
+            "time": "2020-04-20T12:19:33+00:00"
         },
         {
             "name": "monolog/monolog",
@@ -10110,9 +10114,10 @@
         }
     ],
     "aliases": [],
-    "minimum-stability": "stable",
+    "minimum-stability": "dev",
     "stability-flags": {
         "magento/composer": 20,
+        "magento/zendframework1": 20,
         "magento/magento2-functional-testing-framework": 20
     },
     "prefer-stable": true,
