@@ -55,7 +55,7 @@ class Index extends Action implements HttpGetActionInterface
     /**
      * @var ManagerInterface
      */
-    private $messageManager;
+    protected $messageManager;
 
     /**
      * @var LoggerInterface
