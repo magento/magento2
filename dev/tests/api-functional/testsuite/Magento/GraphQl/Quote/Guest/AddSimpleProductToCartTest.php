@@ -126,7 +126,7 @@ QUERY;
         $this->assertEquals('11', $cartItem['prices']['price']['value']);
         $this->assertEquals($sku, $cartItem['product']['sku']);
         $expectedImageRegex = '/^https?:\/\/.+magento_image(_[0-9]+)?.jpg$/';
-        $this->assertRegExp($expectedImageRegex, $cartItem['product']['image']['url']);
+        $this->assertMatchesRegularExpression($expectedImageRegex, $cartItem['product']['image']['url']);
     }
 
     /**
