@@ -28,15 +28,13 @@
             </updateData>
 
             <createData entity="Simple_US_Customer" stepKey="customer"/>
-            <magentoCLI command="indexer:reindex" stepKey="reindex"/>
-            <magentoCLI command="cache:flush" stepKey="flushCache"/>
+            <magentoCron groups="index" stepKey="runCronReindex"/>
         </before>
         <after>
             <deleteData createDataKey="simpleProduct" stepKey="deletesimpleProduct"/>
             <deleteData createDataKey="categoryFirst" stepKey="deleteCategoryFirst"/>
-            <magentoCLI command="indexer:reindex" stepKey="reindex"/>
-            <magentoCLI command="cache:flush" stepKey="flushCache"/>
             <deleteData createDataKey="customer" stepKey="deleteCustomer"/>
+            <magentoCron groups="index" stepKey="runCronReindex"/>
         </after>
 
         <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginToStorefrontAccount">
