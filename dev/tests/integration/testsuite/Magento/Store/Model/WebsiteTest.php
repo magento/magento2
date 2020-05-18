@@ -12,7 +12,7 @@ class WebsiteTest extends \PHPUnit\Framework\TestCase
      */
     protected $_model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             \Magento\Store\Model\Website::class
@@ -184,6 +184,6 @@ class WebsiteTest extends \PHPUnit\Framework\TestCase
     public function testCollection()
     {
         $collection = $this->_model->getCollection()->joinGroupAndStore()->addIdFilter(1);
-        $this->assertEquals(1, count($collection->getItems()));
+        $this->assertCount(1, $collection->getItems());
     }
 }

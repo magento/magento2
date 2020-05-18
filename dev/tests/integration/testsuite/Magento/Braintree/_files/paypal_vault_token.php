@@ -7,12 +7,19 @@
 use Magento\Braintree\Model\Ui\PayPal\ConfigProvider;
 use Magento\Config\Model\Config;
 use Magento\Framework\Encryption\EncryptorInterface;
+use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Vault\Model\AccountPaymentTokenFactory;
 use Magento\Vault\Model\PaymentToken;
 use Magento\Vault\Model\PaymentTokenRepository;
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
+use Magento\Customer\Model\CustomerRegistry;
 
-require __DIR__ . '/../../../Magento/Customer/_files/customer.php';
+Resolver::getInstance()->requireDataFixture('Magento/Customer/_files/customer.php');
 
+$objectManager = Bootstrap::getObjectManager();
+/** @var CustomerRegistry $customerRegistry */
+$customerRegistry = Bootstrap::getObjectManager()->create(CustomerRegistry::class);
+$customer = $customerRegistry->retrieve(1);
 /** @var Config $config */
 $config = $objectManager->get(Config::class);
 $config->setDataByPath('payment/' . ConfigProvider::PAYPAL_CODE . '/active', 1);

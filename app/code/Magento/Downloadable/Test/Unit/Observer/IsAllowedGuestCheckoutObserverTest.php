@@ -3,12 +3,12 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Downloadable\Test\Unit\Observer;
 
 use Magento\Catalog\Model\Product;
 use Magento\Downloadable\Model\Product\Type;
-use Magento\Downloadable\Model\ResourceModel\Link\Purchased\Item\CollectionFactory;
 use Magento\Downloadable\Observer\IsAllowedGuestCheckoutObserver;
 use Magento\Framework\App\Config;
 use Magento\Framework\DataObject;
@@ -136,15 +136,15 @@ class IsAllowedGuestCheckoutObserverTest extends TestCase
 
         $this->eventMock->expects($this->once())
             ->method('getStore')
-            ->will($this->returnValue($this->storeMock));
+            ->willReturn($this->storeMock);
 
         $this->eventMock->expects($this->once())
             ->method('getResult')
-            ->will($this->returnValue($this->resultMock));
+            ->willReturn($this->resultMock);
 
         $this->eventMock->expects($this->once())
             ->method('getQuote')
-            ->will($this->returnValue($quote));
+            ->willReturn($quote);
 
         $this->scopeConfigMock->expects($this->any())
             ->method('isSetFlag')
@@ -157,7 +157,7 @@ class IsAllowedGuestCheckoutObserverTest extends TestCase
 
         $this->observerMock->expects($this->exactly(3))
             ->method('getEvent')
-            ->will($this->returnValue($this->eventMock));
+            ->willReturn($this->eventMock);
 
         $this->assertInstanceOf(
             IsAllowedGuestCheckoutObserver::class,
@@ -209,11 +209,11 @@ class IsAllowedGuestCheckoutObserverTest extends TestCase
 
         $this->eventMock->expects($this->once())
             ->method('getStore')
-            ->willReturn($storeCode);
+            ->willReturn($this->storeMock);
 
         $this->eventMock->expects($this->once())
             ->method('getResult')
-            ->will($this->returnValue($this->resultMock));
+            ->willReturn($this->resultMock);
 
         $this->eventMock->expects($this->once())
             ->method('getQuote')
@@ -230,7 +230,7 @@ class IsAllowedGuestCheckoutObserverTest extends TestCase
 
         $this->observerMock->expects($this->exactly(3))
             ->method('getEvent')
-            ->will($this->returnValue($this->eventMock));
+            ->willReturn($this->eventMock);
 
         $this->assertInstanceOf(
             IsAllowedGuestCheckoutObserver::class,

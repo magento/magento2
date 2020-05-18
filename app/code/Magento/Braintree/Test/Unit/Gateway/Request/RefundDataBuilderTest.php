@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Braintree\Test\Unit\Gateway\Request;
 
 use Magento\Braintree\Gateway\Request\PaymentDataBuilder;
@@ -11,12 +13,13 @@ use Magento\Braintree\Gateway\SubjectReader;
 use Magento\Payment\Gateway\Data\PaymentDataObjectInterface;
 use Magento\Sales\Api\Data\TransactionInterface;
 use Magento\Sales\Model\Order\Payment;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Tests \Magento\Braintree\Gateway\Request\RefundDataBuilder.
  */
-class RefundDataBuilderTest extends \PHPUnit\Framework\TestCase
+class RefundDataBuilderTest extends TestCase
 {
     /**
      * @var SubjectReader|MockObject
@@ -43,7 +46,7 @@ class RefundDataBuilderTest extends \PHPUnit\Framework\TestCase
      */
     private $transactionId = 'xsd7n';
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->paymentModelMock = $this->getMockBuilder(Payment::class)
             ->disableOriginalConstructor()
@@ -138,11 +141,11 @@ class RefundDataBuilderTest extends \PHPUnit\Framework\TestCase
     /**
      * Creates mock object for PaymentDataObjectInterface
      *
-     * @return PaymentDataObjectInterface|MockObject
+     * @return void
      */
-    private function initPaymentDOMock()
+    private function initPaymentDOMock(): void
     {
-        $this->paymentDOMock = $this->createMock(PaymentDataObjectInterface::class);
+        $this->paymentDOMock = $this->getMockForAbstractClass(PaymentDataObjectInterface::class);
         $this->paymentDOMock->expects(self::once())
             ->method('getPayment')
             ->willReturn($this->paymentModelMock);

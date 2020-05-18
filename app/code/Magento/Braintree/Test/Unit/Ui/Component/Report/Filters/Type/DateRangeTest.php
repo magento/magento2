@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Braintree\Test\Unit\Ui\Component\Report\Filters\Type;
 
 use Magento\Braintree\Ui\Component\Report\Filters\Type\DateRange;
@@ -10,47 +12,47 @@ use Magento\Framework\Api\Filter;
 use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Framework\View\Element\UiComponent\DataProvider\DataProviderInterface;
+use Magento\Framework\View\Element\UiComponent\Processor;
 use Magento\Framework\View\Element\UiComponentFactory;
 use Magento\Ui\Component\Filters\FilterModifier;
 use Magento\Ui\Component\Form\Element\DataType\Date as FormDate;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-/**
- * Class DateRangeTest
- */
-class DateRangeTest extends \PHPUnit\Framework\TestCase
+class DateRangeTest extends TestCase
 {
     /**
-     * @var ContextInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ContextInterface|MockObject
      */
     private $contextMock;
 
     /**
-     * @var UiComponentFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var UiComponentFactory|MockObject
      */
     private $uiComponentFactory;
 
     /**
-     * @var FilterBuilder|\PHPUnit_Framework_MockObject_MockObject
+     * @var FilterBuilder|MockObject
      */
     private $filterBuilderMock;
 
     /**
-     * @var FilterModifier|\PHPUnit_Framework_MockObject_MockObject
+     * @var FilterModifier|MockObject
      */
     private $filterModifierMock;
 
     /**
-     * @var DataProviderInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var DataProviderInterface|MockObject
      */
     private $dataProviderMock;
 
     /**
      * Set up
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->contextMock = $this->getMockForAbstractClass(ContextInterface::class);
-        $processor = $this->getMockBuilder(\Magento\Framework\View\Element\UiComponent\Processor::class)
+        $processor = $this->getMockBuilder(Processor::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->contextMock->expects(static::atLeastOnce())
@@ -91,8 +93,10 @@ class DateRangeTest extends \PHPUnit\Framework\TestCase
      */
     public function testPrepare($name, $filterData, $expectedCondition)
     {
-        /** @var FormDate PHPUnit_Framework_MockObject_MockObject|$uiComponent */
-        $uiComponent = $this->getMockBuilder(FormDate::class)->disableOriginalConstructor()->getMock();
+        /** @var FormDate|MockObject $uiComponent */
+        $uiComponent = $this->getMockBuilder(FormDate::class)
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $uiComponent->expects($this->any())
             ->method('getContext')
@@ -117,11 +121,18 @@ class DateRangeTest extends \PHPUnit\Framework\TestCase
                     ->willReturnMap([
                         [
                             $filterData[$name]['from'], 0, 0, 0, true,
-                            new \DateTime($filterData[$name]['from'], new \DateTimeZone('UTC'))
+                            new \DateTime($filterData[$name]['from'] ?? 'now', new \DateTimeZone('UTC'))
                         ],
                         [
-                            $filterData[$name]['to'], 23, 59, 59, true,
-                            new \DateTime($filterData[$name]['to'] . ' 23:59:00', new \DateTimeZone('UTC'))
+                            $filterData[$name]['to'],
+                            23,
+                            59,
+                            59,
+                            true,
+                            new \DateTime(
+                                $filterData[$name]['to'] ? $filterData[$name]['to'] . ' 23:59:00' : 'now',
+                                new \DateTimeZone('UTC')
+                            )
                         ],
                     ]);
             }
@@ -185,7 +196,7 @@ class DateRangeTest extends \PHPUnit\Framework\TestCase
      * @param string $expectedDate
      * @param int $i
      *
-     * @return Filter|\PHPUnit_Framework_MockObject_MockObject
+     * @return Filter|MockObject
      */
     private function getFilterMock($name, $expectedType, $expectedDate, &$i)
     {
