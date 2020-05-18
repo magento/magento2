@@ -46,7 +46,7 @@ class ModuleStatusCommand extends AbstractSetupCommand
     {
         $this->setName('module:status')
             ->setDescription('Displays status of modules')
-            ->addArgument('module', InputArgument::OPTIONAL | InputArgument::IS_ARRAY , 'Optional module name')
+            ->addArgument('module-names', InputArgument::OPTIONAL | InputArgument::IS_ARRAY , 'Optional module name')
             ->addOption('enabled', null, null, 'Print only enabled modules')
             ->addOption('disabled', null, null, 'Print only disabled modules');
         parent::configure();
