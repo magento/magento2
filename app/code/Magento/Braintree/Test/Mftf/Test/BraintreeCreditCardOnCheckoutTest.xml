@@ -30,6 +30,7 @@
             <createData entity="Simple_US_Customer" stepKey="customer"/>
             <createData entity="BraintreeConfig" stepKey="BraintreeConfigurationData"/>
             <createData entity="CustomBraintreeConfigurationData" stepKey="CustomBraintreeConfigurationData"/>
+            <magentoCron stepKey="runCronIndex" groups="index"/>
         </before>
 
         <after>
@@ -43,10 +44,15 @@
         <!--Go to storefront-->
         <amOnPage url="" stepKey="DoToStorefront"/>
         <!--Create account-->
-        <actionGroup ref="SignUpNewUserFromStorefrontActionGroup" stepKey="SignUpNewUserFromStorefrontActionGroup">
-            <argument name="Customer" value="Simple_US_Customer"/>
+        <actionGroup ref="StorefrontOpenCustomerAccountCreatePageActionGroup" stepKey="openCreateAccountPage"/>
+        <actionGroup ref="StorefrontFillCustomerAccountCreationFormActionGroup" stepKey="fillCreateAccountForm">
+            <argument name="customer" value="Simple_US_Customer"/>
         </actionGroup>
-
+        <actionGroup ref="StorefrontClickCreateAnAccountCustomerAccountCreationFormActionGroup" stepKey="submitCreateAccountForm"/>
+        <actionGroup ref="AssertMessageCustomerCreateAccountActionGroup" stepKey="seeSuccessMessage">
+            <argument name="messageType" value="success"/>
+            <argument name="message" value="Thank you for registering with Main Website Store."/>
+        </actionGroup>
         <!--Add product to cart-->
         <amOnPage url="$$product.sku$$.html" stepKey="goToProductPage"/>
         <waitForPageLoad stepKey="waitForPageLoad"/>
@@ -105,7 +111,13 @@
         <grabTextFrom selector="{{CheckoutOrderSummarySection.additionalAddress}}" stepKey="additionalAddress"/>
         <see userInput="Shipping Address" stepKey="seeShippingAddress"/>
         <see userInput="Billing Address" stepKey="seeBillingAddress"/>
-        <assertEquals stepKey="assertValuesAreEqual" actual="$billingAddr" expected="$shippingAddr"/>
-        <assertNotEquals stepKey="assertValuesAreNotEqual" actual="$billingAddr" expected="$additionalAddress"/>
+        <assertEquals stepKey="assertValuesAreEqual">
+			<actualResult type="const">$billingAddr</actualResult>
+			<expectedResult type="const">$shippingAddr</expectedResult>
+        </assertEquals>
+        <assertNotEquals stepKey="assertValuesAreNotEqual">
+			<actualResult type="const">$billingAddr</actualResult>
+			<expectedResult type="const">$additionalAddress</expectedResult>
+        </assertNotEquals>
     </test>
 </tests>

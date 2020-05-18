@@ -3,46 +3,56 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Quote\Test\Unit\Model\Quote\Validator\MinimumOrderAmount;
 
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\Locale\CurrencyInterface;
 use Magento\Framework\Phrase;
+use Magento\Framework\Pricing\Helper\Data;
+use Magento\Quote\Model\Quote\Validator\MinimumOrderAmount\ValidationMessage;
+use Magento\Store\Model\ScopeInterface;
+use Magento\Store\Model\StoreManagerInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class ValidationMessageTest extends \PHPUnit\Framework\TestCase
+class ValidationMessageTest extends TestCase
 {
     /**
-     * @var \Magento\Quote\Model\Quote\Validator\MinimumOrderAmount\ValidationMessage
+     * @var ValidationMessage
      */
     private $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     private $scopeConfigMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     private $storeManagerMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      * @deprecated since 101.0.0
      */
     private $currencyMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     private $priceHelperMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->scopeConfigMock = $this->createMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
-        $this->storeManagerMock = $this->createMock(\Magento\Store\Model\StoreManagerInterface::class);
-        $this->currencyMock = $this->createMock(\Magento\Framework\Locale\CurrencyInterface::class);
-        $this->priceHelperMock = $this->createMock(\Magento\Framework\Pricing\Helper\Data::class);
+        $this->scopeConfigMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
+        $this->storeManagerMock = $this->getMockForAbstractClass(StoreManagerInterface::class);
+        $this->currencyMock = $this->getMockForAbstractClass(CurrencyInterface::class);
+        $this->priceHelperMock = $this->createMock(Data::class);
 
-        $this->model = new \Magento\Quote\Model\Quote\Validator\MinimumOrderAmount\ValidationMessage(
+        $this->model = new ValidationMessage(
             $this->scopeConfigMock,
             $this->storeManagerMock,
             $this->currencyMock,
@@ -56,18 +66,18 @@ class ValidationMessageTest extends \PHPUnit\Framework\TestCase
         $minimumAmountCurrency = '$20';
         $this->scopeConfigMock->expects($this->at(0))
             ->method('getValue')
-            ->with('sales/minimum_order/description', \Magento\Store\Model\ScopeInterface::SCOPE_STORE)
+            ->with('sales/minimum_order/description', ScopeInterface::SCOPE_STORE)
             ->willReturn(null);
 
         $this->scopeConfigMock->expects($this->at(1))
             ->method('getValue')
-            ->with('sales/minimum_order/amount', \Magento\Store\Model\ScopeInterface::SCOPE_STORE)
+            ->with('sales/minimum_order/amount', ScopeInterface::SCOPE_STORE)
             ->willReturn($minimumAmount);
 
         $this->priceHelperMock->expects($this->once())
             ->method('currency')
             ->with($minimumAmount, true, false)
-            ->will($this->returnValue($minimumAmountCurrency));
+            ->willReturn($minimumAmountCurrency);
 
         $this->assertEquals(__('Minimum order amount is %1', $minimumAmountCurrency), $this->model->getMessage());
     }
@@ -76,12 +86,12 @@ class ValidationMessageTest extends \PHPUnit\Framework\TestCase
         $configMessage = 'config_message';
         $this->scopeConfigMock->expects($this->once())
             ->method('getValue')
-            ->with('sales/minimum_order/description', \Magento\Store\Model\ScopeInterface::SCOPE_STORE)
+            ->with('sales/minimum_order/description', ScopeInterface::SCOPE_STORE)
             ->willReturn($configMessage);
 
         $message = $this->model->getMessage();
 
-        $this->assertEquals(Phrase::class, get_class($message));
+        $this->assertInstanceOf(Phrase::class, $message);
         $this->assertEquals($configMessage, $message->__toString());
     }
 }

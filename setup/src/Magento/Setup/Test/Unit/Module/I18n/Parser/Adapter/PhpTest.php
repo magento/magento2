@@ -3,29 +3,36 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Setup\Test\Unit\Module\I18n\Parser\Adapter;
 
-class PhpTest extends \PHPUnit\Framework\TestCase
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Setup\Module\I18n\Parser\Adapter\Php;
+use Magento\Setup\Module\I18n\Parser\Adapter\Php\Tokenizer\PhraseCollector;
+use PHPUnit\Framework\TestCase;
+
+class PhpTest extends TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|
+     * @var \PHPUnit\Framework\MockObject\MockObject|
      * \Magento\Setup\Module\I18n\Parser\Adapter\Php\Tokenizer\PhraseCollector
      */
     protected $_phraseCollectorMock;
 
     /**
-     * @var \Magento\Setup\Module\I18n\Parser\Adapter\Php
+     * @var Php
      */
     protected $_adapter;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_phraseCollectorMock =
-            $this->createMock(\Magento\Setup\Module\I18n\Parser\Adapter\Php\Tokenizer\PhraseCollector::class);
+            $this->createMock(PhraseCollector::class);
 
-        $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $objectManagerHelper = new ObjectManager($this);
         $this->_adapter = $objectManagerHelper->getObject(
-            \Magento\Setup\Module\I18n\Parser\Adapter\Php::class,
+            Php::class,
             ['phraseCollector' => $this->_phraseCollectorMock]
         );
     }
@@ -39,8 +46,8 @@ class PhpTest extends \PHPUnit\Framework\TestCase
             $this->once()
         )->method(
             'getPhrases'
-        )->will(
-            $this->returnValue([['phrase' => 'phrase1', 'file' => 'file1', 'line' => 15]])
+        )->willReturn(
+            [['phrase' => 'phrase1', 'file' => 'file1', 'line' => 15]]
         );
 
         $this->_adapter->parse('file1');

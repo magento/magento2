@@ -22,11 +22,11 @@
         </annotations>
         <before>
             <magentoCLI command="config:set {{StorefrontSingleStoreModeEnabledConfigData.path}} {{StorefrontSingleStoreModeEnabledConfigData.value}}" stepKey="enableSingleStoreMode" />
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
             <magentoCLI command="config:set {{StorefrontSingleStoreModeDisabledConfigData.path}} {{StorefrontSingleStoreModeDisabledConfigData.value}}" stepKey="disableSingleStoreMode" />
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
         <!--Go to New CMS Page page-->
         <actionGroup ref="AdminOpenCreateNewCMSPageActionGroup" stepKey="navigateToCreateNewPage"/>

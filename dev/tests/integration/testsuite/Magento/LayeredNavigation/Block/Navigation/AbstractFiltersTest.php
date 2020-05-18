@@ -68,7 +68,7 @@ abstract class AbstractFiltersTest extends TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->objectManager = Bootstrap::getObjectManager();
@@ -140,7 +140,7 @@ abstract class AbstractFiltersTest extends TestCase
         $this->updateAttribute($attributeData);
         $this->updateProducts($products, $this->getAttributeCode());
         $this->clearInstanceAndReindexSearch();
-        $this->navigationBlock->getRequest()->setParams(['q' => 'Simple Product']);
+        $this->navigationBlock->getRequest()->setParams(['q' => $this->getSearchString()]);
         $this->navigationBlock->setLayout($this->layout);
         $filter = $this->getFilterByCode($this->navigationBlock->getFilters(), $this->getAttributeCode());
 
@@ -292,5 +292,15 @@ abstract class AbstractFiltersTest extends TestCase
         } else {
             $this->navigationBlock = $this->objectManager->create(CategoryNavigationBlock::class);
         }
+    }
+
+    /**
+     * Returns search query for filters on search page.
+     *
+     * @return string
+     */
+    protected function getSearchString(): string
+    {
+        return 'Simple Product';
     }
 }

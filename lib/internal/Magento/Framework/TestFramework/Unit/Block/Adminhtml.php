@@ -146,8 +146,8 @@ class Adminhtml extends \PHPUnit\Framework\TestCase
             $this->any()
         )->method(
             'translate'
-        )->will(
-            $this->returnCallback([$this, 'translateCallback'])
+        )->willReturnCallback(
+            [$this, 'translateCallback']
         );
 
         $this->_context = new \Magento\Backend\Block\Template\Context(
@@ -202,7 +202,7 @@ class Adminhtml extends \PHPUnit\Framework\TestCase
      * @return \PHPUnit\Framework\MockObject\Builder\InvocationMocker
      */
     protected function _setStub(
-        \PHPUnit_Framework_MockObject_MockObject $object,
+        \PHPUnit\Framework\MockObject\MockObject $object,
         $stubName,
         $return = null,
         $expects = null

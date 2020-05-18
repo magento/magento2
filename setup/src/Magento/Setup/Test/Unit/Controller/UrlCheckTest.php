@@ -3,15 +3,19 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Setup\Test\Unit\Controller;
 
-use Magento\Setup\Controller\UrlCheck;
-use Zend\Stdlib\RequestInterface;
-use Zend\View\Model\JsonModel;
-use Magento\Framework\Validator\Url as UrlValidator;
+use Laminas\Stdlib\RequestInterface;
+use Laminas\View\Model\JsonModel;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Framework\Validator\Url as UrlValidator;
+use Magento\Setup\Controller\UrlCheck;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class UrlCheckTest extends \PHPUnit\Framework\TestCase
+class UrlCheckTest extends TestCase
 {
     /**
      * @param array $requestJson
@@ -40,7 +44,7 @@ class UrlCheckTest extends \PHPUnit\Framework\TestCase
             ];
         }
 
-        /** @var UrlValidator|\PHPUnit_Framework_MockObject_MockObject $validator */
+        /** @var UrlValidator|MockObject $validator */
         $validator = $this->getMockBuilder(UrlValidator::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -48,7 +52,7 @@ class UrlCheckTest extends \PHPUnit\Framework\TestCase
             ->method('isValid')
             ->willReturnMap($returnMap);
 
-        /** @var RequestInterface|\PHPUnit_Framework_MockObject_MockObject $requestMock */
+        /** @var RequestInterface|MockObject $requestMock */
         $requestMock = $this->getMockBuilder(RequestInterface::class)
             ->getMockForAbstractClass();
         $requestMock->expects($this->once())

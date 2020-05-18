@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Braintree\Test\Unit\Model\Report;
 
 use Magento\Braintree\Model\Adapter\BraintreeAdapter;
@@ -11,14 +13,13 @@ use Magento\Braintree\Model\Report\FilterMapper;
 use Magento\Braintree\Model\Report\TransactionsCollection;
 use Magento\Framework\Api\Search\DocumentInterface;
 use Magento\Framework\Data\Collection\EntityFactoryInterface;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
- * Class TransactionsCollectionTest
- *
  * Test for class \Magento\Braintree\Model\Report\TransactionsCollection
  */
-class TransactionsCollectionTest extends \PHPUnit\Framework\TestCase
+class TransactionsCollectionTest extends TestCase
 {
     /**
      * @var BraintreeAdapter|MockObject
@@ -48,16 +49,16 @@ class TransactionsCollectionTest extends \PHPUnit\Framework\TestCase
     /**
      * Setup
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->transactionMapMock = $this->getMockBuilder(DocumentInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->entityFactoryMock = $this->getMockBuilder(EntityFactoryInterface::class)
             ->setMethods(['create'])
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->filterMapperMock = $this->getMockBuilder(FilterMapper::class)
             ->setMethods(['getFilter'])
@@ -100,7 +101,7 @@ class TransactionsCollectionTest extends \PHPUnit\Framework\TestCase
 
         $collection->addFieldToFilter('orderId', ['like' => '0']);
         $items = $collection->getItems();
-        $this->assertEquals(2, count($items));
+        $this->assertCount(2, $items);
         $this->assertInstanceOf(DocumentInterface::class, $items[1]);
     }
 
@@ -129,7 +130,7 @@ class TransactionsCollectionTest extends \PHPUnit\Framework\TestCase
 
         $collection->addFieldToFilter('orderId', ['like' => '0']);
         $items = $collection->getItems();
-        $this->assertEquals(0, count($items));
+        $this->assertCount(0, $items);
     }
 
     /**
@@ -160,7 +161,7 @@ class TransactionsCollectionTest extends \PHPUnit\Framework\TestCase
 
         $collection->addFieldToFilter('orderId', ['like' => '0']);
         $items = $collection->getItems();
-        $this->assertEquals(TransactionsCollection::TRANSACTION_MAXIMUM_COUNT, count($items));
+        $this->assertCount(TransactionsCollection::TRANSACTION_MAXIMUM_COUNT, $items);
         $this->assertInstanceOf(DocumentInterface::class, $items[1]);
     }
 
@@ -192,7 +193,7 @@ class TransactionsCollectionTest extends \PHPUnit\Framework\TestCase
 
         $collection->addFieldToFilter('orderId', ['like' => '0']);
         $items = $collection->getItems();
-        $this->assertEquals(TransactionsCollection::TRANSACTION_MAXIMUM_COUNT, count($items));
+        $this->assertCount(TransactionsCollection::TRANSACTION_MAXIMUM_COUNT, $items);
         $this->assertInstanceOf(DocumentInterface::class, $items[1]);
     }
 

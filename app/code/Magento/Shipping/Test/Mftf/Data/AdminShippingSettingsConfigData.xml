@@ -33,4 +33,18 @@
         <data key="hundred">100</data>
         <data key="default">0</data>
     </entity>
+    <entity name="AdminResetShippingOrigin" type="shipping_origin">
+        <requiredEntity type="inheritCountryFlag">ShippingOriginCountryInheritValue</requiredEntity>
+        <requiredEntity type="inheritRegionFlag">ShippingOriginRegionInheritValue</requiredEntity>
+        <requiredEntity type="inheritPostcodeFlag">ShippingOriginPostcodeInheritValue</requiredEntity>
+    </entity>
+    <entity name="ShippingOriginCountryInheritValue" type="inheritCountryFlag">
+        <data key="value">1</data>
+    </entity>
+    <entity name="ShippingOriginRegionInheritValue" type="inheritRegionFlag">
+        <data key="value">1</data>
+    </entity>
+    <entity name="ShippingOriginPostcodeInheritValue" type="inheritPostcodeFlag">
+        <data key="value">1</data>
+    </entity>
 </entities>

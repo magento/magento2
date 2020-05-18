@@ -11,8 +11,9 @@ use Magento\Catalog\Model\Product\Type;
 use Magento\Catalog\Model\Product\Visibility;
 use Magento\Catalog\Model\Product\Attribute\Source\Status;
 use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
 
-require __DIR__ . '/../../Store/_files/core_fixturestore.php';
+Resolver::getInstance()->requireDataFixture('Magento/Store/_files/core_fixturestore.php');
 
 $objectManager = Bootstrap::getObjectManager();
 

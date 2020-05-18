@@ -28,7 +28,7 @@ class LayoutTest extends \PHPUnit\Framework\TestCase
      */
     protected $layoutFactory;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->layoutFactory = $objectManager->get(\Magento\Framework\View\LayoutFactory::class);
@@ -77,15 +77,15 @@ class LayoutTest extends \PHPUnit\Framework\TestCase
             $this->once()
         )->method(
             'asSimplexml'
-        )->will(
-            $this->returnValue(
+        )->willReturn(
+            
                 simplexml_load_string(
                     '<layout><container name="container1"></container></layout>',
                     \Magento\Framework\View\Layout\Element::class
                 )
-            )
+            
         );
-        $layout->expects($this->once())->method('getUpdate')->will($this->returnValue($merge));
+        $layout->expects($this->once())->method('getUpdate')->willReturn($merge);
         $this->assertEmpty($layout->getXpath('/layout/container[@name="container1"]'));
         $layout->generateXml();
         $this->assertNotEmpty($layout->getXpath('/layout/container[@name="container1"]'));
@@ -183,7 +183,7 @@ class LayoutTest extends \PHPUnit\Framework\TestCase
 
         $block = $this->_layout->createBlock($blockType, $blockName, ['data' => $blockData]);
 
-        $this->assertRegExp($expectedName, $block->getNameInLayout());
+        $this->assertMatchesRegularExpression($expectedName, $block->getNameInLayout());
         $this->assertEquals($expectedData, $block->getData());
     }
 
@@ -205,10 +205,11 @@ class LayoutTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @dataProvider blockNotExistsDataProvider
-     * @expectedException \Magento\Framework\Exception\LocalizedException
      */
     public function testCreateBlockNotExists($name)
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+
         $this->_layout->createBlock($name);
     }
 
@@ -253,17 +254,28 @@ class LayoutTest extends \PHPUnit\Framework\TestCase
     public function addContainerDataProvider()
     {
         return [
+            ['aside'],
             ['dd'],
             ['div'],
             ['dl'],
             ['fieldset'],
+            ['main'],
+            ['nav'],
             ['header'],
+            ['footer'],
             ['ol'],
             ['p'],
             ['section'],
             ['table'],
             ['tfoot'],
-            ['ul']
+            ['ul'],
+            ['article'],
+            ['h1'],
+            ['h2'],
+            ['h3'],
+            ['h4'],
+            ['h5'],
+            ['h6'],
         ];
     }
 
@@ -274,7 +286,7 @@ class LayoutTest extends \PHPUnit\Framework\TestCase
     {
         $msg = 'Html tag "span" is forbidden for usage in containers. ' .
             'Consider to use one of the allowed: aside, dd, div, dl, fieldset, main, nav, ' .
-            'header, footer, ol, p, section, table, tfoot, ul.';
+            'header, footer, ol, p, section, table, tfoot, ul, article, h1, h2, h3, h4, h5, h6.';
         $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
         $this->expectExceptionMessage($msg);
         $this->_layout->addContainer('container', 'Container', ['htmlTag' => 'span']);
@@ -361,10 +373,11 @@ class LayoutTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
      */
     public function testAddBlockInvalidType()
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+
         $this->_layout->addBlock('invalid_name', 'child');
     }
 

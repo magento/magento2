@@ -858,7 +858,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
      */
     public function canReorder()
     {
-        return $this->_canReorder(false);
+        return $this->_canReorder();
     }
 
     /**

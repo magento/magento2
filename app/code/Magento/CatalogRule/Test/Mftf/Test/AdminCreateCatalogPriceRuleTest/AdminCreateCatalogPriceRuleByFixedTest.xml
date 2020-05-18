@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCreateCatalogPriceRuleByFixedTest" extends="AdminCreateCatalogPriceRuleByPercentTest">
+        <annotations>
+            <features value="CatalogRule"/>
+            <stories value="Create catalog price rule"/>
+            <title value="Admin should be able to create a catalog price rule applied as a fixed amount (for simple product)"/>
+            <description value="Admin should be able to create a catalog price rule applied as a fixed amount (for simple product)"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-93"/>
+            <group value="CatalogRule"/>
+        </annotations>
+        <before>
+            <actionGroup stepKey="createNewPriceRule" ref="NewCatalogPriceRuleByUIActionGroup">
+                <argument name="catalogRule" value="CatalogRuleByFixed"/>
+            </actionGroup>
+        </before>
+        <after>
+            <actionGroup stepKey="deletePriceRule" ref="deleteEntitySecondaryGrid">
+                <argument name="name" value="{{CatalogRuleByFixed.name}}"/>
+                <argument name="searchInput" value="{{AdminSecondaryGridSection.catalogRuleIdentifierSearch}}"/>
+            </actionGroup>
+        </after>
+    </test>
+</tests>
