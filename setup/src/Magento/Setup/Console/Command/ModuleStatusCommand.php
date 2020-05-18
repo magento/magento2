@@ -46,7 +46,7 @@ class ModuleStatusCommand extends AbstractSetupCommand
     {
         $this->setName('module:status')
             ->setDescription('Displays status of modules')
-            ->addArgument('module', InputArgument::OPTIONAL, 'Optional module name')
+            ->addArgument('module', InputArgument::OPTIONAL | InputArgument::IS_ARRAY , 'Optional module name')
             ->addOption('enabled', null, null, 'Print only enabled modules')
             ->addOption('disabled', null, null, 'Print only disabled modules');
         parent::configure();
@@ -57,9 +57,11 @@ class ModuleStatusCommand extends AbstractSetupCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $moduleName = (string)$input->getArgument('module');
-        if ($moduleName) {
-            return $this->showSpecificModule($moduleName, $output);
+        $moduleNames = $input->getArgument('module');
+        if (!empty($moduleNames)) {
+            foreach($moduleNames as $moduleName)
+                $this->showSpecificModule($moduleName, $output);
+            return;
         }
 
         $onlyEnabled = $input->getOption('enabled');
@@ -89,17 +91,17 @@ class ModuleStatusCommand extends AbstractSetupCommand
     {
         $allModules = $this->getAllModules();
         if (!in_array($moduleName, $allModules->getNames())) {
-            $output->writeln('<error>Module does not exist</error>');
+            $output->writeln($moduleName.' : <error>Module does not exist</error>');
             return Cli::RETURN_FAILURE;
         }
 
         $enabledModules = $this->getEnabledModules();
         if (in_array($moduleName, $enabledModules->getNames())) {
-            $output->writeln('<info>Module is enabled</info>');
+            $output->writeln($moduleName.' : <info>Module is enabled</info>');
             return Cli::RETURN_FAILURE;
         }
 
-        $output->writeln('<info>Module is disabled</info>');
+        $output->writeln($moduleName.' : <info> Module is disabled</info>');
         return \Magento\Framework\Console\Cli::RETURN_SUCCESS;
     }
 
