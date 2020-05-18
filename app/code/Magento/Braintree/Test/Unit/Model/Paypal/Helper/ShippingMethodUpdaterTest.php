@@ -16,7 +16,7 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @see \Magento\Braintree\Model\Paypal\Helper\ShippingMethodUpdater
+ * Test shipping method updater
  */
 class ShippingMethodUpdaterTest extends TestCase
 {
@@ -40,10 +40,18 @@ class ShippingMethodUpdaterTest extends TestCase
     private $shippingAddressMock;
 
     /**
+     * @var Address|MockObject
+     */
+    private $billingAddressMock;
+
+    /**
      * @var ShippingMethodUpdater
      */
     private $shippingMethodUpdater;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp(): void
     {
         $this->configMock = $this->getMockBuilder(Config::class)
@@ -69,16 +77,24 @@ class ShippingMethodUpdaterTest extends TestCase
         );
     }
 
-    public function testExecuteException()
+    /**
+     * Test execute exception
+     *
+     * @return void
+     */
+    public function testExecuteException(): void
     {
         $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage('The "shippingMethod" field does not exists.');
+        $this->expectExceptionMessage("The \"shippingMethod\" field does not exists.");
         $quoteMock = $this->getQuoteMock();
 
         $this->shippingMethodUpdater->execute('', $quoteMock);
     }
 
-    public function testExecute()
+    /**
+     * Test execute
+     */
+    public function testExecute(): void
     {
         $quoteMock = $this->getQuoteMock();
 
@@ -114,9 +130,13 @@ class ShippingMethodUpdaterTest extends TestCase
     }
 
     /**
+     * Disable quote address validation
+     *
      * @param MockObject $quoteMock
+     *
+     * @return void
      */
-    private function disabledQuoteAddressValidationStep(MockObject $quoteMock)
+    private function disabledQuoteAddressValidationStep(MockObject $quoteMock): void
     {
         $billingAddressMock = $this->getBillingAddressMock($quoteMock);
 
@@ -139,27 +159,33 @@ class ShippingMethodUpdaterTest extends TestCase
     }
 
     /**
+     * Get billing address mock object
+     *
      * @param MockObject $quoteMock
      * @return Address|MockObject
      */
-    private function getBillingAddressMock(MockObject $quoteMock)
+    private function getBillingAddressMock(MockObject $quoteMock): MockObject
     {
-        $billingAddressMock = $this->getMockBuilder(Address::class)
-            ->setMethods(['setShouldIgnoreValidation', 'getEmail', 'setSameAsBilling'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        if (!isset($this->billingAddressMock)) {
+            $this->billingAddressMock = $this->getMockBuilder(Address::class)
+                ->setMethods(['setShouldIgnoreValidation', 'getEmail', 'setSameAsBilling'])
+                ->disableOriginalConstructor()
+                ->getMock();
+        }
 
         $quoteMock->expects(self::any())
             ->method('getBillingAddress')
-            ->willReturn($billingAddressMock);
+            ->willReturn($this->billingAddressMock);
 
-        return $billingAddressMock;
+        return $this->billingAddressMock;
     }
 
     /**
+     * Get quote mock object
+     *
      * @return Quote|MockObject
      */
-    private function getQuoteMock()
+    private function getQuoteMock(): MockObject
     {
         return $this->getMockBuilder(Quote::class)
             ->setMethods(
@@ -167,7 +193,8 @@ class ShippingMethodUpdaterTest extends TestCase
                     'collectTotals',
                     'getBillingAddress',
                     'getShippingAddress',
-                    'getIsVirtual'
+                    'getIsVirtual',
+                    'getExtensionAttributes'
                 ]
             )->disableOriginalConstructor()
             ->getMock();
