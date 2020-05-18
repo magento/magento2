@@ -127,21 +127,25 @@ class Add extends \Magento\Checkout\Controller\Cart implements HttpPostActionInt
             );
 
             if (!$this->_checkoutSession->getNoCartRedirect(true)) {
-                if (!$this->cart->getQuote()->getHasError()) {
-                    if ($this->shouldRedirectToCart()) {
-                        $message = __(
-                            'You added %1 to your shopping cart.',
-                            $product->getName()
-                        );
-                        $this->messageManager->addSuccessMessage($message);
-                    } else {
-                        $this->messageManager->addComplexSuccessMessage(
-                            'addCartSuccessMessage',
-                            [
-                                'product_name' => $product->getName(),
-                                'cart_url' => $this->getCartUrl(),
-                            ]
-                        );
+                if ($this->shouldRedirectToCart()) {
+                    $message = __(
+                        'You added %1 to your shopping cart.',
+                        $product->getName()
+                    );
+                    $this->messageManager->addSuccessMessage($message);
+                } else {
+                    $this->messageManager->addComplexSuccessMessage(
+                        'addCartSuccessMessage',
+                        [
+                            'product_name' => $product->getName(),
+                            'cart_url' => $this->getCartUrl(),
+                        ]
+                    );
+                }
+                if ($this->cart->getQuote()->getHasError()) {
+                    $errors = $this->cart->getQuote()->getErrors();
+                    foreach ($errors as $error) {
+                        $this->messageManager->addErrorMessage($error->getText());
                     }
                 }
                 return $this->goBack(null, $product);
