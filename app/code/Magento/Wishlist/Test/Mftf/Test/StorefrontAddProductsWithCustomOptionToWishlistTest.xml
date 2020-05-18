@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontAddProductsWithCustomOptionToWishlistTest">
+        <annotations>
+            <features value="Wishlist"/>
+            <stories value="Add product with customizable option to wishlist"/>
+            <title value="Add product with customizable option to wishlist."/>
+            <description value="Add product with custom radio button option to wishlist."/>
+            <group value="wishlist"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-34245"/>
+        </annotations>
+        <before>
+            <createData entity="SimpleSubCategory" stepKey="categoryFirst"/>
+            <createData entity="SimpleProduct" stepKey="simpleProduct">
+                <requiredEntity createDataKey="categoryFirst"/>
+            </createData>
+
+            <updateData entity="productWithOptionRadiobutton" createDataKey="simpleProduct" stepKey="updateProductWithOptions">
+                <requiredEntity createDataKey="simpleProduct"/>
+            </updateData>
+
+            <createData entity="Simple_US_Customer" stepKey="customer"/>
+            <magentoCLI command="indexer:reindex" stepKey="reindex"/>
+            <magentoCLI command="cache:flush" stepKey="flushCache"/>
+        </before>
+        <after>
+            <deleteData createDataKey="simpleProduct" stepKey="deletesimpleProduct"/>
+            <deleteData createDataKey="categoryFirst" stepKey="deleteCategoryFirst"/>
+            <magentoCLI command="indexer:reindex" stepKey="reindex"/>
+            <magentoCLI command="cache:flush" stepKey="flushCache"/>
+            <deleteData createDataKey="customer" stepKey="deleteCustomer"/>
+        </after>
+
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginToStorefrontAccount">
+            <argument name="Customer" value="$$customer$$"/>
+        </actionGroup>
+
+        <amOnPage url="{{StorefrontCategoryPage.url($$categoryFirst.name$$)}}" stepKey="navigateToCategoryFirstPage"/>
+        <actionGroup ref="StorefrontCheckCategorySimpleProductActionGroup" stepKey="browseAssertCategoryProduct1">
+            <argument name="product" value="$$simpleProduct$$"/>
+        </actionGroup>
+
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openStorefrontProductPage">
+            <argument name="productUrl" value="$$simpleProduct.custom_attributes[url_key]$$"/>
+        </actionGroup>
+
+        <actionGroup ref="StorefrontProductPageSelectRadioButtonOptionValueActionGroup" stepKey="selectRadioButtonOption">
+            <argument name="attributeLabel" value="{{ProductOptionRadiobuttonWithTwoFixedOptions.title}}"/>
+            <argument name="optionLabel" value="{{ProductOptionValueRadioButtons1.title}}"/>
+        </actionGroup>
+
+        <click selector="{{StorefrontProductPageSection.addToWishlist}}" stepKey="addProductToWishlist"/>
+        <actionGroup ref="AssertProductIsPresentInWishListActionGroup" stepKey="assertProductPresent">
+            <argument name="productName" value="$$simpleProduct.name$$"/>
+            <argument name="productPrice" value="$222.99"/>
+        </actionGroup>
+    </test>
+</tests>

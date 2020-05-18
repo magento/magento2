@@ -86,22 +86,8 @@ class ConfiguredPriceBox extends FinalPriceBox
     }
 
     /**
-     * {@inheritdoc}
-     */
-    public function getPriceType($priceCode)
-    {
-        $price = $this->saleableItem->getPriceInfo()->getPrice($priceCode);
-        $item = $this->getData('item');
-        if ($price instanceof ConfiguredPriceInterface
-            && $item instanceof ItemInterface
-        ) {
-            $price->setItem($item);
-        }
-
-        return $price;
-    }
-
-    /**
+     * Returns configured price
+     *
      * @return PriceInterface
      */
     public function getConfiguredPrice(): PriceInterface
@@ -117,6 +103,8 @@ class ConfiguredPriceBox extends FinalPriceBox
     }
 
     /**
+     * Returns configured regular price
+     *
      * @return PriceInterface
      */
     public function getConfiguredRegularPrice(): PriceInterface
