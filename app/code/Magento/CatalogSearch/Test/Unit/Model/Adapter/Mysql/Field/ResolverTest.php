@@ -3,51 +3,61 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\CatalogSearch\Test\Unit\Model\Adapter\Mysql\Field;
 
+use Magento\Catalog\Model\ResourceModel\Product\Attribute\Collection;
+use Magento\CatalogSearch\Model\Adapter\Mysql\Field\Resolver;
+use Magento\Framework\DataObject;
+use Magento\Framework\Search\Adapter\Mysql\Field\Field;
+use Magento\Framework\Search\Adapter\Mysql\Field\FieldFactory;
 use Magento\Framework\Search\Adapter\Mysql\Field\FieldInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Unit tests for Magento\CatalogSearch\Model\Adapter\Mysql\Field\Resolver class.
  *
- * @deprecated
+ * @deprecated Implementation class was replaced
  * @see \Magento\ElasticSearch
  */
-class ResolverTest extends \PHPUnit\Framework\TestCase
+class ResolverTest extends TestCase
 {
     /**
-     * @var \Magento\Catalog\Model\ResourceModel\Product\Attribute\Collection|\PHPUnit_Framework_MockObject_MockObject
+     * @var Collection|MockObject
      */
     private $attributeCollection;
 
     /**
-     * @var \Magento\Framework\Search\Adapter\Mysql\Field\FieldFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var FieldFactory|MockObject
      */
     private $fieldFactory;
 
     /**
-     * @var \Magento\CatalogSearch\Model\Adapter\Mysql\Field\Resolver
+     * @var Resolver
      */
     private $model;
 
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->attributeCollection = $this->getMockBuilder(
-            \Magento\Catalog\Model\ResourceModel\Product\Attribute\Collection::class
+            Collection::class
         )
             ->disableOriginalConstructor()
             ->getMock();
-        $this->fieldFactory = $this->getMockBuilder(\Magento\Framework\Search\Adapter\Mysql\Field\FieldFactory::class)
+        $this->fieldFactory = $this->getMockBuilder(FieldFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
 
-        $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $objectManagerHelper = new ObjectManager($this);
         $this->model = $objectManagerHelper->getObject(
-            \Magento\CatalogSearch\Model\Adapter\Mysql\Field\Resolver::class,
+            Resolver::class,
             [
                 'attributeCollection' => $this->attributeCollection,
                 'fieldFactory' => $this->fieldFactory,
@@ -60,7 +70,7 @@ class ResolverTest extends \PHPUnit\Framework\TestCase
      *
      * @param array $fields
      * @param int|null $attributeId
-     * @param \PHPUnit_Framework_MockObject_MockObject $field
+     * @param MockObject $field
      * @param array $expectedResult
      * @return void
      * @dataProvider resolveDataProvider
@@ -68,10 +78,10 @@ class ResolverTest extends \PHPUnit\Framework\TestCase
     public function testResolve(
         array $fields,
         $attributeId,
-        \PHPUnit_Framework_MockObject_MockObject $field,
+        MockObject $field,
         array $expectedResult
     ) {
-        $item = $this->getMockBuilder(\Magento\Framework\DataObject::class)
+        $item = $this->getMockBuilder(DataObject::class)
             ->disableOriginalConstructor()
             ->setMethods(['getId'])
             ->getMock();
@@ -101,12 +111,12 @@ class ResolverTest extends \PHPUnit\Framework\TestCase
      */
     public function resolveDataProvider()
     {
-        $field = $this->getMockBuilder(\Magento\Framework\Search\Adapter\Mysql\Field\Field::class)
+        $field = $this->getMockBuilder(Field::class)
             ->disableOriginalConstructor()
             ->getMock();
         return [
-          [['code_1'], 1, $field, ['code_1' => $field]],
-          [['*'], null, $field, [$field]],
+            [['code_1'], 1, $field, ['code_1' => $field]],
+            [['*'], null, $field, [$field]],
         ];
     }
 }

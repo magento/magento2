@@ -8,16 +8,16 @@ declare(strict_types=1);
 
 namespace Magento\Analytics\Test\Unit\ReportXml;
 
-use Magento\Analytics\ReportXml\QueryFactory;
-use Magento\Analytics\ReportXml\Query;
 use Magento\Analytics\ReportXml\Config;
-use Magento\Framework\DB\Select;
 use Magento\Analytics\ReportXml\DB\Assembler\AssemblerInterface;
-use Magento\Framework\App\CacheInterface;
-use Magento\Framework\ObjectManagerInterface;
-use Magento\Analytics\ReportXml\SelectHydrator;
 use Magento\Analytics\ReportXml\DB\SelectBuilder;
 use Magento\Analytics\ReportXml\DB\SelectBuilderFactory;
+use Magento\Analytics\ReportXml\Query;
+use Magento\Analytics\ReportXml\QueryFactory;
+use Magento\Analytics\ReportXml\SelectHydrator;
+use Magento\Framework\App\CacheInterface;
+use Magento\Framework\DB\Select;
+use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -93,37 +93,21 @@ class QueryFactoryTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->queryMock = $this->getMockBuilder(Query::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->queryMock = $this->createMock(Query::class);
 
-        $this->configMock = $this->getMockBuilder(Config::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->configMock = $this->createMock(Config::class);
 
-        $this->selectMock = $this->getMockBuilder(Select::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->selectMock = $this->createMock(Select::class);
 
-        $this->assemblerMock = $this->getMockBuilder(AssemblerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->assemblerMock = $this->getMockForAbstractClass(AssemblerInterface::class);
 
-        $this->queryCacheMock = $this->getMockBuilder(CacheInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->queryCacheMock = $this->getMockForAbstractClass(CacheInterface::class);
 
-        $this->objectManagerMock = $this->getMockBuilder(ObjectManagerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->objectManagerMock = $this->getMockForAbstractClass(ObjectManagerInterface::class);
 
-        $this->selectHydratorMock = $this->getMockBuilder(SelectHydrator::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->selectHydratorMock = $this->createMock(SelectHydrator::class);
 
-        $this->selectBuilderFactoryMock = $this->getMockBuilder(SelectBuilderFactory::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->selectBuilderFactoryMock = $this->createMock(SelectBuilderFactory::class);
 
         $this->jsonSerializerMock =  $this->createMock(Json::class);
 
@@ -153,7 +137,7 @@ class QueryFactoryTest extends TestCase
         $queryConfigMock = $queryDataMock['config'];
         $queryName = $queryConfigMock['name'];
 
-        $this->queryCacheMock->expects($this->any())
+        $this->queryCacheMock
             ->method('load')
             ->with($queryName)
             ->willReturn($jsonEncodeData);
@@ -162,7 +146,7 @@ class QueryFactoryTest extends TestCase
             ->method('unserialize')
             ->willReturn($queryDataMock);
 
-        $this->selectHydratorMock->expects($this->any())
+        $this->selectHydratorMock
             ->method('recreate')
             ->with([])
             ->willReturn($this->selectMock);
@@ -189,30 +173,28 @@ class QueryFactoryTest extends TestCase
         $queryConfigMock = $queryDataMock['config'];
         $queryName = $queryConfigMock['name'];
 
-        $selectBuilderMock = $this->getMockBuilder(SelectBuilder::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $selectBuilderMock = $this->createMock(SelectBuilder::class);
         $selectBuilderMock->expects($this->once())
             ->method('setConnectionName')
             ->with($queryConfigMock['connection']);
-        $selectBuilderMock->expects($this->any())
+        $selectBuilderMock
             ->method('create')
             ->willReturn($this->selectMock);
-        $selectBuilderMock->expects($this->any())
+        $selectBuilderMock
             ->method('getConnectionName')
             ->willReturn($queryConfigMock['connection']);
 
-        $this->queryCacheMock->expects($this->any())
+        $this->queryCacheMock
             ->method('load')
             ->with($queryName)
             ->willReturn(null);
 
-        $this->configMock->expects($this->any())
+        $this->configMock
             ->method('get')
             ->with($queryName)
             ->willReturn($queryConfigMock);
 
-        $this->selectBuilderFactoryMock->expects($this->any())
+        $this->selectBuilderFactoryMock
             ->method('create')
             ->willReturn($selectBuilderMock);
 
@@ -254,8 +236,8 @@ class QueryFactoryTest extends TestCase
                     ],
                     'select_parts' => []
                 ],
-                'getQueryDataJsonEncodeMock' => '{"connectionName":"default",'.
-                    '"config":{"name":"test_query",'.
+                'getQueryDataJsonEncodeMock' => '{"connectionName":"default",' .
+                    '"config":{"name":"test_query",' .
                     '"connection":"default"},"select_parts":[]}'
             ]
         ];

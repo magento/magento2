@@ -5,13 +5,22 @@
  */
 declare(strict_types=1);
 
+use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Quote\Model\Quote;
 use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
 
-require __DIR__ . '/../../Checkout/_files/quote_with_address.php';
+Resolver::getInstance()->requireDataFixture('Magento/Checkout/_files/quote_with_address.php');
 
-/** @var \Magento\Quote\Model\Quote $quote */
+$objectManager = Bootstrap::getObjectManager();
+/** @var ProductRepositoryInterface $productRepository */
+$productRepository = $objectManager->create(ProductRepositoryInterface::class);
+$quote = Bootstrap::getObjectManager()->create(Quote::class);
+$quote->load('test_order_1', 'reserved_order_id');
+$customDesignProduct = $productRepository->get('custom-design-simple-product');
+/** @var Quote $quote */
 $quote->addProduct(
-    $customDesignProduct->load($customDesignProduct->getId()),
+    $customDesignProduct,
     1
 );
 

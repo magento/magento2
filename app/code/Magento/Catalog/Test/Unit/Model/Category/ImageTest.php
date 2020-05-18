@@ -38,7 +38,7 @@ class ImageTest extends TestCase
     /**
      * @inheritDoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $storeManager = $this->createPartialMock(StoreManager::class, ['getStore']);
         $this->store = $this->createPartialMock(Store::class, ['getBaseUrl']);
