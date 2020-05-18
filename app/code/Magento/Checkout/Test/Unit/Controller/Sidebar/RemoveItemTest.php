@@ -234,6 +234,52 @@ class RemoveItemTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('json represented', $this->removeItem->execute());
     }
 
+    /**
+     * Test controller when DB exception is thrown.
+     *
+     * @return void
+     */
+    public function testExecuteWithDbException(): void
+    {
+        $itemId = 1;
+        $dbError = 'Error';
+        $message = __('An unspecified error occurred. Please contact us for assistance.');
+        $response = [
+            'success' => false,
+            'error_message' => $message,
+        ];
+
+        $this->getPropertyValue($this->removeItem, 'formKeyValidator')
+            ->expects($this->once())
+            ->method('validate')
+            ->with($this->requestMock)
+            ->willReturn(true);
+        $this->requestMock->expects($this->once())->method('getParam')->with('item_id')->willReturn($itemId);
+
+        $exception = new \Zend_Db_Exception($dbError);
+
+        $this->sidebarMock->expects($this->once())
+            ->method('checkQuoteItem')
+            ->with($itemId)
+            ->willThrowException($exception);
+
+        $this->loggerMock->expects($this->once())->method('critical')->with($exception);
+
+        $this->sidebarMock->expects($this->once())->method('getResponseData')->with($message)->willReturn($response);
+        $encodedResponse = json_encode($response);
+        $this->jsonHelperMock->expects($this->once())
+            ->method('jsonEncode')
+            ->with($response)
+            ->willReturn($encodedResponse);
+
+        $this->responseMock->expects($this->once())
+            ->method('representJson')
+            ->with($encodedResponse)
+            ->willReturn($this->responseMock);
+
+        $this->removeItem->execute();
+    }
+
     public function testExecuteWhenFormKeyValidationFailed()
     {
         $resultRedirect = $this->createMock(\Magento\Framework\Controller\Result\Redirect::class);
