@@ -960,6 +960,7 @@ define([
         reload: function () {
             this.clear();
             this.initChildren(false, true);
+
             /* After change page size need to check existing current page */
             this._reducePages();
         },
