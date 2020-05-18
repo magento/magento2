@@ -27,13 +27,6 @@ class OptionsTest extends TestCase
     private const XML_PATH_PREFIX_SHOW = 'customer/address/prefix_show';
     private const XML_PATH_PREFIX_OPTIONS = 'customer/address/prefix_options';
 
-    private const STUB_OPTION_PREFIX_NAME = 'prefix';
-    private const STUB_OPTION_SUFFIX_NAME = 'suffix';
-    private const STUB_CONFIG_VALUES = 'v1;v2';
-    private const STUB_CONFIG_VALUES_WITH_BLANK_OPTION = ';v1;v2';
-    private const STUB_EXPECTED_VALUES_WITH_BLANK_OPTION = [' ' => ' ', 'v1' => 'v1', 'v2' => 'v2'];
-    private const STUB_EXPECTED_VALUES = ['v1' => 'v1', 'v2' => 'v2'];
-
     /**
      * @var Options
      */
@@ -62,25 +55,22 @@ class OptionsTest extends TestCase
      * @param array $showOptionConfig
      * @param array $optionValuesConfig
      * @param array $expectedOptions
-     * @param int $expectedCount
      * @return void
      */
     public function testOptions(
         string $optionType,
         array $showOptionConfig,
         array $optionValuesConfig,
-        array $expectedOptions,
-        int $expectedCount
+        array $expectedOptions
     ): void {
         $this->setConfig($showOptionConfig);
         $this->setConfig($optionValuesConfig);
 
         /** @var array $options */
-        $options = $optionType === self::STUB_OPTION_PREFIX_NAME
+        $options = $optionType === 'prefix'
             ? $this->model->getNamePrefixOptions()
             : $this->model->getNameSuffixOptions();
 
-        $this->assertCount($expectedCount, $options);
         $this->assertEquals($expectedOptions, $options);
     }
 
@@ -109,48 +99,49 @@ class OptionsTest extends TestCase
      */
     public function optionsDataProvider(): array
     {
+        $optionPrefixName = 'prefix';
+        $optionSuffixName = 'suffix';
+        $optionValues = 'v1;v2';
+        $optionValuesWithBlank = ';v1;v2';
+        $expectedValuesWithBlank = [' ' => ' ', 'v1' => 'v1', 'v2' => 'v2'];
+        $expectedValues = ['v1' => 'v1', 'v2' => 'v2'];
+
         return [
             'prefix_required_with_blank_option' => [
-                self::STUB_OPTION_PREFIX_NAME,
+                $optionPrefixName,
                 [self::XML_PATH_PREFIX_SHOW => Nooptreq::VALUE_REQUIRED],
-                [self::XML_PATH_PREFIX_OPTIONS => self::STUB_CONFIG_VALUES_WITH_BLANK_OPTION],
-                self::STUB_EXPECTED_VALUES_WITH_BLANK_OPTION,
-                3,
+                [self::XML_PATH_PREFIX_OPTIONS => $optionValuesWithBlank],
+                $expectedValuesWithBlank,
             ],
             'prefix_required' => [
-                self::STUB_OPTION_PREFIX_NAME,
+                $optionPrefixName,
                 [self::XML_PATH_PREFIX_SHOW => Nooptreq::VALUE_REQUIRED],
-                [self::XML_PATH_PREFIX_OPTIONS => self::STUB_CONFIG_VALUES],
-                self::STUB_EXPECTED_VALUES,
-                2,
+                [self::XML_PATH_PREFIX_OPTIONS => $optionValues],
+                $expectedValues,
             ],
             'prefix_optional' => [
-                self::STUB_OPTION_PREFIX_NAME,
+                $optionPrefixName,
                 [self::XML_PATH_PREFIX_SHOW => Nooptreq::VALUE_OPTIONAL],
-                [self::XML_PATH_PREFIX_OPTIONS => self::STUB_CONFIG_VALUES],
-                self::STUB_EXPECTED_VALUES_WITH_BLANK_OPTION,
-                3,
+                [self::XML_PATH_PREFIX_OPTIONS => $optionValues],
+                $expectedValuesWithBlank,
             ],
             'suffix_optional' => [
-                self::STUB_OPTION_SUFFIX_NAME,
+                $optionSuffixName,
                 [self::XML_PATH_SUFFIX_SHOW => Nooptreq::VALUE_OPTIONAL],
-                [self::XML_PATH_SUFFIX_OPTIONS => self::STUB_CONFIG_VALUES],
-                self::STUB_EXPECTED_VALUES_WITH_BLANK_OPTION,
-                3,
+                [self::XML_PATH_SUFFIX_OPTIONS => $optionValues],
+                $expectedValuesWithBlank,
             ],
             'suffix_optional_with_blank_option' => [
-                self::STUB_OPTION_SUFFIX_NAME,
+                $optionSuffixName,
                 [self::XML_PATH_SUFFIX_SHOW => Nooptreq::VALUE_OPTIONAL],
-                [self::XML_PATH_SUFFIX_OPTIONS => self::STUB_CONFIG_VALUES_WITH_BLANK_OPTION],
-                self::STUB_EXPECTED_VALUES_WITH_BLANK_OPTION,
-                3,
+                [self::XML_PATH_SUFFIX_OPTIONS => $optionValuesWithBlank],
+                $expectedValuesWithBlank,
             ],
             'suffix_required_with_blank_option' => [
-                self::STUB_OPTION_SUFFIX_NAME,
+                $optionSuffixName,
                 [self::XML_PATH_SUFFIX_SHOW => Nooptreq::VALUE_OPTIONAL],
-                [self::XML_PATH_SUFFIX_OPTIONS => self::STUB_CONFIG_VALUES_WITH_BLANK_OPTION],
-                self::STUB_EXPECTED_VALUES_WITH_BLANK_OPTION,
-                3,
+                [self::XML_PATH_SUFFIX_OPTIONS => $optionValuesWithBlank],
+                $expectedValuesWithBlank,
             ],
         ];
     }
