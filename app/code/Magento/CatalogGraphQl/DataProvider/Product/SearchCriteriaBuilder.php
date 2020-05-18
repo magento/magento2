@@ -123,7 +123,7 @@ class SearchCriteriaBuilder
     {
         if ($isFilter && $isSearch) {
             // Index already contains products filtered by visibility: catalog, search, both
-            return ;
+            return;
         }
         $visibilityIds = $isSearch
             ? $this->visibility->getVisibleInSearchIds()

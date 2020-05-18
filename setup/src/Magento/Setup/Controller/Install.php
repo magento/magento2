@@ -6,18 +6,17 @@
 
 namespace Magento\Setup\Controller;
 
+use Laminas\Json\Json;
+use Laminas\Mvc\Controller\AbstractActionController;
+use Laminas\View\Model\JsonModel;
+use Laminas\View\Model\ViewModel;
 use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\Config\ConfigOptionsListConstants as SetupConfigOptionsList;
-use Magento\SampleData;
 use Magento\Setup\Model\Installer;
 use Magento\Setup\Model\Installer\ProgressFactory;
 use Magento\Setup\Model\InstallerFactory;
 use Magento\Setup\Model\RequestDataConverter;
 use Magento\Setup\Model\WebLogger;
-use Zend\Json\Json;
-use Zend\Mvc\Controller\AbstractActionController;
-use Zend\View\Model\JsonModel;
-use Zend\View\Model\ViewModel;
 
 /**
  * Install controller
@@ -57,8 +56,6 @@ class Install extends AbstractActionController
     private $requestDataConverter;
 
     /**
-     * Default Constructor
-     *
      * @param WebLogger $logger
      * @param InstallerFactory $installerFactory
      * @param ProgressFactory $progressFactory
@@ -83,12 +80,15 @@ class Install extends AbstractActionController
     }
 
     /**
+     * Index action
+     *
      * @return ViewModel
      */
     public function indexAction()
     {
-        $view = new ViewModel;
+        $view = new ViewModel();
         $view->setTerminal(true);
+
         return $view;
     }
 
@@ -100,7 +100,7 @@ class Install extends AbstractActionController
     public function startAction()
     {
         $this->log->clear();
-        $json = new JsonModel;
+        $json = new JsonModel();
         try {
             $this->checkForPriorInstall();
             $content = $this->getRequest()->getContent();
@@ -121,6 +121,7 @@ class Install extends AbstractActionController
             $json->setVariable('messages', $e->getMessage());
             $json->setVariable('success', false);
         }
+
         return $json;
     }
 
@@ -155,6 +156,7 @@ class Install extends AbstractActionController
         } catch (\Exception $e) {
             $contents = [(string)$e];
         }
+
         return $json->setVariables(['progress' => $percent, 'success' => $success, 'console' => $contents]);
     }
 

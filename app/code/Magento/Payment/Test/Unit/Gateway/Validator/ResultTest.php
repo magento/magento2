@@ -3,14 +3,15 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Payment\Test\Unit\Gateway\Validator;
 
+use Magento\Framework\Phrase;
 use Magento\Payment\Gateway\Validator\Result;
+use PHPUnit\Framework\TestCase;
 
-/**
- * Class ResultTest
- */
-class ResultTest extends \PHPUnit\Framework\TestCase
+class ResultTest extends TestCase
 {
     /** @var Result */
     protected $model;
@@ -34,7 +35,9 @@ class ResultTest extends \PHPUnit\Framework\TestCase
      */
     public function resultDataProvider()
     {
-        $phraseMock = $this->getMockBuilder(\Magento\Framework\Phrase::class)->disableOriginalConstructor()->getMock();
+        $phraseMock = $this->getMockBuilder(Phrase::class)
+            ->disableOriginalConstructor()
+            ->getMock();
         return [
             [true, [$phraseMock, $phraseMock], true, [$phraseMock, $phraseMock]],
             ['', [], false, []],

@@ -3,15 +3,18 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Setup\Test\Unit\Model\ConfigOptionsList;
 
-use Magento\Setup\Model\ConfigOptionsList\Cache as CacheConfigOptionsList;
-use Magento\Framework\Setup\Option\TextConfigOption;
+use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\Setup\Option\SelectConfigOption;
+use Magento\Framework\Setup\Option\TextConfigOption;
+use Magento\Setup\Model\ConfigOptionsList\Cache as CacheConfigOptionsList;
 use Magento\Setup\Validator\RedisConnectionValidator;
+use PHPUnit\Framework\TestCase;
 
-class CacheTest extends \PHPUnit\Framework\TestCase
+class CacheTest extends TestCase
 {
     /**
      * @var \Magento\Setup\Model\ConfigOptionsList\Cache
@@ -19,22 +22,22 @@ class CacheTest extends \PHPUnit\Framework\TestCase
     private $configOptionsList;
 
     /**
-     * @var \Magento\Setup\Validator\RedisConnectionValidator
+     * @var RedisConnectionValidator
      */
     private $validatorMock;
 
     /**
-     * @var \Magento\Framework\App\DeploymentConfig
+     * @var DeploymentConfig
      */
     private $deploymentConfigMock;
 
     /**
      * Tests setup
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->validatorMock = $this->createMock(RedisConnectionValidator::class);
-        $this->deploymentConfigMock = $this->createMock(\Magento\Framework\App\DeploymentConfig::class);
+        $this->deploymentConfigMock = $this->createMock(DeploymentConfig::class);
 
         $this->configOptionsList = new CacheConfigOptionsList($this->validatorMock);
     }
@@ -91,7 +94,7 @@ class CacheTest extends \PHPUnit\Framework\TestCase
             'cache' => [
                 'frontend' => [
                     'default' => [
-                        'backend' => 'Cm_Cache_Backend_Redis',
+                        'backend' => '\\Magento\\Framework\\Cache\\Backend\Redis',
                         'backend_options' => [
                             'server' => '',
                             'port' => '',
@@ -120,7 +123,7 @@ class CacheTest extends \PHPUnit\Framework\TestCase
             'cache' => [
                 'frontend' => [
                     'default' => [
-                        'backend' => 'Cm_Cache_Backend_Redis',
+                        'backend' => '\\Magento\\Framework\\Cache\\Backend\Redis',
                         'backend_options' => [
                             'server' => 'localhost',
                             'port' => '1234',
@@ -237,6 +240,6 @@ class CacheTest extends \PHPUnit\Framework\TestCase
      */
     private function expectedIdPrefix(): string
     {
-        return substr(\md5(dirname(__DIR__, 8)), 0, 3) . '_';
+        return substr(\hash('sha256', dirname(__DIR__, 8)), 0, 3) . '_';
     }
 }

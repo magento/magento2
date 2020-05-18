@@ -3,46 +3,56 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Setup\Test\Unit\Controller;
 
-use \Magento\Setup\Controller\CustomizeYourStore;
+use Laminas\View\Model\JsonModel;
+use Laminas\View\Model\ViewModel;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Module\FullModuleList;
+use Magento\Framework\Setup\Lists;
+use Magento\Framework\Setup\SampleData\State;
+use Magento\Setup\Controller\CustomizeYourStore;
+use Magento\Setup\Model\ObjectManagerProvider;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class CustomizeYourStoreTest extends \PHPUnit\Framework\TestCase
+class CustomizeYourStoreTest extends TestCase
 {
     /**
-     * @var \Magento\Setup\Controller\CustomizeYourStore
+     * @var CustomizeYourStore
      */
     private $controller;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Setup\SampleData\State
+     * @var MockObject|State
      */
     private $sampleDataState;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Setup\Lists
+     * @var MockObject|Lists
      */
     private $lists;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\ObjectManager
+     * @var MockObject|ObjectManager
      */
     private $objectManager;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Module\FullModuleList
+     * @var MockObject|FullModuleList
      */
     private $moduleList;
 
-    public function setup()
+    protected function setup(): void
     {
-        $objectManagerProvider = $this->createMock(\Magento\Setup\Model\ObjectManagerProvider::class);
-        $this->objectManager = $this->createMock(\Magento\Framework\App\ObjectManager::class);
+        $objectManagerProvider = $this->createMock(ObjectManagerProvider::class);
+        $this->objectManager = $this->createMock(ObjectManager::class);
         $objectManagerProvider->expects($this->any())->method('get')->willReturn($this->objectManager);
-        $this->sampleDataState = $this->createMock(\Magento\Framework\Setup\SampleData\State::class);
-        $this->lists = $this->createMock(\Magento\Framework\Setup\Lists::class);
-        $this->moduleList = $this->createMock(\Magento\Framework\Module\FullModuleList::class);
+        $this->sampleDataState = $this->createMock(State::class);
+        $this->lists = $this->createMock(Lists::class);
+        $this->moduleList = $this->createMock(FullModuleList::class);
         $this->controller = new CustomizeYourStore($this->moduleList, $this->lists, $objectManagerProvider);
     }
 
@@ -71,7 +81,7 @@ class CustomizeYourStoreTest extends \PHPUnit\Framework\TestCase
 
         $viewModel = $this->controller->indexAction();
 
-        $this->assertInstanceOf(\Zend\View\Model\ViewModel::class, $viewModel);
+        $this->assertInstanceOf(ViewModel::class, $viewModel);
         $this->assertTrue($viewModel->terminate());
 
         $variables = $viewModel->getVariables();
@@ -109,7 +119,7 @@ class CustomizeYourStoreTest extends \PHPUnit\Framework\TestCase
     public function testDefaultTimeZoneAction()
     {
         $jsonModel = $this->controller->defaultTimeZoneAction();
-        $this->assertInstanceOf(\Zend\View\Model\JsonModel::class, $jsonModel);
+        $this->assertInstanceOf(JsonModel::class, $jsonModel);
         $this->assertArrayHasKey('defaultTimeZone', $jsonModel->getVariables());
     }
 }
