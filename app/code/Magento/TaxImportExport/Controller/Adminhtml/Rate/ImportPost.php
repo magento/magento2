@@ -25,7 +25,7 @@ class ImportPost extends \Magento\TaxImportExport\Controller\Adminhtml\Rate
                 );
                 $importHandler->importFromCsvFile($importRatesFile);
 
-                $this->messageManager->addSuccess(__('The tax rate has been imported.'));
+                $this->messageManager->addSuccessMessage(__('The tax rate has been imported.'));
             } catch (\Magento\Framework\Exception\LocalizedException $e) {
                 $this->messageManager->addError($e->getMessage());
             } catch (\Exception $e) {

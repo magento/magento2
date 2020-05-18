@@ -65,7 +65,7 @@ class Save extends \Magento\Theme\Controller\Adminhtml\System\Design\Theme
                 );
                 $customization->delete($removeJsFiles);
                 $singleFile->update($theme, $customCssData);
-                $this->messageManager->addSuccess(__('You saved the theme.'));
+                $this->messageManager->addSuccessMessage(__('You saved the theme.'));
             }
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $this->messageManager->addError($e->getMessage());

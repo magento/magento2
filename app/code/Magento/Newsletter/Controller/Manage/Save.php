@@ -95,17 +95,17 @@ class Save extends \Magento\Newsletter\Controller\Manage implements HttpPostActi
                             ->subscribeCustomerById($customerId);
                         $subscribeStatus = $subscribeModel->getStatus();
                         if ($subscribeStatus == Subscriber::STATUS_SUBSCRIBED) {
-                            $this->messageManager->addSuccess(__('We have saved your subscription.'));
+                            $this->messageManager->addSuccessMessage(__('We have saved your subscription.'));
                         } else {
-                            $this->messageManager->addSuccess(__('A confirmation request has been sent.'));
+                            $this->messageManager->addSuccessMessage(__('A confirmation request has been sent.'));
                         }
                     } else {
                         $this->subscriberFactory->create()
                             ->unsubscribeCustomerById($customerId);
-                        $this->messageManager->addSuccess(__('We have removed your newsletter subscription.'));
+                        $this->messageManager->addSuccessMessage(__('We have removed your newsletter subscription.'));
                     }
                 } else {
-                    $this->messageManager->addSuccess(__('We have updated your subscription.'));
+                    $this->messageManager->addSuccessMessage(__('We have updated your subscription.'));
                 }
             } catch (\Exception $e) {
                 $this->messageManager->addError(__('Something went wrong while saving your subscription.'));

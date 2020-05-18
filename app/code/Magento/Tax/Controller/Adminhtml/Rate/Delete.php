@@ -24,7 +24,7 @@ class Delete extends \Magento\Tax\Controller\Adminhtml\Rate
             try {
                 $this->_taxRateRepository->deleteById($rateId);
 
-                $this->messageManager->addSuccess(__('You deleted the tax rate.'));
+                $this->messageManager->addSuccessMessage(__('You deleted the tax rate.'));
                 return $resultRedirect->setPath("*/*/");
             } catch (NoSuchEntityException $e) {
                 $this->messageManager->addError(

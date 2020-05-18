@@ -255,7 +255,7 @@ class AfterAddressSaveObserver implements ObserverInterface
                 : (string)__('You will not be charged tax.');
         }
 
-        $this->messageManager->addSuccess(implode(' ', $message));
+        $this->messageManager->addSuccessMessage(implode(' ', $message));
 
         return $this;
     }

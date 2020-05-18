@@ -23,7 +23,7 @@ class Delete extends \Magento\Newsletter\Controller\Adminhtml\Template
         if ($template->getId()) {
             try {
                 $template->delete();
-                $this->messageManager->addSuccess(__('The newsletter template has been deleted.'));
+                $this->messageManager->addSuccessMessage(__('The newsletter template has been deleted.'));
                 $this->_getSession()->setFormData(false);
             } catch (\Magento\Framework\Exception\LocalizedException $e) {
                 $this->messageManager->addError($e->getMessage());

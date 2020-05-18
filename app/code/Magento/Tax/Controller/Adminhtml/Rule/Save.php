@@ -24,7 +24,7 @@ class Save extends \Magento\Tax\Controller\Adminhtml\Rule
             try {
                 $taxRule = $this->ruleService->save($taxRule);
 
-                $this->messageManager->addSuccess(__('You saved the tax rule.'));
+                $this->messageManager->addSuccessMessage(__('You saved the tax rule.'));
 
                 if ($this->getRequest()->getParam('back')) {
                     return $resultRedirect->setPath('tax/*/edit', ['rule' => $taxRule->getId()]);

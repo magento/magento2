@@ -29,7 +29,7 @@ class MassChangelog extends \Magento\Indexer\Controller\Adminhtml\Indexer implem
                     )->get($indexerId);
                     $model->setScheduled(true);
                 }
-                $this->messageManager->addSuccess(
+                $this->messageManager->addSuccessMessage(
                     __('%1 indexer(s) are in "Update by Schedule" mode.', count($indexerIds))
                 );
             } catch (\Magento\Framework\Exception\LocalizedException $e) {

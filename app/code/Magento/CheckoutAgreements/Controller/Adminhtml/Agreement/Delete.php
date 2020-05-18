@@ -50,7 +50,7 @@ class Delete extends Agreement implements HttpPostActionInterface
 
         try {
             $this->agreementRepository->delete($agreement);
-            $this->messageManager->addSuccess(__('You deleted the condition.'));
+            $this->messageManager->addSuccessMessage(__('You deleted the condition.'));
             $this->_redirect('checkout/*/');
             return;
         } catch (LocalizedException $e) {

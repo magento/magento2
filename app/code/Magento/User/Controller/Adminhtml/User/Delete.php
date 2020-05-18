@@ -39,7 +39,7 @@ class Delete extends \Magento\User\Controller\Adminhtml\User
                 $model = $this->_userFactory->create();
                 $model->setId($userId);
                 $model->delete();
-                $this->messageManager->addSuccess(__('You deleted the user.'));
+                $this->messageManager->addSuccessMessage(__('You deleted the user.'));
                 $this->_redirect('adminhtml/*/');
                 return;
             } catch (\Exception $e) {

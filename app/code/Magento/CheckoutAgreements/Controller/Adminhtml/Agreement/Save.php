@@ -54,7 +54,7 @@ class Save extends Agreement implements HttpPostActionInterface
                     }
                 } else {
                     $model->save();
-                    $this->messageManager->addSuccess(__('You saved the condition.'));
+                    $this->messageManager->addSuccessMessage(__('You saved the condition.'));
                     $this->_redirect('checkout/*/');
                     return;
                 }

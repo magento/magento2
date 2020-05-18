@@ -25,7 +25,7 @@ class RefreshLifetime extends Statistics implements HttpPostActionInterface
             foreach ($collectionsNames as $collectionName) {
                 $this->_objectManager->create($collectionName)->aggregate();
             }
-            $this->messageManager->addSuccess(__('You refreshed lifetime statistics.'));
+            $this->messageManager->addSuccessMessage(__('You refreshed lifetime statistics.'));
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $this->messageManager->addError($e->getMessage());
         } catch (\Exception $e) {

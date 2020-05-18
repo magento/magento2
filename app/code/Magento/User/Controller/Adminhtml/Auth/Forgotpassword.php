@@ -127,7 +127,7 @@ class Forgotpassword extends Auth implements HttpGetActionInterface, HttpPostAct
                     return $resultRedirect->setPath('admin');
                 }
                 // @codingStandardsIgnoreStart
-                $this->messageManager->addSuccess(__('We\'ll email you a link to reset your password.'));
+                $this->messageManager->addSuccessMessage(__('We\'ll email you a link to reset your password.'));
                 // @codingStandardsIgnoreEnd
                 $this->getResponse()->setRedirect(
                     $this->backendDataHelper->getHomePageUrl()

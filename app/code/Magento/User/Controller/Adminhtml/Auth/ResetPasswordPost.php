@@ -75,7 +75,7 @@ class ResetPasswordPost extends Auth
                 }
             } else {
                 $user->save();
-                $this->messageManager->addSuccess(__('You updated your password.'));
+                $this->messageManager->addSuccessMessage(__('You updated your password.'));
                 $this->getResponse()->setRedirect(
                     $this->backendDataHelper->getHomePageUrl()
                 );

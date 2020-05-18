@@ -29,7 +29,7 @@ class MassOnTheFly extends \Magento\Indexer\Controller\Adminhtml\Indexer impleme
                     )->get($indexerId);
                     $model->setScheduled(false);
                 }
-                $this->messageManager->addSuccess(
+                $this->messageManager->addSuccessMessage(
                     __('%1 indexer(s) are in "Update on Save" mode.', count($indexerIds))
                 );
             } catch (\Magento\Framework\Exception\LocalizedException $e) {

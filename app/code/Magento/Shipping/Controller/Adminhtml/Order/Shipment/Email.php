@@ -57,7 +57,7 @@ class Email extends \Magento\Backend\App\Action
                 $this->_objectManager->create(\Magento\Shipping\Model\ShipmentNotifier::class)
                     ->notify($shipment);
                 $shipment->save();
-                $this->messageManager->addSuccess(__('You sent the shipment.'));
+                $this->messageManager->addSuccessMessage(__('You sent the shipment.'));
             }
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $this->messageManager->addError($e->getMessage());

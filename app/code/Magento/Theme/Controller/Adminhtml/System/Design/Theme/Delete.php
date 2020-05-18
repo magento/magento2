@@ -37,7 +37,7 @@ class Delete extends \Magento\Theme\Controller\Adminhtml\System\Design\Theme
                     );
                 }
                 $theme->delete();
-                $this->messageManager->addSuccess(__('You deleted the theme.'));
+                $this->messageManager->addSuccessMessage(__('You deleted the theme.'));
             }
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $this->messageManager->addError($e->getMessage());

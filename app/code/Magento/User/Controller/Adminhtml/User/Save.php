@@ -95,7 +95,7 @@ class Save extends \Magento\User\Controller\Adminhtml\User implements HttpPostAc
             $currentUser->performIdentityCheck($data[$currentUserPasswordField]);
             $model->save();
 
-            $this->messageManager->addSuccess(__('You saved the user.'));
+            $this->messageManager->addSuccessMessage(__('You saved the user.'));
             $this->_getSession()->setUserData(false);
             $this->_redirect('adminhtml/*/');
 
