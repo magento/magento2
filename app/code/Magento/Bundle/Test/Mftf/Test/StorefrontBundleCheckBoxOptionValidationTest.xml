@@ -36,7 +36,7 @@
                 <requiredEntity createDataKey="simpleProduct2"/>
                 <field key="qty">4</field>
             </createData>
-            <magentoCron stepKey="runCronIndex" groups="indexer:reindex"/>
+            <magentoCron stepKey="runCronIndex" groups="index"/>
         </before>
         <after>
             <deleteData createDataKey="bundleProduct" stepKey="deleteBundleProduct"/>
