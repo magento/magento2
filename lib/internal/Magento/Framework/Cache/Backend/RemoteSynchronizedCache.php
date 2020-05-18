@@ -46,6 +46,11 @@ class RemoteSynchronizedCache extends \Zend_Cache_Backend implements \Zend_Cache
      */
     private const HASH_SUFFIX = ':hash';
 
+    /**
+     * Prefix for locks in case stale cache is used.
+     */
+    private const REMOTE_SYNC_LOCK_PREFIX = 'rsl::';
+
 
     /**
      * @inheritdoc
@@ -67,7 +72,7 @@ class RemoteSynchronizedCache extends \Zend_Cache_Backend implements \Zend_Cache
      *
      * @var array
      */
-    private $lockArray = [];
+    private $lockList = [];
 
     /**
      * Sign for locks, helps to avoid removing a lock that was created by another client
@@ -128,7 +133,6 @@ class RemoteSynchronizedCache extends \Zend_Cache_Backend implements \Zend_Cache
         }
 
         $this->lockSign = $this->generateLockSign();
-        $this->notifier = ObjectManager::getInstance()->get(CompositeStaleCacheNotifier::class);
     }
 
     /**
@@ -204,7 +208,7 @@ class RemoteSynchronizedCache extends \Zend_Cache_Backend implements \Zend_Cache
                 return false;
             }
         } else {
-            if ($versionCheckFailed = $this->getDataVersion($localData) !== $this->loadRemoteDataVersion($id)) {
+            if ($versionCheckFailed = ($this->getDataVersion($localData) !== $this->loadRemoteDataVersion($id))) {
                 $remoteData = $this->remote->load($id);
 
                 if (!$this->_options['use_stale_cache']) {
@@ -220,6 +224,8 @@ class RemoteSynchronizedCache extends \Zend_Cache_Backend implements \Zend_Cache
             if ($this->lock($id)) {
                 return false;
             } else {
+                $this->notifier = $this->notifier ??
+                    ObjectManager::getInstance()->get(CompositeStaleCacheNotifier::class);
                 $this->notifier->cacheLoaderIsUsingStaleCache();
             }
         }
@@ -355,7 +361,7 @@ class RemoteSynchronizedCache extends \Zend_Cache_Backend implements \Zend_Cache
      */
     private function lock(string $id): bool
     {
-        $this->lockArray[$id] = microtime(true);
+        $this->lockList[$id] = microtime(true);
 
         $data = $this->remote->load($this->getLockName($id));
 
@@ -382,8 +388,8 @@ class RemoteSynchronizedCache extends \Zend_Cache_Backend implements \Zend_Cache
      */
     private function unlock(string $id): bool
     {
-        if (isset($this->lockArray[$id])) {
-            unset($this->lockArray[$id]);
+        if (isset($this->lockList[$id])) {
+            unset($this->lockList[$id]);
         }
 
         $data = $this->remote->load($this->getLockName($id));
@@ -408,7 +414,7 @@ class RemoteSynchronizedCache extends \Zend_Cache_Backend implements \Zend_Cache
      */
     private function getLockName($id): string
     {
-        return 'REMOTE_SYNC_LOCK_' . $id;
+        return self::REMOTE_SYNC_LOCK_PREFIX . $id;
     }
 
     /**
@@ -418,7 +424,7 @@ class RemoteSynchronizedCache extends \Zend_Cache_Backend implements \Zend_Cache
      */
     private function unlockAll()
     {
-        foreach ($this->lockArray as $id => $ttl) {
+        foreach ($this->lockList as $id => $ttl) {
             $this->unlock($id);
         }
     }
@@ -440,7 +446,7 @@ class RemoteSynchronizedCache extends \Zend_Cache_Backend implements \Zend_Cache
      */
     private function generateLockSign()
     {
-        $sign = implode(
+        $sign = \implode(
             '-',
             [
                 \getmypid(), \crc32(\gethostname())

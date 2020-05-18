@@ -176,8 +176,6 @@ class Cache implements ConfigOptionsListInterface
             }
         }
 
-        $configData->set(self::CONFIG_PATH_ALLOW_PARALLEL_CACHE_GENERATION, false);
-
         foreach ($this->inputKeyToConfigPathMap as $inputKey => $configPath) {
             if (isset($options[$inputKey])) {
                 $configData->set($configPath, $options[$inputKey]);
