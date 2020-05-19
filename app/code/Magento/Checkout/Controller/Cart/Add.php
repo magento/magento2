@@ -9,6 +9,8 @@ namespace Magento\Checkout\Controller\Cart;
 use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Checkout\Model\Cart as CustomerCart;
+use Magento\Framework\App\ResponseInterface;
+use Magento\Framework\Controller\ResultInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
 
 /**
@@ -77,7 +79,7 @@ class Add extends \Magento\Checkout\Controller\Cart implements HttpPostActionInt
     /**
      * Add product to shopping cart action
      *
-     * @return \Magento\Framework\Controller\ResultInterface
+     * @return ResponseInterface|ResultInterface
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function execute()
@@ -174,6 +176,7 @@ class Add extends \Magento\Checkout\Controller\Cart implements HttpPostActionInt
             $this->_objectManager->get(\Psr\Log\LoggerInterface::class)->critical($e);
             return $this->goBack();
         }
+        return $this->getResponse();
     }
 
     /**
@@ -181,7 +184,7 @@ class Add extends \Magento\Checkout\Controller\Cart implements HttpPostActionInt
      *
      * @param string $backUrl
      * @param \Magento\Catalog\Model\Product $product
-     * @return \Magento\Framework\Controller\ResultInterface
+     * @return ResponseInterface|ResultInterface
      */
     protected function goBack($backUrl = null, $product = null)
     {
