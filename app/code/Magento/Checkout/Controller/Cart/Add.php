@@ -176,6 +176,7 @@ class Add extends \Magento\Checkout\Controller\Cart implements HttpPostActionInt
             $this->_objectManager->get(\Psr\Log\LoggerInterface::class)->critical($e);
             return $this->goBack();
         }
+
         return $this->getResponse();
     }
 
@@ -207,6 +208,8 @@ class Add extends \Magento\Checkout\Controller\Cart implements HttpPostActionInt
         $this->getResponse()->representJson(
             $this->_objectManager->get(\Magento\Framework\Json\Helper\Data::class)->jsonEncode($result)
         );
+
+        return $this->getResponse();
     }
 
     /**
