@@ -4312,4 +4312,6 @@ return [
     ['Magento\Setup\Model\UpdaterTaskCreator'],
     ['Magento\Setup\Model\WebLogger'],
     ['Magento\Setup\Validator\AdminCredentialsValidator'],
+    ['Magento\Setup\Model\Updater'],
+    ['Magento\Setup\Console\Command\CronRunCommand'],
 ];
