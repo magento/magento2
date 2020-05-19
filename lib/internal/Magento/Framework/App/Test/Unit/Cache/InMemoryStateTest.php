@@ -17,7 +17,7 @@ class InMemoryStateTest extends TestCase
     /** @var InMemoryState */
     private $state;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->state = new InMemoryState();
     }
