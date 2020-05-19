@@ -194,6 +194,7 @@ define([
                         container.hide();
                     } else {
                         regionList.show();
+                        regionList.removeAttr('disabled');
                     }
                 }
 
