@@ -7,7 +7,6 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
     <preference for="Magento\Framework\Search\Adapter\OptionsInterface" type="Magento\CatalogSearch\Model\Adapter\Options" />
-    <preference for="Magento\CatalogSearch\Model\Search\FilterMapper\FilterStrategyInterface" type="Magento\CatalogSearch\Model\Search\FilterMapper\FilterContext"/>
     <preference for="Magento\CatalogSearch\Model\Indexer\IndexSwitcherInterface" type="Magento\CatalogSearch\Model\Indexer\IndexSwitcherProxy"/>
     <preference for="Magento\CatalogSearch\Model\Adapter\Aggregation\RequestCheckerInterface" type="Magento\CatalogSearch\Model\Adapter\Aggregation\RequestCheckerComposite"/>
     <preference for="Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection\SearchCriteriaResolverInterface" type="Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection\SearchCriteriaResolver"/>
@@ -200,27 +199,10 @@
             <argument name="name" xsi:type="string">catalog_view_container</argument>
         </arguments>
     </type>
-    <type name="Magento\CatalogSearch\Model\Search\FilterMapper\TermDropdownStrategy">
-        <arguments>
-            <!-- @deprecated parameter storeManager has been deprecated and not in used now -->
-            <argument name="storeManager" xsi:type="null"/>
-            <!-- @deprecated parameter resourceConnection has been deprecated and not in used now -->
-            <argument name="resourceConnection" xsi:type="null"/>
-            <!-- @deprecated parameter scopeConfig has been deprecated and not in used now -->
-            <argument name="scopeConfig" xsi:type="null"/>
-        </arguments>
-    </type>
     <type name="Magento\CatalogSearch\Model\Indexer\Fulltext">
         <arguments>
             <argument name="dimensionProvider" xsi:type="object" shared="false">
                 Magento\Store\Model\StoreDimensionProvider
-            </argument>
-        </arguments>
-    </type>
-    <type name="Magento\CatalogSearch\Model\Search\FilterMapper\ExclusionStrategy">
-        <arguments>
-            <argument name="priceTableResolver" xsi:type="object">
-                Magento\Catalog\Model\Indexer\Product\Price\PriceTableResolver
             </argument>
         </arguments>
     </type>

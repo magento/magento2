@@ -360,11 +360,6 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
     {
         $this->getEntity();
 
-        $currentSearchEngine = $this->_scopeConfig->getValue(self::SEARCH_ENGINE_VALUE_PATH);
-        if ($this->_pageSize && $currentSearchEngine === EngineResolver::CATALOG_SEARCH_MYSQL_ENGINE) {
-            $this->getSelect()->limitPage($this->getCurPage(), $this->_pageSize);
-        }
-
         $this->printLogQuery($printQuery, $logQuery);
 
         try {
