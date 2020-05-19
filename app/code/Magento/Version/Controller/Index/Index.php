@@ -39,8 +39,7 @@ class Index extends Action implements HttpGetActionInterface
         Context $context,
         RawResponseFactory $rawFactory,
         ProductMetadataInterface $productMetadata
-    )
-    {
+    ) {
         parent::__construct($context);
         $this->rawFactory = $rawFactory;
         $this->productMetadata = $productMetadata;
