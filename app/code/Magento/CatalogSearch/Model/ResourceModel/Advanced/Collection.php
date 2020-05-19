@@ -27,7 +27,6 @@ use Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection\SearchCriteria
 use Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection\SearchResultApplierFactory;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Api\Search\SearchResultInterface;
-use Magento\Search\Model\EngineResolver;
 
 /**
  * Advanced search collection
@@ -41,11 +40,6 @@ use Magento\Search\Model\EngineResolver;
  */
 class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
 {
-    /**
-     * Config search engine path.
-     */
-    private const SEARCH_ENGINE_VALUE_PATH = 'catalog/search/engine';
-
     /**
      * List Of filters
      * @var array
