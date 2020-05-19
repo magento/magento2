@@ -35,6 +35,8 @@ class Auth
     }
 
     /**
+     * Add warning message if other sessions terminated
+     *
      * @param \Magento\Backend\Model\Auth $authModel
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
@@ -48,6 +50,8 @@ class Auth
     }
 
     /**
+     * Handle logout process
+     *
      * @param \Magento\Backend\Model\Auth $authModel
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
