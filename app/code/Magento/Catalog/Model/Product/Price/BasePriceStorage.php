@@ -6,10 +6,24 @@
 
 namespace Magento\Catalog\Model\Product\Price;
 
+use Magento\Catalog\Api\BasePriceStorageInterface;
+use Magento\Catalog\Api\Data\BasePriceInterface;
+use Magento\Catalog\Api\Data\BasePriceInterfaceFactory;
+use Magento\Catalog\Api\ProductAttributeRepositoryInterface;
+use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Catalog\Model\Product\Price\Validation\InvalidSkuProcessor;
+use Magento\Catalog\Model\Product\Price\Validation\Result;
+use Magento\Catalog\Model\ProductIdLocatorInterface;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Store\Api\StoreRepositoryInterface;
+use Magento\Store\Model\Store;
+use Magento\Store\Model\StoreManagerInterface;
+
 /**
  * Base prices storage.
  */
-class BasePriceStorage implements \Magento\Catalog\Api\BasePriceStorageInterface
+class BasePriceStorage implements BasePriceStorageInterface
 {
     /**
      * Attribute code.
@@ -24,27 +38,27 @@ class BasePriceStorage implements \Magento\Catalog\Api\BasePriceStorageInterface
     private $pricePersistence;
 
     /**
-     * @var \Magento\Catalog\Api\Data\BasePriceInterfaceFactory
+     * @var BasePriceInterfaceFactory
      */
     private $basePriceInterfaceFactory;
 
     /**
-     * @var \Magento\Catalog\Model\ProductIdLocatorInterface
+     * @var ProductIdLocatorInterface
      */
     private $productIdLocator;
 
     /**
-     * @var \Magento\Store\Api\StoreRepositoryInterface
+     * @var StoreRepositoryInterface
      */
     private $storeRepository;
 
     /**
-     * @var \Magento\Catalog\Api\ProductRepositoryInterface
+     * @var ProductRepositoryInterface
      */
     private $productRepository;
 
     /**
-     * @var \Magento\Catalog\Model\Product\Price\Validation\Result
+     * @var Result
      */
     private $validationResult;
 
@@ -54,19 +68,19 @@ class BasePriceStorage implements \Magento\Catalog\Api\BasePriceStorageInterface
     private $pricePersistenceFactory;
 
     /**
-     * @var \Magento\Catalog\Model\Product\Price\Validation\InvalidSkuProcessor
+     * @var InvalidSkuProcessor
      */
     private $invalidSkuProcessor;
 
     /**
-     * @var \Magento\Catalog\Api\ProductAttributeRepositoryInterface
+     * @var ProductAttributeRepositoryInterface
      */
     private $productAttributeRepository;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var StoreManagerInterface
      */
-    private $_storeManager;
+    private $storeManager;
 
     /**
      * Price type allowed.
@@ -84,27 +98,27 @@ class BasePriceStorage implements \Magento\Catalog\Api\BasePriceStorageInterface
 
     /**
      * @param PricePersistenceFactory $pricePersistenceFactory
-     * @param \Magento\Catalog\Api\Data\BasePriceInterfaceFactory $basePriceInterfaceFactory
-     * @param \Magento\Catalog\Model\ProductIdLocatorInterface $productIdLocator
-     * @param \Magento\Store\Api\StoreRepositoryInterface $storeRepository
-     * @param \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
-     * @param \Magento\Catalog\Model\Product\Price\Validation\Result $validationResult
-     * @param \Magento\Catalog\Model\Product\Price\Validation\InvalidSkuProcessor $invalidSkuProcessor
-     * @param \Magento\Catalog\Api\ProductAttributeRepositoryInterface $productAttributeRepository
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param BasePriceInterfaceFactory $basePriceInterfaceFactory
+     * @param ProductIdLocatorInterface $productIdLocator
+     * @param StoreRepositoryInterface $storeRepository
+     * @param ProductRepositoryInterface $productRepository
+     * @param Result $validationResult
+     * @param InvalidSkuProcessor $invalidSkuProcessor
+     * @param ProductAttributeRepositoryInterface|null $productAttributeRepository
+     * @param StoreManagerInterface|null $storeManager
      * @param array $allowedProductTypes [optional]
      */
     public function __construct(
         PricePersistenceFactory $pricePersistenceFactory,
-        \Magento\Catalog\Api\Data\BasePriceInterfaceFactory $basePriceInterfaceFactory,
-        \Magento\Catalog\Model\ProductIdLocatorInterface $productIdLocator,
-        \Magento\Store\Api\StoreRepositoryInterface $storeRepository,
-        \Magento\Catalog\Api\ProductRepositoryInterface $productRepository,
-        \Magento\Catalog\Model\Product\Price\Validation\Result $validationResult,
-        \Magento\Catalog\Model\Product\Price\Validation\InvalidSkuProcessor $invalidSkuProcessor,
-        \Magento\Catalog\Api\ProductAttributeRepositoryInterface $productAttributeRepository,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
-        array $allowedProductTypes = []
+        BasePriceInterfaceFactory $basePriceInterfaceFactory,
+        ProductIdLocatorInterface $productIdLocator,
+        StoreRepositoryInterface $storeRepository,
+        ProductRepositoryInterface $productRepository,
+        Result $validationResult,
+        InvalidSkuProcessor $invalidSkuProcessor,
+        array $allowedProductTypes = [],
+        ProductAttributeRepositoryInterface $productAttributeRepository = null,
+        StoreManagerInterface $storeManager = null
     ) {
         $this->pricePersistenceFactory = $pricePersistenceFactory;
         $this->basePriceInterfaceFactory = $basePriceInterfaceFactory;
@@ -114,8 +128,9 @@ class BasePriceStorage implements \Magento\Catalog\Api\BasePriceStorageInterface
         $this->validationResult = $validationResult;
         $this->allowedProductTypes = $allowedProductTypes;
         $this->invalidSkuProcessor = $invalidSkuProcessor;
-        $this->productAttributeRepository = $productAttributeRepository;
-        $this->_storeManager = $storeManager;
+        $this->productAttributeRepository = $productAttributeRepository ?: ObjectManager::getInstance()
+            ->get(ProductAttributeRepositoryInterface::class);
+        $this->storeManager = $storeManager ?: ObjectManager::getInstance()->get(StoreManagerInterface::class);
     }
 
     /**
@@ -164,7 +179,7 @@ class BasePriceStorage implements \Magento\Catalog\Api\BasePriceStorageInterface
 
         try {
             $priceAttribute = $this->productAttributeRepository->get($this->attributeCode);
-        } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
+        } catch (NoSuchEntityException $e) {
             $priceAttribute = null;
         }
 
@@ -194,7 +209,7 @@ class BasePriceStorage implements \Magento\Catalog\Api\BasePriceStorageInterface
     /**
      * Retrieve valid prices that do not contain any errors.
      *
-     * @param \Magento\Catalog\Api\Data\BasePriceInterface[] $prices
+     * @param BasePriceInterface[] $prices
      * @return array
      */
     private function retrieveValidPrices(array $prices)
@@ -233,7 +248,7 @@ class BasePriceStorage implements \Magento\Catalog\Api\BasePriceStorageInterface
             }
             try {
                 $this->storeRepository->getById($price->getStoreId());
-            } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
+            } catch (NoSuchEntityException $e) {
                 $this->validationResult->addFailedItem(
                     $id,
                     __(
@@ -261,13 +276,13 @@ class BasePriceStorage implements \Magento\Catalog\Api\BasePriceStorageInterface
     private function applyWebsitePrices($formattedPrices)
     {
         foreach ($formattedPrices as $price) {
-            if ($price['store_id'] == \Magento\Store\Model\Store::DEFAULT_STORE_ID) {
+            if ($price['store_id'] == Store::DEFAULT_STORE_ID) {
                 continue;
             }
 
             try {
-                $storeIds = $this->_storeManager->getStore($price['store_id'])->getWebsite()->getStoreIds();
-            } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
+                $storeIds = $this->storeManager->getStore($price['store_id'])->getWebsite()->getStoreIds();
+            } catch (NoSuchEntityException $e) {
                 continue;
             }
 
