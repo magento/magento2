@@ -30,8 +30,8 @@ $review->setEntityId(
 )->save();
 
 /*
- * Added a sleep because otherwise it could be that the three reviews have the same created at timestamp.
- * In this case some tests would (randomly) fail because the sort order depends on mysql and not on order by.
+ * Added a sleep because in a few tests the sql query orders by created at. Without the sleep the reviews
+ * have sometimes the same created at timestamp, that causes this tests randomly to fail.
  */
 sleep(1);
 
@@ -58,8 +58,8 @@ $review->setEntityId(
 )->save();
 
 /*
- * Added a sleep because otherwise it could be that the three reviews have the same created at timestamp.
- * In this case some tests could (randomly) fail because the sort order depends on mysql and not on order by.
+ * Added a sleep because in a few tests the sql query orders by created at. Without the sleep the reviews
+ * have sometimes the same created at timestamp, that causes this tests randomly to fail.
  */
 sleep(1);
 
