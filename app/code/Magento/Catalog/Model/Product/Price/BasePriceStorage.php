@@ -59,6 +59,16 @@ class BasePriceStorage implements \Magento\Catalog\Api\BasePriceStorageInterface
     private $invalidSkuProcessor;
 
     /**
+     * @var \Magento\Catalog\Api\ProductAttributeRepositoryInterface
+     */
+    private $productAttributeRepository;
+
+    /**
+     * @var \Magento\Store\Model\StoreManagerInterface
+     */
+    private $_storeManager;
+
+    /**
      * Price type allowed.
      *
      * @var int
@@ -80,6 +90,8 @@ class BasePriceStorage implements \Magento\Catalog\Api\BasePriceStorageInterface
      * @param \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
      * @param \Magento\Catalog\Model\Product\Price\Validation\Result $validationResult
      * @param \Magento\Catalog\Model\Product\Price\Validation\InvalidSkuProcessor $invalidSkuProcessor
+     * @param \Magento\Catalog\Api\ProductAttributeRepositoryInterface $productAttributeRepository
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param array $allowedProductTypes [optional]
      */
     public function __construct(
@@ -90,6 +102,8 @@ class BasePriceStorage implements \Magento\Catalog\Api\BasePriceStorageInterface
         \Magento\Catalog\Api\ProductRepositoryInterface $productRepository,
         \Magento\Catalog\Model\Product\Price\Validation\Result $validationResult,
         \Magento\Catalog\Model\Product\Price\Validation\InvalidSkuProcessor $invalidSkuProcessor,
+        \Magento\Catalog\Api\ProductAttributeRepositoryInterface $productAttributeRepository,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         array $allowedProductTypes = []
     ) {
         $this->pricePersistenceFactory = $pricePersistenceFactory;
@@ -100,6 +114,8 @@ class BasePriceStorage implements \Magento\Catalog\Api\BasePriceStorageInterface
         $this->validationResult = $validationResult;
         $this->allowedProductTypes = $allowedProductTypes;
         $this->invalidSkuProcessor = $invalidSkuProcessor;
+        $this->productAttributeRepository = $productAttributeRepository;
+        $this->_storeManager = $storeManager;
     }
 
     /**
@@ -144,6 +160,16 @@ class BasePriceStorage implements \Magento\Catalog\Api\BasePriceStorageInterface
                     'value' => $price->getPrice(),
                 ];
             }
+        }
+
+        try {
+            $priceAttribute = $this->productAttributeRepository->get($this->attributeCode);
+        } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
+            $priceAttribute = null;
+        }
+
+        if ($priceAttribute !== null && $priceAttribute->isScopeWebsite()) {
+            $formattedPrices = $this->applyWebsitePrices($formattedPrices);
         }
 
         $this->getPricePersistence()->update($formattedPrices);
@@ -224,5 +250,36 @@ class BasePriceStorage implements \Magento\Catalog\Api\BasePriceStorageInterface
         }
 
         return $prices;
+    }
+
+    /**
+     * If Catalog Price Mode is Website, price needs to be applied to all Store Views in this website.
+     *
+     * @param array $formattedPrices
+     * @return array
+     */
+    private function applyWebsitePrices($formattedPrices)
+    {
+        foreach ($formattedPrices as $price) {
+            if ($price['store_id'] == \Magento\Store\Model\Store::DEFAULT_STORE_ID) {
+                continue;
+            }
+
+            try {
+                $storeIds = $this->_storeManager->getStore($price['store_id'])->getWebsite()->getStoreIds();
+            } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
+                continue;
+            }
+
+            // Unset origin store view to get rid of duplicate
+            unset($storeIds[$price['store_id']]);
+
+            foreach ($storeIds as $storeId) {
+                $price['store_id'] = (int)$storeId;
+                $formattedPrices[] = $price;
+            }
+        }
+
+        return $formattedPrices;
     }
 }
