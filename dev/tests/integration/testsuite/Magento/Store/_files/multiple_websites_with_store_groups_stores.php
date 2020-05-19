@@ -8,7 +8,6 @@ declare(strict_types=1);
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Store\Model\Website;
 use Magento\Store\Model\Store;
-use Magento\Framework\App\Config\ReinitableConfigInterface;
 use Magento\Store\Model\Group;
 
 $objectManager = Bootstrap::getObjectManager();
@@ -56,7 +55,7 @@ if (!$store->getId()) {
 }
 
 //Creating third website with a store and a storeview
-/** @var $website \Magento\Store\Model\Website */
+/** @var $website2 \Magento\Store\Model\Website */
 $website2 = $objectManager->create(Website::class);
 $website2->load('third', 'code');
 
@@ -70,7 +69,7 @@ if (!$website2->getId()) {
 }
 
 /**
- * @var Group $storeGroup
+ * @var Group $storeGroup2
  */
 $storeGroup2 = $objectManager->create(Group::class);
 $storeGroup2->setCode('third_store')

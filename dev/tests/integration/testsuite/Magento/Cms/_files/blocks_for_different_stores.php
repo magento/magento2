@@ -18,9 +18,6 @@ $blockFactory = Bootstrap::getObjectManager()->get(BlockInterfaceFactory::class)
 /** @var StoreManagerInterface $stores */
 $stores = Bootstrap::getObjectManager()->get(StoreManagerInterface::class)->getStores();
 array_shift($stores);
-foreach ($stores as $store) {
-    $store->getId();
-}
 
 /** @var BlockInterface $block */
 $block = $blockFactory->create([
