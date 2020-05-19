@@ -11,6 +11,7 @@ use Magento\Cms\Api\BlockRepositoryInterface;
 use Magento\Cms\Api\Data\BlockInterface;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Store\Model\Store;
 use Magento\Widget\Model\Template\FilterEmulate;
 
 /**
@@ -91,7 +92,7 @@ class Block
     {
         $searchCriteria = $this->searchCriteriaBuilder
             ->addFilter($field, $identifier)
-            ->addFilter('store_id', $storeId)
+            ->addFilter(Store::STORE_ID, [$storeId, Store::DEFAULT_STORE_ID], 'in')
             ->addFilter(BlockInterface::IS_ACTIVE, true)->create();
 
         $blockResults = $this->blockRepository->getList($searchCriteria)->getItems();

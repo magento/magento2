@@ -216,13 +216,13 @@ QUERY;
      */
     public function testGetCmsBlockPerSpecificStore(): void
     {
-        $blockIdentitifier1 = 'test-block';
-        $blockIdentitifier2 = 'test-block-2';
+        $blockIdentifier1 = 'test-block';
+        $blockIdentifier2 = 'test-block-2';
         $secondStoreCode = 'second_store_view';
         $thirdStoreCode = 'third_store_view';
 
         //Verify the correct block information for second store is returned
-        $cmsBlockResponseSecondStore = $this->getCmsBlockQuery($blockIdentitifier1, $secondStoreCode);
+        $cmsBlockResponseSecondStore = $this->getCmsBlockQuery($blockIdentifier1, $secondStoreCode);
         self::assertArrayHasKey('cmsBlocks', $cmsBlockResponseSecondStore);
         self::assertArrayHasKey('items', $cmsBlockResponseSecondStore['cmsBlocks']);
         self::assertEquals('test-block', $cmsBlockResponseSecondStore['cmsBlocks']['items'][0]['identifier']);
@@ -230,7 +230,7 @@ QUERY;
         self::assertEquals('second_store_view', $cmsBlockResponseSecondStore['storeConfig']['code']);
 
         //Verify the correct block information for third store is returned
-        $cmsBlockResponseThirdStore = $this->getCmsBlockQuery($blockIdentitifier1, $thirdStoreCode);
+        $cmsBlockResponseThirdStore = $this->getCmsBlockQuery($blockIdentifier1, $thirdStoreCode);
         self::assertArrayHasKey('cmsBlocks', $cmsBlockResponseThirdStore);
         self::assertArrayHasKey('items', $cmsBlockResponseThirdStore['cmsBlocks']);
         self::assertEquals('test-block', $cmsBlockResponseThirdStore['cmsBlocks']['items'][0]['identifier']);
@@ -238,7 +238,7 @@ QUERY;
         self::assertEquals('third_store_view', $cmsBlockResponseThirdStore['storeConfig']['code']);
 
         //Verify the correct block information for second block for second store is returned
-        $cmsBlockResponseSecondStore = $this->getCmsBlockQuery($blockIdentitifier2, $secondStoreCode);
+        $cmsBlockResponseSecondStore = $this->getCmsBlockQuery($blockIdentifier2, $secondStoreCode);
         self::assertArrayHasKey('cmsBlocks', $cmsBlockResponseSecondStore);
         self::assertArrayHasKey('items', $cmsBlockResponseSecondStore['cmsBlocks']);
         self::assertEquals('test-block-2', $cmsBlockResponseSecondStore['cmsBlocks']['items'][0]['identifier']);
@@ -252,7 +252,7 @@ QUERY;
         $query =
             <<<QUERY
 {
-  cmsBlocks(identifiers: "$blockIdentitifier2") {
+  cmsBlocks(identifiers: "$blockIdentifier2") {
     items {
       identifier
       title
@@ -271,31 +271,55 @@ QUERY;
      * @magentoApiDataFixture Magento/Store/_files/multiple_websites_with_store_groups_stores.php
      * @magentoApiDataFixture Magento/Cms/_files/blocks_for_different_stores.php
      */
-    public function testGetCmsBlockforDisabledStore(): void
+    public function testGetCmsBlockForDisabledStore(): void
     {
-        $blockIdentitifier1 = 'test-block';
+        $blockIdentifier = 'test-block';
         $thirdStoreCode = 'third_store_view';
         $store = Bootstrap::getObjectManager()->get(Store::class);
         $store->load('third_store_view', 'code')->setIsActive(0)->save();
         $this->expectException(\Exception::class);
         $this->expectExceptionMessage('Requested store is not found');
-        $this->getCmsBlockQuery($blockIdentitifier1, $thirdStoreCode);
+        $this->getCmsBlockQuery($blockIdentifier, $thirdStoreCode);
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Cms/_files/block_default_store.php
+     */
+    public function testGetCmsBlockAssignedToDefaultStore(): void
+    {
+        $blockIdentifier = 'default_store_block';
+        $query = <<<QUERY
+{
+  cmsBlocks(identifiers: "$blockIdentifier") {
+    items {
+      identifier
+      title
+      content
+    }
+  }
+}
+QUERY;
+        $response = $this->graphQlQuery($query);
+        $this->assertArrayNotHasKey('errors', $response);
+        $this->assertArrayHasKey('cmsBlocks', $response);
+        $this->assertCount(1, $response['cmsBlocks']['items']);
+        $this->assertEquals($blockIdentifier, $response['cmsBlocks']['items'][0]['identifier']);
     }
 
     /**
      * Get cmsBlockQuery per store
      *
-     * @param string $blockIdentitifier
+     * @param string $blockIdentifier
      * @param string $storeCode
      * @return array
      * @throws \Exception
      */
-    private function getCmsBlockQuery($blockIdentitifier, $storeCode): array
+    private function getCmsBlockQuery($blockIdentifier, $storeCode): array
     {
         $query =
             <<<QUERY
 {
-  cmsBlocks(identifiers: "$blockIdentitifier") {
+  cmsBlocks(identifiers: "$blockIdentifier") {
     items {
       identifier
       title

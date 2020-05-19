@@ -17,10 +17,14 @@ $blockRepository = $objectManager->get(BlockRepositoryInterface::class);
 
 /** @var SearchCriteriaBuilder $searchCriteriaBuilder */
 $searchCriteriaBuilder = $objectManager->get(SearchCriteriaBuilder::class);
-$searchCriteria = $searchCriteriaBuilder->addFilter(BlockInterface::IDENTIFIER, '%test-block%', 'like')
+$searchCriteria = $searchCriteriaBuilder->addFilter(BlockInterface::IDENTIFIER, 'default_store_block')
     ->create();
 $result = $blockRepository->getList($searchCriteria);
 
+/**
+ * Tests which are wrapped with MySQL transaction clear all data by transaction rollback.
+ * In that case there is "if" which checks that "fixture_block" still exists in database.
+ */
 foreach ($result->getItems() as $item) {
     $blockRepository->delete($item);
 }
