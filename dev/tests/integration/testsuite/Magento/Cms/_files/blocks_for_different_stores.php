@@ -11,7 +11,6 @@ use Magento\Cms\Api\Data\BlockInterfaceFactory;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 
-//require __DIR__ . '/../../../Magento/Store/_files/multiple_websites_with_store_groups_stores.php';
 /** @var BlockRepositoryInterface $blockRepository */
 $blockRepository = Bootstrap::getObjectManager()->get(BlockRepositoryInterface::class);
 /** @var BlockInterfaceFactory $blockFactory */
