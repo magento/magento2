@@ -40,7 +40,7 @@ class DataProviderTest extends TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->initLocaleResolverMock();
         $this->requestMock = $this->createMock(RequestInterface::class);
