@@ -9,7 +9,9 @@
 <?php
 /** @var Magento\Sales\ViewModel\CreditMemo\Create\UpdateTotalsButton $viewModel */
 $viewModel = $block->getData('viewModel');
-$_items = $block->getCreditmemo()->getAllItems();
+/** @var Magento\Sales\ViewModel\CreditMemo\Create\ItemsToRender $itemsToRenderViewModel */
+$itemsToRenderViewModel = $block->getData('itemsToRenderViewModel');
+$_items = $itemsToRenderViewModel->getItems();
 ?>
 
 <section class="admin__page-section">
