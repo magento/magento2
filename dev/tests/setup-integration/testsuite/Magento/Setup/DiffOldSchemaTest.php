@@ -6,7 +6,6 @@
 
 namespace Magento\Setup;
 
-use Magento\Framework\DB\Adapter\SqlVersionProvider;
 use Magento\Framework\Setup\Declaration\Schema\Diff\DiffFactory;
 use Magento\Framework\Setup\Declaration\Schema\Diff\SchemaDiff;
 use Magento\Framework\Setup\Declaration\Schema\SchemaConfigInterface;
@@ -157,7 +156,7 @@ class DiffOldSchemaTest extends SetupTestCase
         return [
             'type' => 'bigint',
             'nullable' => true,
-            'padding' => $this->getPaddingValue(),
+            'padding' => null,
             'unsigned' => false,
             'identity' => false,
             'default' => 0,
@@ -173,25 +172,11 @@ class DiffOldSchemaTest extends SetupTestCase
         return [
             'type' => 'bigint',
             'nullable' => true,
-            'padding' => $this->getPaddingValue(),
+            'padding' => null,
             'unsigned' => false,
             'identity' => false,
             'default' => 1,
             'comment' => 'Bigint',
         ];
-    }
-
-    /**
-     * Get padding regarding the database.
-     *
-     * @return int|null
-     */
-    private function getPaddingValue()
-    {
-        if (strpos($this->getDatabaseVersion(), SqlVersionProvider::MYSQL_8_VERSION) !== false) {
-            return null;
-        }
-
-        return 20;
     }
 }
