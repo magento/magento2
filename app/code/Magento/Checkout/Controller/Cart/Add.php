@@ -77,7 +77,7 @@ class Add extends \Magento\Checkout\Controller\Cart implements HttpPostActionInt
     /**
      * Add product to shopping cart action
      *
-     * @return \Magento\Framework\Controller\Result\Redirect
+     * @return \Magento\Framework\Controller\ResultInterface
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function execute()
@@ -90,7 +90,6 @@ class Add extends \Magento\Checkout\Controller\Cart implements HttpPostActionInt
         }
 
         $params = $this->getRequest()->getParams();
-
         try {
             if (isset($params['qty'])) {
                 $filter = new \Zend_Filter_LocalizedToNormalized(
@@ -104,9 +103,7 @@ class Add extends \Magento\Checkout\Controller\Cart implements HttpPostActionInt
             $product = $this->_initProduct();
             $related = $this->getRequest()->getParam('related_product');
 
-            /**
-             * Check product availability
-             */
+            /** Check product availability */
             if (!$product) {
                 return $this->goBack();
             }
@@ -115,7 +112,6 @@ class Add extends \Magento\Checkout\Controller\Cart implements HttpPostActionInt
             if (!empty($related)) {
                 $this->cart->addProductsByIds(explode(',', $related));
             }
-
             $this->cart->save();
 
             /**
@@ -165,7 +161,6 @@ class Add extends \Magento\Checkout\Controller\Cart implements HttpPostActionInt
             }
 
             $url = $this->_checkoutSession->getRedirectUrl(true);
-
             if (!$url) {
                 $url = $this->_redirect->getRedirectUrl($this->getCartUrl());
             }
@@ -186,7 +181,7 @@ class Add extends \Magento\Checkout\Controller\Cart implements HttpPostActionInt
      *
      * @param string $backUrl
      * @param \Magento\Catalog\Model\Product $product
-     * @return $this|\Magento\Framework\Controller\Result\Redirect
+     * @return \Magento\Framework\Controller\ResultInterface
      */
     protected function goBack($backUrl = null, $product = null)
     {
