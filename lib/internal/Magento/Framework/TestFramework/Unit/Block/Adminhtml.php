@@ -109,7 +109,7 @@ class Adminhtml extends \PHPUnit\Framework\TestCase
 
     /**
      */
-    protected function setUp(): void
+    protected function setUp()
     {
         // These mocks are accessed via context
         $this->_designMock          = $this->_makeMock(\Magento\Framework\View\DesignInterface::class);

@@ -14,7 +14,7 @@ class LayoutTestWithExceptions extends \PHPUnit\Framework\TestCase
      */
     protected $layout;
 
-    protected function setUp(): void
+    protected function setUp()
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $layoutFactory = $objectManager->get(\Magento\Framework\View\LayoutFactory::class);
