@@ -79,7 +79,6 @@ class Module implements
             include __DIR__ . '/../../../config/di.config.php',
             include __DIR__ . '/../../../config/states.install.config.php',
             include __DIR__ . '/../../../config/languages.config.php',
-            include __DIR__ . '/../../../config/marketplace.config.php'
         );
         // phpcs:enable
         return $result;

@@ -23,19 +23,6 @@ main.controller('navigationController',
         return $state.$current.order <= order || !$rootScope.isMenuEnabled;
     };
 }])
-.controller('headerController', ['$scope', '$localStorage', '$window',
-        function ($scope, $localStorage, $window) {
-            if ($localStorage.titles) {
-                $scope.titles = $localStorage.titles;
-            }
-            $scope.redirectTo = function (url) {
-                if (url) {
-                    $window.location.href = url;
-                }
-            };
-        }
-    ]
-)
 .controller('mainController', [
     '$scope', '$state', 'navigationService', '$localStorage',
     function ($scope, $state, navigationService, $localStorage) {

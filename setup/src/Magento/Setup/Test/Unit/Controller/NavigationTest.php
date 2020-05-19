@@ -10,8 +10,6 @@ namespace Magento\Setup\Test\Unit\Controller;
 use Laminas\View\Model\JsonModel;
 use Laminas\View\Model\ViewModel;
 use Magento\Setup\Controller\Navigation;
-use Magento\Setup\Model\Cron\Status;
-use Magento\Setup\Model\Navigation as NavModel;
 use Magento\Setup\Model\ObjectManagerProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -29,11 +27,6 @@ class NavigationTest extends TestCase
     private $controller;
 
     /**
-     * @var Status|MockObject
-     */
-    private $status;
-
-    /**
      * @var ObjectManagerProvider|MockObject
      */
     private $objectManagerProvider;
@@ -41,10 +34,9 @@ class NavigationTest extends TestCase
     protected function setUp(): void
     {
         $this->navigationModel = $this->createMock(\Magento\Setup\Model\Navigation::class);
-        $this->status = $this->createMock(Status::class);
         $this->objectManagerProvider =
             $this->createMock(ObjectManagerProvider::class);
-        $this->controller = new Navigation($this->navigationModel, $this->status, $this->objectManagerProvider);
+        $this->controller = new Navigation($this->navigationModel, $this->objectManagerProvider);
     }
 
     public function testIndexAction()

@@ -8,9 +8,7 @@ namespace Magento\Setup\Controller;
 use Laminas\Mvc\Controller\AbstractActionController;
 use Laminas\View\Model\JsonModel;
 use Laminas\View\Model\ViewModel;
-use Magento\Backend\Model\UrlInterface;
 use Magento\Framework\ObjectManagerInterface;
-use Magento\Setup\Model\Cron\Status;
 use Magento\Setup\Model\Navigation as NavModel;
 use Magento\Setup\Model\ObjectManagerProvider;
 
@@ -25,11 +23,6 @@ class Navigation extends AbstractActionController
     protected $navigation;
 
     /**
-     * @var Status
-     */
-    protected $status;
-
-    /**
      * @var ViewModel
      */
     protected $view;
@@ -41,13 +34,11 @@ class Navigation extends AbstractActionController
 
     /**
      * @param NavModel              $navigation
-     * @param Status                $status
      * @param ObjectManagerProvider $objectManagerProvider
      */
-    public function __construct(NavModel $navigation, Status $status, ObjectManagerProvider $objectManagerProvider)
+    public function __construct(NavModel $navigation, ObjectManagerProvider $objectManagerProvider)
     {
         $this->navigation = $navigation;
-        $this->status = $status;
         $this->objectManagerProvider = $objectManagerProvider->get();
         $this->view = new ViewModel();
         $this->view->setVariable('menu', $this->navigation->getMenuItems());
