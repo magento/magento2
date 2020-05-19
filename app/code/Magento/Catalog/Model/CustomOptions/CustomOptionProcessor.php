@@ -77,7 +77,9 @@ class CustomOptionProcessor implements CartItemProcessorInterface
             && $cartItem->getProductOption()->getExtensionAttributes()->getCustomOptions()) {
             $customOptions = $cartItem->getProductOption()->getExtensionAttributes()->getCustomOptions();
             if (!empty($customOptions) && is_array($customOptions)) {
-                $requestData = [];
+                $requestData = [
+                    'id' => $cartItem->getItemId()
+                ];
                 foreach ($customOptions as $option) {
                     $requestData['options'][$option->getOptionId()] = $option->getOptionValue();
                 }
