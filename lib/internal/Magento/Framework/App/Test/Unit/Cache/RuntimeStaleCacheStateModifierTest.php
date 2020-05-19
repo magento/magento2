@@ -18,7 +18,7 @@ class RuntimeStaleCacheStateModifierTest extends TestCase
     /** @var InMemoryState */
     private $cacheState;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->cacheState = new InMemoryState(
             [
@@ -68,7 +68,7 @@ class RuntimeStaleCacheStateModifierTest extends TestCase
             ]
         );
     }
-    
+
     /** @test */
     public function doesNotPersistModifiedCacheTypes()
     {
