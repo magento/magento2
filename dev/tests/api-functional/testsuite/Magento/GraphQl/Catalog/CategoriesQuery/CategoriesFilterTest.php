@@ -367,11 +367,12 @@ QUERY;
      * Filtering with match value less than minimum query should return empty result
      *
      * @magentoApiDataFixture Magento/Catalog/_files/categories.php
-     * @expectedException \Exception
-     * @expectedExceptionMessage Invalid match filter. Minimum length is 3.
      */
     public function testMinimumMatchQueryLength()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Invalid match filter. Minimum length is 3.');
+
         $query = <<<QUERY
 {
     categories(filters: {name: {match: "mo"}}){

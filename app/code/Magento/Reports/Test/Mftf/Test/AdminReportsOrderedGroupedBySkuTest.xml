@@ -66,13 +66,13 @@
 
         <!-- Verify data -->
         <grabTextFrom selector="{{SoldReportFilterSection.gridProduct}}" stepKey="grabData"/>
-        <assertContains stepKey="assertFirst">
+        <assertStringContainsString stepKey="assertFirst">
             <actualResult type="string">{$grabData}</actualResult>
             <expectedResult type="string">{{_defaultProduct.sku}}-{{colorProductAttribute1.name}}</expectedResult>
-        </assertContains>
-        <assertContains stepKey="assertSecond">
+        </assertStringContainsString>
+        <assertStringContainsString stepKey="assertSecond">
             <actualResult type="string">{$grabData}</actualResult>
             <expectedResult type="string">{{_defaultProduct.sku}}-{{colorProductAttribute2.name}}</expectedResult>
-        </assertContains>
+        </assertStringContainsString>
     </test>
 </tests>
