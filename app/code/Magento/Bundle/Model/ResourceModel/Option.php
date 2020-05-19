@@ -92,29 +92,29 @@ class Option extends AbstractDb
     {
         parent::_afterSave($object);
 
-        $condition = [
-            'option_id = ?' => $object->getId(),
-            'store_id = ? OR store_id = 0' => $object->getStoreId(),
-            'parent_product_id = ?' => $object->getParentId()
-        ];
-
         $connection = $this->getConnection();
-        $connection->delete($this->getTable('catalog_product_bundle_option_value'), $condition);
-
         $data = new DataObject();
         $data->setOptionId($object->getId())
             ->setStoreId($object->getStoreId())
             ->setParentProductId($object->getParentId())
             ->setTitle($object->getTitle());
 
-        $connection->insert($this->getTable('catalog_product_bundle_option_value'), $data->getData());
+        $connection->insertOnDuplicate(
+            $this->getTable('catalog_product_bundle_option_value'),
+            $data->getData(),
+            ['title']
+        );
 
         /**
          * also saving default fallback value
          */
         if (0 !== (int)$object->getStoreId()) {
             $data->setStoreId(0)->setTitle($object->getDefaultTitle());
-            $connection->insert($this->getTable('catalog_product_bundle_option_value'), $data->getData());
+            $connection->insertOnDuplicate(
+                $this->getTable('catalog_product_bundle_option_value'),
+                $data->getData(),
+                ['title']
+            );
         }
 
         return $this;

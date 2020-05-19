@@ -5,6 +5,7 @@
  */
 declare(strict_types=1);
 
+use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Checkout\Model\Session;
 use Magento\Eav\Model\Config;
 use Magento\Framework\DataObject;
@@ -15,12 +16,14 @@ use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\Quote\Address\Rate;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\ObjectManager;
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
 
-require __DIR__ . '/../../ConfigurableProduct/_files/configurable_products.php';
+Resolver::getInstance()->requireDataFixture('Magento/ConfigurableProduct/_files/configurable_products.php');
 
 /** @var ObjectManager $objectManager */
 $objectManager = Bootstrap::getObjectManager();
-
+/** @var ProductRepositoryInterface $productRepository */
+$productRepository = $objectManager->create(ProductRepositoryInterface::class);
 $product = $productRepository->getById(10);
 $product->setStockData(['use_config_manage_stock' => 1, 'qty' => 4, 'is_qty_decimal' => 0, 'is_in_stock' => 1]);
 $productRepository->save($product);
