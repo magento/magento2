@@ -51,7 +51,7 @@ class Renderer extends \Magento\Sales\Block\Adminhtml\Items\Renderer\DefaultRend
      * @param string $value
      * @param int $length
      * @param string $etc
-     * @param string &$remainder
+     * @param string $remainder
      * @param bool $breakWords
      * @return string
      */
