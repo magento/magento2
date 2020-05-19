@@ -32,7 +32,7 @@ class RequestTypeBasedDeserializerTest extends \PHPUnit\Framework\TestCase
      */
     private $requestMock;
 
-    public function setUp()
+    public function setUp(): void
     {
         /** @var DeserializerFactory|MockObject $deserializeFactoryMock */
         $this->deserializeFactoryMock = $this->createMock(DeserializerFactory::class);
@@ -57,11 +57,11 @@ class RequestTypeBasedDeserializerTest extends \PHPUnit\Framework\TestCase
      * @throws \Magento\Framework\Webapi\Exception
      */
     public function testDeserialize(
-        $body,
-        $contentType,
+        string $body,
+        string $contentType,
         DeserializerInterface $deserializer,
         array $expectedResult
-    ) {
+    ): void {
         $this->requestMock->method('getContentType')
             ->willReturn($contentType);
         $this->deserializeFactoryMock->expects($this->any())
@@ -71,7 +71,7 @@ class RequestTypeBasedDeserializerTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expectedResult, $this->requestTypeBasedDeserializer->deserialize($body));
     }
 
-    public function getDeserializerDataProvider()
+    public function getDeserializerDataProvider(): array
     {
         return [
             'request body with xml data' => [
@@ -126,7 +126,7 @@ class RequestTypeBasedDeserializerTest extends \PHPUnit\Framework\TestCase
      *
      * @return DeserializerJson
      */
-    private function prepareJsonDeserializer()
+    private function prepareJsonDeserializer(): DeserializerJson
     {
         /** @var Decoder|MockObject $decoder */
         $decoder = $this->createMock(Decoder::class);
@@ -141,7 +141,7 @@ class RequestTypeBasedDeserializerTest extends \PHPUnit\Framework\TestCase
      *
      * @return DeserializerXml
      */
-    private function prepareXmlDeserializer()
+    private function prepareXmlDeserializer(): DeserializerXml
     {
         $parserXml = new ParserXml();
         /** @var State|MockObject $appStateMock */
