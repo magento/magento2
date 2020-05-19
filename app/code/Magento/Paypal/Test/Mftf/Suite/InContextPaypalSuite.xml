@@ -12,7 +12,6 @@
             <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
             <!--Config PayPal Express Checkout-->
             <actionGroup ref="ConfigPayPalExpressCheckoutActionGroup" stepKey="ConfigPayPalExpressCheckout"/>
-            <!-- Configure PayPal Express Checkout -->
             <magentoCLI command="cache:clean" arguments="config full_page" stepKey="cleanFullPageCache"/>
         </before>
         <after>
