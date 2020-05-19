@@ -3,52 +3,64 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\App\Test\Unit\Route;
 
-class ConfigTest extends \PHPUnit\Framework\TestCase
+use Magento\Framework\App\AreaList;
+use Magento\Framework\App\Route\Config;
+use Magento\Framework\App\Route\Config\Reader;
+use Magento\Framework\Config\CacheInterface;
+use Magento\Framework\Config\ScopeInterface;
+use Magento\Framework\Serialize\SerializerInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class ConfigTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\App\Route\Config
+     * @var Config
      */
     protected $_config;
 
     /**
-     * @var \Magento\Framework\App\Route\Config\Reader|\PHPUnit_Framework_MockObject_MockObject
+     * @var Reader|MockObject
      */
     protected $_readerMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $_cacheMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $_configScopeMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $_areaList;
 
     /**
-     * @var \Magento\Framework\Serialize\SerializerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var SerializerInterface|MockObject
      */
     private $serializerMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->_readerMock = $this->createMock(\Magento\Framework\App\Route\Config\Reader::class);
-        $this->_cacheMock = $this->createMock(\Magento\Framework\Config\CacheInterface::class);
-        $this->_configScopeMock = $this->createMock(\Magento\Framework\Config\ScopeInterface::class);
-        $this->_areaList = $this->createMock(\Magento\Framework\App\AreaList::class);
+        $this->_readerMock = $this->createMock(Reader::class);
+        $this->_cacheMock = $this->getMockForAbstractClass(CacheInterface::class);
+        $this->_configScopeMock = $this->getMockForAbstractClass(ScopeInterface::class);
+        $this->_areaList = $this->createMock(AreaList::class);
         $this->_configScopeMock->expects($this->any())
             ->method('getCurrentScope')
             ->willReturn('areaCode');
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $objectManager = new ObjectManager($this);
         $this->_config = $objectManager->getObject(
-            \Magento\Framework\App\Route\Config::class,
+            Config::class,
             [
                 'reader' => $this->_readerMock,
                 'cache' => $this->_cacheMock,
@@ -56,7 +68,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
                 'areaList' => $this->_areaList
             ]
         );
-        $this->serializerMock = $this->createMock(\Magento\Framework\Serialize\SerializerInterface::class);
+        $this->serializerMock = $this->getMockForAbstractClass(SerializerInterface::class);
         $objectManager->setBackwardCompatibleProperty($this->_config, 'serializer', $this->serializerMock);
     }
 
@@ -123,8 +135,8 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
             'read'
         )->with(
             'scope'
-        )->will(
-            $this->returnValue($routers)
+        )->willReturn(
+            $routers
         );
 
         $this->_areaList->expects(
@@ -133,8 +145,8 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
             'getDefaultRouter'
         )->with(
             'scope'
-        )->will(
-            $this->returnValue('default_router')
+        )->willReturn(
+            'default_router'
         );
 
         $this->serializerMock->expects($this->once())

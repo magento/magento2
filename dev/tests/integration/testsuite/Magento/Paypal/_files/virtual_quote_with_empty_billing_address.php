@@ -18,8 +18,9 @@ use Magento\Quote\Model\Quote\Address;
 use Magento\Quote\Model\Quote\Item;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
 
-require __DIR__ . '/../../Customer/_files/customer.php';
+Resolver::getInstance()->requireDataFixture('Magento/Customer/_files/customer.php');
 
 Bootstrap::getInstance()->loadArea('adminhtml');
 $objectManager = Bootstrap::getObjectManager();
