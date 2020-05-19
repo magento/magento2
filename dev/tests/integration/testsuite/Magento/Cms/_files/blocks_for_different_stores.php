@@ -18,7 +18,6 @@ $blockRepository = Bootstrap::getObjectManager()->get(BlockRepositoryInterface::
 $blockFactory = Bootstrap::getObjectManager()->get(BlockInterfaceFactory::class);
 /** @var StoreManagerInterface $stores */
 $stores = Bootstrap::getObjectManager()->get(StoreManagerInterface::class)->getStores();
-$i = 0;
 array_shift($stores);
 foreach ($stores as $store) {
     $store->getId();

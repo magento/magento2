@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\GraphQl\Cms;
 
 use Magento\Cms\Api\BlockRepositoryInterface;
+use Magento\Store\Model\Store;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQl\ResponseContainsErrorsException;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
@@ -206,8 +207,9 @@ QUERY;
             $responseData['errors'][0]['message']
         );
     }
+
     /**
-     * Verify the CMS Block per storeview
+     * Verify correct CMS block information per store
      *
      * @magentoApiDataFixture Magento/Store/_files/multiple_websites_with_store_groups_stores.php
      * @magentoApiDataFixture Magento/Cms/_files/blocks_for_different_stores.php
@@ -216,11 +218,79 @@ QUERY;
     {
         $blockIdentitifier1 = 'test-block';
         $blockIdentitifier2 = 'test-block-2';
-        $storeCode = 'third_store_view';
-        $this->getCmsBlockQuery($blockIdentitifier2, $storeCode);
+        $secondStoreCode = 'second_store_view';
+        $thirdStoreCode = 'third_store_view';
 
+        //Verify the correct block information for second store is returned
+        $cmsBlockResponseSecondStore = $this->getCmsBlockQuery($blockIdentitifier1, $secondStoreCode);
+        self::assertArrayHasKey('cmsBlocks', $cmsBlockResponseSecondStore);
+        self::assertArrayHasKey('items', $cmsBlockResponseSecondStore['cmsBlocks']);
+        self::assertEquals('test-block', $cmsBlockResponseSecondStore['cmsBlocks']['items'][0]['identifier']);
+        self::assertEquals('Second store block', $cmsBlockResponseSecondStore['cmsBlocks']['items'][0]['title']);
+        self::assertEquals('second_store_view', $cmsBlockResponseSecondStore['storeConfig']['code']);
+
+        //Verify the correct block information for third store is returned
+        $cmsBlockResponseThirdStore = $this->getCmsBlockQuery($blockIdentitifier1, $thirdStoreCode);
+        self::assertArrayHasKey('cmsBlocks', $cmsBlockResponseThirdStore);
+        self::assertArrayHasKey('items', $cmsBlockResponseThirdStore['cmsBlocks']);
+        self::assertEquals('test-block', $cmsBlockResponseThirdStore['cmsBlocks']['items'][0]['identifier']);
+        self::assertEquals('Third store block', $cmsBlockResponseThirdStore['cmsBlocks']['items'][0]['title']);
+        self::assertEquals('third_store_view', $cmsBlockResponseThirdStore['storeConfig']['code']);
+
+        //Verify the correct block information for second block for second store is returned
+        $cmsBlockResponseSecondStore = $this->getCmsBlockQuery($blockIdentitifier2, $secondStoreCode);
+        self::assertArrayHasKey('cmsBlocks', $cmsBlockResponseSecondStore);
+        self::assertArrayHasKey('items', $cmsBlockResponseSecondStore['cmsBlocks']);
+        self::assertEquals('test-block-2', $cmsBlockResponseSecondStore['cmsBlocks']['items'][0]['identifier']);
+        self::assertEquals('Second store block 2', $cmsBlockResponseSecondStore['cmsBlocks']['items'][0]['title']);
+        self::assertEquals('second_store_view', $cmsBlockResponseSecondStore['storeConfig']['code']);
+
+        //Verify that exception is returned if block is not assigned to the store specified
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('The CMS block with the "test-block-2" ID doesn\'t exist');
+
+        $query =
+            <<<QUERY
+{
+  cmsBlocks(identifiers: "$blockIdentitifier2") {
+    items {
+      identifier
+      title
+      content
     }
-    private function getCmsBlockQuery($blockIdentitifier, $storeCode)
+  }
+}
+QUERY;
+        $headerMap['Store'] = $thirdStoreCode;
+        $this->graphQlQuery($query, [], '', $headerMap);
+    }
+
+    /**
+     * Verify CMS block for a disabled store
+     *
+     * @magentoApiDataFixture Magento/Store/_files/multiple_websites_with_store_groups_stores.php
+     * @magentoApiDataFixture Magento/Cms/_files/blocks_for_different_stores.php
+     */
+    public function testGetCmsBlockforDisabledStore(): void
+    {
+        $blockIdentitifier1 = 'test-block';
+        $thirdStoreCode = 'third_store_view';
+        $store = Bootstrap::getObjectManager()->get(Store::class);
+        $store->load('third_store_view', 'code')->setIsActive(0)->save();
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Requested store is not found');
+        $this->getCmsBlockQuery($blockIdentitifier1, $thirdStoreCode);
+    }
+
+    /**
+     * Get cmsBlockQuery per store
+     *
+     * @param string $blockIdentitifier
+     * @param string $storeCode
+     * @return array
+     * @throws \Exception
+     */
+    private function getCmsBlockQuery($blockIdentitifier, $storeCode): array
     {
         $query =
             <<<QUERY
@@ -237,7 +307,6 @@ QUERY;
 QUERY;
         $headerMap['Store'] = $storeCode;
         $response = $this->graphQlQuery($query, [], '', $headerMap);
-        self::assertArrayHasKey('cmsBlocks', $response);
-        self::assertArrayHasKey('items', $response['cmsBlocks']);
+        return $response;
     }
 }
