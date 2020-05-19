@@ -7,6 +7,9 @@ declare(strict_types=1);
 
 namespace Magento\Quote\Model\Cart\Data;
 
+/**
+ * DTO for quote item selected option
+ */
 class SelectedOption
 {
     /**
