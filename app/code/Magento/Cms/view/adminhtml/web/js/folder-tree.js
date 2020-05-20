@@ -128,18 +128,10 @@ define([
             };
 
             $(window).on('reload.MediaGallery', function () {
-                pathId =  window.MediabrowserUtility.pathId;
                 path = _parseCurrentPath();
-
                 tree.jstree('deselect_all');
+                recursiveOpen();
 
-                if (path.length > 1) {
-                    recursiveOpen();
-                } else {
-                    tree.jstree('open_node', $('[data-id="' + pathId + '"]'), function () {
-                        tree.jstree('select_node',  $('[data-id="' + pathId + '"]'));
-                    });
-                }
             });
 
             recursiveOpen();
