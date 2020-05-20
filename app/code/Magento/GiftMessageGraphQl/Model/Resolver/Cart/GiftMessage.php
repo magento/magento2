@@ -15,6 +15,7 @@ use Magento\Framework\GraphQl\Query\Resolver\Value;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\GiftMessage\Api\CartRepositoryInterface;
+use Magento\GiftMessage\Helper\Message as GiftMessageHelper;
 
 /**
  * Class provides ability to get GiftMessage for cart
@@ -27,14 +28,20 @@ class GiftMessage implements ResolverInterface
     private $cartRepository;
 
     /**
-     * GiftMessage constructor.
-     *
+     * @var GiftMessageHelper
+     */
+    private $giftMessageHelper;
+
+    /**
      * @param CartRepositoryInterface $cartRepository
+     * @param GiftMessageHelper       $giftMessageHelper
      */
     public function __construct(
-        CartRepositoryInterface $cartRepository
+        CartRepositoryInterface $cartRepository,
+        GiftMessageHelper $giftMessageHelper
     ) {
         $this->cartRepository = $cartRepository;
+        $this->giftMessageHelper = $giftMessageHelper;
     }
 
     /**
@@ -61,7 +68,12 @@ class GiftMessage implements ResolverInterface
         if (!isset($value['model'])) {
             throw new GraphQlInputException(__('"model" value should be specified'));
         }
+
         $cart = $value['model'];
+
+        if (!$this->giftMessageHelper->isMessagesAllowed('order', $cart)) {
+            return null;
+        }
 
         try {
             $giftCartMessage = $this->cartRepository->get($cart->getId());

@@ -20,13 +20,14 @@ class GiftMessageTest extends GraphQlAbstract
      */
     private $getMaskedQuoteIdByReservedOrderId;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = Bootstrap::getObjectManager();
         $this->getMaskedQuoteIdByReservedOrderId = $objectManager->get(GetMaskedQuoteIdByReservedOrderId::class);
     }
 
     /**
+     * @magentoConfigFixture default_store sales/gift_options/allow_order 1
      * @magentoApiDataFixture Magento/GiftMessage/_files/quote_with_message.php
      * @throws NoSuchEntityException
      * @throws Exception
@@ -39,6 +40,20 @@ class GiftMessageTest extends GraphQlAbstract
         self::assertSame('Mercutio', $response['cart']['gift_message']['to']);
         self::assertSame('Romeo', $response['cart']['gift_message']['from']);
         self::assertSame('I thought all for the best.', $response['cart']['gift_message']['message']);
+    }
+
+    /**
+     * @magentoConfigFixture default_store sales/gift_options/allow_order 0
+     * @magentoApiDataFixture Magento/GiftMessage/_files/quote_with_message.php
+     * @throws NoSuchEntityException
+     * @throws Exception
+     */
+    public function testGiftMessageForCartWithNotAllow()
+    {
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('message_order_21');
+        $response = $this->requestCartAndAssertResult($maskedQuoteId);
+        self::assertArrayHasKey('gift_message', $response['cart']);
+        self::assertNull($response['cart']['gift_message']);
     }
 
     /**
