@@ -5,6 +5,8 @@
  */
 declare(strict_types=1);
 
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
+
 \Magento\TestFramework\Helper\Bootstrap::getInstance()->getInstance()->reinitialize();
 
 /** @var $objectManager \Magento\TestFramework\ObjectManager */
@@ -30,4 +32,4 @@ foreach (['simple1', 'simple2'] as $sku) {
 $registry->unregister('isSecureArea');
 $registry->register('isSecureArea', false);
 
-require __DIR__ . '/attribute_rollback.php';
+Resolver::getInstance()->requireDataFixture('Magento/CatalogRule/_files/attribute_rollback.php');

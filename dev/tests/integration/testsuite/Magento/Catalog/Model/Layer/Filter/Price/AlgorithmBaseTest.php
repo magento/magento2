@@ -38,8 +38,10 @@ class AlgorithmBaseTest extends \PHPUnit\Framework\TestCase
     /**
      * @magentoDbIsolation disabled
      * @magentoAppIsolation enabled
-     * @magentoConfigFixture default/catalog/search/engine mysql
      * @dataProvider pricesSegmentationDataProvider
+     * @param $categoryId
+     * @param array $entityIds
+     * @param array $intervalItems
      * @covers       \Magento\Framework\Search\Dynamic\Algorithm::calculateSeparators
      */
     public function testPricesSegmentation($categoryId, array $entityIds, array $intervalItems)
@@ -110,10 +112,10 @@ class AlgorithmBaseTest extends \PHPUnit\Framework\TestCase
         );
 
         $items = $model->calculateSeparators($interval);
-        $this->assertEquals(array_keys($intervalItems), array_keys($items));
+        $this->assertEquals($intervalItems, $items);
 
         for ($i = 0, $count = count($intervalItems); $i < $count; ++$i) {
-            $this->assertInternalType('array', $items[$i]);
+            $this->assertIsArray($items[$i]);
             $this->assertEquals($intervalItems[$i]['from'], $items[$i]['from']);
             $this->assertEquals($intervalItems[$i]['to'], $items[$i]['to']);
             $this->assertEquals($intervalItems[$i]['count'], $items[$i]['count']);
@@ -129,15 +131,40 @@ class AlgorithmBaseTest extends \PHPUnit\Framework\TestCase
     public function pricesSegmentationDataProvider()
     {
         $testCases = include __DIR__ . '/_files/_algorithm_base_data.php';
+        $testCasesNew = $this->getUnSkippedTestCases($testCases);
         $result = [];
-        foreach ($testCases as $index => $testCase) {
+        foreach ($testCasesNew as $index => $testCase) {
             $result[] = [
                 $index + 4, //category id
                 $testCase[1],
                 $testCase[2],
             ];
         }
-
         return $result;
+    }
+
+    /**
+     * Get unSkipped test cases from dataProvider
+     *
+     * @param array $testCases
+     * @return array
+     */
+    private function getUnSkippedTestCases(array $testCases) : array
+    {
+        // TO DO UnSkip skipped test cases and remove this function
+        $SkippedTestCases = [];
+        $UnSkippedTestCases = [];
+        foreach ($testCases as $testCase) {
+            if (array_key_exists('incomplete_reason', $testCase)) {
+                if ($testCase['incomplete_reason'] === " ") {
+                    $UnSkippedTestCases [] = $testCase;
+                } else {
+                    if ($testCase['incomplete_reason'] != " ") {
+                        $SkippedTestCases [] = $testCase;
+                    }
+                }
+            }
+        }
+        return $UnSkippedTestCases;
     }
 }

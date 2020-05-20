@@ -86,7 +86,7 @@
         <seeInField selector="{{AdminProductFormSection.productPrice}}" userInput="{{simpleProductNotVisibleIndividually.price}}" stepKey="seeSimpleProductPrice"/>
         <seeInField selector="{{AdminProductFormSection.productQuantity}}" userInput="{{simpleProductNotVisibleIndividually.quantity}}" stepKey="seeSimpleProductQuantity"/>
         <seeInField selector="{{AdminProductFormSection.productStockStatus}}" userInput="{{simpleProductNotVisibleIndividually.status}}" stepKey="seeSimpleProductStockStatus"/>
-        <seeInField selector="{{AdminProductFormSection.productWeight}}" userInput="{{simpleProductNotVisibleIndividually.weight}}" stepKey="seeSimpleProductWeight"/>
+        <seeInField selector="{{AdminProductFormSection.productWeight}}" userInput="{{simpleProductNotVisibleIndividually.weightNoDecimals}}" stepKey="seeSimpleProductWeight"/>
         <click selector="{{AdminProductFormSection.categoriesDropdown}}" stepKey="clickCategoriesDropDownToVerify"/>
         <see selector="{{AdminProductFormSection.selectMultipleCategories}}" userInput="$$categoryEntity.name$$" stepKey="seeSelectedCategories" />
         <seeInField selector="{{AdminProductFormSection.visibility}}" userInput="{{simpleProductNotVisibleIndividually.visibility}}" stepKey="seeSimpleProductVisibility"/>

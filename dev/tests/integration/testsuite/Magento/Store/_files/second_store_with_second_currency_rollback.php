@@ -4,6 +4,7 @@
  * See COPYING.txt for license details.
  */
 declare(strict_types=1);
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
 
 $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 $store = $objectManager->create(\Magento\Store\Model\Store::class);
@@ -23,5 +24,4 @@ if ($storeId) {
     );
 }
 
-// phpcs:ignore Magento2.Security.IncludeFile
-require_once 'second_store_rollback.php';
+Resolver::getInstance()->requireDataFixture('Magento/Store/_files/second_store_rollback.php');

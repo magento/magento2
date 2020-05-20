@@ -8,6 +8,7 @@ declare(strict_types=1);
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Sales\Api\InvoiceRepositoryInterface;
 use Magento\TestFramework\ObjectManager;
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
 
 $objectManager = ObjectManager::getInstance();
 
@@ -25,4 +26,4 @@ foreach ($items as $item) {
     $invoiceRepository->delete($item);
 }
 
-require __DIR__ . '/order_rollback.php';
+Resolver::getInstance()->requireDataFixture('Magento/Braintree/Fixtures/order_rollback.php');
