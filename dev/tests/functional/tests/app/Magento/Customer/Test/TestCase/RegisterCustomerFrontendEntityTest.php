@@ -88,7 +88,7 @@ class RegisterCustomerFrontendEntityTest extends Injectable
      *
      * @return void
      */
-    public function tearDown()
+    public function tearDown(): void
     {
         $this->logoutCustomerOnFrontendStep->run();
     }

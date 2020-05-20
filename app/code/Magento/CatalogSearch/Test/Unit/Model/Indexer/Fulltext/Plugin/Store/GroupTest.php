@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\CatalogSearch\Test\Unit\Model\Indexer\Fulltext\Plugin\Store;
 
 use Magento\CatalogSearch\Model\Indexer\Fulltext as FulltextIndexer;
@@ -12,8 +14,10 @@ use Magento\Framework\Indexer\IndexerRegistry;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Store\Model\Group as StoreGroup;
 use Magento\Store\Model\ResourceModel\Group as StoreGroupResourceModel;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class GroupTest extends \PHPUnit\Framework\TestCase
+class GroupTest extends TestCase
 {
     /**
      * @var StoreGroupIndexerPlugin
@@ -26,26 +30,26 @@ class GroupTest extends \PHPUnit\Framework\TestCase
     private $objectManagerHelper;
 
     /**
-     * @var IndexerRegistry|\PHPUnit_Framework_MockObject_MockObject
+     * @var IndexerRegistry|MockObject
      */
     private $indexerRegistryMock;
 
     /**
-     * @var IndexerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var IndexerInterface|MockObject
      */
     private $indexerMock;
 
     /**
-     * @var StoreGroupResourceModel|\PHPUnit_Framework_MockObject_MockObject
+     * @var StoreGroupResourceModel|MockObject
      */
     private $subjectMock;
 
     /**
-     * @var StoreGroup|\PHPUnit_Framework_MockObject_MockObject
+     * @var StoreGroup|MockObject
      */
     private $storeGroupMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->indexerRegistryMock = $this->getMockBuilder(IndexerRegistry::class)
             ->disableOriginalConstructor()

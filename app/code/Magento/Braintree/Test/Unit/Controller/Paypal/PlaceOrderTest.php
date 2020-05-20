@@ -15,19 +15,20 @@ use Magento\Framework\App\Action\Context;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Controller\ResultInterface;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\NotFoundException;
 use Magento\Framework\Message\ManagerInterface;
 use Magento\Quote\Model\Quote;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 
 /**
- * Class PlaceOrderTest
- *
  * @see \Magento\Braintree\Controller\Paypal\PlaceOrder
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class PlaceOrderTest extends \PHPUnit\Framework\TestCase
+class PlaceOrderTest extends TestCase
 {
     /**
      * @var OrderPlace|MockObject
@@ -72,7 +73,7 @@ class PlaceOrderTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         /** @var Context|MockObject $context */
         $context = $this->getMockBuilder(Context::class)
@@ -105,7 +106,7 @@ class PlaceOrderTest extends \PHPUnit\Framework\TestCase
 
         $this->logger = $this->getMockBuilder(LoggerInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->placeOrder = new PlaceOrder(
             $context,
             $this->config,
@@ -118,8 +119,8 @@ class PlaceOrderTest extends \PHPUnit\Framework\TestCase
     /**
      * Checks if an order is placed successfully.
      *
-     * @throws \Magento\Framework\Exception\LocalizedException
-     * @throws \Magento\Framework\Exception\NotFoundException
+     * @throws LocalizedException
+     * @throws NotFoundException
      */
     public function testExecute()
     {
@@ -157,8 +158,8 @@ class PlaceOrderTest extends \PHPUnit\Framework\TestCase
     /**
      * Checks a negative scenario during place order action.
      *
-     * @throws \Magento\Framework\Exception\LocalizedException
-     * @throws \Magento\Framework\Exception\NotFoundException
+     * @throws LocalizedException
+     * @throws NotFoundException
      */
     public function testExecuteException()
     {

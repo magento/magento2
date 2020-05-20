@@ -44,7 +44,7 @@ class DiffOldSchemaTest extends SetupTestCase
      */
     private $schemaConfig;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $objectManager = Bootstrap::getObjectManager();
         $this->moduleManager = $objectManager->get(TestModuleManager::class);

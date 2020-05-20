@@ -3,6 +3,9 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
+
 $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 $registry = $objectManager->get(\Magento\Framework\Registry::class);
 $registry->unregister('isSecureArea');
@@ -22,4 +25,4 @@ if ($product->getId()) {
 $registry->unregister('isSecureArea');
 $registry->register('isSecureArea', false);
 
-require __DIR__ . '/../../Checkout/_files/quote_with_address_rollback.php';
+Resolver::getInstance()->requireDataFixture('Magento/Checkout/_files/quote_with_address_rollback.php');

@@ -44,6 +44,6 @@ class JsTest extends \PHPUnit\Framework\TestCase
                 "Rates for tax class with ID '{$taxClassId}' is missing."
             );
         }
-        $this->assertContains('7.5', $jsonResult, 'Rates for tax classes looks to be invalid.');
+        $this->assertStringContainsString('7.5', $jsonResult, 'Rates for tax classes looks to be invalid.');
     }
 }

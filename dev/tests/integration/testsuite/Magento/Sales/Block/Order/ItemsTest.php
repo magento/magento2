@@ -49,7 +49,7 @@ class ItemsTest extends TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
         $this->layout = $this->objectManager->get(LayoutInterface::class);
@@ -61,7 +61,7 @@ class ItemsTest extends TestCase
     /**
      * @inheritdoc
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->registry->unregister('current_order');
 
