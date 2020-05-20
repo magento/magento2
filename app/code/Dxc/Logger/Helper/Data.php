@@ -13,7 +13,12 @@ namespace Dxc\Logger\Helper;
  */
 class Data
 {
-    public function getKubernetesPodDetails()
+    /**
+     * Inject container details as first param into Monloog\Logger
+     * @author Cristian Pini <cpini@dxc.com>
+     * @return string
+     */
+    public static function getKubernetesPodDetails()
     {
         $podName        = trim(getenv('K8S_POD_NAME'));
         $nodeName       = trim(getenv('K8S_NODE_NAME'));
@@ -21,7 +26,7 @@ class Data
         if ($podName!=='' && $nodeName!=='' && $nodeNameSpace!==''){
             return sprintf("%s-%s-%s", $nodeNameSpace, $nodeName, $podName);
         }
-        return null;
+        return 'main';
     }
 
 }
