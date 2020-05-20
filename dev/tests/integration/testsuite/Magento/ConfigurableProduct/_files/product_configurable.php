@@ -13,25 +13,27 @@ use Magento\Catalog\Setup\CategorySetup;
 use Magento\ConfigurableProduct\Helper\Product\Options\Factory;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 use Magento\Eav\Api\Data\AttributeOptionInterface;
+use Magento\Eav\Model\Config;
 use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
 
 \Magento\TestFramework\Helper\Bootstrap::getInstance()->reinitialize();
 
-require __DIR__ . '/configurable_attribute.php';
+Resolver::getInstance()->requireDataFixture('Magento/ConfigurableProduct/_files/configurable_attribute.php');
 
 /** @var ProductRepositoryInterface $productRepository */
 $productRepository = Bootstrap::getObjectManager()
     ->create(ProductRepositoryInterface::class);
-
 /** @var $installer CategorySetup */
 $installer = Bootstrap::getObjectManager()->create(CategorySetup::class);
-
+$eavConfig = Bootstrap::getObjectManager()->get(Config::class);
+$attribute = $eavConfig->getAttribute(Product::ENTITY, 'test_configurable');
 /* Create simple products per each option value*/
 /** @var AttributeOptionInterface[] $options */
 $options = $attribute->getOptions();
 
 $attributeValues = [];
-$attributeSetId = $installer->getAttributeSetId('catalog_product', 'Default');
+$attributeSetId = $installer->getAttributeSetId(Product::ENTITY, 'Default');
 $associatedProductIds = [];
 $productIds = [10, 20];
 array_shift($options); //remove the first option which is empty
