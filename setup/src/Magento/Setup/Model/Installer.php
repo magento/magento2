@@ -1293,7 +1293,6 @@ class Installer
         $cacheManager = $this->objectManagerProvider->get()->create(\Magento\Framework\App\Cache\Manager::class);
 
         $cacheTypes = array_keys($types);
-        $cachestatuses = array_values($types);
         $availableTypes = $cacheManager->getAvailableTypes();
         $cacheTypes = empty($cacheTypes) ? $availableTypes : array_intersect($availableTypes, $cacheTypes);
         if ($isEnabled == true) {
