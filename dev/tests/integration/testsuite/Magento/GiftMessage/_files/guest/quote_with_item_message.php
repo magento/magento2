@@ -6,7 +6,6 @@
 
 require __DIR__ . '/../../../../Magento/Catalog/_files/products.php';
 
-use Magento\Catalog\Model\Product;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\GiftMessage\Model\Message;
 use Magento\GiftMessage\Model\ResourceModel\Message as MessageResource;
@@ -28,7 +27,6 @@ $quoteModel = $objectManager->create(Quote::class);
 $quoteModel->setData(['store_id' => 1, 'is_active' => 1, 'is_multi_shipping' => 0]);
 $quote->save($quoteModel);
 
-$product = $objectManager->create(Product::class);
 $quoteProduct = $product->load($product->getIdBySku('simple'));
 
 $quoteModel->setReservedOrderId('test_guest_order_with_gift_message')
