@@ -26,18 +26,12 @@
 
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
             <actionGroup ref="AdminCatalogPriceRuleDeleteAllActionGroup" stepKey="deleteAllCatalogPriceRule"/>
+            <magentoCLI command="indexer:reindex" arguments="catalogsearch_fulltext" stepKey="reindexFulltextSearch"/>
         </before>
         <after>
             <!-- Delete the simple product and category -->
             <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
-            <!-- Delete the catalog rule -->
-            <amOnPage url="{{CatalogRulePage.url}}" stepKey="goToRulePage"/>
-            <waitForPageLoad stepKey="waitForRulePage"/>
-            <actionGroup ref="deleteEntitySecondaryGrid" stepKey="deletePriceRule">
-                <argument name="name" value="{{_defaultCatalogRule.name}}"/>
-                <argument name="searchInput" value="{{AdminSecondaryGridSection.catalogRuleIdentifierSearch}}"/>
-            </actionGroup>
             <actionGroup ref="AdminCatalogPriceRuleDeleteAllActionGroup" stepKey="deleteAllCatalogPriceRule"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="amOnLogoutPage"/>
         </after>
