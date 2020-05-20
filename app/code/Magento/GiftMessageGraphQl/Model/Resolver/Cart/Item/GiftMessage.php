@@ -8,7 +8,6 @@ declare(strict_types=1);
 namespace Magento\GiftMessageGraphQl\Model\Resolver\Cart\Item;
 
 use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Query\Resolver\ContextInterface;
@@ -16,6 +15,7 @@ use Magento\Framework\GraphQl\Query\Resolver\Value;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\GiftMessage\Api\ItemRepositoryInterface;
+use Magento\GiftMessage\Helper\Message as GiftMessageHelper;
 
 /**
  * Class provides ability to get GiftMessage for cart item
@@ -28,14 +28,20 @@ class GiftMessage implements ResolverInterface
     private $itemRepository;
 
     /**
-     * GiftMessageItem constructor.
-     *
+     * @var GiftMessageHelper
+     */
+    private $giftMessageHelper;
+
+    /**
      * @param ItemRepositoryInterface $itemRepository
+     * @param GiftMessageHelper       $giftMessageHelper
      */
     public function __construct(
-        ItemRepositoryInterface $itemRepository
+        ItemRepositoryInterface $itemRepository,
+        GiftMessageHelper $giftMessageHelper
     ) {
         $this->itemRepository = $itemRepository;
+        $this->giftMessageHelper = $giftMessageHelper;
     }
 
     /**
@@ -64,16 +70,28 @@ class GiftMessage implements ResolverInterface
 
         $quoteItem = $value['model'];
 
+        if (!$this->giftMessageHelper->isMessagesAllowed('items', $quoteItem)) {
+            return null;
+        }
+
+        if (!$this->giftMessageHelper->isMessagesAllowed('item', $quoteItem)) {
+            return null;
+        }
+
         try {
             $giftItemMessage = $this->itemRepository->get($quoteItem->getQuoteId(), $quoteItem->getItemId());
         } catch (LocalizedException $e) {
             throw new GraphQlInputException(__('Can\'t load cart item'));
         }
 
+        if (!isset($giftItemMessage)) {
+            return null;
+        }
+
         return [
-            'to' => isset($giftItemMessage) ? $giftItemMessage->getRecipient() : '',
-            'from' => isset($giftItemMessage) ? $giftItemMessage->getSender() : '',
-            'message'=> isset($giftItemMessage) ? $giftItemMessage->getMessage() : ''
+            'to' => $giftItemMessage->getRecipient() ?? '',
+            'from' =>  $giftItemMessage->getSender() ?? '',
+            'message'=>  $giftItemMessage->getMessage() ?? ''
         ];
     }
 }

@@ -20,13 +20,14 @@ class GiftMessageTest extends GraphQlAbstract
      */
     private $getMaskedQuoteIdByReservedOrderId;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = Bootstrap::getObjectManager();
         $this->getMaskedQuoteIdByReservedOrderId = $objectManager->get(GetMaskedQuoteIdByReservedOrderId::class);
     }
 
     /**
+     * @magentoConfigFixture default_store sales/gift_options/allow_items 1
      * @magentoApiDataFixture Magento/GiftMessage/_files/guest/quote_with_item_message.php
      * @throws NoSuchEntityException
      * @throws Exception
@@ -34,9 +35,40 @@ class GiftMessageTest extends GraphQlAbstract
     public function testGiftMessageCartForItem()
     {
         $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_guest_order_with_gift_message');
+        foreach ($this->requestCartResult($maskedQuoteId)['cart']['items'] as $item) {
+            self::assertArrayHasKey('gift_message', $item);
+            self::assertArrayHasKey('to', $item['gift_message']);
+            self::assertArrayHasKey('from', $item['gift_message']);
+            self::assertArrayHasKey('message', $item['gift_message']);
+        }
+    }
+
+    /**
+     * @magentoConfigFixture default_store sales/gift_options/allow_items 0
+     * @magentoApiDataFixture Magento/GiftMessage/_files/guest/quote_with_item_message.php
+     * @throws NoSuchEntityException
+     * @throws Exception
+     */
+    public function testGiftMessageCartForItemNotAllow()
+    {
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_guest_order_with_gift_message');
+        foreach ($this->requestCartResult($maskedQuoteId)['cart']['items'] as $item) {
+            self::assertArrayHasKey('gift_message', $item);
+            self::assertNull($item['gift_message']);
+        }
+    }
+
+    /**
+     * @param string $quoteId
+     *
+     * @return array|bool|float|int|string
+     * @throws Exception
+     */
+    private function requestCartResult(string $quoteId)
+    {
         $query = <<<QUERY
 {
-    cart(cart_id: "$maskedQuoteId") {
+    cart(cart_id: "$quoteId") {
         items {
             product {
                 name
@@ -52,12 +84,6 @@ class GiftMessageTest extends GraphQlAbstract
     }
 }
 QUERY;
-        $response = $this->graphQlQuery($query);
-        foreach ($response['cart']['items'] as $item) {
-            self::assertArrayHasKey('gift_message', $item);
-            self::assertArrayHasKey('to', $item['gift_message']);
-            self::assertArrayHasKey('from', $item['gift_message']);
-            self::assertArrayHasKey('message', $item['gift_message']);
-        }
+        return $this->graphQlQuery($query);
     }
 }
