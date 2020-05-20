@@ -81,7 +81,11 @@ class Collection extends SearchResult
             return $this;
         }
 
-        return parent::addFieldToFilter('main_table.' . $field, $condition);
+        if (is_string($field) && count(explode('.', $field)) === 1) {
+            $field = 'main_table.' . $field;
+        }
+
+        return parent::addFieldToFilter($field, $condition);
     }
 
     /**
