@@ -10,6 +10,7 @@ namespace Magento\ImportExport\Model\Export;
 use Magento\Eav\Model\Entity\Attribute;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\ImportExport\Model\Export;
+use Magento\ImportExport\Model\ExportFactory;
 
 /**
  * The class serves as a wrapper for the export model's static methods,
@@ -17,6 +18,20 @@ use Magento\ImportExport\Model\Export;
  */
 class AttributeFilterType
 {
+    /**
+     * @var Export
+     */
+    private $export;
+
+    /**
+     * @param ExportFactory $exportFactory
+     */
+    public function __construct(
+        ExportFactory $exportFactory
+    ) {
+        $this->export = $exportFactory->create();
+    }
+
     /**
      * Determine filter type for specified attribute.
      *
@@ -26,7 +41,7 @@ class AttributeFilterType
      */
     public function getAttributeFilterType(Attribute $attribute)
     {
-        return Export::getAttributeFilterType($attribute);
+        return $this->export->getAttributeFilterType($attribute);
     }
 
     /**
@@ -37,6 +52,6 @@ class AttributeFilterType
      */
     public function getStaticAttributeFilterType(Attribute $attribute)
     {
-        return Export::getStaticAttributeFilterType($attribute);
+        return $this->export->getStaticAttributeFilterType($attribute);
     }
 }
