@@ -18,17 +18,17 @@ class ExportFilterDataProvider extends AbstractDataProvider
     /**
      * @var CollectionFactory
      */
-    protected $collectionFactory;
+    private $collectionFactory;
 
     /**
      * @var ExportFactory
      */
-    protected $exportFactory;
+    private $exportFactory;
 
     /**
      * @var RequestInterface
      */
-    protected $request;
+    private $request;
 
     /**
      * @param CollectionFactory $collectionFactory

@@ -20,7 +20,7 @@ class ExportFilter extends Column
     /**
      * @var AttributeFilterType
      */
-    protected $attributeFilterType;
+    private $attributeFilterType;
 
     /**
      * @param ContextInterface $context
