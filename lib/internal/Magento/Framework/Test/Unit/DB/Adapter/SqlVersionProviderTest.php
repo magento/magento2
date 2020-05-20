@@ -116,15 +116,15 @@ class SqlVersionProviderTest extends TestCase
             ],
             'MySQL-5.7' => [
                 ['version' => '5.7.29'],
-                SqlVersionProvider::MYSQL_57_VERSION,
+                SqlVersionProvider::MYSQL_5_7_VERSION,
             ],
             'MySQL-8' => [
                 ['version' => '8.0.19'],
-                SqlVersionProvider::MYSQL_8_VERSION,
+                SqlVersionProvider::MYSQL_8_0_VERSION,
             ],
             'Percona' => [
                 ['version' => '5.7.29-32'],
-                SqlVersionProvider::MYSQL_57_VERSION,
+                SqlVersionProvider::MYSQL_5_7_VERSION,
             ],
         ];
     }

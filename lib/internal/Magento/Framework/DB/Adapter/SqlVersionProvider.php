@@ -12,27 +12,27 @@ use Magento\Framework\App\ResourceConnection;
 /**
  * Class GetDbVersion provides sql engine version requesting version variable
  *
- * @deprecated Temporary solution which will be replaced after release of main functionality
+ * @deprecated First iteration of proper solution which is planning to implement soon
  */
 class SqlVersionProvider
 {
     /**
-     * @deprecated Temporary solution which will be replaced after release of main functionality
+     * @deprecated First iteration of proper solution which is planning to implement soon
      */
-    public const MYSQL_8_VERSION = '8.0.';
+    public const MYSQL_8_0_VERSION = '8.0.';
 
     /**
-     * @deprecated Temporary solution which will be replaced after release of main functionality
+     * @deprecated First iteration of proper solution which is planning to implement soon
      */
-    public const MYSQL_57_VERSION = '5.7.';
+    public const MYSQL_5_7_VERSION = '5.7.';
 
     /**
-     * @deprecated Temporary solution which will be replaced after release of main functionality
+     * @deprecated First iteration of proper solution which is planning to implement soon
      */
     public const MARIA_DB_10_VERSION = '10.';
 
     /**
-     * @deprecated Temporary solution which will be replaced after release of main functionality
+     * @deprecated First iteration of proper solution which is planning to implement soon
      */
     private const VERSION_VAR_NAME = 'version';
 

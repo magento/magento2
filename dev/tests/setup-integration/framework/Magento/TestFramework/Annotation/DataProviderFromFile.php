@@ -25,7 +25,7 @@ class DataProviderFromFile
      * @var array
      */
     const POSSIBLE_SUFFIXES = [
-        SqlVersionProvider::MYSQL_8_VERSION => 'mysql8',
+        SqlVersionProvider::MYSQL_8_0_VERSION => 'mysql8',
         SqlVersionProvider::MARIA_DB_10_VERSION => 'mariadb10',
     ];
 
