@@ -47,13 +47,10 @@ class ItemsToRender implements ArgumentInterface
      */
     public function getItems(): array
     {
-        $creditMemo = null;
+        $creditMemo = $this->items->getCreditmemo();
         $parents = [];
         $items = [];
-        foreach ($this->items->getCreditmemo()->getAllItems() as $item) {
-            if (!$creditMemo) {
-                $creditMemo = $item->getCreditmemo();
-            }
+        foreach ($creditMemo->getAllItems() as $item) {
             $orderItem = $item->getOrderItem();
             if ($orderItem->getChildrenItems()) {
                 $parents[] = $orderItem->getItemId();
