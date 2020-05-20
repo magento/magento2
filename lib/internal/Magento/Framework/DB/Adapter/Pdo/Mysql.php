@@ -135,11 +135,11 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
     protected $_isDdlCacheAllowed = true;
 
     /**
-     * MySQL version(MySQL-8, MySQL-5.7, MariaDB)
+     * Save if mysql engine is 8 or not.
      *
-     * @var string
+     * @var bool
      */
-    private $dbVersion;
+    private $isMysql8Engine;
 
     /**
      * MySQL column - Table DDL type pairs
@@ -1196,7 +1196,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
         }
         $query = sprintf('SHOW TABLE STATUS%s LIKE %s', $fromDbName, $this->quote($tableName));
         //checks which slq engine used
-        if (!preg_match('/^(8\.)/', $this->isMysql8EngineUsed())) {
+        if (!$this->isMysql8EngineUsed()) {
             //if it's not MySQl-8 we just fetch results
             return $this->rawFetchRow($query);
         }
@@ -1209,17 +1209,18 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
     }
 
     /**
-     * Get database version.
+     * Checks if the engine is mysql 8
      *
-     * @return string
+     * @return bool
      */
-    private function isMysql8EngineUsed(): string
+    private function isMysql8EngineUsed(): bool
     {
-        if (!$this->dbVersion) {
-            $this->dbVersion = $this->fetchPairs("SHOW variables LIKE 'version'")['version'];
+        if (!$this->isMysql8Engine) {
+            $version = $this->fetchPairs("SHOW variables LIKE 'version'")['version'];
+            $this->isMysql8Engine = (bool) preg_match('/^(8\.)/', $version);
         }
 
-        return $this->dbVersion;
+        return $this->isMysql8Engine;
     }
 
     /**
