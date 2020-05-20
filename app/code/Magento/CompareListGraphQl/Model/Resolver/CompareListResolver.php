@@ -7,9 +7,11 @@ namespace Magento\CompareListGraphQl\Model\Resolver;
 
 
 use Magento\Framework\GraphQl\Config\Element\Field;
+use Magento\Framework\GraphQl\Exception\GraphQlAuthorizationException;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Catalog\CustomerData\CompareProducts;
+use Magento\GraphQl\Model\Query\ContextInterface;
 
 class CompareListResolver implements ResolverInterface
 {
@@ -26,17 +28,10 @@ class CompareListResolver implements ResolverInterface
 
     public function resolve(Field $field, $context, ResolveInfo $info, array $value = null, array $args = null)
     {
-        $items = [];
-        $test = $this->customerCompareList->getSectionData();
-        $items[] = [
-            'sku' => 'test123',
-            'name' => (string)'NAME test',
-            'productId' => (int) 123,
-            'canonical_url' => 'canonical_url'
-        ];
-        return [
-            'list_id' => $context->getUserId(),
-            'items' => $items
-        ];
+        /** @var ContextInterface $context */
+        if (false === $context->getExtensionAttributes()->getIsCustomer()) {
+            throw new GraphQlAuthorizationException(__('The current customer isn\'t authorized.'));
+        }
+        return ['list_id' => $context->getUserId()];
     }
 }

@@ -22,7 +22,7 @@ type ComparableAttribute {
 
 type CompareList {
     list_id: ID! @doc(description: "Compare list id")
-    items: [ComparableItem] @doc(description: "Comparable products")
+    items: [ComparableItem] @doc(description: "Comparable products") @resolver(class: "\\Magento\\CompareListGraphQl\\Model\\Resolver\\CompareItemsResolver")
     attributes: [ComparableAttribute] @doc(description: "Comparable attributes, provides codes and titles for the attributes") @resolver(class: "\\Magento\\CompareListGraphQl\\Model\\Resolver\\ComparableAttributeResolver")
 }
 

@@ -20,6 +20,6 @@ class ComparableAttributeResolver implements ResolverInterface
             'title' => 'Attr name'
         ];
 
-        return ['attributes' => $attributes];
+        return $attributes;
     }
 }
