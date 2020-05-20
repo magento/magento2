@@ -106,35 +106,11 @@ define([
             },
 
             /**
-             * Encode path value
-             *
-             * @param {String} val
-             */
-            _encodePathId = function (val) {
-                return Base64.encode(val)
-                    .replace(/\+/g, ':')
-                    .replace(/\//g, '_')
-                    .replace(/=/g, '-');
-            },
-
-            /**
-             * Decode path value
-             *
-             * @param {String} val
-             */
-            _decodePathId = function (val) {
-                return Base64.decode(val)
-                    .replace(/\:/g, '+')
-                    .replace(/\_/g, '/')
-                    .replace(/-/g, '=');
-            },
-
-            /**
              * Get currentPath decode it returns new path array
              */
             _parseCurrentPath = function () {
                 var paths = [],
-                    decodedPath = _decodePathId(window.MediabrowserUtility.pathId.replace(/--|,,/, '==')).split('/');
+                    decodedPath = Base64.mageDecode(window.MediabrowserUtility.pathId).split('/');
 
                 $.each(decodedPath, function (i, val) {
                     var isLastElement = i === decodedPath.length - 1;
@@ -142,7 +118,7 @@ define([
                     if (isLastElement) {
                         paths[i] = window.MediabrowserUtility.pathId.replace(',,', '--');
                     } else {
-                        paths[i] = _encodePathId(val);
+                        paths[i] = Base64.mageEncode(val).replace(',,', '--');
                     }
                 });
                 paths.unshift('root');
@@ -152,7 +128,7 @@ define([
             };
 
             $(window).on('reload.MediaGallery', function () {
-                pathId =  window.MediabrowserUtility.pathId.replace(',,', '--');
+                pathId =  window.MediabrowserUtility.pathId;
                 path = _parseCurrentPath();
 
                 tree.jstree('deselect_all');
