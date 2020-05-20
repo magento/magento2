@@ -16,6 +16,9 @@
             <description value="Users are able to perform PayPal Express Checkout method using PayPal Smart Button on Shopping Cart, payment action is Sale, make sure checkout as guest is not available"/>
             <severity value="CRITICAL"/>
             <testCaseId value="MC-27605"/>
+            <skip>
+                <issueId value="MC-33951"/>
+            </skip>
         </annotations>
         <before>
             <!-- Login -->

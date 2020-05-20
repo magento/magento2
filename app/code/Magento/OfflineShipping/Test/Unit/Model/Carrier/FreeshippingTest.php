@@ -7,19 +7,20 @@ declare(strict_types=1);
 
 namespace Magento\OfflineShipping\Test\Unit\Model\Carrier;
 
-use Magento\Quote\Model\Quote\Address\RateResult\Method;
-use Magento\Shipping\Model\Rate\Result;
-use Magento\OfflineShipping\Model\Carrier\Freeshipping;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\Quote\Model\Quote\Address\RateResult\MethodFactory;
-use Magento\Shipping\Model\Rate\ResultFactory;
+use Magento\Framework\App\Config;
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\OfflineShipping\Model\Carrier\Freeshipping;
 use Magento\Quote\Model\Quote\Address\RateRequest;
-use Magento\Store\Model\ScopeInterface;
-use PHPUnit\Framework\TestCase;
-use PHPUnit\Framework\MockObject\MockObject;
+use Magento\Quote\Model\Quote\Address\RateResult\Method;
+use Magento\Quote\Model\Quote\Address\RateResult\MethodFactory;
 use Magento\Quote\Model\Quote\Item as QuoteItem;
-use PHPUnit\Framework\MockObject\Matcher\InvokedCount;
+use Magento\Shipping\Model\Rate\Result;
+use Magento\Shipping\Model\Rate\ResultFactory;
+use Magento\Store\Model\ScopeInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\MockObject\Rule\InvokedCount;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Class for test free shipping
@@ -56,9 +57,9 @@ class FreeshippingTest extends TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->scopeConfigMock = $this->getMockBuilder(\Magento\Framework\App\Config::class)
+        $this->scopeConfigMock = $this->getMockBuilder(Config::class)
             ->disableOriginalConstructor()
             ->getMock();
 

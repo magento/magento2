@@ -3,23 +3,21 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Setup\Test\Unit\Model\Complex;
 
 use Magento\Setup\Model\Complex\Pattern;
+use PHPUnit\Framework\TestCase;
 
-/**
- * Class PatternTest
- *
- */
-class PatternTest extends \PHPUnit\Framework\TestCase
+class PatternTest extends TestCase
 {
     /**
      * Get pattern object
      *
      * @param array $patternData
      *
-     * @return \Magento\Setup\Model\Complex\Pattern
+     * @return Pattern
      */
     protected function getPattern($patternData)
     {
