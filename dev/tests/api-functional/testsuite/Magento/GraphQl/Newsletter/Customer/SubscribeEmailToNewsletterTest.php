@@ -7,6 +7,9 @@ declare(strict_types=1);
 
 namespace Magento\GraphQl\Newsletter\Customer;
 
+use Exception;
+use Magento\Customer\Model\CustomerAuthUpdate;
+use Magento\Customer\Model\CustomerRegistry;
 use Magento\Framework\Exception\AuthenticationException;
 use Magento\Integration\Api\CustomerTokenServiceInterface;
 use Magento\Newsletter\Model\ResourceModel\Subscriber as SubscriberResourceModel;
@@ -18,6 +21,16 @@ use Magento\TestFramework\TestCase\GraphQlAbstract;
  */
 class SubscribeEmailToNewsletterTest extends GraphQlAbstract
 {
+    /**
+     * @var CustomerAuthUpdate
+     */
+    private $customerAuthUpdate;
+
+    /**
+     * @var CustomerRegistry
+     */
+    private $customerRegistry;
+
     /**
      * @var CustomerTokenServiceInterface
      */
@@ -31,9 +44,11 @@ class SubscribeEmailToNewsletterTest extends GraphQlAbstract
     /**
      * @inheritDoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = Bootstrap::getObjectManager();
+        $this->customerAuthUpdate = Bootstrap::getObjectManager()->get(CustomerAuthUpdate::class);
+        $this->customerRegistry = Bootstrap::getObjectManager()->get(CustomerRegistry::class);
         $this->customerTokenService = $objectManager->get(CustomerTokenServiceInterface::class);
         $this->subscriberResource = $objectManager->get(SubscriberResourceModel::class);
     }
@@ -43,6 +58,24 @@ class SubscribeEmailToNewsletterTest extends GraphQlAbstract
      */
     public function testAddRegisteredCustomerEmailIntoNewsletterSubscription()
     {
+        $query = $this->getQuery('customer@example.com');
+        $response = $this->graphQlMutation($query, [], '', $this->getHeaderMap());
+
+        self::assertArrayHasKey('subscribeEmailToNewsletter', $response);
+        self::assertNotEmpty($response['subscribeEmailToNewsletter']);
+        self::assertEquals('SUBSCRIBED', $response['subscribeEmailToNewsletter']['status']);
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     */
+    public function testAddLockedCustomerEmailIntoNewsletterSubscription()
+    {
+        /* lock customer */
+        $customerSecure = $this->customerRegistry->retrieveSecureData(1);
+        $customerSecure->setLockExpires('2030-12-31 00:00:00');
+        $this->customerAuthUpdate->saveAuth(1);
+
         $query = $this->getQuery('customer@example.com');
         $response = $this->graphQlMutation($query, [], '', $this->getHeaderMap());
 
@@ -81,36 +114,40 @@ class SubscribeEmailToNewsletterTest extends GraphQlAbstract
     }
 
     /**
-     * @expectedException Exception
-     * @expectedExceptionMessage Enter a valid email address.
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
      */
     public function testNewsletterSubscriptionWithIncorrectEmailFormat()
     {
         $query = $this->getQuery('customer.example.com');
+
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Enter a valid email address.' . "\n");
 
         $this->graphQlMutation($query, [], '', $this->getHeaderMap());
     }
 
     /**
      * @magentoApiDataFixture Magento/Newsletter/_files/subscribers.php
-     * @expectedException Exception
-     * @expectedExceptionMessage This email address is already subscribed.
      */
     public function testNewsletterSubscriptionWithAlreadySubscribedEmail()
     {
         $query = $this->getQuery('customer@example.com');
+
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('This email address is already subscribed.' . "\n");
 
         $this->graphQlMutation($query, [], '', $this->getHeaderMap());
     }
 
     /**
      * @magentoApiDataFixture Magento/Newsletter/_files/three_subscribers.php
-     * @expectedException Exception
-     * @expectedExceptionMessage This email address is already assigned to another user.
      */
     public function testNewsletterSubscriptionWithAnotherCustomerEmail()
     {
         $query = $this->getQuery('customer2@search.example.com');
+
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Cannot create a newsletter subscription.' . "\n");
 
         $this->graphQlMutation($query, [], '', $this->getHeaderMap('customer@search.example.com'));
     }
@@ -154,7 +191,7 @@ QUERY;
     /**
      * @inheritDoc
      */
-    public function tearDown()
+    public function tearDown(): void
     {
         $this->subscriberResource
             ->getConnection()
