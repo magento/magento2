@@ -33,7 +33,7 @@ class RemoveItemFromCartTest extends GraphQlAbstract
      */
     private $getQuoteItemIdByReservedQuoteIdAndSku;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = Bootstrap::getObjectManager();
         $this->customerTokenService = $objectManager->get(CustomerTokenServiceInterface::class);
@@ -64,11 +64,12 @@ class RemoveItemFromCartTest extends GraphQlAbstract
 
     /**
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
-     * @expectedException \Exception
-     * @expectedExceptionMessage Could not find a cart with ID "non_existent_masked_id"
      */
     public function testRemoveItemFromNonExistentCart()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Could not find a cart with ID "non_existent_masked_id"');
+
         $query = $this->getQuery('non_existent_masked_id', 1);
         $this->graphQlMutation($query, [], '', $this->getHeaderMap());
     }
@@ -84,7 +85,7 @@ class RemoveItemFromCartTest extends GraphQlAbstract
         $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
         $notExistentItemId = 999;
 
-        $this->expectExceptionMessage("Cart doesn't contain the {$notExistentItemId} item.");
+        $this->expectExceptionMessage("The cart doesn't contain the item");
 
         $query = $this->getQuery($maskedQuoteId, $notExistentItemId);
         $this->graphQlMutation($query, [], '', $this->getHeaderMap());
@@ -106,7 +107,7 @@ class RemoveItemFromCartTest extends GraphQlAbstract
             'virtual-product'
         );
 
-        $this->expectExceptionMessage("Cart doesn't contain the {$secondQuoteItemId} item.");
+        $this->expectExceptionMessage("The cart doesn't contain the item");
 
         $query = $this->getQuery($firstQuoteMaskedId, $secondQuoteItemId);
         $this->graphQlMutation($query, [], '', $this->getHeaderMap());
@@ -153,6 +154,40 @@ class RemoveItemFromCartTest extends GraphQlAbstract
 
         $query = $this->getQuery($anotherCustomerQuoteMaskedId, $anotherCustomerQuoteItemId);
         $this->graphQlMutation($query, [], '', $this->getHeaderMap('customer2@search.example.com'));
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
+     */
+    public function testRemoveItemWithEmptyCartId()
+    {
+        $cartId = "";
+        $cartItemId = $this->getQuoteItemIdByReservedQuoteIdAndSku->execute('test_quote', 'simple_product');
+
+        $this->expectExceptionMessage("Required parameter \"cart_id\" is missing.");
+
+        $query = $this->getQuery($cartId, $cartItemId);
+        $this->graphQlMutation($query, [], '', $this->getHeaderMap());
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
+     */
+    public function testRemoveItemWithZeroCartItemId()
+    {
+        $cartId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
+        $cartItemId = 0;
+
+        $this->expectExceptionMessage("Required parameter \"cart_item_id\" is missing.");
+
+        $query = $this->getQuery($cartId, $cartItemId);
+        $this->graphQlMutation($query, [], '', $this->getHeaderMap());
     }
 
     /**

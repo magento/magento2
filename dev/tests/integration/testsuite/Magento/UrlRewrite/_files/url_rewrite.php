@@ -4,18 +4,18 @@
  * See COPYING.txt for license details.
  */
 
-use \Magento\UrlRewrite\Model\OptionProvider;
-use \Magento\UrlRewrite\Model\UrlRewrite;
-use \Magento\TestFramework\Helper\Bootstrap;
-use \Magento\Store\Model\StoreManagerInterface;
-use \Magento\Store\Model\Store;
-use \Magento\UrlRewrite\Model\ResourceModel\UrlRewrite as UrlRewriteResource;
-use \Magento\Framework\ObjectManagerInterface;
-use \Magento\Cms\Model\ResourceModel\Page as PageResource;
-use \Magento\Cms\Model\Page;
+use Magento\Cms\Model\Page;
+use Magento\Cms\Model\ResourceModel\Page as PageResource;
+use Magento\Framework\ObjectManagerInterface;
+use Magento\Store\Model\Store;
+use Magento\Store\Model\StoreManagerInterface;
+use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
+use Magento\UrlRewrite\Model\OptionProvider;
+use Magento\UrlRewrite\Model\ResourceModel\UrlRewrite as UrlRewriteResource;
+use Magento\UrlRewrite\Model\UrlRewrite;
 
-/** Create fixture store */
-require dirname(dirname(__DIR__)) . '/Store/_files/second_store.php';
+Resolver::getInstance()->requireDataFixture('Magento/Store/_files/second_store.php');
 
 /** @var UrlRewrite $rewrite */
 /** @var ObjectManagerInterface $objectManager */
@@ -154,6 +154,24 @@ $rewrite->setEntityType('custom')
     ->setRedirectType(OptionProvider::PERMANENT)
     ->setStoreId($storeID)
     ->setDescription('From page-similar-query-param with trailing slash to page-e with query param');
+$rewriteResource->save($rewrite);
+
+$rewrite = $objectManager->create(UrlRewrite::class);
+$rewrite->setEntityType('custom')
+    ->setRequestPath('/')
+    ->setTargetPath('/')
+    ->setRedirectType(OptionProvider::PERMANENT)
+    ->setStoreId($storeID)
+    ->setDescription('From / to /');
+$rewriteResource->save($rewrite);
+
+$rewrite = $objectManager->create(UrlRewrite::class);
+$rewrite->setEntityType('custom')
+    ->setRequestPath('contact/')
+    ->setTargetPath('contact?param1=1')
+    ->setRedirectType(OptionProvider::PERMANENT)
+    ->setStoreId($storeID)
+    ->setDescription('From contact with trailing slash to contact with query param');
 $rewriteResource->save($rewrite);
 
 $rewrite = $objectManager->create(UrlRewrite::class);

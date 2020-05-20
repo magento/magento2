@@ -289,4 +289,24 @@
             <argument name="identifierName" xsi:type="string">theme_id</argument>
         </arguments>
     </type>
+    <virtualType name="configured_design_cache" type="Magento\Framework\App\Cache">
+        <arguments>
+            <argument name="cacheIdentifier" xsi:type="string">layout</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="design_context" type="Magento\Framework\Model\Context">
+        <arguments>
+            <argument name="cacheManager" xsi:type="object">configured_design_cache</argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\Theme\Model\Design">
+        <arguments>
+            <argument name="context" xsi:type="object">design_context</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Theme\Model\Theme\ThemeProvider">
+        <arguments>
+            <argument name="cache" xsi:type="object">configured_design_cache</argument>
+        </arguments>
+    </type>
 </config>

@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\CatalogUrlRewrite\Test\Unit\Observer;
 
 use Magento\CatalogImportExport\Model\Import\Product;
@@ -11,12 +13,14 @@ use Magento\Framework\Event;
 use Magento\Framework\Event\Observer;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\UrlRewrite\Model\UrlPersistInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ClearProductUrlsObserverTest extends \PHPUnit\Framework\TestCase
+class ClearProductUrlsObserverTest extends TestCase
 {
     /**
      * @var ClearProductUrlsObserver
@@ -24,22 +28,22 @@ class ClearProductUrlsObserverTest extends \PHPUnit\Framework\TestCase
     protected $clearProductUrlsObserver;
 
     /**
-     * @var UrlPersistInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var UrlPersistInterface|MockObject
      */
     protected $urlPersist;
 
     /**
-     * @var Observer|\PHPUnit_Framework_MockObject_MockObject
+     * @var Observer|MockObject
      */
     protected $observer;
 
     /**
-     * @var Event|\PHPUnit_Framework_MockObject_MockObject
+     * @var Event|MockObject
      */
     protected $event;
 
     /**
-     * @var Product|\PHPUnit_Framework_MockObject_MockObject
+     * @var Product|MockObject
      */
     protected $importProduct;
 
@@ -71,7 +75,7 @@ class ClearProductUrlsObserverTest extends \PHPUnit\Framework\TestCase
     /**
      * @SuppressWarnings(PHPMD.TooManyFields)
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->importProduct = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
@@ -95,7 +99,7 @@ class ClearProductUrlsObserverTest extends \PHPUnit\Framework\TestCase
             ->willReturn($this->event);
         $this->urlPersist = $this->getMockBuilder(UrlPersistInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->clearProductUrlsObserver = new ClearProductUrlsObserver($this->urlPersist);
     }

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="StorefrontCustomerOrdersViewOrderActionGroup">
+        <annotations>
+            <description>Navigate to customer dashboard -> orders. Press 'View Order' button for specified order number. Notice: customer should be logged in.</description>
+        </annotations>
+        <arguments>
+            <argument name="orderNumber" type="string" defaultValue="000000001"/>
+        </arguments>
+
+        <amOnPage url="{{StorefrontCustomerOrdersHistoryPage.url}}" stepKey="openCustomerOrdersHistoryPage"/>
+        <click selector="{{StorefrontCustomerOrdersGridSection.orderView(orderNumber)}}" stepKey="clickViewOrderButton"/>
+    </actionGroup>
+</actionGroups>

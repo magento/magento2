@@ -27,7 +27,7 @@ class SynchronizerTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritDoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
@@ -40,20 +40,24 @@ class SynchronizerTest extends \PHPUnit\Framework\TestCase
      * @magentoDataFixture Magento/Catalog/_files/second_product_simple.php
      *
      * @return void
+     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function testSyncActions(): void
     {
         $actionsType = 'recently_viewed_product';
+        $productScope = 'website';
+        $scopeId = 1;
         $product1 = $this->productRepository->get('simple');
         $product2 = $this->productRepository->get('simple2');
         $product1Id = $product1->getId();
         $product2Id = $product2->getId();
         $productsData = [
-            $product1Id => [
+            $productScope . '-' . $scopeId . '-' . $product1Id => [
                 'added_at' => '1576582660',
                 'product_id' => $product1Id,
             ],
-            $product2Id => [
+            $productScope . '-' . $scopeId . '-' . $product2Id => [
                 'added_at' => '1576587153',
                 'product_id' => $product2Id,
             ],
@@ -71,8 +75,9 @@ class SynchronizerTest extends \PHPUnit\Framework\TestCase
         );
 
         foreach ($synchronizedCollection as $item) {
-            $this->assertArrayHasKey($item->getProductId(), $productsData);
-            $this->assertEquals($productsData[$item->getProductId()]['added_at'], $item->getAddedAt());
+            $productScopeId = $productScope . '-' . $scopeId . '-' . $item->getProductId();
+            $this->assertArrayHasKey($productScopeId, $productsData);
+            $this->assertEquals($productsData[$productScopeId]['added_at'], $item->getAddedAt());
         }
     }
 
@@ -81,6 +86,8 @@ class SynchronizerTest extends \PHPUnit\Framework\TestCase
      * @magentoDataFixture Magento/Catalog/_files/second_product_simple.php
      *
      * @return void
+     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function testSyncActionsWithoutActionsType(): void
     {

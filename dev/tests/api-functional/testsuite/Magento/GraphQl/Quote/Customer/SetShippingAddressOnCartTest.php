@@ -63,7 +63,7 @@ class SetShippingAddressOnCartTest extends GraphQlAbstract
      */
     private $customerRepository;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = Bootstrap::getObjectManager();
         $this->quoteResource = $objectManager->get(QuoteResource::class);
@@ -144,11 +144,12 @@ QUERY;
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_virtual_product.php
      *
-     * @expectedException \Exception
-     * @expectedExceptionMessage The Cart includes virtual product(s) only, so a shipping address is not used.
      */
     public function testSetNewShippingAddressOnCartWithVirtualProduct()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('The Cart includes virtual product(s) only, so a shipping address is not used.');
+
         $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
 
         $query = <<<QUERY
@@ -273,11 +274,12 @@ QUERY;
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
      *
-     * @expectedException \Exception
-     * @expectedExceptionMessage Could not find a address with ID "100"
      */
     public function testSetNonExistentShippingAddressFromAddressBook()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Could not find a address with ID "100"');
+
         $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
 
         $query = <<<QUERY
@@ -357,11 +359,12 @@ QUERY;
      * @magentoApiDataFixture Magento/Customer/_files/customer_address.php
      * @magentoApiDataFixture Magento/Checkout/_files/quote_with_simple_product_saved.php
      *
-     * @expectedException \Exception
-     * @expectedExceptionMessage Current customer does not have permission to address with ID "1"
      */
     public function testSetShippingAddressIfCustomerIsNotOwnerOfAddress()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Current customer does not have permission to address with ID "1"');
+
         $maskedQuoteId = $this->assignQuoteToCustomer('test_order_with_simple_product_without_address', 2);
 
         $query = <<<QUERY
@@ -394,10 +397,11 @@ QUERY;
      * @magentoApiDataFixture Magento/Customer/_files/customer_address.php
      * @magentoApiDataFixture Magento/Checkout/_files/quote_with_simple_product_saved.php
      *
-     * @expectedException \Exception
      */
     public function testSetShippingAddressToAnotherCustomerCart()
     {
+        $this->expectException(\Exception::class);
+
         $maskedQuoteId = $this->assignQuoteToCustomer('test_order_with_simple_product_without_address', 1);
 
         $query = <<<QUERY
@@ -469,11 +473,12 @@ QUERY;
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
      *
-     * @expectedException \Exception
-     * @expectedExceptionMessage Field CartAddressInput.street of required type [String]! was not provided.
      */
     public function testSetNewShippingAddressWithMissedRequiredStreetParameters()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Field CartAddressInput.street of required type [String]! was not provided.');
+
         $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
         $query = <<<QUERY
 mutation {
@@ -568,11 +573,12 @@ QUERY;
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
      *
-     * @expectedException \Exception
-     * @expectedExceptionMessage You cannot specify multiple shipping addresses.
      */
     public function testSetMultipleNewShippingAddresses()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('You cannot specify multiple shipping addresses.');
+
         $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
 
         $query = <<<QUERY
@@ -669,11 +675,12 @@ QUERY;
     /**
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
      * @magentoApiDataFixture Magento/Customer/_files/customer_address.php
-     * @expectedException \Exception
-     * @expectedExceptionMessage Could not find a cart with ID "non_existent_masked_id"
      */
     public function testSetShippingAddressOnNonExistentCart()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Could not find a cart with ID "non_existent_masked_id"');
+
         $maskedQuoteId = 'non_existent_masked_id';
         $query = <<<QUERY
 mutation {
@@ -940,11 +947,196 @@ QUERY;
         $searchCriteria = $this->searchCriteriaBuilder->addFilter('parent_id', $customer->getId())->create();
         $addresses = $this->customerAddressRepository->getList($searchCriteria)->getItems();
 
+        self::assertCount(0, $addresses);
+        self::assertArrayHasKey('cart', $response['setShippingAddressesOnCart']);
+
+        $cartResponse = $response['setShippingAddressesOnCart']['cart'];
+        self::assertArrayHasKey('shipping_addresses', $cartResponse);
+        $shippingAddressResponse = current($cartResponse['shipping_addresses']);
+        $this->assertNewShippingAddressFields($shippingAddressResponse);
+
+        foreach ($addresses as $address) {
+            $this->customerAddressRepository->delete($address);
+        }
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_new_billing_address.php
+     */
+    public function testSetNewShippingAddressAndPlaceOrder()
+    {
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
+        $query = <<<QUERY
+mutation {
+  setShippingAddressesOnCart(
+    input: {
+      cart_id: "$maskedQuoteId"
+      shipping_addresses: [
+        {
+          address: {
+            firstname: "test firstname"
+            lastname: "test lastname"
+            company: "test company"
+            street: ["test street 1", "test street 2"]
+            city: "test city"
+            region: "AZ"
+            postcode: "887766"
+            country_code: "US"
+            telephone: "88776655"
+            save_in_address_book: true
+          }
+          customer_notes: "Test note"
+        }
+      ]
+    }
+  ) {
+    cart {
+      shipping_addresses {
+        firstname
+        lastname
+        company
+        street
+        city
+        postcode
+        telephone
+        country {
+          code
+          label
+        }
+        __typename
+        customer_notes
+      }
+    }
+  }
+}
+QUERY;
+        $response = $this->graphQlMutation($query, [], '', $this->getHeaderMap());
+        $this->graphQlMutation(
+            $this->getSetShippingMethodsQuery($maskedQuoteId, 'flatrate', 'flatrate'),
+            [],
+            '',
+            $this->getHeaderMap()
+        );
+        $this->graphQlMutation(
+            $this->getSetPaymentMethodQuery(
+                $maskedQuoteId,
+                'checkmo'
+            ),
+            [],
+            '',
+            $this->getHeaderMap()
+        );
+        $this->graphQlMutation(
+            $this->getPlaceOrderQuery($maskedQuoteId),
+            [],
+            '',
+            $this->getHeaderMap()
+        );
+        $customer = $this->customerRepository->get('customer@example.com');
+        $searchCriteria = $this->searchCriteriaBuilder->addFilter('parent_id', $customer->getId())->create();
+        $addresses = $this->customerAddressRepository->getList($searchCriteria)->getItems();
+
         self::assertCount(1, $addresses);
         self::assertArrayHasKey('cart', $response['setShippingAddressesOnCart']);
 
         $cartResponse = $response['setShippingAddressesOnCart']['cart'];
         self::assertArrayHasKey('shipping_addresses', $cartResponse);
+        $shippingAddressResponse = current($cartResponse['shipping_addresses']);
+        $this->assertNewShippingAddressFields($shippingAddressResponse);
+
+        foreach ($addresses as $address) {
+            $this->customerAddressRepository->delete($address);
+        }
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_new_billing_address.php
+     */
+    public function testSetNewShippingAddressWithDefaultValueOfSaveInAddressBookAndPlaceOrder()
+    {
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
+        $query = <<<QUERY
+mutation {
+  setShippingAddressesOnCart(
+    input: {
+      cart_id: "$maskedQuoteId"
+      shipping_addresses: [
+        {
+          address: {
+            firstname: "test firstname"
+            lastname: "test lastname"
+            company: "test company"
+            street: ["test street 1", "test street 2"]
+            city: "test city"
+            region: "AZ"
+            postcode: "887766"
+            country_code: "US"
+            telephone: "88776655"
+          }
+          customer_notes: "Test note"
+        }
+      ]
+    }
+  ) {
+    cart {
+      shipping_addresses {
+        firstname
+        lastname
+        company
+        street
+        city
+        postcode
+        telephone
+        country {
+          code
+          label
+        }
+        __typename
+        customer_notes
+      }
+    }
+  }
+}
+QUERY;
+        $response = $this->graphQlMutation($query, [], '', $this->getHeaderMap());
+        $this->graphQlMutation(
+            $this->getSetShippingMethodsQuery($maskedQuoteId, 'flatrate', 'flatrate'),
+            [],
+            '',
+            $this->getHeaderMap()
+        );
+        $this->graphQlMutation(
+            $this->getSetPaymentMethodQuery(
+                $maskedQuoteId,
+                'checkmo'
+            ),
+            [],
+            '',
+            $this->getHeaderMap()
+        );
+        $this->graphQlMutation(
+            $this->getPlaceOrderQuery($maskedQuoteId),
+            [],
+            '',
+            $this->getHeaderMap()
+        );
+        $customer = $this->customerRepository->get('customer@example.com');
+        $searchCriteria = $this->searchCriteriaBuilder->addFilter('parent_id', $customer->getId())->create();
+        $addresses = $this->customerAddressRepository->getList($searchCriteria)->getItems();
+
+        $this->assertCount(1, $addresses);
+        $this->assertArrayHasKey('cart', $response['setShippingAddressesOnCart']);
+
+        $cartResponse = $response['setShippingAddressesOnCart']['cart'];
+        $this->assertArrayHasKey('shipping_addresses', $cartResponse);
         $shippingAddressResponse = current($cartResponse['shipping_addresses']);
         $this->assertNewShippingAddressFields($shippingAddressResponse);
 
@@ -1093,5 +1285,89 @@ QUERY;
         $quote->setCustomerId($customerId);
         $this->quoteResource->save($quote);
         return $this->quoteIdToMaskedId->execute((int)$quote->getId());
+    }
+
+    /**
+     * @param string $maskedQuoteId
+     * @param string $shippingMethodCode
+     * @param string $shippingCarrierCode
+     * @return string
+     */
+    private function getSetShippingMethodsQuery(
+        string $maskedQuoteId,
+        string $shippingMethodCode,
+        string $shippingCarrierCode
+    ): string {
+        return <<<QUERY
+mutation {
+  setShippingMethodsOnCart(input:
+    {
+      cart_id: "$maskedQuoteId",
+      shipping_methods: [{
+        carrier_code: "$shippingCarrierCode"
+        method_code: "$shippingMethodCode"
+      }]
+    }) {
+    cart {
+      shipping_addresses {
+        selected_shipping_method {
+          carrier_code
+          method_code
+          carrier_title
+          method_title
+          amount {
+            value
+            currency
+          }
+        }
+      }
+    }
+  }
+}
+QUERY;
+    }
+
+    /**
+     * @param string $maskedQuoteId
+     * @param string $methodCode
+     * @return string
+     */
+    private function getSetPaymentMethodQuery(
+        string $maskedQuoteId,
+        string $methodCode
+    ) : string {
+        return <<<QUERY
+mutation {
+  setPaymentMethodOnCart(input: {
+      cart_id: "$maskedQuoteId"
+      payment_method: {
+          code: "$methodCode"
+      }
+  }) {
+    cart {
+      selected_payment_method {
+        code
+      }
+    }
+  }
+}
+QUERY;
+    }
+
+    /**
+     * @param string $maskedQuoteId
+     * @return string
+     */
+    private function getPlaceOrderQuery(string $maskedQuoteId): string
+    {
+        return <<<QUERY
+mutation {
+  placeOrder(input: {cart_id: "{$maskedQuoteId}"}) {
+    order {
+      order_number
+    }
+  }
+}
+QUERY;
     }
 }
