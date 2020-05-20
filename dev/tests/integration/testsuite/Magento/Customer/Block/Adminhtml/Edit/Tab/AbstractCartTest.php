@@ -26,7 +26,7 @@ use PHPUnit\Framework\TestCase;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class AbstractCartTest extends TestCase
+abstract class AbstractCartTest extends TestCase
 {
     const CUSTOMER_ID_VALUE = 1234;
 

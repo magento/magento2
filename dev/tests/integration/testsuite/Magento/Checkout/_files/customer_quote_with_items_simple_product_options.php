@@ -22,7 +22,6 @@ use Magento\TestFramework\ObjectManager;
 
 require __DIR__ . '/../../Catalog/_files/product_with_options.php';
 require __DIR__ . '/../../Customer/_files/customer_with_uk_address.php';
-require __DIR__ . '/ValidatorFileMock.php';
 
 /** @var ObjectManager $objectManager */
 $objectManager = Bootstrap::getObjectManager();
@@ -94,9 +93,9 @@ $requestInfo = $objectManager->create(DataObject::class);
 
 foreach ($itemsOptions as $itemOptions) {
     $requestInfo->setData(['qty' => 1, 'options' => $itemOptions]);
-    //$requestInfo = new DataObject(['qty' => 1, 'options' => $itemOptions]);
     $product = clone $product;
     $quote->addProduct($product, $requestInfo);
 }
 
 $quoteRepository->save($quote);
+$objectManager->removeSharedInstance(ValidatorFile::class);
