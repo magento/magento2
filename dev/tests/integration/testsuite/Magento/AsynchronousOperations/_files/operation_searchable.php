@@ -22,6 +22,13 @@ $bulks = [
         'uuid' => 'bulk-uuid-searchable-6',
         'user_id' => 1,
         'description' => 'Bulk Description',
+        'operation_count' => 6,
+        'start_time' => '2009-10-10 00:00:00',
+    ],
+    'not_started' => [
+        'uuid' => 'bulk-uuid-searchable-7',
+        'user_id' => 1,
+        'description' => 'Bulk Description',
         'operation_count' => 3,
         'start_time' => '2009-10-10 00:00:00',
     ],
@@ -67,7 +74,15 @@ $operations = [
         'status' => OperationInterface::STATUS_TYPE_OPEN,
         'error_code' => null,
         'result_message' => '',
-    ]
+    ],
+    [
+        'bulk_uuid' => 'bulk-uuid-searchable-6',
+        'topic_name' => 'topic-5',
+        'serialized_data' => json_encode(['entity_id' => 5]),
+        'status' => OperationInterface::STATUS_TYPE_REJECTED,
+        'error_code' => null,
+        'result_message' => '',
+    ],
 ];
 
 $bulkQuery = "INSERT INTO {$bulkTable} (`uuid`, `user_id`, `description`, `operation_count`, `start_time`)"
