@@ -106,17 +106,16 @@ class Integer implements DbDefinitionProcessorInterface
     {
         $matches = [];
         if (preg_match(
-            '/^(?<type>big|small|tiny|medium)?int(\((?<padding>\d+)\))*/',
+            '/^(?<type>(?:big|small|tiny|medium)?int)(?:\((?<padding>\d+)\))?/',
             $data['definition'],
             $matches
         )) {
-            /**
-             * match[1] - prefix
-             * match[2] - padding with beaked, like (5) or (11)
-             * match[3] - padding, like 5 or 11
-             */
-            if (count($matches) >= 4) {
-                //Use shortcut for mediuminteger
+            $data['padding'] = null;
+            // we have an agreement that tinyint(1) is Boolean
+            if (isset($matches['padding'])
+                && $matches['type'] === 'tinyint'
+                && $matches['padding'] === '1'
+            ) {
                 $data['padding'] = $matches['padding'];
             }
             $data = $this->unsigned->fromDefinition($data);
