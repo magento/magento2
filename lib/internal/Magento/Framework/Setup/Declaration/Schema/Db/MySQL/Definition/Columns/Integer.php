@@ -87,13 +87,6 @@ class Integer implements DbDefinitionProcessorInterface
             $column->getType()
         );
 
-        if ($column->getPadding() !== null) {
-            $definition .= sprintf(
-                '(%s)',
-                $column->getPadding()
-            );
-        }
-
         return sprintf(
             '%s %s %s %s %s %s',
             $definition,
