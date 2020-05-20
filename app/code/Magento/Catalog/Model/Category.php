@@ -674,13 +674,17 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
 
                 $isRelativeUrl = substr($image, 0, 1) === '/';
 
-                $mediaBaseUrl = $store->getBaseUrl(
-                    \Magento\Framework\UrlInterface::URL_TYPE_MEDIA
-                );
-
                 if ($isRelativeUrl) {
-                    $url = $image;
+                    $mediaBaseUrl = $store->getBaseUrl(
+                        \Magento\Framework\UrlInterface::URL_TYPE_WEB
+                    );
+
+                    $url = $mediaBaseUrl . ltrim($image, '/');
                 } else {
+                    $mediaBaseUrl = $store->getBaseUrl(
+                        \Magento\Framework\UrlInterface::URL_TYPE_MEDIA
+                    );
+
                     $url = $mediaBaseUrl
                         . ltrim(\Magento\Catalog\Model\Category\FileInfo::ENTITY_MEDIA_PATH, '/')
                         . '/'
