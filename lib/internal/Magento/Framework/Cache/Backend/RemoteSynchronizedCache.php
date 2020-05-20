@@ -198,39 +198,28 @@ class RemoteSynchronizedCache extends \Zend_Cache_Backend implements \Zend_Cache
     public function load($id, $doNotTestCacheValidity = false)
     {
         $localData = $this->local->load($id);
-        $remoteData = false;
-        $versionCheckFailed = false;
 
-        if (false === $localData) {
-            $remoteData = $this->remote->load($id);
-
-            if (false === $remoteData) {
-                return false;
-            }
-        } else {
-            if ($versionCheckFailed = ($this->getDataVersion($localData) !== $this->loadRemoteDataVersion($id))) {
-                $remoteData = $this->remote->load($id);
-
-                if (!$this->_options['use_stale_cache']) {
-                    $localData = false;
-                }
+        if ($localData) {
+            if ($this->getDataVersion($localData) === $this->loadRemoteDataVersion($id)) {
+                return $localData;
             }
         }
 
-        if ($remoteData !== false) {
+        $remoteData = $this->remote->load($id);
+        if ($remoteData) {
             $this->local->save($remoteData, $id);
-            $localData = $remoteData;
-        } elseif ($this->_options['use_stale_cache'] && $localData !== false && $versionCheckFailed) {
+
+            return $remoteData;
+        } elseif ($localData && $this->_options['use_stale_cache']) {
             if ($this->lock($id)) {
                 return false;
             } else {
-                $this->notifier = $this->notifier ??
-                    ObjectManager::getInstance()->get(CompositeStaleCacheNotifier::class);
-                $this->notifier->cacheLoaderIsUsingStaleCache();
+                $this->notifyStaleCache();
+                return $localData;
             }
         }
 
-        return $localData;
+        return false;
     }
 
     /**
@@ -424,7 +413,7 @@ class RemoteSynchronizedCache extends \Zend_Cache_Backend implements \Zend_Cache
      */
     private function unlockAll()
     {
-        foreach ($this->lockList as $id => $ttl) {
+        foreach ($this->lockList as $id) {
             $this->unlock($id);
         }
     }
@@ -460,5 +449,12 @@ class RemoteSynchronizedCache extends \Zend_Cache_Backend implements \Zend_Cache
         }
 
         return $sign;
+    }
+
+    private function notifyStaleCache(): void
+    {
+        $this->notifier = $this->notifier ??
+            ObjectManager::getInstance()->get(CompositeStaleCacheNotifier::class);
+        $this->notifier->cacheLoaderIsUsingStaleCache();
     }
 }
