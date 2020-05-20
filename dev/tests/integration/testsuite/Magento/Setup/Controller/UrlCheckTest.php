@@ -6,8 +6,8 @@
 namespace Magento\Setup\Controller;
 
 use Magento\TestFramework\Helper\Bootstrap;
-use Zend\Stdlib\RequestInterface as Request;
-use Zend\View\Model\JsonModel;
+use Laminas\Stdlib\RequestInterface as Request;
+use Laminas\View\Model\JsonModel;
 
 class UrlCheckTest extends \PHPUnit\Framework\TestCase
 {
@@ -16,7 +16,7 @@ class UrlCheckTest extends \PHPUnit\Framework\TestCase
      */
     private $controller;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->controller = Bootstrap::getObjectManager()->create(UrlCheck::class);
     }

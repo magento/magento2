@@ -292,6 +292,8 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
      */
     public function getUseSession()
     {
+        trigger_error('Session ID is not used as URL parameter anymore.', E_USER_DEPRECATED);
+
         return false;
     }
 
@@ -424,8 +426,10 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
      */
     public function setScope($params)
     {
-        $this->setData('scope', $this->_scopeResolver->getScope($params));
-        $this->getRouteParamsResolver()->setScope($this->_scopeResolver->getScope($params));
+        $scope = $this->_scopeResolver->getScope($params);
+        $this->setData('scope', $scope);
+        $this->getRouteParamsResolver()->setScope($scope);
+
         return $this;
     }
 
@@ -754,12 +758,12 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
     }
 
     /**
-     * Add session param
-     *
-     * @return \Magento\Framework\UrlInterface
+     * @inheritDoc
      */
     public function addSessionParam()
     {
+        trigger_error('Session ID is not used as URL parameter anymore.', E_USER_DEPRECATED);
+
         return $this;
     }
 

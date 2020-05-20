@@ -14,6 +14,8 @@ use Magento\Framework\Filesystem;
 use Magento\ImportExport\Model\Import as ImportModel;
 use Magento\ImportExport\Model\Import\Adapter as ImportAdapter;
 use Magento\TestFramework\Helper\Bootstrap;
+use Magento\Framework\Indexer\StateInterface;
+use ReflectionClass;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -85,9 +87,14 @@ class AddressTest extends \PHPUnit\Framework\TestCase
     protected $customerResource;
 
     /**
+     * @var \Magento\Customer\Model\Indexer\Processor
+     */
+    private $indexerProcessor;
+
+    /**
      * Init new instance of address entity adapter
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         /** @var \Magento\Catalog\Model\ResourceModel\Product $productResource */
         $this->customerResource = Bootstrap::getObjectManager()->get(
@@ -96,53 +103,9 @@ class AddressTest extends \PHPUnit\Framework\TestCase
         $this->_entityAdapter = Bootstrap::getObjectManager()->create(
             $this->_testClassName
         );
-    }
-
-    /**
-     * Test constructor
-     *
-     * @magentoDataFixture Magento/Customer/_files/import_export/customer_with_addresses.php
-     */
-    public function testConstruct()
-    {
-        // check entity table
-        $this->assertAttributeInternalType(
-            'string',
-            '_entityTable',
-            $this->_entityAdapter,
-            'Entity table must be a string.'
+        $this->indexerProcessor = Bootstrap::getObjectManager()->create(
+            \Magento\Customer\Model\Indexer\Processor::class
         );
-        $this->assertAttributeNotEmpty('_entityTable', $this->_entityAdapter, 'Entity table must not be empty');
-
-        // check message templates
-        $this->assertAttributeInternalType(
-            'array',
-            'errorMessageTemplates',
-            $this->_entityAdapter,
-            'Templates must be an array.'
-        );
-        $this->assertAttributeNotEmpty('errorMessageTemplates', $this->_entityAdapter, 'Templates must not be empty');
-
-        // check attributes
-        $this->assertAttributeInternalType(
-            'array',
-            '_attributes',
-            $this->_entityAdapter,
-            'Attributes must be an array.'
-        );
-        $this->assertAttributeNotEmpty('_attributes', $this->_entityAdapter, 'Attributes must not be empty');
-
-        // check country regions and regions
-        $this->assertAttributeInternalType(
-            'array',
-            '_countryRegions',
-            $this->_entityAdapter,
-            'Country regions must be an array.'
-        );
-        $this->assertAttributeNotEmpty('_countryRegions', $this->_entityAdapter, 'Country regions must not be empty');
-
-        $this->assertAttributeInternalType('array', '_regions', $this->_entityAdapter, 'Regions must be an array.');
-        $this->assertAttributeNotEmpty('_regions', $this->_entityAdapter, 'Regions must not be empty');
     }
 
     /**
@@ -353,6 +316,7 @@ class AddressTest extends \PHPUnit\Framework\TestCase
         $requiredAttributes[] = $keyAttribute;
         foreach (['update', 'remove'] as $action) {
             foreach ($this->_updateData[$action] as $attributes) {
+                // phpcs:ignore Magento2.Performance.ForeachArrayMerge
                 $requiredAttributes = array_merge($requiredAttributes, array_keys($attributes));
             }
         }
@@ -493,5 +457,30 @@ class AddressTest extends \PHPUnit\Framework\TestCase
         //Import
         $imported = $this->_entityAdapter->importData();
         $this->assertTrue($imported, 'Must be successfully imported');
+    }
+
+    /**
+     * Test customer indexer gets invalidated after import when Update on Schedule mode is set
+     *
+     * @magentoDbIsolation enabled
+     */
+    public function testCustomerIndexer(): void
+    {
+        $file = __DIR__ . '/_files/address_import_update.csv';
+        $filesystem = Bootstrap::getObjectManager()->create(Filesystem::class);
+        $directoryWrite = $filesystem->getDirectoryWrite(DirectoryList::ROOT);
+        $source = new \Magento\ImportExport\Model\Import\Source\Csv($file, $directoryWrite);
+        $this->_entityAdapter
+            ->setParameters(['behavior' => ImportModel::BEHAVIOR_ADD_UPDATE])
+            ->setSource($source)
+            ->validateData()
+            ->hasToBeTerminated();
+        $this->indexerProcessor->getIndexer()->reindexAll();
+        $statusBeforeImport = $this->indexerProcessor->getIndexer()->getStatus();
+        $this->indexerProcessor->getIndexer()->setScheduled(true);
+        $this->_entityAdapter->importData();
+        $statusAfterImport = $this->indexerProcessor->getIndexer()->getStatus();
+        $this->assertEquals(StateInterface::STATUS_VALID, $statusBeforeImport);
+        $this->assertEquals(StateInterface::STATUS_INVALID, $statusAfterImport);
     }
 }

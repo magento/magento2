@@ -23,7 +23,7 @@ class NewsletterTemplateTest extends \Magento\TestFramework\TestCase\AbstractBac
     /**
      * @inheritDoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $formKey = $this->_objectManager->get(\Magento\Framework\Data\Form\FormKey::class);
@@ -36,7 +36,7 @@ class NewsletterTemplateTest extends \Magento\TestFramework\TestCase\AbstractBac
             'text' => 'Template Content',
             'form_key' => $this->formKey,
         ];
-        $this->getRequest()->setPostValue($post)->setMethod(\Zend\Http\Request::METHOD_POST);
+        $this->getRequest()->setPostValue($post)->setMethod(\Laminas\Http\Request::METHOD_POST);
         $this->model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             \Magento\Newsletter\Model\Template::class
         );
@@ -45,7 +45,7 @@ class NewsletterTemplateTest extends \Magento\TestFramework\TestCase\AbstractBac
     /**
      * @inheritDoc
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         /**
          * Unset messages
@@ -62,11 +62,19 @@ class NewsletterTemplateTest extends \Magento\TestFramework\TestCase\AbstractBac
     public function testSaveActionCreateNewTemplateAndVerifySuccessMessage()
     {
         $this->getRequest()->setParam('id', $this->model->getId());
+        $this->getRequest()->setParam('is_legacy', 1);
+
         $this->dispatch('backend/newsletter/template/save');
+
         /**
          * Check that errors was generated and set to session
          */
         $this->assertSessionMessages($this->isEmpty(), \Magento\Framework\Message\MessageInterface::TYPE_ERROR);
+
+        $this->model->load($this->getRequest()->getPostValue('code'), 'template_code');
+
+        $this->assertEquals(0, $this->model->getIsLegacy());
+
         /**
          * Check that success message is set
          */
@@ -90,12 +98,18 @@ class NewsletterTemplateTest extends \Magento\TestFramework\TestCase\AbstractBac
         $this->assertEquals('some_unique_code', $this->model->getTemplateCode());
 
         $this->getRequest()->setParam('id', $this->model->getId());
+        $this->getRequest()->setParam('is_legacy', 1);
+
         $this->dispatch('backend/newsletter/template/save');
 
         /**
          * Check that errors was generated and set to session
          */
         $this->assertSessionMessages($this->isEmpty(), \Magento\Framework\Message\MessageInterface::TYPE_ERROR);
+
+        $this->model->load($this->getRequest()->getPostValue('code'), 'template_code');
+
+        $this->assertEquals(0, $this->model->getIsLegacy());
 
         /**
          * Check that success message is set
@@ -141,7 +155,7 @@ class NewsletterTemplateTest extends \Magento\TestFramework\TestCase\AbstractBac
         // Loading by code, since ID will vary. template_code is not actually used to load anywhere else.
         $this->model->load('some_unique_code', 'template_code');
 
-        $this->getRequest()->setMethod(\Zend\Http\Request::METHOD_GET)->setParam('id', $this->model->getId());
+        $this->getRequest()->setMethod(\Laminas\Http\Request::METHOD_GET)->setParam('id', $this->model->getId());
         $this->dispatch('backend/newsletter/template/save');
 
         $this->assertEquals(404, $this->getResponse()->getStatusCode());

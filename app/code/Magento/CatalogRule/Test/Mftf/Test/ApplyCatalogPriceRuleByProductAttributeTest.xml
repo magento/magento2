@@ -21,7 +21,7 @@
             </skip>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="login"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
 
             <createData entity="ApiCategory" stepKey="createFirstCategory"/>
             <createData entity="ApiSimpleProduct" stepKey="createFirstProduct">
@@ -83,7 +83,7 @@
                 <requiredEntity createDataKey="createConfigProduct"/>
                 <requiredEntity createDataKey="createConfigChildProduct2"/>
             </createData>
-
+            <magentoCron stepKey="runCronIndex" groups="index"/>
         </before>
         <after>
 

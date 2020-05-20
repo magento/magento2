@@ -111,11 +111,11 @@ namespace Magento\Framework\Session {
         private $request;
 
         /**
-         * @var State|\PHPUnit_Framework_MockObject_MockObject
+         * @var State|\PHPUnit\Framework\MockObject\MockObject
          */
         private $appState;
 
-        protected function setUp()
+        protected function setUp(): void
         {
             $this->sessionName = 'frontEndSession';
 
@@ -141,7 +141,7 @@ namespace Magento\Framework\Session {
             $this->request = $this->objectManager->get(\Magento\Framework\App\RequestInterface::class);
         }
 
-        protected function tearDown()
+        protected function tearDown(): void
         {
             global $mockPHPFunctions;
             $mockPHPFunctions = false;
@@ -225,22 +225,6 @@ namespace Magento\Framework\Session {
             $this->assertEquals('test', $this->model->getSessionId());
         }
 
-        /**
-         * @magentoConfigFixture current_store web/session/use_frontend_sid 1
-         */
-        public function testSetSessionIdFromParam()
-        {
-            $this->initializeModel();
-            $this->appState->expects($this->any())
-                ->method('getAreaCode')
-                ->willReturn(\Magento\Framework\App\Area::AREA_FRONTEND);
-            $currentId = $this->model->getSessionId();
-            $this->assertNotEquals('test_id', $this->model->getSessionId());
-            $this->request->getQuery()->set(SidResolverInterface::SESSION_ID_QUERY_PARAM, 'test-id');
-            $this->model->setSessionId($this->sidResolver->getSid($this->model));
-            $this->assertEquals($currentId, $this->model->getSessionId());
-        }
-
         public function testGetSessionIdForHost()
         {
             $this->initializeModel();
@@ -267,11 +251,12 @@ namespace Magento\Framework\Session {
         }
 
         /**
-         * @expectedException \Magento\Framework\Exception\SessionException
-         * @expectedExceptionMessage Area code not set: Area code must be set before starting a session.
          */
         public function testStartAreaNotSet()
         {
+            $this->expectException(\Magento\Framework\Exception\SessionException::class);
+            $this->expectExceptionMessage('Area code not set: Area code must be set before starting a session.');
+
             $scope = $this->objectManager->get(\Magento\Framework\Config\ScopeInterface::class);
             $appState = new \Magento\Framework\App\State($scope);
 
