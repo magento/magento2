@@ -4,7 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-use Magento\Braintree\Model\Ui\PayPal\ConfigProvider;
 use Magento\Config\Model\Config;
 use Magento\Framework\Encryption\EncryptorInterface;
 use Magento\TestFramework\Helper\Bootstrap;
@@ -22,9 +21,9 @@ $customerRegistry = Bootstrap::getObjectManager()->create(CustomerRegistry::clas
 $customer = $customerRegistry->retrieve(1);
 /** @var Config $config */
 $config = $objectManager->get(Config::class);
-$config->setDataByPath('payment/' . ConfigProvider::PAYPAL_CODE . '/active', 1);
+$config->setDataByPath('payment/payflowpro/active', 1);
 $config->save();
-$config->setDataByPath('payment/' . ConfigProvider::PAYPAL_VAULT_CODE . '/active', 1);
+$config->setDataByPath('payment/payflowpro_cc_vault/active', 1);
 $config->save();
 
 /** @var EncryptorInterface $encryptor */
@@ -34,7 +33,7 @@ $encryptor = $objectManager->get(EncryptorInterface::class);
 $paymentToken = $objectManager->create(PaymentToken::class);
 $paymentToken
     ->setCustomerId($customer->getId())
-    ->setPaymentMethodCode(ConfigProvider::PAYPAL_CODE)
+    ->setPaymentMethodCode('payflowpro')
     ->setType(AccountPaymentTokenFactory::TOKEN_TYPE_ACCOUNT)
     ->setGatewayToken('mx29vk')
     ->setPublicHash($encryptor->hash($customer->getId()))

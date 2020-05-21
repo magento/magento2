@@ -206,4 +206,6 @@ return [
     ['Magento\AuthorizenetAcceptjs'],
     ['Magento\AuthorizenetCardinal'],
     ['Magento\AuthorizenetGraphQl'],
+    ['Magento\Braintree'],
+    ['Magento\BraintreeGraphQl'],
 ];
