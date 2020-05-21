@@ -62,11 +62,14 @@ class RemoveQuoteItemsTest extends TestCase
      */
     public function testDeleteProduct(): void
     {
-        $quoteItem = $this->getQuoteByReservedOrderId->execute('test_order_with_simple_product_without_address')
-                ->getItems()[0] ?? null;
+        $quote = $this->getQuoteByReservedOrderId->execute('test_order_with_simple_product_without_address');
+        $this->assertNotNull($quote);
+        $quoteItems = $quote->getItems();
+        $quoteItem = current($quoteItems);
         $this->assertNotNull($quoteItem);
         $this->productResoure->delete($quoteItem->getProduct());
         $quote = $this->getQuoteByReservedOrderId->execute('test_order_with_simple_product_without_address');
+        $this->assertNotNull($quote);
         $this->assertEmpty($quote->getItems());
     }
 }

@@ -8,7 +8,7 @@ declare(strict_types=1);
 namespace Magento\Catalog\Model;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
-use Magento\Catalog\Model\Product\Media\Config;
+use Magento\Catalog\Model\Product\Media\ConfigInterface;
 use Magento\Catalog\Model\ResourceModel\Product as ProductResource;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\App\Filesystem\DirectoryList;
@@ -66,7 +66,7 @@ class ProductRepositoryTest extends TestCase
     private $layoutManager;
 
     /**
-     * @var Config
+     * @var ConfigInterface
      */
     private $mediaConfig;
 
@@ -74,6 +74,11 @@ class ProductRepositoryTest extends TestCase
      * @var WriteInterface
      */
     private $mediaDirectory;
+
+    /**
+     * @var array
+     */
+    private $productSkusToDelete = [];
 
     /**
      * @inheritdoc
@@ -89,9 +94,25 @@ class ProductRepositoryTest extends TestCase
         $this->productFactory = $this->objectManager->get(ProductFactory::class);
         $this->productResource = $this->objectManager->get(ProductResource::class);
         $this->layoutManager = $this->objectManager->get(ProductLayoutUpdateManager::class);
-        $this->mediaConfig = $this->objectManager->get(Config::class);
+        $this->mediaConfig = $this->objectManager->get(ConfigInterface::class);
         $this->mediaDirectory = $this->objectManager->get(Filesystem::class)
             ->getDirectoryWrite(DirectoryList::MEDIA);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    protected function tearDown()
+    {
+        foreach ($this->productSkusToDelete as $productSku) {
+            try {
+                $this->productRepository->deleteById($productSku);
+            } catch (NoSuchEntityException $e) {
+                //Product already removed
+            }
+        }
+
+        parent::tearDown();
     }
 
     /**
@@ -122,7 +143,6 @@ class ProductRepositoryTest extends TestCase
     {
         $expectedSku = 'simple';
         $product = $this->productRepository->get($sku);
-        $this->assertNotEmpty($product);
         $this->assertEquals($expectedSku, $product->getSku());
     }
 
@@ -152,8 +172,7 @@ class ProductRepositoryTest extends TestCase
      */
     public function testSaveProductWithGalleryImage(): void
     {
-        $product = $this->productFactory->create();
-        $product->load(1);
+        $product = $this->productRepository->get('simple');
         $path = $this->mediaConfig->getBaseMediaPath() . '/magento_image.jpg';
         $absolutePath = $this->mediaDirectory->getAbsolutePath() . $path;
         $product->addImageToMediaGallery(
@@ -193,10 +212,10 @@ class ProductRepositoryTest extends TestCase
         $this->productResource->load($initialProduct, $productId);
         $initialProduct->setSku($newSku);
         $this->productRepository->save($initialProduct);
+        $this->productSkusToDelete[] = $newSku;
         $updatedProduct = $this->productFactory->create();
         $this->productResource->load($updatedProduct, $productId);
         $this->assertSame($newSku, $updatedProduct->getSku());
-        $this->productRepository->delete($updatedProduct);
     }
 
     /**
@@ -229,11 +248,23 @@ class ProductRepositoryTest extends TestCase
      */
     public function testDeleteByIdSimpleProduct(): void
     {
-        $result = $this->productRepository->deleteById('simple-1');
+        $productSku = 'simple-1';
+        $result = $this->productRepository->deleteById($productSku);
         $this->assertTrue($result);
+        $this->assertProductNotExist($productSku);
+    }
+
+    /**
+     * Assert that product does not exist.
+     *
+     * @param string $sku
+     * @return void
+     */
+    private function assertProductNotExist(string $sku): void
+    {
         $this->expectExceptionObject(new NoSuchEntityException(
             __("The product that was requested doesn't exist. Verify the product and try again.")
         ));
-        $this->productRepository->get('simple-1');
+        $this->productRepository->get($sku);
     }
 }

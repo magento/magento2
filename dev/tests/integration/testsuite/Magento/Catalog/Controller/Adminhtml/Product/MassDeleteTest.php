@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Catalog\Controller\Adminhtml\Product;
 
+use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Framework\App\Request\Http as HttpRequest;
 use Magento\Framework\Message\MessageInterface;
 use Magento\TestFramework\TestCase\AbstractBackendController;
@@ -20,6 +21,20 @@ use Magento\TestFramework\TestCase\AbstractBackendController;
  */
 class MassDeleteTest extends AbstractBackendController
 {
+    /** @var ProductRepositoryInterface */
+    protected $productRepository;
+
+    /**
+     * @inheritdoc
+     */
+    protected function setUp()
+    {
+        parent::setUp();
+
+        $this->productRepository = $this->_objectManager->get(ProductRepositoryInterface::class);
+        $this->productRepository->cleanCache();
+    }
+
     /**
      * @magentoDataFixture Magento/Catalog/_files/multiple_products.php
      *
@@ -29,11 +44,7 @@ class MassDeleteTest extends AbstractBackendController
     {
         $productIds = [10, 11, 12];
         $this->dispatchMassDeleteAction($productIds);
-        $this->assertSessionMessages(
-            $this->equalTo([(string)__('A total of %1 record(s) have been deleted.', count($productIds))]),
-            MessageInterface::TYPE_SUCCESS
-        );
-        $this->assertRedirect($this->stringContains('backend/catalog/product/index'));
+        $this->assertSuccessfulDeleteProducts(count($productIds));
     }
 
     /**
@@ -47,12 +58,41 @@ class MassDeleteTest extends AbstractBackendController
     }
 
     /**
+     * @return void
+     */
+    public function testMassDeleteWithoutProductIds(): void
+    {
+        $this->markTestSkipped('Test is blocked by issue MC-34495');
+        $this->dispatchMassDeleteAction();
+        $this->assertSessionMessages(
+            $this->equalTo('An item needs to be selected. Select and try again.'),
+            MessageInterface::TYPE_ERROR
+        );
+        $this->assertRedirect($this->stringContains('backend/catalog/product/index'));
+    }
+
+    /**
+     * Assert successful delete products.
+     *
+     * @param int $productCount
+     * @return void
+     */
+    protected function assertSuccessfulDeleteProducts(int $productCount): void
+    {
+        $this->assertSessionMessages(
+            $this->equalTo([(string)__('A total of %1 record(s) have been deleted.', $productCount)]),
+            MessageInterface::TYPE_SUCCESS
+        );
+        $this->assertRedirect($this->stringContains('backend/catalog/product/index'));
+    }
+
+    /**
      * Dispatch mass delete action.
      *
      * @param array $productIds
      * @return void
      */
-    private function dispatchMassDeleteAction(array $productIds): void
+    protected function dispatchMassDeleteAction(array $productIds = []): void
     {
         $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
         $this->getRequest()->setParams(['selected' => $productIds, 'namespace' => 'product_listing']);
