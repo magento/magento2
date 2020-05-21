@@ -107,6 +107,7 @@ class BlockByIdentifier extends AbstractBlock implements IdentityInterface
      *
      * @return BlockInterface|BlockModel
      * @throws \InvalidArgumentException
+     * @throws NoSuchEntityException
      */
     private function getCmsBlock(): BlockInterface
     {
@@ -119,6 +120,12 @@ class BlockByIdentifier extends AbstractBlock implements IdentityInterface
                 (string)$this->getIdentifier(),
                 $this->getCurrentStoreId()
             );
+
+            if (!$this->cmsBlock->isActive()) {
+                throw new NoSuchEntityException(
+                    __('The CMS block with identifier "%identifier" is not enabled.', $this->getIdentifier())
+                );
+            }
         }
 
         return $this->cmsBlock;
