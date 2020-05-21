@@ -13,6 +13,7 @@ use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Category;
 use Magento\Catalog\Model\CategoryLinkManagement;
+use Magento\Catalog\Model\ResourceModel\Category\Collection;
 use Magento\Eav\Model\Config;
 use Magento\TestFramework\ObjectManager;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
@@ -462,7 +463,7 @@ QUERY;
     }
 
     /**
-     * Full text search for Products and then filter the results by custom attribute ( sort is by defaulty by relevance)
+     * Full text search for Products and then filter the results by custom attribute (default sort is relevance)
      *
      * @magentoApiDataFixture Magento/Catalog/_files/products_with_layered_navigation_custom_attribute.php
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
@@ -1113,6 +1114,81 @@ QUERY;
         $this->assertArrayHasKey('total_count', $response['products']);
         $this->assertProductItems($filteredProducts, $response);
         $this->assertEquals(4, $response['products']['page_info']['page_size']);
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Catalog/_files/category_with_three_products.php
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+     */
+    public function testSortByPosition()
+    {
+        // Get category ID for filtering
+        /** @var Collection $categoryCollection */
+        $categoryCollection = Bootstrap::getObjectManager()->get(Collection::class);
+        $category = $categoryCollection->addFieldToFilter('name', 'Category 999')->getFirstItem();
+        $categoryId = $category->getId();
+
+        $queryAsc = <<<QUERY
+{
+  products(filter: {category_id: {eq: "$categoryId"}}, sort: {position: ASC}) {
+    total_count
+    items {
+      sku
+      name
+    }
+  }
+}
+QUERY;
+        $resultAsc = $this->graphQlQuery($queryAsc);
+        $this->assertArrayNotHasKey('errors', $resultAsc);
+        $productsAsc = array_column($resultAsc['products']['items'], 'sku');
+        $expectedProductsAsc = ['simple1000', 'simple1001', 'simple1002'];
+        $this->assertEquals($expectedProductsAsc, $productsAsc);
+
+        $queryDesc = <<<QUERY
+{
+  products(filter: {category_id: {eq: "$categoryId"}}, sort: {position: DESC}) {
+    total_count
+    items {
+      sku
+      name
+    }
+  }
+}
+QUERY;
+        $resultDesc = $this->graphQlQuery($queryDesc);
+        $this->assertArrayNotHasKey('errors', $resultDesc);
+        $productsDesc = array_column($resultDesc['products']['items'], 'sku');
+        $expectedProductsDesc = array_reverse($expectedProductsAsc);
+        $this->assertEquals($expectedProductsDesc, $productsDesc);
+
+        //revert position
+        $productPositions = $category->getProductsPosition();
+        $count = 3;
+        foreach ($productPositions as $productId => $position) {
+            $productPositions[$productId] = $count;
+            $count--;
+        }
+
+        $category->setPostedProducts($productPositions);
+        $category->save();
+
+        $queryDesc = <<<QUERY
+{
+  products(filter: {category_id: {eq: "$categoryId"}}, sort: {position: DESC}) {
+    total_count
+    items {
+      sku
+      name
+    }
+  }
+}
+QUERY;
+        $resultDesc = $this->graphQlQuery($queryDesc);
+        $this->assertArrayNotHasKey('errors', $resultDesc);
+        $productsDesc = array_column($resultDesc['products']['items'], 'sku');
+        $expectedProductsDesc = $expectedProductsAsc;
+        $this->assertEquals($expectedProductsDesc, $productsDesc);
     }
 
     /**
