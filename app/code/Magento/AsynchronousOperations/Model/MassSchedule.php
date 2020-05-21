@@ -16,7 +16,6 @@ use Magento\Framework\Bulk\BulkManagementInterface;
 use Magento\Framework\DataObject\IdentityGeneratorInterface;
 use Magento\Framework\Encryption\Encryptor;
 use Magento\AsynchronousOperations\Api\SaveMultipleOperationsInterface;
-use Magento\AsynchronousOperations\Api\GetAllOperationsInterface;
 use Magento\Framework\Exception\BulkException;
 use Magento\Framework\Exception\LocalizedException;
 use Psr\Log\LoggerInterface;
@@ -74,9 +73,9 @@ class MassSchedule
     private $saveMultipleOperations;
 
     /**
-     * @var GetAllOperationsInterface
+     * @var GetAllOperationIds
      */
-    private $getAllOperations;
+    private $getAllOperationIds;
 
     /**
      * Initialize dependencies.
@@ -90,7 +89,7 @@ class MassSchedule
      * @param UserContextInterface $userContext
      * @param Encryptor $encryptor
      * @param SaveMultipleOperationsInterface $saveMultipleOperations
-     * @param GetAllOperationsInterface $getAllOperations
+     * @param GetAllOperationIds $getAllOperationIds
      */
     public function __construct(
         IdentityGeneratorInterface $identityService,
@@ -102,7 +101,7 @@ class MassSchedule
         UserContextInterface $userContext,
         Encryptor $encryptor,
         SaveMultipleOperationsInterface $saveMultipleOperations,
-        GetAllOperationsInterface $getAllOperations
+        GetAllOperationIds $getAllOperationIds
     ) {
         $this->identityService = $identityService;
         $this->itemStatusInterfaceFactory = $itemStatusInterfaceFactory;
@@ -113,7 +112,7 @@ class MassSchedule
         $this->userContext = $userContext;
         $this->encryptor = $encryptor;
         $this->saveMultipleOperations = $saveMultipleOperations;
-        $this->getAllOperations = $getAllOperations;
+        $this->getAllOperationIds = $getAllOperationIds;
     }
 
     /**
@@ -177,7 +176,10 @@ class MassSchedule
         }
 
         $this->saveMultipleOperations->execute($operations);
-        $operations = $this->getAllOperations->execute($groupId);
+        $operationIds = $this->getAllOperationIds->execute($groupId);
+        foreach ($operations as $index => $operation) {
+            $operation->setId($operationIds[$index]['id']);
+        }
         if (!$this->bulkManagement->scheduleBulk($groupId, $operations, $bulkDescription, $userId)) {
             throw new LocalizedException(
                 __('Something went wrong while processing the request.')
