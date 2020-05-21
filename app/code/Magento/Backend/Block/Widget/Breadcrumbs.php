@@ -54,8 +54,7 @@ class Breadcrumbs extends \Magento\Backend\Block\Template
      */
     protected function _beforeToHtml()
     {
-        // TODO - Moved to Beta 2, no breadcrumbs displaying in Beta 1
-        // $this->assign('links', $this->_links);
+        $this->assign('links', $this->_links);
         return parent::_beforeToHtml();
     }
 }
