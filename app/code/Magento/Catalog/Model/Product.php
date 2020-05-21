@@ -2030,9 +2030,11 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      */
     public function setOptions(array $options = null)
     {
-        foreach ($options as $option) {
-            if ($option instanceof \Magento\Catalog\Api\Data\ProductCustomOptionInterface) {
-                $option->setProduct($this);
+        if ($options) {
+            foreach ($options as $option) {
+                if ($option instanceof \Magento\Catalog\Api\Data\ProductCustomOptionInterface) {
+                    $option->setProduct($this);
+                }
             }
         }
         $this->setData('options', $options);

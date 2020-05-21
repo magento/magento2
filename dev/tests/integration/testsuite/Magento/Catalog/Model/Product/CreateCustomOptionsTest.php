@@ -230,7 +230,11 @@ class CreateCustomOptionsTest extends TestCase
      */
     public function testCreateOptionWithError(array $optionData, \Exception $expectedErrorObject): void
     {
-        $product = $this->productRepository->get('simple');
+        /**
+         * storeId == 0 required for 'error_option_without_title' test case.
+         * See \Magento\Catalog\Model\Product\Option\Validator\DefaultValidator::isValidOptionTitle.
+         */
+        $product = $this->productRepository->get('simple', false, 0);
         $createdOption = $this->customOptionFactory->create(['data' => $optionData]);
         $product->setOptions([$createdOption]);
         $this->expectExceptionObject($expectedErrorObject);
@@ -811,20 +815,6 @@ class CreateCustomOptionsTest extends TestCase
     public function productCustomOptionsWithErrorDataProvider(): array
     {
         return [
-            'error_option_without_product_sku' => [
-                [
-                    'record_id' => 0,
-                    'sort_order' => 1,
-                    'is_require' => 1,
-                    'sku' => 'test-option-title-1',
-                    'max_characters' => 50,
-                    'title' => 'Test option title 1',
-                    'type' => 'area',
-                    'price' => 10,
-                    'price_type' => 'fixed',
-                ],
-                new CouldNotSaveException(__('The ProductSku is empty. Set the ProductSku and try again.')),
-            ],
             'error_option_without_type' => [
                 [
                     'record_id' => 0,
