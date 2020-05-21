@@ -216,4 +216,32 @@
     <type name="Magento\CatalogSearch\Model\Indexer\Fulltext\Action\DataProvider">
         <plugin name="stockedProductsFilterPlugin" type="Magento\CatalogSearch\Model\Indexer\Plugin\StockedProductsFilterPlugin"/>
     </type>
+    <type name="Magento\CatalogSearch\Model\Indexer\Fulltext\Action\Full">
+        <arguments>
+            <!-- @deprecated parameter indexIteratorFactory has been deprecated and not in use now -->
+            <argument name="indexIteratorFactory" xsi:type="null" />
+        </arguments>
+    </type>
+    <type name="Magento\CatalogSearch\Model\ResourceModel\Advanced\Collection">
+        <arguments>
+            <!-- @deprecated parameter requestBuilder has been deprecated and not in use now -->
+            <argument name="requestBuilder" xsi:type="null" />
+            <!-- @deprecated parameter searchEngine has been deprecated and not in use now -->
+            <argument name="searchEngine" xsi:type="null" />
+            <!-- @deprecated parameter temporaryStorageFactory has been deprecated and not in use now -->
+            <argument name="temporaryStorageFactory" xsi:type="null" />
+        </arguments>
+    </type>
+    <type name="Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection">
+        <arguments>
+            <!-- @deprecated parameter catalogSearchData has been deprecated and not in use now -->
+            <argument name="catalogSearchData" xsi:type="null" />
+            <!-- @deprecated parameter requestBuilder has been deprecated and not in use now -->
+            <argument name="requestBuilder" xsi:type="null" />
+            <!-- @deprecated parameter searchEngine has been deprecated and not in use now -->
+            <argument name="searchEngine" xsi:type="null" />
+            <!-- @deprecated parameter temporaryStorageFactory has been deprecated and not in use now -->
+            <argument name="temporaryStorageFactory" xsi:type="null" />
+        </arguments>
+    </type>
 </config>
