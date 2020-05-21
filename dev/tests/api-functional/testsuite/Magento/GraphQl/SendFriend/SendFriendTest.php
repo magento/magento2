@@ -122,7 +122,9 @@ class SendFriendTest extends GraphQlAbstract
     public function testSendWithoutExistProduct()
     {
         $this->expectException(\Exception::class);
-        $this->expectExceptionMessage('The product that was requested doesn\'t exist. Verify the product and try again.');
+        $this->expectExceptionMessage(
+            'The product that was requested doesn\'t exist. Verify the product and try again.'
+        );
 
         $productId = 2018;
         $recipients = '{
