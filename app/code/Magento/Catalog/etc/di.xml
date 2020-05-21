@@ -1332,4 +1332,7 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Catalog\Api\CategoryRepositoryInterface">
+        <plugin name="DefaultSortByUpdateCategorySavePlugin" type="Magento\Catalog\Model\Plugin\DefaultSortByUpdateCategorySavePlugin"/>
+    </type>
 </config>
