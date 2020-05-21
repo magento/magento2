@@ -588,10 +588,13 @@ class StorageTest extends TestCase
 
     /**
      * cover \Magento\Theme\Model\Wysiwyg\Storage::deleteDirectory
-     * @expectedException \Magento\Framework\Exception\LocalizedException
      */
     public function testDeleteRootDirectoryRelative()
     {
+        $this->expectException(
+            \Magento\Framework\Exception\LocalizedException::class
+        );
+
         $directoryPath = $this->_storageRoot;
         $fakePath = 'fake/relative/path';
 
