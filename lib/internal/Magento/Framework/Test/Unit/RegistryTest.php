@@ -3,17 +3,22 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\Test\Unit;
 
-use \Magento\Framework\Registry;
+use Magento\Customer\Model\Customer;
+use Magento\Framework\Registry;
+use Magento\ImportExport\Model\Export\Adapter\Csv;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Registry model test. Test cases for managing values in registry
  */
-class RegistryTest extends \PHPUnit\Framework\TestCase
+class RegistryTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\Registry
+     * @var Registry
      */
     protected $registry;
 
@@ -22,17 +27,17 @@ class RegistryTest extends \PHPUnit\Framework\TestCase
      */
     protected $data;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->registry = new Registry();
         $this->data = [
             'key' => 'customer',
-            'value' => \Magento\Customer\Model\Customer::class,
+            'value' => Customer::class,
         ];
         $this->registry->register($this->data['key'], $this->data['value']);
     }
 
-    public function tearDown()
+    protected function tearDown(): void
     {
         unset($this->registry);
     }
@@ -54,18 +59,16 @@ class RegistryTest extends \PHPUnit\Framework\TestCase
         $this->registry->register($key, $value, $graceful);
     }
 
-    /**
-     * @expectedException \RuntimeException
-     */
     public function testRegisterKeyExists()
     {
+        $this->expectException('RuntimeException');
         $this->registry->register($this->data['key'], $this->data['value']);
     }
 
     public function testUnregister()
     {
         $key = 'csv_adapter';
-        $valueObj = $this->createMock(\Magento\ImportExport\Model\Export\Adapter\Csv::class);
+        $valueObj = $this->createMock(Csv::class);
         $this->registry->register($key, $valueObj);
         $this->assertEquals($valueObj, $this->registry->registry($key));
         $this->registry->unregister($key);

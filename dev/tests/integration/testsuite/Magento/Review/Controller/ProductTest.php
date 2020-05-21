@@ -18,6 +18,6 @@ class ProductTest extends \Magento\TestFramework\TestCase\AbstractController
         $this->getRequest()->setParam('id', $product->getId());
         $this->dispatch('review/product/listAction');
         $result = $this->getResponse()->getBody();
-        $this->assertNotContains("/frontend/Magento/luma/en_US/", $result);
+        $this->assertStringNotContainsString("/frontend/Magento/luma/en_US/", $result);
     }
 }

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-/***
+/**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -17,10 +17,10 @@ class RemoveTest extends AbstractBackendController
      * @return void
      * @throws AuthenticationException
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
+        parent::setUp();
         $this->resource = 'Magento_AdminNotification::adminnotification_remove';
         $this->uri = 'backend/admin/notification/remove';
-        parent::setUp();
     }
 }

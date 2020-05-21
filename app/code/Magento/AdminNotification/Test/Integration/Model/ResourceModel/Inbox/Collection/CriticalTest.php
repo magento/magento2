@@ -17,7 +17,7 @@ class CriticalTest extends TestCase
     /**
      * @var Critical
      */
-    protected $model;
+    private $model;
 
     /**
      * @return void

@@ -3,43 +3,48 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\ConfigurableProduct\Test\Unit\Plugin\Model\ResourceModel;
 
 use Magento\Catalog\Model\Product\Type;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
+use Magento\ConfigurableProduct\Plugin\Model\ResourceModel\Product;
 use Magento\Framework\Indexer\ActionInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class ProductTest extends \PHPUnit\Framework\TestCase
+class ProductTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
+     * @var ObjectManager
      */
     private $objectManager;
 
     /**
-     * @var Configurable|\PHPUnit_Framework_MockObject_MockObject
+     * @var Configurable|MockObject
      */
     private $configurableMock;
 
     /**
-     * @var ActionInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ActionInterface|MockObject
      */
     private $actionMock;
 
     /**
-     * @var \Magento\ConfigurableProduct\Plugin\Model\ResourceModel\Product
+     * @var Product
      */
     private $model;
 
-    public function setUp()
+    protected function setUp(): void
     {
-        $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $this->objectManager = new ObjectManager($this);
         $this->configurableMock = $this->createMock(Configurable::class);
-        $this->actionMock = $this->createMock(ActionInterface::class);
+        $this->actionMock = $this->getMockForAbstractClass(ActionInterface::class);
 
         $this->model = $this->objectManager->getObject(
-            \Magento\ConfigurableProduct\Plugin\Model\ResourceModel\Product::class,
+            Product::class,
             [
                 'configurable' => $this->configurableMock,
                 'productIndexer' => $this->actionMock,
@@ -49,18 +54,18 @@ class ProductTest extends \PHPUnit\Framework\TestCase
 
     public function testBeforeSaveConfigurable()
     {
-        /** @var \Magento\Catalog\Model\ResourceModel\Product|\PHPUnit_Framework_MockObject_MockObject $subject */
+        /** @var \Magento\Catalog\Model\ResourceModel\Product|MockObject $subject */
         $subject = $this->createMock(\Magento\Catalog\Model\ResourceModel\Product::class);
-        /** @var \Magento\Catalog\Model\Product|\PHPUnit_Framework_MockObject_MockObject $object */
+        /** @var \Magento\Catalog\Model\Product|MockObject $object */
         $object = $this->createPartialMock(\Magento\Catalog\Model\Product::class, ['getTypeId', 'getTypeInstance']);
         $type = $this->createPartialMock(
-            \Magento\ConfigurableProduct\Model\Product\Type\Configurable::class,
+            Configurable::class,
             ['getSetAttributes']
         );
         $type->expects($this->once())->method('getSetAttributes')->with($object);
 
-        $object->expects($this->once())->method('getTypeId')->will($this->returnValue(Configurable::TYPE_CODE));
-        $object->expects($this->once())->method('getTypeInstance')->will($this->returnValue($type));
+        $object->expects($this->once())->method('getTypeId')->willReturn(Configurable::TYPE_CODE);
+        $object->expects($this->once())->method('getTypeInstance')->willReturn($type);
 
         $this->model->beforeSave(
             $subject,
@@ -70,11 +75,11 @@ class ProductTest extends \PHPUnit\Framework\TestCase
 
     public function testBeforeSaveSimple()
     {
-        /** @var \Magento\Catalog\Model\ResourceModel\Product|\PHPUnit_Framework_MockObject_MockObject $subject */
+        /** @var \Magento\Catalog\Model\ResourceModel\Product|MockObject $subject */
         $subject = $this->createMock(\Magento\Catalog\Model\ResourceModel\Product::class);
-        /** @var \Magento\Catalog\Model\Product|\PHPUnit_Framework_MockObject_MockObject $object */
+        /** @var \Magento\Catalog\Model\Product|MockObject $object */
         $object = $this->createPartialMock(\Magento\Catalog\Model\Product::class, ['getTypeId', 'getTypeInstance']);
-        $object->expects($this->once())->method('getTypeId')->will($this->returnValue(Type::TYPE_SIMPLE));
+        $object->expects($this->once())->method('getTypeId')->willReturn(Type::TYPE_SIMPLE);
         $object->expects($this->never())->method('getTypeInstance');
 
         $this->model->beforeSave(
@@ -87,9 +92,9 @@ class ProductTest extends \PHPUnit\Framework\TestCase
     {
         $productId = '1';
         $parentConfigId = ['2'];
-        /** @var \Magento\Catalog\Model\ResourceModel\Product|\PHPUnit_Framework_MockObject_MockObject $subject */
+        /** @var \Magento\Catalog\Model\ResourceModel\Product|MockObject $subject */
         $subject = $this->createMock(\Magento\Catalog\Model\ResourceModel\Product::class);
-        /** @var \Magento\Catalog\Model\Product|\PHPUnit_Framework_MockObject_MockObject $product */
+        /** @var \Magento\Catalog\Model\Product|MockObject $product */
         $product = $this->createPartialMock(
             \Magento\Catalog\Model\Product::class,
             ['getId', 'delete']
@@ -104,7 +109,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
 
         $return = $this->model->aroundDelete(
             $subject,
-            /** @var \Magento\Catalog\Model\Product|\PHPUnit_Framework_MockObject_MockObject $prod */
+            /** @var \Magento\Catalog\Model\Product|MockObject $prod */
             function (\Magento\Catalog\Model\Product $prod) use ($subject) {
                 $prod->delete();
                 return $subject;
