@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Eav\Test\Unit\Model\Entity;
 
 use Magento\Eav\Model\Entity\Attribute;
@@ -26,7 +28,7 @@ class AttributeTest extends TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_model = $this->createPartialMock(Attribute::class, ['__wakeup']);
     }
@@ -34,7 +36,7 @@ class AttributeTest extends TestCase
     /**
      * @inheritdoc
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->_model = null;
     }

@@ -57,7 +57,7 @@ class ShippingInformationManagementTest extends \PHPUnit\Framework\TestCase
     /** @var InvoiceOrderInterface */
     private $invoiceOrder;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $objectManager = Bootstrap::getObjectManager();
 
