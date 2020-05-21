@@ -44,6 +44,7 @@ define([
                 });
             obj.openDialog(openUrl, 100, 100, 'title', options);
             obj.openDialog(openUrl, 100, 100, 'title', options);
+            expect(obj.pathId).toBe('d3lzaXd5Zw,');
             expect($.ajax.calls.count()).toBe(1);
         });
 
@@ -63,6 +64,7 @@ define([
             obj.openDialog(openUrl, 100, 100, 'title', undefined);
             obj.openDialog(openUrl, 100, 100, 'title', undefined);
             expect($.ajax.calls.count()).toBe(1);
+            expect(obj.pathId).toBe('d3lzaXd5Zw,');
         });
     });
 });
