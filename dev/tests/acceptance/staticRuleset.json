@@ -1,7 +1,6 @@
 {
     "tests": [
         "actionGroupArguments",
-        "deprecatedEntityUsage",
-        "annotations"
+        "deprecatedEntityUsage"
     ]
 }
