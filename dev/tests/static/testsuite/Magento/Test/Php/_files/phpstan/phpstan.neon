@@ -33,3 +33,6 @@ services:
 		class: Magento\PhpStan\Formatters\FilteredErrorFormatter
 		arguments:
 			showTipsOfTheDay: false
+			checkThisOnly: false
+            inferPrivatePropertyTypeFromConstructor: true
+            checkMissingTypehints: %checkMissingTypehints%

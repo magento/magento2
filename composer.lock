@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "087f8432a6f317056b40a0b8a160a2cf",
+    "content-hash": "ecf7fcac6c2cf92a2c1fa5fea6732b41",
     "packages": [
         {
             "name": "braintree/braintree_php",
@@ -5536,16 +5536,16 @@
         },
         {
             "name": "aws/aws-sdk-php",
-            "version": "3.138.4",
+            "version": "3.138.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aws/aws-sdk-php.git",
-                "reference": "2294604d4edb967249c4e41ab775a72d6baa247a"
+                "reference": "2c9ce7a12991e983e009ac9db453036000188ddd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/2294604d4edb967249c4e41ab775a72d6baa247a",
-                "reference": "2294604d4edb967249c4e41ab775a72d6baa247a",
+                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/2c9ce7a12991e983e009ac9db453036000188ddd",
+                "reference": "2c9ce7a12991e983e009ac9db453036000188ddd",
                 "shasum": ""
             },
             "require": {
@@ -5616,7 +5616,7 @@
                 "s3",
                 "sdk"
             ],
-            "time": "2020-05-19T18:15:45+00:00"
+            "time": "2020-05-20T18:12:57+00:00"
         },
         {
             "name": "behat/gherkin",
@@ -8060,16 +8060,16 @@
         },
         {
             "name": "phpstan/phpstan",
-            "version": "0.12.25",
+            "version": "0.12.23",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpstan.git",
-                "reference": "9619551d68b2d4c0d681a8df73f3c847c798ee64"
+                "reference": "71e529efced79e055fa8318b692e7f7d03ea4e75"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/9619551d68b2d4c0d681a8df73f3c847c798ee64",
-                "reference": "9619551d68b2d4c0d681a8df73f3c847c798ee64",
+                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/71e529efced79e055fa8318b692e7f7d03ea4e75",
+                "reference": "71e529efced79e055fa8318b692e7f7d03ea4e75",
                 "shasum": ""
             },
             "require": {
@@ -8098,7 +8098,7 @@
                 "MIT"
             ],
             "description": "PHPStan - PHP Static Analysis Tool",
-            "time": "2020-05-10T20:36:16+00:00"
+            "time": "2020-05-05T12:55:44+00:00"
         },
         {
             "name": "phpunit/php-code-coverage",

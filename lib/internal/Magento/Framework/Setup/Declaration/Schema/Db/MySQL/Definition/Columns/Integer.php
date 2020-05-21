@@ -110,7 +110,6 @@ class Integer implements DbDefinitionProcessorInterface
             $data['definition'],
             $matches
         )) {
-            $data['padding'] = null;
             // we have an agreement that tinyint(1) is Boolean
             if (isset($matches['padding'])
                 && $matches['type'] === 'tinyint'
