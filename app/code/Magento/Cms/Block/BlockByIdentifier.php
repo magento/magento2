@@ -111,9 +111,7 @@ class BlockByIdentifier extends AbstractBlock implements IdentityInterface
     private function getCmsBlock(): BlockInterface
     {
         if (!$this->getIdentifier()) {
-            throw new NoSuchEntityException(
-                __('Expected value of `identifier` was not provided')
-            );
+            throw new \InvalidArgumentException('Expected value of `identifier` was not provided');
         }
 
         if (null === $this->cmsBlock) {
