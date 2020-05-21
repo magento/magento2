@@ -25,7 +25,7 @@
             <argument name="metadata" xsi:type="array">
                 <item name="Magento\AsynchronousOperations\Api\Data\OperationInterface" xsi:type="array">
                     <item name="entityTableName" xsi:type="string">magento_operation</item>
-                    <item name="identifierField" xsi:type="string">id</item>
+                    <item name="identifierField" xsi:type="string">uuid</item>
                 </item>
                 <item name="Magento\AsynchronousOperations\Api\Data\BulkSummaryInterface" xsi:type="array">
                     <item name="entityTableName" xsi:type="string">magento_bulk</item>
