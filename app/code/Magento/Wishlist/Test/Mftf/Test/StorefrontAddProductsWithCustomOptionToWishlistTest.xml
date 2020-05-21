@@ -18,32 +18,20 @@
             <testCaseId value="MC-34245"/>
         </annotations>
         <before>
-            <createData entity="SimpleSubCategory" stepKey="categoryFirst"/>
-            <createData entity="SimpleProduct" stepKey="simpleProduct">
-                <requiredEntity createDataKey="categoryFirst"/>
-            </createData>
-
+            <createData entity="SimpleProduct2" stepKey="simpleProduct"/>
             <updateData entity="productWithOptionRadiobutton" createDataKey="simpleProduct" stepKey="updateProductWithOptions">
                 <requiredEntity createDataKey="simpleProduct"/>
             </updateData>
 
             <createData entity="Simple_US_Customer" stepKey="customer"/>
-            <magentoCron groups="index" stepKey="runCronReindex"/>
         </before>
         <after>
-            <deleteData createDataKey="simpleProduct" stepKey="deletesimpleProduct"/>
-            <deleteData createDataKey="categoryFirst" stepKey="deleteCategoryFirst"/>
+            <deleteData createDataKey="simpleProduct" stepKey="deleteSimpleProduct"/>
             <deleteData createDataKey="customer" stepKey="deleteCustomer"/>
-            <magentoCron groups="index" stepKey="runCronReindex"/>
         </after>
 
         <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginToStorefrontAccount">
             <argument name="Customer" value="$$customer$$"/>
-        </actionGroup>
-
-        <amOnPage url="{{StorefrontCategoryPage.url($$categoryFirst.name$$)}}" stepKey="navigateToCategoryFirstPage"/>
-        <actionGroup ref="StorefrontCheckCategorySimpleProductActionGroup" stepKey="browseAssertCategoryProduct1">
-            <argument name="product" value="$$simpleProduct$$"/>
         </actionGroup>
 
         <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openStorefrontProductPage">
