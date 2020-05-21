@@ -128,6 +128,9 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
      * @param \Magento\Customer\Api\GroupManagementInterface $groupManagement
+     * @param Magento\CatalogSearch\Model\Advanced\Request\Builder $requestBuilder
+     * @param \Magento\Search\Model\SearchEngine $searchEngine
+     * @param \Magento\Framework\Search\Adapter\Mysql\TemporaryStorageFactory $temporaryStorageFactory
      * @param \Magento\Framework\DB\Adapter\AdapterInterface|null $connection
      * @param SearchResultFactory|null $searchResultFactory
      * @param ProductLimitationFactory|null $productLimitationFactory
@@ -160,6 +163,9 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Framework\Stdlib\DateTime $dateTime,
         \Magento\Customer\Api\GroupManagementInterface $groupManagement,
+        $requestBuilder,
+        $searchEngine,
+        $temporaryStorageFactory,
         \Magento\Framework\DB\Adapter\AdapterInterface $connection = null,
         SearchResultFactory $searchResultFactory = null,
         ProductLimitationFactory $productLimitationFactory = null,

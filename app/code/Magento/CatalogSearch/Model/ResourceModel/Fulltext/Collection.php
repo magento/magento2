@@ -120,6 +120,10 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
      * @param \Magento\Customer\Api\GroupManagementInterface $groupManagement
+     * @param \Magento\Search\Model\QueryFactory $catalogSearchData
+     * @param \Magento\Framework\Search\Request\Builder $requestBuilder
+     * @param \Magento\Search\Model\SearchEngine $searchEngine
+     * @param \Magento\Framework\Search\Adapter\Mysql\TemporaryStorageFactory $temporaryStorageFactory
      * @param \Magento\Framework\DB\Adapter\AdapterInterface|null $connection
      * @param string $searchRequestName
      * @param SearchResultFactory|null $searchResultFactory
@@ -155,6 +159,10 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Framework\Stdlib\DateTime $dateTime,
         \Magento\Customer\Api\GroupManagementInterface $groupManagement,
+        $catalogSearchData,
+        $requestBuilder,
+        $searchEngine,
+        $temporaryStorageFactory,
         \Magento\Framework\DB\Adapter\AdapterInterface $connection = null,
         $searchRequestName = 'catalog_view_container',
         SearchResultFactory $searchResultFactory = null,

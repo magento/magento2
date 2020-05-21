@@ -216,6 +216,7 @@ class Full
      * @param \Magento\CatalogSearch\Model\ResourceModel\Fulltext $fulltextResource
      * @param \Magento\Framework\Search\Request\DimensionFactory $dimensionFactory
      * @param \Magento\Framework\Indexer\ConfigInterface $indexerConfig
+     * @param \IteratorFactory $indexIteratorFactory
      * @param \Magento\Framework\EntityManager\MetadataPool $metadataPool
      * @param DataProvider $dataProvider
      * @param int $batchSize
@@ -239,6 +240,7 @@ class Full
         \Magento\CatalogSearch\Model\ResourceModel\Fulltext $fulltextResource,
         \Magento\Framework\Search\Request\DimensionFactory $dimensionFactory,
         \Magento\Framework\Indexer\ConfigInterface $indexerConfig,
+        $indexIteratorFactory,
         \Magento\Framework\EntityManager\MetadataPool $metadataPool = null,
         DataProvider $dataProvider = null,
         $batchSize = 500
