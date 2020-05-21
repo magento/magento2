@@ -176,10 +176,6 @@ class MassSchedule
         }
 
         $this->saveMultipleOperations->execute($operations);
-        $operationIds = $this->getAllOperationIds->execute($groupId);
-        foreach ($operations as $index => $operation) {
-            $operation->setId($operationIds[$index]['id']);
-        }
         if (!$this->bulkManagement->scheduleBulk($groupId, $operations, $bulkDescription, $userId)) {
             throw new LocalizedException(
                 __('Something went wrong while processing the request.')

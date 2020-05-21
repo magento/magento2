@@ -77,7 +77,7 @@ class OperationRepository implements OperationRepositoryInterface
      * @deprecated No longer used.
      * @see create()
      */
-    public function createByTopic($topicName, $entityParams, $groupId)
+    public function createByTopic($topicName, $entityParams, $groupId, $operationId)
     {
         $this->messageValidator->validate($topicName, $entityParams);
         $encodedMessage = $this->messageEncoder->encode($topicName, $entityParams);
@@ -89,10 +89,11 @@ class OperationRepository implements OperationRepositoryInterface
         ];
         $data = [
             'data' => [
-                OperationInterface::BULK_ID         => $groupId,
-                OperationInterface::TOPIC_NAME      => $topicName,
+                OperationInterface::ID => $operationId,
+                OperationInterface::BULK_ID => $groupId,
+                OperationInterface::TOPIC_NAME => $topicName,
                 OperationInterface::SERIALIZED_DATA => $this->jsonSerializer->serialize($serializedData),
-                OperationInterface::STATUS          => OperationInterface::STATUS_TYPE_OPEN,
+                OperationInterface::STATUS => OperationInterface::STATUS_TYPE_OPEN,
             ],
         ];
 
@@ -106,6 +107,6 @@ class OperationRepository implements OperationRepositoryInterface
      */
     public function create($topicName, $entityParams, $groupId, $operationId): OperationInterface
     {
-        return $this->createByTopic($topicName, $entityParams, $groupId);
+        return $this->createByTopic($topicName, $entityParams, $groupId, $operationId);
     }
 }
