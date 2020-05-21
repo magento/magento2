@@ -110,15 +110,15 @@ define([
              */
             _parseCurrentPath = function () {
                 var paths = [],
-                    decodedPath = Base64.mageDecode(window.MediabrowserUtility.pathId).split('/');
+                    decodedPath = Base64.idDecode(window.MediabrowserUtility.pathId).split('/');
 
                 $.each(decodedPath, function (i, val) {
                     var isLastElement = i === decodedPath.length - 1;
 
                     if (isLastElement) {
-                        paths[i] = window.MediabrowserUtility.pathId.replace(',,', '--');
+                        paths[i] = window.MediabrowserUtility.pathId;
                     } else {
-                        paths[i] = Base64.mageEncode(val).replace(',,', '--');
+                        paths[i] = Base64.idEncode(val);
                     }
                 });
                 paths.unshift('root');
