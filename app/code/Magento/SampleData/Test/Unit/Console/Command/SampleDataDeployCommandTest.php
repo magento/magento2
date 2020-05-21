@@ -22,15 +22,9 @@ class SampleDataDeployCommandTest extends AbstractSampleDataCommandTest
      */
     private $serializerMock;
 
-    /**
-     * Creates mocks
-     *
-     * @return void
-     */
     protected function setUp(): void
     {
         parent::setUp();
-
         $this->serializerMock = $this->createMock(Json::class);
     }
 

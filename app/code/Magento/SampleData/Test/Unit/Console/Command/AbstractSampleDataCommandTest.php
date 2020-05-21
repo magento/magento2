@@ -76,11 +76,6 @@ abstract class AbstractSampleDataCommandTest extends TestCase
      */
     private $appRunResult;
 
-    /**
-     * Creates mocks
-     *
-     * @return void
-     */
     protected function setUp(): void
     {
         $this->directoryReadMock = $this->getMockForAbstractClass(ReadInterface::class);
@@ -93,8 +88,6 @@ abstract class AbstractSampleDataCommandTest extends TestCase
     }
 
     /**
-     * Sets mocks
-     *
      * @param array $sampleDataPackages Array in form [package_name => version_constraint]
      * @param string $pathToComposerJson Fake path to composer.json
      * @param int $appRunResult Composer exit code
@@ -190,5 +183,5 @@ abstract class AbstractSampleDataCommandTest extends TestCase
     abstract protected function expectedComposerArgumentsSampleDataCommands(
         array $sampleDataPackages,
         string $pathToComposerJson
-    ) : array;
+    ): array;
 }
