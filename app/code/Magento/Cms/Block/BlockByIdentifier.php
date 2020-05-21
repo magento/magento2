@@ -106,7 +106,7 @@ class BlockByIdentifier extends AbstractBlock implements IdentityInterface
      * Loads the CMS block by `identifier` provided as an argument
      *
      * @return BlockInterface|BlockModel
-     * @throws NoSuchEntityException
+     * @throws \InvalidArgumentException
      */
     private function getCmsBlock(): BlockInterface
     {
