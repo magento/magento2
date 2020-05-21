@@ -23,7 +23,7 @@
                                                         <item name="weee" xsi:type="array">
                                                             <item name="component" xsi:type="string">Magento_Weee/js/view/checkout/summary/weee</item>
                                                             <item name="config" xsi:type="array">
-                                                                <item name="title" xsi:type="string">FPT</item>
+                                                                <item name="title" translate="true" xsi:type="string">FPT</item>
                                                             </item>
                                                         </item>
                                                     </item>

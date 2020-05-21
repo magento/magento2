@@ -3,27 +3,31 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\CatalogInventory\Test\Unit\Model\Source;
 
+use Magento\CatalogInventory\Model\Source\Stock;
+use Magento\Eav\Model\Entity\Collection\AbstractCollection;
+use Magento\Framework\DB\Select;
 use PHPUnit\Framework\TestCase;
 
 class StockTest extends TestCase
 {
     /**
-     * @var \Magento\CatalogInventory\Model\Source\Stock
+     * @var Stock
      */
     private $model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->model = new \Magento\CatalogInventory\Model\Source\Stock();
+        $this->model = new Stock();
     }
 
     public function testAddValueSortToCollection()
     {
-        $selectMock = $this->createMock(\Magento\Framework\DB\Select::class);
-        $collectionMock = $this->createMock(\Magento\Eav\Model\Entity\Collection\AbstractCollection::class);
+        $selectMock = $this->createMock(Select::class);
+        $collectionMock = $this->createMock(AbstractCollection::class);
         $collectionMock->expects($this->atLeastOnce())->method('getSelect')->willReturn($selectMock);
         $collectionMock->expects($this->atLeastOnce())->method('getTable')->willReturn('cataloginventory_stock_item');
 

@@ -8,8 +8,9 @@ declare(strict_types=1);
 use Magento\Sales\Model\Order\Creditmemo;
 use Magento\Sales\Model\ResourceModel\Order\Creditmemo\Collection;
 use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
 
-require 'default_rollback.php';
+Resolver::getInstance()->requireDataFixture('Magento/Sales/_files/default_rollback.php');
 
 /** @var $creditmemo Creditmemo */
 $creditmemoCollection = Bootstrap::getObjectManager()->create(Collection::class);

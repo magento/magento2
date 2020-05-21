@@ -68,11 +68,11 @@ mutation {
 QUERY;
         $response = $this->graphQlMutation($query);
 
-        $this->assertEquals(null, $response['createCustomer']['customer']['id']);
+        $this->assertNull($response['createCustomer']['customer']['id']);
         $this->assertEquals($newFirstname, $response['createCustomer']['customer']['firstname']);
         $this->assertEquals($newLastname, $response['createCustomer']['customer']['lastname']);
         $this->assertEquals($newEmail, $response['createCustomer']['customer']['email']);
-        $this->assertEquals(true, $response['createCustomer']['customer']['is_subscribed']);
+        $this->assertTrue($response['createCustomer']['customer']['is_subscribed']);
     }
 
     /**
@@ -109,15 +109,16 @@ QUERY;
         $this->assertEquals($newFirstname, $response['createCustomer']['customer']['firstname']);
         $this->assertEquals($newLastname, $response['createCustomer']['customer']['lastname']);
         $this->assertEquals($newEmail, $response['createCustomer']['customer']['email']);
-        $this->assertEquals(true, $response['createCustomer']['customer']['is_subscribed']);
+        $this->assertTrue($response['createCustomer']['customer']['is_subscribed']);
     }
 
     /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage "input" value should be specified
      */
     public function testCreateCustomerIfInputDataIsEmpty()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('"input" value should be specified');
+
         $query = <<<QUERY
 mutation {
     createCustomer(
@@ -139,11 +140,12 @@ QUERY;
     }
 
     /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage  Required parameters are missing: Email
      */
     public function testCreateCustomerIfEmailMissed()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Required parameters are missing: Email');
+
         $newFirstname = 'Richard';
         $newLastname = 'Rowe';
         $currentPassword = 'test123#';
@@ -228,11 +230,12 @@ QUERY;
     }
 
     /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage Field "test123" is not defined by type CustomerInput.
      */
     public function testCreateCustomerIfPassedAttributeDosNotExistsInCustomerInput()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Field "test123" is not defined by type CustomerInput.');
+
         $newFirstname = 'Richard';
         $newLastname = 'Rowe';
         $currentPassword = 'test123#';
@@ -264,11 +267,12 @@ QUERY;
     }
 
     /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage Required parameters are missing: First Name
      */
     public function testCreateCustomerIfNameEmpty()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Required parameters are missing: First Name');
+
         $newEmail = 'customer_created' . rand(1, 2000000) . '@example.com';
         $newFirstname = '';
         $newLastname = 'Rowe';
@@ -326,16 +330,17 @@ QUERY;
 
         $response = $this->graphQlMutation($query);
 
-        $this->assertEquals(false, $response['createCustomer']['customer']['is_subscribed']);
+        $this->assertFalse($response['createCustomer']['customer']['is_subscribed']);
     }
 
     /**
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
-     * @expectedException \Exception
-     * @expectedExceptionMessage A customer with the same email address already exists in an associated website.
      */
     public function testCreateCustomerIfCustomerWithProvidedEmailAlreadyExists()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('A customer with the same email address already exists in an associated website.');
+
         $existedEmail = 'customer@example.com';
         $password = 'test123#';
         $firstname = 'John';
@@ -362,7 +367,7 @@ QUERY;
         $this->graphQlMutation($query);
     }
 
-    public function tearDown(): void
+    protected function tearDown(): void
     {
         $newEmail = 'new_customer@example.com';
         try {
