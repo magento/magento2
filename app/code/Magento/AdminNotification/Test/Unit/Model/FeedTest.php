@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\AdminNotification\Test\Unit\Model;
 
@@ -70,13 +71,12 @@ class FeedTest extends TestCase
             ['create']
         );
         $this->curlFactory = $this->createPartialMock(CurlFactory::class, ['create']);
-        $this->curl = $this->getMockBuilder(Curl::class)
-            ->disableOriginalConstructor()->getMock();
+        $this->curl = $this->createMock(Curl::class);
         $this->appState = $this->createPartialMock(State::class, []);
         $this->inboxModel = $this->createPartialMock(Inbox::class, [
-                '__wakeup',
-                'parse'
-            ]);
+            '__wakeup',
+            'parse'
+        ]);
         $this->backendConfig = $this->createPartialMock(
             ConfigInterface::class,
             [
@@ -96,15 +96,13 @@ class FeedTest extends TestCase
             ]
         );
 
-        $this->deploymentConfig = $this->getMockBuilder(DeploymentConfig::class)
-            ->disableOriginalConstructor()->getMock();
+        $this->deploymentConfig = $this->createMock(DeploymentConfig::class);
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
 
-        $this->productMetadata = $this->getMockBuilder(ProductMetadata::class)
-            ->disableOriginalConstructor()->getMock();
+        $this->productMetadata = $this->createMock(ProductMetadata::class);
 
-        $this->urlBuilder = $this->createMock(UrlInterface::class);
+        $this->urlBuilder = $this->getMockForAbstractClass(UrlInterface::class);
 
         $this->feed = $this->objectManagerHelper->getObject(
             Feed::class,
@@ -145,20 +143,20 @@ class FeedTest extends TestCase
         ];
 
         $lastUpdate = 0;
-        $this->cacheManager->expects($this->once())->method('load')->will(($this->returnValue($lastUpdate)));
-        $this->curlFactory->expects($this->at(0))->method('create')->will($this->returnValue($this->curl));
+        $this->cacheManager->expects($this->once())->method('load')->willReturn($lastUpdate);
+        $this->curlFactory->expects($this->at(0))->method('create')->willReturn($this->curl);
         $this->curl->expects($this->once())->method('setConfig')->with($configValues)->willReturnSelf();
-        $this->curl->expects($this->once())->method('read')->will($this->returnValue($curlRequest));
-        $this->backendConfig->expects($this->at(0))->method('getValue')->will($this->returnValue('1'));
-        $this->backendConfig->expects($this->once())->method('isSetFlag')->will($this->returnValue(false));
+        $this->curl->expects($this->once())->method('read')->willReturn($curlRequest);
+        $this->backendConfig->expects($this->at(0))->method('getValue')->willReturn('1');
+        $this->backendConfig->expects($this->once())->method('isSetFlag')->willReturn(false);
         $this->backendConfig->expects($this->at(1))->method('getValue')
-            ->will($this->returnValue('http://feed.magento.com'));
+            ->willReturn('http://feed.magento.com');
         $this->deploymentConfig->expects($this->once())->method('get')
             ->with(ConfigOptionsListConstants::CONFIG_PATH_INSTALL_DATE)
-            ->will($this->returnValue('Sat, 6 Sep 2014 16:46:11 UTC'));
+            ->willReturn('Sat, 6 Sep 2014 16:46:11 UTC');
         if ($callInbox) {
             $this->inboxFactory->expects($this->once())->method('create')
-                ->will($this->returnValue($this->inboxModel));
+                ->willReturn($this->inboxModel);
             $this->inboxModel->expects($this->once())
                 ->method('parse')
                 ->with(
@@ -178,7 +176,7 @@ class FeedTest extends TestCase
                         }
                     )
                 )
-                ->will($this->returnSelf());
+                ->willReturnSelf();
         } else {
             $this->inboxFactory->expects($this->never())->method('create');
             $this->inboxModel->expects($this->never())->method('parse');

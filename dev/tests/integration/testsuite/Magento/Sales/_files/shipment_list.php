@@ -4,15 +4,17 @@
  * See COPYING.txt for license details.
  */
 
+use Magento\Sales\Api\Data\OrderInterfaceFactory;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\ShipmentFactory;
 use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
 
-require 'order.php';
+Resolver::getInstance()->requireDataFixture('Magento/Sales/_files/order.php');
 
+$objectManager = Bootstrap::getObjectManager();
 /** @var Order $order */
-/** @var  Order\Payment $payment */
-/** @var  Order\Item $orderItem */
+$order = $objectManager->get(OrderInterfaceFactory::class)->create()->loadByIncrementId('100000001');
 
 $shipments = [
     [
