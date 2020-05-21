@@ -165,8 +165,8 @@ class DataProviderWithDefaultAddresses extends \Magento\Ui\DataProvider\Abstract
             if (isset($addressData['street']) && !\is_array($address['street'])) {
                 $addressData['street'] = explode("\n", $addressData['street']);
             }
-            $addressData['country'] = $this->countryFactory->create()
-                ->loadByCode($addressData['country_id'])->getName();
+            $countryId = $addressData['country_id'] ?? null;
+            $addressData['country'] = $this->countryFactory->create()->loadByCode($countryId)->getName();
         }
 
         return $addressData;

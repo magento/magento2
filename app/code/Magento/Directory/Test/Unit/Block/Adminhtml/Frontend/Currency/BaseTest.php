@@ -47,10 +47,10 @@ class BaseTest extends TestCase
     /**
      * @inheritDoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->elementMock = $this->createMock(AbstractElement::class);
-        $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
+        $this->scopeConfigMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
         $this->requestMock = $this->getMockBuilder(RequestInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['getParam'])
@@ -73,7 +73,7 @@ class BaseTest extends TestCase
         $this->scopeConfigMock->expects($this->never())->method('getValue');
 
         $result = $this->baseCurrency->render(($this->elementMock));
-        $this->assertFalse(empty($result), 'Result should not be empty.');
+        $this->assertNotEmpty($result, 'Result should not be empty.');
     }
 
     /**
@@ -105,6 +105,6 @@ class BaseTest extends TestCase
             ->willReturn(Store::PRICE_SCOPE_WEBSITE);
 
         $result = $this->baseCurrency->render(($this->elementMock));
-        $this->assertFalse(empty($result), 'Result should not be empty.');
+        $this->assertNotEmpty($result, 'Result should not be empty.');
     }
 }

@@ -15,6 +15,7 @@ var app = angular.module(
         'add-database',
         'web-configuration',
         'customize-your-store',
+        'configure-catalog-search',
         'create-admin-account',
         'install',
         'success',
