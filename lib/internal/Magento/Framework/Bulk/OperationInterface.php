@@ -16,6 +16,7 @@ interface OperationInterface extends \Magento\Framework\Api\ExtensibleDataInterf
      * Constants for keys of data array. Identical to the name of the getter in snake case
      */
     const ID = 'id';
+    const UUID = 'uuid';
     const BULK_ID = 'bulk_uuid';
     const TOPIC_NAME = 'topic_name';
     const SERIALIZED_DATA = 'serialized_data';
@@ -68,6 +69,21 @@ interface OperationInterface extends \Magento\Framework\Api\ExtensibleDataInterf
      * @since 100.2.0
      */
     public function setBulkUuid($bulkId);
+
+    /**
+     * Get operation uuid
+     *
+     * @return string
+     */
+    public function getUuid();
+
+    /**
+     * Set operation uuid
+     *
+     * @param string $uuid
+     * @return $this
+     */
+    public function setUuid($uuid);
 
     /**
      * Message Queue Topic

@@ -16,7 +16,7 @@ interface OperationManagementInterface
     /**
      * Used by consumer to change status after processing operation
      *
-     * @param int $operationId
+     * @param string $operationUuid
      * @param int $status
      * @param int|null $errorCode
      * @param string|null $message property to update Result Message
@@ -24,5 +24,5 @@ interface OperationManagementInterface
      * @return boolean
      * @since 100.2.0
      */
-    public function changeOperationStatus($operationId, $status, $errorCode = null, $message = null, $data = null);
+    public function changeOperationStatus($operationUuid, $status, $errorCode = null, $message = null, $data = null);
 }

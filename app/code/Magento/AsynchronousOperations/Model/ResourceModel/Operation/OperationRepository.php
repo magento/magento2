@@ -11,6 +11,7 @@ namespace Magento\AsynchronousOperations\Model\ResourceModel\Operation;
 use Magento\AsynchronousOperations\Api\Data\OperationInterface;
 use Magento\AsynchronousOperations\Api\Data\OperationInterfaceFactory;
 use Magento\AsynchronousOperations\Model\OperationRepositoryInterface;
+use Magento\Framework\DataObject\IdentityGeneratorInterface;
 use Magento\Framework\MessageQueue\MessageValidator;
 use Magento\Framework\MessageQueue\MessageEncoder;
 use Magento\Framework\Serialize\Serializer\Json;
@@ -21,6 +22,11 @@ use Magento\Framework\EntityManager\EntityManager;
  */
 class OperationRepository implements OperationRepositoryInterface
 {
+    /**
+     * @var IdentityGeneratorInterface
+     */
+    private $identityService;
+
     /**
      * @var OperationInterfaceFactory
      */
@@ -52,19 +58,22 @@ class OperationRepository implements OperationRepositoryInterface
      * @param MessageValidator $messageValidator
      * @param MessageEncoder $messageEncoder
      * @param Json $jsonSerializer
+     * @param IdentityGeneratorInterface $identityService
      */
     public function __construct(
         OperationInterfaceFactory $operationFactory,
         EntityManager $entityManager,
         MessageValidator $messageValidator,
         MessageEncoder $messageEncoder,
-        Json $jsonSerializer
+        Json $jsonSerializer,
+        IdentityGeneratorInterface $identityService
     ) {
         $this->operationFactory = $operationFactory;
         $this->jsonSerializer = $jsonSerializer;
         $this->messageEncoder = $messageEncoder;
         $this->messageValidator = $messageValidator;
         $this->entityManager = $entityManager;
+        $this->identityService = $identityService;
     }
 
     /**
@@ -89,10 +98,11 @@ class OperationRepository implements OperationRepositoryInterface
         ];
         $data = [
             'data' => [
-                OperationInterface::BULK_ID         => $groupId,
-                OperationInterface::TOPIC_NAME      => $topicName,
+                OperationInterface::UUID => $this->identityService->generateId(),
+                OperationInterface::BULK_ID => $groupId,
+                OperationInterface::TOPIC_NAME => $topicName,
                 OperationInterface::SERIALIZED_DATA => $this->jsonSerializer->serialize($serializedData),
-                OperationInterface::STATUS          => OperationInterface::STATUS_TYPE_OPEN,
+                OperationInterface::STATUS => OperationInterface::STATUS_TYPE_OPEN,
             ],
         ];
 

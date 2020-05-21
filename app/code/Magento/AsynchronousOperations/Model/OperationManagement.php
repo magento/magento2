@@ -50,7 +50,7 @@ class OperationManagement implements \Magento\Framework\Bulk\OperationManagement
      * @inheritDoc
      */
     public function changeOperationStatus(
-        $operationId,
+        $operationUuid,
         $status,
         $errorCode = null,
         $message = null,
@@ -59,7 +59,7 @@ class OperationManagement implements \Magento\Framework\Bulk\OperationManagement
     ) {
         try {
             $operationEntity = $this->operationFactory->create();
-            $this->entityManager->load($operationEntity, $operationId);
+            $this->entityManager->load($operationEntity, $operationUuid);
             $operationEntity->setErrorCode($errorCode);
             $operationEntity->setStatus($status);
             $operationEntity->setResultMessage($message);
