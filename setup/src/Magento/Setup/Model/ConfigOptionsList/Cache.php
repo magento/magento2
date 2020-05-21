@@ -97,7 +97,6 @@ class Cache implements ConfigOptionsListInterface
      */
     public function getOptions()
     {
-        $a = \Magento\Framework\Cache\Backend\Redis::class;
         return [
             new SelectConfigOption(
                 self::INPUT_KEY_CACHE_BACKEND,
