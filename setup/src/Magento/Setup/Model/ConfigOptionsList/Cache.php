@@ -22,7 +22,7 @@ use Magento\Setup\Validator\RedisConnectionValidator;
 class Cache implements ConfigOptionsListInterface
 {
     const INPUT_VALUE_CACHE_REDIS = 'redis';
-    const CONFIG_VALUE_CACHE_REDIS = '\\Magento\\Framework\\Cache\\Backend\Redis';
+    const CONFIG_VALUE_CACHE_REDIS = \Magento\Framework\Cache\Backend\Redis::class;
 
     const INPUT_KEY_CACHE_BACKEND = 'cache-backend';
     const INPUT_KEY_CACHE_BACKEND_REDIS_SERVER = 'cache-backend-redis-server';
@@ -43,7 +43,6 @@ class Cache implements ConfigOptionsListInterface
     const CONFIG_PATH_CACHE_BACKEND_COMPRESSION_LIB = 'cache/frontend/default/backend_options/compression_lib';
     const CONFIG_PATH_CACHE_ID_PREFIX = 'cache/frontend/default/id_prefix';
     const CONFIG_PATH_ALLOW_PARALLEL_CACHE_GENERATION = 'cache/allow_parallel_generation';
-
 
     /**
      * @var array
@@ -98,6 +97,7 @@ class Cache implements ConfigOptionsListInterface
      */
     public function getOptions()
     {
+        $a = \Magento\Framework\Cache\Backend\Redis::class;
         return [
             new SelectConfigOption(
                 self::INPUT_KEY_CACHE_BACKEND,
