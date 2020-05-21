@@ -79,53 +79,52 @@ define([
             var path = this.options.currentPath,
                 tree = this.element,
                 lastExistentFolderEl,
-                pathId,
 
-            /**
-             * Recursively open folders specified in path array.
-             */
-            recursiveOpen = function () {
-                var folderEl = $('[data-id="' + path.pop() + '"]');
+                /**
+                 * Recursively open folders specified in path array.
+                 */
+                recursiveOpen = function () {
+                    var folderEl = $('[data-id="' + path.pop() + '"]');
 
-                // if folder doesn't exist, select the last opened folder
-                if (!folderEl.length) {
-                    tree.jstree('select_node', lastExistentFolderEl);
+                    // if folder doesn't exist, select the last opened folder
+                    if (!folderEl.length) {
+                        tree.jstree('select_node', lastExistentFolderEl);
 
-                    return;
-                }
-
-                lastExistentFolderEl = folderEl;
-
-                if (path.length) {
-                    tree.jstree('open_node', folderEl, recursiveOpen);
-                } else {
-                    tree.jstree('open_node', folderEl, function () {
-                        tree.jstree('select_node', folderEl);
-                    });
-                }
-            },
-
-            /**
-             * Get currentPath decode it returns new path array
-             */
-            _parseCurrentPath = function () {
-                var paths = [],
-                    decodedPath = Base64.idDecode(window.MediabrowserUtility.pathId).split('/');
-
-                $.each(decodedPath, function (i, val) {
-                    var isLastElement = i === decodedPath.length - 1;
-
-                    if (isLastElement) {
-                        paths[i] = window.MediabrowserUtility.pathId;
-                    } else {
-                        paths[i] = Base64.idEncode(val);
+                        return;
                     }
-                });
-                paths.unshift('root');
-                paths.reverse();
 
-                return paths;
-            };
+                    lastExistentFolderEl = folderEl;
+
+                    if (path.length) {
+                        tree.jstree('open_node', folderEl, recursiveOpen);
+                    } else {
+                        tree.jstree('open_node', folderEl, function () {
+                            tree.jstree('select_node', folderEl);
+                        });
+                    }
+                },
+
+                /**
+                 * Get currentPath decode it returns new path array
+                 */
+                _parseCurrentPath = function () {
+                    var paths = [],
+                        decodedPath = Base64.idDecode(window.MediabrowserUtility.pathId).split('/');
+
+                    $.each(decodedPath, function (i, val) {
+                        var isLastElement = i === decodedPath.length - 1;
+
+                        if (isLastElement) {
+                            paths[i] = window.MediabrowserUtility.pathId;
+                        } else {
+                            paths[i] = Base64.idEncode(val);
+                        }
+                    });
+                    paths.unshift('root');
+                    paths.reverse();
+
+                    return paths;
+                };
 
             $(window).on('reload.MediaGallery', function () {
                 path = _parseCurrentPath();
