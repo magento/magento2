@@ -9,7 +9,7 @@
 <?php
 $wishlistHelper = $this->helper(\Magento\Wishlist\Helper\Data::class);
 ?>
-<?php if ($wishlistHelper->isAllow()) : ?>
+<?php if ($wishlistHelper->isAllow()  && $wishlistHelper->ifNotWishlistView()) : ?>
     <div class="block block-wishlist" data-bind="scope: 'wishlist'">
         <div class="block-title">
             <strong role="heading" aria-level="2"><?= $block->escapeHtml($block->getTitle()) ?></strong>

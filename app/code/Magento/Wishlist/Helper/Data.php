@@ -517,6 +517,20 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     }
 
     /**
+     * Check if current view is Wishlist View
+     *
+     * @return bool
+     */
+    public function ifNotWishlistView()
+    {
+        if($this->_getRequest()->getModuleName() == 'wishlist')
+        {
+            return false;
+        }
+        return true;
+    }
+
+    /**
      * Check is allow wishlist action in shopping cart
      *
      * @return bool
