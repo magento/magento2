@@ -216,11 +216,12 @@ class Full
      * @param \Magento\CatalogSearch\Model\ResourceModel\Fulltext $fulltextResource
      * @param \Magento\Framework\Search\Request\DimensionFactory $dimensionFactory
      * @param \Magento\Framework\Indexer\ConfigInterface $indexerConfig
-     * @param null $indexIteratorFactory
+     * @param mixed $indexIteratorFactory
      * @param \Magento\Framework\EntityManager\MetadataPool|null $metadataPool
      * @param DataProvider|null $dataProvider
      * @param int $batchSize
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
         ResourceConnection $resource,

@@ -128,9 +128,9 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
      * @param \Magento\Customer\Api\GroupManagementInterface $groupManagement
-     * @param null $requestBuilder
-     * @param null $searchEngine
-     * @param null $temporaryStorageFactory
+     * @param mixed $requestBuilder
+     * @param mixed $searchEngine
+     * @param mixed $temporaryStorageFactory
      * @param \Magento\Framework\DB\Adapter\AdapterInterface|null $connection
      * @param SearchResultFactory|null $searchResultFactory
      * @param ProductLimitationFactory|null $productLimitationFactory
@@ -142,6 +142,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      * @param EngineResolverInterface|null $engineResolver
      * @param DefaultFilterStrategyApplyCheckerInterface|null $defaultFilterStrategyApplyChecker
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
         \Magento\Framework\Data\Collection\EntityFactory $entityFactory,
