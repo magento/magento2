@@ -12,27 +12,23 @@ use Magento\Framework\App\ResourceConnection;
 /**
  * Class GetDbVersion provides sql engine version requesting version variable
  *
- * @deprecated First iteration of proper solution which is planning to implement soon
+ * Rather then depending on this class, please implement this logic in your extension
  */
 class SqlVersionProvider
 {
-    /**
-     * @deprecated First iteration of proper solution which is planning to implement soon
+    /**#@+
+     * Database version specific templates
      */
     public const MYSQL_8_0_VERSION = '8.0.';
 
-    /**
-     * @deprecated First iteration of proper solution which is planning to implement soon
-     */
     public const MYSQL_5_7_VERSION = '5.7.';
 
-    /**
-     * @deprecated First iteration of proper solution which is planning to implement soon
-     */
     public const MARIA_DB_10_VERSION = '10.';
 
+    /**#@-*/
+
     /**
-     * @deprecated First iteration of proper solution which is planning to implement soon
+     * Database version variable name
      */
     private const VERSION_VAR_NAME = 'version';
 
