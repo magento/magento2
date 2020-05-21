@@ -1,0 +1,53 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<overrides>
+    <test class="Magento\TestModuleOverrideConfig\MagentoConfigFixture\ReplaceFixtureTest">
+        <method name="testReplaceFixtureViaThirdModule">
+            <dataSet name="second_data_set">
+                <magentoConfigFixture scopeType="store" scopeCode="current" path="test_section/test_group/field_1" newValue="Overridden fixture for data set from third module"/>
+            </dataSet>
+            <magentoConfigFixture scopeType="store" scopeCode="current" path="test_section/test_group/field_1" newValue="Overridden fixture for method from third module"/>
+        </method>
+    </test>
+    <test class="Magento\TestModuleOverrideConfig\MagentoAdminConfigFixture\ReplaceFixtureTest">
+        <method name="testReplaceFixtureViaThirdModule">
+            <dataSet name="second_data_set">
+                <magentoAdminConfigFixture path="test_section/test_group/field_1" newValue="Overridden admin config fixture for data set from third module"/>
+            </dataSet>
+            <magentoAdminConfigFixture path="test_section/test_group/field_1" newValue="Overridden admin config fixture for method from third module"/>
+        </method>
+    </test>
+    <test class="Magento\TestModuleOverrideConfig\MagentoDataFixture\AddFixtureTest">
+        <method name="testAddSameFixtures">
+            <magentoDataFixture path="Magento/TestModuleOverrideConfig2/_files/fixture2_second_module.php"/>
+        </method>
+    </test>
+    <test class="Magento\TestModuleOverrideConfig\MagentoDataFixtureBeforeTransaction\AddFixtureTest">
+        <method name="testAddSameFixtures">
+            <magentoDataFixture path="Magento/TestModuleOverrideConfig2/_files/fixture3_second_module.php"/>
+        </method>
+    </test>
+    <test class="Magento\TestModuleOverrideConfig\MagentoDataFixture\ReplaceFixtureTest">
+        <method name="testReplaceFixtureViaThirdModule">
+            <magentoDataFixture path="Magento/TestModuleOverrideConfig/_files/fixture1_first_module.php" newPath="Magento/TestModuleOverrideConfig2/_files/fixture3_second_module.php" />
+            <dataSet name="first_data_set">
+                <magentoDataFixture path="Magento/TestModuleOverrideConfig/_files/fixture1_first_module.php" newPath="Magento/TestModuleOverrideConfig2/_files/fixture2_second_module.php" />
+            </dataSet>
+        </method>
+        <method name="testReplaceRequiredFixtureViaThirdModule">
+            <magentoDataFixture path="Magento/TestModuleOverrideConfig2/_files/fixture3_second_module.php" newPath="Magento/TestModuleOverrideConfig3/_files/fixture1_third_module.php" />
+        </method>
+    </test>
+    <test class="Magento\TestModuleOverrideConfig\MagentoDataFixture\SortFixturesTest">
+        <method name="testSortFixtures">
+            <dataSet name="first_data_set">
+                <magentoDataFixture path="Magento/TestModuleOverrideConfig3/_files/fixture1_third_module.php" before="Magento/TestModuleOverrideConfig/_files/fixture3_first_module.php" />
+            </dataSet>
+        </method>
+    </test>
+</overrides>

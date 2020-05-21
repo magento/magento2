@@ -3,61 +3,65 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\CatalogSearch\Test\Unit\Model\Search\SelectContainer;
 
-use Magento\CatalogSearch\Model\Search\SelectContainer\SelectContainerBuilder;
-use Magento\CatalogSearch\Model\Search\SelectContainer\SelectContainer;
-use Magento\CatalogSearch\Model\Search\SelectContainer\SelectContainerFactory;
-use Magento\Framework\Search\RequestInterface;
-use Magento\CatalogSearch\Model\Search\QueryChecker\FullTextSearchCheck;
 use Magento\CatalogSearch\Model\Search\CustomAttributeFilterCheck;
 use Magento\CatalogSearch\Model\Search\FiltersExtractor;
+use Magento\CatalogSearch\Model\Search\QueryChecker\FullTextSearchCheck;
+use Magento\CatalogSearch\Model\Search\SelectContainer\SelectContainer;
+use Magento\CatalogSearch\Model\Search\SelectContainer\SelectContainerBuilder;
+use Magento\CatalogSearch\Model\Search\SelectContainer\SelectContainerFactory;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\ResourceConnection;
-use Magento\Framework\Search\Request\QueryInterface;
-use Magento\Framework\DB\Select;
 use Magento\Framework\DB\Adapter\AdapterInterface;
-use Magento\Store\Model\ScopeInterface;
+use Magento\Framework\DB\Select;
 use Magento\Framework\Search\Request\Filter\Term;
+use Magento\Framework\Search\Request\QueryInterface;
+use Magento\Framework\Search\RequestInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Store\Model\ScopeInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class SelectContainerBuilderTest extends \PHPUnit\Framework\TestCase
+class SelectContainerBuilderTest extends TestCase
 {
     /**
-     * @var SelectContainerFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var SelectContainerFactory|MockObject
      */
     private $selectContainerFactoryMock;
 
     /**
-     * @var FullTextSearchCheck|\PHPUnit_Framework_MockObject_MockObject
+     * @var FullTextSearchCheck|MockObject
      */
     private $fullTextSearchCheckMock;
 
     /**
-     * @var CustomAttributeFilterCheck|\PHPUnit_Framework_MockObject_MockObject
+     * @var CustomAttributeFilterCheck|MockObject
      */
     private $customAttributeFilterCheckMock;
 
     /**
-     * @var FiltersExtractor|\PHPUnit_Framework_MockObject_MockObject
+     * @var FiltersExtractor|MockObject
      */
     private $filtersExtractorMock;
 
     /**
-     * @var ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ScopeConfigInterface|MockObject
      */
     private $scopeConfigInterfaceMock;
 
     /**
-     * @var ResourceConnection|\PHPUnit_Framework_MockObject_MockObject
+     * @var ResourceConnection|MockObject
      */
     private $resourceConnectionMock;
 
     /**
-     * @var RequestInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var RequestInterface|MockObject
      */
     private $requestMock;
 
@@ -66,7 +70,7 @@ class SelectContainerBuilderTest extends \PHPUnit\Framework\TestCase
      */
     private $selectContainerBuilder;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->selectContainerFactoryMock = $this->getMockBuilder(SelectContainerFactory::class)
             ->disableOriginalConstructor()
@@ -97,7 +101,7 @@ class SelectContainerBuilderTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
-        $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $objectManagerHelper = new ObjectManager($this);
         $this->selectContainerBuilder = $objectManagerHelper->getObject(
             SelectContainerBuilder::class,
             [
@@ -191,7 +195,7 @@ class SelectContainerBuilderTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return MockObject
      */
     private function mockQuery()
     {

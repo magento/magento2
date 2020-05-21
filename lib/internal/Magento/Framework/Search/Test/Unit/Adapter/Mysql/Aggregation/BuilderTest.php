@@ -3,79 +3,89 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\Search\Test\Unit\Adapter\Mysql\Aggregation;
 
+use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Ddl\Table;
 use Magento\Framework\DB\Select;
 use Magento\Framework\Search\Adapter\Aggregation\AggregationResolverInterface;
+use Magento\Framework\Search\Adapter\Mysql\Aggregation\Builder;
+use Magento\Framework\Search\Adapter\Mysql\Aggregation\Builder\Container;
 use Magento\Framework\Search\Adapter\Mysql\Aggregation\DataProviderContainer;
 use Magento\Framework\Search\Adapter\Mysql\Aggregation\DataProviderInterface;
-use Magento\Framework\Search\Adapter\Mysql\Aggregation\Builder;
 use Magento\Framework\Search\Adapter\Mysql\TemporaryStorage;
+use Magento\Framework\Search\EntityMetadata;
+use Magento\Framework\Search\Request\BucketInterface;
+use Magento\Framework\Search\RequestInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class BuilderTest extends \PHPUnit\Framework\TestCase
+class BuilderTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\Search\EntityMetadata|\PHPUnit_Framework_MockObject_MockObject
+     * @var EntityMetadata|MockObject
      */
     private $entityMetadata;
 
     /**
-     * @var \Magento\Framework\App\ResourceConnection|\PHPUnit_Framework_MockObject_MockObject
+     * @var ResourceConnection|MockObject
      */
     private $resource;
 
     /**
-     * @var \Magento\Framework\DB\Adapter\AdapterInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var AdapterInterface|MockObject
      */
     private $connectionMock;
 
     /**
-     * @var \Magento\Framework\Search\RequestInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var RequestInterface|MockObject
      */
     private $request;
 
     /**
-     * @var \Magento\Framework\Search\Request\BucketInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var BucketInterface|MockObject
      */
     private $bucket;
 
     /**
-     * @var DataProviderContainer|\PHPUnit_Framework_MockObject_MockObject
+     * @var DataProviderContainer|MockObject
      */
     private $dataProviderContainer;
 
     /**
-     * @var DataProviderInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var DataProviderInterface|MockObject
      */
     private $dataProvider;
 
     /**
-     * @var Builder\Container|\PHPUnit_Framework_MockObject_MockObject
+     * @var Builder\Container|MockObject
      */
     private $aggregationContainer;
 
     /**
-     * @var Builder\BucketInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var Builder\BucketInterface|MockObject
      */
     private $bucketBuilder;
 
     /**
-     * @var \Magento\Framework\DB\Select|\PHPUnit_Framework_MockObject_MockObject
+     * @var Select|MockObject
      */
     private $select;
 
     /**
-     * @var AggregationResolverInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var AggregationResolverInterface|MockObject
      */
     private $aggregationResolver;
 
     /**
-     * @var Table|\PHPUnit_Framework_MockObject_MockObject
+     * @var Table|MockObject
      */
     private $table;
 
@@ -87,26 +97,26 @@ class BuilderTest extends \PHPUnit\Framework\TestCase
     /**
      * SetUP method
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $helper = new ObjectManager($this);
 
-        $this->entityMetadata = $this->getMockBuilder(\Magento\Framework\Search\EntityMetadata::class)
+        $this->entityMetadata = $this->getMockBuilder(EntityMetadata::class)
             ->setMethods(['getEntityId'])
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->request = $this->getMockBuilder(\Magento\Framework\Search\RequestInterface::class)
+        $this->request = $this->getMockBuilder(RequestInterface::class)
             ->setMethods(['getAggregation'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
-        $this->bucket = $this->getMockBuilder(\Magento\Framework\Search\Request\BucketInterface::class)
+        $this->bucket = $this->getMockBuilder(BucketInterface::class)
             ->setMethods(['getName'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
-        $this->select = $this->getMockBuilder(\Magento\Framework\DB\Select::class)
+        $this->select = $this->getMockBuilder(Select::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -118,45 +128,45 @@ class BuilderTest extends \PHPUnit\Framework\TestCase
             ->getMockForAbstractClass();
 
         $this->aggregationContainer = $this->getMockBuilder(
-            \Magento\Framework\Search\Adapter\Mysql\Aggregation\Builder\Container::class
+            Container::class
         )
             ->setMethods(['get'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->aggregationContainer->expects($this->any())->method('get')->willReturn($this->bucketBuilder);
 
-        $this->connectionMock = $this->getMockBuilder(\Magento\Framework\DB\Adapter\AdapterInterface::class)
+        $this->connectionMock = $this->getMockBuilder(AdapterInterface::class)
             ->setMethods(['fetchAssoc'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
         $this->dataProvider = $this->getMockBuilder(
-            \Magento\Framework\Search\Adapter\Mysql\Aggregation\DataProviderInterface::class
+            DataProviderInterface::class
         )
             ->setMethods(['getDataSet'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
         $this->dataProviderContainer = $this->getMockBuilder(
-            \Magento\Framework\Search\Adapter\Mysql\Aggregation\DataProviderContainer::class
+            DataProviderContainer::class
         )
             ->setMethods(['get'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->dataProviderContainer->expects($this->any())->method('get')->willReturn($this->dataProvider);
 
-        $this->resource = $this->getMockBuilder(\Magento\Framework\App\ResourceConnection::class)
+        $this->resource = $this->getMockBuilder(ResourceConnection::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->resource->expects($this->any())->method('getConnection')->willReturn($this->connectionMock);
 
-        $this->aggregationResolver = $this->createMock(AggregationResolverInterface::class);
+        $this->aggregationResolver = $this->getMockForAbstractClass(AggregationResolverInterface::class);
         $this->table = $this->getMockBuilder(Table::class)
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->builder = $helper->getObject(
-            \Magento\Framework\Search\Adapter\Mysql\Aggregation\Builder::class,
+            Builder::class,
             [
                 'entityMetadata' => $this->entityMetadata,
                 'dataProviderContainer' => $this->dataProviderContainer,
@@ -193,7 +203,9 @@ class BuilderTest extends \PHPUnit\Framework\TestCase
         $documentIds = [1, 2];
         $tableName = 'table_name';
 
-        $select = $this->getMockBuilder(Select::class)->disableOriginalConstructor()->getMock();
+        $select = $this->getMockBuilder(Select::class)
+            ->disableOriginalConstructor()
+            ->getMock();
         $select->expects($this->once())
             ->method('from')
             ->with($tableName, TemporaryStorage::FIELD_ENTITY_ID)

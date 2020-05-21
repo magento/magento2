@@ -3,21 +3,29 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Framework\MessageQueue\Test\Unit\Bulk;
+
+use Magento\Framework\Amqp\Bulk\Exchange;
+use Magento\Framework\MessageQueue\Bulk\ExchangeFactoryInterface;
+use Magento\Framework\MessageQueue\Bulk\ExchangeRepository;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Unit test for ExchangeRepository.
  */
-class ExchangeRepositoryTest extends \PHPUnit\Framework\TestCase
+class ExchangeRepositoryTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\MessageQueue\Bulk\ExchangeFactoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ExchangeFactoryInterface|MockObject
      */
     private $exchangeFactory;
 
     /**
-     * @var \Magento\Framework\MessageQueue\Bulk\ExchangeRepository
+     * @var ExchangeRepository
      */
     private $exchangeRepository;
 
@@ -26,15 +34,16 @@ class ExchangeRepositoryTest extends \PHPUnit\Framework\TestCase
      *
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->exchangeFactory = $this
-            ->getMockBuilder(\Magento\Framework\MessageQueue\Bulk\ExchangeFactoryInterface::class)
-            ->disableOriginalConstructor()->getMock();
+            ->getMockBuilder(ExchangeFactoryInterface::class)
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
 
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $objectManager = new ObjectManager($this);
         $this->exchangeRepository = $objectManager->getObject(
-            \Magento\Framework\MessageQueue\Bulk\ExchangeRepository::class
+            ExchangeRepository::class
         );
         $objectManager->setBackwardCompatibleProperty(
             $this->exchangeRepository,
@@ -52,8 +61,9 @@ class ExchangeRepositoryTest extends \PHPUnit\Framework\TestCase
     {
         $connectionName = 'amqp';
         $exchange = $this
-            ->getMockBuilder(\Magento\Framework\Amqp\Bulk\Exchange::class)
-            ->disableOriginalConstructor()->getMock();
+            ->getMockBuilder(Exchange::class)
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->exchangeFactory->expects($this->once())->method('create')->with($connectionName)->willReturn($exchange);
         $this->assertEquals($exchange, $this->exchangeRepository->getByConnectionName($connectionName));
     }

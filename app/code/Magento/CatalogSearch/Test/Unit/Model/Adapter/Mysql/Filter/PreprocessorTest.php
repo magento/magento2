@@ -3,35 +3,48 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\CatalogSearch\Test\Unit\Model\Adapter\Mysql\Filter;
 
+use Magento\Catalog\Model\Product;
 use Magento\CatalogSearch\Model\Adapter\Mysql\Filter\AliasResolver;
+use Magento\CatalogSearch\Model\Adapter\Mysql\Filter\Preprocessor;
+use Magento\Customer\Model\Session;
+use Magento\Eav\Model\Config;
+use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
+use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\App\ScopeInterface;
+use Magento\Framework\App\ScopeResolverInterface;
+use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Select;
 use Magento\Framework\EntityManager\EntityMetadata;
+use Magento\Framework\EntityManager\MetadataPool;
+use Magento\Framework\Search\Adapter\Mysql\ConditionManager;
 use Magento\Framework\Search\Request\FilterInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @deprecated
+ * @deprecated Implementation class was replaced
  * @see \Magento\ElasticSearch
  */
-class PreprocessorTest extends \PHPUnit\Framework\TestCase
+class PreprocessorTest extends TestCase
 {
     /**
-     * @var AliasResolver|\PHPUnit_Framework_MockObject_MockObject
+     * @var AliasResolver|MockObject
      */
     private $aliasResolver;
 
     /**
-     * @var \Magento\Framework\DB\Adapter\AdapterInterface|MockObject
+     * @var AdapterInterface|MockObject
      */
     private $connection;
 
     /**
-     * @var \Magento\CatalogSearch\Model\Adapter\Mysql\Filter\Preprocessor
+     * @var Preprocessor
      */
     protected $target;
 
@@ -41,7 +54,7 @@ class PreprocessorTest extends \PHPUnit\Framework\TestCase
     private $resource;
 
     /**
-     * @var \Magento\Eav\Model\Entity\Attribute\AbstractAttribute|MockObject
+     * @var AbstractAttribute|MockObject
      */
     private $attribute;
 
@@ -56,22 +69,22 @@ class PreprocessorTest extends \PHPUnit\Framework\TestCase
     private $filter;
 
     /**
-     * @var \Magento\Framework\App\ScopeInterface|MockObject
+     * @var ScopeInterface|MockObject
      */
     private $scope;
 
     /**
-     * @var \Magento\Eav\Model\Config|MockObject
+     * @var Config|MockObject
      */
     private $config;
 
     /**
-     * @var \Magento\Framework\App\ScopeResolverInterface|MockObject
+     * @var ScopeResolverInterface|MockObject
      */
     private $scopeResolver;
 
     /**
-     * @var \Magento\Framework\Search\Adapter\Mysql\ConditionManager|MockObject
+     * @var ConditionManager|MockObject
      */
     private $conditionManager;
 
@@ -81,7 +94,7 @@ class PreprocessorTest extends \PHPUnit\Framework\TestCase
     private $metadataPoolMock;
 
     /**
-     * @var \Magento\Customer\Model\Session|\PHPUnit_Framework_MockObject_MockObject
+     * @var Session|MockObject
      */
     protected $customerSessionMock;
 
@@ -93,58 +106,58 @@ class PreprocessorTest extends \PHPUnit\Framework\TestCase
     /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManagerHelper = new ObjectManagerHelper($this);
 
-        $this->conditionManager = $this->getMockBuilder(\Magento\Framework\Search\Adapter\Mysql\ConditionManager::class)
+        $this->conditionManager = $this->getMockBuilder(ConditionManager::class)
             ->disableOriginalConstructor()
             ->setMethods(['wrapBrackets'])
             ->getMock();
-        $this->scopeResolver = $this->getMockBuilder(\Magento\Framework\App\ScopeResolverInterface::class)
+        $this->scopeResolver = $this->getMockBuilder(ScopeResolverInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['getScope'])
             ->getMockForAbstractClass();
-        $this->scope = $this->getMockBuilder(\Magento\Framework\App\ScopeInterface::class)
+        $this->scope = $this->getMockBuilder(ScopeInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['getId'])
             ->getMockForAbstractClass();
         $this->scopeResolver->expects($this->any())
             ->method('getScope')
-            ->will($this->returnValue($this->scope));
-        $this->config = $this->getMockBuilder(\Magento\Eav\Model\Config::class)
+            ->willReturn($this->scope);
+        $this->config = $this->getMockBuilder(Config::class)
             ->disableOriginalConstructor()
             ->setMethods(['getAttribute'])
             ->getMock();
         $methods = ['getBackendTable', 'isStatic', 'getAttributeId',
             'getAttributeCode', 'getFrontendInput', 'getBackendType'
         ];
-        $this->attribute = $this->getMockBuilder(\Magento\Eav\Model\Entity\Attribute\AbstractAttribute::class)
+        $this->attribute = $this->getMockBuilder(AbstractAttribute::class)
             ->disableOriginalConstructor()
             ->setMethods($methods)
             ->getMockForAbstractClass();
-        $this->resource = $resource = $this->getMockBuilder(\Magento\Framework\App\ResourceConnection::class)
+        $this->resource = $resource = $this->getMockBuilder(ResourceConnection::class)
             ->disableOriginalConstructor()
             ->setMethods(['getConnection', 'getTableName'])
             ->getMock();
-        $this->connection = $this->getMockBuilder(\Magento\Framework\DB\Adapter\AdapterInterface::class)
+        $this->connection = $this->getMockBuilder(AdapterInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['select', 'getIfNullSql', 'quote', 'quoteInto'])
             ->getMockForAbstractClass();
-        $this->select = $this->getMockBuilder(\Magento\Framework\DB\Select::class)
+        $this->select = $this->getMockBuilder(Select::class)
             ->disableOriginalConstructor()
             ->setMethods(['from', 'join', 'where', '__toString', 'joinLeft', 'columns', 'having'])
             ->getMock();
         $this->connection->expects($this->any())
             ->method('select')
-            ->will($this->returnValue($this->select));
+            ->willReturn($this->select);
         $this->connection->expects($this->any())
             ->method('quoteIdentifier')
-            ->will($this->returnArgument(0));
+            ->willReturnArgument(0);
         $resource->expects($this->atLeastOnce())
             ->method('getConnection')
-            ->will($this->returnValue($this->connection));
-        $this->filter = $this->getMockBuilder(\Magento\Framework\Search\Request\FilterInterface::class)
+            ->willReturn($this->connection);
+        $this->filter = $this->getMockBuilder(FilterInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['getField', 'getValue', 'getType'])
             ->getMockForAbstractClass();
@@ -152,18 +165,16 @@ class PreprocessorTest extends \PHPUnit\Framework\TestCase
         $this->conditionManager->expects($this->any())
             ->method('wrapBrackets')
             ->with($this->select)
-            ->will(
-                $this->returnCallback(
-                    function ($select) {
-                        return '(' . $select . ')';
-                    }
-                )
+            ->willReturnCallback(
+                function ($select) {
+                    return '(' . $select . ')';
+                }
             );
 
         $this->aliasResolver = $this->getMockBuilder(AliasResolver::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->metadataPoolMock = $this->getMockBuilder(\Magento\Framework\EntityManager\MetadataPool::class)
+        $this->metadataPoolMock = $this->getMockBuilder(MetadataPool::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -174,7 +185,7 @@ class PreprocessorTest extends \PHPUnit\Framework\TestCase
         $this->metadataPoolMock->expects($this->any())->method('getMetadata')->willReturn($metadata);
         $metadata->expects($this->any())->method('getLinkField')->willReturn('entity_id');
 
-        $this->customerSessionMock = $this->getMockBuilder(\Magento\Customer\Model\Session::class)
+        $this->customerSessionMock = $this->getMockBuilder(Session::class)
             ->disableOriginalConstructor()
             ->setMethods(['getCustomerGroupId'])
             ->getMock();
@@ -184,7 +195,7 @@ class PreprocessorTest extends \PHPUnit\Framework\TestCase
             ->willReturn($this->customerGroupId);
 
         $this->target = $objectManagerHelper->getObject(
-            \Magento\CatalogSearch\Model\Adapter\Mysql\Filter\Preprocessor::class,
+            Preprocessor::class,
             [
                 'conditionManager' => $this->conditionManager,
                 'scopeResolver' => $this->scopeResolver,
@@ -206,11 +217,11 @@ class PreprocessorTest extends \PHPUnit\Framework\TestCase
 
         $this->filter->expects($this->exactly(2))
             ->method('getField')
-            ->will($this->returnValue('price'));
+            ->willReturn('price');
         $this->config->expects($this->exactly(1))
             ->method('getAttribute')
-            ->with(\Magento\Catalog\Model\Product::ENTITY, 'price')
-            ->will($this->returnValue($this->attribute));
+            ->with(Product::ENTITY, 'price')
+            ->willReturn($this->attribute);
 
         $actualResult = $this->target->process($this->filter, $isNegation, $query);
         $this->assertSame($expectedResult, $this->removeWhitespaces($actualResult));
@@ -241,16 +252,16 @@ class PreprocessorTest extends \PHPUnit\Framework\TestCase
 
         $this->filter->expects($this->exactly(3))
             ->method('getField')
-            ->will($this->returnValue('category_ids'));
+            ->willReturn('category_ids');
 
         $this->filter->expects($this->once())
             ->method('getValue')
-            ->will($this->returnValue($categoryId));
+            ->willReturn($categoryId);
 
         $this->config->expects($this->exactly(1))
             ->method('getAttribute')
-            ->with(\Magento\Catalog\Model\Product::ENTITY, 'category_ids')
-            ->will($this->returnValue($this->attribute));
+            ->with(Product::ENTITY, 'category_ids')
+            ->willReturn($this->attribute);
 
         $this->connection
             ->expects($this->once())
@@ -274,14 +285,14 @@ class PreprocessorTest extends \PHPUnit\Framework\TestCase
             ->willReturn('attr_table_alias');
         $this->filter->expects($this->exactly(3))
             ->method('getField')
-            ->will($this->returnValue('static_attribute'));
+            ->willReturn('static_attribute');
         $this->config->expects($this->exactly(1))
             ->method('getAttribute')
-            ->with(\Magento\Catalog\Model\Product::ENTITY, 'static_attribute')
-            ->will($this->returnValue($this->attribute));
+            ->with(Product::ENTITY, 'static_attribute')
+            ->willReturn($this->attribute);
         $this->attribute->expects($this->once())
             ->method('isStatic')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $actualResult = $this->target->process($this->filter, $isNegation, $query);
         $this->assertSame($expectedResult, $this->removeWhitespaces($actualResult));
@@ -294,12 +305,12 @@ class PreprocessorTest extends \PHPUnit\Framework\TestCase
     {
         $this->config->expects($this->exactly(1))
             ->method('getAttribute')
-            ->with(\Magento\Catalog\Model\Product::ENTITY, 'termField')
-            ->will($this->returnValue($this->attribute));
+            ->with(Product::ENTITY, 'termField')
+            ->willReturn($this->attribute);
 
         $this->attribute->expects($this->once())
             ->method('isStatic')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
 
         $this->filter->expects($this->once())
             ->method('getType')
@@ -316,7 +327,7 @@ class PreprocessorTest extends \PHPUnit\Framework\TestCase
             ->willReturn('termField');
         $this->filter->expects($this->exactly(2))
             ->method('getValue')
-        ->willReturn($fieldValue);
+            ->willReturn($fieldValue);
 
         $this->connection->expects($this->atLeastOnce())->method('quote')->willReturnArgument(0);
         $actualResult = $this->target->process($this->filter, $isNegation, 'This filter is not depends on used query');
@@ -388,50 +399,45 @@ class PreprocessorTest extends \PHPUnit\Framework\TestCase
         $query = 'SELECT field FROM table';
         $attributeId = 1234567;
 
-        $this->scope->expects($this->once())->method('getId')->will($this->returnValue($scopeId));
+        $this->scope->expects($this->once())->method('getId')->willReturn($scopeId);
         $this->filter->expects($this->exactly(5))
             ->method('getField')
-            ->will($this->returnValue('not_static_attribute'));
+            ->willReturn('not_static_attribute');
         $this->config->expects($this->exactly(1))
             ->method('getAttribute')
-            ->with(\Magento\Catalog\Model\Product::ENTITY, 'not_static_attribute')
-            ->will($this->returnValue($this->attribute));
+            ->with(Product::ENTITY, 'not_static_attribute')
+            ->willReturn($this->attribute);
         $this->attribute->expects($this->once())
             ->method('isStatic')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
         $this->attribute->expects($this->once())
             ->method('getBackendTable')
-            ->will($this->returnValue('backend_table'));
+            ->willReturn('backend_table');
         $this->attribute->expects($this->once())
             ->method('getAttributeId')
-            ->will($this->returnValue($attributeId));
+            ->willReturn($attributeId);
         $this->connection->expects($this->once())
             ->method('getIfNullSql')
             ->with('current_store.value', 'main_table.value')
-            ->will($this->returnValue('IF NULL SQL'));
+            ->willReturn('IF NULL SQL');
         $this->resource->expects($this->once())->method('getTableName')->willReturn('catalog_product_entity');
         $this->select->expects($this->once())
             ->method('from')
-            ->with(['e' => 'catalog_product_entity'], ['entity_id'])
-            ->will($this->returnSelf());
+            ->with(['e' => 'catalog_product_entity'], ['entity_id'])->willReturnSelf();
         $this->select->expects($this->once())
             ->method('join')
-            ->with(['main_table' => 'backend_table'], "main_table.entity_id = e.entity_id")
-            ->will($this->returnSelf());
+            ->with(['main_table' => 'backend_table'], "main_table.entity_id = e.entity_id")->willReturnSelf();
         $this->select->expects($this->once())
             ->method('joinLeft')
-            ->with(['current_store' => 'backend_table'])
-            ->will($this->returnSelf());
+            ->with(['current_store' => 'backend_table'])->willReturnSelf();
         $this->select->expects($this->once())
             ->method('columns')
-            ->with(['not_static_attribute' => 'IF NULL SQL'])
-            ->will($this->returnSelf());
+            ->with(['not_static_attribute' => 'IF NULL SQL'])->willReturnSelf();
         $this->select->expects($this->exactly(2))
-            ->method('where')
-            ->will($this->returnSelf());
+            ->method('where')->willReturnSelf();
         $this->select->expects($this->once())
             ->method('__toString')
-            ->will($this->returnValue('TEST QUERY PART'));
+            ->willReturn('TEST QUERY PART');
 
         $actualResult = $this->target->process($this->filter, $isNegation, $query);
         $this->assertSame($expectedResult, $this->removeWhitespaces($actualResult));
@@ -456,12 +462,12 @@ class PreprocessorTest extends \PHPUnit\Framework\TestCase
             ->willReturn('termField');
         $this->config->expects($this->exactly(1))
             ->method('getAttribute')
-            ->with(\Magento\Catalog\Model\Product::ENTITY, 'termField')
-            ->will($this->returnValue($this->attribute));
+            ->with(Product::ENTITY, 'termField')
+            ->willReturn($this->attribute);
 
         $this->attribute->expects($this->once())
             ->method('isStatic')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
 
         $this->filter->expects($this->any())
             ->method('getType')
