@@ -25,14 +25,14 @@
         <waitForPageLoad stepKey="WaitForPageLoaded"/>
         <!--Verify fields removed-->
         <grabTextFrom selector="{{CaptchaFormsDisplayingSection.forms}}" stepKey="formItems"/>
-        <assertNotContains stepKey="checkoutAsGuest">
+        <assertStringNotContainsString stepKey="checkoutAsGuest">
             <expectedResult type="string">{{CaptchaData.checkoutAsGuest}}</expectedResult>
             <actualResult type="variable">$formItems</actualResult>
-        </assertNotContains>
-        <assertNotContains stepKey="register">
+        </assertStringNotContainsString>
+        <assertStringNotContainsString stepKey="register">
             <expectedResult type="string">{{CaptchaData.register}}</expectedResult>
             <actualResult type="variable">$formItems</actualResult>
-        </assertNotContains>
+        </assertStringNotContainsString>
         <!--Verify fields existence-->
         <grabTextFrom selector="{{CaptchaFormsDisplayingSection.createUser}}" stepKey="createUser"/>
         <assertEquals stepKey="CreateUserFieldIsPresent">

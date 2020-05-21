@@ -25,7 +25,7 @@ class ExtractAssetsFromContentTest extends TestCase
     /**
      * @inheritdoc
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->extractAssetsFromContent = Bootstrap::getObjectManager()
             ->get(ExtractAssetsFromContentInterface::class);
@@ -79,6 +79,12 @@ class ExtractAssetsFromContentTest extends TestCase
             ],
             'Relevant wysiwyg paths in content' => [
                 'content <img src="https://domain.com/media/testDirectory/path.jpg"}} content',
+                [
+                    2020
+                ]
+            ],
+            'Relevant path content with pub' => [
+                '/pub/media/testDirectory/path.jpg',
                 [
                     2020
                 ]

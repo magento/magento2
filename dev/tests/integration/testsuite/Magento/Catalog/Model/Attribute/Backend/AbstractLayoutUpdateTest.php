@@ -53,7 +53,7 @@ class AbstractLayoutUpdateTest extends TestCase
     /**
      * @inheritDoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->categoryFactory = Bootstrap::getObjectManager()->get(CategoryFactory::class);
         $this->recreateCategory();
@@ -93,7 +93,7 @@ class AbstractLayoutUpdateTest extends TestCase
         /** @var AbstractBackend $fileAttribute */
         $fileAttribute = $this->category->getAttributes()['custom_layout_update_file']->getBackend();
         $fileAttribute->beforeSave($this->category);
-        $this->assertEquals(null, $this->category->getData('custom_layout_update_file'));
+        $this->assertNull($this->category->getData('custom_layout_update_file'));
 
         //Removing custom layout update by explicitly selecting the new file (or an empty file).
         $this->recreateCategory();

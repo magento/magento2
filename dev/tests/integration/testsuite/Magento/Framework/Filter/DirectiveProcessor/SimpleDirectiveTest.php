@@ -23,7 +23,7 @@ class SimpleDirectiveTest extends TestCase
      */
     private $objectManager;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = ObjectManager::getInstance();
     }
@@ -74,6 +74,7 @@ class SimpleDirectiveTest extends TestCase
     public function testParametersAreParsed()
     {
         $filter = $this->objectManager->create(Template::class);
+        $filter->setStrictMode(false);
 
         $processor = $this->createWithProcessorsAndFilters(
             ['mydir' => $this->objectManager->create(MyDirProcessor::class)],

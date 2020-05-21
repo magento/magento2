@@ -1,17 +1,27 @@
 <?php
+
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\SalesRule\Test\Unit\Block\Rss;
 
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\RequestInterface;
+use Magento\Framework\App\Rss\UrlBuilderInterface;
+use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Framework\UrlInterface;
+use Magento\SalesRule\Model\Rss\Discounts;
+use Magento\SalesRule\Model\Rule;
+use Magento\Store\Model\Store;
+use Magento\Store\Model\StoreManagerInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-/**
- * Class DiscountsTest
- * @package Magento\SalesRule\Block\Rss
- */
-class DiscountsTest extends \PHPUnit\Framework\TestCase
+class DiscountsTest extends TestCase
 {
     /**
      * @var \Magento\SalesRule\Block\Rss\Discounts
@@ -24,81 +34,83 @@ class DiscountsTest extends \PHPUnit\Framework\TestCase
     protected $objectManagerHelper;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var StoreManagerInterface|MockObject
      */
     protected $storeManagerInterface;
 
     /**
-     * @var \Magento\Store\Model\Store|\PHPUnit_Framework_MockObject_MockObject
+     * @var Store|MockObject
      */
     protected $storeModel;
 
     /**
-     * @var \Magento\SalesRule\Model\Rss\Discounts|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\SalesRule\Model\Rss\Discounts|MockObject
      */
     protected $discounts;
 
     /**
-     * @var \Magento\Framework\App\Rss\UrlBuilderInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var UrlBuilderInterface|MockObject
      */
     protected $rssBuilderInterface;
 
     /**
-     * @var \Magento\Framework\UrlInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var UrlInterface|MockObject
      */
     protected $urlBuilderInterface;
 
     /**
-     * @var \Magento\Framework\App\RequestInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var RequestInterface|MockObject
      */
     protected $requestInterface;
 
     /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ScopeConfigInterface|MockObject
      */
     protected $scopeConfigInterface;
 
     /**
-     * @var \Magento\SalesRule\Model\Rss\Discounts|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\SalesRule\Model\Rss\Discounts|MockObject
      */
     protected $rssModel;
 
     /**
-     * @var \Magento\Framework\Stdlib\DateTime\TimezoneInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var TimezoneInterface|MockObject
      */
     protected $timezoneInterface;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->storeManagerInterface = $this->createMock(\Magento\Store\Model\StoreManagerInterface::class);
-        $this->requestInterface = $this->createMock(\Magento\Framework\App\RequestInterface::class);
-        $this->rssBuilderInterface = $this->createMock(\Magento\Framework\App\Rss\UrlBuilderInterface::class);
-        $this->urlBuilderInterface = $this->createMock(\Magento\Framework\UrlInterface::class);
-        $this->scopeConfigInterface = $this->createMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
-        $this->timezoneInterface = $this->createMock(\Magento\Framework\Stdlib\DateTime\TimezoneInterface::class);
-        $this->discounts = $this->createMock(\Magento\SalesRule\Model\Rss\Discounts::class);
-        $this->rssModel = $this->createPartialMock(\Magento\SalesRule\Model\Rss\Discounts::class, [
-                '__wakeup',
+        $this->storeManagerInterface = $this->getMockForAbstractClass(StoreManagerInterface::class);
+        $this->requestInterface = $this->getMockForAbstractClass(RequestInterface::class);
+        $this->rssBuilderInterface = $this->getMockForAbstractClass(UrlBuilderInterface::class);
+        $this->urlBuilderInterface = $this->getMockForAbstractClass(UrlInterface::class);
+        $this->scopeConfigInterface = $this->getMockForAbstractClass(ScopeConfigInterface::class);
+        $this->timezoneInterface = $this->getMockForAbstractClass(TimezoneInterface::class);
+        $this->rssModel = $this->createPartialMock(
+            Discounts::class,
+            [
                 'getDiscountCollection'
-            ]);
-        $this->storeModel = $this->createPartialMock(\Magento\Store\Model\Store::class, [
-                '__wakeUp',
+            ]
+        );
+        $this->storeModel = $this->createPartialMock(
+            Store::class,
+            [
                 'getId',
                 'getWebsiteId',
                 'getName',
                 'getFrontendName'
-            ]);
+            ]
+        );
 
         $this->storeManagerInterface->expects($this->any())->method('getStore')
-            ->will($this->returnValue($this->storeModel));
-        $this->storeModel->expects($this->any())->method('getId')->will($this->returnValue(1));
+            ->willReturn($this->storeModel);
+        $this->storeModel->expects($this->any())->method('getId')->willReturn(1);
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->block = $this->objectManagerHelper->getObject(
             \Magento\SalesRule\Block\Rss\Discounts::class,
             [
                 'storeManager' => $this->storeManagerInterface,
-                'rssModel' => $this->discounts,
                 'rssUrlBuilder' => $this->rssBuilderInterface,
                 'urlBuilder' => $this->urlBuilderInterface,
                 'request' => $this->requestInterface,
@@ -128,42 +140,39 @@ class DiscountsTest extends \PHPUnit\Framework\TestCase
                 'title' => 'Rule Name',
                 'link' => 'http://rss.magento.com',
                 'description' => [
-                        'description' => 'Rule Description',
-                        'start_date' => '12/12/14',
-                        'end_date' => '12/12/14',
-                        'coupon_code' => '1234567',
-                    ],
+                    'description' => 'Rule Description',
+                    'start_date' => '12/12/14',
+                    'end_date' => '12/12/14',
+                    'coupon_code' => '1234567',
+                ],
             ],
         ];
         $rssUrl = 'http://rss.magento.com/discount';
         $url = 'http://rss.magento.com';
 
-        $ruleModel =  $this->createPartialMock(\Magento\SalesRule\Model\Rule::class, [
-                '__wakeup',
-                'getCouponCode',
-                'getToDate',
-                'getFromDate',
-                'getDescription',
-                'getName'
-            ]);
+        $ruleModel = $this->getMockBuilder(Rule::class)
+            ->addMethods(['getCouponCode', 'getDescription', 'getName'])
+            ->onlyMethods(['getToDate', 'getFromDate'])
+            ->disableOriginalConstructor()
+            ->getMock();
 
-        $this->storeModel->expects($this->once())->method('getWebsiteId')->will($this->returnValue(1));
+        $this->storeModel->expects($this->once())->method('getWebsiteId')->willReturn(1);
         $this->storeModel->expects($this->never())->method('getName');
         $this->storeModel->expects($this->atLeastOnce())->method('getFrontendName')->willReturn('Frontend Name');
 
-        $this->requestInterface->expects($this->any())->method('getParam')->will($this->returnValue(1));
-        $this->urlBuilderInterface->expects($this->any())->method('getUrl')->will($this->returnValue($url));
-        $this->rssBuilderInterface->expects($this->any())->method('getUrl')->will($this->returnValue($rssUrl));
-        $this->scopeConfigInterface->expects($this->any())->method('getValue')->will($this->returnValue('en_US'));
-        $ruleModel->expects($this->any())->method('getCouponCode')->will($this->returnValue($ruleData['coupon_code']));
-        $ruleModel->expects($this->any())->method('getToDate')->will($this->returnValue($ruleData['to_date']));
-        $ruleModel->expects($this->once())->method('getFromDate')->will($this->returnValue($ruleData['from_date']));
+        $this->requestInterface->expects($this->any())->method('getParam')->willReturn(1);
+        $this->urlBuilderInterface->expects($this->any())->method('getUrl')->willReturn($url);
+        $this->rssBuilderInterface->expects($this->any())->method('getUrl')->willReturn($rssUrl);
+        $this->scopeConfigInterface->expects($this->any())->method('getValue')->willReturn('en_US');
+        $ruleModel->expects($this->any())->method('getCouponCode')->willReturn($ruleData['coupon_code']);
+        $ruleModel->expects($this->any())->method('getToDate')->willReturn($ruleData['to_date']);
+        $ruleModel->expects($this->once())->method('getFromDate')->willReturn($ruleData['from_date']);
         $ruleModel->expects($this->once())->method('getDescription')
-            ->will($this->returnValue($ruleData['description']));
-        $ruleModel->expects($this->once())->method('getName')->will($this->returnValue($ruleData['name']));
+            ->willReturn($ruleData['description']);
+        $ruleModel->expects($this->once())->method('getName')->willReturn($ruleData['name']);
         $this->rssModel->expects($this->any())->method('getDiscountCollection')
-            ->will($this->returnValue([$ruleModel]));
-        $this->timezoneInterface->expects($this->any())->method('formatDateTime')->will($this->returnValue('12/12/14'));
+            ->willReturn([$ruleModel]);
+        $this->timezoneInterface->expects($this->any())->method('formatDateTime')->willReturn('12/12/14');
 
         $data = $this->block->getRssData();
 
@@ -174,10 +183,22 @@ class DiscountsTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($rssData['language'], $data['language']);
         $this->assertEquals($rssData['entries']['title'], $data['entries'][0]['title']);
         $this->assertEquals($rssData['entries']['link'], $data['entries'][0]['link']);
-        $this->assertContains($rssData['entries']['description']['description'], $data['entries'][0]['description']);
-        $this->assertContains($rssData['entries']['description']['start_date'], $data['entries'][0]['description']);
-        $this->assertContains($rssData['entries']['description']['end_date'], $data['entries'][0]['description']);
-        $this->assertContains($rssData['entries']['description']['coupon_code'], $data['entries'][0]['description']);
+        $this->assertStringContainsString(
+            $rssData['entries']['description']['description'],
+            $data['entries'][0]['description']
+        );
+        $this->assertStringContainsString(
+            $rssData['entries']['description']['start_date'],
+            $data['entries'][0]['description']
+        );
+        $this->assertStringContainsString(
+            $rssData['entries']['description']['end_date'],
+            $data['entries'][0]['description']
+        );
+        $this->assertStringContainsString(
+            $rssData['entries']['description']['coupon_code'],
+            $data['entries'][0]['description']
+        );
     }
 
     public function testGetCacheLifetime()
@@ -191,7 +212,7 @@ class DiscountsTest extends \PHPUnit\Framework\TestCase
      */
     public function testIsAllowed($isAllowed)
     {
-        $this->scopeConfigInterface->expects($this->once())->method('isSetFlag')->will($this->returnValue($isAllowed));
+        $this->scopeConfigInterface->expects($this->once())->method('isSetFlag')->willReturn($isAllowed);
         $this->assertEquals($isAllowed, $this->block->isAllowed());
     }
 
@@ -214,9 +235,9 @@ class DiscountsTest extends \PHPUnit\Framework\TestCase
         ];
         $this->rssBuilderInterface->expects($this->any())
             ->method('getUrl')
-            ->will($this->returnValue($feedData['link']));
+            ->willReturn($feedData['link']);
 
-        $this->scopeConfigInterface->expects($this->once())->method('isSetFlag')->will($this->returnValue(true));
+        $this->scopeConfigInterface->expects($this->once())->method('isSetFlag')->willReturn(true);
         $this->assertEquals($feedData, $this->block->getFeeds());
     }
 }
