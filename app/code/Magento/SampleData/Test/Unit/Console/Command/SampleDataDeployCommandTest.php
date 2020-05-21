@@ -15,9 +15,6 @@ use Magento\Setup\Model\PackagesAuth;
 use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Component\Console\Tester\CommandTester;
 
-/**
- * Tests for command `sampledata:deploy`
- */
 class SampleDataDeployCommandTest extends AbstractSampleDataCommandTest
 {
     /**
@@ -199,7 +196,7 @@ class SampleDataDeployCommandTest extends AbstractSampleDataCommandTest
      */
     public function testExecuteWithException(): void
     {
-        $this->expectException(Exception::class);
+        $this->expectException(\Exception::class);
         $this->expectExceptionMessage(
             'Error in writing Auth file path/to/auth.json. Please check permissions for writing.'
         );
@@ -238,8 +235,6 @@ class SampleDataDeployCommandTest extends AbstractSampleDataCommandTest
     }
 
     /**
-     * Creates command tester
-     *
      * @return CommandTester
      */
     private function createCommandTester(): CommandTester
@@ -256,8 +251,6 @@ class SampleDataDeployCommandTest extends AbstractSampleDataCommandTest
     }
 
     /**
-     * Returns expected arguments for command `composer require`
-     *
      * @param $sampleDataPackages
      * @param $pathToComposerJson
      * @return array

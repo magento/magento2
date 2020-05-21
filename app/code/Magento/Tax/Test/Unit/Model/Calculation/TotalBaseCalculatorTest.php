@@ -3,19 +3,24 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Tax\Test\Unit\Model\Calculation;
 
+use Magento\Tax\Api\TaxClassManagementInterface;
+use Magento\Tax\Model\Calculation\TotalBaseCalculator;
+use PHPUnit\Framework\MockObject\MockObject;
+
 class TotalBaseCalculatorTest extends RowBaseAndTotalBaseCalculatorTestCase
 {
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    /** @var MockObject */
     protected $totalBaseCalculator;
 
     public function testCalculateWithTaxInPrice()
     {
         $this->initTotalBaseCalculator();
         $this->totalBaseCalculator->expects($this->exactly(3))
-            ->method('deltaRound')->will($this->returnValue(0));
+            ->method('deltaRound')->willReturn(0);
         $this->initMocks(true);
 
         $this->assertSame(
@@ -29,7 +34,7 @@ class TotalBaseCalculatorTest extends RowBaseAndTotalBaseCalculatorTestCase
     {
         $this->initTotalBaseCalculator();
         $this->totalBaseCalculator->expects($this->exactly(3))
-            ->method('deltaRound')->will($this->returnValue(0));
+            ->method('deltaRound')->willReturn(0);
         $this->initMocks(true);
 
         $this->assertSame(
@@ -43,7 +48,7 @@ class TotalBaseCalculatorTest extends RowBaseAndTotalBaseCalculatorTestCase
     {
         $this->initTotalBaseCalculator();
         $this->totalBaseCalculator->expects($this->exactly(2))
-            ->method('deltaRound')->will($this->returnValue(0));
+            ->method('deltaRound')->willReturn(0);
         $this->initMocks(false);
 
         $this->assertSame(
@@ -54,8 +59,8 @@ class TotalBaseCalculatorTest extends RowBaseAndTotalBaseCalculatorTestCase
 
     private function initTotalBaseCalculator()
     {
-        $taxClassService = $this->createMock(\Magento\Tax\Api\TaxClassManagementInterface::class);
-        $this->totalBaseCalculator = $this->getMockBuilder(\Magento\Tax\Model\Calculation\TotalBaseCalculator::class)
+        $taxClassService = $this->getMockForAbstractClass(TaxClassManagementInterface::class);
+        $this->totalBaseCalculator = $this->getMockBuilder(TotalBaseCalculator::class)
             ->setMethods(['deltaRound'])
             ->setConstructorArgs(
                 [

@@ -15,12 +15,11 @@
             <testCaseId value="MC-5345"/>
             <severity value="CRITICAL"/>
             <group value="mtf_migrated"/>
-            <group value="urlRewrite"/>
         </annotations>
 
         <before>
             <createData entity="simpleCmsPage" stepKey="createCMSPage"/>
-            <actionGroup ref="LoginAsAdmin" stepKey="login"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
         </before>
         <after>
             <deleteData createDataKey="createCMSPage" stepKey="deleteCMSPage"/>

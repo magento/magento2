@@ -3,31 +3,37 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\View\Test\Unit\Element\Html;
 
-use Magento\Framework\View\Element\Html\Links;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\View\Element\AbstractBlock;
+use Magento\Framework\View\Element\Html\Link;
+use Magento\Framework\View\Element\Html\Links;
 use Magento\Framework\View\Element\Template\Context;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class LinksTest extends \PHPUnit\Framework\TestCase
+class LinksTest extends TestCase
 {
     /**
-     * @var ObjectManager|\PHPUnit_Framework_MockObject_MockObject
+     * @var ObjectManager|MockObject
      */
     protected $objectManagerHelper;
 
-    /** @var Links|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var Links|MockObject */
     protected $block;
 
-    /** @var Context|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var Context|MockObject */
     protected $context;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManagerHelper = new ObjectManager($this);
 
         /** @var Context $context */
-        $this->context = $this->objectManagerHelper->getObject(\Magento\Framework\View\Element\Template\Context::class);
+        $this->context = $this->objectManagerHelper->getObject(Context::class);
         $this->block = new Links($this->context);
     }
 
@@ -46,7 +52,7 @@ class LinksTest extends \PHPUnit\Framework\TestCase
 
     public function testSetActive()
     {
-        $link = $this->createMock(\Magento\Framework\View\Element\Html\Link::class);
+        $link = $this->createMock(Link::class);
         $link
             ->expects($this->at(1))
             ->method('__call')
@@ -78,8 +84,8 @@ class LinksTest extends \PHPUnit\Framework\TestCase
             ->with($name)
             ->willReturn($blockHtml);
 
-        /** @var \Magento\Framework\View\Element\AbstractBlock $link */
-        $link = $this->getMockBuilder(\Magento\Framework\View\Element\AbstractBlock::class)
+        /** @var AbstractBlock $link */
+        $link = $this->getMockBuilder(AbstractBlock::class)
             ->disableOriginalConstructor()
             ->getMock();
         $link

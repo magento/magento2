@@ -78,7 +78,10 @@ define([
                         '?isAjax=true&current_tree_path=d3lzaXd5Zw,,',
                     null,
                     null,
-                    'Hello world'
+                    'Hello world',
+                    {
+                        targetElementId: 'theTargetId'
+                    }
                 );
             });
         });
