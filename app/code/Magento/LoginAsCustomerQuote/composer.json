@@ -1,15 +1,15 @@
 {
-    "name": "magento/module-login-as-customer-sales",
+    "name": "magento/module-login-as-customer-quote",
     "description": "",
     "require": {
         "php": "~7.3.0||~7.4.0",
         "magento/framework": "*",
-        "magento/module-backend": "*",
+        "magento/module-checkout": "*",
         "magento/module-customer": "*",
-        "magento/module-user": "*"
+        "magento/module-quote": "*"
     },
     "suggest": {
-        "magento/module-sales": "*"
+        "magento/module-login-as-customer-api": "*"
     },
     "type": "magento2-module",
     "license": [
@@ -21,7 +21,7 @@
             "registration.php"
         ],
         "psr-4": {
-            "Magento\\LoginAsCustomerSales\\": ""
+            "Magento\\LoginAsCustomerQuote\\": ""
         }
     }
 }

@@ -8,21 +8,20 @@ declare(strict_types=1);
 namespace Magento\LoginAsCustomerApi\Api;
 
 use Magento\Framework\Exception\LocalizedException;
-use Magento\LoginAsCustomerApi\Api\Data\AuthenticationDataInterface;
 
 /**
- * Get authentication data by secret
+ * Authenticate a customer by secret
  *
  * @api
  */
-interface GetAuthenticationDataBySecretInterface
+interface AuthenticateCustomerBySecretInterface
 {
     /**
-     * Get authentication data by secret
+     * Authenticate a customer by secret
      *
      * @param string $secret
-     * @return AuthenticationDataInterface
+     * @return void
      * @throws LocalizedException
      */
-    public function execute(string $secret): AuthenticationDataInterface;
+    public function execute(string $secret): void;
 }

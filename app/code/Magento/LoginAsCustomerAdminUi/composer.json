@@ -1,15 +1,13 @@
 {
-    "name": "magento/module-login-as-customer-sales",
+    "name": "magento/module-login-as-customer-admin-ui",
     "description": "",
     "require": {
         "php": "~7.3.0||~7.4.0",
         "magento/framework": "*",
+        "magento/module-login-as-customer-api": "*",
         "magento/module-backend": "*",
         "magento/module-customer": "*",
-        "magento/module-user": "*"
-    },
-    "suggest": {
-        "magento/module-sales": "*"
+        "magento/module-store": "*"
     },
     "type": "magento2-module",
     "license": [
@@ -17,11 +15,9 @@
         "AFL-3.0"
     ],
     "autoload": {
-        "files": [
-            "registration.php"
-        ],
+        "files": [ "registration.php" ],
         "psr-4": {
-            "Magento\\LoginAsCustomerSales\\": ""
+            "Magento\\LoginAsCustomerAdminUi\\": ""
         }
     }
 }
