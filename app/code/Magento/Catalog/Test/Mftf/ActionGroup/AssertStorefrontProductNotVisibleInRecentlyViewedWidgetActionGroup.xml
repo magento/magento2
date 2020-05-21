@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AssertStorefrontProductNotVisibleInRecentlyViewedWidgetActionGroup">
+        <annotations>
+            <description>Validate that the provided Product not appears in the Recently Viewed Products widget.</description>
+        </annotations>
+        <arguments>
+            <argument name="productName" type="string" defaultValue="{{SimpleOne.name}}"/>
+        </arguments>
+
+        <dontSee selector="{{StorefrontWidgetsSection.widgetRecentlyViewedProductsGrid}}" userInput="{{productName}}" stepKey="dontSeeProductInRecentlyViewedWidget"/>
+    </actionGroup>
+</actionGroups>
