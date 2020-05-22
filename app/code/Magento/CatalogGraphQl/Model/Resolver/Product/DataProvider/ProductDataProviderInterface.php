@@ -21,5 +21,5 @@ interface ProductDataProviderInterface
      * @param array $attributeCodes
      * @return ProductInterface
      */
-    public function getProductById(int $productId, array $attributeCodes);
+    public function getProductById(int $productId, array $attributeCodes): ProductInterface;
 }

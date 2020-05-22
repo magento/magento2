@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\CatalogGraphQl\Model\Resolver\Product\DataProvider;
 
 use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\ProductFactory;
 use Magento\Catalog\Model\ResourceModel\Product as ProductResourceModel;
 
@@ -47,9 +48,9 @@ class ProductDataProvider implements ProductDataProviderInterface
      * @param array $attributeCodes
      * @return ProductInterface|Product
      */
-    public function getProductById(int $productId, array $attributeCodes)
+    public function getProductById(int $productId, array $attributeCodes): ProductInterface
     {
-        /** @var \Magento\Catalog\Model\Product $product */
+        /** @var Product $product */
         $product = $this->productFactory->create();
         $this->productResourceModel->load($product, $productId, $attributeCodes);
 
