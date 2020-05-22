@@ -38,6 +38,7 @@ return [
   `longtext` longtext,
   `mediumtext` mediumtext,
   `varchar` varchar(254) DEFAULT NULL,
+  `char` char(255) DEFAULT NULL,
   `mediumblob` mediumblob,
   `blob` blob,
   `boolean` tinyint(1) DEFAULT NULL,

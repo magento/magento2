@@ -4,8 +4,18 @@
  * See COPYING.txt for license details.
  */
 
-require 'quote_with_address.php';
-/** @var \Magento\Quote\Model\Quote $quote */
+use Magento\Quote\Model\QuoteFactory;
+use Magento\Quote\Model\ResourceModel\Quote as QuoteResource;
+use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
+
+Resolver::getInstance()->requireDataFixture('Magento/Checkout/_files/quote_with_address.php');
+/** @var QuoteFactory $quoteFactory */
+$quoteFactory = Bootstrap::getObjectManager()->get(QuoteFactory::class);
+/** @var QuoteResource $quoteResource */
+$quoteResource = Bootstrap::getObjectManager()->get(QuoteResource::class);
+$quote = $quoteFactory->create();
+$quoteResource->load($quote, 'test_order_1', 'reserved_order_id');
 
 /** @var $rate \Magento\Quote\Model\Quote\Address\Rate */
 $rate = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(

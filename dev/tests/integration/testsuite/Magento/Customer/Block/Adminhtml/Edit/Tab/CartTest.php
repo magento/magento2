@@ -5,33 +5,53 @@
  */
 namespace Magento\Customer\Block\Adminhtml\Edit\Tab;
 
+use Magento\Backend\Block\Template\Context;
+use Magento\Backend\Model\Session\Quote as SessionQuote;
 use Magento\Customer\Controller\RegistryConstants;
+use Magento\Framework\ObjectManagerInterface;
+use Magento\Framework\Registry;
+use Magento\Quote\Model\Quote;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Magento\Customer\Block\Adminhtml\Edit\Tab\Cart
  *
  * @magentoAppArea adminhtml
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class CartTest extends \PHPUnit\Framework\TestCase
 {
     const CUSTOMER_ID_VALUE = 1234;
 
-    /** @var \Magento\Backend\Block\Template\Context */
+    /**
+     * @var Context
+     */
     private $_context;
 
-    /** @var \Magento\Framework\Registry */
+    /**
+     * @var Registry
+     */
     private $_coreRegistry;
 
-    /** @var \Magento\Store\Model\StoreManagerInterface */
+    /**
+     * @var StoreManagerInterface
+     */
     private $_storeManager;
 
-    /** @var Cart */
+    /**
+     * @var Cart
+     */
     private $_block;
 
-    /** @var \Magento\Framework\ObjectManagerInterface */
+    /**
+     * @var ObjectManagerInterface
+     */
     private $_objectManager;
 
-    public function setUp()
+    /**
+     * @inheritdoc
+     */
+    protected function setUp(): void
     {
         $this->_objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
@@ -53,22 +73,96 @@ class CartTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function tearDown()
+    /**
+     * @inheritdoc
+     */
+    protected function tearDown(): void
     {
         $this->_coreRegistry->unregister(RegistryConstants::CURRENT_CUSTOMER_ID);
     }
 
-    public function testGetCustomerId()
+    /**
+     * Verify Grid with quote items
+     *
+     * @magentoDataFixture Magento/Sales/_files/quote_with_two_products_and_customer.php
+     * @magentoDataFixture Magento/Customer/_files/customer.php
+     * @dataProvider getQuoteDataProvider
+     *
+     * @param int $customerId
+     * @param bool $guest
+     * @param bool $contains
+     * @return void
+     */
+    public function testVerifyCollectionWithQuote(int $customerId, bool $guest, bool $contains): void
+    {
+        $session = $this->_objectManager->create(SessionQuote::class);
+        $session->setCustomerId($customerId);
+        $quoteFixture = $this->_objectManager->create(Quote::class);
+        $quoteFixture->load('test01', 'reserved_order_id');
+        $quoteFixture->setCustomerIsGuest($guest)
+                     ->setCustomerId($customerId)
+                     ->save();
+        $this->_block->toHtml();
+        if ($contains) {
+            $this->assertStringContainsString(
+                "We couldn&#039;t find any records",
+                $this->_block->getGridParentHtml()
+            );
+        } else {
+            $this->assertStringNotContainsString(
+                "We couldn&#039;t find any records",
+                $this->_block->getGridParentHtml()
+            );
+        }
+    }
+
+    /**
+     * Data provider for withQuoteTest
+     *
+     * @return array
+     */
+    public function getQuoteDataProvider(): array
+    {
+        return [
+            [
+                 6,
+                 false,
+                 true
+            ],
+            [
+                 self::CUSTOMER_ID_VALUE,
+                 true,
+                 false
+            ],
+        ];
+    }
+
+    /**
+     * Verify Customer id
+     *
+     * @return void
+     */
+    public function testGetCustomerId(): void
     {
         $this->assertEquals(self::CUSTOMER_ID_VALUE, $this->_block->getCustomerId());
     }
 
-    public function testGetGridUrl()
+    /**
+     * Verify get grid url
+     *
+     * @return void
+     */
+    public function testGetGridUrl(): void
     {
-        $this->assertContains('/backend/customer/index/cart', $this->_block->getGridUrl());
+        $this->assertStringContainsString('/backend/customer/index/cart', $this->_block->getGridUrl());
     }
 
-    public function testGetGridParentHtml()
+    /**
+     * Verify grid parent html
+     *
+     * @return void
+     */
+    public function testGetGridParentHtml(): void
     {
         $this->_block = $this->_objectManager->get(
             \Magento\Framework\View\LayoutInterface::class
@@ -81,26 +175,36 @@ class CartTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->_block->setCollection($mockCollection);
-        $this->assertContains(
+        $this->assertStringContainsString(
             "<div class=\"admin__data-grid-header admin__data-grid-toolbar\"",
             $this->_block->getGridParentHtml()
         );
     }
 
-    public function testGetRowUrl()
+    /**
+     * Verify row url
+     *
+     * @return void
+     */
+    public function testGetRowUrl(): void
     {
         $row = new \Magento\Framework\DataObject();
         $row->setProductId(1);
-        $this->assertContains('/backend/catalog/product/edit/id/1', $this->_block->getRowUrl($row));
+        $this->assertStringContainsString('/backend/catalog/product/edit/id/1', $this->_block->getRowUrl($row));
     }
 
-    public function testGetHtml()
+    /**
+     * Verify get html
+     *
+     * @return void
+     */
+    public function testGetHtml(): void
     {
         $html = $this->_block->toHtml();
-        $this->assertContains("<div id=\"customer_cart_grid\"", $html);
-        $this->assertContains("<div class=\"admin__data-grid-header admin__data-grid-toolbar\"", $html);
-        $this->assertContains("customer_cart_gridJsObject = new varienGrid(\"customer_cart_grid\",", $html);
-        $this->assertContains(
+        $this->assertStringContainsString("<div id=\"customer_cart_grid\"", $html);
+        $this->assertStringContainsString("<div class=\"admin__data-grid-header admin__data-grid-toolbar\"", $html);
+        $this->assertStringContainsString("customer_cart_gridJsObject = new varienGrid(\"customer_cart_grid\",", $html);
+        $this->assertStringContainsString(
             'backend\u002Fcustomer\u002Fcart_product_composite_cart\u002Fconfigure\u002Fcustomer_id\u002F'
             . self::CUSTOMER_ID_VALUE,
             $html

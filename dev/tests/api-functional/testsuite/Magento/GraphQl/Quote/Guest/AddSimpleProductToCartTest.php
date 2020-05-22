@@ -8,8 +8,10 @@ declare(strict_types=1);
 namespace Magento\GraphQl\Quote\Guest;
 
 use Exception;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\GraphQl\Quote\GetMaskedQuoteIdByReservedOrderId;
 use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\TestCase\GraphQl\ResponseContainsErrorsException;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 
 /**
@@ -25,7 +27,7 @@ class AddSimpleProductToCartTest extends GraphQlAbstract
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = Bootstrap::getObjectManager();
         $this->getMaskedQuoteIdByReservedOrderId = $objectManager->get(GetMaskedQuoteIdByReservedOrderId::class);
@@ -80,11 +82,63 @@ class AddSimpleProductToCartTest extends GraphQlAbstract
     }
 
     /**
-     * @expectedException Exception
-     * @expectedExceptionMessage Required parameter "cart_id" is missing
+     * Add disabled product to cart
+     *
+     * @magentoApiDataFixture Magento/Catalog/_files/multiple_products.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
+     * @return void
+     */
+    public function testAddDisabledProductToCart(): void
+    {
+        $sku = 'simple3';
+        $quantity = 2;
+
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
+        $query = $this->getQuery($maskedQuoteId, $sku, $quantity);
+
+        $this->expectException(ResponseContainsErrorsException::class);
+        $this->expectExceptionMessage(
+            'Could not add the product with SKU ' . $sku . ' to the shopping cart: ' .
+            'Product that you are trying to add is not available.'
+        );
+
+        $this->graphQlMutation($query);
+    }
+
+    /**
+     * Add out of stock product to cart
+     *
+     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
+     * @magentoApiDataFixture Magento/Catalog/_files/multiple_products.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
+     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/set_simple_product_out_of_stock.php
+     * @return void
+     * @throws NoSuchEntityException
+     */
+    public function testAddOutOfStockProductToCart(): void
+    {
+        $sku = 'simple1';
+        $quantity = 1;
+
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
+        $query = $this->getQuery($maskedQuoteId, $sku, $quantity);
+
+        $this->expectException(ResponseContainsErrorsException::class);
+        $this->expectExceptionMessage(
+            'Some of the products are out of stock.'
+        );
+
+        $this->graphQlMutation($query);
+    }
+
+    /**
      */
     public function testAddSimpleProductToCartIfCartIdIsEmpty()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Required parameter "cart_id" is missing');
+
         $query = <<<QUERY
 mutation {
   addSimpleProductsToCart(
@@ -106,11 +160,12 @@ QUERY;
     }
 
     /**
-     * @expectedException Exception
-     * @expectedExceptionMessage Required parameter "cart_items" is missing
      */
     public function testAddSimpleProductToCartIfCartItemsAreEmpty()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Required parameter "cart_items" is missing');
+
         $query = <<<QUERY
 mutation {
   addSimpleProductsToCart(
@@ -134,11 +189,12 @@ QUERY;
     /**
      * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
      *
-     * @expectedException Exception
-     * @expectedExceptionMessage Could not find a cart with ID "non_existent_masked_id"
      */
     public function testAddProductToNonExistentCart()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Could not find a cart with ID "non_existent_masked_id"');
+
         $sku = 'simple_product';
         $quantity = 1;
         $maskedQuoteId = 'non_existent_masked_id';
@@ -150,11 +206,12 @@ QUERY;
     /**
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
      *
-     * @expectedException Exception
-     * @expectedExceptionMessage Could not find a product with SKU "simple_product"
      */
     public function testNonExistentProductToCart()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Could not find a product with SKU "simple_product"');
+
         $sku = 'simple_product';
         $quantity = 1;
         $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
@@ -191,7 +248,7 @@ QUERY;
     private function getQuery(string $maskedQuoteId, string $sku, float $quantity): string
     {
         return <<<QUERY
-mutation {  
+mutation {
   addSimpleProductsToCart(
     input: {
       cart_id: "{$maskedQuoteId}"

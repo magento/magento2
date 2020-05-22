@@ -20,7 +20,7 @@
         </annotations>
         <before>
             <!-- log in -->
-            <actionGroup ref="LoginAsAdmin" stepKey="login"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
             <!-- Set configurations -->
             <magentoCLI command="config:set carriers/tablerate/active 1"  stepKey="setShippingMethodEnabled"/>
             <magentoCLI command="config:set carriers/tablerate/condition_name package_value"  stepKey="setShippingMethodConditionName"/>
@@ -92,7 +92,7 @@
             <magentoCLI command="config:set tax/cart_display/subtotal 1"  stepKey="unsetSubtotal"/>
             <magentoCLI command="config:set carriers/freeshipping/active 0"  stepKey="unsetFreeShipping"/>
             <!-- Log out -->
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
         <!-- Add testing products to the cart -->
         <amOnPage url="{{StorefrontProductPage.url($$createSimpleProductFirst.custom_attributes[url_key]$$)}}" stepKey="goToProductPage"/>
@@ -113,8 +113,7 @@
         </actionGroup>
         <see selector="{{StorefrontMinicartSection.quantity}}" userInput="6" stepKey="seeCartQuantity"/>
         <!-- Go to the shopping cart page -->
-        <amOnPage url="{{CheckoutCartPage.url}}" stepKey="amOnPageShoppingCart"/>
-        <waitForPageLoad stepKey="waitForCheckoutPageLoad"/>
+        <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="amOnPageShoppingCart"/>
         <waitForElementVisible selector="{{CheckoutCartSummarySection.orderTotal}}" stepKey="waitForOrderTotalVisible"/>
         <selectOption selector="{{CheckoutCartSummarySection.country}}" userInput="United States" stepKey="selectCountry"/>
         <waitForElementVisible selector="{{CheckoutCartSummarySection.discountAmount}}" stepKey="waitForOrderTotalUpdate"/>

@@ -6,9 +6,11 @@
 
 use Magento\Framework\App\TemplateTypesInterface;
 
+// phpcs:disable Generic.Files.LineLength.TooLong
+
 /** @var $block \Magento\Email\Block\Adminhtml\Template\Edit */
 ?>
-<?php if (!$block->getEditMode()) : ?>
+<?php if (!$block->getEditMode()): ?>
 <form action="<?= $block->escapeUrl($block->getLoadUrl()) ?>" method="post" id="email_template_load_form">
     <?= $block->getBlockHtml('formkey') ?>
     <fieldset class="admin__fieldset form-inline">
@@ -17,14 +19,14 @@ use Magento\Framework\App\TemplateTypesInterface;
             <label class="admin__field-label" for="template_select"><span><?= $block->escapeHtml(__('Template')) ?></span></label>
             <div class="admin__field-control">
                 <select id="template_select" name="code" class="admin__control-select required-entry">
-                    <?php foreach ($block->getTemplateOptions() as $group => $options) : ?>
-                        <?php if ($group) : ?>
+                    <?php foreach ($block->getTemplateOptions() as $group => $options): ?>
+                        <?php if ($group): ?>
                             <optgroup label="<?= $block->escapeHtmlAttr($group) ?>">
                         <?php endif; ?>
-                        <?php foreach ($options as $option) : ?>
+                        <?php foreach ($options as $option): ?>
                             <option value="<?= $block->escapeHtmlAttr($option['value']) ?>"<?= /* @noEscape */ $block->getOrigTemplateCode() == $option['value'] ? ' selected="selected"' : '' ?>><?= $block->escapeHtml($option['label']) ?></option>
                         <?php endforeach; ?>
-                        <?php if ($group) : ?>
+                        <?php if ($group): ?>
                             </optgroup>
                         <?php endif; ?>
                     <?php endforeach; ?>
@@ -114,6 +116,8 @@ require([
         },
 
         stripTags: function () {
+            var self = this;
+
             confirm({
                 content: "<?= $block->escapeJs($block->escapeHtml(__('Are you sure you want to strip tags?'))) ?>",
                 actions: {
@@ -125,7 +129,7 @@ require([
                         ).stripTags().strip();
                         $('convert_button_back').show();
                         $('field_template_styles').hide();
-                        this.typeChange = true;
+                        self.typeChange = true;
                         return false;
                     }
                 }

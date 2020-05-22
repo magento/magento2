@@ -3,15 +3,17 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Setup\Test\Unit\Controller;
 
-use \Magento\Setup\Controller\LandingInstaller;
-use \Magento\Framework\App\ProductMetadata;
-use \Magento\Framework\Composer\ComposerJsonFinder;
-use Magento\Framework\App\Filesystem\DirectoryList;
+use Laminas\View\Model\ViewModel;
+use Magento\Framework\App\ProductMetadata;
+use Magento\Setup\Controller\LandingInstaller;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class LandingInstallerTest extends \PHPUnit\Framework\TestCase
+class LandingInstallerTest extends TestCase
 {
     /**
      * Test Product Version Value
@@ -20,19 +22,19 @@ class LandingInstallerTest extends \PHPUnit\Framework\TestCase
 
     public function testIndexAction()
     {
-        /** @var \Magento\Framework\App\ProductMetadata|\PHPUnit_Framework_MockObject_MockObject $productMetadataMock */
-        $productMetadataMock =  $this->getMockBuilder(\Magento\Framework\App\ProductMetadata::class)
+        /** @var ProductMetadata|MockObject $productMetadataMock */
+        $productMetadataMock =  $this->getMockBuilder(ProductMetadata::class)
             ->setMethods(['getVersion'])
             ->disableOriginalConstructor()
             ->getMock();
         $productMetadataMock->expects($this->once())
             ->method('getVersion')
             ->willReturn($this::TEST_PRODUCT_VERSION);
-        /** @var $controller LandingInstaller */
+        /** @var LandingInstaller $controller */
         $controller = new LandingInstaller($productMetadataMock);
         $_SERVER['DOCUMENT_ROOT'] = 'some/doc/root/value';
         $viewModel = $controller->indexAction();
-        $this->assertInstanceOf(\Zend\View\Model\ViewModel::class, $viewModel);
+        $this->assertInstanceOf(ViewModel::class, $viewModel);
         $this->assertTrue($viewModel->terminate());
         $this->assertEquals('/magento/setup/landing.phtml', $viewModel->getTemplate());
         $variables = $viewModel->getVariables();

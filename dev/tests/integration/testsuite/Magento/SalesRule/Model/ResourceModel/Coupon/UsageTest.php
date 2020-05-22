@@ -71,7 +71,7 @@ class UsageTest extends \PHPUnit\Framework\TestCase
         }
     }
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
         $this->coupon = $this->objectManager->get(Coupon::class);
