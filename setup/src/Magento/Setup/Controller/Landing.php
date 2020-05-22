@@ -11,7 +11,7 @@ use Laminas\View\Model\ViewModel;
 /**
  * Controller for Setup Landing page
  */
-class LandingInstaller extends AbstractActionController
+class Landing extends AbstractActionController
 {
     /**
      * @var \Magento\Framework\App\ProductMetadata
@@ -33,17 +33,10 @@ class LandingInstaller extends AbstractActionController
      */
     public function indexAction()
     {
-        $welcomeMsg = "Welcome to Magento Admin, your online store headquarters.<br>"
-            . "Click 'Agree and Set Up Magento' or read ";
-        $docRef = "https://devdocs.magento.com/guides/v2.3/install-gde/install/web/install-web.html";
-        $agreeButtonText = "Agree and Setup Magento";
         $view = new ViewModel;
         $view->setTerminal(true);
         $view->setTemplate('/magento/setup/landing.phtml');
         $view->setVariable('version', $this->productMetadata->getVersion());
-        $view->setVariable('welcomeMsg', $welcomeMsg);
-        $view->setVariable('docRef', $docRef);
-        $view->setVariable('agreeButtonText', $agreeButtonText);
         return $view;
     }
 }
