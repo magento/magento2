@@ -9,10 +9,15 @@
  */
 namespace Magento\CustomerImportExport\Model\Import;
 
+use Magento\Customer\Api\AddressRepositoryInterface;
+use Magento\Customer\Api\CustomerRepositoryInterface;
+use Magento\Customer\Api\Data\AddressInterface;
+use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem;
 use Magento\ImportExport\Model\Import as ImportModel;
 use Magento\ImportExport\Model\Import\Adapter as ImportAdapter;
+use Magento\ImportExport\Model\Import\Source\Csv;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Framework\Indexer\StateInterface;
 use ReflectionClass;
@@ -482,5 +487,55 @@ class AddressTest extends \PHPUnit\Framework\TestCase
         $statusAfterImport = $this->indexerProcessor->getIndexer()->getStatus();
         $this->assertEquals(StateInterface::STATUS_VALID, $statusBeforeImport);
         $this->assertEquals(StateInterface::STATUS_INVALID, $statusAfterImport);
+    }
+
+    /**
+     * Test import address with region for a country that does not have regions defined
+     *
+     * @magentoDataFixture Magento/Customer/_files/import_export/customer_with_addresses.php
+     */
+    public function testImportAddressWithOptionalRegion()
+    {
+        $objectManager = Bootstrap::getObjectManager();
+        $customerRepository = $objectManager->get(CustomerRepositoryInterface::class);
+        $customer = $customerRepository->get('BetsyParker@example.com');
+        $file = __DIR__ . '/_files/import_uk_address.csv';
+        $filesystem = Bootstrap::getObjectManager()->create(Filesystem::class);
+        $directoryWrite = $filesystem->getDirectoryWrite(DirectoryList::ROOT);
+        $source = new Csv($file, $directoryWrite);
+        $errors = $this->_entityAdapter
+            ->setParameters(['behavior' => ImportModel::BEHAVIOR_ADD_UPDATE])
+            ->setSource($source)
+            ->validateData();
+        $this->assertEmpty($errors->getAllErrors(), 'Import validation failed');
+        $this->_entityAdapter->importData();
+        $address = $this->getAddresses(
+            [
+                'parent_id' => $customer->getId(),
+                'country_id' => 'GB',
+            ]
+        );
+        $this->assertCount(1, $address);
+        $this->assertNull($address[0]->getRegionId());
+        $this->assertEquals('Liverpool', $address[0]->getRegion()->getRegion());
+    }
+
+    /**
+     * Get Addresses by filter
+     *
+     * @param array $filter
+     * @return AddressInterface[]
+     */
+    private function getAddresses(array $filter): array
+    {
+        $objectManager = Bootstrap::getObjectManager();
+        /** @var AddressRepositoryInterface $repository */
+        $repository = $objectManager->create(AddressRepositoryInterface::class);
+        /** @var SearchCriteriaBuilder $searchCriteriaBuilder */
+        $searchCriteriaBuilder = $objectManager->get(SearchCriteriaBuilder::class);
+        foreach ($filter as $attr => $value) {
+            $searchCriteriaBuilder->addFilter($attr, $value);
+        }
+        return $repository->getList($searchCriteriaBuilder->create())->getItems();
     }
 }
