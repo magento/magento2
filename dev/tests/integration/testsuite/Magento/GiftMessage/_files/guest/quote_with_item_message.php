@@ -4,8 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-require __DIR__ . '/../../../../Magento/Catalog/_files/products.php';
-
+use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\GiftMessage\Model\Message;
 use Magento\GiftMessage\Model\ResourceModel\Message as MessageResource;
@@ -15,6 +14,9 @@ use Magento\Quote\Model\ResourceModel\Quote as QuoteResource;
 use Magento\Quote\Model\ResourceModel\Quote\QuoteIdMask as QuoteIdMaskResource;
 use Magento\Quote\Model\ResourceModel\Quote\QuoteIdMaskFactory;
 use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
+
+Resolver::getInstance()->requireDataFixture('Magento/Catalog/_files/products.php');
 
 /** @var ObjectManagerInterface $objectManager */
 $objectManager = Bootstrap::getObjectManager();
@@ -27,10 +29,12 @@ $quoteModel = $objectManager->create(Quote::class);
 $quoteModel->setData(['store_id' => 1, 'is_active' => 1, 'is_multi_shipping' => 0]);
 $quote->save($quoteModel);
 
-$quoteProduct = $product->load($product->getIdBySku('simple'));
+/** @var ProductRepositoryInterface $productRepository */
+$productRepository = $objectManager->create(ProductRepositoryInterface::class);
+$product = $productRepository->get('simple');
 
 $quoteModel->setReservedOrderId('test_guest_order_with_gift_message')
-    ->addProduct($product->load($product->getIdBySku('simple')), 1);
+    ->addProduct($product, 1);
 $quoteModel->collectTotals();
 $quote->save($quoteModel);
 
@@ -45,7 +49,7 @@ $messageModel->setRecipient('Jane Roe');
 $messageModel->setMessage('Gift Message Text');
 $message->save($messageModel);
 
-$quoteModel->getItemByProduct($quoteProduct)->setGiftMessageId($messageModel->getId());
+$quoteModel->getItemByProduct($product)->setGiftMessageId($messageModel->getId());
 $quote->save($quoteModel);
 
 /** @var QuoteIdMaskResource $quoteIdMask */
