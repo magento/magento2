@@ -2723,6 +2723,10 @@ return [
     ['Magento\CatalogSearch\Model\Fulltext\Observer'],
     ['Magento\CatalogSearch\Model\ResourceModel\Indexer\Fulltext'],
     [
+        'Magento\CatalogSearch\Setup\Patch\Data\MySQLSearchDeprecationNotification',
+        'Magento\CatalogSearch\Setup\Patch\Data\MySQLSearchRemovalNotification',
+    ],
+    [
         'Magento\Tax\Block\Adminhtml\Rate\Grid\Renderer\Country',
         'Magento\TaxImportExport\Block\Adminhtml\Rate\Grid\Renderer\Country',
     ],
@@ -4254,5 +4258,7 @@ return [
     ['Magento\Elasticsearch\Elasticsearch5\Model\Adapter\DataMapper\ProductDataMapperProxy'],
     ['Magento\Elasticsearch\Elasticsearch5\Model\Adapter\DataMapper\ProductDataMapper'],
     ['Magento\Elasticsearch\Model\Adapter\DataMapper\DataMapperResolver'],
-    ['Magento\Elasticsearch\Model\Adapter\Container\Attribute']
+    ['Magento\Elasticsearch\Model\Adapter\Container\Attribute'],
+    ['PHPUnit_Framework_MockObject_MockObject', 'PHPUnit\Framework\MockObject\MockObject'],
+    ['PHPUnit\Framework\BaseTestListener'],
 ];

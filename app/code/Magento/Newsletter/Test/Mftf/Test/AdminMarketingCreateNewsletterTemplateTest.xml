@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminMarketingCreateNewsletterTemplateTest">
+        <annotations>
+            <features value="Newsletter"/>
+            <stories value="Admin Creates Newsletter Template"/>
+            <title value="Newsletter Template Creation"/>
+            <description value="Newsletter Template Successfully Created"/>
+            <group value="newsletter"/>
+            <group value="mtf_migrated"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-29809"/>
+            <group value="WYSIWYGDisabled"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>
+        </before>
+        <after>
+         <!-- Delete Created Newsletter Template -->
+            <actionGroup ref="AdminSearchNewsletterTemplateOnGridActionGroup" stepKey="findCreatedNewsletterTemplateInGrid">
+            <argument name="name" value="{{_defaultNewsletter.name}}"/>
+            <argument name="subject" value="{{_defaultNewsletter.subject}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminMarketingOpenNewsletterTemplateFromGridActionGroup" stepKey="openTemplate"/>
+            <actionGroup ref="AdminMarketingDeleteNewsletterTemplateActionGroup" stepKey="deleteTemplate"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
+        </after>
+        <!--TEST BODY -->
+        <!-- Navigate To MARKETING > Newsletter Template -->
+        <actionGroup ref="AdminNavigateMenuActionGroup" stepKey="navigateToNewsletterTemplatePage">
+            <argument name="menuUiId" value="{{AdminMenuMarketing.dataUiId}}"/>
+            <argument name="submenuUiId" value="{{AdminMenuMarketingCommunicationsNewsletterTemplate.dataUiId}}"/>
+        </actionGroup>
+        <!-- Navigate To Create Newsletter Template Page -->
+        <actionGroup ref="AdminNavigateToCreateNewsletterTemplatePageActionGroup" stepKey="navigateToCreateNewsletterPage"/>
+        <!-- Create Newsletter Template -->
+        <actionGroup ref="AdminMarketingCreateNewsletterTemplateActionGroup" stepKey="updateNewsletterTemplate">
+            <argument name="name" value="{{_defaultNewsletter.name}}"/>
+            <argument name="subject" value="{{_defaultNewsletter.subject}}"/>
+            <argument name="senderName" value="{{_defaultNewsletter.senderName}}"/>
+            <argument name="senderEmail" value="{{_defaultNewsletter.senderEmail}}"/>
+            <argument name="templateContent" value="{{_defaultNewsletter.textAreaContent}}"/>
+        </actionGroup>
+        <!-- Assert Success Message -->
+        <actionGroup ref="AssertMessageInAdminPanelActionGroup" stepKey="seeSuccessMessage">
+            <argument name="message" value="The newsletter template has been saved."/>
+        </actionGroup>
+        <!-- Find Created Newsletter On grid -->
+        <actionGroup ref="AdminSearchNewsletterTemplateOnGridActionGroup" stepKey="findCreatedNewsletterTemplate">
+            <argument name="name" value="{{_defaultNewsletter.name}}"/>
+            <argument name="subject" value="{{_defaultNewsletter.subject}}"/>
+        </actionGroup>
+        <!-- Assert Created Newsletter on Grid -->
+        <actionGroup ref="AssertAdminCreatedNewsletterTemplateInGridActionGroup" stepKey="assertNewsletterInGrid">
+            <argument name="name" value="{{_defaultNewsletter.name}}"/>
+            <argument name="subject" value="{{_defaultNewsletter.subject}}"/>
+        </actionGroup>
+        <!--END TEST BODY -->
+    </test>
+</tests>

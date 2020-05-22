@@ -11,10 +11,9 @@ namespace Magento\MediaGallery\Test\Unit\Plugin\Wysiwyg\Images;
 use Magento\Cms\Model\Wysiwyg\Images\Storage as StorageSubject;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\ReadInterface;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
-use Magento\MediaGallery\Plugin\Wysiwyg\Images\Storage;
-use Magento\MediaGalleryApi\Model\Asset\Command\DeleteByPathInterface;
-use Magento\MediaGalleryApi\Model\Asset\Command\GetByPathInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\MediaGallery\Plugin\Wysiwyg\Images\Storage as StoragePlugin;
+use Magento\MediaGalleryApi\Api\DeleteAssetsByPathsInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
@@ -24,21 +23,14 @@ use Psr\Log\LoggerInterface;
  */
 class StorageTest extends TestCase
 {
-    const STUB_TARGET = '/stub/test.png';
-    const STUB_RELATIVE_PATH = 'test.png';
+    private const STUB_TARGET = '/stub/test.png';
+    private const STUB_RELATIVE_PATH = 'test.png';
+    private const NON_STRING_PATH = 2020;
+    private const INVALID_PATH = '&&';
+    private const VALID_PATH = 'test-directory-path/';
 
     /**
-     * @var Storage
-     */
-    private $storage;
-
-    /**
-     * @var GetByPathInterface|MockObject
-     */
-    private $getMediaAssetByPathMock;
-
-    /**
-     * @var DeleteByPathInterface|MockObject
+     * @var DeleteAssetsByPathsInterface|MockObject
      */
     private $deleteMediaAssetByPathMock;
 
@@ -63,35 +55,83 @@ class StorageTest extends TestCase
     private $readInterfaceMock;
 
     /**
-     * @inheritDoc
+     * @var StoragePlugin
      */
-    protected function setUp()
-    {
-        $this->storageSubjectMock = $this->createMock(StorageSubject::class);
-        $this->filesystemMock = $this->createMock(Filesystem::class);
-        $this->getMediaAssetByPathMock = $this->createMock(GetByPathInterface::class);
-        $this->deleteMediaAssetByPathMock = $this->getMockBuilder(DeleteByPathInterface::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['execute'])
-            ->getMockForAbstractClass();
-        $this->loggerMock = $this->getMockBuilder(LoggerInterface::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['critical'])
-            ->getMockForAbstractClass();
-        $this->readInterfaceMock = $this->getMockBuilder(ReadInterface::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getRelativePath'])
-            ->getMockForAbstractClass();
 
-        $this->storage = (new ObjectManagerHelper($this))->getObject(
-            Storage::class,
+    private $storage;
+
+    /**
+     * @inheritdoc
+     */
+    protected function setUp(): void
+    {
+        $this->deleteMediaAssetByPathMock = $this->getMockForAbstractClass(DeleteAssetsByPathsInterface::class);
+        $this->filesystemMock = $this->createMock(Filesystem::class);
+        $this->loggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
+        $this->storageSubjectMock = $this->createMock(StorageSubject::class);
+        $this->readInterfaceMock = $this->getMockForAbstractClass(ReadInterface::class);
+
+        $this->storage = (new ObjectManager($this))->getObject(
+            StoragePlugin::class,
             [
-                'getMediaAssetByPath' => $this->getMediaAssetByPathMock,
                 'deleteMediaAssetByPath' => $this->deleteMediaAssetByPathMock,
                 'filesystem' => $this->filesystemMock,
                 'logger' => $this->loggerMock
             ]
         );
+    }
+
+    /**
+     * @param string $path
+     *
+     * @dataProvider pathPathDataProvider
+     */
+    public function testAfterDeleteDirectory($path): void
+    {
+        $directoryRead = $this->getMockForAbstractClass(ReadInterface::class);
+        $this->filesystemMock->expects($this->any())
+            ->method('getDirectoryRead')
+            ->willReturn($directoryRead);
+
+        switch ($path) {
+            case self::NON_STRING_PATH:
+                $result = $this->storage->afterDeleteDirectory($this->storageSubjectMock, null, (int)$path);
+                self::assertNull($result);
+                break;
+            case self::INVALID_PATH:
+                $directoryRead->expects($this->once())
+                    ->method('getRelativePath')
+                    ->with($path)
+                    ->willThrowException(new \Exception());
+                $this->loggerMock->expects($this->once())
+                    ->method('critical');
+                $this->storage->afterDeleteDirectory($this->storageSubjectMock, null, $path);
+                break;
+            case self::VALID_PATH:
+                $directoryRead->expects($this->once())
+                    ->method('getRelativePath')
+                    ->with($path)
+                    ->willReturn($path);
+                $this->deleteMediaAssetByPathMock->expects($this->once())
+                    ->method('execute')
+                    ->with([$path]);
+                $this->storage->afterDeleteDirectory($this->storageSubjectMock, null, $path);
+                break;
+        }
+    }
+
+    /**
+     * Data provider for path
+     *
+     * @return array
+     */
+    public function pathPathDataProvider(): array
+    {
+        return [
+            'Non string path' => [2020],
+            'Invalid path' => [self::INVALID_PATH],
+            'Existent path' => [self::VALID_PATH]
+        ];
     }
 
     /**
