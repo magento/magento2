@@ -19,4 +19,7 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Customer\Api\CustomerRepositoryInterface">
+        <plugin name="loadCustomerIdFromRequest" type="Magento\Customer\Model\Plugin\UpdateCustomerId" />
+    </type>
 </config>

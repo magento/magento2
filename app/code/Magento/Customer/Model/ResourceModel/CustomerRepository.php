@@ -26,6 +26,7 @@ use Magento\Framework\Api\Search\FilterGroup;
 use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\EntityManager\HydratorInterface;
 use Magento\Framework\Event\ManagerInterface;
 use Magento\Store\Model\StoreManagerInterface;
 
@@ -120,6 +121,11 @@ class CustomerRepository implements CustomerRepositoryInterface
     private $delegatedStorage;
 
     /**
+     * @var HydratorInterface
+     */
+    private $hydrator;
+
+    /**
      * @param CustomerFactory $customerFactory
      * @param CustomerSecureFactory $customerSecureFactory
      * @param CustomerRegistry $customerRegistry
@@ -136,6 +142,7 @@ class CustomerRepository implements CustomerRepositoryInterface
      * @param CollectionProcessorInterface $collectionProcessor
      * @param NotificationStorage $notificationStorage
      * @param DelegatedStorage|null $delegatedStorage
+     * @param HydratorInterface|null $hydrator
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -154,7 +161,8 @@ class CustomerRepository implements CustomerRepositoryInterface
         JoinProcessorInterface $extensionAttributesJoinProcessor,
         CollectionProcessorInterface $collectionProcessor,
         NotificationStorage $notificationStorage,
-        DelegatedStorage $delegatedStorage = null
+        DelegatedStorage $delegatedStorage = null,
+        ?HydratorInterface $hydrator = null
     ) {
         $this->customerFactory = $customerFactory;
         $this->customerSecureFactory = $customerSecureFactory;
@@ -172,6 +180,7 @@ class CustomerRepository implements CustomerRepositoryInterface
         $this->collectionProcessor = $collectionProcessor;
         $this->notificationStorage = $notificationStorage;
         $this->delegatedStorage = $delegatedStorage ?? ObjectManager::getInstance()->get(DelegatedStorage::class);
+        $this->hydrator = $hydrator ?: ObjectManager::getInstance()->get(HydratorInterface::class);
     }
 
     /**
@@ -185,6 +194,7 @@ class CustomerRepository implements CustomerRepositoryInterface
      * @throws \Magento\Framework\Exception\LocalizedException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function save(CustomerInterface $customer, $passwordHash = null)
     {
@@ -193,10 +203,11 @@ class CustomerRepository implements CustomerRepositoryInterface
         $prevCustomerData = $prevCustomerDataArr = null;
         if ($customer->getId()) {
             $prevCustomerData = $this->getById($customer->getId());
-            $prevCustomerDataArr = $prevCustomerData->__toArray();
+            $prevCustomerDataArr = $this->hydrator->extract($prevCustomerData);
+            $customer = $this->hydrator->hydrate($prevCustomerData, $customer->__toArray());
         }
         /** @var $customer \Magento\Customer\Model\Data\Customer */
-        $customerArr = $customer->__toArray();
+        $customerArr = $this->hydrator->extract($customer);
         $customer = $this->imageProcessor->save(
             $customer,
             CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER,
