@@ -56,6 +56,7 @@ abstract class AbstractItemTest extends TestCase
         $itemsCollection = $this->quoteItemCollectionFactory->create();
         /** @var Item $quoteItem */
         $quoteItem = $itemsCollection->getFirstItem();
+        $this->assertNotEmpty($quoteItem->getId());
         $this->blockRendererItem->setProductHelpers([]);
         $html = $this->blockRendererItem->render($quoteItem);
 
@@ -74,11 +75,8 @@ abstract class AbstractItemTest extends TestCase
         $optionsXPath = $this->getOptionsValueXPath($quoteItem);
         $productName = $quoteItem->getProduct()->getName();
 
-        if (count($optionsXPath) == 0) {
-            $productNameXPath = "/descendant::*[contains(text(), '$productName')]";
-        } else {
-            $productNameXPath = "//div[contains(@class, 'product-title') and contains(text(), '$productName')]";
-        }
+        $productNameXPath = count($optionsXPath) == 0 ? "/descendant::*[contains(text(), '$productName')]"
+            : "//div[contains(@class, 'product-title') and contains(text(), '$productName')]";
 
         $this->assertEquals(
             1,

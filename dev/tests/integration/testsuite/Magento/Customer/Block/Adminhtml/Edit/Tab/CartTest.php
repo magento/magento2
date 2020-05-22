@@ -11,7 +11,7 @@ use Magento\Backend\Model\Session\Quote as SessionQuote;
 use Magento\Quote\Model\Quote;
 
 /**
- * Tests for customer's shopping cart using simple product and simple product with options.
+ * Class checks customer's shopping cart block with simple product and simple product with options.
  *
  * @see \Magento\Customer\Block\Adminhtml\Edit\Tab\Cart
  * @magentoAppArea adminhtml
@@ -35,7 +35,7 @@ class CartTest extends AbstractCartTest
      */
     public function testCustomerWithoutQuoteView(): void
     {
-        $this->processCheckQuoteItems('customer_two@example.com');
+        $this->processCheckWithoutQuoteItems('customer_two@example.com');
     }
 
     /**

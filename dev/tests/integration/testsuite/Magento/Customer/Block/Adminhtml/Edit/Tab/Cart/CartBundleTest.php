@@ -14,7 +14,7 @@ use Magento\Quote\Model\ResourceModel\Quote\CollectionFactory;
 use Magento\TestFramework\Helper\Bootstrap;
 
 /**
- * Tests for customer's shopping cart using bundle product.
+ * Class checks customer's shopping cart block with bundle product.
  *
  * @see \Magento\Customer\Block\Adminhtml\Edit\Tab\Cart
  * @magentoAppArea adminhtml
@@ -59,6 +59,7 @@ class CartBundleTest extends AbstractCartTest
         $quoteCollection->addFieldToFilter('reserved_order_id', 'test_cart_with_bundle_and_options');
         /** @var Quote $quote */
         $quote = $quoteCollection->getFirstItem();
+        $this->assertNotEmpty($quote->getId());
         $quote->setCustomerId(1);
         $this->quoteRepository->save($quote);
         $this->processCheckQuoteItems('customer@example.com');

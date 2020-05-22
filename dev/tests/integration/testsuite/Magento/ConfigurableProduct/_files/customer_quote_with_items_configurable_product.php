@@ -5,7 +5,9 @@
  */
 declare(strict_types=1);
 
+use Magento\Catalog\Api\Data\ProductAttributeInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Catalog\Model\ResourceModel\Eav\Attribute as ProductAttribute;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Eav\Model\Config;
 use Magento\Framework\DataObject;
@@ -22,19 +24,20 @@ require __DIR__ . '/../../Customer/_files/customer_with_uk_address.php';
 /** @var ObjectManager $objectManager */
 $objectManager = Bootstrap::getObjectManager();
 /** @var StoreManagerInterface $storeManager */
-$storeManager = $objectManager->create(StoreManagerInterface::class);
+$storeManager = $objectManager->get(StoreManagerInterface::class);
 /** @var ProductRepositoryInterface $productRepository */
-$productRepository = $objectManager->create(ProductRepositoryInterface::class);
+$productRepository = $objectManager->get(ProductRepositoryInterface::class);
+$productRepository->cleanCache();
 /** @var CustomerRepositoryInterface $customerRepository */
-$customerRepository = $objectManager->create(CustomerRepositoryInterface::class);
+$customerRepository = $objectManager->get(CustomerRepositoryInterface::class);
 /** @var Quote $quote */
 $quote = $objectManager->get(QuoteFactory::class)->create();
 /** @var CartRepositoryInterface $quoteRepository */
 $quoteRepository = $objectManager->get(CartRepositoryInterface::class);
 /** @var Config $eavConfig */
 $eavConfig = $objectManager->get(Config::class);
-/** @var  $attribute */
-$attribute = $eavConfig->getAttribute('catalog_product', 'test_configurable');
+/** @var ProductAttribute $attribute */
+$attribute = $eavConfig->getAttribute(ProductAttributeInterface::ENTITY_TYPE_CODE, 'test_configurable');
 
 $customer = $customerRepository->get('customer_uk_address@test.com');
 $quote->setStoreId($storeManager->getStore()->getId())
@@ -45,7 +48,7 @@ $quote->setStoreId($storeManager->getStore()->getId())
 
 $attributeOptions = $attribute->getOptions();
 unset($attributeOptions[0]);
-$productConfigurable = $productRepository->get('configurable', false, null, true);
+$productConfigurable = $productRepository->get('configurable');
 /** @var DataObject $request */
 $request = $objectManager->create(DataObject::class);
 

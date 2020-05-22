@@ -9,21 +9,18 @@ namespace Magento\Customer\Controller\Adminhtml\Index;
 
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Framework\App\Request\Http as HttpRequest;
-use Magento\Framework\Data\Form\FormKey;
 use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Quote\Model\Quote;
 use Magento\TestFramework\TestCase\AbstractBackendController;
 
 /**
- * Tests for customer's shopping cart via backend/customer/index/cart controller.
+ * Class checks customer's shopping cart controller.
  *
+ * @see \Magento\Customer\Controller\Adminhtml\Index\Cart
  * @magentoAppArea adminhtml
  */
 class CartTest extends AbstractBackendController
 {
-    /** @var FormKey */
-    private $formKey;
-
     /** @var CustomerRepositoryInterface */
     private $customerRepository;
 
@@ -37,7 +34,6 @@ class CartTest extends AbstractBackendController
     {
         parent::setUp();
 
-        $this->formKey = $this->_objectManager->get(FormKey::class);
         $this->customerRepository = $this->_objectManager->get(CustomerRepositoryInterface::class);
         $this->quoteRepository = $this->_objectManager->get(CartRepositoryInterface::class);
     }
@@ -71,6 +67,7 @@ class CartTest extends AbstractBackendController
         /** @var Quote $quote */
         $quote = $this->quoteRepository->getForCustomer($customer->getId());
         $quoteItemId = $quote->getItemsCollection()->getFirstItem()->getItemId();
+        $this->assertNotEmpty($quoteItemId);
         $this->dispatchShoppingCart(
             [
                 'id' => $customer->getId(),

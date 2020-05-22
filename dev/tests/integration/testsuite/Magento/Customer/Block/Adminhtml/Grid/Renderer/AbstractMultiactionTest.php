@@ -65,6 +65,7 @@ abstract class AbstractMultiactionTest extends TestCase
         $itemsCollection = $this->quoteItemCollectionFactory->create();
         /** @var Item $quoteItem */
         $quoteItem = $itemsCollection->getFirstItem();
+        $this->assertNotEmpty($quoteItem->getId());
         $actions = [
             [
                 'caption' => 'configure',

@@ -19,12 +19,14 @@ use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\Quote\Item as QuoteItem;
 use Magento\Quote\Model\ResourceModel\Quote\Item\CollectionFactory;
+use Magento\Store\Model\StoreManagerInterface;
 use Magento\TestFramework\TestCase\AbstractBackendController;
 
 /**
  * Tests for update quote item in customer shopping cart.
  *
  * @magentoAppArea adminhtml
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class UpdateTest extends AbstractBackendController
 {
@@ -43,6 +45,9 @@ class UpdateTest extends AbstractBackendController
     /** @var CustomerRepositoryInterface */
     private $customerRepository;
 
+    /** @var int */
+    private $baseWebsiteId;
+
     /** @inheritdoc */
     public function setUp()
     {
@@ -52,6 +57,9 @@ class UpdateTest extends AbstractBackendController
         $this->json = $this->_objectManager->get(SerializerInterface::class);
         $this->quoteRepository = $this->_objectManager->get(CartRepositoryInterface::class);
         $this->customerRepository = $this->_objectManager->get(CustomerRepositoryInterface::class);
+        $this->baseWebsiteId = (int)$this->_objectManager->get(StoreManagerInterface::class)
+            ->getWebsite('base')
+            ->getId();
     }
 
     /**
@@ -84,7 +92,7 @@ class UpdateTest extends AbstractBackendController
         ];
         $this->dispatchCompositeCartUpdate([
             'customer_id' => 1,
-            'website_id' => 1,
+            'website_id' => $this->baseWebsiteId,
             'as_js_varname' => 'iFrameResponse',
         ]);
         /** @var DataObject $updateResult */
@@ -103,15 +111,16 @@ class UpdateTest extends AbstractBackendController
      */
     public function testUpdateWithQuote(bool $hasQuoteItem, array $expectedUpdateResult): void
     {
-        $items = $this->quoteItemCollectionFactory->create();
-        $itemId = $items->getAllIds()[0];
+        $itemsCollection = $this->quoteItemCollectionFactory->create();
+        $itemId = $itemsCollection->getFirstItem()->getId();
+        $this->assertNotEmpty($itemId);
         if (!$hasQuoteItem) {
             $itemId++;
         }
         $this->dispatchCompositeCartUpdate(
             [
                 'customer_id' => 1,
-                'website_id' => 1,
+                'website_id' => $this->baseWebsiteId,
             ],
             [
                 'id' => $itemId,
@@ -162,6 +171,7 @@ class UpdateTest extends AbstractBackendController
         $quote = $this->quoteRepository->getForCustomer($customer->getId());
         /** @var QuoteItem $quoteItem */
         $quoteItem = $quote->getItemsCollection()->getFirstItem();
+        $this->assertNotEmpty($quoteItem->getId());
         $expectedData = $this->prepareExpectedData($quoteItem);
         $expectedUpdateResult = [
             'ok' => true,
@@ -264,16 +274,12 @@ class UpdateTest extends AbstractBackendController
      */
     private function getQuoteItemBySku(Quote $quote, string $sku): ?QuoteItem
     {
-        $quoteItem = null;
-        /** @var QuoteItem $item */
-        foreach ($quote->getItemsCollection(false) as $item) {
-            if ($item->getSku() == $sku) {
-                $quoteItem = $item;
-                break;
-            }
-        }
+        $itemsCollection = $quote->getItemsCollection(false);
+        $itemsCollection->addFieldToFilter('sku', $sku);
+        /** @var QuoteItem $quoteItem */
+        $quoteItem = $itemsCollection->getFirstItem();
 
-        return $quoteItem;
+        return empty($quoteItem->getId()) ? null : $quoteItem;
     }
 
     /**
@@ -289,11 +295,9 @@ class UpdateTest extends AbstractBackendController
         foreach ($expectedParams as $key => $value) {
             if ($key == 'options') {
                 foreach ($value as $optionId => $optionValue) {
-                    if (is_array($optionValue)) {
-                        $buyRequestValue = array_intersect_assoc($optionValue, $buyRequest[$key][$optionId]);
-                    } else {
-                        $buyRequestValue = $buyRequest[$key][$optionId];
-                    }
+                    $buyRequestValue = is_array($optionValue)
+                        ? array_intersect_assoc($optionValue, $buyRequest[$key][$optionId])
+                        : $buyRequest[$key][$optionId];
                     $this->assertEquals($optionValue, $buyRequestValue);
                 }
             } else {

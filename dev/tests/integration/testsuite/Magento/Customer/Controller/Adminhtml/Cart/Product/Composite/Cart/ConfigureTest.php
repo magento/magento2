@@ -8,7 +8,9 @@ declare(strict_types=1);
 namespace Magento\Customer\Controller\Adminhtml\Cart\Product\Composite\Cart;
 
 use Magento\Framework\App\Request\Http as HttpRequest;
+use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Quote\Model\ResourceModel\Quote\Item\CollectionFactory;
+use Magento\Store\Model\StoreManagerInterface;
 use Magento\TestFramework\TestCase\AbstractBackendController;
 
 /**
@@ -21,11 +23,21 @@ class ConfigureTest extends AbstractBackendController
     /** @var CollectionFactory */
     private $quoteItemCollectionFactory;
 
+    /** @var int */
+    private $baseWebsiteId;
+
+    /** @var SerializerInterface */
+    private $json;
+
     /** @inheritdoc */
     public function setUp()
     {
         parent::setUp();
         $this->quoteItemCollectionFactory = $this->_objectManager->get(CollectionFactory::class);
+        $this->baseWebsiteId = (int)$this->_objectManager->get(StoreManagerInterface::class)
+            ->getWebsite('base')
+            ->getId();
+        $this->json = $this->_objectManager->get(SerializerInterface::class);
     }
 
     /**
@@ -35,8 +47,11 @@ class ConfigureTest extends AbstractBackendController
     {
         $this->dispatchCompositeCartConfigure();
         $this->assertEquals(
-            '{"error":true,"message":"The customer ID isn\'t defined."}',
-            $this->getResponse()->getBody()
+            [
+                'error' => true,
+                'message' => "The customer ID isn't defined.",
+            ],
+            $this->json->unserialize($this->getResponse()->getBody())
         );
     }
 
@@ -48,11 +63,14 @@ class ConfigureTest extends AbstractBackendController
     {
         $this->dispatchCompositeCartConfigure([
             'customer_id' => 1,
-            'website_id' => 1,
+            'website_id' => $this->baseWebsiteId,
         ]);
         $this->assertEquals(
-            '{"error":true,"message":"The quote items are incorrect. Verify the quote items and try again."}',
-            $this->getResponse()->getBody()
+            [
+                'error' => true,
+                'message' => "The quote items are incorrect. Verify the quote items and try again.",
+            ],
+            $this->json->unserialize($this->getResponse()->getBody())
         );
     }
 
@@ -66,14 +84,15 @@ class ConfigureTest extends AbstractBackendController
      */
     public function testConfigureWithQuote(bool $hasQuoteItem, string $expectedResponseBody): void
     {
-        $items = $this->quoteItemCollectionFactory->create();
-        $itemId = $items->getAllIds()[0];
+        $itemsCollection = $this->quoteItemCollectionFactory->create();
+        $itemId = $itemsCollection->getFirstItem()->getId();
+        $this->assertNotEmpty($itemId);
         if (!$hasQuoteItem) {
             $itemId++;
         }
         $this->dispatchCompositeCartConfigure([
             'customer_id' => 1,
-            'website_id' => 1,
+            'website_id' => $this->baseWebsiteId,
             'id' => $itemId,
         ]);
         $this->assertContains(

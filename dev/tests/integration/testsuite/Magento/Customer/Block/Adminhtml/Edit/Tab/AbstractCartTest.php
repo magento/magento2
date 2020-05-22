@@ -17,7 +17,6 @@ use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\Quote\Item;
 use Magento\Quote\Model\QuoteFactory;
-use Magento\Quote\Model\ResourceModel\Quote\Item\Collection as ItemCollection;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 
@@ -82,18 +81,37 @@ abstract class AbstractCartTest extends TestCase
         $this->registerCustomerId((int)$customer->getId());
         $this->block->toHtml();
 
-        $quoteItemsCollection = $this->getQuoteItemsCollection((int)$customer->getId());
+        $quoteItemIds = $this->getQuoteItemIds((int)$customer->getId());
         $this->assertCount(
-            $quoteItemsCollection->count(),
+            count($quoteItemIds),
             $this->block->getPreparedCollection(),
             "Item's count in the customer cart grid block doesn't match expected count."
         );
         $this->assertEmpty(
             array_diff(
-                $this->block->getPreparedCollection()->getColumnValues(Item::KEY_ITEM_ID),
-                $quoteItemsCollection->getColumnValues(Item::KEY_ITEM_ID)
+                $this->block->getPreparedCollection()->getAllIds(),
+                $quoteItemIds
             ),
             "Items in the customer cart grid block doesn't match expected items."
+        );
+    }
+
+    /**
+     * Checks that customer's shopping cart block is empty
+     *
+     * @param string $customerEmail
+     * @return void
+     */
+    protected function processCheckWithoutQuoteItems(string $customerEmail): void
+    {
+        $customer = $this->customerRepository->get($customerEmail);
+        $this->registerCustomerId((int)$customer->getId());
+        $this->block->toHtml();
+
+        $this->assertCount(
+            0,
+            $this->block->getPreparedCollection(),
+            "Item's count in the customer cart grid block doesn't match expected count."
         );
     }
 
@@ -110,25 +128,21 @@ abstract class AbstractCartTest extends TestCase
     }
 
     /**
-     * Get shopping cart quote items collection by customer id.
+     * Get shopping cart quote item identifiers by customer id.
      *
      * @param int $customerId
-     * @return ItemCollection
+     * @return array
      */
-    private function getQuoteItemsCollection(int $customerId): ItemCollection
+    private function getQuoteItemIds(int $customerId): array
     {
-        try {
-            /** @var Quote $quote */
-            $quote = $this->quoteRepository->getForCustomer($customerId);
-        } catch (NoSuchEntityException $e) {
-            $quote = $this->quoteFactory->create();
-        }
-        $quoteItemsCollection = $quote->getItemsCollection(false);
-
-        if ($quote->getId()) {
-            $quoteItemsCollection->addFieldToFilter('parent_item_id', ['null' => true]);
+        $ids = [];
+        /** @var Quote $quote */
+        $quote = $this->quoteRepository->getForCustomer($customerId);
+        /** @var Item $item */
+        foreach ($quote->getItems() as $item) {
+            $ids[] = $item->getId();
         }
 
-        return $quoteItemsCollection;
+        return $ids;
     }
 }

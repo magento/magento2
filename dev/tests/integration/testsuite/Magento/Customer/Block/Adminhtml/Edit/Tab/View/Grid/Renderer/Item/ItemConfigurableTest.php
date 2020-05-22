@@ -12,7 +12,7 @@ use Magento\Framework\Module\Manager;
 use Magento\TestFramework\Helper\Bootstrap;
 
 /**
- * Test the rendering of a product name and options in the item block using configurable product.
+ * Class checks item block rendering using configurable product.
  *
  * @see \Magento\Customer\Block\Adminhtml\Edit\Tab\View\Grid\Renderer\Item
  */

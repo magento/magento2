@@ -10,8 +10,7 @@ namespace Magento\Customer\Block\Adminhtml\Grid\Renderer;
 use Magento\Framework\DataObject;
 
 /**
- * Test the rendering of a configure and delete link in the multiaction block
- * using simple product and simple product with options.
+ * Class checks multiaction block rendering using simple product and simple product with options.
  *
  * @see \Magento\Customer\Block\Adminhtml\Grid\Renderer\Multiaction
  */
@@ -51,8 +50,8 @@ class MultiactionTest extends AbstractMultiactionTest
             'empty_actions_element' => [
                 'column_data' => [
                     'actions' => [
-                        'action_1' => 'actions'
-                    ]
+                        'action_1' => 'actions',
+                    ],
                 ],
             ],
         ];

@@ -12,7 +12,7 @@ use Magento\Framework\Module\Manager;
 use Magento\TestFramework\Helper\Bootstrap;
 
 /**
- * Tests for customer's shopping cart using configurable product.
+ * Class checks customer's shopping cart block with configurable product.
  *
  * @see \Magento\Customer\Block\Adminhtml\Edit\Tab\Cart
  * @magentoAppArea adminhtml

@@ -12,7 +12,7 @@ use Magento\Framework\Module\Manager;
 use Magento\TestFramework\Helper\Bootstrap;
 
 /**
- * Test the rendering of a configure and delete link in the multiaction block using configurable product.
+ * Class checks multiaction block rendering using configurable product.
  *
  * @see \Magento\Customer\Block\Adminhtml\Grid\Renderer\Multiaction
  */

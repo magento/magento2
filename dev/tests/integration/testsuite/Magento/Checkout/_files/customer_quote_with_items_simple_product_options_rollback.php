@@ -3,15 +3,13 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 declare(strict_types=1);
 
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Registry;
 use Magento\Quote\Api\CartRepositoryInterface;
-use Magento\Quote\Model\ResourceModel\Quote\Collection;
-use Magento\Quote\Model\ResourceModel\Quote\CollectionFactory;
 use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\Quote\Model\GetQuoteByReservedOrderId;
 
 /** @var ObjectManagerInterface $objectManager */
 $objectManager = Bootstrap::getObjectManager();
@@ -21,12 +19,10 @@ $registry = $objectManager->get(Registry::class);
 $registry->unregister('isSecureArea');
 $registry->register('isSecureArea', true);
 
-/** @var CartRepositoryInterface $quoteRepository */
-$quoteRepository = $objectManager->get(CartRepositoryInterface::class);
-/** @var Collection $quoteCollection */
-$quoteCollection = $objectManager->create(CollectionFactory::class)->create();
-$quoteCollection->addFieldToFilter('reserved_order_id', 'customer_quote_product_custom_options');
-foreach ($quoteCollection as $quote) {
+$quote = $objectManager->get(GetQuoteByReservedOrderId::class)->execute('customer_quote_product_custom_options');
+if ($quote !== null) {
+    /** @var CartRepositoryInterface $quoteRepository */
+    $quoteRepository = $objectManager->get(CartRepositoryInterface::class);
     $quoteRepository->delete($quote);
 }
 

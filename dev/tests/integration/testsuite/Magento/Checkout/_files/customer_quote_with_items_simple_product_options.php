@@ -26,18 +26,19 @@ require __DIR__ . '/../../Customer/_files/customer_with_uk_address.php';
 /** @var ObjectManager $objectManager */
 $objectManager = Bootstrap::getObjectManager();
 /** @var StoreManagerInterface $storeManager */
-$storeManager = $objectManager->create(StoreManagerInterface::class);
+$storeManager = $objectManager->get(StoreManagerInterface::class);
 /** @var ProductRepositoryInterface $productRepository */
-$productRepository = $objectManager->create(ProductRepositoryInterface::class);
+$productRepository = $objectManager->get(ProductRepositoryInterface::class);
+$productRepository->cleanCache();
 /** @var CustomerRepositoryInterface $customerRepository */
-$customerRepository = $objectManager->create(CustomerRepositoryInterface::class);
+$customerRepository = $objectManager->get(CustomerRepositoryInterface::class);
 /** @var Quote $quote */
 $quote = $objectManager->get(QuoteFactory::class)->create();
 /** @var CartRepositoryInterface $quoteRepository */
 $quoteRepository = $objectManager->get(CartRepositoryInterface::class);
 
 $customer = $customerRepository->get('customer_uk_address@test.com');
-$product = $productRepository->get('simple', false, null, true);
+$product = $productRepository->get('simple');
 $options = [];
 $dropDownValues = [];
 $iDate = 1;

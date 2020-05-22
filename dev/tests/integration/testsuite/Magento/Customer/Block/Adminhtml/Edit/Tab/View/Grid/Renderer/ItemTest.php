@@ -8,8 +8,7 @@ declare(strict_types=1);
 namespace Magento\Customer\Block\Adminhtml\Edit\Tab\View\Grid\Renderer;
 
 /**
- * Test the rendering of a product name and options in the item block
- * using simple product and simple product with options.
+ * Class checks item block rendering using simple product and simple product with options.
  *
  * @see \Magento\Customer\Block\Adminhtml\Edit\Tab\View\Grid\Renderer\Item
  */
