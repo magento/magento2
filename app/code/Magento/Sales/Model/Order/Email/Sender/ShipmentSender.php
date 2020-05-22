@@ -108,7 +108,9 @@ class ShipmentSender extends Sender
 
             $transport = [
                 'order' => $order,
+                'order_id' => $order->getId(),
                 'shipment' => $shipment,
+                'shipment_id' => $shipment->getId(),
                 'comment' => $shipment->getCustomerNoteNotify() ? $shipment->getCustomerNote() : '',
                 'billing' => $order->getBillingAddress(),
                 'payment_html' => $this->getPaymentHtml($order),

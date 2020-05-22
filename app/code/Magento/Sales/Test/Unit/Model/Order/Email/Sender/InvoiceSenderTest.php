@@ -12,6 +12,10 @@ use Magento\Sales\Model\Order\Email\Sender\InvoiceSender;
  */
 class InvoiceSenderTest extends AbstractSenderTest
 {
+    private const INVOICE_ID = 1;
+
+    private const ORDER_ID = 1;
+
     /**
      * @var \Magento\Sales\Model\Order\Email\Sender\InvoiceSender
      */
@@ -40,6 +44,7 @@ class InvoiceSenderTest extends AbstractSenderTest
             \Magento\Sales\Model\Order\Invoice::class,
             [
                 'getStore',
+                'getId',
                 '__wakeup',
                 'getOrder',
                 'setSendEmail',
@@ -54,6 +59,11 @@ class InvoiceSenderTest extends AbstractSenderTest
         $this->invoiceMock->expects($this->any())
             ->method('getOrder')
             ->will($this->returnValue($this->orderMock));
+
+        $this->invoiceMock->method('getId')
+            ->willReturn(self::INVOICE_ID);
+        $this->orderMock->method('getId')
+            ->willReturn(self::ORDER_ID);
 
         $this->identityContainerMock = $this->createPartialMock(
             \Magento\Sales\Model\Order\Email\Container\InvoiceIdentity::class,
@@ -148,7 +158,9 @@ class InvoiceSenderTest extends AbstractSenderTest
                 ->with(
                     [
                         'order' => $this->orderMock,
+                        'order_id' => self::ORDER_ID,
                         'invoice' => $this->invoiceMock,
+                        'invoice_id' => self::INVOICE_ID,
                         'comment' => $customerNoteNotify ? $comment : '',
                         'billing' => $addressMock,
                         'payment_html' => 'payment',
@@ -287,7 +299,9 @@ class InvoiceSenderTest extends AbstractSenderTest
             ->with(
                 [
                     'order' => $this->orderMock,
+                    'order_id' => self::ORDER_ID,
                     'invoice' => $this->invoiceMock,
+                    'invoice_id' => self::INVOICE_ID,
                     'comment' => '',
                     'billing' => $addressMock,
                     'payment_html' => 'payment',
