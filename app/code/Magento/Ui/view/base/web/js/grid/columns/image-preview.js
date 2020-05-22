@@ -167,7 +167,7 @@ define([
          * Close image preview
          */
         hide: function () {
-            this.lastOpenedImage(false);
+            this.lastOpenedImage(null);
             this.visibleRecord(null);
             this.height(0);
             this._selectRow(null);
