@@ -10,6 +10,8 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 
 /**
  * Test for \Magento\Cms\Controller\Adminhtml\Wysiwyg\Images\NewFolder class.
+ *
+ * @magentoAppArea adminhtml
  */
 class NewFolderTest extends \PHPUnit\Framework\TestCase
 {
@@ -46,7 +48,7 @@ class NewFolderTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->filesystem = $objectManager->get(\Magento\Framework\Filesystem::class);
@@ -119,7 +121,7 @@ class NewFolderTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    public static function tearDownAfterClass()
+    public static function tearDownAfterClass(): void
     {
         $filesystem = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
             ->get(\Magento\Framework\Filesystem::class);

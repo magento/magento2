@@ -7,21 +7,22 @@ declare(strict_types=1);
 
 namespace Magento\Downloadable\Setup\Patch\Data;
 
+use Laminas\Uri\Uri as UriHandler;
+use Magento\Backend\App\Area\FrontNameResolver;
 use Magento\Config\Model\Config\Backend\Admin\Custom;
+use Magento\Downloadable\Api\DomainManagerInterface as DomainManager;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Framework\Setup\Patch\DataPatchInterface;
+use Magento\Framework\Url\ScopeResolverInterface;
 use Magento\Framework\UrlInterface;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\Store;
-use Zend\Uri\Uri as UriHandler;
-use Magento\Framework\Url\ScopeResolverInterface;
-use Magento\Downloadable\Api\DomainManagerInterface as DomainManager;
-use Magento\Framework\Setup\ModuleDataSetupInterface;
-use Magento\Backend\App\Area\FrontNameResolver;
 
 /**
  * Adding base url as allowed downloadable domain.
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class AddDownloadableHostsConfig implements DataPatchInterface
 {
@@ -79,7 +80,7 @@ class AddDownloadableHostsConfig implements DataPatchInterface
     }
 
     /**
-     * @inheritdoc
+     * @inheritDoc
      */
     public function apply()
     {
@@ -141,6 +142,8 @@ class AddDownloadableHostsConfig implements DataPatchInterface
         }
 
         $this->domainManager->addDomains($this->whitelist);
+
+        return $this;
     }
 
     /**

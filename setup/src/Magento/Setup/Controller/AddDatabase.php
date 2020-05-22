@@ -5,12 +5,17 @@
  */
 namespace Magento\Setup\Controller;
 
-use Zend\Mvc\Controller\AbstractActionController;
-use Zend\View\Model\ViewModel;
+use Laminas\Mvc\Controller\AbstractActionController;
+use Laminas\View\Model\ViewModel;
 
+/**
+ * AddDatabase controller
+ */
 class AddDatabase extends AbstractActionController
 {
     /**
+     * Index action
+     *
      * @return array|ViewModel
      */
     public function indexAction()

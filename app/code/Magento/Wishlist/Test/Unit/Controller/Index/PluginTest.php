@@ -3,54 +3,70 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 
 namespace Magento\Wishlist\Test\Unit\Controller\Index;
 
+use Magento\Customer\Model\Session;
+use Magento\Framework\App\ActionFlag;
+use Magento\Framework\App\Config;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\Request\Http;
+use Magento\Framework\App\Response\RedirectInterface;
+use Magento\Framework\Message\ManagerInterface;
+use Magento\Store\App\Response\Redirect;
 use Magento\Store\Model\ScopeInterface;
+use Magento\Wishlist\Controller\Index\Index;
+use Magento\Wishlist\Controller\Index\Plugin;
+use Magento\Wishlist\Model\AuthenticationState;
+use Magento\Wishlist\Model\AuthenticationStateInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test for wishlist plugin before dispatch
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class PluginTest extends \PHPUnit\Framework\TestCase
+class PluginTest extends TestCase
 {
     /**
-     * @var \Magento\Customer\Model\Session|\PHPUnit_Framework_MockObject_MockObject
+     * @var Session|MockObject
      */
     protected $customerSession;
 
     /**
-     * @var \Magento\Wishlist\Model\AuthenticationStateInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var AuthenticationStateInterface|MockObject
      */
     protected $authenticationState;
 
     /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ScopeConfigInterface|MockObject
      */
     protected $config;
 
     /**
-     * @var \Magento\Framework\App\Response\RedirectInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var RedirectInterface|MockObject
      */
     protected $redirector;
 
     /**
-     * @var \Magento\Framework\Message\ManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ManagerInterface|MockObject
      */
     protected $messageManager;
 
     /**
-     * @var \Magento\Framework\App\Request\Http|\PHPUnit_Framework_MockObject_MockObject
+     * @var Http|MockObject
      */
     protected $request;
 
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->customerSession = $this->getMockBuilder(\Magento\Customer\Model\Session::class)
+        $this->customerSession = $this->getMockBuilder(Session::class)
             ->disableOriginalConstructor()
             ->setMethods(
                 [
@@ -66,17 +82,17 @@ class PluginTest extends \PHPUnit\Framework\TestCase
                 ]
             )->getMock();
 
-        $this->authenticationState = $this->createMock(\Magento\Wishlist\Model\AuthenticationState::class);
-        $this->config = $this->createMock(\Magento\Framework\App\Config::class);
-        $this->redirector = $this->createMock(\Magento\Store\App\Response\Redirect::class);
-        $this->messageManager = $this->createMock(\Magento\Framework\Message\ManagerInterface::class);
-        $this->request = $this->createMock(\Magento\Framework\App\Request\Http::class);
+        $this->authenticationState = $this->createMock(AuthenticationState::class);
+        $this->config = $this->createMock(Config::class);
+        $this->redirector = $this->createMock(Redirect::class);
+        $this->messageManager = $this->getMockForAbstractClass(ManagerInterface::class);
+        $this->request = $this->createMock(Http::class);
     }
 
     /**
      * @inheritdoc
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset(
             $this->customerSession,
@@ -89,11 +105,11 @@ class PluginTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return \Magento\Wishlist\Controller\Index\Plugin
+     * @return Plugin
      */
     protected function getPlugin()
     {
-        return new \Magento\Wishlist\Controller\Index\Plugin(
+        return new Plugin(
             $this->customerSession,
             $this->authenticationState,
             $this->config,
@@ -102,19 +118,17 @@ class PluginTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    /**
-     * @expectedException \Magento\Framework\Exception\NotFoundException
-     */
     public function testBeforeDispatch()
     {
+        $this->expectException('Magento\Framework\Exception\NotFoundException');
         $refererUrl = 'http://referer-url.com';
         $params = [
             'product' => 1,
             'login' => [],
         ];
 
-        $actionFlag = $this->createMock(\Magento\Framework\App\ActionFlag::class);
-        $indexController = $this->createMock(\Magento\Wishlist\Controller\Index\Index::class);
+        $actionFlag = $this->createMock(ActionFlag::class);
+        $indexController = $this->createMock(Index::class);
 
         $actionFlag
             ->expects($this->once())

@@ -92,7 +92,6 @@
         }
 
         .field.choice {
-            &:extend(.clearer all);
             border-bottom: 1px solid @color-gray92;
             box-sizing: border-box;
             margin-bottom: @indent__s;
@@ -178,10 +177,6 @@
 
 .media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
     .page-product-downloadable {
-        .product-add-form {
-            &:extend(.clearer all);
-        }
-
         .product-options-wrapper {
             float: left;
             width: 55%;

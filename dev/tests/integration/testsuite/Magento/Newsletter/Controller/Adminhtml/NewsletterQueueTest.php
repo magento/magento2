@@ -20,7 +20,7 @@ class NewsletterQueueTest extends \Magento\TestFramework\TestCase\AbstractBacken
     /**
      * @inheritDoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
@@ -31,7 +31,7 @@ class NewsletterQueueTest extends \Magento\TestFramework\TestCase\AbstractBacken
     /**
      * @inheritDoc
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         /**
          * Unset messages

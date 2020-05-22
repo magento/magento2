@@ -70,12 +70,17 @@
             <deleteData createDataKey="createConfigChildProduct2" stepKey="deleteConfigChildProduct2"/>
             <deleteData createDataKey="createConfigProduct" stepKey="deleteConfigProduct"/>
             <deleteData createDataKey="createConfigProductAttribute" stepKey="deleteConfigProductAttribute"/>
+
+            <!-- Reindex invalidated indices after product attribute has been created/deleted -->
+            <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
         </after>
 
         <!-- A Cms page containing the New Products Widget gets created here via extends -->
 
         <!-- Modify the Configurable Product that we created in the before block -->
-        <amOnPage url="{{AdminProductEditPage.url($$createConfigProduct.id$$)}}" stepKey="amOnEditPage"/>
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="amOnEditPage">
+            <argument name="productId" value="$$createConfigProduct.id$$"/>
+        </actionGroup>
         <waitForPageLoad stepKey="waitForEditPage"/>
         <fillField selector="{{AdminProductFormSection.setProductAsNewFrom}}" userInput="01/1/2000" stepKey="fillProductNewFrom"/>
         <fillField selector="{{AdminProductFormSection.setProductAsNewTo}}" userInput="01/1/2099" stepKey="fillProductNewTo"/>

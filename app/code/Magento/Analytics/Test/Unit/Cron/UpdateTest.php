@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Analytics\Test\Unit\Cron;
 
 use Magento\Analytics\Cron\Update;
@@ -11,32 +13,35 @@ use Magento\Analytics\Model\Config\Backend\Baseurl\SubscriptionUpdateHandler;
 use Magento\Analytics\Model\Connector;
 use Magento\Framework\App\Config\ReinitableConfigInterface;
 use Magento\Framework\App\Config\Storage\WriterInterface;
+use Magento\Framework\Exception\NotFoundException;
 use Magento\Framework\FlagManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class UpdateTest extends \PHPUnit\Framework\TestCase
+class UpdateTest extends TestCase
 {
     /**
-     * @var Connector|\PHPUnit_Framework_MockObject_MockObject
+     * @var Connector|MockObject
      */
     private $connectorMock;
 
     /**
-     * @var WriterInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var WriterInterface|MockObject
      */
     private $configWriterMock;
 
     /**
-     * @var FlagManager|\PHPUnit_Framework_MockObject_MockObject
+     * @var FlagManager|MockObject
      */
     private $flagManagerMock;
 
     /**
-     * @var ReinitableConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ReinitableConfigInterface|MockObject
      */
     private $reinitableConfigMock;
 
     /**
-     * @var AnalyticsToken|\PHPUnit_Framework_MockObject_MockObject
+     * @var AnalyticsToken|MockObject
      */
     private $analyticsTokenMock;
 
@@ -45,23 +50,16 @@ class UpdateTest extends \PHPUnit\Framework\TestCase
      */
     private $update;
 
-    protected function setUp()
+    /**
+     * @inheritDoc
+     */
+    protected function setUp(): void
     {
-        $this->connectorMock =  $this->getMockBuilder(Connector::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->configWriterMock =  $this->getMockBuilder(WriterInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->flagManagerMock =  $this->getMockBuilder(FlagManager::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->reinitableConfigMock = $this->getMockBuilder(ReinitableConfigInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->analyticsTokenMock = $this->getMockBuilder(AnalyticsToken::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->connectorMock =  $this->createMock(Connector::class);
+        $this->configWriterMock =  $this->getMockForAbstractClass(WriterInterface::class);
+        $this->flagManagerMock =  $this->createMock(FlagManager::class);
+        $this->reinitableConfigMock = $this->getMockForAbstractClass(ReinitableConfigInterface::class);
+        $this->analyticsTokenMock = $this->createMock(AnalyticsToken::class);
 
         $this->update = new Update(
             $this->connectorMock,
@@ -74,6 +72,7 @@ class UpdateTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @return void
+     * @throws NotFoundException
      */
     public function testExecuteWithoutToken()
     {
@@ -82,12 +81,11 @@ class UpdateTest extends \PHPUnit\Framework\TestCase
             ->with(SubscriptionUpdateHandler::SUBSCRIPTION_UPDATE_REVERSE_COUNTER_FLAG_CODE)
             ->willReturn(10);
         $this->connectorMock
-            ->expects($this->once())
+            ->expects($this->never())
             ->method('execute')
             ->with('update')
             ->willReturn(false);
         $this->analyticsTokenMock
-            ->expects($this->once())
             ->method('isTokenExist')
             ->willReturn(false);
         $this->addFinalOutputAsserts();
@@ -120,6 +118,7 @@ class UpdateTest extends \PHPUnit\Framework\TestCase
      * @param $counterData
      * @return void
      * @dataProvider executeWithEmptyReverseCounterDataProvider
+     * @throws NotFoundException
      */
     public function testExecuteWithEmptyReverseCounter($counterData)
     {
@@ -159,6 +158,7 @@ class UpdateTest extends \PHPUnit\Framework\TestCase
      * @param bool $functionResult
      * @return void
      * @dataProvider executeRegularScenarioDataProvider
+     * @throws NotFoundException
      */
     public function testExecuteRegularScenario(
         int $reverseCount,
@@ -170,6 +170,10 @@ class UpdateTest extends \PHPUnit\Framework\TestCase
             ->method('getFlagData')
             ->with(SubscriptionUpdateHandler::SUBSCRIPTION_UPDATE_REVERSE_COUNTER_FLAG_CODE)
             ->willReturn($reverseCount);
+        $this->flagManagerMock
+            ->expects($this->once())
+            ->method('saveFlag')
+            ->with(SubscriptionUpdateHandler::SUBSCRIPTION_UPDATE_REVERSE_COUNTER_FLAG_CODE, $reverseCount - 1);
         $this->connectorMock
             ->expects($this->once())
             ->method('execute')
