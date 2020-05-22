@@ -151,11 +151,11 @@ class MassSchedule
         foreach ($entitiesArray as $key => $entityParams) {
             /** @var \Magento\AsynchronousOperations\Api\Data\ItemStatusInterface $requestItem */
             $requestItem = $this->itemStatusInterfaceFactory->create();
-
             try {
                 $operation = $this->operationRepository->create($topicName, $entityParams, $groupId, $key);
                 $operations[] = $operation;
                 $requestItem->setId($key);
+                $requestItem->setUuid($operation->getUuid());
                 $requestItem->setStatus(ItemStatusInterface::STATUS_ACCEPTED);
                 $requestItem->setDataHash(
                     $this->encryptor->hash($operation->getSerializedData(), Encryptor::HASH_VERSION_SHA256)
@@ -164,6 +164,7 @@ class MassSchedule
             } catch (\Exception $exception) {
                 $this->logger->error($exception);
                 $requestItem->setId($key);
+                $requestItem->setUuid($operation->getUuid());
                 $requestItem->setStatus(ItemStatusInterface::STATUS_REJECTED);
                 $requestItem->setErrorMessage($exception);
                 $requestItem->setErrorCode($exception);

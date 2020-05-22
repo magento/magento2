@@ -12,7 +12,7 @@ use Magento\AsynchronousOperations\Model\ResourceModel\Operation;
 use Magento\Framework\Exception\LocalizedException;
 
 /**
- * Get all operation ids
+ * Get all operation ids to join to pre exists array
  */
 class GetAllOperationIds
 {
@@ -40,6 +40,7 @@ class GetAllOperationIds
 
     /**
      * Get all operation ids
+     *
      * @param string $groupId
      * @return array
      * @throws LocalizedException
