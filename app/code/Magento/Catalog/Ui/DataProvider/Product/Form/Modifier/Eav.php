@@ -789,7 +789,9 @@ class Eav extends AbstractModifier
                 \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
                 $this->storeManager->getStore()
             );
-            $attribute->setDefaultValue($defaultValue);
+            if ($defaultValue !== null) {
+                $attribute->setDefaultValue($defaultValue);
+            }
         }
         return $attribute->getDefaultValue();
     }
