@@ -3,7 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 declare(strict_types=1);
 
 namespace Magento\AsynchronousOperations\Model\ResourceModel\Operation;
@@ -11,6 +10,7 @@ namespace Magento\AsynchronousOperations\Model\ResourceModel\Operation;
 use Magento\AsynchronousOperations\Api\Data\OperationInterface;
 use Magento\AsynchronousOperations\Api\Data\OperationInterfaceFactory;
 use Magento\AsynchronousOperations\Model\OperationRepositoryInterface;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\MessageQueue\MessageValidator;
 use Magento\Framework\MessageQueue\MessageEncoder;
 use Magento\Framework\Serialize\Serializer\Json;
@@ -73,7 +73,9 @@ class OperationRepository implements OperationRepositoryInterface
      * @param string $topicName
      * @param array $entityParams
      * @param string $groupId
+     * @param string $operationId
      * @return OperationInterface
+     * @throws LocalizedException
      * @deprecated No longer used.
      * @see create()
      */
@@ -104,6 +106,8 @@ class OperationRepository implements OperationRepositoryInterface
 
     /**
      * @inheritDoc
+     *
+     * @throws LocalizedException
      */
     public function create($topicName, $entityParams, $groupId, $operationId): OperationInterface
     {

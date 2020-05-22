@@ -25,5 +25,5 @@ interface OperationManagementInterface
      * @return boolean
      * @since 100.2.0
      */
-    public function changeOperationStatus($bulkUuid, $operationKey, $status, $errorCode = null, $message = null, $data = null);
+    public function changeOperationStatus($bulkUuid, $operationKey, $status, $errorCode = null, $message = null, $data = null); // @codingStandardsIgnoreLine
 }
