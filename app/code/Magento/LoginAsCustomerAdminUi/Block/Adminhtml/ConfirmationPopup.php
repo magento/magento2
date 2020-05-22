@@ -7,10 +7,10 @@ declare(strict_types=1);
 
 namespace Magento\LoginAsCustomerAdminUi\Block\Adminhtml;
 
-use Magento\Framework\Serialize\Serializer\Json;
-use Magento\Store\Ui\Component\Listing\Column\Store\Options as StoreOptions;
 use Magento\Backend\Block\Template;
+use Magento\Framework\Serialize\Serializer\Json;
 use Magento\LoginAsCustomerApi\Api\ConfigInterface;
+use Magento\Store\Ui\Component\Listing\Column\Store\Options as StoreOptions;
 
 /**
  * Login confirmation pop-up
@@ -77,15 +77,13 @@ class ConfirmationPopup extends Template
     }
 
     /**
-     * Render block HTML
-     *
-     * @return string
+     * @inheritdoc
      */
-    protected function _toHtml()
+    public function toHtml()
     {
         if (!$this->config->isEnabled()) {
             return '';
         }
-        return parent::_toHtml();
+        return parent::toHtml();
     }
 }

@@ -17,7 +17,7 @@ use Magento\Store\Model\StoreManagerInterface;
  *
  * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  */
-class LoginAsCustomerFrontendUi implements SectionSourceInterface
+class LoginAsCustomerUi implements SectionSourceInterface
 {
     /**
      * @var Session
