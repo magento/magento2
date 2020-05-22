@@ -1,6 +1,12 @@
 # Copyright © Magento, Inc. All rights reserved.
 # See COPYING.txt for license details.
 
+type StoreConfig {
+    required_character_classes_number : String @doc(description: "The number of different character classes required in a password (lowercase, uppercase, digits, special characters).")
+    minimum_password_length : String @doc(description: "The minimum number of characters required for a valid password.")
+    autocomplete_on_storefront : Boolean @doc(description: "Enable autocomplete on login and forgot password forms")
+}
+
 type Query {
     customer: Customer @resolver(class: "Magento\\CustomerGraphQl\\Model\\Resolver\\Customer") @doc(description: "The customer query returns information about a customer account") @cache(cacheable: false)
     isEmailAvailable (
@@ -17,6 +23,8 @@ type Mutation {
     createCustomerAddress(input: CustomerAddressInput!): CustomerAddress @resolver(class: "Magento\\CustomerGraphQl\\Model\\Resolver\\CreateCustomerAddress") @doc(description: "Create customer address")
     updateCustomerAddress(id: Int!, input: CustomerAddressInput): CustomerAddress @resolver(class: "Magento\\CustomerGraphQl\\Model\\Resolver\\UpdateCustomerAddress") @doc(description: "Update customer address")
     deleteCustomerAddress(id: Int!): Boolean @resolver(class: "Magento\\CustomerGraphQl\\Model\\Resolver\\DeleteCustomerAddress") @doc(description: "Delete customer address")
+    requestPasswordResetEmail(email: String!): Boolean  @resolver(class: "\\Magento\\CustomerGraphQl\\Model\\Resolver\\RequestPasswordResetEmail") @doc(description: "Request an email with a reset password token for the registered customer identified by the specified email.")
+    resetPassword(email: String!, resetPasswordToken: String!, newPassword: String!): Boolean  @resolver(class: "\\Magento\\CustomerGraphQl\\Model\\Resolver\\ResetPassword") @doc(description: "Reset a customer's password using the reset password token that the customer received in an email after requesting it using requestPasswordResetEmail.")
 }
 
 input CustomerAddressInput {
