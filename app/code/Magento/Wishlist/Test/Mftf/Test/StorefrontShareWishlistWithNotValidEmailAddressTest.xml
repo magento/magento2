@@ -40,7 +40,7 @@
         <actionGroup ref="StorefrontCustomerAddProductToWishlistActionGroup" stepKey="addToWishlistProduct">
             <argument name="productVar" value="$createProduct$"/>
         </actionGroup>
-        <actionGroup ref="StorefrontCustomerShareWishlistActionGroup" stepKey="shareWishList">
+        <actionGroup ref="StorefrontShareCustomerWishlistActionGroup" stepKey="shareWishList">
             <argument name="email" value="{{notValidEmails.shareInfo_emails}}"/>
             <argument name="message" value="{{notValidEmails.shareInfo_message}}"/>
         </actionGroup>
