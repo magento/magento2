@@ -208,4 +208,5 @@ return [
     ['Magento\AuthorizenetGraphQl'],
     ['Magento\Braintree'],
     ['Magento\BraintreeGraphQl'],
+    ['Magento\Setup\Model\Cron'],
 ];
