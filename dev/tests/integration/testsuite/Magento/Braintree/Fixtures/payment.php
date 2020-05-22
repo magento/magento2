@@ -10,12 +10,15 @@ use Magento\Sales\Api\Data\OrderPaymentExtensionInterfaceFactory;
 use Magento\Sales\Model\Order\Payment;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\ObjectManager;
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
+use Magento\Vault\Model\PaymentToken;
 
+Resolver::getInstance()->requireDataFixture('Magento/Vault/_files/token.php');
 /** @var ObjectManager $objectManager */
 $objectManager = Bootstrap::getObjectManager();
-
-require __DIR__ . '/../../Vault/_files/token.php';
-
+/** @var PaymentToken $token */
+$token = $objectManager->create(PaymentToken::class);
+$token->load('vault_payment', 'payment_method_code');
 $token->setPaymentMethodCode(ConfigProvider::CODE);
 /** @var OrderPaymentExtensionInterfaceFactory $paymentExtensionFactory */
 $paymentExtensionFactory = $objectManager->get(OrderPaymentExtensionInterfaceFactory::class);

@@ -72,7 +72,7 @@ class AddCompareProductsTest extends AbstractCompareProductsTest
      *
      * @return void
      */
-    public function tearDown()
+    public function tearDown(): void
     {
         $this->cmsIndex->open();
         $this->cmsIndex->getLinksBlock()->openLink("Compare Products");
