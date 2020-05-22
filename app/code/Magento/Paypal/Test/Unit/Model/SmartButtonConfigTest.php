@@ -61,7 +61,7 @@ class SmartButtonConfigTest extends TestCase
 
         /** @var Store|MockObject $storeMock */
         $storeMock = $this->createMock(Store::class);
-        $storeMock->method('getCurrentCurrencyCode')
+        $storeMock->method('getBaseCurrencyCode')
             ->willReturn('USD');
 
         /** @var StoreManagerInterface|MockObject $storeManagerMock */

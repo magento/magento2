@@ -131,7 +131,7 @@ class SmartButtonConfig
                 'merchant-id' => $this->config->getValue('merchant_id'),
                 'locale' => $this->localeResolver->getLocale(),
                 'intent' => $this->getIntent(),
-                'currency' => $this->storeManager->getStore()->getCurrentCurrencyCode(),
+                'currency' => $this->storeManager->getStore()->getBaseCurrencyCode(),
             ];
         if ($disallowedFunding) {
             $params['disable-funding'] = $disallowedFunding;
