@@ -13,22 +13,22 @@ use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Wishlist\Model\ResourceModel\Wishlist as WishlistResourceModel;
-use Magento\Wishlist\Model\Wishlist\AddProductsToWishlist;
 use Magento\Wishlist\Model\Wishlist\Config as WishlistConfig;
 use Magento\Wishlist\Model\Wishlist\Data\Error;
 use Magento\Wishlist\Model\Wishlist\Data\WishlistItemFactory;
+use Magento\Wishlist\Model\Wishlist\UpdateProductsInWishlist as UpdateProductsInWishlistModel;
 use Magento\Wishlist\Model\WishlistFactory;
 use Magento\WishlistGraphQl\Mapper\WishlistDataMapper;
 
 /**
- * Adding products to wishlist resolver
+ * Update wishlist items resolver
  */
-class AddProductsToWishlistResolver implements ResolverInterface
+class UpdateProductsInWishlist implements ResolverInterface
 {
     /**
-     * @var AddProductsToWishlist
+     * @var UpdateProductsInWishlistModel
      */
-    private $addProductsToWishlist;
+    private $updateProductsInWishlist;
 
     /**
      * @var WishlistDataMapper
@@ -54,20 +54,20 @@ class AddProductsToWishlistResolver implements ResolverInterface
      * @param WishlistResourceModel $wishlistResource
      * @param WishlistFactory $wishlistFactory
      * @param WishlistConfig $wishlistConfig
-     * @param AddProductsToWishlist $addProductsToWishlist
+     * @param UpdateProductsInWishlistModel $updateProductsInWishlist
      * @param WishlistDataMapper $wishlistDataMapper
      */
     public function __construct(
         WishlistResourceModel $wishlistResource,
         WishlistFactory $wishlistFactory,
         WishlistConfig $wishlistConfig,
-        AddProductsToWishlist $addProductsToWishlist,
+        UpdateProductsInWishlistModel $updateProductsInWishlist,
         WishlistDataMapper $wishlistDataMapper
     ) {
         $this->wishlistResource = $wishlistResource;
         $this->wishlistFactory = $wishlistFactory;
         $this->wishlistConfig = $wishlistConfig;
-        $this->addProductsToWishlist = $addProductsToWishlist;
+        $this->updateProductsInWishlist = $updateProductsInWishlist;
         $this->wishlistDataMapper = $wishlistDataMapper;
     }
 
@@ -92,26 +92,34 @@ class AddProductsToWishlistResolver implements ResolverInterface
             throw new GraphQlAuthorizationException(__('The current user cannot perform operations on wishlist'));
         }
 
-        $wishlistId = $args['wishlist_id'] ?: null;
-        $wishlistItemsData = $args['wishlist_items'];
+        $wishlistId = $args['wishlist_id'];
+
+        if (!$wishlistId) {
+            throw new GraphQlInputException(__('The wishlist id is missing.'));
+        }
+
         $wishlist = $this->wishlistFactory->create();
 
         if ($wishlistId) {
             $this->wishlistResource->load($wishlist, $wishlistId);
-        } elseif ($customerId) {
-            $wishlist->loadByCustomerId($customerId, true);
         }
 
         if (null === $wishlist->getId()) {
-            throw new GraphQlInputException(__('Something went wrong while creating the wishlist'));
+            throw new GraphQlInputException(__('The wishlist was not found.'));
         }
 
         $wishlistItems = [];
+        $wishlistItemsData = $args['wishlist_items'];
+
         foreach ($wishlistItemsData as $wishlistItemData) {
             $wishlistItems[] = (new WishlistItemFactory())->create($wishlistItemData);
         }
 
-        $wishlistOutput = $this->addProductsToWishlist->execute($wishlist, $wishlistItems);
+        $wishlistOutput = $this->updateProductsInWishlist->execute($wishlist, $wishlistItems);
+
+        if (count($wishlistOutput->getErrors()) !== count($wishlistItems)) {
+            $this->wishlistResource->save($wishlist);
+        }
 
         return [
             'wishlist' => $this->wishlistDataMapper->map($wishlistOutput->getWishlist()),

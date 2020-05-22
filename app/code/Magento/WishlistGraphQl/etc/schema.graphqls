@@ -34,9 +34,9 @@ type WishlistItem {
 }
 
 type Mutation {
-    addProductsToWishlist(wishlist_id: ID!, wishlist_items: [WishlistItemInput!]!): AddProductsToWishlistOutput @resolver(class: "\\Magento\\WishlistGraphQl\\Model\\Resolver\\AddProductsToWishlistResolver")
-    removeProductsFromWishlist(wishlist_id: ID!, wishlist_items_ids: [ID!]!): RemoveProductsFromWishlistOutput @resolver(class: "\\Magento\\WishlistGraphQl\\Model\\Resolver\\RemoveProductsFromWishlistResolver")
-    updateProductsInWishlist(wishlist_id: ID!, wishlist_items: [WishlistItemUpdateInput!]!): UpdateProductsInWishlistOutput  @resolver(class: "\\Magento\\WishlistGraphQl\\Model\\Resolver\\UpdateProductsInWishlistResolver")
+    addProductsToWishlist(wishlist_id: ID!, wishlist_items: [WishlistItemInput!]!): AddProductsToWishlistOutput @resolver(class: "\\Magento\\WishlistGraphQl\\Model\\Resolver\\AddProductsToWishlist")
+    removeProductsFromWishlist(wishlist_id: ID!, wishlist_items_ids: [ID!]!): RemoveProductsFromWishlistOutput @resolver(class: "\\Magento\\WishlistGraphQl\\Model\\Resolver\\RemoveProductsFromWishlist")
+    updateProductsInWishlist(wishlist_id: ID!, wishlist_items: [WishlistItemUpdateInput!]!): UpdateProductsInWishlistOutput  @resolver(class: "\\Magento\\WishlistGraphQl\\Model\\Resolver\\UpdateProductsInWishlist")
 }
 
 input WishlistItemInput {
