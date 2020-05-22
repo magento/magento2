@@ -293,6 +293,17 @@ define([
         },
 
         /**
+         * Get chosen product id
+         *
+         * @returns int|null
+         */
+        getProductId: function () {
+            var products = this._CalcProducts();
+
+            return _.isArray(products) && products.length === 1 ? products[0] : null;
+        },
+
+        /**
          * @private
          */
         _init: function () {
