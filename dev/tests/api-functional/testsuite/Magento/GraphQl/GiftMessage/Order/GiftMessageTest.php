@@ -53,16 +53,14 @@ class GiftMessageTest extends GraphQlAbstract
      * @magentoConfigFixture default_store sales/gift_options/allow_items 0
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
      * @magentoApiDataFixture Magento/GiftMessage/_files/customer/order_with_message.php
-     * @expectedException Exception
-     * @expectedExceptionMessage Can't load gift message for order
-     * @throws AuthenticationException
-     * @throws Exception
      */
     public function testGiftMessageNotAllowForOrder()
     {
         $query = $this->getCustomerOrdersQuery();
         $currentEmail = 'customer@example.com';
         $currentPassword = 'password';
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Can\'t load gift message for order');
         $this->graphQlQuery($query, [], '', $this->getCustomerAuthHeaders($currentEmail, $currentPassword));
     }
 

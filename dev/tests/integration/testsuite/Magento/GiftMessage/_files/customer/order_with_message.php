@@ -4,13 +4,17 @@
  * See COPYING.txt for license details.
  */
 
+use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\TestFramework\Helper\Bootstrap;
 use Magento\GiftMessage\Model\Message;
 use Magento\GiftMessage\Model\ResourceModel\Message as MessageResource;
 use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Address as OrderAddress;
 
-require __DIR__ . '/../../../../Magento/Sales/_files/order.php';
+$addressData = include __DIR__ . '/../../../../Magento/Sales/_files/address_data.php';
+
+$objectManager = Bootstrap::getObjectManager();
 
 /** @var Order $order */
 /** @var Order\Payment $payment */
@@ -43,10 +47,13 @@ $orders = [
 /** @var OrderRepositoryInterface $orderRepository */
 $orderRepository = $objectManager->create(OrderRepositoryInterface::class);
 
+$payment = $objectManager->create(\Magento\Sales\Model\Order\Payment::class);
+$payment->setMethod('checkmo');
+$productRepository = $objectManager->create(ProductRepositoryInterface::class);
+$product = $productRepository->get('simple');
+
 /** @var array $orderData */
 foreach ($orders as $orderData) {
-    $newPayment = clone $payment;
-    $newPayment->setId(null);
     /** @var  Magento\Sales\Model\Order $order */
     $order = $objectManager->create(Order::class);
 
@@ -86,7 +93,7 @@ foreach ($orders as $orderData) {
         ->setCustomerEmail('customer@example.com')
         ->setBillingAddress($billingAddress)
         ->setShippingAddress($shippingAddress)
-        ->setPayment($newPayment);
+        ->setPayment($payment);
     $order->setGiftMessageId($messageModel->getId());
     $orderRepository->save($order);
 }

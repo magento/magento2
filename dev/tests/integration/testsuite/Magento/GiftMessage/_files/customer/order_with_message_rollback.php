@@ -23,7 +23,6 @@ $orderRepository = $objectManager->get(OrderRepositoryInterface::class);
 /** @var OrderInterfaceFactory $orderFactory */
 $orderFactory = $objectManager->create(OrderInterfaceFactory::class);
 $orders = [];
-$orders[] = $orderFactory->create()->loadByIncrementId('100000001');
 $orders[] = $orderFactory->create()->loadByIncrementId('999999990');
 $orders[] = $orderFactory->create()->loadByIncrementId('999999991');
 
