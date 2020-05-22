@@ -137,7 +137,7 @@ class View
             ->getCollection()
             ->addCategoryIds()
             ->addAttributeToSelect(['name', 'url_path', 'url_key', 'visibility'])
-            ->addWebsiteFilter($websiteIds);
+            ->addStoreFilter($storeId);
         foreach ($collection as $product) {
             $product->setStoreId($storeId);
             /** @var \Magento\Catalog\Model\Product $product */
