@@ -27,8 +27,8 @@
                 <xs:attribute name="padding">
                     <xs:annotation>
                         <xs:documentation>
-                            We can use padding only from 2, because padding 1 used for boolean type.
-                            And we need to distinguish boolean and integer
+                            This attribute is deprecated and the value is ignored.
+                            See https://dev.mysql.com/doc/relnotes/mysql/8.0/en/news-8-0-19.html.
                         </xs:documentation>
                     </xs:annotation>
                     <xs:simpleType>
