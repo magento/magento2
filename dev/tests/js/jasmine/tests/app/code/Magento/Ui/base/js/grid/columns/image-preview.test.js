@@ -62,7 +62,7 @@ define([
                 expect(imagePreview.lastOpenedImage()).toBe(record._rowIndex);
 
                 imagePreview.hide();
-                expect(imagePreview.lastOpenedImage()).toBe(null);
+                expect(imagePreview.lastOpenedImage()).toBe(false);
             });
 
         });
