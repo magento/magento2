@@ -64,8 +64,11 @@ class UpdateCartItems
      *
      * @param Quote $cart
      * @param array $items
+     *
      * @throws GraphQlInputException
      * @throws LocalizedException
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function processCartItems(Quote $cart, array $items): void
     {
