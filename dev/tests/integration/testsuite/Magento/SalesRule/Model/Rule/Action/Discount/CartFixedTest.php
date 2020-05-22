@@ -12,6 +12,11 @@ use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\ProductRepository;
 use Magento\Checkout\Model\Session as CheckoutSession;
 use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Framework\Exception\CouldNotSaveException;
+use Magento\Framework\Exception\InputException;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\ObjectManagerInterface;
 use Magento\Multishipping\Model\Checkout\Type\Multishipping;
 use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Quote\Api\Data\CartItemInterface;
@@ -28,6 +33,7 @@ use Magento\Sales\Model\Order\Email\Sender\OrderSender;
 use Magento\SalesRule\Api\RuleRepositoryInterface;
 use Magento\SalesRule\Model\Rule;
 use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Tests for Magento\SalesRule\Model\Rule\Action\Discount\CartFixed.
@@ -35,7 +41,7 @@ use Magento\TestFramework\Helper\Bootstrap;
  * @magentoAppArea frontend
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class CartFixedTest extends \PHPUnit\Framework\TestCase
+class CartFixedTest extends TestCase
 {
     /**
      * @var GuestCartManagementInterface
@@ -53,7 +59,7 @@ class CartFixedTest extends \PHPUnit\Framework\TestCase
     private $couponManagement;
 
     /**
-     * @var \Magento\Framework\ObjectManagerInterface
+     * @var ObjectManagerInterface
      */
     private $objectManager;
 
@@ -86,6 +92,9 @@ class CartFixedTest extends \PHPUnit\Framework\TestCase
      *
      * @param array $productPrices
      * @return void
+     * @throws CouldNotSaveException
+     * @throws InputException
+     * @throws NoSuchEntityException
      * @magentoDbIsolation enabled
      * @magentoAppIsolation enabled
      * @magentoDataFixture Magento/SalesRule/_files/coupon_cart_fixed_discount.php
@@ -310,6 +319,7 @@ class CartFixedTest extends \PHPUnit\Framework\TestCase
      * @param array $secondOrderTotals
      * @param array $thirdOrderTotals
      * @return void
+     * @throws LocalizedException
      */
     public function testMultishipping(
         float $discount,
@@ -417,84 +427,84 @@ class CartFixedTest extends \PHPUnit\Framework\TestCase
                 5,
                 [
                     'subtotal' => 10.00,
-                    'discount_amount' => -5.00,
+                    'discount_amount' => -0.7100,
                     'shipping_amount' => 5.00,
-                    'grand_total' => 10.00,
+                    'grand_total' => 14.2900,
                 ],
                 [
                     'subtotal' => 20.00,
-                    'discount_amount' => -0.00,
+                    'discount_amount' => -1.4300,
                     'shipping_amount' => 5.00,
-                    'grand_total' => 25.00,
+                    'grand_total' => 23.5700,
                 ],
                 [
                     'subtotal' => 5.00,
-                    'discount_amount' => -0.00,
+                    'discount_amount' => -5.00,
                     'shipping_amount' => 0.00,
-                    'grand_total' => 5.00,
+                    'grand_total' => 0.00,
                 ]
             ],
             'Discount = 1stOrderSubtotal: only 1st order gets discount' => [
                 10,
                 [
                     'subtotal' => 10.00,
-                    'discount_amount' => -10.00,
+                    'discount_amount' => -1.4300,
                     'shipping_amount' => 5.00,
-                    'grand_total' => 5.00,
+                    'grand_total' => 13.5700,
                 ],
                 [
                     'subtotal' => 20.00,
-                    'discount_amount' => -0.00,
+                    'discount_amount' => -2.8600,
                     'shipping_amount' => 5.00,
-                    'grand_total' => 25.00,
+                    'grand_total' => 22.1400,
                 ],
                 [
                     'subtotal' => 5.00,
-                    'discount_amount' => -0.00,
+                    'discount_amount' => -5.00,
                     'shipping_amount' => 0.00,
-                    'grand_total' => 5.00,
+                    'grand_total' => 0.00,
                 ]
             ],
             'Discount > 1stOrderSubtotal: 1st order get 100% discount and 2nd order get the remaining discount' => [
                 15,
                 [
                     'subtotal' => 10.00,
-                    'discount_amount' => -10.00,
+                    'discount_amount' => -2.1400,
                     'shipping_amount' => 5.00,
-                    'grand_total' => 5.00,
+                    'grand_total' => 12.8600,
                 ],
                 [
                     'subtotal' => 20.00,
-                    'discount_amount' => -5.00,
+                    'discount_amount' => -4.2900,
                     'shipping_amount' => 5.00,
-                    'grand_total' => 20.00,
+                    'grand_total' => 20.71,
                 ],
                 [
                     'subtotal' => 5.00,
-                    'discount_amount' => -0.00,
+                    'discount_amount' => -5.00,
                     'shipping_amount' => 0.00,
-                    'grand_total' => 5.00,
+                    'grand_total' => 0.00,
                 ]
             ],
             'Discount = 1stOrderSubtotal + 2ndOrderSubtotal: 1st order and 2nd order get 100% discount' => [
                 30,
                 [
                     'subtotal' => 10.00,
-                    'discount_amount' => -10.00,
+                    'discount_amount' => -4.2900,
                     'shipping_amount' => 5.00,
-                    'grand_total' => 5.00,
+                    'grand_total' => 10.7100,
                 ],
                 [
                     'subtotal' => 20.00,
-                    'discount_amount' => -20.00,
+                    'discount_amount' => -8.5700,
                     'shipping_amount' => 5.00,
-                    'grand_total' => 5.00,
+                    'grand_total' => 16.4300,
                 ],
                 [
                     'subtotal' => 5.00,
-                    'discount_amount' => -0.00,
+                    'discount_amount' => -5.00,
                     'shipping_amount' => 0.00,
-                    'grand_total' => 5.00,
+                    'grand_total' => 0.00,
                 ]
             ],
             'Discount > 1stOrdSubtotal + 2ndOrdSubtotal: 1st order and 2nd order get 100% discount
@@ -502,21 +512,21 @@ class CartFixedTest extends \PHPUnit\Framework\TestCase
                 31,
                 [
                     'subtotal' => 10.00,
-                    'discount_amount' => -10.00,
+                    'discount_amount' => -4.4300,
                     'shipping_amount' => 5.00,
-                    'grand_total' => 5.00,
+                    'grand_total' => 10.57,
                 ],
                 [
                     'subtotal' => 20.00,
-                    'discount_amount' => -20.00,
+                    'discount_amount' => -8.8600,
                     'shipping_amount' => 5.00,
-                    'grand_total' => 5.00,
+                    'grand_total' => 16.1400,
                 ],
                 [
                     'subtotal' => 5.00,
-                    'discount_amount' => -1.00,
+                    'discount_amount' => -5.00,
                     'shipping_amount' => 0.00,
-                    'grand_total' => 4.00,
+                    'grand_total' => 0.00,
                 ]
             ]
         ];
@@ -545,6 +555,7 @@ class CartFixedTest extends \PHPUnit\Framework\TestCase
      *
      * @param string $name
      * @return Rule
+     * @throws LocalizedException
      */
     private function getRule(string $name): Rule
     {
