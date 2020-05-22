@@ -7,24 +7,19 @@
 namespace Magento\AsynchronousOperations\Model;
 
 use Magento\AsynchronousOperations\Api\Data\OperationInterfaceFactory;
-use Magento\Framework\EntityManager\EntityManager;
 use Magento\Framework\App\ResourceConnection;
 use Psr\Log\LoggerInterface;
+use Magento\Framework\Bulk\OperationManagementInterface;
 
 /**
  * Class for managing Bulk Operations
  */
-class OperationManagement implements \Magento\Framework\Bulk\OperationManagementInterface
+class OperationManagement implements OperationManagementInterface
 {
     /**
      * @var ResourceConnection
      */
     private $connection;
-
-    /**
-     * @var EntityManager
-     */
-    private $entityManager;
 
     /**
      * @var OperationInterfaceFactory
@@ -39,18 +34,15 @@ class OperationManagement implements \Magento\Framework\Bulk\OperationManagement
     /**
      * OperationManagement constructor.
      *
-     * @param EntityManager $entityManager
      * @param OperationInterfaceFactory $operationFactory
      * @param LoggerInterface $logger
      * @param ResourceConnection $connection
      */
     public function __construct(
-        EntityManager $entityManager,
         OperationInterfaceFactory $operationFactory,
         LoggerInterface $logger,
         ResourceConnection $connection
     ) {
-        $this->entityManager = $entityManager;
         $this->operationFactory = $operationFactory;
         $this->logger = $logger;
         $this->connection = $connection;

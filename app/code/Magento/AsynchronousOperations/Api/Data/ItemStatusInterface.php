@@ -18,7 +18,6 @@ namespace Magento\AsynchronousOperations\Api\Data;
 interface ItemStatusInterface
 {
     const ENTITY_ID = 'entity_id';
-    const UUID = 'uuid';
     const DATA_HASH = 'data_hash';
     const STATUS = 'status';
     const ERROR_MESSAGE = 'error_message';
@@ -41,21 +40,6 @@ interface ItemStatusInterface
      * @return $this
      */
     public function setId($entityId);
-
-    /**
-     * Get operation UUID.
-     *
-     * @return string
-     */
-    public function getUuid();
-
-    /**
-     * Sets operation uuid.
-     *
-     * @param string $uuid
-     * @return $this
-     */
-    public function setUuid($uuid);
 
     /**
      * Get hash of entity data.

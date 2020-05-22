@@ -68,22 +68,6 @@ class Operation extends DataObject implements OperationInterface
     /**
      * @inheritDoc
      */
-    public function getUuid()
-    {
-        return $this->getData(self::UUID);
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function setUuid($uuid)
-    {
-        return $this->setData(self::UUID, $uuid);
-    }
-
-    /**
-     * @inheritDoc
-     */
     public function getTopicName()
     {
         return $this->getData(self::TOPIC_NAME);

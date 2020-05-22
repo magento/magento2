@@ -15,7 +15,7 @@ class Operation extends AbstractDb
 {
 
     public const TABLE_NAME = "magento_operation";
-    public const TABLE_PRIMARY_KEY = "uuid";
+    public const TABLE_PRIMARY_KEY = "id";
 
     /**
      * Initialize banner sales rule resource model

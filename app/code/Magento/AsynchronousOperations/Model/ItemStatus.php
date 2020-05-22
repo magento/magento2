@@ -32,22 +32,6 @@ class ItemStatus extends DataObject implements ItemStatusInterface
     /**
      * @inheritDoc
      */
-    public function getUuid()
-    {
-        return $this->getData(self::UUID);
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function setUuid($uuid)
-    {
-        return $this->setData(self::UUID, $uuid);
-    }
-
-    /**
-     * @inheritDoc
-     */
     public function getDataHash()
     {
         return $this->getData(self::DATA_HASH);

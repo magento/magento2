@@ -73,11 +73,6 @@ class MassSchedule
     private $saveMultipleOperations;
 
     /**
-     * @var GetAllOperationIds
-     */
-    private $getAllOperationIds;
-
-    /**
      * Initialize dependencies.
      *
      * @param IdentityGeneratorInterface $identityService
@@ -89,7 +84,6 @@ class MassSchedule
      * @param UserContextInterface $userContext
      * @param Encryptor $encryptor
      * @param SaveMultipleOperationsInterface $saveMultipleOperations
-     * @param GetAllOperationIds $getAllOperationIds
      */
     public function __construct(
         IdentityGeneratorInterface $identityService,
@@ -100,8 +94,7 @@ class MassSchedule
         OperationRepositoryInterface $operationRepository,
         UserContextInterface $userContext,
         Encryptor $encryptor,
-        SaveMultipleOperationsInterface $saveMultipleOperations,
-        GetAllOperationIds $getAllOperationIds
+        SaveMultipleOperationsInterface $saveMultipleOperations
     ) {
         $this->identityService = $identityService;
         $this->itemStatusInterfaceFactory = $itemStatusInterfaceFactory;
@@ -112,7 +105,6 @@ class MassSchedule
         $this->userContext = $userContext;
         $this->encryptor = $encryptor;
         $this->saveMultipleOperations = $saveMultipleOperations;
-        $this->getAllOperationIds = $getAllOperationIds;
     }
 
     /**
@@ -155,7 +147,6 @@ class MassSchedule
                 $operation = $this->operationRepository->create($topicName, $entityParams, $groupId, $key);
                 $operations[] = $operation;
                 $requestItem->setId($key);
-                $requestItem->setUuid($operation->getUuid());
                 $requestItem->setStatus(ItemStatusInterface::STATUS_ACCEPTED);
                 $requestItem->setDataHash(
                     $this->encryptor->hash($operation->getSerializedData(), Encryptor::HASH_VERSION_SHA256)
@@ -164,7 +155,6 @@ class MassSchedule
             } catch (\Exception $exception) {
                 $this->logger->error($exception);
                 $requestItem->setId($key);
-                $requestItem->setUuid($operation->getUuid());
                 $requestItem->setStatus(ItemStatusInterface::STATUS_REJECTED);
                 $requestItem->setErrorMessage($exception);
                 $requestItem->setErrorCode($exception);
