@@ -7,6 +7,9 @@
         "magento/module-customer": "*",
         "magento/module-login-as-customer-api": "*"
     },
+    "suggest": {
+        "magento/module-backend": "*"
+    },
     "type": "magento2-module",
     "license": [
         "OSL-3.0",
