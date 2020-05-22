@@ -12,7 +12,7 @@ use Magento\Framework\Module\Manager;
 use Magento\TestFramework\Helper\Bootstrap;
 
 /**
- * Class checks item block rendering using configurable product.
+ * Class checks item block rendering with configurable product.
  *
  * @see \Magento\Customer\Block\Adminhtml\Edit\Tab\View\Grid\Renderer\Item
  */

@@ -75,7 +75,7 @@ abstract class AbstractItemTest extends TestCase
         $optionsXPath = $this->getOptionsValueXPath($quoteItem);
         $productName = $quoteItem->getProduct()->getName();
 
-        $productNameXPath = count($optionsXPath) == 0 ? "/descendant::*[contains(text(), '$productName')]"
+        $productNameXPath = count($optionsXPath) === 0 ? "/descendant::*[contains(text(), '$productName')]"
             : "//div[contains(@class, 'product-title') and contains(text(), '$productName')]";
 
         $this->assertEquals(

@@ -10,7 +10,7 @@ namespace Magento\Customer\Block\Adminhtml\Grid\Renderer;
 use Magento\Framework\DataObject;
 
 /**
- * Class checks multiaction block rendering using simple product and simple product with options.
+ * Class checks multiaction block rendering with simple product and simple product with options.
  *
  * @see \Magento\Customer\Block\Adminhtml\Grid\Renderer\Multiaction
  */

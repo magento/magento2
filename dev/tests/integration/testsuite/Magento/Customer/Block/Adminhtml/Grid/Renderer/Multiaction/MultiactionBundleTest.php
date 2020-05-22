@@ -12,7 +12,7 @@ use Magento\Framework\Module\Manager;
 use Magento\TestFramework\Helper\Bootstrap;
 
 /**
- * Class checks multiaction block rendering using bundle product.
+ * Class checks multiaction block rendering with bundle product.
  *
  * @see \Magento\Customer\Block\Adminhtml\Grid\Renderer\Multiaction
  */
