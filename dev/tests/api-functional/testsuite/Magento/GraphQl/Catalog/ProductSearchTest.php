@@ -1032,7 +1032,7 @@ QUERY;
     private function assertFilters($response, $expectedFilters, $message = '')
     {
         $this->assertArrayHasKey('filters', $response['products'], 'Product has filters');
-        $this->assertTrue(is_array(($response['products']['filters'])), 'Product filters is not array');
+        $this->assertIsArray(($response['products']['filters']), 'Product filters is not array');
         $this->assertTrue(count($response['products']['filters']) > 0, 'Product filters is empty');
         foreach ($expectedFilters as $expectedFilter) {
             $found = false;
@@ -1641,11 +1641,6 @@ QUERY;
         $this->assertEquals('Colorful Category', $response['products']['filters'][0]['filter_items'][0]['label']);
         $this->assertCount(2, $response['products']['aggregations']);
         $productsInResponse = ['Blue briefs','Navy Blue Striped Shoes','Grey shorts'];
-        /** @var \Magento\Config\Model\Config $config */
-        $config = Bootstrap::getObjectManager()->get(\Magento\Config\Model\Config::class);
-        if (strpos($config->getConfigDataValue('catalog/search/engine'), 'elasticsearch') !== false) {
-            $this->markTestIncomplete('MC-20716');
-        }
         $count = count($response['products']['items']);
         for ($i = 0; $i < $count; $i++) {
             $this->assertEquals($productsInResponse[$i], $response['products']['items'][$i]['name']);
@@ -2116,11 +2111,12 @@ QUERY;
      *
      * @magentoApiDataFixture Magento/Catalog/_files/category.php
      * @magentoApiDataFixture Magento/Catalog/_files/products_with_layered_navigation_attribute.php
-     * @expectedException \Exception
-     * @expectedExceptionMessage currentPage value must be greater than 0
      */
     public function testInvalidCurrentPage()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('currentPage value must be greater than 0');
+
         $query = <<<QUERY
 {
   products (
@@ -2146,11 +2142,12 @@ QUERY;
      *
      * @magentoApiDataFixture Magento/Catalog/_files/category.php
      * @magentoApiDataFixture Magento/Catalog/_files/products_with_layered_navigation_attribute.php
-     * @expectedException \Exception
-     * @expectedExceptionMessage pageSize value must be greater than 0
      */
     public function testInvalidPageSize()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('pageSize value must be greater than 0');
+
         $query = <<<QUERY
 {
   products (

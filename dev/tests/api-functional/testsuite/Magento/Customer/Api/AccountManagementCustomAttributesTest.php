@@ -65,7 +65,7 @@ class AccountManagementCustomAttributesTest extends WebapiAbstract
     /**
      * Execute per test initialization.
      */
-    public function setUp()
+    protected function setUp(): void
     {
         $this->accountManagement = Bootstrap::getObjectManager()->get(
             \Magento\Customer\Api\AccountManagementInterface::class
@@ -82,7 +82,7 @@ class AccountManagementCustomAttributesTest extends WebapiAbstract
         $this->fileSystem = Bootstrap::getObjectManager()->get(\Magento\Framework\Filesystem::class);
     }
 
-    public function tearDown()
+    protected function tearDown(): void
     {
         if (!empty($this->currentCustomerId)) {
             foreach ($this->currentCustomerId as $customerId) {
@@ -171,7 +171,7 @@ class AccountManagementCustomAttributesTest extends WebapiAbstract
         $imageAttributeFound = false;
         foreach ($customAttributeArray as $customAttribute) {
             if ($customAttribute[AttributeValue::ATTRIBUTE_CODE] == 'customer_image') {
-                $this->assertContains($expectedFileName, $customAttribute[AttributeValue::VALUE]);
+                $this->assertStringContainsString($expectedFileName, $customAttribute[AttributeValue::VALUE]);
                 $mediaDirectory = $this->fileSystem->getDirectoryWrite(DirectoryList::MEDIA);
                 $customerMediaPath = $mediaDirectory->getAbsolutePath(CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER);
                 $imageAttributeFound = file_exists($customerMediaPath . $customAttribute[AttributeValue::VALUE]);
@@ -211,7 +211,7 @@ class AccountManagementCustomAttributesTest extends WebapiAbstract
         try {
             $this->createCustomerWithImageAttribute($imageData);
         } catch (\SoapFault $e) {
-            $this->assertContains(
+            $this->assertStringContainsString(
                 $expectedMessage,
                 $e->getMessage(),
                 "Exception message does not match"
@@ -271,6 +271,6 @@ class AccountManagementCustomAttributesTest extends WebapiAbstract
         $customerMediaPath = $mediaDirectory->getAbsolutePath(CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER);
         $previousImagePath =
             $previousCustomerData[CustomAttributesDataInterface::CUSTOM_ATTRIBUTES][0][AttributeValue::VALUE];
-        $this->assertFalse(file_exists($customerMediaPath . $previousImagePath));
+        $this->assertFileDoesNotExist($customerMediaPath . $previousImagePath);
     }
 }

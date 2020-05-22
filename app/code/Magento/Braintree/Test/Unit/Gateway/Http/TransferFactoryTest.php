@@ -3,16 +3,17 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Braintree\Test\Unit\Gateway\Http;
 
 use Magento\Braintree\Gateway\Http\TransferFactory;
 use Magento\Payment\Gateway\Http\TransferBuilder;
 use Magento\Payment\Gateway\Http\TransferInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-/**
- * Class TransferFactoryTest
- */
-class TransferFactoryTest extends \PHPUnit\Framework\TestCase
+class TransferFactoryTest extends TestCase
 {
     /**
      * @var TransferFactory
@@ -25,14 +26,14 @@ class TransferFactoryTest extends \PHPUnit\Framework\TestCase
     private $transferMock;
 
     /**
-     * @var TransferBuilder|\PHPUnit_Framework_MockObject_MockObject
+     * @var TransferBuilder|MockObject
      */
     private $transferBuilder;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->transferBuilder = $this->createMock(TransferBuilder::class);
-        $this->transferMock = $this->createMock(TransferInterface::class);
+        $this->transferMock = $this->getMockForAbstractClass(TransferInterface::class);
 
         $this->transferFactory = new TransferFactory(
             $this->transferBuilder

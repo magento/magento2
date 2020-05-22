@@ -3,58 +3,62 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\NewRelicReporting\Test\Unit\Model\Apm;
 
+use Magento\Framework\HTTP\ZendClient;
+use Magento\Framework\HTTP\ZendClientFactory;
 use Magento\NewRelicReporting\Model\Apm\Deployments;
-use \Magento\Framework\HTTP\ZendClient;
+use Magento\NewRelicReporting\Model\Config;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface;
 
-/**
- * Class DeploymentsTest
- */
-class DeploymentsTest extends \PHPUnit\Framework\TestCase
+class DeploymentsTest extends TestCase
 {
     /**
-     * @var \Magento\NewRelicReporting\Model\Apm\Deployments
+     * @var Deployments
      */
     protected $model;
 
     /**
-     * @var \Magento\NewRelicReporting\Model\Config|\PHPUnit_Framework_MockObject_MockObject
+     * @var Config|MockObject
      */
     protected $configMock;
 
     /**
-     * @var \Magento\Framework\HTTP\ZendClientFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var ZendClientFactory|MockObject
      */
     protected $zendClientFactoryMock;
 
     /**
-     * @var \Magento\Framework\HTTP\ZendClient|\PHPUnit_Framework_MockObject_MockObject
+     * @var ZendClient|MockObject
      */
     protected $zendClientMock;
 
     /**
-     * @var \Psr\Log\LoggerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var LoggerInterface|MockObject
      */
     protected $loggerMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->zendClientFactoryMock = $this->getMockBuilder(\Magento\Framework\HTTP\ZendClientFactory::class)
+        $this->zendClientFactoryMock = $this->getMockBuilder(ZendClientFactory::class)
             ->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->zendClientMock = $this->getMockBuilder(\Magento\Framework\HTTP\ZendClient::class)
+        $this->zendClientMock = $this->getMockBuilder(ZendClient::class)
             ->setMethods(['request', 'setUri', 'setMethod', 'setHeaders', 'setParameterPost'])
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->loggerMock = $this->getMockBuilder(\Psr\Log\LoggerInterface::class)
+        $this->loggerMock = $this->getMockBuilder(LoggerInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
-        $this->configMock = $this->getMockBuilder(\Magento\NewRelicReporting\Model\Config::class)
+        $this->configMock = $this->getMockBuilder(Config::class)
             ->setMethods(['getNewRelicApiUrl', 'getNewRelicApiKey', 'getNewRelicAppName', 'getNewRelicAppId'])
             ->disableOriginalConstructor()
             ->getMock();
@@ -115,7 +119,8 @@ class DeploymentsTest extends \PHPUnit\Framework\TestCase
 
         $zendHttpResponseMock = $this->getMockBuilder(
             \Zend_Http_Response::class
-        )->disableOriginalConstructor()->getMock();
+        )->disableOriginalConstructor()
+            ->getMock();
         $zendHttpResponseMock->expects($this->any())->method('getStatus')->willReturn($data['status_ok']);
         $zendHttpResponseMock->expects($this->once())->method('getBody')->willReturn($data['response_body']);
 
@@ -125,10 +130,7 @@ class DeploymentsTest extends \PHPUnit\Framework\TestCase
             ->method('create')
             ->willReturn($this->zendClientMock);
 
-        $this->assertInternalType(
-            'string',
-            $this->model->setDeployment($data['description'], $data['change'], $data['user'])
-        );
+        $this->assertIsString($this->model->setDeployment($data['description'], $data['change'], $data['user']));
     }
 
     /**
@@ -178,7 +180,8 @@ class DeploymentsTest extends \PHPUnit\Framework\TestCase
 
         $zendHttpResponseMock = $this->getMockBuilder(
             \Zend_Http_Response::class
-        )->disableOriginalConstructor()->getMock();
+        )->disableOriginalConstructor()
+            ->getMock();
         $zendHttpResponseMock->expects($this->any())->method('getStatus')->willReturn($data['status_bad']);
 
         $this->zendClientMock->expects($this->once())->method('request')->willReturn($zendHttpResponseMock);
@@ -188,10 +191,7 @@ class DeploymentsTest extends \PHPUnit\Framework\TestCase
             ->method('create')
             ->willReturn($this->zendClientMock);
 
-        $this->assertInternalType(
-            'bool',
-            $this->model->setDeployment($data['description'], $data['change'], $data['user'])
-        );
+        $this->assertIsBool($this->model->setDeployment($data['description'], $data['change'], $data['user']));
     }
 
     /**
@@ -246,10 +246,7 @@ class DeploymentsTest extends \PHPUnit\Framework\TestCase
             ->method('create')
             ->willReturn($this->zendClientMock);
 
-        $this->assertInternalType(
-            'bool',
-            $this->model->setDeployment($data['description'], $data['change'], $data['user'])
-        );
+        $this->assertIsBool($this->model->setDeployment($data['description'], $data['change'], $data['user']));
     }
 
     /**
@@ -279,19 +276,19 @@ class DeploymentsTest extends \PHPUnit\Framework\TestCase
         ];
 
         return ['description' => $description,
-                 'change' => $change,
-                 'user' => $user,
-                 'uri' => $uri,
-                 'self_uri' => $selfUri,
-                 'api_key' => $apiKey,
-                 'app_name' => $appName,
-                 'app_id' => $appId,
-                 'method' => $method,
-                 'headers' => $headers,
-                 'status_ok' => $statusOk,
-                 'status_bad' => $statusBad,
-                 'response_body' => $responseBody,
-                 'params' => $params
-                ];
+            'change' => $change,
+            'user' => $user,
+            'uri' => $uri,
+            'self_uri' => $selfUri,
+            'api_key' => $apiKey,
+            'app_name' => $appName,
+            'app_id' => $appId,
+            'method' => $method,
+            'headers' => $headers,
+            'status_ok' => $statusOk,
+            'status_bad' => $statusBad,
+            'response_body' => $responseBody,
+            'params' => $params
+        ];
     }
 }

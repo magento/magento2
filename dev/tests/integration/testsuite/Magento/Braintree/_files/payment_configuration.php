@@ -7,11 +7,14 @@
 use Magento\Config\Model\Config;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Encryption\EncryptorInterface;
+use Magento\Store\Api\WebsiteRepositoryInterface;
 use Magento\Store\Model\ScopeInterface;
 use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
 
 $objectManager = Bootstrap::getObjectManager();
-
+/** @var WebsiteRepositoryInterface $websiteRepository */
+$websiteRepository = $objectManager->get(WebsiteRepositoryInterface::class);
 /** @var EncryptorInterface $encryptor */
 $encryptor = $objectManager->get(EncryptorInterface::class);
 
@@ -34,7 +37,7 @@ $defConfig->setScope(ScopeConfigInterface::SCOPE_TYPE_DEFAULT);
 $processConfigData($defConfig, $configData);
 
 // save payment configuration per store
-require __DIR__ . '/../../Store/_files/store.php';
+Resolver::getInstance()->requireDataFixture('Magento/Store/_files/store.php');
 $storeConfigData = [
     'payment/braintree/merchant_id' => 'store_merchant_id',
     'payment/braintree/public_key' => $encryptor->encrypt('store_public_key'),
@@ -46,7 +49,8 @@ $storeConfig->setStore('test');
 $processConfigData($storeConfig, $storeConfigData);
 
 // save payment website config data
-require __DIR__ . '/../../Store/_files/second_website_with_two_stores.php';
+Resolver::getInstance()->requireDataFixture('Magento/Store/_files/second_website_with_two_stores.php');
+$websiteId = $websiteRepository->get('test')->getCode();
 $websiteConfigData = [
     'payment/braintree/merchant_id' => 'website_merchant_id',
     'payment/braintree/private_key' => $encryptor->encrypt('website_private_key'),
