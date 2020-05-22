@@ -1,6 +1,11 @@
 # Copyright © Magento, Inc. All rights reserved.
 # See COPYING.txt for license details.
 
+type StoreConfig {
+    allow_order : String @doc(description: "Allow Gift Messages on order level")
+    allow_items : String @doc(description: "Allow Gift Messages for order items")
+}
+
 type Cart {
     gift_message: GiftMessage @resolver (class: "\\Magento\\GiftMessageGraphQl\\Model\\Resolver\\Cart\\GiftMessage") @doc(description: "The entered gift message for the cart")
 }
@@ -22,6 +27,16 @@ type GiftCardCartItem {
 }
 
 type GiftMessage {
+    to: String! @doc(description: "Recepient name")
+    from: String! @doc(description: "Sender name")
+    message: String! @doc(description: "Gift message text")
+}
+
+input CartItemUpdateInput {
+    gift_message: GiftMessageInput @doc(description: "Gift message details for the cart item")
+}
+
+input GiftMessageInput {
     to: String! @doc(description: "Recepient name")
     from: String! @doc(description: "Sender name")
     message: String! @doc(description: "Gift message text")
