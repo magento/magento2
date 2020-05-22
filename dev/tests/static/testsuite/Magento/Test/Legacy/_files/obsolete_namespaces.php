@@ -206,4 +206,5 @@ return [
     ['Magento\AuthorizenetAcceptjs'],
     ['Magento\AuthorizenetCardinal'],
     ['Magento\AuthorizenetGraphQl'],
+    ['Magento\Setup\Model\Cron'],
 ];
