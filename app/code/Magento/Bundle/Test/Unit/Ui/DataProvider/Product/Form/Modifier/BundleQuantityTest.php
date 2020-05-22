@@ -3,13 +3,12 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Bundle\Test\Unit\Ui\DataProvider\Product\Form\Modifier;
 
 use Magento\Bundle\Ui\DataProvider\Product\Form\Modifier\BundleQuantity;
 
-/**
- * Class BundleQuantityTest
- */
 class BundleQuantityTest extends AbstractModifierTest
 {
     /**

@@ -5,12 +5,12 @@
  */
 declare(strict_types=1);
 
-// phpcs:ignore Magento2.Security.IncludeFile
-require __DIR__ . '/../../ConfigurableProduct/_files/configurable_products.php';
-
-use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Eav\Api\AttributeRepositoryInterface;
+use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\Helper\CacheCleaner;
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
+
+Resolver::getInstance()->requireDataFixture('Magento/ConfigurableProduct/_files/configurable_products.php');
 
 $eavConfig = Bootstrap::getObjectManager()->get(\Magento\Eav\Model\Config::class);
 

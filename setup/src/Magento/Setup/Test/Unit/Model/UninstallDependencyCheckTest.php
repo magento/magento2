@@ -3,12 +3,19 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Setup\Test\Unit\Model;
 
+use Magento\Framework\Composer\ComposerInformation;
+use Magento\Framework\Composer\DependencyChecker;
+use Magento\Setup\Model\ThemeDependencyCheckerFactory;
 use Magento\Setup\Model\UninstallDependencyCheck;
+use Magento\Theme\Model\Theme\ThemeDependencyChecker;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class UninstallDependencyCheckTest extends \PHPUnit\Framework\TestCase
+class UninstallDependencyCheckTest extends TestCase
 {
     /**
      * @var UninstallDependencyCheck
@@ -16,32 +23,32 @@ class UninstallDependencyCheckTest extends \PHPUnit\Framework\TestCase
     private $uninstallDependencyCheck;
 
     /**
-     * @var \Magento\Framework\Composer\ComposerInformation|\PHPUnit_Framework_MockObject_MockObject
+     * @var ComposerInformation|MockObject
      */
     private $composerInfo;
 
     /**
-     * @var \Magento\Framework\Composer\DependencyChecker|\PHPUnit_Framework_MockObject_MockObject
+     * @var DependencyChecker|MockObject
      */
     private $packageDependencyChecker;
 
     /**
-     * @var \Magento\Theme\Model\Theme\ThemeDependencyChecker|\PHPUnit_Framework_MockObject_MockObject
+     * @var ThemeDependencyChecker|MockObject
      */
     private $themeDependencyChecker;
 
     /**
-     * @var \Magento\Setup\Model\ThemeDependencyCheckerFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var ThemeDependencyCheckerFactory|MockObject
      */
     private $themeDependencyCheckerFactory;
 
-    public function setup()
+    protected function setup(): void
     {
-        $this->composerInfo = $this->createMock(\Magento\Framework\Composer\ComposerInformation::class);
-        $this->packageDependencyChecker = $this->createMock(\Magento\Framework\Composer\DependencyChecker::class);
-        $this->themeDependencyChecker = $this->createMock(\Magento\Theme\Model\Theme\ThemeDependencyChecker::class);
+        $this->composerInfo = $this->createMock(ComposerInformation::class);
+        $this->packageDependencyChecker = $this->createMock(DependencyChecker::class);
+        $this->themeDependencyChecker = $this->createMock(ThemeDependencyChecker::class);
         $this->themeDependencyCheckerFactory =
-            $this->createMock(\Magento\Setup\Model\ThemeDependencyCheckerFactory::class);
+            $this->createMock(ThemeDependencyCheckerFactory::class);
         $this->themeDependencyCheckerFactory->expects($this->any())->method('create')
             ->willReturn($this->themeDependencyChecker);
         $this->uninstallDependencyCheck = new UninstallDependencyCheck(

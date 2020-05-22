@@ -5,18 +5,20 @@
  */
 declare(strict_types=1);
 
+use Magento\Sales\Api\Data\OrderInterfaceFactory;
 use Magento\Sales\Api\InvoiceRepositoryInterface;
 use Magento\Sales\Api\TransactionRepositoryInterface;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Service\InvoiceService;
 use Magento\TestFramework\ObjectManager;
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
 
 /** @var Order $order */
-
-require __DIR__ . '/order.php';
+Resolver::getInstance()->requireDataFixture('Magento/Braintree/Fixtures/order.php');
 
 $objectManager = ObjectManager::getInstance();
-
+/** @var Order $order */
+$order = $objectManager->get(OrderInterfaceFactory::class)->create()->loadByIncrementId('100000002');
 /** @var InvoiceService $invoiceService */
 $invoiceService = $objectManager->get(InvoiceService::class);
 $invoice = $invoiceService->prepareInvoice($order);

@@ -20,6 +20,9 @@
             <group value="catalog"/>
             <group value="groupedProduct"/>
             <group value="productVideo"/>
+            <skip>
+                <issueId value="MC-33903"/>
+            </skip>
         </annotations>
         <before>
             <createData entity="SimpleProduct2" after="setYoutubeApiKeyConfig" stepKey="createFirstSimpleProduct"/>
