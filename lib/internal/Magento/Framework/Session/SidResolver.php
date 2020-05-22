@@ -28,13 +28,13 @@ class SidResolver implements SidResolverInterface
 
     /**
      * @var \Magento\Framework\UrlInterface
-     * @deprecated Not used anymore.
+     * @deprecated 102.0.5 Not used anymore.
      */
     protected $urlBuilder;
 
     /**
      * @var \Magento\Framework\App\RequestInterface
-     * @deprecated Not used anymore.
+     * @deprecated 102.0.5 Not used anymore.
      */
     protected $request;
 
