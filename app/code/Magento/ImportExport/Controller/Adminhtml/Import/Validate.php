@@ -59,7 +59,7 @@ class Validate extends ImportResultController implements HttpPostActionInterface
             $resultBlock->addError(__('The file was not uploaded.'));
             return $resultLayout;
         }
-        $this->messageManager->addError(__('Sorry, but the data is invalid or the file is not uploaded.'));
+        $this->messageManager->addErrorMessage(__('Sorry, but the data is invalid or the file is not uploaded.'));
         /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
         $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
         $resultRedirect->setPath('adminhtml/*/index');

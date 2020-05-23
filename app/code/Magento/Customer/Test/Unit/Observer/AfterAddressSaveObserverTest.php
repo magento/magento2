@@ -595,7 +595,7 @@ class AfterAddressSaveObserverTest extends TestCase
                 ->with($vatId)
                 ->willReturn($vatId);
             $this->messageManager->expects($this->once())
-                ->method('addError')
+                ->method('addErrorMessage')
                 ->with($resultInvalidMessage)
                 ->willReturnSelf();
         }
@@ -605,7 +605,7 @@ class AfterAddressSaveObserverTest extends TestCase
                 ->with('trans_email/ident_support/email', ScopeInterface::SCOPE_STORE)
                 ->willReturn('admin@example.com');
             $this->messageManager->expects($this->once())
-                ->method('addError')
+                ->method('addErrorMessage')
                 ->with($resultErrorMessage)
                 ->willReturnSelf();
         }

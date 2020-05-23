@@ -125,7 +125,7 @@ class Link extends \Magento\Catalog\Controller\Adminhtml\Product\Edit
             try {
                 $this->_processDownload($resource, $resourceType);
             } catch (\Magento\Framework\Exception\LocalizedException $e) {
-                $this->messageManager->addError(__('Something went wrong while getting the requested content.'));
+                $this->messageManager->addErrorMessage(__('Something went wrong while getting the requested content.'));
             }
         }
     }
