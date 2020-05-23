@@ -19,14 +19,13 @@
             <group value="CatalogRule"/>
         </annotations>
         <before>
-            <!-- Create a category -->
             <createData entity="ApiCategory" stepKey="createCategory"/>
-            <!-- Create a simple product -->
             <createData entity="ApiSimpleProduct" stepKey="createSimpleProduct">
                 <requiredEntity createDataKey="createCategory"/>
             </createData>
+            <magentoCron stepKey="runCronIndex" groups="index"/>
             <!-- Login to Admin page -->
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
             <!-- Create a configurable product -->
             <actionGroup ref="CreateConfigurableProductActionGroup" stepKey="createConfigurableProduct">
                 <argument name="product" value="_defaultProduct"/>

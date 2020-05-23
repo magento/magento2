@@ -3,22 +3,31 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Framework\MessageQueue\Test\Unit;
+
+use Magento\Framework\Exception\NotFoundException;
+use Magento\Framework\MessageQueue\EnvelopeInterface;
+use Magento\Framework\MessageQueue\LockInterfaceFactory;
+use Magento\Framework\MessageQueue\MessageController;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Unit test for MessageController class.
  *
  */
-class MessageControllerTest extends \PHPUnit\Framework\TestCase
+class MessageControllerTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\MessageQueue\LockInterfaceFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var LockInterfaceFactory|MockObject
      */
     private $lockFactory;
 
     /**
-     * @var \Magento\Framework\MessageQueue\MessageController
+     * @var MessageController
      */
     private $messageController;
 
@@ -27,14 +36,15 @@ class MessageControllerTest extends \PHPUnit\Framework\TestCase
      *
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->lockFactory = $this->getMockBuilder(\Magento\Framework\MessageQueue\LockInterfaceFactory::class)
-            ->disableOriginalConstructor()->setMethods(['create'])->getMock();
+        $this->lockFactory = $this->getMockBuilder(LockInterfaceFactory::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['create'])->getMock();
 
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $objectManager = new ObjectManager($this);
         $this->messageController = $objectManager->getObject(
-            \Magento\Framework\MessageQueue\MessageController::class,
+            MessageController::class,
             [
                 'lockFactory' => $this->lockFactory
             ]
@@ -50,11 +60,11 @@ class MessageControllerTest extends \PHPUnit\Framework\TestCase
     {
         $properties = [];
         $consumerName = '';
-        $this->expectException(\Magento\Framework\Exception\NotFoundException::class);
+        $this->expectException(NotFoundException::class);
         $this->expectExceptionMessage("Property 'message_id' not found in properties.");
         $this->lockFactory->expects($this->once())->method('create');
-        $envelope = $this->getMockBuilder(\Magento\Framework\MessageQueue\EnvelopeInterface::class)
-            ->disableArgumentCloning()->getMock();
+        $envelope = $this->getMockBuilder(EnvelopeInterface::class)
+            ->disableArgumentCloning()->getMockForAbstractClass();
         $envelope->expects($this->once())->method('getProperties')->willReturn($properties);
 
         $this->messageController->lock($envelope, $consumerName);

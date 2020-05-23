@@ -12,7 +12,7 @@ class CircularTest extends \PHPUnit\Framework\TestCase
      */
     protected $circular;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->circular = new Circular();
     }

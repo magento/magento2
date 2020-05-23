@@ -364,6 +364,8 @@ QUERY;
         $out = '';
         // phpcs:ignore Magento2.Security.InsecureFunction
         exec("php -f {$appDir}/bin/magento indexer:reindex catalog_category_product", $out);
+        // phpcs:ignore Magento2.Security.InsecureFunction
+        exec("php -f {$appDir}/bin/magento indexer:reindex catalogsearch_fulltext", $out);
         CacheCleaner::cleanAll();
     }
 
@@ -670,7 +672,7 @@ QUERY;
         $productRepository = ObjectManager::getInstance()->get(ProductRepositoryInterface::class);
         $product1 = $productRepository->get('simple');
         $product2 = $productRepository->get('simple-4');
-        $filteredProducts = [$product1, $product2];
+        $filteredProducts = [$product2, $product1];
         $productItemsInResponse = array_map(null, $response['products']['items'], $filteredProducts);
         //phpcs:ignore Generic.CodeAnalysis.ForLoopWithTestFunctionCall
         for ($itemIndex = 0; $itemIndex < count($filteredProducts); $itemIndex++) {
@@ -678,7 +680,8 @@ QUERY;
             //validate that correct products are returned
             $this->assertResponseFields(
                 $productItemsInResponse[$itemIndex][0],
-                [ 'name' => $filteredProducts[$itemIndex]->getName(),
+                [
+                    'name' => $filteredProducts[$itemIndex]->getName(),
                     'sku' => $filteredProducts[$itemIndex]->getSku()
                 ]
             );
@@ -1029,7 +1032,7 @@ QUERY;
     private function assertFilters($response, $expectedFilters, $message = '')
     {
         $this->assertArrayHasKey('filters', $response['products'], 'Product has filters');
-        $this->assertTrue(is_array(($response['products']['filters'])), 'Product filters is not array');
+        $this->assertIsArray(($response['products']['filters']), 'Product filters is not array');
         $this->assertTrue(count($response['products']['filters']) > 0, 'Product filters is empty');
         foreach ($expectedFilters as $expectedFilter) {
             $found = false;
@@ -1121,6 +1124,7 @@ QUERY;
      */
     public function testSortByPosition()
     {
+        $this->reIndexAndCleanCache();
         // Get category ID for filtering
         /** @var Collection $categoryCollection */
         $categoryCollection = Bootstrap::getObjectManager()->get(Collection::class);
@@ -1141,7 +1145,8 @@ QUERY;
         $resultAsc = $this->graphQlQuery($queryAsc);
         $this->assertArrayNotHasKey('errors', $resultAsc);
         $productsAsc = array_column($resultAsc['products']['items'], 'sku');
-        $expectedProductsAsc = ['simple1000', 'simple1001', 'simple1002'];
+        $expectedProductsAsc = ['simple1002', 'simple1001', 'simple1000'];
+        // position equal and secondary sort by entity_id DESC
         $this->assertEquals($expectedProductsAsc, $productsAsc);
 
         $queryDesc = <<<QUERY
@@ -1158,23 +1163,25 @@ QUERY;
         $resultDesc = $this->graphQlQuery($queryDesc);
         $this->assertArrayNotHasKey('errors', $resultDesc);
         $productsDesc = array_column($resultDesc['products']['items'], 'sku');
-        $expectedProductsDesc = array_reverse($expectedProductsAsc);
-        $this->assertEquals($expectedProductsDesc, $productsDesc);
+        // position equal and secondary sort by entity_id DESC
+        $this->assertEquals($expectedProductsAsc, $productsDesc);
 
         //revert position
         $productPositions = $category->getProductsPosition();
-        $count = 3;
+        $count = 1;
         foreach ($productPositions as $productId => $position) {
             $productPositions[$productId] = $count;
-            $count--;
+            $count++;
         }
+        ksort($productPositions);
 
         $category->setPostedProducts($productPositions);
         $category->save();
+        $this->reIndexAndCleanCache();
 
         $queryDesc = <<<QUERY
 {
-  products(filter: {category_id: {eq: "$categoryId"}}, sort: {position: DESC}) {
+  products(filter: {category_id: {eq: "$categoryId"}}, sort: {position: ASC}) {
     total_count
     items {
       sku
@@ -1186,8 +1193,8 @@ QUERY;
         $resultDesc = $this->graphQlQuery($queryDesc);
         $this->assertArrayNotHasKey('errors', $resultDesc);
         $productsDesc = array_column($resultDesc['products']['items'], 'sku');
-        $expectedProductsDesc = $expectedProductsAsc;
-        $this->assertEquals($expectedProductsDesc, $productsDesc);
+        // position NOT equal and oldest entity first
+        $this->assertEquals(array_reverse($expectedProductsAsc), $productsDesc);
     }
 
     /**
@@ -1532,6 +1539,7 @@ QUERY;
         $categoryRepository = ObjectManager::getInstance()->get(CategoryRepositoryInterface::class);
 
         $links = $productLinks->getAssignedProducts($queryCategoryId);
+        $links = array_reverse($links);
         foreach ($response['products']['items'] as $itemIndex => $itemData) {
             $this->assertNotEmpty($itemData);
             $this->assertEquals($response['products']['items'][$itemIndex]['sku'], $links[$itemIndex]->getSku());
@@ -1633,11 +1641,6 @@ QUERY;
         $this->assertEquals('Colorful Category', $response['products']['filters'][0]['filter_items'][0]['label']);
         $this->assertCount(2, $response['products']['aggregations']);
         $productsInResponse = ['Blue briefs','Navy Blue Striped Shoes','Grey shorts'];
-        /** @var \Magento\Config\Model\Config $config */
-        $config = Bootstrap::getObjectManager()->get(\Magento\Config\Model\Config::class);
-        if (strpos($config->getConfigDataValue('catalog/search/engine'), 'elasticsearch') !== false) {
-            $this->markTestIncomplete('MC-20716');
-        }
         $count = count($response['products']['items']);
         for ($i = 0; $i < $count; $i++) {
             $this->assertEquals($productsInResponse[$i], $response['products']['items'][$i]['name']);
@@ -2108,11 +2111,12 @@ QUERY;
      *
      * @magentoApiDataFixture Magento/Catalog/_files/category.php
      * @magentoApiDataFixture Magento/Catalog/_files/products_with_layered_navigation_attribute.php
-     * @expectedException \Exception
-     * @expectedExceptionMessage currentPage value must be greater than 0
      */
     public function testInvalidCurrentPage()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('currentPage value must be greater than 0');
+
         $query = <<<QUERY
 {
   products (
@@ -2138,11 +2142,12 @@ QUERY;
      *
      * @magentoApiDataFixture Magento/Catalog/_files/category.php
      * @magentoApiDataFixture Magento/Catalog/_files/products_with_layered_navigation_attribute.php
-     * @expectedException \Exception
-     * @expectedExceptionMessage pageSize value must be greater than 0
      */
     public function testInvalidPageSize()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('pageSize value must be greater than 0');
+
         $query = <<<QUERY
 {
   products (

@@ -45,7 +45,7 @@ class OrderTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->resourceModel = $this->objectManager->create(\Magento\Sales\Model\ResourceModel\Order::class);
@@ -57,7 +57,7 @@ class OrderTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $registry = $this->objectManager->get(\Magento\Framework\Registry::class);
         $registry->unregister('isSecureArea');
@@ -161,7 +161,7 @@ class OrderTest extends \PHPUnit\Framework\TestCase
         $orderRepository = $this->objectManager->create(\Magento\Sales\Api\OrderRepositoryInterface::class);
         $order = $orderRepository->get($order->getId());
         $this->assertEquals(255, strlen($order->getStoreName()));
-        $this->assertContains($store->getWebsite()->getName(), $order->getStoreName());
-        $this->assertContains($store->getGroup()->getName(), $order->getStoreName());
+        $this->assertStringContainsString($store->getWebsite()->getName(), $order->getStoreName());
+        $this->assertStringContainsString($store->getGroup()->getName(), $order->getStoreName());
     }
 }

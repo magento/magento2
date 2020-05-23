@@ -7,21 +7,25 @@ declare(strict_types=1);
 
 namespace Magento\CatalogSearch\Test\Unit\Plugin;
 
+use Magento\CatalogSearch\Plugin\EnableEavIndexer;
+use Magento\Config\Model\Config;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
- * @deprecated
+ * @deprecated Implementation class was replaced
  * @see \Magento\ElasticSearch
  */
-class EnableEavIndexerTest extends \PHPUnit\Framework\TestCase
+class EnableEavIndexerTest extends TestCase
 {
     /**
-     * @var \Magento\CatalogSearch\Plugin\EnableEavIndexer
+     * @var EnableEavIndexer
      */
     private $model;
 
     /**
-     * @var \Magento\Config\Model\Config|\PHPUnit_Framework_MockObject_MockObject
+     * @var Config|MockObject
      */
     private $config;
 
@@ -30,16 +34,16 @@ class EnableEavIndexerTest extends \PHPUnit\Framework\TestCase
      *
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->config = $this->getMockBuilder(\Magento\Config\Model\Config::class)
+        $this->config = $this->getMockBuilder(Config::class)
             ->disableOriginalConstructor()
             ->setMethods(['getData', 'setData'])
             ->getMock();
 
         $objectManagerHelper = new ObjectManagerHelper($this);
         $this->model = $objectManagerHelper->getObject(
-            \Magento\CatalogSearch\Plugin\EnableEavIndexer::class
+            EnableEavIndexer::class
         );
     }
 

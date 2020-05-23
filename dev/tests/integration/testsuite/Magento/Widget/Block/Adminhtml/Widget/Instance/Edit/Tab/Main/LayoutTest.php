@@ -15,7 +15,7 @@ class LayoutTest extends \PHPUnit\Framework\TestCase
      */
     protected $_block;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -56,7 +56,7 @@ class LayoutTest extends \PHPUnit\Framework\TestCase
         $actualHtml = $this->_block->getLayoutsChooser();
         $this->assertStringStartsWith('<select ', $actualHtml);
         $this->assertStringEndsWith('</select>', $actualHtml);
-        $this->assertContains('id="layout_handle"', $actualHtml);
+        $this->assertStringContainsString('id="layout_handle"', $actualHtml);
         $optionCount = substr_count($actualHtml, '<option ');
         $this->assertGreaterThan(1, $optionCount, 'HTML select tag must provide options to choose from.');
         $this->assertEquals($optionCount, substr_count($actualHtml, '</option>'));
