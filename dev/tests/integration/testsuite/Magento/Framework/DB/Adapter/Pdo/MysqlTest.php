@@ -187,7 +187,11 @@ class MysqlTest extends \PHPUnit\Framework\TestCase
         //Test default value with expression
         $this->assertEquals('created_at', $dateColumn['COLUMN_NAME'], 'Incorrect column name');
         $this->assertEquals(Table::TYPE_DATETIME, $dateColumn['DATA_TYPE'], 'Incorrect column type');
-        $this->assertEquals('CURRENT_TIMESTAMP', $dateColumn['DEFAULT'], 'Incorrect column default expression value');
+        $this->assertMatchesRegularExpression(
+            '/(CURRENT_TIMESTAMP|current_timestamp\(\))/',
+            $dateColumn['DEFAULT'],
+            'Incorrect column default expression value'
+        );
 
         //Test default value with integer value
         $this->assertEquals('integer_column', $intColumn['COLUMN_NAME'], 'Incorrect column name');

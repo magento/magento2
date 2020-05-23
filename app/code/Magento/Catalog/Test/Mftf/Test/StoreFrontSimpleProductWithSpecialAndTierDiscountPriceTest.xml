@@ -10,6 +10,7 @@
     <test name="StoreFrontSimpleProductWithSpecialAndTierDiscountPriceTest">
         <annotations>
             <features value="Catalog"/>
+            <stories value="Apply discount tier price and custom price values for simple product"/>
             <title value="Apply discount tier price and custom price values for simple product"/>
             <description value="Apply discount tier price and custom price values for simple product"/>
             <severity value="MAJOR"/>
