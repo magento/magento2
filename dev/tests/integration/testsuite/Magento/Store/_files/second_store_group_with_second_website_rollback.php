@@ -4,5 +4,6 @@
  * See COPYING.txt for license details.
  */
 declare(strict_types=1);
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
 
-require_once __DIR__ . '/website_rollback.php';
+Resolver::getInstance()->requireDataFixture('Magento/Store/_files/website_rollback.php');
