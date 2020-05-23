@@ -3,5 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
 
-include __DIR__ . '/../../../Magento/Sales/_files/quote_rollback.php';
+Resolver::getInstance()->requireDataFixture('Magento/Sales/_files/quote_rollback.php');
