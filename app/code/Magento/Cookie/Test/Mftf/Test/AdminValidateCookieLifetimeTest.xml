@@ -14,6 +14,7 @@
             <stories value="Validate cookie lifetime field in Magento admin"/>
             <title value="Admin should not able to enter text in cookie lifetime filed"/>
             <description value="Admin can only be able type numbers in cookie lifetime filed in Magento admin"/>
+            <severity value="MAJOR"/>
             <group value="Cookie"/>
         </annotations>
         <before>
