@@ -14,6 +14,7 @@
             <stories value="Newsletter Updating"/>
             <title value="Newsletter Updating Test"/>
             <description value="Admin should be able update created Newsletter Template"/>
+            <severity value="MAJOR"/>
             <group value="reports"/>
             <group value="mtf_migrated"/>
             <group value="WYSIWYGDisabled"/>

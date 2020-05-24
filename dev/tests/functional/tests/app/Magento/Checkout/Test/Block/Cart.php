@@ -65,13 +65,6 @@ class Cart extends Block
     protected $inContextPaypalCheckoutButton = 'ul.checkout-methods-items a[data-action="paypal-in-context-checkout"]';
 
     /**
-     * Locator value for "Check out with Braintree PayPal" button.
-     *
-     * @var string
-     */
-    protected $braintreePaypalCheckoutButton = './/button[contains(@id, "braintree-paypal-mini-cart")]';
-
-    /**
      * Locator value for "empty Shopping Cart" block.
      *
      * @var string
@@ -161,19 +154,6 @@ class Cart extends Block
         return Factory::getBlockFactory()->getMagentoCheckoutOnepageLink(
             $this->_rootElement->find($this->onepageLinkBlock, Locator::SELECTOR_CSS)
         );
-    }
-
-    /**
-     * Click "Check out with Braintree PayPal" button.
-     *
-     * @return string
-     */
-    public function braintreePaypalCheckout()
-    {
-        $currentWindow = $this->browser->getCurrentWindow();
-        $this->_rootElement->find($this->braintreePaypalCheckoutButton, Locator::SELECTOR_XPATH)
-            ->click();
-        return $currentWindow;
     }
 
     /**
