@@ -17,6 +17,7 @@
             <testCaseId value="MC-14258"/>
             <group value="user"/>
             <group value="mtf_migrated"/>
+            <severity value="MAJOR"/>
         </annotations>
 
         <before>
