@@ -42,7 +42,7 @@ class Delete extends \Magento\Theme\Controller\Adminhtml\System\Design\Theme
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $this->messageManager->addError($e->getMessage());
         } catch (\Exception $e) {
-            $this->messageManager->addException($e, __('We cannot delete the theme.'));
+            $this->messageManager->addExceptionMessage($e, __('We cannot delete the theme.'));
             $this->_objectManager->get(\Psr\Log\LoggerInterface::class)->critical($e);
         }
         $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);

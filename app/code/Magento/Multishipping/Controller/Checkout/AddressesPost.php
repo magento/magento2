@@ -39,7 +39,7 @@ class AddressesPost extends \Magento\Multishipping\Controller\Checkout
             $this->messageManager->addError($e->getMessage());
             $this->_redirect('*/*/addresses');
         } catch (\Exception $e) {
-            $this->messageManager->addException($e, __('Data saving problem'));
+            $this->messageManager->addExceptionMessage($e, __('Data saving problem'));
             $this->_redirect('*/*/addresses');
         }
     }

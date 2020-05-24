@@ -174,9 +174,9 @@ class Confirm extends AbstractAccount implements HttpGetActionInterface
             $resultRedirect->setUrl($this->getSuccessRedirect());
             return $resultRedirect;
         } catch (StateException $e) {
-            $this->messageManager->addException($e, __('This confirmation key is invalid or has expired.'));
+            $this->messageManager->addExceptionMessage($e, __('This confirmation key is invalid or has expired.'));
         } catch (\Exception $e) {
-            $this->messageManager->addException($e, __('There was an error confirming the account'));
+            $this->messageManager->addExceptionMessage($e, __('There was an error confirming the account'));
         }
 
         $url = $this->urlModel->getUrl('*/*/index', ['_secure' => true]);

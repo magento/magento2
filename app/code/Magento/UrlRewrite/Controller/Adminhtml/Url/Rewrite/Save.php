@@ -176,7 +176,7 @@ class Save extends \Magento\UrlRewrite\Controller\Adminhtml\Url\Rewrite implemen
                 $this->messageManager->addError($e->getMessage());
                 $session->setUrlRewriteData($data);
             } catch (\Exception $e) {
-                $this->messageManager->addException(
+                $this->messageManager->addExceptionMessage(
                     $e,
                     __('An error occurred while saving the URL rewrite. Please try to save again.')
                 );

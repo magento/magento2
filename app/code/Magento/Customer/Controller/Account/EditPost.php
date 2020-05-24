@@ -237,7 +237,7 @@ class EditPost extends AbstractAccount implements CsrfAwareActionInterface, Http
             } catch (\Magento\Framework\Exception\LocalizedException $e) {
                 $this->messageManager->addErrorMessage($e->getMessage());
             } catch (\Exception $e) {
-                $this->messageManager->addException($e, __('We can\'t save the customer.'));
+                $this->messageManager->addExceptionMessage($e, __('We can\'t save the customer.'));
             }
 
             $this->session->setCustomerFormData($this->getRequest()->getPostValue());

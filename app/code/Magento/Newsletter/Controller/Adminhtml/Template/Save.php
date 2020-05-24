@@ -72,7 +72,7 @@ class Save extends \Magento\Newsletter\Controller\Adminhtml\Template implements 
             $this->messageManager->addError(nl2br($e->getMessage()));
             $this->_getSession()->setData('newsletter_template_form_data', $this->getRequest()->getParams());
         } catch (\Exception $e) {
-            $this->messageManager->addException($e, __('Something went wrong while saving this template.'));
+            $this->messageManager->addExceptionMessage($e, __('Something went wrong while saving this template.'));
             $this->_getSession()->setData('newsletter_template_form_data', $this->getRequest()->getParams());
         }
 

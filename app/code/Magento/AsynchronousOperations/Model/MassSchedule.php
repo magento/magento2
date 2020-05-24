@@ -161,7 +161,7 @@ class MassSchedule
                 $requestItem->setErrorMessage($exception);
                 $requestItem->setErrorCode($exception);
                 $requestItems[] = $requestItem;
-                $bulkException->addException(new LocalizedException(
+                $bulkException->addExceptionMessage(new LocalizedException(
                     __('Error processing %key element of input data', ['key' => $key]),
                     $exception
                 ));

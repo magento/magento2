@@ -288,7 +288,7 @@ class ReorderTest extends TestCase
             ->willThrowException(new $exception());
         $this->messageManagerMock
             ->expects($this->once())
-            ->method('addException')
+            ->method('addExceptionMessage')
             ->with($exception, __('Error while processing order.'))
             ->willReturnSelf();
         $this->resultRedirectMock

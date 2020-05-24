@@ -237,7 +237,7 @@ class MassOnTheFlyTest extends TestCase
                     ->method('addError')
                     ->with($exception->getMessage());
                 $this->messageManager->expects($this->exactly($expectsExceptionValues[1]))
-                    ->method('addException')
+                    ->method('addExceptionMessage')
                     ->with($exception, "We couldn't change indexer(s)' mode because of an error.");
             }
         }

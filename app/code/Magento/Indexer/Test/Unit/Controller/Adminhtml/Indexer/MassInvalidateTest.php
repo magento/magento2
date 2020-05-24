@@ -265,7 +265,7 @@ class MassInvalidateTest extends TestCase
                         ->with($exception->getMessage());
                 } else {
                     $this->messageManager->expects($this->once())
-                        ->method('addException')
+                        ->method('addExceptionMessage')
                         ->with($exception, "We couldn't invalidate indexer(s) because of an error.");
                 }
             }

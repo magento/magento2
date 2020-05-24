@@ -38,7 +38,7 @@ class MassChangelog extends \Magento\Indexer\Controller\Adminhtml\Indexer implem
             } catch (\Magento\Framework\Exception\LocalizedException $e) {
                 $this->messageManager->addError($e->getMessage());
             } catch (\Exception $e) {
-                $this->messageManager->addException(
+                $this->messageManager->addExceptionMessage(
                     $e,
                     __("We couldn't change indexer(s)' mode because of an error.")
                 );
