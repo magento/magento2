@@ -11,9 +11,11 @@
     <test name="AdminCmsPageUpdateTest">
         <annotations>
             <features value="Cms"/>
+            <stories value="Update CMS Page via the Admin"/>
             <title value="Update CMS Page via the Admin"/>
             <description value="Admin should be able to update a CMS Page"/>
             <testCaseId value="MC-14674"/>
+            <severity value="CRITICAL"/>
             <group value="backend"/>
             <group value="cMSContent"/>
             <group value="mtf_migrated"/>
