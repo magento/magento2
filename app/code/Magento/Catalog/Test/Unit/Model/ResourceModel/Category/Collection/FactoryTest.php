@@ -3,36 +3,44 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Catalog\Test\Unit\Model\ResourceModel\Category\Collection;
 
-class FactoryTest extends \PHPUnit\Framework\TestCase
+use Magento\Catalog\Model\ResourceModel\Category\Collection;
+use Magento\Catalog\Model\ResourceModel\Category\Collection\Factory;
+use Magento\Framework\ObjectManagerInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class FactoryTest extends TestCase
 {
     /**
-     * @var \Magento\Catalog\Model\ResourceModel\Category\Collection\Factory
+     * @var Factory
      */
     protected $_model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $_objectManager;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->_objectManager = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
-        $this->_model = new \Magento\Catalog\Model\ResourceModel\Category\Collection\Factory($this->_objectManager);
+        $this->_objectManager = $this->getMockForAbstractClass(ObjectManagerInterface::class);
+        $this->_model = new Factory($this->_objectManager);
     }
 
     public function testCreate()
     {
-        $objectOne = $this->createMock(\Magento\Catalog\Model\ResourceModel\Category\Collection::class);
-        $objectTwo = $this->createMock(\Magento\Catalog\Model\ResourceModel\Category\Collection::class);
+        $objectOne = $this->createMock(Collection::class);
+        $objectTwo = $this->createMock(Collection::class);
         $this->_objectManager->expects(
             $this->exactly(2)
         )->method(
             'create'
         )->with(
-            \Magento\Catalog\Model\ResourceModel\Category\Collection::class,
+            Collection::class,
             []
         )->will(
             $this->onConsecutiveCalls($objectOne, $objectTwo)

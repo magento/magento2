@@ -51,7 +51,7 @@ class Renderer extends \Magento\Sales\Block\Adminhtml\Items\Renderer\DefaultRend
      * @param string $value
      * @param int $length
      * @param string $etc
-     * @param string &$remainder
+     * @param string $remainder
      * @param bool $breakWords
      * @return string
      */
@@ -83,6 +83,7 @@ class Renderer extends \Magento\Sales\Block\Adminhtml\Items\Renderer\DefaultRend
         }
 
         if ($items) {
+            $itemsArray[$item->getOrderItem()->getId()][$item->getOrderItemId()] = $item;
             foreach ($items as $value) {
                 $parentItem = $value->getOrderItem()->getParentItem();
                 if ($parentItem) {
