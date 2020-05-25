@@ -20,7 +20,7 @@ use Magento\Setup\Validator\RedisConnectionValidator;
 class Cache implements ConfigOptionsListInterface
 {
     const INPUT_VALUE_CACHE_REDIS = 'redis';
-    const CONFIG_VALUE_CACHE_REDIS = 'Cm_Cache_Backend_Redis';
+    const CONFIG_VALUE_CACHE_REDIS = \Magento\Framework\Cache\Backend\Redis::class;
 
     const INPUT_KEY_CACHE_BACKEND = 'cache-backend';
     const INPUT_KEY_CACHE_BACKEND_REDIS_SERVER = 'cache-backend-redis-server';
@@ -233,7 +233,7 @@ class Cache implements ConfigOptionsListInterface
                 self::CONFIG_PATH_CACHE_BACKEND_DATABASE,
                 $this->getDefaultConfigValue(self::INPUT_KEY_CACHE_BACKEND_REDIS_DATABASE)
             );
-        
+
         $config['password'] = isset($options[self::INPUT_KEY_CACHE_BACKEND_REDIS_PASSWORD])
             ? $options[self::INPUT_KEY_CACHE_BACKEND_REDIS_PASSWORD]
             : $deploymentConfig->get(
@@ -282,6 +282,6 @@ class Cache implements ConfigOptionsListInterface
      */
     private function generateCachePrefix(): string
     {
-        return substr(\md5(dirname(__DIR__, 6)), 0, 3) . '_';
+        return substr(\hash('sha256', dirname(__DIR__, 6)), 0, 3) . '_';
     }
 }
