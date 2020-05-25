@@ -304,6 +304,9 @@ define([
             }
 
             if (!self.validateCardType()) {
+                $('body').trigger('processStop');
+                self.error($t('Some payment input fields are invalid.'));
+
                 return false;
             }
 
