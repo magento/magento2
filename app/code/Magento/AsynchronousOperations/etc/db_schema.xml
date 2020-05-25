@@ -58,11 +58,6 @@
             <column name="bulk_uuid"/>
             <column name="error_code"/>
         </index>
-        <constraint xsi:type="unique" referenceId="MAGENTO_OPERATION_BULK_UUID_OPERATION_KEY">
-            <column name="bulk_uuid"/>
-            <column name="operation_key"/>
-        </constraint>
-
     </table>
     <table name="magento_acknowledged_bulk" resource="default" engine="innodb"
            comment="Bulk that was viewed by user from notification area">

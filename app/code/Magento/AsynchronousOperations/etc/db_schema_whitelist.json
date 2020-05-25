@@ -37,7 +37,6 @@
         "constraint": {
             "PRIMARY": true,
             "MAGENTO_OPERATION_BULK_UUID_MAGENTO_BULK_UUID": true,
-            "MAGENTO_OPERATION_BULK_UUID_OPERATION_KEY": true,
             "UUID": true
         }
     },
