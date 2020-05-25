@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\TestFramework\Catalog\Block\Product\View\Options;
 
 use Magento\Catalog\Api\Data\ProductCustomOptionInterface;
+use Magento\Catalog\Model\Config\Source\ProductPriceOptionsInterface;
 use Magento\Catalog\Model\Product\Option;
 
 /**
@@ -31,7 +32,7 @@ class DateGroupDataProvider
                     Option::KEY_TYPE => ProductCustomOptionInterface::OPTION_TYPE_DATE,
                     Option::KEY_IS_REQUIRE => 1,
                     Option::KEY_PRICE => 10,
-                    Option::KEY_PRICE_TYPE => 'fixed',
+                    Option::KEY_PRICE_TYPE => ProductPriceOptionsInterface::VALUE_FIXED,
                     Option::KEY_SKU => 'test-option-date-title-1',
                 ],
                 [
@@ -46,7 +47,7 @@ class DateGroupDataProvider
                     Option::KEY_TYPE => ProductCustomOptionInterface::OPTION_TYPE_DATE,
                     Option::KEY_IS_REQUIRE => 0,
                     Option::KEY_PRICE => 10,
-                    Option::KEY_PRICE_TYPE => 'fixed',
+                    Option::KEY_PRICE_TYPE => ProductPriceOptionsInterface::VALUE_FIXED,
                     Option::KEY_SKU => 'test-option-date-title-2',
                 ],
                 [
@@ -61,7 +62,7 @@ class DateGroupDataProvider
                     Option::KEY_TYPE => ProductCustomOptionInterface::OPTION_TYPE_DATE,
                     Option::KEY_IS_REQUIRE => 0,
                     Option::KEY_PRICE => 50,
-                    Option::KEY_PRICE_TYPE => 'fixed',
+                    Option::KEY_PRICE_TYPE => ProductPriceOptionsInterface::VALUE_FIXED,
                     Option::KEY_SKU => 'test-option-date-title-3',
                 ],
                 [
@@ -76,7 +77,7 @@ class DateGroupDataProvider
                     Option::KEY_TYPE => ProductCustomOptionInterface::OPTION_TYPE_DATE,
                     Option::KEY_IS_REQUIRE => 0,
                     Option::KEY_PRICE => 50,
-                    Option::KEY_PRICE_TYPE => 'percent',
+                    Option::KEY_PRICE_TYPE => ProductPriceOptionsInterface::VALUE_PERCENT,
                     Option::KEY_SKU => 'test-option-date-title-4',
                 ],
                 [
@@ -91,7 +92,7 @@ class DateGroupDataProvider
                     Option::KEY_TYPE => ProductCustomOptionInterface::OPTION_TYPE_DATE_TIME,
                     Option::KEY_IS_REQUIRE => 1,
                     Option::KEY_PRICE => 10,
-                    Option::KEY_PRICE_TYPE => 'fixed',
+                    Option::KEY_PRICE_TYPE => ProductPriceOptionsInterface::VALUE_FIXED,
                     Option::KEY_SKU => 'test-option-date-and-time-title-1',
                 ],
                 [
@@ -106,7 +107,7 @@ class DateGroupDataProvider
                     Option::KEY_TYPE => ProductCustomOptionInterface::OPTION_TYPE_DATE_TIME,
                     Option::KEY_IS_REQUIRE => 0,
                     Option::KEY_PRICE => 10,
-                    Option::KEY_PRICE_TYPE => 'fixed',
+                    Option::KEY_PRICE_TYPE => ProductPriceOptionsInterface::VALUE_FIXED,
                     Option::KEY_SKU => 'test-option-date-and-time-title-2',
                 ],
                 [
@@ -121,7 +122,7 @@ class DateGroupDataProvider
                     Option::KEY_TYPE => ProductCustomOptionInterface::OPTION_TYPE_DATE_TIME,
                     Option::KEY_IS_REQUIRE => 0,
                     Option::KEY_PRICE => 50,
-                    Option::KEY_PRICE_TYPE => 'fixed',
+                    Option::KEY_PRICE_TYPE => ProductPriceOptionsInterface::VALUE_FIXED,
                     Option::KEY_SKU => 'test-option-date-and-time-title-3',
                 ],
                 [
@@ -136,7 +137,7 @@ class DateGroupDataProvider
                     Option::KEY_TYPE => ProductCustomOptionInterface::OPTION_TYPE_DATE_TIME,
                     Option::KEY_IS_REQUIRE => 0,
                     Option::KEY_PRICE => 50,
-                    Option::KEY_PRICE_TYPE => 'percent',
+                    Option::KEY_PRICE_TYPE => ProductPriceOptionsInterface::VALUE_PERCENT,
                     Option::KEY_SKU => 'test-option-date-and-time-title-4',
                 ],
                 [
@@ -151,7 +152,7 @@ class DateGroupDataProvider
                     Option::KEY_TYPE => ProductCustomOptionInterface::OPTION_TYPE_TIME,
                     Option::KEY_IS_REQUIRE => 1,
                     Option::KEY_PRICE => 10,
-                    Option::KEY_PRICE_TYPE => 'fixed',
+                    Option::KEY_PRICE_TYPE => ProductPriceOptionsInterface::VALUE_FIXED,
                     Option::KEY_SKU => 'test-option-time-title-1',
                 ],
                 [
@@ -166,7 +167,7 @@ class DateGroupDataProvider
                     Option::KEY_TYPE => ProductCustomOptionInterface::OPTION_TYPE_TIME,
                     Option::KEY_IS_REQUIRE => 0,
                     Option::KEY_PRICE => 10,
-                    Option::KEY_PRICE_TYPE => 'fixed',
+                    Option::KEY_PRICE_TYPE => ProductPriceOptionsInterface::VALUE_FIXED,
                     Option::KEY_SKU => 'test-option-time-title-2',
                 ],
                 [
@@ -181,7 +182,7 @@ class DateGroupDataProvider
                     Option::KEY_TYPE => ProductCustomOptionInterface::OPTION_TYPE_TIME,
                     Option::KEY_IS_REQUIRE => 0,
                     Option::KEY_PRICE => 50,
-                    Option::KEY_PRICE_TYPE => 'fixed',
+                    Option::KEY_PRICE_TYPE => ProductPriceOptionsInterface::VALUE_FIXED,
                     Option::KEY_SKU => 'test-option-time-title-3',
                 ],
                 [
@@ -196,7 +197,7 @@ class DateGroupDataProvider
                     Option::KEY_TYPE => ProductCustomOptionInterface::OPTION_TYPE_TIME,
                     Option::KEY_IS_REQUIRE => 0,
                     Option::KEY_PRICE => 50,
-                    Option::KEY_PRICE_TYPE => 'percent',
+                    Option::KEY_PRICE_TYPE => ProductPriceOptionsInterface::VALUE_PERCENT,
                     Option::KEY_SKU => 'test-option-time-title-4',
                 ],
                 [

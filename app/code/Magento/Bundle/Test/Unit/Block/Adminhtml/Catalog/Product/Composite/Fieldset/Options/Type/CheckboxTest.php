@@ -3,22 +3,26 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Bundle\Test\Unit\Block\Adminhtml\Catalog\Product\Composite\Fieldset\Options\Type;
 
+use Magento\Bundle\Block\Adminhtml\Catalog\Product\Composite\Fieldset\Options\Type\Checkbox;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\TestCase;
 
-class CheckboxTest extends \PHPUnit\Framework\TestCase
+class CheckboxTest extends TestCase
 {
     /**
-     * @var \Magento\Bundle\Block\Adminhtml\Catalog\Product\Composite\Fieldset\Options\Type\Checkbox
+     * @var Checkbox
      */
     protected $block;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->block = (new ObjectManager($this))
             ->getObject(
-                \Magento\Bundle\Block\Adminhtml\Catalog\Product\Composite\Fieldset\Options\Type\Checkbox::class
+                Checkbox::class
             );
     }
 
@@ -29,7 +33,7 @@ class CheckboxTest extends \PHPUnit\Framework\TestCase
 
         $result = $this->block->setValidationContainer($elementId, $containerId);
 
-        $this->assertContains($elementId, $result);
-        $this->assertContains($containerId, $result);
+        $this->assertStringContainsString($elementId, $result);
+        $this->assertStringContainsString($containerId, $result);
     }
 }

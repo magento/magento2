@@ -24,7 +24,7 @@ class ClassReaderTest extends TestCase
     /**
      * @inheritDoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->model = new ClassReader();
     }
@@ -58,6 +58,27 @@ class ClassReaderTest extends TestCase
             $expectedClass->getValue($model)['ThirdClassForParentCall'],
             $model->getParents('ThirdClassForParentCall')
         );
+    }
+
+    /**
+     * Check that while processing nonexistent argument of constructor exception message contains original class name
+     */
+    public function testGetConstructorWithNonexistentDependency()
+    {
+        $testClass = new class {
+            private $arg;
+
+            // phpstan:ignore
+            public function __construct(?\NonexistentDependency $arg = null)
+            {
+                $this->arg = $arg;
+            }
+        };
+
+        $className = get_class($testClass);
+        $this->expectException(\ReflectionException::class);
+        $this->expectExceptionMessage($className);
+        $this->model->getConstructor($className);
     }
 
     /**

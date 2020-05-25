@@ -15,16 +15,6 @@ use Magento\TestFramework\TestCase\GraphQlAbstract;
 class MediaGalleryTest extends GraphQlAbstract
 {
     /**
-     * @var \Magento\TestFramework\ObjectManager
-     */
-    private $objectManager;
-
-    protected function setUp()
-    {
-        $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-    }
-
-    /**
      * @magentoApiDataFixture Magento/Catalog/_files/product_with_image.php
      */
     public function testProductSmallImageUrlWithExistingImage()
@@ -38,14 +28,41 @@ class MediaGalleryTest extends GraphQlAbstract
             url
         }
     }
-  }    
+  }
 }
 QUERY;
         $response = $this->graphQlQuery($query);
 
         self::assertArrayHasKey('url', $response['products']['items'][0]['small_image']);
-        self::assertContains('magento_image.jpg', $response['products']['items'][0]['small_image']['url']);
+        self::assertStringContainsString('magento_image.jpg', $response['products']['items'][0]['small_image']['url']);
         self::assertTrue($this->checkImageExists($response['products']['items'][0]['small_image']['url']));
+    }
+
+    /**
+     * Test for get product image placeholder
+     *
+     * @magentoApiDataFixture Magento/Catalog/_files/product_simple.php
+     */
+    public function testProductSmallImageUrlPlaceholder()
+    {
+        $productSku = 'simple';
+        $query = <<<QUERY
+{
+  products(filter: {sku: {eq: "{$productSku}"}}) {
+    items {
+        small_image {
+            url
+        }
+    }
+  }
+}
+QUERY;
+        $response = $this->graphQlQuery($query);
+        $responseImage = $response['products']['items'][0]['small_image'];
+
+        self::assertArrayHasKey('url', $responseImage);
+        self::assertStringContainsString('placeholder/small_image.jpg', $responseImage['url']);
+        self::assertTrue($this->checkImageExists($responseImage['url']));
     }
 
     /**
@@ -57,7 +74,7 @@ QUERY;
         $query = <<<QUERY
 {
   products(filter: {sku: {eq: "{$productSku}"}}) {
-    items {    
+    items {
       media_gallery_entries {
       	label
         media_type
@@ -65,7 +82,7 @@ QUERY;
         types
       }
     }
-  }    
+  }
 }
 QUERY;
         $response = $this->graphQlQuery($query);
@@ -74,11 +91,11 @@ QUERY;
         $this->assertCount(2, $mediaGallery);
         $this->assertEquals('Image Alt Text', $mediaGallery[0]['label']);
         $this->assertEquals('image', $mediaGallery[0]['media_type']);
-        $this->assertContains('magento_image', $mediaGallery[0]['file']);
+        $this->assertStringContainsString('magento_image', $mediaGallery[0]['file']);
         $this->assertEquals(['image', 'small_image'], $mediaGallery[0]['types']);
         $this->assertEquals('Thumbnail Image', $mediaGallery[1]['label']);
         $this->assertEquals('image', $mediaGallery[1]['media_type']);
-        $this->assertContains('magento_thumbnail', $mediaGallery[1]['file']);
+        $this->assertStringContainsString('magento_thumbnail', $mediaGallery[1]['file']);
         $this->assertEquals(['thumbnail', 'swatch_image'], $mediaGallery[1]['types']);
     }
 
@@ -91,13 +108,15 @@ QUERY;
         $query = <<<QUERY
 {
   products(filter: {sku: {eq: "{$productSku}"}}) {
-    items {    
+    items {
       media_gallery {
       	label
         url
+        position
+        disabled
       }
     }
-  }    
+  }
 }
 QUERY;
         $response = $this->graphQlQuery($query);
@@ -105,9 +124,13 @@ QUERY;
         $mediaGallery = $response['products']['items'][0]['media_gallery'];
         $this->assertCount(2, $mediaGallery);
         $this->assertEquals('Image Alt Text', $mediaGallery[0]['label']);
-        self::assertTrue($this->checkImageExists($mediaGallery[0]['url']));
+        $this->assertEquals(1, $mediaGallery[0]['position']);
+        $this->assertFalse($mediaGallery[0]['disabled']);
+        $this->assertTrue($this->checkImageExists($mediaGallery[0]['url']));
         $this->assertEquals('Thumbnail Image', $mediaGallery[1]['label']);
-        self::assertTrue($this->checkImageExists($mediaGallery[1]['url']));
+        $this->assertEquals(2, $mediaGallery[1]['position']);
+        $this->assertFalse($mediaGallery[1]['disabled']);
+        $this->assertTrue($this->checkImageExists($mediaGallery[1]['url']));
     }
 
     /**
@@ -119,10 +142,12 @@ QUERY;
         $query = <<<QUERY
 {
   products(filter: {sku: {eq: "{$productSku}"}}) {
-    items {    
+    items {
       media_gallery {
       	label
         url
+        position
+        disabled
         ... on ProductVideo {
               video_content {
                   media_type
@@ -135,7 +160,7 @@ QUERY;
           }
       }
     }
-  }    
+  }
 }
 QUERY;
         $response = $this->graphQlQuery($query);
@@ -143,7 +168,9 @@ QUERY;
         $mediaGallery = $response['products']['items'][0]['media_gallery'];
         $this->assertCount(1, $mediaGallery);
         $this->assertEquals('Video Label', $mediaGallery[0]['label']);
-        self::assertTrue($this->checkImageExists($mediaGallery[0]['url']));
+        $this->assertTrue($this->checkImageExists($mediaGallery[0]['url']));
+        $this->assertFalse($mediaGallery[0]['disabled']);
+        $this->assertEquals(2, $mediaGallery[0]['position']);
         $this->assertNotEmpty($mediaGallery[0]['video_content']);
         $video_content = $mediaGallery[0]['video_content'];
         $this->assertEquals('external-video', $video_content['media_type']);
@@ -178,7 +205,7 @@ QUERY;
         $response = $this->graphQlQuery($query);
 
         self::assertArrayHasKey('file', $response['products']['items'][0]['media_gallery_entries'][0]);
-        self::assertContains(
+        self::assertStringContainsString(
             'magento_image.jpg',
             $response['products']['items'][0]['media_gallery_entries'][0]['file']
         );

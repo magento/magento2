@@ -37,8 +37,8 @@ class AdditionalTest extends \PHPUnit\Framework\TestCase
             'evaluate'
         )->with(
             ['model' => $modelClass]
-        )->will(
-            $this->returnValue($evaluatedValues)
+        )->willReturn(
+            $evaluatedValues
         );
 
         $html = $block->toHtml();

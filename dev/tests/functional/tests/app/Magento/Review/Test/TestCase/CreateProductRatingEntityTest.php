@@ -117,7 +117,7 @@ class CreateProductRatingEntityTest extends Injectable
      *
      * @return void
      */
-    public function tearDown()
+    public function tearDown(): void
     {
         if (!($this->productRating instanceof Rating)) {
             return;

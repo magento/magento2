@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="BlockNewPagePageActionsSection">
+        <element name="saveBlock" type="button" selector="#save-button" timeout="10"/>
+        <element name="saveAndContinueEdit" type="button" selector="#save-button" timeout="10"/>
+        <element name="saveAndDuplicate" type="button" selector="#save_and_duplicate" timeout="10"/>
+        <element name="saveAndClose" type="button" selector="#save_and_close" timeout="10"/>
+        <element name="expandSplitButton" type="button" selector="//button[@data-ui-id='save-button-dropdown']" timeout="10"/>
+        <element name="back" type="button" selector="#back"/>
+    </section>
+</sections>

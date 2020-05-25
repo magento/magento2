@@ -3,37 +3,46 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Config\Test\Unit\Model\Config\Structure\Element;
 
+use Magento\Config\Model\Config\BackendClone\Factory;
+use Magento\Config\Model\Config\Structure\Element\Dependency\Mapper;
+use Magento\Config\Model\Config\Structure\Element\Group;
+use Magento\Framework\App\Config\ValueInterface;
+use Magento\Framework\Data\Form\Element\Fieldset;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class GroupTest extends \PHPUnit\Framework\TestCase
+class GroupTest extends TestCase
 {
     /**
-     * @var \Magento\Config\Model\Config\Structure\Element\Group
+     * @var Group
      */
     protected $_model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $_cloneFactoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $_depMapperMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
-        $this->_cloneFactoryMock = $this->createMock(\Magento\Config\Model\Config\BackendClone\Factory::class);
+        $this->_cloneFactoryMock = $this->createMock(Factory::class);
         $this->_depMapperMock = $this->createMock(
-            \Magento\Config\Model\Config\Structure\Element\Dependency\Mapper::class
+            Mapper::class
         );
 
         $this->_model = $objectManager->getObject(
-            \Magento\Config\Model\Config\Structure\Element\Group::class,
+            Group::class,
             [
                 'cloneModelFactory' => $this->_cloneFactoryMock,
                 'dependencyMapper' => $this->_depMapperMock,
@@ -41,7 +50,7 @@ class GroupTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset($this->_model);
         unset($this->_cloneFactoryMock);
@@ -59,19 +68,17 @@ class GroupTest extends \PHPUnit\Framework\TestCase
         $this->assertFalse($this->_model->shouldCloneFields());
     }
 
-    /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     */
     public function testGetCloneModelThrowsExceptionIfNoSourceModelIsSet()
     {
+        $this->expectException('Magento\Framework\Exception\LocalizedException');
         $this->_model->getCloneModel();
     }
 
     public function testGetCloneModelCreatesCloneModel()
     {
-        $cloneModel = $this->createMock(\Magento\Framework\App\Config\ValueInterface::class);
+        $cloneModel = $this->getMockForAbstractClass(ValueInterface::class);
         $this->_depMapperMock = $this->createMock(
-            \Magento\Config\Model\Config\Structure\Element\Dependency\Mapper::class
+            Mapper::class
         );
         $this->_cloneFactoryMock->expects(
             $this->once()
@@ -79,8 +86,8 @@ class GroupTest extends \PHPUnit\Framework\TestCase
             'create'
         )->with(
             'clone_model_name'
-        )->will(
-            $this->returnValue($cloneModel)
+        )->willReturn(
+            $cloneModel
         );
         $this->_model->setData(['clone_model' => 'clone_model_name'], 'scope');
         $this->assertEquals($cloneModel, $this->_model->getCloneModel());
@@ -88,10 +95,10 @@ class GroupTest extends \PHPUnit\Framework\TestCase
 
     public function testGetFieldsetSetsOnlyNonArrayValuesToFieldset()
     {
-        $fieldsetMock = $this->createPartialMock(
-            \Magento\Framework\Data\Form\Element\Fieldset::class,
-            ['setOriginalData']
-        );
+        $fieldsetMock = $this->getMockBuilder(Fieldset::class)
+            ->addMethods(['setOriginalData'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $fieldsetMock->expects(
             $this->once()
         )->method(
@@ -144,8 +151,8 @@ class GroupTest extends \PHPUnit\Framework\TestCase
         )->with(
             $fields,
             'test_scope'
-        )->will(
-            $this->returnArgument(0)
+        )->willReturnArgument(
+            0
         );
 
         $this->assertEquals($fields, $this->_model->getDependencies('test_scope'));

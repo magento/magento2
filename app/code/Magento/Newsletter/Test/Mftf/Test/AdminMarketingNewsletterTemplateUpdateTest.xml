@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminMarketingNewsletterTemplateUpdateTest">
+        <annotations>
+            <features value="Newsletter"/>
+            <stories value="Newsletter Updating"/>
+            <title value="Newsletter Updating Test"/>
+            <description value="Admin should be able update created Newsletter Template"/>
+            <severity value="MAJOR"/>
+            <group value="reports"/>
+            <group value="mtf_migrated"/>
+            <group value="WYSIWYGDisabled"/>
+        </annotations>
+
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminNavigateMenuActionGroup" stepKey="navigateToNewsletterTemplatePage">
+                <argument name="menuUiId" value="{{AdminMenuMarketing.dataUiId}}"/>
+                <argument name="submenuUiId" value="{{AdminMenuMarketingCommunicationsNewsletterTemplate.dataUiId}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminNavigateToCreateNewsletterTemplatePageActionGroup" stepKey="navigateTiCreateNewsletterTemplatePage"/>
+            <actionGroup ref="AdminMarketingCreateNewsletterTemplateActionGroup" stepKey="createNewsletterTemplate">
+                <argument name="name" value="{{_defaultNewsletter.name}}"/>
+                <argument name="subject" value="{{_defaultNewsletter.subject}}"/>
+                <argument name="senderName" value="{{_defaultNewsletter.senderName}}"/>
+                <argument name="senderEmail" value="{{_defaultNewsletter.senderEmail}}"/>
+                <argument name="templateContent" value="{{_defaultNewsletter.textAreaContent}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminSearchNewsletterTemplateOnGridActionGroup" stepKey="findCreatedNewsletterTemplate">
+                <argument name="name" value="{{_defaultNewsletter.name}}"/>
+                <argument name="subject" value="{{_defaultNewsletter.subject}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminMarketingOpenNewsletterTemplateFromGridActionGroup" stepKey="openCreatedNewsletterTemplate"/>
+        </before>
+        <after>
+            <actionGroup ref="AdminNavigateMenuActionGroup" stepKey="navigateToNewsletterGridPage">
+                <argument name="menuUiId" value="{{AdminMenuMarketing.dataUiId}}"/>
+                <argument name="submenuUiId" value="{{AdminMenuMarketingCommunicationsNewsletterTemplate.dataUiId}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminSearchNewsletterTemplateOnGridActionGroup" stepKey="findCreatedNewsletterTemplateInGrid">
+                <argument name="name" value="{{updatedNewsletter.name}}"/>
+                <argument name="subject" value="{{updatedNewsletter.subject}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminMarketingOpenNewsletterTemplateFromGridActionGroup" stepKey="openTemplate"/>
+            <actionGroup ref="AdminMarketingDeleteNewsletterTemplateActionGroup" stepKey="deleteTemplate"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+
+        <actionGroup ref="AdminMarketingCreateNewsletterTemplateActionGroup" stepKey="updateNewsletterTemplate">
+            <argument name="name" value="{{updatedNewsletter.name}}"/>
+            <argument name="subject" value="{{updatedNewsletter.subject}}"/>
+            <argument name="senderName" value="{{updatedNewsletter.senderName}}"/>
+            <argument name="senderEmail" value="{{updatedNewsletter.senderEmail}}"/>
+            <argument name="templateContent" value="{{updatedNewsletter.textAreaContent}}"/>
+        </actionGroup>
+        <actionGroup ref="AssertMessageInAdminPanelActionGroup" stepKey="assertSuccessMessage">
+            <argument name="message" value="The newsletter template has been saved."/>
+            <argument name="messageType" value="success"/>
+        </actionGroup>
+        <actionGroup ref="AdminSearchNewsletterTemplateOnGridActionGroup" stepKey="findCreatedNewsletterTemplate">
+            <argument name="name" value="{{updatedNewsletter.name}}"/>
+            <argument name="subject" value="{{updatedNewsletter.subject}}"/>
+        </actionGroup>
+        <actionGroup ref="AssertAdminCreatedNewsletterTemplateInGridActionGroup" stepKey="assertNewsletterInGrid">
+            <argument name="name" value="{{updatedNewsletter.name}}"/>
+            <argument name="subject" value="{{updatedNewsletter.subject}}"/>
+        </actionGroup>
+        <actionGroup ref="AdminSearchNewsletterTemplateOnGridActionGroup" stepKey="findUpdatedNewsletterTemplate">
+            <argument name="name" value="Updated Newsletter Template"/>
+            <argument name="subject" value="Updated Newsletter Subject"/>
+        </actionGroup>
+        <actionGroup ref="AdminMarketingOpenNewsletterTemplateFromGridActionGroup" stepKey="openTemplate"/>
+        <actionGroup ref="AssertAdminNewsletterTemplateFormActionGroup" stepKey="assertNewsletterForm">
+            <argument name="name" value="{{updatedNewsletter.name}}"/>
+            <argument name="subject" value="{{updatedNewsletter.subject}}"/>
+            <argument name="senderName" value="{{updatedNewsletter.senderName}}"/>
+            <argument name="senderEmail" value="{{updatedNewsletter.senderEmail}}"/>
+            <argument name="templateContent" value="{{updatedNewsletter.textAreaContent}}"/>
+        </actionGroup>
+    </test>
+</tests>
