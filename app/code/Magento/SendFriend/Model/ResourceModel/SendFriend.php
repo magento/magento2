@@ -46,7 +46,7 @@ class SendFriend extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
                 AND  time>=:time
                 AND  website_id=:website_id'
         );
-        $bind = ['ip' => $ip, 'time' => $startTime, 'website_id' => (int)$websiteId];
+        $bind = ['ip' => ip2long($ip), 'time' => $startTime, 'website_id' => (int)$websiteId];
 
         $row = $connection->fetchRow($select, $bind);
         return $row['count'];
@@ -64,7 +64,7 @@ class SendFriend extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     {
         $this->getConnection()->insert(
             $this->getMainTable(),
-            ['ip' => $ip, 'time' => $startTime, 'website_id' => $websiteId]
+            ['ip' => ip2long($ip), 'time' => $startTime, 'website_id' => $websiteId]
         );
         return $this;
     }

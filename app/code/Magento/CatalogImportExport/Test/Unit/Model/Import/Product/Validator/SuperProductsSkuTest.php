@@ -5,8 +5,6 @@
  */
 declare(strict_types=1);
 
-declare(strict_types=1);
-
 namespace Magento\CatalogImportExport\Test\Unit\Model\Import\Product\Validator;
 
 use Magento\CatalogImportExport\Model\Import\Product\SkuProcessor;
