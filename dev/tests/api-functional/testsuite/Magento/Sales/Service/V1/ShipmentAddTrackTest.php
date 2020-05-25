@@ -15,7 +15,7 @@ use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\WebapiAbstract;
 
 /**
- * Class ShipmentAddTrackTest
+ * Sales Shipment Track Repository API test
  */
 class ShipmentAddTrackTest extends WebapiAbstract
 {
@@ -42,7 +42,7 @@ class ShipmentAddTrackTest extends WebapiAbstract
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
     }
@@ -115,7 +115,7 @@ class ShipmentAddTrackTest extends WebapiAbstract
             $exceptionMessage = $errorObj['message'];
         }
 
-        $this->assertContains(
+        $this->assertStringContainsString(
             $exceptionMessage,
             'Could not save the shipment tracking.',
             'SoapFault or CouldNotSaveException does not contain exception message.'

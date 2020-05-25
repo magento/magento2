@@ -56,7 +56,7 @@ class CollectionTimeLabelTest extends TestCase
     /**
      * @inheritDoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->abstractElementMock = $this->getMockBuilder(AbstractElement::class)
             ->setMethods(['getComment'])
@@ -74,12 +74,8 @@ class CollectionTimeLabelTest extends TestCase
             ->setMethods(['getLocaleDate'])
             ->disableOriginalConstructor()
             ->getMock();
-        $this->formMock = $this->getMockBuilder(Form::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->timeZoneMock = $this->getMockBuilder(TimezoneInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->formMock = $this->createMock(Form::class);
+        $this->timeZoneMock = $this->getMockForAbstractClass(TimezoneInterface::class);
         $this->contextMock->method('getLocaleDate')
             ->willReturn($this->timeZoneMock);
         $this->localeResolverMock = $this->getMockBuilder(ResolverInterface::class)
@@ -111,7 +107,7 @@ class CollectionTimeLabelTest extends TestCase
         $this->localeResolverMock->expects($this->once())
             ->method('getLocale')
             ->willReturn('en_US');
-        $this->assertRegExp(
+        $this->assertMatchesRegularExpression(
             "/Eastern Standard Time \(America\/New_York\)/",
             $this->collectionTimeLabel->render($this->abstractElementMock)
         );
