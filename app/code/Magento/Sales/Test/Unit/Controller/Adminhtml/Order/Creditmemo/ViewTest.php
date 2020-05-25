@@ -13,8 +13,13 @@ use Magento\Backend\Model\Session;
 use Magento\Backend\Model\View\Result\Forward;
 use Magento\Backend\Model\View\Result\ForwardFactory;
 use Magento\Backend\Model\View\Result\Page;
+use Magento\Framework\App\Action\Title as TitleAction;
 use Magento\Framework\App\ActionFlag;
 use Magento\Framework\App\Request\Http;
+use Magento\Framework\Controller\Result\Redirect;
+use Magento\Framework\Controller\Result\Redirect as RedirectResult;
+use Magento\Framework\Controller\Result\RedirectFactory;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Message\Manager;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
@@ -126,11 +131,21 @@ class ViewTest extends TestCase
     protected $resultForwardMock;
 
     /**
+     * @var RedirectFactory|MockObject
+     */
+    private $redirectFactoryMock;
+
+    /**
+     * @var Redirect|MockObject
+     */
+    private $redirectResultMock;
+
+    /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function setUp(): void
     {
-        $titleMock = $this->getMockBuilder(\Magento\Framework\App\Action\Title::class)
+        $titleMock = $this->createMock(TitleAction::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->invoiceMock = $this->getMockBuilder(Invoice::class)
@@ -203,6 +218,8 @@ class ViewTest extends TestCase
         $this->resultForwardMock = $this->getMockBuilder(Forward::class)
             ->disableOriginalConstructor()
             ->getMock();
+        $this->redirectFactoryMock = $this->createMock(RedirectFactory::class);
+        $this->redirectResultMock = $this->createMock(Redirect::class);
 
         $this->contextMock->expects($this->any())
             ->method('getSession')
@@ -239,7 +256,9 @@ class ViewTest extends TestCase
                 'context' => $this->contextMock,
                 'creditmemoLoader' => $this->loaderMock,
                 'resultPageFactory' => $this->resultPageFactoryMock,
-                'resultForwardFactory' => $this->resultForwardFactoryMock
+                'resultForwardFactory' => $this->resultForwardFactoryMock,
+                'resultRedirectFactory'=> $this->redirectFactoryMock,
+                'resultRedirect' => $this->redirectResultMock
             ]
         );
     }
@@ -251,17 +270,21 @@ class ViewTest extends TestCase
             ->willReturnArgument(0);
         $this->loaderMock->expects($this->once())
             ->method('load')
-            ->willReturn(false);
-        $this->resultForwardFactoryMock->expects($this->once())
+            ->willThrowException(
+                new NoSuchEntityException(
+                    __('This creditmemo no longer exists.')
+                )
+            );
+        $this->redirectFactoryMock->expects($this->once())
             ->method('create')
-            ->willReturn($this->resultForwardMock);
-        $this->resultForwardMock->expects($this->once())
-            ->method('forward')
-            ->with('noroute')
+            ->willReturn($this->redirectResultMock);
+        $this->redirectResultMock->expects($this->once())
+            ->method('setPath')
+            ->with('sales/creditmemo')
             ->willReturnSelf();
 
         $this->assertInstanceOf(
-            Forward::class,
+            RedirectResult::class,
             $this->controller->execute()
         );
     }

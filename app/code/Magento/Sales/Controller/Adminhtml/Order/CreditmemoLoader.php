@@ -4,16 +4,26 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Sales\Controller\Adminhtml\Order;
 
+use Magento\Backend\Model\Session;
+use Magento\CatalogInventory\Api\StockConfigurationInterface;
 use Magento\Framework\DataObject;
+use Magento\Framework\Event\ManagerInterface as ManagerInterfaceEvent;
+use Magento\Framework\Message\ManagerInterface;
+use Magento\Framework\Registry;
 use Magento\Sales\Api\CreditmemoRepositoryInterface;
-use \Magento\Sales\Model\Order\CreditmemoFactory;
+use Magento\Sales\Api\InvoiceRepositoryInterface;
+use Magento\Sales\Model\Order;
+use Magento\Sales\Model\Order\Creditmemo;
+use Magento\Sales\Model\Order\CreditmemoFactory;
+use Magento\Sales\Model\OrderFactory;
 
 /**
- * Class CreditmemoLoader
+ * Load Creditmemo
  *
- * @package Magento\Sales\Controller\Adminhtml\Order
  * @method CreditmemoLoader setCreditmemoId($id)
  * @method CreditmemoLoader setCreditmemo($creditMemo)
  * @method CreditmemoLoader setInvoiceId($id)
@@ -22,6 +32,7 @@ use \Magento\Sales\Model\Order\CreditmemoFactory;
  * @method string getCreditmemo()
  * @method int getInvoiceId()
  * @method int getOrderId()
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  */
 class CreditmemoLoader extends DataObject
 {
@@ -36,63 +47,63 @@ class CreditmemoLoader extends DataObject
     protected $creditmemoFactory;
 
     /**
-     * @var \Magento\Sales\Model\OrderFactory
+     * @var OrderFactory
      */
     protected $orderFactory;
 
     /**
-     * @var \Magento\Sales\Api\InvoiceRepositoryInterface
+     * @var InvoiceRepositoryInterface
      */
     protected $invoiceRepository;
 
     /**
-     * @var \Magento\Framework\Event\ManagerInterface
+     * @var ManagerInterfaceEvent
      */
     protected $eventManager;
 
     /**
-     * @var \Magento\Backend\Model\Session
+     * @var Session
      */
     protected $backendSession;
 
     /**
-     * @var \Magento\Framework\Message\ManagerInterface
+     * @var ManagerInterface
      */
     protected $messageManager;
 
     /**
-     * @var \Magento\Framework\Registry
+     * @var Registry
      */
     protected $registry;
 
     /**
-     * @var \Magento\CatalogInventory\Api\StockConfigurationInterface
+     * @var StockConfigurationInterface
      */
     protected $stockConfiguration;
 
     /**
      * @param CreditmemoRepositoryInterface $creditmemoRepository
      * @param CreditmemoFactory $creditmemoFactory
-     * @param \Magento\Sales\Model\OrderFactory $orderFactory
-     * @param \Magento\Sales\Api\InvoiceRepositoryInterface $invoiceRepository
-     * @param \Magento\Framework\Event\ManagerInterface $eventManager
-     * @param \Magento\Backend\Model\Session $backendSession
-     * @param \Magento\Framework\Message\ManagerInterface $messageManager
-     * @param \Magento\Framework\Registry $registry
-     * @param \Magento\CatalogInventory\Api\StockConfigurationInterface $stockConfiguration
+     * @param OrderFactory $orderFactory
+     * @param InvoiceRepositoryInterface $invoiceRepository
+     * @param ManagerInterfaceEvent $eventManager
+     * @param Session $backendSession
+     * @param ManagerInterface $messageManager
+     * @param Registry $registry
+     * @param StockConfigurationInterface $stockConfiguration
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         CreditmemoRepositoryInterface $creditmemoRepository,
         CreditmemoFactory $creditmemoFactory,
-        \Magento\Sales\Model\OrderFactory $orderFactory,
-        \Magento\Sales\Api\InvoiceRepositoryInterface $invoiceRepository,
-        \Magento\Framework\Event\ManagerInterface $eventManager,
-        \Magento\Backend\Model\Session $backendSession,
-        \Magento\Framework\Message\ManagerInterface $messageManager,
-        \Magento\Framework\Registry $registry,
-        \Magento\CatalogInventory\Api\StockConfigurationInterface $stockConfiguration,
+        OrderFactory $orderFactory,
+        InvoiceRepositoryInterface $invoiceRepository,
+        ManagerInterfaceEvent $eventManager,
+        Session $backendSession,
+        ManagerInterface $messageManager,
+        Registry $registry,
+        StockConfigurationInterface $stockConfiguration,
         array $data = []
     ) {
         $this->creditmemoRepository = $creditmemoRepository;
@@ -129,7 +140,8 @@ class CreditmemoLoader extends DataObject
 
     /**
      * Check if creditmeno can be created for order
-     * @param \Magento\Sales\Model\Order $order
+     *
+     * @param Order $order
      * @return bool
      */
     protected function _canCreditmemo($order)
@@ -153,7 +165,9 @@ class CreditmemoLoader extends DataObject
     }
 
     /**
-     * @param \Magento\Sales\Model\Order $order
+     * Initialize invoice
+     *
+     * @param Order $order
      * @return $this|bool
      */
     protected function _initInvoice($order)
@@ -172,7 +186,7 @@ class CreditmemoLoader extends DataObject
     /**
      * Initialize creditmemo model instance
      *
-     * @return \Magento\Sales\Model\Order\Creditmemo|false
+     * @return Creditmemo|false
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function load()
@@ -181,12 +195,7 @@ class CreditmemoLoader extends DataObject
         $creditmemoId = $this->getCreditmemoId();
         $orderId = $this->getOrderId();
         if ($creditmemoId) {
-            try{
-                $creditmemo = $this->creditmemoRepository->get($creditmemoId);
-            }catch(\Exception $e){
-                $this->messageManager->addErrorMessage(__('This creditmemo no longer exists.'));
-                return false;
-            }
+            $creditmemo = $this->creditmemoRepository->get($creditmemoId);
         } elseif ($orderId) {
             $data = $this->getCreditmemo();
             $order = $this->orderFactory->create()->load($orderId);
