@@ -106,7 +106,13 @@ class View
     ): Store {
         if ($this->origStore->isObjectNew() || $this->origStore->dataHasChangedFor('group_id')) {
             if (!$this->origStore->isObjectNew()) {
-                $this->urlPersist->deleteByData([UrlRewrite::STORE_ID => $this->origStore->getId()]);
+                $this->urlPersist->deleteByData([
+                    UrlRewrite::STORE_ID => $this->origStore->getId(),
+                    UrlRewrite::ENTITY_TYPE => [
+                        CategoryUrlRewriteGenerator::ENTITY_TYPE,
+                        ProductUrlRewriteGenerator::ENTITY_TYPE,
+                    ],
+                ]);
             }
 
             $this->urlPersist->replace(
