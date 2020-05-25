@@ -44,6 +44,7 @@ class AttributePriceTest extends AbstractAttributeTest
     /**
      * @dataProvider productProvider
      * @param string $productSku
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function testDefaultValue(string $productSku): void
     {
@@ -88,6 +89,6 @@ class AttributePriceTest extends AbstractAttributeTest
      */
     protected function getDefaultAttributeValue(): string
     {
-        return '100';
+        return '100.000000';
     }
 }

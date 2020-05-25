@@ -46,7 +46,7 @@ class ZookeeperTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         if (!extension_loaded('zookeeper')) {
             $this->markTestSkipped('php extension Zookeeper is not installed.');

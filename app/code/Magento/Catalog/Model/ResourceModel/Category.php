@@ -469,10 +469,6 @@ class Category extends AbstractResource
 
         if (!empty($insert) || !empty($delete)) {
             $productIds = array_unique(array_merge(array_keys($insert), array_keys($delete)));
-            $this->_eventManager->dispatch(
-                'catalog_category_change_products',
-                ['category' => $category, 'product_ids' => $productIds]
-            );
 
             $category->setChangedProductIds($productIds);
         }
@@ -484,6 +480,10 @@ class Category extends AbstractResource
              * Setting affected products to category for third party engine index refresh
              */
             $productIds = array_keys($insert + $delete + $update);
+            $this->_eventManager->dispatch(
+                'catalog_category_change_products',
+                ['category' => $category, 'product_ids' => $productIds]
+            );
             $category->setAffectedProductIds($productIds);
         }
         return $this;
@@ -1078,7 +1078,6 @@ class Category extends AbstractResource
      */
     public function load($object, $entityId, $attributes = [])
     {
-        $this->_attributes = [];
         $select = $this->_getLoadRowSelect($object, $entityId);
         $row = $this->getConnection()->fetchRow($select);
 

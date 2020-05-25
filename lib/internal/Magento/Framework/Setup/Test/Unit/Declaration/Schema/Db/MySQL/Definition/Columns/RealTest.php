@@ -3,20 +3,22 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\Setup\Test\Unit\Declaration\Schema\Db\MySQL\Definition\Columns;
 
 use Magento\Framework\App\ResourceConnection;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\Framework\Setup\Declaration\Schema\Db\MySQL\Definition\Columns\Boolean;
+use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\Setup\Declaration\Schema\Db\MySQL\Definition\Columns\Comment;
-use Magento\Framework\Setup\Declaration\Schema\Db\MySQL\Definition\Columns\Identity;
-use Magento\Framework\Setup\Declaration\Schema\Db\MySQL\Definition\Columns\Integer;
 use Magento\Framework\Setup\Declaration\Schema\Db\MySQL\Definition\Columns\Nullable;
 use Magento\Framework\Setup\Declaration\Schema\Db\MySQL\Definition\Columns\Real;
 use Magento\Framework\Setup\Declaration\Schema\Db\MySQL\Definition\Columns\Unsigned;
 use Magento\Framework\Setup\Declaration\Schema\Dto\Columns\Real as RealColumnDto;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class RealTest extends \PHPUnit\Framework\TestCase
+class RealTest extends TestCase
 {
     /**
      * @var ObjectManager
@@ -29,26 +31,26 @@ class RealTest extends \PHPUnit\Framework\TestCase
     private $real;
 
     /**
-     * @var Nullable|\PHPUnit_Framework_MockObject_MockObject
+     * @var Nullable|MockObject
      */
     private $nullableMock;
 
     /**
-     * @var Comment|\PHPUnit_Framework_MockObject_MockObject
+     * @var Comment|MockObject
      */
     private $commentMock;
 
     /**
-     * @var ResourceConnection|\PHPUnit_Framework_MockObject_MockObject
+     * @var ResourceConnection|MockObject
      */
     private $resourceConnectionMock;
 
     /**
-     * @var Unsigned|\PHPUnit_Framework_MockObject_MockObject
+     * @var Unsigned|MockObject
      */
     private $unsignedMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
         $this->nullableMock = $this->getMockBuilder(Nullable::class)
@@ -79,7 +81,7 @@ class RealTest extends \PHPUnit\Framework\TestCase
      */
     public function testToDefinitionNoScale()
     {
-        /** @var RealColumnDto|\PHPUnit_Framework_MockObject_MockObject $column */
+        /** @var RealColumnDto|MockObject $column */
         $column = $this->getMockBuilder(RealColumnDto::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -106,9 +108,9 @@ class RealTest extends \PHPUnit\Framework\TestCase
             ->method('toDefinition')
             ->with($column)
             ->willReturn('NOT NULL');
-        $adapterMock = $this->getMockBuilder(\Magento\Framework\DB\Adapter\AdapterInterface::class)
+        $adapterMock = $this->getMockBuilder(AdapterInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->resourceConnectionMock->expects($this->once())->method('getConnection')->willReturn($adapterMock);
         $adapterMock->expects($this->once())
             ->method('quoteIdentifier')
@@ -129,7 +131,7 @@ class RealTest extends \PHPUnit\Framework\TestCase
      */
     public function testToDefinition()
     {
-        /** @var RealColumnDto|\PHPUnit_Framework_MockObject_MockObject $column */
+        /** @var RealColumnDto|MockObject $column */
         $column = $this->getMockBuilder(RealColumnDto::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -156,9 +158,9 @@ class RealTest extends \PHPUnit\Framework\TestCase
             ->method('toDefinition')
             ->with($column)
             ->willReturn('NOT NULL');
-        $adapterMock = $this->getMockBuilder(\Magento\Framework\DB\Adapter\AdapterInterface::class)
+        $adapterMock = $this->getMockBuilder(AdapterInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->resourceConnectionMock->expects($this->once())->method('getConnection')->willReturn($adapterMock);
         $adapterMock->expects($this->once())
             ->method('quoteIdentifier')
@@ -179,7 +181,7 @@ class RealTest extends \PHPUnit\Framework\TestCase
      */
     public function testToDefinitionNoDefault()
     {
-        /** @var RealColumnDto|\PHPUnit_Framework_MockObject_MockObject $column */
+        /** @var RealColumnDto|MockObject $column */
         $column = $this->getMockBuilder(RealColumnDto::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -206,9 +208,9 @@ class RealTest extends \PHPUnit\Framework\TestCase
             ->method('toDefinition')
             ->with($column)
             ->willReturn('NOT NULL');
-        $adapterMock = $this->getMockBuilder(\Magento\Framework\DB\Adapter\AdapterInterface::class)
+        $adapterMock = $this->getMockBuilder(AdapterInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->resourceConnectionMock->expects($this->once())->method('getConnection')->willReturn($adapterMock);
         $adapterMock->expects($this->once())
             ->method('quoteIdentifier')
