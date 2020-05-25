@@ -98,10 +98,17 @@ define([
             if (!rows.length) {
                 return;
             }
+
+            //initialize row observables
+            this.rows().forEach(function (image, index) {
+                image.styles = ko.observable({});
+                image.css = ko.observable({});
+            });
+
             this.imageMargin = parseInt(this.imageMargin, 10);
             this.container = $('[data-id="' + this.containerId + '"]')[0];
 
-            this.setLayoutStyles();
+            this.setLayoutStylesWhenLoaded();
             this.setEventListener();
 
             return this;
@@ -181,25 +188,33 @@ define([
         },
 
         /**
-         * Wait for container to initialize
+         * Call method when condition is true
          */
-        waitForContainer: function (callback) {
-            if (typeof this.container === 'undefined') {
+        conditionCallback: function (condition, callback) {
+            if (condition()) {
                 setTimeout(function () {
-                    this.waitForContainer(callback);
-                }.bind(this), 500);
+                    this.conditionCallback(condition, callback);
+                }.bind(this), 100);
             } else {
-                setTimeout(callback, 0);
+                callback();
             }
         },
 
         /**
-         * Set layout styles when container element is loaded.
+         * Set layout styles when last image in grid is loaded.
          */
         setLayoutStylesWhenLoaded: function () {
-            this.waitForContainer(function () {
-                this.setLayoutStyles();
-            }.bind(this));
+            var images = '[data-id="' + this.containerId + '"] img';
+
+            this.conditionCallback(
+                function () {
+                    return $(images).length === 0;
+                }.bind(this),
+                function () {
+                    $(images).last().load(function () {
+                        this.setLayoutStyles();
+                    }.bind(this));
+                }.bind(this));
         },
 
         /**
@@ -210,9 +225,6 @@ define([
          * @param {Number} height
          */
         setImageStyles: function (img, width, height) {
-            if (!img.styles) {
-                img.styles = ko.observable();
-            }
             img.styles({
                 width: parseInt(width, 10) + 'px',
                 height: parseInt(height, 10) + 'px'
@@ -226,9 +238,6 @@ define([
          * @param {Object} classes
          */
         setImageClass: function (image, classes) {
-            if (!image.css) {
-                image.css = ko.observable(classes);
-            }
             image.css(classes);
         },
 
