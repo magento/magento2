@@ -94,8 +94,10 @@ class AddProductsToWishlist
      *
      * @param Wishlist $wishlist
      * @param WishlistItem $wishlistItem
+     *
+     * @return void
      */
-    private function addItemToWishlist(Wishlist $wishlist, WishlistItem $wishlistItem)
+    private function addItemToWishlist(Wishlist $wishlist, WishlistItem $wishlistItem): void
     {
         $sku = $wishlistItem->getParentSku() ?? $wishlistItem->getSku();
 

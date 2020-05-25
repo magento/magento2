@@ -84,8 +84,10 @@ class UpdateProductsInWishlist
      *
      * @param Wishlist $wishlist
      * @param WishlistItemData $wishlistItemData
+     *
+     * @return void
      */
-    private function updateItemInWishlist(Wishlist $wishlist, WishlistItemData $wishlistItemData)
+    private function updateItemInWishlist(Wishlist $wishlist, WishlistItemData $wishlistItemData): void
     {
         try {
             $options = $this->buyRequestBuilder->build($wishlistItemData);

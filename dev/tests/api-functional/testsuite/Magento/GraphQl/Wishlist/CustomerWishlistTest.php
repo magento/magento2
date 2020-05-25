@@ -32,6 +32,7 @@ class CustomerWishlistTest extends GraphQlAbstract
     }
 
     /**
+     * @magentoConfigFixture default_store wishlist/general/active 1
      * @magentoApiDataFixture Magento/Wishlist/_files/wishlist.php
      */
     public function testCustomerWishlist(): void
@@ -74,6 +75,7 @@ QUERY;
     }
 
     /**
+     * @magentoConfigFixture default_store wishlist/general/active 1
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
      */
     public function testCustomerAlwaysHasWishlist(): void
@@ -100,6 +102,7 @@ QUERY;
     }
 
     /**
+     * @magentoConfigFixture default_store wishlist/general/active 1
      */
     public function testGuestCannotGetWishlist()
     {
@@ -119,6 +122,35 @@ QUERY;
 }
 QUERY;
         $this->graphQlQuery($query);
+    }
+
+    /**
+     * @magentoConfigFixture default_store wishlist/general/active 0
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     */
+    public function testCustomerCannotGetWishlistWhenDisabled()
+    {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('The wishlist is not currently available.');
+
+        $query =
+            <<<QUERY
+{
+  customer {
+    wishlist {
+      items_count
+      sharing_code
+      updated_at
+    }
+  }
+}
+QUERY;
+        $this->graphQlQuery(
+            $query,
+            [],
+            '',
+            $this->getCustomerAuthHeaders('customer@example.com', 'password')
+        );
     }
 
     /**

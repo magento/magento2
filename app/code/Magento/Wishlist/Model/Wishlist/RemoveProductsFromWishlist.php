@@ -73,6 +73,8 @@ class RemoveProductsFromWishlist
      * Remove product item from wishlist
      *
      * @param int $wishlistItemId
+     *
+     * @return void
      */
     private function removeItemFromWishlist(int $wishlistItemId): void
     {

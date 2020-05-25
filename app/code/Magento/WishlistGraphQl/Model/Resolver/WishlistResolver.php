@@ -8,10 +8,12 @@ declare(strict_types=1);
 namespace Magento\WishlistGraphQl\Model\Resolver;
 
 use Magento\Framework\GraphQl\Config\Element\Field;
+use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Wishlist\Model\ResourceModel\Wishlist as WishlistResourceModel;
 use Magento\Wishlist\Model\Wishlist;
+use Magento\Wishlist\Model\Wishlist\Config as WishlistConfig;
 use Magento\Wishlist\Model\WishlistFactory;
 use Magento\Framework\GraphQl\Exception\GraphQlAuthorizationException;
 
@@ -31,15 +33,23 @@ class WishlistResolver implements ResolverInterface
     private $wishlistFactory;
 
     /**
+     * @var WishlistConfig
+     */
+    private $wishlistConfig;
+
+    /**
      * @param WishlistResourceModel $wishlistResource
      * @param WishlistFactory $wishlistFactory
+     * @param WishlistConfig $wishlistConfig
      */
     public function __construct(
         WishlistResourceModel $wishlistResource,
-        WishlistFactory $wishlistFactory
+        WishlistFactory $wishlistFactory,
+        WishlistConfig $wishlistConfig
     ) {
         $this->wishlistResource = $wishlistResource;
         $this->wishlistFactory = $wishlistFactory;
+        $this->wishlistConfig = $wishlistConfig;
     }
 
     /**
@@ -52,7 +62,10 @@ class WishlistResolver implements ResolverInterface
         array $value = null,
         array $args = null
     ) {
-        // Todo: Check if wishlist is enabled
+        if (!$this->wishlistConfig->isEnabled()) {
+            throw new GraphQlInputException(__('The wishlist is not currently available.'));
+        }
+
         $customerId = $context->getUserId();
 
         /* Guest checking */
