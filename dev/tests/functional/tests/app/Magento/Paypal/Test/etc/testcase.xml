@@ -62,8 +62,7 @@
         <step name="getPlacedOrderId" module="Magento_Checkout" />
     </scenario>
     <scenario name="ConflictResolutionTest" firstStep="checkExpressConfig">
-        <step name="checkExpressConfig" module="Magento_Paypal" next="checkBraintreeConfig" />
-        <step name="checkBraintreeConfig" module="Magento_Braintree" next="checkPaymentsAdvancedConfig" />
+        <step name="checkExpressConfig" module="Magento_Paypal" next="checkPaymentsAdvancedConfig" />
         <step name="checkPaymentsAdvancedConfig" module="Magento_Paypal" next="checkPaymentsProConfig" />
         <step name="checkPaymentsProConfig" module="Magento_Paypal" next="checkPayflowProConfig" />
         <step name="checkPayflowProConfig" module="Magento_Paypal" next="checkPayflowLinkConfig" />
