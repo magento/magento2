@@ -183,9 +183,11 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
         if (!$this->hasAllowProducts()) {
             $products = [];
             $allProducts = $this->getProduct()->getTypeInstance()->getUsedProducts($this->getProduct(), null);
+            $currentWebsiteId = $this->getCurrentStore()->getId();
             /** @var $product \Magento\Catalog\Model\Product */
             foreach ($allProducts as $product) {
-                if ((int) $product->getStatus() === Status::STATUS_ENABLED) {
+                $productAvailableWebsiteIds = $product->getWebsiteIds();
+                if ((int) $product->getStatus() === Status::STATUS_ENABLED && in_array($currentWebsiteId, $productAvailableWebsiteIds)) {
                     $products[] = $product;
                 }
             }
