@@ -8,7 +8,10 @@
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="InventoryConfigSection">
         <element name="ProductStockOptionsTab" type="button" selector="#cataloginventory_options-head"/>
+        <element name="ProductStockItemOptionsTab" type="button" selector="#cataloginventory_item_options-head"/>
         <element name="CheckIfProductStockOptionsTabExpanded" type="button" selector="#cataloginventory_options-head:not(.open)"/>
+        <element name="CheckIfProductStockItemOptionsTabExpanded" type="button" selector="#cataloginventory_item_options-head:not(.open)"/>
+        <element name="ProductStockItemOptionsTabContent" type="button" selector="#cataloginventory_item_options"/>
         <element name="DisplayOutOfStockSystemValue" type="checkbox" selector="#cataloginventory_options_show_out_of_stock_inherit"/>
         <element name="DisplayOutOfStockDropdown" type="select" selector="#cataloginventory_options_show_out_of_stock"/>
     </section>

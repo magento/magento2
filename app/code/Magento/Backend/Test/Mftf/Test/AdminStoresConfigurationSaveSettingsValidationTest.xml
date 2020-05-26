@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminStoresConfigurationSaveSettingsValidationTest">
+        <annotations>
+            <features value="Backend"/>
+            <stories value="Save Configuration Settings"/>
+            <title value="Save Configuration Settings with validate fields."/>
+            <description value="Save Configuration Settings with validate fields. Verify that Auto Focus in the invalid field on the fieldset collapsed tab."/>
+            <severity value="MAJOR"/>
+            <group value="backend"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>
+        </before>
+        <after>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+
+        <amOnPage url="{{InventoryConfigurationPage.url}}" stepKey="openInventoryConfigPage"/>
+        <conditionalClick selector="{{InventoryConfigSection.ProductStockItemOptionsTab}}" dependentSelector="{{InventoryConfigSection.CheckIfProductStockItemOptionsTabExpanded}}" visible="true" stepKey="expandProductStockItemOptions"/>
+
+        <uncheckOption selector="{{AdminInventoryProductStockOptionsConfigSection.maxSaleQtyInherit}}" stepKey="uncheckUseDefaultValueForMaxSaleQty"/>
+
+        <fillField selector="{{AdminInventoryProductStockOptionsConfigSection.maxSaleQty}}" userInput="0" stepKey="setMaxSaleQtyValue"/>
+        <click stepKey="collapseProductStockItemOptions" selector="{{InventoryConfigSection.ProductStockItemOptionsTab}}" />
+        <dontSee selector="{{InventoryConfigSection.ProductStockItemOptionsTabContent}}" stepKey="waitForElementNotVisible"/>
+        <click selector="{{AdminMainActionsSection.save}}" stepKey="clickSaveConfigButton"/>
+        <waitForElementVisible selector="{{AdminInventoryProductStockOptionsConfigSection.maxSaleQtyError}}" stepKey="waitValidationErrorMessageAppears"/>
+
+    </test>
+</tests>
