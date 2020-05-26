@@ -17,6 +17,8 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * @magentoAppArea adminhtml
+ * @magentoAppIsolation enabled
+ * @magentoDbIsolation enabled
  */
 class AttributeValuesTest extends TestCase
 {
