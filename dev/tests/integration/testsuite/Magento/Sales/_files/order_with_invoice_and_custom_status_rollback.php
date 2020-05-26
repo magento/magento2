@@ -7,9 +7,9 @@ declare(strict_types=1);
 
 use Magento\Sales\Model\Order\Status;
 use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
 
-// phpcs:ignore Magento2.Security.IncludeFile
-require 'default_rollback.php';
+Resolver::getInstance()->requireDataFixture('Magento/Sales/_files/default_rollback.php');
 
 /** @var Status $orderStatus */
 $orderStatus = Bootstrap::getObjectManager()->create(Status::class);

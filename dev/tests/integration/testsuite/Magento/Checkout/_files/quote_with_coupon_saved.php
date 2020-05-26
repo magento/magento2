@@ -8,9 +8,20 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-require __DIR__ . '/../../Checkout/_files/discount_10percent.php';
 
-require 'quote_with_address_saved.php';
+use Magento\Quote\Model\QuoteFactory;
+use Magento\Quote\Model\ResourceModel\Quote as QuoteResource;
+use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
+
+Resolver::getInstance()->requireDataFixture('Magento/Checkout/_files/discount_10percent.php');
+Resolver::getInstance()->requireDataFixture('Magento/Checkout/_files/quote_with_address_saved.php');
+/** @var QuoteFactory $quoteFactory */
+$quoteFactory = Bootstrap::getObjectManager()->get(QuoteFactory::class);
+/** @var QuoteResource $quoteResource */
+$quoteResource = Bootstrap::getObjectManager()->get(QuoteResource::class);
+$quote = $quoteFactory->create();
+$quoteResource->load($quote, 'test_order_1', 'reserved_order_id');
 
 $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 $salesRuleFactory = $objectManager->get(\Magento\SalesRule\Model\RuleFactory::class);
