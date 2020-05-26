@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="StorefrontPaypalFillCardDataActionGroup">
+        <annotations>
+            <description>Fills Card Data with Paypal using the provided Data Entity.</description>
+        </annotations>
+        <arguments>
+            <argument name="cardData" defaultValue="PaymentAndShippingInfo"/>
+        </arguments>
+
+        <fillField selector="{{StorefrontPaypalCheckoutSection.cardNumber}}" userInput="{{cardData.cardNumber}}" stepKey="setCartNumber"/>
+        <fillField selector="{{StorefrontPaypalCheckoutSection.verificationNumber}}" userInput="{{cardData.cvv}}" stepKey="setVerificationNumber"/>
+        <selectOption selector="{{StorefrontPaypalCheckoutSection.expirationMonth}}" userInput="{{cardData.month}}" stepKey="setMonth"/>
+        <selectOption selector="{{StorefrontPaypalCheckoutSection.expirationYear}}" userInput="{{cardData.year}}" stepKey="setYear"/>
+    </actionGroup>
+</actionGroups>
