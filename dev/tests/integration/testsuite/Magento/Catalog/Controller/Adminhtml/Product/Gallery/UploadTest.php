@@ -167,7 +167,7 @@ class UploadTest extends AbstractBackendController
         $this->assertEquals($expectation['errorcode'], $jsonBody['errorcode']);
 
         if (!empty($expectation['tmp_media_path'])) {
-            $this->assertFileNotExists(
+            $this->assertFileDoesNotExist(
                 $this->getFileAbsolutePath($expectation['tmp_media_path'])
             );
         }

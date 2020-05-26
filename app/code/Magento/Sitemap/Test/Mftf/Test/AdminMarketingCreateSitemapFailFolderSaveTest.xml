@@ -15,6 +15,7 @@
             <title value="Sitemap Creation Fail Folder Save"/>
             <description value="Sitemap Entity Creation Fail Folder Save"/>
             <testCaseId value="MC-14314"/>
+            <severity value="MAJOR"/>
             <group value="sitemap"/>
             <group value="mtf_migrated"/>
         </annotations>
