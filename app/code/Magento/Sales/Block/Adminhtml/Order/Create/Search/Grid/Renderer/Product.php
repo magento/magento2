@@ -19,7 +19,7 @@ class Product extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Text
     /**
      * @var SecureHtmlRenderer
      */
-    protected $secureRenderer;
+    private $secureRenderer;
 
     /**
      * @param Context $context
