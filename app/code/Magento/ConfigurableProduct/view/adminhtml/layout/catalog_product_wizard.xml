@@ -48,6 +48,7 @@
                             <item name="modal" xsi:type="string">configurableModal</item>
                             <item name="dataScope" xsi:type="string">productFormConfigurable</item>
                         </argument>
+                        <argument name="permissions" xsi:type="object">Magento\ConfigurableProduct\Block\DataProviders\PermissionsData</argument>
                     </arguments>
                 </block>
                 <block class="Magento\ConfigurableProduct\Block\Adminhtml\Product\Steps\Bulk" name="step3" template="Magento_ConfigurableProduct::catalog/product/edit/attribute/steps/bulk.phtml">
