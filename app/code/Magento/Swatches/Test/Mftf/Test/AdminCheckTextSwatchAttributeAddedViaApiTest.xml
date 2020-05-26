@@ -14,6 +14,7 @@
             <title value="Add Swatch Text Product Attribute via API"/>
             <description value="Login as admin, create swatch text product attribute.Go to New Product page,
                 check the created attribute is available on the page."/>
+            <severity value="MAJOR"/>
             <group value="swatches"/>
         </annotations>
         <before>

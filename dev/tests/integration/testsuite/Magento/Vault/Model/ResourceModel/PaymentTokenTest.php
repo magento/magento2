@@ -5,7 +5,6 @@
  */
 namespace Magento\Vault\Model\ResourceModel;
 
-use Magento\Braintree\Model\Ui\PayPal\ConfigProvider as PayPalConfigProvider;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\ObjectManagerInterface;
@@ -13,12 +12,14 @@ use Magento\Sales\Model\Order;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Vault\Model\PaymentTokenManagement;
 use Magento\Vault\Setup\InstallSchema;
+use PHPUnit\Framework\TestCase;
 
-class PaymentTokenTest extends \PHPUnit\Framework\TestCase
+class PaymentTokenTest extends TestCase
 {
     const CUSTOMER_ID = 1;
     const TOKEN = 'mx29vk';
     const ORDER_INCREMENT_ID = '100000001';
+    const PAYFLOWPRO = 'payflowpro';
 
     /**
      * @var ObjectManagerInterface
@@ -63,13 +64,13 @@ class PaymentTokenTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @magentoDataFixture Magento/Sales/_files/order.php
-     * @magentoDataFixture Magento/Braintree/_files/paypal_vault_token.php
+     * @magentoDataFixture Magento/Vault/_files/payflowpro_vault_token.php
      */
     public function testAddLinkToOrderPaymentExists()
     {
         $this->order->loadByIncrementId(self::ORDER_INCREMENT_ID);
         $paymentToken = $this->paymentTokenManagement
-            ->getByGatewayToken(self::TOKEN, PayPalConfigProvider::PAYPAL_CODE, self::CUSTOMER_ID);
+            ->getByGatewayToken(self::TOKEN, self::PAYFLOWPRO, self::CUSTOMER_ID);
 
         $this->connection->insert(
             $this->resource->getTableName('vault_payment_token_order_payment_link'),
@@ -89,13 +90,13 @@ class PaymentTokenTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @magentoDataFixture Magento/Sales/_files/order.php
-     * @magentoDataFixture Magento/Braintree/_files/paypal_vault_token.php
+     * @magentoDataFixture Magento/Vault/_files/payflowpro_vault_token.php
      */
     public function testAddLinkToOrderPaymentCreate()
     {
         $this->order->loadByIncrementId(self::ORDER_INCREMENT_ID);
         $paymentToken = $this->paymentTokenManagement
-            ->getByGatewayToken(self::TOKEN, PayPalConfigProvider::PAYPAL_CODE, self::CUSTOMER_ID);
+            ->getByGatewayToken(self::TOKEN, self::PAYFLOWPRO, self::CUSTOMER_ID);
 
         $select = $this->connection->select()
             ->from($this->resource->getTableName('vault_payment_token_order_payment_link'))

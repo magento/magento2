@@ -160,7 +160,7 @@ abstract class AbstractRenderCustomOptionsTest extends TestCase
 
         if (isset($checkArray['not_contain_arr'])) {
             foreach ($checkArray['not_contain_arr'] as $notContainPattern) {
-                $this->assertNotRegExp($notContainPattern, $optionHtml);
+                $this->assertDoesNotMatchRegularExpression($notContainPattern, $optionHtml);
             }
         }
 
