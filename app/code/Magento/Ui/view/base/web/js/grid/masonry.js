@@ -213,7 +213,11 @@ define([
                 function () {
                     $(images).last().load(function () {
                         this.setLayoutStyles();
-                    }.bind(this));
+                    }.bind(this)).each(function () {
+                        if (this.complete) {
+                            $(this).load();
+                        }
+                    });;
                 }.bind(this));
         },
 
