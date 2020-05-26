@@ -31,7 +31,7 @@ class ProductGettersTest extends \PHPUnit\Framework\TestCase
      */
     private $productRepository;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             \Magento\Catalog\Model\Product::class
@@ -260,7 +260,7 @@ class ProductGettersTest extends \PHPUnit\Framework\TestCase
     {
         $setId = $this->_model->getDefaultAttributeSetId();
         $this->assertNotEmpty($setId);
-        $this->assertRegExp('/^[0-9]+$/', $setId);
+        $this->assertMatchesRegularExpression('/^[0-9]+$/', $setId);
     }
 
     public function testGetPreconfiguredValues()
@@ -270,7 +270,7 @@ class ProductGettersTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('test', $this->_model->getPreconfiguredValues());
     }
 
-    public static function tearDownAfterClass()
+    public static function tearDownAfterClass(): void
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $mediaDirectory = $objectManager->get(

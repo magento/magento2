@@ -9,12 +9,12 @@ declare(strict_types=1);
 
 namespace Magento\GoogleAnalytics\Test\Unit\Helper;
 
-use Magento\GoogleAnalytics\Helper\Data as HelperData;
 use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Store\Model\ScopeInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use PHPUnit\Framework\TestCase;
+use Magento\GoogleAnalytics\Helper\Data as HelperData;
+use Magento\Store\Model\ScopeInterface;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Unit test for Magento\GoogleAnalytics\Helper\Data

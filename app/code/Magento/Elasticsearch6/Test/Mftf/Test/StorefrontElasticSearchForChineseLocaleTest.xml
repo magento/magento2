@@ -8,7 +8,7 @@
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="StorefrontElasticSearch6ForChineseLocaleTest">
+    <test name="StorefrontElasticSearchForChineseLocaleTest">
         <annotations>
             <features value="Elasticsearch6"/>
             <stories value="Elasticsearch6 for Chinese"/>
@@ -21,8 +21,8 @@
             <group value="SearchEngineElasticsearch"/>
         </annotations>
         <before>
-            <!-- Set search engine to Elastic 6, set Locale to China, create category and product, then go to Storefront -->
-            <actionGroup ref="LoginAsAdmin" stepKey="login"/>
+            <!-- Set search engine to Elastic, set Locale to China, create category and product, then go to Storefront -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
             <magentoCLI command="config:set --scope={{GeneralLocalCodeConfigsForChina.scope}} --scope-code={{GeneralLocalCodeConfigsForChina.scope_code}} {{GeneralLocalCodeConfigsForChina.path}} {{GeneralLocalCodeConfigsForChina.value}}" stepKey="setLocaleToChina"/>
             <comment userInput="Moved to appropriate test suite" stepKey="enableElasticsearch6"/>
             <comment userInput="Moved to appropriate test suite" stepKey="checkConnection"/>

@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\ConfigurableProduct\Test\Unit\Block\Product\View\Type;
 
@@ -137,7 +138,7 @@ class ConfigurableTest extends TestCase
 
         $this->priceCurrency = $this->getMockBuilder(PriceCurrencyInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $appState = $this->getMockBuilder(State::class)
             ->disableOriginalConstructor()
@@ -150,12 +151,11 @@ class ConfigurableTest extends TestCase
             ->willReturn('frontend');
         $urlBuilder = $this->getMockBuilder(UrlInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->context->expects($this->once())
             ->method('getUrlBuilder')
             ->willReturn($urlBuilder);
-        $fileResolverMock = $this
-            ->getMockBuilder(Resolver::class)
+        $fileResolverMock = $this->getMockBuilder(Resolver::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->context->expects($this->once())
@@ -166,8 +166,7 @@ class ConfigurableTest extends TestCase
             ->getMock();
         $this->configurableAttributeData = $this->getMockBuilder(
             ConfigurableAttributeData::class
-        )
-            ->disableOriginalConstructor()
+        )->disableOriginalConstructor()
             ->getMock();
 
         $this->localeFormat = $this->getMockBuilder(Format::class)
@@ -254,10 +253,10 @@ class ConfigurableTest extends TestCase
      * @dataProvider cacheKeyProvider
      * @param array $expected
      * @param string|null $priceCurrency
-     * @param string|null $customerGroupId
+     * @param int|null $customerGroupId
      * @return void
      */
-    public function testGetCacheKeyInfo(array $expected, string $priceCurrency = null, string $customerGroupId = null): void
+    public function testGetCacheKeyInfo(array $expected, ?string $priceCurrency = null, ?int $customerGroupId = null): void
     {
         $storeMock = $this->getMockBuilder(StoreInterface::class)
             ->setMethods(['getCurrentCurrency'])
