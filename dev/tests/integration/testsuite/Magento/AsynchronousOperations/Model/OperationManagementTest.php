@@ -63,7 +63,11 @@ class OperationManagementTest extends \PHPUnit\Framework\TestCase
         $operation = array_shift($operations);
         $operationId = $operation->getId();
 
-        $this->assertTrue($this->model->changeOperationStatus('bulk-uuid-5', $operationId, OperationInterface::STATUS_TYPE_OPEN));
+        $this->assertTrue($this->model->changeOperationStatus(
+            'bulk-uuid-5',
+            $operationId,
+            OperationInterface::STATUS_TYPE_OPEN
+        ));
 
         $table = $this->connection->getTableName('magento_operation');
         $connection = $this->connection->getConnection();
