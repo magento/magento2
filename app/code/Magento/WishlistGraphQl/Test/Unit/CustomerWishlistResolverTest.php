@@ -82,8 +82,6 @@ class CustomerWishlistResolverTest extends TestCase
 
         $this->wishlistConfigMock = $this->createMock(Config::class);
 
-        $this->wishlistConfigMock = $this->getMockClass();
-
         $objectManager = new ObjectManager($this);
         $this->resolver = $objectManager->getObject(CustomerWishlistResolver::class, [
             'wishlistFactory' => $this->wishlistFactoryMock,
