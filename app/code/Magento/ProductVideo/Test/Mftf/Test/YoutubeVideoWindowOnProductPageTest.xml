@@ -17,6 +17,9 @@
             <description value="Check Youtube video window on the product page"/>
             <severity value="MAJOR"/>
             <group value="ProductVideo"/>
+            <skip>
+                <issueId value="MC-34447"/>
+            </skip>
         </annotations>
 
         <before>
