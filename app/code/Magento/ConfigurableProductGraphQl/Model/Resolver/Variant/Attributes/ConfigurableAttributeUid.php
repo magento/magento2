@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\BundleGraphQl\Model\Resolver\Options;
+namespace Magento\ConfigurableProductGraphQl\Model\Resolver\Variant\Attributes;
 
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
@@ -14,17 +14,17 @@ use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 
 /**
- * Format new option id_v2 in base64 encode for entered bundle options
+ * Format new option uid in base64 encode for super attribute options
  */
-class BundleEnteredOptionValueIdV2 implements ResolverInterface
+class ConfigurableAttributeUid implements ResolverInterface
 {
     /**
      * Option type name
      */
-    private const OPTION_TYPE = 'bundle';
+    private const OPTION_TYPE = 'configurable';
 
     /**
-     * Create a option id_v2 for entered option in "<option-type>/<option-id>/<option-value-id>/<quantity>" format
+     * Create a option uid for super attribute in "<option-type>/<attribute-id>/<value-index>" format
      *
      * @param Field $field
      * @param ContextInterface $context
@@ -45,19 +45,18 @@ class BundleEnteredOptionValueIdV2 implements ResolverInterface
         array $value = null,
         array $args = null
     ) {
-        if (!isset($value['option_id']) || empty($value['option_id'])) {
-            throw new GraphQlInputException(__('Wrong format option data: option_id should not be empty.'));
+        if (!isset($value['attribute_id']) || empty($value['attribute_id'])) {
+            throw new GraphQlInputException(__('"attribute_id" value should be specified.'));
         }
 
-        if (!isset($value['selection_id']) || empty($value['selection_id'])) {
-            throw new GraphQlInputException(__('Wrong format option data: selection_id should not be empty.'));
+        if (!isset($value['value_index']) || empty($value['value_index'])) {
+            throw new GraphQlInputException(__('"value_index" value should be specified.'));
         }
 
         $optionDetails = [
             self::OPTION_TYPE,
-            $value['option_id'],
-            $value['selection_id'],
-            (int) $value['selection_qty']
+            $value['attribute_id'],
+            $value['value_index']
         ];
 
         $content = implode('/', $optionDetails);

@@ -14,9 +14,9 @@ use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 
 /**
- * Format new option id_v2 in base64 encode for entered custom options
+ * Format new option uid in base64 encode for selected custom options
  */
-class CustomizableEnteredOptionValueIdV2 implements ResolverInterface
+class CustomizableSelectedOptionValueUid implements ResolverInterface
 {
     /**
      * Option type name
@@ -24,7 +24,7 @@ class CustomizableEnteredOptionValueIdV2 implements ResolverInterface
     private const OPTION_TYPE = 'custom-option';
 
     /**
-     * Create a option id_v2 for entered option in "<option-type>/<option-id>" format
+     * Create a option uid for selected option in "<option-type>/<option-id>/<option-value-id>" format
      *
      * @param Field $field
      * @param ContextInterface $context
@@ -46,12 +46,17 @@ class CustomizableEnteredOptionValueIdV2 implements ResolverInterface
         array $args = null
     ) {
         if (!isset($value['option_id']) || empty($value['option_id'])) {
-            throw new GraphQlInputException(__('Wrong format option data: option_id should not be empty.'));
+            throw new GraphQlInputException(__('"option_id" value should be specified.'));
+        }
+
+        if (!isset($value['option_type_id']) || empty($value['option_type_id'])) {
+            throw new GraphQlInputException(__('"option_type_id" value should be specified.'));
         }
 
         $optionDetails = [
             self::OPTION_TYPE,
-            $value['option_id']
+            $value['option_id'],
+            $value['option_type_id']
         ];
 
         $content = implode('/', $optionDetails);
