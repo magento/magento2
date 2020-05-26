@@ -340,8 +340,8 @@ class Validator extends \Magento\Framework\Model\AbstractModel
                 $address->getBaseShippingDiscountAmount() + $baseDiscountAmount,
                 $baseShippingAmount
             );
-            $address->setShippingDiscountAmount($discountAmount);
-            $address->setBaseShippingDiscountAmount($baseDiscountAmount);
+            $address->setShippingDiscountAmount($this->priceCurrency->roundPrice($discountAmount));
+            $address->setBaseShippingDiscountAmount($this->priceCurrency->roundPrice($baseDiscountAmount));
             $appliedRuleIds[$rule->getRuleId()] = $rule->getRuleId();
 
             $this->rulesApplier->maintainAddressCouponCode($address, $rule, $this->getCouponCode());

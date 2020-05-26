@@ -10,7 +10,7 @@ use Magento\Checkout\Model\Session as CheckoutSession;
 /**
  * Implementation of QuoteSessionInterface for Magento frontend checkout.
  *
- * @deprecated Starting from Magento 2.3.5 Signifyd core integration is deprecated in favor of
+ * @deprecated 100.3.5 Starting from Magento 2.3.5 Signifyd core integration is deprecated in favor of
  * official Signifyd integration available on the marketplace
  */
 class FrontendSession implements QuoteSessionInterface

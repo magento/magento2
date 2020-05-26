@@ -13,7 +13,8 @@ use Magento\Store\Model\Store;
 use PHPUnit\Framework\MockObject\MockObject;
 
 /**
- * Class ValidatorTest
+ * Test sales rule model validator
+ *
  * @@SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ValidatorTest extends \PHPUnit\Framework\TestCase
@@ -115,7 +116,8 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
         $ruleCollectionFactoryMock = $this->prepareRuleCollectionMock($this->ruleCollection);
         $this->priceCurrency = $this->getMockBuilder(PriceCurrencyInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->setMethods(['roundPrice'])
+            ->getMockForAbstractClass();
 
         /** @var Validator|MockObject $validator */
         $this->model = $this->helper->getObject(
@@ -502,6 +504,9 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
 
         $this->priceCurrency->method('convert')
             ->willReturn($ruleDiscount);
+
+        $this->priceCurrency->method('roundPrice')
+            ->willReturn(round($shippingDiscount, 2));
 
         $this->model->init(
             $this->model->getWebsiteId(),
