@@ -63,26 +63,44 @@
         </actionGroup>
 
         <!-- Create simple product with categories created in create data -->
-        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="openProductCatalogPage"/>
-        <waitForPageLoad stepKey="waitForProductCatalogPage"/>
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="openProductsGrid"/>
+        <!--<amOnPage url="{{AdminProductIndexPage.url}}" stepKey="openProductCatalogPage"/>-->
+        <!--<waitForPageLoad stepKey="waitForProductCatalogPage"/>-->
+
         <actionGroup ref="FilterProductGridBySkuActionGroup" stepKey="filterProduct">
             <argument name="product" value="$$createProduct$$"/>
         </actionGroup>
-        <click selector="{{AdminProductGridFilterSection.nthRow('1')}}" stepKey="clickFirstRowOfCreatedSimpleProduct"/>
-        <waitForPageLoad stepKey="waitUntilProductIsOpened"/>
-        <click selector="{{AdminProductFormSection.categoriesDropdown}}" stepKey="clickCategoriesDropDown"/>
-        <fillField selector="{{AdminProductFormSection.searchCategory}}" userInput="$$rootCategory.name$$" stepKey="fillSearchForInitialCategory"/>
-        <waitForPageLoad stepKey="waitForCategory1"/>
-        <click selector="{{AdminProductFormSection.selectCategory($$rootCategory.name$$)}}" stepKey="unselectInitialCategory"/>
-        <fillField selector="{{AdminProductFormSection.searchCategory}}" userInput="$$category.name$$" stepKey="fillSearchCategory"/>
-        <waitForPageLoad stepKey="waitForCategory2"/>
-        <click selector="{{AdminProductFormSection.selectCategory($$category.name$$)}}" stepKey="clickOnCategory"/>
-        <click selector="{{AdminProductFormSection.done}}" stepKey="clickOnDoneAdvancedCategorySelect"/>
-        <scrollToTopOfPage stepKey="scrollToTopOfAdminProductFormSection"/>
-        <click selector="{{AdminProductFormSection.save}}" stepKey="clickSaveButton"/>
-        <waitForPageLoad stepKey="waitForSimpleProductSaved"/>
+
+        <actionGroup ref="OpenProductForEditByClickingRowXColumnYInProductGridActionGroup" stepKey="openProduct"/>
+        <!--<click selector="{{AdminProductGridFilterSection.nthRow('1')}}" stepKey="clickFirstRowOfCreatedSimpleProduct"/>-->
+        <!--<waitForPageLoad stepKey="waitUntilProductIsOpened"/>-->
+
+        <actionGroup ref="SetCategoryByNameActionGroup" stepKey="unselectInitialCategory">
+            <argument name="categoryName" value="$$rootCategory.name$$"/>
+        </actionGroup>
+        <actionGroup ref="SetCategoryByNameActionGroup" stepKey="setNewCategory">
+            <argument name="categoryName" value="$$category.name$$"/>
+        </actionGroup>
+
+        <!--<click selector="{{AdminProductFormSection.categoriesDropdown}}" stepKey="clickCategoriesDropDown"/>-->
+        <!--<fillField selector="{{AdminProductFormSection.searchCategory}}" userInput="$$rootCategory.name$$" stepKey="fillSearchForInitialCategory"/>-->
+        <!--<waitForPageLoad stepKey="waitForCategory1"/>-->
+        <!--<click selector="{{AdminProductFormSection.selectCategory($$rootCategory.name$$)}}" stepKey="unselectInitialCategory"/>-->
+        <!--<fillField selector="{{AdminProductFormSection.searchCategory}}" userInput="$$category.name$$" stepKey="fillSearchCategory"/>-->
+        <!--<waitForPageLoad stepKey="waitForCategory2"/>-->
+        <!--<click selector="{{AdminProductFormSection.selectCategory($$category.name$$)}}" stepKey="clickOnCategory"/>-->
+        <!--<click selector="{{AdminProductFormSection.done}}" stepKey="clickOnDoneAdvancedCategorySelect"/>-->
+
+        <actionGroup ref="SaveProductFormNoSuccessCheckActionGroup" stepKey="saveProduct"/>
+        <!--<scrollToTopOfPage stepKey="scrollToTopOfAdminProductFormSection"/>-->
+        <!--<click selector="{{AdminProductFormSection.save}}" stepKey="clickSaveButton"/>-->
+        <!--<waitForPageLoad stepKey="waitForSimpleProductSaved"/>-->
+
         <!-- Verify customer see success message -->
-        <see selector="{{AdminProductFormSection.successMessage}}" userInput="You saved the product." stepKey="seeAssertSimpleProductSaveSuccessMessage"/>
+        <actionGroup ref="AssertMessageInAdminPanelActionGroup" stepKey="seeAssertSimpleProductSaveSuccessMessage">
+            <argument name="message" value="You saved the product."/>
+        </actionGroup>
+        <!--<see selector="{{AdminProductFormSection.successMessage}}" userInput="You saved the product." stepKey="seeAssertSimpleProductSaveSuccessMessage"/>-->
 
         <!-- Grab category Id -->
         <actionGroup ref="OpenCategoryFromCategoryTreeActionGroup" stepKey="grabCategoryId">
