@@ -40,10 +40,12 @@ class AddressRepositoryTest extends \PHPUnit\Framework\TestCase
     /** @var  \Magento\Framework\Api\DataObjectHelper */
     private $dataObjectHelper;
 
+    private $customerRegistry;
+
     /**
      * Set up.
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
@@ -56,6 +58,7 @@ class AddressRepositoryTest extends \PHPUnit\Framework\TestCase
             \Magento\Customer\Api\Data\AddressInterfaceFactory::class
         );
         $this->dataObjectHelper = $this->objectManager->create(\Magento\Framework\Api\DataObjectHelper::class);
+        $this->customerRegistry = $this->objectManager->get(\Magento\Customer\Model\CustomerRegistry::class);
 
         $regionFactory = $this->objectManager->get(RegionInterfaceFactory::class);
         $region = $regionFactory->create()
@@ -94,12 +97,9 @@ class AddressRepositoryTest extends \PHPUnit\Framework\TestCase
     /**
      * Tear down.
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
-        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        /** @var \Magento\Customer\Model\CustomerRegistry $customerRegistry */
-        $customerRegistry = $objectManager->get(\Magento\Customer\Model\CustomerRegistry::class);
-        $customerRegistry->remove(1);
+        $this->customerRegistry->remove(1);
     }
 
     /**
@@ -132,11 +132,12 @@ class AddressRepositoryTest extends \PHPUnit\Framework\TestCase
      * @magentoDataFixture  Magento/Customer/_files/customer_address.php
      * @magentoDataFixture  Magento/Customer/_files/customer_two_addresses.php
      * @magentoAppIsolation enabled
-     * @expectedException \Magento\Framework\Exception\NoSuchEntityException
-     * @expectedExceptionMessage No such entity with addressId = 4200
      */
     public function testSaveAddressesIdSetButNotAlreadyExisting()
     {
+        $this->expectException(\Magento\Framework\Exception\NoSuchEntityException::class);
+        $this->expectExceptionMessage('No such entity with addressId = 4200');
+
         $proposedAddress = $this->_createSecondAddress()->setId(4200);
         $this->repository->save($proposedAddress);
     }
@@ -160,11 +161,12 @@ class AddressRepositoryTest extends \PHPUnit\Framework\TestCase
      * Test for method get address by id with incorrect id.
      *
      * @magentoDataFixture Magento/Customer/_files/customer.php
-     * @expectedException \Magento\Framework\Exception\NoSuchEntityException
-     * @expectedExceptionMessage No such entity with addressId = 12345
      */
     public function testGetAddressByIdBadAddressId()
     {
+        $this->expectException(\Magento\Framework\Exception\NoSuchEntityException::class);
+        $this->expectExceptionMessage('No such entity with addressId = 12345');
+
         $this->repository->getById(12345);
     }
 
@@ -386,7 +388,7 @@ class AddressRepositoryTest extends \PHPUnit\Framework\TestCase
         $items = array_values($searchResults->getItems());
 
         $this->assertEquals(count($expectedResult), $searchResults->getTotalCount());
-        $this->assertEquals(1, count($items));
+        $this->assertCount(1, $items);
 
         $expectedResultIndex = count($expectedResult) - 1;
 
@@ -507,6 +509,60 @@ class AddressRepositoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Test for saving address with extra spaces in phone.
+     *
+     * @magentoDataFixture  Magento/Customer/_files/customer.php
+     * @magentoDataFixture  Magento/Customer/_files/customer_address.php
+     */
+    public function testSaveNewAddressWithExtraSpacesInPhone()
+    {
+        $proposedAddress = $this->_createSecondAddress()
+            ->setCustomerId(1)
+            ->setTelephone(' 123456 ');
+        $returnedAddress = $this->repository->save($proposedAddress);
+        $savedAddress = $this->repository->getById($returnedAddress->getId());
+        $this->assertEquals('123456', $savedAddress->getTelephone());
+    }
+
+    /**
+     * Scenario for customer's default shipping and billing address saving and rollback.
+     *
+     * @magentoDataFixture Magento/Customer/_files/customer_without_addresses.php
+     */
+    public function testCustomerAddressRelationSynchronisation()
+    {
+        /**
+         * Creating new address which is default shipping and billing for existing customer.
+         */
+        $address = $this->expectedAddresses[0];
+        $address->setId(null);
+        $address->setCustomerId(1);
+        $address->setIsDefaultShipping(true);
+        $address->setIsDefaultBilling(true);
+        $savedAddress = $this->repository->save($address);
+
+        /**
+         * Customer registry should be updated with default shipping and billing addresses.
+         */
+        $customer = $this->getCustomer('customer@example.com', 1);
+        $this->assertEquals($savedAddress->getId(), $customer->getDefaultShipping());
+        $this->assertEquals($savedAddress->getId(), $customer->getDefaultBilling());
+
+        /**
+         * Registry should be clean up for reading data from DB.
+         */
+        $this->repository->deleteById($savedAddress->getId());
+        $this->customerRegistry->removeByEmail('customer@example.com');
+
+        /**
+         * Customer's default shipping and billing addresses should be updated.
+         */
+        $customer = $this->getCustomer('customer@example.com', 1);
+        $this->assertNull($customer->getDefaultShipping());
+        $this->assertNull($customer->getDefaultBilling());
+    }
+
+    /**
      * Helper function that returns an Address Data Object that matches the data from customer_address fixture
      *
      * @return \Magento\Customer\Api\Data\AddressInterface
@@ -570,21 +626,5 @@ class AddressRepositoryTest extends \PHPUnit\Framework\TestCase
         /** @var WebsiteRepositoryInterface $repository */
         $repository = $this->objectManager->get(WebsiteRepositoryInterface::class);
         return $repository->get($code);
-    }
-
-    /**
-     * Test for saving address with extra spaces in phone.
-     *
-     * @magentoDataFixture  Magento/Customer/_files/customer.php
-     * @magentoDataFixture  Magento/Customer/_files/customer_address.php
-     */
-    public function testSaveNewAddressWithExtraSpacesInPhone()
-    {
-        $proposedAddress = $this->_createSecondAddress()
-            ->setCustomerId(1)
-            ->setTelephone(' 123456 ');
-        $returnedAddress = $this->repository->save($proposedAddress);
-        $savedAddress = $this->repository->getById($returnedAddress->getId());
-        $this->assertEquals('123456', $savedAddress->getTelephone());
     }
 }

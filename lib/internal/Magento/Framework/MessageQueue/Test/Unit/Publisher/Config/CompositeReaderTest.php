@@ -3,13 +3,18 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\MessageQueue\Test\Unit\Publisher\Config;
 
+use Magento\Framework\MessageQueue\DefaultValueProvider;
 use Magento\Framework\MessageQueue\Publisher\Config\CompositeReader;
-use Magento\Framework\MessageQueue\Publisher\Config\ValidatorInterface;
 use Magento\Framework\MessageQueue\Publisher\Config\ReaderInterface;
+use Magento\Framework\MessageQueue\Publisher\Config\ValidatorInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class CompositeReaderTest extends \PHPUnit\Framework\TestCase
+class CompositeReaderTest extends TestCase
 {
     /**
      * @var CompositeReader
@@ -17,41 +22,41 @@ class CompositeReaderTest extends \PHPUnit\Framework\TestCase
     private $reader;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     private $validatorMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     private $readerOneMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     private $readerTwoMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     private $readerThreeMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $defaultConfigProviderMock;
 
     /**
      * Initialize parameters
      */
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->validatorMock = $this->createMock(ValidatorInterface::class);
-        $this->readerOneMock = $this->createMock(ReaderInterface::class);
-        $this->readerTwoMock = $this->createMock(ReaderInterface::class);
-        $this->readerThreeMock = $this->createMock(ReaderInterface::class);
+        $this->validatorMock = $this->getMockForAbstractClass(ValidatorInterface::class);
+        $this->readerOneMock = $this->getMockForAbstractClass(ReaderInterface::class);
+        $this->readerTwoMock = $this->getMockForAbstractClass(ReaderInterface::class);
+        $this->readerThreeMock = $this->getMockForAbstractClass(ReaderInterface::class);
         $this->defaultConfigProviderMock =
-            $this->createMock(\Magento\Framework\MessageQueue\DefaultValueProvider::class);
+            $this->createMock(DefaultValueProvider::class);
 
         $this->reader = new CompositeReader(
             $this->validatorMock,

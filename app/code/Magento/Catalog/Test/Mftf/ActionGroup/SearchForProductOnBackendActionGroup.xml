@@ -23,26 +23,4 @@
         <fillField userInput="{{product.sku}}" selector="{{AdminProductFiltersSection.skuInput}}" stepKey="fillSkuFieldOnFiltersSection"/>
         <click selector="{{AdminProductFiltersSection.apply}}" stepKey="clickApplyFiltersButton"/>
     </actionGroup>
-
-    <actionGroup name="SearchForProductOnBackendByNameActionGroup" extends="SearchForProductOnBackendActionGroup">
-        <annotations>
-            <description>Search for the provided Product Name.</description>
-        </annotations>
-        <arguments>
-            <argument name="productName" type="string"/>
-        </arguments>
-
-        <remove keyForRemoval="fillSkuFieldOnFiltersSection"/>
-        <fillField userInput="{{productName}}" selector="{{AdminProductFiltersSection.nameInput}}" after="cleanFiltersIfTheySet" stepKey="fillNameFieldOnFiltersSection"/>
-    </actionGroup>
-
-    <actionGroup name="ClearProductsFilterActionGroup">
-        <annotations>
-            <description>Goto the Product grid page. Clear the Search Filters for the grid.</description>
-        </annotations>
-
-        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndex"/>
-        <waitForPageLoad time="30" stepKey="waitForProductsPageToLoad"/>
-        <conditionalClick selector="{{AdminProductFiltersSection.clearFiltersButton}}" dependentSelector="{{AdminProductFiltersSection.clearFiltersButton}}" visible="true" stepKey="cleanFiltersIfTheySet"/>
-    </actionGroup>
 </actionGroups>

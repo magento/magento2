@@ -14,7 +14,7 @@ use Magento\Store\Model\Store;
 use Magento\TestFramework\Helper\Bootstrap;
 
 /**
- * Collection test
+ * Test for Magento\Catalog\Model\ResourceModel\Product\Collection
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
@@ -39,7 +39,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
      * Sets up the fixture, for example, opens a network connection.
      * This method is called before a test is executed.
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->collection = Bootstrap::getObjectManager()->create(
             \Magento\Catalog\Model\ResourceModel\Product\Collection::class
@@ -262,7 +262,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
             . ' LEFT JOIN `' . $urlRewriteTable . '` AS `alias` ON (alias.entity_id =e.entity_id)'
             . ' AND (alias.entity_type = \'product\')';
 
-        self::assertContains($expected, str_replace(PHP_EOL, '', $sql));
+        self::assertStringContainsString($expected, str_replace(PHP_EOL, '', $sql));
     }
 
     /**
@@ -287,8 +287,8 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
      */
     public function testAddAttributeTierPriceToFilter($condition): void
     {
-        $this->collection->addAttributeToFilter('tier_price', $condition);
-        $this->assertEquals(1, $this->collection->getSize());
+        $size = $this->collection->addAttributeToFilter('tier_price', $condition)->getSize();
+        $this->assertEquals(1, $size);
     }
 
     /**
@@ -314,8 +314,8 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
      */
     public function testAddAttributeIsSaleableToFilter($condition): void
     {
-        $this->collection->addAttributeToFilter('is_saleable', $condition);
-        $this->assertEquals(1, $this->collection->getSize());
+        $size = $this->collection->addAttributeToFilter('is_saleable', $condition)->getSize();
+        $this->assertEquals(1, $size);
     }
 
     /**

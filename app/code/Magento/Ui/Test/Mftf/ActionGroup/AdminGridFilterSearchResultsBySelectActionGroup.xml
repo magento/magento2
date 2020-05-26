@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminGridFilterSearchResultsBySelectActionGroup">
+        <annotations>
+            <description>Filters an Admin Grid page using the provided Filter Selector and Search Value.</description>
+        </annotations>
+        <arguments>
+            <argument name="attributeSelector" type="string" defaultValue="store_id"/>
+            <argument name="attributeValue" type="string" defaultValue="{{_defaultStore.name}}"/>
+        </arguments>
+
+        <conditionalClick selector="{{AdminGridFilterControls.clearAll}}" dependentSelector="{{AdminGridFilterControls.clearAll}}" visible="true" stepKey="clearTheFiltersIfPresent"/>
+        <waitForPageLoad time="30" stepKey="waitForFilterApplied"/>
+        <click selector="{{AdminGridFilterControls.filters}}" stepKey="clickOnFilters"/>
+        <selectOption selector="{{AdminDataGridFilterSection.filterSelectFieldByName(attributeSelector)}}" userInput="{{attributeValue}}" stepKey="setAttributeValue"/>
+        <click selector="{{AdminGridFilterControls.applyFilters}}" stepKey="clickOnApplyFilters"/>
+    </actionGroup>
+</actionGroups>

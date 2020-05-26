@@ -113,7 +113,7 @@ enum CurrencyEnum @doc(description: "The list of available currency codes") {
     BHD
     BDT
     BBD
-    BYR
+    BYN
     BZD
     BMD
     BTN

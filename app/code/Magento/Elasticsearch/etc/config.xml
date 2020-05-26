@@ -9,17 +9,13 @@
     <default>
         <catalog>
             <search>
-                <elasticsearch_server_hostname>localhost</elasticsearch_server_hostname>
-                <elasticsearch_server_port>9200</elasticsearch_server_port>
-                <elasticsearch_index_prefix>magento2</elasticsearch_index_prefix>
-                <elasticsearch_enable_auth>0</elasticsearch_enable_auth>
-                <elasticsearch_server_timeout>15</elasticsearch_server_timeout>
-
+                <engine>elasticsearch5</engine>
                 <elasticsearch5_server_hostname>localhost</elasticsearch5_server_hostname>
                 <elasticsearch5_server_port>9200</elasticsearch5_server_port>
                 <elasticsearch5_index_prefix>magento2</elasticsearch5_index_prefix>
                 <elasticsearch5_enable_auth>0</elasticsearch5_enable_auth>
                 <elasticsearch5_server_timeout>15</elasticsearch5_server_timeout>
+                <elasticsearch5_minimum_should_match></elasticsearch5_minimum_should_match>
             </search>
         </catalog>
     </default>

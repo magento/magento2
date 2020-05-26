@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StoreFrontSimpleProductWithSpecialAndTierDiscountPriceTest">
+        <annotations>
+            <features value="Catalog"/>
+            <stories value="Apply discount tier price and custom price values for simple product"/>
+            <title value="Apply discount tier price and custom price values for simple product"/>
+            <description value="Apply discount tier price and custom price values for simple product"/>
+            <severity value="MAJOR"/>
+            <group value="Catalog"/>
+        </annotations>
+        <before>
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+
+            <createData entity="ApiSimpleProduct" stepKey="createProduct">
+                <requiredEntity createDataKey="createCategory"/>
+                <field key="price">100.00</field>
+            </createData>
+
+            <createData entity="tierProductPriceDiscount" stepKey="addTierPrice">
+                <requiredEntity createDataKey="createProduct"/>
+            </createData>
+        </before>
+        <after>
+            <deleteData createDataKey="createProduct" stepKey="deleteSimpleProduct"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+        </after>
+
+        <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>
+
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="openAdminProductEditPage">
+            <argument name="productId" value="$createProduct.id$"/>
+        </actionGroup>
+
+        <actionGroup ref="AddSpecialPriceToProductActionGroup" stepKey="addSpecialPriceToProduct">
+            <argument name="price" value="65.00"/>
+        </actionGroup>
+
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProductForm"/>
+
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openProductPage">
+            <argument name="productUrl" value="$createProduct.custom_attributes[url_key]$"/>
+        </actionGroup>
+
+        <actionGroup ref="AssertStorefrontProductDetailPageNameActionGroup" stepKey="assertProductNameText">
+            <argument name="productName" value="$createProduct.name$"/>
+        </actionGroup>
+
+        <actionGroup ref="AssertStorefrontProductDetailPageTierPriceActionGroup" stepKey="assertProductTierPriceText">
+            <argument name="tierProductPriceDiscountQuantity" value="{{tierProductPriceDiscount.quantity}}"/>
+            <argument name="productPriceWithAppliedTierPriceDiscount" value="64.00"/>
+            <argument name="productSavedPricePercent" value="2"/>
+        </actionGroup>
+
+        <actionGroup ref="AssertStorefrontProductDetailPageFinalPriceActionGroup" stepKey="assertProductFinalPriceText">
+            <argument name="finalProductPrice" value="65.00"/>
+        </actionGroup>
+    </test>
+</tests>

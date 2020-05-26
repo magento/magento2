@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminUnassignProductTaxClassActionGroup">
+        <annotations>
+            <description>Admin unassign "Product Tax Class" in tax rule edit form</description>
+        </annotations>
+        <arguments>
+            <argument name="taxClass" type="string" defaultValue="{{productTaxClass.class_name}}"/>
+        </arguments>
+
+        <conditionalClick selector="{{AdminTaxRuleFormSection.additionalSettings}}" dependentSelector="{{AdminTaxRuleFormSection.additionalSettingsOpened}}" visible="false" stepKey="openAdditionalSettings"/>
+        <waitForElementVisible selector="{{AdminProductTaxClassSection.productTaxClass}}" stepKey="waitForAddProductTaxClassButton"/>
+        <conditionalClick selector="{{AdminTaxRuleFormSection.productTaxClassOption(taxClass)}}" dependentSelector="{{AdminTaxRuleFormSection.productTaxClassSelected(taxClass)}}" visible="true" stepKey="unSelectTaxClass"/>
+    </actionGroup>
+</actionGroups>

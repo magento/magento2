@@ -9,7 +9,7 @@
     <system>
         <section id="catalog">
             <group id="search">
-                <field id="engine" translate="label" type="select" sortOrder="19" showInDefault="1" showInWebsite="0" showInStore="0">
+                <field id="engine" translate="label" type="select" sortOrder="20" showInDefault="1">
                     <label>Search Engine</label>
                     <source_model>Magento\Search\Model\Adminhtml\System\Config\Source\Engine</source_model>
                 </field>

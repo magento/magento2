@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCreateDuplicatedCmsPageTest">
+        <annotations>
+            <features value="Cms"/>
+            <stories value="CMS Page Duplication and Reset Removal MAGETWO-87096"/>
+            <title value="Admin should be able to duplicate a CMS Page"/>
+            <description value="Admin should be able to duplicate a CMS Page"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MAGETWO-89184"/>
+            <group value="Cms"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginGetFromGeneralFile"/>
+            <actionGroup ref="DisabledWYSIWYGActionGroup" stepKey="disableWYSIWYG"/>
+        </before>
+        <after>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+        <!-- Navigate to create a CMS page and Verify Save&Duplicate - Save&Close button -->
+        <actionGroup ref="AssertAdminCmsPageSaveSplitButtonActionGroup" stepKey="verifyCmsPageSaveButton" />
+        <!-- Filled out Content -->
+        <actionGroup ref="FillOutCMSPageContent" stepKey="FillOutPageContent"/>
+        <!-- Click save and duplicate action -->
+        <actionGroup ref="AdminSaveAndDuplicateCMSPageWithSplitButtonActionGroup" stepKey="clickSaveAndDuplicateButton"/>
+        <!--Verify duplicated CMS Page-->
+        <seeElement selector="{{BlockNewPageBasicFieldsSection.isActive('0')}}" stepKey="seeBlockNotEnable" />
+        <actionGroup ref="AssertCMSPageContentActionGroup" stepKey="assertContent"/>
+        <!-- Click Save Button -->
+        <actionGroup ref="SaveCmsPageActionGroup" stepKey="clickSaveCmsPageButton"/>
+        <actionGroup ref="DeletePageByUrlKeyActionGroup" stepKey="deleteCMSPage">
+            <argument name="UrlKey" value="{{_duplicatedCMSPage.identifier}}"/>
+        </actionGroup>
+    </test>
+</tests>

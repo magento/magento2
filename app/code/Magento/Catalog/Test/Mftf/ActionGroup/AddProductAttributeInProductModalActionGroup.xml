@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AddProductAttributeInProductModalActionGroup">
+        <annotations>
+            <description>Adds the provided Attribute Code to the Product on the Admin Product creation/edit page.</description>
+        </annotations>
+        <arguments>
+            <argument name="attributeCode" type="string"/>
+        </arguments>
+
+        <click stepKey="addAttribute" selector="{{AdminProductFormActionSection.addAttributeButton}}"/>
+        <conditionalClick selector="{{AdminProductAddAttributeModalSection.clearFilters}}" dependentSelector="{{AdminProductAddAttributeModalSection.clearFilters}}" visible="true" stepKey="clearFilters"/>
+        <click stepKey="clickFilters" selector="{{AdminProductAddAttributeModalSection.filters}}"/>
+        <fillField stepKey="fillCode" selector="{{AdminProductAddAttributeModalSection.attributeCodeFilter}}" userInput="{{attributeCode}}"/>
+        <click stepKey="clickApply" selector="{{AdminProductAddAttributeModalSection.applyFilters}}"/>
+        <waitForPageLoad stepKey="waitForFilters"/>
+        <checkOption selector="{{AdminProductAddAttributeModalSection.firstRowCheckBox}}" stepKey="checkAttribute"/>
+        <click stepKey="addSelected" selector="{{AdminProductAddAttributeModalSection.addSelected}}"/>
+    </actionGroup>
+</actionGroups>

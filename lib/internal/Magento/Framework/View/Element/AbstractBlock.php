@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Framework\View\Element;
 
@@ -54,6 +55,7 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
      * SID Resolver
      *
      * @var \Magento\Framework\Session\SidResolverInterface
+     * @deprecated Not used anymore.
      */
     protected $_sidResolver;
 
@@ -821,7 +823,7 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
         $showTime = false,
         $timezone = null
     ) {
-        $date = $date instanceof \DateTimeInterface ? $date : new \DateTime($date);
+        $date = $date instanceof \DateTimeInterface ? $date : new \DateTime($date ?? 'now');
         return $this->_localeDate->formatDateTime(
             $date,
             $format,
@@ -844,7 +846,7 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
         $format = \IntlDateFormatter::SHORT,
         $showDate = false
     ) {
-        $time = $time instanceof \DateTimeInterface ? $time : new \DateTime($time);
+        $time = $time instanceof \DateTimeInterface ? $time : new \DateTime($time ?? 'now');
         return $this->_localeDate->formatDateTime(
             $time,
             $showDate ? $format : \IntlDateFormatter::NONE,
@@ -873,10 +875,14 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
      */
     public static function extractModuleName($className)
     {
+        if (!$className) {
+            return '';
+        }
+
         $namespace = substr(
             $className,
             0,
-            strpos($className, '\\' . 'Block' . '\\')
+            (int)strpos($className, '\\' . 'Block' . '\\')
         );
         return str_replace('\\', '_', $namespace);
     }
@@ -887,6 +893,7 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
      * @param string|array $data
      * @param array|null $allowedTags
      * @return string
+     * @deprecated Use $escaper directly in templates and in blocks.
      */
     public function escapeHtml($data, $allowedTags = null)
     {
@@ -899,6 +906,7 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
      * @param string $string
      * @return string
      * @since 100.2.0
+     * @deprecated Use $escaper directly in templates and in blocks.
      */
     public function escapeJs($string)
     {
@@ -912,6 +920,7 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
      * @param boolean $escapeSingleQuote
      * @return string
      * @since 100.2.0
+     * @deprecated Use $escaper directly in templates and in blocks.
      */
     public function escapeHtmlAttr($string, $escapeSingleQuote = true)
     {
@@ -924,6 +933,7 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
      * @param string $string
      * @return string
      * @since 100.2.0
+     * @deprecated Use $escaper directly in templates and in blocks.
      */
     public function escapeCss($string)
     {
@@ -951,6 +961,7 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
      *
      * @param string $string
      * @return string
+     * @deprecated Use $escaper directly in templates and in blocks.
      */
     public function escapeUrl($string)
     {
@@ -985,10 +996,11 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
     }
 
     /**
-     * Escape quotes in java scripts
+     * Escape single quotes/apostrophes ('), or other specified $quote character in javascript
      *
-     * @param string|array $data
+     * @param string|string[]|array $data
      * @param string $quote
+     *
      * @return string|array
      * @deprecated 100.2.0
      */
@@ -1106,18 +1118,7 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
             return $html;
         }
         $loadAction = function () {
-            $cacheKey = $this->getCacheKey();
-            $cacheData = $this->_cache->load($cacheKey);
-            if ($cacheData) {
-                $cacheData = str_replace(
-                    $this->_getSidPlaceholder($cacheKey),
-                    $this->_sidResolver->getSessionIdQueryParam($this->_session)
-                    . '='
-                    . $this->_session->getSessionId(),
-                    $cacheData
-                );
-            }
-            return $cacheData;
+            return $this->_cache->load($this->getCacheKey());
         };
 
         $saveAction = function ($data) {
@@ -1147,11 +1148,6 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
             return false;
         }
         $cacheKey = $this->getCacheKey();
-        $data = str_replace(
-            $this->_sidResolver->getSessionIdQueryParam($this->_session) . '=' . $this->_session->getSessionId(),
-            $this->_getSidPlaceholder($cacheKey),
-            $data
-        );
 
         $this->_cache->save($data, $cacheKey, array_unique($this->getCacheTags()), $this->getCacheLifetime());
         return $this;

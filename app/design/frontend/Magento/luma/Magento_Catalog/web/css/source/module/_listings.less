@@ -108,6 +108,13 @@
                 .actions-primary {
                     display: inline-block;
                     vertical-align: middle;
+                    
+                    > .stock.unavailable {
+                        line-height: 1;
+                        padding-bottom: @indent__s;
+                        padding-right: 24px;
+                        padding-top: @indent__s;
+                    }
                 }
             }
 
@@ -277,6 +284,12 @@
                 padding: 0 @indent__s @indent__s 0;
                 width: 30%;
             }
+        }
+    }
+    
+    .product-item-actions {
+        .actions-primary {
+            display: block;
         }
     }
 }

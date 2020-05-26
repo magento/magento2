@@ -272,6 +272,10 @@ class Session extends \Magento\Framework\Session\SessionManager
                          */
                         $quote = $this->quoteRepository->get($this->getQuoteId());
                     }
+
+                    if ($quote->getTotalsCollectedFlag() === false) {
+                        $quote->collectTotals();
+                    }
                 } catch (NoSuchEntityException $e) {
                     $this->setQuoteId(null);
                 }

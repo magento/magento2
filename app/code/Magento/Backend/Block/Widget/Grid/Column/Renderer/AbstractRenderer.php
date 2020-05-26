@@ -9,6 +9,9 @@ use Magento\Backend\Block\Widget\Grid\Column;
 use Magento\Framework\DataObject;
 
 /**
+ * Produce html output using the given data source.
+ *
+ * phpcs:disable Magento2.Classes.AbstractApi
  * Backend grid item abstract renderer
  * @api
  * @SuppressWarnings(PHPMD.NumberOfChildren)
@@ -53,7 +56,7 @@ abstract class AbstractRenderer extends \Magento\Backend\Block\AbstractBlock imp
      * Renders grid column
      *
      * @param DataObject $row
-     * @return  string
+     * @return string
      */
     public function render(DataObject $row)
     {
@@ -62,7 +65,7 @@ abstract class AbstractRenderer extends \Magento\Backend\Block\AbstractBlock imp
             $result .= $this->getColumn()->getEditOnly() ? ''
                 : '<span class="admin__grid-control-value">' . $this->_getValue($row) . '</span>';
 
-            return $result . $this->_getInputValueElement($row) . '</div>' ;
+            return $result . $this->_getInputValueElement($row) . '</div>';
         }
         return $this->_getValue($row);
     }
@@ -90,6 +93,7 @@ abstract class AbstractRenderer extends \Magento\Backend\Block\AbstractBlock imp
             if (is_string($getter)) {
                 return $row->{$getter}();
             } elseif (is_callable($getter)) {
+                //phpcs:ignore Magento2.Functions.DiscouragedFunction
                 return call_user_func($getter, $row);
             }
             return '';

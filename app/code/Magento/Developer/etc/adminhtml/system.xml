@@ -9,9 +9,9 @@
         <section id="dev">
             <group id="front_end_development_workflow" translate="label" type="text" sortOrder="8" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>Frontend Development Workflow</label>
-                <field id="type" translate="label comment" type="select" sortOrder="1" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
+                <field id="type" translate="label comment" type="select" sortOrder="1" showInDefault="1" canRestore="1">
                     <label>Workflow type</label>
-                    <comment>Not available in production mode.</comment>
+                    <comment>Modifying this configuration has no effect in production mode.</comment>
                     <source_model>Magento\Developer\Model\Config\Source\WorkflowType</source_model>
                     <frontend_model>Magento\Developer\Block\Adminhtml\System\Config\WorkflowType</frontend_model>
                     <backend_model>Magento\Developer\Model\Config\Backend\WorkflowType</backend_model>

@@ -44,31 +44,43 @@ class TranslatedListsTest extends TestCase
      * @var array
      */
     private $expectedLocales = [
-        'en_US' => 'English (United States)',
-        'en_GB' => 'English (United Kingdom)',
-        'uk_UA' => 'Ukrainian (Ukraine)',
-        'de_DE' => 'German (Germany)',
-        'sr_Cyrl_RS' => 'Serbian (Cyrillic, Serbia)',
-        'sr_Latn_RS' => 'Serbian (Latin, Serbia)'
+        'en_US',
+        'en_GB',
+        'uk_UA',
+        'de_DE',
+        'sr_Cyrl_RS',
+        'sr_Latn_RS'
     ];
 
     /**
-     * @var array
+     * @var string[]
      */
-    private $expectedTranslatedLocales = [
-        'en_US' => 'English (United States) / English (United States)',
-        'en_GB' => 'English (United Kingdom) / English (United Kingdom)',
-        'uk_UA' => 'українська (Україна) / Ukrainian (Ukraine)',
-        'de_DE' => 'Deutsch (Deutschland) / German (Germany)',
-        'sr_Cyrl_RS' => 'српски (ћирилица, Србија) / Serbian (Cyrillic, Serbia)',
-        'sr_Latn_RS' => 'Srpski (latinica, Srbija) / Serbian (Latin, Serbia)'
+    private $languages = [
+        'en_US' => 'English',
+        'en_GB' => 'English',
+        'uk_UA' => 'Ukrainian',
+        'de_DE' => 'German',
+        'sr_Cyrl_RS' => 'Serbian',
+        'sr_Latn_RS' => 'Serbian'
     ];
 
-    protected function setUp()
+    /**
+     * @var string[]
+     */
+    private $countries = [
+        'en_US' => 'United States',
+        'en_GB' => 'United Kingdom',
+        'uk_UA' => 'Ukraine',
+        'de_DE' => 'Germany',
+        'sr_Cyrl_RS' => 'Serbia',
+        'sr_Latn_RS' => 'Serbia'
+    ];
+
+    protected function setUp(): void
     {
         $this->mockConfig = $this->getMockBuilder(ConfigInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->mockConfig->method('getAllowedLocales')
             ->willReturn(array_keys($this->expectedLocales));
         $this->mockConfig->method('getAllowedCurrencies')
@@ -76,7 +88,7 @@ class TranslatedListsTest extends TestCase
 
         $this->mockLocaleResolver = $this->getMockBuilder(ResolverInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->mockLocaleResolver->expects($this->once())
             ->method('getLocale')
             ->willReturn('en_US');
@@ -168,20 +180,22 @@ class TranslatedListsTest extends TestCase
 
     public function testGetOptionLocales()
     {
+        $expected = $this->getExpectedLocales();
         $locales = array_intersect(
-            $this->expectedLocales,
+            $expected,
             $this->convertOptionLocales($this->listsModel->getOptionLocales())
         );
-        $this->assertEquals($this->expectedLocales, $locales);
+        $this->assertEquals($expected, $locales);
     }
 
     public function testGetTranslatedOptionLocales()
     {
+        $expected = $this->getExpectedTranslatedLocales();
         $locales = array_intersect(
-            $this->expectedTranslatedLocales,
+            $expected,
             $this->convertOptionLocales($this->listsModel->getTranslatedOptionLocales())
         );
-        $this->assertEquals($this->expectedTranslatedLocales, $locales);
+        $this->assertEquals($expected, $locales);
     }
 
     /**
@@ -197,5 +211,43 @@ class TranslatedListsTest extends TestCase
         }
 
         return $result;
+    }
+
+    /**
+     * Expected translated locales list.
+     *
+     * @return string[]
+     */
+    private function getExpectedTranslatedLocales(): array
+    {
+        $expected = [];
+        foreach ($this->expectedLocales as $locale) {
+            $script = \Locale::getDisplayScript($locale);
+            $scriptTranslated = $script ? \Locale::getDisplayScript($locale, $locale) . ', ' : '';
+            $expected[$locale] = ucwords(\Locale::getDisplayLanguage($locale, $locale))
+                . ' (' . $scriptTranslated
+                . \Locale::getDisplayRegion($locale, $locale) . ') / '
+                . $this->languages[$locale]
+                . ' (' . ($script ? $script . ', ' : '') . $this->countries[$locale] . ')';
+        }
+
+        return $expected;
+    }
+
+    /**
+     * Expected locales list.
+     *
+     * @return string[]
+     */
+    private function getExpectedLocales(): array
+    {
+        $expected = [];
+        foreach ($this->expectedLocales as $locale) {
+            $script = \Locale::getScript($locale);
+            $scriptDisplayed = $script ? \Locale::getDisplayScript($locale) . ', ' : '';
+            $expected[$locale] = $this->languages[$locale] . ' (' . $scriptDisplayed . $this->countries[$locale] . ')';
+        }
+
+        return $expected;
     }
 }

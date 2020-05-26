@@ -573,7 +573,7 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
 
             $fieldAndValuePairs = [];
             foreach ($fieldAndValuePairsText as $nameAndValue) {
-                $nameAndValue = explode(ImportProduct::PAIR_NAME_VALUE_SEPARATOR, $nameAndValue);
+                $nameAndValue = explode(ImportProduct::PAIR_NAME_VALUE_SEPARATOR, $nameAndValue, 2);
                 if (!empty($nameAndValue)) {
                     $value = isset($nameAndValue[1]) ? trim($nameAndValue[1]) : '';
                     // Ignoring field names' case.

@@ -39,7 +39,7 @@ class UpdateCartItemsTest extends GraphQlAbstract
      */
     private $productRepository;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = Bootstrap::getObjectManager();
         $this->quoteResource = $objectManager->get(QuoteResource::class);
@@ -114,11 +114,12 @@ class UpdateCartItemsTest extends GraphQlAbstract
     }
 
     /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage Could not find a cart with ID "non_existent_masked_id"
      */
     public function testUpdateItemInNonExistentCart()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Could not find a cart with ID "non_existent_masked_id"');
+
         $query = $this->getQuery('non_existent_masked_id', 1, 2);
         $this->graphQlMutation($query);
     }
@@ -182,34 +183,6 @@ class UpdateCartItemsTest extends GraphQlAbstract
     }
 
     /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage Field UpdateCartItemsInput.cart_id of required type String! was not provided.
-     */
-    public function testUpdateWithMissedCartItemId()
-    {
-        $query = <<<QUERY
-mutation {
-  updateCartItems(input: {
-    cart_items: [
-      {
-        cart_item_id: 1
-        quantity: 2
-      }
-    ]  
-  }) {
-    cart {
-      items {
-        id
-        quantity
-      }
-    }
-  }
-}
-QUERY;
-        $this->graphQlMutation($query);
-    }
-
-    /**
      * @param string $input
      * @param string $message
      * @dataProvider dataProviderUpdateWithMissedRequiredParameters
@@ -246,14 +219,6 @@ QUERY;
     public function dataProviderUpdateWithMissedRequiredParameters(): array
     {
         return [
-            'missed_cart_items' => [
-                '',
-                'Field UpdateCartItemsInput.cart_items of required type [CartItemUpdateInput]! was not provided.'
-            ],
-            'missed_cart_item_id' => [
-                'cart_items: [{ quantity: 2 }]',
-                'Field CartItemUpdateInput.cart_item_id of required type Int! was not provided.'
-            ],
             'missed_cart_item_qty' => [
                 'cart_items: [{ cart_item_id: 1 }]',
                 'Required parameter "quantity" for "cart_items" is missing.'

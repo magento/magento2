@@ -6,7 +6,6 @@
 
 namespace Magento\Catalog\Controller\Adminhtml\Product\Initialization;
 
-use DateTime;
 use Magento\Backend\Helper\Js;
 use Magento\Catalog\Api\Data\ProductCustomOptionInterfaceFactory as CustomOptionFactory;
 use Magento\Catalog\Api\Data\ProductLinkInterfaceFactory as ProductLinkFactory;
@@ -15,6 +14,8 @@ use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface\Proxy as ProductRepository;
 use Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper\AttributeFilter;
 use Magento\Catalog\Model\Product;
+use Magento\Catalog\Model\Product\Authorization as ProductAuthorization;
+use Magento\Catalog\Model\Product\Filter\DateTime as DateTimeFilter;
 use Magento\Catalog\Model\Product\Initialization\Helper\ProductLinks;
 use Magento\Catalog\Model\Product\Link\Resolver as LinkResolver;
 use Magento\Catalog\Model\Product\LinkTypeProvider;
@@ -24,13 +25,13 @@ use Magento\Framework\Locale\FormatInterface;
 use Magento\Framework\Stdlib\DateTime\Filter\Date;
 use Magento\Store\Model\StoreManagerInterface;
 use Zend_Filter_Input;
-use Magento\Catalog\Model\Product\Authorization as ProductAuthorization;
 
 /**
  * Product helper
  *
  * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.TooManyFields)
  * @since 100.0.2
  */
 class Helper
@@ -90,11 +91,6 @@ class Helper
     private $linkResolver;
 
     /**
-     * @var \Magento\Framework\Stdlib\DateTime\Filter\DateTime
-     */
-    private $dateTimeFilter;
-
-    /**
      * @var LinkTypeProvider
      */
     private $linkTypeProvider;
@@ -115,6 +111,11 @@ class Helper
     private $localeFormat;
 
     /**
+     * @var DateTimeFilter
+     */
+    private $dateTimeFilter;
+
+    /**
      * Constructor
      *
      * @param RequestInterface $request
@@ -130,6 +131,7 @@ class Helper
      * @param AttributeFilter|null $attributeFilter
      * @param FormatInterface|null $localeFormat
      * @param ProductAuthorization|null $productAuthorization
+     * @param DateTimeFilter|null $dateTimeFilter
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -145,7 +147,8 @@ class Helper
         LinkTypeProvider $linkTypeProvider = null,
         AttributeFilter $attributeFilter = null,
         FormatInterface $localeFormat = null,
-        ?ProductAuthorization $productAuthorization = null
+        ?ProductAuthorization $productAuthorization = null,
+        ?DateTimeFilter $dateTimeFilter = null
     ) {
         $this->request = $request;
         $this->storeManager = $storeManager;
@@ -162,6 +165,7 @@ class Helper
         $this->attributeFilter = $attributeFilter ?: $objectManager->get(AttributeFilter::class);
         $this->localeFormat = $localeFormat ?: $objectManager->get(FormatInterface::class);
         $this->productAuthorization = $productAuthorization ?? $objectManager->get(ProductAuthorization::class);
+        $this->dateTimeFilter = $dateTimeFilter ?? $objectManager->get(DateTimeFilter::class);
     }
 
     /**
@@ -185,7 +189,6 @@ class Helper
         }
 
         $productData = $this->normalize($productData);
-        $productData = $this->convertSpecialFromDateStringToObject($productData);
 
         if (!empty($productData['is_downloadable'])) {
             $productData['product_has_weight'] = 0;
@@ -209,7 +212,7 @@ class Helper
         foreach ($attributes as $attrKey => $attribute) {
             if ($attribute->getBackend()->getType() == 'datetime') {
                 if (array_key_exists($attrKey, $productData) && $productData[$attrKey] != '') {
-                    $dateFieldFilters[$attrKey] = $this->getDateTimeFilter();
+                    $dateFieldFilters[$attrKey] = $this->dateTimeFilter;
                 }
             }
         }
@@ -409,22 +412,6 @@ class Helper
     }
 
     /**
-     * Get DateTimeFilter instance
-     *
-     * @return \Magento\Framework\Stdlib\DateTime\Filter\DateTime
-     * @deprecated 101.0.0
-     */
-    private function getDateTimeFilter()
-    {
-        if ($this->dateTimeFilter === null) {
-            $this->dateTimeFilter = ObjectManager::getInstance()
-                ->get(\Magento\Framework\Stdlib\DateTime\Filter\DateTime::class);
-        }
-
-        return $this->dateTimeFilter;
-    }
-
-    /**
      * Remove ids of non selected websites from $websiteIds array and return filtered data
      *
      * $websiteIds parameter expects array with website ids as keys and 1 (selected) or 0 (non selected) as values
@@ -496,21 +483,5 @@ class Helper
         }
 
         return $product->setOptions($customOptions);
-    }
-
-    /**
-     * Convert string date presentation into object
-     *
-     * @param array $productData
-     * @return array
-     */
-    private function convertSpecialFromDateStringToObject($productData)
-    {
-        if (isset($productData['special_from_date']) && $productData['special_from_date'] != '') {
-            $productData['special_from_date'] = $this->getDateTimeFilter()->filter($productData['special_from_date']);
-            $productData['special_from_date'] = new DateTime($productData['special_from_date']);
-        }
-
-        return $productData;
     }
 }

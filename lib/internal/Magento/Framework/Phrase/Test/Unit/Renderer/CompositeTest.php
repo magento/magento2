@@ -3,12 +3,16 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Framework\Phrase\Test\Unit\Renderer;
 
-use \Magento\Framework\Phrase\Renderer\Composite;
+use Magento\Framework\Phrase\Renderer\Composite;
+use Magento\Framework\Phrase\RendererInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class CompositeTest extends \PHPUnit\Framework\TestCase
+class CompositeTest extends TestCase
 {
     /**
      * @var Composite
@@ -16,29 +20,27 @@ class CompositeTest extends \PHPUnit\Framework\TestCase
     protected $object;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $rendererOne;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $rendererTwo;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->rendererOne = $this->createMock(\Magento\Framework\Phrase\RendererInterface::class);
-        $this->rendererTwo = $this->createMock(\Magento\Framework\Phrase\RendererInterface::class);
-        $this->object = new \Magento\Framework\Phrase\Renderer\Composite([$this->rendererOne, $this->rendererTwo]);
+        $this->rendererOne = $this->getMockForAbstractClass(RendererInterface::class);
+        $this->rendererTwo = $this->getMockForAbstractClass(RendererInterface::class);
+        $this->object = new Composite([$this->rendererOne, $this->rendererTwo]);
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Instance of the phrase renderer is expected, got stdClass instead
-     */
     public function testConstructorException()
     {
-        new \Magento\Framework\Phrase\Renderer\Composite([new \stdClass()]);
+        $this->expectException('InvalidArgumentException');
+        $this->expectExceptionMessage('Instance of the phrase renderer is expected, got stdClass instead');
+        new Composite([new \stdClass()]);
     }
 
     public function testRender()
@@ -55,8 +57,8 @@ class CompositeTest extends \PHPUnit\Framework\TestCase
         )->with(
             [$text],
             $arguments
-        )->will(
-            $this->returnValue($resultAfterFirst)
+        )->willReturn(
+            $resultAfterFirst
         );
 
         $this->rendererTwo->expects(
@@ -69,8 +71,8 @@ class CompositeTest extends \PHPUnit\Framework\TestCase
                 $resultAfterFirst,
             ],
             $arguments
-        )->will(
-            $this->returnValue($resultAfterSecond)
+        )->willReturn(
+            $resultAfterSecond
         );
 
         $this->assertEquals($resultAfterSecond, $this->object->render([$text], $arguments));

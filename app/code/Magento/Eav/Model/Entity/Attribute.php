@@ -285,13 +285,8 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute\AbstractAttribute im
 
             // save default date value as timestamp
             if ($hasDefaultValue) {
-                try {
-                    $locale = $this->_localeResolver->getLocale();
-                    $defaultValue = $this->_localeDate->date($defaultValue, $locale, false, false);
-                    $this->setDefaultValue($defaultValue->format(DateTime::DATETIME_PHP_FORMAT));
-                } catch (\Exception $e) {
-                    throw new LocalizedException(__('The default date is invalid. Verify the date and try again.'));
-                }
+                $defaultValue = $this->getUtcDateDefaultValue($defaultValue);
+                $this->setDefaultValue($defaultValue);
             }
         }
 
@@ -308,6 +303,29 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute\AbstractAttribute im
         }
 
         return parent::beforeSave();
+    }
+
+    /**
+     * Convert localized date default value to UTC
+     *
+     * @param string $defaultValue
+     * @return string
+     * @throws LocalizedException
+     */
+    private function getUtcDateDefaultValue(string $defaultValue): string
+    {
+        $hasTime = $this->getFrontendInput() === 'datetime';
+        try {
+            $defaultValue = $this->_localeDate->date($defaultValue, null, $hasTime, $hasTime);
+            if ($hasTime) {
+                $defaultValue->setTimezone(new \DateTimeZone($this->_localeDate->getDefaultTimezone()));
+            }
+            $utcValue = $defaultValue->format(DateTime::DATETIME_PHP_FORMAT);
+        } catch (\Exception $e) {
+            throw new LocalizedException(__('The default date is invalid. Verify the date and try again.'));
+        }
+
+        return $utcValue;
     }
 
     /**
@@ -346,6 +364,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute\AbstractAttribute im
                 break;
 
             case 'date':
+            case 'datetime':
                 $field = 'datetime';
                 break;
 
@@ -399,6 +418,10 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute\AbstractAttribute im
 
             case 'date':
                 $field = 'default_value_date';
+                break;
+
+            case 'datetime':
+                $field = 'default_value_datetime';
                 break;
 
             case 'boolean':
