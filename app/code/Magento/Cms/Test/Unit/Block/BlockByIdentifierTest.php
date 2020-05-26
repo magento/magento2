@@ -36,7 +36,6 @@ class BlockByIdentifierTest extends TestCase
 
     private const ASSERT_EMPTY_BLOCK_HTML = '';
     private const ASSERT_CONTENT_HTML = self::STUB_CONTENT;
-    private const ASSERT_NO_CACHE_IDENTITIES = [];
     private const ASSERT_UNAVAILABLE_IDENTIFIER_BASED_IDENTITIES = [
         BlockByIdentifier::CACHE_KEY_PREFIX . '_' . self::STUB_UNAVAILABLE_IDENTIFIER,
         BlockByIdentifier::CACHE_KEY_PREFIX . '_' . self::STUB_UNAVAILABLE_IDENTIFIER . '_' . self::STUB_DEFAULT_STORE
@@ -68,15 +67,18 @@ class BlockByIdentifierTest extends TestCase
         $this->filterProviderMock->method('getBlockFilter')->willReturn($this->getPassthroughFilterMock());
     }
 
-    public function testBlockReturnsEmptyStringWhenNoIdentifierProvided(): void
+    public function testBlockThrowsInvalidArgumentExceptionWhenNoIdentifierProvided(): void
     {
         // Given
         $missingIdentifierBlock = $this->getTestedBlockUsingIdentifier(null);
         $this->storeMock->method('getId')->willReturn(self::STUB_DEFAULT_STORE);
 
         // Expect
-        $this->assertSame(self::ASSERT_EMPTY_BLOCK_HTML, $missingIdentifierBlock->toHtml());
-        $this->assertSame(self::ASSERT_NO_CACHE_IDENTITIES, $missingIdentifierBlock->getIdentities());
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Expected value of `identifier` was not provided');
+
+        // When
+        $missingIdentifierBlock->toHtml();
     }
 
     public function testBlockReturnsEmptyStringWhenIdentifierProvidedNotFound(): void
@@ -119,6 +121,7 @@ class BlockByIdentifierTest extends TestCase
         // Given
         $cmsBlockMock = $this->createMock(Block::class);
         $cmsBlockMock->method('getId')->willReturn(self::STUB_CMS_BLOCK_ID);
+        $cmsBlockMock->method('isActive')->willReturn(true);
         $cmsBlockMock->method('getIdentifier')->willReturn(self::STUB_EXISTING_IDENTIFIER);
         $cmsBlockMock->method('getIdentities')->willReturn(
             [
@@ -173,15 +176,21 @@ class BlockByIdentifierTest extends TestCase
      * @param int $entityId
      * @param string $identifier
      * @param string $content
+     * @param bool $isActive
      * @return MockObject|BlockInterface
      */
-    private function getCmsBlockMock(int $entityId, string $identifier, string $content): BlockInterface
-    {
+    private function getCmsBlockMock(
+        int $entityId,
+        string $identifier,
+        string $content,
+        bool $isActive = true
+    ): BlockInterface {
         $cmsBlock = $this->createMock(BlockInterface::class);
 
         $cmsBlock->method('getId')->willReturn($entityId);
         $cmsBlock->method('getIdentifier')->willReturn($identifier);
         $cmsBlock->method('getContent')->willReturn($content);
+        $cmsBlock->method('isActive')->willReturn($isActive);
 
         return $cmsBlock;
     }
