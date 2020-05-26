@@ -8,8 +8,10 @@
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="AdminRewriteProductWithTwoStoreTest">
         <annotations>
+            <stories value="Rewriting URL of product"/>
             <title value="Rewriting URL of product"/>
             <description value="Rewriting URL of product. Verify the full URL address"/>
+            <severity value="MAJOR"/>
             <group value="CatalogUrlRewrite"/>
         </annotations>
 

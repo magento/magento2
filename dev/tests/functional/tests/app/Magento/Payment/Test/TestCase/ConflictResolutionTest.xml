@@ -14,7 +14,6 @@
             <data name="sections" xsi:type="array">
                 <item name="recommended_solutions" xsi:type="array">
                     <item name="PayPal Express Checkout" xsi:type="string">PayPal Express Checkout</item>
-                    <item name="Braintree" xsi:type="string">Braintree</item>
                 </item>
                 <item name="other_paypal_payment_solutions" xsi:type="array">
                     <item name="paypal_group_all_in_one" xsi:type="array">

@@ -9,9 +9,6 @@
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AdminCreateCatalogPriceRuleWithConditionActionGroup" extends="CreateCatalogPriceRuleActionGroup">
-        <arguments>
-            <argument name="catalogRuleType" type="entity" defaultValue="PriceRuleWithCondition"/>
-        </arguments>
         <waitForPageLoad stepKey="waitForPageLoad" after="addNewRule"/>
         <click selector="{{AdminNewCatalogPriceRule.conditionsTab}}" stepKey="expandConditions" before="openActionDropdown"/>
         <scrollTo selector="{{AdminNewCatalogPriceRule.conditionsTab}}" stepKey="scrollToConditionsTab" after="expandConditions"/>
