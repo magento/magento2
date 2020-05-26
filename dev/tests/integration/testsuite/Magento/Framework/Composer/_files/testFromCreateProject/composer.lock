@@ -2401,10 +2401,6 @@
                         ".php_cs.dist"
                     ],
                     [
-                        ".travis.yml",
-                        ".travis.yml"
-                    ],
-                    [
                         ".user.ini",
                         ".user.ini"
                     ],
@@ -2651,10 +2647,6 @@
                     [
                         "dev/tools",
                         "dev/tools"
-                    ],
-                    [
-                        "dev/travis",
-                        "dev/travis"
                     ],
                     [
                         "generated",
