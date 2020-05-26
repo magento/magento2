@@ -14,7 +14,6 @@
         </annotations>
         <arguments>
             <argument name="product" defaultValue="BundleProduct"/>
-            <argument name="thumbnail" defaultValue="ProductPlaceholderImage"/>
         </arguments>
 
         <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="visitAdminProductPage"/>
