@@ -53,6 +53,7 @@ type DownloadableProductLinks @doc(description: "DownloadableProductLinks define
     link_type: DownloadableFileTypeEnum @deprecated(reason: "`sample_url` serves to get the downloadable sample")
     sample_type: DownloadableFileTypeEnum @deprecated(reason: "`sample_url` serves to get the downloadable sample")
     sample_file: String @deprecated(reason: "`sample_url` serves to get the downloadable sample")
+    id_v2: String @doc(description: "Base64 string, that encodes details for each option.") @resolver(class: "Magento\\DownloadableGraphQl\\Resolver\\Product\\DownloadableLinksValueIdV2")
 }
 
 type DownloadableProductSamples @doc(description: "DownloadableProductSamples defines characteristics of a downloadable product") {
