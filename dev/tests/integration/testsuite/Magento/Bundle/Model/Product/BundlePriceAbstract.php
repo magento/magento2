@@ -3,13 +3,11 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-declare(strict_types=1);
 
 namespace Magento\Bundle\Model\Product;
 
 /**
  * Abstract class for testing bundle prices
- *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 abstract class BundlePriceAbstract extends \PHPUnit\Framework\TestCase
@@ -31,14 +29,6 @@ abstract class BundlePriceAbstract extends \PHPUnit\Framework\TestCase
      */
     protected $productCollectionFactory;
 
-    /**
-     * @var \Magento\CatalogRule\Model\RuleFactory
-     */
-    private $ruleFactory;
-
-    /**
-     * @inheritdoc
-     */
     protected function setUp(): void
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
@@ -52,19 +42,15 @@ abstract class BundlePriceAbstract extends \PHPUnit\Framework\TestCase
             true,
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
-        $this->ruleFactory = $this->objectManager->get(\Magento\CatalogRule\Model\RuleFactory::class);
     }
 
     /**
-     * Get test cases.
-     *
+     * Get test cases
      * @return array
      */
     abstract public function getTestCases();
 
     /**
-     * Prepare fixture.
-     *
      * @param array $strategyModifiers
      * @param string $productSku
      * @return void
@@ -75,14 +61,11 @@ abstract class BundlePriceAbstract extends \PHPUnit\Framework\TestCase
      */
     protected function prepareFixture($strategyModifiers, $productSku)
     {
-        $this->ruleFactory->create()->clearPriceRulesData();
-
         $bundleProduct = $this->productRepository->get($productSku);
 
         foreach ($strategyModifiers as $modifier) {
             if (method_exists($this, $modifier['modifierName'])) {
                 array_unshift($modifier['data'], $bundleProduct);
-                // phpcs:ignore Magento2.Functions.DiscouragedFunction
                 $bundleProduct = call_user_func_array([$this, $modifier['modifierName']], $modifier['data']);
             } else {
                 throw new \Magento\Framework\Exception\InputException(
@@ -130,8 +113,6 @@ abstract class BundlePriceAbstract extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Add custom option.
-     *
      * @param \Magento\Catalog\Model\Product $bundleProduct
      * @param array $optionsData
      * @return \Magento\Catalog\Model\Product
