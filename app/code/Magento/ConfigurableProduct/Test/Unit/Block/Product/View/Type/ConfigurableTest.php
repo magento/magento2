@@ -275,6 +275,9 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
         $productMock = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
             ->disableOriginalConstructor()
             ->getMock();
+        $productMock->expects($this->any())
+            ->method('getWebsiteIds')
+            ->willReturn([1]);
 
         $productTypeMock = $this->getProductTypeMock($productMock);
 
@@ -425,6 +428,9 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
         $storeMock->expects($this->any())
             ->method('getCurrentCurrency')
             ->willReturn($currencyMock);
+        $storeMock->expects($this->once())
+            ->method('getId')
+            ->willReturn(1);
 
         $this->storeManager->expects($this->any())
             ->method('getStore')
@@ -510,5 +516,95 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
             ->willReturn($percentage);
 
         return $tierPriceMock;
+    }
+
+    /**
+     * Checks allowed products count for current store
+     *
+     * @dataProvider productsWithSiteIdsProvider
+     *
+     * @param array $productsWebsiteIds
+     * @param int $currentWebsiteId
+     * @param int $expectedProductsCount
+     *
+     * @return void
+     */
+    public function testGetAllowProducts(array $productsWebsiteIds, int $currentWebsiteId, int $expectedProductsCount): void
+    {
+        $simpleProductsMocks = array_map(function ($websiteIds) {
+            $productMock = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
+                ->disableOriginalConstructor()
+                ->getMock();
+            $productMock->expects($this->any())
+                ->method('getWebsiteIds')
+                ->willReturn($websiteIds);
+            $productMock->expects($this->any())
+                ->method('getStatus')
+                ->willReturn(\Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED);
+
+            return $productMock;
+        }, $productsWebsiteIds);
+
+        $configurableProductMock = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $storeMock = $this->createMock(\Magento\Store\Api\Data\StoreInterface::class);
+        $storeMock->expects($this->once())
+            ->method('getId')
+            ->willReturn($currentWebsiteId);
+        $this->storeManager->expects($this->any())
+            ->method('getStore')
+            ->willReturn($storeMock);
+
+        $productTypeMock = $this->getMockBuilder(\Magento\ConfigurableProduct\Model\Product\Type\Configurable::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $productTypeMock->expects($this->any())
+            ->method('getUsedProducts')
+            ->with($configurableProductMock)
+            ->willReturn($simpleProductsMocks);
+        $configurableProductMock->expects($this->any())->method('getTypeInstance')->willReturn($productTypeMock);
+
+        $this->block->setData('product', $configurableProductMock);
+        $this->assertCount($expectedProductsCount, $this->block->getAllowProducts());
+    }
+
+    /**
+     * Provides website ids for products
+     *
+     * @return array
+     */
+    public function productsWithSiteIdsProvider(): array
+    {
+        return [
+            'One allowed product for website' => [
+                $productsWebsiteIds = [
+                    [1, 2, 3, 4],
+                    [2, 3],
+                    [5, 3]
+                ],
+                $currentWebsiteId = 1,
+                $expectedProductsCount = 1
+            ],
+            'Two allowed product for website' => [
+                $productsWebsiteIds = [
+                    [1, 2, 3, 4],
+                    [2, 7],
+                    [5, 1, 3]
+                ],
+                $currentWebsiteId = 2,
+                $expectedProductsCount = 2
+            ],
+            'Three allowed product for website' => [
+                $productsWebsiteIds = [
+                    [1, 2, 3, 4],
+                    [2, 3],
+                    [5, 1, 3]
+                ],
+                $currentWebsiteId = 3,
+                $expectedProductsCount = 3
+            ],
+        ];
     }
 }
