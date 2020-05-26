@@ -67,12 +67,12 @@ class ResultTest extends TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->templateMock = $this->createMock(Template::class);
-        $this->compilerMock = $this->createMock(CompilerInterface::class);
+        $this->compilerMock = $this->getMockForAbstractClass(CompilerInterface::class);
         $this->componentMock = $this->createMock(Listing::class);
-        $this->loggerMock = $this->createMock(LoggerInterface::class);
+        $this->loggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
         $this->stateMock = $this->createMock(State::class);
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
@@ -98,8 +98,8 @@ class ResultTest extends TestCase
         $e = new \Exception();
 
         $this->templateMock->expects($this->once())
-           ->method('getDocumentElement')
-           ->willThrowException($e);
+            ->method('getDocumentElement')
+            ->willThrowException($e);
         $this->stateMock->expects($this->once())
             ->method('getMode')
             ->willReturn(State::MODE_DEVELOPER);

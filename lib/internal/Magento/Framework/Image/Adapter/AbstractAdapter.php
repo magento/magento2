@@ -24,8 +24,9 @@ abstract class AbstractAdapter implements AdapterInterface
      */
     public $imageBackgroundColor = 0;
 
-    /**
-     * Position constants
+    /**#@+
+     * Position constants.
+     * Used mainly for watermarks
      */
     const POSITION_TOP_LEFT = 'top-left';
 
@@ -40,9 +41,10 @@ abstract class AbstractAdapter implements AdapterInterface
     const POSITION_TILE = 'tile';
 
     const POSITION_CENTER = 'center';
+    /**#@-*/
 
     /**
-     * Default font size
+     * The size of the font to use as default
      */
     const DEFAULT_FONT_SIZE = 15;
 

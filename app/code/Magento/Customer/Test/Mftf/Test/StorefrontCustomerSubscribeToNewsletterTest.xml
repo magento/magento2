@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontCustomerSubscribeToNewsletterTest">
+        <annotations>
+            <features value="Newsletter Subscription"/>
+            <stories value="Subscribe To Newsletter Subscription on StoreFront"/>
+            <title value="StoreFront Customer Newsletter Subscription"/>
+            <description value="Customer can be subscribed to Newsletter Subscription on StoreFront"/>
+            <severity value="MAJOR"/>
+        </annotations>
+        <before>
+            <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
+        </before>
+        <after>
+            <deleteData createDataKey="createCustomer" stepKey="deleteCreatedCustomer"/>
+        </after>
+
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginAsCustomer">
+            <argument name="Customer" value="$$createCustomer$$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontCustomerNavigateToNewsletterPageActionGroup" stepKey="navigateToNewsletterPage"/>
+        <actionGroup ref="StorefrontCustomerUpdateGeneralSubscriptionActionGroup" stepKey="subscribeToNewsletter"/>
+        <actionGroup ref="AssertStorefrontCustomerMessagesActionGroup" stepKey="assertMessage">
+            <argument name="message" value="We have saved your subscription."/>
+        </actionGroup>
+    </test>
+</tests>

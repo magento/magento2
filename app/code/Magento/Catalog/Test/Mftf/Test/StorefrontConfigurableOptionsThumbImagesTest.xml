@@ -16,10 +16,11 @@
                 associated simple products. Add few images for products, check the fotorama thumbnail images
                 (visible and active) for each selected option for the configurable product"/>
             <group value="catalog"/>
+            <severity value="MAJOR"/>
         </annotations>
         <before>
             <!-- Login as Admin -->
-            <actionGroup ref="LoginAsAdmin" stepKey="loginToAdminPanel"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginToAdminPanel"/>
 
             <!-- Create Default Category -->
             <createData entity="_defaultCategory" stepKey="createCategory"/>
@@ -87,7 +88,7 @@
 
             <!-- ConfigProduct -->
             <!-- Go to Product Page (ConfigProduct) -->
-            <actionGroup ref="GoToProductPageViaIDActionGroup" stepKey="goToConfigProduct">
+            <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="goToConfigProduct">
                 <argument name="productId" value="$$createConfigProduct.id$$"/>
             </actionGroup>
 
@@ -113,7 +114,7 @@
 
             <!-- ChildProduct1 -->
             <!-- Go to Product Page (ChildProduct1) -->
-            <actionGroup ref="GoToProductPageViaIDActionGroup" stepKey="goToChildProduct1">
+            <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="goToChildProduct1">
                 <argument name="productId" value="$$createConfigChildProduct1.id$$"/>
             </actionGroup>
 
@@ -138,7 +139,7 @@
 
             <!-- ChildProduct2 -->
             <!-- Go to Product Page (ChildProduct2) -->
-            <actionGroup ref="GoToProductPageViaIDActionGroup" stepKey="goToChildProduct2">
+            <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="goToChildProduct2">
                 <argument name="productId" value="$$createConfigChildProduct2.id$$"/>
             </actionGroup>
 
@@ -162,10 +163,10 @@
             <deleteData createDataKey="createConfigChildProduct1" stepKey="deleteConfigChildProduct1"/>
             <deleteData createDataKey="createConfigChildProduct2" stepKey="deleteConfigChildProduct2"/>
             <deleteData createDataKey="createConfigProductAttribute" stepKey="deleteAttribute"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
 
             <!-- Reindex invalidated indices after product attribute has been created/deleted -->
-            <actionGroup ref="CliRunReindexUsingCronJobsActionGroup" stepKey="reindexInvalidatedIndices"/>
+           <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
         </after>
 
         <!-- Open ConfigProduct in Store Front Page -->

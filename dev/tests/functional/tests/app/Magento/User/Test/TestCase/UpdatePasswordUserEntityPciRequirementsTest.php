@@ -122,7 +122,7 @@ class UpdatePasswordUserEntityPciRequirementsTest extends Injectable
      *
      * @return void
      */
-    public function tearDown()
+    public function tearDown(): void
     {
         if ($this->dashboard->getAdminPanelHeader()->isVisible()) {
             $this->dashboard->getAdminPanelHeader()->logOut();

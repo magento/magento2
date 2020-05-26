@@ -11,5 +11,6 @@ return [
     'lib/internal/Magento/Framework/ObjectManager/Test/Unit/Factory/CompiledTest.php',
     'dev/tests/integration/testsuite/Magento/Indexer/Model/Config/_files/result.php',
     'lib/internal/Magento/Framework/Encryption/Test/Unit/EncryptorTest.php',
-    'lib/internal/Magento/Framework/Encryption/Test/Unit/CryptTest.php'
+    'lib/internal/Magento/Framework/Encryption/Test/Unit/CryptTest.php',
+    'setup/src/Zend/Mvc/Controller/LazyControllerAbstractFactory.php',
 ];

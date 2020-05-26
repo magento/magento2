@@ -28,7 +28,7 @@ class ConditionsToCollectionApplierTest extends \PHPUnit\Framework\TestCase
 
     private $setFactory;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
 
@@ -78,18 +78,22 @@ class ConditionsToCollectionApplierTest extends \PHPUnit\Framework\TestCase
             asort($expectedSkuList);
             asort($resultSkuList);
 
+            $expectedSkuList = array_values($expectedSkuList);
+            $resultSkuList = array_values($resultSkuList);
+
             $this->assertEquals($expectedSkuList, $resultSkuList, sprintf('%s failed', $variationName));
         }
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\InputException
-     * @expectedExceptionMessage Undefined rule operator "====" passed in. Valid operators are: ==,!=,>=,<=,>,<,{},!{},(),!()
      *
      * @magentoDbIsolation disabled
      */
     public function testExceptionUndefinedRuleOperator()
     {
+        $this->expectException(\Magento\Framework\Exception\InputException::class);
+        $this->expectExceptionMessage('Undefined rule operator "====" passed in. Valid operators are: ==,!=,>=,<=,>,<,{},!{},(),!()');
+
         $conditions = [
             'type' => \Magento\CatalogRule\Model\Rule\Condition\Combine::class,
             'aggregator' => 'all',
@@ -112,13 +116,14 @@ class ConditionsToCollectionApplierTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\InputException
-     * @expectedExceptionMessage Undefined rule aggregator "olo-lo" passed in. Valid operators are: all,any
      *
      * @magentoDbIsolation disabled
      */
     public function testExceptionUndefinedRuleAggregator()
     {
+        $this->expectException(\Magento\Framework\Exception\InputException::class);
+        $this->expectExceptionMessage('Undefined rule aggregator "olo-lo" passed in. Valid operators are: all,any');
+
         $conditions = [
             'type' => \Magento\CatalogRule\Model\Rule\Condition\Combine::class,
             'aggregator' => 'olo-lo',

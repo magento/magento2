@@ -28,12 +28,8 @@
                 <requiredEntity createDataKey="createAttributeSet"/>
             </createData>
 
-            <!-- Run cron twice -->
-            <magentoCLI command="cron:run" stepKey="runCron1"/>
-            <magentoCLI command="cron:run" stepKey="runCron2"/>
-
-            <!-- Login as admin -->
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <magentoCron stepKey="runCron"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
             <!-- Delete product creations -->
@@ -52,9 +48,11 @@
         <!-- Export created below products -->
         <actionGroup ref="ExportAllProductsActionGroup" stepKey="exportCreatedProducts"/>
 
-        <!-- Run cron -->
-        <magentoCLI command="cron:run" stepKey="runCron3"/>
-        <magentoCLI command="cron:run" stepKey="runCron4"/>
+        <magentoCron stepKey="runCronIndex" groups="index"/>
+
+        <wait stepKey="waitForReindexing" time="60" />
+        <reloadPage stepKey="pageReload" />
+        <waitForPageLoad stepKey="waitForPageLoaded" />
 
         <grabTextFrom selector="{{AdminExportAttributeSection.exportFileNameByPosition('0')}}" stepKey="grabNameFile"/>
 

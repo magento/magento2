@@ -67,3 +67,26 @@ interface SalesTotalsInterface @typeResolver(class: "Magento\\SalesGraphQl\\Mode
 type OrderTotals implements SalesTotalsInterface @doc(description: "Contains details about the subtotals used to calculate the final price") {
     shipping_handling: Money! @doc(description: "The shipping and handling costs for the order")
 }
+
+type Mutation {
+    reorderItems(orderNumber: String!): ReorderItemsOutput @doc(description:"Adds all products from a customer's previous order to the cart.") @resolver(class: "Magento\\SalesGraphQl\\Model\\Resolver\\Reorder")
+}
+
+type ReorderItemsOutput {
+    cart: Cart! @doc(description:"Contains detailed information about the customer's cart.")
+    userInputErrors:[CheckoutUserInputError]! @doc(description:"An array of reordering errors.")
+}
+
+type CheckoutUserInputError @doc(description:"An error encountered while adding an item the the cart."){
+    message: String! @doc(description: "Localized error message")
+    path: [String]! @doc(description: "Path to the input field that caused an error. See the GraphQL specification about path errors for details: http://spec.graphql.org/draft/#sec-Errors")
+    code: CheckoutUserInputErrorCodes! @doc(description: "Checkout-specific error code")
+}
+
+enum CheckoutUserInputErrorCodes {
+    REORDER_NOT_AVAILABLE
+    PRODUCT_NOT_FOUND
+    NOT_SALABLE
+    INSUFFICIENT_STOCK
+    UNDEFINED
+}

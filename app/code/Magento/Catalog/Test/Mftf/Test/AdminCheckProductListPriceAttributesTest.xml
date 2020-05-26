@@ -15,6 +15,7 @@
             <description value="Login as admin, create simple product, add cost, special price. Go to Admin
                 Product List page filter grid by created product, add mentioned columns to grid, check values."/>
             <group value="catalog"/>
+            <severity value="MAJOR"/>
         </annotations>
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginToAdminPanel"/>
@@ -31,9 +32,9 @@
             <actionGroup ref="ResetAdminProductGridColumnsActionGroup" stepKey="resetAdminProductGridColumns"/>
 
             <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
             <!-- Reindex invalidated indices after product attribute has been created/deleted -->
-            <actionGroup ref="CliRunReindexUsingCronJobsActionGroup" stepKey="reindexInvalidatedIndices"/>
+           <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
         </after>
 
         <actionGroup ref="ToggleAdminProductGridColumnsDropdownActionGroup" stepKey="openColumnsDropdown"/>

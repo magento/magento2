@@ -123,7 +123,7 @@ MUTATION;
         $response = $this->graphQlMutation($mutation, [], '', $this->getCustomerAuthHeaders($userName, $password));
         $this->assertArrayHasKey('createCustomerAddress', $response);
         $this->assertArrayHasKey('customer_id', $response['createCustomerAddress']);
-        $this->assertEquals(null, $response['createCustomerAddress']['customer_id']);
+        $this->assertNull($response['createCustomerAddress']['customer_id']);
         $this->assertArrayHasKey('id', $response['createCustomerAddress']);
 
         $address = $this->addressRepository->getById($response['createCustomerAddress']['id']);
@@ -203,11 +203,12 @@ MUTATION;
     }
 
     /**
-     * @expectedException Exception
-     * @expectedExceptionMessage The current customer isn't authorized.
      */
     public function testCreateCustomerAddressIfUserIsNotAuthorized()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('The current customer isn\'t authorized.');
+
         $mutation
             = <<<MUTATION
 mutation{
@@ -239,11 +240,12 @@ MUTATION;
      * with missing required Firstname attribute
      *
      * @magentoApiDataFixture Magento/Customer/_files/customer_without_addresses.php
-     * @expectedException Exception
-     * @expectedExceptionMessage Required parameters are missing: firstname
      */
     public function testCreateCustomerAddressWithMissingAttribute()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Required parameters are missing: firstname');
+
         $mutation
             = <<<MUTATION
 mutation {
@@ -273,11 +275,12 @@ MUTATION;
 
     /**
      * @magentoApiDataFixture Magento/Customer/_files/customer_without_addresses.php
-     * @expectedException Exception
-     * @expectedExceptionMessage "input" value should be specified
      */
     public function testCreateCustomerAddressWithMissingInput()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('"input" value should be specified');
+
         $userName = 'customer@example.com';
         $password = 'password';
         $mutation = <<<MUTATION
@@ -489,7 +492,7 @@ MUTATION;
             ['response_field' => 'default_billing', 'expected_value' => (bool)$address->isDefaultBilling()],
         ];
         $this->assertResponseFields($actualResponse, $assertionMap);
-        $this->assertTrue(is_array([$actualResponse['region']]), "region field must be of an array type.");
+        $this->assertIsArray([$actualResponse['region']], "region field must be of an array type.");
         $assertionRegionMap = [
             ['response_field' => 'region', 'expected_value' => $address->getRegion()->getRegion()],
             ['response_field' => 'region_code', 'expected_value' => $address->getRegion()->getRegionCode()],
