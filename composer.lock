@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "f7640ba242fd3b0b136966f2668eb60c",
+    "content-hash": "fe56bad7475ba018a53ab8a23fe94839",
     "packages": [
         {
             "name": "colinmollenhour/cache-backend-file",
@@ -8137,16 +8137,16 @@
         },
         {
             "name": "phpstan/phpstan",
-            "version": "0.12.25",
+            "version": "0.12.23",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpstan.git",
-                "reference": "9619551d68b2d4c0d681a8df73f3c847c798ee64"
+                "reference": "71e529efced79e055fa8318b692e7f7d03ea4e75"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/9619551d68b2d4c0d681a8df73f3c847c798ee64",
-                "reference": "9619551d68b2d4c0d681a8df73f3c847c798ee64",
+                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/71e529efced79e055fa8318b692e7f7d03ea4e75",
+                "reference": "71e529efced79e055fa8318b692e7f7d03ea4e75",
                 "shasum": ""
             },
             "require": {
@@ -8175,7 +8175,7 @@
                 "MIT"
             ],
             "description": "PHPStan - PHP Static Analysis Tool",
-            "time": "2020-05-10T20:36:16+00:00"
+            "time": "2020-05-05T12:55:44+00:00"
         },
         {
             "name": "phpunit/php-code-coverage",
@@ -10394,19 +10394,7 @@
     "minimum-stability": "stable",
     "stability-flags": {
         "magento/composer": 20,
-        "allure-framework/allure-phpunit": 0,
-        "dealerdirect/phpcodesniffer-composer-installer": 0,
-        "friendsofphp/php-cs-fixer": 0,
-        "lusitanian/oauth": 0,
-        "magento/magento-coding-standard": 0,
-        "magento/magento2-functional-testing-framework": 20,
-        "pdepend/pdepend": 0,
-        "phpcompatibility/php-compatibility": 0,
-        "phpmd/phpmd": 0,
-        "phpstan/phpstan": 0,
-        "phpunit/phpunit": 0,
-        "sebastian/phpcpd": 0,
-        "squizlabs/php_codesniffer": 0
+        "magento/magento2-functional-testing-framework": 20
     },
     "prefer-stable": true,
     "prefer-lowest": false,
