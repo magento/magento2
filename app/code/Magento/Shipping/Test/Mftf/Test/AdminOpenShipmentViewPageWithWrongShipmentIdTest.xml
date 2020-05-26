@@ -33,7 +33,7 @@
 
         <seeInCurrentUrl url="{{AdminShipmentsGridPage.url}}" stepKey="redirectToShipmentsGridPage"/>
 
-        <see selector="{{AdminMessagesSection.error}}" userInput='This shipment no longer exists.'
+        <see selector="{{AdminMessagesSection.error}}" userInput="This shipment no longer exists."
              stepKey="seeErrorMessage"/>
     </test>
 </tests>
