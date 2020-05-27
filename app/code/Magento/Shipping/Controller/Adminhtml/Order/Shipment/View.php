@@ -72,7 +72,8 @@ class View extends \Magento\Backend\App\Action
             return $resultPage;
         } else {
             $resultRedirect = $this->resultRedirectFactory->create();
-            return $resultRedirect->setPath('sales/shipment');
+            $resultRedirect->setPath('sales/shipment');
+            return $resultRedirect;
         }
     }
 }

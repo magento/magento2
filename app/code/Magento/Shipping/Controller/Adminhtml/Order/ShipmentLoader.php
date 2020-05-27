@@ -18,9 +18,8 @@ use Magento\Sales\Model\Order\ShipmentDocumentFactory;
 use Magento\Sales\Api\Data\ShipmentItemCreationInterface;
 
 /**
- * Class ShipmentLoader
+ * Class for ShipmentLoader Controller
  *
- * @package Magento\Shipping\Controller\Adminhtml\Order
  * @method ShipmentLoader setOrderId($id)
  * @method ShipmentLoader setShipmentId($id)
  * @method ShipmentLoader setShipment($shipment)
