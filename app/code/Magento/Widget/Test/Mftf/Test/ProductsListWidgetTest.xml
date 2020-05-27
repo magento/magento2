@@ -34,6 +34,7 @@
         <!-- Create a CMS page containing the Products List widget -->
         <amOnPage url="{{CmsPagesPage.url}}" stepKey="amOnCmsList"/>
         <waitForPageLoad stepKey="waitForCmsList"/>
+        <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clickClearFilters"/>
         <click selector="{{CmsPagesPageActionsSection.addNewPageButton}}" stepKey="clickAddNewPageButton"/>
         <fillField selector="{{CmsNewPagePageBasicFieldsSection.pageTitle}}" userInput="{{_newDefaultCmsPage.title}}" stepKey="fillPageTitle"/>
         <click selector="{{CmsNewPagePageContentSection.header}}" stepKey="expandContentSection"/>
