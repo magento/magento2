@@ -9,6 +9,7 @@
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="AdminCreateOrderWithSimpleProductCustomOptionFileTest">
         <annotations>
+            <stories value="Create Order with simple product with custom option"/>
             <title value="Create Order with simple product with custom option."/>
             <description value="Verify, admin able to change file for custom option during order creation."/>
             <features value="Sales"/>
