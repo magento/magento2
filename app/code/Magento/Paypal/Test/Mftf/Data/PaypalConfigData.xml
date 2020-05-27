@@ -313,4 +313,8 @@
         <data key="label">Black</data>
         <data key="value">black</data>
     </entity>
+    <entity name="DisableVaultPayflowPro">
+        <data key="path">payment/payflowpro_cc_vault/active</data>
+        <data key="value">0</data>
+    </entity>
 </entities>

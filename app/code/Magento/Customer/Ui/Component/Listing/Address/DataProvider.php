@@ -5,17 +5,20 @@
  */
 namespace Magento\Customer\Ui\Component\Listing\Address;
 
+use Magento\Customer\Model\ResourceModel\Address\Grid\Collection as GridCollection;
 use Magento\Customer\Model\ResourceModel\Address\Grid\CollectionFactory;
 use Magento\Directory\Model\CountryFactory;
 use Magento\Framework\Api\Filter;
+use Magento\Framework\App\RequestInterface;
+use Magento\Ui\DataProvider\AbstractDataProvider;
 
 /**
  * Custom DataProvider for customer addresses listing
  */
-class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
+class DataProvider extends AbstractDataProvider
 {
     /**
-     * @var \Magento\Framework\App\RequestInterface $request,
+     * @var RequestInterface $request,
      */
     private $request;
 
@@ -29,7 +32,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
      * @param string $primaryFieldName
      * @param string $requestFieldName
      * @param CollectionFactory $collectionFactory
-     * @param \Magento\Framework\App\RequestInterface $request
+     * @param RequestInterface $request
      * @param CountryFactory $countryFactory
      * @param array $meta
      * @param array $data
@@ -39,7 +42,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
         $primaryFieldName,
         $requestFieldName,
         CollectionFactory $collectionFactory,
-        \Magento\Framework\App\RequestInterface $request,
+        RequestInterface $request,
         CountryFactory $countryFactory,
         array $meta = [],
         array $data = []
@@ -57,6 +60,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
      */
     public function getData(): array
     {
+        /** @var GridCollection $collection */
         $collection = $this->getCollection();
         $data['items'] = [];
         if ($this->request->getParam('parent_id')) {
@@ -80,33 +84,14 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
      */
     public function addFilter(Filter $filter): void
     {
-        if ($filter->getField() !== 'fulltext') {
-            $this->collection->addFieldToFilter(
+        /** @var GridCollection $collection */
+        $collection = $this->getCollection();
+        if ($filter->getField() === 'fulltext') {
+            $collection->addFullTextFilter(trim($filter->getValue()));
+        } else {
+            $collection->addFieldToFilter(
                 $filter->getField(),
                 [$filter->getConditionType() => $filter->getValue()]
-            );
-        } else {
-            $value = trim($filter->getValue());
-            $this->collection->addFieldToFilter(
-                [
-                    ['attribute' => 'firstname'],
-                    ['attribute' => 'lastname'],
-                    ['attribute' => 'street'],
-                    ['attribute' => 'city'],
-                    ['attribute' => 'region'],
-                    ['attribute' => 'postcode'],
-                    ['attribute' => 'telephone']
-                ],
-                [
-                    ['like' => "%{$value}%"],
-                    ['like' => "%{$value}%"],
-                    ['like' => "%{$value}%"],
-                    ['like' => "%{$value}%"],
-                    ['like' => "%{$value}%"],
-                    ['like' => "%{$value}%"],
-                    ['like' => "%{$value}%"],
-                    ['like' => "%{$value}%"],
-                ]
             );
         }
     }
