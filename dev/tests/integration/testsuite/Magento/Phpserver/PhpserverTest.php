@@ -37,6 +37,9 @@ class PhpserverTest extends \PHPUnit\Framework\TestCase
         return sprintf('http://%s/%s', self::BASE_URL, ltrim($url, '/'));
     }
 
+    /**
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+     */
     protected function setUp(): void
     {
         $this->httpClient = new \Laminas\Http\Client(null, ['timeout' => 10]);
