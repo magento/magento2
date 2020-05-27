@@ -109,11 +109,9 @@ class CrontabManagerTest extends TestCase
                 'content' => '* * * * * /bin/php /var/www/cron.php' . PHP_EOL
                     . CrontabManagerInterface::TASKS_BLOCK_START . ' ' . hash("sha256", BP) . PHP_EOL
                     . '* * * * * /bin/php /var/www/magento/bin/magento cron:run' . PHP_EOL
-                    . '* * * * * /bin/php /var/www/magento/bin/magento setup:cron:run' . PHP_EOL
                     . CrontabManagerInterface::TASKS_BLOCK_END . ' ' . hash("sha256", BP) . PHP_EOL,
                 'tasks' => [
                     '* * * * * /bin/php /var/www/magento/bin/magento cron:run',
-                    '* * * * * /bin/php /var/www/magento/bin/magento setup:cron:run',
                 ],
             ],
             [
@@ -193,7 +191,6 @@ class CrontabManagerTest extends TestCase
                 'contentBefore' => '* * * * * /bin/php /var/www/cron.php' . PHP_EOL
                     . CrontabManagerInterface::TASKS_BLOCK_START . ' ' . hash("sha256", BP) . PHP_EOL
                     . '* * * * * /bin/php /var/www/magento/bin/magento cron:run' . PHP_EOL
-                    . '* * * * * /bin/php /var/www/magento/bin/magento setup:cron:run' . PHP_EOL
                     . CrontabManagerInterface::TASKS_BLOCK_END . ' ' . hash("sha256", BP) . PHP_EOL,
                 'contentAfter' => '* * * * * /bin/php /var/www/cron.php' . PHP_EOL
             ],
