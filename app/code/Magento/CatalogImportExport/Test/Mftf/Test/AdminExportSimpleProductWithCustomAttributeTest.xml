@@ -50,6 +50,10 @@
 
         <magentoCron stepKey="runCronIndex" groups="index"/>
 
+        <wait stepKey="waitForReindexing" time="60" />
+        <reloadPage stepKey="pageReload" />
+        <waitForPageLoad stepKey="waitForPageLoaded" />
+
         <grabTextFrom selector="{{AdminExportAttributeSection.exportFileNameByPosition('0')}}" stepKey="grabNameFile"/>
 
         <!-- Download product -->
