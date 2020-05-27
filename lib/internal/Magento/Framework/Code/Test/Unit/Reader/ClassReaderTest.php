@@ -61,6 +61,27 @@ class ClassReaderTest extends TestCase
     }
 
     /**
+     * Check that while processing nonexistent argument of constructor exception message contains original class name
+     */
+    public function testGetConstructorWithNonexistentDependency()
+    {
+        $testClass = new class {
+            private $arg;
+
+            // phpstan:ignore
+            public function __construct(?\NonexistentDependency $arg = null)
+            {
+                $this->arg = $arg;
+            }
+        };
+
+        $className = get_class($testClass);
+        $this->expectException(\ReflectionException::class);
+        $this->expectExceptionMessage($className);
+        $this->model->getConstructor($className);
+    }
+
+    /**
      * Data provider
      *
      * @return array
