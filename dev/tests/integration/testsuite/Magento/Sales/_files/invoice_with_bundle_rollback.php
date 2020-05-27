@@ -5,4 +5,6 @@
  */
 declare(strict_types=1);
 
-require 'order_with_bundle_and_invoiced_rollback.php';
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
+
+Resolver::getInstance()->requireDataFixture('Magento/Sales/_files/order_with_bundle_and_invoiced_rollback.php');
