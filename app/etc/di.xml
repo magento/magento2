@@ -1777,6 +1777,13 @@
             <argument name="locker" xsi:type="object">Magento\Framework\Lock\Backend\Database</argument>
         </arguments>
     </type>
+    <type name="Magento\Framework\Cache\CompositeStaleCacheNotifier">
+        <arguments>
+            <argument name="notifiers" xsi:type="array">
+                <item name="runtime_cache_modifier" xsi:type="object">Magento\Framework\App\Cache\RuntimeStaleCacheStateModifier</item>
+            </argument>
+        </arguments>
+    </type>
     <preference for="Magento\Framework\HTTP\AsyncClientInterface" type="Magento\Framework\HTTP\AsyncClient\GuzzleAsyncClient" />
     <preference for="Magento\Framework\MessageQueue\PoisonPill\PoisonPillCompareInterface" type="Magento\Framework\MessageQueue\PoisonPill\PoisonPillCompare"/>
     <preference for="Magento\Framework\MessageQueue\PoisonPill\PoisonPillPutInterface" type="Magento\Framework\MessageQueue\PoisonPill\PoisonPillPut"/>
