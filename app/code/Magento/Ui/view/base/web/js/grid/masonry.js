@@ -101,8 +101,8 @@ define([
             this.imageMargin = parseInt(this.imageMargin, 10);
             this.container = $('[data-id="' + this.containerId + '"]')[0];
 
-            this.setLayoutStyles();
             this.setEventListener();
+            this.setLayoutStyles();
 
             return this;
         },
@@ -112,18 +112,25 @@ define([
          */
         setEventListener: function () {
             window.addEventListener('resize', function () {
-                raf(function () {
-                    this.containerWidth = window.innerWidth;
-                    this.setLayoutStyles();
-                }.bind(this), this.refreshFPS);
+                this.updateStyles();
             }.bind(this));
+        },
+
+        /**
+         * Updates styles for component.
+         */
+        updateStyles: function () {
+            raf(function () {
+                this.containerWidth = window.innerWidth;
+                this.setLayoutStyles();
+            }.bind(this), this.refreshFPS);
         },
 
         /**
          * Set layout styles inside the container
          */
         setLayoutStyles: function () {
-            var containerWidth = parseInt(this.container.clientWidth, 10) - 15,
+            var containerWidth = parseInt(this.container.clientWidth, 10),
                 rowImages = [],
                 ratio = 0,
                 rowHeight = 0,
