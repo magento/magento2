@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontUpdateCustomerDefaultBillingAddressUsingOptionalSelectTest">
+        <annotations>
+            <features value="Customer address"/>
+            <stories value="Implementing changing of address in case selected option was not required in Configuration"/>
+            <title value="Update default customer address via the Storefront using selection"/>
+            <description value="Storefront user should be able to create a new default address via the storefront"/>
+            <severity value="AVERAGE"/>
+            <testCaseId value="MC-25348"/>
+            <group value="customer"/>
+            <group value="testDebug"/>
+            <group value="update"/>
+        </annotations>
+        <before>
+            <createData entity="Customer_UK_With_Default_Billing_Shipping_Addresses" stepKey="createCustomer"/>
+        </before>
+        <after>
+            <deleteData createDataKey="createCustomer" stepKey="DeleteCustomer"/>
+        </after>
+
+        <!--Log in to Storefront as Customer 1 -->
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="signUp">
+            <argument name="Customer" value="$$createCustomer$$"/>
+        </actionGroup>
+        <amOnPage url="customer/address/" stepKey="OpenCustomerUpdateAddress"/>
+        <click stepKey="ClickEditDefaultBillingAddress" selector="{{StorefrontCustomerAddressesSection.editDefaultBillingAddress}}"/>
+        <fillField stepKey="fillCountry" userInput="EditedCountryBilling" selector="{{StorefrontCustomerAddressFormSection.country}}"/>
+        <fillField stepKey="fillRegion" userInput="EditedRegionBilling" selector="{{StorefrontCustomerAddressFormSection.region}}"/>
+        <click stepKey="saveCustomerAddress" selector="{{StorefrontCustomerAddressFormSection.saveAddress}}"/>
+        <see userInput="You saved the address." stepKey="verifyAddressAdded"/>
+        <see userInput="EditedCountryBilling" selector="{{StorefrontCustomerAddressesSection.defaultBillingAddress}}" stepKey="checkNewAddressesCountryOnDefaultBilling"/>
+        <see userInput="EditedRegionBilling" selector="{{StorefrontCustomerAddressesSection.defaultBillingAddress}}" stepKey="checkNewAddressesRegionOnDefaultBilling"/>
+        <see userInput="{{US_Address_CA.country_id}}" selector="{{StorefrontCustomerAddressesSection.defaultBillingAddress}}" stepKey="checkNewAddressesFirstNameOnDefaultShipping"/>
+        <see userInput="{{US_Address_CA.region}}" selector="{{StorefrontCustomerAddressesSection.defaultBillingAddress}}" stepKey="checkNewAddressesLastNameOnDefaultShipping"/>
+    </test>
+</tests>

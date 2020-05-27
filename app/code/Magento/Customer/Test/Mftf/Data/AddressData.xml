@@ -206,6 +206,10 @@
         <data key="default_billing">true</data>
         <data key="default_shipping">false</data>
     </entity>
+    <entity name="CustomerUKAddress_Default_Addresses" type="address" extends="CustomerUKAddress">
+        <data key="default_billing">true</data>
+        <data key="default_shipping">true</data>
+    </entity>
     <entity name="addressNoZipNoState" type="address">
         <data key="country_id">United Kingdom</data>
         <array key="street">
