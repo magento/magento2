@@ -32,13 +32,9 @@
         </actionGroup>
         <amOnPage url="customer/address/" stepKey="OpenCustomerUpdateAddress"/>
         <click stepKey="ClickEditDefaultBillingAddress" selector="{{StorefrontCustomerAddressesSection.editDefaultBillingAddress}}"/>
-        <fillField stepKey="fillCountry" userInput="EditedCountryBilling" selector="{{StorefrontCustomerAddressFormSection.country}}"/>
-        <fillField stepKey="fillRegion" userInput="EditedRegionBilling" selector="{{StorefrontCustomerAddressFormSection.region}}"/>
+        <selectOption selector="{{StorefrontCustomerAddressFormSection.country}}" userInput="{{US_Address_CA.country}}" stepKey="selectCountry"/>
+        <selectOption selector="{{StorefrontCustomerAddressFormSection.state}}" userInput="{{US_Address_CA.state}}"  stepKey="selectState"/>
         <click stepKey="saveCustomerAddress" selector="{{StorefrontCustomerAddressFormSection.saveAddress}}"/>
         <see userInput="You saved the address." stepKey="verifyAddressAdded"/>
-        <see userInput="EditedCountryBilling" selector="{{StorefrontCustomerAddressesSection.defaultBillingAddress}}" stepKey="checkNewAddressesCountryOnDefaultBilling"/>
-        <see userInput="EditedRegionBilling" selector="{{StorefrontCustomerAddressesSection.defaultBillingAddress}}" stepKey="checkNewAddressesRegionOnDefaultBilling"/>
-        <see userInput="{{US_Address_CA.country_id}}" selector="{{StorefrontCustomerAddressesSection.defaultBillingAddress}}" stepKey="checkNewAddressesFirstNameOnDefaultShipping"/>
-        <see userInput="{{US_Address_CA.region}}" selector="{{StorefrontCustomerAddressesSection.defaultBillingAddress}}" stepKey="checkNewAddressesLastNameOnDefaultShipping"/>
     </test>
 </tests>
