@@ -15,6 +15,8 @@ use Magento\Setup\Model\Cron\ReadinessCheck;
  * This includes verifying file permission in Updater Cron and db privileges in Setup Cron.
  * It also verifies Cron time interval configuration.
  * This class only verifies the status files created by both Cron jobs. No actual checking logic is done in this class.
+ *
+ * @deprecated Starting from Magento 2.3.6 Web Setup Wizard is deprecated
  */
 class CronScriptReadinessCheck
 {

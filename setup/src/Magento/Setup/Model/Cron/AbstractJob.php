@@ -11,6 +11,8 @@ use Magento\Framework\ObjectManagerInterface;
 
 /**
  * Abstract class for jobs run by setup:cron:run command
+ *
+ * @deprecated Starting from Magento 2.3.6 Web Setup Wizard is deprecated
  */
 abstract class AbstractJob
 {
