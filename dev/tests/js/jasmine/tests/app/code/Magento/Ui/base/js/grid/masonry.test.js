@@ -13,7 +13,7 @@ define([
 
     var Component,
         rows,
-        params;
+        container = '<div data-id="masonry_grid" id="masonry_grid"><div class="masonry-image-column"></div></div>';
 
     beforeEach(function () {
         rows = [
@@ -38,15 +38,15 @@ define([
                 overlay: '',
                 path: '',
                 'premium_level_id': 0,
-                'thumbnail_240_url': 'https://t4.ftcdn.net/jpg/03/27/51/57/240_F_327515738_nA3ke9EPgwmuH60oZrqZV4Fe5r9M6ndj.jpg',
-                'thumbnail_500_ur': 'https://as2.ftcdn.net/jpg/03/27/51/57/500_F_327515738_nA3ke9EPgwmuH60oZrqZV4Fe5r9M6ndj.jpg',
+                'thumbnail_240_url': 'https://t4.ftcdn.net/jpg/03/27/51/57/240_F_327515738_n.jpg',
+                'thumbnail_500_ur': 'https://as2.ftcdn.net/jpg/03/27/51/57/500_F_327515738_n.jpg',
                 title: 'Neon effect picture of man wearing medical mask for viral or pandemic disease',
                 width: 4896
             }
 
         ];
 
-        $('<div data-id="masonry_grid" id="masonry_grid"><div class="masonry-image-column"></div></div>').appendTo('body');
+        $(container).appendTo('body');
 
         Component = new Masonry({
             defaults: {
