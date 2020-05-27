@@ -57,5 +57,10 @@
         <actionGroup ref="StorefrontPaypalSwitchBackToMagentoFromCheckoutPageActionGroup" after="LoginToPayPal" stepKey="submitPayment"/>
 
         <waitForElement after="submitPayment" selector="{{CheckoutSuccessMainSection.orderNumber}}" stepKey="waitForOrderNumber"/>
+        <see selector="{{AdminOrderDetailsInformationSection.orderInformationTable}}" userInput="USD / EUR rate" stepKey="seeEURandUSDRate"/>
+        <assertEquals stepKey="assertSelectedCategories">
+            <actualResult type="variable">grabRate</actualResult>
+            <expectedResult type="array">[USD / EUR rate:]</expectedResult>
+        </assertEquals>
     </test>
 </tests>
