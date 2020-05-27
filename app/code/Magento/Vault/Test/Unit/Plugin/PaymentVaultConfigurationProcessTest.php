@@ -122,12 +122,6 @@ class PaymentVaultConfigurationProcessTest extends TestCase
             'vault' => [
                 'methods' => []
             ],
-            'braintree' => [
-                'methods' => [
-                    'braintree_paypal' => [],
-                    'braintree' => []
-                ]
-            ],
             'paypal-payments' => [
                 'methods' => [
                     'payflowpro' => [],
@@ -142,9 +136,9 @@ class PaymentVaultConfigurationProcessTest extends TestCase
             'vault' => [
                 'methods' => []
             ],
-            'braintree' => [
+            'paypal-payments' => [
                 'methods' => [
-                    'braintree_paypal' => []
+                    'payflowpro' => [],
                 ]
             ]
         ];
@@ -155,8 +149,8 @@ class PaymentVaultConfigurationProcessTest extends TestCase
             ->setMethods(['getCode', 'getProviderCode'])
             ->getMockForAbstractClass();
 
-        $vaultPaymentMethod->expects($this->any())->method('getCode')->willReturn('braintree_paypal_vault');
-        $vaultPaymentMethod->expects($this->any())->method('getProviderCode')->willReturn('braintree_paypal');
+        $vaultPaymentMethod->expects($this->any())->method('getCode')->willReturn('payflowpro_cc_vault');
+        $vaultPaymentMethod->expects($this->any())->method('getProviderCode')->willReturn('payflowpro');
 
         return [
             [$jsLayout, [], [], $result1],

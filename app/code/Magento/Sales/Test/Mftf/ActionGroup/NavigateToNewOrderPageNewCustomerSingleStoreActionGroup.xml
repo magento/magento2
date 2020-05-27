@@ -12,9 +12,6 @@
         <annotations>
             <description>Goes to the Admin Orders grid page. Clicks on 'Create New Order'. Clicks on 'Create New Customer'. Validates that Page Title is present and correct.</description>
         </annotations>
-        <arguments>
-            <argument name="storeView" defaultValue="_defaultStore"/>
-        </arguments>
 
         <amOnPage url="{{AdminOrdersPage.url}}" stepKey="navigateToOrderIndexPage"/>
         <waitForPageLoad stepKey="waitForIndexPageLoad"/>
