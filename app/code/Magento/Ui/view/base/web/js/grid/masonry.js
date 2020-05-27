@@ -100,7 +100,7 @@ define([
             }
 
             //initialize row observables
-            this.rows().forEach(function (image, index) {
+            this.rows().forEach(function (image) {
                 image.styles = ko.observable({});
                 image.css = ko.observable({});
             });
@@ -209,7 +209,7 @@ define([
             this.conditionCallback(
                 function () {
                     return $(images).length === 0;
-                }.bind(this),
+                },
                 function () {
                     $(images).last().load(function () {
                         this.setLayoutStyles();
@@ -217,7 +217,7 @@ define([
                         if (this.complete) {
                             $(this).load();
                         }
-                    });;
+                    });
                 }.bind(this));
         },
 

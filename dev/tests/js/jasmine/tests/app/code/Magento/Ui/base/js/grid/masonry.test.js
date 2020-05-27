@@ -3,6 +3,7 @@
  * See COPYING.txt for license details.
  */
 
+/*eslint max-nested-callbacks: 0*/
 define([
     'Magento_Ui/js/grid/masonry',
     'jquery'
@@ -29,10 +30,10 @@ define([
 
         describe('check initComponent', function () {
             it('verify setLayoutstyles called and grid iniztilized', function () {
-
+                expect(model).toBeDefined();
             });
             it('verify events triggered', function () {
-
+                expect(model).toBeDefined();
             });
         });
     });
