@@ -431,27 +431,6 @@ class CartFixedTest extends TestCase
                 5,
                 [
                     'subtotal' => 10.00,
-                    'discount_amount' => -0.7100,
-                    'shipping_amount' => 5.00,
-                    'grand_total' => 14.2900,
-                ],
-                [
-                    'subtotal' => 20.00,
-                    'discount_amount' => -1.4300,
-                    'shipping_amount' => 5.00,
-                    'grand_total' => 23.5700,
-                ],
-                [
-                    'subtotal' => 5.00,
-                    'discount_amount' => -5.00,
-                    'shipping_amount' => 0.00,
-                    'grand_total' => 0.00,
-                ]
-            ],
-            'Discount = 1stOrderSubtotal: only 1st order gets discount' => [
-                10,
-                [
-                    'subtotal' => 10.00,
                     'discount_amount' => -1.4300,
                     'shipping_amount' => 5.00,
                     'grand_total' => 13.5700,
@@ -469,19 +448,40 @@ class CartFixedTest extends TestCase
                     'grand_total' => 0.00,
                 ]
             ],
+            'Discount = 1stOrderSubtotal: only 1st order gets discount' => [
+                10,
+                [
+                    'subtotal' => 10.00,
+                    'discount_amount' => -2.8600,
+                    'shipping_amount' => 5.00,
+                    'grand_total' => 12.1400,
+                ],
+                [
+                    'subtotal' => 20.00,
+                    'discount_amount' => -5.71,
+                    'shipping_amount' => 5.00,
+                    'grand_total' => 19.2900,
+                ],
+                [
+                    'subtotal' => 5.00,
+                    'discount_amount' => -5.00,
+                    'shipping_amount' => 0.00,
+                    'grand_total' => 0.00,
+                ]
+            ],
             'Discount > 1stOrderSubtotal: 1st order get 100% discount and 2nd order get the remaining discount' => [
                 15,
                 [
                     'subtotal' => 10.00,
-                    'discount_amount' => -2.1400,
+                    'discount_amount' => -4.2900,
                     'shipping_amount' => 5.00,
-                    'grand_total' => 12.8600,
+                    'grand_total' => 10.71,
                 ],
                 [
                     'subtotal' => 20.00,
-                    'discount_amount' => -4.2900,
+                    'discount_amount' => -8.5700,
                     'shipping_amount' => 5.00,
-                    'grand_total' => 20.71,
+                    'grand_total' => 16.43,
                 ],
                 [
                     'subtotal' => 5.00,
@@ -494,15 +494,15 @@ class CartFixedTest extends TestCase
                 30,
                 [
                     'subtotal' => 10.00,
-                    'discount_amount' => -4.2900,
+                    'discount_amount' => -8.5700,
                     'shipping_amount' => 5.00,
-                    'grand_total' => 10.7100,
+                    'grand_total' => 6.4300,
                 ],
                 [
                     'subtotal' => 20.00,
-                    'discount_amount' => -8.5700,
+                    'discount_amount' => -17.1400,
                     'shipping_amount' => 5.00,
-                    'grand_total' => 16.4300,
+                    'grand_total' => 7.8600,
                 ],
                 [
                     'subtotal' => 5.00,
@@ -511,20 +511,20 @@ class CartFixedTest extends TestCase
                     'grand_total' => 0.00,
                 ]
             ],
-            'Discount > 1stOrdSubtotal + 2ndOrdSubtotal: 1st order and 2nd order get 100% discount
-             and 3rd order get remaining discount' => [
+            'Discount > 1stOrdSubtotal + 2ndOrdSubtotal: 1st order and 2nd order get 100% discount'
+            . ' and 3rd order get remaining discount' => [
                 31,
                 [
                     'subtotal' => 10.00,
-                    'discount_amount' => -4.4300,
+                    'discount_amount' => -8.8600,
                     'shipping_amount' => 5.00,
-                    'grand_total' => 10.57,
+                    'grand_total' => 6.14,
                 ],
                 [
                     'subtotal' => 20.00,
-                    'discount_amount' => -8.8600,
+                    'discount_amount' => -17.7100,
                     'shipping_amount' => 5.00,
-                    'grand_total' => 16.1400,
+                    'grand_total' => 7.29,
                 ],
                 [
                     'subtotal' => 5.00,
