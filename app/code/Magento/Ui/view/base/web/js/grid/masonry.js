@@ -101,8 +101,8 @@ define([
             this.imageMargin = parseInt(this.imageMargin, 10);
             this.container = $('[data-id="' + this.containerId + '"]')[0];
 
-            this.setEventListener();
             this.setLayoutStyles();
+            this.setEventListener();
 
             return this;
         },
