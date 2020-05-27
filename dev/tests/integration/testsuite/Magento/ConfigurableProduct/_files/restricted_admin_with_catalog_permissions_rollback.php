@@ -5,23 +5,24 @@
  */
 declare(strict_types=1);
 
-use Magento\Authorization\Model\RoleFactory;
 use Magento\Authorization\Model\Role;
+use Magento\Authorization\Model\RoleFactory;
+use Magento\Authorization\Model\Rules;
+use Magento\Authorization\Model\RulesFactory;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\User\Model\User;
-use Magento\Authorization\Model\RulesFactory;
-use Magento\Authorization\Model\Rules;
 
-//Deleting the user and the role.
+// Deleting the user and the role.
 /** @var User $user */
 $user = Bootstrap::getObjectManager()->create(User::class);
-$user->load('admincatalog_user', 'username');
-$user->delete();
+$user->loadByUsername('admincatalog_user')->delete();
 /** @var Role $role */
 $role = Bootstrap::getObjectManager()->get(RoleFactory::class)->create();
 $role->load('role_catalog_permissions', 'role_name');
-/** @var Rules $rules */
-$rules = Bootstrap::getObjectManager()->get(RulesFactory::class)->create();
-$rules->load($role->getId(), 'role_id');
-$rules->delete();
-$role->delete();
+if ($role->getId()) {
+    /** @var Rules $rules */
+    $rules = Bootstrap::getObjectManager()->get(RulesFactory::class)->create();
+    $rules->load($role->getId(), 'role_id');
+    $rules->delete();
+    $role->delete();
+}
