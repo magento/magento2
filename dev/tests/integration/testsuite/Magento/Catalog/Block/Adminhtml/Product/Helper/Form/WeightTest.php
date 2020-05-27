@@ -71,7 +71,7 @@ class WeightTest extends \PHPUnit\Framework\TestCase
         $form = $this->_formFactory->create();
         $form->setDataObject($currentProduct);
         $block->setForm($form);
-        $this->assertNotRegExp(
+        $this->assertDoesNotMatchRegularExpression(
             '/value="0".*checked="checked"/',
             $block->getElementHtml(),
             '"Does this have a weight" is set to "No" for physical products'
