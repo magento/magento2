@@ -16,6 +16,8 @@ use Magento\Framework\Filesystem\Driver\File;
 
 /**
  * This class checks for dependencies between components after an upgrade. It is used in readiness check.
+ *
+ * @deprecated Starting from Magento 2.3.6 Web Setup Wizard is deprecated
  */
 class DependencyReadinessCheck
 {

@@ -5,18 +5,22 @@
  */
 namespace Magento\Catalog\Helper;
 
-class OutputTest extends \PHPUnit\Framework\TestCase
+use Magento\Catalog\Model\Category;
+use Magento\Catalog\Model\Product;
+use Magento\Framework\Phrase;
+use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\TestCase;
+
+class OutputTest extends TestCase
 {
     /**
-     * @var \Magento\Catalog\Helper\Output
+     * @var Output
      */
     protected $_helper;
 
     protected function setUp()
     {
-        $this->_helper = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            \Magento\Catalog\Helper\Output::class
-        );
+        $this->_helper = Bootstrap::getObjectManager()->get(Output::class);
     }
 
     /**
@@ -50,7 +54,7 @@ class OutputTest extends \PHPUnit\Framework\TestCase
     {
         $this->_testAttribute(
             'productAttribute',
-            \Magento\Catalog\Model\Product::ENTITY,
+            Product::ENTITY,
             "&lt;p&gt;line1&lt;/p&gt;<br />\nline2"
         );
     }
@@ -59,33 +63,42 @@ class OutputTest extends \PHPUnit\Framework\TestCase
     {
         $this->_testAttribute(
             'categoryAttribute',
-            \Magento\Catalog\Model\Category::ENTITY,
+            Category::ENTITY,
             "&lt;p&gt;line1&lt;/p&gt;\nline2"
         );
     }
 
     /**
+     * Tests if string has directives.
+     *
      * @dataProvider isDirectiveDataProvider
+     * @param string|Phrase $html
+     * @param bool $expectedResult
      */
-    public function testIsDirective($html, $expectedResult)
+    public function testIsDirectivesExists($html, bool $expectedResult): void
     {
         $this->assertEquals($expectedResult, $this->_helper->isDirectivesExists($html));
     }
 
-    public function isDirectiveDataProvider()
+    /**
+     * Data provider for testIsDirectivesExists()
+     *
+     * @return array
+     */
+    public function isDirectiveDataProvider(): array
     {
         return [
-            ['{{', false],
-            ['Test string', false],
-            ['{store url="customer/account/login"}', false],
-            ['{{store url="customer/account/login"}}', true],
+            'attribute_html_without_directive' => ['Test string', false],
+            'attribute_html_with_incorrect_directive' => ['{store url="customer/account/login"}', false],
+            'attribute_html_with_correct_directive' => ['{{store url="customer/account/login"}}', true],
+            'attribute_html_with_object_type' => [__('{{store url="%1"}}', 'customer/account/login'), true],
         ];
     }
 
     /**
      * Helper method for testProcess()
      *
-     * @param \Magento\Catalog\Helper\Output $helper
+     * @param Output $helper
      * @param string $string
      * @param mixed $params
      * @return string
@@ -93,7 +106,7 @@ class OutputTest extends \PHPUnit\Framework\TestCase
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function sampleProcessor(\Magento\Catalog\Helper\Output $helper, $string, $params)
+    public function sampleProcessor(Output $helper, $string, $params)
     {
         return __CLASS__ . $string;
     }
@@ -109,7 +122,7 @@ class OutputTest extends \PHPUnit\Framework\TestCase
     protected function _testAttribute($method, $entityCode, $expectedResult)
     {
         $attributeName = 'description';
-        $attribute = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+        $attribute = Bootstrap::getObjectManager()->get(
             \Magento\Eav\Model\Config::class
         )->getAttribute(
             $entityCode,

@@ -10,6 +10,8 @@ use Magento\Framework\Filesystem\DriverInterface;
 
 /**
  * Setup specific stream handler
+ *
+ * @deprecated Starting from Magento 2.3.6 Web Setup Wizard is deprecated
  */
 class SetupStreamHandler extends \Magento\Framework\Logger\Handler\Base
 {

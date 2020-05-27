@@ -7,6 +7,8 @@ namespace Magento\Setup\Controller;
 
 /**
  * Sets up session for setup/index.php/session/prolong or redirects to error page
+ *
+ * @deprecated Starting from Magento 2.3.6 Web Setup Wizard is deprecated
  */
 class Session extends \Zend\Mvc\Controller\AbstractActionController
 {

@@ -12,6 +12,9 @@ use Magento\Payment\Gateway\Request\BuilderInterface;
  * Since we can't validate 3Dsecure for sequence multishipping orders based on vault tokens,
  * we skip 3D secure verification for vault transactions.
  * For common vault transaction original 3d secure verification builder is called.
+ *
+ * @deprecated Starting from Magento 2.3.6 Braintree payment method core integration is deprecated
+ * in favor of official payment integration available on the marketplace
  */
 class VaultThreeDSecureDataBuilder implements BuilderInterface
 {

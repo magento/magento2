@@ -10,6 +10,9 @@ use Magento\Braintree\Gateway\Config\PayPal\Config;
 
 /**
  * Resolves locale for PayPal Express.
+ *
+ * @deprecated Starting from Magento 2.3.6 Braintree payment method core integration is deprecated
+ * in favor of official payment integration available on the marketplace
  */
 class LocaleResolver implements ResolverInterface
 {
