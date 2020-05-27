@@ -14,7 +14,7 @@ type Customer {
 }
 
 input CustomerOrdersFilterInput @doc(description: "Identifies which order filter input to search for and return") {
-    number: FilterEqualTypeInput @doc(description: "Filter orders by order number")
+    number: FilterStringTypeInput @doc(description: "Filter orders by order number")
 }
 
 type CustomerOrders @doc(description: "The collection of orders that match the conditions defined in the filter") {

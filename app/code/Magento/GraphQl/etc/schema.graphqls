@@ -79,6 +79,12 @@ input FilterMatchTypeInput @doc(description: "Defines a filter that performs a f
     match: String @doc(description: "One or more words to filter on")
 }
 
+input FilterStringTypeInput @doc(description: "Defines a filter that performs different operations on a string input.") {
+    in: [String] @doc(description: "Defines a filter of an array of value that matches the input exactly on")
+    eq: String @doc(description: "Defines a filter of a string of value that matches the input exactly on")
+    match: String @doc(description: "Defines a string filter that performs a fuzzy search.")
+}
+
 type SearchResultPageInfo @doc(description: "SearchResultPageInfo provides navigation for the query response") {
     page_size: Int @doc(description: "Specifies the maximum number of items to return")
     current_page: Int @doc(description: "Specifies which page of results to return")
