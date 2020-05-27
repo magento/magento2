@@ -15,79 +15,99 @@ use Magento\Customer\Api\Data\CustomerSearchResultsInterfaceFactory;
 use Magento\Customer\Model\Customer\NotificationStorage;
 use Magento\Customer\Model\CustomerFactory;
 use Magento\Customer\Model\CustomerRegistry;
-use Magento\Customer\Model\Customer as CustomerModel;
 use Magento\Customer\Model\Data\CustomerSecure;
+use Magento\Customer\Model\Data\CustomerSecureFactory;
+use Magento\Customer\Model\ResourceModel\AddressRepository;
+use Magento\Customer\Model\ResourceModel\Customer;
 use Magento\Customer\Model\ResourceModel\Customer\Collection;
 use Magento\Customer\Model\ResourceModel\CustomerRepository;
 use Magento\Framework\Api\CustomAttributesDataInterface;
+use Magento\Framework\Api\DataObjectHelper;
 use Magento\Framework\Api\ExtensibleDataObjectConverter;
 use Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface;
 use Magento\Framework\Api\ImageProcessorInterface;
 use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;
-use Magento\Framework\EntityManager\HydratorInterface;
 use Magento\Framework\Event\ManagerInterface;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Store\Model\StoreManagerInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Test for \Magento\Customer\Model\ResourceModel\CustomerRepository.
- *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.TooManyFields)
  */
 class CustomerRepositoryTest extends TestCase
 {
     /**
-     * @var CustomerRepository
-     */
-    private $model;
-
-    /**
      * @var CustomerFactory|MockObject
      */
-    private $customerFactoryMock;
+    private $customerFactory;
+
+    /**
+     * @var CustomerSecureFactory|MockObject
+     */
+    private $customerSecureFactory;
 
     /**
      * @var CustomerRegistry|MockObject
      */
-    private $customerRegistryMock;
+    private $customerRegistry;
+
+    /**
+     * @var AddressRepository|MockObject
+     */
+    private $addressRepository;
+
+    /**
+     * @var Customer|MockObject
+     */
+    private $customerResourceModel;
 
     /**
      * @var CustomerMetadataInterface|MockObject
      */
-    private $customerMetadataMock;
+    private $customerMetadata;
 
     /**
      * @var CustomerSearchResultsInterfaceFactory|MockObject
      */
-    private $searchResultsFactoryMock;
+    private $searchResultsFactory;
 
     /**
      * @var ManagerInterface|MockObject
      */
-    private $eventManagerMock;
+    private $eventManager;
+
+    /**
+     * @var StoreManagerInterface|MockObject
+     */
+    private $storeManager;
 
     /**
      * @var ExtensibleDataObjectConverter|MockObject
      */
-    private $extensibleDataObjectConverterMock;
+    private $extensibleDataObjectConverter;
+
+    /**
+     * @var DataObjectHelper|MockObject
+     */
+    private $dataObjectHelper;
 
     /**
      * @var ImageProcessorInterface|MockObject
      */
-    private $imageProcessorMock;
+    private $imageProcessor;
 
     /**
      * @var JoinProcessorInterface|MockObject
      */
-    private $extensionAttributesJoinProcessorMock;
+    private $extensionAttributesJoinProcessor;
 
     /**
      * @var CustomerInterface|MockObject
      */
-    private $customerMock;
+    private $customer;
 
     /**
      * @var CollectionProcessorInterface|MockObject
@@ -97,53 +117,64 @@ class CustomerRepositoryTest extends TestCase
     /**
      * @var NotificationStorage|MockObject
      */
-    private $notificationStorageMock;
+    private $notificationStorage;
 
     /**
-     * @var HydratorInterface|MockObject
+     * @var CustomerRepository
      */
-    private $hydratorMock;
+    private $model;
 
-    /**
-     * @inheritdoc
-     */
     protected function setUp(): void
     {
-        $objectManager = new ObjectManager($this);
-
-        $this->customerRegistryMock = $this->createMock(CustomerRegistry::class);
-        $this->customerFactoryMock = $this->createPartialMock(CustomerFactory::class, ['create']);
-        $this->customerMetadataMock = $this->getMockForAbstractClass(
+        $this->customerResourceModel =
+            $this->createMock(Customer::class);
+        $this->customerRegistry = $this->createMock(CustomerRegistry::class);
+        $this->dataObjectHelper = $this->createMock(DataObjectHelper::class);
+        $this->customerFactory =
+            $this->createPartialMock(CustomerFactory::class, ['create']);
+        $this->customerSecureFactory = $this->createPartialMock(
+            CustomerSecureFactory::class,
+            ['create']
+        );
+        $this->addressRepository = $this->createMock(AddressRepository::class);
+        $this->customerMetadata = $this->getMockForAbstractClass(
             CustomerMetadataInterface::class,
             [],
             '',
             false
         );
-        $this->searchResultsFactoryMock = $this->createPartialMock(
+        $this->searchResultsFactory = $this->createPartialMock(
             CustomerSearchResultsInterfaceFactory::class,
             ['create']
         );
-        $this->eventManagerMock = $this->getMockForAbstractClass(
+        $this->eventManager = $this->getMockForAbstractClass(
             ManagerInterface::class,
             [],
             '',
             false
         );
-        $this->extensibleDataObjectConverterMock =
-            $this->createMock(ExtensibleDataObjectConverter::class);
-        $this->imageProcessorMock = $this->getMockForAbstractClass(
+        $this->storeManager = $this->getMockForAbstractClass(
+            StoreManagerInterface::class,
+            [],
+            '',
+            false
+        );
+        $this->extensibleDataObjectConverter = $this->createMock(
+            ExtensibleDataObjectConverter::class
+        );
+        $this->imageProcessor = $this->getMockForAbstractClass(
             ImageProcessorInterface::class,
             [],
             '',
             false
         );
-        $this->extensionAttributesJoinProcessorMock = $this->getMockForAbstractClass(
+        $this->extensionAttributesJoinProcessor = $this->getMockForAbstractClass(
             JoinProcessorInterface::class,
             [],
             '',
             false
         );
-        $this->customerMock = $this->getMockForAbstractClass(
+        $this->customer = $this->getMockForAbstractClass(
             CustomerInterface::class,
             [],
             '',
@@ -154,41 +185,39 @@ class CustomerRepositoryTest extends TestCase
                 '__toArray'
             ]
         );
-        $this->collectionProcessorMock = $this->getMockBuilder(CollectionProcessorInterface::class)->getMock();
-        $this->notificationStorageMock = $this->getMockBuilder(NotificationStorage::class)
+        $this->collectionProcessorMock = $this->getMockBuilder(CollectionProcessorInterface::class)
+            ->getMock();
+        $this->notificationStorage = $this->getMockBuilder(NotificationStorage::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->hydratorMock = $this->createMock(HydratorInterface::class);
 
-        $this->model = $objectManager->getObject(
-            CustomerRepository::class,
-            [
-                'customerFactory' => $this->customerFactoryMock,
-                'customerRegistry' => $this->customerRegistryMock,
-                'customerMetadata' => $this->customerMetadataMock,
-                'searchResultsFactory' => $this->searchResultsFactoryMock,
-                'eventManager' => $this->eventManagerMock,
-                'extensibleDataObjectConverter' => $this->extensibleDataObjectConverterMock,
-                'imageProcessor' => $this->imageProcessorMock,
-                'extensionAttributesJoinProcessor' => $this->extensionAttributesJoinProcessorMock,
-                'collectionProcessor' => $this->collectionProcessorMock,
-                'notificationStorage' => $this->notificationStorageMock,
-                'hydrator' => $this->hydratorMock
-            ]
+        $this->model = new CustomerRepository(
+            $this->customerFactory,
+            $this->customerSecureFactory,
+            $this->customerRegistry,
+            $this->addressRepository,
+            $this->customerResourceModel,
+            $this->customerMetadata,
+            $this->searchResultsFactory,
+            $this->eventManager,
+            $this->storeManager,
+            $this->extensibleDataObjectConverter,
+            $this->dataObjectHelper,
+            $this->imageProcessor,
+            $this->extensionAttributesJoinProcessor,
+            $this->collectionProcessorMock,
+            $this->notificationStorage
         );
     }
 
     /**
-     * Test save customer
-     *
-     * @return void
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function testSave(): void
+    public function testSave()
     {
         $customerId = 1;
 
-        $customerModel = $this->getMockBuilder(CustomerModel::class)->addMethods(
+        $customerModel = $this->getMockBuilder(\Magento\Customer\Model\Customer::class)->addMethods(
             [
                 'setStoreId',
                 'getStoreId',
@@ -206,7 +235,7 @@ class CustomerRepositoryTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $origCustomer = $this->customerMock;
+        $origCustomer = $this->customer;
 
         $customerAttributesMetaData = $this->getMockForAbstractClass(
             CustomAttributesDataInterface::class,
@@ -236,43 +265,37 @@ class CustomerRepositoryTest extends TestCase
             )
             ->disableOriginalConstructor()
             ->getMock();
-        $this->customerMock->expects($this->atLeastOnce())
+        $this->customer->expects($this->atLeastOnce())
             ->method('getId')
             ->willReturn($customerId);
-        $this->customerMock->expects($this->once())
+        $this->customer->expects($this->at(4))
             ->method('__toArray')
             ->willReturn([]);
-        $this->hydratorMock->expects($this->at(0))
-            ->method('extract')
+        $this->customer->expects($this->at(3))
+            ->method('__toArray')
             ->willReturn(['group_id' => 1]);
-        $this->hydratorMock->expects($this->exactly(2))
-            ->method('extract')
-            ->willReturn([]);
-        $this->hydratorMock->expects($this->once())
-            ->method('hydrate')
-            ->willReturn($this->customerMock);
         $customerModel->expects($this->once())
             ->method('setGroupId')
             ->with(1);
-        $this->customerRegistryMock->expects($this->atLeastOnce())
+        $this->customerRegistry->expects($this->atLeastOnce())
             ->method('retrieve')
             ->with($customerId)
             ->willReturn($customerModel);
         $customerModel->expects($this->atLeastOnce())
             ->method('getDataModel')
-            ->willReturn($this->customerMock);
-        $this->imageProcessorMock->expects($this->once())
+            ->willReturn($this->customer);
+        $this->imageProcessor->expects($this->once())
             ->method('save')
-            ->with($this->customerMock, CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER, $this->customerMock)
+            ->with($this->customer, CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER, $this->customer)
             ->willReturn($customerAttributesMetaData);
-        $this->customerRegistryMock->expects($this->atLeastOnce())
+        $this->customerRegistry->expects($this->atLeastOnce())
             ->method("remove")
             ->with($customerId);
-        $this->extensibleDataObjectConverterMock->expects($this->once())
+        $this->extensibleDataObjectConverter->expects($this->once())
             ->method('toNestedArray')
             ->with($customerAttributesMetaData, [], CustomerInterface::class)
             ->willReturn(['customerData']);
-        $this->customerFactoryMock->expects($this->once())
+        $this->customerFactory->expects($this->once())
             ->method('create')
             ->with(['data' => ['customerData']])
             ->willReturn($customerModel);
@@ -285,7 +308,7 @@ class CustomerRepositoryTest extends TestCase
         $customerAttributesMetaData->expects($this->atLeastOnce())
             ->method('getId')
             ->willReturn($customerId);
-        $this->customerRegistryMock->expects($this->once())
+        $this->customerRegistry->expects($this->once())
             ->method('retrieveSecureData')
             ->with($customerId)
             ->willReturn($customerSecureData);
@@ -342,7 +365,7 @@ class CustomerRepositoryTest extends TestCase
             ->willReturn($customerId);
         $customerModel->expects($this->once())
             ->method('save');
-        $this->customerRegistryMock->expects($this->once())
+        $this->customerRegistry->expects($this->once())
             ->method('push')
             ->with($customerModel);
         $customerAttributesMetaData->expects($this->once())
@@ -351,30 +374,28 @@ class CustomerRepositoryTest extends TestCase
         $customerAttributesMetaData->expects($this->once())
             ->method('getWebsiteId')
             ->willReturn(2);
-        $this->customerRegistryMock->expects($this->once())
+        $this->customerRegistry->expects($this->once())
             ->method('retrieveByEmail')
             ->with('example@example.com', 2)
             ->willReturn($customerModel);
-        $this->eventManagerMock->expects($this->once())
+        $this->eventManager->expects($this->once())
             ->method('dispatch')
             ->with(
                 'customer_save_after_data_object',
                 [
-                    'customer_data_object' => $this->customerMock,
+                    'customer_data_object' => $this->customer,
                     'orig_customer_data_object' => $origCustomer,
                     'delegate_data' => [],
                 ]
             );
 
-        $this->model->save($this->customerMock);
+        $this->model->save($this->customer);
     }
 
     /**
-     * Test save customer with password hash
-     *
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function testSaveWithPasswordHash(): void
+    public function testSaveWithPasswordHash()
     {
         $customerId = 1;
         $passwordHash = 'ukfa4sdfa56s5df02asdf4rt';
@@ -392,9 +413,9 @@ class CustomerRepositoryTest extends TestCase
             )
             ->disableOriginalConstructor()
             ->getMock();
-        $origCustomer = $this->customerMock;
+        $origCustomer = $this->customer;
 
-        $customerModel = $this->getMockBuilder(CustomerModel::class)->addMethods(
+        $customerModel = $this->getMockBuilder(\Magento\Customer\Model\Customer::class)->addMethods(
             ['setStoreId', 'getStoreId', 'setAttributeSetId', 'setRpToken', 'setRpTokenCreatedAt', 'setPasswordHash']
         )
             ->onlyMethods(['getId', 'setId', 'getAttributeSetId', 'getDataModel', 'save'])
@@ -424,11 +445,11 @@ class CustomerRepositoryTest extends TestCase
         $customerModel->expects($this->atLeastOnce())
             ->method('setPasswordHash')
             ->with($passwordHash);
-        $this->customerRegistryMock->expects($this->atLeastOnce())
+        $this->customerRegistry->expects($this->atLeastOnce())
             ->method('remove')
             ->with($customerId);
 
-        $this->customerRegistryMock->expects($this->once())
+        $this->customerRegistry->expects($this->once())
             ->method('retrieveSecureData')
             ->with($customerId)
             ->willReturn($customerSecureData);
@@ -450,38 +471,32 @@ class CustomerRepositoryTest extends TestCase
         $customerSecureData->expects($this->once())
             ->method('getLockExpires')
             ->willReturn('lockExpires');
-        $this->customerMock->expects($this->atLeastOnce())
+        $this->customer->expects($this->atLeastOnce())
             ->method('getId')
             ->willReturn($customerId);
-        $this->customerMock->expects($this->once())
+        $this->customer->expects($this->atLeastOnce())
             ->method('__toArray')
             ->willReturn([]);
-        $this->hydratorMock->expects($this->atLeastOnce())
-            ->method('extract')
-            ->willReturn([]);
-        $this->hydratorMock->expects($this->atLeastOnce())
-            ->method('hydrate')
-            ->willReturn($this->customerMock);
-        $this->customerRegistryMock->expects($this->atLeastOnce())
+        $this->customerRegistry->expects($this->atLeastOnce())
             ->method('retrieve')
             ->with($customerId)
             ->willReturn($customerModel);
         $customerModel->expects($this->atLeastOnce())
             ->method('getDataModel')
-            ->willReturn($this->customerMock);
-        $this->imageProcessorMock->expects($this->once())
+            ->willReturn($this->customer);
+        $this->imageProcessor->expects($this->once())
             ->method('save')
-            ->with($this->customerMock, CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER, $this->customerMock)
+            ->with($this->customer, CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER, $this->customer)
             ->willReturn($customerAttributesMetaData);
         $customerAttributesMetaData
             ->expects($this->atLeastOnce())
             ->method('getId')
             ->willReturn($customerId);
-        $this->extensibleDataObjectConverterMock->expects($this->once())
+        $this->extensibleDataObjectConverter->expects($this->once())
             ->method('toNestedArray')
             ->with($customerAttributesMetaData, [], CustomerInterface::class)
             ->willReturn(['customerData']);
-        $this->customerFactoryMock->expects($this->once())
+        $this->customerFactory->expects($this->once())
             ->method('create')
             ->with(['data' => ['customerData']])
             ->willReturn($customerModel);
@@ -493,7 +508,7 @@ class CustomerRepositoryTest extends TestCase
             ->willReturn($customerId);
         $customerModel->expects($this->once())
             ->method('save');
-        $this->customerRegistryMock->expects($this->once())
+        $this->customerRegistry->expects($this->once())
             ->method('push')
             ->with($customerModel);
         $customerAttributesMetaData->expects($this->once())
@@ -502,22 +517,22 @@ class CustomerRepositoryTest extends TestCase
         $customerAttributesMetaData->expects($this->once())
             ->method('getWebsiteId')
             ->willReturn(2);
-        $this->customerRegistryMock->expects($this->once())
+        $this->customerRegistry->expects($this->once())
             ->method('retrieveByEmail')
             ->with('example@example.com', 2)
             ->willReturn($customerModel);
-        $this->eventManagerMock->expects($this->once())
+        $this->eventManager->expects($this->once())
             ->method('dispatch')
             ->with(
                 'customer_save_after_data_object',
                 [
-                    'customer_data_object' => $this->customerMock,
+                    'customer_data_object' => $this->customer,
                     'orig_customer_data_object' => $origCustomer,
                     'delegate_data' => [],
                 ]
             );
 
-        $this->model->save($this->customerMock, $passwordHash);
+        $this->model->save($this->customer, $passwordHash);
     }
 
     /**
@@ -538,7 +553,7 @@ class CustomerRepositoryTest extends TestCase
             '',
             false
         );
-        $customerModel = $this->getMockBuilder(CustomerModel::class)
+        $customerModel = $this->getMockBuilder(\Magento\Customer\Model\Customer::class)
             ->setMethods(
                 [
                     'getId',
@@ -564,22 +579,22 @@ class CustomerRepositoryTest extends TestCase
             false
         );
 
-        $this->searchResultsFactoryMock->expects($this->once())
+        $this->searchResultsFactory->expects($this->once())
             ->method('create')
             ->willReturn($searchResults);
         $searchResults->expects($this->once())
             ->method('setSearchCriteria')
             ->with($searchCriteria);
-        $this->customerFactoryMock->expects($this->once())
+        $this->customerFactory->expects($this->once())
             ->method('create')
             ->willReturn($customerModel);
         $customerModel->expects($this->once())
             ->method('getCollection')
             ->willReturn($collection);
-        $this->extensionAttributesJoinProcessorMock->expects($this->once())
+        $this->extensionAttributesJoinProcessor->expects($this->once())
             ->method('process')
             ->with($collection, CustomerInterface::class);
-        $this->customerMetadataMock->expects($this->once())
+        $this->customerMetadata->expects($this->once())
             ->method('getAllAttributesMetadata')
             ->willReturn([$metadata]);
         $metadata->expects($this->once())
@@ -628,64 +643,54 @@ class CustomerRepositoryTest extends TestCase
             ->willReturn(new \ArrayIterator([$customerModel]));
         $customerModel->expects($this->atLeastOnce())
             ->method('getDataModel')
-            ->willReturn($this->customerMock);
+            ->willReturn($this->customer);
         $searchResults->expects($this->once())
             ->method('setItems')
-            ->with([$this->customerMock]);
+            ->with([$this->customer]);
 
         $this->assertSame($searchResults, $this->model->getList($searchCriteria));
     }
 
-    /**
-     * Test delete customer by id
-     *
-     * @return void
-     */
-    public function testDeleteById(): void
+    public function testDeleteById()
     {
         $customerId = 14;
-        $customerModel = $this->createPartialMock(CustomerModel::class, ['delete']);
-        $this->customerRegistryMock
+        $customerModel = $this->createPartialMock(\Magento\Customer\Model\Customer::class, ['delete']);
+        $this->customerRegistry
             ->expects($this->once())
             ->method('retrieve')
             ->with($customerId)
             ->willReturn($customerModel);
         $customerModel->expects($this->once())
             ->method('delete');
-        $this->customerRegistryMock->expects($this->atLeastOnce())
+        $this->customerRegistry->expects($this->atLeastOnce())
             ->method('remove')
             ->with($customerId);
 
         $this->assertTrue($this->model->deleteById($customerId));
     }
 
-    /**
-     * Test delete customer
-     *
-     * @return void
-     */
-    public function testDelete(): void
+    public function testDelete()
     {
         $customerId = 14;
-        $customerModel = $this->createPartialMock(CustomerModel::class, ['delete']);
+        $customerModel = $this->createPartialMock(\Magento\Customer\Model\Customer::class, ['delete']);
 
-        $this->customerMock->expects($this->once())
+        $this->customer->expects($this->once())
             ->method('getId')
             ->willReturn($customerId);
-        $this->customerRegistryMock
+        $this->customerRegistry
             ->expects($this->once())
             ->method('retrieve')
             ->with($customerId)
             ->willReturn($customerModel);
         $customerModel->expects($this->once())
             ->method('delete');
-        $this->customerRegistryMock->expects($this->atLeastOnce())
+        $this->customerRegistry->expects($this->atLeastOnce())
             ->method('remove')
             ->with($customerId);
-        $this->notificationStorageMock->expects($this->atLeastOnce())
+        $this->notificationStorage->expects($this->atLeastOnce())
             ->method('remove')
             ->with(NotificationStorage::UPDATE_CUSTOMER_SESSION, $customerId);
 
-        $this->assertTrue($this->model->delete($this->customerMock));
+        $this->assertTrue($this->model->delete($this->customer));
     }
 }
