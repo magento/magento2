@@ -98,17 +98,10 @@ define([
             if (!rows.length) {
                 return;
             }
-
-            //initialize row observables
-            this.rows().forEach(function (image) {
-                image.styles = ko.observable({});
-                image.css = ko.observable({});
-            });
-
             this.imageMargin = parseInt(this.imageMargin, 10);
             this.container = $('[data-id="' + this.containerId + '"]')[0];
 
-            this.setLayoutStylesWhenLoaded();
+            this.setLayoutStyles();
             this.setEventListener();
 
             return this;
@@ -130,7 +123,7 @@ define([
          * Set layout styles inside the container
          */
         setLayoutStyles: function () {
-            var containerWidth = parseInt(this.container.clientWidth, 10),
+            var containerWidth = parseInt(this.container.clientWidth, 10) - 15,
                 rowImages = [],
                 ratio = 0,
                 rowHeight = 0,
@@ -188,37 +181,25 @@ define([
         },
 
         /**
-         * Call method when condition is true
+         * Wait for container to initialize
          */
-        conditionCallback: function (condition, callback) {
-            if (condition()) {
+        waitForContainer: function (callback) {
+            if (typeof this.container === 'undefined') {
                 setTimeout(function () {
-                    this.conditionCallback(condition, callback);
-                }.bind(this), 100);
+                    this.waitForContainer(callback);
+                }.bind(this), 500);
             } else {
-                callback();
+                setTimeout(callback, 0);
             }
         },
 
         /**
-         * Set layout styles when last image in grid is loaded.
+         * Set layout styles when container element is loaded.
          */
         setLayoutStylesWhenLoaded: function () {
-            var images = '[data-id="' + this.containerId + '"] img';
-
-            this.conditionCallback(
-                function () {
-                    return $(images).length === 0;
-                },
-                function () {
-                    $(images).last().load(function () {
-                        this.setLayoutStyles();
-                    }.bind(this)).each(function () {
-                        if (this.complete) {
-                            $(this).load();
-                        }
-                    });
-                }.bind(this));
+            this.waitForContainer(function () {
+                this.setLayoutStyles();
+            }.bind(this));
         },
 
         /**
@@ -229,6 +210,9 @@ define([
          * @param {Number} height
          */
         setImageStyles: function (img, width, height) {
+            if (!img.styles) {
+                img.styles = ko.observable();
+            }
             img.styles({
                 width: parseInt(width, 10) + 'px',
                 height: parseInt(height, 10) + 'px'
@@ -242,6 +226,9 @@ define([
          * @param {Object} classes
          */
         setImageClass: function (image, classes) {
+            if (!image.css) {
+                image.css = ko.observable(classes);
+            }
             image.css(classes);
         },
 
