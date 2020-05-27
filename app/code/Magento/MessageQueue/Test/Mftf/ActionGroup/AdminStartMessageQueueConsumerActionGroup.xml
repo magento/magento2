@@ -16,7 +16,7 @@
             <argument name="consumer" defaultValue="AdminExportMessageConsumerData"/>
         </arguments>
 
-        <magentoCLI command="queue:consumers:start {{consumer.consumer_name}} --max-messages={{consumer.message_limit}} --single-thread" stepKey="startMessageQueue"/>
+        <magentoCLI command="queue:consumers:start {{consumer.consumer_name}} --max-messages={{consumer.message_limit}}" stepKey="startMessageQueue"/>
         <wait time="30" stepKey="waitForQueueStarting"/>
         <reloadPage stepKey="refreshPage"/>
         <waitForPageLoad stepKey="waitForPageLoaded"/>
