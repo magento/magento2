@@ -142,9 +142,7 @@ class ViewTest extends TestCase
             View::class,
             ['updateBackButtonUrl']
         );
-        $this->resultRedirectFactoryMock = $this->getMockBuilder(
-            RedirectFactory::class
-        )
+        $this->resultRedirectFactoryMock = $this->getMockBuilder(RedirectFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
