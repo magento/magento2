@@ -213,8 +213,6 @@ class ExpressTest extends TestCase
             ['paypal_express', 'order', 50, false],
             ['paypal_express', 'capture', 0, false],
             ['paypal_express', 'order', 0, true],
-            ['braintree', 'authorize', 10, false],
-            ['braintree', 'authorize', 0, false],
         ];
     }
 }
