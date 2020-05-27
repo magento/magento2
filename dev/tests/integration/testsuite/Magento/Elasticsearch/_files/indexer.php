@@ -16,7 +16,7 @@ use Magento\Store\Model\StoreManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
 
-Resolver::getInstance()->requireDataFixture('/../../Catalog/_files/product_boolean_attribute.php');
+Resolver::getInstance()->requireDataFixture('Magento/Catalog/_files/product_boolean_attribute.php');
 
 /** @var $objectManager \Magento\Framework\ObjectManagerInterface */
 $objectManager = Bootstrap::getObjectManager();
