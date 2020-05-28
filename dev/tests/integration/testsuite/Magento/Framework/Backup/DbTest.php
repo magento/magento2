@@ -57,18 +57,10 @@ class DbTest extends \Magento\TestFramework\Indexer\TestCase
         $tableName = Bootstrap::getObjectManager()->get(Setup::class)
             ->getTable('test_table_with_custom_trigger');
         $this->assertMatchesRegularExpression(
-            '/CREATE  TRIGGER test_custom_trigger AFTER INSERT ON '. $tableName . ' FOR EACH ROW/',
+            '/CREATE  TRIGGER `?test_custom_trigger`? AFTER INSERT ON `?'. $tableName . '`? FOR EACH ROW/',
             $content
         );
         //Clean up.
         $write->delete('/backups/' . $time . '_db_testbackup.sql');
-    }
-
-    /**
-     * teardown
-     */
-    protected function tearDown(): void
-    {
-        parent::tearDown();
     }
 }
