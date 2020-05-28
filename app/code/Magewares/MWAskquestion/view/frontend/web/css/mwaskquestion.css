@@ -1,0 +1,18 @@
+.still_have_a_question{
+	float: left;
+    width: 95%;
+    padding: 19px 30px;
+    background: #edeff2;
+    color: #9da0a9;
+    font-weight: 600;
+    border-radius: 4px;
+    margin-bottom: 2%;
+}
+.ask-button {
+    color: #ff4800;
+    font-weight: 700;
+}
+.querybutton{
+	background: #297aa3;
+    color: #FFFFFF;
+}

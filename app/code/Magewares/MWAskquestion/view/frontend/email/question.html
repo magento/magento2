@@ -1,0 +1,45 @@
+<!--@subject Email Subject @-->
+<!--@vars
+{"store url=\"\"":"Store Url",
+"skin url=\"images/logo_email.gif\" _area='frontend'":"Email Logo Image"}
+@-->
+<!--@styles
+body,td { color:#2f2f2f; font:11px/1.35em Verdana, Arial, Helvetica, sans-serif; }
+@-->
+{{template config_path="design/email/header_template"}}
+        <table cellspacing="0" cellpadding="0" border="0" width="100%">
+            <tr>
+                <td align="center" valign="top" style="padding:20px 0 20px 0">
+                    <table bgcolor="#FFFFFF" cellspacing="0" cellpadding="10" border="0" width="650" style="border:1px solid #E0E0E0;">
+                        <tr>
+                            <td valign="top">
+                                <h1 style="font-size:22px;font-weight:normal;line-height:22px;margin:0 0 11px 0;">Hello {{var contactName}},</h1>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <table cellspacing="0" cellpadding="0" border="0" width="650">
+                                    <tbody>
+                                        <tr>
+                                            <td colspan="2" valign="top" style="font-size:12px;padding:7px 9px 9px 9px;border:1px solid #EAEAEA;">
+                                                My Question is: {{var question}}
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td bgcolor="#EAEAEA" align="center" style="background:#EAEAEA;text-align:center;">
+                                <center>
+                                    <p style="font-size:12px;margin:0;">
+                                        <strong>{{trans "Thank you"}}</strong>
+                                    </p>
+                                </center>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </table>
+{{template config_path="design/email/footer_template"}}
