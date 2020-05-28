@@ -7,8 +7,8 @@ namespace Magento\Catalog\Model\CustomOptions;
 
 use Magento\Framework\DataObject;
 use Magento\Quote\Api\Data\CartItemInterface;
-use Magento\Quote\Model\Quote\Item\CartItemProcessorInterface;
 use Magento\Quote\Api\Data\ProductOptionExtensionFactory;
+use Magento\Quote\Model\Quote\Item\CartItemProcessorInterface;
 use Magento\Quote\Model\Quote\ProductOptionFactory;
 
 class CustomOptionProcessor implements CartItemProcessorInterface
@@ -190,6 +190,8 @@ class CustomOptionProcessor implements CartItemProcessorInterface
     }
 
     /**
+     * Returns url builder
+     *
      * @return \Magento\Catalog\Model\Product\Option\UrlBuilder
      *
      * @deprecated 101.0.0
