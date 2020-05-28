@@ -99,6 +99,8 @@
 
         <!-- Start message queue for export consumer -->
         <actionGroup ref="AdminStartMessageQueueConsumerActionGroup" stepKey="startMessageQueue"/>
+        <reloadPage stepKey="refreshPage"/>
+        <waitForPageLoad stepKey="waitForPageLoaded"/>
 
         <grabTextFrom selector="{{AdminExportAttributeSection.exportFileNameByPosition('0')}}" stepKey="grabNameFile"/>
 
