@@ -64,7 +64,7 @@ class CustomerOrders implements ResolverInterface
         try {
             $searchResultDto = $this->searchQuery->getResult($args, $userId, $store);
         } catch (InputException $e) {
-            new GraphQlInputException(__($e->getMessage()));
+            throw new GraphQlInputException(__($e->getMessage()));
         }
 
         $orders = [];
