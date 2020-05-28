@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Version\Test\Unit\Controller\Index;
 
+use Magento\Framework\App\Action\Context;
 use Magento\Framework\App\ProductMetadataInterface;
 use Magento\Framework\Controller\Result\Raw;
 use Magento\Framework\Controller\Result\RawFactory;
@@ -28,11 +29,16 @@ class IndexTest extends TestCase
     /** @var MockObject|Raw */
     private $rawResponseMock;
 
+    /** @var MockObject|Context */
+    private $contextMock;
+
     /**
      * Prepare test preconditions
      */
     protected function setUp(): void
     {
+        $this->contextMock = $this->createMock(Context::class);
+
         $this->productMetadataMock = $this->getMockBuilder(ProductMetadataInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['getName', 'getEdition', 'getVersion'])
@@ -42,7 +48,11 @@ class IndexTest extends TestCase
         $this->rawResponseMock = $this->createPartialMock(Raw::class, ['setContents']);
         $this->rawResponseFactoryMock->method('create')->willReturn($this->rawResponseMock);
 
-        $this->versionController = new VersionIndex($this->rawResponseFactoryMock, $this->productMetadataMock);
+        $this->versionController = new VersionIndex(
+            $this->contextMock,
+            $this->rawResponseFactoryMock,
+            $this->productMetadataMock
+        );
     }
 
     /**
