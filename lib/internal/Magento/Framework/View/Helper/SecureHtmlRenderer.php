@@ -103,8 +103,10 @@ class SecureHtmlRenderer
         if (!$eventName || !$attributeJavascript || !$elementSelector || mb_strpos($eventName, 'on') !== 0) {
             throw new \InvalidArgumentException('Invalid JS event handler data provided');
         }
-        $listenerFunction = 'eventListener' .$this->random->getRandomString(32);
-        $elementName = 'listenedElement' .$this->random->getRandomString(32);
+
+        $random = $this->random->getRandomString(32);
+        $listenerFunction = 'eventListener' .$random;
+        $elementName = 'listenedElement' .$random;
         $script = <<<script
             function {$listenerFunction} () {
                 {$attributeJavascript};
