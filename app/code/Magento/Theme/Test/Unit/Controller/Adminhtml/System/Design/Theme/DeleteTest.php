@@ -141,7 +141,7 @@ class DeleteTest extends \PHPUnit\Framework\TestCase
             ->method('isVirtual')
             ->willReturn(true);
         $this->messageManager->expects($this->once())
-            ->method('addSuccess')
+            ->method('addSuccessMessage')
             ->willReturnSelf();
         $this->resultFactory->expects($this->once())
             ->method('create')

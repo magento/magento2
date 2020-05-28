@@ -575,7 +575,7 @@ class AfterAddressSaveObserverTest extends \PHPUnit\Framework\TestCase
 
         if ($resultValidMessage) {
             $this->messageManager->expects($this->once())
-                ->method('addSuccess')
+                ->method('addSuccessMessage')
                 ->with($resultValidMessage)
                 ->willReturnSelf();
         }

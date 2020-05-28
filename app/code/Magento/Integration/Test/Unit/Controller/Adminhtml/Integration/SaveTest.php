@@ -34,7 +34,7 @@ class SaveTest extends \Magento\Integration\Test\Unit\Controller\Adminhtml\Integ
             ->will($this->returnValue($intData));
         // verify success message
         $this->_messageManager->expects($this->once())
-            ->method('addSuccess')
+            ->method('addSuccessMessage')
             ->with(__('The integration \'%1\' has been saved.', $intData[Info::DATA_NAME]));
 
         $this->_escaper->expects($this->once())
@@ -123,7 +123,7 @@ class SaveTest extends \Magento\Integration\Test\Unit\Controller\Adminhtml\Integ
         $this->_messageManager->expects(
             $this->once()
         )->method(
-            'addSuccess'
+            'addSuccessMessage'
         )->with(
             __('The integration \'%1\' has been saved.', $integration->getName())
         );

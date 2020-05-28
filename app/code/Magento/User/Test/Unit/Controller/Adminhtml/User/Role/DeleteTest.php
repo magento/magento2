@@ -202,7 +202,7 @@ class DeleteTest extends \PHPUnit\Framework\TestCase
         $this->roleModelMock->expects($this->once())->method('delete')->willReturnSelf();
 
         $this->messageManagerMock->expects($this->once())
-            ->method('addSuccess')
+            ->method('addSuccessMessage')
             ->with(__('You deleted the role.'))
             ->willReturnSelf();
 
