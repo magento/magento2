@@ -21,6 +21,7 @@ use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
 Resolver::getInstance()->requireDataFixture(
     'Magento/ConfigurableProduct/_files/configurable_attribute_different_labels_per_stores.php'
 );
+Resolver::getInstance()->requireDataFixture('Magento/Store/_files/second_website_with_two_stores.php');
 
 $objectManager = Bootstrap::getObjectManager();
 /** @var ProductAttributeRepositoryInterface $productAttributeRepository */
@@ -30,6 +31,8 @@ $options = $attribute->getOptions();
 /** @var WebsiteRepositoryInterface $websiteRepository */
 $websiteRepository = $objectManager->get(WebsiteRepositoryInterface::class);
 $baseWebsite = $websiteRepository->get('base');
+$secondWebsite = $websiteRepository->get('test');
+
 /** @var ProductRepositoryInterface $productRepository */
 $productRepository = $objectManager->get(ProductRepositoryInterface::class);
 $productRepository->cleanCache();
@@ -44,7 +47,7 @@ foreach ($options as $option) {
     $product = $productFactory->create();
     $product->setTypeId(ProductType::TYPE_SIMPLE)
         ->setAttributeSetId($product->getDefaultAttributeSetId())
-        ->setWebsiteIds([$baseWebsite->getId()])
+        ->setWebsiteIds([$baseWebsite->getId(), $secondWebsite->getId()])
         ->setName('Configurable Option ' . $option->getLabel())
         ->setSku(strtolower(str_replace(' ', '_', 'simple ' . $option->getLabel())))
         ->setPrice(150)
