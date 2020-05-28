@@ -57,7 +57,7 @@
         </actionGroup>
 
         <!-- 3. Assert the Redirect works and Product is present on StoreFront-->
-        <actionGroup ref="AssertStorefrontProductRedirectWithoutSkuValidationActionGroup" stepKey="verifyProductInStoreFrontPage">
+        <actionGroup ref="AssertStorefrontProductRedirectActionGroup" stepKey="verifyProductInStoreFrontPage">
             <argument name="productName" value="$$createSimpleProduct.name$$"/>
             <argument name="productSku" value="$$createSimpleProduct.sku$$"/>
             <argument name="productRequestPath" value="/$simpleSubCategory1.custom_attributes[url_key]$/$createSimpleProduct.custom_attributes[url_key]$.html"/>
