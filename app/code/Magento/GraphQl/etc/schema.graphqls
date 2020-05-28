@@ -79,10 +79,10 @@ input FilterMatchTypeInput @doc(description: "Defines a filter that performs a f
     match: String @doc(description: "One or more words to filter on")
 }
 
-input FilterStringTypeInput @doc(description: "Defines a filter that performs different operations on a string input.") {
-    in: [String] @doc(description: "Defines a filter of an array of value that matches the input exactly on")
-    eq: String @doc(description: "Defines a filter of a string of value that matches the input exactly on")
-    match: String @doc(description: "Defines a string filter that performs a fuzzy search.")
+input FilterStringTypeInput @doc(description: "Defines a filter for an input string.") {
+    in: [String] @doc(description: "Filters items that are exactly the same as entries specified in an array of strings.")
+    eq: String @doc(description: "Filters items that are exactly the same as the specified string.")
+    match: String @doc(description: "Defines a filter that performs a fuzzy search using the specified string.")
 }
 
 type SearchResultPageInfo @doc(description: "SearchResultPageInfo provides navigation for the query response") {

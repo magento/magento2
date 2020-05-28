@@ -13,8 +13,8 @@ type Customer {
     ): CustomerOrders @resolver(class: "Magento\\SalesGraphQl\\Model\\Resolver\\CustomerOrders") @cache(cacheable: false)
 }
 
-input CustomerOrdersFilterInput @doc(description: "Identifies which order filter input to search for and return") {
-    number: FilterStringTypeInput @doc(description: "Filter orders by order number")
+input CustomerOrdersFilterInput @doc(description: "Identifies the filter to use for filtering orders.") {
+    number: FilterStringTypeInput @doc(description: "Filters by order number.")
 }
 
 type CustomerOrders @doc(description: "The collection of orders that match the conditions defined in the filter") {

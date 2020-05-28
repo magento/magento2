@@ -12,7 +12,7 @@ use Magento\Framework\Exception\InputException;
 use Magento\Sales\Model\ResourceModel\Order\CollectionFactoryInterface;
 use Magento\Framework\DataObjectFactory;
 use Magento\Framework\DataObject;
-use \Magento\Store\Api\Data\StoreInterface;
+use Magento\Store\Api\Data\StoreInterface;
 
 /**
  * Retrieve filtered orders data based off given search criteria in a format that GraphQL can interpret.

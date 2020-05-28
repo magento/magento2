@@ -62,7 +62,8 @@ class CustomerOrders implements ResolverInterface
         $store = $context->getExtensionAttributes()->getStore();
         $searchResultDto = $this->searchQuery->getResult($args, $userId, $store);
 
-        if ($searchResultDto->getCurrentPage() > $searchResultDto->getTotalPages() && $searchResultDto->getTotalCount() > 0) {
+        if ($searchResultDto->getCurrentPage() > $searchResultDto->getTotalPages()
+            && $searchResultDto->getTotalCount() > 0) {
             new GraphQlInputException(
                 __(
                     'currentPage value %1 specified is greater than the number of pages available.',
@@ -88,7 +89,6 @@ class CustomerOrders implements ResolverInterface
                 'order_number' => $order['increment_id'],
                 'status' => $orderModel->getStatusLabel(),
                 'model' => $orderModel,
-                'order_items' => $orderModel->getItems() ?? [],
             ];
         }
 

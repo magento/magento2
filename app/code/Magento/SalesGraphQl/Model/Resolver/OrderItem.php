@@ -33,8 +33,8 @@ class OrderItem implements ResolverInterface
         /** @var Order $parentOrder */
         $parentOrder = $value['model'];
         /** @var OrderItemInterface $item */
-        $orderItems= [];
-        foreach ($value['order_items'] ?? [] as $key => $item) {
+        $orderItems = [];
+        foreach ($parentOrder->getItems() as $key => $item) {
             $options = $this->getItemOptions($item);
             $orderItems[$key] = [
                 'parent_product_sku' => $item->getParentItem() ? $item->getParentItem()->getSku() : null,
@@ -61,37 +61,64 @@ class OrderItem implements ResolverInterface
      */
     public function getItemOptions(OrderItemInterface $orderItem): array
     {
-        //build options arrays
-        $selectedOptions = [];
-        $enteredOptions = [];
+        //build options array
+        $optionsTypes = ['selected_options' => [], 'entered_options' => []];
         $options = $orderItem->getProductOptions();
         if ($options) {
             if (isset($options['options'])) {
-                foreach ($options['options'] ?? [] as $option) {
-                    if (isset($option['option_type'])) {
-                        if (in_array($option['option_type'], ['field', 'area', 'file', 'date', 'date_time', 'time'])) {
-                            $selectedOptions[] = [
-                                'id' => $option['label'],
-                                'value' => $option['print_value'] ?? $option['value'],
-                            ];
-                        } elseif (in_array($option['option_type'], ['drop_down', 'radio', '"checkbox"', 'multiple'])) {
-                            $enteredOptions[] = [
-                                'id' => $option['label'],
-                                'value' => $option['print_value'] ?? $option['value'],
-                            ];
-                        }
-                    }
-                }
+                $optionsTypes = $this->processOptions($options['options']);
             } elseif (isset($options['attributes_info'])) {
-                foreach ($options['attributes_info'] ?? [] as $option) {
+                $optionsTypes = $this->processAttributesInfo($options['attributes_info']);
+            } elseif (isset($options['additional_options'])) {
+                // TODO $options['additional_options']
+            }
+        }
+        return $optionsTypes;
+    }
+
+    /**
+     * Process options data
+     *
+     * @param array $options
+     * @return array
+     */
+    public function processOptions(array $options): array
+    {
+        $selectedOptions = [];
+        $enteredOptions = [];
+        foreach ($options ?? [] as $option) {
+            if (isset($option['option_type'])) {
+                if (in_array($option['option_type'], ['field', 'area', 'file', 'date', 'date_time', 'time'])) {
                     $selectedOptions[] = [
+                        'id' => $option['label'],
+                        'value' => $option['print_value'] ?? $option['value'],
+                    ];
+                } elseif (in_array($option['option_type'], ['drop_down', 'radio', 'checkbox', 'multiple'])) {
+                    $enteredOptions[] = [
                         'id' => $option['label'],
                         'value' => $option['print_value'] ?? $option['value'],
                     ];
                 }
             }
-            // TODO $options['additional_options']
         }
         return ['selected_options' => $selectedOptions, 'entered_options' => $enteredOptions];
+    }
+
+    /**
+     * Process attributes info data
+     *
+     * @param array $attributesFnfo
+     * @return array
+     */
+    public function processAttributesInfo(array $attributesFnfo): array
+    {
+        $selectedOptions = [];
+        foreach ($attributesFnfo ?? [] as $option) {
+            $selectedOptions[] = [
+                'id' => $option['label'],
+                'value' => $option['print_value'] ?? $option['value'],
+            ];
+        }
+        return ['selected_options' => $selectedOptions, 'entered_options' => []];
     }
 }
