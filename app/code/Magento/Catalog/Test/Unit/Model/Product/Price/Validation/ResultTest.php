@@ -8,11 +8,12 @@ declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Unit\Model\Product\Price\Validation;
 
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
-use Magento\Catalog\Model\Product\Price\Validation\Result;
-use PHPUnit\Framework\TestCase;
 use Magento\Catalog\Api\Data\PriceUpdateResultInterface;
 use Magento\Catalog\Api\Data\PriceUpdateResultInterfaceFactory;
+use Magento\Catalog\Model\Product\Price\Validation\Result;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 class ResultTest extends TestCase
 {
@@ -22,19 +23,19 @@ class ResultTest extends TestCase
     private $model;
 
     /**
-     * @var PriceUpdateResultInterfaceFactory|PHPUnit_Framework_MockObject_MockObject
+     * @var PriceUpdateResultInterfaceFactory|MockObject
      */
     private $priceUpdateResultFactory;
 
     /**
-     * @var ObjectManagerHelper|PHPUnit_Framework_MockObject_MockObject
+     * @var ObjectManagerHelper|MockObject
      */
     private $objectManager;
 
     /**
      * Setup environment for test
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->priceUpdateResultFactory = $this->getMockBuilder(PriceUpdateResultInterfaceFactory::class)
             ->disableOriginalConstructor()
@@ -66,8 +67,8 @@ class ResultTest extends TestCase
      */
     public function testGetFailedItems()
     {
-        $priceUpdateResult1 = $this->createMock(PriceUpdateResultInterface::class);
-        $priceUpdateResult2 = $this->createMock(PriceUpdateResultInterface::class);
+        $priceUpdateResult1 = $this->getMockForAbstractClass(PriceUpdateResultInterface::class);
+        $priceUpdateResult2 = $this->getMockForAbstractClass(PriceUpdateResultInterface::class);
 
         $this->priceUpdateResultFactory->expects($this->at(0))
             ->method('create')

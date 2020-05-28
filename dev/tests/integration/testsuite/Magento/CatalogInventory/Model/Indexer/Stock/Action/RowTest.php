@@ -15,7 +15,7 @@ class RowTest extends \PHPUnit\Framework\TestCase
      */
     protected $_processor;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_processor = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             \Magento\CatalogInventory\Model\Indexer\Stock\Processor::class

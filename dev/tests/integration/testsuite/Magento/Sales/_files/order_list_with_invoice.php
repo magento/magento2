@@ -13,9 +13,19 @@ use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Invoice;
 use Magento\Sales\Model\OrderFactory;
+use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
 
-require __DIR__ . '/order.php';
-
+Resolver::getInstance()->requireDataFixture('Magento/Sales/_files/order.php');
+$objectManager = Bootstrap::getObjectManager();
+/** @var \Magento\Sales\Model\Order $order */
+$order = $objectManager->create(\Magento\Sales\Model\Order::class);
+$order->loadByIncrementId('100000001');
+$payment = $order->getPayment();
+$billingAddress = $order->getBillingAddress();
+$shippingAddress = $order->getShippingAddress();
+$items = $order->getItems();
+$orderItem = reset($items);
 /** @var OrderFactory $orderFactory */
 $orderFactory = $objectManager->get(OrderInterfaceFactory::class);
 /** @var OrderRepositoryInterface $orderRepository */

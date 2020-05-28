@@ -6,6 +6,11 @@
 declare(strict_types=1);
 
 use Magento\Bundle\Model\Product\Price;
+use Magento\Catalog\Api\CategoryRepositoryInterface;
+use Magento\Catalog\Api\Data\ProductInterfaceFactory;
+use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Catalog\Api\Data\CategoryInterfaceFactory;
+use Magento\Catalog\Helper\DefaultCategory;
 use Magento\Catalog\Model\Product\Attribute\Source\Status;
 use Magento\Catalog\Model\Product\Type;
 use Magento\Catalog\Model\Product\Type\AbstractType;
@@ -17,10 +22,26 @@ use Magento\CatalogRule\Model\Indexer\IndexBuilder;
 use Magento\CatalogRule\Model\Rule\Condition\Combine;
 use Magento\CatalogRule\Model\Rule\Condition\Product;
 use Magento\Customer\Model\Group;
+use Magento\Store\Model\StoreManagerInterface;
 use Magento\TestFramework\Bundle\Model\PrepareBundleLinks;
+use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
 
-require __DIR__ . '/../../../Magento/Catalog/_files/category_with_different_price_products.php';
+Resolver::getInstance()->requireDataFixture('Magento/Catalog/_files/category_with_different_price_products.php');
 
+$objectManager = Bootstrap::getObjectManager();
+/** @var CategoryInterfaceFactory $categoryFactory */
+$categoryFactory = $objectManager->get(CategoryInterfaceFactory::class);
+/** @var CategoryRepositoryInterface $categoryRepository */
+$categoryRepository = $objectManager->get(CategoryRepositoryInterface::class);
+/** @var DefaultCategory $categoryHelper */
+$categoryHelper = $objectManager->get(DefaultCategory::class);
+/** @var ProductRepositoryInterface $productRepository */
+$productRepository = $objectManager->create(ProductRepositoryInterface::class);
+/** @var ProductInterfaceFactory $productFactory */
+$productFactory = $objectManager->get(ProductInterfaceFactory::class);
+$product = $productRepository->get('simple1000');
+$product2 = $productRepository->get('simple1001');
 /** @var PrepareBundleLinks $prepareBundleLinks */
 $prepareBundleLinks = $objectManager->get(PrepareBundleLinks::class);
 /** @var RuleInterfaceFactory $catalogRuleFactory */
@@ -29,6 +50,8 @@ $catalogRuleFactory = $objectManager->get(RuleInterfaceFactory::class);
 $catalogRuleRepository = $objectManager->get(CatalogRuleRepositoryInterface::class);
 /** @var IndexBuilder $indexBuilder */
 $indexBuilder = $objectManager->get(IndexBuilder::class);
+/** @var StoreManagerInterface $storeManager */
+$storeManager = $objectManager->get(StoreManagerInterface::class);
 $defaultWebsiteId = $storeManager->getWebsite('base')->getId();
 
 $category = $categoryFactory->create();
