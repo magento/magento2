@@ -155,10 +155,12 @@ define([
             modules: {
                 dnd: '${ $.dndConfig.name }'
             },
+            valid: true,
             pages: 1,
             pageSize: 20,
             relatedData: [],
             currentPage: 1,
+            lastVisitedPage: 1,
             recordDataCache: [],
             startIndex: 0
         },
@@ -691,8 +693,13 @@ define([
             this.bubble('addChild', false);
 
             if (this.relatedData.length && this.relatedData.length % this.pageSize === 0) {
-                this.pages(this.pages() + 1);
-                this.nextPage();
+                this.validate();
+                if (this.valid) {
+                    this.pages(this.pages() + 1);
+                    this.nextPage();
+                } else {
+                    return;
+                }
             } else if (~~this.currentPage() !== this.pages()) {
                 this.currentPage(this.pages());
             }
@@ -716,6 +723,12 @@ define([
          * @param {Number} page - current page
          */
         changePage: function (page) {
+            this.validate();
+            if (!this.valid) {
+                this.currentPage(this.lastVisitedPage);
+                return false
+            }
+            this.lastVisitedPage = page;
             this.clear();
 
             if (page === 1 && !this.recordData().length) {
@@ -1145,6 +1158,37 @@ define([
             this.pagesChanged[this.currentPage()] =
                 !compareArrays(this.defaultPagesState[this.currentPage()], this.arrayFilter(this.getChildItems()));
             this.changed(_.some(this.pagesChanged));
+        },
+
+        /**
+         * Validate the dynamic rows
+         *
+         * @return Object
+         */
+        validate: function () {
+            this.valid = true;
+            this.elems().forEach(this.checkRows, this);
+            return {
+                valid: this.valid,
+                target: this
+            };
+        },
+
+        /**
+         * Loop through all the inputs and validate them
+         *
+         * @return void
+         */
+        checkRows: function (elem) {
+            if (typeof elem === 'undefined') {
+                return;
+            }
+            if (typeof elem.validate === 'function') {
+                this.valid = this.valid & elem.validate().valid;
+            }
+            else if (elem.elems) {
+                elem.elems().forEach(this.checkRows, this);
+            }
         }
     });
 });
