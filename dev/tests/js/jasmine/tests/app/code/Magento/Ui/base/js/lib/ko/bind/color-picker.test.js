@@ -12,7 +12,7 @@ define([
     'use strict';
 
     var $input;
-    
+
     beforeAll(function () {
         define('spectrum', function () {
             return jasmine.createSpy();
@@ -37,8 +37,8 @@ define([
             $input = jasmine.createSpy();
 
             ko.bindingHandlers.colorPicker.init($input, valueAccessor, null, viewModel);
-            
-            resolver(function () {
+
+            resolver(function () { //eslint-disable-line max-nested-callbacks
                 expect(value.change).toEqual(jasmine.any(Function));
                 expect(value.hide).toEqual(jasmine.any(Function));
                 expect(value.show).toEqual(jasmine.any(Function));
@@ -65,7 +65,7 @@ define([
 
             ko.bindingHandlers.colorPicker.init($input, valueAccessor, null, viewModel);
 
-            resolver(function () {
+            resolver(function () { //eslint-disable-line max-nested-callbacks
                 expect(value.change).toEqual(jasmine.any(Function));
                 expect(value.hide).toEqual(jasmine.any(Function));
                 expect(value.show).toEqual(jasmine.any(Function));
@@ -93,21 +93,20 @@ define([
 
             ko.bindingHandlers.colorPicker.update($input, valueAccessor, null, viewModel);
 
-            resolver(function () {
+            resolver(function () { //eslint-disable-line max-nested-callbacks
                 expect($.fn.spectrum).toHaveBeenCalledTimes(1);
                 expect(valueAccessor().value).toHaveBeenCalledTimes(4);
 
                 value.value = jasmine.createSpy().and.returnValue('');
                 ko.bindingHandlers.colorPicker.update($input, valueAccessor, null, viewModel);
 
-                resolver(function () {
+                resolver(function () { //eslint-disable-line max-nested-callbacks
                     expect($.fn.spectrum).toHaveBeenCalledTimes(3);
                     expect(valueAccessor().value).toHaveBeenCalledTimes(5);
 
                     done();
                 });
             });
-            
         });
     });
 });
