@@ -184,6 +184,13 @@ class TokensConfigProvider
                     ->create(),
                 ]
         );
+        $this->searchCriteriaBuilder->addFilters(
+            [
+                $this->filterBuilder->setField(PaymentTokenInterface::IS_VISIBLE)
+                    ->setValue(1)
+                    ->create(),
+            ]
+        );
 
         $searchCriteria = $this->searchCriteriaBuilder->create();
 
