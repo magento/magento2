@@ -66,7 +66,8 @@
         </actionGroup>
         <actionGroup ref="SaveAttributeSetActionGroup" stepKey="saveAttributeSet"/>
         <!--Create product and fill new attribute field-->
-        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="navigateToProductIndex"/>
+        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndex"/>
+        <waitForPageLoad stepKey="waitForProductIndexPage"/>
         <actionGroup ref="GoToCreateProductPageActionGroup" stepKey="goToCreateProduct">
             <argument name="product" value="SimpleProduct"/>
         </actionGroup>
