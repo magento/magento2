@@ -9,6 +9,8 @@ namespace Magento\Checkout\Controller\Sidebar;
 
 use Exception;
 use Magento\Checkout\Model\Sidebar;
+use Magento\Framework\App\Action\Action;
+use Magento\Framework\App\Action\Context;
 use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Controller\Result\JsonFactory as ResultJsonFactory;
@@ -20,7 +22,7 @@ use Psr\Log\LoggerInterface;
 /**
  * Controller for removing quote item from shopping cart.
  */
-class RemoveItem implements HttpPostActionInterface
+class RemoveItem extends Action implements HttpPostActionInterface
 {
     /**
      * @var RequestInterface
@@ -35,7 +37,7 @@ class RemoveItem implements HttpPostActionInterface
     /**
      * @var ResultRedirectFactory
      */
-    private $resultRedirectFactory;
+    protected $resultRedirectFactory;
 
     /**
      * @var Sidebar
@@ -53,6 +55,7 @@ class RemoveItem implements HttpPostActionInterface
     protected $logger;
 
     /**
+     * @param Context $context
      * @param RequestInterface $request
      * @param ResultJsonFactory $resultJsonFactory
      * @param ResultRedirectFactory $resultRedirectFactory
@@ -61,6 +64,7 @@ class RemoveItem implements HttpPostActionInterface
      * @param LoggerInterface $logger
      */
     public function __construct(
+        Context $context,
         RequestInterface $request,
         ResultJsonFactory $resultJsonFactory,
         ResultRedirectFactory $resultRedirectFactory,
@@ -68,6 +72,7 @@ class RemoveItem implements HttpPostActionInterface
         Validator $formKeyValidator,
         LoggerInterface $logger
     ) {
+        parent::__construct($context);
         $this->request = $request;
         $this->resultJsonFactory = $resultJsonFactory;
         $this->resultRedirectFactory = $resultRedirectFactory;

@@ -12,9 +12,6 @@
         <annotations>
             <description>Deletes a User Role.</description>
         </annotations>
-        <arguments>
-            <argument name="role" defaultValue=""/>
-        </arguments>
 
         <click stepKey="clickResetFilterButtonBefore" selector="{{AdminRoleGridSection.resetButton}}"/>
         <waitForPageLoad stepKey="waitForRolesGridFilterResetBefore" time="10"/>
