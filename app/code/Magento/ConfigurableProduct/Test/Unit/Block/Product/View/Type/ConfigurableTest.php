@@ -256,8 +256,11 @@ class ConfigurableTest extends TestCase
      * @param int|null $customerGroupId
      * @return void
      */
-    public function testGetCacheKeyInfo(array $expected, ?string $priceCurrency = null, ?int $customerGroupId = null): void
-    {
+    public function testGetCacheKeyInfo(
+        array $expected,
+        ?string $priceCurrency = null,
+        ?int $customerGroupId = null
+    ): void {
         $storeMock = $this->getMockBuilder(StoreInterface::class)
             ->setMethods(['getCurrentCurrency'])
             ->getMockForAbstractClass();
@@ -457,7 +460,7 @@ class ConfigurableTest extends TestCase
             ->method('getCurrentCurrency')
             ->willReturn($currencyMock);
         $storeMock->expects($this->once())
-            ->method('getId')
+            ->method('getWebsiteId')
             ->willReturn(1);
 
         $this->storeManager->expects($this->any())
@@ -555,8 +558,11 @@ class ConfigurableTest extends TestCase
      * @param int $expectedProductsCount
      * @return void
      */
-    public function testGetAllowProducts(array $productsWebsiteIds, int $currentWebsiteId, int $expectedProductsCount): void
-    {
+    public function testGetAllowProducts(
+        array $productsWebsiteIds,
+        int $currentWebsiteId,
+        int $expectedProductsCount
+    ): void {
         $simpleProductsMocks = array_map(function ($websiteIds) {
             $productMock = $this->getMockBuilder(Product::class)
                 ->disableOriginalConstructor()
@@ -577,7 +583,7 @@ class ConfigurableTest extends TestCase
 
         $storeMock = $this->createMock(StoreInterface::class);
         $storeMock->expects($this->once())
-            ->method('getId')
+            ->method('getWebsiteId')
             ->willReturn($currentWebsiteId);
         $this->storeManager->expects($this->any())
             ->method('getStore')
