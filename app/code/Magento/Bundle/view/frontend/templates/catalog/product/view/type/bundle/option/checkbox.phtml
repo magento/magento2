@@ -24,6 +24,7 @@
             <?php else: ?>
                 <?php foreach ($_selections as $_selection): ?>
                     <div class="field choice">
+                        <?php /** phpcs:disable */ ?>
                         <input class="bundle-option-<?= $block->escapeHtmlAttr($_option->getId()) ?> checkbox product bundle option change-container-classname"
                                id="bundle-option-<?= $block->escapeHtmlAttr($_option->getId()) ?>-<?= $block->escapeHtmlAttr($_selection->getSelectionId()) ?>"
                                type="checkbox"
