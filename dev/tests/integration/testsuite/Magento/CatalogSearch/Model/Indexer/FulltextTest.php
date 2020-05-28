@@ -23,16 +23,6 @@ class FulltextTest extends \PHPUnit\Framework\TestCase
     protected $indexer;
 
     /**
-     * @var \Magento\CatalogSearch\Model\ResourceModel\Engine
-     */
-    protected $engine;
-
-    /**
-     * @var \Magento\CatalogSearch\Model\Fulltext
-     */
-    protected $fulltext;
-
-    /**
      * @var \Magento\Search\Model\QueryFactory
      */
     protected $queryFactory;
