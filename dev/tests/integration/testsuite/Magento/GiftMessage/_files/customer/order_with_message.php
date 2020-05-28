@@ -4,6 +4,7 @@
  * See COPYING.txt for license details.
  */
 
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\GiftMessage\Model\Message;
@@ -11,6 +12,8 @@ use Magento\GiftMessage\Model\ResourceModel\Message as MessageResource;
 use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Address as OrderAddress;
+
+Resolver::getInstance()->requireDataFixture('Magento/Catalog/_files/product_simple.php');
 
 $addressData = include __DIR__ . '/../../../../Magento/Sales/_files/address_data.php';
 

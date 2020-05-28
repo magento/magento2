@@ -5,6 +5,7 @@
  */
 declare(strict_types=1);
 
+use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Framework\Registry;
 use Magento\GiftMessage\Model\Message;
 use Magento\Sales\Api\Data\OrderInterfaceFactory;
@@ -17,6 +18,10 @@ $objectManager = Bootstrap::getObjectManager();
 $registry = $objectManager->get(Registry::class);
 $registry->unregister('isSecureArea');
 $registry->register('isSecureArea', true);
+
+$productRepository = $objectManager->get(ProductRepositoryInterface::class);
+$product = $productRepository->get('simple');
+$productRepository->delete($product);
 
 /** @var OrderRepositoryInterface $orderRepository */
 $orderRepository = $objectManager->get(OrderRepositoryInterface::class);
