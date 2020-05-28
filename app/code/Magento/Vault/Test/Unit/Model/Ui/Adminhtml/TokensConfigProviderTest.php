@@ -32,7 +32,7 @@ use Magento\Vault\Model\VaultPaymentInterface;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 /**
- * Class TokensConfigProviderTest
+ * Test for TokensConfigProvider
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
