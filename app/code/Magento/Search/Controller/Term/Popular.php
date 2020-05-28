@@ -7,6 +7,8 @@ declare(strict_types=1);
 
 namespace Magento\Search\Controller\Term;
 
+use Magento\Framework\App\Action\Action;
+use Magento\Framework\App\Action\Context;
 use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Controller\Result\ForwardFactory as ResultForwardFactory;
@@ -16,7 +18,7 @@ use Magento\Store\Model\ScopeInterface;
 /**
  * Popular search terms page
  */
-class Popular implements HttpGetActionInterface
+class Popular extends Action implements HttpGetActionInterface
 {
     private const XML_PATH_SEO_SEARCH_TERMS = 'catalog/seo/search_terms';
 
@@ -36,15 +38,18 @@ class Popular implements HttpGetActionInterface
     private $scopeConfig;
 
     /**
+     * @param Context $context
      * @param ResultForwardFactory $resultForwardFactory
      * @param ResultPageFactory $resultPageFactory
      * @param ScopeConfigInterface $scopeConfig
      */
     public function __construct(
+        Context $context,
         ResultForwardFactory $resultForwardFactory,
         ResultPageFactory $resultPageFactory,
         ScopeConfigInterface $scopeConfig
     ) {
+        parent::__construct($context);
         $this->resultForwardFactory = $resultForwardFactory;
         $this->resultPageFactory = $resultPageFactory;
         $this->scopeConfig = $scopeConfig;
