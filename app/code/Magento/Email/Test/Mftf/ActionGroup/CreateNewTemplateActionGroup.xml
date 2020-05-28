@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <!--Create New Template -->
+    <actionGroup name="CreateNewTemplateActionGroup">
+        <annotations>
+            <description>Clicks on Add New Template. Fills the Template details. Clicks on Save. PLEASE NOTE: The values are Hardcoded.</description>
+        </annotations>
+
+        <!--Go to Marketing> Email Templates-->
+        <amOnPage url="{{AdminEmailTemplateIndexPage.url}}" stepKey="navigateToEmailTemplatePage"/>
+        <!--Click "Add New Template" button-->
+        <click selector="{{AdminMainActionsSection.add}}" stepKey="clickAddNewTemplateButton"/>
+        <!--Select value for "Template" drop-down menu in "Load Default Template" tab-->
+        <selectOption selector="{{AdminEmailTemplateEditSection.templateDropDown}}" userInput="Registry Update" stepKey="selectValueFromTemplateDropDown"/>
+        <!--Fill in required fields in "Template Information" tab and click "Save Template" button-->
+        <click selector="{{AdminEmailTemplateEditSection.loadTemplateButton}}" stepKey="clickLoadTemplateButton"/>
+        <fillField selector="{{AdminEmailTemplateEditSection.templateCode}}" userInput="{{EmailTemplate.templateName}}" stepKey="fillTemplateNameField"/>
+        <click selector="{{AdminMainActionsSection.save}}" stepKey="clickSaveTemplateButton"/>
+        <waitForElementVisible selector="{{AdminMessagesSection.success}}" stepKey="waitForSuccessMessage"/>
+        <see selector="{{AdminMessagesSection.success}}" userInput="You saved the email template." stepKey="seeSuccessMessage"/>
+    </actionGroup>
+</actionGroups>

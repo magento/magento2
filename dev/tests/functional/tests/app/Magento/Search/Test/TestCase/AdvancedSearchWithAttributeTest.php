@@ -378,7 +378,7 @@ class AdvancedSearchWithAttributeTest extends Injectable
      *
      * @return void
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->productAttributePage->open();
         $this->productAttributePage->getGrid()->searchAndOpen(['attribute_code' => $this->attributeForSearch['name']]);

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <!-- Export products using filtering by attribute -->
+    <actionGroup name="ExportProductsFilterByAttributeActionGroup">
+        <annotations>
+            <description>Filters Products by the provided Attribute. Exports the filtered Products list. Validates that the Success Message is present.</description>
+        </annotations>
+        <arguments>
+            <argument name="attribute" type="string"/>
+            <argument name="attributeData" type="string"/>
+        </arguments>
+
+        <selectOption selector="{{AdminExportMainSection.entityType}}" userInput="Products" stepKey="selectProductsOption"/>
+        <waitForElementVisible selector="{{AdminExportMainSection.entityAttributes}}" stepKey="waitForElementVisible"/>
+        <scrollTo selector="{{AdminExportAttributeSection.chooseAttribute('attribute')}}" stepKey="scrollToAttribute"/>
+        <checkOption selector="{{AdminExportAttributeSection.chooseAttribute('attribute')}}" stepKey="selectAttribute"/>
+        <fillField selector="{{AdminExportAttributeSection.fillFilter('attribute')}}" userInput="{{attributeData}}" stepKey="setDataInField"/>
+        <waitForPageLoad stepKey="waitForUserInput"/>
+        <scrollTo selector="{{AdminExportAttributeSection.continueBtn}}" stepKey="scrollToContinue"/>
+        <click selector="{{AdminExportAttributeSection.continueBtn}}" stepKey="clickContinueButton"/>
+        <see selector="{{AdminMessagesSection.success}}" userInput="Message is added to queue, wait to get your file soon" stepKey="seeSuccessMessage"/>
+    </actionGroup>
+</actionGroups>

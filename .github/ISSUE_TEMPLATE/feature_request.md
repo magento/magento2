@@ -1,6 +1,7 @@
 ---
 name: Feature request
 about: Please consider reporting directly to https://github.com/magento/community-features
+labels: 'feature request'
 
 ---
 

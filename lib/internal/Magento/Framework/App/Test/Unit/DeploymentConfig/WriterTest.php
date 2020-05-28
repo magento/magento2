@@ -3,13 +3,14 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Framework\App\Test\Unit\DeploymentConfig;
 
 use Magento\Framework\App\DeploymentConfig;
+use Magento\Framework\App\DeploymentConfig\CommentParser;
 use Magento\Framework\App\DeploymentConfig\Reader;
 use Magento\Framework\App\DeploymentConfig\Writer;
-use Magento\Framework\App\DeploymentConfig\CommentParser;
 use Magento\Framework\App\DeploymentConfig\Writer\FormatterInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Config\File\ConfigFilePool;
@@ -18,12 +19,13 @@ use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\ReadInterface;
 use Magento\Framework\Filesystem\Directory\WriteInterface;
 use Magento\Framework\Phrase;
-use \PHPUnit_Framework_MockObject_MockObject as Mock;
+use PHPUnit\Framework\MockObject\MockObject as Mock;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class WriterTest extends \PHPUnit\Framework\TestCase
+class WriterTest extends TestCase
 {
     /**
      * @var Writer
@@ -70,7 +72,7 @@ class WriterTest extends \PHPUnit\Framework\TestCase
      */
     private $commentParserMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->commentParserMock = $this->getMockBuilder(CommentParser::class)
             ->disableOriginalConstructor()
@@ -242,12 +244,10 @@ class WriterTest extends \PHPUnit\Framework\TestCase
         $this->object->saveConfig($testSetUpdate, true);
     }
 
-    /**
-     * @expectedException \Magento\Framework\Exception\FileSystemException
-     * @expectedExceptionMessage The "env.php" deployment config file isn't writable.
-     */
     public function testSaveConfigException()
     {
+        $this->expectException('Magento\Framework\Exception\FileSystemException');
+        $this->expectExceptionMessage('The "env.php" deployment config file isn\'t writable.');
         $exception = new FileSystemException(new Phrase('error when writing file config file'));
 
         $this->configFilePool->method('getPaths')

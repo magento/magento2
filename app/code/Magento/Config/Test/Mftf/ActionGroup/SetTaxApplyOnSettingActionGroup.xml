@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="SetTaxApplyOnSettingActionGroup">
+        <annotations>
+            <description>Goes to the 'Configuration' page for 'Tax'. Sets 'Apply Tax On' to the provided value. Clicks on the Save button</description>
+        </annotations>
+        <arguments>
+            <argument name="userInput" type="string"/>
+        </arguments>
+
+        <conditionalClick selector="{{AdminConfigureTaxSection.taxCalculationSettings}}" dependentSelector="{{AdminConfigureTaxSection.taxCalculationAlgorithm}}" visible="false" stepKey="openTaxCalcSettingsSection"/>
+        <scrollTo selector="{{AdminConfigureTaxSection.taxCalculationApplyTaxOnInherit}}" x="0" y="-80" stepKey="goToCheckbox"/>
+        <uncheckOption selector="{{AdminConfigureTaxSection.taxCalculationApplyTaxOnInherit}}" stepKey="enableApplyTaxOnSetting"/>
+        <selectOption selector="{{AdminConfigureTaxSection.taxCalculationApplyTaxOn}}" userInput="{{userInput}}" stepKey="setApplyTaxOn"/>
+        <scrollTo selector="{{SalesConfigSection.TaxClassesTab}}" stepKey="scrollToTop"/>
+        <click selector="{{AdminConfigureTaxSection.taxCalculationSettings}}" stepKey="collapseCalcSettingsTab"/>
+        <click selector="{{AdminConfigureTaxSection.save}}" stepKey="saveConfig"/>
+        <waitForPageLoad stepKey="waitForConfigSaved"/>
+        <see userInput="You saved the configuration." stepKey="seeSuccessMessage"/>
+    </actionGroup>
+</actionGroups>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="SaveConfigurableProductWithNewAttributeSetActionGroup">
+        <annotations>
+            <description>Clicks on 'Save'. Clicks radio for '...new Attribute Set...' in the 'Choose Affected Attribute Set' modal. Clicks on 'Confirm' in the model on the Configurable Product creation/edit page.</description>
+        </annotations>
+
+        <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="clickSaveConfigurableProduct"/>
+        <waitForElementVisible selector="{{AdminChooseAffectedAttributeSetPopup.confirm}}" time="30" stepKey="waitForAttributeSetConfirmation"/>
+        <click selector="{{AdminChooseAffectedAttributeSetPopup.addNewAttrSet}}" stepKey="clickAddNewAttributeSet"/>
+        <fillField selector="{{AdminChooseAffectedAttributeSetPopup.createNewAttrSetName}}" userInput="{{ProductAttributeFrontendLabel.label}}" stepKey="fillFieldNewAttrSetName"/>
+        <click selector="{{AdminChooseAffectedAttributeSetPopup.confirm}}" stepKey="clickConfirmAttributeSet"/>
+        <see selector="You saved the product" stepKey="seeConfigurableSaveConfirmation" after="clickConfirmAttributeSet"/>
+    </actionGroup>
+</actionGroups>

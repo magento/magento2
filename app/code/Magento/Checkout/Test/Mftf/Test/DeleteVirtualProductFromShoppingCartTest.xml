@@ -33,13 +33,12 @@
         <!-- Add virtual product to the cart -->
         <amOnPage url="{{StorefrontProductPage.url($$createVirtualProduct.custom_attributes[url_key]$$)}}" stepKey="navigateToProductPage"/>
         <waitForPageLoad stepKey="waitForProductPageLoad"/>
-        <actionGroup ref="addToCartFromStorefrontProductPage" stepKey="addToCartVirtualProductFromStorefrontProductPage">
+        <actionGroup ref="AddToCartFromStorefrontProductPageActionGroup" stepKey="addToCartVirtualProductFromStorefrontProductPage">
             <argument name="productName" value="$$createVirtualProduct.name$$"/>
         </actionGroup>
 
         <!-- Remove product from cart -->
-        <amOnPage url="{{CheckoutCartPage.url}}" stepKey="goToCart"/>
-        <waitForPageLoad stepKey="waitForCartPageLoad"/>
+        <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="goToCart"/>
         <actionGroup ref="DeleteProductFromShoppingCartActionGroup" stepKey="deleteProduct">
             <argument name="productName" value="$$createVirtualProduct.name$$"/>
         </actionGroup>

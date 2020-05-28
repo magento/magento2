@@ -15,7 +15,7 @@ class TypeLocatorTest extends \PHPUnit\Framework\TestCase
      */
     private $attributeTypeLocator;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->attributeTypeLocator = Bootstrap::getObjectManager()->get(TypeLocator::class);
     }

@@ -310,9 +310,9 @@ class Escaper
     }
 
     /**
-     * Escape quotes in java script
+     * Escape single quotes/apostrophes ('), or other specified $quote character in javascript
      *
-     * @param string|array $data
+     * @param string|string[]|array $data
      * @param string $quote
      * @return string|array
      * @deprecated 100.2.0

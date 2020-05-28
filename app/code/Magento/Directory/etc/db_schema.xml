@@ -16,7 +16,7 @@
         </constraint>
     </table>
     <table name="directory_country_format" resource="default" engine="innodb" comment="Directory Country Format">
-        <column xsi:type="int" name="country_format_id" padding="10" unsigned="true" nullable="false" identity="true"
+        <column xsi:type="int" name="country_format_id" unsigned="true" nullable="false" identity="true"
                 comment="Country Format ID"/>
         <column xsi:type="varchar" name="country_id" nullable="true" length="2" comment="Country ID in ISO-2"/>
         <column xsi:type="varchar" name="type" nullable="true" length="30" comment="Country Format Type"/>
@@ -30,7 +30,7 @@
         </constraint>
     </table>
     <table name="directory_country_region" resource="default" engine="innodb" comment="Directory Country Region">
-        <column xsi:type="int" name="region_id" padding="10" unsigned="true" nullable="false" identity="true"
+        <column xsi:type="int" name="region_id" unsigned="true" nullable="false" identity="true"
                 comment="Region ID"/>
         <column xsi:type="varchar" name="country_id" nullable="false" length="4" default="0"
                 comment="Country ID in ISO-2"/>
@@ -45,8 +45,8 @@
     </table>
     <table name="directory_country_region_name" resource="default" engine="innodb"
            comment="Directory Country Region Name">
-        <column xsi:type="varchar" name="locale" nullable="false" length="8" comment="Locale"/>
-        <column xsi:type="int" name="region_id" padding="10" unsigned="true" nullable="false" identity="false"
+        <column xsi:type="varchar" name="locale" nullable="false" length="16" comment="Locale"/>
+        <column xsi:type="int" name="region_id" unsigned="true" nullable="false" identity="false"
                 default="0" comment="Region ID"/>
         <column xsi:type="varchar" name="name" nullable="true" length="255" comment="Region Name"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">

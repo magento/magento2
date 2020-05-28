@@ -11,7 +11,7 @@ namespace Magento\Downloadable\Block\Adminhtml\Catalog\Product\Edit\Tab\Download
  * @author      Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  *
- * @deprecated
+ * @deprecated in favor of new class which adds grid links
  * @see \Magento\Downloadable\Ui\DataProvider\Product\Form\Modifier\Links
  */
 class Links extends \Magento\Backend\Block\Template
@@ -398,7 +398,7 @@ class Links extends \Magento\Backend\Block\Template
      */
     public function getUploadUrl($type)
     {
-        return $this->_urlFactory->create()->addSessionParam()->getUrl(
+        return $this->_urlFactory->create()->getUrl(
             'adminhtml/downloadable_file/upload',
             ['type' => $type, '_secure' => true]
         );

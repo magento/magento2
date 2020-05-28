@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminUpdateCustomerAddressNoBillingNoShippingTest" extends="AdminUpdateCustomerInfoFromDefaultToNonDefaultTest">
+        <annotations>
+            <features value="Customer"/>
+            <stories value="Update Customer Information in Admin"/>
+            <title value="Update Customer Address, default billing/shipping unchecked in Admin"/>
+            <description value="Update Customer Address, default billing/shipping unchecked in Admin"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-13622"/>
+            <group value="Customer"/>
+            <group value="mtf_migrated"/>
+        </annotations>
+        <after>
+            <remove keyForRemoval="goToCustomersGridPage"/>
+            <remove keyForRemoval="waitForCustomersGrid"/>
+            <remove keyForRemoval="resetFilter"/>
+        </after>
+
+        <!-- Remove steps that are not used for this test -->
+        <remove keyForRemoval="editCustomerInformation"/>
+        <remove keyForRemoval="goToCustomersGridPage"/>
+        <remove keyForRemoval="waitForCustomersGrid"/>
+        <remove keyForRemoval="resetFilter"/>
+        <remove keyForRemoval="filterByEamil"/>
+        <remove keyForRemoval="checkCustomerInGrid"/>
+        <remove keyForRemoval="checkCustomerAccountInformation"/>
+        <remove keyForRemoval="checkDefaultBilling"/>
+        <remove keyForRemoval="checkDefaultShipping"/>
+
+        <!--Update Customer Addresses With Default Billing and Shipping Unchecked -->
+        <actionGroup stepKey="editCustomerAddress" ref="AdminEditCustomerAddressesFromActionGroup">
+            <argument name="customerAddress" value="CustomerAddressSimple"/>
+        </actionGroup>
+
+        <!-- Check Customer Address in Customer Form -->
+        <actionGroup stepKey="checkNoDefaultBilling" ref="AdminAssertCustomerNoDefaultBillingAddress" after="waitForCustomerEditPageAfterSave"/>
+        <actionGroup stepKey="checkNoDefaultShipping" ref="AdminAssertCustomerNoDefaultShippingAddress" after="checkNoDefaultBilling"/>
+        <actionGroup stepKey="resetFilter" ref="AdminResetFilterInCustomerAddressGrid" after="checkNoDefaultShipping"/>
+        <actionGroup stepKey="searchAddress" ref="AdminFilterCustomerAddressGridByPhoneNumber" after="resetFilter">
+            <argument name="phone" value="{{CustomerAddressSimple.telephone}}"/>
+        </actionGroup>
+        <actionGroup stepKey="checkAddressStreetInGrid" ref="AdminAssertAddressInCustomersAddressGrid" after="searchAddress">
+            <argument name="text" value="{{CustomerAddressSimple.street[0]}}"/>
+        </actionGroup>
+        <actionGroup stepKey="checkAddressPhoneInGrid" ref="AdminAssertAddressInCustomersAddressGrid" after="checkAddressStreetInGrid">
+            <argument name="text" value="{{CustomerAddressSimple.telephone}}"/>
+        </actionGroup>
+        <actionGroup stepKey="checkAddressStateInGrid" ref="AdminAssertAddressInCustomersAddressGrid" after="checkAddressPhoneInGrid">
+            <argument name="text" value="{{CustomerAddressSimple.state}}"/>
+        </actionGroup>
+        <actionGroup stepKey="checkAddressCityInGrid" ref="AdminAssertAddressInCustomersAddressGrid" after="checkAddressStateInGrid">
+            <argument name="text" value="{{CustomerAddressSimple.city}}"/>
+        </actionGroup>
+        <actionGroup stepKey="checkAddressCountryInGrid" ref="AdminAssertAddressInCustomersAddressGrid" after="checkAddressCityInGrid">
+            <argument name="text" value="{{CustomerAddressSimple.country_id}}"/>
+        </actionGroup>
+        <actionGroup stepKey="resetFilterWhenDone" ref="AdminResetFilterInCustomerAddressGrid" after="checkAddressCountryInGrid"/>
+        <!-- Assert Customer Login Storefront -->
+        <actionGroup stepKey="login" ref="StorefrontAssertSuccessLoginToStorefront" after="resetFilterWhenDone">
+            <argument name="Customer" value="$$customer$$"/>
+        </actionGroup>
+    </test>
+</tests>

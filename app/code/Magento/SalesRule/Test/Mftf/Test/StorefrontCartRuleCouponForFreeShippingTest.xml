@@ -39,7 +39,7 @@
             <deleteData createDataKey="createCartPriceRule" stepKey="deleteSalesRule"/>
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
             <deleteData createDataKey="createSimpleProduct" stepKey="deleteProduct"/>
-            <actionGroup ref="logout" stepKey="logoutFromBackend"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromBackend"/>
         </after>
 
         <!-- Login with created Customer -->
@@ -56,7 +56,7 @@
         <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="goToCheckout"/>
 
         <!-- Go to Order review -->
-        <actionGroup ref="StorefrontCheckoutForwardFromShippingStep" stepKey="goToCheckoutReview"/>
+        <actionGroup ref="StorefrontCheckoutForwardFromShippingStepActionGroup" stepKey="goToCheckoutReview"/>
 
         <!-- Apply Discount Coupon to the Order -->
         <actionGroup ref="StorefrontApplyDiscountCodeActionGroup" stepKey="applyDiscountCoupon">
@@ -86,7 +86,7 @@
         <grabFromCurrentUrl regex="~/order_id/(\d+)/~" stepKey="grabOrderId"/>
 
         <!-- Login to admin -->
-        <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
 
         <!-- Go to created Order -->
         <amOnPage url="{{AdminOrderPage.url({$grabOrderId})}}" stepKey="goToAdminViewOrder"/>

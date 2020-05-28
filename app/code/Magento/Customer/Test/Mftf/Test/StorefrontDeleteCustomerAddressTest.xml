@@ -23,11 +23,12 @@
         <after>
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
         </after>
-        <amOnPage stepKey="amOnSignInPage"  url="{{StorefrontCustomerSignInPage.url}}"/>
-        <fillField  stepKey="fillEmail" userInput="$$createCustomer.email$$" selector="{{StorefrontCustomerSignInFormSection.emailField}}"/>
-        <fillField  stepKey="fillPassword" userInput="$$createCustomer.password$$" selector="{{StorefrontCustomerSignInFormSection.passwordField}}"/>
-        <click stepKey="clickSignInAccountButton" selector="{{StorefrontCustomerSignInFormSection.signInAccountButton}}"/>
-        <actionGroup ref="EnterCustomerAddressInfo" stepKey="enterAddressInfo">
+        <actionGroup ref="StorefrontOpenCustomerLoginPageActionGroup" stepKey="goToSignInPage"/>
+        <actionGroup ref="StorefrontFillCustomerLoginFormActionGroup" stepKey="fillLoginFormWithCorrectCredentials">
+            <argument name="customer" value="$$createCustomer$$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontClickSignOnCustomerLoginFormActionGroup" stepKey="clickSignInAccountButton" />
+        <actionGroup ref="EnterCustomerAddressInfoActionGroup" stepKey="enterAddressInfo">
             <argument name="Address" value="US_Address_NY"/>
         </actionGroup>
         <see userInput="You saved the address." stepKey="verifyAddressCreated"/>

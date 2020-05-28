@@ -138,7 +138,7 @@ class TaxWithCrossBorderTest extends Injectable
      *
      * @return void
      */
-    public function tearDown()
+    public function tearDown(): void
     {
         if (isset($this->salesRule)) {
             $this->objectManager->create(\Magento\SalesRule\Test\TestStep\DeleteAllSalesRuleStep::class)->run();

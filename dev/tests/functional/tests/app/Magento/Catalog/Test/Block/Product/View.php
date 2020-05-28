@@ -388,19 +388,6 @@ class View extends AbstractConfigureBlock
     }
 
     /**
-     * Press 'Check out with Braintree PayPal' button.
-     *
-     * @return string
-     */
-    public function braintreePaypalCheckout()
-    {
-        $currentWindow = $this->browser->getCurrentWindow();
-        $this->getMiniCartBlock()->openMiniCart();
-        $this->getMiniCartBlock()->clickBraintreePaypalButton();
-        return $currentWindow;
-    }
-
-    /**
      * Get product name displayed on page.
      *
      * @return string
