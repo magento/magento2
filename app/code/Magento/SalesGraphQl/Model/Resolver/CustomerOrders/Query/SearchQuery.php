@@ -56,6 +56,7 @@ class SearchQuery
      * @param int $userId,
      * @param StoreInterface $store
      * @return DataObject
+     * @throws InputException
      */
     public function getResult(
         array $args,
@@ -64,63 +65,37 @@ class SearchQuery
     ): DataObject {
         $collection = $this->collectionFactory->create($userId);
         $collection->addFilter('store_id', $store->getId());
-        try {
-            $this->orderFilter->applyFilter($args, $collection, $store);
-            if (isset($args['currentPage'])) {
-                $collection->setCurPage($args['currentPage']);
-            }
-            if (isset($args['pageSize'])) {
-                $collection->setPageSize($args['pageSize']);
-            }
-        } catch (InputException $e) {
-            return $this->createEmptyResult($args);
+
+        $this->orderFilter->applyFilter($args, $collection, $store);
+        if (isset($args['currentPage'])) {
+            $collection->setCurPage($args['currentPage']);
+        }
+        if (isset($args['pageSize'])) {
+            $collection->setPageSize($args['pageSize']);
         }
 
         $orderArray = [];
         /** @var Order $order */
-        foreach ($collection->getItems() as $order) {
-            $orderArray[$order->getId()] = $order->getData();
-            $orderArray[$order->getId()]['model'] = $order;
+        foreach ($collection->getItems() as $key => $order) {
+            $orderArray[$key] = $order->getData();
+            $orderArray[$key]['model'] = $order;
         }
 
         if ($collection->getPageSize()) {
             $maxPages = (int)ceil($collection->getTotalCount() / $collection->getPageSize());
         } else {
-            $maxPages = 0;
+            throw new InputException(__('Collection doesn\'t have set a page size'));
         }
 
         return $this->dataObjectFactory->create(
             [
                 'data' => [
-                        'total_count' => $collection->getTotalCount() ?? 0,
+                        'total_count' => $collection->getTotalCount(),
                         'items' => $orderArray ?? [],
-                        'page_size' => $collection->getPageSize() ?? 0,
-                        'current_page' => $collection->getCurPage() ?? 0,
-                        'total_pages' => $maxPages ?? 0,
+                        'page_size' => $collection->getPageSize(),
+                        'current_page' => $collection->getCurPage(),
+                        'total_pages' => $maxPages,
                     ]
-            ]
-        );
-    }
-
-    /**
-     * Return and empty SearchResult object
-     *
-     * Used for handling exceptions gracefully
-     *
-     * @param array $args
-     * @return DataObject
-     */
-    private function createEmptyResult(array $args): DataObject
-    {
-        return $this->dataObjectFactory->create(
-            [
-                'data' => [
-                    'total_count' => 0,
-                    'items' => [],
-                    'page_size' => $args['pageSize'] ?? 20,
-                    'current_page' => $args['currentPage'] ?? 1,
-                    'total_pages' => 0,
-                ]
             ]
         );
     }
