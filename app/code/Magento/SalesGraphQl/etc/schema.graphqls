@@ -28,7 +28,6 @@ type CustomerOrder @doc(description: "Contains details about each of the custome
     order_number: String! @deprecated(reason: "Use the number attribute instead")
     created_at: String @deprecated(reason: "Use the order_date attribute instead")
     grand_total: Float  @deprecated(reason: "Use the totals.grand_total attribute instead")
-    status: String  @deprecated(reason: "Use the orders from customer order instead")
     id: ID! @doc(description: "Unique identifier for the order")
     order_date: String! @doc(description: "The date the order was placed")
     status: String! @doc(description: "The current status of the order")
@@ -44,14 +43,15 @@ type OrderItem implements SalesItemInterface {
 interface SalesItemInterface @typeResolver(class: "Magento\\SalesGraphQl\\Model\\SalesItemTypeResolver") {
     product_name: String @doc(description: "Name of the base product")
     product_sku: String! @doc(description: "SKU of the base product")
-    product_url: String @doc(description: "URL of the base product")
     product_sale_price: Money! @doc(description: "The sale price of the base product, including selected options")
+    discounts: [Discount] @doc(description: "Final discount information for the product")
     parent_product_sku: String @doc(description: "For configurable or bundle products, the SKU of the parent product")
+    parent_product_name: String @doc(description: "Name of parent product like configurable or bundle")
     selected_options: [SalesItemOption] @doc(description: "The selected options for the base product, such as color or size")
     entered_options: [SalesItemOption] @doc(description: "The entered option for the base product, such as a logo or image")
 }
 
-type SalesItemOption @doc(description: "Contains the ID and value for for the selected or entered options") {
+type SalesItemOption @doc(description: "Contains the ID and value for the selected or entered options") {
     id: String! @doc(description: "The name of the option")
     value: String! @doc(description: "The value of the option")
 }
