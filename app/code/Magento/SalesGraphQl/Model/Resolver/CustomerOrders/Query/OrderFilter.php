@@ -12,13 +12,15 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Exception\InputException;
 use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Model\ScopeInterface;
-use Magento\Search\Model\Query;
 
 /**
- * Order filter allows to filter collection using 'id, url_key, name' from search criteria.
+ * Order filter allows to filter collection using 'increment_id' as order number, from the search criteria.
  */
 class OrderFilter
 {
+    /** Minimum query lenth for the filter */
+    private const DEFAULT_MIN_QUERY_LENGTH = 3;
+
     /**
      * @var ScopeConfigInterface
      */
@@ -61,29 +63,17 @@ class OrderFilter
                     $field = $this->fieldTranslatorArray[$field];
                 }
                 foreach ($cond as $condType => $value) {
-                    $this->addAttributeFilter($orderCollection, $field, $condType, $value, $store);
+                    if ($condType === 'match') {
+                        if (is_array($value)) {
+                            throw new InputException(__('Invalid match filter'));
+                        }
+                        $this->addMatchFilter($orderCollection, $field, $value, $store);
+                        return;
+                    }
+                    $orderCollection->addAttributeToFilter($field, [$condType => $value]);
                 }
             }
         }
-    }
-
-    /**
-     * Add filter to order collection
-     *
-     * @param Collection $orderCollection
-     * @param string $field
-     * @param string $condType
-     * @param string|array $value
-     * @param StoreInterface $store
-     * @throws InputException
-     */
-    private function addAttributeFilter($orderCollection, $field, $condType, $value, $store): void
-    {
-        if ($condType === 'match') {
-            $this->addMatchFilter($orderCollection, $field, $value, $store);
-            return;
-        }
-        $orderCollection->addAttributeToFilter($field, [$condType => $value]);
     }
 
     /**
@@ -95,19 +85,22 @@ class OrderFilter
      * @param StoreInterface $store
      * @throws InputException
      */
-    private function addMatchFilter($orderCollection, $field, $value, $store): void
-    {
+    private function addMatchFilter(
+        Collection $orderCollection,
+        string $field,
+        string $value,
+        StoreInterface $store
+    ): void {
         $minQueryLength = $this->scopeConfig->getValue(
-            Query::XML_PATH_MIN_QUERY_LENGTH,
+            'catalog/search/min_query_length',
             ScopeInterface::SCOPE_STORE,
             $store
-        );
+        ) ?? self::DEFAULT_MIN_QUERY_LENGTH;
         $searchValue = str_replace('%', '', $value);
         $matchLength = strlen($searchValue);
         if ($matchLength < $minQueryLength) {
             throw new InputException(__('Invalid match filter'));
         }
-
         $orderCollection->addAttributeToFilter($field, ['like' => "%{$searchValue}%"]);
     }
 }

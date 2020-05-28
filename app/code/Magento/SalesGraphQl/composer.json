@@ -8,6 +8,9 @@
         "magento/module-sales": "*",
         "magento/module-graph-ql": "*"
     },
+    "suggest": {
+        "magento/module-search": "*"
+    },
     "license": [
         "OSL-3.0",
         "AFL-3.0"

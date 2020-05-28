@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\SalesGraphQl\Model\Resolver;
 
+use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Exception\GraphQlAuthorizationException;
@@ -60,15 +61,10 @@ class CustomerOrders implements ResolverInterface
         $userId = $context->getUserId();
         /** @var StoreInterface $store */
         $store = $context->getExtensionAttributes()->getStore();
-        $searchResultDto = $this->searchQuery->getResult($args, $userId, $store);
-
-        if ($searchResultDto->getCurrentPage() > $searchResultDto->getTotalPages() && $searchResultDto->getTotalCount() > 0) {
-            new GraphQlInputException(
-                __(
-                    'currentPage value %1 specified is greater than the number of pages available.',
-                    [$searchResultDto->getTotalPages() ?? 0]
-                )
-            );
+        try {
+            $searchResultDto = $this->searchQuery->getResult($args, $userId, $store);
+        } catch (InputException $e) {
+            new GraphQlInputException(__($e->getMessage()));
         }
 
         $orders = [];
@@ -88,7 +84,6 @@ class CustomerOrders implements ResolverInterface
                 'order_number' => $order['increment_id'],
                 'status' => $orderModel->getStatusLabel(),
                 'model' => $orderModel,
-                'order_items' => $orderModel->getItems() ?? [],
             ];
         }
 
