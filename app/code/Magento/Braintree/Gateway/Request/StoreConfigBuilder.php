@@ -11,6 +11,9 @@ use Magento\Braintree\Gateway\SubjectReader;
 /**
  * This builder is used for correct store resolving and used only to retrieve correct store ID.
  * The data from this build won't be send to Braintree Gateway.
+ *
+ * @deprecated Starting from Magento 2.3.6 Braintree payment method core integration is deprecated
+ * in favor of official payment integration available on the marketplace
  */
 class StoreConfigBuilder implements BuilderInterface
 {

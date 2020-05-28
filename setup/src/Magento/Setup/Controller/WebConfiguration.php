@@ -10,6 +10,11 @@ use Magento\Framework\Config\ConfigOptionsListConstants;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 
+/**
+ * Class WebConfiguration
+ *
+ * @deprecated Starting from Magento 2.3.6 Web Setup Wizard is deprecated
+ */
 class WebConfiguration extends AbstractActionController
 {
     /**

@@ -9,6 +9,12 @@ use Magento\Braintree\Gateway\SubjectReader;
 use Magento\Payment\Gateway\Response\HandlerInterface;
 use Magento\Sales\Model\Order\Payment;
 
+/**
+ * Braintree transaction id response handler
+ *
+ * @deprecated Starting from Magento 2.3.6 Braintree payment method core integration is deprecated
+ * in favor of official payment integration available on the marketplace
+ */
 class TransactionIdHandler implements HandlerInterface
 {
     /**

@@ -14,6 +14,8 @@ use Zend\View\Model\JsonModel;
 
 /**
  * Controller for admin credentials validation
+ *
+ * @deprecated Starting from Magento 2.3.6 Web Setup Wizard is deprecated
  */
 class ValidateAdminCredentials extends AbstractActionController
 {
