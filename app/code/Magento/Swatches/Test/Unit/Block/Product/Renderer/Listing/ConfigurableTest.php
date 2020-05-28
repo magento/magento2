@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Swatches\Test\Unit\Block\Product\Renderer\Listing;
 
+use Magento\Catalog\Block\Product\Context;
 use Magento\Catalog\Helper\Image;
 use Magento\Catalog\Helper\Product;
 use Magento\Catalog\Model\Product\Attribute\Source\Status;
@@ -24,6 +25,8 @@ use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Framework\Pricing\PriceInfo\Base;
 use Magento\Framework\Stdlib\ArrayUtils;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Store\Api\Data\StoreInterface;
+use Magento\Store\Model\StoreManagerInterface;
 use Magento\Swatches\Block\Product\Renderer\Configurable;
 use Magento\Swatches\Block\Product\Renderer\Listing\Configurable as ConfigurableRenderer;
 use Magento\Swatches\Helper\Media;
@@ -83,9 +86,18 @@ class ConfigurableTest extends TestCase
 
     /** @var MockObject */
     private $variationPricesMock;
+    /**
+     * @var StoreManagerInterface|MockObject
+     */
+    private $storeManager;
+    /**
+     * @var Context|MockObject
+     */
+    private $context;
 
     protected function setUp(): void
     {
+        $this->mockContextObject();
         $this->arrayUtils = $this->createMock(ArrayUtils::class);
         $this->jsonEncoder = $this->getMockForAbstractClass(EncoderInterface::class);
         $this->helper = $this->createMock(Data::class);
@@ -110,6 +122,7 @@ class ConfigurableTest extends TestCase
         $this->configurable = $objectManagerHelper->getObject(
             ConfigurableRenderer::class,
             [
+                'context' => $this->context,
                 'scopeConfig' => $this->scopeConfig,
                 'imageHelper' => $this->imageHelper,
                 'imageUrlBuilder' => $this->imageUrlBuilder,
@@ -126,6 +139,32 @@ class ConfigurableTest extends TestCase
                 'variationPrices' => $this->variationPricesMock
             ]
         );
+    }
+
+    /**
+     * Create mocks for \Magento\Catalog\Block\Product\Context object
+     *
+     * @return void
+     */
+    protected function mockContextObject(): void
+    {
+        $storeMock = $this->createMock(StoreInterface::class);
+        $storeMock->expects($this->any())
+            ->method('getWebsiteId')
+            ->willReturn(1);
+
+        $this->storeManager = $this->getMockBuilder(StoreManagerInterface::class)
+            ->getMockForAbstractClass();
+        $this->storeManager->expects($this->any())
+            ->method('getStore')
+            ->willReturn($storeMock);
+
+        $this->context = $this->getMockBuilder(Context::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->context->expects($this->any())
+            ->method('getStoreManager')
+            ->willReturn($this->storeManager);
     }
 
     /**
@@ -211,11 +250,13 @@ class ConfigurableTest extends TestCase
         $product1->expects($this->any())->method('isSaleable')->willReturn(true);
         $product1->expects($this->atLeastOnce())->method('getStatus')->willReturn(Status::STATUS_ENABLED);
         $product1->expects($this->any())->method('getData')->with('code')->willReturn(1);
+        $product1->expects($this->any())->method('getWebsiteIds')->willReturn([1]);
 
         $product2 = $this->createMock(\Magento\Catalog\Model\Product::class);
         $product2->expects($this->any())->method('isSaleable')->willReturn(true);
         $product2->expects($this->atLeastOnce())->method('getStatus')->willReturn(Status::STATUS_ENABLED);
         $product2->expects($this->any())->method('getData')->with('code')->willReturn(3);
+        $product2->expects($this->any())->method('getWebsiteIds')->willReturn([1]);
 
         $simpleProducts = [$product1, $product2];
         $configurableType = $this->createMock(\Magento\ConfigurableProduct\Model\Product\Type\Configurable::class);
