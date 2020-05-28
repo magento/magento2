@@ -19,7 +19,7 @@
             <group value="mtf_migrated"/>
             <group value="SearchEngineElasticsearch"/>
             <skip>
-                <issueId value="MC-21228"/>
+                <issueId value="MC-34217"/>
             </skip>
         </annotations>
         <actionGroup ref="StorefrontFillFormAdvancedSearchActionGroup" stepKey="search">
