@@ -10,9 +10,8 @@ namespace Magento\CatalogSearch\Test\Unit\Model\Indexer;
 use Magento\CatalogSearch\Model\Indexer\Fulltext;
 use Magento\CatalogSearch\Model\Indexer\Fulltext\Action\Full;
 use Magento\CatalogSearch\Model\Indexer\Fulltext\Action\FullFactory;
-use Magento\CatalogSearch\Model\Indexer\IndexerHandler;
+use Magento\Framework\Indexer\SaveHandler\IndexerInterface;
 use Magento\CatalogSearch\Model\Indexer\IndexerHandlerFactory;
-use Magento\CatalogSearch\Model\Indexer\Scope\IndexSwitcher;
 use Magento\CatalogSearch\Model\Indexer\Scope\State;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Indexer\Dimension;
@@ -38,7 +37,7 @@ class FulltextTest extends TestCase
     protected $fullAction;
 
     /**
-     * @var IndexerHandler|MockObject
+     * @var IndexerInterface|MockObject
      */
     protected $saveHandler;
 
@@ -46,11 +45,6 @@ class FulltextTest extends TestCase
      * @var \Magento\CatalogSearch\Model\ResourceModel\Fulltext|MockObject
      */
     protected $fulltextResource;
-
-    /**
-     * @var IndexSwitcher|MockObject
-     */
-    private $indexSwitcher;
 
     /**
      * @var DimensionProviderInterface|MockObject
@@ -70,7 +64,7 @@ class FulltextTest extends TestCase
             ['create']
         );
         $fullActionFactory->expects($this->any())->method('create')->willReturn($this->fullAction);
-        $this->saveHandler = $this->getClassMock(IndexerHandler::class);
+        $this->saveHandler = $this->getClassMock(IndexerInterface::class);
         $indexerHandlerFactory = $this->createPartialMock(
             IndexerHandlerFactory::class,
             ['create']
@@ -78,11 +72,6 @@ class FulltextTest extends TestCase
         $indexerHandlerFactory->expects($this->any())->method('create')->willReturn($this->saveHandler);
 
         $this->fulltextResource = $this->getClassMock(\Magento\CatalogSearch\Model\ResourceModel\Fulltext::class);
-
-        $this->indexSwitcher = $this->getMockBuilder(IndexSwitcher::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['switchIndex'])
-            ->getMock();
 
         $this->dimensionProviderMock = $this->getMockBuilder(DimensionProviderInterface::class)
             ->getMock();
@@ -101,7 +90,6 @@ class FulltextTest extends TestCase
                 'indexerHandlerFactory' => $indexerHandlerFactory,
                 'fulltextResource' => $this->fulltextResource,
                 'data' => [],
-                'indexSwitcher' => $this->indexSwitcher,
                 'dimensionProvider' => $this->dimensionProviderMock,
                 'indexScopeState' => $stateMock,
                 'processManager' => $this->processManager,
@@ -171,8 +159,6 @@ class FulltextTest extends TestCase
         $stores = [0 => 'Store 1', 1 => 'Store 2'];
         $indexData = new \ArrayObject([new \ArrayObject([]), new \ArrayObject([])]);
         $this->setupDataProvider($stores);
-
-        $this->indexSwitcher->expects($this->exactly(2))->method('switchIndex');
 
         $this->saveHandler->expects($this->exactly(count($stores)))->method('cleanIndex');
         $this->saveHandler->expects($this->exactly(2))->method('saveIndex');
