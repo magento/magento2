@@ -99,7 +99,7 @@ class OrderFilter
         $searchValue = str_replace('%', '', $value);
         $matchLength = strlen($searchValue);
         if ($matchLength < $minQueryLength) {
-            throw new InputException(__('Invalid match filter'));
+            throw new InputException(__('Invalid match filter. Minimum length is %1.', $minQueryLength));
         }
         $orderCollection->addAttributeToFilter($field, ['like' => "%{$searchValue}%"]);
     }
