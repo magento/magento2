@@ -150,8 +150,8 @@ class RegisterTest extends \PHPUnit\Framework\TestCase
             ->setShowAddressFields(true);
         $this->setAttributeDataProvider($block);
 
-        $this->assertNotContains('title="City"', $block->toHtml());
-        $this->assertContains('title="Suburb"', $block->toHtml());
+        $this->assertStringNotContainsString('title="City"', $block->toHtml());
+        $this->assertStringContainsString('title="Suburb"', $block->toHtml());
     }
 
     /**
