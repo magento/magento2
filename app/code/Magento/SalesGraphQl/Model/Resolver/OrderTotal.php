@@ -10,12 +10,12 @@ namespace Magento\SalesGraphQl\Model\Resolver;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Exception\GraphQlAuthorizationException;
+use Magento\GraphQl\Model\Query\ContextInterface;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
-use Magento\GraphQl\Model\Query\ContextInterface;
 use Magento\Sales\Model\Order;
 
-class OrderTotals implements ResolverInterface
+class OrderTotal implements ResolverInterface
 {
     /**
      * @inheritdoc
@@ -43,9 +43,34 @@ class OrderTotals implements ResolverInterface
                 'base_grand_total' => ['value' => $orderModel->getBaseGrandTotal(), 'currency' => $currency],
                 'grand_total' => ['value' =>  $orderModel->getGrandTotal(), 'currency' => $currency],
                 'subtotal' => ['value' =>  $orderModel->getSubtotal(), 'currency' => $currency],
-                'tax' => ['value' =>  $orderModel->getTaxAmount(), 'currency' => $currency],
-                'shipping_handling' => ['value' => $orderModel->getShippingAmount(), 'currency' => $currency]
+                'total_tax' => ['value' =>  $orderModel->getTaxAmount(), 'currency' => $currency],
+                'taxes' => $this->getAppliedTaxes($orderModel, $currency),
+                'total_shipping' => ['value' => $orderModel->getShippingAmount(), 'currency' => $currency],
+                'shipping_handling' => [
+                    'amount_exc_tax' => ['value' => $orderModel->getShippingTaxAmount(), 'currency' => $currency],
+                    'amount_inc_tax' => ['value' => $orderModel->getShippingInclTax(), 'currency' => $currency],
+                    'total_amount' => ['value' => $orderModel->getBaseShippingTaxAmount(), 'currency' => $currency],
+                    'taxes' => $this->getAppliedTaxes($orderModel, $currency)
+                    ]
         ];
         return $totals;
+    }
+
+    /**
+     * Returns taxes applied to the current order
+     *
+     * @param Order $orderModel
+     * @param string $currency
+     * @return array
+     */
+    private function getAppliedTaxes(Order $orderModel, string $currency): array
+    {
+        $taxes[] = [
+            'rate' => $orderModel->getStoreToOrderRate(),
+            'title' => $orderModel->getCustomerName(),
+            'amount' => [ 'value' =>  $orderModel->getTaxAmount(), 'currency' => $currency
+            ]
+        ];
+        return $taxes;
     }
 }

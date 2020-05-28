@@ -9,7 +9,7 @@ namespace Magento\SalesGraphQl\Model;
 
 use Magento\Framework\GraphQl\Query\Resolver\TypeResolverInterface;
 
-class SalesTotalsTypeResolver implements TypeResolverInterface
+class SalesTotalAmountTypeResolver implements TypeResolverInterface
 {
     /**
      * @inheritDoc

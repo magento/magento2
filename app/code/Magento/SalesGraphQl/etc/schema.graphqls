@@ -34,7 +34,7 @@ type CustomerOrder @doc(description: "Contains details about each of the custome
     status: String! @doc(description: "The current status of the order")
     number: String! @doc(description: "The order number")
     order_items: [OrderItem]! @doc(description: "An array containing the items purchased in this order") @resolver(class: "Magento\\SalesGraphQl\\Model\\Resolver\\OrderItem")
-    totals: OrderTotals! @doc(description: "Contains details about the calculated totals for this order") @resolver(class: "Magento\\SalesGraphQl\\Model\\Resolver\\OrderTotals")
+    totals: OrderTotal! @doc(description: "Contains details about the calculated totals for this order") @resolver(class: "Magento\\SalesGraphQl\\Model\\Resolver\\OrderTotal")
 }
 
 type OrderItem implements SalesItemInterface {
@@ -56,16 +56,32 @@ type SalesItemOption @doc(description: "Contains the ID and value for for the se
     value: String! @doc(description: "The value of the option")
 }
 
-interface SalesTotalsInterface @typeResolver(class: "Magento\\SalesGraphQl\\Model\\SalesTotalsTypeResolver") {
+interface SalesTotalAmountInterface @typeResolver(class: "Magento\\SalesGraphQl\\Model\\SalesTotalAmountTypeResolver") {
     subtotal: Money! @doc(description: "The subtotal of the order, excluding shipping, discounts, and taxes")
     discounts: [Discount] @doc(description: "The applied discounts to the order")
-    tax: Money! @doc(description: "The amount of tax applied to the order")
+    total_tax: Money! @doc(description: "The amount of tax applied to the order")
+    taxes: [TaxItem]! @doc(description: "The order taxes details")
     grand_total: Money! @doc(description: "The final total amount, including shipping, discounts, and taxes")
     base_grand_total: Money! @doc(description: "The final base grand total amount in the base currency")
 }
 ​
-type OrderTotals implements SalesTotalsInterface @doc(description: "Contains details about the subtotals used to calculate the final price") {
-    shipping_handling: Money! @doc(description: "The shipping and handling costs for the order")
+type OrderTotal implements SalesTotalAmountInterface @doc(description: "Contains details about the sales total amounts used to calculate the final price") {
+    total_shipping: Money! @doc(description: "The order shipping amount")
+    shipping_handling: ShippingHandling!  @doc(description: "The shipping and handling costs details for the order")
+}
+
+
+type ShippingHandling @doc(description: "The Shipping handling details") {
+    total_amount: Money! @doc(description: "The Shipping total amount")
+    amount_inc_tax: Money @doc(description: "The Shipping amount including tax")
+    amount_exc_tax: Money @doc(description: "The Shipping amount excluding tax")
+    taxes: [TaxItem]! @doc(description: "The Shipping taxes details")
+}
+
+type TaxItem @doc(description: "The tax item details") {
+    amount: Money! @doc(description: "The Tax amount")
+    title: String! @doc(description: "The Tax item title")
+    rate: Float @doc(description: "The Tax item rate")
 }
 
 type Mutation {
