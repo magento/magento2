@@ -6,29 +6,25 @@
 define([
     'ko',
     'jquery',
+    'rjsResolver',
     'Magento_Ui/js/lib/knockout/bindings/color-picker'
-], function (ko, $) {
+], function (ko, $, resolver) {
     'use strict';
 
-    var $input,
-        originaljQuery,
-        originaljQueryInit,
-        originaljQuerySpectrum;
-
-    beforeEach(function () {
-        originaljQuery = $;
-        originaljQueryInit = $.fn.init;
-        originaljQuerySpectrum = $.fn.spectrum;
+    var $input;
+    
+    beforeAll(function () {
+        define('spectrum', function () {
+            return jasmine.createSpy();
+        });
     });
 
-    afterEach(function () {
-        $ = originaljQuery;
-        $.fn.init = originaljQueryInit;
-        $.fn.spectrum = originaljQuerySpectrum;
+    afterAll(function () {
+        require.undef('spectrum');
     });
 
     describe('Colorpicker binding', function () {
-        it('Should call spectrum on $input with disabled configuration if view model disabled', function () {
+        it('Should call spectrum on $input with disabled configuration if view model disabled', function (done) {
             var value = {
                     configStuffInHere: true
                 },
@@ -41,23 +37,21 @@ define([
             $input = jasmine.createSpy();
 
             ko.bindingHandlers.colorPicker.init($input, valueAccessor, null, viewModel);
+            
+            resolver(function () {
+                expect(value.change).toEqual(jasmine.any(Function));
+                expect(value.hide).toEqual(jasmine.any(Function));
+                expect(value.show).toEqual(jasmine.any(Function));
+                expect(value.change).toBe(value.hide);
 
-            expect(value.change).toEqual(jasmine.any(Function));
-            expect(value.hide).toEqual(jasmine.any(Function));
-            expect(value.show).toEqual(jasmine.any(Function));
-            expect(value.change).toBe(value.hide);
+                expect($.fn.spectrum.calls.allArgs()).toEqual([[value], ['disable']]);
+                expect(viewModel.disabled).toHaveBeenCalled();
 
-            expect($.fn.spectrum.calls.allArgs()).toEqual([[value], ['disable']]);
-            expect(viewModel.disabled).toHaveBeenCalled();
-
-            $.fn.init = jasmine.createSpy().and.returnValue($.fn);
-
-            ko.bindingHandlers.colorPicker.init($input, valueAccessor, null, viewModel);
-
-            expect($.fn.init).toHaveBeenCalledWith($input, undefined);
+                done();
+            });
         });
 
-        it('Should call spectrum on $input with extra configuration if view model enabled', function () {
+        it('Should call spectrum on $input with extra configuration if view model enabled', function (done) {
             var value = {
                     configStuffInHere: true
                 },
@@ -71,22 +65,20 @@ define([
 
             ko.bindingHandlers.colorPicker.init($input, valueAccessor, null, viewModel);
 
-            expect(value.change).toEqual(jasmine.any(Function));
-            expect(value.hide).toEqual(jasmine.any(Function));
-            expect(value.show).toEqual(jasmine.any(Function));
-            expect(value.change).toBe(value.hide);
+            resolver(function () {
+                expect(value.change).toEqual(jasmine.any(Function));
+                expect(value.hide).toEqual(jasmine.any(Function));
+                expect(value.show).toEqual(jasmine.any(Function));
+                expect(value.change).toBe(value.hide);
 
-            expect($.fn.spectrum.calls.allArgs()).toEqual([[value], ['enable']]);
-            expect(viewModel.disabled).toHaveBeenCalled();
+                expect($.fn.spectrum.calls.allArgs()).toEqual([[value], ['enable']]);
+                expect(viewModel.disabled).toHaveBeenCalled();
 
-            $.fn.init = jasmine.createSpy().and.returnValue($.fn);
-
-            ko.bindingHandlers.colorPicker.init($input, valueAccessor, null, viewModel);
-
-            expect($.fn.init).toHaveBeenCalledWith($input, undefined);
+                done();
+            });
         });
 
-        it('Verify config value is empty when reset colorpicker intput', function () {
+        it('Verify config value is empty when reset colorpicker intput', function (done) {
             var value = {
                     configStuffInHere: true,
                     value: jasmine.createSpy().and.returnValue(undefined)
@@ -100,13 +92,22 @@ define([
             $input = jasmine.createSpy();
 
             ko.bindingHandlers.colorPicker.update($input, valueAccessor, null, viewModel);
-            expect($.fn.spectrum).toHaveBeenCalledTimes(1);
-            expect(valueAccessor().value).toHaveBeenCalledTimes(4);
 
-            value.value = jasmine.createSpy().and.returnValue('');
-            ko.bindingHandlers.colorPicker.update($input, valueAccessor, null, viewModel);
-            expect($.fn.spectrum).toHaveBeenCalledTimes(3);
-            expect(valueAccessor().value).toHaveBeenCalledTimes(5);
+            resolver(function () {
+                expect($.fn.spectrum).toHaveBeenCalledTimes(1);
+                expect(valueAccessor().value).toHaveBeenCalledTimes(4);
+
+                value.value = jasmine.createSpy().and.returnValue('');
+                ko.bindingHandlers.colorPicker.update($input, valueAccessor, null, viewModel);
+
+                resolver(function () {
+                    expect($.fn.spectrum).toHaveBeenCalledTimes(3);
+                    expect(valueAccessor().value).toHaveBeenCalledTimes(5);
+
+                    done();
+                });
+            });
+            
         });
     });
 });
