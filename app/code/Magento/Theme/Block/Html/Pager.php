@@ -481,12 +481,8 @@ class Pager extends \Magento\Framework\View\Element\Template
         $data = [$this->getLimitVarName() => $limit];
 
         $currentPage = $this->getCurrentPage();
-        if ($currentPage === 1) {
-            return $data;
-        }
-
         $availableCount = (int) ceil($this->getTotalNum() / $limit);
-        if ($availableCount < $currentPage) {
+        if ($currentPage !== 1 && $availableCount < $currentPage) {
             $data = array_merge($data, [$this->getPageVarName() => $availableCount === 1 ? null : $availableCount]);
         }
 
