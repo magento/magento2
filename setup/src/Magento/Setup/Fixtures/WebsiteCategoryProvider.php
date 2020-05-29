@@ -3,10 +3,12 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Setup\Fixtures;
 
 use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\DB\Adapter\AdapterInterface;
 
 /**
  * Website and category provider
@@ -29,7 +31,7 @@ class WebsiteCategoryProvider
     private $resourceConnection;
 
     /**
-     * @var \Magento\Framework\DB\Adapter\AdapterInterface
+     * @var AdapterInterface
      */
     private $connection;
 
@@ -93,6 +95,8 @@ class WebsiteCategoryProvider
     }
 
     /**
+     * Get categories and websites
+     *
      * @return array
      */
     private function getCategoriesAndWebsites()
@@ -106,7 +110,7 @@ class WebsiteCategoryProvider
                     ['sg' => $this->resourceConnection->getTableName('store_group')],
                     "c.path like concat('1/', sg.root_category_id, '/%')",
                     ['website' => 'website_id']
-                );
+                )->order('category ASC');
             $this->categoriesPerWebsite = $this->getConnection()->fetchAll($select);
         }
 
@@ -114,6 +118,8 @@ class WebsiteCategoryProvider
     }
 
     /**
+     * Checks is assign_entities_to_all_websites flag set
+     *
      * @return bool
      */
     private function isAssignToAllWebsites()
@@ -122,6 +128,8 @@ class WebsiteCategoryProvider
     }
 
     /**
+     * Provides all websites
+     *
      * @return array
      */
     private function getAllWebsites()
@@ -134,6 +142,8 @@ class WebsiteCategoryProvider
     }
 
     /**
+     * Provides all categories
+     *
      * @return array
      */
     private function getAllCategories()
@@ -146,7 +156,9 @@ class WebsiteCategoryProvider
     }
 
     /**
-     * @return \Magento\Framework\DB\Adapter\AdapterInterface
+     * Provides connection
+     *
+     * @return AdapterInterface
      */
     private function getConnection()
     {

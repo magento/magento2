@@ -3,19 +3,21 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Framework\App\Test\Unit;
 
-use \Magento\Framework\App\ErrorHandler;
+use Magento\Framework\App\ErrorHandler;
+use PHPUnit\Framework\TestCase;
 
-class ErrorHandlerTest extends \PHPUnit\Framework\TestCase
+class ErrorHandlerTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\App\ErrorHandler
+     * @var ErrorHandler
      */
     protected $object;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->object = new ErrorHandler();
     }
