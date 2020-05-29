@@ -16,8 +16,25 @@ use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 class CustomerCompareList implements ResolverInterface
 {
 
-    public function resolve(Field $field, $context, ResolveInfo $info, array $value = null, array $args = null)
-    {
+    /**
+     * Get customer compare list
+     *
+     * @param Field $field
+     * @param ContextInterface $context
+     * @param ResolveInfo $info
+     * @param array|null $value
+     * @param array|null $args
+     * @return Value|mixed|void
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
+    public function resolve(
+        Field $field,
+        $context,
+        ResolveInfo $info,
+        array $value = null,
+        array $args = null
+    ) {
         // TODO: Implement resolve() method.
     }
 }
