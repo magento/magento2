@@ -129,7 +129,7 @@ $product->setTypeId(Configurable::TYPE_CODE)
     ->setStatus(Status::STATUS_ENABLED)
     ->setStockData(['use_config_manage_stock' => 1, 'is_in_stock' => 1]);
 
-$productRepository->save($product);
+$product = $productRepository->save($product);
 
 /** @var \Magento\Catalog\Api\CategoryLinkManagementInterface $categoryLinkManagement */
 $categoryLinkManagement = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
@@ -139,3 +139,6 @@ $categoryLinkManagement->assignProductToCategories(
     $product->getSku(),
     [2]
 );
+
+$indexerProcessor = Bootstrap::getObjectManager()->get(\Magento\Catalog\Model\Indexer\Product\Price\Processor::class);
+$indexerProcessor->reindexList(array_merge($associatedProductIds, [$product->getId()]));
