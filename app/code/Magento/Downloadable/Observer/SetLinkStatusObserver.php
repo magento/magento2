@@ -160,6 +160,8 @@ class SetLinkStatusObserver implements ObserverInterface
     }
 
     /**
+     * Returns purchased item collection
+     *
      * @return \Magento\Downloadable\Model\ResourceModel\Link\Purchased\Item\Collection
      */
     protected function _createItemsCollection()
