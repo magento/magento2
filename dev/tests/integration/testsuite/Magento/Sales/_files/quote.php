@@ -3,9 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-//\Magento\TestFramework\Helper\Bootstrap::getInstance()->loadArea('frontend');
 
-\Magento\TestFramework\Helper\Bootstrap::getInstance()->reinitialize();
+\Magento\TestFramework\Helper\Bootstrap::getInstance()->loadArea('frontend');
 
 $storeManager = Magento\TestFramework\Helper\Bootstrap::getObjectManager()
     ->get(\Magento\Store\Model\StoreManagerInterface::class);
@@ -71,4 +70,3 @@ $quoteIdMask = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
 $quoteIdMask->setQuoteId($quote->getId());
 $quoteIdMask->setDataChanges(true);
 $quoteIdMask->save();
-
