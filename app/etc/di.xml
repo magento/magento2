@@ -430,6 +430,16 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Setup\Module\Di\App\Task\Operation\PluginListGenerator">
+        <arguments>
+            <argument name="cache" xsi:type="object">Magento\Framework\App\Cache\Type\Config</argument>
+            <argument name="reader" xsi:type="object">Magento\Framework\ObjectManager\Config\Reader\Dom\Proxy</argument>
+            <argument name="cacheId" xsi:type="string">plugin-list</argument>
+            <argument name="scopePriorityScheme" xsi:type="array">
+                <item name="first" xsi:type="string">global</item>
+            </argument>
+        </arguments>
+    </type>
     <type name="Magento\Framework\App\ResourceConnection">
         <arguments>
             <argument name="connectionFactory" xsi:type="object">Magento\Framework\App\ResourceConnection\ConnectionFactory</argument>

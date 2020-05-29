@@ -59,6 +59,11 @@ class OperationFactory
     const APPLICATION_ACTION_LIST_GENERATOR = 'application_action_list_generator';
 
     /**
+     * Plugin list generator
+     */
+    const PLUGIN_LIST_GENERATOR = 'plugin_list_generator';
+
+    /**
      * Operations definitions
      *
      * @var array
@@ -73,6 +78,7 @@ class OperationFactory
         self::REPOSITORY_GENERATOR => \Magento\Setup\Module\Di\App\Task\Operation\RepositoryGenerator::class,
         self::PROXY_GENERATOR => \Magento\Setup\Module\Di\App\Task\Operation\ProxyGenerator::class,
         self::APPLICATION_ACTION_LIST_GENERATOR => AppActionListGenerator::class,
+        self::PLUGIN_LIST_GENERATOR => PluginListGenerator::class,
     ];
 
     /**

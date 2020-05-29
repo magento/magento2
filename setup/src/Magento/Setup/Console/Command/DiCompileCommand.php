@@ -400,6 +400,7 @@ class DiCompileCommand extends Command
                 $compiledPathsList['generated_helpers'],
             ],
             OperationFactory::APPLICATION_ACTION_LIST_GENERATOR => [],
+            OperationFactory::PLUGIN_LIST_GENERATOR => [],
         ];
 
         return $operations;
