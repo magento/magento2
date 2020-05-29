@@ -72,10 +72,6 @@ class Escaper
             $data = (string)$data;
         }
 
-        if ($allowedTags !== null && !is_array($allowedTags)) {
-            $allowedTags = [$allowedTags];
-        }
-
         if (is_array($data)) {
             $result = [];
             foreach ($data as $item) {
