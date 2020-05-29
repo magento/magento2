@@ -29,7 +29,7 @@ type CompareList {
 
 
 type Customer {
-    compare_list: CompareList @doc(description: "Active customers compare list")
+    compare_list: CompareList @resolver(class: "\\Magento\\CompareListGraphQl\\Model\\Resolver\\CustomerCompareList") @doc(description: "Active customers compare list")
 }
 
 type Query {
