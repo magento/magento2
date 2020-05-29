@@ -6,12 +6,29 @@
 namespace Magento\Customer\Block\Adminhtml\Edit;
 
 use Magento\Framework\View\Element\UiComponent\Control\ButtonProviderInterface;
+use Magento\Backend\Block\Widget\Context;
 
 /**
- * Class BackButton
+ * Class for BackButton
  */
 class BackButton extends GenericButton implements ButtonProviderInterface
 {
+
+    /**
+     * @var Context
+     */
+    protected $context;
+
+    /**
+     * @param Context $context
+     */
+    public function __construct(
+        Context $context
+    ) {
+        $this->context = $context;
+        parent::__construct($context);
+    }
+
     /**
      * Get Button Data
      *
@@ -34,10 +51,10 @@ class BackButton extends GenericButton implements ButtonProviderInterface
      */
     public function getBackUrl()
     {
-        if ($this->context->getRequest()->getparam('review_id')) {
+        if ($this->context->getRequest()->getParam('review_id')) {
             return $this->getUrl(
                 'review/product/edit',
-                ['id' => $this->context->getRequest()->getparam('review_id')]
+                ['id' => $this->context->getRequest()->getParam('review_id')]
             );
         }
         return $this->getUrl('*/*/');
