@@ -33,7 +33,7 @@ class RetrieveOrdersByOrderNumberTest extends GraphQlAbstract
     /** @var Order\Item */
     private $orderItem;
 
-    protected function setUp()
+    protected function setUp():void
     {
         parent::setUp();
         $objectManager = Bootstrap::getObjectManager();
@@ -66,7 +66,6 @@ class RetrieveOrdersByOrderNumberTest extends GraphQlAbstract
       order_items{
         quantity_ordered
         product_sku
-        product_url
         product_name
         product_sale_price{currency value}
       }
@@ -79,19 +78,13 @@ class RetrieveOrdersByOrderNumberTest extends GraphQlAbstract
                         value
                         currency
                     }
-                    shipping_handling {
-                        value
-                        currency
-                    }
+                   shipping_handling{total_amount{value currency}}
                     subtotal {
                         value
                         currency
                     }
-                    tax {
-                        value
-                        currency
-                    }
-                    discounts {
+                  taxes {amount {currency value} title rate}
+                  discounts {
                         amount {
                             value
                             currency
@@ -146,15 +139,20 @@ QUERY;
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
      * @magentoApiDataFixture Magento/Sales/_files/orders_with_customer.php
      */
-    public function testGetMultipleCustomerOrdersQuery()
+    public function testGetMatchingCustomerOrders()
     {
         $query =
             <<<QUERY
 {
   customer
   {
-   orders(filter:{number:{in:["100000005","100000006"]}}){
+   orders(filter:{number:{match:"100"}}){
     total_count
+    page_info{
+      total_pages
+      current_page
+      page_size
+    }
     items
     {
       id
@@ -164,7 +162,94 @@ QUERY;
       order_items{
         quantity_ordered
         product_sku
-        product_url
+        product_name
+        parent_product_sku
+        product_sale_price{currency value}
+      }
+
+    }
+   }
+ }
+}
+QUERY;
+
+        $currentEmail = 'customer@example.com';
+        $currentPassword = 'password';
+        $response = $this->graphQlQuery($query, [], '', $this->getCustomerAuthHeaders($currentEmail, $currentPassword));
+        $this->assertArrayHasKey('orders', $response['customer']);
+        $this->assertArrayHasKey('items', $response['customer']['orders']);
+        $this->assertArrayHasKey('total_count', $response['customer']['orders']);
+        $this->assertEquals(4, $response['customer']['orders']['total_count']);
+    }
+    /**
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     * @magentoApiDataFixture Magento/Sales/_files/orders_with_customer.php
+     */
+    public function testGetMatchingOrdersForLowerQueryLength()
+    {
+        $query =
+            <<<QUERY
+{
+ customer
+ {
+  orders(filter:{number:{match:"00"}}){
+   total_count
+   page_info{
+     total_pages
+     current_page
+     page_size
+   }
+   items
+   {
+     id
+     number
+     status
+     order_date
+     order_items{
+       quantity_ordered
+       product_sku
+       product_name
+     }
+   }
+  }
+}
+}
+QUERY;
+
+        $currentEmail = 'customer@example.com';
+        $currentPassword = 'password';
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Invalid match filter. Minimum length is 3.');
+        $this->graphQlQuery($query, [], '', $this->getCustomerAuthHeaders($currentEmail, $currentPassword));
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     * @magentoApiDataFixture Magento/Sales/_files/orders_with_customer.php
+     */
+    public function testGetMultipleCustomerOrdersQueryWithDefaultPagination()
+    {
+        $query =
+            <<<QUERY
+{
+  customer
+  {
+   orders(filter:{number:{in:["100000005","100000006"]}}){
+    total_count
+    page_info{
+      total_pages
+      current_page
+      page_size
+    }
+    items
+    {
+      id
+      number
+      status
+      order_date
+      order_items{
+        quantity_ordered
+        product_sku
         product_name
         parent_product_sku
         product_sale_price{currency value}
@@ -178,18 +263,12 @@ QUERY;
                         value
                         currency
                     }
-                    shipping_handling {
-                        value
-                        currency
-                    }
+                    shipping_handling{total_amount{value currency}}
                     subtotal {
                         value
                         currency
                     }
-                    tax {
-                        value
-                        currency
-                    }
+                    taxes {amount {currency value} title rate}
                     discounts {
                         amount {
                             value
@@ -212,6 +291,11 @@ QUERY;
         $this->assertArrayHasKey('items', $response['customer']['orders']);
         $this->assertArrayHasKey('total_count', $response['customer']['orders']);
         $this->assertEquals(2, $response['customer']['orders']['total_count']);
+        $this->assertArrayHasKey('page_info', $response['customer']['orders']);
+        $pageInfo = $response['customer']['orders']['page_info'];
+        $this->assertEquals(1, $pageInfo['current_page']);
+        $this->assertEquals(20, $pageInfo['page_size']);
+        $this->assertEquals(1, $pageInfo['total_pages']);
         $this->assertNotEmpty($response['customer']['orders']['items']);
         $customerOrderItemsInResponse = $response['customer']['orders']['items'];
         $this->assertCount(2, $response['customer']['orders']['items']);
@@ -238,8 +322,6 @@ QUERY;
     /**
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
      * @magentoApiDataFixture Magento/Sales/_files/orders_with_customer.php
-     * @expectedException \Exception
-     * @expectedExceptionMessage The current customer isn't authorized.
      */
     public function testGetCustomerOrdersUnauthorizedCustomer()
     {
@@ -261,6 +343,8 @@ QUERY;
  }
 }
 QUERY;
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('The current customer isn\'t authorized.');
         $this->graphQlQuery($query);
     }
 
@@ -338,18 +422,12 @@ QUERY;
             value
             currency
           }
-          shipping_handling {
-            value
-            currency
-          }
+        shipping_handling{total_amount{value currency}}
           subtotal {
             value
             currency
           }
-          tax {
-            value
-            currency
-          }
+          taxes {amount{value currency} title rate}
           discounts {
             amount {
               value
@@ -408,18 +486,12 @@ QUERY;
                         value
                         currency
                     }
-                    shipping_handling {
-                        value
-                        currency
-                    }
+                    shipping_handling{total_amount{value currency}}
                     subtotal {
                         value
                         currency
                     }
-                    tax {
-                        value
-                        currency
-                    }
+                    taxes {amount{value currency} title rate}
                     discounts {
                         amount {
                             value
@@ -506,18 +578,12 @@ QUERY;
                         value
                         currency
                     }
-                    shipping_handling {
-                        value
-                        currency
-                    }
+                    shipping_handling {total_amount{value currency}}
                     subtotal {
                         value
                         currency
                     }
-                    tax {
-                        value
-                        currency
-                    }
+                    taxes {amount{value currency} title rate}
                     discounts {
                         amount {
                             value
@@ -588,7 +654,14 @@ QUERY;
         $customerToken = $this->customerTokenService->createCustomerAccessToken($email, $password);
         return ['Authorization' => 'Bearer ' . $customerToken];
     }
+    /**
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     * @magentoApiDataFixture Magento/Sales/_files/order_with_tax.php
+     */
+    public function testCustomerOrderWithTaxes()
+    {
 
+    }
     /**
      * Assert order totals
      *
@@ -626,19 +699,19 @@ QUERY;
             );
             $this->assertEquals(
                 10,
-                $response['customer']['orders']['items'][0]['totals']['shipping_handling']['value']
+                $response['customer']['orders']['items'][0]['totals']['shipping_handling']['total_amount']['value']
             );
             $this->assertEquals(
                 'USD',
-                $response['customer']['orders']['items'][0]['totals']['shipping_handling']['currency']
+                $response['customer']['orders']['items'][0]['totals']['shipping_handling']['total_amount']['currency']
             );
             $this->assertEquals(
                 5,
-                $response['customer']['orders']['items'][0]['totals']['tax']['value']
+                $response['customer']['orders']['items'][0]['totals']['taxes'][0]['amount']['value']
             );
             $this->assertEquals(
                 'USD',
-                $response['customer']['orders']['items'][0]['totals']['tax']['currency']
+                $response['customer']['orders']['items'][0]['totals']['taxes'][0]['amount']['currency']
             );
         }
 

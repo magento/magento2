@@ -49,7 +49,7 @@ class OrderTotal implements ResolverInterface
                 'shipping_handling' => [
                     'amount_exc_tax' => ['value' => $orderModel->getShippingTaxAmount(), 'currency' => $currency],
                     'amount_inc_tax' => ['value' => $orderModel->getShippingInclTax(), 'currency' => $currency],
-                    'total_amount' => ['value' => $orderModel->getBaseShippingTaxAmount(), 'currency' => $currency],
+                    'total_amount' => ['value' => $orderModel->getBaseShippingAmount(), 'currency' => $currency],
                     'taxes' => $this->getAppliedTaxes($orderModel, $currency)
                     ]
         ];
