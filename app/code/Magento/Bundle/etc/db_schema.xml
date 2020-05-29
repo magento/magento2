@@ -9,13 +9,13 @@
         xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
     <table name="catalog_product_bundle_option" resource="default" engine="innodb"
            comment="Catalog Product Bundle Option">
-        <column xsi:type="int" name="option_id" padding="10" unsigned="true" nullable="false" identity="true"
+        <column xsi:type="int" name="option_id" unsigned="true" nullable="false" identity="true"
                 comment="Option ID"/>
-        <column xsi:type="int" name="parent_id" padding="10" unsigned="true" nullable="false" identity="false"
+        <column xsi:type="int" name="parent_id" unsigned="true" nullable="false" identity="false"
                 comment="Parent ID"/>
-        <column xsi:type="smallint" name="required" padding="5" unsigned="true" nullable="false" identity="false"
+        <column xsi:type="smallint" name="required" unsigned="true" nullable="false" identity="false"
                 default="0" comment="Required"/>
-        <column xsi:type="int" name="position" padding="10" unsigned="true" nullable="false" identity="false"
+        <column xsi:type="int" name="position" unsigned="true" nullable="false" identity="false"
                 default="0" comment="Position"/>
         <column xsi:type="varchar" name="type" nullable="true" length="255" comment="Type"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">
@@ -30,14 +30,14 @@
     </table>
     <table name="catalog_product_bundle_option_value" resource="default" engine="innodb"
            comment="Catalog Product Bundle Option Value">
-        <column xsi:type="int" name="value_id" padding="10" unsigned="true" nullable="false" identity="true"
+        <column xsi:type="int" name="value_id" unsigned="true" nullable="false" identity="true"
                 comment="Value ID"/>
-        <column xsi:type="int" name="option_id" padding="10" unsigned="true" nullable="false" identity="false"
+        <column xsi:type="int" name="option_id" unsigned="true" nullable="false" identity="false"
                 comment="Option ID"/>
-        <column xsi:type="smallint" name="store_id" padding="5" unsigned="true" nullable="false" identity="false"
+        <column xsi:type="smallint" name="store_id" unsigned="true" nullable="false" identity="false"
                 comment="Store ID"/>
         <column xsi:type="varchar" name="title" nullable="true" length="255" comment="Title"/>
-        <column xsi:type="int" name="parent_product_id" padding="10" unsigned="true" nullable="false" identity="false"
+        <column xsi:type="int" name="parent_product_id" unsigned="true" nullable="false" identity="false"
                 comment="Parent Product ID"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="value_id"/>
@@ -53,25 +53,25 @@
     </table>
     <table name="catalog_product_bundle_selection" resource="default" engine="innodb"
            comment="Catalog Product Bundle Selection">
-        <column xsi:type="int" name="selection_id" padding="10" unsigned="true" nullable="false" identity="true"
+        <column xsi:type="int" name="selection_id" unsigned="true" nullable="false" identity="true"
                 comment="Selection ID"/>
-        <column xsi:type="int" name="option_id" padding="10" unsigned="true" nullable="false" identity="false"
+        <column xsi:type="int" name="option_id" unsigned="true" nullable="false" identity="false"
                 comment="Option ID"/>
-        <column xsi:type="int" name="parent_product_id" padding="10" unsigned="true" nullable="false" identity="false"
+        <column xsi:type="int" name="parent_product_id" unsigned="true" nullable="false" identity="false"
                 comment="Parent Product ID"/>
-        <column xsi:type="int" name="product_id" padding="10" unsigned="true" nullable="false" identity="false"
+        <column xsi:type="int" name="product_id" unsigned="true" nullable="false" identity="false"
                 comment="Product ID"/>
-        <column xsi:type="int" name="position" padding="10" unsigned="true" nullable="false" identity="false"
+        <column xsi:type="int" name="position" unsigned="true" nullable="false" identity="false"
                 default="0" comment="Position"/>
-        <column xsi:type="smallint" name="is_default" padding="5" unsigned="true" nullable="false" identity="false"
+        <column xsi:type="smallint" name="is_default" unsigned="true" nullable="false" identity="false"
                 default="0" comment="Is Default"/>
-        <column xsi:type="smallint" name="selection_price_type" padding="5" unsigned="true" nullable="false"
+        <column xsi:type="smallint" name="selection_price_type" unsigned="true" nullable="false"
                 identity="false" default="0" comment="Selection Price Type"/>
         <column xsi:type="decimal" name="selection_price_value" scale="4" precision="12" unsigned="false"
                 nullable="false" default="0" comment="Selection Price Value"/>
         <column xsi:type="decimal" name="selection_qty" scale="4" precision="12" unsigned="false" nullable="true"
                 comment="Selection Qty"/>
-        <column xsi:type="smallint" name="selection_can_change_qty" padding="6" unsigned="false" nullable="false"
+        <column xsi:type="smallint" name="selection_can_change_qty" unsigned="false" nullable="false"
                 identity="false" default="0" comment="Selection Can Change Qty"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="selection_id"/>
@@ -91,15 +91,15 @@
     </table>
     <table name="catalog_product_bundle_selection_price" resource="default" engine="innodb"
            comment="Catalog Product Bundle Selection Price">
-        <column xsi:type="int" name="selection_id" padding="10" unsigned="true" nullable="false" identity="false"
+        <column xsi:type="int" name="selection_id" unsigned="true" nullable="false" identity="false"
                 comment="Selection ID"/>
-        <column xsi:type="smallint" name="website_id" padding="5" unsigned="true" nullable="false" identity="false"
+        <column xsi:type="smallint" name="website_id" unsigned="true" nullable="false" identity="false"
                 comment="Website ID"/>
-        <column xsi:type="smallint" name="selection_price_type" padding="5" unsigned="true" nullable="false"
+        <column xsi:type="smallint" name="selection_price_type" unsigned="true" nullable="false"
                 identity="false" default="0" comment="Selection Price Type"/>
         <column xsi:type="decimal" name="selection_price_value" scale="6" precision="20" unsigned="false"
                 nullable="false" default="0" comment="Selection Price Value"/>
-        <column xsi:type="int" name="parent_product_id" padding="10" unsigned="true" nullable="false" identity="false"
+        <column xsi:type="int" name="parent_product_id" unsigned="true" nullable="false" identity="false"
                 comment="Parent Product ID"/>
         <constraint xsi:type="primary" referenceId="PK_CATALOG_PRODUCT_BUNDLE_SELECTION_PRICE">
             <column name="selection_id"/>
@@ -119,11 +119,11 @@
     </table>
     <table name="catalog_product_bundle_price_index" resource="default" engine="innodb"
            comment="Catalog Product Bundle Price Index">
-        <column xsi:type="int" name="entity_id" padding="10" unsigned="true" nullable="false" identity="false"
+        <column xsi:type="int" name="entity_id" unsigned="true" nullable="false" identity="false"
                 comment="Entity ID"/>
-        <column xsi:type="smallint" name="website_id" padding="5" unsigned="true" nullable="false" identity="false"
+        <column xsi:type="smallint" name="website_id" unsigned="true" nullable="false" identity="false"
                 comment="Website ID"/>
-        <column xsi:type="int" name="customer_group_id" padding="10" unsigned="true" nullable="false" identity="false"
+        <column xsi:type="int" name="customer_group_id" unsigned="true" nullable="false" identity="false"
                 comment="Customer Group ID"/>
         <column xsi:type="decimal" name="min_price" scale="6" precision="20" unsigned="false" nullable="false"
                 comment="Min Price"/>
@@ -152,15 +152,15 @@
     </table>
     <table name="catalog_product_bundle_stock_index" resource="default" engine="innodb"
            comment="Catalog Product Bundle Stock Index">
-        <column xsi:type="int" name="entity_id" padding="10" unsigned="true" nullable="false" identity="false"
+        <column xsi:type="int" name="entity_id" unsigned="true" nullable="false" identity="false"
                 comment="Entity ID"/>
-        <column xsi:type="smallint" name="website_id" padding="5" unsigned="true" nullable="false" identity="false"
+        <column xsi:type="smallint" name="website_id" unsigned="true" nullable="false" identity="false"
                 comment="Website ID"/>
-        <column xsi:type="smallint" name="stock_id" padding="5" unsigned="true" nullable="false" identity="false"
+        <column xsi:type="smallint" name="stock_id" unsigned="true" nullable="false" identity="false"
                 comment="Stock ID"/>
-        <column xsi:type="int" name="option_id" padding="10" unsigned="true" nullable="false" identity="false"
+        <column xsi:type="int" name="option_id" unsigned="true" nullable="false" identity="false"
                 default="0" comment="Option ID"/>
-        <column xsi:type="smallint" name="stock_status" padding="6" unsigned="false" nullable="true" identity="false"
+        <column xsi:type="smallint" name="stock_status" unsigned="false" nullable="true" identity="false"
                 default="0" comment="Stock Status"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="entity_id"/>
@@ -171,15 +171,15 @@
     </table>
     <table name="catalog_product_index_price_bundle_idx" resource="default" engine="innodb"
            comment="Catalog Product Index Price Bundle Idx">
-        <column xsi:type="int" name="entity_id" padding="10" unsigned="true" nullable="false" identity="false"
+        <column xsi:type="int" name="entity_id" unsigned="true" nullable="false" identity="false"
                 comment="Entity ID"/>
-        <column xsi:type="int" name="customer_group_id" padding="11" unsigned="false" nullable="false"
+        <column xsi:type="int" name="customer_group_id" unsigned="false" nullable="false"
                 identity="false"/>
-        <column xsi:type="smallint" name="website_id" padding="5" unsigned="true" nullable="false" identity="false"
+        <column xsi:type="smallint" name="website_id" unsigned="true" nullable="false" identity="false"
                 comment="Website ID"/>
-        <column xsi:type="smallint" name="tax_class_id" padding="5" unsigned="true" nullable="true" identity="false"
+        <column xsi:type="smallint" name="tax_class_id" unsigned="true" nullable="true" identity="false"
                 default="0" comment="Tax Class ID"/>
-        <column xsi:type="smallint" name="price_type" padding="5" unsigned="true" nullable="false" identity="false"
+        <column xsi:type="smallint" name="price_type" unsigned="true" nullable="false" identity="false"
                 comment="Price Type"/>
         <column xsi:type="decimal" name="special_price" scale="6" precision="20" unsigned="false" nullable="true"
                 comment="Special Price"/>
@@ -205,15 +205,15 @@
     </table>
     <table name="catalog_product_index_price_bundle_tmp" resource="default" engine="innodb"
            comment="Catalog Product Index Price Bundle Tmp">
-        <column xsi:type="int" name="entity_id" padding="10" unsigned="true" nullable="false" identity="false"
+        <column xsi:type="int" name="entity_id" unsigned="true" nullable="false" identity="false"
                 comment="Entity ID"/>
-        <column xsi:type="int" name="customer_group_id" padding="11" unsigned="false" nullable="false"
+        <column xsi:type="int" name="customer_group_id" unsigned="false" nullable="false"
                 identity="false"/>
-        <column xsi:type="smallint" name="website_id" padding="5" unsigned="true" nullable="false" identity="false"
+        <column xsi:type="smallint" name="website_id" unsigned="true" nullable="false" identity="false"
                 comment="Website ID"/>
-        <column xsi:type="smallint" name="tax_class_id" padding="5" unsigned="true" nullable="true" identity="false"
+        <column xsi:type="smallint" name="tax_class_id" unsigned="true" nullable="true" identity="false"
                 default="0" comment="Tax Class ID"/>
-        <column xsi:type="smallint" name="price_type" padding="5" unsigned="true" nullable="false" identity="false"
+        <column xsi:type="smallint" name="price_type" unsigned="true" nullable="false" identity="false"
                 comment="Price Type"/>
         <column xsi:type="decimal" name="special_price" scale="6" precision="20" unsigned="false" nullable="true"
                 comment="Special Price"/>
@@ -239,19 +239,19 @@
     </table>
     <table name="catalog_product_index_price_bundle_sel_idx" resource="default" engine="innodb"
            comment="Catalog Product Index Price Bundle Sel Idx">
-        <column xsi:type="int" name="entity_id" padding="10" unsigned="true" nullable="false" identity="false"
+        <column xsi:type="int" name="entity_id" unsigned="true" nullable="false" identity="false"
                 comment="Entity ID"/>
-        <column xsi:type="int" name="customer_group_id" padding="11" unsigned="false" nullable="false"
+        <column xsi:type="int" name="customer_group_id" unsigned="false" nullable="false"
                 identity="false"/>
-        <column xsi:type="smallint" name="website_id" padding="5" unsigned="true" nullable="false" identity="false"
+        <column xsi:type="smallint" name="website_id" unsigned="true" nullable="false" identity="false"
                 comment="Website ID"/>
-        <column xsi:type="int" name="option_id" padding="10" unsigned="true" nullable="false" identity="false"
+        <column xsi:type="int" name="option_id" unsigned="true" nullable="false" identity="false"
                 default="0" comment="Option ID"/>
-        <column xsi:type="int" name="selection_id" padding="10" unsigned="true" nullable="false" identity="false"
+        <column xsi:type="int" name="selection_id" unsigned="true" nullable="false" identity="false"
                 default="0" comment="Selection ID"/>
-        <column xsi:type="smallint" name="group_type" padding="5" unsigned="true" nullable="true" identity="false"
+        <column xsi:type="smallint" name="group_type" unsigned="true" nullable="true" identity="false"
                 default="0" comment="Group Type"/>
-        <column xsi:type="smallint" name="is_required" padding="5" unsigned="true" nullable="true" identity="false"
+        <column xsi:type="smallint" name="is_required" unsigned="true" nullable="true" identity="false"
                 default="0" comment="Is Required"/>
         <column xsi:type="decimal" name="price" scale="6" precision="20" unsigned="false" nullable="true"
                 comment="Price"/>
@@ -267,19 +267,19 @@
     </table>
     <table name="catalog_product_index_price_bundle_sel_tmp" resource="default" engine="innodb"
            comment="Catalog Product Index Price Bundle Sel Tmp">
-        <column xsi:type="int" name="entity_id" padding="10" unsigned="true" nullable="false" identity="false"
+        <column xsi:type="int" name="entity_id" unsigned="true" nullable="false" identity="false"
                 comment="Entity ID"/>
-        <column xsi:type="int" name="customer_group_id" padding="11" unsigned="false" nullable="false"
+        <column xsi:type="int" name="customer_group_id" unsigned="false" nullable="false"
                 identity="false"/>
-        <column xsi:type="smallint" name="website_id" padding="5" unsigned="true" nullable="false" identity="false"
+        <column xsi:type="smallint" name="website_id" unsigned="true" nullable="false" identity="false"
                 comment="Website ID"/>
-        <column xsi:type="int" name="option_id" padding="10" unsigned="true" nullable="false" identity="false"
+        <column xsi:type="int" name="option_id" unsigned="true" nullable="false" identity="false"
                 default="0" comment="Option ID"/>
-        <column xsi:type="int" name="selection_id" padding="10" unsigned="true" nullable="false" identity="false"
+        <column xsi:type="int" name="selection_id" unsigned="true" nullable="false" identity="false"
                 default="0" comment="Selection ID"/>
-        <column xsi:type="smallint" name="group_type" padding="5" unsigned="true" nullable="true" identity="false"
+        <column xsi:type="smallint" name="group_type" unsigned="true" nullable="true" identity="false"
                 default="0" comment="Group Type"/>
-        <column xsi:type="smallint" name="is_required" padding="5" unsigned="true" nullable="true" identity="false"
+        <column xsi:type="smallint" name="is_required" unsigned="true" nullable="true" identity="false"
                 default="0" comment="Is Required"/>
         <column xsi:type="decimal" name="price" scale="6" precision="20" unsigned="false" nullable="true"
                 comment="Price"/>
@@ -295,13 +295,13 @@
     </table>
     <table name="catalog_product_index_price_bundle_opt_idx" resource="default" engine="innodb"
            comment="Catalog Product Index Price Bundle Opt Idx">
-        <column xsi:type="int" name="entity_id" padding="10" unsigned="true" nullable="false" identity="false"
+        <column xsi:type="int" name="entity_id" unsigned="true" nullable="false" identity="false"
                 comment="Entity ID"/>
-        <column xsi:type="int" name="customer_group_id" padding="11" unsigned="false" nullable="false"
+        <column xsi:type="int" name="customer_group_id" unsigned="false" nullable="false"
                 identity="false"/>
-        <column xsi:type="smallint" name="website_id" padding="5" unsigned="true" nullable="false" identity="false"
+        <column xsi:type="smallint" name="website_id" unsigned="true" nullable="false" identity="false"
                 comment="Website ID"/>
-        <column xsi:type="int" name="option_id" padding="10" unsigned="true" nullable="false" identity="false"
+        <column xsi:type="int" name="option_id" unsigned="true" nullable="false" identity="false"
                 default="0" comment="Option ID"/>
         <column xsi:type="decimal" name="min_price" scale="6" precision="20" unsigned="false" nullable="true"
                 comment="Min Price"/>
@@ -322,13 +322,13 @@
     </table>
     <table name="catalog_product_index_price_bundle_opt_tmp" resource="default" engine="innodb"
            comment="Catalog Product Index Price Bundle Opt Tmp">
-        <column xsi:type="int" name="entity_id" padding="10" unsigned="true" nullable="false" identity="false"
+        <column xsi:type="int" name="entity_id" unsigned="true" nullable="false" identity="false"
                 comment="Entity ID"/>
-        <column xsi:type="int" name="customer_group_id" padding="11" unsigned="false" nullable="false"
+        <column xsi:type="int" name="customer_group_id" unsigned="false" nullable="false"
                 identity="false"/>
-        <column xsi:type="smallint" name="website_id" padding="5" unsigned="true" nullable="false" identity="false"
+        <column xsi:type="smallint" name="website_id" unsigned="true" nullable="false" identity="false"
                 comment="Website ID"/>
-        <column xsi:type="int" name="option_id" padding="10" unsigned="true" nullable="false" identity="false"
+        <column xsi:type="int" name="option_id" unsigned="true" nullable="false" identity="false"
                 default="0" comment="Option ID"/>
         <column xsi:type="decimal" name="min_price" scale="6" precision="20" unsigned="false" nullable="true"
                 comment="Min Price"/>
