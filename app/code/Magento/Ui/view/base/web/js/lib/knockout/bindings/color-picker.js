@@ -52,7 +52,7 @@ define([
                 return true;
             };
 
-            require(['tinycolor', 'spectrum'], function() {
+            require(['tinycolor', 'spectrum'], function () {
                 $(element).spectrum(config);
 
                 changeColorPickerStateBasedOnViewModel(element, viewModel);
@@ -76,7 +76,7 @@ define([
                 config.value('');
             }
 
-            require(['tinycolor', 'spectrum'], function(tinycolor) {
+            require(['tinycolor', 'spectrum'], function (tinycolor) {
                 if (tinycolor(config.value()).isValid() || config.value() === '') {
                     $(element).spectrum('set', config.value());
 
