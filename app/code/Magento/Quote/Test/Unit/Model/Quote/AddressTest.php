@@ -359,11 +359,12 @@ class AddressTest extends \PHPUnit\Framework\TestCase
 
         $this->scopeConfig->expects($this->exactly(2))
             ->method('getValue')
-            ->with('tax/calculation/price_includes_tax',
+            ->with(
+                'tax/calculation/price_includes_tax',
                 ScopeInterface::SCOPE_STORE,
-                $storeId)
+                $storeId
+            )
             ->willReturn(1);
-
 
         /** @var RateRequest */
         $request = $this->getMockBuilder(RateRequest::class)
