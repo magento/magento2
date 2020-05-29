@@ -19,13 +19,11 @@
             <useCaseId value="MAGETWO-58764"/>
             <group value="CatalogSearch"/>
             <group value="SearchEngineElasticsearch"/>
-            <skip>
-                <issueId value="MC-21228"/>
-            </skip>
+
         </annotations>
         <before>
             <createData entity="ApiCategory" stepKey="createCategory"/>
-            <createData entity="ApiSimpleProduct" stepKey="createProduct">
+            <createData entity="productAlphabeticalB" stepKey="createProduct">
                 <requiredEntity createDataKey="createCategory"/>
             </createData>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
@@ -39,7 +37,8 @@
         <actionGroup ref="SetMinimalQueryLengthActionGroup" stepKey="setMinQueryLength"/>
         <comment userInput="Go to Storefront and search for product" stepKey="searchProdUsingMinQueryLength"/>
         <amOnPage url="{{StorefrontHomePage.url}}" stepKey="goToHomePage"/>
-        <fillField selector="{{StorefrontQuickSearchResultsSection.searchTextBox}}" userInput="s" stepKey="fillAttribute"/>
+        <comment userInput="Quick search by single character and avoid using ES stopwords" stepKey="commentQuickSearch"/>
+        <fillField selector="{{StorefrontQuickSearchResultsSection.searchTextBox}}" userInput="B" stepKey="fillAttribute"/>
         <waitForPageLoad stepKey="waitForSearchTextBox"/>
         <click selector="{{StorefrontQuickSearchResultsSection.searchTextBoxButton}}" stepKey="clickSearchTextBoxButton"/>
         <waitForPageLoad stepKey="waitForSearch"/>
