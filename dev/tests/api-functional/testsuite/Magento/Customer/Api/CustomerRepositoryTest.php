@@ -347,9 +347,12 @@ class CustomerRepositoryTest extends WebapiAbstract
         unset($newCustomerDataObject['website_id']);
         $requestData = ['customer' => $newCustomerDataObject];
 
-        $response = $this->_webApiCall($serviceInfo, $requestData);
-
-        $this->assertEquals($customerData['website_id'], $response['website_id']);
+        try {
+            $response = $this->_webApiCall($serviceInfo, $requestData);
+            $this->assertEquals($customerData['website_id'], $response['website_id']);
+        } catch (\SoapFault $e) {
+            $this->assertStringContainsString('"Associate to Website" is a required value.', $e->getMessage());
+        }
     }
 
     /**
