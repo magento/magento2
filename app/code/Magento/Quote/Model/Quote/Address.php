@@ -1046,8 +1046,7 @@ class Address extends AbstractAddress implements
         /**
          * Need for shipping methods that use insurance based on price of physical products
          */
-        $packagePhysicalValue = $item ? $item->getBaseRowTotal() : $this->getBaseSubtotalTotalInclTax() -
-            $this->getBaseVirtualAmount();
+        $packagePhysicalValue = $item ? $item->getBaseRowTotal() : $baseSubtotal - $this->getBaseVirtualAmount();
         $request->setPackagePhysicalValue($packagePhysicalValue);
 
         $request->setFreeMethodWeight($item ? 0 : $this->getFreeMethodWeight());
