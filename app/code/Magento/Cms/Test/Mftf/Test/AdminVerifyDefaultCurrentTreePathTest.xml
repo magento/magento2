@@ -16,10 +16,12 @@
             <description value="Admin should be able to see preselected default folder in Media Gallery"/>
         </annotations>        
         <before>
+            <magentoCLI command="config:set {{WysiwygEnabledByDefault.path}} {{WysiwygEnabledByDefault.value}}" stepKey="enableWysiwyg" />
             <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
         </before>
 
         <after>
+            <magentoCLI command="config:set {{WysiwygEnabledByDefault.path}} {{WysiwygDisabledByDefault.value}}" stepKey="disableWysiwyg" />
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
