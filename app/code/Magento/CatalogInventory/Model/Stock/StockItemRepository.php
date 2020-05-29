@@ -184,8 +184,6 @@ class StockItemRepository implements StockItemRepositoryInterface
 
             $this->resource->save($stockItem);
         } catch (\Exception $exception) {
-            echo $exception->getMessage();
-            echo $exception->getTraceAsString();
             throw new CouldNotSaveException(__('The stock item was unable to be saved. Please try again.'), $exception);
         }
         return $stockItem;

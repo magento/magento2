@@ -25,8 +25,8 @@ class Mysql extends \Magento\Framework\DB\Adapter\Pdo\Mysql implements \Magento\
      */
     public function beginTransparentTransaction()
     {
-//        $this->_levelAdjustment += 1;
-//        return $this->beginTransaction();
+        $this->_levelAdjustment += 1;
+        return $this->beginTransaction();
     }
 
     /**
@@ -36,8 +36,8 @@ class Mysql extends \Magento\Framework\DB\Adapter\Pdo\Mysql implements \Magento\
      */
     public function commitTransparentTransaction()
     {
-//        $this->_levelAdjustment -= 1;
-//        return $this->commit();
+        $this->_levelAdjustment -= 1;
+        return $this->commit();
     }
 
     /**
@@ -47,7 +47,7 @@ class Mysql extends \Magento\Framework\DB\Adapter\Pdo\Mysql implements \Magento\
      */
     public function rollbackTransparentTransaction()
     {
-//        $this->_levelAdjustment -= 1;
-//        return $this->rollback();
+        $this->_levelAdjustment -= 1;
+        return $this->rollback();
     }
 }
