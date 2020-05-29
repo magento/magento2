@@ -1019,7 +1019,7 @@ class Address extends AbstractAddress implements
      */
     public function requestShippingRates(AbstractItem $item = null)
     {
-        $storeId = $this->getQuote()->getStoreId();
+        $storeId = $this->getQuote()->getStoreId() ?: $this->storeManager->getStore()->getId();
         $taxInclude = $this->_scopeConfig->getValue(
             'tax/calculation/price_includes_tax',
             ScopeInterface::SCOPE_STORE,
@@ -1055,12 +1055,10 @@ class Address extends AbstractAddress implements
         /**
          * Store and website identifiers specified from StoreManager
          */
+        $request->setStoreId($storeId);
         if ($this->getQuote()->getStoreId()) {
-            $storeId = $this->getQuote()->getStoreId();
-            $request->setStoreId($storeId);
             $request->setWebsiteId($this->storeManager->getStore($storeId)->getWebsiteId());
         } else {
-            $request->setStoreId($this->storeManager->getStore()->getId());
             $request->setWebsiteId($this->storeManager->getWebsite()->getId());
         }
         $request->setFreeShipping($this->getFreeShipping());

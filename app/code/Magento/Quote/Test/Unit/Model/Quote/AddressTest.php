@@ -345,10 +345,39 @@ class AddressTest extends \PHPUnit\Framework\TestCase
 
         $currentCurrencyCode = 'UAH';
 
+        $this->quote->expects($this->any())
+            ->method('getStoreId')
+            ->willReturn($storeId);
+
+        $this->storeManager->expects($this->at(0))
+            ->method('getStore')
+            ->with($storeId)
+            ->willReturn($this->store);
+        $this->store->expects($this->any())
+            ->method('getWebsiteId')
+            ->willReturn($webSiteId);
+
+        $this->scopeConfig->expects($this->exactly(2))
+            ->method('getValue')
+            ->with('tax/calculation/price_includes_tax',
+                ScopeInterface::SCOPE_STORE,
+                $storeId)
+            ->willReturn(1);
+
+
         /** @var RateRequest */
         $request = $this->getMockBuilder(RateRequest::class)
             ->disableOriginalConstructor()
-            ->setMethods(['setStoreId', 'setWebsiteId', 'setBaseCurrency', 'setPackageCurrency'])
+            ->setMethods(
+                [
+                    'setStoreId',
+                    'setWebsiteId',
+                    'setBaseCurrency',
+                    'setPackageCurrency',
+                    'getBaseSubtotalTotalInclTax',
+                    'getBaseSubtotal'
+                ]
+            )
             ->getMock();
 
         /** @var Collection */
@@ -427,13 +456,6 @@ class AddressTest extends \PHPUnit\Framework\TestCase
         $this->storeManager->method('getStore')
             ->willReturn($this->store);
 
-        $this->storeManager->expects($this->once())
-            ->method('getWebsite')
-            ->willReturn($this->website);
-
-        $this->store->method('getId')
-            ->willReturn($storeId);
-
         $this->store->method('getBaseCurrency')
             ->willReturn($baseCurrency);
 
@@ -444,10 +466,6 @@ class AddressTest extends \PHPUnit\Framework\TestCase
         $this->store->expects($this->once())
             ->method('getCurrentCurrencyCode')
             ->willReturn($currentCurrencyCode);
-
-        $this->website->expects($this->once())
-            ->method('getId')
-            ->willReturn($webSiteId);
 
         $this->addressRateFactory->expects($this->once())
             ->method('create')
