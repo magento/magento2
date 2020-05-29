@@ -1019,6 +1019,13 @@ class Address extends AbstractAddress implements
      */
     public function requestShippingRates(AbstractItem $item = null)
     {
+        $storeId = $this->getQuote()->getStoreId();
+        $taxInclude = $this->_scopeConfig->getValue(
+            'tax/calculation/price_includes_tax',
+            ScopeInterface::SCOPE_STORE,
+            $storeId
+        );
+
         /** @var $request RateRequest */
         $request = $this->_rateRequestFactory->create();
         $request->setAllItems($item ? [$item] : $this->getAllItems());
@@ -1028,7 +1035,8 @@ class Address extends AbstractAddress implements
         $request->setDestStreet($this->getStreetFull());
         $request->setDestCity($this->getCity());
         $request->setDestPostcode($this->getPostcode());
-        $request->setPackageValue($item ? $item->getBaseRowTotal() : $this->getBaseSubtotal());
+        $baseSubtotal = $taxInclude ? $this->getBaseSubtotalTotalInclTax() : $this->getBaseSubtotal();
+        $request->setPackageValue($item ? $item->getBaseRowTotal() : $baseSubtotal);
         $packageWithDiscount = $item ? $item->getBaseRowTotal() -
             $item->getBaseDiscountAmount() : $this->getBaseSubtotalWithDiscount();
         $request->setPackageValueWithDiscount($packageWithDiscount);
@@ -1038,7 +1046,7 @@ class Address extends AbstractAddress implements
         /**
          * Need for shipping methods that use insurance based on price of physical products
          */
-        $packagePhysicalValue = $item ? $item->getBaseRowTotal() : $this->getBaseSubtotal() -
+        $packagePhysicalValue = $item ? $item->getBaseRowTotal() : $this->getBaseSubtotalTotalInclTax() -
             $this->getBaseVirtualAmount();
         $request->setPackagePhysicalValue($packagePhysicalValue);
 
@@ -1369,7 +1377,14 @@ class Address extends AbstractAddress implements
      */
     public function getBaseSubtotalWithDiscount()
     {
-        return $this->getBaseSubtotal() + $this->getBaseDiscountAmount();
+        $storeId = $this->getQuote()->getStoreId();
+        $taxInclude = $this->_scopeConfig->getValue(
+            'tax/calculation/price_includes_tax',
+            ScopeInterface::SCOPE_STORE,
+            $storeId
+        );
+        $baseSubtotal = $taxInclude ? $this->getBaseSubtotalTotalInclTax() : $this->getBaseSubtotal();
+        return $baseSubtotal + $this->getBaseDiscountAmount();
     }
 
     /**
