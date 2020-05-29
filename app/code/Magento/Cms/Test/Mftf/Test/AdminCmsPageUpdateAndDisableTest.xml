@@ -11,9 +11,11 @@
     <test name="AdminCmsPageUpdateAndDisableTest">
         <annotations>
             <features value="Cms"/>
+            <stories value="Update CMS Page via the Admin, disable"/>
             <testCaseId value="MC-14673" />
             <title value="Update CMS Page via the Admin, disable"/>
             <description value="Admin should be able to update a CMS Page"/>
+            <severity value="CRITICAL"/>
             <group value="backend"/>
             <group value="cMSContent"/>
             <group value="mtf_migrated"/>

@@ -13,17 +13,20 @@ use Magento\Catalog\Model\Product\Attribute\Source\Status;
 use Magento\Catalog\Model\Product\Type as ProductType;
 use Magento\Catalog\Model\Product\Visibility;
 use Magento\Catalog\Model\ProductFactory;
+use Magento\Catalog\Setup\CategorySetup;
 use Magento\ConfigurableProduct\Helper\Product\Options\Factory;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Store\Api\WebsiteRepositoryInterface;
 use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
 
-require __DIR__ . '/product_text_swatch_attribute.php';
-require __DIR__ . '/product_visual_swatch_attribute.php';
+Resolver::getInstance()->requireDataFixture('Magento/Swatches/_files/product_text_swatch_attribute.php');
+Resolver::getInstance()->requireDataFixture('Magento/Swatches/_files/product_visual_swatch_attribute.php');
 
 /** @var ObjectManagerInterface $objectManager */
 $objectManager = Bootstrap::getObjectManager();
+$installer = $objectManager->create(CategorySetup::class);
 /** @var ProductAttributeRepositoryInterface $productAttributeRepository */
 $productAttributeRepository = $objectManager->get(ProductAttributeRepositoryInterface::class);
 $attribute = $productAttributeRepository->get('text_swatch_attribute');

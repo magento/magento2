@@ -22,7 +22,7 @@ class CategoriesTest extends \PHPUnit\Framework\TestCase
      */
     private $object;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $registry = $objectManager->get(\Magento\Framework\Registry::class);

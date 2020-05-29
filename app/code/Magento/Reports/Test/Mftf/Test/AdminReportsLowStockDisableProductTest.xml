@@ -10,9 +10,11 @@
     <test name="AdminReportsLowStockDisableProductTest">
         <annotations>
             <features value="Reports"/>
+            <stories value="Disabled product doesn't present on 'Low Stock' report"/>
             <group value="reports"/>
             <title value="The disabled product doesn't present on 'Low Stock' report."/>
             <description value="A product must don't presents on 'Low Stock' report if the product is disabled."/>
+            <severity value="MAJOR"/>
         </annotations>
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
