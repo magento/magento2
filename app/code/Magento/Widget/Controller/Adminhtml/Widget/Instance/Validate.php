@@ -6,7 +6,9 @@
  */
 namespace Magento\Widget\Controller\Adminhtml\Widget\Instance;
 
-class Validate extends \Magento\Widget\Controller\Adminhtml\Widget\Instance
+use Magento\Framework\App\Action\HttpPostActionInterface;
+
+class Validate extends \Magento\Widget\Controller\Adminhtml\Widget\Instance implements HttpPostActionInterface
 {
     /**
      * Validate action
