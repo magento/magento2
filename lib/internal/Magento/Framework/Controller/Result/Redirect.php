@@ -74,6 +74,7 @@ class Redirect extends AbstractResult
 
     /**
      * URL Setter
+     *
      * @param string $url
      * @return $this
      */
@@ -85,11 +86,12 @@ class Redirect extends AbstractResult
 
     /**
      * URL Getter
-     * @return string
+     *
+     * @return string|null
      */
     public function getUrl()
     {
-        return $this->url
+        return $this->url;
     }
 
     /**
@@ -106,7 +108,7 @@ class Redirect extends AbstractResult
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function render(HttpResponseInterface $response)
     {

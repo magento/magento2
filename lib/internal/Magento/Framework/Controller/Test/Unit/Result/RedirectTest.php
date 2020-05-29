@@ -17,19 +17,19 @@ use PHPUnit\Framework\TestCase;
 class RedirectTest extends TestCase
 {
     /** @var Redirect */
-    protected $redirect;
+    private $redirect;
 
     /** @var RedirectInterface|MockObject */
-    protected $redirectInterface;
+    private $redirectInterface;
 
     /** @var UrlInterface|MockObject */
-    protected $urlBuilder;
+    private $urlBuilder;
 
     /** @var UrlInterface|MockObject */
-    protected $urlInterface;
+    private $urlInterface;
 
     /** @var HttpResponseInterface|MockObject */
-    protected $response;
+    private $response;
 
     protected function setUp(): void
     {
@@ -64,6 +64,12 @@ class RedirectTest extends TestCase
         $this->assertInstanceOf(Redirect::class, $this->redirect->setUrl($url));
     }
 
+    public function testGetUrl()
+    {
+        $this->redirect->setUrl('http://test.com');
+        $this->assertEquals('http://test.com', $this->redirect->getUrl());
+    }
+
     public function testSetPath()
     {
         $path = 'test/path';
@@ -75,18 +81,6 @@ class RedirectTest extends TestCase
             Redirect::class,
             $this->redirect->setPath($path, $params)
         );
-    }
-
-    /**
-     * @return array
-     */
-    public function httpRedirectResponseStatusCodes()
-    {
-        return [
-            [302, null],
-            [302, 302],
-            [303, 303]
-        ];
     }
 
     /**
@@ -106,5 +100,17 @@ class RedirectTest extends TestCase
             ->with($url, $expectedStatusCode);
 
         $this->redirect->renderResult($this->response);
+    }
+
+    /**
+     * @return array
+     */
+    public function httpRedirectResponseStatusCodes()
+    {
+        return [
+            [302, null],
+            [302, 302],
+            [303, 303]
+        ];
     }
 }
