@@ -34,6 +34,7 @@ type CustomerOrder @doc(description: "Contains details about each of the custome
     number: String! @doc(description: "The order number")
     order_items: [OrderItem]! @doc(description: "An array containing the items purchased in this order") @resolver(class: "Magento\\SalesGraphQl\\Model\\Resolver\\OrderItem")
     totals: OrderTotal! @doc(description: "Contains details about the calculated totals for this order") @resolver(class: "Magento\\SalesGraphQl\\Model\\Resolver\\OrderTotal")
+    invoices: [Invoice]! @doc(description: "Invoice list for the order") @resolver(class: "Magento\\SalesGraphQl\\Model\\Resolver\\Invoices")
 }
 
 type OrderItem implements SalesItemInterface {
@@ -97,6 +98,22 @@ type CheckoutUserInputError @doc(description:"An error encountered while adding 
     message: String! @doc(description: "Localized error message")
     path: [String]! @doc(description: "Path to the input field that caused an error. See the GraphQL specification about path errors for details: http://spec.graphql.org/draft/#sec-Errors")
     code: CheckoutUserInputErrorCodes! @doc(description: "Checkout-specific error code")
+}
+
+type Invoice @doc(description: "Invoice details") {
+    id: ID! @doc(description: "the ID of the invoice, used for API purposes")
+    number: String! @doc(description: "sequential invoice number")
+    total: InvoiceTotal! @doc(description: "invoice total amount details") @resolver(class: "Magento\\SalesGraphQl\\Model\\Resolver\\InvoiceTotal")
+    items: [InvoiceItem]! @doc(description: "invoiced product details") @resolver(class: "Magento\\SalesGraphQl\\Model\\Resolver\\InvoiceItem")
+}
+
+type InvoiceItem implements SalesItemInterface {
+    quantity_invoiced: Float! @doc(description: "number of invoiced items")
+}
+
+type InvoiceTotal implements SalesTotalAmountInterface {
+    total_shipping: Money! @doc(description: "order shipping amount")
+    shipping_handling: ShippingHandling! @doc(description: "shipping and handling for the order")
 }
 
 enum CheckoutUserInputErrorCodes {
