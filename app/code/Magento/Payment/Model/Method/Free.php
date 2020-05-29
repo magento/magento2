@@ -22,6 +22,8 @@ class Free extends \Magento\Payment\Model\Method\AbstractMethod
 {
     const PAYMENT_METHOD_FREE_CODE = 'free';
 
+    const PAYMENT_ACTION_NO = 'no_action';
+
     /**
      * XML Paths for configuration constants
      */
@@ -93,6 +95,45 @@ class Free extends \Magento\Payment\Model\Method\AbstractMethod
     }
 
     /**
+     * Method that will be executed instead of authorize or capture
+     * if flag isInitializeNeeded set to true
+     *
+     * @param string $paymentAction
+     * @param object $stateObject
+     *
+     * @return Free
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @api
+     */
+    public function initialize($paymentAction, $stateObject)
+    {
+        if ($this->getConfigData('order_status') == 'processing' &&
+            (!$paymentAction || $paymentAction == self::PAYMENT_ACTION_NO)
+        ) {
+            $stateObject->setState(\Magento\Sales\Model\Order::STATE_PROCESSING)
+                ->setStatus('processing');
+        }
+        return $this;
+    }
+
+    /**
+     * Flag if we need to run payment initialize while order place.
+     * Initialization is needed, when order status was selected as "processing"  in the configuration,
+     * but payment action was selected as: "don't auto-create invoices"
+     *
+     * @return bool
+     * @api
+     */
+    public function isInitializeNeeded()
+    {
+        return
+            $this->getConfigData('order_status') == 'processing' &&
+            $this->getConfigPaymentAction() == self::PAYMENT_ACTION_NO ?
+                true :
+                parent::isInitializeNeeded();
+    }
+
+    /**
      * Check whether method is available
      *
      * @param \Magento\Quote\Api\Data\CartInterface|\Magento\Quote\Model\Quote|null $quote
@@ -101,10 +142,10 @@ class Free extends \Magento\Payment\Model\Method\AbstractMethod
     public function isAvailable(\Magento\Quote\Api\Data\CartInterface $quote = null)
     {
         return parent::isAvailable(
-            $quote
-        ) && null !== $quote && $this->priceCurrency->round(
-            $quote->getGrandTotal()
-        ) == 0;
+                $quote
+            ) && null !== $quote && $this->priceCurrency->round(
+                $quote->getGrandTotal()
+            ) == 0;
     }
 
     /**
@@ -125,6 +166,7 @@ class Free extends \Magento\Payment\Model\Method\AbstractMethod
      */
     public function getConfigPaymentAction()
     {
-        return $this->getConfigData('order_status') == 'pending' ? null : parent::getConfigPaymentAction();
+        return $this->getConfigData('order_status') == 'pending' ? null :
+            (($action = parent::getConfigPaymentAction()) ? $action : self::PAYMENT_ACTION_NO);
     }
 }
