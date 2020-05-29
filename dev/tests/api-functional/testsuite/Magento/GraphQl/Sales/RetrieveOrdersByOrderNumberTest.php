@@ -125,7 +125,6 @@ QUERY;
         $expectedOrderItems =
             [ 'quantity_ordered'=> 2,
                 'product_sku'=> 'simple',
-                "product_url"=> 'url',
                 'product_name'=> 'Simple Product',
                 'product_sale_price'=> ['currency'=> null, 'value'=> 10]
             ];
@@ -662,6 +661,7 @@ QUERY;
     {
 
     }
+
     /**
      * Assert order totals
      *
