@@ -22,6 +22,7 @@ class BackButton extends GenericButton implements ButtonProviderInterface
 
     /**
      * @param Context $context
+     * @param Registry $registry
      */
     public function __construct(
         Context $context,
