@@ -12,6 +12,8 @@ use Magento\Catalog\Model\Product\Visibility as CatalogProbuctVisibility;
 use Magento\Catalog\Model\ResourceModel\Product\Compare\Item\Collection;
 use Magento\Catalog\Model\ResourceModel\Product\Compare\Item\CollectionFactory as CompareItemsCollectionFactory;
 use Magento\Framework\GraphQl\Config\Element\Field;
+use Magento\Framework\GraphQl\Query\Resolver\ContextInterface;
+use Magento\Framework\GraphQl\Query\Resolver\Value;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 
@@ -21,10 +23,12 @@ class CompareItemsResolver implements ResolverInterface
      * @var CompareItemsCollectionFactory
      */
     private $itemCollectionFactory;
+
     /**
      * @var CatalogProbuctVisibility
      */
     private $catalogProductVisibility;
+
     /**
      * @var CatalogConfig
      */
@@ -32,8 +36,8 @@ class CompareItemsResolver implements ResolverInterface
 
     /**
      * @param CompareItemsCollectionFactory $itemCollectionFactory
-     * @param CatalogProbuctVisibility $catalogProductVisibility
-     * @param CatalogConfig $catalogConfig
+     * @param CatalogProbuctVisibility      $catalogProductVisibility
+     * @param CatalogConfig                 $catalogConfig
      */
     public function __construct(
         CompareItemsCollectionFactory $itemCollectionFactory,
@@ -45,8 +49,24 @@ class CompareItemsResolver implements ResolverInterface
         $this->catalogConfig = $catalogConfig;
     }
 
-    public function resolve(Field $field, $context, ResolveInfo $info, array $value = null, array $args = null)
-    {
+    /**
+     * @param Field            $field
+     * @param ContextInterface $context
+     * @param ResolveInfo      $info
+     * @param array|null       $value
+     * @param array|null       $args
+     *
+     * @return array|Value|mixed
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
+    public function resolve(
+        Field $field,
+        $context,
+        ResolveInfo $info,
+        array $value = null,
+        array $args = null
+    ) {
         $items = [];
 
         $comparableItems = $this->getComparableItems($context);
@@ -66,6 +86,7 @@ class CompareItemsResolver implements ResolverInterface
      * Get comparable items for current user
      *
      * @param $context
+     *
      * @return Collection $comparableItems
      */
     private function getComparableItems($context): Collection

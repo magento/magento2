@@ -5,4 +5,8 @@
  */
 use Magento\Framework\Component\ComponentRegistrar;
 
-ComponentRegistrar::register(ComponentRegistrar::MODULE, 'Magento_CompareListGraphQl', __DIR__);
+ComponentRegistrar::register(
+    ComponentRegistrar::MODULE,
+    'Magento_CompareListGraphQl',
+    __DIR__
+);
