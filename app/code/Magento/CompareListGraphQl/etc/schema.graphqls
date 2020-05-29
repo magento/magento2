@@ -1,5 +1,6 @@
 # Copyright © Magento, Inc. All rights reserved.
 # See COPYING.txt for license details.
+
 type ComparableItem {
     productId: ID! @doc(description: "Product Id")
     name: String! @doc(description: "Product name")
@@ -22,8 +23,8 @@ type ComparableAttribute {
 
 type CompareList {
     list_id: ID! @doc(description: "Compare list id")
-    items: [ComparableItem] @doc(description: "Comparable products") @resolver(class: "\\Magento\\CompareListGraphQl\\Model\\Resolver\\CompareItemsResolver")
-    attributes: [ComparableAttribute] @doc(description: "Comparable attributes, provides codes and titles for the attributes") @resolver(class: "\\Magento\\CompareListGraphQl\\Model\\Resolver\\ComparableAttributeResolver")
+    items: [ComparableItem] @doc(description: "Comparable products")
+    attributes: [ComparableAttribute] @doc(description: "Comparable attributes, provides codes and titles for the attributes")
 }
 
 
@@ -32,19 +33,13 @@ type Customer {
 }
 
 type Query {
-    compareList(id: ID!): CompareList @doc(description: "Compare list") @resolver(class: "\\Magento\\CompareListGraphQl\\Model\\Resolver\\CompareListResolver")
+    compareList(id: ID!): CompareList @resolver(class: "\\Magento\\CompareListGraphQl\\Model\\Resolver\\CompareList") @doc(description: "Compare list")
 }
 
 type Mutation {
-    addItemsToCompareList(
-        id: ID!
-        items: [ID!]
-    ): CompareList
-    removeItemsFromCompareList(
-        id: ID!
-        items: [ID!]
-    ): CompareList
-    assignCompareListToCustomer(customerId: ID!, listId: ID!): Boolean
+    addItemsToCompareList(id: ID!, items: [ID!]): CompareList @resolver(class: "\\Magento\\CompareListGraphQl\\Model\\Resolver\\AddItemsToCompareList") @doc(description: "Add items to compare list")
+    removeItemsFromCompareList(id: ID!, items: [ID!]): CompareList @resolver(class: "\\Magento\\CompareListGraphQl\\Model\\Resolver\\RemoveItemsFromCompareList") @doc(description: "Remove items from compare list")
+    assignCompareListToCustomer(customerId: ID!, listId: ID!): Boolean @resolver(class: "\\Magento\\CompareListGraphQl\\Model\\Resolver\\AssignCompareListToCustomer") @doc(description: "Assign compare list to customer")
 }
 
 schema {
