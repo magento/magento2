@@ -13,9 +13,9 @@ use Magento\Backend\Model\Session;
 use Magento\Backend\Model\View\Result\Forward;
 use Magento\Backend\Model\View\Result\ForwardFactory;
 use Magento\Backend\Model\View\Result\Page;
-use Magento\Framework\App\Action\Title as TitleAction;
 use Magento\Framework\App\ActionFlag;
 use Magento\Framework\App\Request\Http;
+use Magento\Framework\App\Response\Http as HttpResponse;
 use Magento\Framework\Controller\Result\Redirect;
 use Magento\Framework\Controller\Result\Redirect as RedirectResult;
 use Magento\Framework\Controller\Result\RedirectFactory;
@@ -27,6 +27,7 @@ use Magento\Framework\View\Layout;
 use Magento\Framework\View\Page\Config;
 use Magento\Framework\View\Page\Title;
 use Magento\Framework\View\Result\PageFactory;
+use Magento\Sales\Block\Adminhtml\Order\Creditmemo\View as ViewCreditmemo;
 use Magento\Sales\Controller\Adminhtml\Order\Creditmemo\View;
 use Magento\Sales\Controller\Adminhtml\Order\CreditmemoLoader;
 use Magento\Sales\Model\Order\Creditmemo;
@@ -145,32 +146,24 @@ class ViewTest extends TestCase
      */
     protected function setUp(): void
     {
-        $titleMock = $this->createMock(TitleAction::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->invoiceMock = $this->getMockBuilder(Invoice::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->creditmemoMock = $this->getMockBuilder(Creditmemo::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getInvoice', 'getOrder', 'cancel', 'getId'])
-            ->getMock();
-        $this->requestMock = $this->getMockBuilder(Http::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->responseMock = $this->getMockBuilder(\Magento\Framework\App\Response\Http::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->objectManagerMock = $this->getMockForAbstractClass(ObjectManagerInterface::class);
-        $this->messageManagerMock = $this->getMockBuilder(Manager::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->sessionMock = $this->getMockBuilder(Session::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->helperMock = $this->getMockBuilder(Data::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->invoiceMock = $this->createMock(Invoice::class);
+        $this->creditmemoMock = $this->createMock(Creditmemo::class);
+        $this->requestMock = $this->createMock(Http::class);
+        $this->responseMock = $this->createMock(HttpResponse::class);
+        $this->objectManagerMock = $this->createMock(ObjectManagerInterface::class);
+        $this->messageManagerMock = $this->createMock(Manager::class);
+        $this->sessionMock = $this->createMock(Session::class);
+        $this->helperMock = $this->createMock(Data::class);
+        $this->actionFlagMock = $this->createMock(ActionFlag::class);
+        $this->loaderMock = $this->createMock(CreditmemoLoader::class);
+        $this->pageConfigMock = $this->createMock(Config::class);
+        $this->pageTitleMock = $this->createMock(Title::class);
+        $this->resultPageFactoryMock = $this->createMock(PageFactory::class);
+        $this->resultPageMock = $this->createMock(Page::class);
+        $this->resultForwardFactoryMock = $this->createMock(ForwardFactory::class);
+        $this->resultForwardMock = $this->createMock(Forward::class);
+        $this->redirectFactoryMock = $this->createMock(RedirectFactory::class);
+        $this->redirectResultMock = $this->createMock(Redirect::class);
         $this->contextMock = $this->getMockBuilder(Context::class)
             ->setMethods(
                 [
@@ -187,40 +180,13 @@ class ViewTest extends TestCase
             )
             ->disableOriginalConstructor()
             ->getMock();
+        $titleMock = $this->getMockBuilder(\Magento\Framework\App\Action\Context::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $this->contextMock->expects($this->any())
             ->method('getHelper')
             ->willReturn($this->helperMock);
-        $this->actionFlagMock = $this->getMockBuilder(ActionFlag::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->loaderMock = $this->getMockBuilder(CreditmemoLoader::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->pageConfigMock = $this->getMockBuilder(Config::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->pageTitleMock = $this->getMockBuilder(Title::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->resultPageFactoryMock = $this->getMockBuilder(PageFactory::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['create'])
-            ->getMock();
-        $this->resultPageMock = $this->getMockBuilder(Page::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->resultForwardFactoryMock = $this->getMockBuilder(
-            ForwardFactory::class
-        )
-            ->disableOriginalConstructor()
-            ->setMethods(['create'])
-            ->getMock();
-        $this->resultForwardMock = $this->getMockBuilder(Forward::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->redirectFactoryMock = $this->createMock(RedirectFactory::class);
-        $this->redirectResultMock = $this->createMock(Redirect::class);
-
         $this->contextMock->expects($this->any())
             ->method('getSession')
             ->willReturn($this->sessionMock);
@@ -294,12 +260,8 @@ class ViewTest extends TestCase
      */
     public function testExecute($invoice)
     {
-        $layoutMock = $this->getMockBuilder(Layout::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $blockMock = $this->getMockBuilder(\Magento\Sales\Block\Adminhtml\Order\Creditmemo\View::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $layoutMock = $this->createMock(Layout::class);
+        $blockMock = $this->createMock(ViewCreditmemo::class);
 
         $this->requestMock->expects($this->any())
             ->method('getParam')
