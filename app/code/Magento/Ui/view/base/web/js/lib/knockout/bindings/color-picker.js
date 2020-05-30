@@ -84,7 +84,7 @@ define([
                         config.value($(element).spectrum('get').toString());
                     }
                 }
-    
+
                 changeColorPickerStateBasedOnViewModel(element, viewModel);
             });
         }

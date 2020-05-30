@@ -7,6 +7,7 @@ define([
     'ko',
     'jquery',
     'rjsResolver',
+    'tinycolor',
     'Magento_Ui/js/lib/knockout/bindings/color-picker'
 ], function (ko, $, resolver) {
     'use strict';
@@ -23,8 +24,16 @@ define([
         require.undef('spectrum');
     });
 
+    beforeEach(function () {
+        jasmine.clock().install();
+    });
+
+    afterEach(function () {
+        jasmine.clock().uninstall();
+    });
+
     describe('Colorpicker binding', function () {
-        it('Should call spectrum on $input with disabled configuration if view model disabled', function (done) {
+        it('Should call spectrum on $input with disabled configuration if view model disabled', function () {
             var value = {
                     configStuffInHere: true
                 },
@@ -38,20 +47,18 @@ define([
 
             ko.bindingHandlers.colorPicker.init($input, valueAccessor, null, viewModel);
 
-            resolver(function () { //eslint-disable-line max-nested-callbacks
-                expect(value.change).toEqual(jasmine.any(Function));
-                expect(value.hide).toEqual(jasmine.any(Function));
-                expect(value.show).toEqual(jasmine.any(Function));
-                expect(value.change).toBe(value.hide);
+            jasmine.clock().tick(1000);
 
-                expect($.fn.spectrum.calls.allArgs()).toEqual([[value], ['disable']]);
-                expect(viewModel.disabled).toHaveBeenCalled();
+            expect(value.change).toEqual(jasmine.any(Function));
+            expect(value.hide).toEqual(jasmine.any(Function));
+            expect(value.show).toEqual(jasmine.any(Function));
+            expect(value.change).toBe(value.hide);
 
-                done();
-            });
+            expect($.fn.spectrum.calls.allArgs()).toEqual([[value], ['disable']]);
+            expect(viewModel.disabled).toHaveBeenCalled();
         });
 
-        it('Should call spectrum on $input with extra configuration if view model enabled', function (done) {
+        it('Should call spectrum on $input with extra configuration if view model enabled', function () {
             var value = {
                     configStuffInHere: true
                 },
@@ -65,20 +72,18 @@ define([
 
             ko.bindingHandlers.colorPicker.init($input, valueAccessor, null, viewModel);
 
-            resolver(function () { //eslint-disable-line max-nested-callbacks
-                expect(value.change).toEqual(jasmine.any(Function));
-                expect(value.hide).toEqual(jasmine.any(Function));
-                expect(value.show).toEqual(jasmine.any(Function));
-                expect(value.change).toBe(value.hide);
+            jasmine.clock().tick(1000);
 
-                expect($.fn.spectrum.calls.allArgs()).toEqual([[value], ['enable']]);
-                expect(viewModel.disabled).toHaveBeenCalled();
+            expect(value.change).toEqual(jasmine.any(Function));
+            expect(value.hide).toEqual(jasmine.any(Function));
+            expect(value.show).toEqual(jasmine.any(Function));
+            expect(value.change).toBe(value.hide);
 
-                done();
-            });
+            expect($.fn.spectrum.calls.allArgs()).toEqual([[value], ['enable']]);
+            expect(viewModel.disabled).toHaveBeenCalled();
         });
 
-        it('Verify config value is empty when reset colorpicker intput', function (done) {
+        it('Verify config value is empty when reset colorpicker intput', function () {
             var value = {
                     configStuffInHere: true,
                     value: jasmine.createSpy().and.returnValue(undefined)
@@ -93,20 +98,18 @@ define([
 
             ko.bindingHandlers.colorPicker.update($input, valueAccessor, null, viewModel);
 
-            resolver(function () { //eslint-disable-line max-nested-callbacks
-                expect($.fn.spectrum).toHaveBeenCalledTimes(1);
-                expect(valueAccessor().value).toHaveBeenCalledTimes(4);
+            jasmine.clock().tick(1000);
 
-                value.value = jasmine.createSpy().and.returnValue('');
-                ko.bindingHandlers.colorPicker.update($input, valueAccessor, null, viewModel);
+            expect($.fn.spectrum).toHaveBeenCalledTimes(1);
+            expect(valueAccessor().value).toHaveBeenCalledTimes(4);
 
-                resolver(function () { //eslint-disable-line max-nested-callbacks
-                    expect($.fn.spectrum).toHaveBeenCalledTimes(3);
-                    expect(valueAccessor().value).toHaveBeenCalledTimes(5);
+            value.value = jasmine.createSpy().and.returnValue('');
+            ko.bindingHandlers.colorPicker.update($input, valueAccessor, null, viewModel);
 
-                    done();
-                });
-            });
+            jasmine.clock().tick(1000);
+
+            expect($.fn.spectrum).toHaveBeenCalledTimes(3);
+            expect(valueAccessor().value).toHaveBeenCalledTimes(5);
         });
     });
 });
