@@ -61,6 +61,7 @@
                     <block class="Magento\Wishlist\Block\Customer\Wishlist\Button" name="customer.wishlist.button.toCart" template="Magento_Wishlist::button/tocart.phtml" cacheable="false"/>
                 </container>
             </block>
+            <referenceBlock name="wishlist_sidebar" remove="true" />
         </referenceContainer>
     </body>
 </page>
