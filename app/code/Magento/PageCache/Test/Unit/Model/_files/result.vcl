@@ -20,7 +20,7 @@
 
     sub vcl_synth {
         if (resp.status == 503) {
-           synthetic(std.fileread("/var/html/magento/varnish/error503.html"));
+           synthetic(std.fileread("/var/html/magento/pub/varnish/error503.html"));
            return(deliver);
         }
     }
