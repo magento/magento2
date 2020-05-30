@@ -59,19 +59,19 @@ class MassDelete extends ProductController implements HttpPostActionInterface
     {
         $reviewsIds = $this->getRequest()->getParam('reviews');
         if (!is_array($reviewsIds)) {
-            $this->messageManager->addError(__('Please select review(s).'));
+            $this->messageManager->addErrorMessage(__('Please select review(s).'));
         } else {
             try {
                 foreach ($this->getCollection() as $model) {
                     $model->delete();
                 }
-                $this->messageManager->addSuccess(
+                $this->messageManager->addSuccessMessage(
                     __('A total of %1 record(s) have been deleted.', count($reviewsIds))
                 );
             } catch (LocalizedException $e) {
-                $this->messageManager->addError($e->getMessage());
+                $this->messageManager->addErrorMessage($e->getMessage());
             } catch (\Exception $e) {
-                $this->messageManager->addException($e, __('Something went wrong while deleting these records.'));
+                $this->messageManager->addExceptionMessage($e, __('Something went wrong while deleting these records.'));
             }
         }
         /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */

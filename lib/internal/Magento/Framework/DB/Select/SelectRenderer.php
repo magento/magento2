@@ -8,10 +8,15 @@ namespace Magento\Framework\DB\Select;
 use Magento\Framework\DB\Select;
 
 /**
- * Class SelectRenderer
+ * Phrase renderer interface
  */
 class SelectRenderer implements RendererInterface
 {
+    private const MANDATORY_SELECT_PARTS = [
+        Select::COLUMNS => true,
+        Select::FROM    => true
+    ];
+
     /**
      * @var RendererInterface[]
      */
@@ -67,7 +72,8 @@ class SelectRenderer implements RendererInterface
     {
         $sql = Select::SQL_SELECT;
         foreach ($this->renderers as $renderer) {
-            if (in_array($renderer['part'], [Select::COLUMNS, Select::FROM]) || $select->getPart($renderer['part'])) {
+            $part = $renderer['part'];
+            if (isset(self::MANDATORY_SELECT_PARTS[$part]) || $select->getPart($part)) {
                 $sql = $renderer['renderer']->render($select, $sql);
             }
         }

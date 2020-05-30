@@ -25,7 +25,7 @@ class SetPaymentMethodOnCart
 {
     private const PATH_CODE = 'input/payment_method/code';
 
-    private const PATH_ADDITIONAL_DATA = 'input/payment_method/additional_data';
+    private const PATH_PAYMENT_METHOD_DATA = 'input/payment_method';
 
     private $allowedPaymentMethodCodes = [];
 
@@ -98,7 +98,7 @@ class SetPaymentMethodOnCart
             return $resolvedValue;
         }
 
-        $paypalAdditionalData = $this->arrayManager->get(self::PATH_ADDITIONAL_DATA, $args) ?? [];
+        $paypalAdditionalData = $this->arrayManager->get(self::PATH_PAYMENT_METHOD_DATA, $args) ?? [];
         $payerId = $paypalAdditionalData[$paymentCode]['payer_id'] ?? null;
         $token = $paypalAdditionalData[$paymentCode]['token'] ?? null;
         $cart = $resolvedValue['cart']['model'];

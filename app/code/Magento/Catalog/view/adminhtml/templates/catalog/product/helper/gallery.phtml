@@ -37,7 +37,7 @@ $formName = $block->getFormName();
                type="hidden"
                value="<?= $block->escapeHtmlAttr($typeData['value']) ?>"/>
         <?php
-} ?>
+    } ?>
 
     <script id="<?= $block->getHtmlId() ?>-template" type="text/x-magento-template">
         <div class="image item<% if (data.disabled == 1) { %> hidden-for-front<% } %>"
@@ -61,7 +61,7 @@ $formName = $block->getFormName();
                    value="<%- data.label %>"/>
             <input type="hidden"
                    name="<?= $block->escapeHtmlAttr($elementName) ?>[<%- data.file_id %>][disabled]"
-                   data-form-part="<?= $block->escapeHtmlAttr(formName) ?>"
+                   data-form-part="<?= $block->escapeHtmlAttr($formName) ?>"
                    value="<%- data.disabled %>"/>
             <input type="hidden"
                    name="<?= $block->escapeHtmlAttr($elementName) ?>[<%- data.file_id %>][media_type]"

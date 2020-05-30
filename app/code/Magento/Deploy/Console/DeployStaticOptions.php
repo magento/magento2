@@ -79,6 +79,11 @@ class DeployStaticOptions
     const NO_JAVASCRIPT = 'no-javascript';
 
     /**
+     * Key for js-bundle option
+     */
+    const NO_JS_BUNDLE = 'no-js-bundle';
+
+    /**
      * Key for css option
      */
     const NO_CSS = 'no-css';
@@ -122,9 +127,6 @@ class DeployStaticOptions
      */
     const NO_LESS = 'no-less';
 
-    /**
-     * Default jobs amount
-     */
     const DEFAULT_JOBS_AMOUNT = 0;
 
     /**
@@ -274,6 +276,12 @@ class DeployStaticOptions
                 null,
                 InputOption::VALUE_NONE,
                 'Do not deploy JavaScript files.'
+            ),
+            new InputOption(
+                self::NO_JS_BUNDLE,
+                null,
+                InputOption::VALUE_NONE,
+                'Do not deploy JavaScript bundle files.'
             ),
             new InputOption(
                 self::NO_CSS,

@@ -79,6 +79,18 @@ class Mime
     ];
 
     /**
+     * List of generic MIME types
+     *
+     * The file mime type should be detected by the file's extension if the native mime type is one of the listed below.
+     *
+     * @var array
+     */
+    private $genericMimeTypes = [
+        'application/x-empty',
+        'inode/x-empty',
+    ];
+
+    /**
      * Get mime type of a file
      *
      * @param string $file
@@ -120,7 +132,11 @@ class Mime
         $extension = $this->getFileExtension($file);
         $result = mime_content_type($file);
         if (isset($this->mimeTypes[$extension], $this->defineByExtensionList[$extension])
-            && (strpos($result, 'text/') === 0 || strpos($result, 'image/svg') === 0)
+            && (
+                strpos($result, 'text/') === 0
+                || strpos($result, 'image/svg') === 0
+                || in_array($result, $this->genericMimeTypes, true)
+            )
         ) {
             $result = $this->mimeTypes[$extension];
         }

@@ -4,12 +4,10 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 /** @var \Magento\Wishlist\Block\Customer\Wishlist\Button $block */
 ?>
 
-<?php if ($block->getWishlist()->getItemsCount()): ?>
+<?php if ($block->getWishlist()->getItemsCount()) : ?>
     <button type="submit" name="do" title="<?= $block->escapeHtmlAttr(__('Update Wish List')) ?>" class="action update">
         <span><?= $block->escapeHtml(__('Update Wish List')) ?></span>
     </button>

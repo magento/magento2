@@ -71,15 +71,11 @@
                 <requiredEntity createDataKey="createConfigSecondChildProduct"/>
             </createData>
 
-            <!-- Run cron twice -->
-            <magentoCLI command="cron:run" stepKey="runCron1"/>
-            <magentoCLI command="cron:run" stepKey="runCron2"/>
-
-            <!-- Login as admin -->
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
-            <actionGroup ref="deleteAllExportedFiles" stepKey="clearExportedFilesList"/>
+            <magentoCron stepKey="runCronIndex" groups="index"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
+
             <!-- Delete simple product -->
             <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
 
@@ -90,12 +86,8 @@
             <deleteData createDataKey="createConfigProductAttribute" stepKey="deleteConfigProductAttribute"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
 
-            <!-- Delete exported file -->
-            <actionGroup ref="deleteExportedFile" stepKey="deleteExportedFile">
-                <argument name="rowIndex" value="0"/>
-            </actionGroup>
-            <!-- Log out -->
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+            <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
         </after>
 
         <!-- Go to export page -->
@@ -103,15 +95,20 @@
         <waitForPageLoad stepKey="waitForExportIndexPageLoad"/>
 
         <!-- Export created below products -->
-        <actionGroup ref="exportAllProducts" stepKey="exportCreatedProducts"/>
+        <actionGroup ref="ExportAllProductsActionGroup" stepKey="exportCreatedProducts"/>
 
-        <!-- Run cron -->
-        <magentoCLI command="cron:run" stepKey="runCron3"/>
-        <magentoCLI command="cron:run" stepKey="runCron4"/>
+        <magentoCron stepKey="runCron"/>
+
+        <grabTextFrom selector="{{AdminExportAttributeSection.exportFileNameByPosition('0')}}" stepKey="grabNameFile"/>
 
         <!-- Download product -->
-        <actionGroup ref="downloadFileByRowIndex" stepKey="downloadCreatedProducts">
-            <argument name="rowIndex" value="0"/>
+        <actionGroup ref="DownloadFileActionGroup" stepKey="downloadCreatedProducts">
+            <argument name="fileName" value="{$grabNameFile}"/>
+        </actionGroup>
+
+        <!-- Delete exported file -->
+        <actionGroup ref="DeleteExportedFileActionGroup" stepKey="deleteExportedFile">
+            <argument name="fileName" value="{$grabNameFile}"/>
         </actionGroup>
     </test>
 </tests>

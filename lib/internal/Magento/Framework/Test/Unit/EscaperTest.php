@@ -3,39 +3,59 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\Test\Unit;
 
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\Escaper;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\Translate\Inline;
+use Magento\Framework\ZendEscaper;
+use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface;
 
 /**
  * \Magento\Framework\Escaper test case
  */
-class EscaperTest extends \PHPUnit\Framework\TestCase
+class EscaperTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\Escaper
+     * @var Escaper
      */
-    protected $escaper = null;
+    protected $escaper;
 
     /**
-     * @var \Magento\Framework\ZendEscaper
+     * @var ZendEscaper
      */
     private $zendEscaper;
 
     /**
-     * @var \Psr\Log\LoggerInterface
+     * @var Inline
+     */
+    private $translateInline;
+
+    /**
+     * @var LoggerInterface
      */
     private $loggerMock;
 
-    protected function setUp()
+    /**
+     * @inheritdoc
+     */
+    protected function setUp(): void
     {
-        $this->escaper = new Escaper();
-        $this->zendEscaper = new \Magento\Framework\ZendEscaper();
-        $this->loggerMock = $this->getMockForAbstractClass(\Psr\Log\LoggerInterface::class);
         $objectManagerHelper = new ObjectManager($this);
+        $this->escaper = new Escaper();
+        $this->zendEscaper = new ZendEscaper();
+        $this->translateInline = $objectManagerHelper->getObject(Inline::class);
+        $this->loggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
         $objectManagerHelper->setBackwardCompatibleProperty($this->escaper, 'escaper', $this->zendEscaper);
         $objectManagerHelper->setBackwardCompatibleProperty($this->escaper, 'logger', $this->loggerMock);
+        $objectManagerHelper->setBackwardCompatibleProperty(
+            $this->escaper,
+            'translateInline',
+            $this->translateInline
+        );
     }
 
     /**
@@ -43,6 +63,7 @@ class EscaperTest extends \PHPUnit\Framework\TestCase
      *
      * @param int $codepoint Unicode codepoint in hex notation
      * @return string UTF-8 literal string
+     * @throws \Exception
      */
     protected function codepointToUtf8($codepoint)
     {
@@ -223,7 +244,12 @@ class EscaperTest extends \PHPUnit\Framework\TestCase
             ],
             'text with html comment' => [
                 'data' => 'Only <span><b>2</b></span> in stock <!-- HTML COMMENT -->',
-                'expected' => 'Only <span><b>2</b></span> in stock <!-- HTML COMMENT -->',
+                'expected' => 'Only <span><b>2</b></span> in stock ',
+                'allowedTags' => ['span', 'b'],
+            ],
+            'text with multi-line html comment' => [
+                'data' => "Only <span><b>2</b></span> in stock <!-- --!\n\n><img src=#>-->",
+                'expected' => 'Only <span><b>2</b></span> in stock ',
                 'allowedTags' => ['span', 'b'],
             ],
             'text with non ascii characters' => [
@@ -265,13 +291,38 @@ class EscaperTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @covers \Magento\Framework\Escaper::escapeUrl
+     *
+     * @param string $data
+     * @param string $expected
+     * @return void
+     *
+     * @dataProvider escapeUrlDataProvider
      */
-    public function testEscapeUrl()
+    public function testEscapeUrl(string $data, string $expected): void
     {
-        $data = 'http://example.com/search?term=this+%26+that&view=list';
-        $expected = 'http://example.com/search?term=this+%26+that&amp;view=list';
         $this->assertEquals($expected, $this->escaper->escapeUrl($data));
         $this->assertEquals($expected, $this->escaper->escapeUrl($expected));
+    }
+
+    /**
+     * @return array
+     */
+    public function escapeUrlDataProvider(): array
+    {
+        return [
+            [
+                'data' => "http://example.com/search?term=this+%26+that&view=list",
+                'expected' => "http://example.com/search?term=this+%26+that&amp;view=list",
+            ],
+            [
+                'data' => "http://exam\r\nple.com/search?term=this+%26+that&view=list",
+                'expected' => "http://example.com/search?term=this+%26+that&amp;view=list",
+            ],
+            [
+                'data' => "http://&#x65;&#x78;&#x61;&#x6d;&#x70;&#x6c;&#x65;&#x2e;&#x63;&#x6f;&#x6d;/",
+                'expected' => "http://example.com/",
+            ],
+        ];
     }
 
     /**
@@ -318,6 +369,10 @@ class EscaperTest extends \PHPUnit\Framework\TestCase
     {
         return [
             [
+                '0',
+                '0',
+            ],
+            [
                 'javascript%3Aalert%28String.fromCharCode%280x78%29%2BString.'
                 . 'fromCharCode%280x73%29%2BString.fromCharCode%280x73%29%29',
                 ':alert%28String.fromCharCode%280x78%29%2BString.'
@@ -362,6 +417,10 @@ class EscaperTest extends \PHPUnit\Framework\TestCase
             [
                 'http://test.com/?redirect=\x64\x61\x74\x61\x3a\x74\x65\x78\x74x2cCPHNjcmlwdD5hbGVydCgxKTwvc2NyaXB0Pg',
                 'http://test.com/?redirect=:\x74\x65\x78\x74x2cCPHNjcmlwdD5hbGVydCgxKTwvc2NyaXB0Pg',
+            ],
+            [
+                'http://test.com/?{{{test}}{{test_translated}}{{tes_origin}}{{theme}}}',
+                'http://test.com/?test',
             ],
         ];
     }

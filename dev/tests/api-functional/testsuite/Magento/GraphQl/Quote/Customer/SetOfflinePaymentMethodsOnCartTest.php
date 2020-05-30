@@ -34,7 +34,7 @@ class SetOfflinePaymentMethodsOnCartTest extends GraphQlAbstract
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = Bootstrap::getObjectManager();
         $this->getMaskedQuoteIdByReservedOrderId = $objectManager->get(GetMaskedQuoteIdByReservedOrderId::class);
@@ -47,7 +47,10 @@ class SetOfflinePaymentMethodsOnCartTest extends GraphQlAbstract
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_new_shipping_address.php
-     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/enable_offline_payment_methods.php
+     * @magentoConfigFixture default_store payment/banktransfer/active 1
+     * @magentoConfigFixture default_store payment/cashondelivery/active 1
+     * @magentoConfigFixture default_store payment/checkmo/active 1
+     * @magentoConfigFixture default_store payment/purchaseorder/active 1
      *
      * @param string $methodCode
      * @param string $methodTitle
@@ -90,7 +93,10 @@ class SetOfflinePaymentMethodsOnCartTest extends GraphQlAbstract
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_new_shipping_address.php
-     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/enable_offline_payment_methods.php
+     * @magentoConfigFixture default_store payment/banktransfer/active 1
+     * @magentoConfigFixture default_store payment/cashondelivery/active 1
+     * @magentoConfigFixture default_store payment/checkmo/active 1
+     * @magentoConfigFixture default_store payment/purchaseorder/active 1
      */
     public function testSetPurchaseOrderPaymentMethod()
     {
@@ -102,7 +108,7 @@ class SetOfflinePaymentMethodsOnCartTest extends GraphQlAbstract
         $query = <<<QUERY
 mutation {
   setPaymentMethodOnCart(input: {
-    cart_id: "{$maskedQuoteId}", 
+    cart_id: "{$maskedQuoteId}",
     payment_method: {
       code: "{$methodCode}"
       purchase_order_number: "{$poNumber}"
@@ -147,7 +153,7 @@ QUERY;
         return <<<QUERY
 mutation {
   setPaymentMethodOnCart(input: {
-    cart_id: "{$maskedQuoteId}", 
+    cart_id: "{$maskedQuoteId}",
     payment_method: {
       code: "{$methodCode}"
     }

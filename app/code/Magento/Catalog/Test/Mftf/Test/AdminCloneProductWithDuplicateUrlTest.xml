@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCloneProductWithDuplicateUrlTest">
+        <annotations>
+            <features value="Catalog"/>
+            <stories value="Product"/>
+            <title value="Cloning a product with duplicate URL key"/>
+            <description value="Check product cloning with duplicate URL key"/>
+            <severity value="AVERAGE"/>
+            <testCaseId value="MAGETWO-98992"/>
+            <useCaseId value="MAGETWO-98708"/>
+            <group value="catalog"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <!--Create category and product-->
+            <comment userInput="Create category and product" stepKey="commentCreateCategoryAndProduct"/>
+            <createData entity="SimpleProduct2" stepKey="createSimpleProduct"/>
+        </before>
+        <after>
+            <!--Delete created data-->
+            <comment userInput="Delete created data" stepKey="commentDeleteCreatedData"/>
+            <actionGroup ref="DeleteAllDuplicateProductUsingProductGridActionGroup" stepKey="deleteAllDuplicateProducts">
+                <argument name="product" value="$$createSimpleProduct$$"/>
+            </actionGroup>
+            <actionGroup ref="ResetProductGridToDefaultViewActionGroup" stepKey="resetFiltersIfExist"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutOfAdmin"/>
+        </after>
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="goToProductEditPage">
+            <argument name="productId" value="$$createSimpleProduct.id$$"/>
+        </actionGroup>
+        <waitForPageLoad stepKey="waitForSimpleProductPageLoad"/>
+        <!--Save and duplicated the product once-->
+        <comment userInput="Save and duplicated the product once" stepKey="commentSaveAndDuplicateProduct"/>
+        <actionGroup ref="AdminFormSaveAndDuplicateActionGroup" stepKey="saveAndDuplicateProductFormFirstTime"/>
+        <conditionalClick selector="{{AdminProductSEOSection.sectionHeader}}" dependentSelector="{{AdminProductSEOSection.urlKeyInput}}" visible="false" stepKey="openSEOSection"/>
+        <grabValueFrom selector="{{AdminProductSEOSection.urlKeyInput}}" stepKey="grabDuplicatedProductUrlKey"/>
+        <assertStringContainsString stepKey="assertDuplicatedProductUrlKey">
+			<actualResult type="const">$grabDuplicatedProductUrlKey</actualResult>
+			<expectedResult type="const">$$createSimpleProduct.custom_attributes[url_key]$$</expectedResult>
+        </assertStringContainsString>
+        <assertStringContainsString stepKey="assertDuplicatedProductUrlKey1">
+			<actualResult type="const">$grabDuplicatedProductUrlKey</actualResult>
+			<expectedResult type="string">-1</expectedResult>
+        </assertStringContainsString>
+        <!--Add duplicated product to the simple product-->
+        <comment userInput="Add duplicated product to the simple product" stepKey="commentAddProduct"/>
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="goToSimpleProductPage">
+            <argument name="productId" value="$$createSimpleProduct.id$$"/>
+        </actionGroup>
+        <waitForPageLoad stepKey="waitForSimpleProductPageLoad1"/>
+        <actionGroup ref="AddCrossSellProductBySkuActionGroup" stepKey="addCrossSellProduct">
+            <argument name="sku" value="$$createSimpleProduct.sku$$"/>
+        </actionGroup>
+        <actionGroup ref="AddRelatedProductBySkuActionGroup" stepKey="addRelatedProduct">
+            <argument name="sku" value="$$createSimpleProduct.sku$$"/>
+        </actionGroup>
+        <actionGroup ref="AddUpSellProductBySkuActionGroup" stepKey="addUpSellProduct">
+            <argument name="sku" value="$$createSimpleProduct.sku$$"/>
+        </actionGroup>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="clickSaveProduct"/>
+        <conditionalClick selector="{{AdminProductFormRelatedUpSellCrossSellSection.sectionHeader}}" dependentSelector="{{AdminProductFormRelatedUpSellCrossSellSection.AddRelatedProductsButton}}" visible="false" stepKey="openProductRUSSection"/>
+        <see selector="{{AdminProductFormRelatedUpSellCrossSellSection.selectedProductSku('related')}}" userInput="$$createSimpleProduct.sku$$-1" stepKey="seeRelatedProduct"/>
+        <see selector="{{AdminProductFormRelatedUpSellCrossSellSection.selectedProductSku('upsell')}}" userInput="$$createSimpleProduct.sku$$-1" stepKey="seeUpSellProduct"/>
+        <see selector="{{AdminProductFormRelatedUpSellCrossSellSection.selectedProductSku('crosssell')}}" userInput="$$createSimpleProduct.sku$$-1" stepKey="seeCrossSellProduct"/>
+        <!--Save and duplicated the product second time-->
+        <comment userInput="Save and duplicated the product second time" stepKey="commentSaveAndDuplicateProduct1"/>
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="goToProductEditPage1">
+            <argument name="productId" value="$$createSimpleProduct.id$$"/>
+        </actionGroup>
+        <waitForPageLoad stepKey="waitForSimpleProductPageLoad2"/>
+        <actionGroup ref="AdminFormSaveAndDuplicateActionGroup" stepKey="saveAndDuplicateProductFormSecondTime"/>
+        <conditionalClick selector="{{AdminProductSEOSection.sectionHeader}}" dependentSelector="{{AdminProductSEOSection.urlKeyInput}}" visible="false" stepKey="openProductSEOSection"/>
+        <waitForElementVisible selector="{{AdminProductSEOSection.urlKeyInput}}" stepKey="waitForUrlKeyField"/>
+        <grabValueFrom selector="{{AdminProductSEOSection.urlKeyInput}}" stepKey="grabSecondDuplicatedProductUrlKey"/>
+        <assertStringContainsString stepKey="assertSecondDuplicatedProductUrlKey">
+			<actualResult type="const">$grabSecondDuplicatedProductUrlKey</actualResult>
+			<expectedResult type="const">$$createSimpleProduct.custom_attributes[url_key]$$</expectedResult>
+        </assertStringContainsString>
+        <assertStringContainsString stepKey="assertSecondDuplicatedProductUrlKey1">
+			<actualResult type="const">$grabSecondDuplicatedProductUrlKey</actualResult>
+			<expectedResult type="string">-2</expectedResult>
+        </assertStringContainsString>
+        <conditionalClick selector="{{AdminProductFormRelatedUpSellCrossSellSection.sectionHeader}}" dependentSelector="{{AdminProductFormRelatedUpSellCrossSellSection.AddRelatedProductsButton}}" visible="false" stepKey="openProductRUSSection1"/>
+        <waitForElementVisible selector="{{AdminProductFormRelatedUpSellCrossSellSection.selectedProductSku('related')}}" stepKey="waitForSelectedProductSku"/>
+        <see selector="{{AdminProductFormRelatedUpSellCrossSellSection.selectedProductSku('related')}}" userInput="$$createSimpleProduct.sku$$-1" stepKey="seeRelatedProductForDuplicated"/>
+        <see selector="{{AdminProductFormRelatedUpSellCrossSellSection.selectedProductSku('upsell')}}" userInput="$$createSimpleProduct.sku$$-1" stepKey="seeUpSellProductForDuplicated"/>
+        <see selector="{{AdminProductFormRelatedUpSellCrossSellSection.selectedProductSku('crosssell')}}" userInput="$$createSimpleProduct.sku$$-1" stepKey="seeCrossSellProductForDuplicated"/>
+    </test>
+</tests>

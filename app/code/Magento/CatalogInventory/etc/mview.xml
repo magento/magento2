@@ -9,6 +9,8 @@
     <view id="cataloginventory_stock" class="Magento\CatalogInventory\Model\Indexer\Stock" group="indexer">
         <subscriptions>
             <table name="cataloginventory_stock_item" entity_column="product_id" />
+            <!--Track product status to trigger stock indexer-->
+            <table name="catalog_product_entity_int" entity_column="entity_id" />
         </subscriptions>
     </view>
     <view id="catalog_product_price" class="Magento\Catalog\Model\Indexer\Product\Price" group="indexer">

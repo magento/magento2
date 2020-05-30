@@ -215,6 +215,19 @@ define([
         },
 
         /**
+         * Checks if the specified region has any elements
+         * associated with it.
+         *
+         * @param {String} name
+         * @returns {Boolean}
+         */
+        regionHasElements: function (name) {
+            var region = this.getRegion(name);
+
+            return region().length > 0;
+        },
+
+        /**
          * Replaces specified regions' data with a provided one.
          * Creates region if it was not created yet.
          *

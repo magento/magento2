@@ -24,7 +24,7 @@ class AddProductToCartTest extends GraphQlAbstract
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = Bootstrap::getObjectManager();
         $this->getMaskedQuoteIdByReservedOrderId = $objectManager->get(GetMaskedQuoteIdByReservedOrderId::class);
@@ -33,11 +33,12 @@ class AddProductToCartTest extends GraphQlAbstract
     /**
      * @magentoApiDataFixture Magento/Catalog/_files/products.php
      * @magentoApiDataFixture Magento/Checkout/_files/active_quote.php
-     * @expectedException \Exception
-     * @expectedExceptionMessage The requested qty is not available
      */
     public function testAddProductIfQuantityIsNotAvailable()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('The requested qty is not available');
+
         $sku = 'simple';
         $quantity = 200;
         $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_order_1');
@@ -49,17 +50,17 @@ class AddProductToCartTest extends GraphQlAbstract
     /**
      * @magentoApiDataFixture Magento/Catalog/_files/products.php
      * @magentoApiDataFixture Magento/Checkout/_files/active_quote.php
-     * @magentoConfigFixture default cataloginventory/item_options/max_sale_qty 5
-     * @expectedException \Exception
-     * @expectedExceptionMessage The most you may purchase is 5.
+     * @magentoConfigFixture default_store cataloginventory/item_options/max_sale_qty 5
      */
     public function testAddMoreProductsThatAllowed()
     {
-        $this->markTestIncomplete('https://github.com/magento/graphql-ce/issues/167');
-
         $sku = 'custom-design-simple-product';
         $quantity = 7;
         $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_order_1');
+
+        $this->expectExceptionMessageMatches(
+            '/The most you may purchase is 5|The requested qty exceeds the maximum qty allowed in shopping cart/'
+        );
 
         $query = $this->getQuery($maskedQuoteId, $sku, $quantity);
         $this->graphQlMutation($query);
@@ -68,11 +69,12 @@ class AddProductToCartTest extends GraphQlAbstract
     /**
      * @magentoApiDataFixture Magento/Catalog/_files/products.php
      * @magentoApiDataFixture Magento/Checkout/_files/active_quote.php
-     * @expectedException \Exception
-     * @expectedExceptionMessage Please enter a number greater than 0 in this field.
      */
     public function testAddSimpleProductToCartWithNegativeQuantity()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Please enter a number greater than 0 in this field.');
+
         $sku = 'simple';
         $quantity = -2;
         $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_order_1');
@@ -108,10 +110,10 @@ class AddProductToCartTest extends GraphQlAbstract
     private function getQuery(string $maskedQuoteId, string $sku, float $quantity) : string
     {
         return <<<QUERY
-mutation {  
+mutation {
   addSimpleProductsToCart(
     input: {
-      cart_id: "{$maskedQuoteId}", 
+      cart_id: "{$maskedQuoteId}",
       cart_items: [
         {
           data: {

@@ -3,43 +3,59 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Unit\Plugin\Model\ResourceModel;
 
+use Magento\Catalog\Model\ResourceModel\Config as ConfigResourceModel;
 use Magento\Catalog\Plugin\Model\ResourceModel\Config;
+use Magento\Eav\Model\Cache\Type;
+use Magento\Eav\Model\Entity\Attribute;
+use Magento\Framework\App\Cache\StateInterface;
+use Magento\Framework\App\CacheInterface;
 use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class ConfigTest extends \PHPUnit\Framework\TestCase
+class ConfigTest extends TestCase
 {
-    /** @var \Magento\Framework\App\CacheInterface|\PHPUnit_Framework_MockObject_MockObject */
-    private $cache;
+    /**
+     * @var CacheInterface|MockObject
+     */
+    private $cacheMock;
 
-    /** @var \Magento\Framework\App\Cache\StateInterface|\PHPUnit_Framework_MockObject_MockObject */
-    private $cacheState;
+    /**
+     * @var StateInterface|MockObject
+     */
+    private $cacheStateMock;
 
-    /** @var SerializerInterface|\PHPUnit_Framework_MockObject_MockObject */
-    private $serializer;
+    /**
+     * @var SerializerInterface|MockObject
+     */
+    private $serializerMock;
 
-    /** @var \Magento\Catalog\Model\ResourceModel\Config|\PHPUnit_Framework_MockObject_MockObject */
-    private $subject;
+    /**
+     * @var ConfigResourceModel|MockObject
+     */
+    private $configResourceModelMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->cache = $this->createMock(\Magento\Framework\App\CacheInterface::class);
-        $this->cacheState = $this->createMock(\Magento\Framework\App\Cache\StateInterface::class);
-        $this->serializer = $this->createMock(SerializerInterface::class);
-        $this->subject = $this->createMock(\Magento\Catalog\Model\ResourceModel\Config::class);
+        $this->cacheMock = $this->getMockForAbstractClass(CacheInterface::class);
+        $this->cacheStateMock = $this->getMockForAbstractClass(StateInterface::class);
+        $this->serializerMock = $this->getMockForAbstractClass(SerializerInterface::class);
+        $this->configResourceModelMock = $this->createMock(ConfigResourceModel::class);
     }
 
     public function testGetAttributesUsedInListingOnCacheDisabled()
     {
-        $this->cache->expects($this->never())->method('load');
+        $this->cacheMock->expects($this->never())->method('load');
 
         $this->assertEquals(
             ['attributes'],
             $this->getConfig(false)->aroundGetAttributesUsedInListing(
-                $this->subject,
+                $this->configResourceModelMock,
                 $this->mockPluginProceed(['attributes'])
             )
         );
@@ -51,13 +67,13 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         $storeId = 'store';
         $attributes = ['attributes'];
         $serializedAttributes = '["attributes"]';
-        $this->subject->expects($this->any())->method('getEntityTypeId')->willReturn($entityTypeId);
-        $this->subject->expects($this->any())->method('getStoreId')->willReturn($storeId);
-        $cacheId = \Magento\Catalog\Plugin\Model\ResourceModel\Config::PRODUCT_LISTING_ATTRIBUTES_CACHE_ID
+        $this->configResourceModelMock->method('getEntityTypeId')->willReturn($entityTypeId);
+        $this->configResourceModelMock->method('getStoreId')->willReturn($storeId);
+        $cacheId = Config::PRODUCT_LISTING_ATTRIBUTES_CACHE_ID
             . $entityTypeId
             . '_' . $storeId;
-        $this->cache->expects($this->any())->method('load')->with($cacheId)->willReturn($serializedAttributes);
-        $this->serializer->expects($this->once())
+        $this->cacheMock->method('load')->with($cacheId)->willReturn($serializedAttributes);
+        $this->serializerMock->expects($this->once())
             ->method('unserialize')
             ->with($serializedAttributes)
             ->willReturn($attributes);
@@ -65,7 +81,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(
             $attributes,
             $this->getConfig(true)->aroundGetAttributesUsedInListing(
-                $this->subject,
+                $this->configResourceModelMock,
                 $this->mockPluginProceed()
             )
         );
@@ -77,31 +93,31 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         $storeId = 'store';
         $attributes = ['attributes'];
         $serializedAttributes = '["attributes"]';
-        $this->subject->expects($this->any())->method('getEntityTypeId')->willReturn($entityTypeId);
-        $this->subject->expects($this->any())->method('getStoreId')->willReturn($storeId);
-        $cacheId = \Magento\Catalog\Plugin\Model\ResourceModel\Config::PRODUCT_LISTING_ATTRIBUTES_CACHE_ID
+        $this->configResourceModelMock->method('getEntityTypeId')->willReturn($entityTypeId);
+        $this->configResourceModelMock->method('getStoreId')->willReturn($storeId);
+        $cacheId = Config::PRODUCT_LISTING_ATTRIBUTES_CACHE_ID
             . $entityTypeId
             . '_' . $storeId;
-        $this->cache->expects($this->any())->method('load')->with($cacheId)->willReturn(false);
-        $this->serializer->expects($this->never())
+        $this->cacheMock->method('load')->with($cacheId)->willReturn(false);
+        $this->serializerMock->expects($this->never())
             ->method('unserialize');
-        $this->serializer->expects($this->once())
+        $this->serializerMock->expects($this->once())
             ->method('serialize')
             ->with($attributes)
             ->willReturn($serializedAttributes);
-        $this->cache->expects($this->any())->method('save')->with(
+        $this->cacheMock->method('save')->with(
             $serializedAttributes,
             $cacheId,
             [
-                \Magento\Eav\Model\Cache\Type::CACHE_TAG,
-                \Magento\Eav\Model\Entity\Attribute::CACHE_TAG
+                Type::CACHE_TAG,
+                Attribute::CACHE_TAG
             ]
         );
 
         $this->assertEquals(
             $attributes,
             $this->getConfig(true)->aroundGetAttributesUsedInListing(
-                $this->subject,
+                $this->configResourceModelMock,
                 $this->mockPluginProceed($attributes)
             )
         );
@@ -109,12 +125,12 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
 
     public function testGetAttributesUsedForSortByOnCacheDisabled()
     {
-        $this->cache->expects($this->never())->method('load');
+        $this->cacheMock->expects($this->never())->method('load');
 
         $this->assertEquals(
             ['attributes'],
             $this->getConfig(false)->aroundGetAttributesUsedForSortBy(
-                $this->subject,
+                $this->configResourceModelMock,
                 $this->mockPluginProceed(['attributes'])
             )
         );
@@ -126,12 +142,12 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         $storeId = 'store';
         $attributes = ['attributes'];
         $serializedAttributes = '["attributes"]';
-        $this->subject->expects($this->any())->method('getEntityTypeId')->willReturn($entityTypeId);
-        $this->subject->expects($this->any())->method('getStoreId')->willReturn($storeId);
-        $cacheId = \Magento\Catalog\Plugin\Model\ResourceModel\Config::PRODUCT_LISTING_SORT_BY_ATTRIBUTES_CACHE_ID
+        $this->configResourceModelMock->method('getEntityTypeId')->willReturn($entityTypeId);
+        $this->configResourceModelMock->method('getStoreId')->willReturn($storeId);
+        $cacheId = Config::PRODUCT_LISTING_SORT_BY_ATTRIBUTES_CACHE_ID
             . $entityTypeId . '_' . $storeId;
-        $this->cache->expects($this->any())->method('load')->with($cacheId)->willReturn($serializedAttributes);
-        $this->serializer->expects($this->once())
+        $this->cacheMock->method('load')->with($cacheId)->willReturn($serializedAttributes);
+        $this->serializerMock->expects($this->once())
             ->method('unserialize')
             ->with($serializedAttributes)
             ->willReturn($attributes);
@@ -139,7 +155,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(
             $attributes,
             $this->getConfig(true)->aroundGetAttributesUsedForSortBy(
-                $this->subject,
+                $this->configResourceModelMock,
                 $this->mockPluginProceed()
             )
         );
@@ -151,30 +167,30 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         $storeId = 'store';
         $attributes = ['attributes'];
         $serializedAttributes = '["attributes"]';
-        $this->subject->expects($this->any())->method('getEntityTypeId')->willReturn($entityTypeId);
-        $this->subject->expects($this->any())->method('getStoreId')->willReturn($storeId);
-        $cacheId = \Magento\Catalog\Plugin\Model\ResourceModel\Config::PRODUCT_LISTING_SORT_BY_ATTRIBUTES_CACHE_ID
+        $this->configResourceModelMock->method('getEntityTypeId')->willReturn($entityTypeId);
+        $this->configResourceModelMock->method('getStoreId')->willReturn($storeId);
+        $cacheId = Config::PRODUCT_LISTING_SORT_BY_ATTRIBUTES_CACHE_ID
             . $entityTypeId . '_' . $storeId;
-        $this->cache->expects($this->any())->method('load')->with($cacheId)->willReturn(false);
-        $this->serializer->expects($this->never())
+        $this->cacheMock->method('load')->with($cacheId)->willReturn(false);
+        $this->serializerMock->expects($this->never())
             ->method('unserialize');
-        $this->serializer->expects($this->once())
+        $this->serializerMock->expects($this->once())
             ->method('serialize')
             ->with($attributes)
             ->willReturn($serializedAttributes);
-        $this->cache->expects($this->any())->method('save')->with(
+        $this->cacheMock->method('save')->with(
             $serializedAttributes,
             $cacheId,
             [
-                \Magento\Eav\Model\Cache\Type::CACHE_TAG,
-                \Magento\Eav\Model\Entity\Attribute::CACHE_TAG
+                Type::CACHE_TAG,
+                Attribute::CACHE_TAG
             ]
         );
 
         $this->assertEquals(
             $attributes,
             $this->getConfig(true)->aroundGetAttributesUsedForSortBy(
-                $this->subject,
+                $this->configResourceModelMock,
                 $this->mockPluginProceed($attributes)
             )
         );
@@ -182,29 +198,33 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param bool $cacheEnabledFlag
-     * @return \Magento\Catalog\Plugin\Model\ResourceModel\Config
+     *
+     * @return Config
      */
     protected function getConfig($cacheEnabledFlag)
     {
-        $this->cacheState->expects($this->any())->method('isEnabled')
-            ->with(\Magento\Eav\Model\Cache\Type::TYPE_IDENTIFIER)->willReturn($cacheEnabledFlag);
+        $this->cacheStateMock->method('isEnabled')
+            ->with(Type::TYPE_IDENTIFIER)
+            ->willReturn($cacheEnabledFlag);
+
         return (new ObjectManager($this))->getObject(
-            \Magento\Catalog\Plugin\Model\ResourceModel\Config::class,
+            Config::class,
             [
-                'cache' => $this->cache,
-                'cacheState' => $this->cacheState,
-                'serializer' => $this->serializer,
+                'cache' => $this->cacheMock,
+                'cacheState' => $this->cacheStateMock,
+                'serializer' => $this->serializerMock,
             ]
         );
     }
 
     /**
      * @param mixed $returnValue
+     *
      * @return callable
      */
     protected function mockPluginProceed($returnValue = null)
     {
-        return function () use ($returnValue) {
+        return static function () use ($returnValue) {
             return $returnValue;
         };
     }

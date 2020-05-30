@@ -15,6 +15,8 @@ use Magento\Framework\App\Response\Http as Response;
 
 /**
  * Test for \Magento\Cms\Controller\Adminhtml\Wysiwyg\Images\Upload class.
+ *
+ * @magentoAppArea adminhtml
  */
 class UploadTest extends \PHPUnit\Framework\TestCase
 {
@@ -32,6 +34,11 @@ class UploadTest extends \PHPUnit\Framework\TestCase
      * @var string
      */
     private $fullDirectoryPath;
+
+    /**
+     * @var string
+     */
+    private $fullExcludedDirectoryPath;
 
     /**
      * @var string
@@ -56,15 +63,17 @@ class UploadTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $directoryName = 'directory1';
+        $excludedDirName = 'downloadable';
         $this->filesystem = $this->objectManager->get(\Magento\Framework\Filesystem::class);
         /** @var \Magento\Cms\Helper\Wysiwyg\Images $imagesHelper */
         $imagesHelper = $this->objectManager->get(\Magento\Cms\Helper\Wysiwyg\Images::class);
         $this->mediaDirectory = $this->filesystem->getDirectoryWrite(DirectoryList::MEDIA);
         $this->fullDirectoryPath = $imagesHelper->getStorageRoot() . DIRECTORY_SEPARATOR . $directoryName;
+        $this->fullExcludedDirectoryPath = $imagesHelper->getStorageRoot() . DIRECTORY_SEPARATOR . $excludedDirName;
         $this->mediaDirectory->create($this->mediaDirectory->getRelativePath($this->fullDirectoryPath));
         $this->responseFactory = $this->objectManager->get(ResponseFactory::class);
         $this->model = $this->objectManager->get(\Magento\Cms\Controller\Adminhtml\Wysiwyg\Images\Upload::class);
@@ -113,6 +122,34 @@ class UploadTest extends \PHPUnit\Framework\TestCase
         $dataKeys = array_keys($data);
         sort($dataKeys);
         $this->assertEquals($keys, $dataKeys);
+    }
+
+    /**
+     * Execute method with excluded directory path and file name to check that file can't be uploaded.
+     *
+     * @return void
+     * @magentoAppIsolation enabled
+     */
+    public function testExecuteWithExcludedDirectory()
+    {
+        $expectedError = 'We can\'t upload the file to current folder right now. Please try another folder.';
+        $this->model->getRequest()->setParams(['type' => 'image/png']);
+        $this->model->getRequest()->setMethod('POST');
+        $this->model->getStorage()->getSession()->setCurrentPath($this->fullExcludedDirectoryPath);
+        /** @var JsonResponse $jsonResponse */
+        $jsonResponse = $this->model->execute();
+        /** @var Response $response */
+        $jsonResponse->renderResult($response = $this->responseFactory->create());
+        $data = json_decode($response->getBody(), true);
+
+        $this->assertEquals($expectedError, $data['error']);
+        $this->assertFalse(
+            $this->mediaDirectory->isExist(
+                $this->mediaDirectory->getRelativePath(
+                    $this->fullExcludedDirectoryPath . DIRECTORY_SEPARATOR . $this->fileName
+                )
+            )
+        );
     }
 
     /**
@@ -173,7 +210,7 @@ class UploadTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    public static function tearDownAfterClass()
+    public static function tearDownAfterClass(): void
     {
         $filesystem = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
             ->get(\Magento\Framework\Filesystem::class);

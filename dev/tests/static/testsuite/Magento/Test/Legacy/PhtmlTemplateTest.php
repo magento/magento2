@@ -7,6 +7,11 @@
  */
 namespace Magento\Test\Legacy;
 
+use Magento\Framework\Component\ComponentRegistrar;
+
+/**
+ * Static test for phtml template files.
+ */
 class PhtmlTemplateTest extends \PHPUnit\Framework\TestCase
 {
     public function testBlockVariableInsteadOfThis()
@@ -19,7 +24,7 @@ class PhtmlTemplateTest extends \PHPUnit\Framework\TestCase
              * @param string $file
              */
             function ($file) {
-                $this->assertNotRegExp(
+                self::assertNotRegExp(
                     '/this->(?!helper)\S*/iS',
                     file_get_contents($file),
                     'Access to members and methods of Block class through $this is ' .
@@ -46,7 +51,7 @@ class PhtmlTemplateTest extends \PHPUnit\Framework\TestCase
              * @param string $file
              */
             function ($file) {
-                $this->assertNotRegexp(
+                self::assertNotRegexp(
                     '/block->_[^_]+\S*\(/iS',
                     file_get_contents($file),
                     'Access to protected and private members of Block class is ' .
@@ -68,11 +73,116 @@ class PhtmlTemplateTest extends \PHPUnit\Framework\TestCase
              * @param string $file
              */
             function ($file) {
-                $this->assertNotRegexp(
+                self::assertNotRegexp(
                     '/type="text\/javascript"/',
                     file_get_contents($file),
                     'Please do not use "text/javascript" type attribute.'
                 );
+            },
+            \Magento\Framework\App\Utility\Files::init()->getPhtmlFiles()
+        );
+    }
+
+    public function testJqueryUiLibraryIsNotUsedInTemplates()
+    {
+        $invoker = new \Magento\Framework\App\Utility\AggregateInvoker($this);
+        $invoker(
+            /**
+             * 'jquery/ui' library is not obligatory to use in phtml files.
+             * It's better to use needed jquery ui widget instead.
+             *
+             * @param string $file
+             */
+            function ($file) {
+                if (strpos($file, '/view/frontend/templates/') !== false
+                    || strpos($file, '/view/base/templates/') !== false
+                ) {
+                    self::assertNotRegexp(
+                        '/(["\'])jquery\/ui\1/',
+                        file_get_contents($file),
+                        'Please do not use "jquery/ui" library in templates. Use needed jquery ui widget instead.'
+                    );
+                }
+            },
+            \Magento\Framework\App\Utility\Files::init()->getPhtmlFiles()
+        );
+    }
+
+    public function testJsComponentsAreProperlyInitializedInDataMageInitAttribute()
+    {
+        $invoker = new \Magento\Framework\App\Utility\AggregateInvoker($this);
+        $invoker(
+            /**
+             * JS components in data-mage-init attributes should be initialized not in php.
+             * JS components should be initialized in templates for them to be properly statically analyzed for bundling.
+             *
+             * @param string $file
+             */
+            function ($file) {
+                $whiteList = $this->getWhiteList();
+                if (!in_array($file, $whiteList, true)
+                    && (strpos($file, '/view/frontend/templates/') !== false
+                    || strpos($file, '/view/base/templates/') !== false)
+                ) {
+                    self::assertNotRegExp(
+                        '/data-mage-init=(?:\'|")(?!\s*{\s*"[^"]+")/',
+                        file_get_contents($file),
+                        'Please do not initialize JS component in php. Do it in template.'
+                    );
+                }
+            },
+            \Magento\Framework\App\Utility\Files::init()->getPhtmlFiles()
+        );
+    }
+
+    /**
+     * @return array
+     */
+    private function getWhiteList()
+    {
+        $whiteListFiles = [];
+        $componentRegistrar = new ComponentRegistrar();
+        foreach ($this->getFilesData('data_mage_init/whitelist.php') as $fileInfo) {
+            $whiteListFiles[] = $componentRegistrar->getPath(ComponentRegistrar::MODULE, $fileInfo[0])
+                . DIRECTORY_SEPARATOR . $fileInfo[1];
+        }
+        return $whiteListFiles;
+    }
+
+    /**
+     * @param string $filePattern
+     * @return array
+     */
+    private function getFilesData($filePattern)
+    {
+        $result = [];
+        foreach (glob(__DIR__ . '/_files/initialize_javascript/' . $filePattern) as $file) {
+            $fileData = include $file;
+            $result = array_merge($result, $fileData);
+        }
+        return $result;
+    }
+
+    public function testJsComponentsAreProperlyInitializedInXMagentoInitAttribute()
+    {
+        $invoker = new \Magento\Framework\App\Utility\AggregateInvoker($this);
+        $invoker(
+            /**
+             * JS components in x-magento-init attributes should be initialized not in php.
+             * JS components should be initialized in templates for them to be properly statically analyzed for bundling.
+             *
+             * @param string $file
+             */
+            function ($file) {
+                if (strpos($file, '/view/frontend/templates/') !== false
+                    || strpos($file, '/view/base/templates/') !== false
+                ) {
+                    self::assertNotRegExp(
+                        '@x-magento-init.>(?!\s*+{\s*"[^"]+"\s*:\s*{\s*"[\w/-]+")@i',
+                        file_get_contents($file),
+                        'Please do not initialize JS component in php. Do it in template.'
+                    );
+                }
             },
             \Magento\Framework\App\Utility\Files::init()->getPhtmlFiles()
         );

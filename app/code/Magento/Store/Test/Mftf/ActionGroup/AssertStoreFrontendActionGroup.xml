@@ -5,15 +5,20 @@
   * See COPYING.txt for license details.
   */
 -->
+
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AssertStoreFrontendActionGroup">
+        <annotations>
+            <description>Goes to the Storefront. Selects the provided Store in the Store View dropdown menu. Validates that the provided Store View #1 is selected. Validates that the provided Store View 2 is present in the dropdown menu.</description>
+        </annotations>
         <arguments>
             <argument name="customStore" type="string"/>
             <!-- defaultValue is blank so that it can be used in cases where there is only one store view -->
             <argument name="storeView1" type="string" defaultValue=""/>
             <argument name="storeView2" type="string" defaultValue=""/>
         </arguments>
+
         <amOnPage url="{{StorefrontHomePage.url}}" stepKey="goToStorefrontPage"/>
         <waitForPageLoad stepKey="waitForStorefrontHomePageLoad"/>
         <click selector="{{StorefrontFooterSection.switchStoreButton}}" stepKey="clickSwitchStoreButton"/>

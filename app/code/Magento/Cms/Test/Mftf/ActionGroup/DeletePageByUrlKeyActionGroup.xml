@@ -5,12 +5,17 @@
   * See COPYING.txt for license details.
   */
 -->
+
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="DeletePageByUrlKeyActionGroup">
+        <annotations>
+            <description>Goes to the Admin CMS Pages page. Deletes a Page based on the provided URL Key. Validates that the Success Message is present and correct.</description>
+        </annotations>
         <arguments>
             <argument name="UrlKey" type="string"/>
         </arguments>
+        
         <amOnPage url="{{CmsPagesPage.url}}" stepKey="amOnCMSNewPage"/>
         <waitForPageLoad stepKey="waitForPageLoad1"/>
         <click selector="{{CmsPagesPageActionsSection.select(UrlKey)}}" stepKey="clickSelect"/>

@@ -6,6 +6,10 @@
 namespace Magento\Persistent\Observer;
 
 use Magento\Framework\Event\ObserverInterface;
+use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Quote\Api\CartRepositoryInterface;
+use Magento\Quote\Api\Data\CartInterface;
+use Magento\Quote\Model\Quote;
 
 /**
  * Observer of expired session
@@ -69,6 +73,16 @@ class CheckExpirePersistentQuoteObserver implements ObserverInterface
     private $checkoutPagePath = 'checkout';
 
     /**
+     * @var Quote
+     */
+    private $quote;
+
+    /**
+     * @var CartRepositoryInterface
+     */
+    private $quoteRepository;
+
+    /**
      * @param \Magento\Persistent\Helper\Session $persistentSession
      * @param \Magento\Persistent\Helper\Data $persistentData
      * @param \Magento\Persistent\Model\QuoteManager $quoteManager
@@ -76,6 +90,7 @@ class CheckExpirePersistentQuoteObserver implements ObserverInterface
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Checkout\Model\Session $checkoutSession
      * @param \Magento\Framework\App\RequestInterface $request
+     * @param CartRepositoryInterface $quoteRepository
      */
     public function __construct(
         \Magento\Persistent\Helper\Session $persistentSession,
@@ -84,7 +99,8 @@ class CheckExpirePersistentQuoteObserver implements ObserverInterface
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Checkout\Model\Session $checkoutSession,
-        \Magento\Framework\App\RequestInterface $request
+        \Magento\Framework\App\RequestInterface $request,
+        CartRepositoryInterface $quoteRepository
     ) {
         $this->_persistentSession = $persistentSession;
         $this->quoteManager = $quoteManager;
@@ -93,6 +109,7 @@ class CheckExpirePersistentQuoteObserver implements ObserverInterface
         $this->_eventManager = $eventManager;
         $this->_persistentData = $persistentData;
         $this->request = $request;
+        $this->quoteRepository = $quoteRepository;
     }
 
     /**
@@ -100,10 +117,21 @@ class CheckExpirePersistentQuoteObserver implements ObserverInterface
      *
      * @param \Magento\Framework\Event\Observer $observer
      * @return void
+     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function execute(\Magento\Framework\Event\Observer $observer)
     {
         if (!$this->_persistentData->canProcess($observer)) {
+            return;
+        }
+
+        //clear persistent when persistent data is disabled
+        if ($this->isPersistentQuoteOutdated()) {
+            $this->_eventManager->dispatch('persistent_session_expired');
+            $this->quoteManager->expire();
+            $this->_checkoutSession->clearQuote();
+            $this->_customerSession->setCustomerId(null)->setCustomerGroupId(null);
             return;
         }
 
@@ -113,14 +141,72 @@ class CheckExpirePersistentQuoteObserver implements ObserverInterface
             $this->_checkoutSession->getQuoteId() &&
             !$this->isRequestFromCheckoutPage($this->request) &&
             // persistent session does not expire on onepage checkout page
-            (
-                $this->_checkoutSession->getQuote()->getIsPersistent() ||
-                $this->_checkoutSession->getQuote()->getCustomerIsGuest()
-            )
+            $this->isNeedToExpireSession()
         ) {
             $this->_eventManager->dispatch('persistent_session_expired');
             $this->quoteManager->expire();
             $this->_customerSession->setCustomerId(null)->setCustomerGroupId(null);
+        }
+    }
+
+    /**
+     * Checks if current quote marked as persistent and Persistence Functionality is disabled.
+     *
+     * @return bool
+     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     */
+    private function isPersistentQuoteOutdated(): bool
+    {
+        if (!($this->_persistentData->isEnabled() && $this->_persistentData->isShoppingCartPersist())
+            && !$this->_customerSession->isLoggedIn()
+            && $this->_checkoutSession->getQuoteId()
+            && $this->isActiveQuote()
+        ) {
+            return (bool)$this->getQuote()->getIsPersistent();
+        }
+        return false;
+    }
+
+    /**
+     * Condition checker
+     *
+     * @return bool
+     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     */
+    private function isNeedToExpireSession(): bool
+    {
+        return $this->getQuote()->getIsPersistent() || $this->getQuote()->getCustomerIsGuest();
+    }
+
+    /**
+     * Getter for Quote with micro optimization
+     *
+     * @return Quote
+     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     */
+    private function getQuote(): Quote
+    {
+        if ($this->quote === null) {
+            $this->quote = $this->_checkoutSession->getQuote();
+        }
+        return $this->quote;
+    }
+
+    /**
+     * Check if quote is active.
+     *
+     * @return bool
+     */
+    private function isActiveQuote(): bool
+    {
+        try {
+            $this->quoteRepository->getActive($this->_checkoutSession->getQuoteId());
+            return true;
+        } catch (NoSuchEntityException $e) {
+            return false;
         }
     }
 
@@ -137,8 +223,8 @@ class CheckExpirePersistentQuoteObserver implements ObserverInterface
 
         /** @var bool $isCheckoutPage */
         $isCheckoutPage = (
-            false !== strpos($requestUri, $this->checkoutPagePath) ||
-            false !== strpos($refererUri, $this->checkoutPagePath)
+            false !== strpos($requestUri, (string) $this->checkoutPagePath) ||
+            false !== strpos($refererUri, (string) $this->checkoutPagePath)
         );
 
         return $isCheckoutPage;

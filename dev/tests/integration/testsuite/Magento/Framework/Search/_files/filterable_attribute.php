@@ -21,6 +21,7 @@ $selectAttribute->setData(
         'is_global' => 1,
         'frontend_input' => 'select',
         'is_filterable' => 1,
+        'is_user_defined' => 1,
         'option' => [
             'value' => ['option_0' => ['Option 1'], 'option_1' => ['Option 2']],
             'order' => ['option_0' => 1, 'option_1' => 2],
@@ -48,6 +49,7 @@ $multiselectAttribute->setData(
         'is_global' => 1,
         'frontend_input' => 'multiselect',
         'is_filterable' => 1,
+        'is_user_defined' => 1,
         'option' => [
             'value' => ['option_0' => ['Option 1'], 'option_1' => ['Option 2']],
             'order' => ['option_0' => 1, 'option_1' => 2],

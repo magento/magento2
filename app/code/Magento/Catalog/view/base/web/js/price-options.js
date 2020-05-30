@@ -9,7 +9,7 @@ define([
     'mage/template',
     'priceUtils',
     'priceBox',
-    'jquery/ui'
+    'jquery-ui-modules/widget'
 ], function ($, _, mageTemplate, utils) {
     'use strict';
 

@@ -5,12 +5,17 @@
   * See COPYING.txt for license details.
   */
 -->
+
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AdminCreateCartPriceRuleLabelsSectionActionGroup">
+        <annotations>
+            <description>Fills in the provided Rule details on a Admin Cart Price Rule creation/edit page.</description>
+        </annotations>
         <arguments>
             <argument name="rule" type="entity"/>
         </arguments>
+
         <conditionalClick selector="{{AdminCartPriceRulesFormSection.labelsHeader}}" dependentSelector="{{AdminCartPriceRulesFormSection.labelsHeader}}" visible="true" stepKey="clickToExpandLabels"/>
         <fillField selector="{{AdminCartPriceRulesFormSection.defaultRuleLabelAllStoreViews}}" userInput="{{rule.defaultRuleLabelAllStoreViews}}" stepKey="fillDefaultRuleLabelAllStoreViews"/>
         <fillField selector="{{AdminCartPriceRulesFormSection.defaultStoreView}}" userInput="{{rule.defaultStoreView}}" stepKey="fillDefaultStoreView"/>

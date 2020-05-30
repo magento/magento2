@@ -34,7 +34,6 @@ return [
                                 'resolver' => Magento\EavGraphQl\Model\Resolver\CustomAttributeMetadata::class,
                                 'description' => 'Returns the attribute type, given an attribute code and entity type',
                                 'cache' => [
-                                    'cacheTag' => 'cat_test',
                                     'cacheIdentity' =>
                                         Magento\EavGraphQl\Model\Resolver\CustomAttributeMetadata::class
                                 ]

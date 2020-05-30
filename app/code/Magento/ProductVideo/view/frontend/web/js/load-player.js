@@ -7,7 +7,10 @@
  @version 0.0.1
  @requires jQuery & jQuery UI
  */
-define(['jquery', 'jquery/ui'], function ($) {
+define([
+    'jquery',
+    'jquery-ui-modules/widget'
+], function ($) {
     'use strict';
 
     var videoRegister = {
@@ -341,6 +344,7 @@ define(['jquery', 'jquery/ui'], function ($) {
                     .attr('mozallowfullscreen', '')
                     .attr('allowfullscreen', '')
                     .attr('referrerPolicy', 'origin')
+                    .attr('allow', 'autoplay')
             );
             this._player = window.$f(this.element.children(':first')[0]);
 

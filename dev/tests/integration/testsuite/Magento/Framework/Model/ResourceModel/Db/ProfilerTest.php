@@ -9,6 +9,9 @@ namespace Magento\Framework\Model\ResourceModel\Db;
 
 use Magento\Framework\Config\ConfigOptionsListConstants;
 
+/**
+ * Test profiler on database queries
+ */
 class ProfilerTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -21,19 +24,29 @@ class ProfilerTest extends \PHPUnit\Framework\TestCase
      */
     protected static $_testResourceName = 'testtest_0000_setup';
 
-    public static function setUpBeforeClass()
+    /**
+     * @inheritdoc
+     *
+     * phpcs:disable Magento2.Functions.StaticFunction
+     */
+    public static function setUpBeforeClass(): void
     {
-        self::$_testResourceName = 'testtest_' . mt_rand(1000, 9999) . '_setup';
+        self::$_testResourceName = 'testtest_' . random_int(1000, 9999) . '_setup';
 
         \Magento\Framework\Profiler::enable();
-    }
+    } // phpcs:enable
 
-    public static function tearDownAfterClass()
+    /**
+     * @inheritdoc
+     *
+     * phpcs:disable Magento2.Functions.StaticFunction
+     */
+    public static function tearDownAfterClass(): void
     {
         \Magento\Framework\Profiler::disable();
-    }
+    } // phpcs:enable
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
             ->create(\Magento\Framework\App\ResourceConnection::class);
@@ -126,19 +139,20 @@ class ProfilerTest extends \PHPUnit\Framework\TestCase
         $connection = $this->_getConnection();
 
         try {
-            $connection->query('SELECT * FROM unknown_table');
-        } catch (\Zend_Db_Statement_Exception $exception) {
+            $connection->select()->from('unknown_table')->query()->fetch();
+        } catch (\Magento\Framework\DB\Adapter\TableNotFoundException $exception) {
+            $this->assertNotEmpty($exception);
         }
 
         if (!isset($exception)) {
-            $this->fail("Expected exception didn't thrown!");
+            $this->fail("Expected exception wasn't thrown!");
         }
 
         /** @var \Magento\Framework\App\ResourceConnection $resource */
         $resource = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
             ->get(\Magento\Framework\App\ResourceConnection::class);
         $testTableName = $resource->getTableName('setup_module');
-        $connection->query('SELECT * FROM ' . $testTableName);
+        $connection->select()->from($testTableName)->query()->fetch();
 
         /** @var \Magento\Framework\Model\ResourceModel\Db\Profiler $profiler */
         $profiler = $connection->getProfiler();

@@ -10,9 +10,13 @@
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <!-- Assert guest shipping info on checkout -->
     <actionGroup name="StorefrontAssertGuestShippingInfoActionGroup">
+        <annotations>
+            <description>Validates that the provided Customer details are present and correct in the 'Shipping Address' section on the Storefront Check page.</description>
+        </annotations>
         <arguments>
             <argument name="customerData" defaultValue="Simple_UK_Customer_For_Shipment"/>
         </arguments>
+        
         <seeInField selector="{{CheckoutShippingGuestInfoSection.email}}" userInput="{{customerData.email}}" stepKey="assertEmailAddress"/>
         <seeInField selector="{{CheckoutShippingGuestInfoSection.firstName}}" userInput="{{customerData.firstName}}" stepKey="assertFirstName"/>
         <seeInField selector="{{CheckoutShippingGuestInfoSection.lastName}}" userInput="{{customerData.lastName}}" stepKey="assertLastName"/>

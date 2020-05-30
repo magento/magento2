@@ -5,13 +5,21 @@
  */
 namespace Magento\Quote\Observer;
 
-use Magento\Sales\Model\Order\Email\Sender\OrderSender;
+use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
+use Magento\Quote\Model\Quote;
+use Magento\Sales\Model\Order;
+use Magento\Sales\Model\Order\Email\Sender\InvoiceSender;
+use Magento\Sales\Model\Order\Email\Sender\OrderSender;
+use Psr\Log\LoggerInterface;
 
+/**
+ * Class responsive for sending order and invoice emails when it's created through storefront.
+ */
 class SubmitObserver implements ObserverInterface
 {
     /**
-     * @var \Psr\Log\LoggerInterface
+     * @var LoggerInterface
      */
     private $logger;
 
@@ -21,27 +29,37 @@ class SubmitObserver implements ObserverInterface
     private $orderSender;
 
     /**
-     * @param \Psr\Log\LoggerInterface $logger
+     * @var InvoiceSender
+     */
+    private $invoiceSender;
+
+    /**
+     * @param LoggerInterface $logger
      * @param OrderSender $orderSender
+     * @param InvoiceSender $invoiceSender
      */
     public function __construct(
-        \Psr\Log\LoggerInterface $logger,
-        OrderSender $orderSender
+        LoggerInterface $logger,
+        OrderSender $orderSender,
+        InvoiceSender $invoiceSender
     ) {
         $this->logger = $logger;
         $this->orderSender = $orderSender;
+        $this->invoiceSender = $invoiceSender;
     }
 
     /**
-     * @param \Magento\Framework\Event\Observer $observer
+     * Send order and invoice email.
+     *
+     * @param Observer $observer
      *
      * @return void
      */
-    public function execute(\Magento\Framework\Event\Observer $observer)
+    public function execute(Observer $observer)
     {
-        /** @var  \Magento\Quote\Model\Quote $quote */
+        /** @var  Quote $quote */
         $quote = $observer->getEvent()->getQuote();
-        /** @var  \Magento\Sales\Model\Order $order */
+        /** @var  Order $order */
         $order = $observer->getEvent()->getOrder();
 
         /**
@@ -51,6 +69,10 @@ class SubmitObserver implements ObserverInterface
         if (!$redirectUrl && $order->getCanSendNewEmailFlag()) {
             try {
                 $this->orderSender->send($order);
+                $invoice = current($order->getInvoiceCollection()->getItems());
+                if ($invoice) {
+                    $this->invoiceSender->send($invoice);
+                }
             } catch (\Exception $e) {
                 $this->logger->critical($e);
             }

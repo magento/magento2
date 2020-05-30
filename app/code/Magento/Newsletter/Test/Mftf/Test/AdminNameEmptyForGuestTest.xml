@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminNameEmptyForGuestTest">
+        <annotations>
+            <features value="Newsletter"/>
+            <stories value="Newsletter Subscribers grid"/>
+            <group value="Newsletter"/>
+            <title value="Empty name for Guest Customer"/>
+            <description value="'Customer First Name' and 'Customer Last Name' should be empty for Guest Customer in Newsletter Subscribers Grid"/>
+            <severity value="MINOR"/>
+        </annotations>
+
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+
+        <after>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
+        </after>
+
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="amOnStorefrontPage"/>
+        <scrollTo selector="{{StorefrontCustomerFooterSection.footerBlock}}" stepKey="scrollToFooter"/>
+        <fillField userInput="{{Simple_US_Customer.email}}" selector="{{StorefrontCustomerFooterSection.formSubscribe}}"
+                   stepKey="giveEmail"/>
+        <click selector="{{StorefrontCustomerFooterSection.buttonSubscribe}}" stepKey="clickSubscribeButton"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <see selector="{{StorefrontCustomerMessagesSection.successMessage}}"
+             userInput="Thank you for your subscription." stepKey="checkSuccessMessage"/>
+
+        <amOnPage url="{{AdminNewsletterSubscriberPage.url}}" stepKey="amOnNewsletterSubscribersPage"/>
+        <see selector="{{AdminNewsletterSubscriberGridSection.email('1')}}" userInput="{{Simple_US_Customer.email}}"
+             stepKey="checkEmail"/>
+        <see selector="{{AdminNewsletterSubscriberGridSection.type('1')}}" userInput="Guest" stepKey="checkType"/>
+        <see selector="{{AdminNewsletterSubscriberGridSection.firstName('1')}}" userInput="" stepKey="checkFirstName"/>
+        <see selector="{{AdminNewsletterSubscriberGridSection.lastName('1')}}" userInput="" stepKey="checkLastName"/>
+    </test>
+</tests>

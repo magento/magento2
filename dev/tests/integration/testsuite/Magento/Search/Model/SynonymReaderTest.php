@@ -16,7 +16,7 @@ class SynonymReaderTest extends \PHPUnit\Framework\TestCase
      */
     private $model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->model = $objectManager->get(\Magento\Search\Model\SynonymReader::class);
@@ -32,6 +32,9 @@ class SynonymReaderTest extends \PHPUnit\Framework\TestCase
                 'ELIZABETH', []
             ],
             [
+                '-+<(ELIZABETH)>*~', []
+            ],
+            [
                 'ENGLISH', [['synonyms' => 'british,english', 'store_id' => 1, 'website_id' => 0]]
             ],
             [
@@ -42,6 +45,9 @@ class SynonymReaderTest extends \PHPUnit\Framework\TestCase
             ],
             [
                 'Monarch', [['synonyms' => 'queen,monarch', 'store_id' => 1, 'website_id' => 0]]
+            ],
+            [
+                '-+<(Monarch)>*~', [['synonyms' => 'queen,monarch', 'store_id' => 1, 'website_id' => 0]]
             ],
             [
                 'MONARCH English', [

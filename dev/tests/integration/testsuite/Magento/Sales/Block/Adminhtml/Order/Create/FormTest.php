@@ -18,7 +18,7 @@ use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Quote\Model\Quote;
 use Magento\Store\Model\Store;
 use Magento\TestFramework\Helper\Bootstrap;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject as MockObject;
 
 /**
  * @magentoAppArea adminhtml
@@ -41,7 +41,7 @@ class FormTest extends \PHPUnit\Framework\TestCase
      */
     private $session;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
 
@@ -68,7 +68,7 @@ class FormTest extends \PHPUnit\Framework\TestCase
         $layout = $this->objectManager->get(LayoutInterface::class);
         $this->block = $layout->createBlock(
             Form::class,
-            'order_create_block' . mt_rand(),
+            'order_create_block' . random_int(0, PHP_INT_MAX),
             ['sessionQuote' => $this->session]
         );
         parent::setUp();

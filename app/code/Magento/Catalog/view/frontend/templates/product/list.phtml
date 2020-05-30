@@ -13,14 +13,16 @@ use Magento\Framework\App\Action\Action;
  * Product list template
  *
  * @var $block \Magento\Catalog\Block\Product\ListProduct
+ * @var \Magento\Framework\Escaper $escaper
  */
 ?>
 <?php
 $_productCollection = $block->getLoadedProductCollection();
+/** @var \Magento\Catalog\Helper\Output $_helper */
 $_helper = $this->helper(Magento\Catalog\Helper\Output::class);
 ?>
 <?php if (!$_productCollection->count()) :?>
-    <div class="message info empty"><div><?= $block->escapeHtml(__('We can\'t find products matching the selection.')) ?></div></div>
+    <div class="message info empty"><div><?= $escaper->escapeHtml(__('We can\'t find products matching the selection.')) ?></div></div>
 <?php else :?>
     <?= $block->getToolbarHtml() ?>
     <?= $block->getAdditionalHtml() ?>
@@ -55,7 +57,7 @@ $_helper = $this->helper(Magento\Catalog\Helper\Output::class);
                     }
                     ?>
                     <?php // Product Image ?>
-                    <a href="<?= $block->escapeUrl($_product->getProductUrl()) ?>"
+                    <a href="<?= $escaper->escapeUrl($_product->getProductUrl()) ?>"
                        class="product photo product-item-photo"
                        tabindex="-1">
                         <?= $productImage->toHtml() ?>
@@ -66,22 +68,24 @@ $_helper = $this->helper(Magento\Catalog\Helper\Output::class);
                         ?>
                         <strong class="product name product-item-name">
                             <a class="product-item-link"
-                               href="<?= $block->escapeUrl($_product->getProductUrl()) ?>">
+                               href="<?= $escaper->escapeUrl($_product->getProductUrl()) ?>">
                                 <?= /* @noEscape */ $_helper->productAttribute($_product, $_product->getName(), 'name') ?>
                             </a>
                         </strong>
                         <?= $block->getReviewsSummaryHtml($_product, $templateType) ?>
                         <?= /* @noEscape */ $block->getProductPrice($_product) ?>
-                        <?= $block->getProductDetailsHtml($_product) ?>
+                        <?php if ($_product->isAvailable()) :?>
+                            <?= $block->getProductDetailsHtml($_product) ?>
+                        <?php endif; ?>
 
                         <div class="product-item-inner">
-                            <div class="product actions product-item-actions"<?= strpos($pos, $viewMode . '-actions') ? $block->escapeHtmlAttr($position) : '' ?>>
-                                <div class="actions-primary"<?= strpos($pos, $viewMode . '-primary') ? $block->escapeHtmlAttr($position) : '' ?>>
+                            <div class="product actions product-item-actions"<?= strpos($pos, $viewMode . '-actions') ? $escaper->escapeHtmlAttr($position) : '' ?>>
+                                <div class="actions-primary"<?= strpos($pos, $viewMode . '-primary') ? $escaper->escapeHtmlAttr($position) : '' ?>>
                                     <?php if ($_product->isSaleable()) :?>
                                         <?php $postParams = $block->getAddToCartPostParams($_product); ?>
                                         <form data-role="tocart-form"
-                                              data-product-sku="<?= $block->escapeHtml($_product->getSku()) ?>"
-                                              action="<?= $block->escapeUrl($postParams['action']) ?>"
+                                              data-product-sku="<?= $escaper->escapeHtml($_product->getSku()) ?>"
+                                              action="<?= $escaper->escapeUrl($postParams['action']) ?>"
                                               method="post">
                                             <input type="hidden"
                                                    name="product"
@@ -90,20 +94,20 @@ $_helper = $this->helper(Magento\Catalog\Helper\Output::class);
                                                    value="<?= /* @noEscape */ $postParams['data'][Action::PARAM_NAME_URL_ENCODED] ?>">
                                             <?= $block->getBlockHtml('formkey') ?>
                                             <button type="submit"
-                                                    title="<?= $block->escapeHtmlAttr(__('Add to Cart')) ?>"
+                                                    title="<?= $escaper->escapeHtmlAttr(__('Add to Cart')) ?>"
                                                     class="action tocart primary">
-                                                <span><?= $block->escapeHtml(__('Add to Cart')) ?></span>
+                                                <span><?= $escaper->escapeHtml(__('Add to Cart')) ?></span>
                                             </button>
                                         </form>
                                     <?php else :?>
                                         <?php if ($_product->isAvailable()) :?>
-                                            <div class="stock available"><span><?= $block->escapeHtml(__('In stock')) ?></span></div>
+                                            <div class="stock available"><span><?= $escaper->escapeHtml(__('In stock')) ?></span></div>
                                         <?php else :?>
-                                            <div class="stock unavailable"><span><?= $block->escapeHtml(__('Out of stock')) ?></span></div>
+                                            <div class="stock unavailable"><span><?= $escaper->escapeHtml(__('Out of stock')) ?></span></div>
                                         <?php endif; ?>
                                     <?php endif; ?>
                                 </div>
-                                <div data-role="add-to-links" class="actions-secondary"<?= strpos($pos, $viewMode . '-secondary') ? $block->escapeHtmlAttr($position) : '' ?>>
+                                <div data-role="add-to-links" class="actions-secondary"<?= strpos($pos, $viewMode . '-secondary') ? $escaper->escapeHtmlAttr($position) : '' ?>>
                                     <?php if ($addToBlock = $block->getChildBlock('addto')) :?>
                                         <?= $addToBlock->setProduct($_product)->getChildHtml() ?>
                                     <?php endif; ?>
@@ -112,9 +116,9 @@ $_helper = $this->helper(Magento\Catalog\Helper\Output::class);
                             <?php if ($showDescription) :?>
                                 <div class="product description product-item-description">
                                     <?= /* @noEscape */ $_helper->productAttribute($_product, $_product->getShortDescription(), 'short_description') ?>
-                                    <a href="<?= $block->escapeUrl($_product->getProductUrl()) ?>"
+                                    <a href="<?= $escaper->escapeUrl($_product->getProductUrl()) ?>"
                                        title="<?= /* @noEscape */ $_productNameStripped ?>"
-                                       class="action more"><?= $block->escapeHtml(__('Learn More')) ?></a>
+                                       class="action more"><?= $escaper->escapeHtml(__('Learn More')) ?></a>
                                 </div>
                             <?php endif; ?>
                         </div>
@@ -130,7 +134,7 @@ $_helper = $this->helper(Magento\Catalog\Helper\Output::class);
         {
             "[data-role=tocart-form], .form.map.checkout": {
                 "catalogAddToCart": {
-                    "product_sku": "<?= $block->escapeJs($_product->getSku()) ?>"
+                    "product_sku": "<?= $escaper->escapeJs($_product->getSku()) ?>"
                 }
             }
         }

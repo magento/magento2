@@ -53,7 +53,6 @@
                                 <resource id="Magento_Backend::flush_static_files" title="Flush Static Files" translate="title" sortOrder="30" />
                             </resource>
                         </resource>
-                        <resource id="Magento_Backend::setup_wizard" title="Web Setup Wizard" translate="title" sortOrder="20" />
                     </resource>
                     <resource id="Magento_Backend::system_other_settings" title="Other Settings" translate="title"  sortOrder="80" />
                 </resource>

@@ -7,6 +7,7 @@
 -->
 <pages xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/PageObject.xsd">
     <page name="AdminUsersPage" url="admin/user/" area="admin" module="Magento_User">
-        <section name="AdminUserGridSection"/>
+        <section name="AdminLegacyDataGridFilterSection"/>
+        <section name="AdminLegacyDataGridTableSection"/>
     </page>
 </pages>

@@ -25,9 +25,8 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Customer\Model\Customer;
 
 /**
- * Class Send
+ * Class Send Email Wishlist Controller
  *
- * @package Magento\Wishlist\Controller\Index
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Send extends \Magento\Wishlist\Controller\AbstractIndex implements Action\HttpPostActionInterface
@@ -204,7 +203,7 @@ class Send extends \Magento\Wishlist\Controller\AbstractIndex implements Action\
                 $error = __('Please enter an email address.');
             } else {
                 if (count($emails) > $emailsLeft) {
-                    $error = __('This wish list can be shared %1 more times.', $emailsLeft);
+                    $error = __('Maximum of %1 emails can be sent.', $emailsLeft);
                 } else {
                     foreach ($emails as $index => $email) {
                         $email = trim($email);
@@ -219,7 +218,7 @@ class Send extends \Magento\Wishlist\Controller\AbstractIndex implements Action\
         }
 
         if ($error) {
-            $this->messageManager->addError($error);
+            $this->messageManager->addErrorMessage($error);
             $this->wishlistSession->setSharingForm($this->getRequest()->getPostValue());
             $resultRedirect->setPath('*/*/share');
             return $resultRedirect;
@@ -285,12 +284,12 @@ class Send extends \Magento\Wishlist\Controller\AbstractIndex implements Action\
             $this->inlineTranslation->resume();
 
             $this->_eventManager->dispatch('wishlist_share', ['wishlist' => $wishlist]);
-            $this->messageManager->addSuccess(__('Your wish list has been shared.'));
+            $this->messageManager->addSuccessMessage(__('Your wish list has been shared.'));
             $resultRedirect->setPath('*/*', ['wishlist_id' => $wishlist->getId()]);
             return $resultRedirect;
         } catch (\Exception $e) {
             $this->inlineTranslation->resume();
-            $this->messageManager->addError($e->getMessage());
+            $this->messageManager->addErrorMessage($e->getMessage());
             $this->wishlistSession->setSharingForm($this->getRequest()->getPostValue());
             $resultRedirect->setPath('*/*/share');
             return $resultRedirect;
@@ -319,7 +318,6 @@ class Send extends \Magento\Wishlist\Controller\AbstractIndex implements Action\
      *
      * @param int $wishlistId
      * @param \Magento\Framework\View\Result\Layout $resultLayout
-     * @return mixed
      */
     protected function getRssLink($wishlistId, ResultLayout $resultLayout)
     {

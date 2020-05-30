@@ -103,7 +103,7 @@ class UrlBuilder
             StoreManagerInterface::PARAM_NAME => $store,
             ActionInterface::PARAM_NAME_URL_ENCODED => $this->urlEncoder->encode($href)
         ];
-        if ($storeView->getCode() !== $store) {
+        if (null !== $storeView && $storeView->getCode() !== $store) {
             $query['___from_store'] = $storeView->getCode();
         }
 

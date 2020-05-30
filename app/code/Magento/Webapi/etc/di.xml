@@ -58,4 +58,11 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Webapi\Model\Config\Reader">
+        <arguments>
+            <argument name="converter" xsi:type="object">Magento\Webapi\Model\Config\Converter</argument>
+            <argument name="schemaLocator" xsi:type="object">Magento\Webapi\Model\Config\SchemaLocator</argument>
+            <argument name="fileName" xsi:type="string">webapi.xml</argument>
+        </arguments>
+    </type>
 </config>

@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 /** @var \Magento\Customer\Block\Account\Dashboard\Info $block */
 ?>
 <div class="block block-dashboard-info">
@@ -46,9 +44,11 @@
                     </p>
                 </div>
                 <div class="box-actions">
-                    <a class="action edit" href="<?= $block->escapeUrl($block->getUrl('newsletter/manage')) ?>"><span><?= $block->escapeHtml(__('Edit')) ?></span></a>
+                    <a class="action edit" href="<?= $block->escapeUrl($block->getUrl('newsletter/manage')) ?>">
+                        <span><?= $block->escapeHtml(__('Edit')) ?></span></a>
                 </div>
             </div>
         <?php endif; ?>
+        <?= $block->getChildHtml('additional_blocks'); ?>
     </div>
 </div>

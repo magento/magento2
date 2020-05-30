@@ -7,7 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\QuoteGraphQl\Model\Cart;
 
-use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Exception\GraphQlNoSuchEntityException;
@@ -50,7 +50,7 @@ class AssignShippingAddressToCart
             $this->shippingAddressManagement->assign($cart->getId(), $shippingAddress);
         } catch (NoSuchEntityException $e) {
             throw new GraphQlNoSuchEntityException(__($e->getMessage()), $e);
-        } catch (LocalizedException $e) {
+        } catch (InputException $e) {
             throw new GraphQlInputException(__($e->getMessage()), $e);
         }
     }

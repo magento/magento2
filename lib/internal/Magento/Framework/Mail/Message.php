@@ -5,25 +5,28 @@
  */
 namespace Magento\Framework\Mail;
 
-use Zend\Mime\Mime;
-use Zend\Mime\Part;
+use Laminas\Mime\Mime;
+use Laminas\Mime\Part;
 
 /**
  * Class Message for email transportation
+ *
+ * @deprecated a new message implementation was added
+ * @see \Magento\Framework\Mail\EmailMessage
  */
 class Message implements MailMessageInterface
 {
     /**
-     * @var \Zend\Mail\Message
+     * @var \Laminas\Mail\Message
      */
-    private $zendMessage;
+    protected $zendMessage;
 
     /**
      * Message type
      *
      * @var string
      */
-    private $messageType = self::TYPE_TEXT;
+    private $messageType = Mime::TYPE_TEXT;
 
     /**
      * Initialize dependencies.
@@ -32,7 +35,7 @@ class Message implements MailMessageInterface
      */
     public function __construct($charset = 'utf-8')
     {
-        $this->zendMessage = new \Zend\Mail\Message();
+        $this->zendMessage = new \Laminas\Mail\Message();
         $this->zendMessage->setEncoding($charset);
     }
 
@@ -58,8 +61,8 @@ class Message implements MailMessageInterface
      */
     public function setBody($body)
     {
-        if (is_string($body) && $this->messageType === MailMessageInterface::TYPE_HTML) {
-            $body = self::createHtmlMimeFromString($body);
+        if (is_string($body)) {
+            $body = self::createMimeFromString($body, $this->messageType);
         }
         $this->zendMessage->setBody($body);
         return $this;
@@ -157,18 +160,20 @@ class Message implements MailMessageInterface
     }
 
     /**
-     * Create HTML mime message from the string.
+     * Create mime message from the string.
      *
-     * @param string $htmlBody
-     * @return \Zend\Mime\Message
+     * @param string $body
+     * @param string $messageType
+     * @return \Laminas\Mime\Message
      */
-    private function createHtmlMimeFromString($htmlBody)
+    private function createMimeFromString($body, $messageType)
     {
-        $htmlPart = new Part($htmlBody);
-        $htmlPart->setCharset($this->zendMessage->getEncoding());
-        $htmlPart->setType(Mime::TYPE_HTML);
-        $mimeMessage = new \Zend\Mime\Message();
-        $mimeMessage->addPart($htmlPart);
+        $part = new Part($body);
+        $part->setCharset($this->zendMessage->getEncoding());
+        $part->setEncoding(Mime::ENCODING_QUOTEDPRINTABLE);
+        $part->setType($messageType);
+        $mimeMessage = new \Laminas\Mime\Message();
+        $mimeMessage->addPart($part);
         return $mimeMessage;
     }
 
@@ -177,7 +182,7 @@ class Message implements MailMessageInterface
      */
     public function setBodyHtml($html)
     {
-        $this->setMessageType(self::TYPE_HTML);
+        $this->setMessageType(Mime::TYPE_HTML);
         return $this->setBody($html);
     }
 
@@ -186,7 +191,7 @@ class Message implements MailMessageInterface
      */
     public function setBodyText($text)
     {
-        $this->setMessageType(self::TYPE_TEXT);
+        $this->setMessageType(Mime::TYPE_TEXT);
         return $this->setBody($text);
     }
 }

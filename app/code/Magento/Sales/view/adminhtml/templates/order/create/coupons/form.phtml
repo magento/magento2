@@ -12,7 +12,7 @@
     <div class="admin__field-control">
         <?php if (!$block->getCouponCode()) : ?>
         <input type="text" class="admin__control-text" id="coupons:code" value="" name="coupon_code" />
-            <?= $block->getButtonHtml(__('Apply'), 'order.applyCoupon($F(\'coupons:code\'))') ?>
+            <?= $block->getButtonHtml(__('Apply'), 'order.handleOnclickCoupon($F(\'coupons:code\'))') ?>
         <?php endif; ?>
         <?php if ($block->getCouponCode()) : ?>
         <p class="added-coupon-code">
@@ -22,9 +22,23 @@
         </p>
         <?php endif; ?>
         <script>
-            require(["Magento_Sales/order/create/form"], function() {
+            require([
+                "jquery",
+                'Magento_Ui/js/modal/alert',
+                'mage/translate',
+                "Magento_Sales/order/create/form"
+            ], function($, alert) {
                 order.overlay('shipping-method-overlay', <?php if ($block->getQuote()->isVirtual()) : ?>false<?php else : ?>true<?php endif; ?>);
                 order.overlay('address-shipping-overlay', <?php if ($block->getQuote()->isVirtual()) : ?>false<?php else : ?>true<?php endif; ?>);
+                order.handleOnclickCoupon = function (code) {
+                    if (!code) {
+                        alert({
+                            content: $.mage.__('Please enter a coupon code!')
+                        });
+                    } else {
+                        order.applyCoupon(code);
+                    }
+                };
             });
         </script>
     </div>

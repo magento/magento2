@@ -84,6 +84,28 @@ $options = [
                 'sort_order' => 2,
             ],
         ],
+    ],
+    [
+        'title' => 'multiple option',
+        'type' => 'multiple',
+        'is_require' => false,
+        'sort_order' => 5,
+        'values' => [
+            [
+                'title' => 'multiple option 1',
+                'price' => 10,
+                'price_type' => 'fixed',
+                'sku' => 'multiple option 1 sku',
+                'sort_order' => 1,
+            ],
+            [
+                'title' => 'multiple option 2',
+                'price' => 20,
+                'price_type' => 'fixed',
+                'sku' => 'multiple option 2 sku',
+                'sort_order' => 2,
+            ],
+        ],
     ]
 ];
 

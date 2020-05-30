@@ -10,7 +10,7 @@
         xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="AdminProductGridActionSection">
         <element name="addProductBtn" type="button" selector="#add_new_product-button" timeout="30"/>
-        <element name="addProductToggle" type="button" selector=".action-toggle.primary.add"/>
+        <element name="addProductToggle" type="button" selector=".action-toggle.primary.add" timeout="30"/>
         <element name="addSimpleProduct" type="button" selector=".item[data-ui-id='products-list-add-new-product-button-item-simple']" timeout="30"/>
         <element name="addGroupedProduct" type="button" selector=".item[data-ui-id='products-list-add-new-product-button-item-grouped']" timeout="30"/>
         <element name="addVirtualProduct" type="button" selector=".item[data-ui-id='products-list-add-new-product-button-item-virtual']" timeout="30"/>

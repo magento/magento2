@@ -5,20 +5,17 @@
  */
 namespace Magento\Backend\Model\Auth;
 
-use Magento\Framework\Acl;
-use Magento\Framework\AclFactory;
-use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Stdlib\Cookie\CookieMetadataFactory;
 use Magento\Framework\Stdlib\CookieManagerInterface;
-use Magento\Backend\Spi\SessionUserHydratorInterface;
-use Magento\Backend\Spi\SessionAclHydratorInterface;
-use Magento\User\Model\User;
-use Magento\User\Model\UserFactory;
 
 /**
  * Backend Auth session model
  *
  * @api
+ * @method \Magento\User\Model\User|null getUser()
+ * @method \Magento\Backend\Model\Auth\Session setUser(\Magento\User\Model\User $value)
+ * @method \Magento\Framework\Acl|null getAcl()
+ * @method \Magento\Backend\Model\Auth\Session setAcl(\Magento\Framework\Acl $value)
  * @method int getUpdatedAt()
  * @method \Magento\Backend\Model\Auth\Session setUpdatedAt(int $value)
  *
@@ -60,36 +57,6 @@ class Session extends \Magento\Framework\Session\SessionManager implements \Mage
     protected $_config;
 
     /**
-     * @var SessionUserHydratorInterface
-     */
-    private $userHydrator;
-
-    /**
-     * @var SessionAclHydratorInterface
-     */
-    private $aclHydrator;
-
-    /**
-     * @var UserFactory
-     */
-    private $userFactory;
-
-    /**
-     * @var AclFactory
-     */
-    private $aclFactory;
-
-    /**
-     * @var User|null
-     */
-    private $user;
-
-    /**
-     * @var Acl|null
-     */
-    private $acl;
-
-    /**
      * @param \Magento\Framework\App\Request\Http $request
      * @param \Magento\Framework\Session\SidResolverInterface $sidResolver
      * @param \Magento\Framework\Session\Config\ConfigInterface $sessionConfig
@@ -103,10 +70,6 @@ class Session extends \Magento\Framework\Session\SessionManager implements \Mage
      * @param \Magento\Backend\Model\UrlInterface $backendUrl
      * @param \Magento\Backend\App\ConfigInterface $config
      * @throws \Magento\Framework\Exception\SessionException
-     * @param SessionUserHydratorInterface|null $userHydrator
-     * @param SessionAclHydratorInterface|null $aclHydrator
-     * @param UserFactory|null $userFactory
-     * @param AclFactory|null $aclFactory
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -121,19 +84,11 @@ class Session extends \Magento\Framework\Session\SessionManager implements \Mage
         \Magento\Framework\App\State $appState,
         \Magento\Framework\Acl\Builder $aclBuilder,
         \Magento\Backend\Model\UrlInterface $backendUrl,
-        \Magento\Backend\App\ConfigInterface $config,
-        ?SessionUserHydratorInterface $userHydrator = null,
-        ?SessionAclHydratorInterface $aclHydrator = null,
-        ?UserFactory $userFactory = null,
-        ?AclFactory $aclFactory = null
+        \Magento\Backend\App\ConfigInterface $config
     ) {
         $this->_config = $config;
         $this->_aclBuilder = $aclBuilder;
         $this->_backendUrl = $backendUrl;
-        $this->userHydrator = $userHydrator ?? ObjectManager::getInstance()->get(SessionUserHydratorInterface::class);
-        $this->aclHydrator = $aclHydrator ?? ObjectManager::getInstance()->get(SessionAclHydratorInterface::class);
-        $this->userFactory = $userFactory ?? ObjectManager::getInstance()->get(UserFactory::class);
-        $this->aclFactory = $aclFactory ?? ObjectManager::getInstance()->get(AclFactory::class);
         parent::__construct(
             $request,
             $sidResolver,
@@ -192,6 +147,7 @@ class Session extends \Magento\Framework\Session\SessionManager implements \Mage
                         return $acl->isAllowed($user->getAclRole(), null, $privilege);
                     }
                 } catch (\Exception $e) {
+                    return false;
                 }
             }
         }
@@ -277,16 +233,6 @@ class Session extends \Magento\Framework\Session\SessionManager implements \Mage
     }
 
     /**
-     * @inheritDoc
-     */
-    public function destroy(array $options = null)
-    {
-        $this->user = null;
-        $this->acl = null;
-        parent::destroy($options);
-    }
-
-    /**
      * Process of configuring of current auth storage when logout was performed
      *
      * @return \Magento\Backend\Model\Auth\Session
@@ -308,137 +254,5 @@ class Session extends \Magento\Framework\Session\SessionManager implements \Mage
     public function isValidForPath($path)
     {
         return true;
-    }
-
-    /**
-     * Logged-in user.
-     *
-     * @return User|null
-     */
-    public function getUser()
-    {
-        if (!$this->user) {
-            $userData = $this->getUserData();
-            if ($userData) {
-                /** @var User $user */
-                $user = $this->userFactory->create();
-                $this->userHydrator->hydrate($user, $userData);
-                $this->user = $user;
-            }
-        }
-
-        return $this->user;
-    }
-
-    /**
-     * Set logged-in user instance.
-     *
-     * @param User|null $user
-     * @return Session
-     */
-    public function setUser($user)
-    {
-        $this->setUserData(null);
-        if ($user) {
-            $this->setUserData($this->userHydrator->extract($user));
-        }
-        $this->user = $user;
-
-        return $this;
-    }
-
-    /**
-     * Is user logged in?
-     *
-     * @return bool
-     */
-    public function hasUser()
-    {
-        return $this->user || $this->hasUserData();
-    }
-
-    /**
-     * Remove logged-in user.
-     *
-     * @return Session
-     */
-    public function unsUser()
-    {
-        $this->user = null;
-        return $this->unsUserData();
-    }
-
-    /**
-     * Logged-in user's ACL data.
-     *
-     * @return Acl|null
-     */
-    public function getAcl()
-    {
-        if (!$this->acl) {
-            $aclData = $this->getUserAclData();
-            if ($aclData) {
-                /** @var Acl $acl */
-                $acl = $this->aclFactory->create();
-                $this->aclHydrator->hydrate($acl, $aclData);
-                $this->acl = $acl;
-            }
-        }
-
-        return $this->acl;
-    }
-
-    /**
-     * Set logged-in user's ACL data instance.
-     *
-     * @param Acl|null $acl
-     * @return Session
-     */
-    public function setAcl($acl)
-    {
-        $this->setUserAclData(null);
-        if ($acl) {
-            $this->setUserAclData($this->aclHydrator->extract($acl));
-        }
-        $this->acl = $acl;
-
-        return $this;
-    }
-
-    /**
-     * Whether ACL data is present.
-     *
-     * @return bool
-     */
-    public function hasAcl()
-    {
-        return $this->acl || $this->hasUserAclData();
-    }
-
-    /**
-     * Remove ACL data.
-     *
-     * @return Session
-     */
-    public function unsAcl()
-    {
-        $this->acl = null;
-        return $this->unsUserAclData();
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function writeClose()
-    {
-        //Updating data in session in case these objects has been changed.
-        if ($this->user) {
-            $this->setUser($this->user);
-        }
-        if ($this->acl) {
-            $this->setAcl($this->acl);
-        }
-
-        parent::writeClose();
     }
 }

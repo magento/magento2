@@ -78,6 +78,13 @@ class Sort
     public function getSort(RequestInterface $request)
     {
         $sorts = [];
+        /**
+         * Temporary solution for an existing interface of a fulltext search request in Backward compatibility purposes.
+         * Scope to split Search request interface on two different 'Search' and 'Fulltext Search' contains in MC-16461.
+         */
+        if (!method_exists($request, 'getSort')) {
+            return $sorts;
+        }
         foreach ($request->getSort() as $item) {
             if (in_array($item['field'], $this->skippedFields)) {
                 continue;

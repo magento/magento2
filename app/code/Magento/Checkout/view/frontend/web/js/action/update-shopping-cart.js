@@ -6,7 +6,7 @@
 define([
     'Magento_Ui/js/modal/alert',
     'jquery',
-    'jquery/ui',
+    'jquery-ui-modules/widget',
     'mage/validation'
 ], function (alert, $) {
     'use strict';
@@ -122,6 +122,9 @@ define([
         submitForm: function () {
             this.element
                 .off('submit', this.onSubmit)
+                .on('submit', function () {
+                    $(document.body).trigger('processStart');
+                })
                 .submit();
         }
     });

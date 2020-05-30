@@ -15,6 +15,8 @@ use Magento\Framework\Api\ExtensionAttributesFactory;
  * This class defines basic data structure of how custom attributes are stored in an ExtensibleModel.
  * Implementations may choose to process custom attributes as their persistence requires them to.
  * @SuppressWarnings(PHPMD.NumberOfChildren)
+ * phpcs:disable Magento2.Classes.AbstractApi
+ * @api
  */
 abstract class AbstractExtensibleModel extends AbstractModel implements
     \Magento\Framework\Api\CustomAttributesDataInterface
@@ -75,6 +77,28 @@ abstract class AbstractExtensibleModel extends AbstractModel implements
     }
 
     /**
+     * Convert the custom attributes array format to map format
+     *
+     * The method \Magento\Framework\Reflection\DataObjectProcessor::buildOutputDataArray generates a custom_attributes
+     * array representation where each custom attribute is a sub-array with a `attribute_code and value key.
+     * This method maps such an array to the plain code => value map format exprected by filterCustomAttributes
+     *
+     * @param array[] $customAttributesData
+     * @return array
+     */
+    private function flattenCustomAttributesArrayToMap(array $customAttributesData): array
+    {
+        return array_reduce(
+            $customAttributesData,
+            function (array $acc, array $customAttribute): array {
+                $acc[$customAttribute['attribute_code']] = $customAttribute['value'];
+                return $acc;
+            },
+            []
+        );
+    }
+
+    /**
      * Verify custom attributes set on $data and unset if not a valid custom attribute
      *
      * @param array $data
@@ -85,9 +109,12 @@ abstract class AbstractExtensibleModel extends AbstractModel implements
         if (empty($data[self::CUSTOM_ATTRIBUTES])) {
             return $data;
         }
-        $customAttributesCodes = $this->getCustomAttributesCodes();
+        if (isset($data[self::CUSTOM_ATTRIBUTES][0])) {
+            $data[self::CUSTOM_ATTRIBUTES] = $this->flattenCustomAttributesArrayToMap($data[self::CUSTOM_ATTRIBUTES]);
+        }
+        $customAttributesCodes         = $this->getCustomAttributesCodes();
         $data[self::CUSTOM_ATTRIBUTES] = array_intersect_key(
-            (array)$data[self::CUSTOM_ATTRIBUTES],
+            (array) $data[self::CUSTOM_ATTRIBUTES],
             array_flip($customAttributesCodes)
         );
         foreach ($data[self::CUSTOM_ATTRIBUTES] as $code => $value) {
@@ -102,8 +129,6 @@ abstract class AbstractExtensibleModel extends AbstractModel implements
 
     /**
      * Initialize customAttributes based on existing data
-     *
-     * @return $this
      */
     protected function initializeCustomAttributes()
     {
@@ -158,7 +183,7 @@ abstract class AbstractExtensibleModel extends AbstractModel implements
     }
 
     /**
-     * @inheritdoc
+     * @inheritDoc
      */
     public function setCustomAttributes(array $attributes)
     {
@@ -166,7 +191,7 @@ abstract class AbstractExtensibleModel extends AbstractModel implements
     }
 
     /**
-     * @inheritdoc
+     * @inheritDoc
      */
     public function setCustomAttribute($attributeCode, $attributeValue)
     {
@@ -182,9 +207,11 @@ abstract class AbstractExtensibleModel extends AbstractModel implements
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc} Added custom attributes support.
      *
-     * Added custom attributes support.
+     * @param string|array $key
+     * @param mixed $value
+     * @return $this
      */
     public function setData($key, $value = null)
     {
@@ -200,9 +227,10 @@ abstract class AbstractExtensibleModel extends AbstractModel implements
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc} Unset customAttributesChanged flag
      *
-     * Unset customAttributesChanged flag
+     * @param null|string|array $key
+     * @return $this
      */
     public function unsetData($key = null)
     {
@@ -359,27 +387,17 @@ abstract class AbstractExtensibleModel extends AbstractModel implements
 
     /**
      * @inheritdoc
-     *
-     * @SuppressWarnings(PHPMD.SerializationAware)
-     * @deprecated Do not use PHP serialization.
      */
     public function __sleep()
     {
-        trigger_error('Using PHP serialization is deprecated', E_USER_DEPRECATED);
-
         return array_diff(parent::__sleep(), ['extensionAttributesFactory', 'customAttributeFactory']);
     }
 
     /**
      * @inheritdoc
-     *
-     * @SuppressWarnings(PHPMD.SerializationAware)
-     * @deprecated Do not use PHP serialization.
      */
     public function __wakeup()
     {
-        trigger_error('Using PHP serialization is deprecated', E_USER_DEPRECATED);
-
         parent::__wakeup();
         $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
         $this->extensionAttributesFactory = $objectManager->get(ExtensionAttributesFactory::class);

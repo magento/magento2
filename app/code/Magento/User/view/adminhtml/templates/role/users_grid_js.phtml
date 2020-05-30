@@ -12,7 +12,6 @@ require([
     'mage/adminhtml/grid',
     'prototype'
 ], function(jQuery, confirm, _){
-<!--
 <?php $myBlock = $block->getLayout()->getBlock('roleUsersGrid'); ?>
 <?php if (is_object($myBlock) && $myBlock->getJsObjectName()) : ?>
     var checkBoxes = $H(<?= /* @noEscape */ $myBlock->getUsers(true) ?>);
@@ -133,7 +132,6 @@ require([
     }
     onLoad();
 <?php endif; ?>
-//-->
 
 });
 </script>

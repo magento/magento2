@@ -16,4 +16,11 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\QuoteGraphQl\Model\Resolver\CartItemTypeResolver">
+        <arguments>
+            <argument name="supportedTypes" xsi:type="array">
+                <item name="bundle" xsi:type="string">BundleCartItem</item>
+            </argument>
+        </arguments>
+    </type>
 </config>

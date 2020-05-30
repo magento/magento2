@@ -10,6 +10,10 @@
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <!--Fill shipment form for free shipping-->
     <actionGroup name="ShipmentFormFreeShippingActionGroup">
+        <annotations>
+            <description>Fills in the Customer details for the 'Shipping Address' section of the Storefront Checkout page. Selects 'Free Shipping'. Clicks on Next. Validates that the URL is present and correct.</description>
+        </annotations>
+        
         <fillField selector="{{CheckoutShippingSection.email}}" userInput="{{CustomerEntityOne.email}}" stepKey="setCustomerEmail"/>
         <fillField selector="{{CheckoutShippingSection.firstName}}" userInput="{{CustomerEntityOne.firstname}}" stepKey="SetCustomerFirstName"/>
         <fillField selector="{{CheckoutShippingSection.lastName}}" userInput="{{CustomerEntityOne.lastname}}" stepKey="SetCustomerLastName"/>

@@ -13,7 +13,7 @@
     <td class="col-price">
         <?= $block->getColumnHtml($_item, 'price') ?>
     </td>
-    <td class="col-qty"><?= (int) $_item->getQty() ?></td>
+    <td class="col-qty"><?= (float) $_item->getQty() ?></td>
     <td class="col-subtotal">
         <?= $block->getColumnHtml($_item, 'subtotal') ?>
     </td>

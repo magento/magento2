@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 /** @var \Magento\Rss\Block\Feeds $block */
 
 ?>
@@ -13,15 +11,15 @@
     <caption class="table-caption"><?= $block->escapeHtml(__('Feed')) ?></caption>
     <tbody>
         <th colspan="2" scope="col"><?= $block->escapeHtml(__('Miscellaneous Feeds')) ?></th>
-    <?php foreach ($block->getFeeds() as $feed): ?>
-        <?php if (!isset($feed['group'])): ?>
+    <?php foreach ($block->getFeeds() as $feed) : ?>
+        <?php if (!isset($feed['group'])) : ?>
         <tr>
             <td class="col feed"><?= $block->escapeHtml($feed['label']) ?></td>
             <td class="col action">
                 <a href="<?= $block->escapeUrl($feed['link']) ?>" class="action get"><span><?= $block->escapeHtml(__('Get Feed')) ?></span></a>
             </td>
         </tr>
-        <?php else: ?>
+        <?php else : ?>
             <th colspan="2" scope="col"><?= $block->escapeHtml($feed['group']) ?></th>
             <?php foreach ($feed['feeds'] as $item) :?>
                 <tr>

@@ -5,13 +5,17 @@
   * See COPYING.txt for license details.
   */
 -->
-<!-- Test XML Example -->
+
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AssertStoreViewInGridActionGroup">
+        <annotations>
+            <description>Goes the Admin Stores grid page. Searches the grid for the provided Store View Name. Validates that the provided Store View Name is present and correct in the grid.</description>
+        </annotations>
         <arguments>
             <argument name="storeViewName" type="string"/>
         </arguments>
+
         <amOnPage url="{{AdminSystemStorePage.url}}" stepKey="amOnAdminSystemStorePage"/>
         <waitForPageLoad stepKey="waitForAdminSystemStorePageLoad"/>
         <click selector="{{AdminStoresGridSection.resetButton}}" stepKey="resetSearchFilter"/>

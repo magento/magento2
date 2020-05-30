@@ -9,6 +9,10 @@
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AdminSelectAllCustomers">
+        <annotations>
+            <description>Selects All of the Customers in the Admin Customers grid.</description>
+        </annotations>
+
         <checkOption selector="{{AdminCustomerGridMainActionsSection.multicheck}}" stepKey="checkAllCustomers"/>
     </actionGroup>
 </actionGroups>

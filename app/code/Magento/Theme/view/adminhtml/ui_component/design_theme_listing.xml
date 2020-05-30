@@ -20,6 +20,9 @@
     <dataSource name="design_theme_listing_data_source" component="Magento_Ui/js/grid/provider">
         <settings>
             <updateUrl path="mui/index/render"/>
+            <storageConfig>
+                <param name="indexField" xsi:type="string">theme_id</param>
+            </storageConfig>
         </settings>
         <aclResource>Magento_Theme::theme</aclResource>
         <dataProvider class="Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider" name="design_theme_listing_data_source">

@@ -5,9 +5,13 @@
   * See COPYING.txt for license details.
   */
 -->
+
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AssertStoreConfigurationBackendActionGroup">
+        <annotations>
+            <description>Goes to the 'Configuration' page. Clicks on the 'Store View' dropdown menu. Validates that the provided Website, Store, Store View 1 and Store View 2 are present and correct.</description>
+        </annotations>
         <arguments>
             <!-- defaultValue is blank so that it can be used in cases where there is only one store view -->
             <argument name="website" type="string" defaultValue=""/>
@@ -15,6 +19,7 @@
             <argument name="storeView1" type="string" defaultValue=""/>
             <argument name="storeView2" type="string" defaultValue=""/>
         </arguments>
+
         <amOnPage url="{{AdminConfigPage.url}}" stepKey="goToConfigStoreConfigurationPage"/>
         <waitForPageLoad stepKey="waitForSystemStoreConfigurationPageLoad"/>
         <click selector="{{AdminConfigSection.defaultConfigButton}}" stepKey="clickDefaultConfigButton"/>

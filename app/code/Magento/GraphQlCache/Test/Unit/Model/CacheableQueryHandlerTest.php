@@ -8,12 +8,11 @@ declare(strict_types=1);
 namespace Magento\GraphQlCache\Test\Unit\Model;
 
 use Magento\Framework\App\Request\Http;
-use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Query\Resolver\IdentityInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\GraphQlCache\Model\CacheableQuery;
 use Magento\GraphQlCache\Model\CacheableQueryHandler;
 use Magento\GraphQlCache\Model\Resolver\IdentityPool;
-use Magento\GraphQlCache\Model\CacheableQuery;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -21,7 +20,6 @@ use PHPUnit\Framework\TestCase;
  */
 class CacheableQueryHandlerTest extends TestCase
 {
-
     private $cacheableQueryHandler;
 
     private $cacheableQueryMock;
@@ -60,14 +58,12 @@ class CacheableQueryHandlerTest extends TestCase
             'cacheIdentity' => IdentityInterface::class,
             'cacheTag' => 'cat_p'
         ];
-        $fieldMock = $this->createMock(Field::class);
         $mockIdentity = $this->getMockBuilder($cacheData['cacheIdentity'])
             ->setMethods(['getIdentities'])
             ->getMockForAbstractClass();
 
         $this->requestMock->expects($this->once())->method('isGet')->willReturn(true);
         $this->identityPoolMock->expects($this->once())->method('get')->willReturn($mockIdentity);
-        $fieldMock->expects($this->once())->method('getCache')->willReturn($cacheData);
         $mockIdentity->expects($this->once())
             ->method('getIdentities')
             ->with($resolvedData)
@@ -76,7 +72,7 @@ class CacheableQueryHandlerTest extends TestCase
         $this->cacheableQueryMock->expects($this->once())->method('isCacheable')->willReturn(true);
         $this->cacheableQueryMock->expects($this->once())->method('setCacheValidity')->with(true);
 
-        $this->cacheableQueryHandler->handleCacheFromResolverResponse($resolvedData, $fieldMock);
+        $this->cacheableQueryHandler->handleCacheFromResolverResponse($resolvedData, $cacheData);
     }
 
     /**
@@ -91,7 +87,7 @@ class CacheableQueryHandlerTest extends TestCase
                     "name" => "TesName",
                     "sku" => "TestSku"
                 ],
-                "identities" => [10],
+                "identities" => ["cat_p", "cat_p_10"],
                 "expectedCacheTags" => ["cat_p", "cat_p_10"]
             ]
         ];

@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Bundle\Ui\DataProvider\Product\Form\Modifier;
 
 use Magento\Bundle\Model\Product\Attribute\Source\Shipment\Type as ShipmentType;
@@ -16,6 +18,7 @@ use Magento\Ui\Component\Container;
 use Magento\Ui\Component\Form;
 use Magento\Ui\Component\Form\Fieldset;
 use Magento\Ui\Component\Modal;
+use Magento\Store\Model\Store;
 
 /**
  * Create Ship Bundle Items and Affect Bundle Product Selections fields
@@ -316,6 +319,7 @@ class BundlePanel extends AbstractModifier
      * Get Bundle Options structure
      *
      * @return array
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function getBundleOptions()
     {
@@ -345,7 +349,8 @@ class BundlePanel extends AbstractModifier
                                 'component' => 'Magento_Ui/js/dynamic-rows/record',
                                 'positionProvider' => 'product_bundle_container.position',
                                 'imports' => [
-                                    'label' => '${ $.name }' . '.product_bundle_container.option_info.title:value'
+                                    'label' => '${ $.name }' . '.product_bundle_container.option_info.title:value',
+                                    '__disableTmpl' => ['label' => false],
                                 ],
                             ],
                         ],
@@ -378,6 +383,7 @@ class BundlePanel extends AbstractModifier
                                                 'template' => 'ui/dynamic-rows/templates/default',
                                                 'provider' => 'product_form.product_form_data_source',
                                                 'dataProvider' => '${ $.dataScope }' . '.bundle_button_proxy',
+                                                '__disableTmpl' => ['dataProvider' => false],
                                                 'identificationDRProperty' => 'product_id',
                                                 'identificationProperty' => 'product_id',
                                                 'map' => [
@@ -392,9 +398,13 @@ class BundlePanel extends AbstractModifier
                                                     'selection_price_value' => '',
                                                     'selection_qty' => '',
                                                 ],
-                                                'links' => ['insertData' => '${ $.provider }:${ $.dataProvider }'],
+                                                'links' => [
+                                                    'insertData' => '${ $.provider }:${ $.dataProvider }',
+                                                    '__disableTmpl' => ['insertData' => false],
+                                                ],
                                                 'imports' => [
                                                     'inputType' => '${$.provider}:${$.dataScope}.type',
+                                                    '__disableTmpl' => ['inputType' => false],
                                                 ],
                                                 'source' => 'product',
                                             ],
@@ -616,9 +626,11 @@ class BundlePanel extends AbstractModifier
                         'is_collection' => true,
                         'imports' => [
                             'inputType' => '${$.parentName}:inputType',
+                            '__disableTmpl' => ['inputType' => false],
                         ],
                         'exports' => [
                             'isDefaultValue' => '${$.parentName}:isDefaultValue.${$.index}',
+                            '__disableTmpl' => ['isDefaultValue' => false],
                         ],
                     ],
                 ],
@@ -699,7 +711,8 @@ class BundlePanel extends AbstractModifier
                                     'validate-greater-than-zero' => true
                                 ],
                                 'imports' => [
-                                    'isInteger' => '${ $.provider }:${ $.parentScope }.selection_qty_is_integer'
+                                    'isInteger' => '${ $.provider }:${ $.parentScope }.selection_qty_is_integer',
+                                    '__disableTmpl' => ['isInteger' => false],
                                 ],
                             ],
                         ],
@@ -720,6 +733,7 @@ class BundlePanel extends AbstractModifier
                                 'sortOrder' => 110,
                                 'imports' => [
                                     'inputType' => '${$.parentName}:inputType',
+                                    '__disableTmpl' => ['inputType' => false],
                                 ],
                             ],
                         ],
@@ -761,7 +775,8 @@ class BundlePanel extends AbstractModifier
                         'dataScope' => 'selection_price_value',
                         'value' => '0.00',
                         'imports' => [
-                            'visible' => '!ns = ${ $.ns }, index = ' . BundlePrice::CODE_PRICE_TYPE . ':checked'
+                            'visible' => '!ns = ${ $.ns }, index = ' . BundlePrice::CODE_PRICE_TYPE . ':checked',
+                            '__disableTmpl' => ['visible' => false],
                         ],
                         'sortOrder' => 80,
                     ],
@@ -798,7 +813,8 @@ class BundlePanel extends AbstractModifier
                             ]
                         ],
                         'imports' => [
-                            'visible' => '!ns = ${ $.ns }, index = ' . BundlePrice::CODE_PRICE_TYPE . ':checked'
+                            'visible' => '!ns = ${ $.ns }, index = ' . BundlePrice::CODE_PRICE_TYPE . ':checked',
+                            '__disableTmpl' => ['visible' => false],
                         ],
                         'sortOrder' => 90,
                     ],
@@ -814,6 +830,6 @@ class BundlePanel extends AbstractModifier
      */
     protected function isDefaultStore()
     {
-        return $this->locator->getProduct()->getStoreId() == 0;
+        return $this->locator->getProduct()->getStoreId() == Store::DEFAULT_STORE_ID;
     }
 }

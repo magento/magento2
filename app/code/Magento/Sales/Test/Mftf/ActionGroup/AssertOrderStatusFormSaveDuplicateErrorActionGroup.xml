@@ -10,6 +10,10 @@
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <!-- Assert that order status is not saved with duplication error message -->
     <actionGroup name="AssertOrderStatusFormSaveDuplicateError">
+        <annotations>
+            <description>Validates that the 'Duplicate Order' Error Message is present and correct.</description>
+        </annotations>
+
         <see selector="{{AdminMessagesSection.error}}" userInput="We found another order status with the same order status code." stepKey="seeError"/>
     </actionGroup>
 </actionGroups>

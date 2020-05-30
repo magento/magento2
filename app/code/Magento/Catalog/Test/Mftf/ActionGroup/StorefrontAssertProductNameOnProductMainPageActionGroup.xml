@@ -5,11 +5,16 @@
  * See COPYING.txt for license details.
 -->
 
-<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="StorefrontAssertProductNameOnProductMainPageActionGroup">
+        <annotations>
+            <description>Validates that the provided Product Name is present and correct on a Storefront Category page.</description>
+        </annotations>
         <arguments>
             <argument name="productName" type="string"/>
         </arguments>
+        
         <waitForPageLoad stepKey="waitForTheProductPageToLoad"/>
         <see selector="{{StorefrontCategoryMainSection.productName}}" userInput="{{productName}}" stepKey="seeProductName"/>
     </actionGroup>

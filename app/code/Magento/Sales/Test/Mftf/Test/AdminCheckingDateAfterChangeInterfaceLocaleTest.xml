@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCheckingDateAfterChangeInterfaceLocaleTest">
+        <annotations>
+            <features value="Ui"/>
+            <stories value="Checking the value in a grid column"/>
+            <title value="Checking date format in orders grid column after changing admin interface locale"/>
+            <description value="Checking date format in orders grid column after changing admin interface locale"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-17761"/>
+            <useCaseId value="MC-17269"/>
+            <group value="backend"/>
+            <group value="ui"/>
+            <group value="sales"/>
+        </annotations>
+        <before>
+            <!--Deploy static content with French locale-->
+            <magentoCLI command="setup:static-content:deploy fr_FR" stepKey="deployStaticContentWithFrenchLocale"/>
+            <!--Create entities-->
+            <createData entity="SimpleProduct2" stepKey="createProduct"/>
+            <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
+            <!--Login to Admin page-->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <!--Delete entities-->
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <!--Set Admin "Interface Locale" to default value-->
+            <actionGroup ref="SetAdminAccountActionGroup" stepKey="setAdminInterfaceLocaleToDefaultValue">
+                <argument name="InterfaceLocaleByValue" value="en_US"/>
+            </actionGroup>
+            <!--Clear filters-->
+            <actionGroup ref="AdminOrdersGridClearFiltersActionGroup" stepKey="clearOrderFilters"/>
+            <!--Logout from Admin page-->
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+
+        <!--Create order-->
+        <actionGroup ref="CreateOrderActionGroup" stepKey="createOrder">
+            <argument name="product" value="$$createProduct$$"/>
+            <argument name="customer" value="$$createCustomer$$"/>
+        </actionGroup>
+        <grabTextFrom selector="{{AdminOrderDetailsInformationSection.orderId}}" stepKey="grabOrderId"/>
+
+        <!--Filter orders grid by ID on Admin page-->
+        <actionGroup ref="FilterOrderGridByIdActionGroup" stepKey="filterOrderGridById">
+            <argument name="orderId" value="{$grabOrderId}"/>
+        </actionGroup>
+
+        <!--Get date from "Purchase Date" column-->
+        <grabTextFrom selector="{{AdminOrdersGridSection.gridCell('1','Purchase Date')}}" stepKey="grabPurchaseDateInDefaultLocale"/>
+
+        <!--Get month name in default locale (US)-->
+        <executeJS function="return (new Date('{$grabPurchaseDateInDefaultLocale}').toLocaleDateString('en-US', {month: 'short'}))" stepKey="getMonthNameInUS"/>
+
+        <!--Checking Date with default "Interface Locale"-->
+        <assertStringContainsString stepKey="checkingDateWithDefaultInterfaceLocale">
+            <expectedResult type="variable">getMonthNameInUS</expectedResult>
+            <actualResult type="variable">grabPurchaseDateInDefaultLocale</actualResult>
+        </assertStringContainsString>
+
+        <!--Set Admin "Interface Locale" to "Français (France) / français (France)"-->
+        <actionGroup ref="SetAdminAccountActionGroup" stepKey="setAdminInterfaceLocaleToFrance">
+            <argument name="InterfaceLocaleByValue" value="fr_FR"/>
+        </actionGroup>
+
+        <!--Filter orders grid by ID on Admin page after changing "Interface Locale"-->
+        <actionGroup ref="FilterOrderGridByIdActionGroup" stepKey="filterOrderGridByIdAfterSetFrenchLocale">
+            <argument name="orderId" value="{$grabOrderId}"/>
+        </actionGroup>
+
+        <!--Get date from "Purchase Date" column after changing "Interface Locale"-->
+        <grabTextFrom selector="{{AdminOrdersGridSection.gridCell('1','Purchase Date')}}" stepKey="grabPurchaseDateInFrenchLocale"/>
+
+        <!--Get month name in French-->
+        <executeJS function="return (new Date('{$grabPurchaseDateInDefaultLocale}').toLocaleDateString('fr-FR', {month: 'short'}))" stepKey="getMonthNameInFrench"/>
+
+        <!--Checking Date after changing "Interface Locale"-->
+        <assertStringContainsString stepKey="checkingDateAfterChangeInterfaceLocale">
+            <expectedResult type="variable">getMonthNameInFrench</expectedResult>
+            <actualResult type="variable">grabPurchaseDateInFrenchLocale</actualResult>
+        </assertStringContainsString>
+    </test>
+</tests>

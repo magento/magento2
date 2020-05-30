@@ -17,30 +17,22 @@
             <testCaseId value="MC-14772"/>
             <group value="CatalogRule"/>
             <group value="mtf_migrated"/>
-            <skip>
-                <issueId value="MC-17140"/>
-            </skip>
         </annotations>
         <before>
             <!-- Login as Admin -->
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
 
             <!-- Create new customer group -->
             <createData entity="CustomCustomerGroup" stepKey="customerGroup" />
-
-            <!--Creating customer-->
             <createData entity="Simple_US_Customer" stepKey="createCustomer" >
                 <field key="group_id">$customerGroup.id$</field>
             </createData>
-
-            <!-- Create category -->
             <createData entity="_defaultCategory" stepKey="createCategory"/>
-
-            <!-- Create Simple Product -->
             <createData entity="_defaultProduct" stepKey="createSimpleProduct">
                 <requiredEntity createDataKey="createCategory"/>
                 <field key="price">56.78</field>
             </createData>
+            <magentoCron stepKey="runCronIndex" groups="index"/>
         </before>
         <after>
             <!-- Delete products and category -->
@@ -61,10 +53,10 @@
             </actionGroup>
 
             <!-- Logout -->
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
         <!-- 1. Begin creating a new catalog price rule -->
-        <actionGroup ref="newCatalogPriceRuleByUIWithConditionIsCategory" stepKey="newCatalogPriceRuleByUIWithConditionIsCategory">
+        <actionGroup ref="NewCatalogPriceRuleByUIWithConditionIsCategoryActionGroup" stepKey="newCatalogPriceRuleByUIWithConditionIsCategory">
             <argument name ="categoryId" value="$createCategory.id$"/>
             <argument name="catalogRule" value="CatalogRuleByFixed"/>
         </actionGroup>

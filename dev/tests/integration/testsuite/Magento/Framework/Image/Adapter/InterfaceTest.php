@@ -108,17 +108,18 @@ class InterfaceTest extends \PHPUnit\Framework\TestCase
      * Mark test as skipped if not
      *
      * @param string $adapterType
-     * @return \Magento\Framework\Image\Adapter\AdapterInterface
+     * @return \Magento\Framework\Image\Adapter\AdapterInterface|null
      */
     protected function _getAdapter($adapterType)
     {
+        $adapter = null;
         try {
             $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
             $adapter = $objectManager->get(\Magento\Framework\Image\AdapterFactory::class)->create($adapterType);
-            return $adapter;
         } catch (\Exception $e) {
             $this->markTestSkipped($e->getMessage());
         }
+        return $adapter;
     }
 
     /**
@@ -667,7 +668,7 @@ class InterfaceTest extends \PHPUnit\Framework\TestCase
             [
                 ['x' => 5, 'y' => 8],
                 'expectedColor1' => ['red' => 0, 'green' => 0, 'blue' => 0],
-                ['x' => 0, 'y' => 14],
+                ['x' => 0, 'y' => 11],
                 'expectedColor2' => ['red' => 255, 'green' => 255, 'blue' => 255],
                 \Magento\Framework\Image\Adapter\AdapterInterface::ADAPTER_GD2,
             ],
@@ -679,9 +680,9 @@ class InterfaceTest extends \PHPUnit\Framework\TestCase
                 \Magento\Framework\Image\Adapter\AdapterInterface::ADAPTER_IM
             ],
             [
-                ['x' => 1, 'y' => 14],
+                ['x' => 1, 'y' => 11],
                 'expectedColor1' => ['red' => 255, 'green' => 255, 'blue' => 255],
-                ['x' => 5, 'y' => 12],
+                ['x' => 5, 'y' => 11],
                 'expectedColor2' => ['red' => 0, 'green' => 0, 'blue' => 0],
                 \Magento\Framework\Image\Adapter\AdapterInterface::ADAPTER_GD2
             ],
@@ -703,12 +704,48 @@ class InterfaceTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
+     * @dataProvider testValidateUploadFileExceptionDataProvider
+     * @param string $fileName
+     * @param string $expectedErrorMsg
+     * @param bool $useFixture
      */
-    public function testValidateUploadFileException()
+    public function testValidateUploadFileException($fileName, $expectedErrorMsg, $useFixture)
     {
+        $this->expectException(\InvalidArgumentException::class);
+
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $imageAdapter = $objectManager->get(\Magento\Framework\Image\AdapterFactory::class)->create();
-        $imageAdapter->validateUploadFile(__FILE__);
+        $filePath = $useFixture ? $this->_getFixture($fileName) : $fileName;
+
+        try {
+            $imageAdapter->validateUploadFile($filePath);
+        } catch (\InvalidArgumentException $e) {
+            $this->assertEquals($expectedErrorMsg, $e->getMessage());
+            throw $e;
+        }
+    }
+
+    /**
+     * @return array
+     */
+    public function testValidateUploadFileExceptionDataProvider()
+    {
+        return [
+            'image_notfound' => [
+                'fileName' => 'notfound.png',
+                'expectedErrorMsg' => 'Upload file does not exist.',
+                'useFixture' => false
+            ],
+            'image_empty' => [
+                'fileName' => 'empty.png',
+                'expectedErrorMsg' => 'Wrong file size.',
+                'useFixture' => true
+            ],
+            'notanimage' => [
+                'fileName' => 'notanimage.txt',
+                'expectedErrorMsg' => 'Disallowed file type.',
+                'useFixture' => true
+            ]
+        ];
     }
 }

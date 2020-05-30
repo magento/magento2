@@ -10,5 +10,6 @@
           xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="StorefrontGuestOrderViewSection">
         <element name="orderInformationTab" type="text" selector="//*[@class='nav item current']/strong[contains(text(), 'Order Information')]"/>
+        <element name="printOrder" type="button" selector=".order-actions-toolbar .actions .print" timeout="30"/>
     </section>
 </sections>

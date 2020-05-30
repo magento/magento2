@@ -9,15 +9,18 @@
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AdminCreateNewCatalogPriceRuleActionGroup">
+        <annotations>
+            <description>Goes to the Admin Catalog Price Rule creation page. Fills in the provided Catalog Rule details. Selects the provided Customer Group.</description>
+        </annotations>
         <arguments>
             <argument name="catalogRule" defaultValue="_defaultCatalogRule"/>
             <argument name="customerGroup" type="string"/>
         </arguments>
+
         <amOnPage url="{{AdminNewCatalogPriceRulePage.url}}" stepKey="openNewCatalogPriceRulePage"/>
         <waitForPageLoad stepKey="waitForPageToLoad"/>
         <fillField stepKey="fillName" selector="{{AdminNewCatalogPriceRule.ruleName}}" userInput="{{catalogRule.name}}"/>
         <fillField stepKey="fillDescription" selector="{{AdminNewCatalogPriceRule.description}}" userInput="{{catalogRule.description}}"/>
-        <selectOption selector="{{AdminNewCatalogPriceRule.status}}" userInput="{{catalogRule.is_active}}" stepKey="selectStatus"/>
         <selectOption stepKey="selectWebSite" selector="{{AdminNewCatalogPriceRule.websites}}" userInput="{{catalogRule.website_ids[0]}}"/>
         <selectOption selector="{{AdminNewCatalogPriceRule.customerGroups}}" userInput="{{customerGroup}}" stepKey="selectCustomerGroup"/>
         <scrollTo selector="{{AdminNewCatalogPriceRule.actionsTab}}" stepKey="scrollToActionTab"/>

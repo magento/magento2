@@ -286,15 +286,19 @@ class Editor extends Textarea
 
         // Button to media images insertion window
         if ($this->getConfig('add_images')) {
+            $htmlId = $this->getHtmlId();
+            $url = $this->getConfig('files_browser_window_url')
+                . 'target_element_id/'
+                . $htmlId
+                . '/'
+                . (null !== $this->getConfig('store_id')
+                    ? 'store/' . $this->getConfig('store_id') . '/"'
+                    : '');
             $buttonsHtml .= $this->_getButtonHtml(
                 [
                     'title' => $this->translate('Insert Image...'),
-                    'onclick' => "MediabrowserUtility.openDialog('"
-                        . $this->getConfig('files_browser_window_url')
-                        . "target_element_id/" . $this->getHtmlId() . "/"
-                        . (null !== $this->getConfig('store_id') ? 'store/'
-                            . $this->getConfig('store_id') . '/' : '')
-                        . "')",
+                    'onclick' => 'MediabrowserUtility.openDialog(\'' . $url
+                        . '\', null, null, null, { \'targetElementId\': \'' . $htmlId . '\' })',
                     'class' => 'action-add-image plugin',
                     'style' => $visible ? '' : 'display:none',
                 ]
@@ -310,7 +314,7 @@ class Editor extends Textarea
                         if (isset($buttonOptions['style'])) {
                             $configStyle = $buttonOptions['style'];
                         }
-                        $buttonOptions = array_merge($buttonOptions, ['style' => 'display:none;' . $configStyle]);
+                        $buttonOptions['style'] = 'display:none; ' . $configStyle;
                     }
                     $buttonsHtml .= $this->_getButtonHtml($buttonOptions);
                 }
@@ -409,7 +413,7 @@ class Editor extends Textarea
     protected function _wrapIntoContainer($html)
     {
         if (!$this->getConfig('use_container')) {
-            return '<div class="admin__control-wysiwig">' .$html . '</div>';
+            return '<div class="admin__control-wysiwig">' . $html . '</div>';
         }
 
         $html = '<div id="editor' . $this->getHtmlId() . '"'
@@ -496,13 +500,13 @@ class Editor extends Textarea
         $jsString = '
                 <script type="text/javascript">
                 //<![CDATA[
-                window.tinyMCE_GZ = window.tinyMCE_GZ || {}; 
+                window.tinyMCE_GZ = window.tinyMCE_GZ || {};
                 window.tinyMCE_GZ.loaded = true;
                 require([
-                "jquery", 
-                "mage/translate", 
-                "mage/adminhtml/events", 
-                "mage/adminhtml/wysiwyg/tiny_mce/setup", 
+                "jquery",
+                "mage/translate",
+                "mage/adminhtml/events",
+                "mage/adminhtml/wysiwyg/tiny_mce/setup",
                 "mage/adminhtml/wysiwyg/widget"
                 ], function(jQuery){' .
             "\n" .
@@ -533,10 +537,6 @@ class Editor extends Textarea
             $jsSetupObject .
             '));
                     varienGlobalEvents.attachEventHandler("formSubmit", editorFormValidationHandler);
-                    varienGlobalEvents.clearEventHandlers("open_browser_callback");
-                    varienGlobalEvents.attachEventHandler("open_browser_callback", ' .
-            $jsSetupObject .
-            '.openFileBrowser);
                 //]]>
                 });
                 </script>';

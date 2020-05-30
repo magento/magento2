@@ -214,7 +214,7 @@ class Subscription implements SubscriptionInterface
                         $columns = [];
                         foreach ($columnNames as $columnName) {
                             $columns[] = sprintf(
-                                'NEW.%1$s <=> OLD.%1$s',
+                                'NOT(NEW.%1$s <=> OLD.%1$s)',
                                 $this->connection->quoteIdentifier($columnName)
                             );
                         }

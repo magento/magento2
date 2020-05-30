@@ -19,20 +19,14 @@ var config = {
         'jquery/hover-intent': ['jquery'],
         'mage/adminhtml/backup': ['prototype'],
         'mage/captcha': ['prototype'],
-        'mage/common': ['jquery'],
         'mage/new-gallery': ['jquery'],
         'mage/webapi': ['jquery'],
         'jquery/ui': ['jquery'],
         'MutationObserver': ['es6-collections'],
-        'moment': {
-            'exports': 'moment'
-        },
         'matchMedia': {
             'exports': 'mediaCheck'
         },
-        'jquery/jquery-storageapi': {
-            'deps': ['jquery/jquery.cookie']
-        }
+        'magnifier/magnifier': ['jquery']
     },
     'paths': {
         'jquery/validate': 'jquery/jquery.validate',
@@ -43,7 +37,8 @@ var config = {
         'text': 'mage/requirejs/text',
         'domReady': 'requirejs/domReady',
         'spectrum': 'jquery/spectrum/spectrum',
-        'tinycolor': 'jquery/spectrum/tinycolor'
+        'tinycolor': 'jquery/spectrum/tinycolor',
+        'jquery-ui-modules': 'jquery/ui-modules'
     },
     'deps': [
         'jquery/jquery-migrate'

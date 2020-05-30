@@ -15,6 +15,7 @@ use Magento\Framework\GraphQl\Exception\GraphQlNoSuchEntityException;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Quote\Api\CartItemRepositoryInterface;
+use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Quote\Model\Quote;
 use Magento\QuoteGraphQl\Model\Cart\GetCartForUser;
 use Magento\QuoteGraphQl\Model\Cart\UpdateCartItem;
@@ -40,18 +41,26 @@ class UpdateCartItems implements ResolverInterface
     private $cartItemRepository;
 
     /**
+     * @var CartRepositoryInterface
+     */
+    private $cartRepository;
+
+    /**
      * @param GetCartForUser $getCartForUser
      * @param CartItemRepositoryInterface $cartItemRepository
      * @param UpdateCartItem $updateCartItem
+     * @param CartRepositoryInterface $cartRepository
      */
     public function __construct(
         GetCartForUser $getCartForUser,
         CartItemRepositoryInterface $cartItemRepository,
-        UpdateCartItem $updateCartItem
+        UpdateCartItem $updateCartItem,
+        CartRepositoryInterface $cartRepository
     ) {
         $this->getCartForUser = $getCartForUser;
         $this->cartItemRepository = $cartItemRepository;
         $this->updateCartItem = $updateCartItem;
+        $this->cartRepository = $cartRepository;
     }
 
     /**
@@ -71,10 +80,12 @@ class UpdateCartItems implements ResolverInterface
         }
         $cartItems = $args['input']['cart_items'];
 
-        $cart = $this->getCartForUser->execute($maskedCartId, $context->getUserId());
+        $storeId = (int)$context->getExtensionAttributes()->getStore()->getId();
+        $cart = $this->getCartForUser->execute($maskedCartId, $context->getUserId(), $storeId);
 
         try {
             $this->processCartItems($cart, $cartItems);
+            $this->cartRepository->save($cart);
         } catch (NoSuchEntityException $e) {
             throw new GraphQlNoSuchEntityException(__($e->getMessage()), $e);
         } catch (LocalizedException $e) {
@@ -104,6 +115,11 @@ class UpdateCartItems implements ResolverInterface
             }
             $itemId = (int)$item['cart_item_id'];
             $customizableOptions = $item['customizable_options'] ?? [];
+
+            $cartItem = $cart->getItemById($itemId);
+            if ($cartItem && $cartItem->getParentItemId()) {
+                throw new GraphQlInputException(__('Child items may not be updated.'));
+            }
 
             if (count($customizableOptions) === 0 && !isset($item['quantity'])) {
                 throw new GraphQlInputException(__('Required parameter "quantity" for "cart_items" is missing.'));

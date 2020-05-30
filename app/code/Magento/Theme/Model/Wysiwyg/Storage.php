@@ -7,9 +7,12 @@
 namespace Magento\Theme\Model\Wysiwyg;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * Theme wysiwyg storage model
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Storage
 {
@@ -74,6 +77,10 @@ class Storage
      * @var \Magento\Framework\Url\DecoderInterface
      */
     protected $urlDecoder;
+    /**
+     * @var \Magento\Framework\Filesystem\Io\File|null
+     */
+    private $file;
 
     /**
      * Initialize dependencies
@@ -84,6 +91,9 @@ class Storage
      * @param \Magento\Framework\Image\AdapterFactory $imageFactory
      * @param \Magento\Framework\Url\EncoderInterface $urlEncoder
      * @param \Magento\Framework\Url\DecoderInterface $urlDecoder
+     * @param \Magento\Framework\Filesystem\Io\File|null $file
+     *
+     * @throws \Magento\Framework\Exception\FileSystemException
      */
     public function __construct(
         \Magento\Framework\Filesystem $filesystem,
@@ -91,7 +101,8 @@ class Storage
         \Magento\Framework\ObjectManagerInterface $objectManager,
         \Magento\Framework\Image\AdapterFactory $imageFactory,
         \Magento\Framework\Url\EncoderInterface $urlEncoder,
-        \Magento\Framework\Url\DecoderInterface $urlDecoder
+        \Magento\Framework\Url\DecoderInterface $urlDecoder,
+        \Magento\Framework\Filesystem\Io\File $file = null
     ) {
         $this->mediaWriteDirectory = $filesystem->getDirectoryWrite(DirectoryList::MEDIA);
         $this->_helper = $helper;
@@ -99,6 +110,9 @@ class Storage
         $this->_imageFactory = $imageFactory;
         $this->urlEncoder = $urlEncoder;
         $this->urlDecoder = $urlDecoder;
+        $this->file = $file ?: ObjectManager::getInstance()->get(
+            \Magento\Framework\Filesystem\Io\File::class
+        );
     }
 
     /**
@@ -147,7 +161,7 @@ class Storage
             return false;
         }
         $thumbnailDir = $this->_helper->getThumbnailDirectory($source);
-        $thumbnailPath = $thumbnailDir . '/' . pathinfo($source, PATHINFO_BASENAME);
+        $thumbnailPath = sprintf("%s/%s", $thumbnailDir, $this->file->getPathInfo($source)['basename']);
         try {
             $this->mediaWriteDirectory->isExist($thumbnailDir);
             $image = $this->_imageFactory->create();
@@ -217,7 +231,9 @@ class Storage
         $filePath = $this->mediaWriteDirectory->getRelativePath($path . '/' . $file);
         $thumbnailPath = $this->_helper->getThumbnailDirectory($filePath) . '/' . $file;
 
-        if (0 === strpos($filePath, $path) && 0 === strpos($filePath, $this->_helper->getStorageRoot())) {
+        if (0 === strpos($filePath, (string) $path) &&
+            0 === strpos($filePath, (string) $this->_helper->getStorageRoot())
+        ) {
             $this->mediaWriteDirectory->delete($filePath);
             $this->mediaWriteDirectory->delete($thumbnailPath);
         }
@@ -261,7 +277,7 @@ class Storage
             if (!$this->mediaWriteDirectory->isFile($path)) {
                 continue;
             }
-            $fileName = pathinfo($path, PATHINFO_BASENAME);
+            $fileName = $this->file->getPathInfo($path)['basename'];
             $file = ['text' => $fileName, 'id' => $this->urlEncoder->encode($fileName)];
             if (self::TYPE_IMAGE == $storageType) {
                 $requestParams['file'] = $fileName;
@@ -289,7 +305,10 @@ class Storage
         $resultArray = [];
         foreach ($directories as $path) {
             $resultArray[] = [
-                'text' => $this->_helper->getShortFilename(pathinfo($path, PATHINFO_BASENAME), 20),
+                'text' => $this->_helper->getShortFilename(
+                    $this->file->getPathInfo($path)['basename'],
+                    20
+                ),
                 'id' => $this->_helper->convertPathToId($path),
                 'cls' => 'folder'
             ];

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="StorefrontCheckoutCartGiftSection">
+        <element name="cartItemGiftMessage" type="text" selector="//tbody[contains(.,'{{productName}}')]//div[@class='gift-message']//textarea" parameterized="true"/>
+        <element name="orderNumber" type="text" selector="(//div[contains(@class, 'orders-succeed')]//a)[{{blockNumber}}]" parameterized="true"/>
+        <element name="viewOrder" type="text" selector="//table[@id='my-orders-table']//tr[contains(.,'{{orderNumber}}')]//a[contains(@class, 'action view')]" parameterized="true"/>
+    </section>
+</sections>

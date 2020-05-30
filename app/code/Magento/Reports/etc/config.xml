@@ -20,7 +20,7 @@
                 <mtd_start>1</mtd_start>
             </dashboard>
             <options>
-                <enabled>1</enabled>
+                <enabled>0</enabled>
                 <product_view_enabled>1</product_view_enabled>
                 <product_send_enabled>1</product_send_enabled>
                 <product_compare_enabled>1</product_compare_enabled>

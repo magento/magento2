@@ -41,9 +41,12 @@
                 </arguments>
             </block>
             <block name="customer.section.config" class="Magento\Customer\Block\SectionConfig"
-                   template="Magento_Customer::js/section-config.phtml"/>
-            <block name="customer.customer.data"
-                   class="Magento\Customer\Block\CustomerData"
+                   template="Magento_Customer::js/section-config.phtml">
+                <arguments>
+                    <argument name="sectionNamesProvider" xsi:type="object">Magento\Customer\Block\SectionNamesProvider</argument>
+                </arguments>
+            </block>
+            <block name="customer.customer.data"  class="Magento\Customer\Block\CustomerData"
                    template="Magento_Customer::js/customer-data.phtml"/>
             <block name="customer.data.invalidation.rules" class="Magento\Customer\Block\CustomerScopeData"
                    template="Magento_Customer::js/customer-data/invalidation-rules.phtml"/>

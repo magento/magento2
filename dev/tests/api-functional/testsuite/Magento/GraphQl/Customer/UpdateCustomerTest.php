@@ -33,7 +33,7 @@ class UpdateCustomerTest extends GraphQlAbstract
      */
     private $lockCustomer;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -69,7 +69,7 @@ mutation {
             middlename: "{$newMiddlename}"
             lastname: "{$newLastname}"
             suffix: "{$newSuffix}"
-            dob: "{$newDob}"
+            date_of_birth: "{$newDob}"
             taxvat: "{$newTaxVat}"
             email: "{$newEmail}"
             password: "{$currentPassword}"
@@ -82,7 +82,7 @@ mutation {
             middlename
             lastname
             suffix
-            dob
+            date_of_birth
             taxvat
             email
             gender
@@ -102,7 +102,7 @@ QUERY;
         $this->assertEquals($newMiddlename, $response['updateCustomer']['customer']['middlename']);
         $this->assertEquals($newLastname, $response['updateCustomer']['customer']['lastname']);
         $this->assertEquals($newSuffix, $response['updateCustomer']['customer']['suffix']);
-        $this->assertEquals($newDob, $response['updateCustomer']['customer']['dob']);
+        $this->assertEquals($newDob, $response['updateCustomer']['customer']['date_of_birth']);
         $this->assertEquals($newTaxVat, $response['updateCustomer']['customer']['taxvat']);
         $this->assertEquals($newEmail, $response['updateCustomer']['customer']['email']);
         $this->assertEquals($newGender, $response['updateCustomer']['customer']['gender']);
@@ -110,11 +110,12 @@ QUERY;
 
     /**
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
-     * @expectedException \Exception
-     * @expectedExceptionMessage "input" value should be specified
      */
     public function testUpdateCustomerIfInputDataIsEmpty()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('"input" value should be specified');
+
         $currentEmail = 'customer@example.com';
         $currentPassword = 'password';
 
@@ -135,11 +136,12 @@ QUERY;
     }
 
     /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage The current customer isn't authorized.
      */
     public function testUpdateCustomerIfUserIsNotAuthorized()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('The current customer isn\'t authorized.');
+
         $newFirstname = 'Richard';
 
         $query = <<<QUERY
@@ -160,11 +162,12 @@ QUERY;
 
     /**
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
-     * @expectedException \Exception
-     * @expectedExceptionMessage The account is locked.
      */
     public function testUpdateCustomerIfAccountIsLocked()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('The account is locked.');
+
         $this->lockCustomer->execute(1);
 
         $currentEmail = 'customer@example.com';
@@ -189,11 +192,12 @@ QUERY;
 
     /**
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
-     * @expectedException \Exception
-     * @expectedExceptionMessage Provide the current "password" to change "email".
      */
     public function testUpdateEmailIfPasswordIsMissed()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Provide the current "password" to change "email".');
+
         $currentEmail = 'customer@example.com';
         $currentPassword = 'password';
         $newEmail = 'customer_updated@example.com';
@@ -216,11 +220,12 @@ QUERY;
 
     /**
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
-     * @expectedException \Exception
-     * @expectedExceptionMessage Invalid login or password.
      */
     public function testUpdateEmailIfPasswordIsInvalid()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Invalid login or password.');
+
         $currentEmail = 'customer@example.com';
         $currentPassword = 'password';
         $invalidPassword = 'invalid_password';
@@ -245,14 +250,17 @@ QUERY;
 
     /**
      * @magentoApiDataFixture Magento/Customer/_files/two_customers.php
-     * @expectedException \Exception
-     * @expectedExceptionMessage A customer with the same email address already exists in an associated website.
      */
     public function testUpdateEmailIfEmailAlreadyExists()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('A customer with the same email address already exists in an associated website.');
+
         $currentEmail = 'customer@example.com';
         $currentPassword = 'password';
         $existedEmail = 'customer_two@example.com';
+        $firstname = 'Richard';
+        $lastname = 'Rowe';
 
         $query = <<<QUERY
 mutation {
@@ -260,10 +268,41 @@ mutation {
         input: {
             email: "{$existedEmail}"
             password: "{$currentPassword}"
+            firstname: "{$firstname}"
+            lastname: "{$lastname}"
         }
     ) {
         customer {
             firstname
+        }
+    }
+}
+QUERY;
+        $this->graphQlMutation($query, [], '', $this->getCustomerAuthHeaders($currentEmail, $currentPassword));
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     */
+    public function testEmptyCustomerName()
+    {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Required parameters are missing: First Name');
+
+        $currentEmail = 'customer@example.com';
+        $currentPassword = 'password';
+
+        $query = <<<QUERY
+mutation {
+    updateCustomer(
+        input: {
+            email: "{$currentEmail}"
+            password: "{$currentPassword}"
+            firstname: ""
+        }
+    ) {
+        customer {
+            email
         }
     }
 }

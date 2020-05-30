@@ -5,13 +5,18 @@
   * See COPYING.txt for license details.
   */
 -->
+
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="StorefrontAssertMiniCartItemCountActionGroup">
+        <annotations>
+            <description>Validates that the provided Product Count appears in the Storefront Header next to the Shopping Cart icon. Validates that the provided Product Count Text appears in the Storefront Mini Shopping Cart.</description>
+        </annotations>
         <arguments>
             <argument name="productCount" type="string"/>
             <argument name="productCountText" type="string"/>
         </arguments>
+        
         <see selector="{{StorefrontMinicartSection.productCount}}" userInput="{{productCount}}" stepKey="seeProductCountInCart"/>
         <see selector="{{StorefrontMinicartSection.visibleItemsCountText}}" userInput="{{productCountText}}" stepKey="seeNumberOfItemDisplayInMiniCart"/>
     </actionGroup>

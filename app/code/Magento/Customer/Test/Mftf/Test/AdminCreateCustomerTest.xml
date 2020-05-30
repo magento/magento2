@@ -14,7 +14,7 @@
             <stories value="Create a Customer via the Admin"/>
             <title value="Admin should be able to create a customer"/>
             <description value="Admin should be able to create a customer"/>
-            <severity value="CRITICAL"/>
+            <severity value="BLOCKER"/>
             <testCaseId value="MAGETWO-72095"/>
             <group value="customer"/>
             <group value="create"/>
@@ -23,10 +23,10 @@
             <magentoCLI command="indexer:reindex customer_grid" stepKey="reindexCustomerGrid"/>
         </before>
         <after>
-            <amOnPage url="admin/admin/auth/logout/" stepKey="amOnLogoutPage"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
         </after>
 
-        <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
+        <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin1"/>
         <amOnPage url="{{AdminCustomerPage.url}}" stepKey="navigateToCustomers"/>
         <waitForPageLoad stepKey="waitForLoad1"/>
         <click selector="{{AdminCustomerGridMainActionsSection.addNewCustomer}}" stepKey="clickCreateCustomer"/>

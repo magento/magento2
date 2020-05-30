@@ -10,5 +10,7 @@
           xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
     <entity name="EmailTemplate" type="template">
         <data key="templateName" unique="suffix">Template</data>
+        <data key="templateSubject" unique="suffix">Template Subject_</data>
+        <data key="templateText" unique="suffix">Template Text_</data>
     </entity>
 </entities>

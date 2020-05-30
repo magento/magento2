@@ -42,6 +42,7 @@ class ImagesGenerator
      */
     public function generate($config)
     {
+        // phpcs:disable Magento2.Functions.DiscouragedFunction
         $binaryData = '';
         $data = str_split(sha1($config['image-name']), 2);
         foreach ($data as $item) {
@@ -72,6 +73,7 @@ class ImagesGenerator
         $absolutePathToMedia = $mediaDirectory->getAbsolutePath($this->mediaConfig->getBaseTmpMediaPath());
         $imagePath = $absolutePathToMedia . DIRECTORY_SEPARATOR . $config['image-name'];
         imagejpeg($image, $imagePath, 100);
+        // phpcs:enable
 
         return $imagePath;
     }

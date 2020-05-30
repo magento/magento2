@@ -18,4 +18,5 @@ $configWriter->delete('carriers/fedex/account');
 $configWriter->delete('carriers/fedex/meter_number');
 $configWriter->delete('carriers/fedex/key');
 $configWriter->delete('carriers/fedex/password');
-$configWriter->delete('carriers/fedex/production_webservices_url');
+$configWriter->delete('carriers/fedex/sandbox_mode');
+$configWriter->delete(\Magento\Sales\Model\Order\Shipment::XML_PATH_STORE_ZIP);

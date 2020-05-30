@@ -38,7 +38,7 @@ class FieldEntityAttributesPool
         if (isset($this->attributesInstances[$fieldName])) {
             return $this->attributesInstances[$fieldName]->getEntityAttributes();
         } else {
-            throw new \LogicException(sprintf('There is no attribute class assigned to field %1', $fieldName));
+            throw new \LogicException(sprintf('There is no attribute class assigned to field %s', $fieldName));
         }
     }
 }

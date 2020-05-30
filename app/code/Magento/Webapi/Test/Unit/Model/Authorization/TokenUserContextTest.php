@@ -3,25 +3,28 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Webapi\Test\Unit\Model\Authorization;
 
-use Magento\Webapi\Model\Authorization\TokenUserContext;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Authorization\Model\UserContextInterface;
-use Magento\Integration\Model\Oauth\TokenFactory;
-use Magento\Integration\Model\Oauth\Token;
-use Magento\Integration\Api\IntegrationServiceInterface;
-use Magento\Framework\Webapi\Request;
-use Magento\Integration\Helper\Oauth\Data as OauthHelper;
-use Magento\Framework\Stdlib\DateTime\DateTime as Date;
 use Magento\Framework\Stdlib\DateTime;
+use Magento\Framework\Stdlib\DateTime\DateTime as Date;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\Webapi\Request;
+use Magento\Integration\Api\IntegrationServiceInterface;
+use Magento\Integration\Helper\Oauth\Data as OauthHelper;
 use Magento\Integration\Model\Integration;
+use Magento\Integration\Model\Oauth\Token;
+use Magento\Integration\Model\Oauth\TokenFactory;
+use Magento\Webapi\Model\Authorization\TokenUserContext;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Tests for TokenUserContext.
  */
-class TokenUserContextTest extends \PHPUnit\Framework\TestCase
+class TokenUserContextTest extends TestCase
 {
     /**
      * @var ObjectManager
@@ -34,36 +37,36 @@ class TokenUserContextTest extends \PHPUnit\Framework\TestCase
     protected $tokenUserContext;
 
     /**
-     * @var TokenFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var TokenFactory|MockObject
      */
     protected $tokenFactory;
 
     /**
-     * @var IntegrationServiceInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var IntegrationServiceInterface|MockObject
      */
     protected $integrationService;
 
     /**
-     * @var Request|\PHPUnit_Framework_MockObject_MockObject
+     * @var Request|MockObject
      */
     protected $request;
 
     /**
-     * @var OauthHelper|\PHPUnit_Framework_MockObject_MockObject
+     * @var OauthHelper|MockObject
      */
     private $oauthHelperMock;
 
     /**
-     * @var Date|\PHPUnit_Framework_MockObject_MockObject
+     * @var Date|MockObject
      */
     private $dateMock;
 
     /**
-     * @var DateTime|\PHPUnit_Framework_MockObject_MockObject
+     * @var DateTime|MockObject
      */
     private $dateTimeMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
 
@@ -91,7 +94,7 @@ class TokenUserContextTest extends \PHPUnit\Framework\TestCase
                     'getSelectedResources',
                 ]
             )
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->oauthHelperMock = $this->getMockBuilder(OauthHelper::class)
             ->disableOriginalConstructor()
@@ -110,12 +113,10 @@ class TokenUserContextTest extends \PHPUnit\Framework\TestCase
 
         $this->dateTimeMock->expects($this->any())
             ->method('strToTime')
-            ->will(
-                $this->returnCallback(
-                    function ($str) {
-                        return strtotime($str);
-                    }
-                )
+            ->willReturnCallback(
+                function ($str) {
+                    return strtotime($str);
+                }
             );
 
         $this->tokenUserContext = $this->objectManager->getObject(
@@ -136,7 +137,7 @@ class TokenUserContextTest extends \PHPUnit\Framework\TestCase
         $this->request->expects($this->once())
             ->method('getHeader')
             ->with('Authorization')
-            ->will($this->returnValue(null));
+            ->willReturn(null);
         $this->assertNull($this->tokenUserContext->getUserType());
         $this->assertNull($this->tokenUserContext->getUserId());
     }
@@ -146,7 +147,7 @@ class TokenUserContextTest extends \PHPUnit\Framework\TestCase
         $this->request->expects($this->once())
             ->method('getHeader')
             ->with('Authorization')
-            ->will($this->returnValue('Bearer'));
+            ->willReturn('Bearer');
         $this->assertNull($this->tokenUserContext->getUserType());
         $this->assertNull($this->tokenUserContext->getUserId());
     }
@@ -156,7 +157,7 @@ class TokenUserContextTest extends \PHPUnit\Framework\TestCase
         $this->request->expects($this->once())
             ->method('getHeader')
             ->with('Authorization')
-            ->will($this->returnValue('Access'));
+            ->willReturn('Access');
         $this->assertNull($this->tokenUserContext->getUserType());
         $this->assertNull($this->tokenUserContext->getUserId());
     }
@@ -168,7 +169,7 @@ class TokenUserContextTest extends \PHPUnit\Framework\TestCase
         $this->request->expects($this->once())
             ->method('getHeader')
             ->with('Authorization')
-            ->will($this->returnValue("Bearer {$bearerToken}"));
+            ->willReturn("Bearer {$bearerToken}");
 
         $token = $this->getMockBuilder(Token::class)
             ->disableOriginalConstructor()
@@ -176,14 +177,13 @@ class TokenUserContextTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $this->tokenFactory->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($token));
+            ->willReturn($token);
         $token->expects($this->once())
             ->method('loadByToken')
-            ->with($bearerToken)
-            ->will($this->returnSelf());
+            ->with($bearerToken)->willReturnSelf();
         $token->expects($this->once())
             ->method('getId')
-            ->will($this->returnValue(null));
+            ->willReturn(null);
 
         $this->assertNull($this->tokenUserContext->getUserType());
         $this->assertNull($this->tokenUserContext->getUserId());
@@ -196,7 +196,7 @@ class TokenUserContextTest extends \PHPUnit\Framework\TestCase
         $this->request->expects($this->once())
             ->method('getHeader')
             ->with('Authorization')
-            ->will($this->returnValue("Bearer {$bearerToken}"));
+            ->willReturn("Bearer {$bearerToken}");
 
         $token = $this->getMockBuilder(Token::class)
             ->disableOriginalConstructor()
@@ -204,17 +204,16 @@ class TokenUserContextTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $this->tokenFactory->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($token));
+            ->willReturn($token);
         $token->expects($this->once())
             ->method('loadByToken')
-            ->with($bearerToken)
-            ->will($this->returnSelf());
+            ->with($bearerToken)->willReturnSelf();
         $token->expects($this->once())
             ->method('getId')
-            ->will($this->returnValue(1));
+            ->willReturn(1);
         $token->expects($this->once())
             ->method('getRevoked')
-            ->will($this->returnValue(1));
+            ->willReturn(1);
 
         $this->assertNull($this->tokenUserContext->getUserType());
         $this->assertNull($this->tokenUserContext->getUserId());
@@ -230,7 +229,7 @@ class TokenUserContextTest extends \PHPUnit\Framework\TestCase
         $this->request->expects($this->once())
             ->method('getHeader')
             ->with('Authorization')
-            ->will($this->returnValue("Bearer {$bearerToken}"));
+            ->willReturn("Bearer {$bearerToken}");
 
         $token = $this->getMockBuilder(Token::class)
             ->disableOriginalConstructor()
@@ -247,17 +246,16 @@ class TokenUserContextTest extends \PHPUnit\Framework\TestCase
             )->getMock();
         $this->tokenFactory->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($token));
+            ->willReturn($token);
         $token->expects($this->once())
             ->method('loadByToken')
-            ->with($bearerToken)
-            ->will($this->returnSelf());
+            ->with($bearerToken)->willReturnSelf();
         $token->expects($this->once())
             ->method('getId')
-            ->will($this->returnValue(1));
+            ->willReturn(1);
         $token->expects($this->any())
             ->method('getUserType')
-            ->will($this->returnValue($userType));
+            ->willReturn($userType);
 
         $token->expects($this->any())
             ->method('getCreatedAt')
@@ -272,20 +270,20 @@ class TokenUserContextTest extends \PHPUnit\Framework\TestCase
 
                 $integration->expects($this->once())
                     ->method('getId')
-                    ->will($this->returnValue($userId));
+                    ->willReturn($userId);
                 $this->integrationService->expects($this->once())
                     ->method('findByConsumerId')
-                    ->will($this->returnValue($integration));
+                    ->willReturn($integration);
                 break;
             case UserContextInterface::USER_TYPE_ADMIN:
                 $token->expects($this->once())
                     ->method('getAdminId')
-                    ->will($this->returnValue($userId));
+                    ->willReturn($userId);
                 break;
             case UserContextInterface::USER_TYPE_CUSTOMER:
                 $token->expects($this->once())
                     ->method('getCustomerId')
-                    ->will($this->returnValue($userId));
+                    ->willReturn($userId);
                 break;
         }
 
@@ -355,7 +353,7 @@ class TokenUserContextTest extends \PHPUnit\Framework\TestCase
         $this->request->expects($this->once())
             ->method('getHeader')
             ->with('Authorization')
-            ->will($this->returnValue("Bearer {$bearerToken}"));
+            ->willReturn("Bearer {$bearerToken}");
 
         $token = $this->getMockBuilder(Token::class)
             ->disableOriginalConstructor()
@@ -373,16 +371,15 @@ class TokenUserContextTest extends \PHPUnit\Framework\TestCase
 
         $token->expects($this->once())
             ->method('loadByToken')
-            ->with($bearerToken)
-            ->will($this->returnSelf());
+            ->with($bearerToken)->willReturnSelf();
 
         $token->expects($this->any())
             ->method('getId')
-            ->will($this->returnValue(1));
+            ->willReturn(1);
 
         $token->expects($this->any())
             ->method('getUserType')
-            ->will($this->returnValue($tokenData['user_type']));
+            ->willReturn($tokenData['user_type']);
 
         $token->expects($this->any())
             ->method('getCreatedAt')
@@ -390,7 +387,7 @@ class TokenUserContextTest extends \PHPUnit\Framework\TestCase
 
         $this->tokenFactory->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($token));
+            ->willReturn($token);
 
         $this->oauthHelperMock->expects($this->any())
             ->method('getAdminTokenLifetime')
@@ -408,21 +405,21 @@ class TokenUserContextTest extends \PHPUnit\Framework\TestCase
                     ->getMock();
                 $integration->expects($this->any())
                     ->method('getId')
-                    ->will($this->returnValue($tokenData['user_id']));
+                    ->willReturn($tokenData['user_id']);
 
                 $this->integrationService->expects($this->any())
                     ->method('findByConsumerId')
-                    ->will($this->returnValue($integration));
+                    ->willReturn($integration);
                 break;
             case UserContextInterface::USER_TYPE_ADMIN:
                 $token->expects($this->any())
                     ->method('getAdminId')
-                    ->will($this->returnValue($tokenData['user_id']));
+                    ->willReturn($tokenData['user_id']);
                 break;
             case UserContextInterface::USER_TYPE_CUSTOMER:
                 $token->expects($this->any())
                     ->method('getCustomerId')
-                    ->will($this->returnValue($tokenData['user_id']));
+                    ->willReturn($tokenData['user_id']);
                 break;
         }
 

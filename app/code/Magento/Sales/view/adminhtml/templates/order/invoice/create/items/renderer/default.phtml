@@ -16,9 +16,9 @@
     <?php if ($block->canEditQty()) : ?>
         <input type="text" class="input-text admin__control-text qty-input"
                name="invoice[items][<?= (int) $_item->getOrderItemId() ?>]"
-               value="<?= (int) $_item->getQty() ?>"/>
+               value="<?= (float) $_item->getQty() ?>"/>
     <?php else : ?>
-        <?= (int) $_item->getQty() ?>
+        <?= (float) $_item->getQty() ?>
     <?php endif; ?>
     </td>
     <td class="col-subtotal">

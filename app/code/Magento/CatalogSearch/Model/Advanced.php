@@ -181,8 +181,8 @@ class Advanced extends \Magento\Framework\Model\AbstractModel
     /**
      * Add advanced search filters to product collection
      *
-     * @param   array $values
-     * @return  $this
+     * @param array $values
+     * @return $this
      * @throws LocalizedException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
@@ -196,6 +196,11 @@ class Advanced extends \Magento\Framework\Model\AbstractModel
             /* @var $attribute Attribute */
             if (!isset($values[$attribute->getAttributeCode()])) {
                 continue;
+            }
+            if ($attribute->getFrontendInput() == 'text' || $attribute->getFrontendInput() == 'textarea') {
+                if (!trim($values[$attribute->getAttributeCode()])) {
+                    continue;
+                }
             }
             $value = $values[$attribute->getAttributeCode()];
             $preparedSearchValue = $this->getPreparedSearchCriteria($attribute, $value);
@@ -343,9 +348,9 @@ class Advanced extends \Magento\Framework\Model\AbstractModel
      *
      * @todo: Move this code to block
      *
-     * @param   EntityAttribute $attribute
-     * @param   mixed $value
-     * @return  string|bool
+     * @param EntityAttribute $attribute
+     * @param mixed $value
+     * @return string|bool
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */

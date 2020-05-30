@@ -13,6 +13,13 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\QuoteGraphQl\Model\Cart\BuyRequest\BuyRequestBuilder">
+        <arguments>
+            <argument name="providers" xsi:type="array">
+                <item name="bundle" xsi:type="object">Magento\BundleGraphQl\Model\Cart\BuyRequest\BundleDataProvider</item>
+            </argument>
+        </arguments>
+    </type>
     <type name="Magento\Framework\GraphQl\Schema\Type\Enum\DefaultDataMapper">
         <arguments>
             <argument name="map" xsi:type="array">
@@ -36,6 +43,24 @@
             <argument name="map" xsi:type="array">
                 <item name="catalog_product" xsi:type="array">
                     <item name="bundle" xsi:type="string">BundleProduct</item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
+
+
+    <type name="Magento\CatalogGraphQl\Model\Resolver\Product\Price\ProviderPool">
+        <arguments>
+            <argument name="providers" xsi:type="array">
+                <item name="bundle" xsi:type="object">Magento\BundleGraphQl\Model\Resolver\Product\Price\Provider</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Product\CollectionProcessor\AttributeProcessor">
+        <arguments>
+            <argument name="fieldToAttributeMap" xsi:type="array">
+                <item name="price_range" xsi:type="array">
+                    <item name="price_type" xsi:type="string">price_type</item>
                 </item>
             </argument>
         </arguments>

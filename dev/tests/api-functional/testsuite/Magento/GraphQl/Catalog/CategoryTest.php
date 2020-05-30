@@ -8,14 +8,17 @@ declare(strict_types=1);
 namespace Magento\GraphQl\Catalog;
 
 use Magento\Catalog\Api\Data\CategoryInterface;
+use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\CategoryRepository;
 use Magento\Catalog\Model\ResourceModel\Category\Collection as CategoryCollection;
 use Magento\Framework\DataObject;
+use Magento\Framework\EntityManager\MetadataPool;
+use Magento\Store\Model\Store;
+use Magento\Store\Model\StoreManagerInterface;
+use Magento\TestFramework\ObjectManager;
 use Magento\TestFramework\TestCase\GraphQl\ResponseContainsErrorsException;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
-use Magento\Catalog\Api\Data\ProductInterface;
-use Magento\Catalog\Api\ProductRepositoryInterface;
-use Magento\TestFramework\ObjectManager;
 
 /**
  * Test loading of category tree
@@ -32,10 +35,22 @@ class CategoryTest extends GraphQlAbstract
      */
     private $categoryRepository;
 
-    protected function setUp()
+    /**
+     * @var Store
+     */
+    private $store;
+
+    /**
+     * @var MetadataPool
+     */
+    private $metadataPool;
+
+    protected function setUp(): void
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->categoryRepository = $this->objectManager->get(CategoryRepository::class);
+        $this->store = $this->objectManager->get(Store::class);
+        $this->metadataPool = $this->objectManager->get(MetadataPool::class);
     }
 
     /**
@@ -48,6 +63,80 @@ class CategoryTest extends GraphQlAbstract
         $query = <<<QUERY
 {
   category(id: {$rootCategoryId}) {
+      id
+      level
+      description
+      path
+      path_in_store
+      product_count
+      url_key
+      url_path
+      children {
+        id
+        description
+        available_sort_by
+        default_sort_by
+        image
+        level
+        children {
+          id
+          filter_price_range
+          description
+          image
+          meta_keywords
+          level
+          is_anchor
+          children {
+            level
+            id
+          }
+        }
+      }
+    }
+}
+QUERY;
+        $response = $this->graphQlQuery($query);
+        $responseDataObject = new DataObject($response);
+        //Some sort of smoke testing
+        self::assertEquals(
+            'Its a description of Test Category 1.2',
+            $responseDataObject->getData('category/children/0/children/1/description')
+        );
+        self::assertEquals(
+            'default-category',
+            $responseDataObject->getData('category/url_key')
+        );
+        self::assertEquals(
+            [],
+            $responseDataObject->getData('category/children/0/available_sort_by')
+        );
+        self::assertEquals(
+            'name',
+            $responseDataObject->getData('category/children/0/default_sort_by')
+        );
+        self::assertCount(
+            7,
+            $responseDataObject->getData('category/children')
+        );
+        self::assertCount(
+            2,
+            $responseDataObject->getData('category/children/0/children')
+        );
+        self::assertEquals(
+            13,
+            $responseDataObject->getData('category/children/0/children/1/id')
+        );
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Catalog/_files/categories.php
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
+    public function testRootCategoryTree()
+    {
+        $query = <<<QUERY
+{
+  category {
       id
       level
       description
@@ -136,7 +225,7 @@ QUERY;
         productImagePreview: products(pageSize: 1) {
             items {
                 id
-                } 
+                }
             }
       }
     }
@@ -146,7 +235,7 @@ QUERY;
 
         $this->assertArrayHasKey('category', $response);
         $this->assertArrayHasKey('children', $response['category']);
-        $this->assertSame(6, count($response['category']['children']));
+        $this->assertCount(6, $response['category']['children']);
     }
 
     /**
@@ -170,12 +259,33 @@ QUERY;
 
     /**
      * @magentoApiDataFixture Magento/Catalog/_files/categories.php
-     * @expectedException \Exception
-     * @expectedExceptionMessage Category doesn't exist
      */
     public function testGetDisabledCategory()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Category doesn\'t exist');
+
         $categoryId = 8;
+        $query = <<<QUERY
+{
+  category(id: {$categoryId}) {
+      id
+      name
+  }
+}
+QUERY;
+        $this->graphQlQuery($query);
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Catalog/_files/categories.php
+     */
+    public function testGetCategoryIdZero()
+    {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Category doesn\'t exist');
+
+        $categoryId = 0;
         $query = <<<QUERY
 {
   category(id: {$categoryId}) {
@@ -383,7 +493,7 @@ QUERY;
 {
   category(id: {$categoryId}) {
     name
-    products(sort: {sku: ASC}) {
+    products(sort: {name: DESC}) {
       total_count
       items {
         sku
@@ -400,13 +510,168 @@ QUERY;
                     'total_count' => 3,
                     'items' => [
                         ['sku' => '12345'],
-                        ['sku' => 'simple'],
-                        ['sku' => 'simple-4']
+                        ['sku' => 'simple-4'],
+                        ['sku' => 'simple']
                     ]
                 ]
             ]
         ];
         $this->assertEquals($expectedResponse, $response);
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Catalog/_files/categories.php
+     */
+    public function testBreadCrumbs()
+    {
+        /** @var CategoryCollection $categoryCollection */
+        $categoryCollection = $this->objectManager->create(CategoryCollection::class);
+        $categoryCollection->addFieldToFilter('name', 'Category 1.1.1');
+        /** @var CategoryInterface $category */
+        $category = $categoryCollection->getFirstItem();
+        $categoryId = $category->getId();
+        $this->assertNotEmpty($categoryId, "Preconditions failed: category is not available.");
+        $query = <<<QUERY
+{
+  category(id: {$categoryId}) {
+    name
+    breadcrumbs {
+      category_id
+      category_name
+      category_level
+      category_url_key
+      category_url_path
+    }
+  }
+}
+QUERY;
+        $response = $this->graphQlQuery($query);
+        $expectedResponse = [
+            'category' => [
+                'name' => 'Category 1.1.1',
+                'breadcrumbs' => [
+                    [
+                        'category_id' => 3,
+                        'category_name' => "Category 1",
+                        'category_level' => 2,
+                        'category_url_key' => "category-1",
+                        'category_url_path' => "category-1"
+                    ],
+                    [
+                        'category_id' => 4,
+                        'category_name' => "Category 1.1",
+                        'category_level' => 3,
+                        'category_url_key' => "category-1-1",
+                        'category_url_path' => "category-1/category-1-1"
+                    ],
+                ]
+            ]
+        ];
+        $this->assertEquals($expectedResponse, $response);
+    }
+
+    /**
+     * Test category image is returned as full url (not relative path)
+     *
+     * @param string $imagePrefix
+     * @magentoApiDataFixture Magento/Catalog/_files/catalog_category_with_image.php
+     * @dataProvider categoryImageDataProvider
+     */
+    public function testCategoryImage(?string $imagePrefix)
+    {
+        /** @var CategoryCollection $categoryCollection */
+        $categoryCollection = $this->objectManager->get(CategoryCollection::class);
+        $categoryModel = $categoryCollection
+            ->addAttributeToSelect('image')
+            ->addAttributeToFilter('name', ['eq' => 'Parent Image Category'])
+            ->getFirstItem();
+        $categoryId = $categoryModel->getId();
+
+        if ($imagePrefix !== null) {
+            // update image to account for different stored image formats
+            $connection = $categoryCollection->getConnection();
+            $productLinkField = $this->metadataPool
+                ->getMetadata(\Magento\Catalog\Api\Data\ProductInterface::class)
+                ->getLinkField();
+
+            $defaultStoreId = $this->store->getId();
+
+            $imageAttributeValue = $imagePrefix . basename($categoryModel->getImage());
+
+            if (!empty($imageAttributeValue)) {
+                $query = sprintf(
+                    'UPDATE %s SET `value` = "%s" ' .
+                    'WHERE `%s` = %d ' .
+                    'AND `store_id`= %d ' .
+                    'AND `attribute_id` = ' .
+                    '(SELECT `ea`.`attribute_id` FROM %s ea WHERE `ea`.`attribute_code` = "image" LIMIT 1)',
+                    $connection->getTableName('catalog_category_entity_varchar'),
+                    $imageAttributeValue,
+                    $productLinkField,
+                    $categoryModel->getData($productLinkField),
+                    $defaultStoreId,
+                    $connection->getTableName('eav_attribute')
+                );
+                $connection->query($query);
+            }
+        }
+
+        $query = <<<QUERY
+    {
+categoryList(filters: {ids: {in: ["$categoryId"]}}) {
+    id
+  name
+  url_key
+  image
+  children {
+    id
+    name
+    url_key
+    image
+  }
+
+ }
+}
+QUERY;
+
+        $response = $this->graphQlQuery($query);
+        $this->assertArrayNotHasKey('errors', $response);
+        $this->assertNotEmpty($response['categoryList']);
+        $categoryList = $response['categoryList'];
+        $storeBaseUrl = $this->objectManager->get(StoreManagerInterface::class)->getStore()->getBaseUrl('media');
+        $expectedImageUrl = rtrim($storeBaseUrl, '/') . '/' . ltrim($categoryModel->getImage(), '/');
+        $expectedImageUrl = str_replace('index.php/', '', $expectedImageUrl);
+
+        $this->assertEquals($categoryId, $categoryList[0]['id']);
+        $this->assertEquals('Parent Image Category', $categoryList[0]['name']);
+        $categoryList[0]['image'] = str_replace('index.php/', '', $categoryList[0]['image']);
+        $this->assertEquals($expectedImageUrl, $categoryList[0]['image']);
+
+        $childCategory = $categoryList[0]['children'][0];
+        $this->assertEquals('Child Image Category', $childCategory['name']);
+        $childCategory['image'] = str_replace('index.php/', '', $childCategory['image']);
+        $this->assertEquals($expectedImageUrl, $childCategory['image']);
+    }
+
+    /**
+     * @return array
+     */
+    public function categoryImageDataProvider(): array
+    {
+        return [
+            'default_filename_strategy' => [
+                'image_prefix' => null
+            ],
+            'just_filename_strategy' => [
+                'image_prefix' => ''
+            ],
+            'with_pub_media_strategy' => [
+                'image_prefix' => '/pub/media/catalog/category/'
+            ],
+            'catalog_category_strategy' => [
+                'image_prefix' => 'catalog/category/'
+            ],
+        ];
     }
 
     /**
@@ -419,8 +684,7 @@ QUERY;
             ['response_field' => 'attribute_set_id', 'expected_value' => $product->getAttributeSetId()],
             ['response_field' => 'created_at', 'expected_value' => $product->getCreatedAt()],
             ['response_field' => 'name', 'expected_value' => $product->getName()],
-            ['response_field' => 'price', 'expected_value' =>
-                [
+            ['response_field' => 'price', 'expected_value' => [
                     'minimalPrice' => [
                         'amount' => [
                             'value' => $product->getPrice(),

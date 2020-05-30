@@ -5,6 +5,10 @@
  */
 namespace Magento\CatalogSearch\Model\ResourceModel\Advanced;
 
+use Magento\CatalogSearch\Model\Indexer\Fulltext;
+use Magento\Framework\Indexer\IndexerRegistry;
+use Magento\TestFramework\Helper\Bootstrap;
+
 /**
  * Test class for \Magento\CatalogSearch\Model\ResourceModel\Advanced\Collection.
  * @magentoDbIsolation disabled
@@ -16,10 +20,14 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
      */
     private $advancedCollection;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->advancedCollection = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create(\Magento\CatalogSearch\Model\ResourceModel\Advanced\Collection::class);
+        $advanced = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+            ->create(\Magento\CatalogSearch\Model\Search\ItemCollectionProvider::class);
+        $this->advancedCollection = $advanced->getCollection();
+        $indexerRegistry = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+            ->create(IndexerRegistry::class);
+        $indexerRegistry->get(Fulltext::INDEXER_ID)->reindexAll();
     }
 
     /**

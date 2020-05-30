@@ -43,7 +43,7 @@ class ItemCollectionProvider implements ItemCollectionProviderInterface
     public function getCollection(): Collection
     {
         if (!isset($this->factories[$this->engineResolver->getCurrentSearchEngine()])) {
-            throw new \DomainException('Undefined factory ' . $this->engineResolver->getCurrentSearchEngine());
+            return $this->factories['default'];
         }
         return $this->factories[$this->engineResolver->getCurrentSearchEngine()]->create();
     }

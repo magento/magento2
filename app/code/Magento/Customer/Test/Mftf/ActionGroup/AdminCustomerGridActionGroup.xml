@@ -9,9 +9,13 @@
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AdminFilterCustomerByEmail">
+        <annotations>
+            <description>Goes to the Customer grid page. Filter results based on provided Customer Email Address.</description>
+        </annotations>
         <arguments>
             <argument name="email" type="string"/>
         </arguments>
+        
         <amOnPage url="{{AdminCustomerPage.url}}" stepKey="openCustomerIndexPage"/>
         <waitForPageLoad stepKey="waitToCustomerIndexPageToLoad"/>
         <click selector="{{AdminDataGridHeaderSection.filters}}" stepKey="openFiltersSectionOnCustomerIndexPage"/>
