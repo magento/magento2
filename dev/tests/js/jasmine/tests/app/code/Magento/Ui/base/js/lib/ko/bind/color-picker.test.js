@@ -6,10 +6,9 @@
 define([
     'ko',
     'jquery',
-    'rjsResolver',
     'tinycolor',
     'Magento_Ui/js/lib/knockout/bindings/color-picker'
-], function (ko, $, resolver) {
+], function (ko, $) {
     'use strict';
 
     var $input;
