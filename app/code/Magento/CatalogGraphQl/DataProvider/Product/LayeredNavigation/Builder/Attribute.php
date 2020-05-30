@@ -154,6 +154,6 @@ class Attribute implements LayerBuilderInterface
             return [];
         }
 
-        return $this->attributeOptionProvider->getOptions(\array_merge(...$attributeOptionIds), $attributes, $storeId);
+        return $this->attributeOptionProvider->getOptions(\array_merge(...$attributeOptionIds), $attributes,$storeId);
     }
 }

@@ -28,7 +28,6 @@ class AttributeOptionProvider
      * @var ResourceConnection
      */
     private $resourceConnection;
-
     private $productFactory;
 
     /**
