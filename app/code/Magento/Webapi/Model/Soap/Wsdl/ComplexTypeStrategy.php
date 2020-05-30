@@ -5,8 +5,8 @@
  */
 namespace Magento\Webapi\Model\Soap\Wsdl;
 
-use Zend\Soap\Wsdl;
-use Zend\Soap\Wsdl\ComplexTypeStrategy\AbstractComplexTypeStrategy;
+use Laminas\Soap\Wsdl;
+use Laminas\Soap\Wsdl\ComplexTypeStrategy\AbstractComplexTypeStrategy;
 
 /**
  * Magento-specific Complex type strategy for WSDL auto discovery.
@@ -184,7 +184,7 @@ class ComplexTypeStrategy extends AbstractComplexTypeStrategy
      * Revert required call info data if needed.
      *
      * @param bool $isRequired
-     * @param array &$callInfo
+     * @param array $callInfo
      * @return void
      */
     protected function _revertRequiredCallInfo($isRequired, &$callInfo)
@@ -236,19 +236,7 @@ class ComplexTypeStrategy extends AbstractComplexTypeStrategy
                 $tagValue = $matches[2][$i];
                 switch ($tagName) {
                     case 'callInfo':
-                        $callInfoRegExp = '/([a-z].+):(returned|requiredInput):(yes|no|always|conditionally)/i';
-                        if (preg_match($callInfoRegExp, $tagValue)) {
-                            list($callName, $direction, $condition) = explode(':', $tagValue);
-                            $condition = strtolower($condition);
-                            if (preg_match('/allCallsExcept\(([a-zA-Z].+)\)/', $callName, $calls)) {
-                                $callInfo[$direction][$condition] = [
-                                    'allCallsExcept' => $calls[1],
-                                ];
-                            } elseif (!isset($callInfo[$direction][$condition]['allCallsExcept'])) {
-                                $this->_overrideCallInfoName($callInfo, $callName);
-                                $callInfo[$direction][$condition]['calls'][] = $callName;
-                            }
-                        }
+                        $this->processCallInfo($callInfo, $tagValue);
                         break;
                     case 'seeLink':
                         $this->_processSeeLink($appInfoNode, $tagValue);
@@ -448,6 +436,29 @@ class ComplexTypeStrategy extends AbstractComplexTypeStrategy
                         break;
                     }
                 }
+            }
+        }
+    }
+
+    /**
+     * Process CallInfo data
+     *
+     * @param array $callInfo
+     * @param string $tagValue
+     */
+    private function processCallInfo(array &$callInfo, string $tagValue): void
+    {
+        $callInfoRegExp = '/([a-z].+):(returned|requiredInput):(yes|no|always|conditionally)/i';
+        if (preg_match($callInfoRegExp, $tagValue)) {
+            list($callName, $direction, $condition) = explode(':', $tagValue);
+            $condition = strtolower($condition);
+            if (preg_match('/allCallsExcept\(([a-zA-Z].+)\)/', $callName, $calls)) {
+                $callInfo[$direction][$condition] = [
+                    'allCallsExcept' => $calls[1],
+                ];
+            } elseif (!isset($callInfo[$direction][$condition]['allCallsExcept'])) {
+                $this->_overrideCallInfoName($callInfo, $callName);
+                $callInfo[$direction][$condition]['calls'][] = $callName;
             }
         }
     }

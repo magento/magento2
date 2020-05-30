@@ -19,7 +19,7 @@ class AddressRepositoryTest extends \Magento\TestFramework\TestCase\WebapiAbstra
     /** @var \Magento\Customer\Api\CustomerRepositoryInterface */
     protected $customerRepository;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = Bootstrap::getObjectManager();
         $this->customerRepository = $objectManager->get(
@@ -34,7 +34,7 @@ class AddressRepositoryTest extends \Magento\TestFramework\TestCase\WebapiAbstra
     /**
      * Ensure that fixture customer and his addresses are deleted.
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         /** @var \Magento\Framework\Registry $registry */
         $registry = Bootstrap::getObjectManager()->get(\Magento\Framework\Registry::class);

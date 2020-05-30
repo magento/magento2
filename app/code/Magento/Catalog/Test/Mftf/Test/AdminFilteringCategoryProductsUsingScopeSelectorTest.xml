@@ -18,7 +18,7 @@
             <group value="catalog"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
             <!--Create website, Store and Store View-->
             <actionGroup ref="AdminCreateWebsiteActionGroup" stepKey="createSecondWebsite">
                 <argument name="newWebsiteName" value="{{secondCustomWebsite.name}}"/>
@@ -100,14 +100,16 @@
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
         <!-- Step 1-2: Open Category page and Set scope selector to All Store Views-->
-        <amOnPage url="{{AdminCategoryPage.url}}" stepKey="goToCategoryPage"/>
+        <actionGroup ref="AdminOpenCategoryPageActionGroup" stepKey="goToCategoryPage"/>
         <click selector="{{AdminCategorySidebarTreeSection.categoryInTree($$createCategory.name$$)}}"
                stepKey="clickCategoryName"/>
         <click selector="{{AdminCategoryProductsSection.sectionHeader}}" stepKey="openProductSection"/>
         <grabTextFrom selector="{{AdminCategorySidebarTreeSection.categoryInTree($$createCategory.name$$)}}"
                       stepKey="grabTextFromCategory"/>
-        <assertRegExp expected="/\(4\)$/" expectedType="string" actual="$grabTextFromCategory" actualType="variable"
-                      message="wrongCountProductOnAllStoreViews" stepKey="checkCountProducts"/>
+        <assertRegExp message="wrongCountProductOnAllStoreViews" stepKey="checkCountProducts">
+			<actualResult type="variable">$grabTextFromCategory</actualResult>
+			<expectedResult type="string">/\(4\)$/</expectedResult>
+        </assertRegExp>
         <see selector="{{AdminCategoryProductsGridSection.productGridNameProduct($$createProduct0.name$$)}}"
              userInput="$$createProduct0.name$$" stepKey="seeProductName"/>
         <see selector="{{AdminCategoryProductsGridSection.productGridNameProduct($$createProduct1.name$$)}}"
@@ -124,8 +126,10 @@
         </actionGroup>
         <grabTextFrom selector="{{AdminCategorySidebarTreeSection.categoryInTree($$createCategory.name$$)}}"
                       stepKey="grabTextFromCategory1"/>
-        <assertRegExp expected="/\(2\)$/" expectedType="string" actual="$grabTextFromCategory1" actualType="variable"
-                      message="wrongCountProductOnWebsite1" stepKey="checkCountProducts1"/>
+        <assertRegExp message="wrongCountProductOnWebsite1" stepKey="checkCountProducts1">
+			<actualResult type="variable">$grabTextFromCategory1</actualResult>
+			<expectedResult type="string">/\(2\)$/</expectedResult>
+        </assertRegExp>
         <click selector="{{AdminCategoryProductsSection.sectionHeader}}" stepKey="openProductSection1"/>
         <see selector="{{AdminCategoryProductsGridSection.productGridNameProduct($$createProduct1.name$$)}}"
              userInput="$$createProduct1.name$$" stepKey="seeProductName4"/>
@@ -144,8 +148,10 @@
         <click selector="{{AdminCategoryProductsSection.sectionHeader}}" stepKey="openProductSection2"/>
         <grabTextFrom selector="{{AdminCategorySidebarTreeSection.categoryInTree($$createCategory.name$$)}}"
                       stepKey="grabTextFromCategory2"/>
-        <assertRegExp expected="/\(2\)$/" expectedType="string" actual="$grabTextFromCategory2" actualType="variable"
-                      message="wrongCountProductOnWebsite2" stepKey="checkCountProducts2"/>
+        <assertRegExp message="wrongCountProductOnWebsite2" stepKey="checkCountProducts2">
+			<actualResult type="variable">$grabTextFromCategory2</actualResult>
+			<expectedResult type="string">/\(2\)$/</expectedResult>
+        </assertRegExp>
         <see selector="{{AdminCategoryProductsGridSection.productGridNameProduct($$createProduct2.name$$)}}"
              userInput="$$createProduct2.name$$" stepKey="seeProductName6"/>
         <see selector="{{AdminCategoryProductsGridSection.productGridNameProduct($$createProduct12.name$$)}}"

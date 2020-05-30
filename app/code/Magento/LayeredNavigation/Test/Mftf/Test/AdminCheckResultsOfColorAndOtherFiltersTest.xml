@@ -7,9 +7,9 @@
 -->
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="AdminCheckResultsOfColorAndOtherFiltersTest">
+    <test name="AdminCheckResultsOfColorAndOtherFiltersTest" insertAfter="runCronIndex">
         <!-- Open a category on storefront -->
-        <actionGroup ref="StorefrontGoToCategoryPageActionGroup" after="flushCache" stepKey="goToCategoryPage">
+        <actionGroup ref="StorefrontGoToCategoryPageActionGroup" stepKey="goToCategoryPage">
             <argument name="categoryName" value="$$createCategory.name$$"/>
         </actionGroup>
         <!-- Choose First attribute filter -->

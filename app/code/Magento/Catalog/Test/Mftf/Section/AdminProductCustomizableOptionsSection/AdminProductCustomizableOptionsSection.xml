@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="AdminProductCustomizableOptionsSection">
+        <element name="requiredFieldIndicator" type="text" selector=" return window.getComputedStyle(document.querySelector('#product_composite_configure_form_fields .admin__field.required .admin__field-label'), ':after').getPropertyValue('content');"/>
+        <element name="checkIfCustomizableOptionsTabOpen" type="text" selector="//span[text()='Customizable Options']/parent::strong/parent::*[@data-state-collapsible='closed']" timeout="30"/>
+        <element name="customizableOptions" type="text" selector="//strong[contains(@class, 'admin__collapsible-title')]/span[text()='Customizable Options']"/>
+        <element name="useDefaultOptionTitle" type="text" selector="[data-index='options'] tr.data-row [data-index='title'] [name^='options_use_default']"/>
+        <element name="useDefaultOptionTitleByIndex" type="text" selector="[data-index='options'] [data-index='values'] tr[data-repeat-index='{{var1}}'] [name^='options_use_default']" parameterized="true"/>
+        <element name="addOptionBtn" type="button" selector="button[data-index='button_add']" timeout="30"/>
+        <element name="fillOptionTitle" type="input" selector="//span[text()='{{var1}}']/parent::div/parent::div/parent::div//span[text()='Option Title']/parent::label/parent::div/parent::div//input[@class='admin__control-text']" parameterized="true"/>
+        <element name="optionTitleInput" type="input" selector="input[name='product[options][{{index}}][title]']" parameterized="true"/>
+        <element name="optionTypeOpenDropDown" type="button" selector=".admin__dynamic-rows[data-index='options'] .action-select" timeout="30"/>
+        <element name="optionTypeTextField" type="button" selector=".admin__dynamic-rows[data-index='options'] .action-menu._active li li" timeout="30"/>
+        <element name="maxCharactersInput" type="input" selector="input[name='product[options][0][max_characters]']"/>
+        <element name="deleteCustomOptions" type="button" selector="//div[contains(@class, 'fieldset-wrapper-title')]//span[contains(., '{{optionTitle}}')]/parent::div/parent::div//button[@class='action-delete']" parameterized="true" timeout="30"/>
+        <element name="customOption" type="block" selector="[data-index='options'] tbody tr.data-row"/>
+        <element name="customOptionButtonDelete" type="button" selector="[data-index='options'] [data-index='delete_button']"/>
+
+        <element name="optionTypeDropDown" type="select" selector="//table[@data-index='options']//tr[{{index}}]//div[@data-index='type']//div[contains(@class, 'action-select-wrap')]" parameterized="true" timeout="30"/>
+        <element name="optionTypeItem" type="select" selector="//table[@data-index='options']//tr[{{index}}]//div[@data-index='type']//*[contains(@class, 'action-menu-item')]//*[contains(., '{{optionValue}}')]" parameterized="true" timeout="30"/>
+        <element name="checkSelect" type="select" selector="//span[text()='{{var1}}']/parent::div/parent::div/parent::div//span[text()='Option Type']/parent::label/parent::div/parent::div//div[@data-role='selected-option']" parameterized="true"/>
+        <element name="checkOptionType" type="select" selector="//span[text()='{{optionTitle}}']/parent::div/parent::div/parent::div//parent::label/parent::div/parent::div//li[@class='admin__action-multiselect-menu-inner-item']//label[text()='{{optionType}}']" parameterized="true"/>
+        <element name="checkDropDown" type="select" selector="//span[text()='{{var1}}']/parent::div/parent::div/parent::div//parent::label/parent::div/parent::div//li[@class='admin__action-multiselect-menu-inner-item']//label[text()='Drop-down']" parameterized="true"/>
+        <element name="clickAddValue" type="button" selector="//span[text()='{{var1}}']/parent::div/parent::div/parent::div//tfoot//button" parameterized="true"/>
+        <element name="fillOptionValueTitle" type="input" selector="//span[text()='{{var1}}']/parent::div/parent::div/parent::div//tbody/tr[@data-repeat-index='{{var2}}']//span[text()='Title']/parent::label/parent::div/parent::div//div[@class='admin__field-control']/input" parameterized="true"/>
+        <element name="fillOptionValuePrice" type="input" selector="//span[text()='{{var1}}']/parent::div/parent::div/parent::div//tbody/tr[@data-repeat-index='{{var2}}']//span[text()='Price']/parent::label/parent::div//div[@class='admin__control-addon']/input" parameterized="true"/>
+        <element name="clickSelectPriceType" type="select" selector="//span[text()='{{var1}}']/parent::div/parent::div/parent::div//tbody//tr[@data-repeat-index='{{var2}}']//span[text()='Price Type']/parent::label/parent::div/parent::div//select" parameterized="true"/>
+        <element name="checkboxUseDefaultTitle" type="checkbox" selector="//span[text()='Option Title']/parent::label/parent::div/parent::div/div//input[@type='checkbox']"/>
+        <element name="checkboxUseDefaultOption" type="checkbox" selector="//table[@data-index='values']//tbody//tr[@data-repeat-index='{{var1}}']//div[@class='admin__field-control']//input[@type='checkbox']" parameterized="true"/>
+        <element name="requiredCheckBox" type="checkbox" selector="input[name='product[options][{{index}}][is_require]']" parameterized="true"/>
+        <element name="fillOptionValueSku" type="input" selector="//span[text()='{{var1}}']/parent::div/parent::div/parent::div//tbody/tr[@data-repeat-index='{{var2}}']//span[text()='SKU']/parent::label/parent::div/parent::div//div[@class='admin__field-control']/input" parameterized="true"/>
+        <element name="fillOptionCompatibleFileExtensions" type="input" selector="input[name='product[options][{{index}}][file_extension]']" parameterized="true"/>
+
+        <!-- Elements that make it easier to select the most recently added element -->
+        <element name="optionPriceByTitle" type="input" selector="//*[@data-index='options']//*[@data-role='collapsible-title' and contains(., '{{optionTitle}}')]/ancestor::tr//*[@data-index='price']//input" parameterized="true"/>
+        <element name="optionPriceTypeByTitle" type="select" selector="//*[@data-index='options']//*[@data-role='collapsible-title' and contains(., '{{optionTitle}}')]/ancestor::tr//*[@data-index='price_type']//select" parameterized="true"/>
+        <element name="optionSkuByTitle" type="input" selector="//*[@data-index='options']//*[@data-role='collapsible-title' and contains(., '{{optionTitle}}')]/ancestor::tr//*[@data-index='sku']//input" parameterized="true"/>
+        <element name="optionFileExtensionByTitle" type="input" selector="//*[@data-index='options']//*[@data-role='collapsible-title' and contains(., '{{optionTitle}}')]/ancestor::tr//*[@data-index='file_extension']//input" parameterized="true"/>
+        <element name="lastOptionTitle" type="input" selector="//*[@data-index='custom_options']//*[@data-index='options']/tbody/tr[last()]//*[contains(@class, '_required')]//input"/>
+        <element name="lastOptionTypeParent" type="block" selector="//*[@data-index='custom_options']//*[@data-index='options']/tbody/tr[last()]//*[contains(@class, 'admin__action-multiselect-text')]"/>
+        <element name="lastOptionPrice" type="input" selector="//*[@data-index='custom_options']//*[@data-index='options']/tbody/tr[last()]//*[contains(@name, '[price]')]"/>
+        <element name="lastOptionPriceType" type="select" selector="//*[@data-index='custom_options']//*[@data-index='options']/tbody/tr[last()]//*[contains(@name, '[price_type]')]"/>
+        <!-- var 1 represents the option type that you want to select, i.e "radio buttons" -->
+        <element name="optionType" type="block" selector="//*[@data-index='custom_options']//label[text()='{{var1}}'][ancestor::*[contains(@class, '_active')]]" parameterized="true"/>
+        <element name="addValue" type="button" selector="//*[@data-index='custom_options']//*[@data-index='options']/tbody/tr[last()]//*[@data-action='add_new_row']" timeout="30"/>
+        <element name="valueTitle" type="input" selector="//*[@data-index='custom_options']//*[@data-index='options']/tbody/tr[last()]//*[contains(@class, 'admin__control-table')]//tbody/tr[last()]//*[@data-index='title']//input"/>
+        <element name="valuePrice" type="input" selector="//*[@data-index='custom_options']//*[@data-index='options']/tbody/tr[last()]//*[contains(@class, 'admin__control-table')]//tbody/tr[last()]//*[@data-index='price']//input"/>
+        <element name="optionPrice" type="input" selector="//*[@data-index='custom_options']//*[@data-index='options']/tbody/tr//*[@name='product[options][{{index}}][price]']" parameterized="true"/>
+        <element name="optionPriceType" type="select" selector="//*[@data-index='custom_options']//*[@data-index='options']/tbody/tr//*[@name='product[options][{{var}}][price_type]']" parameterized="true"/>
+        <element name="optionSku" type="input" selector="//*[@data-index='custom_options']//*[@data-index='options']/tbody/tr//*[@name='product[options][{{index}}][sku]']" parameterized="true"/>
+        <element name="optionFileExtensions" type="input" selector="//*[@data-index='custom_options']//*[@data-index='options']/tbody/tr//*[@name='product[options][{{index}}][file_extension]']" parameterized="true"/>
+        <element name="importOptions" type="button" selector="//button[@data-index='button_import']" timeout="30"/>
+    </section>
+</sections>

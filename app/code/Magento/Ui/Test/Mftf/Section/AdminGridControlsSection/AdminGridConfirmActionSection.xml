@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="AdminGridConfirmActionSection">
+        <element name="title" type="text" selector=".modal-popup.confirm h1.modal-title"/>
+        <element name="message" type="text" selector=".modal-popup.confirm div.modal-content"/>
+        <element name="cancel" type="button" selector=".modal-popup.confirm button.action-dismiss"/>
+        <element name="ok" type="button" selector=".modal-popup.confirm button.action-accept" timeout="60"/>
+    </section>
+</sections>

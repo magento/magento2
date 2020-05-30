@@ -3,20 +3,25 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Setup\Test\Unit\Model;
 
-use \Magento\Setup\Model\Navigation;
+use Laminas\ServiceManager\ServiceLocatorInterface;
+use Magento\Framework\App\DeploymentConfig;
+use Magento\Setup\Model\Navigation;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class NavigationTest extends \PHPUnit\Framework\TestCase
+class NavigationTest extends TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Zend\ServiceManager\ServiceLocatorInterface
+     * @var MockObject|ServiceLocatorInterface
      */
     private $serviceLocatorMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\DeploymentConfig
+     * @var MockObject|DeploymentConfig
      */
     private $deploymentConfig;
 
@@ -25,36 +30,40 @@ class NavigationTest extends \PHPUnit\Framework\TestCase
      */
     private $navigation;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->serviceLocatorMock =
-            $this->getMockForAbstractClass(\Zend\ServiceManager\ServiceLocatorInterface::class, ['get']);
+            $this->getMockBuilder(ServiceLocatorInterface::class)
+                ->onlyMethods(['get'])
+                ->getMockForAbstractClass();
         $this->serviceLocatorMock
             ->expects($this->exactly(2))
             ->method('get')
             ->with('config')
-            ->will($this->returnValue([
-                'navInstallerTitles' => [
-                    'install' => 'SomeTitle'
-                 ],
-                'navInstaller' => [
-                    ['key1' => 'value1'],
-                    ['key2' => 'value2'],
-                    ['nav' => 'abc', 'key3' => 'value3'],
-                    ['nav' => ''],
-                    ['nav' => false],
-                    ['main' => 'abc', 'key3' => 'value3'],
-                    ['main' => ''],
-                    ['main' => false],
+            ->willReturn(
+                [
+                    'navLandingTitles' => [
+                        'install' => 'SomeTitle'
+                    ],
+                    'navLanding' => [
+                        ['key1' => 'value1'],
+                        ['key2' => 'value2'],
+                        ['nav' => 'abc', 'key3' => 'value3'],
+                        ['nav' => ''],
+                        ['nav' => false],
+                        ['main' => 'abc', 'key3' => 'value3'],
+                        ['main' => ''],
+                        ['main' => false],
+                    ]
                 ]
-            ]));
-        $this->deploymentConfig = $this->createMock(\Magento\Framework\App\DeploymentConfig::class);
+            );
+        $this->deploymentConfig = $this->createMock(DeploymentConfig::class);
         $this->navigation = new Navigation($this->serviceLocatorMock, $this->deploymentConfig);
     }
 
     public function testGetType()
     {
-        $this->assertEquals(Navigation::NAV_INSTALLER, $this->navigation->getType());
+        $this->assertEquals(Navigation::NAV_LANDING, $this->navigation->getType());
     }
 
     public function testGetData()

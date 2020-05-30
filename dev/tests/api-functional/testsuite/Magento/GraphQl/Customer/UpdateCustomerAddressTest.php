@@ -8,12 +8,12 @@ declare(strict_types=1);
 namespace Magento\GraphQl\Customer;
 
 use Exception;
-use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Api\AddressRepositoryInterface;
+use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Api\Data\AddressInterface;
+use Magento\Integration\Api\CustomerTokenServiceInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
-use Magento\Integration\Api\CustomerTokenServiceInterface;
 
 /**
  * Update customer address tests
@@ -66,7 +66,7 @@ class UpdateCustomerAddressTest extends GraphQlAbstract
         $response = $this->graphQlMutation($mutation, [], '', $this->getCustomerAuthHeaders($userName, $password));
         $this->assertArrayHasKey('updateCustomerAddress', $response);
         $this->assertArrayHasKey('customer_id', $response['updateCustomerAddress']);
-        $this->assertEquals(null, $response['updateCustomerAddress']['customer_id']);
+        $this->assertNull($response['updateCustomerAddress']['customer_id']);
         $this->assertArrayHasKey('id', $response['updateCustomerAddress']);
 
         $address = $this->addressRepository->getById($addressId);
@@ -100,6 +100,7 @@ mutation {
         region_id: {$updateAddress['region']['region_id']}
         region_code: "{$updateAddress['region']['region_code']}"
     }
+    country_code: {$updateAddress['country_code']}
     country_id: {$updateAddress['country_code']}
     street: ["{$updateAddress['street'][0]}","{$updateAddress['street'][1]}"]
     company: "{$updateAddress['company']}"
@@ -127,11 +128,12 @@ MUTATION;
     }
 
     /**
-     * @expectedException Exception
-     * @expectedExceptionMessage The current customer isn't authorized.
      */
     public function testUpdateCustomerAddressIfUserIsNotAuthorized()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('The current customer isn\'t authorized.');
+
         $addressId = 1;
         $mutation
             = <<<MUTATION
@@ -153,11 +155,12 @@ MUTATION;
      *
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
      * @magentoApiDataFixture Magento/Customer/_files/customer_address.php
-     * @expectedException Exception
-     * @expectedExceptionMessage Required parameters are missing: firstname
      */
     public function testUpdateCustomerAddressWithMissingAttribute()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Required parameters are missing: firstname');
+
         $userName = 'customer@example.com';
         $password = 'password';
         $addressId = 1;
@@ -167,6 +170,33 @@ MUTATION;
 mutation {
   updateCustomerAddress(id: {$addressId}, input: {
     firstname: ""
+    lastname: "Phillis"
+  }) {
+    id
+  }
+}
+MUTATION;
+        $this->graphQlMutation($mutation, [], '', $this->getCustomerAuthHeaders($userName, $password));
+    }
+
+    /**
+     * Verify customers with credentials update address
+     * with missing required Firstname attribute
+     *
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     * @magentoApiDataFixture Magento/Customer/_files/customer_address.php
+     */
+    public function testUpdateCustomerAddressWithoutMissingAttribute()
+    {
+        $userName = 'customer@example.com';
+        $password = 'password';
+        $addressId = 1;
+
+        $mutation
+            = <<<MUTATION
+mutation {
+  updateCustomerAddress(id: {$addressId}, input: {
+    firstname: "some"
     lastname: "Phillis"
   }) {
     id
@@ -249,7 +279,7 @@ MUTATION;
             ['response_field' => 'default_billing', 'expected_value' => (bool)$address->isDefaultBilling()],
         ];
         $this->assertResponseFields($actualResponse, $assertionMap);
-        $this->assertTrue(is_array([$actualResponse['region']]), "region field must be of an array type.");
+        $this->assertIsArray([$actualResponse['region']], "region field must be of an array type.");
         $assertionRegionMap = [
             ['response_field' => 'region', 'expected_value' => $address->getRegion()->getRegion()],
             ['response_field' => 'region_code', 'expected_value' => $address->getRegion()->getRegionCode()],
@@ -320,9 +350,6 @@ MUTATION;
      */
     public function testUpdateCustomerAddressWithInvalidIdType()
     {
-        $this->markTestSkipped(
-            'Type validation returns wrong message https://github.com/magento/graphql-ce/issues/735'
-        );
         $userName = 'customer@example.com';
         $password = 'password';
 
@@ -361,7 +388,7 @@ mutation {
 MUTATION;
 
         $this->expectException(Exception::class);
-        $this->expectExceptionMessage('Expected type Int!, found ""');
+        $this->expectExceptionMessage('Field "updateCustomerAddress" argument "id" requires type Int!, found "".');
         $this->graphQlMutation($mutation, [], '', $this->getCustomerAuthHeaders($userName, $password));
     }
 
@@ -401,7 +428,10 @@ MUTATION;
     {
         return [
             ['', '"input" value must be specified'],
-            ['input: ""', 'requires type CustomerAddressInput, found ""'],
+            [
+                'input: ""',
+                'Field "updateCustomerAddress" argument "input" requires type CustomerAddressInput, found ""'
+            ],
             ['input: "foo"', 'requires type CustomerAddressInput, found "foo"']
         ];
     }
@@ -409,11 +439,12 @@ MUTATION;
     /**
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
      * @magentoApiDataFixture Magento/Customer/_files/customer_address.php
-     * @expectedException Exception
-     * @expectedExceptionMessage Could not find a address with ID "9999"
      */
     public function testUpdateNotExistingCustomerAddress()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Could not find a address with ID "9999"');
+
         $userName = 'customer@example.com';
         $password = 'password';
         $addressId = 9999;
@@ -426,11 +457,12 @@ MUTATION;
     /**
      * @magentoApiDataFixture Magento/Customer/_files/two_customers.php
      * @magentoApiDataFixture Magento/Customer/_files/customer_address.php
-     * @expectedException Exception
-     * @expectedExceptionMessage Current customer does not have permission to address with ID "1"
      */
     public function testUpdateAnotherCustomerAddress()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Current customer does not have permission to address with ID "1"');
+
         $userName = 'customer_two@example.com';
         $password = 'password';
         $addressId = 1;
@@ -443,11 +475,12 @@ MUTATION;
     /**
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
      * @magentoApiDataFixture Magento/Customer/_files/customer_address.php
-     * @expectedException Exception
-     * @expectedExceptionMessage The account is locked.
      */
     public function testUpdateCustomerAddressIfAccountIsLocked()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('The account is locked.');
+
         $this->markTestIncomplete('https://github.com/magento/graphql-ce/issues/750');
 
         $userName = 'customer@example.com';

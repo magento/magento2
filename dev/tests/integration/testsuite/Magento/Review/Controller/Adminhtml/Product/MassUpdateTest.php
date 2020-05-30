@@ -13,7 +13,7 @@ use Magento\Framework\Acl\Builder;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Framework\UrlInterface;
 use Magento\Review\Model\ResourceModel\Review\CollectionFactory;
-use Zend\Http\Request;
+use Laminas\Http\Request;
 
 /**
  * Test Mass Update action.
@@ -45,7 +45,7 @@ class MassUpdateTest extends AbstractBackendController
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 

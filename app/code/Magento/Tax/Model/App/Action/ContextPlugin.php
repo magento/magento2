@@ -6,60 +6,68 @@
 
 namespace Magento\Tax\Model\App\Action;
 
+use Magento\Customer\Model\Session;
+use Magento\Framework\App\ActionInterface;
+use Magento\Framework\App\Http\Context as HttpContext;
+use Magento\Framework\Module\Manager as ModuleManager;
+use Magento\PageCache\Model\Config as PageCacheConfig;
+use Magento\Tax\Helper\Data as TaxHelper;
+use Magento\Tax\Model\Calculation;
+
 /**
- * Class ContextPlugin
+ * Provides Action Context on before executing Controller Action
  */
 class ContextPlugin
 {
     /**
-     * @var \Magento\Customer\Model\Session
+     * @var Session
      */
     protected $customerSession;
 
     /**
-     * @var \Magento\Framework\App\Http\Context
+     * @var HttpContext
      */
     protected $httpContext;
 
     /**
-     * @var \Magento\Tax\Helper\Data
+     * @var TaxHelper
      */
     protected $taxHelper;
 
     /**
-     * @var \Magento\Tax\Model\Calculation\Proxy
+     * @var Calculation
      */
     protected $taxCalculation;
 
     /**
      * Module manager
      *
-     * @var \Magento\Framework\Module\Manager
+     * @var ModuleManager
      */
     private $moduleManager;
 
     /**
      * Cache config
      *
-     * @var \Magento\PageCache\Model\Config
+     * @var PageCacheConfig
      */
     private $cacheConfig;
 
     /**
-     * @param \Magento\Customer\Model\Session $customerSession
-     * @param \Magento\Framework\App\Http\Context $httpContext
-     * @param \Magento\Tax\Model\Calculation\Proxy $calculation
-     * @param \Magento\Tax\Helper\Data $taxHelper
-     * @param \Magento\Framework\Module\Manager $moduleManager
-     * @param \Magento\PageCache\Model\Config $cacheConfig
+     * @param Session $customerSession
+     * @param HttpContext $httpContext
+     * @param Calculation $calculation
+     * @param TaxHelper $taxHelper
+     * @param ModuleManager $moduleManager
+     * @param PageCacheConfig $cacheConfig
      */
     public function __construct(
-        \Magento\Customer\Model\Session $customerSession,
-        \Magento\Framework\App\Http\Context $httpContext,
-        \Magento\Tax\Model\Calculation\Proxy $calculation, //phpcs:ignore Magento2.Classes.DiscouragedDependencies
-        \Magento\Tax\Helper\Data $taxHelper,
-        \Magento\Framework\Module\Manager $moduleManager,
-        \Magento\PageCache\Model\Config $cacheConfig
+        Session $customerSession,
+        HttpContext $httpContext,
+        Calculation $calculation, //phpcs:ignore Magento2.Classes.DiscouragedDependencies
+        TaxHelper $taxHelper,
+        ModuleManager $moduleManager,
+        PageCacheConfig $cacheConfig
     ) {
         $this->customerSession = $customerSession;
         $this->httpContext = $httpContext;
@@ -72,15 +80,12 @@ class ContextPlugin
     /**
      * Before dispatch.
      *
-     * @param \Magento\Framework\App\ActionInterface $subject
-     * @param \Magento\Framework\App\RequestInterface $request
-     * @return mixed
+     * @param ActionInterface $subject
+     * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function beforeDispatch(
-        \Magento\Framework\App\ActionInterface $subject,
-        \Magento\Framework\App\RequestInterface $request
-    ) {
+    public function beforeExecute(ActionInterface $subject)
+    {
         if (!$this->customerSession->isLoggedIn() ||
             !$this->moduleManager->isEnabled('Magento_PageCache') ||
             !$this->cacheConfig->isEnabled() ||
