@@ -37,6 +37,11 @@ use Magento\Framework\Exception\ValidatorException;
 class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterface
 {
     /**
+     * @var \Magento\CatalogInventory\Api\StockRegistryInterface
+     */
+    protected $stockRegistry;
+
+    /**
      * @var \Magento\Catalog\Api\ProductCustomOptionRepositoryInterface
      */
     protected $optionRepository;
@@ -208,6 +213,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
+        \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry,
         ProductFactory $productFactory,
         \Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper $initializationHelper,
         \Magento\Catalog\Api\Data\ProductSearchResultsInterfaceFactory $searchResultsFactory,
@@ -234,6 +240,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
         ReadExtensions $readExtensions = null,
         CategoryLinkManagementInterface $linkManagement = null
     ) {
+        $this->stockRegistry = $stockRegistry;
         $this->productFactory = $productFactory;
         $this->collectionFactory = $collectionFactory;
         $this->initializationHelper = $initializationHelper;
@@ -647,6 +654,9 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
                 ),
                 $product
             );
+            $productExtension = $product->getExtensionAttributes();
+            $productExtension->setStockItem($this->stockRegistry->getStockItem($product->getId()));
+            $product->setExtensionAttributes($productExtension);
         }
 
         return $searchResult;
