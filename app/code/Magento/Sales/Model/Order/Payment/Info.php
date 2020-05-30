@@ -38,6 +38,11 @@ class Info extends AbstractModel implements InfoInterface
     protected $encryptor;
 
     /**
+     * @var \Magento\Framework\Registry
+     */
+    protected $_coreRegistry;
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
@@ -61,6 +66,7 @@ class Info extends AbstractModel implements InfoInterface
     ) {
         $this->paymentData = $paymentData;
         $this->encryptor = $encryptor;
+        $this->_coreRegistry = $registry;
         parent::__construct(
             $context,
             $registry,
@@ -99,6 +105,21 @@ class Info extends AbstractModel implements InfoInterface
     }
 
     /**
+     * @return mixed
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    protected function getOrder()
+    {
+        if ($this->_coreRegistry->registry('current_order')) {
+            return $this->_coreRegistry->registry('current_order');
+        }
+        if ($this->_coreRegistry->registry('order')) {
+            return $this->_coreRegistry->registry('order');
+        }
+        throw new \Magento\Framework\Exception\LocalizedException(__('We can\'t get the order instance right now.'));
+    }
+
+    /**
      * Retrieve payment method model object
      *
      * @return \Magento\Payment\Model\MethodInterface
@@ -117,7 +138,9 @@ class Info extends AbstractModel implements InfoInterface
             } catch (\UnexpectedValueException $e) {
                 $instance = $this->paymentData->getMethodInstance(Substitution::CODE);
             }
+            $storeId = $this->getOrder()->getStoreId();
             $instance->setInfoInstance($this);
+            $instance->setStore($storeId);
             $this->setMethodInstance($instance);
         }
         return $this->getData('method_instance');
