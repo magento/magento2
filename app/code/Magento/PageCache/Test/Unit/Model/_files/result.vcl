@@ -17,3 +17,10 @@
 
     grace:
     120
+
+    sub vcl_synth {
+        if (resp.status == 503) {
+           synthetic(std.fileread("/var/html/magento/varnish/error503.html"));
+           return(deliver);
+        }
+    }

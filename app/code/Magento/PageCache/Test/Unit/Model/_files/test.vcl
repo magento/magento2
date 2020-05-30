@@ -13,3 +13,10 @@
 
     grace:
     /* {{ grace_period }} */
+
+    sub vcl_synth {
+        if (resp.status == 503) {
+           synthetic(std.fileread("/* {{ error_msg_file }} */"));
+           return(deliver);
+        }
+    }

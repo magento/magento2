@@ -190,6 +190,13 @@ sub vcl_backend_response {
     return (deliver);
 }
 
+sub vcl_synth {
+    if (resp.status == 503) {
+       synthetic(std.fileread("/* {{ error_msg_file }} */"));
+       return(deliver);
+    }
+}
+
 sub vcl_deliver {
     if (resp.http.X-Magento-Debug) {
         if (resp.http.x-varnish ~ " ") {
