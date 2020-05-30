@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCheckResultsOfColorAndOtherFiltersTest">
+        <annotations>
+            <features value="ConfigurableProduct"/>
+            <stories value="Checking filters results"/>
+            <title value="Checking results of color and other filters"/>
+            <description value="Checking results of filters: color and other filters"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-6192"/>
+            <useCaseId value="MAGETWO-91753"/>
+            <group value="ConfigurableProduct"/>
+        </annotations>
+        <before>
+            <!-- Create default category with subcategory -->
+            <createData entity="ApiCategory" stepKey="createCategory"/>
+            <createData entity="SubCategoryWithParent" stepKey="createSubcategory">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <!-- Create three configurable product -->
+            <createData entity="ConfigurableProductWithAttributeSet" stepKey="createFirstConfigurableProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="ConfigurableProductWithAttributeSet" stepKey="createSecondConfigurableProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="ConfigurableProductWithAttributeSet" stepKey="createThirdConfigurableProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="_defaultProduct" stepKey="createSimpleProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <!-- Add first attribute with options -->
+            <createData entity="productAttributeWithTwoOptions" stepKey="createConfigProductAttribute"/>
+            <createData entity="productAttributeOption1" stepKey="createConfigProductAttributeOption1">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </createData>
+            <createData entity="productAttributeOption2" stepKey="createConfigProductAttributeOption2">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </createData>
+            <createData entity="productAttributeOption3" stepKey="createConfigProductAttributeOption3">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </createData>
+            <createData entity="productAttributeOption4" stepKey="createConfigProductAttributeOption4">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </createData>
+            <createData entity="productAttributeOption5" stepKey="createConfigProductAttributeOption5">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </createData>
+            <!-- Add second attribute with options-->
+            <createData entity="multipleSelectProductAttribute" stepKey="createConfigProductAttribute2"/>
+            <createData entity="productAttributeOption1" stepKey="createConfigProductAttributeOption12">
+                <requiredEntity createDataKey="createConfigProductAttribute2"/>
+            </createData>
+            <createData entity="productAttributeOption2" stepKey="createConfigProductAttributeOption6">
+                <requiredEntity createDataKey="createConfigProductAttribute2"/>
+            </createData>
+            <createData entity="productAttributeOption3" stepKey="createConfigProductAttributeOption7">
+                <requiredEntity createDataKey="createConfigProductAttribute2"/>
+            </createData>
+            <createData entity="productAttributeOption4" stepKey="createConfigProductAttributeOption8">
+                <requiredEntity createDataKey="createConfigProductAttribute2"/>
+            </createData>
+            <!-- Login as Admin -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <!-- Add created attributes with options to Attribute Set -->
+            <actionGroup ref="AdminAddUnassignedAttributeToGroupActionGroup" stepKey="createDefaultAttributeSet">
+                <argument name="label" value="mySet"/>
+                <argument name="firstOption" value="$$createConfigProductAttribute.attribute_code$$"/>
+                <argument name="secondOption" value="$$createConfigProductAttribute2.attribute_code$$"/>
+                <argument name="group" value="Product Details"/>
+            </actionGroup>
+        </before>
+        <after>
+            <!-- Delete all created data -->
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="createFirstConfigurableProduct" stepKey="deleteFirstProduct"/>
+            <deleteData createDataKey="createSecondConfigurableProduct" stepKey="deleteSecondProduct"/>
+            <deleteData createDataKey="createThirdConfigurableProduct" stepKey="deleteThirdProduct"/>
+            <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
+            <!-- Delete attribute set -->
+            <actionGroup ref="DeleteAttributeSetByLabelActionGroup" stepKey="deleteAttributeSet">
+                <argument name="label" value="mySet"/>
+            </actionGroup>
+            <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearAttributeSetsFilter"/>
+            <!-- Delete First attribute -->
+            <actionGroup ref="OpenProductAttributeFromSearchResultInGridActionGroup" stepKey="openProductAttributeFromSearchResultInGrid">
+                <argument name="productAttributeCode" value="$$createConfigProductAttribute.attribute_code$$"/>
+            </actionGroup>
+            <actionGroup ref="DeleteProductAttributeByAttributeCodeActionGroup" stepKey="deleteProductAttributeByAttributeCode">
+                <argument name="productAttributeCode" value="$$createConfigProductAttribute.attribute_code$$"/>
+            </actionGroup>
+            <!-- Delete Second attribute -->
+            <actionGroup ref="OpenProductAttributeFromSearchResultInGridActionGroup" stepKey="openSecondProductAttributeFromSearchResultInGrid">
+                <argument name="productAttributeCode" value="$$createConfigProductAttribute2.attribute_code$$"/>
+            </actionGroup>
+            <actionGroup ref="DeleteProductAttributeByAttributeCodeActionGroup" stepKey="deleteSecondProductAttributeByAttributeCode">
+                <argument name="productAttributeCode" value="$$createConfigProductAttribute2.attribute_code$$"/>
+            </actionGroup>
+            <actionGroup ref="AssertProductAttributeRemovedSuccessfullyActionGroup" stepKey="deleteProductAttributeSuccess"/>
+            <!-- Clear filters -->
+            <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearProductAttributesFilter"/>
+            <actionGroup ref="AdminClearFiltersActionGroup" stepKey="clearProductsGridFilter"/>
+            <!-- Log out -->
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+
+            <!-- Reindex invalidated indices after product attribute has been created/deleted -->
+            <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
+        </after>
+        <!-- Create three configurable products with options -->
+        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="amOnProductGridPage"/>
+        <waitForPageLoad time="30" stepKey="wait1"/>
+        <!-- Edit created first product as configurable product with options -->
+        <actionGroup ref="FilterProductGridBySkuActionGroup" stepKey="filterGridByFirstProduct">
+            <argument name="product" value="$$createFirstConfigurableProduct$$"/>
+        </actionGroup>
+        <actionGroup ref="OpenEditProductOnBackendActionGroup" stepKey="openEditProductFirst">
+            <argument name="product" value="$$createFirstConfigurableProduct$$"/>
+        </actionGroup>
+        <actionGroup ref="CreateConfigurableProductWithAttributeSetActionGroup" stepKey="createProductFirst">
+            <argument name="product" value="$$createFirstConfigurableProduct$$"/>
+            <argument name="category" value="$$createCategory$$"/>
+            <argument name="label" value="mySet"/>
+            <argument name="option1" value="['option1', 'option2', 'option3', 'option4']"/>
+        </actionGroup>
+        <actionGroup ref="AdminCreateConfigurationsForAttributeActionGroup" stepKey="createConfigurationFirst">
+            <argument name="attributeCode" value="$$createConfigProductAttribute.attribute_code$$"/>
+            <argument name="price" value="34"/>
+        </actionGroup>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <click selector="{{CmsNewPagePageActionsSection.expandSplitButton}}"  stepKey="expandSplitBtnFirst" />
+        <click selector="{{CmsNewPagePageActionsSection.saveAndClose}}" stepKey="clickSaveAndCloseFirst"/>
+        <waitForPageLoad stepKey="waitForMessage"/>
+        <seeElement selector="{{AdminProductMessagesSection.successMessage}}" stepKey="seeSaveProductMessageFirst"/>
+        <!-- Edit created second product as configurable product with options -->
+        <actionGroup ref="FilterProductGridBySkuActionGroup" stepKey="filterGridBySecondProduct">
+            <argument name="product" value="$$createSecondConfigurableProduct$$"/>
+        </actionGroup>
+        <actionGroup ref="OpenEditProductOnBackendActionGroup" stepKey="openEditProductSecond">
+            <argument name="product" value="$$createSecondConfigurableProduct$$"/>
+        </actionGroup>
+        <actionGroup ref="CreateConfigurableProductWithAttributeSetActionGroup" stepKey="createProductSecond">
+            <argument name="product" value="$$createSecondConfigurableProduct$$"/>
+            <argument name="category" value="$$createCategory$$"/>
+            <argument name="label" value="mySet"/>
+            <argument name="option1" value="['option1', 'option2', 'option3']"/>
+        </actionGroup>
+        <actionGroup ref="AdminCreateConfigurableProductWithAttributeUncheckOptionActionGroup" stepKey="createConfigurationSecond">
+            <argument name="attributeCode" value="$$createConfigProductAttribute.attribute_code$$"/>
+            <argument name="price" value="34"/>
+            <argument name="attributeOption" value="option5"/>
+        </actionGroup>
+        <waitForPageLoad stepKey="waitForPageLoadThird"/>
+        <click selector="{{CmsNewPagePageActionsSection.expandSplitButton}}"  stepKey="expandSplitBtnSecond" />
+        <click selector="{{CmsNewPagePageActionsSection.saveAndClose}}" stepKey="clickSaveAndCloseSecond"/>
+        <waitForPageLoad stepKey="waitForSuccessMessage"/>
+        <seeElement selector="{{AdminProductMessagesSection.successMessage}}" stepKey="seeSaveProductMessageSecond"/>
+        <!-- Edit created third product as configurable product with options -->
+        <actionGroup ref="FilterProductGridBySkuActionGroup" stepKey="filterGridByThirdProduct">
+            <argument name="product" value="$$createThirdConfigurableProduct$$"/>
+        </actionGroup>
+        <actionGroup ref="OpenEditProductOnBackendActionGroup" stepKey="openEditProductThird">
+            <argument name="product" value="$$createThirdConfigurableProduct$$"/>
+        </actionGroup>
+        <actionGroup ref="CreateConfigurableProductWithAttributeSetActionGroup" stepKey="createProductThird">
+            <argument name="product" value="$$createThirdConfigurableProduct$$"/>
+            <argument name="category" value="$$createCategory$$"/>
+            <argument name="label" value="mySet"/>
+            <argument name="option1" value="['option2', 'option3', 'option4']"/>
+        </actionGroup>
+        <actionGroup ref="AdminCreateConfigurableProductWithAttributeUncheckOptionActionGroup" stepKey="createConfigurationThird">
+            <argument name="attributeCode" value="$$createConfigProductAttribute.attribute_code$$"/>
+            <argument name="price" value="34"/>
+            <argument name="attributeOption" value="option1"/>
+        </actionGroup>
+        <click selector="{{CmsNewPagePageActionsSection.expandSplitButton}}"  stepKey="expandSplitBtnThird" />
+        <click selector="{{CmsNewPagePageActionsSection.saveAndClose}}" stepKey="clickSaveAndCloseThird"/>
+        <waitForPageLoad stepKey="waitForProductPage"/>
+        <seeElement selector="{{AdminProductMessagesSection.successMessage}}" stepKey="seeSaveConfigurableProductMessage"/>
+        <!-- Create Simple product with options -->
+        <actionGroup ref="FilterProductGridBySkuActionGroup" stepKey="filterGridBySimpleProduct">
+            <argument name="product" value="$$createSimpleProduct$$"/>
+        </actionGroup>
+        <actionGroup ref="OpenEditProductOnBackendActionGroup" stepKey="openEditSimpleProduct">
+            <argument name="product" value="$$createSimpleProduct$$"/>
+        </actionGroup>
+        <actionGroup ref="CreateConfigurableProductWithAttributeSetActionGroup" stepKey="createSimpleProduct">
+            <argument name="product" value="$$createSimpleProduct$$"/>
+            <argument name="category" value="$$createCategory$$"/>
+            <argument name="label" value="mySet"/>
+            <argument name="option1" value="['option1', 'option2']"/>
+        </actionGroup>
+        <click selector="{{AdminGridMainControls.save}}" stepKey="clickToSaveProduct"/>
+        <waitForPageLoad stepKey="waitForNewSimpleProductPage"/>
+        <seeElement selector="{{AdminProductMessagesSection.successMessage}}" stepKey="seeSaveProductMessageThird"/>
+        <magentoCron stepKey="runCronIndex" groups="index"/>
+    </test>
+</tests>

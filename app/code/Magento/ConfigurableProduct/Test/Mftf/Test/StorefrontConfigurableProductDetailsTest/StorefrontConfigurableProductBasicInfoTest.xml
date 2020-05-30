@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontConfigurableProductBasicInfoTest">
+        <annotations>
+            <features value="ConfigurableProduct"/>
+            <stories value="View configurable product details in storefront"/>
+            <title value="Guest customer should see basic Configurable Product details"/>
+            <description value="Guest customer should see basic Configurable Product details"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-77"/>
+            <group value="ConfigurableProduct"/>
+        </annotations>
+
+        <before>
+            <createData entity="ApiCategory" stepKey="createCategory"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+
+            <!-- Create a configurable product via the UI -->
+            <actionGroup ref="CreateConfigurableProductActionGroup" stepKey="createProduct">
+                <argument name="product" value="_defaultProduct"/>
+                <argument name="category" value="$$createCategory$$"/>
+            </actionGroup>
+        </before>
+        <after>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <actionGroup ref="DeleteProductBySkuActionGroup" stepKey="deleteProduct">
+                <argument name="sku" value="{{_defaultProduct.sku}}"/>
+            </actionGroup>
+            <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearProductsGridFilters"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
+        </after>
+
+        <!-- Verify configurable product details in storefront product view -->
+        <amOnPage url="{{_defaultProduct.urlKey}}.html" stepKey="amOnConfigurableProductPage"/>
+        <waitForPageLoad stepKey="wait"/>
+        <see userInput="{{_defaultProduct.name}}" selector="{{StorefrontProductInfoMainSection.productName}}" stepKey="seeProductName"/>
+        <see userInput="{{_defaultProduct.sku}}" selector="{{StorefrontProductInfoMainSection.productSku}}" stepKey="seeProductSku"/>
+        <see userInput="As low as" selector="{{StorefrontProductInfoMainSection.productPriceLabel}}" stepKey="seeProductPriceLabel"/>
+        <see userInput="IN STOCK" selector="{{StorefrontProductInfoMainSection.productStockStatus}}" stepKey="seeProductStockStatus"/>
+        <see userInput="1.00" selector="{{StorefrontProductInfoMainSection.productPrice}}" stepKey="seeProductPrice"/>
+        <see userInput="{{colorProductAttribute.default_label}}" selector="{{StorefrontProductInfoMainSection.productAttributeTitle1}}" stepKey="seeProductAttributeTitle"/>
+        <see selector="{{StorefrontProductInfoMainSection.productAttributeTitle1}}" userInput="{{colorProductAttribute.default_label}}" stepKey="seeColorAttributeName1"/>
+        <see userInput="{{colorProductAttribute1.name}}" selector="{{StorefrontProductInfoMainSection.productAttributeOptions1}}" stepKey="seeInDropDown1"/>
+        <see userInput="{{colorProductAttribute2.name}}" selector="{{StorefrontProductInfoMainSection.productAttributeOptions1}}" stepKey="seeInDropDown2"/>
+        <see userInput="{{colorProductAttribute3.name}}" selector="{{StorefrontProductInfoMainSection.productAttributeOptions1}}" stepKey="seeInDropDown3"/>
+    </test>
+</tests>

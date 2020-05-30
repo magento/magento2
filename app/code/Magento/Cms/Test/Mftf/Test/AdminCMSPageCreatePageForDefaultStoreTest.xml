@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCMSPageCreatePageForDefaultStoreTest">
+        <annotations>
+            <features value="Cms"/>
+            <stories value="Create a CMS Page via the Admin"/>
+            <title value="Create CMS Page via the Admin for default store"/>
+            <description value="Admin should be able to create a CMS Page"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-14676"/>
+            <group value="backend"/>
+            <group value="Cms"/>
+            <group value="mtf_migrated"/>
+            <group value="WYSIWYGDisabled"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+        <!--Go to New CMS Page page-->
+        <actionGroup ref="AdminOpenCreateNewCMSPageActionGroup" stepKey="navigateToCreateNewPage"/>
+        <!--Fill the CMS page form-->
+        <actionGroup ref="FillOutCMSPageContent" stepKey="fillBasicPageDataForPageWithDefaultStore"/>
+        <actionGroup ref="AdminSelectCMSPageStoreViewActionGroup" stepKey="selectCMSPageStoreView">
+            <argument name="storeViewName" value="Default Store View"/>
+        </actionGroup>
+        <!--Verify successfully saved-->
+        <actionGroup ref="SaveCmsPageActionGroup" stepKey="savePageWithDefaultStore"/>
+        <!--Navigate to page in Admin-->
+        <actionGroup ref="NavigateToCreatedCMSPageActionGroup" stepKey="navigateToCMSPageWithDefaultStoreInAdmin">
+            <argument name="CMSPage" value="_duplicatedCMSPage"/>
+        </actionGroup>
+        <!--Verify Page Data in Admin-->
+        <actionGroup ref="AssertCMSPageContentActionGroup" stepKey="verifyPageWithDefaultStoreDataInAdmin"/>
+        <!--Verify Store ID-->
+        <actionGroup ref="AssertCMSPageStoreIdActionGroup" stepKey="verifyStoreId">
+            <argument name="storeId" value="1"/>
+        </actionGroup>
+        <!--Delete page-->
+        <actionGroup ref="DeletePageByUrlKeyActionGroup" stepKey="deletePageWithDefaultStore">
+            <argument name="UrlKey" value="{{_duplicatedCMSPage.identifier}}"/>
+        </actionGroup>
+    </test>
+</tests>

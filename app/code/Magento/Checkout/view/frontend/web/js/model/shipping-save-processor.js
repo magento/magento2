@@ -11,7 +11,7 @@ define([
 ], function (defaultProcessor) {
     'use strict';
 
-    var processors = [];
+    var processors = {};
 
     processors['default'] =  defaultProcessor;
 

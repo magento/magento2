@@ -36,7 +36,7 @@ class SetPaymentMethodAsPayflowLinkTest extends TestCase
     /** @var ObjectManager */
     private $objectManager;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
         $this->json = $this->objectManager->get(SerializerInterface::class);
@@ -168,6 +168,6 @@ QUERY;
         $expectedExceptionMessage = "Invalid Url.";
         $actualError = $responseData['errors'][0];
         $this->assertEquals($expectedExceptionMessage, $actualError['message']);
-        $this->assertEquals(GraphQlInputException::EXCEPTION_CATEGORY, $actualError['category']);
+        $this->assertEquals(GraphQlInputException::EXCEPTION_CATEGORY, $actualError['extensions']['category']);
     }
 }

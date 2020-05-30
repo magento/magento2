@@ -3,22 +3,24 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\ConfigurableProduct\Test\Unit\Controller\Adminhtml\Product\Initialization\Helper\Plugin;
 
-use Magento\ConfigurableProduct\Controller\Adminhtml\Product\Initialization\Helper\Plugin\UpdateConfigurations;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
-use Magento\Framework\App\RequestInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
-use Magento\ConfigurableProduct\Model\Product\VariationHandler;
 use Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper as ProductInitializationHelper;
 use Magento\Catalog\Model\Product;
+use Magento\ConfigurableProduct\Controller\Adminhtml\Product\Initialization\Helper\Plugin\UpdateConfigurations;
+use Magento\ConfigurableProduct\Model\Product\VariationHandler;
+use Magento\Framework\App\RequestInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
- * Class UpdateConfigurationsTest
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @package Magento\ConfigurableProduct\Test\Unit\Controller\Adminhtml\Product\Initialization\Helper\Plugin
  */
-class UpdateConfigurationsTest extends \PHPUnit\Framework\TestCase
+class UpdateConfigurationsTest extends TestCase
 {
     /**
      * @var UpdateConfigurations
@@ -31,26 +33,26 @@ class UpdateConfigurationsTest extends \PHPUnit\Framework\TestCase
     private $objectManagerHelper;
 
     /**
-     * @var RequestInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var RequestInterface|MockObject
      */
     private $requestMock;
 
     /**
-     * @var ProductRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProductRepositoryInterface|MockObject
      */
     private $productRepositoryMock;
 
     /**
-     * @var VariationHandler|\PHPUnit_Framework_MockObject_MockObject
+     * @var VariationHandler|MockObject
      */
     private $variationHandlerMock;
 
     /**
-     * @var ProductInitializationHelper|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProductInitializationHelper|MockObject
      */
     private $subjectMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->requestMock = $this->getMockBuilder(RequestInterface::class)
             ->getMockForAbstractClass();
@@ -144,7 +146,7 @@ class UpdateConfigurationsTest extends \PHPUnit\Framework\TestCase
                 'quantity_and_stock_status' => ['qty' => '3']
             ]
         ];
-        /** @var Product[]|\PHPUnit_Framework_MockObject_MockObject[] $productMocks */
+        /** @var Product[]|MockObject[] $productMocks */
         $productMocks = [
             'product2' => $this->getProductMock($configurations['product2'], true, true),
             'product3' => $this->getProductMock($configurations['product3'], false, true),
@@ -187,7 +189,8 @@ class UpdateConfigurationsTest extends \PHPUnit\Framework\TestCase
      *
      * @param array $expectedData
      * @param bool $hasDataChanges
-     * @return Product|\PHPUnit_Framework_MockObject_MockObject
+     * @param bool $wasChanged
+     * @return Product|MockObject
      */
     protected function getProductMock(array $expectedData = null, $hasDataChanges = false, $wasChanged = false)
     {

@@ -1,1 +1,0 @@
-Module Magento\Braintree implements integration with the Braintree payment system.

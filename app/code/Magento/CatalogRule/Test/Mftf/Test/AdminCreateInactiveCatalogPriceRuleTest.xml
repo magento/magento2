@@ -18,7 +18,7 @@
         </annotations>
 
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginToAdminPanel"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginToAdminPanel"/>
         </before>
         <after>
             <actionGroup ref="AdminSearchCatalogRuleInGridActionGroup" stepKey="searchCreatedCatalogRule">
@@ -28,7 +28,7 @@
                 <argument name="catalogRuleName" value="{{InactiveCatalogRule.name}}"/>
             </actionGroup>
             <actionGroup ref="AdminDeleteCatalogRuleActionGroup" stepKey="deleteTheCatalogRule"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
         <!--  Create Inactive Catalog Price Rule -->
@@ -58,6 +58,7 @@
             <argument name="websites" value="Main Website"/>
             <argument name="customerGroup" value="General"/>
         </actionGroup>
+        <dontSeeCheckboxIsChecked selector="{{AdminCategoryBasicFieldSection.enableCategoryLabel}}"  stepKey="verifyInactiveRule"/>
 
         <!-- Search Catalog Rule in Grid -->
         <actionGroup ref="AdminSearchCatalogRuleInGridActionGroup" stepKey="searchCreatedCatalogRule">

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+
+    <actionGroup name="AdminFillAttributeDataProductFormNewAttributeActionGroup">
+        <arguments>
+            <argument name="attributeName" type="string"  defaultValue="TestAttributeName"/>
+            <argument name="attributeType" type="string" defaultValue="Text Field"/>
+        </arguments>
+        <annotations>
+            <description>Fill attribute data on 'Create New Attribute' page  Admin Product creation/edit page .</description>
+        </annotations>
+        <fillField selector="{{AdminProductFormNewAttributeSection.attributeLabel}}" userInput="{{attributeName}}"
+                   stepKey="fillAttributeLabel"/>
+        <selectOption selector="{{AdminProductFormNewAttributeSection.attributeType}}" userInput="{{attributeType}}"
+                      stepKey="selectAttributeType"/>
+    </actionGroup>
+</actionGroups>

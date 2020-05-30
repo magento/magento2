@@ -256,4 +256,12 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\ConfigurableProduct\Model\Plugin\Frontend\UsedProductsCache">
+        <arguments>
+            <argument name="cache" xsi:type="object">Magento\Framework\App\Cache\Type\Collection</argument>
+        </arguments>
+        <arguments>
+            <argument name="serializer" xsi:type="object">Magento\Framework\Serialize\Serializer\Json</argument>
+        </arguments>
+    </type>
 </config>

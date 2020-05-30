@@ -48,7 +48,7 @@ class PlaceOrderWithPayflowLinkTest extends TestCase
     /** @var Request|MockObject */
     private $payflowRequest;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
         $this->graphQlRequest = $this->objectManager->create(GraphQlRequest::class);
@@ -85,7 +85,7 @@ class PlaceOrderWithPayflowLinkTest extends TestCase
     /**
      * @inheritdoc
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->objectManager->removeSharedInstance(Gateway::class);
     }
@@ -133,7 +133,7 @@ class PlaceOrderWithPayflowLinkTest extends TestCase
   }
     placeOrder(input: {cart_id: "$cartId"}) {
       order {
-        order_id
+        order_number
       }
     }
 }
@@ -183,11 +183,11 @@ QUERY;
             $responseData['data']['setPaymentMethodOnCart']['cart']['selected_payment_method']['code']
         );
         $this->assertTrue(
-            isset($responseData['data']['placeOrder']['order']['order_id'])
+            isset($responseData['data']['placeOrder']['order']['order_number'])
         );
         $this->assertEquals(
             'test_quote',
-            $responseData['data']['placeOrder']['order']['order_id']
+            $responseData['data']['placeOrder']['order']['order_number']
         );
     }
 
@@ -235,7 +235,7 @@ QUERY;
   }
     placeOrder(input: {cart_id: "$cartId"}) {
       order {
-        order_id
+        order_number
       }
     }
 }
@@ -273,6 +273,6 @@ QUERY;
             $expectedExceptionMessage,
             $actualError['message']
         );
-        $this->assertEquals(GraphQlInputException::EXCEPTION_CATEGORY, $actualError['category']);
+        $this->assertEquals(GraphQlInputException::EXCEPTION_CATEGORY, $actualError['extensions']['category']);
     }
 }

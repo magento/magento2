@@ -10,6 +10,8 @@
 namespace Magento\Framework\View\Element;
 
 /**
+ * Element with FormKey
+ *
  * @api
  */
 class FormKey extends \Magento\Framework\View\Element\AbstractBlock

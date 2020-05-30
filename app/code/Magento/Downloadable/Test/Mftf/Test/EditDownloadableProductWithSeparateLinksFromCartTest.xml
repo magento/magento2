@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="EditDownloadableProductWithSeparateLinksFromCartTest">
+        <annotations>
+            <features value="Catalog"/>
+            <stories value="Create Downloadable Product"/>
+            <title value="Edit downloadable product with separate links from cart test"/>
+            <description value="Product price should remain correct when editing downloadable product with separate links from cart."/>
+            <severity value="MAJOR"/>
+            <group value="Downloadable"/>
+        </annotations>
+        <before>
+            <!-- Add downloadable domains -->
+            <magentoCLI stepKey="addDownloadableDomain" command="downloadable:domains:add example.com static.magento.com"/>
+
+            <!-- Create category -->
+            <createData entity="SimpleSubCategory" stepKey="createCategory"/>
+
+            <!-- Login as admin -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>
+
+            <!-- Create downloadable product -->
+            <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="amOnProductGridPage"/>
+            <waitForPageLoad stepKey="waitForProductGridPageLoad"/>
+            <actionGroup ref="GoToSpecifiedCreateProductPageActionGroup" stepKey="createProduct">
+                <argument name="productType" value="downloadable"/>
+            </actionGroup>
+
+            <!-- Fill downloadable product values -->
+            <actionGroup ref="FillMainProductFormNoWeightActionGroup" stepKey="fillDownloadableProductForm">
+                <argument name="product" value="DownloadableProduct"/>
+            </actionGroup>
+
+            <!-- Add downloadable product to category -->
+            <searchAndMultiSelectOption selector="{{AdminProductFormSection.categoriesDropdown}}"
+                                        parameterArray="[$$createCategory.name$$]" stepKey="fillCategory"/>
+
+            <!-- Fill downloadable link information before the creation link -->
+            <actionGroup ref="AdminAddDownloadableLinkInformationActionGroup" stepKey="addDownloadableLinkInformation"/>
+
+            <!-- Links can be purchased separately -->
+            <checkOption selector="{{AdminProductDownloadableSection.isLinksPurchasedSeparately}}"
+                         stepKey="checkOptionPurchaseSeparately"/>
+
+            <!-- Add first downloadable link -->
+            <actionGroup ref="AddDownloadableProductLinkWithMaxDownloadsActionGroup" stepKey="addFirstDownloadableProductLink">
+                <argument name="link" value="downloadableLinkWithMaxDownloads"/>
+            </actionGroup>
+
+            <!-- Add second downloadable link -->
+            <actionGroup ref="AddDownloadableProductLinkActionGroup" stepKey="addSecondDownloadableProductLink">
+                <argument name="link" value="downloadableLink"/>
+            </actionGroup>
+
+            <!-- Save product -->
+            <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct"/>
+        </before>
+        <after>
+            <!-- Remove downloadable domains -->
+            <magentoCLI stepKey="removeDownloadableDomain" command="downloadable:domains:remove example.com static.magento.com"/>
+
+            <!-- Delete category -->
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+
+            <!-- Delete created downloadable product -->
+            <actionGroup ref="DeleteProductUsingProductGridActionGroup" stepKey="deleteProduct">
+                <argument name="product" value="DownloadableProduct"/>
+            </actionGroup>
+
+            <!-- Log out -->
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+
+        <!-- Step 1: Navigate to store front Product page as guest -->
+        <amOnPage url="/{{DownloadableProduct.sku}}.html"
+                  stepKey="amOnStorefrontProductPage"/>
+
+        <!-- Step 2: Add checkbox for first link -->
+        <click
+            selector="{{StorefrontDownloadableProductSection.downloadableLinkByTitle(downloadableLinkWithMaxDownloads.title)}}"
+            stepKey="selectProductLink"/>
+
+        <!-- Step 3: Add the Product to cart -->
+        <actionGroup ref="StorefrontAddProductToCartActionGroup" stepKey="addProductToCart">
+            <argument name="product" value="DownloadableProduct"/>
+            <argument name="productCount" value="1"/>
+        </actionGroup>
+
+        <!-- Step 4: Open cart -->
+        <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="openShoppingCartPage"/>
+        <see selector="{{CheckoutCartProductSection.ProductPriceByName(DownloadableProduct.name)}}" userInput="$51.99"
+             stepKey="assertProductPriceInCart"/>
+
+        <!-- Step 5: Edit Product in cart -->
+        <click selector="{{CheckoutCartProductSection.nthEditButton('1')}}" stepKey="clickEdit"/>
+        <waitForPageLoad stepKey="waitForEditPage"/>
+
+        <!-- Step 6: Make sure Product price is correct -->
+        <see selector="{{StorefrontProductInfoMainSection.productPrice}}" userInput="51.99" stepKey="checkPrice"/>
+    </test>
+</tests>

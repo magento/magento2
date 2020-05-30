@@ -42,41 +42,47 @@ define([
 
             var self = this;
 
-            prompt({
-                content: this.newSetPromptMessage,
-                actions: {
+            this.validate();
 
-                    /**
-                     * @param {String} val
-                     * @this {actions}
-                     */
-                    confirm: function (val) {
-                        var rules = ['required-entry', 'validate-no-html-tags'],
-                            editForm = self,
-                            newAttributeSetName = val,
-                            i,
-                            params = {};
+            if (!this.additionalInvalid && !this.source.get('params.invalid')) {
+                prompt({
+                    content: this.newSetPromptMessage,
+                    actions: {
 
-                        if (!newAttributeSetName) {
-                            return;
-                        }
+                        /**
+                         * @param {String} val
+                         * @this {actions}
+                         */
+                        confirm: function (val) {
+                            var rules = ['required-entry', 'validate-no-html-tags'],
+                                editForm = self,
+                                newAttributeSetName = val,
+                                i,
+                                params = {};
 
-                        for (i = 0; i < rules.length; i++) {
-                            if (!$.validator.methods[rules[i]](newAttributeSetName)) {
-                                alert({
-                                    content: $.validator.messages[rules[i]]
-                                });
-
+                            if (!newAttributeSetName) {
                                 return;
                             }
-                        }
 
-                        params['new_attribute_set_name'] = newAttributeSetName;
-                        editForm.setAdditionalData(params);
-                        editForm.save();
+                            for (i = 0; i < rules.length; i++) {
+                                if (!$.validator.methods[rules[i]](newAttributeSetName)) {
+                                    alert({
+                                        content: $.validator.messages[rules[i]]
+                                    });
+
+                                    return;
+                                }
+                            }
+
+                            params['new_attribute_set_name'] = newAttributeSetName;
+                            editForm.setAdditionalData(params);
+                            editForm.save();
+                        }
                     }
-                }
-            });
+                });
+            } else {
+                this.focusInvalid();
+            }
         }
     });
 });

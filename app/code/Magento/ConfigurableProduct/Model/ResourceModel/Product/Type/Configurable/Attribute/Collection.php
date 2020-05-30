@@ -302,7 +302,9 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     }
 
     /**
-     * Load attribute options.
+     * Load related options' data.
+     *
+     * @return void
      */
     protected function loadOptions()
     {
@@ -329,6 +331,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
                     'use_default_value' => true
                 ];
             }
+            $item->setOptionsMap($values);
             $values = array_values($values);
             $item->setOptions($values);
         }

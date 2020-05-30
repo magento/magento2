@@ -5,13 +5,10 @@
  */
 namespace Magento\Catalog\Model;
 
-use Magento\Authorization\Model\UserContextInterface;
 use Magento\Catalog\Api\CategoryRepositoryInterface;
 use Magento\Catalog\Api\Data\CategoryInterface;
 use Magento\CatalogUrlRewrite\Model\CategoryUrlRewriteGenerator;
 use Magento\Framework\Api\AttributeValueFactory;
-use Magento\Framework\App\ObjectManager;
-use Magento\Framework\AuthorizationInterface;
 use Magento\Framework\Convert\ConvertArray;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Profiler;
@@ -131,6 +128,8 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
         'page_layout',
         'custom_layout_update',
         'custom_apply_to_products',
+        'custom_layout_update_file',
+        'custom_use_parent_settings'
     ];
 
     /**
@@ -213,16 +212,6 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
      * @var \Magento\Framework\Api\MetadataServiceInterface
      */
     protected $metadataService;
-
-    /**
-     * @var UserContextInterface
-     */
-    private $userContext;
-
-    /**
-     * @var AuthorizationInterface
-     */
-    private $authorization;
 
     /**
      * @param \Magento\Framework\Model\Context $context
@@ -331,9 +320,11 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
      * @throws \Magento\Framework\Exception\LocalizedException
      * @return \Magento\Catalog\Model\ResourceModel\Category
      * @deprecated because resource models should be used directly
+     * phpcs:disable Generic.CodeAnalysis.UselessOverridingMethod
      */
     protected function _getResource()
     {
+        //phpcs:enable Generic.CodeAnalysis.UselessOverridingMethod
         return parent::_getResource();
     }
     // phpcs:enable
@@ -492,7 +483,7 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
      * Retrieve all customer attributes
      *
      * @param bool $noDesignAttributes
-     * @return array
+     * @return \Magento\Eav\Api\Data\AttributeInterface[]
      * @todo Use with Flat Resource
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
@@ -761,7 +752,7 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
     /**
      * Retrieve design attributes array
      *
-     * @return array
+     * @return \Magento\Eav\Api\Data\AttributeInterface[]
      */
     public function getDesignAttributes()
     {
@@ -931,60 +922,6 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
             throw new \Magento\Framework\Exception\LocalizedException(__('Can\'t delete root category.'));
         }
         return parent::beforeDelete();
-    }
-
-    /**
-     * Get user context.
-     *
-     * @return UserContextInterface
-     */
-    private function getUserContext(): UserContextInterface
-    {
-        if (!$this->userContext) {
-            $this->userContext = ObjectManager::getInstance()->get(UserContextInterface::class);
-        }
-
-        return $this->userContext;
-    }
-
-    /**
-     * Get authorization service.
-     *
-     * @return AuthorizationInterface
-     */
-    private function getAuthorization(): AuthorizationInterface
-    {
-        if (!$this->authorization) {
-            $this->authorization = ObjectManager::getInstance()->get(AuthorizationInterface::class);
-        }
-
-        return $this->authorization;
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function beforeSave()
-    {
-        //Validate changing of design.
-        $userType = $this->getUserContext()->getUserType();
-        if ((
-                $userType === UserContextInterface::USER_TYPE_ADMIN
-                || $userType === UserContextInterface::USER_TYPE_INTEGRATION
-            )
-            && !$this->getAuthorization()->isAllowed('Magento_Catalog::edit_category_design')
-        ) {
-            foreach ($this->_designAttributes as $attributeCode) {
-                $this->setData($attributeCode, $value = $this->getOrigData($attributeCode));
-                if (!empty($this->_data[self::CUSTOM_ATTRIBUTES])
-                    && array_key_exists($attributeCode, $this->_data[self::CUSTOM_ATTRIBUTES])) {
-                    //In case custom attribute were used to update the entity.
-                    $this->_data[self::CUSTOM_ATTRIBUTES][$attributeCode]->setValue($value);
-                }
-            }
-        }
-
-        return parent::beforeSave();
     }
 
     /**
@@ -1198,8 +1135,6 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
                 || $this->dataHasChangedFor('is_active')) {
             if (!$productIndexer->isScheduled()) {
                 $productIndexer->reindexList($this->getPathIds());
-            } else {
-                $productIndexer->invalidate();
             }
         }
     }
@@ -1357,6 +1292,7 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
 
     //@codeCoverageIgnoreEnd
 
+    // phpcs:disable PHPCompatibility.FunctionNameRestrictions.ReservedFunctionNames
     /**
      * Return Data Object data in array format.
      *
@@ -1365,6 +1301,7 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
      */
     public function __toArray()
     {
+        // phpcs:enable PHPCompatibility.FunctionNameRestrictions.ReservedFunctionNames
         $data = $this->_data;
         $hasToArray = function ($model) {
             return is_object($model) && method_exists($model, '__toArray') && is_callable([$model, '__toArray']);

@@ -90,7 +90,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
     protected function _construct()
     {
         parent::_construct();
-        $this->setId('reviwGrid');
+        $this->setId('reviewGrid');
         $this->setDefaultSort('created_at');
     }
 
@@ -352,6 +352,18 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
                 ]
             ]
         );
+    }
+
+    /**
+     * @inheritdoc
+     */
+    protected function _prepareMassactionColumn()
+    {
+        parent::_prepareMassactionColumn();
+        /** needs for correct work of mass action select functionality */
+        $this->setMassactionIdField('rt.review_id');
+
+        return $this;
     }
 
     /**

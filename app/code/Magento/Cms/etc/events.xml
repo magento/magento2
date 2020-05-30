@@ -36,4 +36,7 @@
     <event name="magento_cms_api_data_pageinterface_load_after">
         <observer name="legacy_model_cms_page_after_load" instance="Magento\Framework\EntityManager\Observer\AfterEntityLoad" />
     </event>
+    <event name="cms_page_prepare_save">
+        <observer name="validate_cms_page" instance="Magento\Cms\Observer\PageValidatorObserver" />
+    </event>
 </config>

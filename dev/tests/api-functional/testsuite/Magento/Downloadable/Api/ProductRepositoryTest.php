@@ -25,18 +25,31 @@ class ProductRepositoryTest extends WebapiAbstract
      */
     protected $testImagePath;
 
-    protected function setUp()
+    protected function setUp(): void
     {
+        parent::setUp();
         $this->testImagePath = __DIR__ . DIRECTORY_SEPARATOR . '_files' . DIRECTORY_SEPARATOR . 'test_image.jpg';
+
+        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+
+        /** @var DomainManagerInterface $domainManager */
+        $domainManager = $objectManager->get(DomainManagerInterface::class);
+        $domainManager->addDomains(['www.example.com']);
     }
 
     /**
      * Execute per test cleanup
      */
-    public function tearDown()
+    protected function tearDown(): void
     {
         $this->deleteProductBySku(self::PRODUCT_SKU);
         parent::tearDown();
+
+        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+
+        /** @var DomainManagerInterface $domainManager */
+        $domainManager = $objectManager->get(DomainManagerInterface::class);
+        $domainManager->removeDomains(['www.example.com']);
     }
 
     protected function getLinkData()
@@ -180,7 +193,7 @@ class ProductRepositoryTest extends WebapiAbstract
         );
         $resultLinks
             = $response[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]["downloadable_product_links"];
-        $this->assertEquals(2, count($resultLinks));
+        $this->assertCount(2, $resultLinks);
         $this->assertTrue(isset($resultLinks[0]['id']));
         $this->assertTrue(isset($resultLinks[0]['link_file']));
         $this->assertTrue(isset($resultLinks[0]['sample_file']));
@@ -194,7 +207,7 @@ class ProductRepositoryTest extends WebapiAbstract
         $this->assertEquals($expectedLinkData, $resultLinks);
 
         $resultSamples = $response[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]["downloadable_product_samples"];
-        $this->assertEquals(2, count($resultSamples));
+        $this->assertCount(2, $resultSamples);
         $this->assertTrue(isset($resultSamples[0]['id']));
         unset($resultSamples[0]['id']);
         $this->assertTrue(isset($resultSamples[1]['id']));
@@ -227,7 +240,9 @@ class ProductRepositoryTest extends WebapiAbstract
             'price' => 5.0,
             'number_of_downloads' => 999,
             'link_type' => 'file',
-            'sample_type' => 'file'
+            'link_file' => $linkFile,
+            'sample_type' => 'file',
+            'sample_file' => $sampleFile,
         ];
         $linkData = $this->getLinkData();
 
@@ -244,7 +259,7 @@ class ProductRepositoryTest extends WebapiAbstract
         $resultLinks
             = $response[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]["downloadable_product_links"];
 
-        $this->assertEquals(3, count($resultLinks));
+        $this->assertCount(3, $resultLinks);
         $this->assertTrue(isset($resultLinks[0]['id']));
         $this->assertEquals($link1Id, $resultLinks[0]['id']);
         $this->assertTrue(isset($resultLinks[0]['link_file']));
@@ -278,7 +293,7 @@ class ProductRepositoryTest extends WebapiAbstract
         $this->assertEquals($expectedLinkData, $resultLinks);
 
         $resultSamples = $response[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]["downloadable_product_samples"];
-        $this->assertEquals(2, count($resultSamples));
+        $this->assertCount(2, $resultSamples);
     }
 
     /**
@@ -350,7 +365,7 @@ class ProductRepositoryTest extends WebapiAbstract
         $resultLinks
             = $response[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]["downloadable_product_links"];
 
-        $this->assertEquals(2, count($resultLinks));
+        $this->assertCount(2, $resultLinks);
         $this->assertTrue(isset($resultLinks[0]['id']));
         $this->assertEquals($link1Id, $resultLinks[0]['id']);
         $this->assertTrue(isset($resultLinks[0]['link_file']));
@@ -395,7 +410,7 @@ class ProductRepositoryTest extends WebapiAbstract
         $this->assertEquals($expectedLinkData, $resultLinks);
 
         $resultSamples = $response[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]["downloadable_product_samples"];
-        $this->assertEquals(2, count($resultSamples));
+        $this->assertCount(2, $resultSamples);
     }
 
     public function testUpdateDownloadableProductSamples()
@@ -429,10 +444,10 @@ class ProductRepositoryTest extends WebapiAbstract
         $resultLinks
             = $response[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]["downloadable_product_links"];
 
-        $this->assertEquals(2, count($resultLinks));
+        $this->assertCount(2, $resultLinks);
 
         $resultSamples = $response[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]["downloadable_product_samples"];
-        $this->assertEquals(3, count($resultSamples));
+        $this->assertCount(3, $resultSamples);
         $this->assertTrue(isset($resultSamples[0]['id']));
         $this->assertEquals($sample1Id, $resultSamples[0]['id']);
         unset($resultSamples[0]['id']);
@@ -502,22 +517,22 @@ class ProductRepositoryTest extends WebapiAbstract
         $resultLinks
             = $response[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]["downloadable_product_links"];
 
-        $this->assertEquals(2, count($resultLinks));
+        $this->assertCount(2, $resultLinks);
 
         $resultSamples = $response[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]["downloadable_product_samples"];
-        $this->assertEquals(2, count($resultSamples));
+        $this->assertCount(2, $resultSamples);
         $this->assertTrue(isset($resultSamples[0]['id']));
         $this->assertEquals($sample1Id, $resultSamples[0]['id']);
         unset($resultSamples[0]['id']);
         $this->assertTrue(isset($resultSamples[0]['sample_file']));
-        $this->assertContains('sample1', $resultSamples[0]['sample_file']);
+        $this->assertStringContainsString('sample1', $resultSamples[0]['sample_file']);
         $this->assertStringEndsWith('.jpg', $resultSamples[0]['sample_file']);
         unset($resultSamples[0]['sample_file']);
         $this->assertTrue(isset($resultSamples[1]['id']));
         $this->assertEquals($sample2Id, $resultSamples[1]['id']);
         unset($resultSamples[1]['id']);
         $this->assertTrue(isset($resultSamples[1]['sample_file']));
-        $this->assertContains('sample2', $resultSamples[1]['sample_file']);
+        $this->assertStringContainsString('sample2', $resultSamples[1]['sample_file']);
         $this->assertStringEndsWith('.jpg', $resultSamples[1]['sample_file']);
         unset($resultSamples[1]['sample_file']);
 

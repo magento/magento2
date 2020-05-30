@@ -19,6 +19,7 @@ use Magento\Framework\Shell\ComplexParameter;
 use Magento\Setup\Application;
 use Magento\Setup\Console\CompilerPreparation;
 use Magento\Setup\Model\ObjectManagerProvider;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\Console;
 use Magento\Framework\Config\ConfigOptionsListConstants;
 
@@ -62,6 +63,11 @@ class Cli extends Console\Application
     private $objectManager;
 
     /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    /**
      * @param string $name the application name
      * @param string $version the application version
      */
@@ -93,6 +99,8 @@ class Cli extends Console\Application
         }
 
         parent::__construct($name, $version);
+        $this->serviceManager->setService(\Symfony\Component\Console\Application::class, $this);
+        $this->logger = $this->objectManager->get(LoggerInterface::class);
     }
 
     /**
@@ -106,7 +114,9 @@ class Cli extends Console\Application
         try {
             $exitCode = parent::doRun($input, $output);
         } catch (\Exception $e) {
-            $output->writeln($e->getTraceAsString());
+            $errorMessage = $e->getMessage() . PHP_EOL . $e->getTraceAsString();
+            $this->logger->error($errorMessage);
+            $this->initException = $e;
         }
 
         if ($this->initException) {

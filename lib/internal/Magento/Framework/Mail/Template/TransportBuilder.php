@@ -12,9 +12,8 @@ namespace Magento\Framework\Mail\Template;
 use Magento\Framework\App\TemplateTypesInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\MailException;
-use Magento\Framework\Mail\EmailMessageInterface;
-use Magento\Framework\Mail\EmailMessageInterfaceFactory;
 use Magento\Framework\Mail\AddressConverter;
+use Magento\Framework\Mail\EmailMessageInterfaceFactory;
 use Magento\Framework\Mail\Exception\InvalidArgumentException;
 use Magento\Framework\Mail\MessageInterface;
 use Magento\Framework\Mail\MessageInterfaceFactory;
@@ -28,7 +27,7 @@ use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Phrase;
 
 /**
- * TransportBuilder
+ * TransportBuilder for Mail Templates
  *
  * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -87,7 +86,7 @@ class TransportBuilder
     /**
      * Message
      *
-     * @var EmailMessageInterface
+     * @var MessageInterface
      */
     protected $message;
 
@@ -377,13 +376,14 @@ class TransportBuilder
     {
         $template = $this->getTemplate();
         $content = $template->processTemplate();
+
         switch ($template->getType()) {
             case TemplateTypesInterface::TYPE_TEXT:
-                $part['type'] = MimeInterface::TYPE_TEXT;
+                $partType = MimeInterface::TYPE_TEXT;
                 break;
 
             case TemplateTypesInterface::TYPE_HTML:
-                $part['type'] = MimeInterface::TYPE_HTML;
+                $partType = MimeInterface::TYPE_HTML;
                 break;
 
             default:
@@ -391,7 +391,15 @@ class TransportBuilder
                     new Phrase('Unknown template type')
                 );
         }
-        $mimePart = $this->mimePartInterfaceFactory->create(['content' => $content]);
+
+        /** @var \Magento\Framework\Mail\MimePartInterface $mimePart */
+        $mimePart = $this->mimePartInterfaceFactory->create(
+            [
+                'content' => $content,
+                'type' => $partType
+            ]
+        );
+        $this->messageData['encoding'] = $mimePart->getCharset();
         $this->messageData['body'] = $this->mimeMessageInterfaceFactory->create(
             ['parts' => [$mimePart]]
         );
@@ -400,6 +408,7 @@ class TransportBuilder
             (string)$template->getSubject(),
             ENT_QUOTES
         );
+
         $this->message = $this->emailMessageInterfaceFactory->create($this->messageData);
 
         return $this;
@@ -427,6 +436,8 @@ class TransportBuilder
                 $this->messageData[$addressType],
                 $convertedAddressArray
             );
+        } else {
+            $this->messageData[$addressType] = $convertedAddressArray;
         }
     }
 }

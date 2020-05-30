@@ -111,7 +111,7 @@ class RewriteUrl implements StoreSwitcherInterface
         if (!$currentRewrite) {
             $currentRewrite = $this->urlFinder->findOneByData(
                 [
-                    UrlRewrite::REQUEST_PATH => $oldRewrite->getTargetPath(),
+                    UrlRewrite::REQUEST_PATH => $oldRewrite->getRequestPath(),
                     UrlRewrite::STORE_ID => $targetStore->getId(),
                 ]
             );

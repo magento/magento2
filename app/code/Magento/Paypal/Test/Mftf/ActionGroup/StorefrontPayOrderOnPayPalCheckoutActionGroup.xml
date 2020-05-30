@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="StorefrontPayOrderOnPayPalCheckoutActionGroup">
+        <annotations>
+            <description>Verifies product name on Paypal cart and clicks 'Pay Now' on PayPal payment checkout page.</description>
+        </annotations>
+        <arguments>
+            <argument name="productName" type="string"/>
+        </arguments>
+        <click selector="{{PayPalPaymentSection.cartIcon}}" stepKey="openCart"/>
+        <waitForPageLoad stepKey="waitForCartLoad"/>
+        <seeElement selector="{{PayPalPaymentSection.itemName(productName)}}" stepKey="seeProductName"/>
+        <click selector="{{CheckoutPaymentSection.PayPalBtn}}" stepKey="clickPayPalBtn"/>
+        <switchToPreviousTab stepKey="switchToPreviousTab"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+    </actionGroup>
+</actionGroups>

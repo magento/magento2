@@ -46,7 +46,8 @@ class TypeFactory implements ConfigElementFactoryInterface
      */
     public function createFromConfigData(array $data): ConfigElementInterface
     {
-        $fields = isset($data['fields']) ? $this->fieldsFactory->createFromConfigData($data['fields']) : [];
+        $fieldsData = $data['fieldsInQuery'] ?? ($data['fields'] ?? []);
+        $fields = $this->fieldsFactory->createFromConfigData($fieldsData);
 
         return $this->create(
             $data,

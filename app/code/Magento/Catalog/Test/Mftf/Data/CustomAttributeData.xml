@@ -31,6 +31,14 @@
         <data key="attribute_code">short_description</data>
         <data key="value" unique="suffix">API Product Short Description</data>
     </entity>
+    <entity name="ApiProductSpecialPrice" type="custom_attribute">
+        <data key="attribute_code">special_price</data>
+        <data key="value">51.51</data>
+    </entity>
+    <entity name="ApiProductCost" type="custom_attribute">
+        <data key="attribute_code">cost</data>
+        <data key="value">50.05</data>
+    </entity>
     <entity name="ApiProductNewsFromDate" type="custom_attribute">
         <data key="attribute_code">news_from_date</data>
         <data key="value">2018-05-17 00:00:00</data>
@@ -50,5 +58,25 @@
     <entity name="CustomFixedProductShortDescription" type="custom_attribute">
         <data key="attribute_code">short_description</data>
         <data key="value">Short Fixedtest 555</data>
+    </entity>
+    <entity name="CustomAttributeCategoryNonAnchor" type="custom_attribute">
+        <data key="attribute_code">is_anchor</data>
+        <data key="value">0</data>
+    </entity>
+    <entity name="ProductDescriptionAdvancedSearchABC" type="custom_attribute">
+        <data key="attribute_code">description</data>
+        <data key="value">&lt;p&gt;adc_Full&lt;/p&gt;</data>
+    </entity>
+    <entity name="ProductShortDescriptionAdvancedSearch" type="custom_attribute">
+        <data key="attribute_code">short_description</data>
+        <data key="value">&lt;p&gt;abc_short&lt;/p&gt;</data>
+    </entity>
+    <entity name="ProductDescriptionAdvancedSearchADC123" type="custom_attribute">
+        <data key="attribute_code">description</data>
+        <data key="value">&lt;p&gt;dfj_full&lt;/p&gt;</data>
+    </entity>
+    <entity name="ProductShortDescriptionAdvancedSearchADC123" type="custom_attribute">
+        <data key="attribute_code">short_description</data>
+        <data key="value">&lt;p&gt;dfj_short&lt;/p&gt;</data>
     </entity>
 </entities>

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminReportsLowStockDisableProductTest">
+        <annotations>
+            <features value="Reports"/>
+            <stories value="Disabled product doesn't present on 'Low Stock' report"/>
+            <group value="reports"/>
+            <title value="The disabled product doesn't present on 'Low Stock' report."/>
+            <description value="A product must don't presents on 'Low Stock' report if the product is disabled."/>
+            <severity value="MAJOR"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+
+            <!-- Created disabled simple product with stock quantity zero -->
+            <createData entity="SimpleProductDisabledStockQuantityZero" stepKey="createProduct"/>
+        </before>
+        <after>
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+
+        <actionGroup ref="AdminNavigateMenuActionGroup" stepKey="navigateToReportsLowStockPage">
+            <argument name="menuUiId" value="{{AdminMenuReports.dataUiId}}"/>
+            <argument name="submenuUiId" value="{{AdminMenuReportsProductsLowStock.dataUiId}}"/>
+        </actionGroup>
+        <actionGroup ref="AdminLowStockReportFilterProductActionGroup" stepKey="assertProductInReport">
+            <argument name="sku" value="{{SimpleProductDisabledStockQuantityZero.sku}}"/>
+        </actionGroup>
+
+        <!-- Verify doesn't present in the report -->
+        <dontSeeElement selector="{{LowStockProductGridSection.productSku}}" stepKey="assertSelector"/>
+    </test>
+</tests>

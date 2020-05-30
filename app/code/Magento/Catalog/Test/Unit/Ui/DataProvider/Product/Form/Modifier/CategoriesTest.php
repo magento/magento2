@@ -7,53 +7,51 @@ declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Unit\Ui\DataProvider\Product\Form\Modifier;
 
-use Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\Categories;
-use Magento\Catalog\Model\ResourceModel\Category\CollectionFactory as CategoryCollectionFactory;
 use Magento\Catalog\Model\ResourceModel\Category\Collection as CategoryCollection;
-use Magento\Framework\App\CacheInterface;
+use Magento\Catalog\Model\ResourceModel\Category\CollectionFactory as CategoryCollectionFactory;
+use Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\Categories;
+use Magento\Framework\AuthorizationInterface;
 use Magento\Framework\DB\Helper as DbHelper;
 use Magento\Framework\UrlInterface;
 use Magento\Store\Model\Store;
-use Magento\Framework\AuthorizationInterface;
+use PHPUnit\Framework\MockObject\MockObject;
 
 /**
- * Class CategoriesTest
- *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class CategoriesTest extends AbstractModifierTest
 {
     /**
-     * @var CategoryCollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var CategoryCollectionFactory|MockObject
      */
     protected $categoryCollectionFactoryMock;
 
     /**
-     * @var DbHelper|\PHPUnit_Framework_MockObject_MockObject
+     * @var DbHelper|MockObject
      */
     protected $dbHelperMock;
 
     /**
-     * @var UrlInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var UrlInterface|MockObject
      */
     protected $urlBuilderMock;
 
     /**
-     * @var Store|\PHPUnit_Framework_MockObject_MockObject
+     * @var Store|MockObject
      */
     protected $storeMock;
 
     /**
-     * @var CategoryCollection|\PHPUnit_Framework_MockObject_MockObject
+     * @var CategoryCollection|MockObject
      */
     protected $categoryCollectionMock;
 
     /**
-     * @var AuthorizationInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var AuthorizationInterface|MockObject
      */
     private $authorizationMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->categoryCollectionFactoryMock = $this->getMockBuilder(CategoryCollectionFactory::class)
@@ -73,7 +71,7 @@ class CategoriesTest extends AbstractModifierTest
             ->getMock();
         $this->authorizationMock = $this->getMockBuilder(AuthorizationInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->categoryCollectionFactoryMock->expects($this->any())
             ->method('create')
@@ -161,7 +159,14 @@ class CategoriesTest extends AbstractModifierTest
             ->willReturnArgument(2);
 
         $modifyMeta = $this->createModel()->modifyMeta($meta);
-        $this->assertEquals($locked, $modifyMeta['arguments']['data']['config']['disabled']);
+        $this->assertEquals(
+            $locked,
+            $modifyMeta['children']['category_ids']['arguments']['data']['config']['disabled']
+        );
+        $this->assertEquals(
+            $locked,
+            $modifyMeta['children']['create_category_button']['arguments']['data']['config']['disabled']
+        );
     }
 
     /**

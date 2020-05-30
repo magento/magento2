@@ -172,7 +172,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         $stockItemData = $response[self::KEY_EXTENSION_ATTRIBUTES][self::KEY_STOCK_ITEM];
 
         $this->assertEquals($qty, $stockItemData[self::KEY_QTY]);
-        $this->assertEquals(false, $stockItemData[self::KEY_IS_IN_STOCK]);
+        $this->assertFalse($stockItemData[self::KEY_IS_IN_STOCK]);
 
         // update a created product with catalog inventory
         $qty = 1;
@@ -306,7 +306,8 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
     protected function saveProduct($product)
     {
         if (isset($product['custom_attributes'])) {
-            for ($i=0; $i<sizeof($product['custom_attributes']); $i++) {
+            $count = count($product['custom_attributes']);
+            for ($i=0; $i < $count; $i++) {
                 if ($product['custom_attributes'][$i]['attribute_code'] == 'category_ids'
                     && !is_array($product['custom_attributes'][$i]['value'])
                 ) {
@@ -339,7 +340,8 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
     protected function updateProduct($product)
     {
         if (isset($product['custom_attributes'])) {
-            for ($i=0; $i<sizeof($product['custom_attributes']); $i++) {
+            $count = count($product['custom_attributes']);
+            for ($i=0; $i < $count; $i++) {
                 if ($product['custom_attributes'][$i]['attribute_code'] == 'category_ids'
                     && !is_array($product['custom_attributes'][$i]['value'])
                 ) {

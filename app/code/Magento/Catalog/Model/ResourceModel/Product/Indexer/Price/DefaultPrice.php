@@ -40,7 +40,7 @@ class DefaultPrice extends AbstractIndexer implements PriceInterface
     /**
      * Core data
      *
-     * @var \Magento\Framework\Module\ModuleManagerInterface
+     * @var \Magento\Framework\Module\Manager
      */
     protected $moduleManager;
 
@@ -73,7 +73,7 @@ class DefaultPrice extends AbstractIndexer implements PriceInterface
      * @param \Magento\Framework\Indexer\Table\StrategyInterface $tableStrategy
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
-     * @param \Magento\Framework\Module\ModuleManagerInterface $moduleManager
+     * @param \Magento\Framework\Module\Manager $moduleManager
      * @param string|null $connectionName
      * @param IndexTableStructureFactory $indexTableStructureFactory
      * @param PriceModifierInterface[] $priceModifiers
@@ -83,7 +83,7 @@ class DefaultPrice extends AbstractIndexer implements PriceInterface
         \Magento\Framework\Indexer\Table\StrategyInterface $tableStrategy,
         \Magento\Eav\Model\Config $eavConfig,
         \Magento\Framework\Event\ManagerInterface $eventManager,
-        \Magento\Framework\Module\ModuleManagerInterface $moduleManager,
+        \Magento\Framework\Module\Manager $moduleManager,
         $connectionName = null,
         IndexTableStructureFactory $indexTableStructureFactory = null,
         array $priceModifiers = []

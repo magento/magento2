@@ -108,6 +108,10 @@
         <data key="used_for_sort_by">true</data>
         <requiredEntity type="FrontendLabel">ProductAttributeFrontendLabel</requiredEntity>
     </entity>
+    <entity name="multipleSelectProductAttribute" extends="productDropDownAttribute" type="ProductAttribute">
+        <data key="frontend_input">multiselect</data>
+        <data key="frontend_input_admin">Multiple Select</data>
+    </entity>
     <entity name="productDropDownAttributeNotSearchable" type="ProductAttribute">
         <data key="attribute_code" unique="suffix">attribute</data>
         <data key="frontend_input">select</data>
@@ -287,6 +291,10 @@
         <data key="frontend_input">date</data>
         <data key="is_required_admin">No</data>
     </entity>
+    <entity name="DatetimeProductAttribute" extends="productAttributeWysiwyg" type="ProductAttribute">
+        <data key="frontend_input">datetime</data>
+        <data key="is_required_admin">No</data>
+    </entity>
     <entity name="priceProductAttribute" extends="productAttributeWysiwyg" type="ProductAttribute">
         <data key="frontend_input">date</data>
         <data key="is_required_admin">No</data>
@@ -364,8 +372,22 @@
         <data key="used_for_sort_by">true</data>
         <requiredEntity type="FrontendLabel">ProductAttributeFrontendLabel</requiredEntity>
     </entity>
-    <entity name="VisualSwatchProductAttribute" type="ProductAttribute">
-        <data key="frontend_input">swatch_visual</data>
-        <data key="attribute_code" unique="suffix">visual_swatch</data>
+    <entity name="ProductColorAttribute" type="ProductAttribute">
+        <data key="frontend_label">Color</data>
+        <data key="attribute_code" unique="suffix">color_attr</data>
+    </entity>
+    <entity name="ProductSizeAttribute" type="ProductAttribute">
+        <data key="frontend_label">Size</data>
+        <data key="attribute_code" unique="suffix">size_attr</data>
+    </entity>
+    <entity name="productAttributeWithHtmlTagsInLabel" extends="newProductAttribute" type="ProductAttribute">
+        <data key="default_label" unique="suffix">Attribute Default label &lt;span&gt;</data>
+        <data key="default_store_label" unique="suffix">Attribute Store label &lt;span&gt; </data>
+        <data key="frontend_input">text</data>
+    </entity>
+    <!-- Product attribute from file "export_import_configurable_product.csv" -->
+    <entity name="ProductAttributeWithTwoOptionsForExportImport" extends="productAttributeDropdownTwoOptions" type="ProductAttribute">
+        <data key="attribute_code">attribute</data>
+        <requiredEntity type="FrontendLabel">ProductAttributeFrontendLabelForExportImport</requiredEntity>
     </entity>
 </entities>

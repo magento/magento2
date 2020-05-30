@@ -13,7 +13,6 @@ use Magento\Catalog\Api\Data\ProductLinkInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Category;
 use Magento\Framework\DataObject;
-use Magento\Framework\EntityManager\MetadataPool;
 use Magento\TestFramework\ObjectManager;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 
@@ -27,7 +26,7 @@ class ProductViewTest extends GraphQlAbstract
      */
     private $objectManager;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
     }
@@ -270,19 +269,13 @@ QUERY;
         /** @var ProductRepositoryInterface $productRepository */
         $productRepository = ObjectManager::getInstance()->get(ProductRepositoryInterface::class);
         $product = $productRepository->get($productSku, false, null, true);
-        /** @var MetadataPool $metadataPool */
-        $metadataPool = ObjectManager::getInstance()->get(MetadataPool::class);
-        $product->setId(
-            $product->getData($metadataPool->getMetadata(ProductInterface::class)->getLinkField())
-        );
         $this->assertArrayHasKey('products', $response);
         $this->assertArrayHasKey('items', $response['products']);
-        $this->assertEquals(1, count($response['products']['items']));
+        $this->assertCount(1, $response['products']['items']);
         $this->assertArrayHasKey(0, $response['products']['items']);
         $this->assertBaseFields($product, $response['products']['items'][0]);
         $this->assertEavAttributes($product, $response['products']['items'][0]);
         $this->assertOptions($product, $response['products']['items'][0]);
-        $this->assertTierPrices($product, $response['products']['items'][0]);
         $this->assertArrayHasKey('websites', $response['products']['items'][0]);
         $this->assertWebsites($product, $response['products']['items'][0]['websites']);
         self::assertEquals(
@@ -293,11 +286,8 @@ QUERY;
             'Filter category',
             $responseObject->getData('products/items/0/categories/1/name')
         );
-        $storeManager = ObjectManager::getInstance()->get(\Magento\Store\Model\StoreManagerInterface::class);
-        self::assertEquals(
-            $storeManager->getStore()->getBaseUrl() . 'simple-product.html',
-            $responseObject->getData('products/items/0/canonical_url')
-        );
+        //canonical_url will be null unless the admin setting catalog/seo/product_canonical_tag is turned ON
+        self::assertNull($responseObject->getData('products/items/0/canonical_url'));
     }
 
     /**
@@ -508,7 +498,7 @@ QUERY;
         $product = $productRepository->get($productSku, false, null, true);
         $this->assertArrayHasKey('products', $response);
         $this->assertArrayHasKey('items', $response['products']);
-        $this->assertEquals(1, count($response['products']['items']));
+        $this->assertCount(1, $response['products']['items']);
         $this->assertArrayHasKey(0, $response['products']['items']);
         $this->assertMediaGalleryEntries($product, $response['products']['items'][0]);
         $this->assertArrayHasKey('websites', $response['products']['items'][0]);
@@ -541,7 +531,7 @@ QUERY;
 
         $this->assertArrayHasKey('products', $response);
         $this->assertArrayHasKey('items', $response['products']);
-        $this->assertEquals(1, count($response['products']['items']));
+        $this->assertCount(1, $response['products']['items']);
         $this->assertArrayHasKey(0, $response['products']['items']);
         $this->assertCustomAttribute($response['products']['items'][0]);
     }
@@ -592,7 +582,7 @@ QUERY;
         $secondProductSku = 'simple-156';
         $query = <<<QUERY
        {
-           products(filter: {min_price: {gt: "100.0"}, max_price: {gt: "150.0", lt: "250.0"}})
+           products(filter: {price: {from: "150.0", to: "250.0"}})
            {
                items {
                    attribute_set_id
@@ -660,15 +650,7 @@ QUERY;
          */
         $productRepository = ObjectManager::getInstance()->get(ProductRepositoryInterface::class);
         $firstProduct = $productRepository->get($firstProductSku, false, null, true);
-        /** @var MetadataPool $metadataPool */
-        $metadataPool = ObjectManager::getInstance()->get(MetadataPool::class);
-        $firstProduct->setId(
-            $firstProduct->getData($metadataPool->getMetadata(ProductInterface::class)->getLinkField())
-        );
         $secondProduct = $productRepository->get($secondProductSku, false, null, true);
-        $secondProduct->setId(
-            $secondProduct->getData($metadataPool->getMetadata(ProductInterface::class)->getLinkField())
-        );
         self::assertNotNull($response['products']['items'][0]['price'], "price must be not null");
         self::assertCount(2, $response['products']['items']);
         $this->assertBaseFields($firstProduct, $response['products']['items'][0]);
@@ -683,8 +665,7 @@ QUERY;
     {
         $mediaGalleryEntries = $product->getMediaGalleryEntries();
         $this->assertCount(1, $mediaGalleryEntries, "Precondition failed, incorrect number of media gallery entries.");
-        $this->assertTrue(
-            is_array([$actualResponse['media_gallery_entries']]),
+        $this->assertIsArray([$actualResponse['media_gallery_entries']],
             "Media galleries field must be of an array type."
         );
         $this->assertCount(1, $actualResponse['media_gallery_entries'], "There must be 1 record in media gallery.");
@@ -723,24 +704,7 @@ QUERY;
         $customAttribute = null;
         $this->assertEquals($customAttribute, $actualResponse['attribute_code_custom']);
     }
-
-    /**
-     * @param ProductInterface $product
-     * @param $actualResponse
-     */
-    private function assertTierPrices($product, $actualResponse)
-    {
-        $tierPrices = $product->getTierPrices();
-        $this->assertNotEmpty($actualResponse['tier_prices'], "Precondition failed: 'tier_prices' must not be empty");
-        foreach ($actualResponse['tier_prices'] as $tierPriceIndex => $tierPriceArray) {
-            foreach ($tierPriceArray as $key => $value) {
-                /** @var \Magento\Catalog\Model\Product\TierPrice $tierPrice */
-                $tierPrice = $tierPrices[$tierPriceIndex];
-                $this->assertEquals($value, $tierPrice->getData($key));
-            }
-        }
-    }
-
+    
     /**
      * @param ProductInterface $product
      * @param $actualResponse
@@ -795,6 +759,7 @@ QUERY;
                 ];
                 $this->assertResponseFields($value, $assertionMapValues);
             } else {
+                // phpcs:ignore Magento2.Performance.ForeachArrayMerge
                 $assertionMap = array_merge(
                     $assertionMap,
                     [
@@ -823,7 +788,7 @@ QUERY;
                     $valueKeyName = 'date_option';
                     $valueAssertionMap = [];
                 }
-
+                // phpcs:ignore Magento2.Performance.ForeachArrayMerge
                 $valueAssertionMap = array_merge(
                     $valueAssertionMap,
                     [
@@ -980,7 +945,7 @@ QUERY;
     {
         $query = <<<QUERY
 {
-    products(filter: {sku: {like: "12345%"}})
+    products(filter: {sku: {in: ["12345"]}})
     {
         items
         {
@@ -1002,7 +967,7 @@ QUERY;
         $categoryIds  = [3, 4, 5];
 
         $productItemsInResponse = $response['products']['items'];
-        $this->assertEquals(1, count($productItemsInResponse));
+        $this->assertCount(1, $productItemsInResponse);
         $this->assertCount(3, $productItemsInResponse[0]['categories']);
         $categoriesInResponse = array_map(null, $categoryIds, $productItemsInResponse[0]['categories']);
         foreach ($categoriesInResponse as $key => $categoryData) {
@@ -1030,7 +995,7 @@ QUERY;
     {
         $query = <<<QUERY
 {
-    products(filter: {sku: {like: "12345%"}})
+    products(filter: {sku: {in: ["12345"]}})
     {
         items
         {
@@ -1057,7 +1022,7 @@ QUERY;
         $this->assertNotEmpty($response['products']['items'][0]['categories'], "Categories must not be empty");
 
         $productItemsInResponse = $response['products']['items'];
-        $this->assertEquals(1, count($productItemsInResponse));
+        $this->assertCount(1, $productItemsInResponse);
         $this->assertCount(3, $productItemsInResponse[0]['categories']);
         $categoriesInResponse = array_map(null, $categoryIds, $productItemsInResponse[0]['categories']);
         foreach ($categoriesInResponse as $key => $categoryData) {
@@ -1084,7 +1049,11 @@ QUERY;
     {
         $query = <<<QUERY
 {
-    products(filter: {sku: {like: "12345%"}})
+    products(filter: 
+             {
+             sku: {in:["12345"]}
+             }
+          )
     {
         items
         {
@@ -1112,7 +1081,7 @@ QUERY;
         $this->assertNotEmpty($response['products']['items'][0]['categories'], "Categories must not be empty");
 
         $productItemsInResponse = $response['products']['items'];
-        $this->assertEquals(1, count($productItemsInResponse));
+        $this->assertCount(1, $productItemsInResponse);
         $this->assertCount(2, $productItemsInResponse[0]['categories']);
         $categoriesInResponse = array_map(null, $categoryIds, $productItemsInResponse[0]['categories']);
         foreach ($categoriesInResponse as $key => $categoryData) {

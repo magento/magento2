@@ -3,6 +3,9 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+declare(strict_types=1);
+
 namespace Magento\Backend\Block\System\Store\Edit\Form;
 
 /**
@@ -85,6 +88,7 @@ class Website extends \Magento\Backend\Block\System\Store\Edit\AbstractForm
                 'label' => __('Sort Order'),
                 'value' => $websiteModel->getSortOrder(),
                 'required' => false,
+                'class' => 'validate-number validate-zero-or-greater',
                 'disabled' => $websiteModel->isReadOnly()
             ]
         );

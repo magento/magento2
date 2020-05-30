@@ -177,6 +177,9 @@
             "is_unique": true,
             "note": true
         },
+        "index": {
+            "EAV_ATTRIBUTE_FRONTEND_INPUT_ENTITY_TYPE_ID_IS_USER_DEFINED": true
+        },
         "constraint": {
             "PRIMARY": true,
             "EAV_ATTRIBUTE_ENTITY_TYPE_ID_EAV_ENTITY_TYPE_ENTITY_TYPE_ID": true,

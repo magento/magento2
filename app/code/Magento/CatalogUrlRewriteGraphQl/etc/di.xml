@@ -14,4 +14,20 @@
             </argument>
         </arguments>
     </type>
+
+    <type name="Magento\CatalogGraphQl\Plugin\Search\Request\ConfigReader">
+        <arguments>
+            <argument name="exactMatchAttributes" xsi:type="array">
+                <item name="url_key" xsi:type="string">url_key</item>
+            </argument>
+        </arguments>
+    </type>
+
+    <type name="Magento\UrlRewriteGraphQl\Model\Resolver\UrlRewrite">
+        <arguments>
+            <argument name="entityTypeMapping" xsi:type="array">
+                <item name="catalog_product" xsi:type="const">Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator::ENTITY_TYPE</item>
+            </argument>
+        </arguments>
+    </type>
 </config>

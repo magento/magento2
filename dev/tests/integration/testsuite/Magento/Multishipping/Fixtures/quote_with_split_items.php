@@ -5,13 +5,24 @@
  */
 declare(strict_types=1);
 
+use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Quote\Model\Quote;
+use Magento\Quote\Model\QuoteFactory;
+use Magento\Quote\Model\ResourceModel\Quote as QuoteResource;
+use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
 
-require __DIR__ . '/quote.php';
+Resolver::getInstance()->requireDataFixture('Magento/Multishipping/Fixtures/quote.php');
 
-/**
- * @var Quote $quote
- */
+$objectManager = Bootstrap::getObjectManager();
+/** @var CartRepositoryInterface $quoteRepository */
+$quoteRepository = $objectManager->get(CartRepositoryInterface::class);
+/** @var QuoteFactory $quoteFactory */
+$quoteFactory = $objectManager->get(QuoteFactory::class);
+/** @var QuoteResource $quoteResource */
+$quoteResource = $objectManager->get(QuoteResource::class);
+$quote = $quoteFactory->create();
+$quoteResource->load($quote, 'multishipping_quote_id', 'reserved_order_id');
 
 $items = $quote->getAllItems();
 $addressList = $quote->getAllShippingAddresses();
@@ -26,7 +37,7 @@ foreach ($addressList as $key => $address) {
 
 // assign virtual product to the billing address
 $billingAddress = $quote->getBillingAddress();
-$virtualItem = $items[sizeof($items) - 1];
+$virtualItem = $items[count($items) - 1];
 $billingAddress->setTotalQty(1);
 $billingAddress->addItem($virtualItem);
 

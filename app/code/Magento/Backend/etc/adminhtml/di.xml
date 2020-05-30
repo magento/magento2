@@ -60,8 +60,9 @@
         </arguments>
     </type>
     <type name="Magento\Backend\App\AbstractAction">
-        <plugin name="adminAuthentication" type="Magento\Backend\App\Action\Plugin\Authentication" sortOrder="100" />
-        <plugin name="adminMassactionKey" type="Magento\Backend\App\Action\Plugin\MassactionKey" sortOrder="11" />
+        <plugin name="adminAuthentication" type="Magento\Backend\App\Action\Plugin\Authentication" sortOrder="100"/>
+        <plugin name="adminMassactionKey" type="Magento\Backend\App\Action\Plugin\MassactionKey" sortOrder="11"/>
+        <plugin name="adminLoadDesign" type="Magento\Backend\App\Action\Plugin\LoadDesignPlugin" sortOrder="101"/>
     </type>
     <type name="Magento\Store\App\Response\Redirect">
         <arguments>
@@ -136,9 +137,6 @@
         <arguments>
             <argument name="isIncludesAvailable" xsi:type="boolean">false</argument>
         </arguments>
-    </type>
-    <type name="Magento\Backend\Model\Menu\Builder">
-        <plugin name="SetupMenuBuilder" type="Magento\Backend\Model\Setup\MenuBuilder" />
     </type>
     <type name="Magento\Config\Model\Config\Structure\ElementVisibility\ConcealInProduction">
         <arguments>

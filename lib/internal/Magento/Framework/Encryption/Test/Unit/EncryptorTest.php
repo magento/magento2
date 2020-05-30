@@ -12,14 +12,16 @@ use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\Encryption\Adapter\SodiumChachaIetf;
 use Magento\Framework\Encryption\Crypt;
 use Magento\Framework\Encryption\Encryptor;
-use Magento\Framework\Math\Random;
 use Magento\Framework\Encryption\KeyValidator;
+use Magento\Framework\Math\Random;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test case for \Magento\Framework\Encryption\Encryptor
  */
-class EncryptorTest extends \PHPUnit\Framework\TestCase
+class EncryptorTest extends TestCase
 {
     private const CRYPT_KEY_1 = 'g9mY9KLrcuAVJfsmVUSRkKFLDdUPVkaZ';
 
@@ -31,22 +33,22 @@ class EncryptorTest extends \PHPUnit\Framework\TestCase
     private $encryptor;
 
     /**
-     * @var Random|\PHPUnit_Framework_MockObject_MockObject
+     * @var Random|MockObject
      */
     private $randomGeneratorMock;
 
     /**
-     * @var KeyValidator|\PHPUnit_Framework_MockObject_MockObject
+     * @var KeyValidator|MockObject
      */
     private $keyValidatorMock;
 
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->randomGeneratorMock = $this->createMock(Random::class);
-        /** @var DeploymentConfig | \PHPUnit_Framework_MockObject_MockObject $deploymentConfigMock */
+        /** @var DeploymentConfig|MockObject $deploymentConfigMock */
         $deploymentConfigMock = $this->createMock(DeploymentConfig::class);
         $deploymentConfigMock->expects($this->any())
             ->method('get')
@@ -135,8 +137,11 @@ class EncryptorTest extends \PHPUnit\Framework\TestCase
      *
      * @dataProvider validateHashDataProvider
      */
-    public function testValidateHash($password, $hash, $expected): void
+    public function testValidateHash($password, $hash, $expected, int $requiresVersion): void
     {
+        if ($requiresVersion > $this->encryptor->getLatestHashVersion()) {
+            $this->markTestSkipped('On current installation encryptor does not support algo #' . $requiresVersion);
+        }
         $actual = $this->encryptor->validateHash($password, $hash);
         $this->assertEquals($expected, $actual);
     }
@@ -149,9 +154,14 @@ class EncryptorTest extends \PHPUnit\Framework\TestCase
     public function validateHashDataProvider(): array
     {
         return [
-            ['password', 'hash:salt:1', false],
-            ['password', '67a1e09bb1f83f5007dc119c14d663aa:salt:0', true],
-            ['password', '13601bda4ea78e55a07b98866d2be6be0744e3866f13c00c811cab608a28f322:salt:1', true],
+            ['password', 'hash:salt:1', false, 1],
+            ['password', '67a1e09bb1f83f5007dc119c14d663aa:salt:0', true, 0],
+            ['password', '13601bda4ea78e55a07b98866d2be6be0744e3866f13c00c811cab608a28f322:salt:1', true, 1],
+            //Hashes after customer:hash:upgrade command issued
+            //Upgraded from version #1 to #2
+            ['password', 'c6aad9e058f6c4b06187c06d2b69bf506a786af030f81fb6d83778422a68205e:salt:1:2', true, 2],
+            //From #0 to #1
+            ['password', '3b68ca4706cbae291455e4340478076c1e1618e742b6144cfcc3e50f648903e4:salt:0:1', true, 1]
         ];
     }
 
@@ -161,10 +171,10 @@ class EncryptorTest extends \PHPUnit\Framework\TestCase
      * @param mixed $key
      *
      * @dataProvider emptyKeyDataProvider
-     * @expectedException \SodiumException
      */
     public function testEncryptWithEmptyKey($key): void
     {
+        $this->expectException('SodiumException');
         $deploymentConfigMock = $this->createMock(DeploymentConfig::class);
         $deploymentConfigMock->expects($this->any())
             ->method('get')
@@ -291,11 +301,10 @@ class EncryptorTest extends \PHPUnit\Framework\TestCase
 
     /**
      * Checking that encryptor relies on key validator.
-     *
-     * @expectedException \Exception
      */
     public function testValidateKeyInvalid(): void
     {
+        $this->expectException('Exception');
         $this->keyValidatorMock->method('isValid')->willReturn(false);
         $this->encryptor->validateKey('-----    ');
     }
@@ -348,7 +357,7 @@ class EncryptorTest extends \PHPUnit\Framework\TestCase
     public function testGetHashMustUseSpecifiedHashingAlgo($password, $salt, $hashAlgo, $pattern): void
     {
         $hash = $this->encryptor->getHash($password, $salt, $hashAlgo);
-        $this->assertRegExp($pattern, $hash);
+        $this->assertMatchesRegularExpression($pattern, $hash);
     }
 
     /**

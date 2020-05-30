@@ -47,9 +47,10 @@ class Website extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     public function readAllWebsites()
     {
         $websites = [];
+        $tableName = $this->getMainTable();
         $select = $this->getConnection()
             ->select()
-            ->from($this->getTable('store_website'));
+            ->from($tableName);
 
         foreach ($this->getConnection()->fetchAll($select) as $websiteData) {
             $websites[$websiteData['code']] = $websiteData;
@@ -115,6 +116,7 @@ class Website extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 
     /**
      * Retrieve default stores select object
+     *
      * Select fields website_id, store_id
      *
      * @param bool $includeDefault include/exclude default admin website

@@ -15,13 +15,16 @@
         <arguments>
             <argument name="ruleName" type="entity"/>
         </arguments>
-        
+
         <amOnPage url="{{AdminCartPriceRulesPage.url}}" stepKey="goToCartPriceRules"/>
         <waitForPageLoad stepKey="waitForCartPriceRules"/>
+        <click selector="{{AdminDataGridHeaderSection.clearFilters}}" stepKey="resetFilterBeforeDelete"/>
+        <waitForPageLoad stepKey="waitForCartPriceRulesResetFilter"/>
         <fillField selector="{{AdminCartPriceRulesSection.filterByNameInput}}" userInput="{{ruleName.name}}" stepKey="filterByName"/>
         <click selector="{{AdminCartPriceRulesSection.searchButton}}" stepKey="doFilter"/>
         <click selector="{{AdminCartPriceRulesSection.rowByIndex('1')}}" stepKey="goToEditRulePage"/>
         <click selector="{{AdminCartPriceRulesFormSection.delete}}" stepKey="clickDeleteButton"/>
-        <click selector="{{AdminCartPriceRulesFormSection.modalAcceptButton}}" stepKey="confirmDelete"/>
+        <waitForElementVisible selector="{{AdminConfirmationModalSection.ok}}" stepKey="waitForConfirmModal"/>
+        <click selector="{{AdminConfirmationModalSection.ok}}" stepKey="confirmDelete"/>
     </actionGroup>
 </actionGroups>

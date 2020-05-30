@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AssertOptionImageAndPriceInStorefrontProductActionGroup">
+        <annotations>
+            <description>Validates that the provided Product Image and Price are present when the provided Product Option is selected.</description>
+        </annotations>
+        <arguments>
+            <argument name="label" type="string"/>
+            <argument name="image" type="string"/>
+            <argument name="price" type="string"/>
+        </arguments>
+
+        <selectOption userInput="{{label}}" selector="{{StorefrontProductInfoMainSection.productAttributeOptionsSelectButton}}" stepKey="selectOption"/>
+        <seeElement selector="{{StorefrontProductMediaSection.imageFile(image)}}" stepKey="seeImage"/>
+        <see userInput="{{price}}" selector="{{StorefrontProductInfoMainSection.price}}" stepKey="seeProductPrice"/>
+    </actionGroup>
+</actionGroups>

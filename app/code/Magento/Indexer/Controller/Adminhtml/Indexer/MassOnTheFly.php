@@ -8,6 +8,9 @@ namespace Magento\Indexer\Controller\Adminhtml\Indexer;
 
 use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
 
+/**
+ * Controller endpoint for mass action: set index mode as 'Update on Save'
+ */
 class MassOnTheFly extends \Magento\Indexer\Controller\Adminhtml\Indexer implements HttpPostActionInterface
 {
     /**

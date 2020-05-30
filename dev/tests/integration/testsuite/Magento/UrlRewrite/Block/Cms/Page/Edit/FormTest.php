@@ -58,7 +58,7 @@ class FormTest extends \PHPUnit\Framework\TestCase
             );
         }
         $form = $this->_getFormInstance($args);
-        $this->assertContains($action, $form->getAction());
+        $this->assertStringContainsString($action, $form->getAction());
 
         $this->assertEquals($requestPath, $form->getElement('request_path')->getValue());
         $this->assertEquals($targetPath, $form->getElement('target_path')->getValue());
@@ -78,10 +78,11 @@ class FormTest extends \PHPUnit\Framework\TestCase
         $form = $this->_getFormInstance($args);
 
         $expectedStores = [
-            ['label' => 'Main Website', 'value' => []],
+            ['label' => 'Main Website', 'value' => [], '__disableTmpl' => true],
             [
                 'label' => '    Main Website Store',
-                'value' => [['label' => '    Default Store View', 'value' => 1]]
+                'value' => [['label' => '    Default Store View', 'value' => 1]],
+                '__disableTmpl' => true
             ],
         ];
         $this->assertEquals($expectedStores, $form->getElement('store_id')->getValues());
@@ -110,6 +111,7 @@ class FormTest extends \PHPUnit\Framework\TestCase
      *
      * @static
      * @return array
+     * phpcs:disable Magento2.Functions.StaticFunction
      */
     public static function formPostInitDataProvider()
     {
@@ -127,7 +129,7 @@ class FormTest extends \PHPUnit\Framework\TestCase
      * Get CMS page model mock
      *
      * @param $stores
-     * @return \PHPUnit_Framework_MockObject_MockObject|\Magento\Cms\Model\Page
+     * @return \PHPUnit\Framework\MockObject\MockObject|\Magento\Cms\Model\Page
      */
     protected function _getCmsPageWithStoresMock($stores)
     {
@@ -136,15 +138,15 @@ class FormTest extends \PHPUnit\Framework\TestCase
         )->setMethods(
             ['lookupStoreIds']
         )->disableOriginalConstructor()->getMock();
-        $resourceMock->expects($this->any())->method('lookupStoreIds')->will($this->returnValue($stores));
+        $resourceMock->expects($this->any())->method('lookupStoreIds')->willReturn($stores);
 
         $cmsPageMock = $this->getMockBuilder(
             \Magento\Cms\Model\Page::class
         )->setMethods(
             ['getResource', 'getId']
         )->disableOriginalConstructor()->getMock();
-        $cmsPageMock->expects($this->any())->method('getId')->will($this->returnValue(1));
-        $cmsPageMock->expects($this->any())->method('getResource')->will($this->returnValue($resourceMock));
+        $cmsPageMock->expects($this->any())->method('getId')->willReturn(1);
+        $cmsPageMock->expects($this->any())->method('getResource')->willReturn($resourceMock);
 
         return $cmsPageMock;
     }

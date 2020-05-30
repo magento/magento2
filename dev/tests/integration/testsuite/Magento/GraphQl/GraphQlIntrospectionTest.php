@@ -19,7 +19,7 @@ class GraphQlIntrospectionTest extends \PHPUnit\Framework\TestCase
     /** @var  ObjectManagerInterface */
     private $objectManager;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->schemaFactory = $this->objectManager->get(\Magento\Framework\GraphQl\SchemaFactory::class);

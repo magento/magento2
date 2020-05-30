@@ -15,7 +15,7 @@
         <arguments>
             <argument name="customerGroupName" type="string"/>
         </arguments>
-        
+
         <amOnPage url="{{AdminCustomerGroupsIndexPage.url}}" stepKey="goToAdminCustomerGroupIndexPage"/>
         <waitForPageLoad time="30" stepKey="waitForCustomerGroupIndexPageLoad"/>
         <click selector="{{AdminDataGridHeaderSection.filters}}" stepKey="openFiltersSectionOnCustomerGroupIndexPage"/>
@@ -24,6 +24,8 @@
         <click selector="{{AdminDataGridHeaderSection.applyFilters}}" stepKey="clickApplyFiltersButton"/>
         <click selector="{{AdminCustomerGroupGridActionsSection.selectButton(customerGroupName)}}" stepKey="clickSelectButton"/>
         <click selector="{{AdminCustomerGroupGridActionsSection.deleteAction(customerGroupName)}}" stepKey="clickOnDeleteItem"/>
+        <waitForElementVisible selector="{{AdminGridConfirmActionSection.message}}" stepKey="waitForConfirmModal"/>
+        <see selector="{{AdminGridConfirmActionSection.message}}" userInput="Are you sure you want to delete a {{customerGroupName}} record?" stepKey="seeRemoveMessage"/>
         <click selector="{{AdminConfirmationModalSection.ok}}" stepKey="confirmDeleteCustomerGroup"/>
         <seeElement selector="{{AdminMessagesSection.success}}" stepKey="seeSuccessMessage"/>
     </actionGroup>

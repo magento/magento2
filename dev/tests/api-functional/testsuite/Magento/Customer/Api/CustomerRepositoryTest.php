@@ -8,8 +8,13 @@ namespace Magento\Customer\Api;
 
 use Magento\Customer\Api\Data\CustomerInterface as Customer;
 use Magento\Customer\Api\Data\AddressInterface as Address;
+use Magento\Framework\Api\FilterBuilder;
+use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\Api\SortOrder;
 use Magento\Framework\Exception\InputException;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Webapi\Rest\Request;
+use Magento\Integration\Api\CustomerTokenServiceInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\Helper\Customer as CustomerHelper;
 use Magento\TestFramework\TestCase\WebapiAbstract;
@@ -87,7 +92,7 @@ class CustomerRepositoryTest extends WebapiAbstract
     /**
      * Execute per test initialization.
      */
-    public function setUp()
+    protected function setUp(): void
     {
         $this->customerRegistry = Bootstrap::getObjectManager()->get(
             \Magento\Customer\Model\CustomerRegistry::class
@@ -119,7 +124,7 @@ class CustomerRepositoryTest extends WebapiAbstract
         );
     }
 
-    public function tearDown()
+    protected function tearDown(): void
     {
         if (!empty($this->currentCustomerId)) {
             foreach ($this->currentCustomerId as $customerId) {
@@ -146,10 +151,11 @@ class CustomerRepositoryTest extends WebapiAbstract
     /**
      * Validate update by invalid customer.
      *
-     * @expectedException \Exception
      */
     public function testInvalidCustomerUpdate()
     {
+        $this->expectException(\Exception::class);
+
         //Create first customer and retrieve customer token.
         $firstCustomerData = $this->_createCustomer();
 
@@ -247,7 +253,7 @@ class CustomerRepositoryTest extends WebapiAbstract
 
             $this->fail("Expected exception");
         } catch (\SoapFault $e) {
-            $this->assertContains(
+            $this->assertStringContainsString(
                 $expectedMessage,
                 $e->getMessage(),
                 "SoapFault does not contain expected message."
@@ -336,7 +342,7 @@ class CustomerRepositoryTest extends WebapiAbstract
             $this->_webApiCall($serviceInfo, $requestData);
             $this->fail("Expected exception.");
         } catch (\SoapFault $e) {
-            $this->assertContains(
+            $this->assertStringContainsString(
                 $expectedMessage,
                 $e->getMessage(),
                 "SoapFault does not contain expected message."
@@ -387,7 +393,7 @@ class CustomerRepositoryTest extends WebapiAbstract
             $this->_webApiCall($serviceInfo, $requestData);
             $this->fail("Expected exception.");
         } catch (\SoapFault $e) {
-            $this->assertContains(
+            $this->assertStringContainsString(
                 $expectedMessage,
                 $e->getMessage(),
                 "SoapFault does not contain expected message."
@@ -479,11 +485,17 @@ class CustomerRepositoryTest extends WebapiAbstract
 
     /**
      * Test with a single filter
+     *
+     * @param bool $subscribeStatus
+     * @return void
+     *
+     * @dataProvider subscriptionDataProvider
      */
-    public function testSearchCustomers()
+    public function testSearchCustomers(bool $subscribeStatus): void
     {
-        $builder = Bootstrap::getObjectManager()->create(\Magento\Framework\Api\FilterBuilder::class);
-        $customerData = $this->_createCustomer();
+        $builder = Bootstrap::getObjectManager()->create(FilterBuilder::class);
+        $subscribeData = $this->buildSubscriptionData($subscribeStatus);
+        $customerData = $this->_createCustomer($subscribeData);
         $filter = $builder
             ->setField(Customer::EMAIL)
             ->setValue($customerData[Customer::EMAIL])
@@ -491,13 +503,13 @@ class CustomerRepositoryTest extends WebapiAbstract
         $this->searchCriteriaBuilder->addFilters([$filter]);
         $searchData = $this->dataObjectProcessor->buildOutputDataArray(
             $this->searchCriteriaBuilder->create(),
-            \Magento\Framework\Api\SearchCriteriaInterface::class
+            SearchCriteriaInterface::class
         );
         $requestData = ['searchCriteria' => $searchData];
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => self::RESOURCE_PATH . '/search' . '?' . http_build_query($requestData),
-                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_GET,
+                'httpMethod' => Request::HTTP_METHOD_GET,
             ],
             'soap' => [
                 'service' => self::SERVICE_NAME,
@@ -508,6 +520,35 @@ class CustomerRepositoryTest extends WebapiAbstract
         $searchResults = $this->_webApiCall($serviceInfo, $requestData);
         $this->assertEquals(1, $searchResults['total_count']);
         $this->assertEquals($customerData[Customer::ID], $searchResults['items'][0][Customer::ID]);
+        $this->assertEquals($subscribeStatus, $searchResults['items'][0]['extension_attributes']['is_subscribed']);
+    }
+
+    /**
+     * Build subscription extension attributes data
+     *
+     * @param bool $status
+     * @return array
+     */
+    private function buildSubscriptionData(bool $status): array
+    {
+        return [
+            'extension_attributes' => [
+                'is_subscribed' => $status,
+            ],
+        ];
+    }
+
+    /**
+     * Subscription customer data provider
+     *
+     * @return array
+     */
+    public function subscriptionDataProvider(): array
+    {
+        return [
+            'subscribed user' => [true],
+            'not subscribed user' => [false],
+        ];
     }
 
     /**
@@ -781,6 +822,67 @@ class CustomerRepositoryTest extends WebapiAbstract
     }
 
     /**
+     * Test revoking all access Tokens for customer
+     */
+    public function testRevokeAllAccessTokensForCustomer()
+    {
+        $customerData = $this->_createCustomer();
+
+        /** @var CustomerTokenServiceInterface $customerTokenService */
+        $customerTokenService = Bootstrap::getObjectManager()->create(CustomerTokenServiceInterface::class);
+        $token = $customerTokenService->createCustomerAccessToken(
+            $customerData[Customer::EMAIL],
+            CustomerHelper::PASSWORD
+        );
+        $serviceInfo = [
+            'rest' => [
+                'resourcePath' => self::RESOURCE_PATH . '/me',
+                'httpMethod' => Request::HTTP_METHOD_GET,
+                'token' => $token,
+            ],
+            'soap' => [
+                'service' => self::SERVICE_NAME,
+                'serviceVersion' => self::SERVICE_VERSION,
+                'operation' => self::SERVICE_NAME . 'GetSelf',
+                'token' => $token,
+            ],
+        ];
+
+        $customerLoadedData = $this->_webApiCall($serviceInfo, ['customerId' => $customerData[Customer::ID]]);
+        self::assertGreaterThanOrEqual($customerData[Customer::UPDATED_AT], $customerLoadedData[Customer::UPDATED_AT]);
+        unset($customerData[Customer::UPDATED_AT]);
+        unset($customerLoadedData[Customer::UPDATED_AT], $customerLoadedData[Customer::CONFIRMATION]);
+        self::assertEquals($customerData, $customerLoadedData);
+
+        $revokeToken = $customerTokenService->revokeCustomerAccessToken($customerData[Customer::ID]);
+        self::assertTrue($revokeToken);
+
+        try {
+            $customerTokenService->revokeCustomerAccessToken($customerData[Customer::ID]);
+        } catch (\Throwable $exception) {
+            $this->assertInstanceOf(LocalizedException::class, $exception);
+            $this->assertEquals('This customer has no tokens.', $exception->getMessage());
+        }
+
+        $expectedMessage = 'The consumer isn\'t authorized to access %resources.';
+
+        try {
+            $this->_webApiCall($serviceInfo, ['customerId' => $customerData[Customer::ID]]);
+        } catch (\SoapFault $e) {
+            $this->assertStringContainsString(
+                $expectedMessage,
+                $e->getMessage(),
+                'SoapFault does not contain expected message.'
+            );
+        } catch (\Throwable $e) {
+            $errorObj = $this->processRestExceptionResult($e);
+            $this->assertEquals($expectedMessage, $errorObj['message']);
+            $this->assertEquals(['resources' => 'self'], $errorObj['parameters']);
+            $this->assertEquals(HTTPExceptionCodes::HTTP_UNAUTHORIZED, $e->getCode());
+        }
+    }
+
+    /**
      * Retrieve customer data by Id
      *
      * @param int $customerId
@@ -794,11 +896,12 @@ class CustomerRepositoryTest extends WebapiAbstract
     }
 
     /**
+     * @param array|null $additionalData
      * @return array|bool|float|int|string
      */
-    protected function _createCustomer()
+    protected function _createCustomer(?array $additionalData = [])
     {
-        $customerData = $this->customerHelper->createSampleCustomer();
+        $customerData = $this->customerHelper->createSampleCustomer($additionalData);
         $this->currentCustomerId[] = $customerData['id'];
         return $customerData;
     }

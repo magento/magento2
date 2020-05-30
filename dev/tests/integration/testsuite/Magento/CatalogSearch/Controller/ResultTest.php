@@ -8,6 +8,7 @@ namespace Magento\CatalogSearch\Controller;
 /**
  * @magentoDbIsolation enabled
  * @magentoAppIsolation enabled
+ * @magentoDataFixture Magento/CatalogSearch/_files/full_reindex.php
  */
 class ResultTest extends \Magento\TestFramework\TestCase\AbstractController
 {
@@ -24,13 +25,16 @@ class ResultTest extends \Magento\TestFramework\TestCase\AbstractController
         $this->dispatch('catalogsearch/result');
 
         $responseBody = $this->getResponse()->getBody();
-        $this->assertNotContains('for="search">Search', $responseBody);
+        $this->assertStringNotContainsString('for="search">Search', $responseBody);
         $this->assertStringMatchesFormat('%aSuche%S%a', $responseBody);
 
-        $this->assertNotContains('Search entire store here...', $responseBody);
-        $this->assertContains('Den gesamten Shop durchsuchen...', $responseBody);
+        $this->assertStringNotContainsString('Search entire store here...', $responseBody);
+        $this->assertStringContainsString('Den gesamten Shop durchsuchen...', $responseBody);
     }
 
+    /**
+     * @magentoDbIsolation disabled
+     */
     public function testIndexActionXSSQueryVerification()
     {
         $escaper = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
@@ -40,8 +44,8 @@ class ResultTest extends \Magento\TestFramework\TestCase\AbstractController
 
         $responseBody = $this->getResponse()->getBody();
         $data = '<script>alert(1)</script>';
-        $this->assertNotContains($data, $responseBody);
-        $this->assertContains($escaper->escapeHtml($data), $responseBody);
+        $this->assertStringNotContainsString($data, $responseBody);
+        $this->assertStringContainsString($escaper->escapeHtml($data), $responseBody);
     }
 
     /**
@@ -82,7 +86,7 @@ class ResultTest extends \Magento\TestFramework\TestCase\AbstractController
 
         $responseBody = $this->getResponse()->getBody();
         $data = '"success":true';
-        $this->assertContains($data, $responseBody);
+        $this->assertStringContainsString($data, $responseBody);
 
         $query->loadByQueryText('query_text');
         $this->assertEquals(2, $query->getPopularity());
@@ -105,8 +109,8 @@ class ResultTest extends \Magento\TestFramework\TestCase\AbstractController
         $this->dispatch('/catalogsearch/result/?q=popular_query_text');
 
         $responseBody = $this->getResponse()->getBody();
-        $this->assertContains('Search results for: &#039;popular_query_text&#039;', $responseBody);
-        $this->assertContains('/catalogsearch/searchTermsLog/save/', $responseBody);
+        $this->assertStringContainsString('Search results for: &#039;popular_query_text&#039;', $responseBody);
+        $this->assertStringContainsString('/catalogsearch/searchTermsLog/save/', $responseBody);
 
         $query->loadByQueryText('popular_query_text');
         $this->assertEquals(100, $query->getPopularity());
@@ -129,8 +133,8 @@ class ResultTest extends \Magento\TestFramework\TestCase\AbstractController
         $this->dispatch('/catalogsearch/result/?q=popular_query_text&additional_parameters=some');
 
         $responseBody = $this->getResponse()->getBody();
-        $this->assertContains('Search results for: &#039;popular_query_text&#039;', $responseBody);
-        $this->assertNotContains('/catalogsearch/searchTermsLog/save/', $responseBody);
+        $this->assertStringContainsString('Search results for: &#039;popular_query_text&#039;', $responseBody);
+        $this->assertStringNotContainsString('/catalogsearch/searchTermsLog/save/', $responseBody);
 
         $query->loadByQueryText('popular_query_text');
         $this->assertEquals(101, $query->getPopularity());
@@ -153,8 +157,8 @@ class ResultTest extends \Magento\TestFramework\TestCase\AbstractController
         $this->dispatch('/catalogsearch/result/?q=query_text');
 
         $responseBody = $this->getResponse()->getBody();
-        $this->assertContains('Search results for: &#039;query_text&#039;', $responseBody);
-        $this->assertNotContains('/catalogsearch/searchTermsLog/save/', $responseBody);
+        $this->assertStringContainsString('Search results for: &#039;query_text&#039;', $responseBody);
+        $this->assertStringNotContainsString('/catalogsearch/searchTermsLog/save/', $responseBody);
 
         $query->loadByQueryText('query_text');
         $this->assertEquals(2, $query->getPopularity());

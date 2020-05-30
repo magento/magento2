@@ -12,7 +12,7 @@ use Magento\Catalog\Model\Locator\LocatorInterface;
 use Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\AbstractModifier;
 use Magento\Ui\Component\Form;
 use Magento\Framework\UrlInterface;
-use \Magento\Framework\Module\ModuleManagerInterface as ModuleManager;
+use Magento\Framework\Module\Manager as ModuleManager;
 use Magento\Framework\App\ObjectManager;
 
 /**
@@ -85,10 +85,12 @@ class Review extends AbstractModifier
                                 'behaviourType' => 'simple',
                                 'externalFilterMode' => true,
                                 'imports' => [
-                                    'productId' => '${ $.provider }:data.product.current_product_id'
+                                    'productId' => '${ $.provider }:data.product.current_product_id',
+                                    '__disableTmpl' => ['productId' => false],
                                 ],
                                 'exports' => [
-                                    'productId' => '${ $.externalProvider }:params.current_product_id'
+                                    'productId' => '${ $.externalProvider }:params.current_product_id',
+                                    '__disableTmpl' => ['productId' => false],
                                 ],
                             ],
                         ],

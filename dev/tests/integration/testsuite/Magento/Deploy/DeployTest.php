@@ -19,8 +19,6 @@ use Magento\Deploy\Config\BundleConfig;
 use Magento\Framework\Filesystem\Directory\WriteInterface;
 
 /**
- * Class DeployTest
- *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class DeployTest extends \PHPUnit\Framework\TestCase
@@ -71,6 +69,7 @@ class DeployTest extends \PHPUnit\Framework\TestCase
     private $options = [
         Options::DRY_RUN => false,
         Options::NO_JAVASCRIPT => false,
+        Options::NO_JS_BUNDLE => false,
         Options::NO_CSS => false,
         Options::NO_LESS => false,
         Options::NO_IMAGES => false,
@@ -89,7 +88,7 @@ class DeployTest extends \PHPUnit\Framework\TestCase
         Options::STRATEGY => DeployStrategyFactory::DEPLOY_STRATEGY_COMPACT,
     ];
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = Bootstrap::getObjectManager();
         $this->prevMode = $objectManager->get(State::class)->getMode();
@@ -100,9 +99,10 @@ class DeployTest extends \PHPUnit\Framework\TestCase
         $this->rootDir = $this->filesystem->getDirectoryRead(DirectoryList::ROOT);
 
         $logger = $objectManager->get(\Psr\Log\LoggerInterface::class);
-        $this->deployService = $objectManager->create(DeployStaticContent::class, [
-            'logger' => $logger
-        ]);
+        $this->deployService = $objectManager->create(
+            DeployStaticContent::class,
+            ['logger' => $logger]
+        );
 
         $this->bundleConfig = $objectManager->create(BundleConfig::class);
         $this->config = $objectManager->create(View::class);
@@ -113,7 +113,7 @@ class DeployTest extends \PHPUnit\Framework\TestCase
         $this->filesystem->getDirectoryWrite(DirectoryList::VAR_DIR)->delete(DirectoryList::TMP_MATERIALIZATION_DIR);
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $objectManager = Bootstrap::getObjectManager();
         $objectManager->get(State::class)->setMode($this->prevMode);
@@ -184,7 +184,7 @@ class DeployTest extends \PHPUnit\Framework\TestCase
     {
         //_testA is included from Magento/zoom3
         //_testB is included from Magento/zoom2
-        $this->assertContains('color:#111', $actualRootCssContent);
+        $this->assertStringContainsString('color:#111', $actualRootCssContent);
     }
 
     /**
@@ -196,21 +196,21 @@ class DeployTest extends \PHPUnit\Framework\TestCase
     private function assertCssUrlFixerPostProcessor($actualRootCssContent)
     {
         //assert CssUrlFixer fix urls
-        $this->assertContains(
+        $this->assertStringContainsString(
             'url("../../../../../frontend/Magento/zoom1/default/images/logo-magento-1.png")',
             $actualRootCssContent
         );
-        $this->assertContains(
+        $this->assertStringContainsString(
             'url("../../../../../frontend/Magento/zoom2/default/images/logo-magento-2.png")',
             $actualRootCssContent
         );
-        $this->assertContains(
+        $this->assertStringContainsString(
             'url("../images/logo-magento-3.png")',
             $actualRootCssContent
         );
         //_testA is included from Magento/zoom3
         //_testB is included from Magento/zoom2
-        $this->assertContains('color:#111', $actualRootCssContent);
+        $this->assertStringContainsString('color:#111', $actualRootCssContent);
     }
 
     /**
@@ -257,7 +257,7 @@ class DeployTest extends \PHPUnit\Framework\TestCase
                     $bundleContent = $this->staticDir->readFile(
                         $this->staticDir->getRelativePath($file->getPathname())
                     );
-                    $this->assertNotContains('"' . $path . '":"', $bundleContent);
+                    $this->assertStringNotContainsString('"' . $path . '":"', $bundleContent);
                 }
             }
         }

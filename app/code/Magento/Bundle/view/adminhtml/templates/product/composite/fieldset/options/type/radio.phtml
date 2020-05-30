@@ -12,7 +12,7 @@
 <?php $_skipSaleableCheck = $this->helper(Magento\Catalog\Helper\Product::class)->getSkipSaleableCheck(); ?>
 <?php list($_defaultQty, $_canChangeQty) = $block->getDefaultValues(); ?>
 
-<div class="field admin__field options<?php if ($_option->getRequired()) { echo ' required'; } ?>">
+<div class="field admin__field options<?php if ($_option->getRequired()) { echo ' _required'; } ?>">
     <label class="label admin__field-label"><span><?= $block->escapeHtml($_option->getTitle()) ?></span></label>
     <div class="control admin__field-control">
         <div class="nested<?php if ($_option->getDecoratedIsLast()) :?> last<?php endif; ?>">
@@ -39,7 +39,7 @@
             <?php foreach ($_selections as $_selection) : ?>
                 <div class="field choice admin__field admin__field-option">
                     <input type="radio"
-                           class="radio admin__control-radio <?= $_option->getRequired() ? ' validate-one-required-by-name' : '' ?> change-container-classname"
+                           class="radio admin__control-radio <?= $_option->getRequired() ? ' required-entry' : '' ?> change-container-classname"
                            id="bundle-option-<?= $block->escapeHtmlAttr($_option->getId()) ?>-<?= $block->escapeHtmlAttr($_selection->getSelectionId()) ?>"
                            name="bundle_option[<?= $block->escapeHtmlAttr($_option->getId()) ?>]"
                            <?php if ($block->isSelected($_selection)) { echo ' checked="checked"'; } ?>
@@ -66,7 +66,7 @@
                 </label>
                 <div class="control admin__field-control"><input <?php if (!$_canChangeQty) { echo ' disabled="disabled"'; } ?>
                         id="bundle-option-<?= $block->escapeHtmlAttr($_option->getId()) ?>-qty-input"
-                        class="input-text admin__control-text qty<?php if (!$_canChangeQty) { echo ' qty-disabled'; } ?>"
+                        class="input-text admin__control-text qty validate-greater-than-zero<?php if (!$_canChangeQty) { echo ' qty-disabled'; } ?>"
                         type="text"
                         name="bundle_option_qty[<?= $block->escapeHtmlAttr($_option->getId()) ?>]"
                         value="<?= $block->escapeHtmlAttr($_defaultQty) ?>" />

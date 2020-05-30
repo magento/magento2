@@ -3,44 +3,54 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Downloadable\Test\Unit\Observer;
 
-use Magento\Downloadable\Observer\IsAllowedGuestCheckoutObserver;
+use Magento\Catalog\Model\Product;
 use Magento\Downloadable\Model\Product\Type;
-use Magento\Downloadable\Model\ResourceModel\Link\Purchased\Item\CollectionFactory;
-use Magento\Store\Model\ScopeInterface;
+use Magento\Downloadable\Observer\IsAllowedGuestCheckoutObserver;
+use Magento\Framework\App\Config;
+use Magento\Framework\DataObject;
+use Magento\Framework\Event;
+use Magento\Framework\Event\Observer;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Quote\Model\Quote;
+use Magento\Quote\Model\Quote\Item;
+use Magento\Store\Model\ScopeInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class IsAllowedGuestCheckoutObserverTest extends \PHPUnit\Framework\TestCase
+class IsAllowedGuestCheckoutObserverTest extends TestCase
 {
     /** @var IsAllowedGuestCheckoutObserver */
     private $isAllowedGuestCheckoutObserver;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Framework\App\Config
+     * @var MockObject|Config
      */
     private $scopeConfig;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Framework\DataObject
+     * @var MockObject|DataObject
      */
     private $resultMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Framework\Event
+     * @var MockObject|Event
      */
     private $eventMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Framework\Event\Observer
+     * @var MockObject|Observer
      */
     private $observerMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Framework\DataObject
+     * @var MockObject|DataObject
      */
     private $storeMock;
 
@@ -48,34 +58,34 @@ class IsAllowedGuestCheckoutObserverTest extends \PHPUnit\Framework\TestCase
      * Sets up the fixture, for example, open a network connection.
      * This method is called before a test is executed.
      */
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->scopeConfig = $this->getMockBuilder(\Magento\Framework\App\Config::class)
+        $this->scopeConfig = $this->getMockBuilder(Config::class)
             ->disableOriginalConstructor()
             ->setMethods(['isSetFlag', 'getValue'])
             ->getMock();
 
-        $this->resultMock = $this->getMockBuilder(\Magento\Framework\DataObject::class)
+        $this->resultMock = $this->getMockBuilder(DataObject::class)
             ->disableOriginalConstructor()
             ->setMethods(['setIsAllowed'])
             ->getMock();
 
-        $this->eventMock = $this->getMockBuilder(\Magento\Framework\Event::class)
+        $this->eventMock = $this->getMockBuilder(Event::class)
             ->disableOriginalConstructor()
             ->setMethods(['getStore', 'getResult', 'getQuote', 'getOrder'])
             ->getMock();
 
-        $this->observerMock = $this->getMockBuilder(\Magento\Framework\Event\Observer::class)
+        $this->observerMock = $this->getMockBuilder(Observer::class)
             ->disableOriginalConstructor()
             ->setMethods(['getEvent'])
             ->getMock();
 
-        $this->storeMock = $this->getMockBuilder(\Magento\Framework\DataObject::class)
+        $this->storeMock = $this->getMockBuilder(DataObject::class)
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->isAllowedGuestCheckoutObserver = (new ObjectManagerHelper($this))->getObject(
-            \Magento\Downloadable\Observer\IsAllowedGuestCheckoutObserver::class,
+            IsAllowedGuestCheckoutObserver::class,
             [
                 'scopeConfig' => $this->scopeConfig,
             ]
@@ -97,7 +107,7 @@ class IsAllowedGuestCheckoutObserverTest extends \PHPUnit\Framework\TestCase
                 ->with(false);
         }
 
-        $product = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
+        $product = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
             ->setMethods(['getTypeId'])
             ->getMock();
@@ -106,7 +116,7 @@ class IsAllowedGuestCheckoutObserverTest extends \PHPUnit\Framework\TestCase
             ->method('getTypeId')
             ->willReturn($productType);
 
-        $item = $this->getMockBuilder(\Magento\Quote\Model\Quote\Item::class)
+        $item = $this->getMockBuilder(Item::class)
             ->disableOriginalConstructor()
             ->setMethods(['getProduct'])
             ->getMock();
@@ -115,7 +125,7 @@ class IsAllowedGuestCheckoutObserverTest extends \PHPUnit\Framework\TestCase
             ->method('getProduct')
             ->willReturn($product);
 
-        $quote = $this->getMockBuilder(\Magento\Quote\Model\Quote::class)
+        $quote = $this->getMockBuilder(Quote::class)
             ->disableOriginalConstructor()
             ->setMethods(['getAllItems'])
             ->getMock();
@@ -126,15 +136,15 @@ class IsAllowedGuestCheckoutObserverTest extends \PHPUnit\Framework\TestCase
 
         $this->eventMock->expects($this->once())
             ->method('getStore')
-            ->will($this->returnValue($this->storeMock));
+            ->willReturn($this->storeMock);
 
         $this->eventMock->expects($this->once())
             ->method('getResult')
-            ->will($this->returnValue($this->resultMock));
+            ->willReturn($this->resultMock);
 
         $this->eventMock->expects($this->once())
             ->method('getQuote')
-            ->will($this->returnValue($quote));
+            ->willReturn($quote);
 
         $this->scopeConfig->expects($this->once())
             ->method('isSetFlag')
@@ -147,10 +157,10 @@ class IsAllowedGuestCheckoutObserverTest extends \PHPUnit\Framework\TestCase
 
         $this->observerMock->expects($this->exactly(3))
             ->method('getEvent')
-            ->will($this->returnValue($this->eventMock));
+            ->willReturn($this->eventMock);
 
         $this->assertInstanceOf(
-            \Magento\Downloadable\Observer\IsAllowedGuestCheckoutObserver::class,
+            IsAllowedGuestCheckoutObserver::class,
             $this->isAllowedGuestCheckoutObserver->execute($this->observerMock)
         );
     }
@@ -170,11 +180,11 @@ class IsAllowedGuestCheckoutObserverTest extends \PHPUnit\Framework\TestCase
     {
         $this->eventMock->expects($this->once())
             ->method('getStore')
-            ->will($this->returnValue($this->storeMock));
+            ->willReturn($this->storeMock);
 
         $this->eventMock->expects($this->once())
             ->method('getResult')
-            ->will($this->returnValue($this->resultMock));
+            ->willReturn($this->resultMock);
 
         $this->scopeConfig->expects($this->once())
             ->method('isSetFlag')
@@ -187,10 +197,10 @@ class IsAllowedGuestCheckoutObserverTest extends \PHPUnit\Framework\TestCase
 
         $this->observerMock->expects($this->exactly(2))
             ->method('getEvent')
-            ->will($this->returnValue($this->eventMock));
+            ->willReturn($this->eventMock);
 
         $this->assertInstanceOf(
-            \Magento\Downloadable\Observer\IsAllowedGuestCheckoutObserver::class,
+            IsAllowedGuestCheckoutObserver::class,
             $this->isAllowedGuestCheckoutObserver->execute($this->observerMock)
         );
     }

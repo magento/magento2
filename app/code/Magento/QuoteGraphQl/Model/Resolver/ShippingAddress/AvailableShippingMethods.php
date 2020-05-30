@@ -7,16 +7,14 @@ declare(strict_types=1);
 
 namespace Magento\QuoteGraphQl\Model\Resolver\ShippingAddress;
 
-use Magento\Directory\Model\Currency;
 use Magento\Framework\Api\ExtensibleDataObjectConverter;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Quote\Api\Data\ShippingMethodInterface;
 use Magento\Quote\Model\Cart\ShippingMethodConverter;
-use Magento\Store\Api\Data\StoreInterface;
+use Magento\Quote\Model\Quote\TotalsCollector;
 
 /**
  * @inheritdoc
@@ -34,15 +32,23 @@ class AvailableShippingMethods implements ResolverInterface
     private $shippingMethodConverter;
 
     /**
+     * @var TotalsCollector
+     */
+    private $totalsCollector;
+
+    /**
      * @param ExtensibleDataObjectConverter $dataObjectConverter
      * @param ShippingMethodConverter $shippingMethodConverter
+     * @param TotalsCollector $totalsCollector
      */
     public function __construct(
         ExtensibleDataObjectConverter $dataObjectConverter,
-        ShippingMethodConverter $shippingMethodConverter
+        ShippingMethodConverter $shippingMethodConverter,
+        TotalsCollector $totalsCollector
     ) {
         $this->dataObjectConverter = $dataObjectConverter;
         $this->shippingMethodConverter = $shippingMethodConverter;
+        $this->totalsCollector = $totalsCollector;
     }
 
     /**
@@ -53,7 +59,8 @@ class AvailableShippingMethods implements ResolverInterface
         if (!isset($value['model'])) {
             throw new LocalizedException(__('"model" values should be specified'));
         }
-        $address = $value['model'];
+        $address = clone $value['model'];
+        $address->setLimitCarrier(null);
 
         // Allow shipping rates by setting country id for new addresses
         if (!$address->getCountryId() && $address->getCountryCode()) {
@@ -61,9 +68,8 @@ class AvailableShippingMethods implements ResolverInterface
         }
 
         $address->setCollectShippingRates(true);
-        $address->collectShippingRates();
         $cart = $address->getQuote();
-
+        $this->totalsCollector->collectAddressTotals($cart, $address);
         $methods = [];
         $shippingRates = $address->getGroupedAllShippingRates();
         foreach ($shippingRates as $carrierRates) {
@@ -75,8 +81,7 @@ class AvailableShippingMethods implements ResolverInterface
                 );
                 $methods[] = $this->processMoneyTypeData(
                     $methodData,
-                    $cart->getQuoteCurrencyCode(),
-                    $context->getExtensionAttributes()->getStore()
+                    $cart->getQuoteCurrencyCode()
                 );
             }
         }
@@ -88,21 +93,16 @@ class AvailableShippingMethods implements ResolverInterface
      *
      * @param array $data
      * @param string $quoteCurrencyCode
-     * @param StoreInterface $store
      * @return array
-     * @throws NoSuchEntityException
      */
-    private function processMoneyTypeData(array $data, string $quoteCurrencyCode, StoreInterface $store): array
+    private function processMoneyTypeData(array $data, string $quoteCurrencyCode): array
     {
         if (isset($data['amount'])) {
             $data['amount'] = ['value' => $data['amount'], 'currency' => $quoteCurrencyCode];
         }
 
-        if (isset($data['base_amount'])) {
-            /** @var Currency $currency */
-            $currency = $store->getBaseCurrency();
-            $data['base_amount'] = ['value' => $data['base_amount'], 'currency' => $currency->getCode()];
-        }
+        /** @deprecated The field should not be used on the storefront */
+        $data['base_amount'] = null;
 
         if (isset($data['price_excl_tax'])) {
             $data['price_excl_tax'] = ['value' => $data['price_excl_tax'], 'currency' => $quoteCurrencyCode];

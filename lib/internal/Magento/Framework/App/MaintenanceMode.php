@@ -110,7 +110,7 @@ class MaintenanceMode
             throw new \InvalidArgumentException("One or more IP-addresses is expected (comma-separated)\n");
         }
         $result = $this->flagDir->writeFile(self::IP_FILENAME, $addresses);
-        return false !== $result ? true : false;
+        return false !== $result;
     }
 
     /**

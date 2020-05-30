@@ -9,7 +9,7 @@ namespace Magento\Checkout\Model;
 use Magento\Framework\Exception\CouldNotSaveException;
 
 /**
- * Payment information management
+ * Payment information management service.
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
@@ -85,6 +85,9 @@ class PaymentInformationManagement implements \Magento\Checkout\Api\PaymentInfor
         try {
             $orderId = $this->cartManagement->placeOrder($cartId);
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
+            $this->getLogger()->critical(
+                'Placing an order with quote_id ' . $cartId . ' is failed: ' . $e->getMessage()
+            );
             throw new CouldNotSaveException(
                 __($e->getMessage()),
                 $e
@@ -124,9 +127,9 @@ class PaymentInformationManagement implements \Magento\Checkout\Api\PaymentInfor
             $shippingAddress = $quote->getShippingAddress();
             if ($shippingAddress && $shippingAddress->getShippingMethod()) {
                 $shippingRate = $shippingAddress->getShippingRateByCode($shippingAddress->getShippingMethod());
-                $shippingAddress->setLimitCarrier(
-                    $shippingRate ? $shippingRate->getCarrier() : $shippingAddress->getShippingMethod()
-                );
+                if ($shippingRate) {
+                    $shippingAddress->setLimitCarrier($shippingRate->getCarrier());
+                }
             }
         }
         $this->paymentMethodManagement->set($cartId, $paymentMethod);

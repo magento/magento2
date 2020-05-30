@@ -81,17 +81,23 @@ class TranslatedLists implements ListsInterface
             }
             $language = \Locale::getPrimaryLanguage($locale);
             $country = \Locale::getRegion($locale);
+            $script = \Locale::getScript($locale);
+            $scriptTranslated = '';
             if (!$languages[$language] || !$countries[$country]) {
                 continue;
             }
+            if ($script !== '') {
+                $script = \Locale::getDisplayScript($locale) . ', ';
+                $scriptTranslated = \Locale::getDisplayScript($locale, $locale) . ', ';
+            }
             if ($translatedName) {
                 $label = ucwords(\Locale::getDisplayLanguage($locale, $locale))
-                    . ' (' . \Locale::getDisplayRegion($locale, $locale) . ') / '
+                    . ' (' . $scriptTranslated . \Locale::getDisplayRegion($locale, $locale) . ') / '
                     . $languages[$language]
-                    . ' (' . $countries[$country] . ')';
+                    . ' (' . $script . $countries[$country] . ')';
             } else {
                 $label = $languages[$language]
-                    . ' (' . $countries[$country] . ')';
+                    . ' (' . $script . $countries[$country] . ')';
             }
             $options[] = ['value' => $locale, 'label' => $label];
         }

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="NoDisplayOutOfStockProductActionGroup">
+        <annotations>
+            <description>Goes to the 'Configuration' page for 'Inventory'. Disables 'Display Out of Stock Products'. Clicks on the Save button.</description>
+        </annotations>
+
+        <amOnPage url="{{InventoryConfigurationPage.url}}" stepKey="navigateToInventoryConfigurationPage"/>
+        <waitForPageLoad stepKey="waitForConfigPageToLoad"/>
+        <conditionalClick stepKey="expandProductStockOptions" selector="{{InventoryConfigSection.ProductStockOptionsTab}}" dependentSelector="{{InventoryConfigSection.CheckIfProductStockOptionsTabExpanded}}" visible="true"/>
+        <uncheckOption selector="{{InventoryConfigSection.DisplayOutOfStockSystemValue}}" stepKey="uncheckUseSystemValue"/>
+        <waitForElementVisible selector="{{InventoryConfigSection.DisplayOutOfStockDropdown}}" stepKey="waitForSwitcherDropdown"/>
+        <selectOption selector="{{InventoryConfigSection.DisplayOutOfStockDropdown}}" userInput="No" stepKey="switchToNo"/>
+        <click selector="{{ContentManagementSection.Save}}" stepKey="clickSaveConfig"/>
+    </actionGroup>
+</actionGroups>
