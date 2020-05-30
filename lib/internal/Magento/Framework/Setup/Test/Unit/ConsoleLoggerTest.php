@@ -3,27 +3,32 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Framework\Setup\Test\Unit;
 
 use Magento\Framework\Setup\ConsoleLogger;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+use Symfony\Component\Console\Formatter\OutputFormatterInterface;
+use Symfony\Component\Console\Output\OutputInterface;
 
-class ConsoleLoggerTest extends \PHPUnit\Framework\TestCase
+class ConsoleLoggerTest extends TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Symfony\Component\Console\Output\OutputInterface
+     * @var MockObject|OutputInterface
      */
     private $console;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|ConsoleLogger
+     * @var MockObject|ConsoleLogger
      */
     private $consoleLoggerModel;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->console = $this->createMock(\Symfony\Component\Console\Output\OutputInterface::class);
-        $outputFormatter = $this->createMock(\Symfony\Component\Console\Formatter\OutputFormatterInterface::class);
+        $this->console = $this->getMockForAbstractClass(OutputInterface::class);
+        $outputFormatter = $this->getMockForAbstractClass(OutputFormatterInterface::class);
         $this->console
             ->expects($this->once())
             ->method('getFormatter')

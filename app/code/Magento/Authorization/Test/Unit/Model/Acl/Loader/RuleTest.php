@@ -18,7 +18,7 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Test class for \Magento\Authorization\Model\Acl\Loader\Rule
+ * @covers \Magento\Authorization\Model\Acl\Loader\Rule
  */
 class RuleTest extends TestCase
 {
@@ -50,14 +50,15 @@ class RuleTest extends TestCase
     /**
      * @inheritDoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->rootResource = new RootResource('Magento_Backend::all');
-        $this->resourceMock = $this->createPartialMock(
-            ResourceConnection::class,
-            ['getTable', 'getConnection']
-        );
-        $this->aclDataCacheMock = $this->createMock(CacheInterface::class);
+        $this->resourceMock = $this->getMockBuilder(ResourceConnection::class)
+            ->addMethods(['getTable'])
+            ->onlyMethods(['getConnection'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->aclDataCacheMock = $this->getMockForAbstractClass(CacheInterface::class);
         $this->serializerMock = $this->createPartialMock(
             Json::class,
             ['serialize', 'unserialize']

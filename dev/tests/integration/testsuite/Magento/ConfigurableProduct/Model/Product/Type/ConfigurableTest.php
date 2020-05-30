@@ -37,7 +37,7 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
      */
     private $productRepository;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->productRepository = Bootstrap::getObjectManager()
             ->create(ProductRepositoryInterface::class);
@@ -236,7 +236,7 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
     public function testGetUsedProductIds()
     {
         $ids = $this->model->getUsedProductIds($this->product);
-        $this->assertInternalType('array', $ids);
+        $this->assertIsArray($ids);
         $this->assertTrue(2 === count($ids)); // impossible to check actual IDs, they are dynamic in the fixture
     }
 
@@ -247,7 +247,7 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
     public function testGetUsedProducts()
     {
         $products = $this->model->getUsedProducts($this->product);
-        $this->assertInternalType('array', $products);
+        $this->assertIsArray($products);
         $this->assertTrue(2 === count($products));
         foreach ($products as $product) {
             $this->assertInstanceOf(\Magento\Catalog\Model\Product::class, $product);
@@ -418,7 +418,7 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
             ['qty' => 5, 'super_attribute' => [$attribute['attribute_id'] => $optionValueId]]
         );
         $result = $this->model->prepareForCart($buyRequest, $this->product);
-        $this->assertInternalType('array', $result);
+        $this->assertIsArray($result);
         $this->assertTrue(2 === count($result));
         foreach ($result as $product) {
             $this->assertInstanceOf(\Magento\Catalog\Model\Product::class, $product);
@@ -514,7 +514,7 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
     {
         $result = $this->model->getProductsToPurchaseByReqGroups($this->product);
         $this->assertArrayHasKey(0, $result);
-        $this->assertInternalType('array', $result[0]);
+        $this->assertIsArray($result[0]);
         $this->assertTrue(2 === count($result[0]));
         // fixture has 2 simple products
         foreach ($result[0] as $product) {

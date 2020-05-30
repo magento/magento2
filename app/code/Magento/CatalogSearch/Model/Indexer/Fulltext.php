@@ -55,11 +55,15 @@ class Fulltext implements
 
     /**
      * @var IndexSwitcherInterface
+     * @deprecated
+     * @see \Magento\Elasticsearch
      */
     private $indexSwitcher;
 
     /**
      * @var \Magento\CatalogSearch\Model\Indexer\Scope\State
+     * @deprecated
+     * @see \Magento\Elasticsearch
      */
     private $indexScopeState;
 
@@ -136,12 +140,8 @@ class Fulltext implements
         );
 
         if (null === $entityIds) {
-            $this->indexScopeState->useTemporaryIndex();
             $saveHandler->cleanIndex($dimensions);
             $saveHandler->saveIndex($dimensions, $this->fullAction->rebuildStoreIndex($storeId));
-
-            $this->indexSwitcher->switchIndex($dimensions);
-            $this->indexScopeState->useRegularIndex();
 
             $this->fulltextResource->resetSearchResultsByStore($storeId);
         } else {

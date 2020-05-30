@@ -3,24 +3,28 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Downloadable\Test\Unit\Model\Sample;
 
 use Magento\Catalog\Api\Data\ProductExtensionInterface;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Downloadable\Api\Data\SampleInterface;
 use Magento\Downloadable\Api\SampleRepositoryInterface;
-use Magento\Downloadable\Model\Sample\UpdateHandler;
 use Magento\Downloadable\Model\Product\Type;
+use Magento\Downloadable\Model\Sample\UpdateHandler;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class UpdateHandlerTest extends \PHPUnit\Framework\TestCase
+class UpdateHandlerTest extends TestCase
 {
     /** @var UpdateHandler */
     protected $model;
 
-    /** @var SampleRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var SampleRepositoryInterface|MockObject */
     protected $sampleRepositoryMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->sampleRepositoryMock = $this->getMockBuilder(SampleRepositoryInterface::class)
             ->getMockForAbstractClass();
@@ -37,21 +41,21 @@ class UpdateHandlerTest extends \PHPUnit\Framework\TestCase
         $sampleId = 11;
         $sampleToDeleteId = 22;
 
-        /** @var SampleInterface|\PHPUnit_Framework_MockObject_MockObject $sampleMock */
+        /** @var SampleInterface|MockObject $sampleMock */
         $sampleMock = $this->getMockBuilder(SampleInterface::class)
             ->getMock();
         $sampleMock->expects($this->exactly(3))
             ->method('getId')
             ->willReturn($sampleId);
 
-        /** @var SampleInterface|\PHPUnit_Framework_MockObject_MockObject $sampleToDeleteMock */
+        /** @var SampleInterface|MockObject $sampleToDeleteMock */
         $sampleToDeleteMock = $this->getMockBuilder(SampleInterface::class)
             ->getMock();
         $sampleToDeleteMock->expects($this->exactly(2))
             ->method('getId')
             ->willReturn($sampleToDeleteId);
 
-        /** @var ProductExtensionInterface|\PHPUnit_Framework_MockObject_MockObject $productExtensionMock */
+        /** @var ProductExtensionInterface|MockObject $productExtensionMock */
         $productExtensionMock = $this->getMockBuilder(ProductExtensionInterface::class)
             ->setMethods(['getDownloadableProductSamples'])
             ->getMockForAbstractClass();
@@ -59,7 +63,7 @@ class UpdateHandlerTest extends \PHPUnit\Framework\TestCase
             ->method('getDownloadableProductSamples')
             ->willReturn([$sampleMock]);
 
-        /** @var ProductInterface|\PHPUnit_Framework_MockObject_MockObject $entityMock */
+        /** @var ProductInterface|MockObject $entityMock */
         $entityMock = $this->getMockBuilder(ProductInterface::class)
             ->setMethods(['getTypeId', 'getExtensionAttributes', 'getSku', 'getStoreId'])
             ->getMockForAbstractClass();
@@ -92,7 +96,7 @@ class UpdateHandlerTest extends \PHPUnit\Framework\TestCase
 
     public function testExecuteNonDownloadable()
     {
-        /** @var ProductInterface|\PHPUnit_Framework_MockObject_MockObject $entityMock */
+        /** @var ProductInterface|MockObject $entityMock */
         $entityMock = $this->getMockBuilder(ProductInterface::class)
             ->setMethods(['getTypeId', 'getExtensionAttributes', 'getSku', 'getStoreId'])
             ->getMockForAbstractClass();
