@@ -86,7 +86,7 @@ class AsyncScheduleMultiStoreTest extends WebapiAbstract
      */
     private $registry;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
         $this->logFilePath = TESTS_TEMP_DIR . "/MessageQueueTestLog.txt";
@@ -225,7 +225,7 @@ class AsyncScheduleMultiStoreTest extends WebapiAbstract
         }
     }
 
-    public function tearDown()
+    protected function tearDown(): void
     {
         $this->clearProducts();
         $this->publisherConsumerController->stopConsumers();
@@ -355,7 +355,7 @@ class AsyncScheduleMultiStoreTest extends WebapiAbstract
      * Remove test store
      * //phpcs:disable
      */
-    public static function tearDownAfterClass()
+    public static function tearDownAfterClass(): void
     {
         parent::tearDownAfterClass();
         //phpcs:enable

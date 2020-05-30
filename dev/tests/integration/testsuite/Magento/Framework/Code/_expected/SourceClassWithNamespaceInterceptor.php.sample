@@ -18,7 +18,7 @@ class Interceptor extends \Magento\Framework\Code\GeneratorTest\SourceClassWithN
     /**
      * {@inheritdoc}
      */
-    public function publicChildMethod(\Zend\Code\Generator\ClassGenerator $classGenerator, $param1 = '', $param2 = '\\', $param3 = '\'', array $array = [])
+    public function publicChildMethod(\Laminas\Code\Generator\ClassGenerator $classGenerator, $param1 = '', $param2 = '\\', $param3 = '\'', array $array = [])
     {
         $pluginInfo = $this->pluginList->getNext($this->subjectType, 'publicChildMethod');
         if (!$pluginInfo) {
@@ -31,7 +31,7 @@ class Interceptor extends \Magento\Framework\Code\GeneratorTest\SourceClassWithN
     /**
      * {@inheritdoc}
      */
-    public function publicMethodWithReference(\Zend\Code\Generator\ClassGenerator &$classGenerator, &$param1, array &$array)
+    public function publicMethodWithReference(\Laminas\Code\Generator\ClassGenerator &$classGenerator, &$param1, array &$array)
     {
         $pluginInfo = $this->pluginList->getNext($this->subjectType, 'publicMethodWithReference');
         if (!$pluginInfo) {
@@ -96,7 +96,7 @@ class Interceptor extends \Magento\Framework\Code\GeneratorTest\SourceClassWithN
     /**
      * {@inheritdoc}
      */
-    public function publicParentMethod(\Zend\Code\Generator\DocBlockGenerator $docBlockGenerator, $param1 = '', $param2 = '\\', $param3 = '\'', array $array = [])
+    public function publicParentMethod(\Laminas\Code\Generator\DocBlockGenerator $docBlockGenerator, $param1 = '', $param2 = '\\', $param3 = '\'', array $array = [])
     {
         $pluginInfo = $this->pluginList->getNext($this->subjectType, 'publicParentMethod');
         if (!$pluginInfo) {

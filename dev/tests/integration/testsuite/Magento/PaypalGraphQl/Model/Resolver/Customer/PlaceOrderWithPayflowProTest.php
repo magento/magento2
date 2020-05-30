@@ -29,7 +29,7 @@ class PlaceOrderWithPayflowProTest extends PaypalPayflowProAbstractTest
      */
     private $quoteIdToMaskedId;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 

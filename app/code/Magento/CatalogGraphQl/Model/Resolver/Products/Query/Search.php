@@ -7,18 +7,19 @@ declare(strict_types=1);
 
 namespace Magento\CatalogGraphQl\Model\Resolver\Products\Query;
 
+use Magento\CatalogGraphQl\DataProvider\Product\SearchCriteriaBuilder;
 use Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\ProductSearch;
-use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
-use Magento\Framework\Api\Search\SearchCriteriaInterface;
 use Magento\CatalogGraphQl\Model\Resolver\Products\SearchResult;
 use Magento\CatalogGraphQl\Model\Resolver\Products\SearchResultFactory;
+use Magento\Framework\Api\Search\SearchCriteriaInterface;
+use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Search\Api\SearchInterface;
-use Magento\Framework\Api\Search\SearchCriteriaInterfaceFactory;
+use Magento\Search\Model\Search\PageSizeProvider;
 
 /**
  * Full text search for catalog using given search criteria.
  */
-class Search
+class Search implements ProductQueryInterface
 {
     /**
      * @var SearchInterface
@@ -31,14 +32,9 @@ class Search
     private $searchResultFactory;
 
     /**
-     * @var \Magento\Search\Model\Search\PageSizeProvider
+     * @var PageSizeProvider
      */
     private $pageSizeProvider;
-
-    /**
-     * @var SearchCriteriaInterfaceFactory
-     */
-    private $searchCriteriaFactory;
 
     /**
      * @var FieldSelection
@@ -51,67 +47,63 @@ class Search
     private $productsProvider;
 
     /**
+     * @var SearchCriteriaBuilder
+     */
+    private $searchCriteriaBuilder;
+
+    /**
      * @param SearchInterface $search
      * @param SearchResultFactory $searchResultFactory
-     * @param \Magento\Search\Model\Search\PageSizeProvider $pageSize
-     * @param SearchCriteriaInterfaceFactory $searchCriteriaFactory
+     * @param PageSizeProvider $pageSize
      * @param FieldSelection $fieldSelection
      * @param ProductSearch $productsProvider
+     * @param SearchCriteriaBuilder $searchCriteriaBuilder
      */
     public function __construct(
         SearchInterface $search,
         SearchResultFactory $searchResultFactory,
-        \Magento\Search\Model\Search\PageSizeProvider $pageSize,
-        SearchCriteriaInterfaceFactory $searchCriteriaFactory,
+        PageSizeProvider $pageSize,
         FieldSelection $fieldSelection,
-        ProductSearch $productsProvider
+        ProductSearch $productsProvider,
+        SearchCriteriaBuilder $searchCriteriaBuilder
     ) {
         $this->search = $search;
         $this->searchResultFactory = $searchResultFactory;
         $this->pageSizeProvider = $pageSize;
-        $this->searchCriteriaFactory = $searchCriteriaFactory;
         $this->fieldSelection = $fieldSelection;
         $this->productsProvider = $productsProvider;
+        $this->searchCriteriaBuilder = $searchCriteriaBuilder;
     }
 
     /**
-     * Return results of full text catalog search of given term, and will return filtered results if filter is specified
+     * Return product search results using Search API
      *
-     * @param SearchCriteriaInterface $searchCriteria
+     * @param array $args
      * @param ResolveInfo $info
      * @return SearchResult
      * @throws \Exception
      */
     public function getResult(
-        SearchCriteriaInterface $searchCriteria,
+        array $args,
         ResolveInfo $info
     ): SearchResult {
         $queryFields = $this->fieldSelection->getProductsFieldSelection($info);
+        $searchCriteria = $this->buildSearchCriteria($args, $info);
 
         $realPageSize = $searchCriteria->getPageSize();
         $realCurrentPage = $searchCriteria->getCurrentPage();
-        // Current page must be set to 0 and page size to max for search to grab all ID's as temporary workaround
+        //Because of limitations of sort and pagination on search API we will query all IDS
         $pageSize = $this->pageSizeProvider->getMaxPageSize();
         $searchCriteria->setPageSize($pageSize);
         $searchCriteria->setCurrentPage(0);
         $itemsResults = $this->search->search($searchCriteria);
 
-        //Create copy of search criteria without conditions (conditions will be applied by joining search result)
-        $searchCriteriaCopy = $this->searchCriteriaFactory->create()
-            ->setSortOrders($searchCriteria->getSortOrders())
-            ->setPageSize($realPageSize)
-            ->setCurrentPage($realCurrentPage);
-
-        $searchResults = $this->productsProvider->getList($searchCriteriaCopy, $itemsResults, $queryFields);
-
-        //possible division by 0
-        if ($realPageSize) {
-            $maxPages = (int)ceil($searchResults->getTotalCount() / $realPageSize);
-        } else {
-            $maxPages = 0;
-        }
+        //Address limitations of sort and pagination on search API apply original pagination from GQL query
         $searchCriteria->setPageSize($realPageSize);
         $searchCriteria->setCurrentPage($realCurrentPage);
+        $searchResults = $this->productsProvider->getList($searchCriteria, $itemsResults, $queryFields);
+
+        $totalPages = $realPageSize ? ((int)ceil($searchResults->getTotalCount() / $realPageSize)) : 0;
 
         $productArray = [];
         /** @var \Magento\Catalog\Model\Product $product */
@@ -127,8 +119,24 @@ class Search
                 'searchAggregation' => $itemsResults->getAggregations(),
                 'pageSize' => $realPageSize,
                 'currentPage' => $realCurrentPage,
-                'totalPages' => $maxPages,
+                'totalPages' => $totalPages,
             ]
         );
+    }
+
+    /**
+     * Build search criteria from query input args
+     *
+     * @param array $args
+     * @param ResolveInfo $info
+     * @return SearchCriteriaInterface
+     */
+    private function buildSearchCriteria(array $args, ResolveInfo $info): SearchCriteriaInterface
+    {
+        $productFields = (array)$info->getFieldSelection(1);
+        $includeAggregations = isset($productFields['filters']) || isset($productFields['aggregations']);
+        $searchCriteria = $this->searchCriteriaBuilder->build($args, $includeAggregations);
+
+        return $searchCriteria;
     }
 }

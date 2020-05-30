@@ -9,7 +9,6 @@ use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\AttributeProvider;
 use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldType\ResolverInterface as TypeResolver;
 use Magento\Elasticsearch\Model\Config;
 use Magento\Elasticsearch\SearchAdapter\Query\ValueTransformerPool;
-use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Search\Request\Query\BoolExpression;
 use Magento\Framework\Search\Request\QueryInterface as RequestQueryInterface;
 use Magento\Elasticsearch\Model\Adapter\FieldMapperInterface;
@@ -29,13 +28,6 @@ class Match implements QueryInterface
      * @var FieldMapperInterface
      */
     private $fieldMapper;
-
-    /**
-     * @deprecated
-     * @see \Magento\Elasticsearch\SearchAdapter\Query\ValueTransformer\TextTransformer
-     * @var PreprocessorInterface[]
-     */
-    protected $preprocessorContainer;
 
     /**
      * @var AttributeProvider
@@ -58,29 +50,23 @@ class Match implements QueryInterface
 
     /**
      * @param FieldMapperInterface $fieldMapper
-     * @param PreprocessorInterface[] $preprocessorContainer
-     * @param AttributeProvider|null $attributeProvider
-     * @param TypeResolver|null $fieldTypeResolver
-     * @param ValueTransformerPool|null $valueTransformerPool
-     * @param Config|null $config
+     * @param AttributeProvider $attributeProvider
+     * @param TypeResolver $fieldTypeResolver
+     * @param ValueTransformerPool $valueTransformerPool
+     * @param Config $config
      */
     public function __construct(
         FieldMapperInterface $fieldMapper,
-        array $preprocessorContainer,
-        AttributeProvider $attributeProvider = null,
-        TypeResolver $fieldTypeResolver = null,
-        ValueTransformerPool $valueTransformerPool = null,
-        Config $config = null
+        AttributeProvider $attributeProvider,
+        TypeResolver $fieldTypeResolver,
+        ValueTransformerPool $valueTransformerPool,
+        Config $config
     ) {
         $this->fieldMapper = $fieldMapper;
-        $this->preprocessorContainer = $preprocessorContainer;
-        $this->attributeProvider = $attributeProvider ?? ObjectManager::getInstance()
-            ->get(AttributeProvider::class);
-        $this->fieldTypeResolver = $fieldTypeResolver ?? ObjectManager::getInstance()
-            ->get(TypeResolver::class);
-        $this->valueTransformerPool = $valueTransformerPool ?? ObjectManager::getInstance()
-            ->get(ValueTransformerPool::class);
-        $this->config = $config ?? ObjectManager::getInstance()->get(Config::class);
+        $this->attributeProvider = $attributeProvider;
+        $this->fieldTypeResolver = $fieldTypeResolver;
+        $this->valueTransformerPool = $valueTransformerPool;
+        $this->config = $config;
     }
 
     /**
@@ -94,10 +80,10 @@ class Match implements QueryInterface
         $minimumShouldMatch = $this->config->getElasticsearchConfigData('minimum_should_match');
         foreach ($queries as $query) {
             $queryBody = $query['body'];
-            $matchKey = isset($queryBody['match_phrase']) ? 'match_phrase' : 'match';
+            $matchKey = array_keys($queryBody)[0];
             foreach ($queryBody[$matchKey] as $field => $matchQuery) {
                 $matchQuery['boost'] = $requestQueryBoost + $matchQuery['boost'];
-                if ($minimumShouldMatch) {
+                if ($minimumShouldMatch && $matchKey != 'match_phrase_prefix') {
                     $matchQuery['minimum_should_match'] = $minimumShouldMatch;
                 }
                 $queryBody[$matchKey][$field] = $matchQuery;
@@ -167,11 +153,11 @@ class Match implements QueryInterface
                 //Value is incompatible with this field type.
                 continue;
             }
-
+            $matchCondition = $match['matchCondition'] ?? $condition;
             $conditions[] = [
                 'condition' => $queryValue['condition'],
                 'body' => [
-                    $condition => [
+                    $matchCondition => [
                         $resolvedField => [
                             'query' => $transformedValue,
                             'boost' => $match['boost'] ?? 1,
@@ -182,21 +168,5 @@ class Match implements QueryInterface
         }
 
         return $conditions;
-    }
-
-    /**
-     * Escape a value for special query characters such as ':', '(', ')', '*', '?', etc.
-     *
-     * @deprecated
-     * @see \Magento\Elasticsearch\SearchAdapter\Query\ValueTransformer\TextTransformer
-     * @param string $value
-     * @return string
-     */
-    protected function escape($value)
-    {
-        $pattern = '/(\+|-|&&|\|\||!|\(|\)|\{|}|\[|]|\^|"|~|\*|\?|:|\\\)/';
-        $replace = '\\\$1';
-
-        return preg_replace($pattern, $replace, $value);
     }
 }
