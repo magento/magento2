@@ -105,6 +105,8 @@ class Info extends AbstractModel implements InfoInterface
     }
 
     /**
+     * Get the current order to manipulate order details
+     *
      * @return mixed
      * @throws \Magento\Framework\Exception\LocalizedException
      */
