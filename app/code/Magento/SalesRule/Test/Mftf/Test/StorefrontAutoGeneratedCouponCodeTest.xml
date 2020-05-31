@@ -59,9 +59,10 @@
         <see selector="{{AdminCartPriceRulesFormSection.successMessage}}" userInput="Message is added to queue, wait to get your coupons soon"
              stepKey="seeSuccessMessage"/>
 
-        <!-- Run cron twice -->
-        <magentoCLI command="cron:run" stepKey="runCron1"/>
-        <magentoCLI command="cron:run" stepKey="runCron2"/>
+        <!-- Start message queue for export consumer -->
+        <actionGroup ref="AdminStartMessageQueueConsumerActionGroup" stepKey="startMessageQueue">
+            <argument name="consumer" value="AdminCodeGeneratorMessageConsumerData"/>
+        </actionGroup>
         <reloadPage stepKey="refreshPage"/>
         <waitForPageLoad stepKey="waitFormToReload1"/>
         <conditionalClick selector="{{AdminCartPriceRulesFormSection.manageCouponCodesHeader}}"
