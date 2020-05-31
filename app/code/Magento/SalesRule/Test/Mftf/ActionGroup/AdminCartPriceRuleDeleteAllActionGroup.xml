@@ -7,12 +7,12 @@
 -->
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <actionGroup name="AdminCatalogPriceRuleDeleteAllActionGroup">
+    <actionGroup name="AdminCartPriceRuleDeleteAllActionGroup">
         <annotations>
-            <description>Open Catalog Price Rule grid and delete all rules one by one. Need to avoid interference with other tests that test catalog price rules.</description>
+            <description>Open Cart Price Rule grid and delete all rules one by one. Need to avoid interference with other tests that test cart price rules.</description>
         </annotations>
 
-        <amOnPage url="{{AdminCatalogPriceRuleGridPage.url}}" stepKey="goToAdminCatalogPriceRuleGridPage"/>
+        <amOnPage url="{{AdminCartPriceRulesPage.url}}" stepKey="goToAdminCartPriceRuleGridPage"/>
         <!-- It sometimes is loading too long for default 10s -->
         <waitForPageLoad time="60" stepKey="waitForPageFullyLoaded"/>
         <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clearExistingFilters"/>
