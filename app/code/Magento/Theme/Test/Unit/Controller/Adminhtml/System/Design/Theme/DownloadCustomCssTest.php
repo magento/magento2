@@ -234,7 +234,7 @@ class DownloadCustomCssTest extends TestCase
             ->with($themeId)
             ->willReturn(null);
         $this->messageManager->expects($this->once())
-            ->method('addException');
+            ->method('addExceptionMessage');
         $logger->expects($this->once())
             ->method('critical');
         $this->redirect->expects($this->once())

@@ -236,7 +236,7 @@ class DeleteTest extends TestCase
             ->with($path)
             ->willReturnSelf();
         $this->messageManager->expects($this->once())
-            ->method('addException');
+            ->method('addExceptionMessage');
         $this->objectManager->expects($this->once())
             ->method('get')
             ->with(LoggerInterface::class)

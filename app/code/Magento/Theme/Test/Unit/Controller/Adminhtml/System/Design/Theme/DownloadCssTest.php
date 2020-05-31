@@ -265,7 +265,7 @@ class DownloadCssTest extends TestCase
             ->method('getId')
             ->willReturn(null);
         $this->messageManager->expects($this->once())
-            ->method('addException');
+            ->method('addExceptionMessage');
         $logger->expects($this->once())
             ->method('critical');
         $this->redirect->expects($this->once())
