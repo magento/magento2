@@ -89,7 +89,7 @@
                 <requiredEntity createDataKey="createConfigProduct"/>
             </createData>
 
-            <magentoCron stepKey="runCronIndex" groups="index"/>
+            <magentoCron groups="index" stepKey="runCronIndex"/>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
@@ -113,7 +113,10 @@
             <argument name="attributeData" value="$$createConfigProduct.sku$$"/>
         </actionGroup>
 
-        <magentoCron stepKey="runCron"/>
+        <!-- Start message queue for export consumer -->
+        <actionGroup ref="AdminStartMessageQueueConsumerActionGroup" stepKey="startMessageQueue"/>
+        <reloadPage stepKey="refreshPage"/>
+        <waitForPageLoad stepKey="waitForPageLoaded"/>
 
         <grabTextFrom selector="{{AdminExportAttributeSection.exportFileNameByPosition('0')}}" stepKey="grabNameFile"/>
 
