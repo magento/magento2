@@ -38,11 +38,16 @@ $productModel->setTypeId(Type::TYPE_SIMPLE)
 
 $productRepository->save($productModel);
 
-$productModel->setName('AdvancedPricingSimple 2')
-    ->setId(null)
-    ->setUrlKey('')
+$productModel = $objectManager->create(Product::class);
+$productModel->setTypeId(Type::TYPE_SIMPLE)
+    ->setAttributeSetId(4)
+    ->setName('AdvancedPricingSimple 2')
     ->setSku('AdvancedPricingSimple 2')
     ->setPrice(654)
+    ->setVisibility(Visibility::VISIBILITY_BOTH)
+    ->setStatus(Status::STATUS_ENABLED)
+    ->setWebsiteIds([1])
+    ->setCategoryIds([])
+    ->setStockData(['qty' => 100, 'is_in_stock' => 1, 'manage_stock' => 1])
     ->setIsObjectNew(true);
-
 $productRepository->save($productModel);
