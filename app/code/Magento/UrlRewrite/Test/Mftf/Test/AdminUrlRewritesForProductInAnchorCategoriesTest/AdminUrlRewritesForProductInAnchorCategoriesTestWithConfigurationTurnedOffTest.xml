@@ -73,7 +73,7 @@
             <argument name="requestPath" value="$simpleSubCategory1.custom_attributes[url_key]$/$simpleSubCategory2.custom_attributes[url_key]$/$simpleSubCategory3.custom_attributes[url_key]$/$createSimpleProduct.custom_attributes[url_key]$.html"/>
         </actionGroup>
 
-        <!-- 3. Edit Category for DEFAULT Store View: -->
+        <!-- 3. Edit Category 1 for DEFAULT Store View: -->
         <actionGroup ref="SwitchCategoryStoreViewActionGroup" stepKey="switchStoreView">
             <argument name="Store" value="_defaultStore.name"/>
             <argument name="CatName" value="$$simpleSubCategory1.name$$"/>
