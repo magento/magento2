@@ -80,7 +80,13 @@
                 <requiredEntity createDataKey="secondSimpleProductForFixedWithAttribute"/>
             </createData>
 
-            <magentoCron stepKey="runCron"/>
+            <!-- Start message queue for export consumer -->
+            <actionGroup ref="CliConsumerStartActionGroup" stepKey="startMessageQueue">
+                <argument name="consumerName" value="{{AdminExportMessageConsumerData.consumerName}}"/>
+                <argument name="maxMessages" value="{{AdminExportMessageConsumerData.messageLimit}}"/>
+            </actionGroup>
+            <reloadPage stepKey="refreshPage"/>
+            <waitForPageLoad stepKey="waitForPageLoaded"/>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
@@ -96,7 +102,7 @@
             <deleteData createDataKey="createProductAttribute" stepKey="deleteProductAttribute"/>
 
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
-            <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
+            <magentoCLI command="cron:run --group=index" stepKey="reindexInvalidatedIndices"/>
         </after>
 
         <!-- Go to export page -->
