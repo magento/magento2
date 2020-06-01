@@ -35,7 +35,7 @@ class CategoryProductIndexTables
     public function createTables(): void
     {
         $connection = $this->resourceConnection->getConnection();
-        for ($storeId = 0; $storeId <= 128; $storeId++) {
+        for ($storeId = 0; $storeId <= 256; $storeId++) {
             $connection->createTable(
                 $connection->createTableByDdl(
                     $this->resourceConnection->getTableName($this->prototype),
