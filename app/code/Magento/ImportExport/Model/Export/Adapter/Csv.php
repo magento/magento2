@@ -54,6 +54,18 @@ class Csv extends AbstractAdapter
     {
         if (is_object($this->_fileHandler)) {
             $this->_fileHandler->close();
+            $this->resolveDestination();
+        }
+    }
+
+    /**
+     * Remove temporary destination
+     *
+     * @return void
+     */
+    private function resolveDestination(): void
+    {
+        if (strpos($this->_destination, '/') === false) {
             $this->_directoryHandle->delete($this->_destination);
         }
     }
