@@ -111,6 +111,8 @@ class Value extends AbstractModel implements \Magento\Catalog\Api\Data\ProductCu
     }
 
     /**
+     * Add value to values array
+     *
      * @codeCoverageIgnoreStart
      * @param mixed $value
      * @return $this
@@ -122,6 +124,8 @@ class Value extends AbstractModel implements \Magento\Catalog\Api\Data\ProductCu
     }
 
     /**
+     * Returns array of values
+     *
      * @return array
      */
     public function getValues()
@@ -130,6 +134,8 @@ class Value extends AbstractModel implements \Magento\Catalog\Api\Data\ProductCu
     }
 
     /**
+     * Set values array
+     *
      * @param array $values
      * @return $this
      */
@@ -140,6 +146,8 @@ class Value extends AbstractModel implements \Magento\Catalog\Api\Data\ProductCu
     }
 
     /**
+     * Unset all from values array
+     *
      * @return $this
      */
     public function unsetValues()
@@ -149,6 +157,8 @@ class Value extends AbstractModel implements \Magento\Catalog\Api\Data\ProductCu
     }
 
     /**
+     * Set option
+     *
      * @param Option $option
      * @return $this
      */
@@ -159,6 +169,8 @@ class Value extends AbstractModel implements \Magento\Catalog\Api\Data\ProductCu
     }
 
     /**
+     * Unset option
+     *
      * @return $this
      */
     public function unsetOption()
@@ -178,6 +190,8 @@ class Value extends AbstractModel implements \Magento\Catalog\Api\Data\ProductCu
     }
 
     /**
+     * Set product
+     *
      * @param Product $product
      * @return $this
      */
@@ -190,6 +204,8 @@ class Value extends AbstractModel implements \Magento\Catalog\Api\Data\ProductCu
     //@codeCoverageIgnoreEnd
 
     /**
+     * Get product
+     *
      * @return Product
      */
     public function getProduct()
@@ -201,6 +217,8 @@ class Value extends AbstractModel implements \Magento\Catalog\Api\Data\ProductCu
     }
 
     /**
+     * Save array of values
+     *
      * @return $this
      */
     public function saveValues()
@@ -270,6 +288,8 @@ class Value extends AbstractModel implements \Magento\Catalog\Api\Data\ProductCu
     }
 
     /**
+     * Returns values by option
+     *
      * @param array $optionIds
      * @param int $option_id
      * @param int $store_id
@@ -289,6 +309,8 @@ class Value extends AbstractModel implements \Magento\Catalog\Api\Data\ProductCu
     }
 
     /**
+     * Delete value by option
+     *
      * @param int $option_id
      * @return $this
      */
@@ -299,6 +321,8 @@ class Value extends AbstractModel implements \Magento\Catalog\Api\Data\ProductCu
     }
 
     /**
+     * Delete values by option
+     *
      * @param int $option_type_id
      * @return $this
      */

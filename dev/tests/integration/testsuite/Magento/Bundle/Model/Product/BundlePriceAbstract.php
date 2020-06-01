@@ -8,6 +8,7 @@ namespace Magento\Bundle\Model\Product;
 
 /**
  * Abstract class for testing bundle prices
+ * @codingStandardsIgnoreStart
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 abstract class BundlePriceAbstract extends \PHPUnit\Framework\TestCase
@@ -142,3 +143,4 @@ abstract class BundlePriceAbstract extends \PHPUnit\Framework\TestCase
         return $bundleProduct;
     }
 }
+// @codingStandardsIgnoreEnd
