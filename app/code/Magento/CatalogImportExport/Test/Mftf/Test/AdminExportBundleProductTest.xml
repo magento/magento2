@@ -81,7 +81,10 @@
             </createData>
 
             <!-- Start message queue for export consumer -->
-            <actionGroup ref="CliConsumerStartActionGroup" stepKey="startMessageQueue"/>
+            <actionGroup ref="CliConsumerStartActionGroup" stepKey="startMessageQueue">
+                <argument name="consumerName" value="{{AdminExportMessageConsumerData.consumerName}}"/>
+                <argument name="maxMessages" value="{{AdminExportMessageConsumerData.messageLimit}}"/>
+            </actionGroup>
             <reloadPage stepKey="refreshPage"/>
             <waitForPageLoad stepKey="waitForPageLoaded"/>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>

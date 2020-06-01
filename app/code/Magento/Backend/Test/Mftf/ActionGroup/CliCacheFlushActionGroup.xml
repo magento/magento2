@@ -13,7 +13,7 @@
             <description>Run cache:flush by CLI with specified cache tags (space separated).</description>
         </annotations>
         <arguments>
-            <argument name="tags" type="string" defaultValue="full_page"/>
+            <argument name="tags" type="string"/>
         </arguments>
 
         <magentoCLI command="cache:flush" arguments="{{tags}}" stepKey="flushSpecifiedCache"/>
