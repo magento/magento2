@@ -18,9 +18,10 @@ use Magento\Quote\Model\Quote;
 use Magento\Framework\Message\MessageInterface;
 
 /**
- * @inheritdoc
+ * Unified approach to add products to the Shopping Cart.
+ * Client code must validate, that customer is eligible to call service with provided {cartId} and {cartItems}
  */
-class AddProductsToCart implements AddProductsToCartInterface
+class AddProductsToCart
 {
     /**#@+
      * Error message codes
@@ -88,7 +89,12 @@ class AddProductsToCart implements AddProductsToCartInterface
     }
 
     /**
-     * @inheritdoc
+     * Add cart items to the cart
+     *
+     * @param string $maskedCartId
+     * @param Data\CartItem[] $cartItems
+     * @return AddProductsToCartOutput
+     * @throws NoSuchEntityException Could not find a Cart with provided $maskedCartId
      */
     public function execute(string $maskedCartId, array $cartItems): AddProductsToCartOutput
     {
