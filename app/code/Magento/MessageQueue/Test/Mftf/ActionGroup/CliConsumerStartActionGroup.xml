@@ -13,8 +13,8 @@
             <description>Starts message queue for specific consumer by CLI.</description>
         </annotations>
         <arguments>
-            <argument name="consumerName" type="string" defaultValue="{{AdminExportMessageConsumerData.consumerName}}"/>
-            <argument name="maxMessages" type="string" defaultValue="{{AdminExportMessageConsumerData.messageLimit}}"/>
+            <argument name="consumerName" type="string"/>
+            <argument name="maxMessages" type="string"/>
         </arguments>
 
         <magentoCLI command="queue:consumers:start {{consumerName}} --max-messages={{maxMessages}}" stepKey="startMessageQueue"/>
