@@ -1,9 +1,7 @@
 {
     "name": "magento/module-newsletter-graph-ql",
     "description": "Provides GraphQl functionality for the newsletter subscriptions.",
-    "config": {
-        "sort-packages": true
-    },
+    "type": "magento2-module",
     "require": {
         "php": "~7.3.0||~7.4.0",
         "magento/framework": "*",
@@ -11,7 +9,6 @@
         "magento/module-newsletter": "*",
         "magento/module-store": "*"
     },
-    "type": "magento2-module",
     "license": [
         "OSL-3.0",
         "AFL-3.0"
