@@ -13,6 +13,8 @@ use Magento\Setup\Model\Cron\Queue;
 
 /**
  * Upgrade job
+ *
+ * @deprecated Starting from Magento 2.3.6 Web Setup Wizard is deprecated
  */
 class JobUpgrade extends AbstractJob
 {

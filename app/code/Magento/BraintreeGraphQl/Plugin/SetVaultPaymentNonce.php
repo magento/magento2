@@ -14,6 +14,9 @@ use Psr\Log\LoggerInterface;
 
 /**
  * Plugin creating nonce from Magento Vault Braintree public hash
+ *
+ * @deprecated Starting from Magento 2.3.6 Braintree payment method core integration is deprecated
+ * in favor of official payment integration available on the marketplace
  */
 class SetVaultPaymentNonce
 {

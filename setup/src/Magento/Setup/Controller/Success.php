@@ -10,6 +10,11 @@ use Magento\Setup\Model\ObjectManagerProvider;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 
+/**
+ * Class Success
+ *
+ * @deprecated Starting from Magento 2.3.6 Web Setup Wizard is deprecated
+ */
 class Success extends AbstractActionController
 {
     /**

@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\CatalogUrlRewrite\Test\Unit\Model\Category\Plugin\Store;
 
+use Magento\Catalog\Model\ResourceModel\Category\Collection as CategortCollection;
 use Magento\CatalogUrlRewrite\Model\Category\Plugin\Store\View as StoreViewPlugin;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\Model\AbstractModel;
@@ -155,9 +156,16 @@ class ViewTest extends TestCase
         $this->abstractModelMock->expects($this->any())
             ->method('isObjectNew')
             ->willReturn(true);
+        $categoryCollection = $this->getMockBuilder(CategortCollection::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['getIterator'])
+            ->getMock();
+        $categoryCollection->expects($this->any())
+            ->method('getIterator')
+            ->willReturn(new \ArrayIterator([]));
         $this->categoryMock->expects($this->once())
             ->method('getCategories')
-            ->willReturn([]);
+            ->willReturn($categoryCollection);
         $this->categoryFactoryMock->expects($this->once())
             ->method('create')
             ->willReturn($this->categoryMock);

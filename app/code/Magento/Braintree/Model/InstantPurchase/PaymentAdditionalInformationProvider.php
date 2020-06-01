@@ -11,6 +11,9 @@ use Magento\Vault\Api\Data\PaymentTokenInterface;
 
 /**
  * Provides Braintree specific payment additional information for instant purchase.
+ *
+ * @deprecated Starting from Magento 2.3.6 Braintree payment method core integration is deprecated
+ * in favor of official payment integration available on the marketplace
  */
 class PaymentAdditionalInformationProvider implements PaymentAdditionalInformationProviderInterface
 {

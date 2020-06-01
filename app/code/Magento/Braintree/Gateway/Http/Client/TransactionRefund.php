@@ -7,6 +7,12 @@ namespace Magento\Braintree\Gateway\Http\Client;
 
 use Magento\Braintree\Gateway\Request\PaymentDataBuilder;
 
+/**
+ * Braintree transaction refund
+ *
+ * @deprecated Starting from Magento 2.3.6 Braintree payment method core integration is deprecated
+ * in favor of official payment integration available on the marketplace
+ */
 class TransactionRefund extends AbstractTransaction
 {
     /**
