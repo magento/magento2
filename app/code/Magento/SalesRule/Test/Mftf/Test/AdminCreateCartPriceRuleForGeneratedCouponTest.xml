@@ -56,8 +56,9 @@
         <see selector="{{AdminCartPriceRulesFormSection.successMessage}}" userInput="Message is added to queue, wait to get your coupons soon" stepKey="seeGenerationSuccess"/>
 
         <!-- Apply changes -->
-        <actionGroup ref="AdminStartMessageQueueConsumerActionGroup" stepKey="startMessageQueue">
-            <argument name="consumer" value="AdminCodeGeneratorMessageConsumerData"/>
+        <actionGroup ref="CliConsumerStartActionGroup" stepKey="startMessageQueue">
+            <argument name="consumerName" value="{{AdminCodeGeneratorMessageConsumerData.consumerName}}"/>
+            <argument name="maxMessages" value="{{AdminCodeGeneratorMessageConsumerData.messageLimit}}"/>
         </actionGroup>
         <reloadPage stepKey="refreshPage"/>
         <waitForPageLoad stepKey="waitFormToReload1"/>

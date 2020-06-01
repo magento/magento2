@@ -50,7 +50,7 @@
         <actionGroup ref="ExportAllProductsActionGroup" stepKey="exportCreatedProducts"/>
 
         <!-- Start message queue for export consumer -->
-        <actionGroup ref="AdminStartMessageQueueConsumerActionGroup" stepKey="startMessageQueue"/>
+        <actionGroup ref="CliConsumerStartActionGroup" stepKey="startMessageQueue"/>
         <reloadPage stepKey="pageReload" />
         <waitForPageLoad stepKey="waitForPageLoaded" />
         <grabTextFrom selector="{{AdminExportAttributeSection.exportFileNameByPosition('0')}}" stepKey="grabNameFile"/>

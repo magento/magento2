@@ -9,15 +9,15 @@
 <entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
     <entity name="AdminExportMessageConsumerData">
-        <data key="consumer_name">exportProcessor</data>
-        <data key="message_limit">100</data>
+        <data key="consumerName">exportProcessor</data>
+        <data key="messageLimit">100</data>
     </entity>
     <entity name="AdminProductAttributeUpdateMessageConsumerData">
-        <data key="consumer_name">product_action_attribute.update</data>
-        <data key="message_limit">100</data>
+        <data key="consumerName">product_action_attribute.update</data>
+        <data key="messageLimit">100</data>
     </entity>
     <entity name="AdminCodeGeneratorMessageConsumerData">
-        <data key="consumer_name">codegeneratorProcessor</data>
-        <data key="message_limit">100</data>
+        <data key="consumerName">codegeneratorProcessor</data>
+        <data key="messageLimit">100</data>
     </entity>
 </entities>

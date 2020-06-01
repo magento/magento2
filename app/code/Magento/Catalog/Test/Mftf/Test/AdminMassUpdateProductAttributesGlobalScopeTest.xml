@@ -67,8 +67,9 @@
         <see selector="{{AdminMessagesSection.success}}" userInput="Message is added to queue" stepKey="seeAttributeUpdateSuccessMsg"/>
 
         <!-- Start message queue for product attribute consumer -->
-        <actionGroup ref="AdminStartMessageQueueConsumerActionGroup" stepKey="startMessageQueue">
-            <argument name="consumer" value="AdminProductAttributeUpdateMessageConsumerData"/>
+        <actionGroup ref="CliConsumerStartActionGroup" stepKey="startMessageQueue">
+            <argument name="consumerName" value="{{AdminProductAttributeUpdateMessageConsumerData.consumerName}}"/>
+            <argument name="maxMessages" value="{{AdminProductAttributeUpdateMessageConsumerData.messageLimit}}"/>
         </actionGroup>
 
         <!-- Assert on storefront default view -->

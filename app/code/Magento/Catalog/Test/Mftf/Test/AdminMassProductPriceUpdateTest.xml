@@ -57,8 +57,9 @@
         <see selector="{{AdminProductMessagesSection.successMessage}}" userInput="Message is added to queue" stepKey="seeAttributeUpateSuccessMsg"/>
 
         <!-- Start message queue -->
-        <actionGroup ref="AdminStartMessageQueueConsumerActionGroup" stepKey="startMessageQueueConsumer">
-            <argument name="consumer" value="AdminProductAttributeUpdateConsumerData"/>
+        <actionGroup ref="CliConsumerStartActionGroup" stepKey="startMessageQueueConsumer">
+            <argument name="consumerName" value="{{AdminProductAttributeUpdateConsumerData.consumerName}}"/>
+            <argument name="maxMessages" value="{{AdminProductAttributeUpdateConsumerData.messageLimit}}"/>
         </actionGroup>
         <!-- Run cron -->
         <magentoCLI command="cron:run --group=index" stepKey="runCron"/>

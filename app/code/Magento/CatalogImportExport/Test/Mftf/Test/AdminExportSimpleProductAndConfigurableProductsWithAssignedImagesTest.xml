@@ -114,7 +114,7 @@
         </actionGroup>
 
         <!-- Start message queue for export consumer -->
-        <actionGroup ref="AdminStartMessageQueueConsumerActionGroup" stepKey="startMessageQueue"/>
+        <actionGroup ref="CliConsumerStartActionGroup" stepKey="startMessageQueue"/>
         <reloadPage stepKey="refreshPage"/>
         <waitForPageLoad stepKey="waitForPageLoaded"/>
 

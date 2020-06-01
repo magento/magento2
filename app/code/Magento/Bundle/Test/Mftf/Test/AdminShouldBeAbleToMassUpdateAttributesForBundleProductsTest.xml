@@ -57,8 +57,9 @@
             <argument name="product" value="UpdateAttributeNameAndDescription"/>
         </actionGroup>
         <!-- Start message queue for product attribute consumer -->
-        <actionGroup ref="AdminStartMessageQueueConsumerActionGroup" stepKey="startMessageQueue">
-            <argument name="consumer" value="AdminProductAttributeUpdateMessageConsumerData"/>
+        <actionGroup ref="CliConsumerStartActionGroup" stepKey="startMessageQueue">
+            <argument name="consumerName" value="{{AdminProductAttributeUpdateMessageConsumerData.consumerName}}"/>
+            <argument name="maxMessages" value="{{AdminProductAttributeUpdateMessageConsumerData.messageLimit}}"/>
         </actionGroup>
         <!-- Search for a product with a new name and Open Product -->
         <actionGroup ref="FilterProductGridByNameActionGroup" stepKey="searchWithNewProductName">
