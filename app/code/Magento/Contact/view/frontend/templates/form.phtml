@@ -5,6 +5,7 @@
  */
 
 // phpcs:disable Magento2.Templates.ThisInTemplate
+// phpcs:disable Generic.Files.LineLength.TooLong
 
 /** @var \Magento\Contact\Block\ContactForm $block */
 ?>
@@ -16,9 +17,7 @@
       data-mage-init='{"validation":{}}'>
     <fieldset class="fieldset">
         <legend class="legend"><span><?= $block->escapeHtml(__('Write Us')) ?></span></legend><br />
-        <div class="field note no-label">
-            <?= $block->escapeHtml(__('Jot us a note and we’ll get back to you as quickly as possible.')) ?>
-        </div>
+        <div class="field note no-label"><?= $block->escapeHtml(__('Jot us a note and we’ll get back to you as quickly as possible.')) ?></div>
         <div class="field name required">
             <label class="label" for="name"><span><?= $block->escapeHtml(__('Name')) ?></span></label>
             <div class="control">
@@ -50,17 +49,9 @@
             </div>
         </div>
         <div class="field comment required">
-            <label class="label" for="comment">
-                <span>
-                    <?= $block->escapeHtml(__('What’s on your mind?')) ?>
-                </span>
-            </label>
+            <label class="label" for="comment"><span><?= $block->escapeHtml(__('What’s on your mind?')) ?></span></label>
             <div class="control">
-                <textarea name="comment" id="comment" title="<?= $block->escapeHtmlAttr(__('What’s on your mind?')) ?>"
-                          class="input-text" cols="5" rows="3" data-validate="{required:true}">
-                    <?= $block->escapeHtml($this->helper(\Magento\Contact\Helper\Data::class)
-                        ->getPostValue('comment')) ?>
-                </textarea>
+                <textarea name="comment" id="comment" title="<?= $block->escapeHtmlAttr(__('What’s on your mind?')) ?>" class="input-text" cols="5" rows="3" data-validate="{required:true}"><?= $block->escapeHtml($this->helper(\Magento\Contact\Helper\Data::class)->getPostValue('comment')) ?></textarea>
             </div>
         </div>
         <?= $block->getChildHtml('form.additional.info') ?>

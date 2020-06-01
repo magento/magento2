@@ -221,6 +221,11 @@ require([
 <?php endif; ?>
 <script type="text/x-magento-init">
     {
+        ".field.password": {
+            "passwordStrengthIndicator": {
+                "formSelector": "form.form-create-account"
+            }
+        },
         "*": {
             "Magento_Customer/js/block-submit-on-send": {
                 "formId": "form-validate"
