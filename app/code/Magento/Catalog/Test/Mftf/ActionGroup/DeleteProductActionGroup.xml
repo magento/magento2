@@ -20,6 +20,7 @@
         <waitForPageLoad stepKey="waitForCatalogSubmenu" time="5"/>
         <click stepKey="clickOnProducts" selector="{{CatalogSubmenuSection.products}}"/>
         <waitForPageLoad stepKey="waitForProductsPage" time="10"/>
+        <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clickClearFilters"/>
         <click stepKey="TickCheckbox" selector="{{ProductsPageSection.checkboxForProduct(productName)}}"/>
         <click stepKey="OpenActions" selector="{{ProductsPageSection.actions}}"/>
         <waitForAjaxLoad stepKey="waitForDelete" time="5"/>
