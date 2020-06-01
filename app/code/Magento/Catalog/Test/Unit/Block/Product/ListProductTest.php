@@ -235,7 +235,7 @@ class ListProductTest extends TestCase
             ->willReturn(true);
         $this->cartHelperMock->expects($this->any())
             ->method('getAddUrl')
-            ->with($this->productMock, [])
+            ->with($this->productMock, ['_escape' => false])
             ->willReturn($url);
         $this->productMock->expects($this->once())
             ->method('getEntityId')
