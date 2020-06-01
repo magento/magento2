@@ -1,9 +1,11 @@
-<?php
+<?php declare(strict_types=1);
+
+use Magento\Framework\MessageQueue\ConsumerInterface;
+
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 return [
     'consumer1' => [
         'name' => 'consumer1',
@@ -57,6 +59,7 @@ return [
         'name' => 'consumer4',
         'queue' => 'queue4',
         'consumerInstance' => 'consumerClass4',
+
         'handlers' => [
             0 => [
                 'type' => 'handlerClassFour',
@@ -104,7 +107,7 @@ return [
     'consumer7' => [
         'name' => 'consumer7',
         'queue' => 'queue7',
-        'consumerInstance' => \Magento\Framework\MessageQueue\ConsumerInterface::class,
+        'consumerInstance' => ConsumerInterface::class,
         'handlers' => [
             0 => [
                 'type' => 'handlerClassSeven',
@@ -120,7 +123,7 @@ return [
     'consumer8' => [
         'name' => 'consumer8',
         'queue' => 'queue8',
-        'consumerInstance' => \Magento\Framework\MessageQueue\ConsumerInterface::class,
+        'consumerInstance' => ConsumerInterface::class,
         'handlers' => [],
         'connection' => 'amqp',
         'maxMessages' => null,

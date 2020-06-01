@@ -15,7 +15,7 @@ namespace Magento\LoginAsCustomerApi\Api;
 interface ConfigInterface
 {
     /**
-     * Check if Login As Customer extension is enabled
+     * Check if Login as Customer extension is enabled
      *
      * @return bool
      */

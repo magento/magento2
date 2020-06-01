@@ -3,20 +3,22 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Multishipping\Test\Unit\Model\Cart;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Multishipping\Model\Cart\CartTotalRepositoryPlugin;
 use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Quote\Model\Cart\CartTotalRepository;
 use Magento\Quote\Model\Cart\Totals as QuoteTotals;
 use Magento\Quote\Model\Quote\Address as QuoteAddress;
 use Magento\Quote\Model\Quote\Address\Rate as QuoteAddressRate;
-use Magento\Multishipping\Model\Cart\CartTotalRepositoryPlugin;
 use Magento\Store\Model\Store;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class CartTotalRepositoryPluginTest extends \PHPUnit\Framework\TestCase
+class CartTotalRepositoryPluginTest extends TestCase
 {
     /**
      * Stub cart id
@@ -68,35 +70,26 @@ class CartTotalRepositoryPluginTest extends \PHPUnit\Framework\TestCase
      */
     private $storeMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
-        $this->quoteTotalsMock = $this->createPartialMock(
-            QuoteTotals::class,
-            [
-                'getStore',
-                'getShippingAddress',
-                'getIsMultiShipping'
-            ]
-        );
-        $this->shippingAddressMock = $this->createPartialMock(
-            QuoteAddress::class,
-            [
-                'getShippingMethod',
-                'getShippingRateByCode',
-                'getShippingAmount'
-            ]
-        );
-        $this->shippingRateMock = $this->createPartialMock(
-            QuoteAddressRate::class,
-            [
-                'getPrice'
-            ]
-        );
+        $this->quoteTotalsMock = $this->getMockBuilder(QuoteTotals::class)
+            ->addMethods(['getStore', 'getShippingAddress', 'getIsMultiShipping'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->shippingAddressMock = $this->getMockBuilder(QuoteAddress::class)
+            ->addMethods(['getShippingAmount'])
+            ->onlyMethods(['getShippingMethod', 'getShippingRateByCode'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->shippingRateMock = $this->getMockBuilder(QuoteAddressRate::class)
+            ->addMethods(['getPrice'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->storeMock = $this->getMockBuilder(Store::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->quoteRepositoryMock = $this->createMock(CartRepositoryInterface::class);
+        $this->quoteRepositoryMock = $this->getMockForAbstractClass(CartRepositoryInterface::class);
         $this->quoteTotalRepositoryMock = $this->createMock(CartTotalRepository::class);
         $this->modelRepository = $objectManager->getObject(CartTotalRepositoryPlugin::class, [
             'quoteRepository' => $this->quoteRepositoryMock
