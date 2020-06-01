@@ -176,6 +176,7 @@
         <arguments>
             <argument name="factories" xsi:type="array">
                 <item name="elasticsearch7" xsi:type="object">elasticsearchAdvancedCollectionFactory</item>
+                <item name="default" xsi:type="object">elasticsearchAdvancedCollectionFactory</item>
             </argument>
         </arguments>
     </type>
