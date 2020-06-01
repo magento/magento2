@@ -24,6 +24,7 @@ Resolver::getInstance()->requireDataFixture('Magento/ConfigurableProduct/_files/
 /** @var ProductRepositoryInterface $productRepository */
 $productRepository = Bootstrap::getObjectManager()
     ->get(ProductRepositoryInterface::class);
+
 /** @var $installer CategorySetup */
 $installer = Bootstrap::getObjectManager()->create(CategorySetup::class);
 $eavConfig = Bootstrap::getObjectManager()->get(Config::class);
