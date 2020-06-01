@@ -12,10 +12,6 @@ use Magento\Store\Model\Store;
 
 class CategoryProductIndexTables
 {
-    /**
-     * @var int[]
-     */
-    private $storeIds = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
 
     /**
      * @var string
@@ -39,7 +35,7 @@ class CategoryProductIndexTables
     public function createTables(): void
     {
         $connection = $this->resourceConnection->getConnection();
-        foreach ($this->storeIds as $storeId) {
+        for ($storeId = 0; $storeId <= 128; $storeId++) {
             $connection->createTable(
                 $connection->createTableByDdl(
                     $this->resourceConnection->getTableName($this->prototype),
