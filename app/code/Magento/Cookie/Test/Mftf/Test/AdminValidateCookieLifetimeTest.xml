@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminValidateCookieLifetimeTest">
+        <annotations>
+            <features value="Cookie"/>
+            <stories value="Validate cookie lifetime field in Magento admin"/>
+            <title value="Admin should not able to enter text in cookie lifetime filed"/>
+            <description value="Admin can only be able type numbers in cookie lifetime filed in Magento admin"/>
+            <severity value="MAJOR"/>
+            <group value="Cookie"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginGetFromGeneralFile"/>
+        </before>
+        <after>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
+        </after>
+        <actionGroup ref="AdminNavigateToDefaultCookieSettingsActionGroup" stepKey="navigateToDefaultCookieSettingsPage"/>
+        <actionGroup ref="AdminUncheckUseSystemValueActionGroup" stepKey="uncheckUseSystemValue">
+            <argument name="rowId" value="row_web_cookie_cookie_lifetime"/>
+        </actionGroup>
+        <actionGroup ref="AdminFillCookieLifetimeActionGroup" stepKey="fillCookieLifetimeField">
+            <argument name="cookieLifetime" value="cookie"/>
+        </actionGroup>
+        <actionGroup ref="AdminClickFormActionButtonActionGroup" stepKey="clickSaveButtonWithString">
+            <argument name="buttonSelector" value="{{AdminMainActionsSection.save}}"/>
+        </actionGroup>
+        <actionGroup ref="AssertAdminValidationErrorActionGroup" stepKey="assertNumberValidation">
+            <argument name="inputId" value="web_cookie_cookie_lifetime"/>
+            <argument name="errorMessage" value="Please enter a valid number in this field."/>
+        </actionGroup>
+        <actionGroup ref="AdminFillCookieLifetimeActionGroup" stepKey="fillCookieLifetimeFieldWithNumber">
+            <argument name="cookieLifetime" value="3600"/>
+        </actionGroup>
+        <actionGroup ref="AdminCheckUseSystemValueActionGroup" stepKey="checkUseSystemValue">
+            <argument name="rowId" value="row_web_cookie_cookie_lifetime"/>
+        </actionGroup>
+        <actionGroup ref="AdminClickFormActionButtonActionGroup" stepKey="clickSaveButtonWithNumber">
+            <argument name="buttonSelector" value="{{AdminMainActionsSection.save}}"/>
+        </actionGroup>
+        <actionGroup ref="AssertMessageInAdminPanelActionGroup" stepKey="assertSaveCookieLifetimeSuccessMessage">
+            <argument name="message" value="You saved the configuration."/>
+            <argument name="messageType" value="success"/>
+        </actionGroup>
+    </test>
+</tests>

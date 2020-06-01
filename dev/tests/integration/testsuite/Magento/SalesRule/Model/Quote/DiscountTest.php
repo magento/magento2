@@ -36,7 +36,7 @@ class DiscountTest extends TestCase
     /**
      * @inheritDoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->objectManager = Bootstrap::getObjectManager();
@@ -46,7 +46,7 @@ class DiscountTest extends TestCase
 
     /**
      * @magentoAppIsolation enabled
-     * @magentoDataFixture bundleProductWithDynamicPriceAndCartPriceRuleFixture
+     * @magentoDataFixture Magento/SalesRule/_files/cart_rule_product_sku.php
      * @magentoDataFixture Magento/Checkout/_files/quote_with_bundle_product_with_dynamic_price.php
      * @dataProvider bundleProductWithDynamicPriceAndCartPriceRuleDataProvider
      * @param string $coupon
@@ -81,6 +81,9 @@ class DiscountTest extends TestCase
         $this->assertEquals($discounts[$item->getSku()], $item->getDiscountAmount());
     }
 
+    /**
+     * @return array
+     */
     public function bundleProductWithDynamicPriceAndCartPriceRuleDataProvider(): array
     {
         return [
@@ -114,34 +117,10 @@ class DiscountTest extends TestCase
         ];
     }
 
-    public static function bundleProductWithDynamicPriceAndCartPriceRuleFixture(): void
-    {
-        $skus = [
-            'bundle_product_with_dynamic_price',
-            'simple1',
-            'simple2',
-        ];
-        foreach ($skus as $sku) {
-            if ($sku) {
-                require __DIR__ . '/../../_files/cart_rule_product_sku.php';
-            }
-        }
-    }
-
-    public static function bundleProductWithDynamicPriceAndCartPriceRuleFixtureRollback(): void
-    {
-        $skus = [
-            'bundle_product_with_dynamic_price',
-            'simple1',
-            'simple2',
-        ];
-        foreach ($skus as $sku) {
-            if ($sku) {
-                require __DIR__ . '/../../_files/cart_rule_product_sku_rollback.php';
-            }
-        }
-    }
-
+    /**
+     * @param string $reservedOrderId
+     * @return Quote
+     */
     private function getQuote(string $reservedOrderId): Quote
     {
         $searchCriteria = $this->criteriaBuilder->addFilter('reserved_order_id', $reservedOrderId)

@@ -15,8 +15,9 @@ use Magento\Store\Model\StoreManagerInterface;
 use Magento\TestFramework\Bundle\Model\PrepareBundleLinks;
 use Magento\Catalog\Api\Data\ProductInterfaceFactory;
 use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
 
-require __DIR__ . '/../../../Magento/Catalog/_files/multiple_products.php';
+Resolver::getInstance()->requireDataFixture('Magento/Catalog/_files/multiple_products.php');
 
 $objectManager = Bootstrap::getObjectManager();
 /** @var PrepareBundleLinks $prepareBundleLinks */

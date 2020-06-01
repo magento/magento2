@@ -32,7 +32,7 @@ class CommandPluginTest extends TestCase
     /**
      * ObjectManager and mocks necessary to run the tests
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->newRelicWrapperMock = $this->getMockBuilder(NewRelicWrapper::class)
             ->disableOriginalConstructor()

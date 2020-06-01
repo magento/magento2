@@ -8,9 +8,9 @@ declare(strict_types=1);
 
 namespace Magento\Customer\Test\Unit\CustomerData;
 
+use Magento\Customer\CustomerData\JsLayoutDataProviderPool;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Tax\CustomerData\CheckoutTotalsJsLayoutDataProvider as CheckoutTotalsJs;
-use Magento\Customer\CustomerData\JsLayoutDataProviderPool;
 use PHPUnit\Framework\TestCase;
 
 class JsLayoutDataProviderPoolTest extends TestCase
@@ -33,7 +33,7 @@ class JsLayoutDataProviderPoolTest extends TestCase
     /**
      * Setup environment to test
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->checkoutTotalsJsLayoutDataProviderMock = $this->createMock(CheckoutTotalsJs::class);
         $this->objectManagerHelper = new ObjectManagerHelper($this);

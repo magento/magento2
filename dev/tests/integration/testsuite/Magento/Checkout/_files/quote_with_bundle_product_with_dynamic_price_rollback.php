@@ -9,6 +9,7 @@ use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Framework\Registry;
 use Magento\Quote\Model\Quote;
 use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
 
 $objectManager = Bootstrap::getObjectManager();
 /** @var Registry $registry */
@@ -24,4 +25,4 @@ $quote->load('quote_with_bundle_product_with_dynamic_price', 'reserved_order_id'
 $registry->unregister('isSecureArea');
 $registry->register('isSecureArea', false);
 
-require __DIR__ . '/../../Bundle/_files/bundle_product_with_dynamic_price_rollback.php';
+Resolver::getInstance()->requireDataFixture('Magento/Bundle/_files/bundle_product_with_dynamic_price_rollback.php');

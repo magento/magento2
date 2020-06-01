@@ -9,6 +9,8 @@ namespace Magento\Checkout\Controller\Sidebar;
 
 use Exception;
 use Magento\Checkout\Model\Sidebar;
+use Magento\Framework\App\Action\Action;
+use Magento\Framework\App\Action\Context;
 use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Controller\Result\JsonFactory as ResultJsonFactory;
@@ -17,7 +19,10 @@ use Magento\Framework\Data\Form\FormKey\Validator;
 use Magento\Framework\Exception\LocalizedException;
 use Psr\Log\LoggerInterface;
 
-class RemoveItem implements HttpPostActionInterface
+/**
+ * Controller for removing quote item from shopping cart.
+ */
+class RemoveItem extends Action implements HttpPostActionInterface
 {
     /**
      * @var RequestInterface
@@ -32,7 +37,7 @@ class RemoveItem implements HttpPostActionInterface
     /**
      * @var ResultRedirectFactory
      */
-    private $resultRedirectFactory;
+    protected $resultRedirectFactory;
 
     /**
      * @var Sidebar
@@ -50,6 +55,7 @@ class RemoveItem implements HttpPostActionInterface
     protected $logger;
 
     /**
+     * @param Context $context
      * @param RequestInterface $request
      * @param ResultJsonFactory $resultJsonFactory
      * @param ResultRedirectFactory $resultRedirectFactory
@@ -58,6 +64,7 @@ class RemoveItem implements HttpPostActionInterface
      * @param LoggerInterface $logger
      */
     public function __construct(
+        Context $context,
         RequestInterface $request,
         ResultJsonFactory $resultJsonFactory,
         ResultRedirectFactory $resultRedirectFactory,
@@ -65,6 +72,7 @@ class RemoveItem implements HttpPostActionInterface
         Validator $formKeyValidator,
         LoggerInterface $logger
     ) {
+        parent::__construct($context);
         $this->request = $request;
         $this->resultJsonFactory = $resultJsonFactory;
         $this->resultRedirectFactory = $resultRedirectFactory;
@@ -91,6 +99,9 @@ class RemoveItem implements HttpPostActionInterface
             $this->sidebar->removeQuoteItem($itemId);
         } catch (LocalizedException $e) {
             $error = $e->getMessage();
+        } catch (\Zend_Db_Exception $e) {
+            $this->logger->critical($e);
+            $error = __('An unspecified error occurred. Please contact us for assistance.');
         } catch (Exception $e) {
             $this->logger->critical($e);
             $error = $e->getMessage();

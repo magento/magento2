@@ -9,6 +9,7 @@ use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Registry;
 use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
 
 $objectManager = Bootstrap::getObjectManager();
 /** @var Registry $registry */
@@ -29,4 +30,4 @@ try {
 $registry->unregister('isSecureArea');
 $registry->register('isSecureArea', false);
 
-require __DIR__ . '/../../../Magento/Catalog/_files/multiple_products_rollback.php';
+Resolver::getInstance()->requireDataFixture('Magento/Catalog/_files/multiple_products_rollback.php');

@@ -6,9 +6,10 @@
 declare(strict_types = 1);
 
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
 
-require dirname(__DIR__, 2) . '/Catalog/_files/product_image.php';
-require dirname(__DIR__, 2) . '/Catalog/_files/product_simple.php';
+Resolver::getInstance()->requireDataFixture('Magento/Catalog/_files/product_image.php');
+Resolver::getInstance()->requireDataFixture('Magento/Catalog/_files/product_simple.php');
 
 $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 /** @var \Magento\Catalog\Api\ProductRepositoryInterface $productRepository */

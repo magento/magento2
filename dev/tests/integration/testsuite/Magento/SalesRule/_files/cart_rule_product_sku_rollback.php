@@ -11,8 +11,12 @@ use Magento\SalesRule\Api\RuleRepositoryInterface;
 use Magento\SalesRule\Model\Rule;
 use Magento\TestFramework\Helper\Bootstrap;
 
-if (!isset($sku)) {
-    $sku = 'simple1';
+if (!isset($skus)) {
+    $skus = [
+        'bundle_product_with_dynamic_price',
+        'simple1',
+        'simple2',
+    ];
 }
 $objectManager = Bootstrap::getObjectManager();
 
@@ -23,16 +27,23 @@ $registry->register('isSecureArea', true);
 
 /** @var SearchCriteriaBuilder $searchCriteriaBuilder */
 $searchCriteriaBuilder = $objectManager->get(SearchCriteriaBuilder::class);
-$searchCriteria = $searchCriteriaBuilder->addFilter('name', '50% Off for ' . $sku)
+$names = array_map(
+    function ($sku) {
+        return '50% Off for ' . $sku;
+    },
+    $skus
+);
+$searchCriteria = $searchCriteriaBuilder->addFilter('name', $names, 'in')
     ->create();
 /** @var RuleRepositoryInterface $ruleRepository */
 $ruleRepository = $objectManager->get(RuleRepositoryInterface::class);
 $items = $ruleRepository->getList($searchCriteria)
     ->getItems();
 /** @var Rule $salesRule */
-$salesRule = array_pop($items);
-if ($salesRule !== null) {
-    $ruleRepository->deleteById($salesRule->getRuleId());
+foreach ($items as $salesRule) {
+    if ($salesRule !== null && $salesRule->getRuleId()) {
+        $ruleRepository->deleteById($salesRule->getRuleId());
+    }
 }
 
 $registry->unregister('isSecureArea');

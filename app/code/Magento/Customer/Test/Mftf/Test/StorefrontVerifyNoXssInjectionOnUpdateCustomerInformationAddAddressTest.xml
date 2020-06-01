@@ -20,9 +20,15 @@
         </annotations>
 
         <before>
-            <actionGroup ref = "LoginAsAdmin" stepKey="loginAsAdmin"/>
-            <actionGroup ref="SignUpNewUserFromStorefrontActionGroup" stepKey="SignUpNewUser">
-                <argument name="Customer" value="Colorado_US_Customer"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <actionGroup ref="StorefrontOpenCustomerAccountCreatePageActionGroup" stepKey="openCreateAccountPage"/>
+            <actionGroup ref="StorefrontFillCustomerAccountCreationFormActionGroup" stepKey="fillCreateAccountForm">
+                <argument name="customer" value="Colorado_US_Customer"/>
+            </actionGroup>
+            <actionGroup ref="StorefrontClickCreateAnAccountCustomerAccountCreationFormActionGroup" stepKey="submitCreateAccountForm"/>
+            <actionGroup ref="AssertMessageCustomerCreateAccountActionGroup" stepKey="seeSuccessMessage">
+                <argument name="messageType" value="success"/>
+                <argument name="message" value="Thank you for registering with Main Website Store."/>
             </actionGroup>
         </before>
         <after>

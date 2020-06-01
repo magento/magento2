@@ -5,7 +5,6 @@ parameters:
 	excludes_analyse:
 		- %rootDir%/../../../lib/internal/Magento/Framework/ObjectManager/Test/Unit/*
 		- %rootDir%/../../../*/_files/*
-		- %rootDir%/../../../dev/tests/functional/*
 		- %rootDir%/../../../dev/tests/*/Fixtures/*
 		- %rootDir%/../../../dev/tests/*/tmp/*
 		- %rootDir%/../../../dev/tests/*/_generated/*
@@ -29,10 +28,10 @@ parameters:
 		- '#Method (?:.*?) should return (?:.*?)void(?:.*?) but return statement is missing.#'
 
 services:
-	errorFormatter.filtered:
-		class: Magento\PhpStan\Formatters\FilteredErrorFormatter
-		arguments:
-			showTipsOfTheDay: false
-			checkThisOnly: false
-			inferPrivatePropertyTypeFromConstructor: true
-			checkMissingTypehints: %checkMissingTypehints%
+    errorFormatter.filtered:
+        class: Magento\PhpStan\Formatters\FilteredErrorFormatter
+        arguments:
+            showTipsOfTheDay: false
+            checkThisOnly: false
+            inferPrivatePropertyTypeFromConstructor: true
+            checkMissingTypehints: %checkMissingTypehints%

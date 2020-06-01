@@ -14,8 +14,9 @@ use Magento\Checkout\Model\Cart;
 use Magento\Checkout\Model\Session;
 use Magento\Framework\DataObject;
 use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
 
-require __DIR__ . '/../../../Magento/Bundle/_files/bundle_product_with_dynamic_price.php';
+Resolver::getInstance()->requireDataFixture('Magento/Bundle/_files/bundle_product_with_dynamic_price.php');
 
 $objectManager = Bootstrap::getObjectManager();
 /** @var ProductRepositoryInterface $productRepository */

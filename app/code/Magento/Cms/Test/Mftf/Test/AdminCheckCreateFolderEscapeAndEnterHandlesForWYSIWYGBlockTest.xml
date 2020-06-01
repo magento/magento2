@@ -16,11 +16,12 @@
                 to add image to new folder (using enter key) for WYSIWYG content of Block"/>
             <description value="Admin should be able to cancel and close 'create folder' modal window using ESC key and
                 to add image to new folder (using enter key) for WYSIWYG content of Block"/>
+            <severity value="MAJOR"/>
         </annotations>
 
         <before>
             <createData entity="_defaultBlock" stepKey="createPreReqBlock" />
-            <actionGroup ref="LoginActionGroup" stepKey="login"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
             <actionGroup ref="EnabledWYSIWYGActionGroup" stepKey="enableWYSIWYG"/>
             <actionGroup ref="SwitchToVersion4ActionGroup" stepKey="switchToTinyMCE4" />
         </before>
