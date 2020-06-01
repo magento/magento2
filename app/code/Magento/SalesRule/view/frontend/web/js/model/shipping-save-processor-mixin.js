@@ -13,7 +13,12 @@ define([
         shippingSaveProcessor.saveShippingInformation = wrapper.wrapSuper(
             shippingSaveProcessor.saveShippingInformation,
             function (type) {
-                var updateCouponCallback = function () {
+                var updateCouponCallback;
+
+                /**
+                 * Update coupon form
+                 */
+                updateCouponCallback = function () {
                     if (quote.totals() && !quote.totals()['coupon_code']) {
                         coupon.setCouponCode('');
                         coupon.setIsApplied(false);
