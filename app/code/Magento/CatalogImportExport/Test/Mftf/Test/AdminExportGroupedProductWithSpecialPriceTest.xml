@@ -48,7 +48,6 @@
                 <requiredEntity createDataKey="createSecondSimpleProduct"/>
             </updateData>
 
-            <magentoCron stepKey="runCron"/>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
@@ -68,7 +67,10 @@
         <!-- Export created below products -->
         <actionGroup ref="ExportAllProductsActionGroup" stepKey="exportCreatedProducts"/>
 
-        <magentoCron stepKey="runCronIndex" groups="index"/>
+        <!-- Start message queue for export consumer -->
+        <actionGroup ref="CliConsumerStartActionGroup" stepKey="startMessageQueue"/>
+        <reloadPage stepKey="refreshPage"/>
+        <waitForPageLoad stepKey="waitForPageLoaded"/>
 
         <grabTextFrom selector="{{AdminExportAttributeSection.exportFileNameByPosition('0')}}" stepKey="grabNameFile"/>
 

@@ -98,7 +98,10 @@
             <argument name="attributeData" value="$$createConfigProduct.sku$$"/>
         </actionGroup>
 
-        <magentoCron stepKey="runCron"/>
+        <!-- Start message queue for export consumer -->
+        <actionGroup ref="CliConsumerStartActionGroup" stepKey="startMessageQueue"/>
+        <reloadPage stepKey="refreshPage"/>
+        <waitForPageLoad stepKey="waitForPageLoaded"/>
 
         <grabTextFrom selector="{{AdminExportAttributeSection.exportFileNameByPosition('0')}}" stepKey="grabNameFile"/>
 
