@@ -65,6 +65,7 @@ class Csv extends AbstractAdapter
      */
     private function resolveDestination(): void
     {
+        // only temporary file located directly in var folder
         if (strpos($this->_destination, '/') === false) {
             $this->_directoryHandle->delete($this->_destination);
         }
