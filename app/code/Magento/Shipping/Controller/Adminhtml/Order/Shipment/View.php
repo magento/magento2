@@ -7,8 +7,9 @@
 namespace Magento\Shipping\Controller\Adminhtml\Order\Shipment;
 
 use Magento\Backend\App\Action;
+use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
 
-class View extends \Magento\Backend\App\Action
+class View extends \Magento\Backend\App\Action implements HttpGetActionInterface
 {
     /**
      * Authorization level of a basic admin session
@@ -53,7 +54,8 @@ class View extends \Magento\Backend\App\Action
     /**
      * Shipment information page
      *
-     * @return void
+     * @return \Magento\Framework\Controller\ResultInterface;
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function execute()
     {
