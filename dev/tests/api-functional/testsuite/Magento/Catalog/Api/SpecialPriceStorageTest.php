@@ -24,6 +24,7 @@ class SpecialPriceStorageTest extends WebapiAbstract
     const SERVICE_VERSION = 'V1';
     const SIMPLE_PRODUCT_SKU = 'simple';
     const VIRTUAL_PRODUCT_SKU = 'virtual-product';
+    const SIMPLE_PRODUCT_SKU_TWO_WEBSITES = 'simple-on-two-websites';
 
     /**
      * @var ObjectManager
@@ -102,7 +103,7 @@ class SpecialPriceStorageTest extends WebapiAbstract
     /**
      * Test delete method.
      *
-     * @magentoApiDataFixture Magento/Catalog/_files/product_simple.php
+     * @magentoApiDataFixture Magento/Catalog/_files/product_two_websites.php
      * @dataProvider deleteData
      * @param array $data
      * @throws CouldNotSaveException
@@ -114,13 +115,22 @@ class SpecialPriceStorageTest extends WebapiAbstract
     {
         /** @var ProductRepositoryInterface $productRepository */
         $productRepository = $this->objectManager->create(ProductRepositoryInterface::class);
-        $product = $productRepository->get($data['sku'], true);
+        $product = $productRepository->get($data['sku'], true, $data['store_id'], true);
         $product->setData('special_price', $data['price']);
         $product->setData('special_from_date', $data['price_from']);
         if ($data['price_to']) {
             $product->setData('special_to_date', $data['price_to']);
         }
         $productRepository->save($product);
+
+        $product = $productRepository->get($data['sku'], true, 1, true);
+        $product->setData('special_price', $data['price']);
+        $product->setData('special_from_date', $data['price_from']);
+        if ($data['price_to']) {
+            $product->setData('special_to_date', $data['price_to']);
+        }
+        $productRepository->save($product);
+
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => '/V1/products/special-price-delete',
@@ -140,9 +150,11 @@ class SpecialPriceStorageTest extends WebapiAbstract
                 ]
             ]
         );
-        $product = $productRepository->get($data['sku'], false, null, true);
+        $product = $productRepository->get($data['sku'], false, 0);
         $this->assertEmpty($response);
         $this->assertNull($product->getSpecialPrice());
+        $product = $productRepository->get($data['sku'], false, 1);
+        $this->assertNotNull($product->getSpecialPrice());
     }
 
     /**
@@ -195,7 +207,7 @@ class SpecialPriceStorageTest extends WebapiAbstract
                 [
                     'price' => 3057,
                     'store_id' => 0,
-                    'sku' => self::SIMPLE_PRODUCT_SKU,
+                    'sku' => self::SIMPLE_PRODUCT_SKU_TWO_WEBSITES,
                     'price_from' => $fromDate,
                     'price_to' => $toDate
                 ]
@@ -205,7 +217,7 @@ class SpecialPriceStorageTest extends WebapiAbstract
                 [
                     'price' => 3057,
                     'store_id' => 0,
-                    'sku' => self::SIMPLE_PRODUCT_SKU,
+                    'sku' => self::SIMPLE_PRODUCT_SKU_TWO_WEBSITES,
                     'price_from' => $fromDate,
                     'price_to' => false
                 ]
