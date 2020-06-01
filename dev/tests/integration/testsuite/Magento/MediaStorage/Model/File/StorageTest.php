@@ -19,7 +19,7 @@ class StorageTest extends \PHPUnit\Framework\TestCase
         $config = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             \Magento\MediaStorage\Model\File\Storage::class
         )->getScriptConfig();
-        $this->assertInternalType('array', $config);
+        $this->assertIsArray($config);
         $this->assertArrayHasKey('media_directory', $config);
         $this->assertArrayHasKey('allowed_resources', $config);
         $this->assertArrayHasKey('update_time', $config);
@@ -31,7 +31,7 @@ class StorageTest extends \PHPUnit\Framework\TestCase
             $filesystem->getDirectoryRead(DirectoryList::MEDIA)->getAbsolutePath(),
             $config['media_directory']
         );
-        $this->assertInternalType('array', $config['allowed_resources']);
+        $this->assertIsArray($config['allowed_resources']);
         $this->assertContains('css', $config['allowed_resources']);
         $this->assertContains('css_secure', $config['allowed_resources']);
         $this->assertContains('js', $config['allowed_resources']);

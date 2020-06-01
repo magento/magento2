@@ -15,7 +15,7 @@ class LayoutTest extends \PHPUnit\Framework\TestCase
      */
     protected $_utility;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         \Magento\TestFramework\Helper\Bootstrap::getInstance()->reinitialize(
             [

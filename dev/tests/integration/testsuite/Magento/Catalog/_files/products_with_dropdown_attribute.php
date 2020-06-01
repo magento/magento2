@@ -5,27 +5,30 @@
  */
 declare(strict_types=1);
 
-/**
- * Create multiselect attribute
- */
-require __DIR__ . '/dropdown_attribute.php';
+use Magento\Catalog\Model\Product;
+use Magento\Catalog\Setup\CategorySetup;
+use Magento\Eav\Model\Config;
+use Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\Collection;
+use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
+
+Resolver::getInstance()->requireDataFixture('Magento/Catalog/_files/dropdown_attribute.php');
 
 /** Create products with attribute option of dropdown type */
 
-/** @var $installer \Magento\Catalog\Setup\CategorySetup */
-$installer = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-    \Magento\Catalog\Setup\CategorySetup::class
-);
-
-/** @var $options \Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\Collection */
-$options = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-    \Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\Collection::class
-);
+$objectManager = Bootstrap::getObjectManager();
+/** @var $installer CategorySetup */
+$installer = $objectManager->create(CategorySetup::class);
+/** @var Config $eavConfig */
+$eavConfig = $objectManager->get(Config::class);
+$attribute = $eavConfig->getAttribute(Product::ENTITY, 'dropdown_attribute');
+/** @var $options Collection */
+$options = $objectManager->create(Collection::class);
 $options->setAttributeFilter($attribute->getId());
 $optionIds = $options->getAllIds();
 
-/** @var $product \Magento\Catalog\Model\Product */
-$product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(\Magento\Catalog\Model\Product::class);
+/** @var $product Product */
+$product = $objectManager->create(Product::class);
 $product->setTypeId(\Magento\Catalog\Model\Product\Type::TYPE_SIMPLE)
     ->setId($optionIds[0] * 10)
     ->setAttributeSetId($installer->getAttributeSetId('catalog_product', 'Default'))
@@ -39,7 +42,7 @@ $product->setTypeId(\Magento\Catalog\Model\Product\Type::TYPE_SIMPLE)
     ->setStockData(['use_config_manage_stock' => 1, 'qty' => 100, 'is_qty_decimal' => 0, 'is_in_stock' => 1])
     ->save();
 
-$product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(\Magento\Catalog\Model\Product::class);
+$product = $objectManager->create(Product::class);
 $product->setTypeId(\Magento\Catalog\Model\Product\Type::TYPE_SIMPLE)
     ->setId($optionIds[1] * 10)
     ->setAttributeSetId($installer->getAttributeSetId('catalog_product', 'Default'))
@@ -53,7 +56,7 @@ $product->setTypeId(\Magento\Catalog\Model\Product\Type::TYPE_SIMPLE)
     ->setStockData(['use_config_manage_stock' => 1, 'qty' => 100, 'is_qty_decimal' => 0, 'is_in_stock' => 1])
     ->save();
 
-$product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(\Magento\Catalog\Model\Product::class);
+$product = $objectManager->create(Product::class);
 $product->setTypeId(\Magento\Catalog\Model\Product\Type::TYPE_SIMPLE)
     ->setId($optionIds[2] * 10)
     ->setAttributeSetId($installer->getAttributeSetId('catalog_product', 'Default'))

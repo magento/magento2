@@ -19,7 +19,7 @@ class ItemsTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $child->expects($this->any())->method('isEnabled')->will($this->returnValue(true));
+        $child->expects($this->any())->method('isEnabled')->willReturn(true);
         $layout->addBlock($child, 'child', 'test');
         $expected = $child->getType();
         $columns = $block->getColumns();

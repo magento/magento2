@@ -14,7 +14,7 @@
 			<Password>CustomerPassword</Password>
 		</ServiceHeader>
 	</Request>
-	<LanguageCode>en</LanguageCode>
+	<LanguageCode>EN</LanguageCode>
 	<AWBNumber>4781585060</AWBNumber>
 	<LevelOfDetails>ALL_CHECK_POINTS</LevelOfDetails>
 </req:KnownTrackingRequest>
