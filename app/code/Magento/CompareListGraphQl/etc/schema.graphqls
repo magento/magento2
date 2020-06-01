@@ -5,15 +5,10 @@ type ComparableItem {
     productId: ID! @doc(description: "Product Id")
     name: String! @doc(description: "Product name")
     sku: String! @doc(description: "Product SKU")
-    priceRange: ProductPriceRange! @doc(description: "Product prices")
+    priceRange: PriceRange! @doc(description: "Product prices")
     canonical_url: String @doc(description: "Product URL")
     images: [ProductImage]! @doc(description: "Product Images")
 #    values: [ProductAttribute]! @doc(description: "Product comparable attributes")
-}
-
-type ProductPriceRange {
-    minimum_price: ProductPrice! @doc(description: "Minimal product price")
-    maximum_price: ProductPrice @doc(description: "Max product prices")
 }
 
 type ComparableAttribute {
@@ -26,7 +21,6 @@ type CompareList {
     items: [ComparableItem] @doc(description: "Comparable products")
     attributes: [ComparableAttribute] @doc(description: "Comparable attributes, provides codes and titles for the attributes")
 }
-
 
 type Customer {
     compare_list: CompareList @resolver(class: "\\Magento\\CompareListGraphQl\\Model\\Resolver\\CustomerCompareList") @doc(description: "Active customers compare list")
