@@ -16,6 +16,8 @@
         <element name="ShortDescription" type="input" selector="#short_description"/>
         <element name="PriceFrom" type="input" selector="#price"/>
         <element name="PriceTo" type="input" selector="#price_to"/>
+        <element name="PriceFromError" type="text" selector="#price-error"/>
+        <element name="PriceToError" type="text" selector="#price_to-error"/>
         <element name="AttributeByCode" type="input" selector="#{{var1}}" parameterized="true"/>
         <element name="SubmitButton" type="button" selector="//*[@id='form-validate']//button[@type='submit']"/>
     </section>

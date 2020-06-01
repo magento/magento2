@@ -16,7 +16,7 @@ define([
             visibleRecord: null,
             height: 0,
             displayedRecord: {},
-            lastOpenedImage: null,
+            lastOpenedImage: false,
             fields: {
                 previewUrl: 'preview_url',
                 title: 'title'
@@ -167,7 +167,7 @@ define([
          * Close image preview
          */
         hide: function () {
-            this.lastOpenedImage(null);
+            this.lastOpenedImage(false);
             this.visibleRecord(null);
             this.height(0);
             this._selectRow(null);

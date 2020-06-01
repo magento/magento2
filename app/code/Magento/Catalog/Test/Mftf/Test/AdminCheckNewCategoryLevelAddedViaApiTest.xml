@@ -16,6 +16,7 @@
                 Check category level for child category entity based on parent level.
                 Check category tree: parent element has child element. "/>
             <group value="catalog"/>
+            <severity value="MAJOR"/>
         </annotations>
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginToAdminPanel"/>

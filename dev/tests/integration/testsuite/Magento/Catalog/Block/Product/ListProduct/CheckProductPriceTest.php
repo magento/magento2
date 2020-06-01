@@ -140,7 +140,7 @@ class CheckProductPriceTest extends TestCase
     {
         $priceHtml = $this->getProductPriceHtml('simple-product-tax-none');
         $this->assertFinalPrice($priceHtml, 205.00);
-        $this->assertNotRegExp('/\$10/', $priceHtml);
+        $this->assertDoesNotMatchRegularExpression('/\$10/', $priceHtml);
         $this->customerSession->setCustomerId(1);
         try {
             $priceHtml = $this->getProductPriceHtml('simple-product-tax-none');
