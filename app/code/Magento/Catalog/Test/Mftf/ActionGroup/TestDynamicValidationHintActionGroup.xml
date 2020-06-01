@@ -12,9 +12,6 @@
         <annotations>
             <description>Validates that the Product Text Option Text Length Hint displays the correct Count for multiple inputs based on the provided Character Limit.</description>
         </annotations>
-        <arguments>
-            <argument name="charLimit"/>
-        </arguments>
 
         <fillField userInput="abcde" selector="{{StorefrontProductPageSection.customTextOptionInput}}" stepKey="textInput1"/>
         <see selector="{{StorefrontProductPageSection.charCounter}}" userInput="(15 remaining)" stepKey="assertHint1"/>
