@@ -106,8 +106,8 @@ class View
     ): Store {
         if ($this->origStore->isObjectNew() || $this->origStore->dataHasChangedFor('group_id')) {
             $categoryRewriteUrls = $this->generateCategoryUrls(
-                $this->origStore->getRootCategoryId(),
-                $this->origStore->getId()
+                (int)$this->origStore->getRootCategoryId(),
+                (int)$this->origStore->getId()
             );
 
             $this->urlPersist->replace($categoryRewriteUrls);
