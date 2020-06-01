@@ -15,8 +15,6 @@ return [
     \Magento\Config\Block\System\Config\Form::class,
     \Magento\Config\Block\System\Config\Tabs::class,
     \Magento\Review\Block\Form::class,
-    \Magento\Braintree\Block\Form::class,
-    \Magento\Braintree\Block\Payment::class,
     // Fails because of dependence on registry
     \Magento\Reminder\Block\Adminhtml\Reminder\Edit\Tab\Customers::class,
     \Magento\LayeredNavigation\Block\Navigation::class,
