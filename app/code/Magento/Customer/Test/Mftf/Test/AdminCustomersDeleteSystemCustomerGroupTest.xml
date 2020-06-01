@@ -14,6 +14,7 @@
             <description value="Admin should not be able to delete system customer groups"/>
             <stories value="Delete System Customer Group" />
             <testCaseId value="MC-14588" />
+            <severity value="MAJOR"/>
             <group value="customers"/>
             <group value="mtf_migrated"/>
         </annotations>
