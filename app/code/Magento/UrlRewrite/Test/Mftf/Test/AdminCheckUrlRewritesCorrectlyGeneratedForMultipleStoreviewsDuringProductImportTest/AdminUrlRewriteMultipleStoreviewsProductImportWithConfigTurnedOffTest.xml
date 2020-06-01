@@ -64,9 +64,9 @@
             <argument name="Store" value="customStoreENNotUnique.name"/>
             <argument name="CatName" value="$$createCategory.name$$"/>
         </actionGroup>
-        <uncheckOption selector="{{AdminCategoryBasicFieldSection.categoryNameUseDefault}}" stepKey="uncheckUseDefaultValueENStoreView"/>
-        <fillField selector="{{AdminCategoryBasicFieldSection.CategoryNameInput}}" userInput="category-english" stepKey="changeNameField"/>
-        <click selector="{{AdminCategorySEOSection.SectionHeader}}" stepKey="clickOnSectionHeader"/>
+        <actionGroup ref="AdminChangeCategoryNameOnStoreViewLevelActionGroup" stepKey="changeCategoryNameForENStoreView">
+            <argument name="categoryName" value="categoryenglish"/>
+        </actionGroup>
         <actionGroup ref="ChangeSeoUrlKeyForSubCategoryActionGroup" stepKey="changeSeoUrlKeyENStoreView">
             <argument name="value" value="category-english"/>
         </actionGroup>
@@ -74,9 +74,9 @@
             <argument name="Store" value="customStoreNLNotUnique.name"/>
             <argument name="CatName" value="$$createCategory.name$$"/>
         </actionGroup>
-        <uncheckOption selector="{{AdminCategoryBasicFieldSection.categoryNameUseDefault}}" stepKey="uncheckUseDefaultValue1"/>
-        <fillField selector="{{AdminCategoryBasicFieldSection.CategoryNameInput}}" userInput="category-dutch" stepKey="changeNameFieldNLStoreView"/>
-        <click selector="{{AdminCategorySEOSection.SectionHeader}}" stepKey="clickOnSectionHeader2"/>
+        <actionGroup ref="AdminChangeCategoryNameOnStoreViewLevelActionGroup" stepKey="changeCategoryNameForNLStoreView">
+            <argument name="categoryName" value="categorydutch"/>
+        </actionGroup>
         <actionGroup ref="ChangeSeoUrlKeyForSubCategoryActionGroup" stepKey="changeSeoUrlKeyNLStoreView">
             <argument name="value" value="category-dutch"/>
         </actionGroup>
