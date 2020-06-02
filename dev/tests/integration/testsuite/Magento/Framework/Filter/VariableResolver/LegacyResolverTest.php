@@ -117,6 +117,7 @@ class LegacyResolverTest extends TestCase
                 ['foo' => $dataClassStub, 'g' => ['h' => ['i' => 'abc']]],
                 'abca=123,b=321,'
             ],
+            'disallow __callParent method' => ['foo.___callParent()',['foo' => $classStub], null],
         ];
     }
 }
