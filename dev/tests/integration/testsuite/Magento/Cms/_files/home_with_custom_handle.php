@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-use Magento\Cms\Api\PageRepositoryInterface;
+use Magento\Cms\Model\ResourceModel\Page as PageResource;
 use Magento\Cms\Model\Page as PageModel;
 use Magento\Cms\Model\PageFactory as PageModelFactory;
 use Magento\TestFramework\Cms\Model\CustomLayoutManager;
@@ -23,14 +23,14 @@ $customLayoutName = 'page_custom_layout';
 
 /**
  * @var PageModel $page
- * @var PageRepositoryInterface $pageRepository
+ * @var PageResource $pageResource
  */
 $page = $pageFactory->create(['customLayoutRepository' => $layoutRepo]);
-$pageRepository = $objectManager->create(PageRepositoryInterface::class);
+$pageResource = $objectManager->create(PageResource::class);
 
-$page = $pageRepository->getById('home');
+$pageResource->load($page, 'home');
 $cmsPageId = (int)$page->getId();
 
 $fakeManager->fakeAvailableFiles($cmsPageId, [$customLayoutName]);
 $page->setData('layout_update_selected', $customLayoutName);
-$pageRepository->save($page);
+$pageResource->save($page);

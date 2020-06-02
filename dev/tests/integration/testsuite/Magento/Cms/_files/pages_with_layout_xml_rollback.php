@@ -20,22 +20,21 @@ $pageFactory = $objectManager->get(PageModelFactory::class);
  */
 $page = $pageFactory->create();
 $pageResource = $objectManager->create(PageResource::class);
-
-$page = $pageResource->load($page, 'test_custom_layout_page_1', PageModel::IDENTIFIER);
+$pageResource->load($page, 'test_custom_layout_page_1', PageModel::IDENTIFIER);
 if ($page->getId()) {
     $pageResource->delete($page);
 }
 
 /** @var PageModel $page2 */
 $page2 = $pageFactory->create();
-$page2 = $pageResource->load($page2, 'test_custom_layout_page_2', PageModel::IDENTIFIER);
+$pageResource->load($page2, 'test_custom_layout_page_2', PageModel::IDENTIFIER);
 if ($page2->getId()) {
     $pageResource->delete($page2);
 }
 
 /** @var PageModel $page3 */
 $page3 = $pageFactory->create();
-$page3 = $pageResource->load($page3, 'test_custom_layout_page_3', PageModel::IDENTIFIER);
+$pageResource->load($page3, 'test_custom_layout_page_3', PageModel::IDENTIFIER);
 if ($page3->getId()) {
     $pageResource->delete($page3);
 }
