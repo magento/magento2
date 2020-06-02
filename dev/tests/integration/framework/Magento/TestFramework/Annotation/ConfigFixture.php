@@ -35,26 +35,21 @@ class ConfigFixture
      *
      * @var array
      */
-    private $globalConfigValues = [];
+    protected $globalConfigValues = [];
 
     /**
      * Original values for website-scoped configuration options that need to be restored
      *
      * @var array
      */
-    private $websiteConfigValues = [];
+    protected $websiteConfigValues = [];
 
     /**
      * Original values for store-scoped configuration options that need to be restored
      *
      * @var array
      */
-    private $storeConfigValues = [];
-
-    /**
-     * @var string
-     */
-    protected $annotation = 'magentoConfigFixture';
+    protected $storeConfigValues = [];
 
     /**
      * Retrieve configuration node value
@@ -164,31 +159,64 @@ class ConfigFixture
         );
         foreach ($testAnnotations as $configPathAndValue) {
             if (preg_match('/^.+?(?=_store\s)/', $configPathAndValue, $matches)) {
-                /* Store-scoped config value */
-                $storeCode = $matches[0] != 'current' ? $matches[0] : null;
-                $parts = preg_split('/\s+/', $configPathAndValue, 3);
-                list($configScope, $configPath, $requiredValue) = $parts + ['', '', ''];
-                $originalValue = $this->_getConfigValue($configPath, $storeCode);
-                $this->storeConfigValues[$storeCode][$configPath] = $originalValue;
-                $this->_setConfigValue($configPath, $requiredValue, $storeCode);
+                $this->setStoreConfigValue($matches ?? [], $configPathAndValue);
             } elseif (preg_match('/^.+?(?=_website\s)/', $configPathAndValue, $matches)) {
-                /* Website-scoped config value */
-                $websiteCode = $matches[0] != 'current' ? $matches[0] : null;
-                $parts = preg_split('/\s+/', $configPathAndValue, 3);
-                list($configScope, $configPath, $requiredValue) = $parts + ['', '', ''];
-                $originalValue = $this->getScopeConfigValue($configPath, ScopeInterface::SCOPE_WEBSITES, $websiteCode);
-                $this->websiteConfigValues[$websiteCode][$configPath] = $originalValue;
-                $this->setScopeConfigValue($configPath, $requiredValue, ScopeInterface::SCOPE_WEBSITES, $websiteCode);
+                $this->setWebsiteConfigValue($matches ?? [], $configPathAndValue);
             } else {
-                /* Global config value */
-                list($configPath, $requiredValue) = preg_split('/\s+/', $configPathAndValue, 2);
-
-                $originalValue = $this->_getConfigValue($configPath);
-                $this->globalConfigValues[$configPath] = $originalValue;
-
-                $this->_setConfigValue($configPath, $requiredValue);
+                $this->setGlobalConfigValue($configPathAndValue);
             }
         }
+    }
+
+    /**
+     * Sets store-scoped config value
+     *
+     * @param array $matches
+     * @param string $configPathAndValue
+     * @return void
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+     */
+    protected function setStoreConfigValue(array $matches, $configPathAndValue): void
+    {
+        $storeCode = $matches[0] != 'current' ? $matches[0] : null;
+        $parts = preg_split('/\s+/', $configPathAndValue, 3);
+        list($configScope, $configPath, $requiredValue) = $parts + ['', '', ''];
+        $originalValue = $this->_getConfigValue($configPath, $storeCode);
+        $this->storeConfigValues[$storeCode][$configPath] = $originalValue;
+        $this->_setConfigValue($configPath, $requiredValue, $storeCode);
+    }
+
+    /**
+     * Sets website-scoped config value
+     *
+     * @param array $matches
+     * @param string $configPathAndValue
+     * @return void
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+     */
+    protected function setWebsiteConfigValue(array $matches, $configPathAndValue): void
+    {
+        $websiteCode = $matches[0] != 'current' ? $matches[0] : null;
+        $parts = preg_split('/\s+/', $configPathAndValue, 3);
+        list($configScope, $configPath, $requiredValue) = $parts + ['', '', ''];
+        $originalValue = $this->getScopeConfigValue($configPath, ScopeInterface::SCOPE_WEBSITES, $websiteCode);
+        $this->websiteConfigValues[$websiteCode][$configPath] = $originalValue;
+        $this->setScopeConfigValue($configPath, $requiredValue, ScopeInterface::SCOPE_WEBSITES, $websiteCode);
+    }
+
+    /**
+     * Sets global config value
+     *
+     * @param string $configPathAndValue
+     * @return void
+     */
+    protected function setGlobalConfigValue($configPathAndValue): void
+    {
+        /* Global config value */
+        list($configPath, $requiredValue) = preg_split('/\s+/', $configPathAndValue, 2);
+        $originalValue = $this->_getConfigValue($configPath);
+        $this->globalConfigValues[$configPath] = $originalValue;
+        $this->_setConfigValue($configPath, $requiredValue);
     }
 
     /**
