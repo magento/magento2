@@ -87,20 +87,24 @@ class RemoveProductsFromWishlist implements ResolverInterface
         $customerId = $context->getUserId();
 
         /* Guest checking */
-        if (!$customerId && 0 === $customerId) {
+        if (null === $customerId || 0 === $customerId) {
             throw new GraphQlAuthorizationException(__('The current user cannot perform operations on wishlist'));
         }
 
-        $wishlistId = $args['wishlist_id'];
+        $wishlistId = $args['wishlist_id'] ?: null;
+        $wishlist = $this->wishlistFactory->create();
 
-        if (!$wishlistId) {
-            throw new GraphQlInputException(__('The wishlist id is missing.'));
+        if ($wishlistId) {
+            $this->wishlistResource->load($wishlist, $wishlistId);
+        } elseif ($customerId) {
+            $wishlist->loadByCustomerId($customerId, true);
         }
 
-        $wishlist = $this->wishlistFactory->create();
-        $this->wishlistResource->load($wishlist, $wishlistId);
+        if ($wishlistId) {
+            $this->wishlistResource->load($wishlist, $wishlistId);
+        }
 
-        if (!$wishlist) {
+        if (null === $wishlist->getId() || $customerId !== (int) $wishlist->getCustomerId()) {
             throw new GraphQlInputException(__('The wishlist was not found.'));
         }
 

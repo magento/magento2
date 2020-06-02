@@ -88,7 +88,7 @@ class AddProductsToWishlist implements ResolverInterface
         $customerId = $context->getUserId();
 
         /* Guest checking */
-        if (!$customerId && 0 === $customerId) {
+        if (null === $customerId || 0 === $customerId) {
             throw new GraphQlAuthorizationException(__('The current user cannot perform operations on wishlist'));
         }
 
@@ -102,8 +102,8 @@ class AddProductsToWishlist implements ResolverInterface
             $wishlist->loadByCustomerId($customerId, true);
         }
 
-        if (null === $wishlist->getId()) {
-            throw new GraphQlInputException(__('Something went wrong while creating the wishlist'));
+        if (null === $wishlist->getId() || $customerId !== (int) $wishlist->getCustomerId()) {
+            throw new GraphQlInputException(__('The wishlist was not found.'));
         }
 
         $wishlistItems = [];

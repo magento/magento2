@@ -88,23 +88,24 @@ class UpdateProductsInWishlist implements ResolverInterface
         $customerId = $context->getUserId();
 
         /* Guest checking */
-        if (!$customerId && 0 === $customerId) {
+        if (null === $customerId || 0 === $customerId) {
             throw new GraphQlAuthorizationException(__('The current user cannot perform operations on wishlist'));
         }
 
-        $wishlistId = $args['wishlist_id'];
-
-        if (!$wishlistId) {
-            throw new GraphQlInputException(__('The wishlist id is missing.'));
-        }
-
+        $wishlistId = $args['wishlist_id'] ?: null;
         $wishlist = $this->wishlistFactory->create();
+
+        if ($wishlistId) {
+            $this->wishlistResource->load($wishlist, $wishlistId);
+        } elseif ($customerId) {
+            $wishlist->loadByCustomerId($customerId, true);
+        }
 
         if ($wishlistId) {
             $this->wishlistResource->load($wishlist, $wishlistId);
         }
 
-        if (null === $wishlist->getId()) {
+        if (null === $wishlist->getId() || $customerId !== (int) $wishlist->getCustomerId()) {
             throw new GraphQlInputException(__('The wishlist was not found.'));
         }
 
