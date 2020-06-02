@@ -155,6 +155,275 @@ QUERY;
     }
 
     /**
+     * @magentoApiDataFixture Magento/Sales/_files/customer_multiple_invoices_with_two_products_and_custom_options.php
+     */
+    public function testMultipleInvoiceForLoggedInCustomerQuery()
+    {
+        $query =
+            <<<QUERY
+query {
+  customer
+  {
+  orders {
+    items {
+      order_number
+      grand_total
+      status
+      invoices {
+          items{
+            product_name
+            product_sku
+            product_sale_price {
+              value
+            }
+            quantity_invoiced
+      }
+      total {
+        subtotal {
+          value
+        }
+        grand_total {
+          value
+        }
+        total_shipping {
+          value
+        }
+        shipping_handling {
+          total_amount {
+            value
+          }
+          amount_exc_tax {
+            value
+          }
+        }
+      }
+    }
+}
+}
+}
+}
+QUERY;
+
+        $currentEmail = 'customer@example.com';
+        $currentPassword = 'password';
+        $response = $this->graphQlQuery($query, [], '', $this->getCustomerAuthHeaders($currentEmail, $currentPassword));
+
+        $expectedData = [
+            [
+                'order_number' => '100000002',
+                'status' => 'Processing',
+                'grand_total' => 50.00
+            ]
+        ];
+
+        $expectedInvoiceData = [
+            [
+                'items' => [
+                    [
+                        'product_name' => 'Simple Related Product',
+                        'product_sku' => 'simple',
+                        'product_sale_price' => [
+                            'value' => 10
+                        ],
+                        'quantity_invoiced' => 3
+                    ]
+                ],
+                'total' => [
+                    'subtotal' => [
+                        'value' => 30
+                    ],
+                    'grand_total' => [
+                        'value' => 30
+                    ],
+                    'total_shipping' => [
+                        'value' => 0
+                    ],
+                    'shipping_handling' => [
+                        'total_amount' => [
+                            'value' => null
+                        ],
+                        'amount_exc_tax' => [
+                            'value' => null
+                        ]
+                    ]
+                ]
+            ],
+            [
+                'items' => [
+                    [
+                        'product_name' => 'Simple Product With Related Product',
+                        'product_sku' => 'simple_with_cross',
+                        'product_sale_price' => [
+                            'value' => 10
+                        ],
+                        'quantity_invoiced' => 1
+                    ]
+                ],
+                'total' => [
+                    'subtotal' => [
+                        'value' => 10
+                    ],
+                    'grand_total' => [
+                        'value' => 10
+                    ],
+                    'total_shipping' => [
+                        'value' => 0
+                    ],
+                    'shipping_handling' => [
+                        'total_amount' => [
+                            'value' => null
+                        ],
+                        'amount_exc_tax' => [
+                            'value' => null
+                        ]
+                    ]
+                ]
+            ]
+        ];
+
+        $actualData = $response['customer']['orders']['items'];
+
+        foreach ($expectedData as $key => $data) {
+            $this->assertEquals(
+                $data['order_number'],
+                $actualData[$key]['order_number'],
+                "order_number is different than the expected for order - " . $data['order_number']
+            );
+            $this->assertEquals(
+                $data['grand_total'],
+                $actualData[$key]['grand_total'],
+                "grand_total is different than the expected for order - " . $data['order_number']
+            );
+            $this->assertEquals(
+                $data['status'],
+                $actualData[$key]['status'],
+                "status is different than the expected for order - " . $data['order_number']
+            );
+            $invoices = $actualData[$key]['invoices'];
+            $this->assertResponseFields($invoices, $expectedInvoiceData);
+        }
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Sales/_files/customers_with_invoices.php
+     */
+    public function testMultipleCustomersWithInvoicesQuery()
+    {
+        $query =
+            <<<QUERY
+query {
+  customer
+  {
+  orders {
+    items {
+      order_number
+      grand_total
+      status
+      invoices {
+          items{
+            product_name
+            product_sku
+            product_sale_price {
+              value
+            }
+            quantity_invoiced
+          }
+          total {
+            subtotal {
+              value
+            }
+            grand_total {
+              value
+            }
+            total_shipping {
+              value
+            }
+      			shipping_handling {
+              total_amount {
+                value
+              }
+              amount_exc_tax {
+                value
+              }
+            }
+          }
+        }
+    }
+  }
+ }
+}
+QUERY;
+
+        $currentEmail = 'customer@search.example.com';
+        $currentPassword = 'password';
+        $response = $this->graphQlQuery($query, [], '', $this->getCustomerAuthHeaders($currentEmail, $currentPassword));
+
+        $expectedData = [
+            [
+                'order_number' => '100000001',
+                'status' => 'Processing',
+                'grand_total' => 100.00
+            ]
+        ];
+
+        $expectedInvoiceData = [
+            [
+                'items' => [
+                    [
+                        'product_name' => 'Simple Product',
+                        'product_sku' => 'simple',
+                        'product_sale_price' => [
+                            'value' => 10
+                        ],
+                        'quantity_invoiced' => 1
+                    ]
+                ],
+                'total' => [
+                    'subtotal' => [
+                        'value' => 100
+                    ],
+                    'grand_total' => [
+                        'value' => 100
+                    ],
+                    'total_shipping' => [
+                        'value' => 0
+                    ],
+                    'shipping_handling' => [
+                        'total_amount' => [
+                            'value' => null
+                        ],
+                        'amount_exc_tax' => [
+                            'value' => null
+                        ]
+                    ]
+                ]
+            ]
+        ];
+
+        $actualData = $response['customer']['orders']['items'];
+
+        foreach ($expectedData as $key => $data) {
+            $this->assertEquals(
+                $data['order_number'],
+                $actualData[$key]['order_number'],
+                "order_number is different than the expected for order - " . $data['order_number']
+            );
+            $this->assertEquals(
+                $data['grand_total'],
+                $actualData[$key]['grand_total'],
+                "grand_total is different than the expected for order - " . $data['order_number']
+            );
+            $this->assertEquals(
+                $data['status'],
+                $actualData[$key]['status'],
+                "status is different than the expected for order - " . $data['order_number']
+            );
+            $invoices = $actualData[$key]['invoices'];
+            $this->assertResponseFields($invoices, $expectedInvoiceData);
+        }
+    }
+
+    /**
      */
     public function testOrdersQueryNotAuthorized()
     {
@@ -163,11 +432,13 @@ QUERY;
 
         $query = <<<QUERY
 {
-  customerOrders {
-    items {
-      increment_id
-      grand_total
-    }
+  customer {
+      orders {
+        items {
+          increment_id
+          grand_total
+        }
+      }
   }
 }
 QUERY;
