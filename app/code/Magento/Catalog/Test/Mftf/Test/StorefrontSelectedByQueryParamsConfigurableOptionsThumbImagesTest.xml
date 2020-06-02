@@ -18,6 +18,7 @@
                 associated simple products. Add few images for products, check the fotorama thumbnail images
                 (visible and active) for each option for the configurable product using product URL with params
                 to selected needed option."/>
+            <severity value="MAJOR"/>
             <group value="catalog"/>
         </annotations>
 
