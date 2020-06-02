@@ -1282,7 +1282,6 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         $resource = $this->_linkFactory->create();
         $mainTable = $resource->getMainTable();
         $positionAttrId = [];
-        $nextLinkId = $this->_resourceHelper->getNextAutoincrement($mainTable);
 
         // pre-load 'position' attributes ID for each link type once
         foreach ($this->_linkNameToId as $linkId) {
@@ -1296,6 +1295,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
             $positionAttrId[$linkId] = $this->_connection->fetchOne($select, $bind);
         }
         while ($bunch = $this->_dataSourceModel->getNextBunch()) {
+            $nextLinkId = $this->_resourceHelper->getNextAutoincrement($mainTable);
             $this->processLinkBunches($bunch, $resource, $nextLinkId, $positionAttrId);
         }
         return $this;
