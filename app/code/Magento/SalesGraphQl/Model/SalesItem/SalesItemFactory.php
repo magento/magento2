@@ -10,6 +10,7 @@ namespace Magento\SalesGraphQl\Model\SalesItem;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Api\Data\OrderItemInterface;
+use Magento\SalesGraphQl\Model\Orders\GetDiscounts;
 use Magento\SalesGraphQl\Model\SalesItem\Data\SalesItem;
 
 /**
@@ -23,11 +24,20 @@ class SalesItemFactory
     private $objectManager;
 
     /**
-     * @param ObjectManagerInterface $objectManager
+     * @var GetDiscounts
      */
-    public function __construct(ObjectManagerInterface $objectManager)
-    {
+    private $getDiscounts;
+
+    /**
+     * @param ObjectManagerInterface $objectManager
+     * @param GetDiscounts $getDiscounts
+     */
+    public function __construct(
+        ObjectManagerInterface $objectManager,
+        GetDiscounts $getDiscounts
+    ) {
         $this->objectManager = $objectManager;
+        $this->getDiscounts = $getDiscounts;
     }
 
     /**
@@ -53,6 +63,7 @@ class SalesItemFactory
             'parent_product_sku' => $orderItem->getParentItem() ? $orderItem->getParentItem()->getSku() : null,
             'selected_options' => $options['selected_options'],
             'entered_options' => $options['entered_options'],
+            'discounts' => $this->getDiscounts->execute($order),
         ];
 
         $salesItemData = array_merge_recursive($salesItemData, $additionalData);
