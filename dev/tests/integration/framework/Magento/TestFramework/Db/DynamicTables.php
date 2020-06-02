@@ -9,6 +9,9 @@ namespace Magento\TestFramework\Db;
 
 use Magento\TestFramework\Db\DymanicTables\CategoryProductIndexTables;
 
+/**
+ * Class to pre-create dynamic tables
+ */
 class DynamicTables
 {
     /**
@@ -16,6 +19,9 @@ class DynamicTables
      */
     private $categoryProductIndexTables;
 
+    /**
+     * @param CategoryProductIndexTables $categoryProductIndexTables
+     */
     public function __construct(
         CategoryProductIndexTables $categoryProductIndexTables
     ) {

@@ -10,6 +10,9 @@ namespace Magento\TestFramework\Db\DymanicTables;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Store\Model\Store;
 
+/**
+ * Class to pre-create category product index tables
+ */
 class CategoryProductIndexTables
 {
 
@@ -23,6 +26,9 @@ class CategoryProductIndexTables
      */
     private $resourceConnection;
 
+    /**
+     * @param ResourceConnection $resourceConnection
+     */
     public function __construct(
         ResourceConnection $resourceConnection
     ) {
