@@ -13,6 +13,7 @@ use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Visibility as CatalogProductVisibility;
 use Magento\Catalog\Model\ResourceModel\Product\Compare\Item\Collection;
 use Magento\Catalog\Model\ResourceModel\Product\Compare\Item\CollectionFactory as CompareItemsCollectionFactory;
+use Magento\Catalog\Helper\Image as ImageHelper;
 use Magento\CatalogGraphQl\Model\Resolver\Product\Price\Discount;
 use Magento\CatalogGraphQl\Model\Resolver\Product\Price\ProviderPool as PriceProviderPool;
 use Magento\Framework\GraphQl\Config\Element\Field;
@@ -61,12 +62,18 @@ class CustomerCompareList implements ResolverInterface
     private $priceProviderPool;
 
     /**
+     * @var ImageHelper
+     */
+    protected $imageHelper;
+
+    /**
      * @param CompareItemsCollectionFactory $itemCollectionFactory
      * @param CatalogProductVisibility      $catalogProductVisibility
      * @param CatalogConfig                 $catalogConfig
      * @param Compare                       $compareHelper
      * @param PriceProviderPool             $priceProviderPool
      * @param Discount                      $discount
+     * @param ImageHelper                   $imageHelper
      */
     public function __construct(
         CompareItemsCollectionFactory $itemCollectionFactory,
@@ -74,7 +81,8 @@ class CustomerCompareList implements ResolverInterface
         CatalogConfig $catalogConfig,
         Compare $compareHelper,
         PriceProviderPool $priceProviderPool,
-        Discount $discount
+        Discount $discount,
+        ImageHelper $imageHelper
     ) {
         $this->itemCollectionFactory = $itemCollectionFactory;
         $this->catalogProductVisibility = $catalogProductVisibility;
@@ -82,6 +90,7 @@ class CustomerCompareList implements ResolverInterface
         $this->compareProduct = $compareHelper;
         $this->priceProviderPool = $priceProviderPool;
         $this->discount = $discount;
+        $this->imageHelper = $imageHelper;
     }
 
     /**
@@ -110,12 +119,16 @@ class CustomerCompareList implements ResolverInterface
         return [
             'list_id' => 1,
             'items' => $this->getComparableItems($context, $store),
-            'attributes' => [
-
-            ]
+            'attributes' => $this->getComparableAttributes($context)
         ];
     }
 
+    /**
+     * @param ContextInterface $context
+     * @param StoreInterface   $store
+     *
+     * @return array
+     */
     private function getComparableItems(ContextInterface $context, StoreInterface $store)
     {
         $items = [];
@@ -130,11 +143,35 @@ class CustomerCompareList implements ResolverInterface
                     'maximum_price' => $this->getMinimumProductPrice($item, $store)
                 ],
                 'canonical_url' => $item->getUrlKey(),
-                'images' => [],
+                'images' => [
+                    'url' => '',
+                    'label' => ''
+                ],
             ];
         }
 
         return $items;
+    }
+
+    /**
+     * Get comparable attributes
+     *
+     * @param ContextInterface $context
+     *
+     * @return array
+     */
+    private function getComparableAttributes(ContextInterface $context): array
+    {
+        $attributes = [];
+        $itemsCollection = $this->getCollectionComparableItems($context);
+        foreach ($itemsCollection->getComparableAttributes() as $item) {
+            $attributes[] = [
+                'code' => $item->getAttributeCode(),
+                'title' => $item->getStoreLabel()
+            ];
+        }
+
+        return $attributes;
     }
 
     /**
@@ -166,6 +203,7 @@ class CustomerCompareList implements ResolverInterface
      *
      * @param SaleableInterface $product
      * @param StoreInterface $store
+     *
      * @return array
      */
     private function getMinimumProductPrice(SaleableInterface $product, StoreInterface $store): array
@@ -181,6 +219,7 @@ class CustomerCompareList implements ResolverInterface
      *
      * @param SaleableInterface $product
      * @param StoreInterface $store
+     *
      * @return array
      */
     private function getMaximumProductPrice(SaleableInterface $product, StoreInterface $store): array
@@ -197,6 +236,7 @@ class CustomerCompareList implements ResolverInterface
      * @param float $regularPrice
      * @param float $finalPrice
      * @param StoreInterface $store
+     *
      * @return array
      */
     private function formatPrice(float $regularPrice, float $finalPrice, StoreInterface $store): array
