@@ -10,5 +10,6 @@
           xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="AdminEditCustomerGroupSection">
         <element name="deleteButton" type="button" selector=".page-actions-buttons button#delete"/>
+        <element name="backButton" type="button" selector=".page-actions-buttons button#back"/>
     </section>
 </sections>

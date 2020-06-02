@@ -9,7 +9,9 @@
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="AdminEditReviewSection">
+        <element name="pageTitle" type="text" selector="h1.page-title"/>
         <element name="status" type="select" selector="#status_id"/>
+        <element name="customerViewLink" type="button" selector="#customer a:first-of-type"/>
         <element name="saveReview" type="button" selector="#save_button"/>
     </section>
 </sections>
