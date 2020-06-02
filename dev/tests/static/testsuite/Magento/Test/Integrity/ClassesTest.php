@@ -612,7 +612,6 @@ class ClassesTest extends \PHPUnit\Framework\TestCase
         $directories = [
             BP . '/dev/tools/',
             BP . '/dev/tests/api-functional/framework/',
-            BP . '/dev/tests/functional/',
             BP . '/dev/tests/integration/framework/',
             BP . '/dev/tests/integration/framework/tests/unit/testsuite/',
             BP . '/dev/tests/integration/testsuite/',

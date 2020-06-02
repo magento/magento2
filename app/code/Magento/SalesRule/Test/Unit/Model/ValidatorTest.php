@@ -134,6 +134,7 @@ class ValidatorTest extends TestCase
         $ruleCollectionFactoryMock = $this->prepareRuleCollectionMock($this->ruleCollection);
         $this->priceCurrency = $this->getMockBuilder(PriceCurrencyInterface::class)
             ->disableOriginalConstructor()
+            ->setMethods(['roundPrice'])
             ->getMockForAbstractClass();
 
         /** @var Validator|MockObject $validator */
@@ -541,6 +542,9 @@ class ValidatorTest extends TestCase
 
         $this->priceCurrency->method('convert')
             ->willReturn($ruleDiscount);
+
+        $this->priceCurrency->method('roundPrice')
+            ->willReturn(round($shippingDiscount, 2));
 
         $this->model->init(
             $this->model->getWebsiteId(),
