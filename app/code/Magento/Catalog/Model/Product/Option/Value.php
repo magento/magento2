@@ -245,8 +245,7 @@ class Value extends AbstractModel implements \Magento\Catalog\Api\Data\ProductCu
     }
 
     /**
-     * Return price. If $flag is true and price is percent
-     *  return converted percent to price
+     * Return price. If $flag is true and price is percent return converted percent to price
      *
      * @param bool $flag
      * @return float|int
