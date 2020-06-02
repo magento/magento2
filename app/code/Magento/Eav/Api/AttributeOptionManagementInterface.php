@@ -15,14 +15,28 @@ interface AttributeOptionManagementInterface
     /**
      * Add option to attribute
      *
-     * @param string $attributeCode
      * @param int $entityType
+     * @param string $attributeCode
      * @param \Magento\Eav\Api\Data\AttributeOptionInterface $option
      * @throws \Magento\Framework\Exception\StateException
      * @throws \Magento\Framework\Exception\InputException
      * @return string
      */
     public function add($entityType, $attributeCode, $option);
+
+    /**
+     * Update attribute option
+     *
+     * @param string $entityType
+     * @param string $attributeCode
+     * @param int $optionId
+     * @param \Magento\Eav\Api\Data\AttributeOptionInterface $option
+     * @return bool
+     * @throws \Magento\Framework\Exception\StateException
+     * @throws \Magento\Framework\Exception\InputException
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     */
+    public function update($entityType, $attributeCode, $optionId, $option);
 
     /**
      * Delete option from attribute
