@@ -108,7 +108,7 @@ abstract class AbstractElement extends AbstractForm
     private function generateElementId(): string
     {
         if (!$this->hasData('formelementhookid')) {
-            $this->setData('formelementhookid', 'elemId' .$this->random->getRandomString(32));
+            $this->setData('formelementhookid', 'elemId' .$this->random->getRandomString(10));
         }
 
         return $this->getData('formelementhookid');

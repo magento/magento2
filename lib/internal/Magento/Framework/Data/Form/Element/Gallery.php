@@ -96,7 +96,7 @@ class Gallery extends AbstractElement
                 $i++;
                 $html .= '<tr class="gallery">';
                 foreach ($this->getValue()->getAttributeBackend()->getImageTypes() as $type) {
-                    $linkId = 'linkId' .$this->random->getRandomString(32);
+                    $linkId = 'linkId' .$this->random->getRandomString(8);
                     $url = $image->setType($type)->getSourceUrl();
                     $html .= '<td class="gallery vertical-gallery-cell" align="center">';
                     $html .= '<a previewlinkid="' .$linkId .'" href="' .

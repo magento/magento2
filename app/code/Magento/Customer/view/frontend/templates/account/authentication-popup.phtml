@@ -7,7 +7,7 @@
 /** @var \Magento\Customer\Block\Account\AuthenticationPopup $block */
 /** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
 ?>
-<div id="authenticationPopup" data-bind="scope:'authenticationPopup'">
+<div id="authenticationPopup" data-bind="scope:'authenticationPopup', style: {display: 'none'}">
     <?php $scriptString = 'window.authenticationPopup = ' . /* @noEscape */ $block->getSerializedConfig(); ?>
     <?= /* @noEscape */ $secureRenderer->renderTag('script', [], $scriptString, false); ?>;
     <!-- ko template: getTemplate() --><!-- /ko -->
@@ -24,4 +24,3 @@
         }
     </script>
 </div>
-<?= /* @noEscape */ $secureRenderer->renderStyleAsTag('display:none', '#authenticationPopup'); ?>

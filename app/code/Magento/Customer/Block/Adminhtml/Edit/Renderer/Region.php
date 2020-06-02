@@ -74,9 +74,8 @@ class Region extends \Magento\Backend\Block\AbstractBlock implements
             '" class="select required-entry admin__control-select">';
         $html .= '<option value="">' . __('Please select') . '</option>';
         $html .= '</select>';
-        $html .= $this->secureRenderer->renderStyleAsTag("display:none", '#region');
 
-        $scriptString = "\n";
+        $scriptString = "\ndocument.querySelector('#$selectId').style.display = 'none';\n";
         $scriptString .= 'require(["prototype", "mage/adminhtml/form"], function(){';
         $scriptString .= '$("' . $selectId . '").setAttribute("defaultValue", "' . $regionId . '");' . "\n";
         $scriptString .= 'new regionUpdater("' .

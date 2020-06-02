@@ -53,7 +53,7 @@ class Button extends AbstractRenderer
     public function render(DataObject $row)
     {
         $attributes = $this->extractAttributes($row);
-        $attributes['button-renderer-hook-id'] = 'hook' .$this->random->getRandomString(32);
+        $attributes['button-renderer-hook-id'] = 'hook' .$this->random->getRandomString(10);
 
         return sprintf('<button %s>%s</button>', $this->renderAttributes($attributes), $this->_getValue($row))
             .$this->renderSpecialAttributes($attributes);

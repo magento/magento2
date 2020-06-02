@@ -18,6 +18,8 @@ $enableLazyLoadingWithoutBorders = (bool)$block->getVar(
     'enable_lazy_loading_for_images_without_borders',
     'Magento_Catalog'
 );
+$width = (int)$block->getWidth();
+$padding = $block->getRatio() * 100;
 ?>
 <span class="product-image-container" id="product-image-container-<?= /* @noEscape */ $block->getProductId() ?>">
     <span class="product-image-wrapper">
@@ -36,11 +38,10 @@ $enableLazyLoadingWithoutBorders = (bool)$block->getVar(
             <?php endif; ?>
             alt="<?= $escaper->escapeHtmlAttr($block->getLabel()) ?>"/></span>
 </span>
-<?= /* @noEscape */ $secureRenderer->renderStyleAsTag(
-    'width:' . (int)$block->getWidth() . 'px;',
-    '#product-image-container-' . $block->getProductId()
-) ?>
-<?= /* @noEscape */ $secureRenderer->renderStyleAsTag(
-    'padding-bottom: '. ($block->getRatio() * 100) . '%;',
-    '#product-image-container-' . $block->getProductId() . ' span.product-image-wrapper'
-) ?>
+<?php
+$script = <<<SCRIPT
+document.querySelector('#product-image-container-{$block->getProductId()}').style.width = '{$width}px';
+document.querySelector('#product-image-container-{$block->getProductId()} span.product-image-wrapper').style.paddingBottom = '{$padding}%'
+SCRIPT;
+echo /* @noEscape */$secureRenderer->renderTag('script', ['type' => 'text/javascript'], $script, false);
+?>
