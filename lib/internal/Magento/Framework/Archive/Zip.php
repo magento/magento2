@@ -69,6 +69,14 @@ class Zip extends AbstractArchive implements ArchiveInterface
         return $destination;
     }
 
+    /**
+     * Retrieve filename for import from zip archive.
+     *
+     * @param \ZipArchive $zip
+     * @param string $baseName
+     *
+     * @return string
+     */
     private function getFilenameFromZip(\ZipArchive $zip, string $baseName): string
     {
         $index = 0;
