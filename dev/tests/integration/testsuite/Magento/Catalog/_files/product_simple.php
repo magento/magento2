@@ -202,11 +202,10 @@ $product->setOptions($options);
 /** @var \Magento\Catalog\Api\ProductRepositoryInterface $productRepository */
 $productRepository = $objectManager->create(\Magento\Catalog\Api\ProductRepositoryInterface::class);
 $product = $productRepository->save($product);
+$indexerProcessor = $objectManager->get(\Magento\Catalog\Model\Indexer\Product\Price\Processor::class);
+$indexerProcessor->reindexRow($product->getId());
 
 $categoryLinkManagement->assignProductToCategories(
     $product->getSku(),
     [2]
 );
-
-$indexerProcessor = $objectManager->get(\Magento\Catalog\Model\Indexer\Product\Price\Processor::class);
-$indexerProcessor->reindexRow($product->getId());

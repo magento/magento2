@@ -22,6 +22,7 @@ use PHPUnit\Framework\TestCase;
  *
  * @magentoDbIsolation enabled
  * @magentoAppIsolation disabled
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class WishlistTest extends TestCase
 {
