@@ -278,6 +278,19 @@ QUERY;
     }
 
     /**
+     * @magentoConfigFixture default_store sales/gift_options/allow_items 0
+     * @magentoApiDataFixture Magento/GiftMessage/_files/guest/quote_with_item_message.php
+     * @throws Exception
+     */
+    public function testUpdateGiftMessageCartForItemNotAllow()
+    {
+        $query = $this->getUpdateGiftMessageQuery();
+        foreach ($this->graphQlMutation($query)['updateCartItems']['cart']['items'] as $item) {
+            self::assertNull($item['gift_message']);
+        }
+    }
+
+    /**
      * @magentoConfigFixture default_store sales/gift_options/allow_items 1
      * @magentoApiDataFixture Magento/GiftMessage/_files/guest/quote_with_item_message.php
      * @throws Exception
@@ -290,19 +303,6 @@ QUERY;
             self::assertSame('Alex', $item['gift_message']['to']);
             self::assertSame('Mike', $item['gift_message']['from']);
             self::assertSame('Best regards.', $item['gift_message']['message']);
-        }
-    }
-
-    /**
-     * @magentoConfigFixture default_store sales/gift_options/allow_items 0
-     * @magentoApiDataFixture Magento/GiftMessage/_files/guest/quote_with_item_message.php
-     * @throws Exception
-     */
-    public function testUpdateGiftMessageCartForItemNotAllow()
-    {
-        $query = $this->getUpdateGiftMessageQuery();
-        foreach ($this->graphQlMutation($query)['updateCartItems']['cart']['items'] as $item) {
-            self::assertNull($item['gift_message']);
         }
     }
 
