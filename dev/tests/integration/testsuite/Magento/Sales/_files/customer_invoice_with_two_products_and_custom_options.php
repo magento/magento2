@@ -55,6 +55,7 @@ $product2 = $repository->get('simple_with_cross');
 /** @var \Magento\Sales\Model\Order\Item $orderItem */
 $orderItem = $objectManager->create(\Magento\Sales\Model\Order\Item::class);
 $orderItem->setProductId($product->getId());
+$orderItem->setName($product->getName());
 $orderItem->setSku($product->getSku());
 $orderItem->setQtyOrdered(1);
 $orderItem->setBasePrice($product->getPrice());
@@ -67,6 +68,7 @@ $orderItem->setProductOptions(['info_buyRequest' => $requestInfo]);
 $orderItem2 = $objectManager->create(\Magento\Sales\Model\Order\Item::class);
 $orderItem2->setProductId($product2->getId());
 $orderItem2->setSku($product2->getSku());
+$orderItem2->setName($product2->getName());
 $orderItem2->setQtyOrdered(1);
 $orderItem2->setBasePrice($product2->getPrice());
 $orderItem2->setPrice($product2->getPrice());

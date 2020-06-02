@@ -7,10 +7,9 @@ declare(strict_types=1);
 
 namespace Magento\GraphQl\Sales;
 
-use Exception;
 use Magento\Integration\Api\CustomerTokenServiceInterface;
-use Magento\TestFramework\TestCase\GraphQlAbstract;
 use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\TestCase\GraphQlAbstract;
 
 /**
  * Class Invoice Test
@@ -31,7 +30,7 @@ class InvoiceTest extends GraphQlAbstract
     /**
      * @magentoApiDataFixture Magento/Sales/_files/customer_invoice_with_two_products_and_custom_options.php
      */
-    public function testOrdersQuery()
+    public function testSingleInvoiceForLoggedInCustomerQuery()
     {
         $query =
             <<<QUERY
@@ -44,7 +43,6 @@ query {
       grand_total
       status
       invoices {
-          id
           items{
             product_name
             product_sku
@@ -91,6 +89,48 @@ QUERY;
             ]
         ];
 
+        $expectedInvoiceData = [
+            [
+                'items' => [
+                    [
+                        'product_name' => 'Simple Related Product',
+                        'product_sku' => 'simple',
+                        'product_sale_price' => [
+                            'value' => 10
+                        ],
+                        'quantity_invoiced' => 1
+                    ],
+                    [
+                        'product_name' => 'Simple Product With Related Product',
+                        'product_sku' => 'simple_with_cross',
+                        'product_sale_price' => [
+                            'value' => 10
+                        ],
+                        'quantity_invoiced' => 1
+                    ]
+                ],
+                'total' => [
+                    'subtotal' => [
+                        'value' => 100
+                    ],
+                    'grand_total' => [
+                        'value' => 100
+                    ],
+                    'total_shipping' => [
+                        'value' => 0
+                    ],
+                    'shipping_handling' => [
+                        'total_amount' => [
+                            'value' => null
+                        ],
+                        'amount_exc_tax' => [
+                            'value' => null
+                        ]
+                    ]
+                ]
+            ]
+        ];
+
         $actualData = $response['customer']['orders']['items'];
 
         foreach ($expectedData as $key => $data) {
@@ -109,6 +149,8 @@ QUERY;
                 $actualData[$key]['status'],
                 "status is different than the expected for order - " . $data['order_number']
             );
+            $invoices = $actualData[$key]['invoices'];
+            $this->assertResponseFields($invoices, $expectedInvoiceData);
         }
     }
 
