@@ -5,7 +5,6 @@ type Cart {
     gift_message: GiftMessage @resolver (class: "\\Magento\\GiftMessageGraphQl\\Model\\Resolver\\Cart\\GiftMessage") @doc(description: "The entered gift message for the cart")
 }
 
-#TODO finish this after implementing this schema https://github.com/magento/architecture/blob/master/design-documents/graph-ql/coverage/customer-orders.md
 type SalesItemInterface {
     gift_message: GiftMessage @doc(description: "The entered gift message for the order item")
 }
