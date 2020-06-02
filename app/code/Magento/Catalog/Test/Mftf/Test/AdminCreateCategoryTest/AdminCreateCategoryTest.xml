@@ -23,16 +23,13 @@
 
         <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin1"/>
         <actionGroup ref="AdminOpenCategoryPageActionGroup" stepKey="navigateToCategoryPage"/>
-        <click selector="{{AdminCategorySidebarActionSection.AddSubcategoryButton}}" stepKey="clickOnAddSubCategory"/>
-        <fillField selector="{{AdminCategoryBasicFieldSection.CategoryNameInput}}" userInput="{{SimpleSubCategory.name}}" stepKey="enterCategoryName"/>
-        <click selector="{{AdminCategorySEOSection.SectionHeader}}" stepKey="openSEO"/>
-        <fillField selector="{{AdminCategorySEOSection.UrlKeyInput}}" userInput="{{SimpleSubCategory.name_lwr}}" stepKey="enterURLKey"/>
-        <click selector="{{AdminCategoryMainActionsSection.SaveButton}}" stepKey="saveCategory"/>
-        <seeElement selector="{{AdminCategoryMessagesSection.SuccessMessage}}" stepKey="assertSuccess"/>
+        <actionGroup ref="CreateCategoryActionGroup" stepKey="createSubcategory">
+            <argument name="categoryEntity" value="SimpleSubCategory"/>
+        </actionGroup>
 
-        <!-- Literal URL below, need to refactor line + StorefrontCategoryPage when support for variable URL is implemented-->
-        <amOnPage url="/{{SimpleSubCategory.name_lwr}}.html" stepKey="goToCategoryFrontPage"/>
-        <seeInTitle userInput="{{SimpleSubCategory.name}}" stepKey="assertTitle"/>
-        <see selector="{{StorefrontCategoryMainSection.CategoryTitle}}" userInput="{{SimpleSubCategory.name_lwr}}" stepKey="assertInfo1"/>
+        <!--Go to storefront and verify created category on frontend-->
+        <actionGroup ref="CheckCategoryOnStorefrontActionGroup" stepKey="checkCreatedCategoryOnFrontend">
+            <argument name="categoryEntity" value="SimpleSubCategory"/>
+        </actionGroup>
     </test>
 </tests>
