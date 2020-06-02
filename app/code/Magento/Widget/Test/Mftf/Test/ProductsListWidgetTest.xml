@@ -56,6 +56,7 @@
         <click selector="{{CmsNewPagePageActionsSection.saveAndClose}}" stepKey="clickSaveAndClose"/>
         <waitForPageLoad stepKey="waitForCmsList2"/>
         <see userInput="You saved the page." stepKey="seeSuccessMessage"/>
+        <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clearGridFilters"/>
         <!-- Verify CMS page on storefront -->
         <waitForElementVisible selector="{{CmsPagesPageActionsSection.select(_newDefaultCmsPage.title)}}" stepKey="waitForCMSPageListItem" />
         <click selector="{{CmsPagesPageActionsSection.select(_newDefaultCmsPage.title)}}" stepKey="clickSelect" />
