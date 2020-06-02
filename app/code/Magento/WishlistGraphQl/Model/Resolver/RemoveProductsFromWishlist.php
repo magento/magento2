@@ -13,8 +13,10 @@ use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Wishlist\Model\ResourceModel\Wishlist as WishlistResourceModel;
+use Magento\Wishlist\Model\Wishlist;
 use Magento\Wishlist\Model\Wishlist\Config as WishlistConfig;
 use Magento\Wishlist\Model\Wishlist\Data\Error;
+use Magento\Wishlist\Model\Wishlist\Data\WishlistItemFactory;
 use Magento\Wishlist\Model\Wishlist\RemoveProductsFromWishlist as RemoveProductsFromWishlistModel;
 use Magento\Wishlist\Model\WishlistFactory;
 use Magento\WishlistGraphQl\Mapper\WishlistDataMapper;
@@ -87,22 +89,12 @@ class RemoveProductsFromWishlist implements ResolverInterface
         $customerId = $context->getUserId();
 
         /* Guest checking */
-        if (null === $customerId || 0 === $customerId) {
+        if ($customerId === null || 0 === $customerId) {
             throw new GraphQlAuthorizationException(__('The current user cannot perform operations on wishlist'));
         }
 
-        $wishlistId = $args['wishlist_id'] ?: null;
-        $wishlist = $this->wishlistFactory->create();
-
-        if ($wishlistId) {
-            $this->wishlistResource->load($wishlist, $wishlistId);
-        } elseif ($customerId) {
-            $wishlist->loadByCustomerId($customerId, true);
-        }
-
-        if ($wishlistId) {
-            $this->wishlistResource->load($wishlist, $wishlistId);
-        }
+        $wishlistId = ((int) $args['wishlist_id']) ?: null;
+        $wishlist = $this->getWishlist($wishlistId, $customerId);
 
         if (null === $wishlist->getId() || $customerId !== (int) $wishlist->getCustomerId()) {
             throw new GraphQlInputException(__('The wishlist was not found.'));
@@ -127,5 +119,26 @@ class RemoveProductsFromWishlist implements ResolverInterface
                 $wishlistOutput->getErrors()
             )
         ];
+    }
+
+    /**
+     * Get customer wishlist
+     *
+     * @param int|null $wishlistId
+     * @param int|null $customerId
+     *
+     * @return Wishlist
+     */
+    private function getWishlist(?int $wishlistId, ?int $customerId): Wishlist
+    {
+        $wishlist = $this->wishlistFactory->create();
+
+        if ($wishlistId !== null && $wishlistId > 0) {
+            $this->wishlistResource->load($wishlist, $wishlistId);
+        } elseif ($customerId !== null) {
+            $wishlist->loadByCustomerId($customerId, true);
+        }
+
+        return $wishlist;
     }
 }

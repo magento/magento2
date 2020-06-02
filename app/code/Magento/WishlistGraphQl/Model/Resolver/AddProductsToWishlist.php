@@ -13,6 +13,7 @@ use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Wishlist\Model\ResourceModel\Wishlist as WishlistResourceModel;
+use Magento\Wishlist\Model\Wishlist;
 use Magento\Wishlist\Model\Wishlist\AddProductsToWishlist as AddProductsToWishlistModel;
 use Magento\Wishlist\Model\Wishlist\Config as WishlistConfig;
 use Magento\Wishlist\Model\Wishlist\Data\Error;
@@ -92,30 +93,19 @@ class AddProductsToWishlist implements ResolverInterface
             throw new GraphQlAuthorizationException(__('The current user cannot perform operations on wishlist'));
         }
 
-        $wishlistId = $args['wishlist_id'] ?: null;
-        $wishlistItemsData = $args['wishlist_items'];
-        $wishlist = $this->wishlistFactory->create();
-
-        if ($wishlistId) {
-            $this->wishlistResource->load($wishlist, $wishlistId);
-        } elseif ($customerId) {
-            $wishlist->loadByCustomerId($customerId, true);
-        }
+        $wishlistId = ((int) $args['wishlist_id']) ?: null;
+        $wishlist = $this->getWishlist($wishlistId, $customerId);
 
         if (null === $wishlist->getId() || $customerId !== (int) $wishlist->getCustomerId()) {
             throw new GraphQlInputException(__('The wishlist was not found.'));
         }
 
-        $wishlistItems = [];
-        foreach ($wishlistItemsData as $wishlistItemData) {
-            $wishlistItems[] = (new WishlistItemFactory())->create($wishlistItemData);
-        }
-
+        $wishlistItems = $this->getWishlistItems($args['wishlist_items']);
         $wishlistOutput = $this->addProductsToWishlist->execute($wishlist, $wishlistItems);
 
         return [
             'wishlist' => $this->wishlistDataMapper->map($wishlistOutput->getWishlist()),
-            'userInputErrors' => \array_map(
+            'userInputErrors' => array_map(
                 function (Error $error) {
                     return [
                         'code' => $error->getCode(),
@@ -125,5 +115,44 @@ class AddProductsToWishlist implements ResolverInterface
                 $wishlistOutput->getErrors()
             )
         ];
+    }
+
+    /**
+     * Get wishlist items
+     *
+     * @param array $wishlistItemsData
+     *
+     * @return array
+     */
+    private function getWishlistItems(array $wishlistItemsData): array
+    {
+        $wishlistItems = [];
+
+        foreach ($wishlistItemsData as $wishlistItemData) {
+            $wishlistItems[] = (new WishlistItemFactory())->create($wishlistItemData);
+        }
+
+        return $wishlistItems;
+    }
+
+    /**
+     * Get customer wishlist
+     *
+     * @param int|null $wishlistId
+     * @param int|null $customerId
+     *
+     * @return Wishlist
+     */
+    private function getWishlist(?int $wishlistId, ?int $customerId): Wishlist
+    {
+        $wishlist = $this->wishlistFactory->create();
+
+        if ($wishlistId !== null && $wishlistId > 0) {
+            $this->wishlistResource->load($wishlist, $wishlistId);
+        } elseif ($customerId !== null) {
+            $wishlist->loadByCustomerId($customerId, true);
+        }
+
+        return $wishlist;
     }
 }

@@ -13,6 +13,7 @@ use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Wishlist\Model\ResourceModel\Wishlist as WishlistResourceModel;
+use Magento\Wishlist\Model\Wishlist;
 use Magento\Wishlist\Model\Wishlist\Config as WishlistConfig;
 use Magento\Wishlist\Model\Wishlist\Data\Error;
 use Magento\Wishlist\Model\Wishlist\Data\WishlistItemFactory;
@@ -88,34 +89,19 @@ class UpdateProductsInWishlist implements ResolverInterface
         $customerId = $context->getUserId();
 
         /* Guest checking */
-        if (null === $customerId || 0 === $customerId) {
+        if (null === $customerId || $customerId === 0) {
             throw new GraphQlAuthorizationException(__('The current user cannot perform operations on wishlist'));
         }
 
-        $wishlistId = $args['wishlist_id'] ?: null;
-        $wishlist = $this->wishlistFactory->create();
-
-        if ($wishlistId) {
-            $this->wishlistResource->load($wishlist, $wishlistId);
-        } elseif ($customerId) {
-            $wishlist->loadByCustomerId($customerId, true);
-        }
-
-        if ($wishlistId) {
-            $this->wishlistResource->load($wishlist, $wishlistId);
-        }
+        $wishlistId = ((int) $args['wishlist_id']) ?: null;
+        $wishlist = $this->getWishlist($wishlistId, $customerId);
 
         if (null === $wishlist->getId() || $customerId !== (int) $wishlist->getCustomerId()) {
             throw new GraphQlInputException(__('The wishlist was not found.'));
         }
 
-        $wishlistItems = [];
-        $wishlistItemsData = $args['wishlist_items'];
-
-        foreach ($wishlistItemsData as $wishlistItemData) {
-            $wishlistItems[] = (new WishlistItemFactory())->create($wishlistItemData);
-        }
-
+        $wishlistItems = $args['wishlist_items'];
+        $wishlistItems = $this->getWishlistItems($wishlistItems);
         $wishlistOutput = $this->updateProductsInWishlist->execute($wishlist, $wishlistItems);
 
         if (count($wishlistOutput->getErrors()) !== count($wishlistItems)) {
@@ -134,5 +120,44 @@ class UpdateProductsInWishlist implements ResolverInterface
                 $wishlistOutput->getErrors()
             )
         ];
+    }
+
+    /**
+     * Get DTO wishlist items
+     *
+     * @param array $wishlistItemsData
+     *
+     * @return array
+     */
+    private function getWishlistItems(array $wishlistItemsData): array
+    {
+        $wishlistItems = [];
+
+        foreach ($wishlistItemsData as $wishlistItemData) {
+            $wishlistItems[] = (new WishlistItemFactory())->create($wishlistItemData);
+        }
+
+        return $wishlistItems;
+    }
+
+    /**
+     * Get customer wishlist
+     *
+     * @param int|null $wishlistId
+     * @param int|null $customerId
+     *
+     * @return Wishlist
+     */
+    private function getWishlist(?int $wishlistId, ?int $customerId): Wishlist
+    {
+        $wishlist = $this->wishlistFactory->create();
+
+        if (null !== $wishlistId && 0 < $wishlistId) {
+            $this->wishlistResource->load($wishlist, $wishlistId);
+        } elseif ($customerId !== null) {
+            $wishlist->loadByCustomerId($customerId, true);
+        }
+
+        return $wishlist;
     }
 }
