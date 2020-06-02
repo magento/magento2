@@ -89,4 +89,24 @@ class LoginTest extends TestCase
             'Forgot password link does not exist on the page'
         );
     }
+
+    /**
+     * @magentoConfigFixture current_store customer/password/autocomplete_on_storefront 1
+     *
+     * @return void
+     */
+    public function testAutocompletePasswordEnabled(): void
+    {
+        $this->assertFalse($this->block->isAutocompleteDisabled());
+    }
+
+    /**
+     * @magentoConfigFixture current_store customer/password/autocomplete_on_storefront 0
+     *
+     * @return void
+     */
+    public function testAutocompletePasswordDisabled(): void
+    {
+        $this->assertTrue($this->block->isAutocompleteDisabled());
+    }
 }
