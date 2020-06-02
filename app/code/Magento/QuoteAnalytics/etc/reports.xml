@@ -6,7 +6,7 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Analytics:etc/reports.xsd">
-    <report name="quotes" connection="default">
+    <report name="quotes" connection="checkout">
         <source name="quote">
             <attribute name="entity_id"/>
             <attribute name="customer_id"/>
