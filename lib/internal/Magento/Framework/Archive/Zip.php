@@ -82,6 +82,7 @@ class Zip extends AbstractArchive implements ArchiveInterface
         $index = 0;
 
         do {
+            $zip->renameIndex($index, $baseName);
             $filename = $zip->getNameIndex($index);
             $index++;
         } while ($baseName !== $filename && $filename !== false);
