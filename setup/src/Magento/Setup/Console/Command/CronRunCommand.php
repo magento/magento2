@@ -14,6 +14,8 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * Command to run scheduled jobs, this command should be run as a cron job
+ *
+ * @deprecated Starting from Magento 2.3.6 Web Setup Wizard is deprecated
  */
 class CronRunCommand extends AbstractSetupCommand
 {

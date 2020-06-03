@@ -14,6 +14,8 @@ use Zend\Json\Json;
 
 /**
  * Controller for updater tasks
+ *
+ * @deprecated Starting from Magento 2.3.6 Web Setup Wizard is deprecated
  */
 class StartUpdater extends AbstractActionController
 {

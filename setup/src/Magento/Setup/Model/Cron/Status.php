@@ -16,6 +16,7 @@ use Magento\Framework\Filesystem;
  * Each job is using this class to share information about its current status.
  * Current status can be seen on the update app web page.
  *
+ * @deprecated Starting from Magento 2.3.6 Web Setup Wizard is deprecated
  * @SuppressWarnings(PHPMD.NPathComplexity)
  */
 class Status

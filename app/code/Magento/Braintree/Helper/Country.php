@@ -10,6 +10,9 @@ use Magento\Braintree\Model\Adminhtml\System\Config\Country as CountryConfig;
 
 /**
  * Class Country
+ *
+ * @deprecated Starting from Magento 2.3.6 Braintree payment method core integration is deprecated
+ * in favor of official payment integration available on the marketplace
  */
 class Country
 {

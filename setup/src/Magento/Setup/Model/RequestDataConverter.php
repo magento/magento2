@@ -12,6 +12,8 @@ use Magento\Setup\Console\Command\InstallCommand;
 
 /**
  * Converter of request data into format compatible with models.
+ *
+ * @deprecated Starting from Magento 2.3.6 Web Setup Wizard is deprecated
  */
 class RequestDataConverter
 {

@@ -20,6 +20,8 @@ use Magento\Quote\Model\Quote;
  * Class OrderPlace
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
+ * @deprecated Starting from Magento 2.3.6 Braintree payment method core integration is deprecated
+ * in favor of official payment integration available on the marketplace
  */
 class OrderPlace extends AbstractHelper
 {
