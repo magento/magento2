@@ -13,7 +13,6 @@ use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Visibility as CatalogProductVisibility;
 use Magento\Catalog\Model\ResourceModel\Product\Compare\Item\Collection;
 use Magento\Catalog\Model\ResourceModel\Product\Compare\Item\CollectionFactory as CompareItemsCollectionFactory;
-use Magento\Catalog\Helper\Image as ImageHelper;
 use Magento\CatalogGraphQl\Model\Resolver\Product\Price\Discount;
 use Magento\CatalogGraphQl\Model\Resolver\Product\Price\ProviderPool as PriceProviderPool;
 use Magento\Framework\GraphQl\Config\Element\Field;
@@ -62,18 +61,12 @@ class CustomerCompareList implements ResolverInterface
     private $priceProviderPool;
 
     /**
-     * @var ImageHelper
-     */
-    protected $imageHelper;
-
-    /**
      * @param CompareItemsCollectionFactory $itemCollectionFactory
      * @param CatalogProductVisibility      $catalogProductVisibility
      * @param CatalogConfig                 $catalogConfig
      * @param Compare                       $compareHelper
      * @param PriceProviderPool             $priceProviderPool
      * @param Discount                      $discount
-     * @param ImageHelper                   $imageHelper
      */
     public function __construct(
         CompareItemsCollectionFactory $itemCollectionFactory,
@@ -81,8 +74,7 @@ class CustomerCompareList implements ResolverInterface
         CatalogConfig $catalogConfig,
         Compare $compareHelper,
         PriceProviderPool $priceProviderPool,
-        Discount $discount,
-        ImageHelper $imageHelper
+        Discount $discount
     ) {
         $this->itemCollectionFactory = $itemCollectionFactory;
         $this->catalogProductVisibility = $catalogProductVisibility;
@@ -90,7 +82,6 @@ class CustomerCompareList implements ResolverInterface
         $this->compareProduct = $compareHelper;
         $this->priceProviderPool = $priceProviderPool;
         $this->discount = $discount;
-        $this->imageHelper = $imageHelper;
     }
 
     /**
@@ -124,6 +115,8 @@ class CustomerCompareList implements ResolverInterface
     }
 
     /**
+     * Get comparable items
+     *
      * @param ContextInterface $context
      * @param StoreInterface   $store
      *
@@ -144,8 +137,11 @@ class CustomerCompareList implements ResolverInterface
                 ],
                 'canonical_url' => $item->getUrlKey(),
                 'images' => [
-                    'url' => '',
-                    'label' => ''
+                    'url' => [
+                        'model' => $item,
+                        'image_type' => 'image',
+                        'label' => $item->getImageLabel()
+                    ],
                 ],
             ];
         }
