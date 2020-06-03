@@ -185,7 +185,7 @@ class ItemRepository implements OrderItemRepositoryInterface
     {
         $request = $this->getBuyRequest($entity);
         $productOptions = $entity->getProductOptions();
-        $productOptions['info_buyRequest'] = $productOptions
+        $productOptions['info_buyRequest'] = $productOptions && !empty($productOptions['info_buyRequest'])
             ? array_merge($productOptions['info_buyRequest'], $request->toArray())
             : $request->toArray();
 
