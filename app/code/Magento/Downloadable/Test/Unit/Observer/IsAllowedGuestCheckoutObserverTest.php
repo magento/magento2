@@ -26,6 +26,8 @@ use PHPUnit\Framework\TestCase;
  */
 class IsAllowedGuestCheckoutObserverTest extends TestCase
 {
+    private const XML_PATH_DISABLE_GUEST_CHECKOUT = 'catalog/downloadable/disable_guest_checkout';
+    
     /** @var IsAllowedGuestCheckoutObserver */
     private $isAllowedGuestCheckoutObserver;
 
@@ -149,7 +151,7 @@ class IsAllowedGuestCheckoutObserverTest extends TestCase
         $this->scopeConfigMock->expects($this->any())
             ->method('isSetFlag')
             ->with(
-                IsAllowedGuestCheckoutObserver::XML_PATH_DISABLE_GUEST_CHECKOUT,
+                self::XML_PATH_DISABLE_GUEST_CHECKOUT,
                 ScopeInterface::SCOPE_STORE,
                 $this->storeMock
             )
@@ -222,7 +224,7 @@ class IsAllowedGuestCheckoutObserverTest extends TestCase
         $this->scopeConfigMock->expects($this->once())
             ->method('isSetFlag')
             ->with(
-                IsAllowedGuestCheckoutObserver::XML_PATH_DISABLE_GUEST_CHECKOUT,
+                self::XML_PATH_DISABLE_GUEST_CHECKOUT,
                 ScopeInterface::SCOPE_STORE,
                 $this->storeMock
             )
