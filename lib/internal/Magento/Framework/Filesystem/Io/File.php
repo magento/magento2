@@ -900,10 +900,12 @@ class File extends AbstractIo
      * Get path info
      *
      * @param string $path
+     * @param null   $options
+     *
      * @return mixed
      */
-    public function getPathInfo($path)
+    public function getPathInfo($path, $options = null)
     {
-        return pathinfo($path);
+        return pathinfo($path, $options);
     }
 }
