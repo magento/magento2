@@ -45,7 +45,7 @@ class CartRepositoryTest extends WebapiAbstract
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->filterBuilder = $this->objectManager->create(
@@ -59,7 +59,7 @@ class CartRepositoryTest extends WebapiAbstract
         );
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         try {
             /** @var CartRepositoryInterface $quoteRepository */
@@ -130,9 +130,9 @@ class CartRepositoryTest extends WebapiAbstract
         $this->assertEquals($cart->getItemsCount(), $cartData['items_count']);
         $this->assertEquals($cart->getItemsQty(), $cartData['items_qty']);
         //following checks will be uncommented when all cart related services are ready
-        $this->assertContains('customer', $cartData);
-        $this->assertEquals(true, $cartData['customer_is_guest']);
-        $this->assertContains('currency', $cartData);
+        $this->assertArrayHasKey('customer', $cartData);
+        $this->assertTrue($cartData['customer_is_guest']);
+        $this->assertArrayHasKey('currency', $cartData);
         $this->assertEquals($cart->getGlobalCurrencyCode(), $cartData['currency']['global_currency_code']);
         $this->assertEquals($cart->getBaseCurrencyCode(), $cartData['currency']['base_currency_code']);
         $this->assertEquals($cart->getQuoteCurrencyCode(), $cartData['currency']['quote_currency_code']);
@@ -146,11 +146,12 @@ class CartRepositoryTest extends WebapiAbstract
     /**
      * Tests exception when cartId is not provided.
      *
-     * @expectedException \Exception
-     * @expectedExceptionMessage No such entity with
      */
     public function testGetCartThrowsExceptionIfThereIsNoCartWithProvidedId()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('No such entity with');
+
         $cartId = 9999;
 
         $serviceInfo = [
@@ -232,15 +233,16 @@ class CartRepositoryTest extends WebapiAbstract
         $this->assertEquals($cart->getUpdatedAt(), $cartData['updated_at']);
         $this->assertEquals($cart->getIsActive(), $cartData['is_active']);
 
-        $this->assertContains('customer_is_guest', $cartData);
+        $this->assertArrayHasKey('customer_is_guest', $cartData);
         $this->assertEquals(1, $cartData['customer_is_guest']);
     }
 
     /**
-     * @expectedException \Exception
      */
     public function testGetListThrowsExceptionIfProvidedSearchFieldIsInvalid()
     {
+        $this->expectException(\Exception::class);
+
         $serviceInfo = [
             'soap' => [
                 'service' => 'quoteCartRepositoryV1',
@@ -267,13 +269,14 @@ class CartRepositoryTest extends WebapiAbstract
     /**
      * Saving quote - negative case, attempt to change customer id in the active quote for the user with Customer role.
      *
-     * @expectedException \Exception
-     * @expectedExceptionMessage Invalid state change requested
      * @dataProvider customerIdDataProvider
      * @magentoApiDataFixture Magento/Checkout/_files/quote_with_shipping_method.php
      */
     public function testSaveQuoteException($customerId)
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Invalid state change requested');
+
         $token = $this->getToken();
 
         /** @var Quote $quote */

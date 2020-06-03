@@ -32,7 +32,7 @@ class UpdateContentAssetLinksTest extends TestCase
     /**
      * @inheritdoc
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->updateContentAssetLinks = Bootstrap::getObjectManager()->get(UpdateContentAssetLinksInterface::class);
         $this->getAssetIdsByContentIdentity = Bootstrap::getObjectManager()

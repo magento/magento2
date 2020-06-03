@@ -8,12 +8,12 @@
 <schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
     <table name="email_template" resource="default" engine="innodb" comment="Email Templates">
-        <column xsi:type="int" name="template_id" padding="10" unsigned="true" nullable="false" identity="true"
+        <column xsi:type="int" name="template_id" unsigned="true" nullable="false" identity="true"
                 comment="Template ID"/>
         <column xsi:type="varchar" name="template_code" nullable="false" length="150" comment="Template Name"/>
         <column xsi:type="text" name="template_text" nullable="false" comment="Template Content"/>
         <column xsi:type="text" name="template_styles" nullable="true" comment="Templste Styles"/>
-        <column xsi:type="int" name="template_type" padding="10" unsigned="true" nullable="true" identity="false"
+        <column xsi:type="int" name="template_type" unsigned="true" nullable="true" identity="false"
                 comment="Template Type"/>
         <column xsi:type="varchar" name="template_subject" nullable="false" length="200" comment="Template Subject"/>
         <column xsi:type="varchar" name="template_sender_name" nullable="true" length="200"

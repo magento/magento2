@@ -6,17 +6,29 @@
 declare(strict_types=1);
 
 use Magento\Bundle\Model\Product\Price;
+use Magento\Catalog\Api\Data\ProductInterfaceFactory;
+use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product\Attribute\Source\Status;
 use Magento\Catalog\Model\Product\Type;
 use Magento\Catalog\Model\Product\Type\AbstractType;
 use Magento\Catalog\Model\Product\Visibility;
+use Magento\Store\Api\WebsiteRepositoryInterface;
 use Magento\TestFramework\Bundle\Model\PrepareBundleLinks;
+use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
 
-require __DIR__ . '/multiple_products.php';
+Resolver::getInstance()->requireDataFixture('Magento/Bundle/_files/multiple_products.php');
 
+$objectManager = Bootstrap::getObjectManager();
 /** @var PrepareBundleLinks $prepareBundleLinks */
 $prepareBundleLinks = $objectManager->get(PrepareBundleLinks::class);
-
+/** @var ProductInterfaceFactory $productFactory */
+$productFactory = $objectManager->get(ProductInterfaceFactory::class);
+/** @var ProductRepositoryInterface $productRepository */
+$productRepository = $objectManager->create(ProductRepositoryInterface::class);
+/** @var WebsiteRepositoryInterface $websiteRepository */
+$websiteRepository = $objectManager->get(WebsiteRepositoryInterface::class);
+$defaultWebsiteId = $websiteRepository->get('base')->getId();
 $bundleProduct = $productFactory->create();
 $bundleProduct->setTypeId(Type::TYPE_BUNDLE)
     ->setAttributeSetId($bundleProduct->getDefaultAttributeSetId())
@@ -51,21 +63,21 @@ $bundleOptionsData = [
 ];
 $bundleSelectionsData = [
     [
-        'sku' => $product->getSku(),
+        'sku' => 'simple1',
         'selection_qty' => 1,
         'selection_price_value' => 10,
         'selection_price_type' => 0,
         'selection_can_change_qty' => 1,
     ],
     [
-        'sku' => $product2->getSku(),
+        'sku' => 'simple2',
         'selection_qty' => 1,
         'selection_price_value' => 25,
         'selection_price_type' => 1,
         'selection_can_change_qty' => 1,
     ],
     [
-        'sku' => $product3->getSku(),
+        'sku' => 'simple3',
         'selection_qty' => 1,
         'selection_price_value' => 25,
         'selection_price_type' => 0,
