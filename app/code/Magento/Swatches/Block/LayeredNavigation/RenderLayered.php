@@ -57,6 +57,13 @@ class RenderLayered extends Template
     protected $mediaHelper;
 
     /**
+     * Html pager block
+     *
+     * @var \Magento\Theme\Block\Html\Pager
+     */
+    private $htmlPagerBlock;
+
+    /**
      * @param Template\Context $context
      * @param Attribute $eavAttribute
      * @param AttributeFactory $layerAttribute
@@ -70,12 +77,14 @@ class RenderLayered extends Template
         AttributeFactory $layerAttribute,
         \Magento\Swatches\Helper\Data $swatchHelper,
         \Magento\Swatches\Helper\Media $mediaHelper,
+        \Magento\Theme\Block\Html\Pager $htmlPagerBlock,
         array $data = []
     ) {
         $this->eavAttribute = $eavAttribute;
         $this->layerAttribute = $layerAttribute;
         $this->swatchHelper = $swatchHelper;
         $this->mediaHelper = $mediaHelper;
+        $this->htmlPagerBlock = $htmlPagerBlock;
 
         parent::__construct($context, $data);
     }
@@ -132,7 +141,10 @@ class RenderLayered extends Template
      */
     public function buildUrl($attributeCode, $optionId)
     {
-        $query = [$attributeCode => $optionId];
+        $query = [
+            $attributeCode => $optionId,
+            $this->htmlPagerBlock->getPageVarName() => null
+        ];
         return $this->_urlBuilder->getUrl('*/*/*', ['_current' => true, '_use_rewrite' => true, '_query' => $query]);
     }
 
