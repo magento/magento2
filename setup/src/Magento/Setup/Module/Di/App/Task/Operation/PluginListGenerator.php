@@ -107,6 +107,11 @@ class PluginListGenerator implements OperationInterface
     /**
      * @var array
      */
+    private $globalScopePluginData = [];
+
+    /**
+     * @var array
+     */
     private $_inherited = [];
 
     /**
@@ -180,14 +185,17 @@ class PluginListGenerator implements OperationInterface
                 foreach ($this->getClassDefinitions() as $class) {
                     $this->_inheritPlugins($class);
                 }
+                if ($scope === 'global') {
+                    $this->globalScopePluginData = $this->_data;
+                }
                 $this->configWriter->write(
                     $cacheId,
                     [$this->_data, $this->_inherited, $this->_processed]
                 );
-
                 if (count($this->_scopePriorityScheme) > 1 ) {
                     array_pop($this->_scopePriorityScheme);
-                    $this->_data = null;
+                    // merge global scope plugin data to other scopes by default
+                    $this->_data = $this->globalScopePluginData;
                 }
                 $this->_pluginInstances = [];
             }
