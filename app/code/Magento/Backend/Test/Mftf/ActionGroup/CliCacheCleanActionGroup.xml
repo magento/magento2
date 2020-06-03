@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="CliCacheCleanActionGroup">
+        <annotations>
+            <description>Run cache:clean by CLI with specified cache tags (space separated).</description>
+        </annotations>
+        <arguments>
+            <argument name="tags" type="string"/>
+        </arguments>
+
+        <magentoCLI command="cache:clean" arguments="{{tags}}" stepKey="cleanSpecifiedCache"/>
+    </actionGroup>
+</actionGroups>
