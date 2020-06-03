@@ -10,11 +10,13 @@ use Magento\Cms\Api\PageRepositoryInterface;
 use Magento\Cms\Model\Page;
 use Magento\TestFramework\Helper\Bootstrap;
 
+$objectManager = Bootstrap::getObjectManager();
+
 /**
  * @var $page Page
  * @var $pageRepository PageRepositoryInterface
  */
-$page = Bootstrap::getObjectManager()->create(Page::class);
+$page = $objectManager->create(Page::class);
 $pageRepository = $objectManager->create(PageRepositoryInterface::class);
 
 $page->setTitle('Cms Page 100')
@@ -29,7 +31,7 @@ $page->setTitle('Cms Page 100')
     ->setPageLayout('1column');
 $pageRepository->save($page);
 
-$page = Bootstrap::getObjectManager()->create(Page::class);
+$page = $objectManager->create(Page::class);
 $page->setTitle('Cms Page Design Blank')
     ->setIdentifier('page_design_blank')
     ->setStores([0])
