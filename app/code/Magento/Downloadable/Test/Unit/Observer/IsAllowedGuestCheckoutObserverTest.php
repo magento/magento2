@@ -103,6 +103,8 @@ class IsAllowedGuestCheckoutObserverTest extends TestCase
      */
     public function testIsAllowedGuestCheckoutConfigSetToTrue($productType, $isAllowed): void
     {
+        $storeId = 1;
+
         if ($isAllowed) {
             $this->resultMock->expects($this->at(0))
                 ->method('setIsAllowed')
@@ -140,6 +142,10 @@ class IsAllowedGuestCheckoutObserverTest extends TestCase
             ->method('getStore')
             ->willReturn($this->storeMock);
 
+        $this->storeMock->expects($this->any())
+            ->method('getId')
+            ->willReturn($storeId);
+
         $this->eventMock->expects($this->once())
             ->method('getResult')
             ->willReturn($this->resultMock);
@@ -153,7 +159,7 @@ class IsAllowedGuestCheckoutObserverTest extends TestCase
             ->with(
                 self::XML_PATH_DISABLE_GUEST_CHECKOUT,
                 ScopeInterface::SCOPE_STORE,
-                $this->storeMock
+                $storeId
             )
             ->willReturn(true);
 
@@ -180,7 +186,7 @@ class IsAllowedGuestCheckoutObserverTest extends TestCase
 
     public function testIsAllowedGuestCheckoutConfigSetToFalse(): void
     {
-        $storeCode = 1;
+        $storeId = 1;
 
         $product = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
@@ -212,6 +218,10 @@ class IsAllowedGuestCheckoutObserverTest extends TestCase
         $this->eventMock->expects($this->once())
             ->method('getStore')
             ->willReturn($this->storeMock);
+        
+        $this->storeMock->expects($this->any())
+            ->method('getId')
+            ->willReturn($storeId);
 
         $this->eventMock->expects($this->once())
             ->method('getResult')
@@ -226,7 +236,7 @@ class IsAllowedGuestCheckoutObserverTest extends TestCase
             ->with(
                 self::XML_PATH_DISABLE_GUEST_CHECKOUT,
                 ScopeInterface::SCOPE_STORE,
-                $this->storeMock
+                $storeId
             )
             ->willReturn(false);
 
