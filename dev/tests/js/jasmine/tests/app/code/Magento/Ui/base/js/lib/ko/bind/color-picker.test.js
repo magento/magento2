@@ -13,22 +13,14 @@ define([
 
     var $input;
 
-    beforeAll(function () {
+    beforeEach(function () {
         define('spectrum', function () {
             return jasmine.createSpy();
         });
     });
 
-    afterAll(function () {
-        require.undef('spectrum');
-    });
-
-    beforeEach(function () {
-        jasmine.clock().install();
-    });
-
     afterEach(function () {
-        jasmine.clock().uninstall();
+        require.undef('spectrum');
     });
 
     describe('Colorpicker binding', function () {
@@ -40,6 +32,8 @@ define([
                 viewModel = {
                     disabled: jasmine.createSpy().and.returnValue(true)
                 };
+
+            jasmine.clock().install();
 
             $.fn.spectrum = jasmine.createSpy();
             $input = jasmine.createSpy();
@@ -55,6 +49,8 @@ define([
 
             expect($.fn.spectrum.calls.allArgs()).toEqual([[value], ['disable']]);
             expect(viewModel.disabled).toHaveBeenCalled();
+
+            jasmine.clock().uninstall();
         });
 
         it('Should call spectrum on $input with extra configuration if view model enabled', function () {
@@ -65,6 +61,8 @@ define([
                 viewModel = {
                     disabled: jasmine.createSpy().and.returnValue(false)
                 };
+
+            jasmine.clock().install();
 
             $.fn.spectrum = jasmine.createSpy();
             $input = jasmine.createSpy();
@@ -80,6 +78,8 @@ define([
 
             expect($.fn.spectrum.calls.allArgs()).toEqual([[value], ['enable']]);
             expect(viewModel.disabled).toHaveBeenCalled();
+
+            jasmine.clock().uninstall();
         });
 
         it('Verify config value is empty when reset colorpicker intput', function () {
@@ -91,6 +91,8 @@ define([
                 viewModel = {
                     disabled: jasmine.createSpy().and.returnValue(false)
                 };
+
+            jasmine.clock().install();
 
             $.fn.spectrum = jasmine.createSpy();
             $input = jasmine.createSpy();
@@ -109,6 +111,8 @@ define([
 
             expect($.fn.spectrum).toHaveBeenCalledTimes(3);
             expect(valueAccessor().value).toHaveBeenCalledTimes(5);
+
+            jasmine.clock().uninstall();
         });
     });
 });
