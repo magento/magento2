@@ -150,9 +150,9 @@
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndex"/>
             <actionGroup ref="ResetProductGridToDefaultViewActionGroup" stepKey="resetProductGridColumnsInitial"/>
+            <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
             <!-- Admin logout-->
             <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
-            <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
         </after>
 
         <!-- Go to System > Export -->
@@ -170,8 +170,7 @@
             <argument name="maxMessages" value="{{AdminExportMessageConsumerData.messageLimit}}"/>
         </actionGroup>
         <reloadPage stepKey="refreshPage"/>
-        <waitForPageLoad stepKey="waitForPageLoaded"/>
-
+        <waitForElementVisible selector="{{AdminExportAttributeSection.exportFileNameByPosition('0')}}" stepKey="waitForFileName"/>
         <grabTextFrom selector="{{AdminExportAttributeSection.exportFileNameByPosition('0')}}" stepKey="grabNameFile"/>
 
         <!-- Save exported file: file successfully downloaded -->
