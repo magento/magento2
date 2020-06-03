@@ -12,7 +12,7 @@ class LayoutUpdateConverterTest extends \PHPUnit\Framework\TestCase
      */
     private $converter;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->converter = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             LayoutUpdateConverter::class

@@ -9,6 +9,7 @@
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="AdminCreateOrderWithSimpleProductCustomOptionFileTest">
         <annotations>
+            <stories value="Create Order with simple product with custom option"/>
             <title value="Create Order with simple product with custom option."/>
             <description value="Verify, admin able to change file for custom option during order creation."/>
             <features value="Sales"/>
@@ -22,7 +23,7 @@
                 <requiredEntity createDataKey="category"/>
             </createData>
             <createData entity="Simple_US_Customer_CA" stepKey="customer"/>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
             <!--Clean up created test data.-->
@@ -33,7 +34,9 @@
         </after>
 
         <!--Add option to product.-->
-        <amOnPage url="{{AdminProductEditPage.url($simpleProduct.id$)}}" stepKey="navigateToProductEditPage"/>
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="navigateToProductEditPage">
+            <argument name="productId" value="$simpleProduct.id$"/>
+        </actionGroup>
         <actionGroup ref="AddProductCustomOptionFileActionGroup" stepKey="addOption">
             <argument name="option" value="ProductOptionFile"/>
         </actionGroup>

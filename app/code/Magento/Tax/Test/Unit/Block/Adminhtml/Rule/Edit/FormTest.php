@@ -3,27 +3,30 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Tax\Test\Unit\Block\Adminhtml\Rule\Edit;
 
 use Magento\Backend\Block\Template\Context;
 use Magento\Framework\Data\FormFactory;
 use Magento\Framework\Registry;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\UrlInterface;
 use Magento\Tax\Api\TaxClassRepositoryInterface;
 use Magento\Tax\Api\TaxRuleRepositoryInterface;
 use Magento\Tax\Block\Adminhtml\Rule\Edit\Form;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Tax\Model\Rate\Source;
 use Magento\Tax\Model\TaxClass\Source\Customer;
 use Magento\Tax\Model\TaxClass\Source\Product;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test for Tax Rule Edit Form
  *
  * Class FormTest
  */
-class FormTest extends \PHPUnit\Framework\TestCase
+class FormTest extends TestCase
 {
     /**
      * @var Form
@@ -31,51 +34,51 @@ class FormTest extends \PHPUnit\Framework\TestCase
     private $form;
 
     /**
-     * @var Context | MockObject
+     * @var Context|MockObject
      */
     private $context;
 
     /**
-     * @var Registry | MockObject
+     * @var Registry|MockObject
      */
     private $registry;
 
     /**
-     * @var FormFactory | MockObject
+     * @var FormFactory|MockObject
      */
     private $formFactory;
 
     /**
-     * @var Source | MockObject
+     * @var Source|MockObject
      */
     private $rateSource;
 
     /**
-     * @var TaxRuleRepositoryInterface | MockObject
+     * @var TaxRuleRepositoryInterface|MockObject
      */
     private $taxRuleRepository;
 
     /**
-     * @var TaxClassRepositoryInterface | MockObject
+     * @var TaxClassRepositoryInterface|MockObject
      */
     private $taxClassRepository;
 
     /**
-     * @var Customer | MockObject
+     * @var Customer|MockObject
      */
     private $taxClassCustomer;
 
     /**
-     * @var Product | MockObject
+     * @var Product|MockObject
      */
     private $product;
 
     /**
-     * @var UrlInterface | MockObject
+     * @var UrlInterface|MockObject
      */
     private $urlBuilder;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManagerHelper = new ObjectManager($this);
 
@@ -97,11 +100,11 @@ class FormTest extends \PHPUnit\Framework\TestCase
 
         $this->taxRuleRepository = $this->getMockBuilder(TaxRuleRepositoryInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->taxClassRepository = $this->getMockBuilder(TaxClassRepositoryInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->taxClassCustomer = $this->getMockBuilder(Customer::class)
             ->disableOriginalConstructor()
@@ -113,7 +116,7 @@ class FormTest extends \PHPUnit\Framework\TestCase
 
         $this->urlBuilder = $this->getMockBuilder(UrlInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->form = $objectManagerHelper->getObject(Form::class, [
             'context' => $this->context,
@@ -138,7 +141,7 @@ class FormTest extends \PHPUnit\Framework\TestCase
         $this->urlBuilder->expects($this->once())
             ->method('getUrl')
             ->with('tax/rule/ajaxLoadRates/')
-            ->will($this->returnValue('some_url'));
+            ->willReturn('some_url');
 
         $this->assertEquals('some_url', $this->form->getTaxRatesPageUrl());
     }

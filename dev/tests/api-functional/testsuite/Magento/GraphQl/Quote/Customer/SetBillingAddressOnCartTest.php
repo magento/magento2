@@ -61,7 +61,7 @@ class SetBillingAddressOnCartTest extends GraphQlAbstract
      */
     private $customerRepository;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = Bootstrap::getObjectManager();
         $this->getMaskedQuoteIdByReservedOrderId = $objectManager->get(GetMaskedQuoteIdByReservedOrderId::class);
@@ -318,11 +318,12 @@ QUERY;
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
      *
-     * @expectedException \Exception
-     * @expectedExceptionMessage Could not find a address with ID "100"
      */
     public function testSetNotExistedBillingAddressFromAddressBook()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Could not find a address with ID "100"');
+
         $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
 
         $query = <<<QUERY
@@ -553,11 +554,12 @@ QUERY;
      * @magentoApiDataFixture Magento/Customer/_files/customer_address.php
      * @magentoApiDataFixture Magento/Checkout/_files/quote_with_simple_product_saved.php
      *
-     * @expectedException \Exception
-     * @expectedExceptionMessage Current customer does not have permission to address with ID "1"
      */
     public function testSetBillingAddressIfCustomerIsNotOwnerOfAddress()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Current customer does not have permission to address with ID "1"');
+
         $maskedQuoteId = $this->assignQuoteToCustomer('test_order_with_simple_product_without_address', 2);
 
         $query = <<<QUERY
@@ -584,11 +586,12 @@ QUERY;
     /**
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
      * @magentoApiDataFixture Magento/Customer/_files/customer_address.php
-     * @expectedException \Exception
-     * @expectedExceptionMessage Could not find a cart with ID "non_existent_masked_id"
      */
     public function testSetBillingAddressOnNonExistentCart()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Could not find a cart with ID "non_existent_masked_id"');
+
         $maskedQuoteId = 'non_existent_masked_id';
         $query = <<<QUERY
 mutation {
@@ -667,9 +670,9 @@ QUERY;
                         telephone: "88776655"
                         }
                     }',
-                '"regionId" is required. Enter and try again.'
+                'Region is required'
             ],
-            'missed_multiple_fields' => [
+            'missed_postal_code' => [
                 'cart_id: "cart_id_value"
                  billing_address: {
                     address: {
@@ -678,12 +681,12 @@ QUERY;
                         company: "test company"
                         street: ["test street 1", "test street 2"]
                         city: "test city"
+                        region: "TX"
                         country_code: "US"
                         telephone: "88776655"
                         }
                     }',
-                '"postcode" is required. Enter and try again.
-"regionId" is required. Enter and try again.'
+                '"postcode" is required. Enter and try again.'
             ],
             'wrong_required_region' => [
                 'cart_id: "cart_id_value"
@@ -696,10 +699,29 @@ QUERY;
                         region: "wrong region"
                         city: "test city"
                         country_code: "US"
+                        postcode: "887766"
                         telephone: "88776655"
                         }
                     }',
-                'Region is not available for the selected country'
+                '"regionId" is required. Enter and try again'
+            ],
+            'wrong_required_region_name' => [
+                'cart_id: "cart_id_value"
+                 billing_address: {
+                    address: {
+                        firstname: "test firstname"
+                        lastname: "test lastname"
+                        company: "test company"
+                        street: ["test street 1", "test street 2"]
+                        region: "wrong region"
+                        region_id: 45
+                        city: "test city"
+                        country_code: "US"
+                        postcode: "887766"
+                        telephone: "88776655"
+                        }
+                    }',
+                'The region_id does not match the selected country or region'
             ],
         ];
     }
@@ -858,7 +880,7 @@ QUERY;
         $searchCriteria = $this->searchCriteriaBuilder->addFilter('parent_id', $customer->getId())->create();
         $addresses = $this->customerAddressRepository->getList($searchCriteria)->getItems();
 
-        self::assertCount(1, $addresses);
+        self::assertCount(0, $addresses);
         self::assertArrayHasKey('cart', $response['setBillingAddressOnCart']);
 
         $cartResponse = $response['setBillingAddressOnCart']['cart'];
@@ -997,7 +1019,7 @@ QUERY;
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
      */
-    public function testSetShippingAddressesWithNotRequiredRegion()
+    public function testSetBillingAddressesWithNotRequiredRegion()
     {
         $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
 
@@ -1038,6 +1060,383 @@ QUERY;
         $cartResponse = $response['setBillingAddressOnCart']['cart'];
         self::assertEquals('UA', $cartResponse['billing_address']['country']['code']);
         self::assertEquals('Lviv', $cartResponse['billing_address']['region']['label']);
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
+     */
+    public function testSetBillingAddressOnCartWithBothRegionAndRegionId()
+    {
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
+
+        $query = <<<QUERY
+mutation {
+  setBillingAddressOnCart(
+    input: {
+      cart_id: "$maskedQuoteId"
+      billing_address: {
+         address: {
+           firstname: "John"
+            lastname: "Smith"
+            company: "Magento"
+            street: ["Magento Pkwy", "Main Street"]
+            city: "APO"
+            region: "AE"
+            region_id: 10
+            postcode: "09369"
+            country_code: "US"
+            telephone: "8675309"
+         }
+      }
+    }
+  ) {
+    cart {
+      billing_address {
+        firstname
+        lastname
+        company
+        street
+        city
+        postcode
+        telephone
+        country {
+          code
+          label
+        }
+        region {
+          code
+          label
+          region_id
+        }
+        __typename
+      }
+    }
+  }
+}
+QUERY;
+        $response = $this->graphQlMutation($query, [], '', $this->getHeaderMap());
+        $this->assertArrayHasKey('cart', $response['setBillingAddressOnCart']);
+        $cartResponse = $response['setBillingAddressOnCart']['cart'];
+        $this->assertArrayHasKey('billing_address', $cartResponse);
+        $billingAddressResponse = $cartResponse['billing_address'];
+        $expectedRegionCode = "AE";
+        $expectedRegionLabel = "Armed Forces Middle East";
+        $this->assertEquals($expectedRegionCode, $billingAddressResponse['region']['code']);
+        $this->assertEquals($expectedRegionLabel, $billingAddressResponse['region']['label']);
+        $this->assertEquals(10, $billingAddressResponse['region']['region_id']);
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
+     */
+    public function testSetBillingAddressOnCartWithFreeFormRegionForNoRequiredCountry()
+    {
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
+
+        $query = <<<QUERY
+mutation {
+  setBillingAddressOnCart(
+    input: {
+      cart_id: "$maskedQuoteId"
+      billing_address: {
+         address: {
+           firstname: "John"
+            lastname: "Smith"
+            company: "Magento"
+            street: ["test street 1", "test street 2"]
+            city: "London"
+            region: "Some"
+            postcode: "887766"
+            country_code: "GB"
+            telephone: "88776655"
+         }
+      }
+    }
+  ) {
+    cart {
+      billing_address {
+        firstname
+        lastname
+        company
+        street
+        city
+        postcode
+        telephone
+        country {
+          code
+          label
+        }
+        region {
+          code
+          label
+          region_id
+        }
+        __typename
+      }
+    }
+  }
+}
+QUERY;
+        $response = $this->graphQlMutation($query, [], '', $this->getHeaderMap());
+        $this->assertArrayHasKey('cart', $response['setBillingAddressOnCart']);
+        $cartResponse = $response['setBillingAddressOnCart']['cart'];
+        $this->assertArrayHasKey('billing_address', $cartResponse);
+        $billingAddressResponse = $cartResponse['billing_address'];
+        $expectedRegionCode = "Some";
+        $expectedRegionLabel = "Some";
+        $this->assertEquals($expectedRegionCode, $billingAddressResponse['region']['code']);
+        $this->assertEquals($expectedRegionLabel, $billingAddressResponse['region']['label']);
+        $this->assertEquals(null, $billingAddressResponse['region']['region_id']);
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
+     */
+    public function testSetBillingAddressOnCartWithRegionOnExistingDuplicateRegionCode()
+    {
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
+
+        $query = <<<QUERY
+mutation {
+  setBillingAddressOnCart(
+    input: {
+      cart_id: "$maskedQuoteId"
+      billing_address: {
+         address: {
+           firstname: "John"
+            lastname: "Smith"
+            company: "Magento"
+            street: ["Magento Pkwy", "Main Street"]
+            city: "APO"
+            region: "AE"
+            postcode: "09369"
+            country_code: "US"
+            telephone: "8675309"
+         }
+      }
+    }
+  ) {
+    cart {
+      billing_address {
+        firstname
+        lastname
+        company
+        street
+        city
+        postcode
+        telephone
+        country {
+          code
+          label
+        }
+        region {
+          code
+          label
+        }
+        __typename
+      }
+    }
+  }
+}
+QUERY;
+        $this->expectExceptionMessage(
+            'Region input is ambiguous. Specify region_id.'
+        );
+        $this->graphQlMutation($query, [], '', $this->getHeaderMap());
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
+     */
+    public function testSetBillingAddressOnCartWithRegionOnExistingDuplicateRegionCodeWithWrongRegionId()
+    {
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
+
+        $query = <<<QUERY
+mutation {
+  setBillingAddressOnCart(
+    input: {
+      cart_id: "$maskedQuoteId"
+      billing_address: {
+         address: {
+           firstname: "John"
+            lastname: "Smith"
+            company: "Magento"
+            street: ["Magento Pkwy", "Main Street"]
+            city: "APO"
+            region: "AE"
+            region_id: 17
+            postcode: "09369"
+            country_code: "US"
+            telephone: "8675309"
+         }
+      }
+    }
+  ) {
+    cart {
+      billing_address {
+        firstname
+        lastname
+        company
+        street
+        city
+        postcode
+        telephone
+        country {
+          code
+          label
+        }
+        region {
+          code
+          label
+        }
+        __typename
+      }
+    }
+  }
+}
+QUERY;
+        $this->expectExceptionMessage(
+            'The region_id does not match the selected country or region'
+        );
+        $this->graphQlMutation($query, [], '', $this->getHeaderMap());
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
+     */
+    public function testSetBillingAddressOnCartWithWrongRegionId()
+    {
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
+
+        $query = <<<QUERY
+mutation {
+  setBillingAddressOnCart(
+    input: {
+      cart_id: "$maskedQuoteId"
+      billing_address: {
+         address: {
+           firstname: "John"
+            lastname: "Smith"
+            company: "Magento"
+            street: ["Magento Pkwy", "Main Street"]
+            city: "Dallas"
+            region: "TX"
+            region_id: 10
+            postcode: "09369"
+            country_code: "US"
+            telephone: "8675309"
+         }
+      }
+    }
+  ) {
+    cart {
+      billing_address {
+        firstname
+        lastname
+        company
+        street
+        city
+        postcode
+        telephone
+        country {
+          code
+          label
+        }
+        region {
+          code
+          label
+        }
+        __typename
+      }
+    }
+  }
+}
+QUERY;
+        $this->expectExceptionMessage(
+            'The region_id does not match the selected country or region'
+        );
+        $this->graphQlMutation($query, [], '', $this->getHeaderMap());
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
+     */
+    public function testSetBillingAddressOnCartWithCorrectRegionId()
+    {
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
+
+        $query = <<<QUERY
+mutation {
+  setBillingAddressOnCart(
+    input: {
+      cart_id: "$maskedQuoteId"
+      billing_address: {
+         address: {
+           firstname: "John"
+            lastname: "Smith"
+            company: "Magento"
+            street: ["Magento Pkwy", "Main Street"]
+            city: "Dallas"
+            region: "TX"
+            region_id: 57
+            postcode: "09369"
+            country_code: "US"
+            telephone: "8675309"
+         }
+      }
+    }
+  ) {
+    cart {
+      billing_address {
+        firstname
+        lastname
+        company
+        street
+        city
+        postcode
+        telephone
+        country {
+          code
+          label
+        }
+        region {
+          code
+          label
+        }
+        __typename
+      }
+    }
+  }
+}
+QUERY;
+        $response = $this->graphQlMutation($query, [], '', $this->getHeaderMap());
+        $this->assertArrayHasKey('cart', $response['setBillingAddressOnCart']);
+        $cartResponse = $response['setBillingAddressOnCart']['cart'];
+        $this->assertArrayHasKey('billing_address', $cartResponse);
+        $billingAddressResponse = $cartResponse['billing_address'];
+        $expectedRegionCode = "TX";
+        $expectedRegionLabel = "Texas";
+        $this->assertEquals($expectedRegionCode, $billingAddressResponse['region']['code']);
+        $this->assertEquals($expectedRegionLabel, $billingAddressResponse['region']['label']);
     }
 
     /**
@@ -1110,5 +1509,254 @@ QUERY;
         $quote->setCustomerId($customerId);
         $this->quoteResource->save($quote);
         return $this->quoteIdToMaskedId->execute((int)$quote->getId());
+    }
+
+    /**
+     * @param string $maskedQuoteId
+     * @param string $shippingMethodCode
+     * @param string $shippingCarrierCode
+     * @return string
+     */
+    private function getSetShippingMethodsQuery(
+        string $maskedQuoteId,
+        string $shippingMethodCode,
+        string $shippingCarrierCode
+    ): string {
+        return <<<QUERY
+mutation {
+  setShippingMethodsOnCart(input:
+    {
+      cart_id: "$maskedQuoteId",
+      shipping_methods: [{
+        carrier_code: "$shippingCarrierCode"
+        method_code: "$shippingMethodCode"
+      }]
+    }) {
+    cart {
+      shipping_addresses {
+        selected_shipping_method {
+          carrier_code
+          method_code
+          carrier_title
+          method_title
+          amount {
+            value
+            currency
+          }
+        }
+      }
+    }
+  }
+}
+QUERY;
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
+     */
+    public function testSetBillingAddressAndPlaceOrder()
+    {
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
+        $query = <<<QUERY
+mutation {
+  setBillingAddressOnCart(
+    input: {
+      cart_id: "$maskedQuoteId"
+      billing_address: {
+        same_as_shipping: true
+         address: {
+          firstname: "test firstname"
+            lastname: "test lastname"
+            company: "test company"
+            street: ["test street 1", "test street 2"]
+            city: "test city"
+            region: "AZ"
+            postcode: "88776"
+            country_code: "US"
+            telephone: "88776655"
+            save_in_address_book: true
+         }
+      }
+    }
+  ) {
+    cart {
+      billing_address {
+        firstname
+        lastname
+        company
+        street
+        city
+        postcode
+        telephone
+        country {
+          code
+          label
+        }
+        __typename
+      }
+    }
+  }
+}
+QUERY;
+        $response = $this->graphQlMutation($query, [], '', $this->getHeaderMap());
+        $this->graphQlMutation(
+            $this->getSetShippingMethodsQuery($maskedQuoteId, 'flatrate', 'flatrate'),
+            [],
+            '',
+            $this->getHeaderMap()
+        );
+        $this->graphQlMutation(
+            $this->getSetPaymentMethodQuery(
+                $maskedQuoteId,
+                'checkmo'
+            ),
+            [],
+            '',
+            $this->getHeaderMap()
+        );
+        $this->graphQlMutation(
+            $this->getPlaceOrderQuery($maskedQuoteId),
+            [],
+            '',
+            $this->getHeaderMap()
+        );
+        $customer = $this->customerRepository->get('customer@example.com');
+        $searchCriteria = $this->searchCriteriaBuilder->addFilter('parent_id', $customer->getId())->create();
+        $addresses = $this->customerAddressRepository->getList($searchCriteria)->getItems();
+
+        self::assertCount(1, $addresses);
+        self::assertArrayHasKey('cart', $response['setBillingAddressOnCart']);
+        foreach ($addresses as $address) {
+            $this->customerAddressRepository->delete($address);
+        }
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
+     */
+    public function testSetBillingAddressWithDefaultValueOfSaveInAddressBookAndPlaceOrder()
+    {
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
+        $query = <<<QUERY
+mutation {
+  setBillingAddressOnCart(
+    input: {
+      cart_id: "$maskedQuoteId"
+      billing_address: {
+        same_as_shipping: true
+         address: {
+          firstname: "test firstname"
+            lastname: "test lastname"
+            company: "test company"
+            street: ["test street 1", "test street 2"]
+            city: "test city"
+            region: "AZ"
+            postcode: "88776"
+            country_code: "US"
+            telephone: "88776655"
+         }
+      }
+    }
+  ) {
+    cart {
+      billing_address {
+        firstname
+        lastname
+        company
+        street
+        city
+        postcode
+        telephone
+        country {
+          code
+          label
+        }
+        __typename
+      }
+    }
+  }
+}
+QUERY;
+        $response = $this->graphQlMutation($query, [], '', $this->getHeaderMap());
+        $this->graphQlMutation(
+            $this->getSetShippingMethodsQuery($maskedQuoteId, 'flatrate', 'flatrate'),
+            [],
+            '',
+            $this->getHeaderMap()
+        );
+        $this->graphQlMutation(
+            $this->getSetPaymentMethodQuery(
+                $maskedQuoteId,
+                'checkmo'
+            ),
+            [],
+            '',
+            $this->getHeaderMap()
+        );
+        $this->graphQlMutation(
+            $this->getPlaceOrderQuery($maskedQuoteId),
+            [],
+            '',
+            $this->getHeaderMap()
+        );
+        $customer = $this->customerRepository->get('customer@example.com');
+        $searchCriteria = $this->searchCriteriaBuilder->addFilter('parent_id', $customer->getId())->create();
+        $addresses = $this->customerAddressRepository->getList($searchCriteria)->getItems();
+
+        $this->assertCount(1, $addresses);
+        $this->assertArrayHasKey('cart', $response['setBillingAddressOnCart']);
+        foreach ($addresses as $address) {
+            $this->customerAddressRepository->delete($address);
+        }
+    }
+
+    /**
+     * @param string $maskedQuoteId
+     * @param string $methodCode
+     * @return string
+     */
+    private function getSetPaymentMethodQuery(
+        string $maskedQuoteId,
+        string $methodCode
+    ) : string {
+        return <<<QUERY
+mutation {
+  setPaymentMethodOnCart(input: {
+      cart_id: "$maskedQuoteId"
+      payment_method: {
+          code: "$methodCode"
+      }
+  }) {
+    cart {
+      selected_payment_method {
+        code
+      }
+    }
+  }
+}
+QUERY;
+    }
+
+    /**
+     * @param string $maskedQuoteId
+     * @return string
+     */
+    private function getPlaceOrderQuery(string $maskedQuoteId): string
+    {
+        return <<<QUERY
+mutation {
+  placeOrder(input: {cart_id: "{$maskedQuoteId}"}) {
+    order {
+      order_number
+    }
+  }
+}
+QUERY;
     }
 }

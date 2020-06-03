@@ -3,53 +3,66 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Customer\Test\Unit\Model;
 
+use Magento\Customer\Api\Data\CustomerInterface;
+use Magento\Customer\Api\Data\CustomerInterfaceFactory;
+use Magento\Customer\Api\Data\GroupInterface;
+use Magento\Customer\Api\GroupManagementInterface;
 use Magento\Customer\Model\CustomerExtractor;
+use Magento\Customer\Model\Metadata\Form;
+use Magento\Customer\Model\Metadata\FormFactory;
+use Magento\Framework\Api\DataObjectHelper;
+use Magento\Framework\App\RequestInterface;
+use Magento\Store\Api\Data\StoreInterface;
+use Magento\Store\Model\StoreManagerInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Unit test CustomerExtractorTest
  */
-class CustomerExtractorTest extends \PHPUnit\Framework\TestCase
+class CustomerExtractorTest extends TestCase
 {
     /** @var CustomerExtractor */
     protected $customerExtractor;
 
-    /** @var \Magento\Customer\Model\Metadata\FormFactory|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var FormFactory|MockObject */
     protected $formFactory;
 
-    /** @var \Magento\Customer\Api\Data\CustomerInterfaceFactory|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var CustomerInterfaceFactory|MockObject */
     protected $customerFactory;
 
-    /** @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var StoreManagerInterface|MockObject */
     protected $storeManager;
 
-    /** @var \Magento\Customer\Api\GroupManagementInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var GroupManagementInterface|MockObject */
     protected $customerGroupManagement;
 
-    /** @var \Magento\Framework\Api\DataObjectHelper|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var DataObjectHelper|MockObject */
     protected $dataObjectHelper;
 
-    /** @var \Magento\Framework\App\RequestInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var RequestInterface|MockObject */
     protected $request;
 
-    /** @var \Magento\Customer\Model\Metadata\Form|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var Form|MockObject */
     protected $customerForm;
 
-    /** @var \Magento\Customer\Api\Data\CustomerInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var CustomerInterface|MockObject */
     protected $customerData;
 
-    /** @var \Magento\Store\Api\Data\StoreInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var StoreInterface|MockObject */
     protected $store;
 
-    /** @var \Magento\Customer\Api\Data\GroupInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var GroupInterface|MockObject */
     protected $customerGroup;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->formFactory = $this->getMockForAbstractClass(
-            \Magento\Customer\Model\Metadata\FormFactory::class,
+            FormFactory::class,
             [],
             '',
             false,
@@ -58,7 +71,7 @@ class CustomerExtractorTest extends \PHPUnit\Framework\TestCase
             ['create']
         );
         $this->customerFactory = $this->getMockForAbstractClass(
-            \Magento\Customer\Api\Data\CustomerInterfaceFactory::class,
+            CustomerInterfaceFactory::class,
             [],
             '',
             false,
@@ -67,34 +80,34 @@ class CustomerExtractorTest extends \PHPUnit\Framework\TestCase
             ['create']
         );
         $this->storeManager = $this->getMockForAbstractClass(
-            \Magento\Store\Model\StoreManagerInterface::class,
+            StoreManagerInterface::class,
             [],
             '',
             false
         );
         $this->customerGroupManagement = $this->getMockForAbstractClass(
-            \Magento\Customer\Api\GroupManagementInterface::class,
+            GroupManagementInterface::class,
             [],
             '',
             false
         );
-        $this->dataObjectHelper = $this->createMock(\Magento\Framework\Api\DataObjectHelper::class);
-        $this->request = $this->getMockForAbstractClass(\Magento\Framework\App\RequestInterface::class, [], '', false);
-        $this->customerForm = $this->createMock(\Magento\Customer\Model\Metadata\Form::class);
+        $this->dataObjectHelper = $this->createMock(DataObjectHelper::class);
+        $this->request = $this->getMockForAbstractClass(RequestInterface::class, [], '', false);
+        $this->customerForm = $this->createMock(Form::class);
         $this->customerData = $this->getMockForAbstractClass(
-            \Magento\Customer\Api\Data\CustomerInterface::class,
+            CustomerInterface::class,
             [],
             '',
             false
         );
         $this->store = $this->getMockForAbstractClass(
-            \Magento\Store\Api\Data\StoreInterface::class,
+            StoreInterface::class,
             [],
             '',
             false
         );
         $this->customerGroup = $this->getMockForAbstractClass(
-            \Magento\Customer\Api\Data\GroupInterface::class,
+            GroupInterface::class,
             [],
             '',
             false
@@ -108,14 +121,27 @@ class CustomerExtractorTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function testExtract()
+    /**
+     * @param int $storeId
+     * @param int $websiteId
+     * @param array $customerData
+     * @dataProvider getDataProvider
+     * @return void
+     */
+    public function testExtract(int $storeId, int $websiteId, array $customerData)
     {
-        $customerData = [
-            'firstname' => 'firstname',
-            'lastname' => 'firstname',
-            'email' => 'email.example.com',
-        ];
+        $this->initializeExpectation($storeId, $websiteId, $customerData);
 
+        $this->assertSame($this->customerData, $this->customerExtractor->extract('form-code', $this->request));
+    }
+
+    /**
+     * @param int $storeId
+     * @param int $websiteId
+     * @param array $customerData
+     */
+    private function initializeExpectation(int $storeId, int $websiteId, array $customerData): void
+    {
         $this->formFactory->expects($this->once())
             ->method('create')
             ->with('customer', 'form-code')
@@ -136,24 +162,61 @@ class CustomerExtractorTest extends \PHPUnit\Framework\TestCase
             ->willReturn($this->customerData);
         $this->dataObjectHelper->expects($this->once())
             ->method('populateWithArray')
-            ->with($this->customerData, $customerData, \Magento\Customer\Api\Data\CustomerInterface::class)
+            ->with($this->customerData, $customerData, CustomerInterface::class)
             ->willReturn($this->customerData);
         $this->storeManager->expects($this->once())
             ->method('getStore')
             ->willReturn($this->store);
         $this->store->expects($this->once())
             ->method('getId')
-            ->willReturn(1);
+            ->willReturn($storeId);
         $this->store->expects($this->once())
             ->method('getWebsiteId')
-            ->willReturn(1);
+            ->willReturn($websiteId);
         $this->customerData->expects($this->once())
             ->method('setWebsiteId')
-            ->with(1);
+            ->with($websiteId);
         $this->customerData->expects($this->once())
             ->method('setStoreId')
-            ->with(1);
+            ->with($storeId);
+    }
 
-        $this->assertSame($this->customerData, $this->customerExtractor->extract('form-code', $this->request));
+    /**
+     * @return array
+     */
+    public function getDataProvider()
+    {
+        return [
+            'extract data when group id is null' => [
+                1,
+                1,
+                [
+                    'firstname' => 'firstname-1',
+                    'lastname' => 'firstname-1',
+                    'email' => 'email-1.example.com',
+                    'group_id' => null
+                ]
+            ],
+            'extract data when group id is not null and default' => [
+                1,
+                2,
+                [
+                    'firstname' => 'firstname-2',
+                    'lastname' => 'firstname-3',
+                    'email' => 'email-2.example.com',
+                    'group_id' => 1
+                ]
+            ],
+            'extract data when group id is different from default' => [
+                1,
+                1,
+                [
+                    'firstname' => 'firstname-3',
+                    'lastname' => 'firstname-3',
+                    'email' => 'email-3.example.com',
+                    'group_id' => 2
+                ]
+            ],
+        ];
     }
 }

@@ -38,7 +38,7 @@ class ContentTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $gallery = Bootstrap::getObjectManager()->get(Gallery::class);
         $layout = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
@@ -73,11 +73,11 @@ class ContentTest extends \PHPUnit\Framework\TestCase
         $imagesJson = $this->block->getImagesJson();
         $images = json_decode($imagesJson);
         $image = array_shift($images);
-        $this->assertRegExp('/\/m\/a\/magento_image/', $image->file);
+        $this->assertMatchesRegularExpression('/\/m\/a\/magento_image/', $image->file);
         $this->assertSame('image', $image->media_type);
         $this->assertSame('Image Alt Text', $image->label);
         $this->assertSame('Image Alt Text', $image->label_default);
-        $this->assertRegExp('/\/pub\/media\/catalog\/product\/m\/a\/magento_image/', $image->url);
+        $this->assertMatchesRegularExpression('/\/pub\/media\/catalog\/product\/m\/a\/magento_image/', $image->url);
     }
 
     /**
@@ -96,7 +96,7 @@ class ContentTest extends \PHPUnit\Framework\TestCase
         foreach ($imageTypes as $type => $image) {
             $this->assertSame($type, $image['code']);
             $type !== 'swatch_image'
-                ? $this->assertRegExp('/\/m\/a\/magento_image/', $image['value'])
+                ? $this->assertMatchesRegularExpression('/\/m\/a\/magento_image/', $image['value'])
                 : $this->assertNull($image['value']);
             $this->assertSame('[STORE VIEW]', $image['scope']->getText());
             $this->assertSame(sprintf('product[%s]', $type), $image['name']);
