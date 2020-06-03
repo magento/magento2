@@ -224,7 +224,7 @@ class IsAllowedGuestCheckoutObserverTest extends TestCase
             ->with(
                 'catalog/downloadable/disable_guest_checkout',
                 ScopeInterface::SCOPE_STORE,
-                $storeCode
+                $this->storeMock
             )
             ->willReturn(false);
 
