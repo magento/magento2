@@ -78,7 +78,7 @@ class View
     }
 
     /**
-     * Set original store before saving
+     * Setter for Orig Store data
      *
      * @param Store $object
      * @param AbstractModel $store
@@ -105,19 +105,12 @@ class View
         Store $store
     ): Store {
         if ($this->origStore->isObjectNew() || $this->origStore->dataHasChangedFor('group_id')) {
-            if (!$this->origStore->isObjectNew()) {
-                $this->urlPersist->deleteByData([
-                    UrlRewrite::STORE_ID => $this->origStore->getId(),
-                    UrlRewrite::ENTITY_TYPE => [
-                        CategoryUrlRewriteGenerator::ENTITY_TYPE,
-                        ProductUrlRewriteGenerator::ENTITY_TYPE,
-                    ],
-                ]);
-            }
-
-            $this->urlPersist->replace(
-                $this->generateCategoryUrls((int)$this->origStore->getRootCategoryId(), (int)$this->origStore->getId())
+            $categoryRewriteUrls = $this->generateCategoryUrls(
+                $this->origStore->getRootCategoryId(),
+                $this->origStore->getId()
             );
+
+            $this->urlPersist->replace($categoryRewriteUrls);
 
             $this->urlPersist->replace(
                 $this->generateProductUrls((int)$this->origStore->getId())
@@ -136,18 +129,17 @@ class View
     protected function generateProductUrls(int $storeId): array
     {
         $urls = [];
-        $rewrites = [];
         $collection = $this->productFactory->create()
             ->getCollection()
             ->addCategoryIds()
             ->addAttributeToSelect(['name', 'url_path', 'url_key', 'visibility'])
             ->addStoreFilter($storeId);
         foreach ($collection as $product) {
+            /** @var \Magento\Catalog\Model\Product $product */
             $product->setStoreId($storeId);
-            /** @var Product $product */
-            $rewrites[] = $this->productUrlRewriteGenerator->generate($product);
+            $urls[] = $this->productUrlRewriteGenerator->generate($product);
         }
-        $urls = array_merge($urls, ...$rewrites);
+        $urls = array_merge([], ...$urls);
 
         return $urls;
     }
@@ -162,14 +154,14 @@ class View
     protected function generateCategoryUrls(int $rootCategoryId, int $storeId): array
     {
         $urls = [];
-        $rewrites = [];
-        $categories = $this->categoryFactory->create()->getCategories($rootCategoryId, 1, false, true);
+        $categories = $this->categoryFactory->create()->getCategories($rootCategoryId, 1, false, true, false);
+        $categories->setStoreId($storeId);
         foreach ($categories as $category) {
             /** @var Category $category */
             $category->setStoreId($storeId);
-            $rewrites[] = $this->categoryUrlRewriteGenerator->generate($category);
+            $urls[] = $this->categoryUrlRewriteGenerator->generate($category);
         }
-        $urls = array_merge($urls, ...$rewrites);
+        $urls = array_merge([], ...$urls);
 
         return $urls;
     }
