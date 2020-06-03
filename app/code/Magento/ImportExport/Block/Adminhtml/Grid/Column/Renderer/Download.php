@@ -21,7 +21,7 @@ class Download extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Text
     public function _getValue(\Magento\Framework\DataObject $row)
     {
         return '<p> ' . $this->escapeHtml($row->getData('imported_file')) .  '</p><a href="'
-        . $this->escapeUrl($this->getUrl('*/*/download', ['filename' => $row->getData('imported_file')])) . '">'
+        . $this->getUrl('*/*/download', ['filename' => $row->getData('imported_file')]) . '">'
         . $this->escapeHtml(__('Download'))
         . '</a>';
     }
