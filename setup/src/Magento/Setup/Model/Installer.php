@@ -875,6 +875,15 @@ class Installer
             LayoutCache::TYPE_IDENTIFIER,
         ];
 
+        $cacheManager = $this->objectManagerProvider->get()->create(\Magento\Framework\App\Cache\Manager::class);
+        $disabledCaches = array_filter(
+            $cacheManager->getStatus(),
+            function ($value, string $key) use ($frontendCaches) {
+                return $value == false && in_array($key, $frontendCaches);
+            },
+            ARRAY_FILTER_USE_BOTH
+        );
+
         /** @var \Magento\Framework\Registry $registry */
         $registry = $this->objectManagerProvider->get()->get(\Magento\Framework\Registry::class);
         //For backward compatibility in install and upgrade scripts with enabled parallelization.
@@ -888,8 +897,10 @@ class Installer
         $this->log->log('Disabling caches:');
         $this->updateCaches(false, $frontendCaches);
         $this->handleDBSchemaData($setup, 'data', $request);
-        $this->log->log('Enabling caches:');
+        $this->log->log('Enabling Caches:');
         $this->updateCaches(true, $frontendCaches);
+        $this->log->log('Return Disabled Caches to their old state:');
+        $this->updateCaches(false, array_keys($disabledCaches));
 
         $registry->unregister('setup-mode-enabled');
     }
