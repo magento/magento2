@@ -13,8 +13,8 @@ use Magento\CatalogImportExport\Model\Import\Product\Validator\LayoutUpdate;
 use Magento\Framework\Config\ValidationStateInterface;
 use Magento\Framework\View\Model\Layout\Update\Validator;
 use Magento\Framework\View\Model\Layout\Update\ValidatorFactory;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 /**
  * Test validation for layout update
@@ -31,10 +31,10 @@ class LayoutUpdateTest extends TestCase
      */
     private $layoutValidator;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $validatorFactory = $this->createMock(ValidatorFactory::class);
-        $validationState = $this->createMock(ValidationStateInterface::class);
+        $validationState = $this->getMockForAbstractClass(ValidationStateInterface::class);
         $this->layoutValidator = $this->createMock(Validator::class);
         $validatorFactory->method('create')
             ->with(['validationState' => $validationState])

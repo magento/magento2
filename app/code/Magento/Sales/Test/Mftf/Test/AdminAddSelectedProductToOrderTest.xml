@@ -23,12 +23,12 @@
         <before>
             <createData entity="Simple_US_Customer" stepKey="simpleCustomer"/>
             <createData entity="SimpleProduct2" stepKey="simpleProduct"/>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
             <deleteData createDataKey="simpleCustomer" stepKey="deleteSimpleCustomer"/>
             <deleteData createDataKey="simpleProduct" stepKey="deleteSimpleProduct"/>
-            <actionGroup ref="logout" stepKey="logoutFromAdmin"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
         </after>
 
         <!-- Initiate create new order -->
@@ -70,9 +70,6 @@
             <argument name="productQty" value="1"/>
         </actionGroup>
         <!-- Check that error remains -->
-        <actionGroup ref="AssertAdminItemOrderedErrorActionGroup" stepKey="assertProductErrorRemains">
-            <argument name="productName" value="$simpleProduct.name$"/>
-            <argument name="messageType" value="notice"/>
-        </actionGroup>
+        <see userInput="The requested qty is not available" stepKey="assertProductErrorRemains"/>
     </test>
 </tests>

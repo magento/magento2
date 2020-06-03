@@ -18,7 +18,7 @@
             <group value="category"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
             <actionGroup ref="RestoreLayoutSetting" stepKey="sampleActionGroup"/>
@@ -31,8 +31,7 @@
         <seeOptionIsSelected selector="{{DefaultLayoutsSection.categoryLayout}}" userInput="No layout updates" stepKey="seeNoLayoutUpdatesSelected"/>
         <selectOption selector="{{DefaultLayoutsSection.categoryLayout}}" userInput="2 columns with right bar" stepKey="select2ColumnsLayout"/>
         <click selector="{{ContentManagementSection.Save}}" stepKey="clickSaveConfig"/>
-        <amOnPage url="{{AdminCategoryPage.url}}" stepKey="navigateToNewCatalog"/>
-        <waitForPageLoad stepKey="wait1"/>
+        <actionGroup ref="AdminOpenCategoryPageActionGroup" stepKey="navigateToNewCatalog"/>
         <waitForLoadingMaskToDisappear stepKey="wait2"/>
         <click selector="{{AdminCategorySidebarActionSection.AddSubcategoryButton}}" stepKey="clickOnAddSubCategory"/>
         <click selector="{{CategoryDesignSection.DesignTab}}" stepKey="clickOnDesignTab"/>

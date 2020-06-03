@@ -78,10 +78,18 @@ define([
                 '/type/image/?isAjax=true';
 
             if (this.mediaGallery.initialOpenSubpath) {
-                openDialogUrl += '&current_tree_path=' + Base64.mageEncode(this.mediaGallery.initialOpenSubpath);
+                openDialogUrl += '&current_tree_path=' + Base64.idEncode(this.mediaGallery.initialOpenSubpath);
             }
 
-            browser.openDialog(openDialogUrl, null, null, this.mediaGallery.openDialogTitle);
+            browser.openDialog(
+                openDialogUrl,
+                null,
+                null,
+                this.mediaGallery.openDialogTitle,
+                {
+                    targetElementId: $buttonEl.attr('id')
+                }
+            );
         },
 
         /**

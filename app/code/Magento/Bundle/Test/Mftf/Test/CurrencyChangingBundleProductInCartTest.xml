@@ -18,9 +18,10 @@
                 <group value="Bundle"/>
             </annotations>
             <before>
-                <actionGroup ref="LoginAsAdmin" stepKey="login"/>
+                <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
                 <createData entity="SimpleProduct2" stepKey="simpleProduct1"/>
                 <createData entity="SimpleProduct2" stepKey="simpleProduct2"/>
+                <magentoCron stepKey="runCronIndex" groups="index"/>
             </before>
             <after>
                 <!-- Delete the bundled product -->
@@ -76,8 +77,7 @@
                 <argument name="product" value="$$simpleProduct2$$"/>
                 <argument name="currency" value="USD - US Dollar"/>
             </actionGroup>
-            <click stepKey="openMiniCart" selector="{{StorefrontMinicartSection.showCart}}"/>
-            <waitForPageLoad stepKey="waitForMiniCart"/>
+            <actionGroup ref="StorefrontClickOnMiniCartActionGroup" stepKey="openMiniCart"/>
             <see stepKey="seeCartSubtotal" userInput="$12,300.00"/>
         </test>
 </tests>

@@ -22,6 +22,7 @@ use Magento\Newsletter\Model\SubscriberFactory;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\TestFramework\TestCase\AbstractBackendController;
+use PHPUnit\Framework\MockObject\MockObject;
 
 /**
  * Tests for save customer via backend/customer/index/save controller.
@@ -56,7 +57,7 @@ class SaveTest extends AbstractBackendController
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->customerRepository = $this->_objectManager->get(CustomerRepositoryInterface::class);
@@ -156,8 +157,10 @@ class SaveTest extends AbstractBackendController
             $this->equalTo($expectedMessage),
             MessageInterface::TYPE_ERROR
         );
-        $this->assertNotEmpty($this->session->getCustomerFormData());
-        $this->assertArraySubset($expectedData, $this->session->getCustomerFormData());
+        $customerFormData = $this->session->getCustomerFormData();
+        $this->assertNotEmpty($customerFormData);
+        unset($customerFormData['form_key']);
+        $this->assertEquals($expectedData, $customerFormData);
         $this->assertRedirect($this->stringContains($this->baseControllerUrl . 'new/key/'));
     }
 
@@ -220,6 +223,32 @@ class SaveTest extends AbstractBackendController
                 ],
             ]
         ];
+    }
+
+    /**
+     * Update customer with exceptions
+     *
+     * @magentoDbIsolation enabled
+     *
+     * @return void
+     */
+    public function testUpdateCustomerErrors(): void
+    {
+        $postData = [
+            'customer' => [
+                CustomerData::FIRSTNAME => 'John',
+                CustomerData::LASTNAME => 'Doe',
+            ],
+            'subscription' => '1',
+        ];
+        $expectedMessages = [(string)__('Something went wrong while saving the customer.')];
+        $postData['customer']['entity_id'] = -1;
+        $params = ['back' => true];
+        $this->dispatchCustomerSave($postData, $params);
+        $this->assertSessionMessages(
+            $this->equalTo($expectedMessages),
+            MessageInterface::TYPE_ERROR
+        );
     }
 
     /**
@@ -378,10 +407,12 @@ class SaveTest extends AbstractBackendController
             ]),
             MessageInterface::TYPE_ERROR
         );
-        $this->assertArraySubset(
+        $customerFormData = $this->session->getCustomerFormData();
+        $this->assertNotEmpty($customerFormData);
+        unset($customerFormData['form_key']);
+        $this->assertEquals(
             $postFormatted,
-            $this->session->getCustomerFormData(),
-            true,
+            $customerFormData,
             'Customer form data should be formatted'
         );
         $this->assertRedirect($this->stringContains($this->baseControllerUrl . 'new/key/'));
@@ -508,7 +539,7 @@ class SaveTest extends AbstractBackendController
      * @param array $sender
      * @param int $customerId
      * @param string|null $newEmail
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return MockObject
      */
     private function prepareEmailMock(
         int $occurrenceNumber,
@@ -516,7 +547,7 @@ class SaveTest extends AbstractBackendController
         array $sender,
         int $customerId,
         $newEmail = null
-    ) : \PHPUnit_Framework_MockObject_MockObject {
+    ) : MockObject {
         $area = Area::AREA_FRONTEND;
         $customer = $this->customerRepository->getById($customerId);
         $storeId = $customer->getStoreId();
@@ -564,12 +595,12 @@ class SaveTest extends AbstractBackendController
     /**
      * Add email mock to class
      *
-     * @param \PHPUnit_Framework_MockObject_MockObject $transportBuilderMock
+     * @param MockObject $transportBuilderMock
      * @param string $className
      * @return void
      */
     private function addEmailMockToClass(
-        \PHPUnit_Framework_MockObject_MockObject $transportBuilderMock,
+        MockObject $transportBuilderMock,
         $className
     ): void {
         $mocked = $this->_objectManager->create(
