@@ -897,9 +897,9 @@ class Installer
         $this->log->log('Disabling caches:');
         $this->updateCaches(false, $frontendCaches);
         $this->handleDBSchemaData($setup, 'data', $request);
-        $this->log->log('Enabling Caches:');
+        $this->log->log('Enabling caches:');
         $this->updateCaches(true, $frontendCaches);
-        $this->log->log('Return Disabled Caches to their old state:');
+        $this->log->log('Return disabled caches back to their old state:');
         $this->updateCaches(false, array_keys($disabledCaches));
 
         $registry->unregister('setup-mode-enabled');
