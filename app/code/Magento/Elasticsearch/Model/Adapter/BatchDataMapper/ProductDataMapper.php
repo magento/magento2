@@ -209,7 +209,7 @@ class ProductDataMapper implements BatchDataMapperInterface
         $productAttributes = [];
 
         $retrievedValue = $this->retrieveFieldValue($attributeValues);
-        if ($retrievedValue) {
+        if ($retrievedValue !== null) {
             $productAttributes[$attribute->getAttributeCode()] = $retrievedValue;
 
             if ($attribute->getIsSearchable()) {
@@ -349,7 +349,7 @@ class ProductDataMapper implements BatchDataMapperInterface
      */
     private function retrieveFieldValue(array $values)
     {
-        $values = \array_filter(\array_unique($values));
+        $values = \array_unique($values);
 
         return count($values) === 1 ? \array_shift($values) : \array_values($values);
     }
