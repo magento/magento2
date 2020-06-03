@@ -56,7 +56,7 @@ class IsAllowedGuestCheckoutObserver implements ObserverInterface
      */
     public function execute(Observer $observer)
     {
-        $store = $observer->getEvent()->getStore();
+        $storeId = (int)$observer->getEvent()->getStore()->getId();
         $result = $observer->getEvent()->getResult();
 
         /* @var $quote Quote */
@@ -69,9 +69,9 @@ class IsAllowedGuestCheckoutObserver implements ObserverInterface
                 if ($this->scopeConfig->isSetFlag(
                     self::XML_PATH_DISABLE_GUEST_CHECKOUT,
                     ScopeInterface::SCOPE_STORE,
-                    $store
+                    $storeId
                 )
-                    || !$this->checkForShareableLinks($item, $store)) {
+                    || !$this->checkForShareableLinks($item, $storeId)) {
                     $result->setIsAllowed(false);
                     break;
                 }
@@ -85,10 +85,10 @@ class IsAllowedGuestCheckoutObserver implements ObserverInterface
      * Check for shareable link
      *
      * @param CartItemInterface $item
-     * @param int $store
+     * @param int $storeId
      * @return boolean
      */
-    private function checkForShareableLinks(CartItemInterface $item, int $store): bool
+    private function checkForShareableLinks(CartItemInterface $item, int $storeId): bool
     {
         $isSharable = true;
         $option = $item->getOptionByCode('downloadable_link_ids');
@@ -101,7 +101,7 @@ class IsAllowedGuestCheckoutObserver implements ObserverInterface
                         $link->getIsShareable() == 2 && !$this->scopeConfig->isSetFlag(
                             self::XML_PATH_DOWNLOADABLE_SHAREABLE,
                             ScopeInterface::SCOPE_STORE,
-                            $store
+                            $storeId
                         )
                     )
                 ) {
