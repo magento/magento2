@@ -106,8 +106,8 @@ class View
     ): Store {
         if ($this->origStore->isObjectNew() || $this->origStore->dataHasChangedFor('group_id')) {
             $categoryRewriteUrls = $this->generateCategoryUrls(
-                $this->origStore->getRootCategoryId(),
-                $this->origStore->getId()
+                (int)$this->origStore->getRootCategoryId(),
+                (int)$this->origStore->getId()
             );
 
             $this->urlPersist->replace($categoryRewriteUrls);
@@ -135,7 +135,7 @@ class View
             ->addAttributeToSelect(['name', 'url_path', 'url_key', 'visibility'])
             ->addStoreFilter($storeId);
         foreach ($collection as $product) {
-            /** @var \Magento\Catalog\Model\Product $product */
+            /** @var Product $product */
             $product->setStoreId($storeId);
             $urls[] = $this->productUrlRewriteGenerator->generate($product);
         }
