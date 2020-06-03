@@ -149,7 +149,7 @@ class IsAllowedGuestCheckoutObserverTest extends TestCase
         $this->scopeConfigMock->expects($this->any())
             ->method('isSetFlag')
             ->with(
-                'catalog/downloadable/disable_guest_checkout',
+                IsAllowedGuestCheckoutObserver::XML_PATH_DISABLE_GUEST_CHECKOUT,
                 ScopeInterface::SCOPE_STORE,
                 $this->storeMock
             )
@@ -222,7 +222,7 @@ class IsAllowedGuestCheckoutObserverTest extends TestCase
         $this->scopeConfigMock->expects($this->once())
             ->method('isSetFlag')
             ->with(
-                'catalog/downloadable/disable_guest_checkout',
+                IsAllowedGuestCheckoutObserver::XML_PATH_DISABLE_GUEST_CHECKOUT,
                 ScopeInterface::SCOPE_STORE,
                 $this->storeMock
             )
