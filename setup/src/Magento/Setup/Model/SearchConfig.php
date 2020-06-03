@@ -7,7 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\Setup\Model;
 
-use Magento\Framework\Config\CacheInterface;
 use Magento\Framework\Setup\Option\AbstractConfigOption;
 use Magento\Framework\Validation\ValidationException;
 use Magento\Search\Model\SearchEngine\Validator;
@@ -35,26 +34,18 @@ class SearchConfig
     private $installConfig;
 
     /**
-     * @var CacheInterface
-     */
-    private $cache;
-
-    /**
      * @param SearchConfigOptionsList $searchConfigOptionsList
      * @param Validator $searchValidator
      * @param CompositeInstallConfig $installConfig
-     * @param CacheInterface $cache
      */
     public function __construct(
         SearchConfigOptionsList $searchConfigOptionsList,
         Validator $searchValidator,
-        CompositeInstallConfig $installConfig,
-        CacheInterface $cache
+        CompositeInstallConfig $installConfig
     ) {
         $this->searchConfigOptionsList = $searchConfigOptionsList;
         $this->searchValidator = $searchValidator;
         $this->installConfig = $installConfig;
-        $this->cache = $cache;
     }
 
     /**
@@ -85,9 +76,6 @@ class SearchConfig
      */
     public function validateSearchEngine()
     {
-        // Clean config cache prior to validation
-        $this->cache->clean();
-
         $validationErrors = $this->searchValidator->validate();
         if (!empty($validationErrors)) {
             throw new ValidationException(__(implode(PHP_EOL, $validationErrors)));
