@@ -31,11 +31,13 @@ use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Item;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class PayflowproVoidTest extends \PHPUnit\Framework\TestCase
+class PayflowproVoidTest extends TestCase
 {
     /**
      * @var ObjectManagerInterface
@@ -208,7 +210,7 @@ class PayflowproVoidTest extends \PHPUnit\Framework\TestCase
                 ]
             );
 
-        /** @var Payflowpro|\PHPUnit_Framework_MockObject_MockObject $instance */
+        /** @var Payflowpro|MockObject $instance */
         $instance = $this->getMockBuilder(Payflowpro::class)
             ->setMethods(['setStore', 'getInfoInstance'])
             ->setConstructorArgs(
