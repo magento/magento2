@@ -53,7 +53,7 @@
         <actionGroup ref="StorefrontGoToCategoryPageActionGroup" stepKey="goToCategoryPage">
             <argument name="categoryName" value="$$category.name$$"/>
         </actionGroup>
-        <actionGroup ref="StorefrontAssertCategoryNameIsShownActionGroup" stepKey="seeCatergoryInStoreFront">
+        <actionGroup ref="StorefrontAssertCategoryNameIsShownInMenuActionGroup" stepKey="seeCatergoryInStoreFront">
             <argument name="categoryName" value="$$category.name$$"/>
         </actionGroup>
 
@@ -69,16 +69,17 @@
         <actionGroup ref="AssertAdminCategorySaveSuccessMessageActionGroup" stepKey="assertSuccessMessage"/>
 
         <!--Verify the Category is not present in Store Front-->
-        <!--<amOnPage url="/{{NewRootCategory.name}}/{{SimpleRootSubCategory.name}}.html" stepKey="seeTheCategoryInStoreFront1"/>-->
-
-        <dontSeeElement selector="{{StorefrontHeaderSection.NavigationCategoryByName(SimpleRootSubCategory.name)}}" stepKey="dontSeeCatergoryInStoreFront"/>
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="openHomepage"/>
+        <actionGroup ref="StorefrontGoToCategoryPageActionGroup" stepKey="openCategoryPage">
+            <argument name="categoryName" value="{{_defaultCategory.name}}"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontAssertCategoryNameIsNotShownInMenuActionGroup" stepKey="doNotSeeOldCategoryNameInStoreFront">
+            <argument name="categoryName" value="{{SimpleRootSubCategory.name}}"/>
+        </actionGroup>
 
         <!--Verify the Updated Category is present in Store Front-->
-        <!--<amOnPage url="" stepKey="seeTheUpdatedCategoryInStoreFront"/>-->
-        <!--<waitForPageLoad stepKey="waitForPageToLoaded3"/>-->
-        <actionGroup ref="AdminCategoriesOpenCategoryActionGroup" stepKey="openCategoryPage">
-            <argument name="pageUrl" value="/{{NewRootCategory.name}}/{{_defaultCategory.name}}.html"/>
+        <actionGroup ref="StorefrontAssertCategoryNameIsShownInMenuActionGroup" stepKey="seeUpdatedCatergoryNameInStoreFront">
+            <argument name="categoryName" value="{{_defaultCategory.name}}"/>
         </actionGroup>
-        <seeElement selector="{{StorefrontHeaderSection.NavigationCategoryByName(_defaultCategory.name)}}" stepKey="seeUpdatedCatergoryInStoreFront"/>
     </test>
 </tests>

@@ -8,9 +8,9 @@
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <actionGroup name="StorefrontAssertCategoryNameIsShownActionGroup">
+    <actionGroup name="StorefrontAssertCategoryNameIsShownInMenuActionGroup">
         <annotations>
-            <description>Validate that the Category is present on Frontend.</description>
+            <description>Validate that the Category is present in menu on Frontend.</description>
         </annotations>
         <arguments>
             <argument name="categoryName" type="string"/>
