@@ -61,6 +61,7 @@ define([
         });
 
         afterEach(function () {
+            ko.cleanNode(element[0]);
             element.remove();
         });
 
