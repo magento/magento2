@@ -867,7 +867,7 @@ class Installer
      * @param array $request
      * @return void
      */
-    public function installDataFixtures(array $request = [])
+    public function installDataFixtures(array $request = [], $keepCacheStatuses = false)
     {
         $frontendCaches = [
             PageCache::TYPE_IDENTIFIER,
@@ -875,14 +875,16 @@ class Installer
             LayoutCache::TYPE_IDENTIFIER,
         ];
 
-        $cacheManager = $this->objectManagerProvider->get()->create(\Magento\Framework\App\Cache\Manager::class);
-        $disabledCaches = array_filter(
-            $cacheManager->getStatus(),
-            function ($value, string $key) use ($frontendCaches) {
-                return $value == false && in_array($key, $frontendCaches);
-            },
-            ARRAY_FILTER_USE_BOTH
-        );
+        if($keepCacheStatuses){
+            $cacheManager = $this->objectManagerProvider->get()->create(\Magento\Framework\App\Cache\Manager::class);
+            $disabledCaches = array_filter(
+                $cacheManager->getStatus(),
+                function ($value, string $key) use ($frontendCaches) {
+                    return $value == false && in_array($key, $frontendCaches);
+                },
+                ARRAY_FILTER_USE_BOTH
+            );
+        }
 
         /** @var \Magento\Framework\Registry $registry */
         $registry = $this->objectManagerProvider->get()->get(\Magento\Framework\Registry::class);
@@ -899,8 +901,10 @@ class Installer
         $this->handleDBSchemaData($setup, 'data', $request);
         $this->log->log('Enabling caches:');
         $this->updateCaches(true, $frontendCaches);
-        $this->log->log('Return disabled caches back to their old state:');
-        $this->updateCaches(false, array_keys($disabledCaches));
+        if($keepCacheStatuses && !empty($disabledCaches)){
+            $this->log->log('Disabling pre-disabled caches:');
+            $this->updateCaches(false, array_keys($disabledCaches));
+        }
 
         $registry->unregister('setup-mode-enabled');
     }
