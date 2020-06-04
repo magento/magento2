@@ -32,7 +32,7 @@ use Magento\Vault\Model\VaultPaymentInterface;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 /**
- * Class TokensConfigProviderTest
+ * Test for TokensConfigProvider
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
@@ -146,7 +146,7 @@ class TokensConfigProviderTest extends \PHPUnit\Framework\TestCase
             ->getMockForAbstractClass();
 
         $this->vaultPayment = $this->getMockForAbstractClass(VaultPaymentInterface::class);
-        
+
         $this->objectManager = new ObjectManager($this);
 
         $this->initStoreMock();
@@ -197,7 +197,7 @@ class TokensConfigProviderTest extends \PHPUnit\Framework\TestCase
             ->method('getMethodInstance')
             ->with(self::VAULT_PAYMENT_CODE)
             ->willReturn($this->vaultPayment);
-        
+
         $this->vaultPayment->expects(static::once())
             ->method('isActive')
             ->with(self::STORE_ID)
@@ -577,12 +577,15 @@ class TokensConfigProviderTest extends \PHPUnit\Framework\TestCase
             '2015-01-01 00:00:00',
             3
         );
+
+        $isVisibleFilter = $this->createExpectedFilter(PaymentTokenInterface::IS_VISIBLE, 1, 4);
+
         $this->filterBuilder->expects(static::once())
             ->method('setConditionType')
             ->with('gt')
             ->willReturnSelf();
 
-        $this->searchCriteriaBuilder->expects(self::exactly(4))
+        $this->searchCriteriaBuilder->expects(self::exactly(5))
             ->method('addFilters')
             ->willReturnMap(
                 [
@@ -590,6 +593,7 @@ class TokensConfigProviderTest extends \PHPUnit\Framework\TestCase
                     [$codeFilter, $this->searchCriteriaBuilder],
                     [$expiresAtFilter, $this->searchCriteriaBuilder],
                     [$isActiveFilter, $this->searchCriteriaBuilder],
+                    [$isVisibleFilter, $this->searchCriteriaBuilder],
                 ]
             );
 
