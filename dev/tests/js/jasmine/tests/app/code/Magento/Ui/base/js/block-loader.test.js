@@ -5,12 +5,16 @@
 
 define([
     'squire',
-    'jquery',
-    'text!tests/assets/app/code/Magento/Ui/base/templates/block-loader.html'
-], function (Squire, $, blockLoaderTmpl) {
+    'jquery'
+], function (Squire, $) {
     'use strict';
 
-    var injector = new Squire(),
+    var blockLoaderTmpl = '<div data-role="loader" class="loading-mask" style="position: absolute;">\n' +
+        '    <div class="loader">\n' +
+        '        <img src="<%= loaderImageHref %>" alt="Loading..." title="Loading..." style="position: absolute;">\n' +
+        '    </div>\n' +
+        '</div>',
+        injector = new Squire(),
         mocks = {
             'Magento_Ui/js/lib/knockout/template/loader': {
                 /** Method stub. */
