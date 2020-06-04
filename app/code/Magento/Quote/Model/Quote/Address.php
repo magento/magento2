@@ -1037,8 +1037,9 @@ class Address extends AbstractAddress implements
         $request->setDestPostcode($this->getPostcode());
         $baseSubtotal = $taxInclude ? $this->getBaseSubtotalTotalInclTax() : $this->getBaseSubtotal();
         $request->setPackageValue($item ? $item->getBaseRowTotal() : $baseSubtotal);
+        $baseSubtotalWithDiscount = $baseSubtotal + $this->getBaseDiscountAmount();
         $packageWithDiscount = $item ? $item->getBaseRowTotal() -
-            $item->getBaseDiscountAmount() : $this->getBaseSubtotalWithDiscountAndTax();
+            $item->getBaseDiscountAmount() : $baseSubtotalWithDiscount;
         $request->setPackageValueWithDiscount($packageWithDiscount);
         $request->setPackageWeight($item ? $item->getRowWeight() : $this->getWeight());
         $request->setPackageQty($item ? $item->getQty() : $this->getItemQty());
@@ -1365,23 +1366,6 @@ class Address extends AbstractAddress implements
         }
 
         return 0;
-    }
-
-    /**
-     * Get subtotal amount with applied discount in base currency and tax
-     *
-     * @return float
-     */
-    private function getBaseSubtotalWithDiscountAndTax(): float
-    {
-        $storeId = $this->getQuote()->getStoreId();
-        $taxInclude = $this->_scopeConfig->getValue(
-            'tax/calculation/price_includes_tax',
-            ScopeInterface::SCOPE_STORE,
-            $storeId
-        );
-        $baseSubtotal = $taxInclude ? $this->getBaseSubtotalTotalInclTax() : $this->getBaseSubtotal();
-        return $baseSubtotal + $this->getBaseDiscountAmount();
     }
 
     /**
