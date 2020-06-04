@@ -281,9 +281,18 @@ class PluginList extends Scoped implements InterceptionPluginList
     {
         $scope = $this->_configScope->getCurrentScope();
         if (false == isset($this->_loadedScopes[$scope])) {
-            if (false == in_array($scope, $this->_scopePriorityScheme)) {
-                $this->_scopePriorityScheme[] = $scope;
+            $index = array_search($scope, $this->_scopePriorityScheme);
+            /**
+             * Force current scope to be at the end of the scheme to ensure that default priority scopes are loaded.
+             * Mostly happens when the current scope is primary.
+             * For instance if the default scope priority scheme is [primary, global] and current scope is primary,
+             * the resulted scheme will be [global, primary] so global scope is loaded.
+             */
+            if ($index !== false) {
+                unset($this->_scopePriorityScheme[$index]);
             }
+            $this->_scopePriorityScheme[] = $scope;
+
             $cacheId = implode('|', $this->_scopePriorityScheme) . "|" . $this->_cacheId;
             $data = $this->_cache->load($cacheId);
             if ($data) {
