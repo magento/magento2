@@ -50,7 +50,7 @@ type CustomerOrder @doc(description: "Contains details about each of the custome
     payment_methods: [PaymentMethod] @doc(description: "payment details for the order")
     shipping_address: CustomerAddress @doc(description: "shipping address for the order")
     billing_address: CustomerAddress @doc(description: "billing address for the order")
-    carrier: String @doc(description: "shipping carrier for the order delivery")
+    carrier: String @doc(description: "shipping carrier for the order delivery") @resolver(class: "Magento\\SalesGraphQl\\Model\\Resolver\\CustomerOrders\\Carrier")
     shipping_method: String @doc(description: "shipping method for the order")
     comments: [CommentItem] @doc(description: "comments on the order")
     increment_id: String @deprecated(reason: "Use the id attribute instead")
@@ -163,7 +163,7 @@ type CommentItem @doc(description: "Comment item details") {
 
 type ShipmentItem @doc(description: "Order shipment item details") {
     id: ID! @doc(description: "Shipment item unique identifier")
-    order_item: OrderItemInterface @doc(description: "Associated order item")
+    order_item: OrderItemInterface @doc(description: "Associated order item") @resolver(class: "Magento\\SalesGraphQl\\Model\\Resolver\\OrderItem")
     product_name: String @doc(description: "Name of the base product")
     product_sku: String! @doc(description: "SKU of the base product")
     product_sale_price: Money! @doc(description: "Sale price for the base product")
