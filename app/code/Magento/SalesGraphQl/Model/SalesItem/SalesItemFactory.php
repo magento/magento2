@@ -43,6 +43,8 @@ class SalesItemFactory
         $options = $this->getItemOptions($orderItem);
 
         $salesItemData = [
+            'id' => base64_encode($orderItem->getOrderId()),
+            'product_type' => $orderItem->getProductType(),
             'product_name' => $orderItem->getName(),
             'product_sku' => $orderItem->getSku(),
             'product_sale_price' => [

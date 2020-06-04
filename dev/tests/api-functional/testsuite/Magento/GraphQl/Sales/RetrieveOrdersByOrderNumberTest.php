@@ -63,13 +63,13 @@ class RetrieveOrdersByOrderNumberTest extends GraphQlAbstract
       number
       status
       order_date
-      order_items{
+      items{
         quantity_ordered
         product_sku
         product_name
         product_sale_price{currency value}
       }
-      totals {
+      total {
                     base_grand_total {
                         value
                         currency
@@ -108,8 +108,8 @@ QUERY;
         $customerOrderItemsInResponse = $response['customer']['orders']['items'][0];
         $expectedCount = count($response['customer']['orders']['items']);
         $this->assertCount($expectedCount, $response['customer']['orders']['items']);
-        $this->assertArrayHasKey('order_items', $customerOrderItemsInResponse);
-        $this->assertNotEmpty($customerOrderItemsInResponse['order_items']);
+        $this->assertArrayHasKey('items', $customerOrderItemsInResponse);
+        $this->assertNotEmpty($customerOrderItemsInResponse['items']);
 
         $searchCriteria = $this->searchCriteriaBuilder->addFilter('increment_id', '100000002')
             ->create();
@@ -128,7 +128,7 @@ QUERY;
                 'product_name'=> 'Simple Product',
                 'product_sale_price'=> ['currency'=> null, 'value'=> 10]
             ];
-        $actualOrderItemsFromResponse = $customerOrderItemsInResponse['order_items'][0];
+        $actualOrderItemsFromResponse = $customerOrderItemsInResponse['items'][0];
         $this->assertEquals($expectedOrderItems, $actualOrderItemsFromResponse);
         //TODO: below function needs to be updated to reflect totals based on the order number used in each test
 //        $this->assertTotals($response, $expectedCount);
@@ -158,7 +158,7 @@ QUERY;
       number
       status
       order_date
-      order_items{
+      items{
         quantity_ordered
         product_sku
         product_name
@@ -204,7 +204,7 @@ QUERY;
      number
      status
      order_date
-     order_items{
+     items{
        quantity_ordered
        product_sku
        product_name
@@ -246,7 +246,7 @@ QUERY;
       number
       status
       order_date
-      order_items{
+      items{
         quantity_ordered
         product_sku
         product_name
@@ -473,10 +473,10 @@ QUERY;
     items
     {
       number
-      order_items{
+      items{
         product_sku
       }
-      totals {
+      total {
                     base_grand_total {
                         value
                         currency
@@ -565,10 +565,10 @@ QUERY;
     items
     {
       number
-      order_items{
+      items{
         product_sku
       }
-      totals {
+      total {
                     base_grand_total {
                         value
                         currency
@@ -675,43 +675,43 @@ QUERY;
         } else {
             $this->assertEquals(
                 100,
-                $response['customer']['orders']['items'][0]['totals']['base_grand_total']['value']
+                $response['customer']['orders']['items'][0]['total']['base_grand_total']['value']
             );
             $this->assertEquals(
                 'USD',
-                $response['customer']['orders']['items'][0]['totals']['base_grand_total']['currency']
+                $response['customer']['orders']['items'][0]['total']['base_grand_total']['currency']
             );
             $this->assertEquals(
                 100,
-                $response['customer']['orders']['items'][0]['totals']['grand_total']['value']
+                $response['customer']['orders']['items'][0]['total']['grand_total']['value']
             );
             $this->assertEquals(
                 'USD',
-                $response['customer']['orders']['items'][0]['totals']['grand_total']['currency']
+                $response['customer']['orders']['items'][0]['total']['grand_total']['currency']
             );
             $this->assertEquals(
                 110,
-                $response['customer']['orders']['items'][0]['totals']['subtotal']['value']
+                $response['customer']['orders']['items'][0]['total']['subtotal']['value']
             );
             $this->assertEquals(
                 'USD',
-                $response['customer']['orders']['items'][0]['totals']['subtotal']['currency']
+                $response['customer']['orders']['items'][0]['total']['subtotal']['currency']
             );
             $this->assertEquals(
                 10,
-                $response['customer']['orders']['items'][0]['totals']['shipping_handling']['total_amount']['value']
+                $response['customer']['orders']['items'][0]['total']['shipping_handling']['total_amount']['value']
             );
             $this->assertEquals(
                 'USD',
-                $response['customer']['orders']['items'][0]['totals']['shipping_handling']['total_amount']['currency']
+                $response['customer']['orders']['items'][0]['total']['shipping_handling']['total_amount']['currency']
             );
             $this->assertEquals(
                 5,
-                $response['customer']['orders']['items'][0]['totals']['taxes'][0]['amount']['value']
+                $response['customer']['orders']['items'][0]['total']['taxes'][0]['amount']['value']
             );
             $this->assertEquals(
                 'USD',
-                $response['customer']['orders']['items'][0]['totals']['taxes'][0]['amount']['currency']
+                $response['customer']['orders']['items'][0]['total']['taxes'][0]['amount']['currency']
             );
         }
 

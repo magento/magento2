@@ -9,7 +9,7 @@ namespace Magento\SalesGraphQl\Model;
 
 use Magento\Framework\GraphQl\Query\Resolver\TypeResolverInterface;
 
-class SalesItemTypeResolver implements TypeResolverInterface
+class InvoiceItemTypeResolver implements TypeResolverInterface
 {
 
     /**
