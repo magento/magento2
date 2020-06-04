@@ -5,79 +5,22 @@
  */
 declare(strict_types=1);
 
-namespace Magento\SalesGraphQl\Model\SalesItem;
+namespace Magento\SalesGraphQl\Model\Resolver\OrderItem;
 
-use Magento\Framework\ObjectManagerInterface;
-use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Api\Data\OrderItemInterface;
-use Magento\SalesGraphQl\Model\Orders\GetDiscounts;
-use Magento\SalesGraphQl\Model\SalesItem\Data\SalesItem;
 
 /**
- * Create SalesItem object with data from OrderItem
+ * Process order item options to format for GraphQl output
  */
-class SalesItemFactory
+class OptionsProcessor
 {
-    /**
-     * @var ObjectManagerInterface
-     */
-    private $objectManager;
-
-    /**
-     * @var GetDiscounts
-     */
-    private $getDiscounts;
-
-    /**
-     * @param ObjectManagerInterface $objectManager
-     * @param GetDiscounts $getDiscounts
-     */
-    public function __construct(
-        ObjectManagerInterface $objectManager,
-        GetDiscounts $getDiscounts
-    ) {
-        $this->objectManager = $objectManager;
-        $this->getDiscounts = $getDiscounts;
-    }
-
-    /**
-     * Create SalesItem object
-     *
-     * @param OrderItemInterface $orderItem
-     * @param OrderInterface $order
-     * @param array $additionalData
-     * @return SalesItem
-     */
-    public function create(OrderItemInterface $orderItem, OrderInterface $order, array $additionalData = []): SalesItem
-    {
-        $options = $this->getItemOptions($orderItem);
-
-        $salesItemData = [
-            'product_name' => $orderItem->getName(),
-            'product_sku' => $orderItem->getSku(),
-            'product_sale_price' => [
-                'currency' => $order->getOrderCurrencyCode(),
-                'value' => $orderItem->getPrice(),
-            ],
-            'parent_product_name' => $orderItem->getParentItem() ? $orderItem->getParentItem()->getName() : null,
-            'parent_product_sku' => $orderItem->getParentItem() ? $orderItem->getParentItem()->getSku() : null,
-            'selected_options' => $options['selected_options'],
-            'entered_options' => $options['entered_options'],
-            'discounts' => $this->getDiscounts->execute($order),
-        ];
-
-        $salesItemData = array_merge_recursive($salesItemData, $additionalData);
-
-        return $this->objectManager->create(SalesItem::class, ['data' => $salesItemData]);
-    }
-
     /**
      * Get Order item options.
      *
      * @param OrderItemInterface $orderItem
      * @return array
      */
-    private function getItemOptions(OrderItemInterface $orderItem): array
+    public function getItemOptions(OrderItemInterface $orderItem): array
     {
         //build options array
         $optionsTypes = ['selected_options' => [], 'entered_options' => []];
