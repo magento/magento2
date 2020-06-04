@@ -7,7 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\SalesGraphQl\Model;
 
-use Magento\Catalog\Model\Product\Type;
 use Magento\Framework\GraphQl\Query\Resolver\TypeResolverInterface;
 
 class OrderItemTypeResolver implements TypeResolverInterface
@@ -18,17 +17,10 @@ class OrderItemTypeResolver implements TypeResolverInterface
     public function resolveType(array $data): string
     {
         if (isset($data['product_type'])) {
-            if ($data['product_type'] == 'simple') {
-                return 'OrderItem';
-            } elseif ($data['product_type'] == 'virtual') {
-                return 'OrderItem';
-            } elseif ($data['product_type'] == 'bundle') {
+            if ($data['product_type'] == 'bundle') {
                 return 'OrderItemBundle';
             }
-            elseif ($data['product_type'] == 'configurable') {
-                return 'OrderItem';
-            }
         }
-        return '';
+        return 'OrderItem';
     }
 }

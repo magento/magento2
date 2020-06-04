@@ -11,9 +11,9 @@ use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Query\Resolver\TypeResolverInterface;
 
 /**
- * {@inheritdoc}
+ * @inheritdoc
  */
-class ItemInterfaceTypeResolverComposite implements TypeResolverInterface
+class InvoiceItemInterfaceTypeResolverComposite implements TypeResolverInterface
 {
     /**
      * TypeResolverInterface[]
@@ -49,7 +49,7 @@ class ItemInterfaceTypeResolverComposite implements TypeResolverInterface
         }
 
         throw new GraphQlInputException(
-            __('Concrete type for %1 not implemented', ['SalesItemInterface'])
+            __('Concrete type for %1 not implemented', ['InvoiceItemInterface'])
         );
     }
 }
