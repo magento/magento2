@@ -32,16 +32,22 @@
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
-        <!--Open Store Page -->
-        <amOnPage url="{{AdminSystemStorePage.url}}" stepKey="amOnAdminSystemStorePage"/>
-        <waitForPageLoad stepKey="waitForSystemStorePage"/>
+        <!--&lt;!&ndash;Open Store Page &ndash;&gt;-->
+        <!--<amOnPage url="{{AdminSystemStorePage.url}}" stepKey="amOnAdminSystemStorePage"/>-->
+        <!--<waitForPageLoad stepKey="waitForSystemStorePage"/>-->
 
-        <!--Create Custom Store -->
-        <click selector="{{AdminStoresMainActionsSection.createStoreButton}}" stepKey="selectCreateStore"/>
-        <fillField userInput="{{customStore.name}}" selector="{{AdminNewStoreGroupSection.storeGrpNameTextField}}" stepKey="fillStoreName"/>
-        <fillField userInput="{{customStore.code}}" selector="{{AdminNewStoreGroupSection.storeGrpCodeTextField}}" stepKey="fillStoreCode"/>
-        <selectOption userInput="{{NewRootCategory.name}}" selector="{{AdminNewStoreGroupSection.storeRootCategoryDropdown}}" stepKey="selectStoreStatus"/>
-        <click selector="{{AdminStoresMainActionsSection.saveButton}}" stepKey="clickSaveStoreButton"/>
+        <!--&lt;!&ndash;Create Custom Store &ndash;&gt;-->
+        <!--<click selector="{{AdminStoresMainActionsSection.createStoreButton}}" stepKey="selectCreateStore"/>-->
+        <!--<fillField userInput="{{customStore.name}}" selector="{{AdminNewStoreGroupSection.storeGrpNameTextField}}" stepKey="fillStoreName"/>-->
+        <!--<fillField userInput="{{customStore.code}}" selector="{{AdminNewStoreGroupSection.storeGrpCodeTextField}}" stepKey="fillStoreCode"/>-->
+        <!--<selectOption userInput="{{NewRootCategory.name}}" selector="{{AdminNewStoreGroupSection.storeRootCategoryDropdown}}" stepKey="selectStoreStatus"/>-->
+        <!--<click selector="{{AdminStoresMainActionsSection.saveButton}}" stepKey="clickSaveStoreButton"/>-->
+
+        <actionGroup ref="CreateCustomStoreActionGroup" stepKey="createCustomStore">
+            <argument name="website" value="{{_defaultWebsite.name}}"/>
+            <argument name="store" value="{{customStore.name}}"/>
+            <argument name="rootCategory" value="$$rootCategory.name$$"/>
+        </actionGroup>
 
         <!--Create Store View-->
         <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createStoreView">
@@ -50,13 +56,24 @@
         </actionGroup>
 
         <!--Verify Category in Store View-->
-        <amOnPage url="/{{NewRootCategory.name}}/{{SimpleRootSubCategory.name}}.html" stepKey="seeTheCategoryInStoreFront"/>
-        <waitForPageLoad stepKey="waitForSystemStorePage1"/>
-        <click selector="{{StorefrontFooterSection.switchStoreButton}}" stepKey="ClickSwitchStoreButtonOnDefaultStore"/>
-        <click selector="{{StorefrontFooterSection.storeLink(customStore.name)}}" stepKey="SelectSecondStoreToSwitchOn"/>
-        <seeElement selector="{{StorefrontHeaderSection.NavigationCategoryByName(SimpleRootSubCategory.name)}}" stepKey="seeCatergoryInStoreFront"/>
-        <click selector="{{StorefrontHeaderSection.NavigationCategoryByName(SimpleRootSubCategory.name)}}" stepKey="selectCategory"/>
-        <waitForPageLoad stepKey="waitForProductToLoad"/>
+        <!--<amOnPage url="/{{NewRootCategory.name}}/{{SimpleRootSubCategory.name}}.html" stepKey="seeTheCategoryInStoreFront"/>-->
+        <!--<waitForPageLoad stepKey="waitForSystemStorePage1"/>-->
+        <!--<click selector="{{StorefrontFooterSection.switchStoreButton}}" stepKey="ClickSwitchStoreButtonOnDefaultStore"/>-->
+        <!--<click selector="{{StorefrontFooterSection.storeLink(customStore.name)}}" stepKey="SelectSecondStoreToSwitchOn"/>-->
+        <!--<seeElement selector="{{StorefrontHeaderSection.NavigationCategoryByName(SimpleRootSubCategory.name)}}" stepKey="seeCatergoryInStoreFront"/>-->
+        <!--<click selector="{{StorefrontHeaderSection.NavigationCategoryByName(SimpleRootSubCategory.name)}}" stepKey="selectCategory"/>-->
+        <!--<waitForPageLoad stepKey="waitForProductToLoad"/>-->
+
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToHomepage"/>
+        <actionGroup ref="StorefrontSwitchStoreActionGroup" stepKey="switchCustomStore">
+            <argument name="storeName" value="{{customStore.name}}"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontAssertCategoryNameIsShownInMenuActionGroup" stepKey="seeCatergoryInStoreFront">
+            <argument name="categoryName" value="{{SimpleRootSubCategory.name}}"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontGoToCategoryPageActionGroup" stepKey="selectCategory">
+            <argument name="categoryName" value="$$category.name$$"/>
+        </actionGroup>
 
         <!--Update URL Key-->
         <actionGroup ref="AdminOpenCategoryPageActionGroup" stepKey="openAdminCategoryIndexPage"/>
