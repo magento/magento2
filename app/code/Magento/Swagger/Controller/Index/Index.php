@@ -7,11 +7,13 @@ declare(strict_types=1);
 
 namespace Magento\Swagger\Controller\Index;
 
+use Magento\Framework\App\Action\Action;
+use Magento\Framework\App\Action\Context;
 use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Framework\View\Page\Config as PageConfig;
 use Magento\Framework\View\Result\PageFactory as PageFactory;
 
-class Index implements HttpGetActionInterface
+class Index extends Action implements HttpGetActionInterface
 {
     /**
      * @var PageConfig
@@ -24,11 +26,13 @@ class Index implements HttpGetActionInterface
     private $pageFactory;
 
     /**
+     * @param Context $context
      * @param PageConfig $pageConfig
      * @param PageFactory $pageFactory
      */
-    public function __construct(PageConfig $pageConfig, PageFactory $pageFactory)
+    public function __construct(Context $context, PageConfig $pageConfig, PageFactory $pageFactory)
     {
+        parent::__construct($context);
         $this->pageConfig = $pageConfig;
         $this->pageFactory = $pageFactory;
     }

@@ -33,11 +33,11 @@ class DownloadableProductViewTest extends GraphQlAbstract
   {
        items{
            id
-           attribute_set_id    
+           attribute_set_id
            created_at
            name
            sku
-           type_id        
+           type_id
            updated_at
         price{
         regularPrice{
@@ -50,16 +50,16 @@ class DownloadableProductViewTest extends GraphQlAbstract
             description
           }
         }
-      }          
+      }
            ... on DownloadableProduct {
             links_title
             links_purchased_separately
-            
+
             downloadable_product_links{
               sample_url
               sort_order
               title
-              price              
+              price
             }
             downloadable_product_samples{
               title
@@ -203,7 +203,7 @@ QUERY;
         /** @var LinkInterface $downloadableProductLinks */
         $downloadableProductLinks = $product->getExtensionAttributes()->getDownloadableProductLinks();
         $downloadableProductLink = $downloadableProductLinks[1];
-        $this->assertNotEmpty('sample_url', $actualResponse['downloadable_product_links'][1]);
+        $this->assertNotEmpty($actualResponse['downloadable_product_links'][1]['sample_url']);
         $this->assertResponseFields(
             $actualResponse['downloadable_product_links'][1],
             [
@@ -227,7 +227,7 @@ QUERY;
         /** @var SampleInterface $downloadableProductSamples */
         $downloadableProductSamples = $product->getExtensionAttributes()->getDownloadableProductSamples();
         $downloadableProductSample = $downloadableProductSamples[0];
-        $this->assertNotEmpty('sample_url', $actualResponse['downloadable_product_samples'][0]);
+        $this->assertNotEmpty($actualResponse['downloadable_product_samples'][0]['sample_url']);
         $this->assertResponseFields(
             $actualResponse['downloadable_product_samples'][0],
             [

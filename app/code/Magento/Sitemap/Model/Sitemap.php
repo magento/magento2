@@ -571,20 +571,34 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento
             foreach ($images->getCollection() as $image) {
                 $row .= '<image:image>';
                 $row .= '<image:loc>' . $this->_escaper->escapeUrl($image->getUrl()) . '</image:loc>';
-                $row .= '<image:title>' . $this->_escaper->escapeHtml($images->getTitle()) . '</image:title>';
+                $row .= '<image:title>' . $this->escapeXmlText($images->getTitle()) . '</image:title>';
                 if ($image->getCaption()) {
-                    $row .= '<image:caption>' . $this->_escaper->escapeHtml($image->getCaption()) . '</image:caption>';
+                    $row .= '<image:caption>' . $this->escapeXmlText($image->getCaption()) . '</image:caption>';
                 }
                 $row .= '</image:image>';
             }
             // Add PageMap image for Google web search
             $row .= '<PageMap xmlns="http://www.google.com/schemas/sitemap-pagemap/1.0"><DataObject type="thumbnail">';
-            $row .= '<Attribute name="name" value="' . $this->_escaper->escapeHtml($images->getTitle()) . '"/>';
+            $row .= '<Attribute name="name" value="' . $this->_escaper->escapeHtmlAttr($images->getTitle()) . '"/>';
             $row .= '<Attribute name="src" value="' . $this->_escaper->escapeUrl($images->getThumbnail()) . '"/>';
             $row .= '</DataObject></PageMap>';
         }
 
         return '<url>' . $row . '</url>';
+    }
+
+    /**
+     * Escape string for XML context.
+     *
+     * @param string $text
+     * @return string
+     */
+    private function escapeXmlText(string $text): string
+    {
+        $doc = new \DOMDocument('1.0', 'UTF-8');
+        $fragment = $doc->createDocumentFragment();
+        $fragment->appendChild($doc->createTextNode($text));
+        return $doc->saveXML($fragment);
     }
 
     /**

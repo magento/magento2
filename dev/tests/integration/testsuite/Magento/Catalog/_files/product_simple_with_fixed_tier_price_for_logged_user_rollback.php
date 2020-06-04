@@ -4,5 +4,6 @@
  * See COPYING.txt for license details.
  */
 declare(strict_types=1);
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
 
-require __DIR__ . '/product_simple_tax_none_rollback.php';
+Resolver::getInstance()->requireDataFixture('Magento/Catalog/_files/product_simple_tax_none_rollback.php');
