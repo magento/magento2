@@ -68,7 +68,7 @@
                             <?= /* @noEscape */ $block->getProductPrice($item, '-compare-list-top') ?>
                             <div class="product-item-actions hidden-print">
                                 <div class="actions-primary">
-                                    <?php if ($item->isSaleable()) :?>
+                                    <?php if ($item->getIsSalable()) :?>
                                         <form data-role="tocart-form"
                                               action="<?= $block->escapeUrl($this->helper(Magento\Catalog\Helper\Product\Compare::class)->getAddToCartUrl($item)) ?>"
                                               method="post">

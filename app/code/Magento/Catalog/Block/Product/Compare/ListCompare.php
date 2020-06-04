@@ -7,6 +7,7 @@
 namespace Magento\Catalog\Block\Product\Compare;
 
 use Magento\Catalog\Model\Product;
+use Magento\Catalog\Model\Product\Attribute\Source\Status;
 use Magento\Customer\Model\Context;
 use Magento\Framework\App\Action\Action;
 
@@ -148,8 +149,10 @@ class ListCompare extends \Magento\Catalog\Block\Product\AbstractProduct
         if ($this->_items === null) {
             $this->_compareProduct->setAllowUsedFlat(false);
 
-            $this->_items = $this->_itemCollectionFactory->create();
-            $this->_items->useProductItem(true)->setStoreId($this->_storeManager->getStore()->getId());
+            $this->_items = $this->_itemCollectionFactory
+                ->create()
+                ->setFlag('has_stock_status_filter', false);
+            $this->_items->useProductItem()->setStoreId($this->_storeManager->getStore()->getId());
 
             if ($this->httpContext->getValue(Context::CONTEXT_AUTH)) {
                 $this->_items->setCustomerId($this->currentCustomer->getCustomerId());
@@ -161,9 +164,9 @@ class ListCompare extends \Magento\Catalog\Block\Product\AbstractProduct
 
             $this->_items->addAttributeToSelect(
                 $this->_catalogConfig->getProductAttributes()
-            )->loadComparableAttributes()->addMinimalPrice()->addTaxPercents()->setVisibility(
-                $this->_catalogProductVisibility->getVisibleInSiteIds()
-            );
+            )
+                ->addAttributeToFilter('status', Status::STATUS_ENABLED)
+                ->loadComparableAttributes();
         }
 
         return $this->_items;
