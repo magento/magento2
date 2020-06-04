@@ -2670,7 +2670,8 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
             $fromDbName = $this->quote($schemaName);
         }
 
-        $sql = sprintf('SELECT COUNT(1) AS tbl_exists FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = %s AND TABLE_SCHEMA = %s',
+        $sql = sprintf(
+            'SELECT COUNT(1) AS tbl_exists FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = %s AND TABLE_SCHEMA = %s',
             $this->quote($tableName),
             $fromDbName
         );
