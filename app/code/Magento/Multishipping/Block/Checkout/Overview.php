@@ -8,6 +8,8 @@ namespace Magento\Multishipping\Block\Checkout;
 
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Quote\Model\Quote\Address;
+use Magento\Checkout\Helper\Data as CheckoutHelper;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * Multishipping checkout overview information
@@ -15,6 +17,7 @@ use Magento\Quote\Model\Quote\Address;
  * @api
  * @author Magento Core Team <core@magentocommerce.com>
  * @since  100.0.2
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Overview extends \Magento\Sales\Block\Items\AbstractItems
 {
@@ -56,6 +59,7 @@ class Overview extends \Magento\Sales\Block\Items\AbstractItems
      * @param \Magento\Quote\Model\Quote\TotalsCollector               $totalsCollector
      * @param \Magento\Quote\Model\Quote\TotalsReader                  $totalsReader
      * @param array                                                    $data
+     * @param CheckoutHelper|null                                      $checkoutHelper
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
@@ -64,11 +68,14 @@ class Overview extends \Magento\Sales\Block\Items\AbstractItems
         PriceCurrencyInterface $priceCurrency,
         \Magento\Quote\Model\Quote\TotalsCollector $totalsCollector,
         \Magento\Quote\Model\Quote\TotalsReader $totalsReader,
-        array $data = []
+        array $data = [],
+        ?CheckoutHelper $checkoutHelper = null
     ) {
         $this->_taxHelper = $taxHelper;
         $this->_multishipping = $multishipping;
         $this->priceCurrency = $priceCurrency;
+        $data['taxHelper'] = $this->_taxHelper;
+        $data['checkoutHelper'] = $checkoutHelper ?? ObjectManager::getInstance()->get(CheckoutHelper::class);
         parent::__construct($context, $data);
         $this->_isScopePrivate = true;
         $this->totalsCollector = $totalsCollector;

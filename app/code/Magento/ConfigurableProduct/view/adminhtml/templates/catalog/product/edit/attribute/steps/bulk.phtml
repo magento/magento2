@@ -3,20 +3,29 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-// phpcs:disable Magento2.Templates.ThisInTemplate.FoundThis
+
 /* @var $block \Magento\ConfigurableProduct\Block\Adminhtml\Product\Steps\Bulk */
+/** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
 ?>
 
+<?php
+/** @var \Magento\Framework\Json\Helper\Data $jsonHelper */
+$jsonHelper = $block->getData('jsonHelper');
+?>
 <div data-bind="scope: '<?= /* @noEscape */  $block->getComponentName() ?>'" data-role="bulk-step">
     <h2 class="steps-wizard-title"><?= $block->escapeHtml(__('Step 3: Bulk Images, Price and Quantity')) ?></h2>
     <div class="steps-wizard-info">
-        <?= /* @noEscape */ __('Based on your selections %1 new products will be created. Use this step to customize images and price for your new products.', '<span class="new-products-count" data-bind="text:countVariations"></span>') ?>
+        <?= /* @noEscape */ __(
+            'Based on your selections %1 new products will be created. ' .
+            'Use this step to customize images and price for your new products.',
+            '<span class="new-products-count" data-bind="text:countVariations"></span>'
+        ) ?>
     </div>
 
     <div data-bind="with: sections().images" class="steps-wizard-section">
         <div data-role="section">
             <div class="steps-wizard-section-title">
-            <span><?= $block->escapeHtml(__('Images')); ?></span>
+                <span><?= $block->escapeHtml(__('Images')); ?></span>
             </div>
 
             <ul class="steps-wizard-section-list">
@@ -65,7 +74,9 @@
                 <div data-role="gallery"
                      class="gallery"
                      data-images="[]"
-                     data-types="<?= $block->escapeHtml($this->helper(Magento\Framework\Json\Helper\Data::class)->jsonEncode($block->getImageTypes())) ?>">
+                     data-types="<?= $block->escapeHtmlAttr($jsonHelper->jsonEncode(
+                         $block->getImageTypes()
+                     )) ?>">
                     <div class="image image-placeholder">
                         <div data-role="uploader" class="uploader">
                             <div class="image-browse">
@@ -75,32 +86,39 @@
                                        name="image"
                                        class="admin__control-file"
                                        multiple="multiple"
-                                       data-url="<?= /* @noEscape */ $block->getUrl('catalog/product_gallery/upload') ?>" />
+                                       data-url="<?= /* @noEscape */ $block->getUrl('catalog/product_gallery/upload')
+                                        ?>" />
                             </div>
                         </div>
                         <div class="product-image-wrapper">
-                            <p class="image-placeholder-text"><?= $block->escapeHtml(__('Browse to find or drag image here')) ?></p>
+                            <p class="image-placeholder-text"><?= $block->escapeHtml(__(
+                                'Browse to find or drag image here'
+                            )) ?></p>
                         </div>
                     </div>
 
-                    <?php foreach ($block->getImageTypes() as $typeData) : ?>
+                    <?php foreach ($block->getImageTypes() as $typeData): ?>
                         <input name="<?= $block->escapeHtml($typeData['name']) ?>"
                                class="image-<?= $block->escapeHtml($typeData['code']) ?>"
                                type="hidden"
                                value="<?= $block->escapeHtml($typeData['value']) ?>"/>
-                        <?php endforeach; ?>
+                    <?php endforeach; ?>
 
                     <script data-template="uploader" type="text/x-magento-template">
                         <div id="<%- data.id %>" class="file-row">
                             <span class="file-info"><%- data.name %> (<%- data.size %>)</span>
                             <div class="progressbar-container">
-                                <div class="progressbar upload-progress" style="width: 0%;"></div>
+                                <div class="progressbar upload-progress"></div>
                             </div>
                             <div class="spinner">
                                 <span></span><span></span><span></span><span></span>
                                 <span></span><span></span><span></span><span></span>
                             </div>
                         </div>
+                        <?= /* @noEscape */ $secureRenderer->renderStyleAsTag(
+                            "width: 0%;",
+                            "div.progressbar-container div.progressbar.upload-progress"
+                        ) ?>
                     </script>
 
                     <script data-template="gallery-content" type="text/x-magento-template">
@@ -124,7 +142,8 @@
                             <input type="hidden"
                                    name="product[media_gallery][images][<%- data.file_id %>][removed]"/>
                             <div class="product-image-wrapper">
-                                <img class="product-image" data-role="image-element" src="<%- data.url %>" alt="<%- data.label %>"/>
+                                <img class="product-image" data-role="image-element" src="<%- data.url %>"
+                                     alt="<%- data.label %>"/>
                                 <div class="actions">
                                     <button type="button"
                                             class="action-remove"
@@ -139,16 +158,18 @@
                             <div class="item-description">
                                 <div class="item-title" data-role="img-title"><%- data.label %></div>
                                 <div class="item-size">
-                                    <span data-role="image-dimens"></span>, <span data-role="image-size"><%- data.sizeLabel %></span>
+                                    <span data-role="image-dimens"></span>,
+                                    <span data-role="image-size"><%- data.sizeLabel %></span>
                                 </div>
                             </div>
                             <ul class="item-roles" data-role="roles-labels">
-                                <?php foreach ($block->getMediaAttributes() as $attribute) :?>
+                                <?php foreach ($block->getMediaAttributes() as $attribute):?>
                                     <li data-role-code="<?= $block->escapeHtml($attribute->getAttributeCode()) ?>"
-                                        class="item-role item-role-<?= $block->escapeHtml($attribute->getAttributeCode()) ?>">
+                                        class="item-role item-role-<?=
+                                        $block->escapeHtml($attribute->getAttributeCode()) ?>">
                                         <?= /* @noEscape */ $attribute->getFrontendLabel() ?>
                                     </li>
-                                    <?php endforeach; ?>
+                                <?php endforeach; ?>
                             </ul>
                         </div>
                     </script>
@@ -210,40 +231,44 @@
 
                                 <div class="admin__field field-image-role">
                                     <label class="admin__field-label">
-                                    <span><?= $block->escapeHtml(__('Role')); ?></span>
+                                        <span><?= $block->escapeHtml(__('Role')); ?></span>
                                     </label>
                                     <div class="admin__field-control">
                                         <ul class="multiselect-alt">
                                             <?php
-                                            foreach ($block->getMediaAttributes() as $attribute) :
+                                            foreach ($block->getMediaAttributes() as $attribute):
                                                 ?>
                                                 <li class="item">
                                                     <label>
                                                         <input class="image-type"
                                                                data-role="type-selector"
                                                                type="checkbox"
-                                                               value="<?= $block->escapeHtml($attribute->getAttributeCode()) ?>"
+                                                               value="<?=
+                                                                $block->escapeHtml($attribute->getAttributeCode()) ?>"
                                                         />
                                                         <?= $block->escapeHtml($attribute->getFrontendLabel()); ?>
                                                     </label>
                                                 </li>
-                                                <?php endforeach; ?>
+                                            <?php endforeach; ?>
                                         </ul>
                                     </div>
                                 </div>
 
                                 <div class="admin__field admin__field-inline field-image-size" data-role="size">
                                     <label class="admin__field-label">
-                                    <span><?= $block->escapeHtml(__('Image Size')); ?></span>
+                                        <span><?= $block->escapeHtml(__('Image Size')); ?></span>
                                     </label>
-                                    <div class="admin__field-value" data-message="<?= $block->escapeHtml(__('{size}'));?>"></div>
+                                    <div class="admin__field-value"
+                                         data-message="<?= $block->escapeHtml(__('{size}'));?>"></div>
                                 </div>
 
-                                <div class="admin__field admin__field-inline field-image-resolution" data-role="resolution">
+                                <div class="admin__field admin__field-inline field-image-resolution"
+                                     data-role="resolution">
                                     <label class="admin__field-label">
-                                    <span><?= $block->escapeHtml(__('Image Resolution')); ?></span>
+                                        <span><?= $block->escapeHtml(__('Image Resolution')); ?></span>
                                     </label>
-                                    <div class="admin__field-value" data-message="<?= $block->escapeHtml(__('{width}^{height} px'));?>"></div>
+                                    <div class="admin__field-value"
+                                         data-message="<?= $block->escapeHtml(__('{width}^{height} px'));?>"></div>
                                 </div>
 
                                 <div class="admin__field field-image-hide">
@@ -273,7 +298,7 @@
                 <fieldset class="admin__fieldset bulk-attribute-values">
                     <div class="admin__field _required">
                         <label class="admin__field-label" for="apply-images-attributes">
-                        <span><?= $block->escapeHtml(__('Select attribute')); ?></span>
+                            <span><?= $block->escapeHtml(__('Select attribute')); ?></span>
                         </label>
                         <div class="admin__field-control">
                             <select
@@ -300,17 +325,22 @@
                         <div data-role="gallery"
                              class="gallery"
                              data-images="[]"
-                             data-types="<?= $block->escapeHtml($this->helper(Magento\Framework\Json\Helper\Data::class)->jsonEncode($block->getImageTypes())) ?>">
+                             data-types="<?= $block->escapeHtmlAttr(
+                                 $jsonHelper->jsonEncode($block->getImageTypes())
+                             ) ?>">
                             <div class="image image-placeholder">
                                 <div data-role="uploader" class="uploader">
                                     <div class="image-browse">
-                                    <span><?= $block->escapeHtml(__('Browse Files...')); ?></span>
+                                        <span><?= $block->escapeHtml(__('Browse Files...')); ?></span>
                                         <input type="file" name="image" multiple="multiple"
-                                               data-url="<?= /* @noEscape */ $block->getUrl('catalog/product_gallery/upload') ?>" />
+                                               data-url="<?=
+                                               /* @noEscape */ $block->getUrl('catalog/product_gallery/upload') ?>" />
                                     </div>
                                 </div>
                                 <div class="product-image-wrapper">
-                                    <p class="image-placeholder-text"><?= $block->escapeHtml(__('Browse to find or drag image here')); ?></p>
+                                    <p class="image-placeholder-text">
+                                        <?= $block->escapeHtml(__('Browse to find or drag image here')); ?>
+                                    </p>
                                 </div>
                                 <div class="spinner">
                                     <span></span><span></span><span></span><span></span>
@@ -318,24 +348,28 @@
                                 </div>
                             </div>
 
-                            <?php foreach ($block->getImageTypes() as $typeData) :?>
+                            <?php foreach ($block->getImageTypes() as $typeData): ?>
                                 <input name="<?= $block->escapeHtml($typeData['name']) ?>"
                                        class="image-<?= $block->escapeHtml($typeData['code']) ?>"
                                        type="hidden"
                                        value="<?= $block->escapeHtml($typeData['value']) ?>"/>
-                                <?php endforeach; ?>
+                            <?php endforeach; ?>
 
                             <script data-template="uploader" type="text/x-magento-template">
                                 <div id="<%- data.id %>" class="file-row">
                                     <span class="file-info"><%- data.name %> (<%- data.size %>)</span>
                                     <div class="progressbar-container">
-                                        <div class="progressbar upload-progress" style="width: 0%;"></div>
+                                        <div class="progressbar upload-progress"></div>
                                     </div>
                                     <div class="spinner">
                                         <span></span><span></span><span></span><span></span>
                                         <span></span><span></span><span></span><span></span>
                                     </div>
                                 </div>
+                                <?= /* @noEscape */ $secureRenderer->renderStyleAsTag(
+                                    "width: 0%;",
+                                    "div.progressbar-container div.progressbar.upload-progress"
+                                ) ?>
                             </script>
 
                             <script data-template="gallery-content" type="text/x-magento-template">
@@ -361,31 +395,36 @@
                                            value=""
                                            class="is-removed"/>
                                     <div class="product-image-wrapper">
-                                        <img class="product-image" data-role="image-element" src="<%- data.url %>" alt="<%- data.label %>"/>
+                                        <img class="product-image" data-role="image-element" src="<%- data.url %>"
+                                             alt="<%- data.label %>"/>
                                         <div class="actions">
                                             <button type="button"
                                                     class="action-remove"
                                                     data-role="delete-button"
                                                     title="<?= $block->escapeHtml(__('Remove image')) ?>">
-                                            <span><?= $block->escapeHtml(__('Remove image')); ?></span>
+                                                <span><?= $block->escapeHtml(__('Remove image')); ?></span>
                                             </button>
                                             <div class="draggable-handle"></div>
                                         </div>
-                                        <div class="image-fade"><span><?= $block->escapeHtml(__('Hidden')); ?></span></div>
+                                        <div class="image-fade"><span><?= $block->escapeHtml(__('Hidden')); ?></span>
+                                        </div>
                                     </div>
                                     <div class="item-description">
                                         <div class="item-title" data-role="img-title"><%- data.label %></div>
                                         <div class="item-size">
-                                            <span data-role="image-dimens"></span>, <span data-role="image-size"><%- data.sizeLabel %></span>
+                                            <span data-role="image-dimens"></span>,
+                                            <span data-role="image-size"><%- data.sizeLabel %></span>
                                         </div>
                                     </div>
                                     <ul class="item-roles" data-role="roles-labels">
-                                        <?php foreach ($block->getMediaAttributes() as $attribute) :?>
-                                            <li data-role-code="<?= $block->escapeHtml($attribute->getAttributeCode()) ?>"
-                                                class="item-role item-role-<?= $block->escapeHtml($attribute->getAttributeCode()) ?>">
+                                        <?php foreach ($block->getMediaAttributes() as $attribute):?>
+                                            <li data-role-code="<?= $block->escapeHtml($attribute->getAttributeCode())
+                                            ?>"
+                                                class="item-role item-role-<?=
+                                                $block->escapeHtml($attribute->getAttributeCode()) ?>">
                                                 <?= $block->escapeHtml($attribute->getFrontendLabel()) ?>
                                             </li>
-                                            <?php endforeach; ?>
+                                        <?php endforeach; ?>
                                     </ul>
                                 </div>
                             </script>
@@ -407,7 +446,8 @@
                                             </button>
                                             <div class="draggable-handle"></div>
                                         </div>
-                                        <div class="image-fade"><span><?= $block->escapeHtml(__('Hidden')) ?></span></div>
+                                        <div class="image-fade"><span><?= $block->escapeHtml(__('Hidden')) ?></span>
+                                        </div>
                                     </div>
                                     <!--<ul class="item-roles">
                                         <li class="item-role item-role-base">Base</li>
@@ -416,7 +456,8 @@
                             </script>
 
                             <script data-role="img-dialog-container-tmpl" type="text/x-magento-template">
-                                <div class="image-panel ui-tabs-panel ui-widget-content ui-corner-bottom" data-role="dialog">
+                                <div class="image-panel ui-tabs-panel ui-widget-content ui-corner-bottom"
+                                     data-role="dialog">
                                 </div>
                             </script>
 
@@ -430,7 +471,7 @@
                                     <fieldset class="admin__fieldset fieldset-image-panel">
                                         <div class="admin__field field-image-description">
                                             <label class="admin__field-label" for="image-description">
-                                            <span><?= $block->escapeHtml(__('Alt Text'));?></span>
+                                                <span><?= $block->escapeHtml(__('Alt Text'));?></span>
                                             </label>
 
                                             <div class="admin__field-control">
@@ -444,38 +485,43 @@
 
                                         <div class="admin__field field-image-role">
                                             <label class="admin__field-label">
-                                            <span><?= $block->escapeHtml(__('Role'));?></span>
+                                                <span><?= $block->escapeHtml(__('Role'));?></span>
                                             </label>
                                             <div class="admin__field-control">
                                                 <ul class="multiselect-alt">
-                                                    <?php foreach ($block->getMediaAttributes() as $attribute) :?>
+                                                    <?php foreach ($block->getMediaAttributes() as $attribute):?>
                                                         <li class="item">
                                                             <label>
                                                                 <input class="image-type"
                                                                        data-role="type-selector"
                                                                        type="checkbox"
-                                                                       value="<?= $block->escapeHtml($attribute->getAttributeCode()) ?>"
+                                                                // @codingStandardsIgnoreLine
+                                                                value="<?= $block->escapeHtmlAttr($attribute->getAttributeCode()) ?>"
                                                                 />
-                                                                <?= $block->escapeHtml($attribute->getFrontendLabel()) ?>
+                                                                <?= $block->escapeHtml($attribute->getFrontendLabel())?>
                                                             </label>
                                                         </li>
-                                                        <?php endforeach; ?>
+                                                    <?php endforeach; ?>
                                                 </ul>
                                             </div>
                                         </div>
 
                                         <div class="admin__field admin__field-inline field-image-size" data-role="size">
                                             <label class="admin__field-label">
-                                            <span><?= $block->escapeHtml(__('Image Size')); ?></span>
+                                                <span><?= $block->escapeHtml(__('Image Size')); ?></span>
                                             </label>
-                                            <div class="admin__field-value" data-message="<?= $block->escapeHtml(__('{size}')); ?>"></div>
+                                            <div class="admin__field-value"
+                                                 data-message="<?= $block->escapeHtml(__('{size}')); ?>"></div>
                                         </div>
 
-                                        <div class="admin__field admin__field-inline field-image-resolution" data-role="resolution">
+                                        <div class="admin__field admin__field-inline field-image-resolution"
+                                             data-role="resolution">
                                             <label class="admin__field-label">
-                                            <span><?= $block->escapeHtml(__('Image Resolution')); ?></span>
+                                                <span><?= $block->escapeHtml(__('Image Resolution')); ?></span>
                                             </label>
-                                            <div class="admin__field-value" data-message="<?= $block->escapeHtml(__('{width}^{height} px')); ?>"></div>
+                                            <div class="admin__field-value"
+                                                 data-message="<?= $block->escapeHtml(__('{width}^{height} px')); ?>">
+                                            </div>
                                         </div>
 
                                         <div class="admin__field field-image-hide">
@@ -486,7 +532,8 @@
                                                            data-role="visibility-trigger"
                                                            value="1"
                                                            class="admin__control-checkbox"
-                                                           name="product[media_gallery][images][<%- data.file_id %>][disabled]"
+                                                    // @codingStandardsIgnoreLine
+                                                    name="product[media_gallery][images][<%- data.file_id %>][disabled]"
                                                     <% if (data.disabled == 1) { %>checked="checked"<% } %> />
 
                                                     <label for="hide-from-product-page" class="admin__field-label">
@@ -556,7 +603,7 @@
                 <fieldset class="admin__fieldset bulk-attribute-values" data-bind="visible: type() == 'single'">
                     <div class="admin__field _required">
                         <label for="apply-single-price-input" class="admin__field-label">
-                        <span><?= $block->escapeHtml(__('Price')); ?></span>
+                            <span><?= $block->escapeHtml(__('Price')); ?></span>
                         </label>
                         <div class="admin__field-control">
                             <div class="currency-addon">
@@ -589,7 +636,8 @@
                     <fieldset class="admin__fieldset bulk-attribute-values" data-bind="if:attribute">
                         <!-- ko foreach: attribute().chosen -->
                         <div class="admin__field _required">
-                            <label data-bind="attr: {for: 'apply-single-price-input-' + $index()}" class="admin__field-label">
+                            <label data-bind="attr: {for: 'apply-single-price-input-' + $index()}"
+                                   class="admin__field-label">
                                 <span data-bind="text:label"></span>
                             </label>
                             <div class="admin__field-control">
@@ -717,7 +765,7 @@
                     "component": "Magento_ConfigurableProduct/js/variations/steps/bulk",
                     "appendTo": "<?= /* @noEscape */  $block->getParentComponentName() ?>",
                     "noImage": "<?= /* @noEscape */  $block->getNoImageUrl() ?>",
-                    "variationsComponent": "<?= /* @noEscape */ $block->getData('config/form') ?>.configurableVariations"
+                    "variationsComponent": "<?= /* @noEscape */ $block->getData('config/form')?>.configurableVariations"
                 }
             }
         }

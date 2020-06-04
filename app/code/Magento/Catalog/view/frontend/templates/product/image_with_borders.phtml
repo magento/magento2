@@ -7,6 +7,7 @@
 <?php
 /** @var $block \Magento\Catalog\Block\Product\Image */
 /** @var $escaper \Magento\Framework\Escaper */
+/** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
 /**
  * Enable lazy loading for images with borders and if variable enable_lazy_loading_for_images_without_borders
  * is enabled in view.xml. Otherwise small size images without borders may be distorted. So max-width is used for them
@@ -18,11 +19,8 @@ $enableLazyLoadingWithoutBorders = (bool)$block->getVar(
     'Magento_Catalog'
 );
 ?>
-
-<span class="product-image-container"
-      style="width:<?= $escaper->escapeHtmlAttr($block->getWidth()) ?>px;">
-    <span class="product-image-wrapper"
-          style="padding-bottom: <?= ($block->getRatio() * 100) ?>%;">
+<span class="product-image-container" id="product-image-container-<?= /* @noEscape */ $block->getProductId() ?>">
+    <span class="product-image-wrapper">
         <img class="<?= $escaper->escapeHtmlAttr($block->getClass()) ?>"
             <?php foreach ($block->getCustomAttributes() as $name => $value): ?>
                 <?= $escaper->escapeHtmlAttr($name) ?>="<?= $escaper->escapeHtmlAttr($value) ?>"
@@ -38,3 +36,11 @@ $enableLazyLoadingWithoutBorders = (bool)$block->getVar(
             <?php endif; ?>
             alt="<?= $escaper->escapeHtmlAttr($block->getLabel()) ?>"/></span>
 </span>
+<?= /* @noEscape */ $secureRenderer->renderStyleAsTag(
+    'width:' . (int)$block->getWidth() . 'px;',
+    '#product-image-container-' . $block->getProductId()
+) ?>
+<?= /* @noEscape */ $secureRenderer->renderStyleAsTag(
+    'padding-bottom: '. ($block->getRatio() * 100) . '%;',
+    '#product-image-container-' . $block->getProductId() . ' span.product-image-wrapper'
+) ?>

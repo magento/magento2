@@ -3,40 +3,62 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+/** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
 ?>
-<!-- <?php if ($block->getTitle()) : ?>
+<!-- <?php if ($block->getTitle()): ?>
     <h3><?= $block->escapeHtml($block->getTitle()) ?></h3>
 <?php endif ?> -->
-<?php if (!empty($tabs)) : ?>
+<?php if (!empty($tabs)): ?>
 <div id="<?=  $block->escapeHtmlAttr($block->getId()) ?>">
 <ul  class="tabs-horiz">
-    <?php foreach ($tabs as $_tab) : ?>
-        <?php $_tabClass = 'tab-item-link ' . $block->getTabClass($_tab) . ' ' . (preg_match('/\s?ajax\s?/', $_tab->getClass()) ? 'notloaded' : '') ?>
+    <?php foreach ($tabs as $_tab): ?>
+        <?php $_tabClass = 'tab-item-link ' . $block->getTabClass($_tab) . ' ' .
+            (preg_match('/\s?ajax\s?/', $_tab->getClass()) ? 'notloaded' : '') ?>
         <?php $_tabType = (!preg_match('/\s?ajax\s?/', $_tabClass) && $block->getTabUrl($_tab) != '#') ? 'link' : '' ?>
-        <?php $_tabHref = $block->getTabUrl($_tab) == '#' ? '#' . $block->getTabId($_tab) . '_content' : $block->getTabUrl($_tab) ?>
+        <?php $_tabHref = $block->getTabUrl($_tab) == '#' ?
+            '#' . $block->getTabId($_tab) . '_content' :
+            $block->getTabUrl($_tab) ?>
     <li>
-        <a href="<?= $block->escapeHtmlAttr($_tabHref) ?>" id="<?= $block->escapeHtmlAttr($block->getTabId($_tab)) ?>" title="<?= $block->escapeHtmlAttr($block->getTabTitle($_tab)) ?>" class="<?= $block->escapeHtmlAttr($_tabClass) ?>" data-tab-type="<?= $block->escapeHtmlAttr($_tabType) ?>">
+        <a href="<?= $block->escapeUrl($_tabHref) ?>"
+           id="<?= $block->escapeHtmlAttr($block->getTabId($_tab)) ?>"
+           title="<?= $block->escapeHtmlAttr($block->getTabTitle($_tab)) ?>"
+           class="<?= $block->escapeHtmlAttr($_tabClass) ?>"
+           data-tab-type="<?= $block->escapeHtmlAttr($_tabType) ?>">
             <span>
-                <span class="changed" title="<?= $block->escapeHtmlAttr(__('The information in this tab has been changed.')) ?>"></span>
-                <span class="error" title="<?= $block->escapeHtmlAttr(__('This tab contains invalid data. Please resolve this before saving.')) ?>"></span>
-                <span class="loader" title="<?= $block->escapeHtmlAttr(__('Loading...')) ?>"></span>
+                <span class="changed"
+                      title="<?= $block->escapeHtmlAttr(__('The information in this tab has been changed.')) ?>"></span>
+                <span class="error"
+                      title="<?= $block->escapeHtmlAttr(__(
+                          'This tab contains invalid data. Please resolve this before saving.'
+                      )) ?>"></span>
+                <span class="loader"
+                      title="<?= $block->escapeHtmlAttr(__('Loading...')) ?>"></span>
                 <?= $block->escapeHtml($block->getTabLabel($_tab)) ?>
             </span>
         </a>
-        <div id="<?=  $block->escapeHtmlAttr($block->getTabId($_tab)) ?>_content" style="display:none"><?= /* @noEscape */ $block->getTabContent($_tab) ?></div>
+        <div id="<?=  $block->escapeHtmlAttr($block->getTabId($_tab)) ?>_content">
+            <?= /* @noEscape */ $block->getTabContent($_tab) ?>
+        </div>
+        <?= /* @noEscape */ $secureRenderer->renderStyleAsTag(
+            'display:none',
+            '#' . $block->escapeJs($block->getTabId($_tab)) . '_content'
+        ); ?>
     </li>
     <?php endforeach; ?>
 </ul>
 </div>
-<script>
+    <?php $scriptString = <<<script
 require(["jquery","mage/backend/tabs"], function($){
     $(function() {
-        $('#<?= /* @noEscape */ $block->getId() ?>').tabs({
-            active: '<?= /* @noEscape */ $block->getActiveTabId() ?>',
-            destination: '#<?= /* @noEscape */ $block->getDestElementId() ?>',
-            shadowTabs: <?= /* @noEscape */ $block->getAllShadowTabs() ?>
+        $('#{$block->getId()}').tabs({
+            active: '{$block->getActiveTabId()}',
+            destination: '#{$block->getDestElementId()}',
+            shadowTabs: {$block->getAllShadowTabs()}
         });
     });
 });
-</script>
+script;
+    ?>
+    <?= /* @noEscape */ $secureRenderer->renderTag('script', [], $scriptString, false) ?>
 <?php endif; ?>
