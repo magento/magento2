@@ -5,13 +5,14 @@
  */
 
 /** @var Magento\Review\Block\Product\View\ListView $block */
+/** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
 
 $_items = $block->getReviewsCollection()->getItems();
 $format = $block->getDateFormat() ?: \IntlDateFormatter::SHORT;
 ?>
-<?php if (count($_items)) : ?>
+<?php if (count($_items)): ?>
 <div class="block review-list" id="customer-reviews">
-    <?php if (!$block->getHideTitle()) : ?>
+    <?php if (!$block->getHideTitle()): ?>
         <div class="block-title">
             <strong><?= $block->escapeHtml(__('Customer Reviews')) ?></strong>
         </div>
@@ -21,21 +22,31 @@ $format = $block->getDateFormat() ?: \IntlDateFormatter::SHORT;
             <?= $block->getChildHtml('toolbar') ?>
         </div>
         <ol class="items review-items">
-        <?php foreach ($_items as $_review) : ?>
+        <?php foreach ($_items as $_review): ?>
             <li class="item review-item" itemscope itemprop="review" itemtype="http://schema.org/Review">
                 <div class="review-title" itemprop="name"><?= $block->escapeHtml($_review->getTitle()) ?></div>
-                <?php if (count($_review->getRatingVotes())) : ?>
+                <?php if (count($_review->getRatingVotes())): ?>
                     <div class="review-ratings">
-                    <?php foreach ($_review->getRatingVotes() as $_vote) : ?>
-                    <div class="rating-summary item" itemprop="reviewRating" itemscope itemtype="http://schema.org/Rating">
-                        <span class="label rating-label"><span><?= $block->escapeHtml($_vote->getRatingCode()) ?></span></span>
-                        <div class="rating-result" title="<?= $block->escapeHtmlAttr($_vote->getPercent()) ?>%">
+                    <?php foreach ($_review->getRatingVotes() as $_vote): ?>
+                    <div class="rating-summary item"
+                         itemprop="reviewRating" itemscope itemtype="http://schema.org/Rating">
+                        <span class="label rating-label">
+                            <span><?= $block->escapeHtml($_vote->getRatingCode()) ?></span>
+                        </span>
+                        <div class="rating-result"
+                             id="review_<?= /* @noEscape */ $_review->getReviewId()
+                                ?>_vote_<?= /* @noEscape */ $_vote->getVoteId() ?>"
+                             title="<?= $block->escapeHtmlAttr($_vote->getPercent()) ?>%">
                             <meta itemprop="worstRating" content = "1"/>
                             <meta itemprop="bestRating" content = "100"/>
-                            <span style="width:<?= $block->escapeHtmlAttr($_vote->getPercent()) ?>%">
+                            <span>
                                 <span itemprop="ratingValue"><?= $block->escapeHtml($_vote->getPercent()) ?>%</span>
                             </span>
                         </div>
+                        <?= /* @noEscape */ $secureRenderer->renderStyleAsTag(
+                            'width:' . $_vote->getPercent() . '%',
+                            'div#review_' . $_review->getReviewId() . '_vote_' . $_vote->getVoteId() . ' span'
+                        ) ?>
                     </div>
                     <?php endforeach; ?>
                     </div>
@@ -46,11 +57,18 @@ $format = $block->getDateFormat() ?: \IntlDateFormatter::SHORT;
                 <div class="review-details">
                     <p class="review-author">
                         <span class="review-details-label"><?= $block->escapeHtml(__('Review by')) ?></span>
-                        <strong class="review-details-value" itemprop="author"><?= $block->escapeHtml($_review->getNickname()) ?></strong>
+                        <strong class="review-details-value"
+                                itemprop="author"><?= $block->escapeHtml($_review->getNickname()) ?></strong>
                     </p>
                     <p class="review-date">
                         <span class="review-details-label"><?= $block->escapeHtml(__('Posted on')) ?></span>
-                        <time class="review-details-value" itemprop="datePublished" datetime="<?= $block->escapeHtmlAttr($block->formatDate($_review->getCreatedAt(), $format)) ?>"><?= $block->escapeHtml($block->formatDate($_review->getCreatedAt(), $format)) ?></time>
+                        <time class="review-details-value"
+                              itemprop="datePublished"
+                              datetime="<?= $block->escapeHtmlAttr($block->formatDate(
+                                  $_review->getCreatedAt(),
+                                  $format
+                              )) ?>"><?= $block->escapeHtml($block->formatDate($_review->getCreatedAt(), $format)) ?>
+                        </time>
                     </p>
                 </div>
             </li>

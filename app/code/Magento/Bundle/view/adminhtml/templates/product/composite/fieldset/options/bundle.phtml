@@ -5,22 +5,26 @@
  */
 ?>
 
-<?php /* @var $block \Magento\Bundle\Block\Adminhtml\Catalog\Product\Composite\Fieldset\Bundle */ ?>
+<?php
+/* @var $block \Magento\Bundle\Block\Adminhtml\Catalog\Product\Composite\Fieldset\Bundle */
+/** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
+?>
+
 <?php $options = $block->decorateArray($block->getOptions(true)); ?>
-<?php if (count($options)) : ?>
+<?php if (count($options)): ?>
 <fieldset id="catalog_product_composite_configure_fields_bundle"
           class="fieldset admin__fieldset composite-bundle<?= $block->getIsLastFieldset() ? ' last-fieldset' : '' ?>">
     <legend class="legend admin__legend">
         <span><?= $block->escapeHtml(__('Bundle Items')) ?></span>
     </legend><br />
-    <?php foreach ($options as $option) : ?>
-        <?php if ($option->getSelections()) : ?>
+    <?php foreach ($options as $option): ?>
+        <?php if ($option->getSelections()): ?>
             <?= $block->getOptionHtml($option) ?>
         <?php endif; ?>
     <?php endforeach; ?>
 </fieldset>
 
-<script>
+    <?php $scriptString = <<<script
 require([
     "Magento_Catalog/catalog/product/composite/configure"
 ], function(){
@@ -70,8 +74,12 @@ require([
             }
         }
     };
-    ProductConfigure.bundleControl = new BundleControl(<?= /* @noEscape */ $block->getJsonConfig() ?>);
+script;
+    $scriptString .= 'ProductConfigure.bundleControl = new BundleControl(' . /* @noEscape */ $block->getJsonConfig() .
+     ');';
+    $scriptString .= <<<script
 });
-</script>
-
+script;
+    ?>
+    <?= /* @noEscape */ $secureRenderer->renderTag('script', [], $scriptString, false) ?>
 <?php endif; ?>

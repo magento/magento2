@@ -6,7 +6,7 @@
 
 ?>
 <?php /** @var $block \Magento\Checkout\Block\Cart\Shipping */ ?>
-
+<?php /** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */ ?>
 <div id="block-shipping"
      class="block shipping"
      data-mage-init='{"collapsible":{"openedState": "active", "saveState": true}}'
@@ -33,8 +33,11 @@
                 }
             }
         </script>
-        <script>
-            window.checkoutConfig = <?= /* @noEscape */ $block->getSerializedCheckoutConfig() ?>;
+<?php $serializedCheckoutConfig = /* @noEscape */ $block->getSerializedCheckoutConfig();
+
+$scriptString = <<<script
+
+            window.checkoutConfig = {$serializedCheckoutConfig};
             window.customerData = window.checkoutConfig.customerData;
             window.isCustomerLoggedIn = window.checkoutConfig.isCustomerLoggedIn;
             require([
@@ -42,10 +45,12 @@
                 'Magento_Ui/js/block-loader'
             ], function(url, blockLoader) {
                 blockLoader(
-                    "<?= $block->escapeJs($block->escapeUrl($block->getViewFileUrl('images/loader-1.gif'))) ?>"
+                    "{$block->escapeJs($block->escapeUrl($block->getViewFileUrl('images/loader-1.gif')))}"
                 );
-                return url.setBaseUrl('<?= $block->escapeJs($block->escapeUrl($block->getBaseUrl())) ?>');
+                return url.setBaseUrl('{$block->escapeJs($block->escapeUrl($block->getBaseUrl()))}');
             })
-        </script>
+script;
+?>
+        <?= /* @noEscape */ $secureRenderer->renderTag('script', [], $scriptString, false) ?>
     </div>
 </div>

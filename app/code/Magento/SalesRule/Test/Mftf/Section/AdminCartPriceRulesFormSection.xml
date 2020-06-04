@@ -10,7 +10,7 @@
     <section name="AdminCartPriceRulesFormSection">
         <element name="save" type="button" selector="#save" timeout="30"/>
         <element name="saveAndContinue" type="button" selector="#save_and_continue" timeout="30"/>
-        <element name="delete" type="button" selector="#delete" timeout="30"/>
+        <element name="delete" type="button" selector="button#delete" timeout="30"/>
         <element name="modalAcceptButton" type="button" selector="button.action-accept" timeout="30"/>
 
         <!-- Rule Information (the main form on the page) -->

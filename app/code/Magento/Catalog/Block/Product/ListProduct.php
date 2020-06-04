@@ -23,6 +23,8 @@ use Magento\Framework\DataObject\IdentityInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Pricing\Render;
 use Magento\Framework\Url\Helper\Data;
+use Magento\Framework\App\ObjectManager;
+use Magento\Catalog\Helper\Output as OutputHelper;
 
 /**
  * Product list
@@ -75,6 +77,7 @@ class ListProduct extends AbstractProduct implements IdentityInterface
      * @param CategoryRepositoryInterface $categoryRepository
      * @param Data $urlHelper
      * @param array $data
+     * @param OutputHelper|null $outputHelper
      */
     public function __construct(
         Context $context,
@@ -82,12 +85,14 @@ class ListProduct extends AbstractProduct implements IdentityInterface
         Resolver $layerResolver,
         CategoryRepositoryInterface $categoryRepository,
         Data $urlHelper,
-        array $data = []
+        array $data = [],
+        ?OutputHelper $outputHelper = null
     ) {
         $this->_catalogLayer = $layerResolver->get();
         $this->_postDataHelper = $postDataHelper;
         $this->categoryRepository = $categoryRepository;
         $this->urlHelper = $urlHelper;
+        $data['outputHelper'] = $outputHelper ?? ObjectManager::getInstance()->get(OutputHelper::class);
         parent::__construct(
             $context,
             $data

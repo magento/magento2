@@ -4,13 +4,16 @@
  * See COPYING.txt for license details.
  */
 
-// phpcs:disable Magento2.Templates.ThisInTemplate
-
 /* @var \Magento\Sales\Block\Adminhtml\Order\Invoice\Create\Form $block */
+/** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
 ?>
 <form id="edit_form" class="order-invoice-edit" method="post" action="<?= $block->escapeUrl($block->getSaveUrl()) ?>">
     <?= $block->getBlockHtml('formkey') ?>
     <?php $_order = $block->getInvoice()->getOrder() ?>
+    <?php
+    /** @var \Magento\Tax\Helper\Data $taxHelper */
+    $taxHelper = $block->getData('taxHelper');
+    ?>
     <?= $block->getChildHtml('order_info') ?>
 
     <section class="admin__page-section">
@@ -18,17 +21,20 @@
             <span class="title"><?= $block->escapeHtml(__('Payment &amp; Shipping Method')) ?></span>
         </div>
         <div class="admin__page-section-content">
-            <div class="admin__page-section-item order-payment-method<?php if ($_order->getIsVirtual()) : ?> order-payment-method-virtual<?php endif; ?>">
+            <div class="admin__page-section-item order-payment-method
+            <?php if ($_order->getIsVirtual()): ?> order-payment-method-virtual<?php endif; ?>">
                 <div class="admin__page-section-item-title">
                     <span class="title"><?= $block->escapeHtml(__('Payment Information')) ?></span>
                 </div>
                 <div class="admin__page-section-item-content">
                     <div class="order-payment-method-title"><?= $block->getChildHtml('order_payment') ?></div>
-                    <div class="order-payment-currency"><?= $block->escapeHtml(__('The order was placed using %1.', $_order->getOrderCurrencyCode())) ?></div>
+                    <div class="order-payment-currency">
+                        <?= $block->escapeHtml(__('The order was placed using %1.', $_order->getOrderCurrencyCode())) ?>
+                    </div>
                     <div class="order-payment-additional"><?= $block->getChildHtml('order_payment_additional') ?></div>
                 </div>
             </div>
-            <?php if (!$_order->getIsVirtual()) : ?>
+            <?php if (!$_order->getIsVirtual()): ?>
                 <div class="admin__page-section-item order-shipping-address">
                     <?php /*Shipping Address */ ?>
                     <div class="admin__page-section-item-title">
@@ -36,35 +42,45 @@
                     </div>
                     <div class="admin__page-section-item-content">
                         <div class="shipping-description-wrapper">
-                            <div class="shipping-description-title"><?= $block->escapeHtml($_order->getShippingDescription()) ?></div>
+                            <div class="shipping-description-title">
+                                <?= $block->escapeHtml($_order->getShippingDescription()) ?></div>
                             <div class="shipping-description-content">
                                 <?= $block->escapeHtml(__('Total Shipping Charges')) ?>:
 
-                                <?php if ($this->helper(\Magento\Tax\Helper\Data::class)->displayShippingPriceIncludingTax()) : ?>
+                                <?php if ($taxHelper->displayShippingPriceIncludingTax()): ?>
                                     <?php $_excl = $block->displayShippingPriceInclTax($_order); ?>
-                                <?php else : ?>
+                                <?php else: ?>
                                     <?php $_excl = $block->displayPriceAttribute('shipping_amount', false, ' '); ?>
                                 <?php endif; ?>
                                 <?php $_incl = $block->displayShippingPriceInclTax($_order); ?>
 
                                 <?= /* @noEscape */ $_excl ?>
-                                <?php if ($this->helper(\Magento\Tax\Helper\Data::class)->displayShippingBothPrices() && $_incl != $_excl) : ?>
+                                <?php if ($taxHelper->displayShippingBothPrices() && $_incl != $_excl): ?>
                                     (<?= $block->escapeHtml(__('Incl. Tax')) ?> <?= /* @noEscape */ $_incl ?>)
                                 <?php endif; ?>
                             </div>
                         </div>
-                        <?php if ($block->canCreateShipment() && $block->canShipPartiallyItem()) : ?>
+                        <?php if ($block->canCreateShipment() && $block->canShipPartiallyItem()): ?>
                             <div class="admin__field admin__field-option">
                                 <input type="checkbox" name="invoice[do_shipment]" id="invoice_do_shipment" value="1"
-                                       class="admin__control-checkbox" <?= $block->hasInvoiceShipmentTypeMismatch() ? ' disabled="disabled"' : '' ?> />
+                                       class="admin__control-checkbox"
+                                    <?= $block->hasInvoiceShipmentTypeMismatch() ? ' disabled="disabled"' : '' ?> />
                                 <label for="invoice_do_shipment"
-                                       class="admin__field-label"><span><?= $block->escapeHtml(__('Create Shipment')) ?></span></label>
+                                       class="admin__field-label">
+                                    <span><?= $block->escapeHtml(__('Create Shipment')) ?></span>
+                                </label>
                             </div>
-                            <?php if ($block->hasInvoiceShipmentTypeMismatch()) : ?>
-                                <small><?= $block->escapeHtml(__('Invoice and shipment types do not match for some items on this order. You can create a shipment only after creating the invoice.')) ?></small>
+                            <?php if ($block->hasInvoiceShipmentTypeMismatch()): ?>
+                                <small>
+                                    <?= $block->escapeHtml(__(
+                                        'Invoice and shipment types do not match for some items on this order. ' .
+                                        'You can create a shipment only after creating the invoice.'
+                                    )) ?>
+                                </small>
                             <?php endif; ?>
                         <?php endif; ?>
-                        <div id="tracking" style="display:none;"><?= $block->getChildHtml('tracking', false) ?></div>
+                        <div id="tracking"><?= $block->getChildHtml('tracking', false) ?></div>
+                        <?= /* @noEscape */ $secureRenderer->renderStyleAsTag("display:none;", 'div#tracking') ?>
                     </div>
                 </div>
             <?php endif; ?>
@@ -75,7 +91,10 @@
         <?= $block->getChildHtml('order_items') ?>
     </section>
 </form>
-<script>
+
+<?php $forcedShipmentCreate = (int) $block->getForcedShipmentCreate();
+$scriptString = <<<script
+
 require(['prototype'], function(){
 
 //<![CDATA[
@@ -91,7 +110,7 @@ require(['prototype'], function(){
     }
 
     /*forced creating of shipment*/
-    var forcedShipmentCreate = <?= (int) $block->getForcedShipmentCreate() ?>;
+    var forcedShipmentCreate = {$forcedShipmentCreate};
     var shipmentElement = $('invoice_do_shipment');
     if (forcedShipmentCreate && shipmentElement) {
         shipmentElement.checked = true;
@@ -105,4 +124,6 @@ require(['prototype'], function(){
 //]]>
 
 });
-</script>
+script;
+?>
+<?= /* @noEscape */ $secureRenderer->renderTag('script', [], $scriptString, false) ?>
