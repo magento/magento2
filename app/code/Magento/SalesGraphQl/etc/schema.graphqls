@@ -45,6 +45,7 @@ type CustomerOrder @doc(description: "Contains details about each of the custome
     number: String! @doc(description: "The order number")
     items: [OrderItemInterface] @doc(description: "An array containing the items purchased in this order") @resolver(class: "Magento\\SalesGraphQl\\Model\\Resolver\\OrderItems")
     total: OrderTotal @doc(description: "Contains details about the calculated totals for this order") @resolver(class: "Magento\\SalesGraphQl\\Model\\Resolver\\OrderTotal")
+    invoices: [Invoice]! @doc(description: "Invoice list for the order") @resolver(class: "Magento\\SalesGraphQl\\Model\\Resolver\\Invoices")
     credit_memos: [CreditMemo] @doc(description: "credit memo list for the order")
     shipments: [OrderShipment] @doc(description: "shipment list for the order")
     payment_methods: [PaymentMethod] @doc(description: "payment details for the order")
@@ -113,8 +114,8 @@ type OrderTotal implements SalesTotalAmountInterface @doc(description: "Contains
 type Invoice @doc(description: "Invoice details") {
     id: ID! @doc(description: "The ID of the invoice, used for API purposes")
     number: String! @doc(description: "Sequential invoice number")
-    total: InvoiceTotal @doc(description: "Invoice total amount details")
-    items: [InvoiceItemInterface] @doc(description: "Invoiced product details")
+    total: InvoiceTotal @doc(description: "Invoice total amount details") @resolver(class: "Magento\\SalesGraphQl\\Model\\Resolver\\InvoiceTotal")
+    items: [InvoiceItemInterface] @doc(description: "Invoiced product details") @resolver(class: "Magento\\SalesGraphQl\\Model\\Resolver\\InvoiceItem")
     comments: [CommentItem] @doc(description: "Comments on the invoice")
 }
 

@@ -15,23 +15,12 @@ use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\GraphQl\Model\Query\ContextInterface;
 use Magento\Sales\Api\Data\InvoiceInterface as Invoice;
 use Magento\Sales\Model\Order;
-use Magento\SalesGraphQl\Model\SalesItem\SalesItemFactory;
 
 /**
  * Resolver for Invoice Item
  */
 class InvoiceItem implements ResolverInterface
 {
-    /**
-     * @var SalesItemFactory
-     */
-    private $salesItemFactory;
-
-    public function __construct(SalesItemFactory $salesItemFactory)
-    {
-        $this->salesItemFactory = $salesItemFactory;
-    }
-
     /**
      * @inheritdoc
      */
@@ -60,12 +49,15 @@ class InvoiceItem implements ResolverInterface
         $invoiceItems = [];
         $parentOrder = $value['order'];
         foreach ($invoiceModel->getItems() as $invoiceItem) {
-            $salesOrderItem = $this->salesItemFactory->create(
-                $parentOrder->getItemById($invoiceItem->getOrderItemId()),
-                $parentOrder,
-                ['quantity_invoiced' => $invoiceItem->getQty()]
-            );
-            $invoiceItems[] = $salesOrderItem->convertToArray();
+            $invoiceItems[] = [
+                'product_sku' => $invoiceItem->getSku(),
+                'product_name' => $invoiceItem->getName(),
+                'product_sale_price' => [
+                    'currency' => $parentOrder->getOrderCurrencyCode(),
+                    'value' => $invoiceItem->getPrice()
+                ],
+                'quantity_invoiced' => $invoiceItem->getQty()
+            ];
         }
         return $invoiceItems;
     }

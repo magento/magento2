@@ -18,7 +18,7 @@ class OrderItemTypeResolver implements TypeResolverInterface
     {
         if (isset($data['product_type'])) {
             if ($data['product_type'] == 'bundle') {
-                return 'OrderItemBundle';
+                return 'BundleOrderItem';
             }
         }
         return 'OrderItem';
