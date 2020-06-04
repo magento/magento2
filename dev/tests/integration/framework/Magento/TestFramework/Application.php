@@ -363,8 +363,6 @@ class Application
         Helper\Bootstrap::setObjectManager($objectManager);
         $this->initLogger();
         $sequenceBuilder = $objectManager->get(\Magento\TestFramework\Db\Sequence\Builder::class);
-        /** @var \Magento\TestFramework\Db\DynamicTables $dynamicTables */
-        $dynamicTables = $objectManager->get(\Magento\TestFramework\Db\DynamicTables::class);
         $objectManager->addSharedInstance($sequenceBuilder, \Magento\SalesSequence\Model\Builder::class);
 
         $objectManagerConfiguration = [
@@ -421,9 +419,19 @@ class Application
             $sequence = $objectManager->get(\Magento\TestFramework\Db\Sequence::class);
             $sequence->generateSequences();
         }
-        $dynamicTables->createTables();
+        $this->createDynamicTables();
         $objectManager->create(\Magento\TestFramework\Config::class, ['configPath' => $this->globalConfigFile])
             ->rewriteAdditionalConfig();
+    }
+
+    /**
+     * Create dynamic tables
+     */
+    protected function createDynamicTables()
+    {
+        /** @var \Magento\TestFramework\Db\DynamicTables $dynamicTables */
+        $dynamicTables = Helper\Bootstrap::getObjectManager()->get(\Magento\TestFramework\Db\DynamicTables::class);
+        $dynamicTables->createTables();
     }
 
     /**

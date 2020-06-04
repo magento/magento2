@@ -34,4 +34,11 @@ class SetupApplication extends Application
     {
         throw new \Exception("Can't start application.");
     }
+
+    /**
+     * Create dynamic tables
+     */
+    protected function createDynamicTables()
+    {
+    }
 }
