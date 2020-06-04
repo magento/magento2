@@ -316,13 +316,7 @@ class ShippingMethodManagement implements
     {
         $output = [];
         $shippingAddress = $quote->getShippingAddress();
-
-        $extractedAddressData = $this->extractAddressData($address);
-        if (array_key_exists('extension_attributes', $extractedAddressData)) {
-            unset($extractedAddressData['extension_attributes']);
-        }
-        $shippingAddress->addData($extractedAddressData);
-
+        $shippingAddress->addData($this->extractAddressData($address));
         $shippingAddress->setCollectShippingRates(true);
 
         $this->totalsCollector->collectAddressTotals($quote, $shippingAddress);
