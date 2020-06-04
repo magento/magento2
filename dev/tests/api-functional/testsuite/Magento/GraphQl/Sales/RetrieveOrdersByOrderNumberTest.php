@@ -33,7 +33,7 @@ class RetrieveOrdersByOrderNumberTest extends GraphQlAbstract
     /** @var Order\Item */
     private $orderItem;
 
-    protected function setUp()
+    protected function setUp():void
     {
         parent::setUp();
         $objectManager = Bootstrap::getObjectManager();
@@ -63,14 +63,13 @@ class RetrieveOrdersByOrderNumberTest extends GraphQlAbstract
       number
       status
       order_date
-      order_items{
+      items{
         quantity_ordered
         product_sku
-        product_url
         product_name
         product_sale_price{currency value}
       }
-      totals {
+      total {
                     base_grand_total {
                         value
                         currency
@@ -79,19 +78,13 @@ class RetrieveOrdersByOrderNumberTest extends GraphQlAbstract
                         value
                         currency
                     }
-                    shipping_handling {
-                        value
-                        currency
-                    }
+                   shipping_handling{total_amount{value currency}}
                     subtotal {
                         value
                         currency
                     }
-                    tax {
-                        value
-                        currency
-                    }
-                    discounts {
+                  taxes {amount {currency value} title rate}
+                  discounts {
                         amount {
                             value
                             currency
@@ -115,8 +108,8 @@ QUERY;
         $customerOrderItemsInResponse = $response['customer']['orders']['items'][0];
         $expectedCount = count($response['customer']['orders']['items']);
         $this->assertCount($expectedCount, $response['customer']['orders']['items']);
-        $this->assertArrayHasKey('order_items', $customerOrderItemsInResponse);
-        $this->assertNotEmpty($customerOrderItemsInResponse['order_items']);
+        $this->assertArrayHasKey('items', $customerOrderItemsInResponse);
+        $this->assertNotEmpty($customerOrderItemsInResponse['items']);
 
         $searchCriteria = $this->searchCriteriaBuilder->addFilter('increment_id', '100000002')
             ->create();
@@ -132,11 +125,10 @@ QUERY;
         $expectedOrderItems =
             [ 'quantity_ordered'=> 2,
                 'product_sku'=> 'simple',
-                "product_url"=> 'url',
                 'product_name'=> 'Simple Product',
                 'product_sale_price'=> ['currency'=> null, 'value'=> 10]
             ];
-        $actualOrderItemsFromResponse = $customerOrderItemsInResponse['order_items'][0];
+        $actualOrderItemsFromResponse = $customerOrderItemsInResponse['items'][0];
         $this->assertEquals($expectedOrderItems, $actualOrderItemsFromResponse);
         //TODO: below function needs to be updated to reflect totals based on the order number used in each test
 //        $this->assertTotals($response, $expectedCount);
@@ -146,7 +138,95 @@ QUERY;
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
      * @magentoApiDataFixture Magento/Sales/_files/orders_with_customer.php
      */
-    public function testGetMultipleCustomerOrdersQuery()
+    public function testGetMatchingCustomerOrders()
+    {
+        $query =
+            <<<QUERY
+{
+  customer
+  {
+   orders(filter:{number:{match:"100"}}){
+    total_count
+    page_info{
+      total_pages
+      current_page
+      page_size
+    }
+    items
+    {
+      id
+      number
+      status
+      order_date
+      items{
+        quantity_ordered
+        product_sku
+        product_name
+        parent_product_sku
+        product_sale_price{currency value}
+      }
+
+    }
+   }
+ }
+}
+QUERY;
+
+        $currentEmail = 'customer@example.com';
+        $currentPassword = 'password';
+        $response = $this->graphQlQuery($query, [], '', $this->getCustomerAuthHeaders($currentEmail, $currentPassword));
+        $this->assertArrayHasKey('orders', $response['customer']);
+        $this->assertArrayHasKey('items', $response['customer']['orders']);
+        $this->assertArrayHasKey('total_count', $response['customer']['orders']);
+        $this->assertEquals(4, $response['customer']['orders']['total_count']);
+    }
+    /**
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     * @magentoApiDataFixture Magento/Sales/_files/orders_with_customer.php
+     */
+    public function testGetMatchingOrdersForLowerQueryLength()
+    {
+        $query =
+            <<<QUERY
+{
+ customer
+ {
+  orders(filter:{number:{match:"00"}}){
+   total_count
+   page_info{
+     total_pages
+     current_page
+     page_size
+   }
+   items
+   {
+     id
+     number
+     status
+     order_date
+     items{
+       quantity_ordered
+       product_sku
+       product_name
+     }
+   }
+  }
+}
+}
+QUERY;
+
+        $currentEmail = 'customer@example.com';
+        $currentPassword = 'password';
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Invalid match filter. Minimum length is 3.');
+        $this->graphQlQuery($query, [], '', $this->getCustomerAuthHeaders($currentEmail, $currentPassword));
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     * @magentoApiDataFixture Magento/Sales/_files/orders_with_customer.php
+     */
+    public function testGetMultipleCustomerOrdersQueryWithDefaultPagination()
     {
         $query =
             <<<QUERY
@@ -155,16 +235,20 @@ QUERY;
   {
    orders(filter:{number:{in:["100000005","100000006"]}}){
     total_count
+    page_info{
+      total_pages
+      current_page
+      page_size
+    }
     items
     {
       id
       number
       status
       order_date
-      order_items{
+      items{
         quantity_ordered
         product_sku
-        product_url
         product_name
         parent_product_sku
         product_sale_price{currency value}
@@ -178,18 +262,12 @@ QUERY;
                         value
                         currency
                     }
-                    shipping_handling {
-                        value
-                        currency
-                    }
+                    shipping_handling{total_amount{value currency}}
                     subtotal {
                         value
                         currency
                     }
-                    tax {
-                        value
-                        currency
-                    }
+                    taxes {amount {currency value} title rate}
                     discounts {
                         amount {
                             value
@@ -212,6 +290,11 @@ QUERY;
         $this->assertArrayHasKey('items', $response['customer']['orders']);
         $this->assertArrayHasKey('total_count', $response['customer']['orders']);
         $this->assertEquals(2, $response['customer']['orders']['total_count']);
+        $this->assertArrayHasKey('page_info', $response['customer']['orders']);
+        $pageInfo = $response['customer']['orders']['page_info'];
+        $this->assertEquals(1, $pageInfo['current_page']);
+        $this->assertEquals(20, $pageInfo['page_size']);
+        $this->assertEquals(1, $pageInfo['total_pages']);
         $this->assertNotEmpty($response['customer']['orders']['items']);
         $customerOrderItemsInResponse = $response['customer']['orders']['items'];
         $this->assertCount(2, $response['customer']['orders']['items']);
@@ -238,8 +321,6 @@ QUERY;
     /**
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
      * @magentoApiDataFixture Magento/Sales/_files/orders_with_customer.php
-     * @expectedException \Exception
-     * @expectedExceptionMessage The current customer isn't authorized.
      */
     public function testGetCustomerOrdersUnauthorizedCustomer()
     {
@@ -261,12 +342,14 @@ QUERY;
  }
 }
 QUERY;
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('The current customer isn\'t authorized.');
         $this->graphQlQuery($query);
     }
 
     /**
      * @magentoApiDataFixture Magento/Customer/_files/two_customers.php
-     * @magentoApiDataFixture Magento/Sales/_files/two_orders_for_two_diff_customers.php
+     * @magentoApiDataFixture Magento/GraphQl/Sales/_files/two_orders_for_two_diff_customers.php
      */
     public function testGetCustomerOrdersWithWrongCustomer()
     {
@@ -313,7 +396,7 @@ QUERY;
 
     /**
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
-     * @magentoApiDataFixture Magento/Sales/_files/order_with_totals.php
+     * @magentoApiDataFixture Magento/GraphQl/Sales/_files/order_with_totals.php
      */
     public function testGetCustomerOrdersOnTotals()
     {
@@ -338,18 +421,12 @@ QUERY;
             value
             currency
           }
-          shipping_handling {
-            value
-            currency
-          }
+        shipping_handling{total_amount{value currency}}
           subtotal {
             value
             currency
           }
-          tax {
-            value
-            currency
-          }
+          taxes {amount{value currency} title rate}
           discounts {
             amount {
               value
@@ -396,10 +473,10 @@ QUERY;
     items
     {
       number
-      order_items{
+      items{
         product_sku
       }
-      totals {
+      total {
                     base_grand_total {
                         value
                         currency
@@ -408,18 +485,12 @@ QUERY;
                         value
                         currency
                     }
-                    shipping_handling {
-                        value
-                        currency
-                    }
+                    shipping_handling{total_amount{value currency}}
                     subtotal {
                         value
                         currency
                     }
-                    tax {
-                        value
-                        currency
-                    }
+                    taxes {amount{value currency} title rate}
                     discounts {
                         amount {
                             value
@@ -481,7 +552,7 @@ QUERY;
      * @throws \Magento\Framework\Exception\AuthenticationException
      * @dataProvider dataProviderMultiStores
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
-     * @magentoApiDataFixture Magento/Sales/_files/two_orders_with_order_items_two_storeviews.php
+     * @magentoApiDataFixture Magento/GraphQl/Sales/_files/two_orders_with_order_items_two_storeviews.php
      */
     public function testGetCustomerOrdersTwoStoreViewQuery(string $orderNumber, string $store, int $expectedCount)
     {
@@ -494,10 +565,10 @@ QUERY;
     items
     {
       number
-      order_items{
+      items{
         product_sku
       }
-      totals {
+      total {
                     base_grand_total {
                         value
                         currency
@@ -506,18 +577,12 @@ QUERY;
                         value
                         currency
                     }
-                    shipping_handling {
-                        value
-                        currency
-                    }
+                    shipping_handling {total_amount{value currency}}
                     subtotal {
                         value
                         currency
                     }
-                    tax {
-                        value
-                        currency
-                    }
+                    taxes {amount{value currency} title rate}
                     discounts {
                         amount {
                             value
@@ -602,43 +667,43 @@ QUERY;
         } else {
             $this->assertEquals(
                 100,
-                $response['customer']['orders']['items'][0]['totals']['base_grand_total']['value']
+                $response['customer']['orders']['items'][0]['total']['base_grand_total']['value']
             );
             $this->assertEquals(
                 'USD',
-                $response['customer']['orders']['items'][0]['totals']['base_grand_total']['currency']
+                $response['customer']['orders']['items'][0]['total']['base_grand_total']['currency']
             );
             $this->assertEquals(
                 100,
-                $response['customer']['orders']['items'][0]['totals']['grand_total']['value']
+                $response['customer']['orders']['items'][0]['total']['grand_total']['value']
             );
             $this->assertEquals(
                 'USD',
-                $response['customer']['orders']['items'][0]['totals']['grand_total']['currency']
+                $response['customer']['orders']['items'][0]['total']['grand_total']['currency']
             );
             $this->assertEquals(
                 110,
-                $response['customer']['orders']['items'][0]['totals']['subtotal']['value']
+                $response['customer']['orders']['items'][0]['total']['subtotal']['value']
             );
             $this->assertEquals(
                 'USD',
-                $response['customer']['orders']['items'][0]['totals']['subtotal']['currency']
+                $response['customer']['orders']['items'][0]['total']['subtotal']['currency']
             );
             $this->assertEquals(
                 10,
-                $response['customer']['orders']['items'][0]['totals']['shipping_handling']['value']
+                $response['customer']['orders']['items'][0]['total']['shipping_handling']['total_amount']['value']
             );
             $this->assertEquals(
                 'USD',
-                $response['customer']['orders']['items'][0]['totals']['shipping_handling']['currency']
+                $response['customer']['orders']['items'][0]['total']['shipping_handling']['total_amount']['currency']
             );
             $this->assertEquals(
                 5,
-                $response['customer']['orders']['items'][0]['totals']['tax']['value']
+                $response['customer']['orders']['items'][0]['total']['taxes'][0]['amount']['value']
             );
             $this->assertEquals(
                 'USD',
-                $response['customer']['orders']['items'][0]['totals']['tax']['currency']
+                $response['customer']['orders']['items'][0]['total']['taxes'][0]['amount']['currency']
             );
         }
 

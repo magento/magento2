@@ -44,13 +44,13 @@ class OrderTotal implements ResolverInterface
                 'grand_total' => ['value' =>  $orderModel->getGrandTotal(), 'currency' => $currency],
                 'subtotal' => ['value' =>  $orderModel->getSubtotal(), 'currency' => $currency],
                 'total_tax' => ['value' =>  $orderModel->getTaxAmount(), 'currency' => $currency],
-                'taxes' => $this->getAppliedTaxes($orderModel, $currency),
+                'taxes' => $this->getAppliedTaxes($orderModel),
                 'total_shipping' => ['value' => $orderModel->getShippingAmount(), 'currency' => $currency],
                 'shipping_handling' => [
                     'amount_exc_tax' => ['value' => $orderModel->getShippingTaxAmount(), 'currency' => $currency],
                     'amount_inc_tax' => ['value' => $orderModel->getShippingInclTax(), 'currency' => $currency],
-                    'total_amount' => ['value' => $orderModel->getBaseShippingTaxAmount(), 'currency' => $currency],
-                    'taxes' => $this->getAppliedTaxes($orderModel, $currency)
+                    'total_amount' => ['value' => $orderModel->getBaseShippingAmount(), 'currency' => $currency],
+                    'taxes' => $this->getAppliedTaxes($orderModel)
                     ]
         ];
         return $totals;
@@ -60,15 +60,14 @@ class OrderTotal implements ResolverInterface
      * Returns taxes applied to the current order
      *
      * @param Order $orderModel
-     * @param string $currency
      * @return array
      */
-    private function getAppliedTaxes(Order $orderModel, string $currency): array
+    private function getAppliedTaxes(Order $orderModel): array
     {
         $taxes[] = [
             'rate' => $orderModel->getStoreToOrderRate(),
             'title' => $orderModel->getCustomerName(),
-            'amount' => [ 'value' =>  $orderModel->getTaxAmount(), 'currency' => $currency
+            'amount' => [ 'value' =>  $orderModel->getTaxAmount(), 'currency' => $orderModel->getOrderCurrencyCode()
             ]
         ];
         return $taxes;

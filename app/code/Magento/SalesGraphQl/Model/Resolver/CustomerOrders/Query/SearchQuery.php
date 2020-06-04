@@ -7,11 +7,12 @@ declare(strict_types=1);
 
 namespace Magento\SalesGraphQl\Model\Resolver\CustomerOrders\Query;
 
-use Magento\Sales\Model\Order;
-use Magento\Framework\Exception\InputException;
-use Magento\Sales\Model\ResourceModel\Order\CollectionFactoryInterface;
-use Magento\Framework\DataObjectFactory;
+use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\DataObject;
+use Magento\Framework\DataObjectFactory;
+use Magento\Framework\Exception\InputException;
+use Magento\Sales\Api\OrderRepositoryInterface;
+use Magento\Sales\Model\Order;
 use Magento\Store\Api\Data\StoreInterface;
 
 /**
@@ -20,9 +21,14 @@ use Magento\Store\Api\Data\StoreInterface;
 class SearchQuery
 {
     /**
-     * @var CollectionFactoryInterface
+     * @var SearchCriteriaBuilder
      */
-    private $collectionFactory;
+    private $searchCriteriaBuilder;
+
+    /**
+     * @var OrderRepositoryInterface
+     */
+    private $orderRepository;
 
     /**
      * @var OrderFilter
@@ -35,16 +41,19 @@ class SearchQuery
     private $dataObjectFactory;
 
     /**
-     * @param CollectionFactoryInterface $collectionFactoryInterface
+     * @param OrderRepositoryInterface $orderRepository
+     * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @param OrderFilter $orderFilter
      * @param DataObjectFactory $dataObjectFactory
      */
     public function __construct(
-        CollectionFactoryInterface $collectionFactory,
+        OrderRepositoryInterface $orderRepository,
+        SearchCriteriaBuilder $searchCriteriaBuilder,
         OrderFilter $orderFilter,
         DataObjectFactory $dataObjectFactory
     ) {
-        $this->collectionFactory = $collectionFactory;
+        $this->orderRepository = $orderRepository;
+        $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->orderFilter = $orderFilter;
         $this->dataObjectFactory = $dataObjectFactory;
     }
@@ -63,26 +72,25 @@ class SearchQuery
         int $userId,
         StoreInterface $store
     ): DataObject {
-        $collection = $this->collectionFactory->create($userId);
-        $collection->addFilter('store_id', $store->getId());
-
-        $this->orderFilter->applyFilter($args, $collection, $store);
+        $this->orderFilter->applyFilter($userId, $args, $store, $this->searchCriteriaBuilder);
         if (isset($args['currentPage'])) {
-            $collection->setCurPage($args['currentPage']);
+            $this->searchCriteriaBuilder->setCurrentPage($args['currentPage']);
         }
         if (isset($args['pageSize'])) {
-            $collection->setPageSize($args['pageSize']);
+            $this->searchCriteriaBuilder->setPageSize($args['pageSize']);
         }
 
+        $searchCriteria = $this->searchCriteriaBuilder->create();
+        $searchResult = $this->orderRepository->getList($searchCriteria);
         $orderArray = [];
         /** @var Order $order */
-        foreach ($collection->getItems() as $key => $order) {
+        foreach ($searchResult->getItems() as $key => $order) {
             $orderArray[$key] = $order->getData();
             $orderArray[$key]['model'] = $order;
         }
 
-        if ($collection->getPageSize()) {
-            $maxPages = (int)ceil($collection->getTotalCount() / $collection->getPageSize());
+        if ($searchResult->getPageSize()) {
+            $maxPages = (int)ceil($searchResult->getTotalCount() / $searchResult->getPageSize());
         } else {
             throw new InputException(__('Collection doesn\'t have set a page size'));
         }
@@ -90,10 +98,10 @@ class SearchQuery
         return $this->dataObjectFactory->create(
             [
                 'data' => [
-                        'total_count' => $collection->getTotalCount(),
+                        'total_count' => $searchResult->getTotalCount(),
                         'items' => $orderArray ?? [],
-                        'page_size' => $collection->getPageSize(),
-                        'current_page' => $collection->getCurPage(),
+                        'page_size' => $searchResult->getPageSize(),
+                        'current_page' => $searchResult->getCurPage(),
                         'total_pages' => $maxPages,
                     ]
             ]

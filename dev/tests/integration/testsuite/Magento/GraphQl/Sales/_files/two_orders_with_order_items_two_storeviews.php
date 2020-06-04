@@ -4,25 +4,29 @@
  * See COPYING.txt for license details.
  */
 
+use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Sales\Model\Order;
+use Magento\Store\Model\Store;
 use Magento\Sales\Model\Order\Address as OrderAddress;
 use Magento\Sales\Model\Order\Item as OrderItem;
 use Magento\Sales\Model\Order\Payment;
 use Magento\Store\Model\StoreManagerInterface;
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
 
-require 'default_rollback.php';
-require __DIR__ . '/../../../Magento/Catalog/_files/product_simple.php';
-require __DIR__ . '/../../../Magento/Customer/_files/customer.php';
-require __DIR__ . '/../../../Magento/Store/_files/second_store.php';
+Resolver::getInstance()->requireDataFixture('Magento/Sales/_files/default_rollback.php');
+Resolver::getInstance()->requireDataFixture('Magento/Catalog/_files/product_simple.php');
+Resolver::getInstance()->requireDataFixture('Magento/Customer/_files/customer.php');
+Resolver::getInstance()->requireDataFixture('Magento/Store/_files/second_store.php');
+
 /** @var \Magento\Catalog\Model\Product $product */
 
 $addressData = include __DIR__ . '/address_data.php';
 
-$objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+$objectManager = Bootstrap::getObjectManager();
 
-$secondStore = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-    ->create(\Magento\Store\Model\Store::class);
+$secondStore = Bootstrap::getObjectManager()
+    ->create(Store::class);
 
 $billingAddress = $objectManager->create(OrderAddress::class, ['data' => $addressData]);
 $billingAddress->setAddressType('billing');
@@ -61,6 +65,7 @@ $order->setIncrementId('100000001')
     ->setSubtotal(110)
     ->setOrderCurrencyCode("USD")
     ->setShippingAmount(10.0)
+    ->setBaseShippingAmount(10.0)
     ->setTaxAmount(5.0)
     ->setGrandTotal(100)
     ->setBaseSubtotal(10)
@@ -110,6 +115,7 @@ $secondOrder->setIncrementId('100000002')
     ->setSubtotal(110)
     ->setOrderCurrencyCode("USD")
     ->setShippingAmount(10.0)
+    ->setBaseShippingAmount(10.0)
     ->setTaxAmount(5.0)
     ->setGrandTotal(100)
     ->setBaseSubtotal(110)
