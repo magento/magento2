@@ -865,6 +865,7 @@ class Installer
      * Installs data fixtures
      *
      * @param array $request
+     * @param boolean $keepCacheStatuses
      * @return void
      */
     public function installDataFixtures(array $request = [], $keepCacheStatuses = false)
@@ -875,7 +876,7 @@ class Installer
             LayoutCache::TYPE_IDENTIFIER,
         ];
 
-        if($keepCacheStatuses){
+        if ($keepCacheStatuses) {
             $cacheManager = $this->objectManagerProvider->get()->create(\Magento\Framework\App\Cache\Manager::class);
             $disabledCaches = array_filter(
                 $cacheManager->getStatus(),
@@ -901,7 +902,7 @@ class Installer
         $this->handleDBSchemaData($setup, 'data', $request);
         $this->log->log('Enabling caches:');
         $this->updateCaches(true, $frontendCaches);
-        if($keepCacheStatuses && !empty($disabledCaches)){
+        if ($keepCacheStatuses && !empty($disabledCaches)) {
             $this->log->log('Disabling pre-disabled caches:');
             $this->updateCaches(false, array_keys($disabledCaches));
         }
