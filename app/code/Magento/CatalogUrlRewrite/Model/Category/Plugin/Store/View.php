@@ -19,7 +19,6 @@ use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
  *
  * @see \Magento\Store\Model\ResourceModel\Store
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @package Magento\CatalogUrlRewrite\Model\Category\Plugin\Store
  */
 class View
 {
@@ -39,7 +38,7 @@ class View
     protected $productFactory;
 
     /**
-     * @var \Magento\CatalogUrlRewrite\Model\CategoryUrlRewriteGenerator
+     * @var CategoryUrlRewriteGenerator
      */
     protected $categoryUrlRewriteGenerator;
 
@@ -75,6 +74,8 @@ class View
     }
 
     /**
+     * Setter for Orig Store data
+     *
      * @param \Magento\Store\Model\ResourceModel\Store $object
      * @param AbstractModel $store
      * @return void
@@ -100,13 +101,12 @@ class View
         \Magento\Store\Model\ResourceModel\Store $store
     ) {
         if ($this->origStore->isObjectNew() || $this->origStore->dataHasChangedFor('group_id')) {
-            if (!$this->origStore->isObjectNew()) {
-                $this->urlPersist->deleteByData([UrlRewrite::STORE_ID => $this->origStore->getId()]);
-            }
-
-            $this->urlPersist->replace(
-                $this->generateCategoryUrls($this->origStore->getRootCategoryId(), $this->origStore->getId())
+            $categoryRewriteUrls = $this->generateCategoryUrls(
+                $this->origStore->getRootCategoryId(),
+                $this->origStore->getId()
             );
+
+            $this->urlPersist->replace($categoryRewriteUrls);
 
             $this->urlPersist->replace(
                 $this->generateProductUrls(
@@ -139,17 +139,18 @@ class View
             ->addAttributeToSelect(['name', 'url_path', 'url_key', 'visibility'])
             ->addWebsiteFilter($websiteIds);
         foreach ($collection as $product) {
-            $product->setStoreId($storeId);
             /** @var \Magento\Catalog\Model\Product $product */
-            $urls = array_merge(
-                $urls,
-                $this->productUrlRewriteGenerator->generate($product)
-            );
+            $product->setStoreId($storeId);
+            $urls[] = $this->productUrlRewriteGenerator->generate($product);
         }
+        $urls = array_merge([], ...$urls);
+
         return $urls;
     }
 
     /**
+     * Generate url rewrites for categories
+     *
      * @param int $rootCategoryId
      * @param int $storeId
      * @return array
@@ -157,15 +158,15 @@ class View
     protected function generateCategoryUrls($rootCategoryId, $storeId)
     {
         $urls = [];
-        $categories = $this->categoryFactory->create()->getCategories($rootCategoryId, 1, false, true);
+        $categories = $this->categoryFactory->create()->getCategories($rootCategoryId, 1, false, true, false);
+        $categories->setStoreId($storeId);
         foreach ($categories as $category) {
-            /** @var \Magento\Catalog\Model\Category $category */
+            /** @var Category $category */
             $category->setStoreId($storeId);
-            $urls = array_merge(
-                $urls,
-                $this->categoryUrlRewriteGenerator->generate($category)
-            );
+            $urls[] = $this->categoryUrlRewriteGenerator->generate($category);
         }
+        $urls = array_merge([], ...$urls);
+
         return $urls;
     }
 
