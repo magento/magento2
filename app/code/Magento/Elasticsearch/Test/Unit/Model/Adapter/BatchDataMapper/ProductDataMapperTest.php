@@ -3,24 +3,27 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Elasticsearch\Test\Unit\Model\Adapter\BatchDataMapper;
 
 use Magento\AdvancedSearch\Model\Adapter\DataMapper\AdditionalFieldsProviderInterface;
 use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
 use Magento\CatalogSearch\Model\Indexer\Fulltext\Action\DataProvider;
 use Magento\Eav\Api\Data\AttributeOptionInterface;
+use Magento\Eav\Model\Entity\Attribute\Source\SourceInterface;
 use Magento\Elasticsearch\Model\Adapter\BatchDataMapper\ProductDataMapper;
 use Magento\Elasticsearch\Model\Adapter\Document\Builder;
 use Magento\Elasticsearch\Model\Adapter\FieldMapperInterface;
 use Magento\Elasticsearch\Model\Adapter\FieldType\Date;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
- * Class ProductDataMapperTest
- *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ProductDataMapperTest extends \PHPUnit\Framework\TestCase
+class ProductDataMapperTest extends TestCase
 {
     /**
      * @var ProductDataMapper
@@ -28,45 +31,45 @@ class ProductDataMapperTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var Builder|\PHPUnit_Framework_MockObject_MockObject
+     * @var Builder|MockObject
      */
     private $builderMock;
 
     /**
-     * @var Attribute|\PHPUnit_Framework_MockObject_MockObject
+     * @var Attribute|MockObject
      */
     private $attribute;
 
     /**
-     * @var FieldMapperInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var FieldMapperInterface|MockObject
      */
     private $fieldMapperMock;
 
     /**
-     * @var Date|\PHPUnit_Framework_MockObject_MockObject
+     * @var Date|MockObject
      */
     private $dateFieldTypeMock;
 
     /**
-     * @var AdditionalFieldsProviderInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var AdditionalFieldsProviderInterface|MockObject
      */
     private $additionalFieldsProvider;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     private $dataProvider;
 
     /**
      * Set up test environment.
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->builderMock = $this->createTestProxy(Builder::class);
-        $this->fieldMapperMock = $this->createMock(FieldMapperInterface::class);
+        $this->fieldMapperMock = $this->getMockForAbstractClass(FieldMapperInterface::class);
         $this->dataProvider = $this->createMock(DataProvider::class);
         $this->attribute = $this->createMock(Attribute::class);
-        $this->additionalFieldsProvider = $this->createMock(AdditionalFieldsProviderInterface::class);
+        $this->additionalFieldsProvider = $this->getMockForAbstractClass(AdditionalFieldsProviderInterface::class);
         $this->dateFieldTypeMock = $this->createMock(Date::class);
 
         $objectManager = new ObjectManagerHelper($this);
@@ -97,10 +100,10 @@ class ProductDataMapperTest extends \PHPUnit\Framework\TestCase
         $this->builderMock->expects($this->any())
             ->method('addFields')
             ->withConsecutive([$additionalFields])
-            ->will($this->returnSelf());
+            ->willReturnSelf();
         $this->builderMock->expects($this->any())
             ->method('build')
-            ->will($this->returnValue([]));
+            ->willReturn([]);
         $this->additionalFieldsProvider->expects($this->once())
             ->method('getFields')
             ->with([$productId], $storeId)
@@ -193,23 +196,31 @@ class ProductDataMapperTest extends \PHPUnit\Framework\TestCase
      * Return attribute mock
      *
      * @param array attributeData
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return MockObject
      */
-    private function getAttribute(array $attributeData): \PHPUnit_Framework_MockObject_MockObject
+    private function getAttribute(array $attributeData): MockObject
     {
-        $attributeMock = $this->createMock(Attribute::class);
-        $attributeMock->method('getAttributeCode')->willReturn($attributeData['code']);
-        $attributeMock->method('getBackendType')->willReturn($attributeData['backendType']);
-        $attributeMock->method('getFrontendInput')->willReturn($attributeData['frontendInput']);
-        $attributeMock->method('getIsSearchable')->willReturn($attributeData['is_searchable']);
+        $attributeMock = $this->createPartialMock(
+            Attribute::class,
+            [
+                'getSource',
+                'getOptions',
+            ]
+        );
+
+        $sourceMock = $this->createMock(SourceInterface::class);
+        $attributeMock->method('getSource')->willReturn($sourceMock);
+        $sourceMock->method('getAllOptions')->willReturn($attributeData['options'] ?? []);
         $options = [];
         foreach ($attributeData['options'] as $option) {
-            $optionMock = $this->createMock(AttributeOptionInterface::class);
+            $optionMock = $this->getMockForAbstractClass(AttributeOptionInterface::class);
             $optionMock->method('getValue')->willReturn($option['value']);
             $optionMock->method('getLabel')->willReturn($option['label']);
             $options[] = $optionMock;
         }
         $attributeMock->method('getOptions')->willReturn($options);
+        unset($attributeData['options']);
+        $attributeMock->setData($attributeData);
 
         return $attributeMock;
     }
@@ -224,9 +235,9 @@ class ProductDataMapperTest extends \PHPUnit\Framework\TestCase
             'text' => [
                 10,
                 [
-                    'code' => 'description',
-                    'backendType' => 'text',
-                    'frontendInput' => 'text',
+                    'attribute_code' => 'description',
+                    'backend_type' => 'text',
+                    'frontend_input' => 'text',
                     'is_searchable' => false,
                     'options' => [],
                 ],
@@ -236,9 +247,9 @@ class ProductDataMapperTest extends \PHPUnit\Framework\TestCase
             'datetime' => [
                 10,
                 [
-                    'code' => 'created_at',
-                    'backendType' => 'datetime',
-                    'frontendInput' => 'date',
+                    'attribute_code' => 'created_at',
+                    'backend_type' => 'datetime',
+                    'frontend_input' => 'date',
                     'is_searchable' => false,
                     'options' => [],
                 ],
@@ -249,9 +260,9 @@ class ProductDataMapperTest extends \PHPUnit\Framework\TestCase
             'array single value' => [
                 10,
                 [
-                    'code' => 'attribute_array',
-                    'backendType' => 'text',
-                    'frontendInput' => 'text',
+                    'attribute_code' => 'attribute_array',
+                    'backend_type' => 'text',
+                    'frontend_input' => 'text',
                     'is_searchable' => false,
                     'options' => [],
                 ],
@@ -261,9 +272,9 @@ class ProductDataMapperTest extends \PHPUnit\Framework\TestCase
             'array multiple value' => [
                 10,
                 [
-                    'code' => 'attribute_array',
-                    'backendType' => 'text',
-                    'frontendInput' => 'text',
+                    'attribute_code' => 'attribute_array',
+                    'backend_type' => 'text',
+                    'frontend_input' => 'text',
                     'is_searchable' => false,
                     'options' => [],
                 ],
@@ -273,9 +284,9 @@ class ProductDataMapperTest extends \PHPUnit\Framework\TestCase
             'array multiple decimal value' => [
                 10,
                 [
-                    'code' => 'decimal_array',
-                    'backendType' => 'decimal',
-                    'frontendInput' => 'text',
+                    'attribute_code' => 'decimal_array',
+                    'backend_type' => 'decimal',
+                    'frontend_input' => 'text',
                     'is_searchable' => false,
                     'options' => [],
                 ],
@@ -285,9 +296,9 @@ class ProductDataMapperTest extends \PHPUnit\Framework\TestCase
             'array excluded from merge' => [
                 10,
                 [
-                    'code' => 'status',
-                    'backendType' => 'int',
-                    'frontendInput' => 'select',
+                    'attribute_code' => 'status',
+                    'backend_type' => 'int',
+                    'frontend_input' => 'select',
                     'is_searchable' => false,
                     'options' => [
                         ['value' => '1', 'label' => 'Enabled'],
@@ -300,9 +311,9 @@ class ProductDataMapperTest extends \PHPUnit\Framework\TestCase
             'select without options' => [
                 10,
                 [
-                    'code' => 'color',
-                    'backendType' => 'text',
-                    'frontendInput' => 'select',
+                    'attribute_code' => 'color',
+                    'backend_type' => 'text',
+                    'frontend_input' => 'select',
                     'is_searchable' => false,
                     'options' => [],
                 ],
@@ -312,9 +323,9 @@ class ProductDataMapperTest extends \PHPUnit\Framework\TestCase
             'unsearchable select with options' => [
                 10,
                 [
-                    'code' => 'color',
-                    'backendType' => 'text',
-                    'frontendInput' => 'select',
+                    'attribute_code' => 'color',
+                    'backend_type' => 'text',
+                    'frontend_input' => 'select',
                     'is_searchable' => false,
                     'options' => [
                         ['value' => '44', 'label' => 'red'],
@@ -327,9 +338,9 @@ class ProductDataMapperTest extends \PHPUnit\Framework\TestCase
             'searchable select with options' => [
                 10,
                 [
-                    'code' => 'color',
-                    'backendType' => 'text',
-                    'frontendInput' => 'select',
+                    'attribute_code' => 'color',
+                    'backend_type' => 'text',
+                    'frontend_input' => 'select',
                     'is_searchable' => true,
                     'options' => [
                         ['value' => '44', 'label' => 'red'],
@@ -342,9 +353,9 @@ class ProductDataMapperTest extends \PHPUnit\Framework\TestCase
             'composite select with options' => [
                 10,
                 [
-                    'code' => 'color',
-                    'backendType' => 'text',
-                    'frontendInput' => 'select',
+                    'attribute_code' => 'color',
+                    'backend_type' => 'text',
+                    'frontend_input' => 'select',
                     'is_searchable' => true,
                     'options' => [
                         ['value' => '44', 'label' => 'red'],
@@ -357,9 +368,9 @@ class ProductDataMapperTest extends \PHPUnit\Framework\TestCase
             'multiselect without options' => [
                 10,
                 [
-                    'code' => 'multicolor',
-                    'backendType' => 'text',
-                    'frontendInput' => 'multiselect',
+                    'attribute_code' => 'multicolor',
+                    'backend_type' => 'text',
+                    'frontend_input' => 'multiselect',
                     'is_searchable' => false,
                     'options' => [],
                 ],
@@ -369,9 +380,9 @@ class ProductDataMapperTest extends \PHPUnit\Framework\TestCase
             'unsearchable multiselect with options' => [
                 10,
                 [
-                    'code' => 'multicolor',
-                    'backendType' => 'text',
-                    'frontendInput' => 'multiselect',
+                    'attribute_code' => 'multicolor',
+                    'backend_type' => 'text',
+                    'frontend_input' => 'multiselect',
                     'is_searchable' => false,
                     'options' => [
                         ['value' => '44', 'label' => 'red'],
@@ -384,9 +395,9 @@ class ProductDataMapperTest extends \PHPUnit\Framework\TestCase
             'searchable multiselect with options' => [
                 10,
                 [
-                    'code' => 'multicolor',
-                    'backendType' => 'text',
-                    'frontendInput' => 'multiselect',
+                    'attribute_code' => 'multicolor',
+                    'backend_type' => 'text',
+                    'frontend_input' => 'multiselect',
                     'is_searchable' => true,
                     'options' => [
                         ['value' => '44', 'label' => 'red'],
@@ -399,9 +410,9 @@ class ProductDataMapperTest extends \PHPUnit\Framework\TestCase
             'composite multiselect with options' => [
                 10,
                 [
-                    'code' => 'multicolor',
-                    'backendType' => 'text',
-                    'frontendInput' => 'multiselect',
+                    'attribute_code' => 'multicolor',
+                    'backend_type' => 'text',
+                    'frontend_input' => 'multiselect',
                     'is_searchable' => true,
                     'options' => [
                         ['value' => '44', 'label' => 'red'],
@@ -415,9 +426,9 @@ class ProductDataMapperTest extends \PHPUnit\Framework\TestCase
             'excluded attribute' => [
                 10,
                 [
-                    'code' => 'price',
-                    'backendType' => 'int',
-                    'frontendInput' => 'int',
+                    'attribute_code' => 'price',
+                    'backend_type' => 'int',
+                    'frontend_input' => 'int',
                     'is_searchable' => false,
                     'options' => []
                 ],

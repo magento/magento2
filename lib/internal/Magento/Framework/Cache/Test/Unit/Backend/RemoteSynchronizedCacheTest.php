@@ -3,26 +3,31 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Framework\Cache\Test\Unit\Backend;
 
 use Magento\Framework\Cache\Backend\Database;
 use Magento\Framework\Cache\Backend\RemoteSynchronizedCache;
+use Magento\Framework\DB\Adapter\Pdo\Mysql;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class RemoteSynchronizedCacheTest extends \PHPUnit\Framework\TestCase
+class RemoteSynchronizedCacheTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
+     * @var ObjectManager
      */
     protected $objectManager;
 
     /**
-     * @var \Cm_Cache_Backend_File|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Cm_Cache_Backend_File|MockObject
      */
     private $localCacheMockExample;
 
     /**
-     * @var Database|\PHPUnit_Framework_MockObject_MockObject
+     * @var Database|MockObject
      */
     private $remoteCacheMockExample;
 
@@ -31,21 +36,21 @@ class RemoteSynchronizedCacheTest extends \PHPUnit\Framework\TestCase
      */
     private $remoteSyncCacheInstance;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $this->objectManager = new ObjectManager($this);
 
         $this->localCacheMockExample = $this->getMockBuilder(\Cm_Cache_Backend_File::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->remoteCacheMockExample = $this->getMockBuilder(\Magento\Framework\Cache\Backend\Database::class)
+        $this->remoteCacheMockExample = $this->getMockBuilder(Database::class)
             ->disableOriginalConstructor()
             ->getMock();
         /** @var \Magento\Framework\Cache\Backend\Database $databaseCacheInstance */
 
         $this->remoteSyncCacheInstance = $this->objectManager->getObject(
-            \Magento\Framework\Cache\Backend\RemoteSynchronizedCache::class,
+            RemoteSynchronizedCache::class,
             [
                 'options' => [
                     'remote_backend' => $this->remoteCacheMockExample,
@@ -58,13 +63,13 @@ class RemoteSynchronizedCacheTest extends \PHPUnit\Framework\TestCase
     /**
      * @param array $options
      *
-     * @expectedException \Zend_Cache_Exception
      * @dataProvider initializeWithExceptionDataProvider
      */
     public function testInitializeWithException($options)
     {
+        $this->expectException('Zend_Cache_Exception');
         $this->objectManager->getObject(
-            \Magento\Framework\Cache\Backend\RemoteSynchronizedCache::class,
+            RemoteSynchronizedCache::class,
             [
                 'options' => $options,
             ]
@@ -85,7 +90,7 @@ class RemoteSynchronizedCacheTest extends \PHPUnit\Framework\TestCase
             ],
             'empty_remote_backend_option' => [
                 'options' => [
-                    'remote_backend' => \Magento\Framework\Cache\Backend\Database::class,
+                    'remote_backend' => Database::class,
                     'local_backend' => null,
                 ],
             ],
@@ -106,12 +111,12 @@ class RemoteSynchronizedCacheTest extends \PHPUnit\Framework\TestCase
     public function testInitializeWithOutException($options)
     {
         $result = $this->objectManager->getObject(
-            \Magento\Framework\Cache\Backend\RemoteSynchronizedCache::class,
+            RemoteSynchronizedCache::class,
             [
                 'options' => $options,
             ]
         );
-        $this->assertInstanceOf(\Magento\Framework\Cache\Backend\RemoteSynchronizedCache::class, $result);
+        $this->assertInstanceOf(RemoteSynchronizedCache::class, $result);
     }
 
     /**
@@ -119,14 +124,14 @@ class RemoteSynchronizedCacheTest extends \PHPUnit\Framework\TestCase
      */
     public function initializeWithOutExceptionDataProvider()
     {
-        $connectionMock = $this->getMockBuilder(\Magento\Framework\DB\Adapter\Pdo\Mysql::class)
+        $connectionMock = $this->getMockBuilder(Mysql::class)
             ->disableOriginalConstructor()
             ->getMock();
 
         return [
             'not_empty_backend_option' => [
                 'options' => [
-                    'remote_backend' => \Magento\Framework\Cache\Backend\Database::class,
+                    'remote_backend' => Database::class,
                     'remote_backend_options' => [
                         'adapter_callback' => '',
                         'data_table' => 'data_table',
@@ -156,23 +161,23 @@ class RemoteSynchronizedCacheTest extends \PHPUnit\Framework\TestCase
         $this->localCacheMockExample
             ->expects($this->at(0))
             ->method('load')
-            ->will($this->returnValue($localData));
+            ->willReturn($localData);
 
         $this->remoteCacheMockExample
             ->expects($this->at(0))
             ->method('load')
-            ->will($this->returnValue(\hash('sha256', $remoteData)));
+            ->willReturn(\hash('sha256', (string)$remoteData));
 
         $this->remoteCacheMockExample
             ->expects($this->at(1))
             ->method('load')
-            ->will($this->returnValue($remoteData));
+            ->willReturn($remoteData);
 
         $this->localCacheMockExample
             ->expects($this->atLeastOnce())
             ->method('save')
             ->with($remoteData)
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $this->assertEquals($remoteData, $this->remoteSyncCacheInstance->load(1));
     }
@@ -185,12 +190,12 @@ class RemoteSynchronizedCacheTest extends \PHPUnit\Framework\TestCase
         $this->localCacheMockExample
             ->expects($this->at(0))
             ->method('load')
-            ->will($this->returnValue($localData));
+            ->willReturn($localData);
 
         $this->remoteCacheMockExample
             ->expects($this->at(0))
             ->method('load')
-            ->will($this->returnValue($remoteData));
+            ->willReturn($remoteData);
 
         $this->assertEquals($remoteData, $this->remoteSyncCacheInstance->load(1));
     }
@@ -203,17 +208,17 @@ class RemoteSynchronizedCacheTest extends \PHPUnit\Framework\TestCase
         $this->localCacheMockExample
             ->expects($this->atLeastOnce())
             ->method('load')
-            ->will($this->returnValue($localData));
+            ->willReturn($localData);
 
         $this->remoteCacheMockExample
             ->expects($this->at(0))
             ->method('load')
-            ->will($this->returnValue($remoteData));
+            ->willReturn($remoteData);
 
         $this->localCacheMockExample
             ->expects($this->atLeastOnce())
             ->method('save')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $this->assertEquals($remoteData, $this->remoteSyncCacheInstance->load(1));
     }
@@ -250,7 +255,7 @@ class RemoteSynchronizedCacheTest extends \PHPUnit\Framework\TestCase
         $this->remoteCacheMockExample
             ->expects($this->at(0))
             ->method('load')
-            ->willReturn(\hash('sha256', $remoteData));
+            ->willReturn(\hash('sha256', (string)$remoteData));
 
         $this->remoteCacheMockExample
             ->expects($this->at(1))

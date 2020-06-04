@@ -50,9 +50,9 @@ class LayoutPluginTest extends TestCase
     private $maintenanceModeMock;
 
     /**
-     * @inheritdoc
+     * @inheritDoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->layoutMock = $this->createPartialMock(Layout::class, ['isCacheable', 'getAllBlocks']);
         $this->responseMock = $this->createMock(Http::class);
@@ -82,7 +82,8 @@ class LayoutPluginTest extends TestCase
 
         $this->layoutMock->expects($this->once())->method('isCacheable')->willReturn($layoutIsCacheable);
         $this->configMock->expects($this->any())->method('isEnabled')->willReturn($cacheState);
-        $this->maintenanceModeMock->expects($this->any())->method('isOn')->willReturn($maintenanceModeIsEnabled);
+        $this->maintenanceModeMock->expects($this->any())->method('isOn')
+            ->willReturn($maintenanceModeIsEnabled);
 
         if ($layoutIsCacheable && $cacheState && !$maintenanceModeIsEnabled) {
             $this->configMock->expects($this->once())->method('getTtl')->willReturn($maxAge);
@@ -120,17 +121,17 @@ class LayoutPluginTest extends TestCase
     public function testAfterGetOutput($cacheState, $layoutIsCacheable, $expectedTags, $configCacheType, $ttl): void
     {
         $html = 'html';
-        $this->configMock->expects($this->any())->method('isEnabled')->will($this->returnValue($cacheState));
+        $this->configMock->expects($this->any())->method('isEnabled')->willReturn($cacheState);
         $blockStub = $this->createPartialMock(
             StubBlock::class,
             ['getIdentities']
         );
         $blockStub->setTtl($ttl);
         $blockStub->expects($this->any())->method('getIdentities')->willReturn(['identity1', 'identity2']);
-        $this->layoutMock->expects($this->once())->method('isCacheable')->will($this->returnValue($layoutIsCacheable));
-        $this->layoutMock->expects($this->any())->method('getAllBlocks')->will($this->returnValue([$blockStub]));
+        $this->layoutMock->expects($this->once())->method('isCacheable')->willReturn($layoutIsCacheable);
+        $this->layoutMock->expects($this->any())->method('getAllBlocks')->willReturn([$blockStub]);
 
-        $this->configMock->expects($this->any())->method('getType')->will($this->returnValue($configCacheType));
+        $this->configMock->expects($this->any())->method('getType')->willReturn($configCacheType);
 
         if ($layoutIsCacheable && $cacheState) {
             $this->responseMock->expects($this->once())->method('setHeader')->with('X-Magento-Tags', $expectedTags);

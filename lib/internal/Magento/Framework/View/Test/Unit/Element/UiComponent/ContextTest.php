@@ -3,20 +3,32 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 /**
  * Test for view Messages model
  */
 namespace Magento\Framework\View\Test\Unit\Element\UiComponent;
 
-use Magento\Framework\View\Element\UiComponent\Context;
+use Magento\Framework\App\Request\Http;
+use Magento\Framework\AuthorizationInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Framework\UrlInterface;
+use Magento\Framework\View\Element\UiComponent\ContentType\ContentTypeFactory;
+use Magento\Framework\View\Element\UiComponent\Context;
+use Magento\Framework\View\Element\UiComponent\Control\ActionPoolFactory;
 use Magento\Framework\View\Element\UiComponent\Control\ActionPoolInterface;
+use Magento\Framework\View\Element\UiComponent\Control\ButtonProviderFactory;
+use Magento\Framework\View\Element\UiComponent\Processor;
+use Magento\Framework\View\Element\UiComponentFactory;
+use Magento\Framework\View\Element\UiComponentInterface;
+use Magento\Framework\View\LayoutInterface;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ContextTest extends \PHPUnit\Framework\TestCase
+class ContextTest extends TestCase
 {
     /**
      * @var Context
@@ -29,45 +41,48 @@ class ContextTest extends \PHPUnit\Framework\TestCase
     private $actionPool;
 
     /**
-     * @var \Magento\Framework\AuthorizationInterface
+     * @var AuthorizationInterface
      */
     private $authorization;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $pageLayout = $this->getMockBuilder(\Magento\Framework\View\LayoutInterface::class)->getMock();
-        $request = $this->getMockBuilder(\Magento\Framework\App\Request\Http::class)
+        $pageLayout = $this->getMockBuilder(LayoutInterface::class)
+            ->getMock();
+        $request = $this->getMockBuilder(Http::class)
             ->disableOriginalConstructor()
             ->getMock();
         $buttonProviderFactory =
-            $this->getMockBuilder(\Magento\Framework\View\Element\UiComponent\Control\ButtonProviderFactory::class)
+            $this->getMockBuilder(ButtonProviderFactory::class)
                 ->disableOriginalConstructor()
                 ->getMock();
         $actionPoolFactory =
-            $this->getMockBuilder(\Magento\Framework\View\Element\UiComponent\Control\ActionPoolFactory::class)
+            $this->getMockBuilder(ActionPoolFactory::class)
                 ->disableOriginalConstructor()
                 ->getMock();
         $this->actionPool = $this->getMockBuilder(ActionPoolInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $actionPoolFactory->method('create')->willReturn($this->actionPool);
         $contentTypeFactory =
-            $this->getMockBuilder(\Magento\Framework\View\Element\UiComponent\ContentType\ContentTypeFactory::class)
+            $this->getMockBuilder(ContentTypeFactory::class)
                 ->disableOriginalConstructor()
                 ->getMock();
-        $urlBuilder = $this->getMockBuilder(\Magento\Framework\UrlInterface::class)->getMock();
-        $processor = $this->getMockBuilder(\Magento\Framework\View\Element\UiComponent\Processor::class)->getMock();
-        $uiComponentFactory =
-            $this->getMockBuilder(\Magento\Framework\View\Element\UiComponentFactory::class)
-                ->disableOriginalConstructor()
-                ->getMock();
-        $this->authorization = $this->getMockBuilder(\Magento\Framework\AuthorizationInterface::class)
-            ->disableOriginalConstructor()
+        $urlBuilder = $this->getMockBuilder(UrlInterface::class)
             ->getMock();
+        $processor = $this->getMockBuilder(Processor::class)
+            ->getMock();
+        $uiComponentFactory =
+            $this->getMockBuilder(UiComponentFactory::class)
+                ->disableOriginalConstructor()
+                ->getMock();
+        $this->authorization = $this->getMockBuilder(AuthorizationInterface::class)
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
 
         $objectManagerHelper = new ObjectManagerHelper($this);
         $this->context = $objectManagerHelper->getObject(
-            \Magento\Framework\View\Element\UiComponent\Context::class,
+            Context::class,
             [
                 'pageLayout'            => $pageLayout,
                 'request'               => $request,
@@ -84,9 +99,9 @@ class ContextTest extends \PHPUnit\Framework\TestCase
 
     public function testAddButtonWithoutAclResource()
     {
-        $component = $this->getMockBuilder(\Magento\Framework\View\Element\UiComponentInterface::class)
+        $component = $this->getMockBuilder(UiComponentInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->actionPool->expects($this->once())->method('add');
         $this->authorization->expects($this->never())->method('isAllowed');
@@ -100,9 +115,9 @@ class ContextTest extends \PHPUnit\Framework\TestCase
 
     public function testAddButtonWithAclResourceAllowed()
     {
-        $component = $this->getMockBuilder(\Magento\Framework\View\Element\UiComponentInterface::class)
+        $component = $this->getMockBuilder(UiComponentInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->actionPool->expects($this->once())->method('add');
         $this->authorization->expects($this->once())->method('isAllowed')->willReturn(true);
@@ -117,9 +132,9 @@ class ContextTest extends \PHPUnit\Framework\TestCase
 
     public function testAddButtonWithAclResourceDenied()
     {
-        $component = $this->getMockBuilder(\Magento\Framework\View\Element\UiComponentInterface::class)
+        $component = $this->getMockBuilder(UiComponentInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->actionPool->expects($this->never())->method('add');
         $this->authorization->expects($this->once())->method('isAllowed')->willReturn(false);

@@ -4,12 +4,17 @@
  * See COPYING.txt for license details.
  */
 
+use Magento\Sales\Api\Data\OrderInterfaceFactory;
 use Magento\Sales\Model\Order\ShipmentFactory;
 use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
 
-require 'default_rollback.php';
-require __DIR__ . '/../../../Magento/Sales/_files/order.php';
+Resolver::getInstance()->requireDataFixture('Magento/Sales/_files/default_rollback.php');
+Resolver::getInstance()->requireDataFixture('Magento/Sales/_files/order.php');
 
+$objectManager = Bootstrap::getObjectManager();
+/** @var Order $order */
+$order = $objectManager->get(OrderInterfaceFactory::class)->create()->loadByIncrementId('100000001');
 $payment = $order->getPayment();
 $paymentInfoBlock = Bootstrap::getObjectManager()->get(\Magento\Payment\Helper\Data::class)->getInfoBlock($payment);
 $payment->setBlockMock($paymentInfoBlock);

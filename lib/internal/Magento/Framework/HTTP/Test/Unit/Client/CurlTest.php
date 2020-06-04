@@ -18,12 +18,11 @@ class CurlTest extends TestCase
 {
     /**
      * Check that HTTP client can be used only for HTTP.
-     *
-     * @expectedException \Exception
-     * @expectedExceptionMessageRegExp  /Protocol .?telnet.? not supported or disabled in libcurl/
      */
     public function testInvalidProtocol()
     {
+        $this->expectException('Exception');
+        $this->expectExceptionMessageMatches('/Protocol .?telnet.? not supported or disabled in libcurl/');
         $client = new Curl();
         $client->get('telnet://127.0.0.1/test');
     }
