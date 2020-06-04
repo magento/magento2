@@ -4,26 +4,50 @@
  * See COPYING.txt for license details.
  */
 
-$productModel = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-    ->create(\Magento\Catalog\Model\Product::class);
+declare(strict_types=1);
 
-$productModel->setTypeId(\Magento\Catalog\Model\Product\Type::TYPE_SIMPLE)
+use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Catalog\Model\Product;
+use Magento\Catalog\Model\Product\Attribute\Source\Status;
+use Magento\Catalog\Model\Product\Type;
+use Magento\Catalog\Model\Product\Visibility;
+use Magento\Framework\ObjectManagerInterface;
+use Magento\TestFramework\Helper\Bootstrap;
+
+/** @var ObjectManagerInterface $objectManager */
+$objectManager = Bootstrap::getObjectManager();
+
+/**
+ * @var Product $productModel
+ * @var ProductRepositoryInterface $productRepository
+ */
+$productModel = $objectManager->create(Product::class);
+$productRepository = $objectManager->create(ProductRepositoryInterface::class);
+
+$productModel->setTypeId(Type::TYPE_SIMPLE)
     ->setAttributeSetId(4)
     ->setName('AdvancedPricingSimple 1')
     ->setSku('AdvancedPricingSimple 1')
     ->setPrice(321)
-    ->setVisibility(\Magento\Catalog\Model\Product\Visibility::VISIBILITY_BOTH)
-    ->setStatus(\Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED)
+    ->setVisibility(Visibility::VISIBILITY_BOTH)
+    ->setStatus(Status::STATUS_ENABLED)
     ->setWebsiteIds([1])
     ->setCategoryIds([])
     ->setStockData(['qty' => 100, 'is_in_stock' => 1, 'manage_stock' => 1])
-    ->setIsObjectNew(true)
-    ->save();
+    ->setIsObjectNew(true);
 
-$productModel->setName('AdvancedPricingSimple 2')
-    ->setId(null)
-    ->setUrlKey(null)
+$productRepository->save($productModel);
+
+$productModel = $objectManager->create(Product::class);
+$productModel->setTypeId(Type::TYPE_SIMPLE)
+    ->setAttributeSetId(4)
+    ->setName('AdvancedPricingSimple 2')
     ->setSku('AdvancedPricingSimple 2')
     ->setPrice(654)
-    ->setIsObjectNew(true)
-    ->save();
+    ->setVisibility(Visibility::VISIBILITY_BOTH)
+    ->setStatus(Status::STATUS_ENABLED)
+    ->setWebsiteIds([1])
+    ->setCategoryIds([])
+    ->setStockData(['qty' => 100, 'is_in_stock' => 1, 'manage_stock' => 1])
+    ->setIsObjectNew(true);
+$productRepository->save($productModel);

@@ -63,26 +63,25 @@
         </actionGroup>
 
         <!-- Create simple product with categories created in create data -->
-        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="openProductCatalogPage"/>
-        <waitForPageLoad stepKey="waitForProductCatalogPage"/>
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="openProductsGrid"/>
         <actionGroup ref="FilterProductGridBySkuActionGroup" stepKey="filterProduct">
             <argument name="product" value="$$createProduct$$"/>
         </actionGroup>
-        <click selector="{{AdminProductGridFilterSection.nthRow('1')}}" stepKey="clickFirstRowOfCreatedSimpleProduct"/>
-        <waitForPageLoad stepKey="waitUntilProductIsOpened"/>
-        <click selector="{{AdminProductFormSection.categoriesDropdown}}" stepKey="clickCategoriesDropDown"/>
-        <fillField selector="{{AdminProductFormSection.searchCategory}}" userInput="$$rootCategory.name$$" stepKey="fillSearchForInitialCategory"/>
-        <waitForPageLoad stepKey="waitForCategory1"/>
-        <click selector="{{AdminProductFormSection.selectCategory($$rootCategory.name$$)}}" stepKey="unselectInitialCategory"/>
-        <fillField selector="{{AdminProductFormSection.searchCategory}}" userInput="$$category.name$$" stepKey="fillSearchCategory"/>
-        <waitForPageLoad stepKey="waitForCategory2"/>
-        <click selector="{{AdminProductFormSection.selectCategory($$category.name$$)}}" stepKey="clickOnCategory"/>
-        <click selector="{{AdminProductFormSection.done}}" stepKey="clickOnDoneAdvancedCategorySelect"/>
-        <scrollToTopOfPage stepKey="scrollToTopOfAdminProductFormSection"/>
-        <click selector="{{AdminProductFormSection.save}}" stepKey="clickSaveButton"/>
-        <waitForPageLoad stepKey="waitForSimpleProductSaved"/>
+        <actionGroup ref="OpenProductForEditByClickingRowXColumnYInProductGridActionGroup" stepKey="openProduct"/>
+        <actionGroup ref="SetCategoryByNameActionGroup" stepKey="unselectInitialCategory">
+            <argument name="categoryName" value="$$rootCategory.name$$"/>
+        </actionGroup>
+        <actionGroup ref="AdminSubmitCategoriesPopupActionGroup" stepKey="pressDoneButton"/>
+        <actionGroup ref="SetCategoryByNameActionGroup" stepKey="setNewCategory">
+            <argument name="categoryName" value="$$category.name$$"/>
+        </actionGroup>
+        <actionGroup ref="AdminSubmitCategoriesPopupActionGroup" stepKey="clickOnDoneButton"/>
+        <actionGroup ref="SaveProductFormNoSuccessCheckActionGroup" stepKey="saveProduct"/>
+
         <!-- Verify customer see success message -->
-        <see selector="{{AdminProductFormSection.successMessage}}" userInput="You saved the product." stepKey="seeAssertSimpleProductSaveSuccessMessage"/>
+        <actionGroup ref="AssertMessageInAdminPanelActionGroup" stepKey="seeAssertSimpleProductSaveSuccessMessage">
+            <argument name="message" value="You saved the product."/>
+        </actionGroup>
 
         <!-- Grab category Id -->
         <actionGroup ref="OpenCategoryFromCategoryTreeActionGroup" stepKey="grabCategoryId">
@@ -95,8 +94,13 @@
             <argument name="redirectType" value="No"/>
             <argument name="targetPath" value="catalog/category/view/id/{$categoryId}"/>
         </actionGroup>
-        <see selector="{{AdminUrlRewriteIndexSection.gridCellByColumnRowNumber('1', 'Store View')}}" userInput="{{customStoreGroup.name}}" stepKey="seeStoreValueForCategoryId"/>
-        <see selector="{{AdminUrlRewriteIndexSection.gridCellByColumnRowNumber('1', 'Store View')}}" userInput="{{customStoreEN.name}}" stepKey="seeStoreViewValueForCategoryId"/>
+
+        <actionGroup ref="AssertAdminStoreValueIsSetForUrlRewriteActionGroup" stepKey="seeStoreValueForCategoryId">
+            <argument name="storeValue" value="{{customStoreGroup.name}}"/>
+        </actionGroup>
+        <actionGroup ref="AssertAdminStoreValueIsSetForUrlRewriteActionGroup" stepKey="seeStoreViewValueForCategoryId">
+            <argument name="storeValue" value="{{customStoreEN.name}}"/>
+        </actionGroup>
 
         <!-- Grab product Id -->
         <actionGroup ref="FilterAndSelectProductActionGroup" stepKey="grabProductId">
@@ -109,7 +113,12 @@
             <argument name="redirectType" value="No"/>
             <argument name="targetPath" value="catalog/product/view/id/{$productId}"/>
         </actionGroup>
-        <see selector="{{AdminUrlRewriteIndexSection.gridCellByColumnRowNumber('1', 'Store View')}}" userInput="{{customStore.name}}" stepKey="seeStoreValueForProductId"/>
-        <see selector="{{AdminUrlRewriteIndexSection.gridCellByColumnRowNumber('1', 'Store View')}}" userInput="{{storeViewData.name}}" stepKey="seeStoreViewValueForProductId"/>
+
+        <actionGroup ref="AssertAdminStoreValueIsSetForUrlRewriteActionGroup" stepKey="seeStoreValueForProductId">
+            <argument name="storeValue" value="{{customStore.name}}"/>
+        </actionGroup>
+        <actionGroup ref="AssertAdminStoreValueIsSetForUrlRewriteActionGroup" stepKey="seeStoreViewValueForProductId">
+            <argument name="storeValue" value="{{storeViewData.name}}"/>
+        </actionGroup>
     </test>
 </tests>
