@@ -357,7 +357,7 @@ class AddressTest extends \PHPUnit\Framework\TestCase
             ->method('getWebsiteId')
             ->willReturn($webSiteId);
 
-        $this->scopeConfig->expects($this->exactly(2))
+        $this->scopeConfig->expects($this->exactly(1))
             ->method('getValue')
             ->with(
                 'tax/calculation/price_includes_tax',
