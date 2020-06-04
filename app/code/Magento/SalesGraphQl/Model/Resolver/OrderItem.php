@@ -9,24 +9,34 @@ namespace Magento\SalesGraphQl\Model\Resolver;
 
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\GraphQl\Config\Element\Field;
-use Magento\Framework\GraphQl\Exception\GraphQlAuthorizationException;
+use Magento\Framework\GraphQl\Query\Resolver\ValueFactory;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
-use Magento\GraphQl\Model\Query\ContextInterface;
-use Magento\Sales\Api\Data\OrderItemInterface;
-use Magento\Sales\Model\Order;
-use Magento\SalesGraphQl\Model\SalesItem\OrderItemFactory;
+use Magento\SalesGraphQl\Model\Resolver\OrderItem\DataProvider as OrderItemProvider;
 
+/**
+ * Resolve a single order item
+ */
 class OrderItem implements ResolverInterface
 {
     /**
-     * @var OrderItemFactory
+     * @var ValueFactory
      */
-    private $itemsItemFactory;
+    private $valueFactory;
 
-    public function __construct(OrderItemFactory $itemsItemFactory)
+    /**
+     * @var OrderItemProvider
+     */
+    private $orderItemProvider;
+
+    /**
+     * @param ValueFactory $valueFactory
+     * @param OrderItemProvider $orderItemProvider
+     */
+    public function __construct(ValueFactory $valueFactory, OrderItemProvider $orderItemProvider)
     {
-        $this->itemsItemFactory = $itemsItemFactory;
+        $this->valueFactory = $valueFactory;
+        $this->orderItemProvider = $orderItemProvider;
     }
 
     /**
@@ -34,25 +44,18 @@ class OrderItem implements ResolverInterface
      */
     public function resolve(Field $field, $context, ResolveInfo $info, array $value = null, array $args = null)
     {
-        /** @var ContextInterface $context */
-        if (false === $context->getExtensionAttributes()->getIsCustomer()) {
-            throw new GraphQlAuthorizationException(__('The current customer isn\'t authorized.'));
+        $parentItem = $value['model'];
+
+        if (!method_exists($parentItem, 'getOrderItemId')) {
+            throw new LocalizedException(__('Unable to find associated order item.'));
         }
-        if (!isset($value['model']) && !($value['model'] instanceof Order)) {
-            throw new LocalizedException(__('"model" value should be specified'));
-        }
-        /** @var Order $parentOrder */
-        $parentOrder = $value['model'];
-        /** @var OrderItemInterface $item */
-        $orderItems = [];
-        foreach ($parentOrder->getItems() as $key => $item) {
-            $salesOrderItem = $this->itemsItemFactory->create(
-                $item,
-                $parentOrder,
-                ['quantity_ordered' => $item->getQtyOrdered()]
-            );
-            $orderItems[] = $salesOrderItem->convertToArray();
-        }
-        return $orderItems;
+
+        $orderItemId = $parentItem->getOrderItemId();
+        $this->orderItemProvider->addOrderItemId((int)$orderItemId);
+
+        return $this->valueFactory->create(function () use ($parentItem) {
+            $orderItem = $this->orderItemProvider->getOrderItemById((int)$parentItem->getOrderItemId());
+            return empty($orderItem) ? null : $orderItem;
+        });
     }
 }
