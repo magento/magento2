@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontPartialWordQuickSearchUsingElasticSearchTest">
+        <annotations>
+            <features value="Search"/>
+            <stories value="Partial Word search using Elasticsearch"/>
+            <title value="Support partial word search in Elasticsearch"/>
+            <description value="Support quick search with Partial word search using ES"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-34205"/>
+            <group value="SearchEngineElasticsearch"/>
+        </annotations>
+        <before>
+            <!-- Create subcategory -->
+            <createData entity="SimpleSubCategory" stepKey="newCategory"/>
+            <createData entity="ProductForPartialSearch" stepKey="product1">
+                <requiredEntity createDataKey="newCategory"/>
+            </createData>
+            <createData entity="ApiSimpleProduct" stepKey="product2">
+                <requiredEntity createDataKey="newCategory"/>
+            </createData>
+            <createData entity="ApiSimpleProductWithNoSpace" stepKey="product3">
+                <requiredEntity createDataKey="newCategory"/>
+            </createData>
+        </before>
+        <after>
+            <deleteData createDataKey="product1" stepKey="deleteProduct1"/>
+            <deleteData createDataKey="product2" stepKey="deleteProduct2"/>
+            <deleteData createDataKey="product3" stepKey="deleteProduct3"/>
+            <deleteData createDataKey="newCategory" stepKey="deleteCategory"/>
+        </after>
+
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToHomePage"/>
+
+        <!--Perform a quick seach using a partial word from product SKU-->
+        <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="quickSearchPartialSku">
+            <argument name="phrase" value="partial"/>
+        </actionGroup>
+
+        <!--Perform a case insensitive quick search of partial word using case product name -->
+        <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="quickSearchPartialCaseInSensitive">
+            <argument name="phrase" value="simple"/>
+        </actionGroup>
+        <!--Perform a quick search using parts of the words from name/sku with additional characters-->
+        <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="quickSearchPartialWordsWithExtraChars">
+            <argument name="phrase" value="barstool"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontCheckSearchIsEmptyActionGroup" stepKey="checkEmptySearchResult"/>
+
+    </test>
+</tests>
+

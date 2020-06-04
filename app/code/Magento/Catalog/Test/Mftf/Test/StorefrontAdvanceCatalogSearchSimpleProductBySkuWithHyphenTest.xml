@@ -17,7 +17,10 @@
             <severity value="MAJOR"/>
             <testCaseId value="MC-20361"/>
             <group value="Catalog"/>
-            <group value="SearchEngineMysql"/>
+            <group value="SearchEngineElasticsearch"/>
+            <skip>
+                <issueId value="MC-34217"/>
+            </skip>
         </annotations>
         <before>
             <createData entity="ApiProductWithDescription" stepKey="product"/>

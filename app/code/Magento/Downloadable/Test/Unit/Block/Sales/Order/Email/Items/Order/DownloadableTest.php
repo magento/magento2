@@ -3,50 +3,60 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Downloadable\Test\Unit\Block\Sales\Order\Email\Items\Order;
 
+use Magento\Backend\Block\Template\Context;
+use Magento\Downloadable\Block\Sales\Order\Email\Items\Order\Downloadable;
+use Magento\Downloadable\Model\Link\Purchased;
+use Magento\Downloadable\Model\Link\PurchasedFactory;
+use Magento\Downloadable\Model\ResourceModel\Link\Purchased\Item\Collection;
 use Magento\Downloadable\Model\ResourceModel\Link\Purchased\Item\CollectionFactory;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Sales\Model\Order\Item;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Tests Magento\Downloadable\Test\Unit\Block\Sales\Order\Email\Items\Order\Downloadable
  */
-class DownloadableTest extends \PHPUnit\Framework\TestCase
+class DownloadableTest extends TestCase
 {
     /**
-     * @var \Magento\Downloadable\Block\Sales\Order\Email\Items\Order\Downloadable
+     * @var Downloadable
      */
     protected $block;
 
     /**
-     * @var \Magento\Downloadable\Model\Link\PurchasedFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var PurchasedFactory|MockObject
      */
     protected $purchasedFactory;
 
     /**
-     * @var CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var CollectionFactory|MockObject
      */
     protected $itemsFactory;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $contextMock = $this->getMockBuilder(\Magento\Backend\Block\Template\Context::class)
+        $objectManager = new ObjectManager($this);
+        $contextMock = $this->getMockBuilder(Context::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->purchasedFactory = $this->getMockBuilder(\Magento\Downloadable\Model\Link\PurchasedFactory::class)
+        $this->purchasedFactory = $this->getMockBuilder(PurchasedFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
         $this->itemsFactory = $this->getMockBuilder(
-            \Magento\Downloadable\Model\ResourceModel\Link\Purchased\Item\CollectionFactory::class
+            CollectionFactory::class
         )
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
 
         $this->block = $objectManager->getObject(
-            \Magento\Downloadable\Block\Sales\Order\Email\Items\Order\Downloadable::class,
+            Downloadable::class,
             [
                 'context' => $contextMock,
                 'purchasedFactory' => $this->purchasedFactory,
@@ -57,19 +67,19 @@ class DownloadableTest extends \PHPUnit\Framework\TestCase
 
     public function testGetLinks()
     {
-        $item = $this->getMockBuilder(\Magento\Sales\Model\Order\Item::class)
+        $item = $this->getMockBuilder(Item::class)
             ->disableOriginalConstructor()
             ->setMethods(['getId'])
             ->getMock();
-        $linkPurchased = $this->getMockBuilder(\Magento\Downloadable\Model\Link\Purchased::class)
+        $linkPurchased = $this->getMockBuilder(Purchased::class)
             ->disableOriginalConstructor()
             ->setMethods(['load'])
             ->getMock();
         $itemCollection =
-            $this->getMockBuilder(\Magento\Downloadable\Model\ResourceModel\Link\Purchased\Item\Collection::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['addFieldToFilter'])
-            ->getMock();
+            $this->getMockBuilder(Collection::class)
+                ->disableOriginalConstructor()
+                ->setMethods(['addFieldToFilter'])
+                ->getMock();
 
         $this->block->setData('item', $item);
         $this->purchasedFactory->expects($this->once())->method('create')->willReturn($linkPurchased);

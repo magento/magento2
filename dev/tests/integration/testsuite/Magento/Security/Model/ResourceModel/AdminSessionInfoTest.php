@@ -17,14 +17,14 @@ class AdminSessionInfoTest extends \PHPUnit\Framework\TestCase
      */
     protected $objectManager;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->model = $this->objectManager->create(\Magento\Security\Model\AdminSessionInfo::class);
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->objectManager = null;
         parent::tearDown();
