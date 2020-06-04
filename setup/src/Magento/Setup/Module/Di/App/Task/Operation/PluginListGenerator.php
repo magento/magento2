@@ -13,7 +13,6 @@ use Magento\Framework\Interception\ObjectManager\ConfigInterface;
 use Magento\Framework\ObjectManager\DefinitionInterface as ClassDefinitions;
 use Magento\Framework\ObjectManager\RelationsInterface;
 use Magento\Setup\Module\Di\App\Task\OperationInterface;
-use Magento\Framework\Config\CacheInterface;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -34,32 +33,25 @@ class PluginListGenerator implements OperationInterface
     private $reader;
 
     /**
-     * Configuration cache
-     *
-     * @var CacheInterface
-     */
-    protected $cache;
-
-    /**
      * Cache tag
      *
      * @var string
      */
-    protected $_cacheId = 'plugin-list';
+    private $cacheId = 'plugin-list';
 
     /**
      * Scope priority loading scheme
      *
      * @var string[]
      */
-    protected $_scopePriorityScheme = [];
+    private $scopePriorityScheme;
 
     /**
      * Loaded scopes
      *
      * @var array
      */
-    protected $_loadedScopes = [];
+    private $loadedScopes = [];
 
     /**
      * Type config
@@ -102,7 +94,7 @@ class PluginListGenerator implements OperationInterface
     /**
      * @var array
      */
-    private $_data;
+    private $pluginData;
 
     /**
      * @var array
@@ -112,17 +104,12 @@ class PluginListGenerator implements OperationInterface
     /**
      * @var array
      */
-    private $_inherited = [];
+    private $inherited = [];
 
     /**
      * @var array
      */
-    private $_processed;
-
-    /**
-     * @var array
-     */
-    protected $_pluginInstances = [];
+    private $processed;
 
     /**
      * @param ReaderInterface $reader
@@ -132,7 +119,6 @@ class PluginListGenerator implements OperationInterface
      * @param DefinitionInterface $definitions
      * @param ClassDefinitions $classDefinitions
      * @param LoggerInterface $logger
-     * @param CacheInterface $cache
      * @param ConfigWriterInterface $configWriter
      * @param array $scopePriorityScheme
      */
@@ -144,7 +130,6 @@ class PluginListGenerator implements OperationInterface
         DefinitionInterface $definitions,
         ClassDefinitions $classDefinitions,
         LoggerInterface $logger,
-        CacheInterface $cache,
         ConfigWriterInterface $configWriter,
         array $scopePriorityScheme = ['global']
     ) {
@@ -155,8 +140,7 @@ class PluginListGenerator implements OperationInterface
         $this->definitions = $definitions;
         $this->classDefinitions = $classDefinitions;
         $this->logger = $logger;
-        $this->cache = $cache;
-        $this->_scopePriorityScheme = $scopePriorityScheme;
+        $this->scopePriorityScheme = $scopePriorityScheme;
         $this->configWriter = $configWriter;
     }
 
@@ -166,38 +150,38 @@ class PluginListGenerator implements OperationInterface
     public function doOperation()
     {
         $scopes = $this->scopeConfig->getAllScopes();
+        // remove primary scope for production mode
         array_shift($scopes);
 
         foreach ($scopes as $scope) {
             $this->scopeConfig->setCurrentScope($scope);
-            if (false === isset($this->_loadedScopes[$scope])) {
-                if (false === in_array($scope, $this->_scopePriorityScheme)) {
-                    $this->_scopePriorityScheme[] = $scope;
+            if (false === isset($this->loadedScopes[$scope])) {
+                if (false === in_array($scope, $this->scopePriorityScheme, true)) {
+                    $this->scopePriorityScheme[] = $scope;
                 }
-                $cacheId = implode('|', $this->_scopePriorityScheme) . "|" . $this->_cacheId;
+                $cacheId = implode('|', $this->scopePriorityScheme) . "|" . $this->cacheId;
 
-                foreach ($this->_loadScopedVirtualTypes() as $class) {
-                    $this->_inheritPlugins($class);
+                foreach ($this->loadScopedVirtualTypes() as $class) {
+                    $this->inheritPlugins($class);
                 }
-                foreach ($this->_data as $className => $value) {
-                    $this->_inheritPlugins($className);
+                foreach ($this->pluginData as $className => $value) {
+                    $this->inheritPlugins($className);
                 }
                 foreach ($this->getClassDefinitions() as $class) {
-                    $this->_inheritPlugins($class);
+                    $this->inheritPlugins($class);
                 }
                 if ($scope === 'global') {
-                    $this->globalScopePluginData = $this->_data;
+                    $this->globalScopePluginData = $this->pluginData;
                 }
                 $this->configWriter->write(
                     $cacheId,
-                    [$this->_data, $this->_inherited, $this->_processed]
+                    [$this->pluginData, $this->inherited, $this->processed]
                 );
-                if (count($this->_scopePriorityScheme) > 1 ) {
-                    array_pop($this->_scopePriorityScheme);
+                if (count($this->scopePriorityScheme) > 1) {
+                    array_pop($this->scopePriorityScheme);
                     // merge global scope plugin data to other scopes by default
-                    $this->_data = $this->globalScopePluginData;
+                    $this->pluginData = $this->globalScopePluginData;
                 }
-                $this->_pluginInstances = [];
             }
         }
     }
@@ -215,16 +199,16 @@ class PluginListGenerator implements OperationInterface
      *
      * @return array
      */
-    private function _loadScopedVirtualTypes()
+    private function loadScopedVirtualTypes()
     {
         $virtualTypes = [];
-        foreach ($this->_scopePriorityScheme as $scopeCode) {
-            if (!isset($this->_loadedScopes[$scopeCode])) {
+        foreach ($this->scopePriorityScheme as $scopeCode) {
+            if (!isset($this->loadedScopes[$scopeCode])) {
                 $data = $this->reader->read($scopeCode) ?: [];
                 unset($data['preferences']);
                 if (count($data) > 0) {
-                    $this->_inherited = [];
-                    $this->_processed = [];
+                    $this->inherited = [];
+                    $this->processed = [];
                     $this->merge($data);
                     foreach ($data as $class => $config) {
                         if (isset($config['type'])) {
@@ -232,7 +216,7 @@ class PluginListGenerator implements OperationInterface
                         }
                     }
                 }
-                $this->_loadedScopes[$scopeCode] = true;
+                $this->loadedScopes[$scopeCode] = true;
             }
             if ($this->isCurrentScope($scopeCode)) {
                 break;
@@ -271,20 +255,20 @@ class PluginListGenerator implements OperationInterface
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
-    private function _inheritPlugins($type)
+    private function inheritPlugins($type)
     {
         $type = ltrim($type, '\\');
-        if (!isset($this->_inherited[$type])) {
+        if (!isset($this->inherited[$type])) {
             $realType = $this->omConfig->getOriginalInstanceType($type);
 
             if ($realType !== $type) {
-                $plugins = $this->_inheritPlugins($realType);
+                $plugins = $this->inheritPlugins($realType);
             } elseif ($this->relations->has($type)) {
                 $relations = $this->relations->getParents($type);
                 $plugins = [];
                 foreach ($relations as $relation) {
                     if ($relation) {
-                        $relationPlugins = $this->_inheritPlugins($relation);
+                        $relationPlugins = $this->inheritPlugins($relation);
                         if ($relationPlugins) {
                             $plugins = array_replace_recursive($plugins, $relationPlugins);
                         }
@@ -293,19 +277,19 @@ class PluginListGenerator implements OperationInterface
             } else {
                 $plugins = [];
             }
-            if (isset($this->_data[$type])) {
+            if (isset($this->pluginData[$type])) {
                 if (!$plugins) {
-                    $plugins = $this->_data[$type];
+                    $plugins = $this->pluginData[$type];
                 } else {
-                    $plugins = array_replace_recursive($plugins, $this->_data[$type]);
+                    $plugins = array_replace_recursive($plugins, $this->pluginData[$type]);
                 }
             }
-            $this->_inherited[$type] = null;
+            $this->inherited[$type] = null;
             if (is_array($plugins) && count($plugins)) {
                 $this->filterPlugins($plugins);
-                uasort($plugins, [$this, '_sort']);
+                uasort($plugins, [$this, 'sort']);
                 $this->trimInstanceStartingBackslash($plugins);
-                $this->_inherited[$type] = $plugins;
+                $this->inherited[$type] = $plugins;
                 $lastPerMethod = [];
                 foreach ($plugins as $key => $plugin) {
                     // skip disabled plugins
@@ -318,24 +302,24 @@ class PluginListGenerator implements OperationInterface
                         throw new \InvalidArgumentException('Plugin class ' . $pluginType . ' doesn\'t exist');
                     }
                     foreach ($this->definitions->getMethodList($pluginType) as $pluginMethod => $methodTypes) {
-                        $current = isset($lastPerMethod[$pluginMethod]) ? $lastPerMethod[$pluginMethod] : '__self';
+                        $current = $lastPerMethod[$pluginMethod] ?? '__self';
                         $currentKey = $type . '_' . $pluginMethod . '_' . $current;
                         if ($methodTypes & DefinitionInterface::LISTENER_AROUND) {
-                            $this->_processed[$currentKey][DefinitionInterface::LISTENER_AROUND] = $key;
+                            $this->processed[$currentKey][DefinitionInterface::LISTENER_AROUND] = $key;
                             $lastPerMethod[$pluginMethod] = $key;
                         }
                         if ($methodTypes & DefinitionInterface::LISTENER_BEFORE) {
-                            $this->_processed[$currentKey][DefinitionInterface::LISTENER_BEFORE][] = $key;
+                            $this->processed[$currentKey][DefinitionInterface::LISTENER_BEFORE][] = $key;
                         }
                         if ($methodTypes & DefinitionInterface::LISTENER_AFTER) {
-                            $this->_processed[$currentKey][DefinitionInterface::LISTENER_AFTER][] = $key;
+                            $this->processed[$currentKey][DefinitionInterface::LISTENER_AFTER][] = $key;
                         }
                     }
                 }
             }
             return $plugins;
         }
-        return $this->_inherited[$type];
+        return $this->inherited[$type];
     }
 
     /**
@@ -378,10 +362,10 @@ class PluginListGenerator implements OperationInterface
         foreach ($config as $type => $typeConfig) {
             if (isset($typeConfig['plugins'])) {
                 $type = ltrim($type, '\\');
-                if (isset($this->_data[$type])) {
-                    $this->_data[$type] = array_replace_recursive($this->_data[$type], $typeConfig['plugins']);
+                if (isset($this->pluginData[$type])) {
+                    $this->pluginData[$type] = array_replace_recursive($this->pluginData[$type], $typeConfig['plugins']);
                 } else {
-                    $this->_data[$type] = $typeConfig['plugins'];
+                    $this->pluginData[$type] = $typeConfig['plugins'];
                 }
             }
         }
@@ -394,7 +378,7 @@ class PluginListGenerator implements OperationInterface
      * @param array $itemB
      * @return int
      */
-    private function _sort($itemA, $itemB)
+    private function sort($itemA, $itemB)
     {
         if (isset($itemA['sortOrder'])) {
             if (isset($itemB['sortOrder'])) {
@@ -407,5 +391,4 @@ class PluginListGenerator implements OperationInterface
             return 0;
         }
     }
-
 }

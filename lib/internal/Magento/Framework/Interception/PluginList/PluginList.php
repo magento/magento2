@@ -281,8 +281,8 @@ class PluginList extends Scoped implements InterceptionPluginList
     protected function _loadScopedData()
     {
         $scope = $this->_configScope->getCurrentScope();
-        if (false == isset($this->_loadedScopes[$scope])) {
-            if (false == in_array($scope, $this->_scopePriorityScheme)) {
+        if (false === isset($this->_loadedScopes[$scope])) {
+            if (false === in_array($scope, $this->_scopePriorityScheme, true)) {
                 $this->_scopePriorityScheme[] = $scope;
             }
             $cacheId = implode('|', $this->_scopePriorityScheme) . "|" . $this->_cacheId;
@@ -291,14 +291,14 @@ class PluginList extends Scoped implements InterceptionPluginList
             $file = $directoryList->getPath(DirectoryList::GENERATED_METADATA) . '/' . $cacheId . '.' . 'php';
             if (file_exists($file)) {
                 $data = include $file;
-                list($this->_data, $this->_inherited, $this->_processed) = $data;
+                [$this->_data, $this->_inherited, $this->_processed] = $data;
                 foreach ($this->_scopePriorityScheme as $scopeCode) {
                     $this->_loadedScopes[$scopeCode] = true;
                 }
             } else {
                 $data = $this->_cache->load($cacheId);
                 if ($data) {
-                    list($this->_data, $this->_inherited, $this->_processed) = $this->serializer->unserialize($data);
+                    [$this->_data, $this->_inherited, $this->_processed] = $this->serializer->unserialize($data);
                     foreach ($this->_scopePriorityScheme as $scopeCode) {
                         $this->_loadedScopes[$scopeCode] = true;
                     }
@@ -358,7 +358,7 @@ class PluginList extends Scoped implements InterceptionPluginList
      */
     protected function isCurrentScope($scopeCode)
     {
-        return $this->_configScope->getCurrentScope() == $scopeCode;
+        return $this->_configScope->getCurrentScope() === $scopeCode;
     }
 
     /**
