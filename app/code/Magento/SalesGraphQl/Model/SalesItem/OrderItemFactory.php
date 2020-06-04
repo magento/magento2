@@ -13,9 +13,9 @@ use Magento\Sales\Api\Data\OrderItemInterface;
 use Magento\SalesGraphQl\Model\SalesItem\Data\SalesItem;
 
 /**
- * Create SalesItem object with data from OrderItem
+ * Create OrderItem object with data from OrderItem
  */
-class SalesItemFactory
+class OrderItemFactory
 {
     /**
      * @var ObjectManagerInterface

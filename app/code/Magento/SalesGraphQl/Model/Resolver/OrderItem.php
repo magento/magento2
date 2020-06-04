@@ -15,18 +15,18 @@ use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\GraphQl\Model\Query\ContextInterface;
 use Magento\Sales\Api\Data\OrderItemInterface;
 use Magento\Sales\Model\Order;
-use Magento\SalesGraphQl\Model\SalesItem\SalesItemFactory;
+use Magento\SalesGraphQl\Model\SalesItem\OrderItemFactory;
 
 class OrderItem implements ResolverInterface
 {
     /**
-     * @var SalesItemFactory
+     * @var OrderItemFactory
      */
-    private $salesItemFactory;
+    private $itemsItemFactory;
 
-    public function __construct(SalesItemFactory $salesItemFactory)
+    public function __construct(OrderItemFactory $itemsItemFactory)
     {
-        $this->salesItemFactory = $salesItemFactory;
+        $this->itemsItemFactory = $itemsItemFactory;
     }
 
     /**
@@ -46,7 +46,7 @@ class OrderItem implements ResolverInterface
         /** @var OrderItemInterface $item */
         $orderItems = [];
         foreach ($parentOrder->getItems() as $key => $item) {
-            $salesOrderItem = $this->salesItemFactory->create(
+            $salesOrderItem = $this->itemsItemFactory->create(
                 $item,
                 $parentOrder,
                 ['quantity_ordered' => $item->getQtyOrdered()]
