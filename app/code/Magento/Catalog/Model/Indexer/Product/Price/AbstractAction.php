@@ -173,7 +173,7 @@ abstract class AbstractAction
                 }
             }
 
-            $query = $insertSelect->insertFromSelect($this->tableMaintainer->getMainTable($dimensions));
+            $query = $insertSelect->insertFromSelect($this->tableMaintainer->getMainTableByDimensions($dimensions));
             $this->getConnection()->query($query);
         }
         return $this;
@@ -385,7 +385,7 @@ abstract class AbstractAction
                     // copy to index
                     $this->_insertFromTable(
                         $temporaryTable,
-                        $this->tableMaintainer->getMainTable($dimensions)
+                        $this->tableMaintainer->getMainTableByDimensions($dimensions)
                     );
                 }
             } else {
@@ -401,6 +401,8 @@ abstract class AbstractAction
     }
 
     /**
+     * Delete Index data
+     *
      * @param array $entityIds
      * @return void
      */
@@ -408,7 +410,7 @@ abstract class AbstractAction
     {
         foreach ($this->dimensionCollectionFactory->create() as $dimensions) {
             $select = $this->getConnection()->select()->from(
-                ['index_price' => $this->tableMaintainer->getMainTable($dimensions)],
+                ['index_price' => $this->tableMaintainer->getMainTableByDimensions($dimensions)],
                 null
             )->where('index_price.entity_id IN (?)', $entityIds);
             $query = $select->deleteFromSelect('index_price');
@@ -476,7 +478,7 @@ abstract class AbstractAction
     {
         $indexTargetTable = $this->getIndexTargetTable();
         if ($indexTargetTable === self::getIndexTargetTable()) {
-            $indexTargetTable = $this->tableMaintainer->getMainTable($dimensions);
+            $indexTargetTable = $this->tableMaintainer->getMainTableByDimensions($dimensions);
         }
         if ($indexTargetTable === self::getIndexTargetTable() . '_replica') {
             $indexTargetTable = $this->tableMaintainer->getMainReplicaTable($dimensions);
@@ -497,6 +499,8 @@ abstract class AbstractAction
     }
 
     /**
+     * Get product Id field name
+     *
      * @return string
      */
     protected function getProductIdFieldName()
@@ -533,6 +537,7 @@ abstract class AbstractAction
 
     /**
      * Get parent products types
+     *
      * Used for add composite products to reindex if we have only simple products in changed ids set
      *
      * @param array $productsIds
