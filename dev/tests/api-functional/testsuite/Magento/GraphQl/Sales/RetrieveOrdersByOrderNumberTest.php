@@ -654,6 +654,98 @@ QUERY;
         $customerToken = $this->customerTokenService->createCustomerAccessToken($email, $password);
         return ['Authorization' => 'Bearer ' . $customerToken];
     }
+
+    /**
+     *  Verify that the customer order has the tax information on shipping and totals
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     * @magentoApiDataFixture Magento/Catalog/_files/product_simple_with_url_key.php
+     * @magentoApiDataFixture Magento/GraphQl/Tax/_files/tax_rule_for_region_1.php
+     * @magentoApiDataFixture Magento/GraphQl/Tax/_files/tax_calculation_shipping_excludeTax_order_display_settings.php
+     */
+    public function testCustomerOrderWithTaxesExcludedOnShipping()
+    {
+        $quantity = 2;
+        $sku = 'simple1';
+        $cartId = $this->createEmptyCart();
+        $this->addProductToCart($cartId, $quantity, $sku);
+        $this->setBillingAddress($cartId);
+        $shippingMethod = $this->setShippingAddress($cartId);
+        $paymentMethod = $this->setShippingMethod($cartId, $shippingMethod);
+        $this->setPaymentMethod($cartId, $paymentMethod);
+        $orderNumber = $this->placeOrder($cartId);
+        $customerOrderResponse = $this->getCustomerOrderQuery($orderNumber);
+        $customerOrderItem = $customerOrderResponse[0];
+        $this->assertTotalsAndShippingWithExcludedTaxSetting($customerOrderItem);
+        $this->deleteOrder();
+    }
+
+    /**
+     * Assert order totals including shipping_handling and taxes
+     *
+     * @param array $customerOrderItem
+     */
+    private function assertTotalsAndShippingWithExcludedTaxSetting(array $customerOrderItem): void
+    {
+        $this->assertEquals(
+            32.25,
+            $customerOrderItem['totals']['base_grand_total']['value']
+        );
+
+        $this->assertEquals(
+            32.25,
+            $customerOrderItem['totals']['grand_total']['value']
+        );
+        $this->assertEquals(
+            20,
+            $customerOrderItem['totals']['subtotal']['value']
+        );
+        $this->assertEquals(
+            2.25,
+            $customerOrderItem['totals']['total_tax']['value']
+        );
+
+        $this->assertEquals(
+            10,
+            $customerOrderItem['totals']['total_shipping']['value']
+        );
+        $this->assertEquals(
+            2.25,
+            $customerOrderItem['totals']['taxes'][0]['amount']['value']
+        );
+        $this->assertEquals(
+            'US-TEST-*-Rate-1',
+            $customerOrderItem['totals']['taxes'][0]['title']
+        );
+        $this->assertEquals(
+            7.5,
+            $customerOrderItem['totals']['taxes'][0]['rate']
+        );
+        $this->assertEquals(
+            10.75,
+            $customerOrderItem['totals']['shipping_handling']['amount_inc_tax']['value']
+        );
+        $this->assertEquals(
+            10,
+            $customerOrderItem['totals']['shipping_handling']['amount_exc_tax']['value']
+        );
+        $this->assertEquals(
+            10,
+            $customerOrderItem['totals']['shipping_handling']['total_amount']['value']
+        );
+
+        $this->assertEquals(
+            2.25,
+            $customerOrderItem['totals']['shipping_handling']['taxes'][0]['amount']['value']
+        );
+        $this->assertEquals(
+            'US-TEST-*-Rate-1',
+            $customerOrderItem['totals']['shipping_handling']['taxes'][0]['title']
+        );
+        $this->assertEquals(
+            7.5,
+            $customerOrderItem['totals']['shipping_handling']['taxes'][0]['rate']
+        );
+    }
     /**
      *  Verify that the customer order has the tax information on shipping and totals
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
