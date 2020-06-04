@@ -28,7 +28,7 @@ class SetupApplication extends Application
     protected $canInstallSequence = false;
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function run()
     {
@@ -37,6 +37,8 @@ class SetupApplication extends Application
 
     /**
      * Create dynamic tables
+     * 
+     * @SuppressWarnings(PHPMD.Generic.CodeAnalysis.EmptyStatement)
      */
     protected function createDynamicTables()
     {
