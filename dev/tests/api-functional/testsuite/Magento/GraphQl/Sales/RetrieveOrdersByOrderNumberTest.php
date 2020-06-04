@@ -350,7 +350,7 @@ QUERY;
 
     /**
      * @magentoApiDataFixture Magento/Customer/_files/two_customers.php
-     * @magentoApiDataFixture Magento/Sales/_files/two_orders_for_two_diff_customers.php
+     * @magentoApiDataFixture Magento/GraphQl/Sales/_files/two_orders_for_two_diff_customers.php
      */
     public function testGetCustomerOrdersWithWrongCustomer()
     {
@@ -397,7 +397,7 @@ QUERY;
 
     /**
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
-     * @magentoApiDataFixture Magento/Sales/_files/order_with_totals.php
+     * @magentoApiDataFixture Magento/GraphQl/Sales/_files/order_with_totals.php
      */
     public function testGetCustomerOrdersOnTotals()
     {
@@ -553,7 +553,7 @@ QUERY;
      * @throws \Magento\Framework\Exception\AuthenticationException
      * @dataProvider dataProviderMultiStores
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
-     * @magentoApiDataFixture Magento/Sales/_files/two_orders_with_order_items_two_storeviews.php
+     * @magentoApiDataFixture Magento/GraphQl/Sales/_files/two_orders_with_order_items_two_storeviews.php
      */
     public function testGetCustomerOrdersTwoStoreViewQuery(string $orderNumber, string $store, int $expectedCount)
     {
