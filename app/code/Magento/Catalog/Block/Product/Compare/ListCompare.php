@@ -149,7 +149,7 @@ class ListCompare extends \Magento\Catalog\Block\Product\AbstractProduct
             $this->_compareProduct->setAllowUsedFlat(false);
 
             $this->_items = $this->_itemCollectionFactory->create();
-            $this->_items->useProductItem(true)->setStoreId($this->_storeManager->getStore()->getId());
+            $this->_items->useProductItem()->setStoreId($this->_storeManager->getStore()->getId());
 
             if ($this->httpContext->getValue(Context::CONTEXT_AUTH)) {
                 $this->_items->setCustomerId($this->currentCustomer->getCustomerId());
