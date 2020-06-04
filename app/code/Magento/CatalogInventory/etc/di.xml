@@ -129,9 +129,6 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\CatalogInventory\Model\ResourceModel\Stock\Item">
-        <plugin name="priceIndexUpdater" type="Magento\CatalogInventory\Model\Plugin\PriceIndexUpdater" />
-    </type>
     <type name="Magento\Catalog\Controller\Adminhtml\Product\Action\Attribute\Save">
         <plugin name="massAction" type="Magento\CatalogInventory\Plugin\MassUpdateProductAttribute" />
     </type>
