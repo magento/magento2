@@ -4,8 +4,8 @@
  */
 
 var config = {
-    'waitSeconds': 0,
-    'map': {
+    waitSeconds: 0,
+    map: {
         '*': {
             'ko': 'knockoutjs/knockout',
             'knockout': 'knockoutjs/knockout',
@@ -13,7 +13,7 @@ var config = {
             'rjsResolver': 'mage/requirejs/resolver'
         }
     },
-    'shim': {
+    shim: {
         'jquery/jquery-migrate': ['jquery'],
         'jquery/jstree/jquery.hotkeys': ['jquery'],
         'jquery/hover-intent': ['jquery'],
@@ -28,7 +28,7 @@ var config = {
         },
         'magnifier/magnifier': ['jquery']
     },
-    'paths': {
+    paths: {
         'jquery/validate': 'jquery/jquery.validate',
         'jquery/hover-intent': 'jquery/jquery.hoverIntent',
         'jquery/file-uploader': 'jquery/fileUploader/jquery.fileupload-fp',
@@ -40,11 +40,11 @@ var config = {
         'tinycolor': 'jquery/spectrum/tinycolor',
         'jquery-ui-modules': 'jquery/ui-modules'
     },
-    'deps': [
+    deps: [
         'jquery/jquery-migrate'
     ],
-    'config': {
-        'mixins': {
+    config: {
+        mixins: {
             'jquery/jstree/jquery.jstree': {
                 'mage/backend/jstree-mixin': true
             },
@@ -52,13 +52,34 @@ var config = {
                 'jquery/patches/jquery': true
             }
         },
-        'text': {
+        text: {
             'headers': {
                 'X-Requested-With': 'XMLHttpRequest'
             }
         }
     }
 };
+
+/* eslint-disable max-depth */
+/**
+ * Adds polyfills only for browser contexts which prevents bundlers from including them.
+ */
+if (typeof window !== 'undefined' && window.document) {
+    /**
+     * Polyfill localStorage and sessionStorage for browsers that do not support them.
+     */
+    try {
+        if (!window.localStorage || !window.sessionStorage) {
+            throw new Error();
+        }
+
+        localStorage.setItem('storage_test', 1);
+        localStorage.removeItem('storage_test');
+    } catch (e) {
+        config.deps.push('mage/polyfill');
+    }
+}
+/* eslint-enable max-depth */
 
 require(['jquery'], function ($) {
     'use strict';
