@@ -13,6 +13,7 @@ use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Sales\Model\Order;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
+use Magento\GraphQl\GetCustomerAuthenticationHeader;
 
 /**
  * Class RetrieveOrdersTest
@@ -33,12 +34,15 @@ class RetrieveOrdersByOrderNumberTest extends GraphQlAbstract
     /** @var Order\Item */
     private $orderItem;
 
+    /** @var GetCustomerAuthenticationHeader */
+    private $customerAuthenticationHeader;
+
     protected function setUp():void
     {
         parent::setUp();
         $objectManager = Bootstrap::getObjectManager();
         $this->customerTokenService = $objectManager->get(CustomerTokenServiceInterface::class);
-
+        $this->customerAuthenticationHeader = $objectManager->get(GetCustomerAuthenticationHeader::class);
         $this->orderRepository = $objectManager->get(OrderRepositoryInterface::class);
         $this->searchCriteriaBuilder = $objectManager->get(SearchCriteriaBuilder::class);
         $this->orderItem = $objectManager->get(Order\Item::class);
@@ -100,7 +104,7 @@ QUERY;
 
         $currentEmail = 'customer@example.com';
         $currentPassword = 'password';
-        $response = $this->graphQlQuery($query, [], '', $this->getCustomerAuthHeaders($currentEmail, $currentPassword));
+        $response = $this->graphQlQuery($query, [], '', $this->customerAuthenticationHeader->execute($currentEmail, $currentPassword));
 
         $this->assertArrayHasKey('orders', $response['customer']);
         $this->assertArrayHasKey('items', $response['customer']['orders']);
@@ -162,10 +166,10 @@ QUERY;
         quantity_ordered
         product_sku
         product_name
-        parent_product_sku
+        product_type
         product_sale_price{currency value}
+        product_url_key
       }
-
     }
    }
  }
@@ -174,7 +178,7 @@ QUERY;
 
         $currentEmail = 'customer@example.com';
         $currentPassword = 'password';
-        $response = $this->graphQlQuery($query, [], '', $this->getCustomerAuthHeaders($currentEmail, $currentPassword));
+        $response = $this->graphQlQuery($query, [], '', $this->customerAuthenticationHeader->execute($currentEmail, $currentPassword));
         $this->assertArrayHasKey('orders', $response['customer']);
         $this->assertArrayHasKey('items', $response['customer']['orders']);
         $this->assertArrayHasKey('total_count', $response['customer']['orders']);
@@ -219,7 +223,7 @@ QUERY;
         $currentPassword = 'password';
         $this->expectException(\Exception::class);
         $this->expectExceptionMessage('Invalid match filter. Minimum length is 3.');
-        $this->graphQlQuery($query, [], '', $this->getCustomerAuthHeaders($currentEmail, $currentPassword));
+        $response = $this->graphQlQuery($query, [], '', $this->customerAuthenticationHeader->execute($currentEmail, $currentPassword));
     }
 
     /**
@@ -250,10 +254,10 @@ QUERY;
         quantity_ordered
         product_sku
         product_name
-        parent_product_sku
+        product_type
         product_sale_price{currency value}
       }
-            totals {
+            total {
                     base_grand_total {
                         value
                         currency
@@ -284,7 +288,7 @@ QUERY;
 
         $currentEmail = 'customer@example.com';
         $currentPassword = 'password';
-        $response = $this->graphQlQuery($query, [], '', $this->getCustomerAuthHeaders($currentEmail, $currentPassword));
+        $response = $this->graphQlQuery($query, [], '', $this->customerAuthenticationHeader->execute($currentEmail, $currentPassword));
 
         $this->assertArrayHasKey('orders', $response['customer']);
         $this->assertArrayHasKey('items', $response['customer']['orders']);
@@ -349,7 +353,7 @@ QUERY;
 
     /**
      * @magentoApiDataFixture Magento/Customer/_files/two_customers.php
-     * @magentoApiDataFixture Magento/GraphQl/Sales/_files/two_orders_for_two_diff_customers.php
+     * @magentoApiDataFixture Magento/Sales/_files/two_orders_for_two_diff_customers.php
      */
     public function testGetCustomerOrdersWithWrongCustomer()
     {
@@ -377,7 +381,7 @@ QUERY;
             $query,
             [],
             '',
-            $this->getCustomerAuthHeaders($currentEmail, $currentPassword)
+            $this->customerAuthenticationHeader->execute($currentEmail, $currentPassword)
         );
         $this->assertEmpty($responseWithWrongCustomer['customer']['orders']['total_count']);
         $this->assertEmpty($responseWithWrongCustomer['customer']['orders']['items']);
@@ -388,7 +392,7 @@ QUERY;
             $query,
             [],
             '',
-            $this->getCustomerAuthHeaders($currentEmail, $currentPassword)
+            $this->customerAuthenticationHeader->execute($currentEmail, $currentPassword)
         );
         $this->assertNotEmpty($responseWithCorrectCustomer['customer']['orders']['total_count']);
         $this->assertNotEmpty($responseWithCorrectCustomer['customer']['orders']['items']);
@@ -412,7 +416,7 @@ QUERY;
         number
         order_date
         status
-        totals {
+        total {
           base_grand_total {
             value
             currency
@@ -447,9 +451,8 @@ QUERY;
             $query,
             [],
             '',
-            $this->getCustomerAuthHeaders($currentEmail, $currentPassword)
+            $this->customerAuthenticationHeader->execute($currentEmail, $currentPassword)
         );
-
         $this->assertArrayHasKey('orders', $response['customer']);
         $this->assertArrayHasKey('items', $response['customer']['orders']);
         $expectedCount = count($response["customer"]["orders"]["items"]);
@@ -513,7 +516,7 @@ QUERY;
 
         $currentEmail = 'customer@example.com';
         $currentPassword = 'password';
-        $response = $this->graphQlQuery($query, [], '', $this->getCustomerAuthHeaders($currentEmail, $currentPassword));
+        $response = $this->graphQlQuery($query, [], '', $this->customerAuthenticationHeader->execute($currentEmail, $currentPassword));
         $this->assertArrayHasKey('customer', $response);
         $this->assertArrayHasKey('orders', $response['customer']);
         $this->assertArrayHasKey('items', $response['customer']['orders']);
@@ -609,7 +612,7 @@ QUERY;
             $query,
             [],
             '',
-            array_merge($this->getCustomerAuthHeaders($currentEmail, $currentPassword), ['Store' => $store])
+            array_merge($this->customerAuthenticationHeader->execute($currentEmail, $currentPassword), ['Store' => $store])
         );
         $this->assertArrayHasKey('customer', $response);
         $this->assertArrayHasKey('orders', $response['customer']);
@@ -640,18 +643,6 @@ QUERY;
                 '100000001', 'fixture_second_store', 0
             ],
         ];
-    }
-
-    /**
-     * @param string $email
-     * @param string $password
-     * @return array
-     * @throws \Magento\Framework\Exception\AuthenticationException
-     */
-    private function getCustomerAuthHeaders(string $email, string $password): array
-    {
-        $customerToken = $this->customerTokenService->createCustomerAccessToken($email, $password);
-        return ['Authorization' => 'Bearer ' . $customerToken];
     }
 
     /**
