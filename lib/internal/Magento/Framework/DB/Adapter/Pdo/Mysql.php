@@ -1631,7 +1631,13 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
         } else {
             $cacheKey = $this->_getTableName($tableName, $schemaName);
 
-            $ddlTypes = [self::DDL_DESCRIBE, self::DDL_CREATE, self::DDL_INDEX, self::DDL_FOREIGN_KEY, self::DDL_EXISTS];
+            $ddlTypes = [
+                self::DDL_DESCRIBE,
+                self::DDL_CREATE,
+                self::DDL_INDEX,
+                self::DDL_FOREIGN_KEY,
+                self::DDL_EXISTS
+            ];
             foreach ($ddlTypes as $ddlType) {
                 unset($this->_ddlCache[$ddlType][$cacheKey]);
             }
