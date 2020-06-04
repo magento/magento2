@@ -37,8 +37,8 @@ class SetupApplication extends Application
 
     /**
      * Create dynamic tables
-     * 
-     * @SuppressWarnings(PHPMD.Generic.CodeAnalysis.EmptyStatement)
+     *
+     * phpcs:ignore Generic.CodeAnalysis.EmptyStatement
      */
     protected function createDynamicTables()
     {
