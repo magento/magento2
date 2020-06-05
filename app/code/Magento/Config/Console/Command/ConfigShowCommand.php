@@ -136,7 +136,7 @@ class ConfigShowCommand extends Command
      * Shows error message if configuration for given path doesn't exist
      * or scope/scope-code doesn't pass validation.
      *
-     * {@inheritdoc}
+     * @inheritdoc
      * @since 100.2.0
      */
     protected function execute(InputInterface $input, OutputInterface $output)
@@ -150,7 +150,7 @@ class ConfigShowCommand extends Command
             $configPath = $this->pathResolver->resolve($this->inputPath, $this->scope, $this->scopeCode);
             $configValue = $this->configSource->get($configPath);
 
-            if (empty($configValue)) {
+            if ($configValue === null) {
                 $output->writeln(sprintf(
                     '<error>%s</error>',
                     __('Configuration for path: "%1" doesn\'t exist', $this->inputPath)->render()
