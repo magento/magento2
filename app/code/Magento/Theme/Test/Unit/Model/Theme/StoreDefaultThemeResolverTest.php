@@ -99,7 +99,7 @@ class StoreDefaultThemeResolverTest extends TestCase
                 []
             ],
             [
-                1,
+                '1',
                 [1]
             ],
             [
