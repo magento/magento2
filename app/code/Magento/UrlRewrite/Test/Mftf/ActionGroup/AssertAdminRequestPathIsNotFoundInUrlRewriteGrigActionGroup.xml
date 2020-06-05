@@ -17,6 +17,6 @@
         </arguments>
 
         <dontSeeElement selector="{{AdminUrlRewriteIndexSection.gridCellByColumnValue('Request Path', requestPath)}}"
-                        stepKey="valueInNotShownInGrid"/>
+                        stepKey="valueIsNotShownInGrid"/>
     </actionGroup>
 </actionGroups>
