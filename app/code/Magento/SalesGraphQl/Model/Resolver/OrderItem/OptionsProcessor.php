@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\SalesGraphQl\Model\Resolver\OrderItem;
 
+use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Sales\Api\Data\OrderItemInterface;
 
 /**
@@ -14,6 +15,21 @@ use Magento\Sales\Api\Data\OrderItemInterface;
  */
 class OptionsProcessor
 {
+    /**
+     * Serializer
+     *
+     * @var Json
+     */
+    private $serializer;
+
+    /**
+     * @param Json $serializer
+     */
+    public function __construct(Json $serializer)
+    {
+        $this->serializer = $serializer;
+    }
+
     /**
      * Get Order item options.
      *
@@ -81,5 +97,24 @@ class OptionsProcessor
             ];
         }
         return ['selected_options' => $selectedOptions, 'entered_options' => []];
+    }
+
+    /**
+     * TODO: use this method for bundle options
+     *
+     * @param mixed $item
+     * @return mixed|null
+     */
+    public function getSelectionAttributes($item)
+    {
+        if ($item instanceof \Magento\Sales\Model\Order\Item) {
+            $options = $item->getProductOptions();
+        } else {
+            $options = $item->getOrderItem()->getProductOptions();
+        }
+        if (isset($options['bundle_selection_attributes'])) {
+            return $this->serializer->unserialize($options['bundle_selection_attributes']);
+        }
+        return null;
     }
 }

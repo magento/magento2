@@ -60,7 +60,9 @@ class OrderItems implements ResolverInterface
         $parentOrder = $value['model'];
         $orderItemIds = [];
         foreach ($parentOrder->getItems() as $item) {
-            $orderItemIds[] = (int)$item->getItemId();
+            if ((!$item->getParentItemId())) {
+                $orderItemIds[] = (int)$item->getItemId();
+            }
             $this->orderItemProvider->addOrderItemId((int)$item->getItemId());
         }
 
