@@ -179,7 +179,7 @@ QUERY;
         $this->assertArrayHasKey('orders', $response['customer']);
         $this->assertArrayHasKey('items', $response['customer']['orders']);
         $this->assertArrayHasKey('total_count', $response['customer']['orders']);
-        $this->assertEquals(4, $response['customer']['orders']['total_count']);
+        $this->assertEquals(6, $response['customer']['orders']['total_count']);
     }
     /**
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
@@ -234,7 +234,7 @@ QUERY;
 {
   customer
   {
-   orders(filter:{number:{in:["100000005","100000006"]}}){
+   orders(filter:{number:{in:["100000007","100000008"]}}){
     total_count
     page_info{
       total_pages
@@ -255,27 +255,18 @@ QUERY;
         product_sale_price{currency value}
       }
             total {
-                    base_grand_total {
-                        value
-                        currency
-                    }
-                    grand_total {
-                        value
-                        currency
-                    }
+                    base_grand_total {value currency}
+                    grand_total {value currency}
+                    subtotal {value currency}
+                    total_shipping{value}
                     shipping_handling{total_amount{value currency}}
-                    subtotal {
-                        value
-                        currency
-                    }
+                    total_tax{value currency}
                     taxes {amount {currency value} title rate}
-                    discounts {
-                        amount {
-                            value
-                            currency
-                        }
-                        label
-                    }
+                    shipping_handling
+                    {
+                     total_amount{value}
+                     taxes{amount{value}}
+                     }
                 }
     }
    }
@@ -300,7 +291,7 @@ QUERY;
         $customerOrderItemsInResponse = $response['customer']['orders']['items'];
         $this->assertCount(2, $response['customer']['orders']['items']);
 
-        $orderNumbers = ['100000005', '100000006'];
+        $orderNumbers = ['100000007', '100000008'];
         $searchCriteria = $this->searchCriteriaBuilder->addFilter('increment_id', $orderNumbers, 'in')
             ->create();
         /** @var \Magento\Sales\Api\Data\OrderInterface[] $items */
@@ -311,10 +302,23 @@ QUERY;
             $orderNumber = $item->getIncrementId();
             $this->assertEquals($orderId, $customerOrderItemsInResponse[$key]['id']);
             $this->assertEquals($orderNumber, $customerOrderItemsInResponse[$key]['number']);
-            $this->assertEquals('Complete', $customerOrderItemsInResponse[$key]['status']);
-            //TODO: below function needs to be updated to reflect totals based on the order number being used in each test
-//            $expectedCount = count($response['customer']['orders']['items']);
-//            $this->assertTotals($customerOrderItemsInResponse[$key], $expectedCount);
+            $this->assertEquals('Processing', $customerOrderItemsInResponse[$key]['status']);
+             $this->assertEquals(
+                 4,
+                 $customerOrderItemsInResponse[$key]['total']['shipping_handling']['total_amount']['value']
+             );
+            $this->assertEquals(
+                5,
+                $customerOrderItemsInResponse[$key]['total']['shipping_handling']['taxes'][0]['amount']['value']
+            );
+            $this->assertEquals(
+                5,
+                $customerOrderItemsInResponse[$key]['total']['total_shipping']['value']
+            );
+            $this->assertEquals(
+                5,
+            $customerOrderItemsInResponse[$key]['total']['total_tax']['value']);
+
             $key++;
         }
     }
