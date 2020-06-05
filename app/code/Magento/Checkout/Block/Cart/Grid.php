@@ -23,7 +23,7 @@ class Grid extends \Magento\Checkout\Block\Cart
     const XPATH_CONFIG_NUMBER_ITEMS_TO_DISPLAY_PAGER = 'checkout/cart/number_items_to_display_pager';
 
     /**
-     * Default display setting for clear shopping cart button
+     * Config settings path to enable clear shopping cart button
      */
     const XPATH_CONFIG_ENABLE_CLEAR_SHOPPING_CART = 'checkout/cart/enable_clear_shopping_cart';
 
