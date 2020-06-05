@@ -8,19 +8,16 @@
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="AdminExportGroupedProductWithSpecialPriceTest">
+    <test name="AdminExportGroupedProductWithSpecialProductPriceTest">
         <annotations>
             <features value="CatalogImportExport"/>
             <stories value="Export products"/>
-            <title value="DEPRECATED Export grouped product with special price"/>
+            <title value="Export grouped product with special price"/>
             <description value="Admin should be able to export grouped product with special price"/>
             <severity value="CRITICAL"/>
             <testCaseId value="MC-14009"/>
             <group value="catalog_import_export"/>
             <group value="mtf_migrated"/>
-            <skip>
-                <issueId value="DEPRECATED">Use AdminExportGroupedProductWithSpecialProductPriceTest instead</issueId>
-            </skip>
         </annotations>
         <before>
             <!-- Create first simple product and add special price  -->
@@ -29,7 +26,7 @@
                 <requiredEntity createDataKey="createFirstSimpleProduct"/>
             </createData>
 
-             <!-- Create second simple product and add special price-->
+            <!-- Create second simple product and add special price-->
             <createData entity="SimpleProduct2" stepKey="createSecondSimpleProduct"/>
             <createData entity="specialProductPrice2" stepKey="specialPriceToSecondProduct">
                 <requiredEntity createDataKey="createSecondSimpleProduct"/>
@@ -50,10 +47,6 @@
                 <requiredEntity createDataKey="createGroupedProduct"/>
                 <requiredEntity createDataKey="createSecondSimpleProduct"/>
             </updateData>
-
-            <!-- Run cron twice -->
-            <magentoCLI command="cron:run" stepKey="runCron1"/>
-            <magentoCLI command="cron:run" stepKey="runCron2"/>
 
             <!-- Login as admin -->
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
@@ -83,9 +76,13 @@
         <!-- Export created below products -->
         <actionGroup ref="exportAllProducts" stepKey="exportCreatedProducts"/>
 
-        <!-- Run cron -->
-        <magentoCLI command="cron:run" stepKey="runCron3"/>
-        <magentoCLI command="cron:run" stepKey="runCron4"/>
+        <!-- Start message queue for export consumer -->
+        <actionGroup ref="CliConsumerStartActionGroup" stepKey="startMessageQueue">
+            <argument name="consumerName" value="{{AdminExportMessageConsumerData.consumerName}}"/>
+            <argument name="maxMessages" value="{{AdminExportMessageConsumerData.messageLimit}}"/>
+        </actionGroup>
+        <reloadPage stepKey="refreshPage"/>
+        <waitForPageLoad stepKey="waitForPageLoaded"/>
 
         <!-- Download product -->
         <actionGroup ref="downloadFileByRowIndex" stepKey="downloadCreatedProducts">

@@ -8,19 +8,16 @@
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="AdminExportSimpleProductWithCustomAttributeTest">
+    <test name="AdminExportSimpleProductWithCustomAttributeSetTest">
         <annotations>
             <features value="CatalogImportExport"/>
             <stories value="Export products"/>
-            <title value="DEPRECATED Export Simple Product with custom attribute"/>
+            <title value="Export Simple Product with custom attribute"/>
             <description value="Admin should be able to export Simple Product with custom attribute"/>
             <severity value="CRITICAL"/>
             <testCaseId value="MC-14007"/>
             <group value="catalog_import_export"/>
             <group value="mtf_migrated"/>
-            <skip>
-                <issueId value="DEPRECATED">Use AdminExportSimpleProductWithCustomAttributeSetTest instead</issueId>
-            </skip>
         </annotations>
         <before>
             <!-- Create simple product with custom attribute set -->
@@ -31,9 +28,8 @@
                 <requiredEntity createDataKey="createAttributeSet"/>
             </createData>
 
-            <!-- Run cron twice -->
-            <magentoCLI command="cron:run" stepKey="runCron1"/>
-            <magentoCLI command="cron:run" stepKey="runCron2"/>
+            <!-- Reindex invalidated indices after product attribute has been created/deleted -->
+            <actionGroup ref="CliRunReindexUsingCronJobsActionGroup" stepKey="reindexInvalidatedIndices"/>
 
             <!-- Login as admin -->
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
@@ -60,9 +56,13 @@
         <!-- Export created below products -->
         <actionGroup ref="exportAllProducts" stepKey="exportCreatedProducts"/>
 
-        <!-- Run cron -->
-        <magentoCLI command="cron:run" stepKey="runCron3"/>
-        <magentoCLI command="cron:run" stepKey="runCron4"/>
+        <!-- Start message queue for export consumer -->
+        <actionGroup ref="CliConsumerStartActionGroup" stepKey="startMessageQueue">
+            <argument name="consumerName" value="{{AdminExportMessageConsumerData.consumerName}}"/>
+            <argument name="maxMessages" value="{{AdminExportMessageConsumerData.messageLimit}}"/>
+        </actionGroup>
+        <reloadPage stepKey="refreshPage"/>
+        <waitForPageLoad stepKey="waitForPageLoaded"/>
 
         <!-- Download product -->
         <actionGroup ref="downloadFileByRowIndex" stepKey="downloadCreatedProducts">
