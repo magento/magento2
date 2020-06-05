@@ -114,7 +114,7 @@
             <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
         </after>
 
-        <!-- Go to product page in admin panel to edit -->
+        <!-- Go to product page in admin panel and open Configurable product to edit -->
         <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="openProductIndexPage"/>
         <actionGroup ref="FilterProductGridByName2ActionGroup" stepKey="filterProductInGrid">
             <argument name="name" value="$$createConfigProduct.name$$"/>
@@ -127,15 +127,40 @@
         </actionGroup>
 
         <!-- Go to product page on frontend and assert all options are shown-->
-        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openProductPage">
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openProductPageOnStorefront">
             <argument name="productUrl" value="$createConfigProduct.custom_attributes[url_key]$"/>
         </actionGroup>
+        <actionGroup ref="AssertStorefrontConfigurableProductOptionIsShownInDropdownActionGroup" stepKey="seeOptionOne">
+            <argument name="optionName" value="$$createConfigProductAttribute.default_frontend_label$$"/>
+            <argument name="optionLabel" value="$$getConfigAttributeOption1.label$$"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontConfigurableProductOptionIsShownInDropdownActionGroup" stepKey="seeOptionTwo">
+            <argument name="optionName" value="$$createConfigProductAttribute.default_frontend_label$$"/>
+            <argument name="optionLabel" value="$$getConfigAttributeOption2.label$$"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontConfigurableProductOptionIsShownInDropdownActionGroup" stepKey="seeOptionThree">
+            <argument name="optionName" value="$$createConfigProductAttribute.default_frontend_label$$"/>
+            <argument name="optionLabel" value="$$getConfigAttributeOption3.label$$"/>
+        </actionGroup>
 
-        <!-- Verify Child Products are displayed -->
-        <selectOption selector="{{StorefrontProductInfoMainSection.productOptionSelect($$createConfigProductAttribute.default_frontend_label$$)}}" userInput="$$getConfigAttributeOption1.label$$" stepKey="seeOptionOne"/>
-        <selectOption selector="{{StorefrontProductInfoMainSection.productOptionSelect($$createConfigProductAttribute.default_frontend_label$$)}}" userInput="$$getConfigAttributeOption2.label$$" stepKey="seeOptionTwo"/>
-        <selectOption selector="{{StorefrontProductInfoMainSection.productOptionSelect($$createConfigProductAttribute.default_frontend_label$$)}}" userInput="$$getConfigAttributeOption3.label$$" stepKey="seeOptionThree"/>
+        <!-- Go to product page in admin panel and unassign child product from the main website -->
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="goToProductIndexPage"/>
+        <actionGroup ref="FilterProductGridByName2ActionGroup" stepKey="filterChildProductInGrid">
+            <argument name="name" value="$$createConfigChildProduct1.name$$"/>
+        </actionGroup>
+        <actionGroup ref="AdminProcessProductWebsitesActionGroup" stepKey="processProductWebsites">
+            <argument name="website" value="customWebsite"/>
+            <argument name="websiteToUnassign" value="_defaultWebsite"/>
+            <argument name="product" value="$$createConfigChildProduct1$$"/>
+        </actionGroup>
 
-
+        <!-- Go to product page on frontend and assert the first option is not shown-->
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="goToProductPageOnStorefront">
+            <argument name="productUrl" value="$createConfigProduct.custom_attributes[url_key]$"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontConfigurableProductOptionIsNotShownInDropdownActionGroup" stepKey="doNotSeeOptionOne">
+            <argument name="optionName" value="$$createConfigProductAttribute.default_frontend_label$$"/>
+            <argument name="optionLabel" value="$$getConfigAttributeOption1.label$$"/>
+        </actionGroup>
     </test>
 </tests>
