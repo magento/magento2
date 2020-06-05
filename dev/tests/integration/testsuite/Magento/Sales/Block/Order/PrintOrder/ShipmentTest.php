@@ -10,26 +10,23 @@ namespace Magento\Sales\Block\Order\PrintOrder;
 use Magento\Directory\Model\CountryFactory;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Registry;
-use Magento\Framework\View\Element\Text;
 use Magento\Framework\View\LayoutInterface;
 use Magento\Framework\View\Result\PageFactory;
-use Magento\Sales\Api\Data\InvoiceInterface;
-use Magento\Sales\Api\Data\InvoiceInterfaceFactory;
+use Magento\Sales\Api\Data\ShipmentInterface;
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Api\Data\OrderInterfaceFactory;
-use Magento\Sales\Api\Data\OrderPaymentInterfaceFactory;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\Helper\Xpath;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Tests for print invoice block.
+ * Tests for print shipment block.
  *
  * @magentoAppArea frontend
  * @magentoDbIsolation enabled
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class InvoiceTest extends TestCase
+class ShipmentTest extends TestCase
 {
     /** @var ObjectManagerInterface */
     private $objectManager;
@@ -43,17 +40,11 @@ class InvoiceTest extends TestCase
     /** @var OrderInterfaceFactory */
     private $orderFactory;
 
-    /** @var InvoiceInterfaceFactory */
-    private $invoiceFactory;
-
     /** @var PageFactory */
     private $pageFactory;
 
     /** @var CountryFactory */
     private $countryFactory;
-
-    /** @var OrderPaymentInterfaceFactory */
-    private $orderPaymentFactory;
 
     /**
      * @inheritdoc
@@ -66,10 +57,8 @@ class InvoiceTest extends TestCase
         $this->registry = $this->objectManager->get(Registry::class);
         $this->layout = $this->objectManager->get(LayoutInterface::class);
         $this->orderFactory = $this->objectManager->get(OrderInterfaceFactory::class);
-        $this->invoiceFactory = $this->objectManager->get(InvoiceInterfaceFactory::class);
         $this->pageFactory = $this->objectManager->get(PageFactory::class);
         $this->countryFactory = $this->objectManager->get(CountryFactory::class);
-        $this->orderPaymentFactory = $this->objectManager->create(OrderPaymentInterfaceFactory::class);
     }
 
     /**
@@ -78,72 +67,49 @@ class InvoiceTest extends TestCase
     protected function tearDown(): void
     {
         $this->registry->unregister('current_order');
-        $this->registry->unregister('current_invoice');
+        $this->registry->unregister('current_shipment');
 
         parent::tearDown();
     }
 
     /**
-     * @magentoAppIsolation enabled
+     * @magentoDataFixture Magento/Sales/_files/shipment_for_two_items.php
      *
      * @return void
      */
-    public function testGetInvoiceTotalsHtml(): void
-    {
-        $order = $this->orderFactory->create();
-        $this->registerOrder($order);
-        $payment = $this->orderPaymentFactory->create();
-        $payment->setMethod('checkmo');
-        $order->setPayment($payment);
-        $block = $this->layout->createBlock(Invoice::class, 'block');
-        $childBlock = $this->layout->addBlock(Text::class, 'invoice_totals', 'block');
-        $expectedHtml = '<b>Any html</b>';
-        $invoice = $this->invoiceFactory->create();
-        $this->assertEmpty($childBlock->getInvoice());
-        $this->assertNotEquals($expectedHtml, $block->getInvoiceTotalsHtml($invoice));
-        $childBlock->setText($expectedHtml);
-        $actualHtml = $block->getInvoiceTotalsHtml($invoice);
-        $this->assertSame($invoice, $childBlock->getInvoice());
-        $this->assertEquals($expectedHtml, $actualHtml);
-    }
-
-    /**
-     * @magentoDataFixture Magento/Sales/_files/invoices_for_items.php
-     *
-     * @return void
-     */
-    public function testPrintInvoice(): void
+    public function testPrintShipment(): void
     {
         $order = $this->orderFactory->create()->loadByIncrementId('100000555');
-        $invoice = $order->getInvoiceCollection()->getFirstItem();
-        $this->assertNotNull($invoice->getId());
         $this->registerOrder($order);
-        $this->registerInvoice($invoice);
-        $blockHtml = $this->renderPrintInvoiceBlock();
+        $shipment = $order->getShipmentsCollection()->getFirstItem();
+        $this->assertNotNull($shipment->getId());
+        $this->registerOrder($order);
+        $this->registerShipment($shipment);
+        $blockHtml = $this->renderPrintShipmentBlock();
         $this->assertEquals(
             1,
             Xpath::getElementsCountForXpath(
                 sprintf(
                     "//div[contains(@class, 'order-title')]/strong[contains(text(), '%s')]",
-                    __('Invoice #%1', (int)$invoice->getIncrementId())
+                    __('Shipment #%1', $shipment->getIncrementId())
                 ),
                 $blockHtml
             ),
-            sprintf('Title for %s was not found.', __('Invoice #%1', (int)$invoice->getIncrementId()))
+            sprintf('Title for %s was not found.', __('Shipment #%1', $shipment->getIncrementId()))
         );
         $this->assertOrderInformation($order, $blockHtml);
     }
 
     /**
-     * @magentoDataFixture Magento/Sales/_files/invoices_for_items.php
+     * @magentoDataFixture Magento/Sales/_files/shipment_for_order_with_customer.php
      *
      * @return void
      */
     public function testOrderInformation(): void
     {
-        $order = $this->orderFactory->create()->loadByIncrementId('100000555');
+        $order = $this->orderFactory->create()->loadByIncrementId('100000001');
         $this->registerOrder($order);
-        $block = $this->layout->createBlock(Invoice::class);
+        $block = $this->layout->createBlock(Shipment::class);
         $orderDate = $block->formatDate($order->getCreatedAt(), \IntlDateFormatter::LONG);
         $templates = [
             'Order status' => [
@@ -183,8 +149,9 @@ class InvoiceTest extends TestCase
             __('Order Information') . ' title wasn\'t found.'
         );
         foreach ([$order->getShippingAddress(), $order->getBillingAddress()] as $address) {
-            $addressBoxXpath = sprintf("//div[contains(@class, 'box-order-%s-address')]", $address->getAddressType())
-                . "//address[contains(., '%s')]";
+            $addressBoxXpath = ($address->getAddressType() == 'shipping')
+                ? "//div[contains(@class, 'box-order-shipping-address')]//address[contains(., '%s')]"
+                : "//div[contains(@class, 'box-order-billing-method')]//address[contains(., '%s')]";
             $this->assertEquals(
                 1,
                 Xpath::getElementsCountForXpath(sprintf($addressBoxXpath, $address->getName()), $html),
@@ -238,33 +205,33 @@ class InvoiceTest extends TestCase
     }
 
     /**
-     * Register invoice in registry.
+     * Register shipment in registry.
      *
-     * @param InvoiceInterface $invoice
+     * @param ShipmentInterface $shipment
      * @return void
      */
-    private function registerInvoice(InvoiceInterface $invoice): void
+    private function registerShipment(ShipmentInterface $shipment): void
     {
-        $this->registry->unregister('current_invoice');
-        $this->registry->register('current_invoice', $invoice);
+        $this->registry->unregister('current_shipment');
+        $this->registry->register('current_shipment', $shipment);
     }
 
     /**
-     * Render print invoice block.
+     * Render print shipment block.
      *
      * @return string
      */
-    private function renderPrintInvoiceBlock(): string
+    private function renderPrintShipmentBlock(): string
     {
         $page = $this->pageFactory->create();
         $page->addHandle([
             'default',
-            'sales_order_printinvoice',
+            'sales_order_printshipment',
         ]);
         $page->getLayout()->generateXml();
-        $printInvoiceBlock = $page->getLayout()->getBlock('sales.order.print.invoice');
-        $this->assertNotFalse($printInvoiceBlock);
+        $printShipmentBlock = $page->getLayout()->getBlock('sales.order.print.shipment');
+        $this->assertNotFalse($printShipmentBlock);
 
-        return $printInvoiceBlock->toHtml();
+        return $printShipmentBlock->toHtml();
     }
 }
