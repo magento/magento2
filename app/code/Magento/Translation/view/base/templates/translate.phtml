@@ -4,14 +4,22 @@
  * See COPYING.txt for license details.
  */
 
-/** @var \Magento\Translation\Block\Js $block */
+/**
+ * @var \Magento\Translation\Block\Js $block
+ * @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer
+ */
 ?>
 <!--
-    For frontend area dictionary file is inserted into html head in Magento/Translation/view/base/templates/dictionary.phtml
-    Same translation mechanism should be introduced for admin area in 2.4 version.
+For frontend area dictionary file is inserted into html head in Magento/Translation/view/base/templates/dictionary.phtml
+Same translation mechanism should be introduced for admin area in 2.4 version.
 -->
-<?php if ($block->dictionaryEnabled()) : ?>
-    <script>
+<?php
+if ($block->dictionaryEnabled()) {
+    $version = $block->getTranslationFileVersion();
+    $escapedVersion = $block->escapeJs($version);
+    $dictionaryFileName = /* @noEscape */ Magento\Translation\Model\Js\Config::DICTIONARY_FILE_NAME;
+
+    $scriptString = <<<script
         require.config({
             deps: [
                 'jquery',
@@ -28,11 +36,9 @@
                 $.initNamespaceStorage('mage-translation-file-version');
                 versionObj = $.localStorage.get('mage-translation-file-version');
 
-                <?php $version = $block->getTranslationFileVersion(); ?>
-
-                if (versionObj.version !== '<?= $block->escapeJs($version) ?>') {
+                if (versionObj.version !== '{$escapedVersion}') {
                     dependencies.push(
-                        'text!<?= /* @noEscape */ Magento\Translation\Model\Js\Config::DICTIONARY_FILE_NAME ?>'
+                        'text!{$dictionaryFileName}'
                     );
 
                 }
@@ -46,7 +52,7 @@
                             $.localStorage.set(
                                 'mage-translation-file-version',
                                 {
-                                    version: '<?= $block->escapeJs($version) ?>'
+                                    version: '{$escapedVersion}'
                                 }
                             );
                         } else {
@@ -56,5 +62,6 @@
                 });
             }
         });
-    </script>
-<?php endif; ?>
+script;
+    echo /* @noEscape */ $secureRenderer->renderTag('script', [], $scriptString, false);
+}

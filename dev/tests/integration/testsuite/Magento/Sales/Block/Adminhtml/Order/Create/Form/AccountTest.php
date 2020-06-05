@@ -94,21 +94,21 @@ class AccountTest extends TestCase
 
         $expectedFields = ['group_id', 'email'];
         $form = $this->accountBlock->getForm();
-        self::assertEquals(1, $form->getElements()->count(), "Form has invalid number of fieldsets");
+        $this->assertEquals(1, $form->getElements()->count(), "Form has invalid number of fieldsets");
         $fieldset = $form->getElements()[0];
         $content = $form->toHtml();
 
-        self::assertEquals(count($expectedFields), $fieldset->getElements()->count());
+        $this->assertEquals(count($expectedFields), $fieldset->getElements()->count());
 
         foreach ($fieldset->getElements() as $element) {
-            self::assertTrue(
+            $this->assertTrue(
                 in_array($element->getId(), $expectedFields),
                 sprintf('Unexpected field "%s" in form.', $element->getId())
             );
         }
 
-        self::assertStringContainsString(
-            '<option value="'.$customerGroup.'" selected="selected">Wholesale</option>',
+        self::assertRegExp(
+            '/<option value="'.$customerGroup.'".*?selected="selected"\>Wholesale\<\/option\>/is',
             $content,
             'The Customer Group specified for the chosen customer should be selected.'
         );
@@ -150,14 +150,14 @@ class AccountTest extends TestCase
         $form->setUseContainer(true);
         $content = $form->toHtml();
 
-        self::assertStringContainsString(
-            '<option value="1" selected="selected">Yes</option>',
+        self::assertRegExp(
+            '/\<option value="1".*?selected="selected"\>Yes\<\/option\>/is',
             $content,
             'Default value for user defined custom attribute should be selected.'
         );
 
-        self::assertStringContainsString(
-            '<option value="3" selected="selected">Retailer</option>',
+        self::assertRegExp(
+            '/<option value="3".*?selected="selected"\>Retailer\<\/option\>/is',
             $content,
             'The Customer Group specified for the chosen store should be selected.'
         );
