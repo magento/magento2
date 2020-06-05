@@ -23,6 +23,11 @@ class Grid extends \Magento\Checkout\Block\Cart
     const XPATH_CONFIG_NUMBER_ITEMS_TO_DISPLAY_PAGER = 'checkout/cart/number_items_to_display_pager';
 
     /**
+     * Default display setting for clear shopping cart button
+     */
+    const XPATH_CONFIG_ENABLE_CLEAR_SHOPPING_CART = 'checkout/cart/enable_clear_shopping_cart';
+
+    /**
      * @var \Magento\Quote\Model\ResourceModel\Quote\Item\Collection
      */
     private $itemsCollection;
@@ -173,5 +178,18 @@ class Grid extends \Magento\Checkout\Block\Cart
             $this->isPagerDisplayed = !$this->getCustomItems() && $availableLimit < $this->getItemsCount();
         }
         return $this->isPagerDisplayed;
+    }
+
+    /**
+     * Check if clear shopping cart button is enabled
+     *
+     * @return bool
+     */
+    public function isClearShoppingCartEnabled()
+    {
+        return (bool) $this->_scopeConfig->getValue(
+            self::XPATH_CONFIG_ENABLE_CLEAR_SHOPPING_CART,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        );
     }
 }

@@ -5,23 +5,32 @@
 
 define([
     'jquery',
-    'jquery-ui-modules/widget'
-], function ($) {
+    'Magento_Ui/js/modal/confirm',
+    'jquery-ui-modules/widget',
+    'mage/translate'
+], function ($, confirm) {
     'use strict';
 
     $.widget('mage.shoppingCart', {
         /** @inheritdoc */
         _create: function () {
-            var items, i, reload;
+            var items, i, reload, self = this;
 
             $(this.options.emptyCartButton).on('click', $.proxy(function () {
-                $(this.options.emptyCartButton).attr('name', 'update_cart_action_temp');
-                $(this.options.updateCartActionContainer)
-                    .attr('name', 'update_cart_action').attr('value', 'empty_cart');
+                confirm({
+                    content: $.mage.__('Are you sure you want to remove all items from your Shopping Cart?'),
+                    actions: {
+                        confirm: function () {
+                            $(self.options.emptyCartButton).attr('name', 'update_cart_action_temp');
+                            $(self.options.updateCartActionContainer)
+                                .attr('name', 'update_cart_action').attr('value', 'empty_cart');
 
-                if ($(this.options.emptyCartButton).parents('form').length > 0) {
-                    $(this.options.emptyCartButton).parents('form').submit();
-                }
+                            if ($(self.options.emptyCartButton).parents('form').length > 0) {
+                                $(self.options.emptyCartButton).parents('form').submit();
+                            }
+                        }
+                    }
+                });
             }, this));
             items = $.find('[data-role="cart-item-qty"]');
 

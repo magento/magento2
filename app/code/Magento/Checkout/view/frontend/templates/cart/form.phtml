@@ -56,14 +56,16 @@
                 <span><?= $block->escapeHtml(__('Continue Shopping')) ?></span>
             </a>
         <?php endif; ?>
-        <button type="button"
-                name="update_cart_action"
-                data-cart-empty=""
-                value="empty_cart"
-                title="<?= $block->escapeHtml(__('Clear Shopping Cart')) ?>"
-                class="action clear" id="empty_cart_button">
-            <span><?= $block->escapeHtml(__('Clear Shopping Cart')) ?></span>
-        </button>
+        <?php if ($block->isClearShoppingCartEnabled()) :?>
+            <button type="button"
+                    name="update_cart_action"
+                    data-cart-empty=""
+                    value="empty_cart"
+                    title="<?= $block->escapeHtml(__('Clear Shopping Cart')) ?>"
+                    class="action clear" id="empty_cart_button">
+                <span><?= $block->escapeHtml(__('Clear Shopping Cart')) ?></span>
+            </button>
+        <?php endif ?>
         <button type="submit"
                 name="update_cart_action"
                 data-cart-item-update=""
@@ -78,3 +80,6 @@
 <?= $block->getChildHtml('checkout.cart.order.actions') ?>
 <?= $block->getChildHtml('shopping.cart.table.after') ?>
 
+<script>
+
+</script>
