@@ -93,7 +93,7 @@ define([
 
                     this.itemsArea.onLoad = this.itemsArea.onLoad.wrap(function (proceed) {
                         proceed();
-                        if ($(searchAreaId) && !$(searchAreaId).visible() && !$(searchButtonId)) {
+                        if ($(searchAreaId) && !jQuery('#' + searchAreaId).is(':visible') && !$(searchButtonId)) {
                             this.addControlButton(searchButton);
                         }
                     });

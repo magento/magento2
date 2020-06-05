@@ -4,7 +4,10 @@
  * See COPYING.txt for license details.
  */
 
-/** @var $block \Magento\User\Block\Role\Tab\Edit */
+/**
+ * @var $block \Magento\User\Block\Role\Tab\Edit
+ * @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer
+ */
 ?>
 
 <?= $block->getChildHtml() ?>
@@ -18,8 +21,7 @@
         <label class="label" for="all"><span><?= $block->escapeHtml(__('Resource Access')) ?></span></label>
 
         <div class="control">
-            <select id="all" name="all"
-                    onchange="jQuery('[data-role=tree-resources-container]').toggle()" class="select">
+            <select id="all" name="all" class="select">
                 <option value="0" <?= ($block->isEverythingAllowed() ? '' : 'selected="selected"') ?>>
                     <?= $block->escapeHtml(__('Custom')) ?>
                 </option>
@@ -27,11 +29,16 @@
                     <?= $block->escapeHtml(__('All')) ?>
                 </option>
             </select>
+            <?= /* @noEscape */ $secureRenderer->renderEventListenerAsTag(
+                'onchange',
+                "jQuery('[data-role=tree-resources-container]').toggle()",
+                'select#all'
+            ) ?>
         </div>
     </div>
 
     <div class="field
-        <?php if ($block->isEverythingAllowed()) :?>
+        <?php if ($block->isEverythingAllowed()):?>
             no-display
         <?php endif ?>"
          data-role="tree-resources-container">
