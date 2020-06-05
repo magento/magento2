@@ -29,6 +29,7 @@ $orders = [
         'increment_id' => '100000002',
         'state' => \Magento\Sales\Model\Order::STATE_NEW,
         'status' => 'processing',
+        'order_currency_code' =>'USD',
         'grand_total' => 120.00,
         'subtotal' => 120.00,
         'base_grand_total' => 120.00,
