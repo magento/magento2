@@ -117,8 +117,6 @@ class ViewTest extends TestCase
 
     /**
      * Create test store
-     *
-     * @return int
      */
     private function createStore(): int
     {
@@ -135,7 +133,6 @@ class ViewTest extends TestCase
      * Delete test store
      *
      * @param int $storeId
-     * @return void
      */
     private function deleteStore(int $storeId): void
     {
