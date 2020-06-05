@@ -5,8 +5,16 @@
  */
 
 /** @var \Magento\Customer\Block\Adminhtml\System\Config\Validatevat $block */
+/** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
 ?>
-<script>
+
+<?php
+ $merchantCountryField = $block->escapeJs($block->getMerchantCountryField());
+ $merchantVatNumberField = $block->escapeJs($block->getMerchantVatNumberField());
+ $ajaxUrl = $block->escapeJs($block->getAjaxUrl());
+ $errorMessage = $block->escapeJs($block->escapeHtml(__('Error during VAT Number verification.')));
+
+ $scriptString = <<<script
 require(['prototype'], function(){
 
 //<![CDATA[
@@ -14,21 +22,22 @@ require(['prototype'], function(){
         var validationMessage = $('validation_result');
 
         params = {
-            country: $('<?= $block->escapeJs($block->getMerchantCountryField()) ?>').value,
-            vat: $('<?= $block->escapeJs($block->getMerchantVatNumberField()) ?>').value
+            country: $('{$merchantCountryField}').value,
+            vat: $('{$merchantVatNumberField}').value
         };
 
-        new Ajax.Request('<?= $block->escapeJs($block->escapeUrl($block->getAjaxUrl())) ?>', {
+        new Ajax.Request('{$ajaxUrl}', {
             parameters: params,
             onSuccess: function(response) {
-                var result = '<?= $block->escapeJs($block->escapeHtml(__('Error during VAT Number verification.'))) ?>';
+                var result = '{$errorMessage}';
                 try {
                     if (response.responseText.isJSON()) {
                         response = response.responseText.evalJSON();
                         result = response.message;
                     }
                     if (response.valid == 1) {
-                        validationMessage.removeClassName('hidden').removeClassName('admin__field-error').addClassName('note');
+                        validationMessage.removeClassName('hidden').removeClassName('admin__field-error').
+                        addClassName('note');
                         validationMessage.setStyle({color:'green'});
                     } else {
                         validationMessage.removeClassName('hidden').addClassName('admin__field-error');
@@ -45,11 +54,19 @@ require(['prototype'], function(){
 //]]>
 
 });
-</script>
+script;
+?>
+<?= /* @noEscape */ $secureRenderer->renderTag('script', [], $scriptString, false); ?>
+
 <div class="actions actions-validate-vat">
-    <p class="admin__field-error hidden" id="validation_result" style="margin-bottom:10px;"></p>
-    <button onclick="javascript:validateVat(); return false;" class="action-validate-vat" type="button" id="<?= $block->escapeHtmlAttr($block->getHtmlId()) ?>">
+    <p class="admin__field-error hidden" id="validation_result"></p>
+    <button class="action-validate-vat" type="button" id="<?= /* @noEscape */ $block->getHtmlId() ?>">
         <span><?= $block->escapeHtml($block->getButtonLabel()) ?></span>
     </button>
 </div>
-
+<?= /* @noEscape */ $secureRenderer->renderTag('style', [], '#validation_result {margin-bottom: 10px;}', false); ?>
+<?= /* @noEscape */ $secureRenderer->renderEventListenerAsTag(
+    'onclick',
+    'validateVat();event.preventDefault();',
+    '#' . /* @noEscape */ $block->getHtmlId()
+); ?>
