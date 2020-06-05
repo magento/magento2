@@ -688,10 +688,10 @@ class User extends AbstractModel implements StorageInterface, UserInterface
      */
     public function hasAssigned2Role($user)
     {
-        if (is_numeric($user)) {
-            $userId = $user;
-        } elseif ($user instanceof AbstractModel) {
+        if ($user instanceof AbstractModel) {
             $userId = $user->getUserId();
+        } elseif (is_numeric($user) && (int)$user !== 0) {
+            $userId = $user;
         } else {
             return null;
         }
