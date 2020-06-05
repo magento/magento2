@@ -6,8 +6,9 @@
 
 namespace Magento\Downloadable\Observer;
 
+use Magento\Downloadable\Model\Link;
 use Magento\Downloadable\Model\Product\Type;
-use Magento\Downloadable\Model\ResourceModel\Link\CollectionFactory;
+use Magento\Downloadable\Model\ResourceModel\Link\CollectionFactory as LinkCollectionFactory;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
@@ -32,17 +33,17 @@ class IsAllowedGuestCheckoutObserver implements ObserverInterface
     /**
      * Downloadable link collection factory
      *
-     * @var CollectionFactory
+     * @var LinkCollectionFactory
      */
-    private $linksFactory;
+    private $linkCollectionFactory;
 
     /**
      * @param ScopeConfigInterface $scopeConfig
-     * @param CollectionFactory $linksFactory
+     * @param LinkCollectionFactory $linkCollectionFactory
      */
-    public function __construct(ScopeConfigInterface $scopeConfig, CollectionFactory $linksFactory) {
+    public function __construct(ScopeConfigInterface $scopeConfig, LinkCollectionFactory $linkCollectionFactory) {
         $this->scopeConfig = $scopeConfig;
-        $this->linksFactory = $linksFactory;
+        $this->linkCollectionFactory = $linkCollectionFactory;
     }
 
     /**
@@ -66,7 +67,7 @@ class IsAllowedGuestCheckoutObserver implements ObserverInterface
 
         foreach ($quote->getAllItems() as $item) {
             $product = $item->getProduct();
-            
+
             if ((string)$product->getTypeId() === Type::TYPE_DOWNLOADABLE) {
                 if ($isGuestCheckoutDisabled || !$this->checkForShareableLinks($item, $storeId)) {
                     $result->setIsAllowed(false);
@@ -92,25 +93,36 @@ class IsAllowedGuestCheckoutObserver implements ObserverInterface
 
         if (!empty($option)) {
             $downloadableLinkIds = explode(',', $option->getValue());
-            $links = $this->linksFactory->create()->addFieldToFilter("link_id", ["in" => $downloadableLinkIds]);
-            
-            $configDownloadableSharable = $this->scopeConfig->isSetFlag(
-                self::XML_PATH_DOWNLOADABLE_SHAREABLE,
-                ScopeInterface::SCOPE_STORE,
-                $storeId
-            );
-            
-            foreach ($links as $link) {
-                if (!$link->getIsShareable() ||
-                    //Use config default value and it's disabled in config
-                    ((int)$link->getIsShareable() === 2 && !$configDownloadableSharable)
-                ) {
-                    $isSharable = false;
-                    break;
-                }
-            }
+
+            $linkCollection = $this->linkCollectionFactory->create();
+            $linkCollection->addFieldToFilter('link_id', ['in' => $downloadableLinkIds]);
+            $linkCollection->addFieldToFilter('is_shareable', ['in' => $this->getNotSharableValues($storeId)]);
+
+            // We don't have not sharable links
+            $isSharable = $linkCollection->getSize() === 0;
         }
 
         return $isSharable;
+    }
+
+    /**
+     * @param int $storeId
+     * @return array
+     */
+    private function getNotSharableValues(int $storeId): array
+    {
+        $configIsSharable = $this->scopeConfig->isSetFlag(
+            self::XML_PATH_DOWNLOADABLE_SHAREABLE,
+            ScopeInterface::SCOPE_STORE,
+            $storeId
+        );
+
+        $notShareableValues = [Link::LINK_SHAREABLE_NO];
+
+        if (!$configIsSharable) {
+            $notShareableValues[] = Link::LINK_SHAREABLE_CONFIG;
+        }
+
+        return $notShareableValues;
     }
 }
