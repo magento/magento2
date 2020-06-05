@@ -9,14 +9,18 @@ namespace Magento\SalesGraphQl\Model;
 
 use Magento\Framework\GraphQl\Query\Resolver\TypeResolverInterface;
 
-class SalesItemTypeResolver implements TypeResolverInterface
+class InvoiceItemTypeResolver implements TypeResolverInterface
 {
-
     /**
      * @inheritDoc
      */
     public function resolveType(array $data): string
     {
-        // TODO: Implement resolveType() method.
+        if (isset($data['product_type'])) {
+            if ($data['product_type'] == 'bundle') {
+                return 'InvoiceItemBundle';
+            }
+        }
+        return 'InvoiceItem';
     }
 }

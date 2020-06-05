@@ -83,6 +83,7 @@ class CustomerOrders implements ResolverInterface
                 'order_date' => $order['created_at'],
                 'order_number' => $order['increment_id'],
                 'status' => $orderModel->getStatusLabel(),
+                'shipping_method' => $orderModel->getShippingDescription(),
                 'model' => $orderModel,
             ];
         }

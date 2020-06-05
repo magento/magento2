@@ -5,6 +5,21 @@ type Query {
     customerOrders: CustomerOrders @resolver(class: "Magento\\SalesGraphQl\\Model\\Resolver\\Orders") @deprecated(reason: "Use orders from customer instead") @cache(cacheable: false)
 }
 
+type Mutation {
+    reorderItems(orderNumber: String!): ReorderItemsOutput @doc(description:"Adds all products from a customer's previous order to the cart.") @resolver(class: "Magento\\SalesGraphQl\\Model\\Resolver\\Reorder")
+}
+
+type ReorderItemsOutput {
+    cart: Cart! @doc(description:"Contains detailed information about the customer's cart.")
+    userInputErrors:[CheckoutUserInputError]! @doc(description:"An array of reordering errors.")
+}
+
+type CheckoutUserInputError @doc(description:"An error encountered while adding an item the the cart."){
+    message: String! @doc(description: "Localized error message")
+    path: [String]! @doc(description: "Path to the input field that caused an error. See the GraphQL specification about path errors for details: http://spec.graphql.org/draft/#sec-Errors")
+    code: CheckoutUserInputErrorCodes! @doc(description: "Checkout-specific error code")
+}
+
 type Customer {
     orders (
         filter: CustomerOrdersFilterInput @doc(description: "Defines the filter to use for searching customer orders"),
@@ -24,58 +39,64 @@ type CustomerOrders @doc(description: "The collection of orders that match the c
 }
 
 type CustomerOrder @doc(description: "Contains details about each of the customer's orders") {
-    increment_id: String @deprecated(reason: "Use the id attribute instead")
-    order_number: String! @deprecated(reason: "Use the number attribute instead")
-    created_at: String @deprecated(reason: "Use the order_date attribute instead")
-    grand_total: Float  @deprecated(reason: "Use the totals.grand_total attribute instead")
     id: ID! @doc(description: "Unique identifier for the order")
     order_date: String! @doc(description: "The date the order was placed")
     status: String! @doc(description: "The current status of the order")
     number: String! @doc(description: "The order number")
-    order_items: [OrderItem]! @doc(description: "An array containing the items purchased in this order") @resolver(class: "Magento\\SalesGraphQl\\Model\\Resolver\\OrderItem")
-    totals: OrderTotal! @doc(description: "Contains details about the calculated totals for this order") @resolver(class: "Magento\\SalesGraphQl\\Model\\Resolver\\OrderTotal")
+    items: [OrderItemInterface] @doc(description: "An array containing the items purchased in this order") @resolver(class: "Magento\\SalesGraphQl\\Model\\Resolver\\OrderItems")
+    total: OrderTotal @doc(description: "Contains details about the calculated totals for this order") @resolver(class: "Magento\\SalesGraphQl\\Model\\Resolver\\OrderTotal")
+    credit_memos: [CreditMemo] @doc(description: "credit memo list for the order")
+    shipments: [OrderShipment] @doc(description: "shipment list for the order")
+    payment_methods: [PaymentMethod] @doc(description: "payment details for the order")
+    shipping_address: CustomerAddress @doc(description: "shipping address for the order")
+    billing_address: CustomerAddress @doc(description: "billing address for the order")
+    carrier: String @doc(description: "shipping carrier for the order delivery")
+    shipping_method: String @doc(description: "shipping method for the order")
+    comments: [CommentItem] @doc(description: "comments on the order")
+    increment_id: String @deprecated(reason: "Use the id attribute instead")
+    order_number: String! @deprecated(reason: "Use the number attribute instead")
+    created_at: String @deprecated(reason: "Use the order_date attribute instead")
+    grand_total: Float  @deprecated(reason: "Use the totals.grand_total attribute instead")
 }
 
-type OrderItem implements SalesItemInterface {
-    quantity_ordered: Float @doc(description: "The number of units ordered for this item")
-}
-
-interface SalesItemInterface @typeResolver(class: "Magento\\SalesGraphQl\\Model\\SalesItemTypeResolver") {
+interface OrderItemInterface @doc(description: "Order item details") @typeResolver(class: "Magento\\SalesGraphQl\\Model\\OrderItemTypeResolver") {
+    id: ID! @doc(description: "Order item unique identifier")
     product_name: String @doc(description: "Name of the base product")
     product_sku: String! @doc(description: "SKU of the base product")
+    product_url_key: String @doc(description: "URL key of the base product")
+    product_type: String @doc(description: "Type of product (e.g. simple, configurable, bundle)")
+    status: String @doc(description: "The status of order item")
     product_sale_price: Money! @doc(description: "The sale price of the base product, including selected options")
     discounts: [Discount] @doc(description: "Final discount information for the product")
-    parent_product_sku: String @doc(description: "For configurable or bundle products, the SKU of the parent product")
-    parent_product_name: String @doc(description: "Name of parent product like configurable or bundle")
-    selected_options: [SalesItemOption] @doc(description: "The selected options for the base product, such as color or size")
-    entered_options: [SalesItemOption] @doc(description: "The entered option for the base product, such as a logo or image")
+    selected_options: [OrderItemOption] @doc(description: "The selected options for the base product, such as color or size")
+    entered_options: [OrderItemOption] @doc(description: "The entered option for the base product, such as a logo or image")
+    quantity_ordered: Float @doc(description: "The number of units ordered for this item")
+    quantity_shipped: Float @doc(description: "The number of shipped items")
+    quantity_refunded: Float @doc(description: "The number of refunded items")
+    quantity_invoiced: Float @doc(description: "The number of invoiced items")
+    quantity_canceled: Float @doc(description: "The number of cancelled items")
+    quantity_returned: Float @doc(description: "The number of returned items")
 }
 
-type SalesItemOption @doc(description: "Contains the ID and value for the selected or entered options") {
+type OrderItem implements OrderItemInterface {
+}
+
+type BundleOrderItem implements OrderItemInterface {
+    child_items: [OrderItemInterface]
+}
+
+type OrderItemOption @doc(description: "Represents order item options like selected or entered") {
     id: String! @doc(description: "The name of the option")
     value: String! @doc(description: "The value of the option")
 }
 
-interface SalesTotalAmountInterface @typeResolver(class: "Magento\\SalesGraphQl\\Model\\SalesTotalAmountTypeResolver") {
+interface SalesTotalAmountInterface @doc(description: "Sales total details") @typeResolver(class: "Magento\\SalesGraphQl\\Model\\SalesTotalAmountTypeResolver") {
     subtotal: Money! @doc(description: "The subtotal of the order, excluding shipping, discounts, and taxes")
     discounts: [Discount] @doc(description: "The applied discounts to the order")
     total_tax: Money! @doc(description: "The amount of tax applied to the order")
-    taxes: [TaxItem]! @doc(description: "The order taxes details")
+    taxes: [TaxItem] @doc(description: "The order taxes details")
     grand_total: Money! @doc(description: "The final total amount, including shipping, discounts, and taxes")
     base_grand_total: Money! @doc(description: "The final base grand total amount in the base currency")
-}
-​
-type OrderTotal implements SalesTotalAmountInterface @doc(description: "Contains details about the sales total amounts used to calculate the final price") {
-    total_shipping: Money! @doc(description: "The order shipping amount")
-    shipping_handling: ShippingHandling!  @doc(description: "The shipping and handling costs details for the order")
-}
-
-
-type ShippingHandling @doc(description: "The Shipping handling details") {
-    total_amount: Money! @doc(description: "The Shipping total amount")
-    amount_inc_tax: Money @doc(description: "The Shipping amount including tax")
-    amount_exc_tax: Money @doc(description: "The Shipping amount excluding tax")
-    taxes: [TaxItem]! @doc(description: "The Shipping taxes details")
 }
 
 type TaxItem @doc(description: "The tax item details") {
@@ -83,20 +104,110 @@ type TaxItem @doc(description: "The tax item details") {
     title: String! @doc(description: "The Tax item title")
     rate: Float @doc(description: "The Tax item rate")
 }
-
-type Mutation {
-    reorderItems(orderNumber: String!): ReorderItemsOutput @doc(description:"Adds all products from a customer's previous order to the cart.") @resolver(class: "Magento\\SalesGraphQl\\Model\\Resolver\\Reorder")
+​
+type OrderTotal implements SalesTotalAmountInterface @doc(description: "Contains details about the sales total amounts used to calculate the final price") {
+    total_shipping: Money! @doc(description: "The order shipping amount")
+    shipping_handling: ShippingHandling @doc(description: "The shipping and handling costs details for the order")
 }
 
-type ReorderItemsOutput {
-    cart: Cart! @doc(description:"Contains detailed information about the customer's cart.")
-    userInputErrors:[CheckoutUserInputError]! @doc(description:"An array of reordering errors.")
+type Invoice @doc(description: "Invoice details") {
+    id: ID! @doc(description: "The ID of the invoice, used for API purposes")
+    number: String! @doc(description: "Sequential invoice number")
+    total: InvoiceTotal @doc(description: "Invoice total amount details")
+    items: [InvoiceItemInterface] @doc(description: "Invoiced product details")
+    comments: [CommentItem] @doc(description: "Comments on the invoice")
 }
 
-type CheckoutUserInputError @doc(description:"An error encountered while adding an item the the cart."){
-    message: String! @doc(description: "Localized error message")
-    path: [String]! @doc(description: "Path to the input field that caused an error. See the GraphQL specification about path errors for details: http://spec.graphql.org/draft/#sec-Errors")
-    code: CheckoutUserInputErrorCodes! @doc(description: "Checkout-specific error code")
+interface InvoiceItemInterface @doc(description: "Invoice item details") @typeResolver(class: "Magento\\SalesGraphQl\\Model\\InvoiceItemTypeResolver")  {
+    id: ID! @doc(description: "invoice item unique identifier")
+    order_item: OrderItemInterface @doc(description: "associated order item")
+    product_name: String @doc(description: "Name of the base product")
+    product_sku: String! @doc(description: "SKU of the base product")
+    product_type: String @doc(description: "Type of product (e.g. simple, configurable, bundle)")
+    product_sale_price: Money! @doc(description: "Sale price for the base product including selected options")
+    discounts: [Discount] @doc(description: "Final discount information for the base product including discounts on options")
+    quantity_invoiced: Float @doc(description: "Number of invoiced items")
+}
+
+type InvoiceItem implements InvoiceItemInterface {
+}
+
+type BundleInvoiceItem implements InvoiceItemInterface {
+    child_items: [InvoiceItemInterface]
+}
+
+type InvoiceTotal implements SalesTotalAmountInterface @doc(description: "Invoice total amount details") {
+    total_shipping: Money! @doc(description: "order shipping amount")
+    shipping_handling: ShippingHandling @doc(description: "shipping and handling for the order")
+}
+
+type ShippingHandling @doc(description: "The Shipping handling details") {
+    total_amount: Money! @doc(description: "The Shipping total amount")
+    amount_including_tax: Money @doc(description: "The Shipping amount including tax")
+    amount_excluding_tax: Money @doc(description: "The Shipping amount excluding tax")
+    taxes: [TaxItem] @doc(description: "The Shipping taxes details")
+    discounts: [Discount] @doc(description: "The applied discounts to the shipping)
+}
+
+type OrderShipment @doc(description: "Order shipment details") {
+    id: ID! @doc(description: "the ID of the shipment, used for API purposes")
+    number: String! @doc(description: "sequential credit shipment number")
+    tracking: [ShipmentTracking] @doc(description: "shipment tracking details")
+    items: [ShipmentItem] @doc(description: "items included in the shipment")
+    comments: [CommentItem] @doc(description: "comments on the shipment")
+}
+
+type CommentItem @doc(description: "Comment item details") {
+    timestamp: String! @doc(description: "The timestamp of the comment")
+    message: String! @doc(description: "the comment message")
+}
+
+type ShipmentItem @doc(description: "Order shipment item details") {
+    id: ID! @doc(description: "Shipment item unique identifier")
+    order_item: OrderItemInterface @doc(description: "Associated order item")
+    product_name: String @doc(description: "Name of the base product")
+    product_sku: String! @doc(description: "SKU of the base product")
+    product_sale_price: Money! @doc(description: "Sale price for the base product")
+    quantity_shipped: Float! @doc(description: "Number of shipped items")
+}
+
+type ShipmentTracking @doc(description: "Order shipment tracking details") {
+    title: String! @doc(description: "Shipment tracking title")
+    carrier: String! @doc(description: "Shipping carrier for the order delivery")
+    number: String @doc(description: "Tracking number of the order shipment")
+}
+
+type PaymentMethod @doc(description: "Payment method used to pay for the order") {
+    name: String! @doc(description: "Payment method name for e.g Paypal, etc.")
+    type: String! @doc(description: "Payment method type used to pay for the order for e.g Credit Card, PayPal etc.")
+    additional_data: [KeyValue] @doc(description:  "Additional data per payment method type")
+}
+
+type KeyValue @doc(description: "The key-value type") {
+    name: String @doc(description: "The name part of the name/value pair")
+    value: String @doc(description: "The value part of the name/value pair")
+}
+
+type CreditMemo @doc(description: "Credit memo details") {
+    id: ID! @doc(description: "The ID of the credit memo, used for API purposes")
+    number: String! @doc(description: "Sequential credit memo number")
+    items: [CreditMemoItem] @doc(description: "An array with the items details refunded")
+    total: CreditMemoTotal @doc(description: "Refund total amount details")
+    comments: [CommentItem] @doc(description: "Comments on the credit memo")
+}
+
+type CreditMemoItem @doc(description: "Credit memo item details") {
+    id: ID! @doc(description: "Credit memo item unique identifier")
+    order_item: OrderItemInterface @doc(description: "Associated order item")
+    product_name: String @doc(description: "Name of the base product")
+    product_sku: String! @doc(description: "SKU of the base product")
+    product_sale_price: Money! @doc(description: "Sale price for the base product including selected options")
+    discounts: [Discount] @doc(description: "Final discount information for the base product including discounts on options")
+    quantity_invoiced: Float @doc(description: "Number of invoiced items")
+}
+
+type CreditMemoTotal implements SalesTotalAmountInterface @doc(description: "Credit memo price details") {
+
 }
 
 enum CheckoutUserInputErrorCodes {
