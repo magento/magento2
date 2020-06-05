@@ -40,10 +40,7 @@ class IsAllowedGuestCheckoutObserver implements ObserverInterface
      * @param ScopeConfigInterface $scopeConfig
      * @param CollectionFactory $linksFactory
      */
-    public function __construct(
-        ScopeConfigInterface $scopeConfig,
-        CollectionFactory $linksFactory
-    ) {
+    public function __construct(ScopeConfigInterface $scopeConfig, CollectionFactory $linksFactory) {
         $this->scopeConfig = $scopeConfig;
         $this->linksFactory = $linksFactory;
     }
@@ -61,17 +58,17 @@ class IsAllowedGuestCheckoutObserver implements ObserverInterface
 
         /* @var $quote Quote */
         $quote = $observer->getEvent()->getQuote();
+        $isGuestCheckoutDisabled = $this->scopeConfig->isSetFlag(
+            self::XML_PATH_DISABLE_GUEST_CHECKOUT,
+            ScopeInterface::SCOPE_STORE,
+            $storeId
+        );
 
         foreach ($quote->getAllItems() as $item) {
-            if (($product = $item->getProduct())
-                && $product->getTypeId() == Type::TYPE_DOWNLOADABLE
-            ) {
-                if ($this->scopeConfig->isSetFlag(
-                    self::XML_PATH_DISABLE_GUEST_CHECKOUT,
-                    ScopeInterface::SCOPE_STORE,
-                    $storeId
-                )
-                    || !$this->checkForShareableLinks($item, $storeId)) {
+            $product = $item->getProduct();
+            
+            if ((string)$product->getTypeId() === Type::TYPE_DOWNLOADABLE) {
+                if ($isGuestCheckoutDisabled || !$this->checkForShareableLinks($item, $storeId)) {
                     $result->setIsAllowed(false);
                     break;
                 }
@@ -92,20 +89,24 @@ class IsAllowedGuestCheckoutObserver implements ObserverInterface
     {
         $isSharable = true;
         $option = $item->getOptionByCode('downloadable_link_ids');
+
         if (!empty($option)) {
             $downloadableLinkIds = explode(',', $option->getValue());
             $links = $this->linksFactory->create()->addFieldToFilter("link_id", ["in" => $downloadableLinkIds]);
+            
+            $configDownloadableSharable = $this->scopeConfig->isSetFlag(
+                self::XML_PATH_DOWNLOADABLE_SHAREABLE,
+                ScopeInterface::SCOPE_STORE,
+                $storeId
+            );
+            
             foreach ($links as $link) {
                 if (!$link->getIsShareable() ||
-                    (
-                        $link->getIsShareable() == 2 && !$this->scopeConfig->isSetFlag(
-                            self::XML_PATH_DOWNLOADABLE_SHAREABLE,
-                            ScopeInterface::SCOPE_STORE,
-                            $storeId
-                        )
-                    )
+                    //Use config default value and it's disabled in config
+                    ((int)$link->getIsShareable() === 2 && !$configDownloadableSharable)
                 ) {
                     $isSharable = false;
+                    break;
                 }
             }
         }
