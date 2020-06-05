@@ -49,8 +49,7 @@
         <actionGroup ref="ClickViewAndEditCartFromMiniCartActionGroup" stepKey="selectViewAndEditCart"/>
 
         <!-- Assert product details in Mini Cart -->
-        <click selector="{{StorefrontMinicartSection.showCart}}" stepKey="clickOnMiniCart"/>
-        <waitForPageLoad stepKey="waitForPageToLoad1"/>
+        <actionGroup ref="StorefrontClickOnMiniCartActionGroup" stepKey="clickOnMiniCart"/>
         <actionGroup ref="AssertStorefrontMiniCartItemsActionGroup" stepKey="assertMiniCart">
             <argument name="productName" value="$$createDownloadableProduct.name$$"/>
             <argument name="productPrice" value="$123.00"/>

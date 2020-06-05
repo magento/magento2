@@ -3,9 +3,10 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Paypal\Test\Unit\Controller\Payflow;
 
-use Magento\Sales\Api\PaymentFailuresInterface;
 use Magento\Checkout\Block\Onepage\Success;
 use Magento\Checkout\Model\Session;
 use Magento\Framework\App\Action\Context;
@@ -17,17 +18,17 @@ use Magento\Paypal\Controller\Payflow\ReturnUrl;
 use Magento\Paypal\Controller\Payflowadvanced\ReturnUrl as PayflowadvancedReturnUrl;
 use Magento\Paypal\Helper\Checkout;
 use Magento\Paypal\Model\Config;
+use Magento\Sales\Api\PaymentFailuresInterface;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Payment;
 use Magento\Sales\Model\OrderFactory;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
- * Class ReturnUrlTest
- *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ReturnUrlTest extends \PHPUnit\Framework\TestCase
+class ReturnUrlTest extends TestCase
 {
     const LAST_REAL_ORDER_ID = '000000001';
 
@@ -92,14 +93,14 @@ class ReturnUrlTest extends \PHPUnit\Framework\TestCase
     private $objectManager;
 
     /**
-     * @var PaymentFailuresInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var PaymentFailuresInterface|MockObject
      */
     private $paymentFailures;
 
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
 
@@ -144,13 +145,9 @@ class ReturnUrlTest extends \PHPUnit\Framework\TestCase
             ->setMethods(['getLastRealOrderId', 'getLastRealOrder', 'restoreQuote'])
             ->getMock();
 
-        $this->quote = $this->getMockBuilder(CartInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
         $this->paymentFailures = $this->getMockBuilder(PaymentFailuresInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->context->method('getView')
             ->willReturn($this->view);

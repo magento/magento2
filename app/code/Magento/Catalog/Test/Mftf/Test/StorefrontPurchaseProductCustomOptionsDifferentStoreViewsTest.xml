@@ -199,8 +199,8 @@
         <actionGroup ref="FilterOrderGridByIdActionGroup" stepKey="openOrdersGrid">
             <argument name="orderId" value="{$grabOrderNumber}"/>
         </actionGroup>
-        <click selector="{{AdminOrdersGridSection.firstRow}}" stepKey="clickOrderRow"/>
-        <waitForPageLoad time="30" stepKey="waitForPageLoad10"/>
+
+        <actionGroup ref="AdminOrderGridClickFirstRowActionGroup" stepKey="clickOrderRow"/>
 
         <!-- Checking the correctness of displayed custom options for user parameters on Order -->
 

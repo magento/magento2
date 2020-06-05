@@ -287,7 +287,8 @@ class Links extends AbstractModifier
             'imports' => [
                 'linksPurchasedSeparately' => '${$.provider}:data.product'
                     . '.links_purchased_separately',
-                'useDefaultPrice' => '${$.parentName}.use_default_price:checked'
+                'useDefaultPrice' => '${$.parentName}.use_default_price:checked',
+                '__disableTmpl' => ['linksPurchasedSeparately' => false, 'useDefaultPrice' => false],
             ],
         ];
 
@@ -485,6 +486,7 @@ class Links extends AbstractModifier
             ],
             'exports' => [
                 'checked' => '${$.parentName}.number_of_downloads:disabled',
+                '__disableTmpl' => ['checked' => false],
             ],
         ];
 

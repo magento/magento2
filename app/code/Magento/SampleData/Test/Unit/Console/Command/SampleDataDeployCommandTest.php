@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\SampleData\Test\Unit\Console\Command;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
@@ -13,7 +15,7 @@ use Symfony\Component\Console\Tester\CommandTester;
 class SampleDataDeployCommandTest extends AbstractSampleDataCommandTest
 {
     /**
-     * @param bool $authExist               True to test with existing auth.json, false without
+     * @param bool $authExist True to test with existing auth.json, false without
      */
     protected function setupMocksForAuthFile($authExist)
     {
@@ -109,12 +111,14 @@ class SampleDataDeployCommandTest extends AbstractSampleDataCommandTest
     }
 
     /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage Error in writing Auth file path/to/auth.json. Please check permissions for writing.
      * @return void
      */
     public function testExecuteWithException()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage(
+            'Error in writing Auth file path/to/auth.json. Please check permissions for writing.'
+        );
         $this->directoryReadMock->expects($this->once())
             ->method('readFile')
             ->with('composer.json')
@@ -123,7 +127,7 @@ class SampleDataDeployCommandTest extends AbstractSampleDataCommandTest
             ->method('getDirectoryRead')
             ->with(DirectoryList::ROOT)
             ->willReturn($this->directoryReadMock);
-        
+
         $this->directoryWriteMock->expects($this->once())
             ->method('isExist')
             ->with(PackagesAuth::PATH_TO_AUTH_FILE)

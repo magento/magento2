@@ -21,6 +21,7 @@
 "var store_email":"Store Email",
 "var store_hours":"Store Hours",
 "var order_data.is_not_virtual":"Order Type",
+"var order_id": "Order DB Id",
 "var order":"Order"
 } @-->
 {{template config_path="design/email/header_template"}}
@@ -85,7 +86,7 @@
                     {{/depend}}
                 </tr>
             </table>
-            {{layout handle="sales_email_order_items" order=$order}}
+            {{layout handle="sales_email_order_items" order_id=$order_id }}
         </td>
     </tr>
 </table>

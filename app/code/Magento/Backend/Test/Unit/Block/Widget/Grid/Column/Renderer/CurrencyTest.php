@@ -3,70 +3,90 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Backend\Test\Unit\Block\Widget\Grid\Column\Renderer;
 
-class CurrencyTest extends \PHPUnit\Framework\TestCase
+use Magento\Backend\Block\Widget\Grid\Column;
+use Magento\Backend\Block\Widget\Grid\Column\Renderer\Currency;
+use Magento\Directory\Model\Currency\DefaultLocator;
+use Magento\Directory\Model\CurrencyFactory;
+use Magento\Framework\App\RequestInterface;
+use Magento\Framework\DataObject;
+use Magento\Framework\Locale\CurrencyInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Store\Model\StoreManagerInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
+class CurrencyTest extends TestCase
 {
     /**
-     * @var \Magento\Backend\Block\Widget\Grid\Column\Renderer\Currency
+     * @var Currency
      */
     protected $_blockCurrency;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $_localeMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $_curLocatorMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $_columnMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $_storeManagerMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $_requestMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $_currencyMock;
 
     /**
-     * @var \Magento\Framework\DataObject
+     * @var DataObject
      */
     protected $_row;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->_storeManagerMock = $this->createMock(\Magento\Store\Model\StoreManagerInterface::class);
-        $this->_localeMock = $this->createMock(\Magento\Framework\Locale\CurrencyInterface::class);
-        $this->_requestMock = $this->createMock(\Magento\Framework\App\RequestInterface::class);
+        $this->_storeManagerMock = $this->getMockForAbstractClass(StoreManagerInterface::class);
+        $this->_localeMock = $this->getMockForAbstractClass(CurrencyInterface::class);
+        $this->_requestMock = $this->getMockForAbstractClass(RequestInterface::class);
 
-        $this->_curLocatorMock = $this->createMock(\Magento\Directory\Model\Currency\DefaultLocator::class);
-        $this->_columnMock = $this->createPartialMock(\Magento\Backend\Block\Widget\Grid\Column::class, ['getIndex']);
-        $this->_columnMock->expects($this->any())->method('getIndex')->will($this->returnValue('columnIndex'));
+        $this->_curLocatorMock = $this->createMock(DefaultLocator::class);
+        $this->_columnMock = $this->getMockBuilder(Column::class)
+            ->addMethods(['getIndex'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->_columnMock->expects($this->any())->method('getIndex')->willReturn('columnIndex');
 
         $this->_currencyMock = $this->createMock(\Magento\Directory\Model\Currency::class);
-        $this->_currencyMock->expects($this->any())->method('load')->will($this->returnSelf());
-        $currencyFactoryMock = $this->createPartialMock(\Magento\Directory\Model\CurrencyFactory::class, ['create']);
-        $currencyFactoryMock->expects($this->any())->method('create')->will($this->returnValue($this->_currencyMock));
+        $this->_currencyMock->expects($this->any())->method('load')->willReturnSelf();
+        $currencyFactoryMock = $this->createPartialMock(CurrencyFactory::class, ['create']);
+        $currencyFactoryMock->expects($this->any())->method('create')->willReturn($this->_currencyMock);
 
-        $this->_row = new \Magento\Framework\DataObject(['columnIndex' => '10']);
+        $this->_row = new DataObject(['columnIndex' => '10']);
 
-        $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $helper = new ObjectManager($this);
         $this->_blockCurrency = $helper->getObject(
-            \Magento\Backend\Block\Widget\Grid\Column\Renderer\Currency::class,
+            Currency::class,
             [
                 'storeManager' => $this->_storeManagerMock,
                 'localeCurrency' => $this->_localeMock,
@@ -79,7 +99,7 @@ class CurrencyTest extends \PHPUnit\Framework\TestCase
         $this->_blockCurrency->setColumn($this->_columnMock);
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset($this->_localeMock);
         unset($this->_curLocatorMock);
@@ -101,8 +121,8 @@ class CurrencyTest extends \PHPUnit\Framework\TestCase
             'getRate'
         )->with(
             'defaultCurrency'
-        )->will(
-            $this->returnValue(1.5)
+        )->willReturn(
+            1.5
         );
 
         $this->_curLocatorMock->expects(
@@ -111,8 +131,8 @@ class CurrencyTest extends \PHPUnit\Framework\TestCase
             'getDefaultCurrency'
         )->with(
             $this->_requestMock
-        )->will(
-            $this->returnValue('defaultCurrency')
+        )->willReturn(
+            'defaultCurrency'
         );
 
         $currLocaleMock = $this->createMock(\Zend_Currency::class);
@@ -122,8 +142,8 @@ class CurrencyTest extends \PHPUnit\Framework\TestCase
             'toCurrency'
         )->with(
             15.0000
-        )->will(
-            $this->returnValue('15USD')
+        )->willReturn(
+            '15USD'
         );
         $this->_localeMock->expects(
             $this->once()
@@ -131,8 +151,8 @@ class CurrencyTest extends \PHPUnit\Framework\TestCase
             'getCurrency'
         )->with(
             'defaultCurrency'
-        )->will(
-            $this->returnValue($currLocaleMock)
+        )->willReturn(
+            $currLocaleMock
         );
 
         $this->assertEquals('15USD', $this->_blockCurrency->render($this->_row));

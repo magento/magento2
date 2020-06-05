@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Analytics\Test\Unit\Model;
 
 use Magento\Analytics\Model\EncodedContext;
@@ -14,36 +16,38 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\WriteInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class FileRecorderTest extends \PHPUnit\Framework\TestCase
+class FileRecorderTest extends TestCase
 {
     /**
-     * @var FileInfoManager|\PHPUnit_Framework_MockObject_MockObject
+     * @var FileInfoManager|MockObject
      */
     private $fileInfoManagerMock;
 
     /**
-     * @var FileInfoFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var FileInfoFactory|MockObject
      */
     private $fileInfoFactoryMock;
 
     /**
-     * @var Filesystem|\PHPUnit_Framework_MockObject_MockObject
+     * @var Filesystem|MockObject
      */
     private $filesystemMock;
 
     /**
-     * @var FileInfo|\PHPUnit_Framework_MockObject_MockObject
+     * @var FileInfo|MockObject
      */
     private $fileInfoMock;
 
     /**
-     * @var WriteInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var WriteInterface|MockObject
      */
     private $directoryMock;
 
     /**
-     * @var EncodedContext|\PHPUnit_Framework_MockObject_MockObject
+     * @var EncodedContext|MockObject
      */
     private $encodedContextMock;
 
@@ -70,32 +74,22 @@ class FileRecorderTest extends \PHPUnit\Framework\TestCase
     /**
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->fileInfoManagerMock = $this->getMockBuilder(FileInfoManager::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->fileInfoManagerMock = $this->createMock(FileInfoManager::class);
 
         $this->fileInfoFactoryMock = $this->getMockBuilder(FileInfoFactory::class)
             ->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->filesystemMock = $this->getMockBuilder(Filesystem::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->filesystemMock = $this->createMock(Filesystem::class);
 
-        $this->fileInfoMock = $this->getMockBuilder(FileInfo::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->fileInfoMock = $this->createMock(FileInfo::class);
 
-        $this->directoryMock = $this->getMockBuilder(WriteInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->directoryMock = $this->getMockForAbstractClass(WriteInterface::class);
 
-        $this->encodedContextMock = $this->getMockBuilder(EncodedContext::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->encodedContextMock = $this->createMock(EncodedContext::class);
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
 

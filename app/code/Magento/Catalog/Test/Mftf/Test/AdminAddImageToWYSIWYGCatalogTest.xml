@@ -22,8 +22,7 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MAGETWO-84373"/>
         </annotations>
-        <amOnPage url="{{AdminCategoryPage.url}}" stepKey="navigateToNewCatalog"/>
-        <waitForPageLoad stepKey="wait1"/>
+        <actionGroup ref="AdminOpenCategoryPageActionGroup" stepKey="navigateToNewCatalog"/>
         <waitForLoadingMaskToDisappear stepKey="wait2" />
         <click selector="{{AdminCategorySidebarActionSection.AddSubcategoryButton}}" stepKey="clickOnAddSubCategory"/>
         <fillField selector="{{AdminCategoryBasicFieldSection.CategoryNameInput}}" userInput="{{SimpleSubCategory.name}}" stepKey="enterCategoryName"/>

@@ -36,9 +36,9 @@
         <actionGroup ref="AdminSaveUserSuccessActionGroup" stepKey="saveNewUserWithValidExpirationSuccess"/>
         <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         <wait time="120" stepKey="waitForUserToExpire"/>
-        <actionGroup ref="LoginAdminWithCredentialsActionGroup" stepKey="loginAsNewAdmin">
-            <argument name="adminUser" value="{$grabUsername}"/>
-            <argument name="adminPassword" value="{$grabPassword}"/>
+        <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsNewAdmin">
+            <argument name="username" value="{$grabUsername}"/>
+            <argument name="password" value="{$grabPassword}"/>
         </actionGroup>
         <actionGroup ref="AssertMessageOnAdminLoginActionGroup" stepKey="checkLoginMessage" />
 

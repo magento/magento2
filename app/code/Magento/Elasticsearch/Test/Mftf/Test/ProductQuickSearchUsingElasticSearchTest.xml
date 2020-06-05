@@ -30,7 +30,7 @@
             <deleteData createDataKey="simpleProduct1" stepKey="deleteSimpleProduct1"/>
             <deleteData createDataKey="categoryFirst" stepKey="deleteCategory"/>
             <comment userInput="The test was moved to elasticsearch suite" stepKey="resetCatalogSearchConfiguration"/>
-            <actionGroup ref="updateIndexerOnSave" stepKey="resetIndexerBackToOriginalState">
+            <actionGroup ref="AdminIndexerSetUpdateOnSaveActionGroup" stepKey="resetIndexerBackToOriginalState">
                 <argument name="indexerName" value="catalogsearch_fulltext"/>
             </actionGroup>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutOfAdmin"/>
