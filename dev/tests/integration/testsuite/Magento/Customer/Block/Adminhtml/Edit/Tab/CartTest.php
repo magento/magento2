@@ -51,7 +51,7 @@ class CartTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    public function setUp()
+    protected function setUp(): void
     {
         $this->_objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
@@ -76,7 +76,7 @@ class CartTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    public function tearDown()
+    protected function tearDown(): void
     {
         $this->_coreRegistry->unregister(RegistryConstants::CURRENT_CUSTOMER_ID);
     }
@@ -104,12 +104,12 @@ class CartTest extends \PHPUnit\Framework\TestCase
                      ->save();
         $this->_block->toHtml();
         if ($contains) {
-            $this->assertContains(
+            $this->assertStringContainsString(
                 "We couldn&#039;t find any records",
                 $this->_block->getGridParentHtml()
             );
         } else {
-            $this->assertNotContains(
+            $this->assertStringNotContainsString(
                 "We couldn&#039;t find any records",
                 $this->_block->getGridParentHtml()
             );
@@ -154,7 +154,7 @@ class CartTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetGridUrl(): void
     {
-        $this->assertContains('/backend/customer/index/cart', $this->_block->getGridUrl());
+        $this->assertStringContainsString('/backend/customer/index/cart', $this->_block->getGridUrl());
     }
 
     /**
@@ -175,7 +175,7 @@ class CartTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->_block->setCollection($mockCollection);
-        $this->assertContains(
+        $this->assertStringContainsString(
             "<div class=\"admin__data-grid-header admin__data-grid-toolbar\"",
             $this->_block->getGridParentHtml()
         );
@@ -190,7 +190,7 @@ class CartTest extends \PHPUnit\Framework\TestCase
     {
         $row = new \Magento\Framework\DataObject();
         $row->setProductId(1);
-        $this->assertContains('/backend/catalog/product/edit/id/1', $this->_block->getRowUrl($row));
+        $this->assertStringContainsString('/backend/catalog/product/edit/id/1', $this->_block->getRowUrl($row));
     }
 
     /**
@@ -201,10 +201,10 @@ class CartTest extends \PHPUnit\Framework\TestCase
     public function testGetHtml(): void
     {
         $html = $this->_block->toHtml();
-        $this->assertContains("<div id=\"customer_cart_grid\"", $html);
-        $this->assertContains("<div class=\"admin__data-grid-header admin__data-grid-toolbar\"", $html);
-        $this->assertContains("customer_cart_gridJsObject = new varienGrid(\"customer_cart_grid\",", $html);
-        $this->assertContains(
+        $this->assertStringContainsString("<div id=\"customer_cart_grid\"", $html);
+        $this->assertStringContainsString("<div class=\"admin__data-grid-header admin__data-grid-toolbar\"", $html);
+        $this->assertStringContainsString("customer_cart_gridJsObject = new varienGrid(\"customer_cart_grid\",", $html);
+        $this->assertStringContainsString(
             'backend\u002Fcustomer\u002Fcart_product_composite_cart\u002Fconfigure\u002Fcustomer_id\u002F'
             . self::CUSTOMER_ID_VALUE,
             $html

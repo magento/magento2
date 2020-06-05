@@ -22,7 +22,7 @@ class InlineTest extends \PHPUnit\Framework\TestCase
      */
     protected $state;
 
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(\Magento\Framework\App\State::class)
             ->setAreaCode('frontend');
@@ -33,7 +33,7 @@ class InlineTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             \Magento\Framework\Translate\Inline::class

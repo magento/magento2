@@ -16,7 +16,7 @@ class BackendTest extends \PHPUnit\Framework\TestCase
      */
     protected $_model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_model = new \Magento\Eav\Model\Validator\Attribute\Backend();
     }

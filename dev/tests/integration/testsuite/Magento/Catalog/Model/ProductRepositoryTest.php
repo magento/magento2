@@ -56,7 +56,7 @@ class ProductRepositoryTest extends \PHPUnit\Framework\TestCase
     /**
      * Sets up common objects
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->productRepository = Bootstrap::getObjectManager()->create(ProductRepositoryInterface::class);
         $this->searchCriteriaBuilder = Bootstrap::getObjectManager()->get(SearchCriteriaBuilder::class);

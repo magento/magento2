@@ -31,7 +31,7 @@ class CompareTest extends \Magento\TestFramework\TestCase\AbstractController
     /**
      * @inheritDoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->formKey = $this->_objectManager->get(\Magento\Framework\Data\Form\FormKey::class);
@@ -173,19 +173,19 @@ class CompareTest extends \Magento\TestFramework\TestCase\AbstractController
 
         $responseBody = $this->getResponse()->getBody();
 
-        $this->assertContains('Products Comparison List', $responseBody);
+        $this->assertStringContainsString('Products Comparison List', $responseBody);
 
-        $this->assertContains('simple_product_1', $responseBody);
-        $this->assertContains('Simple Product 1 Name', $responseBody);
-        $this->assertContains('Simple Product 1 Full Description', $responseBody);
-        $this->assertContains('Simple Product 1 Short Description', $responseBody);
-        $this->assertContains('$1,234.56', $responseBody);
+        $this->assertStringContainsString('simple_product_1', $responseBody);
+        $this->assertStringContainsString('Simple Product 1 Name', $responseBody);
+        $this->assertStringContainsString('Simple Product 1 Full Description', $responseBody);
+        $this->assertStringContainsString('Simple Product 1 Short Description', $responseBody);
+        $this->assertStringContainsString('$1,234.56', $responseBody);
 
-        $this->assertContains('simple_product_2', $responseBody);
-        $this->assertContains('Simple Product 2 Name', $responseBody);
-        $this->assertContains('Simple Product 2 Full Description', $responseBody);
-        $this->assertContains('Simple Product 2 Short Description', $responseBody);
-        $this->assertContains('$987.65', $responseBody);
+        $this->assertStringContainsString('simple_product_2', $responseBody);
+        $this->assertStringContainsString('Simple Product 2 Name', $responseBody);
+        $this->assertStringContainsString('Simple Product 2 Full Description', $responseBody);
+        $this->assertStringContainsString('Simple Product 2 Short Description', $responseBody);
+        $this->assertStringContainsString('$987.65', $responseBody);
     }
 
     /**

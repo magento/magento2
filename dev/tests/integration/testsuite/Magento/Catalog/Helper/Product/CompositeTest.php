@@ -25,13 +25,13 @@ class CompositeTest extends \PHPUnit\Framework\TestCase
      */
     protected $registry;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->helper = Bootstrap::getObjectManager()->get(\Magento\Catalog\Helper\Product\Composite::class);
         $this->registry = Bootstrap::getObjectManager()->get(\Magento\Framework\Registry::class);
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->registry->unregister('composite_configure_result_error_message');
         $this->registry->unregister(RegistryConstants::CURRENT_CUSTOMER_ID);

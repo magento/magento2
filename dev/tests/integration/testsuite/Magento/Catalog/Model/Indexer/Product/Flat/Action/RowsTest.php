@@ -52,7 +52,7 @@ class RowsTest extends TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = Bootstrap::getObjectManager();
         $this->processor = $objectManager->get(Processor::class);
