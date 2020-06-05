@@ -657,6 +657,23 @@ QUERY;
 
     /**
      *  Verify that the customer order has the tax information on shipping and totals
+     *
+     * @magentoApiDataFixture Magento/Catalog/_files/product_simple_with_url_key.php
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     *
+     * @magentoApiDataFixture Magento/GraphQl/Tax/_files/tax_rule_for_region_1.php
+     * @magentoApiDataFixture Magento/SalesRule/_files/cart_rule_10_percent_off_with_discount_on_shipping.php
+     * @magentoApiDataFixture Magento/GraphQl/Tax/_files/tax_calculation_shipping_excludeTax_order_display_settings.php
+     */
+    public function testCustomerOrderWithDiscountsAndTaxesOnShipping()
+    {
+
+        $quantity = 2;
+
+    }
+
+    /**
+     *  Verify that the customer order has the tax information on shipping and totals
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
      * @magentoApiDataFixture Magento/Catalog/_files/product_simple_with_url_key.php
      * @magentoApiDataFixture Magento/GraphQl/Tax/_files/tax_rule_for_region_1.php
