@@ -18,7 +18,7 @@ use Magento\TestFramework\Annotation\DataFixtureBeforeTransaction;
  */
 class Converter implements ConverterInterface
 {
-    private const FIXTURE_TYPES = [
+    protected const FIXTURE_TYPES = [
         DataFixture::ANNOTATION,
         DataFixtureBeforeTransaction::ANNOTATION,
         ConfigFixture::ANNOTATION,
@@ -46,7 +46,7 @@ class Converter implements ConverterInterface
 
                 foreach ($this->xpath->query('./dataSet', $method) as $dataSet) {
                     $setName = $dataSet->getAttribute('name');
-                    $config[$className][$methodName][$setName] =   $config[$className][$methodName][$setName] ?? [];
+                    $config[$className][$methodName][$setName] = $config[$className][$methodName][$setName] ?? [];
                     $config[$className][$methodName][$setName] = $this->fillSkipSection(
                         $dataSet,
                         $config[$className][$methodName][$setName]
@@ -81,7 +81,7 @@ class Converter implements ConverterInterface
      */
     private function getTestConfigByFixtureType(\DOMElement $node): array
     {
-        foreach (self::FIXTURE_TYPES as $fixtureType) {
+        foreach ($this::FIXTURE_TYPES as $fixtureType) {
             $currentTestNodePath = sprintf("//test[@class ='%s']/%s", $node->getAttribute('class'), $fixtureType);
             foreach ($this->xpath->query($currentTestNodePath) as $classDataFixture) {
                 $config[$fixtureType][] = $this->fillAttributes($classDataFixture);
@@ -111,7 +111,7 @@ class Converter implements ConverterInterface
      * @param \DOMElement $fixture
      * @return array
      */
-    private function fillAttributes(\DOMElement $fixture): array
+    protected function fillAttributes(\DOMElement $fixture): array
     {
         $result = [];
         switch ($fixture->nodeName) {
@@ -138,7 +138,7 @@ class Converter implements ConverterInterface
      * @param \DOMElement $fixture
      * @return array
      */
-    private function fillDataFixtureAttributes(\DOMElement $fixture): array
+    protected function fillDataFixtureAttributes(\DOMElement $fixture): array
     {
         return [
             'path' => $fixture->getAttribute('path'),
@@ -155,7 +155,7 @@ class Converter implements ConverterInterface
      * @param \DOMElement $fixture
      * @return array
      */
-    private function fillConfigFixtureAttributes(\DOMElement $fixture): array
+    protected function fillConfigFixtureAttributes(\DOMElement $fixture): array
     {
         return [
             'path' => $fixture->getAttribute('path'),
@@ -173,7 +173,7 @@ class Converter implements ConverterInterface
      * @param \DOMElement $fixture
      * @return array
      */
-    private function fillAdminConfigFixtureAttributes(\DOMElement $fixture): array
+    protected function fillAdminConfigFixtureAttributes(\DOMElement $fixture): array
     {
         return [
             'path' => $fixture->getAttribute('path'),
