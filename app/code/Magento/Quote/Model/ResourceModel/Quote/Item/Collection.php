@@ -64,6 +64,11 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\VersionContro
     private $recollectQuote = false;
 
     /**
+     * @inheritDoc
+     */
+    protected $_idFieldName = 'item_id';
+
+    /**
      * @param \Magento\Framework\Data\Collection\EntityFactory $entityFactory
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
