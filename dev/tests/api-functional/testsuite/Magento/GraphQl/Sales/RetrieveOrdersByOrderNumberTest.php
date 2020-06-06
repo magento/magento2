@@ -588,20 +588,29 @@ QUERY;
     }
 
     /**
-     *  Verify that the customer order has the tax information on shipping and totals
+     *  Verify the customer order with tax, discount with shipping tax class set for calculation setting
      *
      * @magentoApiDataFixture Magento/Catalog/_files/product_simple_with_url_key.php
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
-     *
      * @magentoApiDataFixture Magento/GraphQl/Tax/_files/tax_rule_for_region_1.php
      * @magentoApiDataFixture Magento/SalesRule/_files/cart_rule_10_percent_off_with_discount_on_shipping.php
      * @magentoApiDataFixture Magento/GraphQl/Tax/_files/tax_calculation_shipping_excludeTax_order_display_settings.php
      */
     public function testCustomerOrderWithDiscountsAndTaxesOnShipping()
     {
-
-        $quantity = 2;
-
+        $quantity = 4;
+        $sku = 'simple1';
+        $cartId = $this->createEmptyCart();
+        $this->addProductToCart($cartId, $quantity, $sku);
+        $this->setBillingAddress($cartId);
+        $shippingMethod = $this->setShippingAddress($cartId);
+        $paymentMethod = $this->setShippingMethod($cartId, $shippingMethod);
+        $this->setPaymentMethod($cartId, $paymentMethod);
+        $orderNumber = $this->placeOrder($cartId);
+        $customerOrderResponse = $this->getCustomerOrderQuery($orderNumber);
+        $customerOrderItem = $customerOrderResponse[0];
+        //TODO: once discounts are calculated, order Totals can be verified
+        $this->deleteOrder();
     }
 
     /**
@@ -734,7 +743,7 @@ mutation {
 QUERY;
         $currentEmail = 'customer@example.com';
         $currentPassword = 'password';
-        $response = $this->graphQlMutation($query, [], '', $this->getCustomerAuthHeaders($currentEmail, $currentPassword));
+        $response = $this->graphQlMutation($query, [], '', $this->customerAuthenticationHeader->execute($currentEmail, $currentPassword));
         return $response['createEmptyCart'];
     }
 
@@ -766,7 +775,7 @@ mutation {
 QUERY;
         $currentEmail = 'customer@example.com';
         $currentPassword = 'password';
-        $this->graphQlMutation($query, [], '', $this->getCustomerAuthHeaders($currentEmail, $currentPassword));
+        $this->graphQlMutation($query, [], '', $this->customerAuthenticationHeader->execute($currentEmail, $currentPassword));
     }
 
     /**
@@ -806,7 +815,7 @@ mutation {
 QUERY;
         $currentEmail = 'customer@example.com';
         $currentPassword = 'password';
-        $this->graphQlMutation($query, [], '', $this->getCustomerAuthHeaders($currentEmail, $currentPassword));
+        $this->graphQlMutation($query, [], '', $this->customerAuthenticationHeader->execute($currentEmail, $currentPassword));
     }
 
     /**
@@ -851,7 +860,7 @@ mutation {
 QUERY;
         $currentEmail = 'customer@example.com';
         $currentPassword = 'password';
-        $response = $this->graphQlMutation($query, [], '', $this->getCustomerAuthHeaders($currentEmail, $currentPassword));
+        $response = $this->graphQlMutation($query, [], '', $this->customerAuthenticationHeader->execute($currentEmail, $currentPassword));
         $shippingAddress = current($response['setShippingAddressesOnCart']['cart']['shipping_addresses']);
         $availableShippingMethod = current($shippingAddress['available_shipping_methods']);
         return $availableShippingMethod;
@@ -885,7 +894,7 @@ mutation {
 QUERY;
         $currentEmail = 'customer@example.com';
         $currentPassword = 'password';
-        $response = $this->graphQlMutation($query, [], '', $this->getCustomerAuthHeaders($currentEmail, $currentPassword));
+        $response = $this->graphQlMutation($query, [], '', $this->customerAuthenticationHeader->execute($currentEmail, $currentPassword));
 
         $availablePaymentMethod = current($response['setShippingMethodsOnCart']['cart']['available_payment_methods']);
         return $availablePaymentMethod;
@@ -914,7 +923,7 @@ mutation {
 QUERY;
         $currentEmail = 'customer@example.com';
         $currentPassword = 'password';
-        $this->graphQlMutation($query, [], '', $this->getCustomerAuthHeaders($currentEmail, $currentPassword));
+        $this->graphQlMutation($query, [], '', $this->customerAuthenticationHeader->execute($currentEmail, $currentPassword));
     }
 
     /**
@@ -938,7 +947,7 @@ mutation {
 QUERY;
         $currentEmail = 'customer@example.com';
         $currentPassword = 'password';
-        $response = $this->graphQlMutation($query, [], '', $this->getCustomerAuthHeaders($currentEmail, $currentPassword));
+        $response = $this->graphQlMutation($query, [], '', $this->customerAuthenticationHeader->execute($currentEmail, $currentPassword));
         return $response['placeOrder']['order']['order_number'];
     }
 
@@ -986,7 +995,7 @@ QUERY;
 QUERY;
         $currentEmail = 'customer@example.com';
         $currentPassword = 'password';
-        $response = $this->graphQlQuery($query, [], '', $this->getCustomerAuthHeaders($currentEmail, $currentPassword));
+        $response = $this->graphQlQuery($query, [], '', $this->customerAuthenticationHeader->execute($currentEmail, $currentPassword));
 
         $this->assertArrayHasKey('orders', $response['customer']);
         $this->assertArrayHasKey('items', $response['customer']['orders']);
