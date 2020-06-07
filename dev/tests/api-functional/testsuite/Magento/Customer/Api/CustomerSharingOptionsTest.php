@@ -60,7 +60,7 @@ class CustomerSharingOptionsTest extends WebapiAbstract
     /**
      * Execute per test initialization.
      */
-    public function setUp()
+    public function setUp(): void
     {
         $this->customerRegistry = Bootstrap::getObjectManager()->get(
             \Magento\Customer\Model\CustomerRegistry::class
@@ -82,7 +82,7 @@ class CustomerSharingOptionsTest extends WebapiAbstract
     /**
      * Ensure that fixture customer and his addresses are deleted.
      */
-    public function tearDown()
+    public function tearDown(): void
     {
         $this->customerRepository = null;
 
