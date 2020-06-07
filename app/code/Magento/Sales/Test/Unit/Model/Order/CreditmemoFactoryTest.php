@@ -49,18 +49,13 @@ class CreditmemoFactoryTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->orderItemMock = $this->createPartialMock(
-            Item::class,
-            ['getChildrenItems', 'isDummy', 'getHasChildren', 'getId', 'getParentItemId']
-        );
-        $this->orderChildItemOneMock = $this->createPartialMock(
-            Item::class,
-            ['getQtyToRefund', 'getId']
-        );
-        $this->orderChildItemTwoMock = $this->createPartialMock(
-            Item::class,
-            ['getQtyToRefund', 'getId']
-        );
+        $this->orderItemMock = $this->getMockBuilder(Item::class)
+            ->onlyMethods(['getChildrenItems', 'isDummy', 'getId', 'getParentItemId'])
+            ->addMethods(['getHasChildren'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->orderChildItemOneMock = $this->createPartialMock(Item::class, ['getQtyToRefund', 'getId']);
+        $this->orderChildItemTwoMock = $this->createPartialMock(Item::class, ['getQtyToRefund', 'getId']);
         $this->testMethod = new ReflectionMethod(CreditmemoFactory::class, 'canRefundItem');
 
         $objectManagerHelper = new ObjectManagerHelper($this);
