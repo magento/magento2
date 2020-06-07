@@ -72,7 +72,7 @@
         <actionGroup ref="StorefrontOpenMyAccountPageActionGroup" stepKey="goToMyAccountPage" />
 
         <!-- Assert That Shipping And Billing Address are the same -->
-        <actionGroup ref="AssertThatShippingAndBillingAddressTheSame" stepKey="assertThatShippingAndBillingAddressTheSame"/>
+        <actionGroup ref="AssertThatShippingAndBillingAddressTheSameActionGroup" stepKey="assertThatShippingAndBillingAddressTheSame"/>
 
         <after>
             <!-- Delete created Product -->

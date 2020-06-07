@@ -51,7 +51,7 @@
         <!-- 1. Go to storefront and click the Create an Account link-->
         <amOnPage url="{{StorefrontHomePage.url}}" stepKey="amOnHomePage"/>
         <click selector="{{StorefrontPanelHeaderSection.createAnAccountLink}}" stepKey="clickCreateAnAccountLink" />
-        <actionGroup ref="StorefrontAssertPersistentRegistrationPageFields" stepKey="assertPersistentRegistrationPageFields"/>
+        <actionGroup ref="StorefrontAssertPersistentRegistrationPageFieldsActionGroup" stepKey="assertPersistentRegistrationPageFields"/>
 
         <!-- 2. Fill fields for registration, set password and unselect the Remember Me checkbox-->
         <actionGroup ref="StorefrontCreateCustomerOnRegisterPageDoNotRememberMeActionGroup" stepKey="registrationJohnSmithCustomer">
