@@ -13,6 +13,7 @@ use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Sales\Model\Order;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
+use Magento\GraphQl\GetCustomerAuthenticationHeader;
 
 /**
  * Class RetrieveOrdersTest
@@ -33,12 +34,15 @@ class RetrieveOrdersByOrderNumberTest extends GraphQlAbstract
     /** @var Order\Item */
     private $orderItem;
 
+    /** @var GetCustomerAuthenticationHeader */
+    private $customerAuthenticationHeader;
+
     protected function setUp():void
     {
         parent::setUp();
         $objectManager = Bootstrap::getObjectManager();
         $this->customerTokenService = $objectManager->get(CustomerTokenServiceInterface::class);
-
+        $this->customerAuthenticationHeader = $objectManager->get(GetCustomerAuthenticationHeader::class);
         $this->orderRepository = $objectManager->get(OrderRepositoryInterface::class);
         $this->searchCriteriaBuilder = $objectManager->get(SearchCriteriaBuilder::class);
         $this->orderItem = $objectManager->get(Order\Item::class);
@@ -78,19 +82,11 @@ class RetrieveOrdersByOrderNumberTest extends GraphQlAbstract
                         value
                         currency
                     }
-                   shipping_handling{total_amount{value currency}}
                     subtotal {
                         value
                         currency
                     }
-                  taxes {amount {currency value} title rate}
-                  discounts {
-                        amount {
-                            value
-                            currency
-                        }
-                        label
-                    }
+
                 }
     }
    }
@@ -100,14 +96,13 @@ QUERY;
 
         $currentEmail = 'customer@example.com';
         $currentPassword = 'password';
-        $response = $this->graphQlQuery($query, [], '', $this->getCustomerAuthHeaders($currentEmail, $currentPassword));
+        $response = $this->graphQlQuery($query, [], '', $this->customerAuthenticationHeader->execute($currentEmail, $currentPassword));
 
         $this->assertArrayHasKey('orders', $response['customer']);
         $this->assertArrayHasKey('items', $response['customer']['orders']);
         $this->assertNotEmpty($response['customer']['orders']['items']);
         $customerOrderItemsInResponse = $response['customer']['orders']['items'][0];
         $expectedCount = count($response['customer']['orders']['items']);
-        $this->assertCount($expectedCount, $response['customer']['orders']['items']);
         $this->assertArrayHasKey('items', $customerOrderItemsInResponse);
         $this->assertNotEmpty($customerOrderItemsInResponse['items']);
 
@@ -126,12 +121,18 @@ QUERY;
             [ 'quantity_ordered'=> 2,
                 'product_sku'=> 'simple',
                 'product_name'=> 'Simple Product',
-                'product_sale_price'=> ['currency'=> null, 'value'=> 10]
+                'product_sale_price'=> ['currency'=> 'USD', 'value'=> 10]
             ];
         $actualOrderItemsFromResponse = $customerOrderItemsInResponse['items'][0];
         $this->assertEquals($expectedOrderItems, $actualOrderItemsFromResponse);
-        //TODO: below function needs to be updated to reflect totals based on the order number used in each test
-//        $this->assertTotals($response, $expectedCount);
+        $actualOrderTotalFromResponse = $response['customer']['orders']['items'][0]['total'];
+        $expectedOrderTotal =
+            [
+                'base_grand_total' => ['value'=> 120,'currency' =>'USD'],
+                'grand_total' => ['value'=> 120,'currency' =>'USD'],
+                'subtotal' => ['value'=> 120,'currency' =>'USD']
+            ];
+        $this->assertEquals($expectedOrderTotal, $actualOrderTotalFromResponse,'Totals do not match');
     }
 
     /**
@@ -162,10 +163,10 @@ QUERY;
         quantity_ordered
         product_sku
         product_name
-        parent_product_sku
+        product_type
         product_sale_price{currency value}
+        product_url_key
       }
-
     }
    }
  }
@@ -174,11 +175,11 @@ QUERY;
 
         $currentEmail = 'customer@example.com';
         $currentPassword = 'password';
-        $response = $this->graphQlQuery($query, [], '', $this->getCustomerAuthHeaders($currentEmail, $currentPassword));
+        $response = $this->graphQlQuery($query, [], '', $this->customerAuthenticationHeader->execute($currentEmail, $currentPassword));
         $this->assertArrayHasKey('orders', $response['customer']);
         $this->assertArrayHasKey('items', $response['customer']['orders']);
         $this->assertArrayHasKey('total_count', $response['customer']['orders']);
-        $this->assertEquals(4, $response['customer']['orders']['total_count']);
+        $this->assertEquals(6, $response['customer']['orders']['total_count']);
     }
     /**
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
@@ -219,7 +220,7 @@ QUERY;
         $currentPassword = 'password';
         $this->expectException(\Exception::class);
         $this->expectExceptionMessage('Invalid match filter. Minimum length is 3.');
-        $this->graphQlQuery($query, [], '', $this->getCustomerAuthHeaders($currentEmail, $currentPassword));
+        $this->graphQlQuery($query, [], '', $this->customerAuthenticationHeader->execute($currentEmail, $currentPassword));
     }
 
     /**
@@ -233,7 +234,7 @@ QUERY;
 {
   customer
   {
-   orders(filter:{number:{in:["100000005","100000006"]}}){
+   orders(filter:{number:{in:["100000007","100000008"]}}){
     total_count
     page_info{
       total_pages
@@ -250,31 +251,22 @@ QUERY;
         quantity_ordered
         product_sku
         product_name
-        parent_product_sku
+        product_type
         product_sale_price{currency value}
       }
-            totals {
-                    base_grand_total {
-                        value
-                        currency
-                    }
-                    grand_total {
-                        value
-                        currency
-                    }
+            total {
+                    base_grand_total {value currency}
+                    grand_total {value currency}
+                    subtotal {value currency}
+                    total_shipping{value}
                     shipping_handling{total_amount{value currency}}
-                    subtotal {
-                        value
-                        currency
-                    }
+                    total_tax{value currency}
                     taxes {amount {currency value} title rate}
-                    discounts {
-                        amount {
-                            value
-                            currency
-                        }
-                        label
-                    }
+                    shipping_handling
+                    {
+                     total_amount{value}
+                     taxes{amount{value}}
+                     }
                 }
     }
    }
@@ -284,7 +276,7 @@ QUERY;
 
         $currentEmail = 'customer@example.com';
         $currentPassword = 'password';
-        $response = $this->graphQlQuery($query, [], '', $this->getCustomerAuthHeaders($currentEmail, $currentPassword));
+        $response = $this->graphQlQuery($query, [], '', $this->customerAuthenticationHeader->execute($currentEmail, $currentPassword));
 
         $this->assertArrayHasKey('orders', $response['customer']);
         $this->assertArrayHasKey('items', $response['customer']['orders']);
@@ -299,7 +291,7 @@ QUERY;
         $customerOrderItemsInResponse = $response['customer']['orders']['items'];
         $this->assertCount(2, $response['customer']['orders']['items']);
 
-        $orderNumbers = ['100000005', '100000006'];
+        $orderNumbers = ['100000007', '100000008'];
         $searchCriteria = $this->searchCriteriaBuilder->addFilter('increment_id', $orderNumbers, 'in')
             ->create();
         /** @var \Magento\Sales\Api\Data\OrderInterface[] $items */
@@ -310,10 +302,23 @@ QUERY;
             $orderNumber = $item->getIncrementId();
             $this->assertEquals($orderId, $customerOrderItemsInResponse[$key]['id']);
             $this->assertEquals($orderNumber, $customerOrderItemsInResponse[$key]['number']);
-            $this->assertEquals('Complete', $customerOrderItemsInResponse[$key]['status']);
-            //TODO: below function needs to be updated to reflect totals based on the order number being used in each test
-//            $expectedCount = count($response['customer']['orders']['items']);
-//            $this->assertTotals($customerOrderItemsInResponse[$key], $expectedCount);
+            $this->assertEquals('Processing', $customerOrderItemsInResponse[$key]['status']);
+             $this->assertEquals(
+                 4,
+                 $customerOrderItemsInResponse[$key]['total']['shipping_handling']['total_amount']['value']
+             );
+            $this->assertEquals(
+                5,
+                $customerOrderItemsInResponse[$key]['total']['shipping_handling']['taxes'][0]['amount']['value']
+            );
+            $this->assertEquals(
+                5,
+                $customerOrderItemsInResponse[$key]['total']['total_shipping']['value']
+            );
+            $this->assertEquals(
+                5,
+            $customerOrderItemsInResponse[$key]['total']['total_tax']['value']);
+
             $key++;
         }
     }
@@ -349,7 +354,7 @@ QUERY;
 
     /**
      * @magentoApiDataFixture Magento/Customer/_files/two_customers.php
-     * @magentoApiDataFixture Magento/GraphQl/Sales/_files/two_orders_for_two_diff_customers.php
+     * @magentoApiDataFixture Magento/Sales/_files/two_orders_for_two_diff_customers.php
      */
     public function testGetCustomerOrdersWithWrongCustomer()
     {
@@ -377,7 +382,7 @@ QUERY;
             $query,
             [],
             '',
-            $this->getCustomerAuthHeaders($currentEmail, $currentPassword)
+            $this->customerAuthenticationHeader->execute($currentEmail, $currentPassword)
         );
         $this->assertEmpty($responseWithWrongCustomer['customer']['orders']['total_count']);
         $this->assertEmpty($responseWithWrongCustomer['customer']['orders']['items']);
@@ -388,72 +393,10 @@ QUERY;
             $query,
             [],
             '',
-            $this->getCustomerAuthHeaders($currentEmail, $currentPassword)
+            $this->customerAuthenticationHeader->execute($currentEmail, $currentPassword)
         );
         $this->assertNotEmpty($responseWithCorrectCustomer['customer']['orders']['total_count']);
         $this->assertNotEmpty($responseWithCorrectCustomer['customer']['orders']['items']);
-    }
-
-    /**
-     * @magentoApiDataFixture Magento/Customer/_files/customer.php
-     * @magentoApiDataFixture Magento/GraphQl/Sales/_files/order_with_totals.php
-     */
-    public function testGetCustomerOrdersOnTotals()
-    {
-        $query =
-            <<<QUERY
-{
-  customer {
-    email
-    orders(filter:{number:{eq:"100000001"}}) {
-      total_count
-      items {
-        id
-        number
-        order_date
-        status
-        totals {
-          base_grand_total {
-            value
-            currency
-          }
-          grand_total {
-            value
-            currency
-          }
-        shipping_handling{total_amount{value currency}}
-          subtotal {
-            value
-            currency
-          }
-          taxes {amount{value currency} title rate}
-          discounts {
-            amount {
-              value
-              currency
-            }
-            label
-          }
-        }
-      }
-    }
-  }
-}
-QUERY;
-
-        $currentEmail = 'customer@example.com';
-        $currentPassword = 'password';
-        $response = $this->graphQlQuery(
-            $query,
-            [],
-            '',
-            $this->getCustomerAuthHeaders($currentEmail, $currentPassword)
-        );
-
-        $this->assertArrayHasKey('orders', $response['customer']);
-        $this->assertArrayHasKey('items', $response['customer']['orders']);
-        $expectedCount = count($response["customer"]["orders"]["items"]);
-        $this->assertTotals($response, $expectedCount);
     }
 
     /**
@@ -513,7 +456,7 @@ QUERY;
 
         $currentEmail = 'customer@example.com';
         $currentPassword = 'password';
-        $response = $this->graphQlQuery($query, [], '', $this->getCustomerAuthHeaders($currentEmail, $currentPassword));
+        $response = $this->graphQlQuery($query, [], '', $this->customerAuthenticationHeader->execute($currentEmail, $currentPassword));
         $this->assertArrayHasKey('customer', $response);
         $this->assertArrayHasKey('orders', $response['customer']);
         $this->assertArrayHasKey('items', $response['customer']['orders']);
@@ -609,7 +552,7 @@ QUERY;
             $query,
             [],
             '',
-            array_merge($this->getCustomerAuthHeaders($currentEmail, $currentPassword), ['Store' => $store])
+            array_merge($this->customerAuthenticationHeader->execute($currentEmail, $currentPassword), ['Store' => $store])
         );
         $this->assertArrayHasKey('customer', $response);
         $this->assertArrayHasKey('orders', $response['customer']);
@@ -640,18 +583,6 @@ QUERY;
                 '100000001', 'fixture_second_store', 0
             ],
         ];
-    }
-
-    /**
-     * @param string $email
-     * @param string $password
-     * @return array
-     * @throws \Magento\Framework\Exception\AuthenticationException
-     */
-    private function getCustomerAuthHeaders(string $email, string $password): array
-    {
-        $customerToken = $this->customerTokenService->createCustomerAccessToken($email, $password);
-        return ['Authorization' => 'Bearer ' . $customerToken];
     }
 
     /**

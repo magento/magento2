@@ -7,6 +7,7 @@
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Sales\Model\Order;
+use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Store\Model\Store;
 use Magento\Sales\Model\Order\Address as OrderAddress;
 use Magento\Sales\Model\Order\Item as OrderItem;
@@ -24,6 +25,9 @@ Resolver::getInstance()->requireDataFixture('Magento/Store/_files/second_store.p
 $addressData = include __DIR__ . '/address_data.php';
 
 $objectManager = Bootstrap::getObjectManager();
+$productRepository = $objectManager->get(ProductRepositoryInterface::class);
+/** @var Magento\Catalog\Model\Product  $product */
+$product = $productRepository->get('simple');
 
 $secondStore = Bootstrap::getObjectManager()
     ->create(Store::class);

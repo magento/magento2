@@ -29,6 +29,7 @@ $orders = [
         'increment_id' => '100000002',
         'state' => \Magento\Sales\Model\Order::STATE_NEW,
         'status' => 'processing',
+        'order_currency_code' =>'USD',
         'grand_total' => 120.00,
         'subtotal' => 120.00,
         'base_grand_total' => 120.00,
@@ -69,8 +70,8 @@ $orders = [
     ],
     [
         'increment_id' => '100000006',
-        'state' => \Magento\Sales\Model\Order::STATE_COMPLETE,
-        'status' => 'complete',
+        'state' => \Magento\Sales\Model\Order::STATE_PROCESSING,
+        'status' => 'Processing',
         'grand_total' => 160.00,
         'base_grand_total' => 160.00,
         'subtotal' => 160.00,
@@ -78,6 +79,34 @@ $orders = [
         'store_id' => 1,
         'website_id' => 1,
     ],
+    [
+        'increment_id' => '100000007',
+        'state' => \Magento\Sales\Model\Order::STATE_PROCESSING,
+        'status' => 'Processing',
+        'order_currency_code' =>'USD',
+        'grand_total' => 180.00,
+        'base_grand_total' => 180.00,
+        'subtotal' => 170.00,
+        'tax_amount' => 5.00,
+        'shipping_amount'=> 5.00,
+        'base_shipping_amount'=> 4.00,
+        'store_id' => 1,
+        'website_id' => 1,
+    ],
+    [
+        'increment_id' => '100000008',
+        'state' => \Magento\Sales\Model\Order::STATE_PROCESSING,
+        'status' => 'Processing',
+        'order_currency_code' =>'USD',
+        'grand_total' => 190.00,
+        'base_grand_total' => 190.00,
+        'subtotal' => 180.00,
+        'tax_amount' => 5.00,
+        'shipping_amount'=> 5.00,
+        'base_shipping_amount'=> 4.00,
+        'store_id' => 1,
+        'website_id' => 1,
+    ]
 ];
 
 /** @var OrderRepositoryInterface $orderRepository */
