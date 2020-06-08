@@ -41,7 +41,8 @@ $padding = $block->getRatio() * 100;
 <?php
 $script = <<<SCRIPT
 document.querySelector('#product-image-container-{$block->getProductId()}').style.width = '{$width}px';
-document.querySelector('#product-image-container-{$block->getProductId()} span.product-image-wrapper').style.paddingBottom = '{$padding}%'
+document.querySelector('#product-image-container-{$block->getProductId()} span.product-image-wrapper')
+    .style.paddingBottom = '{$padding}%'
 SCRIPT;
-echo /* @noEscape */$secureRenderer->renderTag('script', ['type' => 'text/javascript'], $script, false);
 ?>
+<?= /* @noEscape */ $secureRenderer->renderTag('script', ['type' => 'text/javascript'], $script, false); ?>

@@ -23,7 +23,8 @@
             <div id="product_composite_configure_form_fields" class="content product-composite-configure-inner"></div>
             <div id="product_composite_configure_form_additional" class="product_composite_configure_form_additional">
             </div>
-            <div id="product_composite_configure_form_confirmed" class="product_composite_configure_form_confirmed"></div>
+            <div id="product_composite_configure_form_confirmed" class="product_composite_configure_form_confirmed">
+            </div>
         </div>
         <input type="hidden" name="as_js_varname" value="iFrameResponse" />
         <input type="hidden" name="form_key" value="<?= $block->escapeHtmlAttr($block->getFormKey()) ?>" />
@@ -44,11 +45,11 @@
         prodCompConfIframe.style.position = "absolute";
         prodCompConfIframe.style.top = "-1000px";
         prodCompConfIframe.style.left = "-1000px";
-        document.querySelector(".product_composite_configure_messages:last-of-type").style.display = "none";
-        document.querySelector(".product_composite_configure_form_additional:last-of-type").style.display = "none";
-        document.querySelector(".product_composite_configure_form_confirmed:last-of-type").style.display = "none";
-        document.querySelector(".product_composite_configure_confirmed:last-of-type").style.display = "none";
-        document.querySelector(".product-configure-popup:last-of-type").style.display = "none";
+        document.querySelectorAll(".product_composite_configure_messages").forEach((e) => e.style.display = "none");
+        document.querySelectorAll(".product_composite_configure_form_additional").forEach((e) => e.style.display = "none");
+        document.querySelectorAll(".product_composite_configure_form_confirmed").forEach((e) => e.style.display = "none");
+        document.querySelectorAll(".product_composite_configure_confirmed").forEach((e) => e.style.display = "none");
+        document.querySelectorAll(".product-configure-popup").forEach((e) => e.style.display = "none");
 
         require([
             "jquery",
