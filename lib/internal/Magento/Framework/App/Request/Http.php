@@ -199,13 +199,8 @@ class Http extends Request implements RequestContentInterface, RequestSafetyInte
      */
     public function getBasePath()
     {
-        $path = parent::getBasePath();
-        if (empty($path)) {
-            $path = '/';
-        } else {
-            $path = str_replace('\\', '/', $path);
-        }
-        return $path;
+        return empty(parent::getBasePath()) ? '/'
+            : str_replace('\\', '/', parent::getBasePath());
     }
 
     /**
@@ -228,8 +223,7 @@ class Http extends Request implements RequestContentInterface, RequestSafetyInte
     public function setRouteName($route)
     {
         $this->route = $route;
-        $module = $this->routeConfig->getRouteFrontName($route);
-        if ($module) {
+        if ($module = $this->routeConfig->getRouteFrontName($route)) {
             $this->setModuleName($module);
         }
         return $this;
@@ -292,13 +286,11 @@ class Http extends Request implements RequestContentInterface, RequestSafetyInte
      * If passed name will be null whole state array will be returned.
      *
      * @param string $name
-     * @return array|string|null
+     * @return mixed|null
      */
     public function getBeforeForwardInfo($name = null)
     {
-        if ($name === null) {
-            return $this->beforeForwardInfo;
-        } elseif (isset($this->beforeForwardInfo[$name])) {
+        if ($name !== null && isset($this->beforeForwardInfo[$name])) {
             return $this->beforeForwardInfo[$name];
         }
         return null;
@@ -311,13 +303,9 @@ class Http extends Request implements RequestContentInterface, RequestSafetyInte
      */
     public function isAjax()
     {
-        if ($this->isXmlHttpRequest()) {
-            return true;
-        }
-        if ($this->getParam('ajax') || $this->getParam('isAjax')) {
-            return true;
-        }
-        return false;
+        return $this->isXmlHttpRequest()
+            || $this->getParam('ajax', null)
+            || $this->getParam('isAjax', null);
     }
 
     /**
@@ -365,7 +353,7 @@ class Http extends Request implements RequestContentInterface, RequestSafetyInte
         $result = '';
         if (isset($server['SCRIPT_NAME'])) {
             $envPath = str_replace('\\', '/', dirname(str_replace('\\', '/', $server['SCRIPT_NAME'])));
-            if ($envPath != '.' && $envPath != '/') {
+            if ($envPath !== '.' && $envPath !== '/') {
                 $result = $envPath;
             }
         }
@@ -425,11 +413,8 @@ class Http extends Request implements RequestContentInterface, RequestSafetyInte
     public function isSafeMethod()
     {
         if ($this->isSafeMethod === null) {
-            if (isset($_SERVER['REQUEST_METHOD']) && (in_array($_SERVER['REQUEST_METHOD'], $this->safeRequestTypes))) {
-                $this->isSafeMethod = true;
-            } else {
-                $this->isSafeMethod = false;
-            }
+            $this->isSafeMethod = isset($_SERVER['REQUEST_METHOD'])
+                && (in_array($_SERVER['REQUEST_METHOD'], $this->safeRequestTypes));
         }
         return $this->isSafeMethod;
     }
