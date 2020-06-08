@@ -35,7 +35,7 @@ class GetCustomerCartTest extends GraphQlAbstract
      */
     private $objectManager;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
         $this->getMaskedQuoteIdByReservedOrderId = $this->objectManager->get(GetMaskedQuoteIdByReservedOrderId::class);
@@ -45,7 +45,7 @@ class GetCustomerCartTest extends GraphQlAbstract
     /**
      * @inheritdoc
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         /** @var \Magento\Quote\Model\Quote $quote */
         $quoteCollection = $this->objectManager->create(Collection::class);
@@ -123,11 +123,12 @@ class GetCustomerCartTest extends GraphQlAbstract
     /**
      * Query for customer cart with no customer token passed
      *
-     * @expectedException Exception
-     * @expectedExceptionMessage The request is allowed for logged in customer
      */
     public function testGetCustomerCartWithNoCustomerToken()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('The request is allowed for logged in customer');
+
         $customerCartQuery = $this->getCustomerCartQuery();
         $this->graphQlQuery($customerCartQuery);
     }
@@ -136,11 +137,12 @@ class GetCustomerCartTest extends GraphQlAbstract
      * Query for customer cart after customer token is revoked
      *
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
-     * @expectedException \Exception
-     * @expectedExceptionMessage The request is allowed for logged in customer
      */
     public function testGetCustomerCartAfterTokenRevoked()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('The request is allowed for logged in customer');
+
         $customerCartQuery = $this->getCustomerCartQuery();
         $headers = $this->getHeaderMap();
         $response = $this->graphQlMutation($customerCartQuery, [], '', $headers);

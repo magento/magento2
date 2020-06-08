@@ -30,7 +30,7 @@ class CheckmoTest extends TestCase
     protected function setUp(): void
     {
         $objectManagerHelper = new ObjectManager($this);
-        $eventManager = $this->createMock(ManagerInterface::class);
+        $eventManager = $this->getMockForAbstractClass(ManagerInterface::class);
         $paymentDataMock = $this->createMock(Data::class);
         $this->scopeConfigMock = $this->createPartialMock(ScopeConfigInterface::class, ['getValue', 'isSetFlag']);
         $this->object = $objectManagerHelper->getObject(

@@ -35,7 +35,7 @@
         <checkOption selector="{{AdminCategoryBasicFieldSection.EnableCategory}}" stepKey="EnableCheckOption"/>
         <click selector="{{AdminCategoryMainActionsSection.SaveButton}}" stepKey="ClickSaveButton"/>
         <waitForPageLoad stepKey="WaitForCategorySaved"/>
-        <see selector="{{AdminCategoryMessagesSection.SuccessMessage}}" userInput="You saved the category." stepKey="AssertSuccessMessage"/>
+        <actionGroup ref="AssertAdminCategorySaveSuccessMessageActionGroup" stepKey="AssertSuccessMessage"/>
         <seeCheckboxIsChecked selector="{{AdminCategoryBasicFieldSection.EnableCategory}}"  stepKey="SeeCheckBoxisSelected"/>
         <seeInField selector="{{AdminCategoryBasicFieldSection.CategoryNameInput}}" userInput="{{_defaultCategory.name}}" stepKey="SeedFieldInput"/>
     </test>

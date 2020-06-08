@@ -27,17 +27,17 @@ class CompareProductsTest extends TestCase
     private $model;
 
     /**
-     * @var ObjectManagerHelper
+     * @var Compare|MockObject
      */
     private $objectManagerHelper;
 
     /**
-     * @var Compare|MockObject
+     * @var Url|MockObject
      */
     private $helperMock;
 
     /**
-     * @var Url|MockObject
+     * @var Output|MockObject
      */
     private $productUrlMock;
 
@@ -59,10 +59,7 @@ class CompareProductsTest extends TestCase
         ProductInterface::NAME => 'getName'
     ];
 
-    /**
-     * @inheritDoc
-     */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -77,7 +74,7 @@ class CompareProductsTest extends TestCase
             ->getMock();
         $this->scopeConfigMock = $this->getMockBuilder(ScopeConfigInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
 
@@ -98,7 +95,7 @@ class CompareProductsTest extends TestCase
      * @param array $items
      * @return MockObject
      */
-    private function getItemCollectionMock(array $items):MockObject
+    private function getItemCollectionMock(array $items) : MockObject
     {
         $itemCollectionMock = $this->getMockBuilder(Collection::class)
             ->disableOriginalConstructor()
@@ -139,15 +136,15 @@ class CompareProductsTest extends TestCase
 
         $this->productUrlMock->expects($this->exactly($count))
             ->method('getUrl')
-            ->will($this->returnValueMap($urlMap));
+            ->willReturnMap($urlMap);
 
         $this->outputHelperMock->expects($this->exactly($count))
             ->method('productAttribute')
-            ->will($this->returnValueMap($outputMap));
+            ->willReturnMap($outputMap);
 
         $this->helperMock->expects($this->exactly($count))
             ->method('getPostDataRemove')
-            ->will($this->returnValueMap($helperMap));
+            ->willReturnMap($helperMap);
 
         return $items;
     }
@@ -158,7 +155,7 @@ class CompareProductsTest extends TestCase
      * @param array $data
      * @return MockObject
      */
-    private function getProductMock(array $data):MockObject
+    private function getProductMock(array $data) : MockObject
     {
         $product = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()

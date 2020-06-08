@@ -3,12 +3,17 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Theme\Test\Unit\Model\Layout;
 
+use Magento\Framework\Config\DataInterface;
 use Magento\Framework\DataObject;
 use Magento\Theme\Model\Layout\Config;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class ConfigTest extends \PHPUnit\Framework\TestCase
+class ConfigTest extends TestCase
 {
     /**
      * @var Config
@@ -16,15 +21,15 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
     protected $_model;
 
     /**
-     * @var \Magento\Framework\Config\DataInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var DataInterface|MockObject
      */
     protected $dataStorage;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->dataStorage = $this->getMockBuilder(\Magento\Framework\Config\DataInterface::class)
+        $this->dataStorage = $this->getMockBuilder(DataInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->_model = new Config($this->dataStorage);
     }
 

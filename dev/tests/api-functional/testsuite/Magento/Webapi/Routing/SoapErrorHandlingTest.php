@@ -13,7 +13,7 @@ use Magento\Framework\Exception\AuthorizationException;
  */
 class SoapErrorHandlingTest extends \Magento\TestFramework\TestCase\WebapiAbstract
 {
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_markTestAsSoapOnly();
         parent::setUp();

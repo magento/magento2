@@ -11,7 +11,7 @@ use Magento\Catalog\Model\Product as CatalogProduct;
 use Magento\Cms\Model\Page;
 use Magento\Cms\Model\Plugin\Product;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -37,7 +37,7 @@ class ProductTest extends TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
 

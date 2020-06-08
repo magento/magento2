@@ -1,16 +1,20 @@
-<?php
+<?php declare(strict_types=1);
+
+use Magento\CatalogSearch\Block\Result;
+use Magento\Framework\Module\Setup\Migration;
+use Magento\ProductAlert\Block\Product\View;
+
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 return [
     '$replaceRules' => [
         [
             'table',
             'field',
-            \Magento\Framework\Module\Setup\Migration::ENTITY_TYPE_BLOCK,
-            \Magento\Framework\Module\Setup\Migration::FIELD_CONTENT_TYPE_WIKI,
+            Migration::ENTITY_TYPE_BLOCK,
+            Migration::FIELD_CONTENT_TYPE_WIKI,
         ],
     ],
     '$tableData' => [
@@ -34,9 +38,9 @@ return [
             ],
         ],
         'aliases_map' => [
-            \Magento\Framework\Module\Setup\Migration::ENTITY_TYPE_BLOCK => [
-                'productalert/product_view' => \Magento\ProductAlert\Block\Product\View::class,
-                'catalogSearch/result' => \Magento\CatalogSearch\Block\Result::class,
+            Migration::ENTITY_TYPE_BLOCK => [
+                'productalert/product_view' => View::class,
+                'catalogSearch/result' => Result::class,
             ],
         ],
     ]

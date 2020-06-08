@@ -22,7 +22,8 @@ type ConfigurableAttributeOption @doc(description: "ConfigurableAttributeOption 
 
 type ConfigurableProductOptions @doc(description: "ConfigurableProductOptions defines configurable attributes for the specified product") {
     id: Int @doc(description: "The configurable option ID number assigned by the system")
-    attribute_id: String @doc(description: "The ID assigned to the attribute")
+    attribute_id: String @deprecated(reason: "Use attribute_id_v2 instead") @doc(description: "The ID assigned to the attribute")
+    attribute_id_v2: Int @doc(description: "The ID assigned to the attribute")
     attribute_code: String @doc(description: "A string that identifies the attribute")
     label: String @doc(description: "A string that describes the configurable product option, which is displayed on the UI")
     position: Int @doc(description: "A number that indicates the order in which the attribute is displayed")

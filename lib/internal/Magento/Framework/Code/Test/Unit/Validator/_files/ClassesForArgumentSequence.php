@@ -11,7 +11,8 @@
 
 namespace ArgumentSequence;
 
-class ContextObject implements \Magento\Framework\ObjectManager\ContextInterface
+use Magento\Framework\ObjectManager\ContextInterface;
+class ContextObject implements ContextInterface
 {
 }
 class ParentRequiredObject

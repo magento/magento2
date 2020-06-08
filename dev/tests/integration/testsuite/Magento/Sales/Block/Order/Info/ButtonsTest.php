@@ -42,7 +42,7 @@ class ButtonsTest extends TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -56,7 +56,7 @@ class ButtonsTest extends TestCase
     /**
      * @inheritdoc
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->registry->unregister('current_order');
         $this->customerSession->logout();

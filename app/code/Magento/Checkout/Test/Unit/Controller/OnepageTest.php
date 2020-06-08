@@ -3,15 +3,22 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Checkout\Test\Unit\Controller;
 
-use \Magento\Checkout\Controller\Onepage;
+use Magento\Checkout\Controller\Onepage;
+use Magento\Checkout\Model\Session;
+use Magento\Checkout\Test\Unit\Controller\Stub\OnepageStub;
+use Magento\Framework\App\Action\Context;
+use Magento\Framework\App\Request\Http;
+use Magento\Framework\Event\Manager;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Quote\Model\Quote;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-/**
- * Class OnepageTest
- * @package Magento\Checkout\Controller
- */
-class OnepageTest extends \PHPUnit\Framework\TestCase
+class OnepageTest extends TestCase
 {
     /**
      * @var Onepage
@@ -19,45 +26,45 @@ class OnepageTest extends \PHPUnit\Framework\TestCase
     protected $controller;
 
     /**
-     * @var \Magento\Checkout\Model\Session | \PHPUnit_Framework_MockObject_MockObject
+     * @var Session|MockObject
      */
     protected $checkoutSession;
 
     /**
-     * @var \Magento\Customer\Model\Session | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Customer\Model\Session|MockObject
      */
     protected $customerSession;
 
     /**
-     * @var \Magento\Framework\App\Request\Http | \PHPUnit_Framework_MockObject_MockObject
+     * @var Http|MockObject
      */
     protected $request;
 
     /**
-     * @var \Magento\Framework\App\Response\Http | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Response\Http|MockObject
      */
     protected $response;
 
     /**
-     * @var \Magento\Quote\Model\Quote | \PHPUnit_Framework_MockObject_MockObject
+     * @var Quote|MockObject
      */
     protected $quote;
 
     /**
-     * @var \Magento\Framework\Event\Manager | \PHPUnit_Framework_MockObject_MockObject
+     * @var Manager|MockObject
      */
     protected $eventManager;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $objectManager = new ObjectManager($this);
 
-        $this->request = $this->createMock(\Magento\Framework\App\Request\Http::class);
+        $this->request = $this->createMock(Http::class);
         $this->response = $this->createMock(\Magento\Framework\App\Response\Http::class);
-        $this->quote = $this->createMock(\Magento\Quote\Model\Quote::class);
-        $this->eventManager = $this->createMock(\Magento\Framework\Event\Manager::class);
+        $this->quote = $this->createMock(Quote::class);
+        $this->eventManager = $this->createMock(Manager::class);
         $this->customerSession = $this->createMock(\Magento\Customer\Model\Session::class);
-        $this->checkoutSession = $this->createMock(\Magento\Checkout\Model\Session::class);
+        $this->checkoutSession = $this->createMock(Session::class);
         $this->checkoutSession->expects($this->once())
             ->method('getQuote')
             ->willReturn($this->quote);
@@ -65,14 +72,14 @@ class OnepageTest extends \PHPUnit\Framework\TestCase
         $objectManagerMock = $this->createMock(\Magento\Framework\ObjectManager\ObjectManager::class);
         $objectManagerMock->expects($this->at(0))
             ->method('get')
-            ->with(\Magento\Checkout\Model\Session::class)
+            ->with(Session::class)
             ->willReturn($this->checkoutSession);
         $objectManagerMock->expects($this->at(1))
             ->method('get')
             ->with(\Magento\Customer\Model\Session::class)
             ->willReturn($this->customerSession);
 
-        $context = $this->createMock(\Magento\Framework\App\Action\Context::class);
+        $context = $this->createMock(Context::class);
         $context->expects($this->once())
             ->method('getObjectManager')
             ->willReturn($objectManagerMock);
@@ -85,9 +92,9 @@ class OnepageTest extends \PHPUnit\Framework\TestCase
         $context->expects($this->once())
             ->method('getEventManager')
             ->willReturn($this->eventManager);
-        
+
         $this->controller = $objectManager->getObject(
-            \Magento\Checkout\Test\Unit\Controller\Stub\OnepageStub::class,
+            OnepageStub::class,
             [
                 'context' => $context
             ]

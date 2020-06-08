@@ -3,10 +3,15 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Framework\Validator\Test\Unit;
 
-class TimezoneTest extends \PHPUnit\Framework\TestCase
+use Magento\Framework\Setup\Lists;
+use Magento\Framework\Validator\Timezone;
+use PHPUnit\Framework\TestCase;
+
+class TimezoneTest extends TestCase
 {
     /**
      * @var array
@@ -20,9 +25,9 @@ class TimezoneTest extends \PHPUnit\Framework\TestCase
 
     public function testIsValid()
     {
-        $lists = $this->createMock(\Magento\Framework\Setup\Lists::class);
-        $lists->expects($this->any())->method('getTimezoneList')->will($this->returnValue($this->expectedTimezones));
-        $timezone = new \Magento\Framework\Validator\Timezone($lists);
-        $this->assertEquals(true, $timezone->isValid('America/Los_Angeles'));
+        $lists = $this->createMock(Lists::class);
+        $lists->expects($this->any())->method('getTimezoneList')->willReturn($this->expectedTimezones);
+        $timezone = new Timezone($lists);
+        $this->assertTrue($timezone->isValid('America/Los_Angeles'));
     }
 }

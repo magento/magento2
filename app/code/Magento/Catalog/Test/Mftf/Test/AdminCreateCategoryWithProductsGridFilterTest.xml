@@ -74,7 +74,7 @@
         <click selector="{{AdminCategoryContentSection.productTableRow}}" stepKey="selectDefaultProductFromTableRow"/>
         <click selector="{{AdminCategoryMainActionsSection.SaveButton}}" stepKey="clickSaveButton"/>
         <waitForPageLoad stepKey="WaitForCategorySaved"/>
-        <see selector="{{AdminCategoryMessagesSection.SuccessMessage}}" userInput="You saved the category." stepKey="successMessageYouSavedTheCategory"/>
+        <actionGroup ref="AssertAdminCategorySaveSuccessMessageActionGroup" stepKey="successMessageYouSavedTheCategory"/>
         <!--Verify product with grid filter is not not visible-->
         <amOnPage url="{{StorefrontProductPage.url(defaultSimpleProduct.urlKey)}}" stepKey="seeOnProductPage"/>
         <waitForPageLoad stepKey="waitForStoreFrontProductPageToLoad"/>

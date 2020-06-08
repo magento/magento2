@@ -14,7 +14,7 @@ class MethodsMapTest extends \PHPUnit\Framework\TestCase
     /** @var \Magento\Framework\Reflection\MethodsMap */
     private $object;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->object = $objectManager->create(

@@ -46,7 +46,7 @@
         <fillField selector="{{AdminCategorySEOSection.MetaTitleInput}}" userInput="{{SimpleRootSubCategory.name}}" stepKey="fillUpdatedMetaTitle"/>
         <click selector="{{AdminCategoryMainActionsSection.SaveButton}}" stepKey="clickSaveButton"/>
         <waitForPageLoad stepKey="waitForCategorySaved"/>
-        <see selector="{{AdminCategoryMessagesSection.SuccessMessage}}" userInput="You saved the category." stepKey="assertSuccessMessage"/>
+        <actionGroup ref="AssertAdminCategorySaveSuccessMessageActionGroup" stepKey="assertSuccessMessage"/>
 
         <!--Open UrlRewrite Page-->
         <amOnPage url="{{AdminUrlRewriteIndexPage.url}}" stepKey="openUrlRewriteIndexPage"/>

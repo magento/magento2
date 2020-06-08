@@ -47,7 +47,7 @@
         <click selector="{{AdminCategoryBasicFieldSection.enableCategoryLabel}}" stepKey="EnableCategory"/>
         <click selector="{{AdminCategoryMainActionsSection.SaveButton}}" stepKey="saveCategoryWithProducts"/>
         <waitForPageLoad stepKey="waitForCategorySaved"/>
-        <see userInput="You saved the category." stepKey="seeSuccessMessage"/>
+        <actionGroup ref="AssertAdminCategorySaveSuccessMessageActionGroup" stepKey="seeSuccessMessage"/>
 
         <!--Run re-index task-->
         <magentoCLI command="indexer:reindex" stepKey="reindex"/>
