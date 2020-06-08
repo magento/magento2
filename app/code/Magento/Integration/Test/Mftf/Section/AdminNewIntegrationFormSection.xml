@@ -18,5 +18,7 @@
         <element name="resourceTree" type="block" selector="[data-ui-id='integration-edit-tabs-tab-content-api-section'] [data-role='resource-tree']"/>
 
         <element name="save" type="button" selector="#save-split-button-button"/>
+        <element name="integrationToggle" type="button" selector=".page-actions-buttons .action-toggle.primary"/>
+        <element name="saveAndActivate" type="button" selector="#save-split-button-activate"/>
     </section>
 </sections>

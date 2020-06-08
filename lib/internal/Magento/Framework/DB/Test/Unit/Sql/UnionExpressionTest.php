@@ -3,15 +3,19 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\DB\Test\Unit\Sql;
 
 use Magento\Framework\DB\Select;
+use Magento\Framework\DB\Sql\UnionExpression;
+use PHPUnit\Framework\TestCase;
 
-class UnionExpressionTest extends \PHPUnit\Framework\TestCase
+class UnionExpressionTest extends TestCase
 {
     public function testToString()
     {
-        $sqlMock = $this->getMockBuilder(\Magento\Framework\DB\Select::class)
+        $sqlMock = $this->getMockBuilder(Select::class)
             ->disableOriginalConstructor()
             ->getMock();
         $sqlMock->expects($this->once())
@@ -21,7 +25,7 @@ class UnionExpressionTest extends \PHPUnit\Framework\TestCase
             $sqlMock,
             '(test_column)'
         ];
-        $model = new \Magento\Framework\DB\Sql\UnionExpression($parts);
+        $model = new UnionExpression($parts);
         $this->assertEquals('(test_assemble)' . Select::SQL_UNION . '(test_column)', $model->__toString());
     }
 }

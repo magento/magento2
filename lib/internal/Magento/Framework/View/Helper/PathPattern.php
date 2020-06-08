@@ -39,7 +39,7 @@ class PathPattern
     protected function translateGroupsFromGlob($pattern)
     {
         preg_match_all('~\\\\\\{[^,\\}]+(?:,[^,\\}]*)*\\\\\\}~', $pattern, $matches, PREG_OFFSET_CAPTURE);
-        for ($index = count($matches[0]) - 1; $index >= 0; $index -= 1) {
+        for ($index = count($matches[0]) - 1; $index >= 0; $index--) {
             list($match, $offset) = $matches[0][$index];
             $replacement = substr_replace($match, '(?:', 0, 2);
             $replacement = substr_replace($replacement, ')', -2);
@@ -65,9 +65,9 @@ class PathPattern
     protected function translateCharacterGroupsFromGlob($pattern)
     {
         preg_match_all('~\\\\\\[(\\\\\\!)?[^\\]]+\\\\\\]~i', $pattern, $matches, PREG_OFFSET_CAPTURE);
-        for ($index = count($matches[0]) - 1; $index >= 0; $index -= 1) {
+        for ($index = count($matches[0]) - 1; $index >= 0; $index--) {
             list($match, $offset) = $matches[0][$index];
-            $exclude = !empty($matches[1][$index]);
+            $exclude = !(empty($matches[1][$index]) || empty($matches[1][$index][0]));
             $replacement = substr_replace($match, '[' . ($exclude ? '^' : ''), 0, $exclude ? 4 : 2);
             $replacement = substr_replace($replacement, ']', -2);
             $replacement = str_replace('\\-', '-', $replacement);

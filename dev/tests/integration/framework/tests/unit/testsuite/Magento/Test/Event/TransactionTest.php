@@ -12,21 +12,21 @@ namespace Magento\Test\Event;
 class TransactionTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\TestFramework\Event\Transaction|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\TestFramework\Event\Transaction|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_object;
 
     /**
-     * @var \Magento\TestFramework\EventManager|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\TestFramework\EventManager|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_eventManager;
 
     /**
-     * @var \Magento\TestFramework\Db\Adapter\TransactionInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\TestFramework\Db\Adapter\TransactionInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_adapter;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_eventManager = $this->getMockBuilder(\Magento\TestFramework\EventManager::class)
             ->setMethods(['fireEvent'])
@@ -40,7 +40,7 @@ class TransactionTest extends \PHPUnit\Framework\TestCase
             ->setConstructorArgs([$this->_eventManager])
             ->getMock();
 
-        $this->_object->expects($this->any())->method('_getConnection')->will($this->returnValue($this->_adapter));
+        $this->_object->expects($this->any())->method('_getConnection')->willReturn($this->_adapter);
     }
 
     /**
@@ -61,17 +61,17 @@ class TransactionTest extends \PHPUnit\Framework\TestCase
             'fireEvent'
         )->with(
             $eventName
-        )->will(
-            $this->returnCallback($callback)
+        )->willReturnCallback(
+            $callback
         );
     }
 
     /**
      * Setup expectations for "transaction start" use case
      *
-     * @param \PHPUnit\Framework\MockObject\Matcher\Invocation $invocationMatcher
+     * @param \PHPUnit\Framework\MockObject\Rule\InvocationOrder $invocationMatcher
      */
-    protected function _expectTransactionStart(\PHPUnit\Framework\MockObject\Matcher\Invocation $invocationMatcher)
+    protected function _expectTransactionStart(\PHPUnit\Framework\MockObject\Rule\InvocationOrder $invocationMatcher)
     {
         $this->_eventManager->expects($invocationMatcher)->method('fireEvent')->with('startTransaction');
         $this->_adapter->expects($this->once())->method('beginTransaction');
@@ -95,17 +95,17 @@ class TransactionTest extends \PHPUnit\Framework\TestCase
             'fireEvent'
         )->with(
             $eventName
-        )->will(
-            $this->returnCallback($callback)
+        )->willReturnCallback(
+            $callback
         );
     }
 
     /**
      * Setup expectations for "transaction rollback" use case
      *
-     * @param \PHPUnit\Framework\MockObject\Matcher\Invocation $invocationMatcher
+     * @param \PHPUnit\Framework\MockObject\Rule\InvocationOrder $invocationMatcher
      */
-    protected function _expectTransactionRollback(\PHPUnit\Framework\MockObject\Matcher\Invocation $invocationMatcher)
+    protected function _expectTransactionRollback(\PHPUnit\Framework\MockObject\Rule\InvocationOrder $invocationMatcher)
     {
         $this->_eventManager->expects($invocationMatcher)->method('fireEvent')->with('rollbackTransaction');
         $this->_adapter->expects($this->once())->method('rollback');

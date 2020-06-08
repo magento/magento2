@@ -3,20 +3,27 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\View\Test\Unit\Layout\Data;
 
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Framework\App\State;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Framework\View\Layout\Data\Structure;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\MockObject\Rule\InvokedCount;
+use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface;
 
-class StructureTest extends \PHPUnit\Framework\TestCase
+class StructureTest extends TestCase
 {
     /**
-     * @var \Psr\Log\LoggerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var LoggerInterface|MockObject
      */
     protected $loggerMock;
 
     /**
-     * @var State|\PHPUnit_Framework_MockObject_MockObject
+     * @var State|MockObject
      */
     protected $stateMock;
 
@@ -26,21 +33,21 @@ class StructureTest extends \PHPUnit\Framework\TestCase
     protected $objectManagerHelper;
 
     /**
-     * @var \Magento\Framework\View\Layout\Data\Structure
+     * @var Structure
      */
     protected $dataStructure;
 
     /**
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->loggerMock = $this->createMock(\Psr\Log\LoggerInterface::class);
-        $this->stateMock = $this->createMock(\Magento\Framework\App\State::class);
+        $this->loggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
+        $this->stateMock = $this->createMock(State::class);
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->dataStructure = $this->objectManagerHelper->getObject(
-            \Magento\Framework\View\Layout\Data\Structure::class,
+            Structure::class,
             [
                 'logger' => $this->loggerMock,
                 'state' => $this->stateMock
@@ -49,7 +56,7 @@ class StructureTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @param \PHPUnit\Framework\MockObject\Matcher\InvokedCount $loggerExpects
+     * @param InvokedCount $loggerExpects
      * @param string $stateMode
      * @return void
      * @dataProvider reorderChildElementLogDataProvider

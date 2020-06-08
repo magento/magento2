@@ -5,9 +5,9 @@
  */
 
 use Magento\SalesRule\Model\Coupon;
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
 
-// phpcs:ignore Magento2.Security.IncludeFile
-require 'rules.php';
+Resolver::getInstance()->requireDataFixture('Magento/SalesRule/_files/rules.php');
 
 $collection = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
     \Magento\SalesRule\Model\ResourceModel\Rule\Collection::class
